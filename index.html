@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Catálogo de Fundos CAIXA - Elton Private Banker</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <style>
+        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f9; }
+        h1 { color: #005ca9; text-align: center; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+    <h1>📊 Catálogo de Fundos CAIXA</h1>
+    <p style="text-align:center">Atualizado automaticamente via Robô Python</p>
+
+    <div class="container">
+        <table id="tabelaFundos" class="display" style="width:100%">
+            <thead><tr id="headerRow"></tr></thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <script>
+        // Caminho do seu arquivo CSV gerado pelo robô
+        // Importante: O robô gera o arquivo com a data. Para o site funcionar sempre, 
+        // seria ideal o robô salvar um arquivo chamado 'ultimo_resultado.csv' fixo.
+        const csvUrl = 'sipii_caixa_20260405.csv'; 
+
+        Papa.parse(csvUrl, {
+            download: true,
+            header: true,
+            complete: function(results) {
+                const data = results.data;
+                const columns = Object.keys(data[0]);
+
+                // Criar cabeçalho
+                columns.forEach(col => {
+                    $('#headerRow').append(`<th>${col}</th>`);
+                });
+
+                // Criar Tabela inteligente
+                $('#tabelaFundos').DataTable({
+                    data: data,
+                    columns: columns.map(col => ({ data: col })),
+                    language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
