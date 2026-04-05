@@ -2,23 +2,27 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Catálogo de Fundos CAIXA - Elton Private Banker</title>
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
-        body { font-family: sans-serif; margin: 20px; background-color: #f4f4f9; }
-        h1 { color: #005ca9; text-align: center; }
-        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; background-color: #f4f4f9; color: #333; }
+        h1 { color: #005ca9; text-align: center; margin-bottom: 5px; }
+        p.subtitle { text-align: center; color: #666; margin-bottom: 25px; }
+        .container { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        table.dataTable thead th { background-color: #005ca9; color: white; border-bottom: none; }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current { background: #005ca9 !important; color: white !important; border: 1px solid #005ca9; }
     </style>
 </head>
 <body>
 
     <h1>📊 Catálogo de Fundos CAIXA</h1>
-    <p style="text-align:center">Atualizado automaticamente via Robô Python</p>
+    <p class="subtitle">Atualizado automaticamente via Robô Python • Elton Private Banker</p>
 
     <div class="container">
-        <table id="tabelaFundos" class="display" style="width:100%">
+        <table id="tabelaFundos" class="display nowrap" style="width:100%">
             <thead><tr id="headerRow"></tr></thead>
-            <tbody id="tableBody"></tbody>
+            <tbody></tbody>
         </table>
     </div>
 
@@ -27,29 +31,41 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 
     <script>
-        // Caminho do seu arquivo CSV gerado pelo robô
-        // Importante: O robô gera o arquivo com a data. Para o site funcionar sempre, 
-        // seria ideal o robô salvar um arquivo chamado 'ultimo_resultado.csv' fixo.
         const csvUrl = 'dados_atuais.csv';
 
         Papa.parse(csvUrl, {
             download: true,
             header: true,
+            skipEmptyLines: true,
             complete: function(results) {
                 const data = results.data;
-                const columns = Object.keys(data[0]);
+                
+                if (data.length > 0) {
+                    // MAPEAMENTO DINÂMICO: Cria colunas automaticamente e evita erros de parâmetros desconhecidos
+                    const columns = Object.keys(data[0]).map(col => ({
+                        title: col,
+                        data: col,
+                        defaultContent: "-" // VACINA: Se faltar um dado, coloca "-" em vez de dar erro na tela
+                    }));
 
-                // Criar cabeçalho
-                columns.forEach(col => {
-                    $('#headerRow').append(`<th>${col}</th>`);
-                });
+                    // Destruir tabela existente antes de recriar (evita bugs de reinicialização)
+                    if ($.fn.DataTable.isDataTable('#tabelaFundos')) {
+                        $('#tabelaFundos').DataTable().destroy();
+                        $('#headerRow').empty();
+                    }
 
-                // Criar Tabela inteligente
-                $('#tabelaFundos').DataTable({
-                    data: data,
-                    columns: columns.map(col => ({ data: col })),
-                    language: { url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json' }
-                });
+                    // Inicializar DataTables com as colunas detectadas
+                    $('#tabelaFundos').DataTable({
+                        data: data,
+                        columns: columns,
+                        scrollX: true, // Barra de rolagem para telas menores
+                        pageLength: 25,
+                        order: [[0, 'asc']], // Começa organizado pela primeira coluna (Categoria)
+                        language: {
+                            url: 'https://cdn.datatables.net/plug-ins/1.13.6/i18n/pt-BR.json'
+                        }
+                    });
+                }
             }
         });
     </script>
