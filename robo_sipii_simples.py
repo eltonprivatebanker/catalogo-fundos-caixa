@@ -1,15 +1,11 @@
 """
 ============================================================
-ROBÔ SIMPLES — Copia tabela do SIPII para Excel
+ROBÔ ATUALIZADO — SIPII PARA EXCEL & DASHBOARD ONLINE
 ============================================================
-Faz exatamente o que faria manualmente:
-  1. Abre o site fundos.caixa.gov.br
-  2. Clica em cada categoria
-  3. Copia a tabela inteira
-  4. Cola num Excel com uma aba por categoria
-
-Requisitos: pip install selenium pandas openpyxl
-Tempo médio: ~2 minutos
+1. Abre o site fundos.caixa.gov.br
+2. Clica em cada categoria e extrai os dados
+3. Salva histórico com DATA (Ex: sipii_caixa_20260405.csv)
+4. Salva arquivo FIXO para o SITE (dados_atuais.csv)
 ============================================================
 """
 
@@ -21,7 +17,6 @@ from selenium.common.exceptions import TimeoutException
 import pandas as pd
 import time, os
 from datetime import datetime
-
 
 URL = "https://www.fundos.caixa.gov.br/sipii/pages/public/listar-fundos-internet.jsf"
 
@@ -38,11 +33,10 @@ COLUNAS = [
     "PL (milhões R$)", "PL Médio (milhões R$)"
 ]
 
-
 def rodar(headless=True):
-    print("🤖 Robô SIPII — Copiando tabelas...\n")
+    print("🤖 Robô SIPII — Iniciando extração inteligente...\n")
 
-    # Abrir navegador
+    # Configurações para rodar no servidor do GitHub
     opt = webdriver.ChromeOptions()
     if headless:
         opt.add_argument("--headless=new")
@@ -54,25 +48,24 @@ def rodar(headless=True):
         "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
     )
+    
     driver = webdriver.Chrome(options=opt)
-
     todos = []
 
     for cat in CATEGORIAS:
-        print(f"  📂 {cat}...", end=" ", flush=True)
+        print(f"  📂 Processando: {cat}...", end=" ", flush=True)
         try:
-            # Recarrega a página a cada categoria (evita bugs JSF)
             driver.get(URL)
             time.sleep(3)
 
-            # Clicar na aba "TODOS" (mostra fundos de todos os perfis)
+            # Localiza a aba "TODOS"
             for aba in driver.find_elements(By.CSS_SELECTOR, "ul.nav-tabs li a"):
                 if "TODOS" in aba.text.upper():
                     aba.click()
                     time.sleep(2)
                     break
 
-            # Clicar na categoria
+            # Localiza e clica na categoria
             clicou = False
             for link in driver.find_elements(By.CSS_SELECTOR, "a"):
                 if cat.upper() == link.text.strip().upper():
@@ -80,28 +73,21 @@ def rodar(headless=True):
                     time.sleep(2)
                     clicou = True
                     break
-            if not clicou:
-                for link in driver.find_elements(By.CSS_SELECTOR, "a"):
-                    if cat.upper() in link.text.strip().upper():
-                        link.click()
-                        time.sleep(2)
-                        clicou = True
-                        break
+            
             if not clicou:
                 print("⚠ não encontrada")
                 continue
 
-            # Esperar a tabela carregar
+            # Aguarda a tabela
             try:
                 WebDriverWait(driver, 15).until(
-                    EC.presence_of_element_located(
-                        (By.CSS_SELECTOR, "table.zebra tbody tr")))
+                    EC.presence_of_element_located((By.CSS_SELECTOR, "table.zebra tbody tr")))
                 time.sleep(1.5)
             except TimeoutException:
                 print("⚠ tabela não carregou")
                 continue
 
-            # Clicar em "Todos" no seletor de registros por página
+            # Selecionar "Todos" registros
             for sel in driver.find_elements(By.TAG_NAME, "select"):
                 try:
                     s = Select(sel)
@@ -113,9 +99,8 @@ def rodar(headless=True):
                     break
                 except Exception:
                     continue
-            time.sleep(1)
 
-            # COPIAR: ler cada linha da tabela
+            # Extração das linhas
             linhas = driver.find_elements(By.CSS_SELECTOR, "table.zebra tbody tr")
             regs = []
             for tr in linhas:
@@ -132,40 +117,43 @@ def rodar(headless=True):
             print(f"✅ {len(regs)} fundos")
 
         except Exception as e:
-            print(f"❌ {str(e)[:50]}")
+            print(f"❌ Erro: {str(e)[:50]}")
 
     driver.quit()
-    print(f"\n🔒 Navegador fechado. Total: {len(todos)} fundos\n")
 
     if not todos:
         print("⚠ Nenhum dado extraído.")
         return
 
-    # COLAR: salvar no Excel
+    # Processamento final com Pandas
     df = pd.DataFrame(todos)
     cols = ["Categoria"] + COLUNAS
     df = df[[c for c in cols if c in df.columns]]
 
-    pasta = os.path.dirname(os.path.abspath(__file__))
     ts = datetime.now().strftime("%Y%m%d")
 
-    # Excel com abas por categoria
-    xlsx = os.path.join(pasta, f"sipii_caixa_{ts}.xlsx")
-    with pd.ExcelWriter(xlsx, engine="openpyxl") as w:
+    # --- SALVAMENTO INTELIGENTE ---
+
+    # 1. Salva histórico com DATA (Excel e CSV)
+    xlsx_path = f"sipii_caixa_{ts}.xlsx"
+    csv_path = f"sipii_caixa_{ts}.csv"
+    
+    # Salva Excel com abas
+    with pd.ExcelWriter(xlsx_path, engine="openpyxl") as w:
         df.to_excel(w, sheet_name="Todos", index=False)
         for cat in df["Categoria"].unique():
-            nome_aba = cat[:31]  # Excel limita 31 chars
-            df[df["Categoria"] == cat].to_excel(
-                w, sheet_name=nome_aba, index=False)
-    print(f"📁 Excel: {xlsx}")
+            df[df["Categoria"] == cat].to_excel(w, sheet_name=cat[:31], index=False)
+    
+    # Salva CSV histórico
+    df.to_csv(csv_path, index=False, encoding="utf-8-sig", sep=",")
 
-    # CSV
-    csv_path = os.path.join(pasta, f"sipii_caixa_{ts}.csv")
-    df.to_csv(csv_path, index=False, encoding="utf-8-sig", sep=";")
-    print(f"📁 CSV:   {csv_path}")
+    # 2. Salva arquivo FIXO para o SITE ler (Sempre o mais atualizado)
+    # Importante: Usar vírgula como separador para o index.html ler corretamente
+    df.to_csv("dados_atuais.csv", index=False, encoding="utf-8-sig", sep=",")
 
-    print(f"\n✅ Pronto! {len(df)} fundos em {len(df['Categoria'].unique())} categorias")
-
+    print(f"\n✅ SUCESSO!")
+    print(f"📁 Histórico: {csv_path}")
+    print(f"🌐 Arquivo do Site: dados_atuais.csv")
 
 if __name__ == "__main__":
     rodar(headless=True)
