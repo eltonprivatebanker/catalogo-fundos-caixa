@@ -2,12 +2,13 @@ name: Atualizacao Diaria Caixa
 
 on:
   schedule:
-    - cron: '0 11 * * *' # Equivale a 08:00 no horário de Brasília
-  workflow_dispatch: # Permite que você dê o "Play" manualmente
+    - cron: '0 12 * * 1-5'
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v3
@@ -17,17 +18,21 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Instalar Dependencias
+      - name: Instalar Chrome
         run: |
-          pip install -r requirements.txt
+          sudo apt-get update -q
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Instalar Dependencias
+        run: pip install -r requirements.txt
 
       - name: Executar o Robo
         run: python robo_sipii_simples.py
 
       - name: Salvar Resultados no GitHub
         run: |
-          git config --global user.name "GitHub Action"
+          git config --global user.name "actions-user"
           git config --global user.email "action@github.com"
           git add .
-          git commit -m "Dados atualizados via Robô: $(date)"
+          git diff --cached --quiet || git commit -m "Dados atualizados via Robô: $(date)"
           git push
