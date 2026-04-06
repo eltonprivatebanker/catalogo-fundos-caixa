@@ -1,9 +1,9 @@
 """
 ============================================================
-ROBÔ SIPII — COM CAPTURA DE URL DE CADA FUNDO
+ROBÔ SIPII — VERSÃO FINAL PARA GITHUB PAGES
 ============================================================
-Novidade: captura o link real de cada fundo na tabela SIPII
-para permitir links clicáveis no dashboard.
+Captura a URL REAL de cada fundo abrindo o popup.
+Gera 'dados_atuais.csv' para o index.html e histórico em Excel.
 ============================================================
 """
 
@@ -12,10 +12,12 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
+from selenium.webdriver.common.keys import Keys
 import pandas as pd
 import time
 from datetime import datetime
 import unicodedata, re
+import csv
 
 URL = "https://www.fundos.caixa.gov.br/sipii/pages/public/listar-fundos-internet.jsf"
 
@@ -25,165 +27,137 @@ CATEGORIAS = [
     "ACOES", "FUNDO DE INDICE", "FUNDOS MUTUOS DE PRIVATIZACAO",
 ]
 
-COLUNAS = [
+COLUNAS_DADOS = [
     "Fundo", "Data Inicio", "Aplic. Inicial (R$)",
-    "Cota (R$)", "Variacao Dia (%)", "Acum. Mes (%)",
+    "Cota (R$)","Variacao Dia (%)", "Acum. Mes (%)",
     "Acum. Ano (%)", "Acum. 12M (%)",
     "PL (milhoes R$)", "PL Medio (milhoes R$)"
 ]
 
-CAT_URL = {
-    "RENDA FIXA SIMPLES":            "renda-fixa-simples",
-    "RENDA FIXA":                    "renda-fixa",
-    "RENDA FIXA REFERENCIADO":       "renda-fixa-referenciado",
-    "RENDA FIXA CURTO PRAZO":        "renda-fixa-curto-prazo",
-    "MULTIMERCADO":                  "multimercado",
-    "CAMBIAL":                       "cambial",
-    "ACOES":                         "acoes",
-    "FUNDO DE INDICE":               "fundo-de-indice",
-    "FUNDOS MUTUOS DE PRIVATIZACAO": "fundos-mutuos-de-privatizacao",
-}
-
 def rm_accent(s):
-    return ''.join(
-        c for c in unicodedata.normalize('NFD', s)
-        if unicodedata.category(c) != 'Mn'
-    )
+    return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn')
 
-def gerar_slug(nome, categoria):
-    slug = nome.upper()
-
-    # Remove apenas sufixos jurídicos — NÃO remove termos de prazo
-    for rem in ["RESP LTDA", "- RESP LTDA", "- RL", "(1)", "(2)", "(3)", "IE"]:
-        slug = slug.replace(rem, " ")
-
-    # "LP" isolado vira "LONGO PRAZO" (abreviação usada nos nomes dos fundos)
-    slug = re.sub(r'\bLP\b', 'LONGO PRAZO', slug)
-
-    slug = re.sub(r'^CAIXA\s+', '', slug.strip())
-    slug = re.sub(r'\bFIF\b', '', slug)
-    slug = rm_accent(slug.strip())
-    slug = re.sub(r'[^A-Z0-9 ]', '', slug)
-    slug = re.sub(r'\s+', '-', slug.strip()).lower()
-    slug = re.sub(r'-+', '-', slug).strip('-')
-
-    cat_seg = CAT_URL.get(categoria, "renda-fixa")
-    return f"https://www.caixa.gov.br/fundos-investimento/{cat_seg}/{slug}/Paginas/default.aspx"
-
-
-def rodar(headless=True):
-    print("Robo SIPII iniciando extracao com URLs...\n")
-
+def configurar_driver(headless=True):
     opt = webdriver.ChromeOptions()
     if headless:
         opt.add_argument("--headless=new")
     opt.add_argument("--no-sandbox")
     opt.add_argument("--disable-dev-shm-usage")
-    opt.add_argument("--window-size=1920,1080")
+    opt.add_argument("--window-size=1400,1080")
     opt.add_argument("--disable-gpu")
-    opt.add_argument(
-        "user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-        "AppleWebKit/537.36 Chrome/120.0.0.0 Safari/537.36"
-    )
+    return webdriver.Chrome(options=opt)
 
-    driver = webdriver.Chrome(options=opt)
-    todos = []
+def extrair():
+    driver = configurar_driver(headless=True) # Mude para False se quiser ver o robo trabalhando
+    wait = WebDriverWait(driver, 10)
+    todos_resultados = []
+
+    print(f"🚀 Iniciando extração em {datetime.now().strftime('%d/%m/%Y %H:%M')}")
 
     for cat in CATEGORIAS:
-        print(f"  Processando: {cat}...", end=" ", flush=True)
+        print(f"📂 Categoria: {cat}")
         try:
             driver.get(URL)
-            time.sleep(3)
+            
+            # 1. Clica na aba TODOS
+            aba_todos = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(text(),'TODOS')]")))
+            aba_todos.click()
+            time.sleep(1.5)
 
-            for aba in driver.find_elements(By.CSS_SELECTOR, "ul.nav-tabs li a"):
-                if "TODOS" in aba.text.upper():
-                    aba.click()
-                    time.sleep(2)
-                    break
+            # 2. Clica na categoria específica
+            link_cat = wait.until(EC.element_to_be_clickable((By.LINK_TEXT, cat)))
+            link_cat.click()
+            
+            # 3. Garante que a tabela carregou
+            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "table.zebra tbody tr")))
+            time.sleep(1)
 
-            clicou = False
-            for link in driver.find_elements(By.CSS_SELECTOR, "a"):
-                if rm_accent(cat.upper()) == rm_accent(link.text.strip().upper()):
-                    link.click()
-                    time.sleep(2)
-                    clicou = True
-                    break
-
-            if not clicou:
-                print("nao encontrada")
-                continue
-
-            try:
-                WebDriverWait(driver, 15).until(
-                    EC.presence_of_element_located((By.CSS_SELECTOR, "table.zebra tbody tr")))
-                time.sleep(1.5)
-            except TimeoutException:
-                print("tabela nao carregou")
-                continue
-
-            for sel in driver.find_elements(By.TAG_NAME, "select"):
-                try:
-                    s = Select(sel)
-                    for op in ["Todos", "All", "100", "50"]:
-                        if op in [o.text for o in s.options]:
-                            s.select_by_visible_text(op)
-                            time.sleep(2)
-                            break
-                    break
-                except Exception:
-                    continue
-
+            # 4. Processa as linhas
             linhas = driver.find_elements(By.CSS_SELECTOR, "table.zebra tbody tr")
-            regs = []
+            fundos_na_cat = 0
+
             for tr in linhas:
-                celulas = [td.text.strip().replace("\n", " ")
-                           for td in tr.find_elements(By.TAG_NAME, "td")]
-                celulas = [c for c in celulas if c]
-                if not celulas or len(celulas) < 5:
-                    continue
+                # Verifica se a linha tem o link do fundo (evita lixo e linhas de '0,01')
+                try:
+                    link_fundo = tr.find_element(By.CSS_SELECTOR, "td:first-child a")
+                    nome_fundo = link_fundo.text.strip().replace("\n", " ")
+                except NoSuchElementException:
+                    continue 
 
-                r = {"Categoria": cat}
-                for i, col in enumerate(COLUNAS):
-                    r[col] = celulas[i] if i < len(celulas) else ""
+                if not nome_fundo: continue
 
-                # Sempre gera o slug próprio (URL do SIPII vem truncada/errada)
-                url_real = gerar_slug(r.get("Fundo", ""), cat)
+                # Coleta dados da linha
+                celulas = [td.text.strip() for td in tr.find_elements(By.TAG_NAME, "td")]
+                
+                # --- CAPTURA DA URL REAL NO POPUP ---
+                url_real = ""
+                try:
+                    driver.execute_script("arguments[0].click();", link_fundo)
+                    
+                    # Espera o container do popup aparecer
+                    popup = wait.until(EC.visibility_of_element_located((
+                        By.XPATH, "//*[contains(@class,'rich-mpnl-content') or contains(@id,'param')]")))
+                    
+                    # Busca o link específico dentro do popup
+                    link_final_el = popup.find_element(By.XPATH, ".//a[contains(@href, 'caixa.gov.br/fundos-investimento')]")
+                    url_real = link_final_el.get_attribute("href")
 
-                r["URL"] = url_real
-                regs.append(r)
+                    # Fecha o popup (X ou ESC)
+                    try:
+                        btn_fechar = driver.find_element(By.XPATH, "//*[contains(@id,'close') or text()='X' or contains(@onclick,'hide')]")
+                        driver.execute_script("arguments[0].click();", btn_fechar)
+                    except:
+                        driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ESCAPE)
+                    
+                    time.sleep(0.8) # Respiro para o site
+                except Exception:
+                    url_real = "" # Fallback se falhar
 
-            todos.extend(regs)
-            print(f"OK {len(regs)} fundos")
+                # Monta o dicionário do fundo
+                registro = {"Categoria": cat}
+                for i, col in enumerate(COLUNAS_DADOS):
+                    registro[col] = celulas[i] if i < len(celulas) else ""
+                
+                registro["URL"] = url_real
+                todos_resultados.append(registro)
+                fundos_na_cat += 1
+
+            print(f"   ✅ {fundos_na_cat} fundos extraídos.")
 
         except Exception as e:
-            print(f"ERRO: {str(e)[:60]}")
+            print(f"   ❌ Erro na categoria {cat}: {str(e)[:50]}")
 
     driver.quit()
+    return todos_resultados
 
-    if not todos:
-        print("Nenhum dado extraido.")
+def salvar_dados(dados):
+    if not dados:
+        print("FALHA: Nenhum dado para salvar.")
         return
 
-    df = pd.DataFrame(todos)
-    cols = ["Categoria"] + COLUNAS + ["URL"]
-    df = df[[c for c in cols if c in df.columns]]
-
+    df = pd.DataFrame(dados)
     ts = datetime.now().strftime("%Y%m%d")
-    xlsx_path = f"sipii_caixa_{ts}.xlsx"
-    csv_path  = f"sipii_caixa_{ts}.csv"
-
-    with pd.ExcelWriter(xlsx_path, engine="openpyxl") as w:
-        df.to_excel(w, sheet_name="Todos", index=False)
-        for cat in df["Categoria"].unique():
-            df[df["Categoria"] == cat].to_excel(w, sheet_name=cat[:31], index=False)
-
-    df.to_csv(csv_path,           index=False, encoding="utf-8-sig")
+    
+    # Salva CSV principal para o Site
     df.to_csv("dados_atuais.csv", index=False, encoding="utf-8-sig")
+    
+    # Salva Histórico CSV e Excel
+    csv_hist = f"sipii_caixa_{ts}.csv"
+    xlsx_hist = f"sipii_caixa_{ts}.xlsx"
+    
+    df.to_csv(csv_hist, index=False, encoding="utf-8-sig")
+    
+    with pd.ExcelWriter(xlsx_hist, engine="openpyxl") as writer:
+        df.to_excel(writer, sheet_name="Todos", index=False)
+        for categoria in df["Categoria"].unique():
+            df[df["Categoria"] == categoria].to_excel(writer, sheet_name=categoria[:31], index=False)
 
-    print(f"\nSUCESSO!")
-    print(f"Historico : {csv_path}")
-    print(f"Site      : dados_atuais.csv")
-
+    print("\n" + "="*30)
+    print("DADOS ATUALIZADOS COM SUCESSO!")
+    print(f"Total: {len(df)} fundos")
+    print(f"Arquivos: dados_atuais.csv, {csv_hist}, {xlsx_hist}")
+    print("="*30)
 
 if __name__ == "__main__":
-    rodar(headless=True)
+    dados_extraidos = extrair()
+    salvar_dados(dados_extraidos)
