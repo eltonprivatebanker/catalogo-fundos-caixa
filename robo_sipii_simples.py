@@ -33,15 +33,15 @@ COLUNAS = [
 ]
 
 CAT_URL = {
-    "RENDA FIXA SIMPLES":           "renda-fixa-simples",
-    "RENDA FIXA":                   "renda-fixa",
-    "RENDA FIXA REFERENCIADO":      "renda-fixa-referenciado",
-    "RENDA FIXA CURTO PRAZO":       "renda-fixa-curto-prazo",
-    "MULTIMERCADO":                 "multimercado",
-    "CAMBIAL":                      "cambial",
-    "ACOES":                        "acoes",
-    "FUNDO DE INDICE":              "fundo-de-indice",
-    "FUNDOS MUTUOS DE PRIVATIZACAO":"fundos-mutuos-de-privatizacao",
+    "RENDA FIXA SIMPLES":            "renda-fixa-simples",
+    "RENDA FIXA":                    "renda-fixa",
+    "RENDA FIXA REFERENCIADO":       "renda-fixa-referenciado",
+    "RENDA FIXA CURTO PRAZO":        "renda-fixa-curto-prazo",
+    "MULTIMERCADO":                  "multimercado",
+    "CAMBIAL":                       "cambial",
+    "ACOES":                         "acoes",
+    "FUNDO DE INDICE":               "fundo-de-indice",
+    "FUNDOS MUTUOS DE PRIVATIZACAO": "fundos-mutuos-de-privatizacao",
 }
 
 def rm_accent(s):
@@ -52,15 +52,21 @@ def rm_accent(s):
 
 def gerar_slug(nome, categoria):
     slug = nome.upper()
-    for rem in ["RESP LTDA", "- RESP LTDA", "- RL", "(1)", "(2)", "(3)",
-                "LP", "LONGO PRAZO", "CURTO PRAZO", "IE"]:
+
+    # Remove apenas sufixos jurídicos — NÃO remove termos de prazo
+    for rem in ["RESP LTDA", "- RESP LTDA", "- RL", "(1)", "(2)", "(3)", "IE"]:
         slug = slug.replace(rem, " ")
+
+    # "LP" isolado vira "LONGO PRAZO" (abreviação usada nos nomes dos fundos)
+    slug = re.sub(r'\bLP\b', 'LONGO PRAZO', slug)
+
     slug = re.sub(r'^CAIXA\s+', '', slug.strip())
     slug = re.sub(r'\bFIF\b', '', slug)
     slug = rm_accent(slug.strip())
     slug = re.sub(r'[^A-Z0-9 ]', '', slug)
     slug = re.sub(r'\s+', '-', slug.strip()).lower()
     slug = re.sub(r'-+', '-', slug).strip('-')
+
     cat_seg = CAT_URL.get(categoria, "renda-fixa")
     return f"https://www.caixa.gov.br/fundos-investimento/{cat_seg}/{slug}/Paginas/default.aspx"
 
@@ -140,19 +146,8 @@ def rodar(headless=True):
                 for i, col in enumerate(COLUNAS):
                     r[col] = celulas[i] if i < len(celulas) else ""
 
-                url_real = ""
-                try:
-                    a_tag = tr.find_element(By.TAG_NAME, "a")
-                    href = a_tag.get_attribute("href") or ""
-                    if href.startswith("http"):
-                        url_real = href
-                    elif href.startswith("/"):
-                        url_real = "https://www.caixa.gov.br" + href
-                except NoSuchElementException:
-                    pass
-
-                if not url_real:
-                    url_real = gerar_slug(r.get("Fundo", ""), cat)
+                # Sempre gera o slug próprio (URL do SIPII vem truncada/errada)
+                url_real = gerar_slug(r.get("Fundo", ""), cat)
 
                 r["URL"] = url_real
                 regs.append(r)
