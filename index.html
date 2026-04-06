@@ -82,7 +82,6 @@
     tbody tr:hover{background:var(--row-hover)}
     td{padding:11px 14px;white-space:nowrap;color:var(--text);font-family:'DM Mono',monospace;font-size:.8rem}
 
-    /* FUNDO CLICÁVEL */
     td.col-fundo{font-family:'DM Sans',sans-serif;font-size:.82rem;white-space:normal;max-width:320px;font-weight:500}
     td.col-fundo a{color:var(--text);text-decoration:none;transition:color .15s;display:inline-flex;align-items:flex-start;gap:6px}
     td.col-fundo a:hover{color:var(--gold2)}
@@ -166,7 +165,53 @@
 let allRows=[],filtered=[],sortCol=7,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',hideSemDados=false,headers=[],displayHeaders=[];
 
-const NUM_SET=new Set(["Cota (R$)","Variação Dia (%)","Acum. Mês (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhões R$)","PL Médio (milhões R$)","Aplic. Inicial (R$)"]);
+// ← nomes SEM acento, igual ao CSV gerado pelo robô
+const NUM_SET=new Set([
+  "Cota (R$)",
+  "Variacao Dia (%)",
+  "Acum. Mes (%)",
+  "Acum. Ano (%)",
+  "Acum. 12M (%)",
+  "PL (milhoes R$)",
+  "PL Medio (milhoes R$)",
+  "Aplic. Inicial (R$)"
+]);
+
+const CAT_URL={
+  "RENDA FIXA SIMPLES":            "renda-fixa-simples",
+  "RENDA FIXA":                    "renda-fixa",
+  "RENDA FIXA REFERENCIADO":       "renda-fixa-referenciado",
+  "RENDA FIXA CURTO PRAZO":        "renda-fixa-curto-prazo",
+  "MULTIMERCADO":                  "multimercado",
+  "CAMBIAL":                       "cambial",
+  "ACOES":                         "acoes",
+  "FUNDO DE INDICE":               "fundo-de-indice",
+  "FUNDOS MUTUOS DE PRIVATIZACAO": "fundos-mutuos-de-privatizacao",
+};
+
+function rmAcc(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
+
+function gerarSlug(nome,cat){
+  let s=nome.toUpperCase();
+  // Remove apenas sufixos jurídicos — NÃO remove termos de prazo
+  ["RESP LTDA","- RESP LTDA","- RL","(1)","(2)","(3)","IE"]
+    .forEach(r=>s=s.split(r).join(' '));
+  // LP isolado vira LONGO PRAZO
+  s=s.replace(/\bLP\b/g,'LONGO PRAZO');
+  s=s.replace(/^CAIXA\s+/,'').replace(/\bFIF\b/g,'');
+  s=rmAcc(s.trim()).replace(/[^A-Z0-9 ]/g,'').trim()
+    .replace(/\s+/g,'-').toLowerCase()
+    .replace(/-+/g,'-').replace(/^-|-$/g,'');
+  // Normaliza a chave da categoria (remove acentos para comparar)
+  const catKey=rmAcc((cat||'').toUpperCase());
+  const catSeg=Object.entries(CAT_URL).find(([k])=>rmAcc(k)===catKey)?.[1]||'renda-fixa';
+  return`https://www.caixa.gov.br/fundos-investimento/${catSeg}/${s}/Paginas/default.aspx`;
+}
+
+function getFundUrl(r){
+  const u=r['URL']||r['url']||'';
+  return(u&&u.startsWith('http'))?u:gerarSlug(r['Fundo']||'',r['Categoria']||'');
+}
 
 function parseCsv(raw){
   if(raw.charCodeAt(0)===0xFEFF)raw=raw.slice(1);
@@ -174,38 +219,26 @@ function parseCsv(raw){
   if(r.data.length){const f=r.data[0],k=Object.keys(f);if(k.every(x=>f[x]===x))r.data.shift();}
   return r;
 }
+
 function toNum(v){
   if(!v||!v.trim||v.trim()===''||v==='-'||v==='—')return null;
   const n=parseFloat(v.replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n;
 }
+
 function fmtNum(v){
   if(!v||v.trim()===''||v==='-'||v==='—')return'<span class="dash">—</span>';
   const n=toNum(v);if(n===null)return`<span class="neutral">${v}</span>`;
   return`<span class="${n>0?'pos':n<0?'neg':'neutral'}">${v}</span>`;
 }
-function temDados(r){const c=(r['Cota (R$)']||'').trim();return c!==''&&c!=='-'&&c!=='—';}
 
-// Geração de slug fallback
-const CAT_URL={"RENDA FIXA SIMPLES":"renda-fixa-simples","RENDA FIXA":"renda-fixa","RENDA FIXA REFERENCIADO":"renda-fixa-referenciado","RENDA FIXA CURTO PRAZO":"renda-fixa-curto-prazo","MULTIMERCADO":"multimercado","CAMBIAL":"cambial","AÇÕES":"acoes","FUNDO DE ÍNDICE":"fundo-de-indice","FUNDOS MÚTUOS DE PRIVATIZAÇÃO":"fundos-mutuos-de-privatizacao"};
-function rmAcc(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
-function gerarSlug(nome,cat){
-  let s=nome.toUpperCase();
-  ["RESP LTDA","- RESP LTDA","- RL","(1)","(2)","(3)","LP","LONGO PRAZO","CURTO PRAZO","IE"].forEach(r=>s=s.split(r).join(' '));
-  s=s.replace(/^CAIXA\s+/,'').replace(/\bFIF\b/g,'');
-  s=rmAcc(s.trim()).replace(/[^A-Z0-9 ]/g,'').trim().replace(/\s+/g,'-').toLowerCase().replace(/-+/g,'-').replace(/^-|-$/g,'');
-  return`https://www.caixa.gov.br/fundos-investimento/${CAT_URL[cat]||'renda-fixa'}/${s}/Paginas/default.aspx`;
-}
-function getFundUrl(r){
-  const u=r['URL']||r['url']||'';
-  return(u&&u.startsWith('http'))?u:gerarSlug(r['Fundo']||'',r['Categoria']||'');
-}
+function temDados(r){const c=(r['Cota (R$)']||'').trim();return c!==''&&c!=='-'&&c!=='—';}
 
 function updateKPIs(){
   document.getElementById('kpiFundos').textContent=allRows.length;
   document.getElementById('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'')).size;
   let pl=0,best=-Infinity,bestName='',bestVal='—';
   allRows.forEach(r=>{
-    const p=toNum(r['PL (milhões R$)']);if(p)pl+=p;
+    const p=toNum(r['PL (milhoes R$)']);if(p)pl+=p;
     const m=toNum(r['Acum. 12M (%)']);if(m!==null&&m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
   });
   document.getElementById('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
@@ -217,7 +250,8 @@ function applyFilter(){
   const q=activeSearch.toLowerCase();
   filtered=allRows.filter(r=>{
     if(hideSemDados&&!temDados(r))return false;
-    return(!activeCat||(r['Categoria']||'')===activeCat)&&(!q||Object.values(r).some(v=>v&&v.toLowerCase().includes(q)));
+    return(!activeCat||(r['Categoria']||'')===activeCat)&&
+           (!q||Object.values(r).some(v=>v&&v.toLowerCase().includes(q)));
   });
   if(sortCol>=0&&sortCol<displayHeaders.length){
     const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);
@@ -231,41 +265,51 @@ function applyFilter(){
 }
 
 function render(){
-  const start=(currentPage-1)*perPage,end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
+  const start=(currentPage-1)*perPage,
+        end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
   const rows=filtered.slice(start,end),tbody=document.getElementById('tableBody');
   tbody.innerHTML='';
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="${displayHeaders.length}" style="text-align:center;padding:40px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;}
+  if(!rows.length){
+    tbody.innerHTML=`<tr><td colspan="${displayHeaders.length}" style="text-align:center;padding:40px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
+  }
   rows.forEach(r=>{
     const tr=document.createElement('tr');
     if(!temDados(r))tr.classList.add('row-sem-dados');
     displayHeaders.forEach(h=>{
       const td=document.createElement('td'),val=r[h]||'';
       if(h==='Categoria'){
-        td.className='col-cat';td.innerHTML=`<span class="cat-badge">${val||'—'}</span>`;
+        td.className='col-cat';
+        td.innerHTML=`<span class="cat-badge">${val||'—'}</span>`;
       }else if(h==='Fundo'){
         td.className='col-fundo';
         const url=getFundUrl(r);
         td.innerHTML=`<a href="${url}" target="_blank" rel="noopener noreferrer" title="Abrir página do fundo na Caixa">${val}<svg class="link-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
       }else if(NUM_SET.has(h)&&h.includes('%')){
         td.innerHTML=fmtNum(val);td.style.textAlign='right';
-      }else{td.textContent=val||'—';}
+      }else{
+        td.textContent=val||'—';
+      }
       tr.appendChild(td);
     });
     tbody.appendChild(tr);
   });
-  document.getElementById('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length||1)}–${end} de ${filtered.length} registros`;
+  document.getElementById('resultInfo').textContent=
+    `Exibindo ${Math.min(start+1,filtered.length||1)}–${end} de ${filtered.length} registros`;
   renderPagination();
 }
 
 function renderPagination(){
-  const total=perPage===9999?1:Math.ceil(filtered.length/perPage),c=document.getElementById('pageBtns');
+  const total=perPage===9999?1:Math.ceil(filtered.length/perPage),
+        c=document.getElementById('pageBtns');
   c.innerHTML='';
   const mk=(label,page,dis,act)=>{
-    const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=label;b.disabled=dis;
+    const b=document.createElement('button');
+    b.className='page-btn'+(act?' active':'');b.textContent=label;b.disabled=dis;
     if(!dis)b.addEventListener('click',()=>{currentPage=page;render();});return b;
   };
   c.appendChild(mk('‹',currentPage-1,currentPage===1));
-  let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);from=Math.max(1,to-4);
+  let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);
+  from=Math.max(1,to-4);
   for(let i=from;i<=to;i++)c.appendChild(mk(i,i,false,i===currentPage));
   c.appendChild(mk('›',currentPage+1,currentPage===total||total===0));
 }
@@ -273,11 +317,13 @@ function renderPagination(){
 function buildHeader(){
   const thead=document.getElementById('tableHead'),tr=document.createElement('tr');
   displayHeaders.forEach((h,i)=>{
-    const th=document.createElement('th');th.innerHTML=`${h} <span class="si"></span>`;
+    const th=document.createElement('th');
+    th.innerHTML=`${h} <span class="si"></span>`;
     if(i===sortCol)th.className=sortDir===1?'sa':'sd';
     th.addEventListener('click',()=>{
       if(sortCol===i)sortDir*=-1;else{sortCol=i;sortDir=1;}
-      thead.querySelectorAll('th').forEach(t=>t.className='');th.className=sortDir===1?'sa':'sd';applyFilter();
+      thead.querySelectorAll('th').forEach(t=>t.className='');
+      th.className=sortDir===1?'sa':'sd';applyFilter();
     });
     tr.appendChild(th);
   });
@@ -287,12 +333,19 @@ function buildHeader(){
 function buildCatFilters(cats){
   const c=document.getElementById('catFilters');
   [...cats].sort().forEach(cat=>{
-    const b=document.createElement('button');b.className='cat-btn';b.dataset.cat=cat;b.textContent=cat;
-    b.addEventListener('click',()=>{activeCat=cat;c.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));b.classList.add('active');applyFilter();});
+    const b=document.createElement('button');
+    b.className='cat-btn';b.dataset.cat=cat;b.textContent=cat;
+    b.addEventListener('click',()=>{
+      activeCat=cat;
+      c.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');applyFilter();
+    });
     c.appendChild(b);
   });
   c.querySelector('[data-cat=""]').addEventListener('click',()=>{
-    activeCat='';c.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));c.querySelector('[data-cat=""]').classList.add('active');applyFilter();
+    activeCat='';
+    c.querySelectorAll('.cat-btn').forEach(x=>x.classList.remove('active'));
+    c.querySelector('[data-cat=""]').classList.add('active');applyFilter();
   });
 }
 
@@ -312,9 +365,13 @@ fetch('dados_atuais.csv?v='+Date.now())
     document.getElementById('loadMsg').style.display='none';
     document.getElementById('mainTable').style.display='table';
     const now=new Date();
-    document.getElementById('lastUpdate').innerHTML=`<span class="live-dot"></span>Atualizado em ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
+    document.getElementById('lastUpdate').innerHTML=
+      `<span class="live-dot"></span>Atualizado em ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
   })
-  .catch(err=>{document.getElementById('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;});
+  .catch(err=>{
+    document.getElementById('loadMsg').innerHTML=
+      `<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
+  });
 </script>
 </body>
 </html>
