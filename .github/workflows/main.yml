@@ -2,7 +2,7 @@ name: Atualizacao Diaria Caixa
 
 on:
   schedule:
-    - cron: '0 12 * * 1-5'
+    - cron: '0 10 * * 1-5'   # 07h Brasília (UTC-3), seg–sex
   workflow_dispatch:
 
 jobs:
@@ -11,12 +11,12 @@ jobs:
 
     steps:
       - name: Baixar codigo
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configurar Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.11'
 
       - name: Instalar Chrome
         run: |
@@ -33,6 +33,6 @@ jobs:
         run: |
           git config --global user.name "actions-user"
           git config --global user.email "action@github.com"
-          git add .
+          git add dados_atuais.csv sipii_caixa_*.csv sipii_caixa_*.xlsx
           git diff --cached --quiet || git commit -m "Dados atualizados via Robô: $(date)"
           git push
