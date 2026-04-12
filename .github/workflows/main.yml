@@ -1,33 +1,38 @@
 name: Atualizacao Diaria Caixa
-
 on:
   schedule:
-    - cron: '0 10 * * 1-5'   # 07h Brasília (UTC-3), seg–sex
+    - cron: '0 10 * * 1-5'
   workflow_dispatch:
-
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v4
-
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Instalar Chrome
         run: |
           sudo apt-get update -q
           sudo apt-get install -y google-chrome-stable
-
       - name: Instalar Dependencias
         run: pip install -r requirements.txt
-
       - name: Executar o Robo
         run: python robo_sipii_simples.py
+
+      # ✅ NOVO: usa o CSV do SIPII (com dados reais) como dados_atuais.csv
+      - name: Atualizar dados_atuais com CSV do SIPII
+        run: |
+          HOJE=$(date +%Y%m%d)
+          ARQUIVO="sipii_caixa_${HOJE}.csv"
+          if [ -f "$ARQUIVO" ]; then
+            cp "$ARQUIVO" dados_atuais.csv
+            echo "✅ dados_atuais.csv atualizado com $ARQUIVO"
+          else
+            echo "⚠️ Arquivo $ARQUIVO não encontrado — mantendo dados_atuais.csv anterior"
+          fi
 
       - name: Salvar Resultados no GitHub
         run: |
