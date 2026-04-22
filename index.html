@@ -91,7 +91,7 @@
     td.col-cat{font-family:'DM Sans',sans-serif;font-size:.72rem}
     .cat-badge{display:inline-block;padding:3px 9px;border-radius:12px;background:var(--gold-dim);
       border:1px solid var(--border);color:var(--gold);font-size:.68rem;font-weight:600;letter-spacing:.04em;white-space:nowrap}
-    .pos{color:var(--green)}.neg{color:var(--red)}.neutral{color:var(--muted)}.dash{color:rgba(138,155,184,.4)}
+    .pos{color:var(--green);font-weight:bold}.neg{color:var(--red);font-weight:bold}.neutral{color:var(--muted)}.dash{color:rgba(138,155,184,.4)}
     .row-sem-dados{opacity:.4}
 
     .pagination-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:20px;padding:0 4px}
@@ -165,7 +165,7 @@
 let allRows=[],filtered=[],sortCol=7,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',hideSemDados=false,headers=[],displayHeaders=[];
 
-// ← nomes SEM acento, igual ao CSV gerado pelo robô
+// Colunas numéricas EXATAMENTE como geradas pelo Robô v5
 const NUM_SET=new Set([
   "Cota (R$)",
   "Variacao Dia (%)",
@@ -193,16 +193,13 @@ function rmAcc(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
 
 function gerarSlug(nome,cat){
   let s=nome.toUpperCase();
-  // Remove apenas sufixos jurídicos — NÃO remove termos de prazo
   ["RESP LTDA","- RESP LTDA","- RL","(1)","(2)","(3)","IE"]
     .forEach(r=>s=s.split(r).join(' '));
-  // LP isolado vira LONGO PRAZO
   s=s.replace(/\bLP\b/g,'LONGO PRAZO');
   s=s.replace(/^CAIXA\s+/,'').replace(/\bFIF\b/g,'');
   s=rmAcc(s.trim()).replace(/[^A-Z0-9 ]/g,'').trim()
     .replace(/\s+/g,'-').toLowerCase()
     .replace(/-+/g,'-').replace(/^-|-$/g,'');
-  // Normaliza a chave da categoria (remove acentos para comparar)
   const catKey=rmAcc((cat||'').toUpperCase());
   const catSeg=Object.entries(CAT_URL).find(([k])=>rmAcc(k)===catKey)?.[1]||'renda-fixa';
   return`https://www.caixa.gov.br/fundos-investimento/${catSeg}/${s}/Paginas/default.aspx`;
@@ -216,33 +213,46 @@ function getFundUrl(r){
 function parseCsv(raw){
   if(raw.charCodeAt(0)===0xFEFF)raw=raw.slice(1);
   const r=Papa.parse(raw,{header:true,skipEmptyLines:true});
-  if(r.data.length){const f=r.data[0],k=Object.keys(f);if(k.every(x=>f[x]===x))r.data.shift();}
   return r;
 }
 
+// NOVA FUNÇÃO toNum: trata vírgula brasileira, porcentagem e pontos de milhar
 function toNum(v){
-  if(!v||!v.trim||v.trim()===''||v==='-'||v==='—')return null;
-  const n=parseFloat(v.replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n;
+  if(!v || typeof v !== 'string' || v.trim()==='' || v==='-' || v==='—') return null;
+  let clean = v.replace('%', '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
+  const n = parseFloat(clean);
+  return isNaN(n) ? null : n;
 }
 
 function fmtNum(v){
   if(!v||v.trim()===''||v==='-'||v==='—')return'<span class="dash">—</span>';
-  const n=toNum(v);if(n===null)return`<span class="neutral">${v}</span>`;
+  const n=toNum(v);
+  if(n===null)return`<span class="neutral">${v}</span>`;
   return`<span class="${n>0?'pos':n<0?'neg':'neutral'}">${v}</span>`;
 }
 
 function temDados(r){const c=(r['Cota (R$)']||'').trim();return c!==''&&c!=='-'&&c!=='—';}
 
+// KPI: Agora busca corretamente a coluna "Acum. 12M (%)" gerada pelo Robô v5
 function updateKPIs(){
   document.getElementById('kpiFundos').textContent=allRows.length;
   document.getElementById('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'')).size;
   let pl=0,best=-Infinity,bestName='',bestVal='—';
+  
   allRows.forEach(r=>{
-    const p=toNum(r['PL (milhoes R$)']);if(p)pl+=p;
-    const m=toNum(r['Acum. 12M (%)']);if(m!==null&&m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
+    const p=toNum(r['PL (milhoes R$)']);
+    if(p) pl += p;
+    
+    const m=toNum(r['Acum. 12M (%)']);
+    if(m!==null && m > best){
+      best=m;
+      bestName=r['Fundo']||'';
+      bestVal=r['Acum. 12M (%)'];
+    }
   });
+  
   document.getElementById('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
-  document.getElementById('kpiBest').innerHTML=best>-Infinity?`<span class="pos">${bestVal}%</span>`:'—';
+  document.getElementById('kpiBest').innerHTML=best>-Infinity?`<span class="pos">${bestVal}</span>`:'—';
   document.getElementById('kpiBestFundo').textContent=bestName.length>35?bestName.slice(0,35)+'…':bestName;
 }
 
@@ -286,6 +296,8 @@ function render(){
         td.innerHTML=`<a href="${url}" target="_blank" rel="noopener noreferrer" title="Abrir página do fundo na Caixa">${val}<svg class="link-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
       }else if(NUM_SET.has(h)&&h.includes('%')){
         td.innerHTML=fmtNum(val);td.style.textAlign='right';
+      }else if(h==='Perfis'){
+        td.innerHTML=`<span class="cat-badge" style="background:rgba(255,255,255,0.05);color:var(--muted)">${val}</span>`;
       }else{
         td.textContent=val||'—';
       }
@@ -316,6 +328,7 @@ function renderPagination(){
 
 function buildHeader(){
   const thead=document.getElementById('tableHead'),tr=document.createElement('tr');
+  thead.innerHTML = ""; 
   displayHeaders.forEach((h,i)=>{
     const th=document.createElement('th');
     th.innerHTML=`${h} <span class="si"></span>`;
@@ -332,6 +345,7 @@ function buildHeader(){
 
 function buildCatFilters(cats){
   const c=document.getElementById('catFilters');
+  c.innerHTML = '<button class="cat-btn active" data-cat="">Todas</button>';
   [...cats].sort().forEach(cat=>{
     const b=document.createElement('button');
     b.className='cat-btn';b.dataset.cat=cat;b.textContent=cat;
@@ -353,13 +367,15 @@ document.getElementById('searchInput').addEventListener('input',e=>{activeSearch
 document.getElementById('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
 document.getElementById('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;applyFilter();});
 
-fetch('dados_atuais.csv?v='+Date.now())
+function carregarDados(){
+  fetch('dados_atuais.csv?v='+Date.now())
   .then(r=>r.text())
   .then(raw=>{
     const result=parseCsv(raw);
     allRows=result.data;
     headers=Object.keys(allRows[0]||{});
-    displayHeaders=headers.filter(h=>h.toLowerCase()!=='url');
+    // Remove colunas auxiliares que não devem aparecer na tabela
+    displayHeaders=headers.filter(h=>h.toLowerCase()!=='url' && h.toLowerCase()!=='fundo_norm');
     const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
     buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
     document.getElementById('loadMsg').style.display='none';
@@ -372,6 +388,9 @@ fetch('dados_atuais.csv?v='+Date.now())
     document.getElementById('loadMsg').innerHTML=
       `<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
   });
+}
+
+carregarDados();
 </script>
 </body>
 </html>
