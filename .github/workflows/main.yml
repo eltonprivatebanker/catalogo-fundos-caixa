@@ -1,28 +1,35 @@
 name: Atualizacao Diaria Caixa
+
 on:
   schedule:
-    - cron: '0 10 * * 1-5'
+    - cron: '0 10 * * 1-5'   # 07h Brasília (UTC-3), seg–sex
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
       - name: Baixar codigo
         uses: actions/checkout@v4
+
       - name: Configurar Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - name: Instalar Chrome
         run: |
           sudo apt-get update -q
           sudo apt-get install -y google-chrome-stable
+
       - name: Instalar Dependencias
         run: pip install -r requirements.txt
+
       - name: Executar o Robo
         run: python robo_sipii_simples.py
 
-      # ✅ NOVO: usa o CSV do SIPII (com dados reais) como dados_atuais.csv
+      # ✅ Garante que o arquivo do dia (coletado pelo robô v5) vire o oficial
       - name: Atualizar dados_atuais com CSV do SIPII
         run: |
           HOJE=$(date +%Y%m%d)
@@ -34,10 +41,11 @@ jobs:
             echo "⚠️ Arquivo $ARQUIVO não encontrado — mantendo dados_atuais.csv anterior"
           fi
 
+      # ✅ Salva as mudanças de volta no seu GitHub
       - name: Salvar Resultados no GitHub
         run: |
           git config --global user.name "actions-user"
-          git config --global user.email "action@github.com"
-          git add dados_atuais.csv sipii_caixa_*.csv sipii_caixa_*.xlsx
-          git diff --cached --quiet || git commit -m "Dados atualizados via Robô: $(date)"
+          git config --global user.email "actions@github.com"
+          git add .
+          git commit -m "Dados atualizados via Robô: $(date +'%d/%m/%Y %H:%M')" || echo "Sem mudanças para salvar"
           git push
