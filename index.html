@@ -127,6 +127,7 @@
     <div class="kpi"><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub">tipos de fundo</div></div>
     <div class="kpi"><div class="kpi-label">PL Total (milhões R$)</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub">patrimônio líquido soma</div></div>
     <div class="kpi"><div class="kpi-label">Melhor Acum. 12M</div><div class="kpi-value" id="kpiBest" style="font-size:1.2rem">—</div><div class="kpi-sub" id="kpiBestFundo">—</div></div>
+    <div class="kpi"><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value" id="kpiWorst" style="font-size:1.2rem">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
   </div>
 
   <div class="controls">
@@ -162,10 +163,10 @@
 </div>
 
 <script>
-let allRows=[],filtered=[],sortCol=7,sortDir=-1,currentPage=1,perPage=25;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',hideSemDados=false,headers=[],displayHeaders=[];
 
-// Colunas numéricas EXATAMENTE como geradas pelo Robô v5
+// Colunas numéricas
 const NUM_SET=new Set([
   "Cota (R$)",
   "Variacao Dia (%)",
@@ -176,6 +177,10 @@ const NUM_SET=new Set([
   "PL Medio (milhoes R$)",
   "Aplic. Inicial (R$)"
 ]);
+
+// Coluna padrão de ordenação ao carregar: Acum. 12M desc
+const DEFAULT_SORT_COL_NAME = "Acum. 12M (%)";
+const DEFAULT_SORT_DIR = -1; // -1 = descendente
 
 const CAT_URL={
   "RENDA FIXA SIMPLES":            "renda-fixa-simples",
@@ -193,7 +198,7 @@ function rmAcc(s){return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'');}
 
 function gerarSlug(nome,cat){
   let s=nome.toUpperCase();
-  ["RESP LTDA","- RESP LTDA","- RL","(1)","(2)","(3)","IE"]
+  ["RESP LTDA","- RESP LTDA","- RL","(1)","(2)","(3)","(8)","IE"]
     .forEach(r=>s=s.split(r).join(' '));
   s=s.replace(/\bLP\b/g,'LONGO PRAZO');
   s=s.replace(/^CAIXA\s+/,'').replace(/\bFIF\b/g,'');
@@ -212,48 +217,74 @@ function getFundUrl(r){
 
 function parseCsv(raw){
   if(raw.charCodeAt(0)===0xFEFF)raw=raw.slice(1);
-  const r=Papa.parse(raw,{header:true,skipEmptyLines:true});
-  return r;
+  return Papa.parse(raw,{header:true,skipEmptyLines:true});
 }
 
-// NOVA FUNÇÃO toNum: trata vírgula brasileira, porcentagem e pontos de milhar
+// Converte valor brasileiro (ex: "12,86" ou "1.234,56") para número
 function toNum(v){
-  if(!v || typeof v !== 'string' || v.trim()==='' || v==='-' || v==='—') return null;
-  let clean = v.replace('%', '').replace(/\s/g, '').replace(/\./g, '').replace(',', '.');
-  const n = parseFloat(clean);
-  return isNaN(n) ? null : n;
+  if(v===null||v===undefined)return null;
+  const s=String(v).trim();
+  if(s===''||s==='-'||s==='—'||s==='null')return null;
+  // Remove %, espaços, pontos de milhar; troca vírgula decimal por ponto
+  const clean=s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.');
+  const n=parseFloat(clean);
+  return isNaN(n)?null:n;
 }
 
 function fmtNum(v){
-  if(!v||v.trim()===''||v==='-'||v==='—')return'<span class="dash">—</span>';
+  if(!v||String(v).trim()===''||v==='-'||v==='—')return'<span class="dash">—</span>';
   const n=toNum(v);
   if(n===null)return`<span class="neutral">${v}</span>`;
   return`<span class="${n>0?'pos':n<0?'neg':'neutral'}">${v}</span>`;
 }
 
-function temDados(r){const c=(r['Cota (R$)']||'').trim();return c!==''&&c!=='-'&&c!=='—';}
+function temDados(r){
+  const c=String(r['Cota (R$)']||'').trim();
+  return c!==''&&c!=='-'&&c!=='—';
+}
 
-// KPI: Agora busca corretamente a coluna "Acum. 12M (%)" gerada pelo Robô v5
+// KPI — Melhor e Pior Acum. 12M
 function updateKPIs(){
   document.getElementById('kpiFundos').textContent=allRows.length;
   document.getElementById('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'')).size;
-  let pl=0,best=-Infinity,bestName='',bestVal='—';
-  
+
+  let pl=0, best=-Infinity, worst=Infinity;
+  let bestName='', worstName='', bestVal='—', worstVal='—';
+
   allRows.forEach(r=>{
+    // PL
     const p=toNum(r['PL (milhoes R$)']);
-    if(p) pl += p;
-    
-    const m=toNum(r['Acum. 12M (%)']);
-    if(m!==null && m > best){
-      best=m;
-      bestName=r['Fundo']||'';
-      bestVal=r['Acum. 12M (%)'];
+    if(p!==null) pl+=p;
+
+    // Acum. 12M — testa o nome exato da coluna
+    const raw12m = r['Acum. 12M (%)'];
+    const m=toNum(raw12m);
+    if(m!==null){
+      if(m>best){
+        best=m;
+        bestName=r['Fundo']||'';
+        bestVal=raw12m;
+      }
+      if(m<worst){
+        worst=m;
+        worstName=r['Fundo']||'';
+        worstVal=raw12m;
+      }
     }
   });
-  
-  document.getElementById('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
-  document.getElementById('kpiBest').innerHTML=best>-Infinity?`<span class="pos">${bestVal}</span>`:'—';
-  document.getElementById('kpiBestFundo').textContent=bestName.length>35?bestName.slice(0,35)+'…':bestName;
+
+  document.getElementById('kpiPL').textContent=
+    pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
+
+  document.getElementById('kpiBest').innerHTML=
+    best>-Infinity?`<span class="pos">${bestVal}%</span>`:'—';
+  document.getElementById('kpiBestFundo').textContent=
+    bestName.length>38?bestName.slice(0,38)+'…':bestName;
+
+  document.getElementById('kpiWorst').innerHTML=
+    worst<Infinity?`<span class="neg">${worstVal}%</span>`:'—';
+  document.getElementById('kpiWorstFundo').textContent=
+    worstName.length>38?worstName.slice(0,38)+'…':worstName;
 }
 
 function applyFilter(){
@@ -261,8 +292,9 @@ function applyFilter(){
   filtered=allRows.filter(r=>{
     if(hideSemDados&&!temDados(r))return false;
     return(!activeCat||(r['Categoria']||'')===activeCat)&&
-           (!q||Object.values(r).some(v=>v&&v.toLowerCase().includes(q)));
+           (!q||Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q)));
   });
+
   if(sortCol>=0&&sortCol<displayHeaders.length){
     const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);
     filtered.sort((a,b)=>{
@@ -286,7 +318,7 @@ function render(){
     const tr=document.createElement('tr');
     if(!temDados(r))tr.classList.add('row-sem-dados');
     displayHeaders.forEach(h=>{
-      const td=document.createElement('td'),val=r[h]||'';
+      const td=document.createElement('td'),val=String(r[h]||'');
       if(h==='Categoria'){
         td.className='col-cat';
         td.innerHTML=`<span class="cat-badge">${val||'—'}</span>`;
@@ -294,8 +326,9 @@ function render(){
         td.className='col-fundo';
         const url=getFundUrl(r);
         td.innerHTML=`<a href="${url}" target="_blank" rel="noopener noreferrer" title="Abrir página do fundo na Caixa">${val}<svg class="link-icon" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
-      }else if(NUM_SET.has(h)&&h.includes('%')){
-        td.innerHTML=fmtNum(val);td.style.textAlign='right';
+      }else if(NUM_SET.has(h)&&(h.includes('%')||h==='Cota (R$)')){
+        td.innerHTML=h.includes('%')?fmtNum(val):`<span class="neutral">${val||'—'}</span>`;
+        td.style.textAlign='right';
       }else if(h==='Perfis'){
         td.innerHTML=`<span class="cat-badge" style="background:rgba(255,255,255,0.05);color:var(--muted)">${val}</span>`;
       }else{
@@ -328,13 +361,13 @@ function renderPagination(){
 
 function buildHeader(){
   const thead=document.getElementById('tableHead'),tr=document.createElement('tr');
-  thead.innerHTML = ""; 
+  thead.innerHTML='';
   displayHeaders.forEach((h,i)=>{
     const th=document.createElement('th');
     th.innerHTML=`${h} <span class="si"></span>`;
     if(i===sortCol)th.className=sortDir===1?'sa':'sd';
     th.addEventListener('click',()=>{
-      if(sortCol===i)sortDir*=-1;else{sortCol=i;sortDir=1;}
+      if(sortCol===i)sortDir*=-1;else{sortCol=i;sortDir=-1;}
       thead.querySelectorAll('th').forEach(t=>t.className='');
       th.className=sortDir===1?'sa':'sd';applyFilter();
     });
@@ -345,7 +378,7 @@ function buildHeader(){
 
 function buildCatFilters(cats){
   const c=document.getElementById('catFilters');
-  c.innerHTML = '<button class="cat-btn active" data-cat="">Todas</button>';
+  c.innerHTML='<button class="cat-btn active" data-cat="">Todas</button>';
   [...cats].sort().forEach(cat=>{
     const b=document.createElement('button');
     b.className='cat-btn';b.dataset.cat=cat;b.textContent=cat;
@@ -374,15 +407,34 @@ function carregarDados(){
     const result=parseCsv(raw);
     allRows=result.data;
     headers=Object.keys(allRows[0]||{});
-    // Remove colunas auxiliares que não devem aparecer na tabela
-    displayHeaders=headers.filter(h=>h.toLowerCase()!=='url' && h.toLowerCase()!=='fundo_norm');
+
+    // Remove colunas auxiliares da tabela
+    displayHeaders=headers.filter(h=>
+      h.toLowerCase()!=='url' &&
+      h.toLowerCase()!=='fundo_norm' &&
+      h.toLowerCase()!=='perfil'   // Perfil (singular) é redundante com Perfis
+    );
+
+    // Ordena por Acum. 12M desc por padrão ao carregar
+    const defaultIdx=displayHeaders.indexOf(DEFAULT_SORT_COL_NAME);
+    if(defaultIdx>=0){sortCol=defaultIdx;sortDir=DEFAULT_SORT_DIR;}
+
     const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
     buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
+
     document.getElementById('loadMsg').style.display='none';
     document.getElementById('mainTable').style.display='table';
+
     const now=new Date();
     document.getElementById('lastUpdate').innerHTML=
-      `<span class="live-dot"></span>Atualizado em ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
+      `<span class="live-dot"></span>Atualizado em `+
+      `${now.toLocaleDateString('pt-BR')} às `+
+      `${now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
+
+    // Aviso se rentabilidade não estiver no CSV
+    if(!headers.includes('Acum. 12M (%)')){
+      console.warn('[Dashboard] Coluna "Acum. 12M (%)" não encontrada no CSV. Verifique se o robô v6 gerou o arquivo.');
+    }
   })
   .catch(err=>{
     document.getElementById('loadMsg').innerHTML=
