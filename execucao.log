@@ -282,3 +282,45 @@
 [16:22:03] CSV salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.csv
 [16:22:04] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260429.xlsx
 [16:22:04] SUCESSO: 171 fundos consolidados salvos.
+[15:58:02] INICIANDO ROBÔ SIPII v6 - GITHUB EDITION
+[15:58:03] [PF] Abrindo site...
+[15:58:23]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[15:58:36]   [PF] RENDA FIXA: 39 fundos.
+[15:58:42]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[15:58:45]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[15:58:56]   [PF] MULTIMERCADO: 30 fundos.
+[15:58:59]   [PF] CAMBIAL: 1 fundos.
+[15:59:10]   [PF] ACOES: 29 fundos.
+[15:59:13]   [PF] FUNDO DE INDICE: 1 fundos.
+[15:59:18]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[15:59:19] [PJ] Abrindo site...
+[15:59:39]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[15:59:52]   [PJ] RENDA FIXA: 38 fundos.
+[15:59:57]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[15:59:59]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[16:00:10]   [PJ] MULTIMERCADO: 27 fundos.
+[16:00:13]   [PJ] CAMBIAL: 1 fundos.
+[16:00:24]   [PJ] ACOES: 28 fundos.
+[16:00:24] [GOV] Abrindo site...
+[16:00:42]   [GOV] RENDA FIXA: 2 fundos.
+[16:00:45]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[16:00:49]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[16:00:53]   [GOV] MULTIMERCADO: 6 fundos.
+[16:00:57]   [GOV] ACOES: 4 fundos.
+[16:00:57] [RPPS] Abrindo site...
+[16:01:26]   [RPPS] RENDA FIXA: 19 fundos.
+[16:01:30]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[16:01:36]   [RPPS] MULTIMERCADO: 14 fundos.
+[16:01:42]   [RPPS] ACOES: 14 fundos.
+[16:01:43] [TODOS] Abrindo site...
+[16:02:00]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[16:02:14]   [TODOS] RENDA FIXA: 42 fundos.
+[16:02:20]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[16:02:24]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[16:02:31]   [TODOS] MULTIMERCADO: 14 fundos.
+[16:02:34]   [TODOS] CAMBIAL: 1 fundos.
+[16:02:44]   [TODOS] ACOES: 25 fundos.
+[16:02:47]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[16:02:47] CSV salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.csv
+[16:02:47] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260430.xlsx
+[16:02:47] SUCESSO: 171 fundos consolidados salvos.
