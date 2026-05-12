@@ -1004,3 +1004,30 @@
 [12:45:29] CSV salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.csv
 [12:45:30] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260511.xlsx
 [12:45:30] SUCESSO: 171 fundos consolidados salvos.
+[11:57:44] INICIANDO ROBÔ SIPII v10 - GITHUB EDITION
+[11:57:44] ETAPA 1 — Coletando URLs dinâmicas (12 páginas CAIXA)...
+[11:57:48]   [CAIXA] renda-fixa → +34 links (34 total)
+[11:57:49]   [CAIXA] referenciados → +4 links (38 total)
+[11:57:51]   [CAIXA] fundo-simples → +2 links (40 total)
+[11:57:52]   [CAIXA] curto-prazo → +1 links (41 total)
+[11:57:54]   [CAIXA] multimercado → +19 links (60 total)
+[11:57:59]   [CAIXA] cambiais → +1 links (61 total)
+[11:58:01]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[11:58:03]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[11:58:04]   [CAIXA] renda-fixa → +8 links (81 total)
+[11:58:06]   [CAIXA] empresa → +5 links (86 total)
+[11:58:08]   [CAIXA] fmp-fgts → HTTP 404
+[11:58:09]   [CAIXA] rpps → +8 links (94 total)
+[11:58:10] [CAIXA] Total URLs dinâmicas: 94
+[11:58:10] ETAPA 2 — Coletando dados do SIPII...
+[11:58:10] [PF] Abrindo SIPII...
+[12:00:11] [PF] Erro geral: HTTPConnectionPool(host='localhost', port=47957): Read timed out. (read timeout=120)
+[12:00:21] [PJ] Abrindo SIPII...
+[12:02:21] [PJ] Erro geral: HTTPConnectionPool(host='localhost', port=42075): Read timed out. (read timeout=120)
+[12:02:33] [GOV] Abrindo SIPII...
+[12:04:33] [GOV] Erro geral: HTTPConnectionPool(host='localhost', port=44723): Read timed out. (read timeout=120)
+[12:04:46] [RPPS] Abrindo SIPII...
+[12:06:46] [RPPS] Erro geral: HTTPConnectionPool(host='localhost', port=43205): Read timed out. (read timeout=120)
+[12:06:57] [TODOS] Abrindo SIPII...
+[12:08:57] [TODOS] Erro geral: HTTPConnectionPool(host='localhost', port=52447): Read timed out. (read timeout=120)
+[12:09:10] ATENÇÃO: Nenhum dado coletado.
