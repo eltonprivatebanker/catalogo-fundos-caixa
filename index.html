@@ -1,257 +1,325 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Catálogo de Fundos CAIXA — Elton Private Banker</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
-  <style>
-    :root{--bg:#07080f;--bg2:#0d0f1a;--bg3:#131629;--bg4:#1a1f3a;--gold:#c8973a;--gold2:#e8bb6a;--gold-dim:rgba(200,151,58,.12);--gold-glow:rgba(200,151,58,.25);--text:#dde1ec;--muted:#6b7799;--muted2:#4a5270;--green:#34d17a;--red:#f05656;--blue:#5b9cf6;--border:rgba(200,151,58,.15);--border2:rgba(255,255,255,.05)}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-    body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 40% at 15% 0%,rgba(200,151,58,.06) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 85% 100%,rgba(91,156,246,.05) 0%,transparent 55%)}
-    body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(200,151,58,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,151,58,.025) 1px,transparent 1px);background-size:60px 60px}
-    .page{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:36px 28px 80px}
-    header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;padding-bottom:32px;border-bottom:1px solid var(--border);margin-bottom:24px}
-    .brand{display:flex;align-items:center;gap:18px}
-    .brand-logo{width:50px;height:50px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:#07080f;flex-shrink:0;box-shadow:0 0 28px var(--gold-glow)}
-    .brand-text h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.4rem,2.8vw,2rem);font-weight:700;color:var(--gold2);letter-spacing:.02em;line-height:1.1}
-    .brand-text p{font-size:.7rem;color:var(--muted);margin-top:5px;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
-    .live-badge{display:inline-flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-    .live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Painel de Consulta — Elton Private Banker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<style>
+:root{--bg:#07080f;--bg2:#0d0f1a;--bg3:#131629;--bg4:#1a1f3a;--gold:#c8973a;--gold2:#e8bb6a;--gold-dim:rgba(200,151,58,.12);--gold-glow:rgba(200,151,58,.25);--text:#dde1ec;--muted:#6b7799;--muted2:#4a5270;--green:#34d17a;--red:#f05656;--blue:#5b9cf6;--border:rgba(200,151,58,.15);--border2:rgba(255,255,255,.05);--purple:#a78bfa;--orange:#fb923c;--cyan:#2dd4bf}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 70% 40% at 15% 0%,rgba(200,151,58,.06) 0%,transparent 55%),radial-gradient(ellipse 50% 50% at 85% 100%,rgba(91,156,246,.05) 0%,transparent 55%)}
+body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(200,151,58,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(200,151,58,.025) 1px,transparent 1px);background-size:60px 60px}
+.page{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:24px 28px 80px}
 
-    .section-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--gold2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px;font-weight:600;display:flex;align-items:center;gap:8px}
-    .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
-    .macro-wrapper{margin-bottom:28px}
+/* HEADER */
+header{display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.brand{display:flex;align-items:center;gap:16px}
+.brand-logo{width:44px;height:44px;background:linear-gradient(135deg,var(--gold),var(--gold2));border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:#07080f;flex-shrink:0;box-shadow:0 0 28px var(--gold-glow)}
+.brand-text h1{font-family:'Cormorant Garamond',serif;font-size:clamp(1.2rem,2.2vw,1.7rem);font-weight:700;color:var(--gold2);letter-spacing:.02em;line-height:1.1}
+.brand-text p{font-size:.66rem;color:var(--muted);margin-top:4px;font-weight:400;letter-spacing:.08em;text-transform:uppercase}
+.live-badge{display:inline-flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
 
-    .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
-    .kpi{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;cursor:default}
-    .kpi:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 32px rgba(0,0,0,.4)}
-    .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold) 0%,transparent 80%)}
-    .kpi-icon{font-size:1rem;margin-bottom:10px;opacity:.75}
-    .kpi-label{font-size:.67rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:8px;font-weight:500}
-    .kpi-value{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold2);line-height:1}
-    .kpi-value.pos{color:var(--green);font-size:1.55rem}.kpi-value.neg{color:var(--red);font-size:1.55rem}
-    .kpi-sub{font-size:.68rem;color:var(--muted);margin-top:6px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .kpi-sub span{font-family:'JetBrains Mono',monospace;font-size:.72rem}
+/* TAB NAV */
+.tab-nav{display:flex;gap:2px;margin:20px 0 0;border-bottom:1px solid var(--border);overflow-x:auto;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:11px 22px;background:transparent;border:none;color:var(--muted);font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;letter-spacing:.04em;white-space:nowrap;position:relative;transition:color .2s;border-radius:8px 8px 0 0}
+.tab-btn::after{content:'';position:absolute;bottom:-1px;left:10%;right:10%;height:2px;background:var(--gold);transform:scaleX(0);transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
+.tab-btn:hover{color:var(--text);background:var(--gold-dim)}
+.tab-btn.active{color:var(--gold2)}
+.tab-btn.active::after{transform:scaleX(1)}
 
-    .kpi-ipca{grid-column:span 2;cursor:pointer}
-    @media(max-width:600px){.kpi-ipca{grid-column:span 1}}
-    .kpi-ipca-sub{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
-    @media(max-width:500px){.kpi-ipca-sub{grid-template-columns:1fr}}
-    .kpi-ipca-item{background:var(--bg3);border-radius:8px;padding:10px 12px;border:1px solid var(--border2);display:flex;flex-direction:column;justify-content:space-between}
-    .kpi-ipca-item-label{font-size:.61rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
-    .kpi-ipca-item-val{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--gold2);line-height:1.1}
-    .kpi-ipca-item-sub{font-size:.63rem;color:var(--muted2);margin-top:3px}
-    .kpi-hint{font-size:.63rem;color:var(--muted2);margin-top:10px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:5px}
+/* TAB PANELS */
+.tab-panel{display:none;padding-top:24px}
+.tab-panel.active{display:block}
 
-    .ipca-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(7,8,15,.88);align-items:center;justify-content:center}
-    .ipca-overlay.open{display:flex}
-    .ipca-modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px;width:min(880px,95vw);max-height:90vh;overflow-y:auto}
-    .ipca-mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-    .ipca-mtitle{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold2);font-weight:700}
-    .ipca-mclose{background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--muted);padding:6px 14px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem;transition:all .15s}
-    .ipca-mclose:hover{border-color:var(--gold);color:var(--gold)}
-    .ipca-mtabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
-    .ipca-mtab{padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.75rem;cursor:pointer;transition:all .15s}
-    .ipca-mtab.active,.ipca-mtab:hover{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
-    .ipca-legend{display:flex;gap:16px;margin-bottom:10px;font-size:.7rem;color:var(--muted)}
-    .ipca-leg{display:flex;align-items:center;gap:5px}
-    .ipca-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
-    .ipca-modal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
-    @media(max-width:500px){.ipca-modal-grid{grid-template-columns:1fr}}
+/* KPI STRIP */
+.kpi-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin-bottom:24px}
+.kpi{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:16px 16px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s}
+.kpi:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold) 0%,transparent 80%)}
+.kpi-icon{font-size:.95rem;margin-bottom:6px;opacity:.7}
+.kpi-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:5px;font-weight:500}
+.kpi-value{font-family:'Cormorant Garamond',serif;font-size:1.75rem;font-weight:700;color:var(--gold2);line-height:1}
+.kpi-value.pos{color:var(--green);font-size:1.35rem}
+.kpi-value.neg{color:var(--red);font-size:1.35rem}
+.kpi-sub{font-size:.64rem;color:var(--muted);margin-top:4px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    .controls-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
-    .search-wrap{position:relative;flex:1;min-width:240px}
-    .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
-    #searchInput{width:100%;padding:11px 16px 11px 42px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s,box-shadow .2s}
-    #searchInput:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
-    #searchInput::placeholder{color:var(--muted2)}
-    .ctrl-select{padding:11px 14px;background:var(--bg2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:.85rem;outline:none;cursor:pointer;transition:border-color .2s}
-    .ctrl-select:hover{border-color:var(--gold)}.ctrl-select option{background:var(--bg3)}
-    .toggle-wrap{display:flex;align-items:center;gap:9px}
-    .toggle-label{font-size:.78rem;color:var(--muted);white-space:nowrap;user-select:none}
-    .toggle{position:relative;width:38px;height:21px}.toggle input{opacity:0;width:0;height:0}
-    .toggle-slider{position:absolute;inset:0;background:var(--bg3);border:1px solid var(--border2);border-radius:21px;cursor:pointer;transition:.25s}
-    .toggle-slider::before{content:'';position:absolute;width:15px;height:15px;left:2px;top:2px;background:var(--muted2);border-radius:50%;transition:.25s}
-    .toggle input:checked+.toggle-slider{background:var(--gold-dim);border-color:var(--gold)}
-    .toggle input:checked+.toggle-slider::before{transform:translateX(17px);background:var(--gold)}
-    .filter-section{margin-bottom:24px}
-    .filter-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
-    .filter-label{font-size:.63rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-right:4px;white-space:nowrap;min-width:60px}
-    .chip{padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.75rem;font-weight:500;cursor:pointer;letter-spacing:.03em;transition:all .18s;white-space:nowrap}
-    .chip:hover{border-color:var(--gold);color:var(--gold)}.chip.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
-    .chip.pf:hover,.chip.pf.active{border-color:var(--green);color:var(--green);background:rgba(52,209,122,.1)}
-    .chip.pj:hover,.chip.pj.active{border-color:var(--blue);color:var(--blue);background:rgba(91,156,246,.1)}
-    .chip.gov:hover,.chip.gov.active{border-color:#fb923c;color:#fb923c;background:rgba(251,146,60,.1)}
-    .chip.rpps:hover,.chip.rpps.active{border-color:#a78bfa;color:#a78bfa;background:rgba(167,139,250,.1)}
-    .table-wrap{border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto;background:var(--bg2);box-shadow:0 4px 40px rgba(0,0,0,.35)}
-    table{width:100%;border-collapse:collapse;min-width:1020px}
-    thead tr{background:linear-gradient(90deg,var(--bg4),var(--bg3));border-bottom:1px solid var(--border)}
-    th{padding:14px 16px;text-align:left;font-weight:600;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s}
-    th:hover{color:var(--gold2)}
-    th .si{opacity:.3;margin-left:4px;font-size:.58rem}
-    th.sa .si::after{content:' ▲';opacity:1}th.sd .si::after{content:' ▼';opacity:1}
-    th.sa,th.sd{color:var(--gold2)}
-    tbody tr{border-bottom:1px solid var(--border2);transition:background .15s}
-    tbody tr:last-child{border-bottom:none}tbody tr:hover{background:rgba(200,151,58,.04)}
-    tbody tr.row-sem-dados{opacity:.3}
-    td{padding:12px 16px;font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text);white-space:nowrap}
-    td.col-fundo{font-family:'Inter',sans-serif;font-size:.82rem;white-space:normal;max-width:310px;font-weight:500;line-height:1.4}
-    td.col-fundo a{color:var(--text);text-decoration:none;display:inline-flex;align-items:flex-start;gap:6px;transition:color .15s}
-    td.col-fundo a:hover{color:var(--gold2)}
-    .link-icon{flex-shrink:0;margin-top:2px;opacity:0;transition:opacity .15s;color:var(--gold)}
-    tbody tr:hover .link-icon{opacity:1}
-    .link-fallback{font-size:.6rem;color:var(--muted2);margin-left:4px;opacity:.6;font-style:italic}
-    td.col-cat{font-family:'Inter',sans-serif}
-    .cat-badge{display:inline-block;padding:3px 8px;border-radius:6px;font-size:.63rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;border:1px solid transparent}
-    .cat-RF-S{background:rgba(52,209,122,.1);color:#34d17a;border-color:rgba(52,209,122,.25)}
-    .cat-RF{background:rgba(91,156,246,.1);color:#5b9cf6;border-color:rgba(91,156,246,.25)}
-    .cat-RF-R{background:rgba(167,139,250,.1);color:#a78bfa;border-color:rgba(167,139,250,.25)}
-    .cat-RF-CP{background:rgba(56,189,248,.1);color:#38bdf8;border-color:rgba(56,189,248,.25)}
-    .cat-MM{background:rgba(251,146,60,.1);color:#fb923c;border-color:rgba(251,146,60,.25)}
-    .cat-CAM{background:rgba(250,204,21,.1);color:#facc15;border-color:rgba(250,204,21,.25)}
-    .cat-AC{background:rgba(244,114,182,.1);color:#f472b6;border-color:rgba(244,114,182,.25)}
-    .cat-ETF{background:rgba(45,212,191,.1);color:#2dd4bf;border-color:rgba(45,212,191,.25)}
-    .cat-FMP{background:rgba(232,121,249,.1);color:#e879f9;border-color:rgba(232,121,249,.25)}
-    td.col-pct{text-align:right}
-    .pct-wrap{display:flex;align-items:center;justify-content:flex-end;gap:6px}
-    .pct-bar-bg{width:30px;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;flex-shrink:0}
-    .pct-bar{height:100%;border-radius:2px}.pct-bar.pos{background:var(--green)}.pct-bar.neg{background:var(--red)}
-    .pct-val{font-size:.78rem;min-width:54px;text-align:right}
-    .pct-val.pos{color:var(--green);font-weight:600}.pct-val.neg{color:var(--red);font-weight:600}.pct-val.zero{color:var(--muted)}
-    .dash{color:var(--muted2);font-size:.7rem}
-    .perfis-wrap{display:flex;flex-wrap:wrap;gap:3px}
-    .perfil-chip{display:inline-block;padding:2px 7px;border-radius:4px;font-family:'Inter',sans-serif;font-size:.61rem;font-weight:600;letter-spacing:.04em;white-space:nowrap}
-    .pchip-PF{background:rgba(52,209,122,.1);color:#34d17a}.pchip-PJ{background:rgba(91,156,246,.1);color:#5b9cf6}
-    .pchip-GOV{background:rgba(251,146,60,.1);color:#fb923c}.pchip-RPPS{background:rgba(167,139,250,.1);color:#a78bfa}
-    .pchip-TODOS{background:rgba(200,151,58,.1);color:var(--gold)}
-    .pagination-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-top:22px;padding:0 2px}
-    #resultInfo{font-size:.73rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-    .page-btns{display:flex;gap:5px}
-    .page-btn{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.82rem;cursor:pointer;transition:all .15s}
-    .page-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
-    .page-btn.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}.page-btn:disabled{opacity:.25;cursor:default}
-    #loadMsg{text-align:center;padding:80px 20px;color:var(--muted);font-size:.88rem}
-    .spinner{width:36px;height:36px;margin:0 auto 20px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    footer{text-align:center;margin-top:56px;font-size:.7rem;color:var(--muted2);letter-spacing:.05em;border-top:1px solid var(--border2);padding-top:28px;line-height:2}
-    footer span{color:var(--gold)}
-    @media(max-width:768px){.page{padding:20px 16px 60px}.kpi-grid{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:16px 14px}.kpi-value{font-size:1.5rem}}
-    
-    /* ── Nova Linha de Insights Dinâmicos ───────────────────────────── */
-    .insight-banner{background:var(--gold-dim);border:1px dashed var(--gold);border-radius:10px;padding:12px 16px;margin-top:10px;font-size:.8rem;color:var(--gold2);font-family:'JetBrains Mono',monospace;display:none;animation:fadeIn .2s ease-out}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
-  </style>
+/* CONTROLS */
+.controls-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.search-wrap{position:relative;flex:1;min-width:220px}
+.search-wrap svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
+#searchInput{width:100%;padding:10px 14px 10px 40px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Inter',sans-serif;font-size:.86rem;outline:none;transition:border-color .2s,box-shadow .2s}
+#searchInput:focus{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-dim)}
+#searchInput::placeholder{color:var(--muted2)}
+.ctrl-select{padding:10px 13px;background:var(--bg2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Inter',sans-serif;font-size:.84rem;outline:none;cursor:pointer;transition:border-color .2s}
+.ctrl-select:hover{border-color:var(--gold)}
+.ctrl-select option{background:var(--bg3)}
+.toggle-wrap{display:flex;align-items:center;gap:8px}
+.toggle-label{font-size:.76rem;color:var(--muted);white-space:nowrap;user-select:none}
+.toggle{position:relative;width:36px;height:20px}
+.toggle input{opacity:0;width:0;height:0}
+.toggle-slider{position:absolute;inset:0;background:var(--bg3);border:1px solid var(--border2);border-radius:20px;cursor:pointer;transition:.25s}
+.toggle-slider::before{content:'';position:absolute;width:14px;height:14px;left:2px;top:2px;background:var(--muted2);border-radius:50%;transition:.25s}
+.toggle input:checked+.toggle-slider{background:var(--gold-dim);border-color:var(--gold)}
+.toggle input:checked+.toggle-slider::before{transform:translateX(16px);background:var(--gold)}
+
+/* FILTERS */
+.filter-section{margin-bottom:18px}
+.filter-row{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-bottom:8px}
+.filter-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-right:3px;white-space:nowrap;min-width:55px}
+.chip{padding:4px 13px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.73rem;font-weight:500;cursor:pointer;letter-spacing:.03em;transition:all .18s;white-space:nowrap}
+.chip:hover{border-color:var(--gold);color:var(--gold)}
+.chip.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
+.chip.pf:hover,.chip.pf.active{border-color:var(--green);color:var(--green);background:rgba(52,209,122,.1)}
+.chip.pj:hover,.chip.pj.active{border-color:var(--blue);color:var(--blue);background:rgba(91,156,246,.1)}
+.chip.gov:hover,.chip.gov.active{border-color:var(--orange);color:var(--orange);background:rgba(251,146,60,.1)}
+.chip.rpps:hover,.chip.rpps.active{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,.1)}
+
+/* TABLE */
+.table-wrap{border:1px solid var(--border);border-radius:12px;overflow:hidden;overflow-x:auto;background:var(--bg2);box-shadow:0 4px 36px rgba(0,0,0,.35)}
+table{width:100%;border-collapse:collapse;min-width:1060px}
+thead tr{background:linear-gradient(90deg,var(--bg4),var(--bg3));border-bottom:1px solid var(--border)}
+th{padding:12px 13px;text-align:left;font-weight:600;font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);white-space:nowrap;cursor:pointer;user-select:none;transition:color .15s}
+th:hover{color:var(--gold2)}
+th .si{opacity:.3;margin-left:3px;font-size:.56rem}
+th.sa .si::after{content:' ▲';opacity:1}th.sd .si::after{content:' ▼';opacity:1}
+th.sa,th.sd{color:var(--gold2)}
+th.col-chk{width:38px;padding:12px 8px;cursor:default}
+td.col-chk{padding:10px 8px;text-align:center}
+.row-chk{width:15px;height:15px;accent-color:var(--gold);cursor:pointer}
+tbody tr{border-bottom:1px solid var(--border2);transition:background .15s}
+tbody tr:last-child{border-bottom:none}
+tbody tr:hover{background:rgba(200,151,58,.04)}
+tbody tr.row-sem-dados{opacity:.32}
+tbody tr.row-selected{background:var(--gold-dim)!important}
+td{padding:10px 13px;font-family:'JetBrains Mono',monospace;font-size:.76rem;color:var(--text);white-space:nowrap}
+td.col-fundo{font-family:'Inter',sans-serif;font-size:.8rem;white-space:normal;max-width:280px;font-weight:500;line-height:1.4}
+td.col-fundo a{color:var(--text);text-decoration:none;display:inline-flex;align-items:flex-start;gap:5px;transition:color .15s}
+td.col-fundo a:hover{color:var(--gold2)}
+.link-icon{flex-shrink:0;margin-top:2px;opacity:0;transition:opacity .15s;color:var(--gold)}
+tbody tr:hover .link-icon{opacity:1}
+.link-fallback{font-size:.58rem;color:var(--muted2);margin-left:3px;opacity:.6;font-style:italic}
+td.col-cat{font-family:'Inter',sans-serif}
+.cat-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:.61rem;font-weight:600;letter-spacing:.04em;white-space:nowrap;border:1px solid transparent}
+.cat-RF-S{background:rgba(52,209,122,.1);color:#34d17a;border-color:rgba(52,209,122,.25)}
+.cat-RF{background:rgba(91,156,246,.1);color:#5b9cf6;border-color:rgba(91,156,246,.25)}
+.cat-RF-R{background:rgba(167,139,250,.1);color:#a78bfa;border-color:rgba(167,139,250,.25)}
+.cat-RF-CP{background:rgba(56,189,248,.1);color:#38bdf8;border-color:rgba(56,189,248,.25)}
+.cat-MM{background:rgba(251,146,60,.1);color:#fb923c;border-color:rgba(251,146,60,.25)}
+.cat-CAM{background:rgba(250,204,21,.1);color:#facc15;border-color:rgba(250,204,21,.25)}
+.cat-AC{background:rgba(244,114,182,.1);color:#f472b6;border-color:rgba(244,114,182,.25)}
+.cat-ETF{background:rgba(45,212,191,.1);color:#2dd4bf;border-color:rgba(45,212,191,.25)}
+.cat-FMP{background:rgba(232,121,249,.1);color:#e879f9;border-color:rgba(232,121,249,.25)}
+td.col-pct{text-align:right}
+.pct-wrap{display:flex;align-items:center;justify-content:flex-end;gap:5px}
+.pct-bar-bg{width:28px;height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;flex-shrink:0}
+.pct-bar{height:100%;border-radius:2px}
+.pct-bar.pos{background:var(--green)}.pct-bar.neg{background:var(--red)}
+.pct-val{font-size:.76rem;min-width:52px;text-align:right}
+.pct-val.pos{color:var(--green);font-weight:600}.pct-val.neg{color:var(--red);font-weight:600}.pct-val.zero{color:var(--muted)}
+.dash{color:var(--muted2);font-size:.68rem}
+.perfis-wrap{display:flex;flex-wrap:wrap;gap:3px}
+.perfil-chip{display:inline-block;padding:2px 6px;border-radius:4px;font-family:'Inter',sans-serif;font-size:.6rem;font-weight:600;letter-spacing:.04em;white-space:nowrap}
+.pchip-PF{background:rgba(52,209,122,.1);color:#34d17a}.pchip-PJ{background:rgba(91,156,246,.1);color:#5b9cf6}
+.pchip-GOV{background:rgba(251,146,60,.1);color:#fb923c}.pchip-RPPS{background:rgba(167,139,250,.1);color:#a78bfa}
+.pchip-TODOS{background:rgba(200,151,58,.1);color:var(--gold)}
+.pagination-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:18px;padding:0 2px}
+#resultInfo{font-size:.71rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.page-btns{display:flex;gap:4px}
+.page-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:7px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.8rem;cursor:pointer;transition:all .15s}
+.page-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.page-btn.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}.page-btn:disabled{opacity:.22;cursor:default}
+#loadMsg{text-align:center;padding:70px 20px;color:var(--muted);font-size:.86rem}
+.spinner{width:34px;height:34px;margin:0 auto 18px;border:2px solid var(--border);border-top-color:var(--gold);border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* FLOATING COMPARE BAR */
+.compare-bar{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--bg4);border:1px solid var(--gold);border-radius:14px;padding:11px 18px;display:flex;align-items:center;gap:14px;z-index:100;box-shadow:0 8px 40px rgba(0,0,0,.7),0 0 40px var(--gold-glow);transition:transform .35s cubic-bezier(.34,1.4,.64,1);white-space:nowrap}
+.compare-bar.visible{transform:translateX(-50%) translateY(0)}
+.compare-bar-label{font-size:.75rem;color:var(--muted)}
+.compare-bar-count{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--gold2)}
+.compare-bar-names{font-size:.7rem;color:var(--text);max-width:350px;overflow:hidden;text-overflow:ellipsis}
+.btn-gold{padding:9px 18px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07080f;font-family:'Inter',sans-serif;font-size:.78rem;font-weight:700;border:none;border-radius:8px;cursor:pointer;letter-spacing:.04em;transition:opacity .2s,transform .1s}
+.btn-gold:hover{opacity:.9;transform:scale(1.03)}
+.btn-clear{padding:9px 13px;background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.78rem;border:1px solid var(--border2);border-radius:8px;cursor:pointer;transition:all .15s}
+.btn-clear:hover{border-color:var(--red);color:var(--red)}
+
+/* RANKINGS */
+.rankings-filter{display:flex;gap:7px;align-items:center;margin-bottom:20px;flex-wrap:wrap}
+.rankings-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ranking-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.ranking-card-hdr{padding:16px 18px 12px;border-bottom:1px solid var(--border2);display:flex;align-items:flex-start;justify-content:space-between}
+.ranking-card-title{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:600;color:var(--gold2)}
+.ranking-card-sub{font-size:.65rem;color:var(--muted);margin-top:2px}
+.ranking-list{padding:14px 18px;display:flex;flex-direction:column;gap:9px}
+.rank-item{display:flex;align-items:center;gap:10px}
+.rank-pos{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--muted2);min-width:20px;text-align:center}
+.rank-pos.top3{color:var(--gold)}
+.rank-info{flex:1;min-width:0}
+.rank-name{font-size:.75rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.rank-cat{font-size:.6rem;color:var(--muted);margin-top:1px}
+.rank-bar-wrap{display:flex;align-items:center;gap:7px;min-width:120px}
+.rank-bar-bg{flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden}
+.rank-bar-fill{height:100%;border-radius:2px;transition:width .7s ease}
+.rank-bar-fill.pos{background:linear-gradient(90deg,var(--gold),var(--green))}
+.rank-bar-fill.neg{background:var(--red)}
+.rank-val{font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:600;min-width:50px;text-align:right}
+.rank-val.pos{color:var(--green)}.rank-val.neg{color:var(--red)}
+
+/* COMPARADOR */
+.comp-empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.comp-empty-icon{font-size:2.5rem;margin-bottom:14px;opacity:.25}
+.comp-empty-text{font-size:.86rem;line-height:1.8}
+#compGrid{display:grid;gap:14px}
+.comp-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;position:relative;transition:border-color .2s}
+.comp-card:hover{border-color:var(--gold)}
+.comp-card-hdr{padding:14px 16px 10px;border-bottom:1px solid var(--border2);background:linear-gradient(90deg,var(--bg4),var(--bg3))}
+.comp-card-name{font-family:'Inter',sans-serif;font-size:.82rem;font-weight:600;color:var(--text);line-height:1.4;margin-bottom:6px;padding-right:28px}
+.comp-card-remove{position:absolute;top:10px;right:10px;background:transparent;border:none;color:var(--muted2);font-size:.85rem;cursor:pointer;padding:4px;border-radius:4px;transition:color .15s}
+.comp-card-remove:hover{color:var(--red)}
+.comp-metric{display:flex;align-items:center;justify-content:space-between;padding:7px 16px;border-bottom:1px solid var(--border2)}
+.comp-metric:last-child{border-bottom:none}
+.comp-metric-label{font-size:.67rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.comp-metric-val{font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:600}
+.comp-metric-val.best{color:var(--green)}.comp-metric-val.worst{color:var(--red)}.comp-metric-val.pos{color:var(--green)}.comp-metric-val.neg{color:var(--red)}.comp-metric-val.neutral{color:var(--text)}
+.comp-legend{display:flex;gap:16px;margin-bottom:14px;font-size:.7rem;color:var(--muted)}
+.comp-legend span{display:flex;align-items:center;gap:5px}
+.comp-legend .dot{width:8px;height:8px;border-radius:50%}
+
+/* SCATTER */
+.scatter-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px}
+.scatter-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:600;color:var(--gold2);margin-bottom:3px}
+.scatter-sub{font-size:.7rem;color:var(--muted);margin-bottom:18px}
+#scatterSvg{width:100%;max-height:480px}
+.scatter-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:.68rem;color:var(--muted)}
+.legend-dot{width:9px;height:9px;border-radius:50%}
+.scatter-tooltip{position:fixed;background:var(--bg4);border:1px solid var(--border);border-radius:8px;padding:10px 13px;font-size:.73rem;pointer-events:none;z-index:200;display:none;box-shadow:0 4px 24px rgba(0,0,0,.6);max-width:240px;line-height:1.6}
+.scatter-tooltip-name{font-weight:600;color:var(--gold2);margin-bottom:4px;line-height:1.3}
+.scatter-tooltip-val{color:var(--muted)}
+.scatter-tooltip-val span{color:var(--text);font-family:'JetBrains Mono',monospace}
+
+/* ASSESSORIA */
+.rec-layout{display:grid;grid-template-columns:320px 1fr;gap:22px;align-items:start}
+.rec-form-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px;position:sticky;top:16px}
+.rec-form-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:600;color:var(--gold2);margin-bottom:3px}
+.rec-form-sub{font-size:.68rem;color:var(--muted);margin-bottom:18px}
+.form-group{margin-bottom:14px}
+.form-label{display:block;font-size:.65rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:6px;font-weight:600}
+.form-input,.form-select{width:100%;padding:9px 11px;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:.84rem;outline:none;transition:border-color .2s}
+.form-input:focus,.form-select:focus{border-color:var(--gold)}
+.form-select option{background:var(--bg3)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.rec-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--gold),var(--gold2));color:#07080f;font-family:'Inter',sans-serif;font-size:.86rem;font-weight:700;border:none;border-radius:10px;cursor:pointer;letter-spacing:.04em;transition:opacity .2s,transform .1s;margin-top:4px}
+.rec-btn:hover{opacity:.9;transform:scale(1.01)}
+.rec-btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.rec-empty{text-align:center;padding:50px 20px;color:var(--muted);font-size:.84rem;line-height:1.9}
+.rec-empty-icon{font-size:2.2rem;margin-bottom:12px;opacity:.22}
+.rec-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:12px;position:relative;overflow:hidden;transition:border-color .2s,box-shadow .2s}
+.rec-card:hover{border-color:var(--gold);box-shadow:0 4px 24px rgba(0,0,0,.3)}
+.rec-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent 80%)}
+.rec-rank{position:absolute;top:14px;right:14px;font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold);opacity:.2}
+.rec-card-name{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:7px;padding-right:44px;line-height:1.4}
+.rec-card-badges{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:10px}
+.rec-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px}
+.rec-metric-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:2px}
+.rec-metric-val{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600}
+.rec-metric-val.pos{color:var(--green)}.rec-metric-val.neg{color:var(--red)}.rec-metric-val.neutral{color:var(--text)}
+.rec-reason{font-size:.73rem;color:var(--muted);background:var(--bg3);border-radius:7px;padding:9px 11px;line-height:1.65;border-left:2px solid var(--gold)}
+.rec-reason strong{color:var(--gold2)}
+.rec-hdr{margin-bottom:18px}
+.rec-hdr-title{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold2)}
+.rec-hdr-sub{font-size:.72rem;color:var(--muted);margin-top:3px}
+
+footer{text-align:center;margin-top:50px;font-size:.68rem;color:var(--muted2);letter-spacing:.05em;border-top:1px solid var(--border2);padding-top:24px;line-height:2}
+footer span{color:var(--gold)}
+
+/* ── MACRO STRIP ── */
+.macro-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:9px;margin:16px 0 0;padding-bottom:20px;border-bottom:1px solid var(--border)}
+.macro-card{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 13px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s;cursor:default}
+.macro-card:hover{border-color:var(--border);transform:translateY(-1px)}
+.macro-card.selic-card{border-color:rgba(200,151,58,.3);background:var(--gold-dim)}
+.macro-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,var(--gold) 0%,transparent 65%)}
+.macro-label{font-size:.59rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-bottom:4px}
+.macro-value{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;color:var(--text);line-height:1;margin-bottom:2px}
+.macro-value.gold{color:var(--gold2)}
+.macro-sub{font-size:.63rem;color:var(--muted);line-height:1.5}
+.macro-var{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:600}
+.macro-var.up{color:var(--green)}.macro-var.down{color:var(--red)}.macro-var.zero{color:var(--muted)}
+.macro-spark{display:block;width:100%;height:28px;margin-top:5px}
+.macro-strip-loading{grid-column:1/-1;text-align:center;padding:16px;color:var(--muted2);font-size:.72rem;opacity:.5}
+
+/* ── RANKINGS KPIS extras ── */
+.kpi-rank-item{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border2)}
+.kpi-rank-item:last-child{border-bottom:none}
+.kpi-rank-pos{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--muted2);min-width:18px;text-align:center}
+.kpi-rank-pos.gold{color:var(--gold)}
+.kpi-rank-info{flex:1;min-width:0}
+.kpi-rank-name{font-size:.74rem;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.kpi-rank-sub{font-size:.6rem;color:var(--muted);margin-top:1px}
+.kpi-rank-val{font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;text-align:right;min-width:60px}
+.kpi-rank-val.pos{color:var(--green)}.kpi-rank-val.neg{color:var(--red)}.kpi-rank-val.neutral{color:var(--text)}
+.perfil-bar-wrap{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.perfil-bar-bg{flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.perfil-bar-fill{height:100%;border-radius:3px;transition:width .7s ease}
+.perfil-bar-label{font-size:.68rem;color:var(--muted);min-width:34px}
+.perfil-bar-val{font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;color:var(--text);min-width:48px;text-align:right}
+
+@media(max-width:1100px){.rankings-grid{grid-template-columns:1fr}.rec-layout{grid-template-columns:1fr}.rec-form-card{position:static}}
+@media(max-width:768px){.page{padding:14px 14px 60px}.kpi-strip{grid-template-columns:1fr 1fr;gap:9px}.rec-metrics{grid-template-columns:repeat(2,1fr)}.compare-bar{flex-wrap:wrap;bottom:10px;gap:8px}.macro-strip{grid-template-columns:repeat(2,1fr)}}
+</style>
 </head>
 <body>
 <div class="page">
 
-  <header>
-    <div class="brand">
-      <div class="brand-logo">E</div>
-      <div class="brand-text">
-        <h1>Catálogo de Fundos CAIXA</h1>
-        <p>Elton Private Banker · Dados atualizados automaticamente via Robô Python</p>
-      </div>
-    </div>
-    <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
-  </header>
-
-  <div class="macro-wrapper">
-    <h2 class="section-title">Painel Macroeconômico Global</h2>
-    <div class="kpi-grid">
-
-      <div class="kpi">
-        <div class="kpi-icon">🏛️</div>
-        <div class="kpi-label">Selic Meta</div>
-        <div class="kpi-value" id="macroSelic">—</div>
-        <div class="kpi-sub">Banco Central do Brasil</div>
-      </div>
-
-      <div class="kpi">
-        <div class="kpi-icon">🔄</div>
-        <div class="kpi-label">Taxa CDI Ano</div>
-        <div class="kpi-value" id="macroCdi">—</div>
-        <div class="kpi-sub">Diário: <span id="macroCdiDia">—</span></div>
-      </div>
-
-      <div class="kpi kpi-ipca" id="ipcaCard" onclick="openIpcaModal()">
-        <div style="display:flex;align-items:center;justify-content:space-between">
-          <div>
-            <div class="kpi-icon">🛒</div>
-            <div class="kpi-label">IPCA — Inflação Oficial</div>
-          </div>
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--muted2)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
-        </div>
-        <div class="kpi-ipca-sub">
-          <div class="kpi-ipca-item">
-            <div class="kpi-ipca-item-label">Último mês</div>
-            <div class="kpi-ipca-item-val" id="ipcaMes">—</div>
-            <div class="kpi-ipca-item-sub" id="ipcaMesLabel">—</div>
-          </div>
-          <div class="kpi-ipca-item">
-            <div class="kpi-ipca-item-label">Acumulado ano</div>
-            <div class="kpi-ipca-item-val" id="ipcaAno">—</div>
-            <div class="kpi-ipca-item-sub" id="ipcaAnoLabel">Jan–?</div>
-          </div>
-          <div class="kpi-ipca-item">
-            <div class="kpi-ipca-item-label">Últimos 12 meses</div>
-            <div class="kpi-ipca-item-val" id="ipca12m">—</div>
-            <div class="kpi-ipca-item-sub">acumulado 12m</div>
-          </div>
-        </div>
-        <div class="kpi-hint">
-          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/></svg>
-          Clique para ver histórico completo
-        </div>
-      </div>
-
-      <div class="kpi">
-        <div class="kpi-icon">📈</div>
-        <div class="kpi-label">Ibovespa</div>
-        <div class="kpi-value" id="macroIbov">—</div>
-        <div class="kpi-sub" id="macroIbovVar">—</div>
-      </div>
-
-      <div class="kpi">
-        <div class="kpi-icon">💵</div>
-        <div class="kpi-label">Dólar Comercial</div>
-        <div class="kpi-value" id="macroDolar">—</div>
-        <div class="kpi-sub" id="macroDolarVar">—</div>
-      </div>
-
-      <div class="kpi">
-        <div class="kpi-icon">🌍</div>
-        <div class="kpi-label">S&P 500</div>
-        <div class="kpi-value" id="macroSp500">—</div>
-        <div class="kpi-sub">Dolarizado (Yahoo)</div>
-      </div>
-
+<header>
+  <div class="brand">
+    <div class="brand-logo">E</div>
+    <div class="brand-text">
+      <h1>Painel de Consulta — Fundos CAIXA</h1>
+      <p>Elton Private Banker · Assessoria Inteligente de Investimentos</p>
     </div>
   </div>
+  <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
+</header>
 
-  <div class="portfolio-wrapper">
-    <h2 class="section-title">Métricas Consolidadas do Catálogo</h2>
-    <div class="kpi-grid">
-      <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub">registros carregados</div></div>
-      <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-label">PL Total Consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub">patrimônio líquido total (M)</div></div>
-      <div class="kpi"><div class="kpi-icon">🚨</div><div class="kpi-label">Concentração Top 5</div><div class="kpi-value" id="kpiConcentracao">—</div><div class="kpi-sub">risco de centralização de PL</div></div>
-      <div class="kpi"><div class="kpi-icon">🚀</div><div class="kpi-label">Pipeline Lançamentos</div><div class="kpi-value" id="kpiPipeline">—</div><div class="kpi-sub">novos fundos sem cota ativa</div></div>
-      <div class="kpi"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor Acum. 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub" id="kpiBestFundo">—</div></div>
-      <div class="kpi"><div class="kpi-icon">📉</div><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
-    </div>
+<!-- ── MACRO STRIP: Indicadores de Mercado ── -->
+<div class="macro-strip" id="macroStrip">
+  <div class="macro-strip-loading">Carregando indicadores de mercado...</div>
+</div>
+
+<nav class="tab-nav">
+  <button class="tab-btn active" data-tab="catalogo">📋 Catálogo</button>
+  <button class="tab-btn" data-tab="rankings">🏆 Rankings</button>
+  <button class="tab-btn" data-tab="comparador">⚖️ Comparador</button>
+  <button class="tab-btn" data-tab="scatter">📡 Risco × Retorno</button>
+  <button class="tab-btn" data-tab="assessoria">🎯 Assessoria</button>
+</nav>
+
+<!-- KPIs sempre visíveis -->
+<div style="margin-top:22px">
+  <div class="kpi-strip">
+    <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub">registros carregados</div></div>
+    <div class="kpi"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub">tipos de fundo</div></div>
+    <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-label">PL Total (Mi R$)</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub">patrimônio líquido consolidado</div></div>
+    <div class="kpi"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor Acum. 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub" id="kpiBestFundo">—</div></div>
+    <div class="kpi"><div class="kpi-icon">📉</div><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
   </div>
+</div>
 
+<!-- ── TAB: CATÁLOGO ── -->
+<div class="tab-panel active" id="panel-catalogo">
   <div class="controls-bar">
     <div class="search-wrap">
-      <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="searchInput" type="text" placeholder="Buscar por nome do fundo, categoria..." />
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="searchInput" type="text" placeholder="Buscar por nome do fundo, categoria..."/>
     </div>
     <select id="perPage" class="ctrl-select">
       <option value="25">25 por página</option>
@@ -264,316 +332,202 @@
       <span class="toggle-label">Ocultar sem dados</span>
     </div>
   </div>
-
   <div class="filter-section">
     <div class="filter-row" id="perfilFilters">
       <span class="filter-label">Perfil</span>
       <button class="chip active" data-perfil="">Todos</button>
-      <button class="chip pf"   data-perfil="PF">🧑 PF</button>
-      <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
-      <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
+      <button class="chip pf" data-perfil="PF">🧑 PF</button>
+      <button class="chip pj" data-perfil="PJ">🏢 PJ</button>
+      <button class="chip gov" data-perfil="GOV">🏛 GOV</button>
       <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
     </div>
     <div class="filter-row" id="catFilters">
       <span class="filter-label">Categoria</span>
       <button class="chip active" data-cat="">Todas</button>
     </div>
-    <!-- Bloco Dinâmico para Insights da Categoria selecionada -->
-    <div id="catInsightRow" class="insight-banner"></div>
   </div>
-
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
-    <table id="mainTable" style="display:none">
-      <thead id="tableHead"></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+    <table id="mainTable" style="display:none"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table>
   </div>
-
   <div class="pagination-row">
     <div id="resultInfo"></div>
     <div class="page-btns" id="pageBtns"></div>
   </div>
-
-  <footer>
-    Dados extraídos de <span>fundos.caixa.gov.br</span> via Robô Python ·
-    Dashboard por <span>Elton Private Banker</span> · Atualização automática diária
-  </footer>
-
 </div>
 
-<div class="ipca-overlay" id="ipcaOverlay" onclick="if(event.target===this)closeIpcaModal()">
-  <div class="ipca-modal">
-    <div class="ipca-mhead">
-      <span class="ipca-mtitle">🛒 IPCA — Histórico Completo</span>
-      <button class="ipca-mclose" onclick="closeIpcaModal()">✕ Fechar</button>
-    </div>
+<!-- ── TAB: RANKINGS ── -->
+<div class="tab-panel" id="panel-rankings">
+  <div class="rankings-filter" id="rankingsFilter"></div>
+  <div class="rankings-grid" id="rankingsGrid">
+    <div style="text-align:center;padding:50px;color:var(--muted)">Carregando dados...</div>
+  </div>
+</div>
 
-    <div class="ipca-modal-grid">
-      <div class="kpi-ipca-item">
-        <div class="kpi-ipca-item-label">Último mês</div>
-        <div class="kpi-ipca-item-val" id="mIpcaMes">—</div>
-        <div class="kpi-ipca-item-sub" id="mIpcaMesLabel">—</div>
+<!-- ── TAB: COMPARADOR ── -->
+<div class="tab-panel" id="panel-comparador">
+  <div class="comp-legend">
+    <span><div class="dot" style="background:var(--green)"></div>Melhor do grupo</span>
+    <span><div class="dot" style="background:var(--red)"></div>Pior do grupo</span>
+  </div>
+  <div class="comp-empty" id="compEmpty">
+    <div class="comp-empty-icon">⚖️</div>
+    <div class="comp-empty-text">Selecione fundos no <strong style="color:var(--gold2)">Catálogo</strong> usando as caixas de seleção<br>e clique em <strong style="color:var(--gold2)">Comparar Selecionados</strong> para ver análise lado a lado.<br><span style="font-size:.72rem;opacity:.6">Máximo de 4 fundos simultâneos</span></div>
+  </div>
+  <div id="compGrid" style="display:none"></div>
+</div>
+
+<!-- ── TAB: SCATTER ── -->
+<div class="tab-panel" id="panel-scatter">
+  <div class="scatter-wrap">
+    <div class="scatter-title">Risco × Retorno do Portfólio</div>
+    <div class="scatter-sub">Eixo X: Acumulado 12M (%) · Eixo Y: |Variação Dia| como proxy de volatilidade · Tamanho do ponto: Patrimônio Líquido</div>
+    <svg id="scatterSvg" viewBox="0 0 900 460" xmlns="http://www.w3.org/2000/svg"></svg>
+    <div class="scatter-legend" id="scatterLegend"></div>
+  </div>
+  <div class="scatter-tooltip" id="scatterTooltip"></div>
+</div>
+
+<!-- ── TAB: ASSESSORIA ── -->
+<div class="tab-panel" id="panel-assessoria">
+  <div class="rec-layout">
+    <div class="rec-form-card">
+      <div class="rec-form-title">Perfil do Cliente</div>
+      <div class="rec-form-sub">Preencha para gerar recomendações personalizadas instantâneas</div>
+      <div class="form-group">
+        <label class="form-label">Tipo de Investidor</label>
+        <select class="form-select" id="recPerfil">
+          <option value="">Todos os perfis</option>
+          <option value="PF">🧑 Pessoa Física (PF)</option>
+          <option value="PJ">🏢 Pessoa Jurídica (PJ)</option>
+          <option value="GOV">🏛 Governo (GOV)</option>
+          <option value="RPPS">🛡 RPPS</option>
+        </select>
       </div>
-      <div class="kpi-ipca-item">
-        <div class="kpi-ipca-item-label">Acumulado ano</div>
-        <div class="kpi-ipca-item-val" id="mIpcaAno">—</div>
-        <div class="kpi-ipca-item-sub" id="mIpcaAnoLabel">—</div>
+      <div class="form-group">
+        <label class="form-label">Tolerância ao Risco</label>
+        <select class="form-select" id="recRisco">
+          <option value="conservador">🛡 Conservador</option>
+          <option value="moderado" selected>⚖️ Moderado</option>
+          <option value="agressivo">🚀 Arrojado</option>
+        </select>
       </div>
-      <div class="kpi-ipca-item">
-        <div class="kpi-ipca-item-label">Últimos 12 meses</div>
-        <div class="kpi-ipca-item-val" id="mIpca12m">—</div>
-        <div class="kpi-ipca-item-sub" id="mIpca12mLabel">acumulado 12m</div>
+      <div class="form-group">
+        <label class="form-label">Horizonte de Investimento</label>
+        <select class="form-select" id="recHorizonte">
+          <option value="curto">Curto prazo (&lt; 1 ano)</option>
+          <option value="medio" selected>Médio prazo (1–3 anos)</option>
+          <option value="longo">Longo prazo (&gt; 3 anos)</option>
+        </select>
       </div>
+      <div class="form-group">
+        <label class="form-label">Objetivo Principal</label>
+        <select class="form-select" id="recObjetivo">
+          <option value="preservacao">🛡 Preservação de capital</option>
+          <option value="rentabilidade">📈 Maximizar rentabilidade</option>
+          <option value="liquidez">💧 Alta liquidez</option>
+          <option value="diversificacao">🌐 Diversificação</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Valor a Investir (R$) — opcional</label>
+        <input class="form-input" id="recValor" type="text" placeholder="Ex: 50.000,00"/>
+      </div>
+      <button class="rec-btn" id="recBtn">🎯 Gerar Recomendações</button>
     </div>
-
-    <div class="ipca-mtabs">
-      <button class="ipca-mtab active" onclick="setIpcaRange(24,this)">2 anos</button>
-      <button class="ipca-mtab" onclick="setIpcaRange(60,this)">5 anos</button>
-      <button class="ipca-mtab" onclick="setIpcaRange(120,this)">10 anos</button>
-      <button class="ipca-mtab" onclick="setIpcaRange(0,this)">Tudo</button>
-    </div>
-
-    <div class="ipca-legend">
-      <span class="ipca-leg"><span class="ipca-leg-dot" style="background:#c8973a"></span>IPCA mensal (%)</span>
-      <span class="ipca-leg"><span class="ipca-leg-dot" style="background:#5b9cf6;opacity:.7"></span>Acumulado 12 meses (%)</span>
-    </div>
-
-    <div style="position:relative;width:100%;height:300px">
-      <canvas id="ipcaCanvas" role="img" aria-label="Gráfico histórico mensal do IPCA e acumulado 12 meses">
-        Histórico IPCA BCB série 433.
-      </canvas>
-    </div>
-
-    <div style="font-size:.67rem;color:var(--muted2);margin-top:12px;text-align:right">
-      Fonte: Banco Central do Brasil — SGS série 433 · Pré-computado pelo Robô Python
+    <div>
+      <div class="rec-empty" id="recEmpty">
+        <div class="rec-empty-icon">🎯</div>
+        Preencha o perfil do cliente ao lado<br>e clique em <strong style="color:var(--gold2)">Gerar Recomendações</strong><br>para ver os fundos indicados com análise de adequação.
+      </div>
+      <div id="recOutput" style="display:none"></div>
     </div>
   </div>
 </div>
 
+</div><!-- /page -->
+
+<!-- FLOATING COMPARISON BAR -->
+<div class="compare-bar" id="compareBar">
+  <div>
+    <div class="compare-bar-count" id="compareCount">0</div>
+    <div class="compare-bar-label">selecionados</div>
+  </div>
+  <div class="compare-bar-names" id="compareNames"></div>
+  <button class="btn-gold" id="btnCompare">Comparar →</button>
+  <button class="btn-clear" id="btnClearCompare">✕ Limpar</button>
+</div>
+
+<div style="position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:0 28px">
+  <footer>Dados extraídos de <span>fundos.caixa.gov.br</span> via Robô Python · Painel por <span>Elton Private Banker</span> · Atualização automática diária</footer>
+</div>
+
 <script>
-/* ── Estado global da tabela ──────────────────────────────────────── */
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',activePerfil='',hideSemDados=false,displayHeaders=[];
-let _kpisData=null; // Estado para armazenar o kpis_dashboard.json
+let selectedFunds=new Map();
+let currentTab='catalogo';
+let rankingsPerfil='';
 
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
+const CAT_COLORS={"RENDA FIXA SIMPLES":"#34d17a","RENDA FIXA":"#5b9cf6","RENDA FIXA REFERENCIADO":"#a78bfa","RENDA FIXA CURTO PRAZO":"#38bdf8","MULTIMERCADO":"#fb923c","CAMBIAL":"#facc15","ACOES":"#f472b6","FUNDO DE INDICE":"#2dd4bf","FUNDOS MUTUOS DE PRIVATIZACAO":"#e879f9"};
+const RISK_CATS={
+  conservador:["RENDA FIXA SIMPLES","RENDA FIXA CURTO PRAZO","RENDA FIXA","RENDA FIXA REFERENCIADO"],
+  moderado:["RENDA FIXA","RENDA FIXA REFERENCIADO","MULTIMERCADO","RENDA FIXA SIMPLES","RENDA FIXA CURTO PRAZO"],
+  agressivo:["MULTIMERCADO","ACOES","CAMBIAL","FUNDO DE INDICE","RENDA FIXA","RENDA FIXA REFERENCIADO"]
+};
+const HORIZON_CATS={
+  curto:["RENDA FIXA SIMPLES","RENDA FIXA CURTO PRAZO","RENDA FIXA"],
+  medio:["RENDA FIXA","RENDA FIXA REFERENCIADO","MULTIMERCADO","RENDA FIXA SIMPLES"],
+  longo:["MULTIMERCADO","ACOES","CAMBIAL","FUNDO DE INDICE","RENDA FIXA","RENDA FIXA REFERENCIADO"]
+};
 
-/* ── Estado global IPCA ───────────────────────────────────────────── */
-let _ipcaHistorico = [];
-let _ipcaChart      = null;
-let _ipcaRange      = 24;
-
-/* ── Helpers URL / tabela ─────────────────────────────────────────── */
-function getFundUrl(r){
-  const u=String(r['URL']||r['url']||'').trim();
-  if(u&&u.startsWith('http')&&u.includes('caixa.gov.br'))return u;
-  const nome=(r['Fundo']||'').replace(/\s*\(8\)|\s*\(1\)|\s*\(2\)|\s*\(3\)/g,'').trim();
-  return 'https://www.google.com/search?q='+encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');
-}
-function isFallbackUrl(r){
-  const u=String(r['URL']||r['url']||'').trim();
-  return !(u&&u.startsWith('http')&&u.includes('caixa.gov.br'));
-}
+// ═══════════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════════
+function getFundUrl(r){const u=String(r['URL']||r['url']||'').trim();if(u&&u.startsWith('http')&&u.includes('caixa.gov.br'))return u;const nome=(r['Fundo']||'').replace(/\s*\(\d\)/g,'').trim();return'https://www.google.com/search?q='+encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');}
+function isFallbackUrl(r){const u=String(r['URL']||r['url']||'').trim();return!(u&&u.startsWith('http')&&u.includes('caixa.gov.br'));}
 function parseCsv(raw){if(raw.charCodeAt(0)===0xFEFF)raw=raw.slice(1);return Papa.parse(raw,{header:true,skipEmptyLines:true});}
 function toNum(v){if(v===null||v===undefined)return null;const s=String(v).trim();if(!s||s==='-'||s==='—'||s==='null')return null;const n=parseFloat(s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n;}
-function pctCell(val){if(!val||String(val).trim()===''||val==='-'||val==='—')return`<td class="col-pct"><span class="dash">—</span></td>`;const n=toNum(val);if(n===null)return`<td class="col-pct"><span class="dash">${val}</span></td>`;const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';const pct=Math.min(Math.abs(n)/20*100,100);return`<td class="col-pct"><div class="pct-wrap"><div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div><span class="pct-val ${cls}">${sign}${val}</span></div></td>`;}
 function temDados(r){const c=String(r['Cota (R$)']||'').trim();return c&&c!=='-'&&c!=='—';}
+function catClass(cat){return CAT_CLS[cat]||'RF';}
+function pctCell(val){
+  if(!val||String(val).trim()===''||val==='-'||val==='—')return`<td class="col-pct"><span class="dash">—</span></td>`;
+  const n=toNum(val);if(n===null)return`<td class="col-pct"><span class="dash">${val}</span></td>`;
+  const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';
+  const pct=Math.min(Math.abs(n)/20*100,100);
+  return`<td class="col-pct"><div class="pct-wrap"><div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div><span class="pct-val ${cls}">${sign}${val}</span></div></td>`;
+}
+function setActiveChip(container,selector,active){container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));active.classList.add('active');}
+function perfilChips(val){return String(val).split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');}
 
-/* ── KPIs do catálogo estruturados via kpis_dashboard.json ────────── */
+// ═══════════════════════════════════════════════════════════
+// KPIs
+// ═══════════════════════════════════════════════════════════
 function updateKPIs(){
   document.getElementById('kpiFundos').textContent=allRows.length;
-  
-  // Consome os dados consolidados do robô
-  if (_kpisData && _kpisData.resumo_geral) {
-    const rg = _kpisData.resumo_geral;
-    document.getElementById('kpiPL').textContent = rg.pl_total_consolidado.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
-    document.getElementById('kpiConcentracao').textContent = rg.concentracao_top5_percent.toLocaleString('pt-BR') + '%';
-    document.getElementById('kpiPipeline').textContent = rg.pipeline_novos_fundos;
-  }
-  
-  let best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
+  document.getElementById('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'')).size;
+  let pl=0,best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
   allRows.forEach(r=>{
+    const p=toNum(r['PL (milhoes R$)']);if(p!==null)pl+=p;
     const m=toNum(r['Acum. 12M (%)']);
-    if(m!==null){
-      if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
-      if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}
-    }
+    if(m!==null){if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}}
   });
+  document.getElementById('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
   document.getElementById('kpiBest').textContent=best>-Infinity?`+${bestVal}%`:'—';
-  document.getElementById('kpiBestFundo').textContent=bestName.length>42?bestName.slice(0,42)+'…':bestName;
+  document.getElementById('kpiBestFundo').textContent=bestName.length>40?bestName.slice(0,40)+'…':bestName;
   document.getElementById('kpiWorst').textContent=worst<Infinity?`${worstVal}%`:'—';
-  document.getElementById('kpiWorstFundo').textContent=worstName.length>42?worstName.slice(0,42)+'…':worstName;
+  document.getElementById('kpiWorstFundo').textContent=worstName.length>40?worstName.slice(0,40)+'…':worstName;
 }
 
-/* ── Painel Macro (lê mercado_atual.json v12 estruturado) ─────────── */
-function renderMacroPainel(data) {
-  const fmt = (val, casas=2) =>
-    (val !== null && val !== undefined)
-      ? val.toLocaleString('pt-BR', {minimumFractionDigits:casas, maximumFractionDigits:casas})
-      : '—';
-
-  document.getElementById('macroSelic').innerText  = fmt(data.cards.selic_meta?.valor) + '% a.a.';
-  document.getElementById('macroCdi').innerText    = fmt(data.cards.cdi?.valor)        + '% a.a.';
-  document.getElementById('macroCdiDia').innerText = fmt(data.cards.cdi_dia?.valor, 4) + '%';
-
-  const ipca = data.cards.ipca;
-  if (ipca) {
-    _ipcaHistorico = ipca.historico || [];
-    const vMes = ipca.ultimo_mes;
-    const vAno = ipca.acum_ano;
-    const v12m = ipca.acum_12m;
-    const metaCentro = ipca.meta_central ?? 3.0;
-    const metaSup = ipca.meta_superior ?? 4.5;
-    const metaInf = ipca.meta_inferior ?? 1.5;
-
-    let badgeHTML = '';
-    if (v12m !== null && v12m !== undefined) {
-      if (v12m >= metaInf && v12m <= metaSup) {
-        badgeHTML = `<br><span style="margin-top:6px;display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;background:rgba(52,209,122,.12);color:var(--green);border:1px solid rgba(52,209,122,.25);font-family:'Inter',sans-serif;font-weight:600;">✓ Dentro da Meta</span>`;
-      } else if (v12m > metaSup) {
-        badgeHTML = `<br><span style="margin-top:6px;display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;background:rgba(240,86,86,.12);color:var(--red);border:1px solid rgba(240,86,86,.25);font-family:'Inter',sans-serif;font-weight:600;">✗ Acima do Teto</span>`;
-      } else {
-        badgeHTML = `<br><span style="margin-top:6px;display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;background:rgba(250,204,21,.12);color:#facc15;border:1px solid rgba(250,204,21,.25);font-family:'Inter',sans-serif;font-weight:600;">⚠ Abaixo do Piso</span>`;
-      }
-    }
-
-    document.getElementById('ipcaMes').innerText = vMes !== null ? fmt(vMes) + '%' : '—';
-    document.getElementById('ipcaMesLabel').innerText = ipca.label_mes || '—';
-    document.getElementById('ipcaAno').innerText = vAno !== null ? fmt(vAno) + '%' : '—';
-    document.getElementById('ipcaAnoLabel').innerText = 'Jan–' + (ipca.label_mes || '');
-    document.getElementById('ipca12m').innerHTML = (v12m !== null ? fmt(v12m) + '%' : '—') + badgeHTML;
-    const item12mSub = document.getElementById('ipca12m').nextElementSibling;
-    if (item12mSub) item12mSub.innerText = `Meta Central: ${fmt(metaCentro)}%`;
-
-    document.getElementById('mIpcaMes').innerText = vMes !== null ? fmt(vMes) + '%' : '—';
-    document.getElementById('mIpcaMesLabel').innerText = ipca.label_mes || '—';
-    document.getElementById('mIpcaAno').innerText = vAno !== null ? fmt(vAno) + '%' : '—';
-    document.getElementById('mIpcaAnoLabel').innerText = 'Jan–' + (ipca.label_mes || '');
-    document.getElementById('mIpca12m').innerHTML = (v12m !== null ? fmt(v12m) + '%' : '—') + badgeHTML;
-    document.getElementById('mIpca12mLabel').innerText = `Bandas: ${fmt(metaInf)}% a ${fmt(metaSup)}%`;
-  }
-
-  document.getElementById('macroIbov').innerText = data.cards.ibovespa?.atual
-    ? Math.round(data.cards.ibovespa.atual).toLocaleString('pt-BR') + ' pts' : '—';
-  const varIbov  = document.getElementById('macroIbovVar');
-  const vIbov    = data.cards.ibovespa?.variacao_mensal;
-  const setaIbov = vIbov > 0 ? '▲ ' : vIbov < 0 ? '▼ ' : '';
-  varIbov.innerText    = `${setaIbov}${vIbov > 0 ? '+' : ''}${fmt(vIbov)}% (mês)`;
-  varIbov.style.color  = vIbov >= 0 ? 'var(--green)' : 'var(--red)';
-
-  document.getElementById('macroDolar').innerText = data.cards.dolar?.atual
-    ? 'R$ ' + fmt(data.cards.dolar.atual, 2) : '—';
-  const varDolar = document.getElementById('macroDolarVar');
-  const vDolar   = data.cards.dolar?.variacao_mensal;
-  const setaDolar = vDolar > 0 ? '▲ ' : vDolar < 0 ? '▼ ' : '';
-  varDolar.innerText   = `${setaDolar}${vDolar > 0 ? '+' : ''}${fmt(vDolar)}% (mês)`;
-  varDolar.style.color = vDolar >= 0 ? 'var(--green)' : 'var(--red)';
-
-  document.getElementById('macroSp500').innerText = data.indices_internacionais?.sp500_usd
-    ? Math.round(data.indices_internacionais.sp500_usd).toLocaleString('pt-BR') + ' USD' : '—';
-}
-
-/* ── Modal IPCA com Renderização Gráfica ──────────────────────────── */
-function openIpcaModal() {
-  document.getElementById('ipcaOverlay').classList.add('open');
-  document.body.style.overflow = 'hidden';
-  if (_ipcaHistorico.length > 0 && !_ipcaChart) buildIpcaChart(_ipcaRange);
-}
-function closeIpcaModal() {
-  document.getElementById('ipcaOverlay').classList.remove('open');
-  document.body.style.overflow = '';
-}
-function setIpcaRange(range, btn) {
-  _ipcaRange = range;
-  document.querySelectorAll('.ipca-mtab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  buildIpcaChart(range);
-}
-function buildIpcaChart(range) {
-  const serie   = range === 0 ? _ipcaHistorico : _ipcaHistorico.slice(-range);
-  const offset = _ipcaHistorico.length - serie.length;
-  const labels  = serie.map(d => d.label);
-  const mensais = serie.map(d => parseFloat(Number(d.valor).toFixed(2)));
-  const acc12m  = serie.map((_, i) => {
-    const abs = offset + i;
-    const sl  = _ipcaHistorico.slice(Math.max(0, abs - 11), abs + 1);
-    const ac  = sl.reduce((a, d) => a * (1 + d.valor / 100), 1);
-    return parseFloat(((ac - 1) * 100).toFixed(2));
-  });
-  const ctx = document.getElementById('ipcaCanvas').getContext('2d');
-  if (_ipcaChart) { _ipcaChart.destroy(); _ipcaChart = null; }
-  _ipcaChart = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [
-        {
-          type: 'bar',
-          label: 'IPCA mensal (%)',
-          data: mensais,
-          yAxisID: 'y',
-          backgroundColor: mensais.map(v => v < 0 ? 'rgba(240,86,86,.45)' : 'rgba(200,151,58,.45)'),
-          borderColor:     mensais.map(v => v < 0 ? '#f05656' : '#c8973a'),
-          borderWidth: 1,
-          borderRadius: 2,
-        },
-        {
-          type: 'line',
-          label: 'Acumulado 12 meses (%)',
-          data: acc12m,
-          yAxisID: 'y2',
-          borderColor: '#5b9cf6',
-          borderWidth: 2,
-          pointRadius: 0,
-          tension: 0.4,
-          borderDash: [5, 3],
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#0d0f1a',
-          borderColor: 'rgba(200,151,58,.3)',
-          borderWidth: 1,
-          titleColor: '#c8973a',
-          bodyColor: '#6b7799',
-          callbacks: {
-            label: c => `${c.dataset.label}: ${c.parsed.y.toFixed(2)}%`
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color:'#4a5270', font:{size:10}, maxRotation:45, autoSkip:true, maxTicksLimit:20 },
-          grid:  { color:'rgba(200,151,58,.05)' }
-        },
-        y: {
-          position: 'left',
-          ticks: { color:'#c8973a', font:{size:10}, callback: v => v.toFixed(1)+'%' },
-          grid:  { color:'rgba(200,151,58,.05)' },
-          title: { display:true, text:'Mensal', color:'#4a5270', font:{size:10} }
-        },
-        y2: {
-          position: 'right',
-          ticks: { color:'#5b9cf6', font:{size:10}, callback: v => v.toFixed(1)+'%' },
-          grid:  { drawOnChartArea:false },
-          title: { display:true, text:'12 meses', color:'#4a5270', font:{size:10} }
-        }
-      }
-    }
-  });
-}
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeIpcaModal(); });
-
-/* ── Motores do Catálogo Geral de Fundos ────────────────────────── */
+// ═══════════════════════════════════════════════════════════
+// CATÁLOGO TABLE
+// ═══════════════════════════════════════════════════════════
 function applyFilter(){
   const q=activeSearch.toLowerCase();
   filtered=allRows.filter(r=>{
@@ -583,25 +537,7 @@ function applyFilter(){
     if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q)))return false;
     return true;
   });
-  
-  // Injeta Dinamicamente a Rentabilidade Ponderada da Categoria Selecionada
-  const insightDiv = document.getElementById('catInsightRow');
-  if (activeCat && _kpisData && _kpisData.categorias && _kpisData.categorias[activeCat]) {
-    const info = _kpisData.categorias[activeCat];
-    insightDiv.style.display = 'block';
-    insightDiv.innerHTML = `✨ <b>Visão Estratégica da Categoria (${activeCat}):</b> Rentabilidade 12M Ponderada Real: <b>${info.rent_12m_ponderada}%</b> | Patrimônio Alocado: <b>R$ ${info.pl_total.toLocaleString('pt-BR')} M</b> (veículos ativos: ${info.qtd_ativos})`;
-  } else {
-    insightDiv.style.display = 'none';
-  }
-
-  if(sortCol>=0&&sortCol<displayHeaders.length){
-    const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);
-    filtered.sort((a,b)=>{
-      const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();
-      const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();
-      return av<bv?-sortDir:av>bv?sortDir:0;
-    });
-  }
+  if(sortCol>=0&&sortCol<displayHeaders.length){const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);filtered.sort((a,b)=>{const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();return av<bv?-sortDir:av>bv?sortDir:0;});}
   currentPage=1;render();
 }
 
@@ -611,39 +547,26 @@ function render(){
   const rows=filtered.slice(start,end),tbody=document.getElementById('tableBody');
   tbody.innerHTML='';
   if(!rows.length){
-    tbody.innerHTML=`<tr><td colspan="${displayHeaders.length}" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
-    document.getElementById('resultInfo').textContent='0 registros';
-    renderPagination();return;
+    tbody.innerHTML=`<tr><td colspan="${displayHeaders.length+1}" style="text-align:center;padding:48px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
+    document.getElementById('resultInfo').textContent='0 registros';renderPagination();return;
   }
   rows.forEach(r=>{
     const tr=document.createElement('tr');
+    const fundKey=r['Fundo']||'';
     if(!temDados(r))tr.classList.add('row-sem-dados');
+    if(selectedFunds.has(fundKey))tr.classList.add('row-selected');
+    // Checkbox
+    const tdChk=document.createElement('td');tdChk.className='col-chk';
+    const chk=document.createElement('input');chk.type='checkbox';chk.className='row-chk';chk.checked=selectedFunds.has(fundKey);
+    chk.addEventListener('change',()=>toggleSelect(fundKey,r,chk.checked,tr));
+    tdChk.appendChild(chk);tr.appendChild(tdChk);
+    // Data cols
     displayHeaders.forEach(h=>{
       const val=String(r[h]||'');
-      if(h==='Categoria'){
-        const cls=CAT_CLS[val]||'RF';
-        const td=document.createElement('td');td.className='col-cat';
-        td.innerHTML=`<span class="cat-badge cat-${cls}">${val||'—'}</span>`;
-        tr.appendChild(td);return;
-      }
-      if(h==='Fundo'){
-        const td=document.createElement('td');td.className='col-fundo';
-        const url=getFundUrl(r);
-        const isFallback=isFallbackUrl(r);
-        const tooltip=isFallback?'Buscar no Google (URL real disponível após próxima execução do robô)':'Abrir página do fundo na CAIXA';
-        const fallbackLabel=isFallback?'<span class="link-fallback">🔍 google</span>':'';
-        td.innerHTML=`<a href="${url}" target="_blank" rel="noopener" title="${tooltip}">${val}${fallbackLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
-        tr.appendChild(td);return;
-      }
-      if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){
-        tr.insertAdjacentHTML('beforeend',pctCell(val));return;
-      }
-      if(h==='Perfis'){
-        const td=document.createElement('td');
-        const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');
-        td.innerHTML=`<div class="perfis-wrap">${chips}</div>`;
-        tr.appendChild(td);return;
-      }
+      if(h==='Categoria'){const cls=catClass(val);const td=document.createElement('td');td.className='col-cat';td.innerHTML=`<span class="cat-badge cat-${cls}">${val||'—'}</span>`;tr.appendChild(td);return;}
+      if(h==='Fundo'){const td=document.createElement('td');td.className='col-fundo';const url=getFundUrl(r);const isF=isFallbackUrl(r);td.innerHTML=`<a href="${url}" target="_blank" rel="noopener">${val}${isF?'<span class="link-fallback">🔍</span>':''}<svg class="link-icon" width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;tr.appendChild(td);return;}
+      if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){tr.insertAdjacentHTML('beforeend',pctCell(val));return;}
+      if(h==='Perfis'){const td=document.createElement('td');td.innerHTML=`<div class="perfis-wrap">${perfilChips(val)}</div>`;tr.appendChild(td);return;}
       if(h==='URL')return;
       const td=document.createElement('td');td.textContent=val||'—';tr.appendChild(td);
     });
@@ -654,13 +577,9 @@ function render(){
 }
 
 function renderPagination(){
-  const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
-  const c=document.getElementById('pageBtns');c.innerHTML='';
-  const mk=(label,page,dis,act)=>{
-    const b=document.createElement('button');
-    b.className='page-btn'+(act?' active':'');b.textContent=label;b.disabled=dis;
-    if(!dis)b.addEventListener('click',()=>{currentPage=page;render();});return b;
-  };
+  const total=perPage===9999?1:Math.ceil(filtered.length/perPage),c=document.getElementById('pageBtns');
+  c.innerHTML='';
+  const mk=(label,page,dis,act)=>{const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=label;b.disabled=dis;if(!dis)b.addEventListener('click',()=>{currentPage=page;render();});return b;};
   c.appendChild(mk('‹',currentPage-1,currentPage===1));
   let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);from=Math.max(1,to-4);
   for(let i=from;i<=to;i++)c.appendChild(mk(i,i,false,i===currentPage));
@@ -669,80 +588,543 @@ function renderPagination(){
 
 function buildHeader(){
   const thead=document.getElementById('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
-  displayHeaders.filter(h=>h!=='URL').forEach(h=>{
-    const th=document.createElement('th');
-    th.innerHTML=`${h} <span class="si"></span>`;
-    const realIdx=displayHeaders.indexOf(h);
-    if(realIdx===sortCol)th.className=sortDir===1?'sa':'sd';
-    th.addEventListener('click',()=>{
-      if(sortCol===realIdx)sortDir*=-1;else{sortCol=realIdx;sortDir=-1;}
-      thead.querySelectorAll('th').forEach(t=>t.className='');
-      th.className=sortDir===1?'sa':'sd';applyFilter();
-    });
+  const thChk=document.createElement('th');thChk.className='col-chk';thChk.textContent='';tr.appendChild(thChk);
+  const vis=displayHeaders.filter(h=>h!=='URL');
+  vis.forEach(h=>{
+    const th=document.createElement('th');th.innerHTML=`${h} <span class="si"></span>`;
+    const ri=displayHeaders.indexOf(h);
+    if(ri===sortCol)th.className=sortDir===1?'sa':'sd';
+    th.addEventListener('click',()=>{if(sortCol===ri)sortDir*=-1;else{sortCol=ri;sortDir=-1;}thead.querySelectorAll('th:not(.col-chk)').forEach(t=>t.className='');th.className=sortDir===1?'sa':'sd';applyFilter();});
     tr.appendChild(th);
   });
   thead.appendChild(tr);
 }
 
-function setActiveChip(container,selector,active){
-  container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));
-  active.classList.add('active');
+function buildCatFilters(cats){
+  const row=document.getElementById('catFilters'),label=row.querySelector('.filter-label');
+  row.innerHTML='';row.appendChild(label);
+  const all=document.createElement('button');all.className='chip active';all.dataset.cat='';all.textContent='Todas';
+  all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});row.appendChild(all);
+  [...cats].sort().forEach(cat=>{const b=document.createElement('button');b.className='chip';b.dataset.cat=cat;b.textContent=cat;b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});row.appendChild(b);});
 }
 
-function buildCatFilters(cats){
-  const row=document.getElementById('catFilters');
-  const label=row.querySelector('.filter-label');row.innerHTML='';row.appendChild(label);
-  const all=document.createElement('button');all.className='chip active';all.dataset.cat='';all.textContent='Todas';
-  all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});
-  row.appendChild(all);
-  [...cats].sort().forEach(cat=>{
-    const b=document.createElement('button');b.className='chip';b.dataset.cat=cat;b.textContent=cat;
-    b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});
-    row.appendChild(b);
+// ═══════════════════════════════════════════════════════════
+// COMPARISON
+// ═══════════════════════════════════════════════════════════
+function toggleSelect(key,row,checked,tr){
+  if(checked){
+    if(selectedFunds.size>=4){alert('Máximo de 4 fundos para comparação.');tr.querySelector('.row-chk').checked=false;return;}
+    selectedFunds.set(key,row);tr.classList.add('row-selected');
+  }else{selectedFunds.delete(key);tr.classList.remove('row-selected');}
+  updateCompareBar();
+}
+
+function updateCompareBar(){
+  const bar=document.getElementById('compareBar'),count=selectedFunds.size;
+  document.getElementById('compareCount').textContent=count;
+  document.getElementById('compareNames').textContent=[...selectedFunds.keys()].map(k=>k.length>28?k.slice(0,28)+'…':k).join(' · ');
+  if(count>0)bar.classList.add('visible');else bar.classList.remove('visible');
+}
+
+function renderComparador(){
+  const empty=document.getElementById('compEmpty'),grid=document.getElementById('compGrid');
+  if(selectedFunds.size===0){empty.style.display='block';grid.style.display='none';return;}
+  empty.style.display='none';grid.style.display='grid';
+  const funds=[...selectedFunds.values()];
+  grid.style.gridTemplateColumns=`repeat(${funds.length},1fr)`;
+  const metrics=[
+    {key:'Categoria',label:'Categoria',isNum:false},
+    {key:'Cota (R$)',label:'Cota (R$)',isNum:true},
+    {key:'Variacao Dia (%)',label:'Variação Dia',isNum:true,isPct:true},
+    {key:'Acum. Mes (%)',label:'Acum. Mês',isNum:true,isPct:true},
+    {key:'Acum. Ano (%)',label:'Acum. Ano',isNum:true,isPct:true},
+    {key:'Acum. 12M (%)',label:'Acum. 12M',isNum:true,isPct:true},
+    {key:'PL (milhoes R$)',label:'PL (Mi R$)',isNum:true},
+    {key:'Perfis',label:'Perfis',isNum:false}
+  ];
+  const best={},worst={};
+  metrics.filter(m=>m.isNum).forEach(m=>{
+    const vals=funds.map(f=>toNum(f[m.key])).filter(v=>v!==null);
+    if(vals.length>1){best[m.key]=Math.max(...vals);worst[m.key]=Math.min(...vals);}
+  });
+  grid.innerHTML='';
+  funds.forEach(r=>{
+    const name=r['Fundo']||'';const cat=r['Categoria']||'';const cls=catClass(cat);
+    const card=document.createElement('div');card.className='comp-card';
+    let mHtml='';
+    metrics.forEach(m=>{
+      const raw=r[m.key]||'—';let valHtml='';
+      if(m.key==='Categoria'){valHtml=`<span class="cat-badge cat-${catClass(raw)}">${raw}</span>`;}
+      else if(m.key==='Perfis'){valHtml=`<div class="perfis-wrap" style="justify-content:flex-end">${perfilChips(raw)}</div>`;}
+      else if(m.isNum){
+        const n=toNum(raw);let cls2='neutral';
+        if(n!==null&&funds.length>1){if(n===best[m.key])cls2='best';else if(n===worst[m.key])cls2='worst';}
+        else if(n!==null){cls2=n>0?'pos':n<0?'neg':'neutral';}
+        const sign=n!==null&&n>0&&m.isPct?'+':'';
+        valHtml=`<span class="comp-metric-val ${cls2}">${n!==null?sign+raw:'—'}</span>`;
+      }else{valHtml=`<span class="comp-metric-val neutral">${raw}</span>`;}
+      mHtml+=`<div class="comp-metric"><span class="comp-metric-label">${m.label}</span>${valHtml}</div>`;
+    });
+    const safeKey=name.replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+    card.innerHTML=`<div class="comp-card-hdr">
+      <button class="comp-card-remove" onclick="removeFromComp('${safeKey}')">✕</button>
+      <div class="comp-card-name">${name}</div>
+      <span class="cat-badge cat-${cls}">${cat}</span>
+    </div><div>${mHtml}</div>`;
+    grid.appendChild(card);
   });
 }
 
-/* ── Escutas de Eventos (Listeners) ──────────────────────────────── */
+function removeFromComp(key){
+  selectedFunds.delete(key);updateCompareBar();renderComparador();
+  document.querySelectorAll('.row-chk').forEach(chk=>{
+    const tr=chk.closest('tr');if(!tr)return;
+    const fc=tr.querySelector('td.col-fundo a');
+    if(fc&&fc.textContent.trim().startsWith(key.slice(0,15))){chk.checked=false;tr.classList.remove('row-selected');}
+  });
+}
+
+// ═══════════════════════════════════════════════════════════
+// RANKINGS
+// ═══════════════════════════════════════════════════════════
+function renderRankings(filterPerfil){
+  if(filterPerfil!==undefined)rankingsPerfil=filterPerfil;
+  const fp=rankingsPerfil;
+  // Update filter UI
+  const filterDiv=document.getElementById('rankingsFilter');
+  filterDiv.innerHTML=['','PF','PJ','GOV','RPPS'].map(p=>`<button class="chip ${p==='pf'?'pf':p==='PJ'?'pj':p==='GOV'?'gov':p==='RPPS'?'rpps':''} ${p===fp?'active':''}" onclick="renderRankings('${p}')">${p||'Todos os Perfis'}</button>`).join('');
+
+  let data=allRows.filter(r=>temDados(r)&&toNum(r['Acum. 12M (%)'])!==null);
+  if(fp){data=data.filter(r=>{const t=String(r['Perfis']||'').split(/\s*\|\s*/).map(s=>s.trim());return t.includes(fp);});}
+
+  const byGrid=document.getElementById('rankingsGrid');
+  if(!data.length){byGrid.innerHTML='<div style="text-align:center;padding:50px;color:var(--muted)">Nenhum dado disponível.</div>';return;}
+
+  // Sort by 12M
+  const s12M=[...data].sort((a,b)=>(toNum(b['Acum. 12M (%)'])??-Infinity)-(toNum(a['Acum. 12M (%)'])??-Infinity));
+  const top10=s12M.slice(0,10);
+  const max12M=Math.abs(toNum(top10[0]?.['Acum. 12M (%)']))||1;
+
+  // Best by category
+  const cats=[...new Set(data.map(r=>r['Categoria']||''))].filter(Boolean);
+  const catTops=cats.map(cat=>{
+    const cr=data.filter(r=>r['Categoria']===cat);cr.sort((a,b)=>(toNum(b['Acum. 12M (%)'])??-Infinity)-(toNum(a['Acum. 12M (%)'])??-Infinity));return{cat,top:cr[0]};
+  }).filter(x=>x.top).sort((a,b)=>(toNum(b.top['Acum. 12M (%)'])??-Infinity)-(toNum(a.top['Acum. 12M (%)'])??-Infinity));
+  const maxCat=Math.abs(toNum(catTops[0]?.top['Acum. 12M (%)']))||1;
+
+  // Top5 mes & ano
+  const sMes=[...data].sort((a,b)=>(toNum(b['Acum. Mes (%)'])??-Infinity)-(toNum(a['Acum. Mes (%)'])??-Infinity));
+  const top5Mes=sMes.slice(0,5);const maxMes=Math.abs(toNum(top5Mes[0]?.['Acum. Mes (%)']))||1;
+  const sAno=[...data].sort((a,b)=>(toNum(b['Acum. Ano (%)'])??-Infinity)-(toNum(a['Acum. Ano (%)'])??-Infinity));
+  const top5Ano=sAno.slice(0,5);const maxAno=Math.abs(toNum(top5Ano[0]?.['Acum. Ano (%)']))||1;
+
+  function RI(items,vFn,maxV,badge){
+    return items.map((item,i)=>{
+      const r=badge?item.top:item;const cat=badge?item.cat:(r['Categoria']||'');
+      const v=vFn(r);const n=toNum(v);
+      const pct=n!==null?Math.min(Math.abs(n)/maxV*100,100):0;
+      const cls=n>=0?'pos':'neg';const sign=n>0?'+':'';
+      const name=r['Fundo']||'—';
+      const catCls=catClass(cat);
+      return`<div class="rank-item">
+        <div class="rank-pos ${i<3?'top3':''}">${i+1}</div>
+        <div class="rank-info">
+          <div class="rank-name" title="${name}">${name.length>44?name.slice(0,44)+'…':name}</div>
+          <div class="rank-cat">${badge?`<span class="cat-badge cat-${catCls}" style="font-size:.58rem;padding:1px 5px">${cat}</span>`:cat}</div>
+        </div>
+        <div class="rank-bar-wrap">
+          <div class="rank-bar-bg"><div class="rank-bar-fill ${cls}" style="width:${pct}%"></div></div>
+          <div class="rank-val ${cls}">${n!==null?sign+v:'—'}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  byGrid.innerHTML=`
+    <div class="ranking-card">
+      <div class="ranking-card-hdr"><div><div class="ranking-card-title">🏆 Top 10 · Acum. 12 Meses</div><div class="ranking-card-sub">Melhor desempenho anual · ${fp||'Todos os perfis'}</div></div></div>
+      <div class="ranking-list">${RI(top10,r=>r['Acum. 12M (%)'],max12M,false)}</div>
+    </div>
+    <div class="ranking-card">
+      <div class="ranking-card-hdr"><div><div class="ranking-card-title">🥇 Destaque por Categoria</div><div class="ranking-card-sub">Melhor de cada tipo · 12M · ${fp||'Todos os perfis'}</div></div></div>
+      <div class="ranking-list">${RI(catTops,r=>r['Acum. 12M (%)'],maxCat,true)}</div>
+    </div>
+    <div class="ranking-card">
+      <div class="ranking-card-hdr"><div><div class="ranking-card-title">📅 Top 5 · Acum. Mês</div><div class="ranking-card-sub">Melhor desempenho no mês corrente</div></div></div>
+      <div class="ranking-list">${RI(top5Mes,r=>r['Acum. Mes (%)'],maxMes,false)}</div>
+    </div>
+    <div class="ranking-card">
+      <div class="ranking-card-hdr"><div><div class="ranking-card-title">📅 Top 5 · Acum. Ano</div><div class="ranking-card-sub">Melhor desempenho no ano corrente</div></div></div>
+      <div class="ranking-list">${RI(top5Ano,r=>r['Acum. Ano (%)'],maxAno,false)}</div>
+    </div>
+    ${renderRankingsKpis(kpisData)}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// SCATTER PLOT
+// ═══════════════════════════════════════════════════════════
+function renderScatter(){
+  const svg=document.getElementById('scatterSvg'),tooltip=document.getElementById('scatterTooltip');
+  const W=900,H=460,PAD={top:22,right:30,bottom:50,left:62};
+  const plotW=W-PAD.left-PAD.right,plotH=H-PAD.top-PAD.bottom;
+  const data=allRows.filter(r=>toNum(r['Acum. 12M (%)'])!==null&&toNum(r['Variacao Dia (%)'])!==null);
+  if(!data.length){svg.innerHTML='<text x="450" y="230" text-anchor="middle" fill="#6b7799" font-size="13">Dados insuficientes para o gráfico</text>';return;}
+  const xs=data.map(r=>toNum(r['Acum. 12M (%)']));
+  const ys=data.map(r=>Math.abs(toNum(r['Variacao Dia (%)'])));
+  const pls=data.map(r=>toNum(r['PL (milhoes R$)'])||10);
+  const xMin=Math.min(...xs),xMax=Math.max(...xs);
+  const yMax=Math.max(...ys)*1.12||1,plMax=Math.max(...pls);
+  function sx(v){return PAD.left+(v-xMin)/(xMax-xMin)*plotW;}
+  function sy(v){return PAD.top+plotH-(v/(yMax))*plotH;}
+  function sr(v){return Math.max(4,Math.min(16,Math.sqrt(v/plMax)*16));}
+  let dots='';
+  data.forEach((r,i)=>{
+    const x=sx(xs[i]),y=sy(ys[i]),radius=sr(pls[i]);
+    const cat=r['Categoria']||'',col=CAT_COLORS[cat]||'#6b7799';
+    const name=(r['Fundo']||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+    dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${radius}" fill="${col}" fill-opacity="0.6" stroke="${col}" stroke-width="1" stroke-opacity="0.9" style="cursor:pointer" data-name="${name}" data-cat="${cat}" data-x="${xs[i]}" data-y="${ys[i].toFixed(4)}" data-pl="${pls[i]}"/>`;
+  });
+  let axX='',axY='';
+  for(let i=0;i<=6;i++){const v=xMin+(xMax-xMin)*i/6;const px=sx(v);axX+=`<line x1="${px.toFixed(1)}" y1="${(PAD.top+plotH).toFixed(1)}" x2="${px.toFixed(1)}" y2="${(PAD.top+plotH+5).toFixed(1)}" stroke="#4a5270" stroke-width="1"/><text x="${px.toFixed(1)}" y="${(PAD.top+plotH+17).toFixed(1)}" text-anchor="middle" fill="#6b7799" font-size="9">${v.toFixed(1)}%</text><line x1="${px.toFixed(1)}" y1="${PAD.top}" x2="${px.toFixed(1)}" y2="${(PAD.top+plotH).toFixed(1)}" stroke="#1a1f3a" stroke-width="1" stroke-dasharray="3,4"/>`;}
+  for(let i=0;i<=5;i++){const v=yMax*i/5;const py=sy(v);axY+=`<line x1="${(PAD.left-5).toFixed(1)}" y1="${py.toFixed(1)}" x2="${PAD.left}" y2="${py.toFixed(1)}" stroke="#4a5270" stroke-width="1"/><text x="${(PAD.left-7).toFixed(1)}" y="${(py+3).toFixed(1)}" text-anchor="end" fill="#6b7799" font-size="9">${v.toFixed(2)}%</text><line x1="${PAD.left}" y1="${py.toFixed(1)}" x2="${(PAD.left+plotW).toFixed(1)}" y2="${py.toFixed(1)}" stroke="#1a1f3a" stroke-width="1" stroke-dasharray="3,4"/>`;}
+  const zeroLine=xMin<0&&xMax>0?`<line x1="${sx(0).toFixed(1)}" y1="${PAD.top}" x2="${sx(0).toFixed(1)}" y2="${(PAD.top+plotH).toFixed(1)}" stroke="rgba(200,151,58,.4)" stroke-width="1.5" stroke-dasharray="5,3"/>`:''
+  svg.innerHTML=`<rect width="${W}" height="${H}" fill="transparent"/>
+    <rect x="${PAD.left}" y="${PAD.top}" width="${plotW}" height="${plotH}" fill="#0d0f1a" rx="3"/>
+    ${axX}${axY}${zeroLine}
+    <line x1="${PAD.left}" y1="${PAD.top}" x2="${PAD.left}" y2="${(PAD.top+plotH).toFixed(1)}" stroke="#4a5270" stroke-width="1"/>
+    <line x1="${PAD.left}" y1="${(PAD.top+plotH).toFixed(1)}" x2="${(PAD.left+plotW).toFixed(1)}" y2="${(PAD.top+plotH).toFixed(1)}" stroke="#4a5270" stroke-width="1"/>
+    <text x="${(PAD.left+plotW/2).toFixed(1)}" y="${H-5}" text-anchor="middle" fill="#6b7799" font-size="10">Acumulado 12M (%)</text>
+    <text x="12" y="${(PAD.top+plotH/2).toFixed(1)}" text-anchor="middle" fill="#6b7799" font-size="10" transform="rotate(-90,12,${(PAD.top+plotH/2).toFixed(1)})">|Var. Dia| (%)</text>
+    ${dots}`;
+  svg.querySelectorAll('circle').forEach(c=>{
+    c.addEventListener('mouseenter',e=>{
+      tooltip.style.display='block';
+      const xv=parseFloat(c.dataset.x);
+      tooltip.innerHTML=`<div class="scatter-tooltip-name">${c.dataset.name}</div>
+        <div class="scatter-tooltip-val">Categoria: <span>${c.dataset.cat}</span></div>
+        <div class="scatter-tooltip-val">Acum. 12M: <span style="color:${xv>=0?'#34d17a':'#f05656'}">${xv>0?'+':''}${xv.toFixed(2)}%</span></div>
+        <div class="scatter-tooltip-val">|Var. Dia|: <span>${parseFloat(c.dataset.y).toFixed(4)}%</span></div>
+        <div class="scatter-tooltip-val">PL: <span>R$ ${parseFloat(c.dataset.pl).toLocaleString('pt-BR',{maximumFractionDigits:0})} Mi</span></div>`;
+    });
+    c.addEventListener('mousemove',e=>{tooltip.style.left=(e.clientX+16)+'px';tooltip.style.top=(e.clientY-10)+'px';});
+    c.addEventListener('mouseleave',()=>{tooltip.style.display='none';});
+  });
+  const cats=[...new Set(data.map(r=>r['Categoria']||''))].filter(Boolean).sort();
+  document.getElementById('scatterLegend').innerHTML=cats.map(cat=>`<div class="legend-item"><div class="legend-dot" style="background:${CAT_COLORS[cat]||'#6b7799'}"></div>${cat}</div>`).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// ASSESSORIA / RECOMENDAÇÃO
+// ═══════════════════════════════════════════════════════════
+function gerarRecomendacoes(){
+  const perfil=document.getElementById('recPerfil').value;
+  const risco=document.getElementById('recRisco').value;
+  const horizonte=document.getElementById('recHorizonte').value;
+  const objetivo=document.getElementById('recObjetivo').value;
+  const valorStr=document.getElementById('recValor').value;
+  const valor=parseFloat(valorStr.replace(/\./g,'').replace(',','.'))||0;
+  let pool=allRows.filter(r=>temDados(r));
+  if(perfil){pool=pool.filter(r=>{const t=String(r['Perfis']||'').split(/\s*\|\s*/).map(s=>s.trim());return t.includes(perfil);});}
+  pool=pool.filter(r=>toNum(r['Acum. 12M (%)'])!==null);
+  const rCats=RISK_CATS[risco]||[];const hCats=HORIZON_CATS[horizonte]||[];
+  const scored=pool.map(r=>{
+    let score=0;const cat=r['Categoria']||'';
+    const v12=toNum(r['Acum. 12M (%)'])||0;const vAno=toNum(r['Acum. Ano (%)'])||0;const vMes=toNum(r['Acum. Mes (%)'])||0;const pl=toNum(r['PL (milhoes R$)'])||0;
+    const ri=rCats.indexOf(cat);const hi=hCats.indexOf(cat);
+    if(ri>=0)score+=(rCats.length-ri)*3;if(hi>=0)score+=(hCats.length-hi)*2;
+    score+=v12*2;score+=vAno;score+=vMes*.5;
+    if(pl>1000)score+=5;else if(pl>100)score+=2;
+    if(objetivo==='preservacao'&&['RENDA FIXA SIMPLES','RENDA FIXA CURTO PRAZO'].includes(cat))score+=10;
+    if(objetivo==='rentabilidade')score+=v12*1.5;
+    if(objetivo==='liquidez'&&['RENDA FIXA SIMPLES','RENDA FIXA CURTO PRAZO'].includes(cat))score+=8;
+    if(objetivo==='liquidez'&&pl>500)score+=5;
+    if(objetivo==='diversificacao'&&['MULTIMERCADO','CAMBIAL','ACOES'].includes(cat))score+=8;
+    return{r,score,v12,vAno,vMes,pl,cat};
+  });
+  scored.sort((a,b)=>b.score-a.score);
+  const top5=scored.slice(0,5);
+  function getReason(item){
+    const{r,v12,pl,cat}=item;
+    const rMap={conservador:'conservador',moderado:'moderado',agressivo:'arrojado'};
+    const hMap={curto:'curto prazo',medio:'médio prazo',longo:'longo prazo'};
+    const oMap={preservacao:'preservação de capital',rentabilidade:'maximizar rentabilidade',liquidez:'alta liquidez',diversificacao:'diversificação'};
+    let pts=[];
+    if(rCats.includes(cat))pts.push(`categoria alinhada ao perfil <strong>${rMap[risco]}</strong>`);
+    if(hCats.includes(cat))pts.push(`adequada para <strong>${hMap[horizonte]}</strong>`);
+    if(v12>10)pts.push(`retorno excelente de <strong>+${r['Acum. 12M (%)']}</strong> em 12 meses`);
+    else if(v12>0)pts.push(`retorno positivo de <strong>+${r['Acum. 12M (%)']}</strong> em 12 meses`);
+    else if(v12<0)pts.push(`retorno negativo de <strong>${r['Acum. 12M (%)']}</strong> em 12 meses — atenção`);
+    if(pl>1000)pts.push(`patrimônio elevado de <strong>R$ ${pl.toLocaleString('pt-BR',{maximumFractionDigits:0})} Mi</strong> — alta solidez`);
+    if(objetivo==='diversificacao'&&['MULTIMERCADO','CAMBIAL','ACOES'].includes(cat))pts.push(`categoria <strong>${cat}</strong> oferece exposição diversificada`);
+    if(objetivo==='liquidez'&&['RENDA FIXA SIMPLES','RENDA FIXA CURTO PRAZO'].includes(cat))pts.push(`alta liquidez para <strong>${oMap[objetivo]}</strong>`);
+    if(!pts.length)pts.push(`desempenho compatível com o perfil informado`);
+    return pts.join(' · ');
+  }
+  const empty=document.getElementById('recEmpty'),output=document.getElementById('recOutput');
+  empty.style.display='none';output.style.display='block';
+  const pLabel={'':'Todos',PF:'Pessoa Física',PJ:'Pessoa Jurídica',GOV:'Governo',RPPS:'RPPS'};
+  const rLabel={conservador:'🛡 Conservador',moderado:'⚖️ Moderado',agressivo:'🚀 Arrojado'};
+  const hLabel={curto:'Curto prazo',medio:'Médio prazo',longo:'Longo prazo'};
+  const oLabel={preservacao:'Preservação de capital',rentabilidade:'Maximizar rentabilidade',liquidez:'Alta liquidez',diversificacao:'Diversificação'};
+  output.innerHTML=`<div class="rec-hdr">
+    <div class="rec-hdr-title">Recomendações Personalizadas</div>
+    <div class="rec-hdr-sub">${pLabel[perfil]||'Todos'} · ${rLabel[risco]} · ${hLabel[horizonte]} · ${oLabel[objetivo]}${valor>0?` · R$ ${valor.toLocaleString('pt-BR',{minimumFractionDigits:2})}`:''}  ·  ${top5.length} fundos de ${pool.length} elegíveis</div>
+  </div>
+  ${!top5.length?'<div class="rec-empty"><div class="rec-empty-icon">🔍</div>Nenhum fundo encontrado para este perfil.</div>':''}
+  ${top5.map((item,i)=>{
+    const{r,v12,vAno,vMes,pl,cat}=item;const cls=catClass(cat);
+    const n12=toNum(r['Acum. 12M (%)']);const nAno=toNum(r['Acum. Ano (%)']);const nMes=toNum(r['Acum. Mes (%)']);
+    return`<div class="rec-card">
+      <div class="rec-rank">${i+1}</div>
+      <div class="rec-card-name">${r['Fundo']||'—'}</div>
+      <div class="rec-card-badges"><span class="cat-badge cat-${cls}">${cat}</span>${perfilChips(r['Perfis']||'')}</div>
+      <div class="rec-metrics">
+        <div><div class="rec-metric-label">Acum. 12M</div><div class="rec-metric-val ${n12>0?'pos':n12<0?'neg':'neutral'}">${n12!==null?(n12>0?'+':'')+r['Acum. 12M (%)']:'—'}</div></div>
+        <div><div class="rec-metric-label">Acum. Ano</div><div class="rec-metric-val ${nAno>0?'pos':nAno<0?'neg':'neutral'}">${nAno!==null?(nAno>0?'+':'')+r['Acum. Ano (%)']:'—'}</div></div>
+        <div><div class="rec-metric-label">Acum. Mês</div><div class="rec-metric-val ${nMes>0?'pos':nMes<0?'neg':'neutral'}">${nMes!==null?(nMes>0?'+':'')+r['Acum. Mes (%)']:'—'}</div></div>
+        <div><div class="rec-metric-label">PL (Mi R$)</div><div class="rec-metric-val neutral">${pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—'}</div></div>
+      </div>
+      <div class="rec-reason">${getReason(item)}</div>
+    </div>`;
+  }).join('')}`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════
+function switchTab(tab){
+  currentTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+tab));
+  if(tab==='rankings'&&allRows.length)renderRankings();
+  if(tab==='comparador')renderComparador();
+  if(tab==='scatter'&&allRows.length)renderScatter();
+}
+document.querySelectorAll('.tab-btn').forEach(btn=>btn.addEventListener('click',()=>switchTab(btn.dataset.tab)));
+
+// ═══════════════════════════════════════════════════════════
+// EVENT LISTENERS
+// ═══════════════════════════════════════════════════════════
 document.getElementById('perfilFilters').addEventListener('click',e=>{
   const btn=e.target.closest('[data-perfil]');if(!btn)return;
-  activePerfil=btn.dataset.perfil;
-  setActiveChip(document.getElementById('perfilFilters'),'[data-perfil]',btn);applyFilter();
+  activePerfil=btn.dataset.perfil;setActiveChip(document.getElementById('perfilFilters'),'[data-perfil]',btn);applyFilter();
 });
 document.getElementById('searchInput').addEventListener('input',e=>{activeSearch=e.target.value;applyFilter();});
 document.getElementById('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
 document.getElementById('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;applyFilter();});
+document.getElementById('btnCompare').addEventListener('click',()=>switchTab('comparador'));
+document.getElementById('btnClearCompare').addEventListener('click',()=>{
+  selectedFunds.clear();updateCompareBar();
+  document.querySelectorAll('.row-chk').forEach(c=>c.checked=false);
+  document.querySelectorAll('tr.row-selected').forEach(tr=>tr.classList.remove('row-selected'));
+  if(currentTab==='comparador')renderComparador();
+});
+document.getElementById('recBtn').addEventListener('click',gerarRecomendacoes);
 
-/* ── Sincronização Assíncrona e Inicialização ────────────────────── */
+// ═══════════════════════════════════════════════════════════
+// MERCADO ATUAL (mercado_atual.json)
+// ═══════════════════════════════════════════════════════════
+let mercadoData=null,kpisData=null;
+
+function fmt2(v,dec=2){return v!=null?v.toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec}):'—';}
+function fmtPctMacro(v){if(v==null)return'—';return(v>0?'+':'')+fmt2(v)+'%';}
+function varCls(v){if(v==null)return'zero';return v>0?'up':v<0?'down':'zero';}
+
+function sparklineSvg(historico,w,h){
+  // últimos 24 meses
+  const serie=(historico||[]).slice(-24);
+  if(serie.length<2)return'';
+  const vals=serie.map(i=>parseFloat(i.valor)||0);
+  const mn=Math.min(...vals),mx=Math.max(...vals),range=mx-mn||0.001;
+  const pts=vals.map((v,i)=>{
+    const x=(i/(vals.length-1))*w;
+    const y=h-((v-mn)/range)*(h-4)-2;
+    return`${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(' ');
+  const meta3=3.0;const metaY=h-((meta3-mn)/range)*(h-4)-2;
+  const metaLine=meta3>=mn&&meta3<=mx?`<line x1="0" y1="${metaY.toFixed(1)}" x2="${w}" y2="${metaY.toFixed(1)}" stroke="rgba(251,146,60,.4)" stroke-width="1" stroke-dasharray="2,2"/>`:''
+  return`<svg class="macro-spark" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    ${metaLine}
+    <polyline points="${pts}" fill="none" stroke="var(--gold)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="${(vals.length-1)/(vals.length-1)*w}" cy="${(h-((vals[vals.length-1]-mn)/range)*(h-4)-2).toFixed(1)}" r="2.5" fill="var(--gold2)"/>
+  </svg>`;
+}
+
+function renderMacroStrip(data){
+  const strip=document.getElementById('macroStrip');
+  const c=data.cards||{};
+  const ii=data.indices_internacionais||{};
+  const selic=c.selic_meta?.valor;
+  const cdi=c.cdi?.valor;
+  const ipcaMes=c.ipca?.ultimo_mes;
+  const ipcaLabel=c.ipca?.label_mes||'';
+  const ipcaAno=c.ipca?.acum_ano;
+  const ipca12m=c.ipca?.acum_12m;
+  const hist=c.ipca?.historico||[];
+  const metaSup=c.ipca?.meta_superior||4.5;
+  const metaInf=c.ipca?.meta_inferior||1.5;
+  const poupanca=c.poupanca_nova?.valor;
+  const dolar=c.dolar?.atual;
+  const dolarVar=c.dolar?.variacao_mensal;
+  const ibov=c.ibovespa?.atual;
+  const ibovVar=c.ibovespa?.variacao_mensal;
+  const sp500=ii.sp500_usd;
+  const nasdaq=ii.nasdaq;
+  const ipcaFaixaStatus=ipcaMes!=null?(ipcaMes<=metaSup&&ipcaMes>=metaInf?'✅ dentro da meta':'⚠️ fora da meta'):'';
+
+  const spark=sparklineSvg(hist,200,28);
+  strip.innerHTML=`
+    <div class="macro-card selic-card">
+      <div class="macro-label">🏦 SELIC</div>
+      <div class="macro-value gold">${selic!=null?fmt2(selic,2)+'%':'—'}</div>
+      <div class="macro-sub">a.a. · meta vigente</div>
+    </div>
+    <div class="macro-card">
+      <div class="macro-label">💹 CDI</div>
+      <div class="macro-value gold">${cdi!=null?fmt2(cdi,2)+'%':'—'}</div>
+      <div class="macro-sub">a.a. estimado · benchmark RF</div>
+    </div>
+    <div class="macro-card">
+      <div class="macro-label">📊 IPCA · ${ipcaLabel}</div>
+      <div class="macro-value">${ipcaMes!=null?fmt2(ipcaMes,2)+'%':'—'}</div>
+      <div class="macro-sub">Ano: <strong>${ipcaAno!=null?fmt2(ipcaAno)+'%':'—'}</strong> · 12M: <strong>${ipca12m!=null?fmt2(ipca12m)+'%':'—'}</strong><br><span style="font-size:.58rem;opacity:.8">${ipcaFaixaStatus}</span></div>
+      ${spark}
+    </div>
+    <div class="macro-card">
+      <div class="macro-label">💵 Dólar (USD/BRL)</div>
+      <div class="macro-value">R$ ${dolar!=null?fmt2(dolar,2):'—'}</div>
+      <div class="macro-sub">Var. 30d: <span class="macro-var ${varCls(dolarVar)}">${fmtPctMacro(dolarVar)}</span></div>
+    </div>
+    <div class="macro-card">
+      <div class="macro-label">📈 Ibovespa</div>
+      <div class="macro-value">${ibov!=null?Math.round(ibov).toLocaleString('pt-BR'):'—'}</div>
+      <div class="macro-sub">Var. 30d: <span class="macro-var ${varCls(ibovVar)}">${fmtPctMacro(ibovVar)}</span></div>
+    </div>
+    <div class="macro-card">
+      <div class="macro-label">🌎 S&amp;P 500</div>
+      <div class="macro-value">${sp500!=null?Math.round(sp500).toLocaleString('pt-BR'):'—'}</div>
+      <div class="macro-sub">Nasdaq: ${nasdaq!=null?Math.round(nasdaq).toLocaleString('pt-BR'):'—'}</div>
+    </div>
+    <div class="macro-card">
+      <div class="macro-label">🏦 Poupança</div>
+      <div class="macro-value">${poupanca!=null?fmt2(poupanca,2)+'%':'—'}</div>
+      <div class="macro-sub">m.m. · nova modalidade</div>
+    </div>`;
+}
+
+function renderRankingsKpis(kpis){
+  if(!kpis)return'';
+  const cats=kpis.categorias||{};
+  const perfis=kpis.perfis_comerciais||{};
+  const resumo=kpis.resumo_geral||{};
+
+  // Rentabilidade ponderada por categoria
+  const catsArr=Object.entries(cats)
+    .filter(([,v])=>v.rent_12m_ponderada!=null)
+    .sort((a,b)=>b[1].rent_12m_ponderada-a[1].rent_12m_ponderada);
+  const maxRent=catsArr.length?Math.abs(catsArr[0][1].rent_12m_ponderada)||1:1;
+
+  const rentHtml=catsArr.map(([cat,v],i)=>{
+    const n=v.rent_12m_ponderada;const cls=catClass(cat);
+    const pct=Math.min(Math.abs(n)/maxRent*100,100);
+    const barCls=n>=0?'pos':'neg';
+    return`<div class="kpi-rank-item">
+      <div class="kpi-rank-pos ${i<3?'gold':''}">${i+1}</div>
+      <div class="kpi-rank-info">
+        <div class="kpi-rank-name"><span class="cat-badge cat-${cls}" style="font-size:.58rem;padding:1px 5px;margin-right:4px">${cat}</span></div>
+        <div class="kpi-rank-sub">${v.qtd_ativos} fundos ativos · PL R$ ${(v.pl_total||0).toLocaleString('pt-BR',{maximumFractionDigits:0})} Mi</div>
+      </div>
+      <div>
+        <div class="rank-bar-bg" style="width:60px;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:4px"><div class="rank-bar-fill ${barCls}" style="width:${pct}%"></div></div>
+        <div class="kpi-rank-val ${barCls}">${n>0?'+':''}${fmt2(n)}%</div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Market share por perfil
+  const perfisArr=Object.entries(perfis).sort((a,b)=>b[1].pl_total-a[1].pl_total);
+  const perfilColors={'PF':'var(--green)','PJ':'var(--blue)','GOV':'var(--orange)','RPPS':'var(--purple)','TODOS':'var(--gold)'};
+  const shareHtml=perfisArr.map(([perf,v])=>{
+    const cor=perfilColors[perf]||'var(--muted)';
+    return`<div class="perfil-bar-wrap">
+      <div class="perfil-bar-label" style="color:${cor};font-size:.67rem;font-weight:600;min-width:38px">${perf}</div>
+      <div class="perfil-bar-bg"><div class="perfil-bar-fill" style="width:${v.share_percent||0}%;background:${cor}"></div></div>
+      <div class="perfil-bar-val">${fmt2(v.share_percent||0,1)}%</div>
+    </div>`;
+  }).join('');
+
+  const concent=resumo.concentracao_top5_percent;
+  const pipeline=resumo.pipeline_novos_fundos;
+
+  return`
+    <div class="ranking-card">
+      <div class="ranking-card-hdr"><div>
+        <div class="ranking-card-title">⚖️ Rentabilidade Ponderada por Categoria</div>
+        <div class="ranking-card-sub">Média do Acum. 12M ponderada pelo PL de cada fundo</div>
+      </div></div>
+      <div class="ranking-list">${rentHtml||'<div style="text-align:center;padding:20px;color:var(--muted);font-size:.8rem">Dados não disponíveis</div>'}</div>
+    </div>
+    <div class="ranking-card">
+      <div class="ranking-card-hdr"><div>
+        <div class="ranking-card-title">🏛 Market Share por Perfil (% do PL)</div>
+        <div class="ranking-card-sub">Concentração de patrimônio por tipo de investidor</div>
+      </div></div>
+      <div style="padding:16px 18px">
+        ${shareHtml||'<div style="text-align:center;padding:20px;color:var(--muted);font-size:.8rem">Dados não disponíveis</div>'}
+        <div style="border-top:1px solid var(--border2);margin-top:12px;padding-top:12px;display:flex;gap:16px;flex-wrap:wrap">
+          <div>
+            <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:3px">Concentração Top 5</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.9rem;color:${concent>50?'var(--red)':'var(--text)'};font-weight:600">${concent!=null?fmt2(concent,1)+'%':'—'}</div>
+          </div>
+          <div>
+            <div style="font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:3px">Pipeline (sem dados)</div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text);font-weight:600">${pipeline!=null?pipeline+' fundos':'—'}</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function loadMercado(){
+  fetch('mercado_atual.json?v='+Date.now())
+    .then(r=>r.json())
+    .then(data=>{mercadoData=data;renderMacroStrip(data);})
+    .catch(()=>{document.getElementById('macroStrip').innerHTML='';});
+}
+
+function loadKpis(){
+  fetch('kpis_dashboard.json?v='+Date.now())
+    .then(r=>r.json())
+    .then(data=>{kpisData=data;if(currentTab==='rankings'&&allRows.length)renderRankings();})
+    .catch(()=>{kpisData=null;});
+}
+
+// ═══════════════════════════════════════════════════════════
+// DATA LOADING
+// ═══════════════════════════════════════════════════════════
 function carregarDados(){
-  const cb='?v='+Date.now();
-  Promise.all([
-    fetch('dados_atuais.csv'+cb).then(r=>r.text()),
-    fetch('mercado_atual.json'+cb).then(r=>r.json()),
-    fetch('kpis_dashboard.json'+cb).then(r=>r.json()) // Injeção do novo JSON analítico
-  ])
-  .then(([csvRaw, macroData, kpisData])=>{
-    _kpisData = kpisData; // Armazena a matriz global de risco e performance
-    renderMacroPainel(macroData);
-
-    const result=parseCsv(csvRaw);allRows=result.data;
-    const headers=Object.keys(allRows[0]||{});
-    displayHeaders=headers.filter(h=>!['fundo_norm','perfil'].includes(h.toLowerCase()));
-    const di=displayHeaders.indexOf(DEFAULT_SORT);if(di>=0){sortCol=di;sortDir=-1;}
-    const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
-
-    buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
-
-    document.getElementById('loadMsg').style.display='none';
-    document.getElementById('mainTable').style.display='table';
-    document.getElementById('lastUpdate').innerHTML=`<span class="live-dot"></span>Robô: ${macroData.atualizado_em}`;
-  })
-  .catch(err=>{
-    document.getElementById('loadMsg').innerHTML=
-      `<div style="color:var(--red)">Erro na sincronização de dados do ecossistema.<br><small>${err.message}</small></div>`;
-  });
+  fetch('dados_atuais.csv?v='+Date.now())
+    .then(r=>r.text())
+    .then(raw=>{
+      const result=parseCsv(raw);allRows=result.data;
+      const headers=Object.keys(allRows[0]||{});
+      displayHeaders=headers.filter(h=>!['fundo_norm','perfil'].includes(h.toLowerCase()));
+      const di=displayHeaders.indexOf(DEFAULT_SORT);if(di>=0){sortCol=di;sortDir=-1;}
+      const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
+      buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
+      document.getElementById('loadMsg').style.display='none';
+      document.getElementById('mainTable').style.display='table';
+      const now=new Date();
+      document.getElementById('lastUpdate').innerHTML=`<span class="live-dot"></span>${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
+    })
+    .catch(err=>{
+      document.getElementById('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
+    });
 }
 
 carregarDados();
+loadMercado();
+loadKpis();
 </script>
 </body>
 </html>
