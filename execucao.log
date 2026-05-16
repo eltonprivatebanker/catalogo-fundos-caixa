@@ -1286,3 +1286,7 @@
 [12:02:37] CSV salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.csv
 [12:02:37] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260515.xlsx
 [12:02:37] SUCESSO: 171 fundos consolidados salvos.
+[02:23:57] ⚡ [MODO TESTE] Iniciando apenas o Coletor de Mercado...
+[02:23:57] [MERCADO] Coletando indicadores macro e índices internacionais...
+[02:23:59] [SUCESSO] Dados de mercado integrados e salvos em: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/mercado_atual.json
+[02:23:59] SUCESSO: Processo de automação e dados de mercado finalizado.
