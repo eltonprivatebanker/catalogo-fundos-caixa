@@ -1310,3 +1310,6 @@
 [05:04:04] ⚡ [MODO MERCADO] Coletando indicadores macro + IPCA histórico...
 [05:04:04] [ERRO] Falha ao processar dados de mercado: 'ColetorMercado' object has no attribute 'coletar_todos'
 [05:04:04] SUCESSO: Processo finalizado.
+[05:07:49] ⚡ [MODO MERCADO] Coletando indicadores macro + IPCA histórico...
+[05:07:49] [ERRO] Falha ao processar dados de mercado: 'ColetorMercado' object has no attribute 'coletar_todos'
+[05:07:49] SUCESSO: Processo finalizado.
