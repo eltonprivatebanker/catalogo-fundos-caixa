@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "16/05/2026 03:26:13",
+    "atualizado_em": "16/05/2026 04:35:34",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -13,55 +13,37 @@
             "valor": 0.0534,
             "unidade": "%"
         },
-        "cdi_mes_anterior": {
-            "valor": 1.1214,
+        "ipca": {
+            "ultimo_mes": null,
+            "label_mes": "",
+            "acum_ano": null,
+            "acum_12m": null,
+            "historico": [],
             "unidade": "%"
         },
         "ipca_mes_anterior": {
-            "valor": 0.67,
+            "valor": null,
             "unidade": "%"
         },
         "poupanca_nova": {
             "valor": 0.6695,
             "unidade": "% m.m."
         },
-        "poupanca_antiga": {
-            "valor": 0.5,
-            "unidade": "% m.m."
-        },
         "ibovespa": {
             "atual": 177284.0,
             "anterior": 198657.0,
-            "variacao_mensal": -10.758744972490275
+            "variacao_mensal": -10.76
         },
         "dolar": {
             "atual": 5.054900169372559,
             "anterior": 4.987090110778809,
-            "variacao_mensal": 1.3597119179216133
+            "variacao_mensal": 1.36
         }
     },
     "indices_internacionais": {
         "sp500_usd": 7408.5,
-        "sp500_brl": 37449.2279047966,
+        "sp500_brl": 37449.23,
         "dow_jones": 49526.171875,
-        "nasdaq": 26225.14453125
-    },
-    "resumo_anual_padrao": {
-        "Configuração": [
-            "SELIC",
-            "CDI",
-            "IPCA",
-            "IBOVESPA",
-            "DÓLAR",
-            "S&P 500"
-        ],
-        "Pesos_Visiveis": [
-            true,
-            true,
-            true,
-            true,
-            true,
-            true
-        ]
+        "nasdaq": 26225.140625
     }
 }
