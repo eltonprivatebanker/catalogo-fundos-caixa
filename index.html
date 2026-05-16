@@ -241,7 +241,47 @@ td.col-pct{text-align:right}
 footer{text-align:center;margin-top:50px;font-size:.68rem;color:var(--muted2);letter-spacing:.05em;border-top:1px solid var(--border2);padding-top:24px;line-height:2}
 footer span{color:var(--gold)}
 
-/* ── MACRO STRIP ── */
+/* ── MACRO STRIP — clicável no IPCA ── */
+.macro-card.clickable{cursor:pointer}
+.macro-card.clickable:hover{border-color:var(--gold);box-shadow:0 0 18px var(--gold-glow)}
+.macro-click-hint{font-size:.58rem;color:var(--gold);opacity:.7;margin-top:4px;text-align:right}
+
+/* ── IPCA MODAL ── */
+.ipca-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(7,8,15,.9);align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.ipca-overlay.open{display:flex}
+.ipca-modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:26px;width:min(860px,95vw);max-height:90vh;overflow-y:auto;position:relative;box-shadow:0 20px 80px rgba(0,0,0,.7)}
+.ipca-mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.ipca-mtitle{font-family:'Cormorant Garamond',serif;font-size:1.4rem;font-weight:700;color:var(--gold2)}
+.ipca-mclose{background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--muted);font-size:1rem;padding:5px 10px;cursor:pointer;transition:all .15s}
+.ipca-mclose:hover{border-color:var(--red);color:var(--red)}
+.ipca-mgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
+@media(max-width:500px){.ipca-mgrid{grid-template-columns:1fr}}
+.ipca-mcard{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:14px}
+.ipca-mcard-label{font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:5px}
+.ipca-mcard-val{font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:700;color:var(--text);line-height:1}
+.ipca-mcard-sub{font-size:.65rem;color:var(--muted);margin-top:4px}
+.ipca-badge{display:inline-block;padding:2px 9px;border-radius:12px;font-size:.65rem;font-weight:700;margin-left:6px;vertical-align:middle}
+.ipca-badge.ok{background:rgba(52,209,122,.15);color:var(--green);border:1px solid rgba(52,209,122,.3)}
+.ipca-badge.alerta{background:rgba(240,86,86,.15);color:var(--red);border:1px solid rgba(240,86,86,.3)}
+.ipca-badge.atencao{background:rgba(251,146,60,.15);color:var(--orange);border:1px solid rgba(251,146,60,.3)}
+.ipca-range-row{display:flex;gap:7px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+.ipca-range-label{font-size:.65rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-right:4px}
+.ipca-range-btn{padding:4px 13px;border-radius:16px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.72rem;cursor:pointer;transition:all .15s}
+.ipca-range-btn:hover{border-color:var(--gold);color:var(--gold)}
+.ipca-range-btn.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
+.ipca-chart-wrap{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:16px;margin-bottom:16px}
+#ipcaChartSvg{width:100%;height:220px}
+.ipca-table-title{font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);margin-bottom:8px}
+.ipca-table{width:100%;border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:.74rem}
+.ipca-table th{text-align:left;padding:6px 10px;border-bottom:1px solid var(--border);color:var(--gold);font-size:.62rem;text-transform:uppercase;letter-spacing:.08em}
+.ipca-table td{padding:6px 10px;border-bottom:1px solid var(--border2);color:var(--text)}
+.ipca-table tr:last-child td{border-bottom:none}
+.ipca-table td.pos{color:var(--green)}.ipca-table td.neg{color:var(--red)}
+.ipca-table-wrap{max-height:220px;overflow-y:auto;border:1px solid var(--border2);border-radius:8px}
+
+/* ── CATEGORY INSIGHT BANNER ── */
+.insight-banner{background:var(--gold-dim);border:1px dashed var(--gold);border-radius:9px;padding:11px 15px;margin-top:8px;font-size:.78rem;color:var(--gold2);font-family:'JetBrains Mono',monospace;display:none;line-height:1.7;animation:fadeInB .2s ease-out}
+@keyframes fadeInB{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:translateY(0)}}
 .macro-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:9px;margin:16px 0 0;padding-bottom:20px;border-bottom:1px solid var(--border)}
 .macro-card{background:var(--bg2);border:1px solid var(--border2);border-radius:10px;padding:12px 13px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s;cursor:default}
 .macro-card:hover{border-color:var(--border);transform:translateY(-1px)}
@@ -345,6 +385,7 @@ footer span{color:var(--gold)}
       <span class="filter-label">Categoria</span>
       <button class="chip active" data-cat="">Todas</button>
     </div>
+    <div id="catInsightRow" class="insight-banner"></div>
   </div>
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
@@ -447,8 +488,35 @@ footer span{color:var(--gold)}
 
 </div><!-- /page -->
 
-<!-- FLOATING COMPARISON BAR -->
-<div class="compare-bar" id="compareBar">
+<!-- ── IPCA MODAL ── -->
+<div class="ipca-overlay" id="ipcaOverlay" onclick="if(event.target===this)closeIpcaModal()">
+  <div class="ipca-modal">
+    <div class="ipca-mhead">
+      <span class="ipca-mtitle">🛒 IPCA — Histórico Completo</span>
+      <button class="ipca-mclose" onclick="closeIpcaModal()">✕ Fechar</button>
+    </div>
+    <div class="ipca-mgrid" id="ipcaMGrid"></div>
+    <div class="ipca-range-row">
+      <span class="ipca-range-label">Período:</span>
+      <button class="ipca-range-btn active" onclick="setIpcaRange(12,this)">12M</button>
+      <button class="ipca-range-btn" onclick="setIpcaRange(24,this)">24M</button>
+      <button class="ipca-range-btn" onclick="setIpcaRange(36,this)">36M</button>
+      <button class="ipca-range-btn" onclick="setIpcaRange(9999,this)">Tudo</button>
+    </div>
+    <div class="ipca-chart-wrap">
+      <svg id="ipcaChartSvg" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg"></svg>
+    </div>
+    <div class="ipca-table-title">Valores Mensais</div>
+    <div class="ipca-table-wrap">
+      <table class="ipca-table">
+        <thead><tr><th>Mês</th><th>IPCA (%)</th><th>vs Meta Central (3%)</th></tr></thead>
+        <tbody id="ipcaTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- FLOATING COMPARISON BAR --><div class="compare-bar" id="compareBar">
   <div>
     <div class="compare-bar-count" id="compareCount">0</div>
     <div class="compare-bar-label">selecionados</div>
@@ -539,6 +607,7 @@ function applyFilter(){
   });
   if(sortCol>=0&&sortCol<displayHeaders.length){const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);filtered.sort((a,b)=>{const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();return av<bv?-sortDir:av>bv?sortDir:0;});}
   currentPage=1;render();
+  updateCatInsight();
 }
 
 function render(){
@@ -922,6 +991,158 @@ document.getElementById('btnClearCompare').addEventListener('click',()=>{
 document.getElementById('recBtn').addEventListener('click',gerarRecomendacoes);
 
 // ═══════════════════════════════════════════════════════════
+// IPCA MODAL
+// ═══════════════════════════════════════════════════════════
+let _ipcaHistorico=[],_ipcaRange=24;
+
+function openIpcaModal(){
+  document.getElementById('ipcaOverlay').classList.add('open');
+  document.body.style.overflow='hidden';
+  renderIpcaModal();
+}
+function closeIpcaModal(){
+  document.getElementById('ipcaOverlay').classList.remove('open');
+  document.body.style.overflow='';
+}
+function setIpcaRange(n,btn){
+  _ipcaRange=n;
+  document.querySelectorAll('.ipca-range-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderIpcaChart();
+  renderIpcaTable();
+}
+
+function renderIpcaModal(){
+  if(!mercadoData)return;
+  const ipca=mercadoData.cards?.ipca;
+  if(!ipca)return;
+  _ipcaHistorico=ipca.historico||[];
+  const metaCentro=ipca.meta_central??3.0;
+  const metaSup=ipca.meta_superior??4.5;
+  const metaInf=ipca.meta_inferior??1.5;
+  const v12m=ipca.acum_12m;
+  let badge='';
+  if(v12m!=null){
+    if(v12m>=metaInf&&v12m<=metaSup)badge='<span class="ipca-badge ok">✅ dentro da meta</span>';
+    else if(v12m<metaInf)badge='<span class="ipca-badge atencao">⚠️ abaixo da meta</span>';
+    else badge='<span class="ipca-badge alerta">🔴 acima do teto</span>';
+  }
+  document.getElementById('ipcaMGrid').innerHTML=`
+    <div class="ipca-mcard">
+      <div class="ipca-mcard-label">📅 Último Mês (${ipca.label_mes||'—'})</div>
+      <div class="ipca-mcard-val">${ipca.ultimo_mes!=null?fmt2(ipca.ultimo_mes)+'%':'—'}</div>
+      <div class="ipca-mcard-sub">variação mensal</div>
+    </div>
+    <div class="ipca-mcard">
+      <div class="ipca-mcard-label">📅 Acumulado Ano</div>
+      <div class="ipca-mcard-val">${ipca.acum_ano!=null?fmt2(ipca.acum_ano)+'%':'—'}</div>
+      <div class="ipca-mcard-sub">jan–${ipca.label_mes||''}</div>
+    </div>
+    <div class="ipca-mcard">
+      <div class="ipca-mcard-label">📅 Acumulado 12M</div>
+      <div class="ipca-mcard-val">${v12m!=null?fmt2(v12m)+'%':'—'}${badge}</div>
+      <div class="ipca-mcard-sub">Meta: ${fmt2(metaInf)}% a ${fmt2(metaSup)}% · Central: ${fmt2(metaCentro)}%</div>
+    </div>`;
+  renderIpcaChart();
+  renderIpcaTable();
+}
+
+function renderIpcaChart(){
+  const svg=document.getElementById('ipcaChartSvg');
+  if(!svg||!_ipcaHistorico.length){return;}
+  const serie=_ipcaRange>=9999?_ipcaHistorico:_ipcaHistorico.slice(-_ipcaRange);
+  if(!serie.length){svg.innerHTML='';return;}
+  const W=800,H=200,PL=50,PR=20,PT=20,PB=36;
+  const pW=W-PL-PR,pH=H-PT-PB;
+  const vals=serie.map(i=>parseFloat(i.valor)||0);
+  const mn=Math.min(0,...vals)-0.1,mx=Math.max(...vals,4.5)+0.2;
+  const rng=mx-mn;
+  function px(i){return PL+(i/(serie.length-1||1))*pW;}
+  function py(v){return PT+pH-((v-mn)/rng)*pH;}
+
+  // Meta band
+  const bandY1=py(4.5),bandY2=py(1.5);
+  let out=`<rect x="${PL}" y="${Math.min(bandY1,bandY2).toFixed(1)}" width="${pW}" height="${Math.abs(bandY2-bandY1).toFixed(1)}" fill="rgba(200,151,58,.07)" rx="2"/>`;
+
+  // Zero line
+  if(mn<0){const zy=py(0);out+=`<line x1="${PL}" y1="${zy.toFixed(1)}" x2="${PL+pW}" y2="${zy.toFixed(1)}" stroke="rgba(255,255,255,.1)" stroke-width="1"/>`;}
+
+  // Meta central 3%
+  const mc=py(3.0);
+  out+=`<line x1="${PL}" y1="${mc.toFixed(1)}" x2="${PL+pW}" y2="${mc.toFixed(1)}" stroke="rgba(251,146,60,.5)" stroke-width="1" stroke-dasharray="4,3"/>`;
+  out+=`<text x="${PL+pW+4}" y="${(mc+4).toFixed(1)}" fill="var(--orange)" font-size="9">3%</text>`;
+
+  // Grid Y
+  [-1,0,1,2,3,4,5].forEach(v=>{
+    if(v<mn||v>mx)return;
+    const gy=py(v);
+    out+=`<line x1="${PL}" y1="${gy.toFixed(1)}" x2="${PL+pW}" y2="${gy.toFixed(1)}" stroke="rgba(255,255,255,.04)" stroke-width="1"/>`;
+    out+=`<text x="${(PL-5).toFixed(1)}" y="${(gy+3).toFixed(1)}" text-anchor="end" fill="#4a5270" font-size="9">${v}%</text>`;
+  });
+
+  // Bars
+  const bw=Math.max(2,Math.min(18,(pW/serie.length)*0.7));
+  serie.forEach((item,i)=>{
+    const v=parseFloat(item.valor)||0;
+    const x=px(i)-bw/2;
+    const barY=py(Math.max(v,0)),barH=Math.abs(py(0)-py(v));
+    const col=v>4.5?'#f05656':v<1.5?'#fb923c':'var(--gold)';
+    out+=`<rect x="${x.toFixed(1)}" y="${barY.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(barH,1).toFixed(1)}" fill="${col}" fill-opacity="0.75" rx="1"/>`;
+  });
+
+  // Line
+  const pts=serie.map((item,i)=>`${px(i).toFixed(1)},${py(parseFloat(item.valor)||0).toFixed(1)}`).join(' ');
+  out+=`<polyline points="${pts}" fill="none" stroke="var(--gold2)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+  // X axis labels (show ~8 evenly)
+  const step=Math.max(1,Math.floor(serie.length/8));
+  serie.forEach((item,i)=>{
+    if(i%step!==0&&i!==serie.length-1)return;
+    out+=`<text x="${px(i).toFixed(1)}" y="${(H-6).toFixed(1)}" text-anchor="middle" fill="#4a5270" font-size="9">${item.label||''}</text>`;
+  });
+
+  // Last value dot
+  const last=vals[vals.length-1];
+  out+=`<circle cx="${px(serie.length-1).toFixed(1)}" cy="${py(last).toFixed(1)}" r="3.5" fill="var(--gold2)" stroke="var(--bg2)" stroke-width="1.5"/>`;
+
+  svg.innerHTML=out;
+}
+
+function renderIpcaTable(){
+  const tbody=document.getElementById('ipcaTableBody');
+  if(!tbody)return;
+  const serie=[..._ipcaHistorico].reverse().slice(0,36);
+  tbody.innerHTML=serie.map(item=>{
+    const v=parseFloat(item.valor)||0;
+    const diff=v-3.0;
+    const cls=v>4.5?'neg':v<1.5?'neg':'pos';
+    const sign=diff>0?'+':'';
+    return`<tr>
+      <td>${item.label||item.data||'—'}</td>
+      <td class="${v>=0?'pos':'neg'}">${fmt2(v)}%</td>
+      <td class="${cls}">${sign}${fmt2(diff)} pp</td>
+    </tr>`;
+  }).join('');
+}
+
+// ═══════════════════════════════════════════════════════════
+// CATEGORY INSIGHT BANNER
+// ═══════════════════════════════════════════════════════════
+function updateCatInsight(){
+  const div=document.getElementById('catInsightRow');
+  if(!div)return;
+  if(activeCat&&kpisData&&kpisData.categorias&&kpisData.categorias[activeCat]){
+    const info=kpisData.categorias[activeCat];
+    const rent=info.rent_12m_ponderada;
+    const rentCls=rent>0?'color:var(--green)':rent<0?'color:var(--red)':'';
+    div.style.display='block';
+    div.innerHTML=`✨ <b>${activeCat}</b> · Rentabilidade 12M Ponderada: <b style="${rentCls}">${rent!=null?(rent>0?'+':'')+fmt2(rent)+'%':'—'}</b> · PL Alocado: <b>R$ ${(info.pl_total||0).toLocaleString('pt-BR',{maximumFractionDigits:0})} Mi</b> · Fundos ativos: <b>${info.qtd_ativos||0}</b>`;
+  }else{
+    div.style.display='none';
+  }
+}
+
+// ═══════════════════════════════════════════════════════════
 // MERCADO ATUAL (mercado_atual.json)
 // ═══════════════════════════════════════════════════════════
 let mercadoData=null,kpisData=null;
@@ -970,7 +1191,7 @@ function renderMacroStrip(data){
   const ibovVar=c.ibovespa?.variacao_mensal;
   const sp500=ii.sp500_usd;
   const nasdaq=ii.nasdaq;
-  const ipcaFaixaStatus=ipcaMes!=null?(ipcaMes<=metaSup&&ipcaMes>=metaInf?'✅ dentro da meta':'⚠️ fora da meta'):'';
+  const ipcaFaixaStatus=ipca12m!=null?(ipca12m<=metaSup&&ipca12m>=metaInf?'✅ dentro da meta':'⚠️ fora da meta'):'';
 
   const spark=sparklineSvg(hist,200,28);
   strip.innerHTML=`
@@ -984,11 +1205,12 @@ function renderMacroStrip(data){
       <div class="macro-value gold">${cdi!=null?fmt2(cdi,2)+'%':'—'}</div>
       <div class="macro-sub">a.a. estimado · benchmark RF</div>
     </div>
-    <div class="macro-card">
+    <div class="macro-card clickable" onclick="openIpcaModal()">
       <div class="macro-label">📊 IPCA · ${ipcaLabel}</div>
       <div class="macro-value">${ipcaMes!=null?fmt2(ipcaMes,2)+'%':'—'}</div>
       <div class="macro-sub">Ano: <strong>${ipcaAno!=null?fmt2(ipcaAno)+'%':'—'}</strong> · 12M: <strong>${ipca12m!=null?fmt2(ipca12m)+'%':'—'}</strong><br><span style="font-size:.58rem;opacity:.8">${ipcaFaixaStatus}</span></div>
       ${spark}
+      <div class="macro-click-hint">↗ ver histórico completo</div>
     </div>
     <div class="macro-card">
       <div class="macro-label">💵 Dólar (USD/BRL)</div>
@@ -1088,7 +1310,7 @@ function renderRankingsKpis(kpis){
 function loadMercado(){
   fetch('mercado_atual.json?v='+Date.now())
     .then(r=>r.json())
-    .then(data=>{mercadoData=data;renderMacroStrip(data);})
+    .then(data=>{mercadoData=data;renderMacroStrip(data);_ipcaHistorico=data.cards?.ipca?.historico||[];})
     .catch(()=>{document.getElementById('macroStrip').innerHTML='';});
 }
 
