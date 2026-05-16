@@ -40,7 +40,6 @@
     .kpi-sub{font-size:.68rem;color:var(--muted);margin-top:6px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .kpi-sub span{font-family:'JetBrains Mono',monospace;font-size:.72rem}
 
-    /* ── IPCA Card expandido ─────────────────────────────────────────── */
     .kpi-ipca{grid-column:span 2;cursor:pointer}
     @media(max-width:600px){.kpi-ipca{grid-column:span 1}}
     .kpi-ipca-sub{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
@@ -51,7 +50,6 @@
     .kpi-ipca-item-sub{font-size:.63rem;color:var(--muted2);margin-top:3px}
     .kpi-hint{font-size:.63rem;color:var(--muted2);margin-top:10px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:5px}
 
-    /* ── Modal IPCA ──────────────────────────────────────────────────── */
     .ipca-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(7,8,15,.88);align-items:center;justify-content:center}
     .ipca-overlay.open{display:flex}
     .ipca-modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px;width:min(880px,95vw);max-height:90vh;overflow-y:auto}
@@ -68,7 +66,6 @@
     .ipca-modal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
     @media(max-width:500px){.ipca-modal-grid{grid-template-columns:1fr}}
 
-    /* ── Controles, Tabela e Paginação ───────────────────────────────── */
     .controls-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
     .search-wrap{position:relative;flex:1;min-width:240px}
     .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
@@ -146,6 +143,10 @@
     footer{text-align:center;margin-top:56px;font-size:.7rem;color:var(--muted2);letter-spacing:.05em;border-top:1px solid var(--border2);padding-top:28px;line-height:2}
     footer span{color:var(--gold)}
     @media(max-width:768px){.page{padding:20px 16px 60px}.kpi-grid{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:16px 14px}.kpi-value{font-size:1.5rem}}
+    
+    /* ── Nova Linha de Insights Dinâmicos ───────────────────────────── */
+    .insight-banner{background:var(--gold-dim);border:1px dashed var(--gold);border-radius:10px;padding:12px 16px;margin-top:10px;font-size:.8rem;color:var(--gold2);font-family:'JetBrains Mono',monospace;display:none;animation:fadeIn .2s ease-out}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:translateY(0)}}
   </style>
 </head>
 <body>
@@ -239,8 +240,9 @@
     <h2 class="section-title">Métricas Consolidadas do Catálogo</h2>
     <div class="kpi-grid">
       <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub">registros carregados</div></div>
-      <div class="kpi"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub">tipos de fundo</div></div>
-      <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-label">PL Total (Milhões R$)</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub">patrimônio líquido consolidado</div></div>
+      <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-label">PL Total Consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub">patrimônio líquido total (M)</div></div>
+      <div class="kpi"><div class="kpi-icon">🚨</div><div class="kpi-label">Concentração Top 5</div><div class="kpi-value" id="kpiConcentracao">—</div><div class="kpi-sub">risco de centralização de PL</div></div>
+      <div class="kpi"><div class="kpi-icon">🚀</div><div class="kpi-label">Pipeline Lançamentos</div><div class="kpi-value" id="kpiPipeline">—</div><div class="kpi-sub">novos fundos sem cota ativa</div></div>
       <div class="kpi"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor Acum. 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub" id="kpiBestFundo">—</div></div>
       <div class="kpi"><div class="kpi-icon">📉</div><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
     </div>
@@ -276,6 +278,8 @@
       <span class="filter-label">Categoria</span>
       <button class="chip active" data-cat="">Todas</button>
     </div>
+    <!-- Bloco Dinâmico para Insights da Categoria selecionada -->
+    <div id="catInsightRow" class="insight-banner"></div>
   </div>
 
   <div class="table-wrap">
@@ -296,7 +300,9 @@
     Dashboard por <span>Elton Private Banker</span> · Atualização automática diária
   </footer>
 
-</div><div class="ipca-overlay" id="ipcaOverlay" onclick="if(event.target===this)closeIpcaModal()">
+</div>
+
+<div class="ipca-overlay" id="ipcaOverlay" onclick="if(event.target===this)closeIpcaModal()">
   <div class="ipca-modal">
     <div class="ipca-mhead">
       <span class="ipca-mtitle">🛒 IPCA — Histórico Completo</span>
@@ -349,14 +355,16 @@
 /* ── Estado global da tabela ──────────────────────────────────────── */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',activePerfil='',hideSemDados=false,displayHeaders=[];
+let _kpisData=null; // Estado para armazenar o kpis_dashboard.json
+
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
 
 /* ── Estado global IPCA ───────────────────────────────────────────── */
 let _ipcaHistorico = [];
-let _ipcaChart     = null;
-let _ipcaRange     = 24;
+let _ipcaChart      = null;
+let _ipcaRange      = 24;
 
 /* ── Helpers URL / tabela ─────────────────────────────────────────── */
 function getFundUrl(r){
@@ -374,20 +382,26 @@ function toNum(v){if(v===null||v===undefined)return null;const s=String(v).trim(
 function pctCell(val){if(!val||String(val).trim()===''||val==='-'||val==='—')return`<td class="col-pct"><span class="dash">—</span></td>`;const n=toNum(val);if(n===null)return`<td class="col-pct"><span class="dash">${val}</span></td>`;const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';const pct=Math.min(Math.abs(n)/20*100,100);return`<td class="col-pct"><div class="pct-wrap"><div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div><span class="pct-val ${cls}">${sign}${val}</span></div></td>`;}
 function temDados(r){const c=String(r['Cota (R$)']||'').trim();return c&&c!=='-'&&c!=='—';}
 
-/* ── KPIs do catálogo ─────────────────────────────────────────────── */
+/* ── KPIs do catálogo estruturados via kpis_dashboard.json ────────── */
 function updateKPIs(){
   document.getElementById('kpiFundos').textContent=allRows.length;
-  document.getElementById('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean)).size;
-  let pl=0,best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
+  
+  // Consome os dados consolidados do robô
+  if (_kpisData && _kpisData.resumo_geral) {
+    const rg = _kpisData.resumo_geral;
+    document.getElementById('kpiPL').textContent = rg.pl_total_consolidado.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
+    document.getElementById('kpiConcentracao').textContent = rg.concentracao_top5_percent.toLocaleString('pt-BR') + '%';
+    document.getElementById('kpiPipeline').textContent = rg.pipeline_novos_fundos;
+  }
+  
+  let best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
   allRows.forEach(r=>{
-    const p=toNum(r['PL (milhoes R$)']);if(p!==null)pl+=p;
     const m=toNum(r['Acum. 12M (%)']);
     if(m!==null){
       if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
       if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}
     }
   });
-  document.getElementById('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
   document.getElementById('kpiBest').textContent=best>-Infinity?`+${bestVal}%`:'—';
   document.getElementById('kpiBestFundo').textContent=bestName.length>42?bestName.slice(0,42)+'…':bestName;
   document.getElementById('kpiWorst').textContent=worst<Infinity?`${worstVal}%`:'—';
@@ -401,17 +415,13 @@ function renderMacroPainel(data) {
       ? val.toLocaleString('pt-BR', {minimumFractionDigits:casas, maximumFractionDigits:casas})
       : '—';
 
-  /* Selic / CDI com Spread Corrigido */
   document.getElementById('macroSelic').innerText  = fmt(data.cards.selic_meta?.valor) + '% a.a.';
   document.getElementById('macroCdi').innerText    = fmt(data.cards.cdi?.valor)        + '% a.a.';
   document.getElementById('macroCdiDia').innerText = fmt(data.cards.cdi_dia?.valor, 4) + '%';
 
-  /* ── IPCA Estruturado v12 — Enquadramento Lógico de Meta ── */
   const ipca = data.cards.ipca;
   if (ipca) {
     _ipcaHistorico = ipca.historico || [];
-
-    // Formata os indicadores essenciais do bloco ipca
     const vMes = ipca.ultimo_mes;
     const vAno = ipca.acum_ano;
     const v12m = ipca.acum_12m;
@@ -419,7 +429,6 @@ function renderMacroPainel(data) {
     const metaSup = ipca.meta_superior ?? 4.5;
     const metaInf = ipca.meta_inferior ?? 1.5;
 
-    // Regra matemática de enquadramento da meta inflacionária
     let badgeHTML = '';
     if (v12m !== null && v12m !== undefined) {
       if (v12m >= metaInf && v12m <= metaSup) {
@@ -431,36 +440,22 @@ function renderMacroPainel(data) {
       }
     }
 
-    // 1. Preenchimento do Card Principal do Painel
     document.getElementById('ipcaMes').innerText = vMes !== null ? fmt(vMes) + '%' : '—';
     document.getElementById('ipcaMesLabel').innerText = ipca.label_mes || '—';
-    
     document.getElementById('ipcaAno').innerText = vAno !== null ? fmt(vAno) + '%' : '—';
     document.getElementById('ipcaAnoLabel').innerText = 'Jan–' + (ipca.label_mes || '');
-    
     document.getElementById('ipca12m').innerHTML = (v12m !== null ? fmt(v12m) + '%' : '—') + badgeHTML;
     const item12mSub = document.getElementById('ipca12m').nextElementSibling;
     if (item12mSub) item12mSub.innerText = `Meta Central: ${fmt(metaCentro)}%`;
 
-    // 2. Preenchimento do Espelho no Modal Gráfico
     document.getElementById('mIpcaMes').innerText = vMes !== null ? fmt(vMes) + '%' : '—';
     document.getElementById('mIpcaMesLabel').innerText = ipca.label_mes || '—';
-    
     document.getElementById('mIpcaAno').innerText = vAno !== null ? fmt(vAno) + '%' : '—';
     document.getElementById('mIpcaAnoLabel').innerText = 'Jan–' + (ipca.label_mes || '');
-    
     document.getElementById('mIpca12m').innerHTML = (v12m !== null ? fmt(v12m) + '%' : '—') + badgeHTML;
     document.getElementById('mIpca12mLabel').innerText = `Bandas: ${fmt(metaInf)}% a ${fmt(metaSup)}%`;
-
-  } else {
-    // Fallback estrutural para segurança retroativa
-    const v = data.cards.ipca_mes_anterior?.valor;
-    const txtFallback = (v !== null && v !== undefined) ? fmt(Number(v)) + '%' : '—';
-    if(document.getElementById('ipcaMes')) document.getElementById('ipcaMes').innerText = txtFallback;
-    if(document.getElementById('mIpcaMes')) document.getElementById('mIpcaMes').innerText = txtFallback;
   }
 
-  /* Ibovespa com Seta Direcional de Tendência */
   document.getElementById('macroIbov').innerText = data.cards.ibovespa?.atual
     ? Math.round(data.cards.ibovespa.atual).toLocaleString('pt-BR') + ' pts' : '—';
   const varIbov  = document.getElementById('macroIbovVar');
@@ -469,7 +464,6 @@ function renderMacroPainel(data) {
   varIbov.innerText    = `${setaIbov}${vIbov > 0 ? '+' : ''}${fmt(vIbov)}% (mês)`;
   varIbov.style.color  = vIbov >= 0 ? 'var(--green)' : 'var(--red)';
 
-  /* Dólar Comercial — Lapidado para 2 Casas Decimais com Seta */
   document.getElementById('macroDolar').innerText = data.cards.dolar?.atual
     ? 'R$ ' + fmt(data.cards.dolar.atual, 2) : '—';
   const varDolar = document.getElementById('macroDolarVar');
@@ -478,7 +472,6 @@ function renderMacroPainel(data) {
   varDolar.innerText   = `${setaDolar}${vDolar > 0 ? '+' : ''}${fmt(vDolar)}% (mês)`;
   varDolar.style.color = vDolar >= 0 ? 'var(--green)' : 'var(--red)';
 
-  /* S&P 500 */
   document.getElementById('macroSp500').innerText = data.indices_internacionais?.sp500_usd
     ? Math.round(data.indices_internacionais.sp500_usd).toLocaleString('pt-BR') + ' USD' : '—';
 }
@@ -590,6 +583,17 @@ function applyFilter(){
     if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q)))return false;
     return true;
   });
+  
+  // Injeta Dinamicamente a Rentabilidade Ponderada da Categoria Selecionada
+  const insightDiv = document.getElementById('catInsightRow');
+  if (activeCat && _kpisData && _kpisData.categorias && _kpisData.categorias[activeCat]) {
+    const info = _kpisData.categorias[activeCat];
+    insightDiv.style.display = 'block';
+    insightDiv.innerHTML = `✨ <b>Visão Estratégica da Categoria (${activeCat}):</b> Rentabilidade 12M Ponderada Real: <b>${info.rent_12m_ponderada}%</b> | Patrimônio Alocado: <b>R$ ${info.pl_total.toLocaleString('pt-BR')} M</b> (veículos ativos: ${info.qtd_ativos})`;
+  } else {
+    insightDiv.style.display = 'none';
+  }
+
   if(sortCol>=0&&sortCol<displayHeaders.length){
     const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);
     filtered.sort((a,b)=>{
@@ -713,9 +717,11 @@ function carregarDados(){
   const cb='?v='+Date.now();
   Promise.all([
     fetch('dados_atuais.csv'+cb).then(r=>r.text()),
-    fetch('mercado_atual.json'+cb).then(r=>r.json())
+    fetch('mercado_atual.json'+cb).then(r=>r.json()),
+    fetch('kpis_dashboard.json'+cb).then(r=>r.json()) // Injeção do novo JSON analítico
   ])
-  .then(([csvRaw, macroData])=>{
+  .then(([csvRaw, macroData, kpisData])=>{
+    _kpisData = kpisData; // Armazena a matriz global de risco e performance
     renderMacroPainel(macroData);
 
     const result=parseCsv(csvRaw);allRows=result.data;
