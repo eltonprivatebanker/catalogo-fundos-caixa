@@ -636,8 +636,11 @@ def executar():
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
             
         log(f"[SUCESSO] Dados de mercado integrados e salvos em: {caminho_json}")
-    except Exception as e:
+   except Exception as e:
         log(f"[ERRO] Falha ao processar dados de mercado: {e}")
     # ───────────────────────────────────────────────────────────────────────
 
-    log(f"SUCESSO: {len(df_final)} fundos consolidados salvos.")
+    log("SUCESSO: Processo de automação e dados de mercado finalizado.")
+
+if __name__ == "__main__":
+    executar()
