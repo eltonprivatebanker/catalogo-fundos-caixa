@@ -541,7 +541,7 @@ class ColetorMercado:
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "cards": {
                 "selic_meta": {"valor": selic_meta, "unidade": "% a.a."},
-                "cdi": {"valor": selic_meta + 0.14 if selic_meta else None, "unidade": "% a.a."}, # Prática de mercado ou cdi_hoje anualizado
+                "cdi": {"valor": selic_meta -0.10 if selic_meta else None, "unidade": "% a.a."}, # Prática de mercado ou cdi_hoje anualizado
                 "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
                 "cdi_mes_anterior": {"valor": cdi_mes_anterior, "unidade": "%"},
                 "ipca_mes_anterior": {"valor": ipca_mensal, "unidade": "%"},
