@@ -45,9 +45,9 @@
     @media(max-width:600px){.kpi-ipca{grid-column:span 1}}
     .kpi-ipca-sub{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
     @media(max-width:500px){.kpi-ipca-sub{grid-template-columns:1fr}}
-    .kpi-ipca-item{background:var(--bg3);border-radius:8px;padding:10px 12px;border:1px solid var(--border2)}
+    .kpi-ipca-item{background:var(--bg3);border-radius:8px;padding:10px 12px;border:1px solid var(--border2);display:flex;flex-direction:column;justify-content:space-between}
     .kpi-ipca-item-label{font-size:.61rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
-    .kpi-ipca-item-val{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--gold2);line-height:1}
+    .kpi-ipca-item-val{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--gold2);line-height:1.1}
     .kpi-ipca-item-sub{font-size:.63rem;color:var(--muted2);margin-top:3px}
     .kpi-hint{font-size:.63rem;color:var(--muted2);margin-top:10px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:5px}
 
@@ -68,7 +68,7 @@
     .ipca-modal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
     @media(max-width:500px){.ipca-modal-grid{grid-template-columns:1fr}}
 
-    /* ── Restante (controles, tabela, paginação etc.) ─────────────────── */
+    /* ── Controles, Tabela e Paginação ───────────────────────────────── */
     .controls-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
     .search-wrap{position:relative;flex:1;min-width:240px}
     .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
@@ -151,7 +151,6 @@
 <body>
 <div class="page">
 
-  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
   <header>
     <div class="brand">
       <div class="brand-logo">E</div>
@@ -163,12 +162,10 @@
     <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
   </header>
 
-  <!-- ═══════════════════════ PAINEL MACRO ═══════════════════════ -->
   <div class="macro-wrapper">
     <h2 class="section-title">Painel Macroeconômico Global</h2>
     <div class="kpi-grid">
 
-      <!-- Selic -->
       <div class="kpi">
         <div class="kpi-icon">🏛️</div>
         <div class="kpi-label">Selic Meta</div>
@@ -176,7 +173,6 @@
         <div class="kpi-sub">Banco Central do Brasil</div>
       </div>
 
-      <!-- CDI -->
       <div class="kpi">
         <div class="kpi-icon">🔄</div>
         <div class="kpi-label">Taxa CDI Ano</div>
@@ -184,7 +180,6 @@
         <div class="kpi-sub">Diário: <span id="macroCdiDia">—</span></div>
       </div>
 
-      <!-- ═══ IPCA — card expandido (span 2 colunas) ═══ -->
       <div class="kpi kpi-ipca" id="ipcaCard" onclick="openIpcaModal()">
         <div style="display:flex;align-items:center;justify-content:space-between">
           <div>
@@ -216,7 +211,6 @@
         </div>
       </div>
 
-      <!-- Ibovespa -->
       <div class="kpi">
         <div class="kpi-icon">📈</div>
         <div class="kpi-label">Ibovespa</div>
@@ -224,7 +218,6 @@
         <div class="kpi-sub" id="macroIbovVar">—</div>
       </div>
 
-      <!-- Dólar -->
       <div class="kpi">
         <div class="kpi-icon">💵</div>
         <div class="kpi-label">Dólar Comercial</div>
@@ -232,7 +225,6 @@
         <div class="kpi-sub" id="macroDolarVar">—</div>
       </div>
 
-      <!-- S&P 500 -->
       <div class="kpi">
         <div class="kpi-icon">🌍</div>
         <div class="kpi-label">S&P 500</div>
@@ -243,7 +235,6 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════ MÉTRICAS CATÁLOGO ═══════════════════════ -->
   <div class="portfolio-wrapper">
     <h2 class="section-title">Métricas Consolidadas do Catálogo</h2>
     <div class="kpi-grid">
@@ -255,7 +246,6 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════ CONTROLES ═══════════════════════ -->
   <div class="controls-bar">
     <div class="search-wrap">
       <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
@@ -273,7 +263,6 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════ FILTROS ═══════════════════════ -->
   <div class="filter-section">
     <div class="filter-row" id="perfilFilters">
       <span class="filter-label">Perfil</span>
@@ -289,7 +278,6 @@
     </div>
   </div>
 
-  <!-- ═══════════════════════ TABELA ═══════════════════════ -->
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
     <table id="mainTable" style="display:none">
@@ -298,7 +286,6 @@
     </table>
   </div>
 
-  <!-- ═══════════════════════ PAGINAÇÃO ═══════════════════════ -->
   <div class="pagination-row">
     <div id="resultInfo"></div>
     <div class="page-btns" id="pageBtns"></div>
@@ -309,17 +296,13 @@
     Dashboard por <span>Elton Private Banker</span> · Atualização automática diária
   </footer>
 
-</div><!-- /.page -->
-
-<!-- ═══════════════════════ MODAL IPCA ═══════════════════════ -->
-<div class="ipca-overlay" id="ipcaOverlay" onclick="if(event.target===this)closeIpcaModal()">
+</div><div class="ipca-overlay" id="ipcaOverlay" onclick="if(event.target===this)closeIpcaModal()">
   <div class="ipca-modal">
     <div class="ipca-mhead">
       <span class="ipca-mtitle">🛒 IPCA — Histórico Completo</span>
       <button class="ipca-mclose" onclick="closeIpcaModal()">✕ Fechar</button>
     </div>
 
-    <!-- 3 métricas resumidas dentro do modal -->
     <div class="ipca-modal-grid">
       <div class="kpi-ipca-item">
         <div class="kpi-ipca-item-label">Último mês</div>
@@ -334,11 +317,10 @@
       <div class="kpi-ipca-item">
         <div class="kpi-ipca-item-label">Últimos 12 meses</div>
         <div class="kpi-ipca-item-val" id="mIpca12m">—</div>
-        <div class="kpi-ipca-item-sub">acumulado 12m</div>
+        <div class="kpi-ipca-item-sub" id="mIpca12mLabel">acumulado 12m</div>
       </div>
     </div>
 
-    <!-- Tabs de range -->
     <div class="ipca-mtabs">
       <button class="ipca-mtab active" onclick="setIpcaRange(24,this)">2 anos</button>
       <button class="ipca-mtab" onclick="setIpcaRange(60,this)">5 anos</button>
@@ -346,13 +328,11 @@
       <button class="ipca-mtab" onclick="setIpcaRange(0,this)">Tudo</button>
     </div>
 
-    <!-- Legenda -->
     <div class="ipca-legend">
       <span class="ipca-leg"><span class="ipca-leg-dot" style="background:#c8973a"></span>IPCA mensal (%)</span>
       <span class="ipca-leg"><span class="ipca-leg-dot" style="background:#5b9cf6;opacity:.7"></span>Acumulado 12 meses (%)</span>
     </div>
 
-    <!-- Gráfico -->
     <div style="position:relative;width:100%;height:300px">
       <canvas id="ipcaCanvas" role="img" aria-label="Gráfico histórico mensal do IPCA e acumulado 12 meses">
         Histórico IPCA BCB série 433.
@@ -365,7 +345,6 @@
   </div>
 </div>
 
-<!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
 <script>
 /* ── Estado global da tabela ──────────────────────────────────────── */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
@@ -415,68 +394,88 @@ function updateKPIs(){
   document.getElementById('kpiWorstFundo').textContent=worstName.length>42?worstName.slice(0,42)+'…':worstName;
 }
 
-/* ── Painel Macro (lê mercado_atual.json) ─────────────────────────── */
+/* ── Painel Macro (lê mercado_atual.json v12 estruturado) ─────────── */
 function renderMacroPainel(data) {
   const fmt = (val, casas=2) =>
     (val !== null && val !== undefined)
       ? val.toLocaleString('pt-BR', {minimumFractionDigits:casas, maximumFractionDigits:casas})
       : '—';
 
-  /* Selic / CDI */
+  /* Selic / CDI com Spread Corrigido */
   document.getElementById('macroSelic').innerText  = fmt(data.cards.selic_meta?.valor) + '% a.a.';
   document.getElementById('macroCdi').innerText    = fmt(data.cards.cdi?.valor)        + '% a.a.';
   document.getElementById('macroCdiDia').innerText = fmt(data.cards.cdi_dia?.valor, 4) + '%';
 
-  /* ── IPCA — suporta estrutura nova (cards.ipca.historico) e antiga ── */
+  /* ── IPCA Estruturado v12 — Enquadramento Lógico de Meta ── */
   const ipca = data.cards.ipca;
-  if (ipca && ipca.historico && ipca.historico.length > 0) {
-    _ipcaHistorico = ipca.historico;
+  if (ipca) {
+    _ipcaHistorico = ipca.historico || [];
 
-    const preencher = (idVal, idLabel, numVal, label) => {
-      const elV = document.getElementById(idVal);
-      const elL = document.getElementById(idLabel);
-      if (elV) elV.innerText = numVal !== null && numVal !== undefined
-        ? numVal.toFixed(2) + '%' : '—';
-      if (elL) elL.innerText = label || '—';
-    };
+    // Formata os indicadores essenciais do bloco ipca
+    const vMes = ipca.ultimo_mes;
+    const vAno = ipca.acum_ano;
+    const v12m = ipca.acum_12m;
+    const metaCentro = ipca.meta_central ?? 3.0;
+    const metaSup = ipca.meta_superior ?? 4.5;
+    const metaInf = ipca.meta_inferior ?? 1.5;
 
-    const anoLabel = 'Jan–' + (ipca.label_mes || '');
+    // Regra matemática de enquadramento da meta inflacionária
+    let badgeHTML = '';
+    if (v12m !== null && v12m !== undefined) {
+      if (v12m >= metaInf && v12m <= metaSup) {
+        badgeHTML = `<br><span style="margin-top:6px;display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;background:rgba(52,209,122,.12);color:var(--green);border:1px solid rgba(52,209,122,.25);font-family:'Inter',sans-serif;font-weight:600;">✓ Dentro da Meta</span>`;
+      } else if (v12m > metaSup) {
+        badgeHTML = `<br><span style="margin-top:6px;display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;background:rgba(240,86,86,.12);color:var(--red);border:1px solid rgba(240,86,86,.25);font-family:'Inter',sans-serif;font-weight:600;">✗ Acima do Teto</span>`;
+      } else {
+        badgeHTML = `<br><span style="margin-top:6px;display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;background:rgba(250,204,21,.12);color:#facc15;border:1px solid rgba(250,204,21,.25);font-family:'Inter',sans-serif;font-weight:600;">⚠ Abaixo do Piso</span>`;
+      }
+    }
 
-    /* card no painel */
-    preencher('ipcaMes',  'ipcaMesLabel', ipca.ultimo_mes, ipca.label_mes);
-    preencher('ipcaAno',  'ipcaAnoLabel', ipca.acum_ano,   anoLabel);
-    const el12 = document.getElementById('ipca12m');
-    if (el12) el12.innerText = ipca.acum_12m !== null ? ipca.acum_12m.toFixed(2) + '%' : '—';
+    // 1. Preenchimento do Card Principal do Painel
+    document.getElementById('ipcaMes').innerText = vMes !== null ? fmt(vMes) + '%' : '—';
+    document.getElementById('ipcaMesLabel').innerText = ipca.label_mes || '—';
+    
+    document.getElementById('ipcaAno').innerText = vAno !== null ? fmt(vAno) + '%' : '—';
+    document.getElementById('ipcaAnoLabel').innerText = 'Jan–' + (ipca.label_mes || '');
+    
+    document.getElementById('ipca12m').innerHTML = (v12m !== null ? fmt(v12m) + '%' : '—') + badgeHTML;
+    const item12mSub = document.getElementById('ipca12m').nextElementSibling;
+    if (item12mSub) item12mSub.innerText = `Meta Central: ${fmt(metaCentro)}%`;
 
-    /* espelho no modal */
-    preencher('mIpcaMes',  'mIpcaMesLabel', ipca.ultimo_mes, ipca.label_mes);
-    preencher('mIpcaAno',  'mIpcaAnoLabel', ipca.acum_ano,   anoLabel);
-    const mEl12 = document.getElementById('mIpca12m');
-    if (mEl12) mEl12.innerText = ipca.acum_12m !== null ? ipca.acum_12m.toFixed(2) + '%' : '—';
+    // 2. Preenchimento do Espelho no Modal Gráfico
+    document.getElementById('mIpcaMes').innerText = vMes !== null ? fmt(vMes) + '%' : '—';
+    document.getElementById('mIpcaMesLabel').innerText = ipca.label_mes || '—';
+    
+    document.getElementById('mIpcaAno').innerText = vAno !== null ? fmt(vAno) + '%' : '—';
+    document.getElementById('mIpcaAnoLabel').innerText = 'Jan–' + (ipca.label_mes || '');
+    
+    document.getElementById('mIpca12m').innerHTML = (v12m !== null ? fmt(v12m) + '%' : '—') + badgeHTML;
+    document.getElementById('mIpca12mLabel').innerText = `Bandas: ${fmt(metaInf)}% a ${fmt(metaSup)}%`;
 
   } else {
-    /* fallback: estrutura antiga com ipca_mes_anterior */
+    // Fallback estrutural para segurança retroativa
     const v = data.cards.ipca_mes_anterior?.valor;
-    ['ipcaMes','mIpcaMes'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.innerText = (v !== null && v !== undefined) ? Number(v).toFixed(2) + '%' : '—';
-    });
+    const txtFallback = (v !== null && v !== undefined) ? fmt(Number(v)) + '%' : '—';
+    if(document.getElementById('ipcaMes')) document.getElementById('ipcaMes').innerText = txtFallback;
+    if(document.getElementById('mIpcaMes')) document.getElementById('mIpcaMes').innerText = txtFallback;
   }
 
-  /* Ibovespa */
+  /* Ibovespa com Seta Direcional de Tendência */
   document.getElementById('macroIbov').innerText = data.cards.ibovespa?.atual
     ? Math.round(data.cards.ibovespa.atual).toLocaleString('pt-BR') + ' pts' : '—';
   const varIbov  = document.getElementById('macroIbovVar');
   const vIbov    = data.cards.ibovespa?.variacao_mensal;
-  varIbov.innerText    = (vIbov > 0 ? '+' : '') + fmt(vIbov) + '% (mês)';
+  const setaIbov = vIbov > 0 ? '▲ ' : vIbov < 0 ? '▼ ' : '';
+  varIbov.innerText    = `${setaIbov}${vIbov > 0 ? '+' : ''}${fmt(vIbov)}% (mês)`;
   varIbov.style.color  = vIbov >= 0 ? 'var(--green)' : 'var(--red)';
 
-  /* Dólar */
+  /* Dólar Comercial — Lapidado para 2 Casas Decimais com Seta */
   document.getElementById('macroDolar').innerText = data.cards.dolar?.atual
-    ? 'R$ ' + fmt(data.cards.dolar.atual, 4) : '—';
+    ? 'R$ ' + fmt(data.cards.dolar.atual, 2) : '—';
   const varDolar = document.getElementById('macroDolarVar');
   const vDolar   = data.cards.dolar?.variacao_mensal;
-  varDolar.innerText   = (vDolar > 0 ? '+' : '') + fmt(vDolar) + '% (mês)';
+  const setaDolar = vDolar > 0 ? '▲ ' : vDolar < 0 ? '▼ ' : '';
+  varDolar.innerText   = `${setaDolar}${vDolar > 0 ? '+' : ''}${fmt(vDolar)}% (mês)`;
   varDolar.style.color = vDolar >= 0 ? 'var(--green)' : 'var(--red)';
 
   /* S&P 500 */
@@ -484,7 +483,7 @@ function renderMacroPainel(data) {
     ? Math.round(data.indices_internacionais.sp500_usd).toLocaleString('pt-BR') + ' USD' : '—';
 }
 
-/* ── Modal IPCA ───────────────────────────────────────────────────── */
+/* ── Modal IPCA com Renderização Gráfica ──────────────────────────── */
 function openIpcaModal() {
   document.getElementById('ipcaOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -501,7 +500,7 @@ function setIpcaRange(range, btn) {
   buildIpcaChart(range);
 }
 function buildIpcaChart(range) {
-  const serie  = range === 0 ? _ipcaHistorico : _ipcaHistorico.slice(-range);
+  const serie   = range === 0 ? _ipcaHistorico : _ipcaHistorico.slice(-range);
   const offset = _ipcaHistorico.length - serie.length;
   const labels  = serie.map(d => d.label);
   const mensais = serie.map(d => parseFloat(Number(d.valor).toFixed(2)));
@@ -581,7 +580,7 @@ function buildIpcaChart(range) {
 }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeIpcaModal(); });
 
-/* ── Tabela e filtros ─────────────────────────────────────────────── */
+/* ── Motores do Catálogo Geral de Fundos ────────────────────────── */
 function applyFilter(){
   const q=activeSearch.toLowerCase();
   filtered=allRows.filter(r=>{
@@ -699,7 +698,7 @@ function buildCatFilters(cats){
   });
 }
 
-/* ── Listeners ────────────────────────────────────────────────────── */
+/* ── Escutas de Eventos (Listeners) ──────────────────────────────── */
 document.getElementById('perfilFilters').addEventListener('click',e=>{
   const btn=e.target.closest('[data-perfil]');if(!btn)return;
   activePerfil=btn.dataset.perfil;
@@ -709,7 +708,7 @@ document.getElementById('searchInput').addEventListener('input',e=>{activeSearch
 document.getElementById('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
 document.getElementById('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;applyFilter();});
 
-/* ── Bootstrap ────────────────────────────────────────────────────── */
+/* ── Sincronização Assíncrona e Inicialização ────────────────────── */
 function carregarDados(){
   const cb='?v='+Date.now();
   Promise.all([
