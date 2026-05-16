@@ -1405,3 +1405,70 @@
 [21:02:31] [IPCA] 0.67% (abr/2026) | Ano: 2.6043% | 12M: 4.3917% | Série: 556 meses
 [21:02:33] [SUCESSO] JSON salvo: mercado_atual.json | Série IPCA: 556 meses
 [21:02:33] ✨ [FIM] Processo finalizado com sucesso! Dados prontos para o front-end.
+[21:18:49] ⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v12...
+[21:18:51]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/renda-fixa/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:52]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/referenciados/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:52]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/fundo-simples/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:53]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/curto-prazo/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:54]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/multimercado/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:54]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/cambiais/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:55]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:55]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/fundos-de-indices/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:56]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/voce/renda-fixa/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:56]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/empresa/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:57]   [CAIXA] fmp-fgts → HTTP 404
+[21:18:57]   [CAIXA] Erro em https://www.caixa.gov.br/fundos-investimento/rpps/Paginas/default.aspx: name 'visitos' is not defined
+[21:18:57] [CAIXA] Total URLs dinâmicas: 0
+[21:18:57] Iniciando raspagem do segmento: PESSOA FÍSICA...
+[21:19:02] [PF] Abrindo SIPII...
+[21:19:23]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[21:19:37]   [PF] RENDA FIXA: 39 fundos.
+[21:19:44]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[21:19:47]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[21:20:00]   [PF] MULTIMERCADO: 30 fundos.
+[21:20:04]   [PF] CAMBIAL: 1 fundos.
+[21:20:16]   [PF] ACOES: 29 fundos.
+[21:20:20]   [PF] FUNDO DE INDICE: 1 fundos.
+[21:20:26]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[21:20:28] Iniciando raspagem do segmento: PESSOA JURÍDICA...
+[21:20:28] [PJ] Abrindo SIPII...
+[21:20:49]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[21:21:03]   [PJ] RENDA FIXA: 38 fundos.
+[21:21:09]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[21:21:12]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[21:21:24]   [PJ] MULTIMERCADO: 27 fundos.
+[21:21:27]   [PJ] CAMBIAL: 1 fundos.
+[21:21:41]   [PJ] ACOES: 28 fundos.
+[21:21:43] Iniciando raspagem do segmento: GOVERNO...
+[21:21:44] [GOV] Abrindo SIPII...
+[21:22:03]   [GOV] RENDA FIXA: 2 fundos.
+[21:22:06]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[21:22:10]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[21:22:15]   [GOV] MULTIMERCADO: 6 fundos.
+[21:22:19]   [GOV] ACOES: 4 fundos.
+[21:22:21] Iniciando raspagem do segmento: RPPS...
+[21:22:21] [RPPS] Abrindo SIPII...
+[21:22:52]   [RPPS] RENDA FIXA: 19 fundos.
+[21:22:56]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[21:23:04]   [RPPS] MULTIMERCADO: 14 fundos.
+[21:23:11]   [RPPS] ACOES: 14 fundos.
+[21:23:13] Iniciando raspagem do segmento: TODOS...
+[21:23:13] [TODOS] Abrindo SIPII...
+[21:23:33]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[21:23:49]   [TODOS] RENDA FIXA: 42 fundos.
+[21:23:55]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[21:23:59]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[21:24:06]   [TODOS] MULTIMERCADO: 14 fundos.
+[21:24:09]   [TODOS] CAMBIAL: 1 fundos.
+[21:24:20]   [TODOS] ACOES: 25 fundos.
+[21:24:24]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[21:24:26] Deduplicando e injetando cruzamento de perfis...
+[21:24:26] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[21:24:26] [KPIs] JSON de métricas avançadas exportado: kpis_dashboard.json
+[21:24:26] [MERCADO] Coletando indicadores macro e índices internacionais...
+[21:24:32] [IPCA] Base local: 556 meses carregados.
+[21:24:33] [IPCA] Delta BCB: 3 meses recebidos.
+[21:24:33] [IPCA] Base salva: 556 meses → ipca_historico_base.json
+[21:24:33] [IPCA] 0.67% (abr/2026) | Ano: 2.6043% | 12M: 4.3917% | Série: 556 meses
+[21:24:33] [SUCESSO] JSON salvo: mercado_atual.json | Série IPCA: 556 meses
+[21:24:33] ✨ [FIM] Processo finalizado com sucesso! Dados prontos para o front-end.
