@@ -1,9 +1,12 @@
 """
-ROBÔ SIPII CAIXA — v10 (Edição GitHub Repository)
+ROBÔ SIPII CAIXA — v11 (Edição GitHub Repository)
 Estratégia de URLs em duas camadas:
   1. Dicionário estático: 116 URLs validadas manualmente
   2. Scraping dinâmico: captura URLs de novos fundos nas páginas da CAIXA
   Resultado esperado: ~149/171 fundos com URL real
+
+  v11 — IPCA agora salva série histórica completa (120 meses) no JSON
+        para alimentar o gráfico interativo do index.html
 """
 
 from pathlib import Path
@@ -485,115 +488,223 @@ class ColetorMercado:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
 
+    # ── Helpers BCB ────────────────────────────────────────────────────────
+
     def _buscar_bcb(self, codigo_serie):
-        """Busca o último valor de uma série do Sistema Gerenciador de Séries Temporais do BCB"""
+        """Busca o último valor de uma série do SGS/BCB."""
         try:
             url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/1?formato=json"
             res = requests.get(url, headers=self.headers, timeout=10)
             if res.status_code == 200:
-                dados = res.json()
-                return float(dados[0]['valor'])
+                return float(res.json()[0]['valor'])
         except Exception:
             pass
         return None
 
+    def _buscar_ipca_historico(self, meses=120):
+        """
+        Busca a série histórica completa do IPCA (série 433).
+        Retorna lista de dicts: [{"data": "01/04/2026", "valor": "0.43"}, ...]
+        Solicita 'meses' entradas para alimentar o gráfico do painel.
+        """
+        try:
+            url = (
+                f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433"
+                f"/dados/ultimos/{meses}?formato=json"
+            )
+            res = requests.get(url, headers=self.headers, timeout=15)
+            if res.status_code == 200:
+                log(f"[IPCA] {meses} meses históricos obtidos com sucesso.")
+                return res.json()
+        except Exception as e:
+            log(f"[IPCA] Erro ao buscar histórico: {e}")
+        return []
+
+    # ── Cálculos de acumulado ──────────────────────────────────────────────
+
+    def _acumular(self, serie, n_meses):
+        """Acumula os últimos n_meses da série."""
+        fatias = serie[-n_meses:]
+        acc = 1.0
+        for item in fatias:
+            try:
+                acc *= (1 + float(item["valor"]) / 100)
+            except (ValueError, KeyError):
+                pass
+        return round((acc - 1) * 100, 4)
+
+    def _acumular_ano(self, serie):
+        """Acumula do primeiro mês do ano corrente até o último dado."""
+        if not serie:
+            return None
+        ultimo_ano = serie[-1]["data"].split("/")[2]
+        acc = 1.0
+        # Percorre de trás pra frente até sair do ano corrente
+        for item in reversed(serie):
+            if item["data"].split("/")[2] != ultimo_ano:
+                break
+            try:
+                acc *= (1 + float(item["valor"]) / 100)
+            except (ValueError, KeyError):
+                pass
+        return round((acc - 1) * 100, 4)
+
+    # ── Yahoo Finance ──────────────────────────────────────────────────────
+
     def _buscar_yahoo(self, ticker):
-        """Busca a cotação atual e o fechamento anterior do Yahoo Finance"""
+        """Busca cotação atual e fechamento ~30 dias atrás via Yahoo Finance."""
         try:
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=2mo&interval=1d"
             res = requests.get(url, headers=self.headers, timeout=10)
             if res.status_code == 200:
-                json_data = res.json()
-                quotes = json_data['chart']['result'][0]['indicators']['quote'][0]['close']
-                # Remove None values
+                quotes = res.json()['chart']['result'][0]['indicators']['quote'][0]['close']
                 quotes = [q for q in quotes if q is not None]
                 if quotes:
-                    atual = quotes[-1]
-                    # Tenta pegar o fechamento de aproximadamente 30 dias atrás para o "mês anterior"
+                    atual    = quotes[-1]
                     anterior = quotes[-22] if len(quotes) >= 22 else quotes[0]
                     return {"atual": atual, "anterior": anterior}
         except Exception:
             pass
         return {"atual": None, "anterior": None}
 
+    # ── Método principal ───────────────────────────────────────────────────
+
     def coletar_todos(self):
         log("[MERCADO] Coletando indicadores macro e índices internacionais...")
-        
-        # 1. Dados do Banco Central do Brasil (SGS)
-        selic_meta = self._buscar_bcb(432)   # Selic Meta % a.a.
-        cdi_hoje = self._buscar_bcb(12)      # CDI DIário %
-        ipca_mensal = self._buscar_bcb(433)  # IPCA Var. Mensal %
-        poupanca_nova = self._buscar_bcb(196) # Poupança pós-2012
-        poupanca_antiga = 0.5000              # Poupança antiga (fixa em 0.5% + TR quando Selic > 8.5%)
 
-        # 2. Índices e Moedas via Yahoo Finance
-        dolar = self._buscar_yahoo("BRL=X")
-        ibov = self._buscar_yahoo("^BVSP")
-        sp500 = self._buscar_yahoo("^GSPC")
+        # ── Banco Central — valores pontuais ──────────────────────────────
+        selic_meta    = self._buscar_bcb(432)   # Selic Meta % a.a.
+        cdi_hoje      = self._buscar_bcb(12)    # CDI diário %
+        poupanca_nova = self._buscar_bcb(196)   # Poupança nova % m.m.
+
+        # ── IPCA — série histórica completa (120 meses = ~10 anos) ────────
+        MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
+        ipca_serie = self._buscar_ipca_historico(meses=120)
+
+        ipca_ultimo_mes = None
+        ipca_label_mes  = ""
+        ipca_acum_ano   = None
+        ipca_acum_12m   = None
+        ipca_historico  = []   # array compacto para o gráfico Chart.js
+
+        if ipca_serie:
+            ultimo = ipca_serie[-1]
+            ipca_ultimo_mes = round(float(ultimo["valor"]), 4)
+
+            # Label legível: "abr/2026"
+            d, m, y       = ultimo["data"].split("/")
+            ipca_label_mes = f"{MESES_PT[int(m)-1]}/{y}"
+
+            ipca_acum_ano  = self._acumular_ano(ipca_serie)
+            ipca_acum_12m  = self._acumular(ipca_serie, 12)
+
+            # Monta array leve para o frontend — apenas label + valor
+            for item in ipca_serie:
+                dd, mm, yy = item["data"].split("/")
+                ipca_historico.append({
+                    "label": f"{MESES_PT[int(mm)-1]}/{yy}",
+                    "valor": round(float(item["valor"]), 4),
+                })
+
+            log(
+                f"[IPCA] Último: {ipca_ultimo_mes}% ({ipca_label_mes}) | "
+                f"Ano: {ipca_acum_ano}% | 12M: {ipca_acum_12m}%"
+            )
+        else:
+            log("[IPCA] Série histórica indisponível — usando fallback vazio.")
+
+        # ── Yahoo Finance ──────────────────────────────────────────────────
+        dolar     = self._buscar_yahoo("BRL=X")
+        ibov      = self._buscar_yahoo("^BVSP")
+        sp500     = self._buscar_yahoo("^GSPC")
         dow_jones = self._buscar_yahoo("^DJI")
-        nasdaq = self._buscar_yahoo("^IXIC")
+        nasdaq    = self._buscar_yahoo("^IXIC")
 
-        # Cálculos de CDI acumulado aproximado (exemplo ilustrativo para o painel)
-        cdi_mes_anterior = cdi_hoje * 21 if cdi_hoje else None 
-
-        # Montagem do dicionário estruturado para o Frontend (index.html)
+        # ── Montagem do JSON final ─────────────────────────────────────────
         dados_mercado = {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "cards": {
-                "selic_meta": {"valor": selic_meta, "unidade": "% a.a."},
-                "cdi": {"valor": selic_meta -0.10 if selic_meta else None, "unidade": "% a.a."}, # Prática de mercado ou cdi_hoje anualizado
-                "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
-                "cdi_mes_anterior": {"valor": cdi_mes_anterior, "unidade": "%"},
-                "ipca_mes_anterior": {"valor": ipca_mensal, "unidade": "%"},
-                "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
-                "poupanca_antiga": {"valor": poupanca_antiga, "unidade": "% m.m."},
+                "selic_meta": {
+                    "valor":   selic_meta,
+                    "unidade": "% a.a.",
+                },
+                "cdi": {
+                    # Prática de mercado: CDI ≈ Selic − 0,10 p.p.
+                    "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
+                    "unidade": "% a.a.",
+                },
+                "cdi_dia": {
+                    "valor":   cdi_hoje,
+                    "unidade": "%",
+                },
+                # ── bloco IPCA estruturado (novo) ──────────────────────
+                "ipca": {
+                    "ultimo_mes":  ipca_ultimo_mes,   # ex: 0.43
+                    "label_mes":   ipca_label_mes,    # ex: "abr/2026"
+                    "acum_ano":    ipca_acum_ano,     # ex: 2.48
+                    "acum_12m":    ipca_acum_12m,     # ex: 5.53
+                    "historico":   ipca_historico,    # array [{label, valor}, ...]
+                    "unidade":     "%",
+                },
+                # ── mantido para compatibilidade com index.html antigo ──
+                "ipca_mes_anterior": {
+                    "valor":   ipca_ultimo_mes,
+                    "unidade": "%",
+                },
+                "poupanca_nova": {
+                    "valor":   poupanca_nova,
+                    "unidade": "% m.m.",
+                },
                 "ibovespa": {
-                    "atual": ibov["atual"], 
+                    "atual":    ibov["atual"],
                     "anterior": ibov["anterior"],
-                    "variacao_mensal": ((ibov["atual"] / ibov["anterior"]) - 1) * 100 if ibov["atual"] and ibov["anterior"] else None
+                    "variacao_mensal": round(
+                        ((ibov["atual"] / ibov["anterior"]) - 1) * 100, 2
+                    ) if ibov["atual"] and ibov["anterior"] else None,
                 },
                 "dolar": {
-                    "atual": dolar["atual"], 
+                    "atual":    dolar["atual"],
                     "anterior": dolar["anterior"],
-                    "variacao_mensal": ((dolar["atual"] / dolar["anterior"]) - 1) * 100 if dolar["atual"] and dolar["anterior"] else None
-                }
+                    "variacao_mensal": round(
+                        ((dolar["atual"] / dolar["anterior"]) - 1) * 100, 2
+                    ) if dolar["atual"] and dolar["anterior"] else None,
+                },
             },
             "indices_internacionais": {
                 "sp500_usd": sp500["atual"],
-                "sp500_brl": sp500["atual"] * dolar["atual"] if sp500["atual"] and dolar["atual"] else None,
+                "sp500_brl": round(sp500["atual"] * dolar["atual"], 2)
+                             if sp500["atual"] and dolar["atual"] else None,
                 "dow_jones": dow_jones["atual"],
-                "nasdaq": nasdaq["atual"]
+                "nasdaq":    nasdaq["atual"],
             },
-            "resumo_anual_padrao": {
-                "Configuração": ["SELIC", "CDI", "IPCA", "IBOVESPA", "DÓLAR", "S&P 500"],
-                "Pesos_Visiveis": [True, True, True, True, True, True] # Chave lógica para o seu HTML decidir o que exibir/ocultar
-            }
         }
         return dados_mercado
 
+
 # ---------------------------------------------------------------------------
-# Ponto de entrada — VERSÃO DE TESTE RÁPIDO ⚡
+# Ponto de entrada
 # ---------------------------------------------------------------------------
 def executar():
-    log("⚡ [MODO TESTE] Iniciando apenas o Coletor de Mercado...")
+    log("⚡ [MODO MERCADO] Coletando indicadores macro + IPCA histórico...")
 
-    # ─── EXECUTA DIRETO A NOVA ETAPA (SEM ENTRAR NO SIPII) ──────────────────
     try:
         import json
-        coletor = ColetorMercado()
+        coletor     = ColetorMercado()
         indicadores = coletor.coletar_todos()
-        
-        # Gera o arquivo contendo os dados dos cards e índices
+
         caminho_json = BASE_DIR / "mercado_atual.json"
         with open(caminho_json, "w", encoding="utf-8") as f:
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
-            
-        log(f"[SUCESSO] Dados de mercado integrados e salvos em: {caminho_json}")
+
+        n_hist = len(indicadores["cards"]["ipca"]["historico"])
+        log(f"[SUCESSO] JSON salvo: {caminho_json} | IPCA histórico: {n_hist} meses")
+
     except Exception as e:
         log(f"[ERRO] Falha ao processar dados de mercado: {e}")
-    # ───────────────────────────────────────────────────────────────────────
+        traceback.print_exc()
 
-    log("SUCESSO: Processo de automação e dados de mercado finalizado.")
+    log("SUCESSO: Processo finalizado.")
+
 
 if __name__ == "__main__":
     executar()
