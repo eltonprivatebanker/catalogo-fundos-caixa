@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
   <style>
     :root{--bg:#07080f;--bg2:#0d0f1a;--bg3:#131629;--bg4:#1a1f3a;--gold:#c8973a;--gold2:#e8bb6a;--gold-dim:rgba(200,151,58,.12);--gold-glow:rgba(200,151,58,.25);--text:#dde1ec;--muted:#6b7799;--muted2:#4a5270;--green:#34d17a;--red:#f05656;--blue:#5b9cf6;--border:rgba(200,151,58,.15);--border2:rgba(255,255,255,.05)}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -23,11 +24,11 @@
     .live-badge{display:inline-flex;align-items:center;gap:7px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:7px 16px;font-size:.72rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
     .live-dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
     @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
-    
+
     .section-title{font-family:'Cormorant Garamond',serif;font-size:1.25rem;color:var(--gold2);letter-spacing:.05em;text-transform:uppercase;margin-bottom:14px;font-weight:600;display:flex;align-items:center;gap:8px}
     .section-title::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,var(--border),transparent)}
     .macro-wrapper{margin-bottom:28px}
-    
+
     .kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px}
     .kpi{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:22px 20px;position:relative;overflow:hidden;transition:transform .2s,border-color .2s,box-shadow .2s;cursor:default}
     .kpi:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 8px 32px rgba(0,0,0,.4)}
@@ -39,6 +40,35 @@
     .kpi-sub{font-size:.68rem;color:var(--muted);margin-top:6px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .kpi-sub span{font-family:'JetBrains Mono',monospace;font-size:.72rem}
 
+    /* ── IPCA Card expandido ─────────────────────────────────────────── */
+    .kpi-ipca{grid-column:span 2;cursor:pointer}
+    @media(max-width:600px){.kpi-ipca{grid-column:span 1}}
+    .kpi-ipca-sub{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:14px}
+    @media(max-width:500px){.kpi-ipca-sub{grid-template-columns:1fr}}
+    .kpi-ipca-item{background:var(--bg3);border-radius:8px;padding:10px 12px;border:1px solid var(--border2)}
+    .kpi-ipca-item-label{font-size:.61rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:5px}
+    .kpi-ipca-item-val{font-family:'Cormorant Garamond',serif;font-size:1.45rem;font-weight:700;color:var(--gold2);line-height:1}
+    .kpi-ipca-item-sub{font-size:.63rem;color:var(--muted2);margin-top:3px}
+    .kpi-hint{font-size:.63rem;color:var(--muted2);margin-top:10px;text-align:right;display:flex;align-items:center;justify-content:flex-end;gap:5px}
+
+    /* ── Modal IPCA ──────────────────────────────────────────────────── */
+    .ipca-overlay{display:none;position:fixed;inset:0;z-index:900;background:rgba(7,8,15,.88);align-items:center;justify-content:center}
+    .ipca-overlay.open{display:flex}
+    .ipca-modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px;padding:28px;width:min(880px,95vw);max-height:90vh;overflow-y:auto}
+    .ipca-mhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    .ipca-mtitle{font-family:'Cormorant Garamond',serif;font-size:1.5rem;color:var(--gold2);font-weight:700}
+    .ipca-mclose{background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--muted);padding:6px 14px;cursor:pointer;font-family:'Inter',sans-serif;font-size:.82rem;transition:all .15s}
+    .ipca-mclose:hover{border-color:var(--gold);color:var(--gold)}
+    .ipca-mtabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+    .ipca-mtab{padding:5px 14px;border-radius:20px;border:1px solid var(--border2);background:transparent;color:var(--muted);font-family:'Inter',sans-serif;font-size:.75rem;cursor:pointer;transition:all .15s}
+    .ipca-mtab.active,.ipca-mtab:hover{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
+    .ipca-legend{display:flex;gap:16px;margin-bottom:10px;font-size:.7rem;color:var(--muted)}
+    .ipca-leg{display:flex;align-items:center;gap:5px}
+    .ipca-leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+    .ipca-modal-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:20px}
+    @media(max-width:500px){.ipca-modal-grid{grid-template-columns:1fr}}
+
+    /* ── Restante (controles, tabela, paginação etc.) ─────────────────── */
     .controls-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
     .search-wrap{position:relative;flex:1;min-width:240px}
     .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
@@ -120,6 +150,8 @@
 </head>
 <body>
 <div class="page">
+
+  <!-- ═══════════════════════ HEADER ═══════════════════════ -->
   <header>
     <div class="brand">
       <div class="brand-logo">E</div>
@@ -131,18 +163,87 @@
     <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
   </header>
 
+  <!-- ═══════════════════════ PAINEL MACRO ═══════════════════════ -->
   <div class="macro-wrapper">
     <h2 class="section-title">Painel Macroeconômico Global</h2>
     <div class="kpi-grid">
-      <div class="kpi"><div class="kpi-icon">🏛️</div><div class="kpi-label">Selic Meta</div><div class="kpi-value" id="macroSelic">—</div><div class="kpi-sub">Banco Central do Brasil</div></div>
-      <div class="kpi"><div class="kpi-icon">🔄</div><div class="kpi-label">Taxa CDI Ano</div><div class="kpi-value" id="macroCdi">—</div><div class="kpi-sub">Diário: <span id="macroCdiDia">—</span></div></div>
-      <div class="kpi"><div class="kpi-icon">🛒</div><div class="kpi-label">IPCA Mensal</div><div class="kpi-value" id="macroIpca">—</div><div class="kpi-sub">Última divulgação SGS</div></div>
-      <div class="kpi"><div class="kpi-icon">📈</div><div class="kpi-label">Ibovespa</div><div class="kpi-value" id="macroIbov">—</div><div class="kpi-sub" id="macroIbovVar">—</div></div>
-      <div class="kpi"><div class="kpi-icon">💵</div><div class="kpi-label">Dólar Comercial</div><div class="kpi-value" id="macroDolar">—</div><div class="kpi-sub" id="macroDolarVar">—</div></div>
-      <div class="kpi"><div class="kpi-icon">🌍</div><div class="kpi-label">S&P 500</div><div class="kpi-value" id="macroSp500">—</div><div class="kpi-sub">Dolarizado (Yahoo)</div></div>
+
+      <!-- Selic -->
+      <div class="kpi">
+        <div class="kpi-icon">🏛️</div>
+        <div class="kpi-label">Selic Meta</div>
+        <div class="kpi-value" id="macroSelic">—</div>
+        <div class="kpi-sub">Banco Central do Brasil</div>
+      </div>
+
+      <!-- CDI -->
+      <div class="kpi">
+        <div class="kpi-icon">🔄</div>
+        <div class="kpi-label">Taxa CDI Ano</div>
+        <div class="kpi-value" id="macroCdi">—</div>
+        <div class="kpi-sub">Diário: <span id="macroCdiDia">—</span></div>
+      </div>
+
+      <!-- ═══ IPCA — card expandido (span 2 colunas) ═══ -->
+      <div class="kpi kpi-ipca" id="ipcaCard" onclick="openIpcaModal()">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div>
+            <div class="kpi-icon">🛒</div>
+            <div class="kpi-label">IPCA — Inflação Oficial</div>
+          </div>
+          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="var(--muted2)" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="kpi-ipca-sub">
+          <div class="kpi-ipca-item">
+            <div class="kpi-ipca-item-label">Último mês</div>
+            <div class="kpi-ipca-item-val" id="ipcaMes">—</div>
+            <div class="kpi-ipca-item-sub" id="ipcaMesLabel">—</div>
+          </div>
+          <div class="kpi-ipca-item">
+            <div class="kpi-ipca-item-label">Acumulado ano</div>
+            <div class="kpi-ipca-item-val" id="ipcaAno">—</div>
+            <div class="kpi-ipca-item-sub" id="ipcaAnoLabel">Jan–?</div>
+          </div>
+          <div class="kpi-ipca-item">
+            <div class="kpi-ipca-item-label">Últimos 12 meses</div>
+            <div class="kpi-ipca-item-val" id="ipca12m">—</div>
+            <div class="kpi-ipca-item-sub">acumulado 12m</div>
+          </div>
+        </div>
+        <div class="kpi-hint">
+          <svg width="11" height="11" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="3 9 21 9"/></svg>
+          Clique para ver histórico completo
+        </div>
+      </div>
+
+      <!-- Ibovespa -->
+      <div class="kpi">
+        <div class="kpi-icon">📈</div>
+        <div class="kpi-label">Ibovespa</div>
+        <div class="kpi-value" id="macroIbov">—</div>
+        <div class="kpi-sub" id="macroIbovVar">—</div>
+      </div>
+
+      <!-- Dólar -->
+      <div class="kpi">
+        <div class="kpi-icon">💵</div>
+        <div class="kpi-label">Dólar Comercial</div>
+        <div class="kpi-value" id="macroDolar">—</div>
+        <div class="kpi-sub" id="macroDolarVar">—</div>
+      </div>
+
+      <!-- S&P 500 -->
+      <div class="kpi">
+        <div class="kpi-icon">🌍</div>
+        <div class="kpi-label">S&P 500</div>
+        <div class="kpi-value" id="macroSp500">—</div>
+        <div class="kpi-sub">Dolarizado (Yahoo)</div>
+      </div>
+
     </div>
   </div>
 
+  <!-- ═══════════════════════ MÉTRICAS CATÁLOGO ═══════════════════════ -->
   <div class="portfolio-wrapper">
     <h2 class="section-title">Métricas Consolidadas do Catálogo</h2>
     <div class="kpi-grid">
@@ -154,14 +255,17 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════ CONTROLES ═══════════════════════ -->
   <div class="controls-bar">
     <div class="search-wrap">
       <svg width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       <input id="searchInput" type="text" placeholder="Buscar por nome do fundo, categoria..." />
     </div>
     <select id="perPage" class="ctrl-select">
-      <option value="25">25 por página</option><option value="50">50 por página</option>
-      <option value="100">100 por página</option><option value="9999">Todos</option>
+      <option value="25">25 por página</option>
+      <option value="50">50 por página</option>
+      <option value="100">100 por página</option>
+      <option value="9999">Todos</option>
     </select>
     <div class="toggle-wrap">
       <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
@@ -169,6 +273,7 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════ FILTROS ═══════════════════════ -->
   <div class="filter-section">
     <div class="filter-row" id="perfilFilters">
       <span class="filter-label">Perfil</span>
@@ -184,11 +289,16 @@
     </div>
   </div>
 
+  <!-- ═══════════════════════ TABELA ═══════════════════════ -->
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
-    <table id="mainTable" style="display:none"><thead id="tableHead"></thead><tbody id="tableBody"></tbody></table>
+    <table id="mainTable" style="display:none">
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
   </div>
 
+  <!-- ═══════════════════════ PAGINAÇÃO ═══════════════════════ -->
   <div class="pagination-row">
     <div id="resultInfo"></div>
     <div class="page-btns" id="pageBtns"></div>
@@ -198,67 +308,280 @@
     Dados extraídos de <span>fundos.caixa.gov.br</span> via Robô Python ·
     Dashboard por <span>Elton Private Banker</span> · Atualização automática diária
   </footer>
+
+</div><!-- /.page -->
+
+<!-- ═══════════════════════ MODAL IPCA ═══════════════════════ -->
+<div class="ipca-overlay" id="ipcaOverlay" onclick="if(event.target===this)closeIpcaModal()">
+  <div class="ipca-modal">
+    <div class="ipca-mhead">
+      <span class="ipca-mtitle">🛒 IPCA — Histórico Completo</span>
+      <button class="ipca-mclose" onclick="closeIpcaModal()">✕ Fechar</button>
+    </div>
+
+    <!-- 3 métricas resumidas dentro do modal -->
+    <div class="ipca-modal-grid">
+      <div class="kpi-ipca-item">
+        <div class="kpi-ipca-item-label">Último mês</div>
+        <div class="kpi-ipca-item-val" id="mIpcaMes">—</div>
+        <div class="kpi-ipca-item-sub" id="mIpcaMesLabel">—</div>
+      </div>
+      <div class="kpi-ipca-item">
+        <div class="kpi-ipca-item-label">Acumulado ano</div>
+        <div class="kpi-ipca-item-val" id="mIpcaAno">—</div>
+        <div class="kpi-ipca-item-sub" id="mIpcaAnoLabel">—</div>
+      </div>
+      <div class="kpi-ipca-item">
+        <div class="kpi-ipca-item-label">Últimos 12 meses</div>
+        <div class="kpi-ipca-item-val" id="mIpca12m">—</div>
+        <div class="kpi-ipca-item-sub">acumulado 12m</div>
+      </div>
+    </div>
+
+    <!-- Tabs de range -->
+    <div class="ipca-mtabs">
+      <button class="ipca-mtab active" onclick="setIpcaRange(24,this)">2 anos</button>
+      <button class="ipca-mtab" onclick="setIpcaRange(60,this)">5 anos</button>
+      <button class="ipca-mtab" onclick="setIpcaRange(120,this)">10 anos</button>
+      <button class="ipca-mtab" onclick="setIpcaRange(0,this)">Tudo</button>
+    </div>
+
+    <!-- Legenda -->
+    <div class="ipca-legend">
+      <span class="ipca-leg"><span class="ipca-leg-dot" style="background:#c8973a"></span>IPCA mensal (%)</span>
+      <span class="ipca-leg"><span class="ipca-leg-dot" style="background:#5b9cf6;opacity:.7"></span>Acumulado 12 meses (%)</span>
+    </div>
+
+    <!-- Gráfico -->
+    <div style="position:relative;width:100%;height:300px">
+      <canvas id="ipcaCanvas" role="img" aria-label="Gráfico histórico mensal do IPCA e acumulado 12 meses">
+        Histórico IPCA BCB série 433.
+      </canvas>
+    </div>
+
+    <div style="font-size:.67rem;color:var(--muted2);margin-top:12px;text-align:right">
+      Fonte: Banco Central do Brasil — SGS série 433 · Pré-computado pelo Robô Python
+    </div>
+  </div>
 </div>
 
+<!-- ═══════════════════════ JAVASCRIPT ═══════════════════════ -->
 <script>
+/* ── Estado global da tabela ──────────────────────────────────────── */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',activePerfil='',hideSemDados=false,displayHeaders=[];
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
 
+/* ── Estado global IPCA ───────────────────────────────────────────── */
+let _ipcaHistorico = [];
+let _ipcaChart     = null;
+let _ipcaRange     = 24;
+
+/* ── Helpers URL / tabela ─────────────────────────────────────────── */
 function getFundUrl(r){
-  const u = String(r['URL']||r['url']||'').trim();
-  if(u && u.startsWith('http') && u.includes('caixa.gov.br')) return u;
-  const nome = (r['Fundo']||'').replace(/\s*\(8\)|\s*\(1\)|\s*\(2\)|\s*\(3\)/g,'').trim();
-  return 'https://www.google.com/search?q=' + encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');
+  const u=String(r['URL']||r['url']||'').trim();
+  if(u&&u.startsWith('http')&&u.includes('caixa.gov.br'))return u;
+  const nome=(r['Fundo']||'').replace(/\s*\(8\)|\s*\(1\)|\s*\(2\)|\s*\(3\)/g,'').trim();
+  return 'https://www.google.com/search?q='+encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');
 }
-
 function isFallbackUrl(r){
-  const u = String(r['URL']||r['url']||'').trim();
-  return !(u && u.startsWith('http') && u.includes('caixa.gov.br'));
+  const u=String(r['URL']||r['url']||'').trim();
+  return !(u&&u.startsWith('http')&&u.includes('caixa.gov.br'));
 }
-
 function parseCsv(raw){if(raw.charCodeAt(0)===0xFEFF)raw=raw.slice(1);return Papa.parse(raw,{header:true,skipEmptyLines:true});}
 function toNum(v){if(v===null||v===undefined)return null;const s=String(v).trim();if(!s||s==='-'||s==='—'||s==='null')return null;const n=parseFloat(s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n;}
 function pctCell(val){if(!val||String(val).trim()===''||val==='-'||val==='—')return`<td class="col-pct"><span class="dash">—</span></td>`;const n=toNum(val);if(n===null)return`<td class="col-pct"><span class="dash">${val}</span></td>`;const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';const pct=Math.min(Math.abs(n)/20*100,100);return`<td class="col-pct"><div class="pct-wrap"><div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div><span class="pct-val ${cls}">${sign}${val}</span></div></td>`;}
 function temDados(r){const c=String(r['Cota (R$)']||'').trim();return c&&c!=='-'&&c!=='—';}
 
+/* ── KPIs do catálogo ─────────────────────────────────────────────── */
 function updateKPIs(){
   document.getElementById('kpiFundos').textContent=allRows.length;
   document.getElementById('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean)).size;
   let pl=0,best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
-  allRows.forEach(r=>{const p=toNum(r['PL (milhoes R$)']);if(p!==null)pl+=p;const m=toNum(r['Acum. 12M (%)']);if(m!==null){if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}}});
+  allRows.forEach(r=>{
+    const p=toNum(r['PL (milhoes R$)']);if(p!==null)pl+=p;
+    const m=toNum(r['Acum. 12M (%)']);
+    if(m!==null){
+      if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
+      if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}
+    }
+  });
   document.getElementById('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
   document.getElementById('kpiBest').textContent=best>-Infinity?`+${bestVal}%`:'—';
-  document.getElementById('kpiBestFundo').textContent=bestName.length > 42 ? bestName.slice(0,42)+'…' : bestName;
+  document.getElementById('kpiBestFundo').textContent=bestName.length>42?bestName.slice(0,42)+'…':bestName;
   document.getElementById('kpiWorst').textContent=worst<Infinity?`${worstVal}%`:'—';
-  document.getElementById('kpiWorstFundo').textContent=worstName.length > 42 ? worstName.slice(0,42)+'…' : worstName;
+  document.getElementById('kpiWorstFundo').textContent=worstName.length>42?worstName.slice(0,42)+'…':worstName;
 }
 
+/* ── Painel Macro (lê mercado_atual.json) ─────────────────────────── */
 function renderMacroPainel(data) {
-  const fmt = (val, casas = 2) => (val !== null && val !== undefined) ? val.toLocaleString('pt-BR', { minimumFractionDigits: casas, maximumFractionDigits: casas }) : '—';
-  
-  document.getElementById('macroSelic').innerText = fmt(data.cards.selic_meta.valor) + '% a.a.';
-  document.getElementById('macroCdi').innerText = fmt(data.cards.cdi.valor) + '% a.a.';
-  document.getElementById('macroCdiDia').innerText = fmt(data.cards.cdi_dia.valor, 4) + '%';
-  document.getElementById('macroIpca').innerText = fmt(data.cards.ipca_mes_anterior.valor) + '%';
+  const fmt = (val, casas=2) =>
+    (val !== null && val !== undefined)
+      ? val.toLocaleString('pt-BR', {minimumFractionDigits:casas, maximumFractionDigits:casas})
+      : '—';
 
-  document.getElementById('macroIbov').innerText = data.cards.ibovespa.atual ? Math.round(data.cards.ibovespa.atual).toLocaleString('pt-BR') + ' pts' : '—';
-  const varIbov = document.getElementById('macroIbovVar');
-  const vIbov = data.cards.ibovespa.variacao_mensal;
-  varIbov.innerText = (vIbov > 0 ? '+' : '') + fmt(vIbov) + '% (mês)';
-  varIbov.style.color = vIbov >= 0 ? 'var(--green)' : 'var(--red)';
+  /* Selic / CDI */
+  document.getElementById('macroSelic').innerText  = fmt(data.cards.selic_meta?.valor) + '% a.a.';
+  document.getElementById('macroCdi').innerText    = fmt(data.cards.cdi?.valor)        + '% a.a.';
+  document.getElementById('macroCdiDia').innerText = fmt(data.cards.cdi_dia?.valor, 4) + '%';
 
-  document.getElementById('macroDolar').innerText = data.cards.dolar.atual ? 'R$ ' + fmt(data.cards.dolar.atual, 4) : '—';
+  /* ── IPCA — suporta estrutura nova (cards.ipca.historico) e antiga ── */
+  const ipca = data.cards.ipca;
+  if (ipca && ipca.historico && ipca.historico.length > 0) {
+    _ipcaHistorico = ipca.historico;
+
+    const preencher = (idVal, idLabel, numVal, label) => {
+      const elV = document.getElementById(idVal);
+      const elL = document.getElementById(idLabel);
+      if (elV) elV.innerText = numVal !== null && numVal !== undefined
+        ? numVal.toFixed(2) + '%' : '—';
+      if (elL) elL.innerText = label || '—';
+    };
+
+    const anoLabel = 'Jan–' + (ipca.label_mes || '');
+
+    /* card no painel */
+    preencher('ipcaMes',  'ipcaMesLabel', ipca.ultimo_mes, ipca.label_mes);
+    preencher('ipcaAno',  'ipcaAnoLabel', ipca.acum_ano,   anoLabel);
+    const el12 = document.getElementById('ipca12m');
+    if (el12) el12.innerText = ipca.acum_12m !== null ? ipca.acum_12m.toFixed(2) + '%' : '—';
+
+    /* espelho no modal */
+    preencher('mIpcaMes',  'mIpcaMesLabel', ipca.ultimo_mes, ipca.label_mes);
+    preencher('mIpcaAno',  'mIpcaAnoLabel', ipca.acum_ano,   anoLabel);
+    const mEl12 = document.getElementById('mIpca12m');
+    if (mEl12) mEl12.innerText = ipca.acum_12m !== null ? ipca.acum_12m.toFixed(2) + '%' : '—';
+
+  } else {
+    /* fallback: estrutura antiga com ipca_mes_anterior */
+    const v = data.cards.ipca_mes_anterior?.valor;
+    ['ipcaMes','mIpcaMes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.innerText = (v !== null && v !== undefined) ? Number(v).toFixed(2) + '%' : '—';
+    });
+  }
+
+  /* Ibovespa */
+  document.getElementById('macroIbov').innerText = data.cards.ibovespa?.atual
+    ? Math.round(data.cards.ibovespa.atual).toLocaleString('pt-BR') + ' pts' : '—';
+  const varIbov  = document.getElementById('macroIbovVar');
+  const vIbov    = data.cards.ibovespa?.variacao_mensal;
+  varIbov.innerText    = (vIbov > 0 ? '+' : '') + fmt(vIbov) + '% (mês)';
+  varIbov.style.color  = vIbov >= 0 ? 'var(--green)' : 'var(--red)';
+
+  /* Dólar */
+  document.getElementById('macroDolar').innerText = data.cards.dolar?.atual
+    ? 'R$ ' + fmt(data.cards.dolar.atual, 4) : '—';
   const varDolar = document.getElementById('macroDolarVar');
-  const vDolar = data.cards.dolar.variacao_mensal;
-  varDolar.innerText = (vDolar > 0 ? '+' : '') + fmt(vDolar) + '% (mês)';
+  const vDolar   = data.cards.dolar?.variacao_mensal;
+  varDolar.innerText   = (vDolar > 0 ? '+' : '') + fmt(vDolar) + '% (mês)';
   varDolar.style.color = vDolar >= 0 ? 'var(--green)' : 'var(--red)';
 
-  document.getElementById('macroSp500').innerText = data.indices_internacionais.sp500_usd ? Math.round(data.indices_internacionais.sp500_usd).toLocaleString('pt-BR') + ' USD' : '—';
+  /* S&P 500 */
+  document.getElementById('macroSp500').innerText = data.indices_internacionais?.sp500_usd
+    ? Math.round(data.indices_internacionais.sp500_usd).toLocaleString('pt-BR') + ' USD' : '—';
 }
 
+/* ── Modal IPCA ───────────────────────────────────────────────────── */
+function openIpcaModal() {
+  document.getElementById('ipcaOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if (_ipcaHistorico.length > 0 && !_ipcaChart) buildIpcaChart(_ipcaRange);
+}
+function closeIpcaModal() {
+  document.getElementById('ipcaOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function setIpcaRange(range, btn) {
+  _ipcaRange = range;
+  document.querySelectorAll('.ipca-mtab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  buildIpcaChart(range);
+}
+function buildIpcaChart(range) {
+  const serie  = range === 0 ? _ipcaHistorico : _ipcaHistorico.slice(-range);
+  const offset = _ipcaHistorico.length - serie.length;
+  const labels  = serie.map(d => d.label);
+  const mensais = serie.map(d => parseFloat(Number(d.valor).toFixed(2)));
+  const acc12m  = serie.map((_, i) => {
+    const abs = offset + i;
+    const sl  = _ipcaHistorico.slice(Math.max(0, abs - 11), abs + 1);
+    const ac  = sl.reduce((a, d) => a * (1 + d.valor / 100), 1);
+    return parseFloat(((ac - 1) * 100).toFixed(2));
+  });
+  const ctx = document.getElementById('ipcaCanvas').getContext('2d');
+  if (_ipcaChart) { _ipcaChart.destroy(); _ipcaChart = null; }
+  _ipcaChart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'IPCA mensal (%)',
+          data: mensais,
+          yAxisID: 'y',
+          backgroundColor: mensais.map(v => v < 0 ? 'rgba(240,86,86,.45)' : 'rgba(200,151,58,.45)'),
+          borderColor:     mensais.map(v => v < 0 ? '#f05656' : '#c8973a'),
+          borderWidth: 1,
+          borderRadius: 2,
+        },
+        {
+          type: 'line',
+          label: 'Acumulado 12 meses (%)',
+          data: acc12m,
+          yAxisID: 'y2',
+          borderColor: '#5b9cf6',
+          borderWidth: 2,
+          pointRadius: 0,
+          tension: 0.4,
+          borderDash: [5, 3],
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#0d0f1a',
+          borderColor: 'rgba(200,151,58,.3)',
+          borderWidth: 1,
+          titleColor: '#c8973a',
+          bodyColor: '#6b7799',
+          callbacks: {
+            label: c => `${c.dataset.label}: ${c.parsed.y.toFixed(2)}%`
+          }
+        }
+      },
+      scales: {
+        x: {
+          ticks: { color:'#4a5270', font:{size:10}, maxRotation:45, autoSkip:true, maxTicksLimit:20 },
+          grid:  { color:'rgba(200,151,58,.05)' }
+        },
+        y: {
+          position: 'left',
+          ticks: { color:'#c8973a', font:{size:10}, callback: v => v.toFixed(1)+'%' },
+          grid:  { color:'rgba(200,151,58,.05)' },
+          title: { display:true, text:'Mensal', color:'#4a5270', font:{size:10} }
+        },
+        y2: {
+          position: 'right',
+          ticks: { color:'#5b9cf6', font:{size:10}, callback: v => v.toFixed(1)+'%' },
+          grid:  { drawOnChartArea:false },
+          title: { display:true, text:'12 meses', color:'#4a5270', font:{size:10} }
+        }
+      }
+    }
+  });
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeIpcaModal(); });
+
+/* ── Tabela e filtros ─────────────────────────────────────────────── */
 function applyFilter(){
   const q=activeSearch.toLowerCase();
   filtered=allRows.filter(r=>{
@@ -268,7 +591,14 @@ function applyFilter(){
     if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q)))return false;
     return true;
   });
-  if(sortCol>=0&&sortCol<displayHeaders.length){const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);filtered.sort((a,b)=>{const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();return av<bv?-sortDir:av>bv?sortDir:0;});}
+  if(sortCol>=0&&sortCol<displayHeaders.length){
+    const key=displayHeaders[sortCol],isNum=NUM_SET.has(key);
+    filtered.sort((a,b)=>{
+      const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();
+      const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();
+      return av<bv?-sortDir:av>bv?sortDir:0;
+    });
+  }
   currentPage=1;render();
 }
 
@@ -277,13 +607,22 @@ function render(){
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
   const rows=filtered.slice(start,end),tbody=document.getElementById('tableBody');
   tbody.innerHTML='';
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="${displayHeaders.length}" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;document.getElementById('resultInfo').textContent='0 registros';renderPagination();return;}
+  if(!rows.length){
+    tbody.innerHTML=`<tr><td colspan="${displayHeaders.length}" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
+    document.getElementById('resultInfo').textContent='0 registros';
+    renderPagination();return;
+  }
   rows.forEach(r=>{
     const tr=document.createElement('tr');
     if(!temDados(r))tr.classList.add('row-sem-dados');
     displayHeaders.forEach(h=>{
       const val=String(r[h]||'');
-      if(h==='Categoria'){const cls=CAT_CLS[val]||'RF';const td=document.createElement('td');td.className='col-cat';td.innerHTML=`<span class="cat-badge cat-${cls}">${val||'—'}</span>`;tr.appendChild(td);return;}
+      if(h==='Categoria'){
+        const cls=CAT_CLS[val]||'RF';
+        const td=document.createElement('td');td.className='col-cat';
+        td.innerHTML=`<span class="cat-badge cat-${cls}">${val||'—'}</span>`;
+        tr.appendChild(td);return;
+      }
       if(h==='Fundo'){
         const td=document.createElement('td');td.className='col-fundo';
         const url=getFundUrl(r);
@@ -293,9 +632,16 @@ function render(){
         td.innerHTML=`<a href="${url}" target="_blank" rel="noopener" title="${tooltip}">${val}${fallbackLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
         tr.appendChild(td);return;
       }
-      if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){tr.insertAdjacentHTML('beforeend',pctCell(val));return;}
-      if(h==='Perfis'){const td=document.createElement('td');const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');td.innerHTML=`<div class="perfis-wrap">${chips}</div>`;tr.appendChild(td);return;}
-      if(h==='URL')return; 
+      if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){
+        tr.insertAdjacentHTML('beforeend',pctCell(val));return;
+      }
+      if(h==='Perfis'){
+        const td=document.createElement('td');
+        const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');
+        td.innerHTML=`<div class="perfis-wrap">${chips}</div>`;
+        tr.appendChild(td);return;
+      }
+      if(h==='URL')return;
       const td=document.createElement('td');td.textContent=val||'—';tr.appendChild(td);
     });
     tbody.appendChild(tr);
@@ -304,38 +650,73 @@ function render(){
   renderPagination();
 }
 
-function renderPagination(){const total=perPage===9999?1:Math.ceil(filtered.length/perPage),c=document.getElementById('pageBtns');c.innerHTML='';const mk=(label,page,dis,act)=>{const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=label;b.disabled=dis;if(!dis)b.addEventListener('click',()=>{currentPage=page;render();});return b;};c.appendChild(mk('‹',currentPage-1,currentPage===1));let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);from=Math.max(1,to-4);for(let i=from;i<=to;i++)c.appendChild(mk(i,i,false,i===currentPage));c.appendChild(mk('›',currentPage+1,currentPage===total||total===0));}
+function renderPagination(){
+  const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
+  const c=document.getElementById('pageBtns');c.innerHTML='';
+  const mk=(label,page,dis,act)=>{
+    const b=document.createElement('button');
+    b.className='page-btn'+(act?' active':'');b.textContent=label;b.disabled=dis;
+    if(!dis)b.addEventListener('click',()=>{currentPage=page;render();});return b;
+  };
+  c.appendChild(mk('‹',currentPage-1,currentPage===1));
+  let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);from=Math.max(1,to-4);
+  for(let i=from;i<=to;i++)c.appendChild(mk(i,i,false,i===currentPage));
+  c.appendChild(mk('›',currentPage+1,currentPage===total||total===0));
+}
 
 function buildHeader(){
   const thead=document.getElementById('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
-  const visibleHeaders=displayHeaders.filter(h=>h!=='URL');
-  visibleHeaders.forEach((h,i)=>{
-    const th=document.createElement('th');th.innerHTML=`${h} <span class="si"></span>`;
+  displayHeaders.filter(h=>h!=='URL').forEach(h=>{
+    const th=document.createElement('th');
+    th.innerHTML=`${h} <span class="si"></span>`;
     const realIdx=displayHeaders.indexOf(h);
     if(realIdx===sortCol)th.className=sortDir===1?'sa':'sd';
-    th.addEventListener('click',()=>{if(sortCol===realIdx)sortDir*=-1;else{sortCol=realIdx;sortDir=-1;}thead.querySelectorAll('th').forEach(t=>t.className='');th.className=sortDir===1?'sa':'sd';applyFilter();});
+    th.addEventListener('click',()=>{
+      if(sortCol===realIdx)sortDir*=-1;else{sortCol=realIdx;sortDir=-1;}
+      thead.querySelectorAll('th').forEach(t=>t.className='');
+      th.className=sortDir===1?'sa':'sd';applyFilter();
+    });
     tr.appendChild(th);
   });
   thead.appendChild(tr);
 }
 
-function setActiveChip(container,selector,active){container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));active.classList.add('active');}
+function setActiveChip(container,selector,active){
+  container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));
+  active.classList.add('active');
+}
 
-function buildCatFilters(cats){const row=document.getElementById('catFilters');const label=row.querySelector('.filter-label');row.innerHTML='';row.appendChild(label);const all=document.createElement('button');all.className='chip active';all.dataset.cat='';all.textContent='Todas';all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});row.appendChild(all);[...cats].sort().forEach(cat=>{const b=document.createElement('button');b.className='chip';b.dataset.cat=cat;b.textContent=cat;b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});row.appendChild(b);});}
+function buildCatFilters(cats){
+  const row=document.getElementById('catFilters');
+  const label=row.querySelector('.filter-label');row.innerHTML='';row.appendChild(label);
+  const all=document.createElement('button');all.className='chip active';all.dataset.cat='';all.textContent='Todas';
+  all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});
+  row.appendChild(all);
+  [...cats].sort().forEach(cat=>{
+    const b=document.createElement('button');b.className='chip';b.dataset.cat=cat;b.textContent=cat;
+    b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});
+    row.appendChild(b);
+  });
+}
 
-document.getElementById('perfilFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-perfil]');if(!btn)return;activePerfil=btn.dataset.perfil;setActiveChip(document.getElementById('perfilFilters'),'[data-perfil]',btn);applyFilter();});
+/* ── Listeners ────────────────────────────────────────────────────── */
+document.getElementById('perfilFilters').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-perfil]');if(!btn)return;
+  activePerfil=btn.dataset.perfil;
+  setActiveChip(document.getElementById('perfilFilters'),'[data-perfil]',btn);applyFilter();
+});
 document.getElementById('searchInput').addEventListener('input',e=>{activeSearch=e.target.value;applyFilter();});
 document.getElementById('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
 document.getElementById('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;applyFilter();});
 
+/* ── Bootstrap ────────────────────────────────────────────────────── */
 function carregarDados(){
-  const cacheBuster = '?v=' + Date.now();
-  
+  const cb='?v='+Date.now();
   Promise.all([
-    fetch('dados_atuais.csv' + cacheBuster).then(r => r.text()),
-    fetch('mercado_atual.json' + cacheBuster).then(r => r.json())
+    fetch('dados_atuais.csv'+cb).then(r=>r.text()),
+    fetch('mercado_atual.json'+cb).then(r=>r.json())
   ])
-  .then(([csvRaw, macroData]) => {
+  .then(([csvRaw, macroData])=>{
     renderMacroPainel(macroData);
 
     const result=parseCsv(csvRaw);allRows=result.data;
@@ -343,16 +724,16 @@ function carregarDados(){
     displayHeaders=headers.filter(h=>!['fundo_norm','perfil'].includes(h.toLowerCase()));
     const di=displayHeaders.indexOf(DEFAULT_SORT);if(di>=0){sortCol=di;sortDir=-1;}
     const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
-    
+
     buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
-    
+
     document.getElementById('loadMsg').style.display='none';
     document.getElementById('mainTable').style.display='table';
-    
     document.getElementById('lastUpdate').innerHTML=`<span class="live-dot"></span>Robô: ${macroData.atualizado_em}`;
   })
   .catch(err=>{
-    document.getElementById('loadMsg').innerHTML=`<div style="color:var(--red)">Erro na sincronização de dados do ecossistema.<br><small>${err.message}</small></div>`;
+    document.getElementById('loadMsg').innerHTML=
+      `<div style="color:var(--red)">Erro na sincronização de dados do ecossistema.<br><small>${err.message}</small></div>`;
   });
 }
 
