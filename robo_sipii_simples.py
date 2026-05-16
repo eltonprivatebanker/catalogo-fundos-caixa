@@ -505,81 +505,47 @@ class ColetorMercado:
         return None
 
     # ── IPCA — base local + delta ──────────────────────────────────────────
-
-    def _carregar_base_ipca(self):
-        """
-        Carrega ipca_historico_base.json do repositório.
-        Esse arquivo contém a série histórica completa desde 1980
-        e é commitado pelo GitHub Actions a cada execução.
-        """
-        if IPCA_BASE_PATH.exists():
-            try:
-                dados = json.loads(IPCA_BASE_PATH.read_text(encoding="utf-8"))
+def _carregar_base_ipca(self):
+    """
+    Carrega ipca_historico_base.json do repositório.
+    Se o arquivo não existir (primeira execução), baixa a série
+    histórica completa do BCB automaticamente — sem script externo.
+    """
+    if IPCA_BASE_PATH.exists():
+        try:
+            dados = json.loads(IPCA_BASE_PATH.read_text(encoding="utf-8"))
+            if dados:
                 log(f"[IPCA] Base local: {len(dados)} meses carregados.")
                 return dados
-            except Exception as e:
-                log(f"[IPCA] Erro ao ler base local: {e}")
-        log("[IPCA] Base local não encontrada — iniciando vazia.")
-        return []
-
-    def _buscar_ipca_delta(self, meses=3):
-        """
-        Busca apenas os últimos N meses na API do BCB.
-        Requisição leve (~3 registros) — sem risco de timeout.
-        Retry automático com backoff exponencial.
-        """
-        for tentativa in range(3):
-            try:
-                url = (
-                    f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433"
-                    f"/dados/ultimos/{meses}?formato=json"
-                )
-                res = requests.get(url, headers=self.headers, timeout=20)
-                if res.status_code == 200:
-                    dados = res.json()
-                    if dados:
-                        log(f"[IPCA] Delta BCB: {len(dados)} meses recebidos.")
-                        return dados
-            except Exception as e:
-                log(f"[IPCA] Delta tentativa {tentativa + 1} falhou: {e}")
-                time.sleep(5 * (tentativa + 1))  # 5s → 10s → 15s
-        log("[IPCA] Delta indisponível — usando apenas a base local.")
-        return []
-
-    def _merge_ipca(self, base, delta):
-        """
-        Combina base local com delta da API.
-        Chave de deduplicação: campo 'data' (ex: '01/04/2026').
-        Retorna lista ordenada cronologicamente por ano e mês.
-        """
-        index = {item["data"]: item for item in base}
-        for item in delta:
-            d, m, y = item["data"].split("/")
-            index[item["data"]] = {
-                "data":  item["data"],
-                "label": f"{MESES_PT[int(m)-1]}/{y}",
-                "valor": round(float(item["valor"]), 4),
-            }
-        return sorted(
-            index.values(),
-            key=lambda x: (x["data"].split("/")[2], x["data"].split("/")[1])
-        )
-
-    def _salvar_base_ipca(self, historico):
-        """
-        Persiste ipca_historico_base.json atualizado.
-        O GitHub Actions commita esse arquivo junto com
-        dados_atuais.csv e mercado_atual.json.
-        """
-        try:
-            IPCA_BASE_PATH.write_text(
-                json.dumps(historico, ensure_ascii=False, indent=2),
-                encoding="utf-8"
-            )
-            log(f"[IPCA] Base salva: {len(historico)} meses → {IPCA_BASE_PATH.name}")
         except Exception as e:
-            log(f"[IPCA] Erro ao salvar base: {e}")
+            log(f"[IPCA] Erro ao ler base local: {e}")
 
+    # Primeira execução: base ausente → baixa série completa do BCB
+    log("[IPCA] Base local ausente — baixando série histórica completa do BCB...")
+    for tentativa in range(3):
+        try:
+            url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json"
+            res = requests.get(url, headers=self.headers, timeout=60)
+            if res.status_code == 200:
+                raw = res.json()
+                if raw:
+                    historico = []
+                    for item in raw:
+                        d, m, y = item["data"].split("/")
+                        historico.append({
+                            "data":  item["data"],
+                            "label": f"{MESES_PT[int(m)-1]}/{y}",
+                            "valor": round(float(item["valor"]), 4),
+                        })
+                    log(f"[IPCA] Série completa obtida: {len(historico)} meses.")
+                    return historico
+        except Exception as e:
+            log(f"[IPCA] Tentativa {tentativa + 1} falhou: {e}")
+            time.sleep(10 * (tentativa + 1))
+
+    log("[IPCA] Não foi possível baixar a série histórica completa.")
+    return []
+   
     # ── Cálculos de acumulado ──────────────────────────────────────────────
 
     def _acumular(self, serie, n_meses):
