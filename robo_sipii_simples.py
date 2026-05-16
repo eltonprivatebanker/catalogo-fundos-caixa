@@ -662,7 +662,7 @@ class ColetorMercado:
         poupanca_nova = self._buscar_bcb(196)   # Poupança nova % m.m.
 
         # ── IPCA: base local + delta (apenas últimos 3 meses via API) ─────
-        base_ipca  = self._carregar_base_ipca()
+        base_ipca = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
         ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
 
@@ -703,20 +703,23 @@ class ColetorMercado:
             "cards": {
                 "selic_meta": {"valor": selic_meta, "unidade": "% a.a."},
                 "cdi": {
-                    "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
+                    "valor":    round(selic_meta - 0.10, 4) if selic_meta else None,
                     "unidade": "% a.a.",
                 },
                 "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
-                # bloco IPCA completo — lido pelo index.html
+                # bloco IPCA completo estruturado com metas para enquadramento no index.html
                 "ipca": {
                     "ultimo_mes": ipca_ultimo_mes,
                     "label_mes":  ipca_label_mes,
                     "acum_ano":   ipca_acum_ano,
                     "acum_12m":   ipca_acum_12m,
                     "historico":  ipca_historico,
+                    "meta_central": 3.0,
+                    "meta_superior": 4.5,
+                    "meta_inferior": 1.5,
                     "unidade":    "%",
                 },
-                # mantido para compatibilidade com versões anteriores do HTML
+                # mantido para compatibilidade histórica do HTML anterior
                 "ipca_mes_anterior": {"valor": ipca_ultimo_mes, "unidade": "%"},
                 "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
                 "ibovespa": {
@@ -758,7 +761,7 @@ def executar():
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
 
         n_hist = len(indicadores["cards"]["ipca"]["historico"])
-        log(f"[SUCESSO] JSON salvo: {caminho_json} | IPCA histórico: {n_hist} meses")
+        log(f"[SUCESSO] JSON saved: {caminho_json} | IPCA histórico: {n_hist} meses")
 
     except Exception as e:
         log(f"[ERRO] Falha ao processar dados de mercado: {e}")
