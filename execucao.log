@@ -1322,3 +1322,11 @@
 [05:29:10] [IPCA] 0.67% (abr/2026) | Ano: 2.6043% | 12M: 4.3917% | Série: 556 meses
 [05:29:11] [SUCESSO] JSON salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/mercado_atual.json | IPCA histórico: 556 meses
 [05:29:11] SUCESSO: Processo finalizado.
+[05:45:53] ⚡ [MODO MERCADO] Coletando indicadores macro + IPCA histórico...
+[05:45:53] [MERCADO] Coletando indicadores macro e índices internacionais...
+[05:46:02] [IPCA] Base local: 556 meses carregados.
+[05:46:03] [IPCA] Delta BCB: 3 meses recebidos.
+[05:46:03] [IPCA] Base salva: 556 meses → ipca_historico_base.json
+[05:46:03] [IPCA] 0.67% (abr/2026) | Ano: 2.6043% | 12M: 4.3917% | Série: 556 meses
+[05:46:03] [SUCESSO] JSON saved: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/mercado_atual.json | IPCA histórico: 556 meses
+[05:46:03] SUCESSO: Processo finalizado.
