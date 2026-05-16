@@ -1307,3 +1307,6 @@
 [04:35:33] [IPCA] Série histórica indisponível — usando fallback vazio.
 [04:35:34] [SUCESSO] JSON salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/mercado_atual.json | IPCA histórico: 0 meses
 [04:35:34] SUCESSO: Processo finalizado.
+[05:04:04] ⚡ [MODO MERCADO] Coletando indicadores macro + IPCA histórico...
+[05:04:04] [ERRO] Falha ao processar dados de mercado: 'ColetorMercado' object has no attribute 'coletar_todos'
+[05:04:04] SUCESSO: Processo finalizado.
