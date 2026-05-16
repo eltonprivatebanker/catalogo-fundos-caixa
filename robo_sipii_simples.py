@@ -576,55 +576,12 @@ class ColetorMercado:
 
 
 # ---------------------------------------------------------------------------
-# Ponto de entrada
+# Ponto de entrada — VERSÃO DE TESTE RÁPIDO ⚡
 # ---------------------------------------------------------------------------
 def executar():
-    log("INICIANDO ROBÔ SIPII v10 - GITHUB EDITION")
+    log("⚡ [MODO TESTE] Iniciando apenas o Coletor de Mercado...")
 
-    if DEBUG_COLUNAS:
-        driver = configurar_driver(headless=False)
-        try:
-            abrir_site_e_preparar(driver,"PF","PESSOA FÍSICA")
-            cats = descobrir_categorias(driver)
-            if cats:
-                clicar_por_texto(driver,cats[0]["texto_tela"]); esperar_ajax(driver); time.sleep(1.5)
-                extrair_dados_tabela(driver,cats[0]["csv"],"PF")
-        finally: encerrar_driver(driver)
-        return
-
-    log(f"ETAPA 1 — Coletando URLs dinâmicas ({len(CAIXA_LISTING_PAGES)} páginas CAIXA)...")
-    registros_dinamicos = raspar_urls_caixa()
-
-    log("ETAPA 2 — Coletando dados do SIPII...")
-    todos = []
-    for p in PERFIS:
-        todos.extend(processar_perfil(p, headless=True))
-
-    df_final = consolidar(todos)
-    if df_final.empty:
-        log("ATENÇÃO: Nenhum dado coletado."); return
-
-    log("ETAPA 3 — Associando URLs (116 estáticas + dinâmico)...")
-    df_final["URL"] = df_final["Fundo"].apply(lambda n: encontrar_url(n, registros_dinamicos))
-
-    com_url = (df_final["URL"] != "").sum()
-    sem_url = (df_final["URL"] == "").sum()
-    log(f"  Dicionário estático : {len(URL_ESTATICO)} entradas")
-    log(f"  URLs encontradas    : {com_url}/{len(df_final)}")
-    log(f"  Sem URL             : {sem_url}/{len(df_final)}")
-    if sem_url > 0:
-        log("  Fundos SEM URL:")
-        for n in df_final[df_final["URL"]==""]['Fundo'].tolist():
-            log(f"    - {n[:75]}")
-
-    data_str = datetime.now().strftime("%Y%m%d")
-    caminho_csv = BASE_DIR / "dados_atuais.csv"
-    df_final.to_csv(caminho_csv, index=False, encoding="utf-8-sig")
-    log(f"CSV salvo: {caminho_csv}")
-    df_final.to_csv(BASE_DIR / f"sipii_caixa_{data_str}.csv", index=False, encoding="utf-8-sig")
-    salvar_excel(df_final, BASE_DIR / f"sipii_caixa_{data_str}.xlsx")
-
-    # ─── NOVA ETAPA: EXECUÇÃO DO COLETOR DE MERCADO MACRO ──────────────────
+    # ─── EXECUTA DIRETO A NOVA ETAPA (SEM ENTRAR NO SIPII) ──────────────────
     try:
         import json
         coletor = ColetorMercado()
@@ -636,7 +593,7 @@ def executar():
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
             
         log(f"[SUCESSO] Dados de mercado integrados e salvos em: {caminho_json}")
-   except Exception as e:
+    except Exception as e:
         log(f"[ERRO] Falha ao processar dados de mercado: {e}")
     # ───────────────────────────────────────────────────────────────────────
 
