@@ -403,6 +403,7 @@ footer span{color:var(--gold)}
   <div class="rankings-grid" id="rankingsGrid">
     <div style="text-align:center;padding:50px;color:var(--muted)">Carregando dados...</div>
   </div>
+  <div id="ibovCdiCard" style="margin-top:18px"></div>
 </div>
 
 <!-- ── TAB: COMPARADOR ── -->
@@ -966,6 +967,7 @@ function switchTab(tab){
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));
   document.querySelectorAll('.tab-panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+tab));
   if(tab==='rankings'&&allRows.length)renderRankings();
+  if(tab==='rankings')renderIbovCDIChart();
   if(tab==='comparador')renderComparador();
   if(tab==='scatter'&&allRows.length)renderScatter();
 }
@@ -1140,6 +1142,151 @@ function updateCatInsight(){
   }else{
     div.style.display='none';
   }
+}
+
+// ═══════════════════════════════════════════════════════════
+// IBOVESPA vs CDI — RETORNO ANUAL HISTÓRICO
+// ═══════════════════════════════════════════════════════════
+const IBOV_CDI_ANUAL=[
+  {a:'1997',i:44.83,c:24.53},{a:'1998',i:-33.46,c:28.61},{a:'1999',i:151.93,c:25.17},
+  {a:'2000',i:-10.72,c:17.33},{a:'2001',i:-11.02,c:17.27},{a:'2002',i:-17.01,c:19.09},
+  {a:'2003',i:97.34,c:23.28},{a:'2004',i:17.81,c:16.17},{a:'2005',i:27.71,c:19.00},
+  {a:'2006',i:32.93,c:15.05},{a:'2007',i:43.65,c:11.82},{a:'2008',i:-41.22,c:12.37},
+  {a:'2009',i:82.66,c:9.90}, {a:'2010',i:1.04,c:9.74},  {a:'2011',i:-18.11,c:11.59},
+  {a:'2012',i:7.40,c:8.41},  {a:'2013',i:-15.50,c:8.05},{a:'2014',i:-2.91,c:10.81},
+  {a:'2015',i:-13.31,c:13.23},{a:'2016',i:38.94,c:14.00},{a:'2017',i:26.86,c:9.95},
+  {a:'2018',i:15.03,c:6.42}, {a:'2019',i:31.58,c:5.97}, {a:'2020',i:2.92,c:2.77},
+  {a:'2021',i:-11.93,c:4.40},{a:'2022',i:4.69,c:12.37}, {a:'2023',i:22.28,c:13.05},
+  {a:'2024',i:-10.36,c:10.87},{a:'2025',i:33.95,c:14.31},{a:'YTD*',i:10.03,c:5.10}
+];
+
+function renderIbovCDIChart(){
+  const container=document.getElementById('ibovCdiCard');
+  if(!container)return;
+  const data=IBOV_CDI_ANUAL;
+  const anos=data.filter(d=>d.a!=='YTD*');
+  const ibovWins=anos.filter(d=>d.i>d.c).length;
+  const total=anos.length;
+  const maxIbov=Math.max(...data.map(d=>d.i));
+  const minIbov=Math.min(...data.map(d=>d.i));
+  const maxD=data.find(d=>d.i===maxIbov);
+  const minD=data.find(d=>d.i===minIbov);
+
+  // ── Tiles (placar ano a ano) ──
+  const tiles=data.map(d=>{
+    const diff=d.i-d.c;
+    const ytd=d.a==='YTD*';
+    let bg,border,ibovColor,icon;
+    if(d.i<0){
+      bg='rgba(240,86,86,.13)';border='rgba(240,86,86,.35)';ibovColor='#f05656';icon='📉';
+    } else if(diff>=0){
+      bg='rgba(251,146,60,.13)';border='rgba(251,146,60,.35)';ibovColor='#fb923c';icon='🟠';
+    } else {
+      bg='rgba(91,156,246,.13)';border='rgba(91,156,246,.35)';ibovColor='#facc15';icon='🔵';
+    }
+    const ibovTxt=d.i>0?`+${d.i.toFixed(1)}%`:d.i.toFixed(1)+'%';
+    const diffTxt=diff>0?`+${diff.toFixed(1)}pp`:`${diff.toFixed(1)}pp`;
+    const diffColor=diff>=0?'var(--orange)':'var(--blue)';
+    return`<div title="${d.a} — Ibov ${ibovTxt} | CDI +${d.c.toFixed(1)}% | Diferença ${diffTxt}" style="background:${bg};border:1px solid ${border};border-radius:8px;padding:8px 4px;text-align:center;opacity:${ytd?0.7:1};cursor:default;transition:transform .15s" onmouseenter="this.style.transform='scale(1.06)'" onmouseleave="this.style.transform='scale(1)'">
+      <div style="font-size:.58rem;color:var(--muted2);margin-bottom:3px">${d.a}</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;color:${ibovColor};line-height:1">${ibovTxt}</div>
+      <div style="font-size:.55rem;color:var(--muted);margin-top:2px">CDI +${d.c.toFixed(1)}%</div>
+      <div style="font-size:.6rem;font-weight:700;color:${diffColor};margin-top:2px">${diffTxt}</div>
+    </div>`;
+  }).join('');
+
+  // ── Premium/Discount SVG chart ──
+  const diffs=data.map(d=>({a:d.a,v:parseFloat((d.i-d.c).toFixed(2))}));
+  const W=900,H=160,PL=46,PR=12,PT=14,PB=34;
+  const plotW=W-PL-PR,plotH=H-PT-PB;
+  const YMAX=80,YMIN=-60,RANGE=YMAX-YMIN;
+  const py=v=>PT+plotH-((Math.min(Math.max(v,YMIN),YMAX)-YMIN)/RANGE)*plotH;
+  const zY=py(0);
+  const GW=plotW/diffs.length;
+  const BW=Math.max(8,Math.min(20,GW*0.7));
+
+  let s=`<rect x="${PL}" y="${PT}" width="${plotW}" height="${plotH}" fill="#0d0f1a" rx="3"/>`;
+  // Grid
+  [-60,-40,-20,0,20,40,60,80].forEach(v=>{
+    const gy=py(v);
+    s+=`<line x1="${PL}" y1="${gy.toFixed(1)}" x2="${PL+plotW}" y2="${gy.toFixed(1)}" stroke="${v===0?'rgba(255,255,255,.25)':'rgba(255,255,255,.05)'}" stroke-width="${v===0?2:1}"/>`;
+    s+=`<text x="${(PL-5).toFixed(1)}" y="${(gy+3.5).toFixed(1)}" text-anchor="end" fill="#4a5270" font-size="9">${v>0?'+':''}${v}pp</text>`;
+  });
+  // Highlight 2010-2015
+  const i10=diffs.findIndex(d=>d.a==='2010'),i15=diffs.findIndex(d=>d.a==='2015');
+  const hx1=PL+i10*GW,hx2=PL+(i15+1)*GW;
+  s+=`<rect x="${hx1.toFixed(1)}" y="${PT}" width="${(hx2-hx1).toFixed(1)}" height="${plotH}" fill="rgba(91,156,246,.06)" rx="2"/>`;
+  s+=`<text x="${((hx1+hx2)/2).toFixed(1)}" y="${(PT+9).toFixed(1)}" text-anchor="middle" fill="rgba(91,156,246,.5)" font-size="8" font-style="italic">6 anos CDI&gt;Ibov</text>`;
+  // Bars
+  diffs.forEach((d,i)=>{
+    const cx=PL+i*GW+GW/2;
+    const bY=py(Math.max(d.v,0)),bH=Math.abs(py(0)-py(d.v));
+    const col=d.v>=0?'#fb923c':'#5b9cf6';
+    const ytd=d.a==='YTD*';
+    s+=`<rect x="${(cx-BW/2).toFixed(1)}" y="${(d.v>=0?bY:zY).toFixed(1)}" width="${BW}" height="${Math.max(bH,1.5).toFixed(1)}" fill="${col}" fill-opacity="${ytd?0.5:0.85}" rx="1"/>`;
+    // Cap label for 1999
+    if(Math.abs(d.v)>YMAX){
+      s+=`<text x="${cx.toFixed(1)}" y="${(PT+8).toFixed(1)}" text-anchor="middle" fill="${col}" font-size="7" font-weight="bold">+${d.v.toFixed(0)}</text>`;
+    }
+    // X labels every 4 years or YTD
+    if(i%4===0||ytd){
+      s+=`<text x="${cx.toFixed(1)}" y="${(H-5).toFixed(1)}" text-anchor="middle" fill="#4a5270" font-size="9">${d.a}</text>`;
+    }
+  });
+  s+=`<line x1="${PL}" y1="${PT}" x2="${PL}" y2="${(PT+plotH).toFixed(1)}" stroke="#4a5270" stroke-width="1"/>`;
+  s+=`<line x1="${PL}" y1="${(PT+plotH).toFixed(1)}" x2="${(PL+plotW).toFixed(1)}" y2="${(PT+plotH).toFixed(1)}" stroke="#4a5270" stroke-width="1"/>`;
+
+  container.innerHTML=`<div class="ranking-card">
+    <div class="ranking-card-hdr">
+      <div>
+        <div class="ranking-card-title">📊 Ibovespa vs CDI — Retorno Anual (1997–2026)</div>
+        <div class="ranking-card-sub">Passe o mouse nos tiles para ver os detalhes de cada ano</div>
+      </div>
+    </div>
+
+    <!-- 4 big numbers -->
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--border2)">
+      <div style="padding:18px;text-align:center;border-right:1px solid var(--border2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--orange);line-height:1">${ibovWins}</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:5px">de ${total} anos<br><strong style="color:var(--orange)">Ibov bateu o CDI</strong></div>
+      </div>
+      <div style="padding:18px;text-align:center;border-right:1px solid var(--border2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--blue);line-height:1">${total-ibovWins}</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:5px">de ${total} anos<br><strong style="color:var(--blue)">CDI bateu o Ibov</strong></div>
+      </div>
+      <div style="padding:18px;text-align:center;border-right:1px solid var(--border2)">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--green);line-height:1">+${maxIbov.toFixed(0)}%</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:5px">melhor ano do Ibov<br><strong style="color:var(--green)">${maxD.a} · CDI foi +${maxD.c.toFixed(1)}%</strong></div>
+      </div>
+      <div style="padding:18px;text-align:center">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--red);line-height:1">${minIbov.toFixed(0)}%</div>
+        <div style="font-size:.68rem;color:var(--muted);margin-top:5px">pior ano do Ibov<br><strong style="color:var(--red)">${minD.a} · CDI foi +${minD.c.toFixed(1)}%</strong></div>
+      </div>
+    </div>
+
+    <!-- Tiles placar -->
+    <div style="padding:16px 18px;border-bottom:1px solid var(--border2)">
+      <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:10px;display:flex;align-items:center;gap:12px">
+        Placar Ano a Ano
+        <span style="font-weight:400;text-transform:none;letter-spacing:0">
+          <span style="display:inline-flex;align-items:center;gap:4px;margin-right:10px"><span style="width:8px;height:8px;background:rgba(251,146,60,.5);border-radius:2px;display:inline-block"></span>Ibov venceu</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;margin-right:10px"><span style="width:8px;height:8px;background:rgba(250,204,21,.5);border-radius:2px;display:inline-block"></span>Ibov + mas abaixo CDI</span>
+          <span style="display:inline-flex;align-items:center;gap:4px"><span style="width:8px;height:8px;background:rgba(240,86,86,.5);border-radius:2px;display:inline-block"></span>Ibov negativo</span>
+        </span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:5px">${tiles}</div>
+    </div>
+
+    <!-- Premium chart -->
+    <div style="padding:14px 18px 12px">
+      <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);margin-bottom:8px">
+        Prêmio de Risco — Ibov <em>menos</em> CDI por ano (pp) &nbsp;·&nbsp;
+        <span style="color:var(--orange);font-weight:600">acima do zero = Ibov valeu a pena</span> &nbsp;
+        <span style="color:var(--blue);font-weight:600">abaixo = CDI ganhou</span>
+      </div>
+      <svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-height:155px">${s}</svg>
+    </div>
+  </div>`;
 }
 
 // ═══════════════════════════════════════════════════════════
