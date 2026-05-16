@@ -1,14 +1,17 @@
 """
-ROBÔ SIPII CAIXA — v11 (Edição GitHub Repository)
+ROBÔ SIPII CAIXA — v12 (Edição GitHub Repository)
 Estratégia de URLs em duas camadas:
   1. Dicionário estático: 116 URLs validadas manualmente
   2. Scraping dinâmico: captura URLs de novos fundos nas páginas da CAIXA
   Resultado esperado: ~149/171 fundos com URL real
 
-  v11 — IPCA agora salva série histórica completa (120 meses) no JSON
-        para alimentar o gráfico interativo do index.html
+  v12 — IPCA com base histórica local (ipca_historico_base.json)
+        A cada execução busca apenas os últimos 3 meses na API do BCB (delta),
+        faz merge com a base local e salva tudo de volta.
+        Zero dependência de requisições longas — sem risco de timeout.
 """
 
+import json
 from pathlib import Path
 from datetime import datetime
 import time, unicodedata, traceback, re, requests
@@ -64,11 +67,12 @@ CAIXA_LISTING_PAGES = [
     "https://www.caixa.gov.br/fundos-investimento/rpps/Paginas/default.aspx",
 ]
 
+MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
+
 # ---------------------------------------------------------------------------
 # Dicionário estático — 116 URLs validadas manualmente
 # ---------------------------------------------------------------------------
 URL_ESTATICO = {
-    # ── Validadas em 18/04/2026 (93) ────────────────────────────────────
     "CAIXA BRASIL INFLACAO ATIVA FIF RF CRED PRIV": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/brasil-IPCA",
     "CAIXA CAPITAL PROTEGIDO IBOVESPA CICLICO I FIC FIF MM": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-capital-protegido-ibovespa-ciclico-1-multimercado",
     "CAIXA ETF IBOVESPA FUNDO DE INDICE": "https://www.caixa.gov.br/fundos-investimento/fundos-de-indices/etf-ibovespa-fundo-de-indice/",
@@ -162,8 +166,6 @@ URL_ESTATICO = {
     "CAIXA FIF SAUDE SUPLEMENTAR ANS II RF LP -": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fi-saude-suplementar-ans-ii-rf-longo-prazo",
     "CAIXA FIF SAUDE SUPLEMENTAR ANS RF LP -": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fi-saude-suplementar-anf-rf",
     "FIC FIF CAIXA EXPERT BTG PACTUAL X10 MM LP": "https://www.caixa.gov.br/fundos-investimento/multimercado/btg-pactual-x10-multimercado-longo-prazo/",
-
-    # ── Validadas em 30/04/2026 (23 novas) ──────────────────────────────
     "CAIXA FIC FIF OBJETIVO PRE RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-objetivo-pre-rf-longo-prazo/Paginas/default.aspx",
     "CAIXA FIC FIF PERFORMANCE IMA-B RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-performance-ima-b-renda-fixa-longo-prazo/Paginas/default.aspx",
     "CAIXA FIC FIF PLUS QUALI RF CREDI PRIV LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-plus-qualificado-rf-credito-privado-longo-prazo/Paginas/default.aspx",
@@ -194,8 +196,9 @@ DEBUG_COLUNAS = False
 # ---------------------------------------------------------------------------
 # Utilidades
 # ---------------------------------------------------------------------------
-BASE_DIR = Path.cwd()
-LOG_PATH = BASE_DIR / "execucao.log"
+BASE_DIR      = Path.cwd()
+LOG_PATH      = BASE_DIR / "execucao.log"
+IPCA_BASE_PATH = BASE_DIR / "ipca_historico_base.json"
 
 def log(msg):
     linha = f"[{datetime.now().strftime('%H:%M:%S')}] {msg}"
@@ -488,7 +491,7 @@ class ColetorMercado:
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
 
-    # ── Helpers BCB ────────────────────────────────────────────────────────
+    # ── BCB — valor pontual ────────────────────────────────────────────────
 
     def _buscar_bcb(self, codigo_serie):
         """Busca o último valor de uma série do SGS/BCB."""
@@ -501,32 +504,88 @@ class ColetorMercado:
             pass
         return None
 
-    def _buscar_ipca_historico(self, meses=120):
+    # ── IPCA — base local + delta ──────────────────────────────────────────
+
+    def _carregar_base_ipca(self):
         """
-        Busca a série histórica completa do IPCA (série 433).
-        Retorna lista de dicts: [{"data": "01/04/2026", "valor": "0.43"}, ...]
-        Solicita 'meses' entradas para alimentar o gráfico do painel.
+        Carrega ipca_historico_base.json do repositório.
+        Esse arquivo contém a série histórica completa desde 1980
+        e é commitado pelo GitHub Actions a cada execução.
+        """
+        if IPCA_BASE_PATH.exists():
+            try:
+                dados = json.loads(IPCA_BASE_PATH.read_text(encoding="utf-8"))
+                log(f"[IPCA] Base local: {len(dados)} meses carregados.")
+                return dados
+            except Exception as e:
+                log(f"[IPCA] Erro ao ler base local: {e}")
+        log("[IPCA] Base local não encontrada — iniciando vazia.")
+        return []
+
+    def _buscar_ipca_delta(self, meses=3):
+        """
+        Busca apenas os últimos N meses na API do BCB.
+        Requisição leve (~3 registros) — sem risco de timeout.
+        Retry automático com backoff exponencial.
+        """
+        for tentativa in range(3):
+            try:
+                url = (
+                    f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433"
+                    f"/dados/ultimos/{meses}?formato=json"
+                )
+                res = requests.get(url, headers=self.headers, timeout=20)
+                if res.status_code == 200:
+                    dados = res.json()
+                    if dados:
+                        log(f"[IPCA] Delta BCB: {len(dados)} meses recebidos.")
+                        return dados
+            except Exception as e:
+                log(f"[IPCA] Delta tentativa {tentativa + 1} falhou: {e}")
+                time.sleep(5 * (tentativa + 1))  # 5s → 10s → 15s
+        log("[IPCA] Delta indisponível — usando apenas a base local.")
+        return []
+
+    def _merge_ipca(self, base, delta):
+        """
+        Combina base local com delta da API.
+        Chave de deduplicação: campo 'data' (ex: '01/04/2026').
+        Retorna lista ordenada cronologicamente por ano e mês.
+        """
+        index = {item["data"]: item for item in base}
+        for item in delta:
+            d, m, y = item["data"].split("/")
+            index[item["data"]] = {
+                "data":  item["data"],
+                "label": f"{MESES_PT[int(m)-1]}/{y}",
+                "valor": round(float(item["valor"]), 4),
+            }
+        return sorted(
+            index.values(),
+            key=lambda x: (x["data"].split("/")[2], x["data"].split("/")[1])
+        )
+
+    def _salvar_base_ipca(self, historico):
+        """
+        Persiste ipca_historico_base.json atualizado.
+        O GitHub Actions commita esse arquivo junto com
+        dados_atuais.csv e mercado_atual.json.
         """
         try:
-            url = (
-                f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433"
-                f"/dados/ultimos/{meses}?formato=json"
+            IPCA_BASE_PATH.write_text(
+                json.dumps(historico, ensure_ascii=False, indent=2),
+                encoding="utf-8"
             )
-            res = requests.get(url, headers=self.headers, timeout=15)
-            if res.status_code == 200:
-                log(f"[IPCA] {meses} meses históricos obtidos com sucesso.")
-                return res.json()
+            log(f"[IPCA] Base salva: {len(historico)} meses → {IPCA_BASE_PATH.name}")
         except Exception as e:
-            log(f"[IPCA] Erro ao buscar histórico: {e}")
-        return []
+            log(f"[IPCA] Erro ao salvar base: {e}")
 
     # ── Cálculos de acumulado ──────────────────────────────────────────────
 
     def _acumular(self, serie, n_meses):
-        """Acumula os últimos n_meses da série."""
-        fatias = serie[-n_meses:]
+        """Acumula os últimos N meses da série pelo produto de fatores."""
         acc = 1.0
-        for item in fatias:
+        for item in serie[-n_meses:]:
             try:
                 acc *= (1 + float(item["valor"]) / 100)
             except (ValueError, KeyError):
@@ -534,12 +593,11 @@ class ColetorMercado:
         return round((acc - 1) * 100, 4)
 
     def _acumular_ano(self, serie):
-        """Acumula do primeiro mês do ano corrente até o último dado."""
+        """Acumula todos os meses do ano corrente até o último dado disponível."""
         if not serie:
             return None
         ultimo_ano = serie[-1]["data"].split("/")[2]
         acc = 1.0
-        # Percorre de trás pra frente até sair do ano corrente
         for item in reversed(serie):
             if item["data"].split("/")[2] != ultimo_ano:
                 break
@@ -552,7 +610,7 @@ class ColetorMercado:
     # ── Yahoo Finance ──────────────────────────────────────────────────────
 
     def _buscar_yahoo(self, ticker):
-        """Busca cotação atual e fechamento ~30 dias atrás via Yahoo Finance."""
+        """Busca cotação atual e fechamento ~22 dias úteis atrás (≈1 mês)."""
         try:
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=2mo&interval=1d"
             res = requests.get(url, headers=self.headers, timeout=10)
@@ -560,9 +618,10 @@ class ColetorMercado:
                 quotes = res.json()['chart']['result'][0]['indicators']['quote'][0]['close']
                 quotes = [q for q in quotes if q is not None]
                 if quotes:
-                    atual    = quotes[-1]
-                    anterior = quotes[-22] if len(quotes) >= 22 else quotes[0]
-                    return {"atual": atual, "anterior": anterior}
+                    return {
+                        "atual":    quotes[-1],
+                        "anterior": quotes[-22] if len(quotes) >= 22 else quotes[0],
+                    }
         except Exception:
             pass
         return {"atual": None, "anterior": None}
@@ -577,41 +636,34 @@ class ColetorMercado:
         cdi_hoje      = self._buscar_bcb(12)    # CDI diário %
         poupanca_nova = self._buscar_bcb(196)   # Poupança nova % m.m.
 
-        # ── IPCA — série histórica completa (120 meses = ~10 anos) ────────
-        MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
-        ipca_serie = self._buscar_ipca_historico(meses=120)
+        # ── IPCA: base local + delta (apenas últimos 3 meses via API) ─────
+        base_ipca  = self._carregar_base_ipca()
+        delta_ipca = self._buscar_ipca_delta(meses=3)
+        ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
+
+        if ipca_serie:
+            self._salvar_base_ipca(ipca_serie)  # persiste para o próximo ciclo
 
         ipca_ultimo_mes = None
         ipca_label_mes  = ""
         ipca_acum_ano   = None
         ipca_acum_12m   = None
-        ipca_historico  = []   # array compacto para o gráfico Chart.js
+        ipca_historico  = []
 
         if ipca_serie:
-            ultimo = ipca_serie[-1]
-            ipca_ultimo_mes = round(float(ultimo["valor"]), 4)
-
-            # Label legível: "abr/2026"
-            d, m, y       = ultimo["data"].split("/")
-            ipca_label_mes = f"{MESES_PT[int(m)-1]}/{y}"
-
-            ipca_acum_ano  = self._acumular_ano(ipca_serie)
-            ipca_acum_12m  = self._acumular(ipca_serie, 12)
-
-            # Monta array leve para o frontend — apenas label + valor
-            for item in ipca_serie:
-                dd, mm, yy = item["data"].split("/")
-                ipca_historico.append({
-                    "label": f"{MESES_PT[int(mm)-1]}/{yy}",
-                    "valor": round(float(item["valor"]), 4),
-                })
-
+            ultimo          = ipca_serie[-1]
+            ipca_ultimo_mes = ultimo["valor"]
+            ipca_label_mes  = ultimo["label"]
+            ipca_acum_ano   = self._acumular_ano(ipca_serie)
+            ipca_acum_12m   = self._acumular(ipca_serie, 12)
+            ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
             log(
-                f"[IPCA] Último: {ipca_ultimo_mes}% ({ipca_label_mes}) | "
-                f"Ano: {ipca_acum_ano}% | 12M: {ipca_acum_12m}%"
+                f"[IPCA] {ipca_ultimo_mes}% ({ipca_label_mes}) | "
+                f"Ano: {ipca_acum_ano}% | 12M: {ipca_acum_12m}% | "
+                f"Série: {len(ipca_historico)} meses"
             )
         else:
-            log("[IPCA] Série histórica indisponível — usando fallback vazio.")
+            log("[IPCA] Série vazia — verifique a base local e a API do BCB.")
 
         # ── Yahoo Finance ──────────────────────────────────────────────────
         dolar     = self._buscar_yahoo("BRL=X")
@@ -620,41 +672,28 @@ class ColetorMercado:
         dow_jones = self._buscar_yahoo("^DJI")
         nasdaq    = self._buscar_yahoo("^IXIC")
 
-        # ── Montagem do JSON final ─────────────────────────────────────────
-        dados_mercado = {
+        # ── JSON final ────────────────────────────────────────────────────
+        return {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "cards": {
-                "selic_meta": {
-                    "valor":   selic_meta,
-                    "unidade": "% a.a.",
-                },
+                "selic_meta": {"valor": selic_meta, "unidade": "% a.a."},
                 "cdi": {
-                    # Prática de mercado: CDI ≈ Selic − 0,10 p.p.
                     "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
                     "unidade": "% a.a.",
                 },
-                "cdi_dia": {
-                    "valor":   cdi_hoje,
-                    "unidade": "%",
-                },
-                # ── bloco IPCA estruturado (novo) ──────────────────────
+                "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
+                # bloco IPCA completo — lido pelo index.html
                 "ipca": {
-                    "ultimo_mes":  ipca_ultimo_mes,   # ex: 0.43
-                    "label_mes":   ipca_label_mes,    # ex: "abr/2026"
-                    "acum_ano":    ipca_acum_ano,     # ex: 2.48
-                    "acum_12m":    ipca_acum_12m,     # ex: 5.53
-                    "historico":   ipca_historico,    # array [{label, valor}, ...]
-                    "unidade":     "%",
+                    "ultimo_mes": ipca_ultimo_mes,
+                    "label_mes":  ipca_label_mes,
+                    "acum_ano":   ipca_acum_ano,
+                    "acum_12m":   ipca_acum_12m,
+                    "historico":  ipca_historico,
+                    "unidade":    "%",
                 },
-                # ── mantido para compatibilidade com index.html antigo ──
-                "ipca_mes_anterior": {
-                    "valor":   ipca_ultimo_mes,
-                    "unidade": "%",
-                },
-                "poupanca_nova": {
-                    "valor":   poupanca_nova,
-                    "unidade": "% m.m.",
-                },
+                # mantido para compatibilidade com versões anteriores do HTML
+                "ipca_mes_anterior": {"valor": ipca_ultimo_mes, "unidade": "%"},
+                "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
                 "ibovespa": {
                     "atual":    ibov["atual"],
                     "anterior": ibov["anterior"],
@@ -678,7 +717,6 @@ class ColetorMercado:
                 "nasdaq":    nasdaq["atual"],
             },
         }
-        return dados_mercado
 
 
 # ---------------------------------------------------------------------------
@@ -686,9 +724,7 @@ class ColetorMercado:
 # ---------------------------------------------------------------------------
 def executar():
     log("⚡ [MODO MERCADO] Coletando indicadores macro + IPCA histórico...")
-
     try:
-        import json
         coletor     = ColetorMercado()
         indicadores = coletor.coletar_todos()
 
