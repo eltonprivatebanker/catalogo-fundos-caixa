@@ -1,12 +1,12 @@
 {
-    "atualizado_em": "16/05/2026 02:35:36",
+    "atualizado_em": "16/05/2026 03:14:14",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
             "unidade": "% a.a."
         },
         "cdi": {
-            "valor": 14.64,
+            "valor": 14.4,
             "unidade": "% a.a."
         },
         "cdi_dia": {
@@ -30,9 +30,9 @@
             "unidade": "% m.m."
         },
         "ibovespa": {
-            "atual": 177283.828125,
+            "atual": 177284.0,
             "anterior": 198657.0,
-            "variacao_mensal": -10.758831490961807
+            "variacao_mensal": -10.758744972490275
         },
         "dolar": {
             "atual": 5.054900169372559,
