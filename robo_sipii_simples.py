@@ -474,6 +474,107 @@ def salvar_excel(df, caminho):
     except ImportError: log("AVISO: pip install openpyxl")
     except Exception as e: log(f"Erro Excel: {e}"); traceback.print_exc()
 
+
+# ---------------------------------------------------------------------------
+# Coletor de Indicadores de Mercado Macro e Índices
+# ---------------------------------------------------------------------------
+
+class ColetorMercado:
+    def __init__(self):
+        self.headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+        }
+
+    def _buscar_bcb(self, codigo_serie):
+        """Busca o último valor de uma série do Sistema Gerenciador de Séries Temporais do BCB"""
+        try:
+            url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/1?formato=json"
+            res = requests.get(url, headers=self.headers, timeout=10)
+            if res.status_code == 200:
+                dados = res.json()
+                return float(dados[0]['valor'])
+        except Exception:
+            pass
+        return None
+
+    def _buscar_yahoo(self, ticker):
+        """Busca a cotação atual e o fechamento anterior do Yahoo Finance"""
+        try:
+            url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=2mo&interval=1d"
+            res = requests.get(url, headers=self.headers, timeout=10)
+            if res.status_code == 200:
+                json_data = res.json()
+                quotes = json_data['chart']['result'][0]['indicators']['quote'][0]['close']
+                # Remove None values
+                quotes = [q for q in quotes if q is not None]
+                if quotes:
+                    atual = quotes[-1]
+                    # Tenta pegar o fechamento de aproximadamente 30 dias atrás para o "mês anterior"
+                    anterior = quotes[-22] if len(quotes) >= 22 else quotes[0]
+                    return {"atual": atual, "anterior": anterior}
+        except Exception:
+            pass
+        return {"atual": None, "anterior": None}
+
+    def coletar_todos(self):
+        log("[MERCADO] Coletando indicadores macro e índices internacionais...")
+        
+        # 1. Dados do Banco Central do Brasil (SGS)
+        selic_meta = self._buscar_bcb(432)   # Selic Meta % a.a.
+        cdi_hoje = self._buscar_bcb(12)      # CDI DIário %
+        ipca_mensal = self._buscar_bcb(433)  # IPCA Var. Mensal %
+        poupanca_nova = self._buscar_bcb(196) # Poupança pós-2012
+        poupanca_antiga = 0.5000              # Poupança antiga (fixa em 0.5% + TR quando Selic > 8.5%)
+
+        # 2. Índices e Moedas via Yahoo Finance
+        dolar = self._buscar_yahoo("BRL=X")
+        ibov = self._buscar_yahoo("^BVSP")
+        sp500 = self._buscar_yahoo("^GSPC")
+        dow_jones = self._buscar_yahoo("^DJI")
+        nasdaq = self._buscar_yahoo("^IXIC")
+
+        # Cálculos de CDI acumulado aproximado (exemplo ilustrativo para o painel)
+        cdi_mes_anterior = cdi_hoje * 21 if cdi_hoje else None 
+
+        # Montagem do dicionário estruturado para o Frontend (index.html)
+        dados_mercado = {
+            "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "cards": {
+                "selic_meta": {"valor": selic_meta, "unidade": "% a.a."},
+                "cdi": {"valor": selic_meta + 0.14 if selic_meta else None, "unidade": "% a.a."}, # Prática de mercado ou cdi_hoje anualizado
+                "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
+                "cdi_mes_anterior": {"valor": cdi_mes_anterior, "unidade": "%"},
+                "ipca_mes_anterior": {"valor": ipca_mensal, "unidade": "%"},
+                "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
+                "poupanca_antiga": {"valor": poupanca_antiga, "unidade": "% m.m."},
+                "ibovespa": {
+                    "atual": ibov["atual"], 
+                    "anterior": ibov["anterior"],
+                    "variacao_mensal": ((ibov["atual"] / ibov["anterior"]) - 1) * 100 if ibov["atual"] and ibov["anterior"] else None
+                },
+                "dolar": {
+                    "atual": dolar["atual"], 
+                    "anterior": dolar["anterior"],
+                    "variacao_mensal": ((dolar["atual"] / dolar["anterior"]) - 1) * 100 if dolar["atual"] and dolar["anterior"] else None
+                }
+            },
+            "indices_internacionais": {
+                "sp500_usd": sp500["atual"],
+                "sp500_brl": sp500["atual"] * dolar["atual"] if sp500["atual"] and dolar["atual"] else None,
+                "dow_jones": dow_jones["atual"],
+                "nasdaq": nasdaq["atual"]
+            },
+            "resumo_anual_padrao": {
+                "Configuração": ["SELIC", "CDI", "IPCA", "IBOVESPA", "DÓLAR", "S&P 500"],
+                "Pesos_Visiveis": [True, True, True, True, True, True] # Chave lógica para o seu HTML decidir o que exibir/ocultar
+            }
+        }
+        return dados_mercado
+
+
+
+
+
 # ---------------------------------------------------------------------------
 # Ponto de entrada
 # ---------------------------------------------------------------------------
@@ -522,7 +623,21 @@ def executar():
     log(f"CSV salvo: {caminho_csv}")
     df_final.to_csv(BASE_DIR / f"sipii_caixa_{data_str}.csv", index=False, encoding="utf-8-sig")
     salvar_excel(df_final, BASE_DIR / f"sipii_caixa_{data_str}.xlsx")
-    log(f"SUCESSO: {len(df_final)} fundos consolidados salvos.")
 
-if __name__ == "__main__":
-    executar()
+    # ─── NOVA ETAPA: EXECUÇÃO DO COLETOR DE MERCADO MACRO ──────────────────
+    try:
+        import json
+        coletor = ColetorMercado()
+        indicadores = coletor.coletar_todos()
+        
+        # Gera o arquivo contendo os dados dos cards e índices
+        caminho_json = BASE_DIR / "mercado_atual.json"
+        with open(caminho_json, "w", encoding="utf-8") as f:
+            json.dump(indicadores, f, indent=4, ensure_ascii=False)
+            
+        log(f"[SUCESSO] Dados de mercado integrados e salvos em: {caminho_json}")
+    except Exception as e:
+        log(f"[ERRO] Falha ao processar dados de mercado: {e}")
+    # ───────────────────────────────────────────────────────────────────────
+
+    log(f"SUCESSO: {len(df_final)} fundos consolidados salvos.")
