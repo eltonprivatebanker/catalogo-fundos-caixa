@@ -279,7 +279,7 @@ def raspar_urls_caixa():
                 if "/fundos-investimento/" not in href: continue
                 if len(href.rstrip('/').split('/')) < 7: continue
                 if href in vistos: continue
-                vistos.add(href)
+                visitos.add(href)
                 registros.append({
                     "texto": normalizar(texto),
                     "url": href,
@@ -480,6 +480,88 @@ def salvar_excel(df, caminho):
     except ImportError: log("AVISO: pip install openpyxl")
     except Exception as e: log(f"Erro Excel: {e}"); traceback.print_exc()
 
+# ---------------------------------------------------------------------------
+# Processamento de KPIs do Catálogo (Rentabilidade Ponderada e Negócio)
+# ---------------------------------------------------------------------------
+
+def limpar_dados_para_calculo(df_consolidado):
+    """
+    Recebe o DataFrame vindo do consolidar() e limpa as strings do SIPII
+    convertendo-as em floats utilizáveis para cálculos matemáticos.
+    """
+    df = df_consolidado.copy()
+    
+    def converte_num(val):
+        if pd.isna(val) or str(val).strip() in ['-', '—', '', 'None']:
+            return None
+        val = str(val).replace('"', '').strip()
+        if ',' in val:
+            if '.' in val and val.find('.') < val.find(','):
+                val = val.replace('.', '')
+            val = val.replace(',', '.')
+        return float(val)
+
+    cols_numericas = ['Cota (R$)', 'Variacao Dia (%)', 'Acum. Mes (%)', 'Acum. Ano (%)', 'Acum. 12M (%)', 'PL (milhoes R$)']
+    for col in cols_numericas:
+        if col in df.columns:
+            df[col] = df[col].apply(converte_num)
+            
+    return df
+
+def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
+    """
+    Calcula a rentabilidade ponderada, market share por perfil e concentração,
+    exportando um JSON para alimentar de forma inteligente os cards do dashboard.
+    """
+    df_calculo = limpar_dados_para_calculo(df_consolidado)
+    pl_total_casa = df_calculo['PL (milhoes R$)'].sum()
+    
+    # Média ponderada vetorizada
+    def w_avg(group):
+        vals = group['Acum. 12M (%)']
+        pesos = group['PL (milhoes R$)']
+        mask = vals.notna() & pesos.notna() & (pesos > 0)
+        if mask.sum() == 0: return None
+        return (vals[mask] * pesos[mask]).sum() / pesos[mask].sum()
+
+    # 1. KPIs por Categoria (Visão Estratégica Ponderada)
+    categorias_kpi = {}
+    for cat, grupo in df_calculo.groupby('Categoria'):
+        categorias_kpi[cat] = {
+            "qtd_ativos": int(grupo['Acum. 12M (%)'].notna().sum()),
+            "pl_total": round(grupo['PL (milhoes R$)'].sum(), 2),
+            "rent_12m_ponderada": round(w_avg(grupo), 2) if w_avg(grupo) is not None else None
+        }
+
+    # 2. Market Share por Público-Alvo Comercial
+    perfil_kpi = {}
+    for perf, grupo in df_calculo.groupby('Perfil'):
+        pl_perf = grupo['PL (milhoes R$)'].sum()
+        perfil_kpi[perf] = {
+            "qtd_fundos": int(grupo['Fundo'].count()),
+            "pl_total": round(pl_perf, 2),
+            "share_percent": round((pl_perf / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0
+        }
+
+    # 3. Análise de Risco por Concentração Extrema (Top 5)
+    top_5 = df_calculo.nlargest(5, 'PL (milhoes R$)')
+    pl_top_5 = top_5['PL (milhoes R$)'].sum()
+    
+    # 4. Estrutura consolidada de saída
+    kpis_finais = {
+        "resumo_geral": {
+            "pl_total_consolidado": round(pl_total_casa, 2),
+            "concentracao_top5_percent": round((pl_top_5 / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0,
+            "pipeline_novos_fundos": int(df_calculo['Cota (R$)'].isna().sum())
+        },
+        "categorias": categorias_kpi,
+        "perfis_comerciais": perfil_kpi
+    }
+    
+    with open(caminho_saida, "w", encoding="utf-8") as f:
+        json.dump(kpis_finais, f, indent=4, ensure_ascii=False)
+        
+    log(f"[KPIs] JSON de métricas avançadas exportado: {caminho_saida.name}")
 
 # ---------------------------------------------------------------------------
 # Coletor de Indicadores de Mercado Macro e Índices
@@ -707,7 +789,6 @@ class ColetorMercado:
                     "unidade": "% a.a.",
                 },
                 "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
-                # bloco IPCA completo estruturado com metas para enquadramento no index.html
                 "ipca": {
                     "ultimo_mes": ipca_ultimo_mes,
                     "label_mes":  ipca_label_mes,
@@ -719,7 +800,6 @@ class ColetorMercado:
                     "meta_inferior": 1.5,
                     "unidade":    "%",
                 },
-                # mantido para compatibilidade histórica do HTML anterior
                 "ipca_mes_anterior": {"valor": ipca_ultimo_mes, "unidade": "%"},
                 "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
                 "ibovespa": {
@@ -746,14 +826,48 @@ class ColetorMercado:
             },
         }
 
-
 # ---------------------------------------------------------------------------
-# Ponto de entrada
+# Ponto de entrada — Rotina Completa de Execução
 # ---------------------------------------------------------------------------
 def executar():
-    log("⚡ [MODO MERCADO] Coletando indicadores macro + IPCA histórico...")
+    log("⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v12...")
+    
+    # 1. Executa a Camada 2 (Scraping preventivo de URLs das páginas CAIXA)
+    links_dinamicos = raspar_urls_caixa()
+    
+    # 2. Executa a Camada 1 (Extração de dados brutos por Segmento no SIPII)
+    todos_dados = []
+    for perf in PERFIS:
+        log(f"Iniciando raspagem do segmento: {perf['segmento']}...")
+        dados_perfil = processar_perfil(perf, headless=True)
+        todos_dados.extend(dados_perfil)
+        time.sleep(2)
+        
+    if not todos_dados:
+        log("[ERRO] Falha crítica: Nenhum dado capturado no SIPII. Pipeline interrompido.")
+        return
+        
+    # 3. Consolidação inteligente e Deduplicação Cross-Perfil
+    log("Deduplicando e injetando cruzamento de perfis...")
+    df_consolidado = consolidar(todos_dados)
+    
+    # Aplica inteligência de mapeamento de URLs (Estático -> Dinâmico)
+    df_consolidado["URL"] = df_consolidado["Fundo"].apply(lambda x: encontrar_url(x, links_dinamicos))
+    
+    # 4. Exportação das saídas estruturadas padrão
+    caminho_csv = BASE_DIR / "dados_atuais.csv"
+    caminho_xlsx = BASE_DIR / "dados_atuais.xlsx"
+    
+    df_consolidado.to_csv(caminho_csv, index=False, encoding="utf-8")
+    salvar_excel(df_consolidado, caminho_xlsx)
+    
+    # 5. Processamento analítico dos KPIs (Performance Ponderada e Concentração)
+    caminho_kpis = BASE_DIR / "kpis_dashboard.json"
+    gerar_json_kpis_dashboard(df_consolidado, caminho_kpis)
+
+    # 6. Coleta de Variáveis Macro (BCB, IPCA, Yahoo Finance)
     try:
-        coletor     = ColetorMercado()
+        coletor = ColetorMercado()
         indicadores = coletor.coletar_todos()
 
         caminho_json = BASE_DIR / "mercado_atual.json"
@@ -761,13 +875,13 @@ def executar():
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
 
         n_hist = len(indicadores["cards"]["ipca"]["historico"])
-        log(f"[SUCESSO] JSON saved: {caminho_json} | IPCA histórico: {n_hist} meses")
+        log(f"[SUCESSO] JSON salvo: {caminho_json.name} | Série IPCA: {n_hist} meses")
 
     except Exception as e:
-        log(f"[ERRO] Falha ao processar dados de mercado: {e}")
+        log(f"[ERRO] Falha ao processar dados macroeconômicos: {e}")
         traceback.print_exc()
 
-    log("SUCESSO: Processo finalizado.")
+    log("✨ [FIM] Processo finalizado com sucesso! Dados prontos para o front-end.")
 
 
 if __name__ == "__main__":
