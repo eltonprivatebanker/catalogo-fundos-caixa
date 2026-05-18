@@ -32,6 +32,38 @@
     .kpi-value{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--gold2);line-height:1}
     .kpi-value.pos{color:var(--green);font-size:1.55rem}.kpi-value.neg{color:var(--red);font-size:1.55rem}
     .kpi-sub{font-size:.68rem;color:var(--muted);margin-top:6px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+    /* ── FOCUS SECTION ──────────────────────────────────────────── */
+    .focus-section{margin-bottom:32px}
+    .focus-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:14px}
+    .focus-title{display:flex;align-items:center;gap:10px}
+    .focus-title h2{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--gold2);letter-spacing:.03em}
+    .focus-meta{font-size:.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:8px}
+    .focus-dot{width:6px;height:6px;background:var(--blue);border-radius:50%;box-shadow:0 0 6px var(--blue)}
+    .focus-bcb-badge{display:inline-flex;align-items:center;gap:5px;font-size:.62rem;color:var(--muted2);border:1px solid var(--border2);border-radius:6px;padding:3px 8px;font-family:'JetBrains Mono',monospace}
+    .focus-actions{display:flex;align-items:center;gap:8px}
+    .btn-download{display:inline-flex;align-items:center;gap:7px;padding:8px 16px;background:var(--gold-dim);border:1px solid var(--gold);border-radius:9px;color:var(--gold2);font-family:'Inter',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer;text-decoration:none;letter-spacing:.04em;transition:all .2s}
+    .btn-download:hover{background:rgba(200,151,58,.22);box-shadow:0 0 18px var(--gold-glow);transform:translateY(-1px)}
+    .btn-download svg{flex-shrink:0}
+    .focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+    .focus-card{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:16px 18px;position:relative;overflow:hidden;transition:border-color .2s,transform .2s;cursor:default}
+    .focus-card:hover{border-color:rgba(91,156,246,.35);transform:translateY(-2px)}
+    .focus-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--blue) 0%,transparent 70%);opacity:.6}
+    .focus-card-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted2);font-weight:600;margin-bottom:4px}
+    .focus-card-indicator{font-size:.68rem;color:var(--muted);margin-bottom:10px;line-height:1.3}
+    .focus-years{display:flex;flex-direction:column;gap:6px}
+    .focus-year-row{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
+    .focus-year-label{font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;min-width:28px}
+    .focus-year-val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--text);line-height:1}
+    .focus-year-val.highlight{color:var(--gold2)}
+    .focus-arrow{font-size:.65rem;margin-left:2px}
+    .focus-arrow.up{color:var(--red)}.focus-arrow.down{color:var(--green)}.focus-arrow.neutral{color:var(--muted2)}
+    .focus-divider{border:none;border-top:1px solid var(--border2);margin:6px 0}
+    .focus-loading{display:flex;align-items:center;gap:10px;padding:24px 18px;color:var(--muted);font-size:.8rem}
+    .focus-spinner{width:18px;height:18px;border:2px solid var(--border);border-top-color:var(--blue);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0}
+    .focus-error{padding:16px 18px;color:var(--muted);font-size:.78rem;border:1px dashed var(--border2);border-radius:12px;text-align:center}
+    /* ────────────────────────────────────────────────────────────── */
+
     .controls-bar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-bottom:16px}
     .search-wrap{position:relative;flex:1;min-width:240px}
     .search-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);pointer-events:none}
@@ -108,7 +140,7 @@
     @keyframes spin{to{transform:rotate(360deg)}}
     footer{text-align:center;margin-top:56px;font-size:.7rem;color:var(--muted2);letter-spacing:.05em;border-top:1px solid var(--border2);padding-top:28px;line-height:2}
     footer span{color:var(--gold)}
-    @media(max-width:768px){.page{padding:20px 16px 60px}.kpi-grid{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:16px 14px}.kpi-value{font-size:1.5rem}}
+    @media(max-width:768px){.page{padding:20px 16px 60px}.kpi-grid{grid-template-columns:1fr 1fr;gap:10px}.kpi{padding:16px 14px}.kpi-value{font-size:1.5rem}.focus-grid{grid-template-columns:1fr 1fr}}
   </style>
 </head>
 <body>
@@ -131,6 +163,30 @@
     <div class="kpi"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor Acum. 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub" id="kpiBestFundo">—</div></div>
     <div class="kpi"><div class="kpi-icon">📉</div><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
   </div>
+
+  <!-- ── BOLETIM FOCUS ─────────────────────────────────────────── -->
+  <div class="focus-section">
+    <div class="focus-header">
+      <div class="focus-title">
+        <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
+        <span class="focus-bcb-badge">
+          <span class="focus-dot"></span>
+          Banco Central do Brasil
+        </span>
+      </div>
+      <div class="focus-actions">
+        <span class="focus-meta" id="focusDate">Carregando...</span>
+        <a id="btnDownloadFocus" class="btn-download" href="#" target="_blank" rel="noopener">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Baixar PDF
+        </a>
+      </div>
+    </div>
+    <div id="focusGrid" class="focus-grid">
+      <div class="focus-loading"><div class="focus-spinner"></div>Buscando expectativas...</div>
+    </div>
+  </div>
+  <!-- ─────────────────────────────────────────────────────────── -->
 
   <div class="controls-bar">
     <div class="search-wrap">
@@ -174,31 +230,201 @@
 
   <footer>
     Dados extraídos de <span>fundos.caixa.gov.br</span> via Robô Python ·
+    Expectativas de mercado: <span>Banco Central do Brasil — Focus</span> ·
     Dashboard por <span>Elton Private Banker</span> · Atualização automática diária
   </footer>
 </div>
 
 <script>
+/* ═══════════════════════════════════════════════════════════════
+   BOLETIM FOCUS — URL dinâmica (última sexta-feira)
+   Pattern: https://www.bcb.gov.br/content/focus/focus/RYYYYMMDD.pdf
+   ═══════════════════════════════════════════════════════════════ */
+function getLastFriday(fromDate){
+  const d = fromDate ? new Date(fromDate) : new Date();
+  // day: 0=dom,1=seg,...,5=sex,6=sab
+  const day = d.getDay();
+  // dias a subtrair para chegar na última sexta
+  const diff = day >= 5 ? day - 5 : day + 2;
+  d.setDate(d.getDate() - diff);
+  return d;
+}
+
+function formatDateBCB(d){
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,'0');
+  const dd = String(d.getDate()).padStart(2,'0');
+  return `${y}${m}${dd}`;
+}
+
+function formatDateBR(d){
+  return d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+}
+
+function buildFocusUrl(d){
+  return `https://www.bcb.gov.br/content/focus/focus/R${formatDateBCB(d)}.pdf`;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   API BCB — Expectativas Anuais
+   ═══════════════════════════════════════════════════════════════ */
+async function fetchExpectativa(indicador, anos){
+  const hoje = new Date().toISOString().split('T')[0];
+  // Busca as últimas 5 entradas para o indicador (dados dos últimos dias)
+  const url = `https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/`
+    + `ExpectativaMercadoAnuais?$filter=Indicador eq '${encodeURIComponent(indicador)}'`
+    + ` and Suavizada eq 'N'`
+    + `&$orderby=Data desc&$top=20&$format=json&$select=Indicador,Data,Ano,Mediana`;
+  const res = await fetch(url);
+  const json = await res.json();
+  const dados = json.value || [];
+  // Pega a data mais recente disponível
+  if(!dados.length) return {};
+  const dataMax = dados[0].Data;
+  const filtrados = dados.filter(d => d.Data === dataMax && anos.includes(String(d.Ano)));
+  const result = {};
+  filtrados.forEach(d => { result[String(d.Ano)] = { valor: d.Mediana, data: d.Data }; });
+  return result;
+}
+
+async function fetchSelic(anos){
+  const url = `https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/`
+    + `ExpectativaMercadoMetas?$filter=Indicador eq 'Selic'`
+    + `&$orderby=Data desc&$top=20&$format=json&$select=Indicador,Data,Reuniao,Mediana`;
+  // Para Selic usamos ExpectativaMercadoAnuais também
+  const url2 = `https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/`
+    + `ExpectativaMercadoAnuais?$filter=Indicador eq 'Selic'`
+    + ` and Suavizada eq 'N'`
+    + `&$orderby=Data desc&$top=20&$format=json&$select=Indicador,Data,Ano,Mediana`;
+  const res = await fetch(url2);
+  const json = await res.json();
+  const dados = json.value || [];
+  if(!dados.length) return {};
+  const dataMax = dados[0].Data;
+  const filtrados = dados.filter(d => d.Data === dataMax && anos.includes(String(d.Ano)));
+  const result = {};
+  filtrados.forEach(d => { result[String(d.Ano)] = { valor: d.Mediana, data: d.Data }; });
+  return result;
+}
+
+function cardHTML(icon, label, sub, rows){
+  const rowsHTML = rows.map((r,i) => `
+    <div class="focus-year-row">
+      <span class="focus-year-label">${r.year}</span>
+      <span class="focus-year-val ${i===0?'highlight':''}">${r.val}</span>
+      ${r.arrow ? `<span class="focus-arrow ${r.arrowClass}">${r.arrow}</span>` : ''}
+    </div>
+    ${i < rows.length-1 ? '<hr class="focus-divider">' : ''}
+  `).join('');
+
+  return `
+    <div class="focus-card">
+      <div class="focus-card-label">${icon} ${label}</div>
+      <div class="focus-card-indicator">${sub}</div>
+      <div class="focus-years">${rowsHTML}</div>
+    </div>
+  `;
+}
+
+function fmt(val, suffix='%', decimais=2){
+  if(val === null || val === undefined) return '—';
+  return Number(val).toFixed(decimais).replace('.',',') + suffix;
+}
+
+async function carregarFocus(){
+  const grid = document.getElementById('focusGrid');
+  const dateEl = document.getElementById('focusDate');
+  const btnPDF = document.getElementById('btnDownloadFocus');
+
+  // Define URL do PDF (última sexta-feira)
+  const lastFri = getLastFriday();
+  const pdfUrl = buildFocusUrl(lastFri);
+  btnPDF.href = pdfUrl;
+
+  // Tenta também sexta anterior se a atual não existir
+  // (publicado às sextas, mas às vezes com 1 semana de atraso)
+  dateEl.innerHTML = `<span class="focus-dot" style="background:var(--blue)"></span>Edição de ${formatDateBR(lastFri)}`;
+
+  try {
+    const anos = ['2026','2027','2028','2029'];
+
+    const [ipca, pib, cambio, selic, igpm] = await Promise.all([
+      fetchExpectativa('IPCA', anos),
+      fetchExpectativa('PIB Total', anos),
+      fetchExpectativa('Câmbio', anos),
+      fetchSelic(anos),
+      fetchExpectativa('IGP-M', anos),
+    ]);
+
+    // Determina data de referência dos dados
+    const dataRef = (ipca['2026']?.data || '').split('-').reverse().join('/');
+    if(dataRef) dateEl.innerHTML = `<span class="focus-dot" style="background:var(--blue)"></span>Referência: ${dataRef}`;
+
+    const cards = [
+      cardHTML('🎯', 'IPCA', 'Inflação ao Consumidor', [
+        { year:'2026', val: fmt(ipca['2026']?.valor) },
+        { year:'2027', val: fmt(ipca['2027']?.valor) },
+        { year:'2028', val: fmt(ipca['2028']?.valor) },
+      ]),
+      cardHTML('🏦', 'Selic', 'Meta da Taxa Básica de Juros', [
+        { year:'2026', val: fmt(selic['2026']?.valor) },
+        { year:'2027', val: fmt(selic['2027']?.valor) },
+        { year:'2028', val: fmt(selic['2028']?.valor) },
+      ]),
+      cardHTML('📦', 'PIB Total', 'Crescimento do Produto Interno Bruto', [
+        { year:'2026', val: fmt(pib['2026']?.valor) },
+        { year:'2027', val: fmt(pib['2027']?.valor) },
+        { year:'2028', val: fmt(pib['2028']?.valor) },
+      ]),
+      cardHTML('💵', 'Câmbio', 'R$ / US$ (dólar americano)', [
+        { year:'2026', val: fmt(cambio['2026']?.valor,'',2) },
+        { year:'2027', val: fmt(cambio['2027']?.valor,'',2) },
+        { year:'2028', val: fmt(cambio['2028']?.valor,'',2) },
+      ]),
+      cardHTML('📊', 'IGP-M', 'Índice Geral de Preços — Mercado', [
+        { year:'2026', val: fmt(igpm['2026']?.valor) },
+        { year:'2027', val: fmt(igpm['2027']?.valor) },
+        { year:'2028', val: fmt(igpm['2028']?.valor) },
+      ]),
+    ];
+
+    grid.innerHTML = cards.join('');
+
+  } catch(err) {
+    // Fallback: mostra dados fixos do último PDF lido e link de download
+    console.warn('API BCB indisponível, usando dados do último PDF.', err);
+
+    dateEl.innerHTML = `<span class="focus-dot" style="background:var(--muted)"></span>15/05/2026 (cache)`;
+
+    const fallback = [
+      cardHTML('🎯','IPCA','Inflação ao Consumidor',[{year:'2026',val:'4,92%'},{year:'2027',val:'4,00%'},{year:'2028',val:'3,65%'},{year:'2029',val:'3,50%'}]),
+      cardHTML('🏦','Selic','Meta da Taxa Básica de Juros',[{year:'2026',val:'13,25%'},{year:'2027',val:'11,25%'},{year:'2028',val:'10,00%'},{year:'2029',val:'10,00%'}]),
+      cardHTML('📦','PIB Total','Crescimento do Produto Interno Bruto',[{year:'2026',val:'1,85%'},{year:'2027',val:'1,77%'},{year:'2028',val:'2,00%'},{year:'2029',val:'2,00%'}]),
+      cardHTML('💵','Câmbio','R$ / US$ (dólar americano)',[{year:'2026',val:'5,20'},{year:'2027',val:'5,27'},{year:'2028',val:'5,34'},{year:'2029',val:'5,40'}]),
+      cardHTML('📊','IGP-M','Índice Geral de Preços — Mercado',[{year:'2026',val:'5,63%'},{year:'2027',val:'4,00%'},{year:'2028',val:'3,82%'},{year:'2029',val:'3,70%'}]),
+    ];
+    grid.innerHTML = fallback.join('') + `<div style="grid-column:1/-1;font-size:.65rem;color:var(--muted2);padding:4px 2px">⚠️ API indisponível — dados do PDF de 15/05/2026. <a href="${pdfUrl}" target="_blank" style="color:var(--gold);text-decoration:none">Abrir PDF ↗</a></div>`;
+  }
+}
+
+carregarFocus();
+
+/* ═══════════════════════════════════════════════════════════════
+   TABELA DE FUNDOS (código original)
+   ═══════════════════════════════════════════════════════════════ */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',activePerfil='',hideSemDados=false,displayHeaders=[];
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
 
-// ── URL: usa a real do CSV (v7) ou fallback para busca Google ──────────────
 function getFundUrl(r){
-  const u = String(r['URL']||r['url']||'').trim();
-  if(u && u.startsWith('http') && u.includes('caixa.gov.br')) return u;
-  // Fallback: abre busca Google pelo nome exato do fundo no site da Caixa
-  const nome = (r['Fundo']||'').replace(/\s*\(8\)|\s*\(1\)|\s*\(2\)|\s*\(3\)/g,'').trim();
-  return 'https://www.google.com/search?q=' + encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');
+  const u=String(r['URL']||r['url']||'').trim();
+  if(u&&u.startsWith('http')&&u.includes('caixa.gov.br'))return u;
+  const nome=(r['Fundo']||'').replace(/\s*\(8\)|\s*\(1\)|\s*\(2\)|\s*\(3\)/g,'').trim();
+  return'https://www.google.com/search?q='+encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');
 }
-
-function isFallbackUrl(r){
-  const u = String(r['URL']||r['url']||'').trim();
-  return !(u && u.startsWith('http') && u.includes('caixa.gov.br'));
-}
-
+function isFallbackUrl(r){const u=String(r['URL']||r['url']||'').trim();return!(u&&u.startsWith('http')&&u.includes('caixa.gov.br'));}
 function parseCsv(raw){if(raw.charCodeAt(0)===0xFEFF)raw=raw.slice(1);return Papa.parse(raw,{header:true,skipEmptyLines:true});}
 function toNum(v){if(v===null||v===undefined)return null;const s=String(v).trim();if(!s||s==='-'||s==='—'||s==='null')return null;const n=parseFloat(s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n;}
 function pctCell(val){if(!val||String(val).trim()===''||val==='-'||val==='—')return`<td class="col-pct"><span class="dash">—</span></td>`;const n=toNum(val);if(n===null)return`<td class="col-pct"><span class="dash">${val}</span></td>`;const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';const pct=Math.min(Math.abs(n)/20*100,100);return`<td class="col-pct"><div class="pct-wrap"><div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div><span class="pct-val ${cls}">${sign}${val}</span></div></td>`;}
@@ -229,34 +455,42 @@ function applyFilter(){
   currentPage=1;render();
 }
 
+function buildRowHTML(r){
+  const semDados=!temDados(r);
+  let html=`<tr${semDados?' class="row-sem-dados"':''}>`;
+  displayHeaders.forEach(h=>{
+    if(h==='URL')return;
+    const val=String(r[h]||'');
+    if(h==='Categoria'){const cls=CAT_CLS[val]||'RF';html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;return;}
+    if(h==='Fundo'){
+      const url=getFundUrl(r);const isFallback=isFallbackUrl(r);
+      const tooltip=isFallback?'Buscar no Google':'Abrir página do fundo na CAIXA';
+      const fallbackLabel=isFallback?'<span class="link-fallback">🔍 google</span>':'';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" title="${tooltip}">${val}${fallbackLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></td>`;
+      return;
+    }
+    if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){html+=pctCell(val);return;}
+    if(h==='Perfis'){
+      const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');
+      html+=`<td><div class="perfis-wrap">${chips}</div></td>`;return;
+    }
+    html+=`<td>${val||'—'}</td>`;
+  });
+  return html+'</tr>';
+}
+
 function render(){
   const start=(currentPage-1)*perPage;
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
-  const rows=filtered.slice(start,end),tbody=document.getElementById('tableBody');
-  tbody.innerHTML='';
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="${displayHeaders.length}" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;document.getElementById('resultInfo').textContent='0 registros';renderPagination();return;}
-  rows.forEach(r=>{
-    const tr=document.createElement('tr');
-    if(!temDados(r))tr.classList.add('row-sem-dados');
-    displayHeaders.forEach(h=>{
-      const val=String(r[h]||'');
-      if(h==='Categoria'){const cls=CAT_CLS[val]||'RF';const td=document.createElement('td');td.className='col-cat';td.innerHTML=`<span class="cat-badge cat-${cls}">${val||'—'}</span>`;tr.appendChild(td);return;}
-      if(h==='Fundo'){
-        const td=document.createElement('td');td.className='col-fundo';
-        const url=getFundUrl(r);
-        const isFallback=isFallbackUrl(r);
-        const tooltip=isFallback?'Buscar no Google (URL real disponível após próxima execução do robô)':'Abrir página do fundo na CAIXA';
-        const fallbackLabel=isFallback?'<span class="link-fallback">🔍 google</span>':'';
-        td.innerHTML=`<a href="${url}" target="_blank" rel="noopener" title="${tooltip}">${val}${fallbackLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>`;
-        tr.appendChild(td);return;
-      }
-      if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){tr.insertAdjacentHTML('beforeend',pctCell(val));return;}
-      if(h==='Perfis'){const td=document.createElement('td');const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');td.innerHTML=`<div class="perfis-wrap">${chips}</div>`;tr.appendChild(td);return;}
-      if(h==='URL')return; // não exibe coluna URL na tabela
-      const td=document.createElement('td');td.textContent=val||'—';tr.appendChild(td);
-    });
-    tbody.appendChild(tr);
-  });
+  const rows=filtered.slice(start,end);
+  const tbody=document.getElementById('tableBody');
+  if(!rows.length){
+    tbody.innerHTML=`<tr><td colspan="${displayHeaders.length}" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
+    document.getElementById('resultInfo').textContent='0 registros';
+    renderPagination();return;
+  }
+  // innerHTML único — uma única operação de layout no DOM
+  tbody.innerHTML=rows.map(buildRowHTML).join('');
   document.getElementById('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length)}–${end} de ${filtered.length} registros`;
   renderPagination();
 }
@@ -265,7 +499,6 @@ function renderPagination(){const total=perPage===9999?1:Math.ceil(filtered.leng
 
 function buildHeader(){
   const thead=document.getElementById('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
-  // Não exibe coluna URL no cabeçalho
   const visibleHeaders=displayHeaders.filter(h=>h!=='URL');
   visibleHeaders.forEach((h,i)=>{
     const th=document.createElement('th');th.innerHTML=`${h} <span class="si"></span>`;
@@ -278,11 +511,15 @@ function buildHeader(){
 }
 
 function setActiveChip(container,selector,active){container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));active.classList.add('active');}
-
 function buildCatFilters(cats){const row=document.getElementById('catFilters');const label=row.querySelector('.filter-label');row.innerHTML='';row.appendChild(label);const all=document.createElement('button');all.className='chip active';all.dataset.cat='';all.textContent='Todas';all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});row.appendChild(all);[...cats].sort().forEach(cat=>{const b=document.createElement('button');b.className='chip';b.dataset.cat=cat;b.textContent=cat;b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});row.appendChild(b);});}
-
 document.getElementById('perfilFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-perfil]');if(!btn)return;activePerfil=btn.dataset.perfil;setActiveChip(document.getElementById('perfilFilters'),'[data-perfil]',btn);applyFilter();});
-document.getElementById('searchInput').addEventListener('input',e=>{activeSearch=e.target.value;applyFilter();});
+
+// Debounce: busca só dispara 280ms após o usuário parar de digitar
+let _searchTimer=null;
+document.getElementById('searchInput').addEventListener('input',e=>{
+  clearTimeout(_searchTimer);
+  _searchTimer=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
+});
 document.getElementById('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
 document.getElementById('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;applyFilter();});
 
