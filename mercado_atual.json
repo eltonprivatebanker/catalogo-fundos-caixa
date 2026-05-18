@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "18/05/2026 17:41:07",
+    "atualizado_em": "18/05/2026 22:53:51",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -2258,20 +2258,20 @@
             "unidade": "% m.m."
         },
         "ibovespa": {
-            "atual": 176860.71875,
+            "atual": 176975.8125,
             "anterior": 197738.0,
-            "variacao_mensal": -10.56
+            "variacao_mensal": -10.5
         },
         "dolar": {
-            "atual": 5.000400066375732,
-            "anterior": 4.987090110778809,
-            "variacao_mensal": 0.27
+            "atual": 4.990099906921387,
+            "anterior": 5.00629997253418,
+            "variacao_mensal": -0.32
         }
     },
     "indices_internacionais": {
-        "sp500_usd": 7388.02001953125,
-        "sp500_brl": 36943.06,
-        "dow_jones": 49557.0390625,
-        "nasdaq": 26042.423828125
+        "sp500_usd": 7403.0498046875,
+        "sp500_brl": 36941.96,
+        "dow_jones": 49686.12109375,
+        "nasdaq": 26090.734375
     }
 }
