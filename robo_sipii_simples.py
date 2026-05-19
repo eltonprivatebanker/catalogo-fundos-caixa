@@ -759,14 +759,13 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
     log(f"[KPIs] JSON exportado: {caminho_saida.name}")
 
 # ---------------------------------------------------------------------------
-# Coletor de Indicadores de Mercado
+# Coletor de Indicadores de Mercado (Atualizado - Estrutura Corrigida)
 # ---------------------------------------------------------------------------
 class ColetorMercado:
     def __init__(self):
         self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
     def _buscar_bcb(self, codigo_serie):
-        """Busca o valor mais recente de uma série do BCB (SGS)."""
         try:
             url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/1?formato=json"
             res = requests.get(url, headers=self.headers, timeout=10)
@@ -898,44 +897,34 @@ class ColetorMercado:
 
     def coletar_todos(self):
         log("[MERCADO] Coletando indicadores macro...")
-
-        # ── Taxas de referência ──────────────────────────────────────────
-        selic_meta    = self._buscar_bcb(432)   # Selic meta
-        cdi_dia       = self._buscar_bcb(12)    # CDI diário
-        # ── NOVO v15: CDI mensal acumulado (real, não estimado) ──────────
-        cdi_mensal    = self._buscar_bcb(4391)  # CDI acumulado no mês — série BCB 4391
-        poupanca_nova = self._buscar_bcb(196)   # Poupança nova
-        log(f"[MERCADO] Selic={selic_meta} | CDI dia={cdi_dia} | CDI mês={cdi_mensal} | Poup={poupanca_nova}")
-
-        # ── Históricos locais ────────────────────────────────────────────
+        selic_meta    = self._buscar_bcb(432)
+        cdi_dia       = self._buscar_bcb(12)
+        cdi_mensal    = self._buscar_bcb(4391) 
+        poupanca_nova = self._buscar_bcb(196)
+        
         selic_historico       = self._carregar_base_selic()
         inflacao_meta_efetiva = self._carregar_base_meta_inflacao()
 
-        # ── IPCA histórico + delta ───────────────────────────────────────
         base_ipca  = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
         ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
-        if ipca_serie:
-            self._salvar_base_ipca(ipca_serie)
+        if ipca_serie: self._salvar_base_ipca(ipca_serie)
 
         ipca_ultimo_mes = ipca_label_mes = ipca_acum_ano = ipca_acum_12m = None
         ipca_historico = []
         if ipca_serie:
-            ultimo         = ipca_serie[-1]
+            ultimo = ipca_serie[-1]
             ipca_ultimo_mes = ultimo["valor"]
             ipca_label_mes  = ultimo["label"]
             ipca_acum_ano   = self._acumular_ano(ipca_serie)
             ipca_acum_12m   = self._acumular(ipca_serie, 12)
             ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
 
-        # ── Mercados ─────────────────────────────────────────────────────
         dolar     = self._buscar_yahoo("BRL=X")
         ibov      = self._buscar_yahoo("^BVSP")
         sp500     = self._buscar_yahoo("^GSPC")
         dow_jones = self._buscar_yahoo("^DJI")
         nasdaq    = self._buscar_yahoo("^IXIC")
-
-        # ── Focus ────────────────────────────────────────────────────────
         focus_data = buscar_focus(self.headers)
 
         return {
@@ -947,17 +936,17 @@ class ColetorMercado:
                     "historico": selic_historico,
                 },
                 "cdi": {
-                    "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
-                    "mensal":  round(cdi_mensal, 4) if cdi_mensal else None,  # ← NOVO v15
-                    "dia":     cdi_dia,
+                    "valor": round(selic_meta - 0.10, 4) if selic_meta else None,
+                    "mensal": round(cdi_mensal, 4) if cdi_mensal else None,
+                    "dia": cdi_dia,
                     "unidade": "% a.a.",
                 },
                 "ipca": {
-                    "ultimo_mes":  ipca_ultimo_mes,
-                    "label_mes":   ipca_label_mes,
-                    "acum_ano":    ipca_acum_ano,
-                    "acum_12m":    ipca_acum_12m,
-                    "historico":   ipca_historico,
+                    "ultimo_mes": ipca_ultimo_mes,
+                    "label_mes": ipca_label_mes,
+                    "acum_ano": ipca_acum_ano,
+                    "acum_12m": ipca_acum_12m,
+                    "historico": ipca_historico,
                     "meta_central": 3.0,
                     "meta_superior": 4.5,
                     "meta_inferior": 1.5,
@@ -965,30 +954,29 @@ class ColetorMercado:
                 },
                 "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
                 "ibovespa": {
-                    "atual":    ibov["atual"],
-                    "anterior": ibov["anterior"],
+                    "atual": ibov.get("atual"),
+                    "anterior": ibov.get("anterior"),
                     "variacao_mensal": round(((ibov["atual"] / ibov["anterior"]) - 1) * 100, 2)
-                                       if ibov["atual"] and ibov["anterior"] else None,
+                                       if ibov.get("atual") and ibov.get("anterior") else None,
                 },
                 "dolar": {
-                    "atual":    dolar["atual"],
-                    "anterior": dolar["anterior"],
+                    "atual": dolar.get("atual"),
+                    "anterior": dolar.get("anterior"),
                     "variacao_mensal": round(((dolar["atual"] / dolar["anterior"]) - 1) * 100, 2)
-                                       if dolar["atual"] and dolar["anterior"] else None,
+                                       if dolar.get("atual") and dolar.get("anterior") else None,
                 },
             },
             "indices_internacionais": {
-                "sp500_usd": sp500["atual"],
-                "sp500_brl": round(sp500["atual"] * dolar["atual"], 2)
-                             if sp500["atual"] and dolar["atual"] else None,
-                "dow_jones": dow_jones["atual"],
-                "nasdaq":    nasdaq["atual"],
+                "sp500_usd": sp500.get("atual"),
+                "sp500_brl": round(sp500.get("atual") * dolar.get("atual"), 2)
+                             if sp500.get("atual") and dolar.get("atual") else None,
+                "dow_jones": dow_jones.get("atual"),
+                "nasdaq":    nasdaq.get("atual"),
             },
             "focus": focus_data,
             "historico_selic": selic_historico,
             "meta_vs_inflacao_efetiva": inflacao_meta_efetiva,
         }
-
 # ---------------------------------------------------------------------------
 # SIPII scraping
 # ---------------------------------------------------------------------------
