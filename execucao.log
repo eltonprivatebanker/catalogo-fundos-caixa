@@ -2736,3 +2736,112 @@
 [05:24:33] [SUCESSO] JSON unificado exportado: mercado_atual.json | Histórico IPCA: 556 m | Focus: 6 ind
 [05:24:33] Ações concluídas com sucesso. Processo de arquitetura de dados finalizado. Bases preparadas.
 [05:24:33] [LIMPEZA] Backups datados mantidos: 5 (limite: 5)
+[05:37:45] ⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v14...
+[05:37:47]   [CAIXA] renda-fixa → +34 links (34 total)
+[05:37:49]   [CAIXA] referenciados → +4 links (38 total)
+[05:37:50]   [CAIXA] fundo-simples → +2 links (40 total)
+[05:37:52]   [CAIXA] curto-prazo → +1 links (41 total)
+[05:37:53]   [CAIXA] multimercado → +19 links (60 total)
+[05:37:55]   [CAIXA] cambiais → +1 links (61 total)
+[05:37:56]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[05:37:58]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[05:37:59]   [CAIXA] renda-fixa → +8 links (81 total)
+[05:38:01]   [CAIXA] empresa → +5 links (86 total)
+[05:38:02]   [CAIXA] fmp-fgts → HTTP 404
+[05:38:02]   [CAIXA] rpps → +8 links (94 total)
+[05:38:03] [CAIXA] Total URLs dinâmicas: 94
+[05:38:03] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[05:38:05] [Fundos.json] Download HTTP OK — 196 registros.
+[05:38:05] [Fundos.json] 194 produtos indexados com metadados comerciais.
+[05:38:05] Iniciando raspagem do segmento: PESSOA FÍSICA...
+[05:38:07] [PF] Abrindo SIPII...
+[05:38:24]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[05:38:38]   [PF] RENDA FIXA: 39 fundos.
+[05:38:44]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[05:38:47]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[05:38:59]   [PF] MULTIMERCADO: 30 fundos.
+[05:39:03]   [PF] CAMBIAL: 1 fundos.
+[05:39:14]   [PF] ACOES: 29 fundos.
+[05:39:17]   [PF] FUNDO DE INDICE: 1 fundos.
+[05:39:22]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[05:39:24] Iniciando raspagem do segmento: PESSOA JURÍDICA...
+[05:39:25] [PJ] Abrindo SIPII...
+[05:39:43]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[05:39:57]   [PJ] RENDA FIXA: 38 fundos.
+[05:40:01]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[05:40:05]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[05:40:15]   [PJ] MULTIMERCADO: 27 fundos.
+[05:40:18]   [PJ] CAMBIAL: 1 fundos.
+[05:40:29]   [PJ] ACOES: 28 fundos.
+[05:40:31] Iniciando raspagem do segmento: GOVERNO...
+[05:40:32] [GOV] Abrindo SIPII...
+[05:40:48]   [GOV] RENDA FIXA: 2 fundos.
+[05:40:51]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[05:40:55]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[05:40:59]   [GOV] MULTIMERCADO: 6 fundos.
+[05:41:03]   [GOV] ACOES: 4 fundos.
+[05:41:05] Iniciando raspagem do segmento: RPPS...
+[05:41:05] [RPPS] Abrindo SIPII...
+[05:41:31]   [RPPS] RENDA FIXA: 19 fundos.
+[05:41:35]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[05:41:42]   [RPPS] MULTIMERCADO: 14 fundos.
+[05:41:48]   [RPPS] ACOES: 14 fundos.
+[05:41:50] Iniciando raspagem do segmento: TODOS...
+[05:41:51] [TODOS] Abrindo SIPII...
+[05:42:08]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[05:42:24]   [TODOS] RENDA FIXA: 42 fundos.
+[05:42:29]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[05:42:32]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[05:42:39]   [TODOS] MULTIMERCADO: 14 fundos.
+[05:42:42]   [TODOS] CAMBIAL: 1 fundos.
+[05:42:51]   [TODOS] ACOES: 25 fundos.
+[05:42:55]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[05:42:57] Deduplicando e injetando cruzamento de perfis...
+[05:42:57] [Fundos.json] Cruzamento finalizado. URLs válidas: 160/171
+[05:42:57] [Ajuste SIPII] Sanetizando nomes dos fundos e aplicando regras de quoting...
+[05:42:57] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[05:42:57] [KPIs] JSON exportado: kpis_dashboard.json
+[05:42:57] [MERCADO] Coletando indicadores macro e índices internacionais...
+[05:42:58] [IPCA] Base local: 556 meses carregados.
+[05:42:59] [IPCA] Delta BCB: 3 meses recebidos.
+[05:42:59] [IPCA] Base salva: 556 meses → ipca_historico_base.json
+[05:43:00] [Focus] Coletando expectativas do Banco Central...
+[05:43:00]   [Focus] -> IPCA
+[05:43:00]   [Focus] IPCA → HTTP 503
+[05:43:00]   [Focus] IPCA vazio — aguardando 15s (tentativa 1/3)...
+[05:43:16]   [Focus] IPCA → HTTP 503
+[05:43:16]   [Focus] IPCA vazio — aguardando 30s (tentativa 2/3)...
+[05:43:46]   [Focus] IPCA → HTTP 503
+[05:43:46]   [Focus] IPCA -> sem dados após 3 tentativas.
+[05:43:47]   [Focus] -> Selic
+[05:43:48]   [Focus] Selic → HTTP 503
+[05:43:48]   [Focus] Selic vazio — aguardando 15s (tentativa 1/3)...
+[05:44:03]   [Focus] Selic → HTTP 503
+[05:44:03]   [Focus] Selic vazio — aguardando 30s (tentativa 2/3)...
+[05:44:34]   [Focus] Selic → HTTP 503
+[05:44:34]   [Focus] Selic -> sem dados após 3 tentativas.
+[05:44:35]   [Focus] -> PIB Total
+[05:44:35]   [Focus] PIB Total → HTTP 503
+[05:44:35]   [Focus] PIB Total vazio — aguardando 15s (tentativa 1/3)...
+[05:44:51]   [Focus] PIB Total → HTTP 503
+[05:44:51]   [Focus] PIB Total vazio — aguardando 30s (tentativa 2/3)...
+[05:45:21]   [Focus] PIB Total → HTTP 503
+[05:45:21]   [Focus] PIB Total -> sem dados após 3 tentativas.
+[05:45:22]   [Focus] -> Câmbio
+[05:45:23]   [Focus] Câmbio → HTTP 503
+[05:45:23]   [Focus] Câmbio vazio — aguardando 15s (tentativa 1/3)...
+[05:45:38]   [Focus] Câmbio → HTTP 503
+[05:45:38]   [Focus] Câmbio vazio — aguardando 30s (tentativa 2/3)...
+[05:46:09]   [Focus] Câmbio → HTTP 503
+[05:46:09]   [Focus] Câmbio -> sem dados após 3 tentativas.
+[05:46:10]   [Focus] -> IGP-M
+[05:46:10]   [Focus] IGP-M → HTTP 503
+[05:46:10]   [Focus] IGP-M vazio — aguardando 15s (tentativa 1/3)...
+[05:46:26]   [Focus] IGP-M → HTTP 503
+[05:46:26]   [Focus] IGP-M vazio — aguardando 30s (tentativa 2/3)...
+[05:46:57]   [Focus] IGP-M → HTTP 503
+[05:46:57]   [Focus] IGP-M -> sem dados após 3 tentativas.
+[05:46:58] [Focus] Coleta concluída — 0/5 indicadores obtidos.
+[05:46:58] [SUCESSO] JSON unificado exportado: mercado_atual.json | Histórico IPCA: 556 m | Focus: 6 ind
+[05:46:58] Ações concluídas com sucesso. Processo de arquitetura de dados finalizado. Bases preparadas.
+[05:46:58] [LIMPEZA] Backups datados mantidos: 5 (limite: 5)
