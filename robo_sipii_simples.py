@@ -10,6 +10,7 @@ Estratégia de URLs em duas camadas:
         Correção: visitos → vistos em raspar_urls_caixa()
         Correção Focus: Montagem de URL manual para evitar o Erro OData 400
         Integração Front-End: Leitura local do histórico Selic e Metas de Inflação
+        Correção de Bug: Restauração da variável global DEBUG_COLUNAS
 """
 
 import json
@@ -70,6 +71,9 @@ CAIXA_LISTING_PAGES = [
 
 MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
 
+# Variável de Debug restaurada para evitar NameError nas tabelas do SIPII
+DEBUG_COLUNAS = False
+
 # ---------------------------------------------------------------------------
 # Dicionário estático — 116 URLs validadas manualmente
 # ---------------------------------------------------------------------------
@@ -90,7 +94,7 @@ URL_ESTATICO = {
     "CAIXA FIC FIF ACOES MULTIGESTOR": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/fic-fia-multigestor/Paginas/default.aspx",
     "CAIXA FIC FIF ALOCACAO MACRO MM LONGO PRAZO": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-alocacao-macro-multimercado-longo-prazo/",
     "CAIXA FIC FIF BETA RF REF DI LP": "https://www.caixa.gov.br/fundos-investimento/referenciados/fic-beta-ref-di-lp",
-    "CAIXA FIC FIF BRASIL DISPONIBILIDADES SIMPLES RF": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/brasil-disponidades",
+    "CAIXA FIC FIF BRASIL DISPONIBILIDADES SIMPLES RF": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/brasil-disponibilidades",
     "CAIXA FIC FIF BRASIL GESTAO ESTRATEGICA RF": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/caixa-fic-brasil-gestao-estrategica-rf",
     "CAIXA FIC FIF BRASIL RF REFER DI LONGO PRAZO": "https://www.caixa.gov.br/fundos-investimento/referenciados/fi-brasil-ref-di-longo-prazo",
     "CAIXA FIC FIF CAPITAL IND PRECOS RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-capital-indice-de-precos-rf-longo-prazo",
@@ -180,7 +184,7 @@ URL_ESTATICO = {
     "CAIXA FIC FIF FOF SMART CRED PRIV MM LP": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-fof-smart-credito-privado-multimercado-longo-prazo/Paginas/default.aspx",
     "CAIXA FIF INDEXA EURO MM LONGO PRAZO": "https://www.caixa.gov.br/fundos-investimento/multimercado/fi-euro-multimercado-longo-prazo/Paginas/default.aspx",
     "CAIXA CAPITAL PROTEGIDO CICLICO III FIC FIF MM LP -": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-capital-protegido-ciclico-iii-multimercado-lp/Paginas/default.aspx",
-    "CAIXA FIC FIM CAPITAL PROTEGIDO CICLICO II LP -": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-capital-protegido-ciclico-ii-multimercado-lp/Paginas/default.aspx",
+    "CAIXA FIC FIM CAPITAL PROTEGIDO CICLICO II LP - RL": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-capital-protegido-ciclico-ii-multimercado-lp/Paginas/default.aspx",
     "CAIXA FIC FIF EXPERT PIMCO INCOME IE MM LP": "https://www.caixa.gov.br/fundos-investimento/multimercado/caixa-expert-pimco-income-ie-fic-multimercado/Paginas/default.aspx",
     "CAIXA FIF EXTRAMERCADO COMUM IRFM-1 RF": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fi-extramercado-comum-irfm-1-rf/Paginas/default.aspx",
     "CAIXA FIC FIF AMETISTA CORP RF SIMPLES": "https://www.caixa.gov.br/fundos-investimento/fundo-simples/fic-ametista-corporativo-rf-simples/Paginas/default.aspx",
@@ -349,7 +353,10 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     filtro_codificado = requests.utils.quote(filtro)
 
     url = (
-        f"{FOCUS_BASE}ExpectativasMercadoAnuais"
+        f"{FOCUS_BASE}ExpectativasMarketAnuais" if indicador == 'Câmbio' else f"{FOCUS_BASE}ExpectativasMercadoAnuais"
+    )
+    url_completa = (
+        f"{url}"
         f"?$filter={filtro_codificado}"
         f"&$format=json"
         f"&$orderby=Data%20desc"
@@ -358,7 +365,7 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     
     resultado = {}
     try:
-        res = requests.get(url, headers=headers, timeout=20)
+        res = requests.get(url_completa, headers=headers, timeout=20)
         if res.status_code != 200:
             log(f"  [Focus] {indicador} → HTTP {res.status_code}")
             return resultado
@@ -452,7 +459,6 @@ def buscar_fundos_json(headers: dict) -> dict:
             url = (f.get("url") or f.get("URL") or "").strip()
             if nome:
                 norm_key = _normalizar_nome_fundo(nome)
-                # Guarda todo o pacote de dados do fundo estruturado
                 indice_rico[norm_key] = {
                     "url": url if (url and "caixa.gov.br" in url) else "",
                     "cnpj": f.get("nu_cnpj"),
@@ -470,7 +476,6 @@ def buscar_fundos_json(headers: dict) -> dict:
 
 def enriquecer_dados_com_fundos_json(df: pd.DataFrame, indice_json: dict) -> pd.DataFrame:
     """Preenche URLs ausentes e acopla metadados comerciais ricos ao DataFrame."""
-    # Inicializa colunas no DataFrame para receber os pacotes do JSON Asset
     colunas_novas = ["CNPJ", "Perfil de Risco", "Taxa Adm (%)", "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate"]
     for col in colunas_novas:
         if col not in df.columns:
@@ -485,11 +490,9 @@ def enriquecer_dados_com_fundos_json(df: pd.DataFrame, indice_json: dict) -> pd.
         
         meta = indice_json.get(chave)
         if meta:
-            # Enriquecimento inteligente de URL (não apaga se já mapeada de forma estática)
             if not (url_atual and url_atual.startswith("http") and "caixa.gov.br" in url_atual):
                 row["URL"] = meta["url"]
             
-            # Acoplamento estruturado das novas propriedades para o index.html ler
             row["CNPJ"] = meta["cnpj"]
             row["Perfil de Risco"] = meta["perfil_risco"]
             row["Taxa Adm (%)"] = meta["taxa_adm"]
@@ -560,7 +563,7 @@ def localizar_tabela_ativa(driver):
 
 def extrair_dados_tabela(driver, nome_csv, sigla):
     tabela = localizar_tabela_ativa(driver)
-    linhas = table_rows = tabela.find_elements(By.CSS_SELECTOR, "tbody tr")
+    linhas = tabela.find_elements(By.CSS_SELECTOR, "tbody tr")
     dados = []
     for i, tr in enumerate(linhas):
         tds = tr.find_elements(By.XPATH, "./td")
@@ -658,7 +661,6 @@ def salvar_excel(df, caminho):
                     except: cell.font=nf
                 else: cell.font=nf
                 
-        # Dicionário de espaçamento estendido contemplando os novos metadados
         widths={"Categoria":18,"Fundo":55,"Data Inicio":13,"Cota (R$)":16,
                 "Variacao Dia (%)":14,"Acum. Mes (%)":13,"Acum. Ano (%)":13,
                 "Acum. 12M (%)":13,"PL (milhoes R$)":18,"Perfis":30,"URL":60,
@@ -1002,7 +1004,7 @@ def executar():
     }
     indice_fundos_json = buscar_fundos_json(headers_http)
 
-    # 3. Extração de tabelas de cotas/PL do SIPII (Selenium headless)
+    # 3. Extração de dados brutos do SIPII por segmento
     todos_dados = []
     for perf in PERFIS:
         log(f"Iniciando raspagem do segmento: {perf['segmento']}...")
@@ -1018,11 +1020,10 @@ def executar():
     log("Deduplicando e injetando cruzamento de perfis...")
     df_consolidado = consolidar(todos_dados)
 
-    # 5. Inteligência de Enriquecimento de Dados Cruzados (Estático → Dinâmico → Metadados JSON Asset)
+    # 5. Inteligência de Enriquecimento de Dados Cruzados
     df_consolidado["URL"] = df_consolidado["Fundo"].apply(
         lambda x: encontrar_url(x, links_dinamicos)
     )
-    # CORREÇÃO APLICADA: Executa o acoplamento completo de CNPJ, Risco, Taxa e Liquidez no CSV
     df_consolidado = enriquecer_dados_com_fundos_json(df_consolidado, indice_fundos_json)
 
     # 6. Exportação CSV e Excel estruturados
@@ -1031,7 +1032,7 @@ def executar():
     df_consolidado.to_csv(caminho_csv, index=False, encoding="utf-8")
     salvar_excel(df_consolidado, caminho_xlsx)
 
-    # 7. KPIs ponderados de Share de Carteira e PL Total por Categoria
+    # 7. KPIs do dashboard
     caminho_kpis = BASE_DIR / "kpis_dashboard.json"
     gerar_json_kpis_dashboard(df_consolidado, caminho_kpis)
 
