@@ -336,23 +336,29 @@ def encontrar_url(nome, registros_dinamicos):
 # ---------------------------------------------------------------------------
 # Boletim Focus (BCB)
 # ---------------------------------------------------------------------------
-FOCUS_BASE = (
-    "https://olinda.bcb.gov.br/olinda/servico/"
-    "Expectativas/versao/v1/odata/"
-)
+FOCUS_BASE = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais"
 
 INDICADORES_FOCUS = ["IPCA", "Selic", "PIB Total", "Câmbio", "IGP-M"]
 
 def _buscar_focus_indicador(indicador, anos, headers):
-    usa_base_calculo = indicador == "IPCA"
-    filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0" if usa_base_calculo else f"Indicador eq '{indicador}'"
+    # IPCA e IPCA Modal exigem baseCalculo eq 0 para evitar duplicatas
+    if indicador in ("IPCA", "IPCA Modal"):
+        filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
+    else:
+        filtro = f"Indicador eq '{indicador}'"
+
     filtro_codificado = requests.utils.quote(filtro)
-    url = (f"{FOCUS_BASE}ExpectativasMarketAnuais" if indicador == 'Câmbio'
-           else f"{FOCUS_BASE}ExpectativasMercadoAnuais")
-    url_completa = f"{url}?$filter={filtro_codificado}&$format=json&$orderby=Data%20desc&$top=50"
+    # Endpoint único correto para todos os indicadores (incluindo Câmbio)
+    url = (
+        f"{FOCUS_BASE}"
+        f"?$filter={filtro_codificado}"
+        f"&$format=json"
+        f"&$orderby=Data%20desc"
+        f"&$top=80"
+    )
     resultado = {}
     try:
-        res = requests.get(url_completa, headers=headers, timeout=20)
+        res = requests.get(url, headers=headers, timeout=15)
         if res.status_code != 200:
             log(f"  [Focus] {indicador} → HTTP {res.status_code}")
             return resultado
@@ -366,8 +372,10 @@ def _buscar_focus_indicador(indicador, anos, headers):
             if ano not in anos or ano in vistos_anos: continue
             vistos_anos.add(ano)
             resultado[ano] = {
-                "mediana": reg.get("Mediana"), "media": reg.get("Media"),
-                "minimo": reg.get("Minimo"), "maximo": reg.get("Maximo"),
+                "mediana": reg.get("Mediana"),
+                "media":   reg.get("Media"),
+                "minimo":  reg.get("Minimo"),
+                "maximo":  reg.get("Maximo"),
                 "data_ref": reg.get("Data"),
             }
             if len(vistos_anos) == len(anos): break
@@ -385,11 +393,11 @@ def buscar_focus(headers):
         time.sleep(0.5)
     focus = {
         "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
-        "IPCA": raw_focus.get("IPCA", {}),
-        "Selic": raw_focus.get("Selic", {}),
-        "PIB": raw_focus.get("PIB Total", {}),
-        "Cambio": raw_focus.get("Câmbio", {}),
-        "IGPM": raw_focus.get("IGP-M", {}),
+        "IPCA":       raw_focus.get("IPCA", {}),
+        "Selic":      raw_focus.get("Selic", {}),
+        "PIB":        raw_focus.get("PIB Total", {}),
+        "Cambio":     raw_focus.get("Câmbio", {}),
+        "IGPM":       raw_focus.get("IGP-M", {}),
         "IPCA_Modal": raw_focus.get("IPCA", {}),
     }
     log(f"[Focus] Coleta concluída e chaves normalizadas para web.")
@@ -544,6 +552,25 @@ def carregar_fallback_sipii():
                 log(f"[FALLBACK SIPII] Erro ao ler '{caminho.name}': {e}")
     log("[FALLBACK SIPII] Nenhum arquivo de fallback encontrado.")
     return pd.DataFrame()
+
+# ---------------------------------------------------------------------------
+# Limpeza de backups antigos
+# ---------------------------------------------------------------------------
+def limpar_backups_antigos(manter=5):
+    """Mantém apenas os N backups datados mais recentes, apagando os demais."""
+    for extensao in ["csv", "xlsx"]:
+        arquivos = sorted(
+            BASE_DIR.glob(f"sipii_caixa_*.{extensao}"), reverse=True
+        )
+        para_apagar = arquivos[manter:]
+        for arq in para_apagar:
+            try:
+                arq.unlink()
+                log(f"[LIMPEZA] Removido backup antigo: {arq.name}")
+            except Exception as e:
+                log(f"[LIMPEZA] Erro ao remover {arq.name}: {e}")
+    restantes = len(list(BASE_DIR.glob("sipii_caixa_*.csv")))
+    log(f"[LIMPEZA] Backups datados mantidos: {restantes} (limite: {manter})")
 
 # ---------------------------------------------------------------------------
 # SIPII scraping
@@ -1052,6 +1079,9 @@ def executar():
         traceback.print_exc()
 
     log("Ações concluídas com sucesso. Processo de arquitetura de dados finalizado. Bases preparadas.")
+
+    # 10. Limpeza de backups datados antigos (mantém os 5 mais recentes)
+    limpar_backups_antigos(manter=5)
 
 
 if __name__ == "__main__":
