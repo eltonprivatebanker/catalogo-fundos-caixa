@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "19/05/2026 00:13:00",
+    "atualizado_em": "19/05/2026 00:33:11",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -2275,12 +2275,12 @@
         "nasdaq": 26090.734375
     },
     "focus": {
-        "data_coleta": "19/05/2026 00:12",
+        "data_coleta": "19/05/2026 00:33",
         "IPCA": {},
         "IPCA Modal": {},
         "Selic": {},
         "PIB Total": {},
-        "Cambio": {},
+        "Câmbio": {},
         "IGP-M": {}
     }
 }
