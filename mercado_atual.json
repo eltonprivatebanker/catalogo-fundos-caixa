@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "19/05/2026 02:21:59",
+    "atualizado_em": "19/05/2026 03:14:34",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -4262,7 +4262,7 @@
             "unidade": "% m.m."
         },
         "ibovespa": {
-            "atual": 176975.8125,
+            "atual": 176976.0,
             "anterior": 197738.0,
             "variacao_mensal": -10.5
         },
@@ -4279,7 +4279,7 @@
         "nasdaq": 26090.734375
     },
     "focus": {
-        "data_coleta": "19/05/2026 02:21",
+        "data_coleta": "19/05/2026 03:13",
         "IPCA": {
             "2026": {
                 "mediana": 4.9193,
@@ -4370,96 +4370,9 @@
                 "data_ref": "2026-05-15"
             }
         },
-        "Câmbio": {
-            "2026": {
-                "mediana": 5.2,
-                "media": 5.1693,
-                "minimo": 4.75,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            },
-            "2027": {
-                "mediana": 5.27,
-                "media": 5.2347,
-                "minimo": 4.5,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            },
-            "2028": {
-                "mediana": 5.34,
-                "media": 5.3029,
-                "minimo": 4.5,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            },
-            "2029": {
-                "mediana": 5.4,
-                "media": 5.3396,
-                "minimo": 4.6,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            }
-        },
-        "IGP-M": {
-            "2026": {
-                "mediana": 5.6278,
-                "media": 5.7757,
-                "minimo": 1.7856,
-                "maximo": 12.4414,
-                "data_ref": "2026-05-15"
-            },
-            "2027": {
-                "mediana": 4.0,
-                "media": 3.955,
-                "minimo": 2.0,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            },
-            "2028": {
-                "mediana": 3.82,
-                "media": 3.9369,
-                "minimo": 2.75,
-                "maximo": 6.97,
-                "data_ref": "2026-05-15"
-            },
-            "2029": {
-                "mediana": 3.7,
-                "media": 3.7413,
-                "minimo": 2.56,
-                "maximo": 5.0,
-                "data_ref": "2026-05-15"
-            }
-        },
-        "Cambio": {
-            "2026": {
-                "mediana": 5.2,
-                "media": 5.1693,
-                "minimo": 4.75,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            },
-            "2027": {
-                "mediana": 5.27,
-                "media": 5.2347,
-                "minimo": 4.5,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            },
-            "2028": {
-                "mediana": 5.34,
-                "media": 5.3029,
-                "minimo": 4.5,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            },
-            "2029": {
-                "mediana": 5.4,
-                "media": 5.3396,
-                "minimo": 4.6,
-                "maximo": 6.0,
-                "data_ref": "2026-05-15"
-            }
-        },
+        "Câmbio": {},
+        "IGP-M": {},
+        "Cambio": {},
         "PIB": {
             "2026": {
                 "mediana": 1.8531,
