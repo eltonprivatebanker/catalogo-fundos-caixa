@@ -3227,3 +3227,81 @@
 [22:31:46] [Focus PDF] Tentando R20260515.pdf (15/05/2026)...
 [22:31:47] [SUCESSO] mercado_atual.json exportado | CDI mensal real=0.59% | IPCA: 556m | Focus: 8 ind.
 [22:31:47] [FIM] 171 fundos consolidados. Pipeline completo.
+[22:52:29] ⚡ [INÍCIO] Robô SIPII v15 — CDI real + todos os indicadores macro
+[22:52:32]   [CAIXA] renda-fixa → +34 links (34 total)
+[22:52:33]   [CAIXA] referenciados → +4 links (38 total)
+[22:52:35]   [CAIXA] fundo-simples → +2 links (40 total)
+[22:52:36]   [CAIXA] curto-prazo → +1 links (41 total)
+[22:52:37]   [CAIXA] multimercado → +19 links (60 total)
+[22:52:39]   [CAIXA] cambiais → +1 links (61 total)
+[22:52:41]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[22:52:42]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[22:52:44]   [CAIXA] renda-fixa → +8 links (81 total)
+[22:52:45]   [CAIXA] empresa → +5 links (86 total)
+[22:52:46]   [CAIXA] fmp-fgts → HTTP 404
+[22:52:47]   [CAIXA] rpps → +8 links (94 total)
+[22:52:48] [CAIXA] Total URLs dinâmicas: 94
+[22:52:48] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[22:52:50] [Fundos.json] Download HTTP OK — 196 registros.
+[22:52:50] [Fundos.json] 194 produtos indexados.
+[22:52:50] Raspando segmento: PESSOA FÍSICA...
+[22:52:51] [PF] Abrindo SIPII...
+[22:53:09]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[22:53:24]   [PF] RENDA FIXA: 39 fundos.
+[22:53:30]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[22:53:33]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[22:53:46]   [PF] MULTIMERCADO: 30 fundos.
+[22:53:49]   [PF] CAMBIAL: 1 fundos.
+[22:54:01]   [PF] ACOES: 29 fundos.
+[22:54:05]   [PF] FUNDO DE INDICE: 1 fundos.
+[22:54:10]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[22:54:12] Raspando segmento: PESSOA JURÍDICA...
+[22:54:13] [PJ] Abrindo SIPII...
+[22:54:32]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[22:54:47]   [PJ] RENDA FIXA: 38 fundos.
+[22:54:52]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[22:54:55]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[22:55:06]   [PJ] MULTIMERCADO: 27 fundos.
+[22:55:09]   [PJ] CAMBIAL: 1 fundos.
+[22:55:21]   [PJ] ACOES: 28 fundos.
+[22:55:23] Raspando segmento: GOVERNO...
+[22:55:23] [GOV] Abrindo SIPII...
+[22:55:41]   [GOV] RENDA FIXA: 2 fundos.
+[22:55:44]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[22:55:48]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[22:55:52]   [GOV] MULTIMERCADO: 6 fundos.
+[22:55:56]   [GOV] ACOES: 4 fundos.
+[22:55:58] Raspando segmento: RPPS...
+[22:55:59] [RPPS] Abrindo SIPII...
+[22:56:28]   [RPPS] RENDA FIXA: 19 fundos.
+[22:56:32]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[22:56:38]   [RPPS] MULTIMERCADO: 14 fundos.
+[22:56:45]   [RPPS] ACOES: 14 fundos.
+[22:56:47] Raspando segmento: TODOS...
+[22:56:48] [TODOS] Abrindo SIPII...
+[22:57:05]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[22:57:22]   [TODOS] RENDA FIXA: 42 fundos.
+[22:57:27]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[22:57:31]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[22:57:38]   [TODOS] MULTIMERCADO: 14 fundos.
+[22:57:41]   [TODOS] CAMBIAL: 1 fundos.
+[22:57:52]   [TODOS] ACOES: 25 fundos.
+[22:57:55]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[22:57:58] [Fundos.json] URLs válidas após cruzamento: 160/171
+[22:57:58] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[22:57:58] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260519.xlsx
+[22:57:58] [KPIs] JSON exportado: kpis_dashboard.json
+[22:57:58] [MERCADO] Coletando indicadores macro...
+[22:58:08] [IPCA] Base local: 556 meses.
+[22:58:08] [IPCA] Base salva: 556 meses.
+[22:58:09] [Focus] Coletando expectativas do Banco Central...
+[22:58:09]   [Focus] -> IPCA
+[22:58:10]   [Focus] IPCA → HTTP 503
+[22:58:20]   [Focus] IPCA → HTTP 503
+[22:58:21]   [Focus] -> Selic
+[22:58:21]   [Focus] Selic → HTTP 503
+[22:58:31]   [Focus] Selic → HTTP 503
+[22:58:31] [Focus] BCB indisponível — abortando OData.
+[22:58:31] [Focus PDF] Tentando R20260515.pdf (15/05/2026)...
+[22:58:31] [SUCESSO] mercado_atual.json exportado | CDI mensal real=0.59% | IPCA: 556m | Focus: 8 ind.
+[22:58:31] [FIM] 171 fundos consolidados. Pipeline completo.
