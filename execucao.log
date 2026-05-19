@@ -1740,3 +1740,86 @@
 [22:53:50] [IPCA] 0.67% (abr/2026) | Ano: 2.6043% | 12M: 4.3917% | Série: 556 meses
 [22:53:51] [SUCESSO] JSON salvo: mercado_atual.json | Série IPCA: 556 meses
 [22:53:51] ✨ [FIM] Processo finalizado com sucesso! Dados prontos para o front-end.
+[00:07:26] ⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v13...
+[00:07:28]   [CAIXA] renda-fixa → +34 links (34 total)
+[00:07:29]   [CAIXA] referenciados → +4 links (38 total)
+[00:07:31]   [CAIXA] fundo-simples → +2 links (40 total)
+[00:07:33]   [CAIXA] curto-prazo → +1 links (41 total)
+[00:07:34]   [CAIXA] multimercado → +19 links (60 total)
+[00:07:36]   [CAIXA] cambiais → +1 links (61 total)
+[00:07:38]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[00:07:39]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[00:07:41]   [CAIXA] renda-fixa → +8 links (81 total)
+[00:07:44]   [CAIXA] empresa → +5 links (86 total)
+[00:07:45]   [CAIXA] fmp-fgts → HTTP 404
+[00:07:45]   [CAIXA] rpps → +8 links (94 total)
+[00:07:46] [CAIXA] Total URLs dinâmicas: 94
+[00:07:46] [Fundos.json] Baixando catálogo CAIXA Asset...
+[00:07:48] [Fundos.json] 0 fundos com URL indexados.
+[00:07:48] Iniciando raspagem do segmento: PESSOA FÍSICA...
+[00:08:01] [PF] Abrindo SIPII...
+[00:08:19]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[00:08:34]   [PF] RENDA FIXA: 39 fundos.
+[00:08:39]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[00:08:42]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[00:08:53]   [PF] MULTIMERCADO: 30 fundos.
+[00:08:56]   [PF] CAMBIAL: 1 fundos.
+[00:09:08]   [PF] ACOES: 29 fundos.
+[00:09:11]   [PF] FUNDO DE INDICE: 1 fundos.
+[00:09:16]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[00:09:18] Iniciando raspagem do segmento: PESSOA JURÍDICA...
+[00:09:18] [PJ] Abrindo SIPII...
+[00:09:36]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[00:09:51]   [PJ] RENDA FIXA: 38 fundos.
+[00:09:55]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[00:09:59]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[00:10:10]   [PJ] MULTIMERCADO: 27 fundos.
+[00:10:13]   [PJ] CAMBIAL: 1 fundos.
+[00:10:24]   [PJ] ACOES: 28 fundos.
+[00:10:26] Iniciando raspagem do segmento: GOVERNO...
+[00:10:26] [GOV] Abrindo SIPII...
+[00:10:43]   [GOV] RENDA FIXA: 2 fundos.
+[00:10:46]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[00:10:49]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[00:10:54]   [GOV] MULTIMERCADO: 6 fundos.
+[00:10:58]   [GOV] ACOES: 4 fundos.
+[00:11:00] Iniciando raspagem do segmento: RPPS...
+[00:11:00] [RPPS] Abrindo SIPII...
+[00:11:26]   [RPPS] RENDA FIXA: 19 fundos.
+[00:11:30]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[00:11:36]   [RPPS] MULTIMERCADO: 14 fundos.
+[00:11:43]   [RPPS] ACOES: 14 fundos.
+[00:11:45] Iniciando raspagem do segmento: TODOS...
+[00:11:46] [TODOS] Abrindo SIPII...
+[00:12:02]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[00:12:17]   [TODOS] RENDA FIXA: 42 fundos.
+[00:12:22]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[00:12:25]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[00:12:32]   [TODOS] MULTIMERCADO: 14 fundos.
+[00:12:35]   [TODOS] CAMBIAL: 1 fundos.
+[00:12:45]   [TODOS] ACOES: 25 fundos.
+[00:12:49]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[00:12:51] Deduplicando e injetando cruzamento de perfis...
+[00:12:51] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[00:12:51] [KPIs] JSON exportado: kpis_dashboard.json
+[00:12:51] [MERCADO] Coletando indicadores macro e índices internacionais...
+[00:12:53] [IPCA] Base local: 556 meses carregados.
+[00:12:53] [IPCA] Delta BCB: 3 meses recebidos.
+[00:12:53] [IPCA] Base salva: 556 meses → ipca_historico_base.json
+[00:12:53] [IPCA] 0.67% (abr/2026) | Ano: 2.6043% | 12M: 4.3917% | Série: 556 meses
+[00:12:54] [Focus] Coletando expectativas do Banco Central...
+[00:12:54]   [Focus] → IPCA
+[00:12:54]   [Focus] IPCA → HTTP 404
+[00:12:55]   [Focus] → IPCA Modal
+[00:12:55]   [Focus] IPCA Modal → HTTP 404
+[00:12:56]   [Focus] → Selic
+[00:12:56]   [Focus] Selic → HTTP 404
+[00:12:57]   [Focus] → PIB Total
+[00:12:57]   [Focus] PIB Total → HTTP 404
+[00:12:58]   [Focus] → Cambio
+[00:12:58]   [Focus] Cambio → HTTP 404
+[00:12:59]   [Focus] → IGP-M
+[00:12:59]   [Focus] IGP-M → HTTP 404
+[00:13:00] [Focus] Coleta concluída: 6 indicadores.
+[00:13:00] [SUCESSO] JSON salvo: mercado_atual.json | IPCA: 556 meses | Focus: 6 indicadores
+[00:13:00] ✨ [FIM] Processo finalizado com sucesso! Dados prontos para o front-end.
