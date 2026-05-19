@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
   --bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--bg4:#181d36;
@@ -112,7 +113,23 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .focus-ref a{color:var(--gold);text-decoration:none;transition:color .15s}
 .focus-ref a:hover{color:var(--gold2)}
 
-/* ── RANKING ── */
+/* ── CHARTS ── */
+.charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
+.chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s}
+.chart-card:hover{border-color:rgba(200,151,58,.25);box-shadow:0 6px 30px rgba(0,0,0,.3)}
+.chart-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
+.chart-card-header{padding:14px 18px 10px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.chart-card-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold2)}
+.chart-card-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.chart-body{padding:16px 18px;position:relative;height:220px}
+.chart-tabs{display:flex;gap:4px}
+.chart-tab{padding:3px 10px;border-radius:10px;border:1px solid var(--border2);background:transparent;
+  color:var(--muted);font-size:.62rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.chart-tab:hover{border-color:var(--gold);color:var(--gold)}
+.chart-tab.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
+
+
 .ranking-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
 .rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
   transition:border-color .2s,box-shadow .2s}
@@ -329,7 +346,62 @@ footer span{color:var(--gold)}
   </div>
 </div>
 
+<!-- EVOLUÇÃO DOS INDICADORES -->
+<div class="section-gap">
+  <div class="section-title">
+    <h2>📊 Evolução dos Indicadores</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
+  </div>
+  <div class="charts-grid">
+
+    <!-- IPCA -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">🎯 IPCA — Variação Mensal</div>
+          <div class="chart-card-sub">Índice Nacional de Preços ao Consumidor Amplo</div>
+        </div>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-chart="ipca" data-range="24">24M</button>
+          <button class="chart-tab" data-chart="ipca" data-range="60">5A</button>
+          <button class="chart-tab" data-chart="ipca" data-range="120">10A</button>
+        </div>
+      </div>
+      <div class="chart-body"><canvas id="chartIpca"></canvas></div>
+    </div>
+
+    <!-- SELIC -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">🏦 Selic — Decisões COPOM</div>
+          <div class="chart-card-sub">Meta da Taxa Básica de Juros</div>
+        </div>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-chart="selic" data-range="20">Rec.</button>
+          <button class="chart-tab" data-chart="selic" data-range="40">5A</button>
+          <button class="chart-tab" data-chart="selic" data-range="999">Hist.</button>
+        </div>
+      </div>
+      <div class="chart-body"><canvas id="chartSelic"></canvas></div>
+    </div>
+
+    <!-- META VS IPCA -->
+    <div class="chart-card">
+      <div class="chart-card-header">
+        <div>
+          <div class="chart-card-title">🎯 IPCA 12M vs Meta</div>
+          <div class="chart-card-sub">Inflação acumulada vs meta e bandas do CMN</div>
+        </div>
+      </div>
+      <div class="chart-body"><canvas id="chartMeta"></canvas></div>
+    </div>
+
+  </div>
+</div>
+
 <!-- RANKINGS -->
+
 <div class="section-gap">
   <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
     <div style="display:flex;align-items:center;gap:10px">
@@ -484,6 +556,7 @@ async function carregarMercado(){
     $('mc-poup').textContent = poup ? fmt(poup) : '—';
 
     carregarFocus(d.focus, d.atualizado_em);
+    inicializarGraficos(d);
 
   }catch(e){
     console.warn('mercado_atual.json indisponível:', e);
@@ -960,6 +1033,229 @@ async function carregarDados(){
   }catch(err){
     $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
   }
+}
+
+/* ════════════════════════════════════════════════════
+   GRÁFICOS — usa dados do mercado_atual.json
+════════════════════════════════════════════════════ */
+let _chartIpca = null, _chartSelic = null, _chartMeta = null;
+let _dadosMercado = null;
+
+const CHART_DEFAULTS = {
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: { display: false },
+    tooltip: {
+      backgroundColor: 'rgba(11,13,26,.95)',
+      borderColor: 'rgba(200,151,58,.3)',
+      borderWidth: 1,
+      titleColor: '#e8bb6a',
+      bodyColor: '#d8dcea',
+      padding: 10,
+      titleFont: { family: 'Cormorant Garamond', size: 14, weight: '700' },
+      bodyFont: { family: 'JetBrains Mono', size: 11 },
+    }
+  },
+  scales: {
+    x: {
+      grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+      ticks: { color: '#3d4560', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 8 }
+    },
+    y: {
+      grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+      ticks: { color: '#5e6b8a', font: { family: 'JetBrains Mono', size: 10 }, callback: v => v.toFixed(2)+'%' }
+    }
+  }
+};
+
+function buildChartIpca(historico, meses) {
+  const slice = historico.slice(-meses);
+  const labels = slice.map(d => d.label);
+  const values = slice.map(d => d.valor);
+  const colors = values.map(v => v > 0 ? 'rgba(46,209,122,.7)' : 'rgba(240,85,101,.7)');
+
+  if(_chartIpca) _chartIpca.destroy();
+  const ctx = document.getElementById('chartIpca')?.getContext('2d');
+  if(!ctx) return;
+  _chartIpca = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        backgroundColor: colors,
+        borderColor: colors.map(c => c.replace('.7)', '1)')),
+        borderWidth: 1,
+        borderRadius: 2,
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        tooltip: {
+          ...CHART_DEFAULTS.plugins.tooltip,
+          callbacks: {
+            label: ctx => `IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`
+          }
+        }
+      }
+    }
+  });
+}
+
+function buildChartSelic(historico, qtd) {
+  const slice = [...historico].reverse().slice(0, qtd).reverse();
+  const labels = slice.map(d => d.data);
+  const values = slice.map(d => d.valor);
+
+  if(_chartSelic) _chartSelic.destroy();
+  const ctx = document.getElementById('chartSelic')?.getContext('2d');
+  if(!ctx) return;
+  _chartSelic = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        borderColor: '#c8973a',
+        backgroundColor: 'rgba(200,151,58,.08)',
+        borderWidth: 2,
+        pointBackgroundColor: '#e8bb6a',
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        fill: true,
+        stepped: 'before',
+        tension: 0,
+      }]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        tooltip: {
+          ...CHART_DEFAULTS.plugins.tooltip,
+          callbacks: {
+            label: ctx => `Selic: ${ctx.parsed.y.toFixed(2).replace('.',',')}% a.a.`
+          }
+        }
+      }
+    }
+  });
+}
+
+function buildChartMeta(metaDados) {
+  if(!metaDados || !metaDados.length) return;
+  const sorted = [...metaDados]
+    .filter(d => d.DataReferencia && d.Inflacao12Meses)
+    .sort((a,b) => new Date(a.DataReferencia) - new Date(b.DataReferencia));
+
+  const labels = sorted.map(d => {
+    const dt = new Date(d.DataReferencia);
+    return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
+  });
+  const values = sorted.map(d => parseFloat(d.Inflacao12Meses));
+  const metaCentral = values.map(() => 3.0);
+  const metaSup = values.map(() => 4.5);
+  const metaInf = values.map(() => 1.5);
+
+  if(_chartMeta) _chartMeta.destroy();
+  const ctx = document.getElementById('chartMeta')?.getContext('2d');
+  if(!ctx) return;
+  _chartMeta = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'IPCA 12M',
+          data: values,
+          borderColor: '#5b9cf6',
+          backgroundColor: 'rgba(91,156,246,.1)',
+          borderWidth: 2.5,
+          pointBackgroundColor: '#5b9cf6',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          fill: false,
+          tension: 0.3,
+        },
+        {
+          label: 'Meta',
+          data: metaCentral,
+          borderColor: 'rgba(200,151,58,.6)',
+          borderWidth: 1.5,
+          borderDash: [6,3],
+          pointRadius: 0,
+          fill: false,
+        },
+        {
+          label: 'Banda Sup.',
+          data: metaSup,
+          borderColor: 'rgba(240,85,101,.4)',
+          borderWidth: 1,
+          borderDash: [3,3],
+          pointRadius: 0,
+          fill: false,
+        },
+        {
+          label: 'Banda Inf.',
+          data: metaInf,
+          borderColor: 'rgba(46,209,122,.4)',
+          borderWidth: 1,
+          borderDash: [3,3],
+          pointRadius: 0,
+          fill: false,
+        }
+      ]
+    },
+    options: {
+      ...CHART_DEFAULTS,
+      plugins: {
+        ...CHART_DEFAULTS.plugins,
+        legend: {
+          display: true,
+          position: 'bottom',
+          labels: {
+            color: '#5e6b8a',
+            font: { family: 'JetBrains Mono', size: 9 },
+            boxWidth: 12,
+            padding: 10,
+          }
+        },
+        tooltip: {
+          ...CHART_DEFAULTS.plugins.tooltip,
+          callbacks: {
+            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`
+          }
+        }
+      }
+    }
+  });
+}
+
+function inicializarGraficos(d) {
+  _dadosMercado = d;
+  const hist = d?.cards?.ipca?.historico || [];
+  const selic = d?.cards?.selic_meta?.historico || [];
+  const meta = d?.meta_vs_inflacao_efetiva || [];
+
+  if(hist.length) buildChartIpca(hist, 24);
+  if(selic.length) buildChartSelic(selic, 20);
+  if(meta.length) buildChartMeta(meta);
+
+  // Tabs dos gráficos
+  document.querySelectorAll('.chart-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const chart = btn.dataset.chart;
+      const range = parseInt(btn.dataset.range);
+      // Atualiza active
+      document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      if(chart === 'ipca') buildChartIpca(_dadosMercado?.cards?.ipca?.historico || [], range);
+      if(chart === 'selic') buildChartSelic(_dadosMercado?.cards?.selic_meta?.historico || [], range);
+    });
+  });
 }
 
 /* ════════════════════════════════════════════════════
