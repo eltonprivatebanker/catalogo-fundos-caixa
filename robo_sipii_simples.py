@@ -12,6 +12,7 @@ Estratégia de URLs em duas camadas:
         Integração Front-End: Leitura local do histórico Selic e Metas de Inflação
         Correção de Bug: Restauração da variável global DEBUG_COLUNAS
         Ajuste de Sanetização: Remoção de notas de rodapé e blindagem de vírgulas no CSV (quoting)
+        Correção Linguística: Padronização de 'ejecutar' para 'executar'
 """
 
 import json
@@ -91,7 +92,7 @@ URL_ESTATICO = {
     "CAIXA FIC ACOES EXPERT VERDE AM LONG BIAS -": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/CAIXA-Expert-Verde-Am-Long-Bias-FIC-Acoes/Paginas/default.aspx",
     "CAIXA FIC ACOES EXPERT VINCI VALOR DIVIDENDOS RPPS": "https://www.caixa.gov.br/fundos-investimento/rpps/caixa-fic-acoes-vinci-valor-dividendos-rpps",
     "CAIXA FIC ACOES EXPERT VINCI VALOR RPPS": "https://www.caixa.gov.br/fundos-investimento/rpps/caixa-fic-acoes-vinci-valor-rpps",
-    "CAIXA FIC FIF ABSOLUTO PRE RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-absolute-pre-rf-longo-prazo",
+    "CAIXA FIC FIF ABSOLUTO PRE RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-absoluto-pre-rf-longo-prazo",
     "CAIXA FIC FIF ACOES IBOVESPA": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/fi-acoes-ibovespa",
     "CAIXA FIC FIF ACOES MULTIGESTOR": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/fic-fia-multigestor/Paginas/default.aspx",
     "CAIXA FIC FIF ALOCACAO MACRO MM LONGO PRAZO": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-alocacao-macro-multimercado-longo-prazo/",
@@ -737,7 +738,7 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
             "concentracao_top5_percent": round((pl_top_5 / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0,
             "pipeline_novos_fundos": int(df_calculo['Cota (R$)'].isna().sum())
         },
-        "categorias": categories_kpi if 'categories_kpi' in locals() else categorias_kpi,
+        "categorias": categorias_kpi,
         "perfis_comerciais": perfil_kpi
     }
     with open(caminho_saida, "w", encoding="utf-8") as f:
@@ -777,19 +778,20 @@ class ColetorMercado:
             try:
                 url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json"
                 res = requests.get(url, headers=self.headers, timeout=60)
-                if res.status_code == 200:
-                    raw = res.json()
-                    if raw:
-                        historico = []
-                        for item in raw:
-                            d, m, y = item["data"].split("/")
-                            historico.append({
-                                "data":  item["data"],
-                                "label": f"{MESES_PT[int(m)-1]}/{y}",
-                                "valor": round(float(item["valor"]), 4),
-                            })
-                        log(f"[IPCA] Série completa obtida: {len(historico)} meses.")
-                        return historico
+                if res.status_code != 200:
+                    continue
+                raw = res.json()
+                if raw:
+                    historico = []
+                    for item in raw:
+                        d, m, y = item["data"].split("/")
+                        historico.append({
+                            "data":  item["data"],
+                            "label": f"{MESES_PT[int(m)-1]}/{y}",
+                            "valor": round(float(item["valor"]), 4),
+                        })
+                    log(f"[IPCA] Série completa obtida: {len(historico)} meses.")
+                    return historico
             except Exception as e:
                 log(f"[IPCA] Tentativa {tentativa + 1} falhou: {e}")
                 time.sleep(10 * (tentativa + 1))
@@ -1002,7 +1004,7 @@ class ColetorMercado:
 # ---------------------------------------------------------------------------
 # Ponto de entrada
 # ---------------------------------------------------------------------------
-def ejecutar():
+def executar():
     log("⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v13...")
 
     # 1. Scraping de URLs do portal institucional CAIXA
