@@ -24,7 +24,6 @@
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
 
-/* ── FUNDO ── */
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse 80% 50% at 10% -5%,rgba(200,151,58,.055) 0%,transparent 55%),
              radial-gradient(ellipse 60% 60% at 90% 105%,rgba(91,156,246,.04) 0%,transparent 55%)}
@@ -53,18 +52,6 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-
-/* ── TICKER ── */
-.ticker-bar{display:flex;flex-wrap:wrap;gap:6px;padding:16px 0 24px;border-bottom:1px solid var(--border2)}
-.ticker-item{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:10px;
-  background:var(--bg2);border:1px solid var(--border2);transition:border-color .2s,transform .2s;cursor:default}
-.ticker-item:hover{border-color:var(--border);transform:translateY(-1px)}
-.ticker-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600}
-.ticker-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--text);line-height:1}
-.ticker-val.up{color:var(--green)}.ticker-val.down{color:var(--red)}.ticker-val.gold{color:var(--gold2)}
-.ticker-chg{font-size:.63rem;font-family:'JetBrains Mono',monospace;margin-top:1px}
-.ticker-chg.up{color:var(--green)}.ticker-chg.down{color:var(--red)}
-.ticker-sep{width:1px;height:32px;background:var(--border2);align-self:center;margin:0 4px}
 
 /* ── KPI GRID ── */
 .section-gap{margin-top:28px}
@@ -125,6 +112,28 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .focus-ref a{color:var(--gold);text-decoration:none;transition:color .15s}
 .focus-ref a:hover{color:var(--gold2)}
 
+/* ── RANKING ── */
+.ranking-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s}
+.rank-card:hover{border-color:rgba(200,151,58,.25);box-shadow:0 6px 30px rgba(0,0,0,.3)}
+.rank-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
+.rank-card-header{padding:14px 18px 10px;border-bottom:1px solid var(--border2);display:flex;align-items:center;gap:8px}
+.rank-card-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold2)}
+.rank-list{padding:4px 0}
+.rank-item{display:flex;align-items:center;gap:10px;padding:8px 18px;border-bottom:1px solid var(--border2);
+  transition:background .12s;cursor:default}
+.rank-item:last-child{border-bottom:none}
+.rank-item:hover{background:rgba(200,151,58,.03)}
+.rank-pos{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--muted2);min-width:22px;text-align:center}
+.rank-pos.gold-medal{color:var(--gold);font-size:.85rem}
+.rank-info{flex:1;min-width:0}
+.rank-name{font-size:.72rem;color:var(--text);line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rank-cat{font-size:.58rem;color:var(--muted2);margin-top:1px}
+.rank-val{font-family:'JetBrains Mono',monospace;font-size:.76rem;font-weight:600;white-space:nowrap}
+.rank-val.pos{color:var(--green)}.rank-val.neg{color:var(--red)}.rank-val.zero{color:var(--muted)}
+.rank-empty{padding:24px 18px;text-align:center;color:var(--muted);font-size:.75rem}
+
 /* ── CONTROLES ── */
 .controls-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 .search-wrap{position:relative;flex:1;min-width:220px}
@@ -159,6 +168,11 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .chip.pj:hover,.chip.pj.active{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
 .chip.gov:hover,.chip.gov.active{border-color:var(--orange);color:var(--orange);background:rgba(251,146,60,.1)}
 .chip.rpps:hover,.chip.rpps.active{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,.1)}
+/* Risco */
+.chip.cons:hover,.chip.cons.active{border-color:var(--green);color:var(--green);background:var(--green-dim)}
+.chip.mod:hover,.chip.mod.active{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
+.chip.arr:hover,.chip.arr.active{border-color:var(--orange);color:var(--orange);background:rgba(251,146,60,.1)}
+.chip.agr:hover,.chip.agr.active{border-color:var(--red);color:var(--red);background:var(--red-dim)}
 
 /* ── TABELA ── */
 .table-wrap{border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto;
@@ -248,8 +262,7 @@ footer span{color:var(--gold)}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
   .kpi-value{font-size:1.5rem}
   .mercado-grid,.focus-grid{grid-template-columns:1fr 1fr}
-  .ticker-bar{gap:5px}
-  .ticker-item{padding:7px 11px}
+  .ranking-grid{grid-template-columns:1fr}
 }
 @media(max-width:480px){
   .mercado-grid,.focus-grid{grid-template-columns:1fr}
@@ -271,21 +284,6 @@ footer span{color:var(--gold)}
   </div>
   <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
-
-<!-- TICKER DE MERCADO -->
-<div class="ticker-bar" id="tickerBar">
-  <div class="ticker-item"><div class="ticker-label">Selic</div><div class="ticker-val gold" id="tk-selic">—</div></div>
-  <div class="ticker-item"><div class="ticker-label">CDI a.a.</div><div class="ticker-val gold" id="tk-cdi">—</div></div>
-  <div class="ticker-sep"></div>
-  <div class="ticker-item"><div class="ticker-label">IPCA 12M</div><div class="ticker-val" id="tk-ipca">—</div><div class="ticker-chg" id="tk-ipca-mes">—</div></div>
-  <div class="ticker-sep"></div>
-  <div class="ticker-item"><div class="ticker-label">Dólar</div><div class="ticker-val" id="tk-dolar">—</div><div class="ticker-chg" id="tk-dolar-chg">—</div></div>
-  <div class="ticker-item"><div class="ticker-label">Ibovespa</div><div class="ticker-val" id="tk-ibov">—</div><div class="ticker-chg" id="tk-ibov-chg">—</div></div>
-  <div class="ticker-sep"></div>
-  <div class="ticker-item"><div class="ticker-label">S&P 500</div><div class="ticker-val" id="tk-sp500">—</div></div>
-  <div class="ticker-item"><div class="ticker-label">Nasdaq</div><div class="ticker-val" id="tk-nasdaq">—</div></div>
-  <div class="ticker-item"><div class="ticker-label">Poupança</div><div class="ticker-val" id="tk-poup">—</div></div>
-</div>
 
 <!-- KPI GRID -->
 <div class="kpi-grid section-gap">
@@ -331,6 +329,21 @@ footer span{color:var(--gold)}
   </div>
 </div>
 
+<!-- RANKINGS -->
+<div class="section-gap">
+  <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <h2>🏆 Rankings de Performance</h2>
+      <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
+    </div>
+  </div>
+  <div id="rankingGrid" class="ranking-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
+      <div class="spinner"></div>Carregando rankings...
+    </div>
+  </div>
+</div>
+
 <!-- CONTROLES DA TABELA -->
 <div class="section-gap">
   <div class="section-title">
@@ -363,6 +376,14 @@ footer span{color:var(--gold)}
       <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
       <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
       <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
+    </div>
+    <div class="filter-row" id="riscoFilters">
+      <span class="filter-label">Risco</span>
+      <button class="chip active" data-risco="">Todos</button>
+      <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
+      <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
+      <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
+      <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
     </div>
     <div class="filter-row" id="catFilters">
       <span class="filter-label">Categoria</span>
@@ -404,15 +425,6 @@ const fmt = (v, dec=2, suf='%') => {
 const fmtBRL = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtK   = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{maximumFractionDigits:0});
 
-function setTicker(id, val, chgId, chg){
-  const el = $(id); if(!el) return;
-  el.textContent = val;
-  if(chgId && $(chgId) && chg!==null && chg!==undefined){
-    const c = $(chgId);
-    c.textContent = (chg>=0?'+':'')+fmt(chg)+'m';
-    c.className = 'ticker-chg '+(chg>=0?'up':'down');
-  }
-}
 function setMcad(id, val, subId, sub, updown){
   const el=$(id); if(!el) return;
   el.textContent = val;
@@ -430,74 +442,47 @@ async function carregarMercado(){
     const r = await fetch('mercado_atual.json?v='+Date.now());
     const d = await r.json();
 
-    // Atualizado em
     if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
 
     const c = d.cards || {};
 
-    // Selic
     const selic = c.selic_meta?.valor;
-    const selicFmt = selic ? fmt(selic)+' a.a.' : '—';
-    $('tk-selic').textContent = selicFmt;
     $('mc-selic').textContent = selic ? fmt(selic) : '—';
 
-    // CDI
     const cdi = c.cdi?.valor;
-    $('tk-cdi').textContent = cdi ? fmt(cdi) : '—';
     $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
 
-    // IPCA
     const ipca = c.ipca || {};
     const ipca12 = ipca.acum_12m;
     const ipcaAno = ipca.acum_ano;
     const ipcaMes = ipca.ultimo_mes;
     const ipcaLabel = ipca.label_mes || '';
-    $('tk-ipca').textContent = ipca12 ? fmt(ipca12) : '—';
-    $('tk-ipca-mes').textContent = ipcaMes ? (ipcaMes>=0?'+':'')+fmt(ipcaMes)+' '+ipcaLabel : '';
     $('mc-ipca12').textContent = ipca12 ? fmt(ipca12) : '—';
     $('mc-ipcaano').textContent = ipcaAno ? fmt(ipcaAno) : '—';
     $('mc-ipca-mes').textContent = ipcaMes ? `último mês (${ipcaLabel}): ${fmt(ipcaMes)}` : 'último mês: —';
 
-    // Dólar
     const dolar = c.dolar || {};
     const dolarAtual = dolar.atual;
     const dolarVar = dolar.variacao_mensal;
-    $('tk-dolar').textContent = dolarAtual ? 'R$ '+fmtBRL(dolarAtual) : '—';
-    if(dolarVar!==null && dolarVar!==undefined){
-      $('tk-dolar-chg').textContent = (dolarVar>=0?'+':'')+fmt(dolarVar)+'m';
-      $('tk-dolar-chg').className = 'ticker-chg '+(dolarVar>=0?'up':'down');
-    }
     $('mc-dolar').textContent = dolarAtual ? 'R$ '+fmtBRL(dolarAtual) : '—';
-    $('mc-dolar').className = 'mcad-val '+(dolarVar>=0?'dn':'up'); // alta do dólar = ruim
+    $('mc-dolar').className = 'mcad-val '+(dolarVar>=0?'dn':'up');
     $('mc-dolar-var').textContent = dolarVar!==null ? `var. 30d: ${(dolarVar>=0?'+':'')+fmt(dolarVar)}` : 'var. 30d: —';
 
-    // Ibovespa
     const ibov = c.ibovespa || {};
     const ibovAtual = ibov.atual;
     const ibovVar = ibov.variacao_mensal;
-    $('tk-ibov').textContent = ibovAtual ? fmtK(ibovAtual) : '—';
-    if(ibovVar!==null && ibovVar!==undefined){
-      $('tk-ibov-chg').textContent = (ibovVar>=0?'+':'')+fmt(ibovVar)+'m';
-      $('tk-ibov-chg').className = 'ticker-chg '+(ibovVar>=0?'up':'down');
-    }
     $('mc-ibov').textContent = ibovAtual ? fmtK(ibovAtual)+' pts' : '—';
     $('mc-ibov').className = 'mcad-val '+(ibovVar>=0?'up':'dn');
     $('mc-ibov-var').textContent = ibovVar!==null ? `var. 30d: ${(ibovVar>=0?'+':'')+fmt(ibovVar)}` : 'var. 30d: —';
     $('mc-ibov-var').className = 'mcad-sub '+(ibovVar>=0?'up':'dn');
 
-    // S&P 500
     const intl = d.indices_internacionais || {};
-    $('tk-sp500').textContent = intl.sp500_usd ? fmtK(intl.sp500_usd) : '—';
-    $('tk-nasdaq').textContent = intl.nasdaq ? fmtK(intl.nasdaq) : '—';
     $('mc-sp500').textContent = intl.sp500_usd ? fmtK(intl.sp500_usd) : '—';
     $('mc-sp500brl').textContent = intl.sp500_brl ? `em R$: ${fmtK(intl.sp500_brl)}` : 'em R$: —';
 
-    // Poupança
     const poup = c.poupanca_nova?.valor;
-    $('tk-poup').textContent = poup ? fmt(poup)+' m.m.' : '—';
     $('mc-poup').textContent = poup ? fmt(poup) : '—';
 
-    // Focus
     carregarFocus(d.focus, d.atualizado_em);
 
   }catch(e){
@@ -508,7 +493,7 @@ async function carregarMercado(){
 }
 
 /* ════════════════════════════════════════════════════
-   FOCUS — usa dados já coletados pelo robô
+   FOCUS
 ════════════════════════════════════════════════════ */
 function focusCardHTML(icon, label, sub, dados){
   const anos = [2026,2027,2028,2029];
@@ -526,7 +511,6 @@ function focusCardHTML(icon, label, sub, dados){
       ${i<anos.length-1?'<hr class="fcad-hr">':''}
     `;
   }).join('');
-
   return `
     <div class="fcad">
       <div class="fcad-label">${icon} ${label}</div>
@@ -542,16 +526,14 @@ function carregarFocus(focus, atualizadoEm){
 
   if(!focus || Object.keys(focus).length === 0){
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.78rem">
-      Dados do Focus não disponíveis. O BCB retornou HTTP 503 na última coleta.</div>`;
+      Dados do Focus não disponíveis.</div>`;
     return;
   }
 
-  // Data de referência: pega a data do primeiro ano disponível do IPCA
   const primeiroAno = Object.keys(focus.IPCA || {})[0];
   const dataRef = focus.IPCA?.[primeiroAno]?.data_ref || '';
   const dataFormatada = dataRef ? dataRef.split('-').reverse().join('/') : (atualizadoEm?.split(' ')[0] || '');
 
-  // Link PDF da última sexta-feira
   const d = new Date();
   const dia = d.getDay();
   d.setDate(d.getDate() - (dia>=5 ? dia-5 : dia+2));
@@ -571,17 +553,111 @@ function carregarFocus(focus, atualizadoEm){
 }
 
 function carregarFocusFallback(){
-  $('focusRef').innerHTML = `Dados offline — <a href="#" style="color:var(--gold)">ver PDF ↗</a>`;
+  $('focusRef').innerHTML = `Dados offline`;
   $('focusGrid').innerHTML = `<div style="grid-column:1/-1;padding:20px;color:var(--muted);font-size:.75rem;
     text-align:center;border:1px dashed var(--border2);border-radius:10px">
     ⚠️ mercado_atual.json não carregado. Execute o robô para atualizar os dados.</div>`;
 }
 
 /* ════════════════════════════════════════════════════
+   RANKINGS
+════════════════════════════════════════════════════ */
+const MEDALHAS = ['🥇','🥈','🥉'];
+
+function renderRankings(){
+  const grid = $('rankingGrid');
+  if(!grid || !allRows.length) return;
+
+  let base = allRows.filter(r => temDados(r));
+
+  // Aplica filtro de perfil se ativo
+  if(activePerfil){
+    base = base.filter(r => {
+      const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
+      return tokens.includes(activePerfil);
+    });
+  }
+  // Aplica filtro de risco se ativo
+  if(activeRisco){
+    base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
+  }
+
+  const sorted12m = base.filter(r => toNum(r['Acum. 12M (%)'])!==null)
+    .sort((a,b) => toNum(b['Acum. 12M (%)']) - toNum(a['Acum. 12M (%)']));
+  const sortedMes = base.filter(r => toNum(r['Acum. Mes (%)'])!==null)
+    .sort((a,b) => toNum(b['Acum. Mes (%)']) - toNum(a['Acum. Mes (%)']));
+  const sortedAno = base.filter(r => toNum(r['Acum. Ano (%)'])!==null)
+    .sort((a,b) => toNum(b['Acum. Ano (%)']) - toNum(a['Acum. Ano (%)']));
+
+  // Melhor por categoria
+  const catMap = {};
+  sorted12m.forEach(r => {
+    const cat = r['Categoria']||'—';
+    if(!catMap[cat]) catMap[cat] = r;
+  });
+  const catTop = Object.entries(catMap)
+    .sort((a,b) => toNum(b[1]['Acum. 12M (%)']) - toNum(a[1]['Acum. 12M (%)']));
+
+  function rankItem(r, i, campo){
+    const val = r[campo]||'—';
+    const n = toNum(val);
+    const cls = n>0?'pos':n<0?'neg':'zero';
+    const sign = n>0?'+':'';
+    const nome = (r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+    const nomeShort = nome.length > 40 ? nome.slice(0,40)+'…' : nome;
+    const medal = i<3 ? MEDALHAS[i] : `${i+1}º`;
+    return `<div class="rank-item">
+      <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
+      <div class="rank-info">
+        <div class="rank-name" title="${nome}">${nomeShort}</div>
+        <div class="rank-cat">${r['Categoria']||''}</div>
+      </div>
+      <span class="rank-val ${cls}">${sign}${val}</span>
+    </div>`;
+  }
+
+  function rankCard(icon, title, html){
+    return `<div class="rank-card">
+      <div class="rank-card-header"><span>${icon}</span><span class="rank-card-title">${title}</span></div>
+      <div class="rank-list">${html || '<div class="rank-empty">Sem dados suficientes</div>'}</div>
+    </div>`;
+  }
+
+  const top10html = sorted12m.slice(0,10).map((r,i) => rankItem(r,i,'Acum. 12M (%)')).join('');
+
+  const catHtml = catTop.slice(0,9).map(([cat,r],i) => {
+    const val = r['Acum. 12M (%)']||'—';
+    const n = toNum(val);
+    const cls = n>0?'pos':n<0?'neg':'zero';
+    const sign = n>0?'+':'';
+    const nome = (r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+    const medal = i<3 ? MEDALHAS[i] : `${i+1}º`;
+    return `<div class="rank-item">
+      <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
+      <div class="rank-info">
+        <div class="rank-name">${cat}</div>
+        <div class="rank-cat">${nome.length>38?nome.slice(0,38)+'…':nome}</div>
+      </div>
+      <span class="rank-val ${cls}">${sign}${val}</span>
+    </div>`;
+  }).join('');
+
+  const top5mesHtml = sortedMes.slice(0,5).map((r,i) => rankItem(r,i,'Acum. Mes (%)')).join('');
+  const top5anoHtml = sortedAno.slice(0,5).map((r,i) => rankItem(r,i,'Acum. Ano (%)')).join('');
+
+  grid.innerHTML = [
+    rankCard('🏆', 'Top 10 — Acumulado 12 Meses', top10html),
+    rankCard('🎖️', 'Melhor por Categoria (12M)', catHtml),
+    rankCard('📅', 'Top 5 — Acumulado do Mês', top5mesHtml),
+    rankCard('📆', 'Top 5 — Acumulado do Ano', top5anoHtml),
+  ].join('');
+}
+
+/* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
-let activeSearch='',activeCat='',activePerfil='',hideSemDados=false,displayHeaders=[];
+let activeSearch='',activeCat='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let expandedRows = new Set();
 
 const NUM_SET = new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
@@ -591,7 +667,6 @@ const CAT_CLS = {
   "RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM",
   "ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"
 };
-// Colunas escondidas da tabela principal (mostradas no painel de detalhe)
 const DETAIL_COLS = new Set(["CNPJ","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate"]);
 const HIDDEN_COLS = new Set(["Fundo_norm","Perfil","URL"]);
 
@@ -657,7 +732,6 @@ function updateKPIs(){
   $('kpiWorstFundo').textContent = worstName.length>45 ? worstName.slice(0,45)+'…' : worstName;
 }
 
-/* Carrega kpis_dashboard.json para enriquecer kpi de PL se disponível */
 async function carregarKPIs(){
   try{
     const r = await fetch('kpis_dashboard.json?v='+Date.now());
@@ -678,6 +752,7 @@ function applyFilter(){
       const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
       if(!tokens.includes(activePerfil)) return false;
     }
+    if(activeRisco && (r['Perfil de Risco']||'').trim() !== activeRisco) return false;
     if(q && !Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
     return true;
   });
@@ -693,6 +768,7 @@ function applyFilter(){
   currentPage=1;
   expandedRows.clear();
   render();
+  renderRankings();
 }
 
 function buildDetailPanel(r, colspan){
@@ -723,11 +799,9 @@ function buildDetailPanel(r, colspan){
 function buildRowHTML(r, idx){
   const semDados = !temDados(r);
   const visibleHeaders = displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
-  const colspan = visibleHeaders.length + 1; // +1 para o botão expand
+  const colspan = visibleHeaders.length + 1;
 
   let html = `<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
-
-  // Botão expand
   const isExpanded = expandedRows.has(idx);
   html += `<td style="width:28px;padding:11px 8px">
     <button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button></td>`;
@@ -758,11 +832,7 @@ function buildRowHTML(r, idx){
   });
 
   html+='</tr>';
-
-  if(isExpanded){
-    html += buildDetailPanel(r, colspan);
-  }
-
+  if(isExpanded) html += buildDetailPanel(r, colspan);
   return html;
 }
 
@@ -779,7 +849,6 @@ function render(){
   tbody.innerHTML = rows.map((r,i)=>buildRowHTML(r, start+i)).join('');
   $('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length)}–${end} de ${filtered.length} registros`;
 
-  // Eventos dos botões expand
   tbody.querySelectorAll('.exp-btn').forEach(btn=>{
     btn.addEventListener('click', e=>{
       e.stopPropagation();
@@ -812,7 +881,6 @@ function renderPagination(){
 
 function buildHeader(){
   const thead=$('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
-  // Coluna expand (sem título)
   const thExp=document.createElement('th');thExp.style.width='28px';thExp.style.padding='13px 8px';
   tr.appendChild(thExp);
 
@@ -853,12 +921,21 @@ function buildCatFilters(cats){
   });
 }
 
+/* Listeners de filtros */
 $('perfilFilters').addEventListener('click',e=>{
   const btn=e.target.closest('[data-perfil]');if(!btn)return;
   activePerfil=btn.dataset.perfil;
   setActiveChip($('perfilFilters'),'[data-perfil]',btn);
   applyFilter();
 });
+
+$('riscoFilters').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-risco]');if(!btn)return;
+  activeRisco=btn.dataset.risco;
+  setActiveChip($('riscoFilters'),'[data-risco]',btn);
+  applyFilter();
+});
+
 let _st=null;
 $('searchInput').addEventListener('input',e=>{
   clearTimeout(_st);_st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
@@ -879,6 +956,7 @@ async function carregarDados(){
     buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
     $('loadMsg').style.display='none';
     $('mainTable').style.display='table';
+    renderRankings();
   }catch(err){
     $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
   }
