@@ -503,23 +503,24 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
         return df
 
     def _processar_linha(row):
-    url_atual = str(row.get("URL", "")).strip()
-    chave = _normalizar_nome_fundo(str(row.get("Fundo", "")))
-    meta = indice_json.get(chave)
-    if meta:
-        if not _url_valida(url_atual):
-            row["URL"] = meta["url"]
-        row["CNPJ"]                  = str(meta["cnpj"] or "")
-        row["Perfil de Risco"]       = str(meta["perfil_risco"] or "")
-        row["Taxa Adm (%)"]          = str(meta["taxa_adm"]) if meta["taxa_adm"] is not None else ""
-        row["Aplicacao Minima (R$)"] = str(meta["aplicacao_minima"]) if meta["aplicacao_minima"] is not None else ""
-        row["Conversao Resgate"]     = str(meta["conversao_resgate"] or "")
-        row["Pagamento Resgate"]     = str(meta["pagamento_resgate"] or "")
-    return row
-df = df.apply(_processar_linha, axis=1)
-preenchidas = df["URL"].apply(_url_valida).sum()
-log(f"[Fundos.json] Cruzamento finalizado. URLs válidas: {preenchidas}/{len(df)}")
-return df
+        url_atual = str(row.get("URL", "")).strip()
+        chave = _normalizar_nome_fundo(str(row.get("Fundo", "")))
+        meta = indice_json.get(chave)
+        if meta:
+            if not _url_valida(url_atual):
+                row["URL"] = meta["url"]
+            row["CNPJ"]                  = str(meta["cnpj"] or "")
+            row["Perfil de Risco"]       = str(meta["perfil_risco"] or "")
+            row["Taxa Adm (%)"]          = str(meta["taxa_adm"]) if meta["taxa_adm"] is not None else ""
+            row["Aplicacao Minima (R$)"] = str(meta["aplicacao_minima"]) if meta["aplicacao_minima"] is not None else ""
+            row["Conversao Resgate"]     = str(meta["conversao_resgate"] or "")
+            row["Pagamento Resgate"]     = str(meta["pagamento_resgate"] or "")
+        return row
+
+    df = df.apply(_processar_linha, axis=1)
+    preenchidas = df["URL"].apply(_url_valida).sum()
+    log(f"[Fundos.json] Cruzamento finalizado. URLs válidas: {preenchidas}/{len(df)}")
+    return df
 
 # ---------------------------------------------------------------------------
 # FALLBACK SIPII — usa dados_atuais.csv se o SIPII retornar vazio
