@@ -1,22 +1,15 @@
 """
-ROBÔ SIPII CAIXA — v13 (Edição GitHub Repository)
-Estratégia de URLs em duas camadas:
-  1. Dicionário estático: 116 URLs validadas manualmente
-  2. Scraping dinâmico: captura URLs de novos fundos nas páginas da CAIXA
-
-  v12 — IPCA com base histórica local (ipca_historico_base.json)
-  v13 — Boletim Focus do BCB (IPCA, Selic, PIB, Câmbio, IGP-M)
-        Integração com fundos.json da CAIXA Asset (Extração de Metadados Ricos: CNPJ, Risco, Taxas e Liquidez)
-        Correção: visitos → vistos em raspar_urls_caixa()
-        Correção Focus: Montagem de URL manual para evitar o Erro OData 400
-        Integração Front-End: Leitura local do histórico Selic e Metas de Inflação
-        Correção de Bug: Restauração da variável global DEBUG_COLUNAS
-        Ajuste de Sanetização: Remoção de notas de rodapé e blindagem de vírgulas no CSV (quoting)
-        Correção Linguística: Padronização de 'ejecutar' para 'executar'
+ROBÔ SIPII CAIXA — v14 (Edição GitHub Repository)
+Correções v14:
+  - FIX CRÍTICO: campos corretos do fundos.json (no_fundo, de_link_pagina_fundo)
+  - FALLBACK SIPII: usa dados_atuais.csv do repositório se o SIPII falhar
+  - FALLBACK fundos.json: usa arquivo local fundos.json se o download HTTP falhar
+  - CNPJ formatado com pontos e barra (XX.XXX.XXX/XXXX-XX)
 """
 
 import json
 import csv
+import glob
 from pathlib import Path
 from datetime import datetime
 import time, unicodedata, traceback, re, requests
@@ -74,11 +67,10 @@ CAIXA_LISTING_PAGES = [
 
 MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
 
-# Variável de Debug restaurada para evitar NameError nas tabelas do SIPII
 DEBUG_COLUNAS = False
 
 # ---------------------------------------------------------------------------
-# Dicionário estático — 116 URLs validadas manualmente
+# Dicionário estático — URLs validadas manualmente
 # ---------------------------------------------------------------------------
 URL_ESTATICO = {
     "CAIXA BRASIL INFLACAO ATIVA FIF RF CRED PRIV": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/brasil-IPCA",
@@ -204,13 +196,14 @@ URL_ESTATICO = {
 # ---------------------------------------------------------------------------
 # Caminhos de arquivo
 # ---------------------------------------------------------------------------
-BASE_DIR       = Path.cwd()
-LOG_PATH       = BASE_DIR / "execucao.log"
-IPCA_BASE_PATH = BASE_DIR / "ipca_historico_base.json"
-
-# Mapeamento das bases históricas estáticas locais na raiz
-SELIC_BASE_PATH   = BASE_DIR / "historico da selic do BC.json"
+BASE_DIR           = Path.cwd()
+LOG_PATH           = BASE_DIR / "execucao.log"
+IPCA_BASE_PATH     = BASE_DIR / "ipca_historico_base.json"
+SELIC_BASE_PATH    = BASE_DIR / "historico da selic do BC.json"
 META_INFLACAO_PATH = BASE_DIR / "meta-vs-inflacao-efetiva.json"
+
+# Caminho local do fundos.json (fallback quando o download HTTP falhar)
+FUNDOS_JSON_LOCAL  = BASE_DIR / "fundos.json"
 
 # ---------------------------------------------------------------------------
 # Utilidades gerais
@@ -233,6 +226,15 @@ def chave_estatica(nome):
     n = re.sub(r'\s*-\s*RL$', '', n)
     n = re.sub(r'\s*\(\d+\).*$', '', n)
     return n.strip()
+
+def formatar_cnpj(cnpj_raw):
+    """Formata CNPJ de '00834074000123' para '00.834.074/0001-23'."""
+    if not cnpj_raw:
+        return ""
+    digits = re.sub(r'\D', '', str(cnpj_raw))
+    if len(digits) == 14:
+        return f"{digits[:2]}.{digits[2:5]}.{digits[5:8]}/{digits[8:12]}-{digits[12:]}"
+    return str(cnpj_raw)
 
 TEXTO_PARA_CSV = {normalizar(c["texto_tela"]): c["csv"] for c in CATEGORIAS_FIXAS}
 
@@ -283,7 +285,7 @@ def raspar_urls_caixa():
             resp = session.get(page_url, timeout=20)
             if resp.status_code != 200:
                 log(f"  [CAIXA] {page_url.split('/')[-3]} → HTTP {resp.status_code}")
-                return registros
+                continue
             soup = BeautifulSoup(resp.text, "html.parser")
             novos = 0
             for a in soup.find_all("a", href=True):
@@ -332,90 +334,55 @@ def encontrar_url(nome, registros_dinamicos):
     return encontrar_url_dinamica(nome, registros_dinamicos)
 
 # ---------------------------------------------------------------------------
-# NOVO v13 — Boletim Focus (BCB) — MONTAGEM MANUAL CONTRA ERRO ODATA 400
+# Boletim Focus (BCB)
 # ---------------------------------------------------------------------------
 FOCUS_BASE = (
     "https://olinda.bcb.gov.br/olinda/servico/"
     "Expectativas/versao/v1/odata/"
 )
 
-INDICADORES_FOCUS = [
-    "IPCA",
-    "Selic",
-    "PIB Total",
-    "Câmbio",
-    "IGP-M",
-]
+INDICADORES_FOCUS = ["IPCA", "Selic", "PIB Total", "Câmbio", "IGP-M"]
 
-def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
-    """Busca as expectativas Focus anuais. Monta a URL travando o caractere '$'."""
+def _buscar_focus_indicador(indicador, anos, headers):
     usa_base_calculo = indicador == "IPCA"
-    if usa_base_calculo:
-        filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
-    else:
-        filtro = f"Indicador eq '{indicador}'"
-
+    filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0" if usa_base_calculo else f"Indicador eq '{indicador}'"
     filtro_codificado = requests.utils.quote(filtro)
-
-    url = (
-        f"{FOCUS_BASE}ExpectativasMarketAnuais" if indicador == 'Câmbio' else f"{FOCUS_BASE}ExpectativasMercadoAnuais"
-    )
-    url_completa = (
-        f"{url}"
-        f"?$filter={filtro_codificado}"
-        f"&$format=json"
-        f"&$orderby=Data%20desc"
-        f"&$top=50"
-    )
-    
+    url = (f"{FOCUS_BASE}ExpectativasMarketAnuais" if indicador == 'Câmbio'
+           else f"{FOCUS_BASE}ExpectativasMercadoAnuais")
+    url_completa = f"{url}?$filter={filtro_codificado}&$format=json&$orderby=Data%20desc&$top=50"
     resultado = {}
     try:
         res = requests.get(url_completa, headers=headers, timeout=20)
         if res.status_code != 200:
             log(f"  [Focus] {indicador} → HTTP {res.status_code}")
             return resultado
-            
         registros = res.json().get("value", [])
         vistos_anos = set()
-        
         for reg in registros:
             ano_str = str(reg.get("DataReferencia", ""))[:4]
-            if not ano_str:
-                continue
-            try:
-                ano = int(ano_str)
-            except ValueError:
-                continue
-                
-            if ano not in anos or ano in vistos_anos:
-                continue
-                
+            if not ano_str: continue
+            try: ano = int(ano_str)
+            except ValueError: continue
+            if ano not in anos or ano in vistos_anos: continue
             vistos_anos.add(ano)
             resultado[ano] = {
-                "mediana": reg.get("Mediana"),
-                "media":   reg.get("Media"),
-                "minimo":  reg.get("Minimo"),
-                "maximo":  reg.get("Maximo"),
+                "mediana": reg.get("Mediana"), "media": reg.get("Media"),
+                "minimo": reg.get("Minimo"), "maximo": reg.get("Maximo"),
                 "data_ref": reg.get("Data"),
             }
-            if len(vistos_anos) == len(anos):
-                break
+            if len(vistos_anos) == len(anos): break
     except Exception as e:
         log(f"  [Focus] Erro ao buscar {indicador}: {e}")
-        
     return resultado
 
-def buscar_focus(headers: dict) -> dict:
-    """Coleta todas as expectativas do Boletim Focus para os próximos 4 anos e limpa as chaves."""
+def buscar_focus(headers):
     anos_alvo = [2026, 2027, 2028, 2029]
     log("[Focus] Coletando expectativas do Banco Central...")
     raw_focus = {}
-    
     for indicador in INDICADORES_FOCUS:
         log(f"  [Focus] → {indicador}")
         raw_focus[indicador] = _buscar_focus_indicador(indicador, anos_alvo, headers)
         time.sleep(0.5)
-        
     focus = {
         "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
         "IPCA": raw_focus.get("IPCA", {}),
@@ -423,71 +390,114 @@ def buscar_focus(headers: dict) -> dict:
         "PIB": raw_focus.get("PIB Total", {}),
         "Cambio": raw_focus.get("Câmbio", {}),
         "IGPM": raw_focus.get("IGP-M", {}),
-        "IPCA_Modal": raw_focus.get("IPCA", {}) # Fallback seguro de amostragem
+        "IPCA_Modal": raw_focus.get("IPCA", {}),
     }
-        
     log(f"[Focus] Coleta concluída e chaves normalizadas para web.")
     return focus
 
 # ---------------------------------------------------------------------------
-# NOVO v13 — fundos.json da CAIXA Asset (Extração Mapeada Completa)
+# FIX v14 — fundos.json com campos corretos + fallback local
 # ---------------------------------------------------------------------------
 FUNDOS_JSON_URL = "https://www.caixa.gov.br/CAIXA-Asset/Documents/data/fundos.json"
 
-def _normalizar_nome_fundo(nome: str) -> str:
-    n = unicodedata.normalize("NFD", nome.upper())
+INDISPONIVEL = {"INDISPONIVEL", "indisponivel", "", None}
+
+def _normalizar_nome_fundo(nome):
+    """Normalização para casamento de strings entre fundos.json e SIPII."""
+    n = unicodedata.normalize("NFD", str(nome).upper())
     n = "".join(c for c in n if unicodedata.category(c) != "Mn")
     n = re.sub(r"[^A-Z0-9 ]", " ", n)
     return re.sub(r"\s+", " ", n).strip()
 
-def buscar_fundos_json(headers: dict) -> dict:
-    """Baixa o fundos.json e mapeia metadados ricos indexados pelo nome normalizado."""
+def _url_valida(url):
+    """Retorna True apenas para URLs reais da CAIXA (ignora INDISPONIVEL e links internos)."""
+    if not url or str(url).strip().upper() in INDISPONIVEL:
+        return False
+    url = str(url).strip()
+    return url.startswith("http") and "caixa.gov.br" in url and "/Sistemas/" not in url
+
+def _parsear_lista_fundos(lista):
+    """
+    Monta o índice rico a partir de uma lista de registros do fundos.json.
+    CAMPOS CORRETOS (v14):
+      nome  → no_fundo
+      url   → de_link_pagina_fundo
+    """
+    indice = {}
+    for f in lista:
+        try:
+            nome = str(f.get("no_fundo") or "").strip()
+            if not nome:
+                continue
+            url_raw = str(f.get("de_link_pagina_fundo") or "").strip()
+            indice[_normalizar_nome_fundo(nome)] = {
+                "url":               url_raw if _url_valida(url_raw) else "",
+                "cnpj":              formatar_cnpj(f.get("nu_cnpj")),
+                "perfil_risco":      f.get("no_perfil_risco"),
+                "taxa_adm":          f.get("pc_taxa_adm_cliente"),
+                "aplicacao_minima":  f.get("vr_aplicacao_inicial"),
+                "conversao_resgate": f.get("de_conversao_resgate"),
+                "pagamento_resgate": f.get("de_pagamento_resgate"),
+            }
+        except Exception:
+            continue
+    return indice
+
+def buscar_fundos_json(headers):
+    """
+    1ª tentativa: download HTTP do fundos.json da CAIXA Asset.
+    FALLBACK:      lê o arquivo fundos.json salvo localmente no repositório.
+    """
+    lista = []
+
+    # --- Tentativa HTTP ---
     log("[Fundos.json] Baixando catálogo integral da CAIXA Asset...")
     try:
         res = requests.get(FUNDOS_JSON_URL, headers=headers, timeout=25)
-        if res.status_code != 200:
-            log(f"[Fundos.json] HTTP {res.status_code} — ignorando.")
-            return {}
-        raw = res.json()
+        if res.status_code == 200:
+            raw = res.json()
+            if isinstance(raw, list):
+                lista = raw
+            elif isinstance(raw, dict):
+                lista = raw.get("fundos") or raw.get("data") or raw.get("items") or []
+            log(f"[Fundos.json] Download HTTP OK — {len(lista)} registros.")
+        else:
+            log(f"[Fundos.json] HTTP {res.status_code} — tentando arquivo local...")
     except Exception as e:
-        log(f"[Fundos.json] Falha ao coletar: {e}")
+        log(f"[Fundos.json] Falha no download HTTP: {e} — tentando arquivo local...")
+
+    # --- Fallback: arquivo local ---
+    if not lista:
+        if FUNDOS_JSON_LOCAL.exists():
+            try:
+                raw = json.loads(FUNDOS_JSON_LOCAL.read_text(encoding="utf-8"))
+                if isinstance(raw, list):
+                    lista = raw
+                elif isinstance(raw, dict):
+                    lista = raw.get("fundos") or raw.get("data") or raw.get("items") or []
+                log(f"[Fundos.json] FALLBACK local OK — {len(lista)} registros de '{FUNDOS_JSON_LOCAL.name}'.")
+            except Exception as e:
+                log(f"[Fundos.json] Erro ao ler arquivo local: {e}")
+        else:
+            log(f"[Fundos.json] Arquivo local '{FUNDOS_JSON_LOCAL.name}' não encontrado. Metadados ausentes.")
+
+    if not lista:
+        log("[Fundos.json] Nenhuma fonte disponível. Continuando sem metadados comerciais.")
         return {}
 
-    if isinstance(raw, list):
-        lista = raw
-    elif isinstance(raw, dict):
-        lista = raw.get("fundos") or raw.get("data") or raw.get("items") or []
-    else:
-        lista = []
+    indice = _parsear_lista_fundos(lista)
+    log(f"[Fundos.json] {len(indice)} produtos indexados com metadados comerciais.")
+    return indice
 
-    indice_rico = {}
-    for f in lista:
-        try:
-            nome = (f.get("nome") or f.get("nomeFundo") or f.get("NomeFundo") or "").strip()
-            url = (f.get("url") or f.get("URL") or "").strip()
-            if nome:
-                norm_key = _normalizar_nome_fundo(nome)
-                indice_rico[norm_key] = {
-                    "url": url if (url and "caixa.gov.br" in url) else "",
-                    "cnpj": f.get("nu_cnpj"),
-                    "perfil_risco": f.get("no_perfil_risco"),
-                    "taxa_adm": f.get("pc_taxa_adm_cliente"),
-                    "aplicacao_minima": f.get("vr_aplicacao_inicial"),
-                    "conversao_resgate": f.get("de_conversao_resgate"),
-                    "pagamento_resgate": f.get("de_pagamento_resgate")
-                }
-        except Exception:
-            continue
-
-    log(f"[Fundos.json] {len(indice_rico)} produtos indexados com metadados comerciais.")
-    return indice_rico
-
-def enriquecer_dados_com_fundos_json(df: pd.DataFrame, indice_json: dict) -> pd.DataFrame:
+def enriquecer_dados_com_fundos_json(df, indice_json):
     """Preenche URLs ausentes e acopla metadados comerciais ricos ao DataFrame."""
-    colunas_novas = ["CNPJ", "Perfil de Risco", "Taxa Adm (%)", "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate"]
+    colunas_novas = [
+        "CNPJ", "Perfil de Risco", "Taxa Adm (%)",
+        "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate",
+    ]
     for col in colunas_novas:
         if col not in df.columns:
-            df[col] = None
+            df[col] = ""
 
     if not indice_json:
         return df
@@ -495,24 +505,45 @@ def enriquecer_dados_com_fundos_json(df: pd.DataFrame, indice_json: dict) -> pd.
     def _processar_linha(row):
         url_atual = str(row.get("URL", "")).strip()
         chave = _normalizar_nome_fundo(str(row.get("Fundo", "")))
-        
         meta = indice_json.get(chave)
         if meta:
-            if not (url_atual and url_atual.startswith("http") and "caixa.gov.br" in url_atual):
+            if not _url_valida(url_atual):
                 row["URL"] = meta["url"]
-            
-            row["CNPJ"] = meta["cnpj"]
-            row["Perfil de Risco"] = meta["perfil_risco"]
-            row["Taxa Adm (%)"] = meta["taxa_adm"]
+            row["CNPJ"]               = meta["cnpj"]
+            row["Perfil de Risco"]    = meta["perfil_risco"] or ""
+            row["Taxa Adm (%)"]       = meta["taxa_adm"]
             row["Aplicacao Minima (R$)"] = meta["aplicacao_minima"]
-            row["Conversao Resgate"] = meta["conversao_resgate"]
-            row["Pagamento Resgate"] = meta["pagamento_resgate"]
+            row["Conversao Resgate"]  = meta["conversao_resgate"] or ""
+            row["Pagamento Resgate"]  = meta["pagamento_resgate"] or ""
         return row
 
     df = df.apply(_processar_linha, axis=1)
-    preenchidas = (df["URL"].str.startswith("http") & df["URL"].str.contains("caixa.gov.br") if df["URL"].notna().any() else 0).sum()
-    log(f"[Fundos.json] Cruzamento finalizado: Novas propriedades vinculadas. Mapeamento de URLs: {preenchidas}/{len(df)}")
+    preenchidas = df["URL"].apply(_url_valida).sum()
+    log(f"[Fundos.json] Cruzamento finalizado. URLs válidas: {preenchidas}/{len(df)}")
     return df
+
+# ---------------------------------------------------------------------------
+# FALLBACK SIPII — usa dados_atuais.csv se o SIPII retornar vazio
+# ---------------------------------------------------------------------------
+def carregar_fallback_sipii():
+    """Carrega dados do arquivo salvo no repositório quando o SIPII falha."""
+    candidatos = [FUNDOS_JSON_LOCAL.parent / "dados_atuais.csv"]
+    # também tenta backups datados (sipii_caixa_YYYYMMDD.csv)
+    candidatos += sorted(
+        Path(BASE_DIR).glob("sipii_caixa_*.csv"), reverse=True
+    )
+    for caminho in candidatos:
+        if caminho.exists():
+            try:
+                df = pd.read_csv(caminho, encoding="utf-8-sig")
+                log(f"[FALLBACK SIPII] {len(df)} fundos carregados de '{caminho.name}'.")
+                if "Fundo_norm" not in df.columns:
+                    df["Fundo_norm"] = df["Fundo"].apply(normalizar)
+                return df
+            except Exception as e:
+                log(f"[FALLBACK SIPII] Erro ao ler '{caminho.name}': {e}")
+    log("[FALLBACK SIPII] Nenhum arquivo de fallback encontrado.")
+    return pd.DataFrame()
 
 # ---------------------------------------------------------------------------
 # SIPII scraping
@@ -527,7 +558,8 @@ def configurar_driver(headless=True):
 
 def esperar_ajax(driver, timeout=20):
     try:
-        WebDriverWait(driver, timeout).until(lambda d: d.execute_script("return (window.jQuery ? jQuery.active === 0 : true);"))
+        WebDriverWait(driver, timeout).until(
+            lambda d: d.execute_script("return (window.jQuery ? jQuery.active === 0 : true);"))
     except: time.sleep(2)
 
 def finalizar_driver(driver):
@@ -552,7 +584,8 @@ def abrir_site_e_preparar(driver, sigla, segmento):
     log(f"[{sigla}] Abrindo SIPII...")
     driver.get(URL_SIPII); time.sleep(3)
     clicar_por_texto(driver, segmento); esperar_ajax(driver)
-    consultar = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.ID, "btn-consultar")))
+    consultar = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.ID, "btn-consultar")))
     clicar_elemento(driver, consultar); esperar_ajax(driver); time.sleep(3)
 
 def descobrir_categorias(driver):
@@ -561,7 +594,8 @@ def descobrir_categorias(driver):
         texto = aba.text.strip()
         if texto:
             norm = normalizar(texto)
-            cats.append({"texto_tela": texto, "csv": TEXTO_PARA_CSV.get(norm) or norm.replace(" ","_")[:31]})
+            cats.append({"texto_tela": texto,
+                         "csv": TEXTO_PARA_CSV.get(norm) or norm.replace(" ","_")[:31]})
     return cats
 
 def localizar_tabela_ativa(driver):
@@ -610,7 +644,8 @@ def coletar_aba(driver, sigla, segmento, cat, dados):
             abrir_site_e_preparar(driver, sigla, segmento)
             clicar_por_texto(driver, cat["texto_tela"]); esperar_ajax(driver); time.sleep(1.5)
             res = extrair_dados_tabela(driver, cat["csv"], sigla)
-            dados.extend(res); log(f"  [{sigla}] {cat['csv']} (recuperado): {len(res)} fundos.")
+            dados.extend(res)
+            log(f"  [{sigla}] {cat['csv']} (recuperado): {len(res)} fundos.")
         except Exception as e2:
             log(f"  [{sigla}] Falha ao recuperar '{cat['csv']}': {e2}")
     except Exception as e:
@@ -668,13 +703,13 @@ def salvar_excel(df, caminho):
                         cell.font=gf if n>0 else(rf if n<0 else nf)
                     except: cell.font=nf
                 else: cell.font=nf
-                
-        widths={"Categoria":18,"Fundo":55,"Data Inicio":13,"Cota (R$)":16,
-                "Variacao Dia (%)":14,"Acum. Mes (%)":13,"Acum. Ano (%)":13,
-                "Acum. 12M (%)":13,"PL (milhoes R$)":18,"Perfis":30,"URL":60,
-                "CNPJ":18, "Perfil de Risco":15, "Taxa Adm (%)":14, "Aplicacao Minima (R$)":22,
-                "Conversao Resgate":18, "Pagamento Resgate":18}
-                
+        widths={
+            "Categoria":18,"Fundo":55,"Data Inicio":13,"Cota (R$)":16,
+            "Variacao Dia (%)":14,"Acum. Mes (%)":13,"Acum. Ano (%)":13,
+            "Acum. 12M (%)":13,"PL (milhoes R$)":18,"Perfis":30,"URL":60,
+            "CNPJ":22,"Perfil de Risco":16,"Taxa Adm (%)":14,
+            "Aplicacao Minima (R$)":22,"Conversao Resgate":18,"Pagamento Resgate":18,
+        }
         for ci,cn in enumerate(cols,1):
             ws.column_dimensions[get_column_letter(ci)].width=widths.get(cn,15)
         ws.row_dimensions[1].height=30; ws.freeze_panes="A2"; wb.save(caminho)
@@ -688,21 +723,15 @@ def salvar_excel(df, caminho):
 def limpar_dados_para_calculo(df_consolidado):
     df = df_consolidado.copy()
     def converte_num(val):
-        if pd.isna(val) or str(val).strip() in ['-', '—', '', 'None']:
-            return None
+        if pd.isna(val) or str(val).strip() in ['-', '—', '', 'None']: return None
         val = str(val).replace('"', '').strip()
         if ',' in val:
-            if '.' in val and val.find('.') < val.find(','):
-                val = val.replace('.', '')
+            if '.' in val and val.find('.') < val.find(','): val = val.replace('.', '')
             val = val.replace(',', '.')
-        try:
-            return float(val)
-        except ValueError:
-            return None
-    cols_numericas = ['Cota (R$)', 'Variacao Dia (%)', 'Acum. Mes (%)', 'Acum. Ano (%)', 'Acum. 12M (%)', 'PL (milhoes R$)']
-    for col in cols_numericas:
-        if col in df.columns:
-            df[col] = df[col].apply(converte_num)
+        try: return float(val)
+        except ValueError: return None
+    for col in ['Cota (R$)','Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)','PL (milhoes R$)']:
+        if col in df.columns: df[col] = df[col].apply(converte_num)
     return df
 
 def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
@@ -720,7 +749,7 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
         categorias_kpi[cat] = {
             "qtd_ativos": int(group['Acum. 12M (%)'].notna().sum()),
             "pl_total": round(group['PL (milhoes R$)'].sum(), 2),
-            "rent_12m_ponderada": round(wa, 2) if wa is not None else None
+            "rent_12m_ponderada": round(wa, 2) if wa is not None else None,
         }
     perfil_kpi = {}
     for perf, group in df_calculo.groupby('Perfil'):
@@ -728,7 +757,7 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
         perfil_kpi[perf] = {
             "qtd_fundos": int(group['Fundo'].count()),
             "pl_total": round(pl_perf, 2),
-            "share_percent": round((pl_perf / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0
+            "share_percent": round((pl_perf / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0,
         }
     top_5 = df_calculo.nlargest(5, 'PL (milhoes R$)')
     pl_top_5 = top_5['PL (milhoes R$)'].sum()
@@ -736,10 +765,10 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
         "resumo_geral": {
             "pl_total_consolidado": round(pl_total_casa, 2),
             "concentracao_top5_percent": round((pl_top_5 / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0,
-            "pipeline_novos_fundos": int(df_calculo['Cota (R$)'].isna().sum())
+            "pipeline_novos_fundos": int(df_calculo['Cota (R$)'].isna().sum()),
         },
         "categorias": categorias_kpi,
-        "perfis_comerciais": perfil_kpi
+        "perfis_comerciais": perfil_kpi,
     }
     with open(caminho_saida, "w", encoding="utf-8") as f:
         json.dump(kpis_finais, f, indent=4, ensure_ascii=False)
@@ -750,18 +779,14 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
 # ---------------------------------------------------------------------------
 class ColetorMercado:
     def __init__(self):
-        self.headers = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-        }
+        self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
     def _buscar_bcb(self, codigo_serie):
         try:
             url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/1?formato=json"
             res = requests.get(url, headers=self.headers, timeout=10)
-            if res.status_code == 200:
-                return float(res.json()[0]['valor'])
-        except Exception:
-            pass
+            if res.status_code == 200: return float(res.json()[0]['valor'])
+        except Exception: pass
         return None
 
     def _carregar_base_ipca(self):
@@ -778,31 +803,27 @@ class ColetorMercado:
             try:
                 url = "https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json"
                 res = requests.get(url, headers=self.headers, timeout=60)
-                if res.status_code != 200:
-                    continue
+                if res.status_code != 200: continue
                 raw = res.json()
                 if raw:
                     historico = []
                     for item in raw:
                         d, m, y = item["data"].split("/")
-                        historico.append({
-                            "data":  item["data"],
-                            "label": f"{MESES_PT[int(m)-1]}/{y}",
-                            "valor": round(float(item["valor"]), 4),
-                        })
+                        historico.append({"data": item["data"],
+                                          "label": f"{MESES_PT[int(m)-1]}/{y}",
+                                          "valor": round(float(item["valor"]), 4)})
                     log(f"[IPCA] Série completa obtida: {len(historico)} meses.")
                     return historico
             except Exception as e:
-                log(f"[IPCA] Tentativa {tentativa + 1} falhou: {e}")
-                time.sleep(10 * (tentativa + 1))
+                log(f"[IPCA] Tentativa {tentativa+1} falhou: {e}")
+                time.sleep(10 * (tentativa+1))
         log("[IPCA] Não foi possível baixar a série histórica completa.")
         return []
 
     def _buscar_ipca_delta(self, meses=3):
         for tentativa in range(3):
             try:
-                url = (f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433"
-                       f"/dados/ultimos/{meses}?formato=json")
+                url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/{meses}?formato=json"
                 res = requests.get(url, headers=self.headers, timeout=20)
                 if res.status_code == 200:
                     dados = res.json()
@@ -810,8 +831,8 @@ class ColetorMercado:
                         log(f"[IPCA] Delta BCB: {len(dados)} meses recebidos.")
                         return dados
             except Exception as e:
-                log(f"[IPCA] Delta tentativa {tentativa + 1} falhou: {e}")
-                time.sleep(5 * (tentativa + 1))
+                log(f"[IPCA] Delta tentativa {tentativa+1} falhou: {e}")
+                time.sleep(5 * (tentativa+1))
         log("[IPCA] Delta indisponível — usando apenas a base local.")
         return []
 
@@ -819,22 +840,15 @@ class ColetorMercado:
         index = {item["data"]: item for item in base}
         for item in delta:
             d, m, y = item["data"].split("/")
-            index[item["data"]] = {
-                "data":  item["data"],
-                "label": f"{MESES_PT[int(m)-1]}/{y}",
-                "valor": round(float(item["valor"]), 4),
-            }
-        return sorted(
-            index.values(),
-            key=lambda x: (x["data"].split("/")[2], x["data"].split("/")[1])
-        )
+            index[item["data"]] = {"data": item["data"],
+                                   "label": f"{MESES_PT[int(m)-1]}/{y}",
+                                   "valor": round(float(item["valor"]), 4)}
+        return sorted(index.values(),
+                      key=lambda x: (x["data"].split("/")[2], x["data"].split("/")[1]))
 
     def _salvar_base_ipca(self, historico):
         try:
-            IPCA_BASE_PATH.write_text(
-                json.dumps(historico, ensure_ascii=False, indent=2),
-                encoding="utf-8"
-            )
+            IPCA_BASE_PATH.write_text(json.dumps(historico, ensure_ascii=False, indent=2), encoding="utf-8")
             log(f"[IPCA] Base salva: {len(historico)} meses → {IPCA_BASE_PATH.name}")
         except Exception as e:
             log(f"[IPCA] Erro ao salvar base: {e}")
@@ -842,10 +856,8 @@ class ColetorMercado:
     def _acumular(self, serie, n_meses):
         acc = 1.0
         for item in serie[-n_meses:]:
-            try:
-                acc *= (1 + float(item["valor"]) / 100)
-            except (ValueError, KeyError):
-                pass
+            try: acc *= (1 + float(item["valor"]) / 100)
+            except (ValueError, KeyError): pass
         return round((acc - 1) * 100, 4)
 
     def _acumular_ano(self, serie):
@@ -854,10 +866,8 @@ class ColetorMercado:
         acc = 1.0
         for item in reversed(serie):
             if item["data"].split("/")[2] != ultimo_ano: break
-            try:
-                acc *= (1 + float(item["valor"]) / 100)
-            except (ValueError, KeyError):
-                pass
+            try: acc *= (1 + float(item["valor"]) / 100)
+            except (ValueError, KeyError): pass
         return round((acc - 1) * 100, 4)
 
     def _buscar_yahoo(self, ticker):
@@ -868,21 +878,16 @@ class ColetorMercado:
                 quotes = res.json()['chart']['result'][0]['indicators']['quote'][0]['close']
                 quotes = [q for q in quotes if q is not None]
                 if quotes:
-                    return {
-                        "atual":    quotes[-1],
-                        "anterior": quotes[-22] if len(quotes) >= 22 else quotes[0],
-                    }
-        except Exception:
-            pass
+                    return {"atual": quotes[-1],
+                            "anterior": quotes[-22] if len(quotes) >= 22 else quotes[0]}
+        except Exception: pass
         return {"atual": None, "anterior": None}
 
     def _carregar_base_selic(self):
-        """Lê e mapeia o arquivo 'historico da selic do BC.json' do repositório raiz."""
         if SELIC_BASE_PATH.exists():
             try:
                 raw_data = json.loads(SELIC_BASE_PATH.read_text(encoding="utf-8"))
                 lista_reunioes = raw_data.get("conteudo", [])
-                
                 historico_formatado = []
                 for item in lista_reunioes:
                     data_iso = item.get("DataReuniaoCopom", "").split("T")[0]
@@ -891,13 +896,11 @@ class ColetorMercado:
                         data_br = dt.strftime("%d/%m/%Y")
                     else:
                         data_br = "-"
-                    
                     historico_formatado.append({
-                        "data": data_br,
-                        "valor": item.get("MetaSelic"),
+                        "data": data_br, "valor": item.get("MetaSelic"),
                         "numero_reuniao": item.get("NumeroReuniaoCopom"),
                         "DataReuniaoCopom": item.get("DataReuniaoCopom"),
-                        "MetaSelic": item.get("MetaSelic")
+                        "MetaSelic": item.get("MetaSelic"),
                     })
                 return historico_formatado
             except Exception as e:
@@ -905,7 +908,6 @@ class ColetorMercado:
         return []
 
     def _carregar_base_meta_inflacao(self):
-        """Lê e repassa o arquivo 'meta-vs-inflacao-efetiva.json' da raiz do repositório."""
         if META_INFLACAO_PATH.exists():
             try:
                 raw_data = json.loads(META_INFLACAO_PATH.read_text(encoding="utf-8"))
@@ -916,24 +918,17 @@ class ColetorMercado:
 
     def coletar_todos(self):
         log("[MERCADO] Coletando indicadores macro e índices internacionais...")
-
         selic_meta    = self._buscar_bcb(432)
         cdi_hoje      = self._buscar_bcb(12)
         poupanca_nova = self._buscar_bcb(196)
-
-        selic_historico = self._carregar_base_selic()
+        selic_historico       = self._carregar_base_selic()
         inflacao_meta_efetiva = self._carregar_base_meta_inflacao()
-
         base_ipca  = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
         ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
-
-        if ipca_serie:
-            self._salvar_base_ipca(ipca_serie)
-
+        if ipca_serie: self._salvar_base_ipca(ipca_serie)
         ipca_ultimo_mes = ipca_label_mes = ipca_acum_ano = ipca_acum_12m = None
         ipca_historico = []
-
         if ipca_serie:
             ultimo          = ipca_serie[-1]
             ipca_ultimo_mes = ultimo["valor"]
@@ -941,50 +936,33 @@ class ColetorMercado:
             ipca_acum_ano   = self._acumular_ano(ipca_serie)
             ipca_acum_12m   = self._acumular(ipca_serie, 12)
             ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
-
         dolar     = self._buscar_yahoo("BRL=X")
         ibov      = self._buscar_yahoo("^BVSP")
         sp500     = self._buscar_yahoo("^GSPC")
         dow_jones = self._buscar_yahoo("^DJI")
         nasdaq    = self._buscar_yahoo("^IXIC")
-
         focus_data = buscar_focus(self.headers)
-
         return {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "cards": {
-                "selic_meta": {
-                    "valor": selic_meta, 
-                    "unidade": "% a.a.",
-                    "historico": selic_historico
-                },
-                "cdi": {
-                    "valor":    round(selic_meta - 0.10, 4) if selic_meta else None,
-                    "unidade": "% a.a.",
-                },
-                "cdi_dia":      {"valor": cdi_hoje, "unidade": "%"},
+                "selic_meta": {"valor": selic_meta, "unidade": "% a.a.", "historico": selic_historico},
+                "cdi": {"valor": round(selic_meta - 0.10, 4) if selic_meta else None, "unidade": "% a.a."},
+                "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
                 "ipca": {
-                    "ultimo_mes":    ipca_ultimo_mes,
-                    "label_mes":     ipca_label_mes,
-                    "acum_ano":      ipca_acum_ano,
-                    "acum_12m":      ipca_acum_12m,
-                    "historico":     ipca_historico,
-                    "meta_central":  3.0,
-                    "meta_superior": 4.5,
-                    "meta_inferior": 1.5,
-                    "unidade":       "%",
+                    "ultimo_mes": ipca_ultimo_mes, "label_mes": ipca_label_mes,
+                    "acum_ano": ipca_acum_ano, "acum_12m": ipca_acum_12m,
+                    "historico": ipca_historico, "meta_central": 3.0,
+                    "meta_superior": 4.5, "meta_inferior": 1.5, "unidade": "%",
                 },
                 "ipca_mes_anterior": {"valor": ipca_ultimo_mes, "unidade": "%"},
-                "poupanca_nova":     {"valor": poupanca_nova, "unidade": "% m.m."},
+                "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
                 "ibovespa": {
-                    "atual":    ibov["atual"],
-                    "anterior": ibov["anterior"],
+                    "atual": ibov["atual"], "anterior": ibov["anterior"],
                     "variacao_mensal": round(((ibov["atual"] / ibov["anterior"]) - 1) * 100, 2)
                                        if ibov["atual"] and ibov["anterior"] else None,
                 },
                 "dolar": {
-                    "atual":    dolar["atual"],
-                    "anterior": dolar["anterior"],
+                    "atual": dolar["atual"], "anterior": dolar["anterior"],
                     "variacao_mensal": round(((dolar["atual"] / dolar["anterior"]) - 1) * 100, 2)
                                        if dolar["atual"] and dolar["anterior"] else None,
                 },
@@ -998,22 +976,20 @@ class ColetorMercado:
             },
             "focus": focus_data,
             "historico_selic": selic_historico,
-            "meta_vs_inflacao_efetiva": inflacao_meta_efetiva
+            "meta_vs_inflacao_efetiva": inflacao_meta_efetiva,
         }
 
 # ---------------------------------------------------------------------------
 # Ponto de entrada
 # ---------------------------------------------------------------------------
 def executar():
-    log("⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v13...")
+    log("⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v14...")
 
     # 1. Scraping de URLs do portal institucional CAIXA
     links_dinamicos = raspar_urls_caixa()
 
-    # 2. Baixa e monta o catálogo de propriedades estruturadas do fundos.json
-    headers_http = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-    }
+    # 2. Catálogo de metadados do fundos.json (com fallback local)
+    headers_http = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     indice_fundos_json = buscar_fundos_json(headers_http)
 
     # 3. Extração de dados brutos do SIPII por segmento
@@ -1024,66 +1000,53 @@ def executar():
         todos_dados.extend(dados_perfil)
         time.sleep(2)
 
-    if not todos_dados:
-        log("[ERRO] Falha crítica: Nenhum dado capturado no SIPII. Pipeline interrompido.")
-        return
-
-    # 4. Consolidação multicruzamento de perfis comerciais
-    log("Deduplicando e injetando cruzamento de perfis...")
+    # 4. Consolidação — com FALLBACK se o SIPII retornar vazio
     df_consolidado = consolidar(todos_dados)
 
-    # 5. Inteligência de Enriquecimento de Dados Cruzados
+    if df_consolidado.empty:
+        log("[AVISO] SIPII não retornou dados. Ativando fallback...")
+        df_consolidado = carregar_fallback_sipii()
+        if df_consolidado.empty:
+            log("[ERRO CRÍTICO] SIPII vazio e nenhum fallback disponível. Pipeline interrompido.")
+            return
+        log(f"[FALLBACK SIPII] Continuando com {len(df_consolidado)} fundos do arquivo salvo.")
+
+    # 5. Enriquecimento de dados
+    log("Deduplicando e injetando cruzamento de perfis...")
     df_consolidado["URL"] = df_consolidado["Fundo"].apply(
-        lambda x: encontrar_url(x, links_dinamicos)
-    )
+        lambda x: encontrar_url(x, links_dinamicos))
     df_consolidado = enriquecer_dados_com_fundos_json(df_consolidado, indice_fundos_json)
 
-    # ---------------------------------------------------------------------------
-    # TRATAMENTO DE SEGURANÇA: Limpeza e Fallback do fundos.json
-    # ---------------------------------------------------------------------------
+    # 6. Limpeza de nomes e colunas
     log("[Ajuste SIPII] Sanetizando nomes dos fundos e aplicando regras de quoting...")
-    
-    # 1. Remove notas residuais tipo (1) (2) que quebram o casamento de strings e o CSV
     df_consolidado['Fundo'] = df_consolidado['Fundo'].astype(str).apply(
-        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip()
-    )
+        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
     df_consolidado['Fundo_norm'] = df_consolidado['Fundo_norm'].astype(str).apply(
-        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip()
-    )
-    
-    # 2. Garante string vazia nas colunas do JSON para evitar termos nulos textuais
-    colunas_validar = ["CNPJ", "Perfil de Risco", "Taxa Adm (%)", "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate"]
+        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
+    colunas_validar = ["CNPJ","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate"]
     for col in colunas_validar:
         if col in df_consolidado.columns:
             df_consolidado[col] = df_consolidado[col].fillna("")
 
-    # ---------------------------------------------------------------------------
-    # 6. Exportação CSV e Excel estruturados (Com Quoting Ativado)
-    # ---------------------------------------------------------------------------
+    # 7. Exportação CSV e Excel
     caminho_csv  = BASE_DIR / "dados_atuais.csv"
     caminho_xlsx = BASE_DIR / "dados_atuais.xlsx"
-    
-    # SALVAMENTO BLINDADO: quoting=csv.QUOTE_MINIMAL força aspas onde houver vírgulas internas
     df_consolidado.to_csv(caminho_csv, index=False, encoding="utf-8", quoting=csv.QUOTE_MINIMAL)
     salvar_excel(df_consolidado, caminho_xlsx)
 
-    # 7. KPIs do dashboard
-    caminho_kpis = BASE_DIR / "kpis_dashboard.json"
-    gerar_json_kpis_dashboard(df_consolidado, caminho_kpis)
+    # 8. KPIs do dashboard
+    gerar_json_kpis_dashboard(df_consolidado, BASE_DIR / "kpis_dashboard.json")
 
-    # 8. Unificação de Macros de Mercado + Focus → mercado_atual.json
+    # 9. Indicadores macro + Focus
     try:
-        coletor    = ColetorMercado()
+        coletor     = ColetorMercado()
         indicadores = coletor.coletar_todos()
-
         caminho_json = BASE_DIR / "mercado_atual.json"
         with open(caminho_json, "w", encoding="utf-8") as f:
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
-
-        n_hist   = len(indicadores["cards"]["ipca"]["historico"])
-        n_focus  = len(indicadores.get("focus", {})) - 1
+        n_hist  = len(indicadores["cards"]["ipca"]["historico"])
+        n_focus = len(indicadores.get("focus", {})) - 1
         log(f"[SUCESSO] JSON unificado exportado: {caminho_json.name} | Histórico IPCA: {n_hist} m | Focus: {n_focus} ind")
-
     except Exception as e:
         log(f"[ERRO] Falha ao processar dados macroeconômicos: {e}")
         traceback.print_exc()
