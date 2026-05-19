@@ -6,8 +6,9 @@ Estratégia de URLs em duas camadas:
 
   v12 — IPCA com base histórica local (ipca_historico_base.json)
   v13 — Boletim Focus do BCB (IPCA, IPCA Modal, Selic, PIB, Câmbio, IGP-M)
-         Integração com fundos.json da CAIXA Asset (enriquecimento de URLs/dados)
-         Correção: visitos → vistos em raspar_urls_caixa()
+        Integração com fundos.json da CAIXA Asset (enriquecimento de URLs/dados)
+        Correção: visitos → vistos em raspar_urls_caixa()
+        Correção Focus: Montagem de URL manual para evitar o Erro OData 400
 """
 
 import json
@@ -319,7 +320,7 @@ def encontrar_url(nome, registros_dinamicos):
     return encontrar_url_dinamica(nome, registros_dinamicos)
 
 # ---------------------------------------------------------------------------
-# NOVO v13 — Boletim Focus (BCB) — RESOLVIDO COM PARAMS
+# NOVO v13 — Boletim Focus (BCB) — MONTAGEM MANUAL CONTRA ERRO ODATA 400
 # ---------------------------------------------------------------------------
 FOCUS_BASE = (
     "https://olinda.bcb.gov.br/olinda/servico/"
@@ -338,7 +339,7 @@ INDICADORES_FOCUS = [
 def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     """
     Busca as expectativas Focus anuais para um indicador específico.
-    Usa o dicionário 'params' para evitar dupla codificação de caracteres (Erro 404).
+    Monta a URL manualmente mantendo o '$' intacto para evitar o Erro 400 do BCB.
     """
     usa_base_calculo = indicador in ("IPCA", "IPCA Modal")
     if usa_base_calculo:
@@ -346,20 +347,21 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     else:
         filtro = f"Indicador eq '{indicador}'"
 
+    # Codifica estritamente o conteúdo da query string do filtro
+    filtro_codificado = requests.utils.quote(filtro)
+
+    # Montagem manual travando os símbolos '$' literais exigidos pelo servidor Olinda
+    url = (
+        f"{FOCUS_BASE}ExpectativasMercadoAnuais"
+        f"?$filter={filtro_codificado}"
+        f"&$format=json"
+        f"&$orderby=Data%20desc"
+        f"&$top=50"
+    )
+    
     resultado = {}
     try:
-        res = requests.get(
-            f"{FOCUS_BASE}ExpectativasMercadoAnuais",
-            params={
-                "$filter":   filtro,
-                "$format":   "json",
-                "$orderby":  "Data desc",
-                "$top":      50,
-            },
-            headers=headers,
-            timeout=20
-        )
-        
+        res = requests.get(url, headers=headers, timeout=20)
         if res.status_code != 200:
             log(f"  [Focus] {indicador} → HTTP {res.status_code}")
             return resultado
@@ -410,11 +412,9 @@ def buscar_focus(headers: dict) -> dict:
         time.sleep(0.5)
         
     # --- BLINDAGEM DE COMPATIBILIDADE PARA O FRONT-END ---
-    # Salva o Câmbio das duas formas para não quebrar o index.html caso não queira editá-lo
     if "Câmbio" in focus:
         focus["Cambio"] = focus["Câmbio"]
         
-    # Garante compatibilidade se o front buscar por "PIB" em vez de "PIB Total"
     if "PIB Total" in focus:
         focus["PIB"] = focus["PIB Total"]
         
@@ -460,7 +460,6 @@ def buscar_fundos_json(headers: dict) -> dict:
         log(f"[Fundos.json] Falha: {e}")
         return {}
 
-    # Estrutura pode ser lista direta ou dict com chave
     if isinstance(raw, list):
         lista = raw
     elif isinstance(raw, dict):
@@ -505,7 +504,7 @@ def enriquecer_urls_com_fundos_json(df: pd.DataFrame, indice_json: dict) -> pd.D
     return df
 
 # ---------------------------------------------------------------------------
-# SIPII scraping (inalterado)
+# SIPII scraping
 # ---------------------------------------------------------------------------
 def configurar_driver(headless=True):
     opt = webdriver.ChromeOptions()
@@ -625,9 +624,9 @@ def consolidar(todos):
     if not todos: return pd.DataFrame()
     df = pd.DataFrame(todos)
     consolidado = []
-    for (fn, cat), grupo in df.groupby(["Fundo_norm","Categoria"], sort=False):
-        reg = grupo.iloc[0].to_dict()
-        reg["Perfis"] = " | ".join(sorted(grupo["Perfil"].unique()))
+    for (fn, cat), group in df.groupby(["Fundo_norm","Categoria"], sort=False):
+        reg = group.iloc[0].to_dict()
+        reg["Perfis"] = " | ".join(sorted(group["Perfil"].unique()))
         consolidado.append(reg)
     return pd.DataFrame(consolidado)
 
@@ -698,18 +697,18 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
         if mask.sum() == 0: return None
         return (vals[mask] * pesos[mask]).sum() / pesos[mask].sum()
     categorias_kpi = {}
-    for cat, grupo in df_calculo.groupby('Categoria'):
-        wa = w_avg(grupo)
+    for cat, group in df_calculo.groupby('Categoria'):
+        wa = w_avg(group)
         categorias_kpi[cat] = {
-            "qtd_ativos": int(grupo['Acum. 12M (%)'].notna().sum()),
-            "pl_total": round(grupo['PL (milhoes R$)'].sum(), 2),
+            "qtd_ativos": int(group['Acum. 12M (%)'].notna().sum()),
+            "pl_total": round(group['PL (milhoes R$)'].sum(), 2),
             "rent_12m_ponderada": round(wa, 2) if wa is not None else None
         }
     perfil_kpi = {}
-    for perf, grupo in df_calculo.groupby('Perfil'):
-        pl_perf = grupo['PL (milhoes R$)'].sum()
+    for perf, group in df_calculo.groupby('Perfil'):
+        pl_perf = group['PL (milhoes R$)'].sum()
         perfil_kpi[perf] = {
-            "qtd_fundos": int(grupo['Fundo'].count()),
+            "qtd_fundos": int(group['Fundo'].count()),
             "pl_total": round(pl_perf, 2),
             "share_percent": round((pl_perf / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0
         }
@@ -892,7 +891,7 @@ class ColetorMercado:
         dow_jones = self._buscar_yahoo("^DJI")
         nasdaq    = self._buscar_yahoo("^IXIC")
 
-        # ── v13: Boletim Focus ────────────────────────────────────────────
+        # ── v13: Boletim Focus Corrigido Manualmente ──────────────────────
         focus_data = buscar_focus(self.headers)
 
         return {
@@ -900,7 +899,7 @@ class ColetorMercado:
             "cards": {
                 "selic_meta":   {"valor": selic_meta, "unidade": "% a.a."},
                 "cdi": {
-                    "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
+                    "valor":    round(selic_meta - 0.10, 4) if selic_meta else None,
                     "unidade": "% a.a.",
                 },
                 "cdi_dia":      {"valor": cdi_hoje, "unidade": "%"},
@@ -937,7 +936,6 @@ class ColetorMercado:
                 "dow_jones": dow_jones["atual"],
                 "nasdaq":    nasdaq["atual"],
             },
-            # ── v13: bloco Focus injetado aqui ────────────────────────────
             "focus": focus_data,
         }
 
@@ -991,14 +989,14 @@ def executar():
     # 8. Indicadores macro + Focus → mercado_atual.json
     try:
         coletor    = ColetorMercado()
-        indicadores = coletor.coletar_todos()   # já inclui focus no retorno
+        indicadores = coletor.coletar_todos()
 
         caminho_json = BASE_DIR / "mercado_atual.json"
         with open(caminho_json, "w", encoding="utf-8") as f:
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
 
         n_hist   = len(indicadores["cards"]["ipca"]["historico"])
-        n_focus  = len(indicadores.get("focus", {})) - 1  # -1 pelo campo data_coleta
+        n_focus  = len(indicadores.get("focus", {})) - 1
         log(f"[SUCESSO] JSON salvo: {caminho_json.name} | IPCA: {n_hist} meses | Focus: {n_focus} indicadores")
 
     except Exception as e:
