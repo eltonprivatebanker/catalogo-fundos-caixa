@@ -319,44 +319,47 @@ def encontrar_url(nome, registros_dinamicos):
     return encontrar_url_dinamica(nome, registros_dinamicos)
 
 # ---------------------------------------------------------------------------
-# NOVO v13 — Boletim Focus (BCB) — CORRIGIDO
+# NOVO v13 — Boletim Focus (BCB) — RESOLVIDO COM PARAMS
 # ---------------------------------------------------------------------------
 FOCUS_BASE = (
     "https://olinda.bcb.gov.br/olinda/servico/"
-    "Focus-EndpointsSelecionados/versao/v1/odata/"
+    "Expectativas/versao/v1/odata/"
 )
 
-# AJUSTE: "Câmbio" corrigido com acento para validação exata na API do BCB
 INDICADORES_FOCUS = [
     "IPCA",
     "IPCA Modal",
     "Selic",
     "PIB Total",
-    "Câmbio",
+    "Câmbio",  # API exige com acento
     "IGP-M",
 ]
 
 def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     """
     Busca as expectativas Focus anuais para um indicador específico.
-    baseCalculo eq 0 só existe para IPCA/IPCA Modal — os demais não usam esse filtro.
+    Usa o dicionário 'params' para evitar dupla codificação de caracteres (Erro 404).
     """
-    # Apenas IPCA e IPCA Modal têm o campo baseCalculo
     usa_base_calculo = indicador in ("IPCA", "IPCA Modal")
     if usa_base_calculo:
         filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
     else:
         filtro = f"Indicador eq '{indicador}'"
 
-    url = (
-        f"{FOCUS_BASE}ExpectativasMercadoAnuais"
-        f"?$filter={requests.utils.quote(filtro)}"
-        f"&$format=json&$orderby=Data desc&$top=50"
-    )
-    
     resultado = {}
     try:
-        res = requests.get(url, headers=headers, timeout=20)
+        res = requests.get(
+            f"{FOCUS_BASE}ExpectativasMercadoAnuais",
+            params={
+                "$filter":   filtro,
+                "$format":   "json",
+                "$orderby":  "Data desc",
+                "$top":      50,
+            },
+            headers=headers,
+            timeout=20
+        )
+        
         if res.status_code != 200:
             log(f"  [Focus] {indicador} → HTTP {res.status_code}")
             return resultado
@@ -404,9 +407,18 @@ def buscar_focus(headers: dict) -> dict:
     for indicador in INDICADORES_FOCUS:
         log(f"  [Focus] → {indicador}")
         focus[indicador] = _buscar_focus_indicador(indicador, anos_alvo, headers)
-        time.sleep(0.5)  # respeita rate limit da API do BCB
+        time.sleep(0.5)
         
-    log(f"[Focus] Coleta concluída: {len(INDICADORES_FOCUS)} indicadores.")
+    # --- BLINDAGEM DE COMPATIBILIDADE PARA O FRONT-END ---
+    # Salva o Câmbio das duas formas para não quebrar o index.html caso não queira editá-lo
+    if "Câmbio" in focus:
+        focus["Cambio"] = focus["Câmbio"]
+        
+    # Garante compatibilidade se o front buscar por "PIB" em vez de "PIB Total"
+    if "PIB Total" in focus:
+        focus["PIB"] = focus["PIB Total"]
+        
+    log(f"[Focus] Coleta concluída: {len(INDICADORES_FOCUS)} indicadores processados.")
     return focus
 
 # ---------------------------------------------------------------------------
