@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "19/05/2026 05:46:58",
+    "atualizado_em": "19/05/2026 06:05:51",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -4279,13 +4279,189 @@
         "nasdaq": 26090.73046875
     },
     "focus": {
-        "data_coleta": "19/05/2026 05:46",
-        "IPCA": {},
-        "Selic": {},
-        "PIB": {},
-        "Cambio": {},
-        "IGPM": {},
-        "IPCA_Modal": {}
+        "data_coleta": "19/05/2026 06:05",
+        "fonte": "pdf",
+        "data_pdf": "20260515",
+        "IPCA": {
+            "2026": {
+                "mediana": 4.92,
+                "media": 4.92,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2027": {
+                "mediana": 4.0,
+                "media": 4.0,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2028": {
+                "mediana": 3.65,
+                "media": 3.65,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2029": {
+                "mediana": 3.5,
+                "media": 3.5,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            }
+        },
+        "Selic": {
+            "2026": {
+                "mediana": 13.25,
+                "media": 13.25,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2027": {
+                "mediana": 10.0,
+                "media": 10.0,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2028": {
+                "mediana": 4.66,
+                "media": 4.66,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2029": {
+                "mediana": 5.63,
+                "media": 5.63,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            }
+        },
+        "PIB": {
+            "2026": {
+                "mediana": 1.85,
+                "media": 1.85,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2027": {
+                "mediana": 1.77,
+                "media": 1.77,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2028": {
+                "mediana": 2.0,
+                "media": 2.0,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2029": {
+                "mediana": 2.0,
+                "media": 2.0,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            }
+        },
+        "Cambio": {
+            "2026": {
+                "mediana": 5.2,
+                "media": 5.2,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2027": {
+                "mediana": 5.27,
+                "media": 5.27,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2028": {
+                "mediana": 5.34,
+                "media": 5.34,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2029": {
+                "mediana": 5.4,
+                "media": 5.4,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            }
+        },
+        "IGPM": {
+            "2026": {
+                "mediana": 5.63,
+                "media": 5.63,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2027": {
+                "mediana": 4.0,
+                "media": 4.0,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2028": {
+                "mediana": 3.82,
+                "media": 3.82,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2029": {
+                "mediana": 3.7,
+                "media": 3.7,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            }
+        },
+        "IPCA_Modal": {
+            "2026": {
+                "mediana": 4.92,
+                "media": 4.92,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2027": {
+                "mediana": 4.0,
+                "media": 4.0,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2028": {
+                "mediana": 3.65,
+                "media": 3.65,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            },
+            "2029": {
+                "mediana": 3.5,
+                "media": 3.5,
+                "minimo": null,
+                "maximo": null,
+                "data_ref": "2026-05-15"
+            }
+        }
     },
     "historico_selic": [
         {
