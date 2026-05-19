@@ -1,8 +1,3 @@
-Aqui está o código completo do script `robo_sipii_simples.py`, atualizado na **versão 13**. Juntei as correções de Regex para limpar as notas de rodapé, o tratamento de valores nulos com strings vazias e o salvamento em CSV com as aspas protetoras (`quoting=csv.QUOTE_MINIMAL`) nos lugares exatos dentro do fluxo de execução.
-
-Pode copiar o bloco abaixo e substituir o conteúdo integral do seu arquivo:
-
-```python
 """
 ROBÔ SIPII CAIXA — v13 (Edição GitHub Repository)
 Estratégia de URLs em duas camadas:
@@ -96,7 +91,7 @@ URL_ESTATICO = {
     "CAIXA FIC ACOES EXPERT VERDE AM LONG BIAS -": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/CAIXA-Expert-Verde-Am-Long-Bias-FIC-Acoes/Paginas/default.aspx",
     "CAIXA FIC ACOES EXPERT VINCI VALOR DIVIDENDOS RPPS": "https://www.caixa.gov.br/fundos-investimento/rpps/caixa-fic-acoes-vinci-valor-dividendos-rpps",
     "CAIXA FIC ACOES EXPERT VINCI VALOR RPPS": "https://www.caixa.gov.br/fundos-investimento/rpps/caixa-fic-acoes-vinci-valor-rpps",
-    "CAIXA FIC FIF ABSOLUTO PRE RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-absoluto-pre-rf-longo-prazo",
+    "CAIXA FIC FIF ABSOLUTO PRE RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-absolute-pre-rf-longo-prazo",
     "CAIXA FIC FIF ACOES IBOVESPA": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/fi-acoes-ibovespa",
     "CAIXA FIC FIF ACOES MULTIGESTOR": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/fic-fia-multigestor/Paginas/default.aspx",
     "CAIXA FIC FIF ALOCACAO MACRO MM LONGO PRAZO": "https://www.caixa.gov.br/fundos-investimento/multimercado/fic-alocacao-macro-multimercado-longo-prazo/",
@@ -410,23 +405,27 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     return resultado
 
 def buscar_focus(headers: dict) -> dict:
-    """Coleta todas as expectativas do Boletim Focus para os próximos 4 anos."""
+    """Coleta todas as expectativas do Boletim Focus para os próximos 4 anos e limpa as chaves."""
     anos_alvo = [2026, 2027, 2028, 2029]
     log("[Focus] Coletando expectativas do Banco Central...")
-    focus = {"data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M")}
+    raw_focus = {}
     
     for indicador in INDICADORES_FOCUS:
         log(f"  [Focus] → {indicador}")
-        focus[indicador] = _buscar_focus_indicador(indicador, anos_alvo, headers)
+        raw_focus[indicador] = _buscar_focus_indicador(indicador, anos_alvo, headers)
         time.sleep(0.5)
         
-    if "Câmbio" in focus:
-        focus["Cambio"] = focus["Câmbio"]
+    focus = {
+        "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
+        "IPCA": raw_focus.get("IPCA", {}),
+        "Selic": raw_focus.get("Selic", {}),
+        "PIB": raw_focus.get("PIB Total", {}),
+        "Cambio": raw_focus.get("Câmbio", {}),
+        "IGPM": raw_focus.get("IGP-M", {}),
+        "IPCA_Modal": raw_focus.get("IPCA", {}) # Fallback seguro de amostragem
+    }
         
-    if "PIB Total" in focus:
-        focus["PIB"] = focus["PIB Total"]
-        
-    log(f"[Focus] Coleta concluída: {len(INDICADORES_FOCUS)} indicadores processados.")
+    log(f"[Focus] Coleta concluída e chaves normalizadas para web.")
     return focus
 
 # ---------------------------------------------------------------------------
@@ -738,7 +737,7 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
             "concentracao_top5_percent": round((pl_top_5 / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0,
             "pipeline_novos_fundos": int(df_calculo['Cota (R$)'].isna().sum())
         },
-        "categorias": categorias_kpi,
+        "categorias": categories_kpi if 'categories_kpi' in locals() else categorias_kpi,
         "perfis_comerciais": perfil_kpi
     }
     with open(caminho_saida, "w", encoding="utf-8") as f:
@@ -1003,7 +1002,7 @@ class ColetorMercado:
 # ---------------------------------------------------------------------------
 # Ponto de entrada
 # ---------------------------------------------------------------------------
-def executar():
+def ejecutar():
     log("⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v13...")
 
     # 1. Scraping de URLs do portal institucional CAIXA
@@ -1092,5 +1091,3 @@ def executar():
 
 if __name__ == "__main__":
     executar()
-
-```
