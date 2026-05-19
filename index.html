@@ -113,6 +113,48 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .focus-ref a{color:var(--gold);text-decoration:none;transition:color .15s}
 .focus-ref a:hover{color:var(--gold2)}
 
+/* ── INDICADORES REDESENHADOS ── */
+.indic-ref-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.indic-ref-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:14px 20px;display:flex;align-items:center;gap:16px;flex:1;min-width:180px;
+  position:relative;overflow:hidden;transition:border-color .2s}
+.indic-ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.indic-ref-card.selic::before{background:linear-gradient(90deg,var(--gold),transparent)}
+.indic-ref-card.cdi::before{background:linear-gradient(90deg,var(--green),transparent)}
+.indic-ref-card.poup::before{background:linear-gradient(90deg,var(--blue),transparent)}
+.indic-ref-icon{font-size:1.4rem;opacity:.7}
+.indic-ref-body{display:flex;flex-direction:column;gap:2px}
+.indic-ref-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600}
+.indic-ref-val{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;line-height:1}
+.indic-ref-val.gold{color:var(--gold2)}
+.indic-ref-val.green{color:var(--green)}
+.indic-ref-val.blue{color:var(--blue)}
+.indic-ref-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+
+.indic-table-wrap{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg2)}
+.indic-table{width:100%;border-collapse:collapse}
+.indic-table thead tr{background:linear-gradient(90deg,var(--bg4),var(--bg3));border-bottom:1px solid var(--border)}
+.indic-table th{padding:11px 16px;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);
+  font-weight:600;text-align:right;white-space:nowrap}
+.indic-table th:first-child{text-align:left}
+.indic-table th.th-mes{color:var(--gold2)}
+.indic-table tbody tr{border-bottom:1px solid var(--border2);transition:background .12s}
+.indic-table tbody tr:last-child{border-bottom:none}
+.indic-table tbody tr:hover{background:rgba(200,151,58,.03)}
+.indic-table td{padding:13px 16px;text-align:right;vertical-align:middle}
+.indic-table td:first-child{text-align:left}
+.indic-name{display:flex;align-items:center;gap:8px}
+.indic-icon{font-size:.95rem}
+.indic-title{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:var(--text)}
+.indic-subtitle{font-size:.6rem;color:var(--muted2);margin-top:1px;font-family:'JetBrains Mono',monospace}
+.indic-val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--text);line-height:1}
+.indic-val-sub{font-size:.6rem;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.indic-pct{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600}
+.indic-pct.pos{color:var(--green)}.indic-pct.neg{color:var(--red)}.indic-pct.zero,.indic-pct.dash{color:var(--muted2)}
+.indic-pct-label{font-size:.58rem;color:var(--muted2);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.indic-footnote{padding:8px 16px;font-size:.6rem;color:var(--muted2);border-top:1px solid var(--border2);
+  font-family:'JetBrains Mono',monospace;font-style:italic}
+
 /* ── CHARTS ── */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
@@ -318,15 +360,111 @@ footer span{color:var(--gold)}
     <h2>📡 Indicadores de Mercado</h2>
     <span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
   </div>
-  <div class="mercado-grid" id="mercadoGrid">
-    <div class="mcad ouro"><div class="mcad-label">Taxa Selic</div><div class="mcad-val gold" id="mc-selic">—</div><div class="mcad-sub">% a.a. — meta vigente</div></div>
-    <div class="mcad verde"><div class="mcad-label">CDI</div><div class="mcad-val up" id="mc-cdi">—</div><div class="mcad-sub">% a.a. estimado</div></div>
-    <div class="mcad azul"><div class="mcad-label">IPCA acum. 12M</div><div class="mcad-val" id="mc-ipca12">—</div><div class="mcad-sub" id="mc-ipca-mes">último mês: —</div></div>
-    <div class="mcad azul"><div class="mcad-label">IPCA acum. ano</div><div class="mcad-val" id="mc-ipcaano">—</div><div class="mcad-sub" id="mc-ipca-meta">meta: 3,0% (banda 1,5%–4,5%)</div></div>
-    <div class="mcad vermelho"><div class="mcad-label">Dólar (BRL/USD)</div><div class="mcad-val" id="mc-dolar">—</div><div class="mcad-sub" id="mc-dolar-var">var. 30d: —</div></div>
-    <div class="mcad verde"><div class="mcad-label">Ibovespa</div><div class="mcad-val" id="mc-ibov">—</div><div class="mcad-sub" id="mc-ibov-var">var. 30d: —</div></div>
-    <div class="mcad azul"><div class="mcad-label">S&P 500 (USD)</div><div class="mcad-val" id="mc-sp500">—</div><div class="mcad-sub" id="mc-sp500brl">em R$: —</div></div>
-    <div class="mcad azul"><div class="mcad-label">Poupança Nova</div><div class="mcad-val" id="mc-poup">—</div><div class="mcad-sub">% a.m. — rendimento mensal</div></div>
+
+  <!-- Taxas de referência -->
+  <div class="indic-ref-bar">
+    <div class="indic-ref-card selic">
+      <div class="indic-ref-icon">🏦</div>
+      <div class="indic-ref-body">
+        <div class="indic-ref-label">Taxa Selic — Meta COPOM</div>
+        <div class="indic-ref-val gold" id="mc-selic">—</div>
+        <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
+      </div>
+    </div>
+    <div class="indic-ref-card cdi">
+      <div class="indic-ref-icon">💰</div>
+      <div class="indic-ref-body">
+        <div class="indic-ref-label">CDI — Certificado de Depósito Interbancário</div>
+        <div class="indic-ref-val green" id="mc-cdi">—</div>
+        <div class="indic-ref-sub">% a.a. estimado · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
+      </div>
+    </div>
+    <div class="indic-ref-card poup">
+      <div class="indic-ref-icon">🏠</div>
+      <div class="indic-ref-body">
+        <div class="indic-ref-label">Poupança Nova — Rendimento</div>
+        <div class="indic-ref-val blue" id="mc-poup">—</div>
+        <div class="indic-ref-sub">% a.m. — rendimento mensal</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabela comparativa de indicadores -->
+  <div class="indic-table-wrap">
+    <table class="indic-table">
+      <thead>
+        <tr>
+          <th style="min-width:160px">Indicador</th>
+          <th>Valor / Cotação</th>
+          <th class="th-mes" id="th-mes-label">Último mês</th>
+          <th>Acum. Ano</th>
+          <th>12 Meses</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- CDI -->
+        <tr>
+          <td><div class="indic-name"><span class="indic-icon">💰</span><div><div class="indic-title">CDI</div><div class="indic-subtitle">Cert. Depósito Interbancário</div></div></div></td>
+          <td><div class="indic-val" id="mc-cdi-v">—</div><div class="indic-val-sub">% a.a.</div></td>
+          <td><div class="indic-pct pos" id="mc-cdi-mes">—</div><div class="indic-pct-label">estimado*</div></td>
+          <td><div class="indic-pct dash">—</div></td>
+          <td><div class="indic-pct pos" id="mc-cdi-12m">—</div><div class="indic-pct-label">estimado*</div></td>
+        </tr>
+
+        <!-- IPCA -->
+        <tr>
+          <td><div class="indic-name"><span class="indic-icon">📊</span><div><div class="indic-title">IPCA</div><div class="indic-subtitle">Inflação ao Consumidor</div></div></div></td>
+          <td><div class="indic-val" id="mc-ipca12">—</div><div class="indic-val-sub">acum. 12M</div></td>
+          <td><div class="indic-pct" id="mc-ipca-mes-v">—</div><div class="indic-pct-label" id="mc-ipca-mes-label">—</div></td>
+          <td><div class="indic-pct" id="mc-ipcaano">—</div><div class="indic-pct-label">acum. ano · meta 3%</div></td>
+          <td><div class="indic-pct" id="mc-ipca12-tab">—</div><div class="indic-pct-label">acum. 12M</div></td>
+        </tr>
+
+        <!-- Dólar -->
+        <tr>
+          <td><div class="indic-name"><span class="indic-icon">💵</span><div><div class="indic-title">Dólar</div><div class="indic-subtitle">BRL / USD</div></div></div></td>
+          <td><div class="indic-val" id="mc-dolar">—</div><div class="indic-val-sub">cotação do dia</div></td>
+          <td><div class="indic-pct" id="mc-dolar-var">—</div><div class="indic-pct-label">var. ~30d</div></td>
+          <td><div class="indic-pct dash">—</div></td>
+          <td><div class="indic-pct dash">—</div></td>
+        </tr>
+
+        <!-- Ibovespa -->
+        <tr>
+          <td><div class="indic-name"><span class="indic-icon">📈</span><div><div class="indic-title">Ibovespa</div><div class="indic-subtitle">Bolsa de Valores B3 — SP</div></div></div></td>
+          <td><div class="indic-val" id="mc-ibov">—</div><div class="indic-val-sub">pontos</div></td>
+          <td><div class="indic-pct" id="mc-ibov-var">—</div><div class="indic-pct-label">var. ~30d</div></td>
+          <td><div class="indic-pct dash">—</div></td>
+          <td><div class="indic-pct dash">—</div></td>
+        </tr>
+
+        <!-- S&P 500 -->
+        <tr>
+          <td><div class="indic-name"><span class="indic-icon">🌎</span><div><div class="indic-title">S&amp;P 500</div><div class="indic-subtitle">Índice EUA — 500 maiores empresas</div></div></div></td>
+          <td>
+            <div class="indic-val" id="mc-sp500">—</div><div class="indic-val-sub">USD</div>
+            <div style="margin-top:4px"><span class="indic-pct" style="font-size:.72rem;color:var(--muted)" id="mc-sp500brl">—</span></div>
+          </td>
+          <td><div class="indic-pct dash">—</div></td>
+          <td><div class="indic-pct dash">—</div></td>
+          <td><div class="indic-pct dash">—</div></td>
+        </tr>
+
+        <!-- IPCA — metadados extras -->
+        <tr>
+          <td><div class="indic-name"><span class="indic-icon">🎯</span><div><div class="indic-title">IPCA vs Meta CMN</div><div class="indic-subtitle">Banda: 1,5% – 4,5% · Meta central: 3%</div></div></div></td>
+          <td><div class="indic-val" id="mc-ipca12-b">—</div><div class="indic-val-sub">acum. 12M (real)</div></td>
+          <td><div class="indic-pct" id="mc-ipca-mes-b">—</div><div class="indic-pct-label" id="mc-ipca-mes-label-b">—</div></td>
+          <td><div class="indic-pct" id="mc-ipcaano-b">—</div><div class="indic-pct-label" id="mc-ipca-meta-b">meta: 3,0%</div></td>
+          <td><div class="indic-pct" id="mc-ipca12-b2">—</div><div class="indic-pct-label">vs meta 3%</div></td>
+        </tr>
+
+      </tbody>
+    </table>
+    <div class="indic-footnote">
+      * CDI mensal e 12M estimados matematicamente a partir da taxa a.a. · Ibovespa e Dólar: variação sobre os ~30 últimos dias disponíveis · S&P 500: cotação em USD e conversão BRL pelo câmbio do dia
+    </div>
   </div>
 </div>
 
@@ -518,40 +656,89 @@ async function carregarMercado(){
 
     const c = d.cards || {};
 
+    // ── Selic ──
     const selic = c.selic_meta?.valor;
     $('mc-selic').textContent = selic ? fmt(selic) : '—';
 
+    // ── CDI ──
     const cdi = c.cdi?.valor;
     $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
+    $('mc-cdi-v').textContent = cdi ? fmt(cdi) : '—';
+    if(cdi){
+      // Usa CDI mensal real (série 4391 BCB) se disponível; senão estimativa matemática
+      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1 + cdi/100, 1/12) - 1) * 100);
+      const isEstimado = c.cdi?.mensal == null;
+      const fCdiMes = '+' + cdiMensal.toFixed(2).replace('.',',') + '%';
+      $('mc-cdi-mes-ref').textContent = fCdiMes + (isEstimado ? '*' : '');
+      const mEl = $('mc-cdi-mes');
+      mEl.textContent = fCdiMes;
+      mEl.className = 'indic-pct pos';
+      const mLab = mEl.nextElementSibling;
+      if(mLab) mLab.textContent = isEstimado ? 'estimado*' : ipcaLabel || 'real BCB';
+      const yEl = $('mc-cdi-12m'); yEl.textContent = '+'+fmt(cdi); yEl.className='indic-pct pos';
+    }
 
+    // ── IPCA ──
     const ipca = c.ipca || {};
     const ipca12 = ipca.acum_12m;
     const ipcaAno = ipca.acum_ano;
     const ipcaMes = ipca.ultimo_mes;
     const ipcaLabel = ipca.label_mes || '';
-    $('mc-ipca12').textContent = ipca12 ? fmt(ipca12) : '—';
-    $('mc-ipcaano').textContent = ipcaAno ? fmt(ipcaAno) : '—';
-    $('mc-ipca-mes').textContent = ipcaMes ? `último mês (${ipcaLabel}): ${fmt(ipcaMes)}` : 'último mês: —';
 
+    // IPCA linha principal
+    const ipca12Fmt = ipca12 ? fmt(ipca12) : '—';
+    $('mc-ipca12').textContent = ipca12Fmt;
+    $('mc-ipca12-tab').textContent = ipca12 ? (ipca12>0?'+':'')+fmt(ipca12) : '—';
+    $('mc-ipca12-tab').className = 'indic-pct '+(ipca12>0?'pos':ipca12<0?'neg':'zero');
+
+    const anoFmt = ipcaAno ? (ipcaAno>0?'+':'')+fmt(ipcaAno) : '—';
+    $('mc-ipcaano').textContent = anoFmt;
+    $('mc-ipcaano').className = 'indic-pct '+(ipcaAno>0?'pos':ipcaAno<0?'neg':'zero');
+
+    const mesFmt = ipcaMes!==null&&ipcaMes!==undefined ? (ipcaMes>0?'+':'')+fmt(ipcaMes) : '—';
+    $('mc-ipca-mes-v').textContent = mesFmt;
+    $('mc-ipca-mes-v').className = 'indic-pct '+(ipcaMes>0?'pos':ipcaMes<0?'neg':'zero');
+    $('mc-ipca-mes-label').textContent = ipcaLabel || '—';
+
+    // IPCA linha vs meta
+    $('mc-ipca12-b').textContent = ipca12Fmt;
+    $('mc-ipca12-b2').textContent = ipca12 ? (ipca12>0?'+':'')+fmt(ipca12) : '—';
+    $('mc-ipca12-b2').className = 'indic-pct '+(ipca12>4.5?'neg':ipca12<1.5?'neg':'pos');
+    $('mc-ipcaano-b').textContent = anoFmt;
+    $('mc-ipcaano-b').className = 'indic-pct '+(ipcaAno>4.5?'neg':ipcaAno<1.5?'neg':'pos');
+    $('mc-ipca-mes-b').textContent = mesFmt;
+    $('mc-ipca-mes-b').className = 'indic-pct '+(ipcaMes>0?'pos':ipcaMes<0?'neg':'zero');
+    $('mc-ipca-mes-label-b').textContent = ipcaLabel || '—';
+    if(ipcaLabel) $('th-mes-label').textContent = `Mês (${ipcaLabel})`;
+
+    // ── Dólar ──
     const dolar = c.dolar || {};
     const dolarAtual = dolar.atual;
     const dolarVar = dolar.variacao_mensal;
     $('mc-dolar').textContent = dolarAtual ? 'R$ '+fmtBRL(dolarAtual) : '—';
-    $('mc-dolar').className = 'mcad-val '+(dolarVar>=0?'dn':'up');
-    $('mc-dolar-var').textContent = dolarVar!==null ? `var. 30d: ${(dolarVar>=0?'+':'')+fmt(dolarVar)}` : 'var. 30d: —';
+    if(dolarVar!==null&&dolarVar!==undefined){
+      const dvEl = $('mc-dolar-var');
+      dvEl.textContent = (dolarVar>=0?'+':'')+fmt(dolarVar);
+      dvEl.className = 'indic-pct '+(dolarVar>=0?'neg':'pos'); // dólar subindo = ruim para BRL
+    }
 
+    // ── Ibovespa ──
     const ibov = c.ibovespa || {};
     const ibovAtual = ibov.atual;
     const ibovVar = ibov.variacao_mensal;
     $('mc-ibov').textContent = ibovAtual ? fmtK(ibovAtual)+' pts' : '—';
-    $('mc-ibov').className = 'mcad-val '+(ibovVar>=0?'up':'dn');
-    $('mc-ibov-var').textContent = ibovVar!==null ? `var. 30d: ${(ibovVar>=0?'+':'')+fmt(ibovVar)}` : 'var. 30d: —';
-    $('mc-ibov-var').className = 'mcad-sub '+(ibovVar>=0?'up':'dn');
+    if(ibovVar!==null&&ibovVar!==undefined){
+      const ivEl = $('mc-ibov-var');
+      ivEl.textContent = (ibovVar>=0?'+':'')+fmt(ibovVar);
+      ivEl.className = 'indic-pct '+(ibovVar>=0?'pos':'neg');
+    }
 
+    // ── S&P 500 ──
     const intl = d.indices_internacionais || {};
     $('mc-sp500').textContent = intl.sp500_usd ? fmtK(intl.sp500_usd) : '—';
-    $('mc-sp500brl').textContent = intl.sp500_brl ? `em R$: ${fmtK(intl.sp500_brl)}` : 'em R$: —';
+    $('mc-sp500brl').textContent = intl.sp500_brl ? `R$ ${fmtK(intl.sp500_brl)}` : '—';
 
+    // ── Poupança ──
     const poup = c.poupanca_nova?.valor;
     $('mc-poup').textContent = poup ? fmt(poup) : '—';
 
