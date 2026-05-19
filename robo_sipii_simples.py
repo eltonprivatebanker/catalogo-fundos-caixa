@@ -1,14 +1,13 @@
 """
-ROBÔ SIPII CAIXA — v12 (Edição GitHub Repository)
+ROBÔ SIPII CAIXA — v13 (Edição GitHub Repository)
 Estratégia de URLs em duas camadas:
   1. Dicionário estático: 116 URLs validadas manualmente
   2. Scraping dinâmico: captura URLs de novos fundos nas páginas da CAIXA
-  Resultado esperado: ~149/171 fundos com URL real
 
   v12 — IPCA com base histórica local (ipca_historico_base.json)
-        Na primeira execução baixa a série completa do BCB automaticamente.
-        Nas execuções seguintes busca apenas os últimos 3 meses (delta)
-        e faz merge com a base local. Zero risco de timeout.
+  v13 — Boletim Focus do BCB (IPCA, IPCA Modal, Selic, PIB, Câmbio, IGP-M)
+         Integração com fundos.json da CAIXA Asset (enriquecimento de URLs/dados)
+         Correção: visitos → vistos em raspar_urls_caixa()
 """
 
 import json
@@ -194,12 +193,15 @@ URL_ESTATICO = {
 DEBUG_COLUNAS = False
 
 # ---------------------------------------------------------------------------
-# Utilidades
+# Caminhos de arquivo
 # ---------------------------------------------------------------------------
 BASE_DIR       = Path.cwd()
 LOG_PATH       = BASE_DIR / "execucao.log"
 IPCA_BASE_PATH = BASE_DIR / "ipca_historico_base.json"
 
+# ---------------------------------------------------------------------------
+# Utilidades gerais
+# ---------------------------------------------------------------------------
 def log(msg):
     linha = f"[{datetime.now().strftime('%H:%M:%S')}] {msg}"
     print(linha)
@@ -222,7 +224,7 @@ def chave_estatica(nome):
 TEXTO_PARA_CSV = {normalizar(c["texto_tela"]): c["csv"] for c in CATEGORIAS_FIXAS}
 
 # ---------------------------------------------------------------------------
-# Camada 2 — Scraping dinâmico
+# Camada 2 — Scraping dinâmico de URLs da CAIXA
 # ---------------------------------------------------------------------------
 STOPWORDS = {
     "CAIXA","FIC","FIF","FI","RF","LP","MM","IE","RL","IS",
@@ -259,7 +261,7 @@ HEADERS_HTTP = {
 }
 
 def raspar_urls_caixa():
-    registros, vistos = [], set()
+    registros, vistos = [], set()   # ← CORREÇÃO: era 'visitos' (bug original)
     base = "https://www.caixa.gov.br"
     session = requests.Session()
     session.headers.update(HEADERS_HTTP)
@@ -279,7 +281,7 @@ def raspar_urls_caixa():
                 if "/fundos-investimento/" not in href: continue
                 if len(href.rstrip('/').split('/')) < 7: continue
                 if href in vistos: continue
-                visitos.add(href)
+                vistos.add(href)   # ← CORREÇÃO aplicada aqui
                 registros.append({
                     "texto": normalizar(texto),
                     "url": href,
@@ -317,7 +319,166 @@ def encontrar_url(nome, registros_dinamicos):
     return encontrar_url_dinamica(nome, registros_dinamicos)
 
 # ---------------------------------------------------------------------------
-# SIPII scraping
+# NOVO v13 — Boletim Focus (BCB)
+# ---------------------------------------------------------------------------
+FOCUS_BASE = (
+    "https://olinda.bcb.gov.br/olinda/servico/"
+    "Focus-EndpointsSelecionados/versao/v1/odata/"
+)
+
+INDICADORES_FOCUS = [
+    "IPCA",
+    "IPCA Modal",
+    "Selic",
+    "PIB Total",
+    "Cambio",
+    "IGP-M",
+]
+
+def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
+    """
+    Busca as expectativas Focus anuais para um indicador específico.
+    Retorna {ano: {mediana, media, minimo, maximo, data_ref}}
+    """
+    filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
+    url = (
+        f"{FOCUS_BASE}ExpectativasMercadoAnuais"
+        f"?$filter={requests.utils.quote(filtro)}"
+        f"&$format=json&$orderby=Data desc&$top=50"
+    )
+    resultado = {}
+    try:
+        res = requests.get(url, headers=headers, timeout=20)
+        if res.status_code != 200:
+            log(f"  [Focus] {indicador} → HTTP {res.status_code}")
+            return resultado
+        registros = res.json().get("value", [])
+        vistos_anos = set()
+        for reg in registros:
+            ano_str = str(reg.get("DataReferencia", ""))[:4]
+            if not ano_str:
+                continue
+            try:
+                ano = int(ano_str)
+            except ValueError:
+                continue
+            if ano not in anos or ano in vistos_anos:
+                continue
+            vistos_anos.add(ano)
+            resultado[ano] = {
+                "mediana": reg.get("Mediana"),
+                "media":   reg.get("Media"),
+                "minimo":  reg.get("Minimo"),
+                "maximo":  reg.get("Maximo"),
+                "data_ref": reg.get("Data"),
+            }
+            if len(vistos_anos) == len(anos):
+                break
+    except Exception as e:
+        log(f"  [Focus] Erro ao buscar {indicador}: {e}")
+    return resultado
+
+
+def buscar_focus(headers: dict) -> dict:
+    """
+    Coleta todas as expectativas do Boletim Focus para os próximos 4 anos.
+    Retorna um dict pronto para injetar em mercado_atual["focus"].
+    """
+    anos_alvo = [2026, 2027, 2028, 2029]
+    log("[Focus] Coletando expectativas do Banco Central...")
+    focus = {"data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M")}
+    for indicador in INDICADORES_FOCUS:
+        log(f"  [Focus] → {indicador}")
+        focus[indicador] = _buscar_focus_indicador(indicador, anos_alvo, headers)
+        time.sleep(0.5)  # respeita rate limit da API do BCB
+    log(f"[Focus] Coleta concluída: {len(INDICADORES_FOCUS)} indicadores.")
+    return focus
+
+# ---------------------------------------------------------------------------
+# NOVO v13 — fundos.json da CAIXA Asset (enriquecimento de URLs)
+# ---------------------------------------------------------------------------
+FUNDOS_JSON_URL = "https://www.caixa.gov.br/CAIXA-Asset/Documents/data/fundos.json"
+
+def _normalizar_nome_fundo(nome: str) -> str:
+    """Normaliza nome para comparação: sem acento, maiúsculo, espaços simples."""
+    n = unicodedata.normalize("NFD", nome.upper())
+    n = "".join(c for c in n if unicodedata.category(c) != "Mn")
+    n = re.sub(r"[^A-Z0-9 ]", " ", n)
+    return re.sub(r"\s+", " ", n).strip()
+
+def _parse_num_fundo(v):
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    s = str(v).strip().replace("%", "").replace(".", "").replace(",", ".")
+    try:
+        return float(s)
+    except Exception:
+        return None
+
+def buscar_fundos_json(headers: dict) -> dict:
+    """
+    Baixa o fundos.json da CAIXA Asset e retorna um índice
+    {nome_normalizado: url} para enriquecer URLs ausentes no CSV.
+    """
+    log("[Fundos.json] Baixando catálogo CAIXA Asset...")
+    try:
+        res = requests.get(FUNDOS_JSON_URL, headers=headers, timeout=25)
+        if res.status_code != 200:
+            log(f"[Fundos.json] HTTP {res.status_code} — ignorando.")
+            return {}
+        raw = res.json()
+    except Exception as e:
+        log(f"[Fundos.json] Falha: {e}")
+        return {}
+
+    # Estrutura pode ser lista direta ou dict com chave
+    if isinstance(raw, list):
+        lista = raw
+    elif isinstance(raw, dict):
+        lista = raw.get("fundos") or raw.get("data") or raw.get("items") or []
+    else:
+        lista = []
+
+    indice = {}
+    for f in lista:
+        try:
+            nome = (
+                f.get("nome") or f.get("nomeFundo") or
+                f.get("NomeFundo") or ""
+            ).strip()
+            url = (f.get("url") or f.get("URL") or "").strip()
+            if nome and url and "caixa.gov.br" in url:
+                indice[_normalizar_nome_fundo(nome)] = url
+        except Exception:
+            continue
+
+    log(f"[Fundos.json] {len(indice)} fundos com URL indexados.")
+    return indice
+
+def enriquecer_urls_com_fundos_json(df: pd.DataFrame, indice_json: dict) -> pd.DataFrame:
+    """
+    Preenche URLs vazias no DataFrame usando o índice do fundos.json.
+    Não sobrescreve URLs já preenchidas.
+    """
+    if not indice_json:
+        return df
+
+    def _preencher(row):
+        url_atual = str(row.get("URL", "")).strip()
+        if url_atual and url_atual.startswith("http") and "caixa.gov.br" in url_atual:
+            return url_atual  # já tem URL válida
+        chave = _normalizar_nome_fundo(str(row.get("Fundo", "")))
+        return indice_json.get(chave, url_atual)
+
+    df["URL"] = df.apply(_preencher, axis=1)
+    preenchidas = (df["URL"].str.startswith("http") & df["URL"].str.contains("caixa.gov.br")).sum()
+    log(f"[Fundos.json] URLs válidas após enriquecimento: {preenchidas}/{len(df)}")
+    return df
+
+# ---------------------------------------------------------------------------
+# SIPII scraping (inalterado)
 # ---------------------------------------------------------------------------
 def configurar_driver(headless=True):
     opt = webdriver.ChromeOptions()
@@ -481,16 +642,10 @@ def salvar_excel(df, caminho):
     except Exception as e: log(f"Erro Excel: {e}"); traceback.print_exc()
 
 # ---------------------------------------------------------------------------
-# Processamento de KPIs do Catálogo (Rentabilidade Ponderada e Negócio)
+# KPIs do Dashboard
 # ---------------------------------------------------------------------------
-
 def limpar_dados_para_calculo(df_consolidado):
-    """
-    Recebe o DataFrame vindo do consolidar() e limpa as strings do SIPII
-    convertendo-as em floats utilizáveis para cálculos matemáticos.
-    """
     df = df_consolidado.copy()
-    
     def converte_num(val):
         if pd.isna(val) or str(val).strip() in ['-', '—', '', 'None']:
             return None
@@ -500,40 +655,29 @@ def limpar_dados_para_calculo(df_consolidado):
                 val = val.replace('.', '')
             val = val.replace(',', '.')
         return float(val)
-
     cols_numericas = ['Cota (R$)', 'Variacao Dia (%)', 'Acum. Mes (%)', 'Acum. Ano (%)', 'Acum. 12M (%)', 'PL (milhoes R$)']
     for col in cols_numericas:
         if col in df.columns:
             df[col] = df[col].apply(converte_num)
-            
     return df
 
 def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
-    """
-    Calcula a rentabilidade ponderada, market share por perfil e concentração,
-    exportando um JSON para alimentar de forma inteligente os cards do dashboard.
-    """
     df_calculo = limpar_dados_para_calculo(df_consolidado)
     pl_total_casa = df_calculo['PL (milhoes R$)'].sum()
-    
-    # Média ponderada vetorizada
     def w_avg(group):
         vals = group['Acum. 12M (%)']
         pesos = group['PL (milhoes R$)']
         mask = vals.notna() & pesos.notna() & (pesos > 0)
         if mask.sum() == 0: return None
         return (vals[mask] * pesos[mask]).sum() / pesos[mask].sum()
-
-    # 1. KPIs por Categoria (Visão Estratégica Ponderada)
     categorias_kpi = {}
     for cat, grupo in df_calculo.groupby('Categoria'):
+        wa = w_avg(grupo)
         categorias_kpi[cat] = {
             "qtd_ativos": int(grupo['Acum. 12M (%)'].notna().sum()),
             "pl_total": round(grupo['PL (milhoes R$)'].sum(), 2),
-            "rent_12m_ponderada": round(w_avg(grupo), 2) if w_avg(grupo) is not None else None
+            "rent_12m_ponderada": round(wa, 2) if wa is not None else None
         }
-
-    # 2. Market Share por Público-Alvo Comercial
     perfil_kpi = {}
     for perf, grupo in df_calculo.groupby('Perfil'):
         pl_perf = grupo['PL (milhoes R$)'].sum()
@@ -542,12 +686,8 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
             "pl_total": round(pl_perf, 2),
             "share_percent": round((pl_perf / pl_total_casa) * 100, 2) if pl_total_casa > 0 else 0
         }
-
-    # 3. Análise de Risco por Concentração Extrema (Top 5)
     top_5 = df_calculo.nlargest(5, 'PL (milhoes R$)')
     pl_top_5 = top_5['PL (milhoes R$)'].sum()
-    
-    # 4. Estrutura consolidada de saída
     kpis_finais = {
         "resumo_geral": {
             "pl_total_consolidado": round(pl_total_casa, 2),
@@ -557,26 +697,20 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
         "categorias": categorias_kpi,
         "perfis_comerciais": perfil_kpi
     }
-    
     with open(caminho_saida, "w", encoding="utf-8") as f:
         json.dump(kpis_finais, f, indent=4, ensure_ascii=False)
-        
-    log(f"[KPIs] JSON de métricas avançadas exportado: {caminho_saida.name}")
+    log(f"[KPIs] JSON exportado: {caminho_saida.name}")
 
 # ---------------------------------------------------------------------------
-# Coletor de Indicadores de Mercado Macro e Índices
+# Coletor de Indicadores de Mercado Macro
 # ---------------------------------------------------------------------------
-
 class ColetorMercado:
     def __init__(self):
         self.headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
         }
 
-    # ── BCB — valor pontual ────────────────────────────────────────────────
-
     def _buscar_bcb(self, codigo_serie):
-        """Busca o último valor de uma série do SGS/BCB."""
         try:
             url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/1?formato=json"
             res = requests.get(url, headers=self.headers, timeout=10)
@@ -586,14 +720,7 @@ class ColetorMercado:
             pass
         return None
 
-    # ── IPCA — base local + delta ──────────────────────────────────────────
-
     def _carregar_base_ipca(self):
-        """
-        Carrega ipca_historico_base.json do repositório.
-        Se o arquivo não existir (primeira execução), baixa a série
-        histórica completa do BCB automaticamente — sem script externo.
-        """
         if IPCA_BASE_PATH.exists():
             try:
                 dados = json.loads(IPCA_BASE_PATH.read_text(encoding="utf-8"))
@@ -602,8 +729,6 @@ class ColetorMercado:
                     return dados
             except Exception as e:
                 log(f"[IPCA] Erro ao ler base local: {e}")
-
-        # Primeira execução: base ausente → baixa série completa do BCB
         log("[IPCA] Base local ausente — baixando série histórica completa do BCB...")
         for tentativa in range(3):
             try:
@@ -624,23 +749,15 @@ class ColetorMercado:
                         return historico
             except Exception as e:
                 log(f"[IPCA] Tentativa {tentativa + 1} falhou: {e}")
-                time.sleep(10 * (tentativa + 1))  # 10s → 20s → 30s
-
+                time.sleep(10 * (tentativa + 1))
         log("[IPCA] Não foi possível baixar a série histórica completa.")
         return []
 
     def _buscar_ipca_delta(self, meses=3):
-        """
-        Busca apenas os últimos N meses na API do BCB.
-        Requisição leve (~3 registros) — sem risco de timeout.
-        Retry automático com backoff exponencial.
-        """
         for tentativa in range(3):
             try:
-                url = (
-                    f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433"
-                    f"/dados/ultimos/{meses}?formato=json"
-                )
+                url = (f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.433"
+                       f"/dados/ultimos/{meses}?formato=json")
                 res = requests.get(url, headers=self.headers, timeout=20)
                 if res.status_code == 200:
                     dados = res.json()
@@ -649,16 +766,11 @@ class ColetorMercado:
                         return dados
             except Exception as e:
                 log(f"[IPCA] Delta tentativa {tentativa + 1} falhou: {e}")
-                time.sleep(5 * (tentativa + 1))  # 5s → 10s → 15s
+                time.sleep(5 * (tentativa + 1))
         log("[IPCA] Delta indisponível — usando apenas a base local.")
         return []
 
     def _merge_ipca(self, base, delta):
-        """
-        Combina base local com delta da API.
-        Chave de deduplicação: campo 'data' (ex: '01/04/2026').
-        Retorna lista ordenada cronologicamente por ano e mês.
-        """
         index = {item["data"]: item for item in base}
         for item in delta:
             d, m, y = item["data"].split("/")
@@ -673,11 +785,6 @@ class ColetorMercado:
         )
 
     def _salvar_base_ipca(self, historico):
-        """
-        Persiste ipca_historico_base.json atualizado.
-        O GitHub Actions commita esse arquivo junto com
-        dados_atuais.csv e mercado_atual.json.
-        """
         try:
             IPCA_BASE_PATH.write_text(
                 json.dumps(historico, ensure_ascii=False, indent=2),
@@ -687,10 +794,7 @@ class ColetorMercado:
         except Exception as e:
             log(f"[IPCA] Erro ao salvar base: {e}")
 
-    # ── Cálculos de acumulado ──────────────────────────────────────────────
-
     def _acumular(self, serie, n_meses):
-        """Acumula os últimos N meses da série pelo produto de fatores."""
         acc = 1.0
         for item in serie[-n_meses:]:
             try:
@@ -700,24 +804,18 @@ class ColetorMercado:
         return round((acc - 1) * 100, 4)
 
     def _acumular_ano(self, serie):
-        """Acumula todos os meses do ano corrente até o último dado disponível."""
-        if not serie:
-            return None
+        if not serie: return None
         ultimo_ano = serie[-1]["data"].split("/")[2]
         acc = 1.0
         for item in reversed(serie):
-            if item["data"].split("/")[2] != ultimo_ano:
-                break
+            if item["data"].split("/")[2] != ultimo_ano: break
             try:
                 acc *= (1 + float(item["valor"]) / 100)
             except (ValueError, KeyError):
                 pass
         return round((acc - 1) * 100, 4)
 
-    # ── Yahoo Finance ──────────────────────────────────────────────────────
-
     def _buscar_yahoo(self, ticker):
-        """Busca cotação atual e fechamento ~22 dias úteis atrás (≈1 mês)."""
         try:
             url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?range=2mo&interval=1d"
             res = requests.get(url, headers=self.headers, timeout=10)
@@ -733,29 +831,22 @@ class ColetorMercado:
             pass
         return {"atual": None, "anterior": None}
 
-    # ── Método principal ───────────────────────────────────────────────────
-
     def coletar_todos(self):
         log("[MERCADO] Coletando indicadores macro e índices internacionais...")
 
-        # ── Banco Central — valores pontuais ──────────────────────────────
-        selic_meta    = self._buscar_bcb(432)   # Selic Meta % a.a.
-        cdi_hoje      = self._buscar_bcb(12)    # CDI diário %
-        poupanca_nova = self._buscar_bcb(196)   # Poupança nova % m.m.
+        selic_meta    = self._buscar_bcb(432)
+        cdi_hoje      = self._buscar_bcb(12)
+        poupanca_nova = self._buscar_bcb(196)
 
-        # ── IPCA: base local + delta (apenas últimos 3 meses via API) ─────
-        base_ipca = self._carregar_base_ipca()
+        base_ipca  = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
         ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
 
         if ipca_serie:
-            self._salvar_base_ipca(ipca_serie)  # persiste para o próximo ciclo
+            self._salvar_base_ipca(ipca_serie)
 
-        ipca_ultimo_mes = None
-        ipca_label_mes  = ""
-        ipca_acum_ano   = None
-        ipca_acum_12m   = None
-        ipca_historico  = []
+        ipca_ultimo_mes = ipca_label_mes = ipca_acum_ano = ipca_acum_12m = None
+        ipca_historico = []
 
         if ipca_serie:
             ultimo          = ipca_serie[-1]
@@ -764,57 +855,52 @@ class ColetorMercado:
             ipca_acum_ano   = self._acumular_ano(ipca_serie)
             ipca_acum_12m   = self._acumular(ipca_serie, 12)
             ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
-            log(
-                f"[IPCA] {ipca_ultimo_mes}% ({ipca_label_mes}) | "
-                f"Ano: {ipca_acum_ano}% | 12M: {ipca_acum_12m}% | "
-                f"Série: {len(ipca_historico)} meses"
-            )
+            log(f"[IPCA] {ipca_ultimo_mes}% ({ipca_label_mes}) | Ano: {ipca_acum_ano}% | 12M: {ipca_acum_12m}% | Série: {len(ipca_historico)} meses")
         else:
             log("[IPCA] Série vazia — verifique a base local e a API do BCB.")
 
-        # ── Yahoo Finance ──────────────────────────────────────────────────
         dolar     = self._buscar_yahoo("BRL=X")
         ibov      = self._buscar_yahoo("^BVSP")
         sp500     = self._buscar_yahoo("^GSPC")
         dow_jones = self._buscar_yahoo("^DJI")
         nasdaq    = self._buscar_yahoo("^IXIC")
 
-        # ── JSON final ────────────────────────────────────────────────────
+        # ── v13: Boletim Focus ────────────────────────────────────────────
+        focus_data = buscar_focus(self.headers)
+
         return {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "cards": {
-                "selic_meta": {"valor": selic_meta, "unidade": "% a.a."},
+                "selic_meta":   {"valor": selic_meta, "unidade": "% a.a."},
                 "cdi": {
-                    "valor":    round(selic_meta - 0.10, 4) if selic_meta else None,
+                    "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
                     "unidade": "% a.a.",
                 },
-                "cdi_dia": {"valor": cdi_hoje, "unidade": "%"},
+                "cdi_dia":      {"valor": cdi_hoje, "unidade": "%"},
                 "ipca": {
-                    "ultimo_mes": ipca_ultimo_mes,
-                    "label_mes":  ipca_label_mes,
-                    "acum_ano":   ipca_acum_ano,
-                    "acum_12m":   ipca_acum_12m,
-                    "historico":  ipca_historico,
-                    "meta_central": 3.0,
+                    "ultimo_mes":    ipca_ultimo_mes,
+                    "label_mes":     ipca_label_mes,
+                    "acum_ano":      ipca_acum_ano,
+                    "acum_12m":      ipca_acum_12m,
+                    "historico":     ipca_historico,
+                    "meta_central":  3.0,
                     "meta_superior": 4.5,
                     "meta_inferior": 1.5,
-                    "unidade":    "%",
+                    "unidade":       "%",
                 },
                 "ipca_mes_anterior": {"valor": ipca_ultimo_mes, "unidade": "%"},
-                "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
+                "poupanca_nova":     {"valor": poupanca_nova, "unidade": "% m.m."},
                 "ibovespa": {
                     "atual":    ibov["atual"],
                     "anterior": ibov["anterior"],
-                    "variacao_mensal": round(
-                        ((ibov["atual"] / ibov["anterior"]) - 1) * 100, 2
-                    ) if ibov["atual"] and ibov["anterior"] else None,
+                    "variacao_mensal": round(((ibov["atual"] / ibov["anterior"]) - 1) * 100, 2)
+                                       if ibov["atual"] and ibov["anterior"] else None,
                 },
                 "dolar": {
                     "atual":    dolar["atual"],
                     "anterior": dolar["anterior"],
-                    "variacao_mensal": round(
-                        ((dolar["atual"] / dolar["anterior"]) - 1) * 100, 2
-                    ) if dolar["atual"] and dolar["anterior"] else None,
+                    "variacao_mensal": round(((dolar["atual"] / dolar["anterior"]) - 1) * 100, 2)
+                                       if dolar["atual"] and dolar["anterior"] else None,
                 },
             },
             "indices_internacionais": {
@@ -824,58 +910,69 @@ class ColetorMercado:
                 "dow_jones": dow_jones["atual"],
                 "nasdaq":    nasdaq["atual"],
             },
+            # ── v13: bloco Focus injetado aqui ────────────────────────────
+            "focus": focus_data,
         }
 
 # ---------------------------------------------------------------------------
-# Ponto de entrada — Rotina Completa de Execução
+# Ponto de entrada
 # ---------------------------------------------------------------------------
 def executar():
-    log("⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v12...")
-    
-    # 1. Executa a Camada 2 (Scraping preventivo de URLs das páginas CAIXA)
+    log("⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v13...")
+
+    # 1. Scraping preventivo de URLs das páginas CAIXA
     links_dinamicos = raspar_urls_caixa()
-    
-    # 2. Executa a Camada 1 (Extração de dados brutos por Segmento no SIPII)
+
+    # 2. v13 — Baixa fundos.json da CAIXA Asset para enriquecer URLs
+    headers_http = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+    }
+    indice_fundos_json = buscar_fundos_json(headers_http)
+
+    # 3. Extração de dados brutos do SIPII por segmento
     todos_dados = []
     for perf in PERFIS:
         log(f"Iniciando raspagem do segmento: {perf['segmento']}...")
         dados_perfil = processar_perfil(perf, headless=True)
         todos_dados.extend(dados_perfil)
         time.sleep(2)
-        
+
     if not todos_dados:
         log("[ERRO] Falha crítica: Nenhum dado capturado no SIPII. Pipeline interrompido.")
         return
-        
-    # 3. Consolidação inteligente e Deduplicação Cross-Perfil
+
+    # 4. Consolidação e deduplicação
     log("Deduplicando e injetando cruzamento de perfis...")
     df_consolidado = consolidar(todos_dados)
-    
-    # Aplica inteligência de mapeamento de URLs (Estático -> Dinâmico)
-    df_consolidado["URL"] = df_consolidado["Fundo"].apply(lambda x: encontrar_url(x, links_dinamicos))
-    
-    # 4. Exportação das saídas estruturadas padrão
-    caminho_csv = BASE_DIR / "dados_atuais.csv"
+
+    # 5. URLs — camada estática → dinâmica → fundos.json (ordem de prioridade)
+    df_consolidado["URL"] = df_consolidado["Fundo"].apply(
+        lambda x: encontrar_url(x, links_dinamicos)
+    )
+    df_consolidado = enriquecer_urls_com_fundos_json(df_consolidado, indice_fundos_json)
+
+    # 6. Exportação CSV e Excel
+    caminho_csv  = BASE_DIR / "dados_atuais.csv"
     caminho_xlsx = BASE_DIR / "dados_atuais.xlsx"
-    
     df_consolidado.to_csv(caminho_csv, index=False, encoding="utf-8")
     salvar_excel(df_consolidado, caminho_xlsx)
-    
-    # 5. Processamento analítico dos KPIs (Performance Ponderada e Concentração)
+
+    # 7. KPIs do dashboard
     caminho_kpis = BASE_DIR / "kpis_dashboard.json"
     gerar_json_kpis_dashboard(df_consolidado, caminho_kpis)
 
-    # 6. Coleta de Variáveis Macro (BCB, IPCA, Yahoo Finance)
+    # 8. Indicadores macro + Focus → mercado_atual.json
     try:
-        coletor = ColetorMercado()
-        indicadores = coletor.coletar_todos()
+        coletor    = ColetorMercado()
+        indicadores = coletor.coletar_todos()   # já inclui focus no retorno
 
         caminho_json = BASE_DIR / "mercado_atual.json"
         with open(caminho_json, "w", encoding="utf-8") as f:
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
 
-        n_hist = len(indicadores["cards"]["ipca"]["historico"])
-        log(f"[SUCESSO] JSON salvo: {caminho_json.name} | Série IPCA: {n_hist} meses")
+        n_hist   = len(indicadores["cards"]["ipca"]["historico"])
+        n_focus  = len(indicadores.get("focus", {})) - 1  # -1 pelo campo data_coleta
+        log(f"[SUCESSO] JSON salvo: {caminho_json.name} | IPCA: {n_hist} meses | Focus: {n_focus} indicadores")
 
     except Exception as e:
         log(f"[ERRO] Falha ao processar dados macroeconômicos: {e}")
