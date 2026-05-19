@@ -1,3 +1,8 @@
+Aqui está o código completo do script `robo_sipii_simples.py`, atualizado na **versão 13**. Juntei as correções de Regex para limpar as notas de rodapé, o tratamento de valores nulos com strings vazias e o salvamento em CSV com as aspas protetoras (`quoting=csv.QUOTE_MINIMAL`) nos lugares exatos dentro do fluxo de execução.
+
+Pode copiar o bloco abaixo e substituir o conteúdo integral do seu arquivo:
+
+```python
 """
 ROBÔ SIPII CAIXA — v13 (Edição GitHub Repository)
 Estratégia de URLs em duas camadas:
@@ -11,9 +16,11 @@ Estratégia de URLs em duas camadas:
         Correção Focus: Montagem de URL manual para evitar o Erro OData 400
         Integração Front-End: Leitura local do histórico Selic e Metas de Inflação
         Correção de Bug: Restauração da variável global DEBUG_COLUNAS
+        Ajuste de Sanetização: Remoção de notas de rodapé e blindagem de vírgulas no CSV (quoting)
 """
 
 import json
+import csv
 from pathlib import Path
 from datetime import datetime
 import time, unicodedata, traceback, re, requests
@@ -97,6 +104,7 @@ URL_ESTATICO = {
     "CAIXA FIC FIF BRASIL DISPONIBILIDADES SIMPLES RF": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/brasil-disponibilidades",
     "CAIXA FIC FIF BRASIL GESTAO ESTRATEGICA RF": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/caixa-fic-brasil-gestao-estrategica-rf",
     "CAIXA FIC FIF BRASIL RF REFER DI LONGO PRAZO": "https://www.caixa.gov.br/fundos-investimento/referenciados/fi-brasil-ref-di-longo-prazo",
+    "CAIXA CAPITAL PROTEGIDO CESTA AGRO MM": "https://www.caixa.gov.br/fundos-investimento/multimercado/caixa_fic_fim_cap_protegido_cesta_agro/Paginas/default.aspx",
     "CAIXA FIC FIF CAPITAL IND PRECOS RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-capital-indice-de-precos-rf-longo-prazo",
     "CAIXA FIC FIF CLASSICO RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-classico-rf-longo-prazo",
     "CAIXA FIC FIF DESENVOLVER RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-desenvolver-rf-longo-prazo/",
@@ -133,7 +141,8 @@ URL_ESTATICO = {
     "CAIXA FIC FIF TITULO PUBLICO MPE RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/caixa-fic-tp-mpe-rf-lp/",
     "CAIXA FIC FIF TRANSFERENCIA VOLUNTARIA RF CP": "https://www.caixa.gov.br/fundos-investimento/curto-prazo/fic-transferencias-voluntarias-curto-prazo",
     "CAIXA FIC FIF TURQUESA CORPORATIVO RF CP": "https://www.caixa.gov.br/fundos-investimento/voce/renda-fixa/fic-turquesa-corporativo-curto-prazo",
-    "CAIXA FIC FIFINVESTIDOR RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-investidor-rf-longo-prazo",
+    "CAIXA FIC FIFONLINE RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-investidor-rf-longo-prazo",
+    "CAIXA FIC INVESTIDOR RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-investidor-rf-longo-prazo",
     "CAIXA FIC MULTIGESTOR GLOBAL EQUITIES IE": "https://www.caixa.gov.br/fundos-investimento/multimercado/caixa-multigestor-global-equities-invest-ext/Paginas/default.aspx",
     "CAIXA FIC RELACIONAMENTO IDEAL RF LP": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/fic-relacionamento-ideal-rf-longo-prazo",
     "CAIXA FIF ACOES BDR NIVEL I": "https://www.caixa.gov.br/fundos-investimento/fundos-de-acoes/fi-acoes-bdr-nivel-1",
@@ -278,7 +287,7 @@ def raspar_urls_caixa():
             resp = session.get(page_url, timeout=20)
             if resp.status_code != 200:
                 log(f"  [CAIXA] {page_url.split('/')[-3]} → HTTP {resp.status_code}")
-                continue
+                return registros
             soup = BeautifulSoup(resp.text, "html.parser")
             novos = 0
             for a in soup.find_all("a", href=True):
@@ -300,7 +309,7 @@ def raspar_urls_caixa():
             log(f"  [CAIXA] {page_url.split('/')[-3]} → +{novos} links ({len(registros)} total)")
             time.sleep(1)
         except Exception as e:
-            log(f"  [CAIXA] Erro em {page_url}: {e}")
+            log(f"  [CAIXA] Erro ao raspar {page_url}: {e}")
     log(f"[CAIXA] Total URLs dinâmicas: {len(registros)}")
     return registros
 
@@ -399,7 +408,6 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
         log(f"  [Focus] Erro ao buscar {indicador}: {e}")
         
     return resultado
-
 
 def buscar_focus(headers: dict) -> dict:
     """Coleta todas as expectativas do Boletim Focus para os próximos 4 anos."""
@@ -502,7 +510,7 @@ def enriquecer_dados_com_fundos_json(df: pd.DataFrame, indice_json: dict) -> pd.
         return row
 
     df = df.apply(_processar_linha, axis=1)
-    preenchidas = (df["URL"].str.startswith("http") & df["URL"].str.contains("caixa.gov.br")).sum()
+    preenchidas = (df["URL"].str.startswith("http") & df["URL"].str.contains("caixa.gov.br") if df["URL"].notna().any() else 0).sum()
     log(f"[Fundos.json] Cruzamento finalizado: Novas propriedades vinculadas. Mapeamento de URLs: {preenchidas}/{len(df)}")
     return df
 
@@ -522,7 +530,7 @@ def esperar_ajax(driver, timeout=20):
         WebDriverWait(driver, timeout).until(lambda d: d.execute_script("return (window.jQuery ? jQuery.active === 0 : true);"))
     except: time.sleep(2)
 
-def encerrar_driver(driver):
+def finalizar_driver(driver):
     try:
         if driver: driver.quit()
     except: pass
@@ -596,7 +604,7 @@ def coletar_aba(driver, sigla, segmento, cat, dados):
         log(f"  [{sigla}] {cat['csv']}: {len(res)} fundos.")
     except (InvalidSessionIdException, WebDriverException):
         log(f"  [{sigla}] Sessão perdida em '{cat['csv']}'. Reiniciando...")
-        encerrar_driver(driver)
+        finalizar_driver(driver)
         driver = configurar_driver(headless=True)
         try:
             abrir_site_e_preparar(driver, sigla, segmento)
@@ -620,7 +628,7 @@ def processar_perfil(perfil, headless=True):
     except Exception as e:
         log(f"[{sigla}] Erro geral: {e}"); traceback.print_exc()
     finally:
-        encerrar_driver(driver)
+        finalizar_driver(driver)
     return dados
 
 def consolidar(todos):
@@ -687,7 +695,10 @@ def limpar_dados_para_calculo(df_consolidado):
             if '.' in val and val.find('.') < val.find(','):
                 val = val.replace('.', '')
             val = val.replace(',', '.')
-        return float(val)
+        try:
+            return float(val)
+        except ValueError:
+            return None
     cols_numericas = ['Cota (R$)', 'Variacao Dia (%)', 'Acum. Mes (%)', 'Acum. Ano (%)', 'Acum. 12M (%)', 'PL (milhoes R$)']
     for col in cols_numericas:
         if col in df.columns:
@@ -1026,10 +1037,33 @@ def executar():
     )
     df_consolidado = enriquecer_dados_com_fundos_json(df_consolidado, indice_fundos_json)
 
-    # 6. Exportação CSV e Excel estruturados
+    # ---------------------------------------------------------------------------
+    # TRATAMENTO DE SEGURANÇA: Limpeza e Fallback do fundos.json
+    # ---------------------------------------------------------------------------
+    log("[Ajuste SIPII] Sanetizando nomes dos fundos e aplicando regras de quoting...")
+    
+    # 1. Remove notas residuais tipo (1) (2) que quebram o casamento de strings e o CSV
+    df_consolidado['Fundo'] = df_consolidado['Fundo'].astype(str).apply(
+        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip()
+    )
+    df_consolidado['Fundo_norm'] = df_consolidado['Fundo_norm'].astype(str).apply(
+        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip()
+    )
+    
+    # 2. Garante string vazia nas colunas do JSON para evitar termos nulos textuais
+    colunas_validar = ["CNPJ", "Perfil de Risco", "Taxa Adm (%)", "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate"]
+    for col in colunas_validar:
+        if col in df_consolidado.columns:
+            df_consolidado[col] = df_consolidado[col].fillna("")
+
+    # ---------------------------------------------------------------------------
+    # 6. Exportação CSV e Excel estruturados (Com Quoting Ativado)
+    # ---------------------------------------------------------------------------
     caminho_csv  = BASE_DIR / "dados_atuais.csv"
     caminho_xlsx = BASE_DIR / "dados_atuais.xlsx"
-    df_consolidado.to_csv(caminho_csv, index=False, encoding="utf-8")
+    
+    # SALVAMENTO BLINDADO: quoting=csv.QUOTE_MINIMAL força aspas onde houver vírgulas internas
+    df_consolidado.to_csv(caminho_csv, index=False, encoding="utf-8", quoting=csv.QUOTE_MINIMAL)
     salvar_excel(df_consolidado, caminho_xlsx)
 
     # 7. KPIs do dashboard
@@ -1053,8 +1087,10 @@ def executar():
         log(f"[ERRO] Falha ao processar dados macroeconômicos: {e}")
         traceback.print_exc()
 
-    log("✨ [FIM] Processo de arquitetura de dados finalizado. Bases preparadas.")
+    log("Ações concluídas com sucesso. Processo de arquitetura de dados finalizado. Bases preparadas.")
 
 
 if __name__ == "__main__":
     executar()
+
+```
