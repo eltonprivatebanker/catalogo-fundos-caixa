@@ -378,8 +378,8 @@ footer span{color:var(--gold)}
           <div class="chart-card-sub">Meta da Taxa Básica de Juros</div>
         </div>
         <div class="chart-tabs">
-          <button class="chart-tab active" data-chart="selic" data-range="20">Rec.</button>
-          <button class="chart-tab" data-chart="selic" data-range="40">5A</button>
+          <button class="chart-tab active" data-chart="selic" data-range="12">1A</button>
+          <button class="chart-tab" data-chart="selic" data-range="35">5A</button>
           <button class="chart-tab" data-chart="selic" data-range="999">Hist.</button>
         </div>
       </div>
@@ -1106,9 +1106,27 @@ function buildChartIpca(historico, meses) {
 }
 
 function buildChartSelic(historico, qtd) {
-  const slice = [...historico].reverse().slice(0, qtd).reverse();
-  const labels = slice.map(d => d.data);
-  const values = slice.map(d => d.valor);
+  // 1. Filtra e normaliza — exclui taxas mensais pré-1999
+  const filtrado = historico
+    .map(d => ({
+      ...d,
+      _ts: d.DataReuniaoCopom ? new Date(d.DataReuniaoCopom).getTime() : 0,
+      _ano: d.DataReuniaoCopom ? new Date(d.DataReuniaoCopom).getFullYear()
+                                : parseInt((d.data||'').split('/')[2]||'0'),
+    }))
+    .filter(d => d._ano >= 1999 && parseFloat(d.valor) >= 4 && d._ts > 0);
+
+  // 2. Ordena por data — mais antigo primeiro (esq → dir no gráfico)
+  filtrado.sort((a, b) => a._ts - b._ts);
+
+  // 3. Pega os N mais recentes (últimos N do array já ordenado)
+  const slice = qtd >= 999 ? filtrado : filtrado.slice(-qtd);
+
+  const labels = slice.map(d => {
+    const dt = new Date(d.DataReuniaoCopom);
+    return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
+  });
+  const values = slice.map(d => parseFloat(d.valor));
 
   if(_chartSelic) _chartSelic.destroy();
   const ctx = document.getElementById('chartSelic')?.getContext('2d');
@@ -1156,57 +1174,76 @@ function buildChartMeta(metaDados) {
     return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
   });
   const values = sorted.map(d => parseFloat(d.Inflacao12Meses));
-  const metaCentral = values.map(() => 3.0);
-  const metaSup = values.map(() => 4.5);
-  const metaInf = values.map(() => 1.5);
+
+  const META = 3.0, SUP = 4.5, INF = 1.5;
+
+  // Ponto vermelho = fora da banda, verde = dentro
+  const ptColors = values.map(v => (v > SUP || v < INF) ? '#f05565' : '#2ed17a');
 
   if(_chartMeta) _chartMeta.destroy();
   const ctx = document.getElementById('chartMeta')?.getContext('2d');
   if(!ctx) return;
+
   _chartMeta = new Chart(ctx, {
     type: 'line',
     data: {
       labels,
       datasets: [
+        // Banda: limite superior (preenchido até limite inferior)
         {
-          label: 'IPCA 12M',
-          data: values,
-          borderColor: '#5b9cf6',
-          backgroundColor: 'rgba(91,156,246,.1)',
-          borderWidth: 2.5,
-          pointBackgroundColor: '#5b9cf6',
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          fill: false,
-          tension: 0.3,
+          label: 'Banda (1,5%–4,5%)',
+          data: values.map(() => SUP),
+          borderColor: 'rgba(46,209,122,.25)',
+          backgroundColor: 'rgba(46,209,122,.07)',
+          borderWidth: 1,
+          borderDash: [4,4],
+          pointRadius: 0,
+          fill: '+1',   // preenche até o próximo dataset (INF)
+          order: 3,
         },
+        // Limite inferior
         {
-          label: 'Meta',
-          data: metaCentral,
-          borderColor: 'rgba(200,151,58,.6)',
+          label: null,
+          data: values.map(() => INF),
+          borderColor: 'rgba(46,209,122,.25)',
+          backgroundColor: 'transparent',
+          borderWidth: 1,
+          borderDash: [4,4],
+          pointRadius: 0,
+          fill: false,
+          order: 3,
+        },
+        // Meta central
+        {
+          label: 'Meta (3%)',
+          data: values.map(() => META),
+          borderColor: 'rgba(200,151,58,.75)',
           borderWidth: 1.5,
           borderDash: [6,3],
           pointRadius: 0,
           fill: false,
+          order: 2,
         },
+        // IPCA 12M — linha com segmentos coloridos
         {
-          label: 'Banda Sup.',
-          data: metaSup,
-          borderColor: 'rgba(240,85,101,.4)',
-          borderWidth: 1,
-          borderDash: [3,3],
-          pointRadius: 0,
+          label: 'IPCA 12M',
+          data: values,
+          borderColor: '#5b9cf6',
+          borderWidth: 2.5,
+          pointBackgroundColor: ptColors,
+          pointBorderColor: ptColors,
+          pointRadius: 4,
+          pointHoverRadius: 6,
           fill: false,
+          tension: 0.3,
+          order: 1,
+          segment: {
+            borderColor: ctx => {
+              const v = values[ctx.p1DataIndex];
+              return (v > SUP || v < INF) ? '#f05565' : '#5b9cf6';
+            }
+          }
         },
-        {
-          label: 'Banda Inf.',
-          data: metaInf,
-          borderColor: 'rgba(46,209,122,.4)',
-          borderWidth: 1,
-          borderDash: [3,3],
-          pointRadius: 0,
-          fill: false,
-        }
       ]
     },
     options: {
@@ -1220,13 +1257,23 @@ function buildChartMeta(metaDados) {
             color: '#5e6b8a',
             font: { family: 'JetBrains Mono', size: 9 },
             boxWidth: 12,
-            padding: 10,
+            padding: 8,
+            filter: item => item.text !== null,
           }
         },
         tooltip: {
           ...CHART_DEFAULTS.plugins.tooltip,
           callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`
+            label: ctx => ctx.dataset.label
+              ? `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`
+              : null,
+            afterBody: items => {
+              const v = items.find(i => i.dataset.label === 'IPCA 12M')?.parsed?.y;
+              if(v === undefined) return [];
+              if(v > SUP) return [`⚠️ Acima do teto (${SUP}%)`];
+              if(v < INF) return [`⚠️ Abaixo do piso (${INF}%)`];
+              return ['✅ Dentro da meta'];
+            }
           }
         }
       }
@@ -1241,7 +1288,7 @@ function inicializarGraficos(d) {
   const meta = d?.meta_vs_inflacao_efetiva || [];
 
   if(hist.length) buildChartIpca(hist, 24);
-  if(selic.length) buildChartSelic(selic, 20);
+  if(selic.length) buildChartSelic(selic, 12);
   if(meta.length) buildChartMeta(meta);
 
   // Tabs dos gráficos
