@@ -388,9 +388,21 @@ def buscar_focus(headers):
     log("[Focus] Coletando expectativas do Banco Central...")
     raw_focus = {}
     for indicador in INDICADORES_FOCUS:
-        log(f"  [Focus] → {indicador}")
-        raw_focus[indicador] = _buscar_focus_indicador(indicador, anos_alvo, headers)
-        time.sleep(0.5)
+        log(f"  [Focus] -> {indicador}")
+        # Retry automático: até 3 tentativas com espera crescente (15s, 30s)
+        for tentativa in range(3):
+            resultado = _buscar_focus_indicador(indicador, anos_alvo, headers)
+            if resultado:
+                raw_focus[indicador] = resultado
+                break
+            if tentativa < 2:
+                espera = 15 * (tentativa + 1)
+                log(f"  [Focus] {indicador} vazio — aguardando {espera}s (tentativa {tentativa+1}/3)...")
+                time.sleep(espera)
+        else:
+            log(f"  [Focus] {indicador} -> sem dados após 3 tentativas.")
+            raw_focus[indicador] = {}
+        time.sleep(1)
     focus = {
         "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
         "IPCA":       raw_focus.get("IPCA", {}),
@@ -400,7 +412,8 @@ def buscar_focus(headers):
         "IGPM":       raw_focus.get("IGP-M", {}),
         "IPCA_Modal": raw_focus.get("IPCA", {}),
     }
-    log(f"[Focus] Coleta concluída e chaves normalizadas para web.")
+    indicadores_ok = sum(1 for v in raw_focus.values() if v)
+    log(f"[Focus] Coleta concluída — {indicadores_ok}/{len(INDICADORES_FOCUS)} indicadores obtidos.")
     return focus
 
 # ---------------------------------------------------------------------------
@@ -410,12 +423,29 @@ FUNDOS_JSON_URL = "https://www.caixa.gov.br/CAIXA-Asset/Documents/data/fundos.js
 
 INDISPONIVEL = {"INDISPONIVEL", "indisponivel", "", None}
 
+# Palavras irrelevantes para o casamento por palavras-chave
+_STOPWORDS_MATCH = {
+    "CAIXA","FIC","FIF","FI","RF","LP","MM","IE","RL","IS","TP",
+    "RESP","LTDA","DE","DO","DA","DOS","DAS","E","A","O","EM",
+    "FUNDO","FUNDOS","RENDA","FIXA","LONGO","PRAZO","CREDITO",
+    "PRIVADO","TITULOS","PUBLICOS","REFERENCIADO","SIMPLES","CURTO",
+}
+
 def _normalizar_nome_fundo(nome):
-    """Normalização para casamento de strings entre fundos.json e SIPII."""
+    """Normalização base: remove acentos, pontuação e espaços extras."""
     n = unicodedata.normalize("NFD", str(nome).upper())
     n = "".join(c for c in n if unicodedata.category(c) != "Mn")
     n = re.sub(r"[^A-Z0-9 ]", " ", n)
     return re.sub(r"\s+", " ", n).strip()
+
+def _palavras_chave_fundo(nome):
+    """Extrai palavras significativas do nome do fundo para match por score."""
+    n = _normalizar_nome_fundo(nome)
+    # Remove sufixos
+    n = re.sub(r"\bRESP LTDA\b", "", n)
+    n = re.sub(r"\bRL\b", "", n)
+    tokens = set(re.sub(r"\s+", " ", n).strip().split())
+    return tokens - _STOPWORDS_MATCH - {t for t in tokens if len(t) <= 2}
 
 def _url_valida(url):
     """Retorna True apenas para URLs reais da CAIXA (ignora INDISPONIVEL e links internos)."""
@@ -426,19 +456,19 @@ def _url_valida(url):
 
 def _parsear_lista_fundos(lista):
     """
-    Monta o índice rico a partir de uma lista de registros do fundos.json.
-    CAMPOS CORRETOS (v14):
-      nome  → no_fundo
-      url   → de_link_pagina_fundo
+    Monta índice duplo do fundos.json:
+      - indice_exato: chave normalizada exata (match rápido)
+      - indice_palavras: lista de (frozenset_palavras_chave, dados) para match por score
     """
-    indice = {}
+    indice_exato = {}
+    indice_palavras = []
     for f in lista:
         try:
             nome = str(f.get("no_fundo") or "").strip()
             if not nome:
                 continue
             url_raw = str(f.get("de_link_pagina_fundo") or "").strip()
-            indice[_normalizar_nome_fundo(nome)] = {
+            dados = {
                 "url":               url_raw if _url_valida(url_raw) else "",
                 "cnpj":              formatar_cnpj(f.get("nu_cnpj")),
                 "perfil_risco":      f.get("no_perfil_risco"),
@@ -447,9 +477,40 @@ def _parsear_lista_fundos(lista):
                 "conversao_resgate": f.get("de_conversao_resgate"),
                 "pagamento_resgate": f.get("de_pagamento_resgate"),
             }
+            indice_exato[_normalizar_nome_fundo(nome)] = dados
+            palavras = _palavras_chave_fundo(nome)
+            if palavras:
+                indice_palavras.append((frozenset(palavras), dados))
         except Exception:
             continue
-    return indice
+    return {"exato": indice_exato, "palavras": indice_palavras}
+
+def _buscar_meta_json(nome_sipii, indice_json):
+    """
+    Busca metadados em duas camadas:
+    1. Match exato pelo nome normalizado
+    2. Match por palavras-chave com score >= 0.65 (cobre reordenações e abreviações)
+    """
+    if not indice_json:
+        return None
+    chave = _normalizar_nome_fundo(nome_sipii)
+    # Camada 1: exato
+    if chave in indice_json["exato"]:
+        return indice_json["exato"][chave]
+    # Camada 2: palavras-chave
+    palavras_sipii = _palavras_chave_fundo(nome_sipii)
+    if not palavras_sipii:
+        return None
+    melhor_meta, melhor_score = None, 0.0
+    for (palavras_json, dados) in indice_json["palavras"]:
+        if not palavras_json:
+            continue
+        intersecao = len(palavras_sipii & palavras_json)
+        score = intersecao / max(len(palavras_sipii), len(palavras_json))
+        if score > melhor_score:
+            melhor_score = score
+            melhor_meta = dados
+    return melhor_meta if melhor_score >= 0.65 else None
 
 def buscar_fundos_json(headers):
     """
@@ -494,7 +555,7 @@ def buscar_fundos_json(headers):
         return {}
 
     indice = _parsear_lista_fundos(lista)
-    log(f"[Fundos.json] {len(indice)} produtos indexados com metadados comerciais.")
+    log(f"[Fundos.json] {len(indice['exato'])} produtos indexados com metadados comerciais.")
     return indice
 
 def enriquecer_dados_com_fundos_json(df, indice_json):
@@ -512,8 +573,7 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
 
     def _processar_linha(row):
         url_atual = str(row.get("URL", "")).strip()
-        chave = _normalizar_nome_fundo(str(row.get("Fundo", "")))
-        meta = indice_json.get(chave)
+        meta = _buscar_meta_json(str(row.get("Fundo", "")), indice_json)
         if meta:
             if not _url_valida(url_atual):
                 row["URL"] = meta["url"]
