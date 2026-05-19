@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "19/05/2026 06:14:18",
+    "atualizado_em": "19/05/2026 21:52:37",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -2011,11 +2011,9 @@
         },
         "cdi": {
             "valor": 14.4,
+            "mensal": 0.59,
+            "dia": 0.0534,
             "unidade": "% a.a."
-        },
-        "cdi_dia": {
-            "valor": 0.0534,
-            "unidade": "%"
         },
         "ipca": {
             "ultimo_mes": 0.67,
@@ -4253,33 +4251,29 @@
             "meta_inferior": 1.5,
             "unidade": "%"
         },
-        "ipca_mes_anterior": {
-            "valor": 0.67,
-            "unidade": "%"
-        },
         "poupanca_nova": {
             "valor": 0.6695,
             "unidade": "% m.m."
         },
         "ibovespa": {
-            "atual": 176976.0,
-            "anterior": 197738.0,
-            "variacao_mensal": -10.5
+            "atual": 174278.859375,
+            "anterior": 196819.0,
+            "variacao_mensal": -11.45
         },
         "dolar": {
-            "atual": 5.0131001472473145,
-            "anterior": 5.00629997253418,
-            "variacao_mensal": 0.14
+            "atual": 5.039999961853027,
+            "anterior": 4.952400207519531,
+            "variacao_mensal": 1.77
         }
     },
     "indices_internacionais": {
-        "sp500_usd": 7403.0498046875,
-        "sp500_brl": 37112.23,
-        "dow_jones": 49686.12109375,
-        "nasdaq": 26090.73046875
+        "sp500_usd": 7353.60986328125,
+        "sp500_brl": 37062.19,
+        "dow_jones": 49363.87890625,
+        "nasdaq": 25870.708984375
     },
     "focus": {
-        "data_coleta": "19/05/2026 06:14",
+        "data_coleta": "19/05/2026 21:52",
         "fonte": "pdf",
         "data_pdf": "20260515",
         "IPCA": {

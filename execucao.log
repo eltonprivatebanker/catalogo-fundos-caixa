@@ -3067,3 +3067,84 @@
 [06:14:18] [SUCESSO] JSON unificado exportado: mercado_atual.json | Histórico IPCA: 556 m | Focus: 8 ind
 [06:14:18] Ações concluídas com sucesso. Processo de arquitetura de dados finalizado. Bases preparadas.
 [06:14:18] [LIMPEZA] Backups datados mantidos: 5 (limite: 5)
+[21:46:24] ⚡ [INÍCIO] Robô SIPII v15 — CDI real + todos os indicadores macro
+[21:46:26]   [CAIXA] renda-fixa → +34 links (34 total)
+[21:46:27]   [CAIXA] referenciados → +4 links (38 total)
+[21:46:29]   [CAIXA] fundo-simples → +2 links (40 total)
+[21:46:31]   [CAIXA] curto-prazo → +1 links (41 total)
+[21:46:32]   [CAIXA] multimercado → +19 links (60 total)
+[21:46:34]   [CAIXA] cambiais → +1 links (61 total)
+[21:46:36]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[21:46:37]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[21:46:39]   [CAIXA] renda-fixa → +8 links (81 total)
+[21:46:40]   [CAIXA] empresa → +5 links (86 total)
+[21:46:42]   [CAIXA] fmp-fgts → HTTP 404
+[21:46:42]   [CAIXA] rpps → +8 links (94 total)
+[21:46:43] [CAIXA] Total URLs dinâmicas: 94
+[21:46:43] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[21:46:45] [Fundos.json] Download HTTP OK — 196 registros.
+[21:46:45] [Fundos.json] 194 produtos indexados.
+[21:46:45] Raspando segmento: PESSOA FÍSICA...
+[21:46:48] [PF] Abrindo SIPII...
+[21:47:08]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[21:47:24]   [PF] RENDA FIXA: 39 fundos.
+[21:47:30]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[21:47:33]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[21:47:45]   [PF] MULTIMERCADO: 30 fundos.
+[21:47:49]   [PF] CAMBIAL: 1 fundos.
+[21:48:01]   [PF] ACOES: 29 fundos.
+[21:48:04]   [PF] FUNDO DE INDICE: 1 fundos.
+[21:48:10]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[21:48:12] Raspando segmento: PESSOA JURÍDICA...
+[21:48:12] [PJ] Abrindo SIPII...
+[21:48:32]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[21:48:47]   [PJ] RENDA FIXA: 38 fundos.
+[21:48:52]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[21:48:55]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[21:49:07]   [PJ] MULTIMERCADO: 27 fundos.
+[21:49:10]   [PJ] CAMBIAL: 1 fundos.
+[21:49:22]   [PJ] ACOES: 28 fundos.
+[21:49:24] Raspando segmento: GOVERNO...
+[21:49:24] [GOV] Abrindo SIPII...
+[21:49:42]   [GOV] RENDA FIXA: 2 fundos.
+[21:49:46]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[21:49:49]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[21:49:54]   [GOV] MULTIMERCADO: 6 fundos.
+[21:49:58]   [GOV] ACOES: 4 fundos.
+[21:50:00] Raspando segmento: RPPS...
+[21:50:00] [RPPS] Abrindo SIPII...
+[21:50:30]   [RPPS] RENDA FIXA: 19 fundos.
+[21:50:34]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[21:50:42]   [RPPS] MULTIMERCADO: 14 fundos.
+[21:50:49]   [RPPS] ACOES: 14 fundos.
+[21:50:51] Raspando segmento: TODOS...
+[21:50:51] [TODOS] Abrindo SIPII...
+[21:51:10]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[21:51:26]   [TODOS] RENDA FIXA: 42 fundos.
+[21:51:32]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[21:51:36]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[21:51:43]   [TODOS] MULTIMERCADO: 14 fundos.
+[21:51:46]   [TODOS] CAMBIAL: 1 fundos.
+[21:51:57]   [TODOS] ACOES: 25 fundos.
+[21:52:00]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[21:52:03] [Fundos.json] URLs válidas após cruzamento: 160/171
+[21:52:03] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[21:52:03] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260519.xlsx
+[21:52:03] [KPIs] JSON exportado: kpis_dashboard.json
+[21:52:03] [MERCADO] Coletando indicadores macro...
+[21:52:11] [MERCADO] Selic=14.5 | CDI dia=0.0534 | CDI mês=0.59 | Poup=0.6695
+[21:52:11] [IPCA] Base local: 556 meses.
+[21:52:12] [IPCA] Base salva: 556 meses.
+[21:52:13] [Focus] Coletando expectativas do Banco Central...
+[21:52:13]   [Focus] -> IPCA
+[21:52:14]   [Focus] IPCA → HTTP 503
+[21:52:25]   [Focus] IPCA → HTTP 503
+[21:52:26]   [Focus] -> Selic
+[21:52:26]   [Focus] Selic → HTTP 503
+[21:52:37]   [Focus] Selic → HTTP 503
+[21:52:37] [Focus] BCB indisponível — abortando OData.
+[21:52:37] [Focus PDF] Tentando R20260515.pdf (15/05/2026)...
+[21:52:37] [SUCESSO] mercado_atual.json exportado | CDI mensal real=0.59% | IPCA: 556m | Focus: 8 ind.
+[21:52:37] [FIM] 171 fundos consolidados. Pipeline completo.
+[21:52:37] [LIMPEZA] Removido: sipii_caixa_20260508.csv
+[21:52:37] [LIMPEZA] Removido: sipii_caixa_20260508.xlsx
