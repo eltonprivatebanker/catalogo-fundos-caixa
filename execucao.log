@@ -2440,3 +2440,131 @@
 [04:55:46] [Focus] Coleta concluída e chaves normalizadas para web.
 [04:55:46] [SUCESSO] JSON unificado exportado: mercado_atual.json | Histórico IPCA: 556 m | Focus: 6 ind
 [04:55:46] Ações concluídas com sucesso. Processo de arquitetura de dados finalizado. Bases preparadas.
+[05:02:45] ⚡ [INÍCIO] Executando pipeline integrado do Robô SIPII v14...
+[05:02:47]   [CAIXA] renda-fixa → +34 links (34 total)
+[05:02:48]   [CAIXA] referenciados → +4 links (38 total)
+[05:02:50]   [CAIXA] fundo-simples → +2 links (40 total)
+[05:02:51]   [CAIXA] curto-prazo → +1 links (41 total)
+[05:02:52]   [CAIXA] multimercado → +19 links (60 total)
+[05:02:54]   [CAIXA] cambiais → +1 links (61 total)
+[05:02:56]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[05:02:57]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[05:02:59]   [CAIXA] renda-fixa → +8 links (81 total)
+[05:03:00]   [CAIXA] empresa → +5 links (86 total)
+[05:03:01]   [CAIXA] fmp-fgts → HTTP 404
+[05:03:01]   [CAIXA] rpps → +8 links (94 total)
+[05:03:02] [CAIXA] Total URLs dinâmicas: 94
+[05:03:02] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[05:03:04] [Fundos.json] Download HTTP OK — 196 registros.
+[05:03:04] [Fundos.json] 194 produtos indexados com metadados comerciais.
+[05:03:04] Iniciando raspagem do segmento: PESSOA FÍSICA...
+[05:03:16] [PF] Abrindo SIPII...
+[05:03:33]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[05:03:48]   [PF] RENDA FIXA: 39 fundos.
+[05:03:53]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[05:03:56]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[05:04:08]   [PF] MULTIMERCADO: 30 fundos.
+[05:04:11]   [PF] CAMBIAL: 1 fundos.
+[05:04:23]   [PF] ACOES: 29 fundos.
+[05:04:26]   [PF] FUNDO DE INDICE: 1 fundos.
+[05:04:31]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[05:04:33] Iniciando raspagem do segmento: PESSOA JURÍDICA...
+[05:04:34] [PJ] Abrindo SIPII...
+[05:04:52]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[05:05:07]   [PJ] RENDA FIXA: 38 fundos.
+[05:05:12]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[05:05:15]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[05:05:26]   [PJ] MULTIMERCADO: 27 fundos.
+[05:05:29]   [PJ] CAMBIAL: 1 fundos.
+[05:05:40]   [PJ] ACOES: 28 fundos.
+[05:05:42] Iniciando raspagem do segmento: GOVERNO...
+[05:05:42] [GOV] Abrindo SIPII...
+[05:05:59]   [GOV] RENDA FIXA: 2 fundos.
+[05:06:03]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[05:06:06]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[05:06:10]   [GOV] MULTIMERCADO: 6 fundos.
+[05:06:14]   [GOV] ACOES: 4 fundos.
+[05:06:16] Iniciando raspagem do segmento: RPPS...
+[05:06:17] [RPPS] Abrindo SIPII...
+[05:06:45]   [RPPS] RENDA FIXA: 19 fundos.
+[05:06:49]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[05:06:56]   [RPPS] MULTIMERCADO: 14 fundos.
+[05:07:02]   [RPPS] ACOES: 14 fundos.
+[05:07:04] Iniciando raspagem do segmento: TODOS...
+[05:07:05] [TODOS] Abrindo SIPII...
+[05:07:22]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[05:07:38]   [TODOS] RENDA FIXA: 42 fundos.
+[05:07:43]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[05:07:46]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[05:07:53]   [TODOS] MULTIMERCADO: 14 fundos.
+[05:07:56]   [TODOS] CAMBIAL: 1 fundos.
+[05:08:06]   [TODOS] ACOES: 25 fundos.
+[05:08:09]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[05:08:11] Deduplicando e injetando cruzamento de perfis...
+[05:08:11] [Fundos.json] Cruzamento finalizado. URLs válidas: 154/171
+[05:08:11] [Ajuste SIPII] Sanetizando nomes dos fundos e aplicando regras de quoting...
+[05:08:11] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[05:08:11] [KPIs] JSON exportado: kpis_dashboard.json
+[05:08:11] [MERCADO] Coletando indicadores macro e índices internacionais...
+[05:08:13] [IPCA] Base local: 556 meses carregados.
+[05:08:14] [IPCA] Delta BCB: 3 meses recebidos.
+[05:08:14] [IPCA] Base salva: 556 meses → ipca_historico_base.json
+[05:08:14] [Focus] Coletando expectativas do Banco Central...
+[05:08:14]   [Focus] → IPCA
+[05:08:15]   [Focus] IPCA → HTTP 503
+[05:08:15]   [Focus] → Selic
+[05:08:15]   [Focus] Selic → HTTP 503
+[05:08:16]   [Focus] → PIB Total
+[05:08:16]   [Focus] PIB Total → HTTP 503
+[05:08:17]   [Focus] → Câmbio
+[05:08:17]   [Focus] Câmbio → HTTP 503
+[05:08:18]   [Focus] → IGP-M
+[05:08:18]   [Focus] IGP-M → HTTP 503
+[05:08:19] [Focus] Coleta concluída e chaves normalizadas para web.
+[05:08:19] [SUCESSO] JSON unificado exportado: mercado_atual.json | Histórico IPCA: 556 m | Focus: 6 ind
+[05:08:19] Ações concluídas com sucesso. Processo de arquitetura de dados finalizado. Bases preparadas.
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260507.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260506.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260505.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260504.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260501.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260430.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260429.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260428.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260427.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260424.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260423.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260422.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260421.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260420.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260417.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260416.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260415.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260414.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260413.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260412.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260408.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260407.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260406.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260405.csv
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260507.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260506.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260505.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260504.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260501.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260430.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260429.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260428.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260421.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260420.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260417.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260416.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260415.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260414.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260413.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260412.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260408.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260407.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260406.xlsx
+[05:08:19] [LIMPEZA] Removido backup antigo: sipii_caixa_20260405.xlsx
+[05:08:19] [LIMPEZA] Backups datados mantidos: 5 (limite: 5)
