@@ -319,41 +319,51 @@ def encontrar_url(nome, registros_dinamicos):
     return encontrar_url_dinamica(nome, registros_dinamicos)
 
 # ---------------------------------------------------------------------------
-# NOVO v13 — Boletim Focus (BCB)
+# NOVO v13 — Boletim Focus (BCB) — CORRIGIDO
 # ---------------------------------------------------------------------------
 FOCUS_BASE = (
     "https://olinda.bcb.gov.br/olinda/servico/"
     "Focus-EndpointsSelecionados/versao/v1/odata/"
 )
 
+# AJUSTE: "Câmbio" corrigido com acento para validação exata na API do BCB
 INDICADORES_FOCUS = [
     "IPCA",
     "IPCA Modal",
     "Selic",
     "PIB Total",
-    "Cambio",
+    "Câmbio",
     "IGP-M",
 ]
 
 def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     """
     Busca as expectativas Focus anuais para um indicador específico.
-    Retorna {ano: {mediana, media, minimo, maximo, data_ref}}
+    baseCalculo eq 0 só existe para IPCA/IPCA Modal — os demais não usam esse filtro.
     """
-    filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
+    # Apenas IPCA e IPCA Modal têm o campo baseCalculo
+    usa_base_calculo = indicador in ("IPCA", "IPCA Modal")
+    if usa_base_calculo:
+        filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
+    else:
+        filtro = f"Indicador eq '{indicador}'"
+
     url = (
         f"{FOCUS_BASE}ExpectativasMercadoAnuais"
         f"?$filter={requests.utils.quote(filtro)}"
         f"&$format=json&$orderby=Data desc&$top=50"
     )
+    
     resultado = {}
     try:
         res = requests.get(url, headers=headers, timeout=20)
         if res.status_code != 200:
             log(f"  [Focus] {indicador} → HTTP {res.status_code}")
             return resultado
+            
         registros = res.json().get("value", [])
         vistos_anos = set()
+        
         for reg in registros:
             ano_str = str(reg.get("DataReferencia", ""))[:4]
             if not ano_str:
@@ -362,8 +372,10 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
                 ano = int(ano_str)
             except ValueError:
                 continue
+                
             if ano not in anos or ano in vistos_anos:
                 continue
+                
             vistos_anos.add(ano)
             resultado[ano] = {
                 "mediana": reg.get("Mediana"),
@@ -376,6 +388,7 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
                 break
     except Exception as e:
         log(f"  [Focus] Erro ao buscar {indicador}: {e}")
+        
     return resultado
 
 
@@ -387,10 +400,12 @@ def buscar_focus(headers: dict) -> dict:
     anos_alvo = [2026, 2027, 2028, 2029]
     log("[Focus] Coletando expectativas do Banco Central...")
     focus = {"data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M")}
+    
     for indicador in INDICADORES_FOCUS:
         log(f"  [Focus] → {indicador}")
         focus[indicador] = _buscar_focus_indicador(indicador, anos_alvo, headers)
         time.sleep(0.5)  # respeita rate limit da API do BCB
+        
     log(f"[Focus] Coleta concluída: {len(INDICADORES_FOCUS)} indicadores.")
     return focus
 
