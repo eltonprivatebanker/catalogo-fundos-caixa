@@ -378,9 +378,9 @@ footer span{color:var(--gold)}
           <div class="chart-card-sub">Meta da Taxa Básica de Juros</div>
         </div>
         <div class="chart-tabs">
-          <button class="chart-tab active" data-chart="selic" data-range="20">Rec.</button>
-          <button class="chart-tab" data-chart="selic" data-range="40">5A</button>
-          <button class="chart-tab" data-chart="selic" data-range="999">Hist.</button>
+          <button class="chart-tab active" data-chart="selic" data-range="15">1A</button>
+          <button class="chart-tab" data-chart="selic" data-range="30">5A</button>
+          <button class="chart-tab" data-chart="selic" data-range="999">2003+</button>
         </div>
       </div>
       <div class="chart-body"><canvas id="chartSelic"></canvas></div>
@@ -1106,8 +1106,17 @@ function buildChartIpca(historico, meses) {
 }
 
 function buildChartSelic(historico, qtd) {
-  const slice = [...historico].reverse().slice(0, qtd).reverse();
-  const labels = slice.map(d => d.data);
+  // Filtra apenas dados anuais (>= 1999) — anteriores são taxa mensal, incompatíveis
+  const filtrado = historico.filter(d => {
+    const ano = parseInt((d.DataReuniaoCopom || d.data || '').toString().slice(0,4));
+    return ano >= 1999 && d.valor >= 4;
+  });
+  const slice = [...filtrado].reverse().slice(0, qtd).reverse();
+  const labels = slice.map(d => {
+    // Formata data: dd/mm/yyyy → mm/yyyy
+    const p = (d.data||'').split('/');
+    return p.length === 3 ? `${p[1]}/${p[2]}` : d.data;
+  });
   const values = slice.map(d => d.valor);
 
   if(_chartSelic) _chartSelic.destroy();
@@ -1241,7 +1250,7 @@ function inicializarGraficos(d) {
   const meta = d?.meta_vs_inflacao_efetiva || [];
 
   if(hist.length) buildChartIpca(hist, 24);
-  if(selic.length) buildChartSelic(selic, 20);
+  if(selic.length) buildChartSelic(selic, 15);
   if(meta.length) buildChartMeta(meta);
 
   // Tabs dos gráficos
