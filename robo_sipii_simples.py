@@ -5,10 +5,11 @@ Estratégia de URLs em duas camadas:
   2. Scraping dinâmico: captura URLs de novos fundos nas páginas da CAIXA
 
   v12 — IPCA com base histórica local (ipca_historico_base.json)
-  v13 — Boletim Focus do BCB (IPCA, IPCA Modal, Selic, PIB, Câmbio, IGP-M)
+  v13 — Boletim Focus do BCB (IPCA, Selic, PIB, Câmbio, IGP-M)
         Integração com fundos.json da CAIXA Asset (enriquecimento de URLs/dados)
         Correção: visitos → vistos em raspar_urls_caixa()
         Correção Focus: Montagem de URL manual para evitar o Erro OData 400
+        Integração Front-End: Leitura local do histórico Selic e Metas de Inflação
 """
 
 import json
@@ -200,6 +201,10 @@ BASE_DIR       = Path.cwd()
 LOG_PATH       = BASE_DIR / "execucao.log"
 IPCA_BASE_PATH = BASE_DIR / "ipca_historico_base.json"
 
+# NOVOS: Ajustados para ler as bases históricas estáticas da raiz do repositório
+SELIC_BASE_PATH   = BASE_DIR / "historico da selic do BC.json"
+META_INFLACAO_PATH = BASE_DIR / "meta-vs-inflacao-efetiva.json"
+
 # ---------------------------------------------------------------------------
 # Utilidades gerais
 # ---------------------------------------------------------------------------
@@ -327,9 +332,9 @@ FOCUS_BASE = (
     "Expectativas/versao/v1/odata/"
 )
 
+# CORREÇÃO: Removido o "IPCA Modal" duplicado/inválido da lista
 INDICADORES_FOCUS = [
     "IPCA",
-    "IPCA Modal",
     "Selic",
     "PIB Total",
     "Câmbio",  # API exige com acento
@@ -341,7 +346,7 @@ def _buscar_focus_indicador(indicador: str, anos: list, headers: dict) -> dict:
     Busca as expectativas Focus anuais para um indicador específico.
     Monta a URL manualmente mantendo o '$' intacto para evitar o Erro 400 do BCB.
     """
-    usa_base_calculo = indicador in ("IPCA", "IPCA Modal")
+    usa_base_calculo = indicador == "IPCA"
     if usa_base_calculo:
         filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
     else:
@@ -857,6 +862,45 @@ class ColetorMercado:
             pass
         return {"atual": None, "anterior": None}
 
+    # --- NOVOS MÉTODOS: Processadores locais das chaves "conteudo" enviados por você ---
+    def _carregar_base_selic(self):
+        """Lê e mapeia o arquivo 'historico da selic do BC.json' do repositório raiz."""
+        if SELIC_BASE_PATH.exists():
+            try:
+                raw_data = json.loads(SELIC_BASE_PATH.read_text(encoding="utf-8"))
+                lista_reunioes = raw_data.get("conteudo", [])
+                
+                historico_formatado = []
+                for item in lista_reunioes:
+                    data_iso = item.get("DataReuniaoCopom", "").split("T")[0]
+                    if data_iso:
+                        dt = datetime.strptime(data_iso, "%Y-%m-%d")
+                        data_br = dt.strftime("%d/%m/%Y")
+                    else:
+                        data_br = "-"
+                    
+                    historico_formatado.append({
+                        "data": data_br,
+                        "valor": item.get("MetaSelic"),
+                        "numero_reuniao": item.get("NumeroReuniaoCopom"),
+                        "DataReuniaoCopom": item.get("DataReuniaoCopom"),
+                        "MetaSelic": item.get("MetaSelic")
+                    })
+                return historico_formatado
+            except Exception as e:
+                log(f"[SELIC] Erro ao ler histórico local: {e}")
+        return []
+
+    def _carregar_base_meta_inflacao(self):
+        """Lê e repassa o arquivo 'meta-vs-inflacao-efetiva.json' da raiz do repositório."""
+        if META_INFLACAO_PATH.exists():
+            try:
+                raw_data = json.loads(META_INFLACAO_PATH.read_text(encoding="utf-8"))
+                return raw_data.get("conteudo", [])
+            except Exception as e:
+                log(f"[META INFLAÇÃO] Erro ao ler base de metas: {e}")
+        return []
+
     def coletar_todos(self):
         log("[MERCADO] Coletando indicadores macro e índices internacionais...")
 
@@ -864,6 +908,11 @@ class ColetorMercado:
         cdi_hoje      = self._buscar_bcb(12)
         poupanca_nova = self._buscar_bcb(196)
 
+        # --- PROCESSAMENTO DOS SEUS DOIS ARQUIVOS LOCAIS ---
+        selic_historico = self._carregar_base_selic()
+        inflacao_meta_efetiva = self._carregar_base_meta_inflacao()
+
+        # Histórico do IPCA
         base_ipca  = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
         ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
@@ -881,9 +930,6 @@ class ColetorMercado:
             ipca_acum_ano   = self._acumular_ano(ipca_serie)
             ipca_acum_12m   = self._acumular(ipca_serie, 12)
             ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
-            log(f"[IPCA] {ipca_ultimo_mes}% ({ipca_label_mes}) | Ano: {ipca_acum_ano}% | 12M: {ipca_acum_12m}% | Série: {len(ipca_historico)} meses")
-        else:
-            log("[IPCA] Série vazia — verifique a base local e a API do BCB.")
 
         dolar     = self._buscar_yahoo("BRL=X")
         ibov      = self._buscar_yahoo("^BVSP")
@@ -891,13 +937,16 @@ class ColetorMercado:
         dow_jones = self._buscar_yahoo("^DJI")
         nasdaq    = self._buscar_yahoo("^IXIC")
 
-        # ── v13: Boletim Focus Corrigido Manualmente ──────────────────────
         focus_data = buscar_focus(self.headers)
 
         return {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "cards": {
-                "selic_meta":   {"valor": selic_meta, "unidade": "% a.a."},
+                "selic_meta": {
+                    "valor": selic_meta, 
+                    "unidade": "% a.a.",
+                    "historico": selic_historico  # Alimenta o gráfico interno do modal Selic
+                },
                 "cdi": {
                     "valor":    round(selic_meta - 0.10, 4) if selic_meta else None,
                     "unidade": "% a.a.",
@@ -937,6 +986,10 @@ class ColetorMercado:
                 "nasdaq":    nasdaq["atual"],
             },
             "focus": focus_data,
+            
+            # --- COMPATIBILIDADE: Injeção na raiz para os scripts JS lerem diretamente ---
+            "historico_selic": selic_historico,
+            "meta_vs_inflacao_efetiva": inflacao_meta_efetiva
         }
 
 # ---------------------------------------------------------------------------
