@@ -11,7 +11,8 @@ import json
 import csv
 import glob
 from pathlib import Path
-from datetime import datetime
+from datetime import datetime, timedelta
+import io
 import time, unicodedata, traceback, re, requests
 from bs4 import BeautifulSoup
 import pandas as pd
@@ -199,6 +200,7 @@ URL_ESTATICO = {
 BASE_DIR           = Path.cwd()
 LOG_PATH           = BASE_DIR / "execucao.log"
 IPCA_BASE_PATH     = BASE_DIR / "ipca_historico_base.json"
+FOCUS_CACHE_PATH   = BASE_DIR / "focus_cache.json"
 SELIC_BASE_PATH    = BASE_DIR / "historico da selic do BC.json"
 META_INFLACAO_PATH = BASE_DIR / "meta-vs-inflacao-efetiva.json"
 
@@ -341,14 +343,12 @@ FOCUS_BASE = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/od
 INDICADORES_FOCUS = ["IPCA", "Selic", "PIB Total", "Câmbio", "IGP-M"]
 
 def _buscar_focus_indicador(indicador, anos, headers):
-    # IPCA e IPCA Modal exigem baseCalculo eq 0 para evitar duplicatas
+    """Tenta buscar um indicador via OData API do BCB."""
     if indicador in ("IPCA", "IPCA Modal"):
         filtro = f"Indicador eq '{indicador}' and baseCalculo eq 0"
     else:
         filtro = f"Indicador eq '{indicador}'"
-
     filtro_codificado = requests.utils.quote(filtro)
-    # Endpoint único correto para todos os indicadores (incluindo Câmbio)
     url = (
         f"{FOCUS_BASE}"
         f"?$filter={filtro_codificado}"
@@ -383,37 +383,225 @@ def _buscar_focus_indicador(indicador, anos, headers):
         log(f"  [Focus] Erro ao buscar {indicador}: {e}")
     return resultado
 
+# Índices fixos no array de decimais por linha do PDF: Hoje por ano
+_FOCUS_PDF_INDICES = {2026: 2, 2027: 6, 2028: 10, 2029: 13}
+
+# Padrões regex para identificar cada indicador no texto do PDF
+_FOCUS_PDF_PADROES = {
+    "IPCA":      r"IPCA\s*\(varia[çc][aã]o\s*%\)",
+    "Selic":     r"Selic\s*\(%\s*a\.a[\).]?",
+    "PIB Total": r"PIB\s*Total",
+    "Câmbio":    r"C[âa]mbio\s*\(R\$\/US\$\)",
+    "IGP-M":     r"IGP-M\s*\(varia[çc][aã]o\s*%\)",
+}
+
+def _ultima_sexta(offset_semanas=0):
+    """Retorna a data da última sexta-feira como string YYYYMMDD."""
+    hoje = datetime.now()
+    dias_ate_sexta = (hoje.weekday() - 4) % 7
+    data = hoje - timedelta(days=dias_ate_sexta + offset_semanas * 7)
+    return data.strftime("%Y%m%d"), data.strftime("%d/%m/%Y")
+
+def _extrair_decimais_linha(texto):
+    """
+    Extrai números decimais (formato brasileiro) de uma linha do PDF.
+    Filtra inteiros grandes (contadores de respondentes) e valores fora de escala.
+    """
+    nums = re.findall(r'\b\d+[,\.]\d+\b', texto)
+    resultado = []
+    for n in nums:
+        try:
+            val = float(n.replace(',', '.'))
+            if 0 < val < 500:  # range válido de indicadores macro
+                resultado.append(val)
+        except Exception:
+            pass
+    return resultado
+
+def _parsear_texto_focus(texto, data_str):
+    """
+    Extrai os valores 'Hoje' do texto extraído do PDF do Boletim Focus.
+    Lógica: cada linha de indicador contém, por ano, os valores:
+      [Há 4 sem] [Há 1 sem] [Hoje] [5d] ... (4 grupos para 2026-2029)
+    Os índices no array de decimais são: 2026→2, 2027→6, 2028→10, 2029→13.
+    """
+    anos = [2026, 2027, 2028, 2029]
+    resultado = {}
+    data_ref = f"{data_str[:4]}-{data_str[4:6]}-{data_str[6:]}"
+
+    for indicador, padrao in _FOCUS_PDF_PADROES.items():
+        match = re.search(padrao, texto, re.IGNORECASE)
+        if not match:
+            log(f"  [Focus PDF] '{indicador}' não localizado no texto.")
+            continue
+        # Pega o trecho de texto após o nome do indicador
+        trecho = texto[match.end():match.end() + 700]
+        decimais = _extrair_decimais_linha(trecho)
+        if len(decimais) < 11:
+            log(f"  [Focus PDF] '{indicador}': poucos decimais ({len(decimais)}) — linha incompleta.")
+            continue
+        resultado[indicador] = {}
+        for ano in anos:
+            idx = _FOCUS_PDF_INDICES[ano]
+            if idx < len(decimais):
+                val = round(decimais[idx], 4)
+                resultado[indicador][ano] = {
+                    "mediana":  val,
+                    "media":    val,
+                    "minimo":   None,
+                    "maximo":   None,
+                    "data_ref": data_ref,
+                }
+                log(f"  [Focus PDF] {indicador} {ano}: {val}")
+            else:
+                log(f"  [Focus PDF] {indicador} {ano}: índice {idx} fora do range.")
+    return resultado if resultado else None
+
+def _raspar_focus_pdf(headers):
+    """
+    Fallback PDF: baixa o Boletim Focus do BCB e extrai os dados da tabela anual.
+    Tenta as últimas 3 sextas-feiras (caso a mais recente ainda não esteja disponível).
+    Requer: pypdf (pip install pypdf)
+    """
+    try:
+        import pypdf
+    except ImportError:
+        log("[Focus PDF] pypdf não instalado — adicione 'pypdf' ao requirements.txt")
+        return None
+
+    for offset in range(3):
+        data_str, data_br = _ultima_sexta(offset)
+        url_pdf = f"https://www.bcb.gov.br/content/focus/focus/R{data_str}.pdf"
+        try:
+            log(f"[Focus PDF] Tentando: R{data_str}.pdf ({data_br})...")
+            res = requests.get(url_pdf, headers=headers, timeout=35)
+            if res.status_code != 200 or len(res.content) < 10000:
+                log(f"[Focus PDF] R{data_str}.pdf → HTTP {res.status_code} ou vazio.")
+                continue
+            log(f"[Focus PDF] PDF baixado: {len(res.content)//1024}KB — extraindo texto...")
+            reader = pypdf.PdfReader(io.BytesIO(res.content))
+            texto = ""
+            for page in reader.pages:
+                texto += (page.extract_text() or "") + "\n"
+            # Verifica se o texto contém indicadores esperados
+            if "IPCA" not in texto or "Selic" not in texto:
+                log("[Focus PDF] Texto extraído não contém indicadores. PDF pode ser scaneado.")
+                continue
+            dados = _parsear_texto_focus(texto, data_str)
+            if dados:
+                log(f"[Focus PDF] {len(dados)}/5 indicadores extraídos do PDF de {data_br}.")
+                return dados, data_str
+        except Exception as e:
+            log(f"[Focus PDF] Erro com R{data_str}.pdf: {e}")
+
+    log("[Focus PDF] Nenhum PDF do Focus disponível para extração.")
+    return None, None
+
+def _salvar_focus_cache(focus):
+    """Salva o Focus bem-sucedido em arquivo local para uso futuro como fallback."""
+    try:
+        FOCUS_CACHE_PATH.write_text(
+            json.dumps(focus, ensure_ascii=False, indent=2),
+            encoding="utf-8"
+        )
+        log(f"[Focus] Cache salvo: {FOCUS_CACHE_PATH.name}")
+    except Exception as e:
+        log(f"[Focus] Erro ao salvar cache: {e}")
+
+def _carregar_focus_cache():
+    """Carrega o último Focus bem-sucedido do cache local."""
+    if FOCUS_CACHE_PATH.exists():
+        try:
+            dados = json.loads(FOCUS_CACHE_PATH.read_text(encoding="utf-8"))
+            data_cache = dados.get("data_coleta", "desconhecida")
+            log(f"[Focus] Cache local carregado — coletado em: {data_cache}")
+            return dados
+        except Exception as e:
+            log(f"[Focus] Erro ao ler cache: {e}")
+    return None
+
 def buscar_focus(headers):
     anos_alvo = [2026, 2027, 2028, 2029]
     log("[Focus] Coletando expectativas do Banco Central...")
     raw_focus = {}
+    falhas_api = 0
+
     for indicador in INDICADORES_FOCUS:
         log(f"  [Focus] -> {indicador}")
-        # Retry automático: até 3 tentativas com espera crescente (15s, 30s)
-        for tentativa in range(3):
+        obtido = False
+        # Retry: até 2 tentativas (reduzido para poupar tempo quando BCB está fora)
+        for tentativa in range(2):
             resultado = _buscar_focus_indicador(indicador, anos_alvo, headers)
             if resultado:
                 raw_focus[indicador] = resultado
+                obtido = True
+                falhas_api = 0  # reset contador de falhas em série
                 break
-            if tentativa < 2:
-                espera = 15 * (tentativa + 1)
-                log(f"  [Focus] {indicador} vazio — aguardando {espera}s (tentativa {tentativa+1}/3)...")
-                time.sleep(espera)
-        else:
-            log(f"  [Focus] {indicador} -> sem dados após 3 tentativas.")
+            if tentativa < 1:
+                log(f"  [Focus] {indicador} vazio — aguardando 10s (tentativa {tentativa+1}/2)...")
+                time.sleep(10)
+        if not obtido:
             raw_focus[indicador] = {}
+            falhas_api += 1
+            log(f"  [Focus] {indicador} -> sem dados após 2 tentativas.")
+            # Se 2 indicadores seguidos falharam, BCB está fora — aborta e usa fallback
+            if falhas_api >= 2:
+                log("[Focus] BCB indisponível (2 falhas consecutivas) — abortando OData.")
+                break
         time.sleep(1)
+
+    indicadores_ok = sum(1 for v in raw_focus.values() if v)
+    log(f"[Focus] OData: {indicadores_ok}/{len(INDICADORES_FOCUS)} indicadores obtidos.")
+
+    # ── FALLBACK 1: PDF do BCB ───────────────────────────────────────────────
+    if indicadores_ok == 0:
+        log("[Focus] Tentando fallback via PDF do Boletim Focus...")
+        dados_pdf, data_pdf = _raspar_focus_pdf(headers)
+        if dados_pdf:
+            focus_pdf = {
+                "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
+                "fonte":       "pdf",
+                "data_pdf":    data_pdf,
+                "IPCA":        dados_pdf.get("IPCA", {}),
+                "Selic":       dados_pdf.get("Selic", {}),
+                "PIB":         dados_pdf.get("PIB Total", {}),
+                "Cambio":      dados_pdf.get("Câmbio", {}),
+                "IGPM":        dados_pdf.get("IGP-M", {}),
+                "IPCA_Modal":  dados_pdf.get("IPCA", {}),
+            }
+            _salvar_focus_cache(focus_pdf)
+            log(f"[Focus] PDF extraído com sucesso — {len(dados_pdf)}/5 indicadores.")
+            return focus_pdf
+
+    # ── FALLBACK 2: cache local do último Focus bem-sucedido ─────────────────
+    if indicadores_ok == 0:
+        cache = _carregar_focus_cache()
+        if cache:
+            fonte = cache.get("fonte", "cache")
+            data_c = cache.get("data_coleta", "desconhecida")
+            log(f"[Focus] Usando cache local ({fonte}) de {data_c}.")
+            cache["fonte"] = "cache"
+            return cache
+
+    # Monta o dicionário final
     focus = {
         "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
-        "IPCA":       raw_focus.get("IPCA", {}),
-        "Selic":      raw_focus.get("Selic", {}),
-        "PIB":        raw_focus.get("PIB Total", {}),
-        "Cambio":     raw_focus.get("Câmbio", {}),
-        "IGPM":       raw_focus.get("IGP-M", {}),
-        "IPCA_Modal": raw_focus.get("IPCA", {}),
+        "fonte":       "odata",
+        "IPCA":        raw_focus.get("IPCA", {}),
+        "Selic":       raw_focus.get("Selic", {}),
+        "PIB":         raw_focus.get("PIB Total", {}),
+        "Cambio":      raw_focus.get("Câmbio", {}),
+        "IGPM":        raw_focus.get("IGP-M", {}),
+        "IPCA_Modal":  raw_focus.get("IPCA", {}),
     }
-    indicadores_ok = sum(1 for v in raw_focus.values() if v)
-    log(f"[Focus] Coleta concluída — {indicadores_ok}/{len(INDICADORES_FOCUS)} indicadores obtidos.")
+
+    # Salva no cache sempre que tiver pelo menos 1 indicador real
+    if indicadores_ok > 0:
+        _salvar_focus_cache(focus)
+        log(f"[Focus] Coleta concluída — {indicadores_ok}/{len(INDICADORES_FOCUS)} indicadores via OData.")
+    else:
+        log("[Focus] Nenhum dado obtido via OData nem cache. Focus ficará vazio.")
+
     return focus
 
 # ---------------------------------------------------------------------------
