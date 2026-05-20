@@ -462,7 +462,7 @@ footer span{color:var(--gold)}
 
       </tbody>
     </table>
-    <div class="indic-footnote">
+    <div class="indic-footnote" id="indic-footnote-text">
       * CDI mensal e 12M estimados matematicamente a partir da taxa a.a. · Ibovespa e Dólar: variação sobre os ~30 últimos dias disponíveis · S&P 500: cotação em USD e conversão BRL pelo câmbio do dia
     </div>
   </div>
@@ -635,15 +635,6 @@ const fmt = (v, dec=2, suf='%') => {
 const fmtBRL = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtK   = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{maximumFractionDigits:0});
 
-function setMcad(id, val, subId, sub, updown){
-  const el=$(id); if(!el) return;
-  el.textContent = val;
-  if(updown==='up') el.classList.add('up');
-  else if(updown==='dn') el.classList.add('dn');
-  else el.classList.add('gold');
-  if(subId && $(subId) && sub) $(subId).textContent = sub;
-}
-
 /* ════════════════════════════════════════════════════
    CARREGA mercado_atual.json
 ════════════════════════════════════════════════════ */
@@ -674,7 +665,14 @@ async function carregarMercado(){
       mEl.textContent = fCdiMes;
       mEl.className = 'indic-pct pos';
       const mLab = mEl.nextElementSibling;
-      if(mLab) mLab.textContent = isEstimado ? 'estimado*' : ipcaLabel || 'real BCB';
+      if(mLab) mLab.textContent = isEstimado ? 'estimado*' : 'real BCB';
+
+      // Atualiza rodapé: remove asterisco se CDI real disponível
+      const fn = $('indic-footnote-text');
+      if(fn && !isEstimado){
+        fn.textContent = 'CDI mensal: dado real BCB (série 4391) · Ibovespa e Dólar: variação sobre os ~30 últimos dias · S&P 500: cotação USD + conversão pelo câmbio do dia';
+      }
+
       const yEl = $('mc-cdi-12m'); yEl.textContent = '+'+fmt(cdi); yEl.className='indic-pct pos';
     }
 
