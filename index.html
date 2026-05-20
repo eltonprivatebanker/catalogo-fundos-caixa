@@ -305,6 +305,61 @@ td.col-pct{text-align:right}
 .page-btn.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
 .page-btn:disabled{opacity:.2;cursor:default}
 
+/* ── MODAL PTAX ── */
+.modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.75);backdrop-filter:blur(4px);
+  display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:18px;width:100%;max-width:720px;
+  max-height:85vh;display:flex;flex-direction:column;overflow:hidden;
+  transform:translateY(20px);transition:transform .25s;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;padding:18px 24px 14px;
+  border-bottom:1px solid var(--border2)}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--gold2)}
+.modal-close{background:transparent;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer;
+  padding:4px 8px;border-radius:6px;transition:color .15s,background .15s;line-height:1}
+.modal-close:hover{color:var(--text);background:var(--bg3)}
+.modal-body{overflow-y:auto;padding:0}
+.modal-footer{padding:12px 24px;border-top:1px solid var(--border2);font-size:.62rem;color:var(--muted2);
+  font-family:'JetBrains Mono',monospace;font-style:italic}
+
+.ptax-table{width:100%;border-collapse:collapse}
+.ptax-table thead tr{background:var(--bg3);position:sticky;top:0;z-index:1}
+.ptax-table th{padding:10px 16px;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--gold);font-weight:600;text-align:right;white-space:nowrap}
+.ptax-table th:first-child{text-align:left}
+.ptax-table tbody tr{border-bottom:1px solid var(--border2);transition:background .12s}
+.ptax-table tbody tr:hover{background:rgba(200,151,58,.04)}
+.ptax-table td{padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:.78rem;text-align:right}
+.ptax-table td:first-child{text-align:left;font-family:'DM Sans',sans-serif;font-size:.8rem;font-weight:500}
+.ptax-month{color:var(--text)}
+.ptax-val{color:var(--gold2);font-weight:600}
+.ptax-var.pos{color:var(--green)}.ptax-var.neg{color:var(--red)}.ptax-var.zero{color:var(--muted)}
+.ptax-loading{text-align:center;padding:40px;color:var(--muted);font-size:.8rem}
+
+/* ── SELIC BADGE ── */
+.selic-change-badge{display:inline-flex;align-items:center;gap:5px;margin-top:4px;
+  font-size:.58rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.selic-change-date{color:var(--gold)}
+.copom-link{display:inline-flex;align-items:center;gap:4px;margin-top:6px;
+  font-size:.6rem;color:var(--gold);text-decoration:none;font-family:'JetBrains Mono',monospace;
+  padding:3px 8px;border:1px solid var(--border);border-radius:6px;background:var(--gold-dim);
+  transition:all .15s;white-space:nowrap}
+.copom-link:hover{background:rgba(200,151,58,.2);border-color:var(--gold2);color:var(--gold2)}
+
+/* ── PTAX BUTTON ── */
+.ptax-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
+  border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--muted);
+  font-size:.62rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.ptax-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+
+/* ── BOLETIM BTN ── */
+.boletim-btn{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
+  border:1px solid var(--border2);border-radius:5px;background:transparent;
+  color:var(--muted2);font-size:.6rem;font-family:'DM Sans',sans-serif;cursor:pointer;
+  text-decoration:none;transition:all .15s;white-space:nowrap}
+.boletim-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
+
 /* ── LOADING ── */
 #loadMsg{text-align:center;padding:70px 20px;color:var(--muted);font-size:.85rem}
 .spinner{width:32px;height:32px;margin:0 auto 18px;border:2px solid var(--border);
@@ -369,6 +424,10 @@ footer span{color:var(--gold)}
         <div class="indic-ref-label">Taxa Selic — Meta COPOM</div>
         <div class="indic-ref-val gold" id="mc-selic">—</div>
         <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
+        <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
+        <a class="copom-link" href="https://www.bcb.gov.br/controleinflacao/historicotaxasjuros" target="_blank" rel="noopener">
+          📅 Calendário COPOM ↗
+        </a>
       </div>
     </div>
     <div class="indic-ref-card cdi">
@@ -423,9 +482,13 @@ footer span{color:var(--gold)}
 
         <!-- Dólar -->
         <tr>
-          <td><div class="indic-name"><span class="indic-icon">💵</span><div><div class="indic-title">Dólar</div><div class="indic-subtitle">BRL / USD</div></div></div></td>
+          <td><div class="indic-name"><span class="indic-icon">💵</span><div><div class="indic-title">Dólar</div><div class="indic-subtitle">BRL / USD — PTAX Bacen</div></div></div></td>
           <td><div class="indic-val" id="mc-dolar">—</div><div class="indic-val-sub">cotação do dia</div></td>
-          <td><div class="indic-pct" id="mc-dolar-var">—</div><div class="indic-pct-label">var. ~30d</div></td>
+          <td>
+            <div class="indic-pct" id="mc-dolar-var">—</div>
+            <div class="indic-pct-label">var. ~30d</div>
+            <button class="ptax-btn" onclick="abrirModalPTAX()" style="margin-top:6px">📊 Ver tabela PTAX</button>
+          </td>
           <td><div class="indic-pct dash">—</div></td>
           <td><div class="indic-pct dash">—</div></td>
         </tr>
@@ -615,6 +678,33 @@ footer span{color:var(--gold)}
   </div>
 </div>
 
+<!-- MODAL PTAX -->
+<div class="modal-overlay" id="modalPtax" onclick="fecharModalPTAX(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">💵 Câmbio PTAX — Fechamento Mensal (BRL/USD)</div>
+      <button class="modal-close" onclick="fecharModalPTAX()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Buscando dados do Bacen...</div>
+      <table class="ptax-table" id="ptaxTable" style="display:none">
+        <thead>
+          <tr>
+            <th style="text-align:left">Mês / Ano</th>
+            <th>Fechamento (R$)</th>
+            <th>Var. mês anterior</th>
+            <th>Data do fechamento</th>
+          </tr>
+        </thead>
+        <tbody id="ptaxBody"></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      Fonte: Banco Central do Brasil — PTAX (cotação de venda, último dia útil do mês) · Atualização em tempo real via API pública do BCB
+    </div>
+  </div>
+</div>
+
 <footer>
   Dados extraídos de <span>fundos.caixa.gov.br</span> via Robô Python ·
   Indicadores: <span>Banco Central do Brasil</span> &amp; <span>Yahoo Finance</span> ·
@@ -627,6 +717,12 @@ footer span{color:var(--gold)}
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
 ════════════════════════════════════════════════════ */
+
+// Detecta se está rodando localmente (file://) e aponta para o GitHub
+const BASE_URL = window.location.protocol === 'file:'
+  ? 'https://raw.githubusercontent.com/eltonprivatebanker/catalogo-fundos-caixa/main/'
+  : '';
+
 const $ = id => document.getElementById(id);
 const fmt = (v, dec=2, suf='%') => {
   if(v===null||v===undefined||v==='') return '—';
@@ -640,7 +736,7 @@ const fmtK   = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('
 ════════════════════════════════════════════════════ */
 async function carregarMercado(){
   try{
-    const r = await fetch('mercado_atual.json?v='+Date.now());
+    const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
     const d = await r.json();
 
     if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
@@ -650,6 +746,13 @@ async function carregarMercado(){
     // ── Selic ──
     const selic = c.selic_meta?.valor;
     $('mc-selic').textContent = selic ? fmt(selic) : '—';
+    // Data da última alteração da Selic
+    const selicHist = d.historico_selic || c.selic_meta?.historico || [];
+    if(selicHist.length) {
+      const ultima = selicHist[0];
+      const slcEl = $('selic-last-change');
+      if(slcEl) slcEl.textContent = ultima.data || '—';
+    }
 
     // ── CDI ──
     const cdi = c.cdi?.valor;
@@ -992,7 +1095,7 @@ function updateKPIs(){
 
 async function carregarKPIs(){
   try{
-    const r = await fetch('kpis_dashboard.json?v='+Date.now());
+    const r = await fetch(BASE_URL+'kpis_dashboard.json?v='+Date.now());
     const d = await r.json();
     const pl = d.resumo_geral?.pl_total_consolidado;
     const pipe = d.resumo_geral?.pipeline_novos_fundos;
@@ -1075,7 +1178,11 @@ function buildRowHTML(r, idx){
       const url = getFundUrl(r);
       const isFb = isFallbackUrl(r);
       const fbLabel = isFb?'<span class="link-fallback">🔍</span>':'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" title="${isFb?'Buscar no Google':'Página do fundo'}">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a></td>`;
+      const boletimUrl = isFb ? '' : url;
+      const boletimBtn = boletimUrl
+        ? `<a href="${boletimUrl}" target="_blank" rel="noopener" class="boletim-btn" title="Abrir página do fundo para baixar boletim">📄 Boletim</a>`
+        : '';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" title="${isFb?'Buscar no Google':'Página do fundo'}">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${boletimBtn}</td>`;
       return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){
@@ -1203,7 +1310,7 @@ $('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;
 
 async function carregarDados(){
   try{
-    const raw = await fetch('dados_atuais.csv?v='+Date.now()).then(r=>r.text());
+    const raw = await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
     const result = parseCsv(raw);
     allRows = result.data;
     const headers = Object.keys(allRows[0]||{});
@@ -1488,6 +1595,100 @@ function inicializarGraficos(d) {
       if(chart === 'selic') buildChartSelic(_dadosMercado?.cards?.selic_meta?.historico || [], range);
     });
   });
+}
+
+/* ════════════════════════════════════════════════════
+   PTAX — CÂMBIO MENSAL (API BCB)
+════════════════════════════════════════════════════ */
+let _ptaxCarregado = false;
+
+function abrirModalPTAX(){
+  $('modalPtax').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  if(!_ptaxCarregado) carregarPTAX();
+}
+
+function fecharModalPTAX(e){
+  if(e && e.target !== $('modalPtax')) return;
+  $('modalPtax').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if(e.key==='Escape') fecharModalPTAX(); });
+
+async function carregarPTAX(){
+  const loading = $('ptaxLoading');
+  const table   = $('ptaxTable');
+  const tbody   = $('ptaxBody');
+  try{
+    const hoje = new Date();
+    const inicio = new Date(hoje);
+    inicio.setFullYear(hoje.getFullYear() - 2); // últimos 2 anos
+
+    const fmtData = d =>
+      `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+
+    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/` +
+      `CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)` +
+      `?@di='${fmtData(inicio)}'&@df='${fmtData(hoje)}'` +
+      `&$top=1000&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
+
+    const res = await fetch(url);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    // Agrupa por mês — pega o último registro de cada mês (= último dia útil)
+    const byMonth = {};
+    (data.value || []).forEach(item => {
+      if(!item.cotacaoVenda) return;
+      const dt = new Date(item.dataHoraCotacao);
+      const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+      if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
+        byMonth[key] = item;
+      }
+    });
+
+    const mesesPT = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
+
+    if(!sorted.length) throw new Error('Sem dados');
+
+    tbody.innerHTML = sorted.reverse().map(([key, item], i) => {
+      const [ano, mes] = key.split('-');
+      const label = `${mesesPT[parseInt(mes)-1]}/${ano}`;
+      const val = item.cotacaoVenda;
+      const valFmt = 'R$ ' + Number(val).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
+      const dtCot = new Date(item.dataHoraCotacao);
+      const dtFmt = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
+
+      // Variação em relação ao mês anterior
+      let varHtml = '<span class="ptax-var zero">—</span>';
+      if(i < sorted.length - 1){
+        const prev = sorted.reverse()[sorted.length - i - 2]?.[1]?.cotacaoVenda;
+        sorted.reverse(); // restore order
+        if(prev){
+          const varPct = ((val - prev) / prev) * 100;
+          const cls = varPct > 0 ? 'neg' : varPct < 0 ? 'pos' : 'zero'; // dólar subindo = ruim p/ BRL
+          const sign = varPct >= 0 ? '+' : '';
+          varHtml = `<span class="ptax-var ${cls}">${sign}${varPct.toFixed(2).replace('.',',')}%</span>`;
+        }
+      }
+
+      return `<tr>
+        <td class="ptax-month">${label}</td>
+        <td class="ptax-val">${valFmt}</td>
+        <td>${varHtml}</td>
+        <td style="color:var(--muted);font-size:.72rem">${dtFmt}</td>
+      </tr>`;
+    }).join('');
+
+    loading.style.display = 'none';
+    table.style.display = 'table';
+    _ptaxCarregado = true;
+
+  }catch(err){
+    loading.innerHTML = `<div style="color:var(--red)">Erro ao buscar dados do BCB: ${err.message}<br>
+      <small style="color:var(--muted)">Tente novamente em alguns segundos</small></div>`;
+  }
 }
 
 /* ════════════════════════════════════════════════════
