@@ -1626,3 +1626,35 @@
 [12:44:56] CSV salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.csv
 [12:44:57] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260519.xlsx
 [12:44:57] SUCESSO: 171 fundos consolidados salvos.
+[12:25:50] INICIANDO ROBÔ SIPII v10 - GITHUB EDITION
+[12:25:50] ETAPA 1 — Coletando URLs dinâmicas (12 páginas CAIXA)...
+[12:25:51]   [CAIXA] renda-fixa → +34 links (34 total)
+[12:25:53]   [CAIXA] referenciados → +4 links (38 total)
+[12:25:54]   [CAIXA] fundo-simples → +2 links (40 total)
+[12:25:56]   [CAIXA] curto-prazo → +1 links (41 total)
+[12:25:57]   [CAIXA] multimercado → +19 links (60 total)
+[12:25:59]   [CAIXA] cambiais → +1 links (61 total)
+[12:26:01]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[12:26:02]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[12:26:04]   [CAIXA] renda-fixa → +8 links (81 total)
+[12:26:05]   [CAIXA] empresa → +5 links (86 total)
+[12:26:06]   [CAIXA] fmp-fgts → HTTP 404
+[12:26:07]   [CAIXA] rpps → +8 links (94 total)
+[12:26:08] [CAIXA] Total URLs dinâmicas: 94
+[12:26:08] ETAPA 2 — Coletando dados do SIPII...
+[12:26:09] [PF] Abrindo SIPII...
+[12:26:15] [PF] Erro geral: Message: Link não encontrado: PESSOA FÍSICA; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[12:26:16] [PJ] Abrindo SIPII...
+[12:26:22] [PJ] Erro geral: Message: Link não encontrado: PESSOA JURÍDICA; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[12:26:22] [GOV] Abrindo SIPII...
+[12:26:28] [GOV] Erro geral: Message: Link não encontrado: GOVERNO; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[12:26:28] [RPPS] Abrindo SIPII...
+[12:26:34] [RPPS] Erro geral: Message: Link não encontrado: RPPS; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[12:26:34] [TODOS] Abrindo SIPII...
+[12:26:41] [TODOS] Erro geral: Message: Link não encontrado: TODOS; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+
+[12:26:41] ATENÇÃO: Nenhum dado coletado.
