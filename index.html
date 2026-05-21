@@ -1034,45 +1034,8 @@ function togglePoupanca(){
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
-  // A BCB SGS API (api.bcb.gov.br) não suporta CORS do browser.
-  // Estratégia: tenta períodos menores em cascata; usa mercado_atual.json como base.
-  const calcAcum = (dados, meses) => {
-    const s = dados.slice(-meses);
-    const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
-    return +((f-1)*100).toFixed(2);
-  };
-
-  const tentativas = [
-    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/36?formato=json',
-    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/24?formato=json',
-    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/13?formato=json',
-  ];
-
-  for(const url of tentativas){
-    try{
-      const r = await fetch(url);
-      if(!r.ok) continue;
-      const dados = await r.json();
-      if(!dados.length) continue;
-
-      indicState.cdi.m12  = calcAcum(dados, Math.min(12, dados.length));
-      indicState.cdi.m24  = dados.length >= 24 ? calcAcum(dados, 24) : null;
-      indicState.cdi.m36  = dados.length >= 36 ? calcAcum(dados, 36) : null;
-
-      const ultimo = dados[dados.length-1];
-      if(ultimo){
-        indicState.cdi.mes = parseFloat(ultimo.valor);
-        const partes = ultimo.data.split('/');
-        indicState.cdi.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
-      }
-      atualizarTabelaIndicadores();
-      return; // sucesso
-    }catch(e){ /* tenta próxima URL */ }
-  }
-
-  // Fallback: usa taxa anual do mercado_atual.json (já carregada em carregarMercado)
-  console.info('[CDI] API BCB indisponível — usando dados do mercado_atual.json');
-  if($('it-cdi-acum-src')) $('it-cdi-acum-src').textContent = 'mercado_atual.json';
+  // Versão corrigida: não chama mais o BCB no navegador.
+  // O robô Python já calcula CDI mês, ano, 12M, 24M e 36M em mercado_atual.json.
   atualizarTabelaIndicadores();
 }
 
@@ -1080,52 +1043,8 @@ async function carregarCDIPeriodos(){
    IPCA — SÉRIE 433 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarIPCAPeriodos(){
-  // Mesma estratégia de cascata — BCB SGS API sem CORS confiável no browser
-  const calcAcum = (dados, meses) => {
-    const s = dados.slice(-meses);
-    const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
-    return +((f-1)*100).toFixed(2);
-  };
-
-  const tentativas = [
-    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/36?formato=json',
-    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/24?formato=json',
-    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/13?formato=json',
-  ];
-
-  for(const url of tentativas){
-    try{
-      const r = await fetch(url);
-      if(!r.ok) continue;
-      const dados = await r.json();
-      if(!dados.length) continue;
-
-      indicState.ipca.m12 = calcAcum(dados, Math.min(12, dados.length));
-      indicState.ipca.m24 = dados.length >= 24 ? calcAcum(dados, 24) : null;
-      indicState.ipca.m36 = dados.length >= 36 ? calcAcum(dados, 36) : null;
-
-      const ultimo = dados[dados.length-1];
-      if(ultimo){
-        indicState.ipca.mes = parseFloat(ultimo.valor);
-        const partes = ultimo.data.split('/');
-        indicState.ipca.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
-      }
-
-      const anoAtual = new Date().getFullYear();
-      const doAno = dados.filter(d => parseInt(d.data.split('/')[2]) === anoAtual);
-      if(doAno.length){
-        const f = doAno.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
-        indicState.ipca.ano = +((f-1)*100).toFixed(2);
-      }
-
-      atualizarTabelaIndicadores();
-      return; // sucesso
-    }catch(e){ /* tenta próxima URL */ }
-  }
-
-  // Fallback: dados já carregados via mercado_atual.json em carregarMercado()
-  console.info('[IPCA] API BCB indisponível — usando dados do mercado_atual.json');
-  if($('it-ipca-acum-label')) $('it-ipca-acum-label').textContent = 'acum. 12M (JSON)';
+  // Versão corrigida: não chama mais o BCB no navegador.
+  // O robô Python já calcula IPCA mês, ano, 12M, 24M e 36M em mercado_atual.json.
   atualizarTabelaIndicadores();
 }
 
@@ -1133,27 +1052,28 @@ async function carregarIPCAPeriodos(){
    PTAX HISTÓRICO — usado pela tabela e gráfico
 ════════════════════════════════════════════════════ */
 async function carregarPTAXHistorico(){
-  try{
-    const fmtData = d => `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
-    const inicio = new Date(HOJE);
-    inicio.setMonth(HOJE.getMonth() - 24); // PTAX API limita a 2 anos
+  // Versão corrigida: não chama mais o endpoint PTAX direto no navegador.
+  // Se futuramente o robô Python exportar um histórico PTAX, esta função já aproveita.
+  const hist = _dadosMercado?.cards?.dolar?.historico || [];
 
-    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
-      + `CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)`
-      + `?@di='${fmtData(inicio)}'&@df='${fmtData(HOJE)}'`
-      + `&$top=5000&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
-
-    const r = await fetch(url);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const data = await r.json();
-    _ptaxHistorico = (data.value||[]).sort((a,b) =>
-      new Date(a.dataHoraCotacao) - new Date(b.dataHoraCotacao));
+  if(Array.isArray(hist) && hist.length){
+    _ptaxHistorico = hist.map(i => ({
+      cotacaoVenda: i.cotacaoVenda ?? i.valor ?? i.venda ?? i.cotacao,
+      dataHoraCotacao: i.dataHoraCotacao ?? i.data ?? i.label
+    })).filter(i => i.cotacaoVenda && i.dataHoraCotacao);
 
     calcularDolarPeriodos();
     renderDolarMensais();
     buildChartDolar('year');
-  }catch(e){
-    console.warn('PTAX histórico:', e);
+    return;
+  }
+
+  if($('dolarMonths')){
+    $('dolarMonths').innerHTML =
+      '<div style="padding:8px;color:var(--muted);font-size:.75rem">Histórico PTAX não veio no JSON. O card do dólar usa o valor atual do mercado_atual.json.</div>';
+  }
+  if($('dolar-chart-sub')){
+    $('dolar-chart-sub').textContent = 'Histórico PTAX não disponível no JSON atual';
   }
 }
 
@@ -1232,87 +1152,48 @@ function calcularDolarPeriodos(){
    DÓLAR DO DIA
 ════════════════════════════════════════════════════ */
 async function carregarDolarDia(){
-  const fmtDataBCB = d =>
-    `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+  // Versão corrigida: usa o dólar já coletado pelo robô Python em mercado_atual.json.
+  const d = _dadosMercado || {};
+  const c = d.cards || {};
+  const dolar = c.dolar || {};
+  const cotVenda = dolar.atual;
+  const cotAnterior = dolar.anterior;
+  const varPct = dolar.variacao_mensal;
 
-  // Tenta até 5 dias para trás (fins de semana/feriados)
-  for(let i = 0; i < 5; i++){
-    const dia = new Date(HOJE);
-    dia.setDate(HOJE.getDate() - i);
-    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
-      + `CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia)}'`
-      + `&$format=json&$select=cotacaoCompra,cotacaoVenda,dataHoraCotacao`;
-    try{
-      const r = await fetch(url);
-      if(!r.ok) continue;
-      const data = await r.json();
-      if(!data.value || !data.value.length) continue;
-
-      // Última cotação do dia
-      const ultima = data.value[data.value.length-1];
-      const cotVenda = parseFloat(ultima.cotacaoVenda);
-      const cotCompra = parseFloat(ultima.cotacaoCompra);
-      const dtCot = new Date(ultima.dataHoraCotacao);
-
-      $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
-      $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
-      $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
-
-      const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
-      const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
-      $('dolar-day-ref').textContent = `Referência: ${diaRef}`;
-      $('dolar-hora').textContent = hora + ' (BCB)';
-      $('dolar-day-src').textContent = `PTAX BCB · ${diaRef}`;
-
-      // Variação vs dia anterior
-      if(i === 0 && data.value.length > 1){
-        const anterior = data.value[data.value.length-2];
-        const antVal = parseFloat(anterior.cotacaoVenda);
-        const varPct = ((cotVenda - antVal) / antVal) * 100;
-        const varEl = $('dolar-var-dia');
-        varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs cot. anterior do dia)`;
-        varEl.className = `dolar-metric-val ${varPct > 0 ? 'neg' : 'pos'}`;
-        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
-      } else {
-        // Compara com dia anterior via histórico
-        const diaAnt = new Date(dia);
-        diaAnt.setDate(dia.getDate() - 1);
-        buscarCotacaoDiaAnterior(cotVenda, diaAnt);
-      }
-
-      $('dolar-day-loading').style.display = 'none';
-      $('dolar-day-content').style.display = 'block';
-      return;
-    }catch(e){ continue; }
+  if(cotVenda === null || cotVenda === undefined){
+    if($('dolar-day-loading')) $('dolar-day-loading').innerHTML =
+      '<span style="color:var(--muted)">Dólar indisponível no mercado_atual.json</span>';
+    return;
   }
-  $('dolar-day-loading').innerHTML = '<span style="color:var(--muted)">Cotação PTAX indisponível no momento</span>';
+
+  if($('dolar-day-rate')) $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
+  if($('dolar-compra')) $('dolar-compra').textContent = '—';
+  if($('dolar-venda')) $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
+
+  const ref = d.atualizado_em?.split(' ')?.[0] || `${String(HOJE.getDate()).padStart(2,'0')}/${String(HOJE.getMonth()+1).padStart(2,'0')}/${HOJE.getFullYear()}`;
+  if($('dolar-day-ref')) $('dolar-day-ref').textContent = `Referência: ${ref}`;
+  if($('dolar-hora')) $('dolar-hora').textContent = d.atualizado_em?.split(' ')?.[1] || 'JSON';
+  if($('dolar-day-src')) $('dolar-day-src').textContent = `mercado_atual.json · ${ref}`;
+
+  if($('dolar-var-dia')){
+    if(varPct !== null && varPct !== undefined){
+      $('dolar-var-dia').textContent = `${signPct(varPct)}${fmt(varPct)} (~30 dias)`;
+      $('dolar-var-dia').className = `dolar-metric-val ${varPct > 0 ? 'neg' : 'pos'}`;
+    } else {
+      $('dolar-var-dia').textContent = '—';
+      $('dolar-var-dia').className = 'dolar-metric-val muted';
+    }
+  }
+  if($('dolar-dia-ant')) $('dolar-dia-ant').textContent =
+    cotAnterior !== null && cotAnterior !== undefined ? 'R$ ' + fmtBRL(cotAnterior) : '—';
+
+  if($('dolar-day-loading')) $('dolar-day-loading').style.display = 'none';
+  if($('dolar-day-content')) $('dolar-day-content').style.display = 'block';
 }
 
 async function buscarCotacaoDiaAnterior(cotAtual, diaAnt){
-  const fmtDataBCB = d =>
-    `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
-  for(let i = 0; i < 5; i++){
-    const dia = new Date(diaAnt);
-    dia.setDate(diaAnt.getDate() - i);
-    try{
-      const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
-        + `CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia)}'`
-        + `&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
-      const r = await fetch(url);
-      if(!r.ok) continue;
-      const data = await r.json();
-      if(!data.value || !data.value.length) continue;
-      const antVal = parseFloat(data.value[data.value.length-1].cotacaoVenda);
-      const varPct = ((cotAtual - antVal) / antVal) * 100;
-      const varEl = $('dolar-var-dia');
-      if(varEl){
-        varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs fechamento ${fmtDataBCB(dia).split('-').reverse().join('/')})`;
-        varEl.className = `dolar-metric-val ${varPct > 0 ? 'neg' : 'pos'}`;
-        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
-      }
-      return;
-    }catch(e){ continue; }
-  }
+  // Mantida apenas por compatibilidade. Não faz chamada externa.
+  return null;
 }
 
 /* ════════════════════════════════════════════════════
@@ -1565,7 +1446,10 @@ document.querySelectorAll('.indic-tab').forEach(btn => {
 async function carregarMercado(){
   try{
     const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
     const d = await r.json();
+
+    _dadosMercado = d;
 
     if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
 
@@ -1573,49 +1457,74 @@ async function carregarMercado(){
 
     // ── Selic ──
     const selic = c.selic_meta?.valor;
-    if($('mc-selic')) $('mc-selic').textContent = selic ? fmt(selic) : '—';
+    if($('mc-selic')) $('mc-selic').textContent = selic !== null && selic !== undefined ? fmt(selic) : '—';
     const selicHist = d.historico_selic || c.selic_meta?.historico || [];
     if(selicHist.length){
       const ultima = selicHist[0];
       const el = $('selic-last-change');
       if(el) el.textContent = ultima.data || '—';
+    } else if($('selic-last-change')) {
+      $('selic-last-change').textContent = d.atualizado_em?.split(' ')?.[0] || '—';
     }
 
-    // ── CDI — popula indicState como baseline (será melhorado pela série 4391 se disponível) ──
-    const cdi = c.cdi?.valor;
-    if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
-    if(cdi){
-      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1+cdi/100,1/12)-1)*100);
-      const isEst = c.cdi?.mensal == null;
-      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+('%');
-      if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + (isEst ? '*' : '');
+    // ── CDI — agora vem 100% do mercado_atual.json gerado pelo robô Python ──
+    const cdiObj = c.cdi || {};
+    const cdiAnual = cdiObj.valor;
+    const cdiMensal = cdiObj.mensal ?? cdiObj.ultimo_mes;
+    const cdiRef = cdiObj.label_mes || d.atualizado_em?.split(' ')?.[0] || '—';
 
-      // Baseline indicState — mantido se série 4391 não responder
-      if(!indicState.cdi.m12) indicState.cdi.m12 = cdi;
-      if(!indicState.cdi.mes) indicState.cdi.mes = cdiMensal;
-      if(!indicState.cdi.mesRef){
-        const h = new Date();
-        indicState.cdi.mesRef = `${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;
-      }
+    if($('mc-cdi')) $('mc-cdi').textContent = cdiAnual !== null && cdiAnual !== undefined ? fmt(cdiAnual) : '—';
+    if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent =
+      cdiMensal !== null && cdiMensal !== undefined ? `+${fmt(cdiMensal)}` : '—';
+
+    indicState.cdi.mes = cdiMensal ?? null;
+    indicState.cdi.mesRef = cdiRef;
+    indicState.cdi.ano = cdiObj.acum_ano ?? null;
+    indicState.cdi.m12 = cdiObj.acum_12m ?? null;
+    indicState.cdi.m24 = cdiObj.acum_24m ?? null;
+    indicState.cdi.m36 = cdiObj.acum_36m ?? null;
+
+    if($('it-cdi-ano')){
+      const n = indicState.cdi.ano;
+      $('it-cdi-ano').textContent = n !== null && n !== undefined ? `+${fmt(n)}` : '—';
+      $('it-cdi-ano').className = 'indic-pct pos';
     }
 
-    // ── IPCA (do JSON — complementado pela série 433) ──
+    // ── IPCA — agora vem 100% do mercado_atual.json gerado pelo robô Python ──
     const ipca = c.ipca || {};
-    const ipcaLabel = ipca.label_mes || '';
-    // Preenche campos que a série 433 pode não ter chegado ainda
-    // Baseline IPCA — sempre carrega do JSON, série 433 enriquece se disponível
-    if(ipca.acum_12m && !indicState.ipca.m12){
-      indicState.ipca.m12 = ipca.acum_12m;
-      indicState.ipca.ano = ipca.acum_ano;
-      indicState.ipca.mes = ipca.ultimo_mes;
-      indicState.ipca.mesRef = ipcaLabel || `${MESES_PT[new Date().getMonth()-1>=0?new Date().getMonth()-1:11]}/${new Date().getFullYear()}`;
+    indicState.ipca.mes = ipca.ultimo_mes ?? null;
+    indicState.ipca.ano = ipca.acum_ano ?? null;
+    indicState.ipca.m12 = ipca.acum_12m ?? null;
+    indicState.ipca.m24 = ipca.acum_24m ?? null;
+    indicState.ipca.m36 = ipca.acum_36m ?? null;
+    indicState.ipca.mesRef = ipca.label_mes || d.atualizado_em?.split(' ')?.[0] || '—';
+
+    // ── Dólar, Ibovespa e índices internacionais — vindos do JSON do robô ──
+    const dolar = c.dolar || {};
+    const dolarAtual = dolar.atual;
+    const dolarAnterior = dolar.anterior;
+    const dolarVar = dolar.variacao_mensal;
+    const refHoje = MESES_PT[HOJE.getMonth()]+'/'+HOJE.getFullYear();
+
+    if($('ref-dolar')) $('ref-dolar').textContent = refHoje;
+    if($('ref-dolar2')) $('ref-dolar2').textContent = refHoje;
+
+    if(dolarAtual !== null && dolarAtual !== undefined){
+      indicState.dolarBRL.mes = dolarAtual;
+      indicState.dolarPct.mes = dolarVar ?? null;
+
+      if($('it-dolar-mes-val')) $('it-dolar-mes-val').textContent = 'R$ '+fmtBRL(dolarAtual);
+      if($('it-dolar-var-mes') && dolarVar !== null && dolarVar !== undefined){
+        $('it-dolar-var-mes').textContent = `${signPct(dolarVar)}${fmt(dolarVar)}`;
+        $('it-dolar-var-mes').className = `indic-pct ${dolarVar > 0 ? 'neg' : 'pos'}`;
+      }
+      if($('it-dolar-ano-val')) $('it-dolar-ano-val').textContent = '—';
+      if($('it-dolar-var-ano')) $('it-dolar-var-ano').textContent = '—';
     }
 
-    // ── Ibovespa ──
     const ibov = c.ibovespa || {};
     const ibovAtual = ibov.atual;
     const ibovVar = ibov.variacao_mensal;
-    const refHoje = MESES_PT[HOJE.getMonth()]+'/'+HOJE.getFullYear();
     if($('ref-ibov')) $('ref-ibov').textContent = refHoje;
     if($('ref-ibov2')) $('ref-ibov2').textContent = refHoje;
     if($('ref-sp-brl')) $('ref-sp-brl').textContent = refHoje;
@@ -1623,19 +1532,17 @@ async function carregarMercado(){
 
     if($('it-ibov-pts') && ibovAtual) $('it-ibov-pts').textContent = fmtK(ibovAtual)+' pts';
     if($('it-ibov-var-mes') && ibovVar !== null && ibovVar !== undefined){
-      const n = ibovVar;
-      $('it-ibov-var-mes').textContent = `${signPct(n)}${fmt(n)}`;
-      $('it-ibov-var-mes').className = `indic-pct ${clsPct(n)}`;
+      $('it-ibov-var-mes').textContent = `${signPct(ibovVar)}${fmt(ibovVar)}`;
+      $('it-ibov-var-mes').className = `indic-pct ${clsPct(ibovVar)}`;
     }
 
-    // ── S&P 500 ──
     const intl = d.indices_internacionais || {};
     if($('it-sp-brl') && intl.sp500_brl) $('it-sp-brl').textContent = 'R$ '+fmtK(intl.sp500_brl);
     if($('it-sp-usd') && intl.sp500_usd) $('it-sp-usd').textContent = fmtK(intl.sp500_usd)+' pts';
 
     // ── Poupança ──
     const poup = c.poupanca_nova?.valor;
-    if($('mc-poup')) $('mc-poup').textContent = poup ? fmt(poup) : '—';
+    if($('mc-poup')) $('mc-poup').textContent = poup !== null && poup !== undefined ? fmt(poup) : '—';
 
     atualizarTabelaIndicadores();
     carregarFocus(d.focus, d.atualizado_em);
@@ -1882,16 +1789,10 @@ function applyFilter(){
 let _fundosDocMap = {}; // CNPJ limpo → { codfundo, docs:{} }
 
 async function carregarFundosJson(){
-  try{
-    const r = await fetch(BASE_URL+'fundos_caixa.json?v='+Date.now());
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d = await r.json();
-    _fundosDocMap = d.por_cnpj || {};
-    console.log(`[fundos_caixa.json] ${Object.keys(_fundosDocMap).length} fundos indexados`);
-  }catch(e){
-    // Silencioso — fallback usa código extraído da URL
-    console.info('[fundos_caixa.json] não disponível, usando fallback por URL:', e.message);
-  }
+  // Versão corrigida: não tenta mais buscar fundos_caixa.json.
+  // O dashboard já usa dados_atuais.csv e as URLs/metadados gerados pelo robô.
+  _fundosDocMap = {};
+  console.info('[fundos_caixa.json] leitura desativada; usando dados_atuais.csv como fonte principal.');
 }
 
 function buildDocsHtml(cnpjLimpo, urlFundo){
@@ -2332,13 +2233,17 @@ function toggleCopomCalendario(){
 /* ════════════════════════════════════════════════════
    INIT
 ════════════════════════════════════════════════════ */
-carregarMercado();
-carregarCDIPeriodos();
-carregarIPCAPeriodos();
-carregarDolarDia();
-carregarPTAXHistorico();
-carregarFundosJson();
-carregarDados().then(()=>carregarKPIs());
+async function iniciarDashboard(){
+  await carregarMercado();
+  await carregarCDIPeriodos();
+  await carregarIPCAPeriodos();
+  await carregarDolarDia();
+  await carregarPTAXHistorico();
+  await carregarFundosJson();
+  await carregarDados();
+  await carregarKPIs();
+}
+iniciarDashboard();
 </script>
 </body>
 </html>
