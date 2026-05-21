@@ -3382,3 +3382,78 @@
 [03:13:33] [FIM] 171 fundos consolidados. Pipeline completo.
 [03:13:33] [LIMPEZA] Removido: sipii_caixa_20260511.csv
 [03:13:33] [LIMPEZA] Removido: sipii_caixa_20260511.xlsx
+[03:48:34] ⚡ [INÍCIO] Robô SIPII v15 — CDI real + todos os indicadores macro
+[03:48:37]   [CAIXA] renda-fixa → +34 links (34 total)
+[03:48:38]   [CAIXA] referenciados → +4 links (38 total)
+[03:48:40]   [CAIXA] fundo-simples → +2 links (40 total)
+[03:48:42]   [CAIXA] curto-prazo → +1 links (41 total)
+[03:48:43]   [CAIXA] multimercado → +19 links (60 total)
+[03:48:45]   [CAIXA] cambiais → +1 links (61 total)
+[03:48:47]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[03:48:48]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[03:48:50]   [CAIXA] renda-fixa → +8 links (81 total)
+[03:48:51]   [CAIXA] empresa → +5 links (86 total)
+[03:48:53]   [CAIXA] fmp-fgts → HTTP 404
+[03:48:53]   [CAIXA] rpps → +8 links (94 total)
+[03:48:54] [CAIXA] Total URLs dinâmicas: 94
+[03:48:54] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[03:48:56] [Fundos.json] Download HTTP OK — 196 registros.
+[03:48:56] [Fundos.json] 194 produtos indexados.
+[03:48:56] Raspando segmento: PESSOA FÍSICA...
+[03:48:57] [PF] Abrindo SIPII...
+[03:49:14]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[03:49:29]   [PF] RENDA FIXA: 39 fundos.
+[03:49:35]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[03:49:38]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[03:49:50]   [PF] MULTIMERCADO: 30 fundos.
+[03:49:53]   [PF] CAMBIAL: 1 fundos.
+[03:50:06]   [PF] ACOES: 29 fundos.
+[03:50:09]   [PF] FUNDO DE INDICE: 1 fundos.
+[03:50:14]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[03:50:16] Raspando segmento: PESSOA JURÍDICA...
+[03:50:17] [PJ] Abrindo SIPII...
+[03:50:35]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[03:50:50]   [PJ] RENDA FIXA: 38 fundos.
+[03:50:55]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[03:50:58]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[03:51:10]   [PJ] MULTIMERCADO: 27 fundos.
+[03:51:13]   [PJ] CAMBIAL: 1 fundos.
+[03:51:25]   [PJ] ACOES: 28 fundos.
+[03:51:27] Raspando segmento: GOVERNO...
+[03:51:27] [GOV] Abrindo SIPII...
+[03:51:44]   [GOV] RENDA FIXA: 2 fundos.
+[03:51:48]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[03:51:51]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[03:51:56]   [GOV] MULTIMERCADO: 6 fundos.
+[03:52:00]   [GOV] ACOES: 4 fundos.
+[03:52:02] Raspando segmento: RPPS...
+[03:52:02] [RPPS] Abrindo SIPII...
+[03:52:30]   [RPPS] RENDA FIXA: 19 fundos.
+[03:52:33]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[03:52:40]   [RPPS] MULTIMERCADO: 14 fundos.
+[03:52:47]   [RPPS] ACOES: 14 fundos.
+[03:52:49] Raspando segmento: TODOS...
+[03:52:49] [TODOS] Abrindo SIPII...
+[03:53:07]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[03:53:24]   [TODOS] RENDA FIXA: 42 fundos.
+[03:53:29]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[03:53:32]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[03:53:39]   [TODOS] MULTIMERCADO: 14 fundos.
+[03:53:42]   [TODOS] CAMBIAL: 1 fundos.
+[03:53:53]   [TODOS] ACOES: 25 fundos.
+[03:53:57]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[03:53:59] [Fundos.json] URLs válidas após cruzamento: 160/171
+[03:53:59] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[03:53:59] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260521.xlsx
+[03:53:59] [KPIs] JSON exportado: kpis_dashboard.json
+[03:53:59] [MERCADO] Coletando indicadores macro...
+[03:54:07] [IPCA] Base local: 556 meses.
+[03:54:08] [IPCA] Base salva: 556 meses.
+[03:54:08] [Focus] Coletando expectativas do Banco Central...
+[03:54:08]   [Focus] -> IPCA
+[03:54:10]   [Focus] -> Selic
+[03:54:11]   [Focus] -> PIB Total
+[03:54:13]   [Focus] -> Câmbio
+[03:54:14]   [Focus] -> IGP-M
+[03:54:16] [SUCESSO] mercado_atual.json exportado | CDI mensal real=0.64% | IPCA: 556m | Focus: 7 ind.
+[03:54:16] [FIM] 171 fundos consolidados. Pipeline completo.
