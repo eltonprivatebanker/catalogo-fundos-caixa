@@ -24,7 +24,6 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
 body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-
 body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background:radial-gradient(ellipse 80% 50% at 10% -5%,rgba(200,151,58,.055) 0%,transparent 55%),
              radial-gradient(ellipse 60% 60% at 90% 105%,rgba(91,156,246,.04) 0%,transparent 55%)}
@@ -32,7 +31,6 @@ body::after{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
   background-image:linear-gradient(rgba(200,151,58,.018) 1px,transparent 1px),
                    linear-gradient(90deg,rgba(200,151,58,.018) 1px,transparent 1px);
   background-size:72px 72px}
-
 .page{position:relative;z-index:1;max-width:1760px;margin:0 auto;padding:32px 28px 100px}
 
 /* ── HEADER ── */
@@ -53,6 +51,7 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.75)}}
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
 
 /* ── KPI GRID ── */
 .section-gap{margin-top:28px}
@@ -70,28 +69,164 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 
 /* ── SEÇÃO MERCADO ── */
 .section-title{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.section-title h2{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;
-  color:var(--gold2);letter-spacing:.03em}
+.section-title h2{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--gold2);letter-spacing:.03em}
 .section-badge{font-size:.6rem;padding:3px 9px;border-radius:6px;border:1px solid var(--border2);
   color:var(--muted);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:5px}
 .badge-dot{width:5px;height:5px;border-radius:50%}
 .badge-dot.green{background:var(--green);box-shadow:0 0 5px var(--green)}
 .badge-dot.blue{background:var(--blue);box-shadow:0 0 5px var(--blue)}
 
-.mercado-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px}
-.mcad{background:var(--bg2);border:1px solid var(--border2);border-radius:12px;padding:16px;
-  transition:border-color .2s,transform .2s;cursor:default;position:relative;overflow:hidden}
-.mcad:hover{border-color:var(--border3);transform:translateY(-2px)}
-.mcad::before{content:'';position:absolute;top:0;left:0;right:0;height:1.5px;opacity:.5}
-.mcad.verde::before{background:linear-gradient(90deg,var(--green),transparent)}
-.mcad.azul::before{background:linear-gradient(90deg,var(--blue),transparent)}
-.mcad.ouro::before{background:linear-gradient(90deg,var(--gold),transparent)}
-.mcad.vermelho::before{background:linear-gradient(90deg,var(--red),transparent)}
-.mcad-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-bottom:4px}
-.mcad-val{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;color:var(--text);line-height:1.1}
-.mcad-val.up{color:var(--green)}.mcad-val.dn{color:var(--red)}.mcad-val.gold{color:var(--gold2)}
-.mcad-sub{font-size:.62rem;color:var(--muted);margin-top:5px;font-family:'JetBrains Mono',monospace}
-.mcad-sub.up{color:var(--green)}.mcad-sub.dn{color:var(--red)}
+/* ── CARDS DE REFERÊNCIA (Selic+CDI unificado + Poupança) ── */
+.indic-ref-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+
+/* Card Selic+CDI unificado */
+.indic-ref-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;
+  padding:18px 22px;display:flex;gap:20px;flex:1;min-width:240px;
+  position:relative;overflow:hidden;transition:border-color .2s}
+.indic-ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.indic-ref-card.selic-cdi::before{background:linear-gradient(90deg,var(--gold),var(--green) 60%,transparent)}
+.indic-ref-card.poup::before{background:linear-gradient(90deg,var(--blue),transparent)}
+
+.selic-cdi-block{display:flex;flex-direction:column;gap:2px;flex:1}
+.selic-cdi-divider{width:1px;background:var(--border2);margin:4px 0;flex-shrink:0}
+.indic-ref-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-bottom:3px}
+.indic-ref-val{font-family:'Cormorant Garamond',serif;font-size:1.9rem;font-weight:700;line-height:1}
+.indic-ref-val.gold{color:var(--gold2)}
+.indic-ref-val.green{color:var(--green)}
+.indic-ref-val.blue{color:var(--blue)}
+.indic-ref-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:3px}
+.selic-change-badge{display:inline-flex;align-items:center;gap:5px;margin-top:4px;
+  font-size:.58rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.selic-change-date{color:var(--gold)}
+.copom-link{display:inline-flex;align-items:center;gap:4px;margin-top:6px;
+  font-size:.6rem;color:var(--gold);text-decoration:none;font-family:'JetBrains Mono',monospace;
+  padding:3px 8px;border:1px solid var(--border);border-radius:6px;background:var(--gold-dim);
+  transition:all .15s;white-space:nowrap}
+.copom-link:hover{background:rgba(200,151,58,.2);border-color:var(--gold2);color:var(--gold2)}
+.cdi-rel{font-size:.58rem;color:var(--muted2);margin-top:5px;font-style:italic;font-family:'JetBrains Mono',monospace}
+
+/* Card Poupança */
+.poup-header{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;width:100%}
+.poup-values{display:flex;gap:18px;margin-top:8px}
+.poup-rule{display:flex;flex-direction:column;gap:2px}
+.poup-rule-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted2);font-weight:600}
+.poup-rule-val{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;line-height:1}
+.poup-rule-val.blue{color:var(--blue)}
+.poup-rule-val.muted{color:var(--muted)}
+.poup-rule-sub{font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace}
+.poup-expand-btn{background:transparent;border:1px solid var(--border2);border-radius:8px;color:var(--muted);
+  font-size:.65rem;padding:4px 10px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0}
+.poup-expand-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
+.poup-explain{overflow:hidden;max-height:0;transition:max-height .35s ease,opacity .25s;opacity:0;width:100%}
+.poup-explain.open{max-height:300px;opacity:1}
+.poup-explain-inner{padding:14px 0 4px;border-top:1px solid var(--border2);margin-top:10px}
+.poup-explain-title{font-size:.65rem;font-weight:700;color:var(--gold2);margin-bottom:6px;text-transform:uppercase;letter-spacing:.06em}
+.poup-explain-row{display:flex;gap:10px;margin-bottom:6px;align-items:flex-start}
+.poup-explain-tag{font-size:.58rem;padding:2px 7px;border-radius:5px;font-weight:700;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.tag-nova{background:var(--blue-dim);color:var(--blue);border:1px solid rgba(91,156,246,.2)}
+.tag-antiga{background:rgba(200,151,58,.1);color:var(--gold);border:1px solid rgba(200,151,58,.2)}
+.poup-explain-text{font-size:.65rem;color:var(--muted);line-height:1.5}
+.poup-bcb-link{display:inline-flex;align-items:center;gap:4px;margin-top:8px;
+  font-size:.6rem;color:var(--blue);text-decoration:none;font-family:'JetBrains Mono',monospace;
+  padding:3px 8px;border:1px solid rgba(91,156,246,.2);border-radius:6px;background:var(--blue-dim);transition:all .15s}
+.poup-bcb-link:hover{background:rgba(91,156,246,.18);color:#8bbfff}
+
+/* ── TABELA DE INDICADORES COM TABS ── */
+.indic-tabs-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px}
+.indic-tabs-label{font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.indic-tabs{display:flex;gap:4px}
+.indic-tab{padding:5px 14px;border-radius:8px;border:1px solid var(--border2);background:transparent;
+  color:var(--muted);font-size:.7rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all .15s}
+.indic-tab:hover{border-color:var(--gold);color:var(--gold)}
+.indic-tab.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2);font-weight:600}
+
+.indic-table-wrap{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg2)}
+.indic-table{width:100%;border-collapse:collapse}
+.indic-table thead tr{background:linear-gradient(90deg,var(--bg4),var(--bg3));border-bottom:1px solid var(--border)}
+.indic-table th{padding:11px 16px;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);
+  font-weight:600;text-align:right;white-space:nowrap}
+.indic-table th:first-child{text-align:left;min-width:200px}
+.indic-table th.th-ref{color:var(--muted2);text-align:center}
+.indic-table th.th-acum{color:var(--gold2)}
+.indic-table tbody tr{border-bottom:1px solid var(--border2);transition:background .12s}
+.indic-table tbody tr:last-child{border-bottom:none}
+.indic-table tbody tr:hover{background:rgba(200,151,58,.03)}
+.indic-table td{padding:13px 16px;text-align:right;vertical-align:middle}
+.indic-table td:first-child{text-align:left}
+.indic-table td.td-ref{text-align:center}
+.indic-name{display:flex;align-items:center;gap:8px}
+.indic-icon{font-size:.95rem}
+.indic-title{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:var(--text)}
+.indic-subtitle{font-size:.6rem;color:var(--muted2);margin-top:1px;font-family:'JetBrains Mono',monospace}
+.indic-val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--text);line-height:1}
+.indic-val-sub{font-size:.6rem;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.indic-pct{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600}
+.indic-pct.pos{color:var(--green)}.indic-pct.neg{color:var(--red)}.indic-pct.zero,.indic-pct.dash{color:var(--muted2)}
+.indic-pct-label{font-size:.58rem;color:var(--muted2);margin-top:2px;font-family:'JetBrains Mono',monospace}
+.ref-badge{display:inline-block;padding:3px 8px;border-radius:6px;background:var(--bg3);
+  border:1px solid var(--border2);font-size:.65rem;font-family:'JetBrains Mono',monospace;color:var(--muted)}
+.indic-footnote{padding:8px 16px;font-size:.6rem;color:var(--muted2);border-top:1px solid var(--border2);
+  font-family:'JetBrains Mono',monospace;font-style:italic}
+.indic-row-group{background:rgba(200,151,58,.015)}
+
+/* ── SEÇÃO DÓLAR ── */
+.dolar-grid{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+@media(max-width:900px){.dolar-grid{grid-template-columns:1fr}}
+
+/* Card do dia */
+.dolar-day-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s}
+.dolar-day-card:hover{border-color:rgba(200,151,58,.25);box-shadow:0 6px 30px rgba(0,0,0,.3)}
+.dolar-day-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),var(--green) 60%,transparent)}
+.dolar-day-header{padding:14px 18px 10px;border-bottom:1px solid var(--border2)}
+.dolar-day-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--gold2)}
+.dolar-day-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.dolar-day-body{padding:18px}
+.dolar-day-rate{font-family:'Cormorant Garamond',serif;font-size:2.8rem;font-weight:700;color:var(--gold2);line-height:1;margin-bottom:4px}
+.dolar-day-ref{font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-bottom:12px}
+.dolar-day-metrics{display:flex;flex-direction:column;gap:8px}
+.dolar-metric{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;
+  background:var(--bg3);border-radius:8px;border:1px solid var(--border2)}
+.dolar-metric-label{font-size:.62rem;color:var(--muted2);font-family:'JetBrains Mono',monospace}
+.dolar-metric-val{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600}
+.dolar-metric-val.pos{color:var(--green)}.dolar-metric-val.neg{color:var(--red)}.dolar-metric-val.muted{color:var(--muted)}
+.dolar-spread{display:flex;gap:6px;margin-top:2px}
+.dolar-spread-item{flex:1;background:var(--bg3);border-radius:7px;padding:6px 8px;border:1px solid var(--border2);text-align:center}
+.dolar-spread-label{font-size:.55rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+.dolar-spread-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--text)}
+
+/* Timeline mensal */
+.dolar-right{display:flex;flex-direction:column;gap:14px}
+.dolar-timeline-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.dolar-timeline-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
+.dolar-timeline-header{padding:12px 18px;border-bottom:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
+.dolar-timeline-header:hover{background:rgba(200,151,58,.03)}
+.dolar-timeline-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--gold2)}
+.dolar-timeline-toggle{font-size:.65rem;color:var(--muted);transition:transform .25s}
+.dolar-timeline-toggle.open{transform:rotate(180deg)}
+.dolar-timeline-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
+.dolar-timeline-body.open{max-height:200px}
+.dolar-months{display:flex;gap:0;overflow-x:auto;padding:12px 16px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.dolar-month-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;
+  padding:10px 8px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);
+  margin-right:8px;flex-shrink:0;transition:border-color .15s,background .15s;cursor:default}
+.dolar-month-item:hover{border-color:var(--gold);background:var(--gold-dim)}
+.dolar-month-item.current{border-color:var(--gold);background:var(--gold-dim)}
+.dolar-month-label{font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.dolar-month-val{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--gold2)}
+.dolar-month-var{font-size:.62rem;font-family:'JetBrains Mono',monospace;font-weight:600}
+.dolar-month-var.pos{color:var(--red)}.dolar-month-var.neg{color:var(--green)}.dolar-month-var.zero{color:var(--muted)}
+
+/* Gráfico dólar */
+.dolar-chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+  transition:border-color .2s,box-shadow .2s}
+.dolar-chart-card:hover{border-color:rgba(200,151,58,.25);box-shadow:0 6px 30px rgba(0,0,0,.3)}
+.dolar-chart-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
+.dolar-chart-header{padding:14px 18px 10px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.dolar-chart-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold2)}
+.dolar-chart-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
+.dolar-chart-body{padding:16px 18px;position:relative;height:220px}
 
 /* ── FOCUS ── */
 .focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
@@ -113,48 +248,6 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .focus-ref a{color:var(--gold);text-decoration:none;transition:color .15s}
 .focus-ref a:hover{color:var(--gold2)}
 
-/* ── INDICADORES REDESENHADOS ── */
-.indic-ref-bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
-.indic-ref-card{background:var(--bg2);border:1px solid var(--border);border-radius:12px;
-  padding:14px 20px;display:flex;align-items:center;gap:16px;flex:1;min-width:180px;
-  position:relative;overflow:hidden;transition:border-color .2s}
-.indic-ref-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
-.indic-ref-card.selic::before{background:linear-gradient(90deg,var(--gold),transparent)}
-.indic-ref-card.cdi::before{background:linear-gradient(90deg,var(--green),transparent)}
-.indic-ref-card.poup::before{background:linear-gradient(90deg,var(--blue),transparent)}
-.indic-ref-icon{font-size:1.4rem;opacity:.7}
-.indic-ref-body{display:flex;flex-direction:column;gap:2px}
-.indic-ref-label{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600}
-.indic-ref-val{font-family:'Cormorant Garamond',serif;font-size:1.7rem;font-weight:700;line-height:1}
-.indic-ref-val.gold{color:var(--gold2)}
-.indic-ref-val.green{color:var(--green)}
-.indic-ref-val.blue{color:var(--blue)}
-.indic-ref-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-
-.indic-table-wrap{border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg2)}
-.indic-table{width:100%;border-collapse:collapse}
-.indic-table thead tr{background:linear-gradient(90deg,var(--bg4),var(--bg3));border-bottom:1px solid var(--border)}
-.indic-table th{padding:11px 16px;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);
-  font-weight:600;text-align:right;white-space:nowrap}
-.indic-table th:first-child{text-align:left}
-.indic-table th.th-mes{color:var(--gold2)}
-.indic-table tbody tr{border-bottom:1px solid var(--border2);transition:background .12s}
-.indic-table tbody tr:last-child{border-bottom:none}
-.indic-table tbody tr:hover{background:rgba(200,151,58,.03)}
-.indic-table td{padding:13px 16px;text-align:right;vertical-align:middle}
-.indic-table td:first-child{text-align:left}
-.indic-name{display:flex;align-items:center;gap:8px}
-.indic-icon{font-size:.95rem}
-.indic-title{font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:600;color:var(--text)}
-.indic-subtitle{font-size:.6rem;color:var(--muted2);margin-top:1px;font-family:'JetBrains Mono',monospace}
-.indic-val{font-family:'Cormorant Garamond',serif;font-size:1.2rem;font-weight:700;color:var(--text);line-height:1}
-.indic-val-sub{font-size:.6rem;color:var(--muted);margin-top:2px;font-family:'JetBrains Mono',monospace}
-.indic-pct{font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600}
-.indic-pct.pos{color:var(--green)}.indic-pct.neg{color:var(--red)}.indic-pct.zero,.indic-pct.dash{color:var(--muted2)}
-.indic-pct-label{font-size:.58rem;color:var(--muted2);margin-top:2px;font-family:'JetBrains Mono',monospace}
-.indic-footnote{padding:8px 16px;font-size:.6rem;color:var(--muted2);border-top:1px solid var(--border2);
-  font-family:'JetBrains Mono',monospace;font-style:italic}
-
 /* ── CHARTS ── */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
 .chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
@@ -171,7 +264,7 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .chart-tab:hover{border-color:var(--gold);color:var(--gold)}
 .chart-tab.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
 
-
+/* ── RANKINGS ── */
 .ranking-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
 .rank-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
   transition:border-color .2s,box-shadow .2s}
@@ -227,11 +320,23 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .chip.pj:hover,.chip.pj.active{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
 .chip.gov:hover,.chip.gov.active{border-color:var(--orange);color:var(--orange);background:rgba(251,146,60,.1)}
 .chip.rpps:hover,.chip.rpps.active{border-color:var(--purple);color:var(--purple);background:rgba(167,139,250,.1)}
-/* Risco */
 .chip.cons:hover,.chip.cons.active{border-color:var(--green);color:var(--green);background:var(--green-dim)}
 .chip.mod:hover,.chip.mod.active{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
 .chip.arr:hover,.chip.arr.active{border-color:var(--orange);color:var(--orange);background:rgba(251,146,60,.1)}
 .chip.agr:hover,.chip.agr.active{border-color:var(--red);color:var(--red);background:var(--red-dim)}
+
+/* Filtro de performance */
+.perf-custom-wrap{display:flex;align-items:center;gap:5px}
+.perf-custom-input{width:72px;padding:5px 8px;background:var(--bg2);border:1px solid var(--border);
+  border-radius:8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.72rem;outline:none;transition:border-color .2s}
+.perf-custom-input:focus{border-color:var(--gold)}
+.perf-custom-input::placeholder{color:var(--muted2)}
+.perf-ok-btn{padding:5px 10px;border-radius:8px;border:1px solid var(--border2);background:transparent;
+  color:var(--muted);font-size:.7rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
+.perf-ok-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.perf-period-select{padding:5px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:.72rem;outline:none;cursor:pointer;transition:border-color .2s;height:30px}
+.perf-period-select:hover{border-color:var(--gold)}.perf-period-select option{background:var(--bg3)}
 
 /* ── TABELA ── */
 .table-wrap{border:1px solid var(--border);border-radius:14px;overflow:hidden;overflow-x:auto;
@@ -322,7 +427,6 @@ td.col-pct{text-align:right}
 .modal-body{overflow-y:auto;padding:0}
 .modal-footer{padding:12px 24px;border-top:1px solid var(--border2);font-size:.62rem;color:var(--muted2);
   font-family:'JetBrains Mono',monospace;font-style:italic}
-
 .ptax-table{width:100%;border-collapse:collapse}
 .ptax-table thead tr{background:var(--bg3);position:sticky;top:0;z-index:1}
 .ptax-table th{padding:10px 16px;font-size:.6rem;text-transform:uppercase;letter-spacing:.1em;
@@ -337,21 +441,12 @@ td.col-pct{text-align:right}
 .ptax-var.pos{color:var(--green)}.ptax-var.neg{color:var(--red)}.ptax-var.zero{color:var(--muted)}
 .ptax-loading{text-align:center;padding:40px;color:var(--muted);font-size:.8rem}
 
-/* ── SELIC BADGE ── */
-.selic-change-badge{display:inline-flex;align-items:center;gap:5px;margin-top:4px;
-  font-size:.58rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-.selic-change-date{color:var(--gold)}
-.copom-link{display:inline-flex;align-items:center;gap:4px;margin-top:6px;
-  font-size:.6rem;color:var(--gold);text-decoration:none;font-family:'JetBrains Mono',monospace;
-  padding:3px 8px;border:1px solid var(--border);border-radius:6px;background:var(--gold-dim);
-  transition:all .15s;white-space:nowrap}
-.copom-link:hover{background:rgba(200,151,58,.2);border-color:var(--gold2);color:var(--gold2)}
-
-/* ── PTAX BUTTON ── */
-.ptax-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
-  border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--muted);
-  font-size:.62rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
-.ptax-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+/* ── LOADING ── */
+#loadMsg{text-align:center;padding:70px 20px;color:var(--muted);font-size:.85rem}
+.spinner{width:32px;height:32px;margin:0 auto 18px;border:2px solid var(--border);
+  border-top-color:var(--gold);border-radius:50%;animation:spin .75s linear infinite}
+.spinner-sm{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--gold);
+  border-radius:50%;animation:spin .75s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
 
 /* ── BOLETIM BTN ── */
 .boletim-btn{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
@@ -360,10 +455,11 @@ td.col-pct{text-align:right}
   text-decoration:none;transition:all .15s;white-space:nowrap}
 .boletim-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-dim)}
 
-/* ── LOADING ── */
-#loadMsg{text-align:center;padding:70px 20px;color:var(--muted);font-size:.85rem}
-.spinner{width:32px;height:32px;margin:0 auto 18px;border:2px solid var(--border);
-  border-top-color:var(--gold);border-radius:50%;animation:spin .75s linear infinite}
+/* ── PTAX BUTTON ── */
+.ptax-btn{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;
+  border:1px solid var(--border);border-radius:6px;background:var(--bg3);color:var(--muted);
+  font-size:.62rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.ptax-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
 
 /* ── FOOTER ── */
 footer{text-align:center;margin-top:60px;font-size:.67rem;color:var(--muted2);
@@ -375,11 +471,12 @@ footer span{color:var(--gold)}
   .page{padding:18px 14px 60px}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
   .kpi-value{font-size:1.5rem}
-  .mercado-grid,.focus-grid{grid-template-columns:1fr 1fr}
+  .focus-grid{grid-template-columns:1fr 1fr}
   .ranking-grid{grid-template-columns:1fr}
+  .indic-ref-card{min-width:100%}
 }
 @media(max-width:480px){
-  .mercado-grid,.focus-grid{grid-template-columns:1fr}
+  .focus-grid{grid-template-columns:1fr}
   .kpi-grid{grid-template-columns:1fr}
 }
 </style>
@@ -387,7 +484,7 @@ footer span{color:var(--gold)}
 <body>
 <div class="page">
 
-<!-- HEADER -->
+<!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header>
   <div class="brand">
     <div class="brand-logo">E</div>
@@ -399,7 +496,7 @@ footer span{color:var(--gold)}
   <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
 
-<!-- KPI GRID -->
+<!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
 <div class="kpi-grid section-gap">
   <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
   <div class="kpi"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub">tipos de fundo</div></div>
@@ -409,129 +506,300 @@ footer span{color:var(--gold)}
   <div class="kpi"><div class="kpi-icon">📉</div><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
 </div>
 
-<!-- INDICADORES DE MERCADO -->
+<!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
 <div class="section-gap">
   <div class="section-title">
     <h2>📡 Indicadores de Mercado</h2>
     <span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
   </div>
 
-  <!-- Taxas de referência -->
+  <!-- Cards de referência: Selic+CDI unificado + Poupança -->
   <div class="indic-ref-bar">
-    <div class="indic-ref-card selic">
-      <div class="indic-ref-icon">🏦</div>
-      <div class="indic-ref-body">
-        <div class="indic-ref-label">Taxa Selic — Meta COPOM</div>
+
+    <!-- Card 1: SELIC + CDI unificado -->
+    <div class="indic-ref-card selic-cdi" style="flex:2;min-width:300px">
+      <div class="selic-cdi-block">
+        <div class="indic-ref-label">🏦 Taxa Selic — Meta COPOM</div>
         <div class="indic-ref-val gold" id="mc-selic">—</div>
         <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
         <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
-        <a class="copom-link" href="https://www.bcb.gov.br/controleinflacao/historicotaxasjuros" target="_blank" rel="noopener">
-          📅 Calendário COPOM ↗
-        </a>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+          <a class="copom-link" href="https://www.bcb.gov.br/detalhenoticia/20739/nota" target="_blank" rel="noopener">📅 Calendário COPOM ↗</a>
+          <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
+        </div>
+        <!-- Card expansível do Calendário COPOM 2026 -->
+        <div id="copomCalendario" style="overflow:hidden;max-height:0;transition:max-height .35s ease,opacity .25s;opacity:0">
+          <div style="margin-top:10px;padding:12px 14px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)">
+            <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:10px">📅 Reuniões COPOM 2026</div>
+            <div id="copomMeetings" style="display:flex;flex-direction:column;gap:4px"></div>
+            <div style="margin-top:8px;font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;font-style:italic;border-top:1px solid var(--border2);padding-top:6px">
+              Atas publicadas às 8h da terça seguinte à reunião ·
+              <a href="https://www.bcb.gov.br/detalhenoticia/20739/nota" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">Fonte BCB ↗</a>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="indic-ref-card cdi">
-      <div class="indic-ref-icon">💰</div>
-      <div class="indic-ref-body">
-        <div class="indic-ref-label">CDI — Certificado de Depósito Interbancário</div>
+      <div class="selic-cdi-divider"></div>
+      <div class="selic-cdi-block">
+        <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
         <div class="indic-ref-val green" id="mc-cdi">—</div>
-        <div class="indic-ref-sub">% a.a. estimado · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
+        <div class="indic-ref-sub">% a.a. · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
+        <div class="cdi-rel" id="mc-cdi-12m-label">Acum. 12M: <span id="mc-cdi-12m-val">—</span></div>
+        <div class="cdi-rel" style="margin-top:2px">CDI ≈ Selic − 0,10 p.p.</div>
       </div>
     </div>
-    <div class="indic-ref-card poup">
-      <div class="indic-ref-icon">🏠</div>
-      <div class="indic-ref-body">
-        <div class="indic-ref-label">Poupança Nova — Rendimento</div>
-        <div class="indic-ref-val blue" id="mc-poup">—</div>
-        <div class="indic-ref-sub">% a.m. — rendimento mensal</div>
+
+    <!-- Card 2: Poupança antiga + nova + expansível -->
+    <div class="indic-ref-card poup" style="flex:1.5;min-width:260px;flex-direction:column;align-items:stretch">
+      <div class="poup-header">
+        <div>
+          <div class="indic-ref-label">🏠 Poupança — Rendimentos</div>
+        </div>
+        <button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Ver regras ▼</button>
       </div>
+      <div class="poup-values">
+        <div class="poup-rule">
+          <div class="poup-rule-label">Nova (pós mai/2012)</div>
+          <div class="poup-rule-val blue" id="mc-poup">—</div>
+          <div class="poup-rule-sub">% a.m. · 70% da Selic</div>
+        </div>
+        <div class="poup-rule" style="opacity:.65">
+          <div class="poup-rule-label">Antiga (pré mai/2012)</div>
+          <div class="poup-rule-val muted">~0,50%</div>
+          <div class="poup-rule-sub">% a.m. · TR + 0,50%</div>
+        </div>
+      </div>
+      <div class="poup-explain" id="poupExplain">
+        <div class="poup-explain-inner">
+          <div class="poup-explain-title">Como funciona cada regra</div>
+          <div class="poup-explain-row">
+            <span class="poup-explain-tag tag-nova">Nova</span>
+            <span class="poup-explain-text">Cadernetas abertas após 04/05/2012. Quando a Selic for <strong style="color:var(--text)">superior a 8,5% a.a.</strong>, rende 70% da Selic a.a. (aplicado mensalmente). Quando a Selic for igual ou inferior a 8,5%, equipara-se à regra antiga: TR + 0,50% a.m.</span>
+          </div>
+          <div class="poup-explain-row">
+            <span class="poup-explain-tag tag-antiga">Antiga</span>
+            <span class="poup-explain-text">Cadernetas abertas antes de 04/05/2012. Rende <strong style="color:var(--text)">sempre TR + 0,50% a.m.</strong>, independentemente do nível da Selic. Com a Selic atual em 14,50%, a regra antiga rende menos que a nova.</span>
+          </div>
+          <a class="poup-bcb-link" href="https://www4.bcb.gov.br/pec/poupanca/poupanca.asp" target="_blank" rel="noopener">🏦 Calculadora oficial BCB ↗</a>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /indic-ref-bar -->
+
+  <!-- TABS dos períodos -->
+  <div class="indic-tabs-bar">
+    <span class="indic-tabs-label">Período acumulado exibido:</span>
+    <div class="indic-tabs">
+      <button class="indic-tab active" data-months="12">12 Meses</button>
+      <button class="indic-tab" data-months="24">24 Meses</button>
+      <button class="indic-tab" data-months="36">36 Meses</button>
     </div>
   </div>
 
-  <!-- Tabela comparativa de indicadores -->
+  <!-- Tabela de indicadores redesenhada -->
   <div class="indic-table-wrap">
     <table class="indic-table">
       <thead>
         <tr>
-          <th style="min-width:160px">Indicador</th>
-          <th>Valor / Cotação</th>
-          <th class="th-mes" id="th-mes-label">Último mês</th>
-          <th>Acum. Ano</th>
-          <th>12 Meses</th>
+          <th style="min-width:200px">Indicador</th>
+          <th class="th-ref">Referência</th>
+          <th>No Mês</th>
+          <th>No Ano</th>
+          <th class="th-acum" id="th-acum-label">Acum. 12M</th>
         </tr>
       </thead>
       <tbody>
 
         <!-- CDI -->
         <tr>
-          <td><div class="indic-name"><span class="indic-icon">💰</span><div><div class="indic-title">CDI</div><div class="indic-subtitle">Cert. Depósito Interbancário</div></div></div></td>
-          <td><div class="indic-val" id="mc-cdi-v">—</div><div class="indic-val-sub">% a.a.</div></td>
-          <td><div class="indic-pct pos" id="mc-cdi-mes">—</div><div class="indic-pct-label">estimado*</div></td>
-          <td><div class="indic-pct dash">—</div></td>
-          <td><div class="indic-pct pos" id="mc-cdi-12m">—</div><div class="indic-pct-label">estimado*</div></td>
+          <td><div class="indic-name"><span class="indic-icon">💰</span><div>
+            <div class="indic-title">CDI</div>
+            <div class="indic-subtitle">Cert. Depósito Interbancário</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-cdi">—</span></td>
+          <td><div class="indic-pct pos" id="it-cdi-mes">—</div><div class="indic-pct-label" id="it-cdi-mes-src">real BCB</div></td>
+          <td><div class="indic-pct pos" id="it-cdi-ano">—</div><div class="indic-pct-label">acum. ano</div></td>
+          <td><div class="indic-pct pos" id="it-cdi-acum">—</div><div class="indic-pct-label" id="it-cdi-acum-src">série 4391 BCB</div></td>
         </tr>
 
         <!-- IPCA -->
         <tr>
-          <td><div class="indic-name"><span class="indic-icon">📊</span><div><div class="indic-title">IPCA</div><div class="indic-subtitle">Inflação ao Consumidor</div></div></div></td>
-          <td><div class="indic-val" id="mc-ipca12">—</div><div class="indic-val-sub">acum. 12M</div></td>
-          <td><div class="indic-pct" id="mc-ipca-mes-v">—</div><div class="indic-pct-label" id="mc-ipca-mes-label">—</div></td>
-          <td><div class="indic-pct" id="mc-ipcaano">—</div><div class="indic-pct-label">acum. ano · meta 3%</div></td>
-          <td><div class="indic-pct" id="mc-ipca12-tab">—</div><div class="indic-pct-label">acum. 12M</div></td>
+          <td><div class="indic-name"><span class="indic-icon">🎯</span><div>
+            <div class="indic-title">IPCA</div>
+            <div class="indic-subtitle">Inflação ao Consumidor</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-ipca">—</span></td>
+          <td><div class="indic-pct" id="it-ipca-mes">—</div><div class="indic-pct-label" id="it-ipca-mes-label">—</div></td>
+          <td><div class="indic-pct" id="it-ipca-ano">—</div><div class="indic-pct-label">acum. ano · meta 3%</div></td>
+          <td><div class="indic-pct" id="it-ipca-acum">—</div><div class="indic-pct-label" id="it-ipca-acum-label">acum. 12M</div></td>
         </tr>
 
-        <!-- Dólar -->
-        <tr>
-          <td><div class="indic-name"><span class="indic-icon">💵</span><div><div class="indic-title">Dólar</div><div class="indic-subtitle">BRL / USD — PTAX Bacen</div></div></div></td>
-          <td><div class="indic-val" id="mc-dolar">—</div><div class="indic-val-sub">cotação do dia</div></td>
-          <td>
-            <div class="indic-pct" id="mc-dolar-var">—</div>
-            <div class="indic-pct-label">var. ~30d</div>
-            <button class="ptax-btn" onclick="abrirModalPTAX()" style="margin-top:6px">📊 Ver tabela PTAX</button>
-          </td>
+        <!-- Dólar R$ -->
+        <tr class="indic-row-group">
+          <td><div class="indic-name"><span class="indic-icon">💵</span><div>
+            <div class="indic-title">Dólar em R$</div>
+            <div class="indic-subtitle">BRL/USD — Cotação PTAX BCB</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-dolar">—</span></td>
+          <td><div class="indic-val" id="it-dolar-mes-val">—</div><div class="indic-val-sub">fechamento mês</div></td>
+          <td><div class="indic-val" id="it-dolar-ano-val">—</div><div class="indic-val-sub">fechamento ano</div></td>
+          <td><div class="indic-val" id="it-dolar-acum-val">—</div><div class="indic-val-sub" id="it-dolar-acum-label">fechamento 12M atrás</div></td>
+        </tr>
+
+        <!-- Dólar Var% -->
+        <tr class="indic-row-group">
+          <td><div class="indic-name"><span class="indic-icon">📊</span><div>
+            <div class="indic-title">Dólar — Variação %</div>
+            <div class="indic-subtitle">BRL/USD — desvalorização cambial</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-dolar2">—</span></td>
+          <td><div class="indic-pct" id="it-dolar-var-mes">—</div><div class="indic-pct-label">var. mês</div></td>
+          <td><div class="indic-pct" id="it-dolar-var-ano">—</div><div class="indic-pct-label">var. no ano</div></td>
+          <td><div class="indic-pct" id="it-dolar-var-acum">—</div><div class="indic-pct-label" id="it-dolar-var-acum-label">var. 12M</div></td>
+        </tr>
+
+        <!-- Ibovespa % -->
+        <tr class="indic-row-group" style="background:rgba(91,156,246,.012)">
+          <td><div class="indic-name"><span class="indic-icon">📈</span><div>
+            <div class="indic-title">Ibovespa — Variação %</div>
+            <div class="indic-subtitle">Bolsa de Valores B3 — SP</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-ibov">—</span></td>
+          <td><div class="indic-pct" id="it-ibov-var-mes">—</div><div class="indic-pct-label">var. ~30d</div></td>
+          <td><div class="indic-pct dash">—</div><div class="indic-pct-label">sem dado</div></td>
+          <td><div class="indic-pct dash">—</div><div class="indic-pct-label">sem dado</div></td>
+        </tr>
+
+        <!-- Ibovespa pts -->
+        <tr class="indic-row-group" style="background:rgba(91,156,246,.012)">
+          <td><div class="indic-name"><span class="indic-icon">🏦</span><div>
+            <div class="indic-title">Ibovespa — Pontos</div>
+            <div class="indic-subtitle">Bolsa de Valores B3 — SP</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-ibov2">—</span></td>
+          <td><div class="indic-val" id="it-ibov-pts">—</div><div class="indic-val-sub">pontos</div></td>
           <td><div class="indic-pct dash">—</div></td>
           <td><div class="indic-pct dash">—</div></td>
         </tr>
 
-        <!-- Ibovespa -->
-        <tr>
-          <td><div class="indic-name"><span class="indic-icon">📈</span><div><div class="indic-title">Ibovespa</div><div class="indic-subtitle">Bolsa de Valores B3 — SP</div></div></div></td>
-          <td><div class="indic-val" id="mc-ibov">—</div><div class="indic-val-sub">pontos</div></td>
-          <td><div class="indic-pct" id="mc-ibov-var">—</div><div class="indic-pct-label">var. ~30d</div></td>
+        <!-- S&P 500 R$ -->
+        <tr class="indic-row-group" style="background:rgba(167,139,250,.01)">
+          <td><div class="indic-name"><span class="indic-icon">🌎</span><div>
+            <div class="indic-title">S&amp;P 500 em R$</div>
+            <div class="indic-subtitle">Índice EUA — conversão pelo câmbio do dia</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-sp-brl">—</span></td>
+          <td><div class="indic-val" id="it-sp-brl">—</div><div class="indic-val-sub">R$ convertido</div></td>
           <td><div class="indic-pct dash">—</div></td>
           <td><div class="indic-pct dash">—</div></td>
         </tr>
 
-        <!-- S&P 500 -->
-        <tr>
-          <td><div class="indic-name"><span class="indic-icon">🌎</span><div><div class="indic-title">S&amp;P 500</div><div class="indic-subtitle">Índice EUA — 500 maiores empresas</div></div></div></td>
-          <td>
-            <div class="indic-val" id="mc-sp500">—</div><div class="indic-val-sub">USD</div>
-            <div style="margin-top:4px"><span class="indic-pct" style="font-size:.72rem;color:var(--muted)" id="mc-sp500brl">—</span></div>
-          </td>
+        <!-- S&P 500 USD -->
+        <tr class="indic-row-group" style="background:rgba(167,139,250,.01)">
+          <td><div class="indic-name"><span class="indic-icon">💹</span><div>
+            <div class="indic-title">S&amp;P 500 em USD</div>
+            <div class="indic-subtitle">Índice EUA — 500 maiores empresas</div>
+          </div></div></td>
+          <td class="td-ref"><span class="ref-badge" id="ref-sp-usd">—</span></td>
+          <td><div class="indic-val" id="it-sp-usd">—</div><div class="indic-val-sub">USD</div></td>
           <td><div class="indic-pct dash">—</div></td>
           <td><div class="indic-pct dash">—</div></td>
-          <td><div class="indic-pct dash">—</div></td>
-        </tr>
-
-        <!-- IPCA — metadados extras -->
-        <tr>
-          <td><div class="indic-name"><span class="indic-icon">🎯</span><div><div class="indic-title">IPCA vs Meta CMN</div><div class="indic-subtitle">Banda: 1,5% – 4,5% · Meta central: 3%</div></div></div></td>
-          <td><div class="indic-val" id="mc-ipca12-b">—</div><div class="indic-val-sub">acum. 12M (real)</div></td>
-          <td><div class="indic-pct" id="mc-ipca-mes-b">—</div><div class="indic-pct-label" id="mc-ipca-mes-label-b">—</div></td>
-          <td><div class="indic-pct" id="mc-ipcaano-b">—</div><div class="indic-pct-label" id="mc-ipca-meta-b">meta: 3,0%</div></td>
-          <td><div class="indic-pct" id="mc-ipca12-b2">—</div><div class="indic-pct-label">vs meta 3%</div></td>
         </tr>
 
       </tbody>
     </table>
     <div class="indic-footnote" id="indic-footnote-text">
-      * CDI mensal e 12M estimados matematicamente a partir da taxa a.a. · Ibovespa e Dólar: variação sobre os ~30 últimos dias disponíveis · S&P 500: cotação em USD e conversão BRL pelo câmbio do dia
+      CDI: série 4391 BCB · IPCA: série 433 BCB · Dólar: PTAX BCB · Ibovespa e S&P 500: variação ~30d via Yahoo Finance · 24M e 36M calculados via composição de fatores mensais
     </div>
   </div>
-</div>
+</div><!-- /section indicadores -->
 
-<!-- BOLETIM FOCUS -->
+<!-- ═══════════════════════════════════ SEÇÃO DÓLAR ══ -->
+<div class="section-gap">
+  <div class="section-title">
+    <h2>💵 Câmbio — Dólar BRL/USD</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB — tempo real</span>
+  </div>
+
+  <div class="dolar-grid">
+
+    <!-- Card do dia -->
+    <div class="dolar-day-card">
+      <div class="dolar-day-header">
+        <div class="dolar-day-title">💵 Cotação do Dia</div>
+        <div class="dolar-day-sub" id="dolar-day-src">Fonte: PTAX BCB · Carregando...</div>
+      </div>
+      <div class="dolar-day-body">
+        <div id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação...</div>
+        <div id="dolar-day-content" style="display:none">
+          <div class="dolar-day-rate" id="dolar-day-rate">—</div>
+          <div class="dolar-day-ref" id="dolar-day-ref">—</div>
+          <div class="dolar-spread" style="margin-bottom:12px">
+            <div class="dolar-spread-item">
+              <div class="dolar-spread-label">Compra</div>
+              <div class="dolar-spread-val" id="dolar-compra">—</div>
+            </div>
+            <div class="dolar-spread-item">
+              <div class="dolar-spread-label">Venda</div>
+              <div class="dolar-spread-val" id="dolar-venda">—</div>
+            </div>
+          </div>
+          <div class="dolar-day-metrics">
+            <div class="dolar-metric">
+              <span class="dolar-metric-label">Var. vs dia anterior</span>
+              <span class="dolar-metric-val" id="dolar-var-dia">—</span>
+            </div>
+            <div class="dolar-metric">
+              <span class="dolar-metric-label">Dia anterior (fechamento)</span>
+              <span class="dolar-metric-val muted" id="dolar-dia-ant">—</span>
+            </div>
+            <div class="dolar-metric">
+              <span class="dolar-metric-label">Hora referência PTAX</span>
+              <span class="dolar-metric-val muted" id="dolar-hora">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Coluna direita: timeline + gráfico -->
+    <div class="dolar-right">
+
+      <!-- Timeline mensal expansível -->
+      <div class="dolar-timeline-card">
+        <div class="dolar-timeline-header" onclick="toggleDolarTimeline()">
+          <span class="dolar-timeline-title">📅 Fechamentos Mensais</span>
+          <span class="dolar-timeline-toggle" id="dolarTimelineToggle">▼</span>
+        </div>
+        <div class="dolar-timeline-body" id="dolarTimelineBody">
+          <div class="dolar-months" id="dolarMonths">
+            <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gráfico do ano -->
+      <div class="dolar-chart-card">
+        <div class="dolar-chart-header">
+          <div>
+            <div class="dolar-chart-title">📈 Dólar no Ano — PTAX Diária</div>
+            <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando dados BCB...</div>
+          </div>
+          <div class="chart-tabs">
+            <button class="chart-tab active" data-dolar-range="year">2026</button>
+            <button class="chart-tab" data-dolar-range="12m">12 Meses</button>
+            <button class="chart-tab" data-dolar-range="24m">24 Meses</button>
+          </div>
+        </div>
+        <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
+      </div>
+
+    </div><!-- /dolar-right -->
+  </div><!-- /dolar-grid -->
+</div><!-- /section dolar -->
+
+<!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
 <div class="section-gap">
   <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
     <div style="display:flex;align-items:center;gap:10px">
@@ -547,21 +815,16 @@ footer span{color:var(--gold)}
   </div>
 </div>
 
-<!-- EVOLUÇÃO DOS INDICADORES -->
+<!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES ══ -->
 <div class="section-gap">
   <div class="section-title">
     <h2>📊 Evolução dos Indicadores</h2>
     <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
   </div>
   <div class="charts-grid">
-
-    <!-- IPCA -->
     <div class="chart-card">
       <div class="chart-card-header">
-        <div>
-          <div class="chart-card-title">🎯 IPCA — Variação Mensal</div>
-          <div class="chart-card-sub">Índice Nacional de Preços ao Consumidor Amplo</div>
-        </div>
+        <div><div class="chart-card-title">🎯 IPCA — Variação Mensal</div><div class="chart-card-sub">Índice Nacional de Preços ao Consumidor Amplo</div></div>
         <div class="chart-tabs">
           <button class="chart-tab active" data-chart="ipca" data-range="24">24M</button>
           <button class="chart-tab" data-chart="ipca" data-range="60">5A</button>
@@ -570,14 +833,9 @@ footer span{color:var(--gold)}
       </div>
       <div class="chart-body"><canvas id="chartIpca"></canvas></div>
     </div>
-
-    <!-- SELIC -->
     <div class="chart-card">
       <div class="chart-card-header">
-        <div>
-          <div class="chart-card-title">🏦 Selic — Decisões COPOM</div>
-          <div class="chart-card-sub">Meta da Taxa Básica de Juros</div>
-        </div>
+        <div><div class="chart-card-title">🏦 Selic — Decisões COPOM</div><div class="chart-card-sub">Meta da Taxa Básica de Juros</div></div>
         <div class="chart-tabs">
           <button class="chart-tab active" data-chart="selic" data-range="12">1A</button>
           <button class="chart-tab" data-chart="selic" data-range="35">5A</button>
@@ -586,23 +844,16 @@ footer span{color:var(--gold)}
       </div>
       <div class="chart-body"><canvas id="chartSelic"></canvas></div>
     </div>
-
-    <!-- META VS IPCA -->
     <div class="chart-card">
       <div class="chart-card-header">
-        <div>
-          <div class="chart-card-title">🎯 IPCA 12M vs Meta</div>
-          <div class="chart-card-sub">Inflação acumulada vs meta e bandas do CMN</div>
-        </div>
+        <div><div class="chart-card-title">🎯 IPCA 12M vs Meta</div><div class="chart-card-sub">Inflação acumulada vs meta e bandas do CMN</div></div>
       </div>
       <div class="chart-body"><canvas id="chartMeta"></canvas></div>
     </div>
-
   </div>
 </div>
 
-<!-- RANKINGS -->
-
+<!-- ═══════════════════════════════════════════ RANKINGS ══ -->
 <div class="section-gap">
   <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
     <div style="display:flex;align-items:center;gap:10px">
@@ -617,7 +868,7 @@ footer span{color:var(--gold)}
   </div>
 </div>
 
-<!-- CONTROLES DA TABELA -->
+<!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
 <div class="section-gap">
   <div class="section-title">
     <h2>📁 Catálogo Completo de Fundos</h2>
@@ -642,6 +893,7 @@ footer span{color:var(--gold)}
   </div>
 
   <div class="filter-section" style="margin-bottom:14px">
+    <!-- Perfil -->
     <div class="filter-row" id="perfilFilters">
       <span class="filter-label">Perfil</span>
       <button class="chip active" data-perfil="">Todos</button>
@@ -650,6 +902,7 @@ footer span{color:var(--gold)}
       <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
       <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
     </div>
+    <!-- Risco -->
     <div class="filter-row" id="riscoFilters">
       <span class="filter-label">Risco</span>
       <button class="chip active" data-risco="">Todos</button>
@@ -658,9 +911,29 @@ footer span{color:var(--gold)}
       <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
       <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
     </div>
+    <!-- Categoria -->
     <div class="filter-row" id="catFilters">
       <span class="filter-label">Categoria</span>
       <button class="chip active" data-cat="">Todas</button>
+    </div>
+    <!-- ★ Performance mínima (NOVO) -->
+    <div class="filter-row" id="perfFilters">
+      <span class="filter-label">Rentab.</span>
+      <select id="perfPeriodo" class="perf-period-select">
+        <option value="Acum. 12M (%)">12 Meses</option>
+        <option value="Acum. Ano (%)">No Ano</option>
+        <option value="Acum. Mes (%)">No Mês</option>
+      </select>
+      <button class="chip active" data-perf="">Todos</button>
+      <button class="chip" data-perf="0">≥ 0%</button>
+      <button class="chip" data-perf="5">≥ 5%</button>
+      <button class="chip" data-perf="10">≥ 10%</button>
+      <button class="chip" data-perf="20">≥ 20%</button>
+      <button class="chip" data-perf="50">≥ 50%</button>
+      <div class="perf-custom-wrap">
+        <input id="perfCustom" class="perf-custom-input" type="number" placeholder="Custom %" step="0.5" min="-100" max="200"/>
+        <button id="perfCustomBtn" class="perf-ok-btn">OK</button>
+      </div>
     </div>
   </div>
 
@@ -678,7 +951,7 @@ footer span{color:var(--gold)}
   </div>
 </div>
 
-<!-- MODAL PTAX -->
+<!-- ═══════════════════════════════════════ MODAL PTAX ══ -->
 <div class="modal-overlay" id="modalPtax" onclick="fecharModalPTAX(event)">
   <div class="modal">
     <div class="modal-header">
@@ -688,20 +961,16 @@ footer span{color:var(--gold)}
     <div class="modal-body">
       <div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Buscando dados do Bacen...</div>
       <table class="ptax-table" id="ptaxTable" style="display:none">
-        <thead>
-          <tr>
-            <th style="text-align:left">Mês / Ano</th>
-            <th>Fechamento (R$)</th>
-            <th>Var. mês anterior</th>
-            <th>Data do fechamento</th>
-          </tr>
-        </thead>
+        <thead><tr>
+          <th style="text-align:left">Mês / Ano</th>
+          <th>Fechamento (R$)</th>
+          <th>Var. mês anterior</th>
+          <th>Data do fechamento</th>
+        </tr></thead>
         <tbody id="ptaxBody"></tbody>
       </table>
     </div>
-    <div class="modal-footer">
-      Fonte: Banco Central do Brasil — PTAX (cotação de venda, último dia útil do mês) · Atualização em tempo real via API pública do BCB
-    </div>
+    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX (cotação de venda, último dia útil do mês) · API pública BCB</div>
   </div>
 </div>
 
@@ -711,25 +980,561 @@ footer span{color:var(--gold)}
   Metadados comerciais: <span>CAIXA Asset Management</span> ·
   Dashboard por <span>Elton Private Banker</span> · Atualização automática diária
 </footer>
-</div>
+</div><!-- /page -->
 
 <script>
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
 ════════════════════════════════════════════════════ */
-
-// Detecta se está rodando localmente (file://) e aponta para o GitHub
 const BASE_URL = window.location.protocol === 'file:'
   ? 'https://raw.githubusercontent.com/eltonprivatebanker/catalogo-fundos-caixa/main/'
   : '';
 
 const $ = id => document.getElementById(id);
-const fmt = (v, dec=2, suf='%') => {
+const fmt = (v,dec=2,suf='%') => {
   if(v===null||v===undefined||v==='') return '—';
   return Number(v).toFixed(dec).replace('.',',')+suf;
 };
 const fmtBRL = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtBRL4 = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
 const fmtK   = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{maximumFractionDigits:0});
+const clsPct = n => n>0?'pos':n<0?'neg':'zero';
+const signPct = n => n>0?'+':'';
+
+const MESES_PT = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+/* Data atual do sistema */
+const HOJE = new Date();
+const ANO_ATUAL = HOJE.getFullYear();
+
+/* ════════════════════════════════════════════════════
+   ESTADO GLOBAL DOS INDICADORES (para tabs 12M/24M/36M)
+════════════════════════════════════════════════════ */
+const indicState = {
+  cdi:  { m12: null, m24: null, m36: null, mes: null, mesRef: null },
+  ipca: { m12: null, m24: null, m36: null, mes: null, ano: null, mesRef: null },
+  dolarBRL: { mes: null, ano: null, m12: null, m24: null, m36: null },
+  dolarPct: { mes: null, ano: null, m12: null, m24: null, m36: null },
+};
+let activePeriodTab = 12; // 12, 24 ou 36
+let _ptaxHistorico = []; // cache para uso nos tabs
+
+/* ════════════════════════════════════════════════════
+   POUPANÇA — TOGGLE
+════════════════════════════════════════════════════ */
+function togglePoupanca(){
+  const el = $('poupExplain');
+  const btn = $('poupExpandBtn');
+  const isOpen = el.classList.toggle('open');
+  btn.textContent = isOpen ? 'Fechar ▲' : 'Ver regras ▼';
+}
+
+/* ════════════════════════════════════════════════════
+   CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
+════════════════════════════════════════════════════ */
+async function carregarCDIPeriodos(){
+  try{
+    const r = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/36?formato=json');
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const dados = await r.json();
+
+    const calcAcum = (d, meses) => {
+      const s = d.slice(-meses);
+      const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
+      return +((f-1)*100).toFixed(2);
+    };
+
+    indicState.cdi.m12 = calcAcum(dados, Math.min(12, dados.length));
+    indicState.cdi.m24 = dados.length >= 24 ? calcAcum(dados, 24) : null;
+    indicState.cdi.m36 = dados.length >= 36 ? calcAcum(dados, 36) : null;
+
+    // Mês mais recente
+    const ultimo = dados[dados.length-1];
+    if(ultimo){
+      indicState.cdi.mes = parseFloat(ultimo.valor);
+      const partes = ultimo.data.split('/');
+      indicState.cdi.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
+    }
+
+    atualizarTabelaIndicadores();
+  }catch(e){
+    console.warn('CDI série 4391:', e);
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   IPCA — SÉRIE 433 BCB (12M / 24M / 36M)
+════════════════════════════════════════════════════ */
+async function carregarIPCAPeriodos(){
+  try{
+    const r = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/36?formato=json');
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const dados = await r.json();
+
+    const calcAcum = (d, meses) => {
+      const s = d.slice(-meses);
+      const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
+      return +((f-1)*100).toFixed(2);
+    };
+
+    indicState.ipca.m12 = calcAcum(dados, Math.min(12, dados.length));
+    indicState.ipca.m24 = dados.length >= 24 ? calcAcum(dados, 24) : null;
+    indicState.ipca.m36 = dados.length >= 36 ? calcAcum(dados, 36) : null;
+
+    const ultimo = dados[dados.length-1];
+    if(ultimo){
+      indicState.ipca.mes = parseFloat(ultimo.valor);
+      const partes = ultimo.data.split('/');
+      indicState.ipca.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
+    }
+
+    // Acumulado do ano (meses do ano atual)
+    const anoAtual = new Date().getFullYear();
+    const doAno = dados.filter(d => {
+      const ano = parseInt(d.data.split('/')[2]);
+      return ano === anoAtual;
+    });
+    if(doAno.length){
+      const f = doAno.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
+      indicState.ipca.ano = +((f-1)*100).toFixed(2);
+    }
+
+    atualizarTabelaIndicadores();
+  }catch(e){
+    console.warn('IPCA série 433:', e);
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   PTAX HISTÓRICO — usado pela tabela e gráfico
+════════════════════════════════════════════════════ */
+async function carregarPTAXHistorico(){
+  try{
+    const fmtData = d => `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+    const inicio = new Date(HOJE);
+    inicio.setMonth(HOJE.getMonth() - 36);
+
+    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
+      + `CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)`
+      + `?@di='${fmtData(inicio)}'&@df='${fmtData(HOJE)}'`
+      + `&$top=5000&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
+
+    const r = await fetch(url);
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const data = await r.json();
+    _ptaxHistorico = (data.value||[]).sort((a,b) =>
+      new Date(a.dataHoraCotacao) - new Date(b.dataHoraCotacao));
+
+    calcularDolarPeriodos();
+    renderDolarMensais();
+    buildChartDolar('year');
+  }catch(e){
+    console.warn('PTAX histórico:', e);
+  }
+}
+
+function calcularDolarPeriodos(){
+  if(!_ptaxHistorico.length) return;
+
+  // Agrupa por mês (último registro = fechamento)
+  const byMonth = {};
+  _ptaxHistorico.forEach(item => {
+    const dt = new Date(item.dataHoraCotacao);
+    const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+    if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
+      byMonth[key] = item;
+    }
+  });
+
+  const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
+  if(sorted.length < 2) return;
+
+  const last = sorted[sorted.length-1];
+  const lastVal = parseFloat(last[1].cotacaoVenda);
+
+  // Mês atual vs mês anterior
+  const prevMes = sorted[sorted.length-2];
+  const prevMesVal = parseFloat(prevMes[1].cotacaoVenda);
+  indicState.dolarBRL.mes = lastVal;
+  indicState.dolarPct.mes = +((lastVal/prevMesVal-1)*100).toFixed(2);
+
+  // Ref label
+  const [ano, mes] = last[0].split('-');
+  const refLabel = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+
+  // Início do ano
+  const anoAtualStr = `${ANO_ATUAL}`;
+  const inicioAno = sorted.find(([k]) => k.startsWith(anoAtualStr));
+  if(inicioAno){
+    const inicioVal = parseFloat(inicioAno[1].cotacaoVenda);
+    indicState.dolarBRL.ano = inicioVal;
+    indicState.dolarPct.ano = +((lastVal/inicioVal-1)*100).toFixed(2);
+  }
+
+  // 12M, 24M, 36M
+  [12, 24, 36].forEach(m => {
+    if(sorted.length > m){
+      const ref = sorted[sorted.length-1-m];
+      const refVal = parseFloat(ref[1].cotacaoVenda);
+      indicState.dolarBRL[`m${m}`] = refVal;
+      indicState.dolarPct[`m${m}`] = +((lastVal/refVal-1)*100).toFixed(2);
+    }
+  });
+
+  // Atualiza campos fixos na tabela (BRL)
+  if($('ref-dolar')) $('ref-dolar').textContent = refLabel;
+  if($('ref-dolar2')) $('ref-dolar2').textContent = refLabel;
+
+  if($('it-dolar-mes-val')) $('it-dolar-mes-val').textContent = indicState.dolarBRL.mes ? 'R$ '+fmtBRL(indicState.dolarBRL.mes) : '—';
+  if($('it-dolar-ano-val') && indicState.dolarBRL.ano) $('it-dolar-ano-val').textContent = 'R$ '+fmtBRL(indicState.dolarBRL.ano);
+
+  const mesVarEl = $('it-dolar-var-mes');
+  if(mesVarEl && indicState.dolarPct.mes !== null){
+    const n = indicState.dolarPct.mes;
+    mesVarEl.textContent = `${signPct(n)}${fmt(n)}`;
+    mesVarEl.className = `indic-pct ${n>0?'neg':'pos'}`; // dolar subindo = ruim para BRL
+  }
+  const anoVarEl = $('it-dolar-var-ano');
+  if(anoVarEl && indicState.dolarPct.ano !== null){
+    const n = indicState.dolarPct.ano;
+    anoVarEl.textContent = `${signPct(n)}${fmt(n)}`;
+    anoVarEl.className = `indic-pct ${n>0?'neg':'pos'}`;
+  }
+
+  atualizarTabelaIndicadores();
+}
+
+/* ════════════════════════════════════════════════════
+   DÓLAR DO DIA
+════════════════════════════════════════════════════ */
+async function carregarDolarDia(){
+  const fmtDataBCB = d =>
+    `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+
+  // Tenta até 5 dias para trás (fins de semana/feriados)
+  for(let i = 0; i < 5; i++){
+    const dia = new Date(HOJE);
+    dia.setDate(HOJE.getDate() - i);
+    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
+      + `CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia)}'`
+      + `&$format=json&$select=cotacaoCompra,cotacaoVenda,dataHoraCotacao`;
+    try{
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const data = await r.json();
+      if(!data.value || !data.value.length) continue;
+
+      // Última cotação do dia
+      const ultima = data.value[data.value.length-1];
+      const cotVenda = parseFloat(ultima.cotacaoVenda);
+      const cotCompra = parseFloat(ultima.cotacaoCompra);
+      const dtCot = new Date(ultima.dataHoraCotacao);
+
+      $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
+      $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
+      $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
+
+      const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
+      const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
+      $('dolar-day-ref').textContent = `Referência: ${diaRef}`;
+      $('dolar-hora').textContent = hora + ' (BCB)';
+      $('dolar-day-src').textContent = `PTAX BCB · ${diaRef}`;
+
+      // Variação vs dia anterior
+      if(i === 0 && data.value.length > 1){
+        const anterior = data.value[data.value.length-2];
+        const antVal = parseFloat(anterior.cotacaoVenda);
+        const varPct = ((cotVenda - antVal) / antVal) * 100;
+        const varEl = $('dolar-var-dia');
+        varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs cot. anterior do dia)`;
+        varEl.className = `dolar-metric-val ${varPct > 0 ? 'neg' : 'pos'}`;
+        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
+      } else {
+        // Compara com dia anterior via histórico
+        const diaAnt = new Date(dia);
+        diaAnt.setDate(dia.getDate() - 1);
+        buscarCotacaoDiaAnterior(cotVenda, diaAnt);
+      }
+
+      $('dolar-day-loading').style.display = 'none';
+      $('dolar-day-content').style.display = 'block';
+      return;
+    }catch(e){ continue; }
+  }
+  $('dolar-day-loading').innerHTML = '<span style="color:var(--muted)">Cotação PTAX indisponível no momento</span>';
+}
+
+async function buscarCotacaoDiaAnterior(cotAtual, diaAnt){
+  const fmtDataBCB = d =>
+    `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+  for(let i = 0; i < 5; i++){
+    const dia = new Date(diaAnt);
+    dia.setDate(diaAnt.getDate() - i);
+    try{
+      const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
+        + `CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia)}'`
+        + `&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const data = await r.json();
+      if(!data.value || !data.value.length) continue;
+      const antVal = parseFloat(data.value[data.value.length-1].cotacaoVenda);
+      const varPct = ((cotAtual - antVal) / antVal) * 100;
+      const varEl = $('dolar-var-dia');
+      if(varEl){
+        varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs fechamento ${fmtDataBCB(dia).split('-').reverse().join('/')})`;
+        varEl.className = `dolar-metric-val ${varPct > 0 ? 'neg' : 'pos'}`;
+        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
+      }
+      return;
+    }catch(e){ continue; }
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   DÓLAR MENSAL — TIMELINE
+════════════════════════════════════════════════════ */
+function renderDolarMensais(){
+  if(!_ptaxHistorico.length) return;
+
+  const byMonth = {};
+  _ptaxHistorico.forEach(item => {
+    const dt = new Date(item.dataHoraCotacao);
+    const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+    if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
+      byMonth[key] = item;
+    }
+  });
+
+  const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
+  // Últimos 18 meses
+  const slice = sorted.slice(-18);
+  const lastKey = slice[slice.length-1]?.[0];
+
+  const container = $('dolarMonths');
+  container.innerHTML = slice.map(([key, item], idx) => {
+    const [ano, mes] = key.split('-');
+    const label = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+    const val = parseFloat(item.cotacaoVenda);
+    const isCurrent = key === lastKey;
+
+    let varHtml = '<span class="dolar-month-var zero">—</span>';
+    if(idx > 0){
+      const prevVal = parseFloat(slice[idx-1][1].cotacaoVenda);
+      const varPct = ((val - prevVal) / prevVal) * 100;
+      const cls = varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero'; // pos = dolar subiu = ruim = vermelho
+      varHtml = `<span class="dolar-month-var ${cls}">${signPct(varPct)}${fmt(varPct)}</span>`;
+    }
+
+    return `<div class="dolar-month-item${isCurrent ? ' current' : ''}">
+      <span class="dolar-month-label">${label}</span>
+      <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
+      ${varHtml}
+    </div>`;
+  }).join('');
+}
+
+function toggleDolarTimeline(){
+  const body = $('dolarTimelineBody');
+  const toggle = $('dolarTimelineToggle');
+  const isOpen = body.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
+}
+
+/* ════════════════════════════════════════════════════
+   GRÁFICO DO DÓLAR
+════════════════════════════════════════════════════ */
+let _chartDolar = null;
+
+function buildChartDolar(range){
+  if(!_ptaxHistorico.length) return;
+
+  let dados;
+  const hoje = new Date();
+
+  if(range === 'year'){
+    // Apenas 2026 (ano atual)
+    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao).getFullYear() === ANO_ATUAL);
+    $('dolar-chart-sub').textContent = `PTAX diária ${ANO_ATUAL} — ${dados.length} registros`;
+  } else if(range === '12m'){
+    const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-12);
+    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
+    $('dolar-chart-sub').textContent = `Últimos 12 meses · ${dados.length} registros`;
+  } else { // 24m
+    const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-24);
+    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
+    $('dolar-chart-sub').textContent = `Últimos 24 meses · ${dados.length} registros`;
+  }
+
+  if(!dados.length) return;
+
+  // Amostra para não sobrecarregar o gráfico (máx 200 pontos)
+  const step = Math.max(1, Math.floor(dados.length/200));
+  const sample = dados.filter((_,i) => i % step === 0 || i === dados.length-1);
+
+  const labels = sample.map(d => {
+    const dt = new Date(d.dataHoraCotacao);
+    return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}`;
+  });
+  const values = sample.map(d => parseFloat(d.cotacaoVenda));
+  const primeiroVal = values[0];
+  const ptColors = values.map(v => v >= primeiroVal ? 'rgba(240,85,101,.8)' : 'rgba(46,209,122,.8)');
+
+  if(_chartDolar) _chartDolar.destroy();
+  const ctx = document.getElementById('chartDolar')?.getContext('2d');
+  if(!ctx) return;
+
+  // Gradiente de área
+  const grad = ctx.createLinearGradient(0, 0, 0, 200);
+  grad.addColorStop(0, 'rgba(200,151,58,.18)');
+  grad.addColorStop(1, 'rgba(200,151,58,0)');
+
+  _chartDolar = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        borderColor: '#c8973a',
+        backgroundColor: grad,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: '#e8bb6a',
+        fill: true,
+        tension: 0.2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(11,13,26,.95)',
+          borderColor: 'rgba(200,151,58,.3)',
+          borderWidth: 1,
+          titleColor: '#e8bb6a',
+          bodyColor: '#d8dcea',
+          padding: 10,
+          titleFont: { family: 'Cormorant Garamond', size: 13, weight: '700' },
+          bodyFont: { family: 'JetBrains Mono', size: 11 },
+          callbacks: {
+            label: ctx => `R$ ${fmtBRL(ctx.parsed.y)}`,
+            afterLabel: ctx => {
+              const v = ctx.parsed.y;
+              const var_ = ((v - primeiroVal) / primeiroVal * 100);
+              return `Var. período: ${signPct(var_)}${fmt(var_)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+          ticks: { color: '#3d4560', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 10 }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+          ticks: {
+            color: '#5e6b8a', font: { family: 'JetBrains Mono', size: 10 },
+            callback: v => 'R$ '+fmtBRL(v)
+          }
+        }
+      }
+    }
+  });
+}
+
+// Tabs do gráfico dólar
+document.querySelectorAll('[data-dolar-range]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-dolar-range]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    buildChartDolar(btn.dataset.dolarRange);
+  });
+});
+
+/* ════════════════════════════════════════════════════
+   ATUALIZAR TABELA DE INDICADORES (tabs 12M/24M/36M)
+════════════════════════════════════════════════════ */
+function atualizarTabelaIndicadores(){
+  const m = activePeriodTab;
+  const key = `m${m}`;
+  const label = `Acum. ${m}M`;
+
+  // Atualiza header
+  const thEl = $('th-acum-label');
+  if(thEl) thEl.textContent = label;
+
+  // CDI
+  const cdiAcum = indicState.cdi[key];
+  const cdiMes = indicState.cdi.mes;
+  if($('ref-cdi')) $('ref-cdi').textContent = indicState.cdi.mesRef || '—';
+  if($('it-cdi-mes') && cdiMes !== null){
+    $('it-cdi-mes').textContent = `+${fmt(cdiMes)}`;
+    $('it-cdi-mes').className = 'indic-pct pos';
+  }
+  if($('it-cdi-acum')){
+    $('it-cdi-acum').textContent = cdiAcum !== null ? `+${fmt(cdiAcum)}` : '—';
+    $('it-cdi-acum').className = 'indic-pct pos';
+    $('it-cdi-acum-src').textContent = `série 4391 BCB · ${label}`;
+  }
+  // CDI 12M no card principal
+  if($('mc-cdi-12m-val')){
+    const c12 = indicState.cdi.m12;
+    $('mc-cdi-12m-val').textContent = c12 !== null ? `+${fmt(c12)}` : '—';
+  }
+
+  // IPCA
+  const ipcaAcum = indicState.ipca[key];
+  const ipcaMes = indicState.ipca.mes;
+  const ipcaAno = indicState.ipca.ano;
+  if($('ref-ipca')) $('ref-ipca').textContent = indicState.ipca.mesRef || '—';
+  if($('it-ipca-mes') && ipcaMes !== null){
+    const n = ipcaMes;
+    $('it-ipca-mes').textContent = `${signPct(n)}${fmt(n)}`;
+    $('it-ipca-mes').className = `indic-pct ${clsPct(n)}`;
+    $('it-ipca-mes-label').textContent = indicState.ipca.mesRef || '';
+  }
+  if($('it-ipca-ano') && ipcaAno !== null){
+    const n = ipcaAno;
+    $('it-ipca-ano').textContent = `${signPct(n)}${fmt(n)}`;
+    $('it-ipca-ano').className = `indic-pct ${n > 4.5 || n < 1.5 ? 'neg' : 'pos'}`;
+  }
+  if($('it-ipca-acum')){
+    $('it-ipca-acum').textContent = ipcaAcum !== null ? `${signPct(ipcaAcum)}${fmt(ipcaAcum)}` : '—';
+    $('it-ipca-acum').className = ipcaAcum !== null ? `indic-pct ${ipcaAcum > 4.5 || ipcaAcum < 1.5 ? 'neg' : 'pos'}` : 'indic-pct dash';
+    $('it-ipca-acum-label').textContent = label;
+  }
+
+  // Dólar acumulado (BRL e %)
+  const dolarAcumBRL = indicState.dolarBRL[key];
+  const dolarAcumPct = indicState.dolarPct[key];
+
+  if($('it-dolar-acum-val')){
+    $('it-dolar-acum-val').textContent = dolarAcumBRL !== null ? 'R$ '+fmtBRL(dolarAcumBRL) : '—';
+    $('it-dolar-acum-label').textContent = `fechamento ${m}M atrás`;
+  }
+  if($('it-dolar-var-acum') && dolarAcumPct !== null){
+    const n = dolarAcumPct;
+    $('it-dolar-var-acum').textContent = `${signPct(n)}${fmt(n)}`;
+    $('it-dolar-var-acum').className = `indic-pct ${n > 0 ? 'neg' : 'pos'}`;
+    $('it-dolar-var-acum-label').textContent = `var. ${m}M`;
+  }
+}
+
+// Tabs 12M / 24M / 36M
+document.querySelectorAll('.indic-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.indic-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activePeriodTab = parseInt(btn.dataset.months);
+    atualizarTabelaIndicadores();
+  });
+});
 
 /* ════════════════════════════════════════════════════
    CARREGA mercado_atual.json
@@ -745,110 +1550,68 @@ async function carregarMercado(){
 
     // ── Selic ──
     const selic = c.selic_meta?.valor;
-    $('mc-selic').textContent = selic ? fmt(selic) : '—';
-    // Data da última alteração da Selic
+    if($('mc-selic')) $('mc-selic').textContent = selic ? fmt(selic) : '—';
     const selicHist = d.historico_selic || c.selic_meta?.historico || [];
-    if(selicHist.length) {
+    if(selicHist.length){
       const ultima = selicHist[0];
-      const slcEl = $('selic-last-change');
-      if(slcEl) slcEl.textContent = ultima.data || '—';
+      const el = $('selic-last-change');
+      if(el) el.textContent = ultima.data || '—';
     }
 
-    // ── CDI ──
+    // ── CDI (do JSON — será sobrescrito pela série 4391) ──
     const cdi = c.cdi?.valor;
-    $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
-    $('mc-cdi-v').textContent = cdi ? fmt(cdi) : '—';
+    if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
     if(cdi){
-      // Usa CDI mensal real (série 4391 BCB) se disponível; senão estimativa matemática
-      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1 + cdi/100, 1/12) - 1) * 100);
-      const isEstimado = c.cdi?.mensal == null;
-      const fCdiMes = '+' + cdiMensal.toFixed(2).replace('.',',') + '%';
-      $('mc-cdi-mes-ref').textContent = fCdiMes + (isEstimado ? '*' : '');
-      const mEl = $('mc-cdi-mes');
-      mEl.textContent = fCdiMes;
-      mEl.className = 'indic-pct pos';
-      const mLab = mEl.nextElementSibling;
-      if(mLab) mLab.textContent = isEstimado ? 'estimado*' : 'real BCB';
-
-      // Atualiza rodapé: remove asterisco se CDI real disponível
-      const fn = $('indic-footnote-text');
-      if(fn && !isEstimado){
-        fn.textContent = 'CDI mensal: dado real BCB (série 4391) · Ibovespa e Dólar: variação sobre os ~30 últimos dias · S&P 500: cotação USD + conversão pelo câmbio do dia';
-      }
-
-      const yEl = $('mc-cdi-12m'); yEl.textContent = '+'+fmt(cdi); yEl.className='indic-pct pos';
+      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1+cdi/100,1/12)-1)*100);
+      const isEst = c.cdi?.mensal == null;
+      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+('%');
+      if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + (isEst ? '*' : '');
     }
 
-    // ── IPCA ──
+    // ── IPCA (do JSON — complementado pela série 433) ──
     const ipca = c.ipca || {};
-    const ipca12 = ipca.acum_12m;
-    const ipcaAno = ipca.acum_ano;
-    const ipcaMes = ipca.ultimo_mes;
     const ipcaLabel = ipca.label_mes || '';
-
-    // IPCA linha principal
-    const ipca12Fmt = ipca12 ? fmt(ipca12) : '—';
-    $('mc-ipca12').textContent = ipca12Fmt;
-    $('mc-ipca12-tab').textContent = ipca12 ? (ipca12>0?'+':'')+fmt(ipca12) : '—';
-    $('mc-ipca12-tab').className = 'indic-pct '+(ipca12>0?'pos':ipca12<0?'neg':'zero');
-
-    const anoFmt = ipcaAno ? (ipcaAno>0?'+':'')+fmt(ipcaAno) : '—';
-    $('mc-ipcaano').textContent = anoFmt;
-    $('mc-ipcaano').className = 'indic-pct '+(ipcaAno>0?'pos':ipcaAno<0?'neg':'zero');
-
-    const mesFmt = ipcaMes!==null&&ipcaMes!==undefined ? (ipcaMes>0?'+':'')+fmt(ipcaMes) : '—';
-    $('mc-ipca-mes-v').textContent = mesFmt;
-    $('mc-ipca-mes-v').className = 'indic-pct '+(ipcaMes>0?'pos':ipcaMes<0?'neg':'zero');
-    $('mc-ipca-mes-label').textContent = ipcaLabel || '—';
-
-    // IPCA linha vs meta
-    $('mc-ipca12-b').textContent = ipca12Fmt;
-    $('mc-ipca12-b2').textContent = ipca12 ? (ipca12>0?'+':'')+fmt(ipca12) : '—';
-    $('mc-ipca12-b2').className = 'indic-pct '+(ipca12>4.5?'neg':ipca12<1.5?'neg':'pos');
-    $('mc-ipcaano-b').textContent = anoFmt;
-    $('mc-ipcaano-b').className = 'indic-pct '+(ipcaAno>4.5?'neg':ipcaAno<1.5?'neg':'pos');
-    $('mc-ipca-mes-b').textContent = mesFmt;
-    $('mc-ipca-mes-b').className = 'indic-pct '+(ipcaMes>0?'pos':ipcaMes<0?'neg':'zero');
-    $('mc-ipca-mes-label-b').textContent = ipcaLabel || '—';
-    if(ipcaLabel) $('th-mes-label').textContent = `Mês (${ipcaLabel})`;
-
-    // ── Dólar ──
-    const dolar = c.dolar || {};
-    const dolarAtual = dolar.atual;
-    const dolarVar = dolar.variacao_mensal;
-    $('mc-dolar').textContent = dolarAtual ? 'R$ '+fmtBRL(dolarAtual) : '—';
-    if(dolarVar!==null&&dolarVar!==undefined){
-      const dvEl = $('mc-dolar-var');
-      dvEl.textContent = (dolarVar>=0?'+':'')+fmt(dolarVar);
-      dvEl.className = 'indic-pct '+(dolarVar>=0?'neg':'pos'); // dólar subindo = ruim para BRL
+    // Preenche campos que a série 433 pode não ter chegado ainda
+    if(!indicState.ipca.m12 && ipca.acum_12m){
+      indicState.ipca.m12 = ipca.acum_12m;
+      indicState.ipca.ano = ipca.acum_ano;
+      indicState.ipca.mes = ipca.ultimo_mes;
+      indicState.ipca.mesRef = ipcaLabel;
     }
 
     // ── Ibovespa ──
     const ibov = c.ibovespa || {};
     const ibovAtual = ibov.atual;
     const ibovVar = ibov.variacao_mensal;
-    $('mc-ibov').textContent = ibovAtual ? fmtK(ibovAtual)+' pts' : '—';
-    if(ibovVar!==null&&ibovVar!==undefined){
-      const ivEl = $('mc-ibov-var');
-      ivEl.textContent = (ibovVar>=0?'+':'')+fmt(ibovVar);
-      ivEl.className = 'indic-pct '+(ibovVar>=0?'pos':'neg');
+    const refHoje = MESES_PT[HOJE.getMonth()]+'/'+HOJE.getFullYear();
+    if($('ref-ibov')) $('ref-ibov').textContent = refHoje;
+    if($('ref-ibov2')) $('ref-ibov2').textContent = refHoje;
+    if($('ref-sp-brl')) $('ref-sp-brl').textContent = refHoje;
+    if($('ref-sp-usd')) $('ref-sp-usd').textContent = refHoje;
+
+    if($('it-ibov-pts') && ibovAtual) $('it-ibov-pts').textContent = fmtK(ibovAtual)+' pts';
+    if($('it-ibov-var-mes') && ibovVar !== null && ibovVar !== undefined){
+      const n = ibovVar;
+      $('it-ibov-var-mes').textContent = `${signPct(n)}${fmt(n)}`;
+      $('it-ibov-var-mes').className = `indic-pct ${clsPct(n)}`;
     }
 
     // ── S&P 500 ──
     const intl = d.indices_internacionais || {};
-    $('mc-sp500').textContent = intl.sp500_usd ? fmtK(intl.sp500_usd) : '—';
-    $('mc-sp500brl').textContent = intl.sp500_brl ? `R$ ${fmtK(intl.sp500_brl)}` : '—';
+    if($('it-sp-brl') && intl.sp500_brl) $('it-sp-brl').textContent = 'R$ '+fmtK(intl.sp500_brl);
+    if($('it-sp-usd') && intl.sp500_usd) $('it-sp-usd').textContent = fmtK(intl.sp500_usd)+' pts';
 
     // ── Poupança ──
     const poup = c.poupanca_nova?.valor;
-    $('mc-poup').textContent = poup ? fmt(poup) : '—';
+    if($('mc-poup')) $('mc-poup').textContent = poup ? fmt(poup) : '—';
 
+    atualizarTabelaIndicadores();
     carregarFocus(d.focus, d.atualizado_em);
     inicializarGraficos(d);
 
   }catch(e){
     console.warn('mercado_atual.json indisponível:', e);
-    $('lastUpdate').innerHTML = `<span class="live-dot" style="background:var(--muted)"></span>Dados em cache`;
+    if($('lastUpdate')) $('lastUpdate').innerHTML = `<span class="live-dot" style="background:var(--muted)"></span>Dados em cache`;
     carregarFocusFallback();
   }
 }
@@ -864,58 +1627,43 @@ function focusCardHTML(icon, label, sub, dados){
     const fmtd = med!==null && med!==undefined
       ? (label==='Câmbio' ? 'R$ '+fmtBRL(med) : fmt(med))
       : '—';
-    return `
-      <div class="fcad-row">
-        <span class="fcad-year">${ano}</span>
-        <span class="fcad-val${i===0?' hl':''}">${fmtd}</span>
-      </div>
-      ${i<anos.length-1?'<hr class="fcad-hr">':''}
-    `;
+    return `<div class="fcad-row">
+      <span class="fcad-year">${ano}</span>
+      <span class="fcad-val${i===0?' hl':''}">${fmtd}</span>
+    </div>${i<anos.length-1?'<hr class="fcad-hr">':''}`;
   }).join('');
-  return `
-    <div class="fcad">
-      <div class="fcad-label">${icon} ${label}</div>
-      <div class="fcad-sub">${sub}</div>
-      <div class="fcad-rows">${rows}</div>
-    </div>
-  `;
+  return `<div class="fcad"><div class="fcad-label">${icon} ${label}</div>
+    <div class="fcad-sub">${sub}</div><div class="fcad-rows">${rows}</div></div>`;
 }
 
 function carregarFocus(focus, atualizadoEm){
   const grid = $('focusGrid');
   const refEl = $('focusRef');
-
   if(!focus || Object.keys(focus).length === 0){
-    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.78rem">
-      Dados do Focus não disponíveis.</div>`;
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.78rem">Dados do Focus não disponíveis.</div>`;
     return;
   }
-
   const primeiroAno = Object.keys(focus.IPCA || {})[0];
   const dataRef = focus.IPCA?.[primeiroAno]?.data_ref || '';
   const dataFormatada = dataRef ? dataRef.split('-').reverse().join('/') : (atualizadoEm?.split(' ')[0] || '');
-
   const d = new Date();
   const dia = d.getDay();
   d.setDate(d.getDate() - (dia>=5 ? dia-5 : dia+2));
   const pdfDate = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
   const pdfUrl = `https://www.bcb.gov.br/content/focus/focus/R${pdfDate}.pdf`;
-
   refEl.innerHTML = `Ref.: ${dataFormatada} · <a href="${pdfUrl}" target="_blank" rel="noopener">Baixar PDF ↗</a>`;
-
-  const cards = [
+  grid.innerHTML = [
     focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
     focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
     focusCardHTML('📦','PIB','Crescimento do Produto Interno Bruto',focus.PIB),
     focusCardHTML('💵','Câmbio','R$ / US$ (dólar americano)',focus.Cambio),
     focusCardHTML('📊','IGP-M','Índice Geral de Preços — Mercado',focus.IGPM),
-  ];
-  grid.innerHTML = cards.join('');
+  ].join('');
 }
 
 function carregarFocusFallback(){
-  $('focusRef').innerHTML = `Dados offline`;
-  $('focusGrid').innerHTML = `<div style="grid-column:1/-1;padding:20px;color:var(--muted);font-size:.75rem;
+  if($('focusRef')) $('focusRef').innerHTML = 'Dados offline';
+  if($('focusGrid')) $('focusGrid').innerHTML = `<div style="grid-column:1/-1;padding:20px;color:var(--muted);font-size:.75rem;
     text-align:center;border:1px dashed var(--border2);border-radius:10px">
     ⚠️ mercado_atual.json não carregado. Execute o robô para atualizar os dados.</div>`;
 }
@@ -928,89 +1676,55 @@ const MEDALHAS = ['🥇','🥈','🥉'];
 function renderRankings(){
   const grid = $('rankingGrid');
   if(!grid || !allRows.length) return;
-
   let base = allRows.filter(r => temDados(r));
-
-  // Aplica filtro de perfil se ativo
-  if(activePerfil){
-    base = base.filter(r => {
-      const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
-      return tokens.includes(activePerfil);
-    });
-  }
-  // Aplica filtro de risco se ativo
-  if(activeRisco){
-    base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
-  }
-
-  const sorted12m = base.filter(r => toNum(r['Acum. 12M (%)'])!==null)
-    .sort((a,b) => toNum(b['Acum. 12M (%)']) - toNum(a['Acum. 12M (%)']));
-  const sortedMes = base.filter(r => toNum(r['Acum. Mes (%)'])!==null)
-    .sort((a,b) => toNum(b['Acum. Mes (%)']) - toNum(a['Acum. Mes (%)']));
-  const sortedAno = base.filter(r => toNum(r['Acum. Ano (%)'])!==null)
-    .sort((a,b) => toNum(b['Acum. Ano (%)']) - toNum(a['Acum. Ano (%)']));
-
-  // Melhor por categoria
-  const catMap = {};
-  sorted12m.forEach(r => {
-    const cat = r['Categoria']||'—';
-    if(!catMap[cat]) catMap[cat] = r;
+  if(activePerfil) base = base.filter(r => {
+    const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
+    return tokens.includes(activePerfil);
   });
-  const catTop = Object.entries(catMap)
-    .sort((a,b) => toNum(b[1]['Acum. 12M (%)']) - toNum(a[1]['Acum. 12M (%)']));
+  if(activeRisco) base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
 
-  function rankItem(r, i, campo){
-    const val = r[campo]||'—';
-    const n = toNum(val);
-    const cls = n>0?'pos':n<0?'neg':'zero';
-    const sign = n>0?'+':'';
-    const nome = (r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
-    const nomeShort = nome.length > 40 ? nome.slice(0,40)+'…' : nome;
-    const medal = i<3 ? MEDALHAS[i] : `${i+1}º`;
+  const sorted12m = base.filter(r=>toNum(r['Acum. 12M (%)'])!==null).sort((a,b)=>toNum(b['Acum. 12M (%)'])-toNum(a['Acum. 12M (%)']));
+  const sortedMes = base.filter(r=>toNum(r['Acum. Mes (%)'])!==null).sort((a,b)=>toNum(b['Acum. Mes (%)'])-toNum(a['Acum. Mes (%)']));
+  const sortedAno = base.filter(r=>toNum(r['Acum. Ano (%)'])!==null).sort((a,b)=>toNum(b['Acum. Ano (%)'])-toNum(a['Acum. Ano (%)']));
+
+  const catMap = {};
+  sorted12m.forEach(r=>{ const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r; });
+  const catTop = Object.entries(catMap).sort((a,b)=>toNum(b[1]['Acum. 12M (%)'])-toNum(a[1]['Acum. 12M (%)']));
+
+  const rankItem = (r,i,campo) => {
+    const val=r[campo]||'—'; const n=toNum(val);
+    const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
+    const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+    const nomeShort=nome.length>40?nome.slice(0,40)+'…':nome;
+    const medal=i<3?MEDALHAS[i]:`${i+1}º`;
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info">
-        <div class="rank-name" title="${nome}">${nomeShort}</div>
-        <div class="rank-cat">${r['Categoria']||''}</div>
-      </div>
-      <span class="rank-val ${cls}">${sign}${val}</span>
-    </div>`;
-  }
+      <div class="rank-info"><div class="rank-name" title="${nome}">${nomeShort}</div><div class="rank-cat">${r['Categoria']||''}</div></div>
+      <span class="rank-val ${cls}">${sign}${val}</span></div>`;
+  };
+  const rankCard = (icon,title,html) =>
+    `<div class="rank-card"><div class="rank-card-header"><span>${icon}</span><span class="rank-card-title">${title}</span></div>
+    <div class="rank-list">${html||'<div class="rank-empty">Sem dados suficientes</div>'}</div></div>`;
 
-  function rankCard(icon, title, html){
-    return `<div class="rank-card">
-      <div class="rank-card-header"><span>${icon}</span><span class="rank-card-title">${title}</span></div>
-      <div class="rank-list">${html || '<div class="rank-empty">Sem dados suficientes</div>'}</div>
-    </div>`;
-  }
-
-  const top10html = sorted12m.slice(0,10).map((r,i) => rankItem(r,i,'Acum. 12M (%)')).join('');
-
-  const catHtml = catTop.slice(0,9).map(([cat,r],i) => {
-    const val = r['Acum. 12M (%)']||'—';
-    const n = toNum(val);
-    const cls = n>0?'pos':n<0?'neg':'zero';
-    const sign = n>0?'+':'';
-    const nome = (r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
-    const medal = i<3 ? MEDALHAS[i] : `${i+1}º`;
+  const top10html = sorted12m.slice(0,10).map((r,i)=>rankItem(r,i,'Acum. 12M (%)')).join('');
+  const catHtml = catTop.slice(0,9).map(([cat,r],i)=>{
+    const val=r['Acum. 12M (%)']||'—'; const n=toNum(val);
+    const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
+    const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+    const medal=i<3?MEDALHAS[i]:`${i+1}º`;
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info">
-        <div class="rank-name">${cat}</div>
-        <div class="rank-cat">${nome.length>38?nome.slice(0,38)+'…':nome}</div>
-      </div>
-      <span class="rank-val ${cls}">${sign}${val}</span>
-    </div>`;
+      <div class="rank-info"><div class="rank-name">${cat}</div><div class="rank-cat">${nome.length>38?nome.slice(0,38)+'…':nome}</div></div>
+      <span class="rank-val ${cls}">${sign}${val}</span></div>`;
   }).join('');
-
-  const top5mesHtml = sortedMes.slice(0,5).map((r,i) => rankItem(r,i,'Acum. Mes (%)')).join('');
-  const top5anoHtml = sortedAno.slice(0,5).map((r,i) => rankItem(r,i,'Acum. Ano (%)')).join('');
+  const top5mesHtml = sortedMes.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Mes (%)')).join('');
+  const top5anoHtml = sortedAno.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Ano (%)')).join('');
 
   grid.innerHTML = [
-    rankCard('🏆', 'Top 10 — Acumulado 12 Meses', top10html),
-    rankCard('🎖️', 'Melhor por Categoria (12M)', catHtml),
-    rankCard('📅', 'Top 5 — Acumulado do Mês', top5mesHtml),
-    rankCard('📆', 'Top 5 — Acumulado do Ano', top5anoHtml),
+    rankCard('🏆','Top 10 — Acumulado 12 Meses',top10html),
+    rankCard('🎖️','Melhor por Categoria (12M)',catHtml),
+    rankCard('📅','Top 5 — Acumulado do Mês',top5mesHtml),
+    rankCard('📆','Top 5 — Acumulado do Ano',top5anoHtml),
   ].join('');
 }
 
@@ -1019,27 +1733,24 @@ function renderRankings(){
 ════════════════════════════════════════════════════ */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
-let expandedRows = new Set();
+let activePerf=null,activePerfCampo='Acum. 12M (%)';
+let expandedRows=new Set();
 
-const NUM_SET = new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
-const DEFAULT_SORT = "Acum. 12M (%)";
-const CAT_CLS = {
-  "RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R",
-  "RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM",
-  "ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"
-};
-const DETAIL_COLS = new Set(["CNPJ","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate"]);
-const HIDDEN_COLS = new Set(["Fundo_norm","Perfil","URL"]);
+const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
+const DEFAULT_SORT="Acum. 12M (%)";
+const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
+const DETAIL_COLS=new Set(["CNPJ","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate"]);
+const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","URL"]);
 
 function getFundUrl(r){
-  const u = String(r['URL']||'').trim();
-  if(u && u.startsWith('http') && u.includes('caixa.gov.br')) return u;
-  const nome = (r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+  const u=String(r['URL']||'').trim();
+  if(u&&u.startsWith('http')&&u.includes('caixa.gov.br')) return u;
+  const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
   return 'https://www.google.com/search?q='+encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');
 }
 function isFallbackUrl(r){
-  const u = String(r['URL']||'').trim();
-  return !(u && u.startsWith('http') && u.includes('caixa.gov.br'));
+  const u=String(r['URL']||'').trim();
+  return !(u&&u.startsWith('http')&&u.includes('caixa.gov.br'));
 }
 function parseCsv(raw){
   if(raw.charCodeAt(0)===0xFEFF) raw=raw.slice(1);
@@ -1047,193 +1758,169 @@ function parseCsv(raw){
 }
 function toNum(v){
   if(v===null||v===undefined) return null;
-  const s = String(v).trim();
+  const s=String(v).trim();
   if(!s||s==='-'||s==='—'||s==='null') return null;
-  const n = parseFloat(s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.'));
+  const n=parseFloat(s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.'));
   return isNaN(n)?null:n;
 }
 function pctCell(val){
   if(!val||String(val).trim()===''||val==='-'||val==='—')
     return `<td class="col-pct"><span class="dash">—</span></td>`;
-  const n = toNum(val);
+  const n=toNum(val);
   if(n===null) return `<td class="col-pct"><span class="dash">${val}</span></td>`;
-  const cls = n>0?'pos':n<0?'neg':'zero';
-  const sign = n>0?'+':'';
-  const pct = Math.min(Math.abs(n)/20*100,100);
+  const cls=n>0?'pos':n<0?'neg':'zero';
+  const sign=n>0?'+':'';
+  const pct=Math.min(Math.abs(n)/20*100,100);
   return `<td class="col-pct"><div class="pct-wrap">
     <div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div>
-    <span class="pct-val ${cls}">${sign}${val}</span>
-  </div></td>`;
+    <span class="pct-val ${cls}">${sign}${val}</span></div></td>`;
 }
 function temDados(r){
-  const c = String(r['Cota (R$)']||'').trim();
-  return c && c!=='-' && c!=='—';
+  const c=String(r['Cota (R$)']||'').trim();
+  return c&&c!=='-'&&c!=='—';
 }
 
 function updateKPIs(){
-  let pl=0, best=-Infinity, worst=Infinity, bestName='', worstName='', bestVal='—', worstVal='—';
+  let pl=0,best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
   allRows.forEach(r=>{
-    const p = toNum(r['PL (milhoes R$)']);
+    const p=toNum(r['PL (milhoes R$)']);
     if(p!==null) pl+=p;
-    const m = toNum(r['Acum. 12M (%)']);
+    const m=toNum(r['Acum. 12M (%)']);
     if(m!==null){
       if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
       if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}
     }
   });
-  $('kpiFundos').textContent = allRows.length;
-  const semDados = allRows.filter(r=>!temDados(r)).length;
-  $('kpiFundosSub').textContent = `${allRows.length - semDados} ativos · ${semDados} em pipeline`;
-  $('kpiCats').textContent = new Set(allRows.map(r=>r['Categoria']||'')).size;
-  $('kpiPL').textContent = pl>0 ? pl.toLocaleString('pt-BR',{maximumFractionDigits:0}) : '—';
-  $('kpiPipe').textContent = semDados;
-  $('kpiBest').textContent = best>-Infinity ? `+${bestVal}%` : '—';
-  $('kpiBestFundo').textContent = bestName.length>45 ? bestName.slice(0,45)+'…' : bestName;
-  $('kpiWorst').textContent = worst<Infinity ? `${worstVal}%` : '—';
-  $('kpiWorstFundo').textContent = worstName.length>45 ? worstName.slice(0,45)+'…' : worstName;
+  $('kpiFundos').textContent=allRows.length;
+  const semDados=allRows.filter(r=>!temDados(r)).length;
+  $('kpiFundosSub').textContent=`${allRows.length-semDados} ativos · ${semDados} em pipeline`;
+  $('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'')).size;
+  $('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
+  $('kpiPipe').textContent=semDados;
+  $('kpiBest').textContent=best>-Infinity?`+${bestVal}%`:'—';
+  $('kpiBestFundo').textContent=bestName.length>45?bestName.slice(0,45)+'…':bestName;
+  $('kpiWorst').textContent=worst<Infinity?`${worstVal}%`:'—';
+  $('kpiWorstFundo').textContent=worstName.length>45?worstName.slice(0,45)+'…':worstName;
 }
 
 async function carregarKPIs(){
   try{
-    const r = await fetch(BASE_URL+'kpis_dashboard.json?v='+Date.now());
-    const d = await r.json();
-    const pl = d.resumo_geral?.pl_total_consolidado;
-    const pipe = d.resumo_geral?.pipeline_novos_fundos;
-    if(pl) $('kpiPL').textContent = pl.toLocaleString('pt-BR',{maximumFractionDigits:0});
-    if(pipe!==undefined) $('kpiPipe').textContent = pipe;
+    const r=await fetch(BASE_URL+'kpis_dashboard.json?v='+Date.now());
+    const d=await r.json();
+    const pl=d.resumo_geral?.pl_total_consolidado;
+    const pipe=d.resumo_geral?.pipeline_novos_fundos;
+    if(pl) $('kpiPL').textContent=pl.toLocaleString('pt-BR',{maximumFractionDigits:0});
+    if(pipe!==undefined) $('kpiPipe').textContent=pipe;
   }catch(e){}
 }
 
 function applyFilter(){
-  const q = activeSearch.toLowerCase();
-  filtered = allRows.filter(r=>{
-    if(hideSemDados && !temDados(r)) return false;
-    if(activeCat && (r['Categoria']||'')!==activeCat) return false;
+  const q=activeSearch.toLowerCase();
+  filtered=allRows.filter(r=>{
+    if(hideSemDados&&!temDados(r)) return false;
+    if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
     if(activePerfil){
-      const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
+      const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
       if(!tokens.includes(activePerfil)) return false;
     }
-    if(activeRisco && (r['Perfil de Risco']||'').trim() !== activeRisco) return false;
-    if(q && !Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
+    if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
+    // ★ Filtro de performance
+    if(activePerf!==null){
+      const n=toNum(r[activePerfCampo]);
+      if(n===null||n<activePerf) return false;
+    }
+    if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
     return true;
   });
-  if(sortCol>=0 && sortCol<displayHeaders.length){
-    const key = displayHeaders[sortCol];
-    const isNum = NUM_SET.has(key);
+  if(sortCol>=0&&sortCol<displayHeaders.length){
+    const key=displayHeaders[sortCol];
+    const isNum=NUM_SET.has(key);
     filtered.sort((a,b)=>{
-      const av = isNum ? (toNum(a[key])??-Infinity) : (a[key]||'').toLowerCase();
-      const bv = isNum ? (toNum(b[key])??-Infinity) : (b[key]||'').toLowerCase();
+      const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();
+      const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();
       return av<bv?-sortDir:av>bv?sortDir:0;
     });
   }
-  currentPage=1;
-  expandedRows.clear();
-  render();
-  renderRankings();
+  currentPage=1; expandedRows.clear(); render(); renderRankings();
 }
 
-function buildDetailPanel(r, colspan){
-  const detailCols = Object.keys(r).filter(k => DETAIL_COLS.has(k));
+function buildDetailPanel(r,colspan){
+  const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k));
   if(!detailCols.length) return '';
-
-  const items = detailCols.map(k=>{
-    let val = String(r[k]||'').trim() || '—';
-    if(k==='CNPJ' && val!=='—'){
-      val = `<a href="https://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${val.replace(/\D/g,'')}" target="_blank" rel="noopener">${val}</a>`;
-    }
-    if(k==='Taxa Adm (%)' && val!=='—') val = val+'%';
-    if(k==='Aplicacao Minima (R$)' && val!=='—'){
-      const n = parseFloat(val.replace(',','.'));
-      val = isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2});
-    }
+  const items=detailCols.map(k=>{
+    let val=String(r[k]||'').trim()||'—';
+    if(k==='CNPJ'&&val!=='—') val=`<a href="https://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${val.replace(/\D/g,'')}" target="_blank" rel="noopener">${val}</a>`;
+    if(k==='Taxa Adm (%)'&&val!=='—') val=val+'%';
+    if(k==='Aplicacao Minima (R$)'&&val!=='—'){const n=parseFloat(val.replace(',','.')); val=isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2});}
     return `<div class="detail-item"><div class="detail-key">${k}</div><div class="detail-val">${val}</div></div>`;
   }).join('');
-
-  const urlFund = isFallbackUrl(r)?'':getFundUrl(r);
-  const urlItem = urlFund ? `<div class="detail-item"><div class="detail-key">Página do Fundo</div>
-    <div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>` : '';
-
+  const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
+  const urlItem=urlFund?`<div class="detail-item"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel">${items}${urlItem}</div></td></tr>`;
 }
 
-function buildRowHTML(r, idx){
-  const semDados = !temDados(r);
-  const visibleHeaders = displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
-  const colspan = visibleHeaders.length + 1;
-
-  let html = `<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
-  const isExpanded = expandedRows.has(idx);
-  html += `<td style="width:28px;padding:11px 8px">
-    <button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button></td>`;
-
+function buildRowHTML(r,idx){
+  const semDados=!temDados(r);
+  const visibleHeaders=displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
+  const colspan=visibleHeaders.length+1;
+  let html=`<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
+  const isExpanded=expandedRows.has(idx);
+  html+=`<td style="width:28px;padding:11px 8px"><button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button></td>`;
   visibleHeaders.forEach(h=>{
-    const val = String(r[h]||'');
+    const val=String(r[h]||'');
     if(h==='Categoria'){
-      const cls = CAT_CLS[val]||'RF';
-      html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;
-      return;
+      const cls=CAT_CLS[val]||'RF';
+      html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;return;
     }
     if(h==='Fundo'){
-      const url = getFundUrl(r);
-      const isFb = isFallbackUrl(r);
-      const fbLabel = isFb?'<span class="link-fallback">🔍</span>':'';
-      const boletimUrl = isFb ? '' : url;
-      const boletimBtn = boletimUrl
-        ? `<a href="${boletimUrl}" target="_blank" rel="noopener" class="boletim-btn" title="Abrir página do fundo para baixar boletim">📄 Boletim</a>`
-        : '';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" title="${isFb?'Buscar no Google':'Página do fundo'}">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${boletimBtn}</td>`;
-      return;
+      const url=getFundUrl(r); const isFb=isFallbackUrl(r);
+      const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';
+      const boletimUrl=isFb?'':url;
+      const boletimBtn=boletimUrl?`<a href="${boletimUrl}" target="_blank" rel="noopener" class="boletim-btn" title="Abrir página do fundo">📄 Boletim</a>`:'';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${boletimBtn}</td>`;return;
     }
-    if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){
-      html+=pctCell(val);return;
-    }
+    if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Perfis'){
-      const chips = val.split(/\s*\|\s*/).filter(Boolean)
-        .map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');
+      const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');
       html+=`<td><div class="perfis-wrap">${chips}</div></td>`;return;
     }
     html+=`<td>${val||'—'}</td>`;
   });
-
   html+='</tr>';
-  if(isExpanded) html += buildDetailPanel(r, colspan);
+  if(isExpanded) html+=buildDetailPanel(r,colspan);
   return html;
 }
 
 function render(){
-  const start = (currentPage-1)*perPage;
-  const end = perPage===9999 ? filtered.length : Math.min(start+perPage, filtered.length);
-  const rows = filtered.slice(start,end);
-  const tbody = $('tableBody');
+  const start=(currentPage-1)*perPage;
+  const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
+  const rows=filtered.slice(start,end);
+  const tbody=$('tableBody');
   if(!rows.length){
     tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
-    $('resultInfo').textContent='0 registros';
-    renderPagination();return;
+    $('resultInfo').textContent='0 registros'; renderPagination(); return;
   }
-  tbody.innerHTML = rows.map((r,i)=>buildRowHTML(r, start+i)).join('');
+  tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
   $('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length)}–${end} de ${filtered.length} registros`;
-
   tbody.querySelectorAll('.exp-btn').forEach(btn=>{
-    btn.addEventListener('click', e=>{
+    btn.addEventListener('click',e=>{
       e.stopPropagation();
-      const idx = parseInt(btn.dataset.idx);
-      if(expandedRows.has(idx)) expandedRows.delete(idx);
-      else expandedRows.add(idx);
+      const idx=parseInt(btn.dataset.idx);
+      if(expandedRows.has(idx)) expandedRows.delete(idx); else expandedRows.add(idx);
       render();
     });
   });
-
   renderPagination();
 }
 
 function renderPagination(){
-  const total = perPage===9999 ? 1 : Math.ceil(filtered.length/perPage);
-  const c = $('pageBtns');c.innerHTML='';
+  const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
+  const c=$('pageBtns'); c.innerHTML='';
   const mk=(label,page,dis,act)=>{
     const b=document.createElement('button');
     b.className='page-btn'+(act?' active':'');
-    b.textContent=label;b.disabled=dis;
+    b.textContent=label; b.disabled=dis;
     if(!dis) b.addEventListener('click',()=>{currentPage=page;render();window.scrollTo({top:0,behavior:'smooth'});});
     return b;
   };
@@ -1246,21 +1933,17 @@ function renderPagination(){
 
 function buildHeader(){
   const thead=$('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
-  const thExp=document.createElement('th');thExp.style.width='28px';thExp.style.padding='13px 8px';
-  tr.appendChild(thExp);
-
-  const visibleHeaders = displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
+  const thExp=document.createElement('th');thExp.style.width='28px';thExp.style.padding='13px 8px';tr.appendChild(thExp);
+  const visibleHeaders=displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
   visibleHeaders.forEach(h=>{
     const th=document.createElement('th');
     th.innerHTML=`${h} <span class="si"></span>`;
     const realIdx=displayHeaders.indexOf(h);
     if(realIdx===sortCol) th.className=sortDir===1?'sa':'sd';
     th.addEventListener('click',()=>{
-      if(sortCol===realIdx) sortDir*=-1;
-      else{sortCol=realIdx;sortDir=-1;}
+      if(sortCol===realIdx) sortDir*=-1; else{sortCol=realIdx;sortDir=-1;}
       thead.querySelectorAll('th').forEach(t=>t.className='');
-      th.className=sortDir===1?'sa':'sd';
-      applyFilter();
+      th.className=sortDir===1?'sa':'sd'; applyFilter();
     });
     tr.appendChild(th);
   });
@@ -1271,54 +1954,67 @@ function setActiveChip(container,selector,active){
   container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));
   active.classList.add('active');
 }
+
 function buildCatFilters(cats){
   const row=$('catFilters');
   const label=row.querySelector('.filter-label');
-  row.innerHTML='';row.appendChild(label);
+  row.innerHTML=''; row.appendChild(label);
   const all=document.createElement('button');
-  all.className='chip active';all.dataset.cat='';all.textContent='Todas';
+  all.className='chip active'; all.dataset.cat=''; all.textContent='Todas';
   all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});
   row.appendChild(all);
   [...cats].sort().forEach(cat=>{
-    const b=document.createElement('button');b.className='chip';b.dataset.cat=cat;b.textContent=cat;
+    const b=document.createElement('button'); b.className='chip'; b.dataset.cat=cat; b.textContent=cat;
     b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});
     row.appendChild(b);
   });
 }
 
-/* Listeners de filtros */
+/* Listeners */
 $('perfilFilters').addEventListener('click',e=>{
-  const btn=e.target.closest('[data-perfil]');if(!btn)return;
-  activePerfil=btn.dataset.perfil;
-  setActiveChip($('perfilFilters'),'[data-perfil]',btn);
-  applyFilter();
+  const btn=e.target.closest('[data-perfil]'); if(!btn) return;
+  activePerfil=btn.dataset.perfil; setActiveChip($('perfilFilters'),'[data-perfil]',btn); applyFilter();
 });
-
 $('riscoFilters').addEventListener('click',e=>{
-  const btn=e.target.closest('[data-risco]');if(!btn)return;
-  activeRisco=btn.dataset.risco;
-  setActiveChip($('riscoFilters'),'[data-risco]',btn);
+  const btn=e.target.closest('[data-risco]'); if(!btn) return;
+  activeRisco=btn.dataset.risco; setActiveChip($('riscoFilters'),'[data-risco]',btn); applyFilter();
+});
+// ★ Performance filter
+$('perfFilters').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-perf]'); if(!btn) return;
+  const v=btn.dataset.perf;
+  activePerf=v===''?null:parseFloat(v);
+  $('perfCustom').value='';
+  setActiveChip($('perfFilters'),'[data-perf]',btn); applyFilter();
+});
+$('perfPeriodo').addEventListener('change',e=>{ activePerfCampo=e.target.value; applyFilter(); });
+$('perfCustomBtn').addEventListener('click',()=>{
+  const v=parseFloat($('perfCustom').value);
+  if(isNaN(v)) return;
+  activePerf=v;
+  $('perfFilters').querySelectorAll('[data-perf]').forEach(b=>b.classList.remove('active'));
   applyFilter();
 });
+$('perfCustom').addEventListener('keydown',e=>{ if(e.key==='Enter') $('perfCustomBtn').click(); });
 
 let _st=null;
 $('searchInput').addEventListener('input',e=>{
-  clearTimeout(_st);_st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
+  clearTimeout(_st); _st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
 });
-$('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
-$('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;applyFilter();});
+$('perPage').addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); });
+$('toggleSemDados').addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
   try{
-    const raw = await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
-    const result = parseCsv(raw);
-    allRows = result.data;
-    const headers = Object.keys(allRows[0]||{});
-    displayHeaders = headers;
-    const di = displayHeaders.indexOf(DEFAULT_SORT);
+    const raw=await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
+    const result=parseCsv(raw);
+    allRows=result.data;
+    const headers=Object.keys(allRows[0]||{});
+    displayHeaders=headers;
+    const di=displayHeaders.indexOf(DEFAULT_SORT);
     if(di>=0){sortCol=di;sortDir=-1;}
-    const cats = new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
-    buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
+    const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
+    buildHeader(); buildCatFilters(cats); updateKPIs(); applyFilter();
     $('loadMsg').style.display='none';
     $('mainTable').style.display='table';
     renderRankings();
@@ -1328,366 +2024,206 @@ async function carregarDados(){
 }
 
 /* ════════════════════════════════════════════════════
-   GRÁFICOS — usa dados do mercado_atual.json
+   GRÁFICOS — IPCA / SELIC / META
 ════════════════════════════════════════════════════ */
-let _chartIpca = null, _chartSelic = null, _chartMeta = null;
-let _dadosMercado = null;
+let _chartIpca=null,_chartSelic=null,_chartMeta=null;
+let _dadosMercado=null;
 
-const CHART_DEFAULTS = {
-  responsive: true,
-  maintainAspectRatio: false,
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      backgroundColor: 'rgba(11,13,26,.95)',
-      borderColor: 'rgba(200,151,58,.3)',
-      borderWidth: 1,
-      titleColor: '#e8bb6a',
-      bodyColor: '#d8dcea',
-      padding: 10,
-      titleFont: { family: 'Cormorant Garamond', size: 14, weight: '700' },
-      bodyFont: { family: 'JetBrains Mono', size: 11 },
+const CHART_DEFAULTS={
+  responsive:true,maintainAspectRatio:false,
+  plugins:{
+    legend:{display:false},
+    tooltip:{
+      backgroundColor:'rgba(11,13,26,.95)',borderColor:'rgba(200,151,58,.3)',borderWidth:1,
+      titleColor:'#e8bb6a',bodyColor:'#d8dcea',padding:10,
+      titleFont:{family:'Cormorant Garamond',size:14,weight:'700'},
+      bodyFont:{family:'JetBrains Mono',size:11},
     }
   },
-  scales: {
-    x: {
-      grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
-      ticks: { color: '#3d4560', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 8 }
-    },
-    y: {
-      grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
-      ticks: { color: '#5e6b8a', font: { family: 'JetBrains Mono', size: 10 }, callback: v => v.toFixed(2)+'%' }
-    }
+  scales:{
+    x:{grid:{color:'rgba(255,255,255,.04)',drawBorder:false},ticks:{color:'#3d4560',font:{family:'JetBrains Mono',size:9},maxTicksLimit:8}},
+    y:{grid:{color:'rgba(255,255,255,.04)',drawBorder:false},ticks:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:10},callback:v=>v.toFixed(2)+'%'}}
   }
 };
 
-function buildChartIpca(historico, meses) {
-  const slice = historico.slice(-meses);
-  const labels = slice.map(d => d.label);
-  const values = slice.map(d => d.valor);
-  const colors = values.map(v => v > 0 ? 'rgba(46,209,122,.7)' : 'rgba(240,85,101,.7)');
-
+function buildChartIpca(historico,meses){
+  const slice=historico.slice(-meses);
+  const labels=slice.map(d=>d.label);
+  const values=slice.map(d=>d.valor);
+  const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');
   if(_chartIpca) _chartIpca.destroy();
-  const ctx = document.getElementById('chartIpca')?.getContext('2d');
-  if(!ctx) return;
-  _chartIpca = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels,
-      datasets: [{
-        data: values,
-        backgroundColor: colors,
-        borderColor: colors.map(c => c.replace('.7)', '1)')),
-        borderWidth: 1,
-        borderRadius: 2,
-      }]
-    },
-    options: {
-      ...CHART_DEFAULTS,
-      plugins: {
-        ...CHART_DEFAULTS.plugins,
-        tooltip: {
-          ...CHART_DEFAULTS.plugins.tooltip,
-          callbacks: {
-            label: ctx => `IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`
-          }
-        }
-      }
-    }
-  });
+  const ctx=document.getElementById('chartIpca')?.getContext('2d'); if(!ctx) return;
+  _chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},
+    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});
 }
 
-function buildChartSelic(historico, qtd) {
-  // 1. Filtra e normaliza — exclui taxas mensais pré-1999
-  const filtrado = historico
-    .map(d => ({
-      ...d,
-      _ts: d.DataReuniaoCopom ? new Date(d.DataReuniaoCopom).getTime() : 0,
-      _ano: d.DataReuniaoCopom ? new Date(d.DataReuniaoCopom).getFullYear()
-                                : parseInt((d.data||'').split('/')[2]||'0'),
-    }))
-    .filter(d => d._ano >= 1999 && parseFloat(d.valor) >= 4 && d._ts > 0);
-
-  // 2. Ordena por data — mais antigo primeiro (esq → dir no gráfico)
-  filtrado.sort((a, b) => a._ts - b._ts);
-
-  // 3. Pega os N mais recentes (últimos N do array já ordenado)
-  const slice = qtd >= 999 ? filtrado : filtrado.slice(-qtd);
-
-  const labels = slice.map(d => {
-    const dt = new Date(d.DataReuniaoCopom);
-    return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
-  });
-  const values = slice.map(d => parseFloat(d.valor));
-
+function buildChartSelic(historico,qtd){
+  const filtrado=historico
+    .map(d=>({...d,_ts:d.DataReuniaoCopom?new Date(d.DataReuniaoCopom).getTime():0,_ano:d.DataReuniaoCopom?new Date(d.DataReuniaoCopom).getFullYear():parseInt((d.data||'').split('/')[2]||'0')}))
+    .filter(d=>d._ano>=1999&&parseFloat(d.valor)>=4&&d._ts>0);
+  filtrado.sort((a,b)=>a._ts-b._ts);
+  const slice=qtd>=999?filtrado:filtrado.slice(-qtd);
+  const labels=slice.map(d=>{const dt=new Date(d.DataReuniaoCopom);return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;});
+  const values=slice.map(d=>parseFloat(d.valor));
   if(_chartSelic) _chartSelic.destroy();
-  const ctx = document.getElementById('chartSelic')?.getContext('2d');
-  if(!ctx) return;
-  _chartSelic = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [{
-        data: values,
-        borderColor: '#c8973a',
-        backgroundColor: 'rgba(200,151,58,.08)',
-        borderWidth: 2,
-        pointBackgroundColor: '#e8bb6a',
-        pointRadius: 3,
-        pointHoverRadius: 5,
-        fill: true,
-        stepped: 'before',
-        tension: 0,
-      }]
-    },
-    options: {
-      ...CHART_DEFAULTS,
-      plugins: {
-        ...CHART_DEFAULTS.plugins,
-        tooltip: {
-          ...CHART_DEFAULTS.plugins.tooltip,
-          callbacks: {
-            label: ctx => `Selic: ${ctx.parsed.y.toFixed(2).replace('.',',')}% a.a.`
-          }
-        }
-      }
-    }
-  });
+  const ctx=document.getElementById('chartSelic')?.getContext('2d'); if(!ctx) return;
+  _chartSelic=new Chart(ctx,{type:'line',data:{labels,datasets:[{data:values,borderColor:'#c8973a',backgroundColor:'rgba(200,151,58,.08)',borderWidth:2,pointBackgroundColor:'#e8bb6a',pointRadius:3,pointHoverRadius:5,fill:true,stepped:'before',tension:0}]},
+    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`Selic: ${ctx.parsed.y.toFixed(2).replace('.',',')}% a.a.`}}}}});
 }
 
-function buildChartMeta(metaDados) {
-  if(!metaDados || !metaDados.length) return;
-  const sorted = [...metaDados]
-    .filter(d => d.DataReferencia && d.Inflacao12Meses)
-    .sort((a,b) => new Date(a.DataReferencia) - new Date(b.DataReferencia));
-
-  const labels = sorted.map(d => {
-    const dt = new Date(d.DataReferencia);
-    return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
-  });
-  const values = sorted.map(d => parseFloat(d.Inflacao12Meses));
-
-  const META = 3.0, SUP = 4.5, INF = 1.5;
-
-  // Ponto vermelho = fora da banda, verde = dentro
-  const ptColors = values.map(v => (v > SUP || v < INF) ? '#f05565' : '#2ed17a');
-
+function buildChartMeta(metaDados){
+  if(!metaDados||!metaDados.length) return;
+  const sorted=[...metaDados].filter(d=>d.DataReferencia&&d.Inflacao12Meses).sort((a,b)=>new Date(a.DataReferencia)-new Date(b.DataReferencia));
+  const labels=sorted.map(d=>{const dt=new Date(d.DataReferencia);return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;});
+  const values=sorted.map(d=>parseFloat(d.Inflacao12Meses));
+  const META=3.0,SUP=4.5,INF=1.5;
+  const ptColors=values.map(v=>(v>SUP||v<INF)?'#f05565':'#2ed17a');
   if(_chartMeta) _chartMeta.destroy();
-  const ctx = document.getElementById('chartMeta')?.getContext('2d');
-  if(!ctx) return;
-
-  _chartMeta = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels,
-      datasets: [
-        // Banda: limite superior (preenchido até limite inferior)
-        {
-          label: 'Banda (1,5%–4,5%)',
-          data: values.map(() => SUP),
-          borderColor: 'rgba(46,209,122,.25)',
-          backgroundColor: 'rgba(46,209,122,.07)',
-          borderWidth: 1,
-          borderDash: [4,4],
-          pointRadius: 0,
-          fill: '+1',   // preenche até o próximo dataset (INF)
-          order: 3,
-        },
-        // Limite inferior
-        {
-          label: null,
-          data: values.map(() => INF),
-          borderColor: 'rgba(46,209,122,.25)',
-          backgroundColor: 'transparent',
-          borderWidth: 1,
-          borderDash: [4,4],
-          pointRadius: 0,
-          fill: false,
-          order: 3,
-        },
-        // Meta central
-        {
-          label: 'Meta (3%)',
-          data: values.map(() => META),
-          borderColor: 'rgba(200,151,58,.75)',
-          borderWidth: 1.5,
-          borderDash: [6,3],
-          pointRadius: 0,
-          fill: false,
-          order: 2,
-        },
-        // IPCA 12M — linha com segmentos coloridos
-        {
-          label: 'IPCA 12M',
-          data: values,
-          borderColor: '#5b9cf6',
-          borderWidth: 2.5,
-          pointBackgroundColor: ptColors,
-          pointBorderColor: ptColors,
-          pointRadius: 4,
-          pointHoverRadius: 6,
-          fill: false,
-          tension: 0.3,
-          order: 1,
-          segment: {
-            borderColor: ctx => {
-              const v = values[ctx.p1DataIndex];
-              return (v > SUP || v < INF) ? '#f05565' : '#5b9cf6';
-            }
-          }
-        },
-      ]
-    },
-    options: {
-      ...CHART_DEFAULTS,
-      plugins: {
-        ...CHART_DEFAULTS.plugins,
-        legend: {
-          display: true,
-          position: 'bottom',
-          labels: {
-            color: '#5e6b8a',
-            font: { family: 'JetBrains Mono', size: 9 },
-            boxWidth: 12,
-            padding: 8,
-            filter: item => item.text !== null,
-          }
-        },
-        tooltip: {
-          ...CHART_DEFAULTS.plugins.tooltip,
-          callbacks: {
-            label: ctx => ctx.dataset.label
-              ? `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`
-              : null,
-            afterBody: items => {
-              const v = items.find(i => i.dataset.label === 'IPCA 12M')?.parsed?.y;
-              if(v === undefined) return [];
-              if(v > SUP) return [`⚠️ Acima do teto (${SUP}%)`];
-              if(v < INF) return [`⚠️ Abaixo do piso (${INF}%)`];
-              return ['✅ Dentro da meta'];
-            }
-          }
-        }
-      }
-    }
-  });
+  const ctx=document.getElementById('chartMeta')?.getContext('2d'); if(!ctx) return;
+  _chartMeta=new Chart(ctx,{type:'line',data:{labels,datasets:[
+    {label:'Banda (1,5%–4,5%)',data:values.map(()=>SUP),borderColor:'rgba(46,209,122,.25)',backgroundColor:'rgba(46,209,122,.07)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:'+1',order:3},
+    {label:null,data:values.map(()=>INF),borderColor:'rgba(46,209,122,.25)',backgroundColor:'transparent',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false,order:3},
+    {label:'Meta (3%)',data:values.map(()=>META),borderColor:'rgba(200,151,58,.75)',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false,order:2},
+    {label:'IPCA 12M',data:values,borderColor:'#5b9cf6',borderWidth:2.5,pointBackgroundColor:ptColors,pointBorderColor:ptColors,pointRadius:4,pointHoverRadius:6,fill:false,tension:0.3,order:1,segment:{borderColor:ctx=>{const v=values[ctx.p1DataIndex];return(v>SUP||v<INF)?'#f05565':'#5b9cf6';}}}
+  ]},
+  options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,legend:{display:true,position:'bottom',labels:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:9},boxWidth:12,padding:8,filter:item=>item.text!==null}},
+    tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>ctx.dataset.label?`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`:null,
+      afterBody:items=>{const v=items.find(i=>i.dataset.label==='IPCA 12M')?.parsed?.y;if(v===undefined) return[];if(v>SUP) return[`⚠️ Acima do teto (${SUP}%)`];if(v<INF) return[`⚠️ Abaixo do piso (${INF}%)`];return['✅ Dentro da meta'];}}}}}}
+  );
 }
 
-function inicializarGraficos(d) {
-  _dadosMercado = d;
-  const hist = d?.cards?.ipca?.historico || [];
-  const selic = d?.cards?.selic_meta?.historico || [];
-  const meta = d?.meta_vs_inflacao_efetiva || [];
-
-  if(hist.length) buildChartIpca(hist, 24);
-  if(selic.length) buildChartSelic(selic, 12);
+function inicializarGraficos(d){
+  _dadosMercado=d;
+  const hist=d?.cards?.ipca?.historico||[];
+  const selic=d?.cards?.selic_meta?.historico||[];
+  const meta=d?.meta_vs_inflacao_efetiva||[];
+  if(hist.length) buildChartIpca(hist,24);
+  if(selic.length) buildChartSelic(selic,12);
   if(meta.length) buildChartMeta(meta);
-
-  // Tabs dos gráficos
-  document.querySelectorAll('.chart-tab').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const chart = btn.dataset.chart;
-      const range = parseInt(btn.dataset.range);
-      // Atualiza active
-      document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
+    btn.addEventListener('click',()=>{
+      const chart=btn.dataset.chart; const range=parseInt(btn.dataset.range);
+      document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>b.classList.remove('active'));
       btn.classList.add('active');
-      if(chart === 'ipca') buildChartIpca(_dadosMercado?.cards?.ipca?.historico || [], range);
-      if(chart === 'selic') buildChartSelic(_dadosMercado?.cards?.selic_meta?.historico || [], range);
+      if(chart==='ipca') buildChartIpca(_dadosMercado?.cards?.ipca?.historico||[],range);
+      if(chart==='selic') buildChartSelic(_dadosMercado?.cards?.selic_meta?.historico||[],range);
     });
   });
 }
 
 /* ════════════════════════════════════════════════════
-   PTAX — CÂMBIO MENSAL (API BCB)
+   PTAX MODAL
 ════════════════════════════════════════════════════ */
-let _ptaxCarregado = false;
+let _ptaxCarregado=false;
 
 function abrirModalPTAX(){
   $('modalPtax').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
   if(!_ptaxCarregado) carregarPTAX();
 }
-
 function fecharModalPTAX(e){
-  if(e && e.target !== $('modalPtax')) return;
+  if(e&&e.target!==$('modalPtax')) return;
   $('modalPtax').classList.remove('open');
-  document.body.style.overflow = '';
+  document.body.style.overflow='';
 }
-document.addEventListener('keydown', e => { if(e.key==='Escape') fecharModalPTAX(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') fecharModalPTAX(); });
 
 async function carregarPTAX(){
-  const loading = $('ptaxLoading');
-  const table   = $('ptaxTable');
-  const tbody   = $('ptaxBody');
+  const loading=$('ptaxLoading'),table=$('ptaxTable'),tbody=$('ptaxBody');
   try{
-    const hoje = new Date();
-    const inicio = new Date(hoje);
-    inicio.setFullYear(hoje.getFullYear() - 2); // últimos 2 anos
-
-    const fmtData = d =>
-      `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
-
-    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/` +
-      `CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)` +
-      `?@di='${fmtData(inicio)}'&@df='${fmtData(hoje)}'` +
-      `&$top=1000&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
-
-    const res = await fetch(url);
+    const hoje=new Date(); const inicio=new Date(hoje); inicio.setFullYear(hoje.getFullYear()-2);
+    const fmtData=d=>`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+    const url=`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
+      +`CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)`
+      +`?@di='${fmtData(inicio)}'&@df='${fmtData(hoje)}'`
+      +`&$top=1000&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
+    const res=await fetch(url);
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-
-    // Agrupa por mês — pega o último registro de cada mês (= último dia útil)
-    const byMonth = {};
-    (data.value || []).forEach(item => {
+    const data=await res.json();
+    const byMonth={};
+    (data.value||[]).forEach(item=>{
       if(!item.cotacaoVenda) return;
-      const dt = new Date(item.dataHoraCotacao);
-      const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-      if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
-        byMonth[key] = item;
-      }
+      const dt=new Date(item.dataHoraCotacao);
+      const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+      if(!byMonth[key]||new Date(item.dataHoraCotacao)>new Date(byMonth[key].dataHoraCotacao)) byMonth[key]=item;
     });
-
-    const mesesPT = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-    const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
-
+    const sorted=Object.entries(byMonth).sort(([a],[b])=>a.localeCompare(b));
     if(!sorted.length) throw new Error('Sem dados');
-
-    tbody.innerHTML = sorted.reverse().map(([key, item], i) => {
-      const [ano, mes] = key.split('-');
-      const label = `${mesesPT[parseInt(mes)-1]}/${ano}`;
-      const val = item.cotacaoVenda;
-      const valFmt = 'R$ ' + Number(val).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
-      const dtCot = new Date(item.dataHoraCotacao);
-      const dtFmt = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
-
-      // Variação em relação ao mês anterior
-      let varHtml = '<span class="ptax-var zero">—</span>';
-      if(i < sorted.length - 1){
-        const prev = sorted.reverse()[sorted.length - i - 2]?.[1]?.cotacaoVenda;
-        sorted.reverse(); // restore order
-        if(prev){
-          const varPct = ((val - prev) / prev) * 100;
-          const cls = varPct > 0 ? 'neg' : varPct < 0 ? 'pos' : 'zero'; // dólar subindo = ruim p/ BRL
-          const sign = varPct >= 0 ? '+' : '';
-          varHtml = `<span class="ptax-var ${cls}">${sign}${varPct.toFixed(2).replace('.',',')}%</span>`;
-        }
+    tbody.innerHTML=sorted.reverse().map(([key,item],i)=>{
+      const [ano,mes]=key.split('-');
+      const label=`${MESES_PT[parseInt(mes)-1]}/${ano}`;
+      const val=item.cotacaoVenda;
+      const valFmt='R$ '+Number(val).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
+      const dtCot=new Date(item.dataHoraCotacao);
+      const dtFmt=`${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
+      let varHtml='<span class="ptax-var zero">—</span>';
+      if(i<sorted.length-1){
+        const prev=sorted.reverse()[sorted.length-i-2]?.[1]?.cotacaoVenda;
+        sorted.reverse();
+        if(prev){const varPct=((val-prev)/prev)*100;const cls=varPct>0?'neg':varPct<0?'pos':'zero';const sign=varPct>=0?'+':'';varHtml=`<span class="ptax-var ${cls}">${sign}${varPct.toFixed(2).replace('.',',')}%</span>`;}
       }
-
-      return `<tr>
-        <td class="ptax-month">${label}</td>
-        <td class="ptax-val">${valFmt}</td>
-        <td>${varHtml}</td>
-        <td style="color:var(--muted);font-size:.72rem">${dtFmt}</td>
-      </tr>`;
+      return `<tr><td class="ptax-month">${label}</td><td class="ptax-val">${valFmt}</td><td>${varHtml}</td><td style="color:var(--muted);font-size:.72rem">${dtFmt}</td></tr>`;
     }).join('');
-
-    loading.style.display = 'none';
-    table.style.display = 'table';
-    _ptaxCarregado = true;
-
+    loading.style.display='none'; table.style.display='table'; _ptaxCarregado=true;
   }catch(err){
-    loading.innerHTML = `<div style="color:var(--red)">Erro ao buscar dados do BCB: ${err.message}<br>
-      <small style="color:var(--muted)">Tente novamente em alguns segundos</small></div>`;
+    loading.innerHTML=`<div style="color:var(--red)">Erro ao buscar dados do BCB: ${err.message}<br><small style="color:var(--muted)">Tente novamente em alguns segundos</small></div>`;
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   CALENDÁRIO COPOM 2026
+════════════════════════════════════════════════════ */
+const COPOM_2026 = [
+  { datas: '27 e 28 de janeiro',  num: 1 },
+  { datas: '17 e 18 de março',    num: 2 },
+  { datas: '28 e 29 de abril',    num: 3 },
+  { datas: '16 e 17 de junho',    num: 4 },
+  { datas: '4 e 5 de agosto',     num: 5 },
+  { datas: '15 e 16 de setembro', num: 6 },
+  { datas: '3 e 4 de novembro',   num: 7 },
+  { datas: '8 e 9 de dezembro',   num: 8 },
+];
+const COPOM_DATAS_INICIO = [
+  new Date(2026,0,27), new Date(2026,2,17), new Date(2026,3,28),
+  new Date(2026,5,16), new Date(2026,7,4),  new Date(2026,8,15),
+  new Date(2026,10,3), new Date(2026,11,8),
+];
+
+function buildCopomCalendario(){
+  const container = $('copomMeetings');
+  if(!container) return;
+  const agora = new Date();
+  container.innerHTML = COPOM_2026.map((r,i) => {
+    const dt = COPOM_DATAS_INICIO[i];
+    const isPast = dt < agora && (agora - dt) > 86400000*2;
+    const isNext = !isPast && COPOM_DATAS_INICIO.findIndex(d => d >= agora) === i;
+    let badge = '';
+    if(isPast) badge = `<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:rgba(94,107,138,.15);color:var(--muted2);margin-left:6px">realizada</span>`;
+    if(isNext) badge = `<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:var(--gold-dim);color:var(--gold2);border:1px solid rgba(200,151,58,.3);margin-left:6px">próxima ★</span>`;
+    const rowStyle = isNext
+      ? 'background:var(--gold-dim);border:1px solid rgba(200,151,58,.2);border-radius:7px;padding:5px 8px;margin:2px 0'
+      : 'padding:4px 8px;border-bottom:1px solid var(--border2)';
+    const cor = isPast ? 'var(--muted)' : isNext ? 'var(--text)' : 'var(--text)';
+    const numCor = isPast ? 'var(--muted2)' : isNext ? 'var(--gold2)' : 'var(--muted)';
+    return `<div style="${rowStyle};display:flex;align-items:center;gap:8px">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:${numCor};min-width:20px;text-align:right">${r.num}ª</span>
+      <span style="font-size:.7rem;color:${cor};flex:1;${isPast?'text-decoration:line-through;text-decoration-color:var(--muted2)':''}">${r.datas}</span>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+function toggleCopomCalendario(){
+  const el = $('copomCalendario');
+  const btn = $('copomCalBtn');
+  const isOpen = el.style.opacity === '1';
+  if(isOpen){
+    el.style.maxHeight = '0px'; el.style.opacity = '0';
+    btn.textContent = '📋 Reuniões 2026 ▼';
+  } else {
+    buildCopomCalendario();
+    el.style.maxHeight = '500px'; el.style.opacity = '1';
+    btn.textContent = '📋 Reuniões 2026 ▲';
   }
 }
 
@@ -1695,6 +2231,10 @@ async function carregarPTAX(){
    INIT
 ════════════════════════════════════════════════════ */
 carregarMercado();
+carregarCDIPeriodos();
+carregarIPCAPeriodos();
+carregarDolarDia();
+carregarPTAXHistorico();
 carregarDados().then(()=>carregarKPIs());
 </script>
 </body>
