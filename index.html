@@ -1034,76 +1034,99 @@ function togglePoupanca(){
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
-  try{
-    const r = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/36?formato=json');
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const dados = await r.json();
+  // A BCB SGS API (api.bcb.gov.br) não suporta CORS do browser.
+  // Estratégia: tenta períodos menores em cascata; usa mercado_atual.json como base.
+  const calcAcum = (dados, meses) => {
+    const s = dados.slice(-meses);
+    const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
+    return +((f-1)*100).toFixed(2);
+  };
 
-    const calcAcum = (d, meses) => {
-      const s = d.slice(-meses);
-      const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
-      return +((f-1)*100).toFixed(2);
-    };
+  const tentativas = [
+    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/36?formato=json',
+    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/24?formato=json',
+    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/13?formato=json',
+  ];
 
-    indicState.cdi.m12 = calcAcum(dados, Math.min(12, dados.length));
-    indicState.cdi.m24 = dados.length >= 24 ? calcAcum(dados, 24) : null;
-    indicState.cdi.m36 = dados.length >= 36 ? calcAcum(dados, 36) : null;
+  for(const url of tentativas){
+    try{
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const dados = await r.json();
+      if(!dados.length) continue;
 
-    // Mês mais recente
-    const ultimo = dados[dados.length-1];
-    if(ultimo){
-      indicState.cdi.mes = parseFloat(ultimo.valor);
-      const partes = ultimo.data.split('/');
-      indicState.cdi.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
-    }
+      indicState.cdi.m12  = calcAcum(dados, Math.min(12, dados.length));
+      indicState.cdi.m24  = dados.length >= 24 ? calcAcum(dados, 24) : null;
+      indicState.cdi.m36  = dados.length >= 36 ? calcAcum(dados, 36) : null;
 
-    atualizarTabelaIndicadores();
-  }catch(e){
-    console.warn('CDI série 4391:', e);
+      const ultimo = dados[dados.length-1];
+      if(ultimo){
+        indicState.cdi.mes = parseFloat(ultimo.valor);
+        const partes = ultimo.data.split('/');
+        indicState.cdi.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
+      }
+      atualizarTabelaIndicadores();
+      return; // sucesso
+    }catch(e){ /* tenta próxima URL */ }
   }
+
+  // Fallback: usa taxa anual do mercado_atual.json (já carregada em carregarMercado)
+  console.info('[CDI] API BCB indisponível — usando dados do mercado_atual.json');
+  if($('it-cdi-acum-src')) $('it-cdi-acum-src').textContent = 'mercado_atual.json';
+  atualizarTabelaIndicadores();
 }
 
 /* ════════════════════════════════════════════════════
    IPCA — SÉRIE 433 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarIPCAPeriodos(){
-  try{
-    const r = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/36?formato=json');
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const dados = await r.json();
+  // Mesma estratégia de cascata — BCB SGS API sem CORS confiável no browser
+  const calcAcum = (dados, meses) => {
+    const s = dados.slice(-meses);
+    const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
+    return +((f-1)*100).toFixed(2);
+  };
 
-    const calcAcum = (d, meses) => {
-      const s = d.slice(-meses);
-      const f = s.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
-      return +((f-1)*100).toFixed(2);
-    };
+  const tentativas = [
+    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/36?formato=json',
+    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/24?formato=json',
+    'https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/13?formato=json',
+  ];
 
-    indicState.ipca.m12 = calcAcum(dados, Math.min(12, dados.length));
-    indicState.ipca.m24 = dados.length >= 24 ? calcAcum(dados, 24) : null;
-    indicState.ipca.m36 = dados.length >= 36 ? calcAcum(dados, 36) : null;
+  for(const url of tentativas){
+    try{
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const dados = await r.json();
+      if(!dados.length) continue;
 
-    const ultimo = dados[dados.length-1];
-    if(ultimo){
-      indicState.ipca.mes = parseFloat(ultimo.valor);
-      const partes = ultimo.data.split('/');
-      indicState.ipca.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
-    }
+      indicState.ipca.m12 = calcAcum(dados, Math.min(12, dados.length));
+      indicState.ipca.m24 = dados.length >= 24 ? calcAcum(dados, 24) : null;
+      indicState.ipca.m36 = dados.length >= 36 ? calcAcum(dados, 36) : null;
 
-    // Acumulado do ano (meses do ano atual)
-    const anoAtual = new Date().getFullYear();
-    const doAno = dados.filter(d => {
-      const ano = parseInt(d.data.split('/')[2]);
-      return ano === anoAtual;
-    });
-    if(doAno.length){
-      const f = doAno.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
-      indicState.ipca.ano = +((f-1)*100).toFixed(2);
-    }
+      const ultimo = dados[dados.length-1];
+      if(ultimo){
+        indicState.ipca.mes = parseFloat(ultimo.valor);
+        const partes = ultimo.data.split('/');
+        indicState.ipca.mesRef = `${MESES_PT[parseInt(partes[1])-1]}/${partes[2]}`;
+      }
 
-    atualizarTabelaIndicadores();
-  }catch(e){
-    console.warn('IPCA série 433:', e);
+      const anoAtual = new Date().getFullYear();
+      const doAno = dados.filter(d => parseInt(d.data.split('/')[2]) === anoAtual);
+      if(doAno.length){
+        const f = doAno.reduce((acc,x) => acc * (1 + parseFloat(x.valor)/100), 1);
+        indicState.ipca.ano = +((f-1)*100).toFixed(2);
+      }
+
+      atualizarTabelaIndicadores();
+      return; // sucesso
+    }catch(e){ /* tenta próxima URL */ }
   }
+
+  // Fallback: dados já carregados via mercado_atual.json em carregarMercado()
+  console.info('[IPCA] API BCB indisponível — usando dados do mercado_atual.json');
+  if($('it-ipca-acum-label')) $('it-ipca-acum-label').textContent = 'acum. 12M (JSON)';
+  atualizarTabelaIndicadores();
 }
 
 /* ════════════════════════════════════════════════════
@@ -1113,7 +1136,7 @@ async function carregarPTAXHistorico(){
   try{
     const fmtData = d => `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
     const inicio = new Date(HOJE);
-    inicio.setMonth(HOJE.getMonth() - 36);
+    inicio.setMonth(HOJE.getMonth() - 24); // PTAX API limita a 2 anos
 
     const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
       + `CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)`
@@ -1558,7 +1581,7 @@ async function carregarMercado(){
       if(el) el.textContent = ultima.data || '—';
     }
 
-    // ── CDI (do JSON — será sobrescrito pela série 4391) ──
+    // ── CDI — popula indicState como baseline (será melhorado pela série 4391 se disponível) ──
     const cdi = c.cdi?.valor;
     if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
     if(cdi){
@@ -1566,17 +1589,26 @@ async function carregarMercado(){
       const isEst = c.cdi?.mensal == null;
       const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+('%');
       if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + (isEst ? '*' : '');
+
+      // Baseline indicState — mantido se série 4391 não responder
+      if(!indicState.cdi.m12) indicState.cdi.m12 = cdi;
+      if(!indicState.cdi.mes) indicState.cdi.mes = cdiMensal;
+      if(!indicState.cdi.mesRef){
+        const h = new Date();
+        indicState.cdi.mesRef = `${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;
+      }
     }
 
     // ── IPCA (do JSON — complementado pela série 433) ──
     const ipca = c.ipca || {};
     const ipcaLabel = ipca.label_mes || '';
     // Preenche campos que a série 433 pode não ter chegado ainda
-    if(!indicState.ipca.m12 && ipca.acum_12m){
+    // Baseline IPCA — sempre carrega do JSON, série 433 enriquece se disponível
+    if(ipca.acum_12m && !indicState.ipca.m12){
       indicState.ipca.m12 = ipca.acum_12m;
       indicState.ipca.ano = ipca.acum_ano;
       indicState.ipca.mes = ipca.ultimo_mes;
-      indicState.ipca.mesRef = ipcaLabel;
+      indicState.ipca.mesRef = ipcaLabel || `${MESES_PT[new Date().getMonth()-1>=0?new Date().getMonth()-1:11]}/${new Date().getFullYear()}`;
     }
 
     // ── Ibovespa ──
@@ -1844,9 +1876,76 @@ function applyFilter(){
   currentPage=1; expandedRows.clear(); render(); renderRankings();
 }
 
+/* ════════════════════════════════════════════════════
+   DOCUMENTOS — fundos_caixa.json (CAIXA Asset)
+════════════════════════════════════════════════════ */
+let _fundosDocMap = {}; // CNPJ limpo → { codfundo, docs:{} }
+
+async function carregarFundosJson(){
+  try{
+    const r = await fetch(BASE_URL+'fundos_caixa.json?v='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json();
+    _fundosDocMap = d.por_cnpj || {};
+    console.log(`[fundos_caixa.json] ${Object.keys(_fundosDocMap).length} fundos indexados`);
+  }catch(e){
+    // Silencioso — fallback usa código extraído da URL
+    console.info('[fundos_caixa.json] não disponível, usando fallback por URL:', e.message);
+  }
+}
+
+function buildDocsHtml(cnpjLimpo, urlFundo){
+  const DOC_TIPOS = [
+    { label:'📄 Lâmina',       key:'lamina',       cor:'var(--gold)',   padrao:'LAC', pasta:'laminas-comerciais' },
+    { label:'📋 Regulamento',  key:'regulamento',  cor:'var(--blue)',   padrao:'RG',  pasta:'regulamentos' },
+    { label:'ℹ️ Inf. Compl.', key:'inf_comp',     cor:'var(--purple)', padrao:'FIC', pasta:'inf-com' },
+    { label:'📊 Carta Mensal', key:'carta_mensal', cor:'var(--green)',  padrao:'CM',  pasta:'carta-mensal' },
+    { label:'📢 Comunicado',   key:'comunicado',   cor:'var(--orange)', padrao:'COM', pasta:'comunicado-aos-cotistas' },
+  ];
+  const btn = (b, url) => `<a href="${url}" target="_blank" rel="noopener"
+    title="${b.label}" style="display:inline-flex;align-items:center;gap:4px;padding:5px 11px;
+    border-radius:7px;border:1px solid ${b.cor}33;background:${b.cor}11;color:${b.cor};
+    font-size:.65rem;font-family:'DM Sans',sans-serif;font-weight:500;text-decoration:none;
+    white-space:nowrap;transition:background .15s"
+    onmouseover="this.style.background='${b.cor}22'"
+    onmouseout="this.style.background='${b.cor}11'">${b.label}</a>`;
+
+  // 1. Tenta pelo mapa do fundos_caixa.json
+  const fundoDoc = cnpjLimpo ? _fundosDocMap[cnpjLimpo] : null;
+  if(fundoDoc){
+    const botoes = DOC_TIPOS.map(b => btn(b, fundoDoc.docs[b.key])).join('');
+    return `<div style="width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)">
+      <div style="font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-bottom:7px">
+        📁 Documentos — Cód. ${fundoDoc.codfundo}
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${botoes}</div>
+    </div>`;
+  }
+
+  // 2. Fallback: extrai código numérico da URL do boletim
+  const matchCod = String(urlFundo||'').match(/[_\/](\d{4,6})(?:[_\/.]|$)/);
+  if(matchCod){
+    const cod = matchCod[1];
+    const mkUrl = (prefixo, pasta) =>
+      `https://www.caixa.gov.br/Downloads/aplicacao-financeira-${pasta}/${prefixo}_${cod}.pdf`;
+    const botoes = DOC_TIPOS.map(b =>
+      btn(b, b.key==='regulamento'
+        ? `https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_${cod}.pdf`
+        : mkUrl(b.padrao, b.pasta))
+    ).join('');
+    return `<div style="width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)">
+      <div style="font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-bottom:7px">
+        📁 Documentos — Cód. ${cod}
+        <span style="color:var(--muted);font-style:italic;margin-left:6px">(adicione fundos_caixa.json para links precisos)</span>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:6px">${botoes}</div>
+    </div>`;
+  }
+  return '';
+}
+
 function buildDetailPanel(r,colspan){
   const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k));
-  if(!detailCols.length) return '';
   const items=detailCols.map(k=>{
     let val=String(r[k]||'').trim()||'—';
     if(k==='CNPJ'&&val!=='—') val=`<a href="https://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${val.replace(/\D/g,'')}" target="_blank" rel="noopener">${val}</a>`;
@@ -1856,9 +1955,12 @@ function buildDetailPanel(r,colspan){
   }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
   const urlItem=urlFund?`<div class="detail-item"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
+  const cnpjLimpo = String(r['CNPJ']||'').replace(/\D/g,'');
+  const docsHtml = buildDocsHtml(cnpjLimpo, r['URL']||'');
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
-    <div class="detail-panel">${items}${urlItem}</div></td></tr>`;
+    <div class="detail-panel" style="flex-wrap:wrap">${items}${urlItem}${docsHtml}</div></td></tr>`;
 }
+
 
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
@@ -2235,6 +2337,7 @@ carregarCDIPeriodos();
 carregarIPCAPeriodos();
 carregarDolarDia();
 carregarPTAXHistorico();
+carregarFundosJson();
 carregarDados().then(()=>carregarKPIs());
 </script>
 </body>
