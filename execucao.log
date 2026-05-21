@@ -3305,3 +3305,80 @@
 [22:58:31] [Focus PDF] Tentando R20260515.pdf (15/05/2026)...
 [22:58:31] [SUCESSO] mercado_atual.json exportado | CDI mensal real=0.59% | IPCA: 556m | Focus: 8 ind.
 [22:58:31] [FIM] 171 fundos consolidados. Pipeline completo.
+[03:07:21] ⚡ [INÍCIO] Robô SIPII v15 — CDI real + todos os indicadores macro
+[03:07:25]   [CAIXA] renda-fixa → +34 links (34 total)
+[03:07:27]   [CAIXA] referenciados → +4 links (38 total)
+[03:07:29]   [CAIXA] fundo-simples → +2 links (40 total)
+[03:07:30]   [CAIXA] curto-prazo → +1 links (41 total)
+[03:07:32]   [CAIXA] multimercado → +19 links (60 total)
+[03:07:36]   [CAIXA] cambiais → +1 links (61 total)
+[03:07:38]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[03:07:40]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[03:07:41]   [CAIXA] renda-fixa → +8 links (81 total)
+[03:07:45]   [CAIXA] empresa → +5 links (86 total)
+[03:07:47]   [CAIXA] fmp-fgts → HTTP 404
+[03:07:49]   [CAIXA] rpps → +8 links (94 total)
+[03:07:50] [CAIXA] Total URLs dinâmicas: 94
+[03:07:50] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[03:07:51] [Fundos.json] Download HTTP OK — 196 registros.
+[03:07:51] [Fundos.json] 194 produtos indexados.
+[03:07:51] Raspando segmento: PESSOA FÍSICA...
+[03:07:54] [PF] Abrindo SIPII...
+[03:08:13]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[03:08:28]   [PF] RENDA FIXA: 39 fundos.
+[03:08:34]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[03:08:38]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[03:08:50]   [PF] MULTIMERCADO: 30 fundos.
+[03:08:54]   [PF] CAMBIAL: 1 fundos.
+[03:09:06]   [PF] ACOES: 29 fundos.
+[03:09:09]   [PF] FUNDO DE INDICE: 1 fundos.
+[03:09:16]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[03:09:18] Raspando segmento: PESSOA JURÍDICA...
+[03:09:18] [PJ] Abrindo SIPII...
+[03:09:40]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[03:09:55]   [PJ] RENDA FIXA: 38 fundos.
+[03:10:00]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[03:10:03]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[03:10:15]   [PJ] MULTIMERCADO: 27 fundos.
+[03:10:18]   [PJ] CAMBIAL: 1 fundos.
+[03:10:31]   [PJ] ACOES: 28 fundos.
+[03:10:33] Raspando segmento: GOVERNO...
+[03:10:33] [GOV] Abrindo SIPII...
+[03:10:52]   [GOV] RENDA FIXA: 2 fundos.
+[03:10:55]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[03:10:59]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[03:11:04]   [GOV] MULTIMERCADO: 6 fundos.
+[03:11:08]   [GOV] ACOES: 4 fundos.
+[03:11:10] Raspando segmento: RPPS...
+[03:11:10] [RPPS] Abrindo SIPII...
+[03:11:42]   [RPPS] RENDA FIXA: 19 fundos.
+[03:11:46]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[03:11:54]   [RPPS] MULTIMERCADO: 14 fundos.
+[03:12:01]   [RPPS] ACOES: 14 fundos.
+[03:12:03] Raspando segmento: TODOS...
+[03:12:03] [TODOS] Abrindo SIPII...
+[03:12:23]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[03:12:39]   [TODOS] RENDA FIXA: 42 fundos.
+[03:12:44]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[03:12:48]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[03:12:55]   [TODOS] MULTIMERCADO: 14 fundos.
+[03:12:58]   [TODOS] CAMBIAL: 1 fundos.
+[03:13:09]   [TODOS] ACOES: 25 fundos.
+[03:13:13]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[03:13:15] [Fundos.json] URLs válidas após cruzamento: 160/171
+[03:13:15] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[03:13:16] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260521.xlsx
+[03:13:16] [KPIs] JSON exportado: kpis_dashboard.json
+[03:13:16] [MERCADO] Coletando indicadores macro...
+[03:13:23] [IPCA] Base local: 556 meses.
+[03:13:23] [IPCA] Base salva: 556 meses.
+[03:13:24] [Focus] Coletando expectativas do Banco Central...
+[03:13:24]   [Focus] -> IPCA
+[03:13:25]   [Focus] -> Selic
+[03:13:27]   [Focus] -> PIB Total
+[03:13:29]   [Focus] -> Câmbio
+[03:13:31]   [Focus] -> IGP-M
+[03:13:33] [SUCESSO] mercado_atual.json exportado | CDI mensal real=0.64% | IPCA: 556m | Focus: 7 ind.
+[03:13:33] [FIM] 171 fundos consolidados. Pipeline completo.
+[03:13:33] [LIMPEZA] Removido: sipii_caixa_20260511.csv
+[03:13:33] [LIMPEZA] Removido: sipii_caixa_20260511.xlsx
