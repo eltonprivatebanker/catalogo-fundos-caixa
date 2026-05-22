@@ -11,17 +11,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root{
-  --bg:#0a0b0f; --bg2:#0f1015; --bg3:#141519; --bg4:#1c1d25;
-  --border:rgba(255,255,255,.10); --border2:rgba(255,255,255,.07);
-  --text:#eceef4; --text2:#b8bdd0; --muted:#6b738a; --muted2:#4a5168;
-  --gold:#c8973a; --gold2:#e8bb6a; --gold3:#f5d48a; --gold-dim:rgba(200,151,58,.10); --gold-glow:rgba(200,151,58,.20);
-  --blue:#5b9cf6; --blue-dim:rgba(91,156,246,.10);
-  --green:#2ed17a; --red:#f05565; --purple:#a78bfa; --orange:#fb923c; --teal:#2dd4bf;
-  --shadow:0 8px 32px rgba(0,0,0,.7); --shadow2:0 2px 8px rgba(0,0,0,.5);
-  --radius:14px;
-  --font-sans:'DM Sans',system-ui,sans-serif;
-  --font-serif:'Cormorant Garamond',Georgia,serif;
-  --font-mono:'JetBrains Mono',monospace;
+  --bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--bg4:#181d36;
+  --gold:#c8973a;--gold2:#e8bb6a;--gold3:#f5d48a;
+  --gold-dim:rgba(200,151,58,.1);--gold-glow:rgba(200,151,58,.2);
+  --text:#d8dcea;--muted:#5e6b8a;--muted2:#3d4560;
+  --green:#2ed17a;--green-dim:rgba(46,209,122,.1);
+  --red:#f05565;--red-dim:rgba(240,85,101,.1);
+  --blue:#5b9cf6;--blue-dim:rgba(91,156,246,.1);
+  --orange:#fb923c;--purple:#a78bfa;
+  --border:rgba(200,151,58,.12);--border2:rgba(255,255,255,.04);--border3:rgba(255,255,255,.07);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -533,6 +531,17 @@ footer span{color:var(--gold)}
   <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
 
+<!-- DISCLAIMER -->
+<div class="section-gap" style="margin-top:14px">
+  <div style="background:rgba(200,151,58,.06);border:1px solid rgba(200,151,58,.18);border-radius:12px;padding:13px 18px;color:var(--muted);font-size:.72rem;line-height:1.6">
+    <strong style="color:var(--gold2)">⚠️ Aviso:</strong>
+    esta ferramenta não é institucional da Caixa Econômica Federal, da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA.
+    Trata-se de produção própria, desenvolvida por <strong style="color:var(--text)">Elton Cardoso Teotonio</strong>,
+    para apoio informativo à consulta e organização de dados públicos.
+    As informações devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
 <div class="kpi-grid section-gap">
   <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
@@ -798,46 +807,31 @@ footer span{color:var(--gold)}
 
   <div class="dolar-grid">
 
-    <!-- Card do dia -->
-    <div class="dolar-day-card">
-      <div class="dolar-day-header">
-        <div class="dolar-day-title">💵 Cotação do Dia</div>
-        <div class="dolar-day-sub" id="dolar-day-src">Fonte: PTAX BCB · Carregando...</div>
-      </div>
-      <div class="dolar-day-body">
-        <div id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação...</div>
-        <div id="dolar-day-content" style="display:none">
-          <div class="dolar-day-rate" id="dolar-day-rate">—</div>
-          <div class="dolar-day-ref" id="dolar-day-ref">—</div>
-          <div class="dolar-spread" style="margin-bottom:12px">
-            <div class="dolar-spread-item">
-              <div class="dolar-spread-label">Compra</div>
-              <div class="dolar-spread-val" id="dolar-compra">—</div>
-            </div>
-            <div class="dolar-spread-item">
-              <div class="dolar-spread-label">Venda</div>
-              <div class="dolar-spread-val" id="dolar-venda">—</div>
-            </div>
-          </div>
-          <div class="dolar-day-metrics">
-            <div class="dolar-metric">
-              <span class="dolar-metric-label">Var. vs dia anterior</span>
-              <span class="dolar-metric-val" id="dolar-var-dia">—</span>
-            </div>
-            <div class="dolar-metric">
-              <span class="dolar-metric-label">Dia anterior (fechamento)</span>
-              <span class="dolar-metric-val muted" id="dolar-dia-ant">—</span>
-            </div>
-            <div class="dolar-metric">
-              <span class="dolar-metric-label">Hora referência PTAX</span>
-              <span class="dolar-metric-val muted" id="dolar-hora">—</span>
-            </div>
-          </div>
-        </div>
+    <!-- Link PTAX do dia -->
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
+      display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;padding:28px 20px;text-align:center">
+      <div style="font-size:1.5rem">💵</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--gold2)">Cotação PTAX — BCB</div>
+      <div style="font-size:.63rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Cotação oficial BRL/USD<br>publicada pelo BCB às 13h</div>
+      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
+        <a href="https://ptax.bcb.gov.br/ptax_internet/consultarBoletim.do?method=consultarBoletimDiretoPrint&idDia=hoje"
+          target="_blank" rel="noopener"
+          style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:9px;
+          background:var(--gold-dim);border:1px solid var(--border);color:var(--gold2);
+          font-size:.72rem;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:none">
+          📊 Boletim PTAX do dia ↗
+        </a>
+        <a href="https://ptax.bcb.gov.br/ptax_internet/consultarBoletim.do"
+          target="_blank" rel="noopener"
+          style="display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:9px;
+          background:transparent;border:1px solid var(--border2);color:var(--muted);
+          font-size:.68rem;font-family:'DM Sans',sans-serif;text-decoration:none">
+          🔗 Histórico PTAX ↗
+        </a>
       </div>
     </div>
 
-    <!-- Coluna direita: timeline + gráfico -->
+        <!-- Coluna direita: timeline + gráfico -->
     <div class="dolar-right">
 
       <!-- Timeline mensal expansível -->
@@ -1004,11 +998,7 @@ footer span{color:var(--gold)}
       <button class="chip" data-perf="10">≥ 10%</button>
       <button class="chip" data-perf="20">≥ 20%</button>
       <button class="chip" data-perf="50">≥ 50%</button>
-      <div class="perf-custom-wrap">
-        <input id="perfCustom" class="perf-custom-input" type="number" placeholder="Custom %" step="0.5" min="-100" max="200"/>
-        <button id="perfCustomBtn" class="perf-ok-btn">OK</button>
       </div>
-    </div>
   </div>
 
   <div class="table-wrap">
@@ -1049,10 +1039,15 @@ footer span{color:var(--gold)}
 </div>
 
 <footer>
-  Dados extraídos de <span>fundos.caixa.gov.br</span> via Robô Python ·
-  Indicadores: <span>Banco Central do Brasil</span> &amp; <span>Yahoo Finance</span> ·
-  Metadados comerciais: <span>CAIXA Asset Management</span> ·
-  Dashboard por <span>Elton Private Banker</span> · Atualização automática diária · Robô <span>v16</span>
+<div>
+  <div style="color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;margin-bottom:10px">Aviso importante</div>
+  <div style="color:var(--muted);font-size:.7rem;line-height:1.8">
+    <p>Esta ferramenta é uma produção própria, desenvolvida por <span>Elton Cardoso Teotonio</span>, para apoio à organização e consulta de informações públicas sobre fundos de investimento.</p>
+    <p style="margin-top:6px">Este site não é uma ferramenta institucional da <span>Caixa Econômica Federal</span>, da <span>CAIXA Asset</span> ou de qualquer empresa do conglomerado CAIXA. As informações devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.</p>
+    <p style="margin-top:6px">Dados públicos: fundos.caixa.gov.br · Banco Central do Brasil · CAIXA Asset Management</p>
+    <p style="margin-top:8px;color:var(--muted2);font-size:.63rem">Desenvolvido por <span>Elton Cardoso Teotonio</span> · Produção própria · Uso informativo e auxiliar</p>
+  </div>
+</div>
 </footer>
 </div><!-- /page -->
 <script>
@@ -1074,7 +1069,7 @@ const ANO_ATUAL = HOJE.getFullYear();
 
 /* ════════════════ ESTADO GLOBAL ════════════════ */
 const indicState = {
-  cdi:  { m12:null, m24:null, m36:null, mes:null, mesRef:null },
+  cdi:  { m12:null, m24:null, m36:null, mes:null, mesRef:null, acumAno:null, acumAnoComParcial:null, parcialMesAtual:null, parcialRef:null },
   ipca: { m12:null, m24:null, m36:null, mes:null, ano:null, mesRef:null },
   dolarBRL: { mes:null, ano:null, m12:null, m24:null, m36:null },
   dolarPct: { mes:null, ano:null, m12:null, m24:null, m36:null },
@@ -1307,7 +1302,10 @@ function buildChartDolar(range){
   if(!_ptaxHistorico.length) return;
   const hoje=new Date();
   let dados;
-  if(range==='year') dados=_ptaxHistorico.filter(d=>new Date(d.dataHoraCotacao).getFullYear()===ANO_ATUAL);
+  if(range==='year'){
+    const src=_ptaxDiario.length>5?_ptaxDiario:_ptaxHistorico;
+    dados=src.filter(d=>new Date(d.dataHoraCotacao).getFullYear()===ANO_ATUAL);
+  } else if(false && range==='_dummy_'){}
   else if(range==='12m'){const l=new Date(hoje);l.setMonth(hoje.getMonth()-12);dados=_ptaxHistorico.filter(d=>new Date(d.dataHoraCotacao)>=l);}
   else{const l=new Date(hoje);l.setMonth(hoje.getMonth()-24);dados=_ptaxHistorico.filter(d=>new Date(d.dataHoraCotacao)>=l);}
   if(!dados.length) return;
@@ -1601,7 +1599,7 @@ function buildRowHTML(r,idx){
   visibleHeaders.forEach(h=>{
     const val=String(r[h]||'');
     if(h==='Categoria'){const cls=CAT_CLS[val]||'RF';html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;return;}
-    if(h==='Fundo'){const url=getFundUrl(r);const isFb=isFallbackUrl(r);const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';const boletimUrl=isFb?'':url;const boletimBtn=boletimUrl?`<a href="${boletimUrl}" target="_blank" rel="noopener" class="boletim-btn">📄 Boletim</a>`:'';html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${boletimBtn}</td>`;return;}
+    if(h==='Fundo'){const url=getFundUrl(r);const isFb=isFallbackUrl(r);const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';}
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Perfis'){const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');html+=`<td><div class="perfis-wrap">${chips}</div></td>`;return;}
     html+=`<td>${val||'—'}</td>`;
@@ -1668,8 +1666,8 @@ $('perfilFilters').addEventListener('click',e=>{const btn=e.target.closest('[dat
 $('riscoFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-risco]');if(!btn) return;activeRisco=btn.dataset.risco;setActiveChip($('riscoFilters'),'[data-risco]',btn);applyFilter();});
 $('perfFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-perf]');if(!btn) return;activePerf=btn.dataset.perf===''?null:parseFloat(btn.dataset.perf);$('perfCustom').value='';setActiveChip($('perfFilters'),'[data-perf]',btn);applyFilter();});
 $('perfPeriodo').addEventListener('change',e=>{activePerfCampo=e.target.value;applyFilter();});
-$('perfCustomBtn').addEventListener('click',()=>{const v=parseFloat($('perfCustom').value);if(isNaN(v)) return;activePerf=v;$('perfFilters').querySelectorAll('[data-perf]').forEach(b=>b.classList.remove('active'));applyFilter();});
-$('perfCustom').addEventListener('keydown',e=>{if(e.key==='Enter') $('perfCustomBtn').click();});
+// $('perfCustomBtn').addEventListener('click',()=>{const v=parseFloat($('perfCustom').value);if(isNaN(v)) return;activePerf=v;$('perfFilters').querySelectorAll('[data-perf]').forEach(b=>b.classList.remove('active'));applyFilter();});
+// $('perfCustom').addEventListener('keydown',e=>{if(e.key==='Enter') $('perfCustomBtn').click();});
 let _st=null;
 $('searchInput').addEventListener('input',e=>{clearTimeout(_st);_st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);});
 $('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
@@ -1744,6 +1742,8 @@ carregarPTAXHistorico();
 carregarFundosJson();
 carregarDados().then(()=>carregarKPIs());
 
+async function iniciarDashboard(){await carregarMercado();await carregarCDIPeriodos();await carregarIPCAPeriodos();carregarDolarDia();await carregarPTAXHistorico();await carregarFundosJson();await carregarDados();await carregarKPIs();}
+iniciarDashboard();
 </script>
 </body>
 </html>
