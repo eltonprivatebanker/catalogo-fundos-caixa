@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "21/05/2026 03:54:16",
+    "atualizado_em": "22/05/2026 05:47:12",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -2011,8 +2011,238 @@
         },
         "cdi": {
             "valor": 14.4,
-            "mensal": 0.64,
-            "dia": 0.0534,
+            "mensal": 1.09,
+            "mes_ref": "abr/2026",
+            "parcial_mes_atual": 0.75,
+            "parcial_ref": "mai/2026",
+            "acum_ano": 4.535,
+            "acum_ano_com_parcial": 5.319,
+            "acum_12m": 14.8315,
+            "acum_24m": 28.0049,
+            "acum_36m": 43.7676,
+            "historico": [
+                {
+                    "key": "2022-10",
+                    "label": "out/2022",
+                    "valor": 1.02
+                },
+                {
+                    "key": "2022-11",
+                    "label": "nov/2022",
+                    "valor": 1.02
+                },
+                {
+                    "key": "2022-12",
+                    "label": "dez/2022",
+                    "valor": 1.12
+                },
+                {
+                    "key": "2023-01",
+                    "label": "jan/2023",
+                    "valor": 1.12
+                },
+                {
+                    "key": "2023-02",
+                    "label": "fev/2023",
+                    "valor": 0.92
+                },
+                {
+                    "key": "2023-03",
+                    "label": "mar/2023",
+                    "valor": 1.17
+                },
+                {
+                    "key": "2023-04",
+                    "label": "abr/2023",
+                    "valor": 0.92
+                },
+                {
+                    "key": "2023-05",
+                    "label": "mai/2023",
+                    "valor": 1.12
+                },
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 1.07
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 1.07
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": 1.14
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": 0.97
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": 1.0
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 0.92
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 0.89
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 0.97
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 0.8
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 0.83
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": 0.89
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 0.83
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 0.79
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 0.91
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 0.87
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": 0.84
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": 0.93
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 0.79
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": 0.93
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 1.01
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": 0.99
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": 0.96
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": 1.06
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 1.14
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 1.1
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 1.28
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 1.16
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 1.22
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 1.28
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": 1.05
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": 1.22
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 1.16
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": 1.0
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": 1.21
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": 1.09
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 0.75
+                }
+            ],
+            "fonte_acum": "série 4391 BCB + validação/override local",
             "unidade": "% a.a."
         },
         "ipca": {
@@ -2020,6 +2250,8 @@
             "label_mes": "abr/2026",
             "acum_ano": 2.6043,
             "acum_12m": 4.3917,
+            "acum_24m": 10.1643,
+            "acum_36m": 14.2272,
             "historico": [
                 {
                     "label": "jan/1980",
@@ -4256,24 +4488,201 @@
             "unidade": "% m.m."
         },
         "ibovespa": {
-            "atual": 177356.0,
-            "anterior": 195734.0,
-            "variacao_mensal": -9.39
+            "atual": 177650.0,
+            "anterior": 196132.0,
+            "variacao_mensal": -9.42
         },
         "dolar": {
-            "atual": 4.995100021362305,
-            "anterior": 5.007999897003174,
-            "variacao_mensal": -0.26
+            "atual": 5.001100063323975,
+            "anterior": 4.984899997711182,
+            "variacao_mensal": 0.32
         }
     },
     "indices_internacionais": {
-        "sp500_usd": 7432.97021484375,
-        "sp500_brl": 37128.43,
-        "dow_jones": 50009.3515625,
-        "nasdaq": 26270.359375
+        "sp500_usd": 7445.72021484375,
+        "sp500_brl": 37236.79,
+        "dow_jones": 50285.66015625,
+        "nasdaq": 26293.099609375
     },
+    "ptax_historico": [
+        {
+            "key": "2024-04",
+            "mes": "abr/2024",
+            "cotacao": 5.1285,
+            "var_pct": null,
+            "data_ref": "2024-04-01"
+        },
+        {
+            "key": "2024-05",
+            "mes": "mai/2024",
+            "cotacao": 5.1324,
+            "var_pct": 0.08,
+            "data_ref": "2024-05-01"
+        },
+        {
+            "key": "2024-06",
+            "mes": "jun/2024",
+            "cotacao": 5.3884,
+            "var_pct": 4.99,
+            "data_ref": "2024-06-01"
+        },
+        {
+            "key": "2024-07",
+            "mes": "jul/2024",
+            "cotacao": 5.5414,
+            "var_pct": 2.84,
+            "data_ref": "2024-07-01"
+        },
+        {
+            "key": "2024-08",
+            "mes": "ago/2024",
+            "cotacao": 5.552,
+            "var_pct": 0.19,
+            "data_ref": "2024-08-01"
+        },
+        {
+            "key": "2024-09",
+            "mes": "set/2024",
+            "cotacao": 5.541,
+            "var_pct": -0.2,
+            "data_ref": "2024-09-01"
+        },
+        {
+            "key": "2024-10",
+            "mes": "out/2024",
+            "cotacao": 5.6235,
+            "var_pct": 1.49,
+            "data_ref": "2024-10-01"
+        },
+        {
+            "key": "2024-11",
+            "mes": "nov/2024",
+            "cotacao": 5.8065,
+            "var_pct": 3.25,
+            "data_ref": "2024-11-01"
+        },
+        {
+            "key": "2024-12",
+            "mes": "dez/2024",
+            "cotacao": 6.0964,
+            "var_pct": 4.99,
+            "data_ref": "2024-12-01"
+        },
+        {
+            "key": "2025-01",
+            "mes": "jan/2025",
+            "cotacao": 6.0212,
+            "var_pct": -1.23,
+            "data_ref": "2025-01-01"
+        },
+        {
+            "key": "2025-02",
+            "mes": "fev/2025",
+            "cotacao": 5.765,
+            "var_pct": -4.25,
+            "data_ref": "2025-02-01"
+        },
+        {
+            "key": "2025-03",
+            "mes": "mar/2025",
+            "cotacao": 5.7462,
+            "var_pct": -0.33,
+            "data_ref": "2025-03-01"
+        },
+        {
+            "key": "2025-04",
+            "mes": "abr/2025",
+            "cotacao": 5.7831,
+            "var_pct": 0.64,
+            "data_ref": "2025-04-01"
+        },
+        {
+            "key": "2025-05",
+            "mes": "mai/2025",
+            "cotacao": 5.6668,
+            "var_pct": -2.01,
+            "data_ref": "2025-05-01"
+        },
+        {
+            "key": "2025-06",
+            "mes": "jun/2025",
+            "cotacao": 5.5465,
+            "var_pct": -2.12,
+            "data_ref": "2025-06-01"
+        },
+        {
+            "key": "2025-07",
+            "mes": "jul/2025",
+            "cotacao": 5.5279,
+            "var_pct": -0.34,
+            "data_ref": "2025-07-01"
+        },
+        {
+            "key": "2025-08",
+            "mes": "ago/2025",
+            "cotacao": 5.4463,
+            "var_pct": -1.48,
+            "data_ref": "2025-08-01"
+        },
+        {
+            "key": "2025-09",
+            "mes": "set/2025",
+            "cotacao": 5.3668,
+            "var_pct": -1.46,
+            "data_ref": "2025-09-01"
+        },
+        {
+            "key": "2025-10",
+            "mes": "out/2025",
+            "cotacao": 5.3849,
+            "var_pct": 0.34,
+            "data_ref": "2025-10-01"
+        },
+        {
+            "key": "2025-11",
+            "mes": "nov/2025",
+            "cotacao": 5.3403,
+            "var_pct": -0.83,
+            "data_ref": "2025-11-01"
+        },
+        {
+            "key": "2025-12",
+            "mes": "dez/2025",
+            "cotacao": 5.4525,
+            "var_pct": 2.1,
+            "data_ref": "2025-12-01"
+        },
+        {
+            "key": "2026-01",
+            "mes": "jan/2026",
+            "cotacao": 5.3374,
+            "var_pct": -2.11,
+            "data_ref": "2026-01-01"
+        },
+        {
+            "key": "2026-02",
+            "mes": "fev/2026",
+            "cotacao": 5.2,
+            "var_pct": -2.57,
+            "data_ref": "2026-02-01"
+        },
+        {
+            "key": "2026-03",
+            "mes": "mar/2026",
+            "cotacao": 5.231,
+            "var_pct": 0.6,
+            "data_ref": "2026-03-01"
+        },
+        {
+            "key": "2026-04",
+            "mes": "abr/2026",
+            "cotacao": 5.0325,
+            "var_pct": -3.79,
+            "data_ref": "2026-04-01"
+        }
+    ],
     "focus": {
-        "data_coleta": "21/05/2026 03:54",
+        "data_coleta": "22/05/2026 05:47",
         "fonte": "odata",
         "IPCA": {
             "2026": {
