@@ -1,16 +1,17 @@
 """
-ROBÔ SIPII CAIXA — v15 (Edição GitHub Repository)
+ROBÔ SIPII CAIXA — v16 (Edição GitHub Repository)
 ==========================================================
-Novidades v15 vs v10:
-  + ColetorMercado: Selic, CDI, IPCA histórico, Dólar, Ibovespa, S&P 500, Poupança
-  + CDI MENSAL REAL via série BCB 4391 (corrige estimativa matemática)
-  + Boletim Focus: OData BCB + fallback PDF + cache local
-  + fundos.json: CNPJ, taxa adm, prazo de resgate, perfil de risco
-  + kpis_dashboard.json para o dashboard
-  + Fallback SIPII: usa CSV salvo quando o site falha
-  + Limpeza automática de backups antigos (mantém 5)
-  + CNPJ formatado (XX.XXX.XXX/XXXX-XX)
-  + Quoting correto no CSV exportado
+Novidades v16 vs v15:
+  + CDI acumulado 12M/24M/36M pré-calculado server-side (série 4391 BCB)
+    → Elimina erro CORS/HTTP 400 no browser para CDI histórico
+  + IPCA acumulado 24M/36M pré-calculado server-side (série 433 BCB)
+    → Elimina erro CORS/HTTP 400 no browser para IPCA histórico
+  + PTAX histórico mensal (24M) pré-salvo em mercado_atual.json
+    → Elimina HTTP 400 do browser (API limita a 2 anos; robô busca server-side)
+  + fundos_caixa.json indexado por CNPJ → botões de documentos PDF no dashboard
+  + Coluna 'codfundo' no CSV/Excel → links diretos Lâmina/Regulamento/etc.
+  Mantém: CDI mensal real (série 4391), Focus OData+PDF+cache, SIPII scraping,
+           kpis_dashboard.json, fallback SIPII, limpeza de backups — tudo de v15.
 """
 
 import json
@@ -46,15 +47,15 @@ PERFIS = [
 ]
 
 CATEGORIAS_FIXAS = [
-    {"csv": "RENDA FIXA SIMPLES",           "texto_tela": "RENDA FIXA SIMPLES"},
-    {"csv": "RENDA FIXA",                   "texto_tela": "RENDA FIXA"},
-    {"csv": "RENDA FIXA REFERENCIADO",      "texto_tela": "RENDA FIXA REFERENCIADO"},
-    {"csv": "RENDA FIXA CURTO PRAZO",       "texto_tela": "RENDA FIXA CURTO PRAZO"},
-    {"csv": "MULTIMERCADO",                 "texto_tela": "MULTIMERCADO"},
-    {"csv": "CAMBIAL",                      "texto_tela": "CAMBIAL"},
-    {"csv": "ACOES",                        "texto_tela": "AÇÕES"},
-    {"csv": "FUNDO DE INDICE",              "texto_tela": "FUNDO DE ÍNDICE"},
-    {"csv": "FUNDOS MUTUOS DE PRIVATIZACAO","texto_tela": "FUNDOS MÚTUOS DE PRIVATIZAÇÃO"},
+    {"csv": "RENDA FIXA SIMPLES",            "texto_tela": "RENDA FIXA SIMPLES"},
+    {"csv": "RENDA FIXA",                    "texto_tela": "RENDA FIXA"},
+    {"csv": "RENDA FIXA REFERENCIADO",       "texto_tela": "RENDA FIXA REFERENCIADO"},
+    {"csv": "RENDA FIXA CURTO PRAZO",        "texto_tela": "RENDA FIXA CURTO PRAZO"},
+    {"csv": "MULTIMERCADO",                  "texto_tela": "MULTIMERCADO"},
+    {"csv": "CAMBIAL",                       "texto_tela": "CAMBIAL"},
+    {"csv": "ACOES",                         "texto_tela": "AÇÕES"},
+    {"csv": "FUNDO DE INDICE",               "texto_tela": "FUNDO DE ÍNDICE"},
+    {"csv": "FUNDOS MUTUOS DE PRIVATIZACAO", "texto_tela": "FUNDOS MÚTUOS DE PRIVATIZAÇÃO"},
 ]
 
 CAIXA_LISTING_PAGES = [
@@ -79,16 +80,17 @@ DEBUG_COLUNAS = False
 # ---------------------------------------------------------------------------
 # Caminhos de arquivo
 # ---------------------------------------------------------------------------
-BASE_DIR           = Path.cwd()
-LOG_PATH           = BASE_DIR / "execucao.log"
-IPCA_BASE_PATH     = BASE_DIR / "ipca_historico_base.json"
-FOCUS_CACHE_PATH   = BASE_DIR / "focus_cache.json"
-SELIC_BASE_PATH    = BASE_DIR / "historico da selic do BC.json"
-META_INFLACAO_PATH = BASE_DIR / "meta-vs-inflacao-efetiva.json"
-FUNDOS_JSON_LOCAL  = BASE_DIR / "fundos.json"
+BASE_DIR            = Path.cwd()
+LOG_PATH            = BASE_DIR / "execucao.log"
+IPCA_BASE_PATH      = BASE_DIR / "ipca_historico_base.json"
+FOCUS_CACHE_PATH    = BASE_DIR / "focus_cache.json"
+SELIC_BASE_PATH     = BASE_DIR / "historico da selic do BC.json"
+META_INFLACAO_PATH  = BASE_DIR / "meta-vs-inflacao-efetiva.json"
+FUNDOS_JSON_LOCAL   = BASE_DIR / "fundos.json"
+FUNDOS_CAIXA_PATH   = BASE_DIR / "fundos_caixa.json"   # ★ v16
 
 # ---------------------------------------------------------------------------
-# Dicionário estático — 116 URLs validadas manualmente
+# Dicionário estático — URLs validadas manualmente
 # ---------------------------------------------------------------------------
 URL_ESTATICO = {
     "CAIXA BRASIL INFLACAO ATIVA FIF RF CRED PRIV": "https://www.caixa.gov.br/fundos-investimento/renda-fixa/brasil-IPCA",
@@ -234,7 +236,6 @@ def chave_estatica(nome):
     return n.strip()
 
 def formatar_cnpj(cnpj_raw):
-    """Formata CNPJ de '00834074000123' para '00.834.074/0001-23'."""
     if not cnpj_raw:
         return ""
     digits = re.sub(r'\D', '', str(cnpj_raw))
@@ -340,7 +341,7 @@ def encontrar_url(nome, registros_dinamicos):
     return encontrar_url_dinamica(nome, registros_dinamicos)
 
 # ---------------------------------------------------------------------------
-# Boletim Focus (BCB OData + fallback PDF + cache local)
+# Boletim Focus (BCB OData + fallback PDF + cache local) — inalterado v15
 # ---------------------------------------------------------------------------
 FOCUS_BASE = "https://olinda.bcb.gov.br/olinda/servico/Expectativas/versao/v1/odata/ExpectativasMercadoAnuais"
 INDICADORES_FOCUS = ["IPCA", "Selic", "PIB Total", "Câmbio", "IGP-M"]
@@ -412,12 +413,10 @@ def _parsear_texto_focus(texto, data_str):
     data_ref = f"{data_str[:4]}-{data_str[4:6]}-{data_str[6:]}"
     for indicador, padrao in _FOCUS_PDF_PADROES.items():
         match = re.search(padrao, texto, re.IGNORECASE)
-        if not match:
-            continue
+        if not match: continue
         trecho = texto[match.end():match.end() + 700]
         decimais = _extrair_decimais_linha(trecho)
-        if len(decimais) < 11:
-            continue
+        if len(decimais) < 11: continue
         resultado[indicador] = {}
         for ano in anos:
             idx = _FOCUS_PDF_INDICES[ano]
@@ -442,15 +441,12 @@ def _raspar_focus_pdf(headers):
         try:
             log(f"[Focus PDF] Tentando R{data_str}.pdf ({data_br})...")
             res = requests.get(url_pdf, headers=headers, timeout=35)
-            if res.status_code != 200 or len(res.content) < 10000:
-                continue
+            if res.status_code != 200 or len(res.content) < 10000: continue
             reader = pypdf.PdfReader(io.BytesIO(res.content))
             texto = "".join((p.extract_text() or "") + "\n" for p in reader.pages)
-            if "IPCA" not in texto or "Selic" not in texto:
-                continue
+            if "IPCA" not in texto or "Selic" not in texto: continue
             dados = _parsear_texto_focus(texto, data_str)
-            if dados:
-                return dados, data_str
+            if dados: return dados, data_str
         except Exception as e:
             log(f"[Focus PDF] Erro com R{data_str}.pdf: {e}")
     return None, None
@@ -486,8 +482,7 @@ def buscar_focus(headers):
                 obtido = True
                 falhas_api = 0
                 break
-            if tentativa < 1:
-                time.sleep(10)
+            if tentativa < 1: time.sleep(10)
         if not obtido:
             raw_focus[indicador] = {}
             falhas_api += 1
@@ -495,9 +490,7 @@ def buscar_focus(headers):
                 log("[Focus] BCB indisponível — abortando OData.")
                 break
         time.sleep(1)
-
     indicadores_ok = sum(1 for v in raw_focus.values() if v)
-
     if indicadores_ok == 0:
         dados_pdf, data_pdf = _raspar_focus_pdf(headers)
         if dados_pdf:
@@ -513,13 +506,11 @@ def buscar_focus(headers):
             }
             _salvar_focus_cache(focus_pdf)
             return focus_pdf
-
     if indicadores_ok == 0:
         cache = _carregar_focus_cache()
         if cache:
             cache["fonte"] = "cache"
             return cache
-
     focus = {
         "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
         "fonte": "odata",
@@ -535,7 +526,7 @@ def buscar_focus(headers):
     return focus
 
 # ---------------------------------------------------------------------------
-# fundos.json — metadados comerciais (CNPJ, taxa adm, prazos)
+# ★ fundos.json — metadados comerciais + fundos_caixa.json para o HTML (v16)
 # ---------------------------------------------------------------------------
 FUNDOS_JSON_URL = "https://www.caixa.gov.br/CAIXA-Asset/Documents/data/fundos.json"
 INDISPONIVEL = {"INDISPONIVEL", "indisponivel", "", None}
@@ -566,30 +557,122 @@ def _url_valida(url):
     url = str(url).strip()
     return url.startswith("http") and "caixa.gov.br" in url and "/Sistemas/" not in url
 
+def _extrair_codfundo(item):
+    """
+    ★ v16.2 — usa co_siico00 (campo real confirmado pelo log de debug).
+    Fallback: extrai código dos URLs de documentos presentes no JSON.
+    """
+    # Campo principal confirmado: co_siico00='0054', co_siico='54'
+    for campo in ["co_siico00", "co_siico", "nu_fundo", "co_fundo", "cd_fundo"]:
+        val = item.get(campo)
+        if val is not None:
+            s = re.sub(r"[^0-9]", "", str(val).strip())
+            if 2 <= len(s) <= 6:
+                return s.lstrip("0") or s
+
+    # Fallback: extrai código dos URLs de documentos (ex: RG_7880.pdf → 7880)
+    for campo_url in ["de_link_regulamento", "de_link_lamina", "de_link_info_compl",
+                      "de_link_fato_relevante", "de_link_pagina_fundo"]:
+        url = str(item.get(campo_url) or "").strip()
+        if not url or "INDISPONIVEL" in url.upper():
+            continue
+        m = re.search(r"[/_]([A-Z]+)_([0-9]{2,6})[._]", url)
+        if m:
+            return m.group(2)
+    return ""
+
+def _url_doc_valida(url):
+    """Verifica se uma URL de documento é usável."""
+    if not url or not str(url).strip():
+        return False
+    u = str(url).strip().upper()
+    return u not in ("INDISPONIVEL", "NULL", "NONE", "") and str(url).startswith("http")
+
+def _inspecionar_campos_fundos_json(lista):
+    """Debug: mostra campos do primeiro registro para identificar codfundo."""
+    if not lista:
+        return
+    primeiro = lista[0]
+    campos = list(primeiro.keys())
+    log(f"[Fundos.json DEBUG] Campos do 1º registro ({len(campos)} campos):")
+    for c in campos:
+        val = primeiro.get(c)
+        if val and str(val).strip():
+            log(f"  {c!r:35s} = {str(val)[:60]!r}")
+
 def _parsear_lista_fundos(lista):
-    indice_exato = {}
+    indice_exato   = {}
     indice_palavras = []
+    mapa_cnpj      = {}   # ★ v16 — para fundos_caixa.json
+
     for f in lista:
         try:
             nome = str(f.get("no_fundo") or "").strip()
             if not nome: continue
             url_raw = str(f.get("de_link_pagina_fundo") or "").strip()
+            codfundo  = _extrair_codfundo(f)
+            cnpj_raw  = formatar_cnpj(f.get("nu_cnpj"))
+            cnpj_limpo = re.sub(r'\D', '', cnpj_raw)
+
+            # ★ v16.2 — URLs de documentos direto do JSON da CAIXA (mais confiável)
+            doc_lamina    = f.get("de_link_lamina", "")
+            doc_reg       = f.get("de_link_regulamento", "")
+            doc_inf       = f.get("de_link_info_compl", "")
+            doc_comunicado= f.get("de_link_fato_relevante", "")
+            doc_boletim   = f.get("de_link_boletim_comercial", "")
+            doc_termo     = f.get("de_link_termo_adesao", "")
+
+            # Carta mensal: não está no JSON, constrói com codfundo se disponível
+            doc_carta = (f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_{codfundo}.pdf"
+                         if codfundo else "")
+
+            # Fallback para lamina/regulamento construídos, se JSON não tiver URL válida
+            if not _url_doc_valida(doc_lamina) and codfundo:
+                doc_lamina = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_{codfundo}.pdf"
+            if not _url_doc_valida(doc_reg) and codfundo:
+                doc_reg = f"https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_{codfundo}.pdf"
+            if not _url_doc_valida(doc_inf) and codfundo:
+                doc_inf = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_{codfundo}.pdf"
+            if not _url_doc_valida(doc_comunicado) and codfundo:
+                doc_comunicado = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_{codfundo}.pdf"
+
             dados = {
                 "url":               url_raw if _url_valida(url_raw) else "",
-                "cnpj":              formatar_cnpj(f.get("nu_cnpj")),
+                "cnpj":              cnpj_raw,
+                "codfundo":          codfundo,
                 "perfil_risco":      f.get("no_perfil_risco"),
                 "taxa_adm":          f.get("pc_taxa_adm_cliente"),
                 "aplicacao_minima":  f.get("vr_aplicacao_inicial"),
                 "conversao_resgate": f.get("de_conversao_resgate"),
                 "pagamento_resgate": f.get("de_pagamento_resgate"),
+                # ★ v16.2 — URLs reais de documentos
+                "docs": {
+                    "lamina":       doc_lamina if _url_doc_valida(doc_lamina) else "",
+                    "regulamento":  doc_reg    if _url_doc_valida(doc_reg)    else "",
+                    "inf_comp":     doc_inf    if _url_doc_valida(doc_inf)    else "",
+                    "comunicado":   doc_comunicado if _url_doc_valida(doc_comunicado) else "",
+                    "carta_mensal": doc_carta,
+                    "boletim":      doc_boletim if _url_doc_valida(doc_boletim) else "",
+                    "termo":        doc_termo   if _url_doc_valida(doc_termo)   else "",
+                },
             }
             indice_exato[_normalizar_nome_fundo(nome)] = dados
             palavras = _palavras_chave_fundo(nome)
             if palavras:
                 indice_palavras.append((frozenset(palavras), dados))
+
+            # ★ v16.2 — índice CNPJ para fundos_caixa.json (usa URLs reais)
+            if cnpj_limpo:
+                mapa_cnpj[cnpj_limpo] = {
+                    "codfundo": codfundo,
+                    "nome":     nome,
+                    "cnpj":     cnpj_raw,
+                    "docs":     dados["docs"],
+                }
         except Exception:
             continue
-    return {"exato": indice_exato, "palavras": indice_palavras}
+
+    return {"exato": indice_exato, "palavras": indice_palavras, "cnpj": mapa_cnpj}
 
 def _buscar_meta_json(nome_sipii, indice_json):
     if not indice_json: return None
@@ -633,13 +716,35 @@ def buscar_fundos_json(headers):
         log("[Fundos.json] Nenhuma fonte disponível. Continuando sem metadados.")
         return {}
 
+    # ★ v16.1 — inspeciona campos na primeira execução (ajuda a achar codfundo)
+    _inspecionar_campos_fundos_json(lista[:1])
     indice = _parsear_lista_fundos(lista)
     log(f"[Fundos.json] {len(indice['exato'])} produtos indexados.")
+
+    # ★ v16 — salva fundos_caixa.json indexado por CNPJ para uso do HTML
+    mapa_cnpj = indice.get("cnpj", {})
+    if mapa_cnpj:
+        saida_html = {
+            "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+            "total":     len(mapa_cnpj),
+            "por_cnpj":  mapa_cnpj,
+        }
+        try:
+            FUNDOS_CAIXA_PATH.write_text(
+                json.dumps(saida_html, ensure_ascii=False, indent=2), encoding="utf-8")
+            log(f"[Fundos.json] fundos_caixa.json salvo — {len(mapa_cnpj)} CNPJs indexados.")
+        except Exception as e:
+            log(f"[Fundos.json] Erro ao salvar fundos_caixa.json: {e}")
+
     return indice
 
 def enriquecer_dados_com_fundos_json(df, indice_json):
-    colunas_novas = ["CNPJ", "Perfil de Risco", "Taxa Adm (%)",
-                     "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate"]
+    colunas_novas = [
+        "CNPJ", "codfundo", "Perfil de Risco", "Taxa Adm (%)",
+        "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate",
+        "doc_lamina", "doc_regulamento", "doc_inf_comp",  # ★ v16.2: URLs reais
+        "doc_comunicado", "doc_carta",
+    ]
     for col in colunas_novas:
         if col not in df.columns:
             df[col] = ""
@@ -651,18 +756,27 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
         meta = _buscar_meta_json(str(row.get("Fundo", "")), indice_json)
         if meta:
             if not _url_valida(url_atual):
-                row["URL"] = meta["url"]
-            row["CNPJ"]                  = str(meta["cnpj"] or "")
-            row["Perfil de Risco"]       = str(meta["perfil_risco"] or "")
-            row["Taxa Adm (%)"]          = str(meta["taxa_adm"]) if meta["taxa_adm"] is not None else ""
-            row["Aplicacao Minima (R$)"] = str(meta["aplicacao_minima"]) if meta["aplicacao_minima"] is not None else ""
-            row["Conversao Resgate"]     = str(meta["conversao_resgate"] or "")
-            row["Pagamento Resgate"]     = str(meta["pagamento_resgate"] or "")
+                row["URL"] = meta.get("url", "")
+            row["CNPJ"]                  = str(meta.get("cnpj") or "")
+            row["codfundo"]              = str(meta.get("codfundo") or "")
+            row["Perfil de Risco"]       = str(meta.get("perfil_risco") or "")
+            row["Taxa Adm (%)"]          = str(meta["taxa_adm"]) if meta.get("taxa_adm") is not None else ""
+            row["Aplicacao Minima (R$)"] = str(meta["aplicacao_minima"]) if meta.get("aplicacao_minima") is not None else ""
+            row["Conversao Resgate"]     = str(meta.get("conversao_resgate") or "")
+            row["Pagamento Resgate"]     = str(meta.get("pagamento_resgate") or "")
+            # ★ v16.2 — armazena URLs reais de documentos
+            docs = meta.get("docs", {})
+            row["doc_lamina"]     = docs.get("lamina", "")
+            row["doc_regulamento"]= docs.get("regulamento", "")
+            row["doc_inf_comp"]   = docs.get("inf_comp", "")
+            row["doc_comunicado"] = docs.get("comunicado", "")
+            row["doc_carta"]      = docs.get("carta_mensal", "")
         return row
 
     df = df.apply(_processar_linha, axis=1)
     preenchidas = df["URL"].apply(_url_valida).sum()
-    log(f"[Fundos.json] URLs válidas após cruzamento: {preenchidas}/{len(df)}")
+    com_cod = (df.get("codfundo", pd.Series(dtype=str)) != "").sum()
+    log(f"[Fundos.json] URLs válidas: {preenchidas}/{len(df)} | codfundo: {com_cod}/{len(df)}")
     return df
 
 # ---------------------------------------------------------------------------
@@ -698,7 +812,7 @@ def limpar_backups_antigos(manter=5):
                 log(f"[LIMPEZA] Erro ao remover {arq.name}: {e}")
 
 # ---------------------------------------------------------------------------
-# KPIs do Dashboard
+# KPIs do Dashboard — inalterado v15
 # ---------------------------------------------------------------------------
 def limpar_dados_para_calculo(df):
     df = df.copy()
@@ -759,7 +873,7 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
     log(f"[KPIs] JSON exportado: {caminho_saida.name}")
 
 # ---------------------------------------------------------------------------
-# Coletor de Indicadores de Mercado (Atualizado - Estrutura Corrigida)
+# ★ Coletor de Indicadores de Mercado — v16 (CDI/IPCA 24M/36M + PTAX histórico)
 # ---------------------------------------------------------------------------
 class ColetorMercado:
     def __init__(self):
@@ -774,6 +888,266 @@ class ColetorMercado:
         except Exception:
             pass
         return None
+
+    # ──────────────────────────────────────────────────────────────────────
+    # ★ v16 — CDI acumulado 12M / 24M / 36M via série 4391 (server-side)
+    # Resolve o HTTP 400 que ocorre quando o browser tenta buscar esses dados
+    # diretamente (api.bcb.gov.br não tem CORS confiável para browsers).
+    # ──────────────────────────────────────────────────────────────────────
+    def _buscar_cdi_acumulado(self):
+        """
+        ★ v16.3 — CDI mensal com separação entre:
+          - último mês fechado;
+          - mês atual parcial;
+          - acumulado no ano fechado;
+          - acumulado no ano com parcial;
+          - acumulados 12M/24M/36M.
+
+        Observação:
+        A série 4391 do BCB pode trazer o último registro como mês parcial ou,
+        em alguns momentos, com valor divergente do que está sendo usado
+        operacionalmente. Por isso esta rotina aceita um arquivo opcional
+        cdi_mensal_override.json na mesma pasta do robô.
+
+        Formato aceito do cdi_mensal_override.json:
+        {
+          "2026-01": 1.16,
+          "2026-02": 1.00,
+          "2026-03": 1.21,
+          "2026-04": 1.09,
+          "2026-05": 0.75
+        }
+        """
+        log("[CDI] Calculando CDI mensal/ano/12M/24M/36M...")
+
+        hoje = datetime.now()
+        caminho_override = BASE_DIR / "cdi_mensal_override.json"
+
+        # Valores informados/validados manualmente para evitar exibição errada.
+        # Se existir cdi_mensal_override.json, ele prevalece sobre estes.
+        overrides = {
+            "2026-01": 1.16,
+            "2026-02": 1.00,
+            "2026-03": 1.21,
+            "2026-04": 1.09,
+            "2026-05": 0.75,  # parcial em 22/05/2026, conforme conferência manual
+        }
+
+        if caminho_override.exists():
+            try:
+                extra = json.loads(caminho_override.read_text(encoding="utf-8"))
+                for k, v in extra.items():
+                    try:
+                        overrides[str(k)] = float(str(v).replace(",", "."))
+                    except Exception:
+                        pass
+                log(f"  [CDI] Override local carregado: {caminho_override.name} ({len(extra)} registros)")
+            except Exception as e:
+                log(f"  [CDI] Erro ao ler cdi_mensal_override.json: {e}")
+
+        def key_from_data_br(data_br):
+            d, m, y = data_br.split("/")
+            return f"{y}-{m.zfill(2)}"
+
+        def label_from_key(key):
+            y, m = key.split("-")
+            return f"{MESES_PT[int(m)-1]}/{y}"
+
+        def acum_valores(valores):
+            f = 1.0
+            for v in valores:
+                try:
+                    f *= (1 + float(v) / 100)
+                except Exception:
+                    pass
+            return round((f - 1) * 100, 4)
+
+        # Busca uma janela maior para conseguir 36M fechados.
+        inicio = hoje - timedelta(days=42 * 31)
+        url = (
+            "https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados"
+            f"?dataInicial={inicio.strftime('%d/%m/%Y')}"
+            f"&dataFinal={hoje.strftime('%d/%m/%Y')}&formato=json"
+        )
+
+        serie = {}
+        try:
+            res = requests.get(url, headers=self.headers, timeout=25)
+            if res.status_code == 200:
+                for item in res.json():
+                    try:
+                        k = key_from_data_br(item["data"])
+                        serie[k] = float(str(item["valor"]).replace(",", "."))
+                    except Exception:
+                        pass
+                log(f"  [CDI] Série 4391 BCB carregada: {len(serie)} meses")
+            else:
+                log(f"  [CDI] Série 4391 BCB HTTP {res.status_code}")
+        except Exception as e:
+            log(f"  [CDI] Erro ao buscar série 4391 BCB: {e}")
+
+        # Mescla overrides sobre a série do BCB.
+        for k, v in overrides.items():
+            serie[k] = float(v)
+
+        if not serie:
+            log("  [CDI] Sem série CDI disponível")
+            return None
+
+        # Mês atual e mês anterior.
+        mes_atual_key = f"{hoje.year}-{str(hoje.month).zfill(2)}"
+        primeiro_dia_mes = hoje.replace(day=1)
+        mes_anterior_data = primeiro_dia_mes - timedelta(days=1)
+        mes_fechado_key = f"{mes_anterior_data.year}-{str(mes_anterior_data.month).zfill(2)}"
+
+        # Todos os meses fechados até o mês anterior.
+        chaves_fechadas = sorted(k for k in serie.keys() if k <= mes_fechado_key)
+
+        mensal_fechado = serie.get(mes_fechado_key)
+        parcial_mes_atual = serie.get(mes_atual_key)
+
+        # Se, por algum motivo, não houver mês anterior na série, usa o último fechado disponível.
+        if mensal_fechado is None and chaves_fechadas:
+            mes_fechado_key = chaves_fechadas[-1]
+            mensal_fechado = serie.get(mes_fechado_key)
+
+        # Acumulado no ano fechado: jan até mês anterior.
+        ano_atual = str(hoje.year)
+        chaves_ano_fechado = sorted(k for k in chaves_fechadas if k.startswith(ano_atual + "-"))
+        valores_ano_fechado = [serie[k] for k in chaves_ano_fechado]
+        acum_ano = acum_valores(valores_ano_fechado) if valores_ano_fechado else None
+
+        # Acumulado no ano com parcial: jan até mês atual, se houver parcial.
+        chaves_ano_com_parcial = list(chaves_ano_fechado)
+        if parcial_mes_atual is not None and mes_atual_key not in chaves_ano_com_parcial:
+            chaves_ano_com_parcial.append(mes_atual_key)
+        chaves_ano_com_parcial = sorted(chaves_ano_com_parcial)
+        valores_ano_com_parcial = [serie[k] for k in chaves_ano_com_parcial if k in serie]
+        acum_ano_com_parcial = acum_valores(valores_ano_com_parcial) if valores_ano_com_parcial else None
+
+        # Acumulados de janela fechada.
+        valores_fechados = [serie[k] for k in chaves_fechadas]
+        acum_12m = acum_valores(valores_fechados[-12:]) if len(valores_fechados) >= 12 else None
+        acum_24m = acum_valores(valores_fechados[-24:]) if len(valores_fechados) >= 24 else None
+        acum_36m = acum_valores(valores_fechados[-36:]) if len(valores_fechados) >= 36 else None
+
+        log(
+            f"  [CDI] mês fechado={mensal_fechado}% ({label_from_key(mes_fechado_key)}) "
+            f"| parcial={parcial_mes_atual}% ({label_from_key(mes_atual_key)}) "
+            f"| ano fechado={acum_ano}% | ano c/ parcial={acum_ano_com_parcial}% "
+            f"| 12M={acum_12m}% | 24M={acum_24m}% | 36M={acum_36m}%"
+        )
+
+        return {
+            "mensal": mensal_fechado,
+            "mes_ref": label_from_key(mes_fechado_key),
+            "parcial_mes_atual": parcial_mes_atual,
+            "parcial_ref": label_from_key(mes_atual_key),
+            "acum_ano": acum_ano,
+            "acum_ano_com_parcial": acum_ano_com_parcial,
+            "acum_12m": acum_12m,
+            "acum_24m": acum_24m,
+            "acum_36m": acum_36m,
+            "n_meses": len(chaves_fechadas),
+            "fonte": "série 4391 BCB + validação/override local",
+            "historico": [{"key": k, "label": label_from_key(k), "valor": serie[k]} for k in sorted(serie.keys())],
+        }
+
+    # ──────────────────────────────────────────────────────────────────────
+    # ★ v16 — PTAX histórico mensal (24M) — server-side
+    # Resolve HTTP 400 do browser que tentava 36M (limite da API é 24M)
+    # ──────────────────────────────────────────────────────────────────────
+    def _buscar_ptax_historico(self, meses=24):
+        """
+        ★ v16.2 fix — usa CotacaoMoedaPeriodoFechamento (endpoint de fechamentos mensais).
+        Endpoint mais simples: aceita MM-YYYY, retorna fechamento de cada mês diretamente,
+        sem limite de período, sem chunking.
+        Fallback: SGS série 3697 (dólar PTAX mensal) se Olinda falhar.
+        """
+        log(f"[PTAX] Buscando histórico {meses}M via CotacaoMoedaPeriodoFechamento...")
+        hoje = datetime.now()
+        inicio = hoje - timedelta(days=meses * 31 + 10)
+
+        def fmt_mes_ptax(d):
+            return f"{str(d.month).zfill(2)}-{d.year}"  # MM-YYYY
+
+        # ── Estratégia 1: endpoint de fechamentos mensais (mais direto) ──
+        try:
+            url = (
+                "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
+                f"CotacaoMoedaPeriodoFechamento(codigoMoeda=@cm,"
+                f"dataInicialFechamento=@di,dataFinalFechamento=@df)"
+                f"?@cm='USD'"
+                f"&@di='{fmt_mes_ptax(inicio)}'"
+                f"&@df='{fmt_mes_ptax(hoje)}'"
+                f"&$format=json&$select=cotacaoVenda,dataFechamento"
+            )
+            res = requests.get(url, headers=self.headers, timeout=25)
+            if res.status_code == 200:
+                dados = res.json().get('value', [])
+                if dados:
+                    resultado = []
+                    prev = None
+                    for item in sorted(dados, key=lambda x: x.get('dataFechamento', '')):
+                        cot = item.get('cotacaoVenda')
+                        data_str = str(item.get('dataFechamento', ''))[:10]
+                        if not cot or not data_str:
+                            continue
+                        dt = datetime.strptime(data_str, '%Y-%m-%d')
+                        cotacao = round(float(cot), 4)
+                        var_pct = round((cotacao / prev - 1) * 100, 2) if prev else None
+                        resultado.append({
+                            'key':      f"{dt.year}-{str(dt.month).zfill(2)}",
+                            'mes':      f"{MESES_PT[dt.month-1]}/{dt.year}",
+                            'cotacao':  cotacao,
+                            'var_pct':  var_pct,
+                            'data_ref': data_str,
+                        })
+                        prev = cotacao
+                    log(f"  [PTAX] CotacaoMoedaPeriodoFechamento OK — {len(resultado)} meses")
+                    return resultado
+                log(f"  [PTAX] CotacaoMoedaPeriodoFechamento: sem dados")
+            else:
+                log(f"  [PTAX] CotacaoMoedaPeriodoFechamento HTTP {res.status_code}")
+        except Exception as e:
+            log(f"  [PTAX] CotacaoMoedaPeriodoFechamento erro: {e}")
+
+        # ── Estratégia 2: BCB SGS série 3697 (Dólar PTAX mensal — venda) ──
+        log("[PTAX] Tentando fallback SGS série 3697...")
+        try:
+            url_sgs = (
+                f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.3697/dados"
+                f"?dataInicial={inicio.strftime('%d/%m/%Y')}"
+                f"&dataFinal={hoje.strftime('%d/%m/%Y')}&formato=json"
+            )
+            res = requests.get(url_sgs, headers=self.headers, timeout=25)
+            if res.status_code == 200:
+                dados = res.json()
+                if dados:
+                    resultado = []
+                    prev = None
+                    for item in dados:
+                        d, m, y = item['data'].split('/')
+                        cotacao = round(float(item['valor']), 4)
+                        var_pct = round((cotacao / prev - 1) * 100, 2) if prev else None
+                        resultado.append({
+                            'key':      f"{y}-{m}",
+                            'mes':      f"{MESES_PT[int(m)-1]}/{y}",
+                            'cotacao':  cotacao,
+                            'var_pct':  var_pct,
+                            'data_ref': f"{y}-{m}-{d}",
+                        })
+                        prev = cotacao
+                    log(f"  [PTAX] SGS série 3697 OK — {len(resultado)} meses")
+                    return resultado
+                log("  [PTAX] SGS série 3697: sem dados")
+            else:
+                log(f"  [PTAX] SGS série 3697 HTTP {res.status_code}")
+        except Exception as e:
+            log(f"  [PTAX] SGS série 3697 erro: {e}")
+
+        log("  [PTAX] Todas as estratégias falharam — PTAX histórico indisponível")
+        return []
 
     def _carregar_base_ipca(self):
         if IPCA_BASE_PATH.exists():
@@ -896,21 +1270,26 @@ class ColetorMercado:
         return []
 
     def coletar_todos(self):
-        log("[MERCADO] Coletando indicadores macro...")
+        log("[MERCADO] Coletando indicadores macro (v16)...")
+
+        # Taxas de referência
         selic_meta    = self._buscar_bcb(432)
-        cdi_dia       = self._buscar_bcb(12)
-        cdi_mensal    = self._buscar_bcb(4391) 
         poupanca_nova = self._buscar_bcb(196)
-        
+
+        # ★ v16 — CDI acumulado server-side (resolve CORS/400 no browser)
+        cdi_acum = self._buscar_cdi_acumulado()
+        cdi_mensal_atual = cdi_acum["mensal"] if cdi_acum else self._buscar_bcb(4391)
+
+        # IPCA histórico
         selic_historico       = self._carregar_base_selic()
         inflacao_meta_efetiva = self._carregar_base_meta_inflacao()
-
         base_ipca  = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
         ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
         if ipca_serie: self._salvar_base_ipca(ipca_serie)
 
         ipca_ultimo_mes = ipca_label_mes = ipca_acum_ano = ipca_acum_12m = None
+        ipca_acum_24m = ipca_acum_36m = None   # ★ v16
         ipca_historico = []
         if ipca_serie:
             ultimo = ipca_serie[-1]
@@ -918,35 +1297,58 @@ class ColetorMercado:
             ipca_label_mes  = ultimo["label"]
             ipca_acum_ano   = self._acumular_ano(ipca_serie)
             ipca_acum_12m   = self._acumular(ipca_serie, 12)
-            ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
+            # ★ v16 — 24M e 36M
+            ipca_acum_24m = self._acumular(ipca_serie, 24) if len(ipca_serie) >= 24 else None
+            ipca_acum_36m = self._acumular(ipca_serie, 36) if len(ipca_serie) >= 36 else None
+            ipca_historico = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
+            log(f"  [IPCA] 12M={ipca_acum_12m}% | 24M={ipca_acum_24m}% | 36M={ipca_acum_36m}%")
 
+        # Yahoo Finance
         dolar     = self._buscar_yahoo("BRL=X")
         ibov      = self._buscar_yahoo("^BVSP")
         sp500     = self._buscar_yahoo("^GSPC")
         dow_jones = self._buscar_yahoo("^DJI")
         nasdaq    = self._buscar_yahoo("^IXIC")
+
+        # Focus
         focus_data = buscar_focus(self.headers)
+
+        # ★ v16 — PTAX histórico mensal (resolve HTTP 400 do browser para 36M)
+        ptax_historico = self._buscar_ptax_historico(meses=24)
 
         return {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
             "cards": {
                 "selic_meta": {
-                    "valor": selic_meta,
-                    "unidade": "% a.a.",
+                    "valor":    selic_meta,
+                    "unidade":  "% a.a.",
                     "historico": selic_historico,
                 },
                 "cdi": {
-                    "valor": round(selic_meta - 0.10, 4) if selic_meta else None,
-                    "mensal": round(cdi_mensal, 4) if cdi_mensal else None,
-                    "dia": cdi_dia,
+                    # Taxa anual estimada
+                    "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
+                    # ★ v16 — acumulados pré-calculados server-side
+                    "mensal":   cdi_mensal_atual,
+                    "mes_ref":  cdi_acum["mes_ref"] if cdi_acum else None,
+                    "parcial_mes_atual": cdi_acum.get("parcial_mes_atual") if cdi_acum else None,
+                    "parcial_ref":       cdi_acum.get("parcial_ref") if cdi_acum else None,
+                    "acum_ano":          cdi_acum.get("acum_ano") if cdi_acum else None,
+                    "acum_ano_com_parcial": cdi_acum.get("acum_ano_com_parcial") if cdi_acum else None,
+                    "acum_12m": cdi_acum["acum_12m"] if cdi_acum else None,
+                    "acum_24m": cdi_acum["acum_24m"] if cdi_acum else None,
+                    "acum_36m": cdi_acum["acum_36m"] if cdi_acum else None,
+                    "historico": cdi_acum.get("historico") if cdi_acum else [],
+                    "fonte_acum": cdi_acum["fonte"] if cdi_acum else "indisponível",
                     "unidade": "% a.a.",
                 },
                 "ipca": {
-                    "ultimo_mes": ipca_ultimo_mes,
-                    "label_mes": ipca_label_mes,
-                    "acum_ano": ipca_acum_ano,
-                    "acum_12m": ipca_acum_12m,
-                    "historico": ipca_historico,
+                    "ultimo_mes":  ipca_ultimo_mes,
+                    "label_mes":   ipca_label_mes,
+                    "acum_ano":    ipca_acum_ano,
+                    "acum_12m":    ipca_acum_12m,
+                    "acum_24m":    ipca_acum_24m,   # ★ v16
+                    "acum_36m":    ipca_acum_36m,   # ★ v16
+                    "historico":   ipca_historico,
                     "meta_central": 3.0,
                     "meta_superior": 4.5,
                     "meta_inferior": 1.5,
@@ -954,13 +1356,13 @@ class ColetorMercado:
                 },
                 "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
                 "ibovespa": {
-                    "atual": ibov.get("atual"),
+                    "atual":    ibov.get("atual"),
                     "anterior": ibov.get("anterior"),
                     "variacao_mensal": round(((ibov["atual"] / ibov["anterior"]) - 1) * 100, 2)
                                        if ibov.get("atual") and ibov.get("anterior") else None,
                 },
                 "dolar": {
-                    "atual": dolar.get("atual"),
+                    "atual":    dolar.get("atual"),
                     "anterior": dolar.get("anterior"),
                     "variacao_mensal": round(((dolar["atual"] / dolar["anterior"]) - 1) * 100, 2)
                                        if dolar.get("atual") and dolar.get("anterior") else None,
@@ -973,12 +1375,15 @@ class ColetorMercado:
                 "dow_jones": dow_jones.get("atual"),
                 "nasdaq":    nasdaq.get("atual"),
             },
+            # ★ v16 — PTAX pré-carregado para o HTML (resolve limite 24M da API)
+            "ptax_historico": ptax_historico,
             "focus": focus_data,
             "historico_selic": selic_historico,
             "meta_vs_inflacao_efetiva": inflacao_meta_efetiva,
         }
+
 # ---------------------------------------------------------------------------
-# SIPII scraping
+# SIPII scraping — inalterado v15
 # ---------------------------------------------------------------------------
 def configurar_driver(headless=True):
     opt = webdriver.ChromeOptions()
@@ -1049,16 +1454,17 @@ def extrair_dados_tabela(driver, nome_csv, sigla):
             nome = tds[0].text.strip()
             if nome:
                 dados.append({
-                    "Categoria": nome_csv, "Fundo": nome,
-                    "Fundo_norm": normalizar(nome),
-                    "Data Inicio": tds[1].text.strip(),
-                    "Cota (R$)": tds[3].text.strip(),
+                    "Categoria":        nome_csv,
+                    "Fundo":            nome,
+                    "Fundo_norm":       normalizar(nome),
+                    "Data Inicio":      tds[1].text.strip(),
+                    "Cota (R$)":        tds[3].text.strip(),
                     "Variacao Dia (%)": tds[4].text.strip(),
-                    "Acum. Mes (%)": tds[5].text.strip(),
-                    "Acum. Ano (%)": tds[6].text.strip(),
-                    "Acum. 12M (%)": tds[7].text.strip(),
-                    "PL (milhoes R$)": tds[8].text.strip(),
-                    "Perfil": sigla,
+                    "Acum. Mes (%)":    tds[5].text.strip(),
+                    "Acum. Ano (%)":    tds[6].text.strip(),
+                    "Acum. 12M (%)":    tds[7].text.strip(),
+                    "PL (milhoes R$)":  tds[8].text.strip(),
+                    "Perfil":           sigla,
                 })
     return dados
 
@@ -1139,7 +1545,7 @@ def salvar_excel(df, caminho):
             "Categoria":18,"Fundo":55,"Data Inicio":13,"Cota (R$)":16,
             "Variacao Dia (%)":14,"Acum. Mes (%)":13,"Acum. Ano (%)":13,
             "Acum. 12M (%)":13,"PL (milhoes R$)":18,"Perfis":30,"URL":60,
-            "CNPJ":22,"Perfil de Risco":16,"Taxa Adm (%)":14,
+            "CNPJ":22,"codfundo":12,"Perfil de Risco":16,"Taxa Adm (%)":14,
             "Aplicacao Minima (R$)":22,"Conversao Resgate":18,"Pagamento Resgate":18,
         }
         for ci,cn in enumerate(cols,1):
@@ -1153,12 +1559,15 @@ def salvar_excel(df, caminho):
 # Ponto de entrada
 # ---------------------------------------------------------------------------
 def executar():
-    log("⚡ [INÍCIO] Robô SIPII v15 — CDI real + todos os indicadores macro")
+    log("=" * 65)
+    log("⚡ ROBÔ SIPII v16 — CDI/IPCA 24M/36M + PTAX + fundos_caixa.json")
+    log("=" * 65)
 
     # 1. URLs dinâmicas do portal CAIXA
     links_dinamicos = raspar_urls_caixa()
 
-    # 2. Metadados do fundos.json (CNPJ, taxa adm, prazos)
+    # 2. Metadados do fundos.json (CNPJ, taxa adm, prazos, codfundo)
+    #    ★ v16: também salva fundos_caixa.json para o HTML
     headers_http = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     indice_fundos_json = buscar_fundos_json(headers_http)
 
@@ -1179,14 +1588,18 @@ def executar():
             return
         log(f"[FALLBACK] Continuando com {len(df_consolidado)} fundos.")
 
-    # 5. Enriquecimento
-    df_consolidado["URL"] = df_consolidado["Fundo"].apply(lambda x: encontrar_url(x, links_dinamicos))
+    # 5. Enriquecimento (URL + CNPJ + codfundo + taxa adm + prazos)
+    df_consolidado["URL"] = df_consolidado["Fundo"].apply(
+        lambda x: encontrar_url(x, links_dinamicos))
     df_consolidado = enriquecer_dados_com_fundos_json(df_consolidado, indice_fundos_json)
 
     # 6. Limpeza de nomes
-    df_consolidado['Fundo']      = df_consolidado['Fundo'].astype(str).apply(lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
-    df_consolidado['Fundo_norm'] = df_consolidado['Fundo_norm'].astype(str).apply(lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
-    for col in ["CNPJ","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate"]:
+    df_consolidado['Fundo']      = df_consolidado['Fundo'].astype(str).apply(
+        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
+    df_consolidado['Fundo_norm'] = df_consolidado['Fundo_norm'].astype(str).apply(
+        lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
+    for col in ["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)",
+                "Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate"]:
         if col in df_consolidado.columns:
             df_consolidado[col] = df_consolidado[col].fillna("")
 
@@ -1197,31 +1610,38 @@ def executar():
     salvar_excel(df_consolidado, caminho_xlsx)
 
     data_str = datetime.now().strftime("%Y%m%d")
-    df_consolidado.to_csv(BASE_DIR / f"sipii_caixa_{data_str}.csv", index=False, encoding="utf-8", quoting=csv.QUOTE_MINIMAL)
+    df_consolidado.to_csv(BASE_DIR / f"sipii_caixa_{data_str}.csv",
+                          index=False, encoding="utf-8", quoting=csv.QUOTE_MINIMAL)
     salvar_excel(df_consolidado, BASE_DIR / f"sipii_caixa_{data_str}.xlsx")
 
     # 8. KPIs do dashboard
     gerar_json_kpis_dashboard(df_consolidado, BASE_DIR / "kpis_dashboard.json")
 
-    # 9. Indicadores macro + Focus + CDI mensal real
+    # 9. Indicadores macro + Focus + CDI/IPCA 24M/36M + PTAX histórico
     try:
         coletor     = ColetorMercado()
         indicadores = coletor.coletar_todos()
         caminho_json = BASE_DIR / "mercado_atual.json"
         with open(caminho_json, "w", encoding="utf-8") as f:
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
-        cdi_mensal = indicadores.get("cards", {}).get("cdi", {}).get("mensal")
-        n_hist  = len(indicadores["cards"]["ipca"]["historico"])
-        n_focus = len(indicadores.get("focus", {})) - 1
-        log(f"[SUCESSO] mercado_atual.json exportado | CDI mensal real={cdi_mensal}% | IPCA: {n_hist}m | Focus: {n_focus} ind.")
+
+        cdi   = indicadores.get("cards", {}).get("cdi", {})
+        ipca  = indicadores.get("cards", {}).get("ipca", {})
+        ptax  = indicadores.get("ptax_historico", [])
+        log(f"[SUCESSO] mercado_atual.json exportado")
+        log(f"  CDI: mensal={cdi.get('mensal')}% | 12M={cdi.get('acum_12m')}% | 24M={cdi.get('acum_24m')}% | 36M={cdi.get('acum_36m')}%")
+        log(f"  IPCA: 12M={ipca.get('acum_12m')}% | 24M={ipca.get('acum_24m')}% | 36M={ipca.get('acum_36m')}%")
+        log(f"  PTAX: {len(ptax)} fechamentos mensais pré-salvos")
     except Exception as e:
         log(f"[ERRO] Falha nos indicadores macro: {e}")
         traceback.print_exc()
 
-    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline completo.")
-
     # 10. Limpeza de backups (mantém 5)
     limpar_backups_antigos(manter=5)
+
+    log("=" * 65)
+    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v16 completo.")
+    log("=" * 65)
 
 
 if __name__ == "__main__":
