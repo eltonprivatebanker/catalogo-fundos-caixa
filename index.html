@@ -2584,13 +2584,140 @@ document.querySelectorAll('.indic-tab').forEach(btn => {
   });
 });
 
+
+/* ════════════════════════════════════════════════════
+   NORMALIZA mercado_atual.json PARA A TABELA DE INDICADORES
+   Resolve compatibilidade entre o JSON gerado pelo robô e a estrutura
+   esperada pela tabela nova.
+════════════════════════════════════════════════════ */
+function normalizarMercadoAtual(d){
+  if(!d || typeof d !== 'object') return d;
+
+  const c = d.cards || {};
+  const intl = d.indices_internacionais || {};
+
+  // A tabela nova lê d.indices_mercado.
+  // O robô atual ainda manda Ibovespa/Dólar dentro de cards
+  // e índices internacionais como valores simples.
+  if(!d.indices_mercado) d.indices_mercado = {};
+
+  const put = (obj, key, value) => {
+    if(value !== null && value !== undefined && value !== '' && obj[key] === undefined){
+      obj[key] = value;
+    }
+  };
+
+  // Dólar — compatibiliza cards.dolar -> indices_mercado.dolar
+  if(!d.indices_mercado.dolar) d.indices_mercado.dolar = {};
+  if(c.dolar){
+    put(d.indices_mercado.dolar, 'fechamento_atual', c.dolar.atual);
+    put(d.indices_mercado.dolar, 'fechamento_mes_anterior', c.dolar.anterior);
+    put(d.indices_mercado.dolar, 'variacao_mes_atual', c.dolar.variacao_mensal);
+    put(d.indices_mercado.dolar, 'variacao_mes_fechado', c.dolar.variacao_mes_fechado);
+    put(d.indices_mercado.dolar, 'acum_ano', c.dolar.acum_ano);
+    put(d.indices_mercado.dolar, 'acum_12m', c.dolar.acum_12m);
+    put(d.indices_mercado.dolar, 'acum_24m', c.dolar.acum_24m);
+    put(d.indices_mercado.dolar, 'acum_36m', c.dolar.acum_36m);
+  }
+
+  // Ibovespa — compatibiliza cards.ibovespa -> indices_mercado.ibovespa
+  if(!d.indices_mercado.ibovespa) d.indices_mercado.ibovespa = {};
+  if(c.ibovespa){
+    put(d.indices_mercado.ibovespa, 'fechamento_atual', c.ibovespa.atual);
+    put(d.indices_mercado.ibovespa, 'fechamento_mes_anterior', c.ibovespa.anterior);
+    put(d.indices_mercado.ibovespa, 'variacao_mes_atual', c.ibovespa.variacao_mensal);
+    put(d.indices_mercado.ibovespa, 'variacao_mes_fechado', c.ibovespa.variacao_mes_fechado);
+    put(d.indices_mercado.ibovespa, 'acum_ano', c.ibovespa.acum_ano);
+    put(d.indices_mercado.ibovespa, 'acum_12m', c.ibovespa.acum_12m);
+    put(d.indices_mercado.ibovespa, 'acum_24m', c.ibovespa.acum_24m);
+    put(d.indices_mercado.ibovespa, 'acum_36m', c.ibovespa.acum_36m);
+  }
+
+  // Bolsa EUA — o robô atual entrega só o valor atual como número.
+  // A tabela nova espera objeto com fechamento_atual e variações.
+  const garantirIndiceEUA = (nome, valorAtual) => {
+    if(!d.indices_mercado[nome]) d.indices_mercado[nome] = {};
+    put(d.indices_mercado[nome], 'fechamento_atual', valorAtual);
+  };
+
+  garantirIndiceEUA('sp500', intl.sp500_usd);
+  garantirIndiceEUA('dow_jones', intl.dow_jones);
+  garantirIndiceEUA('nasdaq', intl.nasdaq);
+
+  return d;
+}
+
+
+
+/* ════════════════════════════════════════════════════
+   CARREGA E MESCLA indices_mercado_teste.json
+   Motivo: mercado_atual.json tem CDI/IPCA/PTAX, mas os
+   acumulados de bolsas vêm no arquivo de índices detalhados.
+════════════════════════════════════════════════════ */
+async function carregarIndicesMercadoDetalhados(){
+  try{
+    const r = await fetch(BASE_URL+'indices_mercado_teste.json?v='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json();
+    if(d?.indices_mercado){
+      console.info('[Índices] indices_mercado_teste.json carregado e pronto para mescla');
+      return d;
+    }
+    console.warn('[Índices] indices_mercado_teste.json carregou, mas não trouxe indices_mercado');
+    return null;
+  }catch(e){
+    console.warn('[Índices] indices_mercado_teste.json indisponível:', e);
+    return null;
+  }
+}
+
+function mesclarMercadoComIndicesDetalhados(raw, detalhado){
+  if(!raw || typeof raw !== 'object' || !detalhado || typeof detalhado !== 'object') return raw;
+
+  // Mantém o mercado_atual.json como arquivo principal, mas injeta
+  // os objetos detalhados que a tabela nova usa.
+  raw.indices_mercado = raw.indices_mercado || {};
+
+  if(detalhado.indices_mercado && typeof detalhado.indices_mercado === 'object'){
+    Object.entries(detalhado.indices_mercado).forEach(([chave, valor]) => {
+      const atual = raw.indices_mercado[chave] || {};
+      raw.indices_mercado[chave] = {
+        ...(valor || {}),
+        ...(atual || {})
+      };
+    });
+  }
+
+  raw.indices_internacionais = raw.indices_internacionais || {};
+
+  if(detalhado.indices_internacionais && typeof detalhado.indices_internacionais === 'object'){
+    raw.indices_internacionais = {
+      ...detalhado.indices_internacionais,
+      ...raw.indices_internacionais
+    };
+  }
+
+  if(detalhado.gerado_em) raw.indices_mercado_gerado_em = detalhado.gerado_em;
+
+  return raw;
+}
+
+
 /* ════════════════════════════════════════════════════
    CARREGA mercado_atual.json
 ════════════════════════════════════════════════════ */
 async function carregarMercado(){
   try{
     const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
-    const d = await r.json();
+    const raw = await r.json();
+
+    // Complementa o mercado_atual.json com o arquivo de índices detalhados,
+    // que contém mês fechado, mês atual, ano, 12M, 24M e 36M para dólar,
+    // Ibovespa, S&P 500, Dow Jones e Nasdaq.
+    const rawIndicesDetalhados = await carregarIndicesMercadoDetalhados();
+    const rawUnificado = mesclarMercadoComIndicesDetalhados(raw, rawIndicesDetalhados);
+
+    const d = normalizarMercadoAtual(rawUnificado);
     _dadosMercado = d;
 
     if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
