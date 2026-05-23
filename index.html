@@ -911,6 +911,7 @@ footer{
 .indic-table-v2 .group-row td{padding:5px 14px;background:var(--bg3);border-bottom:1px solid var(--border2);border-top:1px solid var(--border2)}
 .group-lbl{display:flex;align-items:center;gap:8px;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600}
 .group-lbl-line{flex:1;height:1px;background:var(--border2)}
+.market-flag{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-right:6px;font-size:.86rem;vertical-align:middle;filter:saturate(1.08)}
 .indic-table-v2 tbody tr.data-row{border-bottom:1px solid var(--border2);transition:background .12s}
 .indic-table-v2 tbody tr.data-row:hover{background:rgba(200,151,58,.03)}
 .indic-table-v2 tbody tr.data-row.alert-row{background:rgba(240,85,101,.03)}
@@ -1432,7 +1433,7 @@ footer{
 
         <!-- GRUPO: Bolsa Brasil -->
         <tr class="group-row"><td colspan="5">
-          <div class="group-lbl"><span>Bolsa — Brasil</span><div class="group-lbl-line"></div></div>
+          <div class="group-lbl"><span><span class="market-flag">🇧🇷</span>Bolsa — Brasil</span><div class="group-lbl-line"></div></div>
         </td></tr>
 
         <!-- Ibovespa unificado -->
@@ -1463,7 +1464,7 @@ footer{
 
         <!-- GRUPO: Bolsa EUA -->
         <tr class="group-row"><td colspan="5">
-          <div class="group-lbl"><span>Bolsa — EUA</span><div class="group-lbl-line"></div></div>
+          <div class="group-lbl"><span><span class="market-flag">🇺🇸</span>Bolsa — EUA</span><div class="group-lbl-line"></div></div>
         </td></tr>
 
         <!-- S&P 500 -->
@@ -2510,10 +2511,10 @@ function atualizarTabelaIndicadores(){
   if(dolarDiaTexto && dolarDiaTexto !== '—') set('dolar-cur-cot', dolarDiaTexto);
   else setMoney('dolar-cur-cot', dolarAtual);
 
-  setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10, true);
+  setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10);
   set('dolar-cur-sub', dolarVarMesAtual !== null ? 'var. mês atual' : 'cotação atual');
-  setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15, true);
-  setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25, true);
+  setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
+  setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
   set('dolar-acum-sub-v2', `var. ${m}M`);
 
   // ═══ IBOVESPA ═══
@@ -2907,6 +2908,36 @@ let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
 
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
+const DATE_SET=new Set(["Data Inicio","Data Início","Data de Inicio","Data de Início","DATA INICIO","DATA INÍCIO"]);
+function normalizarHeaderOrdenacao(h){
+  return String(h||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+}
+function isDateHeader(key){
+  const n=normalizarHeaderOrdenacao(key);
+  return DATE_SET.has(key)||n==='data inicio'||n==='data de inicio'||n.includes('data inicio');
+}
+function parseDateBR(v){
+  if(v===null||v===undefined) return null;
+  const s=String(v).trim();
+  if(!s||s==='-'||s==='—'||s.toLowerCase()==='null') return null;
+  const m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+  if(m){
+    const d=parseInt(m[1],10);
+    const mo=parseInt(m[2],10)-1;
+    let y=parseInt(m[3],10);
+    if(y<100) y+=2000;
+    const dt=new Date(y,mo,d);
+    if(dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d) return dt.getTime();
+  }
+  const t=Date.parse(s);
+  return Number.isFinite(t)?t:null;
+}
+function compararOrdenacao(av,bv){
+  if(av===null&&bv===null) return 0;
+  if(av===null) return 1;
+  if(bv===null) return -1;
+  return av<bv?-sortDir:av>bv?sortDir:0;
+}
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
 const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
@@ -3012,10 +3043,22 @@ function applyFilter(){
   if(sortCol>=0&&sortCol<displayHeaders.length){
     const key=displayHeaders[sortCol];
     const isNum=NUM_SET.has(key);
+    const isDate=isDateHeader(key);
     filtered.sort((a,b)=>{
-      const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();
-      const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();
-      return av<bv?-sortDir:av>bv?sortDir:0;
+      let av,bv;
+      if(isNum){
+        av=toNum(a[key]);
+        bv=toNum(b[key]);
+      }else if(isDate){
+        av=parseDateBR(a[key]);
+        bv=parseDateBR(b[key]);
+      }else{
+        av=String(a[key]||'').toLowerCase();
+        bv=String(b[key]||'').toLowerCase();
+        if(!av) av=null;
+        if(!bv) bv=null;
+      }
+      return compararOrdenacao(av,bv);
     });
   }
   currentPage=1; expandedRows.clear(); render(); renderRankings();
