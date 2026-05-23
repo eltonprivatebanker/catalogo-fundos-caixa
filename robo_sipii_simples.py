@@ -429,6 +429,35 @@ def _parsear_texto_focus(texto, data_str):
                 }
     return resultado if resultado else None
 
+def _descobrir_focus_pdf_disponivel(headers, max_semanas=8):
+    """
+    Localiza o PDF do Boletim Focus mais recente realmente disponível no site do BCB.
+
+    Motivo:
+    Nem sempre o PDF da última sexta-feira já está publicado quando o robô ou a página
+    rodam. Por isso não é seguro montar o link apenas com a data do computador.
+    """
+    for offset in range(max_semanas):
+        data_str, data_br = _ultima_sexta(offset)
+        url_pdf = f"https://www.bcb.gov.br/content/focus/focus/R{data_str}.pdf"
+        try:
+            res = requests.get(url_pdf, headers=headers, timeout=20)
+            content_type = res.headers.get("Content-Type", "").lower()
+
+            if res.status_code == 200 and ("pdf" in content_type or len(res.content) > 10000):
+                return {
+                    "data_pdf": data_str,
+                    "data_pdf_br": data_br,
+                    "pdf_url": url_pdf,
+                }
+
+            log(f"[Focus PDF] R{data_str}.pdf ainda indisponível — HTTP {res.status_code}")
+        except Exception as e:
+            log(f"[Focus PDF] Erro ao testar R{data_str}.pdf: {e}")
+
+    return {}
+
+
 def _raspar_focus_pdf(headers):
     try:
         import pypdf
@@ -470,33 +499,57 @@ def _carregar_focus_cache():
 def buscar_focus(headers):
     anos_alvo = [2026, 2027, 2028, 2029]
     log("[Focus] Coletando expectativas do Banco Central...")
+
+    # Localiza o PDF oficial mais recente disponível no BCB.
+    # Esse campo será usado pelo index.html para o botão "Baixe aqui o PDF",
+    # evitando links para arquivos ainda não publicados.
+    pdf_disponivel = _descobrir_focus_pdf_disponivel(headers)
+
     raw_focus = {}
     falhas_api = 0
+
     for indicador in INDICADORES_FOCUS:
         log(f"  [Focus] -> {indicador}")
         obtido = False
+
         for tentativa in range(2):
             resultado = _buscar_focus_indicador(indicador, anos_alvo, headers)
+
             if resultado:
                 raw_focus[indicador] = resultado
                 obtido = True
                 falhas_api = 0
                 break
-            if tentativa < 1: time.sleep(10)
+
+            if tentativa < 1:
+                time.sleep(10)
+
         if not obtido:
             raw_focus[indicador] = {}
             falhas_api += 1
+
             if falhas_api >= 2:
                 log("[Focus] BCB indisponível — abortando OData.")
                 break
+
         time.sleep(1)
+
     indicadores_ok = sum(1 for v in raw_focus.values() if v)
+
+    # Fallback: se a API OData não trouxer nada, tenta extrair do PDF.
     if indicadores_ok == 0:
         dados_pdf, data_pdf = _raspar_focus_pdf(headers)
+
         if dados_pdf:
+            url_pdf = f"https://www.bcb.gov.br/content/focus/focus/R{data_pdf}.pdf"
+            data_pdf_br = f"{data_pdf[6:]}/{data_pdf[4:6]}/{data_pdf[:4]}"
+
             focus_pdf = {
                 "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
-                "fonte": "pdf", "data_pdf": data_pdf,
+                "fonte": "pdf",
+                "data_pdf": data_pdf,
+                "data_pdf_br": data_pdf_br,
+                "pdf_url": url_pdf,
                 "IPCA": dados_pdf.get("IPCA", {}),
                 "Selic": dados_pdf.get("Selic", {}),
                 "PIB": dados_pdf.get("PIB Total", {}),
@@ -504,13 +557,22 @@ def buscar_focus(headers):
                 "IGPM": dados_pdf.get("IGP-M", {}),
                 "IPCA_Modal": dados_pdf.get("IPCA", {}),
             }
+
             _salvar_focus_cache(focus_pdf)
             return focus_pdf
+
     if indicadores_ok == 0:
         cache = _carregar_focus_cache()
+
         if cache:
             cache["fonte"] = "cache"
+
+            # Mesmo quando usa cache, tenta atualizar apenas o link do PDF mais recente disponível.
+            if pdf_disponivel:
+                cache.update(pdf_disponivel)
+
             return cache
+
     focus = {
         "data_coleta": datetime.now().strftime("%d/%m/%Y %H:%M"),
         "fonte": "odata",
@@ -521,9 +583,16 @@ def buscar_focus(headers):
         "IGPM":       raw_focus.get("IGP-M", {}),
         "IPCA_Modal": raw_focus.get("IPCA", {}),
     }
+
+    # Acrescenta link validado do PDF oficial mais recente.
+    if pdf_disponivel:
+        focus.update(pdf_disponivel)
+
     if indicadores_ok > 0:
         _salvar_focus_cache(focus)
+
     return focus
+
 
 # ---------------------------------------------------------------------------
 # ★ fundos.json — metadados comerciais + fundos_caixa.json para o HTML (v16)
