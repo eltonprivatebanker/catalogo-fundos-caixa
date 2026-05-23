@@ -14,12 +14,12 @@
   --bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--bg4:#181d36;
   --gold:#c8973a;--gold2:#e8bb6a;--gold3:#f5d48a;
   --gold-dim:rgba(200,151,58,.1);--gold-glow:rgba(200,151,58,.2);
-  --text:#edf1fb;--muted:#a6b0c9;--muted2:#7f8aa8;
+  --text:#d8dcea;--muted:#5e6b8a;--muted2:#3d4560;
   --green:#2ed17a;--green-dim:rgba(46,209,122,.1);
   --red:#f05565;--red-dim:rgba(240,85,101,.1);
   --blue:#5b9cf6;--blue-dim:rgba(91,156,246,.1);
   --orange:#fb923c;--purple:#a78bfa;
-  --border:rgba(200,151,58,.22);--border2:rgba(255,255,255,.085);--border3:rgba(255,255,255,.13);
+  --border:rgba(200,151,58,.12);--border2:rgba(255,255,255,.04);--border3:rgba(255,255,255,.07);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -52,37 +52,6 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
-
-/* ── AVISOS ── */
-.top-disclaimer{
-  margin-top:18px;
-  display:flex;
-  gap:12px;
-  align-items:flex-start;
-  padding:14px 18px;
-  border:1px solid rgba(200,151,58,.18);
-  border-radius:14px;
-  background:linear-gradient(180deg,rgba(200,151,58,.09),rgba(255,255,255,.018));
-  color:#b8c0d6;
-  font-size:.74rem;
-  line-height:1.6;
-  box-shadow:0 8px 28px rgba(0,0,0,.18);
-}
-.top-disclaimer-icon{
-  flex-shrink:0;
-  width:24px;
-  height:24px;
-  border-radius:8px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:var(--gold-dim);
-  border:1px solid rgba(200,151,58,.18);
-  color:var(--gold2);
-  font-size:.78rem;
-}
-.top-disclaimer strong{color:var(--gold2);font-weight:700}
-.top-disclaimer span{color:var(--text)}
 
 /* ── KPI GRID ── */
 .section-gap{margin-top:28px}
@@ -231,74 +200,23 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-timeline-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;width:100%;max-width:100%;min-width:0}
 .dolar-timeline-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
 .dolar-timeline-header{padding:12px 18px;border-bottom:1px solid var(--border2);
-  display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none;transition:background .15s}
+  display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
 .dolar-timeline-header:hover{background:rgba(200,151,58,.03)}
-.dolar-timeline-title-wrap{display:flex;flex-direction:column;gap:2px;min-width:0}
 .dolar-timeline-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--gold2)}
-.dolar-timeline-sub{font-size:.62rem;color:#9aa6c3;font-family:'JetBrains Mono',monospace}
-.dolar-timeline-toggle{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border2);background:var(--bg3);
-  color:var(--muted);border-radius:8px;padding:5px 10px;font-size:.62rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
-.dolar-timeline-toggle:hover{border-color:var(--gold);color:var(--gold2);background:var(--gold-dim)}
+.dolar-timeline-toggle{font-size:.65rem;color:var(--muted);transition:transform .25s}
+.dolar-timeline-toggle.open{transform:rotate(180deg)}
 .dolar-timeline-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
-.dolar-timeline-body.open{max-height:560px}
-.dolar-months{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(92px,1fr));
-  gap:8px;
-  overflow-x:visible;
-  padding:12px 16px 16px;
-}
-.dolar-month-item{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:4px;
-  min-width:0;
-  padding:10px 8px;
-  border-radius:10px;
-  border:1px solid var(--border2);
-  background:var(--bg3);
-  transition:border-color .15s,background .15s,transform .15s;
-  cursor:default;
-}
-.dolar-month-item:hover{border-color:var(--gold);background:var(--gold-dim);transform:translateY(-2px)}
+.dolar-timeline-body.open{max-height:260px}
+.dolar-months{display:flex;gap:0;overflow-x:auto;padding:12px 16px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
+.dolar-month-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;
+  padding:10px 8px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);
+  margin-right:8px;flex-shrink:0;transition:border-color .15s,background .15s;cursor:default}
+.dolar-month-item:hover{border-color:var(--gold);background:var(--gold-dim)}
 .dolar-month-item.current{border-color:var(--gold);background:var(--gold-dim)}
-.dolar-month-label{font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;text-transform:uppercase}
-.dolar-month-val{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:700;color:var(--gold2)}
-.dolar-month-var{font-size:.6rem;font-family:'JetBrains Mono',monospace;font-weight:600}
+.dolar-month-label{font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.dolar-month-val{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--gold2)}
+.dolar-month-var{font-size:.62rem;font-family:'JetBrains Mono',monospace;font-weight:600}
 .dolar-month-var.pos{color:var(--green)}.dolar-month-var.neg{color:var(--red)}.dolar-month-var.zero{color:var(--muted)}
-.dolar-source-note{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin:0 16px 14px;
-  padding:9px 12px;
-  border-radius:10px;
-  border:1px solid rgba(200,151,58,.14);
-  background:rgba(200,151,58,.055);
-  color:#aeb7cf;
-  font-size:.64rem;
-  font-family:'DM Sans',sans-serif;
-  line-height:1.45;
-}
-.dolar-source-note .source-label,
-.dolar-chart-source .source-label{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  flex-shrink:0;
-  padding:2px 7px;
-  border-radius:6px;
-  border:1px solid rgba(200,151,58,.24);
-  background:rgba(200,151,58,.11);
-  color:var(--gold2);
-  font-size:.56rem;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.08em;
-}
-.dolar-source-note a{color:var(--gold2);text-decoration:none}.dolar-source-note a:hover{text-decoration:underline}
 
 /* Gráfico dólar */
 .dolar-chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
@@ -310,25 +228,6 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-chart-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
 .dolar-chart-body{padding:18px 20px;position:relative;height:clamp(260px,28vw,340px);min-height:260px;max-height:340px;width:100%;max-width:100%;overflow:hidden}
 .dolar-chart-body canvas{width:100% !important;height:100% !important;display:block}
-.dolar-chart-source{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  margin:0 18px 16px;
-  padding:9px 12px;
-  border-radius:10px;
-  border:1px solid rgba(200,151,58,.14);
-  background:rgba(200,151,58,.055);
-  color:#aeb7cf;
-  font-size:.64rem;
-  font-family:'DM Sans',sans-serif;
-  line-height:1.45;
-}
-.dolar-chart-source a{color:var(--gold2);text-decoration:none}.dolar-chart-source a:hover{text-decoration:underline}
-
-.dolar-source-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
-.dolar-source-link{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:8px;border:1px solid rgba(200,151,58,.28);background:rgba(200,151,58,.08);color:var(--gold2);font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:600;text-decoration:none;transition:all .15s}
-.dolar-source-link:hover{border-color:var(--gold2);background:rgba(200,151,58,.16);color:var(--gold3);text-decoration:none}
 
 /* ── FOCUS ── */
 .focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
@@ -345,175 +244,10 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .fcad-val{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--text);line-height:1}
 .fcad-val.hl{color:var(--gold2)}
 .fcad-hr{border:none;border-top:1px solid var(--border2);margin:4px 0}
-.focus-section-title{
-  align-items:flex-start;
-  justify-content:flex-start;
-  margin-bottom:14px;
-}
-.focus-title-block{
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  min-width:0;
-}
-.focus-title-line{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-.focus-ref{
-  display:inline-flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  width:max-content;
-  max-width:100%;
-  padding:7px 10px;
-  border:1px solid rgba(91,156,246,.22);
-  border-radius:10px;
-  background:rgba(91,156,246,.075);
-  color:#c6cee2;
-  font-size:.68rem;
-  line-height:1.35;
-  font-family:'DM Sans',sans-serif;
-  font-weight:500;
-}
-.focus-ref strong{
-  color:var(--text);
-  font-weight:700;
-}
-.focus-ref-label{
-  display:inline-flex;
-  align-items:center;
-  gap:4px;
-  white-space:nowrap;
-}
-.focus-pdf-link{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:4px 9px;
-  border-radius:8px;
-  border:1px solid rgba(200,151,58,.32);
-  background:rgba(200,151,58,.10);
-  color:var(--gold2);
-  text-decoration:none;
-  font-size:.66rem;
-  font-weight:700;
-  transition:all .15s;
-  white-space:nowrap;
-}
-.focus-pdf-link:hover{
-  border-color:var(--gold2);
-  background:rgba(200,151,58,.18);
-  color:var(--gold3);
-}
-
-.focus-explain-card{
-  margin:12px 0 16px;
-  border:1px solid rgba(91,156,246,.24);
-  border-radius:14px;
-  background:linear-gradient(180deg,rgba(91,156,246,.075),rgba(255,255,255,.018));
-  overflow:hidden;
-  box-shadow:0 8px 28px rgba(0,0,0,.18);
-}
-.focus-explain-header{
-  width:100%;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:13px 16px;
-  background:rgba(255,255,255,.012);
-  border:0;
-  border-bottom:1px solid rgba(255,255,255,.055);
-  color:var(--text);
-  cursor:pointer;
-  font-family:'DM Sans',sans-serif;
-  font-size:.84rem;
-  font-weight:700;
-  text-align:left;
-}
-.focus-explain-header span:first-child{
-  color:var(--gold2);
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-.focus-explain-header span:last-child{
-  color:#bec7dc;
-  font-size:.70rem;
-  font-weight:600;
-  white-space:nowrap;
-}
-.focus-explain-body{
-  max-height:0;
-  overflow:hidden;
-  opacity:0;
-  transition:max-height .32s ease,opacity .25s ease,padding .25s ease;
-  padding:0 16px;
-}
-.focus-explain-body.open{
-  max-height:520px;
-  opacity:1;
-  padding:14px 16px 16px;
-}
-.focus-explain-content{
-  max-width:1180px;
-}
-.focus-explain-grid{
-  display:grid;
-  grid-template-columns:repeat(2,minmax(0,1fr));
-  gap:12px;
-}
-.focus-explain-item{
-  padding:13px 14px;
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;
-  background:rgba(12,14,26,.56);
-}
-.focus-explain-kicker{
-  display:block;
-  margin-bottom:6px;
-  color:var(--gold2);
-  font-size:.66rem;
-  font-weight:700;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-}
-.focus-explain-item p{
-  color:#cbd3e6;
-  font-size:.77rem;
-  line-height:1.68;
-  margin:0;
-  max-width:64ch;
-}
-.focus-explain-note{
-  display:flex;
-  align-items:flex-start;
-  gap:9px;
-  margin-top:12px;
-  padding:12px 14px;
-  border:1px solid rgba(200,151,58,.22);
-  border-radius:12px;
-  background:rgba(200,151,58,.075);
-  color:#e8d3a5;
-  font-size:.73rem;
-  line-height:1.6;
-}
-.focus-explain-note strong{
-  color:var(--gold3);
-  font-weight:700;
-}
-.focus-explain-body strong{
-  color:var(--text);
-  font-weight:700;
-}
-@media(max-width:900px){
-  .focus-explain-grid{grid-template-columns:1fr}
-  .focus-explain-body.open{max-height:720px}
-}
+.focus-ref{font-size:.62rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;
+  display:flex;align-items:center;gap:6px;margin-top:12px}
+.focus-ref a{color:var(--gold);text-decoration:none;transition:color .15s}
+.focus-ref a:hover{color:var(--gold2)}
 
 /* ── CHARTS ── */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
@@ -841,54 +575,13 @@ td.col-pct{text-align:right}
 .ptax-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
 
 /* ── FOOTER ── */
-footer{
-  margin-top:60px;
-  padding-top:30px;
-  border-top:1px solid rgba(200,151,58,.16);
-}
-.footer-disclaimer{
-  max-width:1180px;
-  margin:0 auto;
-  padding:22px 26px;
-  border:1px solid rgba(200,151,58,.18);
-  border-radius:16px;
-  background:linear-gradient(180deg,rgba(200,151,58,.075),rgba(255,255,255,.018));
-  color:#aeb7cf;
-  font-size:.74rem;
-  line-height:1.75;
-  text-align:left;
-  box-shadow:0 10px 40px rgba(0,0,0,.22);
-}
-.footer-disclaimer-title{
-  color:var(--gold2);
-  font-family:'Cormorant Garamond',serif;
-  font-size:1.15rem;
-  font-weight:700;
-  margin-bottom:10px;
-  letter-spacing:.02em;
-}
-.footer-disclaimer p{
-  margin:8px 0;
-}
-.footer-disclaimer strong{
-  color:var(--text);
-  font-weight:600;
-}
-.footer-disclaimer-signature{
-  margin-top:14px;
-  padding-top:12px;
-  border-top:1px solid rgba(255,255,255,.07);
-  color:var(--gold2);
-  font-size:.68rem;
-  letter-spacing:.04em;
-}
+footer{text-align:center;margin-top:60px;font-size:.67rem;color:var(--muted2);
+  letter-spacing:.04em;border-top:1px solid var(--border2);padding-top:26px;line-height:2.2}
+footer span{color:var(--gold)}
 
 /* ── RESPONSIVO ── */
 @media(max-width:768px){
   .page{padding:18px 14px 60px}
-  .top-disclaimer{font-size:.7rem;padding:12px 14px}
-  .dolar-source-note,.dolar-chart-source{align-items:flex-start;font-size:.61rem;margin-left:12px;margin-right:12px}
-  .footer-disclaimer{padding:18px 18px;font-size:.7rem}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
   .kpi-value{font-size:1.5rem}
   .focus-grid{grid-template-columns:1fr 1fr}
@@ -911,7 +604,6 @@ footer{
 .indic-table-v2 .group-row td{padding:5px 14px;background:var(--bg3);border-bottom:1px solid var(--border2);border-top:1px solid var(--border2)}
 .group-lbl{display:flex;align-items:center;gap:8px;font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600}
 .group-lbl-line{flex:1;height:1px;background:var(--border2)}
-.market-flag{display:inline-flex;align-items:center;justify-content:center;width:18px;height:18px;margin-right:6px;font-size:.86rem;vertical-align:middle;filter:saturate(1.08)}
 .indic-table-v2 tbody tr.data-row{border-bottom:1px solid var(--border2);transition:background .12s}
 .indic-table-v2 tbody tr.data-row:hover{background:rgba(200,151,58,.03)}
 .indic-table-v2 tbody tr.data-row.alert-row{background:rgba(240,85,101,.03)}
@@ -936,269 +628,116 @@ footer{
 .v2-bar-p{height:100%;border-radius:2px;background:var(--green)}.v2-bar-n{height:100%;border-radius:2px;background:var(--red)}
 
 
+/* ═══════════════════ ABAS PRINCIPAIS ═══════════════════ */
+.tabs-nav{display:flex;background:var(--bg2);border:1px solid var(--border);
+  border-radius:14px 14px 0 0;overflow:hidden;margin-top:22px}
+.tab-btn{flex:1;display:flex;align-items:center;justify-content:center;gap:7px;
+  padding:14px 8px;border:none;background:transparent;
+  color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.82rem;font-weight:500;
+  cursor:pointer;border-bottom:3px solid transparent;transition:all .18s;white-space:nowrap}
+.tab-btn:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.tab-btn.active{color:var(--gold2);border-bottom-color:var(--gold);font-weight:700;
+  background:rgba(200,151,58,.05)}
+.tab-badge{display:inline-flex;align-items:center;justify-content:center;
+  min-width:19px;height:19px;padding:0 5px;border-radius:10px;
+  background:var(--gold-dim);border:1px solid rgba(200,151,58,.3);
+  color:var(--gold2);font-size:.58rem;font-family:'JetBrains Mono',monospace;font-weight:700}
+.tab-content{border:1px solid var(--border);border-top:none;
+  border-radius:0 0 14px 14px;background:var(--bg)}
+.tab-panel{display:none}
+.tab-panel.active{display:block;animation:fadeUp .18s ease}
 
-/* ─────────────────────────────────────────────
-   AJUSTE DE LEGIBILIDADE — versão profissional
-   Melhora contraste, tamanho de fonte e hierarquia visual.
-───────────────────────────────────────────── */
-body{
-  font-weight:400;
-  text-rendering:geometricPrecision;
-}
+/* ═══════════════════ STICKY BAR ═══════════════════ */
+.sticky-bar{position:fixed;top:0;left:0;right:0;z-index:999;
+  background:rgba(10,11,15,.96);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);display:flex;align-items:center;
+  padding:0 20px;height:48px;gap:0;
+  transform:translateY(-100%);transition:transform .25s}
+.sticky-bar.visible{transform:translateY(0)}
+.sticky-brand{font-family:'Cormorant Garamond',serif;font-size:.82rem;font-weight:700;
+  color:var(--gold2);margin-right:16px;flex-shrink:0}
+.sticky-items{display:flex;gap:0;flex:1;overflow:hidden;min-width:0}
+.sticky-item{display:flex;align-items:center;gap:5px;padding:0 12px;
+  border-right:1px solid var(--border2);white-space:nowrap;flex-shrink:0}
+.sticky-item:last-child{border-right:none}
+.sticky-lbl{font-size:.52rem;text-transform:uppercase;color:var(--muted2)}
+.sticky-val{font-size:.72rem;font-weight:600;color:var(--text);
+  font-family:'JetBrains Mono',monospace}
+.sticky-val.pos{color:var(--green)}.sticky-val.neg{color:var(--red)}
+.sticky-actions{display:flex;gap:6px;margin-left:10px;flex-shrink:0}
+.sticky-btn{padding:4px 10px;border-radius:6px;border:1px solid var(--border2);
+  background:transparent;color:var(--muted);font-size:.62rem;
+  font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.sticky-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.sticky-btn.active{border-color:var(--gold);color:var(--gold2);background:var(--gold-dim)}
 
-.brand-text p,
-.live-badge,
-.section-badge,
-.kpi-sub,
-.indic-tabs-label,
-.filter-label,
-#resultInfo{
-  color:var(--muted);
-}
-
-.live-badge,
-.section-badge{
-  border-color:rgba(255,255,255,.10);
-  background:rgba(17,21,38,.72);
-}
-
-.kpi-label,
-.indic-ref-label,
-.poup-rule-label,
-.fcad-label,
-.indic-title,
-.detail-key,
-.docs-title{
-  color:#9faccc;
-  font-weight:700;
-}
-
-.kpi-label{
-  font-size:.66rem;
-  letter-spacing:.105em;
-}
-
-.kpi-sub{
-  font-size:.70rem;
-  line-height:1.45;
-}
-
-.section-title h2{
-  font-size:1.22rem;
-}
-
-.section-badge{
-  font-size:.66rem;
-  padding:4px 10px;
-}
-
-.indic-ref-card{
-  padding:22px 24px;
-  border-color:rgba(200,151,58,.24);
-  background:linear-gradient(180deg,rgba(17,21,38,.96),rgba(12,14,26,.96));
-}
-
-.indic-ref-label{
-  font-size:.67rem;
-  letter-spacing:.085em;
-  margin-bottom:8px;
-}
-
-.indic-ref-val{
-  font-size:2.08rem;
-}
-
-.indic-ref-sub,
-.selic-change-badge,
-.cdi-rel,
-.poup-rule-sub,
-.indic-subtitle,
-.indic-val-sub,
-.indic-pct-label,
-.v2-sub,
-.ind-v2-sub,
-.focus-ref,
-.fcad-sub,
-.rank-cat,
-.detail-val,
-.docs-note{
-  color:#a6b0c9;
-}
-
-.indic-ref-sub{
-  font-size:.68rem;
-  line-height:1.45;
-}
-
-.selic-change-badge,
-.cdi-rel{
-  font-size:.64rem;
-  line-height:1.45;
-}
-
-.cdi-rel{
-  font-style:normal;
-}
-
-.poup-rule-label{
-  font-size:.63rem;
-}
-
-.poup-rule-sub{
-  font-size:.64rem;
-  line-height:1.35;
-}
-
-.poup-expand-btn,
-.copom-link,
-.chart-tab,
-.indic-tab,
-.ptax-btn,
-.boletim-btn,
-.page-btn{
-  color:#b4bdd3;
-  border-color:rgba(255,255,255,.12);
-  background:rgba(17,21,38,.70);
-}
-
-.poup-expand-btn:hover,
-.copom-link:hover,
-.chart-tab:hover,
-.indic-tab:hover,
-.ptax-btn:hover,
-.boletim-btn:hover,
-.page-btn:hover:not(:disabled){
-  color:var(--gold2);
-  border-color:rgba(232,187,106,.55);
-  background:rgba(200,151,58,.14);
-}
-
-.poup-explain-text,
-.fund-quick-note-text,
-.footer-disclaimer,
-.dolar-metric-label,
-.dolar-day-ref{
-  color:#b6bfd5;
-}
-
-.dolar-timeline-title,
-.dolar-chart-title,
-.dolar-day-title,
-.chart-card-title,
-.rank-card-title{
-  font-size:1.08rem;
-}
-
-.dolar-timeline-sub,
-.dolar-chart-sub,
-.dolar-day-sub{
-  color:#a7b1cb;
-  font-size:.66rem;
-  line-height:1.45;
-}
-
-.dolar-month-label{
-  color:#8792b0;
-  font-size:.61rem;
-}
-
-.dolar-month-val{
-  font-size:1.18rem;
-}
-
-.dolar-month-var{
-  font-size:.64rem;
-}
-
-.dolar-source-note,
-.dolar-chart-source{
-  margin:0 16px 14px;
-  padding:10px 12px;
-  border:1px solid rgba(255,255,255,.09);
-  border-radius:10px;
-  background:rgba(255,255,255,.035);
-  color:#aeb8d2;
-  font-size:.64rem;
-  line-height:1.55;
-  font-family:'DM Sans',sans-serif;
-}
-
-.dolar-chart-source{
-  margin:0 18px 16px;
-}
-
-.dolar-source-note strong,
-.dolar-chart-source strong{
-  color:var(--gold2);
-}
-
-.dolar-metric{
-  background:rgba(24,29,54,.72);
-  border-color:rgba(255,255,255,.10);
-}
-
-.dolar-metric-label{
-  font-size:.65rem;
-}
-
-.dolar-metric-val{
-  font-size:.82rem;
-}
-
-.indic-table-v2 th,
-th{
-  color:#d6a958;
-}
-
-.th-sub,
-.group-lbl,
-.ind-v2-sub,
-.v2-sub{
-  color:#9aa5c1;
-}
-
-.v2-val,
-.ind-v2-title,
-.indic-title,
-.rank-name,
-.detail-val,
-td{
-  color:var(--text);
-}
-
-.fcad-sub,
-.rank-cat,
-.indic-subtitle{
-  font-size:.66rem;
-}
-
-.fcad-label,
-.indic-subtitle,
-.detail-key{
-  color:#98a4c3;
-}
-
-.fund-quick-note-disclaimer{
-  color:#97a2bd;
-  font-size:.60rem;
-}
-
-footer{
-  color:#aeb8d2;
-}
-
-.footer-disclaimer{
-  color:#b7c0d7;
-}
-
-.footer-disclaimer-signature{
-  color:var(--gold2);
-}
-
+/* ═══════════════════ MOBILE — 768px ═══════════════════ */
 @media(max-width:768px){
-  .indic-ref-card{padding:18px 18px}
-  .indic-ref-label{font-size:.64rem}
-  .indic-ref-sub,.selic-change-badge,.cdi-rel,.poup-rule-sub{font-size:.62rem}
+  .page{padding:14px 10px 80px}
+  header{gap:12px}
+  .brand-text h1{font-size:1.2rem}
+  .brand-text p{font-size:.6rem}
+  .top-disclaimer{font-size:.68rem;padding:10px 12px}
+  .sticky-brand{display:none}
+  .sticky-lbl{display:none}
+  .sticky-val{font-size:.68rem}
+  .sticky-item{padding:0 8px}
+  .sticky-actions{gap:4px}
+  .sticky-btn{padding:3px 8px;font-size:.58rem}
+  .tabs-nav{border-radius:10px 10px 0 0;margin-top:14px}
+  .tab-btn{padding:12px 6px;font-size:.72rem;gap:4px}
+  .tab-badge{min-width:16px;height:16px;font-size:.52rem}
+  .tab-content{border-radius:0 0 10px 10px}
+  .section-gap{margin-top:18px}
+  .section-title h2{font-size:.95rem}
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi{padding:14px 12px}
+  .kpi-value{font-size:1.4rem}
+  .kpi-sub{white-space:normal;font-size:.62rem}
+  .indic-ref-bar{flex-direction:column}
+  .indic-ref-card{min-width:100% !important;flex-direction:column !important;gap:12px}
+  .selic-cdi-divider{width:100%;height:1px !important;margin:4px 0}
+  .indic-ref-val{font-size:1.6rem}
+  .indic-table-wrap{border-radius:10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .indic-table-v2{min-width:520px}
+  .indic-table-v2 th,.indic-table-v2 td{padding:7px 9px;font-size:.66rem}
+  .ind-v2-title{font-size:.72rem}
+  .ind-v2-sub{font-size:.54rem}
+  .v2-val{font-size:.72rem}
+  .ind-icon-v2{width:22px;height:22px;font-size:.76rem}
+  .poup-values{flex-direction:column;gap:8px}
+  .dolar-grid{grid-template-columns:1fr !important}
+  .dolar-day-rate{font-size:2.2rem}
+  .dolar-day-body{padding:12px}
+  .dolar-months{grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 10px 14px}
+  .dolar-month-val{font-size:.95rem}
+  .dolar-chart-body{height:200px !important}
+  .chart-body{height:175px !important}
+  .focus-grid{grid-template-columns:1fr 1fr}
+  .focus-explain-grid{grid-template-columns:1fr !important}
+  .focus-explain-body.open{max-height:900px !important}
+  .ranking-grid{grid-template-columns:1fr !important}
+  .rank-item{padding:7px 12px}
+  .rank-name{font-size:.68rem}
+  .controls-bar{flex-direction:column;gap:8px}
+  .search-wrap{min-width:unset;width:100%}
+  .filter-label{font-size:.58rem;min-width:44px}
+  .chip{padding:4px 9px;font-size:.66rem}
+  .perf-period-select{font-size:.66rem}
+  td{padding:7px 9px;font-size:.68rem}
+  th{padding:9px 9px;font-size:.57rem}
+  td.col-fundo{max-width:150px;font-size:.7rem}
+  .detail-panel{padding:10px 12px;grid-template-columns:1fr !important}
+  .docs-card{position:static !important}
+  .footer-disclaimer{padding:14px 16px;font-size:.68rem}
+  footer{margin-top:32px}
+}
+@media(max-width:420px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .dolar-months{grid-template-columns:repeat(2,1fr)}
+  .focus-grid{grid-template-columns:1fr}
+  .indic-table-v2{min-width:440px}
+  .tab-btn .tab-label{font-size:.64rem}
 }
 
 </style>
@@ -1212,26 +751,40 @@ footer{
     <div class="brand-logo">E</div>
     <div class="brand-text">
       <h1>Catálogo de Fundos CAIXA</h1>
-      <p>Consulta e análise de informações públicas sobre fundos e mercado</p>
+      <p>Desenvolvido por Elton Cardoso Teotonio · Produção própria</p>
     </div>
   </div>
   <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
 
 <!-- ═══════════════════════════════════════════════ DISCLAIMER ══ -->
-<div class="top-disclaimer">
-  <div class="top-disclaimer-icon">ℹ️</div>
-  <div>
-    <strong>Aviso:</strong>
-    ferramenta de <span>produção própria</span>, com finalidade informativa e auxiliar.
-    Não representa ferramenta institucional da Caixa Econômica Federal, da CAIXA Asset
-    ou de qualquer empresa do conglomerado CAIXA. Consulte sempre as fontes oficiais
-    antes de qualquer decisão.
+<div class="section-gap" style="margin-top:18px">
+  <div style="background:rgba(200,151,58,.07);border:1px solid var(--border);border-radius:14px;padding:14px 18px;color:var(--muted);font-size:.72rem;line-height:1.55">
+    <strong style="color:var(--gold2)">Aviso:</strong>
+    esta ferramenta não é institucional da Caixa Econômica Federal, da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA.
+    Trata-se de produção própria, desenvolvida por <strong style="color:var(--text)">Elton Cardoso Teotonio</strong>, para apoio informativo à consulta e organização de dados públicos.
+    As informações devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.
   </div>
 </div>
 
 
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
+
+<!-- STICKY BAR -->
+<div class="sticky-bar" id="stickyBar">
+  <span class="sticky-brand">💼 CAIXA</span>
+  <div class="sticky-items">
+    <div class="sticky-item"><span class="sticky-lbl">Selic</span><span class="sticky-val" id="st-selic">—</span></div>
+    <div class="sticky-item"><span class="sticky-lbl">CDI</span><span class="sticky-val pos" id="st-cdi">—</span></div>
+    <div class="sticky-item"><span class="sticky-lbl">PTAX</span><span class="sticky-val" id="st-ptax">—</span></div>
+    <div class="sticky-item"><span class="sticky-lbl">Ibov</span><span class="sticky-val" id="st-ibov">—</span></div>
+  </div>
+  <div class="sticky-actions">
+    <button class="sticky-btn" id="compactBtn" onclick="document.body.classList.toggle('compact');this.classList.toggle('active')" title="Modo compacto">⊟</button>
+    <button class="sticky-btn" onclick="exportarCSV()" title="Exportar CSV">⬇</button>
+    <button class="sticky-btn" onclick="irCatalogo()" title="Buscar fundo">🔍</button>
+  </div>
+</div>
 <div class="kpi-grid section-gap">
   <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
   <div class="kpi"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub">tipos de fundo</div></div>
@@ -1241,6 +794,22 @@ footer{
   <div class="kpi"><div class="kpi-icon">📉</div><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
 </div>
 
+
+<!-- ABAS PRINCIPAIS -->
+<div class="tabs-nav" role="tablist">
+  <button class="tab-btn active" id="tabBtn-macro" onclick="switchTab('macro')">
+    <span>📡</span><span class="tab-label">Mercado</span>
+  </button>
+  <button class="tab-btn" id="tabBtn-rankings" onclick="switchTab('rankings')">
+    <span>🏆</span><span class="tab-label">Rankings</span>
+  </button>
+  <button class="tab-btn" id="tabBtn-catalogo" onclick="switchTab('catalogo')">
+    <span>📁</span><span class="tab-label">Catálogo</span>
+    <span class="tab-badge" id="tab-badge-n">—</span>
+  </button>
+</div>
+<div class="tab-content">
+  <div class="tab-panel active" id="tab-macro">
 <!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
 <div class="section-gap">
   <div class="section-title">
@@ -1259,6 +828,7 @@ footer{
         <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
         <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
+          
           <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
         </div>
         <!-- Card expansível do Calendário COPOM 2026 -->
@@ -1267,8 +837,7 @@ footer{
             <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:10px">📅 Reuniões COPOM 2026</div>
             <div id="copomMeetings" style="display:flex;flex-direction:column;gap:4px"></div>
             <div style="margin-top:8px;font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;font-style:italic;border-top:1px solid var(--border2);padding-top:6px">
-              Atas publicadas às 8h da terça seguinte à reunião ·
-              <a href="https://www.bcb.gov.br/detalhenoticia/20739/nota" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">Fonte BCB ↗</a>
+              Atas publicadas às 8h da terça seguinte à reunião · Banco Central do Brasil
             </div>
           </div>
         </div>
@@ -1314,7 +883,7 @@ footer{
             <span class="poup-explain-tag tag-antiga">Antiga</span>
             <span class="poup-explain-text">Cadernetas abertas antes de 04/05/2012. Rende <strong style="color:var(--text)">sempre TR + 0,50% a.m.</strong>, independentemente do nível da Selic. Com a Selic atual em 14,50%, a regra antiga rende menos que a nova.</span>
           </div>
-          <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
+          <a class="poup-bcb-link" href="https://www4.bcb.gov.br/pec/poupanca/poupanca.asp" target="_blank" rel="noopener">🏦 Calculadora oficial BCB ↗</a>
         </div>
       </div>
     </div>
@@ -1433,7 +1002,7 @@ footer{
 
         <!-- GRUPO: Bolsa Brasil -->
         <tr class="group-row"><td colspan="5">
-          <div class="group-lbl"><span><span class="market-flag">🇧🇷</span>Bolsa — Brasil</span><div class="group-lbl-line"></div></div>
+          <div class="group-lbl"><span>Bolsa — Brasil</span><div class="group-lbl-line"></div></div>
         </td></tr>
 
         <!-- Ibovespa unificado -->
@@ -1444,102 +1013,38 @@ footer{
           </div></td>
           <td>
             <div class="v2-val neu" id="ibov-ant-pts">—</div>
-            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ant-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="ibov-ant-sub">mês fechado</div>
+            <div class="v2-sub">~30d atrás</div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="ibov-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-var" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="ibov-cur-sub">mês atual</div>
+            <div class="v2-sub">pontos · var. ~30d</div>
           </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ano-v2">—</span></div>
-            <div class="v2-sub">var. no ano</div>
-          </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-acum-v2">—</span></div>
-            <div class="v2-sub" id="ibov-acum-sub-v2">var. 12M</div>
-          </td>
+          <td><span class="v2-val dash">—</span><div class="v2-sub">sem dado</div></td>
+          <td><span class="v2-val dash">—</span><div class="v2-sub">sem dado</div></td>
         </tr>
 
         <!-- GRUPO: Bolsa EUA -->
         <tr class="group-row"><td colspan="5">
-          <div class="group-lbl"><span><span class="market-flag">🇺🇸</span>Bolsa — EUA</span><div class="group-lbl-line"></div></div>
+          <div class="group-lbl"><span>Bolsa — EUA</span><div class="group-lbl-line"></div></div>
         </td></tr>
 
-        <!-- S&P 500 -->
+        <!-- S&P 500 unificado -->
         <tr class="data-row" id="row-sp">
           <td><div class="ind-name-v2">
             <div class="ind-icon-v2 ii-purple">🌎</div>
-            <div><div class="ind-v2-title">S&amp;P 500</div><div class="ind-v2-sub">Índice em pontos · desempenho em USD e BRL</div></div>
+            <div><div class="ind-v2-title">S&amp;P 500</div><div class="ind-v2-sub">500 maiores empresas EUA</div></div>
           </div></td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ant-var">—</span></div>
-            <div class="v2-sub" id="sp-ant-sub">mês fechado</div>
+            <span class="v2-val dash">—</span>
+            <div class="v2-sub">sem dado</div>
           </td>
           <td class="td-cur">
-            <div class="v2-val neu" id="sp-cur-pts">—</div>
-            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-sp-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="sp-cur-sub">mês atual</div>
+            <div class="v2-val neu" id="sp-cur-usd">—</div>
+            <div class="v2-sub" id="sp-cur-brl">R$ —</div>
           </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ano-var">—</span></div>
-            <div class="v2-sub" id="sp-ano-sub">var. no ano</div>
-          </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-acum-var">—</span></div>
-            <div class="v2-sub" id="sp-acum-sub-v2">var. 12M</div>
-          </td>
-        </tr>
-
-        <!-- Dow Jones -->
-        <tr class="data-row" id="row-dow">
-          <td><div class="ind-name-v2">
-            <div class="ind-icon-v2 ii-blue">🏛️</div>
-            <div><div class="ind-v2-title">Dow Jones</div><div class="ind-v2-sub">Índice em pontos · desempenho em USD e BRL</div></div>
-          </div></td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ant-var">—</span></div>
-            <div class="v2-sub" id="dow-ant-sub">mês fechado</div>
-          </td>
-          <td class="td-cur">
-            <div class="v2-val neu" id="dow-cur-pts">—</div>
-            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dow-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="dow-cur-sub">mês atual</div>
-          </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ano-var">—</span></div>
-            <div class="v2-sub" id="dow-ano-sub">var. no ano</div>
-          </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-acum-var">—</span></div>
-            <div class="v2-sub" id="dow-acum-sub-v2">var. 12M</div>
-          </td>
-        </tr>
-
-        <!-- Nasdaq -->
-        <tr class="data-row" id="row-nasdaq">
-          <td><div class="ind-name-v2">
-            <div class="ind-icon-v2 ii-purple">💻</div>
-            <div><div class="ind-v2-title">Nasdaq</div><div class="ind-v2-sub">Índice em pontos · desempenho em USD e BRL</div></div>
-          </div></td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ant-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-ant-sub">mês fechado</div>
-          </td>
-          <td class="td-cur">
-            <div class="v2-val neu" id="nasdaq-cur-pts">—</div>
-            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-nasdaq-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="nasdaq-cur-sub">mês atual</div>
-          </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ano-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-ano-sub">var. no ano</div>
-          </td>
-          <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-acum-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-acum-sub-v2">var. 12M</div>
-          </td>
+          <td><span class="v2-val dash">—</span></td>
+          <td><span class="v2-val dash">—</span></td>
         </tr>
 
       </tbody>
@@ -1554,7 +1059,7 @@ footer{
 <div class="section-gap">
   <div class="section-title">
     <h2>💵 Câmbio — Dólar BRL/USD</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB — cotação oficial</span>
+    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB — tempo real</span>
   </div>
 
   <div class="dolar-grid">
@@ -1563,7 +1068,7 @@ footer{
     <div class="dolar-day-card">
       <div class="dolar-day-header">
         <div class="dolar-day-title">💵 Cotação do Dia</div>
-        <div class="dolar-day-sub" id="dolar-day-src">Fonte: Banco Central do Brasil · Carregando...</div>
+        <div class="dolar-day-sub" id="dolar-day-src">Fonte: PTAX BCB · Carregando...</div>
       </div>
       <div class="dolar-day-body">
         <div id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação...</div>
@@ -1601,22 +1106,15 @@ footer{
     <!-- Coluna direita: timeline + gráfico -->
     <div class="dolar-right">
 
-      <!-- Timeline mensal aberta por padrão -->
+      <!-- Timeline mensal expansível -->
       <div class="dolar-timeline-card">
-        <div class="dolar-timeline-header">
-          <div class="dolar-timeline-title-wrap">
-            <span class="dolar-timeline-title">📅 Fechamentos Mensais</span>
-            <span class="dolar-timeline-sub">Ano corrente · Fonte: Banco Central do Brasil</span>
-          </div>
-          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
+        <div class="dolar-timeline-header" onclick="toggleDolarTimeline()">
+          <span class="dolar-timeline-title">📅 Fechamentos Mensais</span>
+          <span class="dolar-timeline-toggle" id="dolarTimelineToggle">▼</span>
         </div>
         <div class="dolar-timeline-body open" id="dolarTimelineBody">
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
-          </div>
-          <div class="dolar-source-note">
-            <span class="source-label">Fonte</span>
-            <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Fechamentos mensais pelo último registro disponível de cada mês.</span>
           </div>
         </div>
       </div>
@@ -1625,8 +1123,8 @@ footer{
       <div class="dolar-chart-card">
         <div class="dolar-chart-header">
           <div>
-            <div class="dolar-chart-title">📈 Dólar no Ano — PTAX</div>
-            <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando informações de mercado...</div>
+            <div class="dolar-chart-title">📈 Dólar no Ano — PTAX Diária</div>
+            <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando dados BCB...</div>
           </div>
           <div class="chart-tabs">
             <button class="chart-tab active" data-dolar-range="year">2026</button>
@@ -1635,13 +1133,6 @@ footer{
           </div>
         </div>
         <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
-        <div class="dolar-chart-source">
-          <span class="source-label">Fonte</span>
-          <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Série exibida conforme os períodos selecionados no gráfico.</span>
-          <div class="dolar-source-actions">
-            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico de cotações BCB ↗</a>
-          </div>
-        </div>
       </div>
 
     </div><!-- /dolar-right -->
@@ -1650,47 +1141,13 @@ footer{
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
 <div class="section-gap">
-  <div class="section-title focus-section-title">
-    <div class="focus-title-block">
-      <div class="focus-title-line">
-        <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
-        <span class="section-badge"><span class="badge-dot blue"></span>Banco Central do Brasil</span>
-      </div>
-      <div class="focus-ref" id="focusRef">Carregando último boletim...</div>
+  <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
+    <div style="display:flex;align-items:center;gap:10px">
+      <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
+      <span class="section-badge"><span class="badge-dot blue"></span>Banco Central do Brasil</span>
     </div>
+    <div class="focus-ref" id="focusRef">Carregando...</div>
   </div>
-
-  <div class="focus-explain-card">
-    <button class="focus-explain-header" type="button" onclick="toggleFocusExplain()">
-      <span>ℹ️ Entenda o Boletim Focus</span>
-      <span id="focusExplainIcon">Mostrar ▼</span>
-    </button>
-    <div class="focus-explain-body" id="focusExplainBody">
-      <div class="focus-explain-content">
-        <div class="focus-explain-grid">
-          <div class="focus-explain-item">
-            <span class="focus-explain-kicker">O que é</span>
-            <p>
-              O Boletim Focus é uma publicação do <strong>Banco Central do Brasil</strong> que consolida
-              expectativas de mercado para inflação, Selic, PIB e câmbio.
-            </p>
-          </div>
-          <div class="focus-explain-item">
-            <span class="focus-explain-kicker">Por que o mercado utiliza</span>
-            <p>
-              As projeções reúnem estimativas de bancos, corretoras, consultorias e distribuidoras,
-              ajudando a acompanhar o consenso econômico e comparar cenários para os próximos anos.
-            </p>
-          </div>
-        </div>
-        <div class="focus-explain-note">
-          <span>⚠️</span>
-          <span><strong>Atenção:</strong> as projeções não são garantia de resultado futuro. Elas servem como referência de cenário e podem mudar conforme novos dados econômicos são divulgados.</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="focus-grid" id="focusGrid">
     <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:.8rem">
       <div class="spinner"></div>Buscando expectativas...
@@ -1736,6 +1193,10 @@ footer{
   </div>
 </div>
 
+
+  </div><!-- /tab-macro -->
+
+  <div class="tab-panel" id="tab-rankings">
 <!-- ═══════════════════════════════════════════ RANKINGS ══ -->
 <div class="section-gap">
   <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
@@ -1751,6 +1212,10 @@ footer{
   </div>
 </div>
 
+
+  </div><!-- /tab-rankings -->
+
+  <div class="tab-panel" id="tab-catalogo">
 <!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
 <div class="section-gap">
   <div class="section-title">
@@ -1802,7 +1267,6 @@ footer{
     <!-- ★ Performance mínima (NOVO) -->
     <div class="filter-row" id="perfFilters">
       <span class="filter-label">Rentab.</span>
-      <span style="font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace">período:</span>
       <select id="perfPeriodo" class="perf-period-select">
         <option value="Acum. 12M (%)">12 Meses</option>
         <option value="Acum. Ano (%)">No Ano</option>
@@ -1832,6 +1296,10 @@ footer{
   </div>
 </div>
 
+
+  </div><!-- /tab-catalogo -->
+</div><!-- /tab-content -->
+
 <!-- ═══════════════════════════════════════ MODAL PTAX ══ -->
 <div class="modal-overlay" id="modalPtax" onclick="fecharModalPTAX(event)">
   <div class="modal">
@@ -1840,7 +1308,7 @@ footer{
       <button class="modal-close" onclick="fecharModalPTAX()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Atualizando informações do Banco Central...</div>
+      <div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Buscando dados do Bacen...</div>
       <table class="ptax-table" id="ptaxTable" style="display:none">
         <thead><tr>
           <th style="text-align:left">Mês / Ano</th>
@@ -1851,36 +1319,25 @@ footer{
         <tbody id="ptaxBody"></tbody>
       </table>
     </div>
-    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX, cotação de venda do dólar americano.</div>
+    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX (cotação de venda, último dia útil do mês) · API pública BCB</div>
   </div>
 </div>
 
 <footer>
-  <div class="footer-disclaimer">
-    <div class="footer-disclaimer-title">Aviso importante</div>
-
-    <p>
-      Esta ferramenta é uma produção própria, desenvolvida por
-      <strong>Elton Cardoso Teotonio</strong>, com finalidade exclusivamente
-      informativa e auxiliar para organização, consulta e análise de informações
-      públicas sobre fundos de investimento e indicadores de mercado.
-    </p>
-
-    <p>
-      Este site não é uma ferramenta institucional da Caixa Econômica Federal,
-      da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA. As informações
-      apresentadas não constituem recomendação de investimento, oferta, solicitação
-      de aplicação ou substituição das fontes oficiais.
-    </p>
-
-    <p>
-      As informações devem ser sempre conferidas nos canais oficiais antes de
-      qualquer tomada de decisão. As principais fontes públicas consultadas incluem:
-      fundos.caixa.gov.br, Banco Central do Brasil, CAIXA Asset Management e demais
-      fontes públicas de mercado eventualmente indicadas na própria página.
-    </p>
-
-    <div class="footer-disclaimer-signature">
+  <div style="max-width:1100px;margin:0 auto;text-align:left;line-height:1.7">
+    <div style="color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;margin-bottom:8px">
+      Aviso importante
+    </div>
+    <div>
+      Esta ferramenta é uma produção própria, desenvolvida por <span>Elton Cardoso Teotonio</span>, com finalidade de apoio à organização, consulta e análise de informações públicas sobre fundos de investimento.
+    </div>
+    <div style="margin-top:8px">
+      Este site não é uma ferramenta institucional da <span>Caixa Econômica Federal</span>, da <span>CAIXA Asset</span> ou de qualquer empresa do conglomerado CAIXA. As informações apresentadas são de responsabilidade do desenvolvedor desta ferramenta e devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.
+    </div>
+    <div style="margin-top:8px">
+      Dados públicos utilizados: fundos.caixa.gov.br, Banco Central do Brasil, CAIXA Asset Management e demais fontes públicas de mercado eventualmente indicadas na própria página.
+    </div>
+    <div style="margin-top:10px;color:var(--muted)">
       Desenvolvido por Elton Cardoso Teotonio · Produção própria · Uso informativo e auxiliar
     </div>
   </div>
@@ -1936,18 +1393,6 @@ function togglePoupanca(){
 }
 
 /* ════════════════════════════════════════════════════
-   BOLETIM FOCUS — CARD EXPLICATIVO
-════════════════════════════════════════════════════ */
-function toggleFocusExplain(){
-  const body = $('focusExplainBody');
-  const icon = $('focusExplainIcon');
-  if(!body) return;
-
-  const isOpen = body.classList.toggle('open');
-  if(icon) icon.textContent = isOpen ? 'Recolher ▲' : 'Mostrar ▼';
-}
-
-/* ════════════════════════════════════════════════════
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
@@ -1957,7 +1402,7 @@ async function carregarCDIPeriodos(){
     console.info('[CDI] Usando acumulados do mercado_atual.json');
   } else {
     console.warn('[CDI] mercado_atual.json não trouxe acumulados CDI. Execute o +.');
-    if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'histórico indisponível';
+    if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'sem dados no JSON';
   }
   atualizarTabelaIndicadores();
 }
@@ -1972,7 +1417,7 @@ async function carregarIPCAPeriodos(){
     console.info('[IPCA] Usando acumulados do mercado_atual.json');
   } else {
     console.warn('[IPCA] mercado_atual.json não trouxe acumulados IPCA. Execute o +.');
-    if($('ipca-acum-sub-v2')) $('ipca-acum-sub-v2').textContent = 'histórico indisponível';
+    if($('ipca-acum-sub-v2')) $('ipca-acum-sub-v2').textContent = 'sem dados no JSON';
   }
   atualizarTabelaIndicadores();
 }
@@ -1991,7 +1436,7 @@ async function carregarPTAXHistorico(){
   } else {
     console.warn('[PTAX] mercado_atual.json não trouxe ptax_historico. Execute o +.');
     const sub = $('dolar-chart-sub');
-    if(sub) sub.textContent = 'Histórico PTAX temporariamente indisponível';
+    if(sub) sub.textContent = 'Sem PTAX histórico no mercado_atual.json';
   }
 }
 
@@ -2100,7 +1545,7 @@ async function carregarDolarDia(){
       const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
       $('dolar-day-ref').textContent = `Referência: ${diaRef}`;
       $('dolar-hora').textContent = hora + ' (BCB)';
-      $('dolar-day-src').textContent = `Banco Central do Brasil · PTAX · ${diaRef}`;
+      $('dolar-day-src').textContent = `PTAX BCB · ${diaRef}`;
 
       // Variação vs dia anterior
       if(i === 0 && data.value.length > 1){
@@ -2160,49 +1605,32 @@ function renderDolarMensais(){
   if(!_ptaxHistorico.length) return;
 
   const byMonth = {};
-
   _ptaxHistorico.forEach(item => {
-    const dataRef = item.dataHoraCotacao || item.data_ref;
-    const dt = new Date(dataRef);
-    if(isNaN(dt)) return;
-
+    const dt = new Date(item.dataHoraCotacao);
     const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-
-    // Guarda a última cotação disponível de cada mês.
-    if(!byMonth[key] || new Date(dataRef) > new Date(byMonth[key].dataHoraCotacao || byMonth[key].data_ref)){
+    if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
       byMonth[key] = item;
     }
   });
 
   const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
-  if(!sorted.length) return;
-
-  // Usa como ano corrente o ano do último dado disponível no histórico.
-  // Assim, se o JSON ainda estiver em abril/2026, mostra jan→abr/2026;
-  // quando entrar maio, junho etc., os meses entram automaticamente.
-  const lastKey = sorted[sorted.length - 1][0];
-  const anoCorrente = lastKey.split('-')[0];
-  const mesesAnoCorrente = sorted.filter(([key]) => key.startsWith(anoCorrente + '-'));
+  // Últimos 18 meses
+  const slice = sorted.slice(-18);
+  const lastKey = slice[slice.length-1]?.[0];
 
   const container = $('dolarMonths');
-  if(!container) return;
-
-  container.innerHTML = mesesAnoCorrente.map(([key, item], idx) => {
+  container.innerHTML = slice.map(([key, item], idx) => {
     const [ano, mes] = key.split('-');
     const label = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
-    const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
+    const val = parseFloat(item.cotacaoVenda);
     const isCurrent = key === lastKey;
 
     let varHtml = '<span class="dolar-month-var zero">—</span>';
-
     if(idx > 0){
-      const prevVal = parseFloat(mesesAnoCorrente[idx-1][1].cotacaoVenda || mesesAnoCorrente[idx-1][1].cotacao || 0);
-
-      if(prevVal){
-        const varPct = ((val - prevVal) / prevVal) * 100;
-        const cls = varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
-        varHtml = `<span class="dolar-month-var ${cls}">${signPct(varPct)}${fmt(varPct)}</span>`;
-      }
+      const prevVal = parseFloat(slice[idx-1][1].cotacaoVenda);
+      const varPct = ((val - prevVal) / prevVal) * 100;
+      const cls = varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero'; // convenção visual: positivo verde, negativo vermelho
+      varHtml = `<span class="dolar-month-var ${cls}">${signPct(varPct)}${fmt(varPct)}</span>`;
     }
 
     return `<div class="dolar-month-item${isCurrent ? ' current' : ''}">
@@ -2216,35 +1644,13 @@ function renderDolarMensais(){
 function toggleDolarTimeline(){
   const body = $('dolarTimelineBody');
   const toggle = $('dolarTimelineToggle');
-  if(!body || !toggle) return;
-
   const isOpen = body.classList.toggle('open');
-  toggle.textContent = isOpen ? 'Recolher ▲' : 'Mostrar ▼';
+  toggle.classList.toggle('open', isOpen);
 }
 
 /* ════════════════════════════════════════════════════
    GRÁFICO DO DÓLAR
 ════════════════════════════════════════════════════ */
-let _ptaxDiario = [];
-
-async function carregarPTAXDiarioAno(){
-  if(_ptaxDiario.length > 10){buildChartDolar('year');return;}
-  try{
-    const hoje=new Date(), ini=new Date(hoje.getFullYear(),0,2);
-    const fmtD=d=>`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
-    const url=`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
-      +`CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)`
-      +`?@di='${fmtD(ini)}'&@df='${fmtD(hoje)}'`
-      +`&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
-    const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status);
-    const dados=(await r.json()).value||[];
-    _ptaxDiario=dados.filter(d=>d.cotacaoVenda).sort((a,b)=>a.dataHoraCotacao.localeCompare(b.dataHoraCotacao));
-    if(_ptaxDiario.length>10) console.info('[PTAX diário] '+_ptaxDiario.length+' pontos para '+hoje.getFullYear());
-    else _ptaxDiario=[];
-  }catch(e){console.warn('[PTAX diário]:',e.message); _ptaxDiario=[];}
-  buildChartDolar('year');
-}
-
 let _chartDolar = null;
 
 function buildChartDolar(range){
@@ -2255,18 +1661,16 @@ function buildChartDolar(range){
 
   if(range === 'year'){
     // Apenas 2026 (ano atual)
-    const _src=_ptaxDiario.length>10?_ptaxDiario:_ptaxHistorico;
-    dados=_src.filter(d=>new Date(d.dataHoraCotacao).getFullYear()===ANO_ATUAL);
-    const _tipoLabel=(_ptaxDiario.length>10&&range==='year')?'diária':'mensal';
-  if($('dolar-chart-sub')) $('dolar-chart-sub').textContent=`PTAX ${_tipoLabel} · ${dados.length} registros · Banco Central do Brasil`;
+    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao).getFullYear() === ANO_ATUAL);
+    $('dolar-chart-sub').textContent = `PTAX diária ${ANO_ATUAL} — ${dados.length} registros`;
   } else if(range === '12m'){
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-12);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
-    $('dolar-chart-sub').textContent = `Últimos 12 meses · ${dados.length} registros · Banco Central do Brasil`;
+    $('dolar-chart-sub').textContent = `Últimos 12 meses · ${dados.length} registros`;
   } else { // 24m
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-24);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
-    $('dolar-chart-sub').textContent = `Últimos 24 meses · ${dados.length} registros · Banco Central do Brasil`;
+    $('dolar-chart-sub').textContent = `Últimos 24 meses · ${dados.length} registros`;
   }
 
   if(!dados.length) return;
@@ -2364,213 +1768,153 @@ document.querySelectorAll('[data-dolar-range]').forEach(btn => {
    ATUALIZAR TABELA DE INDICADORES (tabs 12M/24M/36M)
 ════════════════════════════════════════════════════ */
 function atualizarTabelaIndicadores(){
-  const m = activePeriodTab;
+  const m   = activePeriodTab;
   const hoje = new Date();
+  const mAtualIdx = hoje.getMonth();
+  const mAntIdx   = mAtualIdx === 0 ? 11 : mAtualIdx - 1;
+  const mAntAno   = mAtualIdx === 0 ? hoje.getFullYear()-1 : hoje.getFullYear();
+  const mAtualLabel = `${MESES_PT[mAtualIdx]}/${hoje.getFullYear()}`;
+  const mAntLabel   = `${MESES_PT[mAntIdx]}/${mAntAno}`;
+  const anoLabel    = `jan→${MESES_PT[mAtualIdx]}/${hoje.getFullYear()}`;
 
-  const set = (id, txt) => { const el=$(id); if(el) el.textContent = txt; };
-  const num = v => {
-    if(v === null || v === undefined || v === '') return null;
-    const n = Number(v);
-    return Number.isFinite(n) ? n : null;
-  };
-  const pctTxt = n => n === null || n === undefined || Number.isNaN(Number(n))
-    ? '—'
-    : (Number(n) > 0 ? '+' : '') + Number(n).toFixed(2).replace('.',',') + '%';
+  // ── Cabeçalhos ──
+  const set = (id, txt) => { if($(id)) $(id).textContent = txt; };
+  set('th-mes-ant-sub',  mAntLabel);
+  set('th-mes-cur-sub',  mAtualLabel + ' parcial');
+  set('th-ano-sub',      anoLabel);
+  set('th-acum-sub-v2',  `${m}M (${MESES_PT[mAtualIdx]}/${hoje.getFullYear()-Math.floor(m/12)}→hoje)`);
+  if($('th-acum-head')) $('th-acum-head').firstChild.textContent = `Acum. ${m}M `;
 
-  const setPct = (id, n, barId, maxPct=20, inverse=false) => {
-    const el=$(id);
-    const val=num(n);
-
-    if(el){
-      if(val === null){
-        el.textContent = '—';
-        el.className = 'v2-val dash';
-      }else{
-        const cls = val > 0 ? (inverse ? 'neg' : 'pos') : val < 0 ? (inverse ? 'pos' : 'neg') : 'neu';
-        el.textContent = pctTxt(val);
-        el.className = 'v2-val ' + cls;
-      }
-    }
-
-    const bar=$(barId);
-    if(bar){
-      if(val === null){
-        bar.style.width = '0%';
-        bar.className = '';
-      }else{
-        const cls = val > 0 ? (inverse ? 'v2-bar-n' : 'v2-bar-p') : val < 0 ? (inverse ? 'v2-bar-p' : 'v2-bar-n') : 'v2-bar-p';
-        bar.style.width = Math.min(Math.abs(val) / maxPct * 100, 100) + '%';
-        bar.className = cls;
-      }
+  // ── Helper: preenche célula ──
+  const pct = (id, n, barId, maxPct=20) => {
+    if(!$(id)) return;
+    if(n===null||n===undefined){ $(id).textContent='—'; $(id).className='v2-val dash'; return; }
+    const cls = n>0?'pos':n<0?'neg':'neu';
+    $(id).textContent = (n>0?'+':'')+n.toFixed(2).replace('.',',')+'\%';
+    $(id).className = 'v2-val '+cls;
+    if($(barId)){
+      $(barId).style.width = Math.min(Math.abs(n)/maxPct*100,100)+'%';
+      $(barId).className = n>=0?'v2-bar-p':'v2-bar-n';
     }
   };
-
-  const setPts = (id, v, sufixo='pts') => {
-    const val=num(v);
-    set(id, val === null ? '—' : `${fmtK(val)} ${sufixo}`);
-    const el=$(id);
-    if(el) el.className = val === null ? 'v2-val dash' : 'v2-val neu';
-  };
-
-  const setMoney = (id, v) => {
-    const val=num(v);
-    set(id, val === null ? '—' : 'R$ ' + fmtBRL(val));
-    const el=$(id);
-    if(el) el.className = val === null ? 'v2-val dash' : 'v2-val neu';
-  };
-
-  const brlSub = n => {
-    const val=num(n);
-    return val === null ? 'BRL: —' : `BRL: ${pctTxt(val)}`;
-  };
-
-  const indices = _dadosMercado?.indices_mercado || {};
-  const cards = _dadosMercado?.cards || {};
-  const intl = _dadosMercado?.indices_internacionais || {};
-
-  const idxDolar = indices.dolar || {};
-  const idxIbov = indices.ibovespa || {};
-  const idxSp = indices.sp500 || intl.sp500 || {};
-  const idxDow = indices.dow_jones || intl.dow_jones_detalhado || {};
-  const idxNasdaq = indices.nasdaq || intl.nasdaq_detalhado || {};
-
-  const mesAntLabel =
-    idxIbov.mes_anterior_label ||
-    idxDolar.mes_anterior_label ||
-    (() => {
-      const mAtualIdx = hoje.getMonth();
-      const mAntIdx = mAtualIdx === 0 ? 11 : mAtualIdx - 1;
-      const mAntAno = mAtualIdx === 0 ? hoje.getFullYear() - 1 : hoje.getFullYear();
-      return `${MESES_PT[mAntIdx]}/${mAntAno}`;
-    })();
-
-  const mesAtualLabel = `${MESES_PT[hoje.getMonth()]}/${hoje.getFullYear()}`;
-  const anoLabel = `jan→${MESES_PT[hoje.getMonth()]}/${hoje.getFullYear()}`;
-
-  // Cabeçalhos
-  set('th-mes-ant-sub', mesAntLabel);
-  set('th-mes-cur-sub', mesAtualLabel + ' parcial');
-  set('th-ano-sub', anoLabel);
-  set('th-acum-sub-v2', `${m}M`);
-  const thAcum = $('th-acum-head');
-  if(thAcum) thAcum.firstChild.textContent = `Acum. ${m}M `;
 
   // ═══ CDI ═══
-  const cdiMesFechado = num(cards.cdi?.mensal_fechado) ?? num(indicState.cdi.mes) ?? num(cards.cdi?.mensal);
-  const cdiParcial = num(cards.cdi?.parcial_mes_atual);
-  const cdiAno = num(cards.cdi?.acum_ano_com_parcial) ?? num(cards.cdi?.acum_ano) ?? null;
-  const cdiAcum = num(indicState.cdi[`m${m}`]) ?? num(cards.cdi?.[`acum_${m}m`]);
-
-  setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
-  set('cdi-mes-ant-sub', cards.cdi?.mes_fechado_label ? `taxa mensal ${cards.cdi.mes_fechado_label}` : `taxa mensal ${mesAntLabel}`);
-
-  setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2);
-  const diasUteis = cards.cdi?.dias_uteis_parcial || cards.cdi?.dias_uteis_mes_atual || hoje.getDate();
-  set('cdi-cur-sub', cdiParcial !== null ? `~${diasUteis} dias úteis` : 'mês atual parcial');
-
-  setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
-  set('cdi-ano-sub', cdiAno !== null ? 'ano com parcial' : 'acumulado ano');
-
-  setPct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
-  if($('cdi-acum-v2') && cdiAcum !== null) $('cdi-acum-v2').classList.add('pos');
-  set('cdi-acum-src-v2', cdiAcum !== null ? `série 4391 BCB · ${m}M` : 'histórico indisponível');
+  const cdiMes  = indicState.cdi.mes;     // taxa mensal mês anterior
+  const cdiMes2 = indicState.cdi.m12;     // fallback
+  // Mês anterior
+  pct('cdi-mes-ant', cdiMes, 'bar-cdi-ant', 2);
+  set('cdi-mes-ant-sub', `taxa mensal ${mAntLabel}`);
+  // Mês atual (parcial: dias corridos × taxa diária estimada)
+  if(cdiMes){
+    const diasMes  = new Date(hoje.getFullYear(), hoje.getMonth()+1, 0).getDate();
+    const diasCorr = hoje.getDate();
+    const taxaDia  = (Math.pow(1+cdiMes/100, 1/diasMes)-1)*100;
+    const parcial  = parseFloat((taxaDia * diasCorr).toFixed(4));
+    pct('cdi-mes-cur', parcial, 'bar-cdi-cur', 2);
+    set('cdi-cur-sub', `~${diasCorr} dias úteis`);
+  }
+  // No ano (estimativa: meses decorridos × taxa mensal)
+  if(cdiMes){
+    const mesesAno = hoje.getMonth(); // quantos meses fecharam este ano
+    const acumAno  = parseFloat(((Math.pow(1+cdiMes/100, mesesAno)-1)*100).toFixed(2));
+    pct('cdi-ano', acumAno, 'bar-cdi-ano', 15);
+    set('cdi-ano-sub', `${mesesAno} meses fechados`);
+  }
+  // Acumulado
+  const cdiAcum = indicState.cdi[`m${m}`];
+  pct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
+  set('cdi-acum-src-v2', cdiAcum ? `série 4391 BCB · ${m}M` : '—');
+  if($('cdi-acum-v2')) $('cdi-acum-v2').classList.add('pos');
 
   // ═══ IPCA ═══
-  const ipcaMes = num(indicState.ipca.mes);
+  const ipcaMes = indicState.ipca.mes;
   const ipcaRef = indicState.ipca.mesRef;
-  const ipcaAno = num(indicState.ipca.ano);
-  const ipcaAcum = num(indicState.ipca[`m${m}`]);
-
-  setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
-  set('ipca-mes-ant-sub', ipcaRef || mesAntLabel);
-  setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
-  setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
+  // Mês anterior (último mês fechado pelo IBGE)
+  pct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
+  set('ipca-mes-ant-sub', ipcaRef || mAntLabel);
+  // No ano
+  const ipcaAno = indicState.ipca.ano;
+  pct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
+  // Acumulado
+  const ipcaAcum = indicState.ipca[`m${m}`];
+  pct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
   set('ipca-acum-sub-v2', `acum. ${m}M`);
-
+  // Alert badge se acima do teto (4,5%)
   const alertEl = $('ipca-alert-badge');
   const rowIpca = $('row-ipca');
-  if(alertEl && ipcaAcum !== null){
+  if(alertEl && ipcaAcum){
     const show = ipcaAcum > 4.5;
     alertEl.style.display = show ? 'inline-block' : 'none';
     if(rowIpca) rowIpca.className = show ? 'data-row alert-row' : 'data-row';
   }
 
   // ═══ DÓLAR ═══
-  const dolarFechMesAnt = num(idxDolar.fechamento_mes_anterior);
-  const dolarAtual = num(idxDolar.fechamento_atual) ?? num(cards.dolar?.atual);
-  const dolarVarMesFechado = num(idxDolar.variacao_mes_fechado);
-  const dolarVarMesAtual = num(idxDolar.variacao_mes_atual) ?? num(cards.dolar?.variacao_mensal) ?? num(indicState.dolarPct.mes);
-  const dolarAno = num(idxDolar.acum_ano) ?? num(cards.dolar?.acum_ano) ?? num(indicState.dolarPct.ano);
-  const dolarAcum = num(idxDolar[`acum_${m}m`]) ?? num(cards.dolar?.[`acum_${m}m`]) ?? num(indicState.dolarPct[`m${m}`]);
-
-  setMoney('dolar-ant-cot', dolarFechMesAnt ?? indicState.dolarBRL.mes);
-  set('dolar-ant-sub', idxDolar.mes_anterior_label ? `fechamento ${idxDolar.mes_anterior_label}` : `fechamento ${mesAntLabel}`);
-
-  // Se o card PTAX do dia já foi carregado, mantém a cotação oficial exibida ali.
-  const dolarDiaTexto = $('dolar-day-rate')?.textContent;
-  if(dolarDiaTexto && dolarDiaTexto !== '—') set('dolar-cur-cot', dolarDiaTexto);
-  else setMoney('dolar-cur-cot', dolarAtual);
-
-  setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10);
-  set('dolar-cur-sub', dolarVarMesAtual !== null ? 'var. mês atual' : 'cotação atual');
-  setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
-  setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
-  set('dolar-acum-sub-v2', `var. ${m}M`);
+  // Mês anterior — usa ptax_historico ou indicState
+  if(_ptaxHistorico.length >= 2){
+    const antItem = _ptaxHistorico[_ptaxHistorico.length-2];
+    const antCot  = parseFloat(antItem.cotacaoVenda||antItem.cotacao||0);
+    if(antCot && $('dolar-ant-cot'))
+      $('dolar-ant-cot').textContent = 'R$ '+fmtBRL(antCot);
+    // Referência
+    const antDt = new Date(antItem.dataHoraCotacao||antItem.data_ref);
+    const antMesLabel = `${MESES_PT[antDt.getMonth()]}/${antDt.getFullYear()}`;
+    set('dolar-ant-sub', `fechamento ${antMesLabel}`);
+  } else if(indicState.dolarBRL.mes && $('dolar-ant-cot')){
+    $('dolar-ant-cot').textContent = 'R$ '+fmtBRL(indicState.dolarBRL.mes);
+  }
+  // Mês atual — cotação do dia (já carregada no card de dólar)
+  const dolarDayEl = $('dolar-day-rate');
+  if(dolarDayEl && dolarDayEl.textContent !== '—' && $('dolar-cur-cot'))
+    $('dolar-cur-cot').textContent = dolarDayEl.textContent;
+  // Var% mês
+  const dolarVarMes = indicState.dolarPct.mes;
+  if(dolarVarMes !== null && $('dolar-cur-var')){
+    const cls = dolarVarMes>0?'neg':'pos'; // dólar subiu = ruim p/ BRL
+    $('dolar-cur-var').textContent = (dolarVarMes>0?'+':'')+dolarVarMes.toFixed(2).replace('.',',')+'\%';
+    $('dolar-cur-var').className = 'v2-val '+cls;
+    const bar = $('bar-dolar-cur');
+    if(bar){ bar.style.width=Math.min(Math.abs(dolarVarMes)/10*100,100)+'%';bar.className=dolarVarMes>0?'v2-bar-n':'v2-bar-p'; }
+  }
+  // No ano
+  const dVarAno = indicState.dolarPct.ano;
+  if(dVarAno!==null && $('dolar-ano-v2')){
+    $('dolar-ano-v2').textContent = (dVarAno>0?'+':'')+dVarAno.toFixed(2).replace('.',',')+'\%';
+    $('dolar-ano-v2').className = 'v2-val '+(dVarAno>0?'neg':'pos');
+    const bar=$('bar-dolar-ano');
+    if(bar){bar.style.width=Math.min(Math.abs(dVarAno)/15*100,100)+'%';bar.className=dVarAno>0?'v2-bar-n':'v2-bar-p';}
+  }
+  // Acumulado
+  const dVarAcum = indicState.dolarPct[`m${m}`];
+  if(dVarAcum!==null && $('dolar-acum-v2')){
+    $('dolar-acum-v2').textContent = (dVarAcum>0?'+':'')+dVarAcum.toFixed(2).replace('.',',')+'\%';
+    $('dolar-acum-v2').className = 'v2-val '+(dVarAcum>0?'neg':'pos');
+    const bar=$('bar-dolar-acum');
+    if(bar){bar.style.width=Math.min(Math.abs(dVarAcum)/20*100,100)+'%';bar.className=dVarAcum>0?'v2-bar-n':'v2-bar-p';}
+    set('dolar-acum-sub-v2', `var. ${m}M`);
+  }
+  // PTAX ref
+  set('dolar-cur-sub', `cotação · var. vs ${mAntLabel}`);
 
   // ═══ IBOVESPA ═══
-  const ibovFechMesAnt = num(idxIbov.fechamento_mes_anterior) ?? num(cards.ibovespa?.anterior);
-  const ibovAtual = num(idxIbov.fechamento_atual) ?? num(cards.ibovespa?.atual);
-  const ibovMesFechado = num(idxIbov.variacao_mes_fechado);
-  const ibovMesAtual = num(idxIbov.variacao_mes_atual) ?? num(cards.ibovespa?.variacao_mensal);
-  const ibovAno = num(idxIbov.acum_ano) ?? num(cards.ibovespa?.acum_ano);
-  const ibovAcum = num(idxIbov[`acum_${m}m`]) ?? num(cards.ibovespa?.[`acum_${m}m`]);
-
-  setPts('ibov-ant-pts', ibovFechMesAnt);
-  setPct('ibov-ant-var', ibovMesFechado, 'bar-ibov-ant', 20);
-  set('ibov-ant-sub', idxIbov.mes_anterior_label ? `fechamento ${idxIbov.mes_anterior_label}` : 'mês fechado');
-
-  setPts('ibov-cur-pts', ibovAtual);
-  setPct('ibov-cur-var', ibovMesAtual, 'bar-ibov-var', 20);
-  set('ibov-cur-sub', 'pontos · var. mês atual');
-
-  setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
-  setPct('ibov-acum-v2', ibovAcum, 'bar-ibov-acum', 80);
-  set('ibov-acum-sub-v2', `var. ${m}M`);
-
-  // ═══ BOLSAS EUA ═══
-  function popularIndiceEUA(prefix, item){
-    const fechado = num(item?.variacao_mes_fechado);
-    const fechadoBrl = num(item?.variacao_mes_fechado_brl);
-    const atualPts = num(item?.fechamento_atual);
-    const mesAtual = num(item?.variacao_mes_atual);
-    const mesAtualBrl = num(item?.variacao_mes_atual_brl);
-    const ano = num(item?.acum_ano);
-    const anoBrl = num(item?.acum_ano_brl);
-    const acum = num(item?.[`acum_${m}m`]);
-    const acumBrl = num(item?.[`acum_${m}m_brl`]);
-
-    setPct(`${prefix}-ant-var`, fechado, `bar-${prefix}-ant`, 35);
-    set(`${prefix}-ant-sub`, fechadoBrl !== null ? `${item?.mes_anterior_label || mesAntLabel} · ${brlSub(fechadoBrl)}` : (item?.mes_anterior_label || 'mês fechado'));
-
-    setPts(`${prefix}-cur-pts`, atualPts);
-    setPct(`${prefix}-cur-var`, mesAtual, `bar-${prefix}-cur`, 35);
-    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? `mês atual · ${brlSub(mesAtualBrl)}` : 'mês atual');
-
-    setPct(`${prefix}-ano-var`, ano, `bar-${prefix}-ano`, 60);
-    set(`${prefix}-ano-sub`, anoBrl !== null ? `BRL: ${pctTxt(anoBrl)}` : 'var. no ano');
-
-    setPct(`${prefix}-acum-var`, acum, `bar-${prefix}-acum`, 120);
-    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? `${m}M · BRL: ${pctTxt(acumBrl)}` : `var. ${m}M`);
+  // Anterior (~30d)
+  const ibovAnt = typeof _dadosMercado?.cards?.ibovespa?.anterior === 'number'
+    ? _dadosMercado.cards.ibovespa.anterior : null;
+  const ibovCur = typeof _dadosMercado?.cards?.ibovespa?.atual === 'number'
+    ? _dadosMercado.cards.ibovespa.atual : null;
+  if(ibovAnt && $('ibov-ant-pts')) $('ibov-ant-pts').textContent = fmtK(ibovAnt)+' pts';
+  if(ibovCur && $('ibov-cur-pts')) $('ibov-cur-pts').textContent = fmtK(ibovCur)+' pts';
+  const ibovVar = _dadosMercado?.cards?.ibovespa?.variacao_mensal;
+  if(ibovVar!==null&&ibovVar!==undefined && $('ibov-cur-var')){
+    $('ibov-cur-var').textContent = (ibovVar>0?'+':'')+ibovVar.toFixed(2).replace('.',',')+'\%';
+    $('ibov-cur-var').className = 'v2-val '+(ibovVar>0?'pos':'neg');
+    const bar=$('bar-ibov-var');
+    if(bar){bar.style.width=Math.min(Math.abs(ibovVar)/20*100,100)+'%';bar.className=ibovVar>0?'v2-bar-p':'v2-bar-n';}
   }
 
-  // Compatibilidade: se vier apenas estrutura antiga, pelo menos mostra o S&P 500 atual.
-  if(!idxSp || Object.keys(idxSp).length === 0){
-    if(intl.sp500_usd) setPts('sp-cur-pts', intl.sp500_usd);
-  }else{
-    popularIndiceEUA('sp', idxSp);
-  }
-  popularIndiceEUA('dow', idxDow);
-  popularIndiceEUA('nasdaq', idxNasdaq);
+  // ═══ S&P 500 ═══
+  const intl = _dadosMercado?.indices_internacionais || {};
+  if(intl.sp500_usd && $('sp-cur-usd')) $('sp-cur-usd').textContent = fmtK(intl.sp500_usd)+' USD';
+  if(intl.sp500_brl && $('sp-cur-brl')) $('sp-cur-brl').textContent = 'R$ '+fmtK(intl.sp500_brl);
 }
 
 
@@ -2591,7 +1935,6 @@ async function carregarMercado(){
   try{
     const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
     const d = await r.json();
-    _dadosMercado = d;
 
     if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
 
@@ -2689,6 +2032,7 @@ async function carregarMercado(){
     }
 
     atualizarTabelaIndicadores();
+    setTimeout(atualizarStickyBar,600);
     carregarFocus(d.focus, d.atualizado_em);
     await inicializarGraficos(d);
 
@@ -2719,110 +2063,22 @@ function focusCardHTML(icon, label, sub, dados){
     <div class="fcad-sub">${sub}</div><div class="fcad-rows">${rows}</div></div>`;
 }
 
-function normalizarDataFocus(dataRef){
-  if(!dataRef) return null;
-  const raw = String(dataRef).trim();
-
-  // Aceita yyyy-mm-dd, dd/mm/yyyy, yyyy/mm/dd ou yyyymmdd.
-  let m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  if(m) return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
-
-  m = raw.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-  if(m) return { ano:m[3], mes:m[2], dia:m[1], br:raw };
-
-  m = raw.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
-  if(m) return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
-
-  m = raw.match(/^(\d{4})(\d{2})(\d{2})$/);
-  if(m) return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
-
-  return null;
-}
-
-function formatarDataFocusObj(dateObj){
-  const ano = String(dateObj.getFullYear());
-  const mes = String(dateObj.getMonth()+1).padStart(2,'0');
-  const dia = String(dateObj.getDate()).padStart(2,'0');
-  return { ano, mes, dia, br:`${dia}/${mes}/${ano}` };
-}
-
-function subtrairDiasFocus(dataFocus, dias){
-  if(!dataFocus) return null;
-  const d = new Date(`${dataFocus.ano}-${dataFocus.mes}-${dataFocus.dia}T12:00:00`);
-  if(isNaN(d)) return null;
-  d.setDate(d.getDate() - dias);
-  return formatarDataFocusObj(d);
-}
-
-function montarUrlPdfFocus(dataFocus){
-  if(!dataFocus) return 'https://www.bcb.gov.br/publicacoes/focus';
-  return `https://www.bcb.gov.br/content/focus/focus/R${dataFocus.ano}${dataFocus.mes}${dataFocus.dia}.pdf`;
-}
-
-function extrairDataDoPdfUrlFocus(url){
-  const m = String(url || '').match(/R(\d{4})(\d{2})(\d{2})\.pdf/i);
-  if(!m) return null;
-  return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
-}
-
-function obterPdfFocus(focus, dataFocus){
-  // Prioridade 1: URL já validada pelo robô em mercado_atual.json.
-  const urlValidada = focus?.pdf_url || focus?.pdfUrl || focus?.url_pdf || focus?.focus_pdf_url;
-  if(urlValidada){
-    return {
-      url: urlValidada,
-      data: extrairDataDoPdfUrlFocus(urlValidada) || normalizarDataFocus(focus?.data_pdf || focus?.data_pdf_br) || dataFocus,
-      origem: 'validado'
-    };
-  }
-
-  // Prioridade 2: data do PDF validada pelo robô.
-  const dataPdf = normalizarDataFocus(focus?.data_pdf || focus?.dataPdf || focus?.data_pdf_br || focus?.referencia_pdf);
-  if(dataPdf){
-    return { url: montarUrlPdfFocus(dataPdf), data: dataPdf, origem: 'data_pdf' };
-  }
-
-  // Fallback conservador: quando o OData já mostra a sexta mais recente,
-  // mas o PDF correspondente ainda não foi publicado, usa a semana anterior.
-  const dataConservadora = subtrairDiasFocus(dataFocus, 7) || dataFocus;
-  return { url: montarUrlPdfFocus(dataConservadora), data: dataConservadora, origem: 'fallback_conservador' };
-}
-
-function obterDataReferenciaFocus(focus){
-  const grupos = ['IPCA','Selic','PIB','Cambio','IGPM'];
-
-  for(const grupo of grupos){
-    const dados = focus?.[grupo];
-    if(!dados) continue;
-
-    for(const ano of Object.keys(dados)){
-      const dataRef = dados?.[ano]?.data_ref || dados?.[ano]?.data || dados?.[ano]?.referencia;
-      const normalizada = normalizarDataFocus(dataRef);
-      if(normalizada) return normalizada;
-    }
-  }
-
-  return null;
-}
-
 function carregarFocus(focus, atualizadoEm){
   const grid = $('focusGrid');
   const refEl = $('focusRef');
   if(!focus || Object.keys(focus).length === 0){
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.78rem">Dados do Focus não disponíveis.</div>`;
-    if(refEl) refEl.innerHTML = `<span class="focus-ref-label">Boletim Focus temporariamente indisponível</span>`;
     return;
   }
-
-  const dataFocus = obterDataReferenciaFocus(focus);
-  const pdfFocus = obterPdfFocus(focus, dataFocus);
-  const dataFormatada = pdfFocus?.data?.br || dataFocus?.br || (atualizadoEm?.split(' ')[0] || 'data não informada');
-  const pdfUrl = pdfFocus?.url || 'https://www.bcb.gov.br/publicacoes/focus';
-
-  if(refEl){
-    refEl.innerHTML = `<span class="focus-ref-label">Último boletim Focus disponível: <strong>${dataFormatada}</strong></span><a class="focus-pdf-link" href="${pdfUrl}" target="_blank" rel="noopener">Baixe aqui o último boletim Focus (PDF) ↗</a>`;
-  }
-
+  const primeiroAno = Object.keys(focus.IPCA || {})[0];
+  const dataRef = focus.IPCA?.[primeiroAno]?.data_ref || '';
+  const dataFormatada = dataRef ? dataRef.split('-').reverse().join('/') : (atualizadoEm?.split(' ')[0] || '');
+  const d = new Date();
+  const dia = d.getDay();
+  d.setDate(d.getDate() - (dia>=5 ? dia-5 : dia+2));
+  const pdfDate = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  const pdfUrl = `https://www.bcb.gov.br/content/focus/focus/R${pdfDate}.pdf`;
+  refEl.innerHTML = `Ref.: ${dataFormatada} · <a href="${pdfUrl}" target="_blank" rel="noopener">Baixar PDF ↗</a>`;
   grid.innerHTML = [
     focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
     focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
@@ -2833,10 +2089,10 @@ function carregarFocus(focus, atualizadoEm){
 }
 
 function carregarFocusFallback(){
-  if($('focusRef')) $('focusRef').innerHTML = '<span class="focus-ref-label">Boletim Focus temporariamente indisponível</span>';
+  if($('focusRef')) $('focusRef').innerHTML = 'Dados offline';
   if($('focusGrid')) $('focusGrid').innerHTML = `<div style="grid-column:1/-1;padding:20px;color:var(--muted);font-size:.75rem;
     text-align:center;border:1px dashed var(--border2);border-radius:10px">
-    ⚠️ Indicadores de mercado temporariamente indisponíveis. Atualize a página em alguns instantes.</div>`;
+    ⚠️ mercado_atual.json não carregado. Execute o robô para atualizar os dados.</div>`;
 }
 
 /* ════════════════════════════════════════════════════
@@ -2902,42 +2158,12 @@ function renderRankings(){
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=9999;
 let activeSearch='',activeCat='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
 
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
-const DATE_SET=new Set(["Data Inicio","Data Início","Data de Inicio","Data de Início","DATA INICIO","DATA INÍCIO"]);
-function normalizarHeaderOrdenacao(h){
-  return String(h||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
-}
-function isDateHeader(key){
-  const n=normalizarHeaderOrdenacao(key);
-  return DATE_SET.has(key)||n==='data inicio'||n==='data de inicio'||n.includes('data inicio');
-}
-function parseDateBR(v){
-  if(v===null||v===undefined) return null;
-  const s=String(v).trim();
-  if(!s||s==='-'||s==='—'||s.toLowerCase()==='null') return null;
-  const m=s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
-  if(m){
-    const d=parseInt(m[1],10);
-    const mo=parseInt(m[2],10)-1;
-    let y=parseInt(m[3],10);
-    if(y<100) y+=2000;
-    const dt=new Date(y,mo,d);
-    if(dt.getFullYear()===y&&dt.getMonth()===mo&&dt.getDate()===d) return dt.getTime();
-  }
-  const t=Date.parse(s);
-  return Number.isFinite(t)?t:null;
-}
-function compararOrdenacao(av,bv){
-  if(av===null&&bv===null) return 0;
-  if(av===null) return 1;
-  if(bv===null) return -1;
-  return av<bv?-sortDir:av>bv?sortDir:0;
-}
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
 const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
@@ -3043,22 +2269,10 @@ function applyFilter(){
   if(sortCol>=0&&sortCol<displayHeaders.length){
     const key=displayHeaders[sortCol];
     const isNum=NUM_SET.has(key);
-    const isDate=isDateHeader(key);
     filtered.sort((a,b)=>{
-      let av,bv;
-      if(isNum){
-        av=toNum(a[key]);
-        bv=toNum(b[key]);
-      }else if(isDate){
-        av=parseDateBR(a[key]);
-        bv=parseDateBR(b[key]);
-      }else{
-        av=String(a[key]||'').toLowerCase();
-        bv=String(b[key]||'').toLowerCase();
-        if(!av) av=null;
-        if(!bv) bv=null;
-      }
-      return compararOrdenacao(av,bv);
+      const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();
+      const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();
+      return av<bv?-sortDir:av>bv?sortDir:0;
     });
   }
   currentPage=1; expandedRows.clear(); render(); renderRankings();
@@ -3648,13 +2862,13 @@ async function inicializarGraficos(d){
   }
 
   if(hist.length) buildChartIpca(hist,24);
-  else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
+  else marcarGraficoSemDados('chartIpca', 'IPCA histórico não disponível no mercado_atual.json');
 
   if(selic.length) buildChartSelic(selic,12);
-  else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
+  else marcarGraficoSemDados('chartSelic', 'Histórico Selic não disponível. Confira o arquivo "historico da selic do BC.json".');
 
   if(meta.length) buildChartMeta(meta);
-  else marcarGraficoSemDados('chartMeta', 'Histórico de inflação e meta temporariamente indisponível.');
+  else marcarGraficoSemDados('chartMeta', 'IPCA 12M vs Meta não disponível. Confira o arquivo "meta-vs-inflacao-efetiva.json".');
 
   document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
     if(btn.dataset.bound==='1') return;
@@ -3731,7 +2945,7 @@ async function carregarPTAX(){
     }).join('');
     loading.style.display='none'; table.style.display='table'; _ptaxCarregado=true;
   }catch(err){
-    loading.innerHTML=`<div style="color:var(--muted)">Histórico PTAX temporariamente indisponível.<br><small>Atualize a página em alguns instantes.</small></div>`;
+    loading.innerHTML=`<div style="color:var(--muted)">PTAX histórico não disponível no JSON.<br><small>Execute o + para gerar mercado_atual.json com ptax_historico.</small></div>`;
   }
 }
 
@@ -3799,14 +3013,118 @@ async function iniciarDashboard(){
   await carregarMercado();          // primeiro carrega mercado_atual.json
   await carregarCDIPeriodos();      // agora só usa o JSON, sem API externa
   await carregarIPCAPeriodos();     // agora só usa o JSON, sem API externa
-  carregarDolarDia();
-  carregarPTAXDiarioAno();               // mantém PTAX do dia ao vivo
+  carregarDolarDia();               // mantém PTAX do dia ao vivo
   await carregarPTAXHistorico();    // agora só usa o JSON, sem CotacaoDolarPeriodo
   await carregarFundosJson();
   await carregarDados();
   await carregarKPIs();
 }
 iniciarDashboard();
+
+/* ══════════════════════════════════════════════════
+   ABAS
+══════════════════════════════════════════════════ */
+window.switchTab = function(id){
+  ['macro','rankings','catalogo'].forEach(t=>{
+    document.getElementById('tab-'+t)?.classList.toggle('active', t===id);
+    document.getElementById('tabBtn-'+t)?.classList.toggle('active', t===id);
+  });
+  history.replaceState(null,'','#'+id);
+  if(id==='macro') setTimeout(()=>{
+    [window._chartDolar,window._chartIpca,window._chartSelic,window._chartMeta]
+      .forEach(c=>c&&c.resize&&c.resize());
+  },80);
+  document.querySelector('.tabs-nav')?.scrollIntoView({behavior:'smooth',block:'nearest'});
+};
+
+// Restaura aba pelo hash
+(function(){
+  const h=location.hash.replace('#','');
+  if(['macro','rankings','catalogo'].includes(h)) switchTab(h);
+})();
+
+// Atalhos: Alt+1/2/3 e Ctrl+K
+document.addEventListener('keydown',e=>{
+  if(e.altKey){
+    if(e.key==='1') switchTab('macro');
+    if(e.key==='2') switchTab('rankings');
+    if(e.key==='3'){switchTab('catalogo');setTimeout(irCatalogo,200);}
+  }
+  if((e.ctrlKey||e.metaKey)&&e.key==='k'){
+    e.preventDefault();switchTab('catalogo');setTimeout(irCatalogo,200);
+  }
+});
+
+// Swipe horizontal troca de aba
+(function(){
+  let sx=0,sy=0;
+  const tabs=['macro','rankings','catalogo'];
+  document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=Math.abs(e.changedTouches[0].clientY-sy);
+    if(Math.abs(dx)<50||dy>60) return;
+    const cur=tabs.findIndex(t=>document.getElementById('tab-'+t)?.classList.contains('active'));
+    if(cur<0) return;
+    const next=dx<0?Math.min(cur+1,tabs.length-1):Math.max(cur-1,0);
+    if(next!==cur) switchTab(tabs[next]);
+  },{passive:true});
+})();
+
+/* ── Sticky bar ── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('stickyBar')?.classList.toggle('visible',window.scrollY>200);
+},{passive:true});
+
+function atualizarStickyBar(){
+  const map=[
+    ['st-selic',document.getElementById('mc-selic')?.textContent+'%a.a.'],
+    ['st-cdi',  document.getElementById('mc-cdi-mes-ref')?.textContent],
+    ['st-ptax', document.getElementById('dolar-day-rate')?.textContent],
+    ['st-ibov', document.getElementById('ibov-cur-pts')?.textContent],
+  ];
+  map.forEach(([id,val])=>{
+    const el=document.getElementById(id);
+    if(el&&val&&val!=='—'&&val!=='undefined%a.a.'&&!val.startsWith('undefined'))
+      el.textContent=val;
+  });
+}
+
+/* ── Ir para catálogo ── */
+function irCatalogo(){
+  switchTab('catalogo');
+  setTimeout(()=>{
+    const inp=document.getElementById('searchInput');
+    if(inp){inp.focus();inp.select();}
+  },200);
+}
+
+/* ── Badge de fundos ── */
+function atualizarTabBadge(){
+  const b=document.getElementById('tab-badge-n');
+  if(b&&window.allRows&&allRows.length) b.textContent=allRows.length;
+}
+
+/* ── Export CSV ── */
+function exportarCSV(){
+  if(!window.filtered||!filtered.length){alert('Sem dados.');return;}
+  const skip=new Set(['Fundo_norm','Perfil','URL','doc_lamina','doc_regulamento',
+    'doc_inf_comp','doc_comunicado','doc_carta']);
+  const cols=Object.keys(filtered[0]).filter(c=>!skip.has(c));
+  const esc=v=>'"'+String(v||'').replace(/"/g,'""')+'"';
+  const rows=[cols.map(esc).join(','),...filtered.map(r=>cols.map(c=>esc(r[c])).join(','))];
+  const blob=new Blob(['\uFEFF'+rows.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='fundos-caixa-'+new Date().toISOString().slice(0,10)+'.csv';
+  a.click();URL.revokeObjectURL(a.href);
+}
+
+/* ── Modo compacto CSS ── */
+(function(){const s=document.createElement('style');
+s.textContent='body.compact td{padding:5px 8px!important}body.compact .kpi{padding:12px 10px!important}body.compact .rank-item{padding:5px 10px!important}';
+document.head.appendChild(s);})();
+
 </script>
 
 <script>
