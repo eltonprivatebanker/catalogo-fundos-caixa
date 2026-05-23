@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Catálogo de Fundos CAIXA — Elton Private Banker</title>
+<title>Catálogo de Fundos CAIXA — Produção própria de Elton Cardoso Teotonio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
@@ -170,7 +170,7 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .indic-row-group{background:rgba(200,151,58,.015)}
 
 /* ── SEÇÃO DÓLAR ── */
-.dolar-grid{display:grid;grid-template-columns:300px 1fr;gap:14px;align-items:start}
+.dolar-grid{display:grid;grid-template-columns:300px minmax(0,1fr);gap:14px;align-items:start;width:100%;max-width:100%;overflow:hidden}
 @media(max-width:900px){.dolar-grid{grid-template-columns:1fr}}
 
 /* Card do dia */
@@ -196,8 +196,8 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-spread-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--text)}
 
 /* Timeline mensal */
-.dolar-right{display:flex;flex-direction:column;gap:14px}
-.dolar-timeline-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+.dolar-right{display:flex;flex-direction:column;gap:14px;min-width:0;width:100%;max-width:100%;overflow:hidden}
+.dolar-timeline-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;width:100%;max-width:100%;min-width:0}
 .dolar-timeline-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
 .dolar-timeline-header{padding:12px 18px;border-bottom:1px solid var(--border2);
   display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
@@ -206,7 +206,7 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-timeline-toggle{font-size:.65rem;color:var(--muted);transition:transform .25s}
 .dolar-timeline-toggle.open{transform:rotate(180deg)}
 .dolar-timeline-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
-.dolar-timeline-body.open{max-height:200px}
+.dolar-timeline-body.open{max-height:260px}
 .dolar-months{display:flex;gap:0;overflow-x:auto;padding:12px 16px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
 .dolar-month-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;
   padding:10px 8px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);
@@ -216,17 +216,18 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-month-label{font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;text-transform:uppercase}
 .dolar-month-val{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--gold2)}
 .dolar-month-var{font-size:.62rem;font-family:'JetBrains Mono',monospace;font-weight:600}
-.dolar-month-var.pos{color:var(--red)}.dolar-month-var.neg{color:var(--green)}.dolar-month-var.zero{color:var(--muted)}
+.dolar-month-var.pos{color:var(--green)}.dolar-month-var.neg{color:var(--red)}.dolar-month-var.zero{color:var(--muted)}
 
 /* Gráfico dólar */
 .dolar-chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
-  transition:border-color .2s,box-shadow .2s}
+  transition:border-color .2s,box-shadow .2s;width:100%;max-width:100%;min-width:0}
 .dolar-chart-card:hover{border-color:rgba(200,151,58,.25);box-shadow:0 6px 30px rgba(0,0,0,.3)}
 .dolar-chart-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
-.dolar-chart-header{padding:14px 18px 10px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.dolar-chart-header{padding:14px 18px 10px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;min-width:0}
 .dolar-chart-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold2)}
 .dolar-chart-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
-.dolar-chart-body{padding:16px 18px;position:relative;height:220px}
+.dolar-chart-body{padding:18px 20px;position:relative;height:clamp(260px,28vw,340px);min-height:260px;max-height:340px;width:100%;max-width:100%;overflow:hidden}
+.dolar-chart-body canvas{width:100% !important;height:100% !important;display:block}
 
 /* ── FOCUS ── */
 .focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
@@ -326,14 +327,6 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .chip.agr:hover,.chip.agr.active{border-color:var(--red);color:var(--red);background:var(--red-dim)}
 
 /* Filtro de performance */
-.perf-custom-wrap{display:flex;align-items:center;gap:5px}
-.perf-custom-input{width:72px;padding:5px 8px;background:var(--bg2);border:1px solid var(--border);
-  border-radius:8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.72rem;outline:none;transition:border-color .2s}
-.perf-custom-input:focus{border-color:var(--gold)}
-.perf-custom-input::placeholder{color:var(--muted2)}
-.perf-ok-btn{padding:5px 10px;border-radius:8px;border:1px solid var(--border2);background:transparent;
-  color:var(--muted);font-size:.7rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s}
-.perf-ok-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
 .perf-period-select{padding:5px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;
   color:var(--text);font-family:'DM Sans',sans-serif;font-size:.72rem;outline:none;cursor:pointer;transition:border-color .2s;height:30px}
 .perf-period-select:hover{border-color:var(--gold)}.perf-period-select option{background:var(--bg3)}
@@ -393,11 +386,131 @@ td.col-pct{text-align:right}
 .pchip-TODOS{background:rgba(200,151,58,.1);color:var(--gold)}
 
 /* ── DETAIL PANEL ── */
-.detail-panel{padding:14px 18px;display:flex;flex-wrap:wrap;gap:16px;animation:fadeUp .2s ease}
+.detail-panel{padding:14px 18px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;animation:fadeUp .2s ease;align-items:start}
+.detail-main{display:flex;flex-wrap:wrap;gap:16px;min-width:0}
 .detail-item{display:flex;flex-direction:column;gap:3px;min-width:120px}
 .detail-key{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600}
 .detail-val{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text)}
 .detail-val a{color:var(--blue);text-decoration:none}.detail-val a:hover{text-decoration:underline}
+.detail-val.copyable{user-select:all}
+
+.detail-panel{
+  grid-template-columns:1fr !important;
+  white-space:normal !important;
+}
+.detail-main{
+  white-space:normal !important;
+  overflow:visible !important;
+}
+.fund-quick-note{
+  white-space:normal !important;
+  overflow:visible !important;
+  word-break:normal;
+}
+.fund-quick-note-text{
+  white-space:normal !important;
+  overflow:visible !important;
+  display:block;
+}
+.docs-mini-wrap{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  flex-wrap:wrap;
+  max-width:230px;
+}
+.doc-mini,
+.doc-mini-all{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:26px;
+  height:22px;
+  padding:0 6px;
+  border-radius:6px;
+  border:1px solid var(--border2);
+  background:var(--bg3);
+  color:var(--muted);
+  font-size:.58rem;
+  font-family:'DM Sans',sans-serif;
+  font-weight:700;
+  text-decoration:none;
+  cursor:pointer;
+  transition:all .15s;
+}
+.doc-mini:hover,
+.doc-mini-all:hover{
+  border-color:var(--gold);
+  color:var(--gold2);
+  background:var(--gold-dim);
+  text-decoration:none;
+}
+.doc-mini-all{
+  color:var(--gold2);
+  background:var(--gold-dim);
+  border-color:var(--border);
+  min-width:42px;
+}
+.doc-mini-empty{
+  color:var(--muted2);
+  font-size:.65rem;
+}
+
+
+.fund-quick-note{
+  width:100%;
+  margin-top:2px;
+  padding:12px 14px;
+  border:1px solid var(--border2);
+  border-radius:12px;
+  background:rgba(91,156,246,.045);
+  color:var(--muted);
+  line-height:1.55;
+  font-size:.68rem;
+}
+.fund-quick-note-title{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  margin-bottom:6px;
+  font-size:.58rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--gold);
+  font-weight:700;
+}
+.fund-quick-note-text{
+  color:var(--text);
+  font-size:.72rem;
+}
+.fund-quick-note-disclaimer{
+  margin-top:7px;
+  color:var(--muted2);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.54rem;
+  line-height:1.45;
+}
+
+/* ── DOCUMENTOS DO FUNDO — lateral compacta ── */
+.docs-card{width:100%;padding:12px;background:rgba(255,255,255,.018);border:1px solid var(--border2);border-radius:12px;position:sticky;top:10px}
+.docs-head{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-bottom:10px}
+.docs-title{font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;line-height:1.35}
+.docs-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.docs-action-btn{border:1px solid var(--border);background:var(--gold-dim);color:var(--gold2);border-radius:7px;padding:5px 8px;font-size:.6rem;font-family:'DM Sans',sans-serif;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.docs-action-btn:hover{border-color:var(--gold2);background:rgba(200,151,58,.18)}
+.docs-action-btn.secondary{background:var(--bg3);color:var(--muted);border-color:var(--border2)}
+.docs-action-btn.secondary:hover{color:var(--blue);border-color:var(--blue);background:var(--blue-dim)}
+.docs-grid{display:flex;flex-direction:column;gap:6px}
+.doc-pill{display:flex;align-items:center;gap:8px;padding:6px 9px;border:1px solid var(--border2);border-radius:9px;background:var(--bg2);min-width:0;transition:border-color .15s,background .15s}
+.doc-pill:hover{border-color:rgba(200,151,58,.28);background:rgba(200,151,58,.045)}
+.doc-pill input{accent-color:var(--gold);width:13px;height:13px;flex-shrink:0}
+.doc-pill a{color:var(--text);text-decoration:none;font-size:.66rem;font-family:'DM Sans',sans-serif;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.doc-pill a:hover{color:var(--gold2);text-decoration:none}
+.docs-note{margin-top:8px;font-size:.54rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;line-height:1.45}
+@media(max-width:900px){
+  .detail-panel{grid-template-columns:1fr}
+  .docs-card{position:static}
+}
 
 /* ── PAGINAÇÃO ── */
 .pagination-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-top:20px;padding:0 2px}
@@ -448,7 +561,7 @@ td.col-pct{text-align:right}
 .spinner-sm{width:16px;height:16px;border:2px solid var(--border2);border-top-color:var(--gold);
   border-radius:50%;animation:spin .75s linear infinite;display:inline-block;vertical-align:middle;margin-right:6px}
 
-/* ── BOLETIM BTN ── */
+/* ── BOTÃO AUXILIAR DE LINK ── */
 .boletim-btn{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;
   border:1px solid var(--border2);border-radius:5px;background:transparent;
   color:var(--muted2);font-size:.6rem;font-family:'DM Sans',sans-serif;cursor:pointer;
@@ -525,22 +638,22 @@ footer span{color:var(--gold)}
     <div class="brand-logo">E</div>
     <div class="brand-text">
       <h1>Catálogo de Fundos CAIXA</h1>
-      <p>Elton Private Banker · Dados atualizados automaticamente via Robô Python</p>
+      <p>Desenvolvido por Elton Cardoso Teotonio · Produção própria</p>
     </div>
   </div>
   <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
 
-<!-- DISCLAIMER -->
-<div class="section-gap" style="margin-top:14px">
-  <div style="background:rgba(200,151,58,.06);border:1px solid rgba(200,151,58,.18);border-radius:12px;padding:13px 18px;color:var(--muted);font-size:.72rem;line-height:1.6">
-    <strong style="color:var(--gold2)">⚠️ Aviso:</strong>
+<!-- ═══════════════════════════════════════════════ DISCLAIMER ══ -->
+<div class="section-gap" style="margin-top:18px">
+  <div style="background:rgba(200,151,58,.07);border:1px solid var(--border);border-radius:14px;padding:14px 18px;color:var(--muted);font-size:.72rem;line-height:1.55">
+    <strong style="color:var(--gold2)">Aviso:</strong>
     esta ferramenta não é institucional da Caixa Econômica Federal, da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA.
-    Trata-se de produção própria, desenvolvida por <strong style="color:var(--text)">Elton Cardoso Teotonio</strong>,
-    para apoio informativo à consulta e organização de dados públicos.
+    Trata-se de produção própria, desenvolvida por <strong style="color:var(--text)">Elton Cardoso Teotonio</strong>, para apoio informativo à consulta e organização de dados públicos.
     As informações devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.
   </div>
 </div>
+
 
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
 <div class="kpi-grid section-gap">
@@ -793,7 +906,7 @@ footer span{color:var(--gold)}
       </tbody>
     </table>
     <div class="indic-footnote">
-      CDI e IPCA: pré-calculados server-side pelo robô (séries 4391/433 BCB) · Dólar: PTAX BCB · Ibovespa e S&P 500: Yahoo Finance · Robô v16+
+      CDI e IPCA: séries públicas BCB 4391/433 · Dólar: PTAX BCB · Ibovespa e S&P 500: fontes públicas de mercado
     </div>
   </div>
 </div><!-- /section indicadores -->
@@ -807,31 +920,46 @@ footer span{color:var(--gold)}
 
   <div class="dolar-grid">
 
-    <!-- Link PTAX do dia -->
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
-      display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px;padding:28px 20px;text-align:center">
-      <div style="font-size:1.5rem">💵</div>
-      <div style="font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--gold2)">Cotação PTAX — BCB</div>
-      <div style="font-size:.63rem;color:var(--muted);font-family:'JetBrains Mono',monospace;line-height:1.7">Cotação oficial BRL/USD<br>publicada pelo BCB às 13h</div>
-      <div style="display:flex;flex-direction:column;gap:8px;width:100%">
-        <a href="https://ptax.bcb.gov.br/ptax_internet/consultarBoletim.do?method=consultarBoletimDiretoPrint&idDia=hoje"
-          target="_blank" rel="noopener"
-          style="display:flex;align-items:center;justify-content:center;gap:6px;padding:9px 16px;border-radius:9px;
-          background:var(--gold-dim);border:1px solid var(--border);color:var(--gold2);
-          font-size:.72rem;font-family:'DM Sans',sans-serif;font-weight:600;text-decoration:none">
-          📊 Boletim PTAX do dia ↗
-        </a>
-        <a href="https://ptax.bcb.gov.br/ptax_internet/consultarBoletim.do"
-          target="_blank" rel="noopener"
-          style="display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 16px;border-radius:9px;
-          background:transparent;border:1px solid var(--border2);color:var(--muted);
-          font-size:.68rem;font-family:'DM Sans',sans-serif;text-decoration:none">
-          🔗 Histórico PTAX ↗
-        </a>
+    <!-- Card do dia -->
+    <div class="dolar-day-card">
+      <div class="dolar-day-header">
+        <div class="dolar-day-title">💵 Cotação do Dia</div>
+        <div class="dolar-day-sub" id="dolar-day-src">Fonte: PTAX BCB · Carregando...</div>
+      </div>
+      <div class="dolar-day-body">
+        <div id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação...</div>
+        <div id="dolar-day-content" style="display:none">
+          <div class="dolar-day-rate" id="dolar-day-rate">—</div>
+          <div class="dolar-day-ref" id="dolar-day-ref">—</div>
+          <div class="dolar-spread" style="margin-bottom:12px">
+            <div class="dolar-spread-item">
+              <div class="dolar-spread-label">Compra</div>
+              <div class="dolar-spread-val" id="dolar-compra">—</div>
+            </div>
+            <div class="dolar-spread-item">
+              <div class="dolar-spread-label">Venda</div>
+              <div class="dolar-spread-val" id="dolar-venda">—</div>
+            </div>
+          </div>
+          <div class="dolar-day-metrics">
+            <div class="dolar-metric">
+              <span class="dolar-metric-label">Var. vs dia anterior</span>
+              <span class="dolar-metric-val" id="dolar-var-dia">—</span>
+            </div>
+            <div class="dolar-metric">
+              <span class="dolar-metric-label">Dia anterior (fechamento)</span>
+              <span class="dolar-metric-val muted" id="dolar-dia-ant">—</span>
+            </div>
+            <div class="dolar-metric">
+              <span class="dolar-metric-label">Hora referência PTAX</span>
+              <span class="dolar-metric-val muted" id="dolar-hora">—</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 
-        <!-- Coluna direita: timeline + gráfico -->
+    <!-- Coluna direita: timeline + gráfico -->
     <div class="dolar-right">
 
       <!-- Timeline mensal expansível -->
@@ -998,7 +1126,8 @@ footer span{color:var(--gold)}
       <button class="chip" data-perf="10">≥ 10%</button>
       <button class="chip" data-perf="20">≥ 20%</button>
       <button class="chip" data-perf="50">≥ 50%</button>
-      </div>
+      
+    </div>
   </div>
 
   <div class="table-wrap">
@@ -1039,17 +1168,26 @@ footer span{color:var(--gold)}
 </div>
 
 <footer>
-<div>
-  <div style="color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;margin-bottom:10px">Aviso importante</div>
-  <div style="color:var(--muted);font-size:.7rem;line-height:1.8">
-    <p>Esta ferramenta é uma produção própria, desenvolvida por <span>Elton Cardoso Teotonio</span>, para apoio à organização e consulta de informações públicas sobre fundos de investimento.</p>
-    <p style="margin-top:6px">Este site não é uma ferramenta institucional da <span>Caixa Econômica Federal</span>, da <span>CAIXA Asset</span> ou de qualquer empresa do conglomerado CAIXA. As informações devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.</p>
-    <p style="margin-top:6px">Dados públicos: fundos.caixa.gov.br · Banco Central do Brasil · CAIXA Asset Management</p>
-    <p style="margin-top:8px;color:var(--muted2);font-size:.63rem">Desenvolvido por <span>Elton Cardoso Teotonio</span> · Produção própria · Uso informativo e auxiliar</p>
+  <div style="max-width:1100px;margin:0 auto;text-align:left;line-height:1.7">
+    <div style="color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;margin-bottom:8px">
+      Aviso importante
+    </div>
+    <div>
+      Esta ferramenta é uma produção própria, desenvolvida por <span>Elton Cardoso Teotonio</span>, com finalidade de apoio à organização, consulta e análise de informações públicas sobre fundos de investimento.
+    </div>
+    <div style="margin-top:8px">
+      Este site não é uma ferramenta institucional da <span>Caixa Econômica Federal</span>, da <span>CAIXA Asset</span> ou de qualquer empresa do conglomerado CAIXA. As informações apresentadas são de responsabilidade do desenvolvedor desta ferramenta e devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.
+    </div>
+    <div style="margin-top:8px">
+      Dados públicos utilizados: fundos.caixa.gov.br, Banco Central do Brasil, CAIXA Asset Management e demais fontes públicas de mercado eventualmente indicadas na própria página.
+    </div>
+    <div style="margin-top:10px;color:var(--muted)">
+      Desenvolvido por Elton Cardoso Teotonio · Produção própria · Uso informativo e auxiliar
+    </div>
   </div>
-</div>
 </footer>
 </div><!-- /page -->
+
 <script>
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
@@ -1057,556 +1195,900 @@ footer span{color:var(--gold)}
 const BASE_URL = window.location.protocol === 'file:'
   ? 'https://raw.githubusercontent.com/eltonprivatebanker/catalogo-fundos-caixa/main/'
   : '';
+
 const $ = id => document.getElementById(id);
-const fmt = (v,dec=2,suf='%') => { if(v===null||v===undefined||v==='') return '—'; return Number(v).toFixed(dec).replace('.',',')+suf; };
+const fmt = (v,dec=2,suf='%') => {
+  if(v===null||v===undefined||v==='') return '—';
+  return Number(v).toFixed(dec).replace('.',',')+suf;
+};
 const fmtBRL = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtBRL4 = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
 const fmtK   = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{maximumFractionDigits:0});
 const clsPct = n => n>0?'pos':n<0?'neg':'zero';
 const signPct = n => n>0?'+':'';
+
 const MESES_PT = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+const MESES_FULL = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+/* Data atual do sistema */
 const HOJE = new Date();
 const ANO_ATUAL = HOJE.getFullYear();
 
-/* ════════════════ ESTADO GLOBAL ════════════════ */
+/* ════════════════════════════════════════════════════
+   ESTADO GLOBAL DOS INDICADORES (para tabs 12M/24M/36M)
+════════════════════════════════════════════════════ */
 const indicState = {
-  cdi:  { m12:null, m24:null, m36:null, mes:null, mesRef:null, acumAno:null, acumAnoComParcial:null, parcialMesAtual:null, parcialRef:null },
-  ipca: { m12:null, m24:null, m36:null, mes:null, ano:null, mesRef:null },
-  dolarBRL: { mes:null, ano:null, m12:null, m24:null, m36:null },
-  dolarPct: { mes:null, ano:null, m12:null, m24:null, m36:null },
+  cdi:  { m12: null, m24: null, m36: null, mes: null, mesRef: null },
+  ipca: { m12: null, m24: null, m36: null, mes: null, ano: null, mesRef: null },
+  dolarBRL: { mes: null, ano: null, m12: null, m24: null, m36: null },
+  dolarPct: { mes: null, ano: null, m12: null, m24: null, m36: null },
 };
-let activePeriodTab = 12;
-let _ptaxHistorico = [];
-let _dadosMercado  = null;
-let _fundosDocMap  = {};
+let activePeriodTab = 12; // 12, 24 ou 36
+let _ptaxHistorico = []; // cache para uso nos tabs
 
-/* ════════════ POUPANÇA ════════════ */
+/* ════════════════════════════════════════════════════
+   POUPANÇA — TOGGLE
+════════════════════════════════════════════════════ */
 function togglePoupanca(){
-  const el=$('poupExplain'), btn=$('poupExpandBtn');
-  const isOpen=el.classList.toggle('open');
-  btn.textContent=isOpen?'Fechar ▲':'Ver regras ▼';
+  const el = $('poupExplain');
+  const btn = $('poupExpandBtn');
+  const isOpen = el.classList.toggle('open');
+  btn.textContent = isOpen ? 'Fechar ▲' : 'Ver regras ▼';
 }
 
-/* ════════════ COPOM 2026 ════════════ */
-const COPOM_2026=[
-  {datas:'27 e 28 de janeiro',num:1},{datas:'17 e 18 de março',num:2},
-  {datas:'28 e 29 de abril',num:3},{datas:'16 e 17 de junho',num:4},
-  {datas:'4 e 5 de agosto',num:5},{datas:'15 e 16 de setembro',num:6},
-  {datas:'3 e 4 de novembro',num:7},{datas:'8 e 9 de dezembro',num:8},
-];
-const COPOM_DATAS=[new Date(2026,0,27),new Date(2026,2,17),new Date(2026,3,28),
-  new Date(2026,5,16),new Date(2026,7,4),new Date(2026,8,15),new Date(2026,10,3),new Date(2026,11,8)];
-function buildCopomCalendario(){
-  const c=$('copomMeetings'); if(!c) return;
-  const agora=new Date();
-  c.innerHTML=COPOM_2026.map((r,i)=>{
-    const dt=COPOM_DATAS[i];
-    const isPast=dt<agora&&(agora-dt)>86400000*2;
-    const isNext=!isPast&&COPOM_DATAS.findIndex(d=>d>=agora)===i;
-    let badge='';
-    if(isPast) badge=`<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:rgba(94,107,138,.15);color:var(--muted2);margin-left:6px">realizada</span>`;
-    if(isNext) badge=`<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:var(--gold-dim);color:var(--gold2);border:1px solid rgba(200,151,58,.3);margin-left:6px">próxima ★</span>`;
-    const rowStyle=isNext?'background:var(--gold-dim);border:1px solid rgba(200,151,58,.2);border-radius:7px;padding:5px 8px;margin:2px 0':'padding:4px 8px;border-bottom:1px solid var(--border2)';
-    const cor=isPast?'var(--muted)':'var(--text)';
-    const numCor=isPast?'var(--muted2)':isNext?'var(--gold2)':'var(--muted)';
-    return `<div style="${rowStyle};display:flex;align-items:center;gap:8px">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:${numCor};min-width:20px;text-align:right">${r.num}ª</span>
-      <span style="font-size:.7rem;color:${cor};flex:1;${isPast?'text-decoration:line-through;text-decoration-color:var(--muted2)':''}">${r.datas}</span>${badge}</div>`;
-  }).join('');
-}
-function toggleCopomCalendario(){
-  const el=$('copomCalendario'), btn=$('copomCalBtn');
-  const isOpen=el.style.opacity==='1';
-  if(isOpen){el.style.maxHeight='0px';el.style.opacity='0';btn.textContent='📋 Reuniões 2026 ▼';}
-  else{buildCopomCalendario();el.style.maxHeight='500px';el.style.opacity='1';btn.textContent='📋 Reuniões 2026 ▲';}
-}
-
-/* ════════════ CDI / IPCA FALLBACK (BCB) ════════════ */
+/* ════════════════════════════════════════════════════
+   CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
+════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
-  if(indicState.cdi.m12!==null){
-    console.info('[CDI] 12M do mercado_atual.json ('+indicState.cdi.m12+'%) — pulando API BCB');
-    atualizarTabelaIndicadores(); return;
+  // v17 local: não chama mais a API SGS 4391 pelo navegador.
+  // Os acumulados 12M/24M/36M já vêm pré-calculados no mercado_atual.json pelo atualização automatizada.
+  if(indicState.cdi.m12 !== null || indicState.cdi.m24 !== null || indicState.cdi.m36 !== null){
+    console.info('[CDI] Usando acumulados do mercado_atual.json');
+  } else {
+    console.warn('[CDI] mercado_atual.json não trouxe acumulados CDI. Execute o +.');
+    if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'sem dados no JSON';
   }
-  const calcAcum=(dados,meses)=>{const s=dados.slice(-meses);const f=s.reduce((a,x)=>a*(1+parseFloat(x.valor)/100),1);return +((f-1)*100).toFixed(2);};
-  const tentativas=['https://api.bcb.gov.br/dados/serie/bcdata.sgs.4391/dados/ultimos/13?formato=json'];
-  for(const url of tentativas){
-    try{
-      const r=await fetch(url); if(!r.ok) continue;
-      const dados=await r.json(); if(!dados.length) continue;
-      indicState.cdi.m12=calcAcum(dados,Math.min(12,dados.length));
-      const ultimo=dados[dados.length-1];
-      if(ultimo){indicState.cdi.mes=parseFloat(ultimo.valor);const p=ultimo.data.split('/');indicState.cdi.mesRef=`${MESES_PT[parseInt(p[1])-1]}/${p[2]}`;}
-      atualizarTabelaIndicadores(); return;
-    }catch(e){}
-  }
-  console.info('[CDI] API BCB indisponível — usando dados do mercado_atual.json');
   atualizarTabelaIndicadores();
 }
 
+/* ════════════════════════════════════════════════════
+   IPCA — SÉRIE 433 BCB (12M / 24M / 36M)
+════════════════════════════════════════════════════ */
 async function carregarIPCAPeriodos(){
-  if(indicState.ipca.m12!==null){
-    console.info('[IPCA] 12M do mercado_atual.json ('+indicState.ipca.m12+'%) — pulando API BCB');
-    atualizarTabelaIndicadores(); return;
+  // v17 local: não chama mais a API SGS 433 pelo navegador.
+  // IPCA mensal, ano e acumulados vêm do mercado_atual.json.
+  if(indicState.ipca.m12 !== null || indicState.ipca.m24 !== null || indicState.ipca.m36 !== null){
+    console.info('[IPCA] Usando acumulados do mercado_atual.json');
+  } else {
+    console.warn('[IPCA] mercado_atual.json não trouxe acumulados IPCA. Execute o +.');
+    if($('ipca-acum-sub-v2')) $('ipca-acum-sub-v2').textContent = 'sem dados no JSON';
   }
-  const calcAcum=(dados,meses)=>{const s=dados.slice(-meses);const f=s.reduce((a,x)=>a*(1+parseFloat(x.valor)/100),1);return +((f-1)*100).toFixed(2);};
-  const tentativas=['https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/13?formato=json'];
-  for(const url of tentativas){
-    try{
-      const r=await fetch(url); if(!r.ok) continue;
-      const dados=await r.json(); if(!dados.length) continue;
-      indicState.ipca.m12=calcAcum(dados,Math.min(12,dados.length));
-      const ultimo=dados[dados.length-1];
-      if(ultimo){indicState.ipca.mes=parseFloat(ultimo.valor);const p=ultimo.data.split('/');indicState.ipca.mesRef=`${MESES_PT[parseInt(p[1])-1]}/${p[2]}`;}
-      const anoAtual=new Date().getFullYear();
-      const doAno=dados.filter(d=>parseInt(d.data.split('/')[2])===anoAtual);
-      if(doAno.length){const f=doAno.reduce((a,x)=>a*(1+parseFloat(x.valor)/100),1);indicState.ipca.ano=+((f-1)*100).toFixed(2);}
-      atualizarTabelaIndicadores(); return;
-    }catch(e){}
-  }
-  console.info('[IPCA] API BCB indisponível — usando dados do mercado_atual.json');
   atualizarTabelaIndicadores();
 }
 
-/* ════════════ PTAX HISTÓRICO ════════════ */
+/* ════════════════════════════════════════════════════
+   PTAX HISTÓRICO — usado pela tabela e gráfico
+════════════════════════════════════════════════════ */
 async function carregarPTAXHistorico(){
-  if(_ptaxHistorico.length>0){console.info('[PTAX] Dados do mercado_atual.json — OK');return;}
-  try{
-    const hoje=new Date(), inicio=new Date(hoje);
-    inicio.setMonth(hoje.getMonth()-24);
-    const fmtMes=d=>String(d.getMonth()+1).padStart(2,'0')+'-'+d.getFullYear();
-    const url='https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/'
-      +'CotacaoMoedaPeriodoFechamento(codigoMoeda=@cm,dataInicialFechamento=@di,dataFinalFechamento=@df)'
-      +'?@cm=\'USD\'&@di=\''+fmtMes(inicio)+'\'&@df=\''+fmtMes(hoje)+'\''
-      +'&$format=json&$select=cotacaoVenda,dataFechamento';
-    const r=await fetch(url);
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const registros=(await r.json()).value||[];
-    if(!registros.length) throw new Error('Sem dados');
-    _ptaxHistorico=registros
-      .filter(i=>i.cotacaoVenda&&i.dataFechamento)
-      .sort((a,b)=>a.dataFechamento.localeCompare(b.dataFechamento))
-      .map(i=>({cotacaoVenda:parseFloat(i.cotacaoVenda),dataHoraCotacao:i.dataFechamento+'T13:00:00.0000000'}));
-    console.info('[PTAX] CotacaoMoedaPeriodoFechamento OK — '+_ptaxHistorico.length+' meses');
-    calcularDolarPeriodos(); renderDolarMensais(); buildChartDolar('year');
-  }catch(e){console.warn('[PTAX] Indisponível:',e.message);}
+  // v17 local: não chama mais CotacaoDolarPeriodo pelo navegador.
+  // O atualização automatizada já salva ptax_historico no mercado_atual.json.
+  if(_ptaxHistorico.length > 0){
+    console.info('[PTAX] Histórico carregado do mercado_atual.json');
+    calcularDolarPeriodos();
+    renderDolarMensais();
+    buildChartDolar('year');
+  } else {
+    console.warn('[PTAX] mercado_atual.json não trouxe ptax_historico. Execute o +.');
+    const sub = $('dolar-chart-sub');
+    if(sub) sub.textContent = 'Sem PTAX histórico no mercado_atual.json';
+  }
 }
 
 function calcularDolarPeriodos(){
   if(!_ptaxHistorico.length) return;
-  const byMonth={};
-  _ptaxHistorico.forEach(item=>{
-    const dt=new Date(item.dataHoraCotacao);
-    const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-    if(!byMonth[key]||new Date(item.dataHoraCotacao)>new Date(byMonth[key].dataHoraCotacao)) byMonth[key]=item;
+
+  // Agrupa por mês (último registro = fechamento)
+  const byMonth = {};
+  _ptaxHistorico.forEach(item => {
+    const dt = new Date(item.dataHoraCotacao);
+    const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+    if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
+      byMonth[key] = item;
+    }
   });
-  const sorted=Object.entries(byMonth).sort(([a],[b])=>a.localeCompare(b));
-  if(sorted.length<2) return;
-  const lastVal=parseFloat(sorted[sorted.length-1][1].cotacaoVenda);
-  const prevMes=parseFloat(sorted[sorted.length-2][1].cotacaoVenda);
-  indicState.dolarBRL.mes=lastVal;
-  indicState.dolarPct.mes=+((lastVal/prevMes-1)*100).toFixed(2);
-  const anoAtualStr=`${ANO_ATUAL}`;
-  const inicioAno=sorted.find(([k])=>k.startsWith(anoAtualStr));
-  if(inicioAno){const iv=parseFloat(inicioAno[1].cotacaoVenda);indicState.dolarBRL.ano=iv;indicState.dolarPct.ano=+((lastVal/iv-1)*100).toFixed(2);}
-  [12,24,36].forEach(m=>{if(sorted.length>m){const ref=sorted[sorted.length-1-m];const rv=parseFloat(ref[1].cotacaoVenda);indicState.dolarBRL[`m${m}`]=rv;indicState.dolarPct[`m${m}`]=+((lastVal/rv-1)*100).toFixed(2);}});
-  const [ano,mes]=sorted[sorted.length-1][0].split('-');
-  if($('ref-dolar')) $('ref-dolar').textContent=`${MESES_PT[parseInt(mes)-1]}/${ano}`;
-  if($('ref-dolar2')) $('ref-dolar2').textContent=`${MESES_PT[parseInt(mes)-1]}/${ano}`;
+
+  const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
+  if(sorted.length < 2) return;
+
+  const last = sorted[sorted.length-1];
+  const lastVal = parseFloat(last[1].cotacaoVenda);
+
+  // Mês atual vs mês anterior
+  const prevMes = sorted[sorted.length-2];
+  const prevMesVal = parseFloat(prevMes[1].cotacaoVenda);
+  indicState.dolarBRL.mes = lastVal;
+  indicState.dolarPct.mes = +((lastVal/prevMesVal-1)*100).toFixed(2);
+
+  // Ref label
+  const [ano, mes] = last[0].split('-');
+  const refLabel = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+
+  // Início do ano
+  const anoAtualStr = `${ANO_ATUAL}`;
+  const inicioAno = sorted.find(([k]) => k.startsWith(anoAtualStr));
+  if(inicioAno){
+    const inicioVal = parseFloat(inicioAno[1].cotacaoVenda);
+    indicState.dolarBRL.ano = inicioVal;
+    indicState.dolarPct.ano = +((lastVal/inicioVal-1)*100).toFixed(2);
+  }
+
+  // 12M, 24M, 36M
+  [12, 24, 36].forEach(m => {
+    if(sorted.length > m){
+      const ref = sorted[sorted.length-1-m];
+      const refVal = parseFloat(ref[1].cotacaoVenda);
+      indicState.dolarBRL[`m${m}`] = refVal;
+      indicState.dolarPct[`m${m}`] = +((lastVal/refVal-1)*100).toFixed(2);
+    }
+  });
+
+  // Atualiza campos fixos na tabela (BRL)
+  if($('ref-dolar')) $('ref-dolar').textContent = refLabel;
+  if($('ref-dolar2')) $('ref-dolar2').textContent = refLabel;
+
+  if($('it-dolar-mes-val')) $('it-dolar-mes-val').textContent = indicState.dolarBRL.mes ? 'R$ '+fmtBRL(indicState.dolarBRL.mes) : '—';
+  if($('it-dolar-ano-val') && indicState.dolarBRL.ano) $('it-dolar-ano-val').textContent = 'R$ '+fmtBRL(indicState.dolarBRL.ano);
+
+  const mesVarEl = $('it-dolar-var-mes');
+  if(mesVarEl && indicState.dolarPct.mes !== null){
+    const n = indicState.dolarPct.mes;
+    mesVarEl.textContent = `${signPct(n)}${fmt(n)}`;
+    mesVarEl.className = `indic-pct ${n>0?'neg':'pos'}`; // dolar subindo = ruim para BRL
+  }
+  const anoVarEl = $('it-dolar-var-ano');
+  if(anoVarEl && indicState.dolarPct.ano !== null){
+    const n = indicState.dolarPct.ano;
+    anoVarEl.textContent = `${signPct(n)}${fmt(n)}`;
+    anoVarEl.className = `indic-pct ${n>0?'neg':'pos'}`;
+  }
+
   atualizarTabelaIndicadores();
 }
 
+/* ════════════════════════════════════════════════════
+   DÓLAR DO DIA
+════════════════════════════════════════════════════ */
 async function carregarDolarDia(){
-  const fmtDataBCB=d=>`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
-  for(let i=0;i<5;i++){
-    const dia=new Date(HOJE); dia.setDate(HOJE.getDate()-i);
-    const url=`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia)}'&$format=json&$select=cotacaoCompra,cotacaoVenda,dataHoraCotacao`;
+  const fmtDataBCB = d =>
+    `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+
+  // Tenta até 5 dias para trás (fins de semana/feriados)
+  for(let i = 0; i < 5; i++){
+    const dia = new Date(HOJE);
+    dia.setDate(HOJE.getDate() - i);
+    const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
+      + `CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia)}'`
+      + `&$format=json&$select=cotacaoCompra,cotacaoVenda,dataHoraCotacao`;
     try{
-      const r=await fetch(url); if(!r.ok) continue;
-      const data=await r.json(); if(!data.value||!data.value.length) continue;
-      const ultima=data.value[data.value.length-1];
-      const cotVenda=parseFloat(ultima.cotacaoVenda), cotCompra=parseFloat(ultima.cotacaoCompra);
-      const dtCot=new Date(ultima.dataHoraCotacao);
-      const diaRef=`${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
-      const hora=`${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
-      if($('dolar-day-rate')) $('dolar-day-rate').textContent='R$ '+fmtBRL(cotVenda);
-      if($('dolar-compra')) $('dolar-compra').textContent='R$ '+fmtBRL(cotCompra);
-      if($('dolar-venda')) $('dolar-venda').textContent='R$ '+fmtBRL(cotVenda);
-      if($('dolar-day-ref')) $('dolar-day-ref').textContent='Referência: '+diaRef;
-      if($('dolar-hora')) $('dolar-hora').textContent=hora+' (BCB)';
-      if($('dolar-day-src')) $('dolar-day-src').textContent='PTAX BCB · '+diaRef;
-      if($('dolar-day-loading')) $('dolar-day-loading').style.display='none';
-      if($('dolar-day-content')) $('dolar-day-content').style.display='block';
-      if(i===0&&data.value.length>1){
-        const ant=data.value[data.value.length-2], antVal=parseFloat(ant.cotacaoVenda);
-        const varPct=((cotVenda-antVal)/antVal)*100;
-        const dvEl=$('dolar-var-dia');
-        if(dvEl){dvEl.textContent=`${signPct(varPct)}${fmt(varPct)} (vs cot. anterior do dia)`;dvEl.className=`dolar-metric-val ${varPct>0?'neg':'pos'}`;}
-        if($('dolar-dia-ant')) $('dolar-dia-ant').textContent='R$ '+fmtBRL(antVal);
-      } else {buscarCotacaoDiaAnterior(cotVenda,new Date(dia).setDate(dia.getDate()-1));}
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const data = await r.json();
+      if(!data.value || !data.value.length) continue;
+
+      // Última cotação do dia
+      const ultima = data.value[data.value.length-1];
+      const cotVenda = parseFloat(ultima.cotacaoVenda);
+      const cotCompra = parseFloat(ultima.cotacaoCompra);
+      const dtCot = new Date(ultima.dataHoraCotacao);
+
+      $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
+      $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
+      $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
+
+      const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
+      const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
+      $('dolar-day-ref').textContent = `Referência: ${diaRef}`;
+      $('dolar-hora').textContent = hora + ' (BCB)';
+      $('dolar-day-src').textContent = `PTAX BCB · ${diaRef}`;
+
+      // Variação vs dia anterior
+      if(i === 0 && data.value.length > 1){
+        const anterior = data.value[data.value.length-2];
+        const antVal = parseFloat(anterior.cotacaoVenda);
+        const varPct = ((cotVenda - antVal) / antVal) * 100;
+        const varEl = $('dolar-var-dia');
+        varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs cot. anterior do dia)`;
+        varEl.className = `dolar-metric-val ${varPct < 0 ? 'neg' : varPct > 0 ? 'pos' : 'muted'}`;
+        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
+      } else {
+        // Compara com dia anterior via histórico
+        const diaAnt = new Date(dia);
+        diaAnt.setDate(dia.getDate() - 1);
+        buscarCotacaoDiaAnterior(cotVenda, diaAnt);
+      }
+
+      $('dolar-day-loading').style.display = 'none';
+      $('dolar-day-content').style.display = 'block';
       return;
-    }catch(e){continue;}
+    }catch(e){ continue; }
   }
-  if($('dolar-day-loading')) $('dolar-day-loading').innerHTML='<span style="color:var(--muted)">Cotação PTAX indisponível</span>';
+  $('dolar-day-loading').innerHTML = '<span style="color:var(--muted)">Cotação PTAX indisponível no momento</span>';
 }
 
-async function buscarCotacaoDiaAnterior(cotAtual,diaAnt){
-  const d=new Date(diaAnt);
-  const fmtDataBCB=x=>`${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}-${x.getFullYear()}`;
-  for(let i=0;i<5;i++){
-    const dia2=new Date(d); dia2.setDate(d.getDate()-i);
+async function buscarCotacaoDiaAnterior(cotAtual, diaAnt){
+  const fmtDataBCB = d =>
+    `${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+  for(let i = 0; i < 5; i++){
+    const dia = new Date(diaAnt);
+    dia.setDate(diaAnt.getDate() - i);
     try{
-      const url=`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia2)}'&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
-      const r=await fetch(url); if(!r.ok) continue;
-      const data=await r.json(); if(!data.value||!data.value.length) continue;
-      const antVal=parseFloat(data.value[data.value.length-1].cotacaoVenda);
-      const varPct=((cotAtual-antVal)/antVal)*100;
-      const varEl=$('dolar-var-dia');
-      if(varEl){varEl.textContent=`${signPct(varPct)}${fmt(varPct)}`;varEl.className=`dolar-metric-val ${varPct>0?'neg':'pos'}`;}
-      if($('dolar-dia-ant')) $('dolar-dia-ant').textContent='R$ '+fmtBRL(antVal);
+      const url = `https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
+        + `CotacaoDolarDia(dataCotacao=@d)?@d='${fmtDataBCB(dia)}'`
+        + `&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
+      const r = await fetch(url);
+      if(!r.ok) continue;
+      const data = await r.json();
+      if(!data.value || !data.value.length) continue;
+      const antVal = parseFloat(data.value[data.value.length-1].cotacaoVenda);
+      const varPct = ((cotAtual - antVal) / antVal) * 100;
+      const varEl = $('dolar-var-dia');
+      if(varEl){
+        varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs fechamento ${fmtDataBCB(dia).split('-').reverse().join('/')})`;
+        varEl.className = `dolar-metric-val ${varPct < 0 ? 'neg' : varPct > 0 ? 'pos' : 'muted'}`;
+        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
+      }
       return;
-    }catch(e){continue;}
+    }catch(e){ continue; }
   }
 }
 
+/* ════════════════════════════════════════════════════
+   DÓLAR MENSAL — TIMELINE
+════════════════════════════════════════════════════ */
 function renderDolarMensais(){
   if(!_ptaxHistorico.length) return;
-  const byMonth={};
-  _ptaxHistorico.forEach(item=>{
-    const dt=new Date(item.dataHoraCotacao);
-    const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-    if(!byMonth[key]||new Date(item.dataHoraCotacao)>new Date(byMonth[key].dataHoraCotacao)) byMonth[key]=item;
+
+  const byMonth = {};
+  _ptaxHistorico.forEach(item => {
+    const dt = new Date(item.dataHoraCotacao);
+    const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+    if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
+      byMonth[key] = item;
+    }
   });
-  const sorted=Object.entries(byMonth).sort(([a],[b])=>a.localeCompare(b));
-  const slice=sorted.slice(-18);
-  const lastKey=slice[slice.length-1]?.[0];
-  const container=$('dolarMonths'); if(!container) return;
-  container.innerHTML=slice.map(([key,item],idx)=>{
-    const [ano,mes]=key.split('-');
-    const label=`${MESES_PT[parseInt(mes)-1]}/${ano}`;
-    const val=parseFloat(item.cotacaoVenda);
-    const isCurrent=key===lastKey;
-    let varHtml='<span class="dolar-month-var zero">—</span>';
-    if(idx>0){const pv=parseFloat(slice[idx-1][1].cotacaoVenda);const vp=((val/pv-1)*100);const cls=vp>0?'pos':vp<0?'neg':'zero';varHtml=`<span class="dolar-month-var ${cls}">${signPct(vp)}${fmt(vp)}</span>`;}
-    return `<div class="dolar-month-item${isCurrent?' current':''}"><span class="dolar-month-label">${label}</span><span class="dolar-month-val">R$ ${fmtBRL(val)}</span>${varHtml}</div>`;
+
+  const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
+  // Últimos 18 meses
+  const slice = sorted.slice(-18);
+  const lastKey = slice[slice.length-1]?.[0];
+
+  const container = $('dolarMonths');
+  container.innerHTML = slice.map(([key, item], idx) => {
+    const [ano, mes] = key.split('-');
+    const label = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+    const val = parseFloat(item.cotacaoVenda);
+    const isCurrent = key === lastKey;
+
+    let varHtml = '<span class="dolar-month-var zero">—</span>';
+    if(idx > 0){
+      const prevVal = parseFloat(slice[idx-1][1].cotacaoVenda);
+      const varPct = ((val - prevVal) / prevVal) * 100;
+      const cls = varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero'; // convenção visual: positivo verde, negativo vermelho
+      varHtml = `<span class="dolar-month-var ${cls}">${signPct(varPct)}${fmt(varPct)}</span>`;
+    }
+
+    return `<div class="dolar-month-item${isCurrent ? ' current' : ''}">
+      <span class="dolar-month-label">${label}</span>
+      <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
+      ${varHtml}
+    </div>`;
   }).join('');
 }
 
 function toggleDolarTimeline(){
-  const body=$('dolarTimelineBody'), toggle=$('dolarTimelineToggle');
-  const isOpen=body.classList.toggle('open');
-  toggle.classList.toggle('open',isOpen);
+  const body = $('dolarTimelineBody');
+  const toggle = $('dolarTimelineToggle');
+  const isOpen = body.classList.toggle('open');
+  toggle.classList.toggle('open', isOpen);
 }
 
-/* ════════════ GRÁFICO DÓLAR ════════════ */
-let _chartDolar=null;
+/* ════════════════════════════════════════════════════
+   GRÁFICO DO DÓLAR
+════════════════════════════════════════════════════ */
+let _chartDolar = null;
+
 function buildChartDolar(range){
   if(!_ptaxHistorico.length) return;
-  const hoje=new Date();
+
   let dados;
-  if(range==='year'){
-    const src=_ptaxDiario.length>5?_ptaxDiario:_ptaxHistorico;
-    dados=src.filter(d=>new Date(d.dataHoraCotacao).getFullYear()===ANO_ATUAL);
-  } else if(false && range==='_dummy_'){}
-  else if(range==='12m'){const l=new Date(hoje);l.setMonth(hoje.getMonth()-12);dados=_ptaxHistorico.filter(d=>new Date(d.dataHoraCotacao)>=l);}
-  else{const l=new Date(hoje);l.setMonth(hoje.getMonth()-24);dados=_ptaxHistorico.filter(d=>new Date(d.dataHoraCotacao)>=l);}
+  const hoje = new Date();
+
+  if(range === 'year'){
+    // Apenas 2026 (ano atual)
+    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao).getFullYear() === ANO_ATUAL);
+    $('dolar-chart-sub').textContent = `PTAX diária ${ANO_ATUAL} — ${dados.length} registros`;
+  } else if(range === '12m'){
+    const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-12);
+    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
+    $('dolar-chart-sub').textContent = `Últimos 12 meses · ${dados.length} registros`;
+  } else { // 24m
+    const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-24);
+    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
+    $('dolar-chart-sub').textContent = `Últimos 24 meses · ${dados.length} registros`;
+  }
+
   if(!dados.length) return;
-  const step=Math.max(1,Math.floor(dados.length/200));
-  const sample=dados.filter((_,i)=>i%step===0||i===dados.length-1);
-  const labels=sample.map(d=>{const dt=new Date(d.dataHoraCotacao);return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}`;});
-  const values=sample.map(d=>parseFloat(d.cotacaoVenda));
-  const primeiroVal=values[0];
+
+  // Amostra para não sobrecarregar o gráfico (máx 200 pontos)
+  const step = Math.max(1, Math.floor(dados.length/200));
+  const sample = dados.filter((_,i) => i % step === 0 || i === dados.length-1);
+
+  const labels = sample.map(d => {
+    const dt = new Date(d.dataHoraCotacao);
+    return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}`;
+  });
+  const values = sample.map(d => parseFloat(d.cotacaoVenda));
+  const primeiroVal = values[0];
+  const ptColors = values.map(v => v >= primeiroVal ? 'rgba(240,85,101,.8)' : 'rgba(46,209,122,.8)');
+
   if(_chartDolar) _chartDolar.destroy();
-  const ctx=document.getElementById('chartDolar')?.getContext('2d'); if(!ctx) return;
-  const grad=ctx.createLinearGradient(0,0,0,200);
-  grad.addColorStop(0,'rgba(200,151,58,.18)'); grad.addColorStop(1,'rgba(200,151,58,0)');
-  _chartDolar=new Chart(ctx,{type:'line',data:{labels,datasets:[{data:values,borderColor:'#c8973a',backgroundColor:grad,borderWidth:2,pointRadius:0,pointHoverRadius:4,fill:true,tension:0.2}]},
-    options:{responsive:true,maintainAspectRatio:false,interaction:{intersect:false,mode:'index'},
-      plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(11,13,26,.95)',borderColor:'rgba(200,151,58,.3)',borderWidth:1,titleColor:'#e8bb6a',bodyColor:'#d8dcea',padding:10,callbacks:{label:ctx=>'R$ '+fmtBRL(ctx.parsed.y),afterLabel:ctx=>{const v=ctx.parsed.y;const vr=((v-primeiroVal)/primeiroVal*100);return 'Var. período: '+signPct(vr)+fmt(vr);}}}},
-      scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#3d4560',font:{family:'JetBrains Mono',size:9},maxTicksLimit:10}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:10},callback:v=>'R$ '+fmtBRL(v)}}}}});
-  if($('dolar-chart-sub')) $('dolar-chart-sub').textContent=`PTAX diária · ${dados.length} registros`;
+  const ctx = document.getElementById('chartDolar')?.getContext('2d');
+  if(!ctx) return;
+
+  // Gradiente de área
+  const grad = ctx.createLinearGradient(0, 0, 0, 200);
+  grad.addColorStop(0, 'rgba(200,151,58,.18)');
+  grad.addColorStop(1, 'rgba(200,151,58,0)');
+
+  _chartDolar = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: values,
+        borderColor: '#c8973a',
+        backgroundColor: grad,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        pointHoverBackgroundColor: '#e8bb6a',
+        fill: true,
+        tension: 0.2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      resizeDelay: 150,
+      interaction: { intersect: false, mode: 'index' },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(11,13,26,.95)',
+          borderColor: 'rgba(200,151,58,.3)',
+          borderWidth: 1,
+          titleColor: '#e8bb6a',
+          bodyColor: '#d8dcea',
+          padding: 10,
+          titleFont: { family: 'Cormorant Garamond', size: 13, weight: '700' },
+          bodyFont: { family: 'JetBrains Mono', size: 11 },
+          callbacks: {
+            label: ctx => `R$ ${fmtBRL(ctx.parsed.y)}`,
+            afterLabel: ctx => {
+              const v = ctx.parsed.y;
+              const var_ = ((v - primeiroVal) / primeiroVal * 100);
+              return `Var. período: ${signPct(var_)}${fmt(var_)}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+          ticks: { color: '#3d4560', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 10 }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+          ticks: {
+            color: '#5e6b8a', font: { family: 'JetBrains Mono', size: 10 },
+            callback: v => 'R$ '+fmtBRL(v)
+          }
+        }
+      }
+    }
+  });
 }
-document.querySelectorAll('[data-dolar-range]').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('[data-dolar-range]').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active'); buildChartDolar(btn.dataset.dolarRange);
+
+// Tabs do gráfico dólar
+document.querySelectorAll('[data-dolar-range]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-dolar-range]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    buildChartDolar(btn.dataset.dolarRange);
   });
 });
 
-/* ════════════ ATUALIZA TABELA DE INDICADORES ════════════ */
+/* ════════════════════════════════════════════════════
+   ATUALIZAR TABELA DE INDICADORES (tabs 12M/24M/36M)
+════════════════════════════════════════════════════ */
 function atualizarTabelaIndicadores(){
-  const m=activePeriodTab;
-  const hoje=new Date();
-  const mAtualIdx=hoje.getMonth(), mAntIdx=mAtualIdx===0?11:mAtualIdx-1;
-  const mAntAno=mAtualIdx===0?hoje.getFullYear()-1:hoje.getFullYear();
-  const mAtualLabel=`${MESES_PT[mAtualIdx]}/${hoje.getFullYear()}`;
-  const mAntLabel=`${MESES_PT[mAntIdx]}/${mAntAno}`;
-  const anoLabel=`jan→${MESES_PT[mAtualIdx]}/${hoje.getFullYear()}`;
-  const set=(id,txt)=>{if($(id)) $(id).textContent=txt;};
-  set('th-mes-ant-sub',mAntLabel); set('th-mes-cur-sub',mAtualLabel+' parcial');
-  set('th-ano-sub',anoLabel);
-  if($('th-acum-head')) $('th-acum-head').childNodes[0].textContent=`Acum. ${m}M `;
-  if($('th-acum-sub-v2')) $('th-acum-sub-v2').textContent=`${MESES_PT[mAtualIdx]}/${hoje.getFullYear()-Math.floor(m/12)}→hoje`;
-  const pct=(id,n,barId,maxPct=20)=>{
+  const m   = activePeriodTab;
+  const hoje = new Date();
+  const mAtualIdx = hoje.getMonth();
+  const mAntIdx   = mAtualIdx === 0 ? 11 : mAtualIdx - 1;
+  const mAntAno   = mAtualIdx === 0 ? hoje.getFullYear()-1 : hoje.getFullYear();
+  const mAtualLabel = `${MESES_PT[mAtualIdx]}/${hoje.getFullYear()}`;
+  const mAntLabel   = `${MESES_PT[mAntIdx]}/${mAntAno}`;
+  const anoLabel    = `jan→${MESES_PT[mAtualIdx]}/${hoje.getFullYear()}`;
+
+  // ── Cabeçalhos ──
+  const set = (id, txt) => { if($(id)) $(id).textContent = txt; };
+  set('th-mes-ant-sub',  mAntLabel);
+  set('th-mes-cur-sub',  mAtualLabel + ' parcial');
+  set('th-ano-sub',      anoLabel);
+  set('th-acum-sub-v2',  `${m}M (${MESES_PT[mAtualIdx]}/${hoje.getFullYear()-Math.floor(m/12)}→hoje)`);
+  if($('th-acum-head')) $('th-acum-head').firstChild.textContent = `Acum. ${m}M `;
+
+  // ── Helper: preenche célula ──
+  const pct = (id, n, barId, maxPct=20) => {
     if(!$(id)) return;
-    if(n===null||n===undefined){$(id).textContent='—';$(id).className='v2-val dash';return;}
-    const cls=n>0?'pos':n<0?'neg':'neu';
-    $(id).textContent=(n>0?'+':'')+n.toFixed(2).replace('.',',')+'\u0025';
-    $(id).className='v2-val '+cls;
-    if($(barId)){$(barId).style.width=Math.min(Math.abs(n)/maxPct*100,100)+'\u0025';$(barId).className=n>=0?'v2-bar-p':'v2-bar-n';}
+    if(n===null||n===undefined){ $(id).textContent='—'; $(id).className='v2-val dash'; return; }
+    const cls = n>0?'pos':n<0?'neg':'neu';
+    $(id).textContent = (n>0?'+':'')+n.toFixed(2).replace('.',',')+'\%';
+    $(id).className = 'v2-val '+cls;
+    if($(barId)){
+      $(barId).style.width = Math.min(Math.abs(n)/maxPct*100,100)+'%';
+      $(barId).className = n>=0?'v2-bar-p':'v2-bar-n';
+    }
   };
-  // CDI
-  const cdiMes=indicState.cdi.mes;
-  pct('cdi-mes-ant',cdiMes,'bar-cdi-ant',2);
-  set('cdi-mes-ant-sub',`taxa mensal ${mAntLabel}`);
+
+  // ═══ CDI ═══
+  const cdiMes  = indicState.cdi.mes;     // taxa mensal mês anterior
+  const cdiMes2 = indicState.cdi.m12;     // fallback
+  // Mês anterior
+  pct('cdi-mes-ant', cdiMes, 'bar-cdi-ant', 2);
+  set('cdi-mes-ant-sub', `taxa mensal ${mAntLabel}`);
+  // Mês atual (parcial: dias corridos × taxa diária estimada)
   if(cdiMes){
-    const diasMes=new Date(hoje.getFullYear(),hoje.getMonth()+1,0).getDate();
-    const diasCorr=hoje.getDate();
-    const parcial=parseFloat(((Math.pow(1+cdiMes/100,diasCorr/diasMes)-1)*100).toFixed(4));
-    pct('cdi-mes-cur',parcial,'bar-cdi-cur',2);
-    set('cdi-cur-sub',`~${diasCorr} dias úteis`);
-    const mesesAno=hoje.getMonth();
-    if(mesesAno>0){const acumAno=parseFloat(((Math.pow(1+cdiMes/100,mesesAno)-1)*100).toFixed(2));pct('cdi-ano',acumAno,'bar-cdi-ano',15);set('cdi-ano-sub',`${mesesAno} meses fechados`);}
+    const diasMes  = new Date(hoje.getFullYear(), hoje.getMonth()+1, 0).getDate();
+    const diasCorr = hoje.getDate();
+    const taxaDia  = (Math.pow(1+cdiMes/100, 1/diasMes)-1)*100;
+    const parcial  = parseFloat((taxaDia * diasCorr).toFixed(4));
+    pct('cdi-mes-cur', parcial, 'bar-cdi-cur', 2);
+    set('cdi-cur-sub', `~${diasCorr} dias úteis`);
   }
-  const cdiAcum=indicState.cdi[`m${m}`];
-  pct('cdi-acum-v2',cdiAcum,'bar-cdi-acum',50);
-  set('cdi-acum-src-v2',cdiAcum?`série 4391 BCB · ${m}M`:'—');
-  if($('cdi-acum-v2')&&cdiAcum!==null) $('cdi-acum-v2').classList.add('pos');
-  // IPCA
-  pct('ipca-mes-ant',indicState.ipca.mes,'bar-ipca-ant',2);
-  set('ipca-mes-ant-sub',indicState.ipca.mesRef||mAntLabel);
-  pct('ipca-ano-v2',indicState.ipca.ano,'bar-ipca-ano',10);
-  const ipcaAcum=indicState.ipca[`m${m}`];
-  pct('ipca-acum-v2',ipcaAcum,'bar-ipca-acum',20);
-  set('ipca-acum-sub-v2',`acum. ${m}M`);
-  const alertEl=$('ipca-alert-badge'), rowIpca=$('row-ipca');
-  if(alertEl&&ipcaAcum){const show=ipcaAcum>4.5;alertEl.style.display=show?'inline-block':'none';if(rowIpca) rowIpca.className=show?'data-row alert-row':'data-row';}
-  // Dólar
-  if(_ptaxHistorico.length>=2){
-    const antItem=_ptaxHistorico[_ptaxHistorico.length-2];
-    const antCot=parseFloat(antItem.cotacaoVenda||antItem.cotacao||0);
-    if(antCot&&$('dolar-ant-cot')) $('dolar-ant-cot').textContent='R$ '+fmtBRL(antCot);
-    const antDt=new Date(antItem.dataHoraCotacao);
-    set('dolar-ant-sub',`fechamento ${MESES_PT[antDt.getMonth()]}/${antDt.getFullYear()}`);
+  // No ano (estimativa: meses decorridos × taxa mensal)
+  if(cdiMes){
+    const mesesAno = hoje.getMonth(); // quantos meses fecharam este ano
+    const acumAno  = parseFloat(((Math.pow(1+cdiMes/100, mesesAno)-1)*100).toFixed(2));
+    pct('cdi-ano', acumAno, 'bar-cdi-ano', 15);
+    set('cdi-ano-sub', `${mesesAno} meses fechados`);
   }
-  const dolarDayEl=$('dolar-day-rate');
-  if(dolarDayEl&&dolarDayEl.textContent!=='—'&&$('dolar-cur-cot')) $('dolar-cur-cot').textContent=dolarDayEl.textContent;
-  const dolarVarMes=indicState.dolarPct.mes;
-  if(dolarVarMes!==null&&$('dolar-cur-var')){
-    $('dolar-cur-var').textContent=(dolarVarMes>0?'+':'')+dolarVarMes.toFixed(2).replace('.',',')+'\u0025';
-    $('dolar-cur-var').className='v2-val '+(dolarVarMes>0?'neg':'pos');
-    const bar=$('bar-dolar-cur');if(bar){bar.style.width=Math.min(Math.abs(dolarVarMes)/10*100,100)+'\u0025';bar.className=dolarVarMes>0?'v2-bar-n':'v2-bar-p';}
+  // Acumulado
+  const cdiAcum = indicState.cdi[`m${m}`];
+  pct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
+  set('cdi-acum-src-v2', cdiAcum ? `série 4391 BCB · ${m}M` : '—');
+  if($('cdi-acum-v2')) $('cdi-acum-v2').classList.add('pos');
+
+  // ═══ IPCA ═══
+  const ipcaMes = indicState.ipca.mes;
+  const ipcaRef = indicState.ipca.mesRef;
+  // Mês anterior (último mês fechado pelo IBGE)
+  pct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
+  set('ipca-mes-ant-sub', ipcaRef || mAntLabel);
+  // No ano
+  const ipcaAno = indicState.ipca.ano;
+  pct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
+  // Acumulado
+  const ipcaAcum = indicState.ipca[`m${m}`];
+  pct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
+  set('ipca-acum-sub-v2', `acum. ${m}M`);
+  // Alert badge se acima do teto (4,5%)
+  const alertEl = $('ipca-alert-badge');
+  const rowIpca = $('row-ipca');
+  if(alertEl && ipcaAcum){
+    const show = ipcaAcum > 4.5;
+    alertEl.style.display = show ? 'inline-block' : 'none';
+    if(rowIpca) rowIpca.className = show ? 'data-row alert-row' : 'data-row';
   }
-  set('dolar-cur-sub',`cotação · var. vs ${mAntLabel}`);
-  const dVarAno=indicState.dolarPct.ano;
-  if(dVarAno!==null&&$('dolar-ano-v2')){$('dolar-ano-v2').textContent=(dVarAno>0?'+':'')+dVarAno.toFixed(2).replace('.',',')+'\u0025';$('dolar-ano-v2').className='v2-val '+(dVarAno>0?'neg':'pos');const bar=$('bar-dolar-ano');if(bar){bar.style.width=Math.min(Math.abs(dVarAno)/15*100,100)+'\u0025';bar.className=dVarAno>0?'v2-bar-n':'v2-bar-p';}}
-  const dVarAcum=indicState.dolarPct[`m${m}`];
-  if(dVarAcum!==null&&$('dolar-acum-v2')){$('dolar-acum-v2').textContent=(dVarAcum>0?'+':'')+dVarAcum.toFixed(2).replace('.',',')+'\u0025';$('dolar-acum-v2').className='v2-val '+(dVarAcum>0?'neg':'pos');const bar=$('bar-dolar-acum');if(bar){bar.style.width=Math.min(Math.abs(dVarAcum)/20*100,100)+'\u0025';bar.className=dVarAcum>0?'v2-bar-n':'v2-bar-p';}set('dolar-acum-sub-v2',`var. ${m}M`);}
-  // Ibovespa
-  const ibovAnt=_dadosMercado?.cards?.ibovespa?.anterior;const ibovCur=_dadosMercado?.cards?.ibovespa?.atual;
-  if(ibovAnt&&$('ibov-ant-pts')) $('ibov-ant-pts').textContent=fmtK(ibovAnt)+' pts';
-  if(ibovCur&&$('ibov-cur-pts')) $('ibov-cur-pts').textContent=fmtK(ibovCur)+' pts';
-  const ibovVar=_dadosMercado?.cards?.ibovespa?.variacao_mensal;
-  if(ibovVar!==null&&ibovVar!==undefined&&$('ibov-cur-var')){$('ibov-cur-var').textContent=(ibovVar>0?'+':'')+ibovVar.toFixed(2).replace('.',',')+'\u0025';$('ibov-cur-var').className='v2-val '+(ibovVar>0?'pos':'neg');const bar=$('bar-ibov-var');if(bar){bar.style.width=Math.min(Math.abs(ibovVar)/20*100,100)+'\u0025';bar.className=ibovVar>0?'v2-bar-p':'v2-bar-n';}}
-  // S&P 500
-  const intl=_dadosMercado?.indices_internacionais||{};
-  if(intl.sp500_usd&&$('sp-cur-usd')) $('sp-cur-usd').textContent=fmtK(intl.sp500_usd)+' USD';
-  if(intl.sp500_brl&&$('sp-cur-brl')) $('sp-cur-brl').textContent='R$ '+fmtK(intl.sp500_brl);
-  // Card CDI/SELIC
-  if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent=cdiAcum!==null?'+'+(cdiAcum||0).toFixed(2).replace('.',',')+'\u0025':'—';
+
+  // ═══ DÓLAR ═══
+  // Mês anterior — usa ptax_historico ou indicState
+  if(_ptaxHistorico.length >= 2){
+    const antItem = _ptaxHistorico[_ptaxHistorico.length-2];
+    const antCot  = parseFloat(antItem.cotacaoVenda||antItem.cotacao||0);
+    if(antCot && $('dolar-ant-cot'))
+      $('dolar-ant-cot').textContent = 'R$ '+fmtBRL(antCot);
+    // Referência
+    const antDt = new Date(antItem.dataHoraCotacao||antItem.data_ref);
+    const antMesLabel = `${MESES_PT[antDt.getMonth()]}/${antDt.getFullYear()}`;
+    set('dolar-ant-sub', `fechamento ${antMesLabel}`);
+  } else if(indicState.dolarBRL.mes && $('dolar-ant-cot')){
+    $('dolar-ant-cot').textContent = 'R$ '+fmtBRL(indicState.dolarBRL.mes);
+  }
+  // Mês atual — cotação do dia (já carregada no card de dólar)
+  const dolarDayEl = $('dolar-day-rate');
+  if(dolarDayEl && dolarDayEl.textContent !== '—' && $('dolar-cur-cot'))
+    $('dolar-cur-cot').textContent = dolarDayEl.textContent;
+  // Var% mês
+  const dolarVarMes = indicState.dolarPct.mes;
+  if(dolarVarMes !== null && $('dolar-cur-var')){
+    const cls = dolarVarMes>0?'neg':'pos'; // dólar subiu = ruim p/ BRL
+    $('dolar-cur-var').textContent = (dolarVarMes>0?'+':'')+dolarVarMes.toFixed(2).replace('.',',')+'\%';
+    $('dolar-cur-var').className = 'v2-val '+cls;
+    const bar = $('bar-dolar-cur');
+    if(bar){ bar.style.width=Math.min(Math.abs(dolarVarMes)/10*100,100)+'%';bar.className=dolarVarMes>0?'v2-bar-n':'v2-bar-p'; }
+  }
+  // No ano
+  const dVarAno = indicState.dolarPct.ano;
+  if(dVarAno!==null && $('dolar-ano-v2')){
+    $('dolar-ano-v2').textContent = (dVarAno>0?'+':'')+dVarAno.toFixed(2).replace('.',',')+'\%';
+    $('dolar-ano-v2').className = 'v2-val '+(dVarAno>0?'neg':'pos');
+    const bar=$('bar-dolar-ano');
+    if(bar){bar.style.width=Math.min(Math.abs(dVarAno)/15*100,100)+'%';bar.className=dVarAno>0?'v2-bar-n':'v2-bar-p';}
+  }
+  // Acumulado
+  const dVarAcum = indicState.dolarPct[`m${m}`];
+  if(dVarAcum!==null && $('dolar-acum-v2')){
+    $('dolar-acum-v2').textContent = (dVarAcum>0?'+':'')+dVarAcum.toFixed(2).replace('.',',')+'\%';
+    $('dolar-acum-v2').className = 'v2-val '+(dVarAcum>0?'neg':'pos');
+    const bar=$('bar-dolar-acum');
+    if(bar){bar.style.width=Math.min(Math.abs(dVarAcum)/20*100,100)+'%';bar.className=dVarAcum>0?'v2-bar-n':'v2-bar-p';}
+    set('dolar-acum-sub-v2', `var. ${m}M`);
+  }
+  // PTAX ref
+  set('dolar-cur-sub', `cotação · var. vs ${mAntLabel}`);
+
+  // ═══ IBOVESPA ═══
+  // Anterior (~30d)
+  const ibovAnt = typeof _dadosMercado?.cards?.ibovespa?.anterior === 'number'
+    ? _dadosMercado.cards.ibovespa.anterior : null;
+  const ibovCur = typeof _dadosMercado?.cards?.ibovespa?.atual === 'number'
+    ? _dadosMercado.cards.ibovespa.atual : null;
+  if(ibovAnt && $('ibov-ant-pts')) $('ibov-ant-pts').textContent = fmtK(ibovAnt)+' pts';
+  if(ibovCur && $('ibov-cur-pts')) $('ibov-cur-pts').textContent = fmtK(ibovCur)+' pts';
+  const ibovVar = _dadosMercado?.cards?.ibovespa?.variacao_mensal;
+  if(ibovVar!==null&&ibovVar!==undefined && $('ibov-cur-var')){
+    $('ibov-cur-var').textContent = (ibovVar>0?'+':'')+ibovVar.toFixed(2).replace('.',',')+'\%';
+    $('ibov-cur-var').className = 'v2-val '+(ibovVar>0?'pos':'neg');
+    const bar=$('bar-ibov-var');
+    if(bar){bar.style.width=Math.min(Math.abs(ibovVar)/20*100,100)+'%';bar.className=ibovVar>0?'v2-bar-p':'v2-bar-n';}
+  }
+
+  // ═══ S&P 500 ═══
+  const intl = _dadosMercado?.indices_internacionais || {};
+  if(intl.sp500_usd && $('sp-cur-usd')) $('sp-cur-usd').textContent = fmtK(intl.sp500_usd)+' USD';
+  if(intl.sp500_brl && $('sp-cur-brl')) $('sp-cur-brl').textContent = 'R$ '+fmtK(intl.sp500_brl);
 }
-document.querySelectorAll('.indic-tab').forEach(btn=>{
-  btn.addEventListener('click',()=>{
-    document.querySelectorAll('.indic-tab').forEach(b=>b.classList.remove('active'));
-    btn.classList.add('active'); activePeriodTab=parseInt(btn.dataset.months);
+
+
+// Tabs 12M / 24M / 36M
+document.querySelectorAll('.indic-tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.indic-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activePeriodTab = parseInt(btn.dataset.months);
     atualizarTabelaIndicadores();
   });
 });
 
-/* ════════════ CARREGA mercado_atual.json ════════════ */
+/* ════════════════════════════════════════════════════
+   CARREGA mercado_atual.json
+════════════════════════════════════════════════════ */
 async function carregarMercado(){
   try{
-    const r=await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
-    const d=await r.json();
-    _dadosMercado=d;
-    if(d.atualizado_em) $('lastUpdate').innerHTML=`<span class="live-dot"></span>${d.atualizado_em}`;
-    const c=d.cards||{};
-    // Selic
-    const selic=c.selic_meta?.valor;
-    if($('mc-selic')) $('mc-selic').textContent=selic?fmt(selic):'—';
-    const selicHist=d.historico_selic||c.selic_meta?.historico||[];
-    if(selicHist.length){const el=$('selic-last-change');if(el) el.textContent=selicHist[0].data||'—';}
-    // CDI
-    const cdi=c.cdi?.valor;
-    if($('mc-cdi')) $('mc-cdi').textContent=cdi?fmt(cdi):'—';
+    const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
+    const d = await r.json();
+
+    if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
+
+    const c = d.cards || {};
+
+    // ── Selic ──
+    const selic = c.selic_meta?.valor;
+    if($('mc-selic')) $('mc-selic').textContent = selic ? fmt(selic) : '—';
+    const selicHist = d.historico_selic || c.selic_meta?.historico || [];
+    if(selicHist.length){
+      const ultima = selicHist[0];
+      const el = $('selic-last-change');
+      if(el) el.textContent = ultima.data || '—';
+    }
+
+    // ── CDI — baseline + ★ v16: acumulados pré-calculados pelo robô ──
+    const cdi = c.cdi?.valor;
+    if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
     if(cdi){
-      const cdiMensal=c.cdi?.mensal??((Math.pow(1+cdi/100,1/12)-1)*100);
-      const isEst=c.cdi?.mensal==null;
-      const fCdiMes='+'+cdiMensal.toFixed(2).replace('.',',')+'\u0025';
-      if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent=fCdiMes+(isEst?'*':'');
-      if(!indicState.cdi.mes) indicState.cdi.mes=cdiMensal;
-      if(!indicState.cdi.mesRef){const h=new Date();indicState.cdi.mesRef=`${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;}
-      if(c.cdi?.mes_ref&&!indicState.cdi.mesRef) indicState.cdi.mesRef=c.cdi.mes_ref;
-      if(c.cdi?.acum_12m!=null) indicState.cdi.m12=c.cdi.acum_12m;
-      if(c.cdi?.acum_24m!=null) indicState.cdi.m24=c.cdi.acum_24m;
-      if(c.cdi?.acum_36m!=null) indicState.cdi.m36=c.cdi.acum_36m;
-      if(indicState.cdi.m12==null) indicState.cdi.m12=cdi;
+      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1+cdi/100,1/12)-1)*100);
+      const isEst = c.cdi?.mensal == null;
+      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+('%');
+      if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + (isEst ? '*' : '');
+
+      // Baseline
+      if(!indicState.cdi.mes) indicState.cdi.mes = cdiMensal;
+      if(!indicState.cdi.mesRef){
+        const h = new Date();
+        indicState.cdi.mesRef = c.cdi?.mes_ref ||
+          `${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;
+      }
+      // ★ v16 — usa acumulados pré-calculados server-side (resolve CORS/400 do browser)
+      if(c.cdi?.acum_12m != null) indicState.cdi.m12 = c.cdi.acum_12m;
+      if(c.cdi?.acum_24m != null) indicState.cdi.m24 = c.cdi.acum_24m;
+      if(c.cdi?.acum_36m != null) indicState.cdi.m36 = c.cdi.acum_36m;
+      // Fallback: se robô não calculou 12M, usa taxa anual como proxy
+      if(indicState.cdi.m12 == null) indicState.cdi.m12 = cdi;
     }
-    // IPCA
-    const ipca=c.ipca||{};
-    if(ipca.acum_12m!=null) indicState.ipca.m12=ipca.acum_12m;
-    if(ipca.acum_24m!=null) indicState.ipca.m24=ipca.acum_24m;
-    if(ipca.acum_36m!=null) indicState.ipca.m36=ipca.acum_36m;
-    if(ipca.acum_ano!=null) indicState.ipca.ano=ipca.acum_ano;
-    if(ipca.ultimo_mes!=null) indicState.ipca.mes=ipca.ultimo_mes;
-    if(ipca.label_mes) indicState.ipca.mesRef=ipca.label_mes;
-    // Poupança
-    const poup=c.poupanca_nova?.valor;
-    if($('mc-poup')) $('mc-poup').textContent=poup?fmt(poup):'—';
-    // PTAX pré-carregado pelo robô v16+
-    if(d.ptax_historico&&d.ptax_historico.length){
-      _ptaxHistorico=d.ptax_historico.map(item=>({cotacaoVenda:item.cotacao,dataHoraCotacao:item.data_ref+'T12:00:00.0000000',_mes_label:item.mes}));
-      calcularDolarPeriodos(); renderDolarMensais(); buildChartDolar('year');
+
+    // ── IPCA (do JSON — complementado pela série 433) ──
+    const ipca = c.ipca || {};
+    const ipcaLabel = ipca.label_mes || '';
+    // Preenche campos que a série 433 pode não ter chegado ainda
+    // ★ v16 — IPCA: lê todos os acumulados pré-calculados do robô
+    if(ipca.acum_12m != null) indicState.ipca.m12 = ipca.acum_12m;
+    if(ipca.acum_24m != null) indicState.ipca.m24 = ipca.acum_24m;   // ★ v16
+    if(ipca.acum_36m != null) indicState.ipca.m36 = ipca.acum_36m;   // ★ v16
+    if(ipca.acum_ano != null) indicState.ipca.ano = ipca.acum_ano;
+    if(ipca.ultimo_mes != null) indicState.ipca.mes = ipca.ultimo_mes;
+    if(ipcaLabel) indicState.ipca.mesRef = ipcaLabel;
+    else if(!indicState.ipca.mesRef){
+      const h = new Date();
+      indicState.ipca.mesRef = `${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;
     }
+
+    // ── Ibovespa ──
+    const ibov = c.ibovespa || {};
+    const ibovAtual = ibov.atual;
+    const ibovVar = ibov.variacao_mensal;
+    const refHoje = MESES_PT[HOJE.getMonth()]+'/'+HOJE.getFullYear();
+    if($('ref-ibov')) $('ref-ibov').textContent = refHoje;
+    if($('ref-ibov2')) $('ref-ibov2').textContent = refHoje;
+    if($('ref-sp-brl')) $('ref-sp-brl').textContent = refHoje;
+    if($('ref-sp-usd')) $('ref-sp-usd').textContent = refHoje;
+
+    if($('it-ibov-pts') && ibovAtual) $('it-ibov-pts').textContent = fmtK(ibovAtual)+' pts';
+    if($('it-ibov-var-mes') && ibovVar !== null && ibovVar !== undefined){
+      const n = ibovVar;
+      $('it-ibov-var-mes').textContent = `${signPct(n)}${fmt(n)}`;
+      $('it-ibov-var-mes').className = `indic-pct ${clsPct(n)}`;
+    }
+
+    // ── S&P 500 ──
+    const intl = d.indices_internacionais || {};
+    if($('it-sp-brl') && intl.sp500_brl) $('it-sp-brl').textContent = 'R$ '+fmtK(intl.sp500_brl);
+    if($('it-sp-usd') && intl.sp500_usd) $('it-sp-usd').textContent = fmtK(intl.sp500_usd)+' pts';
+
+    // ── Poupança ──
+    const poup = c.poupanca_nova?.valor;
+    if($('mc-poup')) $('mc-poup').textContent = poup ? fmt(poup) : '—';
+
+    // ★ v16 — PTAX histórico pré-carregado pelo robô
+    // Resolve HTTP 400 que ocorria quando browser tentava buscar 36M (limite é 24M)
+    if(d.ptax_historico && d.ptax_historico.length) {
+      _ptaxHistorico = d.ptax_historico.map(item => ({
+        cotacaoVenda:      item.cotacao,
+        dataHoraCotacao:   item.data_ref + 'T12:00:00.0000000',
+        _var_pct:          item.var_pct,
+        _mes_label:        item.mes,
+      }));
+      calcularDolarPeriodos();
+      renderDolarMensais();
+      buildChartDolar('year');
+      console.info(`[PTAX] ${d.ptax_historico.length} fechamentos carregados do mercado_atual.json`);
+    }
+
     atualizarTabelaIndicadores();
-    carregarFocus(d.focus,d.atualizado_em);
-    inicializarGraficos(d);
+    carregarFocus(d.focus, d.atualizado_em);
+    await inicializarGraficos(d);
+
   }catch(e){
-    console.warn('mercado_atual.json indisponível:',e);
-    if($('lastUpdate')) $('lastUpdate').innerHTML=`<span class="live-dot" style="background:var(--muted)"></span>Dados em cache`;
+    console.warn('mercado_atual.json indisponível:', e);
+    if($('lastUpdate')) $('lastUpdate').innerHTML = `<span class="live-dot" style="background:var(--muted)"></span>Dados em cache`;
     carregarFocusFallback();
   }
 }
 
-/* ════════════ FOCUS ════════════ */
-function focusCardHTML(icon,label,sub,dados){
-  const anos=[2026,2027,2028,2029];
-  const rows=anos.map((ano,i)=>{
-    const v=dados?.[ano]; const med=v?.mediana;
-    const fmtd=med!=null?(label==='Câmbio'?'R$ '+fmtBRL(med):fmt(med)):'—';
-    return `<div class="fcad-row"><span class="fcad-year">${ano}</span><span class="fcad-val${i===0?' hl':''}">${fmtd}</span></div>${i<anos.length-1?'<hr class="fcad-hr">':''}`;
+/* ════════════════════════════════════════════════════
+   FOCUS
+════════════════════════════════════════════════════ */
+function focusCardHTML(icon, label, sub, dados){
+  const anos = [2026,2027,2028,2029];
+  const rows = anos.map((ano,i) => {
+    const v = dados?.[ano];
+    const med = v?.mediana;
+    const fmtd = med!==null && med!==undefined
+      ? (label==='Câmbio' ? 'R$ '+fmtBRL(med) : fmt(med))
+      : '—';
+    return `<div class="fcad-row">
+      <span class="fcad-year">${ano}</span>
+      <span class="fcad-val${i===0?' hl':''}">${fmtd}</span>
+    </div>${i<anos.length-1?'<hr class="fcad-hr">':''}`;
   }).join('');
-  return `<div class="fcad"><div class="fcad-label">${icon} ${label}</div><div class="fcad-sub">${sub}</div><div class="fcad-rows">${rows}</div></div>`;
+  return `<div class="fcad"><div class="fcad-label">${icon} ${label}</div>
+    <div class="fcad-sub">${sub}</div><div class="fcad-rows">${rows}</div></div>`;
 }
-function carregarFocus(focus,atualizadoEm){
-  const grid=$('focusGrid'), refEl=$('focusRef');
-  if(!focus||Object.keys(focus).length===0){grid.innerHTML=`<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.78rem">Dados do Focus não disponíveis.</div>`;return;}
-  const primeiroAno=Object.keys(focus.IPCA||{})[0];
-  const dataRef=focus.IPCA?.[primeiroAno]?.data_ref||'';
-  const dataFormatada=dataRef?dataRef.split('-').reverse().join('/'):(atualizadoEm?.split(' ')[0]||'');
-  const d=new Date(), dia=d.getDay(); d.setDate(d.getDate()-(dia>=5?dia-5:dia+2));
-  const pdfDate=`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  if(refEl) refEl.innerHTML=`Ref.: ${dataFormatada} · <a href="https://www.bcb.gov.br/content/focus/focus/R${pdfDate}.pdf" target="_blank" rel="noopener">Baixar PDF ↗</a>`;
-  grid.innerHTML=[focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),focusCardHTML('📦','PIB','Crescimento do PIB',focus.PIB),focusCardHTML('💵','Câmbio','R$ / US$',focus.Cambio),focusCardHTML('📊','IGP-M','Índice Geral de Preços',focus.IGPM)].join('');
+
+function carregarFocus(focus, atualizadoEm){
+  const grid = $('focusGrid');
+  const refEl = $('focusRef');
+  if(!focus || Object.keys(focus).length === 0){
+    grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.78rem">Dados do Focus não disponíveis.</div>`;
+    return;
+  }
+  const primeiroAno = Object.keys(focus.IPCA || {})[0];
+  const dataRef = focus.IPCA?.[primeiroAno]?.data_ref || '';
+  const dataFormatada = dataRef ? dataRef.split('-').reverse().join('/') : (atualizadoEm?.split(' ')[0] || '');
+  const d = new Date();
+  const dia = d.getDay();
+  d.setDate(d.getDate() - (dia>=5 ? dia-5 : dia+2));
+  const pdfDate = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
+  const pdfUrl = `https://www.bcb.gov.br/content/focus/focus/R${pdfDate}.pdf`;
+  refEl.innerHTML = `Ref.: ${dataFormatada} · <a href="${pdfUrl}" target="_blank" rel="noopener">Baixar PDF ↗</a>`;
+  grid.innerHTML = [
+    focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
+    focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
+    focusCardHTML('📦','PIB','Crescimento do Produto Interno Bruto',focus.PIB),
+    focusCardHTML('💵','Câmbio','R$ / US$ (dólar americano)',focus.Cambio),
+    focusCardHTML('📊','IGP-M','Índice Geral de Preços — Mercado',focus.IGPM),
+  ].join('');
 }
+
 function carregarFocusFallback(){
-  if($('focusRef')) $('focusRef').innerHTML='Dados offline';
-  if($('focusGrid')) $('focusGrid').innerHTML=`<div style="grid-column:1/-1;padding:20px;color:var(--muted);font-size:.75rem;text-align:center;border:1px dashed var(--border2);border-radius:10px">⚠️ mercado_atual.json não carregado. Execute o robô para atualizar os dados.</div>`;
+  if($('focusRef')) $('focusRef').innerHTML = 'Dados offline';
+  if($('focusGrid')) $('focusGrid').innerHTML = `<div style="grid-column:1/-1;padding:20px;color:var(--muted);font-size:.75rem;
+    text-align:center;border:1px dashed var(--border2);border-radius:10px">
+    ⚠️ mercado_atual.json não carregado. Execute o robô para atualizar os dados.</div>`;
 }
 
-/* ════════════ RANKINGS ════════════ */
-const MEDALHAS=['🥇','🥈','🥉'];
+/* ════════════════════════════════════════════════════
+   RANKINGS
+════════════════════════════════════════════════════ */
+const MEDALHAS = ['🥇','🥈','🥉'];
+
 function renderRankings(){
-  const grid=$('rankingGrid'); if(!grid||!allRows.length) return;
-  let base=allRows.filter(r=>temDados(r));
-  if(activePerfil) base=base.filter(r=>{const t=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());return t.includes(activePerfil);});
-  if(activeRisco) base=base.filter(r=>(r['Perfil de Risco']||'').trim()===activeRisco);
-  const sorted12m=base.filter(r=>toNum(r['Acum. 12M (%)'])!==null).sort((a,b)=>toNum(b['Acum. 12M (%)'])-toNum(a['Acum. 12M (%)']));
-  const sortedMes=base.filter(r=>toNum(r['Acum. Mes (%)'])!==null).sort((a,b)=>toNum(b['Acum. Mes (%)'])-toNum(a['Acum. Mes (%)']));
-  const sortedAno=base.filter(r=>toNum(r['Acum. Ano (%)'])!==null).sort((a,b)=>toNum(b['Acum. Ano (%)'])-toNum(a['Acum. Ano (%)']));
-  const catMap={};sorted12m.forEach(r=>{const cat=r['Categoria']||'—';if(!catMap[cat])catMap[cat]=r;});
-  const catTop=Object.entries(catMap).sort((a,b)=>toNum(b[1]['Acum. 12M (%)'])-toNum(a[1]['Acum. 12M (%)']));
-  const rankItem=(r,i,campo)=>{const val=r[campo]||'—';const n=toNum(val);const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();const nomeShort=nome.length>40?nome.slice(0,40)+'…':nome;const medal=i<3?MEDALHAS[i]:`${i+1}º`;return `<div class="rank-item"><span class="rank-pos${i===0?' gold-medal':''}">${medal}</span><div class="rank-info"><div class="rank-name" title="${nome}">${nomeShort}</div><div class="rank-cat">${r['Categoria']||''}</div></div><span class="rank-val ${cls}">${sign}${val}</span></div>`;};
-  const rankCard=(icon,title,html)=>`<div class="rank-card"><div class="rank-card-header"><span>${icon}</span><span class="rank-card-title">${title}</span></div><div class="rank-list">${html||'<div class="rank-empty">Sem dados suficientes</div>'}</div></div>`;
-  const top10html=sorted12m.slice(0,10).map((r,i)=>rankItem(r,i,'Acum. 12M (%)')).join('');
-  const catHtml=catTop.slice(0,9).map(([cat,r],i)=>{const val=r['Acum. 12M (%)']||'—';const n=toNum(val);const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();const medal=i<3?MEDALHAS[i]:`${i+1}º`;return `<div class="rank-item"><span class="rank-pos${i===0?' gold-medal':''}">${medal}</span><div class="rank-info"><div class="rank-name">${cat}</div><div class="rank-cat">${nome.length>38?nome.slice(0,38)+'…':nome}</div></div><span class="rank-val ${cls}">${sign}${val}</span></div>`;}).join('');
-  grid.innerHTML=[rankCard('🏆','Top 10 — Acumulado 12 Meses',top10html),rankCard('🎖️','Melhor por Categoria (12M)',catHtml),rankCard('📅','Top 5 — Acumulado do Mês',sortedMes.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Mes (%)')).join('')),rankCard('📆','Top 5 — Acumulado do Ano',sortedAno.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Ano (%)')).join(''))].join('');
+  const grid = $('rankingGrid');
+  if(!grid || !allRows.length) return;
+  let base = allRows.filter(r => temDados(r));
+  if(activePerfil) base = base.filter(r => {
+    const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
+    return tokens.includes(activePerfil);
+  });
+  if(activeRisco) base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
+
+  const sorted12m = base.filter(r=>toNum(r['Acum. 12M (%)'])!==null).sort((a,b)=>toNum(b['Acum. 12M (%)'])-toNum(a['Acum. 12M (%)']));
+  const sortedMes = base.filter(r=>toNum(r['Acum. Mes (%)'])!==null).sort((a,b)=>toNum(b['Acum. Mes (%)'])-toNum(a['Acum. Mes (%)']));
+  const sortedAno = base.filter(r=>toNum(r['Acum. Ano (%)'])!==null).sort((a,b)=>toNum(b['Acum. Ano (%)'])-toNum(a['Acum. Ano (%)']));
+
+  const catMap = {};
+  sorted12m.forEach(r=>{ const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r; });
+  const catTop = Object.entries(catMap).sort((a,b)=>toNum(b[1]['Acum. 12M (%)'])-toNum(a[1]['Acum. 12M (%)']));
+
+  const rankItem = (r,i,campo) => {
+    const val=r[campo]||'—'; const n=toNum(val);
+    const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
+    const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+    const nomeShort=nome.length>40?nome.slice(0,40)+'…':nome;
+    const medal=i<3?MEDALHAS[i]:`${i+1}º`;
+    return `<div class="rank-item">
+      <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
+      <div class="rank-info"><div class="rank-name" title="${nome}">${nomeShort}</div><div class="rank-cat">${r['Categoria']||''}</div></div>
+      <span class="rank-val ${cls}">${sign}${val}</span></div>`;
+  };
+  const rankCard = (icon,title,html) =>
+    `<div class="rank-card"><div class="rank-card-header"><span>${icon}</span><span class="rank-card-title">${title}</span></div>
+    <div class="rank-list">${html||'<div class="rank-empty">Sem dados suficientes</div>'}</div></div>`;
+
+  const top10html = sorted12m.slice(0,10).map((r,i)=>rankItem(r,i,'Acum. 12M (%)')).join('');
+  const catHtml = catTop.slice(0,9).map(([cat,r],i)=>{
+    const val=r['Acum. 12M (%)']||'—'; const n=toNum(val);
+    const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
+    const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+    const medal=i<3?MEDALHAS[i]:`${i+1}º`;
+    return `<div class="rank-item">
+      <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
+      <div class="rank-info"><div class="rank-name">${cat}</div><div class="rank-cat">${nome.length>38?nome.slice(0,38)+'…':nome}</div></div>
+      <span class="rank-val ${cls}">${sign}${val}</span></div>`;
+  }).join('');
+  const top5mesHtml = sortedMes.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Mes (%)')).join('');
+  const top5anoHtml = sortedAno.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Ano (%)')).join('');
+
+  grid.innerHTML = [
+    rankCard('🏆','Top 10 — Acumulado 12 Meses',top10html),
+    rankCard('🎖️','Melhor por Categoria (12M)',catHtml),
+    rankCard('📅','Top 5 — Acumulado do Mês',top5mesHtml),
+    rankCard('📆','Top 5 — Acumulado do Ano',top5anoHtml),
+  ].join('');
 }
 
-/* ════════════ TABELA DE FUNDOS ════════════ */
+/* ════════════════════════════════════════════════════
+   TABELA DE FUNDOS
+════════════════════════════════════════════════════ */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=25;
 let activeSearch='',activeCat='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
+
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
-const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta"]);
-const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","URL",...DETAIL_COLS]);
+const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
+const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
-function getFundUrl(r){const u=String(r['URL']||'').trim();if(u&&u.startsWith('http')&&u.includes('caixa.gov.br')) return u;const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();return 'https://www.google.com/search?q='+encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');}
-function isFallbackUrl(r){const u=String(r['URL']||'').trim();return !(u&&u.startsWith('http')&&u.includes('caixa.gov.br'));}
-function parseCsv(raw){if(raw.charCodeAt(0)===0xFEFF) raw=raw.slice(1);return Papa.parse(raw,{header:true,skipEmptyLines:true});}
-function toNum(v){if(v===null||v===undefined) return null;const s=String(v).trim();if(!s||s==='-'||s==='—'||s==='null') return null;const n=parseFloat(s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.'));return isNaN(n)?null:n;}
-function pctCell(val){if(!val||String(val).trim()===''||val==='-'||val==='—') return `<td class="col-pct"><span class="dash">—</span></td>`;const n=toNum(val);if(n===null) return `<td class="col-pct"><span class="dash">${val}</span></td>`;const cls=n>0?'pos':n<0?'neg':'zero';const sign=n>0?'+':'';const pct=Math.min(Math.abs(n)/20*100,100);return `<td class="col-pct"><div class="pct-wrap"><div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div><span class="pct-val ${cls}">${sign}${val}</span></div></td>`;}
-function temDados(r){const c=String(r['Cota (R$)']||'').trim();return c&&c!=='-'&&c!=='—';}
+
+function getVisibleHeaders(){
+  const base = displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
+  if(!base.includes('Documentos')) base.push('Documentos');
+  return base;
+}
+
+function getFundUrl(r){
+  const u=String(r['URL']||'').trim();
+  if(u&&u.startsWith('http')&&u.includes('caixa.gov.br')) return u;
+  const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
+  return 'https://www.google.com/search?q='+encodeURIComponent('"'+nome+'" site:caixa.gov.br fundos-investimento');
+}
+function isFallbackUrl(r){
+  const u=String(r['URL']||'').trim();
+  return !(u&&u.startsWith('http')&&u.includes('caixa.gov.br'));
+}
+function parseCsv(raw){
+  if(raw.charCodeAt(0)===0xFEFF) raw=raw.slice(1);
+  return Papa.parse(raw,{header:true,skipEmptyLines:true});
+}
+function toNum(v){
+  if(v===null||v===undefined) return null;
+  const s=String(v).trim();
+  if(!s||s==='-'||s==='—'||s==='null') return null;
+  const n=parseFloat(s.replace('%','').replace(/\s/g,'').replace(/\./g,'').replace(',','.'));
+  return isNaN(n)?null:n;
+}
+function pctCell(val){
+  if(!val||String(val).trim()===''||val==='-'||val==='—')
+    return `<td class="col-pct"><span class="dash">—</span></td>`;
+  const n=toNum(val);
+  if(n===null) return `<td class="col-pct"><span class="dash">${val}</span></td>`;
+  const cls=n>0?'pos':n<0?'neg':'zero';
+  const sign=n>0?'+':'';
+  const pct=Math.min(Math.abs(n)/20*100,100);
+  return `<td class="col-pct"><div class="pct-wrap">
+    <div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div>
+    <span class="pct-val ${cls}">${sign}${val}</span></div></td>`;
+}
+function temDados(r){
+  const c=String(r['Cota (R$)']||'').trim();
+  return c&&c!=='-'&&c!=='—';
+}
 
 function updateKPIs(){
   let pl=0,best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
-  allRows.forEach(r=>{const p=toNum(r['PL (milhoes R$)']);if(p!==null) pl+=p;const m=toNum(r['Acum. 12M (%)']);if(m!==null){if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}}});
-  if($('kpiFundos')) $('kpiFundos').textContent=allRows.length;
-  const semDados=allRows.filter(r=>!temDados(r)).length;
-  if($('kpiFundosSub')) $('kpiFundosSub').textContent=`${allRows.length-semDados} ativos · ${semDados} em pipeline`;
-  if($('kpiCats')) $('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'')).size;
-  if($('kpiPL')) $('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
-  if($('kpiPipe')) $('kpiPipe').textContent=semDados;
-  if($('kpiBest')) $('kpiBest').textContent=best>-Infinity?`+${bestVal}%`:'—';
-  if($('kpiBestFundo')) $('kpiBestFundo').textContent=bestName.length>45?bestName.slice(0,45)+'…':bestName;
-  if($('kpiWorst')) $('kpiWorst').textContent=worst<Infinity?`${worstVal}%`:'—';
-  if($('kpiWorstFundo')) $('kpiWorstFundo').textContent=worstName.length>45?worstName.slice(0,45)+'…':worstName;
-}
-async function carregarKPIs(){
-  try{const r=await fetch(BASE_URL+'kpis_dashboard.json?v='+Date.now());const d=await r.json();const pl=d.resumo_geral?.pl_total_consolidado;const pipe=d.resumo_geral?.pipeline_novos_fundos;if(pl&&$('kpiPL')) $('kpiPL').textContent=pl.toLocaleString('pt-BR',{maximumFractionDigits:0});if(pipe!==undefined&&$('kpiPipe')) $('kpiPipe').textContent=pipe;}catch(e){}
-}
-
-async function carregarFundosJson(){
-  try{const r=await fetch(BASE_URL+'fundos_caixa.json?v='+Date.now());if(!r.ok) throw new Error('HTTP '+r.status);const d=await r.json();_fundosDocMap=d.por_cnpj||{};console.log(`[fundos_caixa.json] ${Object.keys(_fundosDocMap).length} fundos indexados`);}catch(e){console.info('[fundos_caixa.json] não disponível:',e.message);}
-}
-
-function buildDocsHtml(cnpjLimpo,urlFundo,row){
-  const DOC_TIPOS=[
-    {label:'📄 Lâmina',csvKey:'doc_lamina',jsonKey:'lamina',cor:'var(--gold)',cod:'LAC',pasta:'laminas-comerciais'},
-    {label:'📋 Regulamento',csvKey:'doc_regulamento',jsonKey:'regulamento',cor:'var(--blue)',cod:'RG',pasta:'regulamentos'},
-    {label:'ℹ️ Inf. Compl.',csvKey:'doc_inf_comp',jsonKey:'inf_comp',cor:'var(--purple)',cod:'FIC',pasta:'inf-com'},
-    {label:'📢 Comunicado',csvKey:'doc_comunicado',jsonKey:'comunicado',cor:'var(--orange)',cod:'COM',pasta:'comunicado-aos-cotistas'},
-    {label:'📊 Carta Mensal',csvKey:'doc_carta',jsonKey:'carta_mensal',cor:'var(--green)',cod:'CM',pasta:'carta-mensal'},
-  ];
-  const btn=(b,url)=>!url?'':`<a href="${url}" target="_blank" rel="noopener" title="${b.label}" style="display:inline-flex;align-items:center;gap:4px;padding:5px 11px;border-radius:7px;border:1px solid ${b.cor}33;background:${b.cor}11;color:${b.cor};font-size:.65rem;font-family:'DM Sans',sans-serif;font-weight:500;text-decoration:none;white-space:nowrap" onmouseover="this.style.background='${b.cor}22'" onmouseout="this.style.background='${b.cor}11'">${b.label}</a>`;
-  const mkSection=(titulo,botoes)=>`<div style="width:100%;margin-top:10px;padding-top:10px;border-top:1px solid var(--border2)"><div style="font-size:.58rem;text-transform:uppercase;letter-spacing:.1em;color:var(--muted2);font-weight:600;margin-bottom:7px">📁 ${titulo}</div><div style="display:flex;flex-wrap:wrap;gap:6px">${botoes}</div></div>`;
-  if(row){const urls=DOC_TIPOS.map(b=>String(row[b.csvKey]||'').trim()).filter(u=>u.startsWith('http'));if(urls.length>=2){const btns=DOC_TIPOS.map(b=>btn(b,String(row[b.csvKey]||'').trim())).join('');const cod=String(row['codfundo']||'').trim();return mkSection(`Documentos${cod?' — Cód. '+cod:''}`,btns);}}
-  const fundoDoc=cnpjLimpo?_fundosDocMap[cnpjLimpo]:null;
-  if(fundoDoc){const btns=DOC_TIPOS.map(b=>btn(b,fundoDoc.docs?.[b.jsonKey]||'')).join('');return mkSection(`Documentos — Cód. ${fundoDoc.codfundo||'?'}`,btns);}
-  const matchCod=String(urlFundo||'').match(/[_\/]([0-9]{3,6})(?:[_\/.]|$)/);
-  if(matchCod){const cod=matchCod[1];const mkUrl=(c,pasta)=>c==='RG'?`https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_${cod}.pdf`:`https://www.caixa.gov.br/Downloads/aplicacao-financeira-${pasta}/${c}_${cod}.pdf`;const btns=DOC_TIPOS.map(b=>btn(b,mkUrl(b.cod,b.pasta))).join('');return mkSection(`Documentos — Cód. ${cod}`,btns);}
-  return '';
-}
-
-function buildDetailPanel(r,colspan){
-  const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k)&&!k.startsWith('doc_')&&k!=='codfundo');
-  const items=detailCols.map(k=>{let val=String(r[k]||'').trim()||'—';if(k==='CNPJ'&&val!=='—') val=`<a href="https://www.receita.fazenda.gov.br/pessoajuridica/cnpj/cnpjreva/cnpjreva_solicitacao.asp?cnpj=${val.replace(/\D/g,'')}" target="_blank" rel="noopener">${val}</a>`;if(k==='Taxa Adm (%)'&&val!=='—') val=val+'%';if(k==='Aplicacao Minima (R$)'&&val!=='—'){const n=parseFloat(val.replace(',','.'));val=isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2});}return `<div class="detail-item"><div class="detail-key">${k}</div><div class="detail-val">${val}</div></div>`;}).join('');
-  const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
-  const urlItem=urlFund?`<div class="detail-item"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
-  const cnpjLimpo=String(r['CNPJ']||'').replace(/\D/g,'');
-  const docsHtml=buildDocsHtml(cnpjLimpo,r['URL']||'',r);
-  return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0"><div class="detail-panel" style="flex-wrap:wrap">${items}${urlItem}${docsHtml}</div></td></tr>`;
-}
-
-function buildRowHTML(r,idx){
-  const semDados=!temDados(r);
-  const visibleHeaders=displayHeaders.filter(h=>!HIDDEN_COLS.has(h));
-  const colspan=visibleHeaders.length+1;
-  let html=`<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
-  const isExpanded=expandedRows.has(idx);
-  html+=`<td style="width:28px;padding:11px 8px"><button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button></td>`;
-  visibleHeaders.forEach(h=>{
-    const val=String(r[h]||'');
-    if(h==='Categoria'){const cls=CAT_CLS[val]||'RF';html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;return;}
-    if(h==='Fundo'){const url=getFundUrl(r);const isFb=isFallbackUrl(r);const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';}
-    if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){html+=pctCell(val);return;}
-    if(h==='Perfis'){const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');html+=`<td><div class="perfis-wrap">${chips}</div></td>`;return;}
-    html+=`<td>${val||'—'}</td>`;
+  allRows.forEach(r=>{
+    const p=toNum(r['PL (milhoes R$)']);
+    if(p!==null) pl+=p;
+    const m=toNum(r['Acum. 12M (%)']);
+    if(m!==null){
+      if(m>best){best=m;bestName=r['Fundo']||'';bestVal=r['Acum. 12M (%)'];}
+      if(m<worst){worst=m;worstName=r['Fundo']||'';worstVal=r['Acum. 12M (%)'];}
+    }
   });
-  html+='</tr>';
-  if(isExpanded) html+=buildDetailPanel(r,colspan);
-  return html;
+  $('kpiFundos').textContent=allRows.length;
+  const semDados=allRows.filter(r=>!temDados(r)).length;
+  $('kpiFundosSub').textContent=`${allRows.length-semDados} ativos · ${semDados} em pipeline`;
+  $('kpiCats').textContent=new Set(allRows.map(r=>r['Categoria']||'')).size;
+  $('kpiPL').textContent=pl>0?pl.toLocaleString('pt-BR',{maximumFractionDigits:0}):'—';
+  $('kpiPipe').textContent=semDados;
+  $('kpiBest').textContent=best>-Infinity?`+${bestVal}%`:'—';
+  $('kpiBestFundo').textContent=bestName.length>45?bestName.slice(0,45)+'…':bestName;
+  $('kpiWorst').textContent=worst<Infinity?`${worstVal}%`:'—';
+  $('kpiWorstFundo').textContent=worstName.length>45?worstName.slice(0,45)+'…':worstName;
+}
+
+async function carregarKPIs(){
+  try{
+    const r=await fetch(BASE_URL+'kpis_dashboard.json?v='+Date.now());
+    const d=await r.json();
+    const pl=d.resumo_geral?.pl_total_consolidado;
+    const pipe=d.resumo_geral?.pipeline_novos_fundos;
+    if(pl) $('kpiPL').textContent=pl.toLocaleString('pt-BR',{maximumFractionDigits:0});
+    if(pipe!==undefined) $('kpiPipe').textContent=pipe;
+  }catch(e){}
 }
 
 function applyFilter(){
@@ -1614,14 +2096,332 @@ function applyFilter(){
   filtered=allRows.filter(r=>{
     if(hideSemDados&&!temDados(r)) return false;
     if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
-    if(activePerfil){const t=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());if(!t.includes(activePerfil)) return false;}
+    if(activePerfil){
+      const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
+      if(!tokens.includes(activePerfil)) return false;
+    }
     if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
-    if(activePerf!==null){const n=toNum(r[activePerfCampo]);if(n===null||n<activePerf) return false;}
+    // ★ Filtro de performance
+    if(activePerf!==null){
+      const n=toNum(r[activePerfCampo]);
+      if(n===null||n<activePerf) return false;
+    }
     if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
     return true;
   });
-  if(sortCol>=0&&sortCol<displayHeaders.length){const key=displayHeaders[sortCol];const isNum=NUM_SET.has(key);filtered.sort((a,b)=>{const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();return av<bv?-sortDir:av>bv?sortDir:0;});}
-  currentPage=1;expandedRows.clear();render();renderRankings();
+  if(sortCol>=0&&sortCol<displayHeaders.length){
+    const key=displayHeaders[sortCol];
+    const isNum=NUM_SET.has(key);
+    filtered.sort((a,b)=>{
+      const av=isNum?(toNum(a[key])??-Infinity):(a[key]||'').toLowerCase();
+      const bv=isNum?(toNum(b[key])??-Infinity):(b[key]||'').toLowerCase();
+      return av<bv?-sortDir:av>bv?sortDir:0;
+    });
+  }
+  currentPage=1; expandedRows.clear(); render(); renderRankings();
+}
+
+/* ════════════════════════════════════════════════════
+   DOCUMENTOS — fundos_caixa.json (CAIXA Asset)
+════════════════════════════════════════════════════ */
+let _fundosDocMap = {}; // CNPJ limpo → { codfundo, docs:{} }
+
+async function carregarFundosJson(){
+  try{
+    const r = await fetch(BASE_URL+'fundos_caixa.json?v='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const d = await r.json();
+    _fundosDocMap = d.por_cnpj || {};
+    console.log(`[fundos_caixa.json] ${Object.keys(_fundosDocMap).length} fundos indexados`);
+  }catch(e){
+    // Silencioso — fallback usa código extraído da URL
+    console.info('[fundos_caixa.json] não disponível, usando fallback por URL:', e.message);
+  }
+}
+
+function htmlAttr(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function abrirDocsSelecionados(btn){
+  const card = btn.closest('.docs-card');
+  const urls = [...card.querySelectorAll('.doc-check:checked')].map(i=>i.dataset.url).filter(Boolean);
+  if(!urls.length){ alert('Selecione pelo menos um documento.'); return; }
+  urls.forEach((u,i)=>setTimeout(()=>window.open(u,'_blank','noopener'), i*180));
+}
+
+function abrirTodosDocs(btn){
+  const card = btn.closest('.docs-card');
+  const checks = [...card.querySelectorAll('.doc-check')];
+  checks.forEach(c=>c.checked=true);
+  const urls = checks.map(i=>i.dataset.url).filter(Boolean);
+  if(!urls.length){ alert('Nenhum documento disponível para este fundo.'); return; }
+  urls.forEach((u,i)=>setTimeout(()=>window.open(u,'_blank','noopener'), i*180));
+}
+
+function marcarTodosDocs(btn, checked){
+  const card = btn.closest('.docs-card');
+  card.querySelectorAll('.doc-check').forEach(c=>c.checked=checked);
+}
+
+
+function obterDocsFundoCompactos(row){
+  const DOC_TIPOS = [
+    { label:'Lâmina', curto:'L', icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LAC', pasta:'laminas-comerciais' },
+    { label:'Regulamento', curto:'R', icon:'📋', csvKey:'doc_regulamento', jsonKey:'regulamento',  cod:'RG',  pasta:'regulamentos' },
+    { label:'Inf. Compl.', curto:'IC', icon:'ℹ️', csvKey:'doc_inf_comp',    jsonKey:'inf_comp',     cod:'FIC', pasta:'inf-com' },
+    { label:'Comunicado', curto:'C', icon:'📢', csvKey:'doc_comunicado',  jsonKey:'comunicado',   cod:'COM', pasta:'comunicado-aos-cotistas' },
+    { label:'Carta Mensal', curto:'CM', icon:'📊', csvKey:'doc_carta',       jsonKey:'carta_mensal', cod:'CM',  pasta:'carta-mensal' },
+    { label:'Boletim Comercial', curto:'BC', icon:'📄', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
+  ];
+
+  let docs = DOC_TIPOS.map(d=>({ ...d, url:String(row?.[d.csvKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
+
+  const cnpjLimpo = String(row?.['CNPJ']||'').replace(/\D/g,'');
+  const fundoDoc = cnpjLimpo ? _fundosDocMap[cnpjLimpo] : null;
+
+  if(!docs.length && fundoDoc){
+    docs = DOC_TIPOS.map(d=>({ ...d, url:String(fundoDoc.docs?.[d.jsonKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
+  }
+
+  if(!docs.length){
+    const urlFundo = String(row?.['URL']||'');
+    const matchCod = urlFundo.match(/[_\/]([0-9]{3,6})(?:[_\/.]|$)/);
+    if(matchCod){
+      const cod = matchCod[1];
+      const mkUrl = (c, pasta) => {
+        if(!c || !pasta) return '';
+        return c === 'RG'
+          ? `https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_${cod}.pdf`
+          : `https://www.caixa.gov.br/Downloads/aplicacao-financeira-${pasta}/${c}_${cod}.pdf`;
+      };
+      docs = DOC_TIPOS.map(d=>({ ...d, url:mkUrl(d.cod,d.pasta), estimado:true })).filter(d=>d.url.startsWith('http'));
+    }
+  }
+
+  return docs;
+}
+
+function abrirDocsDaLinha(ev, btn){
+  ev.preventDefault();
+  ev.stopPropagation();
+  try{
+    const urls = JSON.parse(decodeURIComponent(btn.dataset.urls || '[]'));
+    urls.forEach((u, i)=>setTimeout(()=>window.open(u, '_blank', 'noopener'), i*120));
+  }catch(e){
+    console.warn('Erro ao abrir documentos da linha:', e);
+  }
+}
+
+function buildDocsCompactos(row){
+  const docs = obterDocsFundoCompactos(row);
+  if(!docs.length) return '<span class="doc-mini-empty">—</span>';
+
+  const urls = docs.map(d=>d.url);
+  const btnTodos = `<button type="button" class="doc-mini-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)" title="Abrir todos os documentos">Todos</button>`;
+
+  const links = docs.map(d=>`
+    <a class="doc-mini" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(d.label)}">${d.curto}</a>
+  `).join('');
+
+  return `<div class="docs-mini-wrap">${btnTodos}${links}</div>`;
+}
+
+function buildDocsHtml(cnpjLimpo, urlFundo, row){
+  // Prioridade: (1) URLs reais do CSV, (2) fundos_caixa.json, (3) fallback por código.
+  const DOC_TIPOS = [
+    { label:'Lâmina',       icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LAC', pasta:'laminas-comerciais' },
+    { label:'Regulamento',  icon:'📋', csvKey:'doc_regulamento', jsonKey:'regulamento',  cod:'RG',  pasta:'regulamentos' },
+    { label:'Inf. Compl.',  icon:'ℹ️', csvKey:'doc_inf_comp',    jsonKey:'inf_comp',     cod:'FIC', pasta:'inf-com' },
+    { label:'Comunicado',   icon:'📢', csvKey:'doc_comunicado',  jsonKey:'comunicado',   cod:'COM', pasta:'comunicado-aos-cotistas' },
+    { label:'Carta Mensal', icon:'📊', csvKey:'doc_carta',       jsonKey:'carta_mensal', cod:'CM',  pasta:'carta-mensal' },
+    { label:'Boletim Comercial', icon:'📄', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
+  ];
+
+  let cod = String(row?.['codfundo']||'').trim();
+  let docs = [];
+
+  if(row){
+    docs = DOC_TIPOS.map(d=>({ ...d, url:String(row[d.csvKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
+  }
+
+  const fundoDoc = cnpjLimpo ? _fundosDocMap[cnpjLimpo] : null;
+  if(!docs.length && fundoDoc){
+    cod = cod || String(fundoDoc.codfundo||'').trim();
+    docs = DOC_TIPOS.map(d=>({ ...d, url:String(fundoDoc.docs?.[d.jsonKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
+  }
+
+  if(!docs.length){
+    const matchCod = String(urlFundo||'').match(/[_\/]([0-9]{3,6})(?:[_\/.]|$)/);
+    if(matchCod){
+      cod = matchCod[1];
+      const mkUrl = (c, pasta) => c === 'RG'
+        ? `https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_${cod}.pdf`
+        : `https://www.caixa.gov.br/Downloads/aplicacao-financeira-${pasta}/${c}_${cod}.pdf`;
+      docs = DOC_TIPOS.map(d=>({ ...d, url:mkUrl(d.cod,d.pasta), estimado:true }));
+    }
+  }
+
+  if(!docs.length) return '';
+
+  const pills = docs.map((d,idx)=>`
+    <label class="doc-pill" title="${htmlAttr(d.url)}">
+      <input type="checkbox" class="doc-check" data-url="${htmlAttr(d.url)}" checked>
+      <a href="${htmlAttr(d.url)}" target="_blank" rel="noopener">${d.icon} ${d.label}</a>
+    </label>`).join('');
+
+  return `<aside class="docs-card">
+    <div class="docs-head">
+      <div class="docs-title">📁 Documentos${cod ? '<br><span style="color:var(--muted)">Cód. '+htmlAttr(cod)+'</span>' : ''}</div>
+      <div class="docs-actions">
+        <button type="button" class="docs-action-btn" onclick="abrirTodosDocs(this)">Abrir todos</button>
+      </div>
+    </div>
+    <div class="docs-grid">${pills}</div>
+    <div class="docs-actions" style="margin-top:8px">
+      <button type="button" class="docs-action-btn secondary" onclick="abrirDocsSelecionados(this)">Abrir selecionados</button>
+      <button type="button" class="docs-action-btn secondary" onclick="marcarTodosDocs(this,false)">Limpar</button>
+    </div>
+    <div class="docs-note">Os PDFs podem abrir em novas abas. Se bloquear, permita pop-ups para localhost.</div>
+  </aside>`;
+}
+
+
+function gerarLeituraRapidaFundo(r){
+  const texto = (v) => String(v ?? '').trim();
+  const numero = (v) => {
+    if(v === null || v === undefined) return null;
+    let s = String(v).trim();
+    if(!s || s === '-' || s === '—' || s.toLowerCase() === 'none') return null;
+    if(s.includes(',') && s.includes('.')) s = s.replace(/\./g,'').replace(',','.');
+    else s = s.replace(',','.');
+    const n = parseFloat(s);
+    return isNaN(n) ? null : n;
+  };
+  const pct = (n) => n === null ? '' : `${n >= 0 ? '+' : ''}${n.toFixed(2).replace('.',',')}%`;
+
+  const nome = texto(r['Fundo']);
+  const categoria = texto(r['Categoria']);
+  const risco = texto(r['Perfil de Risco']);
+  const taxa = texto(r['Taxa Adm (%)']);
+  const conv = texto(r['Conversao Resgate']);
+  const pag = texto(r['Pagamento Resgate']);
+  const rent12 = numero(r['Acum. 12M (%)']);
+  const rentAno = numero(r['Acum. Ano (%)']);
+
+  const base = (categoria + ' ' + nome)
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .toUpperCase();
+
+  let objetivo = 'Este fundo pode ser analisado como alternativa de investimento conforme sua categoria, perfil de risco, liquidez e comportamento de rentabilidade.';
+
+  if(base.includes('FUNDOS MUTUOS DE PRIVATIZACAO') || base.includes('FMP')){
+    objetivo = 'Fundo voltado à exposição em ações vinculadas a programas de privatização, geralmente com maior oscilação de curto prazo e forte dependência do desempenho das empresas da carteira.';
+  } else if(base.includes('ACOES')){
+    objetivo = 'Fundo de renda variável, com objetivo de capturar desempenho de ações ou índices de ações. Tende a apresentar maior volatilidade e horizonte recomendado mais longo.';
+  } else if(base.includes('CAMBIAL') || base.includes('DOLAR')){
+    objetivo = 'Fundo com exposição cambial, usado principalmente para acompanhar movimentos do dólar ou compor proteção e diversificação frente ao real.';
+  } else if(base.includes('MULTIMERCADO')){
+    objetivo = 'Fundo multimercado, que pode combinar diferentes estratégias e classes de ativos. A análise deve considerar política do fundo, volatilidade, liquidez e consistência de desempenho.';
+  } else if(base.includes('FUNDO DE INDICE') || base.includes('ETF')){
+    objetivo = 'Fundo de índice, desenhado para acompanhar uma carteira ou índice de referência, com comportamento próximo ao benchmark indicado.';
+  } else if(base.includes('RENDA FIXA REFERENCIADO')){
+    objetivo = 'Fundo de renda fixa referenciado, normalmente voltado a acompanhar um índice de referência, como CDI ou taxa semelhante, com foco em liquidez e previsibilidade relativa.';
+  } else if(base.includes('RENDA FIXA CURTO PRAZO')){
+    objetivo = 'Fundo de renda fixa de curto prazo, geralmente voltado à liquidez, baixo prazo médio da carteira e menor sensibilidade a oscilações longas de juros.';
+  } else if(base.includes('RENDA FIXA SIMPLES')){
+    objetivo = 'Fundo de renda fixa simples, normalmente utilizado para liquidez, reserva e aplicações de perfil mais conservador, com foco em instrumentos de baixo risco relativo.';
+  } else if(base.includes('RENDA FIXA')){
+    objetivo = 'Fundo de renda fixa, com estratégia ligada a títulos públicos, crédito privado, inflação, prefixados ou pós-fixados, conforme a política específica do fundo.';
+  }
+
+  const complementos = [];
+  if(risco) complementos.push(`Perfil de risco informado: ${risco}.`);
+  if(taxa) complementos.push(`Taxa de administração: ${taxa}%.`);
+  if(conv || pag) complementos.push(`Liquidez operacional: conversão ${conv || '—'} e pagamento ${pag || '—'}.`);
+  if(rentAno !== null) complementos.push(`Rentabilidade no ano: ${pct(rentAno)}.`);
+  if(rent12 !== null) complementos.push(`Rentabilidade em 12 meses: ${pct(rent12)}.`);
+
+  return `
+    <div class="fund-quick-note">
+      <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
+      <div class="fund-quick-note-text">${objetivo} ${complementos.join(' ')}</div>
+      <div class="fund-quick-note-disclaimer">
+        Texto interpretativo gerado a partir dos dados disponíveis no catálogo. Para objetivo oficial, política de investimento, riscos e regras completas, consulte a lâmina, o regulamento e os demais documentos do fundo.
+      </div>
+    </div>`;
+}
+
+function buildDetailPanel(r,colspan){
+  const DOC_DETAIL_KEYS = new Set(['doc_lamina','doc_regulamento','doc_inf_comp','doc_comunicado','doc_carta','doc_boletim']);
+  const LABELS = {
+    'codfundo':'Código do fundo',
+    'Aplicacao Minima (R$)':'Aplicação mínima',
+    'Taxa Adm (%)':'Taxa adm.',
+    'Conversao Resgate':'Conversão resgate',
+    'Pagamento Resgate':'Pagamento resgate',
+    'Perfil de Risco':'Perfil de risco'
+  };
+  const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k) && !DOC_DETAIL_KEYS.has(k));
+  const items=detailCols.map(k=>{
+    let val=String(r[k]||'').trim()||'—';
+
+    // CNPJ agora fica somente como texto copiável; sem link externo para Receita.
+    const extraClass = k==='CNPJ' ? ' copyable' : '';
+
+    if(k==='Taxa Adm (%)'&&val!=='—') val=val+'%';
+    if(k==='Aplicacao Minima (R$)'&&val!=='—'){
+      const n=parseFloat(val.replace(',','.'));
+      val=isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2});
+    }
+    const label = LABELS[k] || k;
+    return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
+  }).join('');
+  const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
+  const urlItem=urlFund?`<div class="detail-item"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
+  const cnpjLimpo = String(r['CNPJ']||'').replace(/\D/g,'');
+  return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
+    <div class="detail-panel">
+      <div class="detail-main">${items}${urlItem}${gerarLeituraRapidaFundo(r)}</div>
+    </div>
+  </td></tr>`;
+}
+
+
+function buildRowHTML(r,idx){
+  const semDados=!temDados(r);
+  const visibleHeaders=getVisibleHeaders();
+  const colspan=visibleHeaders.length+1;
+  let html=`<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
+  const isExpanded=expandedRows.has(idx);
+  html+=`<td style="width:28px;padding:11px 8px"><button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button></td>`;
+  visibleHeaders.forEach(h=>{
+    const val=String(r[h]||'');
+    if(h==='Categoria'){
+      const cls=CAT_CLS[val]||'RF';
+      html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;return;
+    }
+    if(h==='Fundo'){
+      const url=getFundUrl(r); const isFb=isFallbackUrl(r);
+      const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';
+      const boletimUrl=isFb?'':url;
+      const boletimBtn=boletimUrl?``:'';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${boletimBtn}</td>`;return;
+    }
+    if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){html+=pctCell(val);return;}
+    if(h==='Documentos'){
+      html+=`<td class="col-docs">${buildDocsCompactos(r)}</td>`;return;
+    }
+    if(h==='Perfis'){
+      const chips=val.split(/\s*\|\s*/).filter(Boolean).map(p=>`<span class="perfil-chip pchip-${p.trim()}">${p.trim()}</span>`).join('');
+      html+=`<td><div class="perfis-wrap">${chips}</div></td>`;return;
+    }
+    html+=`<td>${val||'—'}</td>`;
+  });
+  html+='</tr>';
+  if(isExpanded) html+=buildDetailPanel(r,colspan);
+  return html;
 }
 
 function render(){
@@ -1629,19 +2429,36 @@ function render(){
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
   const rows=filtered.slice(start,end);
   const tbody=$('tableBody');
-  if(!rows.length){tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;if($('resultInfo')) $('resultInfo').textContent='0 registros';renderPagination();return;}
+  if(!rows.length){
+    tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
+    $('resultInfo').textContent='0 registros'; renderPagination(); return;
+  }
   tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
-  if($('resultInfo')) $('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length)}–${end} de ${filtered.length} registros`;
-  tbody.querySelectorAll('.exp-btn').forEach(btn=>{btn.addEventListener('click',e=>{e.stopPropagation();const idx=parseInt(btn.dataset.idx);if(expandedRows.has(idx)) expandedRows.delete(idx);else expandedRows.add(idx);render();});});
+  $('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length)}–${end} de ${filtered.length} registros`;
+  tbody.querySelectorAll('.exp-btn').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.stopPropagation();
+      const idx=parseInt(btn.dataset.idx);
+      if(expandedRows.has(idx)) expandedRows.delete(idx); else expandedRows.add(idx);
+      render();
+    });
+  });
   renderPagination();
 }
 
 function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
-  const c=$('pageBtns');if(!c) return;c.innerHTML='';
-  const mk=(label,page,dis,act)=>{const b=document.createElement('button');b.className='page-btn'+(act?' active':'');b.textContent=label;b.disabled=dis;if(!dis) b.addEventListener('click',()=>{currentPage=page;render();window.scrollTo({top:0,behavior:'smooth'});});return b;};
+  const c=$('pageBtns'); c.innerHTML='';
+  const mk=(label,page,dis,act)=>{
+    const b=document.createElement('button');
+    b.className='page-btn'+(act?' active':'');
+    b.textContent=label; b.disabled=dis;
+    if(!dis) b.addEventListener('click',()=>{currentPage=page;render();window.scrollTo({top:0,behavior:'smooth'});});
+    return b;
+  };
   c.appendChild(mk('‹',currentPage-1,currentPage===1));
-  let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);from=Math.max(1,to-4);
+  let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);
+  from=Math.max(1,to-4);
   for(let i=from;i<=to;i++) c.appendChild(mk(i,i,false,i===currentPage));
   c.appendChild(mk('›',currentPage+1,currentPage===total||total===0));
 }
@@ -1649,101 +2466,412 @@ function renderPagination(){
 function buildHeader(){
   const thead=$('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
   const thExp=document.createElement('th');thExp.style.width='28px';thExp.style.padding='13px 8px';tr.appendChild(thExp);
-  const visibleHeaders=displayHeaders.filter(h=>!HIDDEN_COLS.has(h));
-  visibleHeaders.forEach(h=>{const th=document.createElement('th');th.innerHTML=`${h} <span class="si"></span>`;const realIdx=displayHeaders.indexOf(h);if(realIdx===sortCol) th.className=sortDir===1?'sa':'sd';th.addEventListener('click',()=>{if(sortCol===realIdx) sortDir*=-1;else{sortCol=realIdx;sortDir=-1;}thead.querySelectorAll('th').forEach(t=>t.className='');th.className=sortDir===1?'sa':'sd';applyFilter();});tr.appendChild(th);});
+  const visibleHeaders=getVisibleHeaders();
+  visibleHeaders.forEach(h=>{
+    const th=document.createElement('th');
+
+    if(h==='Documentos'){
+      th.innerHTML='Documentos';
+      th.style.cursor='default';
+      th.title='Atalhos para documentos oficiais do fundo';
+      tr.appendChild(th);
+      return;
+    }
+
+    th.innerHTML=`${h} <span class="si"></span>`;
+    const realIdx=displayHeaders.indexOf(h);
+    if(realIdx===sortCol) th.className=sortDir===1?'sa':'sd';
+    th.addEventListener('click',()=>{
+      if(sortCol===realIdx) sortDir*=-1; else{sortCol=realIdx;sortDir=-1;}
+      thead.querySelectorAll('th').forEach(t=>t.className='');
+      th.className=sortDir===1?'sa':'sd'; applyFilter();
+    });
+    tr.appendChild(th);
+  });
   thead.appendChild(tr);
 }
-function setActiveChip(container,selector,active){container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));active.classList.add('active');}
-function buildCatFilters(cats){
-  const row=$('catFilters');const label=row.querySelector('.filter-label');row.innerHTML='';row.appendChild(label);
-  const all=document.createElement('button');all.className='chip active';all.dataset.cat='';all.textContent='Todas';
-  all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});row.appendChild(all);
-  [...cats].sort().forEach(cat=>{const b=document.createElement('button');b.className='chip';b.dataset.cat=cat;b.textContent=cat;b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});row.appendChild(b);});
+
+function setActiveChip(container,selector,active){
+  container.querySelectorAll(selector).forEach(b=>b.classList.remove('active'));
+  active.classList.add('active');
 }
 
-// Listeners
-$('perfilFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-perfil]');if(!btn) return;activePerfil=btn.dataset.perfil;setActiveChip($('perfilFilters'),'[data-perfil]',btn);applyFilter();});
-$('riscoFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-risco]');if(!btn) return;activeRisco=btn.dataset.risco;setActiveChip($('riscoFilters'),'[data-risco]',btn);applyFilter();});
-$('perfFilters').addEventListener('click',e=>{const btn=e.target.closest('[data-perf]');if(!btn) return;activePerf=btn.dataset.perf===''?null:parseFloat(btn.dataset.perf);$('perfCustom').value='';setActiveChip($('perfFilters'),'[data-perf]',btn);applyFilter();});
-$('perfPeriodo').addEventListener('change',e=>{activePerfCampo=e.target.value;applyFilter();});
-// $('perfCustomBtn').addEventListener('click',()=>{const v=parseFloat($('perfCustom').value);if(isNaN(v)) return;activePerf=v;$('perfFilters').querySelectorAll('[data-perf]').forEach(b=>b.classList.remove('active'));applyFilter();});
-// $('perfCustom').addEventListener('keydown',e=>{if(e.key==='Enter') $('perfCustomBtn').click();});
+function buildCatFilters(cats){
+  const row=$('catFilters');
+  const label=row.querySelector('.filter-label');
+  row.innerHTML=''; row.appendChild(label);
+  const all=document.createElement('button');
+  all.className='chip active'; all.dataset.cat=''; all.textContent='Todas';
+  all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});
+  row.appendChild(all);
+  [...cats].sort().forEach(cat=>{
+    const b=document.createElement('button'); b.className='chip'; b.dataset.cat=cat; b.textContent=cat;
+    b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});
+    row.appendChild(b);
+  });
+}
+
+/* Listeners */
+$('perfilFilters').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-perfil]'); if(!btn) return;
+  activePerfil=btn.dataset.perfil; setActiveChip($('perfilFilters'),'[data-perfil]',btn); applyFilter();
+});
+$('riscoFilters').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-risco]'); if(!btn) return;
+  activeRisco=btn.dataset.risco; setActiveChip($('riscoFilters'),'[data-risco]',btn); applyFilter();
+});
+// ★ Performance filter
+$('perfFilters').addEventListener('click',e=>{
+  const btn=e.target.closest('[data-perf]'); if(!btn) return;
+  const v=btn.dataset.perf;
+  activePerf=v===''?null:parseFloat(v);
+  setActiveChip($('perfFilters'),'[data-perf]',btn); applyFilter();
+});
+$('perfPeriodo').addEventListener('change',e=>{ activePerfCampo=e.target.value; applyFilter(); });
+
 let _st=null;
-$('searchInput').addEventListener('input',e=>{clearTimeout(_st);_st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);});
-$('perPage').addEventListener('change',e=>{perPage=parseInt(e.target.value);currentPage=1;render();});
-$('toggleSemDados').addEventListener('change',e=>{hideSemDados=e.target.checked;applyFilter();});
+$('searchInput').addEventListener('input',e=>{
+  clearTimeout(_st); _st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
+});
+$('perPage').addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); });
+$('toggleSemDados').addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
   try{
     const raw=await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
-    const result=parseCsv(raw);allRows=result.data;
-    const headers=Object.keys(allRows[0]||{});displayHeaders=headers;
-    const di=displayHeaders.indexOf(DEFAULT_SORT);if(di>=0){sortCol=di;sortDir=-1;}
+    const result=parseCsv(raw);
+    allRows=result.data;
+    const headers=Object.keys(allRows[0]||{});
+    displayHeaders=headers;
+    const di=displayHeaders.indexOf(DEFAULT_SORT);
+    if(di>=0){sortCol=di;sortDir=-1;}
     const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
-    buildHeader();buildCatFilters(cats);updateKPIs();applyFilter();
-    if($('loadMsg')) $('loadMsg').style.display='none';
-    if($('mainTable')) $('mainTable').style.display='table';
+    buildHeader(); buildCatFilters(cats); updateKPIs(); applyFilter();
+    $('loadMsg').style.display='none';
+    $('mainTable').style.display='table';
     renderRankings();
-  }catch(err){if($('loadMsg')) $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;}
+  }catch(err){
+    $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
+  }
 }
 
-/* ════════════ GRÁFICOS IPCA / SELIC / META ════════════ */
+/* ════════════════════════════════════════════════════
+   GRÁFICOS — IPCA / SELIC / META
+════════════════════════════════════════════════════ */
 let _chartIpca=null,_chartSelic=null,_chartMeta=null;
-const CHART_DEFAULTS={responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'rgba(11,13,26,.95)',borderColor:'rgba(200,151,58,.3)',borderWidth:1,titleColor:'#e8bb6a',bodyColor:'#d8dcea',padding:10,titleFont:{family:'Cormorant Garamond',size:14,weight:'700'},bodyFont:{family:'JetBrains Mono',size:11}}},scales:{x:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#3d4560',font:{family:'JetBrains Mono',size:9},maxTicksLimit:8}},y:{grid:{color:'rgba(255,255,255,.04)'},ticks:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:10},callback:v=>v.toFixed(2)+'%'}}}};
-function buildChartIpca(historico,meses){const slice=historico.slice(-meses);const labels=slice.map(d=>d.label);const values=slice.map(d=>d.valor);const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');if(_chartIpca) _chartIpca.destroy();const ctx=document.getElementById('chartIpca')?.getContext('2d');if(!ctx) return;_chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});}
-function buildChartSelic(historico,qtd){const filtrado=historico.map(d=>({...d,_ts:d.DataReuniaoCopom?new Date(d.DataReuniaoCopom).getTime():0,_ano:d.DataReuniaoCopom?new Date(d.DataReuniaoCopom).getFullYear():parseInt((d.data||'').split('/')[2]||'0')})).filter(d=>d._ano>=1999&&parseFloat(d.valor)>=4&&d._ts>0);filtrado.sort((a,b)=>a._ts-b._ts);const slice=qtd>=999?filtrado:filtrado.slice(-qtd);const labels=slice.map(d=>{const dt=new Date(d.DataReuniaoCopom);return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;});const values=slice.map(d=>parseFloat(d.valor));if(_chartSelic) _chartSelic.destroy();const ctx=document.getElementById('chartSelic')?.getContext('2d');if(!ctx) return;_chartSelic=new Chart(ctx,{type:'line',data:{labels,datasets:[{data:values,borderColor:'#c8973a',backgroundColor:'rgba(200,151,58,.08)',borderWidth:2,pointBackgroundColor:'#e8bb6a',pointRadius:3,pointHoverRadius:5,fill:true,stepped:'before',tension:0}]},options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`Selic: ${ctx.parsed.y.toFixed(2).replace('.',',')}% a.a.`}}}}});}
-function buildChartMeta(metaDados){if(!metaDados||!metaDados.length) return;const sorted=[...metaDados].filter(d=>d.DataReferencia&&d.Inflacao12Meses).sort((a,b)=>new Date(a.DataReferencia)-new Date(b.DataReferencia));const labels=sorted.map(d=>{const dt=new Date(d.DataReferencia);return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;});const values=sorted.map(d=>parseFloat(d.Inflacao12Meses));const META=3.0,SUP=4.5,INF=1.5;const ptColors=values.map(v=>(v>SUP||v<INF)?'#f05565':'#2ed17a');if(_chartMeta) _chartMeta.destroy();const ctx=document.getElementById('chartMeta')?.getContext('2d');if(!ctx) return;_chartMeta=new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'Banda (1,5%–4,5%)',data:values.map(()=>SUP),borderColor:'rgba(46,209,122,.25)',backgroundColor:'rgba(46,209,122,.07)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:'+1',order:3},{label:null,data:values.map(()=>INF),borderColor:'rgba(46,209,122,.25)',backgroundColor:'transparent',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false,order:3},{label:'Meta (3%)',data:values.map(()=>META),borderColor:'rgba(200,151,58,.75)',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false,order:2},{label:'IPCA 12M',data:values,borderColor:'#5b9cf6',borderWidth:2.5,pointBackgroundColor:ptColors,pointBorderColor:ptColors,pointRadius:4,pointHoverRadius:6,fill:false,tension:0.3,order:1,segment:{borderColor:ctx=>{const v=values[ctx.p1DataIndex];return(v>SUP||v<INF)?'#f05565':'#5b9cf6';}}}]},options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,legend:{display:true,position:'bottom',labels:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:9},boxWidth:12,padding:8,filter:item=>item.text!==null}},tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>ctx.dataset.label?`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`:null,afterBody:items=>{const v=items.find(i=>i.dataset.label==='IPCA 12M')?.parsed?.y;if(v===undefined) return[];if(v>SUP) return[`⚠️ Acima do teto (${SUP}%)`];if(v<INF) return[`⚠️ Abaixo do piso (${INF}%)`];return['✅ Dentro da meta'];}}}}}});}
-function inicializarGraficos(d){
-  const hist=d?.cards?.ipca?.historico||[];
-  const selic=d?.cards?.selic_meta?.historico||[];
-  const meta=d?.meta_vs_inflacao_efetiva||[];
-  if(hist.length) buildChartIpca(hist,24);
-  if(selic.length) buildChartSelic(selic,12);
-  if(meta.length) buildChartMeta(meta);
-  document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{btn.addEventListener('click',()=>{const chart=btn.dataset.chart;const range=parseInt(btn.dataset.range);document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>b.classList.remove('active'));btn.classList.add('active');if(chart==='ipca') buildChartIpca(_dadosMercado?.cards?.ipca?.historico||[],range);if(chart==='selic') buildChartSelic(_dadosMercado?.cards?.selic_meta?.historico||[],range);});});
+let _dadosMercado=null;
+
+const CHART_DEFAULTS={
+  responsive:true,maintainAspectRatio:false,
+  plugins:{
+    legend:{display:false},
+    tooltip:{
+      backgroundColor:'rgba(11,13,26,.95)',borderColor:'rgba(200,151,58,.3)',borderWidth:1,
+      titleColor:'#e8bb6a',bodyColor:'#d8dcea',padding:10,
+      titleFont:{family:'Cormorant Garamond',size:14,weight:'700'},
+      bodyFont:{family:'JetBrains Mono',size:11},
+    }
+  },
+  scales:{
+    x:{grid:{color:'rgba(255,255,255,.04)',drawBorder:false},ticks:{color:'#3d4560',font:{family:'JetBrains Mono',size:9},maxTicksLimit:8}},
+    y:{grid:{color:'rgba(255,255,255,.04)',drawBorder:false},ticks:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:10},callback:v=>v.toFixed(2)+'%'}}
+  }
+};
+
+function buildChartIpca(historico,meses){
+  const slice=historico.slice(-meses);
+  const labels=slice.map(d=>d.label);
+  const values=slice.map(d=>d.valor);
+  const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');
+  if(_chartIpca) _chartIpca.destroy();
+  const ctx=document.getElementById('chartIpca')?.getContext('2d'); if(!ctx) return;
+  _chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},
+    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});
 }
 
-/* ════════════ MODAL PTAX ════════════ */
+function buildChartSelic(historico,qtd){
+  // Aceita os dois formatos:
+  // 1) mercado_atual.json: [{data, valor}]
+  // 2) "historico da selic do BC.json": [{DataReuniaoCopom, MetaSelic, ...}]
+  const filtrado=(historico||[])
+    .map(d=>{
+      const dataRaw = d.DataReuniaoCopom || d.data || d.DataInicioVigencia || '';
+      let dt = dataRaw ? new Date(dataRaw) : null;
+
+      // fallback para data em formato dd/mm/aaaa
+      if((!dt || isNaN(dt.getTime())) && typeof dataRaw === 'string' && dataRaw.includes('/')){
+        const p = dataRaw.split('/');
+        if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+      }
+
+      const valorRaw = d.MetaSelic ?? d.valor ?? d.TaxaSelic ?? d.taxa ?? null;
+      const valor = parseFloat(String(valorRaw).replace(',','.'));
+
+      return {
+        ...d,
+        _dt: dt,
+        _ts: dt && !isNaN(dt.getTime()) ? dt.getTime() : 0,
+        _ano: dt && !isNaN(dt.getTime()) ? dt.getFullYear() : 0,
+        _valor: valor
+      };
+    })
+    .filter(d=>d._ano>=1999 && !isNaN(d._valor) && d._valor>=0 && d._ts>0);
+
+  filtrado.sort((a,b)=>a._ts-b._ts);
+  const slice=qtd>=999?filtrado:filtrado.slice(-qtd);
+  const labels=slice.map(d=>`${String(d._dt.getMonth()+1).padStart(2,'0')}/${d._dt.getFullYear()}`);
+  const values=slice.map(d=>d._valor);
+
+  if(_chartSelic) _chartSelic.destroy();
+  const ctx=document.getElementById('chartSelic')?.getContext('2d'); if(!ctx) return;
+  _chartSelic=new Chart(ctx,{type:'line',data:{labels,datasets:[{data:values,borderColor:'#c8973a',backgroundColor:'rgba(200,151,58,.08)',borderWidth:2,pointBackgroundColor:'#e8bb6a',pointRadius:3,pointHoverRadius:5,fill:true,stepped:'before',tension:0}]},
+    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`Selic: ${ctx.parsed.y.toFixed(2).replace('.',',')}% a.a.`}}}}});
+}
+
+function buildChartMeta(metaDados){
+  if(!metaDados||!metaDados.length) return;
+  const sorted=[...metaDados].filter(d=>d.DataReferencia&&d.Inflacao12Meses).sort((a,b)=>new Date(a.DataReferencia)-new Date(b.DataReferencia));
+  const labels=sorted.map(d=>{const dt=new Date(d.DataReferencia);return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;});
+  const values=sorted.map(d=>parseFloat(d.Inflacao12Meses));
+  const META=3.0,SUP=4.5,INF=1.5;
+  const ptColors=values.map(v=>(v>SUP||v<INF)?'#f05565':'#2ed17a');
+  if(_chartMeta) _chartMeta.destroy();
+  const ctx=document.getElementById('chartMeta')?.getContext('2d'); if(!ctx) return;
+  _chartMeta=new Chart(ctx,{type:'line',data:{labels,datasets:[
+    {label:'Banda (1,5%–4,5%)',data:values.map(()=>SUP),borderColor:'rgba(46,209,122,.25)',backgroundColor:'rgba(46,209,122,.07)',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:'+1',order:3},
+    {label:null,data:values.map(()=>INF),borderColor:'rgba(46,209,122,.25)',backgroundColor:'transparent',borderWidth:1,borderDash:[4,4],pointRadius:0,fill:false,order:3},
+    {label:'Meta (3%)',data:values.map(()=>META),borderColor:'rgba(200,151,58,.75)',borderWidth:1.5,borderDash:[6,3],pointRadius:0,fill:false,order:2},
+    {label:'IPCA 12M',data:values,borderColor:'#5b9cf6',borderWidth:2.5,pointBackgroundColor:ptColors,pointBorderColor:ptColors,pointRadius:4,pointHoverRadius:6,fill:false,tension:0.3,order:1,segment:{borderColor:ctx=>{const v=values[ctx.p1DataIndex];return(v>SUP||v<INF)?'#f05565':'#5b9cf6';}}}
+  ]},
+  options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,legend:{display:true,position:'bottom',labels:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:9},boxWidth:12,padding:8,filter:item=>item.text!==null}},
+    tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>ctx.dataset.label?`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`:null,
+      afterBody:items=>{const v=items.find(i=>i.dataset.label==='IPCA 12M')?.parsed?.y;if(v===undefined) return[];if(v>SUP) return[`⚠️ Acima do teto (${SUP}%)`];if(v<INF) return[`⚠️ Abaixo do piso (${INF}%)`];return['✅ Dentro da meta'];}}}}}}
+  );
+}
+
+
+function marcarGraficoSemDados(canvasId, mensagem){
+  const canvas = document.getElementById(canvasId);
+  if(!canvas) return;
+  const body = canvas.parentElement;
+  if(!body) return;
+  if(body.querySelector('.chart-empty-msg')) return;
+  const msg = document.createElement('div');
+  msg.className = 'chart-empty-msg';
+  msg.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;color:var(--muted);font-size:.72rem;font-family:JetBrains Mono,monospace;line-height:1.5;background:transparent;pointer-events:none';
+  msg.textContent = mensagem;
+  body.appendChild(msg);
+}
+
+async function carregarJsonLocal(nomeArquivo){
+  // Usa encodeURI para preservar espaços e acentos do nome do arquivo.
+  // Ex.: "historico da selic do BC.json"
+  try{
+    const url = BASE_URL + encodeURI(nomeArquivo) + '?v=' + Date.now();
+    const r = await fetch(url);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    return await r.json();
+  }catch(e){
+    console.warn(`[JSON LOCAL] Não consegui carregar ${nomeArquivo}:`, e);
+    return null;
+  }
+}
+
+async function inicializarGraficos(d){
+  _dadosMercado=d;
+
+  const hist=d?.cards?.ipca?.historico||[];
+
+  // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
+  let selic=d?.historico_selic || d?.cards?.selic_meta?.historico || [];
+  if(!selic.length){
+    const jsSelic = await carregarJsonLocal('historico da selic do BC.json');
+    selic = jsSelic?.conteudo || jsSelic?.historico || (Array.isArray(jsSelic) ? jsSelic : []);
+    if(selic.length){
+      _dadosMercado.historico_selic = selic;
+      console.info(`[Selic] ${selic.length} registros carregados do arquivo local.`);
+    }
+  }
+
+  // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
+  let meta=d?.meta_vs_inflacao_efetiva||[];
+  if(!meta.length){
+    const jsMeta = await carregarJsonLocal('meta-vs-inflacao-efetiva.json');
+    meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
+    if(meta.length){
+      _dadosMercado.meta_vs_inflacao_efetiva = meta;
+      console.info(`[IPCA x Meta] ${meta.length} registros carregados do arquivo local.`);
+    }
+  }
+
+  if(hist.length) buildChartIpca(hist,24);
+  else marcarGraficoSemDados('chartIpca', 'IPCA histórico não disponível no mercado_atual.json');
+
+  if(selic.length) buildChartSelic(selic,12);
+  else marcarGraficoSemDados('chartSelic', 'Histórico Selic não disponível. Confira o arquivo "historico da selic do BC.json".');
+
+  if(meta.length) buildChartMeta(meta);
+  else marcarGraficoSemDados('chartMeta', 'IPCA 12M vs Meta não disponível. Confira o arquivo "meta-vs-inflacao-efetiva.json".');
+
+  document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
+    if(btn.dataset.bound==='1') return;
+    btn.dataset.bound='1';
+    btn.addEventListener('click',()=>{
+      const chart=btn.dataset.chart; const range=parseInt(btn.dataset.range);
+      document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      if(chart==='ipca') buildChartIpca(_dadosMercado?.cards?.ipca?.historico||[],range);
+      if(chart==='selic') buildChartSelic(_dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [],range);
+    });
+  });
+}
+
+/* ════════════════════════════════════════════════════
+   PTAX MODAL
+════════════════════════════════════════════════════ */
 let _ptaxCarregado=false;
-function abrirModalPTAX(){$('modalPtax').classList.add('open');document.body.style.overflow='hidden';if(!_ptaxCarregado) carregarPTAXModal();}
-function fecharModalPTAX(e){if(e&&e.target!==$('modalPtax')) return;$('modalPtax').classList.remove('open');document.body.style.overflow='';}
-document.addEventListener('keydown',e=>{if(e.key==='Escape') fecharModalPTAX();});
-async function carregarPTAXModal(){
+
+function abrirModalPTAX(){
+  $('modalPtax').classList.add('open');
+  document.body.style.overflow='hidden';
+  if(!_ptaxCarregado) carregarPTAX();
+}
+function fecharModalPTAX(e){
+  if(e&&e.target!==$('modalPtax')) return;
+  $('modalPtax').classList.remove('open');
+  document.body.style.overflow='';
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') fecharModalPTAX(); });
+
+async function carregarPTAX(){
   const loading=$('ptaxLoading'),table=$('ptaxTable'),tbody=$('ptaxBody');
   try{
-    const hoje=new Date(),inicio=new Date(hoje);inicio.setFullYear(hoje.getFullYear()-2);
-    const fmtData=d=>`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
-    const url=`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoMoedaPeriodoFechamento(codigoMoeda=@cm,dataInicialFechamento=@di,dataFinalFechamento=@df)?@cm='USD'&@di='${String(inicio.getMonth()+1).padStart(2,'0')}-${inicio.getFullYear()}'&@df='${String(hoje.getMonth()+1).padStart(2,'0')}-${hoje.getFullYear()}'&$format=json&$select=cotacaoVenda,dataFechamento`;
-    const res=await fetch(url);if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data=await res.json();const registros=(data.value||[]).sort((a,b)=>b.dataFechamento.localeCompare(a.dataFechamento));
-    if(!registros.length) throw new Error('Sem dados');
-    let prevVal=null;
-    tbody.innerHTML=registros.map(item=>{
-      const dt=new Date(item.dataFechamento);
-      const label=`${MESES_PT[dt.getMonth()]}/${dt.getFullYear()}`;
-      const val=parseFloat(item.cotacaoVenda);
-      const valFmt='R$ '+Number(val).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
-      const dtFmt=`${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
+    if(!_ptaxHistorico.length) throw new Error('ptax_historico ausente no mercado_atual.json');
+
+    const byMonth={};
+    _ptaxHistorico.forEach(item=>{
+      if(!item.cotacaoVenda) return;
+      const dt=new Date(item.dataHoraCotacao);
+      const key=`${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+      if(!byMonth[key]||new Date(item.dataHoraCotacao)>new Date(byMonth[key].dataHoraCotacao)) byMonth[key]=item;
+    });
+
+    const asc=Object.entries(byMonth).sort(([a],[b])=>a.localeCompare(b));
+    if(!asc.length) throw new Error('Sem dados no histórico PTAX');
+
+    const desc=[...asc].reverse();
+    tbody.innerHTML=desc.map(([key,item])=>{
+      const [ano,mes]=key.split('-');
+      const label=item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+      const val=Number(item.cotacaoVenda);
+      const valFmt='R$ '+val.toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
+      const dtCot=new Date(item.dataHoraCotacao);
+      const dtFmt=`${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
+
+      let varPct = item._var_pct;
+      if(varPct === null || varPct === undefined){
+        const idxAsc = asc.findIndex(([k])=>k===key);
+        if(idxAsc > 0){
+          const prevVal = Number(asc[idxAsc-1][1].cotacaoVenda);
+          if(prevVal) varPct = ((val/prevVal)-1)*100;
+        }
+      }
+
       let varHtml='<span class="ptax-var zero">—</span>';
-      if(prevVal!==null){const varPct=((val-prevVal)/prevVal)*100;const cls=varPct>0?'neg':varPct<0?'pos':'zero';const sign=varPct>=0?'+':'';varHtml=`<span class="ptax-var ${cls}">${sign}${varPct.toFixed(2).replace('.',',')}%</span>`;}
-      prevVal=val;
+      if(varPct !== null && varPct !== undefined && !Number.isNaN(Number(varPct))){
+        const n = Number(varPct);
+        const cls=n>0?'neg':n<0?'pos':'zero';
+        varHtml=`<span class="ptax-var ${cls}">${signPct(n)}${fmt(n)}</span>`;
+      }
+
       return `<tr><td class="ptax-month">${label}</td><td class="ptax-val">${valFmt}</td><td>${varHtml}</td><td style="color:var(--muted);font-size:.72rem">${dtFmt}</td></tr>`;
     }).join('');
-    if(loading) loading.style.display='none';if(table) table.style.display='table';_ptaxCarregado=true;
-  }catch(err){if(loading) loading.innerHTML=`<div style="color:var(--red)">Erro ao buscar dados do BCB: ${err.message}</div>`;}
+    loading.style.display='none'; table.style.display='table'; _ptaxCarregado=true;
+  }catch(err){
+    loading.innerHTML=`<div style="color:var(--muted)">PTAX histórico não disponível no JSON.<br><small>Execute o + para gerar mercado_atual.json com ptax_historico.</small></div>`;
+  }
 }
 
-/* ════════════ INIT ════════════ */
-carregarMercado();
-carregarCDIPeriodos();
-carregarIPCAPeriodos();
-carregarDolarDia();
-carregarPTAXHistorico();
-carregarFundosJson();
-carregarDados().then(()=>carregarKPIs());
+/* ════════════════════════════════════════════════════
+   CALENDÁRIO COPOM 2026
+════════════════════════════════════════════════════ */
+const COPOM_2026 = [
+  { datas: '27 e 28 de janeiro',  num: 1 },
+  { datas: '17 e 18 de março',    num: 2 },
+  { datas: '28 e 29 de abril',    num: 3 },
+  { datas: '16 e 17 de junho',    num: 4 },
+  { datas: '4 e 5 de agosto',     num: 5 },
+  { datas: '15 e 16 de setembro', num: 6 },
+  { datas: '3 e 4 de novembro',   num: 7 },
+  { datas: '8 e 9 de dezembro',   num: 8 },
+];
+const COPOM_DATAS_INICIO = [
+  new Date(2026,0,27), new Date(2026,2,17), new Date(2026,3,28),
+  new Date(2026,5,16), new Date(2026,7,4),  new Date(2026,8,15),
+  new Date(2026,10,3), new Date(2026,11,8),
+];
 
-async function iniciarDashboard(){await carregarMercado();await carregarCDIPeriodos();await carregarIPCAPeriodos();carregarDolarDia();await carregarPTAXHistorico();await carregarFundosJson();await carregarDados();await carregarKPIs();}
+function buildCopomCalendario(){
+  const container = $('copomMeetings');
+  if(!container) return;
+  const agora = new Date();
+  container.innerHTML = COPOM_2026.map((r,i) => {
+    const dt = COPOM_DATAS_INICIO[i];
+    const isPast = dt < agora && (agora - dt) > 86400000*2;
+    const isNext = !isPast && COPOM_DATAS_INICIO.findIndex(d => d >= agora) === i;
+    let badge = '';
+    if(isPast) badge = `<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:rgba(94,107,138,.15);color:var(--muted2);margin-left:6px">realizada</span>`;
+    if(isNext) badge = `<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:var(--gold-dim);color:var(--gold2);border:1px solid rgba(200,151,58,.3);margin-left:6px">próxima ★</span>`;
+    const rowStyle = isNext
+      ? 'background:var(--gold-dim);border:1px solid rgba(200,151,58,.2);border-radius:7px;padding:5px 8px;margin:2px 0'
+      : 'padding:4px 8px;border-bottom:1px solid var(--border2)';
+    const cor = isPast ? 'var(--muted)' : isNext ? 'var(--text)' : 'var(--text)';
+    const numCor = isPast ? 'var(--muted2)' : isNext ? 'var(--gold2)' : 'var(--muted)';
+    return `<div style="${rowStyle};display:flex;align-items:center;gap:8px">
+      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:${numCor};min-width:20px;text-align:right">${r.num}ª</span>
+      <span style="font-size:.7rem;color:${cor};flex:1;${isPast?'text-decoration:line-through;text-decoration-color:var(--muted2)':''}">${r.datas}</span>
+      ${badge}
+    </div>`;
+  }).join('');
+}
+
+function toggleCopomCalendario(){
+  const el = $('copomCalendario');
+  const btn = $('copomCalBtn');
+  const isOpen = el.style.opacity === '1';
+  if(isOpen){
+    el.style.maxHeight = '0px'; el.style.opacity = '0';
+    btn.textContent = '📋 Reuniões 2026 ▼';
+  } else {
+    buildCopomCalendario();
+    el.style.maxHeight = '500px'; el.style.opacity = '1';
+    btn.textContent = '📋 Reuniões 2026 ▲';
+  }
+}
+
+/* ════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════ */
+async function iniciarDashboard(){
+  await carregarMercado();          // primeiro carrega mercado_atual.json
+  await carregarCDIPeriodos();      // agora só usa o JSON, sem API externa
+  await carregarIPCAPeriodos();     // agora só usa o JSON, sem API externa
+  carregarDolarDia();               // mantém PTAX do dia ao vivo
+  await carregarPTAXHistorico();    // agora só usa o JSON, sem CotacaoDolarPeriodo
+  await carregarFundosJson();
+  await carregarDados();
+  await carregarKPIs();
+}
 iniciarDashboard();
 </script>
+
+<script>
+document.addEventListener('click', function(e){
+  if(e.target.closest('.detail-row a, .detail-row button, .detail-row input, .docs-card')){
+    e.stopPropagation();
+  }
+}, true);
+</script>
+
 </body>
 </html>
