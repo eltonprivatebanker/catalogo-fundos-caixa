@@ -1,5 +1,5 @@
 {
-  "data_coleta": "22/05/2026 05:47",
+  "data_coleta": "23/05/2026 04:42",
   "fonte": "odata",
   "IPCA": {
     "2026": {
@@ -180,5 +180,8 @@
       "maximo": 6.0,
       "data_ref": "2026-05-15"
     }
-  }
+  },
+  "data_pdf": "20260515",
+  "data_pdf_br": "15/05/2026",
+  "pdf_url": "https://www.bcb.gov.br/content/focus/focus/R20260515.pdf"
 }

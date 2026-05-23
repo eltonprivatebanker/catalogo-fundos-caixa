@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "22/05/2026 05:47:12",
+    "atualizado_em": "23/05/2026 04:42:10",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -4488,21 +4488,21 @@
             "unidade": "% m.m."
         },
         "ibovespa": {
-            "atual": 177650.0,
-            "anterior": 196132.0,
-            "variacao_mensal": -9.42
+            "atual": 176210.0,
+            "anterior": 192889.0,
+            "variacao_mensal": -8.65
         },
         "dolar": {
-            "atual": 5.001100063323975,
-            "anterior": 4.984899997711182,
-            "variacao_mensal": 0.32
+            "atual": 5.03980016708374,
+            "anterior": 5.030799865722656,
+            "variacao_mensal": 0.18
         }
     },
     "indices_internacionais": {
-        "sp500_usd": 7445.72021484375,
-        "sp500_brl": 37236.79,
-        "dow_jones": 50285.66015625,
-        "nasdaq": 26293.099609375
+        "sp500_usd": 7473.47021484375,
+        "sp500_brl": 37664.8,
+        "dow_jones": 50579.69921875,
+        "nasdaq": 26343.970703125
     },
     "ptax_historico": [
         {
@@ -4682,7 +4682,7 @@
         }
     ],
     "focus": {
-        "data_coleta": "22/05/2026 05:47",
+        "data_coleta": "23/05/2026 04:42",
         "fonte": "odata",
         "IPCA": {
             "2026": {
@@ -4863,7 +4863,10 @@
                 "maximo": 6.0,
                 "data_ref": "2026-05-15"
             }
-        }
+        },
+        "data_pdf": "20260515",
+        "data_pdf_br": "15/05/2026",
+        "pdf_url": "https://www.bcb.gov.br/content/focus/focus/R20260515.pdf"
     },
     "historico_selic": [
         {
