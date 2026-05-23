@@ -14,12 +14,12 @@
   --bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--bg4:#181d36;
   --gold:#c8973a;--gold2:#e8bb6a;--gold3:#f5d48a;
   --gold-dim:rgba(200,151,58,.1);--gold-glow:rgba(200,151,58,.2);
-  --text:#d8dcea;--muted:#5e6b8a;--muted2:#3d4560;
+  --text:#edf1fb;--muted:#a6b0c9;--muted2:#7f8aa8;
   --green:#2ed17a;--green-dim:rgba(46,209,122,.1);
   --red:#f05565;--red-dim:rgba(240,85,101,.1);
   --blue:#5b9cf6;--blue-dim:rgba(91,156,246,.1);
   --orange:#fb923c;--purple:#a78bfa;
-  --border:rgba(200,151,58,.12);--border2:rgba(255,255,255,.04);--border3:rgba(255,255,255,.07);
+  --border:rgba(200,151,58,.22);--border2:rgba(255,255,255,.085);--border3:rgba(255,255,255,.13);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -52,6 +52,37 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 @keyframes spin{to{transform:rotate(360deg)}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 @keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
+
+/* ── AVISOS ── */
+.top-disclaimer{
+  margin-top:18px;
+  display:flex;
+  gap:12px;
+  align-items:flex-start;
+  padding:14px 18px;
+  border:1px solid rgba(200,151,58,.18);
+  border-radius:14px;
+  background:linear-gradient(180deg,rgba(200,151,58,.09),rgba(255,255,255,.018));
+  color:#b8c0d6;
+  font-size:.74rem;
+  line-height:1.6;
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+.top-disclaimer-icon{
+  flex-shrink:0;
+  width:24px;
+  height:24px;
+  border-radius:8px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--gold-dim);
+  border:1px solid rgba(200,151,58,.18);
+  color:var(--gold2);
+  font-size:.78rem;
+}
+.top-disclaimer strong{color:var(--gold2);font-weight:700}
+.top-disclaimer span{color:var(--text)}
 
 /* ── KPI GRID ── */
 .section-gap{margin-top:28px}
@@ -200,23 +231,74 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-timeline-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;width:100%;max-width:100%;min-width:0}
 .dolar-timeline-card::before{content:'';display:block;height:2px;background:linear-gradient(90deg,var(--gold),transparent 70%)}
 .dolar-timeline-header{padding:12px 18px;border-bottom:1px solid var(--border2);
-  display:flex;align-items:center;justify-content:space-between;cursor:pointer;user-select:none;transition:background .15s}
+  display:flex;align-items:center;justify-content:space-between;gap:10px;user-select:none;transition:background .15s}
 .dolar-timeline-header:hover{background:rgba(200,151,58,.03)}
+.dolar-timeline-title-wrap{display:flex;flex-direction:column;gap:2px;min-width:0}
 .dolar-timeline-title{font-family:'Cormorant Garamond',serif;font-size:.95rem;font-weight:700;color:var(--gold2)}
-.dolar-timeline-toggle{font-size:.65rem;color:var(--muted);transition:transform .25s}
-.dolar-timeline-toggle.open{transform:rotate(180deg)}
+.dolar-timeline-sub{font-size:.62rem;color:#9aa6c3;font-family:'JetBrains Mono',monospace}
+.dolar-timeline-toggle{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--border2);background:var(--bg3);
+  color:var(--muted);border-radius:8px;padding:5px 10px;font-size:.62rem;font-family:'DM Sans',sans-serif;cursor:pointer;transition:all .15s;white-space:nowrap}
+.dolar-timeline-toggle:hover{border-color:var(--gold);color:var(--gold2);background:var(--gold-dim)}
 .dolar-timeline-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
-.dolar-timeline-body.open{max-height:260px}
-.dolar-months{display:flex;gap:0;overflow-x:auto;padding:12px 16px 16px;padding-right:24px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;-webkit-overflow-scrolling:touch}
-.dolar-month-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:85px;
-  padding:10px 8px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);
-  margin-right:8px;flex-shrink:0;transition:border-color .15s,background .15s;cursor:default}
-.dolar-month-item:hover{border-color:var(--gold);background:var(--gold-dim)}
+.dolar-timeline-body.open{max-height:560px}
+.dolar-months{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(92px,1fr));
+  gap:8px;
+  overflow-x:visible;
+  padding:12px 16px 16px;
+}
+.dolar-month-item{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  min-width:0;
+  padding:10px 8px;
+  border-radius:10px;
+  border:1px solid var(--border2);
+  background:var(--bg3);
+  transition:border-color .15s,background .15s,transform .15s;
+  cursor:default;
+}
+.dolar-month-item:hover{border-color:var(--gold);background:var(--gold-dim);transform:translateY(-2px)}
 .dolar-month-item.current{border-color:var(--gold);background:var(--gold-dim)}
-.dolar-month-label{font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;text-transform:uppercase}
-.dolar-month-val{font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-weight:700;color:var(--gold2)}
-.dolar-month-var{font-size:.62rem;font-family:'JetBrains Mono',monospace;font-weight:600}
+.dolar-month-label{font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.dolar-month-val{font-family:'Cormorant Garamond',serif;font-size:1.08rem;font-weight:700;color:var(--gold2)}
+.dolar-month-var{font-size:.6rem;font-family:'JetBrains Mono',monospace;font-weight:600}
 .dolar-month-var.pos{color:var(--green)}.dolar-month-var.neg{color:var(--red)}.dolar-month-var.zero{color:var(--muted)}
+.dolar-source-note{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 16px 14px;
+  padding:9px 12px;
+  border-radius:10px;
+  border:1px solid rgba(200,151,58,.14);
+  background:rgba(200,151,58,.055);
+  color:#aeb7cf;
+  font-size:.64rem;
+  font-family:'DM Sans',sans-serif;
+  line-height:1.45;
+}
+.dolar-source-note .source-label,
+.dolar-chart-source .source-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+  padding:2px 7px;
+  border-radius:6px;
+  border:1px solid rgba(200,151,58,.24);
+  background:rgba(200,151,58,.11);
+  color:var(--gold2);
+  font-size:.56rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.dolar-source-note a{color:var(--gold2);text-decoration:none}.dolar-source-note a:hover{text-decoration:underline}
 
 /* Gráfico dólar */
 .dolar-chart-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;
@@ -228,6 +310,25 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-chart-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace}
 .dolar-chart-body{padding:18px 20px;position:relative;height:clamp(260px,28vw,340px);min-height:260px;max-height:340px;width:100%;max-width:100%;overflow:hidden}
 .dolar-chart-body canvas{width:100% !important;height:100% !important;display:block}
+.dolar-chart-source{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  margin:0 18px 16px;
+  padding:9px 12px;
+  border-radius:10px;
+  border:1px solid rgba(200,151,58,.14);
+  background:rgba(200,151,58,.055);
+  color:#aeb7cf;
+  font-size:.64rem;
+  font-family:'DM Sans',sans-serif;
+  line-height:1.45;
+}
+.dolar-chart-source a{color:var(--gold2);text-decoration:none}.dolar-chart-source a:hover{text-decoration:underline}
+
+.dolar-source-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:8px}
+.dolar-source-link{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:8px;border:1px solid rgba(200,151,58,.28);background:rgba(200,151,58,.08);color:var(--gold2);font-family:'DM Sans',sans-serif;font-size:.68rem;font-weight:600;text-decoration:none;transition:all .15s}
+.dolar-source-link:hover{border-color:var(--gold2);background:rgba(200,151,58,.16);color:var(--gold3);text-decoration:none}
 
 /* ── FOCUS ── */
 .focus-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px}
@@ -244,10 +345,175 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .fcad-val{font-family:'Cormorant Garamond',serif;font-size:1.25rem;font-weight:700;color:var(--text);line-height:1}
 .fcad-val.hl{color:var(--gold2)}
 .fcad-hr{border:none;border-top:1px solid var(--border2);margin:4px 0}
-.focus-ref{font-size:.62rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;
-  display:flex;align-items:center;gap:6px;margin-top:12px}
-.focus-ref a{color:var(--gold);text-decoration:none;transition:color .15s}
-.focus-ref a:hover{color:var(--gold2)}
+.focus-section-title{
+  align-items:flex-start;
+  justify-content:flex-start;
+  margin-bottom:14px;
+}
+.focus-title-block{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width:0;
+}
+.focus-title-line{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.focus-ref{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  width:max-content;
+  max-width:100%;
+  padding:7px 10px;
+  border:1px solid rgba(91,156,246,.22);
+  border-radius:10px;
+  background:rgba(91,156,246,.075);
+  color:#c6cee2;
+  font-size:.68rem;
+  line-height:1.35;
+  font-family:'DM Sans',sans-serif;
+  font-weight:500;
+}
+.focus-ref strong{
+  color:var(--text);
+  font-weight:700;
+}
+.focus-ref-label{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  white-space:nowrap;
+}
+.focus-pdf-link{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 9px;
+  border-radius:8px;
+  border:1px solid rgba(200,151,58,.32);
+  background:rgba(200,151,58,.10);
+  color:var(--gold2);
+  text-decoration:none;
+  font-size:.66rem;
+  font-weight:700;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.focus-pdf-link:hover{
+  border-color:var(--gold2);
+  background:rgba(200,151,58,.18);
+  color:var(--gold3);
+}
+
+.focus-explain-card{
+  margin:12px 0 16px;
+  border:1px solid rgba(91,156,246,.24);
+  border-radius:14px;
+  background:linear-gradient(180deg,rgba(91,156,246,.075),rgba(255,255,255,.018));
+  overflow:hidden;
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+.focus-explain-header{
+  width:100%;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:13px 16px;
+  background:rgba(255,255,255,.012);
+  border:0;
+  border-bottom:1px solid rgba(255,255,255,.055);
+  color:var(--text);
+  cursor:pointer;
+  font-family:'DM Sans',sans-serif;
+  font-size:.84rem;
+  font-weight:700;
+  text-align:left;
+}
+.focus-explain-header span:first-child{
+  color:var(--gold2);
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.focus-explain-header span:last-child{
+  color:#bec7dc;
+  font-size:.70rem;
+  font-weight:600;
+  white-space:nowrap;
+}
+.focus-explain-body{
+  max-height:0;
+  overflow:hidden;
+  opacity:0;
+  transition:max-height .32s ease,opacity .25s ease,padding .25s ease;
+  padding:0 16px;
+}
+.focus-explain-body.open{
+  max-height:520px;
+  opacity:1;
+  padding:14px 16px 16px;
+}
+.focus-explain-content{
+  max-width:1180px;
+}
+.focus-explain-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.focus-explain-item{
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  background:rgba(12,14,26,.56);
+}
+.focus-explain-kicker{
+  display:block;
+  margin-bottom:6px;
+  color:var(--gold2);
+  font-size:.66rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.focus-explain-item p{
+  color:#cbd3e6;
+  font-size:.77rem;
+  line-height:1.68;
+  margin:0;
+  max-width:64ch;
+}
+.focus-explain-note{
+  display:flex;
+  align-items:flex-start;
+  gap:9px;
+  margin-top:12px;
+  padding:12px 14px;
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:12px;
+  background:rgba(200,151,58,.075);
+  color:#e8d3a5;
+  font-size:.73rem;
+  line-height:1.6;
+}
+.focus-explain-note strong{
+  color:var(--gold3);
+  font-weight:700;
+}
+.focus-explain-body strong{
+  color:var(--text);
+  font-weight:700;
+}
+@media(max-width:900px){
+  .focus-explain-grid{grid-template-columns:1fr}
+  .focus-explain-body.open{max-height:720px}
+}
 
 /* ── CHARTS ── */
 .charts-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:14px}
@@ -575,13 +841,54 @@ td.col-pct{text-align:right}
 .ptax-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
 
 /* ── FOOTER ── */
-footer{text-align:center;margin-top:60px;font-size:.67rem;color:var(--muted2);
-  letter-spacing:.04em;border-top:1px solid var(--border2);padding-top:26px;line-height:2.2}
-footer span{color:var(--gold)}
+footer{
+  margin-top:60px;
+  padding-top:30px;
+  border-top:1px solid rgba(200,151,58,.16);
+}
+.footer-disclaimer{
+  max-width:1180px;
+  margin:0 auto;
+  padding:22px 26px;
+  border:1px solid rgba(200,151,58,.18);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(200,151,58,.075),rgba(255,255,255,.018));
+  color:#aeb7cf;
+  font-size:.74rem;
+  line-height:1.75;
+  text-align:left;
+  box-shadow:0 10px 40px rgba(0,0,0,.22);
+}
+.footer-disclaimer-title{
+  color:var(--gold2);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.15rem;
+  font-weight:700;
+  margin-bottom:10px;
+  letter-spacing:.02em;
+}
+.footer-disclaimer p{
+  margin:8px 0;
+}
+.footer-disclaimer strong{
+  color:var(--text);
+  font-weight:600;
+}
+.footer-disclaimer-signature{
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.07);
+  color:var(--gold2);
+  font-size:.68rem;
+  letter-spacing:.04em;
+}
 
 /* ── RESPONSIVO ── */
 @media(max-width:768px){
   .page{padding:18px 14px 60px}
+  .top-disclaimer{font-size:.7rem;padding:12px 14px}
+  .dolar-source-note,.dolar-chart-source{align-items:flex-start;font-size:.61rem;margin-left:12px;margin-right:12px}
+  .footer-disclaimer{padding:18px 18px;font-size:.7rem}
   .kpi-grid{grid-template-columns:1fr 1fr;gap:10px}
   .kpi-value{font-size:1.5rem}
   .focus-grid{grid-template-columns:1fr 1fr}
@@ -627,6 +934,272 @@ footer span{color:var(--gold)}
 .v2-bar-bg{width:28px;height:3px;border-radius:2px;background:var(--bg3);overflow:hidden;flex-shrink:0;border:1px solid var(--border2)}
 .v2-bar-p{height:100%;border-radius:2px;background:var(--green)}.v2-bar-n{height:100%;border-radius:2px;background:var(--red)}
 
+
+
+/* ─────────────────────────────────────────────
+   AJUSTE DE LEGIBILIDADE — versão profissional
+   Melhora contraste, tamanho de fonte e hierarquia visual.
+───────────────────────────────────────────── */
+body{
+  font-weight:400;
+  text-rendering:geometricPrecision;
+}
+
+.brand-text p,
+.live-badge,
+.section-badge,
+.kpi-sub,
+.indic-tabs-label,
+.filter-label,
+#resultInfo{
+  color:var(--muted);
+}
+
+.live-badge,
+.section-badge{
+  border-color:rgba(255,255,255,.10);
+  background:rgba(17,21,38,.72);
+}
+
+.kpi-label,
+.indic-ref-label,
+.poup-rule-label,
+.fcad-label,
+.indic-title,
+.detail-key,
+.docs-title{
+  color:#9faccc;
+  font-weight:700;
+}
+
+.kpi-label{
+  font-size:.66rem;
+  letter-spacing:.105em;
+}
+
+.kpi-sub{
+  font-size:.70rem;
+  line-height:1.45;
+}
+
+.section-title h2{
+  font-size:1.22rem;
+}
+
+.section-badge{
+  font-size:.66rem;
+  padding:4px 10px;
+}
+
+.indic-ref-card{
+  padding:22px 24px;
+  border-color:rgba(200,151,58,.24);
+  background:linear-gradient(180deg,rgba(17,21,38,.96),rgba(12,14,26,.96));
+}
+
+.indic-ref-label{
+  font-size:.67rem;
+  letter-spacing:.085em;
+  margin-bottom:8px;
+}
+
+.indic-ref-val{
+  font-size:2.08rem;
+}
+
+.indic-ref-sub,
+.selic-change-badge,
+.cdi-rel,
+.poup-rule-sub,
+.indic-subtitle,
+.indic-val-sub,
+.indic-pct-label,
+.v2-sub,
+.ind-v2-sub,
+.focus-ref,
+.fcad-sub,
+.rank-cat,
+.detail-val,
+.docs-note{
+  color:#a6b0c9;
+}
+
+.indic-ref-sub{
+  font-size:.68rem;
+  line-height:1.45;
+}
+
+.selic-change-badge,
+.cdi-rel{
+  font-size:.64rem;
+  line-height:1.45;
+}
+
+.cdi-rel{
+  font-style:normal;
+}
+
+.poup-rule-label{
+  font-size:.63rem;
+}
+
+.poup-rule-sub{
+  font-size:.64rem;
+  line-height:1.35;
+}
+
+.poup-expand-btn,
+.copom-link,
+.chart-tab,
+.indic-tab,
+.ptax-btn,
+.boletim-btn,
+.page-btn{
+  color:#b4bdd3;
+  border-color:rgba(255,255,255,.12);
+  background:rgba(17,21,38,.70);
+}
+
+.poup-expand-btn:hover,
+.copom-link:hover,
+.chart-tab:hover,
+.indic-tab:hover,
+.ptax-btn:hover,
+.boletim-btn:hover,
+.page-btn:hover:not(:disabled){
+  color:var(--gold2);
+  border-color:rgba(232,187,106,.55);
+  background:rgba(200,151,58,.14);
+}
+
+.poup-explain-text,
+.fund-quick-note-text,
+.footer-disclaimer,
+.dolar-metric-label,
+.dolar-day-ref{
+  color:#b6bfd5;
+}
+
+.dolar-timeline-title,
+.dolar-chart-title,
+.dolar-day-title,
+.chart-card-title,
+.rank-card-title{
+  font-size:1.08rem;
+}
+
+.dolar-timeline-sub,
+.dolar-chart-sub,
+.dolar-day-sub{
+  color:#a7b1cb;
+  font-size:.66rem;
+  line-height:1.45;
+}
+
+.dolar-month-label{
+  color:#8792b0;
+  font-size:.61rem;
+}
+
+.dolar-month-val{
+  font-size:1.18rem;
+}
+
+.dolar-month-var{
+  font-size:.64rem;
+}
+
+.dolar-source-note,
+.dolar-chart-source{
+  margin:0 16px 14px;
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.09);
+  border-radius:10px;
+  background:rgba(255,255,255,.035);
+  color:#aeb8d2;
+  font-size:.64rem;
+  line-height:1.55;
+  font-family:'DM Sans',sans-serif;
+}
+
+.dolar-chart-source{
+  margin:0 18px 16px;
+}
+
+.dolar-source-note strong,
+.dolar-chart-source strong{
+  color:var(--gold2);
+}
+
+.dolar-metric{
+  background:rgba(24,29,54,.72);
+  border-color:rgba(255,255,255,.10);
+}
+
+.dolar-metric-label{
+  font-size:.65rem;
+}
+
+.dolar-metric-val{
+  font-size:.82rem;
+}
+
+.indic-table-v2 th,
+th{
+  color:#d6a958;
+}
+
+.th-sub,
+.group-lbl,
+.ind-v2-sub,
+.v2-sub{
+  color:#9aa5c1;
+}
+
+.v2-val,
+.ind-v2-title,
+.indic-title,
+.rank-name,
+.detail-val,
+td{
+  color:var(--text);
+}
+
+.fcad-sub,
+.rank-cat,
+.indic-subtitle{
+  font-size:.66rem;
+}
+
+.fcad-label,
+.indic-subtitle,
+.detail-key{
+  color:#98a4c3;
+}
+
+.fund-quick-note-disclaimer{
+  color:#97a2bd;
+  font-size:.60rem;
+}
+
+footer{
+  color:#aeb8d2;
+}
+
+.footer-disclaimer{
+  color:#b7c0d7;
+}
+
+.footer-disclaimer-signature{
+  color:var(--gold2);
+}
+
+@media(max-width:768px){
+  .indic-ref-card{padding:18px 18px}
+  .indic-ref-label{font-size:.64rem}
+  .indic-ref-sub,.selic-change-badge,.cdi-rel,.poup-rule-sub{font-size:.62rem}
+}
+
 </style>
 </head>
 <body>
@@ -638,19 +1211,21 @@ footer span{color:var(--gold)}
     <div class="brand-logo">E</div>
     <div class="brand-text">
       <h1>Catálogo de Fundos CAIXA</h1>
-      <p>Desenvolvido por Elton Cardoso Teotonio · Produção própria</p>
+      <p>Consulta e análise de informações públicas sobre fundos e mercado</p>
     </div>
   </div>
   <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
 
 <!-- ═══════════════════════════════════════════════ DISCLAIMER ══ -->
-<div class="section-gap" style="margin-top:18px">
-  <div style="background:rgba(200,151,58,.07);border:1px solid var(--border);border-radius:14px;padding:14px 18px;color:var(--muted);font-size:.72rem;line-height:1.55">
-    <strong style="color:var(--gold2)">Aviso:</strong>
-    esta ferramenta não é institucional da Caixa Econômica Federal, da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA.
-    Trata-se de produção própria, desenvolvida por <strong style="color:var(--text)">Elton Cardoso Teotonio</strong>, para apoio informativo à consulta e organização de dados públicos.
-    As informações devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.
+<div class="top-disclaimer">
+  <div class="top-disclaimer-icon">ℹ️</div>
+  <div>
+    <strong>Aviso:</strong>
+    ferramenta de <span>produção própria</span>, com finalidade informativa e auxiliar.
+    Não representa ferramenta institucional da Caixa Econômica Federal, da CAIXA Asset
+    ou de qualquer empresa do conglomerado CAIXA. Consulte sempre as fontes oficiais
+    antes de qualquer decisão.
   </div>
 </div>
 
@@ -683,7 +1258,6 @@ footer span{color:var(--gold)}
         <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
         <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
         <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-          <a class="copom-link" href="https://www.bcb.gov.br/detalhenoticia/20739/nota" target="_blank" rel="noopener">📅 Calendário COPOM ↗</a>
           <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
         </div>
         <!-- Card expansível do Calendário COPOM 2026 -->
@@ -740,7 +1314,6 @@ footer span{color:var(--gold)}
             <span class="poup-explain-text">Cadernetas abertas antes de 04/05/2012. Rende <strong style="color:var(--text)">sempre TR + 0,50% a.m.</strong>, independentemente do nível da Selic. Com a Selic atual em 14,50%, a regra antiga rende menos que a nova.</span>
           </div>
           <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
-          <a class="poup-bcb-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener" style="margin-top:4px">📊 Histórico de cotações BCB ↗</a>
         </div>
       </div>
     </div>
@@ -916,7 +1489,7 @@ footer span{color:var(--gold)}
 <div class="section-gap">
   <div class="section-title">
     <h2>💵 Câmbio — Dólar BRL/USD</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB — tempo real</span>
+    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB — cotação oficial</span>
   </div>
 
   <div class="dolar-grid">
@@ -925,7 +1498,7 @@ footer span{color:var(--gold)}
     <div class="dolar-day-card">
       <div class="dolar-day-header">
         <div class="dolar-day-title">💵 Cotação do Dia</div>
-        <div class="dolar-day-sub" id="dolar-day-src">Fonte: PTAX BCB · Carregando...</div>
+        <div class="dolar-day-sub" id="dolar-day-src">Fonte: Banco Central do Brasil · Carregando...</div>
       </div>
       <div class="dolar-day-body">
         <div id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação...</div>
@@ -963,15 +1536,22 @@ footer span{color:var(--gold)}
     <!-- Coluna direita: timeline + gráfico -->
     <div class="dolar-right">
 
-      <!-- Timeline mensal expansível -->
+      <!-- Timeline mensal aberta por padrão -->
       <div class="dolar-timeline-card">
-        <div class="dolar-timeline-header" onclick="toggleDolarTimeline()">
-          <span class="dolar-timeline-title">📅 Fechamentos Mensais</span>
-          <span class="dolar-timeline-toggle" id="dolarTimelineToggle">▼</span>
+        <div class="dolar-timeline-header">
+          <div class="dolar-timeline-title-wrap">
+            <span class="dolar-timeline-title">📅 Fechamentos Mensais</span>
+            <span class="dolar-timeline-sub">Ano corrente · Fonte: Banco Central do Brasil</span>
+          </div>
+          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
         </div>
-        <div class="dolar-timeline-body" id="dolarTimelineBody">
+        <div class="dolar-timeline-body open" id="dolarTimelineBody">
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
+          </div>
+          <div class="dolar-source-note">
+            <span class="source-label">Fonte</span>
+            <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Fechamentos mensais pelo último registro disponível de cada mês.</span>
           </div>
         </div>
       </div>
@@ -980,8 +1560,8 @@ footer span{color:var(--gold)}
       <div class="dolar-chart-card">
         <div class="dolar-chart-header">
           <div>
-            <div class="dolar-chart-title">📈 Dólar no Ano — PTAX Diária</div>
-            <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando dados BCB...</div>
+            <div class="dolar-chart-title">📈 Dólar no Ano — PTAX</div>
+            <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando informações de mercado...</div>
           </div>
           <div class="chart-tabs">
             <button class="chart-tab active" data-dolar-range="year">2026</button>
@@ -990,6 +1570,13 @@ footer span{color:var(--gold)}
           </div>
         </div>
         <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
+        <div class="dolar-chart-source">
+          <span class="source-label">Fonte</span>
+          <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Série exibida conforme os períodos selecionados no gráfico.</span>
+          <div class="dolar-source-actions">
+            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico de cotações BCB ↗</a>
+          </div>
+        </div>
       </div>
 
     </div><!-- /dolar-right -->
@@ -998,13 +1585,47 @@ footer span{color:var(--gold)}
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
 <div class="section-gap">
-  <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
-    <div style="display:flex;align-items:center;gap:10px">
-      <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
-      <span class="section-badge"><span class="badge-dot blue"></span>Banco Central do Brasil</span>
+  <div class="section-title focus-section-title">
+    <div class="focus-title-block">
+      <div class="focus-title-line">
+        <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
+        <span class="section-badge"><span class="badge-dot blue"></span>Banco Central do Brasil</span>
+      </div>
+      <div class="focus-ref" id="focusRef">Carregando último boletim...</div>
     </div>
-    <div class="focus-ref" id="focusRef">Carregando...</div>
   </div>
+
+  <div class="focus-explain-card">
+    <button class="focus-explain-header" type="button" onclick="toggleFocusExplain()">
+      <span>ℹ️ Entenda o Boletim Focus</span>
+      <span id="focusExplainIcon">Mostrar ▼</span>
+    </button>
+    <div class="focus-explain-body" id="focusExplainBody">
+      <div class="focus-explain-content">
+        <div class="focus-explain-grid">
+          <div class="focus-explain-item">
+            <span class="focus-explain-kicker">O que é</span>
+            <p>
+              O Boletim Focus é uma publicação do <strong>Banco Central do Brasil</strong> que consolida
+              expectativas de mercado para inflação, Selic, PIB e câmbio.
+            </p>
+          </div>
+          <div class="focus-explain-item">
+            <span class="focus-explain-kicker">Por que o mercado utiliza</span>
+            <p>
+              As projeções reúnem estimativas de bancos, corretoras, consultorias e distribuidoras,
+              ajudando a acompanhar o consenso econômico e comparar cenários para os próximos anos.
+            </p>
+          </div>
+        </div>
+        <div class="focus-explain-note">
+          <span>⚠️</span>
+          <span><strong>Atenção:</strong> as projeções não são garantia de resultado futuro. Elas servem como referência de cenário e podem mudar conforme novos dados econômicos são divulgados.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="focus-grid" id="focusGrid">
     <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:.8rem">
       <div class="spinner"></div>Buscando expectativas...
@@ -1154,7 +1775,7 @@ footer span{color:var(--gold)}
       <button class="modal-close" onclick="fecharModalPTAX()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Buscando dados do Bacen...</div>
+      <div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Atualizando informações do Banco Central...</div>
       <table class="ptax-table" id="ptaxTable" style="display:none">
         <thead><tr>
           <th style="text-align:left">Mês / Ano</th>
@@ -1165,25 +1786,36 @@ footer span{color:var(--gold)}
         <tbody id="ptaxBody"></tbody>
       </table>
     </div>
-    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX (cotação de venda, último dia útil do mês) · API pública BCB</div>
+    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX, cotação de venda do dólar americano.</div>
   </div>
 </div>
 
 <footer>
-  <div style="max-width:1100px;margin:0 auto;text-align:left;line-height:1.7">
-    <div style="color:var(--gold2);font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;margin-bottom:8px">
-      Aviso importante
-    </div>
-    <div>
-      Esta ferramenta é uma produção própria, desenvolvida por <span>Elton Cardoso Teotonio</span>, com finalidade de apoio à organização, consulta e análise de informações públicas sobre fundos de investimento.
-    </div>
-    <div style="margin-top:8px">
-      Este site não é uma ferramenta institucional da <span>Caixa Econômica Federal</span>, da <span>CAIXA Asset</span> ou de qualquer empresa do conglomerado CAIXA. As informações apresentadas são de responsabilidade do desenvolvedor desta ferramenta e devem ser conferidas nas fontes oficiais antes de qualquer tomada de decisão.
-    </div>
-    <div style="margin-top:8px">
-      Dados públicos utilizados: fundos.caixa.gov.br, Banco Central do Brasil, CAIXA Asset Management e demais fontes públicas de mercado eventualmente indicadas na própria página.
-    </div>
-    <div style="margin-top:10px;color:var(--muted)">
+  <div class="footer-disclaimer">
+    <div class="footer-disclaimer-title">Aviso importante</div>
+
+    <p>
+      Esta ferramenta é uma produção própria, desenvolvida por
+      <strong>Elton Cardoso Teotonio</strong>, com finalidade exclusivamente
+      informativa e auxiliar para organização, consulta e análise de informações
+      públicas sobre fundos de investimento e indicadores de mercado.
+    </p>
+
+    <p>
+      Este site não é uma ferramenta institucional da Caixa Econômica Federal,
+      da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA. As informações
+      apresentadas não constituem recomendação de investimento, oferta, solicitação
+      de aplicação ou substituição das fontes oficiais.
+    </p>
+
+    <p>
+      As informações devem ser sempre conferidas nos canais oficiais antes de
+      qualquer tomada de decisão. As principais fontes públicas consultadas incluem:
+      fundos.caixa.gov.br, Banco Central do Brasil, CAIXA Asset Management e demais
+      fontes públicas de mercado eventualmente indicadas na própria página.
+    </p>
+
+    <div class="footer-disclaimer-signature">
       Desenvolvido por Elton Cardoso Teotonio · Produção própria · Uso informativo e auxiliar
     </div>
   </div>
@@ -1239,6 +1871,18 @@ function togglePoupanca(){
 }
 
 /* ════════════════════════════════════════════════════
+   BOLETIM FOCUS — CARD EXPLICATIVO
+════════════════════════════════════════════════════ */
+function toggleFocusExplain(){
+  const body = $('focusExplainBody');
+  const icon = $('focusExplainIcon');
+  if(!body) return;
+
+  const isOpen = body.classList.toggle('open');
+  if(icon) icon.textContent = isOpen ? 'Recolher ▲' : 'Mostrar ▼';
+}
+
+/* ════════════════════════════════════════════════════
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
@@ -1248,7 +1892,7 @@ async function carregarCDIPeriodos(){
     console.info('[CDI] Usando acumulados do mercado_atual.json');
   } else {
     console.warn('[CDI] mercado_atual.json não trouxe acumulados CDI. Execute o +.');
-    if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'sem dados no JSON';
+    if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'histórico indisponível';
   }
   atualizarTabelaIndicadores();
 }
@@ -1263,7 +1907,7 @@ async function carregarIPCAPeriodos(){
     console.info('[IPCA] Usando acumulados do mercado_atual.json');
   } else {
     console.warn('[IPCA] mercado_atual.json não trouxe acumulados IPCA. Execute o +.');
-    if($('ipca-acum-sub-v2')) $('ipca-acum-sub-v2').textContent = 'sem dados no JSON';
+    if($('ipca-acum-sub-v2')) $('ipca-acum-sub-v2').textContent = 'histórico indisponível';
   }
   atualizarTabelaIndicadores();
 }
@@ -1282,7 +1926,7 @@ async function carregarPTAXHistorico(){
   } else {
     console.warn('[PTAX] mercado_atual.json não trouxe ptax_historico. Execute o +.');
     const sub = $('dolar-chart-sub');
-    if(sub) sub.textContent = 'Sem PTAX histórico no mercado_atual.json';
+    if(sub) sub.textContent = 'Histórico PTAX temporariamente indisponível';
   }
 }
 
@@ -1391,7 +2035,7 @@ async function carregarDolarDia(){
       const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
       $('dolar-day-ref').textContent = `Referência: ${diaRef}`;
       $('dolar-hora').textContent = hora + ' (BCB)';
-      $('dolar-day-src').textContent = `PTAX BCB · ${diaRef}`;
+      $('dolar-day-src').textContent = `Banco Central do Brasil · PTAX · ${diaRef}`;
 
       // Variação vs dia anterior
       if(i === 0 && data.value.length > 1){
@@ -1451,32 +2095,49 @@ function renderDolarMensais(){
   if(!_ptaxHistorico.length) return;
 
   const byMonth = {};
+
   _ptaxHistorico.forEach(item => {
-    const dt = new Date(item.dataHoraCotacao);
+    const dataRef = item.dataHoraCotacao || item.data_ref;
+    const dt = new Date(dataRef);
+    if(isNaN(dt)) return;
+
     const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-    if(!byMonth[key] || new Date(item.dataHoraCotacao) > new Date(byMonth[key].dataHoraCotacao)){
+
+    // Guarda a última cotação disponível de cada mês.
+    if(!byMonth[key] || new Date(dataRef) > new Date(byMonth[key].dataHoraCotacao || byMonth[key].data_ref)){
       byMonth[key] = item;
     }
   });
 
   const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
-  // Últimos 18 meses
-  const slice = sorted.slice(-18);
-  const lastKey = slice[slice.length-1]?.[0];
+  if(!sorted.length) return;
+
+  // Usa como ano corrente o ano do último dado disponível no histórico.
+  // Assim, se o JSON ainda estiver em abril/2026, mostra jan→abr/2026;
+  // quando entrar maio, junho etc., os meses entram automaticamente.
+  const lastKey = sorted[sorted.length - 1][0];
+  const anoCorrente = lastKey.split('-')[0];
+  const mesesAnoCorrente = sorted.filter(([key]) => key.startsWith(anoCorrente + '-'));
 
   const container = $('dolarMonths');
-  container.innerHTML = slice.map(([key, item], idx) => {
+  if(!container) return;
+
+  container.innerHTML = mesesAnoCorrente.map(([key, item], idx) => {
     const [ano, mes] = key.split('-');
     const label = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
-    const val = parseFloat(item.cotacaoVenda);
+    const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
     const isCurrent = key === lastKey;
 
     let varHtml = '<span class="dolar-month-var zero">—</span>';
+
     if(idx > 0){
-      const prevVal = parseFloat(slice[idx-1][1].cotacaoVenda);
-      const varPct = ((val - prevVal) / prevVal) * 100;
-      const cls = varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero'; // convenção visual: positivo verde, negativo vermelho
-      varHtml = `<span class="dolar-month-var ${cls}">${signPct(varPct)}${fmt(varPct)}</span>`;
+      const prevVal = parseFloat(mesesAnoCorrente[idx-1][1].cotacaoVenda || mesesAnoCorrente[idx-1][1].cotacao || 0);
+
+      if(prevVal){
+        const varPct = ((val - prevVal) / prevVal) * 100;
+        const cls = varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
+        varHtml = `<span class="dolar-month-var ${cls}">${signPct(varPct)}${fmt(varPct)}</span>`;
+      }
     }
 
     return `<div class="dolar-month-item${isCurrent ? ' current' : ''}">
@@ -1490,8 +2151,10 @@ function renderDolarMensais(){
 function toggleDolarTimeline(){
   const body = $('dolarTimelineBody');
   const toggle = $('dolarTimelineToggle');
+  if(!body || !toggle) return;
+
   const isOpen = body.classList.toggle('open');
-  toggle.classList.toggle('open', isOpen);
+  toggle.textContent = isOpen ? 'Recolher ▲' : 'Mostrar ▼';
 }
 
 /* ════════════════════════════════════════════════════
@@ -1530,15 +2193,15 @@ function buildChartDolar(range){
     const _src=_ptaxDiario.length>10?_ptaxDiario:_ptaxHistorico;
     dados=_src.filter(d=>new Date(d.dataHoraCotacao).getFullYear()===ANO_ATUAL);
     const _tipoLabel=(_ptaxDiario.length>10&&range==='year')?'diária':'mensal';
-  if($('dolar-chart-sub')) $('dolar-chart-sub').textContent=`PTAX ${_tipoLabel} · ${dados.length} registros`;
+  if($('dolar-chart-sub')) $('dolar-chart-sub').textContent=`PTAX ${_tipoLabel} · ${dados.length} registros · Banco Central do Brasil`;
   } else if(range === '12m'){
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-12);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
-    $('dolar-chart-sub').textContent = `Últimos 12 meses · ${dados.length} registros`;
+    $('dolar-chart-sub').textContent = `Últimos 12 meses · ${dados.length} registros · Banco Central do Brasil`;
   } else { // 24m
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-24);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
-    $('dolar-chart-sub').textContent = `Últimos 24 meses · ${dados.length} registros`;
+    $('dolar-chart-sub').textContent = `Últimos 24 meses · ${dados.length} registros · Banco Central do Brasil`;
   }
 
   if(!dados.length) return;
@@ -1930,22 +2593,110 @@ function focusCardHTML(icon, label, sub, dados){
     <div class="fcad-sub">${sub}</div><div class="fcad-rows">${rows}</div></div>`;
 }
 
+function normalizarDataFocus(dataRef){
+  if(!dataRef) return null;
+  const raw = String(dataRef).trim();
+
+  // Aceita yyyy-mm-dd, dd/mm/yyyy, yyyy/mm/dd ou yyyymmdd.
+  let m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  if(m) return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
+
+  m = raw.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if(m) return { ano:m[3], mes:m[2], dia:m[1], br:raw };
+
+  m = raw.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+  if(m) return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
+
+  m = raw.match(/^(\d{4})(\d{2})(\d{2})$/);
+  if(m) return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
+
+  return null;
+}
+
+function formatarDataFocusObj(dateObj){
+  const ano = String(dateObj.getFullYear());
+  const mes = String(dateObj.getMonth()+1).padStart(2,'0');
+  const dia = String(dateObj.getDate()).padStart(2,'0');
+  return { ano, mes, dia, br:`${dia}/${mes}/${ano}` };
+}
+
+function subtrairDiasFocus(dataFocus, dias){
+  if(!dataFocus) return null;
+  const d = new Date(`${dataFocus.ano}-${dataFocus.mes}-${dataFocus.dia}T12:00:00`);
+  if(isNaN(d)) return null;
+  d.setDate(d.getDate() - dias);
+  return formatarDataFocusObj(d);
+}
+
+function montarUrlPdfFocus(dataFocus){
+  if(!dataFocus) return 'https://www.bcb.gov.br/publicacoes/focus';
+  return `https://www.bcb.gov.br/content/focus/focus/R${dataFocus.ano}${dataFocus.mes}${dataFocus.dia}.pdf`;
+}
+
+function extrairDataDoPdfUrlFocus(url){
+  const m = String(url || '').match(/R(\d{4})(\d{2})(\d{2})\.pdf/i);
+  if(!m) return null;
+  return { ano:m[1], mes:m[2], dia:m[3], br:`${m[3]}/${m[2]}/${m[1]}` };
+}
+
+function obterPdfFocus(focus, dataFocus){
+  // Prioridade 1: URL já validada pelo robô em mercado_atual.json.
+  const urlValidada = focus?.pdf_url || focus?.pdfUrl || focus?.url_pdf || focus?.focus_pdf_url;
+  if(urlValidada){
+    return {
+      url: urlValidada,
+      data: extrairDataDoPdfUrlFocus(urlValidada) || normalizarDataFocus(focus?.data_pdf || focus?.data_pdf_br) || dataFocus,
+      origem: 'validado'
+    };
+  }
+
+  // Prioridade 2: data do PDF validada pelo robô.
+  const dataPdf = normalizarDataFocus(focus?.data_pdf || focus?.dataPdf || focus?.data_pdf_br || focus?.referencia_pdf);
+  if(dataPdf){
+    return { url: montarUrlPdfFocus(dataPdf), data: dataPdf, origem: 'data_pdf' };
+  }
+
+  // Fallback conservador: quando o OData já mostra a sexta mais recente,
+  // mas o PDF correspondente ainda não foi publicado, usa a semana anterior.
+  const dataConservadora = subtrairDiasFocus(dataFocus, 7) || dataFocus;
+  return { url: montarUrlPdfFocus(dataConservadora), data: dataConservadora, origem: 'fallback_conservador' };
+}
+
+function obterDataReferenciaFocus(focus){
+  const grupos = ['IPCA','Selic','PIB','Cambio','IGPM'];
+
+  for(const grupo of grupos){
+    const dados = focus?.[grupo];
+    if(!dados) continue;
+
+    for(const ano of Object.keys(dados)){
+      const dataRef = dados?.[ano]?.data_ref || dados?.[ano]?.data || dados?.[ano]?.referencia;
+      const normalizada = normalizarDataFocus(dataRef);
+      if(normalizada) return normalizada;
+    }
+  }
+
+  return null;
+}
+
 function carregarFocus(focus, atualizadoEm){
   const grid = $('focusGrid');
   const refEl = $('focusRef');
   if(!focus || Object.keys(focus).length === 0){
     grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--muted);font-size:.78rem">Dados do Focus não disponíveis.</div>`;
+    if(refEl) refEl.innerHTML = `<span class="focus-ref-label">Boletim Focus temporariamente indisponível</span>`;
     return;
   }
-  const primeiroAno = Object.keys(focus.IPCA || {})[0];
-  const dataRef = focus.IPCA?.[primeiroAno]?.data_ref || '';
-  const dataFormatada = dataRef ? dataRef.split('-').reverse().join('/') : (atualizadoEm?.split(' ')[0] || '');
-  const d = new Date();
-  const dia = d.getDay();
-  d.setDate(d.getDate() - (dia>=5 ? dia-5 : dia+2));
-  const pdfDate = `${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`;
-  const pdfUrl = `https://www.bcb.gov.br/content/focus/focus/R${pdfDate}.pdf`;
-  refEl.innerHTML = `Ref.: ${dataFormatada} · <a href="${pdfUrl}" target="_blank" rel="noopener">Baixar PDF ↗</a>`;
+
+  const dataFocus = obterDataReferenciaFocus(focus);
+  const pdfFocus = obterPdfFocus(focus, dataFocus);
+  const dataFormatada = pdfFocus?.data?.br || dataFocus?.br || (atualizadoEm?.split(' ')[0] || 'data não informada');
+  const pdfUrl = pdfFocus?.url || 'https://www.bcb.gov.br/publicacoes/focus';
+
+  if(refEl){
+    refEl.innerHTML = `<span class="focus-ref-label">Último boletim Focus disponível: <strong>${dataFormatada}</strong></span><a class="focus-pdf-link" href="${pdfUrl}" target="_blank" rel="noopener">Baixe aqui o último boletim Focus (PDF) ↗</a>`;
+  }
+
   grid.innerHTML = [
     focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
     focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
@@ -1956,10 +2707,10 @@ function carregarFocus(focus, atualizadoEm){
 }
 
 function carregarFocusFallback(){
-  if($('focusRef')) $('focusRef').innerHTML = 'Dados offline';
+  if($('focusRef')) $('focusRef').innerHTML = '<span class="focus-ref-label">Boletim Focus temporariamente indisponível</span>';
   if($('focusGrid')) $('focusGrid').innerHTML = `<div style="grid-column:1/-1;padding:20px;color:var(--muted);font-size:.75rem;
     text-align:center;border:1px dashed var(--border2);border-radius:10px">
-    ⚠️ mercado_atual.json não carregado. Execute o robô para atualizar os dados.</div>`;
+    ⚠️ Indicadores de mercado temporariamente indisponíveis. Atualize a página em alguns instantes.</div>`;
 }
 
 /* ════════════════════════════════════════════════════
@@ -2729,13 +3480,13 @@ async function inicializarGraficos(d){
   }
 
   if(hist.length) buildChartIpca(hist,24);
-  else marcarGraficoSemDados('chartIpca', 'IPCA histórico não disponível no mercado_atual.json');
+  else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
 
   if(selic.length) buildChartSelic(selic,12);
-  else marcarGraficoSemDados('chartSelic', 'Histórico Selic não disponível. Confira o arquivo "historico da selic do BC.json".');
+  else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
 
   if(meta.length) buildChartMeta(meta);
-  else marcarGraficoSemDados('chartMeta', 'IPCA 12M vs Meta não disponível. Confira o arquivo "meta-vs-inflacao-efetiva.json".');
+  else marcarGraficoSemDados('chartMeta', 'Histórico de inflação e meta temporariamente indisponível.');
 
   document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
     if(btn.dataset.bound==='1') return;
@@ -2812,7 +3563,7 @@ async function carregarPTAX(){
     }).join('');
     loading.style.display='none'; table.style.display='table'; _ptaxCarregado=true;
   }catch(err){
-    loading.innerHTML=`<div style="color:var(--muted)">PTAX histórico não disponível no JSON.<br><small>Execute o + para gerar mercado_atual.json com ptax_historico.</small></div>`;
+    loading.innerHTML=`<div style="color:var(--muted)">Histórico PTAX temporariamente indisponível.<br><small>Atualize a página em alguns instantes.</small></div>`;
   }
 }
 
