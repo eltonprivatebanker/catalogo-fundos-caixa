@@ -437,24 +437,31 @@ def _descobrir_focus_pdf_disponivel(headers, max_semanas=8):
     Nem sempre o PDF da última sexta-feira já está publicado quando o robô ou a página
     rodam. Por isso não é seguro montar o link apenas com a data do computador.
     """
+    log("[Focus PDF] Procurando PDF oficial mais recente disponível...")
+
     for offset in range(max_semanas):
         data_str, data_br = _ultima_sexta(offset)
         url_pdf = f"https://www.bcb.gov.br/content/focus/focus/R{data_str}.pdf"
+
         try:
             res = requests.get(url_pdf, headers=headers, timeout=20)
             content_type = res.headers.get("Content-Type", "").lower()
+            tamanho = len(res.content or b"")
 
-            if res.status_code == 200 and ("pdf" in content_type or len(res.content) > 10000):
+            if res.status_code == 200 and ("pdf" in content_type or tamanho > 10000):
+                log(f"[Focus PDF] PDF disponível encontrado: R{data_str}.pdf ({data_br})")
                 return {
                     "data_pdf": data_str,
                     "data_pdf_br": data_br,
                     "pdf_url": url_pdf,
                 }
 
-            log(f"[Focus PDF] R{data_str}.pdf ainda indisponível — HTTP {res.status_code}")
+            log(f"[Focus PDF] R{data_str}.pdf indisponível — HTTP {res.status_code} | {tamanho} bytes")
+
         except Exception as e:
             log(f"[Focus PDF] Erro ao testar R{data_str}.pdf: {e}")
 
+    log("[Focus PDF] Nenhum PDF disponível encontrado nas últimas semanas.")
     return {}
 
 
@@ -1309,6 +1316,286 @@ class ColetorMercado:
             pass
         return {"atual": None, "anterior": None}
 
+    # ──────────────────────────────────────────────────────────────────────
+    # v17 — Índices de mercado com mês fechado, mês atual, ano, 12M, 24M e 36M
+    # ──────────────────────────────────────────────────────────────────────
+    def _variacao_pct(self, atual, anterior):
+        try:
+            if atual is None or anterior is None:
+                return None
+            atual = float(atual)
+            anterior = float(anterior)
+            if anterior == 0:
+                return None
+            return round(((atual / anterior) - 1) * 100, 2)
+        except Exception:
+            return None
+
+    def _buscar_yahoo_historico(self, ticker, dias=1250):
+        """
+        Busca histórico diário no Yahoo Finance.
+        1250 dias cobre aproximadamente 36 meses com folga.
+        """
+        fim = datetime.now() + timedelta(days=1)
+        inicio = fim - timedelta(days=dias)
+
+        period1 = int(inicio.timestamp())
+        period2 = int(fim.timestamp())
+
+        url = (
+            f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}"
+            f"?period1={period1}&period2={period2}&interval=1d"
+        )
+
+        try:
+            log(f"[Yahoo Histórico] Buscando {ticker}...")
+            res = requests.get(url, headers=self.headers, timeout=25)
+
+            if res.status_code != 200:
+                log(f"[Yahoo Histórico] {ticker} HTTP {res.status_code}")
+                return pd.DataFrame()
+
+            data = res.json()
+            result = data.get("chart", {}).get("result", [])
+
+            if not result:
+                log(f"[Yahoo Histórico] {ticker} sem resultado")
+                return pd.DataFrame()
+
+            result = result[0]
+            timestamps = result.get("timestamp", [])
+            quote = result.get("indicators", {}).get("quote", [{}])[0]
+            closes = quote.get("close", [])
+
+            linhas = []
+            for ts, close in zip(timestamps, closes):
+                if close is None:
+                    continue
+
+                dt = datetime.fromtimestamp(ts).date()
+                linhas.append({
+                    "data": pd.to_datetime(dt),
+                    "fechamento": float(close),
+                })
+
+            df = pd.DataFrame(linhas)
+
+            if df.empty:
+                log(f"[Yahoo Histórico] {ticker} retornou vazio")
+                return df
+
+            df = df.sort_values("data").drop_duplicates("data")
+            df["ano_mes"] = df["data"].dt.strftime("%Y-%m")
+            log(f"[Yahoo Histórico] {ticker} OK — {len(df)} registros")
+            return df
+
+        except Exception as e:
+            log(f"[Yahoo Histórico] Erro em {ticker}: {e}")
+            return pd.DataFrame()
+
+    def _ultimo_registro_ate(self, df, data_limite):
+        """
+        Retorna o último fechamento disponível até determinada data.
+        Resolve fins de semana e feriados.
+        """
+        if df.empty:
+            return None
+
+        data_limite = pd.to_datetime(data_limite)
+        filtrado = df[df["data"] <= data_limite]
+
+        if filtrado.empty:
+            return None
+
+        return filtrado.iloc[-1].to_dict()
+
+    def _fechamento_final_mes(self, df, ano_mes):
+        """
+        Retorna o último fechamento disponível dentro de um mês calendário.
+        Exemplo: 2026-04 retorna o último pregão de abril.
+        """
+        if df.empty:
+            return None
+
+        filtrado = df[df["ano_mes"] == ano_mes]
+
+        if filtrado.empty:
+            return None
+
+        return filtrado.iloc[-1].to_dict()
+
+    def _datas_referencia_indices(self):
+        """
+        Define as referências:
+        - mês anterior fechado;
+        - mês base anterior ao mês fechado;
+        - início do ano;
+        - bases de 12M, 24M e 36M.
+        """
+        hoje = pd.Timestamp(datetime.now().date())
+
+        primeiro_mes_atual = hoje.replace(day=1)
+        ultimo_dia_mes_anterior = primeiro_mes_atual - pd.Timedelta(days=1)
+        primeiro_mes_anterior = ultimo_dia_mes_anterior.replace(day=1)
+        ultimo_dia_mes_base = primeiro_mes_anterior - pd.Timedelta(days=1)
+
+        mes_anterior_key = ultimo_dia_mes_anterior.strftime("%Y-%m")
+        mes_base_key = ultimo_dia_mes_base.strftime("%Y-%m")
+
+        mes_anterior_label = f"{MESES_PT[ultimo_dia_mes_anterior.month - 1]}/{ultimo_dia_mes_anterior.year}"
+        mes_base_label = f"{MESES_PT[ultimo_dia_mes_base.month - 1]}/{ultimo_dia_mes_base.year}"
+
+        return {
+            "hoje": hoje,
+            "mes_anterior_key": mes_anterior_key,
+            "mes_base_key": mes_base_key,
+            "mes_anterior_label": mes_anterior_label,
+            "mes_base_label": mes_base_label,
+            "data_base_ano": pd.Timestamp(year=hoje.year - 1, month=12, day=31),
+            "data_base_12m": hoje - pd.DateOffset(months=12),
+            "data_base_24m": hoje - pd.DateOffset(months=24),
+            "data_base_36m": hoje - pd.DateOffset(months=36),
+        }
+
+    def _resumo_indice_yahoo(self, ticker, nome, dias=1250):
+        """
+        Calcula fechamento mensal, mês atual, ano, 12M, 24M e 36M.
+        Serve para Dólar, Ibovespa, S&P 500, Dow Jones e Nasdaq.
+        """
+        log(f"[Índices] Calculando {nome} ({ticker})...")
+
+        df = self._buscar_yahoo_historico(ticker, dias=dias)
+        ref = self._datas_referencia_indices()
+
+        if df.empty:
+            return {
+                "nome": nome,
+                "ticker": ticker,
+                "fonte": "Yahoo Finance",
+                "erro": "sem dados",
+                "mes_anterior_label": ref["mes_anterior_label"],
+                "mes_base_label": ref["mes_base_label"],
+            }
+
+        fechamento_mes_anterior = self._fechamento_final_mes(df, ref["mes_anterior_key"])
+        fechamento_mes_base = self._fechamento_final_mes(df, ref["mes_base_key"])
+        fechamento_atual = df.iloc[-1].to_dict()
+
+        fechamento_base_ano = self._ultimo_registro_ate(df, ref["data_base_ano"])
+        fechamento_base_12m = self._ultimo_registro_ate(df, ref["data_base_12m"])
+        fechamento_base_24m = self._ultimo_registro_ate(df, ref["data_base_24m"])
+        fechamento_base_36m = self._ultimo_registro_ate(df, ref["data_base_36m"])
+
+        atual = fechamento_atual.get("fechamento") if fechamento_atual else None
+        mes_ant = fechamento_mes_anterior.get("fechamento") if fechamento_mes_anterior else None
+        mes_base = fechamento_mes_base.get("fechamento") if fechamento_mes_base else None
+
+        base_ano = fechamento_base_ano.get("fechamento") if fechamento_base_ano else None
+        base_12m = fechamento_base_12m.get("fechamento") if fechamento_base_12m else None
+        base_24m = fechamento_base_24m.get("fechamento") if fechamento_base_24m else None
+        base_36m = fechamento_base_36m.get("fechamento") if fechamento_base_36m else None
+
+        resultado = {
+            "nome": nome,
+            "ticker": ticker,
+            "fonte": "Yahoo Finance",
+
+            "mes_anterior_label": ref["mes_anterior_label"],
+            "mes_base_label": ref["mes_base_label"],
+
+            "fechamento_mes_anterior": round(mes_ant, 2) if mes_ant is not None else None,
+            "data_mes_anterior": fechamento_mes_anterior["data"].strftime("%Y-%m-%d") if fechamento_mes_anterior else None,
+
+            "fechamento_mes_base": round(mes_base, 2) if mes_base is not None else None,
+            "data_mes_base": fechamento_mes_base["data"].strftime("%Y-%m-%d") if fechamento_mes_base else None,
+
+            "variacao_mes_fechado": self._variacao_pct(mes_ant, mes_base),
+
+            "fechamento_atual": round(atual, 2) if atual is not None else None,
+            "data_atual": fechamento_atual["data"].strftime("%Y-%m-%d") if fechamento_atual else None,
+
+            "variacao_mes_atual": self._variacao_pct(atual, mes_ant),
+            "acum_ano": self._variacao_pct(atual, base_ano),
+            "acum_12m": self._variacao_pct(atual, base_12m),
+            "acum_24m": self._variacao_pct(atual, base_24m),
+            "acum_36m": self._variacao_pct(atual, base_36m),
+
+            "base_ano": round(base_ano, 2) if base_ano is not None else None,
+            "base_12m": round(base_12m, 2) if base_12m is not None else None,
+            "base_24m": round(base_24m, 2) if base_24m is not None else None,
+            "base_36m": round(base_36m, 2) if base_36m is not None else None,
+        }
+
+        log(
+            f"[Índices] {nome}: "
+            f"mês fechado={resultado.get('variacao_mes_fechado')}% | "
+            f"mês atual={resultado.get('variacao_mes_atual')}% | "
+            f"ano={resultado.get('acum_ano')}% | "
+            f"12M={resultado.get('acum_12m')}% | "
+            f"24M={resultado.get('acum_24m')}% | "
+            f"36M={resultado.get('acum_36m')}%"
+        )
+
+        return resultado
+
+    def _converter_indice_usd_para_brl(self, indice_usd, dolar_ref):
+        """
+        Converte índices americanos para BRL usando USD/BRL do Yahoo Finance.
+        Mantém também as variações originais em pontos/USD.
+        """
+        if not indice_usd or not dolar_ref:
+            return indice_usd
+
+        try:
+            fechamento_atual_usd = indice_usd.get("fechamento_atual")
+            fechamento_mes_ant_usd = indice_usd.get("fechamento_mes_anterior")
+            fechamento_mes_base_usd = indice_usd.get("fechamento_mes_base")
+
+            base_ano_usd = indice_usd.get("base_ano")
+            base_12m_usd = indice_usd.get("base_12m")
+            base_24m_usd = indice_usd.get("base_24m")
+            base_36m_usd = indice_usd.get("base_36m")
+
+            dolar_atual = dolar_ref.get("fechamento_atual")
+            dolar_mes_ant = dolar_ref.get("fechamento_mes_anterior")
+            dolar_mes_base = dolar_ref.get("fechamento_mes_base")
+
+            dolar_base_ano = dolar_ref.get("base_ano")
+            dolar_base_12m = dolar_ref.get("base_12m")
+            dolar_base_24m = dolar_ref.get("base_24m")
+            dolar_base_36m = dolar_ref.get("base_36m")
+
+            atual_brl = fechamento_atual_usd * dolar_atual if fechamento_atual_usd and dolar_atual else None
+            mes_ant_brl = fechamento_mes_ant_usd * dolar_mes_ant if fechamento_mes_ant_usd and dolar_mes_ant else None
+            mes_base_brl = fechamento_mes_base_usd * dolar_mes_base if fechamento_mes_base_usd and dolar_mes_base else None
+
+            base_ano_brl = base_ano_usd * dolar_base_ano if base_ano_usd and dolar_base_ano else None
+            base_12m_brl = base_12m_usd * dolar_base_12m if base_12m_usd and dolar_base_12m else None
+            base_24m_brl = base_24m_usd * dolar_base_24m if base_24m_usd and dolar_base_24m else None
+            base_36m_brl = base_36m_usd * dolar_base_36m if base_36m_usd and dolar_base_36m else None
+
+            indice_usd["fechamento_atual_brl"] = round(atual_brl, 2) if atual_brl else None
+            indice_usd["fechamento_mes_anterior_brl"] = round(mes_ant_brl, 2) if mes_ant_brl else None
+            indice_usd["fechamento_mes_base_brl"] = round(mes_base_brl, 2) if mes_base_brl else None
+
+            indice_usd["base_ano_brl"] = round(base_ano_brl, 2) if base_ano_brl else None
+            indice_usd["base_12m_brl"] = round(base_12m_brl, 2) if base_12m_brl else None
+            indice_usd["base_24m_brl"] = round(base_24m_brl, 2) if base_24m_brl else None
+            indice_usd["base_36m_brl"] = round(base_36m_brl, 2) if base_36m_brl else None
+
+            indice_usd["variacao_mes_fechado_brl"] = self._variacao_pct(mes_ant_brl, mes_base_brl)
+            indice_usd["variacao_mes_atual_brl"] = self._variacao_pct(atual_brl, mes_ant_brl)
+            indice_usd["acum_ano_brl"] = self._variacao_pct(atual_brl, base_ano_brl)
+            indice_usd["acum_12m_brl"] = self._variacao_pct(atual_brl, base_12m_brl)
+            indice_usd["acum_24m_brl"] = self._variacao_pct(atual_brl, base_24m_brl)
+            indice_usd["acum_36m_brl"] = self._variacao_pct(atual_brl, base_36m_brl)
+
+        except Exception as e:
+            log(f"[Índices BRL] Erro ao converter {indice_usd.get('nome')}: {e}")
+
+        return indice_usd
+
+
     def _carregar_base_selic(self):
         if SELIC_BASE_PATH.exists():
             try:
@@ -1339,13 +1626,13 @@ class ColetorMercado:
         return []
 
     def coletar_todos(self):
-        log("[MERCADO] Coletando indicadores macro (v16)...")
+        log("[MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...")
 
         # Taxas de referência
         selic_meta    = self._buscar_bcb(432)
         poupanca_nova = self._buscar_bcb(196)
 
-        # ★ v16 — CDI acumulado server-side (resolve CORS/400 no browser)
+        # CDI acumulado server-side (resolve CORS/400 no browser)
         cdi_acum = self._buscar_cdi_acumulado()
         cdi_mensal_atual = cdi_acum["mensal"] if cdi_acum else self._buscar_bcb(4391)
 
@@ -1355,10 +1642,11 @@ class ColetorMercado:
         base_ipca  = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
         ipca_serie = self._merge_ipca(base_ipca, delta_ipca)
-        if ipca_serie: self._salvar_base_ipca(ipca_serie)
+        if ipca_serie:
+            self._salvar_base_ipca(ipca_serie)
 
         ipca_ultimo_mes = ipca_label_mes = ipca_acum_ano = ipca_acum_12m = None
-        ipca_acum_24m = ipca_acum_36m = None   # ★ v16
+        ipca_acum_24m = ipca_acum_36m = None
         ipca_historico = []
         if ipca_serie:
             ultimo = ipca_serie[-1]
@@ -1366,27 +1654,33 @@ class ColetorMercado:
             ipca_label_mes  = ultimo["label"]
             ipca_acum_ano   = self._acumular_ano(ipca_serie)
             ipca_acum_12m   = self._acumular(ipca_serie, 12)
-            # ★ v16 — 24M e 36M
-            ipca_acum_24m = self._acumular(ipca_serie, 24) if len(ipca_serie) >= 24 else None
-            ipca_acum_36m = self._acumular(ipca_serie, 36) if len(ipca_serie) >= 36 else None
-            ipca_historico = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
+            ipca_acum_24m   = self._acumular(ipca_serie, 24) if len(ipca_serie) >= 24 else None
+            ipca_acum_36m   = self._acumular(ipca_serie, 36) if len(ipca_serie) >= 36 else None
+            ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
             log(f"  [IPCA] 12M={ipca_acum_12m}% | 24M={ipca_acum_24m}% | 36M={ipca_acum_36m}%")
 
-        # Yahoo Finance
-        dolar     = self._buscar_yahoo("BRL=X")
-        ibov      = self._buscar_yahoo("^BVSP")
-        sp500     = self._buscar_yahoo("^GSPC")
-        dow_jones = self._buscar_yahoo("^DJI")
-        nasdaq    = self._buscar_yahoo("^IXIC")
+        # Índices de mercado — mês fechado, mês atual, ano, 12M, 24M e 36M
+        # Observação: S&P 500, Dow Jones e Nasdaq são índices em pontos.
+        # A conversão para BRL é uma leitura de performance cambial combinada.
+        dolar_indice  = self._resumo_indice_yahoo("BRL=X", "Dólar BRL/USD")
+        ibov_indice   = self._resumo_indice_yahoo("^BVSP", "Ibovespa")
+        sp500_indice  = self._resumo_indice_yahoo("^GSPC", "S&P 500")
+        dow_indice    = self._resumo_indice_yahoo("^DJI", "Dow Jones")
+        nasdaq_indice = self._resumo_indice_yahoo("^IXIC", "Nasdaq")
+
+        sp500_indice  = self._converter_indice_usd_para_brl(sp500_indice, dolar_indice)
+        dow_indice    = self._converter_indice_usd_para_brl(dow_indice, dolar_indice)
+        nasdaq_indice = self._converter_indice_usd_para_brl(nasdaq_indice, dolar_indice)
 
         # Focus
         focus_data = buscar_focus(self.headers)
 
-        # ★ v16 — PTAX histórico mensal (resolve HTTP 400 do browser para 36M)
+        # PTAX histórico mensal (resolve HTTP 400 do browser para 36M)
         ptax_historico = self._buscar_ptax_historico(meses=24)
 
         return {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+
             "cards": {
                 "selic_meta": {
                     "valor":    selic_meta,
@@ -1394,11 +1688,9 @@ class ColetorMercado:
                     "historico": selic_historico,
                 },
                 "cdi": {
-                    # Taxa anual estimada
                     "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
-                    # ★ v16 — acumulados pré-calculados server-side
-                    "mensal":   cdi_mensal_atual,
-                    "mes_ref":  cdi_acum["mes_ref"] if cdi_acum else None,
+                    "mensal":  cdi_mensal_atual,
+                    "mes_ref": cdi_acum["mes_ref"] if cdi_acum else None,
                     "parcial_mes_atual": cdi_acum.get("parcial_mes_atual") if cdi_acum else None,
                     "parcial_ref":       cdi_acum.get("parcial_ref") if cdi_acum else None,
                     "acum_ano":          cdi_acum.get("acum_ano") if cdi_acum else None,
@@ -1415,8 +1707,8 @@ class ColetorMercado:
                     "label_mes":   ipca_label_mes,
                     "acum_ano":    ipca_acum_ano,
                     "acum_12m":    ipca_acum_12m,
-                    "acum_24m":    ipca_acum_24m,   # ★ v16
-                    "acum_36m":    ipca_acum_36m,   # ★ v16
+                    "acum_24m":    ipca_acum_24m,
+                    "acum_36m":    ipca_acum_36m,
                     "historico":   ipca_historico,
                     "meta_central": 3.0,
                     "meta_superior": 4.5,
@@ -1424,27 +1716,78 @@ class ColetorMercado:
                     "unidade": "%",
                 },
                 "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
+
+                # Compatibilidade com a index atual + campos novos
                 "ibovespa": {
-                    "atual":    ibov.get("atual"),
-                    "anterior": ibov.get("anterior"),
-                    "variacao_mensal": round(((ibov["atual"] / ibov["anterior"]) - 1) * 100, 2)
-                                       if ibov.get("atual") and ibov.get("anterior") else None,
+                    "atual":    ibov_indice.get("fechamento_atual"),
+                    "anterior": ibov_indice.get("fechamento_mes_anterior"),
+
+                    # Mantém nome antigo usado pela index: representa variação do mês atual
+                    "variacao_mensal": ibov_indice.get("variacao_mes_atual"),
+
+                    # Novos campos
+                    "fechamento_mes_anterior": ibov_indice.get("fechamento_mes_anterior"),
+                    "fechamento_mes_base":     ibov_indice.get("fechamento_mes_base"),
+                    "variacao_mes_fechado":    ibov_indice.get("variacao_mes_fechado"),
+                    "variacao_mes_atual":      ibov_indice.get("variacao_mes_atual"),
+                    "acum_ano":                ibov_indice.get("acum_ano"),
+                    "acum_12m":                ibov_indice.get("acum_12m"),
+                    "acum_24m":                ibov_indice.get("acum_24m"),
+                    "acum_36m":                ibov_indice.get("acum_36m"),
+                    "mes_anterior_label":      ibov_indice.get("mes_anterior_label"),
+                    "mes_base_label":          ibov_indice.get("mes_base_label"),
+                    "data_mes_anterior":       ibov_indice.get("data_mes_anterior"),
+                    "data_atual":              ibov_indice.get("data_atual"),
+                    "fonte":                   ibov_indice.get("fonte"),
                 },
+
                 "dolar": {
-                    "atual":    dolar.get("atual"),
-                    "anterior": dolar.get("anterior"),
-                    "variacao_mensal": round(((dolar["atual"] / dolar["anterior"]) - 1) * 100, 2)
-                                       if dolar.get("atual") and dolar.get("anterior") else None,
+                    "atual":    dolar_indice.get("fechamento_atual"),
+                    "anterior": dolar_indice.get("fechamento_mes_anterior"),
+
+                    # Mantém nome antigo usado pela index: representa variação do mês atual
+                    "variacao_mensal": dolar_indice.get("variacao_mes_atual"),
+
+                    # Novos campos
+                    "fechamento_mes_anterior": dolar_indice.get("fechamento_mes_anterior"),
+                    "fechamento_mes_base":     dolar_indice.get("fechamento_mes_base"),
+                    "variacao_mes_fechado":    dolar_indice.get("variacao_mes_fechado"),
+                    "variacao_mes_atual":      dolar_indice.get("variacao_mes_atual"),
+                    "acum_ano":                dolar_indice.get("acum_ano"),
+                    "acum_12m":                dolar_indice.get("acum_12m"),
+                    "acum_24m":                dolar_indice.get("acum_24m"),
+                    "acum_36m":                dolar_indice.get("acum_36m"),
+                    "mes_anterior_label":      dolar_indice.get("mes_anterior_label"),
+                    "mes_base_label":          dolar_indice.get("mes_base_label"),
+                    "data_mes_anterior":       dolar_indice.get("data_mes_anterior"),
+                    "data_atual":              dolar_indice.get("data_atual"),
+                    "fonte":                   dolar_indice.get("fonte"),
                 },
             },
-            "indices_internacionais": {
-                "sp500_usd": sp500.get("atual"),
-                "sp500_brl": round(sp500.get("atual") * dolar.get("atual"), 2)
-                             if sp500.get("atual") and dolar.get("atual") else None,
-                "dow_jones": dow_jones.get("atual"),
-                "nasdaq":    nasdaq.get("atual"),
+
+            # Nova estrutura principal para a tabela de mercado da página.
+            "indices_mercado": {
+                "dolar":     dolar_indice,
+                "ibovespa":  ibov_indice,
+                "sp500":     sp500_indice,
+                "dow_jones": dow_indice,
+                "nasdaq":    nasdaq_indice,
             },
-            # ★ v16 — PTAX pré-carregado para o HTML (resolve limite 24M da API)
+
+            # Compatibilidade com a estrutura antiga da index.
+            "indices_internacionais": {
+                "sp500_usd": sp500_indice.get("fechamento_atual"),
+                "sp500_brl": sp500_indice.get("fechamento_atual_brl"),
+
+                "dow_jones": dow_indice.get("fechamento_atual"),
+                "nasdaq":    nasdaq_indice.get("fechamento_atual"),
+
+                # Novos detalhamentos
+                "sp500": sp500_indice,
+                "dow_jones_detalhado": dow_indice,
+                "nasdaq_detalhado": nasdaq_indice,
+            },
+
             "ptax_historico": ptax_historico,
             "focus": focus_data,
             "historico_selic": selic_historico,
