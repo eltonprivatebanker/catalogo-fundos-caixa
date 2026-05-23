@@ -207,8 +207,8 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-timeline-toggle.open{transform:rotate(180deg)}
 .dolar-timeline-body{overflow:hidden;max-height:0;transition:max-height .35s ease}
 .dolar-timeline-body.open{max-height:260px}
-.dolar-months{display:flex;gap:0;overflow-x:auto;padding:12px 16px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent}
-.dolar-month-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;
+.dolar-months{display:flex;gap:0;overflow-x:auto;padding:12px 16px 16px;padding-right:24px;scrollbar-width:thin;scrollbar-color:var(--border2) transparent;-webkit-overflow-scrolling:touch}
+.dolar-month-item{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:85px;
   padding:10px 8px;border-radius:10px;border:1px solid var(--border2);background:var(--bg3);
   margin-right:8px;flex-shrink:0;transition:border-color .15s,background .15s;cursor:default}
 .dolar-month-item:hover{border-color:var(--gold);background:var(--gold-dim)}
@@ -739,7 +739,8 @@ footer span{color:var(--gold)}
             <span class="poup-explain-tag tag-antiga">Antiga</span>
             <span class="poup-explain-text">Cadernetas abertas antes de 04/05/2012. Rende <strong style="color:var(--text)">sempre TR + 0,50% a.m.</strong>, independentemente do nível da Selic. Com a Selic atual em 14,50%, a regra antiga rende menos que a nova.</span>
           </div>
-          <a class="poup-bcb-link" href="https://www4.bcb.gov.br/pec/poupanca/poupanca.asp" target="_blank" rel="noopener">🏦 Calculadora oficial BCB ↗</a>
+          <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
+          <a class="poup-bcb-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener" style="margin-top:4px">📊 Histórico de cotações BCB ↗</a>
         </div>
       </div>
     </div>
@@ -1115,6 +1116,7 @@ footer span{color:var(--gold)}
     <!-- ★ Performance mínima (NOVO) -->
     <div class="filter-row" id="perfFilters">
       <span class="filter-label">Rentab.</span>
+      <span style="font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace">período:</span>
       <select id="perfPeriodo" class="perf-period-select">
         <option value="Acum. 12M (%)">12 Meses</option>
         <option value="Acum. Ano (%)">No Ano</option>
@@ -1495,6 +1497,26 @@ function toggleDolarTimeline(){
 /* ════════════════════════════════════════════════════
    GRÁFICO DO DÓLAR
 ════════════════════════════════════════════════════ */
+let _ptaxDiario = [];
+
+async function carregarPTAXDiarioAno(){
+  if(_ptaxDiario.length > 10){buildChartDolar('year');return;}
+  try{
+    const hoje=new Date(), ini=new Date(hoje.getFullYear(),0,2);
+    const fmtD=d=>`${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}-${d.getFullYear()}`;
+    const url=`https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/`
+      +`CotacaoDolarPeriodo(dataInicial=@di,dataFinal=@df)`
+      +`?@di='${fmtD(ini)}'&@df='${fmtD(hoje)}'`
+      +`&$format=json&$select=cotacaoVenda,dataHoraCotacao`;
+    const r=await fetch(url); if(!r.ok) throw new Error('HTTP '+r.status);
+    const dados=(await r.json()).value||[];
+    _ptaxDiario=dados.filter(d=>d.cotacaoVenda).sort((a,b)=>a.dataHoraCotacao.localeCompare(b.dataHoraCotacao));
+    if(_ptaxDiario.length>10) console.info('[PTAX diário] '+_ptaxDiario.length+' pontos para '+hoje.getFullYear());
+    else _ptaxDiario=[];
+  }catch(e){console.warn('[PTAX diário]:',e.message); _ptaxDiario=[];}
+  buildChartDolar('year');
+}
+
 let _chartDolar = null;
 
 function buildChartDolar(range){
@@ -1505,8 +1527,10 @@ function buildChartDolar(range){
 
   if(range === 'year'){
     // Apenas 2026 (ano atual)
-    dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao).getFullYear() === ANO_ATUAL);
-    $('dolar-chart-sub').textContent = `PTAX diária ${ANO_ATUAL} — ${dados.length} registros`;
+    const _src=_ptaxDiario.length>10?_ptaxDiario:_ptaxHistorico;
+    dados=_src.filter(d=>new Date(d.dataHoraCotacao).getFullYear()===ANO_ATUAL);
+    const _tipoLabel=(_ptaxDiario.length>10&&range==='year')?'diária':'mensal';
+  if($('dolar-chart-sub')) $('dolar-chart-sub').textContent=`PTAX ${_tipoLabel} · ${dados.length} registros`;
   } else if(range === '12m'){
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-12);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
@@ -2856,7 +2880,8 @@ async function iniciarDashboard(){
   await carregarMercado();          // primeiro carrega mercado_atual.json
   await carregarCDIPeriodos();      // agora só usa o JSON, sem API externa
   await carregarIPCAPeriodos();     // agora só usa o JSON, sem API externa
-  carregarDolarDia();               // mantém PTAX do dia ao vivo
+  carregarDolarDia();
+  carregarPTAXDiarioAno();               // mantém PTAX do dia ao vivo
   await carregarPTAXHistorico();    // agora só usa o JSON, sem CotacaoDolarPeriodo
   await carregarFundosJson();
   await carregarDados();
