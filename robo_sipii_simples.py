@@ -1,17 +1,22 @@
 """
-ROBÔ SIPII CAIXA — v16 (Edição GitHub Repository)
+ROBÔ SIPII CAIXA — v17.1 (Edição GitHub Repository)
 ==========================================================
+Novidades v17.1 vs v16:
+  + Poupança nova e antiga com acum. ano pré-calculado server-side
+    → cards.poupanca_nova: { valor, mensal, acum_ano, historico_ano, nota }
+    → cards.poupanca_antiga: { valor, mensal, acum_ano, historico_ano, nota }
+    → Série BCB 196 (nova); quando Selic>8,5% antiga=nova (mesma fórmula)
+    → Série BCB 253 (TR mensal) só usada quando Selic≤8,5% (raro)
+    → Dashboard exibe "Acum. ano" e texto descritivo da regra em desktop e mobile
+
 Novidades v16 vs v15:
   + CDI acumulado 12M/24M/36M pré-calculado server-side (série 4391 BCB)
-    → Elimina erro CORS/HTTP 400 no browser para CDI histórico
   + IPCA acumulado 24M/36M pré-calculado server-side (série 433 BCB)
-    → Elimina erro CORS/HTTP 400 no browser para IPCA histórico
   + PTAX histórico mensal (24M) pré-salvo em mercado_atual.json
-    → Elimina HTTP 400 do browser (API limita a 2 anos; robô busca server-side)
   + fundos_caixa.json indexado por CNPJ → botões de documentos PDF no dashboard
   + Coluna 'codfundo' no CSV/Excel → links diretos Lâmina/Regulamento/etc.
   Mantém: CDI mensal real (série 4391), Focus OData+PDF+cache, SIPII scraping,
-           kpis_dashboard.json, fallback SIPII, limpeza de backups — tudo de v15.
+           kpis_dashboard.json, fallback SIPII, limpeza de backups.
 """
 
 import json
@@ -1625,12 +1630,149 @@ class ColetorMercado:
                 log(f"[META INFLAÇÃO] Erro: {e}")
         return []
 
+    # ──────────────────────────────────────────────────────────────────────
+    # ★ v17.1 — Poupança nova + antiga: mensal atual + acum. ano
+    #
+    # Série BCB usadas:
+    #   196 — Poupança nova (depósitos a partir de 04/05/2012) — mensal
+    #   253  — TR mensal (só quando Selic ≤ 8,5%; hoje não se aplica)
+    #
+    # Regra:
+    #   Nova:  Selic > 8,5% → TR + 0,50% a.m.
+    #          Selic ≤ 8,5% → TR + 70% × (Selic/12)
+    #   Antiga: sempre TR + 0,50% a.m. (independente da Selic)
+    #
+    # Quando Selic > 8,5% (cenário atual), nova = antiga em valor mensal.
+    # ──────────────────────────────────────────────────────────────────────
+    def _buscar_poupanca_detalhada(self, selic_meta):
+        """
+        Retorna dicionário com:
+          nova:  { valor, mensal, acum_ano, historico_ano, nota }
+          antiga:{ valor, mensal, acum_ano, historico_ano, nota }
+
+        Lógica das regras da poupança:
+          Selic > 8,5% a.a. → NOVA = TR + 0,50% a.m.  |  ANTIGA = TR + 0,50% a.m.
+                               → ambas têm a MESMA taxa: nova == antiga
+          Selic ≤ 8,5% a.a. → NOVA = TR + 70% × (Selic/12)  |  ANTIGA = TR + 0,50% a.m.
+
+        Para a nova: usa série BCB 196 (poupança nova mensal) — valor real e confiável.
+        Para a antiga quando Selic > 8,5%: COPIA os dados da nova (matematicamente idêntico).
+        Para a antiga quando Selic ≤ 8,5%: usa série BCB 253 (TR mensal) + 0,50%.
+        NÃO usa série 7814 — ela retorna taxas anuais (~CDI), não TR mensal.
+        """
+        hoje    = datetime.now()
+        ini_ano = datetime(hoje.year, 1, 1)
+        fmt_d   = lambda d: d.strftime('%d/%m/%Y')
+        acima   = selic_meta is not None and selic_meta > 8.5
+
+        def _fetch_serie_ano(serie):
+            """Busca série BCB do início do ano até hoje; retorna lista [{data, valor}]."""
+            url = (
+                f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{serie}/dados"
+                f"?dataInicial={fmt_d(ini_ano)}&dataFinal={fmt_d(hoje)}&formato=json"
+            )
+            try:
+                res = requests.get(url, headers=self.headers, timeout=15)
+                if res.status_code == 200:
+                    dados = res.json()
+                    if dados:
+                        return [
+                            {"data": item["data"],
+                             "valor": round(float(str(item["valor"]).replace(",",".")), 6)}
+                            for item in dados
+                        ]
+            except Exception as e:
+                log(f"  [Poupança] Erro série {serie}: {e}")
+            return []
+
+        def _acumular(lista):
+            """Composição: (1+r1/100) × (1+r2/100) × … − 1, em %."""
+            acc = 1.0
+            for item in lista:
+                try:
+                    acc *= (1 + item["valor"] / 100)
+                except Exception:
+                    pass
+            return round((acc - 1) * 100, 4) if lista else None
+
+        def _validar_mensal(lista, nome):
+            """Descarta lista se valores > 5% a.m. (indica série errada)."""
+            if not lista:
+                return lista
+            if any(abs(item["valor"]) > 5.0 for item in lista):
+                log(f"  [Poupança] AVISO: {nome} com valores > 5%/mes — serie incorreta, descartando")
+                return []
+            return lista
+
+        log("[Poupança] Buscando série 196 (nova) para acum. ano...")
+
+        # ── Poupança nova (série 196 — mais confiável, específica para nova) ──
+        dados_nova = _validar_mensal(_fetch_serie_ano(196), "nova (196)")
+        mensal_nova = dados_nova[-1]["valor"] if dados_nova else None
+        acum_nova   = _acumular(dados_nova)
+        log(f"  [Poupança] nova: mensal={mensal_nova}% | acum. ano={acum_nova}% ({len(dados_nova)} meses)")
+
+        # ── Poupança antiga ────────────────────────────────────────────────────
+        if acima:
+            # Selic > 8,5%: antiga = nova (mesma fórmula: TR + 0,50% a.m.)
+            # Não precisamos buscar TR separada — os valores são idênticos.
+            dados_antiga  = [{"data": item["data"], "valor": item["valor"]}
+                             for item in dados_nova]
+            mensal_antiga = mensal_nova
+            acum_antiga   = acum_nova
+            log(f"  [Poupança] antiga = nova (Selic {selic_meta}% > 8,5% → TR+0,50% para ambas)")
+        else:
+            # Selic ≤ 8,5%: antiga = TR + 0,50% (série 253 — TR mensal)
+            # Nova usa 70% da Selic/12, então as taxas divergem.
+            log("  [Poupança] Selic <= 8,5%: buscando TR (série 253) para poupança antiga...")
+            dados_tr = _validar_mensal(_fetch_serie_ano(253), "TR (253)")
+            if dados_tr:
+                dados_antiga = [{"data": item["data"],
+                                 "valor": round(item["valor"] + 0.50, 6)}
+                                for item in dados_tr]
+                mensal_antiga = dados_antiga[-1]["valor"] if dados_antiga else None
+                acum_antiga   = _acumular(dados_antiga)
+                log(f"  [Poupança] antiga via TR+0,50%: mensal={mensal_antiga}% | acum={acum_antiga}%")
+            else:
+                # Fallback conservador: estima 0,50% a.m. (TR ≈ 0 quando Selic ≤ 8,5%)
+                dados_antiga  = []
+                mensal_antiga = 0.50
+                acum_antiga   = None
+                log("  [Poupança] antiga: TR indisponível — usando 0,50% a.m. como estimativa")
+
+        nota_nova = (
+            "TR + 0,50% a.m. (Selic > 8,5% a.a.)" if acima
+            else "TR + 70% da Selic a.m. (Selic <= 8,5% a.a.)"
+        )
+
+        return {
+            "nova": {
+                "valor":         mensal_nova,
+                "mensal":        mensal_nova,
+                "acum_ano":      acum_nova,
+                "historico_ano": dados_nova,
+                "unidade":       "% a.m.",
+                "nota":          nota_nova,
+            },
+            "antiga": {
+                "valor":         mensal_antiga,
+                "mensal":        mensal_antiga,
+                "acum_ano":      acum_antiga,
+                "historico_ano": dados_antiga,
+                "unidade":       "% a.m.",
+                "nota":          "TR + 0,50% a.m. — independente da Selic",
+            },
+        }
+
     def coletar_todos(self):
         log("[MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...")
 
         # Taxas de referência
-        selic_meta    = self._buscar_bcb(432)
-        poupanca_nova = self._buscar_bcb(196)
+        selic_meta = self._buscar_bcb(432)
+
+        # ★ v17.1 — Poupança nova + antiga com acum. ano (série 196; 253 para Selic≤8,5%)
+        poup_detalhado = self._buscar_poupanca_detalhada(selic_meta)
+        poupanca_nova  = poup_detalhado["nova"]["valor"] if poup_detalhado else self._buscar_bcb(196)
 
         # CDI acumulado server-side (resolve CORS/400 no browser)
         cdi_acum = self._buscar_cdi_acumulado()
@@ -1715,7 +1857,23 @@ class ColetorMercado:
                     "meta_inferior": 1.5,
                     "unidade": "%",
                 },
-                "poupanca_nova": {"valor": poupanca_nova, "unidade": "% m.m."},
+                # ★ v17.1 — Poupança nova e antiga completas (mensal + acum. ano)
+                "poupanca_nova": {
+                    "valor":        poup_detalhado["nova"]["valor"]    if poup_detalhado else poupanca_nova,
+                    "mensal":       poup_detalhado["nova"]["mensal"]   if poup_detalhado else poupanca_nova,
+                    "acum_ano":     poup_detalhado["nova"]["acum_ano"] if poup_detalhado else None,
+                    "historico_ano": poup_detalhado["nova"]["historico_ano"] if poup_detalhado else [],
+                    "unidade":      "% a.m.",
+                    "nota":         poup_detalhado["nova"]["nota"]     if poup_detalhado else "série BCB 196",
+                },
+                "poupanca_antiga": {
+                    "valor":        poup_detalhado["antiga"]["valor"]    if poup_detalhado else None,
+                    "mensal":       poup_detalhado["antiga"]["mensal"]   if poup_detalhado else None,
+                    "acum_ano":     poup_detalhado["antiga"]["acum_ano"] if poup_detalhado else None,
+                    "historico_ano": poup_detalhado["antiga"]["historico_ano"] if poup_detalhado else [],
+                    "unidade":      "% a.m.",
+                    "nota":         "TR + 0,50% a.m. — independente da Selic",
+                },
 
                 # Compatibilidade com a index atual + campos novos
                 "ibovespa": {
@@ -1972,7 +2130,7 @@ def salvar_excel(df, caminho):
 # ---------------------------------------------------------------------------
 def executar():
     log("=" * 65)
-    log("⚡ ROBÔ SIPII v16 — CDI/IPCA 24M/36M + PTAX + fundos_caixa.json")
+    log("⚡ ROBÔ SIPII v17.1 — Poupança nova+antiga acum. ano + índices mercado")
     log("=" * 65)
 
     # 1. URLs dinâmicas do portal CAIXA
@@ -2037,13 +2195,17 @@ def executar():
         with open(caminho_json, "w", encoding="utf-8") as f:
             json.dump(indicadores, f, indent=4, ensure_ascii=False)
 
-        cdi   = indicadores.get("cards", {}).get("cdi", {})
-        ipca  = indicadores.get("cards", {}).get("ipca", {})
-        ptax  = indicadores.get("ptax_historico", [])
+        cdi    = indicadores.get("cards", {}).get("cdi", {})
+        ipca   = indicadores.get("cards", {}).get("ipca", {})
+        ptax   = indicadores.get("ptax_historico", [])
+        pnova  = indicadores.get("cards", {}).get("poupanca_nova", {})
+        pantiga= indicadores.get("cards", {}).get("poupanca_antiga", {})
         log(f"[SUCESSO] mercado_atual.json exportado")
         log(f"  CDI: mensal={cdi.get('mensal')}% | 12M={cdi.get('acum_12m')}% | 24M={cdi.get('acum_24m')}% | 36M={cdi.get('acum_36m')}%")
         log(f"  IPCA: 12M={ipca.get('acum_12m')}% | 24M={ipca.get('acum_24m')}% | 36M={ipca.get('acum_36m')}%")
         log(f"  PTAX: {len(ptax)} fechamentos mensais pré-salvos")
+        log(f"  Poupança nova:  mensal={pnova.get('valor')}% | acum. ano={pnova.get('acum_ano')}%")
+        log(f"  Poupança antiga: mensal={pantiga.get('valor')}% | acum. ano={pantiga.get('acum_ano')}%")
     except Exception as e:
         log(f"[ERRO] Falha nos indicadores macro: {e}")
         traceback.print_exc()
@@ -2052,7 +2214,7 @@ def executar():
     limpar_backups_antigos(manter=5)
 
     log("=" * 65)
-    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v16 completo.")
+    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v17.1 completo.")
     log("=" * 65)
 
 
