@@ -227,20 +227,6 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-spread-label{font-size:.55rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
 .dolar-spread-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--text)}
 
-.dolar-ptax-compact{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  margin:2px 0 12px;
-  padding:6px 10px;
-  border-radius:8px;
-  border:1px solid rgba(200,151,58,.18);
-  background:rgba(200,151,58,.06);
-  color:#b6bfd5;
-  font-size:.62rem;
-  font-family:'JetBrains Mono',monospace;
-}
-
 /* Timeline mensal */
 .dolar-right{display:flex;flex-direction:column;gap:14px;min-width:0;width:100%;max-width:100%;overflow:hidden}
 .dolar-timeline-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;overflow:hidden;width:100%;max-width:100%;min-width:0}
@@ -1808,31 +1794,6 @@ footer{
   .footer-source-pill{font-size:.55rem;padding:3px 7px}
 }
 
-
-/* Ajuste final dos avisos institucionais */
-.top-disclaimer{
-  padding:12px 16px;
-  font-size:.70rem;
-  line-height:1.5;
-}
-.top-disclaimer-icon{
-  width:22px;
-  height:22px;
-  border-radius:7px;
-}
-.footer-minimal-title{
-  font-size:.95rem;
-}
-.footer-minimal-copy{
-  color:#a4aec8;
-}
-@media(max-width:768px){
-  .top-disclaimer{
-    padding:11px 12px;
-    font-size:.66rem;
-  }
-}
-
 </style>
 </head>
 <body>
@@ -1855,8 +1816,10 @@ footer{
   <div class="top-disclaimer-icon">ℹ️</div>
   <div>
     <strong>Aviso:</strong>
-    ferramenta independente de apoio ao planejamento financeiro. Os dados apresentados possuem finalidade
-    estritamente informativa e não representam canal oficial de comunicação ou recomendação da CAIXA.
+    ferramenta de <span>produção própria</span>, com finalidade informativa e auxiliar.
+    Não representa ferramenta institucional da Caixa Econômica Federal, da CAIXA Asset
+    ou de qualquer empresa do conglomerado CAIXA. Consulte sempre as fontes oficiais
+    antes de qualquer decisão.
   </div>
 </div>
 
@@ -1887,7 +1850,7 @@ footer{
     <div class="indic-ref-card selic-card market-ref-card">
       <div class="indic-ref-label">🏦 Taxa Selic — Meta COPOM</div>
       <div class="indic-ref-val gold" id="mc-selic">—</div>
-      <div class="indic-ref-sub">a.a. — taxa básica de juros</div>
+      <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
       <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
         <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
@@ -1909,7 +1872,7 @@ footer{
     <div class="indic-ref-card cdi-card market-ref-card">
       <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
       <div class="indic-ref-val green" id="mc-cdi">—</div>
-      <div class="indic-ref-sub">a.a. · mês ref.: <span id="mc-cdi-mes-ref">—</span></div>
+      <div class="indic-ref-sub">% a.a. · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
       <div class="cdi-mini-grid">
         <div class="cdi-mini-item">
           <span>CDI mês atual</span>
@@ -1920,6 +1883,7 @@ footer{
           <strong id="mc-cdi-12m-val-hero">—</strong>
         </div>
       </div>
+      <div class="cdi-rel" id="mc-cdi-12m-label">Acum. 12M: <span id="mc-cdi-12m-val">—</span></div>
       <div class="cdi-rel" style="margin-top:2px">CDI ≈ Selic − 0,10 p.p.</div>
     </div>
 
@@ -1933,30 +1897,26 @@ footer{
       </div>
       <div class="poup-values">
         <div class="poup-rule">
-          <div class="poup-rule-label">Regra nova · a partir de 04/05/2012</div>
+          <div class="poup-rule-label">Nova (pós mai/2012)</div>
           <div class="poup-rule-val blue" id="mc-poup">—</div>
-          <div class="poup-rule-sub">a.m. · conforme nível da Selic</div>
+          <div class="poup-rule-sub">% a.m. · 70% da Selic</div>
         </div>
         <div class="poup-rule" style="opacity:.65">
-          <div class="poup-rule-label">Regra antiga · até 03/05/2012</div>
+          <div class="poup-rule-label">Antiga (pré mai/2012)</div>
           <div class="poup-rule-val muted">~0,50%</div>
-          <div class="poup-rule-sub">a.m. · TR + 0,50%</div>
+          <div class="poup-rule-sub">% a.m. · TR + 0,50%</div>
         </div>
       </div>
       <div class="poup-explain" id="poupExplain">
         <div class="poup-explain-inner">
-          <div class="poup-explain-title">Regras da poupança</div>
+          <div class="poup-explain-title">Como funciona cada regra</div>
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-nova">Nova</span>
-            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos a partir de 04/05/2012:</strong> se a Selic for superior a 8,5% a.a., rende TR + 0,50% a.m.; se a Selic for igual ou inferior a 8,5% a.a., rende TR + 70% da Selic.</span>
+            <span class="poup-explain-text">Cadernetas abertas após 04/05/2012. Quando a Selic for <strong style="color:var(--text)">superior a 8,5% a.a.</strong>, rende 70% da Selic a.a. (aplicado mensalmente). Quando a Selic for igual ou inferior a 8,5%, equipara-se à regra antiga: TR + 0,50% a.m.</span>
           </div>
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-antiga">Antiga</span>
-            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos até 03/05/2012:</strong> rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
-          </div>
-          <div class="poup-explain-row">
-            <span class="poup-explain-tag tag-antiga">Dica</span>
-            <span class="poup-explain-text">Com Selic acima de 8,5% a.a., a regra nova também usa remuneração adicional de 0,50% a.m. + TR, evitando confusão com a regra dos 70%.</span>
+            <span class="poup-explain-text">Cadernetas abertas antes de 04/05/2012. Rende <strong style="color:var(--text)">sempre TR + 0,50% a.m.</strong>, independentemente do nível da Selic. Com a Selic atual em 14,50%, a regra antiga rende menos que a nova.</span>
           </div>
           <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
         </div>
@@ -2228,7 +2188,16 @@ footer{
         <div id="dolar-day-content" style="display:none">
           <div class="dolar-day-rate" id="dolar-day-rate">—</div>
           <div class="dolar-day-ref" id="dolar-day-ref">—</div>
-          <div class="dolar-ptax-compact" id="dolar-ptax-compact">Cotação PTAX de venda: —</div>
+          <div class="dolar-spread" style="margin-bottom:12px">
+            <div class="dolar-spread-item">
+              <div class="dolar-spread-label">Compra</div>
+              <div class="dolar-spread-val" id="dolar-compra">—</div>
+            </div>
+            <div class="dolar-spread-item">
+              <div class="dolar-spread-label">Venda</div>
+              <div class="dolar-spread-val" id="dolar-venda">—</div>
+            </div>
+          </div>
           <div class="dolar-day-metrics">
             <div class="dolar-metric">
               <span class="dolar-metric-label">Var. vs dia anterior</span>
@@ -2263,7 +2232,10 @@ footer{
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
           </div>
-
+          <div class="dolar-source-note">
+            <span class="source-label">Fonte</span>
+            <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Fechamentos mensais pelo último registro disponível de cada mês.</span>
+          </div>
         </div>
       </div>
 
@@ -2283,9 +2255,9 @@ footer{
         <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
         <div class="dolar-chart-source">
           <span class="source-label">Fonte</span>
-          <span>Banco Central do Brasil · PTAX</span>
+          <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Série exibida conforme os períodos selecionados no gráfico.</span>
           <div class="dolar-source-actions">
-            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico BCB ↗</a>
+            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico de cotações BCB ↗</a>
           </div>
         </div>
       </div>
@@ -2317,19 +2289,21 @@ footer{
           <div class="focus-explain-item">
             <span class="focus-explain-kicker">O que é</span>
             <p>
-              Relatório do <strong>Banco Central do Brasil</strong> que consolida estimativas de bancos, corretoras e consultorias para inflação, Selic, PIB e câmbio nos próximos anos.
+              O Boletim Focus é uma publicação do <strong>Banco Central do Brasil</strong> que consolida
+              expectativas de mercado para inflação, Selic, PIB e câmbio.
             </p>
           </div>
           <div class="focus-explain-item">
-            <span class="focus-explain-kicker">Para que serve</span>
+            <span class="focus-explain-kicker">Por que o mercado utiliza</span>
             <p>
-              Ajuda a balizar a leitura de cenário e a organização dos investimentos de acordo com o consenso do mercado econômico.
+              As projeções reúnem estimativas de bancos, corretoras, consultorias e distribuidoras,
+              ajudando a acompanhar o consenso econômico e comparar cenários para os próximos anos.
             </p>
           </div>
         </div>
         <div class="focus-explain-note">
           <span>⚠️</span>
-          <span><strong>Atenção:</strong> serve como referência de cenário, mas não é garantia de resultado futuro. As projeções mudam conforme a economia e novas informações são divulgadas.</span>
+          <span><strong>Atenção:</strong> as projeções não são garantia de resultado futuro. Elas servem como referência de cenário e podem mudar conforme novos dados econômicos são divulgados.</span>
         </div>
       </div>
     </div>
@@ -2495,39 +2469,36 @@ footer{
         <tbody id="ptaxBody"></tbody>
       </table>
     </div>
-    <div class="modal-footer">Fonte: Banco Central do Brasil · PTAX.</div>
+    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX, cotação de venda do dólar americano.</div>
   </div>
 </div>
 
 <footer class="site-footer-minimal">
   <details class="footer-disclaimer footer-minimal">
     <summary>
-      <span class="footer-minimal-title">Sobre esta plataforma</span>
-      <span class="footer-minimal-copy">Iniciativa independente · dados públicos · uso informativo · não institucional · não constitui recomendação</span>
+      <span class="footer-minimal-title">Aviso e fontes</span>
+      <span class="footer-minimal-copy">Produção própria · dados públicos · uso informativo · não institucional · não constitui recomendação</span>
       <span class="footer-minimal-toggle" aria-hidden="true"></span>
     </summary>
 
     <div class="footer-minimal-body">
       <div class="footer-minimal-text">
         <p>
-          Esta página é uma iniciativa independente desenvolvida por <strong>Elton Cardoso Teotonio</strong>
-          para consolidar e analisar dados públicos de mercado e fundos de investimento.
+          Esta página é uma produção própria de <strong>Elton Cardoso Teotonio</strong>, criada para organizar e consultar
+          dados públicos sobre fundos de investimento e indicadores de mercado.
         </p>
         <p>
-          <strong>Importante:</strong> esta aplicação não é uma ferramenta institucional da Caixa Econômica Federal,
-          da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA. As informações aqui organizadas não constituem
-          recomendação, oferta ou solicitação de investimento. Consulte sempre as lâminas e regulamentos oficiais antes
-          de qualquer tomada de decisão financeira.
+          <strong>Importante:</strong> não é ferramenta institucional da Caixa Econômica Federal, da CAIXA Asset ou do
+          conglomerado CAIXA. As informações não constituem recomendação, oferta ou solicitação de investimento.
         </p>
       </div>
 
       <div class="footer-source-pills" aria-label="Fontes públicas consultadas">
         <span class="footer-source-label">Fontes públicas consultadas</span>
-        <span class="footer-source-pill">Banco Central do Brasil</span>
-        <span class="footer-source-pill">IBGE</span>
-        <span class="footer-source-pill">B3</span>
-        <span class="footer-source-pill">SIPII</span>
         <span class="footer-source-pill">fundos.caixa.gov.br</span>
+        <span class="footer-source-pill">Banco Central do Brasil</span>
+        <span class="footer-source-pill">CAIXA Asset Management</span>
+        <span class="footer-source-pill">fontes públicas de mercado</span>
       </div>
     </div>
   </details>
@@ -2740,9 +2711,8 @@ async function carregarDolarDia(){
       const dtCot = new Date(ultima.dataHoraCotacao);
 
       $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
-      if($('dolar-compra')) $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
-      if($('dolar-venda')) $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
-      if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda: R$ ' + fmtBRL(cotVenda);
+      $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
+      $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
 
       const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
       const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
