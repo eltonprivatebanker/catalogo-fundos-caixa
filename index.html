@@ -3393,6 +3393,339 @@ html{scroll-padding-top:18px}
   }
 }
 
+
+/* ─────────────────────────────────────────────
+   SELIC + COPOM — card macro consultivo
+───────────────────────────────────────────── */
+.selic-copom-card{
+  grid-column:span 2;
+  display:grid !important;
+  grid-template-columns:minmax(210px,270px) 1px minmax(0,1fr);
+  gap:18px;
+  align-items:stretch;
+  padding:22px 24px !important;
+}
+.selic-copom-card::before{
+  background:linear-gradient(90deg,var(--gold),rgba(46,209,122,.55),transparent 82%) !important;
+}
+.macro-side{min-width:0;display:flex;flex-direction:column;justify-content:flex-start}
+.macro-label{
+  font-size:.66rem;
+  text-transform:uppercase;
+  letter-spacing:.09em;
+  color:#bac4dc;
+  font-weight:800;
+  margin-bottom:10px;
+  line-height:1.35;
+}
+.macro-main-value{
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.45rem;
+  line-height:1;
+  font-weight:800;
+  color:var(--gold2);
+}
+.macro-sub{
+  margin-top:7px;
+  color:#b4bed5;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.70rem;
+  line-height:1.45;
+}
+.macro-note{
+  margin-top:16px;
+  color:#aeb7cf;
+  font-size:.70rem;
+  font-family:'JetBrains Mono',monospace;
+  line-height:1.45;
+}
+.macro-note strong{color:var(--gold2);font-weight:800}
+.macro-divider{
+  width:1px;
+  background:linear-gradient(180deg,transparent,var(--border2),transparent);
+}
+.copom-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin-top:10px;
+}
+.copom-item{
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid var(--border2);
+  border-radius:10px;
+  background:rgba(255,255,255,.018);
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.copom-item .copom-num{
+  color:var(--muted2);
+  font-size:.56rem;
+  font-family:'JetBrains Mono',monospace;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.copom-item .copom-date{
+  color:var(--text);
+  font-size:.68rem;
+  font-family:'JetBrains Mono',monospace;
+  white-space:nowrap;
+  font-weight:700;
+}
+.copom-item .copom-result{
+  color:var(--muted);
+  font-size:.56rem;
+  font-family:'JetBrains Mono',monospace;
+  line-height:1.25;
+}
+.copom-item.done .copom-result{color:#9ee9bd}
+.copom-item.cut .copom-result{color:#9ee9bd}
+.copom-item.hike .copom-result{color:#ff9aa6}
+.copom-item.hold .copom-result{color:#c7d0e7}
+.copom-item.next{
+  border-color:rgba(232,187,106,.58);
+  background:rgba(200,151,58,.105);
+  box-shadow:0 0 0 1px rgba(200,151,58,.08) inset;
+}
+.copom-item.next .copom-date,
+.copom-item.next .copom-result{color:var(--gold2)}
+.copom-item.future{opacity:.82}
+.macro-link{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:max-content;
+  max-width:100%;
+  margin-top:14px;
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid rgba(200,151,58,.22);
+  background:rgba(200,151,58,.07);
+  color:var(--gold2);
+  text-decoration:none;
+  font-size:.62rem;
+  font-family:'JetBrains Mono',monospace;
+  line-height:1.35;
+}
+.macro-link:hover{background:rgba(200,151,58,.14);border-color:rgba(232,187,106,.5)}
+@media(max-width:1100px){
+  .selic-copom-card{grid-column:1/-1}
+  .copom-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(max-width:768px){
+  .selic-copom-card{
+    grid-template-columns:1fr;
+    gap:15px;
+    padding:18px 16px !important;
+  }
+  .macro-divider{
+    width:100%;
+    height:1px;
+    background:linear-gradient(90deg,transparent,var(--border2),transparent);
+  }
+  .macro-main-value{font-size:2.15rem}
+  .copom-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+  .copom-item{padding:8px 9px}
+  .copom-item .copom-date{font-size:.66rem}
+  .macro-link{width:100%;text-align:center}
+}
+@media(max-width:380px){
+  .copom-grid{grid-template-columns:1fr}
+}
+
+
+
+/* ─────────────────────────────────────────────
+   POUPANÇA CONSULTIVA — regra visível + detalhe retrátil
+───────────────────────────────────────────── */
+.poup-card-consultivo{
+  gap:12px !important;
+}
+.poup-header-clean{
+  align-items:center;
+  gap:12px;
+}
+.poup-card-subtitle{
+  margin-top:3px;
+  color:#a6b0c9;
+  font-size:.64rem;
+  line-height:1.35;
+  font-family:'JetBrains Mono',monospace;
+}
+.poup-rules-grid{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr);
+  gap:12px !important;
+  align-items:stretch;
+  margin-top:0 !important;
+}
+.poup-rule-card{
+  min-width:0;
+  padding:12px 13px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:12px;
+  background:rgba(17,21,38,.58);
+}
+.poup-rule-card.new-rule{
+  border-color:rgba(91,156,246,.20);
+  background:linear-gradient(180deg,rgba(91,156,246,.075),rgba(17,21,38,.50));
+}
+.poup-rule-card.old-rule{
+  border-color:rgba(255,255,255,.075);
+  background:rgba(17,21,38,.44);
+}
+.poup-rule-period{
+  margin-top:2px;
+  color:#a6b0c9;
+  font-size:.58rem;
+  font-family:'JetBrains Mono',monospace;
+  line-height:1.35;
+}
+.poup-rule-card .poup-rule-val{
+  margin-top:9px;
+  font-size:1.55rem;
+}
+.poup-rule-card .poup-rule-sub{
+  margin-top:5px;
+  color:#c1cadf;
+  font-size:.64rem;
+  line-height:1.45;
+}
+.poup-rule-divider{
+  width:1px;
+  min-height:100%;
+  background:linear-gradient(180deg,transparent,var(--border2),transparent);
+}
+.poup-accum-pill{
+  display:inline-flex;
+  align-items:center;
+  width:max-content;
+  max-width:100%;
+  margin-top:10px;
+  padding:4px 8px;
+  border:1px solid rgba(46,209,122,.24);
+  border-radius:999px;
+  background:rgba(46,209,122,.085);
+  color:#6ef3a7;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.60rem;
+  font-weight:700;
+  white-space:nowrap;
+}
+.poup-accum-pill.muted{
+  border-color:rgba(255,255,255,.10);
+  background:rgba(255,255,255,.035);
+  color:#b4bdd3;
+}
+.poup-quick-note{
+  padding:9px 11px;
+  border:1px solid rgba(200,151,58,.16);
+  border-radius:11px;
+  background:rgba(200,151,58,.055);
+  color:#d8c79f;
+  font-size:.66rem;
+  line-height:1.55;
+}
+.poup-explain-clean{
+  padding-top:12px !important;
+}
+.poup-explain-clean .poup-explain-text{
+  color:#c6cee2;
+  font-size:.66rem;
+  line-height:1.55;
+}
+@media(max-width:768px){
+  .poup-rules-grid{
+    grid-template-columns:1fr !important;
+    gap:9px !important;
+  }
+  .poup-rule-divider{
+    width:100%;
+    height:1px;
+    min-height:1px;
+    background:linear-gradient(90deg,transparent,var(--border2),transparent);
+  }
+  .poup-rule-card{
+    padding:11px 12px;
+  }
+  .poup-card-subtitle{
+    font-size:.58rem;
+  }
+  .poup-quick-note{
+    font-size:.62rem;
+  }
+}
+
+
+/* ── SEPARADORES DE BLOCO (Assessor-First v20) ── */
+.block-divider{
+  display:flex;align-items:center;gap:14px;
+  margin:32px 0 20px;padding:0;
+}
+.block-divider-line{flex:1;height:1px;background:var(--border2)}
+.block-divider-label{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 16px;border-radius:20px;
+  border:1px solid var(--border2);
+  background:rgba(17,21,38,.80);
+  font-size:.62rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted2);white-space:nowrap;
+  font-family:'JetBrains Mono',monospace;
+}
+.block-divider.bloco-atendimento .block-divider-label{
+  color:var(--gold2);border-color:rgba(200,151,58,.28);background:rgba(200,151,58,.07);
+}
+.block-divider.bloco-macro .block-divider-label{
+  color:var(--blue);border-color:rgba(91,156,246,.22);background:rgba(91,156,246,.06);
+}
+
+/* ── BADGE % DO CDI na tabela ── */
+.cdi-ratio-cell{text-align:right;white-space:nowrap}
+.cdi-ratio-badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:2px 7px;border-radius:6px;
+  font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;
+  border:1px solid transparent;
+}
+.cdi-ratio-badge.above{
+  background:rgba(46,209,122,.10);color:var(--green);border-color:rgba(46,209,122,.20);
+}
+.cdi-ratio-badge.below{
+  background:rgba(240,85,101,.10);color:var(--red);border-color:rgba(240,85,101,.18);
+}
+.cdi-ratio-badge.neutral{
+  background:rgba(255,255,255,.05);color:var(--muted);border-color:var(--border2);
+}
+.cdi-ratio-sub{
+  display:block;font-size:.55rem;color:var(--muted2);
+  font-family:'JetBrains Mono',monospace;margin-top:2px;
+}
+
+/* ── QUICK NOTE com alertas de risco (v20) ── */
+.fund-note-alert{
+  display:inline-flex;align-items:center;gap:5px;
+  margin-top:7px;padding:6px 10px;border-radius:8px;
+  border:1px solid rgba(240,85,101,.25);
+  background:rgba(240,85,101,.07);
+  color:#f5a0a8;font-size:.67rem;line-height:1.5;
+}
+.fund-note-alert strong{color:var(--red);font-weight:700;}
+.fund-note-badge-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+.fund-note-tag{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:2px 8px;border-radius:4px;
+  font-size:.58rem;font-weight:700;letter-spacing:.04em;
+}
+.tag-risco-alto{background:rgba(240,85,101,.12);color:var(--red);border:1px solid rgba(240,85,101,.22)}
+.tag-risco-mod{background:rgba(251,146,60,.10);color:var(--orange);border:1px solid rgba(251,146,60,.20)}
+.tag-risco-baixo{background:rgba(46,209,122,.10);color:var(--green);border:1px solid rgba(46,209,122,.18)}
+.tag-liquidez{background:rgba(91,156,246,.10);color:var(--blue);border:1px solid rgba(91,156,246,.18)}
+.tag-cambio{background:rgba(250,204,21,.10);color:#facc15;border:1px solid rgba(250,204,21,.18)}
+.tag-inflacao{background:rgba(167,139,250,.10);color:var(--purple);border:1px solid rgba(167,139,250,.18)}
+.tag-credpriv{background:rgba(232,121,249,.10);color:#e879f9;border:1px solid rgba(232,121,249,.18)}
 </style>
 </head>
 <body>
@@ -3425,8 +3758,10 @@ html{scroll-padding-top:18px}
 </div>
 
 
+
+<!-- ════════════════ BLOCO 1: QUEBRA-GELO — visão geral ════════════════ -->
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
-<div class="kpi-grid section-gap">
+<div class="kpi-grid section-gap" id="sec-kpi">
   <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
   <div class="kpi"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub">tipos de fundo</div></div>
   <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-label">PL Total</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub">milhões R$ — patrimônio consolidado</div></div>
@@ -3436,7 +3771,7 @@ html{scroll-padding-top:18px}
 </div>
 
 <!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
-<div class="section-gap">
+<div class="section-gap" id="sec-mercado">
   <div class="section-title market-section-head">
     <div class="market-title-left">
       <h2>📡 Indicadores de Mercado</h2>
@@ -3447,25 +3782,25 @@ html{scroll-padding-top:18px}
   <!-- Cards de referência: Selic, CDI e Poupança separados -->
   <div class="indic-ref-bar market-ref-grid">
 
-    <!-- Card 1: SELIC -->
-    <div class="indic-ref-card selic-card market-ref-card">
-      <div class="indic-ref-label">🏦 Taxa Selic — Meta COPOM</div>
-      <div class="indic-ref-val gold" id="mc-selic">—</div>
-      <div class="indic-ref-sub">a.a. — taxa básica de juros</div>
-      <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
-        <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
+    <!-- Card 1: SELIC + COPOM -->
+    <div class="indic-ref-card macro-card selic-copom-card market-ref-card">
+      <div class="macro-side macro-selic">
+        <div class="macro-label">🏦 Taxa Selic — Meta COPOM</div>
+        <div class="macro-main-value gold" id="mc-selic">—</div>
+        <div class="macro-sub">a.a. — taxa básica de juros</div>
+        <div class="macro-note">Última alteração: <strong id="selic-last-change">—</strong></div>
       </div>
-      <!-- Card expansível do Calendário COPOM 2026 -->
-      <div id="copomCalendario" style="overflow:hidden;max-height:0;transition:max-height .35s ease,opacity .25s;opacity:0">
-        <div style="margin-top:10px;padding:12px 14px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)">
-          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:10px">📅 Reuniões COPOM 2026</div>
-          <div id="copomMeetings" style="display:flex;flex-direction:column;gap:4px"></div>
-          <div style="margin-top:8px;font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;font-style:italic;border-top:1px solid var(--border2);padding-top:6px">
-            Atas publicadas às 8h da terça seguinte à reunião ·
-            <a href="https://www.bcb.gov.br/detalhenoticia/20739/nota" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">Fonte BCB ↗</a>
-          </div>
+
+      <div class="macro-divider" aria-hidden="true"></div>
+
+      <div class="macro-side macro-copom">
+        <div class="macro-label">📅 Reuniões COPOM 2026</div>
+        <div class="copom-grid" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026">
+          <span style="color:var(--muted);font-size:.68rem">calendário carregando...</span>
         </div>
+        <a href="https://www.bcb.gov.br/controleinflacao/copom" target="_blank" rel="noopener" class="macro-link">
+          Atas às 8h da terça seguinte · Fonte BCB ↗
+        </a>
       </div>
     </div>
 
@@ -3488,40 +3823,53 @@ html{scroll-padding-top:18px}
       <div class="cdi-rel" style="margin-top:6px">CDI ≈ Selic − 0,10 p.p. · 12M na tabela consolidada</div>
     </div>
 
-    <!-- Card 3: Poupança antiga + nova + expansível -->
-    <div class="indic-ref-card poup market-ref-card">
-      <div class="poup-header">
+    <!-- Card 3: Poupança antiga + nova + regra visível -->
+    <div class="indic-ref-card poup market-ref-card poup-card-consultivo">
+      <div class="poup-header poup-header-clean">
         <div>
           <div class="indic-ref-label">🏠 Poupança — Rendimentos</div>
+          <div class="poup-card-subtitle">Regras visíveis para consulta rápida</div>
         </div>
-        <button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Ver regras ▼</button>
+        <button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Ver detalhes ▼</button>
       </div>
-      <div class="poup-values">
-        <div class="poup-rule">
-          <div class="poup-rule-label">Regra nova · a partir de 04/05/2012</div>
+
+      <div class="poup-values poup-rules-grid">
+        <div class="poup-rule poup-rule-card new-rule">
+          <div class="poup-rule-label">Regra nova</div>
+          <div class="poup-rule-period">A partir de 04/05/2012</div>
           <div class="poup-rule-val blue" id="mc-poup">—</div>
-          <div class="poup-rule-sub">a.m. · conforme nível da Selic</div>
+          <div class="poup-rule-sub" id="poupNewRuleText">a.m. · regra conforme nível da Selic</div>
+          <div class="poup-accum-pill" id="poupNewAccum">Acum. ano: —</div>
         </div>
-        <div class="poup-rule" style="opacity:.65">
-          <div class="poup-rule-label">Regra antiga · até 03/05/2012</div>
-          <div class="poup-rule-val muted">~0,50%</div>
-          <div class="poup-rule-sub">a.m. · TR + 0,50%</div>
+
+        <div class="poup-rule-divider" aria-hidden="true"></div>
+
+        <div class="poup-rule poup-rule-card old-rule">
+          <div class="poup-rule-label">Regra antiga</div>
+          <div class="poup-rule-period">Até 03/05/2012</div>
+          <div class="poup-rule-val muted" id="poupOldMonthly">~0,50%</div>
+          <div class="poup-rule-sub" id="poupOldRuleText">a.m. · TR + 0,50%</div>
+          <div class="poup-accum-pill muted" id="poupOldAccum">Acum. ano: —</div>
         </div>
       </div>
+
+      <div class="poup-quick-note" id="poupQuickNote">
+        Com a Selic atual, a regra nova será definida automaticamente pelo nível da taxa básica.
+      </div>
+
       <div class="poup-explain" id="poupExplain">
-        <div class="poup-explain-inner">
-          <div class="poup-explain-title">Regras da poupança</div>
+        <div class="poup-explain-inner poup-explain-clean">
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-nova">Nova</span>
-            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos a partir de 04/05/2012:</strong> se a Selic for superior a 8,5% a.a., rende TR + 0,50% a.m.; se a Selic for igual ou inferior a 8,5% a.a., rende TR + 70% da Selic.</span>
+            <span class="poup-explain-text">Se a Selic estiver acima de 8,5% a.a., rende TR + 0,50% a.m.; se estiver igual ou abaixo, rende TR + 70% da Selic.</span>
           </div>
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-antiga">Antiga</span>
-            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos até 03/05/2012:</strong> rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
+            <span class="poup-explain-text">Rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
           </div>
           <div class="poup-explain-row">
-            <span class="poup-explain-tag tag-antiga">Dica</span>
-            <span class="poup-explain-text">Com Selic acima de 8,5% a.a., a regra nova também usa remuneração adicional de 0,50% a.m. + TR, evitando confusão com a regra dos 70%.</span>
+            <span class="poup-explain-tag tag-antiga">BCB</span>
+            <span class="poup-explain-text">Use a calculadora oficial para correção de valores e conferência do rendimento acumulado por período.</span>
           </div>
           <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
         </div>
@@ -3537,6 +3885,143 @@ html{scroll-padding-top:18px}
       <span id="marketScenarioText">Carregando leitura dos principais indicadores...</span>
     </div>
   </div>
+</div><!-- /section cards mercado -->
+
+
+
+<!-- ══════════════════════════════════ CORE DO ATENDIMENTO ══ -->
+<!-- ═══ Catálogo e Rankings primeiro — acesso rápido na reunião ═══ -->
+<div class="block-divider bloco-atendimento">
+  <div class="block-divider-line"></div>
+  <span class="block-divider-label">📁 Core do Atendimento — Catálogo &amp; Rankings</span>
+  <div class="block-divider-line"></div>
+</div>
+<!-- ════════════════ BLOCO 2: CORE DO ATENDIMENTO ════════════════ -->
+<!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
+<div class="section-gap" id="sec-fundos">
+  <div class="section-title">
+    <h2>📁 Catálogo Completo de Fundos</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
+  </div>
+
+  <div class="controls-bar" style="margin-bottom:10px">
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="searchInput" type="text" placeholder="Buscar fundo, categoria, CNPJ..."/>
+    </div>
+    <select id="perPage" class="ctrl-select">
+      <option value="25">25 por página</option>
+      <option value="50">50 por página</option>
+      <option value="100">100 por página</option>
+      <option value="9999">Todos</option>
+    </select>
+    <div class="toggle-wrap">
+      <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
+      <span class="toggle-label">Ocultar sem dados</span>
+    </div>
+  </div>
+
+
+  <div class="mobile-filter-bar" id="mobileFilterBar">
+    <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle">⚙️ Editar filtros</button>
+    <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
+  </div>
+
+  <div class="filter-section mobile-filters-collapsed" style="margin-bottom:14px">
+    <!-- Perfil -->
+    <div class="filter-row" id="perfilFilters">
+      <span class="filter-label">Perfil</span>
+      <button class="chip active" data-perfil="">Todos</button>
+      <button class="chip pf"   data-perfil="PF">🧑 PF</button>
+      <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
+      <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
+      <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
+    </div>
+    <!-- Risco -->
+    <div class="filter-row" id="riscoFilters">
+      <span class="filter-label">Risco</span>
+      <button class="chip active" data-risco="">Todos</button>
+      <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
+      <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
+      <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
+      <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
+    </div>
+    <!-- ★ Performance mínima (NOVO) -->
+    <div class="filter-row" id="perfFilters">
+      <span style="font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace">período:</span>
+      <select id="perfPeriodo" class="perf-period-select">
+        <option value="Acum. 12M (%)">12 Meses</option>
+        <option value="Acum. Ano (%)">No Ano</option>
+        <option value="Acum. Mes (%)">No Mês</option>
+      </select>
+      <button class="chip active" data-perf="">Todos</button>
+      <button class="chip" data-perf="0">≥ 0%</button>
+      <button class="chip" data-perf="5">≥ 5%</button>
+      <button class="chip" data-perf="10">≥ 10%</button>
+      <button class="chip" data-perf="20">≥ 20%</button>
+      <button class="chip" data-perf="50">≥ 50%</button>
+      
+    </div>
+  </div>
+
+
+  <div class="mobile-view-toggle" id="mobileViewToggle" aria-label="Modo de visualização do catálogo">
+    <span class="mobile-view-toggle-label">Visualização</span>
+    <div class="mobile-view-toggle-buttons">
+      <button type="button" class="mobile-view-btn" data-view="table">Tabela</button>
+      <button type="button" class="mobile-view-btn active" data-view="cards">Cards</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
+    <table id="mainTable" style="display:none">
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div id="mobileFundCards" class="mobile-fund-cards" aria-live="polite"></div>
+
+  <div class="pagination-row">
+    <div id="resultInfo"></div>
+    <div class="page-btns" id="pageBtns"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ RANKINGS ══ -->
+<div class="section-gap" id="rankingsSection">
+  <div class="ranking-head">
+    <div class="ranking-title-group">
+      <h2>🏆 Rankings de Performance</h2>
+      <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
+    </div>
+    <div class="ranking-actions" aria-label="Ações dos rankings">
+      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar resumo</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Gerar print</button>
+    </div>
+  </div>
+  <div id="rankingGrid" class="ranking-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
+      <div class="spinner"></div>Carregando rankings...
+    </div>
+  </div>
+</div>
+<div id="rankShareToast" class="rank-share-toast" role="status" aria-live="polite"></div>
+
+
+
+<!-- ═════════════════════════════════ APROFUNDAMENTO MACRO ══ -->
+<!-- ═══ Dados contextuais — use quando o cliente perguntar ═══ -->
+<div class="block-divider bloco-macro">
+  <div class="block-divider-line"></div>
+  <span class="block-divider-label">📡 Aprofundamento Macro — use ao contextualizar</span>
+  <div class="block-divider-line"></div>
+</div>
+<!-- ════════════════ BLOCO 3: APROFUNDAMENTO MACRO ════════════════ -->
+<!-- ══════════════════ PAINEL CONSOLIDADO DE INDICADORES ══ -->
+<div class="section-gap" id="sec-mercado-painel">
 
   <!-- Cabeçalho do painel consolidado -->
   <div class="market-table-toolbar">
@@ -3771,10 +4256,10 @@ html{scroll-padding-top:18px}
       CDI e IPCA: séries públicas BCB 4391/433 · Dólar: PTAX BCB · Ibovespa e S&P 500: fontes públicas de mercado
     </div>
   </div>
-</div><!-- /section indicadores -->
+</div><!-- /section painel consolidado -->
 
 <!-- ═══════════════════════════════════ SEÇÃO DÓLAR ══ -->
-<div class="section-gap">
+<div class="section-gap" id="sec-dolar">
   <div class="section-title">
     <h2>💵 Câmbio — Dólar BRL/USD</h2>
     <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB — cotação oficial</span>
@@ -3860,7 +4345,7 @@ html{scroll-padding-top:18px}
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
-<div class="section-gap">
+<div class="section-gap" id="sec-focus">
   <div class="section-title focus-section-title">
     <div class="focus-title-block">
       <div class="focus-title-line">
@@ -3908,7 +4393,7 @@ html{scroll-padding-top:18px}
 </div>
 
 <!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES ══ -->
-<div class="section-gap">
+<div class="section-gap" id="sec-graficos">
   <div class="section-title">
     <h2>📊 Evolução dos Indicadores</h2>
     <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
@@ -3945,118 +4430,6 @@ html{scroll-padding-top:18px}
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════ RANKINGS ══ -->
-<div class="section-gap" id="rankingsSection">
-  <div class="ranking-head">
-    <div class="ranking-title-group">
-      <h2>🏆 Rankings de Performance</h2>
-      <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
-    </div>
-    <div class="ranking-actions" aria-label="Ações dos rankings">
-      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar resumo</button>
-      <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
-      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Gerar print</button>
-    </div>
-  </div>
-  <div id="rankingGrid" class="ranking-grid">
-    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
-      <div class="spinner"></div>Carregando rankings...
-    </div>
-  </div>
-</div>
-<div id="rankShareToast" class="rank-share-toast" role="status" aria-live="polite"></div>
-
-<!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
-<div class="section-gap">
-  <div class="section-title">
-    <h2>📁 Catálogo Completo de Fundos</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
-  </div>
-
-  <div class="controls-bar" style="margin-bottom:10px">
-    <div class="search-wrap">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="searchInput" type="text" placeholder="Buscar fundo, categoria, CNPJ..."/>
-    </div>
-    <select id="perPage" class="ctrl-select">
-      <option value="25">25 por página</option>
-      <option value="50">50 por página</option>
-      <option value="100">100 por página</option>
-      <option value="9999">Todos</option>
-    </select>
-    <div class="toggle-wrap">
-      <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
-      <span class="toggle-label">Ocultar sem dados</span>
-    </div>
-  </div>
-
-
-  <div class="mobile-filter-bar" id="mobileFilterBar">
-    <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle">⚙️ Editar filtros</button>
-    <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
-  </div>
-
-  <div class="filter-section mobile-filters-collapsed" style="margin-bottom:14px">
-    <!-- Perfil -->
-    <div class="filter-row" id="perfilFilters">
-      <span class="filter-label">Perfil</span>
-      <button class="chip active" data-perfil="">Todos</button>
-      <button class="chip pf"   data-perfil="PF">🧑 PF</button>
-      <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
-      <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
-      <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
-    </div>
-    <!-- Risco -->
-    <div class="filter-row" id="riscoFilters">
-      <span class="filter-label">Risco</span>
-      <button class="chip active" data-risco="">Todos</button>
-      <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
-      <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
-      <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
-      <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
-    </div>
-    <!-- ★ Performance mínima (NOVO) -->
-    <div class="filter-row" id="perfFilters">
-      <span style="font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace">período:</span>
-      <select id="perfPeriodo" class="perf-period-select">
-        <option value="Acum. 12M (%)">12 Meses</option>
-        <option value="Acum. Ano (%)">No Ano</option>
-        <option value="Acum. Mes (%)">No Mês</option>
-      </select>
-      <button class="chip active" data-perf="">Todos</button>
-      <button class="chip" data-perf="0">≥ 0%</button>
-      <button class="chip" data-perf="5">≥ 5%</button>
-      <button class="chip" data-perf="10">≥ 10%</button>
-      <button class="chip" data-perf="20">≥ 20%</button>
-      <button class="chip" data-perf="50">≥ 50%</button>
-      
-    </div>
-  </div>
-
-
-  <div class="mobile-view-toggle" id="mobileViewToggle" aria-label="Modo de visualização do catálogo">
-    <span class="mobile-view-toggle-label">Visualização</span>
-    <div class="mobile-view-toggle-buttons">
-      <button type="button" class="mobile-view-btn" data-view="table">Tabela</button>
-      <button type="button" class="mobile-view-btn active" data-view="cards">Cards</button>
-    </div>
-  </div>
-
-  <div class="table-wrap">
-    <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
-    <table id="mainTable" style="display:none">
-      <thead id="tableHead"></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-
-  <div id="mobileFundCards" class="mobile-fund-cards" aria-live="polite"></div>
-
-  <div class="pagination-row">
-    <div id="resultInfo"></div>
-    <div class="page-btns" id="pageBtns"></div>
-  </div>
-</div>
 
 <!-- ═══════════════════════════════════════ MODAL PTAX ══ -->
 <div class="modal-overlay" id="modalPtax" onclick="fecharModalPTAX(event)">
@@ -4165,7 +4538,58 @@ function togglePoupanca(){
   const el = $('poupExplain');
   const btn = $('poupExpandBtn');
   const isOpen = el.classList.toggle('open');
-  btn.textContent = isOpen ? 'Fechar ▲' : 'Ver regras ▼';
+  btn.textContent = isOpen ? 'Ocultar detalhes ▲' : 'Ver detalhes ▼';
+}
+
+function formatPctCard(v, fallback='—'){
+  if(v===null || v===undefined || v==='') return fallback;
+  const n = Number(v);
+  if(!Number.isFinite(n)) return fallback;
+  return (n>0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
+}
+
+function getFirstNumber(...vals){
+  for(const v of vals){
+    if(v===null || v===undefined || v==='') continue;
+    const n = Number(v);
+    if(Number.isFinite(n)) return n;
+  }
+  return null;
+}
+
+function atualizarPoupancaCard(d, selicAtual){
+  const c = d?.cards || {};
+  const nova = c.poupanca_nova || d?.poupanca_nova || d?.poupanca?.nova || {};
+  const antiga = c.poupanca_antiga || d?.poupanca_antiga || d?.poupanca?.antiga || {};
+
+  const valorNova = getFirstNumber(nova.valor, nova.mensal, nova.rendimento_mensal);
+  const valorAntiga = getFirstNumber(antiga.valor, antiga.mensal, antiga.rendimento_mensal);
+  const acumNova = getFirstNumber(nova.acum_ano, nova.acumulado_ano, nova.rendimento_ano, nova.ytd);
+  const acumAntiga = getFirstNumber(antiga.acum_ano, antiga.acumulado_ano, antiga.rendimento_ano, antiga.ytd);
+
+  if($('mc-poup')) $('mc-poup').textContent = valorNova != null ? fmt(valorNova) : '—';
+  if($('poupOldMonthly')) $('poupOldMonthly').textContent = valorAntiga != null ? fmt(valorAntiga) : '~0,50%';
+  if($('poupNewAccum')) $('poupNewAccum').textContent = 'Acum. ano: ' + (acumNova != null ? formatPctCard(acumNova) : '—');
+  if($('poupOldAccum')) $('poupOldAccum').textContent = 'Acum. ano: ' + (acumAntiga != null ? formatPctCard(acumAntiga) : '—');
+
+  const selic = getFirstNumber(selicAtual, c.selic_meta?.valor);
+  const acima = selic != null && selic > 8.5;
+  const textoNova = acima
+    ? 'a.m. · TR + 0,50% (Selic > 8,5%)'
+    : 'a.m. · TR + 70% da Selic (Selic ≤ 8,5%)';
+
+  if($('poupNewRuleText')) $('poupNewRuleText').textContent = textoNova;
+  if($('poupOldRuleText')) $('poupOldRuleText').textContent = 'a.m. · TR + 0,50%';
+
+  if($('poupQuickNote')){
+    if(selic == null){
+      $('poupQuickNote').textContent = 'Regra nova depende do nível da Selic. Para acumulado exato, conferir calculadora oficial do BCB.';
+    }else if(acima){
+      $('poupQuickNote').textContent = `Com Selic em ${fmt(selic)}, a regra nova usa TR + 0,50% a.m.; a regra antiga também usa TR + 0,50% a.m.`;
+    }else{
+      $('poupQuickNote').textContent = `Com Selic em ${fmt(selic)}, a regra nova usa TR + 70% da Selic; a regra antiga mantém TR + 0,50% a.m.`;
+    }
+  }
 }
 
 /* ════════════════════════════════════════════════════
@@ -4690,17 +5114,22 @@ function atualizarTabelaIndicadores(){
   if(thAcum) thAcum.firstChild.textContent = `Acum. ${m}M `;
 
   // ═══ CDI ═══
-  const cdiMesFechado = num(cards.cdi?.mensal_fechado) ?? num(indicState.cdi.mes) ?? num(cards.cdi?.mensal);
+  // v17: o robô gera 'mensal' (mês fechado real, série 4391 BCB).
+  // 'mensal_fechado' não existe — era um campo planejado mas nunca implementado.
+  const cdiMesFechado = num(cards.cdi?.mensal) ?? num(indicState.cdi.mes);
   const cdiParcial = num(cards.cdi?.parcial_mes_atual);
   const cdiAno = num(cards.cdi?.acum_ano_com_parcial) ?? num(cards.cdi?.acum_ano) ?? null;
   const cdiAcum = num(indicState.cdi[`m${m}`]) ?? num(cards.cdi?.[`acum_${m}m`]);
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
-  set('cdi-mes-ant-sub', 'taxa mensal');
+  // v17: usa mes_ref do robô (ex: "abr/2026") em vez de calcular a data
+  set('cdi-mes-ant-sub', cards.cdi?.mes_ref ? `taxa ${cards.cdi.mes_ref}` : `taxa mensal ${mesAntLabel}`);
 
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2);
-  const diasUteis = cards.cdi?.dias_uteis_parcial || cards.cdi?.dias_uteis_mes_atual || hoje.getDate();
-  set('cdi-cur-sub', cdiParcial !== null ? `~${diasUteis} dias úteis` : 'mês atual parcial');
+  // v17: usa parcial_ref do robô (ex: "mai/2026") — dias_uteis_parcial não é gerado
+  set('cdi-cur-sub', cdiParcial !== null
+    ? (cards.cdi?.parcial_ref ? `ref. ${cards.cdi.parcial_ref}` : `mês atual parcial`)
+    : 'mês atual parcial');
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
   set('cdi-ano-sub', cdiAno !== null ? 'ano com parcial' : 'acumulado ano');
@@ -4716,7 +5145,8 @@ function atualizarTabelaIndicadores(){
   const ipcaAcum = num(indicState.ipca[`m${m}`]);
 
   setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
-  set('ipca-mes-ant-sub', 'último divulgado');
+  // v17: usa mesRef que vem do label_mes do robô (ex: "abr/2026")
+  set('ipca-mes-ant-sub', ipcaRef ? `divulgado ${ipcaRef}` : 'último divulgado');
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
   setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
   set('ipca-acum-sub-v2', `acum. ${m}M`);
@@ -4884,25 +5314,16 @@ function normalizarMercadoAtual(d){
 
 
 /* ════════════════════════════════════════════════════
-   CARREGA E MESCLA indices_mercado_teste.json
-   Motivo: mercado_atual.json tem CDI/IPCA/PTAX, mas os
-   acumulados de bolsas vêm no arquivo de índices detalhados.
+   ROBÔ v17 — indices_mercado já vem completo dentro de mercado_atual.json.
+   Arquivo indices_mercado_teste.json foi eliminado (era gerado separadamente
+   nas versões anteriores). A função abaixo é mantida como stub para não
+   quebrar a chamada em carregarMercado(), mas não faz fetch algum.
 ════════════════════════════════════════════════════ */
 async function carregarIndicesMercadoDetalhados(){
-  try{
-    const r = await fetch(BASE_URL+'indices_mercado_teste.json?v='+Date.now());
-    if(!r.ok) throw new Error('HTTP '+r.status);
-    const d = await r.json();
-    if(d?.indices_mercado){
-      console.info('[Índices] indices_mercado_teste.json carregado e pronto para mescla');
-      return d;
-    }
-    console.warn('[Índices] indices_mercado_teste.json carregou, mas não trouxe indices_mercado');
-    return null;
-  }catch(e){
-    console.warn('[Índices] indices_mercado_teste.json indisponível:', e);
-    return null;
-  }
+  // v17: todos os campos de dólar, ibovespa, S&P, Dow e Nasdaq
+  // (mês fechado, mês atual, ano, 12M, 24M, 36M + BRL) já chegam
+  // dentro de mercado_atual.json → indices_mercado. Nada a buscar.
+  return null;
 }
 
 function mesclarMercadoComIndicesDetalhados(raw, detalhado){
@@ -5040,14 +5461,18 @@ async function carregarMercado(){
       if(el) el.textContent = ultima.data || '—';
     }
 
+    buildCopomCalendario();
+
     // ── CDI — baseline + ★ v16: acumulados pré-calculados pelo robô ──
     const cdi = c.cdi?.valor;
     if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
     if(cdi){
       const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1+cdi/100,1/12)-1)*100);
       const isEst = c.cdi?.mensal == null;
-      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+('%');
-      if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + (isEst ? '*' : '');
+      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+'%';
+      // v17: exibe taxa + mês de referência no card CDI (ex: "+1,09% · abr/2026")
+      const mesRefLabel = c.cdi?.mes_ref ? ` · ${c.cdi.mes_ref}` : '';
+      if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + mesRefLabel + (isEst ? '*' : '');
 
       // Baseline
       if(!indicState.cdi.mes) indicState.cdi.mes = cdiMensal;
@@ -5115,8 +5540,7 @@ async function carregarMercado(){
     if($('it-sp-usd') && intl.sp500_usd) $('it-sp-usd').textContent = fmtK(intl.sp500_usd)+' pts';
 
     // ── Poupança ──
-    const poup = c.poupanca_nova?.valor;
-    if($('mc-poup')) $('mc-poup').textContent = poup ? fmt(poup) : '—';
+    atualizarPoupancaCard(d, selic);
 
     atualizarResumoCenario(d);
 
@@ -5522,7 +5946,7 @@ let activeSearch='',activeCat='',activePerfil='',activeRisco='',hideSemDados=fal
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
 
-const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)"]);
+const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)","% CDI 12M"]);
 const DATE_SET=new Set(["Data Inicio","Data Início","Data de Inicio","Data de Início","DATA INICIO","DATA INÍCIO"]);
 function normalizarHeaderOrdenacao(h){
   return String(h||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
@@ -5561,6 +5985,9 @@ const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
 function getVisibleHeaders(){
   const base = displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
+  // v20: injeta coluna calculada '% CDI 12M' após Acum. 12M
+  const idx12m = base.indexOf('Acum. 12M (%)');
+  if(idx12m >= 0 && !base.includes('% CDI 12M')) base.splice(idx12m+1, 0, '% CDI 12M');
   if(!base.includes('Documentos')) base.push('Documentos');
   return base;
 }
@@ -5870,47 +6297,138 @@ function gerarLeituraRapidaFundo(r){
   const pag = texto(r['Pagamento Resgate']);
   const rent12 = numero(r['Acum. 12M (%)']);
   const rentAno = numero(r['Acum. Ano (%)']);
+  const cdiRatio = calcCdiRatio(rent12, indicState.cdi.m12);
 
   const base = (categoria + ' ' + nome)
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g,'')
     .toUpperCase();
 
+  // ── Objetivo por categoria ──────────────────────────────────────────
   let objetivo = 'Este fundo pode ser analisado como alternativa de investimento conforme sua categoria, perfil de risco, liquidez e comportamento de rentabilidade.';
 
   if(base.includes('FUNDOS MUTUOS DE PRIVATIZACAO') || base.includes('FMP')){
-    objetivo = 'Fundo voltado à exposição em ações vinculadas a programas de privatização, geralmente com maior oscilação de curto prazo e forte dependência do desempenho das empresas da carteira.';
-  } else if(base.includes('ACOES')){
-    objetivo = 'Fundo de renda variável, com objetivo de capturar desempenho de ações ou índices de ações. Tende a apresentar maior volatilidade e horizonte recomendado mais longo.';
-  } else if(base.includes('CAMBIAL') || base.includes('DOLAR')){
-    objetivo = 'Fundo com exposição cambial, usado principalmente para acompanhar movimentos do dólar ou compor proteção e diversificação frente ao real.';
+    objetivo = 'Fundo Mútuo de Privatização (FMP-FGTS): permite aplicar recursos do FGTS em ações de empresas privatizadas. Concentra risco em papéis específicos e está sujeito às oscilações do mercado de renda variável e ao ambiente regulatório.';
+  } else if(base.includes('PETROBRAS') && base.includes('PRE-SAL')){
+    objetivo = 'Fundo concentrado em ações da Petrobras com ênfase em ativos do pré-sal. Exposição elevada ao desempenho operacional da empresa, variações do preço do petróleo, câmbio e risco político/regulatório do setor de energia.';
+  } else if(base.includes('PETROBRAS')){
+    objetivo = 'Fundo concentrado em ações da Petrobras. Apresenta exposição direta ao preço do petróleo, variações cambiais, política de dividendos da empresa e risco regulatório do setor. Adequado para horizonte de longo prazo com tolerância a alta volatilidade.';
+  } else if(base.includes('VALE') || base.includes('RIO DOCE')){
+    objetivo = 'Fundo concentrado em ações da Vale. O desempenho está diretamente ligado ao preço internacional do minério de ferro e ao ciclo de demanda da China (principal consumidor). Exposto à variação cambial (receitas em dólar) e a riscos ESG do setor de mineração.';
+  } else if(base.includes('ELETROBRAS') || base.includes('PRIVATIZ')){
+    objetivo = 'Fundo com exposição a ações de empresas resultantes de processos de privatização, incluindo o setor elétrico. O desempenho reflete a transição para o modelo privado de gestão, tarifas reguladas, política energética e condições hídricas do país.';
+  } else if(base.includes('CONSTRUCAO CIVIL')){
+    objetivo = 'Fundo setorial de construção civil. Exposto ao ciclo imobiliário, taxa de juros (INCC, IGPM), crédito habitacional e programas governamentais. Indicado para quem acredita na expansão do setor a médio e longo prazo.';
+  } else if(base.includes('CONSUMO')){
+    objetivo = 'Fundo setorial com ações de empresas de consumo e varejo. O desempenho reflete o ciclo econômico doméstico, nível de emprego, renda e confiança do consumidor. Correlacionado com a atividade econômica do Brasil.';
+  } else if(base.includes('DIVIDENDOS')){
+    objetivo = 'Fundo focado em ações com histórico consistente de distribuição de dividendos. Estratégia orientada à geração de renda recorrente via proventos, combinando potencial de valorização com menor volatilidade relativa ao Ibovespa.';
+  } else if(base.includes('SMALL CAPS')){
+    objetivo = 'Fundo de ações de empresas menores (small caps), com potencial de crescimento acima da média, mas com liquidez e volatilidade superiores aos fundos de large caps. Requer horizonte de longo prazo e tolerância a oscilações maiores.';
+  } else if(base.includes('BDR')){
+    objetivo = 'Fundo com exposição a BDRs (Brazilian Depositary Receipts), que representam ações de empresas estrangeiras negociadas no Brasil. O desempenho combina a performance das empresas investidas com a variação cambial BRL/USD.';
+  } else if(base.includes('ISE') || base.includes('SUSTENTABILIDADE')){
+    objetivo = 'Fundo de ações com critérios ESG (ambiental, social e governança), referenciado ao Índice de Sustentabilidade Empresarial da B3. Seleciona empresas com melhores práticas socioambientais dentro do universo de investimento.';
+  } else if(base.includes('SETOR FINANCEIRO')){
+    objetivo = 'Fundo setorial com exposição a bancos, seguradoras e outras instituições financeiras. O desempenho é sensível ao nível de spread bancário, inadimplência, regulação do setor e ciclo de crédito da economia.';
+  } else if(base.includes('INFRAESTRUTURA')){
+    objetivo = 'Fundo setorial de infraestrutura, com exposição a empresas de utilidade pública, concessões, energia e saneamento. Apresenta características defensivas com previsibilidade de receita por contratos de longo prazo.';
+  } else if((base.includes('IBOVESPA') || base.includes('IBX') || base.includes('IBRX') || base.includes('PIBB')) && !base.includes('ATIVO')){
+    objetivo = 'Fundo passivo referenciado ao Ibovespa ou IBrX. O objetivo é replicar o desempenho do índice com baixo custo de gestão. Exposição ampla ao mercado acionário brasileiro, incluindo as principais empresas por liquidez e capitalização.';
+  } else if(base.includes('IBOVESPA') && base.includes('ATIVO')){
+    objetivo = 'Fundo de gestão ativa que usa o Ibovespa como benchmark. O gestor busca superar o índice por meio de seleção de ações, podendo apresentar tracking error (diferença de desempenho) positivo ou negativo em relação ao índice.';
+  } else if(base.includes('BOLSA AMERICANA') || base.includes('GLOBAL EQUITIES') || base.includes('INVEST EXT') || base.includes('IE')){
+    objetivo = 'Fundo com exposição ao mercado acionário internacional (principalmente EUA). O retorno em reais combina a performance das ações no exterior com a variação cambial BRL/USD. Serve como diversificação geográfica da carteira.';
+  } else if(base.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO') || base.includes('INDEXA DOLAR')){
+    objetivo = 'Fundo cambial com exposição direta à variação da moeda estrangeira frente ao real. Funciona como hedge (proteção) cambial ou especulação direcional. O resultado depende quase exclusivamente da variação da taxa de câmbio.';
+  } else if(base.includes('OURO')){
+    objetivo = 'Fundo com exposição ao ouro, ativo historicamente usado como reserva de valor e proteção em cenários de incerteza e inflação. O retorno em reais combina a performance do ouro em dólar com a variação cambial.';
+  } else if(base.includes('IMA-B 5+') || base.includes('IMA-B5+')){
+    objetivo = 'Fundo de renda fixa referenciado ao IMA-B 5+, índice de títulos IPCA+ com prazo acima de 5 anos. Elevada sensibilidade a variações de taxa de juros (duration longa). Indicado para proteção contra inflação no longo prazo, mas com volatilidade relevante.';
+  } else if(base.includes('IMA-B 5') || base.includes('IMA-B5')){
+    objetivo = 'Fundo de renda fixa referenciado ao IMA-B 5 (títulos IPCA+ com prazo de até 5 anos). Menor sensibilidade à taxa de juros que o IMA-B 5+, mas ainda com exposição à inflação e marcação a mercado dos títulos.';
+  } else if(base.includes('IMA-B') || base.includes('IMAB') || base.includes('BRASIL INFLACAO')){
+    objetivo = 'Fundo de renda fixa indexado ao IMA-B (Índice de Mercado ANBIMA de títulos IPCA+). Protege o patrimônio da inflação com rendimento real. A marcação a mercado pode gerar volatilidade no curto prazo, especialmente em períodos de abertura de juros.';
+  } else if(base.includes('IRF-M 1+') || base.includes('IRFM 1+')){
+    objetivo = 'Fundo de renda fixa referenciado ao IRF-M 1+ (títulos prefixados com prazo acima de 1 ano). Alta sensibilidade à taxa de juros futura (duration longa). O valor da cota pode variar bastante conforme a curva de juros — positiva quando os juros caem, negativa quando sobem.';
+  } else if(base.includes('IRF-M 1') || base.includes('IRFM 1')){
+    objetivo = 'Fundo de renda fixa referenciado ao IRF-M 1 (títulos prefixados com prazo de até 1 ano). Menor sensibilidade à taxa de juros que o IRF-M 1+, com retorno mais previsível e adequado a horizontes mais curtos.';
+  } else if(base.includes('IRF-M') || base.includes('IRFM') || base.includes('PREFIXADO') || base.includes('PRE RF') || base.includes('ABSOLUTO PRE')){
+    objetivo = 'Fundo de renda fixa prefixada, com rentabilidade contratada no momento da aplicação. O valor da cota oscila conforme a variação da curva de juros (marcação a mercado). Beneficia-se de quedas de taxa Selic; perde quando os juros sobem.';
+  } else if(base.includes('IDKA')){
+    objetivo = 'Fundo referenciado ao IDKA (Índice de Duração Constante ANBIMA), que mantém prazo médio fixo de títulos IPCA+. O retorno combina juro real com variação da inflação, com duration controlada para previsibilidade de risco.';
+  } else if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV') || base.includes('EXPERTISE') || base.includes('DIAMANTE') || base.includes('FIDELIDADE')){
+    objetivo = 'Fundo de renda fixa com exposição a crédito privado (debêntures, CRIs, CRAs e outros títulos corporativos). Busca prêmio de risco acima do CDI, mas com menor liquidez e exposição ao risco de crédito dos emissores. Requer análise de spread e qualidade dos ativos.';
+  } else if(base.includes('MULTIMERCADO') && (base.includes('BTG') || base.includes('ZARATHUSTRA') || base.includes('PIMCO') || base.includes('VERDE') || base.includes('CLARITAS'))){
+    objetivo = 'Fundo multimercado de gestão especializada (parceria com gestora renomada). Estratégia flexível com exposição a múltiplas classes de ativos. Avalie o histórico de risco/retorno, volatilidade e consistência da gestora em diferentes cenários de mercado.';
   } else if(base.includes('MULTIMERCADO')){
-    objetivo = 'Fundo multimercado, que pode combinar diferentes estratégias e classes de ativos. A análise deve considerar política do fundo, volatilidade, liquidez e consistência de desempenho.';
-  } else if(base.includes('FUNDO DE INDICE') || base.includes('ETF')){
-    objetivo = 'Fundo de índice, desenhado para acompanhar uma carteira ou índice de referência, com comportamento próximo ao benchmark indicado.';
-  } else if(base.includes('RENDA FIXA REFERENCIADO')){
-    objetivo = 'Fundo de renda fixa referenciado, normalmente voltado a acompanhar um índice de referência, como CDI ou taxa semelhante, com foco em liquidez e previsibilidade relativa.';
-  } else if(base.includes('RENDA FIXA CURTO PRAZO')){
-    objetivo = 'Fundo de renda fixa de curto prazo, geralmente voltado à liquidez, baixo prazo médio da carteira e menor sensibilidade a oscilações longas de juros.';
-  } else if(base.includes('RENDA FIXA SIMPLES')){
-    objetivo = 'Fundo de renda fixa simples, normalmente utilizado para liquidez, reserva e aplicações de perfil mais conservador, com foco em instrumentos de baixo risco relativo.';
+    objetivo = 'Fundo multimercado com liberdade de alocação entre diferentes classes de ativos (juros, câmbio, ações). O resultado depende fortemente das decisões táticas do gestor. Avalie o histórico de volatilidade e consistência de desempenho.';
+  } else if(base.includes('FUNDO DE INDICE') || base.includes('ETF IBOVESPA')){
+    objetivo = 'ETF (Fundo de Índice) negociado em bolsa que replica um índice de referência. Combina a diversificação de uma carteira índice com a liquidez de negociação em bolsa e taxas de administração tipicamente baixas.';
+  } else if(base.includes('EXTRAMERCADO') || base.includes('TRANSFERENCIA VOLUNTARIA') || base.includes('SAUDE SUPLEMENTAR') || base.includes('CNI') || base.includes('SEBRAE') || base.includes('ANS')){
+    objetivo = 'Fundo de destinação específica, voltado a segmentos institucionais ou programas governamentais com regras e restrições próprias de aplicação e resgate. Consulte a lâmina para verificar elegibilidade.';
+  } else if(base.includes('RENDA FIXA REFERENCIADO') || base.includes('REF DI') || base.includes('REFERENC DI')){
+    objetivo = 'Fundo referenciado ao CDI, com objetivo de acompanhar a taxa DI com liquidez diária. Adequado para reserva de liquidez, capital de giro e posições conservadoras. O retorno varia conforme o nível da taxa Selic/CDI.';
+  } else if(base.includes('RENDA FIXA CURTO PRAZO') || base.includes('CURTO PRAZO')){
+    objetivo = 'Fundo de renda fixa de curto prazo com prazo médio de carteira reduzido. Baixa sensibilidade a variações de juros e alta liquidez. Adequado para objetivos de curtíssimo prazo ou como alternativa à poupança.';
+  } else if(base.includes('RENDA FIXA SIMPLES') || base.includes('RF SIMPLES')){
+    objetivo = 'Fundo de renda fixa simples com gestão passiva e isenção de IOF após 30 dias. Voltado a perfis conservadores e reserva de emergência. Investe majoritariamente em títulos públicos federais.';
+  } else if(base.includes('TITULOS PUBLICOS') || base.includes('TP RF') || base.includes('BRASIL TP')){
+    objetivo = 'Fundo de renda fixa com carteira composta predominantemente por títulos públicos federais. Risco soberano baixo, com retorno atrelado à taxa Selic ou indexadores (prefixado/IPCA+) conforme a estratégia do fundo.';
   } else if(base.includes('RENDA FIXA')){
-    objetivo = 'Fundo de renda fixa, com estratégia ligada a títulos públicos, crédito privado, inflação, prefixados ou pós-fixados, conforme a política específica do fundo.';
+    objetivo = 'Fundo de renda fixa com estratégia ampla — pode incluir títulos públicos, crédito privado, inflação ou prefixados conforme a política de investimento. Verifique o regulamento para entender a composição e o nível de risco efetivo.';
   }
 
+  // ── Tags de contexto rápido ──────────────────────────────────────────
+  const tags = [];
+  if(base.includes('PETROBRAS') || base.includes('VALE') || base.includes('RIO DOCE') || base.includes('ELETROBRAS') || base.includes('FMP') || base.includes('PRIVATIZ'))
+    tags.push('<span class="fund-note-tag tag-risco-alto">⚡ Risco concentrado</span>');
+  if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV'))
+    tags.push('<span class="fund-note-tag tag-credpriv">📋 Crédito privado</span>');
+  if(base.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO') || base.includes('OURO') || base.includes('BOLSA AMERICANA') || base.includes('GLOBAL') || base.includes('BDR'))
+    tags.push('<span class="fund-note-tag tag-cambio">💱 Exposição cambial</span>');
+  if(base.includes('IMA-B') || base.includes('IPCA') || base.includes('INFLACAO') || base.includes('IDKA'))
+    tags.push('<span class="fund-note-tag tag-inflacao">📊 Indexado inflação</span>');
+  if(base.includes('IRF-M') || base.includes('IRFM') || base.includes('PRE RF') || base.includes('PREFIXADO') || base.includes('ABSOLUTO PRE'))
+    tags.push('<span class="fund-note-tag tag-risco-mod">📉 Prefixado / duration</span>');
+  if(base.includes('REF DI') || base.includes('REFERENCIADO') || base.includes('SIMPLES') || base.includes('CURTO PRAZO'))
+    tags.push('<span class="fund-note-tag tag-liquidez">💧 Liquidez diária / CDI</span>');
+  if(base.includes('SMALL CAPS'))
+    tags.push('<span class="fund-note-tag tag-risco-alto">📈 Small caps</span>');
+  if(base.includes('IMA-B 5+') || base.includes('IRFM 1+') || base.includes('LONGO PRAZO'))
+    tags.push('<span class="fund-note-tag tag-risco-mod">⏳ Duration longa</span>');
+
+  // ── Alerta de CDI abaixo de 80% ──────────────────────────────────────
+  let alertaCdi = '';
+  if(cdiRatio !== null && cdiRatio < 80 && rent12 !== null &&
+     (base.includes('REFERENCIADO') || base.includes('REF DI') || base.includes('SIMPLES') || base.includes('RENDA FIXA'))){
+    alertaCdi = `<div class="fund-note-alert">⚠️ <strong>Atenção:</strong> Este fundo rendeu apenas <strong>${cdiRatio}% do CDI</strong> nos últimos 12 meses. Fundos de renda fixa/referenciados abaixo de 90–95% do CDI merecem avaliação cuidadosa da relação custo-benefício.</div>`;
+  }
+
+  // ── Complementos de dados ────────────────────────────────────────────
   const complementos = [];
-  if(risco) complementos.push(`Perfil de risco informado: ${risco}.`);
-  if(taxa) complementos.push(`Taxa de administração: ${taxa}%.`);
-  if(conv || pag) complementos.push(`Liquidez operacional: conversão ${conv || '—'} e pagamento ${pag || '—'}.`);
-  if(rentAno !== null) complementos.push(`Rentabilidade no ano: ${pct(rentAno)}.`);
-  if(rent12 !== null) complementos.push(`Rentabilidade em 12 meses: ${pct(rent12)}.`);
+  if(risco) complementos.push(`Perfil de risco: <strong>${risco}</strong>.`);
+  if(taxa) complementos.push(`Taxa de adm.: <strong>${taxa}% a.a.</strong>`);
+  if(conv || pag) complementos.push(`Liquidez: conversão <strong>${conv || '—'}</strong> / pagamento <strong>${pag || '—'}</strong>.`);
+  if(rentAno !== null) complementos.push(`Ano: <strong>${pct(rentAno)}</strong>.`);
+  if(rent12 !== null){
+    const ratioTxt = cdiRatio !== null ? ` (<strong>${cdiRatio}% do CDI</strong>)` : '';
+    complementos.push(`12M: <strong>${pct(rent12)}</strong>${ratioTxt}.`);
+  }
+
+  const tagsHtml = tags.length
+    ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
+    : '';
 
   return `
     <div class="fund-quick-note">
       <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
-      <div class="fund-quick-note-text">${objetivo} ${complementos.join(' ')}</div>
+      ${tagsHtml}
+      <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
+      ${complementos.length ? `<div class="fund-quick-note-text" style="margin-top:6px;font-size:.68rem;color:var(--muted)">${complementos.join(' ')}</div>` : ''}
+      ${alertaCdi}
       <div class="fund-quick-note-disclaimer">
-        Texto interpretativo gerado a partir dos dados disponíveis no catálogo. Para objetivo oficial, política de investimento, riscos e regras completas, consulte a lâmina, o regulamento e os demais documentos do fundo.
+        Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
       </div>
     </div>`;
 }
@@ -5951,6 +6469,27 @@ function buildDetailPanel(r,colspan){
 }
 
 
+
+/* Calcula quanto % do CDI o fundo rendeu em 12M */
+function calcCdiRatio(rent12, cdi12){
+  const r = typeof rent12 === 'string' ? toNum(rent12) : rent12;
+  const c = cdi12 || indicState.cdi.m12 || null;
+  if(r === null || c === null || c === 0) return null;
+  return Math.round((r / c) * 100);
+}
+function pctCdiCell(r){
+  const rent12 = toNum(r['Acum. 12M (%)']);
+  const ratio = calcCdiRatio(rent12, indicState.cdi.m12);
+  if(ratio === null) return '<td class="cdi-ratio-cell"><span class="cdi-ratio-badge neutral">—</span></td>';
+  const cls = ratio >= 100 ? 'above' : ratio >= 80 ? 'neutral' : 'below';
+  const label = ratio >= 100 ? `${ratio}% CDI` : `${ratio}% CDI`;
+  const icon = ratio >= 100 ? '▲' : ratio >= 80 ? '≈' : '▼';
+  return `<td class="cdi-ratio-cell">
+    <span class="cdi-ratio-badge ${cls}">${icon} ${ratio}%</span>
+    <span class="cdi-ratio-sub">do CDI 12M</span>
+  </td>`;
+}
+
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
@@ -5972,6 +6511,7 @@ function buildRowHTML(r,idx){
       html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${boletimBtn}</td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){html+=pctCell(val);return;}
+    if(h==='% CDI 12M'){html+=pctCdiCell(r);return;}
     if(h==='Documentos'){
       html+=`<td class="col-docs">${buildDocsCompactos(r)}</td>`;return;
     }
@@ -6356,60 +6896,87 @@ async function carregarPTAX(){
 }
 
 /* ════════════════════════════════════════════════════
-   CALENDÁRIO COPOM 2026
+   CALENDÁRIO COPOM 2026 — com decisão da Selic
 ════════════════════════════════════════════════════ */
 const COPOM_2026 = [
-  { datas: '27 e 28 de janeiro',  num: 1 },
-  { datas: '17 e 18 de março',    num: 2 },
-  { datas: '28 e 29 de abril',    num: 3 },
-  { datas: '16 e 17 de junho',    num: 4 },
-  { datas: '4 e 5 de agosto',     num: 5 },
-  { datas: '15 e 16 de setembro', num: 6 },
-  { datas: '3 e 4 de novembro',   num: 7 },
-  { datas: '8 e 9 de dezembro',   num: 8 },
-];
-const COPOM_DATAS_INICIO = [
-  new Date(2026,0,27), new Date(2026,2,17), new Date(2026,3,28),
-  new Date(2026,5,16), new Date(2026,7,4),  new Date(2026,8,15),
-  new Date(2026,10,3), new Date(2026,11,8),
+  { num:1, short:'27–28 jan', datas:'27 e 28 de janeiro',  decision:'2026-01-28' },
+  { num:2, short:'17–18 mar', datas:'17 e 18 de março',    decision:'2026-03-18' },
+  { num:3, short:'28–29 abr', datas:'28 e 29 de abril',    decision:'2026-04-29' },
+  { num:4, short:'16–17 jun', datas:'16 e 17 de junho',    decision:'2026-06-17' },
+  { num:5, short:'4–5 ago',   datas:'4 e 5 de agosto',     decision:'2026-08-05' },
+  { num:6, short:'15–16 set', datas:'15 e 16 de setembro', decision:'2026-09-16' },
+  { num:7, short:'3–4 nov',   datas:'3 e 4 de novembro',   decision:'2026-11-04' },
+  { num:8, short:'8–9 dez',   datas:'8 e 9 de dezembro',   decision:'2026-12-09' },
 ];
 
+function _dateKeyCopom(v){
+  if(!v) return '';
+  const s = String(v);
+  if(/^\d{4}-\d{2}-\d{2}/.test(s)) return s.slice(0,10);
+  const m = s.match(/^(\d{2})\/(\d{2})\/(\d{4})/);
+  if(m) return `${m[3]}-${m[2]}-${m[1]}`;
+  return '';
+}
+function _selicValorRegistro(r){
+  const v = r?.MetaSelic ?? r?.valor ?? r?.meta_selic ?? r?.taxa;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+function _fmtPpCopom(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return '—';
+  return (n > 0 ? '+' : '') + n.toFixed(2).replace('.',',') + ' p.p.';
+}
+function _fmtPctCopom(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return '—';
+  return n.toFixed(2).replace('.',',') + '%';
+}
+function _historicoSelicOrdenado(){
+  const h = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
+  return (Array.isArray(h) ? h : [])
+    .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia), _valor:_selicValorRegistro(r)}))
+    .filter(r => r._key && r._valor !== null)
+    .sort((a,b) => b._key.localeCompare(a._key));
+}
+function _decisaoCopomPorData(decisionDate){
+  const hist = _historicoSelicOrdenado();
+  const idx = hist.findIndex(r => r._key === decisionDate);
+  if(idx < 0) return null;
+  const atual = hist[idx];
+  const anterior = hist[idx + 1];
+  const taxa = atual._valor;
+  if(!anterior || anterior._valor === null){
+    return { tipo:'done', texto:`Selic ${_fmtPctCopom(taxa)}` };
+  }
+  const diff = +(taxa - anterior._valor).toFixed(2);
+  if(Math.abs(diff) < 0.005){
+    return { tipo:'hold', texto:`mantida em ${_fmtPctCopom(taxa)}` };
+  }
+  if(diff > 0){
+    return { tipo:'hike', texto:`alta ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
+  }
+  return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
+}
 function buildCopomCalendario(){
   const container = $('copomMeetings');
   if(!container) return;
-  const agora = new Date();
+  const hoje = new Date();
+  const hojeKey = hoje.toISOString().slice(0,10);
+  const proxIdx = COPOM_2026.findIndex(r => r.decision >= hojeKey);
+
   container.innerHTML = COPOM_2026.map((r,i) => {
-    const dt = COPOM_DATAS_INICIO[i];
-    const isPast = dt < agora && (agora - dt) > 86400000*2;
-    const isNext = !isPast && COPOM_DATAS_INICIO.findIndex(d => d >= agora) === i;
-    let badge = '';
-    if(isPast) badge = `<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:rgba(94,107,138,.15);color:var(--muted2);margin-left:6px">realizada</span>`;
-    if(isNext) badge = `<span style="font-size:.55rem;padding:1px 6px;border-radius:4px;background:var(--gold-dim);color:var(--gold2);border:1px solid rgba(200,151,58,.3);margin-left:6px">próxima ★</span>`;
-    const rowStyle = isNext
-      ? 'background:var(--gold-dim);border:1px solid rgba(200,151,58,.2);border-radius:7px;padding:5px 8px;margin:2px 0'
-      : 'padding:4px 8px;border-bottom:1px solid var(--border2)';
-    const cor = isPast ? 'var(--muted)' : isNext ? 'var(--text)' : 'var(--text)';
-    const numCor = isPast ? 'var(--muted2)' : isNext ? 'var(--gold2)' : 'var(--muted)';
-    return `<div style="${rowStyle};display:flex;align-items:center;gap:8px">
-      <span style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:${numCor};min-width:20px;text-align:right">${r.num}ª</span>
-      <span style="font-size:.7rem;color:${cor};flex:1;${isPast?'text-decoration:line-through;text-decoration-color:var(--muted2)':''}">${r.datas}</span>
-      ${badge}
+    const decisao = _decisaoCopomPorData(r.decision);
+    const isNext = i === proxIdx;
+    const isFuture = r.decision >= hojeKey && !isNext;
+    const klass = decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
+    const resultado = decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
+    return `<div class="copom-item ${klass} ${isNext ? 'next' : ''}" title="${r.num}ª reunião: ${r.datas}">
+      <span class="copom-num">${r.num}ª reunião</span>
+      <strong class="copom-date">${r.short}</strong>
+      <small class="copom-result">${resultado}</small>
     </div>`;
   }).join('');
-}
-
-function toggleCopomCalendario(){
-  const el = $('copomCalendario');
-  const btn = $('copomCalBtn');
-  const isOpen = el.style.opacity === '1';
-  if(isOpen){
-    el.style.maxHeight = '0px'; el.style.opacity = '0';
-    btn.textContent = '📋 Reuniões 2026 ▼';
-  } else {
-    buildCopomCalendario();
-    el.style.maxHeight = '500px'; el.style.opacity = '1';
-    btn.textContent = '📋 Reuniões 2026 ▲';
-  }
 }
 
 /* ════════════════════════════════════════════════════
@@ -6450,10 +7017,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <nav class="mobile-bottom-nav" aria-label="Atalhos principais no celular">
   <a href="#topo" data-target="topo"><span>🏠</span><small>Início</small></a>
-  <a href="#sec-mercado" data-target="sec-mercado"><span>📊</span><small>Mercado</small></a>
-  <a href="#sec-dolar" data-target="sec-dolar"><span>💵</span><small>Dólar</small></a>
   <a href="#sec-fundos" data-target="sec-fundos"><span>📁</span><small>Fundos</small></a>
   <a href="#rankingsSection" data-target="rankingsSection"><span>🏆</span><small>Ranking</small></a>
+  <a href="#sec-mercado" data-target="sec-mercado"><span>📡</span><small>Mercado</small></a>
+  <a href="#sec-dolar" data-target="sec-dolar"><span>💵</span><small>Dólar</small></a>
 </nav>
 <a href="#topo" class="mobile-section-top-btn" aria-label="Voltar ao topo">↑</a>
 
@@ -6476,7 +7043,8 @@ document.addEventListener('DOMContentLoaded', function(){
       if(txt.includes('Boletim Focus')&&!qs('#sec-focus')) sec.id='sec-focus';
       if(txt.includes('Catálogo Completo de Fundos')&&!qs('#sec-fundos')) sec.id='sec-fundos';
     });
-    ['topo','sec-mercado','sec-dolar','sec-focus','sec-fundos','rankingsSection'].forEach(id=>{
+    // v20: nova ordem — Fundos e Rankings sobem; Mercado e Dólar descem
+    ['topo','sec-fundos','rankingsSection','sec-mercado','sec-dolar','sec-focus'].forEach(id=>{
       const el=document.getElementById(id); if(el) el.classList.add('mobile-anchor-target');
     });
   }
@@ -6597,7 +7165,8 @@ document.addEventListener('DOMContentLoaded', function(){
         }
       });
     });
-    const ids=['topo','sec-mercado','sec-dolar','sec-fundos','rankingsSection'];
+    // v20: nova ordem — fundos e rankings antes do mercado macro
+    const ids=['topo','sec-fundos','rankingsSection','sec-mercado','sec-dolar','sec-focus'];
     const obs=new IntersectionObserver(entries=>{
       entries.forEach(en=>{
         if(en.isIntersecting){
