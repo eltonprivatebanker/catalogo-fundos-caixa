@@ -3,6 +3,10 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#07080f"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>Catálogo de Fundos CAIXA — Produção própria de Elton Cardoso Teotonio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
@@ -226,6 +230,20 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-spread-item{flex:1;background:var(--bg3);border-radius:7px;padding:6px 8px;border:1px solid var(--border2);text-align:center}
 .dolar-spread-label{font-size:.55rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
 .dolar-spread-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--text)}
+
+.dolar-ptax-compact{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin:2px 0 12px;
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid rgba(200,151,58,.18);
+  background:rgba(200,151,58,.06);
+  color:#b6bfd5;
+  font-size:.62rem;
+  font-family:'JetBrains Mono',monospace;
+}
 
 /* Timeline mensal */
 .dolar-right{display:flex;flex-direction:column;gap:14px;min-width:0;width:100%;max-width:100%;overflow:hidden}
@@ -1794,10 +1812,1591 @@ footer{
   .footer-source-pill{font-size:.55rem;padding:3px 7px}
 }
 
+
+/* Ajuste final dos avisos institucionais */
+.top-disclaimer{
+  padding:12px 16px;
+  font-size:.70rem;
+  line-height:1.5;
+}
+.top-disclaimer-icon{
+  width:22px;
+  height:22px;
+  border-radius:7px;
+}
+.footer-minimal-title{
+  font-size:.95rem;
+}
+.footer-minimal-copy{
+  color:#a4aec8;
+}
+@media(max-width:768px){
+  .top-disclaimer{
+    padding:11px 12px;
+    font-size:.66rem;
+  }
+}
+
+
+
+/* ─────────────────────────────────────────────
+   PATCH MOBILE REAL — retrato e paisagem
+   Ajusta densidade, grades, rankings, gráficos e tabelas em celular.
+───────────────────────────────────────────── */
+@media (hover:none) and (pointer:coarse), (max-width:980px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .page{max-width:100%;padding:14px 10px 72px}
+  header{gap:10px;padding-bottom:18px}
+  .brand{gap:10px;min-width:0}
+  .brand-logo{width:38px;height:38px;border-radius:10px;font-size:1.25rem}
+  .brand-text{min-width:0}
+  .brand-text h1{font-size:1.18rem;line-height:1.08}
+  .brand-text p{font-size:.55rem;letter-spacing:.055em;white-space:normal}
+  .live-badge{padding:6px 10px;font-size:.58rem}
+  .section-gap{margin-top:22px}
+  .section-title{flex-wrap:wrap;gap:8px}
+  .section-title h2{font-size:1.02rem}
+  .section-badge{font-size:.56rem;padding:4px 8px}
+  .top-disclaimer{font-size:.62rem;line-height:1.45;padding:9px 11px;border-radius:11px}
+  .top-disclaimer-icon{width:20px;height:20px;border-radius:7px;font-size:.68rem}
+
+  /* Filtros: viram trilhas horizontais no celular */
+  .controls-bar{gap:8px;align-items:stretch}
+  .search-wrap{flex:1 1 100%;min-width:0}
+  #searchInput{font-size:.78rem;padding:9px 12px 9px 36px}
+  .ctrl-select{flex:1 1 150px;min-width:145px;font-size:.74rem;padding:9px 10px}
+  .toggle-wrap{margin-left:auto;align-self:center}
+  .toggle-label{font-size:.68rem}
+  .filter-section{gap:8px;overflow:hidden}
+  .filter-row{flex-wrap:nowrap;overflow-x:auto;max-width:100%;gap:6px;padding-bottom:6px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .filter-row::-webkit-scrollbar,.ranking-actions::-webkit-scrollbar,.market-period-tabs .indic-tabs::-webkit-scrollbar{height:4px}
+  .filter-row::-webkit-scrollbar-thumb,.ranking-actions::-webkit-scrollbar-thumb,.market-period-tabs .indic-tabs::-webkit-scrollbar-thumb{background:rgba(200,151,58,.28);border-radius:999px}
+  .filter-label{flex:0 0 auto;min-width:auto;position:sticky;left:0;z-index:2;padding:6px 8px 6px 0;background:linear-gradient(90deg,var(--bg) 0%,rgba(7,8,15,.90) 78%,rgba(7,8,15,0) 100%)}
+  .chip,.perf-period-select{flex:0 0 auto;scroll-snap-align:start;font-size:.68rem;padding:6px 11px}
+
+  /* Tabela principal: ocupa a largura da tela e avisa que arrasta */
+  .table-wrap{position:relative;width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);border-left:0;border-right:0;border-radius:0;box-shadow:none;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .table-wrap::before{content:'↔ arraste a tabela para ver mais colunas';position:sticky;left:0;z-index:4;display:block;width:max-content;max-width:100vw;padding:7px 12px;background:linear-gradient(90deg,rgba(12,14,26,.96),rgba(12,14,26,.74));color:#aeb7cf;font-family:'JetBrains Mono',monospace;font-size:.56rem;border-bottom:1px solid rgba(255,255,255,.07)}
+  table{min-width:980px}
+  th{padding:9px 10px;font-size:.54rem;letter-spacing:.075em}
+  td{padding:9px 10px;font-size:.66rem}
+  td.col-fundo{min-width:220px;max-width:220px;font-size:.70rem;line-height:1.32}
+  .cat-badge{font-size:.54rem;padding:3px 7px}
+  .pct-val{font-size:.68rem;min-width:46px}
+  .pct-bar-bg{width:22px}
+  .docs-mini-wrap{max-width:96px;gap:3px}
+  .doc-mini,.doc-mini-all{min-width:23px;height:21px;padding:0 5px;font-size:.52rem}
+
+  /* Painel consolidado: rolagem controlada, texto menor */
+  .indic-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+  .indic-table-v2{min-width:920px}
+  .indic-table-v2 th,.indic-table-v2 td{padding:8px 10px}
+  .ind-icon-v2{width:24px;height:24px;border-radius:7px;font-size:.78rem}
+  .ind-v2-title{font-size:.72rem;line-height:1.22}
+  .ind-v2-sub,.v2-sub{font-size:.52rem}
+  .v2-val{font-size:.74rem}
+  .v2-bar-bg{width:20px}
+  .market-table-toolbar{flex-direction:column;align-items:stretch;padding:9px 10px;gap:8px}
+  .market-table-title span{font-size:.94rem}
+  .market-table-title small{font-size:.53rem}
+  .market-table-toolbar .market-period-tabs{width:100%;margin-left:0;justify-content:space-between}
+  .market-table-toolbar .market-period-tabs .indic-tabs{display:grid;grid-template-columns:repeat(3,1fr);width:100%;gap:6px}
+  .market-table-toolbar .market-period-tabs .indic-tab{text-align:center;padding:7px 6px;font-size:.62rem}
+
+  /* Cards de mercado */
+  .market-ref-grid{grid-template-columns:1fr;gap:9px}
+  .market-ref-card{padding:14px 15px;border-radius:12px}
+  .indic-ref-label{font-size:.58rem;margin-bottom:5px}
+  .indic-ref-val{font-size:1.55rem}
+  .indic-ref-sub,.selic-change-badge,.cdi-rel,.poup-rule-sub{font-size:.58rem}
+  .market-scenario-card{font-size:.66rem;padding:10px 12px;border-radius:12px}
+
+  /* Dólar e gráficos */
+  .dolar-grid{grid-template-columns:1fr;gap:10px}
+  .dolar-day-card,.dolar-timeline-card,.dolar-chart-card,.chart-card{border-radius:12px}
+  .dolar-day-body{padding:14px}
+  .dolar-day-rate{font-size:2.1rem}
+  .dolar-chart-body{height:230px;min-height:220px;padding:12px}
+  .dolar-source-note,.dolar-chart-source{font-size:.56rem;line-height:1.38;margin-left:10px;margin-right:10px;padding:8px 10px}
+  .charts-grid{grid-template-columns:1fr !important;gap:10px}
+  .chart-card-header{padding:12px 14px 9px}
+  .chart-card-title{font-size:.92rem}
+  .chart-body{height:225px;padding:12px}
+
+  /* Focus e rankings */
+  .focus-grid{grid-template-columns:1fr;gap:9px}
+  .fcad{padding:13px 14px}
+  .fcad-val{font-size:1.05rem}
+  .ranking-head{align-items:flex-start;gap:8px}
+  .ranking-title-group{width:100%;gap:8px}
+  .ranking-actions{width:100%;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .ranking-action-btn{flex:0 0 auto;font-size:.58rem;padding:6px 9px}
+  .ranking-grid{grid-template-columns:1fr !important;gap:9px}
+  .rank-card{border-radius:12px}
+  .rank-card-header{padding:10px 11px 7px}
+  .rank-card-title{font-size:.84rem;max-width:100%}
+  .rank-action-btn{font-size:.54rem;padding:5px 6px}
+  .rank-card-sub{font-size:.52rem;padding:3px 11px 0}
+  .rank-item{padding:7px 11px;gap:7px}
+  .rank-name{font-size:.66rem;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .rank-cat{font-size:.52rem}
+  .rank-val{font-size:.68rem;max-width:78px}
+
+  footer{margin-top:30px;padding-top:14px}
+  .footer-minimal{font-size:.58rem;padding:8px 10px}
+}
+
+/* Celular em paisagem: antes caía no layout de desktop; aqui reduz densidade e evita 3 colunas apertadas */
+@media (hover:none) and (pointer:coarse) and (orientation:landscape) and (max-height:560px){
+  .page{padding:9px 8px 54px}
+  header{padding-bottom:14px}
+  .brand-logo{width:34px;height:34px;font-size:1.05rem}
+  .brand-text h1{font-size:1.05rem}
+  .brand-text p{font-size:.50rem}
+  .live-badge{font-size:.54rem;padding:5px 8px}
+  .section-gap{margin-top:18px}
+  .top-disclaimer{font-size:.56rem;padding:7px 9px}
+
+  .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .kpi{padding:11px 12px;border-radius:11px}
+  .kpi-label{font-size:.54rem}
+  .kpi-value{font-size:1.25rem}
+  .kpi-sub{font-size:.56rem}
+
+  .market-ref-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .market-ref-card{padding:12px 13px;min-height:0}
+  .indic-ref-val{font-size:1.38rem}
+  .cdi-mini-grid{grid-template-columns:1fr;gap:6px}
+  .poup-values{gap:10px;flex-wrap:wrap}
+
+  .controls-bar{display:grid;grid-template-columns:minmax(0,1fr) 160px auto;align-items:center}
+  .search-wrap{flex:initial}
+  .filter-row{gap:5px}
+  .chip{padding:5px 10px;font-size:.64rem}
+  .perf-period-select{font-size:.64rem;height:30px}
+
+  .ranking-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:9px}
+  .ranking-head .section-title h2{font-size:1.05rem}
+  .rank-card-title{font-size:.80rem}
+  .rank-item{padding:6px 10px}
+  .rank-name{font-size:.63rem;-webkit-line-clamp:2}
+  .rank-cat{font-size:.50rem}
+  .rank-val{font-size:.64rem}
+
+  .charts-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:9px}
+  .chart-body{height:205px;padding:10px}
+  .chart-card-title{font-size:.86rem}
+  .focus-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+
+  .dolar-grid{grid-template-columns:270px minmax(0,1fr);gap:10px}
+  .dolar-day-rate{font-size:1.9rem}
+  .dolar-chart-body{height:210px;min-height:200px}
+  .dolar-months{grid-template-columns:repeat(4,minmax(88px,1fr));gap:7px}
+
+  .table-wrap::before{font-size:.52rem;padding:6px 10px}
+  table{min-width:940px}
+  th{font-size:.50rem;padding:8px 8px}
+  td{font-size:.62rem;padding:8px 8px}
+  td.col-fundo{min-width:210px;max-width:210px}
+}
+
+@media (hover:none) and (pointer:coarse) and (orientation:portrait){
+  .kpi-grid{grid-template-columns:1fr 1fr;gap:8px}
+  .kpi{padding:13px 12px}
+  .ranking-grid,.charts-grid,.market-ref-grid{grid-template-columns:1fr !important}
+}
+
+@media (hover:none) and (pointer:coarse) and (max-width:430px){
+  .page{padding-left:10px;padding-right:10px}
+  .kpi-grid{grid-template-columns:1fr}
+  .brand-text h1{font-size:1.03rem}
+  .section-title h2{font-size:.98rem}
+  table{min-width:900px}
+  td.col-fundo{min-width:200px;max-width:200px}
+  .indic-table-v2{min-width:880px}
+}
+
+
+/* ─────────────────────────────────────────────
+   PATCH MOBILE FINAL — celular real, retrato e paisagem
+   Evita que navegadores mobile em modo "desktop" deixem grids espremidos.
+───────────────────────────────────────────── */
+@media (pointer:coarse), (hover:none), (max-device-width:920px), (max-width:1180px){
+  html,body{max-width:100%;overflow-x:hidden}
+  .page{width:100%;max-width:100%;padding:14px 10px 78px}
+  header{gap:10px;padding-bottom:16px}
+  .brand{min-width:0;gap:10px}
+  .brand-logo{width:38px;height:38px;border-radius:11px;font-size:1.22rem}
+  .brand-text h1{font-size:clamp(1.08rem,3.4vw,1.36rem);line-height:1.06}
+  .brand-text p{font-size:.55rem;letter-spacing:.05em;white-space:normal;line-height:1.3}
+  .live-badge{font-size:.56rem;padding:6px 9px}
+  .section-gap{margin-top:20px}
+  .section-title{gap:8px;flex-wrap:wrap;margin-bottom:11px}
+  .section-title h2{font-size:1rem;line-height:1.15}
+  .section-badge{font-size:.56rem;padding:4px 8px}
+
+  /* KPI: não deixar 4 colunas espremidas no celular */
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px}
+  .kpi{padding:15px 14px;border-radius:13px;min-height:128px}
+  .kpi-icon{font-size:1.05rem;margin-bottom:8px}
+  .kpi-label{font-size:.58rem;line-height:1.25;letter-spacing:.075em;word-break:normal}
+  .kpi-value{font-size:1.55rem}
+  .kpi-value.pos,.kpi-value.neg{font-size:1.28rem}
+  .kpi-sub{font-size:.58rem;white-space:normal;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+
+  /* Cards Selic/CDI/Poupança: mais densos */
+  .market-ref-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:10px}
+  .market-ref-card{padding:14px 14px;border-radius:13px;min-width:0}
+  .market-ref-card:nth-child(3){grid-column:1/-1}
+  .indic-ref-label{font-size:.58rem;line-height:1.3;margin-bottom:7px}
+  .indic-ref-val{font-size:1.58rem}
+  .indic-ref-sub,.selic-change-badge,.cdi-rel,.poup-rule-sub{font-size:.56rem;line-height:1.35}
+  .cdi-mini-grid{gap:6px;margin:10px 0}
+  .cdi-mini-item{padding:8px 10px}
+  .cdi-mini-item span{font-size:.54rem}
+  .cdi-mini-item strong{font-size:.78rem}
+  .poup-values{gap:12px;flex-wrap:wrap}
+  .poup-rule{min-width:145px;flex:1}
+  .poup-rule-label{font-size:.54rem;line-height:1.25}
+  .poup-rule-val{font-size:1.25rem}
+  .poup-expand-btn{font-size:.58rem;padding:5px 8px}
+  .market-scenario-card{font-size:.60rem;line-height:1.45;padding:9px 11px;border-radius:11px}
+
+  /* Painel consolidado: tabela técnica com rolagem, mas footnote pequena */
+  .market-table-toolbar{flex-direction:column;align-items:stretch;gap:9px;padding:9px 10px}
+  .market-table-title span{font-size:.92rem;line-height:1.2}
+  .market-table-title small{font-size:.52rem;line-height:1.25}
+  .market-table-toolbar .market-period-tabs{width:100%;margin-left:0;justify-content:space-between;gap:7px}
+  .market-table-toolbar .indic-tabs-label{font-size:.54rem}
+  .market-table-toolbar .indic-tabs{display:grid;grid-template-columns:repeat(3,1fr);width:100%;gap:6px;overflow:visible}
+  .market-table-toolbar .indic-tab{width:100%;text-align:center;padding:7px 4px;font-size:.58rem}
+  .indic-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:12px}
+  .indic-table-v2{min-width:880px}
+  .indic-table-v2 th,.indic-table-v2 td{padding:8px 10px}
+  .ind-icon-v2{width:24px;height:24px;border-radius:7px;font-size:.78rem}
+  .ind-v2-title{font-size:.70rem;line-height:1.2}
+  .ind-v2-sub,.v2-sub{font-size:.50rem;line-height:1.32}
+  .v2-val{font-size:.72rem}
+  .indic-footnote{font-size:.52rem !important;line-height:1.45 !important;white-space:normal !important;font-style:normal !important;padding:8px 11px !important;color:#9aa6c3 !important}
+
+  /* Catálogo: manter rolagem horizontal com densidade aceitável */
+  .table-wrap{width:100vw;max-width:100vw;margin-left:calc(50% - 50vw);border-left:0;border-right:0;border-radius:0;overflow-x:auto;-webkit-overflow-scrolling:touch;box-shadow:none}
+  .table-wrap::before{content:'↔ arraste a tabela para ver mais colunas';position:sticky;left:0;z-index:4;display:block;width:max-content;max-width:100vw;padding:7px 12px;background:linear-gradient(90deg,rgba(12,14,26,.97),rgba(12,14,26,.72));color:#aeb7cf;font-family:'JetBrains Mono',monospace;font-size:.54rem;border-bottom:1px solid rgba(255,255,255,.07)}
+  table{min-width:900px}
+  th{padding:8px 9px;font-size:.50rem;letter-spacing:.065em}
+  td{padding:9px 9px;font-size:.62rem}
+  td.col-fundo{min-width:205px;max-width:205px;font-size:.66rem;line-height:1.28}
+  .cat-badge{font-size:.48rem;padding:3px 6px;max-width:165px;overflow:hidden;text-overflow:ellipsis}
+
+  /* Câmbio: reduzir duplicidade visual */
+  .dolar-grid{grid-template-columns:1fr !important;gap:10px}
+  .dolar-day-card,.dolar-timeline-card,.dolar-chart-card,.chart-card{border-radius:12px}
+  .dolar-day-header,.dolar-chart-header,.chart-card-header{padding:11px 13px 8px}
+  .dolar-day-title,.dolar-chart-title,.chart-card-title{font-size:.88rem;line-height:1.15}
+  .dolar-day-sub,.dolar-chart-sub,.chart-card-sub{font-size:.52rem;line-height:1.25}
+  .dolar-day-body{padding:13px}
+  .dolar-day-rate{font-size:2rem}
+  .dolar-ptax-compact{font-size:.58rem;padding:7px 8px;margin-bottom:8px}
+  .dolar-metric{padding:7px 8px}
+  .dolar-metric-label,.dolar-metric-val{font-size:.58rem}
+  .dolar-months{grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:10px 12px 12px}
+  .dolar-month-item{padding:8px 7px}
+  .dolar-month-val{font-size:.98rem}
+  .dolar-source-note,.dolar-chart-source{font-size:.52rem;line-height:1.36;margin:0 10px 12px;padding:8px 9px}
+  .dolar-chart-body{height:215px !important;min-height:205px !important;padding:10px 12px}
+
+  /* Focus: em celular, os cards viram carrossel para não ficarem finos */
+  .focus-grid{display:flex !important;grid-template-columns:none !important;gap:9px;overflow-x:auto;max-width:100%;padding:0 0 8px;-webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+  .focus-grid .fcad{flex:0 0 170px;scroll-snap-align:start;padding:13px 14px;min-height:190px}
+  .fcad-label{font-size:.56rem;line-height:1.25}
+  .fcad-sub{font-size:.60rem;line-height:1.22}
+  .fcad-val{font-size:1rem}
+
+  /* Gráficos: legíveis no retrato */
+  .charts-grid{grid-template-columns:1fr !important;gap:10px}
+  .chart-body{height:215px !important;padding:10px 12px}
+  .chart-tabs{gap:4px;flex-wrap:nowrap;overflow-x:auto}
+  .chart-tab{font-size:.54rem;padding:4px 8px;white-space:nowrap}
+
+  /* Rankings: não deixar 3 colunas no celular */
+  .ranking-head{align-items:flex-start;gap:8px}
+  .ranking-title-group{width:100%;gap:8px}
+  .ranking-actions{width:100%;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .ranking-action-btn{flex:0 0 auto;font-size:.56rem;padding:6px 8px}
+  .ranking-grid{grid-template-columns:1fr !important;gap:10px}
+  .rank-card{border-radius:12px}
+  .rank-card-header{padding:10px 11px 7px}
+  .rank-card-title{font-size:.82rem;max-width:100%;line-height:1.18}
+  .rank-action-btn{font-size:.52rem;padding:5px 6px}
+  .rank-card-sub{font-size:.52rem;padding:3px 11px 0}
+  .rank-item{padding:8px 11px;gap:8px}
+  .rank-name{font-size:.66rem;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .rank-cat{font-size:.52rem}
+  .rank-val{font-size:.68rem}
+  .rank-more-btn{font-size:.60rem;padding:8px 10px;margin:7px 10px 10px}
+
+  /* Rodapé/disclaimer */
+  .site-footer-minimal{margin-top:34px;padding-top:16px}
+  .footer-minimal summary{gap:8px;padding:10px 12px;align-items:flex-start}
+  .footer-minimal-title{font-size:.66rem}
+  .footer-minimal-copy{font-size:.54rem;line-height:1.35}
+  .footer-minimal-body{padding:0 12px 12px}
+}
+
+@media (pointer:coarse) and (orientation:portrait), (max-device-width:620px){
+  .page{padding:11px 8px 82px}
+  .kpi-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px}
+  .kpi{padding:13px 12px;min-height:116px}
+  .kpi-label{font-size:.52rem}
+  .kpi-value{font-size:1.36rem}
+  .market-ref-grid{grid-template-columns:1fr !important}
+  .market-ref-card:nth-child(3){grid-column:auto}
+  .poup-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+  .indic-table-v2{min-width:820px}
+  table{min-width:860px}
+  td.col-fundo{min-width:190px;max-width:190px}
+  .dolar-months{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .focus-grid .fcad{flex-basis:156px;min-height:178px}
+  .chart-body,.dolar-chart-body{height:205px !important;min-height:195px !important}
+  .ranking-title-group h2{font-size:1.15rem}
+}
+
+@media (pointer:coarse) and (orientation:landscape), (max-height:560px){
+  .page{padding:12px 16px 64px}
+  .section-gap{margin-top:18px}
+  .kpi-grid{grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:10px}
+  .kpi{min-height:118px}
+  .market-ref-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .market-ref-card:nth-child(3){grid-column:1/-1}
+  .focus-grid{display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;overflow:visible;padding-bottom:0}
+  .focus-grid .fcad{flex:auto;min-height:150px}
+  .charts-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .ranking-grid{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+  .chart-body,.dolar-chart-body{height:205px !important;min-height:195px !important}
+  .indic-table-v2{min-width:900px}
+  table{min-width:900px}
+}
+
+
+
+/* ─────────────────────────────────────────────
+   PAINEL CONSOLIDADO — coluna fixa + leitura compacta
+   Mantém o indicador visível ao arrastar a tabela no celular.
+───────────────────────────────────────────── */
+.indic-table-wrap{
+  position:relative;
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+}
+.indic-table-v2{
+  border-collapse:separate;
+  border-spacing:0;
+  table-layout:fixed;
+}
+.indic-table-v2 th:first-child,
+.indic-table-v2 td:first-child{
+  position:sticky;
+  left:0;
+  z-index:6;
+  width:230px;
+  min-width:230px;
+  max-width:230px;
+  background:linear-gradient(90deg,rgba(12,14,26,.99),rgba(12,14,26,.96));
+  box-shadow:12px 0 18px rgba(0,0,0,.38);
+}
+.indic-table-v2 thead th:first-child{
+  z-index:8;
+  background:linear-gradient(90deg,var(--bg4),var(--bg3));
+}
+.indic-table-v2 .group-row td{
+  position:sticky;
+  left:0;
+  z-index:7;
+  width:auto;
+  min-width:230px;
+  max-width:none;
+  background:linear-gradient(90deg,var(--bg3),rgba(17,21,38,.98));
+  box-shadow:12px 0 18px rgba(0,0,0,.32);
+}
+.indic-table-v2 th:not(:first-child),
+.indic-table-v2 td:not(:first-child){
+  min-width:120px;
+  width:120px;
+  max-width:120px;
+}
+.indic-table-v2 td:not(:first-child){
+  vertical-align:middle;
+}
+.indic-table-v2 .v2-bar-row{
+  gap:5px;
+}
+
+@media (pointer:coarse), (hover:none), (max-device-width:920px), (max-width:760px){
+  .indic-table-wrap{
+    border-radius:12px;
+    overflow-x:auto;
+  }
+  .indic-table-wrap::before{
+    content:'↔ arraste para ver mês anterior, mês atual, ano e acumulado';
+    position:sticky;
+    left:0;
+    z-index:10;
+    display:block;
+    width:max-content;
+    max-width:100%;
+    padding:7px 10px;
+    color:#aeb7cf;
+    background:linear-gradient(90deg,rgba(12,14,26,.98),rgba(12,14,26,.75));
+    border-bottom:1px solid rgba(255,255,255,.07);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.50rem;
+  }
+  .indic-table-v2{
+    min-width:660px !important;
+  }
+  .indic-table-v2 th,
+  .indic-table-v2 td{
+    padding:10px 8px !important;
+  }
+  .indic-table-v2 th:first-child,
+  .indic-table-v2 td:first-child{
+    width:205px;
+    min-width:205px;
+    max-width:205px;
+  }
+  .indic-table-v2 .group-row td{
+    min-width:205px;
+  }
+  .indic-table-v2 th:not(:first-child),
+  .indic-table-v2 td:not(:first-child){
+    min-width:108px;
+    width:108px;
+    max-width:108px;
+    text-align:left;
+  }
+  .indic-table-v2 th:not(:first-child){
+    text-align:left;
+  }
+  .indic-table-v2 td.td-cur{
+    background:rgba(91,156,246,.035);
+  }
+  .ind-name-v2{
+    gap:8px;
+    align-items:center;
+  }
+  .ind-icon-v2{
+    width:28px !important;
+    height:28px !important;
+    font-size:.82rem !important;
+  }
+  .ind-v2-title{
+    font-size:.78rem !important;
+    line-height:1.18;
+  }
+  .ind-v2-sub{
+    font-size:.56rem !important;
+    line-height:1.28;
+    white-space:normal;
+  }
+  .v2-bar-row{
+    justify-content:flex-start !important;
+    gap:4px;
+    margin:0 !important;
+  }
+  .v2-bar-bg{
+    display:none;
+  }
+  .v2-val{
+    font-size:.77rem !important;
+    line-height:1.2;
+    text-align:left;
+  }
+  .v2-sub{
+    font-size:.50rem !important;
+    line-height:1.2;
+    margin-top:3px;
+    white-space:normal;
+  }
+  .badge-partial,
+  .badge-await,
+  .badge-alrt{
+    font-size:.48rem;
+    padding:1px 5px;
+  }
+  .indic-footnote{
+    font-size:.48rem !important;
+    line-height:1.35 !important;
+    padding:7px 9px !important;
+  }
+}
+
+@media (pointer:coarse) and (orientation:portrait), (max-device-width:620px){
+  .indic-table-v2{
+    min-width:640px !important;
+  }
+  .indic-table-v2 th:first-child,
+  .indic-table-v2 td:first-child{
+    width:195px;
+    min-width:195px;
+    max-width:195px;
+  }
+  .indic-table-v2 .group-row td{
+    min-width:195px;
+  }
+  .indic-table-v2 th:not(:first-child),
+  .indic-table-v2 td:not(:first-child){
+    min-width:104px;
+    width:104px;
+    max-width:104px;
+  }
+}
+
+@media (pointer:coarse) and (orientation:landscape) and (max-height:560px){
+  .indic-table-v2{
+    min-width:720px !important;
+  }
+  .indic-table-v2 th:first-child,
+  .indic-table-v2 td:first-child{
+    width:220px;
+    min-width:220px;
+    max-width:220px;
+  }
+  .indic-table-v2 .group-row td{
+    min-width:220px;
+  }
+  .indic-table-v2 th:not(:first-child),
+  .indic-table-v2 td:not(:first-child){
+    min-width:115px;
+    width:115px;
+    max-width:115px;
+  }
+}
+
+
+
+/* ─────────────────────────────────────────────
+   AJUSTE HEADER — aviso rápido mais legível
+   Divide título e texto, evita bloco pesado no celular e melhora a distribuição.
+───────────────────────────────────────────── */
+.top-disclaimer.top-disclaimer-compact{
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr);
+  align-items:start;
+  gap:10px 14px;
+  padding:13px 16px !important;
+  border-radius:16px;
+  max-width:100%;
+}
+.top-disclaimer-compact .top-disclaimer-head{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  white-space:nowrap;
+  color:var(--gold2);
+  font-weight:800;
+  letter-spacing:.01em;
+  line-height:1.2;
+}
+.top-disclaimer-compact .top-disclaimer-icon{
+  width:24px !important;
+  height:24px !important;
+  min-width:24px;
+  border-radius:8px !important;
+  font-size:.82rem !important;
+}
+.top-disclaimer-compact p{
+  margin:0;
+  min-width:0;
+  max-width:96ch;
+  color:#c6cede;
+  font-size:.74rem;
+  line-height:1.58;
+  text-wrap:pretty;
+}
+@media(max-width:768px), (hover:none) and (pointer:coarse){
+  .top-disclaimer.top-disclaimer-compact{
+    grid-template-columns:1fr;
+    gap:7px;
+    padding:12px 14px !important;
+    margin-top:14px;
+  }
+  .top-disclaimer-compact .top-disclaimer-head{
+    font-size:.78rem;
+  }
+  .top-disclaimer-compact .top-disclaimer-icon{
+    width:22px !important;
+    height:22px !important;
+    min-width:22px;
+    font-size:.74rem !important;
+  }
+  .top-disclaimer-compact p{
+    font-size:.70rem;
+    line-height:1.55;
+    max-width:42rem;
+  }
+}
+@media(max-width:420px){
+  .top-disclaimer.top-disclaimer-compact{
+    padding:11px 12px !important;
+  }
+  .top-disclaimer-compact p{
+    font-size:.68rem;
+  }
+}
+
+
+
+/* ─────────────────────────────────────────────
+   PATCH FINAL — aviso do topo e rodapé mais limpos
+   Remove bloco de texto corrido e melhora leitura no celular.
+───────────────────────────────────────────── */
+.top-disclaimer.top-disclaimer-clean{
+  display:grid !important;
+  grid-template-columns:34px minmax(0,1fr);
+  align-items:start;
+  gap:11px;
+  padding:13px 15px !important;
+  margin-top:16px;
+  border-radius:16px;
+  border:1px solid rgba(200,151,58,.20);
+  background:linear-gradient(180deg,rgba(200,151,58,.075),rgba(255,255,255,.014));
+  box-shadow:0 10px 30px rgba(0,0,0,.18);
+}
+.top-disclaimer-clean .notice-icon{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(200,151,58,.12);
+  border:1px solid rgba(200,151,58,.22);
+  font-size:.88rem;
+  line-height:1;
+}
+.top-disclaimer-clean .notice-content{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.top-disclaimer-clean .notice-title{
+  color:var(--gold2);
+  font-size:.72rem;
+  font-weight:800;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  line-height:1.2;
+}
+.top-disclaimer-clean .notice-copy{
+  color:#c5cede;
+  font-size:.76rem;
+  line-height:1.55;
+  max-width:92ch;
+  overflow-wrap:break-word;
+  text-wrap:pretty;
+}
+
+.site-footer-clean{
+  margin-top:40px;
+  padding-top:18px;
+  border-top:1px solid rgba(200,151,58,.13);
+}
+.footer-disclaimer-clean{
+  max-width:1080px;
+  margin:0 auto;
+  border:1px solid rgba(200,151,58,.18);
+  border-radius:16px;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(200,151,58,.05),rgba(255,255,255,.012));
+  box-shadow:0 10px 34px rgba(0,0,0,.20);
+}
+.footer-disclaimer-clean summary{
+  list-style:none;
+  cursor:pointer;
+  min-height:54px;
+  padding:13px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+}
+.footer-disclaimer-clean summary::-webkit-details-marker{display:none}
+.footer-summary-main{
+  min-width:0;
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.footer-summary-title{
+  color:var(--gold2);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.05rem;
+  font-weight:800;
+  line-height:1.15;
+}
+.footer-summary-sub{
+  color:#aeb7cf;
+  font-size:.68rem;
+  line-height:1.4;
+}
+.footer-summary-action{
+  flex-shrink:0;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:92px;
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(200,151,58,.22);
+  background:rgba(200,151,58,.07);
+  color:var(--gold2);
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+}
+.footer-summary-action::before{content:'Ver detalhes'}
+.footer-disclaimer-clean[open] .footer-summary-action::before{content:'Ocultar'}
+.footer-clean-body{
+  padding:0 16px 16px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+.footer-clean-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  padding-top:14px;
+}
+.footer-clean-item{
+  padding:12px 13px;
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:12px;
+  background:rgba(17,21,38,.45);
+  min-width:0;
+}
+.footer-clean-item strong{
+  display:block;
+  color:var(--gold2);
+  font-size:.64rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  margin-bottom:6px;
+}
+.footer-clean-item span{
+  display:block;
+  color:#c1cadc;
+  font-size:.68rem;
+  line-height:1.55;
+  overflow-wrap:break-word;
+}
+.footer-clean-sources{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+  margin-top:12px;
+  padding-top:12px;
+  border-top:1px solid rgba(255,255,255,.055);
+}
+.footer-clean-sources .sources-title{
+  color:var(--gold2);
+  border:none;
+  background:transparent;
+  padding-left:0;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:800;
+  font-size:.60rem;
+}
+.footer-clean-sources span{
+  display:inline-flex;
+  align-items:center;
+  min-height:26px;
+  padding:5px 10px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(17,21,38,.62);
+  color:#aeb7cf;
+  font-size:.62rem;
+  line-height:1.15;
+}
+@media(max-width:768px), (hover:none) and (pointer:coarse){
+  .top-disclaimer.top-disclaimer-clean{
+    grid-template-columns:28px minmax(0,1fr);
+    gap:9px;
+    padding:11px 12px !important;
+    border-radius:14px;
+  }
+  .top-disclaimer-clean .notice-icon{
+    width:26px;
+    height:26px;
+    border-radius:9px;
+    font-size:.78rem;
+  }
+  .top-disclaimer-clean .notice-title{
+    font-size:.66rem;
+    letter-spacing:.06em;
+  }
+  .top-disclaimer-clean .notice-copy{
+    font-size:.68rem;
+    line-height:1.48;
+  }
+  .site-footer-clean{
+    margin-top:28px;
+    padding-top:14px;
+  }
+  .footer-disclaimer-clean{
+    border-radius:14px;
+  }
+  .footer-disclaimer-clean summary{
+    padding:12px;
+    min-height:auto;
+    align-items:flex-start;
+  }
+  .footer-summary-main{
+    gap:3px 7px;
+  }
+  .footer-summary-title{
+    width:100%;
+    font-size:.98rem;
+  }
+  .footer-summary-sub{
+    font-size:.62rem;
+    line-height:1.35;
+  }
+  .footer-summary-action{
+    min-width:78px;
+    padding:6px 9px;
+    font-size:.56rem;
+  }
+  .footer-clean-body{
+    padding:0 12px 12px;
+  }
+  .footer-clean-grid{
+    grid-template-columns:1fr;
+    gap:8px;
+    padding-top:12px;
+  }
+  .footer-clean-item{
+    padding:10px 11px;
+  }
+  .footer-clean-item strong{
+    font-size:.58rem;
+    margin-bottom:4px;
+  }
+  .footer-clean-item span{
+    font-size:.62rem;
+    line-height:1.48;
+  }
+  .footer-clean-sources{
+    gap:6px;
+    margin-top:10px;
+    padding-top:10px;
+  }
+  .footer-clean-sources .sources-title{
+    width:100%;
+    font-size:.56rem;
+  }
+  .footer-clean-sources span{
+    min-height:24px;
+    padding:4px 8px;
+    font-size:.58rem;
+  }
+}
+@media(max-width:380px){
+  .top-disclaimer-clean .notice-copy{font-size:.64rem}
+  .footer-summary-sub{font-size:.58rem}
+  .footer-clean-item span{font-size:.59rem}
+}
+
+
+
+/* ─────────────────────────────────────────────
+   PATCH FINAL V2 — aviso e rodapé realmente compactos no mobile
+───────────────────────────────────────────── */
+.notice-compact-v2{
+  grid-template-columns:32px minmax(0,1fr) !important;
+  padding:12px 14px !important;
+  align-items:center !important;
+}
+.notice-compact-v2 .notice-content{
+  gap:5px !important;
+}
+.notice-compact-v2 .notice-copy{
+  font-size:.74rem !important;
+  line-height:1.42 !important;
+  max-width:82ch;
+}
+.notice-tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px;
+  margin-top:1px;
+}
+.notice-tags span{
+  display:inline-flex;
+  align-items:center;
+  min-height:20px;
+  padding:3px 7px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(17,21,38,.62);
+  color:#aeb7cf;
+  font-size:.55rem;
+  line-height:1;
+  letter-spacing:.02em;
+}
+.site-footer-v2{
+  margin-top:34px !important;
+  padding-top:14px !important;
+}
+.footer-disclaimer-v2{
+  max-width:980px !important;
+  border-radius:14px !important;
+}
+.footer-disclaimer-v2 summary{
+  padding:11px 14px !important;
+  min-height:48px !important;
+  align-items:center !important;
+}
+.footer-disclaimer-v2 .footer-summary-title{
+  font-size:1rem !important;
+}
+.footer-disclaimer-v2 .footer-summary-sub{
+  font-size:.64rem !important;
+  line-height:1.35 !important;
+}
+.footer-disclaimer-v2 .footer-summary-action{
+  min-width:94px !important;
+  padding:6px 10px !important;
+}
+.footer-disclaimer-v2 .footer-clean-grid{
+  gap:8px !important;
+}
+.footer-disclaimer-v2 .footer-clean-item{
+  padding:10px 11px !important;
+  border-radius:11px !important;
+}
+.footer-disclaimer-v2 .footer-clean-item strong{
+  font-size:.58rem !important;
+  margin-bottom:5px !important;
+}
+.footer-disclaimer-v2 .footer-clean-item span{
+  font-size:.62rem !important;
+  line-height:1.45 !important;
+}
+.footer-disclaimer-v2 .footer-clean-sources{
+  margin-top:10px !important;
+  padding-top:10px !important;
+  gap:6px !important;
+}
+.footer-disclaimer-v2 .footer-clean-sources span{
+  min-height:23px !important;
+  padding:4px 8px !important;
+  font-size:.56rem !important;
+}
+@media(max-width:768px), (hover:none) and (pointer:coarse){
+  .notice-compact-v2{
+    display:grid !important;
+    grid-template-columns:28px minmax(0,1fr) !important;
+    gap:9px !important;
+    padding:10px 11px !important;
+    border-radius:14px !important;
+  }
+  .notice-compact-v2 .notice-icon{
+    width:26px !important;
+    height:26px !important;
+  }
+  .notice-compact-v2 .notice-title{
+    font-size:.62rem !important;
+    line-height:1.1 !important;
+  }
+  .notice-compact-v2 .notice-copy{
+    font-size:.64rem !important;
+    line-height:1.42 !important;
+  }
+  .notice-tags{
+    gap:4px !important;
+  }
+  .notice-tags span{
+    min-height:18px !important;
+    padding:3px 6px !important;
+    font-size:.50rem !important;
+  }
+  .footer-disclaimer-v2 summary{
+    padding:10px 11px !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    gap:10px !important;
+    align-items:center !important;
+  }
+  .footer-disclaimer-v2 .footer-summary-main{
+    display:block !important;
+    min-width:0 !important;
+  }
+  .footer-disclaimer-v2 .footer-summary-title{
+    display:block !important;
+    width:auto !important;
+    font-size:.86rem !important;
+    line-height:1.15 !important;
+    margin-bottom:3px !important;
+  }
+  .footer-disclaimer-v2 .footer-summary-sub{
+    display:block !important;
+    font-size:.54rem !important;
+    line-height:1.28 !important;
+    max-width:100% !important;
+  }
+  .footer-disclaimer-v2 .footer-summary-action{
+    min-width:78px !important;
+    padding:5px 8px !important;
+    font-size:.50rem !important;
+  }
+  .footer-disclaimer-v2 .footer-clean-body{
+    padding:0 10px 10px !important;
+  }
+  .footer-disclaimer-v2 .footer-clean-grid{
+    grid-template-columns:1fr !important;
+    padding-top:10px !important;
+    gap:7px !important;
+  }
+  .footer-disclaimer-v2 .footer-clean-item{
+    padding:9px 10px !important;
+  }
+  .footer-disclaimer-v2 .footer-clean-item strong{
+    font-size:.54rem !important;
+    margin-bottom:4px !important;
+  }
+  .footer-disclaimer-v2 .footer-clean-item span{
+    font-size:.58rem !important;
+    line-height:1.42 !important;
+  }
+  .footer-disclaimer-v2 .footer-clean-sources .sources-title{
+    width:100%;
+    font-size:.52rem !important;
+  }
+  .footer-disclaimer-v2 .footer-clean-sources span{
+    font-size:.52rem !important;
+    padding:3px 7px !important;
+    min-height:21px !important;
+  }
+}
+@media(max-width:380px){
+  .notice-compact-v2 .notice-copy{font-size:.60rem !important;}
+  .notice-tags span{font-size:.48rem !important;}
+  .footer-disclaimer-v2 .footer-summary-title{font-size:.80rem !important;}
+  .footer-disclaimer-v2 .footer-summary-sub{font-size:.50rem !important;}
+}
+
+
+
+/* ════════════════════════════════════════════════════
+   MOBILE UX — navegação fluida, cards e filtros compactos
+════════════════════════════════════════════════════ */
+.mobile-bottom-nav,
+.mobile-filter-bar,
+.mobile-view-toggle,
+.mobile-fund-cards{display:none}
+
+html{scroll-padding-top:18px}
+.mobile-anchor-target{scroll-margin-top:18px}
+
+@media(max-width:820px){
+  html{scroll-padding-top:12px}
+  body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
+  .page{padding-bottom:calc(118px + env(safe-area-inset-bottom,0px))}
+
+  .mobile-bottom-nav{
+    position:fixed;
+    left:10px;
+    right:10px;
+    bottom:calc(10px + env(safe-area-inset-bottom,0px));
+    z-index:999;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:6px;
+    padding:8px;
+    border-radius:18px;
+    border:1px solid rgba(232,187,106,.22);
+    background:rgba(7,8,15,.92);
+    backdrop-filter:blur(14px);
+    box-shadow:0 12px 42px rgba(0,0,0,.52), inset 0 1px 0 rgba(255,255,255,.05);
+  }
+  .mobile-bottom-nav a{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:46px;
+    padding:5px 2px;
+    border-radius:13px;
+    color:#b6bfd5;
+    text-decoration:none;
+    font-size:.56rem;
+    letter-spacing:.02em;
+    font-weight:700;
+    line-height:1.1;
+    border:1px solid transparent;
+    background:transparent;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mobile-bottom-nav a span:first-child{font-size:1rem;line-height:1;margin-bottom:4px}
+  .mobile-bottom-nav a:active,
+  .mobile-bottom-nav a.active{
+    color:var(--gold2);
+    background:rgba(200,151,58,.12);
+    border-color:rgba(200,151,58,.24);
+  }
+
+  .mobile-filter-bar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin:2px 0 10px;
+    padding:8px 9px;
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(17,21,38,.62);
+  }
+  .mobile-filter-toggle{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:5px;
+    min-height:34px;
+    padding:7px 11px;
+    border-radius:10px;
+    border:1px solid rgba(232,187,106,.32);
+    background:rgba(200,151,58,.10);
+    color:var(--gold2);
+    font-size:.68rem;
+    font-weight:800;
+    letter-spacing:.02em;
+  }
+  .mobile-filter-summary{
+    flex:1;
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:#aeb7cf;
+    font-size:.62rem;
+    font-family:'JetBrains Mono',monospace;
+    text-align:right;
+  }
+  .filter-section.mobile-filters-collapsed{
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    margin:0!important;
+    transition:max-height .25s ease,opacity .2s ease,margin .2s ease;
+  }
+  .filter-section:not(.mobile-filters-collapsed){
+    transition:max-height .25s ease,opacity .2s ease;
+  }
+
+  .mobile-view-toggle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin:0 0 10px;
+  }
+  .mobile-view-toggle-label{
+    color:#aeb7cf;
+    font-size:.62rem;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .mobile-view-toggle-buttons{
+    display:flex;
+    gap:6px;
+    padding:3px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:14px;
+    background:rgba(17,21,38,.72);
+  }
+  .mobile-view-btn{
+    min-height:34px;
+    padding:7px 12px;
+    border-radius:11px;
+    border:1px solid transparent;
+    background:transparent;
+    color:#b6bfd5;
+    font-weight:800;
+    font-size:.66rem;
+  }
+  .mobile-view-btn.active{
+    color:var(--gold2);
+    border-color:rgba(200,151,58,.35);
+    background:rgba(200,151,58,.12);
+  }
+
+  body.fund-card-mode .table-wrap{display:none!important}
+  body.fund-card-mode .mobile-fund-cards{display:grid!important}
+  .mobile-fund-cards{
+    grid-template-columns:1fr;
+    gap:10px;
+    margin-top:6px;
+  }
+  .fund-card-mobile{
+    border:1px solid rgba(200,151,58,.18);
+    border-radius:16px;
+    background:linear-gradient(180deg,rgba(17,21,38,.94),rgba(12,14,26,.94));
+    overflow:hidden;
+    box-shadow:0 10px 28px rgba(0,0,0,.20);
+  }
+  .fund-card-mobile-head{
+    padding:12px 13px 10px;
+    border-bottom:1px solid rgba(255,255,255,.06);
+  }
+  .fund-card-mobile-name{
+    color:var(--text);
+    font-size:.82rem;
+    line-height:1.35;
+    font-weight:800;
+    margin:7px 0 0;
+  }
+  .fund-card-mobile-tags{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+  .fund-card-mobile-body{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px;
+    padding:12px 13px;
+  }
+  .fund-metric{
+    padding:8px 9px;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,.065);
+    background:rgba(7,8,15,.34);
+    min-width:0;
+  }
+  .fund-metric-label{
+    display:block;
+    color:#8792b0;
+    font-size:.55rem;
+    text-transform:uppercase;
+    letter-spacing:.075em;
+    font-weight:800;
+    margin-bottom:4px;
+  }
+  .fund-metric-value{
+    display:block;
+    color:var(--text);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.72rem;
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .fund-metric-value.pos{color:var(--green)}
+  .fund-metric-value.neg{color:var(--red)}
+  .fund-card-mobile-actions{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    padding:10px 13px 13px;
+    border-top:1px solid rgba(255,255,255,.055);
+  }
+  .fund-card-mobile-actions a,
+  .fund-card-mobile-actions button{
+    flex:1;
+    min-height:36px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:11px;
+    border:1px solid rgba(255,255,255,.09);
+    background:rgba(17,21,38,.72);
+    color:#b6bfd5;
+    text-decoration:none;
+    font-size:.66rem;
+    font-weight:800;
+  }
+  .fund-card-mobile-actions a:first-child{
+    color:var(--gold2);
+    border-color:rgba(200,151,58,.25);
+    background:rgba(200,151,58,.09);
+  }
+  .fund-card-mobile-detail{
+    display:none;
+    padding:0 13px 13px;
+  }
+  .fund-card-mobile.open .fund-card-mobile-detail{display:block}
+  .fund-card-mobile-detail .fund-quick-note{margin-top:0;font-size:.64rem;padding:10px 11px}
+
+  .mobile-section-top-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    position:fixed;
+    right:14px;
+    bottom:calc(88px + env(safe-area-inset-bottom,0px));
+    z-index:998;
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid rgba(232,187,106,.22);
+    background:rgba(7,8,15,.86);
+    color:var(--gold2);
+    text-decoration:none;
+    box-shadow:0 10px 26px rgba(0,0,0,.42);
+    backdrop-filter:blur(12px);
+    font-size:1rem;
+  }
+}
+
+@media(max-width:480px){
+  .mobile-bottom-nav{left:8px;right:8px;gap:4px;padding:7px}
+  .mobile-bottom-nav a{font-size:.52rem;min-height:43px}
+  .fund-card-mobile-body{grid-template-columns:1fr 1fr;gap:7px}
+  .fund-card-mobile-name{font-size:.78rem}
+}
+
+@media(min-width:821px){.mobile-section-top-btn{display:none!important}}
+
+
+
+/* ─────────────────────────────────────────────
+   CDI — histórico mensal compacto no card
+───────────────────────────────────────────── */
+.cdi-year-history{
+  margin-top:10px;
+  padding:10px 10px 9px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:12px;
+  background:rgba(7,8,15,.24);
+  min-width:0;
+}
+.cdi-year-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  margin-bottom:8px;
+}
+.cdi-year-head span{
+  color:#aab4cf;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+.cdi-year-head strong{
+  color:var(--green);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;
+  white-space:nowrap;
+}
+.cdi-month-strip{
+  display:flex;
+  gap:6px;
+  overflow-x:auto;
+  overflow-y:hidden;
+  padding-bottom:2px;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:thin;
+}
+.cdi-month-chip{
+  flex:0 0 auto;
+  min-width:56px;
+  padding:6px 7px;
+  border-radius:9px;
+  border:1px solid rgba(255,255,255,.085);
+  background:rgba(17,21,38,.62);
+  text-align:center;
+}
+.cdi-month-chip.current{
+  border-color:rgba(46,209,122,.42);
+  background:rgba(46,209,122,.10);
+  box-shadow:0 0 0 1px rgba(46,209,122,.08) inset;
+}
+.cdi-month-chip .m{
+  display:block;
+  color:#8f9ab8;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.55rem;
+  text-transform:uppercase;
+  line-height:1.1;
+}
+.cdi-month-chip .v{
+  display:block;
+  margin-top:3px;
+  color:var(--green);
+  font-family:'JetBrains Mono',monospace;
+  font-weight:700;
+  font-size:.66rem;
+  line-height:1.1;
+}
+.cdi-month-chip .p{
+  display:block;
+  margin-top:2px;
+  color:var(--muted2);
+  font-size:.48rem;
+  font-family:'JetBrains Mono',monospace;
+  line-height:1;
+}
+.cdi-month-empty{
+  color:var(--muted2);
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  padding:4px 0;
+}
+@media(min-width:901px){
+  .cdi-card .cdi-month-strip{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(56px,1fr));
+    overflow:visible;
+  }
+  .cdi-card .cdi-month-chip{min-width:0}
+}
+@media(max-width:768px){
+  .cdi-year-history{padding:8px;margin-top:8px;border-radius:10px}
+  .cdi-month-chip{min-width:52px;padding:5px 6px}
+  .cdi-year-head span{font-size:.54rem}
+  .cdi-year-head strong{font-size:.62rem}
+}
+
+/* ─────────────────────────────────────────────
+   PATCH — CDI histórico mensal mais legível
+───────────────────────────────────────────── */
+.cdi-year-history{
+  margin-top:12px !important;
+  padding:12px !important;
+  border:1px solid rgba(91,156,246,.18) !important;
+  border-radius:13px !important;
+  background:linear-gradient(180deg,rgba(17,21,38,.86),rgba(8,10,18,.92)) !important;
+  box-shadow:0 10px 28px rgba(0,0,0,.20) inset !important;
+}
+
+.cdi-year-head{
+  margin-bottom:10px !important;
+  align-items:center !important;
+}
+
+.cdi-year-head span{
+  color:#d6ddec !important;
+  font-size:.64rem !important;
+  font-weight:800 !important;
+  letter-spacing:.07em !important;
+}
+
+.cdi-year-head strong{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:4px !important;
+  color:#eafff2 !important;
+  font-size:.68rem !important;
+  font-weight:800 !important;
+  padding:3px 8px !important;
+  border-radius:999px !important;
+  border:1px solid rgba(46,209,122,.28) !important;
+  background:rgba(46,209,122,.10) !important;
+}
+
+.cdi-month-strip{
+  gap:8px !important;
+  padding-bottom:3px !important;
+}
+
+.cdi-month-chip{
+  min-width:72px !important;
+  padding:8px 9px !important;
+  border-radius:10px !important;
+  border:1px solid rgba(174,183,207,.16) !important;
+  background:rgba(255,255,255,.035) !important;
+  text-align:left !important;
+}
+
+.cdi-month-chip.current{
+  border-color:rgba(46,209,122,.60) !important;
+  background:linear-gradient(180deg,rgba(46,209,122,.16),rgba(46,209,122,.07)) !important;
+  box-shadow:0 0 0 1px rgba(46,209,122,.10) inset !important;
+}
+
+.cdi-month-chip .m{
+  color:#cbd3e6 !important;
+  font-size:.61rem !important;
+  font-weight:800 !important;
+  letter-spacing:.06em !important;
+}
+
+.cdi-month-chip .v{
+  margin-top:5px !important;
+  color:#78f0aa !important;
+  font-size:.82rem !important;
+  font-weight:900 !important;
+  line-height:1.12 !important;
+  text-shadow:none !important;
+}
+
+.cdi-month-chip.current .v{
+  color:#9cffc3 !important;
+}
+
+.cdi-month-chip .p{
+  margin-top:4px !important;
+  color:#d0d7e8 !important;
+  font-size:.54rem !important;
+  font-weight:700 !important;
+  letter-spacing:.02em !important;
+}
+
+@media(max-width:768px){
+  .cdi-year-history{
+    padding:10px !important;
+  }
+
+  .cdi-year-head{
+    gap:8px !important;
+    flex-wrap:wrap !important;
+  }
+
+  .cdi-year-head span{
+    font-size:.60rem !important;
+  }
+
+  .cdi-year-head strong{
+    font-size:.62rem !important;
+    padding:3px 7px !important;
+  }
+
+  .cdi-month-chip{
+    min-width:68px !important;
+    padding:7px 8px !important;
+  }
+
+  .cdi-month-chip .v{
+    font-size:.76rem !important;
+  }
+}
+
+
+/* Ajuste CDI compacto: evita repetir mês atual e 12M no mesmo card */
+.cdi-card-compacto .cdi-year-history{
+  margin-top:12px;
+}
+.cdi-card-compacto .cdi-year-head span{
+  color:#d4dbea;
+  font-weight:800;
+}
+.cdi-card-compacto .cdi-rel{
+  color:#9faac4;
+}
+@media(max-width:768px){
+  .cdi-card-compacto .indic-ref-sub{
+    font-size:.64rem;
+  }
+}
+
 </style>
 </head>
 <body>
-<div class="page">
+<div class="page" id="topo">
 
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header>
@@ -1812,14 +3411,16 @@ footer{
 </header>
 
 <!-- ═══════════════════════════════════════════════ DISCLAIMER ══ -->
-<div class="top-disclaimer">
-  <div class="top-disclaimer-icon">ℹ️</div>
-  <div>
-    <strong>Aviso:</strong>
-    ferramenta de <span>produção própria</span>, com finalidade informativa e auxiliar.
-    Não representa ferramenta institucional da Caixa Econômica Federal, da CAIXA Asset
-    ou de qualquer empresa do conglomerado CAIXA. Consulte sempre as fontes oficiais
-    antes de qualquer decisão.
+<div class="top-disclaimer top-disclaimer-clean notice-compact-v2" role="note" aria-label="Aviso sobre uso da ferramenta">
+  <div class="notice-icon" aria-hidden="true">ℹ️</div>
+  <div class="notice-content">
+    <div class="notice-title">Aviso rápido</div>
+    <div class="notice-copy">Ferramenta independente de apoio consultivo. Dados públicos e uso informativo; não é canal oficial nem recomendação da CAIXA.</div>
+    <div class="notice-tags" aria-hidden="true">
+      <span>Independente</span>
+      <span>Dados públicos</span>
+      <span>Informativo</span>
+    </div>
   </div>
 </div>
 
@@ -1850,7 +3451,7 @@ footer{
     <div class="indic-ref-card selic-card market-ref-card">
       <div class="indic-ref-label">🏦 Taxa Selic — Meta COPOM</div>
       <div class="indic-ref-val gold" id="mc-selic">—</div>
-      <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
+      <div class="indic-ref-sub">a.a. — taxa básica de juros</div>
       <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
         <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
@@ -1869,22 +3470,22 @@ footer{
     </div>
 
     <!-- Card 2: CDI -->
-    <div class="indic-ref-card cdi-card market-ref-card">
+    <div class="indic-ref-card cdi-card market-ref-card cdi-card-compacto">
       <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
       <div class="indic-ref-val green" id="mc-cdi">—</div>
-      <div class="indic-ref-sub">% a.a. · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
-      <div class="cdi-mini-grid">
-        <div class="cdi-mini-item">
-          <span>CDI mês atual</span>
-          <strong id="mc-cdi-mes-atual">—</strong>
+      <div class="indic-ref-sub">a.a. · taxa anualizada · série BCB 4391</div>
+
+      <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano">
+        <div class="cdi-year-head">
+          <span id="cdiYearHistoryTitle">Mensal</span>
+          <strong id="cdiYearHistoryTotal">Ano —</strong>
         </div>
-        <div class="cdi-mini-item">
-          <span>CDI 12M</span>
-          <strong id="mc-cdi-12m-val-hero">—</strong>
+        <div class="cdi-month-strip" id="cdiMonthStrip">
+          <span class="cdi-month-empty">histórico carregando...</span>
         </div>
       </div>
-      <div class="cdi-rel" id="mc-cdi-12m-label">Acum. 12M: <span id="mc-cdi-12m-val">—</span></div>
-      <div class="cdi-rel" style="margin-top:2px">CDI ≈ Selic − 0,10 p.p.</div>
+
+      <div class="cdi-rel" style="margin-top:6px">CDI ≈ Selic − 0,10 p.p. · 12M na tabela consolidada</div>
     </div>
 
     <!-- Card 3: Poupança antiga + nova + expansível -->
@@ -1897,26 +3498,30 @@ footer{
       </div>
       <div class="poup-values">
         <div class="poup-rule">
-          <div class="poup-rule-label">Nova (pós mai/2012)</div>
+          <div class="poup-rule-label">Regra nova · a partir de 04/05/2012</div>
           <div class="poup-rule-val blue" id="mc-poup">—</div>
-          <div class="poup-rule-sub">% a.m. · 70% da Selic</div>
+          <div class="poup-rule-sub">a.m. · conforme nível da Selic</div>
         </div>
         <div class="poup-rule" style="opacity:.65">
-          <div class="poup-rule-label">Antiga (pré mai/2012)</div>
+          <div class="poup-rule-label">Regra antiga · até 03/05/2012</div>
           <div class="poup-rule-val muted">~0,50%</div>
-          <div class="poup-rule-sub">% a.m. · TR + 0,50%</div>
+          <div class="poup-rule-sub">a.m. · TR + 0,50%</div>
         </div>
       </div>
       <div class="poup-explain" id="poupExplain">
         <div class="poup-explain-inner">
-          <div class="poup-explain-title">Como funciona cada regra</div>
+          <div class="poup-explain-title">Regras da poupança</div>
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-nova">Nova</span>
-            <span class="poup-explain-text">Cadernetas abertas após 04/05/2012. Quando a Selic for <strong style="color:var(--text)">superior a 8,5% a.a.</strong>, rende 70% da Selic a.a. (aplicado mensalmente). Quando a Selic for igual ou inferior a 8,5%, equipara-se à regra antiga: TR + 0,50% a.m.</span>
+            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos a partir de 04/05/2012:</strong> se a Selic for superior a 8,5% a.a., rende TR + 0,50% a.m.; se a Selic for igual ou inferior a 8,5% a.a., rende TR + 70% da Selic.</span>
           </div>
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-antiga">Antiga</span>
-            <span class="poup-explain-text">Cadernetas abertas antes de 04/05/2012. Rende <strong style="color:var(--text)">sempre TR + 0,50% a.m.</strong>, independentemente do nível da Selic. Com a Selic atual em 14,50%, a regra antiga rende menos que a nova.</span>
+            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos até 03/05/2012:</strong> rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
+          </div>
+          <div class="poup-explain-row">
+            <span class="poup-explain-tag tag-antiga">Dica</span>
+            <span class="poup-explain-text">Com Selic acima de 8,5% a.a., a regra nova também usa remuneração adicional de 0,50% a.m. + TR, evitando confusão com a regra dos 70%.</span>
           </div>
           <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
         </div>
@@ -2188,16 +3793,7 @@ footer{
         <div id="dolar-day-content" style="display:none">
           <div class="dolar-day-rate" id="dolar-day-rate">—</div>
           <div class="dolar-day-ref" id="dolar-day-ref">—</div>
-          <div class="dolar-spread" style="margin-bottom:12px">
-            <div class="dolar-spread-item">
-              <div class="dolar-spread-label">Compra</div>
-              <div class="dolar-spread-val" id="dolar-compra">—</div>
-            </div>
-            <div class="dolar-spread-item">
-              <div class="dolar-spread-label">Venda</div>
-              <div class="dolar-spread-val" id="dolar-venda">—</div>
-            </div>
-          </div>
+          <div class="dolar-ptax-compact" id="dolar-ptax-compact">Cotação PTAX de venda: —</div>
           <div class="dolar-day-metrics">
             <div class="dolar-metric">
               <span class="dolar-metric-label">Var. vs dia anterior</span>
@@ -2232,10 +3828,7 @@ footer{
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
           </div>
-          <div class="dolar-source-note">
-            <span class="source-label">Fonte</span>
-            <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Fechamentos mensais pelo último registro disponível de cada mês.</span>
-          </div>
+
         </div>
       </div>
 
@@ -2255,9 +3848,9 @@ footer{
         <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
         <div class="dolar-chart-source">
           <span class="source-label">Fonte</span>
-          <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Série exibida conforme os períodos selecionados no gráfico.</span>
+          <span>Banco Central do Brasil · PTAX</span>
           <div class="dolar-source-actions">
-            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico de cotações BCB ↗</a>
+            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico BCB ↗</a>
           </div>
         </div>
       </div>
@@ -2289,21 +3882,19 @@ footer{
           <div class="focus-explain-item">
             <span class="focus-explain-kicker">O que é</span>
             <p>
-              O Boletim Focus é uma publicação do <strong>Banco Central do Brasil</strong> que consolida
-              expectativas de mercado para inflação, Selic, PIB e câmbio.
+              Relatório do <strong>Banco Central do Brasil</strong> que consolida estimativas de bancos, corretoras e consultorias para inflação, Selic, PIB e câmbio nos próximos anos.
             </p>
           </div>
           <div class="focus-explain-item">
-            <span class="focus-explain-kicker">Por que o mercado utiliza</span>
+            <span class="focus-explain-kicker">Para que serve</span>
             <p>
-              As projeções reúnem estimativas de bancos, corretoras, consultorias e distribuidoras,
-              ajudando a acompanhar o consenso econômico e comparar cenários para os próximos anos.
+              Ajuda a balizar a leitura de cenário e a organização dos investimentos de acordo com o consenso do mercado econômico.
             </p>
           </div>
         </div>
         <div class="focus-explain-note">
           <span>⚠️</span>
-          <span><strong>Atenção:</strong> as projeções não são garantia de resultado futuro. Elas servem como referência de cenário e podem mudar conforme novos dados econômicos são divulgados.</span>
+          <span><strong>Atenção:</strong> serve como referência de cenário, mas não é garantia de resultado futuro. As projeções mudam conforme a economia e novas informações são divulgadas.</span>
         </div>
       </div>
     </div>
@@ -2399,7 +3990,13 @@ footer{
     </div>
   </div>
 
-  <div class="filter-section" style="margin-bottom:14px">
+
+  <div class="mobile-filter-bar" id="mobileFilterBar">
+    <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle">⚙️ Editar filtros</button>
+    <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
+  </div>
+
+  <div class="filter-section mobile-filters-collapsed" style="margin-bottom:14px">
     <!-- Perfil -->
     <div class="filter-row" id="perfilFilters">
       <span class="filter-label">Perfil</span>
@@ -2436,6 +4033,15 @@ footer{
     </div>
   </div>
 
+
+  <div class="mobile-view-toggle" id="mobileViewToggle" aria-label="Modo de visualização do catálogo">
+    <span class="mobile-view-toggle-label">Visualização</span>
+    <div class="mobile-view-toggle-buttons">
+      <button type="button" class="mobile-view-btn" data-view="table">Tabela</button>
+      <button type="button" class="mobile-view-btn active" data-view="cards">Cards</button>
+    </div>
+  </div>
+
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
     <table id="mainTable" style="display:none">
@@ -2443,6 +4049,8 @@ footer{
       <tbody id="tableBody"></tbody>
     </table>
   </div>
+
+  <div id="mobileFundCards" class="mobile-fund-cards" aria-live="polite"></div>
 
   <div class="pagination-row">
     <div id="resultInfo"></div>
@@ -2469,36 +4077,43 @@ footer{
         <tbody id="ptaxBody"></tbody>
       </table>
     </div>
-    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX, cotação de venda do dólar americano.</div>
+    <div class="modal-footer">Fonte: Banco Central do Brasil · PTAX.</div>
   </div>
 </div>
 
-<footer class="site-footer-minimal">
-  <details class="footer-disclaimer footer-minimal">
+<footer class="site-footer-clean site-footer-v2">
+  <details class="footer-disclaimer-clean footer-disclaimer-v2" id="footerDisclaimer">
     <summary>
-      <span class="footer-minimal-title">Aviso e fontes</span>
-      <span class="footer-minimal-copy">Produção própria · dados públicos · uso informativo · não institucional · não constitui recomendação</span>
-      <span class="footer-minimal-toggle" aria-hidden="true"></span>
+      <span class="footer-summary-main">
+        <span class="footer-summary-title">Sobre esta plataforma</span>
+        <span class="footer-summary-sub">produção independente · dados públicos · uso informativo · não institucional</span>
+      </span>
+      <span class="footer-summary-action" aria-hidden="true"></span>
     </summary>
 
-    <div class="footer-minimal-body">
-      <div class="footer-minimal-text">
-        <p>
-          Esta página é uma produção própria de <strong>Elton Cardoso Teotonio</strong>, criada para organizar e consultar
-          dados públicos sobre fundos de investimento e indicadores de mercado.
-        </p>
-        <p>
-          <strong>Importante:</strong> não é ferramenta institucional da Caixa Econômica Federal, da CAIXA Asset ou do
-          conglomerado CAIXA. As informações não constituem recomendação, oferta ou solicitação de investimento.
-        </p>
+    <div class="footer-clean-body">
+      <div class="footer-clean-grid">
+        <div class="footer-clean-item">
+          <strong>Finalidade</strong>
+          <span>Organizar dados públicos de mercado e fundos para apoio consultivo.</span>
+        </div>
+        <div class="footer-clean-item">
+          <strong>Natureza</strong>
+          <span>Iniciativa independente de Elton Cardoso Teotonio. Não é ferramenta institucional da CAIXA ou da CAIXA Asset.</span>
+        </div>
+        <div class="footer-clean-item">
+          <strong>Uso das informações</strong>
+          <span>Não constitui recomendação, oferta ou solicitação de investimento. Consulte sempre documentos oficiais.</span>
+        </div>
       </div>
 
-      <div class="footer-source-pills" aria-label="Fontes públicas consultadas">
-        <span class="footer-source-label">Fontes públicas consultadas</span>
-        <span class="footer-source-pill">fundos.caixa.gov.br</span>
-        <span class="footer-source-pill">Banco Central do Brasil</span>
-        <span class="footer-source-pill">CAIXA Asset Management</span>
-        <span class="footer-source-pill">fontes públicas de mercado</span>
+      <div class="footer-clean-sources" aria-label="Fontes públicas consultadas">
+        <span class="sources-title">Fontes públicas</span>
+        <span>BCB</span>
+        <span>IBGE</span>
+        <span>B3</span>
+        <span>SIPII</span>
+        <span>fundos.caixa.gov.br</span>
       </div>
     </div>
   </details>
@@ -2711,8 +4326,9 @@ async function carregarDolarDia(){
       const dtCot = new Date(ultima.dataHoraCotacao);
 
       $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
-      $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
-      $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
+      if($('dolar-compra')) $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
+      if($('dolar-venda')) $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
+      if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda: R$ ' + fmtBRL(cotVenda);
 
       const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
       const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
@@ -3080,7 +4696,7 @@ function atualizarTabelaIndicadores(){
   const cdiAcum = num(indicState.cdi[`m${m}`]) ?? num(cards.cdi?.[`acum_${m}m`]);
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
-  set('cdi-mes-ant-sub', cards.cdi?.mes_fechado_label ? `taxa mensal ${cards.cdi.mes_fechado_label}` : `taxa mensal ${mesAntLabel}`);
+  set('cdi-mes-ant-sub', 'taxa mensal');
 
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2);
   const diasUteis = cards.cdi?.dias_uteis_parcial || cards.cdi?.dias_uteis_mes_atual || hoje.getDate();
@@ -3100,7 +4716,7 @@ function atualizarTabelaIndicadores(){
   const ipcaAcum = num(indicState.ipca[`m${m}`]);
 
   setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
-  set('ipca-mes-ant-sub', ipcaRef || mesAntLabel);
+  set('ipca-mes-ant-sub', 'último divulgado');
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
   setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
   set('ipca-acum-sub-v2', `acum. ${m}M`);
@@ -3122,7 +4738,7 @@ function atualizarTabelaIndicadores(){
   const dolarAcum = num(idxDolar[`acum_${m}m`]) ?? num(cards.dolar?.[`acum_${m}m`]) ?? num(indicState.dolarPct[`m${m}`]);
 
   setMoney('dolar-ant-cot', dolarFechMesAnt ?? indicState.dolarBRL.mes);
-  set('dolar-ant-sub', idxDolar.mes_anterior_label ? `fechamento ${idxDolar.mes_anterior_label}` : `fechamento ${mesAntLabel}`);
+  set('dolar-ant-sub', 'fechamento');
 
   // Se o card PTAX do dia já foi carregado, mantém a cotação oficial exibida ali.
   const dolarDiaTexto = $('dolar-day-rate')?.textContent;
@@ -3130,7 +4746,7 @@ function atualizarTabelaIndicadores(){
   else setMoney('dolar-cur-cot', dolarAtual);
 
   setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10);
-  set('dolar-cur-sub', dolarVarMesAtual !== null ? 'var. mês atual' : 'cotação atual');
+  set('dolar-cur-sub', dolarVarMesAtual !== null ? 'var. mês' : 'cotação');
   setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
   setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
   set('dolar-acum-sub-v2', `var. ${m}M`);
@@ -3145,11 +4761,11 @@ function atualizarTabelaIndicadores(){
 
   setPts('ibov-ant-pts', ibovFechMesAnt);
   setPct('ibov-ant-var', ibovMesFechado, 'bar-ibov-ant', 20);
-  set('ibov-ant-sub', idxIbov.mes_anterior_label ? `fechamento ${idxIbov.mes_anterior_label}` : 'mês fechado');
+  set('ibov-ant-sub', 'fechamento');
 
   setPts('ibov-cur-pts', ibovAtual);
   setPct('ibov-cur-var', ibovMesAtual, 'bar-ibov-var', 20);
-  set('ibov-cur-sub', 'pontos · var. mês atual');
+  set('ibov-cur-sub', 'pontos · var. mês');
 
   setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
   setPct('ibov-acum-v2', ibovAcum, 'bar-ibov-acum', 80);
@@ -3168,17 +4784,17 @@ function atualizarTabelaIndicadores(){
     const acumBrl = num(item?.[`acum_${m}m_brl`]);
 
     setPct(`${prefix}-ant-var`, fechado, `bar-${prefix}-ant`, 35);
-    set(`${prefix}-ant-sub`, fechadoBrl !== null ? `${item?.mes_anterior_label || mesAntLabel} · ${brlSub(fechadoBrl)}` : (item?.mes_anterior_label || 'mês fechado'));
+    set(`${prefix}-ant-sub`, fechadoBrl !== null ? brlSub(fechadoBrl) : 'mês fechado');
 
     setPts(`${prefix}-cur-pts`, atualPts);
     setPct(`${prefix}-cur-var`, mesAtual, `bar-${prefix}-cur`, 35);
-    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? `mês atual · ${brlSub(mesAtualBrl)}` : 'mês atual');
+    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? brlSub(mesAtualBrl) : 'var. mês');
 
     setPct(`${prefix}-ano-var`, ano, `bar-${prefix}-ano`, 60);
-    set(`${prefix}-ano-sub`, anoBrl !== null ? `BRL: ${pctTxt(anoBrl)}` : 'var. no ano');
+    set(`${prefix}-ano-sub`, anoBrl !== null ? `BRL: ${pctTxt(anoBrl)}` : 'no ano');
 
     setPct(`${prefix}-acum-var`, acum, `bar-${prefix}-acum`, 120);
-    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? `${m}M · BRL: ${pctTxt(acumBrl)}` : `var. ${m}M`);
+    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? `BRL: ${pctTxt(acumBrl)}` : `${m}M`);
   }
 
   // Compatibilidade: se vier apenas estrutura antiga, pelo menos mostra o S&P 500 atual.
@@ -3352,6 +4968,47 @@ function atualizarResumoCenario(d){
     ? `Juros ainda elevados, ${partes.join(', ')}.`
     : 'Dados principais carregados. Execute o robô de mercado para atualizar a leitura automática do cenário.';
 }
+
+
+function renderCdiYearHistory(d){
+  const strip = $('cdiMonthStrip');
+  if(!strip) return;
+  const cdi = d?.cards?.cdi || {};
+  const hist = Array.isArray(cdi.historico) ? cdi.historico : [];
+  if(!hist.length){
+    strip.innerHTML = '<span class="cdi-month-empty">histórico indisponível</span>';
+    return;
+  }
+
+  const last = hist[hist.length - 1];
+  const ano = String(last?.key || '').slice(0,4) || String(new Date().getFullYear());
+  const mesesAno = hist.filter(x => String(x?.key || '').startsWith(ano + '-'));
+  const parcialRef = String(cdi.parcial_ref || '').toLowerCase();
+  const fmtPctLocal = v => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
+  };
+
+  const titulo = $('cdiYearHistoryTitle');
+  if(titulo) titulo.textContent = `CDI mensal ${ano}`;
+
+  const total = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano);
+  const totalEl = $('cdiYearHistoryTotal');
+  if(totalEl) totalEl.textContent = Number.isFinite(total) ? `Ano ${fmtPctLocal(total)}` : 'Ano —';
+
+  strip.innerHTML = mesesAno.map((item, idx) => {
+    const label = String(item.label || item.key || '').replace('/'+ano,'');
+    const isLast = idx === mesesAno.length - 1;
+    const isPartial = isLast && parcialRef && String(item.label || '').toLowerCase() === parcialRef;
+    return `<span class="cdi-month-chip ${isLast ? 'current' : ''}" title="CDI ${item.label || ''}: ${fmtPctLocal(item.valor)}">
+      <span class="m">${label}</span>
+      <span class="v">${fmtPctLocal(item.valor)}</span>
+      ${isPartial ? '<span class="p">parcial</span>' : ''}
+    </span>`;
+  }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
+}
+
 /* ════════════════════════════════════════════════════
    CARREGA mercado_atual.json
 ════════════════════════════════════════════════════ */
@@ -3414,6 +5071,9 @@ async function carregarMercado(){
       if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
       if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
       if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
+      renderCdiYearHistory(d);
+    } else {
+      renderCdiYearHistory(d);
     }
 
     // ── IPCA (do JSON — complementado pela série 433) ──
@@ -4775,6 +6435,199 @@ document.addEventListener('click', function(e){
     e.stopPropagation();
   }
 }, true);
+</script>
+
+
+<script>
+// Mantém o disclaimer do rodapé fechado ao abrir/recarregar a página.
+document.addEventListener('DOMContentLoaded', function(){
+  var footer = document.getElementById('footerDisclaimer');
+  if (footer) footer.removeAttribute('open');
+});
+</script>
+
+
+
+<nav class="mobile-bottom-nav" aria-label="Atalhos principais no celular">
+  <a href="#topo" data-target="topo"><span>🏠</span><small>Início</small></a>
+  <a href="#sec-mercado" data-target="sec-mercado"><span>📊</span><small>Mercado</small></a>
+  <a href="#sec-dolar" data-target="sec-dolar"><span>💵</span><small>Dólar</small></a>
+  <a href="#sec-fundos" data-target="sec-fundos"><span>📁</span><small>Fundos</small></a>
+  <a href="#rankingsSection" data-target="rankingsSection"><span>🏆</span><small>Ranking</small></a>
+</nav>
+<a href="#topo" class="mobile-section-top-btn" aria-label="Voltar ao topo">↑</a>
+
+
+
+<script>
+/* ════════════════════════════════════════════════════
+   MOBILE UX — atalhos, filtros compactos e cards de fundos
+════════════════════════════════════════════════════ */
+(function(){
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia('(max-width: 820px)').matches}
+  function setSectionIds(){
+    const sections=qsa('.section-gap');
+    sections.forEach(sec=>{
+      const txt=(sec.textContent||'').replace(/\s+/g,' ').trim();
+      if(txt.includes('Indicadores de Mercado')&&!qs('#sec-mercado')) sec.id='sec-mercado';
+      if(txt.includes('Câmbio — Dólar')&&!qs('#sec-dolar')) sec.id='sec-dolar';
+      if(txt.includes('Boletim Focus')&&!qs('#sec-focus')) sec.id='sec-focus';
+      if(txt.includes('Catálogo Completo de Fundos')&&!qs('#sec-fundos')) sec.id='sec-fundos';
+    });
+    ['topo','sec-mercado','sec-dolar','sec-focus','sec-fundos','rankingsSection'].forEach(id=>{
+      const el=document.getElementById(id); if(el) el.classList.add('mobile-anchor-target');
+    });
+  }
+
+  function pctClass(v){
+    const n=toNum(v);
+    return n>0?'pos':n<0?'neg':'';
+  }
+  function fmtDash(v){
+    const s=String(v??'').trim();
+    return s && s!=='-' && s!=='—' ? s : '—';
+  }
+  function buildMobileFundCard(r,idx){
+    const nome=fmtDash(r['Fundo']);
+    const cat=fmtDash(r['Categoria']);
+    const risco=fmtDash(r['Perfil de Risco']);
+    const cota=fmtDash(r['Cota (R$)']);
+    const mes=fmtDash(r['Acum. Mes (%)']);
+    const ano=fmtDash(r['Acum. Ano (%)']);
+    const m12=fmtDash(r['Acum. 12M (%)']);
+    const pl=fmtDash(r['PL (milhoes R$)']);
+    const data=fmtDash(r['Data Inicio']||r['Data Início']||r['Data de Inicio']||r['Data de Início']);
+    const cls=CAT_CLS[cat]||'RF';
+    const url=getFundUrl(r);
+    return `<article class="fund-card-mobile" data-card-idx="${idx}">
+      <div class="fund-card-mobile-head">
+        <div class="fund-card-mobile-tags">
+          <span class="cat-badge cat-${cls}">${cat}</span>
+          ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
+        </div>
+        <div class="fund-card-mobile-name">${htmlAttr(nome)}</div>
+      </div>
+      <div class="fund-card-mobile-body">
+        <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Mês</span><span class="fund-metric-value ${pctClass(mes)}">${mes}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">12M</span><span class="fund-metric-value ${pctClass(m12)}">${m12}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
+      </div>
+      <div class="fund-card-mobile-actions">
+        <a href="${htmlAttr(url)}" target="_blank" rel="noopener">Abrir fundo ↗</a>
+        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}">Detalhes</button>
+      </div>
+      <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
+    </article>`;
+  }
+
+  window.renderMobileFundCards=function(){
+    const box=qs('#mobileFundCards');
+    if(!box) return;
+    if(typeof filtered==='undefined' || !Array.isArray(filtered)){box.innerHTML='';return;}
+    const start=(currentPage-1)*perPage;
+    const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
+    const rows=filtered.slice(start,end);
+    if(!rows.length){box.innerHTML='<div class="rank-empty">Nenhum fundo encontrado.</div>';return;}
+    box.innerHTML=rows.map((r,i)=>buildMobileFundCard(r,start+i)).join('');
+    qsa('.fund-card-detail-btn',box).forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        const card=btn.closest('.fund-card-mobile');
+        const open=card.classList.toggle('open');
+        btn.textContent=open?'Ocultar':'Detalhes';
+      });
+    });
+  }
+
+  function applyViewMode(mode){
+    const finalMode=mode || localStorage.getItem('fundMobileView') || (isMobile()?'cards':'table');
+    document.body.classList.toggle('fund-card-mode', finalMode==='cards');
+    qsa('.mobile-view-btn').forEach(b=>b.classList.toggle('active',b.dataset.view===finalMode));
+    localStorage.setItem('fundMobileView',finalMode);
+    if(typeof window.renderMobileFundCards==='function') window.renderMobileFundCards();
+  }
+
+  function updateMobileFilterSummary(){
+    const el=qs('#mobileFilterSummary'); if(!el) return;
+    const parts=[];
+    if(typeof activePerfil!=='undefined' && activePerfil) parts.push(activePerfil);
+    if(typeof activeRisco!=='undefined' && activeRisco) parts.push(activeRisco);
+    if(typeof activePerfCampo!=='undefined'){
+      const map={'Acum. 12M (%)':'12M','Acum. Ano (%)':'Ano','Acum. Mes (%)':'Mês'};
+      parts.push(map[activePerfCampo]||activePerfCampo);
+    }
+    if(typeof activePerf!=='undefined' && activePerf!==null) parts.push('≥ '+activePerf+'%');
+    if(typeof hideSemDados!=='undefined' && hideSemDados) parts.push('sem pipeline');
+    el.textContent='Filtros: '+(parts.length?parts.join(' · '):'todos');
+  }
+
+  function setupMobileFilters(){
+    const btn=qs('#mobileFilterToggle');
+    const sec=qs('.filter-section');
+    if(!btn||!sec) return;
+    function collapseDefault(){
+      if(isMobile()) sec.classList.add('mobile-filters-collapsed');
+      else sec.classList.remove('mobile-filters-collapsed');
+    }
+    btn.addEventListener('click',()=>{
+      sec.classList.toggle('mobile-filters-collapsed');
+      btn.textContent=sec.classList.contains('mobile-filters-collapsed')?'⚙️ Editar filtros':'✓ Ocultar filtros';
+    });
+    qsa('#perfilFilters button,#riscoFilters button,#perfFilters button,#perfPeriodo,#toggleSemDados').forEach(el=>{
+      el.addEventListener('click',()=>setTimeout(updateMobileFilterSummary,80));
+      el.addEventListener('change',()=>setTimeout(updateMobileFilterSummary,80));
+    });
+    collapseDefault();
+    window.addEventListener('resize',collapseDefault);
+  }
+
+  function setupBottomNav(){
+    qsa('.mobile-bottom-nav a').forEach(a=>{
+      a.addEventListener('click',ev=>{
+        const id=a.getAttribute('href').slice(1);
+        const target=document.getElementById(id);
+        if(target){
+          ev.preventDefault();
+          target.scrollIntoView({behavior:'smooth',block:'start'});
+          history.replaceState(null,'','#'+id);
+        }
+      });
+    });
+    const ids=['topo','sec-mercado','sec-dolar','sec-fundos','rankingsSection'];
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          qsa('.mobile-bottom-nav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id));
+        }
+      });
+    },{rootMargin:'-35% 0px -55% 0px',threshold:0.01});
+    ids.forEach(id=>{const el=document.getElementById(id);if(el) obs.observe(el);});
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    setSectionIds();
+    setupMobileFilters();
+    setupBottomNav();
+    qsa('.mobile-view-btn').forEach(b=>b.addEventListener('click',()=>applyViewMode(b.dataset.view)));
+    applyViewMode();
+    updateMobileFilterSummary();
+  });
+
+  try{
+    const originalRender=render;
+    render=function(){
+      originalRender();
+      if(typeof window.renderMobileFundCards==='function') window.renderMobileFundCards();
+      updateMobileFilterSummary();
+    };
+  }catch(e){console.warn('Não foi possível acoplar renderização mobile:',e);}
+
+  window.addEventListener('resize',()=>applyViewMode(localStorage.getItem('fundMobileView')));
+})();
 </script>
 
 </body>
