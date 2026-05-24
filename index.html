@@ -9,6 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
 :root{
   --bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--bg4:#181d36;
@@ -225,6 +226,20 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-spread-item{flex:1;background:var(--bg3);border-radius:7px;padding:6px 8px;border:1px solid var(--border2);text-align:center}
 .dolar-spread-label{font-size:.55rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
 .dolar-spread-val{font-family:'Cormorant Garamond',serif;font-size:1.1rem;font-weight:700;color:var(--text)}
+
+.dolar-ptax-compact{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin:2px 0 12px;
+  padding:6px 10px;
+  border-radius:8px;
+  border:1px solid rgba(200,151,58,.18);
+  background:rgba(200,151,58,.06);
+  color:#b6bfd5;
+  font-size:.62rem;
+  font-family:'JetBrains Mono',monospace;
+}
 
 /* Timeline mensal */
 .dolar-right{display:flex;flex-direction:column;gap:14px;min-width:0;width:100%;max-width:100%;overflow:hidden}
@@ -776,6 +791,173 @@ td.col-pct{text-align:right}
 @media(max-width:900px){
   .detail-panel{grid-template-columns:1fr}
   .docs-card{position:static}
+}
+
+
+
+/* ── RANKINGS COMPACTOS + COMPARTILHAMENTO ── */
+.ranking-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:12px;
+}
+.ranking-title-group{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  min-width:0;
+}
+.ranking-actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.ranking-action-btn,
+.rank-action-btn,
+.rank-more-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  border:1px solid var(--border2);
+  background:rgba(17,21,38,.78);
+  color:#b4bdd3;
+  border-radius:8px;
+  padding:6px 10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:.64rem;
+  font-weight:700;
+  line-height:1;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.ranking-action-btn:hover,
+.rank-action-btn:hover,
+.rank-more-btn:hover{
+  color:var(--gold2);
+  border-color:rgba(232,187,106,.55);
+  background:rgba(200,151,58,.14);
+}
+.ranking-grid{
+  grid-template-columns:repeat(auto-fit,minmax(245px,1fr));
+  gap:10px;
+}
+.rank-card{
+  border-radius:12px;
+}
+.rank-card-header{
+  padding:11px 12px 8px;
+  gap:8px;
+  justify-content:space-between;
+}
+.rank-card-title-wrap{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+}
+.rank-card-title{
+  font-size:.90rem;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.rank-card-actions{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  flex-shrink:0;
+}
+.rank-action-btn{
+  padding:5px 7px;
+  font-size:.58rem;
+  border-radius:7px;
+}
+.rank-card-sub{
+  padding:4px 12px 1px;
+  color:var(--muted2);
+  font-size:.56rem;
+  font-family:'JetBrains Mono',monospace;
+  line-height:1.35;
+}
+.rank-list{
+  padding:2px 0;
+}
+.rank-item{
+  gap:8px;
+  padding:7px 12px;
+}
+.rank-pos{
+  min-width:20px;
+  font-size:.60rem;
+}
+.rank-name{
+  font-size:.68rem;
+  line-height:1.25;
+}
+.rank-cat{
+  font-size:.54rem;
+  line-height:1.25;
+}
+.rank-val{
+  font-size:.70rem;
+  max-width:86px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.rank-card.rank-collapsed .rank-list .rank-item:nth-of-type(n+6){
+  display:none;
+}
+.rank-more-wrap{
+  padding:6px 12px 10px;
+  border-top:1px solid var(--border2);
+}
+.rank-more-btn{
+  width:100%;
+  padding:7px 8px;
+  font-size:.62rem;
+  color:var(--muted);
+}
+.rank-share-toast{
+  position:fixed;
+  left:50%;
+  bottom:18px;
+  z-index:2000;
+  transform:translateX(-50%) translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  padding:10px 14px;
+  border-radius:10px;
+  border:1px solid rgba(46,209,122,.26);
+  background:rgba(12,14,26,.96);
+  color:#c9f6dc;
+  font-size:.72rem;
+  box-shadow:0 10px 40px rgba(0,0,0,.45);
+  transition:opacity .2s, transform .2s;
+}
+.rank-share-toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+@media(max-width:768px){
+  .ranking-head{align-items:flex-start}
+  .ranking-title-group{width:100%}
+  .ranking-actions{width:100%;justify-content:flex-start;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch}
+  .ranking-action-btn{flex:0 0 auto}
+  .ranking-grid{grid-template-columns:1fr;gap:9px}
+  .rank-card-header{padding:10px 11px 7px}
+  .rank-card-title{font-size:.86rem}
+  .rank-action-btn{font-size:.56rem;padding:5px 6px}
+  .rank-item{padding:7px 11px}
+  .rank-name{font-size:.67rem;white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+  .rank-val{font-size:.69rem;max-width:78px}
 }
 
 /* ── PAGINAÇÃO ── */
@@ -1339,6 +1521,318 @@ footer{
   .cdi-mini-grid{grid-template-columns:1fr}
   .market-period-tabs{gap:6px}
 }
+
+
+
+/* ─────────────────────────────────────────────
+   PAINEL CONSOLIDADO — período junto da tabela
+───────────────────────────────────────────── */
+.market-table-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin:12px 0 8px;
+  padding:10px 12px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(17,21,38,.62),rgba(12,14,26,.50));
+}
+.market-table-title{
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+  min-width:0;
+}
+.market-table-title span{
+  color:var(--gold2);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.02rem;
+  font-weight:700;
+  line-height:1.15;
+}
+.market-table-title small{
+  color:#a6b0c9;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.58rem;
+  line-height:1.35;
+}
+.market-table-toolbar .market-period-tabs{
+  margin:0;
+  margin-left:auto;
+  flex-shrink:0;
+}
+.market-table-toolbar .market-period-tabs .indic-tabs-label{
+  font-size:.60rem;
+}
+.market-table-toolbar .indic-tab{
+  padding:5px 12px;
+}
+@media(max-width:768px){
+  .market-table-toolbar{
+    align-items:stretch;
+    flex-direction:column;
+    padding:10px;
+    gap:9px;
+  }
+  .market-table-title span{font-size:.98rem}
+  .market-table-title small{font-size:.56rem}
+  .market-table-toolbar .market-period-tabs{
+    width:100%;
+    margin-left:0;
+    justify-content:space-between;
+  }
+  .market-table-toolbar .market-period-tabs .indic-tabs{
+    display:flex;
+    width:100%;
+    gap:6px;
+  }
+  .market-table-toolbar .market-period-tabs .indic-tab{
+    flex:1;
+    text-align:center;
+    padding:7px 8px;
+    font-size:.66rem;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   AJUSTE FINAL DO AVISO DO RODAPÉ — mais compacto
+───────────────────────────────────────────── */
+footer{
+  margin-top:50px;
+  padding-top:24px;
+  border-top:1px solid rgba(200,151,58,.14);
+}
+.footer-disclaimer.compact-disclaimer{
+  max-width:980px;
+  margin:0 auto;
+  padding:18px 22px;
+  border:1px solid rgba(200,151,58,.16);
+  border-radius:14px;
+  background:linear-gradient(180deg,rgba(200,151,58,.055),rgba(255,255,255,.012));
+  color:#aeb7cf;
+  font-size:.70rem;
+  line-height:1.65;
+  text-align:left;
+  box-shadow:0 8px 28px rgba(0,0,0,.18);
+}
+.footer-disclaimer.compact-disclaimer .footer-disclaimer-title{
+  color:var(--gold2);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1rem;
+  font-weight:700;
+  margin-bottom:8px;
+  letter-spacing:.02em;
+}
+.footer-disclaimer.compact-disclaimer p{
+  margin:7px 0;
+}
+.footer-disclaimer.compact-disclaimer strong{
+  color:var(--text);
+  font-weight:700;
+}
+.footer-sources{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.07);
+  color:var(--gold2);
+  font-size:.62rem;
+  line-height:1.55;
+}
+.footer-disclaimer-signature{
+  display:none !important;
+}
+@media(max-width:768px){
+  footer{
+    margin-top:38px;
+    padding-top:18px;
+  }
+  .footer-disclaimer.compact-disclaimer{
+    padding:15px 16px;
+    font-size:.66rem;
+    line-height:1.6;
+    border-radius:12px;
+  }
+  .footer-disclaimer.compact-disclaimer .footer-disclaimer-title{
+    font-size:.95rem;
+  }
+  .footer-sources{
+    font-size:.58rem;
+  }
+}
+
+
+/* ─────────────────────────────────────────────
+   RODAPÉ MINIMALISTA — aviso retrátil e integrado
+───────────────────────────────────────────── */
+.site-footer-minimal{
+  margin-top:32px;
+  padding-top:16px;
+  border-top:1px solid rgba(200,151,58,.10);
+}
+.footer-disclaimer.footer-minimal{
+  width:100%;
+  max-width:none;
+  margin:0;
+  padding:0;
+  border:1px solid rgba(200,151,58,.13);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(200,151,58,.035),rgba(255,255,255,.008));
+  color:#aeb7cf;
+  font-size:.68rem;
+  line-height:1.55;
+  text-align:left;
+  box-shadow:none;
+  overflow:hidden;
+}
+.footer-minimal summary{
+  list-style:none;
+  cursor:pointer;
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  padding:11px 14px;
+  user-select:none;
+}
+.footer-minimal summary::-webkit-details-marker{display:none}
+.footer-minimal-title{
+  color:var(--gold2);
+  font-family:'Cormorant Garamond',serif;
+  font-size:.98rem;
+  font-weight:700;
+  letter-spacing:.02em;
+  white-space:nowrap;
+}
+.footer-minimal-copy{
+  color:#9fa9c2;
+  font-size:.62rem;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.footer-minimal-toggle{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:88px;
+  padding:4px 9px;
+  border-radius:999px;
+  border:1px solid rgba(200,151,58,.18);
+  background:rgba(200,151,58,.055);
+  color:var(--gold2);
+  font-size:.58rem;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+.footer-minimal-toggle::before{content:'Ver detalhes'}
+.footer-minimal[open] .footer-minimal-toggle::before{content:'Ocultar'}
+.footer-minimal-body{
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(260px,.75fr);
+  gap:12px 18px;
+  padding:12px 14px 14px;
+  border-top:1px solid rgba(255,255,255,.055);
+  background:rgba(7,8,15,.20);
+}
+.footer-minimal-text{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+.footer-minimal-body p{
+  margin:0;
+  color:#b4bdd3;
+  font-size:.66rem;
+  line-height:1.65;
+}
+.footer-minimal-body strong{
+  color:var(--text);
+  font-weight:700;
+}
+.footer-source-pills{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  align-content:flex-start;
+}
+.footer-source-label{
+  width:100%;
+  color:var(--gold2);
+  font-size:.58rem;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:2px;
+}
+.footer-source-pill{
+  display:inline-flex;
+  align-items:center;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(17,21,38,.70);
+  color:#aeb7cf;
+  font-size:.58rem;
+  white-space:nowrap;
+}
+@media(max-width:900px){
+  .site-footer-minimal{
+    margin-top:24px;
+    padding-top:12px;
+  }
+  .footer-minimal summary{
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:7px 10px;
+    padding:10px 12px;
+  }
+  .footer-minimal-title{font-size:.92rem}
+  .footer-minimal-copy{
+    grid-column:1 / -1;
+    white-space:normal;
+    line-height:1.35;
+    font-size:.60rem;
+  }
+  .footer-minimal-toggle{
+    min-width:74px;
+    padding:4px 8px;
+    font-size:.54rem;
+  }
+  .footer-minimal-body{
+    grid-template-columns:1fr;
+    padding:11px 12px 12px;
+    gap:11px;
+  }
+  .footer-minimal-body p{font-size:.62rem;line-height:1.58}
+  .footer-source-pill{font-size:.55rem;padding:3px 7px}
+}
+
+
+/* Ajuste final dos avisos institucionais */
+.top-disclaimer{
+  padding:12px 16px;
+  font-size:.70rem;
+  line-height:1.5;
+}
+.top-disclaimer-icon{
+  width:22px;
+  height:22px;
+  border-radius:7px;
+}
+.footer-minimal-title{
+  font-size:.95rem;
+}
+.footer-minimal-copy{
+  color:#a4aec8;
+}
+@media(max-width:768px){
+  .top-disclaimer{
+    padding:11px 12px;
+    font-size:.66rem;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1361,10 +1855,8 @@ footer{
   <div class="top-disclaimer-icon">ℹ️</div>
   <div>
     <strong>Aviso:</strong>
-    ferramenta de <span>produção própria</span>, com finalidade informativa e auxiliar.
-    Não representa ferramenta institucional da Caixa Econômica Federal, da CAIXA Asset
-    ou de qualquer empresa do conglomerado CAIXA. Consulte sempre as fontes oficiais
-    antes de qualquer decisão.
+    ferramenta independente de apoio ao planejamento financeiro. Os dados apresentados possuem finalidade
+    estritamente informativa e não representam canal oficial de comunicação ou recomendação da CAIXA.
   </div>
 </div>
 
@@ -1386,14 +1878,6 @@ footer{
       <h2>📡 Indicadores de Mercado</h2>
       <span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
     </div>
-    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela">
-      <span class="indic-tabs-label">Período:</span>
-      <div class="indic-tabs">
-        <button class="indic-tab active" data-months="12">12 Meses</button>
-        <button class="indic-tab" data-months="24">24 Meses</button>
-        <button class="indic-tab" data-months="36">36 Meses</button>
-      </div>
-    </div>
   </div>
 
   <!-- Cards de referência: Selic, CDI e Poupança separados -->
@@ -1403,7 +1887,7 @@ footer{
     <div class="indic-ref-card selic-card market-ref-card">
       <div class="indic-ref-label">🏦 Taxa Selic — Meta COPOM</div>
       <div class="indic-ref-val gold" id="mc-selic">—</div>
-      <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
+      <div class="indic-ref-sub">a.a. — taxa básica de juros</div>
       <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
         <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
@@ -1425,7 +1909,7 @@ footer{
     <div class="indic-ref-card cdi-card market-ref-card">
       <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
       <div class="indic-ref-val green" id="mc-cdi">—</div>
-      <div class="indic-ref-sub">% a.a. · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
+      <div class="indic-ref-sub">a.a. · mês ref.: <span id="mc-cdi-mes-ref">—</span></div>
       <div class="cdi-mini-grid">
         <div class="cdi-mini-item">
           <span>CDI mês atual</span>
@@ -1436,7 +1920,6 @@ footer{
           <strong id="mc-cdi-12m-val-hero">—</strong>
         </div>
       </div>
-      <div class="cdi-rel" id="mc-cdi-12m-label">Acum. 12M: <span id="mc-cdi-12m-val">—</span></div>
       <div class="cdi-rel" style="margin-top:2px">CDI ≈ Selic − 0,10 p.p.</div>
     </div>
 
@@ -1450,26 +1933,30 @@ footer{
       </div>
       <div class="poup-values">
         <div class="poup-rule">
-          <div class="poup-rule-label">Nova (pós mai/2012)</div>
+          <div class="poup-rule-label">Regra nova · a partir de 04/05/2012</div>
           <div class="poup-rule-val blue" id="mc-poup">—</div>
-          <div class="poup-rule-sub">% a.m. · 70% da Selic</div>
+          <div class="poup-rule-sub">a.m. · conforme nível da Selic</div>
         </div>
         <div class="poup-rule" style="opacity:.65">
-          <div class="poup-rule-label">Antiga (pré mai/2012)</div>
+          <div class="poup-rule-label">Regra antiga · até 03/05/2012</div>
           <div class="poup-rule-val muted">~0,50%</div>
-          <div class="poup-rule-sub">% a.m. · TR + 0,50%</div>
+          <div class="poup-rule-sub">a.m. · TR + 0,50%</div>
         </div>
       </div>
       <div class="poup-explain" id="poupExplain">
         <div class="poup-explain-inner">
-          <div class="poup-explain-title">Como funciona cada regra</div>
+          <div class="poup-explain-title">Regras da poupança</div>
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-nova">Nova</span>
-            <span class="poup-explain-text">Cadernetas abertas após 04/05/2012. Quando a Selic for <strong style="color:var(--text)">superior a 8,5% a.a.</strong>, rende 70% da Selic a.a. (aplicado mensalmente). Quando a Selic for igual ou inferior a 8,5%, equipara-se à regra antiga: TR + 0,50% a.m.</span>
+            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos a partir de 04/05/2012:</strong> se a Selic for superior a 8,5% a.a., rende TR + 0,50% a.m.; se a Selic for igual ou inferior a 8,5% a.a., rende TR + 70% da Selic.</span>
           </div>
           <div class="poup-explain-row">
             <span class="poup-explain-tag tag-antiga">Antiga</span>
-            <span class="poup-explain-text">Cadernetas abertas antes de 04/05/2012. Rende <strong style="color:var(--text)">sempre TR + 0,50% a.m.</strong>, independentemente do nível da Selic. Com a Selic atual em 14,50%, a regra antiga rende menos que a nova.</span>
+            <span class="poup-explain-text"><strong style="color:var(--text)">Depósitos até 03/05/2012:</strong> rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
+          </div>
+          <div class="poup-explain-row">
+            <span class="poup-explain-tag tag-antiga">Dica</span>
+            <span class="poup-explain-text">Com Selic acima de 8,5% a.a., a regra nova também usa remuneração adicional de 0,50% a.m. + TR, evitando confusão com a regra dos 70%.</span>
           </div>
           <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
         </div>
@@ -1483,6 +1970,22 @@ footer{
     <div>
       <strong>Resumo do cenário:</strong>
       <span id="marketScenarioText">Carregando leitura dos principais indicadores...</span>
+    </div>
+  </div>
+
+  <!-- Cabeçalho do painel consolidado -->
+  <div class="market-table-toolbar">
+    <div class="market-table-title">
+      <span>📊 Painel consolidado de indicadores</span>
+      <small>Taxas, inflação, câmbio e bolsas em uma visão comparativa</small>
+    </div>
+    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela">
+      <span class="indic-tabs-label">Período acumulado:</span>
+      <div class="indic-tabs">
+        <button class="indic-tab active" data-months="12">12 Meses</button>
+        <button class="indic-tab" data-months="24">24 Meses</button>
+        <button class="indic-tab" data-months="36">36 Meses</button>
+      </div>
     </div>
   </div>
 
@@ -1725,16 +2228,7 @@ footer{
         <div id="dolar-day-content" style="display:none">
           <div class="dolar-day-rate" id="dolar-day-rate">—</div>
           <div class="dolar-day-ref" id="dolar-day-ref">—</div>
-          <div class="dolar-spread" style="margin-bottom:12px">
-            <div class="dolar-spread-item">
-              <div class="dolar-spread-label">Compra</div>
-              <div class="dolar-spread-val" id="dolar-compra">—</div>
-            </div>
-            <div class="dolar-spread-item">
-              <div class="dolar-spread-label">Venda</div>
-              <div class="dolar-spread-val" id="dolar-venda">—</div>
-            </div>
-          </div>
+          <div class="dolar-ptax-compact" id="dolar-ptax-compact">Cotação PTAX de venda: —</div>
           <div class="dolar-day-metrics">
             <div class="dolar-metric">
               <span class="dolar-metric-label">Var. vs dia anterior</span>
@@ -1769,10 +2263,7 @@ footer{
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
           </div>
-          <div class="dolar-source-note">
-            <span class="source-label">Fonte</span>
-            <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Fechamentos mensais pelo último registro disponível de cada mês.</span>
-          </div>
+
         </div>
       </div>
 
@@ -1792,9 +2283,9 @@ footer{
         <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
         <div class="dolar-chart-source">
           <span class="source-label">Fonte</span>
-          <span>Banco Central do Brasil — PTAX, cotação de venda do dólar americano. Série exibida conforme os períodos selecionados no gráfico.</span>
+          <span>Banco Central do Brasil · PTAX</span>
           <div class="dolar-source-actions">
-            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico de cotações BCB ↗</a>
+            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico BCB ↗</a>
           </div>
         </div>
       </div>
@@ -1826,21 +2317,19 @@ footer{
           <div class="focus-explain-item">
             <span class="focus-explain-kicker">O que é</span>
             <p>
-              O Boletim Focus é uma publicação do <strong>Banco Central do Brasil</strong> que consolida
-              expectativas de mercado para inflação, Selic, PIB e câmbio.
+              Relatório do <strong>Banco Central do Brasil</strong> que consolida estimativas de bancos, corretoras e consultorias para inflação, Selic, PIB e câmbio nos próximos anos.
             </p>
           </div>
           <div class="focus-explain-item">
-            <span class="focus-explain-kicker">Por que o mercado utiliza</span>
+            <span class="focus-explain-kicker">Para que serve</span>
             <p>
-              As projeções reúnem estimativas de bancos, corretoras, consultorias e distribuidoras,
-              ajudando a acompanhar o consenso econômico e comparar cenários para os próximos anos.
+              Ajuda a balizar a leitura de cenário e a organização dos investimentos de acordo com o consenso do mercado econômico.
             </p>
           </div>
         </div>
         <div class="focus-explain-note">
           <span>⚠️</span>
-          <span><strong>Atenção:</strong> as projeções não são garantia de resultado futuro. Elas servem como referência de cenário e podem mudar conforme novos dados econômicos são divulgados.</span>
+          <span><strong>Atenção:</strong> serve como referência de cenário, mas não é garantia de resultado futuro. As projeções mudam conforme a economia e novas informações são divulgadas.</span>
         </div>
       </div>
     </div>
@@ -1892,11 +2381,16 @@ footer{
 </div>
 
 <!-- ═══════════════════════════════════════════ RANKINGS ══ -->
-<div class="section-gap">
-  <div class="section-title" style="justify-content:space-between;flex-wrap:wrap;gap:10px">
-    <div style="display:flex;align-items:center;gap:10px">
+<div class="section-gap" id="rankingsSection">
+  <div class="ranking-head">
+    <div class="ranking-title-group">
       <h2>🏆 Rankings de Performance</h2>
       <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
+    </div>
+    <div class="ranking-actions" aria-label="Ações dos rankings">
+      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar resumo</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Gerar print</button>
     </div>
   </div>
   <div id="rankingGrid" class="ranking-grid">
@@ -1905,6 +2399,7 @@ footer{
     </div>
   </div>
 </div>
+<div id="rankShareToast" class="rank-share-toast" role="status" aria-live="polite"></div>
 
 <!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
 <div class="section-gap">
@@ -2000,39 +2495,42 @@ footer{
         <tbody id="ptaxBody"></tbody>
       </table>
     </div>
-    <div class="modal-footer">Fonte: Banco Central do Brasil — PTAX, cotação de venda do dólar americano.</div>
+    <div class="modal-footer">Fonte: Banco Central do Brasil · PTAX.</div>
   </div>
 </div>
 
-<footer>
-  <div class="footer-disclaimer">
-    <div class="footer-disclaimer-title">Aviso importante</div>
+<footer class="site-footer-minimal">
+  <details class="footer-disclaimer footer-minimal">
+    <summary>
+      <span class="footer-minimal-title">Sobre esta plataforma</span>
+      <span class="footer-minimal-copy">Iniciativa independente · dados públicos · uso informativo · não institucional · não constitui recomendação</span>
+      <span class="footer-minimal-toggle" aria-hidden="true"></span>
+    </summary>
 
-    <p>
-      Esta ferramenta é uma produção própria, desenvolvida por
-      <strong>Elton Cardoso Teotonio</strong>, com finalidade exclusivamente
-      informativa e auxiliar para organização, consulta e análise de informações
-      públicas sobre fundos de investimento e indicadores de mercado.
-    </p>
+    <div class="footer-minimal-body">
+      <div class="footer-minimal-text">
+        <p>
+          Esta página é uma iniciativa independente desenvolvida por <strong>Elton Cardoso Teotonio</strong>
+          para consolidar e analisar dados públicos de mercado e fundos de investimento.
+        </p>
+        <p>
+          <strong>Importante:</strong> esta aplicação não é uma ferramenta institucional da Caixa Econômica Federal,
+          da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA. As informações aqui organizadas não constituem
+          recomendação, oferta ou solicitação de investimento. Consulte sempre as lâminas e regulamentos oficiais antes
+          de qualquer tomada de decisão financeira.
+        </p>
+      </div>
 
-    <p>
-      Este site não é uma ferramenta institucional da Caixa Econômica Federal,
-      da CAIXA Asset ou de qualquer empresa do conglomerado CAIXA. As informações
-      apresentadas não constituem recomendação de investimento, oferta, solicitação
-      de aplicação ou substituição das fontes oficiais.
-    </p>
-
-    <p>
-      As informações devem ser sempre conferidas nos canais oficiais antes de
-      qualquer tomada de decisão. As principais fontes públicas consultadas incluem:
-      fundos.caixa.gov.br, Banco Central do Brasil, CAIXA Asset Management e demais
-      fontes públicas de mercado eventualmente indicadas na própria página.
-    </p>
-
-    <div class="footer-disclaimer-signature">
-      Desenvolvido por Elton Cardoso Teotonio · Produção própria · Uso informativo e auxiliar
+      <div class="footer-source-pills" aria-label="Fontes públicas consultadas">
+        <span class="footer-source-label">Fontes públicas consultadas</span>
+        <span class="footer-source-pill">Banco Central do Brasil</span>
+        <span class="footer-source-pill">IBGE</span>
+        <span class="footer-source-pill">B3</span>
+        <span class="footer-source-pill">SIPII</span>
+        <span class="footer-source-pill">fundos.caixa.gov.br</span>
+      </div>
     </div>
-  </div>
+  </details>
 </footer>
 </div><!-- /page -->
 
@@ -2242,8 +2740,9 @@ async function carregarDolarDia(){
       const dtCot = new Date(ultima.dataHoraCotacao);
 
       $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
-      $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
-      $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
+      if($('dolar-compra')) $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
+      if($('dolar-venda')) $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
+      if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda: R$ ' + fmtBRL(cotVenda);
 
       const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
       const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
@@ -3161,10 +3660,28 @@ function carregarFocusFallback(){
    RANKINGS
 ════════════════════════════════════════════════════ */
 const MEDALHAS = ['🥇','🥈','🥉'];
+let kpisDashboard = null;
+
+function numKpi(v){
+  if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+  return toNum(v);
+}
+function fmtPctKpi(v){
+  const n = numKpi(v);
+  if(n === null) return '—';
+  const sign = n > 0 ? '+' : '';
+  return sign + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+}
+function fmtPlMi(v){
+  const n = numKpi(v);
+  if(n === null) return 'PL —';
+  return 'PL R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+}
 
 function renderRankings(){
   const grid = $('rankingGrid');
   if(!grid || !allRows.length) return;
+
   let base = allRows.filter(r => temDados(r));
   if(activePerfil) base = base.filter(r => {
     const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
@@ -3176,9 +3693,20 @@ function renderRankings(){
   const sortedMes = base.filter(r=>toNum(r['Acum. Mes (%)'])!==null).sort((a,b)=>toNum(b['Acum. Mes (%)'])-toNum(a['Acum. Mes (%)']));
   const sortedAno = base.filter(r=>toNum(r['Acum. Ano (%)'])!==null).sort((a,b)=>toNum(b['Acum. Ano (%)'])-toNum(a['Acum. Ano (%)']));
 
+  // Melhor fundo dentro de cada categoria, com base no Acum. 12M do fundo.
   const catMap = {};
   sorted12m.forEach(r=>{ const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r; });
   const catTop = Object.entries(catMap).sort((a,b)=>toNum(b[1]['Acum. 12M (%)'])-toNum(a[1]['Acum. 12M (%)']));
+
+  // Ranking agregado por categoria, vindo do kpis_dashboard.json.
+  // Aqui a rentabilidade é ponderada pelo PL da categoria, não apenas o melhor fundo isolado.
+  const categoriasKpi = kpisDashboard?.categorias || {};
+  const catPonderada = Object.entries(categoriasKpi)
+    .filter(([,d])=>numKpi(d?.rent_12m_ponderada)!==null)
+    .sort((a,b)=>numKpi(b[1].rent_12m_ponderada)-numKpi(a[1].rent_12m_ponderada));
+  const catPL = Object.entries(categoriasKpi)
+    .filter(([,d])=>numKpi(d?.pl_total)!==null)
+    .sort((a,b)=>numKpi(b[1].pl_total)-numKpi(a[1].pl_total));
 
   const rankItem = (r,i,campo) => {
     const val=r[campo]||'—'; const n=toNum(val);
@@ -3191,11 +3719,25 @@ function renderRankings(){
       <div class="rank-info"><div class="rank-name" title="${nome}">${nomeShort}</div><div class="rank-cat">${r['Categoria']||''}</div></div>
       <span class="rank-val ${cls}">${sign}${val}</span></div>`;
   };
-  const rankCard = (icon,title,html) =>
-    `<div class="rank-card"><div class="rank-card-header"><span>${icon}</span><span class="rank-card-title">${title}</span></div>
-    <div class="rank-list">${html||'<div class="rank-empty">Sem dados suficientes</div>'}</div></div>`;
+
+  const attr = (v) => String(v||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  const rankCard = (icon,title,html,sub='') => {
+    const total = (html.match(/class="rank-item"/g)||[]).length;
+    const more = total > 5 ? `<div class="rank-more-wrap"><button type="button" class="rank-more-btn" data-rank-action="toggle-card">Ver + ${total-5}</button></div>` : '';
+    return `<div class="rank-card rank-collapsed" data-rank-title="${attr(title)}">
+      <div class="rank-card-header">
+        <div class="rank-card-title-wrap"><span>${icon}</span><span class="rank-card-title" title="${attr(title)}">${title}</span></div>
+        <div class="rank-card-actions">
+          <button type="button" class="rank-action-btn" data-rank-action="copy-card" title="Copiar este ranking">📋</button>
+          <button type="button" class="rank-action-btn" data-rank-action="png-card" title="Gerar print deste ranking">🖼️</button>
+        </div>
+      </div>
+      ${sub ? `<div class="rank-card-sub">${sub}</div>` : ''}
+      <div class="rank-list">${html||'<div class="rank-empty">Sem dados suficientes</div>'}</div>${more}</div>`;
+  };
 
   const top10html = sorted12m.slice(0,10).map((r,i)=>rankItem(r,i,'Acum. 12M (%)')).join('');
+
   const catHtml = catTop.slice(0,9).map(([cat,r],i)=>{
     const val=r['Acum. 12M (%)']||'—'; const n=toNum(val);
     const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
@@ -3203,19 +3745,144 @@ function renderRankings(){
     const medal=i<3?MEDALHAS[i]:`${i+1}º`;
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info"><div class="rank-name">${cat}</div><div class="rank-cat">${nome.length>38?nome.slice(0,38)+'…':nome}</div></div>
+      <div class="rank-info"><div class="rank-name" title="${cat}">${cat}</div><div class="rank-cat" title="${nome}">${nome.length>38?nome.slice(0,38)+'…':nome}</div></div>
       <span class="rank-val ${cls}">${sign}${val}</span></div>`;
   }).join('');
+
+  const catPonderadaHtml = catPonderada.slice(0,9).map(([cat,d],i)=>{
+    const n = numKpi(d.rent_12m_ponderada);
+    const cls = n>0?'pos':n<0?'neg':'zero';
+    const medal = i<3?MEDALHAS[i]:`${i+1}º`;
+    const qtd = d.qtd_ativos ?? '—';
+    return `<div class="rank-item">
+      <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
+      <div class="rank-info"><div class="rank-name" title="${cat}">${cat}</div><div class="rank-cat">${qtd} fundos · ${fmtPlMi(d.pl_total)}</div></div>
+      <span class="rank-val ${cls}">${fmtPctKpi(n)}</span></div>`;
+  }).join('');
+
+  const catPLHtml = catPL.slice(0,9).map(([cat,d],i)=>{
+    const n = numKpi(d.pl_total);
+    const medal = i<3?MEDALHAS[i]:`${i+1}º`;
+    const rent = fmtPctKpi(d.rent_12m_ponderada);
+    const qtd = d.qtd_ativos ?? '—';
+    return `<div class="rank-item">
+      <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
+      <div class="rank-info"><div class="rank-name" title="${cat}">${cat}</div><div class="rank-cat">${qtd} fundos · rent. pond. 12M ${rent}</div></div>
+      <span class="rank-val zero">R$ ${n.toLocaleString('pt-BR',{maximumFractionDigits:0})} mi</span></div>`;
+  }).join('');
+
   const top5mesHtml = sortedMes.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Mes (%)')).join('');
   const top5anoHtml = sortedAno.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Ano (%)')).join('');
 
   grid.innerHTML = [
-    rankCard('🏆','Top 10 — Acumulado 12 Meses',top10html),
-    rankCard('🎖️','Melhor por Categoria (12M)',catHtml),
+    rankCard('🏆','Top 10 — Fundos 12M',top10html),
+    rankCard('📊','Rentab. Ponderada por Categoria',catPonderadaHtml,'Ponderada pelo PL consolidado de cada categoria.'),
+    rankCard('🎖️','Melhor Fundo por Categoria',catHtml),
+    rankCard('🏦','Maiores Categorias por PL',catPLHtml,'Ajuda a entender onde está concentrado o patrimônio.'),
     rankCard('📅','Top 5 — Acumulado do Mês',top5mesHtml),
     rankCard('📆','Top 5 — Acumulado do Ano',top5anoHtml),
   ].join('');
 }
+
+
+
+/* ════════════════════════════════════════════════════
+   COMPARTILHAMENTO DOS RANKINGS
+════════════════════════════════════════════════════ */
+function showRankToast(msg){
+  const t = $('rankShareToast');
+  if(!t) return;
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showRankToast._timer);
+  showRankToast._timer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function getVisibleRankItems(card){
+  return Array.from(card.querySelectorAll('.rank-list .rank-item')).filter(el=>el.offsetParent !== null);
+}
+function textoDoRankCard(card){
+  if(!card) return '';
+  const title = card.dataset.rankTitle || card.querySelector('.rank-card-title')?.textContent?.trim() || 'Ranking';
+  const linhas = getVisibleRankItems(card).map(item=>{
+    const pos = item.querySelector('.rank-pos')?.textContent?.trim() || '';
+    const nome = item.querySelector('.rank-name')?.textContent?.trim() || '';
+    const sub = item.querySelector('.rank-cat')?.textContent?.trim() || '';
+    const val = item.querySelector('.rank-val')?.textContent?.trim() || '';
+    return `${pos} ${nome}${sub ? ' — '+sub : ''}: ${val}`;
+  });
+  return `*${title}*\n${linhas.join('\n')}`;
+}
+function textoDosRankings(){
+  const cards = Array.from(document.querySelectorAll('#rankingGrid .rank-card'));
+  const data = _dadosMercado?.atualizado_em || kpisDashboard?.gerado_em || '';
+  const header = `*Rankings de Performance — Fundos CAIXA*${data ? '\nAtualizado em: '+data : ''}`;
+  return [header, ...cards.map(textoDoRankCard).filter(Boolean), '_Fonte: dados públicos SIPII/CAIXA. Material informativo._'].join('\n\n');
+}
+async function copiarTextoRank(texto){
+  try{
+    await navigator.clipboard.writeText(texto);
+    showRankToast('Resumo copiado para a área de transferência.');
+  }catch(e){
+    const ta = document.createElement('textarea');
+    ta.value = texto;
+    ta.style.position='fixed'; ta.style.left='-9999px';
+    document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove();
+    showRankToast('Resumo copiado.');
+  }
+}
+function abrirWhatsRank(texto){
+  copiarTextoRank(texto);
+  window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank', 'noopener');
+}
+function slugRank(s){
+  return String(s||'ranking').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,60) || 'ranking';
+}
+async function baixarPrintRank(el, nome){
+  if(!window.html2canvas){
+    showRankToast('Biblioteca de print não carregou. Verifique a internet/CDN.');
+    return;
+  }
+  const wasCollapsed = el.classList?.contains('rank-collapsed');
+  try{
+    // Para print individual, abre temporariamente o card inteiro.
+    if(el.classList?.contains('rank-card')) el.classList.remove('rank-collapsed');
+    const canvas = await html2canvas(el, {
+      backgroundColor:'#07080f',
+      scale:Math.min(2, window.devicePixelRatio || 1.5),
+      useCORS:true,
+      logging:false
+    });
+    const a = document.createElement('a');
+    a.download = `${slugRank(nome)}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+    showRankToast('Print PNG gerado.');
+  }catch(e){
+    console.error(e);
+    showRankToast('Não consegui gerar o print deste quadro.');
+  }finally{
+    if(wasCollapsed) el.classList.add('rank-collapsed');
+  }
+}
+document.addEventListener('click', (ev)=>{
+  const btn = ev.target.closest('[data-rank-action]');
+  if(!btn) return;
+  const action = btn.dataset.rankAction;
+  const card = btn.closest('.rank-card');
+  if(action === 'toggle-card' && card){
+    const collapsed = card.classList.toggle('rank-collapsed');
+    const total = card.querySelectorAll('.rank-list .rank-item').length;
+    const hidden = Math.max(0,total-5);
+    btn.textContent = collapsed ? `Ver + ${hidden}` : 'Ver menos';
+    return;
+  }
+  if(action === 'copy-card' && card) return copiarTextoRank(textoDoRankCard(card));
+  if(action === 'png-card' && card) return baixarPrintRank(card, card.dataset.rankTitle || 'ranking');
+  if(action === 'copy-all') return copiarTextoRank(textoDosRankings());
+  if(action === 'whatsapp-all') return abrirWhatsRank(textoDosRankings());
+  if(action === 'png-all') return baixarPrintRank($('rankingsSection') || $('rankingGrid'), 'rankings-performance-fundos-caixa');
+});
 
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
@@ -3333,11 +4000,15 @@ async function carregarKPIs(){
   try{
     const r=await fetch(BASE_URL+'kpis_dashboard.json?v='+Date.now());
     const d=await r.json();
+    kpisDashboard = d;
     const pl=d.resumo_geral?.pl_total_consolidado;
     const pipe=d.resumo_geral?.pipeline_novos_fundos;
     if(pl) $('kpiPL').textContent=pl.toLocaleString('pt-BR',{maximumFractionDigits:0});
     if(pipe!==undefined) $('kpiPipe').textContent=pipe;
-  }catch(e){}
+    renderRankings();
+  }catch(e){
+    console.warn('Não foi possível carregar kpis_dashboard.json', e);
+  }
 }
 
 function applyFilter(){
