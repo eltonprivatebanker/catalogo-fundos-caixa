@@ -1201,6 +1201,144 @@ footer{
   .indic-ref-sub,.selic-change-badge,.cdi-rel,.poup-rule-sub{font-size:.62rem}
 }
 
+
+
+/* ─────────────────────────────────────────────
+   MELHORIAS DA SEÇÃO DE MERCADO — cards separados + resumo
+───────────────────────────────────────────── */
+.market-section-head{
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.market-title-left{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  min-width:0;
+}
+.market-period-tabs{
+  margin-bottom:0;
+  margin-left:auto;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.market-period-tabs .indic-tabs-label{
+  font-size:.64rem;
+  color:#aeb7cf;
+  font-family:'JetBrains Mono',monospace;
+  white-space:nowrap;
+}
+.market-ref-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  align-items:stretch;
+  margin-bottom:12px;
+}
+.market-ref-card{
+  min-width:0 !important;
+  flex:none !important;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:flex-start;
+  gap:0;
+}
+.selic-card::before{background:linear-gradient(90deg,var(--gold),transparent 72%)}
+.cdi-card::before{background:linear-gradient(90deg,var(--green),transparent 72%)}
+.poup.market-ref-card::before{background:linear-gradient(90deg,var(--blue),transparent 72%)}
+.cdi-mini-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-top:12px;
+  margin-bottom:6px;
+}
+.cdi-mini-item{
+  padding:8px 10px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:10px;
+  background:rgba(17,21,38,.62);
+  min-width:0;
+}
+.cdi-mini-item span{
+  display:block;
+  font-size:.56rem;
+  color:var(--muted2);
+  text-transform:uppercase;
+  letter-spacing:.075em;
+  margin-bottom:3px;
+}
+.cdi-mini-item strong{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.78rem;
+  color:var(--green);
+  white-space:nowrap;
+}
+.market-scenario-card{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:2px 0 12px;
+  padding:12px 15px;
+  border:1px solid rgba(200,151,58,.18);
+  border-radius:14px;
+  background:linear-gradient(180deg,rgba(200,151,58,.075),rgba(255,255,255,.018));
+  color:#b8c0d6;
+  font-size:.74rem;
+  line-height:1.55;
+  box-shadow:0 8px 28px rgba(0,0,0,.16);
+}
+.market-scenario-icon{
+  flex-shrink:0;
+  width:24px;
+  height:24px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:8px;
+  background:rgba(200,151,58,.10);
+  border:1px solid rgba(200,151,58,.18);
+}
+.market-scenario-card strong{
+  color:var(--gold2);
+  font-weight:700;
+}
+#marketScenarioText{
+  color:#d5dbea;
+}
+@media(max-width:1100px){
+  .market-ref-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .poup.market-ref-card{grid-column:1/-1}
+}
+@media(max-width:768px){
+  .market-section-head{align-items:stretch}
+  .market-title-left{width:100%}
+  .market-period-tabs{
+    width:100%;
+    margin-left:0;
+    justify-content:space-between;
+  }
+  .market-period-tabs .indic-tabs{
+    overflow-x:auto;
+    padding-bottom:2px;
+    -webkit-overflow-scrolling:touch;
+  }
+  .market-ref-grid{grid-template-columns:1fr}
+  .poup.market-ref-card{grid-column:auto}
+  .market-scenario-card{font-size:.70rem;padding:11px 13px}
+}
+@media(max-width:480px){
+  .cdi-mini-grid{grid-template-columns:1fr}
+  .market-period-tabs{gap:6px}
+}
 </style>
 </head>
 <body>
@@ -1243,48 +1381,67 @@ footer{
 
 <!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
 <div class="section-gap">
-  <div class="section-title">
-    <h2>📡 Indicadores de Mercado</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
+  <div class="section-title market-section-head">
+    <div class="market-title-left">
+      <h2>📡 Indicadores de Mercado</h2>
+      <span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
+    </div>
+    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela">
+      <span class="indic-tabs-label">Período:</span>
+      <div class="indic-tabs">
+        <button class="indic-tab active" data-months="12">12 Meses</button>
+        <button class="indic-tab" data-months="24">24 Meses</button>
+        <button class="indic-tab" data-months="36">36 Meses</button>
+      </div>
+    </div>
   </div>
 
-  <!-- Cards de referência: Selic+CDI unificado + Poupança -->
-  <div class="indic-ref-bar">
+  <!-- Cards de referência: Selic, CDI e Poupança separados -->
+  <div class="indic-ref-bar market-ref-grid">
 
-    <!-- Card 1: SELIC + CDI unificado -->
-    <div class="indic-ref-card selic-cdi" style="flex:2;min-width:300px">
-      <div class="selic-cdi-block">
-        <div class="indic-ref-label">🏦 Taxa Selic — Meta COPOM</div>
-        <div class="indic-ref-val gold" id="mc-selic">—</div>
-        <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
-        <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px">
-          <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
-        </div>
-        <!-- Card expansível do Calendário COPOM 2026 -->
-        <div id="copomCalendario" style="overflow:hidden;max-height:0;transition:max-height .35s ease,opacity .25s;opacity:0">
-          <div style="margin-top:10px;padding:12px 14px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)">
-            <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:10px">📅 Reuniões COPOM 2026</div>
-            <div id="copomMeetings" style="display:flex;flex-direction:column;gap:4px"></div>
-            <div style="margin-top:8px;font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;font-style:italic;border-top:1px solid var(--border2);padding-top:6px">
-              Atas publicadas às 8h da terça seguinte à reunião ·
-              <a href="https://www.bcb.gov.br/detalhenoticia/20739/nota" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">Fonte BCB ↗</a>
-            </div>
+    <!-- Card 1: SELIC -->
+    <div class="indic-ref-card selic-card market-ref-card">
+      <div class="indic-ref-label">🏦 Taxa Selic — Meta COPOM</div>
+      <div class="indic-ref-val gold" id="mc-selic">—</div>
+      <div class="indic-ref-sub">% a.a. — taxa básica de juros</div>
+      <div class="selic-change-badge">Última alteração: <span class="selic-change-date" id="selic-last-change">—</span></div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+        <button class="copom-link" onclick="toggleCopomCalendario()" id="copomCalBtn" style="cursor:pointer;border:none">📋 Reuniões 2026 ▼</button>
+      </div>
+      <!-- Card expansível do Calendário COPOM 2026 -->
+      <div id="copomCalendario" style="overflow:hidden;max-height:0;transition:max-height .35s ease,opacity .25s;opacity:0">
+        <div style="margin-top:10px;padding:12px 14px;background:var(--bg3);border-radius:10px;border:1px solid var(--border)">
+          <div style="font-size:.62rem;text-transform:uppercase;letter-spacing:.1em;color:var(--gold);font-weight:700;margin-bottom:10px">📅 Reuniões COPOM 2026</div>
+          <div id="copomMeetings" style="display:flex;flex-direction:column;gap:4px"></div>
+          <div style="margin-top:8px;font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;font-style:italic;border-top:1px solid var(--border2);padding-top:6px">
+            Atas publicadas às 8h da terça seguinte à reunião ·
+            <a href="https://www.bcb.gov.br/detalhenoticia/20739/nota" target="_blank" rel="noopener" style="color:var(--gold);text-decoration:none">Fonte BCB ↗</a>
           </div>
         </div>
       </div>
-      <div class="selic-cdi-divider"></div>
-      <div class="selic-cdi-block">
-        <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
-        <div class="indic-ref-val green" id="mc-cdi">—</div>
-        <div class="indic-ref-sub">% a.a. · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
-        <div class="cdi-rel" id="mc-cdi-12m-label">Acum. 12M: <span id="mc-cdi-12m-val">—</span></div>
-        <div class="cdi-rel" style="margin-top:2px">CDI ≈ Selic − 0,10 p.p.</div>
-      </div>
     </div>
 
-    <!-- Card 2: Poupança antiga + nova + expansível -->
-    <div class="indic-ref-card poup" style="flex:1.5;min-width:260px;flex-direction:column;align-items:stretch">
+    <!-- Card 2: CDI -->
+    <div class="indic-ref-card cdi-card market-ref-card">
+      <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
+      <div class="indic-ref-val green" id="mc-cdi">—</div>
+      <div class="indic-ref-sub">% a.a. · <span id="mc-cdi-mes-ref">—</span> a.m.</div>
+      <div class="cdi-mini-grid">
+        <div class="cdi-mini-item">
+          <span>CDI mês atual</span>
+          <strong id="mc-cdi-mes-atual">—</strong>
+        </div>
+        <div class="cdi-mini-item">
+          <span>CDI 12M</span>
+          <strong id="mc-cdi-12m-val-hero">—</strong>
+        </div>
+      </div>
+      <div class="cdi-rel" id="mc-cdi-12m-label">Acum. 12M: <span id="mc-cdi-12m-val">—</span></div>
+      <div class="cdi-rel" style="margin-top:2px">CDI ≈ Selic − 0,10 p.p.</div>
+    </div>
+
+    <!-- Card 3: Poupança antiga + nova + expansível -->
+    <div class="indic-ref-card poup market-ref-card">
       <div class="poup-header">
         <div>
           <div class="indic-ref-label">🏠 Poupança — Rendimentos</div>
@@ -1321,13 +1478,11 @@ footer{
 
   </div><!-- /indic-ref-bar -->
 
-  <!-- TABS dos períodos -->
-  <div class="indic-tabs-bar">
-    <span class="indic-tabs-label">Período acumulado exibido:</span>
-    <div class="indic-tabs">
-      <button class="indic-tab active" data-months="12">12 Meses</button>
-      <button class="indic-tab" data-months="24">24 Meses</button>
-      <button class="indic-tab" data-months="36">36 Meses</button>
+  <div class="market-scenario-card" id="marketScenario">
+    <span class="market-scenario-icon">🧭</span>
+    <div>
+      <strong>Resumo do cenário:</strong>
+      <span id="marketScenarioText">Carregando leitura dos principais indicadores...</span>
     </div>
   </div>
 
@@ -1794,14 +1949,8 @@ footer{
       <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
       <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
     </div>
-    <!-- Categoria -->
-    <div class="filter-row" id="catFilters">
-      <span class="filter-label">Categoria</span>
-      <button class="chip active" data-cat="">Todas</button>
-    </div>
     <!-- ★ Performance mínima (NOVO) -->
     <div class="filter-row" id="perfFilters">
-      <span class="filter-label">Rentab.</span>
       <span style="font-size:.6rem;color:var(--muted2);font-family:'JetBrains Mono',monospace">período:</span>
       <select id="perfPeriodo" class="perf-period-select">
         <option value="Acum. 12M (%)">12 Meses</option>
@@ -2703,6 +2852,37 @@ function mesclarMercadoComIndicesDetalhados(raw, detalhado){
 }
 
 
+
+
+function atualizarResumoCenario(d){
+  const el = $('marketScenarioText');
+  if(!el) return;
+  const toNum = v => {
+    if(v === null || v === undefined || v === '') return null;
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+  const pct = v => v === null ? '—' : `${v > 0 ? '+' : ''}${v.toFixed(2).replace('.',',')}%`;
+  const c = d?.cards || {};
+  const idx = d?.indices_mercado || {};
+  const cdi = toNum(c.cdi?.valor);
+  const cdiMes = toNum(c.cdi?.parcial_mes_atual) ?? toNum(c.cdi?.mensal) ?? null;
+  const ipca12 = toNum(c.ipca?.acum_12m) ?? toNum(indicState.ipca.m12);
+  const dolarAno = toNum(idx.dolar?.acum_ano) ?? toNum(c.dolar?.acum_ano) ?? null;
+
+  const partes = [];
+  if(cdi !== null) partes.push(`CDI em <strong>${fmt(cdi)}</strong> a.a.`);
+  if(cdiMes !== null) partes.push(`mês atual em <strong>${pct(cdiMes)}</strong>`);
+  if(ipca12 !== null) partes.push(`IPCA 12M em <strong>${fmt(ipca12)}</strong>`);
+  if(dolarAno !== null){
+    const direcao = dolarAno < 0 ? 'queda' : dolarAno > 0 ? 'alta' : 'estabilidade';
+    partes.push(`dólar com ${direcao} de <strong>${pct(dolarAno)}</strong> no ano`);
+  }
+
+  el.innerHTML = partes.length
+    ? `Juros ainda elevados, ${partes.join(', ')}.`
+    : 'Dados principais carregados. Execute o robô de mercado para atualizar a leitura automática do cenário.';
+}
 /* ════════════════════════════════════════════════════
    CARREGA mercado_atual.json
 ════════════════════════════════════════════════════ */
@@ -2756,6 +2936,15 @@ async function carregarMercado(){
       if(c.cdi?.acum_36m != null) indicState.cdi.m36 = c.cdi.acum_36m;
       // Fallback: se robô não calculou 12M, usa taxa anual como proxy
       if(indicState.cdi.m12 == null) indicState.cdi.m12 = cdi;
+
+      const cdiMesAtual = c.cdi?.parcial_mes_atual ?? c.cdi?.mensal ?? cdiMensal;
+      const cdiMesAtualTxt = '+' + Number(cdiMesAtual).toFixed(2).replace('.',',') + '%';
+      const cdi12Txt = indicState.cdi.m12 !== null && indicState.cdi.m12 !== undefined
+        ? '+' + Number(indicState.cdi.m12).toFixed(2).replace('.',',') + '%'
+        : '—';
+      if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
+      if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
+      if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
     }
 
     // ── IPCA (do JSON — complementado pela série 433) ──
@@ -2799,6 +2988,8 @@ async function carregarMercado(){
     // ── Poupança ──
     const poup = c.poupanca_nova?.valor;
     if($('mc-poup')) $('mc-poup').textContent = poup ? fmt(poup) : '—';
+
+    atualizarResumoCenario(d);
 
     // ★ v16 — PTAX histórico pré-carregado pelo robô
     // Resolve HTTP 400 que ocorria quando browser tentava buscar 36M (limite é 24M)
@@ -3568,6 +3759,7 @@ function setActiveChip(container,selector,active){
 
 function buildCatFilters(cats){
   const row=$('catFilters');
+  if(!row){ activeCat=''; return; }
   const label=row.querySelector('.filter-label');
   row.innerHTML=''; row.appendChild(label);
   const all=document.createElement('button');
