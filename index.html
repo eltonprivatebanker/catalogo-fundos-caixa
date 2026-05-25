@@ -3095,44 +3095,111 @@ html{scroll-padding-top:18px}
   .fund-metric-value.pos{color:var(--green)}
   .fund-metric-value.neg{color:var(--red)}
   .fund-card-mobile-actions{
-    display:flex;
-    justify-content:space-between;
+    display:grid;
+    grid-template-columns:1fr 1fr;
     gap:8px;
     padding:10px 13px 13px;
     border-top:1px solid rgba(255,255,255,.055);
   }
-  .fund-card-mobile-actions a,
-  .fund-card-mobile-actions button{
-    flex:1;
-    min-height:36px;
+  .fund-card-primary-btn,
+  .fund-card-detail-btn{
+    min-height:38px;
     display:inline-flex;
     align-items:center;
     justify-content:center;
-    border-radius:11px;
-    border:1px solid rgba(255,255,255,.09);
+    border-radius:12px;
+    border:1px solid rgba(255,255,255,.10);
     background:rgba(17,21,38,.72);
     color:#b6bfd5;
     text-decoration:none;
-    font-size:.66rem;
+    font-size:.68rem;
     font-weight:800;
+    line-height:1.15;
+    -webkit-tap-highlight-color:transparent;
   }
-  .fund-card-mobile-actions a:first-child{
+  .fund-card-primary-btn{
     color:var(--gold2);
+    border-color:rgba(200,151,58,.30);
+    background:linear-gradient(180deg,rgba(200,151,58,.13),rgba(200,151,58,.06));
+  }
+  .fund-card-detail-btn{
+    color:#c1cae0;
+    background:rgba(24,29,54,.78);
+  }
+  .fund-card-mobile-docs{
+    grid-column:1 / -1;
+    margin-top:2px;
+    padding:10px;
+    border-radius:13px;
+    border:1px solid rgba(91,156,246,.20);
+    background:rgba(91,156,246,.055);
+  }
+  .fund-card-docs-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .fund-card-docs-title{
+    color:#c7d0e7;
+    font-size:.58rem;
+    font-weight:800;
+    letter-spacing:.07em;
+    text-transform:uppercase;
+  }
+  .fund-card-docs-all{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:26px;
+    padding:5px 9px;
+    border-radius:9px;
+    border:1px solid rgba(200,151,58,.30);
+    background:rgba(200,151,58,.10);
+    color:var(--gold2);
+    font-size:.58rem;
+    font-weight:800;
+    text-decoration:none;
+    white-space:nowrap;
+  }
+  .fund-card-docs-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  .fund-card-doc-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    min-height:28px;
+    padding:5px 8px;
+    border-radius:9px;
+    border:1px solid rgba(255,255,255,.085);
+    background:rgba(7,8,15,.30);
+    color:#d9e2f4;
+    text-decoration:none;
+    font-size:.60rem;
+    font-weight:800;
+    line-height:1;
+  }
+  .fund-card-doc-pill.boletim{
+    color:#f5dc90;
     border-color:rgba(200,151,58,.25);
-    background:rgba(200,151,58,.09);
+    background:rgba(200,151,58,.075);
   }
-  .fund-card-mobile-actions .fund-card-boletim-btn{
-    flex:1 0 100%;
-    min-height:34px;
-    color:#8bbfff;
-    border-color:rgba(91,156,246,.28);
-    background:rgba(91,156,246,.085);
+  .fund-card-docs-empty{
+    grid-column:1 / -1;
+    padding:9px 10px;
+    border-radius:12px;
+    border:1px dashed rgba(255,255,255,.10);
+    color:#8792b0;
+    font-size:.62rem;
+    text-align:center;
   }
-  .fund-card-mobile-actions .fund-card-boletim-btn:hover{
-    color:#cfe4ff;
-    border-color:rgba(91,156,246,.48);
-    background:rgba(91,156,246,.14);
-  }
+  .fund-cdi-ratio-good{color:var(--green)!important}
+  .fund-cdi-ratio-mid{color:var(--gold2)!important}
+  .fund-cdi-ratio-low{color:var(--red)!important}
   .fund-card-mobile-detail{
     display:none;
     padding:0 13px 13px;
@@ -3436,6 +3503,138 @@ html{scroll-padding-top:18px}
   line-height:1;
   font-weight:800;
   color:var(--gold2);
+}
+.market-rate-line{
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.market-rate-suffix{
+  display:inline-flex;
+  align-items:center;
+  margin-bottom:.22rem;
+  color:#cbd3e5;
+  font-family:'DM Sans',sans-serif;
+  font-size:.88rem;
+  font-weight:700;
+  letter-spacing:.03em;
+  line-height:1;
+  white-space:nowrap;
+}
+.market-rate-line-cdi .market-rate-suffix{
+  color:#d5deef;
+}
+
+
+/* ─────────────────────────────────────────────
+   TRIO EXECUTIVO — SELIC, CDI E POUPANÇA
+───────────────────────────────────────────── */
+.market-ref-card-unified{
+  border-radius:16px !important;
+  background:linear-gradient(180deg,rgba(17,21,38,.96),rgba(7,8,15,.94)) !important;
+  box-shadow:0 8px 32px rgba(0,0,0,.22);
+}
+.market-ref-card-unified .indic-ref-label,
+.market-ref-card-unified .macro-label{
+  font-family:'DM Sans',sans-serif !important;
+  color:#c2cbe0 !important;
+  font-size:.68rem !important;
+  font-weight:700 !important;
+  letter-spacing:.06em !important;
+  line-height:1.3 !important;
+}
+.market-ref-card-unified .indic-ref-sub,
+.market-ref-card-unified .macro-sub,
+.market-ref-card-unified .poup-card-subtitle{
+  font-family:'DM Sans',sans-serif !important;
+  color:#9fa9c2 !important;
+  font-size:.72rem !important;
+  letter-spacing:0 !important;
+  line-height:1.35 !important;
+}
+.market-ref-card-unified .macro-note,
+.market-ref-card-unified .cdi-rel{
+  font-family:'DM Sans',sans-serif !important;
+  color:#aeb8cf !important;
+  font-size:.68rem !important;
+  letter-spacing:0 !important;
+}
+.unified-card-head{
+  align-items:center !important;
+  margin-bottom:10px;
+}
+.poup-card-consultivo .poup-rules-grid{
+  gap:10px !important;
+}
+.poup-card-consultivo .poup-rule-card{
+  padding:12px 13px !important;
+  border-radius:12px !important;
+}
+.poup-card-consultivo .poup-rule-label{
+  font-family:'DM Sans',sans-serif !important;
+  color:#c5cee4 !important;
+  font-size:.66rem !important;
+  font-weight:700 !important;
+  letter-spacing:.055em !important;
+}
+.poup-card-consultivo .poup-rule-period,
+.poup-card-consultivo .poup-rule-sub{
+  font-family:'DM Sans',sans-serif !important;
+  color:#a8b2ca !important;
+  font-size:.68rem !important;
+  letter-spacing:0 !important;
+}
+.poup-card-consultivo .poup-rule-val{
+  margin-top:8px;
+  font-size:1.75rem !important;
+}
+.poup-card-consultivo .poup-accum-pill{
+  margin-top:8px;
+  width:max-content;
+  max-width:100%;
+  font-family:'DM Sans',sans-serif !important;
+  font-size:.66rem !important;
+  font-weight:700 !important;
+}
+.poup-card-consultivo .poup-expand-btn{
+  font-family:'DM Sans',sans-serif !important;
+  font-weight:700;
+  padding:7px 12px;
+  border-radius:10px;
+}
+@media(max-width:768px){
+  .market-ref-card-unified{
+    border-radius:15px !important;
+    padding:16px 16px !important;
+  }
+  .market-ref-card-unified .indic-ref-label,
+  .market-ref-card-unified .macro-label{
+    font-size:.70rem !important;
+  }
+  .poup-card-consultivo .poup-header-clean{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:10px;
+  }
+  .poup-card-consultivo .poup-rules-grid{
+    grid-template-columns:1fr !important;
+  }
+  .poup-card-consultivo .poup-rule-card{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:
+      "label value"
+      "period value"
+      "sub accum";
+    column-gap:10px;
+    align-items:center;
+  }
+  .poup-card-consultivo .poup-rule-label{grid-area:label;margin:0 !important;}
+  .poup-card-consultivo .poup-rule-period{grid-area:period;margin-top:2px;}
+  .poup-card-consultivo .poup-rule-val{grid-area:value;margin:0 !important;justify-self:end;white-space:nowrap;font-size:1.65rem !important;}
+  .poup-card-consultivo .poup-rule-sub{grid-area:sub;margin-top:6px;}
+  .poup-card-consultivo .poup-accum-pill{grid-area:accum;justify-self:end;margin-top:6px;white-space:nowrap;}
 }
 .macro-sub{
   margin-top:7px;
@@ -4409,6 +4608,394 @@ html{scroll-padding-top:18px}
   }
 }
 
+
+
+/* ─────────────────────────────────────────────
+   MOBILE — KPIs em leitura executiva
+   No celular, troca a grade de 6 cards por 3 blocos: catálogo, patrimônio e performance.
+───────────────────────────────────────────── */
+.mobile-kpi-overview{display:none}
+.mobile-kpi-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(17,21,38,.96),rgba(7,8,15,.98));
+  box-shadow:0 10px 34px rgba(0,0,0,.24);
+}
+.mobile-kpi-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),rgba(91,156,246,.55),transparent 80%);
+}
+.mobile-kpi-head{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:16px 16px 10px;
+}
+.mobile-kpi-head.compact{padding-bottom:8px}
+.mobile-kpi-emoji{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:34px;height:34px;
+  flex:0 0 34px;
+  border-radius:11px;
+  background:rgba(200,151,58,.10);
+  border:1px solid rgba(200,151,58,.18);
+  font-size:1.06rem;
+}
+.mobile-kpi-head h3{
+  margin:0;
+  color:var(--gold2);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.08rem;
+  font-weight:700;
+  line-height:1.1;
+}
+.mobile-kpi-head p{
+  margin:3px 0 0;
+  color:#aeb7cf;
+  font-family:'DM Sans',sans-serif;
+  font-size:.68rem;
+  line-height:1.35;
+}
+.mobile-kpi-bigline{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  padding:0 16px 4px;
+}
+.mobile-kpi-bigline strong{
+  color:var(--text);
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.15rem;
+  font-weight:700;
+  line-height:1;
+}
+.mobile-kpi-bigline.gold strong{color:var(--gold2)}
+.mobile-kpi-bigline span{
+  color:#b5bfd5;
+  font-size:.72rem;
+  line-height:1.25;
+}
+.mobile-kpi-muted{
+  padding:0 16px 13px;
+  color:#9aa6c3;
+  font-size:.70rem;
+  line-height:1.35;
+}
+.mobile-kpi-mini-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  padding:0 16px 16px;
+}
+.mobile-kpi-mini{
+  padding:11px 12px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:13px;
+  background:rgba(255,255,255,.025);
+}
+.mobile-kpi-mini span,
+.mobile-perf-item span{
+  display:block;
+  color:#9fa9c4;
+  font-size:.62rem;
+  font-weight:700;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+  line-height:1.25;
+}
+.mobile-kpi-mini strong{
+  display:block;
+  margin-top:5px;
+  color:var(--text);
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.45rem;
+  line-height:1;
+}
+.mobile-perf-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  padding:0 16px 16px;
+}
+.mobile-perf-item{
+  min-width:0;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:13px;
+  background:rgba(255,255,255,.025);
+}
+.mobile-perf-item strong{
+  display:block;
+  margin-top:5px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.45rem;
+  line-height:1;
+}
+.mobile-perf-item strong.pos{color:var(--green)}
+.mobile-perf-item strong.neg{color:var(--red)}
+.mobile-perf-item small{
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  margin-top:6px;
+  color:#aeb7cf;
+  font-family:'DM Sans',sans-serif;
+  font-size:.66rem;
+  line-height:1.28;
+}
+@media (pointer:coarse), (hover:none), (max-device-width:920px), (max-width:760px){
+  .page{padding-bottom:calc(150px + env(safe-area-inset-bottom)) !important}
+  #sec-kpi.kpi-grid{display:none !important}
+  .mobile-kpi-overview{
+    display:grid !important;
+    grid-template-columns:1fr;
+    gap:12px;
+    margin-top:22px;
+  }
+  #sec-mercado{scroll-margin-top:18px;scroll-margin-bottom:160px}
+  .market-section-head{
+    margin-top:26px;
+    padding-top:4px;
+  }
+}
+@media (pointer:coarse) and (orientation:landscape) and (max-height:560px){
+  .mobile-kpi-overview{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+  .mobile-kpi-head{padding:13px 13px 8px;gap:9px}
+  .mobile-kpi-emoji{width:30px;height:30px;flex-basis:30px;font-size:.95rem}
+  .mobile-kpi-head h3{font-size:.94rem}
+  .mobile-kpi-head p{font-size:.58rem}
+  .mobile-kpi-bigline{padding:0 13px 4px}
+  .mobile-kpi-bigline strong{font-size:1.65rem}
+  .mobile-kpi-mini-grid,.mobile-perf-grid{padding:0 13px 13px;gap:7px}
+  .mobile-kpi-mini,.mobile-perf-item{padding:9px}
+  .mobile-kpi-mini strong,.mobile-perf-item strong{font-size:1.16rem}
+}
+
+
+
+/* ─────────────────────────────────────────────
+   MOBILE — SELIC/COPOM compacto e alinhado
+   Objetivo: reduzir altura no celular e manter leitura executiva
+───────────────────────────────────────────── */
+@media(max-width:768px){
+  #sec-mercado .market-section-head{
+    margin-bottom:10px;
+  }
+
+  .selic-copom-card{
+    padding:14px 14px 12px !important;
+    gap:10px !important;
+    border-radius:16px !important;
+  }
+
+  .selic-copom-card .macro-selic{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-areas:
+      "label value"
+      "note note";
+    column-gap:12px;
+    row-gap:3px;
+    align-items:center;
+    min-width:0;
+  }
+
+  .selic-copom-card .macro-selic .macro-label{
+    grid-area:label;
+    margin:0 !important;
+    color:#c7d0e7;
+    font-family:'DM Sans',sans-serif;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.055em;
+    line-height:1.25;
+  }
+
+  .selic-copom-card .macro-main-value{
+    grid-area:value;
+    justify-self:end;
+    align-self:center;
+    font-size:2.05rem !important;
+    line-height:.95;
+    letter-spacing:-.02em;
+    white-space:nowrap;
+  }
+
+  .selic-copom-card .market-rate-line{
+    grid-area:value;
+    justify-self:end;
+    align-self:center;
+    gap:6px;
+    flex-wrap:nowrap;
+  }
+
+  .selic-copom-card .market-rate-suffix{
+    margin-bottom:.14rem;
+    font-size:.72rem;
+  }
+
+  .selic-copom-card .macro-sub{
+    grid-area:sub;
+    margin:0 !important;
+    color:#aeb8d1;
+    font-family:'DM Sans',sans-serif;
+    font-size:.72rem;
+    line-height:1.35;
+  }
+
+  .selic-copom-card .macro-note{
+    grid-area:note;
+    width:max-content;
+    max-width:100%;
+    margin:8px 0 0 !important;
+    padding:6px 9px;
+    border:1px solid rgba(200,151,58,.18);
+    border-radius:9px;
+    background:rgba(200,151,58,.07);
+    color:#b6bfd6;
+    font-family:'DM Sans',sans-serif;
+    font-size:.68rem;
+    line-height:1.25;
+  }
+
+  .selic-copom-card .macro-note strong{
+    color:var(--gold2);
+    font-weight:700;
+  }
+
+  .selic-copom-card .macro-divider{
+    display:none !important;
+  }
+
+  .selic-copom-card .macro-copom{
+    min-width:0;
+    padding-top:2px;
+  }
+
+  .selic-copom-card .macro-copom .macro-label{
+    margin:2px 0 8px !important;
+    color:#c7d0e7;
+    font-family:'DM Sans',sans-serif;
+    font-size:.72rem;
+    font-weight:700;
+    letter-spacing:.055em;
+    line-height:1.25;
+  }
+
+  .selic-copom-card .copom-grid{
+    display:flex !important;
+    grid-template-columns:none !important;
+    gap:8px !important;
+    margin-top:0 !important;
+    padding:0 2px 8px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    scroll-snap-type:x proximity;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .selic-copom-card .copom-grid::-webkit-scrollbar{height:4px}
+  .selic-copom-card .copom-grid::-webkit-scrollbar-thumb{
+    background:rgba(200,151,58,.35);
+    border-radius:999px;
+  }
+
+  .selic-copom-card .copom-item{
+    flex:0 0 132px;
+    min-height:72px;
+    padding:9px 10px !important;
+    border-radius:11px;
+    gap:4px;
+    scroll-snap-align:start;
+    justify-content:center;
+  }
+
+  .selic-copom-card .copom-item.next{
+    flex-basis:150px;
+    background:rgba(200,151,58,.12);
+  }
+
+  .selic-copom-card .copom-item .copom-num{
+    color:#aab4cd;
+    font-family:'DM Sans',sans-serif;
+    font-size:.62rem;
+    font-weight:700;
+    letter-spacing:.035em;
+    line-height:1.15;
+  }
+
+  .selic-copom-card .copom-item .copom-date{
+    color:#f0f3fb;
+    font-family:'DM Sans',sans-serif;
+    font-size:.94rem !important;
+    font-weight:800;
+    line-height:1.12;
+    white-space:nowrap;
+  }
+
+  .selic-copom-card .copom-item .copom-result{
+    color:#aeb8d1;
+    font-family:'DM Sans',sans-serif;
+    font-size:.67rem;
+    font-weight:600;
+    line-height:1.2;
+  }
+
+  .selic-copom-card .copom-item.done .copom-result,
+  .selic-copom-card .copom-item.cut .copom-result{
+    color:#b7efcd;
+  }
+
+  .selic-copom-card .copom-item.hike .copom-result{
+    color:#ffb4bd;
+  }
+
+  .selic-copom-card .copom-item.next .copom-date,
+  .selic-copom-card .copom-item.next .copom-result{
+    color:var(--gold2);
+  }
+
+  .selic-copom-card .macro-copom::after{
+    content:'↔ arraste para ver as próximas reuniões';
+    display:block;
+    margin:-2px 0 0 2px;
+    color:#818ba6;
+    font-family:'DM Sans',sans-serif;
+    font-size:.62rem;
+    line-height:1.2;
+  }
+
+  .selic-copom-card .macro-link{
+    width:100%;
+    margin-top:8px !important;
+    padding:7px 9px;
+    border-radius:9px;
+    font-family:'DM Sans',sans-serif;
+    font-size:.66rem;
+    font-weight:700;
+    line-height:1.25;
+  }
+}
+
+@media(max-width:380px){
+  .selic-copom-card .copom-grid{
+    grid-template-columns:none !important;
+  }
+  .selic-copom-card .copom-item{
+    flex-basis:126px;
+  }
+  .selic-copom-card .copom-item.next{
+    flex-basis:142px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -4453,6 +5040,70 @@ html{scroll-padding-top:18px}
   <div class="kpi"><div class="kpi-icon">📉</div><div class="kpi-label">Pior Acum. 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub" id="kpiWorstFundo">—</div></div>
 </div>
 
+<!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
+<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo do catálogo">
+  <article class="mobile-kpi-card mobile-kpi-card-main">
+    <div class="mobile-kpi-head">
+      <span class="mobile-kpi-emoji">📊</span>
+      <div>
+        <h3>Resumo do catálogo</h3>
+        <p>Visão rápida dos fundos disponíveis</p>
+      </div>
+    </div>
+    <div class="mobile-kpi-bigline">
+      <strong id="mKpiFundos">—</strong>
+      <span>fundos cadastrados</span>
+    </div>
+    <div class="mobile-kpi-muted" id="mKpiFundosSub">carregando...</div>
+    <div class="mobile-kpi-mini-grid">
+      <div class="mobile-kpi-mini">
+        <span>Categorias</span>
+        <strong id="mKpiCats">—</strong>
+      </div>
+      <div class="mobile-kpi-mini">
+        <span>Novos fundos</span>
+        <strong id="mKpiPipe">—</strong>
+      </div>
+    </div>
+  </article>
+
+  <article class="mobile-kpi-card mobile-kpi-card-pl">
+    <div class="mobile-kpi-head compact">
+      <span class="mobile-kpi-emoji">💰</span>
+      <div>
+        <h3>Patrimônio consolidado</h3>
+        <p>PL total dos fundos monitorados</p>
+      </div>
+    </div>
+    <div class="mobile-kpi-bigline gold">
+      <strong id="mKpiPL">—</strong>
+      <span>milhões R$</span>
+    </div>
+  </article>
+
+  <article class="mobile-kpi-card mobile-kpi-card-perf">
+    <div class="mobile-kpi-head compact">
+      <span class="mobile-kpi-emoji">🏆</span>
+      <div>
+        <h3>Destaques 12M</h3>
+        <p>Melhor e pior acumulado no período</p>
+      </div>
+    </div>
+    <div class="mobile-perf-grid">
+      <div class="mobile-perf-item">
+        <span>Melhor</span>
+        <strong class="pos" id="mKpiBest">—</strong>
+        <small id="mKpiBestFundo">—</small>
+      </div>
+      <div class="mobile-perf-item">
+        <span>Pior</span>
+        <strong class="neg" id="mKpiWorst">—</strong>
+        <small id="mKpiWorstFundo">—</small>
+      </div>
+    </div>
+  </article>
+</div>
+
 <!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
 <div class="section-gap" id="sec-mercado">
   <div class="section-title market-section-head">
@@ -4466,11 +5117,13 @@ html{scroll-padding-top:18px}
   <div class="indic-ref-bar market-ref-grid">
 
     <!-- Card 1: SELIC + COPOM -->
-    <div class="indic-ref-card macro-card selic-copom-card market-ref-card">
+    <div class="indic-ref-card macro-card selic-copom-card market-ref-card market-ref-card-unified">
       <div class="macro-side macro-selic">
         <div class="macro-label">🏦 Taxa Selic — Meta COPOM</div>
-        <div class="macro-main-value gold" id="mc-selic">—</div>
-        <div class="macro-sub">a.a. — taxa básica de juros</div>
+        <div class="market-rate-line market-rate-line-selic">
+          <div class="macro-main-value gold" id="mc-selic">—</div>
+          <span class="market-rate-suffix">a.a.</span>
+        </div>
         <div class="macro-note">Última alteração: <strong id="selic-last-change">—</strong></div>
       </div>
 
@@ -4488,10 +5141,12 @@ html{scroll-padding-top:18px}
     </div>
 
     <!-- Card 2: CDI -->
-    <div class="indic-ref-card cdi-card market-ref-card cdi-card-compacto">
+    <div class="indic-ref-card cdi-card market-ref-card cdi-card-compacto market-ref-card-unified">
       <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
-      <div class="indic-ref-val green" id="mc-cdi">—</div>
-      <div class="indic-ref-sub">a.a. · taxa anualizada · série BCB 4391</div>
+      <div class="market-rate-line market-rate-line-cdi">
+        <div class="indic-ref-val green" id="mc-cdi">—</div>
+        <span class="market-rate-suffix">a.a.</span>
+      </div>
 
       <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano">
         <div class="cdi-year-head">
@@ -4507,13 +5162,13 @@ html{scroll-padding-top:18px}
     </div>
 
     <!-- Card 3: Poupança antiga + nova + regra visível -->
-    <div class="indic-ref-card poup market-ref-card poup-card-consultivo">
-      <div class="poup-header poup-header-clean">
+    <div class="indic-ref-card poup market-ref-card poup-card-consultivo market-ref-card-unified">
+      <div class="poup-header poup-header-clean unified-card-head">
         <div>
           <div class="indic-ref-label">🏠 Poupança — Rendimentos</div>
-          <div class="poup-card-subtitle">Regras visíveis para consulta rápida</div>
+          <div class="poup-card-subtitle">Nova x antiga</div>
         </div>
-        <button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Ver detalhes ▼</button>
+        <button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Detalhes ▼</button>
       </div>
 
       <div class="poup-values poup-rules-grid">
@@ -6977,6 +7632,21 @@ function temDados(r){
   return c&&c!=='-'&&c!=='—';
 }
 
+function syncMobileKpis(){
+  const getTxt = id => ($(id)?.textContent || '—').trim() || '—';
+  const setTxt = (id, value) => { const el=$(id); if(el) el.textContent=value; };
+
+  setTxt('mKpiFundos', getTxt('kpiFundos'));
+  setTxt('mKpiFundosSub', getTxt('kpiFundosSub'));
+  setTxt('mKpiCats', getTxt('kpiCats'));
+  setTxt('mKpiPL', getTxt('kpiPL'));
+  setTxt('mKpiPipe', getTxt('kpiPipe'));
+  setTxt('mKpiBest', getTxt('kpiBest'));
+  setTxt('mKpiBestFundo', getTxt('kpiBestFundo'));
+  setTxt('mKpiWorst', getTxt('kpiWorst'));
+  setTxt('mKpiWorstFundo', getTxt('kpiWorstFundo'));
+}
+
 function updateKPIs(){
   let pl=0,best=-Infinity,worst=Infinity,bestName='',worstName='',bestVal='—',worstVal='—';
   allRows.forEach(r=>{
@@ -6998,6 +7668,7 @@ function updateKPIs(){
   $('kpiBestFundo').textContent=bestName.length>45?bestName.slice(0,45)+'…':bestName;
   $('kpiWorst').textContent=worst<Infinity?`${worstVal}%`:'—';
   $('kpiWorstFundo').textContent=worstName.length>45?worstName.slice(0,45)+'…':worstName;
+  syncMobileKpis();
 }
 
 async function carregarKPIs(){
@@ -7009,6 +7680,7 @@ async function carregarKPIs(){
     const pipe=d.resumo_geral?.pipeline_novos_fundos;
     if(pl) $('kpiPL').textContent=pl.toLocaleString('pt-BR',{maximumFractionDigits:0});
     if(pipe!==undefined) $('kpiPipe').textContent=pipe;
+    syncMobileKpis();
     renderRankings();
   }catch(e){
     console.warn('Não foi possível carregar kpis_dashboard.json', e);
@@ -7996,26 +8668,46 @@ document.addEventListener('DOMContentLoaded', function(){
     });
   }
 
-  function getBoletimComercialUrl(row){
-    const direto = String(row?.['doc_boletim'] || row?.doc_boletim || '').trim();
-    if(direto.startsWith('http')) return direto;
+  function getMobileDocs(row){
+    if(typeof obterDocsFundoCompactos !== 'function') return [];
+    const docs = obterDocsFundoCompactos(row) || [];
+    const vistos = new Set();
+    return docs
+      .filter(d => d && String(d.url || '').startsWith('http'))
+      .filter(d => {
+        const u = String(d.url || '').trim();
+        if(vistos.has(u)) return false;
+        vistos.add(u);
+        return true;
+      });
+  }
 
-    const cnpjLimpo = String(row?.['CNPJ'] || '').replace(/\D/g,'');
-    const fundoDoc = cnpjLimpo && typeof _fundosDocMap !== 'undefined' ? _fundosDocMap[cnpjLimpo] : null;
-    const peloJson = String(fundoDoc?.docs?.boletim || '').trim();
-    if(peloJson.startsWith('http')) return peloJson;
-
-    if(typeof obterDocsFundoCompactos === 'function'){
-      const docs = obterDocsFundoCompactos(row) || [];
-      const achado = docs.find(d =>
-        String(d.csvKey || '') === 'doc_boletim' ||
-        String(d.jsonKey || '') === 'boletim' ||
-        /boletim/i.test(String(d.label || ''))
-      );
-      if(achado?.url && String(achado.url).startsWith('http')) return String(achado.url);
+  function buildMobileDocsHtml(row){
+    const docs = getMobileDocs(row);
+    if(!docs.length){
+      return `<div class="fund-card-docs-empty">Nenhum documento disponível na base</div>`;
     }
+    const urls = docs.map(d => d.url);
+    const allBtn = `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`;
+    const links = docs.map(d => {
+      const isBoletim = /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim';
+      const label = d.curto || d.label || 'Doc';
+      return `<a class="fund-card-doc-pill ${isBoletim ? 'boletim' : ''}" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
+    }).join('');
+    return `<div class="fund-card-mobile-docs">
+      <div class="fund-card-docs-head">
+        <span class="fund-card-docs-title">Documentos</span>
+        ${allBtn}
+      </div>
+      <div class="fund-card-docs-list">${links}</div>
+    </div>`;
+  }
 
-    return '';
+  function cdiRatioInfo(m12){
+    const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(toNum(m12), indicState?.cdi?.m12) : null;
+    if(ratio === null || ratio === undefined || !Number.isFinite(Number(ratio))) return {txt:'—', cls:''};
+    const cls = ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
+    return {txt:`${ratio}% do CDI`, cls};
   }
 
   function pctClass(v){
@@ -8038,10 +8730,8 @@ document.addEventListener('DOMContentLoaded', function(){
     const data=fmtDash(r['Data Inicio']||r['Data Início']||r['Data de Inicio']||r['Data de Início']);
     const cls=CAT_CLS[cat]||'RF';
     const url=getFundUrl(r);
-    const boletimUrl = getBoletimComercialUrl(r);
-    const boletimBtn = boletimUrl
-      ? `<a class="fund-card-boletim-btn" href="${htmlAttr(boletimUrl)}" target="_blank" rel="noopener" title="Abrir boletim comercial em PDF">📄 Boletim comercial ↧</a>`
-      : '';
+    const ratioCdi = cdiRatioInfo(m12);
+    const docsHtml = buildMobileDocsHtml(r);
     return `<article class="fund-card-mobile" data-card-idx="${idx}">
       <div class="fund-card-mobile-head">
         <div class="fund-card-mobile-tags">
@@ -8055,13 +8745,14 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="fund-metric"><span class="fund-metric-label">Mês</span><span class="fund-metric-value ${pctClass(mes)}">${mes}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">12M</span><span class="fund-metric-value ${pctClass(m12)}">${m12}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">% CDI 12M</span><span class="fund-metric-value ${ratioCdi.cls}">${ratioCdi.txt}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
       </div>
       <div class="fund-card-mobile-actions">
-        <a href="${htmlAttr(url)}" target="_blank" rel="noopener">Abrir fundo ↗</a>
+        <a class="fund-card-primary-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Abrir fundo ↗</a>
         <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}">Detalhes</button>
-        ${boletimBtn}
+        ${docsHtml}
       </div>
       <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
     </article>`;
