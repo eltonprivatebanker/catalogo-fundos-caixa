@@ -5357,6 +5357,160 @@ html{scroll-padding-top:18px}
   .dolar-compact-footer{padding:11px 12px 13px}
 }
 
+
+
+/* ─────────────────────────────────────────────────────────────
+   Rankings consultivos v4 — menos cards, mais filtros e contexto
+───────────────────────────────────────────────────────────── */
+.ranking-toolbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:8px 0 12px;
+}
+.ranking-filter-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  flex-wrap:wrap;
+}
+.ranking-filter-label{
+  font-size:.58rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--muted2);
+  font-weight:700;
+  margin-right:2px;
+}
+.ranking-filter-chip,
+.rank-period-tab{
+  border:1px solid var(--border2);
+  background:rgba(17,21,38,.78);
+  color:#b4bdd3;
+  border-radius:999px;
+  padding:5px 10px;
+  font-family:'DM Sans',sans-serif;
+  font-size:.62rem;
+  font-weight:700;
+  line-height:1;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.ranking-filter-chip:hover,
+.rank-period-tab:hover{
+  color:var(--gold2);
+  border-color:rgba(232,187,106,.52);
+  background:rgba(200,151,58,.12);
+}
+.ranking-filter-chip.active,
+.rank-period-tab.active{
+  color:var(--gold2);
+  border-color:var(--gold);
+  background:rgba(200,151,58,.16);
+}
+.ranking-context-note{
+  max-width:620px;
+  color:#aeb7cf;
+  font-size:.64rem;
+  line-height:1.45;
+  padding:7px 10px;
+  border-radius:10px;
+  border:1px solid rgba(200,151,58,.14);
+  background:rgba(200,151,58,.055);
+}
+.ranking-grid-consultiva{
+  display:grid;
+  grid-template-columns:repeat(12,minmax(0,1fr)) !important;
+  gap:12px !important;
+  align-items:stretch;
+}
+.ranking-grid-consultiva .rank-card{
+  grid-column:span 4;
+  min-height:100%;
+  display:flex;
+  flex-direction:column;
+}
+.ranking-grid-consultiva .rank-card.rank-wide{
+  grid-column:span 6;
+}
+.ranking-grid-consultiva .rank-card-header{
+  align-items:flex-start;
+  padding:12px 13px 8px;
+}
+.rank-card-main-title{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+}
+.ranking-grid-consultiva .rank-card-title{
+  white-space:normal;
+  overflow:visible;
+  text-overflow:clip;
+  line-height:1.25;
+  font-size:.94rem;
+}
+.rank-period-tabs{
+  display:flex;
+  align-items:center;
+  gap:4px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+  flex-shrink:0;
+}
+.rank-period-tab{
+  padding:4px 8px;
+  font-size:.56rem;
+}
+.rank-advisory-note{
+  margin:8px 12px 2px;
+  padding:8px 10px;
+  border:1px solid rgba(91,156,246,.18);
+  background:rgba(91,156,246,.06);
+  color:#b9c4dd;
+  border-radius:10px;
+  font-size:.62rem;
+  line-height:1.45;
+}
+.rank-list{
+  flex:1;
+}
+.ranking-grid-consultiva .rank-item{
+  padding:8px 12px;
+}
+.ranking-grid-consultiva .rank-name{
+  white-space:normal;
+  display:-webkit-box;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  line-height:1.25;
+}
+.ranking-grid-consultiva .rank-card-actions{
+  display:none !important;
+}
+.ranking-grid-consultiva .rank-val{
+  max-width:108px;
+  text-align:right;
+}
+@media(max-width:1180px){
+  .ranking-grid-consultiva .rank-card,
+  .ranking-grid-consultiva .rank-card.rank-wide{grid-column:span 6;}
+}
+@media(max-width:768px){
+  .ranking-toolbar{gap:8px;}
+  .ranking-context-note{width:100%;font-size:.60rem;}
+  .ranking-filter-row{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:4px;-webkit-overflow-scrolling:touch;}
+  .ranking-filter-chip{flex:0 0 auto;}
+  .ranking-grid-consultiva{grid-template-columns:1fr !important;gap:10px !important;}
+  .ranking-grid-consultiva .rank-card,
+  .ranking-grid-consultiva .rank-card.rank-wide{grid-column:1/-1;}
+  .ranking-grid-consultiva .rank-card-header{gap:8px;}
+  .rank-period-tabs{width:100%;justify-content:flex-start;}
+}
+
 </style>
 </head>
 <body>
@@ -5578,7 +5732,20 @@ html{scroll-padding-top:18px}
       <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Gerar print</button>
     </div>
   </div>
-  <div id="rankingGrid" class="ranking-grid">
+
+  <div class="ranking-toolbar" aria-label="Filtros dos rankings">
+    <div class="ranking-filter-row" id="rankingFilterRow">
+      <span class="ranking-filter-label">Visão</span>
+      <button type="button" class="ranking-filter-chip active" data-rank-filter="todos">Todos</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="sem-fmp">Sem FMP</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa">Renda Fixa</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="multimercado">Multimercado</button>
+    </div>
+    <div class="ranking-context-note">Alguns rankings podem ser influenciados por fundos FMP/privatização, que possuem comportamento específico e maior concentração.</div>
+  </div>
+
+  <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva">
     <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
       <div class="spinner"></div>Carregando rankings...
     </div>
@@ -7732,112 +7899,166 @@ function fmtPlMi(v){
   return 'PL R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
 }
 
+
+let activeRankFilter = 'todos';
+let activeRankPeriods = { topFundos:'12m', destaques:'mes' };
+
+function normRankTxt(v){
+  return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+}
+function rankCampoPorPeriodo(periodo){
+  if(periodo === 'dia') return 'Variacao Dia (%)';
+  if(periodo === 'mes') return 'Acum. Mes (%)';
+  if(periodo === 'ano') return 'Acum. Ano (%)';
+  return 'Acum. 12M (%)';
+}
+function rankPeriodoLabel(periodo){
+  return ({dia:'dia',mes:'mês',ano:'ano',m12:'12 meses','12m':'12 meses'})[periodo] || '12 meses';
+}
+function passaFiltroRanking(r){
+  const cat = normRankTxt(r['Categoria']);
+  const nome = normRankTxt(r['Fundo']);
+  const base = cat + ' ' + nome;
+  if(activeRankFilter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
+  if(activeRankFilter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
+  if(activeRankFilter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
+  if(activeRankFilter === 'multimercado') return cat.includes('MULTIMERCADO');
+  return true;
+}
+function atualizarRankingFilterUI(){
+  document.querySelectorAll('[data-rank-filter]').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.rankFilter === activeRankFilter);
+  });
+}
+function rankPeriodTabs(target, active, periods){
+  return `<div class="rank-period-tabs" role="tablist" aria-label="Período do ranking">${periods.map(p=>`<button type="button" class="rank-period-tab ${active===p?'active':''}" data-rank-target="${target}" data-rank-period="${p}">${p==='dia'?'Dia':p==='mes'?'Mês':p==='ano'?'Ano':'12M'}</button>`).join('')}</div>`;
+}
+
 function renderRankings(){
   const grid = $('rankingGrid');
   if(!grid || !allRows.length) return;
 
-  let base = allRows.filter(r => temDados(r));
+  atualizarRankingFilterUI();
+
+  let base = allRows.filter(r => temDados(r)).filter(passaFiltroRanking);
   if(activePerfil) base = base.filter(r => {
     const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
     return tokens.includes(activePerfil);
   });
   if(activeRisco) base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
 
-  const sorted12m = base.filter(r=>toNum(r['Acum. 12M (%)'])!==null).sort((a,b)=>toNum(b['Acum. 12M (%)'])-toNum(a['Acum. 12M (%)']));
-  const sortedMes = base.filter(r=>toNum(r['Acum. Mes (%)'])!==null).sort((a,b)=>toNum(b['Acum. Mes (%)'])-toNum(a['Acum. Mes (%)']));
-  const sortedAno = base.filter(r=>toNum(r['Acum. Ano (%)'])!==null).sort((a,b)=>toNum(b['Acum. Ano (%)'])-toNum(a['Acum. Ano (%)']));
+  const ordenaCampo = (campo, asc=false) => base
+    .filter(r=>toNum(r[campo])!==null)
+    .sort((a,b)=>asc ? toNum(a[campo])-toNum(b[campo]) : toNum(b[campo])-toNum(a[campo]));
 
-  // Melhor fundo dentro de cada categoria, com base no Acum. 12M do fundo.
+  const campoTop = rankCampoPorPeriodo(activeRankPeriods.topFundos);
+  const campoDestaques = rankCampoPorPeriodo(activeRankPeriods.destaques);
+  const sortedTop = ordenaCampo(campoTop);
+  const sortedDestaques = ordenaCampo(campoDestaques);
+  const sortedPiores = ordenaCampo(campoDestaques, true).filter(r=>toNum(r[campoDestaques]) < 0);
+  const sorted12m = ordenaCampo('Acum. 12M (%)');
+
+  // Melhor fundo dentro de cada categoria, com base no Acum. 12M.
   const catMap = {};
   sorted12m.forEach(r=>{ const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r; });
   const catTop = Object.entries(catMap).sort((a,b)=>toNum(b[1]['Acum. 12M (%)'])-toNum(a[1]['Acum. 12M (%)']));
 
   // Ranking agregado por categoria, vindo do kpis_dashboard.json.
-  // Aqui a rentabilidade é ponderada pelo PL da categoria, não apenas o melhor fundo isolado.
+  // Quando o filtro "sem FMP" está ativo, retiramos FMP/privatização também do agregado.
   const categoriasKpi = kpisDashboard?.categorias || {};
+  const passaFiltroCat = (cat) => {
+    const c = normRankTxt(cat);
+    if(activeRankFilter === 'sem-fmp') return !(c.includes('FMP') || c.includes('PRIVATIZACAO'));
+    if(activeRankFilter === 'renda-fixa') return c.includes('RENDA FIXA');
+    if(activeRankFilter === 'acoes') return c.includes('ACOES');
+    if(activeRankFilter === 'multimercado') return c.includes('MULTIMERCADO');
+    return true;
+  };
   const catPonderada = Object.entries(categoriasKpi)
-    .filter(([,d])=>numKpi(d?.rent_12m_ponderada)!==null)
+    .filter(([cat,d])=>passaFiltroCat(cat) && numKpi(d?.rent_12m_ponderada)!==null)
     .sort((a,b)=>numKpi(b[1].rent_12m_ponderada)-numKpi(a[1].rent_12m_ponderada));
   const catPL = Object.entries(categoriasKpi)
-    .filter(([,d])=>numKpi(d?.pl_total)!==null)
+    .filter(([cat,d])=>passaFiltroCat(cat) && numKpi(d?.pl_total)!==null)
     .sort((a,b)=>numKpi(b[1].pl_total)-numKpi(a[1].pl_total));
 
   const rankItem = (r,i,campo) => {
     const val=r[campo]||'—'; const n=toNum(val);
     const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
     const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
-    const nomeShort=nome.length>40?nome.slice(0,40)+'…':nome;
+    const nomeShort=nome.length>44?nome.slice(0,44)+'…':nome;
     const medal=i<3?MEDALHAS[i]:`${i+1}º`;
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info"><div class="rank-name" title="${nome}">${nomeShort}</div><div class="rank-cat">${r['Categoria']||''}</div></div>
-      <span class="rank-val ${cls}">${sign}${val}</span></div>`;
+      <div class="rank-info"><div class="rank-name" title="${attr(nome)}">${attr(nomeShort)}</div><div class="rank-cat">${attr(r['Categoria']||'')}</div></div>
+      <span class="rank-val ${cls}">${sign}${attr(val)}</span></div>`;
   };
 
   const attr = (v) => String(v||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  const rankCard = (icon,title,html,sub='') => {
+  const rankCard = (icon,title,html,sub='',opts={}) => {
     const total = (html.match(/class="rank-item"/g)||[]).length;
     const more = total > 5 ? `<div class="rank-more-wrap"><button type="button" class="rank-more-btn" data-rank-action="toggle-card">Ver + ${total-5}</button></div>` : '';
-    return `<div class="rank-card rank-collapsed" data-rank-title="${attr(title)}">
+    const tabs = opts.tabs || '';
+    const wide = opts.wide ? ' rank-wide' : '';
+    const note = opts.note ? `<div class="rank-advisory-note">${opts.note}</div>` : '';
+    return `<div class="rank-card rank-collapsed${wide}" data-rank-title="${attr(title)}">
       <div class="rank-card-header">
-        <div class="rank-card-title-wrap"><span>${icon}</span><span class="rank-card-title" title="${attr(title)}">${title}</span></div>
-        <div class="rank-card-actions">
-          <button type="button" class="rank-action-btn" data-rank-action="copy-card" title="Copiar este ranking">📋</button>
-          <button type="button" class="rank-action-btn" data-rank-action="png-card" title="Gerar print deste ranking">🖼️</button>
-        </div>
+        <div class="rank-card-main-title"><span>${icon}</span><span class="rank-card-title" title="${attr(title)}">${title}</span></div>
+        ${tabs}
       </div>
       ${sub ? `<div class="rank-card-sub">${sub}</div>` : ''}
+      ${note}
       <div class="rank-list">${html||'<div class="rank-empty">Sem dados suficientes</div>'}</div>${more}</div>`;
   };
 
-  const top10html = sorted12m.slice(0,10).map((r,i)=>rankItem(r,i,'Acum. 12M (%)')).join('');
+  const topFundosHtml = sortedTop.slice(0,10).map((r,i)=>rankItem(r,i,campoTop)).join('');
 
-  const catHtml = catTop.slice(0,9).map(([cat,r],i)=>{
+  const catHtml = catTop.slice(0,8).map(([cat,r],i)=>{
     const val=r['Acum. 12M (%)']||'—'; const n=toNum(val);
     const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
     const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
     const medal=i<3?MEDALHAS[i]:`${i+1}º`;
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info"><div class="rank-name" title="${cat}">${cat}</div><div class="rank-cat" title="${nome}">${nome.length>38?nome.slice(0,38)+'…':nome}</div></div>
-      <span class="rank-val ${cls}">${sign}${val}</span></div>`;
+      <div class="rank-info"><div class="rank-name" title="${attr(cat)}">${attr(cat)}</div><div class="rank-cat" title="${attr(nome)}">${attr(nome.length>42?nome.slice(0,42)+'…':nome)}</div></div>
+      <span class="rank-val ${cls}">${sign}${attr(val)}</span></div>`;
   }).join('');
 
-  const catPonderadaHtml = catPonderada.slice(0,9).map(([cat,d],i)=>{
+  const destaqueAltaHtml = sortedDestaques.slice(0,3).map((r,i)=>rankItem(r,i,campoDestaques)).join('');
+  const destaqueQuedaHtml = sortedPiores.slice(0,2).map((r,i)=>rankItem(r,i,campoDestaques)).join('');
+  const destaquesHtml = [destaqueAltaHtml, destaqueQuedaHtml ? `<div class="rank-card-sub" style="border-top:1px solid var(--border2);padding-top:8px;margin-top:2px">Maiores quedas no período</div>${destaqueQuedaHtml}` : ''].join('');
+
+  const catPonderadaHtml = catPonderada.slice(0,8).map(([cat,d],i)=>{
     const n = numKpi(d.rent_12m_ponderada);
     const cls = n>0?'pos':n<0?'neg':'zero';
     const medal = i<3?MEDALHAS[i]:`${i+1}º`;
     const qtd = d.qtd_ativos ?? '—';
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info"><div class="rank-name" title="${cat}">${cat}</div><div class="rank-cat">${qtd} fundos · ${fmtPlMi(d.pl_total)}</div></div>
+      <div class="rank-info"><div class="rank-name" title="${attr(cat)}">${attr(cat)}</div><div class="rank-cat">${qtd} fundos · ${fmtPlMi(d.pl_total)}</div></div>
       <span class="rank-val ${cls}">${fmtPctKpi(n)}</span></div>`;
   }).join('');
 
-  const catPLHtml = catPL.slice(0,9).map(([cat,d],i)=>{
+  const catPLHtml = catPL.slice(0,8).map(([cat,d],i)=>{
     const n = numKpi(d.pl_total);
     const medal = i<3?MEDALHAS[i]:`${i+1}º`;
     const rent = fmtPctKpi(d.rent_12m_ponderada);
     const qtd = d.qtd_ativos ?? '—';
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info"><div class="rank-name" title="${cat}">${cat}</div><div class="rank-cat">${qtd} fundos · rent. pond. 12M ${rent}</div></div>
+      <div class="rank-info"><div class="rank-name" title="${attr(cat)}">${attr(cat)}</div><div class="rank-cat">${qtd} fundos · rent. pond. 12M ${rent}</div></div>
       <span class="rank-val zero">R$ ${n.toLocaleString('pt-BR',{maximumFractionDigits:0})} mi</span></div>`;
   }).join('');
 
-  const top5mesHtml = sortedMes.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Mes (%)')).join('');
-  const top5anoHtml = sortedAno.slice(0,5).map((r,i)=>rankItem(r,i,'Acum. Ano (%)')).join('');
+  const filtroLabel = activeRankFilter === 'todos' ? 'todos os fundos' : document.querySelector(`[data-rank-filter="${activeRankFilter}"]`)?.textContent?.trim() || 'filtro aplicado';
 
   grid.innerHTML = [
-    rankCard('🏆','Top 10 — Fundos 12M',top10html),
-    rankCard('📊','Rentab. Ponderada por Categoria',catPonderadaHtml,'Ponderada pelo PL consolidado de cada categoria.'),
-    rankCard('🎖️','Melhor Fundo por Categoria',catHtml),
-    rankCard('🏦','Maiores Categorias por PL',catPLHtml,'Ajuda a entender onde está concentrado o patrimônio.'),
-    rankCard('📅','Top 5 — Acumulado do Mês',top5mesHtml),
-    rankCard('📆','Top 5 — Acumulado do Ano',top5anoHtml),
+    rankCard('🏆','Top Fundos',topFundosHtml,`Ranking por rentabilidade — ${rankPeriodoLabel(activeRankPeriods.topFundos)} · ${filtroLabel}.`,{tabs:rankPeriodTabs('topFundos',activeRankPeriods.topFundos,['mes','ano','12m'])}),
+    rankCard('🎖️','Melhor por Categoria',catHtml,'Melhor fundo de cada categoria com base no acumulado de 12 meses.'),
+    rankCard('📅','Destaques do Período',destaquesHtml,`Maiores altas e quedas — ${rankPeriodoLabel(activeRankPeriods.destaques)}.`,{tabs:rankPeriodTabs('destaques',activeRankPeriods.destaques,['dia','mes','ano','12m'])}),
+    rankCard('📊','Categorias — Rentabilidade',catPonderadaHtml,'Rentabilidade 12M ponderada pelo PL consolidado da categoria.',{wide:true,note:'Leitura mais institucional: mostra a média ponderada da categoria, não apenas o fundo vencedor.'}),
+    rankCard('🏦','Categorias — Patrimônio Líquido',catPLHtml,'Ajuda a entender onde está concentrado o patrimônio dos fundos.',{wide:true}),
   ].join('');
 }
-
 
 
 /* ════════════════════════════════════════════════════
@@ -7920,6 +8141,24 @@ async function baixarPrintRank(el, nome){
   }
 }
 document.addEventListener('click', (ev)=>{
+  const filterBtn = ev.target.closest('[data-rank-filter]');
+  if(filterBtn){
+    activeRankFilter = filterBtn.dataset.rankFilter || 'todos';
+    renderRankings();
+    return;
+  }
+
+  const periodBtn = ev.target.closest('[data-rank-period][data-rank-target]');
+  if(periodBtn){
+    const target = periodBtn.dataset.rankTarget;
+    const period = periodBtn.dataset.rankPeriod;
+    if(target && period){
+      activeRankPeriods[target] = period;
+      renderRankings();
+    }
+    return;
+  }
+
   const btn = ev.target.closest('[data-rank-action]');
   if(!btn) return;
   const action = btn.dataset.rankAction;
