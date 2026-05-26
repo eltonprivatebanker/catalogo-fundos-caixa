@@ -226,6 +226,9 @@ header{display:flex;align-items:flex-start;justify-content:space-between;flex-wr
 .dolar-metric-label{font-size:.62rem;color:var(--muted2);font-family:'JetBrains Mono',monospace}
 .dolar-metric-val{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:600}
 .dolar-metric-val.pos{color:var(--green)}.dolar-metric-val.neg{color:var(--red)}.dolar-metric-val.muted{color:var(--muted)}
+.dolar-resumo-metrics .dolar-metric{padding:9px 10px}
+.dolar-resumo-metrics .dolar-metric-label{max-width:130px;line-height:1.25}
+.dolar-resumo-metrics .dolar-metric-val{font-size:.82rem}
 .dolar-spread{display:flex;gap:6px;margin-top:2px}
 .dolar-spread-item{flex:1;background:var(--bg3);border-radius:7px;padding:6px 8px;border:1px solid var(--border2);text-align:center}
 .dolar-spread-label{font-size:.55rem;color:var(--muted2);text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
@@ -669,6 +672,47 @@ td.col-pct{text-align:right}
 .pchip-GOV{background:rgba(251,146,60,.1);color:#fb923c}
 .pchip-RPPS{background:rgba(167,139,250,.1);color:#a78bfa}
 .pchip-TODOS{background:rgba(200,151,58,.1);color:var(--gold)}
+
+/* ── SINAIS CONSULTIVOS ── */
+
+/* Colunas consultivas visíveis na tabela */
+.col-liquidez,.col-benchmark{white-space:normal;min-width:130px}
+.liquidez-badge,.benchmark-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:4px 8px;
+  border-radius:8px;
+  border:1px solid var(--border2);
+  background:rgba(255,255,255,.04);
+  color:var(--muted);
+  font-family:'DM Sans',sans-serif;
+  font-size:.62rem;
+  font-weight:750;
+  line-height:1.2;
+}
+.liquidez-badge{color:var(--blue);background:rgba(91,156,246,.10);border-color:rgba(91,156,246,.22)}
+.bench-cdi{color:var(--green);background:rgba(46,209,122,.10);border-color:rgba(46,209,122,.20)}
+.bench-ipca{color:var(--purple);background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.20)}
+.bench-prefixado{color:var(--orange);background:rgba(251,146,60,.10);border-color:rgba(251,146,60,.20)}
+.bench-cambio{color:#facc15;background:rgba(250,204,21,.10);border-color:rgba(250,204,21,.20)}
+.bench-rv{color:var(--red);background:rgba(240,85,101,.10);border-color:rgba(240,85,101,.20)}
+.bench-multi{color:var(--blue);background:rgba(91,156,246,.10);border-color:rgba(91,156,246,.20)}
+.bench-cred{color:#e879f9;background:rgba(232,121,249,.10);border-color:rgba(232,121,249,.20)}
+.bench-outros{color:var(--muted);background:rgba(255,255,255,.04);border-color:var(--border2)}
+@media(max-width:768px){.col-liquidez,.col-benchmark{min-width:115px}.liquidez-badge,.benchmark-badge{font-size:.56rem;padding:4px 7px}}
+
+.col-sinais{min-width:220px;white-space:normal}
+.sinais-wrap{display:flex;flex-wrap:wrap;gap:4px;max-width:280px}
+.sinal-chip{display:inline-flex;align-items:center;gap:4px;padding:3px 7px;border-radius:6px;font-size:.56rem;font-family:'DM Sans',sans-serif;font-weight:700;line-height:1.25;border:1px solid var(--border2);background:rgba(255,255,255,.04);color:var(--muted);white-space:nowrap}
+.sinal-liq{color:var(--blue);background:rgba(91,156,246,.10);border-color:rgba(91,156,246,.20)}
+.sinal-cdi{color:var(--green);background:rgba(46,209,122,.10);border-color:rgba(46,209,122,.18)}
+.sinal-ipca{color:var(--purple);background:rgba(167,139,250,.10);border-color:rgba(167,139,250,.18)}
+.sinal-cambio{color:#facc15;background:rgba(250,204,21,.10);border-color:rgba(250,204,21,.18)}
+.sinal-cred{color:#e879f9;background:rgba(232,121,249,.10);border-color:rgba(232,121,249,.18)}
+.sinal-duration{color:var(--orange);background:rgba(251,146,60,.10);border-color:rgba(251,146,60,.20)}
+.sinal-rv{color:var(--red);background:rgba(240,85,101,.10);border-color:rgba(240,85,101,.18)}
+@media(max-width:768px){.col-sinais{min-width:180px}.sinais-wrap{max-width:220px}.sinal-chip{font-size:.54rem;padding:3px 6px}}
 
 /* ── DETAIL PANEL ── */
 .detail-panel{padding:14px 18px;display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;animation:fadeUp .2s ease;align-items:start}
@@ -4996,6 +5040,323 @@ html{scroll-padding-top:18px}
   }
 }
 
+
+/* ── Ajuste consultivo: liquidez em duas colunas + documentos com Boletim em destaque ── */
+.col-prazo-resgate{
+  min-width:96px;
+  text-align:left;
+  white-space:normal;
+}
+.prazo-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:68px;
+  padding:5px 8px;
+  border-radius:8px;
+  border:1px solid rgba(91,156,246,.22);
+  background:rgba(91,156,246,.09);
+  color:#9fc6ff;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.64rem;
+  font-weight:700;
+  line-height:1.15;
+}
+.prazo-badge.pagamento{
+  border-color:rgba(46,209,122,.22);
+  background:rgba(46,209,122,.08);
+  color:#8ce9b6;
+}
+.prazo-badge.muted{
+  border-color:var(--border2);
+  background:rgba(255,255,255,.035);
+  color:var(--muted2);
+}
+.doc-mini-primary{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:24px;
+  padding:0 9px;
+  border-radius:8px;
+  border:1px solid rgba(200,151,58,.42);
+  background:rgba(200,151,58,.16);
+  color:var(--gold2);
+  font-size:.60rem;
+  font-family:'DM Sans',sans-serif;
+  font-weight:800;
+  text-decoration:none;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.doc-mini-primary:hover{
+  border-color:var(--gold2);
+  background:rgba(200,151,58,.24);
+  color:var(--gold3);
+  text-decoration:none;
+}
+.doc-mini-secondary{
+  opacity:.78;
+}
+.doc-pill.primary-doc{
+  border-color:rgba(200,151,58,.34);
+  background:rgba(200,151,58,.08);
+}
+.doc-pill.primary-doc a{
+  color:var(--gold2);
+}
+
+
+
+/* ── DÓLAR COMPACTO v3 — resumo executivo ── */
+.dolar-compact-section{margin-top:28px}
+.dolar-compact-card{
+  position:relative;
+  overflow:hidden;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(17,21,38,.92),rgba(12,14,26,.92));
+  box-shadow:0 10px 38px rgba(0,0,0,.24);
+}
+.dolar-compact-card::before{
+  content:'';
+  display:block;
+  height:2px;
+  background:linear-gradient(90deg,var(--gold),rgba(46,209,122,.8) 42%,transparent 86%);
+}
+.dolar-compact-loading{
+  padding:22px 24px;
+  color:var(--muted);
+  font-size:.8rem;
+}
+.dolar-compact-top{
+  display:grid;
+  grid-template-columns:285px minmax(0,1fr);
+  gap:14px;
+  padding:16px 18px 12px;
+  align-items:stretch;
+}
+.dolar-main-kpi{
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:13px;
+  background:rgba(200,151,58,.055);
+  padding:15px 16px;
+  min-width:0;
+}
+.dolar-main-kpi .dolar-kpi-label{
+  display:block;
+  font-size:.58rem;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  color:var(--muted2);
+  font-weight:700;
+  margin-bottom:6px;
+}
+.dolar-main-kpi strong{
+  display:block;
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.25rem;
+  line-height:1;
+  color:var(--gold2);
+  font-weight:700;
+  margin-bottom:5px;
+}
+.dolar-main-kpi small{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.62rem;
+  color:#c0c8dc;
+  margin-bottom:8px;
+}
+.dolar-ptax-compact{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  max-width:100%;
+  padding:5px 8px;
+  border-radius:8px;
+  border:1px solid rgba(200,151,58,.18);
+  background:rgba(200,151,58,.06);
+  color:#b6bfd5;
+  font-size:.58rem;
+  font-family:'JetBrains Mono',monospace;
+  white-space:normal;
+  line-height:1.35;
+}
+.dolar-kpi-row{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+  align-content:stretch;
+}
+.dolar-mini-kpi{
+  min-width:0;
+  padding:13px 14px;
+  border-radius:12px;
+  border:1px solid var(--border2);
+  background:rgba(7,8,15,.46);
+}
+.dolar-mini-kpi span{
+  display:block;
+  font-size:.58rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--muted2);
+  font-weight:700;
+  margin-bottom:7px;
+}
+.dolar-mini-kpi strong{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.92rem;
+  line-height:1.1;
+  font-weight:700;
+}
+.dolar-mini-kpi small{
+  display:block;
+  margin-top:6px;
+  font-size:.55rem;
+  color:var(--muted2);
+  font-family:'JetBrains Mono',monospace;
+}
+.dolar-mini-kpi .pos{color:var(--green)}
+.dolar-mini-kpi .neg{color:var(--red)}
+.dolar-mini-kpi .muted{color:var(--muted)}
+.dolar-compact-chart{
+  border-top:1px solid var(--border2);
+  border-bottom:1px solid var(--border2);
+  background:rgba(7,8,15,.22);
+}
+.dolar-compact-chart-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  flex-wrap:wrap;
+  padding:13px 18px 10px;
+}
+.dolar-chart-title{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:700;color:var(--gold2)}
+.dolar-chart-sub{font-size:.6rem;color:var(--muted);font-family:'JetBrains Mono',monospace;margin-top:2px}
+.dolar-compact-card .dolar-chart-body{
+  height:clamp(210px,22vw,255px);
+  min-height:210px;
+  max-height:255px;
+  padding:8px 18px 14px;
+  width:100%;
+  overflow:hidden;
+}
+.dolar-compact-card .dolar-chart-body canvas{width:100% !important;height:100% !important;display:block}
+.dolar-compact-footer{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:12px;
+  align-items:end;
+  padding:12px 18px 15px;
+}
+.dolar-month-strip-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  margin-bottom:8px;
+}
+.dolar-month-strip-title{
+  font-size:.62rem;
+  color:var(--gold2);
+  font-family:'JetBrains Mono',monospace;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.dolar-compact-card .dolar-timeline-toggle{
+  padding:4px 8px;
+  border-radius:7px;
+  font-size:.58rem;
+}
+.dolar-compact-card .dolar-timeline-body{max-height:0;overflow:hidden;transition:max-height .28s ease}
+.dolar-compact-card .dolar-timeline-body.open{max-height:160px}
+.dolar-compact-card .dolar-months{
+  display:flex;
+  gap:7px;
+  overflow-x:auto;
+  padding:0 2px 2px 0;
+  -webkit-overflow-scrolling:touch;
+}
+.dolar-compact-card .dolar-month-item{
+  flex:0 0 auto;
+  min-width:118px;
+  padding:8px 10px;
+  border-radius:10px;
+  border:1px solid var(--border2);
+  background:rgba(7,8,15,.40);
+  display:grid;
+  grid-template-columns:1fr;
+  gap:2px;
+  align-items:center;
+  text-align:left;
+}
+.dolar-compact-card .dolar-month-item.current{
+  border-color:rgba(200,151,58,.55);
+  background:rgba(200,151,58,.08);
+}
+.dolar-compact-card .dolar-month-label{font-size:.54rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;text-transform:uppercase}
+.dolar-compact-card .dolar-month-val{font-family:'Cormorant Garamond',serif;font-size:1.05rem;font-weight:700;color:var(--gold2);line-height:1}
+.dolar-compact-card .dolar-month-var{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700}
+.dolar-compact-source{
+  min-width:230px;
+  max-width:360px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+  color:#aeb7cf;
+  font-size:.62rem;
+  line-height:1.45;
+}
+.dolar-compact-source .source-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:2px 7px;
+  border-radius:6px;
+  border:1px solid rgba(200,151,58,.24);
+  background:rgba(200,151,58,.11);
+  color:var(--gold2);
+  font-size:.54rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.dolar-compact-source a{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 9px;
+  border-radius:8px;
+  border:1px solid rgba(200,151,58,.28);
+  background:rgba(200,151,58,.08);
+  color:var(--gold2);
+  text-decoration:none;
+  font-size:.62rem;
+  font-weight:700;
+}
+.dolar-compact-source a:hover{border-color:var(--gold2);background:rgba(200,151,58,.16);color:var(--gold3);text-decoration:none}
+@media(max-width:980px){
+  .dolar-compact-top{grid-template-columns:1fr;gap:10px}
+  .dolar-kpi-row{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .dolar-compact-footer{grid-template-columns:1fr}
+  .dolar-compact-source{justify-content:flex-start;max-width:100%}
+}
+@media(max-width:560px){
+  .dolar-compact-top{padding:13px 12px 10px}
+  .dolar-kpi-row{grid-template-columns:1fr 1fr;gap:8px}
+  .dolar-mini-kpi{padding:10px 11px}
+  .dolar-main-kpi strong{font-size:1.9rem}
+  .dolar-compact-card .dolar-chart-body{height:205px;min-height:205px;padding:4px 10px 12px}
+  .dolar-compact-chart-header{padding:12px 12px 8px}
+  .dolar-compact-footer{padding:11px 12px 13px}
+}
+
 </style>
 </head>
 <body>
@@ -5103,6 +5464,129 @@ html{scroll-padding-top:18px}
     </div>
   </article>
 </div>
+
+
+
+
+
+<!-- ══════════════════════════════════ CORE DO ATENDIMENTO ══ -->
+<!-- ═══ Catálogo e Rankings primeiro — acesso rápido na reunião ═══ -->
+<div class="block-divider bloco-atendimento">
+  <div class="block-divider-line"></div>
+  <span class="block-divider-label">📁 Core do Atendimento — Catálogo &amp; Rankings</span>
+  <div class="block-divider-line"></div>
+</div>
+<!-- ════════════════ BLOCO 2: CORE DO ATENDIMENTO ════════════════ -->
+<!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
+<div class="section-gap" id="sec-fundos">
+  <div class="section-title">
+    <h2>📁 Catálogo Completo de Fundos</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
+  </div>
+
+  <div class="controls-bar" style="margin-bottom:10px">
+    <div class="search-wrap">
+      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="searchInput" type="text" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..."/>
+    </div>
+    <select id="perPage" class="ctrl-select">
+      <option value="5" selected>5 por página</option>
+      <option value="10">10 por página</option>
+      <option value="25">25 por página</option>
+      <option value="50">50 por página</option>
+      <option value="100">100 por página</option>
+      <option value="9999">Todos</option>
+    </select>
+    <div class="toggle-wrap">
+      <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
+      <span class="toggle-label">Ocultar sem dados</span>
+    </div>
+  </div>
+
+
+  <div class="mobile-filter-bar" id="mobileFilterBar">
+    <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle">⚙️ Editar filtros</button>
+    <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
+  </div>
+
+  <div class="filter-section mobile-filters-collapsed" style="margin-bottom:14px">
+    <!-- Categoria -->
+    <div class="filter-row" id="catFilters">
+      <span class="filter-label">Categoria</span>
+      <button class="chip active" data-cat="">Todas</button>
+    </div>
+    <!-- Benchmark / indicador de referência -->
+    <div class="filter-row" id="benchmarkFilters">
+      <span class="filter-label">Benchmark</span>
+      <button class="chip active" data-benchmark="">Todos</button>
+    </div>
+    <!-- Perfil -->
+    <div class="filter-row" id="perfilFilters">
+      <span class="filter-label">Perfil</span>
+      <button class="chip active" data-perfil="">Todos</button>
+      <button class="chip pf"   data-perfil="PF">🧑 PF</button>
+      <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
+      <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
+      <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
+    </div>
+    <!-- Risco -->
+    <div class="filter-row" id="riscoFilters">
+      <span class="filter-label">Risco</span>
+      <button class="chip active" data-risco="">Todos</button>
+      <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
+      <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
+      <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
+      <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
+    </div>
+  </div>
+
+
+  <div class="mobile-view-toggle" id="mobileViewToggle" aria-label="Modo de visualização do catálogo">
+    <span class="mobile-view-toggle-label">Visualização</span>
+    <div class="mobile-view-toggle-buttons">
+      <button type="button" class="mobile-view-btn" data-view="table">Tabela</button>
+      <button type="button" class="mobile-view-btn active" data-view="cards">Cards</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
+    <table id="mainTable" style="display:none">
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div id="mobileFundCards" class="mobile-fund-cards" aria-live="polite"></div>
+
+  <div class="pagination-row">
+    <div id="resultInfo"></div>
+    <div class="page-btns" id="pageBtns"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════ RANKINGS ══ -->
+<div class="section-gap" id="rankingsSection">
+  <div class="ranking-head">
+    <div class="ranking-title-group">
+      <h2>🏆 Rankings de Performance</h2>
+      <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
+    </div>
+    <div class="ranking-actions" aria-label="Ações dos rankings">
+      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar resumo</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Gerar print</button>
+    </div>
+  </div>
+  <div id="rankingGrid" class="ranking-grid">
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
+      <div class="spinner"></div>Carregando rankings...
+    </div>
+  </div>
+</div>
+<div id="rankShareToast" class="rank-share-toast" role="status" aria-live="polite"></div>
+
+
 
 <!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
 <div class="section-gap" id="sec-mercado">
@@ -5259,132 +5743,6 @@ html{scroll-padding-top:18px}
     </div>
   </div>
 </div><!-- /section cards mercado -->
-
-
-
-<!-- ══════════════════════════════════ CORE DO ATENDIMENTO ══ -->
-<!-- ═══ Catálogo e Rankings primeiro — acesso rápido na reunião ═══ -->
-<div class="block-divider bloco-atendimento">
-  <div class="block-divider-line"></div>
-  <span class="block-divider-label">📁 Core do Atendimento — Catálogo &amp; Rankings</span>
-  <div class="block-divider-line"></div>
-</div>
-<!-- ════════════════ BLOCO 2: CORE DO ATENDIMENTO ════════════════ -->
-<!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
-<div class="section-gap" id="sec-fundos">
-  <div class="section-title">
-    <h2>📁 Catálogo Completo de Fundos</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
-  </div>
-
-  <div class="controls-bar" style="margin-bottom:10px">
-    <div class="search-wrap">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="searchInput" type="text" placeholder="Buscar fundo, categoria, CNPJ..."/>
-    </div>
-    <select id="perPage" class="ctrl-select">
-      <option value="5" selected>5 por página</option>
-      <option value="10">10 por página</option>
-      <option value="25">25 por página</option>
-      <option value="50">50 por página</option>
-      <option value="100">100 por página</option>
-      <option value="9999">Todos</option>
-    </select>
-    <div class="toggle-wrap">
-      <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
-      <span class="toggle-label">Ocultar sem dados</span>
-    </div>
-  </div>
-
-
-  <div class="mobile-filter-bar" id="mobileFilterBar">
-    <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle">⚙️ Editar filtros</button>
-    <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
-  </div>
-
-  <div class="filter-section mobile-filters-collapsed" style="margin-bottom:14px">
-    <!-- Perfil -->
-    <div class="filter-row" id="perfilFilters">
-      <span class="filter-label">Perfil</span>
-      <button class="chip active" data-perfil="">Todos</button>
-      <button class="chip pf"   data-perfil="PF">🧑 PF</button>
-      <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
-      <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
-      <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
-    </div>
-    <!-- Risco -->
-    <div class="filter-row" id="riscoFilters">
-      <span class="filter-label">Risco</span>
-      <button class="chip active" data-risco="">Todos</button>
-      <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
-      <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
-      <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
-      <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
-    </div>
-    <!-- ★ Performance mínima (NOVO) -->
-    <div class="filter-row" id="perfFilters">
-      <span class="filter-label">Período</span>
-      <select id="perfPeriodo" class="perf-period-select">
-        <option value="Acum. 12M (%)">12 Meses</option>
-        <option value="Acum. Ano (%)">No Ano</option>
-        <option value="Acum. Mes (%)">No Mês</option>
-      </select>
-      <button class="chip active" data-perf="">Todos</button>
-      <button class="chip" data-perf="0">≥ 0%</button>
-      <button class="chip" data-perf="5">≥ 5%</button>
-      <button class="chip" data-perf="10">≥ 10%</button>
-      <button class="chip" data-perf="20">≥ 20%</button>
-      <button class="chip" data-perf="50">≥ 50%</button>
-      
-    </div>
-  </div>
-
-
-  <div class="mobile-view-toggle" id="mobileViewToggle" aria-label="Modo de visualização do catálogo">
-    <span class="mobile-view-toggle-label">Visualização</span>
-    <div class="mobile-view-toggle-buttons">
-      <button type="button" class="mobile-view-btn" data-view="table">Tabela</button>
-      <button type="button" class="mobile-view-btn active" data-view="cards">Cards</button>
-    </div>
-  </div>
-
-  <div class="table-wrap">
-    <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
-    <table id="mainTable" style="display:none">
-      <thead id="tableHead"></thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-  </div>
-
-  <div id="mobileFundCards" class="mobile-fund-cards" aria-live="polite"></div>
-
-  <div class="pagination-row">
-    <div id="resultInfo"></div>
-    <div class="page-btns" id="pageBtns"></div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════════════════ RANKINGS ══ -->
-<div class="section-gap" id="rankingsSection">
-  <div class="ranking-head">
-    <div class="ranking-title-group">
-      <h2>🏆 Rankings de Performance</h2>
-      <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
-    </div>
-    <div class="ranking-actions" aria-label="Ações dos rankings">
-      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar resumo</button>
-      <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
-      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Gerar print</button>
-    </div>
-  </div>
-  <div id="rankingGrid" class="ranking-grid">
-    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
-      <div class="spinner"></div>Carregando rankings...
-    </div>
-  </div>
-</div>
-<div id="rankShareToast" class="rank-share-toast" role="status" aria-live="polite"></div>
-
 
 
 <!-- ═════════════════════════════════ APROFUNDAMENTO MACRO ══ -->
@@ -5634,89 +5992,84 @@ html{scroll-padding-top:18px}
 </div><!-- /section painel consolidado -->
 
 <!-- ═══════════════════════════════════ SEÇÃO DÓLAR ══ -->
-<div class="section-gap" id="sec-dolar">
+<div class="section-gap dolar-compact-section" id="sec-dolar">
   <div class="section-title">
     <h2>💵 Câmbio — Dólar BRL/USD</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB — cotação oficial</span>
+    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB · cotação oficial</span>
   </div>
 
-  <div class="dolar-grid">
+  <div class="dolar-compact-card">
+    <div class="dolar-compact-loading" id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação PTAX...</div>
 
-    <!-- Card do dia -->
-    <div class="dolar-day-card">
-      <div class="dolar-day-header">
-        <div class="dolar-day-title">💵 Cotação do Dia</div>
-        <div class="dolar-day-sub" id="dolar-day-src">Fonte: Banco Central do Brasil · Carregando...</div>
-      </div>
-      <div class="dolar-day-body">
-        <div id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação...</div>
-        <div id="dolar-day-content" style="display:none">
-          <div class="dolar-day-rate" id="dolar-day-rate">—</div>
-          <div class="dolar-day-ref" id="dolar-day-ref">—</div>
-          <div class="dolar-ptax-compact" id="dolar-ptax-compact">Cotação PTAX de venda: —</div>
-          <div class="dolar-day-metrics">
-            <div class="dolar-metric">
-              <span class="dolar-metric-label">Var. vs dia anterior</span>
-              <span class="dolar-metric-val" id="dolar-var-dia">—</span>
-            </div>
-            <div class="dolar-metric">
-              <span class="dolar-metric-label">Dia anterior (fechamento)</span>
-              <span class="dolar-metric-val muted" id="dolar-dia-ant">—</span>
-            </div>
-            <div class="dolar-metric">
-              <span class="dolar-metric-label">Hora referência PTAX</span>
-              <span class="dolar-metric-val muted" id="dolar-hora">—</span>
-            </div>
+    <div id="dolar-day-content" style="display:none">
+      <div class="dolar-compact-top">
+        <div class="dolar-main-kpi">
+          <span class="dolar-kpi-label">Cotação PTAX</span>
+          <strong id="dolar-day-rate">—</strong>
+          <small id="dolar-day-ref">—</small>
+          <span class="dolar-ptax-compact" id="dolar-ptax-compact">Cotação PTAX de venda / fechamento: —</span>
+        </div>
+
+        <div class="dolar-kpi-row">
+          <div class="dolar-mini-kpi">
+            <span>Variação no mês</span>
+            <strong class="muted" id="dolar-var-mes-card">—</strong>
+            <small>mês corrente/fechado</small>
+          </div>
+          <div class="dolar-mini-kpi">
+            <span>Variação no ano</span>
+            <strong class="muted" id="dolar-var-ano-card">—</strong>
+            <small>acumulado anual</small>
+          </div>
+          <div class="dolar-mini-kpi">
+            <span>Variação em 12 meses</span>
+            <strong class="muted" id="dolar-var-12m-card">—</strong>
+            <small>janela móvel</small>
+          </div>
+          <div class="dolar-mini-kpi">
+            <span>Variação em 36 meses</span>
+            <strong class="muted" id="dolar-var-36m-card">—</strong>
+            <small>histórico ampliado</small>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Coluna direita: timeline + gráfico -->
-    <div class="dolar-right">
+    <div class="dolar-compact-chart">
+      <div class="dolar-compact-chart-header">
+        <div>
+          <div class="dolar-chart-title">📈 Dólar — PTAX</div>
+          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando informações de mercado...</div>
+        </div>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-dolar-range="year">2026</button>
+          <button class="chart-tab" data-dolar-range="12m">12 Meses</button>
+          <button class="chart-tab" data-dolar-range="24m">24 Meses</button>
+        </div>
+      </div>
+      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
+    </div>
 
-      <!-- Timeline mensal aberta por padrão -->
-      <div class="dolar-timeline-card">
-        <div class="dolar-timeline-header">
-          <div class="dolar-timeline-title-wrap">
-            <span class="dolar-timeline-title">📅 Fechamentos Mensais</span>
-            <span class="dolar-timeline-sub">Ano corrente · Fonte: Banco Central do Brasil</span>
-          </div>
+    <div class="dolar-compact-footer">
+      <div class="dolar-month-strip">
+        <div class="dolar-month-strip-head">
+          <div class="dolar-month-strip-title">Fechamentos mensais</div>
           <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
         </div>
         <div class="dolar-timeline-body open" id="dolarTimelineBody">
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
           </div>
-
         </div>
       </div>
 
-      <!-- Gráfico do ano -->
-      <div class="dolar-chart-card">
-        <div class="dolar-chart-header">
-          <div>
-            <div class="dolar-chart-title">📈 Dólar no Ano — PTAX</div>
-            <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando informações de mercado...</div>
-          </div>
-          <div class="chart-tabs">
-            <button class="chart-tab active" data-dolar-range="year">2026</button>
-            <button class="chart-tab" data-dolar-range="12m">12 Meses</button>
-            <button class="chart-tab" data-dolar-range="24m">24 Meses</button>
-          </div>
-        </div>
-        <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
-        <div class="dolar-chart-source">
-          <span class="source-label">Fonte</span>
-          <span>Banco Central do Brasil · PTAX</span>
-          <div class="dolar-source-actions">
-            <a class="dolar-source-link" href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">📊 Histórico BCB ↗</a>
-          </div>
-        </div>
+      <div class="dolar-compact-source">
+        <span class="source-label">Fonte</span>
+        <span id="dolar-day-src">Banco Central do Brasil · PTAX</span>
+        <a href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">Histórico BCB ↗</a>
       </div>
-
-    </div><!-- /dolar-right -->
-  </div><!-- /dolar-grid -->
+    </div>
+  </div>
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
@@ -5787,11 +6140,11 @@ html{scroll-padding-top:18px}
     </div>
     <div class="chart-card">
       <div class="chart-card-header">
-        <div><div class="chart-card-title">🏦 Selic — Decisões COPOM</div><div class="chart-card-sub">Meta da Taxa Básica de Juros</div></div>
+        <div><div class="chart-card-title">🏦 Selic — Histórico COPOM</div><div class="chart-card-sub">Visão histórica desde 1999 · taxa básica de juros</div></div>
         <div class="chart-tabs">
-          <button class="chart-tab active" data-chart="selic" data-range="12">1A</button>
+          <button class="chart-tab" data-chart="selic" data-range="12">1A</button>
           <button class="chart-tab" data-chart="selic" data-range="35">5A</button>
-          <button class="chart-tab" data-chart="selic" data-range="999">Hist.</button>
+          <button class="chart-tab active" data-chart="selic" data-range="999">Hist.</button>
         </div>
       </div>
       <div class="chart-body"><canvas id="chartSelic"></canvas></div>
@@ -6254,6 +6607,32 @@ async function carregarPTAXHistorico(){
   }
 }
 
+function setDolarVarCard(id, valor){
+  const el = $(id);
+  if(!el) return;
+
+  const n = Number(valor);
+  if(valor === null || valor === undefined || !Number.isFinite(n)){
+    el.textContent = '—';
+    el.className = 'dolar-metric-val muted';
+    return;
+  }
+
+  el.textContent = `${signPct(n)}${fmt(n)}`;
+  el.className = `dolar-metric-val ${n > 0 ? 'pos' : n < 0 ? 'neg' : 'muted'}`;
+}
+
+function atualizarCardDolarResumo(refLabel){
+  setDolarVarCard('dolar-var-mes-card', indicState.dolarPct.mes);
+  setDolarVarCard('dolar-var-ano-card', indicState.dolarPct.ano);
+  setDolarVarCard('dolar-var-12m-card', indicState.dolarPct.m12);
+  setDolarVarCard('dolar-var-36m-card', indicState.dolarPct.m36);
+
+  if($('dolar-day-ref') && refLabel){
+    $('dolar-day-ref').textContent = `Último fechamento PTAX: ${refLabel}`;
+  }
+}
+
 function calcularDolarPeriodos(){
   if(!_ptaxHistorico.length) return;
 
@@ -6322,6 +6701,23 @@ function calcularDolarPeriodos(){
     anoVarEl.className = `indic-pct ${n>0?'neg':'pos'}`;
   }
 
+  if($('dolar-day-rate')){
+    $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(lastVal);
+  }
+  if($('dolar-ptax-compact')){
+    $('dolar-ptax-compact').textContent = `Cotação PTAX de venda / fechamento ${refLabel}`;
+  }
+  if($('dolar-day-src')){
+    $('dolar-day-src').textContent = `Fonte: Banco Central do Brasil · PTAX · ${refLabel}`;
+  }
+  if($('dolar-day-loading')){
+    $('dolar-day-loading').style.display = 'none';
+  }
+  if($('dolar-day-content')){
+    $('dolar-day-content').style.display = 'block';
+  }
+  atualizarCardDolarResumo(refLabel);
+
   atualizarTabelaIndicadores();
 }
 
@@ -6351,16 +6747,16 @@ async function carregarDolarDia(){
       const cotCompra = parseFloat(ultima.cotacaoCompra);
       const dtCot = new Date(ultima.dataHoraCotacao);
 
-      $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
+      if($('dolar-day-rate')) $('dolar-day-rate').textContent = 'R$ ' + fmtBRL(cotVenda);
       if($('dolar-compra')) $('dolar-compra').textContent = 'R$ ' + fmtBRL(cotCompra);
       if($('dolar-venda')) $('dolar-venda').textContent = 'R$ ' + fmtBRL(cotVenda);
-      if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda: R$ ' + fmtBRL(cotVenda);
+      if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda / fechamento: R$ ' + fmtBRL(cotVenda);
 
       const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
       const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
-      $('dolar-day-ref').textContent = `Referência: ${diaRef}`;
-      $('dolar-hora').textContent = hora + ' (BCB)';
-      $('dolar-day-src').textContent = `Banco Central do Brasil · PTAX · ${diaRef}`;
+      if($('dolar-day-ref')) $('dolar-day-ref').textContent = `Referência: ${diaRef}`;
+      if($('dolar-hora')) $('dolar-hora').textContent = hora + ' (BCB)';
+      if($('dolar-day-src')) $('dolar-day-src').textContent = `Banco Central do Brasil · PTAX · ${diaRef}`;
 
       // Variação vs dia anterior
       if(i === 0 && data.value.length > 1){
@@ -6368,9 +6764,11 @@ async function carregarDolarDia(){
         const antVal = parseFloat(anterior.cotacaoVenda);
         const varPct = ((cotVenda - antVal) / antVal) * 100;
         const varEl = $('dolar-var-dia');
-        varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs cot. anterior do dia)`;
-        varEl.className = `dolar-metric-val ${varPct < 0 ? 'neg' : varPct > 0 ? 'pos' : 'muted'}`;
-        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
+        if(varEl){
+          varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs cot. anterior do dia)`;
+          varEl.className = `dolar-metric-val ${varPct < 0 ? 'neg' : varPct > 0 ? 'pos' : 'muted'}`;
+        }
+        if($('dolar-dia-ant')) $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
       } else {
         // Compara com dia anterior via histórico
         const diaAnt = new Date(dia);
@@ -6406,7 +6804,7 @@ async function buscarCotacaoDiaAnterior(cotAtual, diaAnt){
       if(varEl){
         varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs fechamento ${fmtDataBCB(dia).split('-').reverse().join('/')})`;
         varEl.className = `dolar-metric-val ${varPct < 0 ? 'neg' : varPct > 0 ? 'pos' : 'muted'}`;
-        $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
+        if($('dolar-dia-ant')) $('dolar-dia-ant').textContent = 'R$ ' + fmtBRL(antVal);
       }
       return;
     }catch(e){ continue; }
@@ -6564,8 +6962,8 @@ function buildChartDolar(range){
         pointRadius: 0,
         pointHoverRadius: 4,
         pointHoverBackgroundColor: '#e8bb6a',
-        fill: true,
-        tension: 0.2,
+        fill: false,
+        tension: 0.24,
       }]
     },
     options: {
@@ -7544,7 +7942,7 @@ document.addEventListener('click', (ev)=>{
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
-let activeSearch='',activeCat='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
+let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
 
@@ -7586,14 +7984,25 @@ const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
 
 function getVisibleHeaders(){
-  const base = displayHeaders.filter(h=>!HIDDEN_COLS.has(h)&&!DETAIL_COLS.has(h));
+  const base = displayHeaders.filter(h=>
+    !HIDDEN_COLS.has(h) &&
+    !DETAIL_COLS.has(h) &&
+    h !== 'Categoria'
+  );
+
+  // Categoria e Benchmark ficam como filtros. Na tabela, a liquidez aparece em duas colunas claras.
+  const idxFundo = base.indexOf('Fundo');
+  if(idxFundo >= 0){
+    if(!base.includes('Pagamento')) base.splice(idxFundo + 1, 0, 'Pagamento');
+    if(!base.includes('Conversão')) base.splice(idxFundo + 1, 0, 'Conversão');
+  }
+
   // v20: injeta coluna calculada '% CDI 12M' após Acum. 12M
   const idx12m = base.indexOf('Acum. 12M (%)');
   if(idx12m >= 0 && !base.includes('% CDI 12M')) base.splice(idx12m+1, 0, '% CDI 12M');
   if(!base.includes('Documentos')) base.push('Documentos');
   return base;
 }
-
 function getFundUrl(r){
   const u=String(r['URL']||'').trim();
   if(u&&u.startsWith('http')&&u.includes('caixa.gov.br')) return u;
@@ -7622,10 +8031,7 @@ function pctCell(val){
   if(n===null) return `<td class="col-pct"><span class="dash">${val}</span></td>`;
   const cls=n>0?'pos':n<0?'neg':'zero';
   const sign=n>0?'+':'';
-  const pct=Math.min(Math.abs(n)/20*100,100);
-  return `<td class="col-pct"><div class="pct-wrap">
-    <div class="pct-bar-bg"><div class="pct-bar ${cls}" style="width:${pct}%"></div></div>
-    <span class="pct-val ${cls}">${sign}${val}</span></div></td>`;
+  return `<td class="col-pct"><span class="pct-val ${cls}">${sign}${val}</span></td>`;
 }
 function temDados(r){
   const c=String(r['Cota (R$)']||'').trim();
@@ -7692,16 +8098,12 @@ function applyFilter(){
   filtered=allRows.filter(r=>{
     if(hideSemDados&&!temDados(r)) return false;
     if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
+    if(activeBenchmark && detectarBenchmarkFundo(r).label !== activeBenchmark) return false;
     if(activePerfil){
       const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
       if(!tokens.includes(activePerfil)) return false;
     }
     if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
-    // ★ Filtro de performance
-    if(activePerf!==null){
-      const n=toNum(r[activePerfCampo]);
-      if(n===null||n<activePerf) return false;
-    }
     if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
     return true;
   });
@@ -7825,25 +8227,33 @@ function buildDocsCompactos(row){
   const docs = obterDocsFundoCompactos(row);
   if(!docs.length) return '<span class="doc-mini-empty">—</span>';
 
-  const urls = docs.map(d=>d.url);
-  const btnTodos = `<button type="button" class="doc-mini-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)" title="Abrir todos os documentos">Todos</button>`;
+  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
+  const secundarios = boletim ? docs.filter(d => d.url !== boletim.url) : docs;
 
-  const links = docs.map(d=>`
-    <a class="doc-mini" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(d.label)}">${d.curto}</a>
+  const primary = boletim ? `
+    <a class="doc-mini-primary" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Boletim Comercial">Boletim</a>
+  ` : '';
+
+  const btnTodos = (!boletim && docs.length > 1)
+    ? `<button type="button" class="doc-mini-all" data-urls="${encodeURIComponent(JSON.stringify(docs.map(d=>d.url)))}" onclick="abrirDocsDaLinha(event,this)" title="Abrir todos os documentos">Todos</button>`
+    : '';
+
+  const links = secundarios.map(d=>`
+    <a class="doc-mini doc-mini-secondary" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(d.label)}">${d.curto}</a>
   `).join('');
 
-  return `<div class="docs-mini-wrap">${btnTodos}${links}</div>`;
+  return `<div class="docs-mini-wrap">${primary}${btnTodos}${links}</div>`;
 }
 
 function buildDocsHtml(cnpjLimpo, urlFundo, row){
   // Prioridade: (1) URLs reais do CSV, (2) fundos_caixa.json, (3) fallback por código.
   const DOC_TIPOS = [
+    { label:'Boletim Comercial', icon:'⭐', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
     { label:'Lâmina',       icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LAC', pasta:'laminas-comerciais' },
     { label:'Regulamento',  icon:'📋', csvKey:'doc_regulamento', jsonKey:'regulamento',  cod:'RG',  pasta:'regulamentos' },
     { label:'Inf. Compl.',  icon:'ℹ️', csvKey:'doc_inf_comp',    jsonKey:'inf_comp',     cod:'FIC', pasta:'inf-com' },
     { label:'Comunicado',   icon:'📢', csvKey:'doc_comunicado',  jsonKey:'comunicado',   cod:'COM', pasta:'comunicado-aos-cotistas' },
     { label:'Carta Mensal', icon:'📊', csvKey:'doc_carta',       jsonKey:'carta_mensal', cod:'CM',  pasta:'carta-mensal' },
-    { label:'Boletim Comercial', icon:'📄', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
   ];
 
   let cod = String(row?.['codfundo']||'').trim();
@@ -7872,11 +8282,14 @@ function buildDocsHtml(cnpjLimpo, urlFundo, row){
 
   if(!docs.length) return '';
 
-  const pills = docs.map((d,idx)=>`
-    <label class="doc-pill" title="${htmlAttr(d.url)}">
+  const pills = docs.map((d,idx)=>{
+    const primaryCls = d.csvKey === 'doc_boletim' ? ' primary-doc' : '';
+    return `
+    <label class="doc-pill${primaryCls}" title="${htmlAttr(d.url)}">
       <input type="checkbox" class="doc-check" data-url="${htmlAttr(d.url)}" checked>
       <a href="${htmlAttr(d.url)}" target="_blank" rel="noopener">${d.icon} ${d.label}</a>
-    </label>`).join('');
+    </label>`;
+  }).join('');
 
   return `<aside class="docs-card">
     <div class="docs-head">
@@ -8089,6 +8502,134 @@ function buildDetailPanel(r,colspan){
 
 
 
+function normalizarTextoBase(v){
+  return String(v || '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g,'')
+    .toUpperCase();
+}
+
+function detectarLiquidezFundo(r){
+  const conv = String(r['Conversao Resgate'] || '').trim();
+  const pag = String(r['Pagamento Resgate'] || '').trim();
+
+  if(conv || pag){
+    return `${conv || '—'} / ${pag || '—'}`;
+  }
+
+  return '';
+}
+
+function getLiquidezConsultiva(r){
+  const clean = v => String(v || '').trim();
+  const conv = clean(r['Conversao Resgate']);
+  const pag = clean(r['Pagamento Resgate']);
+
+  if(conv && pag){
+    if(conv === pag) return conv;
+    return `Conv. ${conv} · Pag. ${pag}`;
+  }
+  if(conv) return `Conv. ${conv}`;
+  if(pag) return `Pag. ${pag}`;
+  return 'Consultar';
+}
+
+function detectarBenchmarkFundo(r){
+  const nome = normalizarTextoBase(r['Fundo']);
+  const cat = normalizarTextoBase(r['Categoria']);
+  const risco = normalizarTextoBase(r['Perfil de Risco']);
+  const base = `${cat} ${nome} ${risco}`;
+
+  if(base.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO') || base.includes('OURO') || base.includes('BDR') || base.includes('BOLSA AMERICANA') || base.includes('GLOBAL')){
+    return {label:'Dólar/Câmbio', cls:'bench-cambio', icon:'💱'};
+  }
+  if(base.includes('IMA-B') || base.includes('IMAB') || base.includes('IPCA') || base.includes('INFLACAO') || base.includes('IDKA')){
+    return {label:'IPCA', cls:'bench-ipca', icon:'📊'};
+  }
+  if(base.includes('IRF-M') || base.includes('IRFM') || base.includes('PREFIXADO') || base.includes('PRE RF') || base.includes('IMA-B 5+') || base.includes('LONGO PRAZO')){
+    return {label:'Prefixado/Duration', cls:'bench-prefixado', icon:'⏳'};
+  }
+  if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV')){
+    return {label:'Crédito privado', cls:'bench-cred', icon:'📋'};
+  }
+  if(base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('SMALL CAPS') || base.includes('PETROBRAS') || base.includes('VALE') || base.includes('ELETROBRAS') || base.includes('FMP') || base.includes('FUNDO DE INDICE')){
+    return {label:'Renda variável', cls:'bench-rv', icon:'📈'};
+  }
+  if(base.includes('MULTIMERCADO')){
+    return {label:'Multimercado', cls:'bench-multi', icon:'🧭'};
+  }
+  if(base.includes('REF DI') || base.includes('REFERENCIADO') || base.includes('SIMPLES') || base.includes('CURTO PRAZO') || base.includes('CDI') || base.includes('RENDA FIXA')){
+    return {label:'CDI', cls:'bench-cdi', icon:'📌'};
+  }
+  return {label:'Outros', cls:'bench-outros', icon:'🧩'};
+}
+
+function prazoResgateCell(valor, tipo){
+  const v = String(valor || '').trim();
+  const cls = v ? `prazo-badge ${tipo === 'pagamento' ? 'pagamento' : ''}` : 'prazo-badge muted';
+  return `<td class="col-prazo-resgate"><span class="${cls}">${htmlAttr(v || '—')}</span></td>`;
+}
+
+function conversaoCell(r){
+  return prazoResgateCell(r['Conversao Resgate'], 'conversao');
+}
+
+function pagamentoCell(r){
+  return prazoResgateCell(r['Pagamento Resgate'], 'pagamento');
+}
+
+function liquidezCell(r){
+  return `<td class="col-liquidez"><span class="liquidez-badge">💧 ${htmlAttr(getLiquidezConsultiva(r))}</span></td>`;
+}
+
+function benchmarkCell(r){
+  const b = detectarBenchmarkFundo(r);
+  return `<td class="col-benchmark"><span class="benchmark-badge ${b.cls}">${b.icon} ${htmlAttr(b.label)}</span></td>`;
+}
+
+function buildSinaisConsultivos(r){
+  const nome = normalizarTextoBase(r['Fundo']);
+  const cat = normalizarTextoBase(r['Categoria']);
+  const risco = normalizarTextoBase(r['Perfil de Risco']);
+  const base = `${cat} ${nome} ${risco}`;
+  const chips = [];
+
+  const liquidez = detectarLiquidezFundo(r);
+  if(liquidez){
+    chips.push(`<span class="sinal-chip sinal-liq">💧 ${liquidez}</span>`);
+  }
+
+  if(base.includes('REF DI') || base.includes('REFERENCIADO') || base.includes('SIMPLES') || base.includes('CURTO PRAZO') || base.includes('CDI')){
+    chips.push(`<span class="sinal-chip sinal-cdi">📌 CDI</span>`);
+  }
+
+  if(base.includes('IMA-B') || base.includes('IMAB') || base.includes('IPCA') || base.includes('INFLACAO') || base.includes('IDKA')){
+    chips.push(`<span class="sinal-chip sinal-ipca">📊 IPCA</span>`);
+  }
+
+  if(base.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO') || base.includes('OURO') || base.includes('BDR') || base.includes('BOLSA AMERICANA') || base.includes('GLOBAL')){
+    chips.push(`<span class="sinal-chip sinal-cambio">💱 Câmbio</span>`);
+  }
+
+  if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV')){
+    chips.push(`<span class="sinal-chip sinal-cred">📋 Crédito privado</span>`);
+  }
+
+  if(base.includes('IRF-M') || base.includes('IRFM') || base.includes('PREFIXADO') || base.includes('PRE RF') || base.includes('IMA-B 5+') || base.includes('LONGO PRAZO')){
+    chips.push(`<span class="sinal-chip sinal-duration">⏳ Duration</span>`);
+  }
+
+  if(base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('SMALL CAPS') || base.includes('PETROBRAS') || base.includes('VALE') || base.includes('ELETROBRAS') || base.includes('FMP') || base.includes('FUNDO DE INDICE')){
+    chips.push(`<span class="sinal-chip sinal-rv">📈 Renda variável</span>`);
+  }
+
+  if(!chips.length){
+    chips.push(`<span class="sinal-chip">🧭 Ver detalhe</span>`);
+  }
+
+  return `<div class="sinais-wrap">${chips.slice(0,4).join('')}</div>`;
+}
+
 /* Calcula quanto % do CDI o fundo rendeu em 12M */
 function calcCdiRatio(rent12, cdi12){
   const r = typeof rent12 === 'string' ? toNum(rent12) : rent12;
@@ -8105,7 +8646,6 @@ function pctCdiCell(r){
   const icon = ratio >= 100 ? '▲' : ratio >= 80 ? '≈' : '▼';
   return `<td class="cdi-ratio-cell">
     <span class="cdi-ratio-badge ${cls}">${icon} ${ratio}%</span>
-    <span class="cdi-ratio-sub">do CDI 12M</span>
   </td>`;
 }
 
@@ -8121,6 +8661,21 @@ function buildRowHTML(r,idx){
     if(h==='Categoria'){
       const cls=CAT_CLS[val]||'RF';
       html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;return;
+    }
+    if(h==='Sinais'){
+      html+=`<td class="col-sinais">${buildSinaisConsultivos(r)}</td>`;return;
+    }
+    if(h==='Conversão'){
+      html+=conversaoCell(r);return;
+    }
+    if(h==='Pagamento'){
+      html+=pagamentoCell(r);return;
+    }
+    if(h==='Liquidez'){
+      html+=liquidezCell(r);return;
+    }
+    if(h==='Benchmark'){
+      html+=benchmarkCell(r);return;
     }
     if(h==='Fundo'){
       const url=getFundUrl(r); const isFb=isFallbackUrl(r);
@@ -8191,10 +8746,20 @@ function buildHeader(){
   visibleHeaders.forEach(h=>{
     const th=document.createElement('th');
 
-    if(h==='Documentos'){
-      th.innerHTML='Documentos';
+    if(h==='Documentos' || h==='Sinais' || h==='Liquidez' || h==='Benchmark' || h==='Conversão' || h==='Pagamento'){
+      th.innerHTML=h;
       th.style.cursor='default';
-      th.title='Atalhos para documentos oficiais do fundo';
+      th.title = h === 'Sinais'
+        ? 'Resumo consultivo: liquidez, benchmark e principais exposições'
+        : h === 'Conversão'
+          ? 'Prazo estimado para conversão do resgate em cotas'
+          : h === 'Pagamento'
+            ? 'Prazo estimado para pagamento do resgate'
+            : h === 'Liquidez'
+              ? 'Prazo de conversão e/ou pagamento do resgate'
+              : h === 'Benchmark'
+                ? 'Indicador de referência inferido pelo nome/categoria do fundo'
+                : 'Atalhos para documentos oficiais do fundo';
       tr.appendChild(th);
       return;
     }
@@ -8233,6 +8798,31 @@ function buildCatFilters(cats){
   });
 }
 
+function buildBenchmarkFilters(rows){
+  const row=$('benchmarkFilters');
+  if(!row){ activeBenchmark=''; return; }
+  const label=row.querySelector('.filter-label');
+  row.innerHTML=''; row.appendChild(label);
+  const all=document.createElement('button');
+  all.className='chip active'; all.dataset.benchmark=''; all.textContent='Todos';
+  all.addEventListener('click',()=>{activeBenchmark='';setActiveChip(row,'[data-benchmark]',all);applyFilter();});
+  row.appendChild(all);
+
+  const seen=new Map();
+  rows.forEach(r=>{
+    const b=detectarBenchmarkFundo(r);
+    if(!seen.has(b.label)) seen.set(b.label,b);
+  });
+  [...seen.values()].sort((a,b)=>a.label.localeCompare(b.label,'pt-BR')).forEach(item=>{
+    const btn=document.createElement('button');
+    btn.className='chip';
+    btn.dataset.benchmark=item.label;
+    btn.textContent=`${item.icon} ${item.label}`;
+    btn.addEventListener('click',()=>{activeBenchmark=item.label;setActiveChip(row,'[data-benchmark]',btn);applyFilter();});
+    row.appendChild(btn);
+  });
+}
+
 /* Listeners */
 $('perfilFilters').addEventListener('click',e=>{
   const btn=e.target.closest('[data-perfil]'); if(!btn) return;
@@ -8242,15 +8832,6 @@ $('riscoFilters').addEventListener('click',e=>{
   const btn=e.target.closest('[data-risco]'); if(!btn) return;
   activeRisco=btn.dataset.risco; setActiveChip($('riscoFilters'),'[data-risco]',btn); applyFilter();
 });
-// ★ Performance filter
-$('perfFilters').addEventListener('click',e=>{
-  const btn=e.target.closest('[data-perf]'); if(!btn) return;
-  const v=btn.dataset.perf;
-  activePerf=v===''?null:parseFloat(v);
-  setActiveChip($('perfFilters'),'[data-perf]',btn); applyFilter();
-});
-$('perfPeriodo').addEventListener('change',e=>{ activePerfCampo=e.target.value; applyFilter(); });
-
 let _st=null;
 $('searchInput').addEventListener('input',e=>{
   clearTimeout(_st); _st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
@@ -8268,7 +8849,7 @@ async function carregarDados(){
     const di=displayHeaders.indexOf(DEFAULT_SORT);
     if(di>=0){sortCol=di;sortDir=-1;}
     const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
-    buildHeader(); buildCatFilters(cats); updateKPIs(); applyFilter();
+    buildHeader(); buildCatFilters(cats); buildBenchmarkFilters(allRows); updateKPIs(); applyFilter();
     $('loadMsg').style.display='none';
     $('mainTable').style.display='table';
     renderRankings();
@@ -8429,7 +9010,7 @@ async function inicializarGraficos(d){
   if(hist.length) buildChartIpca(hist,24);
   else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
 
-  if(selic.length) buildChartSelic(selic,12);
+  if(selic.length) buildChartSelic(selic,999);
   else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
 
   if(meta.length) buildChartMeta(meta);
@@ -8731,6 +9312,8 @@ document.addEventListener('DOMContentLoaded', function(){
     const cls=CAT_CLS[cat]||'RF';
     const url=getFundUrl(r);
     const ratioCdi = cdiRatioInfo(m12);
+    const liquidez = typeof getLiquidezConsultiva === 'function' ? getLiquidezConsultiva(r) : '—';
+    const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
     const docsHtml = buildMobileDocsHtml(r);
     return `<article class="fund-card-mobile" data-card-idx="${idx}">
       <div class="fund-card-mobile-head">
@@ -8746,6 +9329,8 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">12M</span><span class="fund-metric-value ${pctClass(m12)}">${m12}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">% CDI 12M</span><span class="fund-metric-value ${ratioCdi.cls}">${ratioCdi.txt}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Liquidez</span><span class="fund-metric-value">${htmlAttr(liquidez)}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
       </div>
@@ -8787,13 +9372,10 @@ document.addEventListener('DOMContentLoaded', function(){
   function updateMobileFilterSummary(){
     const el=qs('#mobileFilterSummary'); if(!el) return;
     const parts=[];
+    if(typeof activeCat!=='undefined' && activeCat) parts.push(activeCat);
+    if(typeof activeBenchmark!=='undefined' && activeBenchmark) parts.push(activeBenchmark);
     if(typeof activePerfil!=='undefined' && activePerfil) parts.push(activePerfil);
     if(typeof activeRisco!=='undefined' && activeRisco) parts.push(activeRisco);
-    if(typeof activePerfCampo!=='undefined'){
-      const map={'Acum. 12M (%)':'12M','Acum. Ano (%)':'Ano','Acum. Mes (%)':'Mês'};
-      parts.push(map[activePerfCampo]||activePerfCampo);
-    }
-    if(typeof activePerf!=='undefined' && activePerf!==null) parts.push('≥ '+activePerf+'%');
     if(typeof hideSemDados!=='undefined' && hideSemDados) parts.push('sem pipeline');
     el.textContent='Filtros: '+(parts.length?parts.join(' · '):'todos');
   }
@@ -8810,7 +9392,7 @@ document.addEventListener('DOMContentLoaded', function(){
       sec.classList.toggle('mobile-filters-collapsed');
       btn.textContent=sec.classList.contains('mobile-filters-collapsed')?'⚙️ Editar filtros':'✓ Ocultar filtros';
     });
-    qsa('#perfilFilters button,#riscoFilters button,#perfFilters button,#perfPeriodo,#toggleSemDados').forEach(el=>{
+    qsa('#catFilters button,#benchmarkFilters button,#perfilFilters button,#riscoFilters button,#toggleSemDados').forEach(el=>{
       el.addEventListener('click',()=>setTimeout(updateMobileFilterSummary,80));
       el.addEventListener('change',()=>setTimeout(updateMobileFilterSummary,80));
     });
