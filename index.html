@@ -5511,6 +5511,265 @@ html{scroll-padding-top:18px}
   .rank-period-tabs{width:100%;justify-content:flex-start;}
 }
 
+
+
+/* ─────────────────────────────────────────────
+   MOBILE V5 — resumo compacto, mais nítido e menor
+   Substitui os 3 cards grandes por um bloco único no celular.
+───────────────────────────────────────────── */
+@media (pointer:coarse), (hover:none), (max-device-width:920px), (max-width:760px){
+  .page{
+    padding-left:14px !important;
+    padding-right:14px !important;
+    padding-bottom:calc(96px + env(safe-area-inset-bottom,0px)) !important;
+  }
+
+  header{
+    padding-bottom:14px !important;
+    margin-bottom:0 !important;
+  }
+  .brand{gap:10px !important}
+  .brand-logo{width:38px !important;height:38px !important;border-radius:11px !important;font-size:1.2rem !important}
+  .brand-text h1{font-size:1.16rem !important;line-height:1.06 !important}
+  .brand-text p{font-size:.55rem !important;line-height:1.25 !important;letter-spacing:.055em !important}
+  .live-badge{padding:6px 10px !important;font-size:.58rem !important;border-radius:14px !important}
+
+  .top-disclaimer.notice-compact-v2{
+    margin-top:12px !important;
+    padding:10px 11px !important;
+    border-radius:14px !important;
+    font-size:.64rem !important;
+  }
+  .top-disclaimer .notice-icon{width:24px !important;height:24px !important;font-size:.78rem !important}
+  .top-disclaimer .notice-title{font-size:.66rem !important}
+  .top-disclaimer .notice-copy{line-height:1.38 !important}
+  .top-disclaimer .notice-tags{display:none !important}
+
+  #sec-kpi.kpi-grid{display:none !important}
+  .mobile-kpi-overview{
+    display:block !important;
+    margin-top:12px !important;
+  }
+  .mobile-kpi-card-compact{
+    border-radius:16px !important;
+    padding:12px !important;
+    background:linear-gradient(180deg,rgba(17,21,38,.92),rgba(7,8,15,.97)) !important;
+    box-shadow:0 8px 26px rgba(0,0,0,.24) !important;
+  }
+  .mobile-kpi-card-compact::before{
+    height:2px !important;
+    background:linear-gradient(90deg,var(--gold),rgba(91,156,246,.55),transparent 82%) !important;
+  }
+  .mobile-kpi-card-compact .mobile-kpi-head{
+    padding:0 0 10px !important;
+    align-items:center !important;
+    gap:9px !important;
+  }
+  .mobile-kpi-card-compact .mobile-kpi-emoji{
+    width:30px !important;
+    height:30px !important;
+    flex:0 0 30px !important;
+    border-radius:10px !important;
+    font-size:1rem !important;
+  }
+  .mobile-kpi-card-compact .mobile-kpi-head h3{
+    font-family:'DM Sans',sans-serif !important;
+    font-size:.98rem !important;
+    font-weight:800 !important;
+    letter-spacing:-.015em !important;
+    color:var(--gold2) !important;
+  }
+  .mobile-kpi-card-compact .mobile-kpi-head p{
+    margin-top:1px !important;
+    font-size:.60rem !important;
+    color:#9fa9c4 !important;
+    line-height:1.25 !important;
+  }
+
+  .mobile-kpi-compact-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:7px !important;
+  }
+  .mobile-kpi-cell{
+    min-width:0 !important;
+    padding:8px 9px !important;
+    border:1px solid rgba(255,255,255,.075) !important;
+    border-radius:12px !important;
+    background:rgba(255,255,255,.024) !important;
+  }
+  .mobile-kpi-cell-primary{
+    background:rgba(200,151,58,.045) !important;
+    border-color:rgba(200,151,58,.16) !important;
+  }
+  .mobile-kpi-cell span{
+    display:block !important;
+    color:#9fa9c4 !important;
+    font-family:'DM Sans',sans-serif !important;
+    font-size:.58rem !important;
+    font-weight:800 !important;
+    letter-spacing:.055em !important;
+    line-height:1.2 !important;
+    text-transform:uppercase !important;
+  }
+  .mobile-kpi-cell strong{
+    display:flex !important;
+    align-items:baseline !important;
+    gap:4px !important;
+    margin-top:3px !important;
+    color:#eef2fb !important;
+    font-family:'DM Sans',sans-serif !important;
+    font-size:1.28rem !important;
+    font-weight:800 !important;
+    letter-spacing:-.035em !important;
+    line-height:1.08 !important;
+    text-rendering:optimizeLegibility !important;
+  }
+  .mobile-kpi-cell strong b{
+    font:inherit !important;
+    color:inherit !important;
+  }
+  .mobile-kpi-cell strong em{
+    color:#aeb7cf !important;
+    font-style:normal !important;
+    font-size:.62rem !important;
+    font-weight:700 !important;
+    letter-spacing:0 !important;
+    white-space:nowrap !important;
+  }
+  .mobile-kpi-cell small{
+    display:-webkit-box !important;
+    -webkit-line-clamp:1 !important;
+    -webkit-box-orient:vertical !important;
+    overflow:hidden !important;
+    margin-top:3px !important;
+    color:#aeb7cf !important;
+    font-family:'DM Sans',sans-serif !important;
+    font-size:.58rem !important;
+    line-height:1.22 !important;
+  }
+  .mobile-kpi-cell-perf strong{
+    font-size:1.18rem !important;
+  }
+  .mobile-kpi-cell-perf.pos strong{color:var(--green) !important}
+  .mobile-kpi-cell-perf.neg strong{color:var(--red) !important}
+
+  .block-divider.bloco-atendimento{
+    margin:14px 0 8px !important;
+    gap:7px !important;
+  }
+  .block-divider.bloco-atendimento .block-divider-label{
+    max-width:100% !important;
+    padding:5px 10px !important;
+    border-radius:14px !important;
+    font-size:.56rem !important;
+    letter-spacing:.055em !important;
+    white-space:normal !important;
+    text-align:center !important;
+    line-height:1.18 !important;
+  }
+  .block-divider.bloco-atendimento .block-divider-line{
+    min-width:14px !important;
+  }
+
+  .mobile-bottom-nav{
+    left:10px !important;
+    right:10px !important;
+    bottom:calc(8px + env(safe-area-inset-bottom,0px)) !important;
+    gap:4px !important;
+    padding:6px !important;
+    border-radius:18px !important;
+  }
+  .mobile-bottom-nav a{
+    min-height:40px !important;
+    padding:4px 2px !important;
+    border-radius:12px !important;
+    font-size:.52rem !important;
+    line-height:1.05 !important;
+  }
+  .mobile-bottom-nav a span:first-child{
+    font-size:.95rem !important;
+    margin-bottom:2px !important;
+  }
+  .mobile-bottom-nav a.active{
+    background:rgba(200,151,58,.13) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06) !important;
+  }
+
+  .mobile-section-top-btn{
+    width:34px !important;
+    height:34px !important;
+    right:14px !important;
+    bottom:calc(72px + env(safe-area-inset-bottom,0px)) !important;
+    opacity:.65 !important;
+  }
+}
+
+@media(max-width:380px){
+  .mobile-kpi-cell{padding:7px 8px !important}
+  .mobile-kpi-cell strong{font-size:1.14rem !important}
+  .mobile-kpi-cell-perf strong{font-size:1.06rem !important}
+  .mobile-kpi-card-compact .mobile-kpi-head p{display:none !important}
+  .mobile-bottom-nav a{font-size:.49rem !important}
+}
+
+
+/* ── MOBILE v6 — liquidez separada, código e boletim comercial em destaque ── */
+@media(max-width:820px){
+  .fund-code-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    padding:3px 8px;
+    border-radius:999px;
+    border:1px solid rgba(91,156,246,.22);
+    background:rgba(91,156,246,.075);
+    color:#b8d3ff;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.56rem;
+    font-weight:800;
+    letter-spacing:.02em;
+  }
+  .fund-metric-value.prazo-mobile{
+    white-space:normal;
+    overflow:visible;
+    text-overflow:clip;
+    font-family:'DM Sans',sans-serif;
+    font-size:.82rem;
+    line-height:1.2;
+    letter-spacing:-.01em;
+  }
+  .fund-card-docs-primary{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:8px;
+    margin-bottom:8px;
+  }
+  .fund-card-boletim-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    min-height:34px;
+    padding:8px 11px;
+    border-radius:11px;
+    border:1px solid rgba(232,187,106,.42);
+    background:linear-gradient(180deg,rgba(200,151,58,.18),rgba(200,151,58,.08));
+    color:var(--gold2);
+    font-size:.66rem;
+    font-weight:900;
+    text-decoration:none;
+    flex:1;
+  }
+  .fund-card-doc-pill.boletim{
+    display:none;
+  }
+  .fund-card-docs-list.secundarios{
+    margin-top:2px;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -5556,63 +5815,48 @@ html{scroll-padding-top:18px}
 </div>
 
 <!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
-<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo do catálogo">
-  <article class="mobile-kpi-card mobile-kpi-card-main">
+<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo">
+  <article class="mobile-kpi-card mobile-kpi-card-compact">
     <div class="mobile-kpi-head">
       <span class="mobile-kpi-emoji">📊</span>
       <div>
-        <h3>Resumo do catálogo</h3>
-        <p>Visão rápida dos fundos disponíveis</p>
+        <h3>Catálogo CAIXA</h3>
+        <p>Resumo rápido para consulta no celular</p>
       </div>
     </div>
-    <div class="mobile-kpi-bigline">
-      <strong id="mKpiFundos">—</strong>
-      <span>fundos cadastrados</span>
-    </div>
-    <div class="mobile-kpi-muted" id="mKpiFundosSub">carregando...</div>
-    <div class="mobile-kpi-mini-grid">
-      <div class="mobile-kpi-mini">
+
+    <div class="mobile-kpi-compact-grid">
+      <div class="mobile-kpi-cell mobile-kpi-cell-primary">
+        <span>Fundos</span>
+        <strong id="mKpiFundos">—</strong>
+        <small id="mKpiFundosSub">carregando...</small>
+      </div>
+
+      <div class="mobile-kpi-cell mobile-kpi-cell-primary">
+        <span>PL total</span>
+        <strong><b id="mKpiPL">—</b><em> mi R$</em></strong>
+        <small>patrimônio consolidado</small>
+      </div>
+
+      <div class="mobile-kpi-cell">
         <span>Categorias</span>
         <strong id="mKpiCats">—</strong>
       </div>
-      <div class="mobile-kpi-mini">
-        <span>Novos fundos</span>
+
+      <div class="mobile-kpi-cell">
+        <span>Pipeline</span>
         <strong id="mKpiPipe">—</strong>
       </div>
-    </div>
-  </article>
 
-  <article class="mobile-kpi-card mobile-kpi-card-pl">
-    <div class="mobile-kpi-head compact">
-      <span class="mobile-kpi-emoji">💰</span>
-      <div>
-        <h3>Patrimônio consolidado</h3>
-        <p>PL total dos fundos monitorados</p>
-      </div>
-    </div>
-    <div class="mobile-kpi-bigline gold">
-      <strong id="mKpiPL">—</strong>
-      <span>milhões R$</span>
-    </div>
-  </article>
-
-  <article class="mobile-kpi-card mobile-kpi-card-perf">
-    <div class="mobile-kpi-head compact">
-      <span class="mobile-kpi-emoji">🏆</span>
-      <div>
-        <h3>Destaques 12M</h3>
-        <p>Melhor e pior acumulado no período</p>
-      </div>
-    </div>
-    <div class="mobile-perf-grid">
-      <div class="mobile-perf-item">
-        <span>Melhor</span>
-        <strong class="pos" id="mKpiBest">—</strong>
+      <div class="mobile-kpi-cell mobile-kpi-cell-perf pos">
+        <span>Melhor 12M</span>
+        <strong id="mKpiBest">—</strong>
         <small id="mKpiBestFundo">—</small>
       </div>
-      <div class="mobile-perf-item">
-        <span>Pior</span>
-        <strong class="neg" id="mKpiWorst">—</strong>
+
+      <div class="mobile-kpi-cell mobile-kpi-cell-perf neg">
+        <span>Pior 12M</span>
+        <strong id="mKpiWorst">—</strong>
         <small id="mKpiWorstFundo">—</small>
       </div>
     </div>
@@ -8416,37 +8660,40 @@ function marcarTodosDocs(btn, checked){
 
 function obterDocsFundoCompactos(row){
   const DOC_TIPOS = [
+    { label:'Boletim Comercial', curto:'BC', icon:'⭐', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
     { label:'Lâmina', curto:'L', icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LAC', pasta:'laminas-comerciais' },
     { label:'Regulamento', curto:'R', icon:'📋', csvKey:'doc_regulamento', jsonKey:'regulamento',  cod:'RG',  pasta:'regulamentos' },
     { label:'Inf. Compl.', curto:'IC', icon:'ℹ️', csvKey:'doc_inf_comp',    jsonKey:'inf_comp',     cod:'FIC', pasta:'inf-com' },
     { label:'Comunicado', curto:'C', icon:'📢', csvKey:'doc_comunicado',  jsonKey:'comunicado',   cod:'COM', pasta:'comunicado-aos-cotistas' },
     { label:'Carta Mensal', curto:'CM', icon:'📊', csvKey:'doc_carta',       jsonKey:'carta_mensal', cod:'CM',  pasta:'carta-mensal' },
-    { label:'Boletim Comercial', curto:'BC', icon:'📄', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
   ];
-
-  let docs = DOC_TIPOS.map(d=>({ ...d, url:String(row?.[d.csvKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
 
   const cnpjLimpo = String(row?.['CNPJ']||'').replace(/\D/g,'');
   const fundoDoc = cnpjLimpo ? _fundosDocMap[cnpjLimpo] : null;
+  const urlFundo = String(row?.['URL']||'');
+  const matchCod = urlFundo.match(/[_\/]([0-9]{3,6})(?:[_\/.]|$)/);
+  const codFallback = matchCod ? matchCod[1] : '';
 
-  if(!docs.length && fundoDoc){
-    docs = DOC_TIPOS.map(d=>({ ...d, url:String(fundoDoc.docs?.[d.jsonKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
-  }
+  const mkUrl = (c, pasta) => {
+    if(!c || !pasta || !codFallback) return '';
+    return c === 'RG'
+      ? `https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_${codFallback}.pdf`
+      : `https://www.caixa.gov.br/Downloads/aplicacao-financeira-${pasta}/${c}_${codFallback}.pdf`;
+  };
 
-  if(!docs.length){
-    const urlFundo = String(row?.['URL']||'');
-    const matchCod = urlFundo.match(/[_\/]([0-9]{3,6})(?:[_\/.]|$)/);
-    if(matchCod){
-      const cod = matchCod[1];
-      const mkUrl = (c, pasta) => {
-        if(!c || !pasta) return '';
-        return c === 'RG'
-          ? `https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_${cod}.pdf`
-          : `https://www.caixa.gov.br/Downloads/aplicacao-financeira-${pasta}/${c}_${cod}.pdf`;
-      };
-      docs = DOC_TIPOS.map(d=>({ ...d, url:mkUrl(d.cod,d.pasta), estimado:true })).filter(d=>d.url.startsWith('http'));
+  const docs = [];
+  const urlsVistas = new Set();
+
+  DOC_TIPOS.forEach(d=>{
+    const urlCsv = String(row?.[d.csvKey]||'').trim();
+    const urlJson = String(fundoDoc?.docs?.[d.jsonKey]||'').trim();
+    const urlFallback = mkUrl(d.cod,d.pasta);
+    const url = [urlCsv,urlJson,urlFallback].find(u=>u && u.startsWith('http')) || '';
+    if(url && !urlsVistas.has(url)){
+      urlsVistas.add(url);
+      docs.push({ ...d, url, estimado: url === urlFallback && !urlCsv && !urlJson });
     }
-  }
+  });
 
   return docs;
 }
@@ -8485,40 +8732,11 @@ function buildDocsCompactos(row){
 }
 
 function buildDocsHtml(cnpjLimpo, urlFundo, row){
-  // Prioridade: (1) URLs reais do CSV, (2) fundos_caixa.json, (3) fallback por código.
-  const DOC_TIPOS = [
-    { label:'Boletim Comercial', icon:'⭐', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
-    { label:'Lâmina',       icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LAC', pasta:'laminas-comerciais' },
-    { label:'Regulamento',  icon:'📋', csvKey:'doc_regulamento', jsonKey:'regulamento',  cod:'RG',  pasta:'regulamentos' },
-    { label:'Inf. Compl.',  icon:'ℹ️', csvKey:'doc_inf_comp',    jsonKey:'inf_comp',     cod:'FIC', pasta:'inf-com' },
-    { label:'Comunicado',   icon:'📢', csvKey:'doc_comunicado',  jsonKey:'comunicado',   cod:'COM', pasta:'comunicado-aos-cotistas' },
-    { label:'Carta Mensal', icon:'📊', csvKey:'doc_carta',       jsonKey:'carta_mensal', cod:'CM',  pasta:'carta-mensal' },
-  ];
-
   let cod = String(row?.['codfundo']||'').trim();
-  let docs = [];
-
-  if(row){
-    docs = DOC_TIPOS.map(d=>({ ...d, url:String(row[d.csvKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
-  }
-
   const fundoDoc = cnpjLimpo ? _fundosDocMap[cnpjLimpo] : null;
-  if(!docs.length && fundoDoc){
-    cod = cod || String(fundoDoc.codfundo||'').trim();
-    docs = DOC_TIPOS.map(d=>({ ...d, url:String(fundoDoc.docs?.[d.jsonKey]||'').trim() })).filter(d=>d.url.startsWith('http'));
-  }
+  cod = cod || String(fundoDoc?.codfundo||'').trim();
 
-  if(!docs.length){
-    const matchCod = String(urlFundo||'').match(/[_\/]([0-9]{3,6})(?:[_\/.]|$)/);
-    if(matchCod){
-      cod = matchCod[1];
-      const mkUrl = (c, pasta) => c === 'RG'
-        ? `https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_${cod}.pdf`
-        : `https://www.caixa.gov.br/Downloads/aplicacao-financeira-${pasta}/${c}_${cod}.pdf`;
-      docs = DOC_TIPOS.map(d=>({ ...d, url:mkUrl(d.cod,d.pasta), estimado:true }));
-    }
-  }
-
+  const docs = obterDocsFundoCompactos(row);
   if(!docs.length) return '';
 
   const pills = docs.map((d,idx)=>{
@@ -9507,19 +9725,27 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!docs.length){
       return `<div class="fund-card-docs-empty">Nenhum documento disponível na base</div>`;
     }
+
     const urls = docs.map(d => d.url);
+    const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
+    const secundarios = boletim ? docs.filter(d => d.url !== boletim.url) : docs;
     const allBtn = `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`;
-    const links = docs.map(d => {
-      const isBoletim = /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim';
+    const boletimBtn = boletim
+      ? `<a class="fund-card-boletim-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener" title="Boletim Comercial">⭐ Boletim Comercial</a>`
+      : '';
+
+    const links = secundarios.map(d => {
       const label = d.curto || d.label || 'Doc';
-      return `<a class="fund-card-doc-pill ${isBoletim ? 'boletim' : ''}" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
+      return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
     }).join('');
+
     return `<div class="fund-card-mobile-docs">
       <div class="fund-card-docs-head">
         <span class="fund-card-docs-title">Documentos</span>
         ${allBtn}
       </div>
-      <div class="fund-card-docs-list">${links}</div>
+      ${boletimBtn ? `<div class="fund-card-docs-primary">${boletimBtn}</div>` : ''}
+      <div class="fund-card-docs-list secundarios">${links}</div>
     </div>`;
   }
 
@@ -9538,6 +9764,23 @@ document.addEventListener('DOMContentLoaded', function(){
     const s=String(v??'').trim();
     return s && s!=='-' && s!=='—' ? s : '—';
   }
+
+  function getCampoPrazoMobile(row, key){
+    const v = String(row?.[key] || '').trim();
+    return v && v !== '-' && v !== '—' ? v : 'Consultar';
+  }
+
+  function getCodigoFundoMobile(row){
+    const keys = ['codfundo','Código SIART','Codigo SIART','SIART','Código SIICO','Codigo SIICO','SIICO','Código do Fundo','Codigo do Fundo','Cod Fundo','Cód. Fundo'];
+    for(const k of keys){
+      const v = String(row?.[k] || '').trim();
+      if(v && v !== '-' && v !== '—') return v;
+    }
+    const cnpjLimpo = String(row?.['CNPJ'] || '').replace(/\D/g,'');
+    const vJson = cnpjLimpo ? String(_fundosDocMap?.[cnpjLimpo]?.codfundo || '').trim() : '';
+    return vJson || '';
+  }
+
   function buildMobileFundCard(r,idx){
     const nome=fmtDash(r['Fundo']);
     const cat=fmtDash(r['Categoria']);
@@ -9551,7 +9794,9 @@ document.addEventListener('DOMContentLoaded', function(){
     const cls=CAT_CLS[cat]||'RF';
     const url=getFundUrl(r);
     const ratioCdi = cdiRatioInfo(m12);
-    const liquidez = typeof getLiquidezConsultiva === 'function' ? getLiquidezConsultiva(r) : '—';
+    const conversao = getCampoPrazoMobile(r,'Conversao Resgate');
+    const pagamento = getCampoPrazoMobile(r,'Pagamento Resgate');
+    const codigo = getCodigoFundoMobile(r);
     const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
     const docsHtml = buildMobileDocsHtml(r);
     return `<article class="fund-card-mobile" data-card-idx="${idx}">
@@ -9559,6 +9804,7 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="fund-card-mobile-tags">
           <span class="cat-badge cat-${cls}">${cat}</span>
           ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
+          ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
         </div>
         <div class="fund-card-mobile-name">${htmlAttr(nome)}</div>
       </div>
@@ -9568,7 +9814,8 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">12M</span><span class="fund-metric-value ${pctClass(m12)}">${m12}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">% CDI 12M</span><span class="fund-metric-value ${ratioCdi.cls}">${ratioCdi.txt}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">Liquidez</span><span class="fund-metric-value">${htmlAttr(liquidez)}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
         <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
