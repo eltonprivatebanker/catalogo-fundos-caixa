@@ -9781,7 +9781,20 @@ document.addEventListener('DOMContentLoaded', function(){
     return vJson || '';
   }
 
+  const mobileOpenFundKeys = new Set();
+
+  function getMobileCardKey(row){
+    return String(row?.['CNPJ'] || row?.['codfundo'] || row?.['Fundo'] || '')
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g,'')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
   function buildMobileFundCard(r,idx){
+    const cardKey=getMobileCardKey(r);
+    const isOpen=mobileOpenFundKeys.has(cardKey);
     const nome=fmtDash(r['Fundo']);
     const cat=fmtDash(r['Categoria']);
     const risco=fmtDash(r['Perfil de Risco']);
@@ -9799,7 +9812,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const codigo = getCodigoFundoMobile(r);
     const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
     const docsHtml = buildMobileDocsHtml(r);
-    return `<article class="fund-card-mobile" data-card-idx="${idx}">
+    return `<article class="fund-card-mobile${isOpen?' open':''}" data-card-idx="${idx}" data-card-key="${htmlAttr(cardKey)}">
       <div class="fund-card-mobile-head">
         <div class="fund-card-mobile-tags">
           <span class="cat-badge cat-${cls}">${cat}</span>
@@ -9822,7 +9835,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
       <div class="fund-card-mobile-actions">
         <a class="fund-card-primary-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Abrir fundo ↗</a>
-        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}">Detalhes</button>
+        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}">${isOpen?'Ocultar':'Detalhes'}</button>
         ${docsHtml}
       </div>
       <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
@@ -9839,9 +9852,16 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!rows.length){box.innerHTML='<div class="rank-empty">Nenhum fundo encontrado.</div>';return;}
     box.innerHTML=rows.map((r,i)=>buildMobileFundCard(r,start+i)).join('');
     qsa('.fund-card-detail-btn',box).forEach(btn=>{
-      btn.addEventListener('click',()=>{
+      btn.addEventListener('click',(ev)=>{
+        ev.preventDefault();
+        ev.stopPropagation();
         const card=btn.closest('.fund-card-mobile');
+        const key=card?.dataset.cardKey || '';
         const open=card.classList.toggle('open');
+        if(key){
+          if(open) mobileOpenFundKeys.add(key);
+          else mobileOpenFundKeys.delete(key);
+        }
         btn.textContent=open?'Ocultar':'Detalhes';
       });
     });
@@ -9870,20 +9890,47 @@ document.addEventListener('DOMContentLoaded', function(){
     const btn=qs('#mobileFilterToggle');
     const sec=qs('.filter-section');
     if(!btn||!sec) return;
-    function collapseDefault(){
-      if(isMobile()) sec.classList.add('mobile-filters-collapsed');
-      else sec.classList.remove('mobile-filters-collapsed');
-    }
-    btn.addEventListener('click',()=>{
-      sec.classList.toggle('mobile-filters-collapsed');
+
+    function setFilterButtonText(){
       btn.textContent=sec.classList.contains('mobile-filters-collapsed')?'⚙️ Editar filtros':'✓ Ocultar filtros';
+    }
+
+    function collapseDefault(force=false){
+      if(isMobile()){
+        if(force) sec.classList.add('mobile-filters-collapsed');
+      }else{
+        sec.classList.remove('mobile-filters-collapsed');
+      }
+      setFilterButtonText();
+    }
+
+    btn.addEventListener('click',(ev)=>{
+      ev.preventDefault();
+      ev.stopPropagation();
+      sec.classList.toggle('mobile-filters-collapsed');
+      setFilterButtonText();
     });
+
     qsa('#catFilters button,#benchmarkFilters button,#perfilFilters button,#riscoFilters button,#toggleSemDados').forEach(el=>{
-      el.addEventListener('click',()=>setTimeout(updateMobileFilterSummary,80));
+      el.addEventListener('click',(ev)=>{
+        ev.stopPropagation();
+        setTimeout(updateMobileFilterSummary,80);
+      });
       el.addEventListener('change',()=>setTimeout(updateMobileFilterSummary,80));
     });
-    collapseDefault();
-    window.addEventListener('resize',collapseDefault);
+
+    collapseDefault(true);
+
+    // No celular, resize também dispara quando a barra do navegador/teclado aparece.
+    // Por isso, só recolhemos/expandimos ao cruzar o breakpoint mobile/desktop.
+    let wasMobile=isMobile();
+    window.addEventListener('resize',()=>{
+      const nowMobile=isMobile();
+      if(nowMobile!==wasMobile){
+        wasMobile=nowMobile;
+        collapseDefault(true);
+      }
+    });
   }
 
   function setupBottomNav(){
@@ -10346,6 +10393,106 @@ tbody tr.row-fav:hover{background:rgba(200,151,58,.08)!important}
 
 })();
 </script>
+
+
+
+<!-- PATCH MOBILE — barra global tipo desktop + estabilidade dos cards/filtros -->
+<style id="patch-mobile-gfb-estabilidade">
+@media(max-width:768px){
+  #gfb{
+    z-index:1600 !important;
+  }
+  #gfb-inner{
+    height:auto !important;
+    min-height:78px !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto auto !important;
+    align-items:center !important;
+    gap:6px 8px !important;
+    padding:6px 10px 7px !important;
+  }
+  #gfb-search-wrap{
+    grid-column:1 / 2 !important;
+    min-width:0 !important;
+    flex:unset !important;
+  }
+  #gfbSearch{
+    height:34px !important;
+    padding:7px 26px 7px 30px !important;
+    font-size:.72rem !important;
+    border-radius:11px !important;
+  }
+  #gfb-right{
+    grid-column:2 / 4 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:7px !important;
+    margin-left:0 !important;
+    min-width:max-content !important;
+  }
+  #gfbCount{
+    font-size:.66rem !important;
+    line-height:1 !important;
+  }
+  #gfbCount strong{
+    font-size:.86rem !important;
+  }
+  #gfbCount span{
+    display:none !important;
+  }
+  #gfbGo{
+    min-height:34px !important;
+    padding:6px 10px !important;
+    font-size:.64rem !important;
+    border-radius:10px !important;
+  }
+  #gfb-chips{
+    grid-column:1 / -1 !important;
+    display:flex !important;
+    order:3 !important;
+    overflow-x:auto !important;
+    gap:6px !important;
+    padding:1px 0 3px !important;
+    scrollbar-width:none !important;
+    -webkit-overflow-scrolling:touch !important;
+    mask-image:linear-gradient(90deg,#000 0%,#000 calc(100% - 28px),transparent 100%);
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 calc(100% - 28px),transparent 100%);
+  }
+  #gfb-chips::-webkit-scrollbar{display:none !important}
+  .gfb-chip{
+    min-height:28px !important;
+    padding:5px 10px !important;
+    font-size:.64rem !important;
+    border-radius:999px !important;
+  }
+  body{
+    padding-top:84px !important;
+  }
+  html{
+    scroll-padding-top:92px !important;
+  }
+  .mobile-anchor-target{
+    scroll-margin-top:92px !important;
+  }
+}
+@media(max-width:380px){
+  #gfb-inner{
+    grid-template-columns:minmax(0,1fr) auto !important;
+    gap:6px !important;
+  }
+  #gfb-right{
+    grid-column:2 / 3 !important;
+  }
+  #gfbGo{
+    padding:6px 8px !important;
+    font-size:.60rem !important;
+  }
+  #gfbCount strong{
+    font-size:.80rem !important;
+  }
+}
+</style>
 
 </body>
 </html>
