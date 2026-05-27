@@ -9932,5 +9932,420 @@ document.addEventListener('DOMContentLoaded', function(){
 })();
 </script>
 
+
+<!-- ════════════════════════════════════════════════════════════
+     MELHORIAS COMPLETAS — Barra Global de Fundos + Favoritos + Fix CDI Sort
+     Elton Cardoso — patch único sobre o original, sem alterar nada
+════════════════════════════════════════════════════════════════ -->
+
+<!-- BARRA GLOBAL DE FUNDOS -->
+<div id="gfb" role="search" aria-label="Barra de busca global de fundos">
+  <div id="gfb-inner">
+    <div id="gfb-logo" aria-hidden="true">📁</div>
+
+    <div id="gfb-search-wrap">
+      <svg id="gfb-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="gfbSearch" type="search" placeholder="Buscar fundo, CNPJ, benchmark..." autocomplete="off" aria-label="Buscar fundo"/>
+      <button id="gfbClear" aria-label="Limpar busca">✕</button>
+    </div>
+
+    <div id="gfb-chips" role="group" aria-label="Filtrar por categoria">
+      <button class="gfb-chip gfb-chip-active" data-gcat="">Todos</button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA SIMPLES">RF Simples</button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA">Renda Fixa</button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA REFERENCIADO">RF Ref.</button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA CURTO PRAZO">RF Curto Prazo</button>
+      <button class="gfb-chip" data-gcat="MULTIMERCADO">Multimercado</button>
+      <button class="gfb-chip" data-gcat="ACOES">Ações</button>
+      <button class="gfb-chip" data-gcat="CAMBIAL">Cambial</button>
+      <button class="gfb-chip" data-gcat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP</button>
+    </div>
+
+    <div id="gfb-right">
+      <span id="gfbCount" aria-live="polite">—</span>
+      <button id="gfbGo" aria-label="Ir para tabela de fundos">Ver tabela ↓</button>
+    </div>
+  </div>
+</div>
+
+<style>
+/* ══ BARRA GLOBAL ══ */
+#gfb{
+  position:fixed;top:0;left:0;right:0;z-index:150;
+  background:rgba(7,8,15,.96);
+  border-bottom:1px solid rgba(200,151,58,.28);
+  box-shadow:0 4px 28px rgba(0,0,0,.55);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+}
+#gfb-inner{
+  max-width:1760px;margin:0 auto;
+  display:flex;align-items:center;gap:10px;
+  padding:7px 24px;
+  height:52px;
+}
+#gfb-logo{
+  font-size:1.1rem;flex-shrink:0;opacity:.9;
+  display:none; /* só desktop largo */
+}
+#gfb-search-wrap{
+  position:relative;flex:0 0 260px;
+}
+#gfb-icon{
+  position:absolute;left:10px;top:50%;transform:translateY(-50%);
+  color:var(--muted2);pointer-events:none;
+}
+#gfbSearch{
+  width:100%;padding:7px 28px 7px 32px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:10px;
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  font-size:.8rem;
+  outline:none;
+  transition:border-color .2s,box-shadow .2s;
+  -webkit-appearance:none;
+}
+#gfbSearch:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(200,151,58,.18)}
+#gfbSearch::placeholder{color:var(--muted2)}
+#gfbClear{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  background:transparent;border:none;color:var(--muted2);cursor:pointer;
+  font-size:.75rem;padding:2px 4px;border-radius:4px;
+  display:none;transition:color .15s;
+}
+#gfbClear.visible{display:block}
+#gfbClear:hover{color:var(--text)}
+
+/* Chips de categoria */
+#gfb-chips{
+  display:flex;gap:5px;flex:1;overflow-x:auto;
+  scrollbar-width:none;-webkit-overflow-scrolling:touch;
+  padding:2px 0;
+}
+#gfb-chips::-webkit-scrollbar{display:none}
+.gfb-chip{
+  flex-shrink:0;
+  padding:4px 11px;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.1);
+  background:transparent;
+  color:#9aa6c3;
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:500;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+.gfb-chip:hover{border-color:rgba(200,151,58,.5);color:var(--gold2)}
+.gfb-chip-active{
+  background:rgba(200,151,58,.15);
+  border-color:var(--gold);
+  color:var(--gold2);
+  font-weight:700;
+}
+
+/* Direita: count + botão */
+#gfb-right{
+  display:flex;align-items:center;gap:8px;flex-shrink:0;margin-left:auto;
+}
+#gfbCount{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.7rem;color:var(--muted);
+  white-space:nowrap;
+}
+#gfbCount strong{color:var(--gold2);font-size:.78rem}
+#gfbGo{
+  padding:5px 13px;
+  background:linear-gradient(135deg,rgba(200,151,58,.2),rgba(200,151,58,.1));
+  border:1px solid rgba(200,151,58,.4);
+  border-radius:8px;
+  color:var(--gold2);
+  font-family:'DM Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:700;
+  cursor:pointer;
+  transition:all .15s;
+  white-space:nowrap;
+}
+#gfbGo:hover{background:rgba(200,151,58,.25);border-color:var(--gold2)}
+
+/* Empurra o conteúdo da página pra baixo */
+body{padding-top:52px !important}
+
+/* Ajuste do z-index do header original */
+header{position:relative;z-index:1}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  #gfb-inner{padding:6px 12px;gap:7px;height:48px}
+  #gfb-search-wrap{flex:1;min-width:0}
+  #gfbSearch{font-size:.76rem;padding:6px 26px 6px 28px}
+  #gfb-chips{display:none} /* filtros apenas na seção abaixo */
+  #gfbCount{font-size:.65rem}
+  #gfbGo{padding:5px 10px;font-size:.66rem}
+  body{padding-top:48px !important}
+}
+@media(min-width:1200px){
+  #gfb-logo{display:flex}
+  #gfb-search-wrap{flex:0 0 300px}
+}
+
+/* ══ FAV BOTÃO — TABELA ══ */
+.fav-btn{background:transparent;border:none;cursor:pointer;font-size:.85rem;line-height:1;padding:2px 4px;border-radius:4px;opacity:.3;transition:opacity .15s,transform .15s;vertical-align:middle}
+.fav-btn:hover{opacity:.7;transform:scale(1.15)}
+.fav-btn.is-fav{opacity:1;filter:drop-shadow(0 0 4px #e8bb6a)}
+tbody tr.row-fav{background:rgba(200,151,58,.045)!important;border-left:2px solid var(--gold)!important}
+tbody tr.row-fav:hover{background:rgba(200,151,58,.08)!important}
+
+/* ══ FAV BOTÃO — CARD MOBILE ══ */
+.fund-card-mobile-head{position:relative}
+.fav-btn-mobile{position:absolute;top:10px;right:10px;background:rgba(7,8,15,.55);border:1px solid rgba(200,151,58,.22);border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1rem;cursor:pointer;opacity:.5;transition:opacity .15s;-webkit-tap-highlight-color:transparent}
+.fav-btn-mobile:active{transform:scale(.9)}
+.fav-btn-mobile.is-fav{opacity:1;background:rgba(200,151,58,.14);border-color:rgba(200,151,58,.5)}
+.fund-card-mobile.card-fav{border-color:rgba(200,151,58,.42)!important;background:linear-gradient(180deg,rgba(200,151,58,.07),rgba(17,21,38,.94))!important}
+
+/* ══ CHIP FAVORITOS ══ */
+.chip.fav-chip{border-color:rgba(200,151,58,.35);color:var(--gold2)}
+.chip.fav-chip.active{background:var(--gold-dim);border-color:var(--gold);color:var(--gold2)}
+.fav-count{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:var(--gold-dim);border:1px solid rgba(200,151,58,.3);color:var(--gold2);font-size:.58rem;font-weight:700;margin-left:4px;font-family:"JetBrains Mono",monospace}
+
+/* ══ TOAST ══ */
+#elton-fav-toast{position:fixed;left:50%;bottom:24px;z-index:2000;transform:translateX(-50%) translateY(20px);opacity:0;pointer-events:none;padding:10px 18px;border-radius:12px;border:1px solid rgba(200,151,58,.3);background:rgba(7,8,15,.96);color:var(--gold2);font-family:"JetBrains Mono",monospace;font-size:.72rem;box-shadow:0 10px 40px rgba(0,0,0,.5);transition:opacity .2s,transform .2s;white-space:nowrap}
+#elton-fav-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
+
+<div id="elton-fav-toast">⭐ Favorito atualizado</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ════════════════════════════════════════════
+     UTILITÁRIOS FAVORITOS
+  ════════════════════════════════════════════ */
+  const FAV_KEY='fundos_favoritos_v1';
+  function getFavs(){ try{return new Set(JSON.parse(localStorage.getItem(FAV_KEY)||'[]'));}catch{return new Set();} }
+  function saveFavs(s){ localStorage.setItem(FAV_KEY,JSON.stringify([...s])); }
+  function getFundKey(r){ return (r['CNPJ']||r['Fundo']||'').replace(/\D/g,'').slice(0,20)||JSON.stringify(r).slice(0,40); }
+  function showToast(msg){ const t=document.getElementById('elton-fav-toast');if(!t)return;t.textContent=msg;t.classList.add('show');clearTimeout(t._tid);t._tid=setTimeout(()=>t.classList.remove('show'),1800); }
+  function toggleFavRow(key,btn,el){ const f=getFavs();if(f.has(key)){f.delete(key);showToast('Removido dos favoritos');btn.textContent='☆';btn.classList.remove('is-fav');el?.classList.remove('row-fav','card-fav');}else{f.add(key);showToast('⭐ Adicionado aos favoritos');btn.textContent='⭐';btn.classList.add('is-fav');el?.classList.add('row-fav','card-fav');}saveFavs(f);updateFavChip(); }
+  function updateFavChip(){ const c=document.querySelector('.fav-chip');if(!c)return;const n=getFavs().size;let ct=c.querySelector('.fav-count');if(n>0){if(!ct){ct=document.createElement('span');ct.className='fav-count';c.appendChild(ct);}ct.textContent=n;}else if(ct)ct.remove(); }
+
+  /* ════════════════════════════════════════════
+     BARRA GLOBAL — LÓGICA
+  ════════════════════════════════════════════ */
+  let _gfbInit=false;
+  let _currentGcat=''; // categoria ativa na barra global
+
+  function scrollToFunds(){
+    const sec=document.getElementById('sec-fundos');
+    if(!sec) return;
+    const top=sec.getBoundingClientRect().top+window.scrollY-60;
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+
+  function setGlobalCat(cat, skipApply){
+    _currentGcat=cat;
+    // Sincroniza com o chip existente em #catFilters
+    const catRow=document.getElementById('catFilters');
+    if(catRow){
+      const target=catRow.querySelector(`[data-cat="${cat}"]`);
+      if(target) target.click();
+      else if(cat==='') { const all=catRow.querySelector('[data-cat=""]'); if(all) all.click(); }
+    } else {
+      // catFilters ainda não foi construído — seta diretamente
+      if(typeof activeCat!=='undefined') window.activeCat=cat;
+      if(!skipApply && typeof applyFilter==='function') applyFilter();
+    }
+    // Atualiza visual dos chips globais
+    document.querySelectorAll('.gfb-chip').forEach(c=>c.classList.toggle('gfb-chip-active',c.dataset.gcat===cat));
+  }
+
+  function updateGfbCount(){
+    const el=document.getElementById('gfbCount');
+    if(!el) return;
+    const n=(typeof filtered!=='undefined'&&Array.isArray(filtered))?filtered.length:
+            (typeof allRows!=='undefined'&&Array.isArray(allRows))?allRows.length:null;
+    el.innerHTML = n!==null ? `<strong>${n}</strong> <span>fundo${n===1?'':'s'}</span>` : '—';
+  }
+
+  function initGlobalBar(){
+    if(_gfbInit) return; _gfbInit=true;
+
+    const inp=document.getElementById('gfbSearch');
+    const existing=document.getElementById('searchInput');
+    const clearBtn=document.getElementById('gfbClear');
+    const goBtn=document.getElementById('gfbGo');
+
+    /* Busca: global → existente */
+    inp?.addEventListener('input',e=>{
+      const v=e.target.value;
+      if(clearBtn) clearBtn.classList.toggle('visible',v.length>0);
+      if(existing && existing.value!==v){
+        existing.value=v;
+        existing.dispatchEvent(new Event('input'));
+      }
+      scrollToFunds();
+    });
+
+    /* Busca: existente → global (sincroniza quando outro input muda) */
+    existing?.addEventListener('input',e=>{
+      if(inp && inp!==document.activeElement && inp.value!==e.target.value) inp.value=e.target.value;
+      if(clearBtn) clearBtn.classList.toggle('visible',(e.target.value||'').length>0);
+    });
+
+    clearBtn?.addEventListener('click',()=>{
+      if(inp){ inp.value=''; clearBtn.classList.remove('visible'); inp.dispatchEvent(new Event('input')); }
+    });
+
+    goBtn?.addEventListener('click',scrollToFunds);
+
+    /* Chips de categoria */
+    document.querySelectorAll('.gfb-chip').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        setGlobalCat(btn.dataset.gcat);
+        scrollToFunds();
+      });
+    });
+
+    /* Sincroniza chips globais quando o usuário muda filtro localmente */
+    document.getElementById('catFilters')?.addEventListener('click',e=>{
+      const b=e.target.closest('[data-cat]'); if(!b) return;
+      const cat=b.dataset.cat||'';
+      if(cat!==_currentGcat){
+        _currentGcat=cat;
+        document.querySelectorAll('.gfb-chip').forEach(c=>c.classList.toggle('gfb-chip-active',c.dataset.gcat===cat));
+      }
+    });
+
+    updateGfbCount();
+  }
+
+  /* ════════════════════════════════════════════
+     PATCH applyFilter — CDI sort fix + favoritos + atualiza contagem
+  ════════════════════════════════════════════ */
+  let onlyFavs=false;
+
+  function addFavChip(){
+    const row=document.getElementById('catFilters'); if(!row||row.querySelector('.fav-chip')) return;
+    const btn=document.createElement('button');
+    btn.className='chip fav-chip'; btn.innerHTML='⭐ Favoritos';
+    btn.addEventListener('click',()=>{ onlyFavs=!onlyFavs; btn.classList.toggle('active',onlyFavs); if(typeof applyFilter==='function') applyFilter(); });
+    const first=row.querySelector('[data-cat=""]');
+    first?.nextSibling ? row.insertBefore(btn,first.nextSibling) : row.appendChild(btn);
+    updateFavChip();
+  }
+
+  function patchApplyFilter(){
+    if(typeof applyFilter!=='function') return;
+    const orig=applyFilter;
+    window.applyFilter=function(){
+      orig.apply(this,arguments);
+
+      /* Fix sort coluna virtual % CDI 12M (não está em displayHeaders → indexOf=-1 → sortCol=-1 → sem sort) */
+      const cdiTh=document.querySelector('#mainTable thead th.sa, #mainTable thead th.sd');
+      if(cdiTh && cdiTh.textContent.includes('% CDI 12M') && typeof filtered!=='undefined' && Array.isArray(filtered)){
+        const dir=cdiTh.classList.contains('sa')?1:-1;
+        const cdi12=(typeof indicState!=='undefined'&&indicState.cdi)?indicState.cdi.m12:null;
+        const tn=typeof toNum==='function'?toNum:v=>parseFloat(String(v||'').replace(',','.'));
+        filtered.sort((a,b)=>{
+          let av,bv;
+          if(cdi12 && typeof calcCdiRatio==='function'){ av=calcCdiRatio(tn(a['Acum. 12M (%)']),cdi12); bv=calcCdiRatio(tn(b['Acum. 12M (%)']),cdi12); }
+          else{ av=tn(a['Acum. 12M (%)']); bv=tn(b['Acum. 12M (%)']); }
+          if(av===null&&bv===null) return 0; if(av===null) return 1; if(bv===null) return -1;
+          return dir===1?av-bv:bv-av;
+        });
+        if(typeof currentPage!=='undefined') currentPage=1;
+        if(typeof expandedRows!=='undefined') expandedRows.clear();
+        if(typeof render==='function') render();
+      }
+
+      /* Favoritos */
+      if(typeof filtered==='undefined') return;
+      const favs=getFavs();
+      if(onlyFavs){ filtered=filtered.filter(r=>favs.has(getFundKey(r))); if(typeof render==='function') render(); }
+      else if(favs.size>0){ filtered.sort((a,b)=>(favs.has(getFundKey(a))?0:1)-(favs.has(getFundKey(b))?0:1)); if(typeof render==='function') render(); }
+
+      /* Atualiza contador na barra global */
+      updateGfbCount();
+    };
+  }
+
+  /* ════════════════════════════════════════════
+     PATCH buildRowHTML — botão ⭐ na tabela
+  ════════════════════════════════════════════ */
+  function patchBuildRow(){
+    if(typeof buildRowHTML!=='function') return;
+    const orig=buildRowHTML;
+    window.buildRowHTML=function(row,idx){
+      let html=orig.apply(this,arguments);
+      const key=getFundKey(row); const isFav=getFavs().has(key);
+      const star=`<button class="fav-btn${isFav?' is-fav':''}" data-fk="${key}" title="Favorito">${isFav?'⭐':'☆'}</button>`;
+      html=html.replace(/(<td[^>]*style="width:28px[^"]*"[^>]*>)([\s\S]*?)(<\/td>)/,`$1$2${star}$3`);
+      if(isFav) html=html.replace(/^<tr/,'<tr class="row-fav"');
+      return html;
+    };
+  }
+
+  function patchRender(){
+    if(typeof render!=='function') return;
+    const orig=render;
+    window.render=function(){
+      orig.apply(this,arguments);
+      document.querySelectorAll('#tableBody .fav-btn').forEach(btn=>{
+        btn.onclick=e=>{ e.stopPropagation(); toggleFavRow(btn.dataset.fk,btn,btn.closest('tr')); };
+      });
+      updateGfbCount();
+    };
+  }
+
+  /* ════════════════════════════════════════════
+     CARDS MOBILE — botão ⭐
+  ════════════════════════════════════════════ */
+  function injectFavBtnsCards(){
+    document.querySelectorAll('#mobileFundCards .fund-card-mobile').forEach(card=>{
+      if(card.querySelector('.fav-btn-mobile')) return;
+      const idx=parseInt(card.dataset.cardIdx); if(isNaN(idx)) return;
+      const row=(typeof filtered!=='undefined'&&Array.isArray(filtered))?filtered[idx]:null; if(!row) return;
+      const key=getFundKey(row); const isFav=getFavs().has(key);
+      card.classList.toggle('card-fav',isFav);
+      const btn=document.createElement('button');
+      btn.className='fav-btn-mobile'+(isFav?' is-fav':''); btn.type='button'; btn.textContent=isFav?'⭐':'☆';
+      btn.addEventListener('click',e=>{ e.stopPropagation(); toggleFavRow(key,btn,card); });
+      card.querySelector('.fund-card-mobile-head')?.appendChild(btn);
+    });
+  }
+
+  function patchMobileRender(){
+    if(typeof window.renderMobileFundCards!=='function') return;
+    const orig=window.renderMobileFundCards;
+    window.renderMobileFundCards=function(){ orig.apply(this,arguments); injectFavBtnsCards(); updateGfbCount(); };
+  }
+
+  /* ════════════════════════════════════════════
+     INIT
+  ════════════════════════════════════════════ */
+  function init(){
+    initGlobalBar();
+    addFavChip();
+    patchBuildRow();
+    patchRender();
+    patchApplyFilter();
+    patchMobileRender();
+    new MutationObserver(()=>injectFavBtnsCards())
+      .observe(document.getElementById('mobileFundCards')||document.body,{childList:true,subtree:!document.getElementById('mobileFundCards')});
+    updateGfbCount();
+  }
+
+  const d=document.readyState==='loading';
+  if(d) document.addEventListener('DOMContentLoaded',()=>setTimeout(init,400));
+  else setTimeout(init,400);
+
+})();
+</script>
+
 </body>
 </html>
