@@ -2,23 +2,11 @@ name: Atualizacao Diaria Caixa
 
 on:
   schedule:
-    # Rodada da noite — 23:45 horário de Brasília, de segunda a sexta
-    # Como o GitHub Actions usa UTC, isso roda às 02:45 UTC do dia seguinte.
-    # Segunda a sexta no Brasil = terça a sábado em UTC.
-    - cron: '45 2 * * 2-6'
-
-    # Rodada da manhã — 06:05 horário de Brasília, de segunda a sexta
-    # 06:05 BRT = 09:05 UTC.
-    - cron: '5 9 * * 1-5'
-
+    - cron: '17 13 * * 1-5'
   workflow_dispatch:
 
 permissions:
   contents: write
-
-concurrency:
-  group: atualizacao-diaria-caixa
-  cancel-in-progress: false
 
 jobs:
   build:
@@ -26,8 +14,11 @@ jobs:
     timeout-minutes: 45
 
     steps:
-      - name: Baixar codigo
+      - name: Baixar codigo da branch do site
         uses: actions/checkout@v4
+        with:
+          ref: Testes-da-versão-01
+          fetch-depth: 0
 
       - name: Configurar Python
         uses: actions/setup-python@v5
@@ -52,5 +43,5 @@ jobs:
           git config --global user.name "actions-user"
           git config --global user.email "actions@github.com"
           git add .
-          git commit -m "Dados atualizados via Robô: $(TZ=America/Sao_Paulo date +'%d/%m/%Y %H:%M')" || echo "Sem mudanças para salvar"
-          git push
+          git commit -m "Dados atualizados via Robô: $(date +'%d/%m/%Y %H:%M')" || echo "Sem mudanças para salvar"
+          git push origin HEAD:Testes-da-versão-01
