@@ -10,7 +10,7 @@
 <title>Catálogo de Fundos CAIXA — Produção própria de Elton Cardoso Teotonio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1076,7 +1076,7 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
           boxWidth:10,
           boxHeight:10,
           padding:10,
-          font:{size:10,family:'DM Sans'}
+          font:{size:10,family:'Inter'}
         }
       },
       tooltip:{
@@ -2786,6 +2786,7 @@ const COLS_OCULTAS_REUNIAO = new Set([
   'Data Inicio',
   'Cota (R$)',
   'Variacao Dia (%)',
+  'PL (milhoes R$)',  // PL agora fica inline no nome do fundo
 ]);
 
 let vistaAtual = 'reuniao'; // padrão: Reunião
@@ -2815,12 +2816,14 @@ function getVisibleHeaders(){
     h !== 'Categoria'
   );
 
-  // Injeta colunas de liquidez explícitas
+  // Injeta coluna de liquidez unificada (Conversão + Pagamento em 1 célula compacta)
   const idxFundo = base.indexOf('Fundo');
-  if(idxFundo >= 0){
-    if(!base.includes('Pagamento')) base.splice(idxFundo + 1, 0, 'Pagamento');
-    if(!base.includes('Conversão')) base.splice(idxFundo + 1, 0, 'Conversão');
+  if(idxFundo >= 0 && !base.includes('Conv / Pag')){
+    base.splice(idxFundo + 1, 0, 'Conv / Pag');
   }
+  // Remove colunas separadas se existirem no CSV
+  const remover = ['Conversão','Pagamento'];
+  remover.forEach(col=>{ const i=base.indexOf(col); if(i>=0) base.splice(i,1); });
 
   // Injeta % CDI 12M após Acum. 12M
   const idx12m = base.indexOf('Acum. 12M (%)');
@@ -3458,6 +3461,76 @@ function pctCdiCell(r){
   </td>`;
 }
 
+
+/* ════════════════════════════════════════
+   CÉLULAS OTIMIZADAS v21
+════════════════════════════════════════ */
+
+// Liquidez Unificada: Conversão + Pagamento em 1 célula compacta
+function liquidezUnifCell(r){
+  const conv = String(r['Conversao Resgate']||'').trim();
+  const pag  = String(r['Pagamento Resgate']||'').trim();
+  if(!conv && !pag) return '<td class="liq-unified-cell"><span style="color:var(--muted2);font-size:.65rem">—</span></td>';
+
+  // D+30 ou mais = prazo realmente longo (apagado, sem alarme)
+  const isLong = pag && /D\+([3-9][0-9]|[1-9][0-9]{2,})/.test(pag);
+
+  const sameValue = conv && pag && conv === pag;
+  let inner = '';
+  if(sameValue){
+    inner = `<div class="liq-line"><span class="liq-label">Conv</span><span class="liq-val">${htmlAttr(conv)}</span></div>`;
+  } else {
+    if(conv) inner += `<div class="liq-line"><span class="liq-label">Conv</span><span class="liq-val">${htmlAttr(conv)}</span></div>`;
+    if(pag)  inner += `<div class="liq-line"><span class="liq-label">Pag</span><span class="liq-val${isLong?' liq-long':''}">${htmlAttr(pag)}</span></div>`;
+  }
+  return `<td class="liq-unified-cell"><div class="liq-unified-inner">${inner}</div></td>`;
+}
+
+// Acum. 12M com tipografia em destaque (Cormorant maior)
+function pct12mCell(val){
+  if(!val||String(val).trim()===''||val==='-'||val==='—')
+    return '<td class="col-pct-12m"><span class="dash" style="color:var(--muted2)">—</span></td>';
+  const n=toNum(val);
+  if(n===null) return `<td class="col-pct-12m"><span class="dash">${val}</span></td>`;
+  const cls=n>0?'pos':n<0?'neg':'zero';
+  const sign=n>0?'+':'';
+  // Sub-label contextual
+  const cdi12 = indicState?.cdi?.m12;
+  const ratio = (cdi12 && cdi12 > 0) ? Math.round((n/cdi12)*100) : null;
+  const subLabel = ratio !== null ? `${ratio}% CDI` : '';
+  return `<td class="col-pct-12m"><div class="pct12m-wrap">
+    <span class="pct12m-val ${cls}">${sign}${val}</span>
+    ${subLabel ? `<span class="pct12m-sub">${subLabel}</span>` : ''}
+  </div></td>`;
+}
+
+// % CDI 12M com barra visual proporcional
+function pctCdiCell(r){
+  const rent12=toNum(r['Acum. 12M (%)']);
+  const ratio=calcCdiRatio(rent12,indicState?.cdi?.m12);
+  if(ratio===null) return '<td class="col-cdi-bar"><span class="cdi-ratio-badge neutral">—</span></td>';
+
+  const cls   = ratio>=100?'above':ratio>=80?'neutral':'below';
+  const icon  = ratio>=100?'▲':ratio>=80?'≈':'▼';
+  const label = `${icon} ${ratio}%`;
+
+  // Barra: 100% CDI = 33% da largura (referência visual no centro)
+  // Máximo exibido: 300% CDI = largura total
+  const pct300 = Math.min(ratio/300*100, 100);
+
+  return `<td class="col-cdi-bar">
+    <div class="cdi-bar-wrap">
+      <div class="cdi-bar-header">
+        <span class="cdi-bar-pct ${cls}">${label}</span>
+      </div>
+      <div class="cdi-bar-track" title="${ratio}% do CDI em 12 meses">
+        <div class="cdi-bar-fill ${cls}" style="width:${pct300}%"></div>
+      </div>
+      <span class="cdi-bar-label">do CDI 12M</span>
+    </div>
+  </td>`;
+}
+
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
@@ -3480,7 +3553,10 @@ function buildRowHTML(r,idx){
     if(h==='Pagamento'){
       html+=pagamentoCell(r);return;
     }
-    if(h==='Liquidez'){
+    if(h==='Conv / Pag'){
+      html+=liquidezUnifCell(r);return;
+    }
+    if(h==='Conv / Pag'){
       html+=liquidezCell(r);return;
     }
     if(h==='Benchmark'){
@@ -3489,11 +3565,18 @@ function buildRowHTML(r,idx){
     if(h==='Fundo'){
       const url=getFundUrl(r); const isFb=isFallbackUrl(r);
       const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';
-      const boletimUrl=isFb?'':url;
-      const boletimBtn=boletimUrl?``:'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>${boletimBtn}</td>`;return;
+      // Categoria como badge colorido
+      const cat=String(r['Categoria']||'');
+      const catCls=CAT_CLS[cat]||'RF';
+      const catAbrev={'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'RF','RENDA FIXA REFERENCIADO':'RF Ref.','RENDA FIXA CURTO PRAZO':'RF CP','MULTIMERCADO':'MM','CAMBIAL':'CAM','ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'};
+      const catLabel=catAbrev[cat]||cat.slice(0,8);
+      // PL compacto
+      const plVal=toNum(r['PL (milhoes R$)']);
+      const plStr=plVal?'PL R$ '+( plVal>=1000?(plVal/1000).toFixed(1)+'bi' : plVal.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi' ):'';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
     }
-    if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)','Acum. 12M (%)'].includes(h)){html+=pctCell(val);return;}
+    if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
+    if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
     if(h==='% CDI 12M'){html+=pctCdiCell(r);return;}
     if(h==='Documentos'){
       html+=`<td class="col-docs">${buildDocsCompactos(r)}</td>`;return;
@@ -3555,7 +3638,7 @@ function buildHeader(){
   visibleHeaders.forEach(h=>{
     const th=document.createElement('th');
 
-    if(h==='Documentos' || h==='Sinais' || h==='Liquidez' || h==='Benchmark' || h==='Conversão' || h==='Pagamento'){
+    if(h==='Documentos' || h==='Sinais' || h==='Conv / Pag' || h==='Benchmark' || h==='Conversão' || h==='Pagamento'){
       th.innerHTML=h;
       th.style.cursor='default';
       th.title = h === 'Sinais'
@@ -3564,8 +3647,8 @@ function buildHeader(){
           ? 'Prazo estimado para conversão do resgate em cotas'
           : h === 'Pagamento'
             ? 'Prazo estimado para pagamento do resgate'
-            : h === 'Liquidez'
-              ? 'Prazo de conversão e/ou pagamento do resgate'
+            : h === 'Conv / Pag'
+              ? 'Prazo de conversão e pagamento do resgate'
               : h === 'Benchmark'
                 ? 'Indicador de referência inferido pelo nome/categoria do fundo'
                 : 'Atalhos para documentos oficiais do fundo';
@@ -3575,11 +3658,16 @@ function buildHeader(){
 
     th.innerHTML=`${h} <span class="si"></span>`;
     const realIdx=displayHeaders.indexOf(h);
-    if(realIdx===sortCol) th.className=sortDir===1?'sa':'sd';
+    // Centraliza colunas numéricas
+    if(NUM_SET.has(h)) th.classList.add('th-num');
+    if(realIdx===sortCol) th.className=(th.classList.contains('th-num')?'th-num ':'')+(sortDir===1?'sa':'sd');
     th.addEventListener('click',()=>{
       if(sortCol===realIdx) sortDir*=-1; else{sortCol=realIdx;sortDir=-1;}
-      thead.querySelectorAll('th').forEach(t=>t.className='');
-      th.className=sortDir===1?'sa':'sd'; applyFilter();
+      thead.querySelectorAll('th').forEach(t=>{
+        const wasNum=t.classList.contains('th-num');
+        t.className=wasNum?'th-num':'';
+      });
+      th.className=(th.classList.contains('th-num')?'th-num ':'')+(sortDir===1?'sa':'sd'); applyFilter();
     });
     tr.appendChild(th);
   });
@@ -4956,81 +5044,155 @@ document.addEventListener('DOMContentLoaded', function(){
     showToast._t=setTimeout(()=>el.classList.remove('show'),2600);
   }
 
+  /* ═══════════════════════════════════════════
+     FUND SPOTLIGHT MODAL — lógica de abertura
+  ═══════════════════════════════════════════ */
   function openFundRow(row){
     if(!row) return showToast('Fundo não localizado na base atual.');
-    const nome=String(row['Fundo']||'').trim();
-    const cnpj=cleanCnpj(row['CNPJ']);
-    const busca=cnpj || nome;
 
-    clearChipGroups();
-    try{ activeSearch=busca.toLowerCase(); }catch(e){}
-    setInputValue('searchInput', busca);
-    setInputValue('gfbSearch', busca);
+    const nome  = String(row['Fundo']||'').trim();
+    const cat   = String(row['Categoria']||'').trim();
+    const pl    = numKpi(row['PL (milhoes R$)']);
+    const conv  = String(row['Conversao Resgate']||'').trim();
+    const pag   = String(row['Pagamento Resgate']||'').trim();
+    const r12   = numKpi(row['Acum. 12M (%)']);
+    const rAno  = numKpi(row['Acum. Ano (%)']);
+    const rMes  = numKpi(row['Acum. Mes (%)']);
+    const rDia  = numKpi(row['Variacao Dia (%)']);
+    const cdi   = calcCdiRatio(r12, indicState?.cdi?.m12);
 
-    try{
-      if(typeof applyFilter==='function') applyFilter();
-    }catch(e){
-      try{ if(typeof render==='function') render(); }catch(_e){}
+    const fmtPct = (n,forceSign=true)=>{
+      if(n===null) return '—';
+      return (forceSign && n>0?'+':'')+n.toFixed(2).replace('.',',')+' %';
+    };
+    const clsPct = n=>n===null?'neu':n>0?'pos':'neg';
+
+    // Título e meta
+    const el = id => document.getElementById(id);
+    el('fspotTitle').textContent = nome;
+
+    const catAbrev={
+      'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'Renda Fixa',
+      'RENDA FIXA REFERENCIADO':'RF Ref. DI','RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+      'MULTIMERCADO':'Multimercado','CAMBIAL':'Cambial',
+      'ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP-FGTS'
+    };
+    const catLabel = catAbrev[cat] || cat || '—';
+    const plStr = pl ? ' · PL R$ '+(pl>=1000?(pl/1000).toFixed(1)+'bi':pl.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi') : '';
+    el('fspotMeta').textContent = catLabel + plStr;
+
+    // Métricas
+    el('fspotMetrics').innerHTML = [
+      {label:'Mês',  val:fmtPct(rMes),  cls:clsPct(rMes)},
+      {label:'Ano',  val:fmtPct(rAno),  cls:clsPct(rAno)},
+      {label:'12M',  val:fmtPct(r12),   cls:clsPct(r12)},
+      {label:'% CDI 12M', val:cdi!==null?cdi+'%':'—', cls:cdi!==null?(cdi>=100?'pos':cdi>=80?'neu':'neg'):'neu'},
+    ].map(m=>`
+      <div class="fspot-metric-item">
+        <span class="fspot-metric-label">${m.label}</span>
+        <span class="fspot-metric-val ${m.cls}">${m.val}</span>
+      </div>`).join('');
+
+    // Liquidez
+    const liqParts = [];
+    if(conv) liqParts.push(`<span class="fspot-liq-badge"><i class="ti ti-refresh" aria-hidden="true" style="font-size:12px"></i>${conv}</span>`);
+    if(pag)  liqParts.push(`<span class="fspot-liq-badge"><i class="ti ti-cash" aria-hidden="true" style="font-size:12px"></i>${pag}</span>`);
+    el('fspotLiq').innerHTML = liqParts.length
+      ? `<span class="fspot-liq-label">Liquidez</span>${liqParts.join('')}`
+      : '';
+    el('fspotLiq').style.display = liqParts.length ? '' : 'none';
+
+    // Nota rápida
+    const nota = gerarLeituraRapidaFundo(row);
+    const tmpDiv = document.createElement('div');
+    tmpDiv.innerHTML = nota;
+    const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
+    el('fspotNote').innerHTML = noteTxt
+      ? `<div class="fspot-note-title">🧭 Leitura rápida</div>${noteTxt}`
+      : '';
+    el('fspotNote').style.display = noteTxt ? '' : 'none';
+
+    // Link CAIXA
+    const urlFundo = getFundUrl(row);
+    const linkEl = el('fspotLinkCaixa');
+    if(urlFundo && !isFallbackUrl(row)){
+      linkEl.href = urlFundo; linkEl.style.display = '';
+    } else {
+      linkEl.style.display = 'none';
     }
 
-    setTimeout(()=>{
-      let rows=[];
-      try{ rows=Array.isArray(filtered)?filtered:[]; }catch(e){}
-      let idx=rows.findIndex(r=>sameRow(r,row));
-
-      if(idx<0){
-        // Fallback por nome, caso a busca tenha truncado ou o CNPJ não exista.
-        const alvo=normText(nome);
-        idx=rows.findIndex(r=>normText(r && r['Fundo'])===alvo);
-      }
-
-      if(idx<0){
-        showToast('Filtro aplicado, mas não consegui abrir o detalhe automaticamente.');
-        const sec=$('sec-fundos');
-        if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
-        return;
-      }
-
-      try{
-        const pp=(typeof perPage!=='undefined' && perPage && perPage!==9999) ? perPage : rows.length;
-        currentPage = pp ? Math.floor(idx/pp)+1 : 1;
-        if(typeof expandedRows!=='undefined'){
-          expandedRows.clear();
-          expandedRows.add(idx);
-        }
-        if(typeof render==='function') render();
-      }catch(e){}
-
+    // Botão "Ver na tabela"
+    el('fspotVerTabela').onclick = ()=>{
+      closeFundSpotlight();
+      // Pequeno delay para o modal fechar antes de filtrar
       setTimeout(()=>{
-        if(isMobile()){
-          try{
-            document.body.classList.add('fund-card-mode');
-            localStorage.setItem('fundMobileView','cards');
-            if(typeof window.renderMobileFundCards==='function') window.renderMobileFundCards();
-          }catch(e){}
-          const card=document.querySelector(`.fund-card-mobile[data-card-idx="${idx}"], .fund-card-mobile[data-idx="${idx}"]`);
-          if(card){
-            card.classList.add('open');
-            const btn=card.querySelector('.fund-card-detail-btn');
-            if(btn) btn.textContent='Ocultar';
-            card.scrollIntoView({behavior:'smooth',block:'center'});
-          }else{
-            const sec=$('sec-fundos');
-            if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
-          }
-        }else{
-          const tr=document.querySelector(`#tableBody tr[data-idx="${idx}"]`);
-          if(tr) tr.scrollIntoView({behavior:'smooth',block:'center'});
-          else {
-            const sec=$('sec-fundos');
-            if(sec) sec.scrollIntoView({behavior:'smooth',block:'start'});
-          }
-        }
-        showToast('Abrindo detalhes: '+(nome || 'fundo selecionado'));
-      },80);
-    },80);
+        clearChipGroups();
+        const cnpj = cleanCnpj ? cleanCnpj(row['CNPJ']) : '';
+        const busca = cnpj || nome;
+        try{ activeSearch = busca.toLowerCase(); }catch(e){}
+        const inp = $('searchInput'); if(inp) inp.value = busca;
+        const gfb = $('gfbSearch'); if(gfb) gfb.value = busca;
+        try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
+        // Scroll até a tabela
+        const sec = $('sec-fundos') || document.querySelector('.table-wrap');
+        if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
+      }, 320);
+    };
+
+    // Documentos
+    const docs = obterDocsFundoCompactos ? obterDocsFundoCompactos(row) : [];
+    el('fspotDocs').innerHTML = docs.length
+      ? docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')
+      : '';
+
+    // Badge tipo (best/worst)
+    const kind = _spotlightKind || 'best';
+    const badge = el('fspotKind');
+    badge.textContent = kind==='best' ? '🏆 Melhor 12M' : '📉 Pior 12M';
+    badge.className = 'fspot-badge ' + (kind==='best' ? 'best' : 'worst');
+
+    openFundSpotlight();
   }
 
+  let _spotlightKind = 'best';
+
+  function openFundSpotlight(){
+    const ov = document.getElementById('fundSpotlightOverlay');
+    if(!ov) return;
+    ov.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    ov.addEventListener('click', _spotlightBackdropClose);
+    document.addEventListener('keydown', _spotlightEscClose);
+  }
+
+  function closeFundSpotlight(){
+    const ov = document.getElementById('fundSpotlightOverlay');
+    if(!ov) return;
+    ov.classList.remove('open');
+    document.body.style.overflow = '';
+    ov.removeEventListener('click', _spotlightBackdropClose);
+    document.removeEventListener('keydown', _spotlightEscClose);
+  }
+
+  function _spotlightBackdropClose(e){
+    if(e.target.id === 'fundSpotlightOverlay') closeFundSpotlight();
+  }
+  function _spotlightEscClose(e){
+    if(e.key === 'Escape') closeFundSpotlight();
+  }
+
+  // Botão fechar
+  document.addEventListener('DOMContentLoaded', ()=>{
+    const btn = document.getElementById('fspotClose');
+    if(btn) btn.addEventListener('click', closeFundSpotlight);
+  });
+  setTimeout(()=>{
+    const btn = document.getElementById('fspotClose');
+    if(btn && !btn._fspotPatched){
+      btn._fspotPatched = true;
+      btn.addEventListener('click', closeFundSpotlight);
+    }
+  }, 500);
   function setupKpiClick(){
     const best=$('kpiBestFundo');
     const worst=$('kpiWorstFundo');
@@ -5044,7 +5206,10 @@ document.addEventListener('DOMContentLoaded', function(){
       card.setAttribute('tabindex','0');
       card.title='Clique para abrir os detalhes do fundo';
       const kind=i===0?'best':'worst';
-      const handler=()=>openFundRow(bestWorstRow(kind));
+      const handler=()=>{
+        _spotlightKind = kind;
+        openFundRow(bestWorstRow(kind));
+      };
       card.addEventListener('click',handler);
       card.addEventListener('keydown',ev=>{
         if(ev.key==='Enter' || ev.key===' '){ev.preventDefault();handler();}
@@ -5102,10 +5267,10 @@ document.addEventListener('DOMContentLoaded', function(){
   function desktopHeaders(){
     const base = baseVisibleHeaders();
     const idxFundo = base.indexOf('Fundo');
-    if(idxFundo >= 0){
-      if(!base.includes('Pagamento')) base.splice(idxFundo + 1, 0, 'Pagamento');
-      if(!base.includes('Conversão')) base.splice(idxFundo + 1, 0, 'Conversão');
+    if(idxFundo >= 0 && !base.includes('Conv / Pag')){
+      base.splice(idxFundo + 1, 0, 'Conv / Pag');
     }
+    ['Conversão','Pagamento'].forEach(col=>{ const i=base.indexOf(col); if(i>=0) base.splice(i,1); });
     const idx12m = base.indexOf('Acum. 12M (%)');
     if(idx12m >= 0 && !base.includes('% CDI 12M')) base.splice(idx12m+1, 0, '% CDI 12M');
     if(!base.includes('Documentos')) base.push('Documentos');
@@ -5173,6 +5338,40 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(()=>rebuildTableForViewport(true),4500);
 })();
 </script>
+
+
+<!-- ════════════════════════════════════════════
+     FUND SPOTLIGHT MODAL — KPI melhor/pior 12M
+════════════════════════════════════════════ -->
+<div id="fundSpotlightOverlay" class="fspot-overlay" role="dialog" aria-modal="true" aria-labelledby="fspotTitle">
+  <div class="fspot-panel">
+    <div class="fspot-handle" aria-hidden="true"></div>
+
+    <div class="fspot-header">
+      <div class="fspot-header-left">
+        <span class="fspot-badge" id="fspotKind">—</span>
+        <div>
+          <div class="fspot-title" id="fspotTitle">—</div>
+          <div class="fspot-meta" id="fspotMeta">—</div>
+        </div>
+      </div>
+      <button class="fspot-close" id="fspotClose" aria-label="Fechar">✕</button>
+    </div>
+
+    <div class="fspot-metrics" id="fspotMetrics"></div>
+
+    <div class="fspot-liq" id="fspotLiq"></div>
+
+    <div class="fspot-note" id="fspotNote"></div>
+
+    <div class="fspot-actions">
+      <button class="fspot-btn-primary" id="fspotVerTabela">🔍 Ver na tabela</button>
+      <a class="fspot-btn-secondary" id="fspotLinkCaixa" href="#" target="_blank" rel="noopener">↗ Site CAIXA</a>
+    </div>
+
+    <div class="fspot-docs" id="fspotDocs"></div>
+  </div>
+</div>
 
 </body>
 </html>
