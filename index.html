@@ -111,14 +111,7 @@
 
 
 
-<!-- ══════════════════════════════════ CORE DO ATENDIMENTO ══ -->
-<!-- ═══ Catálogo e Rankings primeiro — acesso rápido na reunião ═══ -->
-<div class="block-divider bloco-atendimento">
-  <div class="block-divider-line"></div>
-  <span class="block-divider-label">📁 Core do Atendimento — Catálogo &amp; Rankings</span>
-  <div class="block-divider-line"></div>
-</div>
-<!-- ════════════════ BLOCO 2: CORE DO ATENDIMENTO ════════════════ -->
+<!-- ════════════════ CATÁLOGO E RANKINGS ════════════════ -->
 <!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
 <div class="section-gap" id="sec-fundos">
   <div class="section-title">
@@ -126,67 +119,110 @@
     <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
   </div>
 
-  <div class="controls-bar" style="margin-bottom:10px">
-    <div class="search-wrap">
-      <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="searchInput" type="text" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..."/>
+  <div class="fund-filter-shell" id="fundFilterShell">
+    <div class="controls-bar fund-controls-v2">
+      <div class="search-wrap fund-search-main">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="searchInput" type="text" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..."/>
+      </div>
+
+      <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo">
+        <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
+          <span class="filter-button-icon">⚙️</span>
+          <span id="filterButtonText">Filtros</span>
+          <span class="filter-count-badge" id="filterActiveCount">0</span>
+        </button>
+        <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
+        <span class="filter-result-summary" id="filterResultSummary">Resultado: —</span>
+        <button type="button" class="filter-clear-inline" id="clearFiltersTop">Limpar</button>
+      </div>
+
+      <div class="fund-view-controls" aria-label="Opções de visualização do catálogo">
+        <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
+          <span>Exibição</span>
+          <select id="perPage" class="ctrl-select">
+            <option value="9999" selected>Todos os fundos</option>
+            <option value="25">25 por página</option>
+            <option value="50">50 por página</option>
+            <option value="100">100 por página</option>
+            <option value="10">10 por página</option>
+            <option value="5">5 por página</option>
+          </select>
+        </label>
+        <div class="vista-toggle-wrap" title="Alterna entre vista focada em rentabilidade e vista com todos os dados">
+          <button class="vista-btn active" id="vistaBtnReuniao" onclick="setVista('reuniao')">📊 Reunião</button>
+          <button class="vista-btn" id="vistaBtnCompleta" onclick="setVista('completa')">⚙️ Completa</button>
+        </div>
+        <div class="toggle-wrap compact-toggle-wrap">
+          <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
+          <span class="toggle-label">Ocultar sem dados</span>
+        </div>
+      </div>
     </div>
-    <select id="perPage" class="ctrl-select">
-      <option value="5" selected>5 por página</option>
-      <option value="10">10 por página</option>
-      <option value="25">25 por página</option>
-      <option value="50">50 por página</option>
-      <option value="100">100 por página</option>
-      <option value="9999">Todos</option>
-    </select>
-    <!-- Toggle Vista Reunião / Completa -->
-    <div class="vista-toggle-wrap" title="Alterna entre vista focada em rentabilidade e vista com todos os dados">
-      <button class="vista-btn active" id="vistaBtnReuniao" onclick="setVista('reuniao')">📊 Reunião</button>
-      <button class="vista-btn" id="vistaBtnCompleta" onclick="setVista('completa')">⚙️ Completa</button>
-    </div>
-    <div class="toggle-wrap">
-      <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
-      <span class="toggle-label">Ocultar sem dados</span>
-    </div>
+
+    <div class="active-filter-strip" id="activeFilterStrip" aria-live="polite"></div>
   </div>
 
+  <div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
 
-  <div class="mobile-filter-bar" id="mobileFilterBar">
-    <button type="button" class="mobile-filter-toggle" id="mobileFilterToggle">⚙️ Editar filtros</button>
-    <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
+  <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed" id="fundFilterDrawer" style="margin-bottom:14px">
+    <div class="filter-sheet-head">
+      <div>
+        <strong>Filtros do catálogo</strong>
+        <span>Escolha por categoria, benchmark, perfil ou risco.</span>
+      </div>
+      <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar filtros">✕</button>
+    </div>
+
+    <div class="filter-presets" aria-label="Filtros rápidos para atendimento">
+      <span class="filter-presets-label">Atalhos</span>
+      <button type="button" class="filter-preset-chip" data-preset="all">Todos</button>
+      <button type="button" class="filter-preset-chip" data-preset="cdi">CDI</button>
+      <button type="button" class="filter-preset-chip" data-preset="conservador">Conservador</button>
+      <button type="button" class="filter-preset-chip" data-preset="ipca">IPCA</button>
+      <button type="button" class="filter-preset-chip" data-preset="renda-fixa">Renda Fixa</button>
+      <button type="button" class="filter-preset-chip" data-preset="multimercado">Multimercado</button>
+      <button type="button" class="filter-preset-chip" data-preset="acoes">Ações</button>
+      <button type="button" class="filter-preset-chip" data-preset="cambial">Cambial</button>
+      <button type="button" class="filter-preset-chip" data-preset="fmp">FMP</button>
+    </div>
+
+    <div class="filter-groups-grid">
+      <!-- Categoria -->
+      <div class="filter-row" id="catFilters">
+        <span class="filter-label">Categoria</span>
+        <button class="chip active" data-cat="">Todas</button>
+      </div>
+      <!-- Benchmark / indicador de referência -->
+      <div class="filter-row" id="benchmarkFilters">
+        <span class="filter-label">Benchmark</span>
+        <button class="chip active" data-benchmark="">Todos</button>
+      </div>
+      <!-- Perfil -->
+      <div class="filter-row" id="perfilFilters">
+        <span class="filter-label">Perfil</span>
+        <button class="chip active" data-perfil="">Todos</button>
+        <button class="chip pf"   data-perfil="PF">🧑 PF</button>
+        <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
+        <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
+        <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
+      </div>
+      <!-- Risco -->
+      <div class="filter-row" id="riscoFilters">
+        <span class="filter-label">Risco</span>
+        <button class="chip active" data-risco="">Todos</button>
+        <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
+        <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
+        <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
+        <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
+      </div>
+    </div>
+
+    <div class="filter-sheet-actions">
+      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar filtros</button>
+      <button type="button" class="filter-action-primary" id="filterApplyBtn">Aplicar</button>
+    </div>
   </div>
-
-  <div class="filter-section mobile-filters-collapsed" style="margin-bottom:14px">
-    <!-- Categoria -->
-    <div class="filter-row" id="catFilters">
-      <span class="filter-label">Categoria</span>
-      <button class="chip active" data-cat="">Todas</button>
-    </div>
-    <!-- Benchmark / indicador de referência -->
-    <div class="filter-row" id="benchmarkFilters">
-      <span class="filter-label">Benchmark</span>
-      <button class="chip active" data-benchmark="">Todos</button>
-    </div>
-    <!-- Perfil -->
-    <div class="filter-row" id="perfilFilters">
-      <span class="filter-label">Perfil</span>
-      <button class="chip active" data-perfil="">Todos</button>
-      <button class="chip pf"   data-perfil="PF">🧑 PF</button>
-      <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
-      <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
-      <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
-    </div>
-    <!-- Risco -->
-    <div class="filter-row" id="riscoFilters">
-      <span class="filter-label">Risco</span>
-      <button class="chip active" data-risco="">Todos</button>
-      <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
-      <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
-      <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
-      <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
-    </div>
-  </div>
-
 
   <div class="mobile-view-toggle" id="mobileViewToggle" aria-label="Modo de visualização do catálogo">
     <span class="mobile-view-toggle-label">Visualização</span>
@@ -235,7 +271,6 @@
       <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="multimercado">Multimercado</button>
     </div>
-    <div class="ranking-context-note">Alguns rankings podem ser influenciados por fundos FMP/privatização, que possuem comportamento específico e maior concentração.</div>
   </div>
 
   <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva">
@@ -489,8 +524,7 @@
             <div class="v2-sub" id="ipca-mes-ant-sub">—</div>
           </td>
           <td class="td-cur">
-            <span class="badge-await">aguardando nova divulgação do IBGE</span>
-            <div class="v2-sub" style="margin-top:4px">usa o último dado divulgado</div>
+            <span class="badge-await">aguardando IBGE</span>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-ano" style="width:0%"></div></div><span class="v2-val" id="ipca-ano-v2">—</span></div>
@@ -520,15 +554,15 @@
           <td class="td-cur">
             <div class="v2-val neu" id="dolar-cur-cot">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dolar-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="dolar-cur-sub">cotação · var. mês</div>
+            <div class="v2-sub" id="dolar-cur-sub">Mês</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-ano-v2">—</span></div>
-            <div class="v2-sub">var. no ano</div>
+            <div class="v2-sub">Ano</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-acum-v2">—</span></div>
-            <div class="v2-sub" id="dolar-acum-sub-v2">var. 12M</div>
+            <div class="v2-sub" id="dolar-acum-sub-v2">12M</div>
           </td>
         </tr>
 
@@ -551,15 +585,15 @@
           <td class="td-cur">
             <div class="v2-val neu" id="ibov-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-var" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="ibov-cur-sub">mês atual</div>
+            <div class="v2-sub" id="ibov-cur-sub">Mês</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ano-v2">—</span></div>
-            <div class="v2-sub">var. no ano</div>
+            <div class="v2-sub">Ano</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-acum-v2">—</span></div>
-            <div class="v2-sub" id="ibov-acum-sub-v2">var. 12M</div>
+            <div class="v2-sub" id="ibov-acum-sub-v2">12M</div>
           </td>
         </tr>
 
@@ -576,20 +610,20 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ant-var">—</span></div>
-            <div class="v2-sub" id="sp-ant-sub">mês fechado</div>
+            <div class="v2-sub" id="sp-ant-sub">Mês fechado</div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="sp-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-sp-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="sp-cur-sub">mês atual</div>
+            <div class="v2-sub" id="sp-cur-sub">Mês</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ano-var">—</span></div>
-            <div class="v2-sub" id="sp-ano-sub">var. no ano</div>
+            <div class="v2-sub" id="sp-ano-sub">Ano</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-acum-var">—</span></div>
-            <div class="v2-sub" id="sp-acum-sub-v2">var. 12M</div>
+            <div class="v2-sub" id="sp-acum-sub-v2">12M</div>
           </td>
         </tr>
 
@@ -601,20 +635,20 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ant-var">—</span></div>
-            <div class="v2-sub" id="dow-ant-sub">mês fechado</div>
+            <div class="v2-sub" id="dow-ant-sub">Mês fechado</div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="dow-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dow-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="dow-cur-sub">mês atual</div>
+            <div class="v2-sub" id="dow-cur-sub">Mês</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ano-var">—</span></div>
-            <div class="v2-sub" id="dow-ano-sub">var. no ano</div>
+            <div class="v2-sub" id="dow-ano-sub">Ano</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-acum-var">—</span></div>
-            <div class="v2-sub" id="dow-acum-sub-v2">var. 12M</div>
+            <div class="v2-sub" id="dow-acum-sub-v2">12M</div>
           </td>
         </tr>
 
@@ -626,20 +660,20 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ant-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-ant-sub">mês fechado</div>
+            <div class="v2-sub" id="nasdaq-ant-sub">Mês fechado</div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="nasdaq-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-nasdaq-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="nasdaq-cur-sub">mês atual</div>
+            <div class="v2-sub" id="nasdaq-cur-sub">Mês</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ano-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-ano-sub">var. no ano</div>
+            <div class="v2-sub" id="nasdaq-ano-sub">Ano</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-acum-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-acum-sub-v2">var. 12M</div>
+            <div class="v2-sub" id="nasdaq-acum-sub-v2">12M</div>
           </td>
         </tr>
 
@@ -1028,7 +1062,7 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
     return {
       selic: v,
       // Chart.js interpreta array de strings como rótulo em múltiplas linhas.
-      // Assim evitamos aparecer o texto literal \"\\n\" no gráfico.
+      // Assim evitamos aparecer o texto literal "\\n" no gráfico.
       label: isHoje ? ['Hoje', fmt(v)] : ['Selic', fmt(v)]
     };
   });
@@ -1797,9 +1831,13 @@ function atualizarTabelaIndicadores(){
     if(el) el.className = val === null ? 'v2-val dash' : 'v2-val neu';
   };
 
-  const brlSub = n => {
+  const brlSub = (n, label='BRL') => {
     const val=num(n);
-    return val === null ? 'BRL: —' : `BRL: ${pctTxt(val)}`;
+    return val === null ? `${label}: —` : `${label}: ${pctTxt(val)}`;
+  };
+  const brlPeriodSub = (periodo, n) => {
+    const val=num(n);
+    return val === null ? `${periodo} em BRL: —` : `${periodo} em BRL: ${pctTxt(val)}`;
   };
 
   const indices = _dadosMercado?.indices_mercado || {};
@@ -1866,7 +1904,7 @@ function atualizarTabelaIndicadores(){
 
   setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
   // v17: usa mesRef que vem do label_mes do robô (ex: "abr/2026")
-  set('ipca-mes-ant-sub', ipcaRef ? `(último divulgado · ${ipcaRef})` : '(último divulgado)');
+  set('ipca-mes-ant-sub', ipcaRef ? `${ipcaRef} · aguardando IBGE` : 'aguardando IBGE');
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
   setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
   set('ipca-acum-sub-v2', `acum. ${m}M`);
@@ -1896,10 +1934,10 @@ function atualizarTabelaIndicadores(){
   else setMoney('dolar-cur-cot', dolarAtual);
 
   setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10);
-  set('dolar-cur-sub', dolarVarMesAtual !== null ? 'var. mês' : 'cotação');
+  set('dolar-cur-sub', dolarVarMesAtual !== null ? 'Mês' : 'cotação');
   setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
   setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
-  set('dolar-acum-sub-v2', `var. ${m}M`);
+  set('dolar-acum-sub-v2', `${m}M`);
 
   // ═══ IBOVESPA ═══
   const ibovFechMesAnt = num(idxIbov.fechamento_mes_anterior) ?? num(cards.ibovespa?.anterior);
@@ -1915,11 +1953,11 @@ function atualizarTabelaIndicadores(){
 
   setPts('ibov-cur-pts', ibovAtual);
   setPct('ibov-cur-var', ibovMesAtual, 'bar-ibov-var', 20);
-  set('ibov-cur-sub', 'pontos · var. mês');
+  set('ibov-cur-sub', 'Mês');
 
   setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
   setPct('ibov-acum-v2', ibovAcum, 'bar-ibov-acum', 80);
-  set('ibov-acum-sub-v2', `var. ${m}M`);
+  set('ibov-acum-sub-v2', `${m}M`);
 
   // ═══ BOLSAS EUA ═══
   function popularIndiceEUA(prefix, item){
@@ -1934,17 +1972,17 @@ function atualizarTabelaIndicadores(){
     const acumBrl = num(item?.[`acum_${m}m_brl`]);
 
     setPct(`${prefix}-ant-var`, fechado, `bar-${prefix}-ant`, 35);
-    set(`${prefix}-ant-sub`, fechadoBrl !== null ? brlSub(fechadoBrl) : 'mês fechado');
+    set(`${prefix}-ant-sub`, fechadoBrl !== null ? brlPeriodSub('Mês fechado', fechadoBrl) : 'Mês fechado');
 
     setPts(`${prefix}-cur-pts`, atualPts);
     setPct(`${prefix}-cur-var`, mesAtual, `bar-${prefix}-cur`, 35);
-    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? brlSub(mesAtualBrl) : 'var. mês');
+    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? brlPeriodSub('Mês', mesAtualBrl) : 'Mês');
 
     setPct(`${prefix}-ano-var`, ano, `bar-${prefix}-ano`, 60);
-    set(`${prefix}-ano-sub`, anoBrl !== null ? `BRL: ${pctTxt(anoBrl)}` : 'no ano');
+    set(`${prefix}-ano-sub`, anoBrl !== null ? brlPeriodSub('Ano', anoBrl) : 'Ano');
 
     setPct(`${prefix}-acum-var`, acum, `bar-${prefix}-acum`, 120);
-    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? `BRL: ${pctTxt(acumBrl)}` : `${m}M`);
+    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? brlPeriodSub(`${m}M`, acumBrl) : `${m}M`);
   }
 
   // Compatibilidade: se vier apenas estrutura antiga, pelo menos mostra o S&P 500 atual.
@@ -2734,7 +2772,7 @@ document.addEventListener('click', (ev)=>{
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=9999;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
@@ -3592,6 +3630,22 @@ function buildRowHTML(r,idx){
   return html;
 }
 
+function fundPlural(n){ return n===1 ? 'fundo encontrado' : 'fundos encontrados'; }
+function perPageDisplayLabel(){
+  const sel=$('perPage');
+  return sel?.selectedOptions?.[0]?.textContent?.trim() || (perPage===9999?'Todos os fundos':`${perPage} por página`);
+}
+function updateFundResultSummary(){
+  const total=Array.isArray(filtered)?filtered.length:0;
+  const resultText=`Resultado: ${total.toLocaleString('pt-BR')} ${fundPlural(total)}`;
+  const top=$('filterResultSummary');
+  if(top) top.textContent=resultText;
+  const shell=$('fundFilterShell');
+  if(shell) shell.setAttribute('data-result', resultText);
+  const per=$('perPage');
+  if(per) per.setAttribute('aria-label', `Exibição: ${perPageDisplayLabel()}`);
+}
+
 function render(){
   const start=(currentPage-1)*perPage;
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
@@ -3599,10 +3653,11 @@ function render(){
   const tbody=$('tableBody');
   if(!rows.length){
     tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
-    $('resultInfo').textContent='0 registros'; renderPagination(); return;
+    $('resultInfo').textContent='Resultado: 0 fundos encontrados'; updateFundResultSummary(); renderPagination(); return;
   }
   tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
-  $('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length)}–${end} de ${filtered.length} registros`;
+  $('resultInfo').textContent= perPage===9999 ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}` : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
+  updateFundResultSummary();
   tbody.querySelectorAll('.exp-btn').forEach(btn=>{
     btn.addEventListener('click',e=>{
       e.stopPropagation();
@@ -3617,6 +3672,7 @@ function render(){
 function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
   const c=$('pageBtns'); c.innerHTML='';
+  if(total<=1) return;
   const mk=(label,page,dis,act)=>{
     const b=document.createElement('button');
     b.className='page-btn'+(act?' active':'');
@@ -3733,7 +3789,7 @@ let _st=null;
 $('searchInput').addEventListener('input',e=>{
   clearTimeout(_st); _st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
 });
-$('perPage').addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); });
+$('perPage').addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); updateFundResultSummary(); });
 $('toggleSemDados').addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
@@ -4392,35 +4448,178 @@ document.addEventListener('DOMContentLoaded', function(){
     if(typeof window.renderMobileFundCards==='function') window.renderMobileFundCards();
   }
 
-  function updateMobileFilterSummary(){
-    const el=qs('#mobileFilterSummary'); if(!el) return;
+  function filterCssEscape(v){
+    return (window.CSS && CSS.escape) ? CSS.escape(String(v||'')) : String(v||'').replace(/"/g,'\"');
+  }
+
+  function getActiveFilterParts(){
     const parts=[];
-    if(typeof activeCat!=='undefined' && activeCat) parts.push(activeCat);
-    if(typeof activeBenchmark!=='undefined' && activeBenchmark) parts.push(activeBenchmark);
-    if(typeof activePerfil!=='undefined' && activePerfil) parts.push(activePerfil);
-    if(typeof activeRisco!=='undefined' && activeRisco) parts.push(activeRisco);
-    if(typeof hideSemDados!=='undefined' && hideSemDados) parts.push('sem pipeline');
-    el.textContent='Filtros: '+(parts.length?parts.join(' · '):'todos');
+    if(typeof activeCat!=='undefined' && activeCat) parts.push({kind:'cat', label:'Categoria', value:activeCat});
+    if(typeof activeBenchmark!=='undefined' && activeBenchmark) parts.push({kind:'benchmark', label:'Benchmark', value:activeBenchmark});
+    if(typeof activePerfil!=='undefined' && activePerfil) parts.push({kind:'perfil', label:'Perfil', value:activePerfil});
+    if(typeof activeRisco!=='undefined' && activeRisco) parts.push({kind:'risco', label:'Risco', value:activeRisco});
+    if(typeof hideSemDados!=='undefined' && hideSemDados) parts.push({kind:'semDados', label:'Base', value:'sem pipeline'});
+    return parts;
+  }
+
+  function activateFilterChip(rowSelector, attr, value){
+    const row=qs(rowSelector);
+    if(!row) return;
+    row.querySelectorAll(`[${attr}]`).forEach(b=>b.classList.remove('active'));
+    const target=row.querySelector(`[${attr}="${filterCssEscape(value||'')}"]`) || row.querySelector(`[${attr}=""]`);
+    if(target) target.classList.add('active');
+  }
+
+  function syncFilterControls(){
+    try{ activateFilterChip('#catFilters','data-cat',activeCat||''); }catch(e){}
+    try{ activateFilterChip('#benchmarkFilters','data-benchmark',activeBenchmark||''); }catch(e){}
+    try{ activateFilterChip('#perfilFilters','data-perfil',activePerfil||''); }catch(e){}
+    try{ activateFilterChip('#riscoFilters','data-risco',activeRisco||''); }catch(e){}
+    const chk=qs('#toggleSemDados');
+    if(chk) chk.checked=!!hideSemDados;
+  }
+
+  function setFilterPanelOpen(open){
+    const sec=qs('#fundFilterDrawer') || qs('.filter-section');
+    const btn=qs('#mobileFilterToggle');
+    const backdrop=qs('#filterBackdrop');
+    const label=qs('#filterButtonText');
+    if(!sec) return;
+    const willOpen=!!open;
+    sec.classList.toggle('mobile-filters-collapsed', !willOpen);
+    sec.classList.toggle('desktop-filters-collapsed', !willOpen);
+    document.body.classList.toggle('filter-sheet-open', willOpen);
+    if(backdrop) backdrop.classList.toggle('active', willOpen);
+    if(btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+    if(label) label.textContent=willOpen ? 'Fechar filtros' : 'Filtros';
+  }
+
+  function clearFilter(kind){
+    if(kind==='cat') activeCat='';
+    if(kind==='benchmark') activeBenchmark='';
+    if(kind==='perfil') activePerfil='';
+    if(kind==='risco') activeRisco='';
+    if(kind==='semDados') hideSemDados=false;
+    syncFilterControls();
+    if(typeof applyFilter==='function') applyFilter();
+  }
+
+  function clearAllFilters(){
+    try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; }catch(e){}
+    syncFilterControls();
+    if(typeof applyFilter==='function') applyFilter();
+  }
+
+  function applyFilterPreset(preset){
+    if(!preset || preset==='all'){
+      clearAllFilters();
+      return;
+    }
+    activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false;
+    if(preset==='cdi') activeBenchmark='CDI';
+    if(preset==='conservador') activeRisco='Conservador';
+    if(preset==='ipca') activeBenchmark='IPCA';
+    if(preset==='renda-fixa') activeCat='RENDA FIXA';
+    if(preset==='multimercado') activeCat='MULTIMERCADO';
+    if(preset==='acoes') activeCat='ACOES';
+    if(preset==='cambial') activeCat='CAMBIAL';
+    if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
+    syncFilterControls();
+    if(typeof applyFilter==='function') applyFilter();
+  }
+
+  function updatePresetStates(){
+    const cat=typeof activeCat!=='undefined' ? activeCat : '';
+    const bench=typeof activeBenchmark!=='undefined' ? activeBenchmark : '';
+    const risco=typeof activeRisco!=='undefined' ? activeRisco : '';
+    qsa('.filter-preset-chip').forEach(btn=>{
+      const p=btn.dataset.preset;
+      let on=false;
+      if(p==='all') on=!cat&&!bench&&!risco&&!(typeof activePerfil!=='undefined'&&activePerfil)&&!(typeof hideSemDados!=='undefined'&&hideSemDados);
+      if(p==='cdi') on=bench==='CDI';
+      if(p==='conservador') on=risco==='Conservador';
+      if(p==='ipca') on=bench==='IPCA';
+      if(p==='renda-fixa') on=cat==='RENDA FIXA';
+      if(p==='multimercado') on=cat==='MULTIMERCADO';
+      if(p==='acoes') on=cat==='ACOES';
+      if(p==='cambial') on=cat==='CAMBIAL';
+      if(p==='fmp') on=cat==='FUNDOS MUTUOS DE PRIVATIZACAO';
+      btn.classList.toggle('active', on);
+    });
+  }
+
+  function updateMobileFilterSummary(){
+    const parts=getActiveFilterParts();
+    const el=qs('#mobileFilterSummary');
+    if(el) el.textContent='Filtros: '+(parts.length?parts.map(p=>p.value).join(' · '):'todos');
+
+    const count=qs('#filterActiveCount');
+    if(count){
+      count.textContent=String(parts.length);
+      count.classList.toggle('has-active', parts.length>0);
+    }
+
+    const strip=qs('#activeFilterStrip');
+    if(strip){
+      if(!parts.length){
+        strip.innerHTML='';
+        strip.classList.remove('active');
+      }else{
+        strip.classList.add('active');
+        strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span>`+
+          parts.map(p=>`<button type="button" class="active-filter-pill" data-clear-filter="${p.kind}"><small>${p.label}</small>${p.value}<span>×</span></button>`).join('')+
+          `<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>`;
+      }
+    }
+
+    const applyBtn=qs('#filterApplyBtn');
+    if(applyBtn){
+      const n=(typeof filtered!=='undefined' && Array.isArray(filtered) && filtered.length) ? filtered.length :
+              (typeof allRows!=='undefined' && Array.isArray(allRows) ? allRows.length : null);
+      applyBtn.textContent=n!==null ? `Aplicar — ${n} fundos` : 'Aplicar filtros';
+    }
+    if(typeof updateFundResultSummary==='function') updateFundResultSummary();
+    updatePresetStates();
   }
 
   function setupMobileFilters(){
     const btn=qs('#mobileFilterToggle');
-    const sec=qs('.filter-section');
+    const sec=qs('#fundFilterDrawer') || qs('.filter-section');
     if(!btn||!sec) return;
-    function collapseDefault(){
-      if(isMobile()) sec.classList.add('mobile-filters-collapsed');
-      else sec.classList.remove('mobile-filters-collapsed');
-    }
+    sec.dataset.resizeGuard='1';
+
+    setFilterPanelOpen(false);
+
     btn.addEventListener('click',()=>{
-      sec.classList.toggle('mobile-filters-collapsed');
-      btn.textContent=sec.classList.contains('mobile-filters-collapsed')?'⚙️ Editar filtros':'✓ Ocultar filtros';
+      const isOpen=!sec.classList.contains('mobile-filters-collapsed') || !sec.classList.contains('desktop-filters-collapsed');
+      setFilterPanelOpen(!isOpen);
     });
-    qsa('#catFilters button,#benchmarkFilters button,#perfilFilters button,#riscoFilters button,#toggleSemDados').forEach(el=>{
-      el.addEventListener('click',()=>setTimeout(updateMobileFilterSummary,80));
-      el.addEventListener('change',()=>setTimeout(updateMobileFilterSummary,80));
+
+    qs('#filterCloseBtn')?.addEventListener('click',()=>setFilterPanelOpen(false));
+    qs('#filterBackdrop')?.addEventListener('click',()=>setFilterPanelOpen(false));
+    qs('#filterApplyBtn')?.addEventListener('click',()=>setFilterPanelOpen(false));
+    qs('#clearFiltersBtn')?.addEventListener('click',clearAllFilters);
+    qs('#clearFiltersTop')?.addEventListener('click',clearAllFilters);
+
+    qs('#activeFilterStrip')?.addEventListener('click',e=>{
+      const b=e.target.closest('[data-clear-filter]');
+      if(!b) return;
+      const kind=b.dataset.clearFilter;
+      if(kind==='all') clearAllFilters(); else clearFilter(kind);
     });
-    collapseDefault();
-    window.addEventListener('resize',collapseDefault);
+
+    qsa('.filter-preset-chip').forEach(b=>b.addEventListener('click',()=>applyFilterPreset(b.dataset.preset)));
+
+    document.addEventListener('keydown',e=>{
+      if(e.key==='Escape') setFilterPanelOpen(false);
+    });
+
+    sec.addEventListener('click',e=>{
+      if(e.target.closest('.chip')) setTimeout(updateMobileFilterSummary,70);
+    });
+    qs('#toggleSemDados')?.addEventListener('change',()=>setTimeout(updateMobileFilterSummary,70));
+    syncFilterControls();
+    updateMobileFilterSummary();
   }
 
   function setupBottomNav(){
