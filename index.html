@@ -16,7 +16,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link rel="stylesheet" href="style.css"/>
 </head>
-<body>
+<body class="top-compact-enabled">
 <div class="page" id="topo">
 
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
@@ -31,11 +31,14 @@
   <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
 
-<!-- ═══════════════════════════════════════════════ DISCLAIMER ══ -->
-<div class="top-disclaimer top-disclaimer-clean notice-compact-v2" role="note" aria-label="Aviso sobre uso da ferramenta">
-  <div class="notice-icon" aria-hidden="true">ℹ️</div>
-  <div class="notice-content">
-    <div class="notice-title">Aviso rápido</div>
+<!-- ═══════════════════════════════════════════════ DISCLAIMER COMPACTO ══ -->
+<details class="top-disclaimer top-disclaimer-clean notice-compact-v2 compact-disclaimer" role="note" aria-label="Aviso sobre uso da ferramenta">
+  <summary>
+    <span class="notice-icon" aria-hidden="true">ℹ️</span>
+    <span class="notice-summary-text">Aviso sobre uso da ferramenta</span>
+    <span class="notice-summary-action">Ver detalhes</span>
+  </summary>
+  <div class="notice-content compact-disclaimer-body">
     <div class="notice-copy">Ferramenta independente de apoio consultivo. Dados públicos e uso informativo; não é canal oficial nem recomendação da CAIXA.</div>
     <div class="notice-tags" aria-hidden="true">
       <span>Independente</span>
@@ -43,13 +46,13 @@
       <span>Informativo</span>
     </div>
   </div>
-</div>
+</details>
 
 
 
 <!-- ════════════════ BLOCO 1: QUEBRA-GELO — visão geral ════════════════ -->
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
-<div class="kpi-grid section-gap" id="sec-kpi">
+<div class="kpi-grid section-gap top-kpi-compact" id="sec-kpi">
   <div class="kpi"><div class="kpi-icon">📊</div><div class="kpi-label">Total de Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
   <div class="kpi"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub">tipos de fundo</div></div>
   <div class="kpi"><div class="kpi-icon">💰</div><div class="kpi-label">PL Total</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">patrimônio consolidado</div></div>
@@ -59,7 +62,7 @@
 </div>
 
 <!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
-<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo">
+<div class="mobile-kpi-overview section-gap mobile-top-kpi-compact" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo">
   <article class="mobile-kpi-card mobile-kpi-card-compact">
     <div class="mobile-kpi-head">
       <span class="mobile-kpi-emoji">📊</span>
@@ -271,6 +274,7 @@
       <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="multimercado">Multimercado</button>
     </div>
+    <div class="ranking-context-note">Alguns rankings podem ser influenciados por fundos FMP/privatização, que possuem comportamento específico e maior concentração.</div>
   </div>
 
   <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva">
@@ -494,15 +498,15 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ant" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-ant">—</span></div>
-            <div class="v2-sub" id="cdi-mes-ant-sub">taxa mensal</div>
+            <div class="v2-sub" id="cdi-mes-ant-sub"></div>
           </td>
           <td class="td-cur">
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-cur" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-cur">—</span></div>
-            <div class="v2-sub"><span class="badge-partial">parcial</span> <span id="cdi-cur-sub">mês atual</span></div>
+            <div class="v2-sub"><span class="badge-partial">parcial</span></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ano" style="width:0%"></div></div><span class="v2-val" id="cdi-ano">—</span></div>
-            <div class="v2-sub" id="cdi-ano-sub">acumulado ano</div>
+            <div class="v2-sub" id="cdi-ano-sub"></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-acum" style="width:0%"></div></div><span class="v2-val pos" id="cdi-acum-v2">—</span></div>
@@ -528,11 +532,11 @@
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-ano" style="width:0%"></div></div><span class="v2-val" id="ipca-ano-v2">—</span></div>
-            <div class="v2-sub">acum. ano · meta 3%</div>
+            <div class="v2-sub">meta 3%</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-acum" style="width:0%"></div></div><span class="v2-val" id="ipca-acum-v2">—</span></div>
-            <div class="v2-sub" id="ipca-acum-sub-v2">acum. 12M</div>
+            <div class="v2-sub" id="ipca-acum-sub-v2"></div>
           </td>
         </tr>
 
@@ -549,20 +553,20 @@
           </div></td>
           <td>
             <div class="v2-val neu" id="dolar-ant-cot">—</div>
-            <div class="v2-sub" id="dolar-ant-sub">fechamento mês ant.</div>
+            <div class="v2-sub" id="dolar-ant-sub"></div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="dolar-cur-cot">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dolar-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="dolar-cur-sub">Mês</div>
+            <div class="v2-sub" id="dolar-cur-sub">cotação · var. mês</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-ano-v2">—</span></div>
-            <div class="v2-sub">Ano</div>
+            <div class="v2-sub"></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-acum-v2">—</span></div>
-            <div class="v2-sub" id="dolar-acum-sub-v2">12M</div>
+            <div class="v2-sub" id="dolar-acum-sub-v2"></div>
           </td>
         </tr>
 
@@ -580,20 +584,20 @@
           <td>
             <div class="v2-val neu" id="ibov-ant-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ant-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="ibov-ant-sub">mês fechado</div>
+            <div class="v2-sub" id="ibov-ant-sub"></div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="ibov-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-var" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="ibov-cur-sub">Mês</div>
+            <div class="v2-sub" id="ibov-cur-sub">mês atual</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ano-v2">—</span></div>
-            <div class="v2-sub">Ano</div>
+            <div class="v2-sub"></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-acum-v2">—</span></div>
-            <div class="v2-sub" id="ibov-acum-sub-v2">12M</div>
+            <div class="v2-sub" id="ibov-acum-sub-v2"></div>
           </td>
         </tr>
 
@@ -610,20 +614,20 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ant-var">—</span></div>
-            <div class="v2-sub" id="sp-ant-sub">Mês fechado</div>
+            <div class="v2-sub" id="sp-ant-sub"></div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="sp-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-sp-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="sp-cur-sub">Mês</div>
+            <div class="v2-sub" id="sp-cur-sub">mês atual</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ano-var">—</span></div>
-            <div class="v2-sub" id="sp-ano-sub">Ano</div>
+            <div class="v2-sub" id="sp-ano-sub"></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-acum-var">—</span></div>
-            <div class="v2-sub" id="sp-acum-sub-v2">12M</div>
+            <div class="v2-sub" id="sp-acum-sub-v2"></div>
           </td>
         </tr>
 
@@ -635,20 +639,20 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ant-var">—</span></div>
-            <div class="v2-sub" id="dow-ant-sub">Mês fechado</div>
+            <div class="v2-sub" id="dow-ant-sub"></div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="dow-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dow-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="dow-cur-sub">Mês</div>
+            <div class="v2-sub" id="dow-cur-sub">mês atual</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ano-var">—</span></div>
-            <div class="v2-sub" id="dow-ano-sub">Ano</div>
+            <div class="v2-sub" id="dow-ano-sub"></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-acum-var">—</span></div>
-            <div class="v2-sub" id="dow-acum-sub-v2">12M</div>
+            <div class="v2-sub" id="dow-acum-sub-v2"></div>
           </td>
         </tr>
 
@@ -660,20 +664,20 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ant-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-ant-sub">Mês fechado</div>
+            <div class="v2-sub" id="nasdaq-ant-sub"></div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="nasdaq-cur-pts">—</div>
             <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-nasdaq-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-cur-var" style="font-size:.72rem">—</span></div>
-            <div class="v2-sub" id="nasdaq-cur-sub">Mês</div>
+            <div class="v2-sub" id="nasdaq-cur-sub">mês atual</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ano-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-ano-sub">Ano</div>
+            <div class="v2-sub" id="nasdaq-ano-sub"></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-acum-var">—</span></div>
-            <div class="v2-sub" id="nasdaq-acum-sub-v2">12M</div>
+            <div class="v2-sub" id="nasdaq-acum-sub-v2"></div>
           </td>
         </tr>
 
@@ -1062,7 +1066,7 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
     return {
       selic: v,
       // Chart.js interpreta array de strings como rótulo em múltiplas linhas.
-      // Assim evitamos aparecer o texto literal "\\n" no gráfico.
+      // Assim evitamos aparecer o texto literal \"\\n\" no gráfico.
       label: isHoje ? ['Hoje', fmt(v)] : ['Selic', fmt(v)]
     };
   });
@@ -1202,6 +1206,8 @@ function atualizarPoupancaCard(d, selicAtual){
   // Regra antiga: se o robô ainda não mandar esse campo, e a Selic estiver acima de 8,5%,
   // podemos espelhar a regra nova, pois ambas usam TR + 0,50% a.m.
   let valorAntiga = getFirstNumber(antiga.valor, antiga.mensal, antiga.rendimento_mensal);
+  // Guarda: poupança mensal nunca > 2% — descarta se vier dado errado (ex: CDI 12M)
+  if(valorAntiga != null && valorAntiga > 2.0){ valorAntiga = null; }
   if(valorAntiga == null && acima && valorNova != null){
     valorAntiga = valorNova;
   }
@@ -1831,13 +1837,9 @@ function atualizarTabelaIndicadores(){
     if(el) el.className = val === null ? 'v2-val dash' : 'v2-val neu';
   };
 
-  const brlSub = (n, label='BRL') => {
+  const brlSub = n => {
     const val=num(n);
-    return val === null ? `${label}: —` : `${label}: ${pctTxt(val)}`;
-  };
-  const brlPeriodSub = (periodo, n) => {
-    const val=num(n);
-    return val === null ? `${periodo} em BRL: —` : `${periodo} em BRL: ${pctTxt(val)}`;
+    return val === null ? '' : pctTxt(val);  // sem prefixo BRL — CSS já diferencia
   };
 
   const indices = _dadosMercado?.indices_mercado || {};
@@ -1881,20 +1883,18 @@ function atualizarTabelaIndicadores(){
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
   // v17: usa mes_ref do robô (ex: "abr/2026") em vez de calcular a data
-  set('cdi-mes-ant-sub', cards.cdi?.mes_ref ? `taxa ${cards.cdi.mes_ref}` : `taxa mensal ${mesAntLabel}`);
+  set('cdi-mes-ant-sub', cards.cdi?.mes_ref || '');
 
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2);
   // v17: usa parcial_ref do robô (ex: "mai/2026") — dias_uteis_parcial não é gerado
-  set('cdi-cur-sub', cdiParcial !== null
-    ? (cards.cdi?.parcial_ref ? `ref. ${cards.cdi.parcial_ref}` : `mês atual parcial`)
-    : 'mês atual parcial');
+  set('cdi-cur-sub', '');
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
-  set('cdi-ano-sub', cdiAno !== null ? 'ano com parcial' : 'acumulado ano');
+  set('cdi-ano-sub', '');
 
   setPct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
   if($('cdi-acum-v2') && cdiAcum !== null) $('cdi-acum-v2').classList.add('pos');
-  set('cdi-acum-src-v2', cdiAcum !== null ? `série 4391 BCB · ${m}M` : 'histórico indisponível');
+  set('cdi-acum-src-v2', '');
 
   // ═══ IPCA ═══
   const ipcaMes = num(indicState.ipca.mes);
@@ -1904,10 +1904,10 @@ function atualizarTabelaIndicadores(){
 
   setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
   // v17: usa mesRef que vem do label_mes do robô (ex: "abr/2026")
-  set('ipca-mes-ant-sub', ipcaRef ? `${ipcaRef} · aguardando IBGE` : 'aguardando IBGE');
+  set('ipca-mes-ant-sub', ipcaRef || '');
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
   setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
-  set('ipca-acum-sub-v2', `acum. ${m}M`);
+  set('ipca-acum-sub-v2', '');
 
   const alertEl = $('ipca-alert-badge');
   const rowIpca = $('row-ipca');
@@ -1926,7 +1926,7 @@ function atualizarTabelaIndicadores(){
   const dolarAcum = num(idxDolar[`acum_${m}m`]) ?? num(cards.dolar?.[`acum_${m}m`]) ?? num(indicState.dolarPct[`m${m}`]);
 
   setMoney('dolar-ant-cot', dolarFechMesAnt ?? indicState.dolarBRL.mes);
-  set('dolar-ant-sub', 'fechamento');
+  set('dolar-ant-sub', '');
 
   // Se o card PTAX do dia já foi carregado, mantém a cotação oficial exibida ali.
   const dolarDiaTexto = $('dolar-day-rate')?.textContent;
@@ -1934,10 +1934,10 @@ function atualizarTabelaIndicadores(){
   else setMoney('dolar-cur-cot', dolarAtual);
 
   setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10);
-  set('dolar-cur-sub', dolarVarMesAtual !== null ? 'Mês' : 'cotação');
+  set('dolar-cur-sub', '');
   setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
   setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
-  set('dolar-acum-sub-v2', `${m}M`);
+  set('dolar-acum-sub-v2', '');
 
   // ═══ IBOVESPA ═══
   const ibovFechMesAnt = num(idxIbov.fechamento_mes_anterior) ?? num(cards.ibovespa?.anterior);
@@ -1949,15 +1949,15 @@ function atualizarTabelaIndicadores(){
 
   setPts('ibov-ant-pts', ibovFechMesAnt);
   setPct('ibov-ant-var', ibovMesFechado, 'bar-ibov-ant', 20);
-  set('ibov-ant-sub', 'fechamento');
+  set('ibov-ant-sub', '');
 
   setPts('ibov-cur-pts', ibovAtual);
   setPct('ibov-cur-var', ibovMesAtual, 'bar-ibov-var', 20);
-  set('ibov-cur-sub', 'Mês');
+  set('ibov-cur-sub', '');
 
   setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
   setPct('ibov-acum-v2', ibovAcum, 'bar-ibov-acum', 80);
-  set('ibov-acum-sub-v2', `${m}M`);
+  set('ibov-acum-sub-v2', '');
 
   // ═══ BOLSAS EUA ═══
   function popularIndiceEUA(prefix, item){
@@ -1972,17 +1972,17 @@ function atualizarTabelaIndicadores(){
     const acumBrl = num(item?.[`acum_${m}m_brl`]);
 
     setPct(`${prefix}-ant-var`, fechado, `bar-${prefix}-ant`, 35);
-    set(`${prefix}-ant-sub`, fechadoBrl !== null ? brlPeriodSub('Mês fechado', fechadoBrl) : 'Mês fechado');
+    set(`${prefix}-ant-sub`, fechadoBrl !== null ? brlSub(fechadoBrl) : (item?.mes_anterior_label || ''));
 
-    setPts(`${prefix}-cur-pts`, atualPts);
+    setPts(`${prefix}-cur-pts`, atualPts, '');  // sem 'pts' — CSS já define contexto
     setPct(`${prefix}-cur-var`, mesAtual, `bar-${prefix}-cur`, 35);
-    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? brlPeriodSub('Mês', mesAtualBrl) : 'Mês');
+    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? brlSub(mesAtualBrl) : '');
 
     setPct(`${prefix}-ano-var`, ano, `bar-${prefix}-ano`, 60);
-    set(`${prefix}-ano-sub`, anoBrl !== null ? brlPeriodSub('Ano', anoBrl) : 'Ano');
+    set(`${prefix}-ano-sub`, anoBrl !== null ? `BRL ${pctTxt(anoBrl)}` : '');
 
     setPct(`${prefix}-acum-var`, acum, `bar-${prefix}-acum`, 120);
-    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? brlPeriodSub(`${m}M`, acumBrl) : `${m}M`);
+    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? `BRL ${pctTxt(acumBrl)}` : '');
   }
 
   // Compatibilidade: se vier apenas estrutura antiga, pelo menos mostra o S&P 500 atual.
@@ -2772,7 +2772,7 @@ document.addEventListener('click', (ev)=>{
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=9999;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
@@ -3630,22 +3630,6 @@ function buildRowHTML(r,idx){
   return html;
 }
 
-function fundPlural(n){ return n===1 ? 'fundo encontrado' : 'fundos encontrados'; }
-function perPageDisplayLabel(){
-  const sel=$('perPage');
-  return sel?.selectedOptions?.[0]?.textContent?.trim() || (perPage===9999?'Todos os fundos':`${perPage} por página`);
-}
-function updateFundResultSummary(){
-  const total=Array.isArray(filtered)?filtered.length:0;
-  const resultText=`Resultado: ${total.toLocaleString('pt-BR')} ${fundPlural(total)}`;
-  const top=$('filterResultSummary');
-  if(top) top.textContent=resultText;
-  const shell=$('fundFilterShell');
-  if(shell) shell.setAttribute('data-result', resultText);
-  const per=$('perPage');
-  if(per) per.setAttribute('aria-label', `Exibição: ${perPageDisplayLabel()}`);
-}
-
 function render(){
   const start=(currentPage-1)*perPage;
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
@@ -3653,11 +3637,10 @@ function render(){
   const tbody=$('tableBody');
   if(!rows.length){
     tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
-    $('resultInfo').textContent='Resultado: 0 fundos encontrados'; updateFundResultSummary(); renderPagination(); return;
+    $('resultInfo').textContent='0 registros'; renderPagination(); return;
   }
   tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
-  $('resultInfo').textContent= perPage===9999 ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}` : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
-  updateFundResultSummary();
+  $('resultInfo').textContent=`Exibindo ${Math.min(start+1,filtered.length)}–${end} de ${filtered.length} registros`;
   tbody.querySelectorAll('.exp-btn').forEach(btn=>{
     btn.addEventListener('click',e=>{
       e.stopPropagation();
@@ -3672,7 +3655,6 @@ function render(){
 function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
   const c=$('pageBtns'); c.innerHTML='';
-  if(total<=1) return;
   const mk=(label,page,dis,act)=>{
     const b=document.createElement('button');
     b.className='page-btn'+(act?' active':'');
@@ -3789,7 +3771,7 @@ let _st=null;
 $('searchInput').addEventListener('input',e=>{
   clearTimeout(_st); _st=setTimeout(()=>{activeSearch=e.target.value;applyFilter();},280);
 });
-$('perPage').addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); updateFundResultSummary(); });
+$('perPage').addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); });
 $('toggleSemDados').addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
@@ -4149,9 +4131,9 @@ async function carregarPTAX(){
    CALENDÁRIO COPOM 2026 — com decisão da Selic
 ════════════════════════════════════════════════════ */
 const COPOM_2026 = [
-  { num:1, short:'27–28 jan', datas:'27 e 28 de janeiro',  decision:'2026-01-28' },
-  { num:2, short:'17–18 mar', datas:'17 e 18 de março',    decision:'2026-03-18' },
-  { num:3, short:'28–29 abr', datas:'28 e 29 de abril',    decision:'2026-04-29' },
+  { num:1, short:'27–28 jan', datas:'27 e 28 de janeiro',  decision:'2026-01-28', resultado_static:'mantida em 15,00%',       tipo_static:'hold' },
+  { num:2, short:'17–18 mar', datas:'17 e 18 de março',    decision:'2026-03-18', resultado_static:'corte −0,25 p.p. → 14,75%', tipo_static:'cut'  },
+  { num:3, short:'28–29 abr', datas:'28 e 29 de abril',    decision:'2026-04-29', resultado_static:'corte −0,25 p.p. → 14,50%', tipo_static:'cut'  },
   { num:4, short:'16–17 jun', datas:'16 e 17 de junho',    decision:'2026-06-17' },
   { num:5, short:'4–5 ago',   datas:'4 e 5 de agosto',     decision:'2026-08-05' },
   { num:6, short:'15–16 set', datas:'15 e 16 de setembro', decision:'2026-09-16' },
@@ -4233,6 +4215,7 @@ function buildCopomCalendario(){
    INIT
 ════════════════════════════════════════════════════ */
 async function iniciarDashboard(){
+  buildCopomCalendario(); // renderiza grid COPOM imediatamente, sem esperar JSON
   await carregarMercado();          // primeiro carrega mercado_atual.json
   await carregarCDIPeriodos();      // agora só usa o JSON, sem API externa
   await carregarIPCAPeriodos();     // agora só usa o JSON, sem API externa
@@ -4275,6 +4258,34 @@ document.addEventListener('DOMContentLoaded', function(){
 <a href="#topo" class="mobile-section-top-btn" aria-label="Voltar ao topo">↑</a>
 
 
+
+
+<script>
+/* Resultado compacto do catálogo — usado pela barra de filtros do topo */
+function fundPlural(n){ return n===1 ? 'fundo encontrado' : 'fundos encontrados'; }
+function perPageDisplayLabel(){
+  const sel=document.getElementById('perPage');
+  const txt=sel?.selectedOptions?.[0]?.textContent?.trim();
+  if(txt) return txt;
+  const p=typeof perPage!=='undefined' ? perPage : null;
+  return p===9999 ? 'Todos os fundos' : (p ? `${p} por página` : 'Exibição');
+}
+function updateFundResultSummary(){
+  const total=(typeof filtered!=='undefined' && Array.isArray(filtered)) ? filtered.length :
+              ((typeof allRows!=='undefined' && Array.isArray(allRows)) ? allRows.length : 0);
+  const resultText=`Resultado: ${Number(total||0).toLocaleString('pt-BR')} ${fundPlural(total||0)}`;
+  const top=document.getElementById('filterResultSummary');
+  if(top) top.textContent=resultText;
+  const shell=document.getElementById('fundFilterShell');
+  if(shell) shell.setAttribute('data-result', resultText);
+  const per=document.getElementById('perPage');
+  if(per) per.setAttribute('aria-label', `Exibição: ${perPageDisplayLabel()}`);
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  setTimeout(updateFundResultSummary,350);
+  setInterval(updateFundResultSummary,1800);
+});
+</script>
 
 <script>
 /* ════════════════════════════════════════════════════
@@ -4702,6 +4713,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
     <div id="gfb-right">
       <span id="gfbCount" aria-live="polite">—</span>
+      <button id="gfbFilterBtn" type="button" aria-label="Abrir filtros do catálogo">Filtros ⚙️</button>
       <button id="gfbGo" aria-label="Ir para tabela de fundos">Ver tabela ↓</button>
     </div>
   </div>
@@ -4770,6 +4782,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const existing=document.getElementById('searchInput');
     const clearBtn=document.getElementById('gfbClear');
     const goBtn=document.getElementById('gfbGo');
+    const filterBtn=document.getElementById('gfbFilterBtn');
 
     /* Busca: global → existente */
     inp?.addEventListener('input',e=>{
@@ -4793,6 +4806,16 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     goBtn?.addEventListener('click',scrollToFunds);
+
+    filterBtn?.addEventListener('click',()=>{
+      scrollToFunds();
+      setTimeout(()=>{
+        const drawer=document.getElementById('fundFilterDrawer');
+        const localBtn=document.getElementById('mobileFilterToggle');
+        const isClosed=!drawer || drawer.classList.contains('mobile-filters-collapsed') || drawer.classList.contains('desktop-filters-collapsed');
+        if(isClosed) localBtn?.click();
+      },260);
+    });
 
     /* Chips de categoria */
     document.querySelectorAll('.gfb-chip').forEach(btn=>{
