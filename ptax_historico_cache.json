@@ -1,0 +1,302 @@
+{
+  "gerado_em": "30/05/2026 18:34:09",
+  "total": 37,
+  "ptax_historico": [
+    {
+      "key": "2023-05",
+      "mes": "mai/2023",
+      "cotacao": 5.0959,
+      "var_pct": null,
+      "data_ref": "2023-05-31",
+      "dataHoraCotacao": "2023-05-31 13:08:48.515"
+    },
+    {
+      "key": "2023-06",
+      "mes": "jun/2023",
+      "cotacao": 4.8192,
+      "var_pct": -5.43,
+      "data_ref": "2023-06-30",
+      "dataHoraCotacao": "2023-06-30 13:10:24.365"
+    },
+    {
+      "key": "2023-07",
+      "mes": "jul/2023",
+      "cotacao": 4.7415,
+      "var_pct": -1.61,
+      "data_ref": "2023-07-31",
+      "dataHoraCotacao": "2023-07-31 13:02:52.412"
+    },
+    {
+      "key": "2023-08",
+      "mes": "ago/2023",
+      "cotacao": 4.9219,
+      "var_pct": 3.8,
+      "data_ref": "2023-08-31",
+      "dataHoraCotacao": "2023-08-31 13:02:58.521"
+    },
+    {
+      "key": "2023-09",
+      "mes": "set/2023",
+      "cotacao": 5.0076,
+      "var_pct": 1.74,
+      "data_ref": "2023-09-29",
+      "dataHoraCotacao": "2023-09-29 13:09:29.084"
+    },
+    {
+      "key": "2023-10",
+      "mes": "out/2023",
+      "cotacao": 5.0575,
+      "var_pct": 1.0,
+      "data_ref": "2023-10-31",
+      "dataHoraCotacao": "2023-10-31 13:05:31.053"
+    },
+    {
+      "key": "2023-11",
+      "mes": "nov/2023",
+      "cotacao": 4.9355,
+      "var_pct": -2.41,
+      "data_ref": "2023-11-30",
+      "dataHoraCotacao": "2023-11-30 13:04:55.748"
+    },
+    {
+      "key": "2023-12",
+      "mes": "dez/2023",
+      "cotacao": 4.8413,
+      "var_pct": -1.91,
+      "data_ref": "2023-12-29",
+      "dataHoraCotacao": "2023-12-29 10:04:11.873"
+    },
+    {
+      "key": "2024-01",
+      "mes": "jan/2024",
+      "cotacao": 4.9535,
+      "var_pct": 2.32,
+      "data_ref": "2024-01-31",
+      "dataHoraCotacao": "2024-01-31 15:06:26.221"
+    },
+    {
+      "key": "2024-02",
+      "mes": "fev/2024",
+      "cotacao": 4.9833,
+      "var_pct": 0.6,
+      "data_ref": "2024-02-29",
+      "dataHoraCotacao": "2024-02-29 14:45:45.193"
+    },
+    {
+      "key": "2024-03",
+      "mes": "mar/2024",
+      "cotacao": 4.9962,
+      "var_pct": 0.26,
+      "data_ref": "2024-03-28",
+      "dataHoraCotacao": "2024-03-28 14:40:02.052"
+    },
+    {
+      "key": "2024-04",
+      "mes": "abr/2024",
+      "cotacao": 5.1718,
+      "var_pct": 3.51,
+      "data_ref": "2024-04-30",
+      "dataHoraCotacao": "2024-04-30 13:09:37.423"
+    },
+    {
+      "key": "2024-05",
+      "mes": "mai/2024",
+      "cotacao": 5.2416,
+      "var_pct": 1.35,
+      "data_ref": "2024-05-31",
+      "dataHoraCotacao": "2024-05-31 13:03:45.288"
+    },
+    {
+      "key": "2024-06",
+      "mes": "jun/2024",
+      "cotacao": 5.5589,
+      "var_pct": 6.05,
+      "data_ref": "2024-06-28",
+      "dataHoraCotacao": "2024-06-28 13:08:04.301"
+    },
+    {
+      "key": "2024-07",
+      "mes": "jul/2024",
+      "cotacao": 5.6621,
+      "var_pct": 1.86,
+      "data_ref": "2024-07-31",
+      "dataHoraCotacao": "2024-07-31 13:06:27.451"
+    },
+    {
+      "key": "2024-08",
+      "mes": "ago/2024",
+      "cotacao": 5.6562,
+      "var_pct": -0.1,
+      "data_ref": "2024-08-30",
+      "dataHoraCotacao": "2024-08-30 13:03:31.368"
+    },
+    {
+      "key": "2024-09",
+      "mes": "set/2024",
+      "cotacao": 5.4481,
+      "var_pct": -3.68,
+      "data_ref": "2024-09-30",
+      "dataHoraCotacao": "2024-09-30 13:08:57.897"
+    },
+    {
+      "key": "2024-10",
+      "mes": "out/2024",
+      "cotacao": 5.7779,
+      "var_pct": 6.05,
+      "data_ref": "2024-10-31",
+      "dataHoraCotacao": "2024-10-31 13:09:27.538"
+    },
+    {
+      "key": "2024-11",
+      "mes": "nov/2024",
+      "cotacao": 6.0535,
+      "var_pct": 4.77,
+      "data_ref": "2024-11-29",
+      "dataHoraCotacao": "2024-11-29 13:07:34.549"
+    },
+    {
+      "key": "2024-12",
+      "mes": "dez/2024",
+      "cotacao": 6.1923,
+      "var_pct": 2.29,
+      "data_ref": "2024-12-31",
+      "dataHoraCotacao": "2024-12-31 10:04:09.264"
+    },
+    {
+      "key": "2025-01",
+      "mes": "jan/2025",
+      "cotacao": 5.8301,
+      "var_pct": -5.85,
+      "data_ref": "2025-01-31",
+      "dataHoraCotacao": "2025-01-31 13:03:54.994"
+    },
+    {
+      "key": "2025-02",
+      "mes": "fev/2025",
+      "cotacao": 5.8488,
+      "var_pct": 0.32,
+      "data_ref": "2025-02-28",
+      "dataHoraCotacao": "2025-02-28 13:04:29.1"
+    },
+    {
+      "key": "2025-03",
+      "mes": "mar/2025",
+      "cotacao": 5.7422,
+      "var_pct": -1.82,
+      "data_ref": "2025-03-31",
+      "dataHoraCotacao": "2025-03-31 13:11:27.506"
+    },
+    {
+      "key": "2025-04",
+      "mes": "abr/2025",
+      "cotacao": 5.6608,
+      "var_pct": -1.42,
+      "data_ref": "2025-04-30",
+      "dataHoraCotacao": "2025-04-30 13:11:27.944"
+    },
+    {
+      "key": "2025-05",
+      "mes": "mai/2025",
+      "cotacao": 5.7087,
+      "var_pct": 0.85,
+      "data_ref": "2025-05-30",
+      "dataHoraCotacao": "2025-05-30 13:05:27.127"
+    },
+    {
+      "key": "2025-06",
+      "mes": "jun/2025",
+      "cotacao": 5.4571,
+      "var_pct": -4.41,
+      "data_ref": "2025-06-30",
+      "dataHoraCotacao": "2025-06-30 13:06:30.905"
+    },
+    {
+      "key": "2025-07",
+      "mes": "jul/2025",
+      "cotacao": 5.6021,
+      "var_pct": 2.66,
+      "data_ref": "2025-07-31",
+      "dataHoraCotacao": "2025-07-31 13:02:33.384"
+    },
+    {
+      "key": "2025-08",
+      "mes": "ago/2025",
+      "cotacao": 5.4264,
+      "var_pct": -3.14,
+      "data_ref": "2025-08-29",
+      "dataHoraCotacao": "2025-08-29 13:10:21.165"
+    },
+    {
+      "key": "2025-09",
+      "mes": "set/2025",
+      "cotacao": 5.3186,
+      "var_pct": -1.99,
+      "data_ref": "2025-09-30",
+      "dataHoraCotacao": "2025-09-30 13:08:29.141"
+    },
+    {
+      "key": "2025-10",
+      "mes": "out/2025",
+      "cotacao": 5.3843,
+      "var_pct": 1.24,
+      "data_ref": "2025-10-31",
+      "dataHoraCotacao": "2025-10-31 13:07:28.481"
+    },
+    {
+      "key": "2025-11",
+      "mes": "nov/2025",
+      "cotacao": 5.3338,
+      "var_pct": -0.94,
+      "data_ref": "2025-11-28",
+      "dataHoraCotacao": "2025-11-28 13:10:31.721"
+    },
+    {
+      "key": "2025-12",
+      "mes": "dez/2025",
+      "cotacao": 5.5024,
+      "var_pct": 3.16,
+      "data_ref": "2025-12-31",
+      "dataHoraCotacao": "2025-12-31 10:06:24.183"
+    },
+    {
+      "key": "2026-01",
+      "mes": "jan/2026",
+      "cotacao": 5.2301,
+      "var_pct": -4.95,
+      "data_ref": "2026-01-30",
+      "dataHoraCotacao": "2026-01-30 13:05:28.73"
+    },
+    {
+      "key": "2026-02",
+      "mes": "fev/2026",
+      "cotacao": 5.1495,
+      "var_pct": -1.54,
+      "data_ref": "2026-02-27",
+      "dataHoraCotacao": "2026-02-27 13:02:27.158"
+    },
+    {
+      "key": "2026-03",
+      "mes": "mar/2026",
+      "cotacao": 5.2194,
+      "var_pct": 1.36,
+      "data_ref": "2026-03-31",
+      "dataHoraCotacao": "2026-03-31 13:04:22.65"
+    },
+    {
+      "key": "2026-04",
+      "mes": "abr/2026",
+      "cotacao": 4.9886,
+      "var_pct": -4.42,
+      "data_ref": "2026-04-30",
+      "dataHoraCotacao": "2026-04-30 13:06:27.523"
+    },
+    {
+      "key": "2026-05",
+      "mes": "mai/2026",
+      "cotacao": 5.0569,
+      "var_pct": 1.37,
+      "data_ref": "2026-05-29",
+      "dataHoraCotacao": "2026-05-29 13:10:26.61"
+    }
+  ]
+}
