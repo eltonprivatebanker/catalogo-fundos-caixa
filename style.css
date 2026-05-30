@@ -7293,123 +7293,134 @@ th.th-num, td.col-pct, td.col-pct-12m, td.col-cdi-bar, td.cdi-ratio-cell{
   }
 }
 
-
 /* ════════════════════════════════════════════════════
-   PATCH FINAL — Desktop/Mobile: cards macro + painel mais limpo
-   - SELIC e CDI com taxa anual na mesma posição no desktop
-   - catálogo inicia exibindo 05 fundos
-   - painel consolidado com subtítulos compactos
+   PATCH DESKTOP — legibilidade do Painel Consolidado
+   Objetivo: aumentar leitura em telas grandes sem mexer na experiência mobile.
 ════════════════════════════════════════════════════ */
-@media (min-width:821px){
-  .macro-selic{
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) auto;
-    grid-template-rows:auto auto;
-    column-gap:18px;
-    row-gap:8px;
-    align-items:start;
+@media (min-width: 821px){
+  /* O painel estava ficando com cara de "mini tabela" no desktop. */
+  .market-table-toolbar{
+    padding:14px 18px !important;
   }
-  .macro-selic .macro-label{
-    grid-column:1;
-    grid-row:1;
-    margin-bottom:0 !important;
-    max-width:210px;
+  .market-table-title span{
+    font-size:1.08rem !important;
+    line-height:1.25 !important;
   }
-  .macro-selic .market-rate-line{
-    grid-column:2;
-    grid-row:1 / span 2;
-    justify-content:flex-end;
-    align-self:start;
-    text-align:right;
-    white-space:nowrap;
-    margin-top:0;
-  }
-  .macro-selic .macro-note{
-    grid-column:1;
-    grid-row:2;
-    align-self:start;
-    width:max-content;
-    max-width:100%;
-    margin-top:10px;
+  .market-table-title small{
+    font-size:.72rem !important;
+    line-height:1.35 !important;
+    color:#c0c8da !important;
   }
 
-  .cdi-card-compacto{
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) auto;
-    grid-template-rows:auto auto auto;
-    column-gap:18px;
-    row-gap:10px;
-    align-items:start;
+  .indic-table-v2{
+    min-width:1080px !important;
+    table-layout:fixed !important;
   }
-  .cdi-card-compacto .indic-ref-label{
-    grid-column:1;
-    grid-row:1;
-    margin-bottom:0 !important;
-    max-width:260px;
+
+  .indic-table-v2 th{
+    padding:13px 16px !important;
+    font-size:.70rem !important;
+    letter-spacing:.075em !important;
+    line-height:1.35 !important;
   }
-  .cdi-card-compacto .market-rate-line{
-    grid-column:2;
-    grid-row:1;
-    justify-content:flex-end;
-    align-self:start;
-    text-align:right;
-    white-space:nowrap;
-    margin-top:0;
+  .indic-table-v2 th:first-child,
+  .indic-table-v2 td:first-child{
+    width:34% !important;
+    min-width:340px !important;
+    max-width:420px !important;
   }
-  .cdi-card-compacto .indic-ref-val{
-    font-family:'Cormorant Garamond',serif !important;
-    font-size:2.45rem !important;
-    line-height:1 !important;
+  .indic-table-v2 th:not(:first-child),
+  .indic-table-v2 td:not(:first-child){
+    width:16.5% !important;
+    min-width:148px !important;
+  }
+  .th-sub{
+    display:block !important;
+    margin-top:2px !important;
+    font-size:.66rem !important;
+    line-height:1.25 !important;
+    color:#aeb7cf !important;
+    opacity:.88 !important;
+  }
+
+  .indic-table-v2 td{
+    padding:17px 16px !important;
+    font-size:.82rem !important;
+  }
+  .indic-table-v2 tbody tr.data-row td{
+    min-height:66px !important;
+  }
+
+  .indic-table-v2 .group-row td{
+    padding:10px 16px 8px !important;
+  }
+  .group-lbl{
+    font-size:.70rem !important;
+    letter-spacing:.095em !important;
+    color:#b9c2d8 !important;
+  }
+
+  .ind-name-v2{
+    gap:11px !important;
+    align-items:center !important;
+  }
+  .ind-icon-v2{
+    width:32px !important;
+    height:32px !important;
+    border-radius:10px !important;
+    font-size:1rem !important;
+  }
+  .ind-v2-title{
+    font-size:.96rem !important;
+    line-height:1.24 !important;
+    font-weight:750 !important;
+    letter-spacing:0 !important;
+  }
+  .ind-v2-sub{
+    font-size:.72rem !important;
+    line-height:1.34 !important;
+    color:#b8c1d5 !important;
+    font-family:'Inter',sans-serif !important;
+    font-weight:500 !important;
+    letter-spacing:0 !important;
+  }
+
+  .v2-val{
+    font-size:1.28rem !important;
+    line-height:1.05 !important;
     font-weight:800 !important;
   }
-  .cdi-card-compacto .cdi-year-history,
-  .cdi-card-compacto .cdi-rel{
-    grid-column:1 / -1;
+  .v2-sub{
+    margin-top:5px !important;
+    font-size:.70rem !important;
+    line-height:1.25 !important;
+    color:#aeb7cf !important;
+    font-family:'Inter',sans-serif !important;
+    font-weight:500 !important;
+    letter-spacing:0 !important;
   }
-}
+  .v2-val.pos,
+  .v2-val.neg{
+    font-family:'Inter',sans-serif !important;
+    font-size:1.08rem !important;
+    font-weight:800 !important;
+  }
+  .v2-val.neu{
+    font-size:1.24rem !important;
+  }
 
-/* Exibição padrão 05: deixa o seletor visualmente coerente */
-.exhibition-control .ctrl-select option[value="5"]{
-  font-weight:700;
-}
+  .badge-await,
+  .badge-partial,
+  .badge-alrt{
+    font-size:.66rem !important;
+    padding:3px 8px !important;
+    border-radius:6px !important;
+  }
 
-/* Painel consolidado: reduz ruído visual sem perder informação */
-.indic-table-v2 .v2-sub{
-  font-size:.58rem !important;
-  line-height:1.28 !important;
-  color:#8f9ab6 !important;
-  opacity:.86;
-  white-space:normal;
-}
-.indic-table-v2 .badge-partial,
-.indic-table-v2 .badge-await{
-  font-size:.54rem !important;
-  padding:2px 6px !important;
-  border-radius:6px !important;
-  opacity:.9;
-}
-.indic-table-v2 td{
-  vertical-align:middle !important;
-}
-.indic-table-v2 .v2-val{
-  line-height:1.12 !important;
-}
-.indic-table-v2 .v2-bar-row + .v2-sub,
-.indic-table-v2 .v2-val + .v2-sub{
-  margin-top:4px !important;
-}
-@media (min-width:821px){
-  .indic-table-v2 th,
-  .indic-table-v2 td{
-    padding-top:10px !important;
-    padding-bottom:10px !important;
-  }
-  .indic-table-v2 .v2-sub{
-    font-size:.56rem !important;
-  }
-}
-@media (max-width:820px){
-  .indic-table-v2 .v2-sub{
-    font-size:.53rem !important;
+  .indic-footnote{
+    font-size:.72rem !important;
+    line-height:1.45 !important;
+    padding:12px 16px !important;
+    color:#b5bed4 !important;
   }
 }
