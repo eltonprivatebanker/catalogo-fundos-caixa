@@ -12,7 +12,7 @@ Novidades v17.1 vs v16:
 Novidades v16 vs v15:
   + CDI acumulado 12M/24M/36M pré-calculado server-side (série 4391 BCB)
   + IPCA acumulado 24M/36M pré-calculado server-side (série 433 BCB)
-  + PTAX histórico mensal (24M) pré-salvo em mercado_atual.json
+  + PTAX histórico mensal (37M) pré-salvo em mercado_atual.json
   + fundos_caixa.json indexado por CNPJ → botões de documentos PDF no dashboard
   + Coluna 'codfundo' no CSV/Excel → links diretos Lâmina/Regulamento/etc.
   Mantém: CDI mensal real (série 4391), Focus OData+PDF+cache, SIPII scraping,
@@ -22,8 +22,9 @@ Novidades v16 vs v15:
 import json
 import csv
 import glob
+import calendar
 from pathlib import Path
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 import io
 import time, unicodedata, traceback, re, requests
 from bs4 import BeautifulSoup
@@ -93,6 +94,7 @@ SELIC_BASE_PATH     = BASE_DIR / "historico da selic do BC.json"
 META_INFLACAO_PATH  = BASE_DIR / "meta-vs-inflacao-efetiva.json"
 FUNDOS_JSON_LOCAL   = BASE_DIR / "fundos.json"
 FUNDOS_CAIXA_PATH   = BASE_DIR / "fundos_caixa.json"   # ★ v16
+PTAX_CACHE_PATH    = BASE_DIR / "ptax_historico_cache.json"
 
 # ---------------------------------------------------------------------------
 # Dicionário estático — URLs validadas manualmente
@@ -954,7 +956,7 @@ def gerar_json_kpis_dashboard(df_consolidado, caminho_saida):
     log(f"[KPIs] JSON exportado: {caminho_saida.name}")
 
 # ---------------------------------------------------------------------------
-# ★ Coletor de Indicadores de Mercado — v16 (CDI/IPCA 24M/36M + PTAX histórico)
+# ★ Coletor de Indicadores de Mercado — v17.2 (CDI/IPCA 24M/36M + PTAX histórico 37M)
 # ---------------------------------------------------------------------------
 class ColetorMercado:
     def __init__(self):
@@ -1138,97 +1140,274 @@ class ColetorMercado:
     # ★ v16 — PTAX histórico mensal (24M) — server-side
     # Resolve HTTP 400 do browser que tentava 36M (limite da API é 24M)
     # ──────────────────────────────────────────────────────────────────────
-    def _buscar_ptax_historico(self, meses=24):
+    # ──────────────────────────────────────────────────────────────────────
+    # ★ v17.2 — PTAX histórico mensal robusto (37M)
+    # Usa a API Olinda/CotacaoDolarPeriodo mês a mês e salva cache local.
+    # Isso evita histórico vazio e mantém gráfico/cards/timeline na mesma base.
+    # ──────────────────────────────────────────────────────────────────────
+    def _buscar_ptax_historico(self, meses=37):
         """
-        ★ v16.2 fix — usa CotacaoMoedaPeriodoFechamento (endpoint de fechamentos mensais).
-        Endpoint mais simples: aceita MM-YYYY, retorna fechamento de cada mês diretamente,
-        sem limite de período, sem chunking.
-        Fallback: SGS série 3697 (dólar PTAX mensal) se Olinda falhar.
+        Retorna fechamentos mensais da PTAX de venda.
+
+        Estrutura esperada pelo index.html:
+        [
+          {
+            "key": "2026-05",
+            "mes": "mai/2026",
+            "cotacao": 5.0569,
+            "var_pct": 1.37,
+            "data_ref": "2026-05",
+            "dataHoraCotacao": "2026-05-29T13:05:..."
+          }
+        ]
+
+        Observações:
+        - 37 meses = mês atual + 36 meses anteriores.
+        - A busca é feita mês a mês para evitar limites/instabilidades do BCB.
+        - Se a API falhar, tenta SGS 3697; se também falhar, usa cache local.
         """
-        log(f"[PTAX] Buscando histórico {meses}M via CotacaoMoedaPeriodoFechamento...")
-        hoje = datetime.now()
-        inicio = hoje - timedelta(days=meses * 31 + 10)
+        log(f"[PTAX] Buscando histórico {meses}M via CotacaoDolarPeriodo mês a mês...")
 
-        def fmt_mes_ptax(d):
-            return f"{str(d.month).zfill(2)}-{d.year}"  # MM-YYYY
+        hoje = datetime.now().date()
 
-        # ── Estratégia 1: endpoint de fechamentos mensais (mais direto) ──
-        try:
-            url = (
-                "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/"
-                f"CotacaoMoedaPeriodoFechamento(codigoMoeda=@cm,"
-                f"dataInicialFechamento=@di,dataFinalFechamento=@df)"
-                f"?@cm='USD'"
-                f"&@di='{fmt_mes_ptax(inicio)}'"
-                f"&@df='{fmt_mes_ptax(hoje)}'"
-                f"&$format=json&$select=cotacaoVenda,dataFechamento"
+        def fmt_odata(d):
+            # Formato exigido pela API Olinda PTAX: MM-DD-YYYY
+            return d.strftime("%m-%d-%Y")
+
+        def month_key(d):
+            return f"{d.year}-{d.month:02d}"
+
+        def last_day_of_month(year, month):
+            return date(year, month, calendar.monthrange(year, month)[1])
+
+        def add_months(d, qtd_meses):
+            y = d.year + (d.month - 1 + qtd_meses) // 12
+            m = (d.month - 1 + qtd_meses) % 12 + 1
+            day = min(d.day, calendar.monthrange(y, m)[1])
+            return date(y, m, day)
+
+        def calc_var(atual, base):
+            if atual is None or base is None or base == 0:
+                return None
+            return round((float(atual) / float(base) - 1) * 100, 2)
+
+        def salvar_cache(historico):
+            if not historico:
+                return
+            try:
+                PTAX_CACHE_PATH.write_text(
+                    json.dumps({
+                        "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+                        "total": len(historico),
+                        "ptax_historico": historico,
+                    }, ensure_ascii=False, indent=2),
+                    encoding="utf-8"
+                )
+                log(f"  [PTAX] Cache salvo: {PTAX_CACHE_PATH.name} ({len(historico)} meses)")
+            except Exception as e:
+                log(f"  [PTAX] Erro ao salvar cache: {e}")
+
+        def carregar_cache():
+            try:
+                if not PTAX_CACHE_PATH.exists():
+                    return []
+                raw = json.loads(PTAX_CACHE_PATH.read_text(encoding="utf-8"))
+                hist = raw.get("ptax_historico", []) if isinstance(raw, dict) else raw
+                if hist:
+                    log(f"  [PTAX] Usando cache local: {len(hist)} meses")
+                    return hist[-meses:]
+            except Exception as e:
+                log(f"  [PTAX] Erro ao ler cache: {e}")
+            return []
+
+        def buscar_mes(inicio, fim):
+            base_url = "https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata"
+            endpoint = (
+                f"{base_url}/CotacaoDolarPeriodo"
+                f"(dataInicial=@dataInicial,dataFinalCotacao=@dataFinalCotacao)"
             )
-            res = requests.get(url, headers=self.headers, timeout=25)
-            if res.status_code == 200:
-                dados = res.json().get('value', [])
-                if dados:
-                    resultado = []
-                    prev = None
-                    for item in sorted(dados, key=lambda x: x.get('dataFechamento', '')):
-                        cot = item.get('cotacaoVenda')
-                        data_str = str(item.get('dataFechamento', ''))[:10]
-                        if not cot or not data_str:
-                            continue
-                        dt = datetime.strptime(data_str, '%Y-%m-%d')
-                        cotacao = round(float(cot), 4)
-                        var_pct = round((cotacao / prev - 1) * 100, 2) if prev else None
-                        resultado.append({
-                            'key':      f"{dt.year}-{str(dt.month).zfill(2)}",
-                            'mes':      f"{MESES_PT[dt.month-1]}/{dt.year}",
-                            'cotacao':  cotacao,
-                            'var_pct':  var_pct,
-                            'data_ref': data_str,
-                        })
-                        prev = cotacao
-                    log(f"  [PTAX] CotacaoMoedaPeriodoFechamento OK — {len(resultado)} meses")
-                    return resultado
-                log(f"  [PTAX] CotacaoMoedaPeriodoFechamento: sem dados")
-            else:
-                log(f"  [PTAX] CotacaoMoedaPeriodoFechamento HTTP {res.status_code}")
-        except Exception as e:
-            log(f"  [PTAX] CotacaoMoedaPeriodoFechamento erro: {e}")
+            params = {
+                "@dataInicial": f"'{fmt_odata(inicio)}'",
+                "@dataFinalCotacao": f"'{fmt_odata(fim)}'",
+                "$top": "100",
+                "$format": "json",
+                "$select": "cotacaoVenda,dataHoraCotacao",
+            }
 
-        # ── Estratégia 2: BCB SGS série 3697 (Dólar PTAX mensal — venda) ──
-        log("[PTAX] Tentando fallback SGS série 3697...")
+            for tentativa in range(1, 4):
+                try:
+                    res = requests.get(endpoint, params=params, headers=self.headers, timeout=25)
+                    if res.status_code != 200:
+                        log(f"  [PTAX] {month_key(inicio)} HTTP {res.status_code} — tentativa {tentativa}")
+                        time.sleep(2 * tentativa)
+                        continue
+
+                    dados = res.json().get("value", [])
+                    if not dados:
+                        log(f"  [PTAX] {month_key(inicio)} sem dados")
+                        return None
+
+                    ultimo = max(dados, key=lambda x: str(x.get("dataHoraCotacao", "")))
+                    cot = ultimo.get("cotacaoVenda")
+                    data_hora = ultimo.get("dataHoraCotacao")
+                    if cot is None or not data_hora:
+                        return None
+
+                    data_ref = str(data_hora)[:10]
+                    dt_ref = datetime.strptime(data_ref, "%Y-%m-%d").date()
+                    cotacao = round(float(str(cot).replace(",", ".")), 4)
+
+                    return {
+                        "key": month_key(dt_ref),
+                        "mes": f"{MESES_PT[dt_ref.month - 1]}/{dt_ref.year}",
+                        "cotacao": cotacao,
+                        "var_pct": None,
+                        "data_ref": data_ref,
+                        "dataHoraCotacao": data_hora,
+                    }
+                except Exception as e:
+                    log(f"  [PTAX] {month_key(inicio)} erro — tentativa {tentativa}: {e}")
+                    time.sleep(2 * tentativa)
+            return None
+
+        primeiro_mes_atual = date(hoje.year, hoje.month, 1)
+        inicio_janela = add_months(primeiro_mes_atual, -(meses - 1))
+        registros = []
+
+        for i in range(meses):
+            ini = add_months(inicio_janela, i)
+            fim = last_day_of_month(ini.year, ini.month)
+            if fim > hoje:
+                fim = hoje
+
+            item = buscar_mes(ini, fim)
+            if item:
+                registros.append(item)
+            time.sleep(0.25)
+
+        # Remove duplicados e ordena por mês.
+        por_mes = {}
+        for item in registros:
+            por_mes[item["key"]] = item
+        historico = [por_mes[k] for k in sorted(por_mes.keys())]
+
+        # Calcula variação mensal.
+        prev = None
+        for item in historico:
+            item["var_pct"] = calc_var(item.get("cotacao"), prev) if prev else None
+            prev = item.get("cotacao")
+
+        if historico:
+            log(f"  [PTAX] CotacaoDolarPeriodo OK — {len(historico)} meses")
+            salvar_cache(historico)
+            return historico[-meses:]
+
+        # ── Fallback 1: SGS 3697 ──
+        log("[PTAX] Olinda sem histórico. Tentando fallback SGS série 3697...")
         try:
+            inicio_sgs = add_months(hoje, -(meses + 2))
             url_sgs = (
-                f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.3697/dados"
-                f"?dataInicial={inicio.strftime('%d/%m/%Y')}"
+                "https://api.bcb.gov.br/dados/serie/bcdata.sgs.3697/dados"
+                f"?dataInicial={inicio_sgs.strftime('%d/%m/%Y')}"
                 f"&dataFinal={hoje.strftime('%d/%m/%Y')}&formato=json"
             )
             res = requests.get(url_sgs, headers=self.headers, timeout=25)
             if res.status_code == 200:
                 dados = res.json()
-                if dados:
-                    resultado = []
-                    prev = None
-                    for item in dados:
-                        d, m, y = item['data'].split('/')
-                        cotacao = round(float(item['valor']), 4)
-                        var_pct = round((cotacao / prev - 1) * 100, 2) if prev else None
-                        resultado.append({
-                            'key':      f"{y}-{m}",
-                            'mes':      f"{MESES_PT[int(m)-1]}/{y}",
-                            'cotacao':  cotacao,
-                            'var_pct':  var_pct,
-                            'data_ref': f"{y}-{m}-{d}",
-                        })
-                        prev = cotacao
+                resultado = []
+                prev = None
+                for item in dados[-meses:]:
+                    d, m, y = item["data"].split("/")
+                    cotacao = round(float(str(item["valor"]).replace(",", ".")), 4)
+                    resultado.append({
+                        "key": f"{y}-{m}",
+                        "mes": f"{MESES_PT[int(m)-1]}/{y}",
+                        "cotacao": cotacao,
+                        "var_pct": calc_var(cotacao, prev) if prev else None,
+                        "data_ref": f"{y}-{m}-{d}",
+                        "dataHoraCotacao": f"{y}-{m}-{d}T12:00:00",
+                    })
+                    prev = cotacao
+                if resultado:
                     log(f"  [PTAX] SGS série 3697 OK — {len(resultado)} meses")
-                    return resultado
-                log("  [PTAX] SGS série 3697: sem dados")
+                    salvar_cache(resultado)
+                    return resultado[-meses:]
             else:
                 log(f"  [PTAX] SGS série 3697 HTTP {res.status_code}")
         except Exception as e:
             log(f"  [PTAX] SGS série 3697 erro: {e}")
 
+        # ── Fallback 2: cache local ──
+        cache = carregar_cache()
+        if cache:
+            return cache
+
         log("  [PTAX] Todas as estratégias falharam — PTAX histórico indisponível")
         return []
+
+    def _montar_dolar_indice_ptax(self, ptax_historico):
+        """
+        Monta o bloco indices_mercado.dolar a partir do mesmo histórico PTAX
+        usado no gráfico. Evita divergência entre card, tabela e gráfico.
+        """
+        if not ptax_historico:
+            return None
+
+        hist = sorted(ptax_historico, key=lambda x: x.get("key", ""))
+        atual = hist[-1]
+        mes_anterior = hist[-2] if len(hist) >= 2 else None
+        mes_base = hist[-3] if len(hist) >= 3 else None
+
+        def calc_var(atual_val, base_val):
+            if atual_val is None or base_val is None or base_val == 0:
+                return None
+            return round((float(atual_val) / float(base_val) - 1) * 100, 2)
+
+        def item_n_meses_atras(n):
+            return hist[-(n + 1)] if len(hist) > n else None
+
+        ano_atual = int(str(atual.get("key", "0000-00"))[:4])
+        dez_anterior = next((i for i in reversed(hist) if i.get("key") == f"{ano_atual - 1}-12"), None)
+        base_12m = item_n_meses_atras(12)
+        base_24m = item_n_meses_atras(24)
+        base_36m = item_n_meses_atras(36)
+
+        atual_val = atual.get("cotacao")
+        mes_ant_val = mes_anterior.get("cotacao") if mes_anterior else None
+        mes_base_val = mes_base.get("cotacao") if mes_base else None
+
+        resultado = {
+            "nome": "Dólar BRL/USD",
+            "ticker": "PTAX",
+            "fonte": "Banco Central do Brasil - PTAX",
+            "mes_anterior_label": mes_anterior.get("mes") if mes_anterior else None,
+            "mes_base_label": mes_base.get("mes") if mes_base else None,
+            "fechamento_mes_anterior": round(mes_ant_val, 4) if mes_ant_val is not None else None,
+            "data_mes_anterior": mes_anterior.get("data_ref") if mes_anterior else None,
+            "fechamento_mes_base": round(mes_base_val, 4) if mes_base_val is not None else None,
+            "data_mes_base": mes_base.get("data_ref") if mes_base else None,
+            "variacao_mes_fechado": calc_var(mes_ant_val, mes_base_val),
+            "fechamento_atual": round(atual_val, 4) if atual_val is not None else None,
+            "data_atual": atual.get("data_ref"),
+            "variacao_mes_atual": calc_var(atual_val, mes_ant_val),
+            "acum_ano": calc_var(atual_val, dez_anterior.get("cotacao") if dez_anterior else None),
+            "acum_12m": calc_var(atual_val, base_12m.get("cotacao") if base_12m else None),
+            "acum_24m": calc_var(atual_val, base_24m.get("cotacao") if base_24m else None),
+            "acum_36m": calc_var(atual_val, base_36m.get("cotacao") if base_36m else None),
+            "base_ano": round(dez_anterior.get("cotacao"), 4) if dez_anterior else None,
+            "base_12m": round(base_12m.get("cotacao"), 4) if base_12m else None,
+            "base_24m": round(base_24m.get("cotacao"), 4) if base_24m else None,
+            "base_36m": round(base_36m.get("cotacao"), 4) if base_36m else None,
+        }
+
+        log(
+            f"[PTAX] Dólar PTAX: atual={resultado.get('fechamento_atual')} "
+            f"({resultado.get('data_atual')}) | mês={resultado.get('variacao_mes_atual')}% "
+            f"| ano={resultado.get('acum_ano')}% | 12M={resultado.get('acum_12m')}% "
+            f"| 24M={resultado.get('acum_24m')}% | 36M={resultado.get('acum_36m')}%"
+        )
+
+        return resultado
 
     def _carregar_base_ipca(self):
         if IPCA_BASE_PATH.exists():
@@ -1801,10 +1980,18 @@ class ColetorMercado:
             ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
             log(f"  [IPCA] 12M={ipca_acum_12m}% | 24M={ipca_acum_24m}% | 36M={ipca_acum_36m}%")
 
-        # Índices de mercado — mês fechado, mês atual, ano, 12M, 24M e 36M
+        # PTAX histórico mensal — base única para card, tabela, timeline e gráfico do dólar.
+        # 37 meses = mês atual + 36 meses anteriores.
+        ptax_historico = self._buscar_ptax_historico(meses=37)
+        dolar_indice = self._montar_dolar_indice_ptax(ptax_historico)
+
+        # Fallback: se PTAX falhar totalmente, usa Yahoo apenas para não deixar o painel vazio.
+        if not dolar_indice:
+            dolar_indice = self._resumo_indice_yahoo("BRL=X", "Dólar BRL/USD")
+
+        # Índices de mercado — mês fechado, mês atual, ano, 12M, 24M e 36M.
         # Observação: S&P 500, Dow Jones e Nasdaq são índices em pontos.
-        # A conversão para BRL é uma leitura de performance cambial combinada.
-        dolar_indice  = self._resumo_indice_yahoo("BRL=X", "Dólar BRL/USD")
+        # A conversão para BRL usa o dólar PTAX quando disponível.
         ibov_indice   = self._resumo_indice_yahoo("^BVSP", "Ibovespa")
         sp500_indice  = self._resumo_indice_yahoo("^GSPC", "S&P 500")
         dow_indice    = self._resumo_indice_yahoo("^DJI", "Dow Jones")
@@ -1816,9 +2003,6 @@ class ColetorMercado:
 
         # Focus
         focus_data = buscar_focus(self.headers)
-
-        # PTAX histórico mensal (resolve HTTP 400 do browser para 36M)
-        ptax_historico = self._buscar_ptax_historico(meses=24)
 
         return {
             "atualizado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
