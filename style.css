@@ -7168,3 +7168,127 @@ th.th-num, td.col-pct, td.col-pct-12m, td.col-cdi-bar, td.cdi-ratio-cell{
   }
   .exhibition-control .ctrl-select{width:auto!important;min-width:165px!important;min-height:34px!important}
 }
+
+
+/* ─────────────────────────────────────────────
+   PATCH v18 — mobile mercado: SELIC/CDI alinhados,
+   próxima reunião COPOM em evidência e CDI com mês fechado + parcial
+───────────────────────────────────────────── */
+@media(max-width:768px){
+  .cdi-card-compacto{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    grid-template-areas:
+      "cdiLabel cdiRate"
+      "cdiHistory cdiHistory"
+      "cdiNote cdiNote" !important;
+    column-gap:12px !important;
+    row-gap:8px !important;
+    padding:14px 14px 12px !important;
+    border-radius:16px !important;
+  }
+
+  .cdi-card-compacto > .indic-ref-label{
+    grid-area:cdiLabel !important;
+    align-self:center !important;
+    margin:0 !important;
+    color:#c7d0e7 !important;
+    font-family:'Inter',sans-serif !important;
+    font-size:.72rem !important;
+    font-weight:700 !important;
+    letter-spacing:.055em !important;
+    line-height:1.25 !important;
+  }
+
+  .cdi-card-compacto > .market-rate-line-cdi{
+    grid-area:cdiRate !important;
+    justify-self:end !important;
+    align-self:center !important;
+    display:flex !important;
+    align-items:flex-end !important;
+    gap:6px !important;
+    flex-wrap:nowrap !important;
+    white-space:nowrap !important;
+  }
+
+  .cdi-card-compacto #mc-cdi{
+    font-size:2.05rem !important;
+    line-height:.95 !important;
+    letter-spacing:-.02em !important;
+    white-space:nowrap !important;
+  }
+
+  .cdi-card-compacto .market-rate-suffix{
+    margin-bottom:.14rem !important;
+    font-size:.72rem !important;
+    line-height:1 !important;
+  }
+
+  .cdi-card-compacto .cdi-year-history{
+    grid-area:cdiHistory !important;
+    width:100% !important;
+    margin-top:2px !important;
+  }
+
+  .cdi-card-compacto .cdi-rel{
+    grid-area:cdiNote !important;
+    margin-top:0 !important;
+  }
+}
+
+/* COPOM: próxima reunião maior e sempre no início da faixa */
+.copom-item.featured-next,
+.selic-copom-card .copom-item.featured-next{
+  border-color:rgba(232,187,106,.72) !important;
+  background:linear-gradient(180deg,rgba(200,151,58,.18),rgba(200,151,58,.075)) !important;
+  box-shadow:0 0 0 1px rgba(200,151,58,.14) inset,0 10px 28px rgba(0,0,0,.22) !important;
+}
+
+@media(max-width:768px){
+  .selic-copom-card .copom-item.featured-next{
+    flex-basis:178px !important;
+    min-height:86px !important;
+  }
+  .selic-copom-card .copom-item.featured-next .copom-num{
+    color:#e7d3a9 !important;
+  }
+  .selic-copom-card .copom-item.featured-next .copom-date{
+    font-size:1.02rem !important;
+    color:#f3f5fb !important;
+  }
+  .selic-copom-card .copom-item.featured-next .copom-result{
+    color:var(--gold2) !important;
+  }
+}
+
+/* CDI mensal: últimos dados em evidência, histórico continua no arraste */
+.cdi-month-chip.featured{
+  min-width:92px !important;
+  border-color:rgba(232,187,106,.38) !important;
+  background:linear-gradient(180deg,rgba(200,151,58,.10),rgba(255,255,255,.035)) !important;
+}
+.cdi-month-chip.closed .v{
+  color:var(--gold2) !important;
+}
+.cdi-month-chip.current{
+  min-width:96px !important;
+  border-color:rgba(46,209,122,.72) !important;
+  background:linear-gradient(180deg,rgba(46,209,122,.20),rgba(46,209,122,.08)) !important;
+}
+.cdi-month-chip.featured .p{
+  color:#d9e1f1 !important;
+}
+
+@media(max-width:768px){
+  .cdi-card-compacto .cdi-month-strip{
+    gap:8px !important;
+    scroll-snap-type:x proximity;
+  }
+  .cdi-card-compacto .cdi-month-chip{
+    scroll-snap-align:start;
+  }
+  .cdi-card-compacto .cdi-month-chip.featured{
+    min-width:96px !important;
+    padding:8px 9px !important;
+  }
+}
