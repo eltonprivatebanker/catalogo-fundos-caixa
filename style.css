@@ -7668,3 +7668,184 @@ th.th-num, td.col-pct, td.col-pct-12m, td.col-cdi-bar, td.cdi-ratio-cell{
     font-size:.70rem;
   }
 }
+
+
+/* ─────────────────────────────────────────────
+   PATCH v22 — aviso compacto + SELIC/CDI padronizados
+   Baseado no style.css atual do GitHub
+───────────────────────────────────────────── */
+.notice-strip-v3{
+  display:flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  margin:14px 0 0 !important;
+  padding:9px 12px !important;
+  min-height:38px !important;
+  border-radius:12px !important;
+  border:1px solid rgba(200,151,58,.16) !important;
+  background:linear-gradient(90deg,rgba(200,151,58,.075),rgba(17,21,38,.50)) !important;
+  box-shadow:none !important;
+  color:#c8d0e3 !important;
+  line-height:1.35 !important;
+}
+.notice-strip-v3 .notice-inline-icon{
+  width:22px !important;
+  height:22px !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  flex:0 0 auto !important;
+  border-radius:7px !important;
+  border:1px solid rgba(200,151,58,.18) !important;
+  background:rgba(200,151,58,.09) !important;
+  font-size:.72rem !important;
+}
+.notice-strip-v3 .notice-inline-title{
+  flex:0 0 auto !important;
+  color:var(--gold2) !important;
+  font-size:.64rem !important;
+  font-weight:800 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.08em !important;
+  white-space:nowrap !important;
+}
+.notice-strip-v3 .notice-inline-copy{
+  min-width:0 !important;
+  color:#c9d1e5 !important;
+  font-size:.72rem !important;
+  font-weight:500 !important;
+  line-height:1.38 !important;
+}
+.notice-strip-v3 .notice-tags,
+.notice-strip-v3 .notice-content,
+.notice-strip-v3 .notice-title,
+.notice-strip-v3 .notice-copy,
+.notice-strip-v3 .notice-icon{display:none !important;}
+
+@media(min-width:769px){
+  /* SELIC: taxa anual no mesmo canto visual do CDI */
+  .selic-copom-card{
+    grid-template-columns:minmax(260px,320px) 1px minmax(0,1fr) !important;
+  }
+  .selic-copom-card .macro-selic{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    grid-template-areas:
+      "selicLabel selicRate"
+      "selicNote  selicNote" !important;
+    align-content:start !important;
+    align-items:start !important;
+    column-gap:14px !important;
+    row-gap:8px !important;
+    min-width:0 !important;
+  }
+  .selic-copom-card .macro-selic .macro-label{
+    grid-area:selicLabel !important;
+    margin:0 !important;
+    padding-top:3px !important;
+    max-width:170px !important;
+    line-height:1.38 !important;
+  }
+  .selic-copom-card .macro-selic .market-rate-line{
+    grid-area:selicRate !important;
+    justify-self:end !important;
+    align-self:start !important;
+    display:flex !important;
+    align-items:flex-end !important;
+    gap:7px !important;
+    flex-wrap:nowrap !important;
+    white-space:nowrap !important;
+    margin:0 !important;
+  }
+  .selic-copom-card .macro-selic .macro-main-value{
+    font-size:2.42rem !important;
+    line-height:.92 !important;
+    letter-spacing:-.02em !important;
+  }
+  .selic-copom-card .macro-selic .market-rate-suffix{
+    margin-bottom:.18rem !important;
+    font-size:.86rem !important;
+  }
+  .selic-copom-card .macro-selic .macro-note{
+    grid-area:selicNote !important;
+    width:max-content !important;
+    max-width:100% !important;
+    margin-top:4px !important;
+  }
+
+  /* CDI: mesmo desenho visual da SELIC no topo do card */
+  .cdi-card-compacto{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    grid-template-areas:
+      "cdiLabel cdiRate"
+      "cdiHistory cdiHistory"
+      "cdiNote cdiNote" !important;
+    align-content:start !important;
+    align-items:start !important;
+    column-gap:14px !important;
+    row-gap:10px !important;
+    padding:22px 24px !important;
+  }
+  .cdi-card-compacto > .indic-ref-label{
+    grid-area:cdiLabel !important;
+    align-self:start !important;
+    margin:0 !important;
+    padding-top:3px !important;
+    max-width:220px !important;
+    line-height:1.38 !important;
+  }
+  .cdi-card-compacto > .market-rate-line-cdi{
+    grid-area:cdiRate !important;
+    justify-self:end !important;
+    align-self:start !important;
+    display:flex !important;
+    align-items:flex-end !important;
+    gap:7px !important;
+    flex-wrap:nowrap !important;
+    white-space:nowrap !important;
+    margin:0 !important;
+  }
+  .cdi-card-compacto #mc-cdi{
+    font-size:2.42rem !important;
+    line-height:.92 !important;
+    letter-spacing:-.02em !important;
+  }
+  .cdi-card-compacto .market-rate-suffix{
+    margin-bottom:.18rem !important;
+    font-size:.86rem !important;
+  }
+  .cdi-card-compacto .cdi-year-history{
+    grid-area:cdiHistory !important;
+    margin-top:2px !important;
+  }
+  .cdi-card-compacto .cdi-rel{
+    grid-area:cdiNote !important;
+    margin-top:0 !important;
+  }
+}
+
+@media(max-width:768px){
+  .notice-strip-v3{
+    margin-top:10px !important;
+    padding:8px 10px !important;
+    gap:7px !important;
+    border-radius:11px !important;
+  }
+  .notice-strip-v3 .notice-inline-icon{
+    width:20px !important;
+    height:20px !important;
+    font-size:.66rem !important;
+  }
+  .notice-strip-v3 .notice-inline-title{display:none !important;}
+  .notice-strip-v3 .notice-inline-copy{
+    font-size:.64rem !important;
+    line-height:1.34 !important;
+  }
+  .notice-strip-v3 .notice-inline-copy::before{
+    content:"Dados públicos · uso informativo · ";
+    color:var(--gold2);
+    font-weight:700;
+  }
+}
+
