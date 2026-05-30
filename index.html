@@ -141,12 +141,12 @@
         <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
           <span>Exibição</span>
           <select id="perPage" class="ctrl-select">
-            <option value="9999" selected>Todos os fundos</option>
+            <option value="5" selected>05 por página</option>
+            <option value="10">10 por página</option>
             <option value="25">25 por página</option>
             <option value="50">50 por página</option>
             <option value="100">100 por página</option>
-            <option value="10">10 por página</option>
-            <option value="5">5 por página</option>
+            <option value="9999">Todos os fundos</option>
           </select>
         </label>
         <div class="vista-toggle-wrap" title="Alterna entre vista focada em rentabilidade e vista com todos os dados">
@@ -494,19 +494,19 @@
           </div></td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ant" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-ant">—</span></div>
-            <div class="v2-sub" id="cdi-mes-ant-sub">taxa mensal</div>
+            <div class="v2-sub" id="cdi-mes-ant-sub">mês fechado</div>
           </td>
           <td class="td-cur">
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-cur" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-cur">—</span></div>
-            <div class="v2-sub"><span class="badge-partial">parcial</span> <span id="cdi-cur-sub">mês atual</span></div>
+            <div class="v2-sub"><span id="cdi-cur-sub">mês atual</span></div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ano" style="width:0%"></div></div><span class="v2-val" id="cdi-ano">—</span></div>
-            <div class="v2-sub" id="cdi-ano-sub">acumulado ano</div>
+            <div class="v2-sub" id="cdi-ano-sub">ano</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-acum" style="width:0%"></div></div><span class="v2-val pos" id="cdi-acum-v2">—</span></div>
-            <div class="v2-sub" id="cdi-acum-src-v2">série 4391 BCB</div>
+            <div class="v2-sub" id="cdi-acum-src-v2">12M</div>
           </td>
         </tr>
 
@@ -528,11 +528,11 @@
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-ano" style="width:0%"></div></div><span class="v2-val" id="ipca-ano-v2">—</span></div>
-            <div class="v2-sub">acum. ano · meta 3%</div>
+            <div class="v2-sub">ano</div>
           </td>
           <td>
             <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-acum" style="width:0%"></div></div><span class="v2-val" id="ipca-acum-v2">—</span></div>
-            <div class="v2-sub" id="ipca-acum-sub-v2">acum. 12M</div>
+            <div class="v2-sub" id="ipca-acum-sub-v2">12M</div>
           </td>
         </tr>
 
@@ -1833,11 +1833,11 @@ function atualizarTabelaIndicadores(){
 
   const brlSub = (n, label='BRL') => {
     const val=num(n);
-    return val === null ? `${label}: —` : `${label}: ${pctTxt(val)}`;
+    return val === null ? `${label} —` : `${label} ${pctTxt(val)}`;
   };
   const brlPeriodSub = (periodo, n) => {
     const val=num(n);
-    return val === null ? `${periodo} em BRL: —` : `${periodo} em BRL: ${pctTxt(val)}`;
+    return val === null ? `BRL —` : `BRL ${pctTxt(val)}`;
   };
 
   const indices = _dadosMercado?.indices_mercado || {};
@@ -1881,20 +1881,20 @@ function atualizarTabelaIndicadores(){
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
   // v17: usa mes_ref do robô (ex: "abr/2026") em vez de calcular a data
-  set('cdi-mes-ant-sub', cards.cdi?.mes_ref ? `taxa ${cards.cdi.mes_ref}` : `taxa mensal ${mesAntLabel}`);
+  set('cdi-mes-ant-sub', cards.cdi?.mes_ref || mesAntLabel);
 
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2);
   // v17: usa parcial_ref do robô (ex: "mai/2026") — dias_uteis_parcial não é gerado
   set('cdi-cur-sub', cdiParcial !== null
-    ? (cards.cdi?.parcial_ref ? `ref. ${cards.cdi.parcial_ref}` : `mês atual parcial`)
-    : 'mês atual parcial');
+    ? (cards.cdi?.parcial_ref || 'parcial')
+    : 'parcial');
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
-  set('cdi-ano-sub', cdiAno !== null ? 'ano com parcial' : 'acumulado ano');
+  set('cdi-ano-sub', 'ano');
 
   setPct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
   if($('cdi-acum-v2') && cdiAcum !== null) $('cdi-acum-v2').classList.add('pos');
-  set('cdi-acum-src-v2', cdiAcum !== null ? `série 4391 BCB · ${m}M` : 'histórico indisponível');
+  set('cdi-acum-src-v2', cdiAcum !== null ? `${m}M` : '—');
 
   // ═══ IPCA ═══
   const ipcaMes = num(indicState.ipca.mes);
@@ -1904,10 +1904,10 @@ function atualizarTabelaIndicadores(){
 
   setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
   // v17: usa mesRef que vem do label_mes do robô (ex: "abr/2026")
-  set('ipca-mes-ant-sub', ipcaRef ? `${ipcaRef} · aguardando IBGE` : 'aguardando IBGE');
+  set('ipca-mes-ant-sub', ipcaRef || 'último dado');
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
   setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
-  set('ipca-acum-sub-v2', `acum. ${m}M`);
+  set('ipca-acum-sub-v2', `${m}M`);
 
   const alertEl = $('ipca-alert-badge');
   const rowIpca = $('row-ipca');
@@ -2807,7 +2807,7 @@ document.addEventListener('click', (ev)=>{
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=9999;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let expandedRows=new Set();
