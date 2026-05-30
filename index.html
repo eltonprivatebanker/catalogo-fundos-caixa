@@ -2152,17 +2152,23 @@ function atualizarResumoCenario(d){
 function renderCdiYearHistory(d){
   const strip = $('cdiMonthStrip');
   if(!strip) return;
+
   const cdi = d?.cards?.cdi || {};
   const hist = Array.isArray(cdi.historico) ? cdi.historico : [];
+
   if(!hist.length){
     strip.innerHTML = '<span class="cdi-month-empty">histórico indisponível</span>';
     return;
   }
 
-  const last = hist[hist.length - 1];
+  const ordenado = [...hist].sort((a,b) => String(a?.key || '').localeCompare(String(b?.key || '')));
+  const last = ordenado[ordenado.length - 1];
   const ano = String(last?.key || '').slice(0,4) || String(new Date().getFullYear());
-  const mesesAno = hist.filter(x => String(x?.key || '').startsWith(ano + '-'));
+  const mesesAno = ordenado.filter(x => String(x?.key || '').startsWith(ano + '-'));
+
   const parcialRef = String(cdi.parcial_ref || '').toLowerCase();
+  const mesFechadoRef = String(cdi.mes_ref || '').toLowerCase();
+
   const fmtPctLocal = v => {
     const n = Number(v);
     if(!Number.isFinite(n)) return '—';
@@ -2172,18 +2178,47 @@ function renderCdiYearHistory(d){
   const titulo = $('cdiYearHistoryTitle');
   if(titulo) titulo.textContent = `CDI mensal ${ano}`;
 
+  // Mantém no card o mesmo acumulado do painel consolidado: ano com parcial quando existir.
   const total = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano);
   const totalEl = $('cdiYearHistoryTotal');
   if(totalEl) totalEl.textContent = Number.isFinite(total) ? `Ano ${fmtPctLocal(total)}` : 'Ano —';
 
-  strip.innerHTML = mesesAno.map((item, idx) => {
-    const label = String(item.label || item.key || '').replace('/'+ano,'');
-    const isLast = idx === mesesAno.length - 1;
-    const isPartial = isLast && parcialRef && String(item.label || '').toLowerCase() === parcialRef;
-    return `<span class="cdi-month-chip ${isLast ? 'current' : ''}" title="CDI ${item.label || ''}: ${fmtPctLocal(item.valor)}">
+  const byLabel = (label) => mesesAno.find(x => String(x?.label || '').toLowerCase() === label);
+  const atualParcial = parcialRef ? byLabel(parcialRef) : mesesAno[mesesAno.length - 1];
+  const ultimoFechado = mesFechadoRef
+    ? byLabel(mesFechadoRef)
+    : mesesAno[mesesAno.length - 2];
+
+  // Ordem consultiva no celular: último mês fechado + mês atual parcial sempre aparecem primeiro.
+  const destaque = [];
+  if(ultimoFechado) destaque.push(ultimoFechado);
+  if(atualParcial && atualParcial !== ultimoFechado) destaque.push(atualParcial);
+
+  const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
+  const exibicao = [...destaque, ...restantes];
+
+  strip.innerHTML = exibicao.map((item) => {
+    const labelCompleta = String(item.label || item.key || '');
+    const label = labelCompleta.replace('/'+ano,'');
+    const isCurrent = atualParcial && item === atualParcial;
+    const isClosed = ultimoFechado && item === ultimoFechado;
+    const classes = [
+      'cdi-month-chip',
+      (isCurrent || isClosed) ? 'featured' : '',
+      isCurrent ? 'current' : '',
+      isClosed ? 'closed' : ''
+    ].filter(Boolean).join(' ');
+
+    const subtitulo = isCurrent
+      ? '<span class="p">parcial</span>'
+      : isClosed
+        ? '<span class="p">último mês</span>'
+        : '';
+
+    return `<span class="${classes}" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
       <span class="m">${label}</span>
       <span class="v">${fmtPctLocal(item.valor)}</span>
-      ${isPartial ? '<span class="p">parcial</span>' : ''}
+      ${subtitulo}
     </span>`;
   }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
 }
@@ -4211,22 +4246,35 @@ function _decisaoCopomPorData(decisionDate){
 function buildCopomCalendario(){
   const container = $('copomMeetings');
   if(!container) return;
+
   const hoje = new Date();
   const hojeKey = hoje.toISOString().slice(0,10);
   const proxIdx = COPOM_2026.findIndex(r => r.decision >= hojeKey);
 
-  container.innerHTML = COPOM_2026.map((r,i) => {
+  const base = COPOM_2026.map((r,i) => {
     const decisao = _decisaoCopomPorData(r.decision);
     const isNext = i === proxIdx;
     const isFuture = r.decision >= hojeKey && !isNext;
     const klass = decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
     const resultado = decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
-    return `<div class="copom-item ${klass} ${isNext ? 'next' : ''}" title="${r.num}ª reunião: ${r.datas}">
+    return { ...r, _i:i, decisao, isNext, isFuture, klass, resultado };
+  });
+
+  // Exibe a próxima reunião em primeiro plano; as demais continuam disponíveis no arraste.
+  const lista = proxIdx >= 0
+    ? [...base.slice(proxIdx), ...base.slice(0, proxIdx)]
+    : [...base].reverse();
+
+  container.innerHTML = lista.map((r) => {
+    return `<div class="copom-item ${r.klass} ${r.isNext ? 'next featured-next' : ''}" title="${r.num}ª reunião: ${r.datas}" data-original-order="${r._i}">
       <span class="copom-num">${r.num}ª reunião</span>
       <strong class="copom-date">${r.short}</strong>
-      <small class="copom-result">${resultado}</small>
+      <small class="copom-result">${r.resultado}</small>
     </div>`;
   }).join('');
+
+  // Garante posição inicial no começo da faixa, onde agora fica a próxima reunião.
+  requestAnimationFrame(() => { container.scrollLeft = 0; });
 }
 
 /* ════════════════════════════════════════════════════
