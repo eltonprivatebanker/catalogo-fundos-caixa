@@ -153,6 +153,11 @@
           <button class="vista-btn active" id="vistaBtnReuniao" onclick="setVista('reuniao')">📊 Reunião</button>
           <button class="vista-btn" id="vistaBtnCompleta" onclick="setVista('completa')">⚙️ Completa</button>
         </div>
+        <div class="cdi-sort-control" title="Ordena os fundos pelo retorno de 12 meses em relação ao CDI">
+          <span>% CDI 12M</span>
+          <button type="button" class="cdi-sort-btn" data-cdi-sort="desc">Maior</button>
+          <button type="button" class="cdi-sort-btn" data-cdi-sort="asc">Menor</button>
+        </div>
         <div class="toggle-wrap compact-toggle-wrap">
           <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
           <span class="toggle-label">Ocultar sem dados</span>
@@ -2810,6 +2815,7 @@ document.addEventListener('click', (ev)=>{
 let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
+let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor primeiro
 let expandedRows=new Set();
 
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)","% CDI 12M"]);
@@ -2852,7 +2858,7 @@ const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
 /* ════════════════════════════════════════════════════
    VISTA REUNIÃO / COMPLETA
-   Reunião: só o essencial — Fundo, liquidez, rentab., %CDI, PL, Docs
+   Reunião: só o essencial — Fundo, liquidez, rentabilidade, PL e Docs
    Completa: todas as colunas incluindo Cota, Data, Variação dia
 ════════════════════════════════════════════════════ */
 const COLS_OCULTAS_REUNIAO = new Set([
@@ -2898,9 +2904,8 @@ function getVisibleHeaders(){
   const remover = ['Conversão','Pagamento'];
   remover.forEach(col=>{ const i=base.indexOf(col); if(i>=0) base.splice(i,1); });
 
-  // Injeta % CDI 12M após Acum. 12M
-  const idx12m = base.indexOf('Acum. 12M (%)');
-  if(idx12m >= 0 && !base.includes('% CDI 12M')) base.splice(idx12m+1, 0, '% CDI 12M');
+  // O comparativo com CDI fica dentro da própria coluna Acum. 12M,
+  // evitando a coluna redundante "% CDI 12M" na tabela.
   if(!base.includes('Documentos')) base.push('Documentos');
 
   // Vista Reunião: remove colunas que distraem na reunião com cliente
@@ -3035,6 +3040,53 @@ async function carregarKPIs(){
   }
 }
 
+
+function getCdiRatioFromRow(row){
+  const rent12=toNum(row['Acum. 12M (%)']);
+  return calcCdiRatio(rent12, indicState?.cdi?.m12);
+}
+function updateCdiSortButtons(){
+  document.querySelectorAll('[data-cdi-sort]').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.cdiSort === activeCdiSort);
+    btn.setAttribute('aria-pressed', btn.dataset.cdiSort === activeCdiSort ? 'true' : 'false');
+  });
+}
+function ordenarPorCdiRelativo(rows,dir){
+  const mult = dir === 'asc' ? 1 : -1;
+  rows.sort((a,b)=>{
+    const av=getCdiRatioFromRow(a);
+    const bv=getCdiRatioFromRow(b);
+    if(av===null&&bv===null) return 0;
+    if(av===null) return 1;
+    if(bv===null) return -1;
+    return (av-bv)*mult;
+  });
+}
+function setCdiSort(dir){
+  activeCdiSort = activeCdiSort === dir ? null : dir;
+  if(activeCdiSort){
+    sortCol = -1;
+    sortDir = -1;
+    const thead=$('tableHead');
+    if(thead) thead.querySelectorAll('th').forEach(t=>{
+      const wasNum=t.classList.contains('th-num');
+      t.className=wasNum?'th-num':'';
+    });
+  }
+  updateCdiSortButtons();
+  applyFilter();
+}
+(function setupCdiSortButtonsWhenReady(){
+  const setup=()=>{
+    document.querySelectorAll('[data-cdi-sort]').forEach(btn=>{
+      btn.addEventListener('click',()=>setCdiSort(btn.dataset.cdiSort));
+    });
+    updateCdiSortButtons();
+  };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
+  else setup();
+})();
+
 function applyFilter(){
   const q=activeSearch.toLowerCase();
   filtered=allRows.filter(r=>{
@@ -3049,7 +3101,9 @@ function applyFilter(){
     if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
     return true;
   });
-  if(sortCol>=0&&sortCol<displayHeaders.length){
+  if(activeCdiSort){
+    ordenarPorCdiRelativo(filtered, activeCdiSort);
+  } else if(sortCol>=0&&sortCol<displayHeaders.length){
     const key=displayHeaders[sortCol];
     const isNum=NUM_SET.has(key);
     const isDate=isDateHeader(key);
@@ -3070,7 +3124,7 @@ function applyFilter(){
       return compararOrdenacao(av,bv);
     });
   }
-  currentPage=1; expandedRows.clear(); render(); renderRankings();
+  currentPage=1; expandedRows.clear(); render(); renderRankings(); updateCdiSortButtons();
 }
 
 /* ════════════════════════════════════════════════════
@@ -3601,7 +3655,7 @@ function pct12mCell(val){
   // Sub-label contextual
   const cdi12 = indicState?.cdi?.m12;
   const ratio = (cdi12 && cdi12 > 0) ? Math.round((n/cdi12)*100) : null;
-  const subLabel = ratio !== null ? `${ratio}% CDI` : '';
+  const subLabel = ratio !== null ? `${ratio}% do CDI` : '';
   return `<td class="col-pct-12m"><div class="pct12m-wrap">
     <span class="pct12m-val ${cls}">${sign}${val}</span>
     ${subLabel ? `<span class="pct12m-sub">${subLabel}</span>` : ''}
@@ -3784,6 +3838,8 @@ function buildHeader(){
     if(NUM_SET.has(h)) th.classList.add('th-num');
     if(realIdx===sortCol) th.className=(th.classList.contains('th-num')?'th-num ':'')+(sortDir===1?'sa':'sd');
     th.addEventListener('click',()=>{
+      activeCdiSort=null;
+      updateCdiSortButtons();
       if(sortCol===realIdx) sortDir*=-1; else{sortCol=realIdx;sortDir=-1;}
       thead.querySelectorAll('th').forEach(t=>{
         const wasNum=t.classList.contains('th-num');
@@ -5549,8 +5605,7 @@ document.addEventListener('DOMContentLoaded', function(){
       base.splice(idxFundo + 1, 0, 'Conv / Pag');
     }
     ['Conversão','Pagamento'].forEach(col=>{ const i=base.indexOf(col); if(i>=0) base.splice(i,1); });
-    const idx12m = base.indexOf('Acum. 12M (%)');
-    if(idx12m >= 0 && !base.includes('% CDI 12M')) base.splice(idx12m+1, 0, '% CDI 12M');
+    // O % do CDI fica como subtítulo dentro de Acum. 12M, não como coluna separada.
     if(!base.includes('Documentos')) base.push('Documentos');
     // Aplica filtro Vista Reunião (remove colunas que distraem na reunião com cliente)
     if(typeof vistaAtual !== 'undefined' && vistaAtual === 'reuniao' &&
@@ -5570,7 +5625,6 @@ document.addEventListener('DOMContentLoaded', function(){
     uniquePush(out, firstExisting(base, ['Acum. Ano (%)']));
     const h12 = firstExisting(base, ['Acum. 12M (%)']);
     uniquePush(out, h12);
-    if(h12) uniquePush(out, '% CDI 12M');
     uniquePush(out, firstExisting(base, ['PL (milhoes R$)','PL (milhões R$)','PL Médio (milhões R$)','PL Medio (milhoes R$)']));
 
     // No celular, documentos ficam no final e super compactos.
