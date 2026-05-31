@@ -122,7 +122,7 @@
       <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo">
         <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
           <span class="filter-button-icon">⚙️</span>
-          <span id="filterButtonText">Filtros</span>
+          <span id="filterButtonText">Filtros avançados</span>
           <span class="filter-count-badge" id="filterActiveCount">0</span>
         </button>
         <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
@@ -158,67 +158,79 @@
       </div>
     </div>
 
+    <div class="catalog-shortcuts" aria-label="Atalhos rápidos do catálogo">
+      <span class="catalog-shortcuts-label">Atalhos</span>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="all">Todos</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cdi">CDI</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="conservador">Conservador</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="ipca">IPCA</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa">Renda Fixa</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado">Multimercado</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes">Ações</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial">Cambial</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp">FMP</button>
+    </div>
+
     <div class="active-filter-strip" id="activeFilterStrip" aria-live="polite"></div>
   </div>
 
   <div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
 
   <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed" id="fundFilterDrawer" style="margin-bottom:14px">
-    <div class="filter-sheet-head">
+    <div class="filter-sheet-head filter-sheet-head-compact">
       <div>
-        <strong>Filtros do catálogo</strong>
-        <span>Escolha por categoria, benchmark, perfil ou risco.</span>
+        <strong>Refinar filtros</strong>
+        <span>Filtro em tempo real: ao clicar em uma opção, a tabela já atualiza. Use “Fechar” só para voltar à tela cheia.</span>
       </div>
       <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar filtros">✕</button>
     </div>
 
-    <div class="filter-presets" aria-label="Filtros rápidos para atendimento">
-      <span class="filter-presets-label">Atalhos</span>
-      <button type="button" class="filter-preset-chip" data-preset="all">Todos</button>
-      <button type="button" class="filter-preset-chip" data-preset="cdi">CDI</button>
-      <button type="button" class="filter-preset-chip" data-preset="conservador">Conservador</button>
-      <button type="button" class="filter-preset-chip" data-preset="ipca">IPCA</button>
-      <button type="button" class="filter-preset-chip" data-preset="renda-fixa">Renda Fixa</button>
-      <button type="button" class="filter-preset-chip" data-preset="multimercado">Multimercado</button>
-      <button type="button" class="filter-preset-chip" data-preset="acoes">Ações</button>
-      <button type="button" class="filter-preset-chip" data-preset="cambial">Cambial</button>
-      <button type="button" class="filter-preset-chip" data-preset="fmp">FMP</button>
+
+    <div class="filter-groups-grid filter-groups-accordion" aria-label="Filtros avançados do catálogo">
+      <details class="filter-group-accordion">
+        <summary><span>Categoria</span><small>Tipo do fundo</small></summary>
+        <div class="filter-row filter-group-panel" id="catFilters">
+          <span class="filter-label">Categoria</span>
+          <button class="chip active" data-cat="">Todas</button>
+        </div>
+      </details>
+
+      <details class="filter-group-accordion">
+        <summary><span>Benchmark</span><small>CDI, IPCA, câmbio e outros</small></summary>
+        <div class="filter-row filter-group-panel" id="benchmarkFilters">
+          <span class="filter-label">Benchmark</span>
+          <button class="chip active" data-benchmark="">Todos</button>
+        </div>
+      </details>
+
+      <details class="filter-group-accordion">
+        <summary><span>Perfil</span><small>PF, PJ, GOV ou RPPS</small></summary>
+        <div class="filter-row filter-group-panel" id="perfilFilters">
+          <span class="filter-label">Perfil</span>
+          <button class="chip active" data-perfil="">Todos</button>
+          <button class="chip pf"   data-perfil="PF">🧑 PF</button>
+          <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
+          <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
+          <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
+        </div>
+      </details>
+
+      <details class="filter-group-accordion">
+        <summary><span>Risco</span><small>Perfil de risco do produto</small></summary>
+        <div class="filter-row filter-group-panel" id="riscoFilters">
+          <span class="filter-label">Risco</span>
+          <button class="chip active" data-risco="">Todos</button>
+          <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
+          <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
+          <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
+          <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
+        </div>
+      </details>
     </div>
 
-    <div class="filter-groups-grid">
-      <!-- Categoria -->
-      <div class="filter-row" id="catFilters">
-        <span class="filter-label">Categoria</span>
-        <button class="chip active" data-cat="">Todas</button>
-      </div>
-      <!-- Benchmark / indicador de referência -->
-      <div class="filter-row" id="benchmarkFilters">
-        <span class="filter-label">Benchmark</span>
-        <button class="chip active" data-benchmark="">Todos</button>
-      </div>
-      <!-- Perfil -->
-      <div class="filter-row" id="perfilFilters">
-        <span class="filter-label">Perfil</span>
-        <button class="chip active" data-perfil="">Todos</button>
-        <button class="chip pf"   data-perfil="PF">🧑 PF</button>
-        <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
-        <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
-        <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
-      </div>
-      <!-- Risco -->
-      <div class="filter-row" id="riscoFilters">
-        <span class="filter-label">Risco</span>
-        <button class="chip active" data-risco="">Todos</button>
-        <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
-        <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
-        <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
-        <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
-      </div>
-    </div>
-
-    <div class="filter-sheet-actions">
-      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar filtros</button>
-      <button type="button" class="filter-action-primary" id="filterApplyBtn">Aplicar</button>
+    <div class="filter-sheet-actions filter-sheet-actions-compact">
+      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar</button>
+      <button type="button" class="filter-action-primary" id="filterApplyBtn">Fechar</button>
     </div>
   </div>
 
@@ -439,12 +451,6 @@
 
 
 <!-- ═════════════════════════════════ APROFUNDAMENTO MACRO ══ -->
-<!-- ═══ Dados contextuais — use quando o cliente perguntar ═══ -->
-<div class="block-divider bloco-macro">
-  <div class="block-divider-line"></div>
-  <span class="block-divider-label">📡 Aprofundamento Macro — use ao contextualizar</span>
-  <div class="block-divider-line"></div>
-</div>
 <!-- ════════════════ BLOCO 3: APROFUNDAMENTO MACRO ════════════════ -->
 <!-- ══════════════════ PAINEL CONSOLIDADO DE INDICADORES ══ -->
 <div class="section-gap" id="sec-mercado-painel">
@@ -686,8 +692,8 @@
 <!-- ═══════════════════════════════════ SEÇÃO DÓLAR ══ -->
 <div class="section-gap dolar-compact-section" id="sec-dolar">
   <div class="section-title">
-    <h2>💵 Câmbio — Dólar BRL/USD</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>PTAX BCB · cotação oficial</span>
+    <h2>💵 Dólar PTAX</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>BCB · cotação oficial</span>
   </div>
 
   <div class="dolar-compact-card">
@@ -699,34 +705,28 @@
           <span class="dolar-kpi-label">Cotação PTAX</span>
           <strong id="dolar-day-rate">—</strong>
           <small id="dolar-day-ref">—</small>
-          <span class="dolar-ptax-compact" id="dolar-ptax-compact">Cotação PTAX de venda / fechamento: —</span>
         </div>
 
         <div class="dolar-kpi-row">
           <div class="dolar-mini-kpi">
-            <span>Variação no mês</span>
+            <span>Mês</span>
             <strong class="muted" id="dolar-var-mes-card">—</strong>
-            <small>mês corrente/fechado</small>
           </div>
           <div class="dolar-mini-kpi">
-            <span>Variação no ano</span>
+            <span>Ano</span>
             <strong class="muted" id="dolar-var-ano-card">—</strong>
-            <small>acumulado anual</small>
           </div>
           <div class="dolar-mini-kpi">
-            <span>Variação em 12 meses</span>
+            <span>12 meses</span>
             <strong class="muted" id="dolar-var-12m-card">—</strong>
-            <small>janela móvel</small>
           </div>
           <div class="dolar-mini-kpi">
-            <span>Variação em 24 meses</span>
+            <span>24 meses</span>
             <strong class="muted" id="dolar-var-24m-card">—</strong>
-            <small>janela ampliada</small>
           </div>
           <div class="dolar-mini-kpi">
-            <span>Variação em 36 meses</span>
+            <span>36 meses</span>
             <strong class="muted" id="dolar-var-36m-card">—</strong>
-            <small>histórico ampliado</small>
           </div>
         </div>
       </div>
@@ -735,8 +735,8 @@
     <div class="dolar-compact-chart">
       <div class="dolar-compact-chart-header">
         <div>
-          <div class="dolar-chart-title">📈 Dólar — PTAX</div>
-          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando informações de mercado...</div>
+          <div class="dolar-chart-title">📈 Histórico PTAX</div>
+          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
         </div>
         <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar">
           <button class="chart-tab" data-dolar-range="year" type="button">2026</button>
@@ -1456,7 +1456,7 @@ function calcularDolarPeriodos(){
     $('dolar-ptax-compact').textContent = `Cotação PTAX de venda / fechamento ${refLabel}`;
   }
   if($('dolar-day-src')){
-    $('dolar-day-src').textContent = `Fonte: Banco Central do Brasil · PTAX · ${refLabel}`;
+    $('dolar-day-src').textContent = `Banco Central do Brasil · PTAX · ${refLabel}`;
   }
   if($('dolar-day-loading')){
     $('dolar-day-loading').style.display = 'none';
@@ -1664,19 +1664,19 @@ function buildChartDolar(range){
     const _src=_ptaxDiario.length>10?_ptaxDiario:_ptaxHistorico;
     dados=_src.filter(d=>new Date(d.dataHoraCotacao).getFullYear()===ANO_ATUAL);
     const _tipoLabel=(_ptaxDiario.length>10&&range==='year')?'diária':'mensal';
-  if($('dolar-chart-sub')) $('dolar-chart-sub').textContent=`PTAX ${_tipoLabel} · ${dados.length} registros · Banco Central do Brasil`;
+  if($('dolar-chart-sub')) $('dolar-chart-sub').textContent=`PTAX ${_tipoLabel} · ${dados.length} registros`;
   } else if(range === '12m'){
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-12);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
-    $('dolar-chart-sub').textContent = `Últimos 12 meses · ${dados.length} registros · Banco Central do Brasil`;
+    $('dolar-chart-sub').textContent = `12 meses · ${dados.length} registros`;
   } else if(range === '24m'){
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-24);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
-    $('dolar-chart-sub').textContent = `Últimos 24 meses · ${dados.length} registros · Banco Central do Brasil`;
+    $('dolar-chart-sub').textContent = `24 meses · ${dados.length} registros`;
   } else { // 36m
     const limite = new Date(hoje); limite.setMonth(hoje.getMonth()-36);
     dados = _ptaxHistorico.filter(d => new Date(d.dataHoraCotacao) >= limite);
-    $('dolar-chart-sub').textContent = `Últimos 36 meses · ${dados.length} registros · Banco Central do Brasil`;
+    $('dolar-chart-sub').textContent = `36 meses · ${dados.length} registros`;
   }
 
   if(!dados.length) return;
@@ -4614,12 +4614,17 @@ document.addEventListener('DOMContentLoaded', function(){
     const label=qs('#filterButtonText');
     if(!sec) return;
     const willOpen=!!open;
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
     sec.classList.toggle('mobile-filters-collapsed', !willOpen);
     sec.classList.toggle('desktop-filters-collapsed', !willOpen);
-    document.body.classList.toggle('filter-sheet-open', willOpen);
-    if(backdrop) backdrop.classList.toggle('active', willOpen);
+
+    // No desktop, o painel fica como gaveta leve e não bloqueia/embaça a tabela.
+    // No mobile, mantém o comportamento de bottom sheet com fundo escurecido.
+    document.body.classList.toggle('filter-sheet-open', willOpen && isMobile);
+    if(backdrop) backdrop.classList.toggle('active', willOpen && isMobile);
+
     if(btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-    if(label) label.textContent=willOpen ? 'Fechar filtros' : 'Filtros';
+    if(label) label.textContent=willOpen ? 'Fechar filtros' : 'Refinar filtros';
   }
 
   function clearFilter(kind){
@@ -4702,12 +4707,26 @@ document.addEventListener('DOMContentLoaded', function(){
 
     const applyBtn=qs('#filterApplyBtn');
     if(applyBtn){
-      const n=(typeof filtered!=='undefined' && Array.isArray(filtered) && filtered.length) ? filtered.length :
+      applyBtn.textContent='Fechar';
+      const n=(typeof filtered!=='undefined' && Array.isArray(filtered)) ? filtered.length :
               (typeof allRows!=='undefined' && Array.isArray(allRows) ? allRows.length : null);
-      applyBtn.textContent=n!==null ? `Aplicar — ${n} fundos` : 'Aplicar filtros';
+      if(n!==null) applyBtn.setAttribute('title', `${n} fundos no resultado atual`);
     }
     if(typeof updateFundResultSummary==='function') updateFundResultSummary();
     updatePresetStates();
+  }
+
+  function setupAdvancedFilterAccordion(){
+    const items=qsa('#fundFilterDrawer .filter-group-accordion');
+    if(!items.length) return;
+    items.forEach(details=>{
+      if(details.dataset.accordionReady==='1') return;
+      details.dataset.accordionReady='1';
+      details.addEventListener('toggle',()=>{
+        if(!details.open) return;
+        items.forEach(other=>{ if(other!==details) other.open=false; });
+      });
+    });
   }
 
   function setupMobileFilters(){
@@ -4737,6 +4756,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     qsa('.filter-preset-chip').forEach(b=>b.addEventListener('click',()=>applyFilterPreset(b.dataset.preset)));
+    setupAdvancedFilterAccordion();
 
     document.addEventListener('keydown',e=>{
       if(e.key==='Escape') setFilterPanelOpen(false);
