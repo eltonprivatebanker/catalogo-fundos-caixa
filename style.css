@@ -8620,3 +8620,81 @@ table .liq-val.liq-long{
     max-width:220px !important;
   }
 }
+
+/* ════════════════════════════════════════════════════
+   PATCH FINAL — Aviso compacto no mobile
+   Mantém desktop como faixa institucional e reduz o card no celular.
+   Evita duplicidade do texto e excesso de altura antes dos KPIs.
+════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  .top-disclaimer.notice-strip-v3{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    align-items:center !important;
+    gap:7px !important;
+    width:100% !important;
+    margin:10px 0 14px !important;
+    padding:8px 10px !important;
+    min-height:38px !important;
+    border-radius:12px !important;
+    background:linear-gradient(90deg,rgba(200,151,58,.075),rgba(17,21,38,.42)) !important;
+    border:1px solid rgba(200,151,58,.18) !important;
+    box-shadow:none !important;
+    overflow:hidden !important;
+  }
+
+  .top-disclaimer.notice-strip-v3 .notice-inline-icon{
+    width:22px !important;
+    height:22px !important;
+    flex:0 0 22px !important;
+    border-radius:7px !important;
+    font-size:.72rem !important;
+  }
+
+  .top-disclaimer.notice-strip-v3 .notice-inline-title{
+    display:inline-flex !important;
+    align-items:center !important;
+    flex:0 0 auto !important;
+    color:var(--gold2) !important;
+    font-size:.62rem !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    letter-spacing:.08em !important;
+    text-transform:uppercase !important;
+    white-space:nowrap !important;
+  }
+
+  .top-disclaimer.notice-strip-v3 .notice-inline-title::after{
+    content:'·' !important;
+    margin-left:7px !important;
+    color:rgba(232,187,106,.55) !important;
+  }
+
+  .top-disclaimer.notice-strip-v3 .notice-inline-copy{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    padding-left:0 !important;
+    margin:0 !important;
+    color:#c4cde0 !important;
+    line-height:1.25 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    font-size:0 !important;
+  }
+
+  .top-disclaimer.notice-strip-v3 .notice-inline-copy::before{
+    content:'Dados públicos · uso informativo · não oficial CAIXA' !important;
+    color:#c4cde0 !important;
+    font-size:.62rem !important;
+    line-height:1.25 !important;
+    font-weight:600 !important;
+  }
+}
+
+@media(max-width:390px){
+  .top-disclaimer.notice-strip-v3 .notice-inline-copy::before{
+    content:'Dados públicos · uso informativo · não oficial' !important;
+    font-size:.60rem !important;
+  }
+}
