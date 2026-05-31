@@ -8451,3 +8451,79 @@ body.filter-sheet-open{overflow:hidden;}
   border-color:rgba(46,209,122,.30) !important;
   color:#85efb7 !important;
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   AJUSTE FINAL — Legibilidade da coluna CONV / PAG
+   Motivo: o branco muito pesado em fonte monoespaçada perdia nitidez.
+═══════════════════════════════════════════════════════════════ */
+.table-wrap td.liq-unified-cell,
+table td.liq-unified-cell{
+  min-width:128px;
+  padding-right:18px;
+}
+.table-wrap .liq-unified-inner,
+table .liq-unified-inner{
+  gap:5px;
+}
+.table-wrap .liq-line,
+table .liq-line{
+  display:inline-grid;
+  grid-template-columns:34px auto;
+  align-items:baseline;
+  column-gap:7px;
+  font-family:'Inter',sans-serif;
+  line-height:1.28;
+}
+.table-wrap .liq-label,
+table .liq-label{
+  min-width:0;
+  font-family:'Inter',sans-serif;
+  font-size:.57rem;
+  font-weight:700;
+  letter-spacing:.075em;
+  color:#8e9ab8;
+  opacity:.96;
+  text-transform:uppercase;
+}
+.table-wrap .liq-val,
+table .liq-val{
+  font-family:'Inter',sans-serif;
+  font-size:.78rem;
+  font-weight:600;
+  letter-spacing:0;
+  color:#dfe6f7;
+  text-shadow:none;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+}
+.table-wrap .liq-val strong,
+table .liq-val strong{
+  font-weight:600;
+}
+.table-wrap .liq-val.liq-long,
+table .liq-val.liq-long{
+  color:#b8c3dd;
+  font-weight:550;
+}
+
+@media(max-width:768px){
+  .table-wrap td.liq-unified-cell,
+  table td.liq-unified-cell{
+    min-width:118px;
+    padding-right:12px;
+  }
+  .table-wrap .liq-line,
+  table .liq-line{
+    grid-template-columns:32px auto;
+    column-gap:6px;
+  }
+  .table-wrap .liq-label,
+  table .liq-label{
+    font-size:.55rem;
+  }
+  .table-wrap .liq-val,
+  table .liq-val{
+    font-size:.74rem;
+    font-weight:600;
+  }
+}
