@@ -8527,3 +8527,96 @@ table .liq-val.liq-long{
     font-weight:600;
   }
 }
+
+
+/* ═══════════════════════════════════════
+   PATCH — Mobile tabela após ordenação por % CDI
+   Objetivo: evitar coluna intermediária espremida/ilegível.
+   A tabela mobile passa a priorizar: Fundo | Acum. 12M | PL | Docs.
+═══════════════════════════════════════ */
+@media (pointer:coarse), (hover:none), (max-width:768px){
+  body:not(.fund-card-mode) .table-wrap::before{
+    content:'↔ tabela resumida: Fundo · 12M/CDI · PL · docs' !important;
+    font-size:.54rem !important;
+    letter-spacing:.015em !important;
+  }
+
+  body:not(.fund-card-mode) #mainTable{
+    min-width:560px !important;
+    width:max-content !important;
+  }
+
+  body:not(.fund-card-mode) #mainTable thead th:first-child,
+  body:not(.fund-card-mode) #mainTable tbody td:first-child{
+    width:24px !important;
+    min-width:24px !important;
+    max-width:24px !important;
+  }
+
+  body:not(.fund-card-mode) #mainTable thead th:nth-child(2),
+  body:not(.fund-card-mode) #mainTable tbody td.col-fundo{
+    min-width:178px !important;
+    max-width:178px !important;
+  }
+
+  body:not(.fund-card-mode) #mainTable thead th:nth-child(3),
+  body:not(.fund-card-mode) #mainTable tbody td.col-pct-12m{
+    min-width:112px !important;
+    max-width:112px !important;
+    text-align:center !important;
+  }
+
+  body:not(.fund-card-mode) #mainTable thead th:nth-child(4),
+  body:not(.fund-card-mode) #mainTable tbody td:nth-child(4){
+    min-width:106px !important;
+    max-width:106px !important;
+    text-align:center !important;
+  }
+
+  body:not(.fund-card-mode) #mainTable thead th:nth-child(5),
+  body:not(.fund-card-mode) #mainTable tbody td.col-docs{
+    width:62px !important;
+    min-width:62px !important;
+    max-width:62px !important;
+  }
+
+  body:not(.fund-card-mode) td.col-fundo{
+    font-size:.64rem !important;
+    line-height:1.28 !important;
+  }
+
+  body:not(.fund-card-mode) .pct12m-wrap{
+    align-items:center !important;
+    justify-content:center !important;
+    min-width:0 !important;
+  }
+
+  body:not(.fund-card-mode) .pct12m-val{
+    font-size:.84rem !important;
+    line-height:1.05 !important;
+    font-weight:650 !important;
+  }
+
+  body:not(.fund-card-mode) .pct12m-sub{
+    font-size:.58rem !important;
+    line-height:1.15 !important;
+    color:#9ba7c3 !important;
+    white-space:nowrap !important;
+  }
+
+  body:not(.fund-card-mode) #mainTable th:nth-child(n+3),
+  body:not(.fund-card-mode) #mainTable td:nth-child(n+3):not(.col-docs){
+    min-width:initial;
+  }
+}
+
+@media (pointer:coarse) and (orientation:landscape), (hover:none) and (orientation:landscape){
+  body:not(.fund-card-mode) #mainTable{
+    min-width:620px !important;
+  }
+  body:not(.fund-card-mode) #mainTable thead th:nth-child(2),
+  body:not(.fund-card-mode) #mainTable tbody td.col-fundo{
+    min-width:220px !important;
+    max-width:220px !important;
+  }
+}
