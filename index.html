@@ -5633,16 +5633,22 @@ document.addEventListener('DOMContentLoaded', function(){
     const out = [];
 
     uniquePush(out, firstExisting(base, ['Fundo']));
-    uniquePush(out, firstExisting(base, ['Variacao Dia (%)','Variação Dia (%)']));
-    uniquePush(out, firstExisting(base, ['Acum. Mes (%)','Acum. Mês (%)']));
-    uniquePush(out, firstExisting(base, ['Acum. Ano (%)']));
+
+    // Mobile: tabela realmente resumida.
+    // O % do CDI continua no subtítulo do Acum. 12M e também serve para ordenar
+    // pelos botões Maior/Menor, sem criar coluna extra nem comprimir a primeira linha.
     const h12 = firstExisting(base, ['Acum. 12M (%)']);
     uniquePush(out, h12);
-    uniquePush(out, firstExisting(base, ['PL (milhoes R$)','PL (milhões R$)','PL Médio (milhões R$)','PL Medio (milhoes R$)']));
 
-    // No celular, documentos ficam no final e super compactos.
-    // Conversão, pagamento, cota e data continuam disponíveis nos cards/detalhes,
-    // mas saem da tabela resumida para a rentabilidade aparecer primeiro.
+    uniquePush(out, firstExisting(base, [
+      'PL (milhoes R$)',
+      'PL (milhões R$)',
+      'PL Médio (milhões R$)',
+      'PL Medio (milhoes R$)'
+    ]));
+
+    // Documentos ficam por último e compactos. As demais métricas continuam
+    // disponíveis no modo Cards ou no detalhe expandido da linha.
     uniquePush(out, 'Documentos');
 
     return out.filter(Boolean);
