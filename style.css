@@ -10547,3 +10547,82 @@ tbody tr.row-fav{
   .usd-brl-line{font-size:.66rem}
   .usd-brl-line.brl{font-size:.59rem}
 }
+
+
+/* ─────────────────────────────────────────────
+   PATCH — Painel consolidado: textos mais limpos
+   Remove excesso de “badges” e melhora leitura de fechado/parcial/aguardando.
+───────────────────────────────────────────── */
+.indic-table-v2 .v2-sub{
+  color:#9aa5c4;
+  letter-spacing:.01em;
+  line-height:1.35;
+}
+.period-line{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:4px;
+  white-space:nowrap;
+  color:#9aa5c4;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.61rem;
+  font-weight:500;
+  letter-spacing:.01em;
+}
+.period-line .period-label{color:#aeb8d3;font-weight:500}
+.period-line .period-dot{color:#5e6b8a;opacity:.8}
+.period-line .period-status{font-size:.58rem;text-transform:none;font-weight:500;color:#7d89a9}
+.period-line.status-fechado .period-status{color:#caa85f}
+.period-line.status-parcial .period-status{color:#6fa8ff}
+.period-line.status-aguardando .period-status{color:#8d97b2}
+.status-chip{display:none!important}
+.badge-await-full{background:transparent!important;border:0!important;padding:0!important;color:#8d97b2!important;font-size:.7rem!important}
+.indic-table-v2 .v2-val.dash{
+  color:#7e89a7;
+  font-size:.86rem;
+  font-weight:600;
+}
+.indic-table-v2 .td-cur .v2-val.dash{
+  color:#7d89a9;
+}
+.usd-brl-stack{
+  display:flex!important;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:2px;
+  line-height:1.18;
+}
+.usd-brl-line{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.68rem;
+  font-weight:700;
+  letter-spacing:-.01em;
+  white-space:nowrap;
+}
+.usd-brl-line.usd::before{content:''}
+.usd-brl-line.brl{font-size:.63rem;opacity:.9}
+.indic-table-v2 td.td-cur{
+  background:rgba(91,156,246,.035);
+}
+.indic-table-v2 th.th-cur{
+  background:rgba(91,156,246,.07);
+}
+.indic-table-v2 td{
+  vertical-align:middle;
+}
+.indic-table-v2 td:not(:first-child){
+  min-width:118px;
+}
+.indic-table-v2 .th-sub{
+  color:#8792ae;
+  opacity:1;
+}
+@media (max-width: 700px){
+  .period-line{font-size:.58rem;gap:3px;justify-content:flex-end}
+  .period-line .period-status{font-size:.55rem}
+  .usd-brl-line{font-size:.62rem}
+  .usd-brl-line.brl{font-size:.58rem}
+  .indic-table-v2 .v2-val.dash{font-size:.76rem}
+}
