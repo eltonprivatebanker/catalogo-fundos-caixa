@@ -11255,3 +11255,168 @@ tbody tr.row-fav{
     font-size:.95rem;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH 20260601 — Print/WhatsApp somente último mês fechado
+   Objetivo: gerar um card compacto, limpo e consultivo para envio
+════════════════════════════════════════════════════ */
+.closed-month-share-card{
+  display:none;
+  width:min(980px,100%);
+  margin:14px 0 0;
+  border:1px solid rgba(231,185,95,.28);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(231,185,95,.16), transparent 34%),
+    linear-gradient(180deg, rgba(18,22,42,.98), rgba(8,10,18,.98));
+  color:#eef2ff;
+  box-shadow:0 20px 60px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.05);
+  padding:22px;
+}
+.closed-card-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  padding-bottom:16px;
+  border-bottom:1px solid rgba(231,185,95,.18);
+}
+.closed-card-kicker{
+  display:block;
+  color:#9eabca;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.74rem;
+  font-weight:800;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  margin-bottom:5px;
+}
+.closed-card-head h3{
+  margin:0;
+  color:#f4d28a;
+  font-family:'Cormorant Garamond',serif;
+  font-size:2.05rem;
+  font-weight:700;
+  line-height:1;
+}
+.closed-card-badge{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(231,185,95,.36);
+  border-radius:999px;
+  padding:8px 12px;
+  background:rgba(231,185,95,.10);
+  color:#f4d28a;
+  font-weight:850;
+  white-space:nowrap;
+}
+.closed-card-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:12px;
+  margin-top:16px;
+}
+.closed-card-item{
+  border:1px solid rgba(159,174,213,.16);
+  border-radius:18px;
+  background:rgba(10,13,25,.68);
+  padding:14px;
+  min-height:118px;
+}
+.closed-item-top{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-bottom:12px;
+}
+.closed-item-icon{
+  width:30px;
+  height:30px;
+  border-radius:10px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.06);
+}
+.closed-item-name{
+  color:#dfe6ff;
+  font-weight:850;
+  letter-spacing:.01em;
+}
+.closed-item-value strong,
+.closed-item-value{
+  color:#f7f1ff;
+  font-size:1.18rem;
+  font-weight:900;
+  line-height:1.12;
+}
+.closed-card-item small{
+  display:block;
+  margin-top:9px;
+  color:#9eabca;
+  font-size:.78rem;
+  font-weight:650;
+}
+.closed-us-lines{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+.closed-us-line{
+  display:block;
+  font-family:'JetBrains Mono',monospace;
+  font-size:1.05rem;
+  font-weight:900;
+  letter-spacing:-.02em;
+}
+.closed-us-line.pos{color:var(--green)}
+.closed-us-line.neg{color:var(--red)}
+.closed-us-line.neu{color:#dbe3f2}
+.closed-card-foot{
+  margin-top:16px;
+  padding-top:12px;
+  border-top:1px solid rgba(159,174,213,.14);
+  color:#9eabca;
+  font-size:.78rem;
+  font-weight:650;
+}
+
+@media(max-width:760px){
+  .closed-card-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .closed-card-head{flex-direction:column;}
+  .closed-card-head h3{font-size:1.62rem;}
+}
+
+@media print{
+  @page{size:A4 landscape;margin:12mm;}
+  body.printing-closed-month-panel{
+    background:#080a12 !important;
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+  body.printing-closed-month-panel *{
+    visibility:hidden !important;
+  }
+  body.printing-closed-month-panel #painelFechadoCard,
+  body.printing-closed-month-panel #painelFechadoCard *{
+    visibility:visible !important;
+  }
+  body.printing-closed-month-panel #painelFechadoCard{
+    display:block !important;
+    position:absolute !important;
+    left:0 !important;
+    top:0 !important;
+    width:100% !important;
+    max-width:none !important;
+    margin:0 !important;
+    background:linear-gradient(180deg,#11162a,#070910) !important;
+  }
+  body.printing-closed-month-panel .bottom-nav,
+  body.printing-closed-month-panel .mobile-nav,
+  body.printing-closed-month-panel .back-to-top,
+  body.printing-closed-month-panel .sticky-top-mobile{
+    display:none !important;
+  }
+}
