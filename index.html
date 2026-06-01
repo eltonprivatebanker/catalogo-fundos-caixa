@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-eua-legivel-final"/>
+<link rel="stylesheet" href="style.css?v=20260601-ipca-positivo-verde"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -540,7 +540,7 @@
         </tr>
 
         <!-- IPCA -->
-        <tr class="data-row alert-row" id="row-ipca">
+        <tr class="data-row" id="row-ipca">
           <td><div class="ind-name-v2">
             <div class="ind-icon-v2 ii-red">🎯</div>
             <div>
@@ -2023,16 +2023,16 @@ function atualizarTabelaIndicadores(){
   const ipcaAno = num(cards.ipca?.acum_ano) ?? num(indicState.ipca.ano);
   const ipcaAcum = num(cards.ipca?.[`acum_${m}m`]) ?? num(indicState.ipca[`m${m}`]);
 
-  setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2, true);
+  setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2, false);
   setSubStatus('ipca-mes-ant-sub', ipcaRef, 'fechado');
   const ipcaCurCell = document.querySelector('#row-ipca .td-cur');
   if(ipcaCurCell){
     ipcaCurCell.innerHTML = `<div class="v2-val dash">—</div><div class="v2-sub status-line">${subStatus(mesAtualLabel, 'aguardando')}</div>`;
   }
-  setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10, true);
+  setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10, false);
   const ipcaAnoSub = document.querySelector('#row-ipca td:nth-child(4) .v2-sub');
   if(ipcaAnoSub) ipcaAnoSub.textContent = atePeriodo(ipcaRef);
-  setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20, true);
+  setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20, false);
   set('ipca-acum-sub-v2', `${m}M`);
 
   const alertEl = $('ipca-alert-badge');
@@ -2040,7 +2040,7 @@ function atualizarTabelaIndicadores(){
   if(alertEl && ipcaAcum !== null){
     const show = ipcaAcum > 4.5;
     alertEl.style.display = show ? 'inline-block' : 'none';
-    if(rowIpca) rowIpca.className = show ? 'data-row alert-row' : 'data-row';
+    if(rowIpca) rowIpca.className = 'data-row';
   }
 
   // ═══ DÓLAR ═══
