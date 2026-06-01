@@ -108,6 +108,7 @@ FECHAMENTOS_CONFIRMADOS = {
         "^GSPC": {"2026-05": {"variacao_mes_fechado": 5.15, "variacao_mes_fechado_brl": 6.59}},
         "^IXIC": {"2026-05": {"variacao_mes_fechado": 8.36}},
         "^DJI":  {"2026-05": {"variacao_mes_fechado": 1.99}},
+        "^IFIX": {"2026-05": {"variacao_mes_fechado": None}},  # ★ v17.3: IFIX pendente
     },
 }
 
@@ -2178,6 +2179,19 @@ class ColetorMercado:
         # Observação: S&P 500, Dow Jones e Nasdaq são índices em pontos.
         # A conversão para BRL usa o dólar PTAX quando disponível.
         ibov_indice   = self._resumo_indice_yahoo("^BVSP", "Ibovespa")
+
+        # ★ v17.3: IFIX — Índice de Fundos de Investimento Imobiliário
+        # Ticker ^IFIX existe no Yahoo Finance; se indisponível, retorna dict vazio (graceful)
+        try:
+            ifix_indice = self._resumo_indice_yahoo("^IFIX", "IFIX")
+            if ifix_indice.get("erro"):
+                log(f"  [IFIX] Indisponível no Yahoo — campo virá vazio no JSON")
+                ifix_indice = {"nome": "IFIX", "ticker": "^IFIX", "fonte": "Yahoo Finance",
+                               "erro": "indisponível", "nota": "Adicionar ao robô quando ticker disponível"}
+        except Exception as e_ifix:
+            log(f"  [IFIX] Erro ao buscar: {e_ifix}")
+            ifix_indice = {"nome": "IFIX", "ticker": "^IFIX", "fonte": "Yahoo Finance", "erro": str(e_ifix)}
+
         sp500_indice  = self._resumo_indice_yahoo("^GSPC", "S&P 500")
         dow_indice    = self._resumo_indice_yahoo("^DJI", "Dow Jones")
         nasdaq_indice = self._resumo_indice_yahoo("^IXIC", "Nasdaq")
@@ -2298,6 +2312,7 @@ class ColetorMercado:
             "indices_mercado": {
                 "dolar":     dolar_indice,
                 "ibovespa":  ibov_indice,
+                "ifix":      ifix_indice,   # ★ v17.3: FIIs — usado pelo fechamento rápido mobile
                 "sp500":     sp500_indice,
                 "dow_jones": dow_indice,
                 "nasdaq":    nasdaq_indice,
@@ -2501,7 +2516,7 @@ def salvar_excel(df, caminho):
 # ---------------------------------------------------------------------------
 def executar():
     log("=" * 65)
-    log("⚡ ROBÔ SIPII v17.1 — Poupança nova+antiga acum. ano + índices mercado")
+    log("⚡ ROBÔ SIPII v17.3 — Poupança nova+antiga acum. ano + índices mercado")
     log("=" * 65)
 
     # 1. URLs dinâmicas do portal CAIXA
