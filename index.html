@@ -332,6 +332,23 @@
     </div>
   </div>
 
+
+<button type="button" class="closed-month-launch" id="closedMonthLaunch" onclick="openFechamentoMesSheet()" aria-label="Abrir resumo do último mês fechado">
+    <span class="closed-month-launch-icon">📌</span>
+    <span class="closed-month-launch-copy">
+      <strong id="closedMonthLaunchTitle">Resumo do mês fechado</strong>
+      <small id="closedMonthLaunchSub">Principais indicadores do último mês consolidado</small>
+      <span class="closed-month-mini" aria-hidden="true">
+        <span><b>CDI</b> <em id="closedMiniCdi">—</em></span>
+        <span><b>IPCA</b> <em id="closedMiniIpca">—</em></span>
+        <span><b>Dólar</b> <em id="closedMiniDolar">—</em></span>
+        <span><b>Ibov</b> <em id="closedMiniIbov">—</em></span>
+      </span>
+    </span>
+    <span class="closed-month-launch-action">Ver resumo ›</span>
+  </button>
+
+
   <!-- Cards de referência: Selic, CDI e Poupança separados -->
   <div class="indic-ref-bar market-ref-grid">
 
@@ -1498,12 +1515,10 @@ function calcularDolarPeriodos(){
   const refLabel = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
 
   // Início do ano — usa Dez do ano anterior como base (YTD correto)
-  // BUG anterior: sorted.find pegava Jan/2026 em vez de Dez/2025
   const anoAnteriorStr = `${ANO_ATUAL - 1}`;
   const fimAnoAnterior = [...sorted].reverse().find(([k]) => k.startsWith(anoAnteriorStr));
-  const baseAno = fimAnoAnterior; // Dez/2025 = último fechamento do ano anterior
-  if(baseAno){
-    const inicioVal = parseFloat(baseAno[1].cotacaoVenda);
+  if(fimAnoAnterior){
+    const inicioVal = parseFloat(fimAnoAnterior[1].cotacaoVenda);
     indicState.dolarBRL.ano = inicioVal;
     indicState.dolarPct.ano = +((lastVal/inicioVal-1)*100).toFixed(2);
   }
@@ -6844,7 +6859,158 @@ async function sharePainelMercado(){
     alert('Não foi possível abrir o WhatsApp automaticamente. Copie o resumo manualmente pelo painel.');
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   FECHAMENTO RÁPIDO DE MERCADO — Bottom Sheet
+════════════════════════════════════════════════════ */
+
+function normalizeValueForSign(txt){
+  const s=String(txt||'');
+  const m=s.match(/[-+]?\d+(?:[\.,]\d+)?/);
+  if(!m) return null;
+  const n=Number(m[0].replace('.','').replace(',','.'));
+  return Number.isFinite(n) ? n : null;
+}
+
+function signClassFromText(txt){
+  const n=normalizeValueForSign(txt);
+  if(n === null) return 'neu';
+  return n > 0 ? 'pos' : n < 0 ? 'neg' : 'neu';
+}
+
+function primeiroValorNaoVazio(...vals){
+  for(const v of vals){
+    const s=cleanTxt(v);
+    if(s && s !== '—') return s;
+  }
+  return '—';
+}
+
+function ifixFechadoRow(){
+  const indices=_dadosMercado?.indices_mercado || {};
+  const intl=_dadosMercado?.indices_internacionais || {};
+  const item = indices.ifix || indices.IFIX || intl.ifix || _dadosMercado?.ifix || _dadosMercado?.cards?.ifix || null;
+  if(!item) return {grupo:'Bolsa Brasil', icon:'🏢', nome:'IFIX', valor:'—', detalhe:'pendente no robô'};
+  const pts = item.fechamento_mes_anterior ?? item.fechamento_atual ?? item.pontos ?? item.valor;
+  const vari = item.variacao_mes_fechado ?? item.variacao_mes_anterior ?? item.variacao_mes_atual ?? item.mensal;
+  const ptsTxt = pts != null && Number.isFinite(Number(pts)) ? `${fmtK(Number(pts))} pts` : '';
+  const varTxt = vari != null && Number.isFinite(Number(vari)) ? pctTxt(Number(vari)) : '';
+  return {grupo:'Bolsa Brasil', icon:'🏢', nome:'IFIX', valor:primeiroValorNaoVazio([ptsTxt,varTxt].filter(Boolean).join(' · '), varTxt, ptsTxt), detalhe: item ? 'fundos imobiliários' : 'pendente no robô'};
+}
+
+function indicadorFechadoRows(){
+  const poupValor = primeiroValorNaoVazio(painelText('mc-poup'), painelText('poupOldMonthly'));
+  return [
+    {grupo:'Taxas e inflação', icon:'💰', nome:'CDI', valor:painelText('cdi-mes-ant'), detalhe:'mês fechado'},
+    {grupo:'Taxas e inflação', icon:'🎯', nome:'IPCA', valor:painelText('ipca-mes-ant'), detalhe:'inflação do mês'},
+    {grupo:'Taxas e inflação', icon:'🏠', nome:'Poupança', valor:poupValor, detalhe:'rendimento mensal'},
+    {grupo:'Câmbio e bolsa Brasil', icon:'💵', nome:'Dólar PTAX', valor:painelText('dolar-ant-cot'), detalhe:painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : 'cotação de fechamento', extra:painelText('dolar-ant-var')},
+    {grupo:'Câmbio e bolsa Brasil', icon:'📈', nome:'Ibovespa', valor:[painelText('ibov-ant-pts'), painelText('ibov-ant-var')].filter(v=>v && v!=='—').join(' · ') || '—', detalhe:'fechamento mensal'},
+    ifixFechadoRow(),
+    {grupo:'Bolsa EUA', icon:'🌎', nome:'S&P 500', valor:painelText('sp-ant-var'), detalhe:'USD e BRL', us:true},
+    {grupo:'Bolsa EUA', icon:'💻', nome:'Nasdaq', valor:painelText('nasdaq-ant-var'), detalhe:'USD e BRL', us:true},
+    {grupo:'Bolsa EUA', icon:'🏛️', nome:'Dow Jones', valor:painelText('dow-ant-var'), detalhe:'USD e BRL', us:true},
+  ];
+}
+
+function renderClosedMarketSheet(){
+  const periodo=periodoUltimoFechado();
+  const title=document.getElementById('closedMarketSheetTitle');
+  const note=document.getElementById('closedMarketSheetNote');
+  const list=document.getElementById('closedMarketSheetList');
+  if(title) title.textContent=`Fechamento de Mercado — ${periodo}`;
+  if(note) note.textContent=`Último mês fechado · ${periodo}`;
+  if(!list) return;
+  let lastGrupo='';
+  list.innerHTML=indicadorFechadoRows().map(r=>{
+    const grupo = r.grupo || '';
+    const section = grupo !== lastGrupo ? `<div class="closed-market-group-label">${escapeHtml(grupo)}</div>` : '';
+    lastGrupo=grupo;
+    const mainCls = r.us ? 'us' : signClassFromText(r.valor + ' ' + (r.extra||''));
+    let valueHtml='';
+    if(r.us){
+      valueHtml = `<div class="closed-market-us-lines">${quebrarUsdBrl(r.valor).map(l=>`<span class="${signClassFromText(l)}">${escapeHtml(l)}</span>`).join('')}</div>`;
+    }else if(r.nome==='Dólar PTAX'){
+      const extra = r.extra && r.extra !== '—' ? `<small class="${signClassFromText(r.extra)}">${escapeHtml(r.extra)}</small>` : '';
+      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong>${extra}`;
+    }else{
+      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong>`;
+    }
+    return `${section}<button type="button" class="closed-market-row" aria-label="${escapeHtml(r.nome)} ${escapeHtml(r.valor)}">
+      <span class="closed-market-row-icon">${r.icon}</span>
+      <span class="closed-market-row-name">${escapeHtml(r.nome)}<small>${escapeHtml(r.detalhe||'')}</small></span>
+      <span class="closed-market-row-value">${valueHtml}</span>
+    </button>`;
+  }).join('');
+}
+
+function openFechamentoMesSheet(){
+  atualizarResumoFechamentoMes();
+  atualizarPainelFechadoCard();
+  renderClosedMarketSheet();
+  document.body.classList.add('closed-market-open');
+  const sheet=document.getElementById('closedMarketSheet');
+  const overlay=document.getElementById('closedMarketOverlay');
+  if(sheet) sheet.setAttribute('aria-hidden','false');
+  if(overlay) overlay.setAttribute('aria-hidden','false');
+}
+
+function closeFechamentoMesSheet(){
+  document.body.classList.remove('closed-market-open');
+  const sheet=document.getElementById('closedMarketSheet');
+  const overlay=document.getElementById('closedMarketOverlay');
+  if(sheet) sheet.setAttribute('aria-hidden','true');
+  if(overlay) overlay.setAttribute('aria-hidden','true');
+}
+
+function atualizarResumoFechamentoMes(){
+  const periodo=periodoUltimoFechado();
+  const title=document.getElementById('closedMonthLaunchTitle');
+  const sub=document.getElementById('closedMonthLaunchSub');
+  if(title) title.textContent=`Resumo do mês fechado`;
+  if(sub) sub.textContent=`${periodo} · principais indicadores`;
+  const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
+  setMini('closedMiniCdi', painelText('cdi-mes-ant'));
+  setMini('closedMiniIpca', painelText('ipca-mes-ant'));
+  setMini('closedMiniDolar', painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : painelText('dolar-ant-cot'));
+  setMini('closedMiniIbov', painelText('ibov-ant-var'));
+}
+
+function copiarResumoPainelMercado(){
+  atualizarPainelFechadoCard();
+  const texto=montarResumoPainelMercado();
+  try{
+    await navigator.clipboard.writeText(texto);
+    alert('Resumo do mês fechado copiado.');
+  }catch(e){
+    prompt('Copie o resumo abaixo:', texto);
+  }
+}
+
 </script>
+
+
+
+<div class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()" aria-hidden="true"></div>
+  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-labelledby="closedMarketSheetTitle" aria-hidden="true">
+    <div class="closed-market-handle" aria-hidden="true"></div>
+    <div class="closed-market-sheet-head">
+      <div class="closed-market-sheet-icon">📊</div>
+      <div>
+        <span class="closed-market-kicker">Consulta rápida</span>
+        <h3 id="closedMarketSheetTitle">Fechamento de Mercado</h3>
+      </div>
+      <button type="button" class="closed-market-close" onclick="closeFechamentoMesSheet()" aria-label="Fechar resumo">×</button>
+    </div>
+    <div class="closed-market-section-note" id="closedMarketSheetNote">Último mês fechado · dados públicos</div>
+    <div class="closed-market-list" id="closedMarketSheetList"></div>
+    <div class="closed-market-actions">
+      <button type="button" onclick="copiarResumoPainelMercado()">📋 Copiar resumo</button>
+      <button type="button" onclick="sharePainelMercado()">📲 WhatsApp</button>
+      <button type="button" onclick="printPainelMercado()">🖨️ Print</button>
+    </div>
+  </aside>
 
 </body>
 </html>
