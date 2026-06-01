@@ -719,6 +719,10 @@ def _parsear_lista_fundos(lista):
             if not _url_doc_valida(doc_comunicado) and codfundo:
                 doc_comunicado = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_{codfundo}.pdf"
 
+            # ★ v17.2 — Boletim Comercial = LAC_{codfundo}.pdf (mesma URL da lâmina)
+            if not _url_doc_valida(doc_boletim) and codfundo:
+                doc_boletim = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_{codfundo}.pdf"
+
             dados = {
                 "url":               url_raw if _url_valida(url_raw) else "",
                 "cnpj":              cnpj_raw,
@@ -771,7 +775,19 @@ def _buscar_meta_json(nome_sipii, indice_json):
         if score > melhor_score:
             melhor_score = score
             melhor_meta = dados
-    return melhor_meta if melhor_score >= 0.65 else None
+    if melhor_score >= 0.65:
+        return melhor_meta
+
+    # ★ v17.2 — Fallback estático para fundos sem CNPJ no SIPII
+    # Tenta o mapeamento _CODFUNDO_FALLBACK quando a busca por palavras não encontra
+    cod_fb, razao_fb = _buscar_codfundo_por_nome(nome_sipii, indice_json)
+    if cod_fb:
+        # Localiza o registro no índice pelo codfundo
+        for (_, dados) in indice_json["palavras"]:
+            if str(dados.get("codfundo","")).lstrip("0") == str(cod_fb).lstrip("0"):
+                log(f"  [Meta] Fallback nome→codfundo {cod_fb} para '{nome_sipii[:40]}' ({razao_fb})")
+                return dados
+    return None
 
 def buscar_fundos_json(headers):
     lista = []
@@ -821,12 +837,59 @@ def buscar_fundos_json(headers):
 
     return indice
 
+# ★ v17.2 — Mapeamento estático para fundos sem CNPJ no SIPII
+# Chave: fragmento único e inequívoco do nome SIPII (lowercase, sem acento)
+# Valor: codfundo confirmado no fundos_caixa.json
+_CODFUNDO_FALLBACK = {
+    "e-simples renda fixa":      "5980",   # CAIXA FIF E-SIMPLES RENDA FIXA LP
+    "e simples renda fixa":      "5980",
+    "e-simples fif rf":          "5980",   # CAIXA E-SIMPLES FIF RF LP
+    "esimples fif rf":           "5980",
+    "geracao jovem":             "5570",   # GER JOVEM RF CREDITO PRIV LP
+    "geracao jov":               "5570",
+    "exclusivo func":            "5972",   # EXCLUSIVO FUNCIONARIOS RF CRED PRIVADO
+    "exclusivo funcionario":     "5972",
+    "fifinvestidor":             "89",     # FIC FIF INVESTIDOR RF LONGO PRAZO
+    "plus quali":                "6533",   # PLUS QUALIFICADO FIC FIF RF CRED PRIV
+    "mega rf ref":               "5411",   # MEGA RF REF DI LONGO PRAZO
+    "mega rf referenc":          "5411",
+    "multimercado rv 30":        "82",     # FIF RV 30 MM LONGO PRAZO
+    "etf ibovespa":              "5842",   # BRASIL ETF IBOVESPA FIF ACOES
+    "ametista corp":             "7861",   # AMETISTA CORPORATIVO FIC FIF RF SIMPLES
+    "ametista corporativo":      "7861",
+    "transferencia voluntaria":  "5413",   # TRANSF VOLUNTARIAS POLIS FIC FIF RF CP
+    "brasil idka ipca 2a":       "5825",   # BRASIL IDKA IPCA 2A TP FIF RF LP
+    "idka ipca 2a":              "5825",
+    # RS TITULOS PUBLICOS e BRASIL RF REFER DI LONGO: não estão na API CAIXA
+}
+
+def _buscar_codfundo_por_nome(nome_sipii, indice_json):
+    """
+    Fallback para fundos sem CNPJ: busca codfundo pelo nome.
+    Etapa 1: mapeamento estático _CODFUNDO_FALLBACK (mais seguro).
+    Etapa 2: não há match automático — retorna None (não arrisca falso positivo).
+    """
+    import unicodedata as _ud
+    def _n(t):
+        t = _ud.normalize('NFD', str(t))
+        t = ''.join(c for c in t if _ud.category(c) != 'Mn')
+        import re as _re
+        return _re.sub(r'[^a-z0-9 ]', ' ', t.lower()).strip()
+
+    nome_norm = _n(nome_sipii)
+    # Etapa 1: mapeamento estático
+    for frag, cod in _CODFUNDO_FALLBACK.items():
+        if frag in nome_norm:
+            return cod, f"fallback_estatico:{frag}"
+    return None, None
+
+
 def enriquecer_dados_com_fundos_json(df, indice_json):
     colunas_novas = [
         "CNPJ", "codfundo", "Perfil de Risco", "Taxa Adm (%)",
         "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate",
         "doc_lamina", "doc_regulamento", "doc_inf_comp",  # ★ v16.2: URLs reais
-        "doc_comunicado", "doc_carta",
+        "doc_comunicado", "doc_carta", "doc_boletim",     # ★ v17.2: boletim LAC
     ]
     for col in colunas_novas:
         if col not in df.columns:
@@ -854,6 +917,7 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
             row["doc_inf_comp"]   = docs.get("inf_comp", "")
             row["doc_comunicado"] = docs.get("comunicado", "")
             row["doc_carta"]      = docs.get("carta_mensal", "")
+            row["doc_boletim"]    = docs.get("boletim", "")      # ★ v17.2: LAC_XXXX.pdf
         return row
 
     df = df.apply(_processar_linha, axis=1)
