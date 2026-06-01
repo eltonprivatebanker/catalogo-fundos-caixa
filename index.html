@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-painel-print-left"/>
+<link rel="stylesheet" href="style.css?v=20260601-painel-acoes-textos-final"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -490,9 +490,9 @@
         <button class="indic-tab" data-months="36">36 Meses</button>
       </div>
     </div>
-    <div class="market-toolbar-actions" aria-label="Ações do painel consolidado">
-      <button type="button" class="panel-action-btn" onclick="printPainelMercado()">🖨️ Print</button>
-      <button type="button" class="panel-action-btn panel-action-btn-primary" onclick="sharePainelMercado()">📲 WhatsApp</button>
+    <div class="market-toolbar-actions indic-actions" aria-label="Ações do painel consolidado">
+      <button type="button" class="panel-action-btn indic-action-btn" onclick="printPainelMercado()" aria-label="Imprimir painel consolidado">🖨️ Print</button>
+      <button type="button" class="panel-action-btn indic-action-btn indic-action-btn-primary" onclick="sharePainelMercado()" aria-label="Compartilhar resumo dos indicadores pelo WhatsApp">📲 WhatsApp</button>
     </div>
   </div>
 
@@ -1853,6 +1853,11 @@ function atualizarTabelaIndicadores(){
   };
 
   const setSubStatus = (id, label, status='fechado') => setHTML(id, subStatus(label, status));
+  const setSubSimple = (id, label) => {
+    const el = $(id);
+    if(el) el.textContent = limparStatus(label || '—');
+  };
+  const atePeriodo = (label) => label ? `até ${limparStatus(label)}` : 'até último dado';
 
   const setPct = (id, n, barId, maxPct=20, inverse=false, emptyText='—') => {
     const el=$(id);
@@ -1986,8 +1991,8 @@ function atualizarTabelaIndicadores(){
 
   // Cabeçalhos mais claros para virada de mês
   set('th-mes-ant-sub', fallbackMesFechado);
-  set('th-mes-cur-sub', `${mesAtualLabel} parcial`);
-  set('th-ano-sub', anoLabel);
+  set('th-mes-cur-sub', mesAtualLabel);
+  set('th-ano-sub', 'ano até agora');
   set('th-acum-sub-v2', `${m}M`);
   const thAcum = $('th-acum-head');
   if(thAcum) thAcum.firstChild.textContent = `Acum. ${m}M `;
@@ -2006,7 +2011,7 @@ function atualizarTabelaIndicadores(){
   setSubStatus('cdi-cur-sub', cdiParcialLabel, cdiParcial !== null ? 'parcial' : 'aguardando');
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
-  setSubStatus('cdi-ano-sub', cdiParcial !== null ? 'ano com parcial' : 'ano fechado', cdiParcial !== null ? 'parcial' : 'fechado');
+  setSubSimple('cdi-ano-sub', atePeriodo(cdiParcial !== null ? cdiParcialLabel : (cards.cdi?.mes_ref || fallbackMesFechado)));
 
   setPct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
   if($('cdi-acum-v2') && cdiAcum !== null) $('cdi-acum-v2').classList.add('pos');
@@ -2026,7 +2031,7 @@ function atualizarTabelaIndicadores(){
   }
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10, true);
   const ipcaAnoSub = document.querySelector('#row-ipca td:nth-child(4) .v2-sub');
-  if(ipcaAnoSub) ipcaAnoSub.innerHTML = subStatus('ano', 'fechado');
+  if(ipcaAnoSub) ipcaAnoSub.textContent = atePeriodo(ipcaRef);
   setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20, true);
   set('ipca-acum-sub-v2', `${m}M`);
 
@@ -2052,7 +2057,7 @@ function atualizarTabelaIndicadores(){
   setSubStatus('dolar-cur-sub', dolarAtualInfo.label, dolarAtualInfo.status);
   setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
   const dolarAnoSub = document.querySelector('#row-dolar td:nth-child(4) .v2-sub');
-  if(dolarAnoSub) dolarAnoSub.innerHTML = subStatus('Ano', 'fechado');
+  if(dolarAnoSub) dolarAnoSub.textContent = atePeriodo(dolarAtualInfo.status === 'parcial' ? dolarAtualInfo.label : dolarFechado.label);
   setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
   set('dolar-acum-sub-v2', `${m}M`);
 
@@ -2072,7 +2077,7 @@ function atualizarTabelaIndicadores(){
 
   setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
   const ibovAnoSub = document.querySelector('#row-ibov td:nth-child(4) .v2-sub');
-  if(ibovAnoSub) ibovAnoSub.innerHTML = subStatus('Ano', ibovAtualInfo.status === 'parcial' ? 'parcial' : 'fechado');
+  if(ibovAnoSub) ibovAnoSub.textContent = atePeriodo(ibovAtualInfo.status === 'parcial' ? ibovAtualInfo.label : ibovFechado.label);
   setPct('ibov-acum-v2', ibovAcum, 'bar-ibov-acum', 80);
   set('ibov-acum-sub-v2', `${m}M`);
 
@@ -2105,7 +2110,7 @@ function atualizarTabelaIndicadores(){
     setHTML(`${prefix}-ano-var`, usdBrlHTML(ano, anoBrl));
     const anoEl = $(`${prefix}-ano-var`); if(anoEl) anoEl.className = 'v2-val usd-brl-stack';
     const barAno = $(`bar-${prefix}-ano`); if(barAno){ barAno.style.width = ano === null ? '0%' : Math.min(Math.abs(ano)/60*100,100)+'%'; barAno.className = ano >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
-    setSubStatus(`${prefix}-ano-sub`, 'Ano', atual.status === 'parcial' ? 'parcial' : 'fechado');
+    setSubSimple(`${prefix}-ano-sub`, atePeriodo(atual.status === 'parcial' ? atual.label : fechado.label));
 
     setHTML(`${prefix}-acum-var`, usdBrlHTML(acum, acumBrl));
     const acumEl = $(`${prefix}-acum-var`); if(acumEl) acumEl.className = 'v2-val usd-brl-stack';
@@ -6576,7 +6581,7 @@ function montarResumoPainelMercado(){
   const linhas=[
     '📊 Painel consolidado de indicadores',
     data ? `Atualização: ${data}` : '',
-    `Colunas: fechado ${fechado} | atual ${atual} | acum. ${acum}`,
+    `Referências: último fechado ${fechado} | mês atual ${atual} | acumulado ${acum}`,
     '',
     painelLine('CDI', ['cdi-mes-ant','cdi-mes-cur','cdi-ano','cdi-acum-v2']),
     painelLine('IPCA', ['ipca-mes-ant','ipca-ano-v2','ipca-acum-v2']),
@@ -6597,18 +6602,14 @@ function printPainelMercado(){
 }
 async function sharePainelMercado(){
   const texto=montarResumoPainelMercado();
-  const titulo='Painel consolidado de indicadores';
-  try{
-    if(navigator.share){
-      await navigator.share({title:titulo,text:texto});
-      return;
-    }
-  }catch(e){/* usuário cancelou ou navegador bloqueou */}
+  const url='https://wa.me/?text='+encodeURIComponent(texto);
+  const opened=window.open(url,'_blank','noopener,noreferrer');
+  if(opened) return;
   try{
     await navigator.clipboard.writeText(texto);
     alert('Resumo copiado. Agora é só colar no WhatsApp.');
   }catch(e){
-    window.open('https://wa.me/?text='+encodeURIComponent(texto),'_blank','noopener,noreferrer');
+    alert('Não foi possível abrir o WhatsApp automaticamente. Copie o resumo manualmente pelo painel.');
   }
 }
 </script>
