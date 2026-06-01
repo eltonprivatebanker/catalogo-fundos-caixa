@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-rankings-abas-limpo"/>
+<link rel="stylesheet" href="style.css?v=20260601-evolucao-indicadores-abas"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -866,32 +866,62 @@
 </div>
 
 <!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES ══ -->
-<div class="section-gap" id="sec-graficos">
-  <div class="section-title">
-    <h2>📊 Evolução dos Indicadores</h2>
+<div class="section-gap evolution-section" id="sec-graficos">
+  <div class="section-title evolution-title">
+    <div>
+      <h2>📊 Evolução dos Indicadores</h2>
+      <p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
+    </div>
     <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
   </div>
-  <div class="charts-grid">
-    <div class="chart-card">
+
+  <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores">
+    <div class="evo-summary-card">
+      <span class="evo-summary-kicker">IPCA mensal</span>
+      <strong id="evoIpcaMensalVal">—</strong>
+      <small id="evoIpcaMensalSub">último dado oficial</small>
+    </div>
+    <div class="evo-summary-card emphasis">
+      <span class="evo-summary-kicker">Selic atual</span>
+      <strong id="evoSelicAtualVal">—</strong>
+      <small id="evoSelicAtualSub">meta COPOM</small>
+    </div>
+    <div class="evo-summary-card">
+      <span class="evo-summary-kicker">IPCA 12M x meta</span>
+      <strong id="evoIpca12Val">—</strong>
+      <small id="evoIpca12Sub">meta 3,00% · banda 1,50% a 4,50%</small>
+    </div>
+  </div>
+
+  <div class="evo-view-tabs" aria-label="Selecionar gráfico no celular">
+    <button class="evo-view-tab active" type="button" data-evo-chart="ipca">IPCA mensal</button>
+    <button class="evo-view-tab" type="button" data-evo-chart="selic">Selic</button>
+    <button class="evo-view-tab" type="button" data-evo-chart="meta">IPCA 12M</button>
+  </div>
+
+  <div class="charts-grid evo-charts-grid">
+    <div class="chart-card evo-chart-card active" id="evoChartIpcaCard" data-evo-panel="ipca">
       <div class="chart-card-header">
-        <div><div class="chart-card-title">🎯 IPCA — Variação Mensal</div><div class="chart-card-sub">Índice Nacional de Preços ao Consumidor Amplo</div></div>
+        <div><div class="chart-card-title">🎯 IPCA mensal</div><div class="chart-card-sub">Variação oficial mês a mês</div></div>
         <div class="chart-tabs">
           <button class="chart-tab active" data-chart="ipca" data-range="24">24M</button>
           <button class="chart-tab" data-chart="ipca" data-range="60">5A</button>
           <button class="chart-tab" data-chart="ipca" data-range="120">10A</button>
         </div>
       </div>
+      <div class="chart-reading" id="evoCardIpcaNote">Último dado: aguardando atualização.</div>
       <div class="chart-body"><canvas id="chartIpca"></canvas></div>
     </div>
-    <div class="chart-card selic-chart-card">
+    <div class="chart-card selic-chart-card evo-chart-card" id="evoChartSelicCard" data-evo-panel="selic">
       <div class="chart-card-header">
-        <div><div class="chart-card-title">🏦 Selic — Histórico COPOM</div><div class="chart-card-sub">Visão histórica desde 1999 · taxa básica de juros</div></div>
+        <div><div class="chart-card-title">🏦 Selic histórica</div><div class="chart-card-sub">Histórico COPOM desde 1999</div></div>
         <div class="chart-tabs">
           <button class="chart-tab" data-chart="selic" data-range="12">1A</button>
           <button class="chart-tab" data-chart="selic" data-range="35">5A</button>
-          <button class="chart-tab active" data-chart="selic" data-range="999">Hist.</button>
+          <button class="chart-tab active" data-chart="selic" data-range="999">Histórico</button>
         </div>
       </div>
+      <div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
       <div class="selic-summary-row" id="selicSummaryRow" aria-label="Resumo do período exibido no gráfico da Selic">
         <div class="selic-summary-chip max">
           <span class="selic-summary-dot"></span>
@@ -908,10 +938,11 @@
       </div>
       <div class="chart-body"><canvas id="chartSelic"></canvas></div>
     </div>
-    <div class="chart-card">
+    <div class="chart-card evo-chart-card" id="evoChartMetaCard" data-evo-panel="meta">
       <div class="chart-card-header">
-        <div><div class="chart-card-title">🎯 IPCA 12M vs Meta</div><div class="chart-card-sub">Inflação acumulada vs meta e bandas do CMN</div></div>
+        <div><div class="chart-card-title">🎯 IPCA acumulado em 12 meses</div><div class="chart-card-sub">Meta central e intervalo de tolerância</div></div>
       </div>
+      <div class="chart-reading" id="evoCardMetaNote">Meta: 3,00% · banda: 1,50% a 4,50%.</div>
       <div class="chart-body"><canvas id="chartMeta"></canvas></div>
     </div>
   </div>
@@ -2501,6 +2532,7 @@ async function carregarMercado(){
     atualizarPoupancaCard(d, selic);
 
     atualizarResumoCenario(d);
+    atualizarResumoEvolucao(d);
 
     // ★ v16 — PTAX histórico pré-carregado pelo robô
     // Resolve HTTP 400 que ocorria quando browser tentava buscar 36M (limite é 24M)
@@ -4603,6 +4635,54 @@ async function carregarJsonLocal(nomeArquivo){
   }
 }
 
+function atualizarResumoEvolucao(d){
+  const ipca = d?.cards?.ipca || {};
+  const selic = d?.cards?.selic_meta || {};
+  const meta12 = Number(ipca.acum_12m);
+
+  const setText = (id, value) => { const el = document.getElementById(id); if(el) el.textContent = value; };
+  const pct = v => formatPctCard(v);
+  const metaStatus = (v) => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return 'meta 3,00% · banda 1,50% a 4,50%';
+    if(n > 4.5) return 'acima do teto da meta · meta 3,00%';
+    if(n < 1.5) return 'abaixo do piso da meta · meta 3,00%';
+    return 'dentro da banda da meta · meta 3,00%';
+  };
+
+  setText('evoIpcaMensalVal', pct(ipca.ultimo_mes));
+  setText('evoIpcaMensalSub', ipca.label_mes ? `${ipca.label_mes} · último dado oficial` : 'último dado oficial');
+  setText('evoSelicAtualVal', selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.` : '—');
+  setText('evoSelicAtualSub', selic.data_ref || selic.ultima_alteracao || 'meta COPOM');
+  setText('evoIpca12Val', pct(ipca.acum_12m));
+  setText('evoIpca12Sub', metaStatus(ipca.acum_12m));
+
+  setText('evoCardIpcaNote', ipca.ultimo_mes != null ? `Último dado: ${pct(ipca.ultimo_mes)} em ${ipca.label_mes || 'período recente'}.` : 'Último dado: aguardando atualização.');
+  setText('evoCardSelicNote', selic.valor != null ? `Selic atual: ${Number(selic.valor).toFixed(2).replace('.',',')}% a.a. · referência para CDI, crédito e renda fixa.` : 'Selic atual: aguardando atualização.');
+  setText('evoCardMetaNote', ipca.acum_12m != null ? `IPCA 12M: ${pct(ipca.acum_12m)} · ${metaStatus(ipca.acum_12m)}.` : 'Meta: 3,00% · banda: 1,50% a 4,50%.');
+}
+
+function selecionarGraficoEvolucao(chave){
+  const target = chave || 'ipca';
+  document.querySelectorAll('.evo-view-tab').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.evoChart === target);
+  });
+  document.querySelectorAll('.evo-chart-card').forEach(card=>{
+    card.classList.toggle('active', card.dataset.evoPanel === target);
+  });
+  setTimeout(()=>{
+    [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{ if(ch && typeof ch.resize === 'function') ch.resize(); });
+  }, 80);
+}
+
+function bindEvolucaoTabs(){
+  document.querySelectorAll('.evo-view-tab').forEach(btn=>{
+    if(btn.dataset.bound === '1') return;
+    btn.dataset.bound = '1';
+    btn.addEventListener('click',()=>selecionarGraficoEvolucao(btn.dataset.evoChart));
+  });
+}
+
 async function inicializarGraficos(d){
   _dadosMercado=d;
 
@@ -4638,6 +4718,9 @@ async function inicializarGraficos(d){
 
   if(meta.length) buildChartMeta(meta);
   else marcarGraficoSemDados('chartMeta', 'Histórico de inflação e meta temporariamente indisponível.');
+
+  bindEvolucaoTabs();
+  selecionarGraficoEvolucao('ipca');
 
   document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
     if(btn.dataset.bound==='1') return;
