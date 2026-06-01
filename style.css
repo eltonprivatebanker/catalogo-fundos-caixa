@@ -10886,3 +10886,103 @@ tbody tr.row-fav{
     font-size:10px !important;
   }
 }
+
+
+/* ─────────────────────────────────────────────
+   PATCH FINAL — Painel consolidado: ações e subtítulos mais limpos
+───────────────────────────────────────────── */
+.market-table-toolbar .indic-actions,
+.market-table-toolbar .market-toolbar-actions{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:flex-end !important;
+  gap:8px !important;
+  flex-wrap:wrap !important;
+  margin-left:auto !important;
+}
+.market-table-toolbar .indic-action-btn,
+.market-table-toolbar .panel-action-btn{
+  all:unset;
+  box-sizing:border-box !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  min-height:30px !important;
+  padding:7px 12px !important;
+  border:1px solid rgba(231,185,95,.44) !important;
+  border-radius:11px !important;
+  background:linear-gradient(180deg, rgba(231,185,95,.18), rgba(231,185,95,.075)) !important;
+  color:#f4d28a !important;
+  font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif !important;
+  font-size:.74rem !important;
+  font-weight:850 !important;
+  line-height:1 !important;
+  letter-spacing:.015em !important;
+  cursor:pointer !important;
+  white-space:nowrap !important;
+  box-shadow:0 0 0 1px rgba(255,255,255,.04) inset, 0 10px 24px rgba(0,0,0,.18) !important;
+  transition:transform .15s ease,border-color .15s ease,background .15s ease,box-shadow .15s ease !important;
+}
+.market-table-toolbar .indic-action-btn:hover,
+.market-table-toolbar .panel-action-btn:hover{
+  transform:translateY(-1px) !important;
+  border-color:rgba(231,185,95,.72) !important;
+  background:linear-gradient(180deg, rgba(231,185,95,.26), rgba(231,185,95,.10)) !important;
+}
+.market-table-toolbar .indic-action-btn-primary,
+.market-table-toolbar .panel-action-btn-primary{
+  border-color:rgba(49,211,132,.46) !important;
+  color:#79f0b0 !important;
+  background:linear-gradient(180deg, rgba(49,211,132,.16), rgba(49,211,132,.065)) !important;
+}
+
+.indic-table-v2 .v2-sub{
+  color:#9ca8c8 !important;
+  font-size:.66rem;
+  line-height:1.35;
+}
+.indic-table-v2 td:nth-child(4) .v2-sub,
+.indic-table-v2 [id$="-ano-sub"]{
+  color:#aeb8d4 !important;
+  font-weight:600 !important;
+  letter-spacing:.01em !important;
+}
+.indic-table-v2 .td-cur .v2-val.dash{
+  font-size:1.05rem !important;
+  color:#8490ad !important;
+  font-weight:700 !important;
+}
+.period-line{
+  gap:3px !important;
+}
+.period-line .period-label{
+  color:#aab5d2 !important;
+}
+.period-line .period-status{
+  opacity:.78;
+}
+
+@media(max-width:768px){
+  .market-table-toolbar .indic-actions,
+  .market-table-toolbar .market-toolbar-actions{
+    width:100% !important;
+    justify-content:flex-start !important;
+    margin-left:0 !important;
+    gap:10px !important;
+  }
+  .market-table-toolbar .indic-action-btn,
+  .market-table-toolbar .panel-action-btn{
+    flex:1 1 130px !important;
+    min-height:40px !important;
+    padding:10px 12px !important;
+    font-size:.82rem !important;
+  }
+}
+
+@media print{
+  body.printing-market-panel .market-toolbar-actions,
+  body.printing-market-panel .indic-actions{
+    display:none !important;
+  }
+}
