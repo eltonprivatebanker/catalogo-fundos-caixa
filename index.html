@@ -2489,10 +2489,10 @@ function carregarFocus(focus, atualizadoEm){
   }
 
   grid.innerHTML = [
-    focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
     focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
-    focusCardHTML('📦','PIB','Crescimento do Produto Interno Bruto',focus.PIB),
+    focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
     focusCardHTML('💵','Câmbio','R$ / US$ (dólar americano)',focus.Cambio),
+    focusCardHTML('📦','PIB','Crescimento do Produto Interno Bruto',focus.PIB),
     focusCardHTML('📊','IGP-M','Índice Geral de Preços — Mercado',focus.IGPM),
   ].join('');
 }
@@ -2859,8 +2859,8 @@ const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 const COLS_OCULTAS_REUNIAO = new Set([
   'Data Inicio',
   'Cota (R$)',
-  'Variacao Dia (%)',
-  'PL (milhoes R$)',  // PL agora fica inline no nome do fundo
+  // 'Variacao Dia (%)' devolvida — assessor precisa ver var. do dia
+  'PL (milhoes R$)',
 ]);
 
 let vistaAtual = 'reuniao'; // padrão: Reunião
@@ -3861,7 +3861,17 @@ function buildCatFilters(cats){
   all.className='chip active'; all.dataset.cat=''; all.textContent='Todas';
   all.addEventListener('click',()=>{activeCat='';setActiveChip(row,'[data-cat]',all);applyFilter();});
   row.appendChild(all);
-  [...cats].sort().forEach(cat=>{
+  const CAT_CAIXA_ORDER = [
+    'RENDA FIXA SIMPLES','RENDA FIXA','RENDA FIXA REFERENCIADO',
+    'RENDA FIXA CURTO PRAZO','MULTIMERCADO','CAMBIAL',
+    'ACOES','FUNDO DE INDICE','FUNDOS MUTUOS DE PRIVATIZACAO',
+  ];
+  const _catIdx = c => {
+    const cu = c.toUpperCase();
+    const i = CAT_CAIXA_ORDER.findIndex(o => cu===o || cu.includes(o) || o.includes(cu));
+    return i === -1 ? 99 : i;
+  };
+  [...cats].sort((a,b)=>_catIdx(a)-_catIdx(b)||a.localeCompare(b)).forEach(cat=>{
     const b=document.createElement('button'); b.className='chip'; b.dataset.cat=cat; b.textContent=cat;
     b.addEventListener('click',()=>{activeCat=cat;setActiveChip(row,'[data-cat]',b);applyFilter();});
     row.appendChild(b);
