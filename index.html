@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-painel-acoes-textos-final"/>
+<link rel="stylesheet" href="style.css?v=20260601-eua-legivel-final"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -635,23 +635,23 @@
         <tr class="data-row" id="row-sp">
           <td><div class="ind-name-v2">
             <div class="ind-icon-v2 ii-purple">🌎</div>
-            <div><div class="ind-v2-title">S&amp;P 500</div><div class="ind-v2-sub">Índice em pontos · desempenho em USD e BRL</div></div>
+            <div><div class="ind-v2-title">S&amp;P 500</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
           </div></td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ant-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-ant-var">—</div></div>
             <div class="v2-sub" id="sp-ant-sub">Mês fechado</div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="sp-cur-pts">—</div>
-            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-sp-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-cur-var" style="font-size:.72rem">—</span></div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-sp-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-cur-var">—</div></div>
             <div class="v2-sub" id="sp-cur-sub">Mês</div>
           </td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-ano-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-ano-var">—</div></div>
             <div class="v2-sub" id="sp-ano-sub">Ano</div>
           </td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="sp-acum-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-acum-var">—</div></div>
             <div class="v2-sub" id="sp-acum-sub-v2">12M</div>
           </td>
         </tr>
@@ -660,23 +660,23 @@
         <tr class="data-row" id="row-dow">
           <td><div class="ind-name-v2">
             <div class="ind-icon-v2 ii-blue">🏛️</div>
-            <div><div class="ind-v2-title">Dow Jones</div><div class="ind-v2-sub">Índice em pontos · desempenho em USD e BRL</div></div>
+            <div><div class="ind-v2-title">Dow Jones</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
           </div></td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ant-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-ant-var">—</div></div>
             <div class="v2-sub" id="dow-ant-sub">Mês fechado</div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="dow-cur-pts">—</div>
-            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dow-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-cur-var" style="font-size:.72rem">—</span></div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dow-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-cur-var">—</div></div>
             <div class="v2-sub" id="dow-cur-sub">Mês</div>
           </td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-ano-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-ano-var">—</div></div>
             <div class="v2-sub" id="dow-ano-sub">Ano</div>
           </td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dow-acum-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-acum-var">—</div></div>
             <div class="v2-sub" id="dow-acum-sub-v2">12M</div>
           </td>
         </tr>
@@ -685,23 +685,23 @@
         <tr class="data-row" id="row-nasdaq">
           <td><div class="ind-name-v2">
             <div class="ind-icon-v2 ii-purple">💻</div>
-            <div><div class="ind-v2-title">Nasdaq</div><div class="ind-v2-sub">Índice em pontos · desempenho em USD e BRL</div></div>
+            <div><div class="ind-v2-title">Nasdaq</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
           </div></td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ant-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-ant-var">—</div></div>
             <div class="v2-sub" id="nasdaq-ant-sub">Mês fechado</div>
           </td>
           <td class="td-cur">
             <div class="v2-val neu" id="nasdaq-cur-pts">—</div>
-            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-nasdaq-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-cur-var" style="font-size:.72rem">—</span></div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-nasdaq-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-cur-var">—</div></div>
             <div class="v2-sub" id="nasdaq-cur-sub">Mês</div>
           </td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-ano-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-ano-var">—</div></div>
             <div class="v2-sub" id="nasdaq-ano-sub">Ano</div>
           </td>
           <td>
-            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="nasdaq-acum-var">—</span></div>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-acum-var">—</div></div>
             <div class="v2-sub" id="nasdaq-acum-sub-v2">12M</div>
           </td>
         </tr>
@@ -2086,7 +2086,18 @@ function atualizarTabelaIndicadores(){
     const u = num(usd), b = num(brl);
     const clsU = u === null ? 'dash' : u > 0 ? 'pos' : u < 0 ? 'neg' : 'neu';
     const clsB = b === null ? 'dash' : b > 0 ? 'pos' : b < 0 ? 'neg' : 'neu';
-    return `<span class="usd-brl-line usd ${clsU}">USD ${pctTxt(u)}</span>${b !== null ? `<span class="usd-brl-line brl ${clsB}">BRL ${pctTxt(b)}</span>` : ''}`;
+
+    const linha = (rotulo, valor, cls, extra='') => `
+      <div class="us-market-line ${cls} ${extra}">
+        <span class="us-market-label">${rotulo}</span>
+        <strong class="us-market-value">${pctTxt(valor)}</strong>
+      </div>`;
+
+    return `
+      <div class="us-market-block" aria-label="Variação em dólar e em reais">
+        ${linha('USD', u, clsU, 'usd')}
+        ${b !== null ? linha('BRL', b, clsB, 'brl') : ''}
+      </div>`;
   }
 
   function popularIndiceEUA(prefix, item){
@@ -2098,22 +2109,22 @@ function atualizarTabelaIndicadores(){
     const acumBrl = num(item?.[`acum_${m}m_brl`]);
 
     setHTML(`${prefix}-ant-var`, usdBrlHTML(fechado.variacao, fechado.brl));
-    const antEl = $(`${prefix}-ant-var`); if(antEl) antEl.className = 'v2-val usd-brl-stack';
+    const antEl = $(`${prefix}-ant-var`); if(antEl) antEl.className = 'v2-val us-market-stack';
     setSubStatus(`${prefix}-ant-sub`, fechado.label, 'fechado');
 
     setPts(`${prefix}-cur-pts`, atual.valor, 'pts', '—');
     setHTML(`${prefix}-cur-var`, atual.variacao === null ? '' : usdBrlHTML(atual.variacao, atual.brl));
-    const curEl = $(`${prefix}-cur-var`); if(curEl) curEl.className = atual.variacao === null ? 'v2-val dash' : 'v2-val usd-brl-stack';
+    const curEl = $(`${prefix}-cur-var`); if(curEl) curEl.className = atual.variacao === null ? 'v2-val dash' : 'v2-val us-market-stack';
     const barCur = $(`bar-${prefix}-cur`); if(barCur){ barCur.style.width = atual.variacao === null ? '0%' : Math.min(Math.abs(atual.variacao)/35*100,100)+'%'; barCur.className = atual.variacao >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
     setSubStatus(`${prefix}-cur-sub`, atual.label, atual.status);
 
     setHTML(`${prefix}-ano-var`, usdBrlHTML(ano, anoBrl));
-    const anoEl = $(`${prefix}-ano-var`); if(anoEl) anoEl.className = 'v2-val usd-brl-stack';
+    const anoEl = $(`${prefix}-ano-var`); if(anoEl) anoEl.className = 'v2-val us-market-stack';
     const barAno = $(`bar-${prefix}-ano`); if(barAno){ barAno.style.width = ano === null ? '0%' : Math.min(Math.abs(ano)/60*100,100)+'%'; barAno.className = ano >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
     setSubSimple(`${prefix}-ano-sub`, atePeriodo(atual.status === 'parcial' ? atual.label : fechado.label));
 
     setHTML(`${prefix}-acum-var`, usdBrlHTML(acum, acumBrl));
-    const acumEl = $(`${prefix}-acum-var`); if(acumEl) acumEl.className = 'v2-val usd-brl-stack';
+    const acumEl = $(`${prefix}-acum-var`); if(acumEl) acumEl.className = 'v2-val us-market-stack';
     const barAcum = $(`bar-${prefix}-acum`); if(barAcum){ barAcum.style.width = acum === null ? '0%' : Math.min(Math.abs(acum)/120*100,100)+'%'; barAcum.className = acum >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
     set(`${prefix}-acum-sub-v2`, `${m}M`);
   }
