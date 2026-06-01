@@ -84,6 +84,35 @@ MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","d
 DEBUG_COLUNAS = False
 
 # ---------------------------------------------------------------------------
+# Fechamentos confirmados / validação manual de virada de mês
+# ---------------------------------------------------------------------------
+# Estes valores são usados apenas para corrigir divergências conhecidas na virada
+# de mês e evitar que valores parciais fiquem marcados como mês fechado.
+# Chave no formato AAAA-MM.
+FECHAMENTOS_CONFIRMADOS = {
+    "cdi_mensal": {
+        "2026-01": 1.16,
+        "2026-02": 1.00,
+        "2026-03": 1.21,
+        "2026-04": 1.09,
+        "2026-05": 1.07,
+    },
+    "ipca_mensal": {
+        "2026-05": 0.50,
+    },
+    "ptax_mensal": {
+        "2026-05": {"variacao_mes_fechado": 1.37},
+    },
+    "indices_mensais": {
+        "^BVSP": {"2026-05": {"fechamento": 173787.0, "variacao_mes_fechado": -7.22}},
+        "^GSPC": {"2026-05": {"variacao_mes_fechado": 5.15, "variacao_mes_fechado_brl": 6.59}},
+        "^IXIC": {"2026-05": {"variacao_mes_fechado": 8.36}},
+        "^DJI":  {"2026-05": {"variacao_mes_fechado": 1.99}},
+    },
+}
+
+
+# ---------------------------------------------------------------------------
 # Caminhos de arquivo
 # ---------------------------------------------------------------------------
 BASE_DIR            = Path.cwd()
@@ -1043,52 +1072,60 @@ class ColetorMercado:
     # ──────────────────────────────────────────────────────────────────────
     def _buscar_cdi_acumulado(self):
         """
-        ★ v16.3 — CDI mensal com separação entre:
+        CDI mensal com separação entre:
           - último mês fechado;
-          - mês atual parcial;
+          - mês atual parcial, quando houver;
           - acumulado no ano fechado;
           - acumulado no ano com parcial;
           - acumulados 12M/24M/36M.
 
-        Observação:
-        A série 4391 do BCB pode trazer o último registro como mês parcial ou,
-        em alguns momentos, com valor divergente do que está sendo usado
-        operacionalmente. Por isso esta rotina aceita um arquivo opcional
-        cdi_mensal_override.json na mesma pasta do robô.
+        A rotina aceita cdi_mensal_override.json em dois formatos:
+        1) Legado/flat:
+           {"2026-05": 1.07}
 
-        Formato aceito do cdi_mensal_override.json:
-        {
-          "2026-01": 1.16,
-          "2026-02": 1.00,
-          "2026-03": 1.21,
-          "2026-04": 1.09,
-          "2026-05": 0.75
-        }
+        2) Recomendado:
+           {
+             "confirmados": {"2026-05": 1.07},
+             "parciais": {"2026-06": 0.03}
+           }
+
+        Valores confirmados prevalecem sobre a série BCB 4391 para evitar que
+        parciais antigos sejam tratados como fechamento após a virada do mês.
         """
         log("[CDI] Calculando CDI mensal/ano/12M/24M/36M...")
 
         hoje = datetime.now()
         caminho_override = BASE_DIR / "cdi_mensal_override.json"
 
-        # Valores informados/validados manualmente para evitar exibição errada.
-        # Se existir cdi_mensal_override.json, ele prevalece sobre estes.
-        overrides = {
-            "2026-01": 1.16,
-            "2026-02": 1.00,
-            "2026-03": 1.21,
-            "2026-04": 1.09,
-            "2026-05": 0.75,  # parcial em 22/05/2026, conforme conferência manual
-        }
+        confirmados = dict(FECHAMENTOS_CONFIRMADOS.get("cdi_mensal", {}))
+        parciais = {}
 
         if caminho_override.exists():
             try:
                 extra = json.loads(caminho_override.read_text(encoding="utf-8"))
-                for k, v in extra.items():
-                    try:
-                        overrides[str(k)] = float(str(v).replace(",", "."))
-                    except Exception:
-                        pass
-                log(f"  [CDI] Override local carregado: {caminho_override.name} ({len(extra)} registros)")
+                if isinstance(extra, dict) and ("confirmados" in extra or "parciais" in extra):
+                    for k, v in (extra.get("confirmados") or {}).items():
+                        try:
+                            confirmados[str(k)] = float(str(v).replace(",", "."))
+                        except Exception:
+                            pass
+                    for k, v in (extra.get("parciais") or {}).items():
+                        try:
+                            parciais[str(k)] = float(str(v).replace(",", "."))
+                        except Exception:
+                            pass
+                    log(
+                        f"  [CDI] Override local carregado: {caminho_override.name} "
+                        f"({len(extra.get('confirmados') or {})} confirmados, {len(extra.get('parciais') or {})} parciais)"
+                    )
+                elif isinstance(extra, dict):
+                    # Formato antigo: trata tudo como mês confirmado.
+                    for k, v in extra.items():
+                        try:
+                            confirmados[str(k)] = float(str(v).replace(",", "."))
+                        except Exception:
+                            pass
+                    log(f"  [CDI] Override local legado carregado: {caminho_override.name} ({len(extra)} registros)")
             except Exception as e:
                 log(f"  [CDI] Erro ao ler cdi_mensal_override.json: {e}")
 
@@ -1133,25 +1170,31 @@ class ColetorMercado:
         except Exception as e:
             log(f"  [CDI] Erro ao buscar série 4391 BCB: {e}")
 
-        # Mescla overrides sobre a série do BCB.
-        for k, v in overrides.items():
-            serie[k] = float(v)
+        mes_atual_key = f"{hoje.year}-{hoje.month:02d}"
+        primeiro_dia_mes = hoje.replace(day=1)
+        mes_anterior_data = primeiro_dia_mes - timedelta(days=1)
+        mes_fechado_key = f"{mes_anterior_data.year}-{mes_anterior_data.month:02d}"
+
+        # Aplica fechamentos confirmados até o mês fechado.
+        for k, v in confirmados.items():
+            if k <= mes_fechado_key:
+                serie[k] = float(v)
+            elif k == mes_atual_key:
+                # Se alguém informou o mês atual no arquivo legado, trata como parcial.
+                parciais[k] = float(v)
+
+        # Aplica parcial somente para o mês calendário atual.
+        if mes_atual_key in parciais:
+            serie[mes_atual_key] = float(parciais[mes_atual_key])
 
         if not serie:
             log("  [CDI] Sem série CDI disponível")
             return None
 
-        # Mês atual e mês anterior.
-        mes_atual_key = f"{hoje.year}-{str(hoje.month).zfill(2)}"
-        primeiro_dia_mes = hoje.replace(day=1)
-        mes_anterior_data = primeiro_dia_mes - timedelta(days=1)
-        mes_fechado_key = f"{mes_anterior_data.year}-{str(mes_anterior_data.month).zfill(2)}"
-
         # Todos os meses fechados até o mês anterior.
         chaves_fechadas = sorted(k for k in serie.keys() if k <= mes_fechado_key)
-
         mensal_fechado = serie.get(mes_fechado_key)
-        parcial_mes_atual = serie.get(mes_atual_key)
+        parcial_mes_atual = serie.get(mes_atual_key) if mes_atual_key in parciais else None
 
         # Se, por algum motivo, não houver mês anterior na série, usa o último fechado disponível.
         if mensal_fechado is None and chaves_fechadas:
@@ -1170,7 +1213,7 @@ class ColetorMercado:
             chaves_ano_com_parcial.append(mes_atual_key)
         chaves_ano_com_parcial = sorted(chaves_ano_com_parcial)
         valores_ano_com_parcial = [serie[k] for k in chaves_ano_com_parcial if k in serie]
-        acum_ano_com_parcial = acum_valores(valores_ano_com_parcial) if valores_ano_com_parcial else None
+        acum_ano_com_parcial = acum_valores(valores_ano_com_parcial) if valores_ano_com_parcial else acum_ano
 
         # Acumulados de janela fechada.
         valores_fechados = [serie[k] for k in chaves_fechadas]
@@ -1196,7 +1239,8 @@ class ColetorMercado:
             "acum_24m": acum_24m,
             "acum_36m": acum_36m,
             "n_meses": len(chaves_fechadas),
-            "fonte": "série 4391 BCB + validação/override local",
+            "fonte": "série 4391 BCB + fechamentos confirmados/override local",
+            "status_mes_atual": "parcial" if parcial_mes_atual is not None else "sem_parcial",
             "historico": [{"key": k, "label": label_from_key(k), "valor": serie[k]} for k in sorted(serie.keys())],
         }
 
@@ -1412,15 +1456,17 @@ class ColetorMercado:
     def _montar_dolar_indice_ptax(self, ptax_historico):
         """
         Monta o bloco indices_mercado.dolar a partir do mesmo histórico PTAX
-        usado no gráfico. Evita divergência entre card, tabela e gráfico.
+        usado no gráfico. Trata corretamente a virada do mês:
+          - se ainda não houver cotação do mês atual, o último mês disponível
+            vira mês fechado;
+          - o campo variacao_mes_atual fica None, evitando exibir 0,00% no painel.
         """
         if not ptax_historico:
             return None
 
         hist = sorted(ptax_historico, key=lambda x: x.get("key", ""))
-        atual = hist[-1]
-        mes_anterior = hist[-2] if len(hist) >= 2 else None
-        mes_base = hist[-3] if len(hist) >= 3 else None
+        hoje = datetime.now().date()
+        mes_atual_key = f"{hoje.year}-{hoje.month:02d}"
 
         def calc_var(atual_val, base_val):
             if atual_val is None or base_val is None or base_val == 0:
@@ -1430,6 +1476,20 @@ class ColetorMercado:
         def item_n_meses_atras(n):
             return hist[-(n + 1)] if len(hist) > n else None
 
+        # Se o último registro é do mês atual, existe mês parcial/atual.
+        # Se o último registro é anterior ao mês atual, ele é o último mês fechado.
+        latest = hist[-1]
+        tem_mes_atual = latest.get("key") == mes_atual_key
+
+        if tem_mes_atual:
+            atual = latest
+            mes_fechado = hist[-2] if len(hist) >= 2 else None
+            mes_base = hist[-3] if len(hist) >= 3 else None
+        else:
+            atual = latest
+            mes_fechado = latest
+            mes_base = hist[-2] if len(hist) >= 2 else None
+
         ano_atual = int(str(atual.get("key", "0000-00"))[:4])
         dez_anterior = next((i for i in reversed(hist) if i.get("key") == f"{ano_atual - 1}-12"), None)
         base_12m = item_n_meses_atras(12)
@@ -1437,23 +1497,28 @@ class ColetorMercado:
         base_36m = item_n_meses_atras(36)
 
         atual_val = atual.get("cotacao")
-        mes_ant_val = mes_anterior.get("cotacao") if mes_anterior else None
+        mes_fechado_val = mes_fechado.get("cotacao") if mes_fechado else None
         mes_base_val = mes_base.get("cotacao") if mes_base else None
+
+        variacao_mes_fechado = calc_var(mes_fechado_val, mes_base_val)
+        override_ptax = FECHAMENTOS_CONFIRMADOS.get("ptax_mensal", {}).get(mes_fechado.get("key") if mes_fechado else "", {})
+        if override_ptax.get("variacao_mes_fechado") is not None:
+            variacao_mes_fechado = float(override_ptax["variacao_mes_fechado"])
 
         resultado = {
             "nome": "Dólar BRL/USD",
             "ticker": "PTAX",
             "fonte": "Banco Central do Brasil - PTAX",
-            "mes_anterior_label": mes_anterior.get("mes") if mes_anterior else None,
+            "mes_anterior_label": mes_fechado.get("mes") if mes_fechado else None,
             "mes_base_label": mes_base.get("mes") if mes_base else None,
-            "fechamento_mes_anterior": round(mes_ant_val, 4) if mes_ant_val is not None else None,
-            "data_mes_anterior": mes_anterior.get("data_ref") if mes_anterior else None,
+            "fechamento_mes_anterior": round(mes_fechado_val, 4) if mes_fechado_val is not None else None,
+            "data_mes_anterior": mes_fechado.get("data_ref") if mes_fechado else None,
             "fechamento_mes_base": round(mes_base_val, 4) if mes_base_val is not None else None,
             "data_mes_base": mes_base.get("data_ref") if mes_base else None,
-            "variacao_mes_fechado": calc_var(mes_ant_val, mes_base_val),
+            "variacao_mes_fechado": variacao_mes_fechado,
             "fechamento_atual": round(atual_val, 4) if atual_val is not None else None,
             "data_atual": atual.get("data_ref"),
-            "variacao_mes_atual": calc_var(atual_val, mes_ant_val),
+            "variacao_mes_atual": calc_var(atual_val, mes_fechado_val) if tem_mes_atual else None,
             "acum_ano": calc_var(atual_val, dez_anterior.get("cotacao") if dez_anterior else None),
             "acum_12m": calc_var(atual_val, base_12m.get("cotacao") if base_12m else None),
             "acum_24m": calc_var(atual_val, base_24m.get("cotacao") if base_24m else None),
@@ -1462,13 +1527,15 @@ class ColetorMercado:
             "base_12m": round(base_12m.get("cotacao"), 4) if base_12m else None,
             "base_24m": round(base_24m.get("cotacao"), 4) if base_24m else None,
             "base_36m": round(base_36m.get("cotacao"), 4) if base_36m else None,
+            "tem_mes_atual": tem_mes_atual,
+            "status_mes_atual": "parcial" if tem_mes_atual else "sem_parcial",
         }
 
         log(
-            f"[PTAX] Dólar PTAX: atual={resultado.get('fechamento_atual')} "
-            f"({resultado.get('data_atual')}) | mês={resultado.get('variacao_mes_atual')}% "
-            f"| ano={resultado.get('acum_ano')}% | 12M={resultado.get('acum_12m')}% "
-            f"| 24M={resultado.get('acum_24m')}% | 36M={resultado.get('acum_36m')}%"
+            f"[PTAX] Dólar PTAX: último={resultado.get('fechamento_atual')} "
+            f"({resultado.get('data_atual')}) | mês fechado={resultado.get('variacao_mes_fechado')}% "
+            f"| mês atual={resultado.get('variacao_mes_atual')}% | ano={resultado.get('acum_ano')}% "
+            f"| 12M={resultado.get('acum_12m')}% | 24M={resultado.get('acum_24m')}% | 36M={resultado.get('acum_36m')}%"
         )
 
         return resultado
@@ -1525,7 +1592,24 @@ class ColetorMercado:
                 "label": f"{MESES_PT[int(m)-1]}/{y}",
                 "valor": round(float(item["valor"]), 4)
             }
-        return sorted(index.values(), key=lambda x: (x["data"].split("/")[2], x["data"].split("/")[1]))
+
+        # Validação manual opcional para meses oficialmente/operacionalmente fechados
+        # que ainda não tenham aparecido no delta da série 433 no momento da execução.
+        for key, valor in FECHAMENTOS_CONFIRMADOS.get("ipca_mensal", {}).items():
+            try:
+                y, m = key.split("-")
+                d = calendar.monthrange(int(y), int(m))[1]
+                data_br = f"{d:02d}/{int(m):02d}/{y}"
+                index[data_br] = {
+                    "data": data_br,
+                    "label": f"{MESES_PT[int(m)-1]}/{y}",
+                    "valor": round(float(valor), 4),
+                    "fonte_override": "fechamento confirmado"
+                }
+            except Exception:
+                pass
+
+        return sorted(index.values(), key=lambda x: (x["data"].split("/")[2], x["data"].split("/")[1], x["data"].split("/")[0]))
 
     def _salvar_base_ipca(self, historico):
         try:
@@ -1708,7 +1792,9 @@ class ColetorMercado:
     def _resumo_indice_yahoo(self, ticker, nome, dias=1250):
         """
         Calcula fechamento mensal, mês atual, ano, 12M, 24M e 36M.
-        Serve para Dólar, Ibovespa, S&P 500, Dow Jones e Nasdaq.
+        Trata corretamente a virada do mês: se ainda não houver registro do mês
+        atual, o último pregão disponível é tratado como mês fechado, não como
+        mês atual 0,00%.
         """
         log(f"[Índices] Calculando {nome} ({ticker})...")
 
@@ -1729,6 +1815,10 @@ class ColetorMercado:
         fechamento_mes_base = self._fechamento_final_mes(df, ref["mes_base_key"])
         fechamento_atual = df.iloc[-1].to_dict()
 
+        # Se o último dado ainda pertence ao mês anterior, não existe parcial do mês atual.
+        ultimo_ano_mes = str(fechamento_atual.get("data"))[:7] if fechamento_atual else ""
+        tem_mes_atual = ultimo_ano_mes == datetime.now().strftime("%Y-%m")
+
         fechamento_base_ano = self._ultimo_registro_ate(df, ref["data_base_ano"])
         fechamento_base_12m = self._ultimo_registro_ate(df, ref["data_base_12m"])
         fechamento_base_24m = self._ultimo_registro_ate(df, ref["data_base_24m"])
@@ -1742,6 +1832,14 @@ class ColetorMercado:
         base_12m = fechamento_base_12m.get("fechamento") if fechamento_base_12m else None
         base_24m = fechamento_base_24m.get("fechamento") if fechamento_base_24m else None
         base_36m = fechamento_base_36m.get("fechamento") if fechamento_base_36m else None
+
+        variacao_mes_fechado = self._variacao_pct(mes_ant, mes_base)
+        overrides_ticker = FECHAMENTOS_CONFIRMADOS.get("indices_mensais", {}).get(ticker, {})
+        override_mes = overrides_ticker.get(ref["mes_anterior_key"], {})
+        if override_mes.get("fechamento") is not None:
+            mes_ant = float(override_mes["fechamento"])
+        if override_mes.get("variacao_mes_fechado") is not None:
+            variacao_mes_fechado = float(override_mes["variacao_mes_fechado"])
 
         resultado = {
             "nome": nome,
@@ -1757,12 +1855,12 @@ class ColetorMercado:
             "fechamento_mes_base": round(mes_base, 2) if mes_base is not None else None,
             "data_mes_base": fechamento_mes_base["data"].strftime("%Y-%m-%d") if fechamento_mes_base else None,
 
-            "variacao_mes_fechado": self._variacao_pct(mes_ant, mes_base),
+            "variacao_mes_fechado": variacao_mes_fechado,
 
             "fechamento_atual": round(atual, 2) if atual is not None else None,
             "data_atual": fechamento_atual["data"].strftime("%Y-%m-%d") if fechamento_atual else None,
 
-            "variacao_mes_atual": self._variacao_pct(atual, mes_ant),
+            "variacao_mes_atual": self._variacao_pct(atual, mes_ant) if tem_mes_atual else None,
             "acum_ano": self._variacao_pct(atual, base_ano),
             "acum_12m": self._variacao_pct(atual, base_12m),
             "acum_24m": self._variacao_pct(atual, base_24m),
@@ -1772,6 +1870,8 @@ class ColetorMercado:
             "base_12m": round(base_12m, 2) if base_12m is not None else None,
             "base_24m": round(base_24m, 2) if base_24m is not None else None,
             "base_36m": round(base_36m, 2) if base_36m is not None else None,
+            "tem_mes_atual": tem_mes_atual,
+            "status_mes_atual": "parcial" if tem_mes_atual else "sem_parcial",
         }
 
         log(
@@ -1788,8 +1888,9 @@ class ColetorMercado:
 
     def _converter_indice_usd_para_brl(self, indice_usd, dolar_ref):
         """
-        Converte índices americanos para BRL usando USD/BRL do Yahoo Finance.
-        Mantém também as variações originais em pontos/USD.
+        Converte índices americanos para BRL usando PTAX.
+        Respeita o status de virada de mês: sem parcial do mês atual, a variação
+        do mês atual em BRL fica None e o mês fechado segue em destaque.
         """
         if not indice_usd or not dolar_ref:
             return indice_usd
@@ -1831,8 +1932,29 @@ class ColetorMercado:
             indice_usd["base_24m_brl"] = round(base_24m_brl, 2) if base_24m_brl else None
             indice_usd["base_36m_brl"] = round(base_36m_brl, 2) if base_36m_brl else None
 
-            indice_usd["variacao_mes_fechado_brl"] = self._variacao_pct(mes_ant_brl, mes_base_brl)
-            indice_usd["variacao_mes_atual_brl"] = self._variacao_pct(atual_brl, mes_ant_brl)
+            var_fechado_brl = self._variacao_pct(mes_ant_brl, mes_base_brl)
+            override_mes = FECHAMENTOS_CONFIRMADOS.get("indices_mensais", {}).get(
+                indice_usd.get("ticker"), {}
+            ).get(datetime.now().replace(day=1).strftime("%Y-%m"), {})
+
+            # O override de BRL normalmente será informado para o mês anterior fechado,
+            # não para o mês atual. Corrige a chave para o campo mes_anterior_key.
+            mes_anterior_key = None
+            try:
+                ref = self._datas_referencia_indices()
+                mes_anterior_key = ref.get("mes_anterior_key")
+            except Exception:
+                pass
+            if mes_anterior_key:
+                override_mes = FECHAMENTOS_CONFIRMADOS.get("indices_mensais", {}).get(
+                    indice_usd.get("ticker"), {}
+                ).get(mes_anterior_key, {})
+
+            if override_mes.get("variacao_mes_fechado_brl") is not None:
+                var_fechado_brl = float(override_mes["variacao_mes_fechado_brl"])
+
+            indice_usd["variacao_mes_fechado_brl"] = var_fechado_brl
+            indice_usd["variacao_mes_atual_brl"] = self._variacao_pct(atual_brl, mes_ant_brl) if indice_usd.get("tem_mes_atual") else None
             indice_usd["acum_ano_brl"] = self._variacao_pct(atual_brl, base_ano_brl)
             indice_usd["acum_12m_brl"] = self._variacao_pct(atual_brl, base_12m_brl)
             indice_usd["acum_24m_brl"] = self._variacao_pct(atual_brl, base_24m_brl)
@@ -1842,7 +1964,6 @@ class ColetorMercado:
             log(f"[Índices BRL] Erro ao converter {indice_usd.get('nome')}: {e}")
 
         return indice_usd
-
 
     def _carregar_base_selic(self):
         if SELIC_BASE_PATH.exists():
@@ -2079,6 +2200,8 @@ class ColetorMercado:
                 },
                 "cdi": {
                     "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
+                    "valor_estimado": True,
+                    "fonte_valor": "Referência estimada: Selic Meta - 0,10 p.p.; CDI mensal/acumulado: BCB SGS 4391",
                     "mensal":  cdi_mensal_atual,
                     "mes_ref": cdi_acum["mes_ref"] if cdi_acum else None,
                     "parcial_mes_atual": cdi_acum.get("parcial_mes_atual") if cdi_acum else None,
@@ -2128,8 +2251,8 @@ class ColetorMercado:
                     "atual":    ibov_indice.get("fechamento_atual"),
                     "anterior": ibov_indice.get("fechamento_mes_anterior"),
 
-                    # Mantém nome antigo usado pela index: representa variação do mês atual
-                    "variacao_mensal": ibov_indice.get("variacao_mes_atual"),
+                    # Mantém nome antigo usado pela index: usa mês atual se houver parcial; senão usa mês fechado.
+                    "variacao_mensal": ibov_indice.get("variacao_mes_atual") if ibov_indice.get("variacao_mes_atual") is not None else ibov_indice.get("variacao_mes_fechado"),
 
                     # Novos campos
                     "fechamento_mes_anterior": ibov_indice.get("fechamento_mes_anterior"),
@@ -2151,8 +2274,8 @@ class ColetorMercado:
                     "atual":    dolar_indice.get("fechamento_atual"),
                     "anterior": dolar_indice.get("fechamento_mes_anterior"),
 
-                    # Mantém nome antigo usado pela index: representa variação do mês atual
-                    "variacao_mensal": dolar_indice.get("variacao_mes_atual"),
+                    # Mantém nome antigo usado pela index: usa mês atual se houver parcial; senão usa mês fechado.
+                    "variacao_mensal": dolar_indice.get("variacao_mes_atual") if dolar_indice.get("variacao_mes_atual") is not None else dolar_indice.get("variacao_mes_fechado"),
 
                     # Novos campos
                     "fechamento_mes_anterior": dolar_indice.get("fechamento_mes_anterior"),
