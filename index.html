@@ -3687,10 +3687,10 @@ function pctCdiCell(r){
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
-  const colspan=visibleHeaders.length+1;
+  const colspan=visibleHeaders.length+2;
   let html=`<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
   const isExpanded=expandedRows.has(idx);
-  html+=`<td style="width:28px;padding:11px 8px;text-align:center">
+  html+=`<td class="td-expander" style="width:28px;padding:11px 8px;text-align:center">
     <button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button>
   </td>`;
   // Checkbox comparador
@@ -3821,10 +3821,32 @@ function renderPagination(){
 
 function buildHeader(){
   const thead=$('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
-  const thExp=document.createElement('th');thExp.style.width='28px';thExp.style.padding='13px 8px';tr.appendChild(thExp);
+  const thExp=document.createElement('th');
+  thExp.className='th-exp';
+  thExp.style.width='28px';
+  thExp.style.padding='13px 8px';
+  thExp.title='Expandir detalhes do fundo';
+  tr.appendChild(thExp);
+
+  // Cabeçalho da coluna do comparador. Antes a tabela tinha checkbox no corpo
+  // sem TH correspondente, o que desalinhava as colunas no mobile.
+  const thComp=document.createElement('th');
+  thComp.className='th-comp';
+  thComp.style.width='28px';
+  thComp.style.padding='13px 6px';
+  thComp.style.cursor='default';
+  thComp.title='Selecionar fundo para comparar';
+  thComp.innerHTML='';
+  tr.appendChild(thComp);
+
   const visibleHeaders=getVisibleHeaders();
   visibleHeaders.forEach(h=>{
     const th=document.createElement('th');
+    if(h==='Fundo') th.classList.add('th-fundo');
+    if(h==='Acum. 12M (%)') th.classList.add('th-pct-12m');
+    if(h==='PL (milhoes R$)' || h==='PL (milhões R$)') th.classList.add('th-pl');
+    if(h==='Documentos') th.classList.add('th-docs');
+    if(h==='Conv / Pag') th.classList.add('th-liq');
 
     if(h==='Documentos' || h==='Sinais' || h==='Conv / Pag' || h==='Benchmark' || h==='Conversão' || h==='Pagamento'){
       th.innerHTML=h;
@@ -5661,24 +5683,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const base = baseVisibleHeaders();
     const out = [];
 
+    // Mobile: tabela de leitura rápida. O PL já aparece dentro da célula do fundo
+    // e os documentos ficam mais completos no modo Cards/detalhe, evitando tabela espremida.
     uniquePush(out, firstExisting(base, ['Fundo']));
-
-    // Mobile: tabela realmente resumida.
-    // O % do CDI continua no subtítulo do Acum. 12M e também serve para ordenar
-    // pelos botões Maior/Menor, sem criar coluna extra nem comprimir a primeira linha.
-    const h12 = firstExisting(base, ['Acum. 12M (%)']);
-    uniquePush(out, h12);
-
-    uniquePush(out, firstExisting(base, [
-      'PL (milhoes R$)',
-      'PL (milhões R$)',
-      'PL Médio (milhões R$)',
-      'PL Medio (milhoes R$)'
-    ]));
-
-    // Documentos ficam por último e compactos. As demais métricas continuam
-    // disponíveis no modo Cards ou no detalhe expandido da linha.
-    uniquePush(out, 'Documentos');
+    uniquePush(out, firstExisting(base, ['Acum. 12M (%)']));
 
     return out.filter(Boolean);
   }
