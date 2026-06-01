@@ -242,6 +242,26 @@
     </div>
   </div>
 
+  <div class="mobile-sort-toolbar" id="mobileSortToolbar" aria-label="Ordenação da tabela e dos cards no celular">
+    <div class="mobile-sort-line mobile-sort-field-line">
+      <span class="mobile-sort-label">Ordenar</span>
+      <div class="mobile-sort-chip-row" role="group" aria-label="Campo de ordenação">
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="dia">Dia</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="mes">Mês</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="ano">Ano</button>
+        <button type="button" class="mobile-sort-chip active" data-mobile-sort-field="m12">12M</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="cdi">% CDI</button>
+      </div>
+    </div>
+    <div class="mobile-sort-line mobile-sort-dir-line">
+      <span class="mobile-sort-label">Sentido</span>
+      <div class="mobile-sort-dir" role="group" aria-label="Sentido de ordenação">
+        <button type="button" class="mobile-sort-dir-btn active" data-mobile-sort-dir="desc">Maior</button>
+        <button type="button" class="mobile-sort-dir-btn" data-mobile-sort-dir="asc">Menor</button>
+      </div>
+    </div>
+  </div>
+
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
     <table id="mainTable" style="display:none">
@@ -2813,6 +2833,8 @@ let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor primeiro
+let activeMobileSortCampo='m12'; // dia | mes | ano | m12 | cdi
+let activeMobileSortDir='desc';  // desc = maior primeiro; asc = menor primeiro
 let expandedRows=new Set();
 
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)","% CDI 12M"]);
@@ -3059,8 +3081,78 @@ function ordenarPorCdiRelativo(rows,dir){
     return (av-bv)*mult;
   });
 }
+
+const MOBILE_SORT_FIELDS={
+  dia:'Variacao Dia (%)',
+  mes:'Acum. Mes (%)',
+  ano:'Acum. Ano (%)',
+  m12:'Acum. 12M (%)',
+  cdi:'__CDI_12M__'
+};
+function isMobileSortViewport(){
+  return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
+}
+function getMobileSortValue(row,campo){
+  if(campo==='cdi') return getCdiRatioFromRow(row);
+  const key=MOBILE_SORT_FIELDS[campo] || MOBILE_SORT_FIELDS.m12;
+  return toNum(row[key]);
+}
+function ordenarPorMobileSort(rows){
+  const campo=activeMobileSortCampo || 'm12';
+  const dir=activeMobileSortDir || 'desc';
+  const mult=dir==='asc' ? 1 : -1;
+  rows.sort((a,b)=>{
+    const av=getMobileSortValue(a,campo);
+    const bv=getMobileSortValue(b,campo);
+    if(av===null&&bv===null) return 0;
+    if(av===null) return 1;
+    if(bv===null) return -1;
+    return (av-bv)*mult;
+  });
+}
+function updateMobileSortButtons(){
+  document.querySelectorAll('[data-mobile-sort-field]').forEach(btn=>{
+    const on=btn.dataset.mobileSortField===activeMobileSortCampo;
+    btn.classList.toggle('active',on);
+    btn.setAttribute('aria-pressed',on?'true':'false');
+  });
+  document.querySelectorAll('[data-mobile-sort-dir]').forEach(btn=>{
+    const on=btn.dataset.mobileSortDir===activeMobileSortDir;
+    btn.classList.toggle('active',on);
+    btn.setAttribute('aria-pressed',on?'true':'false');
+  });
+  const toolbar=document.getElementById('mobileSortToolbar');
+  if(toolbar){
+    const labels={dia:'Dia',mes:'Mês',ano:'Ano',m12:'12M',cdi:'% CDI'};
+    toolbar.setAttribute('data-current-sort',`${labels[activeMobileSortCampo]||'12M'} · ${activeMobileSortDir==='asc'?'Menor':'Maior'}`);
+  }
+}
+function setMobileSort(campo,dir){
+  if(campo) activeMobileSortCampo=campo;
+  if(dir) activeMobileSortDir=dir;
+  // No mobile, a régua própria controla a ordenação; evita conflito com clique em cabeçalho.
+  activeCdiSort=null;
+  sortCol=-1;
+  sortDir=-1;
+  updateCdiSortButtons();
+  updateMobileSortButtons();
+  applyFilter();
+}
+function setupMobileSortToolbar(){
+  document.querySelectorAll('[data-mobile-sort-field]').forEach(btn=>{
+    btn.addEventListener('click',()=>setMobileSort(btn.dataset.mobileSortField,null));
+  });
+  document.querySelectorAll('[data-mobile-sort-dir]').forEach(btn=>{
+    btn.addEventListener('click',()=>setMobileSort(null,btn.dataset.mobileSortDir));
+  });
+  updateMobileSortButtons();
+}
 function setCdiSort(dir){
   activeCdiSort = activeCdiSort === dir ? null : dir;
+  if(activeCdiSort){
+    activeMobileSortCampo='cdi';
+    activeMobileSortDir=activeCdiSort;
+  }
   if(activeCdiSort){
     sortCol = -1;
     sortDir = -1;
@@ -3071,6 +3163,7 @@ function setCdiSort(dir){
     });
   }
   updateCdiSortButtons();
+  updateMobileSortButtons();
   applyFilter();
 }
 (function setupCdiSortButtonsWhenReady(){
@@ -3098,7 +3191,9 @@ function applyFilter(){
     if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
     return true;
   });
-  if(activeCdiSort){
+  if(isMobileSortViewport()){
+    ordenarPorMobileSort(filtered);
+  } else if(activeCdiSort){
     ordenarPorCdiRelativo(filtered, activeCdiSort);
   } else if(sortCol>=0&&sortCol<displayHeaders.length){
     const key=displayHeaders[sortCol];
@@ -4878,6 +4973,7 @@ document.addEventListener('DOMContentLoaded', function(){
     setSectionIds();
     setupMobileFilters();
     setupBottomNav();
+    setupMobileSortToolbar();
     qsa('.mobile-view-btn').forEach(b=>b.addEventListener('click',()=>applyViewMode(b.dataset.view)));
     applyViewMode();
     updateMobileFilterSummary();
