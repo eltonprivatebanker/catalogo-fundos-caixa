@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-evolucao-indicadores-abas"/>
+<link rel="stylesheet" href="style.css?v=20260601-rankings-labels-claros"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -284,6 +284,7 @@
   <div class="ranking-head">
     <div class="ranking-title-group">
       <h2>🏆 Rankings de Performance</h2>
+      <p class="ranking-subtitle">Compare fundos por retorno, categoria, destaques do período e patrimônio.</p>
       <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
     </div>
     <div class="ranking-actions" aria-label="Ações dos rankings">
@@ -2739,6 +2740,25 @@ function rankCampoPorPeriodo(periodo){
 function rankPeriodoLabel(periodo){
   return ({dia:'dia',mes:'mês',ano:'ano',m12:'12 meses','12m':'12 meses'})[periodo] || '12 meses';
 }
+function rankPeriodoResumo(periodo){
+  return ({dia:'do dia',mes:'do mês',ano:'no ano',m12:'12M','12m':'12M'})[periodo] || '12M';
+}
+function fmtSummaryPct(v){
+  const raw = String(v ?? '').trim();
+  if(!raw || raw === '—') return '—';
+  const n = toNum(raw);
+  if(n === null) return raw.includes('%') ? raw : raw;
+  const sign = n > 0 ? '+' : '';
+  return sign + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+}
+function fmtSummaryPl(v){
+  const n = numKpi(v);
+  if(n === null) return '—';
+  if(Math.abs(n) >= 1000){
+    return 'R$ ' + (n/1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
+  }
+  return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+}
 function passaFiltroRanking(r){
   const cat = normRankTxt(r['Categoria']);
   const nome = normRankTxt(r['Fundo']);
@@ -2881,18 +2901,31 @@ function renderRankings(){
   const resumoCards = (() => {
     const melhor = sortedTop[0];
     const melhorNome = melhor ? String(melhor['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim() : '—';
-    const melhorVal = melhor ? ((toNum(melhor[campoTop])>0?'+':'') + String(melhor[campoTop]||'—')) : '—';
+    const melhorVal = melhor ? fmtSummaryPct(melhor[campoTop]) : '—';
     const destaque = sortedDestaques[0];
     const destaqueNome = destaque ? String(destaque['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim() : '—';
-    const destaqueVal = destaque ? ((toNum(destaque[campoDestaques])>0?'+':'') + String(destaque[campoDestaques]||'—')) : '—';
+    const destaqueVal = destaque ? fmtSummaryPct(destaque[campoDestaques]) : '—';
     const maiorPL = catPL[0];
     const maiorPLNome = maiorPL ? maiorPL[0] : '—';
-    const maiorPLVal = maiorPL ? ('R$ ' + numKpi(maiorPL[1].pl_total).toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi') : '—';
-    const corta = (s,n=28) => String(s||'—').length>n ? String(s).slice(0,n)+'…' : String(s||'—');
+    const maiorPLVal = maiorPL ? fmtSummaryPl(maiorPL[1].pl_total) : '—';
+    const melhorLabel = activeRankPeriods.topFundos === '12m' ? '🏆 Melhor fundo 12M' : `🏆 Melhor fundo ${rankPeriodoResumo(activeRankPeriods.topFundos)}`;
+    const destaqueLabel = `📈 Maior alta ${rankPeriodoResumo(activeRankPeriods.destaques)}`;
     return `<div class="ranking-summary-strip" aria-label="Resumo rápido dos rankings">
-      <div class="ranking-summary-card"><span>🏆 Melhor</span><strong>${attr(melhorVal)}</strong><small>${attr(corta(melhorNome))}</small></div>
-      <div class="ranking-summary-card"><span>📈 Destaque</span><strong>${attr(destaqueVal)}</strong><small>${attr(corta(destaqueNome))}</small></div>
-      <div class="ranking-summary-card"><span>🏦 Maior PL</span><strong>${attr(maiorPLVal)}</strong><small>${attr(corta(maiorPLNome))}</small></div>
+      <div class="ranking-summary-card ranking-summary-best">
+        <span class="ranking-summary-label">${attr(melhorLabel)}</span>
+        <strong>${attr(melhorVal)}</strong>
+        <small class="ranking-summary-name" title="${attr(melhorNome)}">${attr(melhorNome)}</small>
+      </div>
+      <div class="ranking-summary-card ranking-summary-highlight">
+        <span class="ranking-summary-label">${attr(destaqueLabel)}</span>
+        <strong>${attr(destaqueVal)}</strong>
+        <small class="ranking-summary-name" title="${attr(destaqueNome)}">${attr(destaqueNome)}</small>
+      </div>
+      <div class="ranking-summary-card ranking-summary-pl">
+        <span class="ranking-summary-label">🏦 Categoria com maior PL</span>
+        <strong>${attr(maiorPLVal)}</strong>
+        <small class="ranking-summary-name" title="${attr(maiorPLNome)}">${attr(maiorPLNome)}</small>
+      </div>
     </div>`;
   })();
 
