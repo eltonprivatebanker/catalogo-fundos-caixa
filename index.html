@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-rent-12m-respiro"/>
+<link rel="stylesheet" href="style.css?v=20260601-rankings-abas-limpo"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -287,15 +287,15 @@
       <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
     </div>
     <div class="ranking-actions" aria-label="Ações dos rankings">
-      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar resumo</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar visão</button>
       <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
-      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Gerar print</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Print da visão</button>
     </div>
   </div>
 
   <div class="ranking-toolbar" aria-label="Filtros dos rankings">
     <div class="ranking-filter-row" id="rankingFilterRow">
-      <span class="ranking-filter-label">Visão</span>
+      <span class="ranking-filter-label">Filtro</span>
       <button type="button" class="ranking-filter-chip active" data-rank-filter="todos">Todos</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="sem-fmp">Sem FMP</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa">Renda Fixa</button>
@@ -304,7 +304,15 @@
     </div>
   </div>
 
-  <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva">
+  <div class="ranking-view-tabs" id="rankingViewTabs" aria-label="Menu de rankings">
+    <button type="button" class="ranking-view-tab active" data-rank-view="top">🏆 Top fundos</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="categoria">🎖️ Por categoria</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="destaques">📅 Destaques</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="rentabilidade">📊 Categorias</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="pl">🏦 Patrimônio</button>
+  </div>
+
+  <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva ranking-grid-single">
     <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
       <div class="spinner"></div>Carregando rankings...
     </div>
@@ -2684,6 +2692,7 @@ function fmtPlMi(v){
 
 
 let activeRankFilter = 'todos';
+let activeRankView = 'top';
 let activeRankPeriods = { topFundos:'12m', destaques:'mes' };
 
 function normRankTxt(v){
@@ -2711,6 +2720,9 @@ function passaFiltroRanking(r){
 function atualizarRankingFilterUI(){
   document.querySelectorAll('[data-rank-filter]').forEach(btn=>{
     btn.classList.toggle('active', btn.dataset.rankFilter === activeRankFilter);
+  });
+  document.querySelectorAll('[data-rank-view]').forEach(btn=>{
+    btn.classList.toggle('active', btn.dataset.rankView === activeRankView);
   });
 }
 function rankPeriodTabs(target, active, periods){
@@ -2783,7 +2795,7 @@ function renderRankings(){
     const tabs = opts.tabs || '';
     const wide = opts.wide ? ' rank-wide' : '';
     const note = opts.note ? `<div class="rank-advisory-note">${opts.note}</div>` : '';
-    return `<div class="rank-card rank-collapsed${wide}" data-rank-title="${attr(title)}">
+    return `<div class="rank-card rank-collapsed${wide}" data-rank-title="${attr(title)}" data-rank-view-key="${attr(opts.key||title)}">
       <div class="rank-card-header">
         <div class="rank-card-main-title"><span>${icon}</span><span class="rank-card-title" title="${attr(title)}">${title}</span></div>
         ${tabs}
@@ -2834,13 +2846,33 @@ function renderRankings(){
 
   const filtroLabel = activeRankFilter === 'todos' ? 'todos os fundos' : document.querySelector(`[data-rank-filter="${activeRankFilter}"]`)?.textContent?.trim() || 'filtro aplicado';
 
-  grid.innerHTML = [
-    rankCard('🏆','Top Fundos',topFundosHtml,`Ranking por rentabilidade — ${rankPeriodoLabel(activeRankPeriods.topFundos)} · ${filtroLabel}.`,{tabs:rankPeriodTabs('topFundos',activeRankPeriods.topFundos,['mes','ano','12m'])}),
-    rankCard('🎖️','Melhor por Categoria',catHtml,'Melhor fundo de cada categoria com base no acumulado de 12 meses.'),
-    rankCard('📅','Destaques do Período',destaquesHtml,`Maiores altas e quedas — ${rankPeriodoLabel(activeRankPeriods.destaques)}.`,{tabs:rankPeriodTabs('destaques',activeRankPeriods.destaques,['dia','mes','ano','12m'])}),
-    rankCard('📊','Categorias — Rentabilidade',catPonderadaHtml,'Rentabilidade 12M ponderada pelo PL consolidado da categoria.',{wide:true,note:'Leitura mais institucional: mostra a média ponderada da categoria, não apenas o fundo vencedor.'}),
-    rankCard('🏦','Categorias — Patrimônio Líquido',catPLHtml,'Ajuda a entender onde está concentrado o patrimônio dos fundos.',{wide:true}),
-  ].join('');
+  const resumoCards = (() => {
+    const melhor = sortedTop[0];
+    const melhorNome = melhor ? String(melhor['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim() : '—';
+    const melhorVal = melhor ? ((toNum(melhor[campoTop])>0?'+':'') + String(melhor[campoTop]||'—')) : '—';
+    const destaque = sortedDestaques[0];
+    const destaqueNome = destaque ? String(destaque['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim() : '—';
+    const destaqueVal = destaque ? ((toNum(destaque[campoDestaques])>0?'+':'') + String(destaque[campoDestaques]||'—')) : '—';
+    const maiorPL = catPL[0];
+    const maiorPLNome = maiorPL ? maiorPL[0] : '—';
+    const maiorPLVal = maiorPL ? ('R$ ' + numKpi(maiorPL[1].pl_total).toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi') : '—';
+    const corta = (s,n=28) => String(s||'—').length>n ? String(s).slice(0,n)+'…' : String(s||'—');
+    return `<div class="ranking-summary-strip" aria-label="Resumo rápido dos rankings">
+      <div class="ranking-summary-card"><span>🏆 Melhor</span><strong>${attr(melhorVal)}</strong><small>${attr(corta(melhorNome))}</small></div>
+      <div class="ranking-summary-card"><span>📈 Destaque</span><strong>${attr(destaqueVal)}</strong><small>${attr(corta(destaqueNome))}</small></div>
+      <div class="ranking-summary-card"><span>🏦 Maior PL</span><strong>${attr(maiorPLVal)}</strong><small>${attr(corta(maiorPLNome))}</small></div>
+    </div>`;
+  })();
+
+  const cardsPorVisao = {
+    top: rankCard('🏆','Top Fundos',topFundosHtml,`Ranking por rentabilidade — ${rankPeriodoLabel(activeRankPeriods.topFundos)} · ${filtroLabel}.`,{key:'top',tabs:rankPeriodTabs('topFundos',activeRankPeriods.topFundos,['mes','ano','12m'])}),
+    categoria: rankCard('🎖️','Melhor por Categoria',catHtml,'Melhor fundo de cada categoria com base no acumulado de 12 meses.',{key:'categoria'}),
+    destaques: rankCard('📅','Destaques do Período',destaquesHtml,`Maiores altas e quedas — ${rankPeriodoLabel(activeRankPeriods.destaques)}.`,{key:'destaques',tabs:rankPeriodTabs('destaques',activeRankPeriods.destaques,['dia','mes','ano','12m'])}),
+    rentabilidade: rankCard('📊','Categorias — Rentabilidade',catPonderadaHtml,'Rentabilidade 12M ponderada pelo PL consolidado da categoria.',{key:'rentabilidade',wide:true,note:'Leitura institucional: média ponderada da categoria pelo PL, não apenas o fundo vencedor.'}),
+    pl: rankCard('🏦','Categorias — Patrimônio Líquido',catPLHtml,'Ajuda a entender onde está concentrado o patrimônio dos fundos.',{key:'pl',wide:true}),
+  };
+
+  grid.innerHTML = resumoCards + (cardsPorVisao[activeRankView] || cardsPorVisao.top);
 }
 
 
@@ -2924,6 +2956,17 @@ async function baixarPrintRank(el, nome){
   }
 }
 document.addEventListener('click', (ev)=>{
+  const viewBtn = ev.target.closest('[data-rank-view]');
+  if(viewBtn){
+    activeRankView = viewBtn.dataset.rankView || 'top';
+    renderRankings();
+    const sec = $('rankingsSection');
+    if(sec && window.matchMedia('(max-width: 760px)').matches){
+      sec.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+    return;
+  }
+
   const filterBtn = ev.target.closest('[data-rank-filter]');
   if(filterBtn){
     activeRankFilter = filterBtn.dataset.rankFilter || 'todos';
