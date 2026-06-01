@@ -12798,11 +12798,13 @@ tbody tr.row-fav{
   box-shadow:0 -24px 70px rgba(0,0,0,.48);
   z-index:9991;
   padding:12px 18px calc(20px + env(safe-area-inset-bottom));
-  transition:transform .25s ease;
+  transition:transform .25s ease, opacity .2s ease;
+  opacity:0;
 }
+
 body.closed-market-open{ overflow:hidden; }
 body.closed-market-open .closed-market-overlay{ opacity:1; pointer-events:auto; }
-body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); }
+body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opacity:1; }
 .closed-market-handle{
   width:64px;height:5px;border-radius:999px;
   background:rgba(255,255,255,.28);
@@ -12948,6 +12950,30 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); }
 .closed-card-item strong.pos{ color:var(--green) !important; }
 .closed-card-item strong.neg{ color:var(--red) !important; }
 .closed-card-item strong.neu{ color:#e8ecff !important; }
+.closed-card-item small.pos,
+.closed-card-item small.neg,
+.closed-card-item small.neu{
+  display:block;
+  margin-top:4px;
+  font-size:.82rem;
+  font-weight:900;
+}
+.closed-card-item small.pos{ color:var(--green) !important; }
+.closed-card-item small.neg{ color:var(--red) !important; }
+.closed-card-item small.neu{ color:#e8ecff !important; }
+@media(min-width:701px){
+  .closed-market-sheet{
+    top:50%;
+    bottom:auto;
+    max-height:min(88vh, 840px);
+    border-radius:28px;
+    padding:14px 18px 20px;
+    transform:translate(-50%, -46%);
+  }
+  body.closed-market-open .closed-market-sheet{
+    transform:translate(-50%, -50%);
+  }
+}
 @media(max-width:700px){
   .closed-month-launch{
     margin:10px 0 16px;
