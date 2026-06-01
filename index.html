@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-rent-mobile-v3"/>
+<link rel="stylesheet" href="style.css?v=20260601-painel-virada-mes"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -247,10 +247,10 @@
     <div class="mobile-sort-line mobile-sort-field-line">
       <span class="mobile-sort-label">Ordenar</span>
       <div class="mobile-sort-chip-row" role="group" aria-label="Campo de ordenação">
-        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="dia">Dia</button>
+        <button type="button" class="mobile-sort-chip active" data-mobile-sort-field="dia">Dia</button>
         <button type="button" class="mobile-sort-chip" data-mobile-sort-field="mes">Mês</button>
         <button type="button" class="mobile-sort-chip" data-mobile-sort-field="ano">Ano</button>
-        <button type="button" class="mobile-sort-chip active" data-mobile-sort-field="m12">12M</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="m12">12M</button>
         <button type="button" class="mobile-sort-chip" data-mobile-sort-field="cdi">% CDI</button>
       </div>
     </div>
@@ -498,8 +498,8 @@
       <thead>
         <tr>
           <th style="text-align:left">Indicador</th>
-          <th>Mês anterior<br><span class="th-sub" id="th-mes-ant-sub">—</span></th>
-          <th class="th-cur">Mês atual<br><span class="th-sub" id="th-mes-cur-sub">—</span></th>
+          <th>Último fechado<br><span class="th-sub" id="th-mes-ant-sub">—</span></th>
+          <th class="th-cur">Mês atual<br><span class="th-sub" id="th-mes-cur-sub">parcial</span></th>
           <th>No ano<br><span class="th-sub" id="th-ano-sub">jan→—</span></th>
           <th class="th-acum" id="th-acum-head">Acum. 12M<br><span class="th-sub" id="th-acum-sub-v2">—</span></th>
         </tr>
@@ -1829,6 +1829,7 @@ function atualizarTabelaIndicadores(){
   const hoje = new Date();
 
   const set = (id, txt) => { const el=$(id); if(el) el.textContent = txt; };
+  const setHTML = (id, html) => { const el=$(id); if(el) el.innerHTML = html; };
   const num = v => {
     if(v === null || v === undefined || v === '') return null;
     const n = Number(v);
@@ -1838,13 +1839,23 @@ function atualizarTabelaIndicadores(){
     ? '—'
     : (Number(n) > 0 ? '+' : '') + Number(n).toFixed(2).replace('.',',') + '%';
 
-  const setPct = (id, n, barId, maxPct=20, inverse=false) => {
+  const limparStatus = (txt='') => String(txt || '').replace(/^(FECHADO|PARCIAL|AGUARDANDO)\s*/i,'').trim();
+  const subStatus = (label, status='fechado') => {
+    const cleanLabel = limparStatus(label || '—');
+    const s = String(status || 'fechado').toLowerCase();
+    const nome = s === 'aguardando' ? 'aguardando' : s === 'parcial' ? 'parcial' : 'fechado';
+    return `<span class="period-label">${cleanLabel}</span><span class="status-chip status-${nome}">${nome}</span>`;
+  };
+
+  const setSubStatus = (id, label, status='fechado') => setHTML(id, subStatus(label, status));
+
+  const setPct = (id, n, barId, maxPct=20, inverse=false, emptyText='—') => {
     const el=$(id);
     const val=num(n);
 
     if(el){
       if(val === null){
-        el.textContent = '—';
+        el.textContent = emptyText;
         el.className = 'v2-val dash';
       }else{
         const cls = val > 0 ? (inverse ? 'neg' : 'pos') : val < 0 ? (inverse ? 'pos' : 'neg') : 'neu';
@@ -1866,28 +1877,46 @@ function atualizarTabelaIndicadores(){
     }
   };
 
-  const setPts = (id, v, sufixo='pts') => {
+  const setPts = (id, v, sufixo='pts', emptyText='—') => {
     const val=num(v);
-    set(id, val === null ? '—' : `${fmtK(val)} ${sufixo}`);
+    set(id, val === null ? emptyText : `${fmtK(val)} ${sufixo}`);
     const el=$(id);
     if(el) el.className = val === null ? 'v2-val dash' : 'v2-val neu';
   };
 
-  const setMoney = (id, v) => {
+  const setMoney = (id, v, emptyText='—') => {
     const val=num(v);
-    set(id, val === null ? '—' : brl(val));
+    set(id, val === null ? emptyText : brl(val));
     const el=$(id);
     if(el) el.className = val === null ? 'v2-val dash' : 'v2-val neu';
   };
 
-  const brlSub = (n, label='BRL') => {
-    const val=num(n);
-    return val === null ? '' : pctTxt(val);  // sem prefixo BRL redundante
+  const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
+  const labelFromDate = dataStr => {
+    if(!dataStr) return null;
+    const m = String(dataStr).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(!m) return null;
+    const ano = Number(m[1]);
+    const mes = Number(m[2]) - 1;
+    return `${MESES_PT[mes]}/${ano}`;
   };
-  const brlPeriodSub = (periodo, n) => {
-    const val=num(n);
-    return val === null ? `BRL —` : `BRL ${pctTxt(val)}`;
+  const keyFromDate = dataStr => {
+    if(!dataStr) return null;
+    const m = String(dataStr).match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return m ? `${m[1]}-${m[2]}` : null;
   };
+  const parseLabelKey = label => {
+    const m = String(label || '').match(/([a-zç]{3})\/(\d{4})/i);
+    if(!m) return null;
+    const mes = MESES_PT.findIndex(x => x.toLowerCase() === m[1].toLowerCase());
+    return mes >= 0 ? `${m[2]}-${String(mes+1).padStart(2,'0')}` : null;
+  };
+  const currentKey = monthKey(hoje);
+  const mesAtualLabel = `${MESES_PT[hoje.getMonth()]}/${hoje.getFullYear()}`;
+  const anoLabel = `jan→${MESES_PT[hoje.getMonth()]}/${hoje.getFullYear()}`;
+
+  const isAtualNoMesCorrente = item => keyFromDate(item?.data_atual) === currentKey;
+  const itemTemDadoAtual = item => num(item?.fechamento_atual) !== null && isAtualNoMesCorrente(item);
 
   const indices = _dadosMercado?.indices_mercado || {};
   const cards = _dadosMercado?.cards || {};
@@ -1899,7 +1928,48 @@ function atualizarTabelaIndicadores(){
   const idxDow = indices.dow_jones || intl.dow_jones_detalhado || {};
   const idxNasdaq = indices.nasdaq || intl.nasdaq_detalhado || {};
 
-  const mesAntLabel =
+  function fechadoDeItem(item, fallbackLabel){
+    const dataLabel = labelFromDate(item?.data_atual);
+    const dataKey = keyFromDate(item?.data_atual);
+    const itemLabelKey = parseLabelKey(item?.mes_anterior_label);
+
+    // Se o dado mais recente ainda é de mês já encerrado, ele é o último fechado.
+    // Isso evita repetir a mesma cotação/pontuação em “fechado” e “mês atual” na virada do mês.
+    if(dataKey && dataKey !== currentKey && dataLabel){
+      const usarAtualComoFechado = !item?.mes_anterior_label || itemLabelKey !== dataKey;
+      if(usarAtualComoFechado){
+        return {
+          label: dataLabel,
+          valor: num(item?.fechamento_atual),
+          variacao: num(item?.variacao_mes_atual) ?? num(item?.variacao_mes_fechado),
+          brl: num(item?.variacao_mes_atual_brl) ?? num(item?.variacao_mes_fechado_brl),
+        };
+      }
+    }
+
+    return {
+      label: item?.mes_anterior_label || fallbackLabel || dataLabel || 'último fechado',
+      valor: num(item?.fechamento_mes_anterior) ?? num(item?.fechamento_atual),
+      variacao: num(item?.variacao_mes_fechado) ?? num(item?.variacao_mes_atual),
+      brl: num(item?.variacao_mes_fechado_brl),
+    };
+  }
+
+  function atualDeItem(item){
+    if(!itemTemDadoAtual(item)){
+      return { label: mesAtualLabel, valor: null, variacao: null, brl: null, status: 'aguardando' };
+    }
+    return {
+      label: item?.mes_atual_label || mesAtualLabel,
+      valor: num(item?.fechamento_atual),
+      variacao: num(item?.variacao_mes_atual),
+      brl: num(item?.variacao_mes_atual_brl),
+      status: 'parcial'
+    };
+  }
+
+  const fallbackMesFechado =
+    cards.cdi?.mes_ref ||
     idxIbov.mes_anterior_label ||
     idxDolar.mes_anterior_label ||
     (() => {
@@ -1909,54 +1979,51 @@ function atualizarTabelaIndicadores(){
       return `${MESES_PT[mAntIdx]}/${mAntAno}`;
     })();
 
-  const mesAtualLabel = `${MESES_PT[hoje.getMonth()]}/${hoje.getFullYear()}`;
-  const anoLabel = `jan→${MESES_PT[hoje.getMonth()]}/${hoje.getFullYear()}`;
-
-  // Cabeçalhos
-  set('th-mes-ant-sub', mesAntLabel);
-  set('th-mes-cur-sub', mesAtualLabel + ' parcial');
+  // Cabeçalhos mais claros para virada de mês
+  set('th-mes-ant-sub', fallbackMesFechado);
+  set('th-mes-cur-sub', `${mesAtualLabel} parcial`);
   set('th-ano-sub', anoLabel);
   set('th-acum-sub-v2', `${m}M`);
   const thAcum = $('th-acum-head');
   if(thAcum) thAcum.firstChild.textContent = `Acum. ${m}M `;
 
   // ═══ CDI ═══
-  // v17: o robô gera 'mensal' (mês fechado real, série 4391 BCB).
-  // 'mensal_fechado' não existe — era um campo planejado mas nunca implementado.
   const cdiMesFechado = num(cards.cdi?.mensal) ?? num(indicState.cdi.mes);
   const cdiParcial = num(cards.cdi?.parcial_mes_atual);
-  const cdiAno = num(cards.cdi?.acum_ano_com_parcial) ?? num(cards.cdi?.acum_ano) ?? null;
+  const cdiParcialLabel = cards.cdi?.parcial_ref || mesAtualLabel;
+  const cdiAno = (cdiParcial !== null ? num(cards.cdi?.acum_ano_com_parcial) : num(cards.cdi?.acum_ano)) ?? num(cards.cdi?.acum_ano_com_parcial) ?? null;
   const cdiAcum = num(indicState.cdi[`m${m}`]) ?? num(cards.cdi?.[`acum_${m}m`]);
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
-  // v17: usa mes_ref do robô (ex: "abr/2026") em vez de calcular a data
-  set('cdi-mes-ant-sub', cards.cdi?.mes_ref || mesAntLabel);
+  setSubStatus('cdi-mes-ant-sub', cards.cdi?.mes_ref || fallbackMesFechado, 'fechado');
 
-  setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2);
-  // v17: usa parcial_ref do robô (ex: "mai/2026") — dias_uteis_parcial não é gerado
-  set('cdi-cur-sub', cdiParcial !== null
-    ? (cards.cdi?.parcial_ref || 'parcial')
-    : 'parcial');
+  setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2, false, 'aguardando');
+  setSubStatus('cdi-cur-sub', cdiParcialLabel, cdiParcial !== null ? 'parcial' : 'aguardando');
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
-  set('cdi-ano-sub', '');
+  setSubStatus('cdi-ano-sub', cdiParcial !== null ? 'ano com parcial' : 'ano fechado', cdiParcial !== null ? 'parcial' : 'fechado');
 
   setPct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
   if($('cdi-acum-v2') && cdiAcum !== null) $('cdi-acum-v2').classList.add('pos');
-  set('cdi-acum-src-v2', cdiAcum !== null ? `${m}M` : '—');
+  set('cdi-acum-src-v2', `${m}M`);
 
   // ═══ IPCA ═══
-  const ipcaMes = num(indicState.ipca.mes);
-  const ipcaRef = indicState.ipca.mesRef;
-  const ipcaAno = num(indicState.ipca.ano);
-  const ipcaAcum = num(indicState.ipca[`m${m}`]);
+  const ipcaMes = num(cards.ipca?.ultimo_mes) ?? num(indicState.ipca.mes);
+  const ipcaRef = cards.ipca?.label_mes || indicState.ipca.mesRef || 'último dado';
+  const ipcaAno = num(cards.ipca?.acum_ano) ?? num(indicState.ipca.ano);
+  const ipcaAcum = num(cards.ipca?.[`acum_${m}m`]) ?? num(indicState.ipca[`m${m}`]);
 
-  setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2);
-  // v17: usa mesRef que vem do label_mes do robô (ex: "abr/2026")
-  set('ipca-mes-ant-sub', ipcaRef || 'último dado');
-  setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
-  setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
-  set('ipca-acum-sub-v2', '');
+  setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2, true);
+  setSubStatus('ipca-mes-ant-sub', ipcaRef, 'fechado');
+  const ipcaCurCell = document.querySelector('#row-ipca .td-cur');
+  if(ipcaCurCell){
+    ipcaCurCell.innerHTML = `<span class="badge-await badge-await-full">aguardando IBGE</span><div class="v2-sub status-line">${subStatus(mesAtualLabel, 'aguardando')}</div>`;
+  }
+  setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10, true);
+  const ipcaAnoSub = document.querySelector('#row-ipca td:nth-child(4) .v2-sub');
+  if(ipcaAnoSub) ipcaAnoSub.innerHTML = subStatus('ano', 'fechado');
+  setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20, true);
+  set('ipca-acum-sub-v2', `${m}M`);
 
   const alertEl = $('ipca-alert-badge');
   const rowIpca = $('row-ipca');
@@ -1967,74 +2034,80 @@ function atualizarTabelaIndicadores(){
   }
 
   // ═══ DÓLAR ═══
-  const dolarFechMesAnt = num(idxDolar.fechamento_mes_anterior);
-  const dolarAtual = num(idxDolar.fechamento_atual) ?? num(cards.dolar?.atual);
-  const dolarVarMesFechado = num(idxDolar.variacao_mes_fechado);
-  const dolarVarMesAtual = num(idxDolar.variacao_mes_atual) ?? num(cards.dolar?.variacao_mensal) ?? num(indicState.dolarPct.mes);
+  const dolarFechado = fechadoDeItem(idxDolar, fallbackMesFechado);
+  const dolarAtualInfo = atualDeItem(idxDolar);
   const dolarAno = num(idxDolar.acum_ano) ?? num(cards.dolar?.acum_ano) ?? num(indicState.dolarPct.ano);
   const dolarAcum = num(idxDolar[`acum_${m}m`]) ?? num(cards.dolar?.[`acum_${m}m`]) ?? num(indicState.dolarPct[`m${m}`]);
 
-  setMoney('dolar-ant-cot', dolarFechMesAnt ?? indicState.dolarBRL.mes);
-  set('dolar-ant-sub', 'fechamento');
+  setMoney('dolar-ant-cot', dolarFechado.valor ?? indicState.dolarBRL.mes);
+  setSubStatus('dolar-ant-sub', dolarFechado.label, 'fechado');
 
-  // Se o card PTAX do dia já foi carregado, mantém a cotação oficial exibida ali.
-  const dolarDiaTexto = $('dolar-day-rate')?.textContent;
-  if(dolarDiaTexto && dolarDiaTexto !== '—') set('dolar-cur-cot', dolarDiaTexto);
-  else setMoney('dolar-cur-cot', dolarAtual);
-
-  setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10);
-  set('dolar-cur-sub', '');
+  setMoney('dolar-cur-cot', dolarAtualInfo.valor, 'aguardando');
+  setPct('dolar-cur-var', dolarAtualInfo.variacao, 'bar-dolar-cur', 10, false, '—');
+  setSubStatus('dolar-cur-sub', dolarAtualInfo.label, dolarAtualInfo.status);
   setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
+  const dolarAnoSub = document.querySelector('#row-dolar td:nth-child(4) .v2-sub');
+  if(dolarAnoSub) dolarAnoSub.innerHTML = subStatus('Ano', 'fechado');
   setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
-  set('dolar-acum-sub-v2', '');
+  set('dolar-acum-sub-v2', `${m}M`);
 
   // ═══ IBOVESPA ═══
-  const ibovFechMesAnt = num(idxIbov.fechamento_mes_anterior) ?? num(cards.ibovespa?.anterior);
-  const ibovAtual = num(idxIbov.fechamento_atual) ?? num(cards.ibovespa?.atual);
-  const ibovMesFechado = num(idxIbov.variacao_mes_fechado);
-  const ibovMesAtual = num(idxIbov.variacao_mes_atual) ?? num(cards.ibovespa?.variacao_mensal);
+  const ibovFechado = fechadoDeItem(idxIbov, fallbackMesFechado);
+  const ibovAtualInfo = atualDeItem(idxIbov);
   const ibovAno = num(idxIbov.acum_ano) ?? num(cards.ibovespa?.acum_ano);
   const ibovAcum = num(idxIbov[`acum_${m}m`]) ?? num(cards.ibovespa?.[`acum_${m}m`]);
 
-  setPts('ibov-ant-pts', ibovFechMesAnt);
-  setPct('ibov-ant-var', ibovMesFechado, 'bar-ibov-ant', 20);
-  set('ibov-ant-sub', 'fechamento');
+  setPts('ibov-ant-pts', ibovFechado.valor);
+  setPct('ibov-ant-var', ibovFechado.variacao, 'bar-ibov-ant', 20);
+  setSubStatus('ibov-ant-sub', ibovFechado.label, 'fechado');
 
-  setPts('ibov-cur-pts', ibovAtual);
-  setPct('ibov-cur-var', ibovMesAtual, 'bar-ibov-var', 20);
-  set('ibov-cur-sub', '');
+  setPts('ibov-cur-pts', ibovAtualInfo.valor, 'pts', 'aguardando');
+  setPct('ibov-cur-var', ibovAtualInfo.variacao, 'bar-ibov-var', 20, false, '—');
+  setSubStatus('ibov-cur-sub', ibovAtualInfo.label, ibovAtualInfo.status);
 
   setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
+  const ibovAnoSub = document.querySelector('#row-ibov td:nth-child(4) .v2-sub');
+  if(ibovAnoSub) ibovAnoSub.innerHTML = subStatus('Ano', ibovAtualInfo.status === 'parcial' ? 'parcial' : 'fechado');
   setPct('ibov-acum-v2', ibovAcum, 'bar-ibov-acum', 80);
-  set('ibov-acum-sub-v2', '');
+  set('ibov-acum-sub-v2', `${m}M`);
 
   // ═══ BOLSAS EUA ═══
+  function usdBrlHTML(usd, brl){
+    const u = num(usd), b = num(brl);
+    const clsU = u === null ? 'dash' : u > 0 ? 'pos' : u < 0 ? 'neg' : 'neu';
+    const clsB = b === null ? 'dash' : b > 0 ? 'pos' : b < 0 ? 'neg' : 'neu';
+    return `<span class="usd-brl-line usd ${clsU}">USD ${pctTxt(u)}</span>${b !== null ? `<span class="usd-brl-line brl ${clsB}">BRL ${pctTxt(b)}</span>` : ''}`;
+  }
+
   function popularIndiceEUA(prefix, item){
-    const fechado = num(item?.variacao_mes_fechado);
-    const fechadoBrl = num(item?.variacao_mes_fechado_brl);
-    const atualPts = num(item?.fechamento_atual);
-    const mesAtual = num(item?.variacao_mes_atual);
-    const mesAtualBrl = num(item?.variacao_mes_atual_brl);
+    const fechado = fechadoDeItem(item, fallbackMesFechado);
+    const atual = atualDeItem(item);
     const ano = num(item?.acum_ano);
     const anoBrl = num(item?.acum_ano_brl);
     const acum = num(item?.[`acum_${m}m`]);
     const acumBrl = num(item?.[`acum_${m}m_brl`]);
 
-    setPct(`${prefix}-ant-var`, fechado, `bar-${prefix}-ant`, 35);
-    set(`${prefix}-ant-sub`, fechadoBrl !== null ? brlPeriodSub('Mês fechado', fechadoBrl) : 'Mês fechado');
+    setHTML(`${prefix}-ant-var`, usdBrlHTML(fechado.variacao, fechado.brl));
+    const antEl = $(`${prefix}-ant-var`); if(antEl) antEl.className = 'v2-val usd-brl-stack';
+    setSubStatus(`${prefix}-ant-sub`, fechado.label, 'fechado');
 
-    setPts(`${prefix}-cur-pts`, atualPts);
-    setPct(`${prefix}-cur-var`, mesAtual, `bar-${prefix}-cur`, 35);
-    set(`${prefix}-cur-sub`, mesAtualBrl !== null ? brlPeriodSub('Mês', mesAtualBrl) : 'Mês');
+    setPts(`${prefix}-cur-pts`, atual.valor, 'pts', 'aguardando');
+    setHTML(`${prefix}-cur-var`, atual.variacao === null ? '—' : usdBrlHTML(atual.variacao, atual.brl));
+    const curEl = $(`${prefix}-cur-var`); if(curEl) curEl.className = atual.variacao === null ? 'v2-val dash' : 'v2-val usd-brl-stack';
+    const barCur = $(`bar-${prefix}-cur`); if(barCur){ barCur.style.width = atual.variacao === null ? '0%' : Math.min(Math.abs(atual.variacao)/35*100,100)+'%'; barCur.className = atual.variacao >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
+    setSubStatus(`${prefix}-cur-sub`, atual.label, atual.status);
 
-    setPct(`${prefix}-ano-var`, ano, `bar-${prefix}-ano`, 60);
-    set(`${prefix}-ano-sub`, anoBrl !== null ? brlPeriodSub('Ano', anoBrl) : 'Ano');
+    setHTML(`${prefix}-ano-var`, usdBrlHTML(ano, anoBrl));
+    const anoEl = $(`${prefix}-ano-var`); if(anoEl) anoEl.className = 'v2-val usd-brl-stack';
+    const barAno = $(`bar-${prefix}-ano`); if(barAno){ barAno.style.width = ano === null ? '0%' : Math.min(Math.abs(ano)/60*100,100)+'%'; barAno.className = ano >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
+    setSubStatus(`${prefix}-ano-sub`, 'Ano', atual.status === 'parcial' ? 'parcial' : 'fechado');
 
-    setPct(`${prefix}-acum-var`, acum, `bar-${prefix}-acum`, 120);
-    set(`${prefix}-acum-sub-v2`, acumBrl !== null ? brlPeriodSub(`${m}M`, acumBrl) : `${m}M`);
+    setHTML(`${prefix}-acum-var`, usdBrlHTML(acum, acumBrl));
+    const acumEl = $(`${prefix}-acum-var`); if(acumEl) acumEl.className = 'v2-val usd-brl-stack';
+    const barAcum = $(`bar-${prefix}-acum`); if(barAcum){ barAcum.style.width = acum === null ? '0%' : Math.min(Math.abs(acum)/120*100,100)+'%'; barAcum.className = acum >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
+    set(`${prefix}-acum-sub-v2`, `${m}M`);
   }
 
-  // Compatibilidade: se vier apenas estrutura antiga, pelo menos mostra o S&P 500 atual.
   if(!idxSp || Object.keys(idxSp).length === 0){
     if(intl.sp500_usd) setPts('sp-cur-pts', intl.sp500_usd);
   }else{
@@ -2860,7 +2933,7 @@ let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor primeiro
-let activeMobileSortCampo='m12'; // dia | mes | ano | m12 | cdi
+let activeMobileSortCampo='dia'; // dia | mes | ano | m12 | cdi
 let activeMobileSortDir='desc';  // desc = maior primeiro; asc = menor primeiro
 let expandedRows=new Set();
 
@@ -3400,7 +3473,32 @@ function buildDocsCompactos(row){
     <a class="doc-mini doc-mini-secondary" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(d.label)}">${d.curto}</a>
   `).join('');
 
+
   return `<div class="docs-mini-wrap">${primary}${btnTodos}${links}</div>`;
+}
+
+function buildDetailQuickActions(row, urlFund){
+  const docs = obterDocsFundoCompactos(row);
+  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || /boletim/i.test(String(d.label||'')));
+  const lamina = docs.find(d => d.csvKey === 'doc_lamina' || /lâmina|lamina/i.test(String(d.label||'')));
+  const regulamento = docs.find(d => d.csvKey === 'doc_regulamento' || /regulamento/i.test(String(d.label||'')));
+
+  const mkBtn = (href, cls, icon, label, title) => href
+    ? `<a class="detail-action-btn ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(title || label)}"><span>${icon}</span>${label}</a>`
+    : '';
+
+  const buttons = [
+    mkBtn(boletim?.url, 'detail-action-primary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
+    mkBtn(lamina?.url, 'detail-action-secondary', '📄', 'Lâmina', 'Abrir lâmina'),
+    mkBtn(regulamento?.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento'),
+    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página CAIXA', 'Abrir página do fundo na CAIXA'),
+  ].filter(Boolean).join('');
+
+  if(!buttons) return '';
+  return `<div class="detail-actions-card">
+    <div class="detail-actions-title">Ações rápidas</div>
+    <div class="detail-actions-buttons">${buttons}</div>
+  </div>`;
 }
 
 function buildDocsHtml(cnpjLimpo, urlFundo, row){
@@ -3620,11 +3718,11 @@ function buildDetailPanel(r,colspan){
     return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
   }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
-  const urlItem=urlFund?`<div class="detail-item"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
-  const cnpjLimpo = String(r['CNPJ']||'').replace(/\D/g,'');
+  const urlItem=urlFund?`<div class="detail-item detail-site-link"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
+  const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
-    <div class="detail-panel">
-      <div class="detail-main">${items}${urlItem}${gerarLeituraRapidaFundo(r)}</div>
+    <div class="detail-panel detail-panel-mobile-clean">
+      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}${urlItem}</div>${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
@@ -4008,6 +4106,22 @@ function render(){
   renderPagination();
 }
 
+function scrollToFundResultsStart(){
+  const tableWrap = document.querySelector('#sec-fundos .table-wrap');
+  const fallback = document.getElementById('sec-fundos');
+  const target = tableWrap || fallback;
+  if(!target) return;
+
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const stickyOffset = isMobile ? 118 : 24;
+  const y = target.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
+
+  window.scrollTo({
+    top: Math.max(0, y),
+    behavior: 'smooth'
+  });
+}
+
 function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
   const c=$('pageBtns'); c.innerHTML='';
@@ -4016,7 +4130,12 @@ function renderPagination(){
     const b=document.createElement('button');
     b.className='page-btn'+(act?' active':'');
     b.textContent=label; b.disabled=dis;
-    if(!dis) b.addEventListener('click',()=>{currentPage=page;render();window.scrollTo({top:0,behavior:'smooth'});});
+    if(!dis) b.addEventListener('click',()=>{
+      currentPage=page;
+      expandedRows.clear();
+      render();
+      requestAnimationFrame(scrollToFundResultsStart);
+    });
     return b;
   };
   c.appendChild(mk('‹',currentPage-1,currentPage===1));
