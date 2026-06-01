@@ -10986,3 +10986,272 @@ tbody tr.row-fav{
     display:none !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH 20260601 — Painel consolidado: Bolsa EUA legível
+   - USD e BRL em linhas próprias
+   - remove barras pequenas nas linhas EUA para ganhar espaço
+   - aumenta fonte e reduz redundância visual
+════════════════════════════════════════════════════ */
+#row-sp .v2-bar-bg,
+#row-dow .v2-bar-bg,
+#row-nasdaq .v2-bar-bg{
+  display:none !important;
+}
+
+#row-sp .v2-bar-row,
+#row-dow .v2-bar-row,
+#row-nasdaq .v2-bar-row{
+  justify-content:flex-end !important;
+  gap:0 !important;
+  width:100%;
+}
+
+#row-sp .v2-bar-row .v2-val,
+#row-dow .v2-bar-row .v2-val,
+#row-nasdaq .v2-bar-row .v2-val{
+  margin-left:0 !important;
+}
+
+.us-market-stack{
+  display:flex !important;
+  justify-content:flex-end;
+  width:100%;
+  min-width:112px;
+  line-height:1.15;
+}
+
+.us-market-lines{
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  gap:4px;
+  min-width:98px;
+  max-width:132px;
+}
+
+.us-market-line{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:8px;
+  white-space:nowrap;
+  font-family:'Inter',sans-serif;
+}
+
+.us-market-label{
+  display:inline-flex;
+  min-width:28px;
+  color:#9da8c7;
+  font-size:.66rem;
+  font-weight:900;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+
+.us-market-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.88rem;
+  font-weight:900;
+  letter-spacing:-.02em;
+  text-align:right;
+}
+
+.us-market-line.brl .us-market-value{
+  font-size:.80rem;
+  font-weight:850;
+}
+
+.us-market-line.pos .us-market-value{color:var(--green)}
+.us-market-line.neg .us-market-value{color:var(--red)}
+.us-market-line.neu .us-market-value{color:#dbe3f2}
+.us-market-line.dash .us-market-value{color:var(--muted2)}
+
+#row-sp .td-cur > .v2-val.neu,
+#row-dow .td-cur > .v2-val.neu,
+#row-nasdaq .td-cur > .v2-val.neu{
+  display:block;
+  margin-bottom:5px;
+  color:#f3eefc;
+  font-size:1.02rem;
+  font-weight:800;
+  letter-spacing:-.02em;
+}
+
+#row-sp td:not(:first-child),
+#row-dow td:not(:first-child),
+#row-nasdaq td:not(:first-child){
+  padding-top:16px;
+  padding-bottom:16px;
+}
+
+#row-sp .v2-sub,
+#row-dow .v2-sub,
+#row-nasdaq .v2-sub{
+  margin-top:6px;
+  font-size:.66rem;
+  color:#9faaca;
+}
+
+@media(max-width:900px){
+  .us-market-stack{
+    justify-content:flex-start;
+    min-width:0;
+  }
+  .us-market-lines{
+    min-width:92px;
+    max-width:120px;
+    gap:3px;
+  }
+  .us-market-label{font-size:.61rem;min-width:26px}
+  .us-market-value{font-size:.78rem}
+  .us-market-line.brl .us-market-value{font-size:.72rem}
+}
+
+
+/* ════════════════════════════════════════════════════
+   PATCH 20260601 — Painel consolidado: Bolsa EUA v2
+   Objetivo: USD e BRL legíveis, sem texto colado e sem barras redundantes
+════════════════════════════════════════════════════ */
+#row-sp .v2-bar-bg,
+#row-dow .v2-bar-bg,
+#row-nasdaq .v2-bar-bg{
+  display:none !important;
+}
+
+#row-sp .v2-bar-row,
+#row-dow .v2-bar-row,
+#row-nasdaq .v2-bar-row{
+  display:block !important;
+  width:100%;
+  text-align:right;
+  margin-top:0 !important;
+}
+
+#row-sp .v2-bar-row .v2-val,
+#row-dow .v2-bar-row .v2-val,
+#row-nasdaq .v2-bar-row .v2-val{
+  margin-left:0 !important;
+}
+
+.us-market-stack{
+  display:block !important;
+  width:100%;
+  min-width:128px;
+  line-height:1.15;
+  text-align:right;
+}
+
+.us-market-block{
+  display:inline-grid;
+  grid-template-columns:1fr;
+  align-items:end;
+  justify-items:end;
+  gap:5px;
+  min-width:126px;
+  padding:2px 0;
+}
+
+.us-market-line{
+  display:grid;
+  grid-template-columns:auto auto;
+  justify-content:end;
+  align-items:baseline;
+  column-gap:8px;
+  width:100%;
+  white-space:nowrap;
+  font-family:'Inter',sans-serif;
+}
+
+.us-market-label{
+  display:inline-flex;
+  align-items:center;
+  justify-content:flex-start;
+  min-width:32px;
+  color:#aeb8d3;
+  font-size:.72rem;
+  font-weight:900;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+
+.us-market-value{
+  font-family:'JetBrains Mono',monospace;
+  font-size:.98rem;
+  line-height:1.08;
+  font-weight:950;
+  letter-spacing:-.025em;
+  text-align:right;
+}
+
+.us-market-line.brl .us-market-value{
+  font-size:.92rem;
+  font-weight:900;
+}
+
+.us-market-line.pos .us-market-value{color:var(--green)}
+.us-market-line.neg .us-market-value{color:var(--red)}
+.us-market-line.neu .us-market-value{color:#dbe3f2}
+.us-market-line.dash .us-market-value{color:var(--muted2)}
+
+#row-sp .td-cur > .v2-val.neu,
+#row-dow .td-cur > .v2-val.neu,
+#row-nasdaq .td-cur > .v2-val.neu{
+  display:block;
+  margin-bottom:6px;
+  color:#f3eefc;
+  font-size:1.12rem;
+  font-weight:850;
+  letter-spacing:-.025em;
+}
+
+#row-sp td:not(:first-child),
+#row-dow td:not(:first-child),
+#row-nasdaq td:not(:first-child){
+  padding-top:17px;
+  padding-bottom:17px;
+}
+
+#row-sp .v2-sub,
+#row-dow .v2-sub,
+#row-nasdaq .v2-sub{
+  margin-top:7px;
+  font-size:.70rem;
+  color:#a7b2ce;
+  line-height:1.25;
+}
+
+/* dá um pouco mais de largura às colunas numéricas no desktop */
+@media(min-width:901px){
+  .indic-table-v2 th:not(:first-child),
+  .indic-table-v2 td:not(:first-child){
+    min-width:150px;
+  }
+}
+
+@media(max-width:900px){
+  .us-market-stack{
+    min-width:0;
+    text-align:right;
+  }
+  .us-market-block{
+    min-width:96px;
+    gap:4px;
+  }
+  .us-market-label{
+    font-size:.64rem;
+    min-width:28px;
+  }
+  .us-market-value{
+    font-size:.82rem;
+  }
+  .us-market-line.brl .us-market-value{
+    font-size:.78rem;
+  }
+  #row-sp .td-cur > .v2-val.neu,
+  #row-dow .td-cur > .v2-val.neu,
+  #row-nasdaq .td-cur > .v2-val.neu{
+    font-size:.95rem;
+  }
+}
