@@ -1497,11 +1497,13 @@ function calcularDolarPeriodos(){
   const [ano, mes] = last[0].split('-');
   const refLabel = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
 
-  // Início do ano
-  const anoAtualStr = `${ANO_ATUAL}`;
-  const inicioAno = sorted.find(([k]) => k.startsWith(anoAtualStr));
-  if(inicioAno){
-    const inicioVal = parseFloat(inicioAno[1].cotacaoVenda);
+  // Início do ano — usa Dez do ano anterior como base (YTD correto)
+  // BUG anterior: sorted.find pegava Jan/2026 em vez de Dez/2025
+  const anoAnteriorStr = `${ANO_ATUAL - 1}`;
+  const fimAnoAnterior = [...sorted].reverse().find(([k]) => k.startsWith(anoAnteriorStr));
+  const baseAno = fimAnoAnterior; // Dez/2025 = último fechamento do ano anterior
+  if(baseAno){
+    const inicioVal = parseFloat(baseAno[1].cotacaoVenda);
     indicState.dolarBRL.ano = inicioVal;
     indicState.dolarPct.ano = +((lastVal/inicioVal-1)*100).toFixed(2);
   }
