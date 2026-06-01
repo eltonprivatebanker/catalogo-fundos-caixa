@@ -1585,32 +1585,34 @@ function renderDolarMensais(){
   const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
   if(!sorted.length) return;
 
-  // Usa como ano corrente o ano do último dado disponível no histórico.
-  // Assim, se o JSON ainda estiver em abril/2026, mostra jan→abr/2026;
-  // quando entrar maio, junho etc., os meses entram automaticamente.
+  // Mostra sempre os últimos fechamentos disponíveis, com o mês mais recente primeiro.
+  // Isso evita que no mobile apareça jan/fev enquanto o fechamento atual fica escondido no fim.
   const lastKey = sorted[sorted.length - 1][0];
-  const anoCorrente = lastKey.split('-')[0];
-  const mesesAnoCorrente = sorted.filter(([key]) => key.startsWith(anoCorrente + '-'));
+  const ultimosMeses = sorted.slice(-6).reverse();
 
   const container = $('dolarMonths');
   if(!container) return;
 
-  container.innerHTML = mesesAnoCorrente.map(([key, item], idx) => {
+  container.innerHTML = ultimosMeses.map(([key, item]) => {
     const [ano, mes] = key.split('-');
-    const label = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+    const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
     const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
     const isCurrent = key === lastKey;
 
-    let varHtml = '<span class="dolar-month-var zero">—</span>';
-
-    if(idx > 0){
-      const prevVal = parseFloat(mesesAnoCorrente[idx-1][1].cotacaoVenda || mesesAnoCorrente[idx-1][1].cotacao || 0);
-
-      if(prevVal){
-        const varPct = ((val - prevVal) / prevVal) * 100;
-        const cls = varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
-        varHtml = `<span class="dolar-month-var ${cls}">${signPct(varPct)}${fmt(varPct)}</span>`;
+    let varPct = item._var_pct;
+    if(varPct === null || varPct === undefined || Number.isNaN(Number(varPct))){
+      const idxAsc = sorted.findIndex(([k]) => k === key);
+      if(idxAsc > 0){
+        const prevVal = parseFloat(sorted[idxAsc-1][1].cotacaoVenda || sorted[idxAsc-1][1].cotacao || 0);
+        if(prevVal) varPct = ((val - prevVal) / prevVal) * 100;
       }
+    }
+
+    let varHtml = '<span class="dolar-month-var zero">—</span>';
+    if(varPct !== null && varPct !== undefined && !Number.isNaN(Number(varPct))){
+      const n = Number(varPct);
+      const cls = n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+      varHtml = `<span class="dolar-month-var ${cls}">${signPct(n)}${fmt(n)}</span>`;
     }
 
     return `<div class="dolar-month-item${isCurrent ? ' current' : ''}">
@@ -3684,13 +3686,53 @@ function pctCdiCell(r){
   </td>`;
 }
 
+
+// Mobile: uma célula única de rentabilidade para evitar tabela espremida.
+// Mantém Dia, Mês, Ano, 12M e % do CDI sem criar muitas colunas no celular.
+function mobileResumoRentCell(r){
+  const metrics = [
+    { label:'Dia', key:'Variacao Dia (%)' },
+    { label:'Mês', key:'Acum. Mes (%)' },
+    { label:'Ano', key:'Acum. Ano (%)' },
+  ];
+
+  function fmtPctInline(raw){
+    const n = toNum(raw);
+    if(n === null) return {txt:'—', cls:'zero'};
+    const sign = n > 0 ? '+' : '';
+    const txt = sign + String(raw).replace('.', ',');
+    return {txt, cls:n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero'};
+  }
+
+  const rent12 = toNum(r['Acum. 12M (%)']);
+  const m12 = fmtPctInline(r['Acum. 12M (%)']);
+  const ratio = calcCdiRatio(rent12, indicState?.cdi?.m12);
+  const ratioTxt = ratio === null ? 'CDI —' : `${ratio}% do CDI`;
+
+  const small = metrics.map(m=>{
+    const v = fmtPctInline(r[m.key]);
+    return `<span class="mrt-chip ${v.cls}"><b>${m.label}</b>${v.txt}</span>`;
+  }).join('');
+
+  return `<td class="mobile-rent-summary-cell">
+    <div class="mobile-rent-summary">
+      <div class="mrt-row">${small}</div>
+      <div class="mrt-main ${m12.cls}">
+        <span class="mrt-main-label">12M</span>
+        <strong>${m12.txt}</strong>
+        <small>${ratioTxt}</small>
+      </div>
+    </div>
+  </td>`;
+}
+
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
   const colspan=visibleHeaders.length+2;
   let html=`<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
   const isExpanded=expandedRows.has(idx);
-  html+=`<td class="td-expander" style="width:28px;padding:11px 8px;text-align:center">
+  html+=`<td style="width:28px;padding:11px 8px;text-align:center">
     <button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button>
   </td>`;
   // Checkbox comparador
@@ -3700,6 +3742,9 @@ function buildRowHTML(r,idx){
   </td>`;
   visibleHeaders.forEach(h=>{
     const val=String(r[h]||'');
+    if(h==='Resumo Mobile'){
+      html+=mobileResumoRentCell(r);return;
+    }
     if(h==='Categoria'){
       const cls=CAT_CLS[val]||'RF';
       html+=`<td class="col-cat"><span class="cat-badge cat-${cls}">${val||'—'}</span></td>`;return;
@@ -3821,35 +3866,19 @@ function renderPagination(){
 
 function buildHeader(){
   const thead=$('tableHead'),tr=document.createElement('tr');thead.innerHTML='';
-  const thExp=document.createElement('th');
-  thExp.className='th-exp';
-  thExp.style.width='28px';
-  thExp.style.padding='13px 8px';
-  thExp.title='Expandir detalhes do fundo';
-  tr.appendChild(thExp);
-
-  // Cabeçalho da coluna do comparador. Antes a tabela tinha checkbox no corpo
-  // sem TH correspondente, o que desalinhava as colunas no mobile.
+  const thExp=document.createElement('th');thExp.style.width='28px';thExp.style.padding='13px 8px';tr.appendChild(thExp);
   const thComp=document.createElement('th');
-  thComp.className='th-comp';
+  thComp.className='th-comp-check';
   thComp.style.width='28px';
-  thComp.style.padding='13px 6px';
-  thComp.style.cursor='default';
-  thComp.title='Selecionar fundo para comparar';
-  thComp.innerHTML='';
+  thComp.style.padding='13px 4px';
+  thComp.title='Selecionar fundos para comparar';
   tr.appendChild(thComp);
-
   const visibleHeaders=getVisibleHeaders();
   visibleHeaders.forEach(h=>{
     const th=document.createElement('th');
-    if(h==='Fundo') th.classList.add('th-fundo');
-    if(h==='Acum. 12M (%)') th.classList.add('th-pct-12m');
-    if(h==='PL (milhoes R$)' || h==='PL (milhões R$)') th.classList.add('th-pl');
-    if(h==='Documentos') th.classList.add('th-docs');
-    if(h==='Conv / Pag') th.classList.add('th-liq');
 
-    if(h==='Documentos' || h==='Sinais' || h==='Conv / Pag' || h==='Benchmark' || h==='Conversão' || h==='Pagamento'){
-      th.innerHTML=h;
+    if(h==='Resumo Mobile' || h==='Documentos' || h==='Sinais' || h==='Conv / Pag' || h==='Benchmark' || h==='Conversão' || h==='Pagamento'){
+      th.innerHTML = h==='Resumo Mobile' ? 'Rentabilidade' : h;
       th.style.cursor='default';
       th.title = h === 'Sinais'
         ? 'Resumo consultivo: liquidez, benchmark e principais exposições'
@@ -5683,10 +5712,11 @@ document.addEventListener('DOMContentLoaded', function(){
     const base = baseVisibleHeaders();
     const out = [];
 
-    // Mobile: tabela de leitura rápida. O PL já aparece dentro da célula do fundo
-    // e os documentos ficam mais completos no modo Cards/detalhe, evitando tabela espremida.
     uniquePush(out, firstExisting(base, ['Fundo']));
-    uniquePush(out, firstExisting(base, ['Acum. 12M (%)']));
+
+    // Mobile: evita 4 ou 5 colunas espremidas.
+    // A célula "Rentabilidade" consolida Dia, Mês, Ano, 12M e % do CDI.
+    uniquePush(out, 'Resumo Mobile');
 
     return out.filter(Boolean);
   }
