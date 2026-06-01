@@ -6845,7 +6845,14 @@ function ifixFechadoRow(){
   const vari = item.variacao_mes_fechado ?? item.variacao_mes_anterior ?? item.variacao_mes_atual ?? item.mensal;
   const ptsTxt = pts != null && Number.isFinite(Number(pts)) ? `${fmtK(Number(pts))} pts` : '';
   const varTxt = vari != null && Number.isFinite(Number(vari)) ? pctTxt(Number(vari)) : '';
-  return {grupo:'Bolsa Brasil', icon:'🏢', nome:'IFIX', valor:primeiroValorNaoVazio([ptsTxt,varTxt].filter(Boolean).join(' · '), varTxt, ptsTxt), detalhe: item ? 'fundos imobiliários' : 'pendente no robô'};
+  return {
+    grupo:'Bolsa Brasil',
+    icon:'🏢',
+    nome:'IFIX',
+    valor:primeiroValorNaoVazio(ptsTxt, varTxt),
+    detalhe:'fundos imobiliários',
+    extra: varTxt && varTxt !== ptsTxt ? varTxt : ''
+  };
 }
 function indicadorFechadoRows(){
   const poupValor = primeiroValorNaoVazio(painelText('mc-poup'), painelText('poupOldMonthly'));
@@ -6853,8 +6860,8 @@ function indicadorFechadoRows(){
     {grupo:'Taxas e inflação', icon:'💰', nome:'CDI', valor:painelText('cdi-mes-ant'), detalhe:'mês fechado'},
     {grupo:'Taxas e inflação', icon:'🎯', nome:'IPCA', valor:painelText('ipca-mes-ant'), detalhe:'inflação do mês'},
     {grupo:'Taxas e inflação', icon:'🏠', nome:'Poupança', valor:poupValor, detalhe:'rendimento mensal'},
-    {grupo:'Câmbio e bolsa Brasil', icon:'💵', nome:'Dólar PTAX', valor:painelText('dolar-ant-cot'), detalhe:painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : 'cotação de fechamento', extra:painelText('dolar-ant-var')},
-    {grupo:'Câmbio e bolsa Brasil', icon:'📈', nome:'Ibovespa', valor:[painelText('ibov-ant-pts'), painelText('ibov-ant-var')].filter(v=>v && v!=='—').join(' · ') || '—', detalhe:'fechamento mensal'},
+    {grupo:'Câmbio e bolsa Brasil', icon:'💵', nome:'Dólar PTAX', valor:painelText('dolar-ant-cot'), detalhe:'cotação de fechamento', extra:painelText('dolar-ant-var')},
+    {grupo:'Câmbio e bolsa Brasil', icon:'📈', nome:'Ibovespa', valor:painelText('ibov-ant-pts'), detalhe:'fechamento mensal', extra:painelText('ibov-ant-var')},
     ifixFechadoRow(),
     {grupo:'Bolsa EUA', icon:'🌎', nome:'S&P 500', valor:painelText('sp-ant-var'), detalhe:'USD e BRL', us:true},
     {grupo:'Bolsa EUA', icon:'💻', nome:'Nasdaq', valor:painelText('nasdaq-ant-var'), detalhe:'USD e BRL', us:true},
@@ -6886,14 +6893,15 @@ function renderClosedMarketSheet(){
     const grupo = r.grupo || '';
     const section = grupo !== lastGrupo ? `<div class="closed-market-group-label">${escapeHtml(grupo)}</div>` : '';
     lastGrupo=grupo;
-    const mainCls = r.us ? 'us' : signClassFromText(r.valor + ' ' + (r.extra||''));
     let valueHtml='';
     if(r.us){
       valueHtml = `<div class="closed-market-us-lines">${quebrarUsdBrl(r.valor).map(l=>`<span class="${signClassFromText(l)}">${escapeHtml(l)}</span>`).join('')}</div>`;
-    }else if(r.nome==='Dólar PTAX'){
-      const extra = r.extra && r.extra !== '—' ? `<small class="${signClassFromText(r.extra)}">${escapeHtml(r.extra)}</small>` : '';
-      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong>${extra}`;
+    }else if(r.extra && r.extra !== '—'){
+      const mainCls = signClassFromText(r.valor);
+      const extraCls = signClassFromText(r.extra);
+      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong><small class="${extraCls}">${escapeHtml(r.extra)}</small>`;
     }else{
+      const mainCls = signClassFromText(r.valor);
       valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong>`;
     }
     return `${section}<button type="button" class="closed-market-row" aria-label="${escapeHtml(r.nome)} ${escapeHtml(r.valor)}">
@@ -6930,7 +6938,14 @@ function atualizarPainelFechadoCard(){
   if(title) title.textContent=`Indicadores — ${periodo} fechado`;
   if(badge) badge.textContent=periodo;
   grid.innerHTML=indicadorFechadoRows().map(r=>{
-    const valHtml = r.us ? `<div class="closed-us-lines">${linhasHtmlUsdBrl(r.valor)}</div>` : `<strong class="${signClassFromText(r.valor + ' ' + (r.extra||''))}">${escapeHtml(r.valor)}</strong>`;
+    let valHtml='';
+    if(r.us){
+      valHtml = `<div class="closed-us-lines">${linhasHtmlUsdBrl(r.valor)}</div>`;
+    }else if(r.extra && r.extra !== '—'){
+      valHtml = `<strong class="${signClassFromText(r.valor)}">${escapeHtml(r.valor)}</strong><small class="${signClassFromText(r.extra)}">${escapeHtml(r.extra)}</small>`;
+    }else{
+      valHtml = `<strong class="${signClassFromText(r.valor)}">${escapeHtml(r.valor)}</strong>`;
+    }
     return `<article class="closed-card-item closed-grupo-${escapeHtml((r.grupo||'geral').toLowerCase().replace(/\s+/g,'-'))}">
       <div class="closed-item-top"><span class="closed-item-icon">${r.icon}</span><span class="closed-item-name">${escapeHtml(r.nome)}</span></div>
       <div class="closed-item-value">${valHtml}</div>
