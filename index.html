@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-rankings-labels-claros"/>
+<link rel="stylesheet" href="style.css?v=20260601-rankings-nomes-completos"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -2832,11 +2832,10 @@ function renderRankings(){
     const val=r[campo]||'—'; const n=toNum(val);
     const cls=n>0?'pos':n<0?'neg':'zero'; const sign=n>0?'+':'';
     const nome=(r['Fundo']||'').replace(/\s*\(\d+\)/g,'').trim();
-    const nomeShort=nome.length>44?nome.slice(0,44)+'…':nome;
     const medal=i<3?MEDALHAS[i]:`${i+1}º`;
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info"><div class="rank-name" title="${attr(nome)}">${attr(nomeShort)}</div><div class="rank-cat">${attr(r['Categoria']||'')}</div></div>
+      <div class="rank-info"><div class="rank-name" title="${attr(nome)}">${attr(nome)}</div><div class="rank-cat">${attr(r['Categoria']||'')}</div></div>
       <span class="rank-val ${cls}">${sign}${attr(val)}</span></div>`;
   };
 
@@ -2866,7 +2865,7 @@ function renderRankings(){
     const medal=i<3?MEDALHAS[i]:`${i+1}º`;
     return `<div class="rank-item">
       <span class="rank-pos${i===0?' gold-medal':''}">${medal}</span>
-      <div class="rank-info"><div class="rank-name" title="${attr(cat)}">${attr(cat)}</div><div class="rank-cat" title="${attr(nome)}">${attr(nome.length>42?nome.slice(0,42)+'…':nome)}</div></div>
+      <div class="rank-info"><div class="rank-name" title="${attr(cat)}">${attr(cat)}</div><div class="rank-cat rank-cat-fund" title="${attr(nome)}">${attr(nome)}</div></div>
       <span class="rank-val ${cls}">${sign}${attr(val)}</span></div>`;
   }).join('');
 
