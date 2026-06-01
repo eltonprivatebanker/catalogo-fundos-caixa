@@ -3690,7 +3690,14 @@ function buildRowHTML(r,idx){
   const colspan=visibleHeaders.length+1;
   let html=`<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
   const isExpanded=expandedRows.has(idx);
-  html+=`<td style="width:28px;padding:11px 8px"><button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button></td>`;
+  html+=`<td style="width:28px;padding:11px 8px;text-align:center">
+    <button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button>
+  </td>`;
+  // Checkbox comparador
+  const isCompSelected = comparSet.has(idx);
+  html+=`<td class="comp-check-wrap" style="width:28px;padding:0 4px">
+    <input type="checkbox" class="comp-check" data-idx="${idx}" ${isCompSelected?'checked':''} title="Selecionar para comparar">
+  </td>`;
   visibleHeaders.forEach(h=>{
     const val=String(r[h]||'');
     if(h==='Categoria'){
@@ -3773,6 +3780,16 @@ function render(){
   tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
   $('resultInfo').textContent= perPage===9999 ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}` : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
   updateFundResultSummary();
+  // Eventos checkboxes comparador
+  tbody.querySelectorAll('.comp-check').forEach(cb=>{
+    const idx = parseInt(cb.dataset.idx);
+    cb.addEventListener('change', ()=>{
+      const row = filtered[idx] || allRows[idx];
+      comparToggle(idx, row, cb);
+    });
+    cb.addEventListener('click', e=>e.stopPropagation());
+  });
+
   tbody.querySelectorAll('.exp-btn').forEach(btn=>{
     btn.addEventListener('click',e=>{
       e.stopPropagation();
@@ -5700,6 +5717,197 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(()=>rebuildTableForViewport(true),2200);
   setTimeout(()=>rebuildTableForViewport(true),4500);
 })();
+
+
+/* ════════════════════════════════════════════════════════
+   COMPARADOR DE FUNDOS — v1.0
+   Máximo 6 fundos | Checkbox em cada linha | Modal lado a lado
+════════════════════════════════════════════════════════ */
+
+const COMPAR_MAX = 6;
+let comparSet = new Map(); // idx → row data
+
+function comparUpdateBar(){
+  const n = comparSet.size;
+  const bar = document.getElementById('comparBar');
+  const btn = document.getElementById('comparBtn');
+  const hint = document.getElementById('comparHint');
+  const count = document.getElementById('comparCount');
+  if(!bar) return;
+  if(n === 0){ bar.style.display='none'; return; }
+  bar.style.display='flex';
+  count.textContent = n;
+  if(btn) btn.disabled = n < 2;
+  if(hint){
+    if(n < 2) hint.textContent = 'selecione ao menos 2';
+    else if(n >= COMPAR_MAX) hint.textContent = `máximo ${COMPAR_MAX} fundos`;
+    else hint.textContent = '';
+  }
+}
+
+function comparToggle(idx, row, checkbox){
+  if(comparSet.has(idx)){
+    comparSet.delete(idx);
+    checkbox.checked = false;
+    const tr = document.querySelector(`tr[data-idx="${idx}"]`);
+    if(tr) tr.classList.remove('row-selected-compar');
+  } else {
+    if(comparSet.size >= COMPAR_MAX){
+      showToast(`Máximo ${COMPAR_MAX} fundos para comparar`);
+      checkbox.checked = false;
+      return;
+    }
+    comparSet.set(idx, row);
+    checkbox.checked = true;
+    const tr = document.querySelector(`tr[data-idx="${idx}"]`);
+    if(tr) tr.classList.add('row-selected-compar');
+  }
+  comparUpdateBar();
+}
+
+function limparComparador(){
+  comparSet.clear();
+  document.querySelectorAll('.comp-check').forEach(c=>c.checked=false);
+  document.querySelectorAll('.row-selected-compar').forEach(tr=>tr.classList.remove('row-selected-compar'));
+  comparUpdateBar();
+}
+
+function fecharComparador(){
+  const ov = document.getElementById('comparOverlay');
+  if(ov){ ov.classList.remove('open'); document.body.style.overflow=''; }
+}
+
+function abrirComparador(){
+  if(comparSet.size < 2){ showToast('Selecione ao menos 2 fundos'); return; }
+  const fundos = [...comparSet.values()];
+  const tbl = document.getElementById('comparTable');
+  if(!tbl) return;
+
+  const fmt = (v,dec=2) => {
+    if(v===null||v===undefined||v===''||v==='—') return '—';
+    const n = parseFloat(String(v).replace(',','.'));
+    return isNaN(n) ? String(v) : (n>0?'+':'')+n.toFixed(dec).replace('.',',')+' %';
+  };
+  const fmtN = v => {
+    if(!v||v==='—') return '—';
+    const n = parseFloat(String(v).replace(',','.'));
+    if(isNaN(n)) return v;
+    return n.toLocaleString('pt-BR',{maximumFractionDigits:2});
+  };
+  const fmtPL = v => {
+    const n = parseFloat(String(v||'').replace(',','.'));
+    if(isNaN(n)||n===0) return '—';
+    return n>=1000 ? 'R$ '+(n/1000).toFixed(1)+'bi' : 'R$ '+Math.round(n)+'mi';
+  };
+  const cls = v => {
+    const n = parseFloat(String(v||'').replace(',','.'));
+    if(isNaN(n)) return '';
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : '';
+  };
+
+  // Campos a comparar
+  const campos = [
+    { label:'Perfil',       key: r => r['Perfil de Risco']||r['Perfil']||'—',  tipo:'txt' },
+    { label:'Categoria',    key: r => r['Categoria']||'—',                      tipo:'txt' },
+    { label:'CNPJ',         key: r => r['CNPJ']||'—',                           tipo:'txt' },
+    { label:'Taxa Adm',     key: r => r['Taxa Adm (%)'] ? r['Taxa Adm (%)']+' %' : '—', tipo:'txt' },
+    { label:'Var. Dia',     key: r => fmt(r['Variacao Dia (%)']),    tipo:'pct', val: r => parseFloat(String(r['Variacao Dia (%)']||'').replace(',','.')) },
+    { label:'Acum. Mês',    key: r => fmt(r['Acum. Mes (%)']),       tipo:'pct', val: r => parseFloat(String(r['Acum. Mes (%)']||'').replace(',','.')) },
+    { label:'Acum. Ano',    key: r => fmt(r['Acum. Ano (%)']),       tipo:'pct', val: r => parseFloat(String(r['Acum. Ano (%)']||'').replace(',','.')) },
+    { label:'Acum. 12M',    key: r => fmt(r['Acum. 12M (%)']),       tipo:'pct dest', val: r => parseFloat(String(r['Acum. 12M (%)']||'').replace(',','.')) },
+    { label:'% CDI 12M',    key: r => {
+        const rent = parseFloat(String(r['Acum. 12M (%)']||'').replace(',','.'));
+        const cdi  = indicState?.cdi?.m12;
+        if(isNaN(rent)||!cdi) return '—';
+        return Math.round((rent/cdi)*100)+' %';
+      }, tipo:'cdi', val: r => {
+        const rent = parseFloat(String(r['Acum. 12M (%)']||'').replace(',','.'));
+        const cdi  = indicState?.cdi?.m12;
+        return (isNaN(rent)||!cdi) ? NaN : Math.round((rent/cdi)*100);
+      }
+    },
+    { label:'PL',           key: r => fmtPL(r['PL (milhoes R$)']),  tipo:'txt' },
+    { label:'Conversão',    key: r => r['Conversao Resgate']||'—',   tipo:'txt' },
+    { label:'Pagamento',    key: r => r['Pagamento Resgate']||'—',   tipo:'txt' },
+    { label:'Aplic. Mín.',  key: r => r['Aplicacao Minima (R$)'] ? 'R$ '+fmtN(r['Aplicacao Minima (R$)']) : '—', tipo:'txt' },
+  ];
+
+  // Cabeçalho com nomes dos fundos
+  const catAbrev = {'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'RF','RENDA FIXA REFERENCIADO':'RF Ref.','RENDA FIXA CURTO PRAZO':'RF CP','MULTIMERCADO':'MM','CAMBIAL':'CAM','ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'};
+  let thead = '<thead><tr><th class="ct-campo">Campo</th>';
+  fundos.forEach((r,i)=>{
+    const cat = r['Categoria']||'';
+    const catCls = (CAT_CLS?.[cat])||'RF';
+    const catLabel = catAbrev[cat]||cat.slice(0,10);
+    const nome = (r['Fundo']||'').replace(/RESP\s+LTDA.*$/i,'').trim();
+    thead += `<th class="ct-fundo">
+      <span class="ct-fundo-nome">${nome}</span>
+      <span class="fundo-cat-badge cat-${catCls} ct-fundo-cat">${catLabel}</span>
+      <button class="ct-remove" onclick="comparRemover(${[...comparSet.keys()][i]})" title="Remover da comparação">✕ remover</button>
+    </th>`;
+  });
+  thead += '</tr></thead>';
+
+  // Corpo com cada campo
+  let tbody = '<tbody>';
+  campos.forEach(campo=>{
+    // Calcular valores numéricos para highlight melhor/pior
+    const vals = fundos.map(r=>campo.val ? campo.val(r) : NaN);
+    const validos = vals.filter(v=>!isNaN(v));
+    const melhor = validos.length ? Math.max(...validos) : NaN;
+    const pior   = validos.length ? Math.min(...validos) : NaN;
+
+    tbody += `<tr><td class="ct-campo">${campo.label}</td>`;
+    fundos.forEach((r,i)=>{
+      const txt  = campo.key(r);
+      const vn   = vals[i];
+      const isMelhor = !isNaN(vn) && vn===melhor && melhor!==pior;
+      const isPior   = !isNaN(vn) && vn===pior   && melhor!==pior;
+      let valCls = campo.tipo.includes('pct') ? cls(r[
+        campo.label==='Var. Dia'?'Variacao Dia (%)':
+        campo.label==='Acum. Mês'?'Acum. Mes (%)':
+        campo.label==='Acum. Ano'?'Acum. Ano (%)':'Acum. 12M (%)'
+      ]) : (campo.tipo==='cdi'?(vn>=100?'pos':vn>=80?'':vn>0?'neg':''):'');
+      const destCls = campo.tipo.includes('dest') ? ' dest' : '';
+      const bgCls = isMelhor ? ' ct-best' : isPior ? ' ct-worst' : '';
+      tbody += `<td class="ct-val${destCls}${bgCls} ${valCls}">${txt}</td>`;
+    });
+    tbody += '</tr>';
+  });
+  tbody += '</tbody>';
+
+  tbl.innerHTML = thead + tbody;
+
+  const ov = document.getElementById('comparOverlay');
+  if(ov){
+    ov.classList.add('open');
+    document.body.style.overflow='hidden';
+    ov.addEventListener('click', e=>{ if(e.target===ov) fecharComparador(); }, {once:true});
+  }
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape') fecharComparador(); }, {once:true});
+}
+
+function comparRemover(idx){
+  comparSet.delete(idx);
+  const tr = document.querySelector(`tr[data-idx="${idx}"]`);
+  if(tr) tr.classList.remove('row-selected-compar');
+  const cb = tr?.querySelector('.comp-check');
+  if(cb) cb.checked = false;
+  comparUpdateBar();
+  if(comparSet.size < 1){ fecharComparador(); return; }
+  abrirComparador(); // re-render
+}
+
+// Fechar botão
+document.addEventListener('DOMContentLoaded', ()=>{
+  const btn = document.getElementById('comparClose');
+  if(btn) btn.addEventListener('click', fecharComparador);
+});
+setTimeout(()=>{
+  const btn = document.getElementById('comparClose');
+  if(btn && !btn._cpatched){ btn._cpatched=true; btn.addEventListener('click', fecharComparador); }
+},600);
+
 </script>
 
 
@@ -5733,6 +5941,32 @@ document.addEventListener('DOMContentLoaded', function(){
     </div>
 
     <div class="fspot-docs" id="fspotDocs"></div>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════
+     COMPARADOR DE FUNDOS
+════════════════════════════════════════════ -->
+
+<!-- Barra flutuante de seleção -->
+<div id="comparBar" class="compar-bar" style="display:none" role="status">
+  <span class="compar-bar-count"><strong id="comparCount">0</strong> fundo(s) selecionado(s)</span>
+  <span class="compar-bar-hint" id="comparHint"></span>
+  <button class="compar-btn-primary" id="comparBtn" onclick="abrirComparador()">⚖ Comparar</button>
+  <button class="compar-btn-clear" onclick="limparComparador()">✕ Limpar</button>
+</div>
+
+<!-- Modal comparador -->
+<div id="comparOverlay" class="compar-overlay" role="dialog" aria-modal="true" aria-label="Comparador de Fundos">
+  <div class="compar-panel">
+    <div class="compar-header">
+      <h2 class="compar-title">⚖ Comparador de Fundos</h2>
+      <button class="compar-close" id="comparClose" aria-label="Fechar" onclick="fecharComparador()">✕</button>
+    </div>
+    <div class="compar-scroll">
+      <table class="compar-table" id="comparTable"></table>
+    </div>
   </div>
 </div>
 
