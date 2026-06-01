@@ -2778,5 +2778,11 @@
     "data": "01/04/2026",
     "label": "abr/2026",
     "valor": 0.67
+  },
+  {
+    "data": "31/05/2026",
+    "label": "mai/2026",
+    "valor": 0.5,
+    "fonte_override": "fechamento confirmado"
   }
 ]
