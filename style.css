@@ -12102,3 +12102,98 @@ tbody tr.row-fav{
   #sec-mercado-painel .us-market-value{font-size:.86rem !important}
   #sec-mercado-painel .us-market-line.brl .us-market-value{font-size:.80rem !important}
 }
+
+
+/* ════════════════════════════════════════════════════════════════
+   Ajuste fino mobile — respiro no bloco 12M / % do CDI
+   - mantém Dia/Mês/Ano compactos
+   - dá uma linha própria para o comparativo "≈ 189% do CDI"
+   - evita que o texto fique espremido ou colado no valor de 12M
+════════════════════════════════════════════════════════════════ */
+@media(max-width:820px), (pointer:coarse) and (hover:none){
+  body:not(.fund-card-mode) #mainTable tbody td.mobile-rent-summary-cell{
+    padding-right:8px !important;
+  }
+
+  .mobile-rent-summary-v3{
+    gap:7px !important;
+  }
+
+  .mobile-rent-summary-v3 .mrt-12m-line{
+    display:grid !important;
+    grid-template-columns:38px minmax(0,1fr) !important;
+    grid-template-areas:
+      "lab val"
+      "cdi cdi" !important;
+    align-items:center !important;
+    column-gap:9px !important;
+    row-gap:5px !important;
+    padding:9px 10px 8px !important;
+    min-height:58px !important;
+    border-radius:14px !important;
+    overflow:hidden !important;
+  }
+
+  .mobile-rent-summary-v3 .mrt-12m-line .mrt-main-label{
+    grid-area:lab !important;
+    align-self:center !important;
+    min-width:0 !important;
+    width:38px !important;
+    padding:0 8px 0 0 !important;
+    border-right:1px solid rgba(255,255,255,.11) !important;
+    font-size:.56rem !important;
+    letter-spacing:.05em !important;
+    text-align:left !important;
+    color:#aeb7d4 !important;
+  }
+
+  .mobile-rent-summary-v3 .mrt-12m-line strong{
+    grid-area:val !important;
+    justify-self:end !important;
+    display:block !important;
+    font-size:1.20rem !important;
+    line-height:1 !important;
+    letter-spacing:-.02em !important;
+    max-width:100% !important;
+    white-space:nowrap !important;
+  }
+
+  .mobile-rent-summary-v3 .mrt-12m-line small{
+    grid-area:cdi !important;
+    display:block !important;
+    width:100% !important;
+    margin-top:1px !important;
+    padding-top:5px !important;
+    border-top:1px solid rgba(255,255,255,.075) !important;
+    font-size:.59rem !important;
+    line-height:1.15 !important;
+    text-align:right !important;
+    color:#b8c2dd !important;
+    white-space:normal !important;
+    overflow-wrap:normal !important;
+  }
+}
+
+@media(max-width:380px){
+  .mobile-rent-summary-v3 .mrt-12m-line{
+    grid-template-columns:34px minmax(0,1fr) !important;
+    column-gap:7px !important;
+    padding:8px 8px 7px !important;
+    min-height:56px !important;
+  }
+
+  .mobile-rent-summary-v3 .mrt-12m-line .mrt-main-label{
+    width:34px !important;
+    font-size:.52rem !important;
+    padding-right:6px !important;
+  }
+
+  .mobile-rent-summary-v3 .mrt-12m-line strong{
+    font-size:1.10rem !important;
+  }
+
+  .mobile-rent-summary-v3 .mrt-12m-line small{
+    font-size:.54rem !important;
+    line-height:1.12 !important;
+  }
+}
