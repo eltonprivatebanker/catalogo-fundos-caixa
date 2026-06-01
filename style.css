@@ -11420,3 +11420,685 @@ tbody tr.row-fav{
     display:none !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH 20260601 — Painel consolidado no MOBILE em cards
+   Objetivo: impedir corte das colunas no celular e deixar USD/BRL legível.
+   Desktop permanece em tabela; mobile vira cards 2x2 por indicador.
+════════════════════════════════════════════════════ */
+@media (max-width: 760px), (pointer: coarse) and (max-device-width: 920px){
+  #sec-mercado-painel{
+    overflow:visible !important;
+  }
+
+  #sec-mercado-painel .market-table-toolbar{
+    padding:10px 11px !important;
+    gap:10px !important;
+  }
+
+  #sec-mercado-painel .market-table-title span{
+    font-size:1rem !important;
+    line-height:1.22 !important;
+  }
+
+  #sec-mercado-painel .market-table-title small{
+    font-size:.66rem !important;
+    line-height:1.35 !important;
+  }
+
+  #sec-mercado-painel .market-toolbar-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr;
+    gap:8px !important;
+    width:100%;
+  }
+
+  #sec-mercado-painel .indic-action-btn{
+    width:100%;
+    min-height:38px;
+    justify-content:center;
+    font-size:.70rem !important;
+    padding:9px 8px !important;
+    border-radius:12px !important;
+  }
+
+  #sec-mercado-painel .indic-table-wrap{
+    overflow:visible !important;
+    width:100% !important;
+    max-width:100% !important;
+    border-radius:16px !important;
+    border:1px solid rgba(231,185,95,.20) !important;
+    background:rgba(9,11,22,.82) !important;
+  }
+
+  #sec-mercado-painel .indic-table-wrap::before{
+    content:'Painel mobile: cada indicador mostra fechado, mês atual, ano e acumulado' !important;
+    position:static !important;
+    display:block !important;
+    width:auto !important;
+    max-width:none !important;
+    padding:9px 12px !important;
+    background:linear-gradient(90deg,rgba(17,21,38,.95),rgba(17,21,38,.72)) !important;
+    border-bottom:1px solid rgba(255,255,255,.07) !important;
+    color:#aeb8d3 !important;
+    font-family:'Inter',sans-serif !important;
+    font-size:.66rem !important;
+    line-height:1.35 !important;
+    letter-spacing:.01em !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    border-collapse:separate !important;
+    border-spacing:0 !important;
+    table-layout:auto !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 thead{
+    display:none !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tbody{
+    display:block !important;
+    width:100% !important;
+    padding:8px !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tr.group-row{
+    display:block !important;
+    margin:10px 0 6px !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 .group-row td{
+    position:static !important;
+    display:block !important;
+    width:auto !important;
+    min-width:0 !important;
+    max-width:none !important;
+    padding:8px 10px !important;
+    border:1px solid rgba(255,255,255,.06) !important;
+    border-radius:12px !important;
+    background:linear-gradient(90deg,rgba(20,25,45,.95),rgba(15,18,32,.84)) !important;
+    box-shadow:none !important;
+    transform:none !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tr.data-row{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px !important;
+    margin:8px 0 12px !important;
+    padding:10px !important;
+    border:1px solid rgba(255,255,255,.075) !important;
+    border-radius:16px !important;
+    background:linear-gradient(180deg,rgba(13,16,30,.96),rgba(9,11,21,.92)) !important;
+    box-shadow:0 10px 24px rgba(0,0,0,.22) !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tr.data-row:hover{
+    background:linear-gradient(180deg,rgba(13,16,30,.96),rgba(9,11,21,.92)) !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tr.data-row td{
+    position:static !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:flex-start !important;
+    gap:4px !important;
+    width:auto !important;
+    min-width:0 !important;
+    max-width:none !important;
+    min-height:70px !important;
+    padding:9px 9px !important;
+    text-align:left !important;
+    vertical-align:top !important;
+    overflow:visible !important;
+    background:rgba(255,255,255,.025) !important;
+    border:1px solid rgba(255,255,255,.07) !important;
+    border-radius:13px !important;
+    box-shadow:none !important;
+    z-index:auto !important;
+    transform:none !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tr.data-row td:first-child{
+    grid-column:1 / -1 !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    min-height:auto !important;
+    padding:10px 11px !important;
+    border-color:rgba(231,185,95,.18) !important;
+    background:linear-gradient(90deg,rgba(231,185,95,.08),rgba(255,255,255,.025)) !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 th:first-child::after,
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:first-child::after{
+    display:none !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tr.data-row td:nth-child(2)::before{content:'Último fechado';}
+  #sec-mercado-painel .indic-table-v2 tr.data-row td:nth-child(3)::before{content:'Mês atual';}
+  #sec-mercado-painel .indic-table-v2 tr.data-row td:nth-child(4)::before{content:'No ano';}
+  #sec-mercado-painel .indic-table-v2 tr.data-row td:nth-child(5)::before{content:'Acumulado';}
+
+  #sec-mercado-painel .indic-table-v2 tr.data-row td:not(:first-child)::before{
+    display:block;
+    margin-bottom:3px;
+    color:#e3bd72;
+    font-family:'Inter',sans-serif;
+    font-size:.58rem;
+    line-height:1;
+    font-weight:900;
+    text-transform:uppercase;
+    letter-spacing:.075em;
+  }
+
+  #sec-mercado-painel .ind-name-v2{
+    gap:9px !important;
+    width:100% !important;
+    align-items:center !important;
+  }
+
+  #sec-mercado-painel .ind-icon-v2{
+    width:31px !important;
+    height:31px !important;
+    min-width:31px !important;
+    border-radius:10px !important;
+    font-size:.88rem !important;
+  }
+
+  #sec-mercado-painel .ind-v2-title{
+    font-size:.86rem !important;
+    line-height:1.15 !important;
+    white-space:normal !important;
+    color:#f3f6ff !important;
+  }
+
+  #sec-mercado-painel .ind-v2-sub{
+    display:block !important;
+    font-size:.62rem !important;
+    line-height:1.25 !important;
+    color:#aeb8d3 !important;
+    -webkit-line-clamp:unset !important;
+  }
+
+  #sec-mercado-painel .badge-alrt{
+    display:inline-flex !important;
+    margin-left:4px !important;
+    padding:2px 6px !important;
+    border-radius:999px !important;
+    background:rgba(231,185,95,.13) !important;
+    color:#e9c176 !important;
+    font-size:.52rem !important;
+    white-space:nowrap !important;
+  }
+
+  #sec-mercado-painel .v2-bar-bg{
+    display:none !important;
+  }
+
+  #sec-mercado-painel .v2-bar-row{
+    display:flex !important;
+    align-items:flex-start !important;
+    justify-content:flex-start !important;
+    flex-wrap:wrap !important;
+    gap:3px !important;
+    width:100% !important;
+    margin:0 !important;
+  }
+
+  #sec-mercado-painel .v2-val{
+    display:block !important;
+    width:auto !important;
+    margin:0 !important;
+    font-size:1.02rem !important;
+    line-height:1.08 !important;
+    text-align:left !important;
+    letter-spacing:-.015em !important;
+  }
+
+  #sec-mercado-painel .v2-val.neu{
+    color:#f1eefb !important;
+  }
+
+  #sec-mercado-painel .v2-val.dash{
+    color:#7f8aa8 !important;
+    font-size:1.12rem !important;
+  }
+
+  #sec-mercado-painel .v2-sub{
+    display:block !important;
+    width:100% !important;
+    margin-top:2px !important;
+    font-size:.63rem !important;
+    line-height:1.28 !important;
+    color:#9ea9c8 !important;
+    text-align:left !important;
+    word-break:normal !important;
+    white-space:normal !important;
+  }
+
+  #sec-mercado-painel .period-line{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    align-items:center !important;
+    gap:3px !important;
+  }
+
+  #sec-mercado-painel .period-dot{
+    margin:0 1px !important;
+  }
+
+  #sec-mercado-painel .td-cur{
+    background:rgba(91,156,246,.055) !important;
+    border-color:rgba(91,156,246,.12) !important;
+  }
+
+  #row-sp .v2-bar-row,
+  #row-dow .v2-bar-row,
+  #row-nasdaq .v2-bar-row{
+    text-align:left !important;
+  }
+
+  #row-sp .td-cur > .v2-val.neu,
+  #row-dow .td-cur > .v2-val.neu,
+  #row-nasdaq .td-cur > .v2-val.neu{
+    font-size:1.02rem !important;
+    margin-bottom:5px !important;
+    text-align:left !important;
+  }
+
+  #sec-mercado-painel .us-market-stack{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    text-align:left !important;
+  }
+
+  #sec-mercado-painel .us-market-block{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    justify-items:start !important;
+    align-items:start !important;
+    min-width:0 !important;
+    width:100% !important;
+    gap:4px !important;
+    padding:0 !important;
+  }
+
+  #sec-mercado-painel .us-market-line{
+    display:grid !important;
+    grid-template-columns:34px 1fr !important;
+    justify-content:start !important;
+    align-items:baseline !important;
+    column-gap:6px !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+
+  #sec-mercado-painel .us-market-label{
+    min-width:0 !important;
+    font-size:.62rem !important;
+    color:#aeb8d3 !important;
+  }
+
+  #sec-mercado-painel .us-market-value{
+    font-size:.92rem !important;
+    line-height:1.08 !important;
+    text-align:left !important;
+  }
+
+  #sec-mercado-painel .us-market-line.brl .us-market-value{
+    font-size:.88rem !important;
+  }
+
+  #sec-mercado-painel .indic-footnote{
+    padding:10px 12px 12px !important;
+    font-size:.62rem !important;
+    line-height:1.45 !important;
+    white-space:normal !important;
+  }
+}
+
+@media (max-width: 390px){
+  #sec-mercado-painel .indic-table-v2 tr.data-row{
+    grid-template-columns:1fr !important;
+  }
+
+  #sec-mercado-painel .market-toolbar-actions{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   PATCH 20260601 — Painel indicadores mobile sem corte + cores por sinal
+   - no mobile, a tabela consolidada vira cards por indicador
+   - elimina corte em "jun/2026 · aguardando"
+   - positivo sempre verde, negativo sempre vermelho no painel
+════════════════════════════════════════════════════ */
+#sec-mercado-painel .v2-val.pos,
+#sec-mercado-painel .us-market-line.pos .us-market-value,
+#sec-mercado-painel .usd-brl-line.pos,
+#sec-mercado-painel .usd-brl-line.pos .us-market-value{
+  color:var(--green) !important;
+}
+#sec-mercado-painel .v2-val.neg,
+#sec-mercado-painel .us-market-line.neg .us-market-value,
+#sec-mercado-painel .usd-brl-line.neg,
+#sec-mercado-painel .usd-brl-line.neg .us-market-value{
+  color:var(--red) !important;
+}
+#sec-mercado-painel .v2-val.neu{
+  color:#e8edf7 !important;
+}
+#sec-mercado-painel .v2-val.dash{
+  color:#8d98b6 !important;
+}
+#row-ipca,
+#row-ipca.alert-row{
+  background:transparent !important;
+}
+#row-ipca:hover{
+  background:rgba(255,255,255,.025) !important;
+}
+#row-ipca .v2-val.pos{
+  color:var(--green) !important;
+}
+#row-ipca .v2-val.neg{
+  color:var(--red) !important;
+}
+#row-ipca .badge-alrt{
+  color:#f4c56f !important;
+  background:rgba(231,185,95,.12) !important;
+  border:1px solid rgba(231,185,95,.28) !important;
+}
+
+/* período/status mais legível em qualquer tamanho */
+#sec-mercado-painel .period-line{
+  max-width:100%;
+  min-width:0;
+  white-space:normal !important;
+  flex-wrap:wrap;
+  row-gap:1px;
+  column-gap:4px;
+  line-height:1.22;
+}
+#sec-mercado-painel .period-line .period-label,
+#sec-mercado-painel .period-line .period-status{
+  white-space:nowrap;
+}
+
+@media(max-width:820px){
+  #sec-mercado-painel{
+    overflow:visible !important;
+  }
+  #sec-mercado-painel .market-table-toolbar{
+    gap:12px !important;
+    align-items:stretch !important;
+  }
+  #sec-mercado-painel .indic-tabs-bar{
+    width:100% !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch;
+    padding-bottom:3px;
+  }
+  #sec-mercado-painel .indic-tabs{
+    min-width:max-content;
+  }
+  #sec-mercado-painel .market-toolbar-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    width:100% !important;
+    gap:8px !important;
+  }
+  #sec-mercado-painel .panel-action-btn,
+  #sec-mercado-painel .indic-action-btn{
+    width:100% !important;
+    min-width:0 !important;
+    white-space:normal !important;
+    text-align:center !important;
+    font-size:.72rem !important;
+    line-height:1.12 !important;
+    padding:9px 8px !important;
+  }
+
+  /* remove a necessidade de scroll horizontal no painel */
+  #sec-mercado-painel .indic-table-wrap{
+    overflow:visible !important;
+    border:0 !important;
+    background:transparent !important;
+  }
+  #sec-mercado-painel .indic-table-v2,
+  #sec-mercado-painel .indic-table-v2 tbody,
+  #sec-mercado-painel .indic-table-v2 tr,
+  #sec-mercado-painel .indic-table-v2 td{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+  #sec-mercado-painel .indic-table-v2{
+    min-width:0 !important;
+    table-layout:auto !important;
+    border-collapse:separate !important;
+    border-spacing:0 !important;
+  }
+  #sec-mercado-painel .indic-table-v2 thead{
+    display:none !important;
+  }
+  #sec-mercado-painel .indic-table-v2 .group-row{
+    margin:14px 0 8px !important;
+    border:0 !important;
+  }
+  #sec-mercado-painel .indic-table-v2 .group-row td{
+    padding:8px 2px !important;
+    background:transparent !important;
+    border:0 !important;
+  }
+  #sec-mercado-painel .group-lbl{
+    padding:0 !important;
+    font-size:.68rem !important;
+    letter-spacing:.12em !important;
+  }
+  #sec-mercado-painel .group-lbl-line{
+    opacity:.55 !important;
+  }
+
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row{
+    display:block !important;
+    margin:0 0 12px !important;
+    border:1px solid rgba(255,255,255,.10) !important;
+    border-radius:18px !important;
+    overflow:hidden !important;
+    background:linear-gradient(180deg,rgba(18,22,42,.92),rgba(9,11,21,.94)) !important;
+    box-shadow:0 12px 32px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.04) !important;
+  }
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row:hover{
+    background:linear-gradient(180deg,rgba(18,22,42,.96),rgba(9,11,21,.96)) !important;
+  }
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td{
+    padding:10px 12px !important;
+    border:0 !important;
+    text-align:left !important;
+    background:transparent !important;
+  }
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:first-child{
+    padding:13px 12px 11px !important;
+    border-bottom:1px solid rgba(255,255,255,.075) !important;
+  }
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:not(:first-child){
+    display:grid !important;
+    grid-template-columns:minmax(96px,.92fr) minmax(0,1.35fr) !important;
+    align-items:center !important;
+    gap:10px !important;
+    border-top:1px solid rgba(255,255,255,.055) !important;
+  }
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:not(:first-child)::before{
+    display:block !important;
+    color:#e5bd72 !important;
+    font-family:'Inter',sans-serif !important;
+    font-size:.62rem !important;
+    font-weight:900 !important;
+    letter-spacing:.08em !important;
+    text-transform:uppercase !important;
+    line-height:1.15 !important;
+  }
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:nth-child(2)::before{content:'Último fechado'}
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:nth-child(3)::before{content:'Mês atual'}
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:nth-child(4)::before{content:'No ano'}
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:nth-child(5)::before{content:'Acumulado'}
+
+  #sec-mercado-painel .ind-name-v2{
+    gap:10px !important;
+    align-items:center !important;
+  }
+  #sec-mercado-painel .ind-icon-v2{
+    width:34px !important;
+    height:34px !important;
+    border-radius:12px !important;
+    flex:0 0 34px !important;
+  }
+  #sec-mercado-painel .ind-v2-title{
+    font-size:.95rem !important;
+    line-height:1.12 !important;
+  }
+  #sec-mercado-painel .ind-v2-sub{
+    margin-top:3px !important;
+    font-size:.70rem !important;
+    line-height:1.25 !important;
+  }
+
+  /* valores ficam à direita, mas sem corte */
+  #sec-mercado-painel .v2-bar-bg{
+    display:none !important;
+  }
+  #sec-mercado-painel .v2-bar-row{
+    display:block !important;
+    width:100% !important;
+    text-align:right !important;
+  }
+  #sec-mercado-painel .v2-bar-row .v2-val{
+    margin-left:0 !important;
+  }
+  #sec-mercado-painel .v2-val{
+    display:block !important;
+    width:100% !important;
+    text-align:right !important;
+    font-size:1rem !important;
+    line-height:1.08 !important;
+    white-space:normal !important;
+    overflow-wrap:anywhere;
+  }
+  #sec-mercado-painel .v2-val.neu{
+    font-size:.98rem !important;
+  }
+  #sec-mercado-painel .v2-val.dash,
+  #sec-mercado-painel .td-cur .v2-val.dash{
+    font-size:1rem !important;
+    line-height:1.05 !important;
+  }
+  #sec-mercado-painel .v2-sub{
+    margin-top:5px !important;
+    width:100% !important;
+    text-align:right !important;
+    font-size:.66rem !important;
+    line-height:1.25 !important;
+    overflow:visible !important;
+  }
+  #sec-mercado-painel .period-line{
+    justify-content:flex-end !important;
+    white-space:normal !important;
+    max-width:100% !important;
+    font-size:.66rem !important;
+    line-height:1.25 !important;
+  }
+  #sec-mercado-painel .period-line .period-dot{
+    display:none !important;
+  }
+  #sec-mercado-painel .period-line .period-status{
+    flex-basis:100%;
+    text-align:right;
+    font-size:.61rem !important;
+    text-transform:uppercase !important;
+    letter-spacing:.045em !important;
+    opacity:.86;
+  }
+
+  /* Bolsa EUA: USD/BRL sempre em duas linhas legíveis no card mobile */
+  #sec-mercado-painel .us-market-stack{
+    display:block !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    text-align:right !important;
+  }
+  #sec-mercado-painel .us-market-block{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    justify-items:end !important;
+    gap:4px !important;
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    padding:0 !important;
+  }
+  #sec-mercado-painel .us-market-line{
+    display:flex !important;
+    justify-content:flex-end !important;
+    align-items:baseline !important;
+    gap:7px !important;
+    width:100% !important;
+    white-space:nowrap !important;
+  }
+  #sec-mercado-painel .us-market-label{
+    min-width:30px !important;
+    font-size:.65rem !important;
+    color:#aeb8d3 !important;
+  }
+  #sec-mercado-painel .us-market-value{
+    font-size:.94rem !important;
+    line-height:1.05 !important;
+  }
+  #sec-mercado-painel .us-market-line.brl .us-market-value{
+    font-size:.88rem !important;
+  }
+
+  /* rodapé do painel sem cortar */
+  #sec-mercado-painel .indic-table-v2 tfoot,
+  #sec-mercado-painel .indic-footnote,
+  #sec-mercado-painel .market-table-footnote{
+    display:block !important;
+    width:100% !important;
+    white-space:normal !important;
+    line-height:1.35 !important;
+  }
+}
+
+@media(max-width:380px){
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:not(:first-child){
+    grid-template-columns:minmax(82px,.85fr) minmax(0,1.25fr) !important;
+    gap:8px !important;
+    padding:9px 10px !important;
+  }
+  #sec-mercado-painel .indic-table-v2 tbody tr.data-row td:not(:first-child)::before{
+    font-size:.57rem !important;
+  }
+  #sec-mercado-painel .v2-val{
+    font-size:.92rem !important;
+  }
+  #sec-mercado-painel .v2-sub,
+  #sec-mercado-painel .period-line{
+    font-size:.60rem !important;
+  }
+  #sec-mercado-painel .period-line .period-status{
+    font-size:.56rem !important;
+  }
+  #sec-mercado-painel .us-market-value{font-size:.86rem !important}
+  #sec-mercado-painel .us-market-line.brl .us-market-value{font-size:.80rem !important}
+}
