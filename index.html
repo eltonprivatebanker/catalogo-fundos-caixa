@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-painel-virada-mes"/>
+<link rel="stylesheet" href="style.css?v=20260601-painel-textos-v2"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -1844,7 +1844,8 @@ function atualizarTabelaIndicadores(){
     const cleanLabel = limparStatus(label || '—');
     const s = String(status || 'fechado').toLowerCase();
     const nome = s === 'aguardando' ? 'aguardando' : s === 'parcial' ? 'parcial' : 'fechado';
-    return `<span class="period-label">${cleanLabel}</span><span class="status-chip status-${nome}">${nome}</span>`;
+    const statusTxt = nome === 'fechado' ? 'fechado' : nome === 'parcial' ? 'parcial' : 'aguardando';
+    return `<span class="period-line status-${nome}"><span class="period-label">${cleanLabel}</span><span class="period-dot">·</span><span class="period-status">${statusTxt}</span></span>`;
   };
 
   const setSubStatus = (id, label, status='fechado') => setHTML(id, subStatus(label, status));
@@ -1997,7 +1998,7 @@ function atualizarTabelaIndicadores(){
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
   setSubStatus('cdi-mes-ant-sub', cards.cdi?.mes_ref || fallbackMesFechado, 'fechado');
 
-  setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2, false, 'aguardando');
+  setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2, false, '—');
   setSubStatus('cdi-cur-sub', cdiParcialLabel, cdiParcial !== null ? 'parcial' : 'aguardando');
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
@@ -2017,7 +2018,7 @@ function atualizarTabelaIndicadores(){
   setSubStatus('ipca-mes-ant-sub', ipcaRef, 'fechado');
   const ipcaCurCell = document.querySelector('#row-ipca .td-cur');
   if(ipcaCurCell){
-    ipcaCurCell.innerHTML = `<span class="badge-await badge-await-full">aguardando IBGE</span><div class="v2-sub status-line">${subStatus(mesAtualLabel, 'aguardando')}</div>`;
+    ipcaCurCell.innerHTML = `<div class="v2-val dash">—</div><div class="v2-sub status-line">${subStatus(mesAtualLabel, 'aguardando')}</div>`;
   }
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10, true);
   const ipcaAnoSub = document.querySelector('#row-ipca td:nth-child(4) .v2-sub');
@@ -2042,8 +2043,8 @@ function atualizarTabelaIndicadores(){
   setMoney('dolar-ant-cot', dolarFechado.valor ?? indicState.dolarBRL.mes);
   setSubStatus('dolar-ant-sub', dolarFechado.label, 'fechado');
 
-  setMoney('dolar-cur-cot', dolarAtualInfo.valor, 'aguardando');
-  setPct('dolar-cur-var', dolarAtualInfo.variacao, 'bar-dolar-cur', 10, false, '—');
+  setMoney('dolar-cur-cot', dolarAtualInfo.valor, '—');
+  setPct('dolar-cur-var', dolarAtualInfo.variacao, 'bar-dolar-cur', 10, false, '');
   setSubStatus('dolar-cur-sub', dolarAtualInfo.label, dolarAtualInfo.status);
   setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
   const dolarAnoSub = document.querySelector('#row-dolar td:nth-child(4) .v2-sub');
@@ -2061,8 +2062,8 @@ function atualizarTabelaIndicadores(){
   setPct('ibov-ant-var', ibovFechado.variacao, 'bar-ibov-ant', 20);
   setSubStatus('ibov-ant-sub', ibovFechado.label, 'fechado');
 
-  setPts('ibov-cur-pts', ibovAtualInfo.valor, 'pts', 'aguardando');
-  setPct('ibov-cur-var', ibovAtualInfo.variacao, 'bar-ibov-var', 20, false, '—');
+  setPts('ibov-cur-pts', ibovAtualInfo.valor, 'pts', '—');
+  setPct('ibov-cur-var', ibovAtualInfo.variacao, 'bar-ibov-var', 20, false, '');
   setSubStatus('ibov-cur-sub', ibovAtualInfo.label, ibovAtualInfo.status);
 
   setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
@@ -2091,8 +2092,8 @@ function atualizarTabelaIndicadores(){
     const antEl = $(`${prefix}-ant-var`); if(antEl) antEl.className = 'v2-val usd-brl-stack';
     setSubStatus(`${prefix}-ant-sub`, fechado.label, 'fechado');
 
-    setPts(`${prefix}-cur-pts`, atual.valor, 'pts', 'aguardando');
-    setHTML(`${prefix}-cur-var`, atual.variacao === null ? '—' : usdBrlHTML(atual.variacao, atual.brl));
+    setPts(`${prefix}-cur-pts`, atual.valor, 'pts', '—');
+    setHTML(`${prefix}-cur-var`, atual.variacao === null ? '' : usdBrlHTML(atual.variacao, atual.brl));
     const curEl = $(`${prefix}-cur-var`); if(curEl) curEl.className = atual.variacao === null ? 'v2-val dash' : 'v2-val usd-brl-stack';
     const barCur = $(`bar-${prefix}-cur`); if(barCur){ barCur.style.width = atual.variacao === null ? '0%' : Math.min(Math.abs(atual.variacao)/35*100,100)+'%'; barCur.className = atual.variacao >= 0 ? 'v2-bar-p' : 'v2-bar-n'; }
     setSubStatus(`${prefix}-cur-sub`, atual.label, atual.status);
