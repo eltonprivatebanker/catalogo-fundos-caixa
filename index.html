@@ -1200,6 +1200,8 @@ function atualizarPoupancaCard(d, selicAtual){
   // Regra antiga: se o robô ainda não mandar esse campo, e a Selic estiver acima de 8,5%,
   // podemos espelhar a regra nova, pois ambas usam TR + 0,50% a.m.
   let valorAntiga = getFirstNumber(antiga.valor, antiga.mensal, antiga.rendimento_mensal);
+  // Guarda: poupança mensal nunca > 2% a.m. — descarta se vier dado errado (ex: CDI 12M)
+  if(valorAntiga != null && valorAntiga > 2.0){ valorAntiga = null; }
   if(valorAntiga == null && acima && valorNova != null){
     valorAntiga = valorNova;
   }
@@ -1831,7 +1833,7 @@ function atualizarTabelaIndicadores(){
 
   const brlSub = (n, label='BRL') => {
     const val=num(n);
-    return val === null ? `${label} —` : `${label} ${pctTxt(val)}`;
+    return val === null ? '' : pctTxt(val);  // sem prefixo BRL redundante
   };
   const brlPeriodSub = (periodo, n) => {
     const val=num(n);
@@ -1888,7 +1890,7 @@ function atualizarTabelaIndicadores(){
     : 'parcial');
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
-  set('cdi-ano-sub', 'ano');
+  set('cdi-ano-sub', '');
 
   setPct('cdi-acum-v2', cdiAcum, 'bar-cdi-acum', 50);
   if($('cdi-acum-v2') && cdiAcum !== null) $('cdi-acum-v2').classList.add('pos');
@@ -1905,7 +1907,7 @@ function atualizarTabelaIndicadores(){
   set('ipca-mes-ant-sub', ipcaRef || 'último dado');
   setPct('ipca-ano-v2', ipcaAno, 'bar-ipca-ano', 10);
   setPct('ipca-acum-v2', ipcaAcum, 'bar-ipca-acum', 20);
-  set('ipca-acum-sub-v2', `${m}M`);
+  set('ipca-acum-sub-v2', '');
 
   const alertEl = $('ipca-alert-badge');
   const rowIpca = $('row-ipca');
@@ -1932,10 +1934,10 @@ function atualizarTabelaIndicadores(){
   else setMoney('dolar-cur-cot', dolarAtual);
 
   setPct('dolar-cur-var', dolarVarMesAtual, 'bar-dolar-cur', 10);
-  set('dolar-cur-sub', dolarVarMesAtual !== null ? 'Mês' : 'cotação');
+  set('dolar-cur-sub', '');
   setPct('dolar-ano-v2', dolarAno, 'bar-dolar-ano', 15);
   setPct('dolar-acum-v2', dolarAcum, 'bar-dolar-acum', 25);
-  set('dolar-acum-sub-v2', `${m}M`);
+  set('dolar-acum-sub-v2', '');
 
   // ═══ IBOVESPA ═══
   const ibovFechMesAnt = num(idxIbov.fechamento_mes_anterior) ?? num(cards.ibovespa?.anterior);
@@ -1951,11 +1953,11 @@ function atualizarTabelaIndicadores(){
 
   setPts('ibov-cur-pts', ibovAtual);
   setPct('ibov-cur-var', ibovMesAtual, 'bar-ibov-var', 20);
-  set('ibov-cur-sub', 'Mês');
+  set('ibov-cur-sub', '');
 
   setPct('ibov-ano-v2', ibovAno, 'bar-ibov-ano', 40);
   setPct('ibov-acum-v2', ibovAcum, 'bar-ibov-acum', 80);
-  set('ibov-acum-sub-v2', `${m}M`);
+  set('ibov-acum-sub-v2', '');
 
   // ═══ BOLSAS EUA ═══
   function popularIndiceEUA(prefix, item){
@@ -4264,9 +4266,9 @@ async function carregarPTAX(){
    CALENDÁRIO COPOM 2026 — com decisão da Selic
 ════════════════════════════════════════════════════ */
 const COPOM_2026 = [
-  { num:1, short:'27–28 jan', datas:'27 e 28 de janeiro',  decision:'2026-01-28' },
-  { num:2, short:'17–18 mar', datas:'17 e 18 de março',    decision:'2026-03-18' },
-  { num:3, short:'28–29 abr', datas:'28 e 29 de abril',    decision:'2026-04-29' },
+  { num:1, short:'27–28 jan', datas:'27 e 28 de janeiro',  decision:'2026-01-28', resultado_static:'mantida em 15,00%',        tipo_static:'hold' },
+  { num:2, short:'17–18 mar', datas:'17 e 18 de março',    decision:'2026-03-18', resultado_static:'corte −0,25 p.p. → 14,75%', tipo_static:'cut'  },
+  { num:3, short:'28–29 abr', datas:'28 e 29 de abril',    decision:'2026-04-29', resultado_static:'corte −0,25 p.p. → 14,50%', tipo_static:'cut'  },
   { num:4, short:'16–17 jun', datas:'16 e 17 de junho',    decision:'2026-06-17' },
   { num:5, short:'4–5 ago',   datas:'4 e 5 de agosto',     decision:'2026-08-05' },
   { num:6, short:'15–16 set', datas:'15 e 16 de setembro', decision:'2026-09-16' },
