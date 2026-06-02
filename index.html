@@ -151,8 +151,7 @@
     <!-- preenchido por JS -->
   </div>
 
-  <button class="vg-btn-fundos" onclick="document.getElementById('sec-fundos').scrollIntoView({behavior:'smooth'});
-    document.querySelectorAll('.mobile-bottom-nav a').forEach(a=>a.classList.toggle('active', a.getAttribute('href')==='#sec-fundos'));">
+  <button class="vg-btn-fundos" onclick="irParaFundos()">
     Ver todos os fundos →
   </button>
 </div>
@@ -7072,7 +7071,12 @@ function copiarResumoPainelMercado(){
 /* ════════════════════════════════════════════════════════
    VISÃO GERAL DO CATÁLOGO — preenchida após carregarDados()
 ════════════════════════════════════════════════════════ */
+function irParaFundos(){
+  try{ document.getElementById('sec-fundos').scrollIntoView({behavior:'smooth'}); }catch(e){}
+}
+
 function atualizarVisaoGeral(){
+  try{
   const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
 
   // KPIs do catálogo
@@ -7132,6 +7136,7 @@ function atualizarVisaoGeral(){
       </div>`;
     }).join('');
   }
+    }catch(e){ console.warn("[visaoGeral] erro:", e); }
 }
 
 /* ════════════════════════════════════════════════════════
