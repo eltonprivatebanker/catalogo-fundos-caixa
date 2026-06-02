@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v2"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -14,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-mobile-resumo-dolar-fit-v7"/>
+<link rel="stylesheet" href="style.css?v=20260602-tabs-force-v2"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -7156,6 +7157,75 @@ async function sharePainelMercado(){
     alert('Não foi possível abrir o WhatsApp automaticamente. Copie o resumo manualmente pelo painel.');
   }
 }
+</script>
+
+
+<script id="ELTAUM_TABS_FORCE_20260602_v2">
+/* Patch final — garante ação dos filtros IPCA/Selic mesmo se algum listener anterior falhar.
+   Build: ELTAUM_TABS_FORCE_20260602_v2 */
+(function(){
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v2';
+  window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
+  console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
+
+  function tabsDoMesmoGrafico(btn){
+    const chart = btn && btn.dataset ? btn.dataset.chart : '';
+    if(!chart) return [];
+    return Array.from(document.querySelectorAll('.evolution-section .chart-tab[data-chart="' + chart + '"]'));
+  }
+
+  function marcarBotaoAtivo(btn){
+    tabsDoMesmoGrafico(btn).forEach(function(tab){
+      const ativo = tab === btn;
+      tab.classList.toggle('active', ativo);
+      tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+      tab.setAttribute('type', 'button');
+    });
+  }
+
+  function executarTroca(btn){
+    if(!btn) return;
+    marcarBotaoAtivo(btn);
+
+    if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
+      try{
+        window.alterarPeriodoGraficoEvolucao(btn);
+        return;
+      }catch(err){
+        console.warn('[Catálogo CAIXA] Falha no handler principal dos filtros. Tentando fallback.', err);
+      }
+    }
+
+    // Fallback mínimo: se o handler principal não estiver disponível,
+    // pelo menos deixa claro no console que o clique chegou ao navegador.
+    console.warn('[Catálogo CAIXA] Clique capturado, mas alterarPeriodoGraficoEvolucao não está disponível.');
+  }
+
+  function prepararBotoes(){
+    document.querySelectorAll('.evolution-section .chart-tab[data-chart]').forEach(function(btn){
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
+      btn.style.pointerEvents = 'auto';
+    });
+  }
+
+  prepararBotoes();
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', prepararBotoes, {once:true});
+  }else{
+    setTimeout(prepararBotoes, 0);
+  }
+
+  // Captura no início do fluxo do clique para evitar que outro listener impeça a troca.
+  document.addEventListener('click', function(ev){
+    const target = ev.target;
+    const btn = target && target.closest ? target.closest('.evolution-section .chart-tab[data-chart]') : null;
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    executarTroca(btn);
+  }, true);
+})();
 </script>
 
 </body>
