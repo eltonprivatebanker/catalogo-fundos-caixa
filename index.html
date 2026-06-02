@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v8"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v9"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -3784,6 +3784,24 @@ function setCdiSort(dir){
     });
     updateCdiSortButtons();
   };
+
+
+  window.__eltonDiagnosticarAtalhos=function(){
+    const atalhos=[...document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]')];
+    const out={
+      buildIndex:document.querySelector('meta[name="app-build"]')?.content,
+      buildAtalhos:window.__ELTAUM_SHORTCUT_FILTERS_BUILD__,
+      presetAtivo:window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__,
+      qtdBotoes:atalhos.length,
+      filteredQtd:Array.isArray(filtered)?filtered.length:null,
+      allRowsQtd:Array.isArray(allRows)?allRows.length:null,
+      botoes:atalhos.map(b=>({texto:b.textContent.trim(),preset:b.dataset.preset,classe:b.className,aria:b.getAttribute('aria-pressed')}))
+    };
+    console.table(out.botoes);
+    console.log('[Diagnóstico atalhos]',out);
+    return out;
+  };
+
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup);
   else setup();
 })();
@@ -6477,6 +6495,24 @@ document.addEventListener('DOMContentLoaded', function(){
     setInterval(()=>{updateQuickCount();syncQuickGoLabel();},1800);
   }
 
+
+
+  window.__eltonDiagnosticarAtalhos=function(){
+    const atalhos=[...document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]')];
+    const out={
+      buildIndex:document.querySelector('meta[name="app-build"]')?.content,
+      buildAtalhos:window.__ELTAUM_SHORTCUT_FILTERS_BUILD__,
+      presetAtivo:window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__,
+      qtdBotoes:atalhos.length,
+      filteredQtd:Array.isArray(filtered)?filtered.length:null,
+      allRowsQtd:Array.isArray(allRows)?allRows.length:null,
+      botoes:atalhos.map(b=>({texto:b.textContent.trim(),preset:b.dataset.preset,classe:b.className,aria:b.getAttribute('aria-pressed')}))
+    };
+    console.table(out.botoes);
+    console.log('[Diagnóstico atalhos]',out);
+    return out;
+  };
+
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
   else init();
 })();
@@ -6733,6 +6769,24 @@ document.addEventListener('DOMContentLoaded', function(){
       });
     });
   }
+
+
+
+  window.__eltonDiagnosticarAtalhos=function(){
+    const atalhos=[...document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]')];
+    const out={
+      buildIndex:document.querySelector('meta[name="app-build"]')?.content,
+      buildAtalhos:window.__ELTAUM_SHORTCUT_FILTERS_BUILD__,
+      presetAtivo:window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__,
+      qtdBotoes:atalhos.length,
+      filteredQtd:Array.isArray(filtered)?filtered.length:null,
+      allRowsQtd:Array.isArray(allRows)?allRows.length:null,
+      botoes:atalhos.map(b=>({texto:b.textContent.trim(),preset:b.dataset.preset,classe:b.className,aria:b.getAttribute('aria-pressed')}))
+    };
+    console.table(out.botoes);
+    console.log('[Diagnóstico atalhos]',out);
+    return out;
+  };
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setupKpiClick);
   else setupKpiClick();
@@ -7332,6 +7386,24 @@ setTimeout(()=>{
     setInterval(updateFavCounts,2000);
   }
 
+
+
+  window.__eltonDiagnosticarAtalhos=function(){
+    const atalhos=[...document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]')];
+    const out={
+      buildIndex:document.querySelector('meta[name="app-build"]')?.content,
+      buildAtalhos:window.__ELTAUM_SHORTCUT_FILTERS_BUILD__,
+      presetAtivo:window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__,
+      qtdBotoes:atalhos.length,
+      filteredQtd:Array.isArray(filtered)?filtered.length:null,
+      allRowsQtd:Array.isArray(allRows)?allRows.length:null,
+      botoes:atalhos.map(b=>({texto:b.textContent.trim(),preset:b.dataset.preset,classe:b.className,aria:b.getAttribute('aria-pressed')}))
+    };
+    console.table(out.botoes);
+    console.log('[Diagnóstico atalhos]',out);
+    return out;
+  };
+
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(initFavEnhanced,500));
   else setTimeout(initFavEnhanced,500);
 })();
@@ -7557,13 +7629,13 @@ async function sharePainelMercado(){
 </script>
 
 
-<script id="ELTAUM_TABS_FORCE_20260602_v8">
+<script id="ELTAUM_TABS_FORCE_20260602_v9">
 /* Patch final — controle próprio dos botões IPCA/Selic.
-   Build: ELTAUM_TABS_FORCE_20260602_v8
+   Build: ELTAUM_TABS_FORCE_20260602_v9
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v8';
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v9';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -8191,19 +8263,46 @@ async function sharePainelMercado(){
 
 
 
-<script id="ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v8">
+
+<style id="ELTAUM_OVERLAY_CLICK_FIX_20260602_v9">
+/* Correção de clique: garante que overlays/sheets ocultos não capturem cliques dos atalhos no desktop. */
+#closedMarketOverlay[aria-hidden="true"],
+#closedMarketSheet[aria-hidden="true"],
+body:not(.closed-market-open) #closedMarketOverlay,
+body:not(.closed-market-open) #closedMarketSheet,
+#filterBackdrop[aria-hidden="true"]{
+  pointer-events:none!important;
+}
+body:not(.closed-market-open) #closedMarketOverlay{
+  opacity:0!important;
+  visibility:hidden!important;
+}
+body:not(.closed-market-open) #closedMarketSheet{
+  pointer-events:none!important;
+}
+.catalog-shortcuts,
+.catalog-shortcuts .shortcut-preset,
+.catalog-shortcuts .filter-preset-chip{
+  pointer-events:auto!important;
+  position:relative;
+  z-index:50;
+}
+</style>
+
+<script id="ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v9">
 /* Patch final — atalhos do catálogo no desktop/mobile.
-   Build: ELTAUM_TABS_FORCE_20260602_v8
+   Build: ELTAUM_TABS_FORCE_20260602_v9
    Motivo: alguns atalhos por categoria (Renda Fixa, Multimercado, Ações, Cambial e FMP)
    dependiam de igualdade exata com a categoria do CSV. Esta versão filtra por grupo,
    então cobre variações como RENDA FIXA SIMPLES, REFERENCIADO, CURTO PRAZO e acentuação. */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v8';
+  const BUILD='ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v9';
   const GROUP_PRESETS=new Set(['renda-fixa','multimercado','acoes','cambial','fmp']);
   window.__ELTAUM_SHORTCUT_FILTERS_BUILD__=BUILD;
   window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'';
   console.info('[Catálogo CAIXA] Patch atalhos/filtros ativo:', BUILD);
+  console.info('[Catálogo CAIXA] Correção de overlay/clique dos atalhos ativa: ELTAUM_OVERLAY_CLICK_FIX_20260602_v9');
 
   function norm(v){
     return String(v||'')
@@ -8277,7 +8376,7 @@ async function sharePainelMercado(){
     filtered=filtered.filter(row=>rowMatchesGroup(row,preset));
     try{ currentPage=1; }catch(e){}
     try{ if(expandedRows && typeof expandedRows.clear==='function') expandedRows.clear(); }catch(e){}
-    try{ if(typeof render==='function') render(); }catch(e){ console.warn('[Atalhos v8] render falhou:',e); }
+    try{ if(typeof render==='function') render(); }catch(e){ console.warn('[Atalhos v9] render falhou:',e); }
     try{ if(typeof renderMobileFundCards==='function') renderMobileFundCards(); }catch(e){}
     try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){}
     try{ if(typeof updateFundResultSummary==='function') updateFundResultSummary(); }catch(e){}
@@ -8306,13 +8405,15 @@ async function sharePainelMercado(){
     try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
   }
 
+  let __lastShortcutClick={preset:'',t:0};
+
   function applyShortcutPreset(preset){
     patchApplyFilter();
     preset=String(preset||'all');
 
     if(preset==='favoritos'){
       window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='favoritos';
-      try{ if(typeof toggleFavList==='function') toggleFavList(); else if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v8] favoritos falhou:',e); }
+      try{ if(typeof toggleFavList==='function') toggleFavList(); else if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v9] favoritos falhou:',e); }
       syncShortcutVisual('favoritos');
       return;
     }
@@ -8321,7 +8422,7 @@ async function sharePainelMercado(){
       window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
       try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; window.__favListMode=false; }catch(e){}
       try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v8] todos falhou:',e); }
+      try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v9] todos falhou:',e); }
       syncShortcutVisual('all');
       return;
     }
@@ -8339,7 +8440,7 @@ async function sharePainelMercado(){
     }catch(e){}
 
     try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v8] aplicar filtro falhou:',e); }
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v9] aplicar filtro falhou:',e); }
     syncShortcutVisual(preset);
 
     const sec=document.getElementById('sec-fundos');
@@ -8355,12 +8456,15 @@ async function sharePainelMercado(){
     ev.preventDefault();
     ev.stopPropagation();
     if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+    const now=Date.now();
+    if(__lastShortcutClick.preset===preset && now-__lastShortcutClick.t<220) return;
+    __lastShortcutClick={preset,t:now};
     applyShortcutPreset(preset);
   }
 
   function setup(){
     patchApplyFilter();
-    ['click','pointerup','touchend'].forEach(type=>{
+    ['pointerdown','mousedown','click','pointerup','touchend'].forEach(type=>{
       document.addEventListener(type, shortcutHandler, true);
     });
     document.getElementById('activeFilterStrip')?.addEventListener('click',ev=>{
@@ -8374,6 +8478,24 @@ async function sharePainelMercado(){
     syncShortcutVisual(window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'all');
     console.info('[Catálogo CAIXA] Atalhos do catálogo prontos:', BUILD);
   }
+
+
+
+  window.__eltonDiagnosticarAtalhos=function(){
+    const atalhos=[...document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]')];
+    const out={
+      buildIndex:document.querySelector('meta[name="app-build"]')?.content,
+      buildAtalhos:window.__ELTAUM_SHORTCUT_FILTERS_BUILD__,
+      presetAtivo:window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__,
+      qtdBotoes:atalhos.length,
+      filteredQtd:Array.isArray(filtered)?filtered.length:null,
+      allRowsQtd:Array.isArray(allRows)?allRows.length:null,
+      botoes:atalhos.map(b=>({texto:b.textContent.trim(),preset:b.dataset.preset,classe:b.className,aria:b.getAttribute('aria-pressed')}))
+    };
+    console.table(out.botoes);
+    console.log('[Diagnóstico atalhos]',out);
+    return out;
+  };
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
   else setTimeout(setup,650);
