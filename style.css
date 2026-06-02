@@ -12703,52 +12703,51 @@ tbody tr.row-fav{
 
 
 /* ════════════════════════════════════════════════════
+   FECHAMENTO RÁPIDO DE MERCADO
+   Bottom Sheet + Card de Lançamento
+════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════
    RESUMO DO MÊS FECHADO — ATALHO + BOTTOM SHEET
 ════════════════════════════════════════════════════ */
 .closed-month-launch{
   width:100%;
   margin:0 0 16px;
-  border:1px solid rgba(231,185,95,.28);
-  border-left:3px solid rgba(231,185,95,.75);
+  border:1px solid rgba(231,185,95,.45);
   background:
-    linear-gradient(90deg, rgba(231,185,95,.075), rgba(18,23,42,.78) 34%, rgba(10,13,24,.92));
+    radial-gradient(circle at 10% 20%, rgba(231,185,95,.20), transparent 32%),
+    linear-gradient(135deg, rgba(231,185,95,.16), rgba(18,22,38,.82));
   color:#f4f1ff;
-  border-radius:18px;
-  padding:14px 16px;
+  border-radius:22px;
+  padding:16px 18px;
   display:grid;
   grid-template-columns:auto 1fr auto;
-  gap:13px;
+  gap:14px;
   align-items:center;
   cursor:pointer;
   text-align:left;
-  box-shadow:0 10px 26px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.035);
+  box-shadow:0 14px 36px rgba(0,0,0,.20), inset 0 0 0 1px rgba(255,255,255,.04);
 }
-.closed-month-launch:hover{
-  border-color:rgba(231,185,95,.48);
-  background:
-    linear-gradient(90deg, rgba(231,185,95,.10), rgba(18,23,42,.82) 34%, rgba(10,13,24,.94));
-  transform:translateY(-1px);
-}
+.closed-month-launch:hover{ border-color:rgba(231,185,95,.75); transform:translateY(-1px); }
 .closed-month-launch-icon{
-  width:42px;height:42px;border-radius:14px;
+  width:46px;height:46px;border-radius:16px;
   display:grid;place-items:center;
-  font-size:1.12rem;
-  background:rgba(15,22,42,.88);
-  border:1px solid rgba(231,185,95,.24);
-  box-shadow:inset 0 0 0 1px rgba(255,255,255,.035);
+  font-size:1.35rem;
+  background:rgba(231,185,95,.16);
+  border:1px solid rgba(231,185,95,.28);
 }
 .closed-month-launch-copy strong{
   display:block;
-  color:#f6d58d;
-  font-size:1.02rem;
+  color:#f2c56f;
+  font-size:1.05rem;
   font-weight:900;
-  letter-spacing:.01em;
+  letter-spacing:.02em;
 }
 .closed-month-launch-copy small{
   display:block;
   margin-top:2px;
-  color:#aeb8d4;
-  font-size:.76rem;
+  color:#cbd3e8;
+  font-size:.78rem;
   font-weight:650;
 }
 .closed-month-mini{
@@ -12761,8 +12760,8 @@ tbody tr.row-fav{
   display:inline-flex;
   gap:4px;
   align-items:center;
-  border:1px solid rgba(255,255,255,.075);
-  background:rgba(7,11,24,.54);
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(5,8,18,.34);
   border-radius:999px;
   padding:4px 8px;
   font-size:.68rem;
@@ -12774,14 +12773,10 @@ tbody tr.row-fav{
 .closed-month-mini em.neg{ color:var(--red); }
 .closed-month-mini em.neu{ color:#dbe4ff; }
 .closed-month-launch-action{
-  color:#f4ce82;
+  color:#f2c56f;
   font-weight:900;
-  font-size:.80rem;
+  font-size:.86rem;
   white-space:nowrap;
-  border:1px solid rgba(231,185,95,.25);
-  background:rgba(231,185,95,.055);
-  border-radius:999px;
-  padding:7px 10px;
 }
 .closed-market-overlay{
   position:fixed;
@@ -12808,13 +12803,11 @@ tbody tr.row-fav{
   box-shadow:0 -24px 70px rgba(0,0,0,.48);
   z-index:9991;
   padding:12px 18px calc(20px + env(safe-area-inset-bottom));
-  transition:transform .25s ease, opacity .2s ease;
-  opacity:0;
+  transition:transform .25s ease;
 }
-
 body.closed-market-open{ overflow:hidden; }
 body.closed-market-open .closed-market-overlay{ opacity:1; pointer-events:auto; }
-body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opacity:1; }
+body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); }
 .closed-market-handle{
   width:64px;height:5px;border-radius:999px;
   background:rgba(255,255,255,.28);
@@ -12960,36 +12953,12 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opac
 .closed-card-item strong.pos{ color:var(--green) !important; }
 .closed-card-item strong.neg{ color:var(--red) !important; }
 .closed-card-item strong.neu{ color:#e8ecff !important; }
-.closed-card-item small.pos,
-.closed-card-item small.neg,
-.closed-card-item small.neu{
-  display:block;
-  margin-top:4px;
-  font-size:.82rem;
-  font-weight:900;
-}
-.closed-card-item small.pos{ color:var(--green) !important; }
-.closed-card-item small.neg{ color:var(--red) !important; }
-.closed-card-item small.neu{ color:#e8ecff !important; }
-@media(min-width:701px){
-  .closed-market-sheet{
-    top:50%;
-    bottom:auto;
-    max-height:min(88vh, 840px);
-    border-radius:28px;
-    padding:14px 18px 20px;
-    transform:translate(-50%, -46%);
-  }
-  body.closed-market-open .closed-market-sheet{
-    transform:translate(-50%, -50%);
-  }
-}
 @media(max-width:700px){
   .closed-month-launch{
     margin:10px 0 16px;
     grid-template-columns:auto 1fr;
-    padding:13px 14px;
-    border-radius:18px;
+    padding:14px;
+    border-radius:20px;
   }
   .closed-month-launch-action{
     grid-column:2;
@@ -13022,594 +12991,92 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opac
   .closed-market-actions{ grid-template-columns:1fr; }
 }
 
-
-/* ════════════════════════════════════════════════════
-   PATCH v5 — Resumo do mês fechado mais discreto no mobile
-   Objetivo: reduzir peso visual, remover "cartão gigante" e integrar com a plataforma.
-════════════════════════════════════════════════════ */
-
-.closed-month-launch{
-  position:relative;
+/* ════════════════════════════════════════════════════════
+   VISÃO GERAL DO CATÁLOGO
+════════════════════════════════════════════════════════ */
+.vg-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  margin-bottom:16px;
+}
+.vg-card{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
+  padding:14px 12px;display:flex;flex-direction:column;gap:4px;
+}
+.vg-card-primary{
+  background:linear-gradient(135deg,rgba(200,151,58,.08),rgba(91,156,246,.06));
+  border-color:rgba(200,151,58,.25);
+}
+.vg-card-perf.pos{ border-color:rgba(46,209,122,.25);background:rgba(46,209,122,.05) }
+.vg-card-perf.neg{ border-color:rgba(240,85,101,.2);background:rgba(240,85,101,.04) }
+.vg-label{
+  font-size:.62rem;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--muted2);font-weight:700;
+}
+.vg-val{
+  font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:700;
+  color:var(--text);line-height:1;margin:2px 0;
+}
+.vg-val.gold{ color:var(--gold2) }
+.vg-sub{
+  font-size:.65rem;color:var(--muted);font-family:'JetBrains Mono',monospace;
 }
 
-/* Desktop: mantém card horizontal, mas com visual mais sóbrio */
-.closed-month-launch{
-  border:1px solid rgba(231,185,95,.24);
-  border-left:3px solid rgba(231,185,95,.62);
-  background:
-    linear-gradient(90deg, rgba(231,185,95,.055), rgba(18,23,42,.76) 30%, rgba(9,12,23,.94));
-  box-shadow:0 10px 26px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.025);
+/* Categoria list */
+.vg-cat-list{ display:flex;flex-direction:column;gap:6px;margin-bottom:16px }
+.vg-cat-row{
+  display:grid;grid-template-columns:1fr auto auto auto;
+  align-items:center;gap:8px;
+  padding:9px 12px;background:var(--bg2);border:1px solid var(--border2);
+  border-radius:10px;
 }
+.vg-cat-nome{ font-size:.74rem;font-weight:600;color:var(--text) }
+.vg-cat-qtd{  font-size:.62rem;color:var(--muted);font-family:'JetBrains Mono',monospace }
+.vg-cat-pl{   font-size:.70rem;font-family:'JetBrains Mono',monospace;
+              color:var(--gold2);font-weight:600 }
+.vg-cat-rent{ font-size:.72rem;font-family:'JetBrains Mono',monospace;font-weight:700 }
 
-.closed-month-launch-icon{
-  background:rgba(15,22,42,.84);
-  border-color:rgba(231,185,95,.20);
+.vg-btn-fundos{
+  width:100%;padding:13px;border-radius:12px;
+  background:var(--gold-dim);border:1px solid var(--gold);
+  color:var(--gold2);font-family:'Inter',sans-serif;font-size:.82rem;
+  font-weight:700;cursor:pointer;transition:all .18s;letter-spacing:.02em;
 }
+.vg-btn-fundos:hover{ background:rgba(200,151,58,.2) }
 
-.closed-month-launch-action{
-  background:rgba(231,185,95,.045);
-  border-color:rgba(231,185,95,.22);
+/* Desktop: só mostra no mobile */
+@media(min-width:821px){ .mob-visao-geral{ display:none } }
+
+/* ════════════════════════════════════════════════════════
+   ESTATÍSTICAS PTAX 12M
+════════════════════════════════════════════════════════ */
+.ptax-stats-card{
+  margin:16px 0;padding:16px;
+  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
 }
-
-/* Mobile: vira uma faixa compacta, sem cara de bloco pesado */
-@media(max-width:700px){
-  .closed-month-launch{
-    margin:8px 0 14px;
-    padding:12px 12px 13px;
-    border-radius:18px;
-    border:1px solid rgba(231,185,95,.22);
-    border-left:3px solid rgba(231,185,95,.70);
-    display:grid;
-    grid-template-columns:32px minmax(0, 1fr) auto;
-    grid-template-areas:
-      "icon copy action"
-      "mini mini mini";
-    align-items:center;
-    column-gap:10px;
-    row-gap:9px;
-    background:
-      linear-gradient(135deg, rgba(231,185,95,.055), rgba(15,20,38,.86) 42%, rgba(7,10,20,.95));
-    box-shadow:0 8px 22px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.025);
-  }
-
-  .closed-month-launch-icon{
-    grid-area:icon;
-    width:32px;
-    height:32px;
-    border-radius:11px;
-    font-size:1rem;
-    align-self:start;
-  }
-
-  .closed-month-launch-copy{
-    grid-area:copy;
-    min-width:0;
-    display:block;
-  }
-
-  .closed-month-launch-copy strong{
-    font-size:.98rem;
-    line-height:1.12;
-    letter-spacing:0;
-    color:#f2cf82;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-
-  .closed-month-launch-copy small{
-    font-size:.72rem;
-    line-height:1.15;
-    color:#aeb8d4;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-
-  .closed-month-launch-action{
-    grid-area:action;
-    align-self:start;
-    justify-self:end;
-    margin:0;
-    padding:6px 9px;
-    border-radius:999px;
-    font-size:.72rem;
-    line-height:1;
-    background:rgba(231,185,95,.055);
-    border:1px solid rgba(231,185,95,.24);
-    color:#f2cf82;
-  }
-
-  .closed-month-mini{
-    grid-area:mini;
-    display:flex;
-    flex-wrap:nowrap;
-    gap:6px;
-    overflow-x:auto;
-    overflow-y:hidden;
-    margin-top:0;
-    padding:1px 2px 2px;
-    scrollbar-width:none;
-    -webkit-overflow-scrolling:touch;
-  }
-
-  .closed-month-mini::-webkit-scrollbar{
-    display:none;
-  }
-
-  .closed-month-mini span{
-    min-width:max-content;
-    justify-content:flex-start;
-    gap:5px;
-    padding:5px 8px;
-    border-radius:999px;
-    background:rgba(5,8,18,.48);
-    border:1px solid rgba(255,255,255,.07);
-    font-size:.68rem;
-    line-height:1;
-  }
-
-  .closed-month-mini b{
-    color:#9faad0;
-    font-weight:900;
-  }
-
-  .closed-month-mini em{
-    font-weight:950;
-  }
+.ptax-stats-title{
+  font-size:.72rem;font-weight:700;color:var(--muted);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;
 }
-
-/* Mobile bem estreito: reduz ainda mais o botão de ação */
-@media(max-width:390px){
-  .closed-month-launch{
-    grid-template-columns:30px minmax(0, 1fr) auto;
-    column-gap:8px;
-    padding:11px 10px 12px;
-  }
-  .closed-month-launch-action{
-    font-size:0;
-    padding:7px 9px;
-  }
-  .closed-month-launch-action::after{
-    content:"Ver ›";
-    font-size:.72rem;
-  }
+.ptax-stats-grid{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:8px;
 }
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v6 — Resumo do mês fechado sem corte no mobile
-   Ajuste principal: chips em grade 2x2, sem scroll horizontal.
-════════════════════════════════════════════════════ */
-
-@media(max-width:700px){
-  .closed-month-launch{
-    grid-template-columns:34px minmax(0, 1fr) auto;
-    grid-template-areas:
-      "icon copy action"
-      "mini mini mini";
-    column-gap:10px;
-    row-gap:10px;
-    padding:13px 12px 14px;
-    overflow:hidden;
-  }
-
-  .closed-month-launch-icon{
-    width:34px;
-    height:34px;
-    border-radius:12px;
-    align-self:center;
-  }
-
-  .closed-month-launch-copy{
-    min-width:0;
-    padding-right:2px;
-  }
-
-  .closed-month-launch-copy strong{
-    font-size:1rem;
-    line-height:1.08;
-    max-width:100%;
-  }
-
-  .closed-month-launch-copy small{
-    font-size:.72rem;
-    line-height:1.15;
-    margin-top:3px;
-    max-width:100%;
-  }
-
-  .closed-month-launch-action{
-    align-self:center;
-    justify-self:end;
-    padding:7px 10px;
-    min-width:58px;
-    text-align:center;
-    font-size:.74rem;
-  }
-
-  .closed-month-mini{
-    grid-area:mini;
-    display:grid;
-    grid-template-columns:repeat(2, minmax(0, 1fr));
-    gap:7px;
-    width:100%;
-    overflow:visible;
-    padding:0;
-    margin:0;
-  }
-
-  .closed-month-mini span{
-    min-width:0;
-    width:100%;
-    height:34px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    padding:0 8px;
-    border-radius:999px;
-    font-size:.73rem;
-    line-height:1;
-    white-space:nowrap;
-    overflow:hidden;
-  }
-
-  .closed-month-mini b,
-  .closed-month-mini em{
-    min-width:0;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-
-  .closed-month-mini b{
-    flex:0 0 auto;
-  }
-
-  .closed-month-mini em{
-    flex:0 1 auto;
-  }
+.ptax-stat-item{
+  display:flex;flex-direction:column;gap:3px;
+  padding:10px 8px;background:var(--bg3);border-radius:10px;
+  text-align:center;
 }
-
-@media(max-width:390px){
-  .closed-month-launch{
-    grid-template-columns:32px minmax(0, 1fr) 50px;
-    column-gap:8px;
-    padding:12px 10px 13px;
-  }
-
-  .closed-month-launch-copy strong{
-    font-size:.93rem;
-  }
-
-  .closed-month-launch-copy small{
-    font-size:.68rem;
-  }
-
-  .closed-month-mini{
-    gap:6px;
-  }
-
-  .closed-month-mini span{
-    height:32px;
-    font-size:.66rem;
-    gap:4px;
-    padding:0 6px;
-  }
-
-  .closed-month-launch-action{
-    min-width:50px;
-    padding:7px 8px;
-  }
+.ptax-stat-label{
+  font-size:.58rem;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--muted2);font-weight:700;
 }
-
-
-
-
-/* =========================================================
-   PATCH v7 — Resumo do mês + PTAX mais compacto no mobile
-   Objetivos:
-   1) Remover sobreposição do botão "Ver resumo"
-   2) Fazer os mini-indicadores caberem sem cortar Dólar/Ibov
-   3) Reduzir a altura visual do bloco Dólar PTAX no celular
-========================================================= */
-
-@media (max-width: 700px){
-  .market-section-head,
-  .market-title-left{
-    min-width: 0;
-  }
-
-  .closed-month-launch{
-    display: grid !important;
-    grid-template-columns: 40px minmax(0, 1fr) !important;
-    grid-template-areas:
-      "icon copy"
-      "mini mini"
-      "action action";
-    align-items: start !important;
-    column-gap: 12px !important;
-    row-gap: 10px !important;
-    padding: 14px 14px 14px !important;
-    overflow: hidden;
-  }
-
-  .closed-month-launch-icon{
-    grid-area: icon;
-    width: 40px !important;
-    height: 40px !important;
-    border-radius: 14px !important;
-    align-self: start !important;
-    justify-self: start !important;
-  }
-
-  .closed-month-launch-copy{
-    grid-area: copy;
-    min-width: 0 !important;
-    width: 100%;
-    padding-right: 0 !important;
-  }
-
-  .closed-month-launch-copy strong{
-    display: block;
-    font-size: clamp(1rem, 5vw, 1.16rem) !important;
-    line-height: 1.08 !important;
-    max-width: 100%;
-    margin-bottom: 3px;
-  }
-
-  .closed-month-launch-copy small{
-    display: block;
-    font-size: .73rem !important;
-    line-height: 1.18 !important;
-    max-width: 100%;
-    margin-top: 0;
-  }
-
-  .closed-month-mini{
-    grid-area: mini;
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-    width: 100% !important;
-    min-width: 0 !important;
-    overflow: visible !important;
-    margin-top: 2px;
-  }
-
-  .closed-month-mini span{
-    display: flex !important;
-    align-items: center !important;
-    justify-content: space-between !important;
-    gap: 8px !important;
-    min-width: 0 !important;
-    width: 100% !important;
-    padding: 8px 10px !important;
-    height: 36px;
-    border-radius: 999px;
-    white-space: nowrap;
-    overflow: hidden;
-  }
-
-  .closed-month-mini b,
-  .closed-month-mini em{
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-  }
-
-  .closed-month-mini b{
-    flex: 0 0 auto;
-    font-size: .70rem !important;
-  }
-
-  .closed-month-mini em{
-    flex: 0 1 auto;
-    font-size: .83rem !important;
-    font-weight: 700;
-    text-align: right;
-  }
-
-  .closed-month-launch-action{
-    grid-area: action;
-    display: inline-flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    justify-self: stretch !important;
-    width: 100% !important;
-    min-height: 40px !important;
-    padding: 10px 12px !important;
-    text-align: center !important;
-    font-size: .76rem !important;
-    line-height: 1 !important;
-  }
-
-  .closed-month-launch-action::after{
-    content: '';
-  }
-
-  #sec-dolar .section-title h2{
-    font-size: 1.8rem !important;
-  }
-
-  .dolar-mobile-priority .dolar-compact-card{
-    border-radius: 12px !important;
-  }
-
-  .dolar-mobile-priority .dolar-compact-top{
-    padding: 12px 12px 10px !important;
-    gap: 10px !important;
-  }
-
-  .dolar-mobile-priority .dolar-main-kpi{
-    padding: 12px 12px 10px !important;
-    border-radius: 14px !important;
-  }
-
-  .dolar-mobile-priority .dolar-main-kpi .dolar-kpi-label{
-    font-size: .60rem !important;
-    letter-spacing: .14em;
-    margin-bottom: 6px;
-  }
-
-  .dolar-mobile-priority .dolar-main-kpi strong{
-    font-size: 2.2rem !important;
-    line-height: .96 !important;
-  }
-
-  .dolar-mobile-priority .dolar-main-kpi small{
-    font-size: .68rem !important;
-    line-height: 1.2 !important;
-    margin-top: 4px !important;
-  }
-
-  .dolar-mobile-priority .dolar-kpi-row{
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 8px !important;
-  }
-
-  .dolar-mobile-priority .dolar-mini-kpi{
-    padding: 10px 10px !important;
-    min-height: 90px !important;
-    border-radius: 12px !important;
-  }
-
-  .dolar-mobile-priority .dolar-mini-kpi span{
-    font-size: .58rem !important;
-    line-height: 1 !important;
-    margin-bottom: 6px !important;
-  }
-
-  .dolar-mobile-priority .dolar-mini-kpi strong{
-    font-size: 1.02rem !important;
-    line-height: 1.05 !important;
-  }
-
-  .dolar-mobile-priority .dolar-mini-kpi small{
-    font-size: .60rem !important;
-    line-height: 1.15 !important;
-    margin-top: 3px;
-  }
-
-  .dolar-mobile-priority .dolar-compact-footer{
-    padding: 10px 12px 12px !important;
-    gap: 10px !important;
-  }
-
-  .dolar-mobile-priority .dolar-month-strip-head{
-    margin-bottom: 8px !important;
-  }
-
-  .dolar-mobile-priority .dolar-month-strip-title{
-    font-size: .88rem !important;
-    letter-spacing: .16em !important;
-  }
-
-  .dolar-mobile-priority .dolar-months{
-    gap: 8px !important;
-    padding-bottom: 4px !important;
-  }
-
-  .dolar-mobile-priority .dolar-month-item{
-    min-width: 132px !important;
-    padding: 9px 9px !important;
-    border-radius: 12px !important;
-  }
-
-  .dolar-mobile-priority .dolar-month-label{
-    font-size: .58rem !important;
-  }
-
-  .dolar-mobile-priority .dolar-month-val{
-    font-size: 1.02rem !important;
-    line-height: 1 !important;
-  }
-
-  .dolar-mobile-priority .dolar-month-var{
-    font-size: .72rem !important;
-  }
-
-  .dolar-mobile-priority .dolar-compact-source{
-    gap: 8px !important;
-    padding: 8px 10px !important;
-    font-size: .58rem !important;
-    line-height: 1.32 !important;
-  }
-
-  .dolar-mobile-priority .dolar-compact-source .source-label{
-    font-size: .56rem !important;
-    padding: 5px 8px !important;
-  }
-
-  .dolar-mobile-priority .dolar-compact-source span#dolar-day-src{
-    font-size: .58rem !important;
-  }
-
-  .dolar-mobile-priority .dolar-compact-source a,
-  .dolar-mobile-priority .dolar-source-link{
-    display: inline-flex !important;
-    width: 100% !important;
-    justify-content: center !important;
-    padding: 10px 12px !important;
-    font-size: .72rem !important;
-  }
+.ptax-stat-val{
+  font-family:'Cormorant Garamond',serif;font-size:1.0rem;font-weight:700;
+  color:var(--text);
 }
-
-@media (max-width: 390px){
-  .closed-month-launch{
-    padding: 12px 12px 13px !important;
-    column-gap: 10px !important;
-    row-gap: 9px !important;
-  }
-
-  .closed-month-launch-copy strong{
-    font-size: .95rem !important;
-  }
-
-  .closed-month-launch-copy small{
-    font-size: .68rem !important;
-  }
-
-  .closed-month-mini{
-    gap: 6px !important;
-  }
-
-  .closed-month-mini span{
-    padding: 7px 8px !important;
-    height: 34px !important;
-  }
-
-  .closed-month-mini b{
-    font-size: .66rem !important;
-  }
-
-  .closed-month-mini em{
-    font-size: .78rem !important;
-  }
-
-  .closed-month-launch-action{
-    min-height: 38px !important;
-    padding: 9px 10px !important;
-    font-size: .72rem !important;
-  }
-
-  .dolar-mobile-priority .dolar-main-kpi strong{
-    font-size: 2.02rem !important;
-  }
-
-  .dolar-mobile-priority .dolar-mini-kpi{
-    min-height: 84px !important;
-    padding: 9px !important;
-  }
-
-  .dolar-mobile-priority .dolar-mini-kpi strong{
-    font-size: .96rem !important;
-  }
-
-  .dolar-mobile-priority .dolar-month-item{
-    min-width: 126px !important;
-    padding: 8px 8px !important;
-  }
+.ptax-stat-ref{
+  font-size:.58rem;color:var(--muted2);font-family:'JetBrains Mono',monospace;
 }
-
+@media(max-width:480px){
+  .ptax-stats-grid{ grid-template-columns:1fr 1fr }
+  .ptax-stat-val{ font-size:.88rem }
+}
