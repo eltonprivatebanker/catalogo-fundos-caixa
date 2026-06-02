@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v6"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v7"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -16,6 +16,282 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <link rel="stylesheet" href="style.css?v=20260602-tabs-force-v6"/>
+
+<style id="ELTAUM_DETAIL_PANEL_POLISH_20260602_v7">
+/* ==========================================================
+   ELTAUM_DETAIL_PANEL_POLISH_20260602_v7
+   Refinamento visual da linha expandida do catálogo no desktop.
+   Mantém o mobile simples e melhora ações, dados técnicos e leitura rápida.
+========================================================== */
+@media (min-width: 901px){
+  #sec-fundos .detail-row > td{
+    background: rgba(8, 10, 20, .72) !important;
+    border-top: 1px solid rgba(255, 193, 85, .14) !important;
+  }
+
+  #sec-fundos .detail-panel,
+  #sec-fundos .detail-panel-mobile-clean{
+    padding: 16px !important;
+    background:
+      radial-gradient(circle at top left, rgba(255, 193, 85, .055), transparent 28%),
+      linear-gradient(180deg, rgba(15, 17, 31, .98), rgba(11, 12, 22, .98)) !important;
+  }
+
+  #sec-fundos .detail-main{
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 14px !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  #sec-fundos .detail-actions-card{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 14px !important;
+    padding: 12px 14px !important;
+    border: 1px solid rgba(255, 193, 85, .20) !important;
+    border-radius: 16px !important;
+    background: rgba(255, 193, 85, .045) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.04) !important;
+  }
+
+  #sec-fundos .detail-actions-title{
+    margin: 0 !important;
+    color: #f4c76c !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .72rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+  }
+
+  #sec-fundos .detail-actions-buttons{
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: flex-end !important;
+    gap: 8px !important;
+  }
+
+  #sec-fundos .detail-action-btn{
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    border-radius: 11px !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .72rem !important;
+    font-weight: 750 !important;
+    line-height: 1 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+  }
+
+  #sec-fundos .detail-action-primary{
+    border: 1px solid rgba(255, 193, 85, .55) !important;
+    background: rgba(255, 193, 85, .14) !important;
+    color: #ffd98a !important;
+  }
+
+  #sec-fundos .detail-action-secondary{
+    border: 1px solid rgba(148, 163, 184, .24) !important;
+    background: rgba(17, 24, 39, .65) !important;
+    color: #d8deee !important;
+  }
+
+  #sec-fundos .detail-action-btn:hover{
+    transform: translateY(-1px) !important;
+    filter: brightness(1.08) !important;
+  }
+
+  #sec-fundos .detail-grid-compact{
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(130px, 1fr)) !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+  }
+
+  #sec-fundos .detail-item{
+    min-height: 62px !important;
+    padding: 11px 12px !important;
+    border: 1px solid rgba(148, 163, 184, .16) !important;
+    border-radius: 14px !important;
+    background: rgba(15, 23, 42, .52) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.035) !important;
+    overflow: hidden !important;
+  }
+
+  #sec-fundos .detail-item.detail-site-link{
+    grid-column: span 2 !important;
+    border-color: rgba(96, 165, 250, .24) !important;
+    background: rgba(30, 64, 175, .12) !important;
+  }
+
+  #sec-fundos .detail-key{
+    margin: 0 0 6px !important;
+    color: #8ea0bf !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .62rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .09em !important;
+    text-transform: uppercase !important;
+    line-height: 1.1 !important;
+  }
+
+  #sec-fundos .detail-val{
+    color: #eef4ff !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .82rem !important;
+    font-weight: 760 !important;
+    line-height: 1.25 !important;
+    word-break: break-word !important;
+  }
+
+  #sec-fundos .detail-val a{
+    color: #65a7ff !important;
+    text-decoration: none !important;
+  }
+
+  #sec-fundos .fund-quick-note{
+    margin: 0 !important;
+    padding: 14px 16px !important;
+    border-radius: 17px !important;
+    border: 1px solid rgba(148, 163, 184, .18) !important;
+    background:
+      linear-gradient(180deg, rgba(20, 27, 45, .90), rgba(14, 18, 31, .95)) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.04) !important;
+  }
+
+  #sec-fundos .fund-quick-note-title{
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+    color: #e7edf9 !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .78rem !important;
+    font-weight: 850 !important;
+    letter-spacing: .04em !important;
+    text-transform: uppercase !important;
+  }
+
+  #sec-fundos .fund-note-badge-wrap{
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 7px !important;
+    margin: 0 0 10px !important;
+  }
+
+  #sec-fundos .fund-note-tag{
+    display: inline-flex !important;
+    align-items: center !important;
+    min-height: 24px !important;
+    padding: 0 9px !important;
+    border-radius: 999px !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .66rem !important;
+    font-weight: 800 !important;
+    letter-spacing: .02em !important;
+  }
+
+  #sec-fundos .fund-quick-note-text,
+  #sec-fundos .fund-quick-note .fund-quick-note-text[style]{
+    margin-top: 0 !important;
+    color: #d5dced !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .78rem !important;
+    line-height: 1.58 !important;
+    max-width: 1120px !important;
+  }
+
+  #sec-fundos .fund-note-metrics{
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(120px, 1fr)) !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+
+  #sec-fundos .fund-note-metric{
+    padding: 9px 10px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(148, 163, 184, .14) !important;
+    background: rgba(2, 6, 23, .34) !important;
+  }
+
+  #sec-fundos .fund-note-metric span{
+    display: block !important;
+    color: #8998b5 !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .58rem !important;
+    font-weight: 850 !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 4px !important;
+  }
+
+  #sec-fundos .fund-note-metric strong{
+    display: block !important;
+    color: #f4f7ff !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .77rem !important;
+    font-weight: 850 !important;
+    line-height: 1.25 !important;
+  }
+
+  #sec-fundos .fund-quick-note-disclaimer{
+    margin-top: 12px !important;
+    padding-top: 10px !important;
+    border-top: 1px solid rgba(148, 163, 184, .14) !important;
+    color: #93a1ba !important;
+    font-family: Inter, system-ui, sans-serif !important;
+    font-size: .68rem !important;
+    line-height: 1.45 !important;
+  }
+}
+
+@media (min-width: 901px) and (max-width: 1180px){
+  #sec-fundos .detail-grid-compact{
+    grid-template-columns: repeat(3, minmax(150px, 1fr)) !important;
+  }
+  #sec-fundos .fund-note-metrics{
+    grid-template-columns: repeat(3, minmax(140px, 1fr)) !important;
+  }
+}
+
+@media (max-width: 900px){
+  #sec-fundos .fund-note-metrics{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 8px !important;
+    margin-top: 10px !important;
+  }
+  #sec-fundos .fund-note-metric{
+    padding: 8px !important;
+    border-radius: 12px !important;
+    border: 1px solid rgba(148, 163, 184, .14) !important;
+    background: rgba(2, 6, 23, .28) !important;
+  }
+  #sec-fundos .fund-note-metric span{
+    display: block !important;
+    color: #8998b5 !important;
+    font-size: .58rem !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    margin-bottom: 3px !important;
+  }
+  #sec-fundos .fund-note-metric strong{
+    display: block !important;
+    color: #f4f7ff !important;
+    font-size: .72rem !important;
+    font-weight: 800 !important;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="page" id="topo">
@@ -3863,17 +4139,21 @@ function gerarLeituraRapidaFundo(r){
 
   // ── Complementos de dados ────────────────────────────────────────────
   const complementos = [];
-  if(risco) complementos.push(`Perfil de risco: <strong>${risco}</strong>.`);
-  if(taxa) complementos.push(`Taxa de adm.: <strong>${taxa}% a.a.</strong>`);
-  if(conv || pag) complementos.push(`Liquidez: conversão <strong>${conv || '—'}</strong> / pagamento <strong>${pag || '—'}</strong>.`);
-  if(rentAno !== null) complementos.push(`Ano: <strong>${pct(rentAno)}</strong>.`);
+  if(risco) complementos.push({label:'Perfil', value:risco});
+  if(taxa) complementos.push({label:'Taxa adm.', value:`${taxa}% a.a.`});
+  if(conv || pag) complementos.push({label:'Liquidez', value:`Conv. ${conv || '—'} · Pag. ${pag || '—'}`});
+  if(rentAno !== null) complementos.push({label:'Ano', value:pct(rentAno)});
   if(rent12 !== null){
-    const ratioTxt = cdiRatio !== null ? ` (<strong>${cdiRatio}% do CDI</strong>)` : '';
-    complementos.push(`12M: <strong>${pct(rent12)}</strong>${ratioTxt}.`);
+    const ratioTxt = cdiRatio !== null ? ` · ${cdiRatio}% do CDI` : '';
+    complementos.push({label:'12M', value:`${pct(rent12)}${ratioTxt}`});
   }
 
   const tagsHtml = tags.length
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
+    : '';
+
+  const complementosHtml = complementos.length
+    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
     : '';
 
   return `
@@ -3881,7 +4161,7 @@ function gerarLeituraRapidaFundo(r){
       <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
       ${tagsHtml}
       <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
-      ${complementos.length ? `<div class="fund-quick-note-text" style="margin-top:6px;font-size:.68rem;color:var(--muted)">${complementos.join(' ')}</div>` : ''}
+      ${complementosHtml}
       ${alertaCdi}
       <div class="fund-quick-note-disclaimer">
         Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
@@ -7277,13 +7557,13 @@ async function sharePainelMercado(){
 </script>
 
 
-<script id="ELTAUM_TABS_FORCE_20260602_v6">
+<script id="ELTAUM_TABS_FORCE_20260602_v7">
 /* Patch final — controle próprio dos botões IPCA/Selic.
-   Build: ELTAUM_TABS_FORCE_20260602_v6
+   Build: ELTAUM_TABS_FORCE_20260602_v7
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v6';
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v7';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
