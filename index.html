@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v7"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v8"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -7557,13 +7557,13 @@ async function sharePainelMercado(){
 </script>
 
 
-<script id="ELTAUM_TABS_FORCE_20260602_v7">
+<script id="ELTAUM_TABS_FORCE_20260602_v8">
 /* Patch final — controle próprio dos botões IPCA/Selic.
-   Build: ELTAUM_TABS_FORCE_20260602_v7
+   Build: ELTAUM_TABS_FORCE_20260602_v8
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v7';
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v8';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -8186,6 +8186,197 @@ async function sharePainelMercado(){
   });
 
   console.info('[' + BUILD + '] instalado.');
+})();
+</script>
+
+
+
+<script id="ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v8">
+/* Patch final — atalhos do catálogo no desktop/mobile.
+   Build: ELTAUM_TABS_FORCE_20260602_v8
+   Motivo: alguns atalhos por categoria (Renda Fixa, Multimercado, Ações, Cambial e FMP)
+   dependiam de igualdade exata com a categoria do CSV. Esta versão filtra por grupo,
+   então cobre variações como RENDA FIXA SIMPLES, REFERENCIADO, CURTO PRAZO e acentuação. */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v8';
+  const GROUP_PRESETS=new Set(['renda-fixa','multimercado','acoes','cambial','fmp']);
+  window.__ELTAUM_SHORTCUT_FILTERS_BUILD__=BUILD;
+  window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'';
+  console.info('[Catálogo CAIXA] Patch atalhos/filtros ativo:', BUILD);
+
+  function norm(v){
+    return String(v||'')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function rowCategory(row){ return norm(row && row['Categoria']); }
+  function rowName(row){ return norm(row && row['Fundo']); }
+
+  function rowMatchesGroup(row,preset){
+    const cat=rowCategory(row);
+    const nome=rowName(row);
+    if(preset==='renda-fixa') return cat.includes('RENDA FIXA');
+    if(preset==='multimercado') return cat.includes('MULTIMERCADO');
+    if(preset==='acoes') return cat.includes('ACOES') || cat.includes('ACAO') || nome.includes('ACOES');
+    if(preset==='cambial') return cat.includes('CAMBIAL') || nome.includes('CAMBIAL') || nome.includes('DOLAR') || nome.includes('CAMBIO');
+    if(preset==='fmp') return cat.includes('PRIVATIZACAO') || cat.includes('FMP') || nome.includes('FMP') || nome.includes('FGTS');
+    return true;
+  }
+
+  function presetLabel(preset){
+    return ({
+      'renda-fixa':'Renda Fixa',
+      'multimercado':'Multimercado',
+      'acoes':'Ações',
+      'cambial':'Cambial',
+      'fmp':'FMP',
+      'cdi':'CDI',
+      'ipca':'IPCA',
+      'conservador':'Conservador',
+      'favoritos':'Favoritos',
+      'all':'Todos'
+    })[preset] || preset || 'Todos';
+  }
+
+  function syncShortcutVisual(preset){
+    const active=preset || window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ || 'all';
+    document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]').forEach(btn=>{
+      const on=(btn.dataset.preset||'')===active || (active==='all' && (btn.dataset.preset||'')==='all');
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+    });
+
+    // Se o filtro for por grupo, o painel lateral não tem uma categoria exata ativa.
+    // Mostra o nome do grupo no resumo para o usuário não achar que o clique falhou.
+    const summary=document.getElementById('mobileFilterSummary');
+    if(summary && GROUP_PRESETS.has(active)) summary.textContent='Filtros: '+presetLabel(active);
+
+    const count=document.getElementById('filterActiveCount');
+    if(count && GROUP_PRESETS.has(active)){
+      count.textContent='1';
+      count.classList.add('has-active');
+    }
+
+    const strip=document.getElementById('activeFilterStrip');
+    if(strip && GROUP_PRESETS.has(active)){
+      strip.classList.add('active');
+      strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-elton-clear-shortcut="1"><small>Grupo</small>${presetLabel(active)}<span>×</span></button><button type="button" class="active-filter-clear" data-elton-clear-shortcut="1">Limpar tudo</button>`;
+    }
+  }
+
+  function applyAfterGroupFilter(){
+    const preset=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'';
+    if(!GROUP_PRESETS.has(preset)) return;
+    if(typeof filtered==='undefined' || !Array.isArray(filtered)) return;
+
+    filtered=filtered.filter(row=>rowMatchesGroup(row,preset));
+    try{ currentPage=1; }catch(e){}
+    try{ if(expandedRows && typeof expandedRows.clear==='function') expandedRows.clear(); }catch(e){}
+    try{ if(typeof render==='function') render(); }catch(e){ console.warn('[Atalhos v8] render falhou:',e); }
+    try{ if(typeof renderMobileFundCards==='function') renderMobileFundCards(); }catch(e){}
+    try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){}
+    try{ if(typeof updateFundResultSummary==='function') updateFundResultSummary(); }catch(e){}
+    syncShortcutVisual(preset);
+  }
+
+  function patchApplyFilter(){
+    const current=(typeof window.applyFilter==='function') ? window.applyFilter : (typeof applyFilter==='function' ? applyFilter : null);
+    if(!current || current.__eltonShortcutV8) return;
+    const original=current;
+    const wrapped=function(){
+      const out=original.apply(this,arguments);
+      applyAfterGroupFilter();
+      const active=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'';
+      if(active) setTimeout(()=>syncShortcutVisual(active),0);
+      return out;
+    };
+    wrapped.__eltonShortcutV8=true;
+    window.applyFilter=wrapped;
+    try{ applyFilter=wrapped; }catch(e){}
+  }
+
+  function resetBaseFiltersForShortcut(){
+    try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; }catch(e){}
+    try{ window.__favListMode=false; }catch(e){}
+    try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
+  }
+
+  function applyShortcutPreset(preset){
+    patchApplyFilter();
+    preset=String(preset||'all');
+
+    if(preset==='favoritos'){
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='favoritos';
+      try{ if(typeof toggleFavList==='function') toggleFavList(); else if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v8] favoritos falhou:',e); }
+      syncShortcutVisual('favoritos');
+      return;
+    }
+
+    if(preset==='all'){
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
+      try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; window.__favListMode=false; }catch(e){}
+      try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
+      try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v8] todos falhou:',e); }
+      syncShortcutVisual('all');
+      return;
+    }
+
+    resetBaseFiltersForShortcut();
+    window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset;
+
+    // Filtros que já têm critério exato seguro.
+    try{
+      if(preset==='cdi') activeBenchmark='CDI';
+      else if(preset==='ipca') activeBenchmark='IPCA';
+      else if(preset==='conservador') activeRisco='Conservador';
+      // Grupos de categoria ficam com activeCat vazio; o patch filtra depois por correspondência ampla.
+      else if(GROUP_PRESETS.has(preset)) activeCat='';
+    }catch(e){}
+
+    try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v8] aplicar filtro falhou:',e); }
+    syncShortcutVisual(preset);
+
+    const sec=document.getElementById('sec-fundos');
+    if(sec) setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),40);
+  }
+
+  function shortcutHandler(ev){
+    const target=ev.target;
+    const btn=target && target.closest ? target.closest('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]') : null;
+    if(!btn) return;
+    const preset=btn.dataset.preset||'all';
+    if(!['all','favoritos','cdi','conservador','ipca','renda-fixa','multimercado','acoes','cambial','fmp'].includes(preset)) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+    applyShortcutPreset(preset);
+  }
+
+  function setup(){
+    patchApplyFilter();
+    ['click','pointerup','touchend'].forEach(type=>{
+      document.addEventListener(type, shortcutHandler, true);
+    });
+    document.getElementById('activeFilterStrip')?.addEventListener('click',ev=>{
+      const b=ev.target.closest('[data-elton-clear-shortcut]');
+      if(!b) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+      applyShortcutPreset('all');
+    },true);
+    syncShortcutVisual(window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'all');
+    console.info('[Catálogo CAIXA] Atalhos do catálogo prontos:', BUILD);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
+  else setTimeout(setup,650);
 })();
 </script>
 
