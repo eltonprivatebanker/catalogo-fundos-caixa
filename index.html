@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v2"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v3"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260602-tabs-force-v2"/>
+<link rel="stylesheet" href="style.css?v=20260602-tabs-force-v3"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -4569,11 +4569,19 @@ async function carregarIPCAHistoricoAmpliado(historicoAtual){
     if(Array.isArray(obj?.historico)) return obj.historico;
     if(Array.isArray(obj?.dados)) return obj.dados;
     if(Array.isArray(obj?.value)) return obj.value;
+    if(Array.isArray(obj?.serie)) return obj.serie;
+    if(Array.isArray(obj?.records)) return obj.records;
+    if(Array.isArray(obj?.ipca)) return obj.ipca;
+    if(Array.isArray(obj?.historico_ipca)) return obj.historico_ipca;
     return [];
   };
 
   // 1) Tenta primeiro arquivos locais/estáticos, caso o robô já tenha salvo a série completa no repositório.
   const arquivosLocais = [
+    // Nome que está no repositório atual
+    'ipca_historico_base.json',
+
+    // Nomes alternativos para manter compatibilidade com versões anteriores
     'ipca_historico.json',
     'historico_ipca.json',
     'serie_ipca_433.json',
@@ -4613,6 +4621,68 @@ async function carregarIPCAHistoricoAmpliado(historicoAtual){
     }
   }catch(e){
     console.warn('[IPCA] Não foi possível ampliar o histórico pela série SGS 433:', e);
+  }
+
+  return atual;
+}
+
+async function carregarSelicHistoricoAmpliado(historicoAtual){
+  const extrairArray = obj => {
+    if(Array.isArray(obj)) return obj;
+    if(Array.isArray(obj?.conteudo)) return obj.conteudo;
+    if(Array.isArray(obj?.historico)) return obj.historico;
+    if(Array.isArray(obj?.dados)) return obj.dados;
+    if(Array.isArray(obj?.value)) return obj.value;
+    if(Array.isArray(obj?.serie)) return obj.serie;
+    if(Array.isArray(obj?.records)) return obj.records;
+    return [];
+  };
+
+  const normalizar = arr => (arr || [])
+    .map((d, idx) => {
+      const dataRaw = d.DataReuniaoCopom || d.data || d.DataInicioVigencia || d.Data || d.data_ref || '';
+      let dt = dataRaw ? new Date(dataRaw) : null;
+
+      if((!dt || isNaN(dt.getTime())) && typeof dataRaw === 'string' && dataRaw.includes('/')){
+        const p = dataRaw.split('/');
+        if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+        else if(p.length === 2) dt = new Date(`${p[1]}-${p[0]}-01T00:00:00`);
+      }
+
+      const valorRaw = d.MetaSelic ?? d.valor ?? d.TaxaSelic ?? d.taxa ?? d.Selic ?? null;
+      const valor = parseFloat(String(valorRaw).replace(',','.'));
+
+      return {
+        ...d,
+        _dtSelic: dt,
+        _tsSelic: dt && !isNaN(dt.getTime()) ? dt.getTime() : idx,
+        _valorSelic: valor
+      };
+    })
+    .filter(d => Number.isFinite(d._valorSelic) && d._valorSelic >= 0)
+    .sort((a,b) => a._tsSelic - b._tsSelic);
+
+  const atual = normalizar(historicoAtual);
+  const primeiroAno = atual.length && atual[0]._dtSelic && !isNaN(atual[0]._dtSelic.getTime())
+    ? atual[0]._dtSelic.getFullYear()
+    : 9999;
+
+  // Se a base já vier realmente histórica, mantém. Se vier curta, força o JSON completo do repositório.
+  if(atual.length >= 80 && primeiroAno <= 2000) return atual;
+
+  const arquivosLocais = [
+    'historico da selic do BC.json',
+    'historico_selic.json',
+    'selic_historico.json'
+  ];
+
+  for(const nome of arquivosLocais){
+    const js = await carregarJsonLocal(nome);
+    const arr = normalizar(extrairArray(js));
+    if(arr.length > atual.length){
+      console.info(`[Selic] ${arr.length} registros carregados de ${nome}.`);
+      return arr;
+    }
   }
 
   return atual;
@@ -4814,17 +4884,33 @@ function marcarGraficoSemDados(canvasId, mensagem){
 }
 
 async function carregarJsonLocal(nomeArquivo){
-  // Usa encodeURI para preservar espaços e acentos do nome do arquivo.
-  // Ex.: "historico da selic do BC.json"
-  try{
-    const url = BASE_URL + encodeURI(nomeArquivo) + '?v=' + Date.now();
-    const r = await fetch(url);
-    if(!r.ok) throw new Error(`HTTP ${r.status}`);
-    return await r.json();
-  }catch(e){
-    console.warn(`[JSON LOCAL] Não consegui carregar ${nomeArquivo}:`, e);
-    return null;
+  // Busca JSON local do GitHub Pages e, se necessário, cai para o raw.githubusercontent.com.
+  // Isso reduz cache/404 intermitente e também funciona quando o arquivo tem espaços no nome.
+  const arquivo = encodeURI(nomeArquivo);
+  const versao = '?v=' + Date.now();
+  const candidatos = [];
+
+  if(BASE_URL){
+    candidatos.push(BASE_URL + arquivo + versao);
+  }else{
+    candidatos.push(arquivo + versao);
+    candidatos.push('https://raw.githubusercontent.com/eltonprivatebanker/catalogo-fundos-caixa/main/' + arquivo + versao);
   }
+
+  let ultimoErro = null;
+  for(const url of candidatos){
+    try{
+      const r = await fetch(url, { cache:'no-store' });
+      if(!r.ok) throw new Error(`HTTP ${r.status}`);
+      return await r.json();
+    }catch(e){
+      ultimoErro = e;
+      console.warn(`[JSON LOCAL] Não consegui carregar ${nomeArquivo} em ${url}:`, e);
+    }
+  }
+
+  console.warn(`[JSON LOCAL] Falha final ao carregar ${nomeArquivo}:`, ultimoErro);
+  return null;
 }
 
 function atualizarResumoEvolucao(d){
@@ -4883,15 +4969,10 @@ async function inicializarGraficos(d){
   if(!_dadosMercado.cards.ipca) _dadosMercado.cards.ipca = {};
   _dadosMercado.cards.ipca.historico = hist;
 
-  // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
-  let selic=d?.historico_selic || d?.cards?.selic_meta?.historico || [];
-  if(!selic.length){
-    const jsSelic = await carregarJsonLocal('historico da selic do BC.json');
-    selic = jsSelic?.conteudo || jsSelic?.historico || (Array.isArray(jsSelic) ? jsSelic : []);
-    if(selic.length){
-      _dadosMercado.historico_selic = selic;
-      console.info(`[Selic] ${selic.length} registros carregados do arquivo local.`);
-    }
+  // Força base histórica completa quando o mercado_atual.json trouxer apenas recorte curto.
+  let selic = await carregarSelicHistoricoAmpliado(d?.historico_selic || d?.cards?.selic_meta?.historico || []);
+  if(selic.length){
+    _dadosMercado.historico_selic = selic;
   }
 
   // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
@@ -4920,7 +5001,7 @@ async function inicializarGraficos(d){
   bindEvolucaoChartPeriodTabs();
 }
 
-function alterarPeriodoGraficoEvolucao(btn){
+async function alterarPeriodoGraficoEvolucao(btn){
   if(!btn) return;
   const chart = btn.dataset.chart;
   const range = parseInt(btn.dataset.range, 10);
@@ -4930,30 +5011,66 @@ function alterarPeriodoGraficoEvolucao(btn){
     const ativo = b === btn;
     b.classList.toggle('active', ativo);
     b.setAttribute('aria-pressed', String(ativo));
+    b.setAttribute('type','button');
   });
 
-  if(chart === 'ipca'){
-    const hist = _dadosMercado?.cards?.ipca?.historico || [];
-    if(hist.length) buildChartIpca(hist, range);
-    else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
-  }
+  btn.dataset.loadingChart = '1';
 
-  if(chart === 'selic'){
-    const histSelic = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
-    if(histSelic.length) buildChartSelic(histSelic, range);
-    else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
-  }
+  try{
+    if(chart === 'ipca'){
+      if(!_dadosMercado) _dadosMercado = {};
+      if(!_dadosMercado.cards) _dadosMercado.cards = {};
+      if(!_dadosMercado.cards.ipca) _dadosMercado.cards.ipca = {};
 
-  setTimeout(()=>{
-    if(chart === 'ipca' && _chartIpca && typeof _chartIpca.resize === 'function') _chartIpca.resize();
-    if(chart === 'selic' && _chartSelic && typeof _chartSelic.resize === 'function') _chartSelic.resize();
-  }, 40);
+      let hist = _dadosMercado?.cards?.ipca?.historico || [];
+
+      // Quando clicar 5A/10A e a base atual estiver curta, tenta buscar a base histórica do repositório.
+      if(range > normalizarHistoricoIPCA(hist).length){
+        hist = await carregarIPCAHistoricoAmpliado(hist);
+        _dadosMercado.cards.ipca.historico = hist;
+      }
+
+      if(hist.length) buildChartIpca(hist, range);
+      else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
+    }
+
+    if(chart === 'selic'){
+      let histSelic = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
+
+      // Mantém 1A/5A/Histórico funcionando mesmo quando o JSON principal trouxer uma amostra curta.
+      histSelic = await carregarSelicHistoricoAmpliado(histSelic);
+      if(!_dadosMercado) _dadosMercado = {};
+      _dadosMercado.historico_selic = histSelic;
+
+      if(histSelic.length) buildChartSelic(histSelic, range);
+      else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
+    }
+  }catch(err){
+    console.warn('[Gráficos] Erro ao trocar período:', chart, range, err);
+  }finally{
+    delete btn.dataset.loadingChart;
+    setTimeout(()=>{
+      if(chart === 'ipca' && _chartIpca && typeof _chartIpca.resize === 'function') _chartIpca.resize();
+      if(chart === 'selic' && _chartSelic && typeof _chartSelic.resize === 'function') _chartSelic.resize();
+    }, 40);
+  }
 }
+
+window.alterarPeriodoGraficoEvolucao = alterarPeriodoGraficoEvolucao;
 
 function bindEvolucaoChartPeriodTabs(){
   document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
     btn.setAttribute('type','button');
     btn.setAttribute('aria-pressed', String(btn.classList.contains('active')));
+    btn.style.pointerEvents = 'auto';
+
+    if(btn.dataset.chartTabBound === '1') return;
+    btn.dataset.chartTabBound = '1';
+
+    btn.addEventListener('click', e=>{
+      e.preventDefault();
+      alterarPeriodoGraficoEvolucao(btn);
+    });
   });
 }
 
@@ -7160,11 +7277,11 @@ async function sharePainelMercado(){
 </script>
 
 
-<script id="ELTAUM_TABS_FORCE_20260602_v2">
-/* Patch final — garante ação dos filtros IPCA/Selic mesmo se algum listener anterior falhar.
-   Build: ELTAUM_TABS_FORCE_20260602_v2 */
+<script id="ELTAUM_TABS_FORCE_20260602_v3">
+/* Patch final — garante ação dos filtros IPCA/Selic, inclusive 10A do IPCA via base histórica do GitHub.
+   Build: ELTAUM_TABS_FORCE_20260602_v3 */
 (function(){
-  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v2';
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v3';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -7180,24 +7297,23 @@ async function sharePainelMercado(){
       tab.classList.toggle('active', ativo);
       tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
       tab.setAttribute('type', 'button');
+      tab.style.pointerEvents = 'auto';
     });
   }
 
-  function executarTroca(btn){
+  async function executarTroca(btn){
     if(!btn) return;
     marcarBotaoAtivo(btn);
 
     if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
       try{
-        window.alterarPeriodoGraficoEvolucao(btn);
+        await window.alterarPeriodoGraficoEvolucao(btn);
         return;
       }catch(err){
-        console.warn('[Catálogo CAIXA] Falha no handler principal dos filtros. Tentando fallback.', err);
+        console.warn('[Catálogo CAIXA] Falha no handler principal dos filtros.', err);
       }
     }
 
-    // Fallback mínimo: se o handler principal não estiver disponível,
-    // pelo menos deixa claro no console que o clique chegou ao navegador.
     console.warn('[Catálogo CAIXA] Clique capturado, mas alterarPeriodoGraficoEvolucao não está disponível.');
   }
 
@@ -7206,6 +7322,13 @@ async function sharePainelMercado(){
       btn.setAttribute('type', 'button');
       btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
       btn.style.pointerEvents = 'auto';
+
+      if(btn.dataset.forceChartBound === '1') return;
+      btn.dataset.forceChartBound = '1';
+      btn.addEventListener('click', function(ev){
+        ev.preventDefault();
+        executarTroca(btn);
+      });
     });
   }
 
@@ -7215,14 +7338,16 @@ async function sharePainelMercado(){
   }else{
     setTimeout(prepararBotoes, 0);
   }
+  setTimeout(prepararBotoes, 600);
+  setTimeout(prepararBotoes, 1800);
 
-  // Captura no início do fluxo do clique para evitar que outro listener impeça a troca.
+  // Captura cedo para evitar que algum listener externo/travado impeça a troca.
   document.addEventListener('click', function(ev){
     const target = ev.target;
     const btn = target && target.closest ? target.closest('.evolution-section .chart-tab[data-chart]') : null;
     if(!btn) return;
     ev.preventDefault();
-    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
     executarTroca(btn);
   }, true);
 })();
