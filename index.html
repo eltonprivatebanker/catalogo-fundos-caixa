@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v2"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -14,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-rankings-nomes-completos"/>
+<link rel="stylesheet" href="style.css?v=20260602-tabs-force-v2"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -106,56 +107,6 @@
 
 <!-- ════════════════ CATÁLOGO E RANKINGS ════════════════ -->
 <!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
-
-<!-- ═══════════════════════════════════ VISÃO GERAL DO CATÁLOGO ══ -->
-<div class="section-gap mob-visao-geral" id="sec-visao-geral">
-  <div class="section-title">
-    <h2>📋 Visão Geral do Catálogo</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>SIPII · CAIXA</span>
-  </div>
-
-  <div class="vg-grid">
-    <div class="vg-card vg-card-primary">
-      <span class="vg-label">Total de Fundos</span>
-      <strong class="vg-val" id="vgTotalFundos">—</strong>
-      <small class="vg-sub" id="vgTotalSub">fundos disponíveis</small>
-    </div>
-    <div class="vg-card vg-card-primary">
-      <span class="vg-label">Patrimônio Total</span>
-      <strong class="vg-val gold" id="vgPLTotal">—</strong>
-      <small class="vg-sub" id="vgPLSub">no catálogo</small>
-    </div>
-    <div class="vg-card">
-      <span class="vg-label">Categorias</span>
-      <strong class="vg-val" id="vgCats">—</strong>
-      <small class="vg-sub">tipos distintos</small>
-    </div>
-    <div class="vg-card">
-      <span class="vg-label">Gestora</span>
-      <strong class="vg-val" id="vgGestores">1</strong>
-      <small class="vg-sub">CAIXA Asset</small>
-    </div>
-    <div class="vg-card vg-card-perf pos">
-      <span class="vg-label">Melhor 12M</span>
-      <strong class="vg-val pos" id="vgMelhor">—</strong>
-      <small class="vg-sub" id="vgMelhorNome">—</small>
-    </div>
-    <div class="vg-card vg-card-perf neg">
-      <span class="vg-label">Pior 12M</span>
-      <strong class="vg-val neg" id="vgPior">—</strong>
-      <small class="vg-sub" id="vgPiorNome">—</small>
-    </div>
-  </div>
-
-  <div class="vg-cat-list" id="vgCatList">
-    <!-- preenchido por JS -->
-  </div>
-
-  <button class="vg-btn-fundos" onclick="irParaFundos()">
-    Ver todos os fundos →
-  </button>
-</div>
-
 <div class="section-gap" id="sec-fundos">
   <div class="section-title">
     <h2>📁 Catálogo Completo de Fundos</h2>
@@ -382,8 +333,7 @@
     </div>
   </div>
 
-
-<button type="button" class="closed-month-launch" id="closedMonthLaunch" onclick="openFechamentoMesSheet()" aria-label="Abrir resumo do último mês fechado">
+  <button type="button" class="closed-month-launch" id="closedMonthLaunch" onclick="openFechamentoMesSheet()" aria-label="Abrir resumo do último mês fechado">
     <span class="closed-month-launch-icon">📌</span>
     <span class="closed-month-launch-copy">
       <strong id="closedMonthLaunchTitle">Resumo do mês fechado</strong>
@@ -397,7 +347,6 @@
     </span>
     <span class="closed-month-launch-action">Ver resumo ›</span>
   </button>
-
 
   <!-- Cards de referência: Selic, CDI e Poupança separados -->
   <div class="indic-ref-bar market-ref-grid">
@@ -584,6 +533,26 @@
     <div class="closed-card-grid" id="closedCardGrid"></div>
     <div class="closed-card-foot">Dados públicos · CDI/IPCA BCB · Dólar PTAX BCB · bolsas: fontes públicas de mercado</div>
   </div>
+
+  <div class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()" aria-hidden="true"></div>
+  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-labelledby="closedMarketSheetTitle" aria-hidden="true">
+    <div class="closed-market-handle" aria-hidden="true"></div>
+    <div class="closed-market-sheet-head">
+      <div class="closed-market-sheet-icon">📊</div>
+      <div>
+        <span class="closed-market-kicker">Consulta rápida</span>
+        <h3 id="closedMarketSheetTitle">Fechamento de Mercado</h3>
+      </div>
+      <button type="button" class="closed-market-close" onclick="closeFechamentoMesSheet()" aria-label="Fechar resumo">×</button>
+    </div>
+    <div class="closed-market-section-note" id="closedMarketSheetNote">Último mês fechado · dados públicos</div>
+    <div class="closed-market-list" id="closedMarketSheetList"></div>
+    <div class="closed-market-actions">
+      <button type="button" onclick="copiarResumoPainelMercado()">📋 Copiar resumo</button>
+      <button type="button" onclick="sharePainelMercado()">📲 WhatsApp</button>
+      <button type="button" onclick="printPainelMercado()">🖨️ Print</button>
+    </div>
+  </aside>
 
   <!-- Tabela linha do tempo -->
   <div class="indic-table-wrap">
@@ -883,32 +852,6 @@
       <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
     </div>
   </div>
-
-  <!-- Estatísticas PTAX 12M -->
-  <div class="ptax-stats-card" id="ptaxStatsCard">
-    <div class="ptax-stats-title">📊 Estatísticas PTAX — 12 meses</div>
-    <div class="ptax-stats-grid">
-      <div class="ptax-stat-item">
-        <span class="ptax-stat-label">Atual</span>
-        <strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong>
-      </div>
-      <div class="ptax-stat-item">
-        <span class="ptax-stat-label">Máxima 12M</span>
-        <strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong>
-        <small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small>
-      </div>
-      <div class="ptax-stat-item">
-        <span class="ptax-stat-label">Mínima 12M</span>
-        <strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong>
-        <small class="ptax-stat-ref" id="ptaxStatMinRef">—</small>
-      </div>
-      <div class="ptax-stat-item">
-        <span class="ptax-stat-label">Média 12M</span>
-        <strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong>
-      </div>
-    </div>
-  </div>
-
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
@@ -998,9 +941,9 @@
       <div class="chart-card-header">
         <div><div class="chart-card-title">🎯 IPCA mensal</div><div class="chart-card-sub">Variação oficial mês a mês</div></div>
         <div class="chart-tabs">
-          <button class="chart-tab active" data-chart="ipca" data-range="24">24M</button>
-          <button class="chart-tab" data-chart="ipca" data-range="60">5A</button>
-          <button class="chart-tab" data-chart="ipca" data-range="120">10A</button>
+          <button class="chart-tab active" data-chart="ipca" data-range="24" type="button" aria-pressed="true">24M</button>
+          <button class="chart-tab" data-chart="ipca" data-range="60" type="button" aria-pressed="false">5A</button>
+          <button class="chart-tab" data-chart="ipca" data-range="120" type="button" aria-pressed="false">10A</button>
         </div>
       </div>
       <div class="chart-reading" id="evoCardIpcaNote">Último dado: aguardando atualização.</div>
@@ -1010,9 +953,9 @@
       <div class="chart-card-header">
         <div><div class="chart-card-title">🏦 Selic histórica</div><div class="chart-card-sub">Histórico COPOM desde 1999</div></div>
         <div class="chart-tabs">
-          <button class="chart-tab" data-chart="selic" data-range="12">1A</button>
-          <button class="chart-tab" data-chart="selic" data-range="35">5A</button>
-          <button class="chart-tab active" data-chart="selic" data-range="999">Histórico</button>
+          <button class="chart-tab" data-chart="selic" data-range="12" type="button" aria-pressed="false">1A</button>
+          <button class="chart-tab" data-chart="selic" data-range="60" type="button" aria-pressed="false">5A</button>
+          <button class="chart-tab active" data-chart="selic" data-range="999" type="button" aria-pressed="true">Histórico</button>
         </div>
       </div>
       <div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
@@ -1590,11 +1533,30 @@ function calcularDolarPeriodos(){
   const [ano, mes] = last[0].split('-');
   const refLabel = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
 
-  // Início do ano — usa Dez do ano anterior como base (YTD correto)
-  const anoAnteriorStr = `${ANO_ATUAL - 1}`;
-  const fimAnoAnterior = [...sorted].reverse().find(([k]) => k.startsWith(anoAnteriorStr));
-  if(fimAnoAnterior){
-    const inicioVal = parseFloat(fimAnoAnterior[1].cotacaoVenda);
+  // Acumulado no ano
+  // Regra correta: comparar a cotação atual com o fechamento de DEZEMBRO do ano anterior.
+  // Antes estava usando o primeiro registro de 2026 (jan/2026), o que gerava -3,82% em vez de -8,58%.
+  const dolarJson = _dadosMercado?.indices_mercado?.dolar || _dadosMercado?.cards?.dolar || {};
+  const baseAnoJson = Number(dolarJson.base_ano ?? dolarJson.fechamento_ano_anterior ?? dolarJson.baseAno);
+  const acumAnoJson = Number(dolarJson.acum_ano);
+
+  const anoAtualStr = `${ANO_ATUAL}`;
+  const dezAnteriorKey = `${ANO_ATUAL - 1}-12`;
+  const dezAnterior = sorted.find(([k]) => k === dezAnteriorKey);
+  const primeiroMesAno = sorted.find(([k]) => k.startsWith(anoAtualStr));
+
+  if(Number.isFinite(baseAnoJson) && baseAnoJson > 0){
+    indicState.dolarBRL.ano = baseAnoJson;
+    indicState.dolarPct.ano = Number.isFinite(acumAnoJson)
+      ? acumAnoJson
+      : +((lastVal/baseAnoJson-1)*100).toFixed(2);
+  }else if(dezAnterior){
+    const baseDez = parseFloat(dezAnterior[1].cotacaoVenda);
+    indicState.dolarBRL.ano = baseDez;
+    indicState.dolarPct.ano = +((lastVal/baseDez-1)*100).toFixed(2);
+  }else if(primeiroMesAno){
+    // fallback apenas se o histórico não trouxer dez/ano anterior
+    const inicioVal = parseFloat(primeiroMesAno[1].cotacaoVenda);
     indicState.dolarBRL.ano = inicioVal;
     indicState.dolarPct.ano = +((lastVal/inicioVal-1)*100).toFixed(2);
   }
@@ -2528,6 +2490,7 @@ async function carregarMercado(){
 
     const d = normalizarMercadoAtual(rawUnificado);
     _dadosMercado = d;
+    setTimeout(()=>{ try{ atualizarResumoFechamentoMes(); atualizarPainelFechadoCard(); renderClosedMarketSheet(); }catch(e){} }, 600);
     hidratarDolarResumoDoJson(d);
 
     if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
@@ -4564,13 +4527,107 @@ const CHART_DEFAULTS={
   }
 };
 
+function normalizarHistoricoIPCA(historico){
+  return (historico || [])
+    .map((d, idx) => {
+      const dataRaw = d.Data || d.data || d.data_ref || d.DataReferencia || d.mes_ref || d.label || '';
+      let dt = null;
+
+      if(dataRaw){
+        if(typeof dataRaw === 'string' && dataRaw.includes('/')){
+          const p = dataRaw.split('/');
+          if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+          else if(p.length === 2) dt = new Date(`${p[1]}-${p[0]}-01T00:00:00`);
+        }else{
+          dt = new Date(dataRaw);
+        }
+      }
+
+      const valorRaw = d.valor ?? d.Valor ?? d.value ?? d.ipca ?? d.IPCA ?? d.variacao ?? d.Variacao ?? null;
+      const valor = parseFloat(String(valorRaw).replace(',','.'));
+      const label = d.label || (dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}` : `p${idx+1}`);
+
+      return {
+        ...d,
+        label,
+        valor,
+        _dt: dt,
+        _ts: dt && !isNaN(dt.getTime()) ? dt.getTime() : idx,
+      };
+    })
+    .filter(d => Number.isFinite(d.valor))
+    .sort((a,b) => a._ts - b._ts);
+}
+
+async function carregarIPCAHistoricoAmpliado(historicoAtual){
+  const atual = normalizarHistoricoIPCA(historicoAtual);
+  if(atual.length >= 120) return atual;
+
+  const extrairArray = obj => {
+    if(Array.isArray(obj)) return obj;
+    if(Array.isArray(obj?.conteudo)) return obj.conteudo;
+    if(Array.isArray(obj?.historico)) return obj.historico;
+    if(Array.isArray(obj?.dados)) return obj.dados;
+    if(Array.isArray(obj?.value)) return obj.value;
+    return [];
+  };
+
+  // 1) Tenta primeiro arquivos locais/estáticos, caso o robô já tenha salvo a série completa no repositório.
+  const arquivosLocais = [
+    'ipca_historico.json',
+    'historico_ipca.json',
+    'serie_ipca_433.json',
+    'ipca_serie_433.json',
+    'historico ipca bcb.json'
+  ];
+
+  for(const nome of arquivosLocais){
+    try{
+      const js = await carregarJsonLocal(nome);
+      const arr = normalizarHistoricoIPCA(extrairArray(js));
+      if(arr.length > atual.length){
+        console.info(`[IPCA] ${arr.length} registros carregados de ${nome}.`);
+        return arr;
+      }
+    }catch(e){
+      console.warn(`[IPCA] Falha ao tentar ${nome}:`, e);
+    }
+  }
+
+  // 2) Fallback público do BCB/SGS 433: libera os botões 5A e 10A mesmo quando o JSON principal traz só 24M.
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    const hoje = new Date();
+    const iniAno = hoje.getFullYear() - 10;
+    const dataInicial = `01/01/${iniAno}`;
+    const dataFinal = `${String(hoje.getDate()).padStart(2,'0')}/${String(hoje.getMonth()+1).padStart(2,'0')}/${hoje.getFullYear()}`;
+    const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=${encodeURIComponent(dataInicial)}&dataFinal=${encodeURIComponent(dataFinal)}`;
+    const r = await fetch(url, { signal: controller.signal });
+    clearTimeout(timer);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const arr = normalizarHistoricoIPCA(await r.json());
+    if(arr.length > atual.length){
+      console.info(`[IPCA] ${arr.length} registros carregados diretamente da série SGS 433 do BCB.`);
+      return arr;
+    }
+  }catch(e){
+    console.warn('[IPCA] Não foi possível ampliar o histórico pela série SGS 433:', e);
+  }
+
+  return atual;
+}
+
 function buildChartIpca(historico,meses){
-  const slice=historico.slice(-meses);
+  const base = normalizarHistoricoIPCA(historico);
+  const slice=base.slice(-meses);
   const labels=slice.map(d=>d.label);
   const values=slice.map(d=>d.valor);
   const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');
   if(_chartIpca) _chartIpca.destroy();
   const ctx=document.getElementById('chartIpca')?.getContext('2d'); if(!ctx) return;
+  const emptyMsg = ctx.canvas?.parentElement?.querySelector('.chart-empty-msg');
+  if(emptyMsg) emptyMsg.remove();
   _chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},
     options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});
 }
@@ -4604,7 +4661,17 @@ function buildChartSelic(historico,qtd){
     .filter(d=>d._ano>=1999 && !isNaN(d._valor) && d._valor>=0 && d._ts>0);
 
   filtrado.sort((a,b)=>a._ts-b._ts);
-  const slice=qtd>=999?filtrado:filtrado.slice(-qtd);
+
+  // Nos botões da Selic, data-range passa a representar meses de janela: 12 = 1A, 60 = 5A, 999 = histórico completo.
+  let slice = filtrado;
+  if(qtd < 999 && filtrado.length){
+    const ultimo = filtrado[filtrado.length - 1]._dt;
+    const limite = new Date(ultimo);
+    limite.setMonth(limite.getMonth() - qtd);
+    slice = filtrado.filter(d => d._dt >= limite);
+    if(slice.length < 2) slice = filtrado.slice(-Math.max(2, Math.min(filtrado.length, qtd)));
+  }
+
   const labels=slice.map(d=>`${String(d._dt.getMonth()+1).padStart(2,'0')}/${d._dt.getFullYear()}`);
   const values=slice.map(d=>d._valor);
 
@@ -4811,7 +4878,10 @@ function bindEvolucaoTabs(){
 async function inicializarGraficos(d){
   _dadosMercado=d;
 
-  const hist=d?.cards?.ipca?.historico||[];
+  const hist=await carregarIPCAHistoricoAmpliado(d?.cards?.ipca?.historico||[]);
+  if(!_dadosMercado.cards) _dadosMercado.cards = {};
+  if(!_dadosMercado.cards.ipca) _dadosMercado.cards.ipca = {};
+  _dadosMercado.cards.ipca.historico = hist;
 
   // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
   let selic=d?.historico_selic || d?.cards?.selic_meta?.historico || [];
@@ -4847,18 +4917,52 @@ async function inicializarGraficos(d){
   bindEvolucaoTabs();
   selecionarGraficoEvolucao('ipca');
 
+  bindEvolucaoChartPeriodTabs();
+}
+
+function alterarPeriodoGraficoEvolucao(btn){
+  if(!btn) return;
+  const chart = btn.dataset.chart;
+  const range = parseInt(btn.dataset.range, 10);
+  if(!chart || !Number.isFinite(range)) return;
+
+  document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>{
+    const ativo = b === btn;
+    b.classList.toggle('active', ativo);
+    b.setAttribute('aria-pressed', String(ativo));
+  });
+
+  if(chart === 'ipca'){
+    const hist = _dadosMercado?.cards?.ipca?.historico || [];
+    if(hist.length) buildChartIpca(hist, range);
+    else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
+  }
+
+  if(chart === 'selic'){
+    const histSelic = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
+    if(histSelic.length) buildChartSelic(histSelic, range);
+    else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
+  }
+
+  setTimeout(()=>{
+    if(chart === 'ipca' && _chartIpca && typeof _chartIpca.resize === 'function') _chartIpca.resize();
+    if(chart === 'selic' && _chartSelic && typeof _chartSelic.resize === 'function') _chartSelic.resize();
+  }, 40);
+}
+
+function bindEvolucaoChartPeriodTabs(){
   document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
-    if(btn.dataset.bound==='1') return;
-    btn.dataset.bound='1';
-    btn.addEventListener('click',()=>{
-      const chart=btn.dataset.chart; const range=parseInt(btn.dataset.range);
-      document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      if(chart==='ipca') buildChartIpca(_dadosMercado?.cards?.ipca?.historico||[],range);
-      if(chart==='selic') buildChartSelic(_dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [],range);
-    });
+    btn.setAttribute('type','button');
+    btn.setAttribute('aria-pressed', String(btn.classList.contains('active')));
   });
 }
+
+document.addEventListener('click', e=>{
+  const btn = e.target.closest('.chart-tab[data-chart]');
+  if(!btn) return;
+  e.preventDefault();
+  alterarPeriodoGraficoEvolucao(btn);
+});
 
 /* ════════════════════════════════════════════════════
    PTAX MODAL
@@ -5036,10 +5140,6 @@ async function iniciarDashboard(){
   await carregarFundosJson();
   await carregarDados();
   await carregarKPIs();
-  // Chamadas tardias: aguardam todos os blocos JS estarem carregados
-  // (evita ReferenceError quando JSON carrega do cache antes dos scripts secundários)
-  if(typeof calcularEstatisticasPTAX === 'function') calcularEstatisticasPTAX();
-  if(typeof atualizarVisaoGeral === 'function') atualizarVisaoGeral();
 }
 iniciarDashboard();
 </script>
@@ -6878,16 +6978,116 @@ function linhasHtmlUsdBrl(txt){
 function linhaTextoUsdBrl(txt){
   return quebrarUsdBrl(txt).join(' | ');
 }
+function normalizeValueForSign(txt){
+  const s=String(txt||'');
+  const m=s.match(/[-+]?\d+(?:[\.,]\d+)?/);
+  if(!m) return null;
+  const n=Number(m[0].replace('.','').replace(',','.'));
+  return Number.isFinite(n) ? n : null;
+}
+function signClassFromText(txt){
+  const n=normalizeValueForSign(txt);
+  if(n === null) return 'neu';
+  return n > 0 ? 'pos' : n < 0 ? 'neg' : 'neu';
+}
+function primeiroValorNaoVazio(...vals){
+  for(const v of vals){
+    const s=cleanTxt(v);
+    if(s && s !== '—') return s;
+  }
+  return '—';
+}
+function ifixFechadoRow(){
+  const indices=_dadosMercado?.indices_mercado || {};
+  const intl=_dadosMercado?.indices_internacionais || {};
+  const item = indices.ifix || indices.IFIX || intl.ifix || _dadosMercado?.ifix || _dadosMercado?.cards?.ifix || null;
+  if(!item) return {grupo:'Bolsa Brasil', icon:'🏢', nome:'IFIX', valor:'—', detalhe:'pendente no robô'};
+  const pts = item.fechamento_mes_anterior ?? item.fechamento_atual ?? item.pontos ?? item.valor;
+  const vari = item.variacao_mes_fechado ?? item.variacao_mes_anterior ?? item.variacao_mes_atual ?? item.mensal;
+  const ptsTxt = pts != null && Number.isFinite(Number(pts)) ? `${fmtK(Number(pts))} pts` : '';
+  const varTxt = vari != null && Number.isFinite(Number(vari)) ? pctTxt(Number(vari)) : '';
+  return {
+    grupo:'Bolsa Brasil',
+    icon:'🏢',
+    nome:'IFIX',
+    valor:primeiroValorNaoVazio(ptsTxt, varTxt),
+    detalhe:'fundos imobiliários',
+    extra: varTxt && varTxt !== ptsTxt ? varTxt : ''
+  };
+}
 function indicadorFechadoRows(){
+  const poupValor = primeiroValorNaoVazio(painelText('mc-poup'), painelText('poupOldMonthly'));
   return [
-    {grupo:'Taxas', icon:'💰', nome:'CDI', valor:painelText('cdi-mes-ant'), detalhe:'mês fechado'},
-    {grupo:'Taxas', icon:'🎯', nome:'IPCA', valor:painelText('ipca-mes-ant'), detalhe:'inflação do mês'},
-    {grupo:'Câmbio', icon:'💵', nome:'Dólar PTAX', valor:painelText('dolar-ant-cot'), detalhe:'cotação de fechamento'},
-    {grupo:'Bolsa Brasil', icon:'📈', nome:'Ibovespa', valor:[painelText('ibov-ant-pts'), painelText('ibov-ant-var')].filter(v=>v && v!=='—').join(' · ') || '—', detalhe:'fechamento mensal'},
+    {grupo:'Taxas e inflação', icon:'💰', nome:'CDI', valor:painelText('cdi-mes-ant'), detalhe:'mês fechado'},
+    {grupo:'Taxas e inflação', icon:'🎯', nome:'IPCA', valor:painelText('ipca-mes-ant'), detalhe:'inflação do mês'},
+    {grupo:'Taxas e inflação', icon:'🏠', nome:'Poupança', valor:poupValor, detalhe:'rendimento mensal'},
+    {grupo:'Câmbio e bolsa Brasil', icon:'💵', nome:'Dólar PTAX', valor:painelText('dolar-ant-cot'), detalhe:'cotação de fechamento', extra:painelText('dolar-ant-var')},
+    {grupo:'Câmbio e bolsa Brasil', icon:'📈', nome:'Ibovespa', valor:painelText('ibov-ant-pts'), detalhe:'fechamento mensal', extra:painelText('ibov-ant-var')},
+    ifixFechadoRow(),
     {grupo:'Bolsa EUA', icon:'🌎', nome:'S&P 500', valor:painelText('sp-ant-var'), detalhe:'USD e BRL', us:true},
-    {grupo:'Bolsa EUA', icon:'🏛️', nome:'Dow Jones', valor:painelText('dow-ant-var'), detalhe:'USD e BRL', us:true},
     {grupo:'Bolsa EUA', icon:'💻', nome:'Nasdaq', valor:painelText('nasdaq-ant-var'), detalhe:'USD e BRL', us:true},
+    {grupo:'Bolsa EUA', icon:'🏛️', nome:'Dow Jones', valor:painelText('dow-ant-var'), detalhe:'USD e BRL', us:true},
   ];
+}
+function atualizarResumoFechamentoMes(){
+  const periodo=periodoUltimoFechado();
+  const title=document.getElementById('closedMonthLaunchTitle');
+  const sub=document.getElementById('closedMonthLaunchSub');
+  if(title) title.textContent=`Resumo do mês fechado`;
+  if(sub) sub.textContent=`${periodo} · principais indicadores`;
+  const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
+  setMini('closedMiniCdi', painelText('cdi-mes-ant'));
+  setMini('closedMiniIpca', painelText('ipca-mes-ant'));
+  setMini('closedMiniDolar', painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : painelText('dolar-ant-cot'));
+  setMini('closedMiniIbov', painelText('ibov-ant-var'));
+}
+function renderClosedMarketSheet(){
+  const periodo=periodoUltimoFechado();
+  const title=document.getElementById('closedMarketSheetTitle');
+  const note=document.getElementById('closedMarketSheetNote');
+  const list=document.getElementById('closedMarketSheetList');
+  if(title) title.textContent=`Fechamento de Mercado — ${periodo}`;
+  if(note) note.textContent=`Último mês fechado · ${periodo}`;
+  if(!list) return;
+  let lastGrupo='';
+  list.innerHTML=indicadorFechadoRows().map(r=>{
+    const grupo = r.grupo || '';
+    const section = grupo !== lastGrupo ? `<div class="closed-market-group-label">${escapeHtml(grupo)}</div>` : '';
+    lastGrupo=grupo;
+    let valueHtml='';
+    if(r.us){
+      valueHtml = `<div class="closed-market-us-lines">${quebrarUsdBrl(r.valor).map(l=>`<span class="${signClassFromText(l)}">${escapeHtml(l)}</span>`).join('')}</div>`;
+    }else if(r.extra && r.extra !== '—'){
+      const mainCls = signClassFromText(r.valor);
+      const extraCls = signClassFromText(r.extra);
+      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong><small class="${extraCls}">${escapeHtml(r.extra)}</small>`;
+    }else{
+      const mainCls = signClassFromText(r.valor);
+      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong>`;
+    }
+    return `${section}<button type="button" class="closed-market-row" aria-label="${escapeHtml(r.nome)} ${escapeHtml(r.valor)}">
+      <span class="closed-market-row-icon">${r.icon}</span>
+      <span class="closed-market-row-name">${escapeHtml(r.nome)}<small>${escapeHtml(r.detalhe||'')}</small></span>
+      <span class="closed-market-row-value">${valueHtml}</span>
+    </button>`;
+  }).join('');
+}
+function openFechamentoMesSheet(){
+  atualizarResumoFechamentoMes();
+  atualizarPainelFechadoCard();
+  renderClosedMarketSheet();
+  document.body.classList.add('closed-market-open');
+  const sheet=document.getElementById('closedMarketSheet');
+  const overlay=document.getElementById('closedMarketOverlay');
+  if(sheet) sheet.setAttribute('aria-hidden','false');
+  if(overlay) overlay.setAttribute('aria-hidden','false');
+}
+function closeFechamentoMesSheet(){
+  document.body.classList.remove('closed-market-open');
+  const sheet=document.getElementById('closedMarketSheet');
+  const overlay=document.getElementById('closedMarketOverlay');
+  if(sheet) sheet.setAttribute('aria-hidden','true');
+  if(overlay) overlay.setAttribute('aria-hidden','true');
 }
 function atualizarPainelFechadoCard(){
   const periodo=periodoUltimoFechado();
@@ -6899,13 +7099,21 @@ function atualizarPainelFechadoCard(){
   if(title) title.textContent=`Indicadores — ${periodo} fechado`;
   if(badge) badge.textContent=periodo;
   grid.innerHTML=indicadorFechadoRows().map(r=>{
-    const valHtml = r.us ? `<div class="closed-us-lines">${linhasHtmlUsdBrl(r.valor)}</div>` : `<strong>${escapeHtml(r.valor)}</strong>`;
-    return `<article class="closed-card-item closed-grupo-${escapeHtml(r.grupo.toLowerCase().replace(/\s+/g,'-'))}">
+    let valHtml='';
+    if(r.us){
+      valHtml = `<div class="closed-us-lines">${linhasHtmlUsdBrl(r.valor)}</div>`;
+    }else if(r.extra && r.extra !== '—'){
+      valHtml = `<strong class="${signClassFromText(r.valor)}">${escapeHtml(r.valor)}</strong><small class="${signClassFromText(r.extra)}">${escapeHtml(r.extra)}</small>`;
+    }else{
+      valHtml = `<strong class="${signClassFromText(r.valor)}">${escapeHtml(r.valor)}</strong>`;
+    }
+    return `<article class="closed-card-item closed-grupo-${escapeHtml((r.grupo||'geral').toLowerCase().replace(/\s+/g,'-'))}">
       <div class="closed-item-top"><span class="closed-item-icon">${r.icon}</span><span class="closed-item-name">${escapeHtml(r.nome)}</span></div>
       <div class="closed-item-value">${valHtml}</div>
       <small>${escapeHtml(r.detalhe)}</small>
     </article>`;
   }).join('');
+  atualizarResumoFechamentoMes();
 }
 function montarResumoPainelMercado(){
   const periodo=periodoUltimoFechado();
@@ -6919,6 +7127,16 @@ function montarResumoPainelMercado(){
     'Fonte: dados públicos · BCB/PTAX e fontes públicas de mercado.'
   ].filter(Boolean);
   return linhas.join('\n');
+}
+async function copiarResumoPainelMercado(){
+  atualizarPainelFechadoCard();
+  const texto=montarResumoPainelMercado();
+  try{
+    await navigator.clipboard.writeText(texto);
+    alert('Resumo do mês fechado copiado.');
+  }catch(e){
+    prompt('Copie o resumo abaixo:', texto);
+  }
 }
 function printPainelMercado(){
   atualizarPainelFechadoCard();
@@ -6939,275 +7157,76 @@ async function sharePainelMercado(){
     alert('Não foi possível abrir o WhatsApp automaticamente. Copie o resumo manualmente pelo painel.');
   }
 }
-
-
-/* ════════════════════════════════════════════════════
-   FECHAMENTO RÁPIDO DE MERCADO — Bottom Sheet
-════════════════════════════════════════════════════ */
-
-function normalizeValueForSign(txt){
-  const s=String(txt||'');
-  const m=s.match(/[-+]?\d+(?:[\.,]\d+)?/);
-  if(!m) return null;
-  const n=Number(m[0].replace('.','').replace(',','.'));
-  return Number.isFinite(n) ? n : null;
-}
-
-function signClassFromText(txt){
-  const n=normalizeValueForSign(txt);
-  if(n === null) return 'neu';
-  return n > 0 ? 'pos' : n < 0 ? 'neg' : 'neu';
-}
-
-function primeiroValorNaoVazio(...vals){
-  for(const v of vals){
-    const s=cleanTxt(v);
-    if(s && s !== '—') return s;
-  }
-  return '—';
-}
-
-function ifixFechadoRow(){
-  const indices=_dadosMercado?.indices_mercado || {};
-  const intl=_dadosMercado?.indices_internacionais || {};
-  const item = indices.ifix || indices.IFIX || intl.ifix || _dadosMercado?.ifix || _dadosMercado?.cards?.ifix || null;
-  if(!item) return {grupo:'Bolsa Brasil', icon:'🏢', nome:'IFIX', valor:'—', detalhe:'pendente no robô'};
-  const pts = item.fechamento_mes_anterior ?? item.fechamento_atual ?? item.pontos ?? item.valor;
-  const vari = item.variacao_mes_fechado ?? item.variacao_mes_anterior ?? item.variacao_mes_atual ?? item.mensal;
-  const ptsTxt = pts != null && Number.isFinite(Number(pts)) ? `${fmtK(Number(pts))} pts` : '';
-  const varTxt = vari != null && Number.isFinite(Number(vari)) ? pctTxt(Number(vari)) : '';
-  return {grupo:'Bolsa Brasil', icon:'🏢', nome:'IFIX', valor:primeiroValorNaoVazio([ptsTxt,varTxt].filter(Boolean).join(' · '), varTxt, ptsTxt), detalhe: item ? 'fundos imobiliários' : 'pendente no robô'};
-}
-
-function indicadorFechadoRows(){
-  const poupValor = primeiroValorNaoVazio(painelText('mc-poup'), painelText('poupOldMonthly'));
-  return [
-    {grupo:'Taxas e inflação', icon:'💰', nome:'CDI', valor:painelText('cdi-mes-ant'), detalhe:'mês fechado'},
-    {grupo:'Taxas e inflação', icon:'🎯', nome:'IPCA', valor:painelText('ipca-mes-ant'), detalhe:'inflação do mês'},
-    {grupo:'Taxas e inflação', icon:'🏠', nome:'Poupança', valor:poupValor, detalhe:'rendimento mensal'},
-    {grupo:'Câmbio e bolsa Brasil', icon:'💵', nome:'Dólar PTAX', valor:painelText('dolar-ant-cot'), detalhe:painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : 'cotação de fechamento', extra:painelText('dolar-ant-var')},
-    {grupo:'Câmbio e bolsa Brasil', icon:'📈', nome:'Ibovespa', valor:[painelText('ibov-ant-pts'), painelText('ibov-ant-var')].filter(v=>v && v!=='—').join(' · ') || '—', detalhe:'fechamento mensal'},
-    ifixFechadoRow(),
-    {grupo:'Bolsa EUA', icon:'🌎', nome:'S&P 500', valor:painelText('sp-ant-var'), detalhe:'USD e BRL', us:true},
-    {grupo:'Bolsa EUA', icon:'💻', nome:'Nasdaq', valor:painelText('nasdaq-ant-var'), detalhe:'USD e BRL', us:true},
-    {grupo:'Bolsa EUA', icon:'🏛️', nome:'Dow Jones', valor:painelText('dow-ant-var'), detalhe:'USD e BRL', us:true},
-  ];
-}
-
-function renderClosedMarketSheet(){
-  const periodo=periodoUltimoFechado();
-  const title=document.getElementById('closedMarketSheetTitle');
-  const note=document.getElementById('closedMarketSheetNote');
-  const list=document.getElementById('closedMarketSheetList');
-  if(title) title.textContent=`Fechamento de Mercado — ${periodo}`;
-  if(note) note.textContent=`Último mês fechado · ${periodo}`;
-  if(!list) return;
-  let lastGrupo='';
-  list.innerHTML=indicadorFechadoRows().map(r=>{
-    const grupo = r.grupo || '';
-    const section = grupo !== lastGrupo ? `<div class="closed-market-group-label">${escapeHtml(grupo)}</div>` : '';
-    lastGrupo=grupo;
-    const mainCls = r.us ? 'us' : signClassFromText(r.valor + ' ' + (r.extra||''));
-    let valueHtml='';
-    if(r.us){
-      valueHtml = `<div class="closed-market-us-lines">${quebrarUsdBrl(r.valor).map(l=>`<span class="${signClassFromText(l)}">${escapeHtml(l)}</span>`).join('')}</div>`;
-    }else if(r.nome==='Dólar PTAX'){
-      const extra = r.extra && r.extra !== '—' ? `<small class="${signClassFromText(r.extra)}">${escapeHtml(r.extra)}</small>` : '';
-      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong>${extra}`;
-    }else{
-      valueHtml = `<strong class="${mainCls}">${escapeHtml(r.valor)}</strong>`;
-    }
-    return `${section}<button type="button" class="closed-market-row" aria-label="${escapeHtml(r.nome)} ${escapeHtml(r.valor)}">
-      <span class="closed-market-row-icon">${r.icon}</span>
-      <span class="closed-market-row-name">${escapeHtml(r.nome)}<small>${escapeHtml(r.detalhe||'')}</small></span>
-      <span class="closed-market-row-value">${valueHtml}</span>
-    </button>`;
-  }).join('');
-}
-
-function openFechamentoMesSheet(){
-  atualizarResumoFechamentoMes();
-  atualizarPainelFechadoCard();
-  renderClosedMarketSheet();
-  document.body.classList.add('closed-market-open');
-  const sheet=document.getElementById('closedMarketSheet');
-  const overlay=document.getElementById('closedMarketOverlay');
-  if(sheet) sheet.setAttribute('aria-hidden','false');
-  if(overlay) overlay.setAttribute('aria-hidden','false');
-}
-
-function closeFechamentoMesSheet(){
-  document.body.classList.remove('closed-market-open');
-  const sheet=document.getElementById('closedMarketSheet');
-  const overlay=document.getElementById('closedMarketOverlay');
-  if(sheet) sheet.setAttribute('aria-hidden','true');
-  if(overlay) overlay.setAttribute('aria-hidden','true');
-}
-
-function atualizarResumoFechamentoMes(){
-  const periodo=periodoUltimoFechado();
-  const title=document.getElementById('closedMonthLaunchTitle');
-  const sub=document.getElementById('closedMonthLaunchSub');
-  if(title) title.textContent=`Resumo do mês fechado`;
-  if(sub) sub.textContent=`${periodo} · principais indicadores`;
-  const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
-  setMini('closedMiniCdi', painelText('cdi-mes-ant'));
-  setMini('closedMiniIpca', painelText('ipca-mes-ant'));
-  setMini('closedMiniDolar', painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : painelText('dolar-ant-cot'));
-  setMini('closedMiniIbov', painelText('ibov-ant-var'));
-}
-
-function copiarResumoPainelMercado(){
-  atualizarPainelFechadoCard();
-  const texto=montarResumoPainelMercado();
-  try{
-    await navigator.clipboard.writeText(texto);
-    alert('Resumo do mês fechado copiado.');
-  }catch(e){
-    prompt('Copie o resumo abaixo:', texto);
-  }
-}
-
-
-/* ════════════════════════════════════════════════════════
-   VISÃO GERAL DO CATÁLOGO — preenchida após carregarDados()
-════════════════════════════════════════════════════════ */
-function irParaFundos(){
-  try{ document.getElementById('sec-fundos').scrollIntoView({behavior:'smooth'}); }catch(e){}
-}
-
-function atualizarVisaoGeral(){
-  try{
-  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
-
-  // KPIs do catálogo
-  const total = Array.isArray(allRows) ? allRows.length : 0;
-  const semDados = Array.isArray(allRows) ? allRows.filter(r => !temDados(r)).length : 0;
-  const ativos = total - semDados;
-  set('vgTotalFundos', total || '—');
-  set('vgTotalSub', total ? `${ativos} ativos · ${semDados} pipeline` : 'carregando...');
-
-  // PL total
-  let pl = 0;
-  if(Array.isArray(allRows)) allRows.forEach(r => { const p = toNum(r['PL (milhoes R$)']); if(p) pl += p; });
-  set('vgPLTotal', pl > 0 ? fmtPLBilhoes(pl) : '—');
-  set('vgPLSub', pl > 0 ? fmtPLMilhoes(pl).split('·')[0].trim() : 'carregando...');
-
-  // Categorias
-  const cats = Array.isArray(allRows) ? new Set(allRows.map(r => r['Categoria']||'').filter(Boolean)) : new Set();
-  set('vgCats', cats.size || '—');
-
-  // Melhor / Pior 12M
-  let best = -Infinity, worst = Infinity, bestName = '', worstName = '', bestVal = '—', worstVal = '—';
-  if(Array.isArray(allRows)) allRows.forEach(r => {
-    const m = toNum(r['Acum. 12M (%)']);
-    if(m === null) return;
-    if(m > best){ best = m; bestName = r['Fundo']||''; bestVal = r['Acum. 12M (%)']; }
-    if(m < worst){ worst = m; worstName = r['Fundo']||''; worstVal = r['Acum. 12M (%)']; }
-  });
-  set('vgMelhor', best > -Infinity ? `+${bestVal}%` : '—');
-  set('vgMelhorNome', kpiShortFundName(bestName));
-  set('vgPior', worst < Infinity ? `${worstVal}%` : '—');
-  set('vgPiorNome', kpiShortFundName(worstName));
-
-  // Lista de categorias com PL e qtd
-  const catList = document.getElementById('vgCatList');
-  if(catList && kpisDashboard?.categorias){
-    const CAT_LABEL = {
-      'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'Renda Fixa',
-      'RENDA FIXA REFERENCIADO':'RF Ref. DI','RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
-      'MULTIMERCADO':'Multimercado','CAMBIAL':'Cambial',
-      'ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP-FGTS'
-    };
-    const rows = Object.entries(kpisDashboard.categorias)
-      .sort((a,b) => (b[1].pl_total||0) - (a[1].pl_total||0));
-    catList.innerHTML = rows.map(([cat, d]) => {
-      const pl = d.pl_total ? 'R$ ' + (d.pl_total >= 1000
-        ? (d.pl_total/1000).toFixed(1)+'bi'
-        : Math.round(d.pl_total)+'mi') : '—';
-      const rent = d.rent_12m_ponderada != null
-        ? (d.rent_12m_ponderada > 0 ? '+' : '') + Number(d.rent_12m_ponderada).toFixed(2).replace('.',',') + '%'
-        : '—';
-      const rentCls = d.rent_12m_ponderada > 0 ? 'pos' : d.rent_12m_ponderada < 0 ? 'neg' : '';
-      return `<div class="vg-cat-row">
-        <span class="vg-cat-nome">${CAT_LABEL[cat]||cat}</span>
-        <span class="vg-cat-qtd">${d.qtd_ativos||'—'} fundos</span>
-        <span class="vg-cat-pl">${pl}</span>
-        <span class="vg-cat-rent ${rentCls}">${rent}</span>
-      </div>`;
-    }).join('');
-  }
-    }catch(e){ console.warn("[visaoGeral] erro:", e); }
-}
-
-/* ════════════════════════════════════════════════════════
-   ESTATÍSTICAS PTAX 12M — calculadas do histórico em memória
-════════════════════════════════════════════════════════ */
-function calcularEstatisticasPTAX(){
-  if(!_ptaxHistorico || !_ptaxHistorico.length) return;
-
-  const hoje = new Date();
-  const limite12m = new Date(hoje);
-  limite12m.setMonth(hoje.getMonth() - 12);
-
-  // Filtrar últimos 12 meses
-  const ultimos12 = _ptaxHistorico.filter(item => {
-    const dt = new Date(item.dataHoraCotacao);
-    return dt >= limite12m;
-  });
-  if(!ultimos12.length) return;
-
-  const vals = ultimos12.map(d => parseFloat(d.cotacaoVenda)).filter(v => !isNaN(v));
-  if(!vals.length) return;
-
-  const atual = vals[vals.length - 1];
-  const maxVal = Math.max(...vals);
-  const minVal = Math.min(...vals);
-  const media  = vals.reduce((a,b) => a+b, 0) / vals.length;
-
-  // Encontrar datas do max e min
-  const itemMax = ultimos12.find(d => parseFloat(d.cotacaoVenda) === maxVal);
-  const itemMin = ultimos12.find(d => parseFloat(d.cotacaoVenda) === minVal);
-
-  const fmtRef = item => {
-    if(!item) return '—';
-    if(item._mes_label) return item._mes_label;
-    const dt = new Date(item.dataHoraCotacao);
-    return MESES_PT[dt.getMonth()] + '/' + dt.getFullYear();
-  };
-
-  const set = (id, v) => { const el = document.getElementById(id); if(el) el.textContent = v; };
-  set('ptaxStatAtual',   brl(atual));
-  set('ptaxStatMax',     brl(maxVal));
-  set('ptaxStatMaxRef',  fmtRef(itemMax));
-  set('ptaxStatMin',     brl(minVal));
-  set('ptaxStatMinRef',  fmtRef(itemMin));
-  set('ptaxStatMedia',   brl(+media.toFixed(4)));
-}
-
 </script>
 
 
+<script id="ELTAUM_TABS_FORCE_20260602_v2">
+/* Patch final — garante ação dos filtros IPCA/Selic mesmo se algum listener anterior falhar.
+   Build: ELTAUM_TABS_FORCE_20260602_v2 */
+(function(){
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v2';
+  window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
+  console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
-<div class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()" aria-hidden="true"></div>
-  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-labelledby="closedMarketSheetTitle" aria-hidden="true">
-    <div class="closed-market-handle" aria-hidden="true"></div>
-    <div class="closed-market-sheet-head">
-      <div class="closed-market-sheet-icon">📊</div>
-      <div>
-        <span class="closed-market-kicker">Consulta rápida</span>
-        <h3 id="closedMarketSheetTitle">Fechamento de Mercado</h3>
-      </div>
-      <button type="button" class="closed-market-close" onclick="closeFechamentoMesSheet()" aria-label="Fechar resumo">×</button>
-    </div>
-    <div class="closed-market-section-note" id="closedMarketSheetNote">Último mês fechado · dados públicos</div>
-    <div class="closed-market-list" id="closedMarketSheetList"></div>
-    <div class="closed-market-actions">
-      <button type="button" onclick="copiarResumoPainelMercado()">📋 Copiar resumo</button>
-      <button type="button" onclick="sharePainelMercado()">📲 WhatsApp</button>
-      <button type="button" onclick="printPainelMercado()">🖨️ Print</button>
-    </div>
-  </aside>
+  function tabsDoMesmoGrafico(btn){
+    const chart = btn && btn.dataset ? btn.dataset.chart : '';
+    if(!chart) return [];
+    return Array.from(document.querySelectorAll('.evolution-section .chart-tab[data-chart="' + chart + '"]'));
+  }
+
+  function marcarBotaoAtivo(btn){
+    tabsDoMesmoGrafico(btn).forEach(function(tab){
+      const ativo = tab === btn;
+      tab.classList.toggle('active', ativo);
+      tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+      tab.setAttribute('type', 'button');
+    });
+  }
+
+  function executarTroca(btn){
+    if(!btn) return;
+    marcarBotaoAtivo(btn);
+
+    if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
+      try{
+        window.alterarPeriodoGraficoEvolucao(btn);
+        return;
+      }catch(err){
+        console.warn('[Catálogo CAIXA] Falha no handler principal dos filtros. Tentando fallback.', err);
+      }
+    }
+
+    // Fallback mínimo: se o handler principal não estiver disponível,
+    // pelo menos deixa claro no console que o clique chegou ao navegador.
+    console.warn('[Catálogo CAIXA] Clique capturado, mas alterarPeriodoGraficoEvolucao não está disponível.');
+  }
+
+  function prepararBotoes(){
+    document.querySelectorAll('.evolution-section .chart-tab[data-chart]').forEach(function(btn){
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
+      btn.style.pointerEvents = 'auto';
+    });
+  }
+
+  prepararBotoes();
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', prepararBotoes, {once:true});
+  }else{
+    setTimeout(prepararBotoes, 0);
+  }
+
+  // Captura no início do fluxo do clique para evitar que outro listener impeça a troca.
+  document.addEventListener('click', function(ev){
+    const target = ev.target;
+    const btn = target && target.closest ? target.closest('.evolution-section .chart-tab[data-chart]') : null;
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    executarTroca(btn);
+  }, true);
+})();
+</script>
 
 </body>
 </html>
