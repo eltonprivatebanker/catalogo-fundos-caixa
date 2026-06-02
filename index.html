@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v5"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v6"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260602-tabs-force-v3"/>
+<link rel="stylesheet" href="style.css?v=20260602-tabs-force-v6"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -7277,13 +7277,13 @@ async function sharePainelMercado(){
 </script>
 
 
-<script id="ELTAUM_TABS_FORCE_20260602_v5">
+<script id="ELTAUM_TABS_FORCE_20260602_v6">
 /* Patch final — controle próprio dos botões IPCA/Selic.
-   Build: ELTAUM_TABS_FORCE_20260602_v5
+   Build: ELTAUM_TABS_FORCE_20260602_v6
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v5';
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v6';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -7771,6 +7771,141 @@ async function sharePainelMercado(){
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar, {once:true});
   else instalar();
+})();
+</script>
+
+
+<script id="ELTAUM_WINDOW_HITTEST_TABS_FORCE_20260602_v6">
+/* Patch v6 — captura no window antes dos listeners antigos e usa hit-test por coordenada.
+   Objetivo: fazer os botões responderem mesmo se algum elemento/camada estiver interceptando o target. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_WINDOW_HITTEST_TABS_FORCE_20260602_v6';
+  window.__ELTAUM_WINDOW_HITTEST_TABS_FORCE_BUILD__ = BUILD;
+
+  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+
+  function eventoXY(ev){
+    if(ev && ev.touches && ev.touches[0]) return {x: ev.touches[0].clientX, y: ev.touches[0].clientY};
+    if(ev && ev.changedTouches && ev.changedTouches[0]) return {x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY};
+    if(ev && Number.isFinite(ev.clientX) && Number.isFinite(ev.clientY)) return {x: ev.clientX, y: ev.clientY};
+    return null;
+  }
+
+  function visivel(el){
+    if(!el) return false;
+    const st = getComputedStyle(el);
+    if(st.display === 'none' || st.visibility === 'hidden' || Number(st.opacity) === 0) return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  }
+
+  function dentro(el, pt){
+    if(!el || !pt || !visivel(el)) return false;
+    const r = el.getBoundingClientRect();
+    return pt.x >= r.left && pt.x <= r.right && pt.y >= r.top && pt.y <= r.bottom;
+  }
+
+  function tabDireta(ev){
+    const t = ev && ev.target;
+    if(!t || !t.closest) return null;
+    return t.closest('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
+  }
+
+  function tabPorCoordenada(ev){
+    const pt = eventoXY(ev);
+    if(!pt) return null;
+    const tabs = qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
+    // Inverte a ordem para privilegiar o último elemento pintado no DOM quando há sobreposição.
+    for(let i = tabs.length - 1; i >= 0; i--){
+      if(dentro(tabs[i], pt)) return tabs[i];
+    }
+    return null;
+  }
+
+  function prepararTab(tab){
+    if(!tab) return;
+    tab.setAttribute('type', 'button');
+    tab.style.pointerEvents = 'auto';
+    tab.style.cursor = 'pointer';
+    tab.style.touchAction = 'manipulation';
+    if(getComputedStyle(tab).position === 'static') tab.style.position = 'relative';
+    tab.style.zIndex = '999';
+  }
+
+  function prepararTodos(){
+    qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]').forEach(prepararTab);
+    qsa('.chart-tabs, .indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
+      el.style.pointerEvents = 'auto';
+      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
+      el.style.zIndex = '998';
+    });
+  }
+
+  function ativarGrupo(selector, ativo){
+    qsa(selector).forEach(btn => {
+      const isActive = btn === ativo;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
+  function acionarGrafico(btn){
+    prepararTab(btn);
+    const chart = btn.dataset.chart;
+    if(!chart) return false;
+    ativarGrupo('.chart-tab[data-chart="' + chart + '"]', btn);
+    if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
+      window.alterarPeriodoGraficoEvolucao(btn);
+      return true;
+    }
+    console.warn('[' + BUILD + '] alterarPeriodoGraficoEvolucao não encontrada.');
+    return false;
+  }
+
+  function acionarIndicador(btn){
+    prepararTab(btn);
+    const meses = Number(btn.dataset.months);
+    if(![12,24,36].includes(meses)) return false;
+    ativarGrupo('.indic-tab[data-months]', btn);
+    try { activePeriodTab = meses; } catch(e) { window.activePeriodTab = meses; }
+    document.documentElement.dataset.indicPeriod = String(meses);
+    if(typeof window.atualizarTabelaIndicadores === 'function'){
+      window.atualizarTabelaIndicadores();
+      return true;
+    }
+    console.warn('[' + BUILD + '] atualizarTabelaIndicadores não encontrada.');
+    return false;
+  }
+
+  function capturar(ev){
+    const btn = tabDireta(ev) || tabPorCoordenada(ev);
+    if(!btn) return;
+
+    let ok = false;
+    if(btn.matches('.chart-tab[data-chart][data-range]')) ok = acionarGrafico(btn);
+    if(btn.matches('.indic-tab[data-months]')) ok = acionarIndicador(btn);
+
+    if(ok){
+      ev.preventDefault();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      else if(typeof ev.stopPropagation === 'function') ev.stopPropagation();
+      console.info('[' + BUILD + '] botão acionado:', btn.textContent.trim(), Object.assign({}, btn.dataset));
+    }
+  }
+
+  prepararTodos();
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prepararTodos, {once:true});
+  setTimeout(prepararTodos, 300);
+  setTimeout(prepararTodos, 1200);
+  setTimeout(prepararTodos, 3000);
+
+  // Window capture roda antes dos listeners em document; isso contorna stopImmediatePropagation de patches anteriores.
+  ['pointerdown','pointerup','click','touchend'].forEach(tipo => {
+    window.addEventListener(tipo, capturar, true);
+  });
+
+  console.info('[' + BUILD + '] instalado.');
 })();
 </script>
 
