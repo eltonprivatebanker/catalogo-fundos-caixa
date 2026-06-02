@@ -13021,3 +13021,158 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opac
   .closed-market-row-value strong{ font-size:.98rem; }
   .closed-market-actions{ grid-template-columns:1fr; }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v5 — Resumo do mês fechado mais discreto no mobile
+   Objetivo: reduzir peso visual, remover "cartão gigante" e integrar com a plataforma.
+════════════════════════════════════════════════════ */
+
+.closed-month-launch{
+  position:relative;
+}
+
+/* Desktop: mantém card horizontal, mas com visual mais sóbrio */
+.closed-month-launch{
+  border:1px solid rgba(231,185,95,.24);
+  border-left:3px solid rgba(231,185,95,.62);
+  background:
+    linear-gradient(90deg, rgba(231,185,95,.055), rgba(18,23,42,.76) 30%, rgba(9,12,23,.94));
+  box-shadow:0 10px 26px rgba(0,0,0,.16), inset 0 0 0 1px rgba(255,255,255,.025);
+}
+
+.closed-month-launch-icon{
+  background:rgba(15,22,42,.84);
+  border-color:rgba(231,185,95,.20);
+}
+
+.closed-month-launch-action{
+  background:rgba(231,185,95,.045);
+  border-color:rgba(231,185,95,.22);
+}
+
+/* Mobile: vira uma faixa compacta, sem cara de bloco pesado */
+@media(max-width:700px){
+  .closed-month-launch{
+    margin:8px 0 14px;
+    padding:12px 12px 13px;
+    border-radius:18px;
+    border:1px solid rgba(231,185,95,.22);
+    border-left:3px solid rgba(231,185,95,.70);
+    display:grid;
+    grid-template-columns:32px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "icon copy action"
+      "mini mini mini";
+    align-items:center;
+    column-gap:10px;
+    row-gap:9px;
+    background:
+      linear-gradient(135deg, rgba(231,185,95,.055), rgba(15,20,38,.86) 42%, rgba(7,10,20,.95));
+    box-shadow:0 8px 22px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.025);
+  }
+
+  .closed-month-launch-icon{
+    grid-area:icon;
+    width:32px;
+    height:32px;
+    border-radius:11px;
+    font-size:1rem;
+    align-self:start;
+  }
+
+  .closed-month-launch-copy{
+    grid-area:copy;
+    min-width:0;
+    display:block;
+  }
+
+  .closed-month-launch-copy strong{
+    font-size:.98rem;
+    line-height:1.12;
+    letter-spacing:0;
+    color:#f2cf82;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .closed-month-launch-copy small{
+    font-size:.72rem;
+    line-height:1.15;
+    color:#aeb8d4;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .closed-month-launch-action{
+    grid-area:action;
+    align-self:start;
+    justify-self:end;
+    margin:0;
+    padding:6px 9px;
+    border-radius:999px;
+    font-size:.72rem;
+    line-height:1;
+    background:rgba(231,185,95,.055);
+    border:1px solid rgba(231,185,95,.24);
+    color:#f2cf82;
+  }
+
+  .closed-month-mini{
+    grid-area:mini;
+    display:flex;
+    flex-wrap:nowrap;
+    gap:6px;
+    overflow-x:auto;
+    overflow-y:hidden;
+    margin-top:0;
+    padding:1px 2px 2px;
+    scrollbar-width:none;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  .closed-month-mini::-webkit-scrollbar{
+    display:none;
+  }
+
+  .closed-month-mini span{
+    min-width:max-content;
+    justify-content:flex-start;
+    gap:5px;
+    padding:5px 8px;
+    border-radius:999px;
+    background:rgba(5,8,18,.48);
+    border:1px solid rgba(255,255,255,.07);
+    font-size:.68rem;
+    line-height:1;
+  }
+
+  .closed-month-mini b{
+    color:#9faad0;
+    font-weight:900;
+  }
+
+  .closed-month-mini em{
+    font-weight:950;
+  }
+}
+
+/* Mobile bem estreito: reduz ainda mais o botão de ação */
+@media(max-width:390px){
+  .closed-month-launch{
+    grid-template-columns:30px minmax(0, 1fr) auto;
+    column-gap:8px;
+    padding:11px 10px 12px;
+  }
+  .closed-month-launch-action{
+    font-size:0;
+    padding:7px 9px;
+  }
+  .closed-month-launch-action::after{
+    content:"Ver ›";
+    font-size:.72rem;
+  }
+}
+
