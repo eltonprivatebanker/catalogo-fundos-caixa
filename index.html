@@ -940,9 +940,9 @@
       <div class="chart-card-header">
         <div><div class="chart-card-title">🎯 IPCA mensal</div><div class="chart-card-sub">Variação oficial mês a mês</div></div>
         <div class="chart-tabs">
-          <button class="chart-tab active" data-chart="ipca" data-range="24">24M</button>
-          <button class="chart-tab" data-chart="ipca" data-range="60">5A</button>
-          <button class="chart-tab" data-chart="ipca" data-range="120">10A</button>
+          <button class="chart-tab active" data-chart="ipca" data-range="24" type="button" aria-pressed="true">24M</button>
+          <button class="chart-tab" data-chart="ipca" data-range="60" type="button" aria-pressed="false">5A</button>
+          <button class="chart-tab" data-chart="ipca" data-range="120" type="button" aria-pressed="false">10A</button>
         </div>
       </div>
       <div class="chart-reading" id="evoCardIpcaNote">Último dado: aguardando atualização.</div>
@@ -952,9 +952,9 @@
       <div class="chart-card-header">
         <div><div class="chart-card-title">🏦 Selic histórica</div><div class="chart-card-sub">Histórico COPOM desde 1999</div></div>
         <div class="chart-tabs">
-          <button class="chart-tab" data-chart="selic" data-range="12">1A</button>
-          <button class="chart-tab" data-chart="selic" data-range="35">5A</button>
-          <button class="chart-tab active" data-chart="selic" data-range="999">Histórico</button>
+          <button class="chart-tab" data-chart="selic" data-range="12" type="button" aria-pressed="false">1A</button>
+          <button class="chart-tab" data-chart="selic" data-range="60" type="button" aria-pressed="false">5A</button>
+          <button class="chart-tab active" data-chart="selic" data-range="999" type="button" aria-pressed="true">Histórico</button>
         </div>
       </div>
       <div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
@@ -4526,13 +4526,107 @@ const CHART_DEFAULTS={
   }
 };
 
+function normalizarHistoricoIPCA(historico){
+  return (historico || [])
+    .map((d, idx) => {
+      const dataRaw = d.Data || d.data || d.data_ref || d.DataReferencia || d.mes_ref || d.label || '';
+      let dt = null;
+
+      if(dataRaw){
+        if(typeof dataRaw === 'string' && dataRaw.includes('/')){
+          const p = dataRaw.split('/');
+          if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+          else if(p.length === 2) dt = new Date(`${p[1]}-${p[0]}-01T00:00:00`);
+        }else{
+          dt = new Date(dataRaw);
+        }
+      }
+
+      const valorRaw = d.valor ?? d.Valor ?? d.value ?? d.ipca ?? d.IPCA ?? d.variacao ?? d.Variacao ?? null;
+      const valor = parseFloat(String(valorRaw).replace(',','.'));
+      const label = d.label || (dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}` : `p${idx+1}`);
+
+      return {
+        ...d,
+        label,
+        valor,
+        _dt: dt,
+        _ts: dt && !isNaN(dt.getTime()) ? dt.getTime() : idx,
+      };
+    })
+    .filter(d => Number.isFinite(d.valor))
+    .sort((a,b) => a._ts - b._ts);
+}
+
+async function carregarIPCAHistoricoAmpliado(historicoAtual){
+  const atual = normalizarHistoricoIPCA(historicoAtual);
+  if(atual.length >= 120) return atual;
+
+  const extrairArray = obj => {
+    if(Array.isArray(obj)) return obj;
+    if(Array.isArray(obj?.conteudo)) return obj.conteudo;
+    if(Array.isArray(obj?.historico)) return obj.historico;
+    if(Array.isArray(obj?.dados)) return obj.dados;
+    if(Array.isArray(obj?.value)) return obj.value;
+    return [];
+  };
+
+  // 1) Tenta primeiro arquivos locais/estáticos, caso o robô já tenha salvo a série completa no repositório.
+  const arquivosLocais = [
+    'ipca_historico.json',
+    'historico_ipca.json',
+    'serie_ipca_433.json',
+    'ipca_serie_433.json',
+    'historico ipca bcb.json'
+  ];
+
+  for(const nome of arquivosLocais){
+    try{
+      const js = await carregarJsonLocal(nome);
+      const arr = normalizarHistoricoIPCA(extrairArray(js));
+      if(arr.length > atual.length){
+        console.info(`[IPCA] ${arr.length} registros carregados de ${nome}.`);
+        return arr;
+      }
+    }catch(e){
+      console.warn(`[IPCA] Falha ao tentar ${nome}:`, e);
+    }
+  }
+
+  // 2) Fallback público do BCB/SGS 433: libera os botões 5A e 10A mesmo quando o JSON principal traz só 24M.
+  try{
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 8000);
+    const hoje = new Date();
+    const iniAno = hoje.getFullYear() - 10;
+    const dataInicial = `01/01/${iniAno}`;
+    const dataFinal = `${String(hoje.getDate()).padStart(2,'0')}/${String(hoje.getMonth()+1).padStart(2,'0')}/${hoje.getFullYear()}`;
+    const url = `https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados?formato=json&dataInicial=${encodeURIComponent(dataInicial)}&dataFinal=${encodeURIComponent(dataFinal)}`;
+    const r = await fetch(url, { signal: controller.signal });
+    clearTimeout(timer);
+    if(!r.ok) throw new Error(`HTTP ${r.status}`);
+    const arr = normalizarHistoricoIPCA(await r.json());
+    if(arr.length > atual.length){
+      console.info(`[IPCA] ${arr.length} registros carregados diretamente da série SGS 433 do BCB.`);
+      return arr;
+    }
+  }catch(e){
+    console.warn('[IPCA] Não foi possível ampliar o histórico pela série SGS 433:', e);
+  }
+
+  return atual;
+}
+
 function buildChartIpca(historico,meses){
-  const slice=historico.slice(-meses);
+  const base = normalizarHistoricoIPCA(historico);
+  const slice=base.slice(-meses);
   const labels=slice.map(d=>d.label);
   const values=slice.map(d=>d.valor);
   const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');
   if(_chartIpca) _chartIpca.destroy();
   const ctx=document.getElementById('chartIpca')?.getContext('2d'); if(!ctx) return;
+  const emptyMsg = ctx.canvas?.parentElement?.querySelector('.chart-empty-msg');
+  if(emptyMsg) emptyMsg.remove();
   _chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},
     options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});
 }
@@ -4566,7 +4660,17 @@ function buildChartSelic(historico,qtd){
     .filter(d=>d._ano>=1999 && !isNaN(d._valor) && d._valor>=0 && d._ts>0);
 
   filtrado.sort((a,b)=>a._ts-b._ts);
-  const slice=qtd>=999?filtrado:filtrado.slice(-qtd);
+
+  // Nos botões da Selic, data-range passa a representar meses de janela: 12 = 1A, 60 = 5A, 999 = histórico completo.
+  let slice = filtrado;
+  if(qtd < 999 && filtrado.length){
+    const ultimo = filtrado[filtrado.length - 1]._dt;
+    const limite = new Date(ultimo);
+    limite.setMonth(limite.getMonth() - qtd);
+    slice = filtrado.filter(d => d._dt >= limite);
+    if(slice.length < 2) slice = filtrado.slice(-Math.max(2, Math.min(filtrado.length, qtd)));
+  }
+
   const labels=slice.map(d=>`${String(d._dt.getMonth()+1).padStart(2,'0')}/${d._dt.getFullYear()}`);
   const values=slice.map(d=>d._valor);
 
@@ -4773,7 +4877,10 @@ function bindEvolucaoTabs(){
 async function inicializarGraficos(d){
   _dadosMercado=d;
 
-  const hist=d?.cards?.ipca?.historico||[];
+  const hist=await carregarIPCAHistoricoAmpliado(d?.cards?.ipca?.historico||[]);
+  if(!_dadosMercado.cards) _dadosMercado.cards = {};
+  if(!_dadosMercado.cards.ipca) _dadosMercado.cards.ipca = {};
+  _dadosMercado.cards.ipca.historico = hist;
 
   // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
   let selic=d?.historico_selic || d?.cards?.selic_meta?.historico || [];
@@ -4809,18 +4916,52 @@ async function inicializarGraficos(d){
   bindEvolucaoTabs();
   selecionarGraficoEvolucao('ipca');
 
+  bindEvolucaoChartPeriodTabs();
+}
+
+function alterarPeriodoGraficoEvolucao(btn){
+  if(!btn) return;
+  const chart = btn.dataset.chart;
+  const range = parseInt(btn.dataset.range, 10);
+  if(!chart || !Number.isFinite(range)) return;
+
+  document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>{
+    const ativo = b === btn;
+    b.classList.toggle('active', ativo);
+    b.setAttribute('aria-pressed', String(ativo));
+  });
+
+  if(chart === 'ipca'){
+    const hist = _dadosMercado?.cards?.ipca?.historico || [];
+    if(hist.length) buildChartIpca(hist, range);
+    else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
+  }
+
+  if(chart === 'selic'){
+    const histSelic = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
+    if(histSelic.length) buildChartSelic(histSelic, range);
+    else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
+  }
+
+  setTimeout(()=>{
+    if(chart === 'ipca' && _chartIpca && typeof _chartIpca.resize === 'function') _chartIpca.resize();
+    if(chart === 'selic' && _chartSelic && typeof _chartSelic.resize === 'function') _chartSelic.resize();
+  }, 40);
+}
+
+function bindEvolucaoChartPeriodTabs(){
   document.querySelectorAll('.chart-tab[data-chart]').forEach(btn=>{
-    if(btn.dataset.bound==='1') return;
-    btn.dataset.bound='1';
-    btn.addEventListener('click',()=>{
-      const chart=btn.dataset.chart; const range=parseInt(btn.dataset.range);
-      document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>b.classList.remove('active'));
-      btn.classList.add('active');
-      if(chart==='ipca') buildChartIpca(_dadosMercado?.cards?.ipca?.historico||[],range);
-      if(chart==='selic') buildChartSelic(_dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [],range);
-    });
+    btn.setAttribute('type','button');
+    btn.setAttribute('aria-pressed', String(btn.classList.contains('active')));
   });
 }
+
+document.addEventListener('click', e=>{
+  const btn = e.target.closest('.chart-tab[data-chart]');
+  if(!btn) return;
+  e.preventDefault();
+  alterarPeriodoGraficoEvolucao(btn);
+});
 
 /* ════════════════════════════════════════════════════
    PTAX MODAL
