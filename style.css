@@ -13304,3 +13304,312 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opac
   }
 }
 
+
+
+
+/* =========================================================
+   PATCH v7 — Resumo do mês + PTAX mais compacto no mobile
+   Objetivos:
+   1) Remover sobreposição do botão "Ver resumo"
+   2) Fazer os mini-indicadores caberem sem cortar Dólar/Ibov
+   3) Reduzir a altura visual do bloco Dólar PTAX no celular
+========================================================= */
+
+@media (max-width: 700px){
+  .market-section-head,
+  .market-title-left{
+    min-width: 0;
+  }
+
+  .closed-month-launch{
+    display: grid !important;
+    grid-template-columns: 40px minmax(0, 1fr) !important;
+    grid-template-areas:
+      "icon copy"
+      "mini mini"
+      "action action";
+    align-items: start !important;
+    column-gap: 12px !important;
+    row-gap: 10px !important;
+    padding: 14px 14px 14px !important;
+    overflow: hidden;
+  }
+
+  .closed-month-launch-icon{
+    grid-area: icon;
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 14px !important;
+    align-self: start !important;
+    justify-self: start !important;
+  }
+
+  .closed-month-launch-copy{
+    grid-area: copy;
+    min-width: 0 !important;
+    width: 100%;
+    padding-right: 0 !important;
+  }
+
+  .closed-month-launch-copy strong{
+    display: block;
+    font-size: clamp(1rem, 5vw, 1.16rem) !important;
+    line-height: 1.08 !important;
+    max-width: 100%;
+    margin-bottom: 3px;
+  }
+
+  .closed-month-launch-copy small{
+    display: block;
+    font-size: .73rem !important;
+    line-height: 1.18 !important;
+    max-width: 100%;
+    margin-top: 0;
+  }
+
+  .closed-month-mini{
+    grid-area: mini;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    overflow: visible !important;
+    margin-top: 2px;
+  }
+
+  .closed-month-mini span{
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 8px 10px !important;
+    height: 36px;
+    border-radius: 999px;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .closed-month-mini b,
+  .closed-month-mini em{
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  .closed-month-mini b{
+    flex: 0 0 auto;
+    font-size: .70rem !important;
+  }
+
+  .closed-month-mini em{
+    flex: 0 1 auto;
+    font-size: .83rem !important;
+    font-weight: 700;
+    text-align: right;
+  }
+
+  .closed-month-launch-action{
+    grid-area: action;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    justify-self: stretch !important;
+    width: 100% !important;
+    min-height: 40px !important;
+    padding: 10px 12px !important;
+    text-align: center !important;
+    font-size: .76rem !important;
+    line-height: 1 !important;
+  }
+
+  .closed-month-launch-action::after{
+    content: '';
+  }
+
+  #sec-dolar .section-title h2{
+    font-size: 1.8rem !important;
+  }
+
+  .dolar-mobile-priority .dolar-compact-card{
+    border-radius: 12px !important;
+  }
+
+  .dolar-mobile-priority .dolar-compact-top{
+    padding: 12px 12px 10px !important;
+    gap: 10px !important;
+  }
+
+  .dolar-mobile-priority .dolar-main-kpi{
+    padding: 12px 12px 10px !important;
+    border-radius: 14px !important;
+  }
+
+  .dolar-mobile-priority .dolar-main-kpi .dolar-kpi-label{
+    font-size: .60rem !important;
+    letter-spacing: .14em;
+    margin-bottom: 6px;
+  }
+
+  .dolar-mobile-priority .dolar-main-kpi strong{
+    font-size: 2.2rem !important;
+    line-height: .96 !important;
+  }
+
+  .dolar-mobile-priority .dolar-main-kpi small{
+    font-size: .68rem !important;
+    line-height: 1.2 !important;
+    margin-top: 4px !important;
+  }
+
+  .dolar-mobile-priority .dolar-kpi-row{
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+  }
+
+  .dolar-mobile-priority .dolar-mini-kpi{
+    padding: 10px 10px !important;
+    min-height: 90px !important;
+    border-radius: 12px !important;
+  }
+
+  .dolar-mobile-priority .dolar-mini-kpi span{
+    font-size: .58rem !important;
+    line-height: 1 !important;
+    margin-bottom: 6px !important;
+  }
+
+  .dolar-mobile-priority .dolar-mini-kpi strong{
+    font-size: 1.02rem !important;
+    line-height: 1.05 !important;
+  }
+
+  .dolar-mobile-priority .dolar-mini-kpi small{
+    font-size: .60rem !important;
+    line-height: 1.15 !important;
+    margin-top: 3px;
+  }
+
+  .dolar-mobile-priority .dolar-compact-footer{
+    padding: 10px 12px 12px !important;
+    gap: 10px !important;
+  }
+
+  .dolar-mobile-priority .dolar-month-strip-head{
+    margin-bottom: 8px !important;
+  }
+
+  .dolar-mobile-priority .dolar-month-strip-title{
+    font-size: .88rem !important;
+    letter-spacing: .16em !important;
+  }
+
+  .dolar-mobile-priority .dolar-months{
+    gap: 8px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .dolar-mobile-priority .dolar-month-item{
+    min-width: 132px !important;
+    padding: 9px 9px !important;
+    border-radius: 12px !important;
+  }
+
+  .dolar-mobile-priority .dolar-month-label{
+    font-size: .58rem !important;
+  }
+
+  .dolar-mobile-priority .dolar-month-val{
+    font-size: 1.02rem !important;
+    line-height: 1 !important;
+  }
+
+  .dolar-mobile-priority .dolar-month-var{
+    font-size: .72rem !important;
+  }
+
+  .dolar-mobile-priority .dolar-compact-source{
+    gap: 8px !important;
+    padding: 8px 10px !important;
+    font-size: .58rem !important;
+    line-height: 1.32 !important;
+  }
+
+  .dolar-mobile-priority .dolar-compact-source .source-label{
+    font-size: .56rem !important;
+    padding: 5px 8px !important;
+  }
+
+  .dolar-mobile-priority .dolar-compact-source span#dolar-day-src{
+    font-size: .58rem !important;
+  }
+
+  .dolar-mobile-priority .dolar-compact-source a,
+  .dolar-mobile-priority .dolar-source-link{
+    display: inline-flex !important;
+    width: 100% !important;
+    justify-content: center !important;
+    padding: 10px 12px !important;
+    font-size: .72rem !important;
+  }
+}
+
+@media (max-width: 390px){
+  .closed-month-launch{
+    padding: 12px 12px 13px !important;
+    column-gap: 10px !important;
+    row-gap: 9px !important;
+  }
+
+  .closed-month-launch-copy strong{
+    font-size: .95rem !important;
+  }
+
+  .closed-month-launch-copy small{
+    font-size: .68rem !important;
+  }
+
+  .closed-month-mini{
+    gap: 6px !important;
+  }
+
+  .closed-month-mini span{
+    padding: 7px 8px !important;
+    height: 34px !important;
+  }
+
+  .closed-month-mini b{
+    font-size: .66rem !important;
+  }
+
+  .closed-month-mini em{
+    font-size: .78rem !important;
+  }
+
+  .closed-month-launch-action{
+    min-height: 38px !important;
+    padding: 9px 10px !important;
+    font-size: .72rem !important;
+  }
+
+  .dolar-mobile-priority .dolar-main-kpi strong{
+    font-size: 2.02rem !important;
+  }
+
+  .dolar-mobile-priority .dolar-mini-kpi{
+    min-height: 84px !important;
+    padding: 9px !important;
+  }
+
+  .dolar-mobile-priority .dolar-mini-kpi strong{
+    font-size: .96rem !important;
+  }
+
+  .dolar-mobile-priority .dolar-month-item{
+    min-width: 126px !important;
+    padding: 8px 8px !important;
+  }
+}
+
