@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v3"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v5"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -510,9 +510,9 @@
     <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela">
       <span class="indic-tabs-label">Período acumulado:</span>
       <div class="indic-tabs">
-        <button class="indic-tab active" data-months="12">12 Meses</button>
-        <button class="indic-tab" data-months="24">24 Meses</button>
-        <button class="indic-tab" data-months="36">36 Meses</button>
+        <button class="indic-tab active" data-months="12" type="button" aria-pressed="true">12 Meses</button>
+        <button class="indic-tab" data-months="24" type="button" aria-pressed="false">24 Meses</button>
+        <button class="indic-tab" data-months="36" type="button" aria-pressed="false">36 Meses</button>
       </div>
     </div>
     <div class="market-toolbar-actions indic-actions" aria-label="Ações do painel consolidado">
@@ -7277,79 +7277,500 @@ async function sharePainelMercado(){
 </script>
 
 
-<script id="ELTAUM_TABS_FORCE_20260602_v3">
-/* Patch final — garante ação dos filtros IPCA/Selic, inclusive 10A do IPCA via base histórica do GitHub.
-   Build: ELTAUM_TABS_FORCE_20260602_v3 */
+<script id="ELTAUM_TABS_FORCE_20260602_v5">
+/* Patch final — controle próprio dos botões IPCA/Selic.
+   Build: ELTAUM_TABS_FORCE_20260602_v5
+   Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
+   Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v3';
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v5';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
-  function tabsDoMesmoGrafico(btn){
-    const chart = btn && btn.dataset ? btn.dataset.chart : '';
-    if(!chart) return [];
-    return Array.from(document.querySelectorAll('.evolution-section .chart-tab[data-chart="' + chart + '"]'));
+  const repoRaw = 'https://raw.githubusercontent.com/eltonprivatebanker/catalogo-fundos-caixa/main/';
+  const cache = window.__ELTAUM_CHART_CACHE__ || (window.__ELTAUM_CHART_CACHE__ = { ipca:null, selic:null, mercado:null });
+
+  function baseUrl(){
+    try{
+      return window.location.protocol === 'file:' ? repoRaw : '';
+    }catch(e){
+      return '';
+    }
   }
 
-  function marcarBotaoAtivo(btn){
-    tabsDoMesmoGrafico(btn).forEach(function(tab){
+  function qs(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function byId(id){ return document.getElementById(id); }
+  function pct(v){ return Number(v).toFixed(2).replace('.', ',') + '%'; }
+  function dataBR(dt){
+    if(!dt || isNaN(dt.getTime())) return '—';
+    return String(dt.getDate()).padStart(2,'0') + '/' + String(dt.getMonth()+1).padStart(2,'0') + '/' + dt.getFullYear();
+  }
+  function mesAno(dt){
+    if(!dt || isNaN(dt.getTime())) return '—';
+    return String(dt.getMonth()+1).padStart(2,'0') + '/' + dt.getFullYear();
+  }
+  function parseNum(v){
+    if(v === null || v === undefined || v === '') return NaN;
+    return Number(String(v).replace(',', '.'));
+  }
+  function parseDateAny(v){
+    if(!v) return null;
+    if(v instanceof Date) return v;
+    const txt = String(v).trim();
+    if(/^\d{2}\/\d{2}\/\d{4}$/.test(txt)){
+      const [d,m,y] = txt.split('/');
+      return new Date(`${y}-${m}-${d}T00:00:00`);
+    }
+    if(/^\d{2}\/\d{4}$/.test(txt)){
+      const [m,y] = txt.split('/');
+      return new Date(`${y}-${m}-01T00:00:00`);
+    }
+    const dt = new Date(txt);
+    return isNaN(dt.getTime()) ? null : dt;
+  }
+
+  function extrairArray(obj, nomes){
+    if(Array.isArray(obj)) return obj;
+    if(!obj || typeof obj !== 'object') return [];
+    for(const nome of nomes){
+      if(Array.isArray(obj[nome])) return obj[nome];
+    }
+    return [];
+  }
+
+  async function fetchJson(url){
+    const r = await fetch(url, { cache:'no-store' });
+    if(!r.ok) throw new Error('HTTP ' + r.status + ' em ' + url);
+    return await r.json();
+  }
+
+  async function carregarJsonDoRepo(nomeArquivo){
+    const b = baseUrl();
+    const arquivo = encodeURI(nomeArquivo);
+    const versao = '?v=' + Date.now();
+    const candidatos = b ? [b + arquivo + versao] : [arquivo + versao, repoRaw + arquivo + versao];
+    let ultimoErro = null;
+    for(const url of candidatos){
+      try{ return await fetchJson(url); }
+      catch(e){ ultimoErro = e; console.warn('[Gráficos v4] Falha ao carregar', nomeArquivo, url, e); }
+    }
+    throw ultimoErro || new Error('Não carregou ' + nomeArquivo);
+  }
+
+  async function carregarMercadoAtual(){
+    if(cache.mercado) return cache.mercado;
+    cache.mercado = await carregarJsonDoRepo('mercado_atual.json');
+    return cache.mercado;
+  }
+
+  function normalizarIPCA(arr){
+    return (arr || []).map((d, idx) => {
+      const dataRaw = d.Data || d.data || d.data_ref || d.DataReferencia || d.mes_ref || d.label || d.Mes || d.mes || '';
+      const dt = parseDateAny(dataRaw);
+      const valor = parseNum(d.valor ?? d.Valor ?? d.value ?? d.ipca ?? d.IPCA ?? d.variacao ?? d.Variacao);
+      return {
+        label: d.label || (dt ? mesAno(dt) : 'p' + (idx + 1)),
+        valor,
+        _dt: dt,
+        _ts: dt ? dt.getTime() : idx
+      };
+    }).filter(d => Number.isFinite(d.valor)).sort((a,b) => a._ts - b._ts);
+  }
+
+  async function carregarIPCA(range){
+    if(cache.ipca && cache.ipca.length >= range) return cache.ipca;
+
+    let base = [];
+    try{
+      const mercado = await carregarMercadoAtual();
+      base = normalizarIPCA(mercado?.cards?.ipca?.historico || mercado?.ipca_historico || mercado?.historico_ipca || []);
+    }catch(e){
+      console.warn('[Gráficos v4] mercado_atual não trouxe IPCA histórico:', e);
+    }
+
+    const arquivos = [
+      'ipca_historico_base.json',
+      'ipca_historico.json',
+      'historico_ipca.json',
+      'serie_ipca_433.json',
+      'ipca_serie_433.json',
+      'historico ipca bcb.json'
+    ];
+
+    for(const nome of arquivos){
+      if(base.length >= range) break;
+      try{
+        const js = await carregarJsonDoRepo(nome);
+        const arr = normalizarIPCA(extrairArray(js, ['conteudo','historico','dados','value','serie','records','ipca','historico_ipca']));
+        if(arr.length > base.length) base = arr;
+      }catch(e){}
+    }
+
+    // Fallback BCB mais simples: últimos N registros da série 433, sem parâmetro de data.
+    if(base.length < range){
+      try{
+        const qtd = Math.max(120, range);
+        const arr = await fetchJson(`https://api.bcb.gov.br/dados/serie/bcdata.sgs.433/dados/ultimos/${qtd}?formato=json`);
+        const norm = normalizarIPCA(arr);
+        if(norm.length > base.length) base = norm;
+      }catch(e){
+        console.warn('[Gráficos v4] Fallback BCB IPCA não respondeu:', e);
+      }
+    }
+
+    cache.ipca = base;
+    return base;
+  }
+
+  function normalizarSelic(arr){
+    const norm = (arr || []).map((d, idx) => {
+      const dataRaw = d.DataReuniaoCopom || d.data || d.DataInicioVigencia || d.Data || d.data_ref || d.label || '';
+      const dt = parseDateAny(dataRaw);
+      const valor = parseNum(d.MetaSelic ?? d.valor ?? d.Valor ?? d.TaxaSelic ?? d.taxa ?? d.Selic ?? d.selic);
+      return { label: dt ? mesAno(dt) : 'p' + (idx + 1), valor, _dt: dt, _ts: dt ? dt.getTime() : idx };
+    }).filter(d => Number.isFinite(d.valor) && d.valor >= 0).sort((a,b) => a._ts - b._ts);
+
+    // Se vier uma série diária, mantém só pontos de mudança para o gráfico ficar leve e didático.
+    const compacta = [];
+    for(const item of norm){
+      const ant = compacta[compacta.length - 1];
+      if(!ant || Math.abs(ant.valor - item.valor) > 0.0001) compacta.push(item);
+      else compacta[compacta.length - 1] = item; // mantém a data mais recente do mesmo patamar
+    }
+    return compacta;
+  }
+
+  async function carregarSelic(){
+    if(cache.selic && cache.selic.length) return cache.selic;
+
+    let base = [];
+    try{
+      const mercado = await carregarMercadoAtual();
+      base = normalizarSelic(mercado?.historico_selic || mercado?.cards?.selic_meta?.historico || []);
+    }catch(e){
+      console.warn('[Gráficos v4] mercado_atual não trouxe Selic histórica:', e);
+    }
+
+    const arquivos = [
+      'historico da selic do BC.json',
+      'historico_selic.json',
+      'selic_historico.json',
+      'selic_meta_historico.json'
+    ];
+
+    for(const nome of arquivos){
+      if(base.length >= 80 && base[0]?._dt?.getFullYear?.() <= 2000) break;
+      try{
+        const js = await carregarJsonDoRepo(nome);
+        const arr = normalizarSelic(extrairArray(js, ['conteudo','historico','dados','value','serie','records','selic','historico_selic']));
+        if(arr.length > base.length) base = arr;
+      }catch(e){}
+    }
+
+    // Fallback BCB: série 432 = meta Selic definida pelo Copom. Pode vir diária; normalizarSelic compacta mudanças.
+    if(base.length < 20){
+      try{
+        const arr = await fetchJson('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados?formato=json&dataInicial=01/01/1999');
+        const norm = normalizarSelic(arr);
+        if(norm.length > base.length) base = norm;
+      }catch(e){
+        console.warn('[Gráficos v4] Fallback BCB Selic não respondeu:', e);
+      }
+    }
+
+    cache.selic = base;
+    return base;
+  }
+
+  function chartDefaults(){
+    return {
+      responsive:true,
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{
+          backgroundColor:'rgba(11,13,26,.95)',
+          borderColor:'rgba(200,151,58,.3)',
+          borderWidth:1,
+          titleColor:'#e8bb6a',
+          bodyColor:'#d8dcea',
+          padding:10,
+          titleFont:{family:'Cormorant Garamond',size:14,weight:'700'},
+          bodyFont:{family:'JetBrains Mono',size:11}
+        }
+      },
+      scales:{
+        x:{grid:{color:'rgba(255,255,255,.04)',drawBorder:false},ticks:{color:'#3d4560',font:{family:'JetBrains Mono',size:9},maxTicksLimit:8}},
+        y:{grid:{color:'rgba(255,255,255,.04)',drawBorder:false},ticks:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:10},callback:v=>Number(v).toFixed(2)+'%'}}
+      }
+    };
+  }
+
+  function destruirChart(canvas){
+    if(!canvas || !window.Chart) return;
+    const existente = Chart.getChart ? Chart.getChart(canvas) : null;
+    if(existente && typeof existente.destroy === 'function') existente.destroy();
+  }
+
+  function limparMsg(canvas){
+    const msg = canvas?.parentElement?.querySelector('.chart-empty-msg');
+    if(msg) msg.remove();
+  }
+
+  function mostrarMsg(canvasId, texto){
+    const canvas = byId(canvasId);
+    const body = canvas?.parentElement;
+    if(!body) return;
+    limparMsg(canvas);
+    const msg = document.createElement('div');
+    msg.className = 'chart-empty-msg';
+    msg.style.cssText = 'position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:18px;color:var(--muted);font-size:.72rem;font-family:JetBrains Mono,monospace;line-height:1.5;background:transparent;pointer-events:none';
+    msg.textContent = texto;
+    body.appendChild(msg);
+  }
+
+  async function desenharIPCA(range){
+    if(!window.Chart){ mostrarMsg('chartIpca', 'Chart.js ainda não carregou. Recarregue a página.'); return; }
+    const dados = await carregarIPCA(range);
+    const slice = dados.slice(-range);
+    const canvas = byId('chartIpca');
+    const ctx = canvas?.getContext('2d');
+    if(!ctx || !slice.length){ mostrarMsg('chartIpca', 'Histórico de IPCA temporariamente indisponível.'); return; }
+    limparMsg(canvas);
+    destruirChart(canvas);
+    const labels = slice.map(d => d.label);
+    const values = slice.map(d => d.valor);
+    const colors = values.map(v => v >= 0 ? 'rgba(46,209,122,.7)' : 'rgba(240,85,101,.7)');
+    new Chart(ctx, {
+      type:'bar',
+      data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderColor:colors, borderWidth:1, borderRadius:2 }] },
+      options:{
+        ...chartDefaults(),
+        plugins:{
+          ...chartDefaults().plugins,
+          tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'IPCA: ' + pct(ctx.parsed.y) } }
+        }
+      }
+    });
+  }
+
+  function janelaSelic(dados, range){
+    if(range >= 999) return dados;
+    if(!dados.length) return [];
+    const ultimo = dados[dados.length - 1]._dt;
+    if(!ultimo || isNaN(ultimo.getTime())) return dados.slice(-Math.min(range, dados.length));
+    const limite = new Date(ultimo);
+    limite.setMonth(limite.getMonth() - range);
+    let out = dados.filter(d => d._dt && d._dt >= limite);
+    if(out.length < 2) out = dados.slice(-Math.min(Math.max(2, range), dados.length));
+    return out;
+  }
+
+  function atualizarResumoSelic(slice){
+    if(!slice.length) return;
+    const values = slice.map(d => d.valor);
+    const maxVal = Math.max(...values);
+    const minVal = Math.min(...values);
+    const maxItem = slice[values.indexOf(maxVal)];
+    const minItem = slice[values.indexOf(minVal)];
+    const hoje = slice[slice.length - 1];
+    const set = (id, txt) => { const el = byId(id); if(el) el.textContent = txt; };
+    set('selicMaxResumo', pct(maxVal) + ' a.a.');
+    set('selicMaxData', dataBR(maxItem?._dt));
+    set('selicMinResumo', pct(minVal) + ' a.a.');
+    set('selicMinData', dataBR(minItem?._dt));
+    set('selicHojeResumo', pct(hoje.valor) + ' a.a.');
+    set('selicHojeData', dataBR(hoje._dt));
+  }
+
+  async function desenharSelic(range){
+    if(!window.Chart){ mostrarMsg('chartSelic', 'Chart.js ainda não carregou. Recarregue a página.'); return; }
+    const dados = await carregarSelic();
+    const slice = janelaSelic(dados, range);
+    const canvas = byId('chartSelic');
+    const ctx = canvas?.getContext('2d');
+    if(!ctx || !slice.length){ mostrarMsg('chartSelic', 'Histórico da Selic temporariamente indisponível.'); return; }
+    limparMsg(canvas);
+    atualizarResumoSelic(slice);
+    destruirChart(canvas);
+    const labels = slice.map(d => d.label);
+    const values = slice.map(d => d.valor);
+    const maxVal = Math.max(...values);
+    new Chart(ctx, {
+      type:'line',
+      data:{ labels, datasets:[{ data:values, borderColor:'#c8973a', backgroundColor:'rgba(200,151,58,.08)', borderWidth:2, pointBackgroundColor:'#e8bb6a', pointRadius:2.6, pointHoverRadius:5, fill:true, stepped:'before', tension:0 }] },
+      options:{
+        ...chartDefaults(),
+        plugins:{ ...chartDefaults().plugins, tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'Selic: ' + pct(ctx.parsed.y) + ' a.a.' } } },
+        scales:{ ...chartDefaults().scales, y:{ ...chartDefaults().scales.y, suggestedMin:0, suggestedMax:maxVal * 1.10 } }
+      }
+    });
+  }
+
+  function tabsDoGrafico(chart){
+    return qs('.chart-tab[data-chart="' + chart + '"]');
+  }
+
+  function marcarAtivo(btn){
+    const chart = btn?.dataset?.chart;
+    if(!chart) return;
+    tabsDoGrafico(chart).forEach(tab => {
       const ativo = tab === btn;
       tab.classList.toggle('active', ativo);
       tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
       tab.setAttribute('type', 'button');
       tab.style.pointerEvents = 'auto';
+      tab.style.cursor = 'pointer';
     });
   }
 
-  async function executarTroca(btn){
+  function setLoading(btn, ligado){
     if(!btn) return;
-    marcarBotaoAtivo(btn);
-
-    if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
-      try{
-        await window.alterarPeriodoGraficoEvolucao(btn);
-        return;
-      }catch(err){
-        console.warn('[Catálogo CAIXA] Falha no handler principal dos filtros.', err);
-      }
+    if(ligado){
+      btn.dataset.loadingChart = '1';
+      btn.style.opacity = '.72';
+    }else{
+      delete btn.dataset.loadingChart;
+      btn.style.opacity = '';
     }
+  }
 
-    console.warn('[Catálogo CAIXA] Clique capturado, mas alterarPeriodoGraficoEvolucao não está disponível.');
+  async function trocarPeriodo(btn){
+    const chart = btn?.dataset?.chart;
+    const range = Number(btn?.dataset?.range);
+    if(!chart || !Number.isFinite(range)) return;
+    marcarAtivo(btn);
+    setLoading(btn, true);
+    try{
+      if(chart === 'ipca') await desenharIPCA(range);
+      if(chart === 'selic') await desenharSelic(range);
+      setTimeout(() => {
+        const canvas = byId(chart === 'ipca' ? 'chartIpca' : 'chartSelic');
+        const ch = window.Chart?.getChart ? Chart.getChart(canvas) : null;
+        if(ch && typeof ch.resize === 'function') ch.resize();
+      }, 40);
+    }catch(e){
+      console.warn('[Gráficos v4] Erro ao trocar período:', chart, range, e);
+      mostrarMsg(chart === 'ipca' ? 'chartIpca' : 'chartSelic', 'Não consegui redesenhar este período agora. Veja o console para detalhes.');
+    }finally{
+      setLoading(btn, false);
+    }
   }
 
   function prepararBotoes(){
-    document.querySelectorAll('.evolution-section .chart-tab[data-chart]').forEach(function(btn){
+    qs('.chart-tab[data-chart]').forEach(btn => {
       btn.setAttribute('type', 'button');
       btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
       btn.style.pointerEvents = 'auto';
-
-      if(btn.dataset.forceChartBound === '1') return;
-      btn.dataset.forceChartBound = '1';
-      btn.addEventListener('click', function(ev){
-        ev.preventDefault();
-        executarTroca(btn);
-      });
+      btn.style.cursor = 'pointer';
     });
   }
 
-  prepararBotoes();
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', prepararBotoes, {once:true});
-  }else{
-    setTimeout(prepararBotoes, 0);
-  }
-  setTimeout(prepararBotoes, 600);
-  setTimeout(prepararBotoes, 1800);
-
-  // Captura cedo para evitar que algum listener externo/travado impeça a troca.
-  document.addEventListener('click', function(ev){
+  function capturar(ev){
     const target = ev.target;
-    const btn = target && target.closest ? target.closest('.evolution-section .chart-tab[data-chart]') : null;
+    const btn = target && target.closest ? target.closest('.chart-tab[data-chart]') : null;
     if(!btn) return;
     ev.preventDefault();
     if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-    executarTroca(btn);
-  }, true);
+    trocarPeriodo(btn);
+  }
+
+  prepararBotoes();
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prepararBotoes, {once:true});
+  else setTimeout(prepararBotoes, 0);
+  setTimeout(prepararBotoes, 700);
+  setTimeout(prepararBotoes, 2000);
+
+  // Usa click e pointerup em captura. Assim, mesmo que algum listener antigo ou overlay lógico interfira, o botão responde.
+  document.addEventListener('click', capturar, true);
+  document.addEventListener('pointerup', capturar, true);
+})();
+</script>
+
+
+<script id="ELTAUM_INDIC_TABS_FORCE_20260602_v5">
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_INDIC_TABS_FORCE_20260602_v5';
+
+  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+
+  function prepararIndicTabs(){
+    qsa('.indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
+      el.style.pointerEvents = 'auto';
+      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
+      el.style.zIndex = '80';
+    });
+
+    qsa('.indic-tab[data-months]').forEach(btn => {
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
+      btn.style.pointerEvents = 'auto';
+      btn.style.cursor = 'pointer';
+      btn.style.touchAction = 'manipulation';
+      if(getComputedStyle(btn).position === 'static') btn.style.position = 'relative';
+      btn.style.zIndex = '90';
+    });
+  }
+
+  function setPeriodoIndicadores(btn){
+    const meses = Number(btn && btn.dataset ? btn.dataset.months : NaN);
+    if(![12,24,36].includes(meses)) return;
+
+    qsa('.indic-tab[data-months]').forEach(tab => {
+      const ativo = tab === btn;
+      tab.classList.toggle('active', ativo);
+      tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+    });
+
+    try{
+      activePeriodTab = meses;
+    }catch(e){
+      window.activePeriodTab = meses;
+    }
+    document.documentElement.dataset.indicPeriod = String(meses);
+
+    if(typeof atualizarTabelaIndicadores === 'function'){
+      atualizarTabelaIndicadores();
+    }else{
+      console.warn('[' + BUILD + '] atualizarTabelaIndicadores ainda não está disponível.');
+    }
+  }
+
+  function acharIndicTab(evento){
+    const alvo = evento.target;
+    if(alvo && alvo.closest){
+      const direto = alvo.closest('.indic-tab[data-months]');
+      if(direto) return direto;
+    }
+    if(evento.composedPath){
+      const item = evento.composedPath().find(el => el && el.matches && el.matches('.indic-tab[data-months]'));
+      if(item) return item;
+    }
+    return null;
+  }
+
+  function capturarIndicTab(evento){
+    const btn = acharIndicTab(evento);
+    if(!btn) return;
+    evento.preventDefault();
+    if(typeof evento.stopImmediatePropagation === 'function') evento.stopImmediatePropagation();
+    setPeriodoIndicadores(btn);
+  }
+
+  function instalar(){
+    prepararIndicTabs();
+    document.addEventListener('click', capturarIndicTab, true);
+    document.addEventListener('pointerup', capturarIndicTab, true);
+    document.addEventListener('touchend', capturarIndicTab, true);
+    setTimeout(prepararIndicTabs, 400);
+    setTimeout(prepararIndicTabs, 1200);
+    setTimeout(prepararIndicTabs, 2500);
+    console.info('[' + BUILD + '] patch dos botões 12M/24M/36M instalado.');
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar, {once:true});
+  else instalar();
 })();
 </script>
 
