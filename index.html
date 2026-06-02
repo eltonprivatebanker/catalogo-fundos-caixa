@@ -14,7 +14,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link rel="stylesheet" href="style.css?v=20260601-fechamento-card-clean-v3"/>
+<link rel="stylesheet" href="style.css?v=20260601-fechamento-card-mobile-slim-v5"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -1532,11 +1532,30 @@ function calcularDolarPeriodos(){
   const [ano, mes] = last[0].split('-');
   const refLabel = `${MESES_PT[parseInt(mes)-1]}/${ano}`;
 
-  // Início do ano
+  // Acumulado no ano
+  // Regra correta: comparar a cotação atual com o fechamento de DEZEMBRO do ano anterior.
+  // Antes estava usando o primeiro registro de 2026 (jan/2026), o que gerava -3,82% em vez de -8,58%.
+  const dolarJson = _dadosMercado?.indices_mercado?.dolar || _dadosMercado?.cards?.dolar || {};
+  const baseAnoJson = Number(dolarJson.base_ano ?? dolarJson.fechamento_ano_anterior ?? dolarJson.baseAno);
+  const acumAnoJson = Number(dolarJson.acum_ano);
+
   const anoAtualStr = `${ANO_ATUAL}`;
-  const inicioAno = sorted.find(([k]) => k.startsWith(anoAtualStr));
-  if(inicioAno){
-    const inicioVal = parseFloat(inicioAno[1].cotacaoVenda);
+  const dezAnteriorKey = `${ANO_ATUAL - 1}-12`;
+  const dezAnterior = sorted.find(([k]) => k === dezAnteriorKey);
+  const primeiroMesAno = sorted.find(([k]) => k.startsWith(anoAtualStr));
+
+  if(Number.isFinite(baseAnoJson) && baseAnoJson > 0){
+    indicState.dolarBRL.ano = baseAnoJson;
+    indicState.dolarPct.ano = Number.isFinite(acumAnoJson)
+      ? acumAnoJson
+      : +((lastVal/baseAnoJson-1)*100).toFixed(2);
+  }else if(dezAnterior){
+    const baseDez = parseFloat(dezAnterior[1].cotacaoVenda);
+    indicState.dolarBRL.ano = baseDez;
+    indicState.dolarPct.ano = +((lastVal/baseDez-1)*100).toFixed(2);
+  }else if(primeiroMesAno){
+    // fallback apenas se o histórico não trouxer dez/ano anterior
+    const inicioVal = parseFloat(primeiroMesAno[1].cotacaoVenda);
     indicState.dolarBRL.ano = inicioVal;
     indicState.dolarPct.ano = +((lastVal/inicioVal-1)*100).toFixed(2);
   }
