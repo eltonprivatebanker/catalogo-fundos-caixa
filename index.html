@@ -295,30 +295,6 @@
 </head>
 <body>
 <div class="page" id="topo">
-<!-- ══ EXEC BAR — resumo executivo fixo ══ -->
-<div class="exec-bar" id="execBar" role="region" aria-label="Resumo executivo do dia">
-  <div class="exec-bar-inner">
-    <div class="exec-item" title="CDI — variação do mês atual">
-      <span class="exec-label">CDI mês</span>
-      <strong class="exec-val neu" id="execCDI">—</strong>
-    </div>
-    <div class="exec-sep"></div>
-    <div class="exec-item" title="Dólar PTAX — variação no mês">
-      <span class="exec-label">Dólar</span>
-      <strong class="exec-val" id="execDolar">—</strong>
-    </div>
-    <div class="exec-sep"></div>
-    <div class="exec-item" title="Ibovespa — variação no mês">
-      <span class="exec-label">Ibov</span>
-      <strong class="exec-val" id="execIbov">—</strong>
-    </div>
-    <div class="exec-sep"></div>
-    <div class="exec-item exec-item-best" title="Melhor fundo do catálogo nos últimos 12 meses">
-      <span class="exec-label">Melhor 12M</span>
-      <strong class="exec-val pos" id="execBest">—</strong>
-    </div>
-  </div>
-</div>
 
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header>
@@ -401,51 +377,6 @@
   </article>
 </div>
 
-<!-- ══ CARD HOJE — contexto de mercado (mobile only) ══ -->
-<div class="hoje-card section-gap mob-hoje-card" id="cardHoje">
-  <div class="hoje-header">
-    <div class="hoje-header-left">
-      <span class="hoje-icon">📅</span>
-      <div>
-        <strong class="hoje-title">Resumo do dia</strong>
-        <small class="hoje-date" id="hojeDate">—</small>
-      </div>
-    </div>
-    <span class="hoje-selic-badge" title="Taxa Selic atual definida pelo COPOM">
-      Selic <strong id="hojeSelicVal">—</strong>
-    </span>
-  </div>
-
-  <div class="hoje-metrics">
-    <div class="hoje-metric">
-      <span class="hoje-metric-label">CDI mês</span>
-      <strong class="hoje-metric-val pos" id="hojeCDI">—</strong>
-    </div>
-    <div class="hoje-metric">
-      <span class="hoje-metric-label">IPCA 12M</span>
-      <strong class="hoje-metric-val" id="hojeIPCA">—</strong>
-    </div>
-    <div class="hoje-metric">
-      <span class="hoje-metric-label">Dólar mês</span>
-      <strong class="hoje-metric-val" id="hojeDolar">—</strong>
-    </div>
-    <div class="hoje-metric">
-      <span class="hoje-metric-label">Ibov mês</span>
-      <strong class="hoje-metric-val" id="hojeIbov">—</strong>
-    </div>
-  </div>
-
-  <div class="hoje-copom">
-    <span class="hoje-copom-label">Próxima reunião COPOM</span>
-    <strong class="hoje-copom-val" id="hojeCopom">—</strong>
-  </div>
-
-  <div class="hoje-cenario" id="hojeCenario">
-    <!-- preenchido por JS com o resumo narrativo do cenário -->
-  </div>
-</div>
-
-
 
 
 
@@ -506,10 +437,7 @@
 
     <div class="catalog-shortcuts" aria-label="Atalhos rápidos do catálogo">
       <span class="catalog-shortcuts-label">Atalhos</span>
-      <!-- Presets recomendados — médio prazo Melhoria 4 -->
-      <button type="button" class="filter-preset-chip shortcut-preset preset-recommended" data-preset="all" title="Mostrar todos os fundos do catálogo">Todos</button>
-      <button type="button" class="filter-preset-chip shortcut-preset preset-recommended" data-preset="liquidez-diaria" title="Fundos com conversão e pagamento em D+1 — ideal para reserva de emergência">💧 Liquidez D+1</button>
-      <button type="button" class="filter-preset-chip shortcut-preset preset-recommended" data-preset="top-rentabilidade" title="Os 20 fundos com maior rentabilidade nos últimos 12 meses">🏆 Top Rentab.</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="all">Todos</button>
       <button type="button" class="filter-preset-chip shortcut-preset fav-shortcut-chip" data-preset="favoritos" aria-pressed="false">⭐ Favoritos <span class="fav-count-inline" id="favShortcutCount">0</span></button>
       <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cdi">CDI</button>
       <button type="button" class="filter-preset-chip shortcut-preset" data-preset="conservador">Conservador</button>
@@ -1203,8 +1131,8 @@
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
-<div class="section-gap collapsible-section" id="sec-focus">
-  <div class="section-title focus-section-title section-title-collapsible" onclick="toggleSection('sec-focus-body','sec-focus')" role="button" aria-expanded="false" tabindex="0">
+<div class="section-gap" id="sec-focus">
+  <div class="section-title focus-section-title">
     <div class="focus-title-block">
       <div class="focus-title-line">
         <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
@@ -1212,12 +1140,7 @@
       </div>
       <div class="focus-ref" id="focusRef">Carregando último boletim...</div>
     </div>
-    <button class="section-toggle-btn" aria-label="Expandir seção" tabindex="-1">
-      <span class="toggle-icon">›</span>
-      <span class="toggle-label">Ver mais</span>
-    </button>
   </div>
-  <div class="section-collapsible-body" id="sec-focus-body" hidden>
 
   <div class="focus-explain-card">
     <button class="focus-explain-header" type="button" onclick="toggleFocusExplain()">
@@ -1256,21 +1179,14 @@
 </div>
 
 <!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES ══ -->
-<div class="section-gap evolution-section collapsible-section" id="sec-graficos">
-  <div class="section-title evolution-title section-title-collapsible" onclick="toggleSection('sec-graficos-body','sec-graficos')" role="button" aria-expanded="false" tabindex="0">
+<div class="section-gap evolution-section" id="sec-graficos">
+  <div class="section-title evolution-title">
     <div>
       <h2>📊 Evolução dos Indicadores</h2>
       <p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
-      <button class="section-toggle-btn" aria-label="Expandir seção" tabindex="-1">
-        <span class="toggle-icon">›</span>
-        <span class="toggle-label">Ver mais</span>
-      </button>
-    </div>
+    <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
   </div>
-  <div class="section-collapsible-body" id="sec-graficos-body" hidden>
 
   <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores">
     <div class="evo-summary-card">
@@ -8632,252 +8548,6 @@ body:not(.closed-market-open) #closedMarketSheet{
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
   else setTimeout(setup,650);
 })();
-
-/* ════ TOOLTIPS EM SIGLAS (Melhoria 4) ════ */
-(function addSiglaTips(){
-  const tips = {
-    'CDI': 'Certificado de Depósito Interbancário · taxa de referência do mercado interbancário',
-    'IPCA': 'Índice Nacional de Preços ao Consumidor Amplo · principal índice de inflação do Brasil',
-    'PTAX': 'Taxa de câmbio oficial do Banco Central do Brasil · média das operações do dia',
-    'COPOM': 'Comitê de Política Monetária · define a taxa Selic nas reuniões a cada 45 dias',
-    'IGP-M': 'Índice Geral de Preços do Mercado · muito usado na correção de aluguéis',
-    'PIB': 'Produto Interno Bruto · soma de toda a riqueza produzida no país em um período',
-    'Selic': 'Taxa básica de juros da economia brasileira · definida pelo COPOM',
-    'IFIX': 'Índice de Fundos de Investimento Imobiliário da B3',
-    'BDR': 'Brazilian Depositary Receipt · certificado que representa ações estrangeiras negociadas no Brasil',
-    'FMP': 'Fundo Mútuo de Privatização · investe em ações de empresas privatizadas usando FGTS',
-    'FGTS': 'Fundo de Garantia do Tempo de Serviço · depósito mensal feito pelo empregador',
-    'RF': 'Renda Fixa · investimentos com retorno previsível baseado em taxas ou índices',
-    'p.p.': 'ponto percentual · unidade de medida para diferença entre percentuais',
-  };
-
-  // Elementos candidatos: th, label, span com texto curto, h2, h3, small
-  const selectors = 'th, .kpi-label, .exec-label, .indic-label, .focus-ind-label, ' +
-    '.rank-cat-label, .v2-label, .ptax-stat-label, .vg-label, .closed-ind-label, ' +
-    '.mobile-kpi-cell span:first-child, .evo-summary-kicker';
-
-  document.querySelectorAll(selectors).forEach(el => {
-    if(el.title) return; // já tem tooltip
-    const txt = (el.textContent || '').trim();
-    for(const [sigla, desc] of Object.entries(tips)){
-      if(txt === sigla || txt.startsWith(sigla + ' ') || txt.endsWith(' ' + sigla)){
-        el.title = desc;
-        el.style.cursor = 'help';
-        break;
-      }
-    }
-  });
-})();
-
-
-/* ════ EXEC BAR — popular com dados (Melhoria 1) ════ */
-function atualizarExecBar(){
-  const set = (id, v, cls) => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.textContent = v;
-    if(cls){ el.className = 'exec-val ' + cls; }
-  };
-  try{
-    const d = _dadosMercado;
-    if(!d) return;
-    // CDI mês
-    const cdiMes = d?.cards?.cdi?.ultimo_mes;
-    set('execCDI', cdiMes != null ? (cdiMes > 0 ? '+' : '') + Number(cdiMes).toFixed(2).replace('.',',') + '%' : '—', 'pos');
-    // Dólar mês
-    const dolarMes = d?.cards?.dolar?.var_mes ?? indicState?.dolarPct?.mes;
-    const dolarCls = dolarMes > 0 ? 'neg' : dolarMes < 0 ? 'pos' : 'neu';
-    set('execDolar', dolarMes != null ? (dolarMes > 0 ? '+' : '') + Number(dolarMes).toFixed(2).replace('.',',') + '%' : '—', dolarCls);
-    // Ibov mês
-    const ibovMes = d?.indices_mercado?.ibovespa?.variacao_mes_fechado ?? d?.indices_internacionais?.ibovespa?.var_mes;
-    const ibovCls = ibovMes > 0 ? 'pos' : ibovMes < 0 ? 'neg' : 'neu';
-    set('execIbov', ibovMes != null ? (ibovMes > 0 ? '+' : '') + Number(ibovMes).toFixed(2).replace('.',',') + '%' : '—', ibovCls);
-    // Melhor fundo 12M
-    const best = document.getElementById('mKpiBest')?.textContent || document.getElementById('kpiBest')?.textContent;
-    if(best && best !== '—') set('execBest', best, 'pos');
-  }catch(e){ console.warn('[execBar]', e); }
-}
-
-/* ════ TOGGLE SEÇÕES COLAPSÁVEIS (Melhoria 2) ════ */
-function toggleSection(bodyId, sectionId){
-  const body = document.getElementById(bodyId);
-  const section = document.getElementById(sectionId);
-  if(!body) return;
-  const isHidden = body.hasAttribute('hidden');
-  const btn = section?.querySelector('.section-toggle-btn');
-  const icon = btn?.querySelector('.toggle-icon');
-  const label = btn?.querySelector('.toggle-label');
-  const title = section?.querySelector('.section-title-collapsible');
-  if(isHidden){
-    body.removeAttribute('hidden');
-    if(icon) icon.textContent = '⌄';
-    if(label) label.textContent = 'Ver menos';
-    if(title) title.setAttribute('aria-expanded','true');
-    section?.classList.add('section-expanded');
-  } else {
-    body.setAttribute('hidden','');
-    if(icon) icon.textContent = '›';
-    if(label) label.textContent = 'Ver mais';
-    if(title) title.setAttribute('aria-expanded','false');
-    section?.classList.remove('section-expanded');
-  }
-}
-
-// Chamar exec bar após carregar mercado
-document.addEventListener('DOMContentLoaded', () => {
-  // Observer: quando _dadosMercado for populado, atualizar exec bar
-  const tryExec = () => {
-    if(typeof _dadosMercado !== 'undefined' && _dadosMercado) atualizarExecBar();
-    else setTimeout(tryExec, 800);
-  };
-  setTimeout(tryExec, 1200);
-  setTimeout(() => { if(typeof atualizarCardHoje === "function") atualizarCardHoje(); }, 2000);
-  // Também após 3s (garante que tudo carregou)
-  setTimeout(atualizarExecBar, 3000);
-});
-
-
-/* ════ URL ANCHORS — atualiza hash conforme scroll (Melhoria 5) ════ */
-(function setupUrlAnchors(){
-  const sections = [
-    { id: 'topo',          hash: '' },
-    { id: 'sec-fundos',    hash: '#fundos' },
-    { id: 'rankingsSection', hash: '#rankings' },
-    { id: 'sec-mercado',   hash: '#mercado' },
-    { id: 'sec-dolar',     hash: '#dolar' },
-    { id: 'sec-focus',     hash: '#focus' },
-    { id: 'sec-graficos',  hash: '#evolucao' },
-    { id: 'sec-visao-geral', hash: '#visao-geral' },
-  ];
-
-  let ticking = false;
-  function onScroll(){
-    if(ticking) return;
-    ticking = true;
-    requestAnimationFrame(() => {
-      const mid = window.scrollY + window.innerHeight * 0.35;
-      let active = sections[0];
-      for(const sec of sections){
-        const el = document.getElementById(sec.id);
-        if(!el) continue;
-        if(el.getBoundingClientRect().top + window.scrollY <= mid) active = sec;
-      }
-      const currentHash = window.location.hash || '';
-      if(active.hash !== currentHash){
-        history.replaceState(null, '', active.hash || window.location.pathname);
-        // Atualizar nav mobile ativa
-        document.querySelectorAll('.mobile-bottom-nav a').forEach(a => {
-          const href = a.getAttribute('href') || '';
-          const secId = a.dataset.target || href.replace('#','');
-          a.classList.toggle('active', secId && active.id.includes(secId));
-        });
-      }
-      ticking = false;
-    });
-  }
-
-  // Restaurar posição pelo hash ao carregar
-  window.addEventListener('load', () => {
-    const hash = window.location.hash;
-    if(hash){
-      const target = document.querySelector(hash) || document.getElementById(hash.slice(1));
-      if(target) setTimeout(() => target.scrollIntoView({behavior:'smooth'}), 400);
-    }
-    window.addEventListener('scroll', onScroll, {passive:true});
-  });
-})();
-
-/* ════ NOVOS PRESETS DE FILTRO (Melhoria 4) ════ */
-// Interceptar os novos presets antes do handler original
-document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('[data-preset="liquidez-diaria"]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Filtrar: Conv D+0 ou D+1 E Pag D+0 ou D+1
-      if(typeof applyQuickFilter === 'function'){
-        // Usar busca direta por liquidez
-        const si = document.getElementById('searchInput');
-        if(si){ si.value = ''; si.dispatchEvent(new Event('input')); }
-        if(typeof applyFilter === 'function'){
-          // Filtro: apenas fundos com liquidez D+0 ou D+1
-          window._presetLiquidez = true;
-          applyFilter();
-          window._presetLiquidez = false;
-        }
-      }
-    });
-  });
-
-  document.querySelectorAll('[data-preset="top-rentabilidade"]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      // Ordenar por 12M decrescente e limitar display
-      if(typeof setOrderBy === 'function') setOrderBy('pct12m','desc');
-      else if(typeof applyFilter === 'function'){
-        window._presetTopRent = true;
-        applyFilter();
-        window._presetTopRent = false;
-      }
-    });
-  });
-});
-
-
-/* ════ CARD HOJE — popular com dados de mercado (Melhoria 1) ════ */
-function atualizarCardHoje(){
-  try{
-    const set = (id,v,cls) => {
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.textContent = v;
-      if(cls) el.className = 'hoje-metric-val ' + cls;
-    };
-    const d = _dadosMercado;
-    if(!d) return;
-
-    // Data atual
-    const dt = new Date();
-    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-    const hojeEl = document.getElementById('hojeDate');
-    if(hojeEl) hojeEl.textContent = `${dt.getDate()} de ${meses[dt.getMonth()]} de ${dt.getFullYear()}`;
-
-    // Selic
-    const selicEl = document.getElementById('hojeSelicVal');
-    if(selicEl) selicEl.textContent = d?.cards?.selic_meta?.valor ? d.cards.selic_meta.valor + '%' : '—';
-
-    // CDI mês
-    const cdiMes = d?.cards?.cdi?.ultimo_mes;
-    set('hojeCDI', cdiMes != null ? (cdiMes>0?'+':'') + Number(cdiMes).toFixed(2).replace('.',',')+'%' : '—',
-        cdiMes > 0 ? 'pos' : 'neg');
-
-    // IPCA 12M
-    const ipca12 = d?.cards?.ipca?.acum_12m;
-    set('hojeIPCA', ipca12 != null ? (ipca12>0?'+':'') + Number(ipca12).toFixed(2).replace('.',',')+'%' : '—',
-        ipca12 > 4.5 ? 'neg' : 'pos');
-
-    // Dólar mês
-    const dolarMes = d?.cards?.dolar?.var_mes ?? indicState?.dolarPct?.mes;
-    set('hojeDolar', dolarMes != null ? (dolarMes>0?'+':'') + Number(dolarMes).toFixed(2).replace('.',',')+'%' : '—',
-        dolarMes > 0 ? 'neg' : dolarMes < 0 ? 'pos' : 'neu');
-
-    // Ibov mês
-    const ibovMes = d?.indices_mercado?.ibovespa?.variacao_mes_fechado;
-    set('hojeIbov', ibovMes != null ? (ibovMes>0?'+':'') + Number(ibovMes).toFixed(2).replace('.',',')+'%' : '—',
-        ibovMes > 0 ? 'pos' : ibovMes < 0 ? 'neg' : 'neu');
-
-    // COPOM próxima
-    const copomEl = document.getElementById('hojeCopom');
-    const proximaCopom = document.querySelector('.copom-item.proxima .copom-dates');
-    if(copomEl) copomEl.textContent = proximaCopom?.textContent?.trim() || '—';
-
-    // Cenário narrativo
-    const cenario = document.getElementById('hojeCenario');
-    const narrativa = document.getElementById('scenarioText') || document.querySelector('.scenario-text');
-    if(cenario && narrativa) cenario.innerHTML = narrativa.innerHTML;
-
-    // Sincronizar com exec-bar
-    if(typeof atualizarExecBar === 'function') atualizarExecBar();
-  }catch(e){ console.warn('[cardHoje]', e); }
-}
-
 </script>
 
 </body>
