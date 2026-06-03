@@ -14265,3 +14265,16 @@ body:not(.closed-market-open) #closedMarketSheet{
     line-height: 1.25 !important;
   }
 }
+/* ==========================================================
+   MOBILE — Topo limpo
+   Oculta os chips rápidos do cabeçalho global
+========================================================== */
+@media (max-width: 768px){
+  #gfb-chips{
+    display: none !important;
+  }
+
+  #gfb{
+    padding-bottom: 8px !important;
+  }
+}
