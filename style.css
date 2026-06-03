@@ -14144,3 +14144,64 @@ body:not(.closed-market-open) #closedMarketSheet{
   margin: 0 !important;
   border-bottom: 0 !important;
 }
+
+/* ==========================================================
+   MOBILE — Reduz espaço entre catálogo, paginação e rankings
+========================================================== */
+@media (max-width: 768px){
+
+  /* Reduz o bloco onde aparece "Resultado: 170 fundos..." */
+  .pagination-row{
+    margin-top: 10px !important;
+    padding: 10px 0 4px !important;
+    gap: 10px !important;
+  }
+
+  #resultInfo{
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: .72rem !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Aproxima os botões de paginação do texto */
+  .page-btns{
+    margin-top: 8px !important;
+    padding: 0 !important;
+    gap: 8px !important;
+  }
+
+  .page-btns button{
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px !important;
+    padding: 0 !important;
+    border-radius: 10px !important;
+    font-size: .78rem !important;
+  }
+
+  /* Remove espaço grande antes dos rankings */
+  #rankingsSection{
+    margin-top: 14px !important;
+    padding-top: 14px !important;
+  }
+
+  #rankingsSection .ranking-head{
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  #rankingsSection h2{
+    margin-top: 0 !important;
+    margin-bottom: 4px !important;
+    font-size: 1.28rem !important;
+    line-height: 1.05 !important;
+  }
+
+  #rankingsSection .ranking-subtitle{
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+    font-size: .78rem !important;
+    line-height: 1.25 !important;
+  }
+}
