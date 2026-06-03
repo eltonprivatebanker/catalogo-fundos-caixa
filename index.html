@@ -460,34 +460,20 @@
 </div>
 <div class="section-collapsible-body" hidden="" id="sec-painel-body">
 <!-- Card compacto usado no print/WhatsApp: somente último mês fechado -->
-<div aria-hidden="true" class="closed-month-share-card" id="painelFechadoCard">
-<div class="closed-card-head">
-<div>
-<span class="closed-card-kicker">Painel de mercado</span>
-<h3 id="closedCardTitle">Último mês fechado</h3>
-</div>
-<span class="closed-card-badge" id="closedCardPeriod">—</span>
-</div>
-<div class="closed-card-grid" id="closedCardGrid"></div>
-<div class="closed-card-foot">Dados públicos · CDI/IPCA BCB · Dólar PTAX BCB · bolsas: fontes públicas de mercado</div>
-</div>
 <div aria-hidden="true" class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()"></div>
-<aside aria-hidden="true" aria-labelledby="closedMarketSheetTitle" aria-modal="true" class="closed-market-sheet" id="closedMarketSheet" role="dialog">
-<div aria-hidden="true" class="closed-market-handle"></div>
-<div class="closed-market-sheet-head">
-<div class="closed-market-sheet-icon">📊</div>
-<div>
-<span class="closed-market-kicker">Consulta rápida</span>
-<h3 id="closedMarketSheetTitle">Fechamento de Mercado</h3>
-</div>
-<button aria-label="Fechar resumo" class="closed-market-close" onclick="closeFechamentoMesSheet()" type="button">×</button>
-</div>
-<div class="closed-market-section-note" id="closedMarketSheetNote">Último mês fechado · dados públicos</div>
-<div class="closed-market-list" id="closedMarketSheetList"></div>
-<div class="closed-market-actions">
-<button onclick="copiarResumoPainelMercado()" type="button">📋 Copiar resumo</button>
-<button onclick="sharePainelMercado()" type="button">📲 WhatsApp</button>
-</div>
+
+<aside aria-hidden="true" aria-label="Resumo do último mês fechado" aria-modal="true" class="closed-market-sheet" id="closedMarketSheet" role="dialog">
+  <div aria-hidden="true" class="closed-market-handle"></div>
+
+  <div class="closed-market-sheet-head closed-market-sheet-head-clean">
+    <button aria-label="Fechar resumo" class="closed-market-close" onclick="closeFechamentoMesSheet()" type="button">×</button>
+  </div>
+  <div class="closed-market-list" id="closedMarketSheetList"></div>
+
+  <div class="closed-market-actions">
+    <button onclick="copiarResumoPainelMercado()" type="button">📋 Copiar resumo</button>
+    <button onclick="sharePainelMercado()" type="button">📲 WhatsApp</button>
+  </div>
 </aside>
 <!-- Tabela linha do tempo -->
 <div class="indic-table-wrap">
