@@ -6091,21 +6091,54 @@ function renderClosedMarketSheet(){
   }).join('');
 }
 function openFechamentoMesSheet(){
-  atualizarResumoFechamentoMes();
-  atualizarPainelFechadoCard();
-  renderClosedMarketSheet();
+  const painelBody = document.getElementById('sec-painel-body');
+  const secPainel = document.getElementById('sec-mercado-painel');
+
+  if(painelBody){
+    painelBody.hidden = false;
+    painelBody.classList.add('open');
+  }
+
+  if(secPainel){
+    secPainel.classList.add('open');
+    secPainel.setAttribute('aria-expanded', 'true');
+  }
+
+  try{ atualizarResumoFechamentoMes(); }catch(e){ console.warn('[Fechamento rápido] mini card:', e); }
+  try{ atualizarPainelFechadoCard(); }catch(e){ console.warn('[Fechamento rápido] card print:', e); }
+  try{ renderClosedMarketSheet(); }catch(e){ console.warn('[Fechamento rápido] sheet:', e); }
+
   document.body.classList.add('closed-market-open');
-  const sheet=document.getElementById('closedMarketSheet');
-  const overlay=document.getElementById('closedMarketOverlay');
-  if(sheet) sheet.setAttribute('aria-hidden','false');
-  if(overlay) overlay.setAttribute('aria-hidden','false');
+
+  const sheet = document.getElementById('closedMarketSheet');
+  const overlay = document.getElementById('closedMarketOverlay');
+
+  if(sheet){
+    sheet.setAttribute('aria-hidden','false');
+    sheet.classList.add('open', 'active');
+  }
+
+  if(overlay){
+    overlay.setAttribute('aria-hidden','false');
+    overlay.classList.add('open', 'active');
+  }
 }
+
 function closeFechamentoMesSheet(){
   document.body.classList.remove('closed-market-open');
-  const sheet=document.getElementById('closedMarketSheet');
-  const overlay=document.getElementById('closedMarketOverlay');
-  if(sheet) sheet.setAttribute('aria-hidden','true');
-  if(overlay) overlay.setAttribute('aria-hidden','true');
+
+  const sheet = document.getElementById('closedMarketSheet');
+  const overlay = document.getElementById('closedMarketOverlay');
+
+  if(sheet){
+    sheet.setAttribute('aria-hidden','true');
+    sheet.classList.remove('open', 'active');
+  }
+
+  if(overlay){
+    overlay.setAttribute('aria-hidden','true');
+    overlay.classList.remove('open', 'active');
+  }
 }
 function atualizarPainelFechadoCard(){
   const periodo=periodoUltimoFechado();
