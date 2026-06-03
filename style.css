@@ -14136,3 +14136,11 @@ body:not(.closed-market-open) #closedMarketSheet{
     border-radius: 14px !important;
   }
 }
+.closed-market-sheet-head-clean{
+  display: flex !important;
+  justify-content: flex-end !important;
+  align-items: center !important;
+  padding: 0 0 6px !important;
+  margin: 0 !important;
+  border-bottom: 0 !important;
+}
