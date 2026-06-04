@@ -14466,3 +14466,129 @@ tr.detail-row td{
     min-height: auto !important;
   }
 }
+/* ==========================================================
+   MOBILE — KPI mais compacto e topo com menos espaço vazio
+========================================================== */
+
+@media(max-width:768px){
+
+  /* Reduz espaço geral da página no topo */
+  .page{
+    padding-top: 74px !important;
+  }
+
+  /* Aproxima o header do topo */
+  header{
+    padding-bottom: 16px !important;
+    margin-bottom: 0 !important;
+  }
+
+  .brand{
+    gap: 10px !important;
+  }
+
+  .brand-logo{
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: 10px !important;
+    font-size: 1.25rem !important;
+  }
+
+  .brand-text h1{
+    font-size: 1.16rem !important;
+    line-height: 1.08 !important;
+  }
+
+  .brand-text p{
+    font-size: .55rem !important;
+    line-height: 1.25 !important;
+    max-width: 250px !important;
+  }
+
+  .live-badge{
+    margin-top: 8px !important;
+    padding: 6px 10px !important;
+    font-size: .62rem !important;
+  }
+
+  /* Aviso mais compacto */
+  .top-disclaimer,
+  .notice-strip-v3{
+    margin-top: 10px !important;
+    padding: 9px 11px !important;
+    border-radius: 11px !important;
+    font-size: .60rem !important;
+    line-height: 1.35 !important;
+  }
+
+  /* KPI mobile mais enxuto */
+  #sec-kpi-mobile{
+    margin-top: 12px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-card{
+    padding: 11px !important;
+    border-radius: 14px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-head{
+    margin-bottom: 8px !important;
+    gap: 8px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-emoji{
+    width: 34px !important;
+    height: 34px !important;
+    font-size: 1rem !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-head h3{
+    font-size: 1rem !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-head p{
+    font-size: .56rem !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-compact-grid{
+    grid-template-columns: repeat(2, minmax(0,1fr)) !important;
+    gap: 7px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-cell{
+    padding: 9px 10px !important;
+    min-height: 64px !important;
+    border-radius: 10px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-cell span{
+    font-size: .56rem !important;
+    margin-bottom: 3px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-cell strong{
+    font-size: 1.08rem !important;
+    line-height: 1 !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-cell small{
+    font-size: .52rem !important;
+    margin-top: 3px !important;
+    line-height: 1.15 !important;
+  }
+
+  /* Esconde Categorias e Pipeline no mobile */
+  #sec-kpi-mobile .mobile-kpi-cell:nth-child(3),
+  #sec-kpi-mobile .mobile-kpi-cell:nth-child(4){
+    display: none !important;
+  }
+
+  /* Aproxima o bloco de filtros do KPI */
+  #sec-fundos{
+    margin-top: 12px !important;
+  }
+
+  #fundFilterShell{
+    margin-top: 0 !important;
+  }
+}
