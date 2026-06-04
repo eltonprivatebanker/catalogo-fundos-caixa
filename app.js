@@ -7314,3 +7314,167 @@ document.addEventListener('keydown', function(e){
     btn.setAttribute('aria-expanded', 'false');
   });
 });
+/* ==========================================================
+   PATCH — atalhos do catálogo na ordem SIPII
+   Corrige presets sem ação e evita inconsistência visual
+========================================================== */
+(function(){
+  const PRESET_TO_FILTER = {
+    "all": { type: "all" },
+
+    "renda-fixa-simples": {
+      type: "cat",
+      value: "RENDA FIXA SIMPLES"
+    },
+
+    "renda-fixa": {
+      type: "cat",
+      value: "RENDA FIXA"
+    },
+
+    "renda-fixa-referenciado": {
+      type: "cat",
+      value: "RENDA FIXA REFERENCIADO"
+    },
+
+    "renda-fixa-curto-prazo": {
+      type: "cat",
+      value: "RENDA FIXA CURTO PRAZO"
+    },
+
+    "multimercado": {
+      type: "cat",
+      value: "MULTIMERCADO"
+    },
+
+    "cambial": {
+      type: "cat",
+      value: "CAMBIAL"
+    },
+
+    "acoes": {
+      type: "cat",
+      value: "ACOES"
+    },
+
+    "fundo-de-indice": {
+      type: "cat",
+      value: "FUNDO DE INDICE"
+    },
+
+    "fmp": {
+      type: "cat",
+      value: "FUNDOS MUTUOS DE PRIVATIZACAO"
+    },
+
+    "cdi": {
+      type: "benchmark",
+      value: "CDI"
+    },
+
+    "ipca": {
+      type: "benchmark",
+      value: "IPCA"
+    },
+
+    "conservador": {
+      type: "risco",
+      value: "Conservador"
+    }
+  };
+
+  function clickIfExists(selector){
+    const el = document.querySelector(selector);
+    if(el){
+      el.click();
+      return true;
+    }
+    return false;
+  }
+
+  function clearCurrentFilters(){
+    const clearBtn =
+      document.getElementById("clearFiltersTop") ||
+      document.getElementById("clearFiltersBtn");
+
+    if(clearBtn){
+      clearBtn.click();
+    }
+
+    const searchInput = document.getElementById("searchInput");
+    if(searchInput){
+      searchInput.value = "";
+      searchInput.dispatchEvent(new Event("input", { bubbles:true }));
+    }
+  }
+
+  function setShortcutVisual(activeBtn){
+    document.querySelectorAll(".shortcut-preset").forEach(btn => {
+      btn.classList.remove("active");
+      btn.setAttribute("aria-pressed", "false");
+    });
+
+    if(activeBtn){
+      activeBtn.classList.add("active");
+      activeBtn.setAttribute("aria-pressed", "true");
+    }
+  }
+
+  function applyPreset(preset, btn){
+    const cfg = PRESET_TO_FILTER[preset];
+    if(!cfg) return;
+
+    setShortcutVisual(btn);
+
+    clearCurrentFilters();
+
+    if(cfg.type === "all"){
+      return;
+    }
+
+    setTimeout(() => {
+      let selector = "";
+
+      if(cfg.type === "cat"){
+        selector = `#catFilters .chip[data-cat="${CSS.escape(cfg.value)}"]`;
+      }
+
+      if(cfg.type === "benchmark"){
+        selector = `#benchmarkFilters .chip[data-benchmark="${CSS.escape(cfg.value)}"]`;
+      }
+
+      if(cfg.type === "risco"){
+        selector = `#riscoFilters .chip[data-risco="${CSS.escape(cfg.value)}"]`;
+      }
+
+      const ok = clickIfExists(selector);
+
+      if(!ok){
+        console.warn("[Atalhos] Não encontrei filtro para:", preset, cfg);
+      }
+    }, 30);
+  }
+
+  document.addEventListener("click", function(e){
+    const btn = e.target.closest(".shortcut-preset[data-preset]");
+    if(!btn) return;
+
+    const preset = btn.dataset.preset;
+
+    if(!PRESET_TO_FILTER[preset]) return;
+
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+
+    applyPreset(preset, btn);
+  }, true);
+
+  window.__diagnosticarAtalhosCatalogo = function(){
+    return [...document.querySelectorAll(".shortcut-preset[data-preset]")].map(btn => ({
+      texto: btn.textContent.trim(),
+      preset: btn.dataset.preset,
+      mapeado: !!PRESET_TO_FILTER[btn.dataset.preset]
+    }));
+  };
+})();
