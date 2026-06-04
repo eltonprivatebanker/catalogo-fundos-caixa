@@ -14278,3 +14278,10 @@ body:not(.closed-market-open) #closedMarketSheet{
     padding-bottom: 8px !important;
   }
 }
+/* ==========================================================
+   TOPO LIMPO — oculta chips rápidos no cabeçalho global
+   Remove: Todos, Favoritos, RF Simp., RF, CDI, IPCA etc.
+========================================================== */
+#gfb-chips{
+  display: none !important;
+}
