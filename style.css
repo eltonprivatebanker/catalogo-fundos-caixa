@@ -14643,3 +14643,85 @@ tr.detail-row td{
     padding: 8px 9px !important;
   }
 }
+/* ==========================================================
+   MOBILE — remover espaços vazios no topo
+========================================================== */
+@media (max-width: 768px) {
+
+  /* Barra global fixa */
+  #gfb {
+    padding: 8px 10px !important;
+    min-height: auto !important;
+  }
+
+  /* Força o conteúdo da barra a ficar em uma linha só */
+  #gfb-inner {
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    flex-wrap: nowrap !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    min-height: auto !important;
+  }
+
+  /* Esconde o que não queremos no topo mobile */
+  #gfb-logo,
+  #gfb-chips {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Busca ocupa o máximo possível */
+  #gfb-search-wrap {
+    flex: 1 1 auto !important;
+    margin: 0 !important;
+  }
+
+  /* Bloco da direita mais compacto */
+  #gfb-right {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  /* Reduz o espaço entre barra fixa e conteúdo */
+  .page {
+    padding-top: 44px !important;
+  }
+
+  /* Header mais colado */
+  header {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 12px !important;
+  }
+
+  /* Badge da data mais compacta */
+  .live-badge {
+    margin-top: 8px !important;
+  }
+
+  /* Aviso mais próximo do header */
+  .top-disclaimer,
+  .notice-strip-v3 {
+    margin-top: 8px !important;
+  }
+
+  /* KPI mais próximo do aviso */
+  #sec-kpi-mobile {
+    margin-top: 10px !important;
+  }
+
+  /* Próximo bloco mais próximo do KPI */
+  #sec-fundos {
+    margin-top: 10px !important;
+  }
+}
