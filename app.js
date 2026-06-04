@@ -3279,40 +3279,43 @@ function render(){
   });
 
   // Evento de expandir/recolher detalhe do fundo
-  tbody.querySelectorAll('.exp-btn').forEach(btn=>{
-    btn.addEventListener('click', e=>{
-      e.stopPropagation();
+tbody.querySelectorAll('.exp-btn').forEach(btn=>{
+  btn.addEventListener('click', e=>{
+    e.stopPropagation();
 
-      const idx = parseInt(btn.dataset.idx);
+    const idx = parseInt(btn.dataset.idx, 10);
+    const mainRow = btn.closest('tr');
 
-      // Suaviza a sensação de "pulo" antes de redesenhar a tabela
-      tbody.classList.add('table-refreshing');
+    if(!mainRow || !Number.isFinite(idx)) return;
 
-      setTimeout(() => {
-        if(expandedRows.has(idx)){
-          expandedRows.delete(idx);
-        }else{
-          expandedRows.clear(); // mantém só uma linha aberta por vez
-          expandedRows.add(idx);
-        }
+    const nextRow = mainRow.nextElementSibling;
+    const isOpen = !!(nextRow && nextRow.classList.contains('detail-row'));
 
-        render();
+    // Fecha qualquer detalhe aberto sem redesenhar a tabela inteira
+    tbody.querySelectorAll('tr.detail-row').forEach(row => row.remove());
 
-        requestAnimationFrame(() => {
-          const tbody2 = document.getElementById('tableBody');
-
-          if(tbody2){
-            tbody2.classList.remove('table-refreshing');
-            tbody2.classList.add('table-refreshed');
-
-            setTimeout(() => {
-              tbody2.classList.remove('table-refreshed');
-            }, 220);
-          }
-        });
-      }, 80);
+    tbody.querySelectorAll('.exp-btn').forEach(b=>{
+      b.textContent = '▼';
+      b.setAttribute('aria-expanded', 'false');
     });
+
+    expandedRows.clear();
+
+    // Se já estava aberto, apenas fecha
+    if(isOpen) return;
+
+    const rowData = filtered[idx] || allRows[idx];
+    if(!rowData) return;
+
+    expandedRows.add(idx);
+
+    const colspan = mainRow.children.length || 20;
+    mainRow.insertAdjacentHTML('afterend', buildDetailPanel(rowData, colspan));
+
+    btn.textContent = '▲';
+    btn.setAttribute('aria-expanded', 'true');
   });
+});
 
   renderPagination();
 }
