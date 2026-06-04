@@ -6866,9 +6866,9 @@ async function sharePainelMercado(){
    - Reduz os eventos de clique e aplica debounce para evitar renderizações duplicadas. */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v10';
-  const GROUP_PRESETS=new Set(['renda-fixa','multimercado','acoes','cambial','fmp']);
-  const VALID_PRESETS=new Set(['all','favoritos','cdi','conservador','ipca','renda-fixa','multimercado','acoes','cambial','fmp']);
+  const BUILD='ELTAUM_SHORTCUT_FILTERS_FORCE_20260604_SIPII_v11';
+  const GROUP_PRESETS=new Set(['renda-fixa-simples','renda-fixa','renda-fixa-referenciado','renda-fixa-curto-prazo','multimercado','cambial','acoes','fundo-de-indice','fmp']);
+  const VALID_PRESETS=new Set(['all','favoritos','cdi','conservador','ipca','renda-fixa-simples','renda-fixa','renda-fixa-referenciado','renda-fixa-curto-prazo','multimercado','cambial','acoes','fundo-de-indice','fmp']);
   window.__ELTAUM_SHORTCUT_FILTERS_BUILD__=BUILD;
   window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'';
   console.info('[Catálogo CAIXA] Patch atalhos/filtros ativo:', BUILD);
@@ -6889,11 +6889,20 @@ async function sharePainelMercado(){
   function rowMatchesGroup(row,preset){
     const cat=rowCategory(row);
     const nome=rowName(row);
-    if(preset==='renda-fixa') return cat.includes('RENDA FIXA');
+
+    // Ordem oficial SIPII / robô:
+    // RF Simples → RF → RF Referenciado → RF Curto Prazo → Multimercado → Cambial → Ações → Fundo de Índice → FMP.
+    if(preset==='renda-fixa-simples') return cat === 'RENDA FIXA SIMPLES';
+    if(preset==='renda-fixa') return cat === 'RENDA FIXA';
+    if(preset==='renda-fixa-referenciado') return cat === 'RENDA FIXA REFERENCIADO';
+    if(preset==='renda-fixa-curto-prazo') return cat === 'RENDA FIXA CURTO PRAZO';
+
     if(preset==='multimercado') return cat.includes('MULTIMERCADO');
-    if(preset==='acoes') return cat.includes('ACOES') || cat.includes('ACAO') || nome.includes('ACOES') || nome.includes('ACAO');
     if(preset==='cambial') return cat.includes('CAMBIAL') || nome.includes('CAMBIAL') || nome.includes('DOLAR') || nome.includes('CAMBIO');
+    if(preset==='acoes') return cat.includes('ACOES') || cat.includes('ACAO') || nome.includes('ACOES') || nome.includes('ACAO');
+    if(preset==='fundo-de-indice') return cat.includes('FUNDO DE INDICE') || nome.includes('ETF') || nome.includes('INDICE');
     if(preset==='fmp') return cat.includes('PRIVATIZACAO') || cat.includes('FMP') || nome.includes('FMP') || nome.includes('FGTS');
+
     return true;
   }
 
@@ -6906,10 +6915,14 @@ async function sharePainelMercado(){
 
   function presetLabel(preset){
     return ({
+      'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
+      'renda-fixa-referenciado':'RF Referenciado',
+      'renda-fixa-curto-prazo':'RF Curto Prazo',
       'multimercado':'Multimercado',
-      'acoes':'Ações',
       'cambial':'Cambial',
+      'acoes':'Ações',
+      'fundo-de-indice':'Fundo de Índice',
       'fmp':'FMP',
       'cdi':'CDI',
       'ipca':'IPCA',
