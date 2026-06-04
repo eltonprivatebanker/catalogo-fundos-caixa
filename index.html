@@ -16,7 +16,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=20260604-mobile-body-gap-fix-01" rel="stylesheet"/>
+<link href="style.css?v=20260604-mobile-organize-02" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -204,45 +204,60 @@
 <button class="filter-action-primary" id="filterApplyBtn" type="button">Fechar</button>
 </div>
 </div>
-<div aria-label="Modo de visualização do catálogo" class="mobile-view-toggle" id="mobileViewToggle">
-<span class="mobile-view-toggle-label">Visualização</span>
-<div class="mobile-view-toggle-buttons">
-<button class="mobile-view-btn" data-view="table" type="button">Tabela</button>
-<button class="mobile-view-btn active" data-view="cards" type="button">Cards</button>
+<button class="mobile-organize-toggle" id="mobileOrganizeToggle" type="button" aria-expanded="false">
+  <span>⚙️ Organizar resultados</span>
+  <small id="mobileOrganizeSummary">Tabela · Dia · Maior</small>
+  <strong>⌄</strong>
+</button>
+
+<div class="mobile-organize-panel" id="mobileOrganizePanel" hidden>
+  <div aria-label="Modo de visualização do catálogo" class="mobile-view-toggle" id="mobileViewToggle">
+    <span class="mobile-view-toggle-label">Visualização</span>
+    <div class="mobile-view-toggle-buttons">
+      <button class="mobile-view-btn" data-view="table" type="button">Tabela</button>
+      <button class="mobile-view-btn active" data-view="cards" type="button">Cards</button>
+    </div>
+  </div>
+
+  <div aria-label="Ordenação da tabela e dos cards no celular" class="mobile-sort-toolbar" id="mobileSortToolbar">
+    <div class="mobile-sort-line mobile-sort-field-line">
+      <span class="mobile-sort-label">Ordenar</span>
+      <div aria-label="Campo de ordenação" class="mobile-sort-chip-row" role="group">
+        <button class="mobile-sort-chip active" data-mobile-sort-field="dia" type="button">Dia</button>
+        <button class="mobile-sort-chip" data-mobile-sort-field="mes" type="button">Mês</button>
+        <button class="mobile-sort-chip" data-mobile-sort-field="ano" type="button">Ano</button>
+        <button class="mobile-sort-chip" data-mobile-sort-field="m12" type="button">12M</button>
+        <button class="mobile-sort-chip" data-mobile-sort-field="cdi" type="button">% CDI</button>
+      </div>
+    </div>
+
+    <div class="mobile-sort-line mobile-sort-dir-line">
+      <span class="mobile-sort-label">Sentido</span>
+      <div aria-label="Sentido de ordenação" class="mobile-sort-dir" role="group">
+        <button class="mobile-sort-dir-btn active" data-mobile-sort-dir="desc" type="button">Maior</button>
+        <button class="mobile-sort-dir-btn" data-mobile-sort-dir="asc" type="button">Menor</button>
+      </div>
+    </div>
+  </div>
 </div>
-</div>
-<div aria-label="Ordenação da tabela e dos cards no celular" class="mobile-sort-toolbar" id="mobileSortToolbar">
-<div class="mobile-sort-line mobile-sort-field-line">
-<span class="mobile-sort-label">Ordenar</span>
-<div aria-label="Campo de ordenação" class="mobile-sort-chip-row" role="group">
-<button class="mobile-sort-chip active" data-mobile-sort-field="dia" type="button">Dia</button>
-<button class="mobile-sort-chip" data-mobile-sort-field="mes" type="button">Mês</button>
-<button class="mobile-sort-chip" data-mobile-sort-field="ano" type="button">Ano</button>
-<button class="mobile-sort-chip" data-mobile-sort-field="m12" type="button">12M</button>
-<button class="mobile-sort-chip" data-mobile-sort-field="cdi" type="button">% CDI</button>
-</div>
-</div>
-<div class="mobile-sort-line mobile-sort-dir-line">
-<span class="mobile-sort-label">Sentido</span>
-<div aria-label="Sentido de ordenação" class="mobile-sort-dir" role="group">
-<button class="mobile-sort-dir-btn active" data-mobile-sort-dir="desc" type="button">Maior</button>
-<button class="mobile-sort-dir-btn" data-mobile-sort-dir="asc" type="button">Menor</button>
-</div>
-</div>
-</div>
+
 <div class="table-wrap">
-<div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
-<table id="mainTable" style="display:none">
-<thead id="tableHead"></thead>
-<tbody id="tableBody"></tbody>
-</table>
+  <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
+  <table id="mainTable" style="display:none">
+    <thead id="tableHead"></thead>
+    <tbody id="tableBody"></tbody>
+  </table>
 </div>
+
 <div aria-live="polite" class="mobile-fund-cards" id="mobileFundCards"></div>
+
 <div class="pagination-row">
-<div id="resultInfo"></div>
-<div class="page-btns" id="pageBtns"></div>
+  <div id="resultInfo"></div>
+  <div class="page-btns" id="pageBtns"></div>
 </div>
-</div>
+
+</div><!-- /sec-fundos -->
+
 <!-- ═══════════════════════════════════════════ RANKINGS ══ -->
 <div class="section-gap" id="rankingsSection">
 <div class="ranking-head">
@@ -972,9 +987,9 @@
 <div aria-hidden="true" id="gfb-logo">📁</div>
 <div id="gfb-search-wrap">
 <svg aria-hidden="true" fill="none" height="13" id="gfb-icon" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-<input aria-label="Buscar fundo" autocomplete="off" id="gfbSearch" placeholder="Buscar fundo, CNPJ..." type="search">
+<input aria-label="Buscar fundo" autocomplete="off" id="gfbSearch" placeholder="Buscar fundo, CNPJ..." type="search"/>
 <button aria-label="Limpar busca" id="gfbClear">✕</button>
-</input></div>
+</div>
 <div aria-label="Atalhos rápidos para filtrar fundos" id="gfb-chips" role="group">
 <button class="gfb-chip gfb-chip-active" data-gquick="all">Todos</button>
 <button aria-pressed="false" class="gfb-chip gfb-fav-chip" data-gfav="1">⭐ Favoritos <span class="gfb-fav-count" id="gfbFavCount">0</span></button>
@@ -1053,6 +1068,48 @@
 </div>
 <!-- PATCH — Favoritos evidentes, persistentes e com estado vazio -->
 <!-- JavaScript principal —— todos os patches incluídos -->
-<script src="app.js?v=20260604-render-pagination-03"></script>
+<script>
+(function(){
+  function setupMobileOrganize(){
+    const btn = document.getElementById('mobileOrganizeToggle');
+    const panel = document.getElementById('mobileOrganizePanel');
+    const summary = document.getElementById('mobileOrganizeSummary');
+    if(!btn || !panel) return;
+
+    function updateSummary(){
+      const activeView = document.querySelector('.mobile-view-btn.active')?.textContent?.trim() || 'Tabela';
+      const activeSort = document.querySelector('.mobile-sort-chip.active')?.textContent?.trim() || 'Dia';
+      const activeDir = document.querySelector('.mobile-sort-dir-btn.active')?.textContent?.trim() || 'Maior';
+      if(summary) summary.textContent = `${activeView} · ${activeSort} · ${activeDir}`;
+    }
+
+    btn.addEventListener('click', function(){
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+      panel.hidden = isOpen;
+      updateSummary();
+    });
+
+    document.addEventListener('click', function(e){
+      if(
+        e.target.closest('.mobile-view-btn') ||
+        e.target.closest('.mobile-sort-chip') ||
+        e.target.closest('.mobile-sort-dir-btn')
+      ){
+        setTimeout(updateSummary, 60);
+      }
+    });
+
+    updateSummary();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setupMobileOrganize);
+  }else{
+    setupMobileOrganize();
+  }
+})();
+</script>
+<script src="app.js?v=20260604-mobile-organize-02"></script>
 </div></div></body>
 </html>
