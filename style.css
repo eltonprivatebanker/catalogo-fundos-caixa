@@ -14310,3 +14310,51 @@ tr.detail-row .detail-panel{
 tr.detail-row td{
   background: rgba(7,8,15,.92);
 }
+/* ==========================================================
+   TABELA — suaviza abertura/fechamento do detalhe do fundo
+   Compatível com classes adicionadas no app.js:
+   table-refreshing / table-refreshed
+========================================================== */
+
+#tableBody.table-refreshing{
+  opacity: .84 !important;
+  transition: opacity .08s ease-out !important;
+}
+
+#tableBody.table-refreshed{
+  animation: tableSoftReturn .20s ease-out both !important;
+}
+
+@keyframes tableSoftReturn{
+  from{
+    opacity: .86;
+    transform: translateY(-2px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+#sec-fundos tr.detail-row .detail-panel,
+#sec-fundos tr.detail-row .detail-panel-mobile-clean{
+  animation: detailOpenSoft .22s ease-out both !important;
+  transform-origin: top center !important;
+  will-change: opacity, transform;
+}
+
+@keyframes detailOpenSoft{
+  from{
+    opacity: 0;
+    transform: translateY(-6px) scaleY(.985);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
+
+/* Mantém o topo limpo em desktop e mobile */
+#gfb-chips{
+  display: none !important;
+}
