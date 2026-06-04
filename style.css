@@ -14592,3 +14592,54 @@ tr.detail-row td{
     margin-top: 0 !important;
   }
 }
+/* ==========================================================
+   MOBILE — reduz espaço vazio abaixo da barra global
+========================================================== */
+
+@media(max-width:768px){
+
+  /* aproxima o conteúdo da barra fixa superior */
+  .page{
+    padding-top: 58px !important;
+  }
+
+  /* deixa o cabeçalho mais colado e compacto */
+  header{
+    padding-top: 0 !important;
+    padding-bottom: 14px !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* reduz respiro entre header, aviso, KPI e filtros */
+  .top-disclaimer,
+  .notice-strip-v3{
+    margin-top: 10px !important;
+    margin-bottom: 0 !important;
+  }
+
+  #sec-kpi-mobile{
+    margin-top: 10px !important;
+  }
+
+  #sec-fundos{
+    margin-top: 10px !important;
+  }
+
+  #fundFilterShell{
+    margin-top: 0 !important;
+  }
+
+  /* compacta um pouco mais o card do catálogo */
+  #sec-kpi-mobile .mobile-kpi-card{
+    padding: 10px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-head{
+    margin-bottom: 7px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-cell{
+    min-height: 58px !important;
+    padding: 8px 9px !important;
+  }
+}
