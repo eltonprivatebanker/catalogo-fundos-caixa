@@ -1,42 +1,13 @@
+:root{
+  --ds-bg-base:#07080f;--ds-bg-surface:#0d0f1c;--ds-bg-raised:#111526;
+  --ds-brand:#c8973a;--ds-brand-light:#e8bb6a;--ds-brand-dim:rgba(200,151,58,.12);
+  --ds-border:rgba(180,189,211,.16);--ds-border-brand:rgba(200,151,58,.35);
+  --ds-radius-lg:14px;--ds-radius-md:10px;--ds-radius-sm:6px;
+  --ds-ease:cubic-bezier(.4,0,.2,1);--ds-duration-normal:200ms;
+}
 /* Catálogo de Fundos CAIXA — Elton Cardoso Teotonio
    style.css — extraído do index.html (v20) */
 
-
-/* ════════════════════════════════════════════════════════════════════
-   DESIGN SYSTEM — tokens canônicos (adicionados sessão 04/06/2026)
-════════════════════════════════════════════════════════════════════ */
-:root{
-  --ds-bg-base:    #07080f;
-  --ds-bg-surface: #0d0f1c;
-  --ds-bg-raised:  #111526;
-  --ds-bg-overlay: #181d36;
-  --ds-text-primary:   #e8ecf7;
-  --ds-text-secondary: #b4bdd3;
-  --ds-text-tertiary:  #7f8aa8;
-  --ds-brand:       #c8973a;
-  --ds-brand-light: #e8bb6a;
-  --ds-brand-dim:   rgba(200,151,58,.12);
-  --ds-brand-border:rgba(200,151,58,.30);
-  --ds-up:          #2ed17a;
-  --ds-up-subtle:   rgba(46,209,122,.12);
-  --ds-down:        #f05565;
-  --ds-down-subtle: rgba(240,85,101,.10);
-  --ds-info:        #5b9cf6;
-  --ds-border:         rgba(180,189,211,.16);
-  --ds-border-subtle:  rgba(180,189,211,.08);
-  --ds-border-strong:  rgba(180,189,211,.28);
-  --ds-border-brand:   rgba(200,151,58,.35);
-  --ds-radius-sm:   6px;
-  --ds-radius-md:   10px;
-  --ds-radius-lg:   14px;
-  --ds-radius-xl:   20px;
-  --ds-radius-full: 9999px;
-  --ds-shadow-sm:   0 1px 3px rgba(0,0,0,.25);
-  --ds-shadow-md:   0 4px 12px rgba(0,0,0,.35);
-  --ds-ease:        cubic-bezier(.4,0,.2,1);
-  --ds-duration-fast:   120ms;
-  --ds-duration-normal: 200ms;
-}
 :root{
   --bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--bg4:#181d36;
   --gold:#c8973a;--gold2:#e8bb6a;--gold3:#f5d48a;
@@ -13774,16 +13745,10 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opac
   padding:10px 14px;
   margin-bottom:0;
   background:rgba(13,15,28,1);
-  border:1px solid var(--ds-border);
-  border-radius:var(--ds-radius-lg);
+  border:1px solid rgba(180,189,211,.16);
+  border-radius:14px;
   cursor:pointer;
-  user-select:none;
-  transition:border-color var(--ds-duration-normal) var(--ds-ease),
-             background var(--ds-duration-normal) var(--ds-ease);
-}
-.poup-collapse-header:hover{
-  border-color:var(--ds-border-brand);
-  background:var(--ds-brand-dim);
+  transition:border-color .2s ease, background .2s ease;
 }
 .poup-collapse-header:hover{
   border-color:rgba(200,151,58,.35);
@@ -15148,5 +15113,38 @@ tr.detail-row td{
   display: none !important;
 }
 
-/* Seleção de texto */
-::selection{ background:rgba(200,151,58,.20); color:#e8bb6a; }
+/* ── Filtros ativos — sempre visível ─────────────────────────────
+   Mesmo sem filtros, a faixa aparece indicando o estado neutro.
+   .active-filter-empty  → texto quando nenhum filtro está selecionado
+──────────────────────────────────────────────────────────────── */
+.active-filter-strip{
+  display:flex !important;   /* sempre visível */
+  min-height:34px;
+}
+.active-filter-empty{
+  color:#7f8aa8;
+  font-family:'Inter',sans-serif;
+  font-size:.68rem;
+  font-weight:600;
+  font-style:italic;
+  padding:4px 2px;
+}
+/* Quando filtros estão ativos, pill com X mais clicável */
+.active-filter-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  cursor:pointer;
+}
+.active-filter-pill .pill-x{
+  opacity:.6;
+  font-size:.72rem;
+  font-weight:900;
+  margin-left:2px;
+}
+.active-filter-pill:hover .pill-x{
+  opacity:1;
+  color:var(--red);
+}
+
+::selection{background:rgba(200,151,58,.20);color:#e8bb6a;}
