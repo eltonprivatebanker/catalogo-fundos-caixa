@@ -14391,3 +14391,78 @@ tr.detail-row .detail-panel{
 tr.detail-row td{
   background: rgba(7,8,15,.92);
 }
+/* ==========================================================
+   KPI EXECUTIVO — versão mais limpa e compacta
+========================================================== */
+
+#sec-kpi.executive-kpi-grid{
+  margin-top: 18px !important;
+  grid-template-columns: 1.1fr 1.25fr 1fr 1fr !important;
+  gap: 10px !important;
+}
+
+/* Esconde cards redundantes */
+#sec-kpi .kpi-categorias,
+#sec-kpi .kpi-pipeline{
+  display: none !important;
+}
+
+/* Compacta os cards restantes */
+#sec-kpi .kpi{
+  padding: 14px 16px !important;
+  min-height: 96px !important;
+  border-radius: 12px !important;
+}
+
+/* Remove ícones grandes para limpar visual */
+#sec-kpi .kpi-icon{
+  display: none !important;
+}
+
+#sec-kpi .kpi-label{
+  font-size: .56rem !important;
+  margin-bottom: 6px !important;
+}
+
+#sec-kpi .kpi-value{
+  font-size: 1.45rem !important;
+  line-height: 1.05 !important;
+}
+
+#sec-kpi .kpi-value.pos,
+#sec-kpi .kpi-value.neg{
+  font-size: 1.35rem !important;
+}
+
+#sec-kpi .kpi-sub{
+  font-size: .58rem !important;
+  margin-top: 5px !important;
+}
+
+/* Mobile: mantém só o card mobile já existente */
+@media(max-width:768px){
+  #sec-kpi.executive-kpi-grid{
+    display: none !important;
+  }
+
+  #sec-kpi-mobile{
+    margin-top: 14px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-card{
+    padding: 13px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-head{
+    margin-bottom: 8px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-compact-grid{
+    gap: 7px !important;
+  }
+
+  #sec-kpi-mobile .mobile-kpi-cell{
+    padding: 9px !important;
+    min-height: auto !important;
+  }
+}
