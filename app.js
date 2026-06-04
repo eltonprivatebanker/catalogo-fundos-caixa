@@ -6,40 +6,21 @@ const BASE_URL = window.location.protocol === 'file:'
   : '';
 
 
-/* ═══════════════════════════════════════════════════════════════
-   toggleSection — abre/fecha seções colapsáveis
-   Chamada inline no HTML: onclick="toggleSection(bodyId, containerId)"
-   - bodyId:      id do <div class="section-collapsible-body" hidden>
-   - containerId: id do elemento pai (cabeçalho ou wrapper da seção)
-═══════════════════════════════════════════════════════════════ */
+/* toggleSection — abre/fecha seções colapsáveis */
 function toggleSection(bodyId, containerId) {
-  var body      = document.getElementById(bodyId);
+  var body = document.getElementById(bodyId);
   var container = document.getElementById(containerId);
   if (!body) return;
-
   var isHidden = body.hasAttribute('hidden');
-
-  // Abre ou fecha o corpo
-  if (isHidden) {
-    body.removeAttribute('hidden');
-  } else {
-    body.setAttribute('hidden', '');
-  }
-
-  // Atualiza classe e aria no container
+  if (isHidden) { body.removeAttribute('hidden'); } else { body.setAttribute('hidden', ''); }
   if (container) {
     container.classList.toggle('section-expanded', isHidden);
     container.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
   }
-
-  // Atualiza o label do botão toggle dentro do cabeçalho
-  var btn = container ? container.querySelector('.toggle-label') : null;
-  if (btn) btn.textContent = isHidden ? 'Ver menos' : 'Ver mais';
+  var lbl = container ? container.querySelector('.toggle-label') : null;
+  if (lbl) lbl.textContent = isHidden ? 'Ver menos' : 'Ver mais';
 }
-
-/* Expõe no escopo global (necessário para onclick inline no HTML) */
 window.toggleSection = toggleSection;
-
 const $ = id => document.getElementById(id);
 const fmt = (v,dec=2,suf='%') => {
   if(v===null||v===undefined||v==='') return '—';
@@ -4518,14 +4499,11 @@ document.addEventListener('DOMContentLoaded', function(){
     clearAllFilters();
     return;
   }
-  // Perfil
+  /* Funil AND — cada clique ACUMULA, não limpa os filtros anteriores */
   if(preset==='pf') activePerfil='PF';
-  // Benchmark
   if(preset==='cdi') activeBenchmark='CDI';
   if(preset==='ipca') activeBenchmark='IPCA';
-  // Risco
   if(preset==='conservador') activeRisco='Conservador';
-  // Categoria
   if(preset==='renda-fixa-simples') activeCat='RENDA FIXA SIMPLES';
   if(preset==='renda-fixa') activeCat='RENDA FIXA';
   if(preset==='renda-fixa-referenciado') activeCat='RENDA FIXA REFERENCIADO';
@@ -4573,12 +4551,14 @@ document.addEventListener('DOMContentLoaded', function(){
     const strip=qs('#activeFilterStrip');
     if(strip){
       if(!parts.length){
-        strip.innerHTML='';
+        /* Strip sempre visível — mesmo sem filtros mostra o estado neutro */
         strip.classList.remove('active');
+        strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span>`+
+          `<span class="active-filter-empty">Nenhum filtro selecionado — mostrando todos os fundos</span>`;
       }else{
         strip.classList.add('active');
         strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span>`+
-          parts.map(p=>`<button type="button" class="active-filter-pill" data-clear-filter="${p.kind}"><small>${p.label}</small>${p.value}<span>×</span></button>`).join('')+
+          parts.map(p=>`<button type="button" class="active-filter-pill" data-clear-filter="${p.kind}"><small>${p.label}</small><span>${p.value}</span><span class="pill-x">×</span></button>`).join('')+
           `<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>`;
       }
     }
