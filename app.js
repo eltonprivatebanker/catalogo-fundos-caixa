@@ -3316,7 +3316,9 @@ function render(){
 
   renderPagination();
 }
+function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
+ 
   const c=$('pageBtns'); c.innerHTML='';
   if(total<=1) return;
   const mk=(label,page,dis,act)=>{
