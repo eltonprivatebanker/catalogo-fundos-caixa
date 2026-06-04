@@ -2890,11 +2890,10 @@ function buildDetailPanel(r,colspan){
     return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
   }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
-  const urlItem=urlFund?`<div class="detail-item detail-site-link"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean">
-      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}${urlItem}</div>${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
