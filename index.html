@@ -16,7 +16,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=20260604-mobile-organize-03" rel="stylesheet"/>
+<link href="style.css?v=20260604-sipii-order-02" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -139,16 +139,20 @@
 </div>
 <div aria-label="Atalhos rápidos do catálogo" class="catalog-shortcuts">
 <span class="catalog-shortcuts-label">Atalhos</span>
-<button class="filter-preset-chip shortcut-preset" data-preset="all" type="button">Todos</button>
+<button class="filter-preset-chip shortcut-preset active" data-preset="all" type="button">Todos</button>
 <button aria-pressed="false" class="filter-preset-chip shortcut-preset fav-shortcut-chip" data-preset="favoritos" type="button">⭐ Favoritos <span class="fav-count-inline" id="favShortcutCount">0</span></button>
-<button class="filter-preset-chip shortcut-preset" data-preset="cdi" type="button">CDI</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="conservador" type="button">Conservador</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="ipca" type="button">IPCA</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-simples" type="button">RF Simples</button>
 <button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" type="button">Renda Fixa</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-referenciado" type="button">RF Referenciado</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-curto-prazo" type="button">RF Curto Prazo</button>
 <button class="filter-preset-chip shortcut-preset" data-preset="multimercado" type="button">Multimercado</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="acoes" type="button">Ações</button>
 <button class="filter-preset-chip shortcut-preset" data-preset="cambial" type="button">Cambial</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="acoes" type="button">Ações</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="fundo-de-indice" type="button">Fundo de Índice</button>
 <button class="filter-preset-chip shortcut-preset" data-preset="fmp" type="button">FMP</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="cdi" type="button">CDI</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="ipca" type="button">IPCA</button>
+<button class="filter-preset-chip shortcut-preset" data-preset="conservador" type="button">Conservador</button>
 </div>
 <div aria-live="polite" class="active-filter-strip" id="activeFilterStrip"></div>
 </div>
@@ -167,6 +171,15 @@
 <div class="filter-row filter-group-panel" id="catFilters">
 <span class="filter-label">Categoria</span>
 <button class="chip active" data-cat="">Todas</button>
+<button class="chip" data-cat="RENDA FIXA SIMPLES">RENDA FIXA SIMPLES</button>
+<button class="chip" data-cat="RENDA FIXA">RENDA FIXA</button>
+<button class="chip" data-cat="RENDA FIXA REFERENCIADO">RENDA FIXA REFERENCIADO</button>
+<button class="chip" data-cat="RENDA FIXA CURTO PRAZO">RENDA FIXA CURTO PRAZO</button>
+<button class="chip" data-cat="MULTIMERCADO">MULTIMERCADO</button>
+<button class="chip" data-cat="CAMBIAL">CAMBIAL</button>
+<button class="chip" data-cat="ACOES">AÇÕES</button>
+<button class="chip" data-cat="FUNDO DE INDICE">FUNDO DE ÍNDICE</button>
+<button class="chip" data-cat="FUNDOS MUTUOS DE PRIVATIZACAO">FUNDOS MÚTUOS DE PRIVATIZAÇÃO</button>
 </div>
 </details>
 <details class="filter-group-accordion">
@@ -997,13 +1010,14 @@
 <button class="gfb-chip" data-gcat="RENDA FIXA">RF</button>
 <button class="gfb-chip" data-gcat="RENDA FIXA REFERENCIADO">RF Ref.</button>
 <button class="gfb-chip" data-gcat="RENDA FIXA CURTO PRAZO">RF CP</button>
+<button class="gfb-chip" data-gcat="MULTIMERCADO">MM</button>
+<button class="gfb-chip" data-gcat="CAMBIAL">Câmbio</button>
+<button class="gfb-chip" data-gcat="ACOES">Ações</button>
+<button class="gfb-chip" data-gcat="FUNDO DE INDICE">Índice</button>
+<button class="gfb-chip" data-gcat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP</button>
 <button class="gfb-chip" data-gbench="CDI">CDI</button>
 <button class="gfb-chip" data-gbench="IPCA">IPCA</button>
 <button class="gfb-chip" data-gbench="Crédito privado">Créd. Priv.</button>
-<button class="gfb-chip" data-gcat="MULTIMERCADO">MM</button>
-<button class="gfb-chip" data-gcat="ACOES">Ações</button>
-<button class="gfb-chip" data-gcat="CAMBIAL">Câmbio</button>
-<button class="gfb-chip" data-gcat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP</button>
 </div>
 <div id="gfb-right">
 <span aria-live="polite" id="gfbCount">—</span>
@@ -1110,6 +1124,6 @@
   }
 })();
 </script>
-<script src="app.js?v=20260604-mobile-organize-02"></script>
+<script src="app.js?v=20260604-sipii-order-02"></script>
 </div></div></body>
 </html>
