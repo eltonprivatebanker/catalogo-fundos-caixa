@@ -14911,3 +14911,25 @@ tr.detail-row td{
 .ranking-title-group .section-badge{
   display:none !important;
 }
+/* ==========================================================
+   TABELA — estabiliza carregamento e reduz layout shift
+========================================================== */
+
+.table-wrap{
+  min-height: 430px !important;
+  transition: none !important;
+}
+
+#loadMsg{
+  min-height: 260px !important;
+}
+
+#mainTable{
+  contain: layout paint !important;
+}
+
+#tableBody,
+#mobileFundCards{
+  transition: none !important;
+  animation: none !important;
+}
