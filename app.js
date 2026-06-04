@@ -1,12 +1,3 @@
-/* ════════════════════════════════════════════════════════════════════
-   app.js — Catálogo de Fundos CAIXA
-   Gerado a partir do index.html com todos os patches aplicados
-   Inclui: bug fixes Selic, exec-bar, colapsáveis, PTAX stats,
-           visão geral, tooltips, URL anchors, typeof guards
-════════════════════════════════════════════════════════════════════ */
-
-
-/* ── Bloco 1 ────────────────────────────────────────────────── */
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
 ════════════════════════════════════════════════════ */
@@ -2852,16 +2843,21 @@ function gerarLeituraRapidaFundo(r){
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
     : '';
 
-return `
-  <div class="fund-quick-note">
-    <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
-    ${tagsHtml}
-    <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
-    ${alertaCdi}
-    <div class="fund-quick-note-disclaimer">
-      Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
-    </div>
-  </div>`;
+  const complementosHtml = complementos.length
+    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
+    : '';
+
+  return `
+    <div class="fund-quick-note">
+      <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
+      ${tagsHtml}
+      <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
+      ${complementosHtml}
+      ${alertaCdi}
+      <div class="fund-quick-note-disclaimer">
+        Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
+      </div>
+    </div>`;
 }
 
 function buildDetailPanel(r,colspan){
@@ -2890,10 +2886,11 @@ function buildDetailPanel(r,colspan){
     return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
   }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
+  const urlItem=urlFund?`<div class="detail-item detail-site-link"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean">
-      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}${urlItem}</div>${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
@@ -3249,76 +3246,52 @@ function render(){
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
   const rows=filtered.slice(start,end);
   const tbody=$('tableBody');
-
   if(!rows.length){
     tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
-    $('resultInfo').textContent='Resultado: 0 fundos encontrados';
-    updateFundResultSummary();
-    renderPagination();
-    return;
+    $('resultInfo').textContent='Resultado: 0 fundos encontrados'; updateFundResultSummary(); renderPagination(); return;
   }
-
   tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
-
-  $('resultInfo').textContent= perPage===9999
-    ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}`
-    : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
-
+  $('resultInfo').textContent= perPage===9999 ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}` : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
   updateFundResultSummary();
-
   // Eventos checkboxes comparador
   tbody.querySelectorAll('.comp-check').forEach(cb=>{
     const idx = parseInt(cb.dataset.idx);
-
     cb.addEventListener('change', ()=>{
       const row = filtered[idx] || allRows[idx];
       comparToggle(idx, row, cb);
     });
-
     cb.addEventListener('click', e=>e.stopPropagation());
   });
 
-  // Evento de expandir/recolher detalhe do fundo
   tbody.querySelectorAll('.exp-btn').forEach(btn=>{
-    btn.addEventListener('click', e=>{
+    btn.addEventListener('click',e=>{
       e.stopPropagation();
-
-      const idx = parseInt(btn.dataset.idx);
-
-      // Suaviza a sensação de "pulo" antes de redesenhar a tabela
-      tbody.classList.add('table-refreshing');
-
-      setTimeout(() => {
-        if(expandedRows.has(idx)){
-          expandedRows.delete(idx);
-        }else{
-          expandedRows.clear(); // mantém só uma linha aberta por vez
-          expandedRows.add(idx);
-        }
-
-        render();
-
-        requestAnimationFrame(() => {
-          const tbody2 = document.getElementById('tableBody');
-
-          if(tbody2){
-            tbody2.classList.remove('table-refreshing');
-            tbody2.classList.add('table-refreshed');
-
-            setTimeout(() => {
-              tbody2.classList.remove('table-refreshed');
-            }, 220);
-          }
-        });
-      }, 80);
+      const idx=parseInt(btn.dataset.idx);
+      if(expandedRows.has(idx)) expandedRows.delete(idx); else expandedRows.add(idx);
+      render();
     });
   });
-
   renderPagination();
 }
+
+function scrollToFundResultsStart(){
+  const tableWrap = document.querySelector('#sec-fundos .table-wrap');
+  const fallback = document.getElementById('sec-fundos');
+  const target = tableWrap || fallback;
+  if(!target) return;
+
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const stickyOffset = isMobile ? 118 : 24;
+  const y = target.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
+
+  window.scrollTo({
+    top: Math.max(0, y),
+    behavior: 'smooth'
+  });
+}
+
 function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
- 
   const c=$('pageBtns'); c.innerHTML='';
   if(total<=1) return;
   const mk=(label,page,dis,act)=>{
@@ -3448,11 +3421,11 @@ function buildBenchmarkFilters(rows){
 }
 
 /* Listeners */
-$('perfilFilters').addEventListener('click',e=>{
+$('perfilFilters')?.addEventListener('click',e=>{
   const btn=e.target.closest('[data-perfil]'); if(!btn) return;
   activePerfil=btn.dataset.perfil; setActiveChip($('perfilFilters'),'[data-perfil]',btn); applyFilter();
 });
-$('riscoFilters').addEventListener('click',e=>{
+$('riscoFilters')?.addEventListener('click',e=>{
   const btn=e.target.closest('[data-risco]'); if(!btn) return;
   activeRisco=btn.dataset.risco; setActiveChip($('riscoFilters'),'[data-risco]',btn); applyFilter();
 });
@@ -3470,7 +3443,7 @@ function ativarTabelaAoBuscar(){
   document.body.classList.remove('fund-card-mode');
   document.querySelectorAll('.mobile-view-btn').forEach(b=>b.classList.toggle('active',b.dataset.view==='table'));
 }
-$('searchInput').addEventListener('input',e=>{
+$('searchInput')?.addEventListener('input',e=>{
   clearTimeout(_st);
   _st=setTimeout(()=>{
     activeSearch=e.target.value;
@@ -3480,8 +3453,8 @@ $('searchInput').addEventListener('input',e=>{
     if(temBusca) setTimeout(irParaTabelaDeFundosMobile,90);
   },280);
 });
-$('perPage').addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); updateFundResultSummary(); });
-$('toggleSemDados').addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
+$('perPage')?.addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); updateFundResultSummary(); });
+$('toggleSemDados')?.addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
   try{
@@ -3968,10 +3941,7 @@ async function inicializarGraficos(d){
   _dadosMercado.cards.ipca.historico = hist;
 
   // Força base histórica completa quando o mercado_atual.json trouxer apenas recorte curto.
-  let selic = await carregarSelicHistoricoAmpliado(
-    (d?.historico_selic?.length ? d.historico_selic : null)
-    || (d?.cards?.selic_meta?.historico?.length ? d.cards.selic_meta.historico : null)
-    || []);
+  let selic = await carregarSelicHistoricoAmpliado(d?.historico_selic || d?.cards?.selic_meta?.historico || []);
   if(selic.length){
     _dadosMercado.historico_selic = selic;
   }
@@ -4036,9 +4006,7 @@ async function alterarPeriodoGraficoEvolucao(btn){
     }
 
     if(chart === 'selic'){
-      let histSelic = (_dadosMercado?.historico_selic?.length ? _dadosMercado.historico_selic : null)
-                 || (_dadosMercado?.cards?.selic_meta?.historico?.length ? _dadosMercado.cards.selic_meta.historico : null)
-                 || [];
+      let histSelic = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
 
       // Mantém 1A/5A/Histórico funcionando mesmo quando o JSON principal trouxer uma amostra curta.
       histSelic = await carregarSelicHistoricoAmpliado(histSelic);
@@ -4188,9 +4156,7 @@ function _fmtPctCopom(v){
   return n.toFixed(2).replace('.',',') + '%';
 }
 function _historicoSelicOrdenado(){
-  const h = (_dadosMercado?.historico_selic?.length ? _dadosMercado.historico_selic : null)
-           || (_dadosMercado?.cards?.selic_meta?.historico?.length ? _dadosMercado.cards.selic_meta.historico : null)
-           || [];
+  const h = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
   return (Array.isArray(h) ? h : [])
     .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia), _valor:_selicValorRegistro(r)}))
     .filter(r => r._key && r._valor !== null)
@@ -4262,27 +4228,18 @@ async function iniciarDashboard(){
   await carregarFundosJson();
   await carregarDados();
   await carregarKPIs();
-  // Chamadas tardias — todos os blocos JS já carregados
-  if(typeof calcularEstatisticasPTAX === 'function') calcularEstatisticasPTAX();
-  if(typeof atualizarVisaoGeral === 'function') atualizarVisaoGeral();
 }
 iniciarDashboard();
-
-/* ── Bloco 2 ────────────────────────────────────────────────── */
 document.addEventListener('click', function(e){
   if(e.target.closest('.detail-row a, .detail-row button, .detail-row input, .docs-card')){
     e.stopPropagation();
   }
 }, true);
-
-/* ── Bloco 3 ────────────────────────────────────────────────── */
 // Mantém o disclaimer do rodapé fechado ao abrir/recarregar a página.
 document.addEventListener('DOMContentLoaded', function(){
   var footer = document.getElementById('footerDisclaimer');
   if (footer) footer.removeAttribute('open');
 });
-
-/* ── Bloco 4 ────────────────────────────────────────────────── */
 /* ════════════════════════════════════════════════════
    MOBILE UX — atalhos, filtros compactos e cards de fundos
 ════════════════════════════════════════════════════ */
@@ -4526,15 +4483,21 @@ document.addEventListener('DOMContentLoaded', function(){
       clearAllFilters();
       return;
     }
-    activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false;
-    if(preset==='cdi') activeBenchmark='CDI';
+    if(preset === 'pf') activePerfil = 'PF';
+  if(preset === 'cdi') activeBenchmark = 'CDI';
     if(preset==='conservador') activeRisco='Conservador';
     if(preset==='ipca') activeBenchmark='IPCA';
     if(preset==='renda-fixa') activeCat='RENDA FIXA';
     if(preset==='multimercado') activeCat='MULTIMERCADO';
-    if(preset==='acoes') activeCat='ACOES';
-    if(preset==='cambial') activeCat='CAMBIAL';
-    if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
+    if(preset==='renda-fixa-simples') activeCat='RENDA FIXA SIMPLES';
+  if(preset==='renda-fixa') activeCat='RENDA FIXA';
+  if(preset==='renda-fixa-referenciado') activeCat='RENDA FIXA REFERENCIADO';
+  if(preset==='renda-fixa-curto-prazo') activeCat='RENDA FIXA CURTO PRAZO';
+  if(preset==='multimercado') activeCat='MULTIMERCADO';
+  if(preset==='acoes') activeCat='ACOES';
+  if(preset==='cambial') activeCat='CAMBIAL';
+  if(preset==='fundo-de-indice') activeCat='FUNDO DE INDICE';
+  if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
     syncFilterControls();
     if(typeof applyFilter==='function') applyFilter();
   }
@@ -4693,8 +4656,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
   window.addEventListener('resize',()=>applyViewMode(localStorage.getItem('fundMobileView')));
 })();
-
-/* ── Bloco 5 ────────────────────────────────────────────────── */
 (function(){
   'use strict';
 
@@ -4921,8 +4882,6 @@ document.addEventListener('DOMContentLoaded', function(){
   else setTimeout(init,400);
 
 })();
-
-/* ── Bloco 6 ────────────────────────────────────────────────── */
 (function(){
   'use strict';
 
@@ -5161,8 +5120,6 @@ document.addEventListener('DOMContentLoaded', function(){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init);
   else init();
 })();
-
-/* ── Bloco 7 ────────────────────────────────────────────────── */
 (function(){
   'use strict';
 
@@ -5434,8 +5391,6 @@ document.addEventListener('DOMContentLoaded', function(){
   setTimeout(setupKpiClick,600);
   setTimeout(setupKpiClick,1800);
 })();
-
-/* ── Bloco 8 ────────────────────────────────────────────────── */
 (function(){
   function isMobilePriorityTable(){
     try{
@@ -5723,7 +5678,6 @@ setTimeout(()=>{
   if(btn && !btn._cpatched){ btn._cpatched=true; btn.addEventListener('click', fecharComparador); }
 },600);
 
-/* ── Bloco 9 ────────────────────────────────────────────────── */
 (function(){
   'use strict';
 
@@ -5975,8 +5929,6 @@ setTimeout(()=>{
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(initFavEnhanced,500));
   else setTimeout(initFavEnhanced,500);
 })();
-
-/* ── Bloco 10 ────────────────────────────────────────────────── */
 // ─────────────────────────────────────────────
 // Painel consolidado — print e compartilhamento
 // Agora foca somente no bloco do ÚLTIMO MÊS FECHADO
@@ -6109,54 +6061,21 @@ function renderClosedMarketSheet(){
   }).join('');
 }
 function openFechamentoMesSheet(){
-  const painelBody = document.getElementById('sec-painel-body');
-  const secPainel = document.getElementById('sec-mercado-painel');
-
-  if(painelBody){
-    painelBody.hidden = false;
-    painelBody.classList.add('open');
-  }
-
-  if(secPainel){
-    secPainel.classList.add('open');
-    secPainel.setAttribute('aria-expanded', 'true');
-  }
-
-  try{ atualizarResumoFechamentoMes(); }catch(e){ console.warn('[Fechamento rápido] mini card:', e); }
-  try{ atualizarPainelFechadoCard(); }catch(e){ console.warn('[Fechamento rápido] card print:', e); }
-  try{ renderClosedMarketSheet(); }catch(e){ console.warn('[Fechamento rápido] sheet:', e); }
-
+  atualizarResumoFechamentoMes();
+  atualizarPainelFechadoCard();
+  renderClosedMarketSheet();
   document.body.classList.add('closed-market-open');
-
-  const sheet = document.getElementById('closedMarketSheet');
-  const overlay = document.getElementById('closedMarketOverlay');
-
-  if(sheet){
-    sheet.setAttribute('aria-hidden','false');
-    sheet.classList.add('open', 'active');
-  }
-
-  if(overlay){
-    overlay.setAttribute('aria-hidden','false');
-    overlay.classList.add('open', 'active');
-  }
+  const sheet=document.getElementById('closedMarketSheet');
+  const overlay=document.getElementById('closedMarketOverlay');
+  if(sheet) sheet.setAttribute('aria-hidden','false');
+  if(overlay) overlay.setAttribute('aria-hidden','false');
 }
-
 function closeFechamentoMesSheet(){
   document.body.classList.remove('closed-market-open');
-
-  const sheet = document.getElementById('closedMarketSheet');
-  const overlay = document.getElementById('closedMarketOverlay');
-
-  if(sheet){
-    sheet.setAttribute('aria-hidden','true');
-    sheet.classList.remove('open', 'active');
-  }
-
-  if(overlay){
-    overlay.setAttribute('aria-hidden','true');
-    overlay.classList.remove('open', 'active');
-  }
+  const sheet=document.getElementById('closedMarketSheet');
+  const overlay=document.getElementById('closedMarketOverlay');
+  if(sheet) sheet.setAttribute('aria-hidden','true');
+  if(overlay) overlay.setAttribute('aria-hidden','true');
 }
 function atualizarPainelFechadoCard(){
   const periodo=periodoUltimoFechado();
@@ -6226,8 +6145,6 @@ async function sharePainelMercado(){
     alert('Não foi possível abrir o WhatsApp automaticamente. Copie o resumo manualmente pelo painel.');
   }
 }
-
-/* ── Bloco 11 ────────────────────────────────────────────────── */
 /* Patch final — controle próprio dos botões IPCA/Selic.
    Build: ELTAUM_TABS_FORCE_20260602_v10
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
@@ -6635,8 +6552,6 @@ async function sharePainelMercado(){
   document.addEventListener('click', capturar, true);
   document.addEventListener('pointerup', capturar, true);
 })();
-
-/* ── Bloco 12 ────────────────────────────────────────────────── */
 (function(){
   'use strict';
   const BUILD = 'ELTAUM_INDIC_TABS_FORCE_20260602_v5';
@@ -6720,8 +6635,6 @@ async function sharePainelMercado(){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar, {once:true});
   else instalar();
 })();
-
-/* ── Bloco 13 ────────────────────────────────────────────────── */
 /* Patch v6 — captura no window antes dos listeners antigos e usa hit-test por coordenada.
    Objetivo: fazer os botões responderem mesmo se algum elemento/camada estiver interceptando o target. */
 (function(){
@@ -6853,8 +6766,6 @@ async function sharePainelMercado(){
 
   console.info('[' + BUILD + '] instalado.');
 })();
-
-/* ── Bloco 14 ────────────────────────────────────────────────── */
 /* Patch final — atalhos do catálogo no desktop/mobile.
    Build: ELTAUM_TABS_FORCE_20260602_v10
    Ajuste v10: reduz piscadas/pulos ao filtrar grupos.
@@ -7107,445 +7018,4 @@ async function sharePainelMercado(){
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
   else setTimeout(setup,650);
-})();
-
-/* ════════════════════════════════════════════════════════════════════
-   PATCHES — irParaFundos / toggleSection / atualizarExecBar /
-             calcularEstatisticasPTAX / atualizarVisaoGeral /
-             addSiglaTips / setupUrlAnchors
-════════════════════════════════════════════════════════════════════ */
-
-/* ── Navegação ──────────────────────────────────────────────────── */
-function irParaFundos(){
-  try{ document.getElementById('sec-fundos').scrollIntoView({behavior:'smooth'}); }catch(e){}
-}
-
-/* ── Seções colapsáveis ─────────────────────────────────────────── */
-function toggleSection(bodyId, sectionId){
-  const body    = document.getElementById(bodyId);
-  const section = document.getElementById(sectionId);
-  if(!body) return;
-  const isHidden = body.hasAttribute('hidden');
-  const btn   = section?.querySelector('.section-toggle-btn');
-  const icon  = btn?.querySelector('.toggle-icon');
-  const label = btn?.querySelector('.toggle-label');
-  const title = section?.querySelector('.section-title-collapsible');
-  if(isHidden){
-    body.removeAttribute('hidden');
-    if(icon)  icon.textContent  = '⌄';
-    if(label) label.textContent = 'Ver menos';
-    if(title) title.setAttribute('aria-expanded','true');
-    section?.classList.add('section-expanded');
-  } else {
-    body.setAttribute('hidden','');
-    if(icon)  icon.textContent  = '›';
-    if(label) label.textContent = 'Ver mais';
-    if(title) title.setAttribute('aria-expanded','false');
-    section?.classList.remove('section-expanded');
-  }
-}
-
-/* ── Exec Bar ───────────────────────────────────────────────────── */
-function atualizarExecBar(){
-  const set = (id,v,cls) => {
-    const el = document.getElementById(id);
-    if(!el) return;
-    el.textContent = v;
-    if(cls) el.className = 'exec-val ' + cls;
-  };
-  try{
-    const d = _dadosMercado;
-    if(!d) return;
-    const cdiMes = d?.cards?.cdi?.ultimo_mes;
-    set('execCDI', cdiMes!=null ? (cdiMes>0?'+':'')+Number(cdiMes).toFixed(2).replace('.',',')+'%' : '—', 'pos');
-    const dolarMes = d?.cards?.dolar?.var_mes ?? indicState?.dolarPct?.mes;
-    const dCls = dolarMes>0?'neg':dolarMes<0?'pos':'neu';
-    set('execDolar', dolarMes!=null ? (dolarMes>0?'+':'')+Number(dolarMes).toFixed(2).replace('.',',')+'%' : '—', dCls);
-    const ibovMes = d?.indices_mercado?.ibovespa?.variacao_mes_fechado ?? d?.indices_internacionais?.ibovespa?.var_mes;
-    const iCls = ibovMes>0?'pos':ibovMes<0?'neg':'neu';
-    set('execIbov', ibovMes!=null ? (ibovMes>0?'+':'')+Number(ibovMes).toFixed(2).replace('.',',')+'%' : '—', iCls);
-    const best = document.getElementById('kpiBest')?.textContent || document.getElementById('mKpiBest')?.textContent;
-    if(best && best!=='—') set('execBest', best, 'pos');
-  }catch(e){ console.warn('[execBar]',e); }
-}
-
-/* ── Estatísticas PTAX 12M ──────────────────────────────────────── */
-function calcularEstatisticasPTAX(){
-  if(!_ptaxHistorico || !_ptaxHistorico.length) return;
-  const hoje=new Date(), lim=new Date(hoje);
-  lim.setMonth(hoje.getMonth()-12);
-  const ult12 = _ptaxHistorico.filter(d=>new Date(d.dataHoraCotacao)>=lim);
-  if(!ult12.length) return;
-  const vals = ult12.map(d=>parseFloat(d.cotacaoVenda)).filter(v=>!isNaN(v));
-  if(!vals.length) return;
-  const maxV=Math.max(...vals), minV=Math.min(...vals), med=vals.reduce((a,b)=>a+b,0)/vals.length;
-  const iMax=ult12.find(d=>parseFloat(d.cotacaoVenda)===maxV);
-  const iMin=ult12.find(d=>parseFloat(d.cotacaoVenda)===minV);
-  const ref=item=>{
-    if(!item) return '—';
-    if(item._mes_label) return item._mes_label;
-    const dt=new Date(item.dataHoraCotacao);
-    const m=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
-    return m[dt.getMonth()]+'/'+dt.getFullYear();
-  };
-  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-  set('ptaxStatAtual',  brl(vals[vals.length-1]));
-  set('ptaxStatMax',    brl(maxV));
-  set('ptaxStatMaxRef', ref(iMax));
-  set('ptaxStatMin',    brl(minV));
-  set('ptaxStatMinRef', ref(iMin));
-  set('ptaxStatMedia',  brl(+med.toFixed(4)));
-}
-
-/* ── Visão Geral do Catálogo ────────────────────────────────────── */
-function atualizarVisaoGeral(){
-  try{
-    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-    const total=Array.isArray(allRows)?allRows.length:0;
-    const semD=Array.isArray(allRows)?allRows.filter(r=>!temDados(r)).length:0;
-    set('vgTotalFundos',total||'—');
-    set('vgTotalSub',total?`${total-semD} ativos · ${semD} pipeline`:'carregando...');
-    let pl=0;
-    if(Array.isArray(allRows)) allRows.forEach(r=>{const p=toNum(r['PL (milhoes R$)']);if(p)pl+=p;});
-    set('vgPLTotal',pl>0?fmtPLBilhoes(pl):'—');
-    set('vgPLSub',pl>0?fmtPLMilhoes(pl).split('·')[0].trim():'carregando...');
-    const cats=Array.isArray(allRows)?new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean)):new Set();
-    set('vgCats',cats.size||'—');
-    let best=-Infinity,worst=Infinity,bV='—',wV='—',bN='',wN='';
-    if(Array.isArray(allRows)) allRows.forEach(r=>{
-      const m=toNum(r['Acum. 12M (%)']);if(m===null)return;
-      if(m>best){best=m;bV=r['Acum. 12M (%)'];bN=r['Fundo']||'';}
-      if(m<worst){worst=m;wV=r['Acum. 12M (%)'];wN=r['Fundo']||'';}
-    });
-    set('vgMelhor',best>-Infinity?'+'+bV+'%':'—');
-    set('vgMelhorNome',typeof kpiShortFundName==='function'?kpiShortFundName(bN):bN.slice(0,22));
-    set('vgPior',worst<Infinity?wV+'%':'—');
-    set('vgPiorNome',typeof kpiShortFundName==='function'?kpiShortFundName(wN):wN.slice(0,22));
-    const catList=document.getElementById('vgCatList');
-    if(catList&&kpisDashboard?.categorias){
-      const L={'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'Renda Fixa',
-        'RENDA FIXA REFERENCIADO':'RF Ref. DI','RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
-        'MULTIMERCADO':'Multimercado','CAMBIAL':'Cambial','ACOES':'Ações',
-        'FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP-FGTS'};
-      catList.innerHTML=Object.entries(kpisDashboard.categorias)
-        .sort((a,b)=>(b[1].pl_total||0)-(a[1].pl_total||0))
-        .map(([cat,d])=>{
-          const pl=d.pl_total?'R$ '+(d.pl_total>=1000?(d.pl_total/1000).toFixed(1)+'bi':Math.round(d.pl_total)+'mi'):'—';
-          const rent=d.rent_12m_ponderada!=null?(d.rent_12m_ponderada>0?'+':'')+Number(d.rent_12m_ponderada).toFixed(2).replace('.',',')+'%':'—';
-          const cls=d.rent_12m_ponderada>0?'pos':d.rent_12m_ponderada<0?'neg':'';
-          return `<div class="vg-cat-row"><span class="vg-cat-nome">${L[cat]||cat}</span><span class="vg-cat-qtd">${d.qtd_ativos||'—'} fundos</span><span class="vg-cat-pl">${pl}</span><span class="vg-cat-rent ${cls}">${rent}</span></div>`;
-        }).join('');
-    }
-  }catch(e){console.warn('[visaoGeral]',e);}
-}
-
-/* ── Tooltips em siglas ─────────────────────────────────────────── */
-function addSiglaTips(){
-  const tips={
-    'CDI':'Certificado de Depósito Interbancário · taxa de referência do mercado',
-    'IPCA':'Índice Nacional de Preços ao Consumidor Amplo · principal inflação do Brasil',
-    'PTAX':'Taxa de câmbio oficial do Banco Central do Brasil',
-    'COPOM':'Comitê de Política Monetária · define a Selic a cada 45 dias',
-    'IGP-M':'Índice Geral de Preços do Mercado · usado em contratos de aluguel',
-    'PIB':'Produto Interno Bruto · soma da riqueza produzida no país',
-    'Selic':'Taxa básica de juros da economia brasileira',
-    'IFIX':'Índice de Fundos de Investimento Imobiliário da B3',
-    'FMP':'Fundo Mútuo de Privatização · investe em ações de empresas privatizadas usando FGTS',
-    'p.p.':'ponto percentual · diferença entre dois percentuais',
-  };
-  const sel='.exec-label,.kpi-label,.indic-label,.v2-label,.ptax-stat-label,.vg-label,.evo-summary-kicker,.closed-ind-label,.mobile-kpi-cell>span:first-child';
-  document.querySelectorAll(sel).forEach(el=>{
-    if(el.title) return;
-    const txt=(el.textContent||'').trim();
-    for(const [s,d] of Object.entries(tips)){
-      if(txt===s||txt.startsWith(s+' ')||txt.endsWith(' '+s)){el.title=d;el.style.cursor='help';break;}
-    }
-  });
-}
-
-/* ── URL Anchors ────────────────────────────────────────────────── */
-function setupUrlAnchors(){
-  const secs=[
-    {id:'topo',hash:''},{id:'sec-fundos',hash:'#fundos'},
-    {id:'rankingsSection',hash:'#rankings'},{id:'sec-mercado',hash:'#mercado'},
-    {id:'sec-dolar',hash:'#dolar'},{id:'sec-focus',hash:'#focus'},
-  ];
-  let tick=false;
-  window.addEventListener('scroll',()=>{
-    if(tick)return; tick=true;
-    requestAnimationFrame(()=>{
-      const mid=window.scrollY+window.innerHeight*.35;
-      let active=secs[0];
-      for(const s of secs){
-        const el=document.getElementById(s.id);
-        if(el&&el.getBoundingClientRect().top+window.scrollY<=mid) active=s;
-      }
-      if((window.location.hash||'')!==active.hash)
-        history.replaceState(null,'',active.hash||window.location.pathname);
-      tick=false;
-    });
-  },{passive:true});
-  const hash=window.location.hash;
-  if(hash){const t=document.querySelector(hash)||document.getElementById(hash.slice(1));
-    if(t) setTimeout(()=>t.scrollIntoView({behavior:'smooth'}),400);}
-}
-
-/* ── Inicialização tardia (após todos os scripts carregados) ─────── */
-document.addEventListener('DOMContentLoaded',()=>{
-  setupUrlAnchors();
-  setTimeout(addSiglaTips, 2000);
-  const tryExec=()=>{
-    if(typeof _dadosMercado!=='undefined'&&_dadosMercado) atualizarExecBar();
-    else setTimeout(tryExec,800);
-  };
-  setTimeout(tryExec,1200);
-  setTimeout(atualizarExecBar,3500);
-});
-document.addEventListener('keydown', function(e){
-  if(e.key !== 'Escape') return;
-
-  document.querySelectorAll('tr.detail-row').forEach(row => row.remove());
-
-  document.querySelectorAll('.exp-btn').forEach(btn => {
-    btn.textContent = '▼';
-    btn.setAttribute('aria-expanded', 'false');
-  });
-});
-/* ==========================================================
-   ELTAUM — FUNIL PF + FILTROS ATIVOS FIXO
-   Colar no FINAL do app.js completo
-   Versão: 20260604-funil-pf-final-02
-========================================================== */
-(function(){
-  const BUILD = '20260604-funil-pf-final-02';
-
-  const PRESET_MAP = {
-    all: { type: 'all', label: 'Todos' },
-
-    pf: { type: 'perfil', value: 'PF', label: 'Pessoa Física' },
-
-    cdi: { type: 'benchmark', value: 'CDI', label: 'CDI' },
-    ipca: { type: 'benchmark', value: 'IPCA', label: 'IPCA' },
-
-    conservador: { type: 'risco', value: 'Conservador', label: 'Conservador' },
-
-    'renda-fixa-simples': { type: 'cat', value: 'RENDA FIXA SIMPLES', label: 'RF Simples' },
-    'renda-fixa': { type: 'cat', value: 'RENDA FIXA', label: 'Renda Fixa' },
-    'renda-fixa-referenciado': { type: 'cat', value: 'RENDA FIXA REFERENCIADO', label: 'RF Referenciado' },
-    'renda-fixa-curto-prazo': { type: 'cat', value: 'RENDA FIXA CURTO PRAZO', label: 'RF Curto Prazo' },
-    multimercado: { type: 'cat', value: 'MULTIMERCADO', label: 'Multimercado' },
-    cambial: { type: 'cat', value: 'CAMBIAL', label: 'Cambial' },
-    acoes: { type: 'cat', value: 'ACOES', label: 'Ações' },
-    'fundo-de-indice': { type: 'cat', value: 'FUNDO DE INDICE', label: 'Fundo de Índice' },
-    fmp: { type: 'cat', value: 'FUNDOS MUTUOS DE PRIVATIZACAO', label: 'FMP' }
-  };
-
-  function getActiveState(){
-    return {
-      cat: typeof activeCat !== 'undefined' ? activeCat : '',
-      benchmark: typeof activeBenchmark !== 'undefined' ? activeBenchmark : '',
-      perfil: typeof activePerfil !== 'undefined' ? activePerfil : '',
-      risco: typeof activeRisco !== 'undefined' ? activeRisco : '',
-      hideSemDados: typeof hideSemDados !== 'undefined' ? hideSemDados : false
-    };
-  }
-
-  function hasAnyFilter(){
-    const s = getActiveState();
-    return !!(s.cat || s.benchmark || s.perfil || s.risco || s.hideSemDados);
-  }
-
-  function ensurePessoaFisicaButton(){
-    const allBtn = document.querySelector('.shortcut-preset[data-preset="all"], .filter-preset-chip[data-preset="all"]');
-    if(!allBtn) return;
-
-    if(!document.querySelector('.shortcut-preset[data-preset="pf"], .filter-preset-chip[data-preset="pf"]')){
-      allBtn.insertAdjacentHTML(
-        'afterend',
-        '<button type="button" class="filter-preset-chip shortcut-preset" data-preset="pf" aria-pressed="false">Pessoa Física</button>'
-      );
-    }
-  }
-
-  function updateShortcutButtons(){
-    const s = getActiveState();
-
-    document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]').forEach(btn => {
-      const p = btn.dataset.preset;
-      let on = false;
-
-      if(p === 'all') on = !hasAnyFilter();
-
-      if(p === 'pf') on = s.perfil === 'PF';
-
-      if(p === 'cdi') on = s.benchmark === 'CDI';
-      if(p === 'ipca') on = s.benchmark === 'IPCA';
-
-      if(p === 'conservador') on = s.risco === 'Conservador';
-
-      if(p === 'renda-fixa-simples') on = s.cat === 'RENDA FIXA SIMPLES';
-      if(p === 'renda-fixa') on = s.cat === 'RENDA FIXA';
-      if(p === 'renda-fixa-referenciado') on = s.cat === 'RENDA FIXA REFERENCIADO';
-      if(p === 'renda-fixa-curto-prazo') on = s.cat === 'RENDA FIXA CURTO PRAZO';
-      if(p === 'multimercado') on = s.cat === 'MULTIMERCADO';
-      if(p === 'cambial') on = s.cat === 'CAMBIAL';
-      if(p === 'acoes') on = s.cat === 'ACOES';
-      if(p === 'fundo-de-indice') on = s.cat === 'FUNDO DE INDICE';
-      if(p === 'fmp') on = s.cat === 'FUNDOS MUTUOS DE PRIVATIZACAO';
-
-      btn.classList.toggle('active', on);
-      btn.setAttribute('aria-pressed', String(on));
-    });
-  }
-
-  function forceActiveFilterStrip(){
-    const strip = document.getElementById('activeFilterStrip');
-    if(!strip) return;
-
-    strip.hidden = false;
-    strip.style.display = 'flex';
-    strip.style.visibility = 'visible';
-    strip.style.opacity = '1';
-
-    if(!hasAnyFilter()){
-      strip.innerHTML = `
-        <span class="active-filter-label">Filtros ativos</span>
-        <span class="active-filter-empty">Nenhum filtro aplicado</span>
-      `;
-    }
-  }
-
-  function clearAllLayers(){
-    try{
-      activeCat = '';
-      activeBenchmark = '';
-      activePerfil = '';
-      activeRisco = '';
-      hideSemDados = false;
-
-      const semDados = document.getElementById('toggleSemDados');
-      if(semDados) semDados.checked = false;
-
-      const search = document.getElementById('searchInput');
-      if(search){
-        search.value = '';
-        activeSearch = '';
-      }
-
-      window.__favListMode = false;
-    }catch(e){}
-
-    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-  }
-
-  function aplicarFunilPreset(preset){
-    const cfg = PRESET_MAP[preset];
-    if(!cfg) return;
-
-    try{ window.__favListMode = false; }catch(e){}
-
-    if(cfg.type === 'all'){
-      clearAllLayers();
-    }else{
-      try{
-        if(cfg.type === 'perfil') activePerfil = cfg.value;
-        if(cfg.type === 'cat') activeCat = cfg.value;
-        if(cfg.type === 'benchmark') activeBenchmark = cfg.value;
-        if(cfg.type === 'risco') activeRisco = cfg.value;
-      }catch(e){}
-
-      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-    }
-
-    setTimeout(() => {
-      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-      updateShortcutButtons();
-      forceActiveFilterStrip();
-    }, 30);
-
-    setTimeout(() => {
-      updateShortcutButtons();
-      forceActiveFilterStrip();
-    }, 180);
-  }
-
-  // Sobrescreve a função antiga de preset para impedir que ela limpe o funil.
-  window.applyFilterPreset = aplicarFunilPreset;
-
-  // Captura os cliques nos atalhos antes dos handlers antigos.
-  if(window.__ELTAUM_FUNIL_PF_CLICK_HANDLER__){
-    document.removeEventListener('click', window.__ELTAUM_FUNIL_PF_CLICK_HANDLER__, true);
-  }
-
-  window.__ELTAUM_FUNIL_PF_CLICK_HANDLER__ = function(ev){
-    const btn = ev.target.closest('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]');
-    if(!btn) return;
-
-    const preset = btn.dataset.preset;
-    if(!PRESET_MAP[preset]) return;
-
-    ev.preventDefault();
-    ev.stopPropagation();
-    ev.stopImmediatePropagation();
-
-    aplicarFunilPreset(preset);
-  };
-
-  document.addEventListener('click', window.__ELTAUM_FUNIL_PF_CLICK_HANDLER__, true);
-
-  // Mantém a linha "Filtros ativos" estável mesmo quando o app redesenha.
-  if(window.__ELTAUM_ACTIVE_FILTER_OBSERVER__){
-    window.__ELTAUM_ACTIVE_FILTER_OBSERVER__.disconnect();
-  }
-
-  function installActiveFilterObserver(){
-    const strip = document.getElementById('activeFilterStrip');
-    if(!strip) return;
-
-    window.__ELTAUM_ACTIVE_FILTER_OBSERVER__ = new MutationObserver(() => {
-      setTimeout(() => {
-        updateShortcutButtons();
-        forceActiveFilterStrip();
-      }, 30);
-    });
-
-    window.__ELTAUM_ACTIVE_FILTER_OBSERVER__.observe(strip, {
-      childList: true,
-      subtree: true,
-      characterData: true,
-      attributes: true
-    });
-  }
-
-  function initFunilPF(){
-    ensurePessoaFisicaButton();
-    updateShortcutButtons();
-    forceActiveFilterStrip();
-    installActiveFilterObserver();
-    console.log('[ELTAUM] Funil PF instalado:', BUILD);
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', initFunilPF);
-  }else{
-    initFunilPF();
-  }
-
-  window.__diagnosticarFunilPF = function(){
-    const s = getActiveState();
-    return {
-      build: BUILD,
-      activePerfil: s.perfil,
-      activeCat: s.cat,
-      activeBenchmark: s.benchmark,
-      activeRisco: s.risco,
-      hideSemDados: s.hideSemDados,
-      filtrosAtivos: document.getElementById('activeFilterStrip')?.textContent.trim(),
-      atalhosAtivos: [...document.querySelectorAll('.shortcut-preset.active, .filter-preset-chip.active')]
-        .map(b => ({ texto: b.textContent.trim(), preset: b.dataset.preset })),
-      totalFiltrado: typeof filtered !== 'undefined' && Array.isArray(filtered) ? filtered.length : null
-    };
-  };
 })();
