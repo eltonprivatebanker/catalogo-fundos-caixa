@@ -14285,3 +14285,28 @@ body:not(.closed-market-open) #closedMarketSheet{
 #gfb-chips{
   display: none !important;
 }
+/* ==========================================================
+   DETALHE DO FUNDO — abertura mais suave
+========================================================== */
+
+@keyframes detailPanelOpen{
+  from{
+    opacity: 0;
+    transform: translateY(-8px);
+    filter: blur(1px);
+  }
+  to{
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+tr.detail-row .detail-panel{
+  animation: detailPanelOpen .22s ease-out both;
+  will-change: opacity, transform;
+}
+
+tr.detail-row td{
+  background: rgba(7,8,15,.92);
+}
