@@ -1,1129 +1,1290 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width,initial-scale=1.0" name="viewport"/>
-<meta content="#07080f" name="theme-color"/>
-<meta content="ELTAUM_TABS_FORCE_20260602_v10" name="app-build"/>
-<meta content="yes" name="mobile-web-app-capable"/>
-<meta content="yes" name="apple-mobile-web-app-capable"/>
-<meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="theme-color" content="#07080f"/>
+<meta name="app-build" content="ELTAUM_TABS_FORCE_20260602_v10"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <title>Catálogo de Fundos CAIXA — Produção própria de Elton Cardoso Teotonio</title>
-<link href="https://fonts.googleapis.com" rel="preconnect"/>
-<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=20260604-filtros-estaveis-01" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css?v=20260604-funil-pf-01"/>
+
+
 </head>
 <body>
 <div class="page" id="topo">
+<!-- ══ EXEC BAR — resumo executivo fixo ══ -->
+<div class="exec-bar" id="execBar" role="region" aria-label="Resumo executivo do dia">
+  <div class="exec-bar-inner">
+    <div class="exec-item" title="CDI — variação do mês atual">
+      <span class="exec-label">CDI mês</span>
+      <strong class="exec-val neu" id="execCDI">—</strong>
+    </div>
+    <div class="exec-sep"></div>
+    <div class="exec-item" title="Dólar PTAX — variação no mês">
+      <span class="exec-label">Dólar</span>
+      <strong class="exec-val" id="execDolar">—</strong>
+    </div>
+    <div class="exec-sep"></div>
+    <div class="exec-item" title="Ibovespa — variação no mês">
+      <span class="exec-label">Ibov</span>
+      <strong class="exec-val" id="execIbov">—</strong>
+    </div>
+    <div class="exec-sep"></div>
+    <div class="exec-item" title="Melhor fundo nos últimos 12 meses">
+      <span class="exec-label">Melhor 12M</span>
+      <strong class="exec-val pos" id="execBest">—</strong>
+    </div>
+  </div>
+</div>
+
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header>
-<div class="brand">
-<div class="brand-logo">E</div>
-<div class="brand-text">
-<h1>Catálogo de Fundos CAIXA</h1>
-<p>Consulta e análise de informações públicas sobre fundos e mercado</p>
-</div>
-</div>
-<div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
+  <div class="brand">
+    <div class="brand-logo">E</div>
+    <div class="brand-text">
+      <h1>Catálogo de Fundos CAIXA</h1>
+      <p>Consulta e análise de informações públicas sobre fundos e mercado</p>
+    </div>
+  </div>
+  <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
 </header>
+
 <!-- ═══════════════════════════════════════════════ DISCLAIMER ══ -->
-<div aria-label="Aviso sobre uso da ferramenta" class="top-disclaimer top-disclaimer-clean notice-strip-v3" role="note">
-<span aria-hidden="true" class="notice-inline-icon">ℹ️</span>
-<span class="notice-inline-title">Aviso</span>
-<span class="notice-inline-copy">Ferramenta independente, com dados públicos e finalidade informativa. Não é canal oficial nem recomendação da CAIXA.</span>
+<div class="top-disclaimer top-disclaimer-clean notice-strip-v3" role="note" aria-label="Aviso sobre uso da ferramenta">
+  <span class="notice-inline-icon" aria-hidden="true">ℹ️</span>
+  <span class="notice-inline-title">Aviso</span>
+  <span class="notice-inline-copy">Ferramenta independente, com dados públicos e finalidade informativa. Não é canal oficial nem recomendação da CAIXA.</span>
 </div>
+
+
+
 <!-- ════════════════ BLOCO 1: QUEBRA-GELO — visão geral ════════════════ -->
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
-<div aria-label="Resumo executivo do catálogo" class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi">
-<div class="kpi kpi-fundos"><div class="kpi-icon">📊</div><div class="kpi-label">Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
-<div class="kpi kpi-categorias"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub" id="kpiCatsSub">Tipos de estratégia</div></div>
-<div class="kpi kpi-pl"><div class="kpi-icon">💰</div><div class="kpi-label">PL consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">Patrimônio consolidado</div></div>
-<div class="kpi kpi-pipeline"><div class="kpi-icon">🔬</div><div class="kpi-label">Pipeline</div><div class="kpi-value" id="kpiPipe">—</div><div class="kpi-sub" id="kpiPipeSub">Fundos sem cota</div></div>
-<div class="kpi kpi-best"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub kpi-fund-name" id="kpiBestFundo">—</div></div>
-<div class="kpi kpi-worst"><div class="kpi-icon">📉</div><div class="kpi-label">Pior 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub kpi-fund-name" id="kpiWorstFundo">—</div></div>
-</div><div aria-label="Resumo executivo compacto do catálogo" class="mobile-kpi-overview section-gap" id="sec-kpi-mobile">
-<article class="mobile-kpi-card mobile-kpi-card-compact">
-<div class="mobile-kpi-head">
-<span class="mobile-kpi-emoji">📊</span>
-<div>
-<h3>Catálogo CAIXA</h3>
-<p>Resumo rápido para consulta no celular</p>
+<div class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi" aria-label="Resumo executivo do catálogo">
+  <div class="kpi kpi-fundos"><div class="kpi-icon">📊</div><div class="kpi-label">Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
+  <div class="kpi kpi-categorias"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub" id="kpiCatsSub">Tipos de estratégia</div></div>
+  <div class="kpi kpi-pl"><div class="kpi-icon">💰</div><div class="kpi-label">PL consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">Patrimônio consolidado</div></div>
+  <div class="kpi kpi-pipeline"><div class="kpi-icon">🔬</div><div class="kpi-label">Pipeline</div><div class="kpi-value" id="kpiPipe">—</div><div class="kpi-sub" id="kpiPipeSub">Fundos sem cota</div></div>
+  <div class="kpi kpi-best"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub kpi-fund-name" id="kpiBestFundo">—</div></div>
+  <div class="kpi kpi-worst"><div class="kpi-icon">📉</div><div class="kpi-label">Pior 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub kpi-fund-name" id="kpiWorstFundo">—</div></div>
 </div>
+
+<!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
+<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo">
+  <article class="mobile-kpi-card mobile-kpi-card-compact">
+    <div class="mobile-kpi-head">
+      <span class="mobile-kpi-emoji">📊</span>
+      <div>
+        <h3>Catálogo CAIXA</h3>
+        <p>Resumo rápido para consulta no celular</p>
+      </div>
+    </div>
+
+    <div class="mobile-kpi-compact-grid">
+      <div class="mobile-kpi-cell mobile-kpi-cell-primary">
+        <span>Fundos</span>
+        <strong id="mKpiFundos">—</strong>
+        <small id="mKpiFundosSub">carregando...</small>
+      </div>
+
+      <div class="mobile-kpi-cell mobile-kpi-cell-primary">
+        <span>PL consolidado</span>
+        <strong><b id="mKpiPL">—</b></strong>
+        <small id="mKpiPLSub">Patrimônio consolidado</small>
+      </div>
+
+      <div class="mobile-kpi-cell">
+        <span>Categorias</span>
+        <strong id="mKpiCats">—</strong>
+      </div>
+
+      <div class="mobile-kpi-cell">
+        <span>Pipeline</span>
+        <strong id="mKpiPipe">—</strong>
+      </div>
+
+      <div class="mobile-kpi-cell mobile-kpi-cell-perf pos">
+        <span>Melhor 12M</span>
+        <strong id="mKpiBest">—</strong>
+        <small id="mKpiBestFundo">—</small>
+      </div>
+
+      <div class="mobile-kpi-cell mobile-kpi-cell-perf neg">
+        <span>Pior 12M</span>
+        <strong id="mKpiWorst">—</strong>
+        <small id="mKpiWorstFundo">—</small>
+      </div>
+    </div>
+  </article>
 </div>
-<div class="mobile-kpi-compact-grid">
-<div class="mobile-kpi-cell mobile-kpi-cell-primary">
-<span>Fundos</span>
-<strong id="mKpiFundos">—</strong>
-<small id="mKpiFundosSub">carregando...</small>
-</div>
-<div class="mobile-kpi-cell mobile-kpi-cell-primary">
-<span>PL consolidado</span>
-<strong><b id="mKpiPL">—</b></strong>
-<small id="mKpiPLSub">Patrimônio consolidado</small>
-</div>
-<div class="mobile-kpi-cell">
-<span>Categorias</span>
-<strong id="mKpiCats">—</strong>
-</div>
-<div class="mobile-kpi-cell">
-<span>Pipeline</span>
-<strong id="mKpiPipe">—</strong>
-</div>
-<div class="mobile-kpi-cell mobile-kpi-cell-perf pos">
-<span>Melhor 12M</span>
-<strong id="mKpiBest">—</strong>
-<small id="mKpiBestFundo">—</small>
-</div>
-<div class="mobile-kpi-cell mobile-kpi-cell-perf neg">
-<span>Pior 12M</span>
-<strong id="mKpiWorst">—</strong>
-<small id="mKpiWorstFundo">—</small>
-</div>
-</div>
-</article>
-</div>
+
+
+
 
 
 <!-- ════════════════ CATÁLOGO E RANKINGS ════════════════ -->
 <!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
+
 <!-- ═══════════════ VISÃO GERAL DO CATÁLOGO (mobile only) ══ -->
+<div class="section-gap mob-visao-geral" id="sec-visao-geral">
+  <div class="section-title">
+    <h2>📋 Visão Geral do Catálogo</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>SIPII · CAIXA</span>
+  </div>
+  <div class="vg-grid">
+    <div class="vg-card vg-card-primary"><span class="vg-label">Total de Fundos</span><strong class="vg-val" id="vgTotalFundos">—</strong><small class="vg-sub" id="vgTotalSub">fundos disponíveis</small></div>
+    <div class="vg-card vg-card-primary"><span class="vg-label">Patrimônio Total</span><strong class="vg-val gold" id="vgPLTotal">—</strong><small class="vg-sub" id="vgPLSub">no catálogo</small></div>
+    <div class="vg-card"><span class="vg-label">Categorias</span><strong class="vg-val" id="vgCats">—</strong><small class="vg-sub">tipos distintos</small></div>
+    <div class="vg-card"><span class="vg-label">Gestora</span><strong class="vg-val" id="vgGestores">1</strong><small class="vg-sub">CAIXA Asset</small></div>
+    <div class="vg-card vg-card-perf pos"><span class="vg-label">Melhor 12M</span><strong class="vg-val pos" id="vgMelhor">—</strong><small class="vg-sub" id="vgMelhorNome">—</small></div>
+    <div class="vg-card vg-card-perf neg"><span class="vg-label">Pior 12M</span><strong class="vg-val neg" id="vgPior">—</strong><small class="vg-sub" id="vgPiorNome">—</small></div>
+  </div>
+  <div class="vg-cat-list" id="vgCatList"></div>
+  <button class="vg-btn-fundos" onclick="irParaFundos()">Ver todos os fundos →</button>
+</div>
 
 <div class="section-gap" id="sec-fundos">
-<div class="fund-filter-shell" id="fundFilterShell">
-<div class="controls-bar fund-controls-v2">
-<div class="search-wrap fund-search-main">
-<svg fill="none" height="14" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24" width="14"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-<input id="searchInput" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..." type="text"/>
-</div>
-<div aria-label="Comandos de filtro do catálogo" class="filter-command-bar" id="mobileFilterBar">
-<button aria-controls="fundFilterDrawer" aria-expanded="false" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" type="button">
-<span class="filter-button-icon">⚙️</span>
-<span id="filterButtonText">Filtros avançados</span>
-<span class="filter-count-badge" id="filterActiveCount">0</span>
-</button>
-<span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
-<span class="filter-result-summary" id="filterResultSummary">Resultado: —</span>
-<button class="filter-clear-inline" id="clearFiltersTop" type="button">Limpar</button>
-</div>
-<div aria-label="Opções de visualização do catálogo" class="fund-view-controls">
-<label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
-<span>Exibição</span>
-<select class="ctrl-select" id="perPage">
-<option selected="" value="5">05 por página</option>
-<option value="10">10 por página</option>
-<option value="25">25 por página</option>
-<option value="50">50 por página</option>
-<option value="100">100 por página</option>
-<option value="9999">Todos os fundos</option>
-</select>
-</label>
-<div class="vista-toggle-wrap desktop-table-mode-control" title="Alterna entre vista focada em rentabilidade e vista com todos os dados">
-<button class="vista-btn active" id="vistaBtnReuniao" onclick="setVista('reuniao')">📊 Reunião</button>
-<button class="vista-btn" id="vistaBtnCompleta" onclick="setVista('completa')">⚙️ Completa</button>
-</div>
-<div class="cdi-sort-control desktop-cdi-sort-control" title="Ordena os fundos pelo retorno de 12 meses em relação ao CDI">
-<span>% CDI 12M</span>
-<button class="cdi-sort-btn" data-cdi-sort="desc" type="button">Maior</button>
-<button class="cdi-sort-btn" data-cdi-sort="asc" type="button">Menor</button>
-</div>
-<div class="toggle-wrap compact-toggle-wrap">
-<label class="toggle"><input id="toggleSemDados" type="checkbox"/><span class="toggle-slider"></span></label>
-<span class="toggle-label">Ocultar sem dados</span>
-</div>
-</div>
-</div>
-<div aria-label="Atalhos rápidos do catálogo" class="catalog-shortcuts">
-<span class="catalog-shortcuts-label">Atalhos</span>
-<button class="filter-preset-chip shortcut-preset active" data-preset="all" type="button">Todos</button>
-<button aria-pressed="false" class="filter-preset-chip shortcut-preset fav-shortcut-chip" data-preset="favoritos" type="button">⭐ Favoritos <span class="fav-count-inline" id="favShortcutCount">0</span></button>
-<button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-simples" type="button">RF Simples</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" type="button">Renda Fixa</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-referenciado" type="button">RF Referenciado</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-curto-prazo" type="button">RF Curto Prazo</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="multimercado" type="button">Multimercado</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="cambial" type="button">Cambial</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="acoes" type="button">Ações</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="fundo-de-indice" type="button">Fundo de Índice</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="fmp" type="button">FMP</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="cdi" type="button">CDI</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="ipca" type="button">IPCA</button>
-<button class="filter-preset-chip shortcut-preset" data-preset="conservador" type="button">Conservador</button>
-</div>
-<div aria-live="polite" class="active-filter-strip" id="activeFilterStrip"></div>
-</div>
-<div aria-hidden="true" class="filter-backdrop" id="filterBackdrop"></div>
-<div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed" id="fundFilterDrawer" style="margin-bottom:14px">
-<div class="filter-sheet-head filter-sheet-head-compact">
-<div>
-<strong>Refinar filtros</strong>
-<span>Filtro em tempo real: ao clicar em uma opção, a tabela já atualiza. Use “Fechar” só para voltar à tela cheia.</span>
-</div>
-<button aria-label="Fechar filtros" class="filter-sheet-close" id="filterCloseBtn" type="button">✕</button>
-</div>
-<div aria-label="Filtros avançados do catálogo" class="filter-groups-grid filter-groups-accordion">
-<details class="filter-group-accordion">
-<summary><span>Categoria</span><small>Tipo do fundo</small></summary>
-<div class="filter-row filter-group-panel" id="catFilters">
-<span class="filter-label">Categoria</span>
-<button class="chip active" data-cat="">Todas</button>
-<button class="chip" data-cat="RENDA FIXA SIMPLES">RENDA FIXA SIMPLES</button>
-<button class="chip" data-cat="RENDA FIXA">RENDA FIXA</button>
-<button class="chip" data-cat="RENDA FIXA REFERENCIADO">RENDA FIXA REFERENCIADO</button>
-<button class="chip" data-cat="RENDA FIXA CURTO PRAZO">RENDA FIXA CURTO PRAZO</button>
-<button class="chip" data-cat="MULTIMERCADO">MULTIMERCADO</button>
-<button class="chip" data-cat="CAMBIAL">CAMBIAL</button>
-<button class="chip" data-cat="ACOES">AÇÕES</button>
-<button class="chip" data-cat="FUNDO DE INDICE">FUNDO DE ÍNDICE</button>
-<button class="chip" data-cat="FUNDOS MUTUOS DE PRIVATIZACAO">FUNDOS MÚTUOS DE PRIVATIZAÇÃO</button>
-</div>
-</details>
-<details class="filter-group-accordion">
-<summary><span>Benchmark</span><small>CDI, IPCA, câmbio e outros</small></summary>
-<div class="filter-row filter-group-panel" id="benchmarkFilters">
-<span class="filter-label">Benchmark</span>
-<button class="chip active" data-benchmark="">Todos</button>
-</div>
-</details>
-<details class="filter-group-accordion">
-<summary><span>Perfil</span><small>PF, PJ, GOV ou RPPS</small></summary>
-<div class="filter-row filter-group-panel" id="perfilFilters">
-<span class="filter-label">Perfil</span>
-<button class="chip active" data-perfil="">Todos</button>
-<button class="chip pf" data-perfil="PF">🧑 PF</button>
-<button class="chip pj" data-perfil="PJ">🏢 PJ</button>
-<button class="chip gov" data-perfil="GOV">🏛 GOV</button>
-<button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
-</div>
-</details>
-<details class="filter-group-accordion">
-<summary><span>Risco</span><small>Perfil de risco do produto</small></summary>
-<div class="filter-row filter-group-panel" id="riscoFilters">
-<span class="filter-label">Risco</span>
-<button class="chip active" data-risco="">Todos</button>
-<button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
-<button class="chip mod" data-risco="Moderado">🔵 Moderado</button>
-<button class="chip arr" data-risco="Arrojado">🟠 Arrojado</button>
-<button class="chip agr" data-risco="Agressivo">🔴 Agressivo</button>
-</div>
-</details>
-</div>
-<div class="filter-sheet-actions filter-sheet-actions-compact">
-<button class="filter-action-secondary" id="clearFiltersBtn" type="button">Limpar</button>
-<button class="filter-action-primary" id="filterApplyBtn" type="button">Fechar</button>
-</div>
-</div>
-<button class="mobile-organize-toggle" id="mobileOrganizeToggle" type="button" aria-expanded="false">
-  <span>⚙️ Organizar resultados</span>
-  <small id="mobileOrganizeSummary">Tabela · Dia · Maior</small>
-  <strong>⌄</strong>
-</button>
+  <div class="section-title">
+    <h2>📁 Catálogo Completo de Fundos</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
+  </div>
 
-<div class="mobile-organize-panel" id="mobileOrganizePanel" hidden>
-  <div aria-label="Modo de visualização do catálogo" class="mobile-view-toggle" id="mobileViewToggle">
+  <div class="fund-filter-shell" id="fundFilterShell">
+    <div class="controls-bar fund-controls-v2">
+      <div class="search-wrap fund-search-main">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input id="searchInput" type="text" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..."/>
+      </div>
+
+      <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo">
+        <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
+          <span class="filter-button-icon">⚙️</span>
+          <span id="filterButtonText">Filtros avançados</span>
+          <span class="filter-count-badge" id="filterActiveCount">0</span>
+        </button>
+        <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
+        <span class="filter-result-summary" id="filterResultSummary">Resultado: —</span>
+        <button type="button" class="filter-clear-inline" id="clearFiltersTop">Limpar</button>
+      </div>
+
+      <div class="fund-view-controls" aria-label="Opções de visualização do catálogo">
+        <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
+          <span>Exibição</span>
+          <select id="perPage" class="ctrl-select">
+            <option value="5" selected>05 por página</option>
+            <option value="10">10 por página</option>
+            <option value="25">25 por página</option>
+            <option value="50">50 por página</option>
+            <option value="100">100 por página</option>
+            <option value="9999">Todos os fundos</option>
+          </select>
+        </label>
+        <div class="vista-toggle-wrap desktop-table-mode-control" title="Alterna entre vista focada em rentabilidade e vista com todos os dados">
+          <button class="vista-btn active" id="vistaBtnReuniao" onclick="setVista('reuniao')">📊 Reunião</button>
+          <button class="vista-btn" id="vistaBtnCompleta" onclick="setVista('completa')">⚙️ Completa</button>
+        </div>
+        <div class="cdi-sort-control desktop-cdi-sort-control" title="Ordena os fundos pelo retorno de 12 meses em relação ao CDI">
+          <span>% CDI 12M</span>
+          <button type="button" class="cdi-sort-btn" data-cdi-sort="desc">Maior</button>
+          <button type="button" class="cdi-sort-btn" data-cdi-sort="asc">Menor</button>
+        </div>
+        <div class="toggle-wrap compact-toggle-wrap">
+          <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
+          <span class="toggle-label">Ocultar sem dados</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="catalog-shortcuts" aria-label="Atalhos rápidos do catálogo">
+      <span class="catalog-shortcuts-label">Atalhos</span>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="all">Todos</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="pf" aria-pressed="false">Pessoa Física</button>
+      <button type="button" class="filter-preset-chip shortcut-preset fav-shortcut-chip" data-preset="favoritos" aria-pressed="false">⭐ Favoritos <span class="fav-count-inline" id="favShortcutCount">0</span></button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cdi">CDI</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="conservador">Conservador</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="ipca">IPCA</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa">Renda Fixa</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado">Multimercado</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes">Ações</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial">Cambial</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp">FMP</button>
+    </div>
+
+    <div class="active-filter-strip" id="activeFilterStrip" aria-live="polite"></div>
+  </div>
+
+  <div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
+
+  <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed" id="fundFilterDrawer" style="margin-bottom:14px">
+    <div class="filter-sheet-head filter-sheet-head-compact">
+      <div>
+        <strong>Refinar filtros</strong>
+        <span>Filtro em tempo real: ao clicar em uma opção, a tabela já atualiza. Use “Fechar” só para voltar à tela cheia.</span>
+      </div>
+      <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar filtros">✕</button>
+    </div>
+
+
+    <div class="filter-groups-grid filter-groups-accordion" aria-label="Filtros avançados do catálogo">
+      <details class="filter-group-accordion">
+        <summary><span>Categoria</span><small>Tipo do fundo</small></summary>
+        <div class="filter-row filter-group-panel" id="catFilters">
+          <span class="filter-label">Categoria</span>
+          <button class="chip active" data-cat="">Todas</button>
+        </div>
+      </details>
+
+      <details class="filter-group-accordion">
+        <summary><span>Benchmark</span><small>CDI, IPCA, câmbio e outros</small></summary>
+        <div class="filter-row filter-group-panel" id="benchmarkFilters">
+          <span class="filter-label">Benchmark</span>
+          <button class="chip active" data-benchmark="">Todos</button>
+        </div>
+      </details>
+
+      <details class="filter-group-accordion">
+        <summary><span>Perfil</span><small>PF, PJ, GOV ou RPPS</small></summary>
+        <div class="filter-row filter-group-panel" id="perfilFilters">
+          <span class="filter-label">Perfil</span>
+          <button class="chip active" data-perfil="">Todos</button>
+          <button class="chip pf"   data-perfil="PF">🧑 PF</button>
+          <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
+          <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
+          <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
+        </div>
+      </details>
+
+      <details class="filter-group-accordion">
+        <summary><span>Risco</span><small>Perfil de risco do produto</small></summary>
+        <div class="filter-row filter-group-panel" id="riscoFilters">
+          <span class="filter-label">Risco</span>
+          <button class="chip active" data-risco="">Todos</button>
+          <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
+          <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
+          <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
+          <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
+        </div>
+      </details>
+    </div>
+
+    <div class="filter-sheet-actions filter-sheet-actions-compact">
+      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar</button>
+      <button type="button" class="filter-action-primary" id="filterApplyBtn">Fechar</button>
+    </div>
+  </div>
+
+  <div class="mobile-view-toggle" id="mobileViewToggle" aria-label="Modo de visualização do catálogo">
     <span class="mobile-view-toggle-label">Visualização</span>
     <div class="mobile-view-toggle-buttons">
-      <button class="mobile-view-btn" data-view="table" type="button">Tabela</button>
-      <button class="mobile-view-btn active" data-view="cards" type="button">Cards</button>
+      <button type="button" class="mobile-view-btn" data-view="table">Tabela</button>
+      <button type="button" class="mobile-view-btn active" data-view="cards">Cards</button>
     </div>
   </div>
 
-  <div aria-label="Ordenação da tabela e dos cards no celular" class="mobile-sort-toolbar" id="mobileSortToolbar">
+  <div class="mobile-sort-toolbar" id="mobileSortToolbar" aria-label="Ordenação da tabela e dos cards no celular">
     <div class="mobile-sort-line mobile-sort-field-line">
       <span class="mobile-sort-label">Ordenar</span>
-      <div aria-label="Campo de ordenação" class="mobile-sort-chip-row" role="group">
-        <button class="mobile-sort-chip active" data-mobile-sort-field="dia" type="button">Dia</button>
-        <button class="mobile-sort-chip" data-mobile-sort-field="mes" type="button">Mês</button>
-        <button class="mobile-sort-chip" data-mobile-sort-field="ano" type="button">Ano</button>
-        <button class="mobile-sort-chip" data-mobile-sort-field="m12" type="button">12M</button>
-        <button class="mobile-sort-chip" data-mobile-sort-field="cdi" type="button">% CDI</button>
+      <div class="mobile-sort-chip-row" role="group" aria-label="Campo de ordenação">
+        <button type="button" class="mobile-sort-chip active" data-mobile-sort-field="dia">Dia</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="mes">Mês</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="ano">Ano</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="m12">12M</button>
+        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="cdi">% CDI</button>
       </div>
     </div>
-
     <div class="mobile-sort-line mobile-sort-dir-line">
       <span class="mobile-sort-label">Sentido</span>
-      <div aria-label="Sentido de ordenação" class="mobile-sort-dir" role="group">
-        <button class="mobile-sort-dir-btn active" data-mobile-sort-dir="desc" type="button">Maior</button>
-        <button class="mobile-sort-dir-btn" data-mobile-sort-dir="asc" type="button">Menor</button>
+      <div class="mobile-sort-dir" role="group" aria-label="Sentido de ordenação">
+        <button type="button" class="mobile-sort-dir-btn active" data-mobile-sort-dir="desc">Maior</button>
+        <button type="button" class="mobile-sort-dir-btn" data-mobile-sort-dir="asc">Menor</button>
       </div>
     </div>
   </div>
+
+  <div class="table-wrap">
+    <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
+    <table id="mainTable" style="display:none">
+      <thead id="tableHead"></thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+
+  <div id="mobileFundCards" class="mobile-fund-cards" aria-live="polite"></div>
+
+  <div class="pagination-row">
+    <div id="resultInfo"></div>
+    <div class="page-btns" id="pageBtns"></div>
+  </div>
 </div>
-
-<div class="table-wrap">
-  <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
-  <table id="mainTable" style="display:none">
-    <thead id="tableHead"></thead>
-    <tbody id="tableBody"></tbody>
-  </table>
-</div>
-
-<div aria-live="polite" class="mobile-fund-cards" id="mobileFundCards"></div>
-
-<div class="pagination-row">
-  <div id="resultInfo"></div>
-  <div class="page-btns" id="pageBtns"></div>
-</div>
-
-</div><!-- /sec-fundos -->
 
 <!-- ═══════════════════════════════════════════ RANKINGS ══ -->
 <div class="section-gap" id="rankingsSection">
-<div class="ranking-head">
-<div class="ranking-title-group">
-<h2>🏆 Rankings de Performance</h2>
-<p class="ranking-subtitle">Compare fundos por retorno, categoria, destaques do período e patrimônio.</p>
-<span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
-</div>
-<div aria-label="Ações dos rankings" class="ranking-actions">
-<button class="ranking-action-btn" data-rank-action="copy-all" type="button">📋 Copiar visão</button>
-<button class="ranking-action-btn" data-rank-action="whatsapp-all" type="button">🟢 Enviar WhatsApp</button>
-<button class="ranking-action-btn" data-rank-action="png-all" type="button">🖼️ Print da visão</button>
-</div>
-</div>
-<div aria-label="Filtros dos rankings" class="ranking-toolbar">
-<div class="ranking-filter-row" id="rankingFilterRow">
-<span class="ranking-filter-label">Filtro</span>
-<button class="ranking-filter-chip active" data-rank-filter="todos" type="button">Todos</button>
-<button class="ranking-filter-chip" data-rank-filter="sem-fmp" type="button">Sem FMP</button>
-<button class="ranking-filter-chip" data-rank-filter="renda-fixa" type="button">Renda Fixa</button>
-<button class="ranking-filter-chip" data-rank-filter="acoes" type="button">Ações</button>
-<button class="ranking-filter-chip" data-rank-filter="multimercado" type="button">Multimercado</button>
-</div>
-</div>
-<div aria-label="Menu de rankings" class="ranking-view-tabs" id="rankingViewTabs">
-<button class="ranking-view-tab active" data-rank-view="top" type="button">🏆 Top fundos</button>
-<button class="ranking-view-tab" data-rank-view="categoria" type="button">🎖️ Por categoria</button>
-<button class="ranking-view-tab" data-rank-view="destaques" type="button">📅 Destaques</button>
-<button class="ranking-view-tab" data-rank-view="rentabilidade" type="button">📊 Categorias</button>
-<button class="ranking-view-tab" data-rank-view="pl" type="button">🏦 Patrimônio</button>
-</div>
-<div class="ranking-grid ranking-grid-consultiva ranking-grid-single" id="rankingGrid">
-<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
-<div class="spinner"></div>Carregando rankings...
+  <div class="ranking-head">
+    <div class="ranking-title-group">
+      <h2>🏆 Rankings de Performance</h2>
+      <p class="ranking-subtitle">Compare fundos por retorno, categoria, destaques do período e patrimônio.</p>
+      <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
     </div>
+    <div class="ranking-actions" aria-label="Ações dos rankings">
+      <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar visão</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
+      <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Print da visão</button>
+    </div>
+  </div>
+
+  <div class="ranking-toolbar" aria-label="Filtros dos rankings">
+    <div class="ranking-filter-row" id="rankingFilterRow">
+      <span class="ranking-filter-label">Filtro</span>
+      <button type="button" class="ranking-filter-chip active" data-rank-filter="todos">Todos</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="sem-fmp">Sem FMP</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa">Renda Fixa</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="multimercado">Multimercado</button>
+    </div>
+  </div>
+
+  <div class="ranking-view-tabs" id="rankingViewTabs" aria-label="Menu de rankings">
+    <button type="button" class="ranking-view-tab active" data-rank-view="top">🏆 Top fundos</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="categoria">🎖️ Por categoria</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="destaques">📅 Destaques</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="rentabilidade">📊 Categorias</button>
+    <button type="button" class="ranking-view-tab" data-rank-view="pl">🏦 Patrimônio</button>
+  </div>
+
+  <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva ranking-grid-single">
+    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
+      <div class="spinner"></div>Carregando rankings...
+    </div>
+  </div>
 </div>
-</div>
-<div aria-live="polite" class="rank-share-toast" id="rankShareToast" role="status"></div>
+<div id="rankShareToast" class="rank-share-toast" role="status" aria-live="polite"></div>
+
+
+
 <!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
 <div class="section-gap" id="sec-mercado">
-<div class="section-title market-section-head">
-<div class="market-title-left">
-<h2>📡 Indicadores de Mercado</h2>
-<span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
-</div>
-</div>
-<button aria-label="Abrir resumo do último mês fechado" class="closed-month-launch" id="closedMonthLaunch" onclick="openFechamentoMesSheet()" type="button">
-<span class="closed-month-launch-icon">📌</span>
-<span class="closed-month-launch-copy">
-<strong id="closedMonthLaunchTitle">Resumo do mês fechado</strong>
-<small id="closedMonthLaunchSub">Principais indicadores do último mês consolidado</small>
-<span aria-hidden="true" class="closed-month-mini">
-<span><b>CDI</b> <em id="closedMiniCdi">—</em></span>
-<span><b>IPCA</b> <em id="closedMiniIpca">—</em></span>
-<span><b>Dólar</b> <em id="closedMiniDolar">—</em></span>
-<span><b>Ibov</b> <em id="closedMiniIbov">—</em></span>
-</span>
-</span>
-<span class="closed-month-launch-action">Ver resumo ›</span>
-</button>
-<!-- Cards de referência: Selic, CDI e Poupança separados -->
-<div class="indic-ref-bar market-ref-grid">
-<!-- Card 1: SELIC + COPOM -->
-<div class="indic-ref-card macro-card selic-copom-card market-ref-card market-ref-card-unified">
-<div class="macro-side macro-selic">
-<div class="macro-label">🏦 Taxa Selic — Meta COPOM</div>
-<div class="market-rate-line market-rate-line-selic">
-<div class="macro-main-value gold" id="mc-selic">—</div>
-<span class="market-rate-suffix">a.a.</span>
-</div>
-<div class="macro-note">Última alteração: <strong id="selic-last-change">—</strong></div>
-</div>
-<div aria-hidden="true" class="macro-divider"></div>
-<div class="macro-side macro-copom">
-<div class="macro-label">📅 Reuniões COPOM 2026</div>
-<div aria-label="Calendário de reuniões do COPOM em 2026" class="copom-grid" id="copomMeetings">
-<span style="color:var(--muted);font-size:.68rem">calendário carregando...</span>
-</div>
-<a class="macro-link" href="https://www.bcb.gov.br/controleinflacao/copom" rel="noopener" target="_blank">
+  <div class="section-title market-section-head">
+    <div class="market-title-left">
+      <h2>📡 Indicadores de Mercado</h2>
+      <span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
+    </div>
+  </div>
+
+  <button type="button" class="closed-month-launch" id="closedMonthLaunch" onclick="openFechamentoMesSheet()" aria-label="Abrir resumo do último mês fechado">
+    <span class="closed-month-launch-icon">📌</span>
+    <span class="closed-month-launch-copy">
+      <strong id="closedMonthLaunchTitle">Resumo do mês fechado</strong>
+      <small id="closedMonthLaunchSub">Principais indicadores do último mês consolidado</small>
+      <span class="closed-month-mini" aria-hidden="true">
+        <span><b>CDI</b> <em id="closedMiniCdi">—</em></span>
+        <span><b>IPCA</b> <em id="closedMiniIpca">—</em></span>
+        <span><b>Dólar</b> <em id="closedMiniDolar">—</em></span>
+        <span><b>Ibov</b> <em id="closedMiniIbov">—</em></span>
+      </span>
+    </span>
+    <span class="closed-month-launch-action">Ver resumo ›</span>
+  </button>
+
+  <!-- Cards de referência: Selic, CDI e Poupança separados -->
+  <div class="indic-ref-bar market-ref-grid">
+
+    <!-- Card 1: SELIC + COPOM -->
+    <div class="indic-ref-card macro-card selic-copom-card market-ref-card market-ref-card-unified">
+      <div class="macro-side macro-selic">
+        <div class="macro-label">🏦 Taxa Selic — Meta COPOM</div>
+        <div class="market-rate-line market-rate-line-selic">
+          <div class="macro-main-value gold" id="mc-selic">—</div>
+          <span class="market-rate-suffix">a.a.</span>
+        </div>
+        <div class="macro-note">Última alteração: <strong id="selic-last-change">—</strong></div>
+      </div>
+
+      <div class="macro-divider" aria-hidden="true"></div>
+
+      <div class="macro-side macro-copom">
+        <div class="macro-label">📅 Reuniões COPOM 2026</div>
+        <div class="copom-grid" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026">
+          <span style="color:var(--muted);font-size:.68rem">calendário carregando...</span>
+        </div>
+        <a href="https://www.bcb.gov.br/controleinflacao/copom" target="_blank" rel="noopener" class="macro-link">
           Atas às 8h da terça seguinte · Fonte BCB ↗
         </a>
+      </div>
+    </div>
+
+    <!-- Card 2: CDI -->
+    <div class="indic-ref-card cdi-card market-ref-card cdi-card-compacto market-ref-card-unified">
+      <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
+      <div class="market-rate-line market-rate-line-cdi">
+        <div class="indic-ref-val green" id="mc-cdi">—</div>
+        <span class="market-rate-suffix">a.a.</span>
+      </div>
+
+      <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano">
+        <div class="cdi-year-head">
+          <span id="cdiYearHistoryTitle">Mensal</span>
+          <strong id="cdiYearHistoryTotal">Ano —</strong>
+        </div>
+        <div class="cdi-month-strip" id="cdiMonthStrip">
+          <span class="cdi-month-empty">histórico carregando...</span>
+        </div>
+      </div>
+
+      <div class="cdi-rel" style="margin-top:6px">CDI ≈ Selic − 0,10 p.p. · 12M na tabela consolidada</div>
+    </div>
+
+    <!-- Card 3: Poupança antiga + nova + regra visível -->
+<div class="poup-collapse-header section-title-collapsible"
+    onclick="toggleSection('sec-poupanca-body','poup-collapse')" id="poup-collapse"
+    role="button" aria-expanded="false" tabindex="0">
+  <span style="font-size:.75rem;font-weight:700;color:var(--muted)">🏠 Poupança — Regras e Cenários</span>
+  <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
 </div>
-</div>
-<!-- Card 2: CDI -->
-<div class="indic-ref-card cdi-card market-ref-card cdi-card-compacto market-ref-card-unified">
-<div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
-<div class="market-rate-line market-rate-line-cdi">
-<div class="indic-ref-val green" id="mc-cdi">—</div>
-<span class="market-rate-suffix">a.a.</span>
-</div>
-<div aria-label="Histórico mensal do CDI no ano" class="cdi-year-history" id="cdiYearHistory">
-<div class="cdi-year-head">
-<span id="cdiYearHistoryTitle">Mensal</span>
-<strong id="cdiYearHistoryTotal">Ano —</strong>
-</div>
-<div class="cdi-month-strip" id="cdiMonthStrip">
-<span class="cdi-month-empty">histórico carregando...</span>
-</div>
-</div>
-<div class="cdi-rel" style="margin-top:6px">CDI ≈ Selic − 0,10 p.p. · 12M na tabela consolidada</div>
-</div>
-<!-- Card 3: Poupança antiga + nova + regra visível -->
-<div aria-expanded="false" class="poup-collapse-header section-title-collapsible" id="poup-collapse" onclick="toggleSection('sec-poupanca-body','poup-collapse')" role="button" tabindex="0">
-<span style="font-size:.75rem;font-weight:700;color:var(--muted)">🏠 Poupança — Regras e Cenários</span>
-<button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
-</div>
-<div class="section-collapsible-body" hidden="" id="sec-poupanca-body">
-<div class="indic-ref-card poup market-ref-card poup-card-consultivo market-ref-card-unified">
-<div class="poup-header poup-header-clean unified-card-head">
-<div>
-<div class="indic-ref-label">🏠 Poupança — Rendimentos</div>
-<div class="poup-card-subtitle">Nova x antiga</div>
-</div>
-<button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Detalhes ▼</button>
-</div>
-<div class="poup-values poup-rules-grid">
-<div class="poup-rule poup-rule-card new-rule">
-<div class="poup-rule-label">Regra nova</div>
-<div class="poup-rule-period">A partir de 04/05/2012</div>
-<div class="poup-rule-val blue" id="mc-poup">—</div>
-<div class="poup-rule-sub" id="poupNewRuleText">a.m. · regra conforme nível da Selic</div>
-<div class="poup-accum-pill" id="poupNewAccum">Acum. ano: —</div>
-</div>
-<div aria-hidden="true" class="poup-rule-divider"></div>
-<div class="poup-rule poup-rule-card old-rule">
-<div class="poup-rule-label">Regra antiga</div>
-<div class="poup-rule-period">Até 03/05/2012</div>
-<div class="poup-rule-val muted" id="poupOldMonthly">—</div>
-<div class="poup-rule-sub" id="poupOldRuleText">a.m. · TR + 0,50%</div>
-<div class="poup-accum-pill muted" id="poupOldAccum">Acum. ano: —</div>
-</div>
-</div>
-<div class="poup-quick-note" id="poupQuickNote">
+<div class="section-collapsible-body" id="sec-poupanca-body" hidden>
+    <div class="indic-ref-card poup market-ref-card poup-card-consultivo market-ref-card-unified">
+      <div class="poup-header poup-header-clean unified-card-head">
+        <div>
+          <div class="indic-ref-label">🏠 Poupança — Rendimentos</div>
+          <div class="poup-card-subtitle">Nova x antiga</div>
+        </div>
+        <button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Detalhes ▼</button>
+      </div>
+
+      <div class="poup-values poup-rules-grid">
+        <div class="poup-rule poup-rule-card new-rule">
+          <div class="poup-rule-label">Regra nova</div>
+          <div class="poup-rule-period">A partir de 04/05/2012</div>
+          <div class="poup-rule-val blue" id="mc-poup">—</div>
+          <div class="poup-rule-sub" id="poupNewRuleText">a.m. · regra conforme nível da Selic</div>
+          <div class="poup-accum-pill" id="poupNewAccum">Acum. ano: —</div>
+        </div>
+
+        <div class="poup-rule-divider" aria-hidden="true"></div>
+
+        <div class="poup-rule poup-rule-card old-rule">
+          <div class="poup-rule-label">Regra antiga</div>
+          <div class="poup-rule-period">Até 03/05/2012</div>
+          <div class="poup-rule-val muted" id="poupOldMonthly">—</div>
+          <div class="poup-rule-sub" id="poupOldRuleText">a.m. · TR + 0,50%</div>
+          <div class="poup-accum-pill muted" id="poupOldAccum">Acum. ano: —</div>
+        </div>
+      </div>
+
+      <div class="poup-quick-note" id="poupQuickNote">
         Com a Selic atual, a regra nova será definida automaticamente pelo nível da taxa básica.
       </div>
-<div class="poup-explain" id="poupExplain">
-<div class="poup-explain-inner poup-explain-clean">
-<div class="poup-explain-row">
-<span class="poup-explain-tag tag-nova">Nova</span>
-<span class="poup-explain-text">Se a Selic estiver acima de 8,5% a.a., rende TR + 0,50% a.m.; se estiver igual ou abaixo, rende TR + 70% da Selic meta anual, mensalizada.</span>
-</div>
-<div class="poup-explain-row">
-<span class="poup-explain-tag tag-antiga">Antiga</span>
-<span class="poup-explain-text">Rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
-</div>
-<div class="poup-explain-row">
-<span class="poup-explain-tag tag-antiga">BCB</span>
-<span class="poup-explain-text">Use a calculadora oficial para correção de valores e conferência do rendimento acumulado por período.</span>
-</div>
-<a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" rel="noopener" target="_blank">🏦 Correção de valores BCB ↗</a>
-</div>
-</div>
-</div>
-<!-- Card 4: Gráfico didático de cenários da Poupança -->
-<div class="indic-ref-card market-ref-card poup-scenarios-card">
-<div class="poup-scenarios-head">
-<div class="poup-scenarios-title">
-<div class="indic-ref-label">📊 Poupança — Cenários</div>
-<div class="poup-scenarios-subtitle">Comparativo didático entre regra nova e antiga</div>
-</div>
-<span class="poup-scenario-status" id="poupScenarioStatus">Selic —</span>
-</div>
-<div class="poup-scenario-summary" id="poupScenarioSummary">
+
+      <div class="poup-explain" id="poupExplain">
+        <div class="poup-explain-inner poup-explain-clean">
+          <div class="poup-explain-row">
+            <span class="poup-explain-tag tag-nova">Nova</span>
+            <span class="poup-explain-text">Se a Selic estiver acima de 8,5% a.a., rende TR + 0,50% a.m.; se estiver igual ou abaixo, rende TR + 70% da Selic meta anual, mensalizada.</span>
+          </div>
+          <div class="poup-explain-row">
+            <span class="poup-explain-tag tag-antiga">Antiga</span>
+            <span class="poup-explain-text">Rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
+          </div>
+          <div class="poup-explain-row">
+            <span class="poup-explain-tag tag-antiga">BCB</span>
+            <span class="poup-explain-text">Use a calculadora oficial para correção de valores e conferência do rendimento acumulado por período.</span>
+          </div>
+          <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 4: Gráfico didático de cenários da Poupança -->
+    <div class="indic-ref-card market-ref-card poup-scenarios-card">
+      <div class="poup-scenarios-head">
+        <div class="poup-scenarios-title">
+          <div class="indic-ref-label">📊 Poupança — Cenários</div>
+          <div class="poup-scenarios-subtitle">Comparativo didático entre regra nova e antiga</div>
+        </div>
+        <span class="poup-scenario-status" id="poupScenarioStatus">Selic —</span>
+      </div>
+
+      <div class="poup-scenario-summary" id="poupScenarioSummary">
         Carregando comparação das regras conforme o nível da Selic...
       </div>
-<div class="poup-scenario-chart-wrap">
-<canvas aria-label="Gráfico comparando cenários da poupança pela Selic" id="poupScenarioChart"></canvas>
-</div>
-<div class="poup-scenario-metrics">
-<div class="poup-scenario-pill">
-<span>Situação hoje</span>
-<strong id="poupScenarioToday">—</strong>
-</div>
-<div class="poup-scenario-pill">
-<span>Virada da regra nova</span>
-<strong>Selic ≤ 8,50% a.a.</strong>
-</div>
-</div>
-<div class="poup-scenario-note" id="poupScenarioNote">
+
+      <div class="poup-scenario-chart-wrap">
+        <canvas id="poupScenarioChart" aria-label="Gráfico comparando cenários da poupança pela Selic"></canvas>
+      </div>
+
+      <div class="poup-scenario-metrics">
+        <div class="poup-scenario-pill">
+          <span>Situação hoje</span>
+          <strong id="poupScenarioToday">—</strong>
+        </div>
+        <div class="poup-scenario-pill">
+          <span>Virada da regra nova</span>
+          <strong>Selic ≤ 8,50% a.a.</strong>
+        </div>
+      </div>
+
+      <div class="poup-scenario-note" id="poupScenarioNote">
         Estimativa didática: a TR pode variar conforme o período de aniversário da poupança.
       </div>
-</div>
+    </div>
+
+
+  
 </div><!-- /poupanca-body -->
 </div><!-- /indic-ref-bar -->
-<div class="market-scenario-card" id="marketScenario">
-<span class="market-scenario-icon">🧭</span>
-<div>
-<strong>Resumo do cenário:</strong>
-<span id="marketScenarioText">Carregando leitura dos principais indicadores...</span>
-</div>
-</div>
+
+  <div class="market-scenario-card" id="marketScenario">
+    <span class="market-scenario-icon">🧭</span>
+    <div>
+      <strong>Resumo do cenário:</strong>
+      <span id="marketScenarioText">Carregando leitura dos principais indicadores...</span>
+    </div>
+  </div>
 </div><!-- /section cards mercado -->
+
+
 <!-- ═════════════════════════════════ APROFUNDAMENTO MACRO ══ -->
 <!-- ════════════════ BLOCO 3: APROFUNDAMENTO MACRO ════════════════ -->
 <!-- ══════════════════ PAINEL CONSOLIDADO DE INDICADORES ══ -->
 <div class="section-gap collapsible-section" id="sec-mercado-painel">
-<div aria-expanded="false" class="market-table-toolbar section-title-collapsible" onclick="toggleSection('sec-painel-body','sec-mercado-painel')" role="button" tabindex="0">
-<div class="market-table-title">
-<span>📊 Painel consolidado de indicadores</span>
-<small>Taxas, inflação, câmbio e bolsas em uma visão comparativa</small>
-</div>
-<div aria-label="Período acumulado exibido na tabela" class="indic-tabs-bar market-period-tabs">
-<span class="indic-tabs-label">Período acumulado:</span>
-<div class="indic-tabs">
-<button aria-pressed="true" class="indic-tab active" data-months="12" type="button">12 Meses</button>
-<button aria-pressed="false" class="indic-tab" data-months="24" type="button">24 Meses</button>
-<button aria-pressed="false" class="indic-tab" data-months="36" type="button">36 Meses</button>
-</div>
-</div>
-<div aria-label="Ações do painel consolidado" class="market-toolbar-actions indic-actions">
-<button aria-label="Imprimir somente o bloco do último mês fechado" class="panel-action-btn indic-action-btn" onclick="printPainelMercado()" type="button">🖨️ Print mês fechado</button>
-<button aria-label="Compartilhar somente o resumo do último mês fechado pelo WhatsApp" class="panel-action-btn indic-action-btn indic-action-btn-primary" onclick="sharePainelMercado()" type="button">📲 WhatsApp mês fechado</button>
-<button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
-</div>
-</div>
-<div class="section-collapsible-body" hidden="" id="sec-painel-body">
-<!-- Card compacto usado no print/WhatsApp: somente último mês fechado -->
-<div aria-hidden="true" class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()"></div>
 
-<aside aria-hidden="true" aria-label="Resumo do último mês fechado" aria-modal="true" class="closed-market-sheet" id="closedMarketSheet" role="dialog">
-  <div aria-hidden="true" class="closed-market-handle"></div>
-
-  <div class="closed-market-sheet-head closed-market-sheet-head-clean">
-    <button aria-label="Fechar resumo" class="closed-market-close" onclick="closeFechamentoMesSheet()" type="button">×</button>
-  </div>
-  <div class="closed-market-list" id="closedMarketSheetList"></div>
-
-  <div class="closed-market-actions">
-    <button onclick="copiarResumoPainelMercado()" type="button">📋 Copiar resumo</button>
-    <button onclick="sharePainelMercado()" type="button">📲 WhatsApp</button>
-  </div>
-</aside>
-<!-- Tabela linha do tempo -->
-<div class="indic-table-wrap">
-<table class="indic-table-v2">
-<thead>
-<tr>
-<th style="text-align:left">Indicador</th>
-<th>Último fechado<br/><span class="th-sub" id="th-mes-ant-sub">—</span></th>
-<th class="th-cur">Mês atual<br/><span class="th-sub" id="th-mes-cur-sub">parcial</span></th>
-<th>No ano<br/><span class="th-sub" id="th-ano-sub">jan→—</span></th>
-<th class="th-acum" id="th-acum-head">Acum. 12M<br/><span class="th-sub" id="th-acum-sub-v2">—</span></th>
-</tr>
-</thead>
-<tbody>
-<!-- GRUPO: Taxas de referência -->
-<tr class="group-row"><td colspan="5">
-<div class="group-lbl"><span>Taxas de referência</span><div class="group-lbl-line"></div></div>
-</td></tr>
-<!-- CDI -->
-<tr class="data-row" id="row-cdi">
-<td><div class="ind-name-v2">
-<div class="ind-icon-v2 ii-blue">💰</div>
-<div><div class="ind-v2-title">CDI</div><div class="ind-v2-sub">Cert. Depósito Interbancário</div></div>
-</div></td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ant" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-ant">—</span></div>
-<div class="v2-sub" id="cdi-mes-ant-sub">mês fechado</div>
-</td>
-<td class="td-cur">
-<div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-cur" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-cur">—</span></div>
-<div class="v2-sub"><span id="cdi-cur-sub">mês atual</span></div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ano" style="width:0%"></div></div><span class="v2-val" id="cdi-ano">—</span></div>
-<div class="v2-sub" id="cdi-ano-sub">ano</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-acum" style="width:0%"></div></div><span class="v2-val pos" id="cdi-acum-v2">—</span></div>
-<div class="v2-sub" id="cdi-acum-src-v2">12M</div>
-</td>
-</tr>
-<!-- IPCA -->
-<tr class="data-row" id="row-ipca">
-<td><div class="ind-name-v2">
-<div class="ind-icon-v2 ii-red">🎯</div>
-<div>
-<div class="ind-v2-title">IPCA <span class="badge-alrt" id="ipca-alert-badge" style="display:none">acima da meta</span></div>
-<div class="ind-v2-sub">Inflação ao Consumidor · meta 3,0%</div>
-</div>
-</div></td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-ant" style="width:0%"></div></div><span class="v2-val" id="ipca-mes-ant">—</span></div>
-<div class="v2-sub" id="ipca-mes-ant-sub">—</div>
-</td>
-<td class="td-cur">
-<span class="badge-await">aguardando IBGE</span>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-ano" style="width:0%"></div></div><span class="v2-val" id="ipca-ano-v2">—</span></div>
-<div class="v2-sub">ano</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-acum" style="width:0%"></div></div><span class="v2-val" id="ipca-acum-v2">—</span></div>
-<div class="v2-sub" id="ipca-acum-sub-v2">12M</div>
-</td>
-</tr>
-<!-- GRUPO: Câmbio -->
-<tr class="group-row"><td colspan="5">
-<div class="group-lbl"><span>Câmbio</span><div class="group-lbl-line"></div></div>
-</td></tr>
-<!-- Dólar unificado -->
-<tr class="data-row" id="row-dolar">
-<td><div class="ind-name-v2">
-<div class="ind-icon-v2 ii-amber">💵</div>
-<div><div class="ind-v2-title">Dólar BRL/USD</div><div class="ind-v2-sub">Cotação · Variação PTAX BCB</div></div>
-</div></td>
-<td>
-<div class="v2-val neu" id="dolar-ant-cot">—</div>
-<div class="v2-sub" id="dolar-ant-sub">fechamento mês ant.</div>
-</td>
-<td class="td-cur">
-<div class="v2-val neu" id="dolar-cur-cot">—</div>
-<div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dolar-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-cur-var" style="font-size:.72rem">—</span></div>
-<div class="v2-sub" id="dolar-cur-sub">Mês</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-ano-v2">—</span></div>
-<div class="v2-sub">Ano</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-acum-v2">—</span></div>
-<div class="v2-sub" id="dolar-acum-sub-v2">12M</div>
-</td>
-</tr>
-<!-- GRUPO: Bolsa Brasil -->
-<tr class="group-row"><td colspan="5">
-<div class="group-lbl"><span><span class="market-flag">🇧🇷</span>Bolsa — Brasil</span><div class="group-lbl-line"></div></div>
-</td></tr>
-<!-- Ibovespa unificado -->
-<tr class="data-row" id="row-ibov">
-<td><div class="ind-name-v2">
-<div class="ind-icon-v2 ii-teal">📈</div>
-<div><div class="ind-v2-title">Ibovespa</div><div class="ind-v2-sub">B3 · pontos + variação %</div></div>
-</div></td>
-<td>
-<div class="v2-val neu" id="ibov-ant-pts">—</div>
-<div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ant-var" style="font-size:.72rem">—</span></div>
-<div class="v2-sub" id="ibov-ant-sub">mês fechado</div>
-</td>
-<td class="td-cur">
-<div class="v2-val neu" id="ibov-cur-pts">—</div>
-<div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-var" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-cur-var" style="font-size:.72rem">—</span></div>
-<div class="v2-sub" id="ibov-cur-sub">Mês</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ano-v2">—</span></div>
-<div class="v2-sub">Ano</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-acum-v2">—</span></div>
-<div class="v2-sub" id="ibov-acum-sub-v2">12M</div>
-</td>
-</tr>
-<!-- GRUPO: Bolsa EUA -->
-<tr class="group-row"><td colspan="5">
-<div class="group-lbl"><span><span class="market-flag">🇺🇸</span>Bolsa — EUA</span><div class="group-lbl-line"></div></div>
-</td></tr>
-<!-- S&P 500 -->
-<tr class="data-row" id="row-sp">
-<td><div class="ind-name-v2">
-<div class="ind-icon-v2 ii-purple">🌎</div>
-<div><div class="ind-v2-title">S&amp;P 500</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
-</div></td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-ant-var">—</div></div>
-<div class="v2-sub" id="sp-ant-sub">Mês fechado</div>
-</td>
-<td class="td-cur">
-<div class="v2-val neu" id="sp-cur-pts">—</div>
-<div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-sp-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-cur-var">—</div></div>
-<div class="v2-sub" id="sp-cur-sub">Mês</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-ano-var">—</div></div>
-<div class="v2-sub" id="sp-ano-sub">Ano</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-acum-var">—</div></div>
-<div class="v2-sub" id="sp-acum-sub-v2">12M</div>
-</td>
-</tr>
-<!-- Dow Jones -->
-<tr class="data-row" id="row-dow">
-<td><div class="ind-name-v2">
-<div class="ind-icon-v2 ii-blue">🏛️</div>
-<div><div class="ind-v2-title">Dow Jones</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
-</div></td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-ant-var">—</div></div>
-<div class="v2-sub" id="dow-ant-sub">Mês fechado</div>
-</td>
-<td class="td-cur">
-<div class="v2-val neu" id="dow-cur-pts">—</div>
-<div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dow-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-cur-var">—</div></div>
-<div class="v2-sub" id="dow-cur-sub">Mês</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-ano-var">—</div></div>
-<div class="v2-sub" id="dow-ano-sub">Ano</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-acum-var">—</div></div>
-<div class="v2-sub" id="dow-acum-sub-v2">12M</div>
-</td>
-</tr>
-<!-- Nasdaq -->
-<tr class="data-row" id="row-nasdaq">
-<td><div class="ind-name-v2">
-<div class="ind-icon-v2 ii-purple">💻</div>
-<div><div class="ind-v2-title">Nasdaq</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
-</div></td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-ant-var">—</div></div>
-<div class="v2-sub" id="nasdaq-ant-sub">Mês fechado</div>
-</td>
-<td class="td-cur">
-<div class="v2-val neu" id="nasdaq-cur-pts">—</div>
-<div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-nasdaq-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-cur-var">—</div></div>
-<div class="v2-sub" id="nasdaq-cur-sub">Mês</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-ano-var">—</div></div>
-<div class="v2-sub" id="nasdaq-ano-sub">Ano</div>
-</td>
-<td>
-<div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-acum-var">—</div></div>
-<div class="v2-sub" id="nasdaq-acum-sub-v2">12M</div>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="indic-footnote">
-      CDI e IPCA: séries públicas BCB 4391/433 · Dólar: PTAX BCB · Ibovespa e S&amp;P 500: fontes públicas de mercado
+  <div class="market-table-toolbar section-title-collapsible"
+       onclick="toggleSection('sec-painel-body','sec-mercado-painel')"
+       role="button" aria-expanded="false" tabindex="0">
+    <div class="market-table-title">
+      <span>📊 Painel consolidado de indicadores</span>
+      <small>Taxas, inflação, câmbio e bolsas em uma visão comparativa</small>
     </div>
-</div>
+    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela">
+      <span class="indic-tabs-label">Período acumulado:</span>
+      <div class="indic-tabs">
+        <button class="indic-tab active" data-months="12" type="button" aria-pressed="true">12 Meses</button>
+        <button class="indic-tab" data-months="24" type="button" aria-pressed="false">24 Meses</button>
+        <button class="indic-tab" data-months="36" type="button" aria-pressed="false">36 Meses</button>
+      </div>
+    </div>
+    <div class="market-toolbar-actions indic-actions" aria-label="Ações do painel consolidado">
+      <button type="button" class="panel-action-btn indic-action-btn" onclick="printPainelMercado()" aria-label="Imprimir somente o bloco do último mês fechado">🖨️ Print mês fechado</button>
+      <button type="button" class="panel-action-btn indic-action-btn indic-action-btn-primary" onclick="sharePainelMercado()" aria-label="Compartilhar somente o resumo do último mês fechado pelo WhatsApp">📲 WhatsApp mês fechado</button>
+    
+    <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
+  </div>
+  </div>
+
+  <div class="section-collapsible-body" id="sec-painel-body" hidden>
+  <!-- Card compacto usado no print/WhatsApp: somente último mês fechado -->
+  <div id="painelFechadoCard" class="closed-month-share-card" aria-hidden="true">
+    <div class="closed-card-head">
+      <div>
+        <span class="closed-card-kicker">Painel de mercado</span>
+        <h3 id="closedCardTitle">Último mês fechado</h3>
+      </div>
+      <span class="closed-card-badge" id="closedCardPeriod">—</span>
+    </div>
+    <div class="closed-card-grid" id="closedCardGrid"></div>
+    <div class="closed-card-foot">Dados públicos · CDI/IPCA BCB · Dólar PTAX BCB · bolsas: fontes públicas de mercado</div>
+  </div>
+
+  <div class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()" aria-hidden="true"></div>
+  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-labelledby="closedMarketSheetTitle" aria-hidden="true">
+    <div class="closed-market-handle" aria-hidden="true"></div>
+    <div class="closed-market-sheet-head">
+      <div class="closed-market-sheet-icon">📊</div>
+      <div>
+        <span class="closed-market-kicker">Consulta rápida</span>
+        <h3 id="closedMarketSheetTitle">Fechamento de Mercado</h3>
+      </div>
+      <button type="button" class="closed-market-close" onclick="closeFechamentoMesSheet()" aria-label="Fechar resumo">×</button>
+    </div>
+    <div class="closed-market-section-note" id="closedMarketSheetNote">Último mês fechado · dados públicos</div>
+    <div class="closed-market-list" id="closedMarketSheetList"></div>
+    <div class="closed-market-actions">
+      <button type="button" onclick="copiarResumoPainelMercado()">📋 Copiar resumo</button>
+      <button type="button" onclick="sharePainelMercado()">📲 WhatsApp</button>
+      <button type="button" onclick="printPainelMercado()">🖨️ Print</button>
+    </div>
+  </aside>
+
+  <!-- Tabela linha do tempo -->
+  <div class="indic-table-wrap">
+    <table class="indic-table-v2">
+      <thead>
+        <tr>
+          <th style="text-align:left">Indicador</th>
+          <th>Último fechado<br><span class="th-sub" id="th-mes-ant-sub">—</span></th>
+          <th class="th-cur">Mês atual<br><span class="th-sub" id="th-mes-cur-sub">parcial</span></th>
+          <th>No ano<br><span class="th-sub" id="th-ano-sub">jan→—</span></th>
+          <th class="th-acum" id="th-acum-head">Acum. 12M<br><span class="th-sub" id="th-acum-sub-v2">—</span></th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- GRUPO: Taxas de referência -->
+        <tr class="group-row"><td colspan="5">
+          <div class="group-lbl"><span>Taxas de referência</span><div class="group-lbl-line"></div></div>
+        </td></tr>
+
+        <!-- CDI -->
+        <tr class="data-row" id="row-cdi">
+          <td><div class="ind-name-v2">
+            <div class="ind-icon-v2 ii-blue">💰</div>
+            <div><div class="ind-v2-title">CDI</div><div class="ind-v2-sub">Cert. Depósito Interbancário</div></div>
+          </div></td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ant" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-ant">—</span></div>
+            <div class="v2-sub" id="cdi-mes-ant-sub">mês fechado</div>
+          </td>
+          <td class="td-cur">
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-cur" style="width:0%"></div></div><span class="v2-val" id="cdi-mes-cur">—</span></div>
+            <div class="v2-sub"><span id="cdi-cur-sub">mês atual</span></div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-ano" style="width:0%"></div></div><span class="v2-val" id="cdi-ano">—</span></div>
+            <div class="v2-sub" id="cdi-ano-sub">ano</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-p" id="bar-cdi-acum" style="width:0%"></div></div><span class="v2-val pos" id="cdi-acum-v2">—</span></div>
+            <div class="v2-sub" id="cdi-acum-src-v2">12M</div>
+          </td>
+        </tr>
+
+        <!-- IPCA -->
+        <tr class="data-row" id="row-ipca">
+          <td><div class="ind-name-v2">
+            <div class="ind-icon-v2 ii-red">🎯</div>
+            <div>
+              <div class="ind-v2-title">IPCA <span class="badge-alrt" id="ipca-alert-badge" style="display:none">acima da meta</span></div>
+              <div class="ind-v2-sub">Inflação ao Consumidor · meta 3,0%</div>
+            </div>
+          </div></td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-ant" style="width:0%"></div></div><span class="v2-val" id="ipca-mes-ant">—</span></div>
+            <div class="v2-sub" id="ipca-mes-ant-sub">—</div>
+          </td>
+          <td class="td-cur">
+            <span class="badge-await">aguardando IBGE</span>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-ano" style="width:0%"></div></div><span class="v2-val" id="ipca-ano-v2">—</span></div>
+            <div class="v2-sub">ano</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div class="v2-bar-n" id="bar-ipca-acum" style="width:0%"></div></div><span class="v2-val" id="ipca-acum-v2">—</span></div>
+            <div class="v2-sub" id="ipca-acum-sub-v2">12M</div>
+          </td>
+        </tr>
+
+        <!-- GRUPO: Câmbio -->
+        <tr class="group-row"><td colspan="5">
+          <div class="group-lbl"><span>Câmbio</span><div class="group-lbl-line"></div></div>
+        </td></tr>
+
+        <!-- Dólar unificado -->
+        <tr class="data-row" id="row-dolar">
+          <td><div class="ind-name-v2">
+            <div class="ind-icon-v2 ii-amber">💵</div>
+            <div><div class="ind-v2-title">Dólar BRL/USD</div><div class="ind-v2-sub">Cotação · Variação PTAX BCB</div></div>
+          </div></td>
+          <td>
+            <div class="v2-val neu" id="dolar-ant-cot">—</div>
+            <div class="v2-sub" id="dolar-ant-sub">fechamento mês ant.</div>
+          </td>
+          <td class="td-cur">
+            <div class="v2-val neu" id="dolar-cur-cot">—</div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dolar-cur" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-cur-var" style="font-size:.72rem">—</span></div>
+            <div class="v2-sub" id="dolar-cur-sub">Mês</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-ano-v2">—</span></div>
+            <div class="v2-sub">Ano</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dolar-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="dolar-acum-v2">—</span></div>
+            <div class="v2-sub" id="dolar-acum-sub-v2">12M</div>
+          </td>
+        </tr>
+
+        <!-- GRUPO: Bolsa Brasil -->
+        <tr class="group-row"><td colspan="5">
+          <div class="group-lbl"><span><span class="market-flag">🇧🇷</span>Bolsa — Brasil</span><div class="group-lbl-line"></div></div>
+        </td></tr>
+
+        <!-- Ibovespa unificado -->
+        <tr class="data-row" id="row-ibov">
+          <td><div class="ind-name-v2">
+            <div class="ind-icon-v2 ii-teal">📈</div>
+            <div><div class="ind-v2-title">Ibovespa</div><div class="ind-v2-sub">B3 · pontos + variação %</div></div>
+          </div></td>
+          <td>
+            <div class="v2-val neu" id="ibov-ant-pts">—</div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-ant" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ant-var" style="font-size:.72rem">—</span></div>
+            <div class="v2-sub" id="ibov-ant-sub">mês fechado</div>
+          </td>
+          <td class="td-cur">
+            <div class="v2-val neu" id="ibov-cur-pts">—</div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-ibov-var" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-cur-var" style="font-size:.72rem">—</span></div>
+            <div class="v2-sub" id="ibov-cur-sub">Mês</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-ano" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-ano-v2">—</span></div>
+            <div class="v2-sub">Ano</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-ibov-acum" style="width:0%;height:100%;border-radius:2px"></div></div><span class="v2-val" id="ibov-acum-v2">—</span></div>
+            <div class="v2-sub" id="ibov-acum-sub-v2">12M</div>
+          </td>
+        </tr>
+
+        <!-- GRUPO: Bolsa EUA -->
+        <tr class="group-row"><td colspan="5">
+          <div class="group-lbl"><span><span class="market-flag">🇺🇸</span>Bolsa — EUA</span><div class="group-lbl-line"></div></div>
+        </td></tr>
+
+        <!-- S&P 500 -->
+        <tr class="data-row" id="row-sp">
+          <td><div class="ind-name-v2">
+            <div class="ind-icon-v2 ii-purple">🌎</div>
+            <div><div class="ind-v2-title">S&amp;P 500</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
+          </div></td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-ant-var">—</div></div>
+            <div class="v2-sub" id="sp-ant-sub">Mês fechado</div>
+          </td>
+          <td class="td-cur">
+            <div class="v2-val neu" id="sp-cur-pts">—</div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-sp-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-cur-var">—</div></div>
+            <div class="v2-sub" id="sp-cur-sub">Mês</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-ano-var">—</div></div>
+            <div class="v2-sub" id="sp-ano-sub">Ano</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-sp-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="sp-acum-var">—</div></div>
+            <div class="v2-sub" id="sp-acum-sub-v2">12M</div>
+          </td>
+        </tr>
+
+        <!-- Dow Jones -->
+        <tr class="data-row" id="row-dow">
+          <td><div class="ind-name-v2">
+            <div class="ind-icon-v2 ii-blue">🏛️</div>
+            <div><div class="ind-v2-title">Dow Jones</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
+          </div></td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-ant-var">—</div></div>
+            <div class="v2-sub" id="dow-ant-sub">Mês fechado</div>
+          </td>
+          <td class="td-cur">
+            <div class="v2-val neu" id="dow-cur-pts">—</div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-dow-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-cur-var">—</div></div>
+            <div class="v2-sub" id="dow-cur-sub">Mês</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-ano-var">—</div></div>
+            <div class="v2-sub" id="dow-ano-sub">Ano</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-dow-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="dow-acum-var">—</div></div>
+            <div class="v2-sub" id="dow-acum-sub-v2">12M</div>
+          </td>
+        </tr>
+
+        <!-- Nasdaq -->
+        <tr class="data-row" id="row-nasdaq">
+          <td><div class="ind-name-v2">
+            <div class="ind-icon-v2 ii-purple">💻</div>
+            <div><div class="ind-v2-title">Nasdaq</div><div class="ind-v2-sub">Pontos · variação em USD e BRL</div></div>
+          </div></td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ant" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-ant-var">—</div></div>
+            <div class="v2-sub" id="nasdaq-ant-sub">Mês fechado</div>
+          </td>
+          <td class="td-cur">
+            <div class="v2-val neu" id="nasdaq-cur-pts">—</div>
+            <div class="v2-bar-row" style="margin-top:3px"><div class="v2-bar-bg"><div id="bar-nasdaq-cur" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-cur-var">—</div></div>
+            <div class="v2-sub" id="nasdaq-cur-sub">Mês</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-ano" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-ano-var">—</div></div>
+            <div class="v2-sub" id="nasdaq-ano-sub">Ano</div>
+          </td>
+          <td>
+            <div class="v2-bar-row"><div class="v2-bar-bg"><div id="bar-nasdaq-acum" style="width:0%;height:100%;border-radius:2px"></div></div><div class="v2-val" id="nasdaq-acum-var">—</div></div>
+            <div class="v2-sub" id="nasdaq-acum-sub-v2">12M</div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <div class="indic-footnote">
+      CDI e IPCA: séries públicas BCB 4391/433 · Dólar: PTAX BCB · Ibovespa e S&P 500: fontes públicas de mercado
+    </div>
+  </div>
 </div><!-- /section painel consolidado -->
+
 <!-- ═══════════════════════════════════ SEÇÃO DÓLAR ══ -->
 <div class="section-gap dolar-compact-section" id="sec-dolar">
-<div class="section-title">
-<h2>💵 Dólar PTAX</h2>
-<span class="section-badge"><span class="badge-dot green"></span>BCB · cotação oficial</span>
-</div>
-<div class="dolar-compact-card dolar-mobile-priority">
-<div class="dolar-compact-loading" id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação PTAX...</div>
-<div id="dolar-day-content" style="display:none">
-<div class="dolar-compact-top">
-<div class="dolar-main-kpi">
-<span class="dolar-kpi-label">Cotação PTAX</span>
-<strong id="dolar-day-rate">—</strong>
-<small id="dolar-day-ref">—</small>
-</div>
-<div class="dolar-kpi-row">
-<div class="dolar-mini-kpi">
-<span>Mês</span>
-<strong class="muted" id="dolar-var-mes-card">—</strong>
-</div>
-<div class="dolar-mini-kpi">
-<span>Ano</span>
-<strong class="muted" id="dolar-var-ano-card">—</strong>
-</div>
-<div class="dolar-mini-kpi">
-<span>12M</span>
-<strong class="muted" id="dolar-var-12m-card">—</strong>
-</div>
-<div class="dolar-mini-kpi">
-<span>24M</span>
-<strong class="muted" id="dolar-var-24m-card">—</strong>
-</div>
-<div class="dolar-mini-kpi dolar-mini-kpi-36m">
-<span>36M</span>
-<strong class="muted" id="dolar-var-36m-card">—</strong>
-</div>
-</div>
-</div>
-</div>
-<div class="dolar-compact-footer dolar-months-first">
-<div class="dolar-month-strip">
-<div class="dolar-month-strip-head">
-<div class="dolar-month-strip-title">Fechamentos mensais</div>
-<button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
-</div>
-<div class="dolar-timeline-body open" id="dolarTimelineBody">
-<div class="dolar-months" id="dolarMonths">
-<div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
-</div>
-</div>
-</div>
-<div class="dolar-compact-source">
-<span class="source-label">Fonte</span>
-<span id="dolar-day-src">BCB · PTAX</span>
-<a href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" rel="noopener" target="_blank">Histórico BCB ↗</a>
-</div>
-</div>
-<div class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel">
-<div class="dolar-compact-chart-header">
-<div>
-<div class="dolar-chart-title">📈 Histórico PTAX</div>
-<div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
-</div>
-<button aria-expanded="false" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" type="button">Ver gráfico</button>
-<div aria-label="Selecionar período do gráfico do dólar" class="chart-tabs dolar-range-tabs">
-<button class="chart-tab" data-dolar-range="year" type="button">2026</button>
-<button class="chart-tab" data-dolar-range="12m" type="button">12M</button>
-<button class="chart-tab active" data-dolar-range="24m" type="button">24M</button>
-<button class="chart-tab" data-dolar-range="36m" type="button">36M</button>
-</div>
-</div>
-<div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
-</div>
-</div>
-<!-- Estatísticas PTAX 12M -->
-<div class="ptax-stats-card" id="ptaxStatsCard">
-<div class="ptax-stats-title">📊 Estatísticas PTAX — 12 meses</div>
-<div class="ptax-stats-grid">
-<div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
-<div class="ptax-stat-item"><span class="ptax-stat-label">Máxima 12M</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
-<div class="ptax-stat-item"><span class="ptax-stat-label">Mínima 12M</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
-<div class="ptax-stat-item"><span class="ptax-stat-label">Média 12M</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
-</div>
-</div>
+  <div class="section-title">
+    <h2>💵 Dólar PTAX</h2>
+    <span class="section-badge"><span class="badge-dot green"></span>BCB · cotação oficial</span>
+  </div>
+
+  <div class="dolar-compact-card dolar-mobile-priority">
+    <div class="dolar-compact-loading" id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação PTAX...</div>
+
+    <div id="dolar-day-content" style="display:none">
+      <div class="dolar-compact-top">
+        <div class="dolar-main-kpi">
+          <span class="dolar-kpi-label">Cotação PTAX</span>
+          <strong id="dolar-day-rate">—</strong>
+          <small id="dolar-day-ref">—</small>
+        </div>
+
+        <div class="dolar-kpi-row">
+          <div class="dolar-mini-kpi">
+            <span>Mês</span>
+            <strong class="muted" id="dolar-var-mes-card">—</strong>
+          </div>
+          <div class="dolar-mini-kpi">
+            <span>Ano</span>
+            <strong class="muted" id="dolar-var-ano-card">—</strong>
+          </div>
+          <div class="dolar-mini-kpi">
+            <span>12M</span>
+            <strong class="muted" id="dolar-var-12m-card">—</strong>
+          </div>
+          <div class="dolar-mini-kpi">
+            <span>24M</span>
+            <strong class="muted" id="dolar-var-24m-card">—</strong>
+          </div>
+          <div class="dolar-mini-kpi dolar-mini-kpi-36m">
+            <span>36M</span>
+            <strong class="muted" id="dolar-var-36m-card">—</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dolar-compact-footer dolar-months-first">
+      <div class="dolar-month-strip">
+        <div class="dolar-month-strip-head">
+          <div class="dolar-month-strip-title">Fechamentos mensais</div>
+          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
+        </div>
+        <div class="dolar-timeline-body open" id="dolarTimelineBody">
+          <div class="dolar-months" id="dolarMonths">
+            <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dolar-compact-source">
+        <span class="source-label">Fonte</span>
+        <span id="dolar-day-src">BCB · PTAX</span>
+        <a href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">Histórico BCB ↗</a>
+      </div>
+    </div>
+
+    <div class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel">
+      <div class="dolar-compact-chart-header">
+        <div>
+          <div class="dolar-chart-title">📈 Histórico PTAX</div>
+          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
+        </div>
+        <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
+        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar">
+          <button class="chart-tab" data-dolar-range="year" type="button">2026</button>
+          <button class="chart-tab" data-dolar-range="12m" type="button">12M</button>
+          <button class="chart-tab active" data-dolar-range="24m" type="button">24M</button>
+          <button class="chart-tab" data-dolar-range="36m" type="button">36M</button>
+        </div>
+      </div>
+      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Estatísticas PTAX 12M -->
+  <div class="ptax-stats-card" id="ptaxStatsCard">
+    <div class="ptax-stats-title">📊 Estatísticas PTAX — 12 meses</div>
+    <div class="ptax-stats-grid">
+      <div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
+      <div class="ptax-stat-item"><span class="ptax-stat-label">Máxima 12M</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
+      <div class="ptax-stat-item"><span class="ptax-stat-label">Mínima 12M</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
+      <div class="ptax-stat-item"><span class="ptax-stat-label">Média 12M</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
+    </div>
+  </div>
+
 </div><!-- /section dolar -->
+
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
 <div class="section-gap collapsible-section" id="sec-focus">
-<div aria-expanded="false" class="section-title focus-section-title section-title-collapsible" onclick="toggleSection('sec-focus-body','sec-focus')" role="button" tabindex="0">
-<div class="focus-title-block">
-<div class="focus-title-line">
-<h2>📋 Boletim Focus — Expectativas de Mercado</h2>
-<span class="section-badge"><span class="badge-dot blue"></span>Banco Central do Brasil</span>
-</div>
-<div class="focus-ref" id="focusRef">Carregando último boletim...</div>
-</div>
-<button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
-</div>
-<div class="section-collapsible-body" hidden="" id="sec-focus-body">
-<div class="focus-explain-card">
-<button class="focus-explain-header" onclick="toggleFocusExplain()" type="button">
-<span>ℹ️ Entenda o Boletim Focus</span>
-<span id="focusExplainIcon">Mostrar ▼</span>
-</button>
-<div class="focus-explain-body" id="focusExplainBody">
-<div class="focus-explain-content">
-<div class="focus-explain-grid">
-<div class="focus-explain-item">
-<span class="focus-explain-kicker">O que é</span>
-<p>
+  <div class="section-title focus-section-title section-title-collapsible"
+       onclick="toggleSection('sec-focus-body','sec-focus')" role="button" aria-expanded="false" tabindex="0">
+    <div class="focus-title-block">
+      <div class="focus-title-line">
+        <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
+        <span class="section-badge"><span class="badge-dot blue"></span>Banco Central do Brasil</span>
+      </div>
+      <div class="focus-ref" id="focusRef">Carregando último boletim...</div>
+    </div>
+    <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
+  </div>
+  <div class="section-collapsible-body" id="sec-focus-body" hidden>
+
+  <div class="focus-explain-card">
+    <button class="focus-explain-header" type="button" onclick="toggleFocusExplain()">
+      <span>ℹ️ Entenda o Boletim Focus</span>
+      <span id="focusExplainIcon">Mostrar ▼</span>
+    </button>
+    <div class="focus-explain-body" id="focusExplainBody">
+      <div class="focus-explain-content">
+        <div class="focus-explain-grid">
+          <div class="focus-explain-item">
+            <span class="focus-explain-kicker">O que é</span>
+            <p>
               Relatório do <strong>Banco Central do Brasil</strong> que consolida estimativas de bancos, corretoras e consultorias para inflação, Selic, PIB e câmbio nos próximos anos.
             </p>
-</div>
-<div class="focus-explain-item">
-<span class="focus-explain-kicker">Para que serve</span>
-<p>
+          </div>
+          <div class="focus-explain-item">
+            <span class="focus-explain-kicker">Para que serve</span>
+            <p>
               Ajuda a balizar a leitura de cenário e a organização dos investimentos de acordo com o consenso do mercado econômico.
             </p>
-</div>
-</div>
-<div class="focus-explain-note">
-<span>⚠️</span>
-<span><strong>Atenção:</strong> serve como referência de cenário, mas não é garantia de resultado futuro. As projeções mudam conforme a economia e novas informações são divulgadas.</span>
-</div>
-</div>
-</div>
-</div>
-<div class="focus-grid" id="focusGrid">
-<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:.8rem">
-<div class="spinner"></div>Buscando expectativas...
+          </div>
+        </div>
+        <div class="focus-explain-note">
+          <span>⚠️</span>
+          <span><strong>Atenção:</strong> serve como referência de cenário, mas não é garantia de resultado futuro. As projeções mudam conforme a economia e novas informações são divulgadas.</span>
+        </div>
+      </div>
     </div>
+  </div>
+
+  <div class="focus-grid" id="focusGrid">
+    <div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--muted);font-size:.8rem">
+      <div class="spinner"></div>Buscando expectativas...
+    </div>
+  </div>
 </div>
-</div>
+
 <!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES ══ -->
-</div><!-- /focus-body -->
+  </div><!-- /focus-body -->
+
 <div class="section-gap evolution-section collapsible-section" id="sec-graficos">
-<div aria-expanded="false" class="section-title evolution-title section-title-collapsible" onclick="toggleSection('sec-graficos-body','sec-graficos')" role="button" tabindex="0">
-<div>
-<h2>📊 Evolução dos Indicadores</h2>
-<p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
+  <div class="section-title evolution-title section-title-collapsible"
+       onclick="toggleSection('sec-graficos-body','sec-graficos')" role="button" aria-expanded="false" tabindex="0">
+    <div>
+      <h2>📊 Evolução dos Indicadores</h2>
+      <p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
+      <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
+    </div>
+  </div>
+  <div class="section-collapsible-body" id="sec-graficos-body" hidden>
+
+  <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores">
+    <div class="evo-summary-card">
+      <span class="evo-summary-kicker">IPCA mensal</span>
+      <strong id="evoIpcaMensalVal">—</strong>
+      <small id="evoIpcaMensalSub">último dado oficial</small>
+    </div>
+    <div class="evo-summary-card emphasis">
+      <span class="evo-summary-kicker">Selic atual</span>
+      <strong id="evoSelicAtualVal">—</strong>
+      <small id="evoSelicAtualSub">meta COPOM</small>
+    </div>
+    <div class="evo-summary-card">
+      <span class="evo-summary-kicker">IPCA 12M x meta</span>
+      <strong id="evoIpca12Val">—</strong>
+      <small id="evoIpca12Sub">meta 3,00% · banda 1,50% a 4,50%</small>
+    </div>
+  </div>
+
+  <div class="evo-view-tabs" aria-label="Selecionar gráfico no celular">
+    <button class="evo-view-tab active" type="button" data-evo-chart="ipca">IPCA mensal</button>
+    <button class="evo-view-tab" type="button" data-evo-chart="selic">Selic</button>
+    <button class="evo-view-tab" type="button" data-evo-chart="meta">IPCA 12M</button>
+  </div>
+
+  <div class="charts-grid evo-charts-grid">
+    <div class="chart-card evo-chart-card active" id="evoChartIpcaCard" data-evo-panel="ipca">
+      <div class="chart-card-header">
+        <div><div class="chart-card-title">🎯 IPCA mensal</div><div class="chart-card-sub">Variação oficial mês a mês</div></div>
+        <div class="chart-tabs">
+          <button class="chart-tab active" data-chart="ipca" data-range="24" type="button" aria-pressed="true">24M</button>
+          <button class="chart-tab" data-chart="ipca" data-range="60" type="button" aria-pressed="false">5A</button>
+          <button class="chart-tab" data-chart="ipca" data-range="120" type="button" aria-pressed="false">10A</button>
+        </div>
+      </div>
+      <div class="chart-reading" id="evoCardIpcaNote">Último dado: aguardando atualização.</div>
+      <div class="chart-body"><canvas id="chartIpca"></canvas></div>
+    </div>
+    <div class="chart-card selic-chart-card evo-chart-card" id="evoChartSelicCard" data-evo-panel="selic">
+      <div class="chart-card-header">
+        <div><div class="chart-card-title">🏦 Selic histórica</div><div class="chart-card-sub">Histórico COPOM desde 1999</div></div>
+        <div class="chart-tabs">
+          <button class="chart-tab" data-chart="selic" data-range="12" type="button" aria-pressed="false">1A</button>
+          <button class="chart-tab" data-chart="selic" data-range="60" type="button" aria-pressed="false">5A</button>
+          <button class="chart-tab active" data-chart="selic" data-range="999" type="button" aria-pressed="true">Histórico</button>
+        </div>
+      </div>
+      <div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
+      <div class="selic-summary-row" id="selicSummaryRow" aria-label="Resumo do período exibido no gráfico da Selic">
+        <div class="selic-summary-chip max">
+          <span class="selic-summary-dot"></span>
+          <span class="selic-summary-text"><span class="selic-summary-label">Máxima</span><strong class="selic-summary-value" id="selicMaxResumo">—</strong><small class="selic-summary-date" id="selicMaxData">—</small></span>
+        </div>
+        <div class="selic-summary-chip min">
+          <span class="selic-summary-dot"></span>
+          <span class="selic-summary-text"><span class="selic-summary-label">Mínima</span><strong class="selic-summary-value" id="selicMinResumo">—</strong><small class="selic-summary-date" id="selicMinData">—</small></span>
+        </div>
+        <div class="selic-summary-chip now">
+          <span class="selic-summary-dot"></span>
+          <span class="selic-summary-text"><span class="selic-summary-label">Hoje</span><strong class="selic-summary-value" id="selicHojeResumo">—</strong><small class="selic-summary-date" id="selicHojeData">último dado</small></span>
+        </div>
+      </div>
+      <div class="chart-body"><canvas id="chartSelic"></canvas></div>
+    </div>
+    <div class="chart-card evo-chart-card" id="evoChartMetaCard" data-evo-panel="meta">
+      <div class="chart-card-header">
+        <div><div class="chart-card-title">🎯 IPCA acumulado em 12 meses</div><div class="chart-card-sub">Meta central e intervalo de tolerância</div></div>
+      </div>
+      <div class="chart-reading" id="evoCardMetaNote">Meta: 3,00% · banda: 1,50% a 4,50%.</div>
+      <div class="chart-body"><canvas id="chartMeta"></canvas></div>
+    </div>
+  </div>
 </div>
-<div style="display:flex;align-items:center;gap:10px">
-<span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
-<button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
-</div>
-</div>
-<div class="section-collapsible-body" hidden="" id="sec-graficos-body">
-<div aria-label="Resumo dos gráficos de indicadores" class="evo-summary-grid">
-<div class="evo-summary-card">
-<span class="evo-summary-kicker">IPCA mensal</span>
-<strong id="evoIpcaMensalVal">—</strong>
-<small id="evoIpcaMensalSub">último dado oficial</small>
-</div>
-<div class="evo-summary-card emphasis">
-<span class="evo-summary-kicker">Selic atual</span>
-<strong id="evoSelicAtualVal">—</strong>
-<small id="evoSelicAtualSub">meta COPOM</small>
-</div>
-<div class="evo-summary-card">
-<span class="evo-summary-kicker">IPCA 12M x meta</span>
-<strong id="evoIpca12Val">—</strong>
-<small id="evoIpca12Sub">meta 3,00% · banda 1,50% a 4,50%</small>
-</div>
-</div>
-<div aria-label="Selecionar gráfico no celular" class="evo-view-tabs">
-<button class="evo-view-tab active" data-evo-chart="ipca" type="button">IPCA mensal</button>
-<button class="evo-view-tab" data-evo-chart="selic" type="button">Selic</button>
-<button class="evo-view-tab" data-evo-chart="meta" type="button">IPCA 12M</button>
-</div>
-<div class="charts-grid evo-charts-grid">
-<div class="chart-card evo-chart-card active" data-evo-panel="ipca" id="evoChartIpcaCard">
-<div class="chart-card-header">
-<div><div class="chart-card-title">🎯 IPCA mensal</div><div class="chart-card-sub">Variação oficial mês a mês</div></div>
-<div class="chart-tabs">
-<button aria-pressed="true" class="chart-tab active" data-chart="ipca" data-range="24" type="button">24M</button>
-<button aria-pressed="false" class="chart-tab" data-chart="ipca" data-range="60" type="button">5A</button>
-<button aria-pressed="false" class="chart-tab" data-chart="ipca" data-range="120" type="button">10A</button>
-</div>
-</div>
-<div class="chart-reading" id="evoCardIpcaNote">Último dado: aguardando atualização.</div>
-<div class="chart-body"><canvas id="chartIpca"></canvas></div>
-</div>
-<div class="chart-card selic-chart-card evo-chart-card" data-evo-panel="selic" id="evoChartSelicCard">
-<div class="chart-card-header">
-<div><div class="chart-card-title">🏦 Selic histórica</div><div class="chart-card-sub">Histórico COPOM desde 1999</div></div>
-<div class="chart-tabs">
-<button aria-pressed="false" class="chart-tab" data-chart="selic" data-range="12" type="button">1A</button>
-<button aria-pressed="false" class="chart-tab" data-chart="selic" data-range="60" type="button">5A</button>
-<button aria-pressed="true" class="chart-tab active" data-chart="selic" data-range="999" type="button">Histórico</button>
-</div>
-</div>
-<div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
-<div aria-label="Resumo do período exibido no gráfico da Selic" class="selic-summary-row" id="selicSummaryRow">
-<div class="selic-summary-chip max">
-<span class="selic-summary-dot"></span>
-<span class="selic-summary-text"><span class="selic-summary-label">Máxima</span><strong class="selic-summary-value" id="selicMaxResumo">—</strong><small class="selic-summary-date" id="selicMaxData">—</small></span>
-</div>
-<div class="selic-summary-chip min">
-<span class="selic-summary-dot"></span>
-<span class="selic-summary-text"><span class="selic-summary-label">Mínima</span><strong class="selic-summary-value" id="selicMinResumo">—</strong><small class="selic-summary-date" id="selicMinData">—</small></span>
-</div>
-<div class="selic-summary-chip now">
-<span class="selic-summary-dot"></span>
-<span class="selic-summary-text"><span class="selic-summary-label">Hoje</span><strong class="selic-summary-value" id="selicHojeResumo">—</strong><small class="selic-summary-date" id="selicHojeData">último dado</small></span>
-</div>
-</div>
-<div class="chart-body"><canvas id="chartSelic"></canvas></div>
-</div>
-<div class="chart-card evo-chart-card" data-evo-panel="meta" id="evoChartMetaCard">
-<div class="chart-card-header">
-<div><div class="chart-card-title">🎯 IPCA acumulado em 12 meses</div><div class="chart-card-sub">Meta central e intervalo de tolerância</div></div>
-</div>
-<div class="chart-reading" id="evoCardMetaNote">Meta: 3,00% · banda: 1,50% a 4,50%.</div>
-<div class="chart-body"><canvas id="chartMeta"></canvas></div>
-</div>
-</div>
-</div>
+
+
 <!-- ═══════════════════════════════════════ MODAL PTAX ══ -->
 <div class="modal-overlay" id="modalPtax" onclick="fecharModalPTAX(event)">
-<div class="modal">
-<div class="modal-header">
-<div class="modal-title">💵 Câmbio PTAX — Fechamento Mensal (BRL/USD)</div>
-<button class="modal-close" onclick="fecharModalPTAX()">✕</button>
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">💵 Câmbio PTAX — Fechamento Mensal (BRL/USD)</div>
+      <button class="modal-close" onclick="fecharModalPTAX()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Atualizando informações do Banco Central...</div>
+      <table class="ptax-table" id="ptaxTable" style="display:none">
+        <thead><tr>
+          <th style="text-align:left">Mês / Ano</th>
+          <th>Fechamento (R$)</th>
+          <th>Var. mês anterior</th>
+          <th>Data do fechamento</th>
+        </tr></thead>
+        <tbody id="ptaxBody"></tbody>
+      </table>
+    </div>
+    <div class="modal-footer">Fonte: Banco Central do Brasil · PTAX.</div>
+  </div>
 </div>
-<div class="modal-body">
-<div class="ptax-loading" id="ptaxLoading"><div class="spinner"></div>Atualizando informações do Banco Central...</div>
-<table class="ptax-table" id="ptaxTable" style="display:none">
-<thead><tr>
-<th style="text-align:left">Mês / Ano</th>
-<th>Fechamento (R$)</th>
-<th>Var. mês anterior</th>
-<th>Data do fechamento</th>
-</tr></thead>
-<tbody id="ptaxBody"></tbody>
-</table>
-</div>
-<div class="modal-footer">Fonte: Banco Central do Brasil · PTAX.</div>
-</div>
-</div>
+
 <footer class="site-footer-clean site-footer-v2">
-<details class="footer-disclaimer-clean footer-disclaimer-v2" id="footerDisclaimer">
-<summary>
-<span class="footer-summary-main">
-<span class="footer-summary-title">Sobre esta plataforma</span>
-<span class="footer-summary-sub">produção independente · dados públicos · uso informativo · não institucional</span>
-</span>
-<span aria-hidden="true" class="footer-summary-action"></span>
-</summary>
-<div class="footer-clean-body">
-<div class="footer-clean-grid">
-<div class="footer-clean-item">
-<strong>Finalidade</strong>
-<span>Organizar dados públicos de mercado e fundos para apoio consultivo.</span>
-</div>
-<div class="footer-clean-item">
-<strong>Natureza</strong>
-<span>Iniciativa independente de Elton Cardoso Teotonio. Não é ferramenta institucional da CAIXA ou da CAIXA Asset.</span>
-</div>
-<div class="footer-clean-item">
-<strong>Uso das informações</strong>
-<span>Não constitui recomendação, oferta ou solicitação de investimento. Consulte sempre documentos oficiais.</span>
-</div>
-</div>
-<div aria-label="Fontes públicas consultadas" class="footer-clean-sources">
-<span class="sources-title">Fontes públicas</span>
-<span>BCB</span>
-<span>IBGE</span>
-<span>B3</span>
-<span>SIPII</span>
-<span>fundos.caixa.gov.br</span>
-</div>
-</div>
-</details>
+  <details class="footer-disclaimer-clean footer-disclaimer-v2" id="footerDisclaimer">
+    <summary>
+      <span class="footer-summary-main">
+        <span class="footer-summary-title">Sobre esta plataforma</span>
+        <span class="footer-summary-sub">produção independente · dados públicos · uso informativo · não institucional</span>
+      </span>
+      <span class="footer-summary-action" aria-hidden="true"></span>
+    </summary>
+
+    <div class="footer-clean-body">
+      <div class="footer-clean-grid">
+        <div class="footer-clean-item">
+          <strong>Finalidade</strong>
+          <span>Organizar dados públicos de mercado e fundos para apoio consultivo.</span>
+        </div>
+        <div class="footer-clean-item">
+          <strong>Natureza</strong>
+          <span>Iniciativa independente de Elton Cardoso Teotonio. Não é ferramenta institucional da CAIXA ou da CAIXA Asset.</span>
+        </div>
+        <div class="footer-clean-item">
+          <strong>Uso das informações</strong>
+          <span>Não constitui recomendação, oferta ou solicitação de investimento. Consulte sempre documentos oficiais.</span>
+        </div>
+      </div>
+
+      <div class="footer-clean-sources" aria-label="Fontes públicas consultadas">
+        <span class="sources-title">Fontes públicas</span>
+        <span>BCB</span>
+        <span>IBGE</span>
+        <span>B3</span>
+        <span>SIPII</span>
+        <span>fundos.caixa.gov.br</span>
+      </div>
+    </div>
+  </details>
 </footer>
 </div><!-- /page -->
-<nav aria-label="Atalhos principais no celular" class="mobile-bottom-nav">
-<a data-target="topo" href="#topo"><span>🏠</span><small>Início</small></a>
-<a data-target="sec-fundos" href="#sec-fundos"><span>📁</span><small>Fundos</small></a>
-<a data-target="rankingsSection" href="#rankingsSection"><span>🏆</span><small>Ranking</small></a>
-<a data-target="sec-mercado" href="#sec-mercado"><span>📡</span><small>Mercado</small></a>
-<a data-target="sec-dolar" href="#sec-dolar"><span>💵</span><small>Dólar</small></a>
+
+
+
+
+
+
+
+<nav class="mobile-bottom-nav" aria-label="Atalhos principais no celular">
+  <a href="#topo" data-target="topo"><span>🏠</span><small>Início</small></a>
+  <a href="#sec-fundos" data-target="sec-fundos"><span>📁</span><small>Fundos</small></a>
+  <a href="#rankingsSection" data-target="rankingsSection"><span>🏆</span><small>Ranking</small></a>
+  <a href="#sec-mercado" data-target="sec-mercado"><span>📡</span><small>Mercado</small></a>
+  <a href="#sec-dolar" data-target="sec-dolar"><span>💵</span><small>Dólar</small></a>
 </nav>
-<a aria-label="Voltar ao topo" class="mobile-section-top-btn" href="#topo">↑</a>
+<a href="#topo" class="mobile-section-top-btn" aria-label="Voltar ao topo">↑</a>
+
+
+
+
+
 <!-- ════════════════════════════════════════════════════════════
      MELHORIAS COMPLETAS — Barra Global de Fundos + Favoritos + Fix CDI Sort
      Elton Cardoso — patch único sobre o original, sem alterar nada
 ════════════════════════════════════════════════════════════════ -->
+
 <!-- BARRA GLOBAL DE FUNDOS -->
-<div aria-label="Barra de busca global de fundos" id="gfb" role="search">
-<div id="gfb-inner">
-<div aria-hidden="true" id="gfb-logo">📁</div>
-<div id="gfb-search-wrap">
-<svg aria-hidden="true" fill="none" height="13" id="gfb-icon" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24" width="13"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.35-4.35"></path></svg>
-<input aria-label="Buscar fundo" autocomplete="off" id="gfbSearch" placeholder="Buscar fundo, CNPJ..." type="search"/>
-<button aria-label="Limpar busca" id="gfbClear">✕</button>
+<div id="gfb" role="search" aria-label="Barra de busca global de fundos">
+  <div id="gfb-inner">
+    <div id="gfb-logo" aria-hidden="true">📁</div>
+
+    <div id="gfb-search-wrap">
+      <svg id="gfb-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="gfbSearch" type="search" placeholder="Buscar fundo, CNPJ..." autocomplete="off" aria-label="Buscar fundo"/>
+      <button id="gfbClear" aria-label="Limpar busca">✕</button>
+    </div>
+
+    <div id="gfb-chips" role="group" aria-label="Atalhos rápidos para filtrar fundos">
+      <button class="gfb-chip gfb-chip-active" data-gquick="all">Todos</button>
+      <button class="gfb-chip gfb-fav-chip" data-gfav="1" aria-pressed="false">⭐ Favoritos <span class="gfb-fav-count" id="gfbFavCount">0</span></button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA SIMPLES">RF Simp.</button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA">RF</button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA REFERENCIADO">RF Ref.</button>
+      <button class="gfb-chip" data-gcat="RENDA FIXA CURTO PRAZO">RF CP</button>
+      <button class="gfb-chip" data-gbench="CDI">CDI</button>
+      <button class="gfb-chip" data-gbench="IPCA">IPCA</button>
+      <button class="gfb-chip" data-gbench="Crédito privado">Créd. Priv.</button>
+      <button class="gfb-chip" data-gcat="MULTIMERCADO">MM</button>
+      <button class="gfb-chip" data-gcat="ACOES">Ações</button>
+      <button class="gfb-chip" data-gcat="CAMBIAL">Câmbio</button>
+      <button class="gfb-chip" data-gcat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP</button>
+    </div>
+
+    <div id="gfb-right">
+      <span id="gfbCount" aria-live="polite">—</span>
+      <button id="gfbGo" aria-label="Ir para tabela de fundos">Ver tabela ↓</button>
+    </div>
+  </div>
 </div>
-<div aria-label="Atalhos rápidos para filtrar fundos" id="gfb-chips" role="group">
-<button class="gfb-chip gfb-chip-active" data-gquick="all">Todos</button>
-<button aria-pressed="false" class="gfb-chip gfb-fav-chip" data-gfav="1">⭐ Favoritos <span class="gfb-fav-count" id="gfbFavCount">0</span></button>
-<button class="gfb-chip" data-gcat="RENDA FIXA SIMPLES">RF Simp.</button>
-<button class="gfb-chip" data-gcat="RENDA FIXA">RF</button>
-<button class="gfb-chip" data-gcat="RENDA FIXA REFERENCIADO">RF Ref.</button>
-<button class="gfb-chip" data-gcat="RENDA FIXA CURTO PRAZO">RF CP</button>
-<button class="gfb-chip" data-gcat="MULTIMERCADO">MM</button>
-<button class="gfb-chip" data-gcat="CAMBIAL">Câmbio</button>
-<button class="gfb-chip" data-gcat="ACOES">Ações</button>
-<button class="gfb-chip" data-gcat="FUNDO DE INDICE">Índice</button>
-<button class="gfb-chip" data-gcat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP</button>
-<button class="gfb-chip" data-gbench="CDI">CDI</button>
-<button class="gfb-chip" data-gbench="IPCA">IPCA</button>
-<button class="gfb-chip" data-gbench="Crédito privado">Créd. Priv.</button>
-</div>
-<div id="gfb-right">
-<span aria-live="polite" id="gfbCount">—</span>
-<button aria-label="Ir para tabela de fundos" id="gfbGo">Ver tabela ↓</button>
-</div>
-</div>
-</div>
+
+
 <div id="elton-fav-toast">⭐ Favorito atualizado</div>
+
+
+
+
 <!-- PATCH FINAL — mobile header de seleção rápida + detalhes persistentes -->
+
+
+
 <!-- PATCH — KPI Melhor/Pior 12M clicáveis: abre o fundo nos cards/tabela -->
+
+
+
 <!-- ════════════════════════════════════════════════════════════
      PATCH MOBILE — Tabela consultiva resumida
      Prioriza rentabilidade no início da tabela e compacta documentos
 ════════════════════════════════════════════════════════════════ -->
+
+
+
 <!-- ════════════════════════════════════════════
      FUND SPOTLIGHT MODAL — KPI melhor/pior 12M
 ════════════════════════════════════════════ -->
-<div aria-labelledby="fspotTitle" aria-modal="true" class="fspot-overlay" id="fundSpotlightOverlay" role="dialog">
-<div class="fspot-panel">
-<div aria-hidden="true" class="fspot-handle"></div>
-<div class="fspot-header">
-<div class="fspot-header-left">
-<span class="fspot-badge" id="fspotKind">—</span>
-<div>
-<div class="fspot-title" id="fspotTitle">—</div>
-<div class="fspot-meta" id="fspotMeta">—</div>
+<div id="fundSpotlightOverlay" class="fspot-overlay" role="dialog" aria-modal="true" aria-labelledby="fspotTitle">
+  <div class="fspot-panel">
+    <div class="fspot-handle" aria-hidden="true"></div>
+
+    <div class="fspot-header">
+      <div class="fspot-header-left">
+        <span class="fspot-badge" id="fspotKind">—</span>
+        <div>
+          <div class="fspot-title" id="fspotTitle">—</div>
+          <div class="fspot-meta" id="fspotMeta">—</div>
+        </div>
+      </div>
+      <button class="fspot-close" id="fspotClose" aria-label="Fechar">✕</button>
+    </div>
+
+    <div class="fspot-metrics" id="fspotMetrics"></div>
+
+    <div class="fspot-liq" id="fspotLiq"></div>
+
+    <div class="fspot-note" id="fspotNote"></div>
+
+    <div class="fspot-actions">
+      <button class="fspot-btn-primary" id="fspotVerTabela">🔍 Ver na tabela</button>
+      <a class="fspot-btn-secondary" id="fspotLinkCaixa" href="#" target="_blank" rel="noopener">↗ Site CAIXA</a>
+    </div>
+
+    <div class="fspot-docs" id="fspotDocs"></div>
+  </div>
 </div>
-</div>
-<button aria-label="Fechar" class="fspot-close" id="fspotClose">✕</button>
-</div>
-<div class="fspot-metrics" id="fspotMetrics"></div>
-<div class="fspot-liq" id="fspotLiq"></div>
-<div class="fspot-note" id="fspotNote"></div>
-<div class="fspot-actions">
-<button class="fspot-btn-primary" id="fspotVerTabela">🔍 Ver na tabela</button>
-<a class="fspot-btn-secondary" href="#" id="fspotLinkCaixa" rel="noopener" target="_blank">↗ Site CAIXA</a>
-</div>
-<div class="fspot-docs" id="fspotDocs"></div>
-</div>
-</div>
+
+
 <!-- ════════════════════════════════════════════
      COMPARADOR DE FUNDOS
 ════════════════════════════════════════════ -->
+
 <!-- Barra flutuante de seleção -->
-<div class="compar-bar" id="comparBar" role="status" style="display:none">
-<span class="compar-bar-count"><strong id="comparCount">0</strong> fundo(s) selecionado(s)</span>
-<span class="compar-bar-hint" id="comparHint"></span>
-<button class="compar-btn-primary" id="comparBtn" onclick="abrirComparador()">⚖ Comparar</button>
-<button class="compar-btn-clear" onclick="limparComparador()">✕ Limpar</button>
+<div id="comparBar" class="compar-bar" style="display:none" role="status">
+  <span class="compar-bar-count"><strong id="comparCount">0</strong> fundo(s) selecionado(s)</span>
+  <span class="compar-bar-hint" id="comparHint"></span>
+  <button class="compar-btn-primary" id="comparBtn" onclick="abrirComparador()">⚖ Comparar</button>
+  <button class="compar-btn-clear" onclick="limparComparador()">✕ Limpar</button>
 </div>
+
 <!-- Modal comparador -->
-<div aria-label="Comparador de Fundos" aria-modal="true" class="compar-overlay" id="comparOverlay" role="dialog">
-<div class="compar-panel">
-<div class="compar-header">
-<h2 class="compar-title">⚖ Comparador de Fundos</h2>
-<button aria-label="Fechar" class="compar-close" id="comparClose" onclick="fecharComparador()">✕</button>
+<div id="comparOverlay" class="compar-overlay" role="dialog" aria-modal="true" aria-label="Comparador de Fundos">
+  <div class="compar-panel">
+    <div class="compar-header">
+      <h2 class="compar-title">⚖ Comparador de Fundos</h2>
+      <button class="compar-close" id="comparClose" aria-label="Fechar" onclick="fecharComparador()">✕</button>
+    </div>
+    <div class="compar-scroll">
+      <table class="compar-table" id="comparTable"></table>
+    </div>
+  </div>
 </div>
-<div class="compar-scroll">
-<table class="compar-table" id="comparTable"></table>
-</div>
-</div>
-</div>
+
+
+
 <!-- PATCH — Favoritos evidentes, persistentes e com estado vazio -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <!-- JavaScript principal —— todos os patches incluídos -->
-<script>
-(function(){
-  function setupMobileOrganize(){
-    const btn = document.getElementById('mobileOrganizeToggle');
-    const panel = document.getElementById('mobileOrganizePanel');
-    const summary = document.getElementById('mobileOrganizeSummary');
-    if(!btn || !panel) return;
-
-    function updateSummary(){
-      const activeView = document.querySelector('.mobile-view-btn.active')?.textContent?.trim() || 'Tabela';
-      const activeSort = document.querySelector('.mobile-sort-chip.active')?.textContent?.trim() || 'Dia';
-      const activeDir = document.querySelector('.mobile-sort-dir-btn.active')?.textContent?.trim() || 'Maior';
-      if(summary) summary.textContent = `${activeView} · ${activeSort} · ${activeDir}`;
-    }
-
-    btn.addEventListener('click', function(){
-      const isOpen = btn.getAttribute('aria-expanded') === 'true';
-      btn.setAttribute('aria-expanded', String(!isOpen));
-      panel.hidden = isOpen;
-      updateSummary();
-    });
-
-    document.addEventListener('click', function(e){
-      if(
-        e.target.closest('.mobile-view-btn') ||
-        e.target.closest('.mobile-sort-chip') ||
-        e.target.closest('.mobile-sort-dir-btn')
-      ){
-        setTimeout(updateSummary, 60);
-      }
-    });
-
-    updateSummary();
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', setupMobileOrganize);
-  }else{
-    setupMobileOrganize();
-  }
-})();
-</script>
-<script src="app.js?v=20260604-safe-null-listeners-01"></script>
-</div></div></body>
+<script src="app.js?v=20260604-funil-pf-01"></script>
+</body>
 </html>
