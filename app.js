@@ -7277,3 +7277,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   setTimeout(tryExec,1200);
   setTimeout(atualizarExecBar,3500);
 });
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+
+  document.querySelectorAll('tr.detail-row').forEach(row => row.remove());
+
+  document.querySelectorAll('.exp-btn').forEach(btn => {
+    btn.textContent = '▼';
+    btn.setAttribute('aria-expanded', 'false');
+  });
+});
