@@ -5,6 +5,41 @@ const BASE_URL = window.location.protocol === 'file:'
   ? 'https://raw.githubusercontent.com/eltonprivatebanker/catalogo-fundos-caixa/main/'
   : '';
 
+
+/* ═══════════════════════════════════════════════════════════════
+   toggleSection — abre/fecha seções colapsáveis
+   Chamada inline no HTML: onclick="toggleSection(bodyId, containerId)"
+   - bodyId:      id do <div class="section-collapsible-body" hidden>
+   - containerId: id do elemento pai (cabeçalho ou wrapper da seção)
+═══════════════════════════════════════════════════════════════ */
+function toggleSection(bodyId, containerId) {
+  var body      = document.getElementById(bodyId);
+  var container = document.getElementById(containerId);
+  if (!body) return;
+
+  var isHidden = body.hasAttribute('hidden');
+
+  // Abre ou fecha o corpo
+  if (isHidden) {
+    body.removeAttribute('hidden');
+  } else {
+    body.setAttribute('hidden', '');
+  }
+
+  // Atualiza classe e aria no container
+  if (container) {
+    container.classList.toggle('section-expanded', isHidden);
+    container.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+  }
+
+  // Atualiza o label do botão toggle dentro do cabeçalho
+  var btn = container ? container.querySelector('.toggle-label') : null;
+  if (btn) btn.textContent = isHidden ? 'Ver menos' : 'Ver mais';
+}
+
+/* Expõe no escopo global (necessário para onclick inline no HTML) */
+window.toggleSection = toggleSection;
+
 const $ = id => document.getElementById(id);
 const fmt = (v,dec=2,suf='%') => {
   if(v===null||v===undefined||v==='') return '—';
@@ -4479,28 +4514,30 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function applyFilterPreset(preset){
-    if(!preset || preset==='all'){
-      clearAllFilters();
-      return;
-    }
-    if(preset === 'pf') activePerfil = 'PF';
-  if(preset === 'cdi') activeBenchmark = 'CDI';
-    if(preset==='conservador') activeRisco='Conservador';
-    if(preset==='ipca') activeBenchmark='IPCA';
-    if(preset==='renda-fixa') activeCat='RENDA FIXA';
-    if(preset==='multimercado') activeCat='MULTIMERCADO';
-    if(preset==='renda-fixa-simples') activeCat='RENDA FIXA SIMPLES';
+  if(!preset || preset==='all'){
+    clearAllFilters();
+    return;
+  }
+  // Perfil
+  if(preset==='pf') activePerfil='PF';
+  // Benchmark
+  if(preset==='cdi') activeBenchmark='CDI';
+  if(preset==='ipca') activeBenchmark='IPCA';
+  // Risco
+  if(preset==='conservador') activeRisco='Conservador';
+  // Categoria
+  if(preset==='renda-fixa-simples') activeCat='RENDA FIXA SIMPLES';
   if(preset==='renda-fixa') activeCat='RENDA FIXA';
   if(preset==='renda-fixa-referenciado') activeCat='RENDA FIXA REFERENCIADO';
   if(preset==='renda-fixa-curto-prazo') activeCat='RENDA FIXA CURTO PRAZO';
   if(preset==='multimercado') activeCat='MULTIMERCADO';
-  if(preset==='acoes') activeCat='ACOES';
   if(preset==='cambial') activeCat='CAMBIAL';
+  if(preset==='acoes') activeCat='ACOES';
   if(preset==='fundo-de-indice') activeCat='FUNDO DE INDICE';
   if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
-    syncFilterControls();
-    if(typeof applyFilter==='function') applyFilter();
-  }
+  syncFilterControls();
+  if(typeof applyFilter==='function') applyFilter();
+}
 
   function updatePresetStates(){
     const cat=typeof activeCat!=='undefined' ? activeCat : '';
