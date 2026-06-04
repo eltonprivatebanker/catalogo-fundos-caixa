@@ -3249,51 +3249,73 @@ function render(){
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
   const rows=filtered.slice(start,end);
   const tbody=$('tableBody');
+
   if(!rows.length){
     tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
-    $('resultInfo').textContent='Resultado: 0 fundos encontrados'; updateFundResultSummary(); renderPagination(); return;
+    $('resultInfo').textContent='Resultado: 0 fundos encontrados';
+    updateFundResultSummary();
+    renderPagination();
+    return;
   }
+
   tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
-  $('resultInfo').textContent= perPage===9999 ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}` : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
+
+  $('resultInfo').textContent= perPage===9999
+    ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}`
+    : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
+
   updateFundResultSummary();
+
   // Eventos checkboxes comparador
   tbody.querySelectorAll('.comp-check').forEach(cb=>{
     const idx = parseInt(cb.dataset.idx);
+
     cb.addEventListener('change', ()=>{
       const row = filtered[idx] || allRows[idx];
       comparToggle(idx, row, cb);
     });
+
     cb.addEventListener('click', e=>e.stopPropagation());
   });
 
+  // Evento de expandir/recolher detalhe do fundo
   tbody.querySelectorAll('.exp-btn').forEach(btn=>{
-    btn.addEventListener('click',e=>{
+    btn.addEventListener('click', e=>{
       e.stopPropagation();
-      const idx=parseInt(btn.dataset.idx);
-      if(expandedRows.has(idx)) expandedRows.delete(idx); else expandedRows.add(idx);
-      render();
+
+      const idx = parseInt(btn.dataset.idx);
+
+      // Suaviza a sensação de "pulo" antes de redesenhar a tabela
+      tbody.classList.add('table-refreshing');
+
+      setTimeout(() => {
+        if(expandedRows.has(idx)){
+          expandedRows.delete(idx);
+        }else{
+          expandedRows.clear(); // mantém só uma linha aberta por vez
+          expandedRows.add(idx);
+        }
+
+        render();
+
+        requestAnimationFrame(() => {
+          const tbody2 = document.getElementById('tableBody');
+
+          if(tbody2){
+            tbody2.classList.remove('table-refreshing');
+            tbody2.classList.add('table-refreshed');
+
+            setTimeout(() => {
+              tbody2.classList.remove('table-refreshed');
+            }, 220);
+          }
+        });
+      }, 80);
     });
   });
+
   renderPagination();
 }
-
-function scrollToFundResultsStart(){
-  const tableWrap = document.querySelector('#sec-fundos .table-wrap');
-  const fallback = document.getElementById('sec-fundos');
-  const target = tableWrap || fallback;
-  if(!target) return;
-
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  const stickyOffset = isMobile ? 118 : 24;
-  const y = target.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
-
-  window.scrollTo({
-    top: Math.max(0, y),
-    behavior: 'smooth'
-  });
-}
-
-function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
   const c=$('pageBtns'); c.innerHTML='';
   if(total<=1) return;
