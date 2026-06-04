@@ -15051,3 +15051,57 @@ tr.detail-row td{
 .exec-bar{
   display: none !important;
 }
+/* ==========================================================
+   ELTAUM — Filtros ativos sempre visível + remove exec-bar
+========================================================== */
+
+#activeFilterStrip{
+  min-height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+  padding-top: 4px !important;
+  padding-bottom: 4px !important;
+  border-top: 1px solid rgba(255,255,255,.06) !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+#activeFilterStrip .active-filter-label{
+  font-size: .62rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: .08em !important;
+  color: #9ca6c2 !important;
+  font-weight: 800 !important;
+}
+
+#activeFilterStrip .active-filter-empty{
+  font-size: .68rem !important;
+  color: #7f89a8 !important;
+  padding: 5px 9px !important;
+  border-radius: 999px !important;
+  border: 1px solid rgba(255,255,255,.08) !important;
+  background: rgba(255,255,255,.025) !important;
+}
+
+#fundFilterShell{
+  min-height: 168px !important;
+  transition: none !important;
+  overflow-anchor: none !important;
+}
+
+#sec-fundos,
+#fundFilterShell,
+#activeFilterStrip,
+.table-wrap,
+#mainTable,
+#tableBody{
+  overflow-anchor: none !important;
+}
+
+#execBar,
+.exec-bar{
+  display: none !important;
+}
