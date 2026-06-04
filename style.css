@@ -1,6 +1,42 @@
 /* Catálogo de Fundos CAIXA — Elton Cardoso Teotonio
    style.css — extraído do index.html (v20) */
 
+
+/* ════════════════════════════════════════════════════════════════════
+   DESIGN SYSTEM — tokens canônicos (adicionados sessão 04/06/2026)
+════════════════════════════════════════════════════════════════════ */
+:root{
+  --ds-bg-base:    #07080f;
+  --ds-bg-surface: #0d0f1c;
+  --ds-bg-raised:  #111526;
+  --ds-bg-overlay: #181d36;
+  --ds-text-primary:   #e8ecf7;
+  --ds-text-secondary: #b4bdd3;
+  --ds-text-tertiary:  #7f8aa8;
+  --ds-brand:       #c8973a;
+  --ds-brand-light: #e8bb6a;
+  --ds-brand-dim:   rgba(200,151,58,.12);
+  --ds-brand-border:rgba(200,151,58,.30);
+  --ds-up:          #2ed17a;
+  --ds-up-subtle:   rgba(46,209,122,.12);
+  --ds-down:        #f05565;
+  --ds-down-subtle: rgba(240,85,101,.10);
+  --ds-info:        #5b9cf6;
+  --ds-border:         rgba(180,189,211,.16);
+  --ds-border-subtle:  rgba(180,189,211,.08);
+  --ds-border-strong:  rgba(180,189,211,.28);
+  --ds-border-brand:   rgba(200,151,58,.35);
+  --ds-radius-sm:   6px;
+  --ds-radius-md:   10px;
+  --ds-radius-lg:   14px;
+  --ds-radius-xl:   20px;
+  --ds-radius-full: 9999px;
+  --ds-shadow-sm:   0 1px 3px rgba(0,0,0,.25);
+  --ds-shadow-md:   0 4px 12px rgba(0,0,0,.35);
+  --ds-ease:        cubic-bezier(.4,0,.2,1);
+  --ds-duration-fast:   120ms;
+  --ds-duration-normal: 200ms;
+}
 :root{
   --bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--bg4:#181d36;
   --gold:#c8973a;--gold2:#e8bb6a;--gold3:#f5d48a;
@@ -2443,7 +2479,7 @@ footer{
   color:#c6cede;
   font-size:.74rem;
   line-height:1.58;
-  text-wrap:pretty;
+  overflow-wrap:break-word;
 }
 @media(max-width:768px), (hover:none) and (pointer:coarse){
   .top-disclaimer.top-disclaimer-compact{
@@ -2526,7 +2562,7 @@ footer{
   line-height:1.55;
   max-width:92ch;
   overflow-wrap:break-word;
-  text-wrap:pretty;
+  overflow-wrap:break-word;
 }
 
 .site-footer-clean{
@@ -7924,7 +7960,7 @@ th.th-num, td.col-pct, td.col-pct-12m, td.col-cdi-bar, td.cdi-ratio-cell{
   white-space:normal !important;
   overflow-wrap:normal !important;
   word-break:normal !important;
-  text-wrap:pretty !important;
+  overflow-wrap:break-word;!important;
 }
 @media(max-width:760px), (hover:none) and (pointer:coarse){
   .top-disclaimer.notice-strip-v3{
@@ -13738,10 +13774,16 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opac
   padding:10px 14px;
   margin-bottom:0;
   background:rgba(13,15,28,1);
-  border:1px solid rgba(180,189,211,.16);
-  border-radius:14px;
+  border:1px solid var(--ds-border);
+  border-radius:var(--ds-radius-lg);
   cursor:pointer;
-  transition:border-color .2s ease, background .2s ease;
+  user-select:none;
+  transition:border-color var(--ds-duration-normal) var(--ds-ease),
+             background var(--ds-duration-normal) var(--ds-ease);
+}
+.poup-collapse-header:hover{
+  border-color:var(--ds-border-brand);
+  background:var(--ds-brand-dim);
 }
 .poup-collapse-header:hover{
   border-color:rgba(200,151,58,.35);
@@ -13780,7 +13822,7 @@ body.closed-market-open .closed-market-sheet{ transform:translate(-50%, 0); opac
 
 /* ── Sticky search mobile ───────────────────────────────────────── */
 @media(max-width:820px){
-  .fund-filter-shell{position:sticky;top:38px;z-index:700;background:rgba(7,8,15,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(180,189,211,.1);padding-bottom:6px;margin-bottom:8px}
+  .fund-filter-shell{position:sticky;top:0;z-index:700;background:rgba(7,8,15,.97);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid rgba(180,189,211,.1);padding-bottom:6px;margin-bottom:8px}
 }
 
 /* ── Fontes mínimas mobile ──────────────────────────────────────── */
@@ -15105,3 +15147,6 @@ tr.detail-row td{
 .exec-bar{
   display: none !important;
 }
+
+/* Seleção de texto */
+::selection{ background:rgba(200,151,58,.20); color:#e8bb6a; }
