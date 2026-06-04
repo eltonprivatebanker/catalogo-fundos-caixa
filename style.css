@@ -14933,3 +14933,67 @@ tr.detail-row td{
   transition: none !important;
   animation: none !important;
 }
+/* ==========================================================
+   FILTROS — evita pulo quando aparece "Filtros ativos"
+========================================================== */
+
+#fundFilterShell{
+  min-height: 132px !important;
+  transition: none !important;
+  overflow-anchor: none !important;
+}
+
+#activeFilterStrip{
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+  transition: none !important;
+}
+
+/* Quando estiver vazio, mantém o espaço reservado, mas invisível */
+#activeFilterStrip:empty{
+  visibility: hidden !important;
+}
+
+/* Atalhos sempre em uma linha rolável, sem quebrar e empurrar a tabela */
+.catalog-shortcuts{
+  min-height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  scrollbar-width: none !important;
+}
+
+.catalog-shortcuts::-webkit-scrollbar{
+  display: none !important;
+}
+
+.filter-preset-chip,
+.shortcut-preset{
+  flex: 0 0 auto !important;
+  height: 28px !important;
+  min-height: 28px !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+  transform: none !important;
+}
+
+/* Estado ativo não pode mudar tamanho */
+.filter-preset-chip.active,
+.shortcut-preset.active{
+  border-width: 1px !important;
+  transform: none !important;
+}
+
+/* Remove favoritos, que está poluindo e ocupando espaço */
+.fav-shortcut-chip,
+.gfb-fav-chip,
+.fav-btn,
+.fav-btn-inline,
+.mobile-fav-btn{
+  display: none !important;
+}
