@@ -2852,21 +2852,16 @@ function gerarLeituraRapidaFundo(r){
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
     : '';
 
-  const complementosHtml = complementos.length
-    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
-    : '';
-
-  return `
-    <div class="fund-quick-note">
-      <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
-      ${tagsHtml}
-      <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
-      ${complementosHtml}
-      ${alertaCdi}
-      <div class="fund-quick-note-disclaimer">
-        Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
-      </div>
-    </div>`;
+return `
+  <div class="fund-quick-note">
+    <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
+    ${tagsHtml}
+    <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
+    ${alertaCdi}
+    <div class="fund-quick-note-disclaimer">
+      Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
+    </div>
+  </div>`;
 }
 
 function buildDetailPanel(r,colspan){
