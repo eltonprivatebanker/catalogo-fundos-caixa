@@ -1,3 +1,4 @@
+/* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){
   var bd=document.getElementById(b),ct=document.getElementById(c);
   if(!bd)return false;

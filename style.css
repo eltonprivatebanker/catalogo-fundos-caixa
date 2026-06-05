@@ -15376,3 +15376,140 @@ body > #closedMarketSheet .closed-market-actions button{
     width:100% !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento
+   - Distribui SELIC/COPOM e CDI em 12 colunas no desktop.
+   - Poupança e Cenários ficam em duas colunas abaixo.
+   - Histórico mensal do CDI passa a usar grade estável 3x2 no desktop,
+     evitando chips sobrepostos quando o card fica estreito.
+════════════════════════════════════════════════════ */
+@media (min-width: 1101px){
+  #sec-mercado .market-ref-grid{
+    display:grid !important;
+    grid-template-columns:repeat(12,minmax(0,1fr)) !important;
+    gap:14px !important;
+    align-items:stretch !important;
+  }
+
+  #sec-mercado .selic-copom-card{
+    grid-column:span 7 !important;
+    min-width:0 !important;
+  }
+
+  #sec-mercado .cdi-card-compacto{
+    grid-column:span 5 !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+
+  #sec-mercado .poup-card-consultivo,
+  #sec-mercado .poup-scenarios-card{
+    grid-column:span 6 !important;
+    min-width:0 !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-year-history{
+    min-width:0 !important;
+    width:100% !important;
+    overflow:hidden !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-year-head{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8px !important;
+    min-width:0 !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-strip{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:7px !important;
+    overflow:visible !important;
+    padding:0 !important;
+    min-width:0 !important;
+    width:100% !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-chip,
+  #sec-mercado .cdi-card-compacto .cdi-month-chip.featured,
+  #sec-mercado .cdi-card-compacto .cdi-month-chip.current{
+    min-width:0 !important;
+    width:100% !important;
+    max-width:100% !important;
+    padding:7px 8px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:flex-start !important;
+    text-align:left !important;
+    overflow:hidden !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-chip .m,
+  #sec-mercado .cdi-card-compacto .cdi-month-chip .v,
+  #sec-mercado .cdi-card-compacto .cdi-month-chip .p{
+    max-width:100% !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-chip .m{
+    font-size:.57rem !important;
+    line-height:1 !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-chip .v{
+    margin-top:4px !important;
+    font-size:.78rem !important;
+    line-height:1.05 !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-chip .p{
+    margin-top:3px !important;
+    font-size:.48rem !important;
+    line-height:1.05 !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-rel{
+    font-size:.64rem !important;
+    line-height:1.35 !important;
+  }
+}
+
+@media (min-width:1101px) and (max-width:1350px){
+  #sec-mercado .selic-copom-card,
+  #sec-mercado .cdi-card-compacto,
+  #sec-mercado .poup-card-consultivo,
+  #sec-mercado .poup-scenarios-card{
+    grid-column:1/-1 !important;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-strip{
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+  }
+}
+
+@media (max-width:1100px){
+  #sec-mercado .cdi-card-compacto .cdi-month-strip{
+    display:flex !important;
+    flex-wrap:nowrap !important;
+    gap:8px !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    padding-bottom:4px !important;
+    -webkit-overflow-scrolling:touch;
+  }
+
+  #sec-mercado .cdi-card-compacto .cdi-month-chip,
+  #sec-mercado .cdi-card-compacto .cdi-month-chip.featured,
+  #sec-mercado .cdi-card-compacto .cdi-month-chip.current{
+    flex:0 0 88px !important;
+    min-width:88px !important;
+    width:88px !important;
+  }
+}
