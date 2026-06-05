@@ -8092,3 +8092,155 @@ async function sharePainelMercado(){
     if(inGlobalChip) scheduleScroll(140);
   },true);
 })();
+
+
+/* Build UI: ELTAUM_MOBILE_SEARCH_ANCHOR_VIEW_STABLE_20260605_v48 */
+
+/* ════════════════════════════════════════════════════════
+   PATCH v48 — Mobile: busca do topo ancora nos resultados e
+   troca Lista/Cards preserva a posição do usuário.
+
+   Ajustes:
+   1) #gfbSearch no mobile não para mais no título "Fundos disponíveis";
+      o destino final é a região de visualização/lista dos fundos.
+   2) Ao alternar Lista ↔ Cards, mantém a posição aproximada do fundo
+      que estava visível, evitando o usuário ter que rolar tudo de novo.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MOBILE_SEARCH_ANCHOR_VIEW_STABLE_20260605_v48';
+  let searchTimer=null;
+  let viewAnchor=null;
+
+  function qs(sel,root=document){return root.querySelector(sel);} 
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function isMobile(){try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}}
+
+  function updateBuild(){
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    const link=qs('link[href*="style.css"]');
+    if(link) link.setAttribute('href','style.css?v=mobile-search-anchor-view-stable-v48');
+  }
+
+  function fixedOffset(){
+    const gfb=qs('#gfb');
+    const r=gfb ? gfb.getBoundingClientRect() : null;
+    const visible=r && r.height>0 && r.bottom>0;
+    const h=visible ? Math.min(92,Math.max(54,r.height)) : 0;
+    return h + 14;
+  }
+
+  function resultsTarget(){
+    return qs('#mobileCatalogViewSwitch') || qs('#mobileResultsHintV46') || qs('#mobileFundCards') || qs('#sec-fundos .table-wrap') || qs('#sec-fundos');
+  }
+
+  function scrollToResultsFinal(reason){
+    if(!isMobile()) return;
+    const target=resultsTarget();
+    if(!target) return;
+    const top=Math.max(0,target.getBoundingClientRect().top + window.scrollY - fixedOffset());
+    window.scrollTo({top,behavior: reason==='fast' ? 'auto' : 'smooth'});
+  }
+
+  function scheduleSearchAnchor(delay){
+    if(!isMobile()) return;
+    clearTimeout(searchTimer);
+    searchTimer=setTimeout(()=>{
+      // garante que a lista compacta esteja ativa ao pesquisar no topo
+      try{localStorage.setItem('fundMobileViewV45','list');}catch(e){}
+      const listBtn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="list"]');
+      if(listBtn && !listBtn.classList.contains('active')){
+        listBtn.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
+      }
+      setTimeout(()=>scrollToResultsFinal('search'),90);
+    }, typeof delay==='number' ? delay : 760);
+  }
+
+  function visibleFundAnchor(){
+    if(!isMobile()) return null;
+    const offset=fixedOffset();
+    const items=qsa('#mobileFundCards [data-idx]');
+    let best=null;
+    for(const el of items){
+      const r=el.getBoundingClientRect();
+      if(r.bottom > offset + 8){
+        best={idx:el.getAttribute('data-idx'), top:r.top};
+        break;
+      }
+    }
+    return best;
+  }
+
+  function restoreViewAnchor(anchor){
+    if(!isMobile() || !anchor || anchor.idx==null) return false;
+    const safeIdx=String(anchor.idx).replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+    const el=qs('#mobileFundCards [data-idx="'+safeIdx+'"]');
+    if(!el) return false;
+    const top=Math.max(0,el.getBoundingClientRect().top + window.scrollY - anchor.top);
+    window.scrollTo({top,behavior:'auto'});
+    return true;
+  }
+
+  function fallbackKeepViewArea(){
+    const target=resultsTarget();
+    if(!target || !isMobile()) return;
+    const top=Math.max(0,target.getBoundingClientRect().top + window.scrollY - fixedOffset());
+    window.scrollTo({top,behavior:'auto'});
+  }
+
+  function beforeViewSwitch(ev){
+    const btn=ev.target && ev.target.closest ? ev.target.closest('.mobile-catalog-view-btn') : null;
+    if(!btn || !isMobile()) return;
+    viewAnchor=visibleFundAnchor();
+  }
+
+  function afterViewSwitch(ev){
+    const btn=ev.target && ev.target.closest ? ev.target.closest('.mobile-catalog-view-btn') : null;
+    if(!btn || !isMobile()) return;
+    const anchor=viewAnchor || visibleFundAnchor();
+    setTimeout(()=>{
+      if(!restoreViewAnchor(anchor)) fallbackKeepViewArea();
+    },120);
+    setTimeout(()=>{
+      if(!restoreViewAnchor(anchor)) fallbackKeepViewArea();
+    },420);
+  }
+
+  function bind(){
+    updateBuild();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true});
+  else bind();
+
+  // Busca do topo: destino final = lista/visualização, não apenas o título.
+  document.addEventListener('input',function(ev){
+    if(ev.target && ev.target.id==='gfbSearch'){
+      const value=String(ev.target.value||'').trim();
+      if(value.length>=1) scheduleSearchAnchor(760);
+    }
+  },true);
+
+  document.addEventListener('keydown',function(ev){
+    if(ev.target && ev.target.id==='gfbSearch' && ev.key==='Enter'){
+      ev.preventDefault();
+      scheduleSearchAnchor(80);
+      try{ev.target.blur();}catch(e){}
+    }
+  },true);
+
+  // Também ancora após limpar/aplicar categoria, quando a lista renderiza novamente.
+  document.addEventListener('click',function(ev){
+    const relevant=ev.target && ev.target.closest ? ev.target.closest('.category-choice-v44,#clearFiltersTop,#clearFiltersBtn,.active-filter-pill,.active-filter-clear') : null;
+    if(relevant && isMobile()) setTimeout(()=>scrollToResultsFinal('filter'),360);
+  },true);
+
+  // Preserva posição ao trocar entre Lista e Cards.
+  document.addEventListener('pointerdown',beforeViewSwitch,true);
+  document.addEventListener('touchstart',beforeViewSwitch,true);
+  document.addEventListener('click',afterViewSwitch,true);
+
+  window.addEventListener('resize',()=>setTimeout(updateBuild,120),{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(updateBuild,240),{passive:true});
+})();
