@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_FILTRO_CATEGORIAS_MOBILE_20260605_v43"/>
+<meta name="app-build" content="ELTAUM_FILTRO_CATEGORIAS_LIMPO_20260605_v44"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=filtro-categorias-mobile-v43" rel="stylesheet">
+<link href="style.css?v=filtro-categorias-limpo-v44" rel="stylesheet">
 
 
 </head>
@@ -172,80 +172,40 @@
 
   <div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
 
-  <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed" id="fundFilterDrawer" style="margin-bottom:14px">
-    <div class="filter-sheet-head filter-sheet-head-compact">
+  <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed filter-drawer-category-only-v44" id="fundFilterDrawer" style="margin-bottom:14px" aria-label="Categorias dos fundos">
+    <div class="filter-sheet-head filter-sheet-head-compact category-filter-head-v44">
       <div>
         <strong>Categorias dos fundos</strong>
-        <span>Escolha uma categoria para aplicar o filtro automaticamente.</span>
+        <span>Escolha uma classe CAIXA para filtrar rapidamente.</span>
       </div>
-      <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar filtros">✕</button>
+      <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar categorias">✕</button>
     </div>
 
-    <div class="mobile-category-picker-v43" aria-label="Categorias principais dos fundos">
-      <div class="mobile-category-grid-v43">
-        <button type="button" class="mobile-category-option-v43 is-active all" data-mobile-cat="">Todos os fundos</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA SIMPLES">RF Simples</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA">Renda Fixa</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA REFERENCIADO">RF Referenciado</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA CURTO PRAZO">RF Curto Prazo</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="MULTIMERCADO">Multimercado</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="CAMBIAL">Cambial</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="ACOES">Ações</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="FUNDO DE INDICE">Fundo de Índice</button>
-        <button type="button" class="mobile-category-option-v43" data-mobile-cat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP / Privatização</button>
-      </div>
-      <p class="mobile-category-hint-v43">A busca acima continua disponível para refinar por CDI, IPCA, CNPJ ou nome do fundo.</p>
+    <div class="category-choice-grid-v44" id="mobileCategoryFiltersV44" aria-label="Selecionar categoria do fundo">
+      <button type="button" class="category-choice-v44 active" data-cat="">Todos os fundos</button>
+      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA SIMPLES">RF Simples</button>
+      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA">Renda Fixa</button>
+      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA REFERENCIADO">RF Referenciado</button>
+      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA CURTO PRAZO">RF Curto Prazo</button>
+      <button type="button" class="category-choice-v44" data-cat="MULTIMERCADO">Multimercado</button>
+      <button type="button" class="category-choice-v44" data-cat="CAMBIAL">Cambial</button>
+      <button type="button" class="category-choice-v44" data-cat="ACOES">Ações</button>
+      <button type="button" class="category-choice-v44" data-cat="FUNDO DE INDICE">Fundo de Índice</button>
+      <button type="button" class="category-choice-v44" data-cat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP / Privatização</button>
     </div>
 
-    <div class="filter-groups-grid filter-groups-accordion filter-legacy-advanced-v43" aria-label="Filtros avançados do catálogo">
-      <details class="filter-group-accordion">
-        <summary><span>Categoria</span><small>Tipo do fundo</small></summary>
-        <div class="filter-row filter-group-panel" id="catFilters">
-          <span class="filter-label">Categoria</span>
-          <button class="chip active" data-cat="">Todas</button>
-        </div>
-      </details>
+    <p class="category-filter-note-v44">Para refinar por CDI, IPCA, CNPJ, risco ou nome do fundo, use a busca acima.</p>
 
-      <details class="filter-group-accordion">
-        <summary><span>Benchmark</span><small>CDI, IPCA, câmbio e outros</small></summary>
-        <div class="filter-row filter-group-panel" id="benchmarkFilters">
-          <span class="filter-label">Benchmark</span>
-          <button class="chip active" data-benchmark="">Todos</button>
-        </div>
-      </details>
-
-      <details class="filter-group-accordion">
-        <summary><span>Perfil</span><small>PF, PJ, GOV ou RPPS</small></summary>
-        <div class="filter-row filter-group-panel" id="perfilFilters">
-          <span class="filter-label">Perfil</span>
-          <button class="chip active" data-perfil="">Todos</button>
-          <button class="chip pf"   data-perfil="PF">🧑 PF</button>
-          <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
-          <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
-          <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
-        </div>
-      </details>
-
-      <details class="filter-group-accordion">
-        <summary><span>Risco</span><small>Perfil de risco do produto</small></summary>
-        <div class="filter-row filter-group-panel" id="riscoFilters">
-          <span class="filter-label">Risco</span>
-          <button class="chip active" data-risco="">Todos</button>
-          <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
-          <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
-          <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
-          <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
-        </div>
-      </details>
+    <!-- Motor legado preservado oculto para manter a filtragem existente funcionando -->
+    <div class="category-hidden-engine-v44" aria-hidden="true">
+      <div class="filter-row filter-group-panel" id="catFilters"><span class="filter-label">Categoria</span><button class="chip active" data-cat="">Todas</button></div>
+      <div class="filter-row filter-group-panel" id="benchmarkFilters"><span class="filter-label">Benchmark</span><button class="chip active" data-benchmark="">Todos</button></div>
+      <div class="filter-row filter-group-panel" id="perfilFilters"><span class="filter-label">Perfil</span><button class="chip active" data-perfil="">Todos</button></div>
+      <div class="filter-row filter-group-panel" id="riscoFilters"><span class="filter-label">Risco</span><button class="chip active" data-risco="">Todos</button></div>
     </div>
 
-    <div class="mobile-category-actions-v43">
-      <button type="button" class="filter-action-secondary" id="clearCategoryMobileBtn">Limpar categoria</button>
-      <button type="button" class="filter-action-primary" id="closeCategoryMobileBtn">Fechar</button>
-    </div>
-
-    <div class="filter-sheet-actions filter-sheet-actions-compact">
-      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar</button>
+    <div class="filter-sheet-actions filter-sheet-actions-compact category-filter-actions-v44">
+      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar categoria</button>
       <button type="button" class="filter-action-primary" id="filterApplyBtn">Fechar</button>
     </div>
   </div>
@@ -1186,6 +1146,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=filtro-categorias-mobile-v43"></script>
+<script src="app.js?v=filtro-categorias-limpo-v44"></script>
 </body>
 </html>
