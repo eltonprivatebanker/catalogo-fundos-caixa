@@ -4844,8 +4844,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function scrollToFunds(){
     const sec=document.getElementById('sec-fundos');
-    if(!sec) return;
-    const top=sec.getBoundingClientRect().top+window.scrollY-60;
+    const target=document.querySelector('#sec-fundos .section-title') || sec;
+    if(!target) return;
+    const gfb=document.getElementById('gfb');
+    const gfbRect=gfb ? gfb.getBoundingClientRect() : null;
+    const gfbH=(gfbRect && gfbRect.height>0) ? Math.min(78,Math.max(46,gfbRect.height)) : 0;
+    const offset=gfbH + 18;
+    const top=target.getBoundingClientRect().top+window.scrollY-offset;
     window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
   }
 
@@ -8020,3 +8025,70 @@ async function sharePainelMercado(){
 })();
 
 /* Build UI: ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46 */
+
+
+/* Build UI: ELTAUM_GFB_SCROLL_FUNDOS_20260605_v47 */
+
+/* ════════════════════════════════════════════════════════
+   PATCH v47 — Busca global posiciona em "Fundos disponíveis"
+   Objetivo: quando o usuário digitar na busca fixa do topo (#gfbSearch),
+   a tela deve avançar até o título da seção de fundos, mantendo os controles
+   e os resultados logo abaixo, como no desktop do print enviado.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_GFB_SCROLL_FUNDOS_20260605_v47';
+  let t=null;
+
+  function qs(sel,root=document){return root.querySelector(sel);} 
+  function isMobile(){try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}}
+  function topSearchIsActive(el){return el && el.id==='gfbSearch';}
+  function targetFundosTitle(){
+    return qs('#sec-fundos .section-title') || qs('#sec-fundos h2') || qs('#sec-fundos');
+  }
+  function fixedHeaderOffset(){
+    const gfb=qs('#gfb');
+    const rect=gfb ? gfb.getBoundingClientRect() : null;
+    const visible=rect && rect.height>0 && rect.bottom>0;
+    const gfbH=visible ? Math.min(82,Math.max(46,rect.height)) : 0;
+    return gfbH + (isMobile()?12:18);
+  }
+  function scrollToFundosTitle(){
+    const target=targetFundosTitle();
+    if(!target) return;
+    const top=Math.max(0,target.getBoundingClientRect().top + window.scrollY - fixedHeaderOffset());
+    window.scrollTo({top,behavior:'smooth'});
+  }
+  function scheduleScroll(delay){
+    clearTimeout(t);
+    t=setTimeout(scrollToFundosTitle, typeof delay==='number'?delay:180);
+  }
+  function bind(){
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    const link=qs('link[href*="style.css"]');
+    if(link) link.setAttribute('href','style.css?v=gfb-scroll-fundos-v47');
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true});
+  else bind();
+
+  document.addEventListener('input',function(ev){
+    if(!topSearchIsActive(ev.target)) return;
+    const value=String(ev.target.value||'').trim();
+    if(value.length>=1) scheduleScroll(isMobile()?420:150);
+  },true);
+
+  document.addEventListener('keydown',function(ev){
+    if(!topSearchIsActive(ev.target)) return;
+    if(ev.key==='Enter'){
+      ev.preventDefault();
+      scheduleScroll(60);
+      try{ev.target.blur();}catch(e){}
+    }
+  },true);
+
+  document.addEventListener('click',function(ev){
+    const inGlobalChip=ev.target && ev.target.closest ? ev.target.closest('#gfb .gfb-chip,#gfbGo') : null;
+    if(inGlobalChip) scheduleScroll(140);
+  },true);
+})();
