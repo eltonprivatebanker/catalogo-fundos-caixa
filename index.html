@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_NAV_MES_FOCUS_20260605_v40"/>
+<meta name="app-build" content="ELTAUM_FILTRO_CATEGORIAS_MOBILE_20260605_v43"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=nav-mes-focus-v40" rel="stylesheet">
+<link href="style.css?v=filtro-categorias-mobile-v43" rel="stylesheet">
 
 
 </head>
@@ -116,7 +116,7 @@
       <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo">
         <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
           <span class="filter-button-icon">⚙️</span>
-          <span id="filterButtonText">Filtros</span>
+          <span id="filterButtonText">Categorias</span>
           <span class="filter-count-badge" id="filterActiveCount">0</span>
         </button>
         <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
@@ -175,14 +175,29 @@
   <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed" id="fundFilterDrawer" style="margin-bottom:14px">
     <div class="filter-sheet-head filter-sheet-head-compact">
       <div>
-        <strong>Filtros do catálogo</strong>
-        <span>Escolha uma classe de fundo no padrão CAIXA. Use “Mais filtros” apenas se precisar refinar.</span>
+        <strong>Categorias dos fundos</strong>
+        <span>Escolha uma categoria para aplicar o filtro automaticamente.</span>
       </div>
       <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar filtros">✕</button>
     </div>
 
+    <div class="mobile-category-picker-v43" aria-label="Categorias principais dos fundos">
+      <div class="mobile-category-grid-v43">
+        <button type="button" class="mobile-category-option-v43 is-active all" data-mobile-cat="">Todos os fundos</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA SIMPLES">RF Simples</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA">Renda Fixa</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA REFERENCIADO">RF Referenciado</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="RENDA FIXA CURTO PRAZO">RF Curto Prazo</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="MULTIMERCADO">Multimercado</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="CAMBIAL">Cambial</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="ACOES">Ações</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="FUNDO DE INDICE">Fundo de Índice</button>
+        <button type="button" class="mobile-category-option-v43" data-mobile-cat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP / Privatização</button>
+      </div>
+      <p class="mobile-category-hint-v43">A busca acima continua disponível para refinar por CDI, IPCA, CNPJ ou nome do fundo.</p>
+    </div>
 
-    <div class="filter-groups-grid filter-groups-accordion" aria-label="Filtros avançados do catálogo">
+    <div class="filter-groups-grid filter-groups-accordion filter-legacy-advanced-v43" aria-label="Filtros avançados do catálogo">
       <details class="filter-group-accordion">
         <summary><span>Categoria</span><small>Tipo do fundo</small></summary>
         <div class="filter-row filter-group-panel" id="catFilters">
@@ -222,6 +237,11 @@
           <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
         </div>
       </details>
+    </div>
+
+    <div class="mobile-category-actions-v43">
+      <button type="button" class="filter-action-secondary" id="clearCategoryMobileBtn">Limpar categoria</button>
+      <button type="button" class="filter-action-primary" id="closeCategoryMobileBtn">Fechar</button>
     </div>
 
     <div class="filter-sheet-actions filter-sheet-actions-compact">
@@ -1166,6 +1186,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=nav-mes-focus-v40"></script>
+<script src="app.js?v=filtro-categorias-mobile-v43"></script>
 </body>
 </html>

@@ -4627,7 +4627,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if(backdrop) backdrop.classList.toggle('active', willOpen && isMobile);
 
     if(btn) btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-    if(label) label.textContent=willOpen ? 'Fechar filtros' : 'Refinar filtros';
+    if(label) label.textContent=willOpen ? 'Fechar' : 'Categorias';
   }
 
   function clearFilter(kind){
@@ -7988,3 +7988,131 @@ async function sharePainelMercado(){
 })();
 
 /* Build UI: ELTAUM_FILTRO_MOBILE_SELECT_PREMIUM_20260605_v37 */
+
+
+/* ═══════════════════════════════════════════════
+   v43 — Filtro mobile minimalista por categorias
+   Base aprovada: v40
+═══════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_FILTRO_CATEGORIAS_MOBILE_20260605_v43';
+  const CAT_LABELS={
+    '':'Todos os fundos',
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+  const qs=(s,root=document)=>root.querySelector(s);
+  const qsa=(s,root=document)=>Array.from(root.querySelectorAll(s));
+  const isMobile=()=>window.matchMedia && window.matchMedia('(max-width:820px)').matches;
+
+  function setDrawerOpenV43(open){
+    const sec=qs('#fundFilterDrawer');
+    const btn=qs('#mobileFilterToggle');
+    const backdrop=qs('#filterBackdrop');
+    const label=qs('#filterButtonText');
+    if(!sec) return;
+    const willOpen=!!open;
+    sec.classList.toggle('mobile-filters-collapsed',!willOpen);
+    sec.classList.toggle('desktop-filters-collapsed',!willOpen);
+    document.body.classList.toggle('filter-sheet-open',willOpen && isMobile());
+    if(backdrop) backdrop.classList.toggle('active',willOpen && isMobile());
+    if(btn) btn.setAttribute('aria-expanded',willOpen?'true':'false');
+    if(label) label.textContent=willOpen?'Fechar':'Categorias';
+  }
+
+  function updateMobileCategoryButtonsV43(){
+    let cat='';
+    try{ cat=activeCat || ''; }catch(e){}
+    qsa('.mobile-category-option-v43').forEach(btn=>{
+      const on=(btn.dataset.mobileCat||'')===cat;
+      btn.classList.toggle('is-active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+    });
+    const summary=qs('#mobileFilterSummary');
+    if(summary) summary.textContent='Categoria: '+(CAT_LABELS[cat] || cat || 'Todos os fundos');
+    const count=qs('#filterActiveCount');
+    if(count){
+      const n=cat ? 1 : 0;
+      count.textContent=String(n);
+      count.classList.toggle('has-active',n>0);
+    }
+    const label=qs('#filterButtonText');
+    if(label && !qs('#fundFilterDrawer')?.classList.contains('mobile-filters-collapsed')) label.textContent='Fechar';
+    else if(label) label.textContent='Categorias';
+  }
+
+  function syncHiddenCategoryChipV43(cat){
+    const row=qs('#catFilters');
+    if(!row) return;
+    row.querySelectorAll('[data-cat]').forEach(b=>b.classList.remove('active'));
+    const target=row.querySelector(`[data-cat="${(window.CSS&&CSS.escape)?CSS.escape(cat):String(cat).replace(/"/g,'\\"')}"]`) || row.querySelector('[data-cat=""]');
+    if(target) target.classList.add('active');
+  }
+
+  function applyMobileCategoryV43(cat,closeAfter=true){
+    try{
+      activeCat=cat || '';
+      activeBenchmark='';
+      activePerfil='';
+      activeRisco='';
+      hideSemDados=false;
+      window.__favListMode=false;
+    }catch(e){}
+    syncHiddenCategoryChipV43(cat || '');
+    const sem=qs('#toggleSemDados'); if(sem) sem.checked=false;
+    try{ if(typeof currentPage!=='undefined') currentPage=1; }catch(e){}
+    try{ if(typeof expandedRows!=='undefined') expandedRows.clear(); }catch(e){}
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
+    updateMobileCategoryButtonsV43();
+    if(closeAfter) setTimeout(()=>setDrawerOpenV43(false),90);
+  }
+
+  function setupMobileCategoryFilterV43(){
+    const drawer=qs('#fundFilterDrawer');
+    if(!drawer || drawer.dataset.v43Ready==='1') return;
+    drawer.dataset.v43Ready='1';
+    drawer.classList.add('filters-category-simple-v43');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.setAttribute('content',BUILD);
+
+    qsa('.mobile-category-option-v43').forEach(btn=>{
+      btn.addEventListener('click',ev=>{
+        ev.preventDefault();
+        applyMobileCategoryV43(btn.dataset.mobileCat || '',true);
+      });
+    });
+    qs('#clearCategoryMobileBtn')?.addEventListener('click',ev=>{
+      ev.preventDefault();
+      applyMobileCategoryV43('',false);
+    });
+    qs('#closeCategoryMobileBtn')?.addEventListener('click',ev=>{
+      ev.preventDefault();
+      setDrawerOpenV43(false);
+    });
+    qs('#filterCloseBtn')?.addEventListener('click',()=>setTimeout(updateMobileCategoryButtonsV43,40));
+    qs('#filterBackdrop')?.addEventListener('click',()=>setTimeout(updateMobileCategoryButtonsV43,40));
+    qs('#mobileFilterToggle')?.addEventListener('click',()=>setTimeout(updateMobileCategoryButtonsV43,40));
+    updateMobileCategoryButtonsV43();
+  }
+
+  const oldApply=typeof applyFilter==='function' ? applyFilter : null;
+  if(oldApply && !window.__ELTAUM_V43_APPLY_PATCHED__){
+    window.__ELTAUM_V43_APPLY_PATCHED__=true;
+    applyFilter=function(){
+      const out=oldApply.apply(this,arguments);
+      setTimeout(updateMobileCategoryButtonsV43,0);
+      return out;
+    };
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setupMobileCategoryFilterV43);
+  else setupMobileCategoryFilterV43();
+})();
