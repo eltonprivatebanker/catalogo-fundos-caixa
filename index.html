@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_FECHAMENTO_SHEET_FIX_20260604_v15"/>
+<meta name="app-build" content="ELTAUM_FECHAMENTO_SHEET_FIX_20260604_v16"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -903,7 +903,7 @@
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
 <div class="section-gap collapsible-section" id="sec-focus">
   <div class="section-title focus-section-title section-title-collapsible"
-       onclick="return handleSectionToggleClick(event,'sec-focus-body','sec-focus')" role="button" aria-expanded="false" tabindex="0">
+       onclick="toggleSection('sec-focus-body','sec-focus')" role="button" aria-expanded="false" tabindex="0">
     <div class="focus-title-block">
       <div class="focus-title-line">
         <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
@@ -956,7 +956,7 @@
 
 <div class="section-gap evolution-section collapsible-section" id="sec-graficos">
   <div class="section-title evolution-title section-title-collapsible"
-       onclick="return handleSectionToggleClick(event,'sec-graficos-body','sec-graficos')" role="button" aria-expanded="false" tabindex="0">
+       onclick="toggleSection('sec-graficos-body','sec-graficos')" role="button" aria-expanded="false" tabindex="0">
     <div>
       <h2>📊 Evolução dos Indicadores</h2>
       <p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
