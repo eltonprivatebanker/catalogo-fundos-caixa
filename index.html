@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_FILTROS_MOBILE_SIMPLIFICADOS_20260605_v28"/>
+<meta name="app-build" content="ELTAUM_POUPANCA_MOBILE_COMPACTA_20260605_v29"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -404,6 +404,10 @@
         Com a Selic atual, a regra nova será definida automaticamente pelo nível da taxa básica.
       </div>
 
+      <button type="button" class="poup-mobile-details-toggle" id="poupMobileDetailsToggle" onclick="togglePoupancaMobileDetails()" aria-expanded="false">
+        Ver cenários e regras ↓
+      </button>
+
       <div class="poup-explain" id="poupExplain">
         <div class="poup-explain-inner poup-explain-clean">
           <div class="poup-explain-row">
@@ -424,7 +428,7 @@
     </div>
 
     <!-- Card 4: Gráfico didático de cenários da Poupança -->
-    <div class="indic-ref-card market-ref-card poup-scenarios-card">
+    <div class="indic-ref-card market-ref-card poup-scenarios-card poup-mobile-extra">
       <div class="poup-scenarios-head">
         <div class="poup-scenarios-title">
           <div class="indic-ref-label">📊 Poupança — Cenários</div>
@@ -455,6 +459,9 @@
       <div class="poup-scenario-note" id="poupScenarioNote">
         Estimativa didática: a TR pode variar conforme o período de aniversário da poupança.
       </div>
+      <button type="button" class="poup-mobile-close-extra" onclick="togglePoupancaMobileDetails(false)">
+        Ocultar cenários ↑
+      </button>
     </div>
 
 

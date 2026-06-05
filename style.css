@@ -16596,3 +16596,233 @@ body > #closedMarketSheet .closed-market-actions button{
   .filter-mobile-fast-grid-v28{grid-template-columns:1fr !important;}
   #fundFilterDrawer.filters-advanced-open .filter-mobile-fast-grid-v28{grid-template-columns:repeat(2,minmax(0,1fr)) !important;}
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v29 — Poupança mobile compacta e recolhida
+   - Mantém desktop completo.
+   - No celular, mostra apenas rendimento compacto e esconde cenários/regras.
+   - Usuário abre manualmente "Ver cenários e regras".
+════════════════════════════════════════════════════ */
+.poup-mobile-details-toggle,
+.poup-mobile-close-extra{
+  display:none;
+}
+
+@media(max-width:768px), (pointer:coarse) and (hover:none){
+  #sec-mercado .poup-card-consultivo{
+    padding:12px 12px 13px !important;
+    gap:9px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-header-clean{
+    margin-bottom:6px !important;
+    gap:8px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-card-subtitle{
+    display:none !important;
+  }
+
+  #sec-mercado .poup-card-consultivo #poupExpandBtn{
+    display:none !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-rules-grid{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:8px !important;
+    margin-top:6px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-rule-divider{
+    display:none !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-rule-card{
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:space-between !important;
+    min-height:92px !important;
+    padding:9px 9px !important;
+    border-radius:12px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-rule-label{
+    font-size:.56rem !important;
+    line-height:1.15 !important;
+    margin:0 0 3px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-rule-period,
+  #sec-mercado .poup-card-consultivo .poup-rule-sub{
+    display:none !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-rule-val{
+    margin:4px 0 0 !important;
+    justify-self:auto !important;
+    align-self:flex-start !important;
+    font-size:1.28rem !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-accum-pill{
+    width:100% !important;
+    max-width:100% !important;
+    margin-top:7px !important;
+    padding:4px 5px !important;
+    justify-content:center !important;
+    text-align:center !important;
+    font-size:.50rem !important;
+    line-height:1.1 !important;
+    white-space:nowrap !important;
+  }
+
+  #sec-mercado .poup-quick-note{
+    margin-top:8px !important;
+    padding:8px 9px !important;
+    border-radius:10px !important;
+    font-size:.58rem !important;
+    line-height:1.35 !important;
+  }
+
+  .poup-mobile-details-toggle{
+    width:100%;
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    min-height:34px;
+    margin-top:8px;
+    border:1px solid rgba(200,151,58,.26);
+    border-radius:11px;
+    background:linear-gradient(180deg,rgba(200,151,58,.12),rgba(200,151,58,.045));
+    color:var(--gold3);
+    font-size:.68rem;
+    font-weight:800;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+  }
+
+  body:not(.poup-mobile-expanded) #sec-mercado .poup-mobile-extra{
+    display:none !important;
+  }
+
+  body.poup-mobile-expanded #sec-mercado .poup-mobile-extra{
+    display:flex !important;
+  }
+
+  body:not(.poup-mobile-expanded) #sec-mercado #poupExplain{
+    display:none !important;
+  }
+
+  body.poup-mobile-expanded #sec-mercado #poupExplain.open{
+    display:block !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-explain-inner{
+    padding:9px 0 0 !important;
+    margin-top:8px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-explain-row{
+    margin-bottom:5px !important;
+    gap:7px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-explain-tag{
+    font-size:.50rem !important;
+    padding:2px 5px !important;
+  }
+
+  #sec-mercado .poup-card-consultivo .poup-explain-text{
+    font-size:.58rem !important;
+    line-height:1.35 !important;
+  }
+
+  #sec-mercado .poup-scenarios-card{
+    padding:12px !important;
+    gap:8px !important;
+  }
+
+  #sec-mercado .poup-scenarios-head{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    align-items:start !important;
+    gap:8px !important;
+  }
+
+  #sec-mercado .poup-scenarios-subtitle{
+    display:none !important;
+  }
+
+  #sec-mercado .poup-scenario-status{
+    font-size:.50rem !important;
+    padding:4px 7px !important;
+  }
+
+  #sec-mercado .poup-scenario-summary{
+    padding:8px 9px !important;
+    font-size:.58rem !important;
+    line-height:1.35 !important;
+  }
+
+  #sec-mercado .poup-scenario-chart-wrap{
+    height:132px !important;
+    min-height:132px !important;
+    padding:6px 4px 2px !important;
+  }
+
+  #sec-mercado .poup-scenario-metrics{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:7px !important;
+  }
+
+  #sec-mercado .poup-scenario-pill{
+    padding:7px 8px !important;
+  }
+
+  #sec-mercado .poup-scenario-pill span{
+    font-size:.50rem !important;
+    margin-bottom:3px !important;
+  }
+
+  #sec-mercado .poup-scenario-pill strong{
+    font-size:.66rem !important;
+    line-height:1.2 !important;
+  }
+
+  #sec-mercado .poup-scenario-note{
+    display:none !important;
+  }
+
+  .poup-mobile-close-extra{
+    width:100%;
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    min-height:32px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:10px;
+    background:rgba(255,255,255,.035);
+    color:#cbd5ea;
+    font-size:.64rem;
+    font-weight:800;
+    font-family:'Inter',sans-serif;
+    cursor:pointer;
+  }
+}
+
+@media(max-width:360px){
+  #sec-mercado .poup-card-consultivo .poup-rule-card{
+    min-height:88px !important;
+    padding:8px !important;
+  }
+  #sec-mercado .poup-card-consultivo .poup-rule-val{
+    font-size:1.16rem !important;
+  }
+  #sec-mercado .poup-card-consultivo .poup-accum-pill{
+    font-size:.46rem !important;
+  }
+}

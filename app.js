@@ -89,6 +89,46 @@ function togglePoupanca(){
   btn.textContent = isOpen ? 'Ocultar detalhes ▲' : 'Ver detalhes ▼';
 }
 
+
+function togglePoupancaMobileDetails(force){
+  const shouldOpen = typeof force === 'boolean'
+    ? force
+    : !document.body.classList.contains('poup-mobile-expanded');
+
+  document.body.classList.toggle('poup-mobile-expanded', shouldOpen);
+
+  const btn = $('poupMobileDetailsToggle');
+  if(btn){
+    btn.textContent = shouldOpen ? 'Ocultar cenários e regras ↑' : 'Ver cenários e regras ↓';
+    btn.setAttribute('aria-expanded', String(shouldOpen));
+  }
+
+  // No mobile, o botão único controla também a explicação das regras.
+  const explain = $('poupExplain');
+  if(explain) explain.classList.toggle('open', shouldOpen);
+
+  const desktopBtn = $('poupExpandBtn');
+  if(desktopBtn) desktopBtn.textContent = shouldOpen ? 'Ocultar detalhes ▲' : 'Ver detalhes ▼';
+
+  if(shouldOpen){
+    setTimeout(function(){
+      try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
+      try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update(); }catch(e){}
+    }, 120);
+  }
+
+  return false;
+}
+window.togglePoupancaMobileDetails = togglePoupancaMobileDetails;
+
+document.addEventListener('DOMContentLoaded', function(){
+  try{
+    if(window.matchMedia && window.matchMedia('(max-width: 768px), (pointer: coarse)').matches){
+      togglePoupancaMobileDetails(false);
+    }
+  }catch(e){}
+});
+
 function formatPctCard(v, fallback='—'){
   if(v===null || v===undefined || v==='') return fallback;
   const n = Number(v);
