@@ -4452,33 +4452,41 @@ document.addEventListener('DOMContentLoaded', function(){
     const codigo = getCodigoFundoMobile(r);
     const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
     const docsHtml = buildMobileDocsHtml(r);
-    return `<article class="fund-card-mobile" data-card-idx="${idx}">
-      <div class="fund-card-mobile-head">
-        <div class="fund-card-mobile-tags">
-          <span class="cat-badge cat-${cls}">${cat}</span>
-          ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
-          ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
+    return `<article class="fund-card-mobile fund-card-mobile-list" data-card-idx="${idx}">
+      <div class="fund-card-list-main">
+        <div class="fund-card-list-left">
+          <div class="fund-card-mobile-tags fund-card-list-tags">
+            <span class="cat-badge cat-${cls}">${cat}</span>
+            ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
+            ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
+          </div>
+          <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
         </div>
-        <div class="fund-card-mobile-name">${htmlAttr(nome)}</div>
+        <div class="fund-card-list-metrics" aria-label="Resumo de rentabilidade do fundo">
+          <span class="fund-card-list-metric"><small>Mês</small><strong class="${pctClass(mes)}">${mes}</strong></span>
+          <span class="fund-card-list-metric"><small>12M</small><strong class="${pctClass(m12)}">${m12}</strong></span>
+          <span class="fund-card-list-metric cdi"><small>% CDI</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
+        </div>
       </div>
-      <div class="fund-card-mobile-body">
-        <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">Mês</span><span class="fund-metric-value ${pctClass(mes)}">${mes}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">12M</span><span class="fund-metric-value ${pctClass(m12)}">${m12}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">% CDI 12M</span><span class="fund-metric-value ${ratioCdi.cls}">${ratioCdi.txt}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
-        <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
-      </div>
-      <div class="fund-card-mobile-actions">
+
+      <div class="fund-card-mobile-actions fund-card-list-actions">
         <a class="fund-card-primary-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Abrir fundo ↗</a>
         <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}">Detalhes</button>
-        ${docsHtml}
       </div>
-      <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
+
+      <div class="fund-card-list-expanded">
+        <div class="fund-card-mobile-body">
+          <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
+        </div>
+        ${docsHtml}
+        <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
+      </div>
     </article>`;
   }
 
