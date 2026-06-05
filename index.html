@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_HEADER_MOBILE_REFINADO_20260605_v38"/>
+<meta name="app-build" content="ELTAUM_NAV_MES_HEADER_COMPACTO_20260605_v39"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=header-mobile-refinado-v38" rel="stylesheet">
+<link href="style.css?v=nav-mes-header-compacto-v39" rel="stylesheet">
 
 
 </head>
@@ -50,8 +50,8 @@
     <div class="mobile-kpi-head">
       <span class="mobile-kpi-emoji">📊</span>
       <div>
-        <h3>Catálogo CAIXA</h3>
-        <p>Resumo rápido para consulta no celular</p>
+        <h3>Resumo executivo</h3>
+        <p>Principais números para consulta rápida</p>
       </div>
     </div>
 
@@ -102,7 +102,7 @@
 
 <div class="section-gap" id="sec-fundos">
   <div class="section-title">
-    <h2>📁 Catálogo Completo de Fundos</h2>
+    <h2>📁 Fundos disponíveis</h2>
     <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
   </div>
 
@@ -1036,8 +1036,8 @@
 <nav class="mobile-bottom-nav" aria-label="Atalhos principais no celular">
   <a href="#topo" data-target="topo"><span>🏠</span><small>Início</small></a>
   <a href="#sec-fundos" data-target="sec-fundos"><span>📁</span><small>Fundos</small></a>
+  <button type="button" class="mobile-nav-action" onclick="openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês"><span>📊</span><small>Mês</small></button>
   <a href="#rankingsSection" data-target="rankingsSection"><span>🏆</span><small>Ranking</small></a>
-  <a href="#sec-mercado" data-target="sec-mercado"><span>📡</span><small>Mercado</small></a>
   <a href="#sec-dolar" data-target="sec-dolar"><span>💵</span><small>Dólar</small></a>
 </nav>
 <a href="#topo" class="mobile-section-top-btn" aria-label="Voltar ao topo">↑</a>
@@ -1166,6 +1166,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=header-mobile-refinado-v38"></script>
+<script src="app.js?v=nav-mes-header-compacto-v39"></script>
 </body>
 </html>

@@ -18011,3 +18011,108 @@ header.site-header-clean{
     font-size:.47rem !important;
   }
 }
+
+
+/* ==========================================================
+   v39 — Atalho mobile para fechamento do mês + topo mais enxuto
+   - Troca "Mercado" por botão "Mês" na navegação inferior.
+   - Reduz repetições de "Catálogo" no início do mobile.
+   - Aproxima header, resumo executivo e bloco de fundos.
+========================================================== */
+.mobile-bottom-nav .mobile-nav-action{
+  appearance:none !important;
+  -webkit-appearance:none !important;
+  border:1px solid transparent !important;
+  background:transparent !important;
+  color:#b6bfd5 !important;
+  font:inherit !important;
+  cursor:pointer !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:0 !important;
+  min-height:46px !important;
+  padding:5px 2px !important;
+  border-radius:13px !important;
+  text-decoration:none !important;
+  font-size:.56rem !important;
+  letter-spacing:.02em !important;
+  font-weight:700 !important;
+  line-height:1.1 !important;
+  -webkit-tap-highlight-color:transparent !important;
+}
+.mobile-bottom-nav .mobile-nav-action span:first-child{
+  font-size:1rem !important;
+  line-height:1 !important;
+  margin-bottom:4px !important;
+}
+.mobile-bottom-nav .mobile-nav-action:active,
+.mobile-bottom-nav .mobile-nav-action.active{
+  color:var(--gold2) !important;
+  background:rgba(200,151,58,.12) !important;
+  border-color:rgba(200,151,58,.24) !important;
+}
+
+@media(max-width:768px){
+  .site-header-clean,
+  header.site-header-clean{
+    margin:4px 0 8px !important;
+    padding:10px 11px 9px !important;
+    border-radius:16px !important;
+  }
+  .site-header-clean .brand{
+    grid-template-columns:32px minmax(0,1fr) !important;
+    gap:9px !important;
+  }
+  .site-header-clean .brand-logo{
+    width:32px !important;
+    height:32px !important;
+    min-width:32px !important;
+    border-radius:10px !important;
+    font-size:.94rem !important;
+  }
+  .site-header-clean .brand-text h1{
+    font-size:.98rem !important;
+    line-height:1.05 !important;
+  }
+  .site-header-clean .brand-text p{
+    margin-top:3px !important;
+    font-size:.45rem !important;
+    line-height:1.22 !important;
+    letter-spacing:.045em !important;
+  }
+  .site-header-clean .live-badge{
+    margin:6px 0 0 41px !important;
+    font-size:.51rem !important;
+  }
+  .mobile-kpi-overview.section-gap,
+  #sec-kpi-mobile{
+    margin-top:6px !important;
+  }
+  #sec-kpi-mobile .mobile-kpi-card{
+    padding:9px !important;
+    border-radius:13px !important;
+  }
+  #sec-kpi-mobile .mobile-kpi-head{
+    margin-bottom:6px !important;
+  }
+  #sec-kpi-mobile .mobile-kpi-head h3{
+    font-size:.96rem !important;
+  }
+  #sec-kpi-mobile .mobile-kpi-head p{
+    font-size:.52rem !important;
+  }
+  #sec-fundos{
+    margin-top:8px !important;
+  }
+  #sec-fundos .section-title{
+    margin-bottom:8px !important;
+  }
+  #sec-fundos .section-title h2{
+    font-size:.98rem !important;
+  }
+  #fundFilterShell{
+    margin-top:0 !important;
+  }
+}
