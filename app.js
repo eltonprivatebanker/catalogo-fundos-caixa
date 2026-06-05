@@ -1,35 +1,13 @@
-/* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){
   var bd=document.getElementById(b),ct=document.getElementById(c);
-  if(!bd)return false;
+  if(!bd)return;
   var h=bd.hasAttribute('hidden');
   h?bd.removeAttribute('hidden'):bd.setAttribute('hidden','');
   if(ct){ct.classList.toggle('section-expanded',h);ct.setAttribute('aria-expanded',h?'true':'false');}
   var l=ct?ct.querySelector('.toggle-label'):null;
   if(l)l.textContent=h?'Ver menos':'Ver mais';
-  return false;
 }
 window.toggleSection=toggleSection;
-
-function handleSectionToggleClick(event, bodyId, containerId){
-  if(event){
-    var target = event.target;
-    var current = event.currentTarget;
-    var toggleBtn = target && target.closest ? target.closest('.section-toggle-btn') : null;
-    var interactive = target && target.closest ? target.closest('button,a,input,select,textarea,label,[data-no-section-toggle]') : null;
-
-    // Botões internos (12M/24M/36M, Print, WhatsApp etc.) não podem acionar o abre/fecha do bloco pai.
-    if(interactive && interactive !== current && !toggleBtn){
-      if(typeof event.stopPropagation === 'function') event.stopPropagation();
-      return false;
-    }
-
-    if(typeof event.preventDefault === 'function') event.preventDefault();
-    if(typeof event.stopPropagation === 'function') event.stopPropagation();
-  }
-  return toggleSection(bodyId, containerId);
-}
-window.handleSectionToggleClick=handleSectionToggleClick;
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
 ════════════════════════════════════════════════════ */
@@ -88,46 +66,6 @@ function togglePoupanca(){
   const isOpen = el.classList.toggle('open');
   btn.textContent = isOpen ? 'Ocultar detalhes ▲' : 'Ver detalhes ▼';
 }
-
-
-function togglePoupancaMobileDetails(force){
-  const shouldOpen = typeof force === 'boolean'
-    ? force
-    : !document.body.classList.contains('poup-mobile-expanded');
-
-  document.body.classList.toggle('poup-mobile-expanded', shouldOpen);
-
-  const btn = $('poupMobileDetailsToggle');
-  if(btn){
-    btn.textContent = shouldOpen ? 'Ocultar cenários e regras ↑' : 'Ver cenários e regras ↓';
-    btn.setAttribute('aria-expanded', String(shouldOpen));
-  }
-
-  // No mobile, o botão único controla também a explicação das regras.
-  const explain = $('poupExplain');
-  if(explain) explain.classList.toggle('open', shouldOpen);
-
-  const desktopBtn = $('poupExpandBtn');
-  if(desktopBtn) desktopBtn.textContent = shouldOpen ? 'Ocultar detalhes ▲' : 'Ver detalhes ▼';
-
-  if(shouldOpen){
-    setTimeout(function(){
-      try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
-      try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update(); }catch(e){}
-    }, 120);
-  }
-
-  return false;
-}
-window.togglePoupancaMobileDetails = togglePoupancaMobileDetails;
-
-document.addEventListener('DOMContentLoaded', function(){
-  try{
-    if(window.matchMedia && window.matchMedia('(max-width: 768px), (pointer: coarse)').matches){
-      togglePoupancaMobileDetails(false);
-    }
-  }catch(e){}
-});
 
 function formatPctCard(v, fallback='—'){
   if(v===null || v===undefined || v==='') return fallback;
@@ -525,53 +463,6 @@ function hidratarDolarResumoDoJson(d){
   atualizarCardDolarResumo();
 }
 
-
-function atualizarPTAXStats(){
-  const setText = (id, value) => { const el = $(id); if(el) el.textContent = value; };
-  const setClass = (id, cls) => { const el = $(id); if(el) el.className = cls; };
-
-  if(!_ptaxHistorico || !_ptaxHistorico.length){
-    ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
-    return;
-  }
-
-  const byMonth = {};
-  _ptaxHistorico.forEach(item => {
-    const rawDate = item.dataHoraCotacao || item.data_ref || item.data || item.date;
-    const dt = new Date(rawDate);
-    const val = Number(item.cotacaoVenda ?? item.cotacao ?? item.valor);
-    if(isNaN(dt) || !Number.isFinite(val)) return;
-    const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-    if(!byMonth[key] || new Date(rawDate) > new Date(byMonth[key].rawDate)){
-      byMonth[key] = { key, dt, val, rawDate, label:item._mes_label || `${MESES_PT[dt.getMonth()]}/${dt.getFullYear()}` };
-    }
-  });
-
-  const asc = Object.values(byMonth).sort((a,b)=>a.key.localeCompare(b.key));
-  if(!asc.length){
-    ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
-    return;
-  }
-
-  const janela12 = asc.slice(-12);
-  const atual = asc[asc.length-1];
-  const max = janela12.reduce((a,b)=> b.val > a.val ? b : a, janela12[0]);
-  const min = janela12.reduce((a,b)=> b.val < a.val ? b : a, janela12[0]);
-  const media = janela12.reduce((sum,item)=>sum+item.val,0) / janela12.length;
-
-  setText('ptaxStatAtual', brl(atual.val));
-  setText('ptaxStatMax', brl(max.val));
-  setText('ptaxStatMaxRef', max.label);
-  setText('ptaxStatMin', brl(min.val));
-  setText('ptaxStatMinRef', min.label);
-  setText('ptaxStatMedia', brl(media));
-
-  setClass('ptaxStatAtual', 'ptax-stat-val neu');
-  setClass('ptaxStatMax', 'ptax-stat-val neg');
-  setClass('ptaxStatMin', 'ptax-stat-val pos');
-  setClass('ptaxStatMedia', 'ptax-stat-val neu');
-}
-
 function calcularDolarPeriodos(){
   if(!_ptaxHistorico.length) return;
 
@@ -675,7 +566,6 @@ function calcularDolarPeriodos(){
     $('dolar-day-content').style.display = 'block';
   }
   atualizarCardDolarResumo(refLabel);
-  atualizarPTAXStats();
 
   atualizarTabelaIndicadores();
 }
@@ -4419,16 +4309,12 @@ document.addEventListener('DOMContentLoaded', function(){
       return `<div class="fund-card-docs-empty">Nenhum documento disponível na base</div>`;
     }
 
+    const urls = docs.map(d => d.url);
     const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
     const secundarios = boletim ? docs.filter(d => d.url !== boletim.url) : docs;
-
-    // No mobile, o Boletim Comercial já aparece como ação rápida no card.
-    // Para evitar repetição dentro de "Mais detalhes", mostramos aqui apenas documentos complementares.
-    if(!secundarios.length) return '';
-
-    const urls = secundarios.map(d => d.url);
-    const allBtn = secundarios.length > 1
-      ? `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`
+    const allBtn = `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`;
+    const boletimBtn = boletim
+      ? `<a class="fund-card-boletim-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener" title="Boletim Comercial">⭐ Boletim Comercial</a>`
       : '';
 
     const links = secundarios.map(d => {
@@ -4438,9 +4324,10 @@ document.addEventListener('DOMContentLoaded', function(){
 
     return `<div class="fund-card-mobile-docs">
       <div class="fund-card-docs-head">
-        <span class="fund-card-docs-title">Documentos complementares</span>
+        <span class="fund-card-docs-title">Documentos</span>
         ${allBtn}
       </div>
+      ${boletimBtn ? `<div class="fund-card-docs-primary">${boletimBtn}</div>` : ''}
       <div class="fund-card-docs-list secundarios">${links}</div>
     </div>`;
   }
@@ -4494,52 +4381,34 @@ document.addEventListener('DOMContentLoaded', function(){
     const pagamento = getCampoPrazoMobile(r,'Pagamento Resgate');
     const codigo = getCodigoFundoMobile(r);
     const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
-    const docs = getMobileDocs(r);
-    const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
-    const boletimBtn = boletim
-      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim comercial ↗</a>`
-      : '';
     const docsHtml = buildMobileDocsHtml(r);
-    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
-      <div class="fund-card-list-main">
-        <div class="fund-card-list-left">
-          <div class="fund-card-mobile-tags fund-card-list-tags">
-            <span class="cat-badge cat-${cls}">${cat}</span>
-            ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
-            ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
-          </div>
-          <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
+    return `<article class="fund-card-mobile" data-card-idx="${idx}">
+      <div class="fund-card-mobile-head">
+        <div class="fund-card-mobile-tags">
+          <span class="cat-badge cat-${cls}">${cat}</span>
+          ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
+          ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
         </div>
-        <div class="fund-card-list-metrics" aria-label="Resumo de rentabilidade do fundo">
-          <span class="fund-card-list-metric"><small>Mês</small><strong class="${pctClass(mes)}">${mes}</strong></span>
-          <span class="fund-card-list-metric"><small>12M</small><strong class="${pctClass(m12)}">${m12}</strong></span>
-          <span class="fund-card-list-metric cdi"><small>% CDI</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
-        </div>
+        <div class="fund-card-mobile-name">${htmlAttr(nome)}</div>
       </div>
-
-      <div class="fund-card-mobile-actions fund-card-list-actions fund-card-list-actions-v26">
-        ${boletimBtn}
-        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página do fundo ↗</a>
-        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Mais detalhes</button>
+      <div class="fund-card-mobile-body">
+        <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Mês</span><span class="fund-metric-value ${pctClass(mes)}">${mes}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">12M</span><span class="fund-metric-value ${pctClass(m12)}">${m12}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">% CDI 12M</span><span class="fund-metric-value ${ratioCdi.cls}">${ratioCdi.txt}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
+        <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
       </div>
-
-      <div class="fund-card-list-expanded" aria-hidden="true">
-        <div class="fund-card-expanded-head">
-          <strong>Mais detalhes</strong>
-          <button type="button" class="fund-card-close-details" data-card-idx="${idx}" aria-label="Fechar detalhes">× Fechar</button>
-        </div>
-        <div class="fund-card-mobile-body">
-          <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
-        </div>
+      <div class="fund-card-mobile-actions">
+        <a class="fund-card-primary-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Abrir fundo ↗</a>
+        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}">Detalhes</button>
         ${docsHtml}
-        <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
       </div>
+      <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
     </article>`;
   }
 
@@ -4553,20 +4422,10 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!rows.length){box.innerHTML='<div class="rank-empty">Nenhum fundo encontrado.</div>';return;}
     box.innerHTML=rows.map((r,i)=>buildMobileFundCard(r,start+i)).join('');
     qsa('.fund-card-detail-btn',box).forEach(btn=>{
-      btn.addEventListener('click',(ev)=>{
-        ev.preventDefault();
-        ev.stopPropagation();
+      btn.addEventListener('click',()=>{
         const card=btn.closest('.fund-card-mobile');
-        if(!card) return;
         const open=card.classList.toggle('open');
-        const expanded=card.querySelector('.fund-card-list-expanded');
-        if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
-        btn.textContent=open?'Ocultar':'Mais detalhes';
-        btn.setAttribute('aria-expanded', open?'true':'false');
-        try{
-          const key=fundKeyFromIdx(btn.dataset.cardIdx || card.dataset.idx);
-          if(open) openCards.add(key); else openCards.delete(key);
-        }catch(e){}
+        btn.textContent=open?'Ocultar':'Detalhes';
       });
     });
   }
@@ -5009,11 +4868,16 @@ document.addEventListener('DOMContentLoaded', function(){
      CARDS MOBILE — botão ⭐
   ════════════════════════════════════════════ */
   function injectFavBtnsCards(){
-    // v27: no mobile, removemos o botão de favorito do card para limpar a interface.
-    // A gestão de favoritos permanece no desktop/barra global, mas o card compacto não exibe estrela.
-    document.querySelectorAll('#mobileFundCards .fav-btn-mobile').forEach(btn=>btn.remove());
     document.querySelectorAll('#mobileFundCards .fund-card-mobile').forEach(card=>{
-      card.classList.remove('card-fav');
+      if(card.querySelector('.fav-btn-mobile')) return;
+      const idx=parseInt(card.dataset.cardIdx); if(isNaN(idx)) return;
+      const row=(typeof filtered!=='undefined'&&Array.isArray(filtered))?filtered[idx]:null; if(!row) return;
+      const key=getFundKey(row); const isFav=getFavs().has(key);
+      card.classList.toggle('card-fav',isFav);
+      const btn=document.createElement('button');
+      btn.className='fav-btn-mobile'+(isFav?' is-fav':''); btn.type='button'; btn.textContent=isFav?'⭐':'☆';
+      btn.addEventListener('click',e=>{ e.stopPropagation(); toggleFavRow(key,btn,card); });
+      card.querySelector('.fund-card-mobile-head')?.appendChild(btn);
     });
   }
 
@@ -5193,13 +5057,8 @@ document.addEventListener('DOMContentLoaded', function(){
       const key=fundKeyFromIdx(idx);
       const should=openCards.has(key);
       card.classList.toggle('open',should);
-      const expanded=card.querySelector('.fund-card-list-expanded');
-      if(expanded) expanded.setAttribute('aria-hidden', should?'false':'true');
       const btn=card.querySelector('.fund-card-detail-btn');
-      if(btn){
-        btn.textContent=should?'Ocultar':'Mais detalhes';
-        btn.setAttribute('aria-expanded', should?'true':'false');
-      }
+      if(btn) btn.textContent=should?'Ocultar':'Detalhes';
     });
     updateQuickCount();
     updateQuickHeaderActive();
@@ -5210,25 +5069,17 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!box || box.dataset.persistentDetails) return;
     box.dataset.persistentDetails='1';
     box.addEventListener('click',ev=>{
-      const detailBtn=ev.target.closest('.fund-card-detail-btn');
-      const closeBtn=ev.target.closest('.fund-card-close-details');
-      const btn=detailBtn || closeBtn;
+      const btn=ev.target.closest('.fund-card-detail-btn');
       if(!btn) return;
       ev.preventDefault();
       ev.stopPropagation();
       if(ev.stopImmediatePropagation) ev.stopImmediatePropagation();
       const card=btn.closest('.fund-card-mobile');
       if(!card) return;
-      const mainBtn=card.querySelector('.fund-card-detail-btn');
       const key=fundKeyFromIdx(btn.dataset.cardIdx || card.dataset.idx);
-      const open=detailBtn ? !card.classList.contains('open') : false;
+      const open=!card.classList.contains('open');
       card.classList.toggle('open',open);
-      const expanded=card.querySelector('.fund-card-list-expanded');
-      if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
-      if(mainBtn){
-        mainBtn.textContent=open?'Ocultar':'Mais detalhes';
-        mainBtn.setAttribute('aria-expanded', open?'true':'false');
-      }
+      btn.textContent=open?'Ocultar':'Detalhes';
       if(open) openCards.add(key); else openCards.delete(key);
     },true);
     new MutationObserver(()=>restoreOpenCards()).observe(box,{childList:true,subtree:false});
@@ -5950,9 +5801,24 @@ setTimeout(()=>{
     });
 
     document.querySelectorAll('#mobileFundCards .fund-card-mobile').forEach(card=>{
-      // v27: não inserir estrela/favorito nos cards mobile; mantém a tela mais limpa.
-      card.classList.remove('card-fav');
-      card.querySelectorAll('.fav-btn-mobile').forEach(btn=>btn.remove());
+      const idx=parseInt(card.dataset.cardIdx,10);
+      const row=(typeof filtered!=='undefined' && Array.isArray(filtered)) ? filtered[idx] : null;
+      if(!row) return;
+      const key=favKey(row);
+      const isFav=favHasRow(row);
+      card.classList.toggle('card-fav', isFav);
+      let btn=card.querySelector('.fav-btn-mobile');
+      if(!btn){
+        btn=document.createElement('button');
+        btn.type='button';
+        btn.className='fav-btn-mobile';
+        btn.title='Adicionar ou remover dos favoritos';
+        btn.setAttribute('aria-label','Adicionar ou remover dos favoritos');
+        (card.querySelector('.fund-card-mobile-head')||card).appendChild(btn);
+      }
+      btn.dataset.fk=key;
+      btn.textContent=isFav?'⭐':'☆';
+      btn.classList.toggle('is-fav', isFav);
     });
   }
 
@@ -6180,8 +6046,8 @@ function atualizarResumoFechamentoMes(){
   const periodo=periodoUltimoFechado();
   const title=document.getElementById('closedMonthLaunchTitle');
   const sub=document.getElementById('closedMonthLaunchSub');
-  if(title) title.textContent=`Resumo de mercado`;
-  if(sub) sub.textContent=`${periodo} · indicadores consolidados`;
+  if(title) title.textContent=`Resumo do mês fechado`;
+  if(sub) sub.textContent=`${periodo} · principais indicadores`;
   const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
@@ -6190,9 +6056,11 @@ function atualizarResumoFechamentoMes(){
 }
 function renderClosedMarketSheet(){
   const periodo=periodoUltimoFechado();
-  // Título removido do cabeçalho para reduzir altura no modal compacto.
+  const title=document.getElementById('closedMarketSheetTitle');
   const note=document.getElementById('closedMarketSheetNote');
-  const list=document.getElementById('closedMarketSheetList');  if(note) note.textContent=`Último mês fechado · ${periodo}`;
+  const list=document.getElementById('closedMarketSheetList');
+  if(title) title.textContent=`Fechamento de Mercado — ${periodo}`;
+  if(note) note.textContent=`Último mês fechado · ${periodo}`;
   if(!list) return;
   let lastGrupo='';
   list.innerHTML=indicadorFechadoRows().map(r=>{
@@ -6217,27 +6085,9 @@ function renderClosedMarketSheet(){
     </button>`;
   }).join('');
 }
-function ensureClosedMarketPortal(){
-  var sheet=document.getElementById('closedMarketSheet');
-  var overlay=document.getElementById('closedMarketOverlay');
-
-  // O modal não pode ficar dentro de uma seção recolhida com hidden.
-  // Quando fica dentro de #sec-painel-body fechado, o JS abre, mas o retângulo real vira 0x0.
-  // Movendo overlay + sheet para o body, o modal independe do estado do painel consolidado.
-  if(overlay && overlay.parentElement !== document.body){
-    document.body.appendChild(overlay);
-  }
-  if(sheet && sheet.parentElement !== document.body){
-    document.body.appendChild(sheet);
-  }
-
-  return { sheet:sheet, overlay:overlay };
-}
-
 function openFechamentoMesSheet(){
-  const portal=ensureClosedMarketPortal();
-  const sheet=portal.sheet;
-  const overlay=portal.overlay;
+  const sheet=document.getElementById('closedMarketSheet');
+  const overlay=document.getElementById('closedMarketOverlay');
 
   if(!sheet){
     console.warn('[Fechamento] closedMarketSheet não encontrado no DOM.');
@@ -6253,41 +6103,10 @@ function openFechamentoMesSheet(){
   document.body.classList.add('closed-market-open');
   sheet.removeAttribute('hidden');
   sheet.setAttribute('aria-hidden','false');
-  try{
-    Object.assign(sheet.style,{
-      position:'fixed',
-      left:'50%',
-      top: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? '50%' : 'auto',
-      bottom: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? 'auto' : '0',
-      transform: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
-      width: (window.matchMedia && window.matchMedia('(min-width:701px)').matches) ? 'min(760px, calc(100vw - 24px))' : 'calc(100vw - 16px)',
-      minHeight:'0',
-      maxHeight: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? 'calc(100vh - 20px)' : 'calc(100vh - 12px)',
-      display:'block',
-      opacity:'1',
-      visibility:'visible',
-      pointerEvents:'auto',
-      zIndex:'2147483647',
-      contentVisibility:'visible',
-      contain:'none',
-      overflow:'auto'
-    });
-  }catch(e){}
 
   if(overlay){
     overlay.removeAttribute('hidden');
     overlay.setAttribute('aria-hidden','false');
-    try{
-      Object.assign(overlay.style,{
-        position:'fixed',
-        inset:'0',
-        display:'block',
-        opacity:'1',
-        visibility:'visible',
-        pointerEvents:'auto',
-        zIndex:'2147483646'
-      });
-    }catch(e){}
   }
 
   return false;
@@ -6296,45 +6115,32 @@ function closeFechamentoMesSheet(){
   document.body.classList.remove('closed-market-open');
   const sheet=document.getElementById('closedMarketSheet');
   const overlay=document.getElementById('closedMarketOverlay');
-  if(sheet){
-    sheet.setAttribute('aria-hidden','true');
-    try{
-      sheet.style.opacity='0';
-      sheet.style.visibility='hidden';
-      sheet.style.pointerEvents='none';
-    }catch(e){}
-  }
-  if(overlay){
-    overlay.setAttribute('aria-hidden','true');
-    try{
-      overlay.style.opacity='0';
-      overlay.style.visibility='hidden';
-      overlay.style.pointerEvents='none';
-    }catch(e){}
-  }
+  if(sheet) sheet.setAttribute('aria-hidden','true');
+  if(overlay) overlay.setAttribute('aria-hidden','true');
 }
 window.openFechamentoMesSheet=openFechamentoMesSheet;
 window.closeFechamentoMesSheet=closeFechamentoMesSheet;
 
 (function setupClosedMarketOpen(){
+  function onClick(e){
+    const btn = e.target && e.target.closest
+      ? e.target.closest('#closedMonthLaunch, .closed-month-launch, [data-open-closed-market]')
+      : null;
+    if(!btn) return;
+    e.preventDefault();
+    openFechamentoMesSheet();
+  }
+
+  // Delegação: funciona mesmo se o HTML for alterado depois e não depende do onclick inline.
+  document.addEventListener('click', onClick, true);
+
   function init(){
     var btn=document.getElementById('closedMonthLaunch');
-    if(!btn || btn.dataset.closedMarketBound === '1') return;
-    btn.dataset.closedMarketBound='1';
-    btn.setAttribute('data-open-closed-market','true');
-    btn.style.pointerEvents='auto';
-    btn.addEventListener('click', function(e){
-      e.preventDefault();
-      e.stopPropagation();
-      if(typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-      openFechamentoMesSheet();
-      return false;
-    }, true);
+    if(btn) btn.setAttribute('data-open-closed-market','true');
   }
+
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init, {once:true});
   else init();
-  setTimeout(init, 300);
-  setTimeout(init, 1200);
 })();
 (function setupClosedMarketClose(){
   function init(){
@@ -7300,691 +7106,3 @@ async function sharePainelMercado(){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
   else setTimeout(setup,650);
 })();
-
-
-/* ════════════════════════════════════════════════════
-   v24 — Mobile card-first para o catálogo de fundos
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_CATALOGO_MOBILE_CARDS_CLEAN_20260604_v24';
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}
-  function qsa(sel,root=document){return Array.from((root||document).querySelectorAll(sel));}
-  function forceCards(){
-    if(!isMobile()) return;
-    document.body.classList.add('fund-card-mode','catalog-mobile-clean');
-    try{ localStorage.setItem('fundMobileView','cards'); }catch(e){}
-    qsa('.mobile-view-btn').forEach(b=>b.classList.toggle('active',b.dataset.view==='cards'));
-    const g=document.getElementById('gfbGo');
-    if(g){ g.textContent='Fundos ↓'; g.setAttribute('aria-label','Ir para os fundos'); }
-    if(typeof window.renderMobileFundCards==='function'){
-      try{ window.renderMobileFundCards(); }catch(e){}
-    }
-  }
-  function scrollFunds(){
-    const sec=document.getElementById('sec-fundos');
-    if(!sec) return;
-    const offset=isMobile()?96:64;
-    const top=sec.getBoundingClientRect().top+window.scrollY-offset;
-    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
-  }
-  function neutralizeGoButton(){
-    const old=document.getElementById('gfbGo');
-    if(!old || old.dataset.cleanV24==='1') return;
-    const fresh=old.cloneNode(true);
-    fresh.dataset.cleanV24='1';
-    fresh.textContent='Fundos ↓';
-    fresh.setAttribute('aria-label','Ir para os fundos');
-    old.parentNode.replaceChild(fresh,old);
-    fresh.addEventListener('click',function(ev){
-      if(!isMobile()) return;
-      ev.preventDefault();
-      ev.stopPropagation();
-      if(ev.stopImmediatePropagation) ev.stopImmediatePropagation();
-      forceCards();
-      setTimeout(scrollFunds,30);
-    },true);
-  }
-  function init(){
-    forceCards();
-    neutralizeGoButton();
-    setTimeout(forceCards,120);
-    setTimeout(forceCards,500);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
-  else init();
-  window.addEventListener('resize',()=>setTimeout(forceCards,80),{passive:true});
-  window.addEventListener('orientationchange',()=>setTimeout(forceCards,180),{passive:true});
-  document.addEventListener('input',function(ev){
-    if(ev.target && (ev.target.id==='searchInput' || ev.target.id==='gfbSearch')){
-      setTimeout(forceCards,340);
-    }
-  },true);
-  document.addEventListener('click',function(ev){
-    if(!isMobile()) return;
-    const tableBtn=ev.target && ev.target.closest ? ev.target.closest('.mobile-view-btn[data-view="table"]') : null;
-    if(tableBtn){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if(ev.stopImmediatePropagation) ev.stopImmediatePropagation();
-      forceCards();
-    }
-  },true);
-  const oldRender=window.render;
-  if(typeof oldRender==='function' && !oldRender.__v24Clean){
-    window.render=function(){
-      const r=oldRender.apply(this,arguments);
-      setTimeout(forceCards,0);
-      return r;
-    };
-    window.render.__v24Clean=true;
-  }
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v26 — Catálogo mobile: ações rápidas e detalhes persistentes
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  window.__ELTAUM_MOBILE_CATALOG_V26__='ELTAUM_CATALOGO_MOBILE_ACOES_DETALHES_20260604_v26';
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}
-  function syncCards(){
-    if(!isMobile()) return;
-    document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26');
-    try{ localStorage.setItem('fundMobileView','cards'); }catch(e){}
-    if(typeof window.renderMobileFundCards==='function'){
-      try{ window.renderMobileFundCards(); }catch(e){}
-    }
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(syncCards,450),{once:true});
-  else setTimeout(syncCards,450);
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v28 — Filtros mobile simplificados
-   - Insere filtros rápidos dentro do drawer
-   - Avançados ficam recolhidos por padrão
-   - Mantém apenas uma categoria avançada aberta
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  function isMobileV28(){
-    try{return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}catch(e){return false;}
-  }
-  function qs(sel,root=document){return root.querySelector(sel);}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
-
-  const QUICK = [
-    {preset:'all', label:'Todos'},
-    {preset:'pf', label:'Pessoa Física'},
-    {preset:'cdi', label:'CDI'},
-    {preset:'conservador', label:'Conservador'},
-    {preset:'renda-fixa', label:'Renda Fixa'},
-    {preset:'multimercado', label:'Multimercado'}
-  ];
-
-  function activePresetV28(){
-    let cat='', bench='', risco='', perfil='';
-    try{cat=activeCat||'';}catch(e){}
-    try{bench=activeBenchmark||'';}catch(e){}
-    try{risco=activeRisco||'';}catch(e){}
-    try{perfil=activePerfil||'';}catch(e){}
-    if(!cat && !bench && !risco && !perfil) return 'all';
-    if(perfil==='PF') return 'pf';
-    if(bench==='CDI') return 'cdi';
-    if(risco==='Conservador') return 'conservador';
-    if(cat==='RENDA FIXA') return 'renda-fixa';
-    if(cat==='MULTIMERCADO') return 'multimercado';
-    return '';
-  }
-
-  function clickExistingPreset(preset){
-    const btn = qs(`.filter-preset-chip[data-preset="${preset}"]`);
-    if(btn){ btn.click(); return true; }
-    return false;
-  }
-
-  function clearDirect(){
-    try{activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false;}catch(e){}
-    const t=qs('#toggleSemDados'); if(t) t.checked=false;
-    qsa('#fundFilterDrawer .chip').forEach(b=>b.classList.remove('active'));
-    qsa('#fundFilterDrawer [data-cat=""], #fundFilterDrawer [data-benchmark=""], #fundFilterDrawer [data-perfil=""], #fundFilterDrawer [data-risco=""]').forEach(b=>b.classList.add('active'));
-    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
-  }
-
-  function applyPresetDirect(preset){
-    if(preset==='all'){ clearDirect(); return; }
-    if(clickExistingPreset(preset)) return;
-    try{
-      if(preset==='pf') activePerfil='PF';
-      if(preset==='cdi') activeBenchmark='CDI';
-      if(preset==='conservador') activeRisco='Conservador';
-      if(preset==='renda-fixa') activeCat='RENDA FIXA';
-      if(preset==='multimercado') activeCat='MULTIMERCADO';
-      if(typeof applyFilter==='function') applyFilter();
-    }catch(e){}
-  }
-
-  function refreshFastButtons(){
-    const active=activePresetV28();
-    qsa('.filter-fast-btn-v28').forEach(b=>{
-      b.classList.toggle('is-active', b.dataset.v28Preset===active);
-      b.setAttribute('aria-pressed', b.dataset.v28Preset===active ? 'true':'false');
-    });
-    const drawer=qs('#fundFilterDrawer');
-    const advBtn=qs('.filter-advanced-toggle-v28');
-    if(advBtn && drawer){
-      const open=drawer.classList.contains('filters-advanced-open');
-      advBtn.setAttribute('aria-expanded',open?'true':'false');
-      const txt=advBtn.querySelector('span:last-child');
-      if(txt) txt.textContent=open?'Ocultar opções':'Mais opções';
-    }
-    const apply=qs('#filterApplyBtn');
-    if(apply) apply.textContent='Ver resultados';
-  }
-
-  function buildFastPanel(){
-    const drawer=qs('#fundFilterDrawer');
-    if(!drawer || drawer.querySelector('.filter-mobile-fast-v28')) return;
-    const groups=qs('.filter-groups-grid',drawer);
-    const panel=document.createElement('div');
-    panel.className='filter-mobile-fast-v28';
-    panel.innerHTML=`
-      <div class="filter-mobile-fast-title-v28">
-        <span>Filtros rápidos</span>
-        <small>toque para aplicar</small>
-      </div>
-      <div class="filter-mobile-fast-grid-v28">
-        ${QUICK.map(q=>`<button type="button" class="filter-fast-btn-v28" data-v28-preset="${q.preset}" aria-pressed="false">${q.label}</button>`).join('')}
-        <button type="button" class="filter-advanced-toggle-v28" aria-expanded="false"><span>Filtros avançados</span><span>Mais opções</span></button>
-      </div>`;
-    if(groups) drawer.insertBefore(panel,groups); else drawer.appendChild(panel);
-
-    panel.addEventListener('click',ev=>{
-      const fast=ev.target.closest('.filter-fast-btn-v28');
-      const adv=ev.target.closest('.filter-advanced-toggle-v28');
-      if(fast){
-        ev.preventDefault(); ev.stopPropagation();
-        applyPresetDirect(fast.dataset.v28Preset);
-        setTimeout(refreshFastButtons,80);
-      }
-      if(adv){
-        ev.preventDefault(); ev.stopPropagation();
-        drawer.classList.toggle('filters-advanced-open');
-        setTimeout(refreshFastButtons,30);
-      }
-    },true);
-  }
-
-  function refineDrawerBehavior(){
-    const drawer=qs('#fundFilterDrawer');
-    if(!drawer || drawer.dataset.v28Ready==='1') return;
-    drawer.dataset.v28Ready='1';
-
-    // Começa simples no mobile: avançados fechados.
-    if(isMobileV28()) drawer.classList.remove('filters-advanced-open');
-
-    drawer.addEventListener('toggle',ev=>{
-      const d=ev.target;
-      if(!d || !d.matches || !d.matches('.filter-group-accordion') || !d.open) return;
-      qsa('.filter-group-accordion',drawer).forEach(o=>{ if(o!==d) o.open=false; });
-    },true);
-
-    drawer.addEventListener('click',ev=>{
-      if(ev.target.closest('.chip')) setTimeout(refreshFastButtons,100);
-    },true);
-  }
-
-  function centerOnOpenPatch(){
-    const btn=qs('#mobileFilterToggle');
-    const drawer=qs('#fundFilterDrawer');
-    if(!btn || !drawer || btn.dataset.v28OpenPatch==='1') return;
-    btn.dataset.v28OpenPatch='1';
-    btn.addEventListener('click',()=>{
-      setTimeout(()=>{
-        if(!isMobileV28()) return;
-        if(!drawer.classList.contains('mobile-filters-collapsed')){
-          drawer.classList.remove('filters-advanced-open');
-          qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
-          refreshFastButtons();
-        }
-      },60);
-    },true);
-  }
-
-  function init(){
-    buildFastPanel();
-    refineDrawerBehavior();
-    centerOnOpenPatch();
-    refreshFastButtons();
-    const clearTop=qs('#clearFiltersTop');
-    if(clearTop && !clearTop.dataset.v28){
-      clearTop.dataset.v28='1';
-      clearTop.addEventListener('click',()=>setTimeout(refreshFastButtons,80),true);
-    }
-    const clear=qs('#clearFiltersBtn');
-    if(clear && !clear.dataset.v28){
-      clear.dataset.v28='1';
-      clear.addEventListener('click',()=>setTimeout(refreshFastButtons,80),true);
-    }
-    setInterval(refreshFastButtons,1800);
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,350));
-  else setTimeout(init,350);
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v33 — Filtros mobile no padrão de classes CAIXA
-   - Substitui filtros rápidos genéricos por abas de classe de fundo.
-   - Avançados ficam secundários: Benchmark, Perfil e Risco.
-   - Categoria antiga fica oculta no mobile para evitar redundância.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  function isMobileV33(){
-    try{return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}catch(e){return false;}
-  }
-  function qs(sel,root=document){return root.querySelector(sel);}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
-  function norm(s){
-    return String(s||'')
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-      .replace(/[–—]/g,'-')
-      .replace(/\s+/g,' ')
-      .trim().toUpperCase();
-  }
-
-  const CAIXA_CLASSES = [
-    {key:'', label:'Todos os fundos', short:'Todos'},
-    {key:'RENDA FIXA SIMPLES', label:'Renda Fixa Simples', short:'RF Simples'},
-    {key:'RENDA FIXA', label:'Renda Fixa', short:'Renda Fixa'},
-    {key:'RENDA FIXA REFERENCIADO', label:'Renda Fixa Referenciado', short:'RF Referenciado'},
-    {key:'RENDA FIXA CURTO PRAZO', label:'Renda Fixa Curto Prazo', short:'RF Curto Prazo'},
-    {key:'MULTIMERCADO', label:'Multimercado', short:'Multimercado'},
-    {key:'CAMBIAL', label:'Cambial', short:'Cambial'},
-    {key:'ACOES', label:'Ações', short:'Ações'},
-    {key:'FUNDO DE INDICE', label:'Fundo de Índice', short:'Índice'},
-    {key:'FUNDOS MUTUOS DE PRIVATIZACAO', label:'Fundos Mútuos de Privatização', short:'FMP'}
-  ];
-
-  function getCurrentCat(){
-    try{return activeCat || '';}catch(e){return '';}
-  }
-  function getCurrentBenchmark(){
-    try{return activeBenchmark || '';}catch(e){return '';}
-  }
-  function getCurrentPerfil(){
-    try{return activePerfil || '';}catch(e){return '';}
-  }
-  function getCurrentRisco(){
-    try{return activeRisco || '';}catch(e){return '';}
-  }
-
-  function findCatButtonByKey(key){
-    const wanted=norm(key);
-    const buttons=qsa('#catFilters [data-cat]');
-    if(!key) return qs('#catFilters [data-cat=""]');
-    return buttons.find(b=>{
-      const val=norm(b.dataset.cat || b.textContent || '');
-      return val===wanted || val.includes(wanted) || wanted.includes(val);
-    });
-  }
-
-  function setCategory(key){
-    const btn=findCatButtonByKey(key);
-    if(btn){
-      btn.click();
-    }else{
-      try{activeCat=key || '';}catch(e){}
-      try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
-    }
-    setTimeout(refreshV33,80);
-  }
-
-  function setQuick(type){
-    try{
-      if(type==='pf') activePerfil = getCurrentPerfil()==='PF' ? '' : 'PF';
-      if(type==='cdi') activeBenchmark = getCurrentBenchmark()==='CDI' ? '' : 'CDI';
-      if(type==='conservador') activeRisco = getCurrentRisco()==='Conservador' ? '' : 'Conservador';
-      if(typeof applyFilter==='function') applyFilter();
-    }catch(e){}
-    setTimeout(refreshV33,80);
-  }
-
-  function refreshV33(){
-    const cur=norm(getCurrentCat());
-    qsa('.filter-class-tab-v33').forEach(btn=>{
-      const key=norm(btn.dataset.v33Cat||'');
-      const active=(!key && !cur) || (!!key && (cur===key || cur.includes(key) || key.includes(cur)));
-      btn.classList.toggle('is-active', active);
-      btn.setAttribute('aria-selected', active ? 'true':'false');
-    });
-    qsa('.filter-refine-chip-v33').forEach(btn=>{
-      const kind=btn.dataset.v33Quick;
-      let active=false;
-      if(kind==='pf') active=getCurrentPerfil()==='PF';
-      if(kind==='cdi') active=getCurrentBenchmark()==='CDI';
-      if(kind==='conservador') active=getCurrentRisco()==='Conservador';
-      btn.classList.toggle('is-active',active);
-      btn.setAttribute('aria-pressed',active?'true':'false');
-    });
-    const drawer=qs('#fundFilterDrawer');
-    const toggle=qs('.filter-advanced-toggle-v33');
-    if(drawer&&toggle){
-      const open=drawer.classList.contains('filters-advanced-open');
-      toggle.setAttribute('aria-expanded',open?'true':'false');
-      const txt=toggle.querySelector('.filter-advanced-state-v33');
-      if(txt) txt.textContent=open?'Ocultar':'Mais filtros';
-    }
-    const apply=qs('#filterApplyBtn');
-    if(apply) apply.textContent='Ver resultados';
-    const head=qs('#fundFilterDrawer .filter-sheet-head span');
-    if(head) head.textContent='Escolha uma classe de fundo no padrão CAIXA. Use “Mais filtros” apenas se precisar refinar.';
-  }
-
-  function buildV33(){
-    const drawer=qs('#fundFilterDrawer');
-    if(!drawer) return;
-
-    // Remove interface antiga do patch v28 para evitar camadas duplicadas/confusas.
-    qsa('.filter-mobile-fast-v28',drawer).forEach(el=>el.remove());
-
-    if(drawer.querySelector('.filter-mobile-classes-v33')) return;
-    const groups=qs('.filter-groups-grid',drawer);
-    const panel=document.createElement('div');
-    panel.className='filter-mobile-classes-v33';
-    panel.innerHTML=`
-      <div class="filter-class-head-v33">
-        <div>
-          <strong>Classe do fundo</strong>
-          <small>mesma lógica de consulta por classes da CAIXA</small>
-        </div>
-      </div>
-      <div class="filter-class-tabs-v33" role="tablist" aria-label="Classes de fundos CAIXA">
-        ${CAIXA_CLASSES.map(c=>`<button type="button" class="filter-class-tab-v33" role="tab" data-v33-cat="${c.key}" aria-selected="false"><span>${c.short}</span><small>${c.label}</small></button>`).join('')}
-      </div>
-      <div class="filter-refine-v33" aria-label="Refinamentos rápidos">
-        <span>Refinar</span>
-        <button type="button" class="filter-refine-chip-v33" data-v33-quick="pf" aria-pressed="false">Pessoa Física</button>
-        <button type="button" class="filter-refine-chip-v33" data-v33-quick="cdi" aria-pressed="false">CDI</button>
-        <button type="button" class="filter-refine-chip-v33" data-v33-quick="conservador" aria-pressed="false">Conservador</button>
-      </div>
-      <button type="button" class="filter-advanced-toggle-v33" aria-expanded="false"><span>Opções avançadas</span><strong class="filter-advanced-state-v33">Mais filtros</strong></button>
-    `;
-    if(groups) drawer.insertBefore(panel,groups); else drawer.appendChild(panel);
-
-    panel.addEventListener('click',ev=>{
-      const cat=ev.target.closest('.filter-class-tab-v33');
-      const quick=ev.target.closest('.filter-refine-chip-v33');
-      const adv=ev.target.closest('.filter-advanced-toggle-v33');
-      if(cat){
-        ev.preventDefault(); ev.stopPropagation();
-        setCategory(cat.dataset.v33Cat || '');
-      }
-      if(quick){
-        ev.preventDefault(); ev.stopPropagation();
-        setQuick(quick.dataset.v33Quick);
-      }
-      if(adv){
-        ev.preventDefault(); ev.stopPropagation();
-        const drawer=qs('#fundFilterDrawer');
-        if(drawer){
-          drawer.classList.toggle('filters-advanced-open');
-          qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
-        }
-        setTimeout(refreshV33,30);
-      }
-    },true);
-  }
-
-  function refineAdvanced(){
-    const drawer=qs('#fundFilterDrawer');
-    if(!drawer || drawer.dataset.v33Ready==='1') return;
-    drawer.dataset.v33Ready='1';
-    drawer.classList.add('filters-caixa-v33');
-    if(isMobileV33()) drawer.classList.remove('filters-advanced-open');
-
-    // No mobile, Categoria já aparece nas abas principais; deixamos avançado só para refino real.
-    const catDetails=qs('#catFilters')?.closest('.filter-group-accordion');
-    if(catDetails) catDetails.classList.add('filter-category-legacy-v33');
-
-    drawer.addEventListener('toggle',ev=>{
-      const d=ev.target;
-      if(!d || !d.matches || !d.matches('.filter-group-accordion') || !d.open) return;
-      qsa('.filter-group-accordion',drawer).forEach(o=>{ if(o!==d) o.open=false; });
-    },true);
-    drawer.addEventListener('click',ev=>{
-      if(ev.target.closest('.chip')) setTimeout(refreshV33,100);
-    },true);
-  }
-
-  function patchOpen(){
-    const btn=qs('#mobileFilterToggle');
-    const drawer=qs('#fundFilterDrawer');
-    if(!btn || !drawer || btn.dataset.v33OpenPatch==='1') return;
-    btn.dataset.v33OpenPatch='1';
-    btn.addEventListener('click',()=>{
-      setTimeout(()=>{
-        if(!isMobileV33()) return;
-        buildV33();
-        drawer.classList.add('filters-caixa-v33');
-        drawer.classList.remove('filters-advanced-open');
-        qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
-        refreshV33();
-      },90);
-    },true);
-  }
-
-  function init(){
-    buildV33();
-    refineAdvanced();
-    patchOpen();
-    refreshV33();
-    ['#clearFiltersTop','#clearFiltersBtn','#filterApplyBtn'].forEach(sel=>{
-      const el=qs(sel);
-      if(el && !el.dataset.v33){
-        el.dataset.v33='1';
-        el.addEventListener('click',()=>setTimeout(refreshV33,120),true);
-      }
-    });
-    setInterval(()=>{ if(isMobileV33()) refreshV33(); },1600);
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,450));
-  else setTimeout(init,450);
-})();
-
-
-/* Build UI: ELTAUM_TOPO_CABECALHO_LIMPO_20260605_v36 */
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v37 — Filtro mobile com hierarquia: classe em select
-   - Remove a grade com muitas opções visíveis.
-   - Mantém categorias CAIXA em um campo único.
-   - Avançados ficam fechados e secundários.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_FILTRO_MOBILE_SELECT_PREMIUM_20260605_v37';
-
-  function qs(sel,root=document){return root.querySelector(sel);} 
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
-  function isMobile(){try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}}
-  function norm(s){return String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[–—]/g,'-').replace(/\s+/g,' ').trim().toUpperCase();}
-
-  const CLASSES=[
-    {key:'', label:'Todos os fundos'},
-    {key:'RENDA FIXA SIMPLES', label:'Renda Fixa Simples'},
-    {key:'RENDA FIXA', label:'Renda Fixa'},
-    {key:'RENDA FIXA REFERENCIADO', label:'Renda Fixa Referenciado'},
-    {key:'RENDA FIXA CURTO PRAZO', label:'Renda Fixa Curto Prazo'},
-    {key:'MULTIMERCADO', label:'Multimercado'},
-    {key:'CAMBIAL', label:'Cambial'},
-    {key:'ACOES', label:'Ações'},
-    {key:'FUNDO DE INDICE', label:'Fundo de Índice'},
-    {key:'FUNDOS MUTUOS DE PRIVATIZACAO', label:'FMP / Privatização'}
-  ];
-
-  function getVar(name){try{return window[name] || eval(name) || '';}catch(e){return '';}}
-  function setVar(name,value){try{window[name]=value;}catch(e){} try{eval(name+' = value');}catch(e){}}
-  function currentCat(){return getVar('activeCat')||'';}
-  function currentBenchmark(){return getVar('activeBenchmark')||'';}
-  function currentPerfil(){return getVar('activePerfil')||'';}
-  function currentRisco(){return getVar('activeRisco')||'';}
-
-  function syncChip(rowSel,attr,value){
-    const row=qs(rowSel); if(!row) return;
-    qsa('button',row).forEach(b=>{
-      const active=String(b.getAttribute(attr)||'')===String(value||'');
-      b.classList.toggle('active',active);
-      b.setAttribute('aria-pressed',active?'true':'false');
-    });
-  }
-  function apply(){
-    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
-    setTimeout(refresh,80);
-  }
-  function setCategory(key){
-    setVar('activeCat',key||'');
-    syncChip('#catFilters','data-cat',key||'');
-    apply();
-  }
-  function toggleQuick(kind){
-    if(kind==='pf') setVar('activePerfil', currentPerfil()==='PF' ? '' : 'PF');
-    if(kind==='cdi') setVar('activeBenchmark', currentBenchmark()==='CDI' ? '' : 'CDI');
-    if(kind==='conservador') setVar('activeRisco', currentRisco()==='Conservador' ? '' : 'Conservador');
-    syncChip('#perfilFilters','data-perfil',currentPerfil());
-    syncChip('#benchmarkFilters','data-benchmark',currentBenchmark());
-    syncChip('#riscoFilters','data-risco',currentRisco());
-    apply();
-  }
-
-  function buildPanel(){
-    const drawer=qs('#fundFilterDrawer'); if(!drawer) return;
-    drawer.classList.add('filters-select-v37');
-    drawer.classList.add('filters-caixa-v33');
-
-    // Remove grades antigas que deixavam muitas opções expostas.
-    qsa('.filter-mobile-fast-v28',drawer).forEach(el=>el.remove());
-    qsa('.filter-mobile-classes-v33',drawer).forEach(el=>el.remove());
-
-    const groups=qs('.filter-groups-grid',drawer);
-    const panel=document.createElement('div');
-    panel.className='filter-mobile-classes-v33 filter-mobile-select-v37';
-    panel.innerHTML=`
-      <div class="filter-select-block-v37">
-        <div class="filter-select-label-v37">
-          <strong>Classe principal</strong>
-          <small>padrão CAIXA</small>
-        </div>
-        <select class="filter-class-select-v37" id="filterClassSelectV37" aria-label="Selecionar classe do fundo">
-          ${CLASSES.map(c=>`<option value="${c.key}">${c.label}</option>`).join('')}
-        </select>
-      </div>
-      <div class="filter-refine-block-v37">
-        <div class="filter-refine-label-v37">
-          <strong>Refinar se necessário</strong>
-          <small>opcional</small>
-        </div>
-        <div class="filter-refine-buttons-v37">
-          <button type="button" class="filter-refine-chip-v37" data-v37-quick="pf" aria-pressed="false">Pessoa Física</button>
-          <button type="button" class="filter-refine-chip-v37" data-v37-quick="cdi" aria-pressed="false">CDI</button>
-          <button type="button" class="filter-refine-chip-v37" data-v37-quick="conservador" aria-pressed="false">Conservador</button>
-        </div>
-      </div>
-      <button type="button" class="filter-advanced-line-v37" aria-expanded="false">
-        <span>Filtros avançados</span><strong>Mostrar</strong>
-      </button>
-    `;
-    if(groups) drawer.insertBefore(panel,groups); else drawer.appendChild(panel);
-
-    const sel=qs('#filterClassSelectV37',panel);
-    if(sel && !sel.dataset.bound){
-      sel.dataset.bound='1';
-      sel.addEventListener('change',ev=>{ setCategory(ev.target.value||''); },true);
-    }
-    panel.addEventListener('click',ev=>{
-      const q=ev.target.closest('.filter-refine-chip-v37');
-      const adv=ev.target.closest('.filter-advanced-line-v37');
-      if(q){ev.preventDefault(); ev.stopPropagation(); toggleQuick(q.dataset.v37Quick);}
-      if(adv){
-        ev.preventDefault(); ev.stopPropagation();
-        drawer.classList.toggle('filters-advanced-open');
-        qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
-        refresh();
-      }
-    },true);
-
-    const catDetails=qs('#catFilters',drawer)?.closest('.filter-group-accordion');
-    if(catDetails) catDetails.classList.add('filter-category-legacy-v33');
-    const applyBtn=qs('#filterApplyBtn'); if(applyBtn) applyBtn.textContent='Ver resultados';
-    const headTxt=qs('#fundFilterDrawer .filter-sheet-head span');
-    if(headTxt) headTxt.textContent='Escolha a classe principal. Use os refinamentos apenas se precisar.';
-  }
-
-  function refresh(){
-    const drawer=qs('#fundFilterDrawer'); if(!drawer) return;
-    const sel=qs('#filterClassSelectV37',drawer);
-    if(sel && sel.value!==currentCat()) sel.value=currentCat();
-    qsa('.filter-refine-chip-v37',drawer).forEach(btn=>{
-      const kind=btn.dataset.v37Quick;
-      let active=false;
-      if(kind==='pf') active=currentPerfil()==='PF';
-      if(kind==='cdi') active=currentBenchmark()==='CDI';
-      if(kind==='conservador') active=currentRisco()==='Conservador';
-      btn.classList.toggle('is-active',active);
-      btn.setAttribute('aria-pressed',active?'true':'false');
-    });
-    const adv=qs('.filter-advanced-line-v37',drawer);
-    if(adv){
-      const open=drawer.classList.contains('filters-advanced-open');
-      adv.setAttribute('aria-expanded',open?'true':'false');
-      const st=adv.querySelector('strong'); if(st) st.textContent=open?'Ocultar':'Mostrar';
-    }
-    const count=qs('#filterActiveCount');
-    if(count){
-      const n=[currentCat(),currentBenchmark(),currentPerfil(),currentRisco()].filter(Boolean).length;
-      count.textContent=String(n);
-      count.classList.toggle('is-active',n>0);
-    }
-  }
-
-  function onOpen(){
-    setTimeout(()=>{
-      const drawer=qs('#fundFilterDrawer'); if(!drawer) return;
-      buildPanel();
-      if(isMobile()){
-        drawer.classList.remove('filters-advanced-open');
-        qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
-      }
-      refresh();
-    },70);
-  }
-
-  function init(){
-    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-    buildPanel();
-    refresh();
-    const btn=qs('#mobileFilterToggle');
-    if(btn && !btn.dataset.v37OpenPatch){
-      btn.dataset.v37OpenPatch='1';
-      btn.addEventListener('click',onOpen,true);
-    }
-    ['#clearFiltersTop','#clearFiltersBtn','#filterApplyBtn'].forEach(sel=>{
-      const el=qs(sel);
-      if(el && !el.dataset.v37){el.dataset.v37='1'; el.addEventListener('click',()=>setTimeout(refresh,120),true);}
-    });
-    setInterval(()=>{ if(isMobile()) { buildPanel(); refresh(); } },2200);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,700));
-  else setTimeout(init,700);
-})();
-
-/* Build UI: ELTAUM_FILTRO_MOBILE_SELECT_PREMIUM_20260605_v37 */
