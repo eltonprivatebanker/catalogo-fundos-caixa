@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_FECHAMENTO_SHEET_COMPACT_20260604_v17"/>
+<meta name="app-build" content="ELTAUM_CACHE_FOUC_FIX_POUPANCA_20260605_v49"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=20260604-fechamento-sheet-compact-v17" rel="stylesheet">
+<style id="critical-fouc-guard">
+  html{background:#07080f;}
+  body{margin:0;background:#07080f;color:#edf1fb;font-family:Inter,Arial,sans-serif;}
+  .page{opacity:0;}
+  html.css-ready .page{opacity:1;transition:opacity .14s ease;}
+</style>
+<script>
+  document.documentElement.classList.remove('css-ready');
+  window.setTimeout(function(){ document.documentElement.classList.add('css-ready'); }, 1400);
+</script>
+<link href="style.css?v=cache-fouc-poupanca-v49" rel="stylesheet" onload="document.documentElement.classList.add('css-ready')">
 
 
 </head>
@@ -419,10 +429,10 @@
 
     <!-- Card 3: Poupança antiga + nova + regra visível -->
 <div class="poup-collapse-header section-title-collapsible"
-    onclick="return handleSectionToggleClick(event,'sec-poupanca-body','poup-collapse')" id="poup-collapse"
+    onclick="toggleSection('sec-poupanca-body','poup-collapse')" id="poup-collapse"
     role="button" aria-expanded="false" tabindex="0">
   <span style="font-size:.75rem;font-weight:700;color:var(--muted)">🏠 Poupança — Regras e Cenários</span>
-  <button type="button" class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
+  <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
 </div>
 <div class="section-collapsible-body" id="sec-poupanca-body" hidden>
     <div class="indic-ref-card poup market-ref-card poup-card-consultivo market-ref-card-unified">
@@ -532,7 +542,7 @@
 <div class="section-gap collapsible-section" id="sec-mercado-painel">
 
   <div class="market-table-toolbar section-title-collapsible"
-       onclick="return handleSectionToggleClick(event,'sec-painel-body','sec-mercado-painel')"
+       onclick="toggleSection('sec-painel-body','sec-mercado-painel')"
        role="button" aria-expanded="false" tabindex="0">
     <div class="market-table-title">
       <span>📊 Painel consolidado de indicadores</span>
@@ -550,7 +560,7 @@
       <button type="button" class="panel-action-btn indic-action-btn" onclick="printPainelMercado()" aria-label="Imprimir somente o bloco do último mês fechado">🖨️ Print mês fechado</button>
       <button type="button" class="panel-action-btn indic-action-btn indic-action-btn-primary" onclick="sharePainelMercado()" aria-label="Compartilhar somente o resumo do último mês fechado pelo WhatsApp">📲 WhatsApp mês fechado</button>
     
-    <button type="button" class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
+    <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
   </div>
   </div>
 
@@ -584,6 +594,7 @@
     <div class="closed-market-actions">
       <button type="button" onclick="copiarResumoPainelMercado()">📋 Copiar resumo</button>
       <button type="button" onclick="sharePainelMercado()">📲 WhatsApp</button>
+      <button type="button" onclick="printPainelMercado()">🖨️ Print</button>
     </div>
   </aside>
 
@@ -910,7 +921,7 @@
       </div>
       <div class="focus-ref" id="focusRef">Carregando último boletim...</div>
     </div>
-    <button type="button" class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
+    <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
   </div>
   <div class="section-collapsible-body" id="sec-focus-body" hidden>
 
@@ -962,7 +973,7 @@
     </div>
     <div style="display:flex;align-items:center;gap:10px">
       <span class="section-badge"><span class="badge-dot green"></span>Dados históricos BCB</span>
-      <button type="button" class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
+      <button class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
     </div>
   </div>
   <div class="section-collapsible-body" id="sec-graficos-body" hidden>
@@ -1247,6 +1258,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=20260604-fechamento-sheet-compact-v17"></script>
+<script src="app.js?v=cache-fouc-poupanca-v49"></script>
 </body>
 </html>

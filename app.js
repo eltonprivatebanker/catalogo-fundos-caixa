@@ -8094,7 +8094,7 @@ async function sharePainelMercado(){
 })();
 
 
-/* Build UI: ELTAUM_MOBILE_SEARCH_ANCHOR_VIEW_STABLE_20260605_v48 */
+/* Build UI: ELTAUM_CACHE_FOUC_FIX_POUPANCA_20260605_v49 */
 
 /* ════════════════════════════════════════════════════════
    PATCH v48 — Mobile: busca do topo ancora nos resultados e
@@ -8108,7 +8108,7 @@ async function sharePainelMercado(){
 ════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_MOBILE_SEARCH_ANCHOR_VIEW_STABLE_20260605_v48';
+  const BUILD='ELTAUM_CACHE_FOUC_FIX_POUPANCA_20260605_v49';
   let searchTimer=null;
   let viewAnchor=null;
 
