@@ -4842,11 +4842,32 @@ document.addEventListener('DOMContentLoaded', function(){
   let _gfbInit=false;
   let _currentGcat=''; // categoria ativa na barra global
 
-  function scrollToFunds(){
+  let _gfbScrollTimer=null;
+  let _gfbFinalTimer=null;
+
+  function globalBarOffset(){
+    const bar=document.getElementById('gfb');
+    const rect=bar ? bar.getBoundingClientRect() : null;
+    const visible=rect && rect.height>0 && rect.bottom>0;
+    const h=visible ? Math.ceil(rect.height) : 52;
+    return Math.max(56, Math.min(96, h+14));
+  }
+
+  function scrollToFunds(options){
     const sec=document.getElementById('sec-fundos');
     if(!sec) return;
-    const top=sec.getBoundingClientRect().top+window.scrollY-60;
-    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+    const behavior=(options && options.behavior) || 'smooth';
+    const top=sec.getBoundingClientRect().top+window.scrollY-globalBarOffset();
+    window.scrollTo({top:Math.max(0,top),behavior});
+  }
+
+  function scheduleGlobalSearchScroll(delay){
+    clearTimeout(_gfbScrollTimer);
+    clearTimeout(_gfbFinalTimer);
+    _gfbScrollTimer=setTimeout(()=>{
+      scrollToFunds({behavior:'auto'});
+      _gfbFinalTimer=setTimeout(()=>scrollToFunds({behavior:'auto'}),160);
+    }, typeof delay==='number' ? delay : 430);
   }
 
   function setGlobalCat(cat, skipApply){
@@ -4891,7 +4912,7 @@ document.addEventListener('DOMContentLoaded', function(){
         existing.dispatchEvent(new Event('input'));
       }
       if(String(v||'').trim().length>=2 && typeof ativarTabelaAoBuscar==='function') ativarTabelaAoBuscar();
-      scrollToFunds();
+      if(String(v||'').trim().length>=2) scheduleGlobalSearchScroll(430);
     });
 
     /* Busca: existente → global (sincroniza quando outro input muda) */
@@ -7906,7 +7927,7 @@ async function sharePainelMercado(){
   setInterval(()=>{ if(isMobile()) { ensureToggle(); applyMode(getMode()); } },1800);
 })();
 
-/* Build UI: ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46 */
+/* Build UI: ELTAUM_BUSCA_ESTAVEL_TOPO_20260605_v48 */
 
 
 /* ════════════════════════════════════════════════════════
@@ -7916,7 +7937,7 @@ async function sharePainelMercado(){
 ════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46';
+  const BUILD='ELTAUM_BUSCA_ESTAVEL_TOPO_20260605_v48';
   const MODE_KEY='fundMobileViewV45';
   let scrollTimer=null;
   let lastScrollAt=0;
@@ -8019,82 +8040,7 @@ async function sharePainelMercado(){
   window.addEventListener('orientationchange',()=>setTimeout(bind,220),{passive:true});
 })();
 
-/* Build UI: ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46 */
+/* Build UI: ELTAUM_BUSCA_ESTAVEL_TOPO_20260605_v48 */
 
-/* Build UI: ELTAUM_BUSCA_TOPO_SECAO_FUNDOS_20260605_v47 */
 
-/* ════════════════════════════════════════════════════════
-   PATCH v47 — Busca do topo para no início correto dos fundos
-   Objetivo: ao digitar na barra fixa superior, a página deve avançar
-   até o início da seção "Fundos disponíveis", mantendo filtros e atalhos visíveis.
-   Corrige o salto excessivo que levava direto para a tabela/resultados.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_BUSCA_TOPO_SECAO_FUNDOS_20260605_v47';
-  let scrollTimer=null;
-  let finalTimer=null;
-
-  function qs(sel,root=document){ return root.querySelector(sel); }
-  function isSearchInput(el){ return el && (el.id==='gfbSearch' || el.id==='searchInput'); }
-  function hasQuery(el){ return String(el && el.value || '').trim().length >= 2; }
-
-  function getGlobalBarOffset(){
-    const bar=qs('#gfb');
-    if(!bar) return 16;
-    const rect=bar.getBoundingClientRect();
-    const visible=rect && rect.height>0 && rect.bottom>0;
-    if(!visible) return 16;
-    return Math.ceil(rect.height) + 12;
-  }
-
-  function getFundsStartAnchor(){
-    return qs('#sec-fundos') || qs('#fundFilterShell') || qs('#sec-fundos .table-wrap');
-  }
-
-  function scrollToFundsStart(){
-    const target=getFundsStartAnchor();
-    if(!target) return;
-    const top=target.getBoundingClientRect().top + window.scrollY - getGlobalBarOffset();
-    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
-  }
-
-  function scheduleFundsStartScroll(input, delay){
-    if(!isSearchInput(input) || !hasQuery(input)) return;
-
-    clearTimeout(scrollTimer);
-    clearTimeout(finalTimer);
-
-    // Primeiro ajuste: espera a filtragem/renderização terminar.
-    scrollTimer=setTimeout(scrollToFundsStart, typeof delay==='number' ? delay : 430);
-
-    // Segundo ajuste: garante a posição correta caso algum patch legado role até a tabela depois.
-    finalTimer=setTimeout(()=>{
-      if(hasQuery(input)) scrollToFundsStart();
-    }, (typeof delay==='number' ? delay : 430) + 520);
-  }
-
-  function bindBuild(){
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindBuild,{once:true});
-  else bindBuild();
-
-  document.addEventListener('input',function(ev){
-    const input=ev.target;
-    if(!isSearchInput(input)) return;
-    if(!hasQuery(input)) return;
-    scheduleFundsStartScroll(input, input.id==='gfbSearch' ? 380 : 460);
-  },true);
-
-  document.addEventListener('keydown',function(ev){
-    const input=ev.target;
-    if(!isSearchInput(input) || ev.key!=='Enter') return;
-    if(!hasQuery(input)) return;
-    ev.preventDefault();
-    scheduleFundsStartScroll(input,80);
-    try{ input.blur(); }catch(e){}
-  },true);
-})();
+/* Build UI: ELTAUM_BUSCA_ESTAVEL_TOPO_20260605_v48 */

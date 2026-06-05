@@ -18477,3 +18477,15 @@ header.site-header-clean{
     display:block;
   }
 }
+
+/* Build UI: ELTAUM_BUSCA_ESTAVEL_TOPO_20260605_v48
+   Evita que o navegador tente compensar o scroll enquanto a tabela muda de altura na busca. */
+#sec-fundos,
+#fundFilterShell,
+#mobileCatalogViewSwitch,
+#mobileFundCards,
+#sec-fundos .table-wrap,
+#mainTable,
+#tableBody{
+  overflow-anchor:none;
+}
