@@ -4229,17 +4229,32 @@ function buildCopomCalendario(){
    INIT
 ════════════════════════════════════════════════════ */
 async function iniciarDashboard(){
-  await carregarMercado();
-  await carregarCDIPeriodos();
-  await carregarIPCAPeriodos();
-  carregarDolarDia();
-  carregarPTAXDiarioAno();
-  await carregarPTAXHistorico();
-  await carregarFundosJson();
-  await carregarDados();
-  await carregarKPIs();
-  window.__dashboardReady = true;
-  if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes();
+  const etapa = async function(nome, fn){
+    try{
+      return await fn();
+    }catch(e){
+      console.warn('[INIT] Falha em ' + nome + ':', e);
+      return null;
+    }
+  };
+
+  try{
+    await etapa('carregarMercado', carregarMercado);
+    await etapa('carregarCDIPeriodos', carregarCDIPeriodos);
+    await etapa('carregarIPCAPeriodos', carregarIPCAPeriodos);
+    etapa('carregarDolarDia', carregarDolarDia);
+    etapa('carregarPTAXDiarioAno', carregarPTAXDiarioAno);
+    await etapa('carregarPTAXHistorico', carregarPTAXHistorico);
+    await etapa('carregarFundosJson', carregarFundosJson);
+    await etapa('carregarDados', carregarDados);
+    await etapa('carregarKPIs', carregarKPIs);
+  }finally{
+    // A interface fica pronta mesmo que algum endpoint externo falhe.
+    window.__dashboardReady = true;
+    try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){}
+    try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){}
+    try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){}
+  }
 }
 iniciarDashboard();
 document.addEventListener('click', function(e){
@@ -6071,29 +6086,30 @@ function renderClosedMarketSheet(){
   }).join('');
 }
 function openFechamentoMesSheet(){
-  if(!window.__dashboardReady){
-    var sp=document.querySelector('.closed-month-launch-action');
-    if(sp && sp.textContent!=='Carregando...'){
-      var prev=sp.textContent; sp.textContent='Carregando...';
-      var t=0, iv=setInterval(function(){
-        t++;
-        if(window.__dashboardReady||t>12){
-          clearInterval(iv);
-          if(sp) sp.textContent=prev;
-          if(window.__dashboardReady) openFechamentoMesSheet();
-        }
-      },500);
-    }
-    return;
-  }
-  atualizarResumoFechamentoMes();
-  atualizarPainelFechadoCard();
-  renderClosedMarketSheet();
-  document.body.classList.add('closed-market-open');
   const sheet=document.getElementById('closedMarketSheet');
   const overlay=document.getElementById('closedMarketOverlay');
-  if(sheet) sheet.setAttribute('aria-hidden','false');
-  if(overlay) overlay.setAttribute('aria-hidden','false');
+
+  if(!sheet){
+    console.warn('[Fechamento] closedMarketSheet não encontrado no DOM.');
+    return false;
+  }
+
+  // O painel deve abrir mesmo se algum dado externo ainda não tiver carregado.
+  // Assim um erro de fetch/BCB não bloqueia a interação do usuário.
+  try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){ console.warn('[Fechamento] resumo:', e); }
+  try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){ console.warn('[Fechamento] card:', e); }
+  try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){ console.warn('[Fechamento] sheet:', e); }
+
+  document.body.classList.add('closed-market-open');
+  sheet.removeAttribute('hidden');
+  sheet.setAttribute('aria-hidden','false');
+
+  if(overlay){
+    overlay.removeAttribute('hidden');
+    overlay.setAttribute('aria-hidden','false');
+  }
+
+  return false;
 }
 function closeFechamentoMesSheet(){
   document.body.classList.remove('closed-market-open');
@@ -6104,6 +6120,28 @@ function closeFechamentoMesSheet(){
 }
 window.openFechamentoMesSheet=openFechamentoMesSheet;
 window.closeFechamentoMesSheet=closeFechamentoMesSheet;
+
+(function setupClosedMarketOpen(){
+  function onClick(e){
+    const btn = e.target && e.target.closest
+      ? e.target.closest('#closedMonthLaunch, .closed-month-launch, [data-open-closed-market]')
+      : null;
+    if(!btn) return;
+    e.preventDefault();
+    openFechamentoMesSheet();
+  }
+
+  // Delegação: funciona mesmo se o HTML for alterado depois e não depende do onclick inline.
+  document.addEventListener('click', onClick, true);
+
+  function init(){
+    var btn=document.getElementById('closedMonthLaunch');
+    if(btn) btn.setAttribute('data-open-closed-market','true');
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init, {once:true});
+  else init();
+})();
 (function setupClosedMarketClose(){
   function init(){
     var ov=document.getElementById('closedMarketOverlay');
