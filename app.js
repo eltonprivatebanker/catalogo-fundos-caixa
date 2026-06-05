@@ -1,4 +1,3 @@
-
 function toggleSection(b,c){var bd=document.getElementById(b),ct=document.getElementById(c);if(!bd)return;var h=bd.hasAttribute("hidden");h?bd.removeAttribute("hidden"):bd.setAttribute("hidden","");if(ct){ct.classList.toggle("section-expanded",h);ct.setAttribute("aria-expanded",h?"true":"false");}var l=ct?ct.querySelector(".toggle-label"):null;if(l)l.textContent=h?"Ver menos":"Ver mais";}
 window.toggleSection=toggleSection;
 /* ════════════════════════════════════════════════════
@@ -3424,11 +3423,11 @@ function buildBenchmarkFilters(rows){
 }
 
 /* Listeners */
-$('perfilFilters')?.addEventListener('click',e=>{
+$('perfilFilters').addEventListener('click',e=>{
   const btn=e.target.closest('[data-perfil]'); if(!btn) return;
   activePerfil=btn.dataset.perfil; setActiveChip($('perfilFilters'),'[data-perfil]',btn); applyFilter();
 });
-$('riscoFilters')?.addEventListener('click',e=>{
+$('riscoFilters').addEventListener('click',e=>{
   const btn=e.target.closest('[data-risco]'); if(!btn) return;
   activeRisco=btn.dataset.risco; setActiveChip($('riscoFilters'),'[data-risco]',btn); applyFilter();
 });
@@ -3457,7 +3456,7 @@ $('searchInput')?.addEventListener('input',e=>{
   },280);
 });
 $('perPage')?.addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); updateFundResultSummary(); });
-$('toggleSemDados')?.addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
+$('toggleSemDados').addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
   try{
@@ -4222,15 +4221,17 @@ function buildCopomCalendario(){
    INIT
 ════════════════════════════════════════════════════ */
 async function iniciarDashboard(){
-  await carregarMercado();          // primeiro carrega mercado_atual.json
-  await carregarCDIPeriodos();      // agora só usa o JSON, sem API externa
-  await carregarIPCAPeriodos();     // agora só usa o JSON, sem API externa
+  await carregarMercado();
+  await carregarCDIPeriodos();
+  await carregarIPCAPeriodos();
   carregarDolarDia();
-  carregarPTAXDiarioAno();               // mantém PTAX do dia ao vivo
-  await carregarPTAXHistorico();    // agora só usa o JSON, sem CotacaoDolarPeriodo
+  carregarPTAXDiarioAno();
+  await carregarPTAXHistorico();
   await carregarFundosJson();
   await carregarDados();
   await carregarKPIs();
+  window.__dashboardReady = true;
+  if(typeof atualizarResumoFechamentoMes === 'function') atualizarResumoFechamentoMes();
 }
 iniciarDashboard();
 document.addEventListener('click', function(e){
@@ -6057,8 +6058,24 @@ function renderClosedMarketSheet(){
     </button>`;
   }).join('');
 }
-window.openFechamentoMesSheet = openFechamentoMesSheet;
 function openFechamentoMesSheet(){
+  if(!window.__dashboardReady){
+    var actionSpan = document.querySelector('.closed-month-launch-action');
+    if(actionSpan && actionSpan.textContent !== 'Carregando...'){
+      var prev = actionSpan.textContent;
+      actionSpan.textContent = 'Carregando...';
+      var tries = 0;
+      var wait = setInterval(function(){
+        tries++;
+        if(window.__dashboardReady || tries > 12){
+          clearInterval(wait);
+          if(actionSpan) actionSpan.textContent = prev;
+          if(window.__dashboardReady) openFechamentoMesSheet();
+        }
+      }, 500);
+    }
+    return;
+  }
   atualizarResumoFechamentoMes();
   atualizarPainelFechadoCard();
   renderClosedMarketSheet();
@@ -6075,47 +6092,43 @@ function closeFechamentoMesSheet(){
   if(sheet) sheet.setAttribute('aria-hidden','true');
   if(overlay) overlay.setAttribute('aria-hidden','true');
 }
-/* FIX: conectar overlay, Escape e botão close ao fechamento */
+window.openFechamentoMesSheet = openFechamentoMesSheet;
+window.closeFechamentoMesSheet = closeFechamentoMesSheet;
+
+/* Conecta overlay + Escape + botão X ao fechamento */
 (function setupClosedMarketClose(){
   function init(){
-    /* Clique no overlay fecha */
-    const overlay=document.getElementById('closedMarketOverlay');
+    var overlay = document.getElementById('closedMarketOverlay');
     if(overlay && !overlay.dataset.closeReady){
-      overlay.dataset.closeReady='1';
+      overlay.dataset.closeReady = '1';
       overlay.addEventListener('click', function(e){
-        if(e.target===overlay) closeFechamentoMesSheet();
+        if(e.target === overlay) closeFechamentoMesSheet();
       });
     }
-    /* Botão X dentro do sheet */
-    const closeBtn=document.querySelector('.closed-market-close, #closedMarketClose');
+    var closeBtn = document.querySelector('.closed-market-close, #closedMarketClose');
     if(closeBtn && !closeBtn.dataset.closeReady){
-      closeBtn.dataset.closeReady='1';
+      closeBtn.dataset.closeReady = '1';
       closeBtn.addEventListener('click', closeFechamentoMesSheet);
     }
-    /* Tecla Escape */
-    if(!window.__closedMarketEscReady){
-      window.__closedMarketEscReady=true;
-      document.addEventListener('keydown',function(e){
-        if(e.key==='Escape' && document.body.classList.contains('closed-market-open')){
+    if(!window.__closedEscReady){
+      window.__closedEscReady = true;
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && document.body.classList.contains('closed-market-open'))
           closeFechamentoMesSheet();
-        }
       });
     }
   }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
   else setTimeout(init, 400);
-  setTimeout(init, 1200);
-  /* Segurança: se body ainda tem closed-market-open mas sheet está hidden, limpa */
+  setTimeout(init, 1500);
+  /* Safety net: limpa overflow preso */
   setInterval(function(){
-    const sheet=document.getElementById('closedMarketSheet');
-    if(!sheet) return;
-    const hidden=sheet.getAttribute('aria-hidden')==='true';
-    if(hidden && document.body.classList.contains('closed-market-open')){
+    var sheet = document.getElementById('closedMarketSheet');
+    if(sheet && sheet.getAttribute('aria-hidden') === 'true')
       document.body.classList.remove('closed-market-open');
-    }
   }, 2000);
-  window.closeFechamentoMesSheet = closeFechamentoMesSheet;
 })();
+
 function atualizarPainelFechadoCard(){
   const periodo=periodoUltimoFechado();
   const card=document.getElementById('painelFechadoCard');
@@ -6777,15 +6790,6 @@ async function sharePainelMercado(){
   }
 
   function capturar(ev){
-    /* FIX: não interceptar cliques dentro do botão "Ver resumo" ou do sheet de fechamento */
-    const target = ev && ev.target;
-    if(target && target.closest){
-      if(target.closest('.closed-month-launch') ||
-         target.closest('#closedMarketSheet') ||
-         target.closest('#closedMarketOverlay') ||
-         target.closest('.closed-market-close') ||
-         target.closest('.closed-market-actions')) return;
-    }
     const btn = tabDireta(ev) || tabPorCoordenada(ev);
     if(!btn) return;
 
