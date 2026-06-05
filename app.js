@@ -7362,3 +7362,179 @@ async function sharePainelMercado(){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(syncCards,450),{once:true});
   else setTimeout(syncCards,450);
 })();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v28 — Filtros mobile simplificados
+   - Insere filtros rápidos dentro do drawer
+   - Avançados ficam recolhidos por padrão
+   - Mantém apenas uma categoria avançada aberta
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  function isMobileV28(){
+    try{return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}catch(e){return false;}
+  }
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+
+  const QUICK = [
+    {preset:'all', label:'Todos'},
+    {preset:'pf', label:'Pessoa Física'},
+    {preset:'cdi', label:'CDI'},
+    {preset:'conservador', label:'Conservador'},
+    {preset:'renda-fixa', label:'Renda Fixa'},
+    {preset:'multimercado', label:'Multimercado'}
+  ];
+
+  function activePresetV28(){
+    let cat='', bench='', risco='', perfil='';
+    try{cat=activeCat||'';}catch(e){}
+    try{bench=activeBenchmark||'';}catch(e){}
+    try{risco=activeRisco||'';}catch(e){}
+    try{perfil=activePerfil||'';}catch(e){}
+    if(!cat && !bench && !risco && !perfil) return 'all';
+    if(perfil==='PF') return 'pf';
+    if(bench==='CDI') return 'cdi';
+    if(risco==='Conservador') return 'conservador';
+    if(cat==='RENDA FIXA') return 'renda-fixa';
+    if(cat==='MULTIMERCADO') return 'multimercado';
+    return '';
+  }
+
+  function clickExistingPreset(preset){
+    const btn = qs(`.filter-preset-chip[data-preset="${preset}"]`);
+    if(btn){ btn.click(); return true; }
+    return false;
+  }
+
+  function clearDirect(){
+    try{activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false;}catch(e){}
+    const t=qs('#toggleSemDados'); if(t) t.checked=false;
+    qsa('#fundFilterDrawer .chip').forEach(b=>b.classList.remove('active'));
+    qsa('#fundFilterDrawer [data-cat=""], #fundFilterDrawer [data-benchmark=""], #fundFilterDrawer [data-perfil=""], #fundFilterDrawer [data-risco=""]').forEach(b=>b.classList.add('active'));
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
+  }
+
+  function applyPresetDirect(preset){
+    if(preset==='all'){ clearDirect(); return; }
+    if(clickExistingPreset(preset)) return;
+    try{
+      if(preset==='pf') activePerfil='PF';
+      if(preset==='cdi') activeBenchmark='CDI';
+      if(preset==='conservador') activeRisco='Conservador';
+      if(preset==='renda-fixa') activeCat='RENDA FIXA';
+      if(preset==='multimercado') activeCat='MULTIMERCADO';
+      if(typeof applyFilter==='function') applyFilter();
+    }catch(e){}
+  }
+
+  function refreshFastButtons(){
+    const active=activePresetV28();
+    qsa('.filter-fast-btn-v28').forEach(b=>{
+      b.classList.toggle('is-active', b.dataset.v28Preset===active);
+      b.setAttribute('aria-pressed', b.dataset.v28Preset===active ? 'true':'false');
+    });
+    const drawer=qs('#fundFilterDrawer');
+    const advBtn=qs('.filter-advanced-toggle-v28');
+    if(advBtn && drawer){
+      const open=drawer.classList.contains('filters-advanced-open');
+      advBtn.setAttribute('aria-expanded',open?'true':'false');
+      const txt=advBtn.querySelector('span:last-child');
+      if(txt) txt.textContent=open?'Ocultar opções':'Mais opções';
+    }
+    const apply=qs('#filterApplyBtn');
+    if(apply) apply.textContent='Ver resultados';
+  }
+
+  function buildFastPanel(){
+    const drawer=qs('#fundFilterDrawer');
+    if(!drawer || drawer.querySelector('.filter-mobile-fast-v28')) return;
+    const groups=qs('.filter-groups-grid',drawer);
+    const panel=document.createElement('div');
+    panel.className='filter-mobile-fast-v28';
+    panel.innerHTML=`
+      <div class="filter-mobile-fast-title-v28">
+        <span>Filtros rápidos</span>
+        <small>toque para aplicar</small>
+      </div>
+      <div class="filter-mobile-fast-grid-v28">
+        ${QUICK.map(q=>`<button type="button" class="filter-fast-btn-v28" data-v28-preset="${q.preset}" aria-pressed="false">${q.label}</button>`).join('')}
+        <button type="button" class="filter-advanced-toggle-v28" aria-expanded="false"><span>Filtros avançados</span><span>Mais opções</span></button>
+      </div>`;
+    if(groups) drawer.insertBefore(panel,groups); else drawer.appendChild(panel);
+
+    panel.addEventListener('click',ev=>{
+      const fast=ev.target.closest('.filter-fast-btn-v28');
+      const adv=ev.target.closest('.filter-advanced-toggle-v28');
+      if(fast){
+        ev.preventDefault(); ev.stopPropagation();
+        applyPresetDirect(fast.dataset.v28Preset);
+        setTimeout(refreshFastButtons,80);
+      }
+      if(adv){
+        ev.preventDefault(); ev.stopPropagation();
+        drawer.classList.toggle('filters-advanced-open');
+        setTimeout(refreshFastButtons,30);
+      }
+    },true);
+  }
+
+  function refineDrawerBehavior(){
+    const drawer=qs('#fundFilterDrawer');
+    if(!drawer || drawer.dataset.v28Ready==='1') return;
+    drawer.dataset.v28Ready='1';
+
+    // Começa simples no mobile: avançados fechados.
+    if(isMobileV28()) drawer.classList.remove('filters-advanced-open');
+
+    drawer.addEventListener('toggle',ev=>{
+      const d=ev.target;
+      if(!d || !d.matches || !d.matches('.filter-group-accordion') || !d.open) return;
+      qsa('.filter-group-accordion',drawer).forEach(o=>{ if(o!==d) o.open=false; });
+    },true);
+
+    drawer.addEventListener('click',ev=>{
+      if(ev.target.closest('.chip')) setTimeout(refreshFastButtons,100);
+    },true);
+  }
+
+  function centerOnOpenPatch(){
+    const btn=qs('#mobileFilterToggle');
+    const drawer=qs('#fundFilterDrawer');
+    if(!btn || !drawer || btn.dataset.v28OpenPatch==='1') return;
+    btn.dataset.v28OpenPatch='1';
+    btn.addEventListener('click',()=>{
+      setTimeout(()=>{
+        if(!isMobileV28()) return;
+        if(!drawer.classList.contains('mobile-filters-collapsed')){
+          drawer.classList.remove('filters-advanced-open');
+          qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
+          refreshFastButtons();
+        }
+      },60);
+    },true);
+  }
+
+  function init(){
+    buildFastPanel();
+    refineDrawerBehavior();
+    centerOnOpenPatch();
+    refreshFastButtons();
+    const clearTop=qs('#clearFiltersTop');
+    if(clearTop && !clearTop.dataset.v28){
+      clearTop.dataset.v28='1';
+      clearTop.addEventListener('click',()=>setTimeout(refreshFastButtons,80),true);
+    }
+    const clear=qs('#clearFiltersBtn');
+    if(clear && !clear.dataset.v28){
+      clear.dataset.v28='1';
+      clear.addEventListener('click',()=>setTimeout(refreshFastButtons,80),true);
+    }
+    setInterval(refreshFastButtons,1800);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,350));
+  else setTimeout(init,350);
+})();
