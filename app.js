@@ -4379,12 +4379,16 @@ document.addEventListener('DOMContentLoaded', function(){
       return `<div class="fund-card-docs-empty">Nenhum documento disponível na base</div>`;
     }
 
-    const urls = docs.map(d => d.url);
     const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
     const secundarios = boletim ? docs.filter(d => d.url !== boletim.url) : docs;
-    const allBtn = `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`;
-    const boletimBtn = boletim
-      ? `<a class="fund-card-boletim-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener" title="Boletim Comercial">⭐ Boletim Comercial</a>`
+
+    // No mobile, o Boletim Comercial já aparece como ação rápida no card.
+    // Para evitar repetição dentro de "Mais detalhes", mostramos aqui apenas documentos complementares.
+    if(!secundarios.length) return '';
+
+    const urls = secundarios.map(d => d.url);
+    const allBtn = secundarios.length > 1
+      ? `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`
       : '';
 
     const links = secundarios.map(d => {
@@ -4394,10 +4398,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
     return `<div class="fund-card-mobile-docs">
       <div class="fund-card-docs-head">
-        <span class="fund-card-docs-title">Documentos</span>
+        <span class="fund-card-docs-title">Documentos complementares</span>
         ${allBtn}
       </div>
-      ${boletimBtn ? `<div class="fund-card-docs-primary">${boletimBtn}</div>` : ''}
       <div class="fund-card-docs-list secundarios">${links}</div>
     </div>`;
   }
@@ -4966,16 +4969,11 @@ document.addEventListener('DOMContentLoaded', function(){
      CARDS MOBILE — botão ⭐
   ════════════════════════════════════════════ */
   function injectFavBtnsCards(){
+    // v27: no mobile, removemos o botão de favorito do card para limpar a interface.
+    // A gestão de favoritos permanece no desktop/barra global, mas o card compacto não exibe estrela.
+    document.querySelectorAll('#mobileFundCards .fav-btn-mobile').forEach(btn=>btn.remove());
     document.querySelectorAll('#mobileFundCards .fund-card-mobile').forEach(card=>{
-      if(card.querySelector('.fav-btn-mobile')) return;
-      const idx=parseInt(card.dataset.cardIdx); if(isNaN(idx)) return;
-      const row=(typeof filtered!=='undefined'&&Array.isArray(filtered))?filtered[idx]:null; if(!row) return;
-      const key=getFundKey(row); const isFav=getFavs().has(key);
-      card.classList.toggle('card-fav',isFav);
-      const btn=document.createElement('button');
-      btn.className='fav-btn-mobile'+(isFav?' is-fav':''); btn.type='button'; btn.textContent=isFav?'⭐':'☆';
-      btn.addEventListener('click',e=>{ e.stopPropagation(); toggleFavRow(key,btn,card); });
-      card.querySelector('.fund-card-mobile-head')?.appendChild(btn);
+      card.classList.remove('card-fav');
     });
   }
 
@@ -5912,24 +5910,9 @@ setTimeout(()=>{
     });
 
     document.querySelectorAll('#mobileFundCards .fund-card-mobile').forEach(card=>{
-      const idx=parseInt(card.dataset.cardIdx,10);
-      const row=(typeof filtered!=='undefined' && Array.isArray(filtered)) ? filtered[idx] : null;
-      if(!row) return;
-      const key=favKey(row);
-      const isFav=favHasRow(row);
-      card.classList.toggle('card-fav', isFav);
-      let btn=card.querySelector('.fav-btn-mobile');
-      if(!btn){
-        btn=document.createElement('button');
-        btn.type='button';
-        btn.className='fav-btn-mobile';
-        btn.title='Adicionar ou remover dos favoritos';
-        btn.setAttribute('aria-label','Adicionar ou remover dos favoritos');
-        (card.querySelector('.fund-card-mobile-head')||card).appendChild(btn);
-      }
-      btn.dataset.fk=key;
-      btn.textContent=isFav?'⭐':'☆';
-      btn.classList.toggle('is-fav', isFav);
+      // v27: não inserir estrela/favorito nos cards mobile; mantém a tela mais limpa.
+      card.classList.remove('card-fav');
+      card.querySelectorAll('.fav-btn-mobile').forEach(btn=>btn.remove());
     });
   }
 
