@@ -7578,3 +7578,226 @@ async function sharePainelMercado(){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,350));
   else setTimeout(init,350);
 })();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v33 — Filtros mobile no padrão de classes CAIXA
+   - Substitui filtros rápidos genéricos por abas de classe de fundo.
+   - Avançados ficam secundários: Benchmark, Perfil e Risco.
+   - Categoria antiga fica oculta no mobile para evitar redundância.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  function isMobileV33(){
+    try{return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}catch(e){return false;}
+  }
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function norm(s){
+    return String(s||'')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[–—]/g,'-')
+      .replace(/\s+/g,' ')
+      .trim().toUpperCase();
+  }
+
+  const CAIXA_CLASSES = [
+    {key:'', label:'Todos os fundos', short:'Todos'},
+    {key:'RENDA FIXA SIMPLES', label:'Renda Fixa Simples', short:'RF Simples'},
+    {key:'RENDA FIXA', label:'Renda Fixa', short:'Renda Fixa'},
+    {key:'RENDA FIXA REFERENCIADO', label:'Renda Fixa Referenciado', short:'RF Referenciado'},
+    {key:'RENDA FIXA CURTO PRAZO', label:'Renda Fixa Curto Prazo', short:'RF Curto Prazo'},
+    {key:'MULTIMERCADO', label:'Multimercado', short:'Multimercado'},
+    {key:'CAMBIAL', label:'Cambial', short:'Cambial'},
+    {key:'ACOES', label:'Ações', short:'Ações'},
+    {key:'FUNDO DE INDICE', label:'Fundo de Índice', short:'Índice'},
+    {key:'FUNDOS MUTUOS DE PRIVATIZACAO', label:'Fundos Mútuos de Privatização', short:'FMP'}
+  ];
+
+  function getCurrentCat(){
+    try{return activeCat || '';}catch(e){return '';}
+  }
+  function getCurrentBenchmark(){
+    try{return activeBenchmark || '';}catch(e){return '';}
+  }
+  function getCurrentPerfil(){
+    try{return activePerfil || '';}catch(e){return '';}
+  }
+  function getCurrentRisco(){
+    try{return activeRisco || '';}catch(e){return '';}
+  }
+
+  function findCatButtonByKey(key){
+    const wanted=norm(key);
+    const buttons=qsa('#catFilters [data-cat]');
+    if(!key) return qs('#catFilters [data-cat=""]');
+    return buttons.find(b=>{
+      const val=norm(b.dataset.cat || b.textContent || '');
+      return val===wanted || val.includes(wanted) || wanted.includes(val);
+    });
+  }
+
+  function setCategory(key){
+    const btn=findCatButtonByKey(key);
+    if(btn){
+      btn.click();
+    }else{
+      try{activeCat=key || '';}catch(e){}
+      try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
+    }
+    setTimeout(refreshV33,80);
+  }
+
+  function setQuick(type){
+    try{
+      if(type==='pf') activePerfil = getCurrentPerfil()==='PF' ? '' : 'PF';
+      if(type==='cdi') activeBenchmark = getCurrentBenchmark()==='CDI' ? '' : 'CDI';
+      if(type==='conservador') activeRisco = getCurrentRisco()==='Conservador' ? '' : 'Conservador';
+      if(typeof applyFilter==='function') applyFilter();
+    }catch(e){}
+    setTimeout(refreshV33,80);
+  }
+
+  function refreshV33(){
+    const cur=norm(getCurrentCat());
+    qsa('.filter-class-tab-v33').forEach(btn=>{
+      const key=norm(btn.dataset.v33Cat||'');
+      const active=(!key && !cur) || (!!key && (cur===key || cur.includes(key) || key.includes(cur)));
+      btn.classList.toggle('is-active', active);
+      btn.setAttribute('aria-selected', active ? 'true':'false');
+    });
+    qsa('.filter-refine-chip-v33').forEach(btn=>{
+      const kind=btn.dataset.v33Quick;
+      let active=false;
+      if(kind==='pf') active=getCurrentPerfil()==='PF';
+      if(kind==='cdi') active=getCurrentBenchmark()==='CDI';
+      if(kind==='conservador') active=getCurrentRisco()==='Conservador';
+      btn.classList.toggle('is-active',active);
+      btn.setAttribute('aria-pressed',active?'true':'false');
+    });
+    const drawer=qs('#fundFilterDrawer');
+    const toggle=qs('.filter-advanced-toggle-v33');
+    if(drawer&&toggle){
+      const open=drawer.classList.contains('filters-advanced-open');
+      toggle.setAttribute('aria-expanded',open?'true':'false');
+      const txt=toggle.querySelector('.filter-advanced-state-v33');
+      if(txt) txt.textContent=open?'Ocultar':'Mais filtros';
+    }
+    const apply=qs('#filterApplyBtn');
+    if(apply) apply.textContent='Ver resultados';
+    const head=qs('#fundFilterDrawer .filter-sheet-head span');
+    if(head) head.textContent='Escolha uma classe de fundo no padrão CAIXA. Use “Mais filtros” apenas se precisar refinar.';
+  }
+
+  function buildV33(){
+    const drawer=qs('#fundFilterDrawer');
+    if(!drawer) return;
+
+    // Remove interface antiga do patch v28 para evitar camadas duplicadas/confusas.
+    qsa('.filter-mobile-fast-v28',drawer).forEach(el=>el.remove());
+
+    if(drawer.querySelector('.filter-mobile-classes-v33')) return;
+    const groups=qs('.filter-groups-grid',drawer);
+    const panel=document.createElement('div');
+    panel.className='filter-mobile-classes-v33';
+    panel.innerHTML=`
+      <div class="filter-class-head-v33">
+        <div>
+          <strong>Classe do fundo</strong>
+          <small>mesma lógica de consulta por classes da CAIXA</small>
+        </div>
+      </div>
+      <div class="filter-class-tabs-v33" role="tablist" aria-label="Classes de fundos CAIXA">
+        ${CAIXA_CLASSES.map(c=>`<button type="button" class="filter-class-tab-v33" role="tab" data-v33-cat="${c.key}" aria-selected="false"><span>${c.short}</span><small>${c.label}</small></button>`).join('')}
+      </div>
+      <div class="filter-refine-v33" aria-label="Refinamentos rápidos">
+        <span>Refinar</span>
+        <button type="button" class="filter-refine-chip-v33" data-v33-quick="pf" aria-pressed="false">Pessoa Física</button>
+        <button type="button" class="filter-refine-chip-v33" data-v33-quick="cdi" aria-pressed="false">CDI</button>
+        <button type="button" class="filter-refine-chip-v33" data-v33-quick="conservador" aria-pressed="false">Conservador</button>
+      </div>
+      <button type="button" class="filter-advanced-toggle-v33" aria-expanded="false"><span>Opções avançadas</span><strong class="filter-advanced-state-v33">Mais filtros</strong></button>
+    `;
+    if(groups) drawer.insertBefore(panel,groups); else drawer.appendChild(panel);
+
+    panel.addEventListener('click',ev=>{
+      const cat=ev.target.closest('.filter-class-tab-v33');
+      const quick=ev.target.closest('.filter-refine-chip-v33');
+      const adv=ev.target.closest('.filter-advanced-toggle-v33');
+      if(cat){
+        ev.preventDefault(); ev.stopPropagation();
+        setCategory(cat.dataset.v33Cat || '');
+      }
+      if(quick){
+        ev.preventDefault(); ev.stopPropagation();
+        setQuick(quick.dataset.v33Quick);
+      }
+      if(adv){
+        ev.preventDefault(); ev.stopPropagation();
+        const drawer=qs('#fundFilterDrawer');
+        if(drawer){
+          drawer.classList.toggle('filters-advanced-open');
+          qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
+        }
+        setTimeout(refreshV33,30);
+      }
+    },true);
+  }
+
+  function refineAdvanced(){
+    const drawer=qs('#fundFilterDrawer');
+    if(!drawer || drawer.dataset.v33Ready==='1') return;
+    drawer.dataset.v33Ready='1';
+    drawer.classList.add('filters-caixa-v33');
+    if(isMobileV33()) drawer.classList.remove('filters-advanced-open');
+
+    // No mobile, Categoria já aparece nas abas principais; deixamos avançado só para refino real.
+    const catDetails=qs('#catFilters')?.closest('.filter-group-accordion');
+    if(catDetails) catDetails.classList.add('filter-category-legacy-v33');
+
+    drawer.addEventListener('toggle',ev=>{
+      const d=ev.target;
+      if(!d || !d.matches || !d.matches('.filter-group-accordion') || !d.open) return;
+      qsa('.filter-group-accordion',drawer).forEach(o=>{ if(o!==d) o.open=false; });
+    },true);
+    drawer.addEventListener('click',ev=>{
+      if(ev.target.closest('.chip')) setTimeout(refreshV33,100);
+    },true);
+  }
+
+  function patchOpen(){
+    const btn=qs('#mobileFilterToggle');
+    const drawer=qs('#fundFilterDrawer');
+    if(!btn || !drawer || btn.dataset.v33OpenPatch==='1') return;
+    btn.dataset.v33OpenPatch='1';
+    btn.addEventListener('click',()=>{
+      setTimeout(()=>{
+        if(!isMobileV33()) return;
+        buildV33();
+        drawer.classList.add('filters-caixa-v33');
+        drawer.classList.remove('filters-advanced-open');
+        qsa('.filter-group-accordion',drawer).forEach(d=>d.open=false);
+        refreshV33();
+      },90);
+    },true);
+  }
+
+  function init(){
+    buildV33();
+    refineAdvanced();
+    patchOpen();
+    refreshV33();
+    ['#clearFiltersTop','#clearFiltersBtn','#filterApplyBtn'].forEach(sel=>{
+      const el=qs(sel);
+      if(el && !el.dataset.v33){
+        el.dataset.v33='1';
+        el.addEventListener('click',()=>setTimeout(refreshV33,120),true);
+      }
+    });
+    setInterval(()=>{ if(isMobileV33()) refreshV33(); },1600);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,450));
+  else setTimeout(init,450);
+})();
