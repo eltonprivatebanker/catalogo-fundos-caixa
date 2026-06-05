@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_LIMPEZA_GAP_FOOTER_20260605_v30"/>
+<meta name="app-build" content="ELTAUM_RESUMO_MES_PREMIUM_20260605_v32"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=20260605-filtros-mobile-v28" rel="stylesheet">
+<link href="style.css?v=20260605-resumo-premium-v32" rel="stylesheet">
 
 
 </head>
@@ -298,19 +298,19 @@
     </div>
   </div>
 
-  <button type="button" class="closed-month-launch" id="closedMonthLaunch" data-open-closed-market="true" onclick="return openFechamentoMesSheet()" aria-label="Abrir resumo do último mês fechado">
-    <span class="closed-month-launch-icon">📌</span>
+  <button type="button" class="closed-month-launch closed-month-launch-premium" id="closedMonthLaunch" data-open-closed-market="true" onclick="return openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês consolidado">
     <span class="closed-month-launch-copy">
-      <strong id="closedMonthLaunchTitle">Resumo do mês fechado</strong>
-      <small id="closedMonthLaunchSub">Principais indicadores do último mês consolidado</small>
+      <span class="closed-month-kicker">Fechamento consolidado</span>
+      <strong id="closedMonthLaunchTitle">Fechamento do mês</strong>
+      <small id="closedMonthLaunchSub">Último mês fechado · principais indicadores</small>
       <span class="closed-month-mini" aria-hidden="true">
-        <span><b>CDI</b> <em id="closedMiniCdi">—</em></span>
-        <span><b>IPCA</b> <em id="closedMiniIpca">—</em></span>
-        <span><b>Dólar</b> <em id="closedMiniDolar">—</em></span>
-        <span><b>Ibov</b> <em id="closedMiniIbov">—</em></span>
+        <span class="closed-mini-item"><b>CDI</b> <em id="closedMiniCdi">—</em></span>
+        <span class="closed-mini-item"><b>IPCA</b> <em id="closedMiniIpca">—</em></span>
+        <span class="closed-mini-item"><b>Dólar</b> <em id="closedMiniDolar">—</em></span>
+        <span class="closed-mini-item"><b>Ibov</b> <em id="closedMiniIbov">—</em></span>
       </span>
     </span>
-    <span class="closed-month-launch-action">Ver resumo ›</span>
+    <span class="closed-month-launch-action">Ver fechamento ›</span>
   </button>
 
   <!-- Cards de referência: Selic, CDI e Poupança separados -->
@@ -793,17 +793,12 @@
         </div>
       </div>
 
-      <div class="dolar-compact-source">
-        <span class="source-label">Fonte</span>
-        <span id="dolar-day-src">BCB · PTAX</span>
-        <a href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes" target="_blank" rel="noopener">Histórico BCB ↗</a>
-      </div>
     </div>
 
     <div class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel">
       <div class="dolar-compact-chart-header">
         <div>
-          <div class="dolar-chart-title">📈 Histórico PTAX</div>
+          <div class="dolar-chart-title">📈 Ver gráfico histórico PTAX</div>
           <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
         </div>
         <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
@@ -1177,6 +1172,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=20260605-filtros-mobile-v28"></script>
+<script src="app.js?v=20260605-resumo-premium-v32"></script>
 </body>
 </html>
