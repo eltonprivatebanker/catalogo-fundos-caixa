@@ -6180,8 +6180,8 @@ function atualizarResumoFechamentoMes(){
   const periodo=periodoUltimoFechado();
   const title=document.getElementById('closedMonthLaunchTitle');
   const sub=document.getElementById('closedMonthLaunchSub');
-  if(title) title.textContent=`Fechamento do mês`;
-  if(sub) sub.textContent=`${periodo} · dados consolidados de mercado`;
+  if(title) title.textContent=`Resumo de mercado`;
+  if(sub) sub.textContent=`${periodo} · indicadores consolidados`;
   const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
