@@ -1,4 +1,12 @@
-function toggleSection(b,c){var bd=document.getElementById(b),ct=document.getElementById(c);if(!bd)return;var h=bd.hasAttribute("hidden");h?bd.removeAttribute("hidden"):bd.setAttribute("hidden","");if(ct){ct.classList.toggle("section-expanded",h);ct.setAttribute("aria-expanded",h?"true":"false");}var l=ct?ct.querySelector(".toggle-label"):null;if(l)l.textContent=h?"Ver menos":"Ver mais";}
+function toggleSection(b,c){
+  var bd=document.getElementById(b),ct=document.getElementById(c);
+  if(!bd)return;
+  var h=bd.hasAttribute('hidden');
+  h?bd.removeAttribute('hidden'):bd.setAttribute('hidden','');
+  if(ct){ct.classList.toggle('section-expanded',h);ct.setAttribute('aria-expanded',h?'true':'false');}
+  var l=ct?ct.querySelector('.toggle-label'):null;
+  if(l)l.textContent=h?'Ver menos':'Ver mais';
+}
 window.toggleSection=toggleSection;
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
@@ -3423,11 +3431,11 @@ function buildBenchmarkFilters(rows){
 }
 
 /* Listeners */
-$('perfilFilters').addEventListener('click',e=>{
+$('perfilFilters')?.addEventListener('click',e=>{
   const btn=e.target.closest('[data-perfil]'); if(!btn) return;
   activePerfil=btn.dataset.perfil; setActiveChip($('perfilFilters'),'[data-perfil]',btn); applyFilter();
 });
-$('riscoFilters').addEventListener('click',e=>{
+$('riscoFilters')?.addEventListener('click',e=>{
   const btn=e.target.closest('[data-risco]'); if(!btn) return;
   activeRisco=btn.dataset.risco; setActiveChip($('riscoFilters'),'[data-risco]',btn); applyFilter();
 });
@@ -3456,7 +3464,7 @@ $('searchInput')?.addEventListener('input',e=>{
   },280);
 });
 $('perPage')?.addEventListener('change',e=>{ perPage=parseInt(e.target.value); currentPage=1; render(); updateFundResultSummary(); });
-$('toggleSemDados').addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
+$('toggleSemDados')?.addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
   try{
@@ -4231,7 +4239,7 @@ async function iniciarDashboard(){
   await carregarDados();
   await carregarKPIs();
   window.__dashboardReady = true;
-  if(typeof atualizarResumoFechamentoMes === 'function') atualizarResumoFechamentoMes();
+  if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes();
 }
 iniciarDashboard();
 document.addEventListener('click', function(e){
@@ -4487,18 +4495,22 @@ document.addEventListener('DOMContentLoaded', function(){
       clearAllFilters();
       return;
     }
-    activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false;
-    if(preset==='cdi') activeBenchmark='CDI';
-    if(preset==='conservador') activeRisco='Conservador';
-    if(preset==='ipca') activeBenchmark='IPCA';
-    if(preset==='renda-fixa') activeCat='RENDA FIXA';
-    if(preset==='multimercado') activeCat='MULTIMERCADO';
-    if(preset==='acoes') activeCat='ACOES';
-    if(preset==='cambial') activeCat='CAMBIAL';
-    if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
-    syncFilterControls();
-    if(typeof applyFilter==='function') applyFilter();
-  }
+  if(preset==='pf') activePerfil='PF';
+  if(preset==='cdi') activeBenchmark='CDI';
+  if(preset==='ipca') activeBenchmark='IPCA';
+  if(preset==='conservador') activeRisco='Conservador';
+  if(preset==='renda-fixa-simples') activeCat='RENDA FIXA SIMPLES';
+  if(preset==='renda-fixa') activeCat='RENDA FIXA';
+  if(preset==='renda-fixa-referenciado') activeCat='RENDA FIXA REFERENCIADO';
+  if(preset==='renda-fixa-curto-prazo') activeCat='RENDA FIXA CURTO PRAZO';
+  if(preset==='multimercado') activeCat='MULTIMERCADO';
+  if(preset==='cambial') activeCat='CAMBIAL';
+  if(preset==='acoes') activeCat='ACOES';
+  if(preset==='fundo-de-indice') activeCat='FUNDO DE INDICE';
+  if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
+  syncFilterControls();
+  if(typeof applyFilter==='function') applyFilter();
+}
 
   function updatePresetStates(){
     const cat=typeof activeCat!=='undefined' ? activeCat : '';
@@ -6060,19 +6072,17 @@ function renderClosedMarketSheet(){
 }
 function openFechamentoMesSheet(){
   if(!window.__dashboardReady){
-    var actionSpan = document.querySelector('.closed-month-launch-action');
-    if(actionSpan && actionSpan.textContent !== 'Carregando...'){
-      var prev = actionSpan.textContent;
-      actionSpan.textContent = 'Carregando...';
-      var tries = 0;
-      var wait = setInterval(function(){
-        tries++;
-        if(window.__dashboardReady || tries > 12){
-          clearInterval(wait);
-          if(actionSpan) actionSpan.textContent = prev;
+    var sp=document.querySelector('.closed-month-launch-action');
+    if(sp && sp.textContent!=='Carregando...'){
+      var prev=sp.textContent; sp.textContent='Carregando...';
+      var t=0, iv=setInterval(function(){
+        t++;
+        if(window.__dashboardReady||t>12){
+          clearInterval(iv);
+          if(sp) sp.textContent=prev;
           if(window.__dashboardReady) openFechamentoMesSheet();
         }
-      }, 500);
+      },500);
     }
     return;
   }
@@ -6092,43 +6102,24 @@ function closeFechamentoMesSheet(){
   if(sheet) sheet.setAttribute('aria-hidden','true');
   if(overlay) overlay.setAttribute('aria-hidden','true');
 }
-window.openFechamentoMesSheet = openFechamentoMesSheet;
-window.closeFechamentoMesSheet = closeFechamentoMesSheet;
-
-/* Conecta overlay + Escape + botão X ao fechamento */
+window.openFechamentoMesSheet=openFechamentoMesSheet;
+window.closeFechamentoMesSheet=closeFechamentoMesSheet;
 (function setupClosedMarketClose(){
   function init(){
-    var overlay = document.getElementById('closedMarketOverlay');
-    if(overlay && !overlay.dataset.closeReady){
-      overlay.dataset.closeReady = '1';
-      overlay.addEventListener('click', function(e){
-        if(e.target === overlay) closeFechamentoMesSheet();
-      });
-    }
-    var closeBtn = document.querySelector('.closed-market-close, #closedMarketClose');
-    if(closeBtn && !closeBtn.dataset.closeReady){
-      closeBtn.dataset.closeReady = '1';
-      closeBtn.addEventListener('click', closeFechamentoMesSheet);
-    }
-    if(!window.__closedEscReady){
-      window.__closedEscReady = true;
-      document.addEventListener('keydown', function(e){
-        if(e.key === 'Escape' && document.body.classList.contains('closed-market-open'))
-          closeFechamentoMesSheet();
-      });
-    }
+    var ov=document.getElementById('closedMarketOverlay');
+    if(ov&&!ov.dataset.cr){ov.dataset.cr='1';ov.addEventListener('click',function(e){if(e.target===ov)closeFechamentoMesSheet();});}
+    var cb=document.querySelector('.closed-market-close,#closedMarketClose');
+    if(cb&&!cb.dataset.cr){cb.dataset.cr='1';cb.addEventListener('click',closeFechamentoMesSheet);}
+    if(!window.__cesc){window.__cesc=1;document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('closed-market-open'))closeFechamentoMesSheet();});}
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
-  else setTimeout(init, 400);
-  setTimeout(init, 1500);
-  /* Safety net: limpa overflow preso */
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else setTimeout(init,400);
+  setTimeout(init,1500);
   setInterval(function(){
-    var sheet = document.getElementById('closedMarketSheet');
-    if(sheet && sheet.getAttribute('aria-hidden') === 'true')
-      document.body.classList.remove('closed-market-open');
-  }, 2000);
+    var s=document.getElementById('closedMarketSheet');
+    if(s&&s.getAttribute('aria-hidden')==='true')document.body.classList.remove('closed-market-open');
+  },2000);
 })();
-
 function atualizarPainelFechadoCard(){
   const periodo=periodoUltimoFechado();
   const card=document.getElementById('painelFechadoCard');
@@ -6790,6 +6781,12 @@ async function sharePainelMercado(){
   }
 
   function capturar(ev){
+    var _t = ev && ev.target;
+    if(_t && _t.closest && (
+      _t.closest('.closed-month-launch') ||
+      _t.closest('#closedMarketSheet') ||
+      _t.closest('#closedMarketOverlay')
+    )) return;
     const btn = tabDireta(ev) || tabPorCoordenada(ev);
     if(!btn) return;
 
