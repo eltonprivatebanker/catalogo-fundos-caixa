@@ -7742,3 +7742,168 @@ async function sharePainelMercado(){
 })();
 
 /* Build UI: ELTAUM_FILTRO_CATEGORIAS_LIMPO_20260605_v44 */
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v45 — Visualização mobile: Lista tabular x Cards
+   Permite ver mais fundos por tela sem perder os cards detalhados.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_LISTA_TABULAR_MOBILE_20260605_v45';
+  const MODE_KEY='fundMobileViewV45';
+  const LEGACY_KEY='fundMobileView';
+  const LABELS={
+    'RENDA FIXA SIMPLES':'RF SIMPLES',
+    'RENDA FIXA':'RENDA FIXA',
+    'RENDA FIXA REFERENCIADO':'RF REFERENC.',
+    'RENDA FIXA CURTO PRAZO':'RF CURTO',
+    'MULTIMERCADO':'MULTIMERCADO',
+    'CAMBIAL':'CAMBIAL',
+    'ACOES':'AÇÕES',
+    'FUNDO DE INDICE':'ÍNDICE',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
+  };
+
+  function qs(sel,root=document){return root.querySelector(sel);} 
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function isMobile(){try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}}
+  function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function clean(v){const s=String(v??'').trim(); return s && s!=='-' && s!=='—' ? s : '—';}
+  function num(v){try{ return typeof toNum==='function' ? toNum(v) : parseFloat(String(v).replace('%','').replace(/\./g,'').replace(',','.')); }catch(e){ return null; }}
+  function cls(v){const n=num(v); return n>0?'pos':n<0?'neg':'zero';}
+  function catLabel(cat){return LABELS[String(cat||'').trim().toUpperCase()] || clean(cat);}
+  function shortCode(row){
+    const keys=['codfundo','Código SIART','Codigo SIART','SIART','Código SIICO','Codigo SIICO','SIICO','Código do Fundo','Codigo do Fundo','Cod Fundo','Cód. Fundo'];
+    for(const k of keys){ const v=clean(row?.[k]); if(v!=='—') return v; }
+    const url=String(row?.URL||'');
+    const m=url.match(/(?:codfundo|codigo|fundos?)[=_-]?(\d{3,8})/i) || url.match(/(\d{4,6})(?:\.pdf|\/|$)/i);
+    return m ? m[1] : '';
+  }
+  function cdiText(row){
+    try{
+      const ratio = typeof calcCdiRatio==='function' ? calcCdiRatio(num(row['Acum. 12M (%)']), indicState?.cdi?.m12) : null;
+      if(ratio!==null && ratio!==undefined && Number.isFinite(Number(ratio))) return ratio+'%';
+    }catch(e){}
+    const raw=clean(row['% CDI 12M']);
+    return raw==='—' ? '—' : raw.replace(/\s*do\s*CDI/i,'');
+  }
+  function normalizeMode(mode){return mode==='cards' ? 'cards' : 'list';}
+  function getMode(){
+    try{return normalizeMode(localStorage.getItem(MODE_KEY)||'list');}catch(e){return 'list';}
+  }
+  function saveMode(mode){
+    try{localStorage.setItem(MODE_KEY,normalizeMode(mode)); localStorage.setItem(LEGACY_KEY,'cards');}catch(e){}
+  }
+  function pagedRows(){
+    try{
+      if(!Array.isArray(filtered)) return [];
+      const pg=typeof currentPage==='number' ? currentPage : 1;
+      const pp=typeof perPage==='number' ? perPage : 5;
+      const start=(pg-1)*pp;
+      const end=pp===9999 ? filtered.length : Math.min(start+pp,filtered.length);
+      return filtered.slice(start,end).map((r,i)=>({row:r,idx:start+i}));
+    }catch(e){return [];}
+  }
+  function renderList(){
+    const box=qs('#mobileFundCards');
+    if(!box) return;
+    const rows=pagedRows();
+    if(!rows.length){
+      box.innerHTML='<div class="fund-mobile-table-list"><div class="fund-list-empty-v45">Nenhum fundo encontrado.</div></div>';
+      return;
+    }
+    const html=rows.map(({row,idx})=>{
+      const name=clean(row['Fundo']);
+      const cat=catLabel(row['Categoria']);
+      const risco=clean(row['Perfil de Risco']);
+      const code=shortCode(row);
+      const mes=clean(row['Acum. Mes (%)']);
+      const m12=clean(row['Acum. 12M (%)']);
+      const cdi=cdiText(row);
+      return `<article class="fund-list-row-v45" data-idx="${idx}" aria-label="${esc(name)}">
+        <div class="fund-list-main-v45">
+          <div class="fund-list-tags-v45">
+            ${cat!=='—'?`<span class="fund-list-tag-v45">${esc(cat)}</span>`:''}
+            ${risco!=='—'?`<span class="fund-list-tag-v45 risk">${esc(risco)}</span>`:''}
+            ${code?`<span class="fund-list-tag-v45 code">Cód. ${esc(code)}</span>`:''}
+          </div>
+          <div class="fund-list-name-v45">${esc(name)}</div>
+        </div>
+        <div class="fund-list-metrics-v45">
+          <span class="fund-list-metric-v45"><small>Mês</small><strong class="${cls(mes)}">${esc(mes)}</strong></span>
+          <span class="fund-list-metric-v45"><small>12M</small><strong class="${cls(m12)}">${esc(m12)}</strong></span>
+          <span class="fund-list-metric-v45 cdi"><small>% CDI</small><strong class="${cls(cdi)}">${esc(cdi)}</strong></span>
+        </div>
+      </article>`;
+    }).join('');
+    box.innerHTML='<div class="fund-mobile-table-list">'+html+'</div>';
+  }
+
+  const originalRenderCards = window.renderMobileFundCards;
+  function renderByMode(){
+    if(getMode()==='list') renderList();
+    else if(typeof originalRenderCards==='function') originalRenderCards.apply(this,arguments);
+  }
+  window.renderMobileFundCards=renderByMode;
+
+  function syncButtons(){
+    const mode=getMode();
+    qsa('.mobile-catalog-view-btn').forEach(btn=>{
+      const on=btn.dataset.mobileCatalogView===mode;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+    });
+  }
+  function applyMode(mode){
+    mode=normalizeMode(mode);
+    saveMode(mode);
+    if(isMobile()){
+      document.body.classList.add('fund-card-mode');
+      document.body.classList.toggle('fund-list-mode',mode==='list');
+    }else{
+      document.body.classList.remove('fund-list-mode');
+    }
+    syncButtons();
+    renderByMode();
+  }
+  function ensureToggle(){
+    const host=qs('#sec-fundos');
+    if(!host || qs('#mobileCatalogViewSwitch')) return;
+    const table=qs('#sec-fundos .table-wrap');
+    const div=document.createElement('div');
+    div.className='mobile-catalog-view-switch';
+    div.id='mobileCatalogViewSwitch';
+    div.setAttribute('aria-label','Escolher forma de visualização dos fundos no celular');
+    div.innerHTML=`<div class="mobile-catalog-view-copy"><strong>Visualização</strong><small>Lista mostra mais fundos; cards mantêm ações e detalhes.</small></div><div class="mobile-catalog-view-buttons" role="group" aria-label="Modo de visualização"><button type="button" class="mobile-catalog-view-btn active" data-mobile-catalog-view="list" aria-pressed="true">Lista</button><button type="button" class="mobile-catalog-view-btn" data-mobile-catalog-view="cards" aria-pressed="false">Cards</button></div>`;
+    if(table) host.insertBefore(div,table); else host.appendChild(div);
+  }
+  function bind(){
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    ensureToggle();
+    qsa('.mobile-catalog-view-btn').forEach(btn=>{
+      if(btn.dataset.v45Bound==='1') return;
+      btn.dataset.v45Bound='1';
+      btn.addEventListener('click',ev=>{
+        ev.preventDefault(); ev.stopPropagation();
+        applyMode(btn.dataset.mobileCatalogView||'list');
+      },true);
+    });
+    applyMode(getMode());
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,650),{once:true});
+  else setTimeout(bind,650);
+  document.addEventListener('click',ev=>{
+    const btn=ev.target && ev.target.closest ? ev.target.closest('.category-choice-v44,#clearFiltersTop,#clearFiltersBtn,.active-filter-pill,.active-filter-clear') : null;
+    if(btn) setTimeout(()=>applyMode(getMode()),220);
+  },true);
+  document.addEventListener('input',ev=>{
+    if(ev.target && (ev.target.id==='searchInput' || ev.target.id==='gfbSearch')) setTimeout(()=>applyMode(getMode()),360);
+  },true);
+  window.addEventListener('resize',()=>setTimeout(()=>applyMode(getMode()),160),{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(()=>applyMode(getMode()),260),{passive:true});
+  setInterval(()=>{ if(isMobile()) { ensureToggle(); applyMode(getMode()); } },1800);
+})();
+
+/* Build UI: ELTAUM_LISTA_TABULAR_MOBILE_20260605_v45 */
