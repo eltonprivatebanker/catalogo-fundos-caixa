@@ -15148,3 +15148,49 @@ tr.detail-row td{
 }
 
 ::selection{background:rgba(200,151,58,.20);color:#e8bb6a;}
+
+
+/* ═══════════════════════════════════════════════════════
+   PATCH — Fechamento de Mercado abre no desktop e mobile
+   Corrige opacity/visibility/pointer-events do sheet.
+═══════════════════════════════════════════════════════ */
+#closedMarketOverlay,
+#closedMarketSheet{
+  visibility:hidden;
+}
+
+#closedMarketSheet{
+  pointer-events:none;
+}
+
+body.closed-market-open #closedMarketOverlay{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+
+body.closed-market-open #closedMarketSheet,
+body.closed-market-open .closed-market-sheet{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  transform:translate(-50%, 0)!important;
+}
+
+#closedMarketSheet[aria-hidden="false"]{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+
+@media(min-width:701px){
+  body.closed-market-open #closedMarketSheet,
+  body.closed-market-open .closed-market-sheet,
+  #closedMarketSheet[aria-hidden="false"]{
+    transform:translate(-50%, -50%)!important;
+    opacity:1!important;
+    visibility:visible!important;
+    pointer-events:auto!important;
+  }
+}
+
