@@ -485,6 +485,53 @@ function hidratarDolarResumoDoJson(d){
   atualizarCardDolarResumo();
 }
 
+
+function atualizarPTAXStats(){
+  const setText = (id, value) => { const el = $(id); if(el) el.textContent = value; };
+  const setClass = (id, cls) => { const el = $(id); if(el) el.className = cls; };
+
+  if(!_ptaxHistorico || !_ptaxHistorico.length){
+    ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
+    return;
+  }
+
+  const byMonth = {};
+  _ptaxHistorico.forEach(item => {
+    const rawDate = item.dataHoraCotacao || item.data_ref || item.data || item.date;
+    const dt = new Date(rawDate);
+    const val = Number(item.cotacaoVenda ?? item.cotacao ?? item.valor);
+    if(isNaN(dt) || !Number.isFinite(val)) return;
+    const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
+    if(!byMonth[key] || new Date(rawDate) > new Date(byMonth[key].rawDate)){
+      byMonth[key] = { key, dt, val, rawDate, label:item._mes_label || `${MESES_PT[dt.getMonth()]}/${dt.getFullYear()}` };
+    }
+  });
+
+  const asc = Object.values(byMonth).sort((a,b)=>a.key.localeCompare(b.key));
+  if(!asc.length){
+    ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
+    return;
+  }
+
+  const janela12 = asc.slice(-12);
+  const atual = asc[asc.length-1];
+  const max = janela12.reduce((a,b)=> b.val > a.val ? b : a, janela12[0]);
+  const min = janela12.reduce((a,b)=> b.val < a.val ? b : a, janela12[0]);
+  const media = janela12.reduce((sum,item)=>sum+item.val,0) / janela12.length;
+
+  setText('ptaxStatAtual', brl(atual.val));
+  setText('ptaxStatMax', brl(max.val));
+  setText('ptaxStatMaxRef', max.label);
+  setText('ptaxStatMin', brl(min.val));
+  setText('ptaxStatMinRef', min.label);
+  setText('ptaxStatMedia', brl(media));
+
+  setClass('ptaxStatAtual', 'ptax-stat-val neu');
+  setClass('ptaxStatMax', 'ptax-stat-val neg');
+  setClass('ptaxStatMin', 'ptax-stat-val pos');
+  setClass('ptaxStatMedia', 'ptax-stat-val neu');
+}
+
 function calcularDolarPeriodos(){
   if(!_ptaxHistorico.length) return;
 
@@ -588,6 +635,7 @@ function calcularDolarPeriodos(){
     $('dolar-day-content').style.display = 'block';
   }
   atualizarCardDolarResumo(refLabel);
+  atualizarPTAXStats();
 
   atualizarTabelaIndicadores();
 }
