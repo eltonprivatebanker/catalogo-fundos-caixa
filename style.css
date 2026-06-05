@@ -15236,3 +15236,143 @@ body.closed-market-open > #closedMarketSheet{
     max-height:min(82vh, 780px)!important;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════
+   PATCH v17 — Modal Fechamento compacto e ações reorganizadas
+   Objetivo: caber em telas baixas de desktop sem rolagem na maior parte dos casos.
+═══════════════════════════════════════════════════════ */
+body > #closedMarketSheet,
+#closedMarketSheet.closed-market-sheet{
+  width:min(760px, calc(100vw - 24px)) !important;
+  min-height:0 !important;
+  max-height:calc(100vh - 20px) !important;
+  padding:10px 14px 12px !important;
+  border-radius:20px !important;
+  overflow:auto !important;
+}
+body > #closedMarketSheet .closed-market-handle{
+  width:58px !important;
+  height:4px !important;
+  margin:0 auto 8px !important;
+}
+body > #closedMarketSheet .closed-market-sheet-head{
+  gap:10px !important;
+  padding-bottom:8px !important;
+}
+body > #closedMarketSheet .closed-market-sheet-icon{
+  width:36px !important;
+  height:36px !important;
+  border-radius:12px !important;
+  font-size:.95rem !important;
+}
+body > #closedMarketSheet .closed-market-kicker{
+  font-size:.57rem !important;
+  letter-spacing:.13em !important;
+  margin-bottom:1px !important;
+}
+body > #closedMarketSheet .closed-market-sheet h3,
+body > #closedMarketSheet h3{
+  font-size:1.02rem !important;
+  line-height:1.08 !important;
+}
+body > #closedMarketSheet .closed-market-close{
+  width:34px !important;
+  height:34px !important;
+  font-size:1.25rem !important;
+}
+body > #closedMarketSheet .closed-market-section-note{
+  font-size:.68rem !important;
+  padding:0 0 7px !important;
+}
+body > #closedMarketSheet .closed-market-list{
+  padding:6px 0 8px !important;
+}
+body > #closedMarketSheet .closed-market-group-label{
+  margin:8px 2px 5px !important;
+  font-size:.55rem !important;
+  letter-spacing:.13em !important;
+  line-height:1.05 !important;
+}
+body > #closedMarketSheet .closed-market-row{
+  min-height:38px !important;
+  padding:6px 9px !important;
+  margin-bottom:5px !important;
+  gap:9px !important;
+  border-radius:12px !important;
+}
+body > #closedMarketSheet .closed-market-row-icon{
+  width:30px !important;
+  height:30px !important;
+  border-radius:10px !important;
+  font-size:.86rem !important;
+}
+body > #closedMarketSheet .closed-market-row-name{
+  font-size:.82rem !important;
+  line-height:1.03 !important;
+}
+body > #closedMarketSheet .closed-market-row-name small{
+  margin-top:2px !important;
+  font-size:.56rem !important;
+  line-height:1.05 !important;
+}
+body > #closedMarketSheet .closed-market-row-value{
+  min-width:86px !important;
+}
+body > #closedMarketSheet .closed-market-row-value strong{
+  font-size:.90rem !important;
+  line-height:1.05 !important;
+}
+body > #closedMarketSheet .closed-market-row-value small{
+  margin-top:1px !important;
+  font-size:.70rem !important;
+  line-height:1.05 !important;
+}
+body > #closedMarketSheet .closed-market-us-lines{
+  gap:0 !important;
+}
+body > #closedMarketSheet .closed-market-us-lines span{
+  font-size:.72rem !important;
+  line-height:1.15 !important;
+}
+body > #closedMarketSheet .closed-market-actions{
+  display:flex !important;
+  justify-content:center !important;
+  align-items:center !important;
+  gap:10px !important;
+  padding-top:8px !important;
+  margin-top:0 !important;
+  border-top:1px solid rgba(255,255,255,.08) !important;
+}
+body > #closedMarketSheet .closed-market-actions button{
+  flex:0 1 180px !important;
+  min-height:38px !important;
+  padding:7px 12px !important;
+  border-radius:12px !important;
+  font-size:.78rem !important;
+}
+@media(min-width:701px){
+  body.closed-market-open > #closedMarketSheet{
+    top:50% !important;
+    bottom:auto !important;
+    transform:translate(-50%, -50%) !important;
+    max-height:calc(100vh - 20px) !important;
+  }
+}
+@media(max-width:700px){
+  body > #closedMarketSheet,
+  #closedMarketSheet.closed-market-sheet{
+    width:calc(100vw - 12px) !important;
+    max-height:calc(100vh - 10px) !important;
+    padding:10px 12px calc(12px + env(safe-area-inset-bottom)) !important;
+    border-radius:18px 18px 0 0 !important;
+  }
+  body > #closedMarketSheet .closed-market-actions{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+  }
+  body > #closedMarketSheet .closed-market-actions button{
+    min-width:0 !important;
+    width:100% !important;
+  }
+}

@@ -6149,16 +6149,17 @@ function openFechamentoMesSheet(){
       top: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? '50%' : 'auto',
       bottom: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? 'auto' : '0',
       transform: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? 'translate(-50%, -50%)' : 'translate(-50%, 0)',
-      width:'min(720px, calc(100vw - 24px))',
-      minHeight:'220px',
-      maxHeight: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? 'min(88vh, 840px)' : 'min(82vh, 780px)',
+      width: (window.matchMedia && window.matchMedia('(min-width:701px)').matches) ? 'min(760px, calc(100vw - 24px))' : 'calc(100vw - 16px)',
+      minHeight:'0',
+      maxHeight: window.matchMedia && window.matchMedia('(min-width:701px)').matches ? 'calc(100vh - 20px)' : 'calc(100vh - 12px)',
       display:'block',
       opacity:'1',
       visibility:'visible',
       pointerEvents:'auto',
       zIndex:'2147483647',
       contentVisibility:'visible',
-      contain:'none'
+      contain:'none',
+      overflow:'auto'
     });
   }catch(e){}
 
