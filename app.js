@@ -7799,3 +7799,6 @@ async function sharePainelMercado(){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,450));
   else setTimeout(init,450);
 })();
+
+
+/* Build UI: ELTAUM_TOPO_CABECALHO_LIMPO_20260605_v36 */
