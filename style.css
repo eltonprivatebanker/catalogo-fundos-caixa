@@ -16826,3 +16826,41 @@ body > #closedMarketSheet .closed-market-actions button{
     font-size:.46rem !important;
   }
 }
+
+/* ═════════════════════════════════════════════════════
+   PATCH v30 — Limpeza visual, espaçamento Dólar→Focus e rodapé profissional
+   - Removeu o aviso superior do HTML.
+   - Reduz o espaço exagerado causado pelo padding-bottom mobile da seção Dólar.
+   - Aproxima Estatísticas PTAX do Boletim Focus.
+   - Refina o texto/visual do disclaimer final.
+═════════════════════════════════════════════════════ */
+#sec-dolar.dolar-compact-section{
+  margin-bottom:0 !important;
+}
+#sec-dolar .ptax-stats-card{
+  margin-bottom:0 !important;
+}
+#sec-dolar + #sec-focus{
+  margin-top:14px !important;
+}
+@media(max-width:768px){
+  #sec-dolar{
+    padding-bottom:0 !important;
+  }
+  #sec-dolar .ptax-stats-card{
+    margin-top:10px !important;
+    margin-bottom:0 !important;
+  }
+  #sec-dolar + #sec-focus{
+    margin-top:12px !important;
+  }
+}
+.footer-disclaimer-v2 .footer-summary-title{
+  letter-spacing:.02em;
+}
+.footer-disclaimer-v2 .footer-summary-sub{
+  color:#aeb7cf;
+}
+.footer-clean-item span{
+  line-height:1.55;
+}
