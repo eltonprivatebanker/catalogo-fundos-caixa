@@ -4451,8 +4451,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const pagamento = getCampoPrazoMobile(r,'Pagamento Resgate');
     const codigo = getCodigoFundoMobile(r);
     const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
+    const docs = getMobileDocs(r);
+    const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
+    const boletimBtn = boletim
+      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim comercial ↗</a>`
+      : '';
     const docsHtml = buildMobileDocsHtml(r);
-    return `<article class="fund-card-mobile fund-card-mobile-list" data-card-idx="${idx}">
+    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
       <div class="fund-card-list-main">
         <div class="fund-card-list-left">
           <div class="fund-card-mobile-tags fund-card-list-tags">
@@ -4469,12 +4474,17 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
       </div>
 
-      <div class="fund-card-mobile-actions fund-card-list-actions">
-        <a class="fund-card-primary-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Abrir fundo ↗</a>
-        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}">Detalhes</button>
+      <div class="fund-card-mobile-actions fund-card-list-actions fund-card-list-actions-v26">
+        ${boletimBtn}
+        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página do fundo ↗</a>
+        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Mais detalhes</button>
       </div>
 
-      <div class="fund-card-list-expanded">
+      <div class="fund-card-list-expanded" aria-hidden="true">
+        <div class="fund-card-expanded-head">
+          <strong>Mais detalhes</strong>
+          <button type="button" class="fund-card-close-details" data-card-idx="${idx}" aria-label="Fechar detalhes">× Fechar</button>
+        </div>
         <div class="fund-card-mobile-body">
           <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
@@ -4500,10 +4510,20 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!rows.length){box.innerHTML='<div class="rank-empty">Nenhum fundo encontrado.</div>';return;}
     box.innerHTML=rows.map((r,i)=>buildMobileFundCard(r,start+i)).join('');
     qsa('.fund-card-detail-btn',box).forEach(btn=>{
-      btn.addEventListener('click',()=>{
+      btn.addEventListener('click',(ev)=>{
+        ev.preventDefault();
+        ev.stopPropagation();
         const card=btn.closest('.fund-card-mobile');
+        if(!card) return;
         const open=card.classList.toggle('open');
-        btn.textContent=open?'Ocultar':'Detalhes';
+        const expanded=card.querySelector('.fund-card-list-expanded');
+        if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
+        btn.textContent=open?'Ocultar':'Mais detalhes';
+        btn.setAttribute('aria-expanded', open?'true':'false');
+        try{
+          const key=fundKeyFromIdx(btn.dataset.cardIdx || card.dataset.idx);
+          if(open) openCards.add(key); else openCards.delete(key);
+        }catch(e){}
       });
     });
   }
@@ -5135,8 +5155,13 @@ document.addEventListener('DOMContentLoaded', function(){
       const key=fundKeyFromIdx(idx);
       const should=openCards.has(key);
       card.classList.toggle('open',should);
+      const expanded=card.querySelector('.fund-card-list-expanded');
+      if(expanded) expanded.setAttribute('aria-hidden', should?'false':'true');
       const btn=card.querySelector('.fund-card-detail-btn');
-      if(btn) btn.textContent=should?'Ocultar':'Detalhes';
+      if(btn){
+        btn.textContent=should?'Ocultar':'Mais detalhes';
+        btn.setAttribute('aria-expanded', should?'true':'false');
+      }
     });
     updateQuickCount();
     updateQuickHeaderActive();
@@ -5147,17 +5172,25 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!box || box.dataset.persistentDetails) return;
     box.dataset.persistentDetails='1';
     box.addEventListener('click',ev=>{
-      const btn=ev.target.closest('.fund-card-detail-btn');
+      const detailBtn=ev.target.closest('.fund-card-detail-btn');
+      const closeBtn=ev.target.closest('.fund-card-close-details');
+      const btn=detailBtn || closeBtn;
       if(!btn) return;
       ev.preventDefault();
       ev.stopPropagation();
       if(ev.stopImmediatePropagation) ev.stopImmediatePropagation();
       const card=btn.closest('.fund-card-mobile');
       if(!card) return;
+      const mainBtn=card.querySelector('.fund-card-detail-btn');
       const key=fundKeyFromIdx(btn.dataset.cardIdx || card.dataset.idx);
-      const open=!card.classList.contains('open');
+      const open=detailBtn ? !card.classList.contains('open') : false;
       card.classList.toggle('open',open);
-      btn.textContent=open?'Ocultar':'Detalhes';
+      const expanded=card.querySelector('.fund-card-list-expanded');
+      if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
+      if(mainBtn){
+        mainBtn.textContent=open?'Ocultar':'Mais detalhes';
+        mainBtn.setAttribute('aria-expanded', open?'true':'false');
+      }
       if(open) openCards.add(key); else openCards.delete(key);
     },true);
     new MutationObserver(()=>restoreOpenCards()).observe(box,{childList:true,subtree:false});
@@ -7325,4 +7358,24 @@ async function sharePainelMercado(){
     };
     window.render.__v24Clean=true;
   }
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v26 — Catálogo mobile: ações rápidas e detalhes persistentes
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  window.__ELTAUM_MOBILE_CATALOG_V26__='ELTAUM_CATALOGO_MOBILE_ACOES_DETALHES_20260604_v26';
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}
+  function syncCards(){
+    if(!isMobile()) return;
+    document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26');
+    try{ localStorage.setItem('fundMobileView','cards'); }catch(e){}
+    if(typeof window.renderMobileFundCards==='function'){
+      try{ window.renderMobileFundCards(); }catch(e){}
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(syncCards,450),{once:true});
+  else setTimeout(syncCards,450);
 })();
