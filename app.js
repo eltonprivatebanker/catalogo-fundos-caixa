@@ -6122,25 +6122,54 @@ window.openFechamentoMesSheet=openFechamentoMesSheet;
 window.closeFechamentoMesSheet=closeFechamentoMesSheet;
 
 (function setupClosedMarketOpen(){
-  function onClick(e){
-    const btn = e.target && e.target.closest
+  function isInsideClosedMonthLaunch(e, btn){
+    if(!btn || !e) return false;
+    var x = typeof e.clientX === 'number' ? e.clientX : null;
+    var y = typeof e.clientY === 'number' ? e.clientY : null;
+    if(x === null || y === null) return false;
+    var r = btn.getBoundingClientRect();
+    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  }
+
+  function onOpenIntent(e){
+    var mainBtn = document.getElementById('closedMonthLaunch');
+    var closestBtn = e.target && e.target.closest
       ? e.target.closest('#closedMonthLaunch, .closed-month-launch, [data-open-closed-market]')
       : null;
-    if(!btn) return;
+
+    // Caminho normal: clique direto no botão ou em qualquer filho dele.
+    // Fallback por coordenada: se algum overlay/elemento transparente interceptar o target,
+    // ainda assim abrimos quando o clique caiu dentro da área visual do botão.
+    var shouldOpen = !!closestBtn || isInsideClosedMonthLaunch(e, mainBtn);
+    if(!shouldOpen) return;
+
     e.preventDefault();
+    if(typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+    else if(typeof e.stopPropagation === 'function') e.stopPropagation();
+
     openFechamentoMesSheet();
   }
 
-  // Delegação: funciona mesmo se o HTML for alterado depois e não depende do onclick inline.
-  document.addEventListener('click', onClick, true);
+  // Captura em window + document para ganhar de outros patches/listeners da página.
+  ['pointerdown','click','touchend'].forEach(function(tipo){
+    window.addEventListener(tipo, onOpenIntent, true);
+    document.addEventListener(tipo, onOpenIntent, true);
+  });
 
   function init(){
     var btn=document.getElementById('closedMonthLaunch');
-    if(btn) btn.setAttribute('data-open-closed-market','true');
+    if(btn){
+      btn.setAttribute('data-open-closed-market','true');
+      btn.style.pointerEvents = 'auto';
+      if(getComputedStyle(btn).position === 'static') btn.style.position = 'relative';
+      btn.style.zIndex = '60';
+    }
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init, {once:true});
   else init();
+  setTimeout(init, 300);
+  setTimeout(init, 1200);
 })();
 (function setupClosedMarketClose(){
   function init(){
