@@ -7238,3 +7238,83 @@ async function sharePainelMercado(){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
   else setTimeout(setup,650);
 })();
+
+
+/* ════════════════════════════════════════════════════
+   v24 — Mobile card-first para o catálogo de fundos
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_CATALOGO_MOBILE_CARDS_CLEAN_20260604_v24';
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;}
+  function qsa(sel,root=document){return Array.from((root||document).querySelectorAll(sel));}
+  function forceCards(){
+    if(!isMobile()) return;
+    document.body.classList.add('fund-card-mode','catalog-mobile-clean');
+    try{ localStorage.setItem('fundMobileView','cards'); }catch(e){}
+    qsa('.mobile-view-btn').forEach(b=>b.classList.toggle('active',b.dataset.view==='cards'));
+    const g=document.getElementById('gfbGo');
+    if(g){ g.textContent='Fundos ↓'; g.setAttribute('aria-label','Ir para os fundos'); }
+    if(typeof window.renderMobileFundCards==='function'){
+      try{ window.renderMobileFundCards(); }catch(e){}
+    }
+  }
+  function scrollFunds(){
+    const sec=document.getElementById('sec-fundos');
+    if(!sec) return;
+    const offset=isMobile()?96:64;
+    const top=sec.getBoundingClientRect().top+window.scrollY-offset;
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+  function neutralizeGoButton(){
+    const old=document.getElementById('gfbGo');
+    if(!old || old.dataset.cleanV24==='1') return;
+    const fresh=old.cloneNode(true);
+    fresh.dataset.cleanV24='1';
+    fresh.textContent='Fundos ↓';
+    fresh.setAttribute('aria-label','Ir para os fundos');
+    old.parentNode.replaceChild(fresh,old);
+    fresh.addEventListener('click',function(ev){
+      if(!isMobile()) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+      forceCards();
+      setTimeout(scrollFunds,30);
+    },true);
+  }
+  function init(){
+    forceCards();
+    neutralizeGoButton();
+    setTimeout(forceCards,120);
+    setTimeout(forceCards,500);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.addEventListener('resize',()=>setTimeout(forceCards,80),{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(forceCards,180),{passive:true});
+  document.addEventListener('input',function(ev){
+    if(ev.target && (ev.target.id==='searchInput' || ev.target.id==='gfbSearch')){
+      setTimeout(forceCards,340);
+    }
+  },true);
+  document.addEventListener('click',function(ev){
+    if(!isMobile()) return;
+    const tableBtn=ev.target && ev.target.closest ? ev.target.closest('.mobile-view-btn[data-view="table"]') : null;
+    if(tableBtn){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+      forceCards();
+    }
+  },true);
+  const oldRender=window.render;
+  if(typeof oldRender==='function' && !oldRender.__v24Clean){
+    window.render=function(){
+      const r=oldRender.apply(this,arguments);
+      setTimeout(forceCards,0);
+      return r;
+    };
+    window.render.__v24Clean=true;
+  }
+})();
