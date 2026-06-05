@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_SEM_BADGES_FOCUS_EVOLUCAO_20260604_v22"/>
+<meta name="app-build" content="ELTAUM_LIMPEZA_MOBILE_MERCADO_20260604_v23"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=20260604-sem-badges-v22" rel="stylesheet">
+<link href="style.css?v=20260604-limpeza-mobile-mercado-v23" rel="stylesheet">
 
 
 </head>
@@ -108,24 +108,6 @@
 
 <!-- ════════════════ CATÁLOGO E RANKINGS ════════════════ -->
 <!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
-
-<!-- ═══════════════ VISÃO GERAL DO CATÁLOGO (mobile only) ══ -->
-<div class="section-gap mob-visao-geral" id="sec-visao-geral">
-  <div class="section-title">
-    <h2>📋 Visão Geral do Catálogo</h2>
-    <span class="section-badge"><span class="badge-dot green"></span>SIPII · CAIXA</span>
-  </div>
-  <div class="vg-grid">
-    <div class="vg-card vg-card-primary"><span class="vg-label">Total de Fundos</span><strong class="vg-val" id="vgTotalFundos">—</strong><small class="vg-sub" id="vgTotalSub">fundos disponíveis</small></div>
-    <div class="vg-card vg-card-primary"><span class="vg-label">Patrimônio Total</span><strong class="vg-val gold" id="vgPLTotal">—</strong><small class="vg-sub" id="vgPLSub">no catálogo</small></div>
-    <div class="vg-card"><span class="vg-label">Categorias</span><strong class="vg-val" id="vgCats">—</strong><small class="vg-sub">tipos distintos</small></div>
-    <div class="vg-card"><span class="vg-label">Gestora</span><strong class="vg-val" id="vgGestores">1</strong><small class="vg-sub">CAIXA Asset</small></div>
-    <div class="vg-card vg-card-perf pos"><span class="vg-label">Melhor 12M</span><strong class="vg-val pos" id="vgMelhor">—</strong><small class="vg-sub" id="vgMelhorNome">—</small></div>
-    <div class="vg-card vg-card-perf neg"><span class="vg-label">Pior 12M</span><strong class="vg-val neg" id="vgPior">—</strong><small class="vg-sub" id="vgPiorNome">—</small></div>
-  </div>
-  <div class="vg-cat-list" id="vgCatList"></div>
-  <button class="vg-btn-fundos" onclick="irParaFundos()">Ver todos os fundos →</button>
-</div>
 
 <div class="section-gap" id="sec-fundos">
   <div class="section-title">
@@ -265,26 +247,6 @@
     </div>
   </div>
 
-  <div class="mobile-sort-toolbar" id="mobileSortToolbar" aria-label="Ordenação da tabela e dos cards no celular">
-    <div class="mobile-sort-line mobile-sort-field-line">
-      <span class="mobile-sort-label">Ordenar</span>
-      <div class="mobile-sort-chip-row" role="group" aria-label="Campo de ordenação">
-        <button type="button" class="mobile-sort-chip active" data-mobile-sort-field="dia">Dia</button>
-        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="mes">Mês</button>
-        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="ano">Ano</button>
-        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="m12">12M</button>
-        <button type="button" class="mobile-sort-chip" data-mobile-sort-field="cdi">% CDI</button>
-      </div>
-    </div>
-    <div class="mobile-sort-line mobile-sort-dir-line">
-      <span class="mobile-sort-label">Sentido</span>
-      <div class="mobile-sort-dir" role="group" aria-label="Sentido de ordenação">
-        <button type="button" class="mobile-sort-dir-btn active" data-mobile-sort-dir="desc">Maior</button>
-        <button type="button" class="mobile-sort-dir-btn" data-mobile-sort-dir="asc">Menor</button>
-      </div>
-    </div>
-  </div>
-
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
     <table id="mainTable" style="display:none">
@@ -350,7 +312,6 @@
   <div class="section-title market-section-head">
     <div class="market-title-left">
       <h2>📡 Indicadores de Mercado</h2>
-      <span class="section-badge"><span class="badge-dot green"></span>Dados do dia</span>
     </div>
   </div>
 
@@ -507,13 +468,6 @@
 
 </div><!-- /indic-ref-bar -->
 
-  <div class="market-scenario-card" id="marketScenario">
-    <span class="market-scenario-icon">🧭</span>
-    <div>
-      <strong>Resumo do cenário:</strong>
-      <span id="marketScenarioText">Carregando leitura dos principais indicadores...</span>
-    </div>
-  </div>
 </div><!-- /section cards mercado -->
 
 
@@ -1233,6 +1187,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=20260604-sem-badges-v22"></script>
+<script src="app.js?v=20260604-limpeza-mobile-mercado-v23"></script>
 </body>
 </html>
