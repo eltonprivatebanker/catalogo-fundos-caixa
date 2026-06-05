@@ -7906,4 +7906,117 @@ async function sharePainelMercado(){
   setInterval(()=>{ if(isMobile()) { ensureToggle(); applyMode(getMode()); } },1800);
 })();
 
-/* Build UI: ELTAUM_LISTA_TABULAR_MOBILE_20260605_v45 */
+/* Build UI: ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46 */
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v46 — Busca/filtro mobile conduz para resultados
+   Objetivo: ao digitar na busca superior ou do catálogo, a tela desce
+   para a visualização dos fundos, evitando que o usuário fique preso no topo.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46';
+  const MODE_KEY='fundMobileViewV45';
+  let scrollTimer=null;
+  let lastScrollAt=0;
+
+  function qs(sel,root=document){return root.querySelector(sel);} 
+  function isMobile(){try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}}
+  function hasRealQuery(){
+    const s=qs('#searchInput');
+    const g=qs('#gfbSearch');
+    return [s?.value,g?.value].some(v=>String(v||'').trim().length>=2);
+  }
+  function preferListMode(){
+    try{localStorage.setItem(MODE_KEY,'list');}catch(e){}
+    const btn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="list"]');
+    if(btn && !btn.classList.contains('active')){
+      btn.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
+    }
+  }
+  function topOffset(){
+    const gfb=qs('#gfb');
+    const rect=gfb ? gfb.getBoundingClientRect() : null;
+    const visible=rect && rect.height>0 && rect.bottom>0;
+    const gfbH=visible ? Math.min(74,Math.max(48,rect.height)) : 0;
+    return gfbH + 18;
+  }
+  function ensureHint(){
+    const sw=qs('#mobileCatalogViewSwitch');
+    if(!sw || qs('#mobileResultsHintV46')) return;
+    const hint=document.createElement('div');
+    hint.id='mobileResultsHintV46';
+    hint.className='mobile-results-hint-v46';
+    hint.textContent='Resultados atualizados abaixo. Use Lista para comparar mais fundos ou Cards para acessar documentos.';
+    sw.insertAdjacentElement('afterend',hint);
+  }
+  function resultsAnchor(){
+    return qs('#mobileCatalogViewSwitch') || qs('#mobileFundCards') || qs('#sec-fundos .table-wrap') || qs('#sec-fundos');
+  }
+  function scrollToResults(reason){
+    if(!isMobile()) return;
+    const target=resultsAnchor();
+    if(!target) return;
+    const now=Date.now();
+    if(now-lastScrollAt<650 && reason==='input') return;
+    lastScrollAt=now;
+    ensureHint();
+    document.body.classList.toggle('mobile-searching-results-v46',!!hasRealQuery());
+    const sw=qs('#mobileCatalogViewSwitch');
+    if(sw){
+      sw.classList.add('results-focus-v46');
+      setTimeout(()=>sw.classList.remove('results-focus-v46'),1400);
+    }
+    const top=Math.max(0,target.getBoundingClientRect().top+window.scrollY-topOffset());
+    window.scrollTo({top,behavior:'smooth'});
+  }
+  function scheduleResultsScroll(reason,delay){
+    if(!isMobile()) return;
+    clearTimeout(scrollTimer);
+    scrollTimer=setTimeout(()=>{
+      preferListMode();
+      scrollToResults(reason||'input');
+    },typeof delay==='number'?delay:520);
+  }
+  function bind(){
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    const link=qs('link[href*="style.css"]');
+    if(link && !/busca-scroll-resultados-v46/.test(link.getAttribute('href')||'')) link.setAttribute('href','style.css?v=busca-scroll-resultados-v46');
+    ensureHint();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bind,{once:true});
+  else bind();
+
+  document.addEventListener('input',function(ev){
+    const id=ev.target && ev.target.id;
+    if(id==='searchInput' || id==='gfbSearch'){
+      const hasText=String(ev.target.value||'').trim().length>=2;
+      if(hasText) scheduleResultsScroll('input',620);
+      else document.body.classList.remove('mobile-searching-results-v46');
+    }
+  },true);
+
+  document.addEventListener('keydown',function(ev){
+    const id=ev.target && ev.target.id;
+    if((id==='searchInput' || id==='gfbSearch') && ev.key==='Enter'){
+      ev.preventDefault();
+      scheduleResultsScroll('enter',80);
+      try{ev.target.blur();}catch(e){}
+    }
+  },true);
+
+  document.addEventListener('click',function(ev){
+    if(!isMobile()) return;
+    const cat=ev.target && ev.target.closest ? ev.target.closest('.category-choice-v44') : null;
+    if(cat) scheduleResultsScroll('category',360);
+    const clear=ev.target && ev.target.closest ? ev.target.closest('#clearFiltersTop,#clearFiltersBtn,.active-filter-pill,.active-filter-clear') : null;
+    if(clear) scheduleResultsScroll('clear',360);
+  },true);
+
+  window.addEventListener('resize',()=>setTimeout(bind,120),{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(bind,220),{passive:true});
+})();
+
+/* Build UI: ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46 */
