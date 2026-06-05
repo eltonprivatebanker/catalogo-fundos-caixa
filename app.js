@@ -1,3 +1,6 @@
+
+function toggleSection(b,c){var bd=document.getElementById(b),ct=document.getElementById(c);if(!bd)return;var h=bd.hasAttribute("hidden");h?bd.removeAttribute("hidden"):bd.setAttribute("hidden","");if(ct){ct.classList.toggle("section-expanded",h);ct.setAttribute("aria-expanded",h?"true":"false");}var l=ct?ct.querySelector(".toggle-label"):null;if(l)l.textContent=h?"Ver menos":"Ver mais";}
+window.toggleSection=toggleSection;
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
 ════════════════════════════════════════════════════ */
@@ -5,22 +8,6 @@ const BASE_URL = window.location.protocol === 'file:'
   ? 'https://raw.githubusercontent.com/eltonprivatebanker/catalogo-fundos-caixa/main/'
   : '';
 
-
-/* toggleSection — abre/fecha seções colapsáveis */
-function toggleSection(bodyId, containerId) {
-  var body = document.getElementById(bodyId);
-  var container = document.getElementById(containerId);
-  if (!body) return;
-  var isHidden = body.hasAttribute('hidden');
-  if (isHidden) { body.removeAttribute('hidden'); } else { body.setAttribute('hidden', ''); }
-  if (container) {
-    container.classList.toggle('section-expanded', isHidden);
-    container.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-  }
-  var lbl = container ? container.querySelector('.toggle-label') : null;
-  if (lbl) lbl.textContent = isHidden ? 'Ver menos' : 'Ver mais';
-}
-window.toggleSection = toggleSection;
 const $ = id => document.getElementById(id);
 const fmt = (v,dec=2,suf='%') => {
   if(v===null||v===undefined||v==='') return '—';
@@ -4495,27 +4482,22 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function applyFilterPreset(preset){
-  if(!preset || preset==='all'){
-    clearAllFilters();
-    return;
+    if(!preset || preset==='all'){
+      clearAllFilters();
+      return;
+    }
+    activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false;
+    if(preset==='cdi') activeBenchmark='CDI';
+    if(preset==='conservador') activeRisco='Conservador';
+    if(preset==='ipca') activeBenchmark='IPCA';
+    if(preset==='renda-fixa') activeCat='RENDA FIXA';
+    if(preset==='multimercado') activeCat='MULTIMERCADO';
+    if(preset==='acoes') activeCat='ACOES';
+    if(preset==='cambial') activeCat='CAMBIAL';
+    if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
+    syncFilterControls();
+    if(typeof applyFilter==='function') applyFilter();
   }
-  /* Funil AND — cada clique ACUMULA, não limpa os filtros anteriores */
-  if(preset==='pf') activePerfil='PF';
-  if(preset==='cdi') activeBenchmark='CDI';
-  if(preset==='ipca') activeBenchmark='IPCA';
-  if(preset==='conservador') activeRisco='Conservador';
-  if(preset==='renda-fixa-simples') activeCat='RENDA FIXA SIMPLES';
-  if(preset==='renda-fixa') activeCat='RENDA FIXA';
-  if(preset==='renda-fixa-referenciado') activeCat='RENDA FIXA REFERENCIADO';
-  if(preset==='renda-fixa-curto-prazo') activeCat='RENDA FIXA CURTO PRAZO';
-  if(preset==='multimercado') activeCat='MULTIMERCADO';
-  if(preset==='cambial') activeCat='CAMBIAL';
-  if(preset==='acoes') activeCat='ACOES';
-  if(preset==='fundo-de-indice') activeCat='FUNDO DE INDICE';
-  if(preset==='fmp') activeCat='FUNDOS MUTUOS DE PRIVATIZACAO';
-  syncFilterControls();
-  if(typeof applyFilter==='function') applyFilter();
-}
 
   function updatePresetStates(){
     const cat=typeof activeCat!=='undefined' ? activeCat : '';
@@ -4551,14 +4533,12 @@ document.addEventListener('DOMContentLoaded', function(){
     const strip=qs('#activeFilterStrip');
     if(strip){
       if(!parts.length){
-        /* Strip sempre visível — mesmo sem filtros mostra o estado neutro */
+        strip.innerHTML='';
         strip.classList.remove('active');
-        strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span>`+
-          `<span class="active-filter-empty">Nenhum filtro selecionado — mostrando todos os fundos</span>`;
       }else{
         strip.classList.add('active');
         strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span>`+
-          parts.map(p=>`<button type="button" class="active-filter-pill" data-clear-filter="${p.kind}"><small>${p.label}</small><span>${p.value}</span><span class="pill-x">×</span></button>`).join('')+
+          parts.map(p=>`<button type="button" class="active-filter-pill" data-clear-filter="${p.kind}"><small>${p.label}</small>${p.value}<span>×</span></button>`).join('')+
           `<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>`;
       }
     }
@@ -6077,6 +6057,7 @@ function renderClosedMarketSheet(){
     </button>`;
   }).join('');
 }
+window.openFechamentoMesSheet = openFechamentoMesSheet;
 function openFechamentoMesSheet(){
   atualizarResumoFechamentoMes();
   atualizarPainelFechadoCard();
@@ -6094,6 +6075,47 @@ function closeFechamentoMesSheet(){
   if(sheet) sheet.setAttribute('aria-hidden','true');
   if(overlay) overlay.setAttribute('aria-hidden','true');
 }
+/* FIX: conectar overlay, Escape e botão close ao fechamento */
+(function setupClosedMarketClose(){
+  function init(){
+    /* Clique no overlay fecha */
+    const overlay=document.getElementById('closedMarketOverlay');
+    if(overlay && !overlay.dataset.closeReady){
+      overlay.dataset.closeReady='1';
+      overlay.addEventListener('click', function(e){
+        if(e.target===overlay) closeFechamentoMesSheet();
+      });
+    }
+    /* Botão X dentro do sheet */
+    const closeBtn=document.querySelector('.closed-market-close, #closedMarketClose');
+    if(closeBtn && !closeBtn.dataset.closeReady){
+      closeBtn.dataset.closeReady='1';
+      closeBtn.addEventListener('click', closeFechamentoMesSheet);
+    }
+    /* Tecla Escape */
+    if(!window.__closedMarketEscReady){
+      window.__closedMarketEscReady=true;
+      document.addEventListener('keydown',function(e){
+        if(e.key==='Escape' && document.body.classList.contains('closed-market-open')){
+          closeFechamentoMesSheet();
+        }
+      });
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else setTimeout(init, 400);
+  setTimeout(init, 1200);
+  /* Segurança: se body ainda tem closed-market-open mas sheet está hidden, limpa */
+  setInterval(function(){
+    const sheet=document.getElementById('closedMarketSheet');
+    if(!sheet) return;
+    const hidden=sheet.getAttribute('aria-hidden')==='true';
+    if(hidden && document.body.classList.contains('closed-market-open')){
+      document.body.classList.remove('closed-market-open');
+    }
+  }, 2000);
+  window.closeFechamentoMesSheet = closeFechamentoMesSheet;
+})();
 function atualizarPainelFechadoCard(){
   const periodo=periodoUltimoFechado();
   const card=document.getElementById('painelFechadoCard');
@@ -6755,6 +6777,15 @@ async function sharePainelMercado(){
   }
 
   function capturar(ev){
+    /* FIX: não interceptar cliques dentro do botão "Ver resumo" ou do sheet de fechamento */
+    const target = ev && ev.target;
+    if(target && target.closest){
+      if(target.closest('.closed-month-launch') ||
+         target.closest('#closedMarketSheet') ||
+         target.closest('#closedMarketOverlay') ||
+         target.closest('.closed-market-close') ||
+         target.closest('.closed-market-actions')) return;
+    }
     const btn = tabDireta(ev) || tabPorCoordenada(ev);
     if(!btn) return;
 
