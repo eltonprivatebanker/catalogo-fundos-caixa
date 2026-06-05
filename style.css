@@ -17515,3 +17515,44 @@ body > #closedMarketSheet .closed-market-actions button{
     font-size:.68rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v35 — Modal fechamento: cabeçalho compacto sem título redundante
+   Remove a linha grande "Fechamento de Mercado — mês/ano" e preserva só o kicker/nota.
+════════════════════════════════════════════════════ */
+.closed-market-sheet-head{
+  gap:10px !important;
+  padding-bottom:8px !important;
+  margin-bottom:6px !important;
+}
+.closed-market-sheet-head h3#closedMarketSheetTitle{
+  display:none !important;
+}
+.closed-market-kicker{
+  display:block !important;
+  margin-top:1px !important;
+  font-size:.68rem !important;
+  letter-spacing:.13em !important;
+  color:#b9c3da !important;
+}
+.closed-market-sheet-icon{
+  width:30px !important;
+  height:30px !important;
+  min-width:30px !important;
+  border-radius:10px !important;
+  font-size:.9rem !important;
+}
+.closed-market-section-note{
+  margin-top:2px !important;
+  padding-top:6px !important;
+  border-top:1px solid rgba(255,255,255,.07) !important;
+}
+@media(max-width:720px){
+  .closed-market-sheet-head{
+    min-height:34px !important;
+  }
+  .closed-market-kicker{
+    font-size:.64rem !important;
+  }
+}

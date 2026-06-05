@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_RESUMO_MES_NEUTRO_PREMIUM_20260605_v34"/>
+<meta name="app-build" content="ELTAUM_MODAL_FECHAMENTO_HEADER_COMPACTO_20260605_v35"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=20260605-resumo-neutro-premium-v34" rel="stylesheet">
+<link href="style.css?v=modal-fechamento-header-compacto-v35" rel="stylesheet">
 
 
 </head>
@@ -501,13 +501,12 @@
   </div>
 
   <div class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()" aria-hidden="true"></div>
-  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-labelledby="closedMarketSheetTitle" aria-hidden="true">
+  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-label="Fechamento de mercado" aria-hidden="true">
     <div class="closed-market-handle" aria-hidden="true"></div>
     <div class="closed-market-sheet-head">
       <div class="closed-market-sheet-icon">📊</div>
       <div>
         <span class="closed-market-kicker">Consulta rápida</span>
-        <h3 id="closedMarketSheetTitle">Fechamento de Mercado</h3>
       </div>
       <button type="button" class="closed-market-close" onclick="closeFechamentoMesSheet()" aria-label="Fechar resumo">×</button>
     </div>
@@ -1172,6 +1171,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=20260605-resumo-neutro-premium-v34"></script>
+<script src="app.js?v=modal-fechamento-header-compacto-v35"></script>
 </body>
 </html>

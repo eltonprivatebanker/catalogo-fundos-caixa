@@ -6190,11 +6190,9 @@ function atualizarResumoFechamentoMes(){
 }
 function renderClosedMarketSheet(){
   const periodo=periodoUltimoFechado();
-  const title=document.getElementById('closedMarketSheetTitle');
+  // Título removido do cabeçalho para reduzir altura no modal compacto.
   const note=document.getElementById('closedMarketSheetNote');
-  const list=document.getElementById('closedMarketSheetList');
-  if(title) title.textContent=`Fechamento de Mercado — ${periodo}`;
-  if(note) note.textContent=`Último mês fechado · ${periodo}`;
+  const list=document.getElementById('closedMarketSheetList');  if(note) note.textContent=`Último mês fechado · ${periodo}`;
   if(!list) return;
   let lastGrupo='';
   list.innerHTML=indicadorFechadoRows().map(r=>{
