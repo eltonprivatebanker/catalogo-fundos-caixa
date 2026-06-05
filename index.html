@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_FILTRO_MOBILE_MINIMO_20260605_v42"/>
+<meta name="app-build" content="ELTAUM_HEADER_GAP_NAV_FOCUS_20260605_v41"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -15,7 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<link href="style.css?v=filtro-mobile-minimo-v42" rel="stylesheet">
+<link href="style.css?v=header-gap-nav-focus-v41" rel="stylesheet">
 
 
 </head>
@@ -172,71 +172,61 @@
 
   <div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
 
-    <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed filters-minimal-v42" id="fundFilterDrawer" style="margin-bottom:14px">
-    <div class="filter-sheet-head filter-sheet-head-compact filter-head-v42">
+  <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed" id="fundFilterDrawer" style="margin-bottom:14px">
+    <div class="filter-sheet-head filter-sheet-head-compact">
       <div>
-        <strong>Filtrar fundos</strong>
-        <span>Escolha a classe principal. Use a busca para localizar por nome, benchmark ou CNPJ.</span>
+        <strong>Filtros do catálogo</strong>
+        <span>Escolha uma classe de fundo no padrão CAIXA. Use “Mais filtros” apenas se precisar refinar.</span>
       </div>
       <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar filtros">✕</button>
     </div>
 
-    <div class="filter-simple-panel-v42" aria-label="Filtro simplificado do catálogo">
-      <label class="filter-class-field-v42" for="filterClassSelectV42">
-        <span>Classe do fundo</span>
-        <select id="filterClassSelectV42" aria-label="Selecionar classe do fundo">
-          <option value="">Todos os fundos</option>
-          <option value="RENDA FIXA SIMPLES">Renda Fixa Simples</option>
-          <option value="RENDA FIXA">Renda Fixa</option>
-          <option value="RENDA FIXA REFERENCIADO">Renda Fixa Referenciado</option>
-          <option value="RENDA FIXA CURTO PRAZO">Renda Fixa Curto Prazo</option>
-          <option value="MULTIMERCADO">Multimercado</option>
-          <option value="CAMBIAL">Cambial</option>
-          <option value="ACOES">Ações</option>
-          <option value="FUNDO DE INDICE">Fundo de Índice</option>
-          <option value="FUNDOS MUTUOS DE PRIVATIZACAO">FMP / Privatização</option>
-        </select>
-      </label>
-      <div class="filter-simple-hint-v42" id="filterSimpleHintV42">A seleção é aplicada automaticamente.</div>
-    </div>
 
-    <!-- Mantém os filtros técnicos no DOM apenas como motor de compatibilidade do JS. No mobile eles não são exibidos. -->
-    <div class="filter-groups-grid filter-groups-accordion legacy-filter-engine-v42" aria-label="Filtros técnicos do catálogo">
-      <details class="filter-group-accordion filter-category-legacy-v33">
+    <div class="filter-groups-grid filter-groups-accordion" aria-label="Filtros avançados do catálogo">
+      <details class="filter-group-accordion">
         <summary><span>Categoria</span><small>Tipo do fundo</small></summary>
-        <div class="filter-row filter-group-panel" id="catFilters"><span class="filter-label">Categoria</span><button class="chip active" data-cat="">Todas</button></div>
+        <div class="filter-row filter-group-panel" id="catFilters">
+          <span class="filter-label">Categoria</span>
+          <button class="chip active" data-cat="">Todas</button>
+        </div>
       </details>
+
       <details class="filter-group-accordion">
         <summary><span>Benchmark</span><small>CDI, IPCA, câmbio e outros</small></summary>
-        <div class="filter-row filter-group-panel" id="benchmarkFilters"><span class="filter-label">Benchmark</span><button class="chip active" data-benchmark="">Todos</button></div>
+        <div class="filter-row filter-group-panel" id="benchmarkFilters">
+          <span class="filter-label">Benchmark</span>
+          <button class="chip active" data-benchmark="">Todos</button>
+        </div>
       </details>
+
       <details class="filter-group-accordion">
         <summary><span>Perfil</span><small>PF, PJ, GOV ou RPPS</small></summary>
         <div class="filter-row filter-group-panel" id="perfilFilters">
           <span class="filter-label">Perfil</span>
           <button class="chip active" data-perfil="">Todos</button>
-          <button class="chip pf" data-perfil="PF">🧑 PF</button>
-          <button class="chip pj" data-perfil="PJ">🏢 PJ</button>
-          <button class="chip gov" data-perfil="GOV">🏛 GOV</button>
+          <button class="chip pf"   data-perfil="PF">🧑 PF</button>
+          <button class="chip pj"   data-perfil="PJ">🏢 PJ</button>
+          <button class="chip gov"  data-perfil="GOV">🏛 GOV</button>
           <button class="chip rpps" data-perfil="RPPS">🛡 RPPS</button>
         </div>
       </details>
+
       <details class="filter-group-accordion">
         <summary><span>Risco</span><small>Perfil de risco do produto</small></summary>
         <div class="filter-row filter-group-panel" id="riscoFilters">
           <span class="filter-label">Risco</span>
           <button class="chip active" data-risco="">Todos</button>
           <button class="chip cons" data-risco="Conservador">🟢 Conservador</button>
-          <button class="chip mod" data-risco="Moderado">🔵 Moderado</button>
-          <button class="chip arr" data-risco="Arrojado">🟠 Arrojado</button>
-          <button class="chip agr" data-risco="Agressivo">🔴 Agressivo</button>
+          <button class="chip mod"  data-risco="Moderado">🔵 Moderado</button>
+          <button class="chip arr"  data-risco="Arrojado">🟠 Arrojado</button>
+          <button class="chip agr"  data-risco="Agressivo">🔴 Agressivo</button>
         </div>
       </details>
     </div>
 
-    <div class="filter-sheet-actions filter-sheet-actions-compact filter-actions-v42">
+    <div class="filter-sheet-actions filter-sheet-actions-compact">
       <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar</button>
-      <button type="button" class="filter-action-primary" id="filterApplyBtn">Ver resultados</button>
+      <button type="button" class="filter-action-primary" id="filterApplyBtn">Fechar</button>
     </div>
   </div>
 
@@ -1046,8 +1036,8 @@
 <nav class="mobile-bottom-nav" aria-label="Atalhos principais no celular">
   <a href="#topo" data-target="topo"><span>🏠</span><small>Início</small></a>
   <a href="#sec-fundos" data-target="sec-fundos"><span>📁</span><small>Fundos</small></a>
-  <button type="button" class="mobile-nav-action" onclick="openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês"><span>📊</span><small>Mês</small></button>
   <a href="#rankingsSection" data-target="rankingsSection"><span>🏆</span><small>Ranking</small></a>
+  <a href="#sec-mercado" data-target="sec-mercado"><span>📡</span><small>Mercado</small></a>
   <a href="#sec-focus" data-target="sec-focus" aria-label="Ir para o Boletim Focus"><span>📋</span><small>Focus</small></a>
 </nav>
 <a href="#topo" class="mobile-section-top-btn" aria-label="Voltar ao topo">↑</a>
@@ -1176,6 +1166,6 @@
 
 <!-- JavaScript principal —— todos os patches incluídos -->
 
-<script src="app.js?v=filtro-mobile-minimo-v42"></script>
+<script src="app.js?v=header-gap-nav-focus-v41"></script>
 </body>
 </html>
