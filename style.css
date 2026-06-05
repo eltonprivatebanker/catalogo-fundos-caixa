@@ -15194,3 +15194,85 @@ body.closed-market-open .closed-market-sheet{
   }
 }
 
+
+
+/* ═══════════════════════════════════════════════════════
+   PATCH v14 — Fechamento de Mercado com caixa real visível
+   Diagnóstico: o painel ficava aria-hidden=false/opacidade 1, mas 0x0 no desktop.
+   Este patch força largura, altura mínima, posição, camada e visibilidade.
+════════════════════════════════════════════════════════ */
+html body.closed-market-open #closedMarketOverlay,
+#closedMarketOverlay[aria-hidden="false"]{
+  position:fixed!important;
+  inset:0!important;
+  display:block!important;
+  width:100vw!important;
+  height:100vh!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  background:rgba(0,0,0,.72)!important;
+  z-index:2147483646!important;
+}
+
+html body.closed-market-open #closedMarketSheet.closed-market-sheet,
+#closedMarketSheet[aria-hidden="false"]{
+  position:fixed!important;
+  display:block!important;
+  box-sizing:border-box!important;
+  left:50%!important;
+  top:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translate(-50%,-50%)!important;
+  width:min(760px, calc(100vw - 24px))!important;
+  min-width:min(760px, calc(100vw - 24px))!important;
+  height:auto!important;
+  min-height:240px!important;
+  max-height:calc(100vh - 24px)!important;
+  overflow:auto!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  z-index:2147483647!important;
+  content-visibility:visible!important;
+  contain:none!important;
+  background:
+    radial-gradient(circle at 8% 8%, rgba(231,185,95,.12), transparent 28%),
+    rgba(10,13,24,.98)!important;
+  border:1px solid rgba(231,185,95,.38)!important;
+  border-radius:28px!important;
+  box-shadow:0 24px 90px rgba(0,0,0,.78)!important;
+}
+
+#closedMarketSheet[aria-hidden="true"]{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+@media(max-width:700px){
+  html body.closed-market-open #closedMarketSheet.closed-market-sheet,
+  #closedMarketSheet[aria-hidden="false"]{
+    top:auto!important;
+    bottom:0!important;
+    transform:translate(-50%,0)!important;
+    width:calc(100vw - 16px)!important;
+    min-width:0!important;
+    max-height:84dvh!important;
+    border-radius:24px 24px 0 0!important;
+  }
+}
+
+
+/* PATCH v15 — evita conflito de cliques nos cabeçalhos colapsáveis */
+.section-title-collapsible button,
+.section-title-collapsible a,
+.section-title-collapsible input,
+.section-title-collapsible select,
+.section-title-collapsible .indic-tabs-bar,
+.section-title-collapsible .market-toolbar-actions{
+  position:relative;
+  z-index:3;
+}
+.section-toggle-btn{cursor:pointer;}

@@ -1,13 +1,37 @@
 function toggleSection(b,c){
   var bd=document.getElementById(b),ct=document.getElementById(c);
-  if(!bd)return;
+  if(!bd)return false;
   var h=bd.hasAttribute('hidden');
   h?bd.removeAttribute('hidden'):bd.setAttribute('hidden','');
   if(ct){ct.classList.toggle('section-expanded',h);ct.setAttribute('aria-expanded',h?'true':'false');}
   var l=ct?ct.querySelector('.toggle-label'):null;
   if(l)l.textContent=h?'Ver menos':'Ver mais';
+  return false;
+}
+function handleSectionToggleClick(event,b,c){
+  var e=event||window.event;
+  var target=e&&e.target;
+
+  // Evita o bug de clique duplo/bubbling: botões, abas, links e ações dentro do
+  // cabeçalho não podem acionar o abre/fecha da seção pai. Apenas o próprio
+  // cabeçalho livre ou o botão .section-toggle-btn devem alternar a seção.
+  if(target && target.closest){
+    var toggleBtn=target.closest('.section-toggle-btn');
+    var interactive=target.closest('button,a,input,select,textarea,label,.indic-tabs-bar,.market-toolbar-actions,.chart-tabs,.dolar-range-tabs,.focus-ref,.section-badge');
+    if(interactive && !toggleBtn){
+      if(e.stopPropagation)e.stopPropagation();
+      return false;
+    }
+  }
+
+  if(e){
+    if(e.preventDefault)e.preventDefault();
+    if(e.stopPropagation)e.stopPropagation();
+  }
+  return toggleSection(b,c);
 }
 window.toggleSection=toggleSection;
+window.handleSectionToggleClick=handleSectionToggleClick;
 /* ════════════════════════════════════════════════════
    UTILITÁRIOS
 ════════════════════════════════════════════════════ */
@@ -6100,84 +6124,121 @@ function openFechamentoMesSheet(){
   try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){ console.warn('[Fechamento] card:', e); }
   try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){ console.warn('[Fechamento] sheet:', e); }
 
+  // Marca o instante da abertura para evitar fechamento imediato pelo clique/touch residual no overlay.
+  window.__closedMarketOpenedAt = Date.now();
+
   document.body.classList.add('closed-market-open');
   sheet.removeAttribute('hidden');
   sheet.setAttribute('aria-hidden','false');
 
+  // PATCH v14: força uma caixa visível. Em alguns estados do CSS o sheet ficava aberto,
+  // mas com getBoundingClientRect() = 0x0. Estas regras inline blindam a modal.
+  var isMobile = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+
   if(overlay){
     overlay.removeAttribute('hidden');
     overlay.setAttribute('aria-hidden','false');
+    Object.assign(overlay.style, {
+      position:'fixed', inset:'0', display:'block', width:'100vw', height:'100vh',
+      opacity:'1', visibility:'visible', pointerEvents:'auto',
+      background:'rgba(0,0,0,.72)', zIndex:'2147483646'
+    });
   }
+
+  Object.assign(sheet.style, {
+    position:'fixed', display:'block', boxSizing:'border-box',
+    left:'50%', right:'auto',
+    top:isMobile ? 'auto' : '50%',
+    bottom:isMobile ? '0' : 'auto',
+    transform:isMobile ? 'translate(-50%,0)' : 'translate(-50%,-50%)',
+    width:isMobile ? 'calc(100vw - 16px)' : 'min(760px, calc(100vw - 24px))',
+    minWidth:isMobile ? '0' : 'min(760px, calc(100vw - 24px))',
+    height:'auto', minHeight:'240px',
+    maxHeight:isMobile ? '84dvh' : 'calc(100vh - 24px)',
+    overflow:'auto', opacity:'1', visibility:'visible', pointerEvents:'auto',
+    zIndex:'2147483647', contentVisibility:'visible', contain:'none'
+  });
 
   return false;
 }
-function closeFechamentoMesSheet(){
+function closeFechamentoMesSheet(force){
+  // Evita o efeito abre-fecha no mesmo clique: quando o painel abre em pointer/touch,
+  // o click residual pode cair no overlay recém-exibido e fechar instantaneamente.
+  if(!force && window.__closedMarketOpenedAt && (Date.now() - window.__closedMarketOpenedAt < 800)){
+    return false;
+  }
+
   document.body.classList.remove('closed-market-open');
   const sheet=document.getElementById('closedMarketSheet');
   const overlay=document.getElementById('closedMarketOverlay');
-  if(sheet) sheet.setAttribute('aria-hidden','true');
-  if(overlay) overlay.setAttribute('aria-hidden','true');
+  if(sheet){
+    sheet.setAttribute('aria-hidden','true');
+    Object.assign(sheet.style, {
+      opacity:'0', visibility:'hidden', pointerEvents:'none'
+    });
+  }
+  if(overlay){
+    overlay.setAttribute('aria-hidden','true');
+    Object.assign(overlay.style, {
+      opacity:'0', visibility:'hidden', pointerEvents:'none'
+    });
+  }
+  return false;
 }
 window.openFechamentoMesSheet=openFechamentoMesSheet;
 window.closeFechamentoMesSheet=closeFechamentoMesSheet;
 
 (function setupClosedMarketOpen(){
-  function isInsideClosedMonthLaunch(e, btn){
-    if(!btn || !e) return false;
-    var x = typeof e.clientX === 'number' ? e.clientX : null;
-    var y = typeof e.clientY === 'number' ? e.clientY : null;
-    if(x === null || y === null) return false;
-    var r = btn.getBoundingClientRect();
-    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
+  function openFromButton(e){
+    if(e){
+      if(e.preventDefault)e.preventDefault();
+      if(typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+      else if(e.stopPropagation)e.stopPropagation();
+    }
+    return openFechamentoMesSheet();
   }
-
-  function onOpenIntent(e){
-    var mainBtn = document.getElementById('closedMonthLaunch');
-    var closestBtn = e.target && e.target.closest
-      ? e.target.closest('#closedMonthLaunch, .closed-month-launch, [data-open-closed-market]')
-      : null;
-
-    // Caminho normal: clique direto no botão ou em qualquer filho dele.
-    // Fallback por coordenada: se algum overlay/elemento transparente interceptar o target,
-    // ainda assim abrimos quando o clique caiu dentro da área visual do botão.
-    var shouldOpen = !!closestBtn || isInsideClosedMonthLaunch(e, mainBtn);
-    if(!shouldOpen) return;
-
-    e.preventDefault();
-    if(typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
-    else if(typeof e.stopPropagation === 'function') e.stopPropagation();
-
-    openFechamentoMesSheet();
-  }
-
-  // Captura em window + document para ganhar de outros patches/listeners da página.
-  ['pointerdown','click','touchend'].forEach(function(tipo){
-    window.addEventListener(tipo, onOpenIntent, true);
-    document.addEventListener(tipo, onOpenIntent, true);
-  });
 
   function init(){
     var btn=document.getElementById('closedMonthLaunch');
-    if(btn){
-      btn.setAttribute('data-open-closed-market','true');
-      btn.style.pointerEvents = 'auto';
-      if(getComputedStyle(btn).position === 'static') btn.style.position = 'relative';
-      btn.style.zIndex = '60';
+    if(!btn)return;
+    btn.setAttribute('data-open-closed-market','true');
+    btn.style.pointerEvents='auto';
+    if(getComputedStyle(btn).position==='static')btn.style.position='relative';
+    btn.style.zIndex='60';
+
+    // v15: listener restrito ao próprio botão. Removemos a captura global por
+    // coordenada para impedir que outros botões do painel de indicadores
+    // acionem comportamentos cruzados.
+    if(!btn.dataset.openBound){
+      btn.dataset.openBound='1';
+      btn.addEventListener('click',openFromButton,true);
+      btn.addEventListener('touchend',openFromButton,true);
     }
   }
 
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', init, {once:true});
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();
-  setTimeout(init, 300);
-  setTimeout(init, 1200);
+  setTimeout(init,300);
+  setTimeout(init,1200);
 })();
 (function setupClosedMarketClose(){
   function init(){
     var ov=document.getElementById('closedMarketOverlay');
-    if(ov&&!ov.dataset.cr){ov.dataset.cr='1';ov.addEventListener('click',function(e){if(e.target===ov)closeFechamentoMesSheet();});}
+    if(ov&&!ov.dataset.cr){
+      ov.dataset.cr='1';
+      ov.addEventListener('click',function(e){
+        if(window.__closedMarketOpenedAt && (Date.now() - window.__closedMarketOpenedAt < 800)){
+          e.preventDefault();
+          if(typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+          else e.stopPropagation();
+          return false;
+        }
+        if(e.target===ov)closeFechamentoMesSheet(true);
+      }, true);
+    }
     var cb=document.querySelector('.closed-market-close,#closedMarketClose');
-    if(cb&&!cb.dataset.cr){cb.dataset.cr='1';cb.addEventListener('click',closeFechamentoMesSheet);}
-    if(!window.__cesc){window.__cesc=1;document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('closed-market-open'))closeFechamentoMesSheet();});}
+    if(cb&&!cb.dataset.cr){cb.dataset.cr='1';cb.addEventListener('click',function(e){e.preventDefault();closeFechamentoMesSheet(true);});}
+    if(!window.__cesc){window.__cesc=1;document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('closed-market-open'))closeFechamentoMesSheet(true);});}
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
   else setTimeout(init,400);
