@@ -8939,3 +8939,382 @@ async function sharePainelMercado(){
   window.syncCategoryGridV70 = syncCategoryGridV70;
 })();
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v71 — Filtro sem salto de tela
+   Diagnóstico: o salto vinha de reflow/scroll anchoring e módulos antigos
+   alternando tabela/cards, não de um único scrollTo explícito.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD='ELTAUM_FILTER_NO_JUMP_20260606_v71';
+  window.__ELTAUM_FILTER_NO_JUMP_BUILD__=BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+  function now(){return performance.now()}
+
+  const filterSelector = [
+    '#sec-fundos .filter-preset-chip',
+    '#sec-fundos .shortcut-preset',
+    '#sec-fundos .category-choice-v44',
+    '#sec-fundos .chip',
+    '#sec-fundos #clearFiltersTop',
+    '#sec-fundos #clearFiltersBtn',
+    '#sec-fundos #filterApplyBtn',
+    '#sec-fundos #mobileFilterToggle',
+    '#sec-fundos .active-filter-pill',
+    '#sec-fundos .active-filter-clear',
+    '#sec-fundos [data-preset]',
+    '#sec-fundos [data-cat]',
+    '#sec-fundos [data-clear-filter]',
+    '#sec-fundos [data-v70-clear-filter]',
+    '#sec-fundos [data-v71-clear-filter]'
+  ].join(',');
+
+  const PRESET_TO_CANON_CAT = {
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+  };
+
+  const CANON_LABEL = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^\w\s]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function getActiveCanonCat(){
+    try{return canon(activeCat || '')}catch(e){return ''}
+  }
+
+  function findRawCategoryByCanon(canonTarget){
+    try{
+      if(!canonTarget || !Array.isArray(allRows)) return '';
+      const found = allRows.find(r => canon(r && r['Categoria']) === canonTarget);
+      return found ? String(found['Categoria'] || '').trim() : canonTarget;
+    }catch(e){
+      return canonTarget || '';
+    }
+  }
+
+  const lock = {
+    active:false,
+    allow:false,
+    y:0,
+    anchor:null,
+    anchorTop:0,
+    until:0,
+    raf:0,
+    timer:0
+  };
+
+  const originalScrollTo = window.scrollTo.bind(window);
+  const originalScrollBy = window.scrollBy.bind(window);
+  const originalScrollIntoView = Element.prototype.scrollIntoView;
+
+  function preserveNodeHeights(){
+    const nodes = [
+      qs('#fundFilterShell'),
+      qs('#sec-fundos .table-wrap'),
+      qs('#mobileFundCards'),
+      qs('.pagination-row')
+    ].filter(Boolean);
+
+    nodes.forEach(el=>{
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      if(h > 0){
+        el.dataset.v71MinHeight = el.style.minHeight || '';
+        el.style.minHeight = h + 'px';
+        el.classList.add('v71-filter-stabilizing');
+      }
+    });
+
+    return function releaseHeights(){
+      nodes.forEach(el=>{
+        el.style.minHeight = el.dataset.v71MinHeight || '';
+        delete el.dataset.v71MinHeight;
+        el.classList.remove('v71-filter-stabilizing');
+      });
+    };
+  }
+
+  function hardRestoreScroll(){
+    if(!lock.active) return;
+    const y = lock.y;
+    lock.allow = true;
+    try{ originalScrollTo(0, y); }catch(e){}
+    lock.allow = false;
+  }
+
+  function startNoJumpLock(){
+    const anchor = qs('#fundFilterShell') || qs('#sec-fundos') || document.body;
+    lock.active = true;
+    lock.y = window.scrollY || window.pageYOffset || 0;
+    lock.anchor = anchor;
+    lock.anchorTop = anchor ? anchor.getBoundingClientRect().top : 0;
+    lock.until = now() + 1500;
+
+    document.documentElement.classList.add('v71-filter-no-jump');
+    document.body.classList.add('v71-filter-no-jump');
+
+    const release = preserveNodeHeights();
+
+    const tick = () => {
+      if(!lock.active) return;
+      hardRestoreScroll();
+      if(now() < lock.until){
+        lock.raf = requestAnimationFrame(tick);
+      }
+    };
+    cancelAnimationFrame(lock.raf);
+    lock.raf = requestAnimationFrame(tick);
+
+    clearTimeout(lock.timer);
+    lock.timer = setTimeout(()=>{
+      release();
+      hardRestoreScroll();
+      lock.active = false;
+      document.documentElement.classList.remove('v71-filter-no-jump');
+      document.body.classList.remove('v71-filter-no-jump');
+    }, 1550);
+
+    return release;
+  }
+
+  window.scrollTo = function(...args){
+    if(lock.active && !lock.allow){
+      return;
+    }
+    return originalScrollTo(...args);
+  };
+
+  window.scrollBy = function(...args){
+    if(lock.active && !lock.allow){
+      return;
+    }
+    return originalScrollBy(...args);
+  };
+
+  Element.prototype.scrollIntoView = function(...args){
+    if(lock.active && !lock.allow){
+      return;
+    }
+    return originalScrollIntoView.apply(this,args);
+  };
+
+  function syncGridVisual(){
+    try{
+      const active = getActiveCanonCat();
+
+      qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset]').forEach(btn=>{
+        const p = btn.dataset.preset || 'all';
+        const wanted = PRESET_TO_CANON_CAT[p] || '';
+        const on = p === 'all' ? !active : active === wanted;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      const status = qs('#categoryGridStatus');
+      if(status) status.textContent = active ? ('Categoria: ' + (CANON_LABEL[active] || active)) : 'Todos os fundos';
+
+      const result = qs('#filterResultSummary');
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+      if(result && n !== null) result.textContent = `${n} fundos encontrados`;
+
+      const clearTop = qs('#clearFiltersTop');
+      if(clearTop){
+        const hasFilter = !!active;
+        clearTop.hidden = !hasFilter;
+        clearTop.classList.toggle('is-visible', hasFilter);
+        clearTop.textContent = 'Limpar filtro';
+      }
+
+      const strip = qs('#activeFilterStrip');
+      if(strip){
+        if(active){
+          strip.classList.add('active','category-grid-active-v70','category-grid-active-v71');
+          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v71-clear-filter="1"><small>Categoria</small>${CANON_LABEL[active] || active}<span>×</span></button><button type="button" class="active-filter-clear" data-v71-clear-filter="1">Limpar tudo</button>`;
+        }else{
+          strip.classList.remove('active','category-grid-active-v70','category-grid-active-v71');
+          strip.innerHTML = '';
+        }
+      }
+
+      qsa('.category-choice-v44').forEach(btn=>{
+        const on = canon(btn.dataset.cat || '') === active;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true':'false');
+      });
+    }catch(e){}
+  }
+
+  function keepMobileCardsStable(){
+    try{
+      if(isMobile()){
+        document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v71-mobile-cards-only');
+        document.body.classList.remove('fund-list-mode');
+        qsa('.mobile-catalog-view-btn').forEach(btn=>{
+          const on = btn.dataset.mobileCatalogView === 'cards';
+          btn.classList.toggle('active', on);
+          btn.setAttribute('aria-pressed', on ? 'true':'false');
+        });
+        try{localStorage.setItem('fundMobileView','cards'); localStorage.setItem('fundMobileViewV45','cards');}catch(e){}
+      }else{
+        document.body.classList.remove('v71-mobile-cards-only');
+      }
+    }catch(e){}
+  }
+
+  function clearFilters(){
+    startNoJumpLock();
+    try{
+      activeCat='';
+      activeBenchmark='';
+      activePerfil='';
+      activeRisco='';
+      hideSemDados=false;
+      currentPage=1;
+      window.__favListMode=false;
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
+      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+    }catch(e){}
+    const toggle = qs('#toggleSemDados');
+    if(toggle) toggle.checked = false;
+    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+    keepMobileCardsStable();
+    syncGridVisual();
+    setTimeout(syncGridVisual, 120);
+    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();}, 420);
+  }
+
+  function applyCategory(preset){
+    startNoJumpLock();
+
+    const wanted = PRESET_TO_CANON_CAT[preset] || '';
+    try{
+      activeBenchmark='';
+      activePerfil='';
+      activeRisco='';
+      hideSemDados=false;
+      currentPage=1;
+      window.__favListMode=false;
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset || 'all';
+      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+
+      activeCat = wanted ? findRawCategoryByCanon(wanted) : '';
+    }catch(e){}
+
+    const toggle = qs('#toggleSemDados');
+    if(toggle) toggle.checked = false;
+    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+    keepMobileCardsStable();
+    syncGridVisual();
+    setTimeout(syncGridVisual, 120);
+    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();}, 420);
+  }
+
+  let last = {key:'', t:0};
+  function interceptFilterEvent(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest(filterSelector) : null;
+    if(!target) return;
+
+    const isOurGrid = target.closest('.catalog-shortcuts-category-grid-v69');
+    const isClear = target.matches('#clearFiltersTop,#clearFiltersBtn,[data-v70-clear-filter],[data-v71-clear-filter],.active-filter-clear,.active-filter-pill');
+    const preset = target.dataset ? target.dataset.preset : '';
+
+    // Intercepta somente o grid novo e limpar filtros do bloco fundos.
+    // Outros filtros legados continuam funcionando, mas com trava anti-salto.
+    if(isOurGrid || isClear){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+
+      const key = isClear ? 'clear' : (preset || 'all');
+      const t = Date.now();
+      if(last.key === key && t - last.t < 420) return;
+      last = {key,t};
+
+      if(target && typeof target.blur === 'function') setTimeout(()=>target.blur(),0);
+      if(isClear) clearFilters();
+      else applyCategory(preset || 'all');
+      return;
+    }
+
+    // Para filtros legados, pelo menos trava a posição visual.
+    startNoJumpLock();
+    if(target && typeof target.blur === 'function') setTimeout(()=>target.blur(),0);
+    setTimeout(syncGridVisual,120);
+    setTimeout(syncGridVisual,420);
+  }
+
+  function bind(){
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+
+    if(document.documentElement.dataset.v71NoJumpBound !== '1'){
+      document.documentElement.dataset.v71NoJumpBound = '1';
+      ['pointerdown','pointerup','touchend','click'].forEach(type=>{
+        window.addEventListener(type, interceptFilterEvent, true);
+      });
+      window.addEventListener('resize',()=>{keepMobileCardsStable(); syncGridVisual();});
+    }
+
+    keepMobileCardsStable();
+    syncGridVisual();
+    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();},600);
+    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();},1600);
+    console.info('[Catálogo CAIXA] Filtro sem salto ativo:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__filterNoJumpV71){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      keepMobileCardsStable();
+      syncGridVisual();
+      return out;
+    };
+    wrapped.__filterNoJumpV71 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,80));
+  else setTimeout(bind,80);
+
+  window.__ELTAUM_FILTER_NO_JUMP_V71__ = {
+    sync: syncGridVisual,
+    cards: keepMobileCardsStable,
+    clear: clearFilters,
+    apply: applyCategory
+  };
+})();
+
