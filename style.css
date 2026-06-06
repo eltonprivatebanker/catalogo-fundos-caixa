@@ -18634,3 +18634,49 @@ header.site-header-clean{
     margin-bottom:8px !important;
   }
 }
+
+/* ==========================================================
+   v54 — Mobile limpo: remove textos redundantes e compacta modal
+   - Remove subtítulo do ranking solicitado
+   - Remove observação "Para refinar..." do modal de categorias
+   - Ajusta altura/padding do modal para não cortar conteúdo no celular
+========================================================== */
+.ranking-title-group .ranking-subtitle,
+#rankingsSection .ranking-subtitle,
+.category-filter-note-v44{
+  display:none !important;
+}
+
+@media(max-width:820px){
+  #rankingsSection .ranking-title-group{
+    gap:0 !important;
+  }
+
+  #rankingsSection .ranking-head{
+    margin-bottom:10px !important;
+  }
+
+  #fundFilterDrawer.filter-drawer-category-only-v44{
+    max-height:min(calc(100dvh - 36px),620px) !important;
+    padding:12px !important;
+    gap:10px !important;
+  }
+
+  #fundFilterDrawer.filter-drawer-category-only-v44 .filter-sheet-head{
+    padding-bottom:10px !important;
+  }
+
+  .category-choice-grid-v44{
+    gap:7px !important;
+  }
+
+  .category-choice-v44{
+    min-height:40px !important;
+    padding:7px 8px !important;
+  }
+
+  #fundFilterDrawer.filter-drawer-category-only-v44 .filter-sheet-actions{
+    margin:6px -2px -2px !important;
+    padding-top:9px !important;
+  }
+}
