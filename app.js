@@ -8921,3 +8921,402 @@ async function sharePainelMercado(){
   };
 })();
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v75 — Mobile: Pessoa Física + Ordenação
+   - Inclui "Somente Pessoa Física".
+   - Inclui ordenação por 12M, ano, mês, dia e % CDI.
+   - Usa select/toggle nativos para manter estabilidade no celular.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_SELECT_PF_SORT_20260606_v75';
+  window.__ELTAUM_MOBILE_SELECT_PF_SORT_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  const CANON_LABEL = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  const SORT_MAP = {
+    base:{campo:'base',dir:'desc'},
+    m12_desc:{campo:'m12',dir:'desc'},
+    m12_asc:{campo:'m12',dir:'asc'},
+    ano_desc:{campo:'ano',dir:'desc'},
+    ano_asc:{campo:'ano',dir:'asc'},
+    mes_desc:{campo:'mes',dir:'desc'},
+    dia_desc:{campo:'dia',dir:'desc'},
+    cdi_desc:{campo:'cdi',dir:'desc'},
+    cdi_asc:{campo:'cdi',dir:'asc'}
+  };
+
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^\w\s]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function activeCanonCat(){
+    try{return canon(activeCat || '')}catch(e){return ''}
+  }
+
+  function findRawCategoryByCanon(canonTarget){
+    try{
+      if(!canonTarget || !Array.isArray(allRows)) return '';
+      const found = allRows.find(r => canon(r && r['Categoria']) === canonTarget);
+      return found ? String(found['Categoria'] || '').trim() : canonTarget;
+    }catch(e){
+      return canonTarget || '';
+    }
+  }
+
+  function getSortMode(){
+    try{return localStorage.getItem('mobileSortModeV75') || window.__mobileSortModeV75 || 'base'}
+    catch(e){return window.__mobileSortModeV75 || 'base'}
+  }
+
+  function setSortMode(mode){
+    window.__mobileSortModeV75 = SORT_MAP[mode] ? mode : 'base';
+    try{localStorage.setItem('mobileSortModeV75', window.__mobileSortModeV75)}catch(e){}
+  }
+
+  /* Override controlado: no mobile, "Padrão da base" não ordena; demais opções usam o motor já existente. */
+  try{
+    if(typeof ordenarPorMobileSort === 'function' && !ordenarPorMobileSort.__v75Wrapped){
+      const originalOrdenarPorMobileSort = ordenarPorMobileSort;
+      ordenarPorMobileSort = function(rows){
+        const mode = getSortMode();
+        const cfg = SORT_MAP[mode] || SORT_MAP.base;
+
+        if(cfg.campo === 'base'){
+          return rows;
+        }
+
+        try{
+          activeMobileSortCampo = cfg.campo;
+          activeMobileSortDir = cfg.dir;
+        }catch(e){}
+
+        return originalOrdenarPorMobileSort(rows);
+      };
+      ordenarPorMobileSort.__v75Wrapped = true;
+    }
+  }catch(e){}
+
+  function keepMobileCards(){
+    try{
+      if(!isMobile()) return;
+      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v75-mobile-cards-only');
+      document.body.classList.remove('fund-list-mode');
+      try{
+        localStorage.setItem('fundMobileView','cards');
+        localStorage.setItem('fundMobileViewV45','cards');
+      }catch(e){}
+    }catch(e){}
+  }
+
+  function preserveViewport(task){
+    const y = window.scrollY || window.pageYOffset || 0;
+    const shell = qs('#fundFilterShell') || qs('#sec-fundos');
+    const beforeTop = shell ? shell.getBoundingClientRect().top : 0;
+
+    const locked = [];
+    ['#fundFilterShell','#mobileFundCards','#sec-fundos .table-wrap','.pagination-row'].forEach(sel=>{
+      const el = qs(sel);
+      if(!el) return;
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      if(h > 0){
+        locked.push([el, el.style.minHeight || '']);
+        el.style.minHeight = h + 'px';
+        el.classList.add('v75-stabilizing');
+      }
+    });
+
+    try{ task(); }
+    finally{
+      const restore = () => {
+        try{
+          const nowTop = shell ? shell.getBoundingClientRect().top : beforeTop;
+          const delta = nowTop - beforeTop;
+          if(Math.abs(delta) > 0.5){
+            window.scrollBy({top:delta, left:0, behavior:'auto'});
+          }else{
+            window.scrollTo({top:y, left:0, behavior:'auto'});
+          }
+        }catch(e){
+          try{window.scrollTo(0,y)}catch(_){}
+        }
+      };
+      restore();
+      requestAnimationFrame(restore);
+      setTimeout(restore,80);
+      setTimeout(()=>{
+        locked.forEach(([el,old])=>{
+          el.style.minHeight = old;
+          el.classList.remove('v75-stabilizing');
+        });
+        restore();
+      },260);
+    }
+  }
+
+  function syncV75(){
+    try{
+      const active = activeCanonCat();
+      const label = active ? (CANON_LABEL[active] || active) : 'Todos os fundos';
+
+      const select = qs('#mobileCategorySelectV74');
+      if(select && select.value !== active) select.value = active;
+
+      const pf = qs('#mobileOnlyPfV75');
+      if(pf) pf.checked = (String(activePerfil || '') === 'PF');
+
+      const sort = qs('#mobileSortSelectV75');
+      if(sort && sort.value !== getSortMode()) sort.value = getSortMode();
+
+      const status = qs('#mobileCategorySelectStatusV74');
+      if(status){
+        const pfTxt = (String(activePerfil || '') === 'PF') ? ' · PF' : '';
+        status.textContent = label + pfTxt;
+      }
+
+      const result = qs('#mobileCategorySelectResultV74');
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+      if(result && n !== null) result.textContent = `${n} fundos encontrados`;
+
+      const clear = qs('#mobileCategoryClearV74');
+      if(clear){
+        const has = !!(active || String(activePerfil || '') === 'PF' || getSortMode() !== 'base');
+        clear.hidden = !has;
+        clear.textContent = 'Limpar filtros';
+      }
+
+      const filterResult = qs('#filterResultSummary');
+      if(filterResult && n !== null) filterResult.textContent = `${n} fundos encontrados`;
+
+      const desktopStatus = qs('#categoryGridStatus');
+      if(desktopStatus) desktopStatus.textContent = active ? ('Categoria: ' + label) : 'Todos os fundos';
+
+      const summary = qs('#mobileFilterSummary');
+      if(summary) summary.textContent = active ? ('Categoria: ' + label) : 'Categoria: Todos os fundos';
+    }catch(e){}
+  }
+
+  function applyMobileControls(options){
+    const opts = options || {};
+    preserveViewport(()=>{
+      const cat = opts.hasOwnProperty('category') ? opts.category : (qs('#mobileCategorySelectV74')?.value || '');
+      const onlyPf = opts.hasOwnProperty('onlyPf') ? !!opts.onlyPf : !!qs('#mobileOnlyPfV75')?.checked;
+      const sortMode = opts.sortMode || qs('#mobileSortSelectV75')?.value || getSortMode();
+
+      try{
+        activeCat = cat ? findRawCategoryByCanon(cat) : '';
+        activePerfil = onlyPf ? 'PF' : '';
+        activeBenchmark = '';
+        activeRisco = '';
+        hideSemDados = false;
+        currentPage = 1;
+        activeCdiSort = null;
+        sortCol = -1;
+        sortDir = -1;
+        window.__favListMode = false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'mobile-controls-v75';
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+      }catch(e){}
+
+      setSortMode(sortMode);
+
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.checked = false;
+
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof updateCdiSortButtons === 'function') updateCdiSortButtons(); }catch(e){}
+      try{ if(typeof updateMobileSortButtons === 'function') updateMobileSortButtons(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+
+      keepMobileCards();
+      syncV75();
+      setTimeout(()=>{keepMobileCards(); syncV75();},120);
+    });
+  }
+
+  function clearMobileControls(ev){
+    if(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+    }
+
+    const sel = qs('#mobileCategorySelectV74');
+    const pf = qs('#mobileOnlyPfV75');
+    const sort = qs('#mobileSortSelectV75');
+    if(sel) sel.value = '';
+    if(pf) pf.checked = false;
+    if(sort) sort.value = 'base';
+
+    applyMobileControls({category:'', onlyPf:false, sortMode:'base'});
+  }
+
+  function bindV75(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    const sel = qs('#mobileCategorySelectV74');
+    if(sel && sel.dataset.v75Bound !== '1'){
+      sel.dataset.v75Bound = '1';
+      sel.addEventListener('change', ev=>{
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+        applyMobileControls({category:sel.value});
+        if(typeof sel.blur === 'function') sel.blur();
+      }, true);
+    }
+
+    const pf = qs('#mobileOnlyPfV75');
+    if(pf && pf.dataset.v75Bound !== '1'){
+      pf.dataset.v75Bound = '1';
+      pf.addEventListener('change', ev=>{
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+        applyMobileControls({onlyPf:pf.checked});
+      }, true);
+    }
+
+    const sort = qs('#mobileSortSelectV75');
+    if(sort && sort.dataset.v75Bound !== '1'){
+      sort.dataset.v75Bound = '1';
+      sort.value = getSortMode();
+      sort.addEventListener('change', ev=>{
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+        applyMobileControls({sortMode:sort.value});
+        if(typeof sort.blur === 'function') sort.blur();
+      }, true);
+    }
+
+    const clear = qs('#mobileCategoryClearV74');
+    if(clear && clear.dataset.v75Bound !== '1'){
+      clear.dataset.v75Bound = '1';
+      clear.addEventListener('click', clearMobileControls, true);
+    }
+
+    keepMobileCards();
+    syncV75();
+    setTimeout(()=>{keepMobileCards(); syncV75();},500);
+    setTimeout(()=>{keepMobileCards(); syncV75();},1400);
+
+    console.info('[Catálogo CAIXA] Mobile PF + ordenação:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__mobilePfSortV75){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      keepMobileCards();
+      syncV75();
+      return out;
+    };
+    wrapped.__mobilePfSortV75 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV75,160));
+  else setTimeout(bindV75,160);
+
+  window.__ELTAUM_MOBILE_PF_SORT_V75__ = {
+    apply: applyMobileControls,
+    clear: clearMobileControls,
+    sync: syncV75
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v76 — Mobile: rodapé seguro e compacto
+   - Ajusta espaçamento inferior para o último card não ficar atrás do menu.
+   - Renomeia item "Mês" para "Mercado" quando necessário.
+   - Recalcula altura real do rodapé em celulares com barra de navegação.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_FOOTER_SAFE_20260606_v76';
+  window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function updateFooterSafeAreaV76(){
+    try{
+      const nav = qs('.mobile-bottom-nav');
+      const root = document.documentElement;
+      const mobile = isMobile();
+
+      if(!mobile || !nav){
+        root.style.removeProperty('--mobile-bottom-nav-real-h');
+        root.style.removeProperty('--mobile-content-safe-bottom');
+        return;
+      }
+
+      // Renomeia "Mês" para "Mercado" sem depender de HTML específico.
+      qsa('.mobile-bottom-nav a, .mobile-bottom-nav button').forEach(item=>{
+        const text = (item.textContent || '').trim();
+        if(/^📊?\s*M[eê]s$/i.test(text) || text === 'Mês' || text === 'Mes'){
+          item.childNodes.forEach(n=>{
+            if(n.nodeType === 3 && /M[eê]s|Mes/.test(n.nodeValue || '')) n.nodeValue = n.nodeValue.replace(/M[eê]s|Mes/g,'Mercado');
+          });
+          const span = item.querySelector('span:last-child, small:last-child, b:last-child');
+          if(span && /M[eê]s|Mes/.test(span.textContent || '')) span.textContent = 'Mercado';
+        }
+      });
+
+      const rect = nav.getBoundingClientRect();
+      const h = Math.max(64, Math.ceil(rect.height || 0));
+      const safe = Math.max(108, h + 38);
+
+      root.style.setProperty('--mobile-bottom-nav-real-h', h + 'px');
+      root.style.setProperty('--mobile-content-safe-bottom', `calc(${safe}px + env(safe-area-inset-bottom, 0px))`);
+
+      document.body.classList.add('mobile-footer-safe-v76');
+    }catch(e){}
+  }
+
+  function bind(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    updateFooterSafeAreaV76();
+    setTimeout(updateFooterSafeAreaV76,300);
+    setTimeout(updateFooterSafeAreaV76,1000);
+    setTimeout(updateFooterSafeAreaV76,1800);
+
+    window.addEventListener('resize', updateFooterSafeAreaV76, {passive:true});
+    window.addEventListener('orientationchange', ()=>setTimeout(updateFooterSafeAreaV76,350), {passive:true});
+
+    console.info('[Catálogo CAIXA] Rodapé mobile seguro:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+
+  window.__ELTAUM_MOBILE_FOOTER_SAFE_V76__ = {sync:updateFooterSafeAreaV76};
+})();
+

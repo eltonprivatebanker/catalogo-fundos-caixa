@@ -229,6 +229,34 @@
         </select>
         <span class="mobile-category-select-arrow-v74">⌄</span>
       </label>
+
+      <div class="mobile-extra-controls-v75" id="mobileExtraControlsV75" aria-label="Filtros complementares no celular">
+        <label class="mobile-pf-toggle-v75" for="mobileOnlyPfV75">
+          <input type="checkbox" id="mobileOnlyPfV75"/>
+          <span class="mobile-pf-toggle-mark-v75">✓</span>
+          <span class="mobile-pf-toggle-text-v75">
+            <strong>Somente Pessoa Física</strong>
+            <small>Exibe apenas fundos disponíveis para PF</small>
+          </span>
+        </label>
+
+        <label class="mobile-sort-shell-v75" for="mobileSortSelectV75">
+          <span>Ordenar por</span>
+          <select id="mobileSortSelectV75" aria-label="Ordenar fundos no celular">
+            <option value="base">Padrão da base</option>
+            <option value="m12_desc">Maior rentabilidade 12M</option>
+            <option value="m12_asc">Menor rentabilidade 12M</option>
+            <option value="ano_desc">Maior rentabilidade no ano</option>
+            <option value="ano_asc">Menor rentabilidade no ano</option>
+            <option value="mes_desc">Maior rentabilidade no mês</option>
+            <option value="dia_desc">Maior rentabilidade no dia</option>
+            <option value="cdi_desc">Maior % do CDI 12M</option>
+            <option value="cdi_asc">Menor % do CDI 12M</option>
+          </select>
+          <span class="mobile-sort-arrow-v75">⌄</span>
+        </label>
+      </div>
+
       <div class="mobile-category-select-foot-v74">
         <span id="mobileCategorySelectResultV74">171 fundos encontrados</span>
         <button type="button" id="mobileCategoryClearV74" hidden>Limpar filtro</button>
@@ -1094,7 +1122,7 @@
 <nav class="mobile-bottom-nav" aria-label="Atalhos principais no celular">
   <a href="#topo" data-target="topo"><span>🏠</span><small>Início</small></a>
   <a href="#sec-fundos" data-target="sec-fundos"><span>📁</span><small>Fundos</small></a>
-  <button type="button" class="mobile-nav-action" onclick="openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês"><span>📊</span><small>Mês</small></button>
+  <button type="button" class="mobile-nav-action" onclick="openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês"><span>📊</span><small>Mercado</small></button>
   <a href="#rankingsSection" data-target="rankingsSection"><span>🏆</span><small>Ranking</small></a>
   <a href="#sec-focus" data-target="sec-focus" aria-label="Ir para o Boletim Focus"><span>📋</span><small>Focus</small></a>
 </nav>
