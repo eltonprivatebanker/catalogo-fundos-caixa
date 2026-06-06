@@ -1,3 +1,4 @@
+// ELTAUM_SORT_FAVORITOS_FIX_20260606_v66
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){
   var bd=document.getElementById(b),ct=document.getElementById(c);
@@ -5003,11 +5004,20 @@ document.addEventListener('DOMContentLoaded', function(){
         if(typeof render==='function') render();
       }
 
-      /* Favoritos */
+      /* Favoritos
+         v66: favorito NÃO altera mais a ordenação da lista geral.
+         Antes, qualquer fundo favoritado era jogado para o topo depois da ordenação,
+         o que fazia o CAIXA FIC FIF INDEXA DOLAR CAMBIAL parecer "preso".
+         Agora: Favoritos clicado => filtra favoritos; Todos => ordena normalmente. */
       if(typeof filtered==='undefined') return;
       const favs=getFavs();
-      if(onlyFavs){ filtered=filtered.filter(r=>favs.has(getFundKey(r))); if(typeof render==='function') render(); }
-      else if(favs.size>0){ filtered.sort((a,b)=>(favs.has(getFundKey(a))?0:1)-(favs.has(getFundKey(b))?0:1)); if(typeof render==='function') render(); }
+      if(onlyFavs){
+        filtered=filtered.filter(r=>{
+          try{ return typeof rowIsFavoritedForFilter==='function' ? rowIsFavoritedForFilter(r) : favs.has(getFundKey(r)); }
+          catch(e){ return favs.has(getFundKey(r)); }
+        });
+        if(typeof render==='function') render();
+      }
 
       /* Atualiza contador na barra global */
       updateGfbCount();
