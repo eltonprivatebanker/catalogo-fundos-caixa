@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-booting">
+<html lang="pt-br" class="app-ready no-boot-v79">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_MOBILE_FILTER_UNIFIED_20260606_v78"/>
+<meta name="app-build" content="ELTAUM_NO_BOOT_SCREEN_20260606_v79"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -40,71 +40,35 @@ html:not(.app-booting) .page{
   pointer-events:none!important;
 }
 
+
+/* PATCH v79 — sem tela inicial de carregamento */
+html.no-boot-v79 .page,
+html.app-ready .page,
+html:not(.app-booting) .page{
+  opacity:1!important;
+  transform:none!important;
+  visibility:visible!important;
+}
+#appBootScreen{
+  display:none!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
 </style>
 
-<script id="boot-reveal-v78">
-(function(){
-  var revealed = false;
-
-  function revealApp(reason){
-    if(revealed) return;
-    revealed = true;
-    try{
-      var html = document.documentElement;
-      html.classList.remove('app-booting');
-      html.classList.add('app-ready');
-      html.setAttribute('data-boot-reveal', reason || 'ok');
-
-      var boot = document.getElementById('appBootScreen');
-      if(boot){
-        boot.classList.add('boot-hidden-v78');
-        boot.setAttribute('aria-hidden','true');
-        setTimeout(function(){
-          try{ boot.style.display = 'none'; }catch(e){}
-        }, 260);
-      }
-    }catch(e){}
-  }
-
-  window.__revealApp = revealApp;
-
-  // Fallbacks independentes: mesmo se algum dado atrasar, a tela não fica presa no loading.
-  window.setTimeout(function(){ revealApp('timeout-3200'); }, 3200);
-  window.setTimeout(function(){ revealApp('timeout-6500'); }, 6500);
-
-  document.addEventListener('DOMContentLoaded', function(){
-    window.setTimeout(function(){ revealApp('dom-ready'); }, 900);
-  });
-
-  window.addEventListener('load', function(){
-    window.setTimeout(function(){ revealApp('window-load'); }, 350);
-  });
-
-  window.addEventListener('error', function(){
-    window.setTimeout(function(){ revealApp('error-fallback'); }, 200);
-  }, true);
-})();
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=mobile-filter-unified-v78" rel="stylesheet"/>
+<link href="style.css?v=no-boot-screen-v79" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=mobile-filter-unified-v78"></script>
+<script defer src="app.js?v=no-boot-screen-v79"></script>
 
 </head>
 <body>
-<div id="appBootScreen" role="status" aria-live="polite" aria-label="Carregando catálogo">
-  <div class="boot-card">
-    <div class="boot-logo">E</div>
-    <p class="boot-title">Carregando Catálogo de Fundos</p>
-    <p class="boot-sub">Preparando dados, rankings e indicadores para uma abertura estável.</p>
-    <div class="boot-bar" aria-hidden="true"></div>
-  </div>
-</div>
-
 <div class="page" id="topo">
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header class="site-header-clean">

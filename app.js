@@ -8649,7 +8649,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_FILTER_UNIFIED_20260606_v78';
+  const BUILD = 'ELTAUM_NO_BOOT_SCREEN_20260606_v79';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8721,7 +8721,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_FILTER_UNIFIED_20260606_v78';
+  const BUILD = 'ELTAUM_NO_BOOT_SCREEN_20260606_v79';
   window.__ELTAUM_MOBILE_FILTER_UNIFIED_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9084,21 +9084,14 @@ async function sharePainelMercado(){
 })();
 
 
-/* PATCH v78 — fallback final anti-loading infinito */
+/* PATCH v79 — app sem boot screen */
 (function(){
-  function reveal(reason){
-    try{
-      if(typeof window.__revealApp === 'function') window.__revealApp(reason || 'app-fallback');
-      else{
-        document.documentElement.classList.remove('app-booting');
-        document.documentElement.classList.add('app-ready');
-        var boot=document.getElementById('appBootScreen');
-        if(boot){boot.style.display='none'; boot.setAttribute('aria-hidden','true');}
-      }
-    }catch(e){}
-  }
-  setTimeout(function(){reveal('app-js-timeout-4500');},4500);
-  window.addEventListener('unhandledrejection',function(){setTimeout(function(){reveal('unhandledrejection');},100);});
-  window.addEventListener('error',function(){setTimeout(function(){reveal('app-error');},100);},true);
+  try{
+    document.documentElement.classList.remove('app-booting');
+    document.documentElement.classList.add('app-ready','no-boot-v79');
+    var boot=document.getElementById('appBootScreen');
+    if(boot) boot.remove();
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_NO_BOOT_SCREEN_20260606_v79');
+  }catch(e){}
 })();
 
