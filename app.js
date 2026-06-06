@@ -7827,10 +7827,7 @@ async function sharePainelMercado(){
   }
   function normalizeMode(mode){return mode==='cards' ? 'cards' : 'list';}
   function getMode(){
-    try{
-      if(isMobile()) return 'cards';
-      return normalizeMode(localStorage.getItem(MODE_KEY)||'list');
-    }catch(e){return isMobile()?'cards':'list';}
+    try{return normalizeMode(localStorage.getItem(MODE_KEY)||'list');}catch(e){return 'list';}
   }
   function saveMode(mode){
     try{localStorage.setItem(MODE_KEY,normalizeMode(mode)); localStorage.setItem(LEGACY_KEY,'cards');}catch(e){}
@@ -7900,11 +7897,11 @@ async function sharePainelMercado(){
     });
   }
   function applyMode(mode){
-    const mobile=isMobile();
-    mode=mobile ? 'cards' : normalizeMode(mode);
+    mode=normalizeMode(mode);
     saveMode(mode);
+    const mobile=isMobile();
     document.body.classList.toggle('fund-card-mode', mode==='cards' || mobile);
-    document.body.classList.toggle('fund-list-mode', false);
+    document.body.classList.toggle('fund-list-mode', mobile && mode==='list');
     syncButtons();
     renderByMode();
   }
@@ -7970,8 +7967,8 @@ async function sharePainelMercado(){
     return [s?.value,g?.value].some(v=>String(v||'').trim().length>=2);
   }
   function preferListMode(){
-    try{localStorage.setItem(MODE_KEY,'cards'); localStorage.setItem('fundMobileView','cards');}catch(e){}
-    const btn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="cards"]');
+    try{localStorage.setItem(MODE_KEY,'list');}catch(e){}
+    const btn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="list"]');
     if(btn && !btn.classList.contains('active')){
       btn.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
     }
@@ -7984,8 +7981,13 @@ async function sharePainelMercado(){
     return gfbH + 18;
   }
   function ensureHint(){
-    const old=qs('#mobileResultsHintV46');
-    if(old) old.remove();
+    const sw=qs('#mobileCatalogViewSwitch');
+    if(!sw || qs('#mobileResultsHintV46')) return;
+    const hint=document.createElement('div');
+    hint.id='mobileResultsHintV46';
+    hint.className='mobile-results-hint-v46';
+    hint.textContent='Resultados atualizados abaixo. Use Lista para comparar mais fundos ou Cards para acessar documentos.';
+    sw.insertAdjacentElement('afterend',hint);
   }
   function resultsAnchor(){
     return qs('#mobileCatalogViewSwitch') || qs('#mobileFundCards') || qs('#sec-fundos .table-wrap') || qs('#sec-fundos');
@@ -8396,93 +8398,4 @@ async function sharePainelMercado(){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindSidePanel);
   else bindSidePanel();
-})();
-
-
-/* Build UI: ELTAUM_MOBILE_CARDS_ONLY_20260606_v65
-   PATCH v65 — Mobile somente Cards
-   - Remove o seletor Tabela/Cards no celular.
-   - Força a visualização em cards no mobile.
-   - Compacta os botões dos cards no celular.
-   - Mantém Tabela/Cards no desktop.
-*/
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_MOBILE_CARDS_ONLY_20260606_v65';
-  const MODE_KEY='fundMobileViewV45';
-  const LEGACY_KEY='fundMobileView';
-  const mq=()=>{try{return window.matchMedia('(max-width:820px)').matches;}catch(e){return false;}};
-  const qs=(s,r=document)=>r.querySelector(s);
-  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
-
-  function shortenMobileCardActions(){
-    if(!mq()) return;
-    qsa('#mobileFundCards .fund-card-mobile').forEach(card=>{
-      const page=card.querySelector('.fund-card-page-btn');
-      const expanded=card.querySelector('.fund-card-list-expanded');
-      if(page && expanded && !expanded.querySelector('.mobile-detail-page-link-v65')){
-        const wrap=document.createElement('div');
-        wrap.className='mobile-detail-page-link-wrap-v65';
-        wrap.innerHTML='<a class="mobile-detail-page-link-v65" href="'+page.href+'" target="_blank" rel="noopener">🌐 Página do fundo na CAIXA ↗</a>';
-        const docs=expanded.querySelector('.fund-card-mobile-docs');
-        if(docs) expanded.insertBefore(wrap,docs);
-        else expanded.appendChild(wrap);
-      }
-      const boletim=card.querySelector('.fund-card-boletim-quick-btn');
-      if(boletim) boletim.textContent='📄 Boletim';
-      const detail=card.querySelector('.fund-card-detail-btn');
-      if(detail && !card.classList.contains('open') && detail.textContent.trim()!=='Em análise') detail.textContent='➕ Detalhes';
-      const close=card.querySelector('.fund-card-close-details');
-      if(close) close.textContent='× Fechar';
-    });
-  }
-
-  function forceMobileCards(){
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-    if(!mq()){
-      document.body.classList.remove('mobile-cards-only-v65');
-      return;
-    }
-    try{localStorage.setItem(MODE_KEY,'cards'); localStorage.setItem(LEGACY_KEY,'cards');}catch(e){}
-    document.body.classList.add('mobile-cards-only-v65','fund-card-mode');
-    document.body.classList.remove('fund-list-mode');
-    const sw=qs('#mobileCatalogViewSwitch');
-    if(sw){
-      sw.setAttribute('aria-hidden','true');
-      sw.dataset.mobileHiddenV65='1';
-    }
-    const oldHint=qs('#mobileResultsHintV46');
-    if(oldHint) oldHint.remove();
-    const btn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="cards"]');
-    if(btn && !btn.classList.contains('active')){
-      btn.classList.add('active');
-      btn.setAttribute('aria-pressed','true');
-    }
-    const listBtn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="list"]');
-    if(listBtn){listBtn.classList.remove('active'); listBtn.setAttribute('aria-pressed','false');}
-    if(typeof window.renderMobileFundCards==='function'){
-      try{window.renderMobileFundCards();}catch(e){}
-    }
-    shortenMobileCardActions();
-  }
-
-  function schedule(){setTimeout(forceMobileCards,60); setTimeout(shortenMobileCardActions,180);}
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',schedule,{once:true});
-  else schedule();
-  window.addEventListener('resize',()=>setTimeout(forceMobileCards,140),{passive:true});
-  window.addEventListener('orientationchange',()=>setTimeout(forceMobileCards,240),{passive:true});
-  document.addEventListener('input',ev=>{
-    if(ev.target && (ev.target.id==='searchInput' || ev.target.id==='gfbSearch')) setTimeout(forceMobileCards,260);
-  },true);
-  document.addEventListener('click',ev=>{
-    if(!mq()) return;
-    if(ev.target.closest('.category-choice-v44,#clearFiltersTop,#clearFiltersBtn,.active-filter-pill,.active-filter-clear,.fund-card-detail-btn')){
-      setTimeout(forceMobileCards,220);
-    }
-  },true);
-  const box=()=>qs('#mobileFundCards');
-  const obs=new MutationObserver(()=>{ if(mq()) setTimeout(shortenMobileCardActions,30); });
-  setTimeout(()=>{const b=box(); if(b) obs.observe(b,{childList:true,subtree:true});},900);
-  setInterval(()=>{ if(mq()) forceMobileCards(); },1600);
 })();
