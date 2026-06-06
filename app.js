@@ -4366,12 +4366,14 @@ function buildCopomCalendario(){
   requestAnimationFrame(() => { container.scrollLeft = 0; });
 }
 
+
 /* ════════════════════════════════════════════════════
-   INIT
+   INIT — v80 dados primeiro, indicadores depois
 ════════════════════════════════════════════════════ */
 async function iniciarDashboard(){
   const etapa = async function(nome, fn){
     try{
+      if(typeof fn !== 'function') return null;
       return await fn();
     }catch(e){
       console.warn('[INIT] Falha em ' + nome + ':', e);
@@ -4379,26 +4381,57 @@ async function iniciarDashboard(){
     }
   };
 
+  const revelar = function(){
+    try{
+      document.documentElement.classList.remove('app-booting');
+      document.documentElement.classList.add('app-ready','no-boot-v79','data-first-v80');
+      const boot=document.getElementById('appBootScreen');
+      if(boot) boot.remove();
+      if(typeof window.__revealApp === 'function') window.__revealApp('data-first-v80');
+    }catch(e){}
+  };
+
   try{
-    await etapa('carregarMercado', carregarMercado);
-    await etapa('carregarCDIPeriodos', carregarCDIPeriodos);
-    await etapa('carregarIPCAPeriodos', carregarIPCAPeriodos);
-    etapa('carregarDolarDia', carregarDolarDia);
-    etapa('carregarPTAXDiarioAno', carregarPTAXDiarioAno);
-    await etapa('carregarPTAXHistorico', carregarPTAXHistorico);
+    /* Principal: dados locais do catálogo não podem esperar endpoints externos. */
     await etapa('carregarFundosJson', carregarFundosJson);
     await etapa('carregarDados', carregarDados);
     await etapa('carregarKPIs', carregarKPIs);
-  }finally{
-    // A interface fica pronta mesmo que algum endpoint externo falhe.
+
+    revelar();
     window.__dashboardReady = true;
-    try{ if(typeof window.__revealApp === 'function') window.__revealApp(); }catch(e){}
-    try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){}
-    try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){}
-    try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){}
+
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+    try{ if(typeof renderRankings === 'function') renderRankings(); }catch(e){}
+
+    /* Indicadores e gráficos rodam em segundo plano. Se algum endpoint atrasar,
+       a lista de fundos continua disponível. */
+    (async function carregarIndicadoresEmBackground(){
+      await etapa('carregarMercado', carregarMercado);
+      await etapa('carregarCDIPeriodos', carregarCDIPeriodos);
+      await etapa('carregarIPCAPeriodos', carregarIPCAPeriodos);
+      etapa('carregarDolarDia', carregarDolarDia);
+      etapa('carregarPTAXDiarioAno', carregarPTAXDiarioAno);
+      await etapa('carregarPTAXHistorico', carregarPTAXHistorico);
+
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderRankings === 'function') renderRankings(); }catch(e){}
+      try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){}
+      try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){}
+      try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){}
+    })();
+
+  }catch(e){
+    console.error('[INIT] Falha crítica no carregamento principal:', e);
+    revelar();
+
+    const loadMsg = document.getElementById('loadMsg');
+    if(loadMsg){
+      loadMsg.innerHTML = `<div style="color:var(--red)">Erro ao carregar a base principal<br><small>${e.message || e}</small></div>`;
+    }
   }
 }
 iniciarDashboard();
+
 document.addEventListener('click', function(e){
   if(e.target.closest('.detail-row a, .detail-row button, .detail-row input, .docs-card')){
     e.stopPropagation();
@@ -8649,7 +8682,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_NO_BOOT_SCREEN_20260606_v79';
+  const BUILD = 'ELTAUM_DATA_FIRST_INIT_20260606_v80';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8721,7 +8754,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_NO_BOOT_SCREEN_20260606_v79';
+  const BUILD = 'ELTAUM_DATA_FIRST_INIT_20260606_v80';
   window.__ELTAUM_MOBILE_FILTER_UNIFIED_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9091,7 +9124,22 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_NO_BOOT_SCREEN_20260606_v79');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DATA_FIRST_INIT_20260606_v80');
   }catch(e){}
+})();
+
+
+/* PATCH v80 — monitor de dados principais */
+(function(){
+  setTimeout(function(){
+    try{
+      var hasRows = Array.isArray(window.allRows) && window.allRows.length > 0;
+      var loadMsg = document.getElementById('loadMsg');
+      if(loadMsg && loadMsg.style.display !== 'none' && !hasRows){
+        loadMsg.innerHTML = '<div style="color:var(--muted)">Ainda tentando carregar <b>dados_atuais.csv</b>...<br><small>Se permanecer assim, confira no console se o arquivo existe na branch publicada.</small></div>';
+      }
+    }catch(e){}
+  }, 6500);
+  console.info('[Catálogo CAIXA] Init dados primeiro:', 'ELTAUM_DATA_FIRST_INIT_20260606_v80');
 })();
 
