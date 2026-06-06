@@ -2968,16 +2968,13 @@ function gerarLeituraRapidaFundo(r){
     alertaCdi = `<div class="fund-note-alert">⚠️ <strong>Atenção:</strong> Este fundo rendeu apenas <strong>${cdiRatio}% do CDI</strong> nos últimos 12 meses. Fundos de renda fixa/referenciados abaixo de 90–95% do CDI merecem avaliação cuidadosa da relação custo-benefício.</div>`;
   }
 
-  // ── Complementos de dados ────────────────────────────────────────────
+  // ── Complementos da leitura rápida ─────────────────────────────────
+  // Evita redundância: cadastro, taxa, perfil e liquidez já aparecem na grade de dados.
+  // Aqui ficam apenas os indicadores de performance para leitura executiva.
   const complementos = [];
-  if(risco) complementos.push({label:'Perfil', value:risco});
-  if(taxa) complementos.push({label:'Taxa adm.', value:`${taxa}% a.a.`});
-  if(conv || pag) complementos.push({label:'Liquidez', value:`Conv. ${conv || '—'} · Pag. ${pag || '—'}`});
   if(rentAno !== null) complementos.push({label:'Ano', value:pct(rentAno)});
-  if(rent12 !== null){
-    const ratioTxt = cdiRatio !== null ? ` · ${cdiRatio}% do CDI` : '';
-    complementos.push({label:'12M', value:`${pct(rent12)}${ratioTxt}`});
-  }
+  if(rent12 !== null) complementos.push({label:'12M', value:pct(rent12)});
+  if(cdiRatio !== null) complementos.push({label:'% CDI', value:`${cdiRatio}% do CDI`});
 
   const tagsHtml = tags.length
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
@@ -3026,11 +3023,10 @@ function buildDetailPanel(r,colspan){
     return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
   }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
-  const urlItem=urlFund?`<div class="detail-item detail-site-link"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean">
-      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}${urlItem}</div>${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
@@ -8056,7 +8052,7 @@ async function sharePainelMercado(){
 */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_BOOT_STABLE_RANKING_20260606_v51';
+  const BUILD='ELTAUM_DETAIL_CLEAN_NO_REDUNDANCY_20260606_v55';
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
