@@ -18509,3 +18509,35 @@ header.site-header-clean{
 .ranking-exec-secondary{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(320px,.65fr);gap:12px}.ranking-panel-head{padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.07)}.ranking-cat-grid-v50{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:12px}.ranking-cat-mini{min-width:0;padding:11px;border:1px solid rgba(255,255,255,.075);border-radius:11px;background:rgba(17,21,38,.58)}.ranking-cat-mini span{display:block;color:#f0c777;font-size:.58rem;font-weight:900;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ranking-cat-mini strong{display:block;margin-top:6px;font-family:'JetBrains Mono',monospace;font-size:.86rem}.ranking-cat-mini small{display:block;margin-top:5px;color:#cfd7ea;font-size:.62rem;line-height:1.35;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ranking-risk-list{padding:7px 0}.ranking-risk-row{display:grid;grid-template-columns:36px minmax(0,1fr) 88px;gap:9px;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(255,255,255,.06)}.ranking-risk-row:last-child{border-bottom:0}.ranking-risk-row span{font-family:'JetBrains Mono',monospace;color:#8795ba;font-size:.62rem}.ranking-risk-row strong{color:#eef3ff;font-size:.67rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ranking-risk-row em{font-style:normal;text-align:right;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:900}.ranking-empty-v50{padding:18px;color:#9aa6c3;font-size:.72rem;text-align:center}
 @media(max-width:1050px){.ranking-exec-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.ranking-exec-secondary{grid-template-columns:1fr}.ranking-cat-grid-v50{grid-template-columns:repeat(2,minmax(0,1fr))}.ranking-top-header,.ranking-top-row{grid-template-columns:44px minmax(0,1fr) 96px 86px}}
 @media(max-width:700px){#rankingsSection .ranking-head{margin-bottom:10px}.ranking-exec-summary{grid-template-columns:1fr 1fr;gap:8px}.ranking-exec-card{padding:12px}.ranking-exec-card span{font-size:.55rem}.ranking-exec-card strong{font-size:1rem}.ranking-exec-card small{font-size:.64rem}.ranking-exec-insight{flex-direction:column;gap:8px}.ranking-exec-board-head{flex-direction:column;align-items:stretch}.ranking-exec-controls{justify-content:flex-start}.ranking-universe-pill{width:100%;justify-content:center}.ranking-top-header{display:none}.ranking-top-row{grid-template-columns:34px minmax(0,1fr) 82px;gap:8px;padding:12px}.ranking-cdi{display:none}.ranking-fund strong{white-space:normal;font-size:.70rem}.ranking-cat-grid-v50{grid-template-columns:1fr}.ranking-exec-secondary{gap:10px}.ranking-risk-row{grid-template-columns:30px minmax(0,1fr) 76px}.ranking-risk-row strong{font-size:.63rem}}
+
+/* ==========================================================
+   ELTAUM v52 — Tabela compacta após filtros
+   Remove altura mínima fixa que deixava espaço vazio quando a busca retorna poucos fundos.
+   O loader continua com altura própria enquanto os dados carregam.
+========================================================== */
+#sec-fundos .table-wrap{
+  min-height:0 !important;
+  height:auto !important;
+}
+
+#sec-fundos #mainTable,
+#sec-fundos #tableBody{
+  min-height:0 !important;
+  height:auto !important;
+}
+
+#sec-fundos #loadMsg[style*="display: none"]{
+  min-height:0 !important;
+  height:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:hidden !important;
+}
+
+#sec-fundos .pagination-row{
+  margin-top:12px !important;
+}
+
+#sec-fundos .table-wrap table{
+  margin-bottom:0 !important;
+}
