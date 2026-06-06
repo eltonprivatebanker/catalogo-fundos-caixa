@@ -2117,9 +2117,29 @@ function abrirWhatsRank(texto){
 function slugRank(s){
   return String(s||'ranking').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,60) || 'ranking';
 }
+
+function ensureHtml2Canvas(){
+  if(window.html2canvas) return Promise.resolve(window.html2canvas);
+  if(window.__html2canvasLoading) return window.__html2canvasLoading;
+  window.__html2canvasLoading = new Promise((resolve, reject)=>{
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s.async = true;
+    s.onload = ()=>resolve(window.html2canvas);
+    s.onerror = ()=>reject(new Error('Falha ao carregar html2canvas'));
+    document.head.appendChild(s);
+  });
+  return window.__html2canvasLoading;
+}
+
 async function baixarPrintRank(el, nome){
-  if(!window.html2canvas){
-    showRankToast('Biblioteca de print não carregou. Verifique a internet/CDN.');
+  try{
+    if(!window.html2canvas){
+      showRankToast('Preparando biblioteca de print...');
+      await ensureHtml2Canvas();
+    }
+  }catch(e){
+    showRankToast('Não consegui carregar a biblioteca de print. Verifique a internet/CDN.');
     return;
   }
   const wasCollapsed = el.classList?.contains('rank-collapsed');
@@ -2948,23 +2968,33 @@ function gerarLeituraRapidaFundo(r){
     alertaCdi = `<div class="fund-note-alert">⚠️ <strong>Atenção:</strong> Este fundo rendeu apenas <strong>${cdiRatio}% do CDI</strong> nos últimos 12 meses. Fundos de renda fixa/referenciados abaixo de 90–95% do CDI merecem avaliação cuidadosa da relação custo-benefício.</div>`;
   }
 
-  // ── Complementos de dados ────────────────────────────────────────────
+  // ── Complementos da leitura rápida ─────────────────────────────────
+  // Evita redundância: cadastro, taxa, perfil e liquidez já aparecem na grade de dados.
+  // Aqui ficam apenas os indicadores de performance para leitura executiva.
   const complementos = [];
-  if(risco) complementos.push({label:'Perfil', value:risco});
-  if(taxa) complementos.push({label:'Taxa adm.', value:`${taxa}% a.a.`});
-  if(conv || pag) complementos.push({label:'Liquidez', value:`Conv. ${conv || '—'} · Pag. ${pag || '—'}`});
   if(rentAno !== null) complementos.push({label:'Ano', value:pct(rentAno)});
-  if(rent12 !== null){
-    const ratioTxt = cdiRatio !== null ? ` · ${cdiRatio}% do CDI` : '';
-    complementos.push({label:'12M', value:`${pct(rent12)}${ratioTxt}`});
-  }
+  if(rent12 !== null) complementos.push({label:'12M', value:pct(rent12)});
+  if(cdiRatio !== null) complementos.push({label:'% CDI', value:`${cdiRatio}% do CDI`});
 
   const tagsHtml = tags.length
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
     : '';
 
+  const metricValueClass = (label, value) => {
+    const n = toNum(value);
+    const labelNorm = normalizarTextoBase(label);
+    if(n === null || !Number.isFinite(Number(n))) return 'zero';
+    if(labelNorm.includes('CDI')){
+      if(n < 0) return 'neg';
+      if(n >= 100) return 'pos cdi-good';
+      if(n >= 80) return 'cdi-mid';
+      return 'cdi-low';
+    }
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  };
+
   const complementosHtml = complementos.length
-    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
+    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric ${metricValueClass(m.label,m.value)}"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
     : '';
 
   return `
@@ -3006,11 +3036,10 @@ function buildDetailPanel(r,colspan){
     return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
   }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
-  const urlItem=urlFund?`<div class="detail-item detail-site-link"><div class="detail-key">Página do Fundo</div><div class="detail-val"><a href="${urlFund}" target="_blank" rel="noopener">Abrir no site da CAIXA ↗</a></div></div>`:'';
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean">
-      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}${urlItem}</div>${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
@@ -4362,6 +4391,7 @@ async function iniciarDashboard(){
   }finally{
     // A interface fica pronta mesmo que algum endpoint externo falhe.
     window.__dashboardReady = true;
+    try{ if(typeof window.__revealApp === 'function') window.__revealApp(); }catch(e){}
     try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){}
     try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){}
     try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){}
@@ -7849,8 +7879,12 @@ async function sharePainelMercado(){
 
   const originalRenderCards = window.renderMobileFundCards;
   function renderByMode(){
-    if(getMode()==='list') renderList();
-    else if(typeof originalRenderCards==='function') originalRenderCards.apply(this,arguments);
+    const mode=getMode();
+    if(mode==='cards'){
+      if(typeof originalRenderCards==='function') originalRenderCards.apply(this,arguments);
+    }else{
+      if(isMobile()) renderList();
+    }
   }
   window.renderMobileFundCards=renderByMode;
 
@@ -7865,12 +7899,9 @@ async function sharePainelMercado(){
   function applyMode(mode){
     mode=normalizeMode(mode);
     saveMode(mode);
-    if(isMobile()){
-      document.body.classList.add('fund-card-mode');
-      document.body.classList.toggle('fund-list-mode',mode==='list');
-    }else{
-      document.body.classList.remove('fund-list-mode');
-    }
+    const mobile=isMobile();
+    document.body.classList.toggle('fund-card-mode', mode==='cards' || mobile);
+    document.body.classList.toggle('fund-list-mode', mobile && mode==='list');
     syncButtons();
     renderByMode();
   }
@@ -7882,7 +7913,7 @@ async function sharePainelMercado(){
     div.className='mobile-catalog-view-switch';
     div.id='mobileCatalogViewSwitch';
     div.setAttribute('aria-label','Escolher forma de visualização dos fundos no celular');
-    div.innerHTML=`<div class="mobile-catalog-view-copy"><strong>Visualização</strong><small>Lista mostra mais fundos; cards mantêm ações e detalhes.</small></div><div class="mobile-catalog-view-buttons" role="group" aria-label="Modo de visualização"><button type="button" class="mobile-catalog-view-btn active" data-mobile-catalog-view="list" aria-pressed="true">Lista</button><button type="button" class="mobile-catalog-view-btn" data-mobile-catalog-view="cards" aria-pressed="false">Cards</button></div>`;
+    div.innerHTML=`<div class="mobile-catalog-view-copy"><strong>Visualização</strong><small>Tabela compara mais fundos; cards priorizam leitura rápida.</small></div><div class="mobile-catalog-view-buttons" role="group" aria-label="Modo de visualização"><button type="button" class="mobile-catalog-view-btn active" data-mobile-catalog-view="list" aria-pressed="true">Tabela</button><button type="button" class="mobile-catalog-view-btn" data-mobile-catalog-view="cards" aria-pressed="false">Cards</button></div>`;
     if(table) host.insertBefore(div,table); else host.appendChild(div);
   }
   function bind(){
@@ -7988,8 +8019,8 @@ async function sharePainelMercado(){
   }
   function bind(){
     const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-    const link=qs('link[href*="style.css"]');
-    if(link && !/busca-scroll-resultados-v46/.test(link.getAttribute('href')||'')) link.setAttribute('href','style.css?v=busca-scroll-resultados-v46');
+    // v50: não reescreve mais o href do CSS via JavaScript.
+    // Isso evitava cache, mas causava recarregamento visual/FOUC após a página abrir.
     ensureHint();
   }
 
@@ -8028,129 +8059,343 @@ async function sharePainelMercado(){
 
 /* Build UI: ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46 */
 
-/* Build UI: ELTAUM_CSS_SCROLL_ESTAVEL_20260606_v49 */
-
-/* ════════════════════════════════════════════════════════
-   PATCH v47 — Busca do topo para no início correto dos fundos
-   Objetivo: ao digitar na barra fixa superior, a página deve avançar
-   até o início da seção "Fundos disponíveis", mantendo filtros e atalhos visíveis.
-   Corrige o salto excessivo que levava direto para a tabela/resultados.
-════════════════════════════════════════════════════════ */
+/* Build UI: ELTAUM_BOOT_STABLE_RANKING_20260606_v51
+   PATCH v50 — Ranking executivo limpo + sem reescrever CSS
+   - Substitui a visão de abas por uma leitura única: cards, Top 10, melhores por categoria e alertas.
+   - Mantém filtros existentes e o seletor de período sem exigir vários cliques.
+*/
 (function(){
   'use strict';
-  const BUILD='ELTAUM_CSS_SCROLL_ESTAVEL_20260606_v49';
-  let scrollTimer=null;
-  let finalTimer=null;
-
-  function qs(sel,root=document){ return root.querySelector(sel); }
-  function isSearchInput(el){ return el && el.id==='gfbSearch'; }
-  function hasQuery(el){ return String(el && el.value || '').trim().length >= 2; }
-
-  function getGlobalBarOffset(){
-    const bar=qs('#gfb');
-    if(!bar) return 16;
-    const rect=bar.getBoundingClientRect();
-    const visible=rect && rect.height>0 && rect.bottom>0;
-    if(!visible) return 16;
-    return Math.ceil(rect.height) + 12;
+  const BUILD='ELTAUM_DESKTOP_CARDS_FORMAT_FIX_20260606_v57';
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
+  function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
+  function shortCat(v){
+    const raw=String(v||'—').trim();
+    const n=typeof normRankTxt==='function'?normRankTxt(raw):raw.toUpperCase();
+    if(n.includes('FUNDOS MUTUOS')||n.includes('PRIVATIZACAO')) return 'FMP';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Referenciado';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto Prazo';
+    if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
+    if(n.includes('RENDA FIXA')) return 'Renda Fixa';
+    if(n.includes('MULTIMERCADO')) return 'Multimercado';
+    if(n.includes('CAMBIAL')) return 'Cambial';
+    if(n.includes('ACOES')) return 'Ações';
+    if(n.includes('INDICE')) return 'Índice';
+    return raw;
+  }
+  function num(v){return typeof toNum==='function'?toNum(v):Number(String(v??'').replace('%','').replace(',','.'))}
+  function numK(v){return typeof numKpi==='function'?numKpi(v):num(v)}
+  function pct(v){
+    const n=num(v); if(n===null||Number.isNaN(n)||!Number.isFinite(n)) return '—';
+    const sign=n>0?'+':''; return sign+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+  }
+  function plMi(v){
+    const n=numK(v); if(n===null||Number.isNaN(n)||!Number.isFinite(n)) return 'PL —';
+    if(Math.abs(n)>=1000) return 'PL R$ '+(n/1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1})+' bi';
+    return 'PL R$ '+n.toLocaleString('pt-BR',{maximumFractionDigits:0})+' mi';
+  }
+  function retClass(v){const n=num(v); return n>0?'pos':n<0?'neg':'zero'}
+  function campoPorPeriodo(p){return typeof rankCampoPorPeriodo==='function'?rankCampoPorPeriodo(p):(p==='mes'?'Acum. Mes (%)':p==='ano'?'Acum. Ano (%)':'Acum. 12M (%)')}
+  function periodoLabel(p){return typeof rankPeriodoLabel==='function'?rankPeriodoLabel(p):(p==='mes'?'mês':p==='ano'?'ano':'12 meses')}
+  function periodoResumo(p){return typeof rankPeriodoResumo==='function'?rankPeriodoResumo(p):(p==='mes'?'do mês':p==='ano'?'no ano':'12M')}
+  function filtroLabelAtual(){
+    if(typeof activeRankFilter==='undefined'||activeRankFilter==='todos') return 'Todos os fundos';
+    const btn=qs(`[data-rank-filter="${activeRankFilter}"]`);
+    return btn?btn.textContent.trim():'Filtro aplicado';
+  }
+  function cdiRatioTxt(r){
+    try{
+      if(typeof calcCdiRatio!=='function') return '—';
+      const ratio=calcCdiRatio(num(r['Acum. 12M (%)']), indicState?.cdi?.m12);
+      return ratio===null?'—':ratio+'%';
+    }catch(e){return '—'}
+  }
+  function rowPL(r){return plMi(r['PL (milhoes R$)']||r['PL']||r['Patrimonio Liquido'])}
+  function medal(i){return i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'º'}
+  function periodTabs(active){
+    const periods=['mes','ano','12m'];
+    return `<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">${periods.map(p=>`<button type="button" class="rank-period-tab ${active===p?'active':''}" data-rank-target="topFundos" data-rank-period="${p}">${p==='mes'?'Mês':p==='ano'?'Ano':'12M'}</button>`).join('')}</div>`;
+  }
+  function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
+  function summaryCard(kind,label,value,name,meta){
+    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
+  }
+  function topRow(r,i,campo,showCdi){
+    const cat=shortCat(r['Categoria']);
+    const nome=cleanFund(r['Fundo']);
+    const val=pct(r[campo]);
+    const cls=retClass(r[campo]);
+    const cdi=showCdi?cdiRatioTxt(r):'—';
+    return `<div class="ranking-top-row">
+      <div class="ranking-pos">${medal(i)}</div>
+      <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
+      <div class="ranking-return ${cls}">${esc(val)}</div>
+      <div class="ranking-cdi">${esc(cdi)}</div>
+    </div>`;
+  }
+  function categoryMini([cat,r]){
+    const nome=cleanFund(r['Fundo']);
+    const val=pct(r['Acum. 12M (%)']);
+    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
+  }
+  function worstMini(r,i,campo){
+    const nome=cleanFund(r['Fundo']);
+    return `<div class="ranking-risk-row"><span>${i+1}º</span><strong title="${esc(nome)}">${esc(nome)}</strong><em class="${retClass(r[campo])}">${esc(pct(r[campo]))}</em></div>`;
+  }
+  function insight(top,worst,periodo){
+    if(!top) return 'Ainda não há dados suficientes para montar uma leitura executiva dos rankings.';
+    const cat=shortCat(top['Categoria']);
+    const nome=cleanFund(top['Fundo']);
+    const v=pct(top[campoPorPeriodo(periodo)]);
+    const w=worst?` No mesmo recorte, o destaque negativo é ${cleanFund(worst['Fundo'])}, com ${pct(worst[campoPorPeriodo(periodo)])}.`:'';
+    return `No período de ${periodoLabel(periodo)}, o maior destaque é ${nome}, da categoria ${cat}, com ${v}.${w}`;
   }
 
-  function getFundsStartAnchor(){
-    return qs('#sec-fundos') || qs('#fundFilterShell') || qs('#sec-fundos .table-wrap');
+  function renderRankingsV50(){
+    const grid=qs('#rankingGrid');
+    if(!grid || typeof allRows==='undefined' || !Array.isArray(allRows) || !allRows.length) return;
+    try{ if(typeof atualizarRankingFilterUI==='function') atualizarRankingFilterUI(); }catch(e){}
+    const periodo=(typeof activeRankPeriods!=='undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campo=campoPorPeriodo(periodo);
+    let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
+    try{
+      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
+      if(typeof activeRisco!=='undefined' && activeRisco) base=base.filter(r=>String(r['Perfil de Risco']||'').trim()===activeRisco);
+    }catch(e){}
+    const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
+    const top=sortBy(campo).slice(0,10);
+    const worst=sortBy(campo,true).filter(r=>num(r[campo])<0).slice(0,5);
+    const top12=sortBy('Acum. 12M (%)');
+    const best12=top12[0];
+    const bestMonth=sortBy('Acum. Mes (%)')[0];
+    const worst12=sortBy('Acum. 12M (%)',true).find(r=>num(r['Acum. 12M (%)'])<0);
+
+    const catMap={};
+    top12.forEach(r=>{const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r;});
+    const catTop=Object.entries(catMap).slice(0,8);
+
+    const categorias=(typeof kpisDashboard!=='undefined' && kpisDashboard && kpisDashboard.categorias) ? kpisDashboard.categorias : {};
+    const catPL=Object.entries(categorias).filter(([cat,d])=>{
+      try{
+        const okFiltro=(typeof activeRankFilter==='undefined'||activeRankFilter==='todos')?true:(activeRankFilter==='sem-fmp'?!/FMP|PRIVATIZA/i.test(cat):activeRankFilter==='renda-fixa'?/RENDA FIXA/i.test(cat):activeRankFilter==='acoes'?/ACOES|AÇÕES/i.test(cat):activeRankFilter==='multimercado'?/MULTIMERCADO/i.test(cat):true);
+        return okFiltro && numK(d?.pl_total)!==null && !Number.isNaN(numK(d?.pl_total));
+      }catch(e){return false}
+    }).sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
+    const maiorPL=catPL[0];
+
+    const cards=[
+      summaryCard('best','🏆 Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12)} do CDI · ${shortCat(best12['Categoria'])}`:''),
+      summaryCard('month','📈 Melhor no mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
+      summaryCard('pl','🏦 Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:''),
+      summaryCard('worst','⚠️ Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):'')
+    ].join('');
+
+    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
+    const riskRows=worst.map((r,i)=>worstMini(r,i,campo)).join('') || '<div class="ranking-empty-v50">Não há retornos negativos neste recorte.</div>';
+
+    grid.className='ranking-grid ranking-executive-v50';
+    grid.innerHTML=`
+      <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
+      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(insight(top[0],worst[0],periodo))}</p></section>
+      <section class="ranking-exec-board">
+        <div class="ranking-exec-board-head">
+          <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
+          <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}</div>
+        </div>
+        <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
+          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
+          ${topRows}
+        </div>
+      </section>
+      <section class="ranking-exec-secondary">
+        <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Melhor fundo de cada categoria em 12 meses.</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
+        <div class="ranking-risk-panel"><div class="ranking-panel-head"><h3>Pontos de atenção</h3><p>Maiores quedas no recorte selecionado.</p></div><div class="ranking-risk-list">${riskRows}</div></div>
+      </section>
+    `;
   }
 
-  function scrollToFundsStart(){
-    const target=getFundsStartAnchor();
-    if(!target) return;
-    const top=target.getBoundingClientRect().top + window.scrollY - getGlobalBarOffset();
-    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
+  window.renderRankings=renderRankingsV50;
+  try{ renderRankings=renderRankingsV50; }catch(e){}
+  function init(){
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    // v50: não altera o href do CSS em runtime para evitar recarregamento visual.
+    if(typeof allRows!=='undefined' && Array.isArray(allRows) && allRows.length) renderRankingsV50();
   }
-
-  function scheduleFundsStartScroll(input, delay){
-    if(!isSearchInput(input) || !hasQuery(input)) return;
-
-    clearTimeout(scrollTimer);
-    clearTimeout(finalTimer);
-
-    // Primeiro ajuste: espera a filtragem/renderização terminar.
-    scrollTimer=setTimeout(scrollToFundsStart, typeof delay==='number' ? delay : 430);
-
-    // Segundo ajuste: garante a posição correta caso algum patch legado role até a tabela depois.
-    finalTimer=setTimeout(()=>{
-      if(hasQuery(input)) scrollToFundsStart();
-    }, (typeof delay==='number' ? delay : 430) + 520);
-  }
-
-  function bindBuild(){
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindBuild,{once:true});
-  else bindBuild();
-
-  document.addEventListener('input',function(ev){
-    const input=ev.target;
-    if(!isSearchInput(input)) return;
-    if(!hasQuery(input)) return;
-    scheduleFundsStartScroll(input, 380);
-  },true);
-
-  document.addEventListener('keydown',function(ev){
-    const input=ev.target;
-    if(!isSearchInput(input) || ev.key!=='Enter') return;
-    if(!hasQuery(input)) return;
-    ev.preventDefault();
-    scheduleFundsStartScroll(input,80);
-    try{ input.blur(); }catch(e){}
-  },true);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 })();
 
 
-/* Build UI: ELTAUM_CSS_SCROLL_ESTAVEL_20260606_v49 */
-/* PATCH v49 — CSS primeiro + busca local sem auto-scroll
-   - O scroll automático fica restrito à barra global do topo (#gfbSearch).
-   - A busca interna do catálogo (#searchInput) filtra sem deslocar a tela,
-     preservando filtros, atalhos e cabeçalho como referência visual. */
+/* ════════════════════════════════════════════════════════
+   PATCH v57 — Correção visual dos cards no desktop
+════════════════════════════════════════════════════════ */
 (function(){
-  'use strict';
-  const BUILD='ELTAUM_CSS_SCROLL_ESTAVEL_20260606_v49';
-  function qs(sel,root=document){ return root.querySelector(sel); }
-  function setBuild(){
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
+  const BUILD='ELTAUM_DESKTOP_CARDS_FORMAT_FIX_20260606_v57';
+  function qs(s,root=document){return root.querySelector(s)}
+  function qsa(s,root=document){return Array.from(root.querySelectorAll(s))}
+  function markSearching(input){
+    if(!input) return;
+    const wrap = input.closest('.search-wrap') || input.closest('#gfb-search-wrap') || input.parentElement;
+    if(!wrap) return;
+    wrap.classList.add('is-searching');
+    clearTimeout(wrap.__searchUxTimer);
+    wrap.__searchUxTimer=setTimeout(()=>wrap.classList.remove('is-searching'),520);
   }
+  function bindSearchFeedback(){
+    qsa('#searchInput,#gfbSearch').forEach(inp=>{
+      if(inp.dataset.v57SearchFeedback==='1') return;
+      inp.dataset.v57SearchFeedback='1';
+      inp.addEventListener('input',()=>markSearching(inp),{passive:true});
+      inp.addEventListener('change',()=>setTimeout(()=>{
+        const wrap = inp.closest('.search-wrap') || inp.closest('#gfb-search-wrap') || inp.parentElement;
+        if(wrap) wrap.classList.remove('is-searching');
+      },120),{passive:true});
+    });
+  }
+  function init(){
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    bindSearchFeedback();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  document.addEventListener('focusin',ev=>{ if(ev.target && (ev.target.id==='searchInput'||ev.target.id==='gfbSearch')) bindSearchFeedback(); },true);
+})();
 
-  let lockTimer=null;
-  function preserveLocalSearchScroll(){
-    const active=document.activeElement;
-    if(!active || active.id!=='searchInput') return;
-    const y=window.scrollY;
-    clearTimeout(lockTimer);
-    let ticks=0;
-    lockTimer=setInterval(function(){
-      ticks++;
-      if(document.activeElement && document.activeElement.id==='searchInput'){
-        const delta=Math.abs(window.scrollY-y);
-        if(delta>18) window.scrollTo({top:y,left:window.scrollX,behavior:'auto'});
+
+/* ════════════════════════════════════════════════════════
+   v58 — Detalhes dos cards em painel lateral no desktop
+   - Evita expansão vertical dos cards no desktop.
+   - Mantém cards compactos e abre análise em um painel à direita.
+   - No mobile, preserva o comportamento atual em bottom/lista.
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_CARD_SIDE_PANEL_20260606_v58';
+  function isDesktopCards(){
+    return window.matchMedia && window.matchMedia('(min-width: 821px)').matches && document.body.classList.contains('fund-card-mode');
+  }
+  function ensurePanel(){
+    let backdrop=document.getElementById('fundCardDetailBackdrop');
+    let panel=document.getElementById('fundCardDetailPanel');
+    if(backdrop && panel) return {backdrop,panel};
+    backdrop=document.createElement('div');
+    backdrop.id='fundCardDetailBackdrop';
+    backdrop.className='fund-card-detail-backdrop-v58';
+    backdrop.setAttribute('aria-hidden','true');
+    panel=document.createElement('aside');
+    panel.id='fundCardDetailPanel';
+    panel.className='fund-card-detail-panel-v58';
+    panel.setAttribute('aria-hidden','true');
+    panel.setAttribute('role','dialog');
+    panel.setAttribute('aria-modal','false');
+    panel.setAttribute('aria-label','Detalhes do fundo');
+    panel.innerHTML=`
+      <div class="fund-card-detail-panel-head-v58">
+        <div class="fund-card-detail-panel-kicker-v58">Detalhes do fundo</div>
+        <button type="button" class="fund-card-detail-panel-close-v58" aria-label="Fechar painel">×</button>
+      </div>
+      <div class="fund-card-detail-panel-title-v58"></div>
+      <div class="fund-card-detail-panel-tags-v58"></div>
+      <div class="fund-card-detail-panel-body-v58"></div>
+    `;
+    document.body.appendChild(backdrop);
+    document.body.appendChild(panel);
+    const close=()=>closePanel();
+    backdrop.addEventListener('click',close);
+    panel.querySelector('.fund-card-detail-panel-close-v58')?.addEventListener('click',close);
+    document.addEventListener('keydown',ev=>{
+      if(ev.key==='Escape' && document.body.classList.contains('fund-detail-panel-open-v58')) closePanel();
+    });
+    return {backdrop,panel};
+  }
+  function resetCardButtons(){
+    document.querySelectorAll('#mobileFundCards .fund-card-mobile').forEach(card=>{
+      card.classList.remove('side-panel-active-v58');
+      const btn=card.querySelector('.fund-card-detail-btn');
+      if(btn){
+        btn.textContent='Mais detalhes';
+        btn.setAttribute('aria-expanded','false');
       }
-      if(ticks>=12) clearInterval(lockTimer);
-    },55);
+    });
   }
-
-  // Roda depois dos listeners principais e neutraliza qualquer scroll tardio do campo local.
-  window.addEventListener('input',function(ev){
-    if(ev.target && ev.target.id==='searchInput') preserveLocalSearchScroll();
-  },true);
-
-  window.addEventListener('keydown',function(ev){
-    if(ev.target && ev.target.id==='searchInput' && ev.key==='Enter'){
-      ev.preventDefault();
-      preserveLocalSearchScroll();
-      try{ ev.target.blur(); }catch(e){}
+  function closePanel(){
+    document.body.classList.remove('fund-detail-panel-open-v58');
+    const backdrop=document.getElementById('fundCardDetailBackdrop');
+    const panel=document.getElementById('fundCardDetailPanel');
+    if(backdrop) backdrop.setAttribute('aria-hidden','true');
+    if(panel) panel.setAttribute('aria-hidden','true');
+    resetCardButtons();
+  }
+  function cloneCleanExpanded(card){
+    const expanded=card.querySelector('.fund-card-list-expanded');
+    const wrapper=document.createElement('div');
+    if(!expanded){
+      wrapper.innerHTML='<div class="rank-empty">Detalhes indisponíveis para este fundo.</div>';
+      return wrapper;
     }
-  },true);
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setBuild,{once:true});
-  else setBuild();
+    wrapper.innerHTML=expanded.innerHTML;
+    wrapper.querySelector('.fund-card-expanded-head')?.remove();
+    wrapper.querySelectorAll('.fund-card-close-details').forEach(el=>el.remove());
+    wrapper.querySelectorAll('[aria-hidden]').forEach(el=>el.removeAttribute('aria-hidden'));
+    wrapper.querySelectorAll('.fund-card-list-expanded').forEach(el=>el.classList.remove('fund-card-list-expanded'));
+    return wrapper;
+  }
+  function openPanelForCard(card){
+    if(!card) return;
+    const {backdrop,panel}=ensurePanel();
+    const title=card.querySelector('.fund-card-mobile-name,.fund-card-list-name')?.textContent?.trim() || 'Fundo selecionado';
+    const tags=card.querySelector('.fund-card-mobile-tags,.fund-card-list-tags')?.cloneNode(true);
+    const body=panel.querySelector('.fund-card-detail-panel-body-v58');
+    const titleEl=panel.querySelector('.fund-card-detail-panel-title-v58');
+    const tagsEl=panel.querySelector('.fund-card-detail-panel-tags-v58');
+    if(titleEl) titleEl.textContent=title;
+    if(tagsEl){
+      tagsEl.innerHTML='';
+      if(tags) tagsEl.appendChild(tags);
+    }
+    if(body){
+      body.innerHTML='';
+      body.appendChild(cloneCleanExpanded(card));
+      body.scrollTop=0;
+    }
+    resetCardButtons();
+    card.classList.add('side-panel-active-v58');
+    const btn=card.querySelector('.fund-card-detail-btn');
+    if(btn){
+      btn.textContent='Em análise';
+      btn.setAttribute('aria-expanded','true');
+    }
+    backdrop.setAttribute('aria-hidden','false');
+    panel.setAttribute('aria-hidden','false');
+    document.body.classList.add('fund-detail-panel-open-v58');
+  }
+  function bindSidePanel(){
+    if(document.body.dataset.cardSidePanelV58==='1') return;
+    document.body.dataset.cardSidePanelV58='1';
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    document.addEventListener('click',ev=>{
+      const btn=ev.target.closest('.fund-card-detail-btn');
+      if(!btn || !isDesktopCards()) return;
+      const card=btn.closest('#mobileFundCards .fund-card-mobile');
+      if(!card) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(ev.stopImmediatePropagation) ev.stopImmediatePropagation();
+      openPanelForCard(card);
+    },true);
+    window.addEventListener('resize',()=>{
+      if(!isDesktopCards()) closePanel();
+    },{passive:true});
+    const box=document.getElementById('mobileFundCards');
+    if(box){
+      new MutationObserver(()=>{
+        if(document.body.classList.contains('fund-detail-panel-open-v58')){
+          const active=document.querySelector('#mobileFundCards .side-panel-active-v58');
+          if(!active) closePanel();
+        }
+      }).observe(box,{childList:true});
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindSidePanel);
+  else bindSidePanel();
 })();
