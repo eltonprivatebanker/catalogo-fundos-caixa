@@ -3307,21 +3307,6 @@ function mobileResumoRentCell(r){
   </td>`;
 }
 
-function onlyDigitsCnpjV61(v){
-  return String(v || '').replace(/\D/g,'').slice(0,14);
-}
-function formatCnpjV61(v){
-  const d = onlyDigitsCnpjV61(v);
-  if(d.length === 14) return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5');
-  return String(v || '').trim();
-}
-function cnpjCopyChipV61(raw, extraClass=''){
-  const formatted = formatCnpjV61(raw);
-  const digits = onlyDigitsCnpjV61(raw);
-  if(!formatted || !digits) return '';
-  return `<button type="button" class="cnpj-copy-chip-v61 ${extraClass}" data-cnpj="${htmlAttr(formatted)}" title="Copiar CNPJ ${htmlAttr(formatted)}" aria-label="Copiar CNPJ ${htmlAttr(formatted)}"><span>CNPJ</span>${htmlAttr(formatted)}</button>`;
-}
-
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
@@ -4559,6 +4544,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const conversao = getCampoPrazoMobile(r,'Conversao Resgate');
     const pagamento = getCampoPrazoMobile(r,'Pagamento Resgate');
     const codigo = getCodigoFundoMobile(r);
+    const cnpjChip = cnpjCopyChipV61(r['CNPJ'],'card-cnpj-chip-v61 card-cnpj-chip-v62');
     const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
     const docs = getMobileDocs(r);
     const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
@@ -4576,9 +4562,9 @@ document.addEventListener('DOMContentLoaded', function(){
             <span class="cat-badge cat-${cls}">${cat}</span>
             ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
             ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
-            ${cnpjCopyChipV61(r['CNPJ'],'card-cnpj-chip-v61')}
           </div>
           <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
+          ${cnpjChip?`<div class="fund-card-cnpj-row-v62">${cnpjChip}</div>`:''}
         </div>
         <div class="fund-card-list-metrics fund-card-list-metrics-v60" aria-label="Resumo de rentabilidade do fundo">
           <span class="fund-card-list-metric"><small>Dia</small><strong class="${pctClass(dia)}">${dia}</strong></span>
@@ -8495,4 +8481,57 @@ async function sharePainelMercado(){
     ev.preventDefault(); ev.stopPropagation();
     copyTextV61(text);
   }, true);
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v62 — CNPJ legível + cards mobile respirando
+   - CNPJ aparece em linha própria nos cards.
+   - Lista compacta mobile também recebe CNPJ copiável.
+   - Mantém as 5 métricas, mas evita espremimento no mobile.
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_CNPJ_LAYOUT_PRO_20260606_v62';
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function cnpjDigits(v){return String(v||'').replace(/\D/g,'').slice(0,14);}
+  function cnpjFmt(v){const d=cnpjDigits(v); return d.length===14?d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5'):String(v||'').trim();}
+  function chip(raw, extra){
+    const f=cnpjFmt(raw), d=cnpjDigits(raw);
+    if(!f||!d) return '';
+    return `<button type="button" class="cnpj-copy-chip-v61 cnpj-copy-chip-pro-v62 ${extra||''}" data-cnpj="${esc(f)}" title="Copiar CNPJ ${esc(f)}" aria-label="Copiar CNPJ ${esc(f)}"><span>CNPJ</span><b>${esc(f)}</b><i>copiar</i></button>`;
+  }
+  function getRowByIdx(idx){try{return Array.isArray(filtered)?filtered[Number(idx)]:null;}catch(e){return null;}}
+  function enhanceListCnpj(){
+    const box=qs('#mobileFundCards');
+    if(!box) return;
+    qsa('.fund-list-row-v45',box).forEach(row=>{
+      if(row.dataset.cnpjV62==='1') return;
+      const idx=row.getAttribute('data-idx');
+      const data=getRowByIdx(idx);
+      if(!data || !data['CNPJ']) return;
+      const main=qs('.fund-list-main-v45',row);
+      if(!main) return;
+      const div=document.createElement('div');
+      div.className='fund-list-cnpj-row-v62';
+      div.innerHTML=chip(data['CNPJ'],'list-cnpj-chip-v62');
+      main.appendChild(div);
+      row.dataset.cnpjV62='1';
+    });
+  }
+  function bind(){
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    enhanceListCnpj();
+    const box=qs('#mobileFundCards');
+    if(box && box.dataset.cnpjV62Observe!=='1'){
+      box.dataset.cnpjV62Observe='1';
+      new MutationObserver(()=>setTimeout(enhanceListCnpj,30)).observe(box,{childList:true,subtree:true});
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,850),{once:true});
+  else setTimeout(bind,850);
+  document.addEventListener('input',ev=>{if(ev.target && (ev.target.id==='searchInput'||ev.target.id==='gfbSearch')) setTimeout(enhanceListCnpj,500);},true);
+  document.addEventListener('click',ev=>{if(ev.target.closest('.mobile-catalog-view-btn,.page-btn,.category-choice-v44,#clearFiltersTop,#clearFiltersBtn')) setTimeout(enhanceListCnpj,500);},true);
 })();
