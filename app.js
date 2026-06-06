@@ -8641,16 +8641,17 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v72 — Mobile: toque seguro + filtro sem salto
-   - Remove acionamento acidental durante rolagem.
-   - O filtro só executa em CLICK real, não em touchend/pointerup.
-   - Preserva posição da tela ao aplicar/limpar filtro.
+   PATCH v73 — Mobile: filtro travado por âncora visual
+   - Mantém segurança contra clique fantasma da rolagem.
+   - Filtro só executa em click real.
+   - Durante o re-render, bloqueia scrollTo/scrollBy/scrollIntoView.
+   - Restaura a posição por âncora visual por 1,8s, cobrindo reflows tardios.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_FILTER_SAFE_TAP_20260606_v72';
-  window.__ELTAUM_MOBILE_FILTER_SAFE_TAP_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_MOBILE_FILTER_LOCKED_20260606_v73';
+  window.__ELTAUM_MOBILE_FILTER_LOCKED_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
@@ -8704,10 +8705,133 @@ async function sharePainelMercado(){
     }
   }
 
+  const original = {
+    scrollTo: window.scrollTo.bind(window),
+    scrollBy: window.scrollBy.bind(window),
+    scrollIntoView: Element.prototype.scrollIntoView
+  };
+
+  const lock = {
+    active:false,
+    allow:false,
+    y:0,
+    anchor:null,
+    anchorTop:0,
+    until:0,
+    raf:0,
+    timer:0,
+    release:null
+  };
+
+  function selectAnchor(){
+    return qs('#fundFilterShell') || qs('#sec-fundos') || qs('#topo') || document.body;
+  }
+
+  function preserveHeights(){
+    const selectors = [
+      '#fundFilterShell',
+      '#mobileFundCards',
+      '#sec-fundos .table-wrap',
+      '#sec-fundos .pagination-row',
+      '#resultInfo'
+    ];
+
+    const changed = [];
+    selectors.forEach(sel=>{
+      const el = qs(sel);
+      if(!el) return;
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      if(h <= 0) return;
+      changed.push([el, el.style.minHeight || '']);
+      el.style.minHeight = h + 'px';
+      el.classList.add('v73-filter-stabilizing');
+    });
+
+    return () => {
+      changed.forEach(([el,old])=>{
+        el.style.minHeight = old;
+        el.classList.remove('v73-filter-stabilizing');
+      });
+    };
+  }
+
+  function restoreByAnchor(){
+    if(!lock.active || !lock.anchor) return;
+
+    const rect = lock.anchor.getBoundingClientRect();
+    const delta = rect.top - lock.anchorTop;
+
+    lock.allow = true;
+    try{
+      if(Math.abs(delta) > 0.5){
+        original.scrollBy(0, delta);
+      }else{
+        original.scrollTo(0, lock.y);
+      }
+    }catch(e){
+      try{ original.scrollTo(0, lock.y); }catch(_){}
+    }
+    lock.allow = false;
+  }
+
+  function startLock(){
+    cancelAnimationFrame(lock.raf);
+    clearTimeout(lock.timer);
+    if(lock.release) {
+      try{ lock.release(); }catch(e){}
+    }
+
+    lock.active = true;
+    lock.y = window.scrollY || window.pageYOffset || 0;
+    lock.anchor = selectAnchor();
+    lock.anchorTop = lock.anchor ? lock.anchor.getBoundingClientRect().top : 0;
+    lock.until = performance.now() + 1800;
+    lock.release = preserveHeights();
+
+    document.documentElement.classList.add('v73-filter-lock');
+    document.body.classList.add('v73-filter-lock');
+
+    const loop = () => {
+      if(!lock.active) return;
+      restoreByAnchor();
+      if(performance.now() < lock.until){
+        lock.raf = requestAnimationFrame(loop);
+      }
+    };
+    lock.raf = requestAnimationFrame(loop);
+
+    lock.timer = setTimeout(()=>{
+      restoreByAnchor();
+      if(lock.release) {
+        try{ lock.release(); }catch(e){}
+      }
+      restoreByAnchor();
+      lock.active = false;
+      lock.release = null;
+      document.documentElement.classList.remove('v73-filter-lock');
+      document.body.classList.remove('v73-filter-lock');
+    }, 1850);
+  }
+
+  window.scrollTo = function(...args){
+    if(lock.active && !lock.allow) return;
+    return original.scrollTo(...args);
+  };
+
+  window.scrollBy = function(...args){
+    if(lock.active && !lock.allow) return;
+    return original.scrollBy(...args);
+  };
+
+  Element.prototype.scrollIntoView = function(...args){
+    if(lock.active && !lock.allow) return;
+    return original.scrollIntoView.apply(this,args);
+  };
+
   function setMobileCardsMode(){
     try{
       if(!isMobile()) return;
-      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v72-mobile-cards-only');
+      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v73-mobile-cards-only');
       document.body.classList.remove('fund-list-mode');
       try{
         localStorage.setItem('fundMobileView','cards');
@@ -8716,7 +8840,7 @@ async function sharePainelMercado(){
     }catch(e){}
   }
 
-  function syncCategoryGridV72(){
+  function syncCategoryGrid(){
     try{
       const active = activeCanonCat();
 
@@ -8749,10 +8873,10 @@ async function sharePainelMercado(){
       const strip = qs('#activeFilterStrip');
       if(strip){
         if(active){
-          strip.classList.add('active','category-grid-active-v72');
-          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v72-clear-filter="1"><small>Categoria</small>${CANON_LABEL[active] || active}<span>×</span></button><button type="button" class="active-filter-clear" data-v72-clear-filter="1">Limpar tudo</button>`;
+          strip.classList.add('active','category-grid-active-v73');
+          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v73-clear-filter="1"><small>Categoria</small>${CANON_LABEL[active] || active}<span>×</span></button><button type="button" class="active-filter-clear" data-v73-clear-filter="1">Limpar tudo</button>`;
         }else{
-          strip.classList.remove('active','category-grid-active-v72');
+          strip.classList.remove('active','category-grid-active-v73');
           strip.innerHTML = '';
         }
       }
@@ -8765,58 +8889,21 @@ async function sharePainelMercado(){
     }catch(e){}
   }
 
-  function preserveHeights(){
-    const selectors = ['#fundFilterShell','#mobileFundCards','#sec-fundos .table-wrap','.pagination-row'];
-    const changed = [];
-    selectors.forEach(sel=>{
-      const el = qs(sel);
-      if(!el) return;
-      const h = Math.ceil(el.getBoundingClientRect().height);
-      if(h <= 0) return;
-      changed.push([el, el.style.minHeight || '']);
-      el.style.minHeight = h + 'px';
-      el.classList.add('v72-filter-stabilizing');
-    });
-
-    return () => {
-      changed.forEach(([el,old])=>{
-        el.style.minHeight = old;
-        el.classList.remove('v72-filter-stabilizing');
-      });
-    };
-  }
-
-  function withStableViewport(task){
-    const y = window.scrollY || window.pageYOffset || 0;
-    const release = preserveHeights();
-
-    document.documentElement.classList.add('v72-filter-applying');
-    document.body.classList.add('v72-filter-applying');
-
-    try{ task(); }
-    finally{
-      const restore = () => {
-        try{ window.scrollTo({top:y, left:0, behavior:'auto'}); }
-        catch(e){ try{ window.scrollTo(0,y); }catch(_){} }
-      };
-
-      restore();
-      requestAnimationFrame(restore);
-      setTimeout(restore, 60);
-      setTimeout(restore, 160);
-      setTimeout(()=>{
-        release();
-        restore();
-        document.documentElement.classList.remove('v72-filter-applying');
-        document.body.classList.remove('v72-filter-applying');
-      }, 320);
-    }
+  function runFilterTask(task){
+    startLock();
+    try{ task(); }catch(e){ console.warn('[v73 filtro]', e); }
+    restoreByAnchor();
+    requestAnimationFrame(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); });
+    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 90);
+    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 240);
+    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 620);
+    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 1200);
   }
 
   function applyCategoryPreset(preset){
     const wanted = PRESET_TO_CANON_CAT[preset] || '';
 
-    withStableViewport(()=>{
+    runFilterTask(()=>{
       try{
         activeCat = wanted ? findRawCategoryByCanon(wanted) : '';
         activeBenchmark = '';
@@ -8836,13 +8923,12 @@ async function sharePainelMercado(){
       try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
       try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
       setMobileCardsMode();
-      syncCategoryGridV72();
-      setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 120);
+      syncCategoryGrid();
     });
   }
 
-  function clearCategoryFilters(){
-    withStableViewport(()=>{
+  function clearFilters(){
+    runFilterTask(()=>{
       try{
         activeCat = '';
         activeBenchmark = '';
@@ -8862,12 +8948,11 @@ async function sharePainelMercado(){
       try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
       try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
       setMobileCardsMode();
-      syncCategoryGridV72();
-      setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 120);
+      syncCategoryGrid();
     });
   }
 
-  /* Guarda gestos de rolagem para impedir clique fantasma após arrastar a tela */
+  /* Proteção contra clique fantasma depois de arrastar a tela no celular */
   const touch = {x:0,y:0,scrollY:0,moved:false,lastMove:0};
 
   window.addEventListener('touchstart', ev=>{
@@ -8891,36 +8976,36 @@ async function sharePainelMercado(){
     }
   }, {capture:true, passive:true});
 
-  function isGhostClickAfterScroll(){
-    return touch.moved && (Date.now() - touch.lastMove < 520);
+  function ghostClick(){
+    return isMobile() && touch.moved && (Date.now() - touch.lastMove < 650);
   }
 
   let lastClick = {key:'', t:0};
 
-  function handleFilterClick(ev){
-    const target = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset], #sec-fundos #clearFiltersTop, #sec-fundos #clearFiltersBtn, #sec-fundos [data-v72-clear-filter], #sec-fundos .active-filter-clear, #sec-fundos .active-filter-pill') : null;
+  function handleClick(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset], #sec-fundos #clearFiltersTop, #sec-fundos #clearFiltersBtn, #sec-fundos [data-v73-clear-filter], #sec-fundos .active-filter-clear, #sec-fundos .active-filter-pill') : null;
     if(!target) return;
 
     ev.preventDefault();
     ev.stopPropagation();
     if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
 
-    if(isGhostClickAfterScroll()){
+    if(ghostClick()){
       if(target && typeof target.blur === 'function') target.blur();
       return;
     }
 
-    const isClear = target.matches('#clearFiltersTop,#clearFiltersBtn,[data-v72-clear-filter],.active-filter-clear,.active-filter-pill');
+    const isClear = target.matches('#clearFiltersTop,#clearFiltersBtn,[data-v73-clear-filter],.active-filter-clear,.active-filter-pill');
     const preset = target.dataset ? (target.dataset.preset || 'all') : 'all';
     const key = isClear ? 'clear' : preset;
-    const now = Date.now();
+    const t = Date.now();
 
-    if(lastClick.key === key && now - lastClick.t < 360) return;
-    lastClick = {key, t:now};
+    if(lastClick.key === key && t - lastClick.t < 420) return;
+    lastClick = {key,t};
 
     if(target && typeof target.blur === 'function') setTimeout(()=>target.blur(),0);
 
-    if(isClear) clearCategoryFilters();
+    if(isClear) clearFilters();
     else applyCategoryPreset(preset);
   }
 
@@ -8928,45 +9013,41 @@ async function sharePainelMercado(){
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
 
-    if(document.documentElement.dataset.v72SafeTapBound !== '1'){
-      document.documentElement.dataset.v72SafeTapBound = '1';
-
-      /* Apenas CLICK. Nada de touchend/pointerup para não acionar durante rolagem. */
-      window.addEventListener('click', handleFilterClick, true);
-
-      window.addEventListener('resize', ()=>{
-        setMobileCardsMode();
-        syncCategoryGridV72();
-      });
+    if(document.documentElement.dataset.v73LockedBound !== '1'){
+      document.documentElement.dataset.v73LockedBound = '1';
+      window.addEventListener('click', handleClick, true);
+      window.addEventListener('resize',()=>{setMobileCardsMode(); syncCategoryGrid();});
     }
 
     setMobileCardsMode();
-    syncCategoryGridV72();
-    setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 500);
-    setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 1400);
+    syncCategoryGrid();
+    setTimeout(()=>{setMobileCardsMode(); syncCategoryGrid();}, 500);
+    setTimeout(()=>{setMobileCardsMode(); syncCategoryGrid();}, 1400);
 
-    console.info('[Catálogo CAIXA] Mobile filtro toque seguro:', BUILD);
+    console.info('[Catálogo CAIXA] Mobile filtro travado por âncora:', BUILD);
   }
 
   const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__mobileSafeTapV72){
+  if(typeof oldRender === 'function' && !oldRender.__mobileFilterLockedV73){
     const wrapped = function(){
       const out = oldRender.apply(this, arguments);
       setMobileCardsMode();
-      syncCategoryGridV72();
+      syncCategoryGrid();
+      if(lock.active) restoreByAnchor();
       return out;
     };
-    wrapped.__mobileSafeTapV72 = true;
+    wrapped.__mobileFilterLockedV73 = true;
     window.render = wrapped;
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,120));
   else setTimeout(bind,120);
 
-  window.__ELTAUM_MOBILE_FILTER_SAFE_TAP_V72__ = {
+  window.__ELTAUM_MOBILE_FILTER_LOCKED_V73__ = {
     apply: applyCategoryPreset,
-    clear: clearCategoryFilters,
-    sync: syncCategoryGridV72
+    clear: clearFilters,
+    sync: syncCategoryGrid,
+    restore: restoreByAnchor
   };
 })();
 

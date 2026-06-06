@@ -20134,7 +20134,7 @@ header.site-header-clean{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v72 — mobile: toque seguro + sem salto
+   PATCH v73 — mobile: filtro travado por âncora visual
 ════════════════════════════════════════════════════ */
 
 html,
@@ -20148,14 +20148,14 @@ body,
   overflow-anchor:none!important;
 }
 
-.v72-filter-stabilizing{
-  overflow:hidden!important;
-  contain:layout paint;
+html.v73-filter-lock,
+body.v73-filter-lock{
+  scroll-behavior:auto!important;
 }
 
-html.v72-filter-applying,
-body.v72-filter-applying{
-  scroll-behavior:auto!important;
+.v73-filter-stabilizing{
+  overflow:hidden!important;
+  contain:layout paint;
 }
 
 #sec-fundos .catalog-shortcuts-category-grid-v69 .filter-preset-chip,
@@ -20175,12 +20175,12 @@ body.v72-filter-applying{
     display:none!important;
   }
 
-  body.v72-mobile-cards-only #sec-fundos .table-wrap,
+  body.v73-mobile-cards-only #sec-fundos .table-wrap,
   body.fund-card-mode #sec-fundos .table-wrap{
     display:none!important;
   }
 
-  body.v72-mobile-cards-only #mobileFundCards,
+  body.v73-mobile-cards-only #mobileFundCards,
   body.fund-card-mode #mobileFundCards{
     display:grid!important;
   }
@@ -20206,6 +20206,7 @@ body.v72-filter-applying{
 
   #sec-fundos .fund-filter-shell{
     overflow-anchor:none!important;
+    transform:translateZ(0);
   }
 }
 
