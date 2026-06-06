@@ -20134,88 +20134,7 @@ header.site-header-clean{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v70 — estabilidade visual dos filtros mobile
-════════════════════════════════════════════════════ */
-
-@media(max-width:820px){
-  #sec-fundos .catalog-shortcuts-category-grid-v69{
-    overflow:visible!important;
-  }
-
-  #sec-fundos .category-grid-v69{
-    align-items:stretch;
-  }
-
-  #sec-fundos .category-grid-v69 .filter-preset-chip{
-    transform:none!important;
-    transition:border-color .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease!important;
-  }
-
-  #sec-fundos .category-grid-v69 .filter-preset-chip.active{
-    transform:none!important;
-  }
-
-  #sec-fundos .active-filter-strip{
-    display:flex!important;
-    min-height:39px;
-    align-items:center;
-    gap:6px;
-    flex-wrap:nowrap;
-    overflow-x:auto;
-    margin-top:10px;
-    padding-top:8px;
-    padding-bottom:0;
-    border-top:1px solid rgba(255,255,255,.06);
-    visibility:hidden;
-    opacity:0;
-    pointer-events:none;
-    transition:opacity .12s ease;
-  }
-
-  #sec-fundos .active-filter-strip.active{
-    visibility:visible;
-    opacity:1;
-    pointer-events:auto;
-  }
-
-  #sec-fundos .active-filter-strip::-webkit-scrollbar{
-    display:none;
-  }
-
-  #sec-fundos .active-filter-strip .empty-v70{
-    opacity:0;
-  }
-
-  #sec-fundos .filter-result-summary{
-    min-height:22px;
-  }
-
-  #sec-fundos #clearFiltersTop{
-    min-height:30px;
-  }
-
-  #sec-fundos #clearFiltersTop[hidden]{
-    display:none!important;
-  }
-
-  #sec-fundos .fund-filter-shell{
-    contain:layout paint;
-  }
-
-  #sec-fundos .elton-filter-stabilizing{
-    overflow:hidden;
-  }
-}
-
-@media(max-width:390px){
-  #sec-fundos .active-filter-strip{
-    min-height:37px;
-  }
-}
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v71 — filtro sem salto de tela
+   PATCH v72 — mobile: toque seguro + sem salto
 ════════════════════════════════════════════════════ */
 
 html,
@@ -20229,29 +20148,24 @@ body,
   overflow-anchor:none!important;
 }
 
-.v71-filter-stabilizing{
+.v72-filter-stabilizing{
   overflow:hidden!important;
   contain:layout paint;
 }
 
-body.v71-filter-no-jump,
-html.v71-filter-no-jump{
+html.v72-filter-applying,
+body.v72-filter-applying{
   scroll-behavior:auto!important;
 }
 
-#sec-fundos .category-grid-v69 .filter-preset-chip,
+#sec-fundos .catalog-shortcuts-category-grid-v69 .filter-preset-chip,
 #sec-fundos #clearFiltersTop,
 #sec-fundos .active-filter-pill,
 #sec-fundos .active-filter-clear{
+  -webkit-tap-highlight-color:transparent;
+  touch-action:pan-y;
+  user-select:none;
   scroll-margin-top:0!important;
-}
-
-#sec-fundos .active-filter-strip{
-  min-height:0!important;
-}
-
-#sec-fundos .active-filter-strip.active{
-  min-height:38px!important;
 }
 
 @media(max-width:820px){
@@ -20261,32 +20175,37 @@ html.v71-filter-no-jump{
     display:none!important;
   }
 
-  body.v71-mobile-cards-only #sec-fundos .table-wrap,
+  body.v72-mobile-cards-only #sec-fundos .table-wrap,
   body.fund-card-mode #sec-fundos .table-wrap{
     display:none!important;
   }
 
-  body.v71-mobile-cards-only #mobileFundCards,
+  body.v72-mobile-cards-only #mobileFundCards,
   body.fund-card-mode #mobileFundCards{
     display:grid!important;
   }
 
-  body.v71-mobile-cards-only #mobileFundCards{
-    min-height:520px;
-  }
-
-  #sec-fundos .fund-filter-shell{
-    overflow-anchor:none!important;
-    transform:translateZ(0);
-  }
-
   #sec-fundos .category-grid-v69{
+    touch-action:pan-y;
     overflow-anchor:none!important;
   }
 
   #sec-fundos .category-grid-v69 .filter-preset-chip{
-    -webkit-tap-highlight-color:transparent;
-    touch-action:manipulation;
+    transform:none!important;
+    transition:border-color .14s ease, background .14s ease, color .14s ease, box-shadow .14s ease!important;
+  }
+
+  #sec-fundos .active-filter-strip{
+    min-height:0!important;
+    overflow-anchor:none!important;
+  }
+
+  #sec-fundos .active-filter-strip.active{
+    min-height:38px!important;
+  }
+
+  #sec-fundos .fund-filter-shell{
+    overflow-anchor:none!important;
   }
 }
 

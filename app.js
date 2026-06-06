@@ -8641,21 +8641,20 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v70 — Categorias mobile estáveis e filtro exato CAIXA
-   - Corrige Ações: deixa de usar filtro amplo por nome.
-   - Categorias do grid filtram por categoria oficial exata.
-   - Limpar filtro não executa handlers antigos e não força scroll.
-   - Preserva a posição visual da tela durante filtros.
+   PATCH v72 — Mobile: toque seguro + filtro sem salto
+   - Remove acionamento acidental durante rolagem.
+   - O filtro só executa em CLICK real, não em touchend/pointerup.
+   - Preserva posição da tela ao aplicar/limpar filtro.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
+  const BUILD = 'ELTAUM_MOBILE_FILTER_SAFE_TAP_20260606_v72';
+  window.__ELTAUM_MOBILE_FILTER_SAFE_TAP_BUILD__ = BUILD;
+
   function qs(sel,root=document){return root.querySelector(sel)}
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
   function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  const BUILD='ELTAUM_MOBILE_CATEGORY_GRID_STABLE_20260606_v70';
-  window.__ELTAUM_CATEGORY_GRID_STABLE_BUILD__=BUILD;
 
   const PRESET_TO_CANON_CAT = {
     'renda-fixa-simples':'RENDA FIXA SIMPLES',
@@ -8705,436 +8704,26 @@ async function sharePainelMercado(){
     }
   }
 
-  function visibleFilterLabel(){
-    const c = activeCanonCat();
-    return c ? (CANON_LABEL[c] || c) : 'Todos os fundos';
-  }
-
-  function stabilizeViewport(fn){
-    const anchor = qs('#fundFilterShell') || qs('#sec-fundos') || document.body;
-    const table = qs('.table-wrap');
-    const cards = qs('#mobileFundCards');
-
-    const beforeTop = anchor.getBoundingClientRect().top;
-    const tableH = table ? Math.ceil(table.getBoundingClientRect().height) : 0;
-    const cardsH = cards ? Math.ceil(cards.getBoundingClientRect().height) : 0;
-
-    if(table && tableH > 0){
-      table.style.minHeight = tableH + 'px';
-      table.classList.add('elton-filter-stabilizing');
-    }
-    if(cards && cardsH > 0){
-      cards.style.minHeight = cardsH + 'px';
-      cards.classList.add('elton-filter-stabilizing');
-    }
-
-    let out;
-    try{ out = fn(); }
-    finally{
-      const keep = () => {
-        try{
-          const afterTop = anchor.getBoundingClientRect().top;
-          const delta = afterTop - beforeTop;
-          if(Math.abs(delta) > 1) window.scrollBy({top:delta, left:0, behavior:'auto'});
-        }catch(e){}
-      };
-      requestAnimationFrame(keep);
-      setTimeout(keep,70);
-      setTimeout(()=>{
-        if(table){ table.style.minHeight=''; table.classList.remove('elton-filter-stabilizing'); }
-        if(cards){ cards.style.minHeight=''; cards.classList.remove('elton-filter-stabilizing'); }
-        keep();
-      },220);
-    }
-    return out;
-  }
-
-  function syncHiddenLegacyChips(){
+  function setMobileCardsMode(){
     try{
-      const cat = activeCat || '';
-      const row = qs('#catFilters');
-      if(row){
-        qsa('[data-cat]',row).forEach(b=>{
-          const on = String(b.dataset.cat || '') === String(cat || '');
-          b.classList.toggle('active', on);
-        });
-        if(!cat){
-          const all = row.querySelector('[data-cat=""]');
-          if(all) all.classList.add('active');
-        }
-      }
-
-      qsa('.category-choice-v44').forEach(btn=>{
-        const on = canon(btn.dataset.cat || '') === activeCanonCat();
-        btn.classList.toggle('active', on);
-        btn.setAttribute('aria-pressed', on ? 'true':'false');
-      });
+      if(!isMobile()) return;
+      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v72-mobile-cards-only');
+      document.body.classList.remove('fund-list-mode');
+      try{
+        localStorage.setItem('fundMobileView','cards');
+        localStorage.setItem('fundMobileViewV45','cards');
+      }catch(e){}
     }catch(e){}
   }
 
-  function syncCategoryGridV70(){
+  function syncCategoryGridV72(){
     try{
       const active = activeCanonCat();
+
       qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset]').forEach(btn=>{
         const preset = btn.dataset.preset || 'all';
         const wanted = PRESET_TO_CANON_CAT[preset] || '';
         const on = preset === 'all' ? !active : active === wanted;
-        btn.classList.toggle('active', on);
-        btn.setAttribute('aria-pressed', on ? 'true':'false');
-      });
-
-      const status = qs('#categoryGridStatus');
-      if(status) status.textContent = active ? ('Categoria: ' + visibleFilterLabel()) : 'Todos os fundos';
-
-      const result = qs('#filterResultSummary');
-      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
-      if(result && n !== null) result.textContent = `${n} fundos encontrados`;
-
-      const clearTop = qs('#clearFiltersTop');
-      if(clearTop){
-        const hasFilter = !!(active || (()=>{try{return activeBenchmark || activePerfil || activeRisco || hideSemDados}catch(e){return false}})());
-        clearTop.hidden = !hasFilter;
-        clearTop.classList.toggle('is-visible', hasFilter);
-        clearTop.textContent = 'Limpar filtro';
-      }
-
-      const summary = qs('#mobileFilterSummary');
-      if(summary) summary.textContent = active ? ('Categoria: ' + visibleFilterLabel()) : 'Categoria: Todos os fundos';
-
-      const count = qs('#filterActiveCount');
-      if(count){
-        count.textContent = active ? '1' : '0';
-        count.classList.toggle('has-active', !!active);
-      }
-
-      const strip = qs('#activeFilterStrip');
-      if(strip){
-        if(active){
-          strip.classList.add('active','category-grid-active-v70');
-          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v70-clear-filter="1"><small>Categoria</small>${visibleFilterLabel()}<span>×</span></button><button type="button" class="active-filter-clear" data-v70-clear-filter="1">Limpar tudo</button>`;
-        }else{
-          strip.classList.remove('active','category-grid-active-v70');
-          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill empty-v70" tabindex="-1" aria-hidden="true"><small>Categoria</small>Todos<span>×</span></button>`;
-        }
-      }
-
-      syncHiddenLegacyChips();
-      try{ if(typeof updateFundResultSummary === 'function') updateFundResultSummary(); }catch(e){}
-    }catch(e){}
-  }
-
-  function clearFiltersV70(){
-    stabilizeViewport(()=>{
-      try{
-        activeCat='';
-        activeBenchmark='';
-        activePerfil='';
-        activeRisco='';
-        hideSemDados=false;
-        window.__favListMode=false;
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
-        currentPage=1;
-        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
-      }catch(e){}
-      const semDados = qs('#toggleSemDados');
-      if(semDados) semDados.checked = false;
-      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-      syncCategoryGridV70();
-    });
-  }
-
-  function applyCategoryPresetV70(preset){
-    const targetCanon = PRESET_TO_CANON_CAT[preset] || '';
-    stabilizeViewport(()=>{
-      try{
-        activeBenchmark='';
-        activePerfil='';
-        activeRisco='';
-        hideSemDados=false;
-        window.__favListMode=false;
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset || 'all';
-        currentPage=1;
-        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
-
-        if(!targetCanon){
-          activeCat='';
-        }else{
-          activeCat = findRawCategoryByCanon(targetCanon);
-        }
-      }catch(e){}
-
-      const semDados = qs('#toggleSemDados');
-      if(semDados) semDados.checked = false;
-      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-      syncCategoryGridV70();
-    });
-  }
-
-  let lastAction = {key:'', t:0};
-
-  function shouldHandleEvent(ev){
-    const target = ev.target && ev.target.closest ? ev.target.closest('.catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset], #clearFiltersTop, #clearFiltersBtn, #activeFilterStrip [data-v70-clear-filter]') : null;
-    if(!target) return null;
-    return target;
-  }
-
-  function handleGridEvent(ev){
-    const target = shouldHandleEvent(ev);
-    if(!target) return;
-
-    ev.preventDefault();
-    ev.stopPropagation();
-    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-
-    const key = target.id || target.dataset.preset || 'clear';
-    const now = Date.now();
-    if(lastAction.key === key && now - lastAction.t < 360) return;
-    lastAction = {key, t:now};
-
-    if(target.matches('#clearFiltersTop, #clearFiltersBtn, [data-v70-clear-filter]')){
-      clearFiltersV70();
-      return;
-    }
-
-    const preset = target.dataset.preset || 'all';
-    applyCategoryPresetV70(preset);
-  }
-
-  function bindV70(){
-    if(document.documentElement.dataset.categoryGridV70 === '1') return;
-    document.documentElement.dataset.categoryGridV70 = '1';
-
-    ['pointerup','click','touchend'].forEach(type=>{
-      window.addEventListener(type, handleGridEvent, true);
-    });
-
-    const search = qs('#searchInput');
-    if(search && search.dataset.v70Bound !== '1'){
-      search.dataset.v70Bound = '1';
-      search.addEventListener('input',()=>setTimeout(syncCategoryGridV70,80));
-    }
-
-    syncCategoryGridV70();
-    setTimeout(syncCategoryGridV70,400);
-    setTimeout(syncCategoryGridV70,1200);
-    console.info('[Catálogo CAIXA] Categorias mobile estáveis:', BUILD);
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV70,80));
-  else setTimeout(bindV70,80);
-
-  const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__categoryGridStableV70){
-    const wrapped = function(){
-      const out = oldRender.apply(this, arguments);
-      try{ syncCategoryGridV70(); }catch(e){}
-      return out;
-    };
-    wrapped.__categoryGridStableV70 = true;
-    window.render = wrapped;
-  }
-
-  window.syncCategoryGridV70 = syncCategoryGridV70;
-})();
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v71 — Filtro sem salto de tela
-   Diagnóstico: o salto vinha de reflow/scroll anchoring e módulos antigos
-   alternando tabela/cards, não de um único scrollTo explícito.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD='ELTAUM_FILTER_NO_JUMP_20260606_v71';
-  window.__ELTAUM_FILTER_NO_JUMP_BUILD__=BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-  function now(){return performance.now()}
-
-  const filterSelector = [
-    '#sec-fundos .filter-preset-chip',
-    '#sec-fundos .shortcut-preset',
-    '#sec-fundos .category-choice-v44',
-    '#sec-fundos .chip',
-    '#sec-fundos #clearFiltersTop',
-    '#sec-fundos #clearFiltersBtn',
-    '#sec-fundos #filterApplyBtn',
-    '#sec-fundos #mobileFilterToggle',
-    '#sec-fundos .active-filter-pill',
-    '#sec-fundos .active-filter-clear',
-    '#sec-fundos [data-preset]',
-    '#sec-fundos [data-cat]',
-    '#sec-fundos [data-clear-filter]',
-    '#sec-fundos [data-v70-clear-filter]',
-    '#sec-fundos [data-v71-clear-filter]'
-  ].join(',');
-
-  const PRESET_TO_CANON_CAT = {
-    'renda-fixa-simples':'RENDA FIXA SIMPLES',
-    'renda-fixa':'RENDA FIXA',
-    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
-    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
-    'multimercado':'MULTIMERCADO',
-    'cambial':'CAMBIAL',
-    'acoes':'ACOES',
-    'fundo-de-indice':'FUNDO DE INDICE',
-    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
-  };
-
-  const CANON_LABEL = {
-    'RENDA FIXA SIMPLES':'RF Simples',
-    'RENDA FIXA':'Renda Fixa',
-    'RENDA FIXA REFERENCIADO':'RF Referenciado',
-    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
-    'MULTIMERCADO':'Multimercado',
-    'CAMBIAL':'Cambial',
-    'ACOES':'Ações',
-    'FUNDO DE INDICE':'Fundo de Índice',
-    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
-  };
-
-  function canon(v){
-    return String(v || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g,'')
-      .replace(/[^\w\s]/g,' ')
-      .replace(/\s+/g,' ')
-      .trim()
-      .toUpperCase();
-  }
-
-  function getActiveCanonCat(){
-    try{return canon(activeCat || '')}catch(e){return ''}
-  }
-
-  function findRawCategoryByCanon(canonTarget){
-    try{
-      if(!canonTarget || !Array.isArray(allRows)) return '';
-      const found = allRows.find(r => canon(r && r['Categoria']) === canonTarget);
-      return found ? String(found['Categoria'] || '').trim() : canonTarget;
-    }catch(e){
-      return canonTarget || '';
-    }
-  }
-
-  const lock = {
-    active:false,
-    allow:false,
-    y:0,
-    anchor:null,
-    anchorTop:0,
-    until:0,
-    raf:0,
-    timer:0
-  };
-
-  const originalScrollTo = window.scrollTo.bind(window);
-  const originalScrollBy = window.scrollBy.bind(window);
-  const originalScrollIntoView = Element.prototype.scrollIntoView;
-
-  function preserveNodeHeights(){
-    const nodes = [
-      qs('#fundFilterShell'),
-      qs('#sec-fundos .table-wrap'),
-      qs('#mobileFundCards'),
-      qs('.pagination-row')
-    ].filter(Boolean);
-
-    nodes.forEach(el=>{
-      const h = Math.ceil(el.getBoundingClientRect().height);
-      if(h > 0){
-        el.dataset.v71MinHeight = el.style.minHeight || '';
-        el.style.minHeight = h + 'px';
-        el.classList.add('v71-filter-stabilizing');
-      }
-    });
-
-    return function releaseHeights(){
-      nodes.forEach(el=>{
-        el.style.minHeight = el.dataset.v71MinHeight || '';
-        delete el.dataset.v71MinHeight;
-        el.classList.remove('v71-filter-stabilizing');
-      });
-    };
-  }
-
-  function hardRestoreScroll(){
-    if(!lock.active) return;
-    const y = lock.y;
-    lock.allow = true;
-    try{ originalScrollTo(0, y); }catch(e){}
-    lock.allow = false;
-  }
-
-  function startNoJumpLock(){
-    const anchor = qs('#fundFilterShell') || qs('#sec-fundos') || document.body;
-    lock.active = true;
-    lock.y = window.scrollY || window.pageYOffset || 0;
-    lock.anchor = anchor;
-    lock.anchorTop = anchor ? anchor.getBoundingClientRect().top : 0;
-    lock.until = now() + 1500;
-
-    document.documentElement.classList.add('v71-filter-no-jump');
-    document.body.classList.add('v71-filter-no-jump');
-
-    const release = preserveNodeHeights();
-
-    const tick = () => {
-      if(!lock.active) return;
-      hardRestoreScroll();
-      if(now() < lock.until){
-        lock.raf = requestAnimationFrame(tick);
-      }
-    };
-    cancelAnimationFrame(lock.raf);
-    lock.raf = requestAnimationFrame(tick);
-
-    clearTimeout(lock.timer);
-    lock.timer = setTimeout(()=>{
-      release();
-      hardRestoreScroll();
-      lock.active = false;
-      document.documentElement.classList.remove('v71-filter-no-jump');
-      document.body.classList.remove('v71-filter-no-jump');
-    }, 1550);
-
-    return release;
-  }
-
-  window.scrollTo = function(...args){
-    if(lock.active && !lock.allow){
-      return;
-    }
-    return originalScrollTo(...args);
-  };
-
-  window.scrollBy = function(...args){
-    if(lock.active && !lock.allow){
-      return;
-    }
-    return originalScrollBy(...args);
-  };
-
-  Element.prototype.scrollIntoView = function(...args){
-    if(lock.active && !lock.allow){
-      return;
-    }
-    return originalScrollIntoView.apply(this,args);
-  };
-
-  function syncGridVisual(){
-    try{
-      const active = getActiveCanonCat();
-
-      qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset]').forEach(btn=>{
-        const p = btn.dataset.preset || 'all';
-        const wanted = PRESET_TO_CANON_CAT[p] || '';
-        const on = p === 'all' ? !active : active === wanted;
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
@@ -9154,13 +8743,16 @@ async function sharePainelMercado(){
         clearTop.textContent = 'Limpar filtro';
       }
 
+      const summary = qs('#mobileFilterSummary');
+      if(summary) summary.textContent = active ? ('Categoria: ' + (CANON_LABEL[active] || active)) : 'Categoria: Todos os fundos';
+
       const strip = qs('#activeFilterStrip');
       if(strip){
         if(active){
-          strip.classList.add('active','category-grid-active-v70','category-grid-active-v71');
-          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v71-clear-filter="1"><small>Categoria</small>${CANON_LABEL[active] || active}<span>×</span></button><button type="button" class="active-filter-clear" data-v71-clear-filter="1">Limpar tudo</button>`;
+          strip.classList.add('active','category-grid-active-v72');
+          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v72-clear-filter="1"><small>Categoria</small>${CANON_LABEL[active] || active}<span>×</span></button><button type="button" class="active-filter-clear" data-v72-clear-filter="1">Limpar tudo</button>`;
         }else{
-          strip.classList.remove('active','category-grid-active-v70','category-grid-active-v71');
+          strip.classList.remove('active','category-grid-active-v72');
           strip.innerHTML = '';
         }
       }
@@ -9173,148 +8765,208 @@ async function sharePainelMercado(){
     }catch(e){}
   }
 
-  function keepMobileCardsStable(){
-    try{
-      if(isMobile()){
-        document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v71-mobile-cards-only');
-        document.body.classList.remove('fund-list-mode');
-        qsa('.mobile-catalog-view-btn').forEach(btn=>{
-          const on = btn.dataset.mobileCatalogView === 'cards';
-          btn.classList.toggle('active', on);
-          btn.setAttribute('aria-pressed', on ? 'true':'false');
-        });
-        try{localStorage.setItem('fundMobileView','cards'); localStorage.setItem('fundMobileViewV45','cards');}catch(e){}
-      }else{
-        document.body.classList.remove('v71-mobile-cards-only');
-      }
-    }catch(e){}
+  function preserveHeights(){
+    const selectors = ['#fundFilterShell','#mobileFundCards','#sec-fundos .table-wrap','.pagination-row'];
+    const changed = [];
+    selectors.forEach(sel=>{
+      const el = qs(sel);
+      if(!el) return;
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      if(h <= 0) return;
+      changed.push([el, el.style.minHeight || '']);
+      el.style.minHeight = h + 'px';
+      el.classList.add('v72-filter-stabilizing');
+    });
+
+    return () => {
+      changed.forEach(([el,old])=>{
+        el.style.minHeight = old;
+        el.classList.remove('v72-filter-stabilizing');
+      });
+    };
   }
 
-  function clearFilters(){
-    startNoJumpLock();
-    try{
-      activeCat='';
-      activeBenchmark='';
-      activePerfil='';
-      activeRisco='';
-      hideSemDados=false;
-      currentPage=1;
-      window.__favListMode=false;
-      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
-      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
-    }catch(e){}
-    const toggle = qs('#toggleSemDados');
-    if(toggle) toggle.checked = false;
-    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
-    keepMobileCardsStable();
-    syncGridVisual();
-    setTimeout(syncGridVisual, 120);
-    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();}, 420);
+  function withStableViewport(task){
+    const y = window.scrollY || window.pageYOffset || 0;
+    const release = preserveHeights();
+
+    document.documentElement.classList.add('v72-filter-applying');
+    document.body.classList.add('v72-filter-applying');
+
+    try{ task(); }
+    finally{
+      const restore = () => {
+        try{ window.scrollTo({top:y, left:0, behavior:'auto'}); }
+        catch(e){ try{ window.scrollTo(0,y); }catch(_){} }
+      };
+
+      restore();
+      requestAnimationFrame(restore);
+      setTimeout(restore, 60);
+      setTimeout(restore, 160);
+      setTimeout(()=>{
+        release();
+        restore();
+        document.documentElement.classList.remove('v72-filter-applying');
+        document.body.classList.remove('v72-filter-applying');
+      }, 320);
+    }
   }
 
-  function applyCategory(preset){
-    startNoJumpLock();
-
+  function applyCategoryPreset(preset){
     const wanted = PRESET_TO_CANON_CAT[preset] || '';
-    try{
-      activeBenchmark='';
-      activePerfil='';
-      activeRisco='';
-      hideSemDados=false;
-      currentPage=1;
-      window.__favListMode=false;
-      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset || 'all';
-      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
 
-      activeCat = wanted ? findRawCategoryByCanon(wanted) : '';
-    }catch(e){}
+    withStableViewport(()=>{
+      try{
+        activeCat = wanted ? findRawCategoryByCanon(wanted) : '';
+        activeBenchmark = '';
+        activePerfil = '';
+        activeRisco = '';
+        hideSemDados = false;
+        currentPage = 1;
+        window.__favListMode = false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+      }catch(e){}
 
-    const toggle = qs('#toggleSemDados');
-    if(toggle) toggle.checked = false;
-    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
-    keepMobileCardsStable();
-    syncGridVisual();
-    setTimeout(syncGridVisual, 120);
-    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();}, 420);
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.checked = false;
+
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+      setMobileCardsMode();
+      syncCategoryGridV72();
+      setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 120);
+    });
   }
 
-  let last = {key:'', t:0};
-  function interceptFilterEvent(ev){
-    const target = ev.target && ev.target.closest ? ev.target.closest(filterSelector) : null;
+  function clearCategoryFilters(){
+    withStableViewport(()=>{
+      try{
+        activeCat = '';
+        activeBenchmark = '';
+        activePerfil = '';
+        activeRisco = '';
+        hideSemDados = false;
+        currentPage = 1;
+        window.__favListMode = false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'all';
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+      }catch(e){}
+
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.checked = false;
+
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+      setMobileCardsMode();
+      syncCategoryGridV72();
+      setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 120);
+    });
+  }
+
+  /* Guarda gestos de rolagem para impedir clique fantasma após arrastar a tela */
+  const touch = {x:0,y:0,scrollY:0,moved:false,lastMove:0};
+
+  window.addEventListener('touchstart', ev=>{
+    const t = ev.touches && ev.touches[0];
+    if(!t) return;
+    touch.x = t.clientX;
+    touch.y = t.clientY;
+    touch.scrollY = window.scrollY || 0;
+    touch.moved = false;
+  }, {capture:true, passive:true});
+
+  window.addEventListener('touchmove', ev=>{
+    const t = ev.touches && ev.touches[0];
+    if(!t) return;
+    const dx = Math.abs(t.clientX - touch.x);
+    const dy = Math.abs(t.clientY - touch.y);
+    const ds = Math.abs((window.scrollY || 0) - touch.scrollY);
+    if(dx > 8 || dy > 8 || ds > 4){
+      touch.moved = true;
+      touch.lastMove = Date.now();
+    }
+  }, {capture:true, passive:true});
+
+  function isGhostClickAfterScroll(){
+    return touch.moved && (Date.now() - touch.lastMove < 520);
+  }
+
+  let lastClick = {key:'', t:0};
+
+  function handleFilterClick(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset], #sec-fundos #clearFiltersTop, #sec-fundos #clearFiltersBtn, #sec-fundos [data-v72-clear-filter], #sec-fundos .active-filter-clear, #sec-fundos .active-filter-pill') : null;
     if(!target) return;
 
-    const isOurGrid = target.closest('.catalog-shortcuts-category-grid-v69');
-    const isClear = target.matches('#clearFiltersTop,#clearFiltersBtn,[data-v70-clear-filter],[data-v71-clear-filter],.active-filter-clear,.active-filter-pill');
-    const preset = target.dataset ? target.dataset.preset : '';
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
 
-    // Intercepta somente o grid novo e limpar filtros do bloco fundos.
-    // Outros filtros legados continuam funcionando, mas com trava anti-salto.
-    if(isOurGrid || isClear){
-      ev.preventDefault();
-      ev.stopPropagation();
-      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-
-      const key = isClear ? 'clear' : (preset || 'all');
-      const t = Date.now();
-      if(last.key === key && t - last.t < 420) return;
-      last = {key,t};
-
-      if(target && typeof target.blur === 'function') setTimeout(()=>target.blur(),0);
-      if(isClear) clearFilters();
-      else applyCategory(preset || 'all');
+    if(isGhostClickAfterScroll()){
+      if(target && typeof target.blur === 'function') target.blur();
       return;
     }
 
-    // Para filtros legados, pelo menos trava a posição visual.
-    startNoJumpLock();
+    const isClear = target.matches('#clearFiltersTop,#clearFiltersBtn,[data-v72-clear-filter],.active-filter-clear,.active-filter-pill');
+    const preset = target.dataset ? (target.dataset.preset || 'all') : 'all';
+    const key = isClear ? 'clear' : preset;
+    const now = Date.now();
+
+    if(lastClick.key === key && now - lastClick.t < 360) return;
+    lastClick = {key, t:now};
+
     if(target && typeof target.blur === 'function') setTimeout(()=>target.blur(),0);
-    setTimeout(syncGridVisual,120);
-    setTimeout(syncGridVisual,420);
+
+    if(isClear) clearCategoryFilters();
+    else applyCategoryPreset(preset);
   }
 
   function bind(){
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
 
-    if(document.documentElement.dataset.v71NoJumpBound !== '1'){
-      document.documentElement.dataset.v71NoJumpBound = '1';
-      ['pointerdown','pointerup','touchend','click'].forEach(type=>{
-        window.addEventListener(type, interceptFilterEvent, true);
+    if(document.documentElement.dataset.v72SafeTapBound !== '1'){
+      document.documentElement.dataset.v72SafeTapBound = '1';
+
+      /* Apenas CLICK. Nada de touchend/pointerup para não acionar durante rolagem. */
+      window.addEventListener('click', handleFilterClick, true);
+
+      window.addEventListener('resize', ()=>{
+        setMobileCardsMode();
+        syncCategoryGridV72();
       });
-      window.addEventListener('resize',()=>{keepMobileCardsStable(); syncGridVisual();});
     }
 
-    keepMobileCardsStable();
-    syncGridVisual();
-    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();},600);
-    setTimeout(()=>{keepMobileCardsStable(); syncGridVisual();},1600);
-    console.info('[Catálogo CAIXA] Filtro sem salto ativo:', BUILD);
+    setMobileCardsMode();
+    syncCategoryGridV72();
+    setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 500);
+    setTimeout(()=>{setMobileCardsMode(); syncCategoryGridV72();}, 1400);
+
+    console.info('[Catálogo CAIXA] Mobile filtro toque seguro:', BUILD);
   }
 
   const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__filterNoJumpV71){
+  if(typeof oldRender === 'function' && !oldRender.__mobileSafeTapV72){
     const wrapped = function(){
       const out = oldRender.apply(this, arguments);
-      keepMobileCardsStable();
-      syncGridVisual();
+      setMobileCardsMode();
+      syncCategoryGridV72();
       return out;
     };
-    wrapped.__filterNoJumpV71 = true;
+    wrapped.__mobileSafeTapV72 = true;
     window.render = wrapped;
   }
 
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,80));
-  else setTimeout(bind,80);
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,120));
+  else setTimeout(bind,120);
 
-  window.__ELTAUM_FILTER_NO_JUMP_V71__ = {
-    sync: syncGridVisual,
-    cards: keepMobileCardsStable,
-    clear: clearFilters,
-    apply: applyCategory
+  window.__ELTAUM_MOBILE_FILTER_SAFE_TAP_V72__ = {
+    apply: applyCategoryPreset,
+    clear: clearCategoryFilters,
+    sync: syncCategoryGridV72
   };
 })();
 
