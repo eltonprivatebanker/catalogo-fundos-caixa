@@ -2971,10 +2971,14 @@ function gerarLeituraRapidaFundo(r){
   // ── Complementos da leitura rápida ─────────────────────────────────
   // Evita redundância: cadastro, taxa, perfil e liquidez já aparecem na grade de dados.
   // Aqui ficam apenas os indicadores de performance para leitura executiva.
+  const rentDia = numero(r['Variacao Dia (%)']);
+  const rentMes = numero(r['Acum. Mes (%)']);
   const complementos = [];
+  if(rentDia !== null) complementos.push({label:'Dia', value:pct(rentDia)});
+  if(rentMes !== null) complementos.push({label:'Mês', value:pct(rentMes)});
   if(rentAno !== null) complementos.push({label:'Ano', value:pct(rentAno)});
   if(rent12 !== null) complementos.push({label:'12M', value:pct(rent12)});
-  if(cdiRatio !== null) complementos.push({label:'% CDI', value:`${cdiRatio}% do CDI`});
+  if(cdiRatio !== null) complementos.push({label:'% CDI', value:`${cdiRatio}%`});
 
   const tagsHtml = tags.length
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
@@ -3355,7 +3359,7 @@ function buildRowHTML(r,idx){
       // PL compacto
       const plVal=toNum(r['PL (milhoes R$)']);
       const plStr=plVal?'PL R$ '+( plVal>=1000?(plVal/1000).toFixed(1)+'bi' : plVal.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi' ):'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}${cnpjCopyChipV61(r['CNPJ'],'table-cnpj-chip-v61')}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
@@ -4480,7 +4484,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(toNum(m12), indicState?.cdi?.m12) : null;
     if(ratio === null || ratio === undefined || !Number.isFinite(Number(ratio))) return {txt:'—', cls:''};
     const cls = ratio < 0 ? 'fund-cdi-ratio-negative' : ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
-    return {txt:`${ratio}% do CDI`, cls};
+    return {txt:`${ratio}%`, cls};
   }
 
   function pctClass(v){
@@ -4508,6 +4512,21 @@ document.addEventListener('DOMContentLoaded', function(){
     return vJson || '';
   }
 
+  function onlyDigitsCnpjV61(v){
+    return String(v || '').replace(/\D/g,'').slice(0,14);
+  }
+  function formatCnpjV61(v){
+    const d = onlyDigitsCnpjV61(v);
+    if(d.length === 14) return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5');
+    return String(v || '').trim();
+  }
+  function cnpjCopyChipV61(raw, extraClass=''){
+    const formatted = formatCnpjV61(raw);
+    const digits = onlyDigitsCnpjV61(raw);
+    if(!formatted || !digits) return '';
+    return `<button type="button" class="cnpj-copy-chip-v61 cnpj-copy-chip-pro-v63 ${extraClass}" data-cnpj="${htmlAttr(formatted)}" title="Copiar CNPJ ${htmlAttr(formatted)}" aria-label="Copiar CNPJ ${htmlAttr(formatted)}"><span>CNPJ</span><b>${htmlAttr(formatted)}</b><i>copiar</i></button>`;
+  }
+
   function buildMobileFundCard(r,idx){
     const nome=fmtDash(r['Fundo']);
     const cat=fmtDash(r['Categoria']);
@@ -4525,6 +4544,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const conversao = getCampoPrazoMobile(r,'Conversao Resgate');
     const pagamento = getCampoPrazoMobile(r,'Pagamento Resgate');
     const codigo = getCodigoFundoMobile(r);
+    const cnpjChip = cnpjCopyChipV61(r['CNPJ'],'card-cnpj-chip-v61 card-cnpj-chip-v62');
     const bench = typeof detectarBenchmarkFundo === 'function' ? detectarBenchmarkFundo(r).label : '—';
     const docs = getMobileDocs(r);
     const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
@@ -4544,11 +4564,14 @@ document.addEventListener('DOMContentLoaded', function(){
             ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
           </div>
           <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
+          ${cnpjChip?`<div class="fund-card-cnpj-row-v62">${cnpjChip}</div>`:''}
         </div>
-        <div class="fund-card-list-metrics" aria-label="Resumo de rentabilidade do fundo">
+        <div class="fund-card-list-metrics fund-card-list-metrics-v60" aria-label="Resumo de rentabilidade do fundo">
           <span class="fund-card-list-metric"><small>Dia</small><strong class="${pctClass(dia)}">${dia}</strong></span>
+          <span class="fund-card-list-metric"><small>Mês</small><strong class="${pctClass(mes)}">${mes}</strong></span>
           <span class="fund-card-list-metric"><small>Ano</small><strong class="${pctClass(ano)}">${ano}</strong></span>
           <span class="fund-card-list-metric"><small>12M</small><strong class="${pctClass(m12)}">${m12}</strong></span>
+          <span class="fund-card-list-metric cdi"><small>% CDI</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
         </div>
       </div>
 
@@ -5010,8 +5033,12 @@ document.addEventListener('DOMContentLoaded', function(){
       /* Favoritos */
       if(typeof filtered==='undefined') return;
       const favs=getFavs();
-      if(onlyFavs){ filtered=filtered.filter(r=>favs.has(getFundKey(r))); if(typeof render==='function') render(); }
-      else if(favs.size>0){ filtered.sort((a,b)=>(favs.has(getFundKey(a))?0:1)-(favs.has(getFundKey(b))?0:1)); if(typeof render==='function') render(); }
+      if(onlyFavs){
+        filtered=filtered.filter(r=>favs.has(getFundKey(r)));
+        if(typeof render==='function') render();
+      }
+      // v60: favoritos não devem mais ficar "travados" no topo.
+      // A estrela continua destacando o fundo, mas a ordenação respeita a coluna escolhida.
 
       /* Atualiza contador na barra global */
       updateGfbCount();
@@ -7862,6 +7889,7 @@ async function sharePainelMercado(){
       const mes=clean(row['Acum. Mes (%)']);
       const m12=clean(row['Acum. 12M (%)']);
       const cdi=cdiText(row);
+      const cnpjChip = (typeof cnpjCopyChipV61==='function') ? cnpjCopyChipV61(row['CNPJ'],'list-cnpj-chip-v62 list-cnpj-chip-v63') : '';
       return `<article class="fund-list-row-v45" data-idx="${idx}" aria-label="${esc(name)}">
         <div class="fund-list-main-v45">
           <div class="fund-list-tags-v45">
@@ -7870,6 +7898,7 @@ async function sharePainelMercado(){
             ${code?`<span class="fund-list-tag-v45 code">Cód. ${esc(code)}</span>`:''}
           </div>
           <div class="fund-list-name-v45">${esc(name)}</div>
+          ${cnpjChip?`<div class="fund-list-cnpj-row-v62 fund-list-cnpj-row-v63">${cnpjChip}</div>`:''}
         </div>
         <div class="fund-list-metrics-v45">
           <span class="fund-list-metric-v45"><small>Mês</small><strong class="${cls(mes)}">${esc(mes)}</strong></span>
@@ -8273,7 +8302,7 @@ async function sharePainelMercado(){
    - No mobile, preserva o comportamento atual em bottom/lista.
 ════════════════════════════════════════════════════════ */
 (function(){
-  const BUILD='ELTAUM_CARD_SIDE_PANEL_METRICS_20260606_v59';
+  const BUILD='ELTAUM_CNPJ_HINT_METRICS_20260606_v61';
   function isDesktopCards(){
     return window.matchMedia && window.matchMedia('(min-width: 821px)').matches && document.body.classList.contains('fund-card-mode');
   }
@@ -8402,4 +8431,265 @@ async function sharePainelMercado(){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindSidePanel);
   else bindSidePanel();
+})();
+
+/* ════════════════════════════════════════════════════════
+   PATCH v60 — ordenação sem favoritos fixos + métricas completas
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_SORT_METRICS_READABILITY_20260606_v60';
+  function init(){
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v61 — CNPJ visível/copiável + % CDI compacto
+════════════════════════════════════════════════════════ */
+(function(){
+  function toastMsgV61(msg){
+    try{
+      if(typeof showToast==='function') return showToast(msg);
+    }catch(e){}
+    const el=document.createElement('div');
+    el.className='copy-toast-v61';
+    el.textContent=msg;
+    document.body.appendChild(el);
+    requestAnimationFrame(()=>el.classList.add('show'));
+    setTimeout(()=>{el.classList.remove('show'); setTimeout(()=>el.remove(),240);},1600);
+  }
+  async function copyTextV61(text){
+    const v=String(text||'').trim();
+    if(!v) return;
+    try{
+      await navigator.clipboard.writeText(v);
+      toastMsgV61('CNPJ copiado');
+    }catch(e){
+      const ta=document.createElement('textarea');
+      ta.value=v; ta.style.position='fixed'; ta.style.opacity='0';
+      document.body.appendChild(ta); ta.select();
+      try{document.execCommand('copy'); toastMsgV61('CNPJ copiado');}
+      catch(err){prompt('Copie o CNPJ:', v);}
+      ta.remove();
+    }
+  }
+  document.addEventListener('click', function(ev){
+    const btn=ev.target.closest('.cnpj-copy-chip-v61, .detail-val.copyable');
+    if(!btn) return;
+    const text=btn.getAttribute('data-cnpj') || btn.textContent.replace(/^\s*CNPJ\s*/i,'').trim();
+    ev.preventDefault(); ev.stopPropagation();
+    copyTextV61(text);
+  }, true);
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v62 — CNPJ legível + cards mobile respirando
+   - CNPJ aparece em linha própria nos cards.
+   - Lista compacta mobile também recebe CNPJ copiável.
+   - Mantém as 5 métricas, mas evita espremimento no mobile.
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_MOBILE_CNPJ_READABLE_20260606_v63';
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+  function cnpjDigits(v){return String(v||'').replace(/\D/g,'').slice(0,14);}
+  function cnpjFmt(v){const d=cnpjDigits(v); return d.length===14?d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5'):String(v||'').trim();}
+  function chip(raw, extra){
+    const f=cnpjFmt(raw), d=cnpjDigits(raw);
+    if(!f||!d) return '';
+    return `<button type="button" class="cnpj-copy-chip-v61 cnpj-copy-chip-pro-v62 cnpj-copy-chip-pro-v63 ${extra||''}" data-cnpj="${esc(f)}" title="Copiar CNPJ ${esc(f)}" aria-label="Copiar CNPJ ${esc(f)}"><span>CNPJ</span><b>${esc(f)}</b><i>copiar</i></button>`;
+  }
+  function getRowByIdx(idx){try{return Array.isArray(filtered)?filtered[Number(idx)]:null;}catch(e){return null;}}
+  function enhanceListCnpj(){
+    const box=qs('#mobileFundCards');
+    if(!box) return;
+    qsa('.fund-list-row-v45',box).forEach(row=>{
+      if(row.dataset.cnpjV62==='1' || row.querySelector('.fund-list-cnpj-row-v63,.fund-list-cnpj-row-v62')) return;
+      const idx=row.getAttribute('data-idx');
+      const data=getRowByIdx(idx);
+      if(!data || !data['CNPJ']) return;
+      const main=qs('.fund-list-main-v45',row);
+      if(!main) return;
+      const div=document.createElement('div');
+      div.className='fund-list-cnpj-row-v62';
+      div.innerHTML=chip(data['CNPJ'],'list-cnpj-chip-v62');
+      main.appendChild(div);
+      row.dataset.cnpjV62='1';
+    });
+  }
+  function bind(){
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    enhanceListCnpj();
+    const box=qs('#mobileFundCards');
+    if(box && box.dataset.cnpjV62Observe!=='1'){
+      box.dataset.cnpjV62Observe='1';
+      new MutationObserver(()=>setTimeout(enhanceListCnpj,30)).observe(box,{childList:true,subtree:true});
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,850),{once:true});
+  else setTimeout(bind,850);
+  document.addEventListener('input',ev=>{if(ev.target && (ev.target.id==='searchInput'||ev.target.id==='gfbSearch')) setTimeout(enhanceListCnpj,500);},true);
+  document.addEventListener('click',ev=>{if(ev.target.closest('.mobile-catalog-view-btn,.page-btn,.category-choice-v44,#clearFiltersTop,#clearFiltersBtn')) setTimeout(enhanceListCnpj,500);},true);
+})();
+
+/* ════════════════════════════════════════════════════════
+   PATCH v64 — Ordenação sem favorito fixo + sem hint deslocado + categorias CAIXA
+   - Remove helper mobileResultsHintV46 que ficava solto/deslocado.
+   - Garante que favoritos não sejam tratados como linha fixa no topo.
+   - Reaplica a ordenação ativa após wrappers antigos de favoritos.
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_FAV_SORT_CATEGORY_CLEAN_20260606_v64';
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+
+  function removeMobileHintV64(){
+    qsa('#mobileResultsHintV46,.mobile-results-hint-v46').forEach(el=>el.remove());
+    document.body.classList.remove('mobile-searching-results-v46');
+  }
+
+  function cleanupFavoriteVisualV64(){
+    // Favorito pode continuar salvo/filtrável, mas não deve parecer item preso/fixado.
+    if(!window.__favListMode){
+      qsa('#tableBody tr.row-fav').forEach(tr=>tr.classList.remove('row-fav'));
+      qsa('#mobileFundCards .card-fav').forEach(card=>card.classList.remove('card-fav'));
+    }
+  }
+
+  function normalizeCompareV64(av,bv,dir){
+    if(av===null&&bv===null) return 0;
+    if(av===null) return 1;
+    if(bv===null) return -1;
+    if(av<bv) return dir===1?-1:1;
+    if(av>bv) return dir===1?1:-1;
+    return 0;
+  }
+
+  function reapplyActiveSortV64(){
+    try{
+      if(!Array.isArray(filtered) || filtered.length<2) return false;
+      if(window.__favListMode) return false;
+      if(typeof isMobileSortViewport==='function' && isMobileSortViewport()){
+        if(typeof ordenarPorMobileSort==='function'){
+          ordenarPorMobileSort(filtered);
+          return true;
+        }
+        return false;
+      }
+      if(typeof activeCdiSort!=='undefined' && activeCdiSort && typeof ordenarPorCdiRelativo==='function'){
+        ordenarPorCdiRelativo(filtered, activeCdiSort);
+        return true;
+      }
+      if(typeof sortCol!=='undefined' && typeof displayHeaders!=='undefined' && sortCol>=0 && sortCol<displayHeaders.length){
+        const key=displayHeaders[sortCol];
+        const isNum=(typeof NUM_SET!=='undefined' && NUM_SET.has(key));
+        const isDate=(typeof isDateHeader==='function' && isDateHeader(key));
+        const dir=(typeof sortDir==='number' && sortDir===1)?1:-1;
+        filtered.sort((a,b)=>{
+          let av,bv;
+          if(isNum){
+            av=typeof toNum==='function'?toNum(a[key]):parseFloat(String(a[key]||'').replace(',','.'));
+            bv=typeof toNum==='function'?toNum(b[key]):parseFloat(String(b[key]||'').replace(',','.'));
+            if(!Number.isFinite(av)) av=null;
+            if(!Number.isFinite(bv)) bv=null;
+          }else if(isDate){
+            av=typeof parseDateBR==='function'?parseDateBR(a[key]):Date.parse(a[key]);
+            bv=typeof parseDateBR==='function'?parseDateBR(b[key]):Date.parse(b[key]);
+            if(!Number.isFinite(av)) av=null;
+            if(!Number.isFinite(bv)) bv=null;
+          }else{
+            av=String(a[key]||'').toLowerCase() || null;
+            bv=String(b[key]||'').toLowerCase() || null;
+          }
+          return normalizeCompareV64(av,bv,dir);
+        });
+        return true;
+      }
+    }catch(e){console.warn('[v64 sort cleanup]',e);}
+    return false;
+  }
+
+  function syncCategoryLabelsV64(){
+    const labels={
+      'RENDA FIXA SIMPLES':'RENDA FIXA SIMPLES',
+      'RENDA FIXA':'RENDA FIXA',
+      'RENDA FIXA REFERENCIADO':'RENDA FIXA REFERENCIADO',
+      'RENDA FIXA CURTO PRAZO':'RENDA FIXA CURTO PRAZO',
+      'MULTIMERCADO':'MULTIMERCADO',
+      'CAMBIAL':'CAMBIAL',
+      'ACOES':'AÇÕES',
+      'FUNDO DE INDICE':'FUNDO DE ÍNDICE',
+      'FUNDOS MUTUOS DE PRIVATIZACAO':'FUNDOS MÚTUOS DE PRIVATIZAÇÃO'
+    };
+    qsa('.category-choice-v44[data-cat]').forEach(btn=>{
+      const cat=btn.dataset.cat||'';
+      if(labels[cat]) btn.textContent=labels[cat];
+    });
+  }
+
+  function patchApplyFilterV64(){
+    if(typeof applyFilter!=='function' || applyFilter.__v64SortClean) return;
+    const old=applyFilter;
+    const wrapped=function(){
+      const out=old.apply(this,arguments);
+      removeMobileHintV64();
+      cleanupFavoriteVisualV64();
+      const sorted=reapplyActiveSortV64();
+      if(sorted){
+        try{ if(typeof expandedRows!=='undefined' && expandedRows?.clear) expandedRows.clear(); }catch(e){}
+        try{ if(typeof render==='function') render(); }catch(e){}
+        try{ if(typeof renderMobileFundCards==='function') renderMobileFundCards(); }catch(e){}
+        cleanupFavoriteVisualV64();
+      }
+      return out;
+    };
+    wrapped.__v64SortClean=true;
+    window.applyFilter=wrapped;
+  }
+
+  function patchRenderV64(){
+    if(typeof render==='function' && !render.__v64CleanFavVisual){
+      const old=render;
+      const wrapped=function(){
+        const out=old.apply(this,arguments);
+        setTimeout(()=>{removeMobileHintV64(); cleanupFavoriteVisualV64();},0);
+        return out;
+      };
+      wrapped.__v64CleanFavVisual=true;
+      window.render=wrapped;
+    }
+    if(typeof renderMobileFundCards==='function' && !renderMobileFundCards.__v64CleanFavVisual){
+      const old=renderMobileFundCards;
+      const wrapped=function(){
+        const out=old.apply(this,arguments);
+        setTimeout(()=>{removeMobileHintV64(); cleanupFavoriteVisualV64();},0);
+        return out;
+      };
+      wrapped.__v64CleanFavVisual=true;
+      window.renderMobileFundCards=wrapped;
+    }
+  }
+
+  function init(){
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    syncCategoryLabelsV64();
+    removeMobileHintV64();
+    patchApplyFilterV64();
+    patchRenderV64();
+    cleanupFavoriteVisualV64();
+    const box=qs('#sec-fundos')||document.body;
+    if(box && box.dataset.v64Observer!=='1'){
+      box.dataset.v64Observer='1';
+      new MutationObserver(()=>{removeMobileHintV64(); cleanupFavoriteVisualV64(); syncCategoryLabelsV64();}).observe(box,{childList:true,subtree:true});
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,900),{once:true});
+  else setTimeout(init,900);
 })();
