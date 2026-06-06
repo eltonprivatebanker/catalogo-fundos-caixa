@@ -2117,9 +2117,29 @@ function abrirWhatsRank(texto){
 function slugRank(s){
   return String(s||'ranking').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'').slice(0,60) || 'ranking';
 }
+
+function ensureHtml2Canvas(){
+  if(window.html2canvas) return Promise.resolve(window.html2canvas);
+  if(window.__html2canvasLoading) return window.__html2canvasLoading;
+  window.__html2canvasLoading = new Promise((resolve, reject)=>{
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
+    s.async = true;
+    s.onload = ()=>resolve(window.html2canvas);
+    s.onerror = ()=>reject(new Error('Falha ao carregar html2canvas'));
+    document.head.appendChild(s);
+  });
+  return window.__html2canvasLoading;
+}
+
 async function baixarPrintRank(el, nome){
-  if(!window.html2canvas){
-    showRankToast('Biblioteca de print não carregou. Verifique a internet/CDN.');
+  try{
+    if(!window.html2canvas){
+      showRankToast('Preparando biblioteca de print...');
+      await ensureHtml2Canvas();
+    }
+  }catch(e){
+    showRankToast('Não consegui carregar a biblioteca de print. Verifique a internet/CDN.');
     return;
   }
   const wasCollapsed = el.classList?.contains('rank-collapsed');
@@ -4362,6 +4382,7 @@ async function iniciarDashboard(){
   }finally{
     // A interface fica pronta mesmo que algum endpoint externo falhe.
     window.__dashboardReady = true;
+    try{ if(typeof window.__revealApp === 'function') window.__revealApp(); }catch(e){}
     try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){}
     try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){}
     try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){}
@@ -8028,14 +8049,14 @@ async function sharePainelMercado(){
 
 /* Build UI: ELTAUM_BUSCA_SCROLL_RESULTADOS_20260605_v46 */
 
-/* Build UI: ELTAUM_RANKING_CLEAN_FOUC_20260606_v50
+/* Build UI: ELTAUM_BOOT_STABLE_RANKING_20260606_v51
    PATCH v50 — Ranking executivo limpo + sem reescrever CSS
    - Substitui a visão de abas por uma leitura única: cards, Top 10, melhores por categoria e alertas.
    - Mantém filtros existentes e o seletor de período sem exigir vários cliques.
 */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_RANKING_CLEAN_FOUC_20260606_v50';
+  const BUILD='ELTAUM_BOOT_STABLE_RANKING_20260606_v51';
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
@@ -8189,11 +8210,7 @@ async function sharePainelMercado(){
   try{ renderRankings=renderRankingsV50; }catch(e){}
   function init(){
     const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-    const styleLink=qs('link[href*="style.css"]');
-    if(styleLink && styleLink.getAttribute('rel')==='stylesheet' && !/ranking-clean-fouc-v50/.test(styleLink.getAttribute('href')||'')){
-      // só corrige se já for stylesheet; não força reload se o preload ainda estiver em curso
-      styleLink.setAttribute('href','style.css?v=ranking-clean-fouc-v50');
-    }
+    // v50: não altera o href do CSS em runtime para evitar recarregamento visual.
     if(typeof allRows!=='undefined' && Array.isArray(allRows) && allRows.length) renderRankingsV50();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();

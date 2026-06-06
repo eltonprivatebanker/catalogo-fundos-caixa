@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="app-booting">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_RANKING_CLEAN_FOUC_20260606_v50"/>
+<meta name="app-build" content="ELTAUM_BOOT_STABLE_RANKING_20260606_v51"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -12,20 +12,52 @@
 <style id="critical-css-v50">
   :root{--bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--gold:#c8973a;--gold2:#e8bb6a;--text:#edf1fb;--muted:#a6b0c9;--border:rgba(200,151,58,.22);--border2:rgba(255,255,255,.085);}
   *{box-sizing:border-box} html{background:#07080f;color-scheme:dark} body{margin:0;min-height:100vh;background:#07080f;color:#edf1fb;font-family:Inter,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased} body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 10% -5%,rgba(200,151,58,.055),transparent 55%),radial-gradient(ellipse 60% 60% at 90% 105%,rgba(91,156,246,.04),transparent 55%)} .page{position:relative;z-index:1;max-width:1760px;margin:0 auto;padding:32px 28px 100px} header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-bottom:28px;border-bottom:1px solid rgba(200,151,58,.22)} .brand{display:flex;align-items:center;gap:16px}.brand-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#c8973a,#e8bb6a);color:#07080f;font-weight:800;font-size:1.55rem}.brand-text h1{margin:0;color:#e8bb6a;font-size:1.8rem;line-height:1.1}.brand-text p{margin:.35rem 0 0;color:#a6b0c9;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}.section-gap{margin-top:28px}.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.kpi,.fund-filter-shell,.rank-card,.ranking-exec-card,.table-wrap{background:#0c0e1a;border:1px solid rgba(200,151,58,.22);border-radius:14px}.kpi{padding:20px 18px}.section-title h2,.ranking-title-group h2{color:#e8bb6a}.table-wrap{overflow:hidden} #loadMsg{padding:34px;text-align:center;color:#a6b0c9}.spinner{width:18px;height:18px;border:2px solid rgba(200,151,58,.22);border-top-color:#e8bb6a;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px}@keyframes spin{to{transform:rotate(360deg)}}
+
+  html.app-booting{background:#07080f;color-scheme:dark;}
+  html.app-booting body{background:#07080f;}
+  html.app-booting .page{opacity:0;transform:translateY(6px);}
+  html.app-ready .page{opacity:1;transform:none;transition:opacity .22s ease,transform .22s ease;}
+  #appBootScreen{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 55% at 50% -10%,rgba(200,151,58,.12),transparent 60%),#07080f;color:#edf1fb;transition:opacity .22s ease,visibility .22s ease;}
+  html.app-ready #appBootScreen,html:not(.app-booting) #appBootScreen{opacity:0;visibility:hidden;pointer-events:none;}
+  .boot-card{width:min(420px,calc(100vw - 44px));padding:28px 26px;border:1px solid rgba(200,151,58,.28);border-radius:18px;background:linear-gradient(180deg,rgba(17,21,38,.92),rgba(12,14,26,.92));box-shadow:0 24px 80px rgba(0,0,0,.38);text-align:center;}
+  .boot-logo{width:54px;height:54px;border-radius:15px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#c8973a,#e8bb6a);color:#07080f;font-weight:800;font-size:1.8rem;font-family:Georgia,serif;box-shadow:0 0 30px rgba(200,151,58,.18);}
+  .boot-title{font-size:1.05rem;font-weight:800;color:#e8bb6a;margin:0 0 6px;}
+  .boot-sub{font-size:.76rem;color:#a6b0c9;margin:0 0 18px;line-height:1.5;}
+  .boot-bar{height:4px;border-radius:999px;overflow:hidden;background:rgba(255,255,255,.08);}
+  .boot-bar::before{content:'';display:block;width:42%;height:100%;border-radius:999px;background:linear-gradient(90deg,#c8973a,#e8bb6a);animation:bootMove 1.1s ease-in-out infinite;}
+  @keyframes bootMove{0%{transform:translateX(-105%)}100%{transform:translateX(245%)}}
+
 </style>
+
+<script id="boot-reveal-v51">
+  window.__revealApp = function(){
+    try{
+      document.documentElement.classList.remove('app-booting');
+      document.documentElement.classList.add('app-ready');
+    }catch(e){}
+  };
+  window.setTimeout(window.__revealApp, 5200);
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link rel="preload" as="style" href="style.css?v=ranking-clean-fouc-v50" onload="this.onload=null;this.rel='stylesheet'"/>
-<noscript><link href="style.css?v=ranking-clean-fouc-v50" rel="stylesheet"/></noscript>
+<link href="style.css?v=boot-stable-ranking-v51" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script defer src="app.js?v=ranking-clean-fouc-v50"></script>
+<script defer src="app.js?v=boot-stable-ranking-v51"></script>
 
 </head>
 <body>
+<div id="appBootScreen" role="status" aria-live="polite" aria-label="Carregando catálogo">
+  <div class="boot-card">
+    <div class="boot-logo">E</div>
+    <p class="boot-title">Carregando Catálogo de Fundos</p>
+    <p class="boot-sub">Preparando dados, rankings e indicadores para uma abertura estável.</p>
+    <div class="boot-bar" aria-hidden="true"></div>
+  </div>
+</div>
+
 <div class="page" id="topo">
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header class="site-header-clean">
