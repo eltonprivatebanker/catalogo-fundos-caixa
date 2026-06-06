@@ -20134,7 +20134,7 @@ header.site-header-clean{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v73 — mobile: filtro travado por âncora visual
+   PATCH v74 — Mobile: select nativo de categoria
 ════════════════════════════════════════════════════ */
 
 html,
@@ -20148,69 +20148,165 @@ body,
   overflow-anchor:none!important;
 }
 
-html.v73-filter-lock,
-body.v73-filter-lock{
-  scroll-behavior:auto!important;
-}
-
-.v73-filter-stabilizing{
+.v74-select-stabilizing{
   overflow:hidden!important;
   contain:layout paint;
 }
 
-#sec-fundos .catalog-shortcuts-category-grid-v69 .filter-preset-chip,
-#sec-fundos #clearFiltersTop,
-#sec-fundos .active-filter-pill,
-#sec-fundos .active-filter-clear{
-  -webkit-tap-highlight-color:transparent;
-  touch-action:pan-y;
-  user-select:none;
-  scroll-margin-top:0!important;
+.mobile-category-select-shell-v74{
+  display:none;
 }
 
 @media(max-width:820px){
+  /* No celular o grid de botões sai da interação. Evita toque fantasma e pulos. */
+  #sec-fundos .catalog-shortcuts-category-grid-v69,
+  #sec-fundos .catalog-shortcuts-premium-v69{
+    display:none!important;
+  }
+
+  #sec-fundos #mobileFilterBar,
+  #sec-fundos #mobileFilterToggle,
+  #sec-fundos #mobileFilterSummary,
+  #sec-fundos #clearFiltersTop{
+    display:none!important;
+  }
+
+  .mobile-category-select-shell-v74{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-top:12px;
+    padding:12px;
+    border:1px solid rgba(200,151,58,.18);
+    border-radius:14px;
+    background:linear-gradient(180deg,rgba(17,21,38,.92),rgba(12,14,26,.92));
+    box-shadow:0 10px 26px rgba(0,0,0,.18);
+    overflow-anchor:none!important;
+  }
+
+  .mobile-category-select-head-v74{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .mobile-category-select-head-v74 span{
+    color:#9faac4;
+    font-size:.58rem;
+    font-weight:900;
+    letter-spacing:.13em;
+    text-transform:uppercase;
+  }
+
+  .mobile-category-select-head-v74 strong{
+    color:#e8bb6a;
+    font-size:.68rem;
+    font-weight:800;
+    text-align:right;
+  }
+
+  .mobile-category-select-wrap-v74{
+    position:relative;
+    display:block;
+  }
+
+  #mobileCategorySelectV74{
+    width:100%;
+    min-height:44px;
+    padding:10px 42px 10px 13px;
+    border-radius:12px;
+    border:1px solid rgba(200,151,58,.32);
+    background:#0d1020;
+    color:#edf1fb;
+    font-family:'Inter',sans-serif;
+    font-size:.86rem;
+    font-weight:800;
+    outline:none;
+    appearance:none;
+    -webkit-appearance:none;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+  }
+
+  #mobileCategorySelectV74:focus{
+    border-color:rgba(232,187,106,.74);
+    box-shadow:0 0 0 3px rgba(200,151,58,.13);
+  }
+
+  #mobileCategorySelectV74 option{
+    background:#111526;
+    color:#edf1fb;
+  }
+
+  .mobile-category-select-arrow-v74{
+    position:absolute;
+    right:14px;
+    top:50%;
+    transform:translateY(-56%);
+    color:#e8bb6a;
+    font-size:1.05rem;
+    pointer-events:none;
+  }
+
+  .mobile-category-select-foot-v74{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    min-height:27px;
+  }
+
+  #mobileCategorySelectResultV74{
+    color:#c8d0e5;
+    font-size:.68rem;
+    font-weight:800;
+  }
+
+  #mobileCategoryClearV74{
+    border:1px solid rgba(200,151,58,.28);
+    border-radius:999px;
+    background:rgba(200,151,58,.08);
+    color:#e8bb6a;
+    padding:6px 10px;
+    font-size:.66rem;
+    font-weight:900;
+    font-family:'Inter',sans-serif;
+  }
+
+  #mobileCategoryClearV74[hidden]{
+    display:none!important;
+  }
+
   #mobileCatalogViewSwitch,
   .mobile-catalog-view-switch,
   .mobile-view-toggle{
     display:none!important;
   }
 
-  body.v73-mobile-cards-only #sec-fundos .table-wrap,
+  body.v74-mobile-cards-only #sec-fundos .table-wrap,
   body.fund-card-mode #sec-fundos .table-wrap{
     display:none!important;
   }
 
-  body.v73-mobile-cards-only #mobileFundCards,
+  body.v74-mobile-cards-only #mobileFundCards,
   body.fund-card-mode #mobileFundCards{
     display:grid!important;
   }
 
-  #sec-fundos .category-grid-v69{
-    touch-action:pan-y;
-    overflow-anchor:none!important;
-  }
-
-  #sec-fundos .category-grid-v69 .filter-preset-chip{
-    transform:none!important;
-    transition:border-color .14s ease, background .14s ease, color .14s ease, box-shadow .14s ease!important;
-  }
-
   #sec-fundos .active-filter-strip{
-    min-height:0!important;
-    overflow-anchor:none!important;
-  }
-
-  #sec-fundos .active-filter-strip.active{
-    min-height:38px!important;
-  }
-
-  #sec-fundos .fund-filter-shell{
-    overflow-anchor:none!important;
-    transform:translateZ(0);
+    display:none!important;
   }
 }
 
 @media(min-width:821px){
+  .mobile-category-select-shell-v74{
+    display:none!important;
+  }
+
+  #sec-fundos .catalog-shortcuts-category-grid-v69{
+    display:flex;
+  }
+
   #sec-fundos .table-wrap,
   #sec-fundos #mainTable,
   #sec-fundos #tableBody{

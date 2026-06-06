@@ -8641,33 +8641,21 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v73 — Mobile: filtro travado por âncora visual
-   - Mantém segurança contra clique fantasma da rolagem.
-   - Filtro só executa em click real.
-   - Durante o re-render, bloqueia scrollTo/scrollBy/scrollIntoView.
-   - Restaura a posição por âncora visual por 1,8s, cobrindo reflows tardios.
+   PATCH v74 — Mobile: filtro por select nativo
+   - Desktop mantém grid/chips.
+   - Mobile abandona grid clicável e usa select nativo.
+   - Remove risco de toque fantasma durante rolagem.
+   - Preserva posição visual ao trocar categoria.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_FILTER_LOCKED_20260606_v73';
-  window.__ELTAUM_MOBILE_FILTER_LOCKED_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_MOBILE_SELECT_FILTER_20260606_v74';
+  window.__ELTAUM_MOBILE_SELECT_FILTER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
   function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  const PRESET_TO_CANON_CAT = {
-    'renda-fixa-simples':'RENDA FIXA SIMPLES',
-    'renda-fixa':'RENDA FIXA',
-    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
-    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
-    'multimercado':'MULTIMERCADO',
-    'cambial':'CAMBIAL',
-    'acoes':'ACOES',
-    'fundo-de-indice':'FUNDO DE INDICE',
-    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
-  };
 
   const CANON_LABEL = {
     'RENDA FIXA SIMPLES':'RF Simples',
@@ -8679,6 +8667,19 @@ async function sharePainelMercado(){
     'ACOES':'Ações',
     'FUNDO DE INDICE':'Fundo de Índice',
     'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  const PRESET_TO_CANON = {
+    'all':'',
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
   };
 
   function canon(v){
@@ -8705,133 +8706,10 @@ async function sharePainelMercado(){
     }
   }
 
-  const original = {
-    scrollTo: window.scrollTo.bind(window),
-    scrollBy: window.scrollBy.bind(window),
-    scrollIntoView: Element.prototype.scrollIntoView
-  };
-
-  const lock = {
-    active:false,
-    allow:false,
-    y:0,
-    anchor:null,
-    anchorTop:0,
-    until:0,
-    raf:0,
-    timer:0,
-    release:null
-  };
-
-  function selectAnchor(){
-    return qs('#fundFilterShell') || qs('#sec-fundos') || qs('#topo') || document.body;
-  }
-
-  function preserveHeights(){
-    const selectors = [
-      '#fundFilterShell',
-      '#mobileFundCards',
-      '#sec-fundos .table-wrap',
-      '#sec-fundos .pagination-row',
-      '#resultInfo'
-    ];
-
-    const changed = [];
-    selectors.forEach(sel=>{
-      const el = qs(sel);
-      if(!el) return;
-      const h = Math.ceil(el.getBoundingClientRect().height);
-      if(h <= 0) return;
-      changed.push([el, el.style.minHeight || '']);
-      el.style.minHeight = h + 'px';
-      el.classList.add('v73-filter-stabilizing');
-    });
-
-    return () => {
-      changed.forEach(([el,old])=>{
-        el.style.minHeight = old;
-        el.classList.remove('v73-filter-stabilizing');
-      });
-    };
-  }
-
-  function restoreByAnchor(){
-    if(!lock.active || !lock.anchor) return;
-
-    const rect = lock.anchor.getBoundingClientRect();
-    const delta = rect.top - lock.anchorTop;
-
-    lock.allow = true;
-    try{
-      if(Math.abs(delta) > 0.5){
-        original.scrollBy(0, delta);
-      }else{
-        original.scrollTo(0, lock.y);
-      }
-    }catch(e){
-      try{ original.scrollTo(0, lock.y); }catch(_){}
-    }
-    lock.allow = false;
-  }
-
-  function startLock(){
-    cancelAnimationFrame(lock.raf);
-    clearTimeout(lock.timer);
-    if(lock.release) {
-      try{ lock.release(); }catch(e){}
-    }
-
-    lock.active = true;
-    lock.y = window.scrollY || window.pageYOffset || 0;
-    lock.anchor = selectAnchor();
-    lock.anchorTop = lock.anchor ? lock.anchor.getBoundingClientRect().top : 0;
-    lock.until = performance.now() + 1800;
-    lock.release = preserveHeights();
-
-    document.documentElement.classList.add('v73-filter-lock');
-    document.body.classList.add('v73-filter-lock');
-
-    const loop = () => {
-      if(!lock.active) return;
-      restoreByAnchor();
-      if(performance.now() < lock.until){
-        lock.raf = requestAnimationFrame(loop);
-      }
-    };
-    lock.raf = requestAnimationFrame(loop);
-
-    lock.timer = setTimeout(()=>{
-      restoreByAnchor();
-      if(lock.release) {
-        try{ lock.release(); }catch(e){}
-      }
-      restoreByAnchor();
-      lock.active = false;
-      lock.release = null;
-      document.documentElement.classList.remove('v73-filter-lock');
-      document.body.classList.remove('v73-filter-lock');
-    }, 1850);
-  }
-
-  window.scrollTo = function(...args){
-    if(lock.active && !lock.allow) return;
-    return original.scrollTo(...args);
-  };
-
-  window.scrollBy = function(...args){
-    if(lock.active && !lock.allow) return;
-    return original.scrollBy(...args);
-  };
-
-  Element.prototype.scrollIntoView = function(...args){
-    if(lock.active && !lock.allow) return;
-    return original.scrollIntoView.apply(this,args);
-  };
-
-  function setMobileCardsMode(){
+  function keepMobileCards(){
     try{
       if(!isMobile()) return;
-      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v73-mobile-cards-only');
+      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v74-mobile-cards-only');
       document.body.classList.remove('fund-list-mode');
       try{
         localStorage.setItem('fundMobileView','cards');
@@ -8840,43 +8718,122 @@ async function sharePainelMercado(){
     }catch(e){}
   }
 
-  function syncCategoryGrid(){
+  function applyCategoryState(canonCat, source){
+    const beforeY = window.scrollY || window.pageYOffset || 0;
+    const shell = qs('#fundFilterShell') || qs('#sec-fundos');
+    const beforeTop = shell ? shell.getBoundingClientRect().top : 0;
+
+    const stabilize = [];
+    ['#fundFilterShell','#mobileFundCards','#sec-fundos .table-wrap','.pagination-row'].forEach(sel=>{
+      const el = qs(sel);
+      if(!el) return;
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      if(h > 0){
+        stabilize.push([el, el.style.minHeight || '']);
+        el.style.minHeight = h + 'px';
+        el.classList.add('v74-select-stabilizing');
+      }
+    });
+
+    try{
+      activeCat = canonCat ? findRawCategoryByCanon(canonCat) : '';
+      activeBenchmark = '';
+      activePerfil = '';
+      activeRisco = '';
+      hideSemDados = false;
+      currentPage = 1;
+      window.__favListMode = false;
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = source || (canonCat ? 'mobile-select' : 'all');
+      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+    }catch(e){}
+
+    const toggle = qs('#toggleSemDados');
+    if(toggle) toggle.checked = false;
+
+    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+
+    keepMobileCards();
+    syncMobileSelectV74();
+
+    const restore = () => {
+      try{
+        const nowTop = shell ? shell.getBoundingClientRect().top : beforeTop;
+        const delta = nowTop - beforeTop;
+        if(Math.abs(delta) > 0.5){
+          window.scrollBy({top:delta, left:0, behavior:'auto'});
+        }else{
+          window.scrollTo({top:beforeY, left:0, behavior:'auto'});
+        }
+      }catch(e){
+        try{window.scrollTo(0,beforeY)}catch(_){}
+      }
+    };
+
+    restore();
+    requestAnimationFrame(restore);
+    setTimeout(restore,80);
+    setTimeout(()=>{
+      stabilize.forEach(([el,old])=>{
+        el.style.minHeight = old;
+        el.classList.remove('v74-select-stabilizing');
+      });
+      restore();
+    },240);
+  }
+
+  function syncDesktopGrid(){
     try{
       const active = activeCanonCat();
 
       qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset]').forEach(btn=>{
-        const preset = btn.dataset.preset || 'all';
-        const wanted = PRESET_TO_CANON_CAT[preset] || '';
-        const on = preset === 'all' ? !active : active === wanted;
+        const p = btn.dataset.preset || 'all';
+        const wanted = PRESET_TO_CANON[p] || '';
+        const on = p === 'all' ? !active : active === wanted;
         btn.classList.toggle('active', on);
-        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        btn.setAttribute('aria-pressed', on ? 'true':'false');
       });
+    }catch(e){}
+  }
 
-      const status = qs('#categoryGridStatus');
-      if(status) status.textContent = active ? ('Categoria: ' + (CANON_LABEL[active] || active)) : 'Todos os fundos';
+  function syncMobileSelectV74(){
+    try{
+      const active = activeCanonCat();
+      const select = qs('#mobileCategorySelectV74');
+      if(select && select.value !== active) select.value = active;
 
-      const result = qs('#filterResultSummary');
+      const label = active ? (CANON_LABEL[active] || active) : 'Todos os fundos';
+
+      const status = qs('#mobileCategorySelectStatusV74');
+      if(status) status.textContent = label;
+
+      const result = qs('#mobileCategorySelectResultV74');
       const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
       if(result && n !== null) result.textContent = `${n} fundos encontrados`;
 
+      const clear = qs('#mobileCategoryClearV74');
+      if(clear) clear.hidden = !active;
+
+      const desktopStatus = qs('#categoryGridStatus');
+      if(desktopStatus) desktopStatus.textContent = active ? ('Categoria: ' + label) : 'Todos os fundos';
+
+      const filterResult = qs('#filterResultSummary');
+      if(filterResult && n !== null) filterResult.textContent = `${n} fundos encontrados`;
+
       const clearTop = qs('#clearFiltersTop');
-      if(clearTop){
-        const hasFilter = !!active;
-        clearTop.hidden = !hasFilter;
-        clearTop.classList.toggle('is-visible', hasFilter);
-        clearTop.textContent = 'Limpar filtro';
-      }
+      if(clearTop) clearTop.hidden = !active;
 
       const summary = qs('#mobileFilterSummary');
-      if(summary) summary.textContent = active ? ('Categoria: ' + (CANON_LABEL[active] || active)) : 'Categoria: Todos os fundos';
+      if(summary) summary.textContent = active ? ('Categoria: ' + label) : 'Categoria: Todos os fundos';
 
       const strip = qs('#activeFilterStrip');
       if(strip){
-        if(active){
-          strip.classList.add('active','category-grid-active-v73');
-          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v73-clear-filter="1"><small>Categoria</small>${CANON_LABEL[active] || active}<span>×</span></button><button type="button" class="active-filter-clear" data-v73-clear-filter="1">Limpar tudo</button>`;
+        if(active && !isMobile()){
+          strip.classList.add('active');
+          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v74-clear-filter="1"><small>Categoria</small>${label}<span>×</span></button><button type="button" class="active-filter-clear" data-v74-clear-filter="1">Limpar tudo</button>`;
         }else{
-          strip.classList.remove('active','category-grid-active-v73');
+          strip.classList.remove('active');
           strip.innerHTML = '';
         }
       }
@@ -8886,168 +8843,81 @@ async function sharePainelMercado(){
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true':'false');
       });
+
+      syncDesktopGrid();
     }catch(e){}
   }
 
-  function runFilterTask(task){
-    startLock();
-    try{ task(); }catch(e){ console.warn('[v73 filtro]', e); }
-    restoreByAnchor();
-    requestAnimationFrame(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); });
-    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 90);
-    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 240);
-    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 620);
-    setTimeout(()=>{ setMobileCardsMode(); syncCategoryGrid(); restoreByAnchor(); }, 1200);
-  }
-
-  function applyCategoryPreset(preset){
-    const wanted = PRESET_TO_CANON_CAT[preset] || '';
-
-    runFilterTask(()=>{
-      try{
-        activeCat = wanted ? findRawCategoryByCanon(wanted) : '';
-        activeBenchmark = '';
-        activePerfil = '';
-        activeRisco = '';
-        hideSemDados = false;
-        currentPage = 1;
-        window.__favListMode = false;
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
-        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
-      }catch(e){}
-
-      const toggle = qs('#toggleSemDados');
-      if(toggle) toggle.checked = false;
-
-      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
-      setMobileCardsMode();
-      syncCategoryGrid();
-    });
-  }
-
-  function clearFilters(){
-    runFilterTask(()=>{
-      try{
-        activeCat = '';
-        activeBenchmark = '';
-        activePerfil = '';
-        activeRisco = '';
-        hideSemDados = false;
-        currentPage = 1;
-        window.__favListMode = false;
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'all';
-        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
-      }catch(e){}
-
-      const toggle = qs('#toggleSemDados');
-      if(toggle) toggle.checked = false;
-
-      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
-      setMobileCardsMode();
-      syncCategoryGrid();
-    });
-  }
-
-  /* Proteção contra clique fantasma depois de arrastar a tela no celular */
-  const touch = {x:0,y:0,scrollY:0,moved:false,lastMove:0};
-
-  window.addEventListener('touchstart', ev=>{
-    const t = ev.touches && ev.touches[0];
-    if(!t) return;
-    touch.x = t.clientX;
-    touch.y = t.clientY;
-    touch.scrollY = window.scrollY || 0;
-    touch.moved = false;
-  }, {capture:true, passive:true});
-
-  window.addEventListener('touchmove', ev=>{
-    const t = ev.touches && ev.touches[0];
-    if(!t) return;
-    const dx = Math.abs(t.clientX - touch.x);
-    const dy = Math.abs(t.clientY - touch.y);
-    const ds = Math.abs((window.scrollY || 0) - touch.scrollY);
-    if(dx > 8 || dy > 8 || ds > 4){
-      touch.moved = true;
-      touch.lastMove = Date.now();
-    }
-  }, {capture:true, passive:true});
-
-  function ghostClick(){
-    return isMobile() && touch.moved && (Date.now() - touch.lastMove < 650);
-  }
-
-  let lastClick = {key:'', t:0};
-
-  function handleClick(ev){
-    const target = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset], #sec-fundos #clearFiltersTop, #sec-fundos #clearFiltersBtn, #sec-fundos [data-v73-clear-filter], #sec-fundos .active-filter-clear, #sec-fundos .active-filter-pill') : null;
-    if(!target) return;
-
-    ev.preventDefault();
-    ev.stopPropagation();
-    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-
-    if(ghostClick()){
-      if(target && typeof target.blur === 'function') target.blur();
-      return;
+  function bindMobileSelect(){
+    const select = qs('#mobileCategorySelectV74');
+    if(select && select.dataset.v74Bound !== '1'){
+      select.dataset.v74Bound = '1';
+      select.addEventListener('change', ()=>{
+        applyCategoryState(select.value || '', 'mobile-select');
+        if(typeof select.blur === 'function') select.blur();
+      });
     }
 
-    const isClear = target.matches('#clearFiltersTop,#clearFiltersBtn,[data-v73-clear-filter],.active-filter-clear,.active-filter-pill');
-    const preset = target.dataset ? (target.dataset.preset || 'all') : 'all';
-    const key = isClear ? 'clear' : preset;
-    const t = Date.now();
+    const clear = qs('#mobileCategoryClearV74');
+    if(clear && clear.dataset.v74Bound !== '1'){
+      clear.dataset.v74Bound = '1';
+      clear.addEventListener('click', ev=>{
+        ev.preventDefault();
+        ev.stopPropagation();
+        applyCategoryState('', 'all');
+      });
+    }
 
-    if(lastClick.key === key && t - lastClick.t < 420) return;
-    lastClick = {key,t};
-
-    if(target && typeof target.blur === 'function') setTimeout(()=>target.blur(),0);
-
-    if(isClear) clearFilters();
-    else applyCategoryPreset(preset);
+    const strip = qs('#activeFilterStrip');
+    if(strip && strip.dataset.v74Bound !== '1'){
+      strip.dataset.v74Bound = '1';
+      strip.addEventListener('click', ev=>{
+        const target = ev.target.closest('[data-v74-clear-filter]');
+        if(!target) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        applyCategoryState('', 'all');
+      });
+    }
   }
 
   function bind(){
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
 
-    if(document.documentElement.dataset.v73LockedBound !== '1'){
-      document.documentElement.dataset.v73LockedBound = '1';
-      window.addEventListener('click', handleClick, true);
-      window.addEventListener('resize',()=>{setMobileCardsMode(); syncCategoryGrid();});
-    }
+    bindMobileSelect();
+    keepMobileCards();
+    syncMobileSelectV74();
 
-    setMobileCardsMode();
-    syncCategoryGrid();
-    setTimeout(()=>{setMobileCardsMode(); syncCategoryGrid();}, 500);
-    setTimeout(()=>{setMobileCardsMode(); syncCategoryGrid();}, 1400);
+    window.addEventListener('resize',()=>{
+      keepMobileCards();
+      syncMobileSelectV74();
+    });
 
-    console.info('[Catálogo CAIXA] Mobile filtro travado por âncora:', BUILD);
+    setTimeout(()=>{keepMobileCards(); syncMobileSelectV74();},500);
+    setTimeout(()=>{keepMobileCards(); syncMobileSelectV74();},1400);
+
+    console.info('[Catálogo CAIXA] Mobile com select nativo de categoria:', BUILD);
   }
 
   const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__mobileFilterLockedV73){
+  if(typeof oldRender === 'function' && !oldRender.__mobileSelectFilterV74){
     const wrapped = function(){
       const out = oldRender.apply(this, arguments);
-      setMobileCardsMode();
-      syncCategoryGrid();
-      if(lock.active) restoreByAnchor();
+      keepMobileCards();
+      syncMobileSelectV74();
       return out;
     };
-    wrapped.__mobileFilterLockedV73 = true;
+    wrapped.__mobileSelectFilterV74 = true;
     window.render = wrapped;
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bind,120));
   else setTimeout(bind,120);
 
-  window.__ELTAUM_MOBILE_FILTER_LOCKED_V73__ = {
-    apply: applyCategoryPreset,
-    clear: clearFilters,
-    sync: syncCategoryGrid,
-    restore: restoreByAnchor
+  window.__ELTAUM_MOBILE_SELECT_FILTER_V74__ = {
+    apply: applyCategoryState,
+    sync: syncMobileSelectV74
   };
 })();
 
