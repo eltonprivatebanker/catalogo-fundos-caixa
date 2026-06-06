@@ -2980,8 +2980,21 @@ function gerarLeituraRapidaFundo(r){
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
     : '';
 
+  const metricValueClass = (label, value) => {
+    const n = toNum(value);
+    const labelNorm = normalizarTextoBase(label);
+    if(n === null || !Number.isFinite(Number(n))) return 'zero';
+    if(labelNorm.includes('CDI')){
+      if(n < 0) return 'neg';
+      if(n >= 100) return 'pos cdi-good';
+      if(n >= 80) return 'cdi-mid';
+      return 'cdi-low';
+    }
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  };
+
   const complementosHtml = complementos.length
-    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
+    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric ${metricValueClass(m.label,m.value)}"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
     : '';
 
   return `
@@ -7866,8 +7879,12 @@ async function sharePainelMercado(){
 
   const originalRenderCards = window.renderMobileFundCards;
   function renderByMode(){
-    if(getMode()==='list') renderList();
-    else if(typeof originalRenderCards==='function') originalRenderCards.apply(this,arguments);
+    const mode=getMode();
+    if(mode==='cards'){
+      if(typeof originalRenderCards==='function') originalRenderCards.apply(this,arguments);
+    }else{
+      if(isMobile()) renderList();
+    }
   }
   window.renderMobileFundCards=renderByMode;
 
@@ -7882,12 +7899,9 @@ async function sharePainelMercado(){
   function applyMode(mode){
     mode=normalizeMode(mode);
     saveMode(mode);
-    if(isMobile()){
-      document.body.classList.add('fund-card-mode');
-      document.body.classList.toggle('fund-list-mode',mode==='list');
-    }else{
-      document.body.classList.remove('fund-list-mode');
-    }
+    const mobile=isMobile();
+    document.body.classList.toggle('fund-card-mode', mode==='cards' || mobile);
+    document.body.classList.toggle('fund-list-mode', mobile && mode==='list');
     syncButtons();
     renderByMode();
   }
@@ -7899,7 +7913,7 @@ async function sharePainelMercado(){
     div.className='mobile-catalog-view-switch';
     div.id='mobileCatalogViewSwitch';
     div.setAttribute('aria-label','Escolher forma de visualização dos fundos no celular');
-    div.innerHTML=`<div class="mobile-catalog-view-copy"><strong>Visualização</strong><small>Lista mostra mais fundos; cards mantêm ações e detalhes.</small></div><div class="mobile-catalog-view-buttons" role="group" aria-label="Modo de visualização"><button type="button" class="mobile-catalog-view-btn active" data-mobile-catalog-view="list" aria-pressed="true">Lista</button><button type="button" class="mobile-catalog-view-btn" data-mobile-catalog-view="cards" aria-pressed="false">Cards</button></div>`;
+    div.innerHTML=`<div class="mobile-catalog-view-copy"><strong>Visualização</strong><small>Tabela compara mais fundos; cards priorizam leitura rápida.</small></div><div class="mobile-catalog-view-buttons" role="group" aria-label="Modo de visualização"><button type="button" class="mobile-catalog-view-btn active" data-mobile-catalog-view="list" aria-pressed="true">Tabela</button><button type="button" class="mobile-catalog-view-btn" data-mobile-catalog-view="cards" aria-pressed="false">Cards</button></div>`;
     if(table) host.insertBefore(div,table); else host.appendChild(div);
   }
   function bind(){
@@ -8052,7 +8066,7 @@ async function sharePainelMercado(){
 */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_DETAIL_CLEAN_NO_REDUNDANCY_20260606_v55';
+  const BUILD='ELTAUM_UX_SEARCH_DESKTOP_CARDS_METRICS_20260606_v56';
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
@@ -8210,4 +8224,39 @@ async function sharePainelMercado(){
     if(typeof allRows!=='undefined' && Array.isArray(allRows) && allRows.length) renderRankingsV50();
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v56 — UX refinada: busca com feedback, cards no desktop e métricas coloridas
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_UX_SEARCH_DESKTOP_CARDS_METRICS_20260606_v56';
+  function qs(s,root=document){return root.querySelector(s)}
+  function qsa(s,root=document){return Array.from(root.querySelectorAll(s))}
+  function markSearching(input){
+    if(!input) return;
+    const wrap = input.closest('.search-wrap') || input.closest('#gfb-search-wrap') || input.parentElement;
+    if(!wrap) return;
+    wrap.classList.add('is-searching');
+    clearTimeout(wrap.__searchUxTimer);
+    wrap.__searchUxTimer=setTimeout(()=>wrap.classList.remove('is-searching'),520);
+  }
+  function bindSearchFeedback(){
+    qsa('#searchInput,#gfbSearch').forEach(inp=>{
+      if(inp.dataset.v56SearchFeedback==='1') return;
+      inp.dataset.v56SearchFeedback='1';
+      inp.addEventListener('input',()=>markSearching(inp),{passive:true});
+      inp.addEventListener('change',()=>setTimeout(()=>{
+        const wrap = inp.closest('.search-wrap') || inp.closest('#gfb-search-wrap') || inp.parentElement;
+        if(wrap) wrap.classList.remove('is-searching');
+      },120),{passive:true});
+    });
+  }
+  function init(){
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    bindSearchFeedback();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  document.addEventListener('focusin',ev=>{ if(ev.target && (ev.target.id==='searchInput'||ev.target.id==='gfbSearch')) bindSearchFeedback(); },true);
 })();

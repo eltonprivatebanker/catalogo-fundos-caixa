@@ -18680,3 +18680,117 @@ header.site-header-clean{
     padding-top:9px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════════
+   v56 — UX: feedback de busca, contraste, cards no desktop e métricas com cor
+════════════════════════════════════════════════════════ */
+:root{
+  --muted:#bac4da;
+  --muted2:#9aa7c4;
+}
+
+/* Textos pequenos com leitura mais confortável no tema escuro */
+.kpi-sub,
+.rank-cat,
+.indic-subtitle,
+.fund-list-tag-v45,
+.fund-card-mobile-tags,
+.detail-key,
+.fund-note-metric span,
+.fund-quick-note-disclaimer,
+.mobile-catalog-view-copy small{
+  color:#a7b3cc !important;
+}
+
+/* Feedback visual na busca: o usuário percebe que o filtro está processando */
+.search-wrap.is-searching svg,
+#gfb-search-wrap.is-searching #gfb-icon{
+  animation:spin .72s linear infinite !important;
+  color:var(--gold2) !important;
+}
+.search-wrap.is-searching::after,
+#gfb-search-wrap.is-searching::after{
+  content:'';
+  position:absolute;
+  right:12px;
+  top:50%;
+  width:13px;
+  height:13px;
+  margin-top:-6.5px;
+  border-radius:50%;
+  border:2px solid rgba(232,187,106,.22);
+  border-top-color:var(--gold2);
+  animation:spin .72s linear infinite;
+  pointer-events:none;
+}
+.search-wrap.is-searching #searchInput{padding-right:38px !important;}
+#gfb-search-wrap.is-searching #gfbSearch{padding-right:42px !important;}
+#gfb-search-wrap.is-searching #gfbClear{opacity:.25;}
+
+/* Métricas da leitura rápida com cor sem depender apenas do texto */
+#sec-fundos .fund-note-metric.pos strong{color:var(--green) !important;}
+#sec-fundos .fund-note-metric.neg strong{color:var(--red) !important;}
+#sec-fundos .fund-note-metric.zero strong{color:#b7c2d8 !important;}
+#sec-fundos .fund-note-metric.cdi-good strong{color:var(--green) !important;}
+#sec-fundos .fund-note-metric.cdi-mid strong{color:var(--gold2) !important;}
+#sec-fundos .fund-note-metric.cdi-low strong{color:#f59e0b !important;}
+#sec-fundos .fund-note-metric.neg{
+  border-color:rgba(240,85,101,.24) !important;
+  background:linear-gradient(180deg,rgba(240,85,101,.055),rgba(2,6,23,.32)) !important;
+}
+#sec-fundos .fund-note-metric.pos,
+#sec-fundos .fund-note-metric.cdi-good{
+  border-color:rgba(46,209,122,.22) !important;
+  background:linear-gradient(180deg,rgba(46,209,122,.045),rgba(2,6,23,.32)) !important;
+}
+
+/* Visualização também no desktop: Tabela x Cards */
+@media(min-width:821px){
+  .mobile-catalog-view-switch{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:12px !important;
+    margin:12px 0 12px !important;
+    padding:12px 14px !important;
+    border-radius:16px !important;
+    border:1px solid rgba(200,151,58,.18) !important;
+    background:linear-gradient(180deg,rgba(17,21,38,.82),rgba(7,8,15,.90)) !important;
+    box-shadow:0 10px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.035) !important;
+  }
+  .mobile-catalog-view-copy{display:flex !important;flex-direction:column !important;gap:2px !important;min-width:0 !important;}
+  .mobile-catalog-view-copy strong{color:var(--gold2) !important;font-size:.72rem !important;font-weight:900 !important;letter-spacing:.07em !important;text-transform:uppercase !important;}
+  .mobile-catalog-view-copy small{font-size:.62rem !important;line-height:1.35 !important;}
+  .mobile-catalog-view-buttons{display:flex !important;gap:6px !important;padding:4px !important;border-radius:13px !important;border:1px solid rgba(255,255,255,.08) !important;background:rgba(7,8,15,.62) !important;}
+  .mobile-catalog-view-btn{appearance:none !important;min-height:32px !important;padding:7px 14px !important;border-radius:10px !important;border:1px solid transparent !important;background:transparent !important;color:#c0c9df !important;font-family:'Inter',sans-serif !important;font-size:.68rem !important;font-weight:850 !important;cursor:pointer !important;}
+  .mobile-catalog-view-btn.active{color:var(--gold3) !important;border-color:rgba(232,187,106,.44) !important;background:rgba(200,151,58,.14) !important;}
+
+  body.fund-card-mode #sec-fundos .table-wrap{display:none !important;}
+  body.fund-card-mode #mobileFundCards{
+    display:grid !important;
+    grid-template-columns:repeat(auto-fit,minmax(315px,1fr)) !important;
+    gap:12px !important;
+    margin:10px 0 12px !important;
+  }
+  body:not(.fund-card-mode) #mobileFundCards{display:none !important;}
+  body.fund-card-mode #mobileFundCards .fund-card-mobile{
+    display:block !important;
+    border:1px solid rgba(200,151,58,.18) !important;
+    border-radius:16px !important;
+    background:linear-gradient(180deg,rgba(17,21,38,.94),rgba(12,14,26,.94)) !important;
+    overflow:hidden !important;
+    box-shadow:0 12px 30px rgba(0,0,0,.22) !important;
+  }
+  body.fund-card-mode #mobileFundCards .fund-card-list-main,
+  body.fund-card-mode #mobileFundCards .fund-card-mobile-head{
+    padding:14px !important;
+  }
+  body.fund-card-mode #mobileFundCards .fund-card-mobile-actions,
+  body.fund-card-mode #mobileFundCards .fund-card-list-actions{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+    padding:0 14px 14px !important;
+  }
+}
