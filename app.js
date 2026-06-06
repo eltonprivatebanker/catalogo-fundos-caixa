@@ -4479,7 +4479,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function cdiRatioInfo(m12){
     const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(toNum(m12), indicState?.cdi?.m12) : null;
     if(ratio === null || ratio === undefined || !Number.isFinite(Number(ratio))) return {txt:'—', cls:''};
-    const cls = ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
+    const cls = ratio < 0 ? 'fund-cdi-ratio-negative' : ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
     return {txt:`${ratio}% do CDI`, cls};
   }
 
@@ -4513,6 +4513,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const cat=fmtDash(r['Categoria']);
     const risco=fmtDash(r['Perfil de Risco']);
     const cota=fmtDash(r['Cota (R$)']);
+    const dia=fmtDash(r['Variacao Dia (%)']);
     const mes=fmtDash(r['Acum. Mes (%)']);
     const ano=fmtDash(r['Acum. Ano (%)']);
     const m12=fmtDash(r['Acum. 12M (%)']);
@@ -4531,6 +4532,9 @@ document.addEventListener('DOMContentLoaded', function(){
       ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim comercial ↗</a>`
       : '';
     const docsHtml = buildMobileDocsHtml(r);
+    const pageDetailHtml = url
+      ? `<div class="fund-card-detail-links-v59"><a class="fund-card-page-detail-btn-v59" href="${htmlAttr(url)}" target="_blank" rel="noopener">🏦 Abrir página do fundo na CAIXA ↗</a></div>`
+      : '';
     return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
       <div class="fund-card-list-main">
         <div class="fund-card-list-left">
@@ -4542,15 +4546,14 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
         </div>
         <div class="fund-card-list-metrics" aria-label="Resumo de rentabilidade do fundo">
-          <span class="fund-card-list-metric"><small>Mês</small><strong class="${pctClass(mes)}">${mes}</strong></span>
+          <span class="fund-card-list-metric"><small>Dia</small><strong class="${pctClass(dia)}">${dia}</strong></span>
+          <span class="fund-card-list-metric"><small>Ano</small><strong class="${pctClass(ano)}">${ano}</strong></span>
           <span class="fund-card-list-metric"><small>12M</small><strong class="${pctClass(m12)}">${m12}</strong></span>
-          <span class="fund-card-list-metric cdi"><small>% CDI</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
         </div>
       </div>
 
       <div class="fund-card-mobile-actions fund-card-list-actions fund-card-list-actions-v26">
         ${boletimBtn}
-        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página do fundo ↗</a>
         <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Mais detalhes</button>
       </div>
 
@@ -4568,6 +4571,7 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
         </div>
+        ${pageDetailHtml}
         ${docsHtml}
         <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
       </div>
@@ -8269,7 +8273,7 @@ async function sharePainelMercado(){
    - No mobile, preserva o comportamento atual em bottom/lista.
 ════════════════════════════════════════════════════════ */
 (function(){
-  const BUILD='ELTAUM_CARD_SIDE_PANEL_20260606_v58';
+  const BUILD='ELTAUM_CARD_SIDE_PANEL_METRICS_20260606_v59';
   function isDesktopCards(){
     return window.matchMedia && window.matchMedia('(min-width: 821px)').matches && document.body.classList.contains('fund-card-mode');
   }
