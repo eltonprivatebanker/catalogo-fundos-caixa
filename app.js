@@ -8066,7 +8066,7 @@ async function sharePainelMercado(){
 */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_UX_SEARCH_DESKTOP_CARDS_METRICS_20260606_v56';
+  const BUILD='ELTAUM_DESKTOP_CARDS_FORMAT_FIX_20260606_v57';
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
@@ -8228,10 +8228,10 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════════
-   PATCH v56 — UX refinada: busca com feedback, cards no desktop e métricas coloridas
+   PATCH v57 — Correção visual dos cards no desktop
 ════════════════════════════════════════════════════════ */
 (function(){
-  const BUILD='ELTAUM_UX_SEARCH_DESKTOP_CARDS_METRICS_20260606_v56';
+  const BUILD='ELTAUM_DESKTOP_CARDS_FORMAT_FIX_20260606_v57';
   function qs(s,root=document){return root.querySelector(s)}
   function qsa(s,root=document){return Array.from(root.querySelectorAll(s))}
   function markSearching(input){
@@ -8244,8 +8244,8 @@ async function sharePainelMercado(){
   }
   function bindSearchFeedback(){
     qsa('#searchInput,#gfbSearch').forEach(inp=>{
-      if(inp.dataset.v56SearchFeedback==='1') return;
-      inp.dataset.v56SearchFeedback='1';
+      if(inp.dataset.v57SearchFeedback==='1') return;
+      inp.dataset.v57SearchFeedback='1';
       inp.addEventListener('input',()=>markSearching(inp),{passive:true});
       inp.addEventListener('change',()=>setTimeout(()=>{
         const wrap = inp.closest('.search-wrap') || inp.closest('#gfb-search-wrap') || inp.parentElement;
