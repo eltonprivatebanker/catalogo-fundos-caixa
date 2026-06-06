@@ -4,7 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_MOBILE_CARDS_RANKING_FOCUS_20260606_v67"/>
+<meta name="app-build" content="ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -40,12 +40,12 @@
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=mobile-cards-ranking-v67" rel="stylesheet"/>
+<link href="style.css?v=mobile-premium-v68" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=mobile-cards-ranking-v67"></script>
+<script defer src="app.js?v=mobile-premium-v68"></script>
 
 </head>
 <body>
@@ -190,19 +190,16 @@
       </div>
     </div>
 
-    <div class="catalog-shortcuts" aria-label="Atalhos rápidos do catálogo">
-      <span class="catalog-shortcuts-label">Atalhos</span>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="all">Todos</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="pf" aria-pressed="false">Pessoa Física</button>
-      <button type="button" class="filter-preset-chip shortcut-preset fav-shortcut-chip" data-preset="favoritos" aria-pressed="false">⭐ Favoritos <span class="fav-count-inline" id="favShortcutCount">0</span></button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cdi">CDI</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="conservador">Conservador</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="ipca">IPCA</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa">Renda Fixa</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado">Multimercado</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes">Ações</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial">Cambial</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp">FMP</button>
+    <div class="catalog-shortcuts catalog-shortcuts-premium-v68" aria-label="Filtros rápidos do catálogo">
+      <span class="catalog-shortcuts-label">Filtros</span>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="all" aria-pressed="true">Todos</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" aria-pressed="false">RF</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cdi" aria-pressed="false">CDI</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="ipca" aria-pressed="false">IPCA</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado" aria-pressed="false">MM</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes" aria-pressed="false">Ações</button>
+      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp" aria-pressed="false">FMP</button>
+      <button type="button" class="shortcut-preset shortcut-more-cats-v68" id="mobileCategoryMoreBtn" aria-controls="fundFilterDrawer">+ Mais</button>
     </div>
 
     <div class="active-filter-strip" id="activeFilterStrip" aria-live="polite"></div>

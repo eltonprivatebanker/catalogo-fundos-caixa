@@ -1,4 +1,4 @@
-// ELTAUM_MOBILE_CARDS_RANKING_FOCUS_20260606_v67
+// ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){
   var bd=document.getElementById(b),ct=document.getElementById(c);
@@ -3384,7 +3384,7 @@ function updateFundResultSummary(){
   const total=Array.isArray(filtered)?filtered.length:0;
   const resultText=`Resultado: ${total.toLocaleString('pt-BR')} ${fundPlural(total)}`;
   const top=$('filterResultSummary');
-  if(top) top.textContent=resultText;
+  if(top) top.textContent=`${total.toLocaleString('pt-BR')} ${fundPlural(total)}`;
   const shell=$('fundFilterShell');
   if(shell) shell.setAttribute('data-result', resultText);
   const per=$('perPage');
@@ -4493,6 +4493,14 @@ document.addEventListener('DOMContentLoaded', function(){
     return s && s!=='-' && s!=='—' ? s : '—';
   }
 
+  function fmtPctMobilePremium(v){
+    const n=toNum(v);
+    if(n===null || n===undefined || !Number.isFinite(Number(n))) return {txt:'—', cls:'zero'};
+    const sign=n>0?'+':'';
+    const txt=sign+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+    return {txt, cls:n>0?'pos':n<0?'neg':'zero'};
+  }
+
   function getCampoPrazoMobile(row, key){
     const v = String(row?.[key] || '').trim();
     return v && v !== '-' && v !== '—' ? v : 'Consultar';
@@ -4514,6 +4522,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const cat=fmtDash(r['Categoria']);
     const risco=fmtDash(r['Perfil de Risco']);
     const cota=fmtDash(r['Cota (R$)']);
+    const diaInfo=fmtPctMobilePremium(r['Variacao Dia (%)']);
+    const mesInfo=fmtPctMobilePremium(r['Acum. Mes (%)']);
+    const anoInfo=fmtPctMobilePremium(r['Acum. Ano (%)']);
+    const m12Info=fmtPctMobilePremium(r['Acum. 12M (%)']);
     const mes=fmtDash(r['Acum. Mes (%)']);
     const ano=fmtDash(r['Acum. Ano (%)']);
     const m12=fmtDash(r['Acum. 12M (%)']);
@@ -4533,7 +4545,7 @@ document.addEventListener('DOMContentLoaded', function(){
       : '';
     const docsHtml = buildMobileDocsHtml(r);
     return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
-      <div class="fund-card-list-main">
+      <div class="fund-card-list-main fund-card-list-main-premium-v68">
         <div class="fund-card-list-left">
           <div class="fund-card-mobile-tags fund-card-list-tags">
             <span class="cat-badge cat-${cls}">${cat}</span>
@@ -4542,10 +4554,18 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
         </div>
-        <div class="fund-card-list-metrics" aria-label="Resumo de rentabilidade do fundo">
-          <span class="fund-card-list-metric"><small>Mês</small><strong class="${pctClass(mes)}">${mes}</strong></span>
-          <span class="fund-card-list-metric"><small>12M</small><strong class="${pctClass(m12)}">${m12}</strong></span>
-          <span class="fund-card-list-metric cdi"><small>% CDI</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
+      </div>
+
+      <div class="fund-card-performance-v68" aria-label="Rentabilidade do fundo">
+        <div class="fund-card-performance-title-v68">Rentabilidade</div>
+        <div class="fund-card-perf-short-v68">
+          <span class="fund-card-perf-chip-v68"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68"><small>Ano</small><strong class="${anoInfo.cls}">${anoInfo.txt}</strong></span>
+        </div>
+        <div class="fund-card-perf-highlight-v68">
+          <span class="fund-card-perf-main-v68"><small>12 meses</small><strong class="${m12Info.cls}">${m12Info.txt}</strong></span>
+          <span class="fund-card-perf-main-v68 cdi"><small>% CDI 12M</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
         </div>
       </div>
 
@@ -4562,7 +4582,6 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="fund-card-mobile-body">
           <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
@@ -8410,4 +8429,78 @@ async function sharePainelMercado(){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindSidePanel);
   else bindSidePanel();
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   v68 — Mobile premium: filtros rápidos + cards com Dia/Mês/Ano/12M/%CDI
+   Mantém a base atual e apenas refina a experiência mobile.
+════════════════════════════════════════════════════════ */
+(function(){
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+  const PRESET_LABEL={
+    'all':'Todos','renda-fixa':'RF','cdi':'CDI','ipca':'IPCA','multimercado':'MM','acoes':'Ações','fmp':'FMP','cambial':'Cambial','conservador':'Conservador','favoritos':'Favoritos','pf':'PF'
+  };
+  function activePremiumLabel(){
+    try{
+      const preset=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ || 'all';
+      if(preset && preset!=='all') return PRESET_LABEL[preset] || preset;
+      if(typeof activeCat!=='undefined' && activeCat) return String(activeCat).replace('RENDA FIXA','RF').replace('FUNDOS MUTUOS DE PRIVATIZACAO','FMP');
+      if(typeof activeBenchmark!=='undefined' && activeBenchmark) return String(activeBenchmark);
+      if(typeof activePerfil!=='undefined' && activePerfil) return String(activePerfil);
+      if(typeof activeRisco!=='undefined' && activeRisco) return String(activeRisco);
+      if(typeof hideSemDados!=='undefined' && hideSemDados) return 'Sem pipeline';
+    }catch(e){}
+    return '';
+  }
+  function syncMobilePremiumFilterState(){
+    const total=(typeof filtered!=='undefined' && Array.isArray(filtered)) ? filtered.length : null;
+    const label=activePremiumLabel();
+    const top=qs('#filterResultSummary');
+    if(top && total!==null){
+      top.textContent=label ? `${label} · ${total.toLocaleString('pt-BR')} fundos` : `${total.toLocaleString('pt-BR')} fundos encontrados`;
+    }
+    const clear=qs('#clearFiltersTop');
+    if(clear){
+      const active=!!label;
+      clear.hidden=!active;
+      clear.classList.toggle('is-visible',active);
+      clear.textContent=active?'Limpar filtro':'Limpar';
+    }
+    const more=qs('#mobileCategoryMoreBtn');
+    if(more){
+      more.setAttribute('aria-expanded', document.body.classList.contains('filter-sheet-open')?'true':'false');
+    }
+  }
+  function setupPremiumMobileCategoryButton(){
+    const more=qs('#mobileCategoryMoreBtn');
+    if(!more || more.dataset.readyPremiumV68==='1') return;
+    more.dataset.readyPremiumV68='1';
+    more.addEventListener('click',function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      const toggle=qs('#mobileFilterToggle');
+      if(toggle) toggle.click();
+    });
+  }
+  const prevRender=typeof render==='function' ? render : null;
+  if(prevRender && !window.__ELTAUM_RENDER_PREMIUM_V68__){
+    window.__ELTAUM_RENDER_PREMIUM_V68__=true;
+    render=function(){
+      const out=prevRender.apply(this,arguments);
+      try{syncMobilePremiumFilterState();}catch(e){}
+      return out;
+    };
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    setupPremiumMobileCategoryButton();
+    setTimeout(syncMobilePremiumFilterState,250);
+    setTimeout(syncMobilePremiumFilterState,900);
+  });
+  ['click','input','change','touchend','pointerup'].forEach(evt=>{
+    document.addEventListener(evt,function(){setTimeout(syncMobilePremiumFilterState,90);},true);
+  });
+  window.addEventListener('resize',function(){ if(isMobile()) setTimeout(syncMobilePremiumFilterState,80); });
+  window.__eltonSyncMobilePremiumV68=syncMobilePremiumFilterState;
 })();
