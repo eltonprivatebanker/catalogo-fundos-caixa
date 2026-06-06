@@ -2971,7 +2971,11 @@ function gerarLeituraRapidaFundo(r){
   // ── Complementos da leitura rápida ─────────────────────────────────
   // Evita redundância: cadastro, taxa, perfil e liquidez já aparecem na grade de dados.
   // Aqui ficam apenas os indicadores de performance para leitura executiva.
+  const rentDia = numero(r['Variacao Dia (%)']);
+  const rentMes = numero(r['Acum. Mes (%)']);
   const complementos = [];
+  if(rentDia !== null) complementos.push({label:'Dia', value:pct(rentDia)});
+  if(rentMes !== null) complementos.push({label:'Mês', value:pct(rentMes)});
   if(rentAno !== null) complementos.push({label:'Ano', value:pct(rentAno)});
   if(rent12 !== null) complementos.push({label:'12M', value:pct(rent12)});
   if(cdiRatio !== null) complementos.push({label:'% CDI', value:`${cdiRatio}% do CDI`});
@@ -4545,10 +4549,12 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
         </div>
-        <div class="fund-card-list-metrics" aria-label="Resumo de rentabilidade do fundo">
+        <div class="fund-card-list-metrics fund-card-list-metrics-v60" aria-label="Resumo de rentabilidade do fundo">
           <span class="fund-card-list-metric"><small>Dia</small><strong class="${pctClass(dia)}">${dia}</strong></span>
+          <span class="fund-card-list-metric"><small>Mês</small><strong class="${pctClass(mes)}">${mes}</strong></span>
           <span class="fund-card-list-metric"><small>Ano</small><strong class="${pctClass(ano)}">${ano}</strong></span>
           <span class="fund-card-list-metric"><small>12M</small><strong class="${pctClass(m12)}">${m12}</strong></span>
+          <span class="fund-card-list-metric cdi"><small>% CDI</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
         </div>
       </div>
 
@@ -5010,8 +5016,12 @@ document.addEventListener('DOMContentLoaded', function(){
       /* Favoritos */
       if(typeof filtered==='undefined') return;
       const favs=getFavs();
-      if(onlyFavs){ filtered=filtered.filter(r=>favs.has(getFundKey(r))); if(typeof render==='function') render(); }
-      else if(favs.size>0){ filtered.sort((a,b)=>(favs.has(getFundKey(a))?0:1)-(favs.has(getFundKey(b))?0:1)); if(typeof render==='function') render(); }
+      if(onlyFavs){
+        filtered=filtered.filter(r=>favs.has(getFundKey(r)));
+        if(typeof render==='function') render();
+      }
+      // v60: favoritos não devem mais ficar "travados" no topo.
+      // A estrela continua destacando o fundo, mas a ordenação respeita a coluna escolhida.
 
       /* Atualiza contador na barra global */
       updateGfbCount();
@@ -8402,4 +8412,16 @@ async function sharePainelMercado(){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindSidePanel);
   else bindSidePanel();
+})();
+
+/* ════════════════════════════════════════════════════════
+   PATCH v60 — ordenação sem favoritos fixos + métricas completas
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_SORT_METRICS_READABILITY_20260606_v60';
+  function init(){
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 })();

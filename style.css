@@ -19526,3 +19526,116 @@ header.site-header-clean{
     color:var(--red) !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════
+   v60 — Ordenação, cards com 5 métricas e leitura rápida mais legível
+════════════════════════════════════════════════════════ */
+@media(min-width:821px){
+  body.fund-card-mode #mobileFundCards .fund-card-list-metrics,
+  body.fund-card-mode #mobileFundCards .fund-card-list-metrics-v60{
+    grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    gap:7px !important;
+  }
+  body.fund-card-mode #mobileFundCards .fund-card-list-metric{
+    padding:7px 7px !important;
+    min-height:48px !important;
+  }
+  body.fund-card-mode #mobileFundCards .fund-card-list-metric small{
+    font-size:.50rem !important;
+  }
+  body.fund-card-mode #mobileFundCards .fund-card-list-metric strong{
+    font-size:.76rem !important;
+  }
+  body.fund-card-mode #mobileFundCards .fund-card-list-metric.cdi strong{
+    font-size:.68rem !important;
+  }
+}
+
+@media(max-width:820px){
+  #mobileFundCards .fund-card-list-metrics-v60{
+    display:grid !important;
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:7px !important;
+  }
+  #mobileFundCards .fund-card-list-metrics-v60 .fund-card-list-metric.cdi{
+    grid-column:1 / -1 !important;
+  }
+}
+
+/* Leitura rápida: texto mais organizado e métricas com respiro */
+#sec-fundos .fund-quick-note{
+  text-align:left !important;
+}
+#sec-fundos .fund-quick-note-title{
+  display:flex !important;
+  align-items:center !important;
+  gap:7px !important;
+  letter-spacing:.055em !important;
+}
+#sec-fundos .fund-quick-note-text,
+#sec-fundos .fund-quick-note .fund-quick-note-text[style]{
+  max-width:86ch !important;
+  color:#dbe4f4 !important;
+  font-size:.80rem !important;
+  line-height:1.72 !important;
+}
+#sec-fundos .fund-note-metrics{
+  display:grid !important;
+  grid-template-columns:repeat(auto-fit,minmax(108px,1fr)) !important;
+  gap:9px !important;
+  align-items:stretch !important;
+}
+#sec-fundos .fund-note-metric{
+  text-align:center !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  min-height:54px !important;
+}
+#sec-fundos .fund-note-metric span{
+  text-align:center !important;
+}
+#sec-fundos .fund-note-metric strong{
+  text-align:center !important;
+  font-size:.82rem !important;
+}
+
+/* Painel lateral: evita métricas espremidas e melhora leitura no detalhe */
+.fund-card-detail-panel-body-v58 .fund-quick-note{
+  padding:15px !important;
+}
+.fund-card-detail-panel-body-v58 .fund-quick-note-title{
+  justify-content:flex-start !important;
+  margin-bottom:8px !important;
+}
+.fund-card-detail-panel-body-v58 .fund-quick-note-text{
+  max-width:60ch !important;
+  font-size:.78rem !important;
+  line-height:1.72 !important;
+}
+.fund-card-detail-panel-body-v58 .fund-note-metrics{
+  grid-template-columns:repeat(auto-fit,minmax(92px,1fr)) !important;
+  gap:8px !important;
+}
+.fund-card-detail-panel-body-v58 .fund-note-metric{
+  min-height:52px !important;
+  text-align:center !important;
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+}
+.fund-card-detail-panel-body-v58 .fund-note-metric span,
+.fund-card-detail-panel-body-v58 .fund-note-metric strong{
+  text-align:center !important;
+}
+.fund-card-detail-panel-body-v58 .fund-note-metric.neg strong,
+.fund-card-detail-panel-body-v58 .fund-note-metric.neg span,
+#sec-fundos .fund-note-metric.neg strong,
+#sec-fundos .fund-note-metric.neg span{
+  color:var(--red) !important;
+}
+
+/* A estrela/favorito destaca, mas não deve parecer linha fixada no topo */
+#tableBody tr.row-fav{
+  box-shadow:none !important;
+}
