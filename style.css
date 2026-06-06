@@ -18541,3 +18541,96 @@ header.site-header-clean{
 #sec-fundos .table-wrap table{
   margin-bottom:0 !important;
 }
+
+
+/* ==========================================================
+   ELTAUM v53 — Espaçamento superior mais justo
+   Objetivo: aproximar a barra global de busca do cabeçalho,
+   sem remover nenhum elemento. Aplica em desktop e mobile.
+========================================================== */
+
+/* Desktop/tablet: barra superior mais compacta e conteúdo mais próximo */
+#gfb-inner{
+  height:44px !important;
+  min-height:44px !important;
+  padding-top:5px !important;
+  padding-bottom:5px !important;
+}
+#gfbSearch{
+  min-height:30px !important;
+}
+body{
+  padding-top:44px !important;
+}
+.page{
+  padding-top:18px !important;
+}
+.site-header-clean,
+header.site-header-clean{
+  padding-top:0 !important;
+  padding-bottom:16px !important;
+  margin-top:0 !important;
+  margin-bottom:0 !important;
+}
+
+/* Mobile: mantém a busca global, mas remove a altura exagerada herdada dos patches anteriores */
+@media(max-width:768px){
+  #gfb{
+    min-height:44px !important;
+  }
+  #gfb-inner{
+    height:44px !important;
+    min-height:44px !important;
+    padding:5px 12px !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+  }
+  #gfb-logo,
+  #gfb-chips,
+  #gfb-right,
+  #gfbCount,
+  #gfbGo{
+    display:none !important;
+  }
+  #gfb-search-wrap{
+    flex:1 1 auto !important;
+    width:100% !important;
+    min-width:0 !important;
+  }
+  #gfbSearch{
+    min-height:30px !important;
+    padding:6px 28px 6px 30px !important;
+    font-size:.74rem !important;
+  }
+  body{
+    padding-top:44px !important;
+  }
+  .page{
+    padding-top:8px !important;
+  }
+  .site-header-clean,
+  header.site-header-clean{
+    padding:10px 12px 12px !important;
+    margin-top:0 !important;
+    margin-bottom:8px !important;
+  }
+}
+
+@media(max-width:430px){
+  #gfb-inner{
+    height:42px !important;
+    min-height:42px !important;
+    padding:5px 10px !important;
+  }
+  body{
+    padding-top:42px !important;
+  }
+  .page{
+    padding-top:6px !important;
+  }
+  .site-header-clean,
+  header.site-header-clean{
+    margin-bottom:8px !important;
+  }
+}
