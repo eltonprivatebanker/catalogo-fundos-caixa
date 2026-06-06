@@ -8639,3 +8639,303 @@ async function sharePainelMercado(){
   window.addEventListener('resize',syncCategoryGridV69);
 })();
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v70 — Categorias mobile estáveis e filtro exato CAIXA
+   - Corrige Ações: deixa de usar filtro amplo por nome.
+   - Categorias do grid filtram por categoria oficial exata.
+   - Limpar filtro não executa handlers antigos e não força scroll.
+   - Preserva a posição visual da tela durante filtros.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  const BUILD='ELTAUM_MOBILE_CATEGORY_GRID_STABLE_20260606_v70';
+  window.__ELTAUM_CATEGORY_GRID_STABLE_BUILD__=BUILD;
+
+  const PRESET_TO_CANON_CAT = {
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+  };
+
+  const CANON_LABEL = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^\w\s]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function activeCanonCat(){
+    try{return canon(activeCat || '')}catch(e){return ''}
+  }
+
+  function findRawCategoryByCanon(canonTarget){
+    try{
+      if(!canonTarget || !Array.isArray(allRows)) return '';
+      const found = allRows.find(r => canon(r && r['Categoria']) === canonTarget);
+      return found ? String(found['Categoria'] || '').trim() : canonTarget;
+    }catch(e){
+      return canonTarget || '';
+    }
+  }
+
+  function visibleFilterLabel(){
+    const c = activeCanonCat();
+    return c ? (CANON_LABEL[c] || c) : 'Todos os fundos';
+  }
+
+  function stabilizeViewport(fn){
+    const anchor = qs('#fundFilterShell') || qs('#sec-fundos') || document.body;
+    const table = qs('.table-wrap');
+    const cards = qs('#mobileFundCards');
+
+    const beforeTop = anchor.getBoundingClientRect().top;
+    const tableH = table ? Math.ceil(table.getBoundingClientRect().height) : 0;
+    const cardsH = cards ? Math.ceil(cards.getBoundingClientRect().height) : 0;
+
+    if(table && tableH > 0){
+      table.style.minHeight = tableH + 'px';
+      table.classList.add('elton-filter-stabilizing');
+    }
+    if(cards && cardsH > 0){
+      cards.style.minHeight = cardsH + 'px';
+      cards.classList.add('elton-filter-stabilizing');
+    }
+
+    let out;
+    try{ out = fn(); }
+    finally{
+      const keep = () => {
+        try{
+          const afterTop = anchor.getBoundingClientRect().top;
+          const delta = afterTop - beforeTop;
+          if(Math.abs(delta) > 1) window.scrollBy({top:delta, left:0, behavior:'auto'});
+        }catch(e){}
+      };
+      requestAnimationFrame(keep);
+      setTimeout(keep,70);
+      setTimeout(()=>{
+        if(table){ table.style.minHeight=''; table.classList.remove('elton-filter-stabilizing'); }
+        if(cards){ cards.style.minHeight=''; cards.classList.remove('elton-filter-stabilizing'); }
+        keep();
+      },220);
+    }
+    return out;
+  }
+
+  function syncHiddenLegacyChips(){
+    try{
+      const cat = activeCat || '';
+      const row = qs('#catFilters');
+      if(row){
+        qsa('[data-cat]',row).forEach(b=>{
+          const on = String(b.dataset.cat || '') === String(cat || '');
+          b.classList.toggle('active', on);
+        });
+        if(!cat){
+          const all = row.querySelector('[data-cat=""]');
+          if(all) all.classList.add('active');
+        }
+      }
+
+      qsa('.category-choice-v44').forEach(btn=>{
+        const on = canon(btn.dataset.cat || '') === activeCanonCat();
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true':'false');
+      });
+    }catch(e){}
+  }
+
+  function syncCategoryGridV70(){
+    try{
+      const active = activeCanonCat();
+      qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset]').forEach(btn=>{
+        const preset = btn.dataset.preset || 'all';
+        const wanted = PRESET_TO_CANON_CAT[preset] || '';
+        const on = preset === 'all' ? !active : active === wanted;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true':'false');
+      });
+
+      const status = qs('#categoryGridStatus');
+      if(status) status.textContent = active ? ('Categoria: ' + visibleFilterLabel()) : 'Todos os fundos';
+
+      const result = qs('#filterResultSummary');
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+      if(result && n !== null) result.textContent = `${n} fundos encontrados`;
+
+      const clearTop = qs('#clearFiltersTop');
+      if(clearTop){
+        const hasFilter = !!(active || (()=>{try{return activeBenchmark || activePerfil || activeRisco || hideSemDados}catch(e){return false}})());
+        clearTop.hidden = !hasFilter;
+        clearTop.classList.toggle('is-visible', hasFilter);
+        clearTop.textContent = 'Limpar filtro';
+      }
+
+      const summary = qs('#mobileFilterSummary');
+      if(summary) summary.textContent = active ? ('Categoria: ' + visibleFilterLabel()) : 'Categoria: Todos os fundos';
+
+      const count = qs('#filterActiveCount');
+      if(count){
+        count.textContent = active ? '1' : '0';
+        count.classList.toggle('has-active', !!active);
+      }
+
+      const strip = qs('#activeFilterStrip');
+      if(strip){
+        if(active){
+          strip.classList.add('active','category-grid-active-v70');
+          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-v70-clear-filter="1"><small>Categoria</small>${visibleFilterLabel()}<span>×</span></button><button type="button" class="active-filter-clear" data-v70-clear-filter="1">Limpar tudo</button>`;
+        }else{
+          strip.classList.remove('active','category-grid-active-v70');
+          strip.innerHTML = `<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill empty-v70" tabindex="-1" aria-hidden="true"><small>Categoria</small>Todos<span>×</span></button>`;
+        }
+      }
+
+      syncHiddenLegacyChips();
+      try{ if(typeof updateFundResultSummary === 'function') updateFundResultSummary(); }catch(e){}
+    }catch(e){}
+  }
+
+  function clearFiltersV70(){
+    stabilizeViewport(()=>{
+      try{
+        activeCat='';
+        activeBenchmark='';
+        activePerfil='';
+        activeRisco='';
+        hideSemDados=false;
+        window.__favListMode=false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
+        currentPage=1;
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+      }catch(e){}
+      const semDados = qs('#toggleSemDados');
+      if(semDados) semDados.checked = false;
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      syncCategoryGridV70();
+    });
+  }
+
+  function applyCategoryPresetV70(preset){
+    const targetCanon = PRESET_TO_CANON_CAT[preset] || '';
+    stabilizeViewport(()=>{
+      try{
+        activeBenchmark='';
+        activePerfil='';
+        activeRisco='';
+        hideSemDados=false;
+        window.__favListMode=false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset || 'all';
+        currentPage=1;
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+
+        if(!targetCanon){
+          activeCat='';
+        }else{
+          activeCat = findRawCategoryByCanon(targetCanon);
+        }
+      }catch(e){}
+
+      const semDados = qs('#toggleSemDados');
+      if(semDados) semDados.checked = false;
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      syncCategoryGridV70();
+    });
+  }
+
+  let lastAction = {key:'', t:0};
+
+  function shouldHandleEvent(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest('.catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset], #clearFiltersTop, #clearFiltersBtn, #activeFilterStrip [data-v70-clear-filter]') : null;
+    if(!target) return null;
+    return target;
+  }
+
+  function handleGridEvent(ev){
+    const target = shouldHandleEvent(ev);
+    if(!target) return;
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+
+    const key = target.id || target.dataset.preset || 'clear';
+    const now = Date.now();
+    if(lastAction.key === key && now - lastAction.t < 360) return;
+    lastAction = {key, t:now};
+
+    if(target.matches('#clearFiltersTop, #clearFiltersBtn, [data-v70-clear-filter]')){
+      clearFiltersV70();
+      return;
+    }
+
+    const preset = target.dataset.preset || 'all';
+    applyCategoryPresetV70(preset);
+  }
+
+  function bindV70(){
+    if(document.documentElement.dataset.categoryGridV70 === '1') return;
+    document.documentElement.dataset.categoryGridV70 = '1';
+
+    ['pointerup','click','touchend'].forEach(type=>{
+      window.addEventListener(type, handleGridEvent, true);
+    });
+
+    const search = qs('#searchInput');
+    if(search && search.dataset.v70Bound !== '1'){
+      search.dataset.v70Bound = '1';
+      search.addEventListener('input',()=>setTimeout(syncCategoryGridV70,80));
+    }
+
+    syncCategoryGridV70();
+    setTimeout(syncCategoryGridV70,400);
+    setTimeout(syncCategoryGridV70,1200);
+    console.info('[Catálogo CAIXA] Categorias mobile estáveis:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV70,80));
+  else setTimeout(bindV70,80);
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__categoryGridStableV70){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      try{ syncCategoryGridV70(); }catch(e){}
+      return out;
+    };
+    wrapped.__categoryGridStableV70 = true;
+    window.render = wrapped;
+  }
+
+  window.syncCategoryGridV70 = syncCategoryGridV70;
+})();
+
