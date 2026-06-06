@@ -2978,7 +2978,7 @@ function gerarLeituraRapidaFundo(r){
   if(rentMes !== null) complementos.push({label:'Mês', value:pct(rentMes)});
   if(rentAno !== null) complementos.push({label:'Ano', value:pct(rentAno)});
   if(rent12 !== null) complementos.push({label:'12M', value:pct(rent12)});
-  if(cdiRatio !== null) complementos.push({label:'% CDI', value:`${cdiRatio}%`});
+  if(cdiRatio !== null) complementos.push({label:'% CDI', value:`${cdiRatio}% do CDI`});
 
   const tagsHtml = tags.length
     ? `<div class="fund-note-badge-wrap">${tags.join('')}</div>`
@@ -3307,21 +3307,6 @@ function mobileResumoRentCell(r){
   </td>`;
 }
 
-function onlyDigitsCnpjV61(v){
-  return String(v || '').replace(/\D/g,'').slice(0,14);
-}
-function formatCnpjV61(v){
-  const d = onlyDigitsCnpjV61(v);
-  if(d.length === 14) return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5');
-  return String(v || '').trim();
-}
-function cnpjCopyChipV61(raw, extraClass=''){
-  const formatted = formatCnpjV61(raw);
-  const digits = onlyDigitsCnpjV61(raw);
-  if(!formatted || !digits) return '';
-  return `<button type="button" class="cnpj-copy-chip-v61 ${extraClass}" data-cnpj="${htmlAttr(formatted)}" title="Copiar CNPJ ${htmlAttr(formatted)}" aria-label="Copiar CNPJ ${htmlAttr(formatted)}"><span>CNPJ</span>${htmlAttr(formatted)}</button>`;
-}
-
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
@@ -3374,7 +3359,7 @@ function buildRowHTML(r,idx){
       // PL compacto
       const plVal=toNum(r['PL (milhoes R$)']);
       const plStr=plVal?'PL R$ '+( plVal>=1000?(plVal/1000).toFixed(1)+'bi' : plVal.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi' ):'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}${cnpjCopyChipV61(r['CNPJ'],'table-cnpj-chip-v61')}</div></td>`;return;
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
@@ -4499,7 +4484,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(toNum(m12), indicState?.cdi?.m12) : null;
     if(ratio === null || ratio === undefined || !Number.isFinite(Number(ratio))) return {txt:'—', cls:''};
     const cls = ratio < 0 ? 'fund-cdi-ratio-negative' : ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
-    return {txt:`${ratio}%`, cls};
+    return {txt:`${ratio}% do CDI`, cls};
   }
 
   function pctClass(v){
@@ -4525,21 +4510,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const cnpjLimpo = String(row?.['CNPJ'] || '').replace(/\D/g,'');
     const vJson = cnpjLimpo ? String(_fundosDocMap?.[cnpjLimpo]?.codfundo || '').trim() : '';
     return vJson || '';
-  }
-
-  function onlyDigitsCnpjV61(v){
-    return String(v || '').replace(/\D/g,'').slice(0,14);
-  }
-  function formatCnpjV61(v){
-    const d = onlyDigitsCnpjV61(v);
-    if(d.length === 14) return d.replace(/^(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})$/,'$1.$2.$3/$4-$5');
-    return String(v || '').trim();
-  }
-  function cnpjCopyChipV61(raw, extraClass=''){
-    const formatted = formatCnpjV61(raw);
-    const digits = onlyDigitsCnpjV61(raw);
-    if(!formatted || !digits) return '';
-    return `<button type="button" class="cnpj-copy-chip-v61 ${extraClass}" data-cnpj="${htmlAttr(formatted)}" title="Copiar CNPJ ${htmlAttr(formatted)}" aria-label="Copiar CNPJ ${htmlAttr(formatted)}"><span>CNPJ</span>${htmlAttr(formatted)}</button>`;
   }
 
   function buildMobileFundCard(r,idx){
@@ -4576,7 +4546,6 @@ document.addEventListener('DOMContentLoaded', function(){
             <span class="cat-badge cat-${cls}">${cat}</span>
             ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
             ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
-            ${cnpjCopyChipV61(r['CNPJ'],'card-cnpj-chip-v61')}
           </div>
           <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
         </div>
@@ -8314,7 +8283,7 @@ async function sharePainelMercado(){
    - No mobile, preserva o comportamento atual em bottom/lista.
 ════════════════════════════════════════════════════════ */
 (function(){
-  const BUILD='ELTAUM_CNPJ_HINT_METRICS_20260606_v61';
+  const BUILD='ELTAUM_CARD_SIDE_PANEL_METRICS_20260606_v59';
   function isDesktopCards(){
     return window.matchMedia && window.matchMedia('(min-width: 821px)').matches && document.body.classList.contains('fund-card-mode');
   }
@@ -8455,44 +8424,4 @@ async function sharePainelMercado(){
     if(meta) meta.content=BUILD;
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v61 — CNPJ visível/copiável + % CDI compacto
-════════════════════════════════════════════════════════ */
-(function(){
-  function toastMsgV61(msg){
-    try{
-      if(typeof showToast==='function') return showToast(msg);
-    }catch(e){}
-    const el=document.createElement('div');
-    el.className='copy-toast-v61';
-    el.textContent=msg;
-    document.body.appendChild(el);
-    requestAnimationFrame(()=>el.classList.add('show'));
-    setTimeout(()=>{el.classList.remove('show'); setTimeout(()=>el.remove(),240);},1600);
-  }
-  async function copyTextV61(text){
-    const v=String(text||'').trim();
-    if(!v) return;
-    try{
-      await navigator.clipboard.writeText(v);
-      toastMsgV61('CNPJ copiado');
-    }catch(e){
-      const ta=document.createElement('textarea');
-      ta.value=v; ta.style.position='fixed'; ta.style.opacity='0';
-      document.body.appendChild(ta); ta.select();
-      try{document.execCommand('copy'); toastMsgV61('CNPJ copiado');}
-      catch(err){prompt('Copie o CNPJ:', v);}
-      ta.remove();
-    }
-  }
-  document.addEventListener('click', function(ev){
-    const btn=ev.target.closest('.cnpj-copy-chip-v61, .detail-val.copyable');
-    if(!btn) return;
-    const text=btn.getAttribute('data-cnpj') || btn.textContent.replace(/^\s*CNPJ\s*/i,'').trim();
-    ev.preventDefault(); ev.stopPropagation();
-    copyTextV61(text);
-  }, true);
 })();
