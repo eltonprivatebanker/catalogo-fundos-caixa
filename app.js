@@ -4723,20 +4723,49 @@ document.addEventListener('DOMContentLoaded', function(){
     const cat=typeof activeCat!=='undefined' ? activeCat : '';
     const bench=typeof activeBenchmark!=='undefined' ? activeBenchmark : '';
     const risco=typeof activeRisco!=='undefined' ? activeRisco : '';
+    const perfil=typeof activePerfil!=='undefined' ? activePerfil : '';
+    const semDados=typeof hideSemDados!=='undefined' ? !!hideSemDados : false;
+
+    const presetByCat = {
+      'renda-fixa-simples':'RENDA FIXA SIMPLES',
+      'renda-fixa':'RENDA FIXA',
+      'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+      'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+      'multimercado':'MULTIMERCADO',
+      'cambial':'CAMBIAL',
+      'acoes':'ACOES',
+      'fundo-de-indice':'FUNDO DE INDICE',
+      'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+    };
+
     qsa('.filter-preset-chip').forEach(btn=>{
       const p=btn.dataset.preset;
       let on=false;
-      if(p==='all') on=!cat&&!bench&&!risco&&!(typeof activePerfil!=='undefined'&&activePerfil)&&!(typeof hideSemDados!=='undefined'&&hideSemDados);
+      if(p==='all') on=!cat&&!bench&&!risco&&!perfil&&!semDados;
       if(p==='cdi') on=bench==='CDI';
-      if(p==='conservador') on=risco==='Conservador';
       if(p==='ipca') on=bench==='IPCA';
-      if(p==='renda-fixa') on=cat==='RENDA FIXA';
-      if(p==='multimercado') on=cat==='MULTIMERCADO';
-      if(p==='acoes') on=cat==='ACOES';
-      if(p==='cambial') on=cat==='CAMBIAL';
-      if(p==='fmp') on=cat==='FUNDOS MUTUOS DE PRIVATIZACAO';
+      if(p==='conservador') on=risco==='Conservador';
+      if(p==='pf') on=perfil==='PF';
+      if(presetByCat[p]) on=cat===presetByCat[p];
       btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+
+    const status=qs('#categoryGridStatus');
+    if(status){
+      const labelMap={
+        'RENDA FIXA SIMPLES':'RF Simples',
+        'RENDA FIXA':'Renda Fixa',
+        'RENDA FIXA REFERENCIADO':'RF Referenciado',
+        'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+        'MULTIMERCADO':'Multimercado',
+        'CAMBIAL':'Cambial',
+        'ACOES':'Ações',
+        'FUNDO DE INDICE':'Fundo de Índice',
+        'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+      };
+      status.textContent = cat ? ('Categoria: '+(labelMap[cat] || cat)) : 'Todos os fundos';
+    }
   }
 
   function updateMobileFilterSummary(){
@@ -8504,3 +8533,109 @@ async function sharePainelMercado(){
   window.addEventListener('resize',function(){ if(isMobile()) setTimeout(syncMobilePremiumFilterState,80); });
   window.__eltonSyncMobilePremiumV68=syncMobilePremiumFilterState;
 })();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v69 — Mobile: categorias CAIXA em grid visível
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  const CAT_LABEL = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  function syncCategoryGridV69(){
+    try{
+      const cat = typeof activeCat !== 'undefined' ? activeCat : '';
+      const bench = typeof activeBenchmark !== 'undefined' ? activeBenchmark : '';
+      const risco = typeof activeRisco !== 'undefined' ? activeRisco : '';
+      const perfil = typeof activePerfil !== 'undefined' ? activePerfil : '';
+      const semDados = typeof hideSemDados !== 'undefined' ? !!hideSemDados : false;
+
+      const presetCat = {
+        'renda-fixa-simples':'RENDA FIXA SIMPLES',
+        'renda-fixa':'RENDA FIXA',
+        'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+        'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+        'multimercado':'MULTIMERCADO',
+        'cambial':'CAMBIAL',
+        'acoes':'ACOES',
+        'fundo-de-indice':'FUNDO DE INDICE',
+        'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+      };
+
+      qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip').forEach(btn=>{
+        const p = btn.dataset.preset || '';
+        let on = false;
+        if(p === 'all') on = !cat && !bench && !risco && !perfil && !semDados;
+        if(presetCat[p]) on = cat === presetCat[p];
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+
+      const status = qs('#categoryGridStatus');
+      if(status) status.textContent = cat ? ('Categoria: ' + (CAT_LABEL[cat] || cat)) : 'Todos os fundos';
+
+      const clearTop = qs('#clearFiltersTop');
+      if(clearTop){
+        const hasFilter = !!(cat || bench || risco || perfil || semDados || (qs('#searchInput')?.value || '').trim());
+        clearTop.hidden = !hasFilter;
+      }
+
+      const summary = qs('#mobileFilterSummary');
+      if(summary && isMobile()) summary.textContent = cat ? ('Categoria: ' + (CAT_LABEL[cat] || cat)) : 'Categoria: Todos os fundos';
+
+      const result = qs('#filterResultSummary');
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+      if(result && n !== null) result.textContent = `${n} fundos encontrados`;
+    }catch(e){}
+  }
+
+  function bindCategoryGridV69(){
+    qsa('.catalog-shortcuts-category-grid-v69 .shortcut-preset').forEach(btn=>{
+      if(btn.dataset.v69Bound === '1') return;
+      btn.dataset.v69Bound = '1';
+      btn.addEventListener('click',()=>{
+        setTimeout(syncCategoryGridV69, 80);
+        setTimeout(syncCategoryGridV69, 260);
+      });
+    });
+    const search = qs('#searchInput');
+    if(search && search.dataset.v69Bound !== '1'){
+      search.dataset.v69Bound = '1';
+      search.addEventListener('input',()=>setTimeout(syncCategoryGridV69,80));
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>{
+    bindCategoryGridV69();
+    syncCategoryGridV69();
+  });
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__categoryGridV69){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      try{syncCategoryGridV69();}catch(e){}
+      return out;
+    };
+    wrapped.__categoryGridV69 = true;
+    window.render = wrapped;
+  }
+
+  window.syncCategoryGridV69 = syncCategoryGridV69;
+  window.addEventListener('resize',syncCategoryGridV69);
+})();
+

@@ -190,16 +190,23 @@
       </div>
     </div>
 
-    <div class="catalog-shortcuts catalog-shortcuts-premium-v68" aria-label="Filtros rápidos do catálogo">
-      <span class="catalog-shortcuts-label">Filtros</span>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="all" aria-pressed="true">Todos</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" aria-pressed="false">RF</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cdi" aria-pressed="false">CDI</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="ipca" aria-pressed="false">IPCA</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado" aria-pressed="false">MM</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes" aria-pressed="false">Ações</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp" aria-pressed="false">FMP</button>
-      <button type="button" class="shortcut-preset shortcut-more-cats-v68" id="mobileCategoryMoreBtn" aria-controls="fundFilterDrawer">+ Mais</button>
+    <div class="catalog-shortcuts catalog-shortcuts-premium-v69 catalog-shortcuts-category-grid-v69" aria-label="Categorias dos fundos">
+      <div class="category-grid-head-v69">
+        <span class="catalog-shortcuts-label">Categorias</span>
+        <span class="category-grid-status-v69" id="categoryGridStatus">Todos os fundos</span>
+      </div>
+      <div class="category-grid-v69" role="tablist" aria-label="Categorias padrão CAIXA">
+        <button type="button" class="filter-preset-chip shortcut-preset active" data-preset="all" aria-pressed="true">Todos</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-simples" aria-pressed="false">RF Simples</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" aria-pressed="false">Renda Fixa</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-referenciado" aria-pressed="false">RF Ref.</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-curto-prazo" aria-pressed="false">RF Curto</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado" aria-pressed="false">Multimercado</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial" aria-pressed="false">Cambial</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes" aria-pressed="false">Ações</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fundo-de-indice" aria-pressed="false">Índice</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp" aria-pressed="false">FMP</button>
+      </div>
     </div>
 
     <div class="active-filter-strip" id="activeFilterStrip" aria-live="polite"></div>
