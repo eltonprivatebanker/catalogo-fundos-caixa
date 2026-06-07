@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_PTAX_PRO_20260607_v98');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10055,5 +10055,123 @@ async function sharePainelMercado(){
   setTimeout(normalizeMobilePtaxV98,2800);
 
   window.__ELTAUM_MOBILE_PTAX_PRO_V98__ = {sync:normalizeMobilePtaxV98};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v99 — Mobile PTAX: indicação de rolagem horizontal
+   - Adiciona microcopy "arraste para ver mais" nos carrosséis.
+   - Adiciona classe quando há conteúdo fora da tela.
+   - Remove a dúvida visual de parecer conteúdo cortado.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function ensureHintBefore(row, text, id){
+    if(!row || !row.parentElement) return null;
+
+    let hint = row.parentElement.querySelector(`[data-scroll-hint-v99="${id}"]`);
+    if(!hint){
+      hint = document.createElement('div');
+      hint.className = 'ptax-scroll-hint-v99';
+      hint.dataset.scrollHintV99 = id;
+      hint.innerHTML = `<span>${text}</span><strong>Arraste →</strong>`;
+      row.parentElement.insertBefore(hint, row);
+    }else{
+      const span = hint.querySelector('span');
+      if(span) span.textContent = text;
+    }
+    return hint;
+  }
+
+  function updateOverflowState(row, hint){
+    if(!row) return;
+
+    const hasOverflow = row.scrollWidth > row.clientWidth + 8;
+    row.classList.toggle('has-horizontal-overflow-v99', hasOverflow);
+
+    if(hint){
+      hint.hidden = !hasOverflow;
+      hint.classList.toggle('is-hidden-v99', !hasOverflow);
+    }
+
+    const updateScrollClass = () => {
+      const max = Math.max(0, row.scrollWidth - row.clientWidth);
+      const atStart = row.scrollLeft <= 8;
+      const atEnd = row.scrollLeft >= max - 8;
+      row.classList.toggle('is-scroll-start-v99', atStart);
+      row.classList.toggle('is-scroll-end-v99', atEnd);
+      if(hint){
+        hint.classList.toggle('is-scroll-end-v99', atEnd);
+      }
+    };
+
+    if(row.dataset.v99ScrollBound !== '1'){
+      row.dataset.v99ScrollBound = '1';
+      row.addEventListener('scroll', updateScrollClass, {passive:true});
+    }
+    updateScrollClass();
+  }
+
+  function normalizePtaxScrollHintsV99(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const sec = qs('#sec-dolar');
+      if(sec) sec.classList.add('dolar-mobile-scroll-hint-v99');
+
+      if(!isMobile()) return;
+
+      const kpiRow = qs('#sec-dolar .dolar-kpi-row');
+      const monthRow = qs('#sec-dolar .dolar-compact-card .dolar-months');
+
+      const kpiHint = ensureHintBefore(kpiRow, 'Variações por período', 'ptax-variacoes');
+      const monthHint = ensureHintBefore(monthRow, 'Fechamentos anteriores', 'ptax-fechamentos');
+
+      updateOverflowState(kpiRow, kpiHint);
+      updateOverflowState(monthRow, monthHint);
+
+      /* Garante que os carrosséis comecem alinhados no primeiro item. */
+      if(kpiRow && !kpiRow.dataset.v99InitialScroll){
+        kpiRow.dataset.v99InitialScroll = '1';
+        kpiRow.scrollLeft = 0;
+      }
+      if(monthRow && !monthRow.dataset.v99InitialScroll){
+        monthRow.dataset.v99InitialScroll = '1';
+        monthRow.scrollLeft = 0;
+      }
+    }catch(e){}
+  }
+
+  const oldNormalize = window.__ELTAUM_MOBILE_PTAX_PRO_V98__?.sync;
+  if(typeof oldNormalize === 'function' && !oldNormalize.__scrollHintV99){
+    const wrapped = function(){
+      const out = oldNormalize.apply(this, arguments);
+      normalizePtaxScrollHintsV99();
+      return out;
+    };
+    wrapped.__scrollHintV99 = true;
+    try{ window.__ELTAUM_MOBILE_PTAX_PRO_V98__.sync = wrapped; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizePtaxScrollHintsV99,160));
+  else setTimeout(normalizePtaxScrollHintsV99,160);
+
+  document.addEventListener('click',()=>setTimeout(normalizePtaxScrollHintsV99,100),true);
+  window.addEventListener('resize',()=>setTimeout(normalizePtaxScrollHintsV99,120),{passive:true});
+
+  setTimeout(normalizePtaxScrollHintsV99,700);
+  setTimeout(normalizePtaxScrollHintsV99,1600);
+  setTimeout(normalizePtaxScrollHintsV99,3000);
+
+  window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__ = {sync:normalizePtaxScrollHintsV99};
 })();
 
