@@ -20598,3 +20598,275 @@ body,
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v82 — Desktop: filtros estáveis sem pulo visual
+   - Reserva largura fixa para resumo/limpar/categorias.
+   - Mantém grid de categorias com colunas estáveis.
+   - Mantém faixa de filtros ativos com altura reservada.
+════════════════════════════════════════════════════ */
+
+@media(min-width:821px){
+  #sec-fundos .fund-filter-shell{
+    overflow:hidden;
+  }
+
+  #sec-fundos .fund-controls-v2{
+    display:grid!important;
+    grid-template-columns:minmax(310px,1fr) 320px 155px 200px 312px 190px;
+    align-items:center;
+    gap:10px!important;
+  }
+
+  #sec-fundos .fund-search-main{
+    min-width:0!important;
+    width:100%!important;
+  }
+
+  #sec-fundos #mobileFilterBar{
+    display:grid!important;
+    grid-template-columns:112px 134px 74px;
+    align-items:center;
+    gap:8px!important;
+    min-width:320px!important;
+    width:320px!important;
+  }
+
+  #sec-fundos #mobileFilterToggle{
+    width:112px!important;
+    min-width:112px!important;
+    max-width:112px!important;
+    height:38px!important;
+    justify-content:center!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-fundos #filterButtonText{
+    display:inline-block;
+    width:66px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+
+  #sec-fundos #filterActiveCount{
+    width:22px!important;
+    min-width:22px!important;
+    height:22px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 22px!important;
+  }
+
+  #sec-fundos #mobileFilterSummary{
+    display:none!important;
+  }
+
+  #sec-fundos #filterResultSummary{
+    display:block!important;
+    width:134px!important;
+    min-width:134px!important;
+    max-width:134px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    text-align:left!important;
+    font-size:.68rem!important;
+    font-weight:900!important;
+  }
+
+  #sec-fundos #clearFiltersTop{
+    width:74px!important;
+    min-width:74px!important;
+    max-width:74px!important;
+    height:34px!important;
+    padding:0 8px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    justify-content:center!important;
+  }
+
+  #sec-fundos #clearFiltersTop[hidden]{
+    display:inline-flex!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  #sec-fundos .exhibition-control{
+    width:155px!important;
+    min-width:155px!important;
+  }
+
+  #sec-fundos .exhibition-control .ctrl-select{
+    width:100%!important;
+  }
+
+  #sec-fundos .desktop-table-mode-control{
+    width:200px!important;
+    min-width:200px!important;
+  }
+
+  #sec-fundos .desktop-cdi-sort-control{
+    width:312px!important;
+    min-width:312px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap{
+    width:190px!important;
+    min-width:190px!important;
+    justify-content:flex-end!important;
+  }
+
+  #sec-fundos .catalog-shortcuts-category-grid-v69{
+    margin-top:12px!important;
+    padding-top:12px!important;
+    min-height:112px!important;
+  }
+
+  #sec-fundos .category-grid-head-v69{
+    height:20px!important;
+    min-height:20px!important;
+    justify-content:center!important;
+    gap:10px!important;
+  }
+
+  #sec-fundos .category-grid-head-v69 .catalog-shortcuts-label{
+    width:88px!important;
+    min-width:88px!important;
+    text-align:right!important;
+  }
+
+  #sec-fundos #categoryGridStatus{
+    width:240px!important;
+    min-width:240px!important;
+    max-width:240px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    text-align:left!important;
+  }
+
+  #sec-fundos .category-grid-v69{
+    display:grid!important;
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+    align-items:stretch!important;
+  }
+
+  #sec-fundos .category-grid-v69 .filter-preset-chip{
+    width:100%!important;
+    min-width:0!important;
+    height:32px!important;
+    min-height:32px!important;
+    max-height:32px!important;
+    padding:0 10px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    transform:none!important;
+    transition:border-color .14s ease, background .14s ease, color .14s ease, box-shadow .14s ease!important;
+  }
+
+  #sec-fundos .active-filter-strip{
+    min-height:42px!important;
+    height:42px!important;
+    max-height:42px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    overflow:hidden!important;
+    padding-top:8px!important;
+    padding-bottom:0!important;
+    border-top:1px solid rgba(255,255,255,.055)!important;
+  }
+
+  #sec-fundos .active-filter-strip:not(.active){
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  #sec-fundos .active-filter-strip.active{
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  #sec-fundos .active-filter-label{
+    flex:0 0 92px!important;
+    width:92px!important;
+  }
+
+  #sec-fundos .active-filter-pill{
+    max-width:260px!important;
+    height:30px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-fundos .active-filter-clear{
+    flex:0 0 auto!important;
+    height:30px!important;
+  }
+
+  #sec-fundos .mobile-catalog-view-switch{
+    min-height:64px!important;
+  }
+}
+
+@media(min-width:821px) and (max-width:1320px){
+  #sec-fundos .fund-controls-v2{
+    grid-template-columns:minmax(260px,1fr) 300px 145px 185px 270px 170px;
+  }
+
+  #sec-fundos #mobileFilterBar{
+    grid-template-columns:108px 124px 68px;
+    min-width:300px!important;
+    width:300px!important;
+  }
+
+  #sec-fundos #mobileFilterToggle{
+    width:108px!important;
+    min-width:108px!important;
+    max-width:108px!important;
+  }
+
+  #sec-fundos #filterResultSummary{
+    width:124px!important;
+    min-width:124px!important;
+    max-width:124px!important;
+  }
+
+  #sec-fundos #clearFiltersTop{
+    width:68px!important;
+    min-width:68px!important;
+    max-width:68px!important;
+  }
+
+  #sec-fundos .exhibition-control{
+    width:145px!important;
+    min-width:145px!important;
+  }
+
+  #sec-fundos .desktop-table-mode-control{
+    width:185px!important;
+    min-width:185px!important;
+  }
+
+  #sec-fundos .desktop-cdi-sort-control{
+    width:270px!important;
+    min-width:270px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap{
+    width:170px!important;
+    min-width:170px!important;
+  }
+}
+

@@ -8682,7 +8682,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81';
+  const BUILD = 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8753,7 +8753,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82');
   }catch(e){}
 })();
 
@@ -8767,7 +8767,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81';
+  const BUILD = 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9096,6 +9096,71 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82');
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v82 — Desktop: normalização visual do filtro
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82';
+  window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+
+  function normalizeDesktopFilterV82(){
+    try{
+      const meta=qs('meta[name="app-build"]');
+      if(meta) meta.content=BUILD;
+
+      if(!isDesktop()) return;
+
+      document.body.classList.add('desktop-filter-stable-v82');
+
+      const clear = qs('#clearFiltersTop');
+      if(clear){
+        clear.textContent = 'Limpar';
+      }
+
+      const result = qs('#filterResultSummary');
+      if(result){
+        const txt = (result.textContent || '').replace(/^Resultado:\s*/i,'').trim();
+        result.textContent = txt || '— fundos';
+      }
+
+      const status = qs('#categoryGridStatus');
+      if(status){
+        const txt = (status.textContent || '').trim();
+        if(!txt) status.textContent = 'Todos os fundos';
+      }
+
+      const strip = qs('#activeFilterStrip');
+      if(strip && strip.children.length === 0){
+        strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>';
+      }
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__desktopStableV82){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeDesktopFilterV82();
+      return out;
+    };
+    wrapped.__desktopStableV82 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeDesktopFilterV82,120));
+  else setTimeout(normalizeDesktopFilterV82,120);
+
+  window.addEventListener('resize',()=>setTimeout(normalizeDesktopFilterV82,80),{passive:true});
+  setTimeout(normalizeDesktopFilterV82,600);
+  setTimeout(normalizeDesktopFilterV82,1600);
 })();
 
