@@ -23481,3 +23481,45 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v104 — Corrige duplicação dos avisos "Arraste"
+════════════════════════════════════════════════════ */
+
+@media(max-width:820px){
+  /* Esconde qualquer duplicação residual por CSS, mesmo antes do JS limpar. */
+  #sec-mercado .copom-scroll-hint-v101 ~ .copom-scroll-hint-v101,
+  #sec-mercado .cdi-scroll-hint-v101 ~ .cdi-scroll-hint-v101{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  #sec-mercado.market-hints-fixed-v104 .market-scroll-hint-v101{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    margin:4px 2px 8px!important;
+    padding:0!important;
+    min-height:18px!important;
+    height:auto!important;
+    font-size:.60rem!important;
+    line-height:1.2!important;
+  }
+
+  #sec-mercado.market-hints-fixed-v104 .market-scroll-hint-v101[hidden]{
+    display:none!important;
+  }
+
+  /* Ajusta respiro depois da limpeza para os cards voltarem ao tamanho correto. */
+  #sec-mercado .selic-copom-card .copom-grid,
+  #sec-mercado .cdi-month-strip{
+    margin-bottom:0!important;
+  }
+}
+

@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10274,7 +10274,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10385,7 +10385,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10453,7 +10453,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
   window.__ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10540,6 +10540,124 @@ async function sharePainelMercado(){
   window.__ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_V103__ = {
     sync: setupV103,
     scroll: scrollToFundResultsStartV103
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v104 — Corrige duplicação dos avisos "Arraste"
+   Problema vindo do v101:
+   - O seletor que procurava o hint existente usava uma string com duas classes
+     como se fosse descendência, então não encontrava o próprio elemento.
+   - A cada resize/click/timeout criava outro aviso "Próximas reuniões / Arraste".
+   Correção:
+   - Remove duplicados.
+   - Mantém só 1 hint de COPOM e 1 hint de CDI.
+   - Desativa a execução repetida problemática do v101.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_FIX_MARKET_HINT_DUPLICATION_20260607_v104';
+  window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function ensureSingleHint(row, type, label){
+    if(!row || !row.parentElement) return null;
+
+    const className = type === 'copom' ? 'copom-scroll-hint-v101' : 'cdi-scroll-hint-v101';
+    const all = qsa('.' + className, row.parentElement);
+
+    let hint = all[0] || null;
+    all.slice(1).forEach(el => el.remove());
+
+    if(!hint){
+      hint = document.createElement('div');
+      hint.className = 'market-scroll-hint-v101 ' + className + ' market-scroll-hint-fixed-v104';
+      hint.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
+      row.insertAdjacentElement('afterend', hint);
+    }else{
+      hint.classList.add('market-scroll-hint-fixed-v104');
+      const span = hint.querySelector('span');
+      const strong = hint.querySelector('strong');
+      if(span) span.textContent = label;
+      if(strong) strong.textContent = 'Arraste →';
+    }
+
+    return hint;
+  }
+
+  function updateHintVisibility(row, hint){
+    if(!row || !hint) return;
+
+    const hasOverflow = row.scrollWidth > row.clientWidth + 8;
+    hint.hidden = !hasOverflow;
+    row.classList.toggle('market-has-overflow-v101', hasOverflow);
+
+    if(row.dataset.v104ScrollBound !== '1'){
+      row.dataset.v104ScrollBound = '1';
+      row.addEventListener('scroll', () => {
+        const max = Math.max(0, row.scrollWidth - row.clientWidth);
+        const atEnd = row.scrollLeft >= max - 8;
+        hint.classList.toggle('is-end-v101', atEnd);
+        row.classList.toggle('is-end-v101', atEnd);
+      }, {passive:true});
+    }
+  }
+
+  function fixMarketHintDuplicationV104(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const mercado = qs('#sec-mercado');
+      if(mercado) mercado.classList.add('market-hints-fixed-v104');
+
+      /* Limpeza global de duplicados criados pelo v101 */
+      ['copom-scroll-hint-v101','cdi-scroll-hint-v101'].forEach(cls=>{
+        const items = qsa('#sec-mercado .' + cls);
+        items.slice(1).forEach(el => el.remove());
+      });
+
+      if(!isMobile()) return;
+
+      const copomGrid = qs('#sec-mercado .selic-copom-card .copom-grid');
+      const cdiStrip = qs('#sec-mercado .cdi-month-strip, #sec-mercado #cdiMonthStrip');
+
+      const copomHint = ensureSingleHint(copomGrid, 'copom', 'Próximas reuniões');
+      const cdiHint = ensureSingleHint(cdiStrip, 'cdi', 'Histórico mensal do CDI');
+
+      updateHintVisibility(copomGrid, copomHint);
+      updateHintVisibility(cdiStrip, cdiHint);
+    }catch(e){}
+  }
+
+  /* Desativa o sync antigo problemático e substitui por versão segura */
+  try{
+    if(window.__ELTAUM_MOBILE_MARKET_PRO_V101__){
+      window.__ELTAUM_MOBILE_MARKET_PRO_V101__.sync = fixMarketHintDuplicationV104;
+    }
+  }catch(e){}
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded',()=>setTimeout(fixMarketHintDuplicationV104,120));
+  } else {
+    setTimeout(fixMarketHintDuplicationV104,120);
+  }
+
+  document.addEventListener('click',()=>setTimeout(fixMarketHintDuplicationV104,80),true);
+  window.addEventListener('resize',()=>setTimeout(fixMarketHintDuplicationV104,120),{passive:true});
+
+  setTimeout(fixMarketHintDuplicationV104,500);
+  setTimeout(fixMarketHintDuplicationV104,1200);
+  setTimeout(fixMarketHintDuplicationV104,2400);
+  setTimeout(fixMarketHintDuplicationV104,4200);
+
+  window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_V104__ = {
+    sync: fixMarketHintDuplicationV104
   };
 })();
 
