@@ -22026,3 +22026,71 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v97 — Mobile: paginação próxima dos cards
+   Causa do espaço: patches anteriores criaram padding-bottom no #mobileFundCards
+   e margin-bottom no último card para proteger o rodapé fixo. Isso empurrava
+   "Resultado" e os botões de página para muito longe do último card.
+════════════════════════════════════════════════════ */
+
+@media(max-width:820px){
+  #sec-fundos #mobileFundCards,
+  #mobileFundCards.mobile-pagination-close-v97,
+  body.fund-card-mode #mobileFundCards,
+  body.fund-list-mode #mobileFundCards{
+    padding-bottom:0!important;
+    margin-bottom:8px!important;
+    min-height:0!important;
+    height:auto!important;
+    gap:10px!important;
+  }
+
+  #sec-fundos #mobileFundCards .fund-card-mobile:last-child,
+  #mobileFundCards.mobile-pagination-close-v97 .fund-card-mobile:last-child,
+  .mobile-fund-cards .fund-card-mobile:last-child{
+    margin-bottom:0!important;
+  }
+
+  #sec-fundos .pagination-row,
+  .pagination-row.mobile-pagination-row-close-v97{
+    margin-top:10px!important;
+    margin-bottom:calc(var(--mobile-bottom-nav-real-h, 74px) + 18px)!important;
+    padding:8px 0 0!important;
+    gap:10px!important;
+    align-items:flex-start!important;
+  }
+
+  #sec-fundos #resultInfo{
+    margin:0!important;
+    padding:0!important;
+    line-height:1.35!important;
+  }
+
+  #sec-fundos .page-btns{
+    margin-top:6px!important;
+    padding:0!important;
+    gap:8px!important;
+  }
+
+  #sec-fundos .page-btn{
+    width:40px!important;
+    min-width:40px!important;
+    height:40px!important;
+    border-radius:12px!important;
+  }
+
+  /* O espaço seguro fica depois da paginação, não entre card e paginação. */
+  #sec-fundos{
+    padding-bottom:calc(var(--mobile-bottom-nav-real-h, 74px) + 14px)!important;
+  }
+}
+
+@media(max-width:380px){
+  #sec-fundos .page-btn{
+    width:38px!important;
+    min-width:38px!important;
+    height:38px!important;
+  }
+}
+
