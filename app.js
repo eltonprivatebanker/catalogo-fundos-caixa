@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10274,7 +10274,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10385,7 +10385,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10458,7 +10458,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10571,7 +10571,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10708,7 +10708,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10822,6 +10822,211 @@ async function sharePainelMercado(){
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_V108__ = {
     sync: setupPaginationNativeV108,
     scrollToFirstFund: scrollToFirstCardNativeV108
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v109 — Micro ajuste: CDI e "Arraste" padronizados
+   - CDI passa a exibir meses na mesma lógica do dólar: mês atual, mês fechado, anterior.
+   - Linha "Arraste →" fica no padrão visual do bloco Dólar.
+   - Remove microtexto inferior espremido no COPOM.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  window.__ELTAUM_MICRO_CDI_DRAG_STANDARD_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function setBuildV109(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  function removeOldMarketHintsV109(){
+    qsa('#sec-mercado .market-scroll-hint-v101, #sec-mercado .copom-scroll-hint-v101, #sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
+
+    /* Remove textos pequenos do tipo "↔ arraste..." que ficavam espremidos abaixo dos botões. */
+    qsa('#sec-mercado *').forEach(el => {
+      if(!el || !el.textContent) return;
+      const txt = el.textContent.trim().toLowerCase();
+      const isSmallHint =
+        (txt.includes('arraste') && txt.includes('próximas reuniões')) ||
+        (txt.includes('arraste') && txt.includes('histórico mensal do cdi'));
+
+      if(isSmallHint && !el.classList.contains('market-mobile-scroll-label-v109')){
+        el.classList.add('market-old-hint-hidden-v109');
+      }
+    });
+  }
+
+  function ensureScrollLabelV109(container, label, type){
+    if(!container || !container.parentElement) return null;
+
+    const cls = type === 'copom' ? 'copom-scroll-label-v109' : 'cdi-scroll-label-v109';
+    let row = container.parentElement.querySelector('.' + cls);
+
+    if(!row){
+      row = document.createElement('div');
+      row.className = 'market-mobile-scroll-label-v109 ' + cls;
+      row.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
+      container.insertAdjacentElement('beforebegin', row);
+    }else{
+      const span = row.querySelector('span');
+      const strong = row.querySelector('strong');
+      if(span) span.textContent = label;
+      if(strong) strong.textContent = 'Arraste →';
+    }
+
+    const hasOverflow = container.scrollWidth > container.clientWidth + 8;
+    row.hidden = !isMobile() || !hasOverflow;
+    return row;
+  }
+
+  function labelKey(item){
+    return String(item?.label || item?.key || '').toLowerCase();
+  }
+
+  function overrideRenderCdiYearHistoryV109(){
+    const old = window.renderCdiYearHistory || (typeof renderCdiYearHistory === 'function' ? renderCdiYearHistory : null);
+
+    const novo = function(d){
+      const strip = qs('#cdiMonthStrip');
+      if(!strip) return;
+
+      const cdi = d?.cards?.cdi || {};
+      const hist = Array.isArray(cdi.historico) ? cdi.historico : [];
+
+      if(!hist.length){
+        strip.innerHTML = '<span class="cdi-month-empty">histórico indisponível</span>';
+        return;
+      }
+
+      const ordenado = [...hist].sort((a,b) => String(a?.key || '').localeCompare(String(b?.key || '')));
+      const last = ordenado[ordenado.length - 1];
+      const ano = String(last?.key || '').slice(0,4) || String(new Date().getFullYear());
+      const mesesAno = ordenado.filter(x => String(x?.key || '').startsWith(ano + '-'));
+
+      const parcialRef = String(cdi.parcial_ref || '').toLowerCase();
+      const mesFechadoRef = String(cdi.mes_ref || '').toLowerCase();
+
+      const fmtPctLocal = v => {
+        const n = Number(v);
+        if(!Number.isFinite(n)) return '—';
+        return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
+      };
+
+      const titulo = qs('#cdiYearHistoryTitle');
+      if(titulo) titulo.textContent = `CDI mensal ${ano}`;
+
+      const total = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano);
+      const totalEl = qs('#cdiYearHistoryTotal');
+      if(totalEl) totalEl.textContent = Number.isFinite(total) ? `Ano ${fmtPctLocal(total)}` : 'Ano —';
+
+      const byLabel = (label) => mesesAno.find(x => labelKey(x) === label);
+      const atualParcial = parcialRef ? byLabel(parcialRef) : mesesAno[mesesAno.length - 1];
+      const ultimoFechado = mesFechadoRef
+        ? byLabel(mesFechadoRef)
+        : mesesAno[mesesAno.length - 2];
+
+      /*
+        Padronização com Dólar:
+        - Primeiro: mês atual/parcial, quando existir.
+        - Depois: último mês fechado.
+        - Depois: meses anteriores em ordem decrescente.
+        Ex.: JUN/2026, MAI/2026, ABR/2026.
+      */
+      const destaque = [];
+      if(atualParcial) destaque.push(atualParcial);
+      if(ultimoFechado && ultimoFechado !== atualParcial) destaque.push(ultimoFechado);
+
+      const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
+      const exibicao = [...destaque, ...restantes];
+
+      strip.innerHTML = exibicao.map((item) => {
+        const labelCompleta = String(item.label || item.key || '');
+        const label = labelCompleta.replace('/'+ano,'');
+        const isCurrent = atualParcial && item === atualParcial;
+        const isClosed = ultimoFechado && item === ultimoFechado;
+        const classes = [
+          'cdi-month-chip',
+          (isCurrent || isClosed) ? 'featured' : '',
+          isCurrent ? 'current' : '',
+          isClosed ? 'closed' : ''
+        ].filter(Boolean).join(' ');
+
+        const subtitulo = isCurrent
+          ? '<span class="p">parcial</span>'
+          : isClosed
+            ? '<span class="p">último mês</span>'
+            : '';
+
+        return `<span class="${classes}" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
+          <span class="m">${label}</span>
+          <span class="v">${fmtPctLocal(item.valor)}</span>
+          ${subtitulo}
+        </span>`;
+      }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
+
+      ensureScrollLabelV109(strip, 'Histórico mensal do CDI', 'cdi');
+    };
+
+    novo.__v109 = true;
+
+    try{ window.renderCdiYearHistory = novo; }catch(e){}
+    try{ renderCdiYearHistory = novo; }catch(e){}
+  }
+
+  function syncV109(){
+    try{
+      setBuildV109();
+      removeOldMarketHintsV109();
+
+      const copom = qs('#copomMeetings');
+      if(copom) ensureScrollLabelV109(copom, 'Próximas reuniões', 'copom');
+
+      const cdi = qs('#cdiMonthStrip');
+      if(cdi) ensureScrollLabelV109(cdi, 'Histórico mensal do CDI', 'cdi');
+
+      if(window.__ELTAUM_MOBILE_MARKET_PRO_V101__){
+        window.__ELTAUM_MOBILE_MARKET_PRO_V101__.sync = removeOldMarketHintsV109;
+      }
+      if(window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_V104__){
+        window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_V104__.sync = removeOldMarketHintsV109;
+      }
+    }catch(e){}
+  }
+
+  overrideRenderCdiYearHistoryV109();
+
+  const oldMercado = window.carregarMercado || (typeof carregarMercado === 'function' ? carregarMercado : null);
+  if(typeof oldMercado === 'function' && !oldMercado.__v109){
+    const wrapped = async function(){
+      const out = await oldMercado.apply(this, arguments);
+      setTimeout(syncV109,120);
+      return out;
+    };
+    wrapped.__v109 = true;
+    try{ window.carregarMercado = wrapped; }catch(e){}
+    try{ carregarMercado = wrapped; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(syncV109,160));
+  else setTimeout(syncV109,160);
+
+  document.addEventListener('click',()=>setTimeout(syncV109,80),true);
+  window.addEventListener('resize',()=>setTimeout(syncV109,120),{passive:true});
+
+  setTimeout(syncV109,700);
+  setTimeout(syncV109,1800);
+  setTimeout(syncV109,3200);
+
+  window.__ELTAUM_MICRO_CDI_DRAG_STANDARD_V109__ = {
+    sync: syncV109
   };
 })();
 
