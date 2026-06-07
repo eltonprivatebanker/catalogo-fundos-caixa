@@ -21696,3 +21696,24 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v90 — Resultado apenas com quantidade
+════════════════════════════════════════════════════ */
+
+#filterResultSummary,
+#mobileCategorySelectResultV74{
+  text-transform:none!important;
+  letter-spacing:0!important;
+}
+
+@media(min-width:821px){
+  #sec-fundos #filterResultSummary{
+    font-size:.72rem!important;
+    font-weight:900!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+

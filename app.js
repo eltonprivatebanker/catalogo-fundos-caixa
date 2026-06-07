@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_SUMMARY_LABELS_20260606_v89');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_RESULT_COUNT_FINAL_20260606_v90');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_SUMMARY_LABELS_20260606_v89');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9315,5 +9315,146 @@ async function sharePainelMercado(){
 
   window.addEventListener('resize',()=>setTimeout(normalizeSummaryLabelsV89,80),{passive:true});
   window.__ELTAUM_SUMMARY_LABELS_V89__ = {sync:normalizeSummaryLabelsV89};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v90 — Resultado somente com quantidade
+   - Força "1 fundo" / "N fundos", sem "encontrados" e sem prefixos.
+   - Corrige sobrescritas tardias de funções antigas.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function countLabel(n){
+    const num = Number(n || 0);
+    return num === 1 ? '1 fundo' : `${num} fundos`;
+  }
+
+  function readCountFromDomText(txt){
+    const m = String(txt || '').match(/(\d+)/);
+    return m ? Number(m[1]) : null;
+  }
+
+  function currentCount(){
+    try{
+      if(Array.isArray(filtered)) return filtered.length;
+    }catch(e){}
+    const fromMain = readCountFromDomText(qs('#filterResultSummary')?.textContent);
+    if(fromMain !== null) return fromMain;
+    const fromMobile = readCountFromDomText(qs('#mobileCategorySelectResultV74')?.textContent);
+    if(fromMobile !== null) return fromMobile;
+    const rows = qsa('#tableBody tr').length;
+    if(rows) return rows;
+    const cards = qsa('#mobileFundCards .fund-card-mobile').length;
+    return cards || 0;
+  }
+
+  let normalizing = false;
+
+  function setCleanText(el, txt){
+    if(!el) return;
+    if(el.textContent !== txt) el.textContent = txt;
+    if(el.title !== txt) el.title = txt;
+  }
+
+  function normalizeResultCountV90(){
+    if(normalizing) return;
+    normalizing = true;
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const txt = countLabel(currentCount());
+
+      setCleanText(qs('#filterResultSummary'), txt);
+      setCleanText(qs('#mobileCategorySelectResultV74'), txt);
+
+      const applyBtn = qs('#filterApplyBtn');
+      if(applyBtn) applyBtn.title = txt;
+
+      const toggleLabel = qs('#toggleSemDados')?.closest('.toggle-wrap')?.querySelector('.toggle-label') || qs('.toggle-label');
+      if(toggleLabel && /Ocultar/i.test(toggleLabel.textContent || '')){
+        toggleLabel.textContent = 'Ocultar fundos sem dados';
+        toggleLabel.title = 'Ocultar fundos sem dados';
+      }
+
+      const toggleWrap = qs('#toggleSemDados')?.closest('.toggle-wrap');
+      if(toggleWrap) toggleWrap.title = 'Ocultar fundos sem dados';
+
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.setAttribute('aria-label','Ocultar fundos sem dados');
+    }catch(e){}
+    finally{
+      normalizing = false;
+    }
+  }
+
+  function scheduleNormalizeV90(){
+    normalizeResultCountV90();
+    requestAnimationFrame(normalizeResultCountV90);
+    setTimeout(normalizeResultCountV90, 30);
+    setTimeout(normalizeResultCountV90, 120);
+    setTimeout(normalizeResultCountV90, 320);
+  }
+
+  function wrapFunction(name){
+    try{
+      const fn = window[name] || eval(name);
+      if(typeof fn !== 'function' || fn.__resultCountFinalV90) return;
+      const wrapped = function(){
+        const out = fn.apply(this, arguments);
+        scheduleNormalizeV90();
+        return out;
+      };
+      wrapped.__resultCountFinalV90 = true;
+      try{ window[name] = wrapped; }catch(e){}
+      try{ eval(name + ' = wrapped'); }catch(e){}
+    }catch(e){}
+  }
+
+  function bindObserver(){
+    ['#filterResultSummary','#mobileCategorySelectResultV74'].forEach(sel=>{
+      const el = qs(sel);
+      if(!el || el.dataset.v90Observed === '1') return;
+      el.dataset.v90Observed = '1';
+      try{
+        const obs = new MutationObserver(()=>{
+          if(normalizing) return;
+          setTimeout(normalizeResultCountV90, 0);
+        });
+        obs.observe(el,{childList:true,characterData:true,subtree:true});
+      }catch(e){}
+    });
+  }
+
+  function bindV90(){
+    ['render','applyFilter','updateFundResultSummary','updateMobileFilterSummary','syncCleanFilterV86','normalizeTopbarV88','normalizeSummaryLabelsV89'].forEach(wrapFunction);
+
+    bindObserver();
+    scheduleNormalizeV90();
+
+    document.addEventListener('click',()=>setTimeout(scheduleNormalizeV90,40),true);
+    document.addEventListener('change',()=>setTimeout(scheduleNormalizeV90,40),true);
+    document.addEventListener('input',()=>setTimeout(scheduleNormalizeV90,80),true);
+
+    setTimeout(scheduleNormalizeV90,700);
+    setTimeout(scheduleNormalizeV90,1600);
+    setTimeout(scheduleNormalizeV90,3000);
+
+    console.info('[Catálogo CAIXA] Resultado somente quantidade:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV90,180));
+  else setTimeout(bindV90,180);
+
+  window.addEventListener('resize',()=>setTimeout(scheduleNormalizeV90,80),{passive:true});
+  window.__ELTAUM_RESULT_COUNT_FINAL_V90__ = {sync:scheduleNormalizeV90};
 })();
 
