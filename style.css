@@ -20870,3 +20870,157 @@ body,
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v83 — Desktop: rótulos de filtros claros
+════════════════════════════════════════════════════ */
+
+@media(min-width:821px){
+  #sec-fundos .fund-controls-v2{
+    grid-template-columns:minmax(300px,1fr) 390px 150px 198px 300px 180px!important;
+  }
+
+  #sec-fundos #mobileFilterBar{
+    grid-template-columns:132px 176px 74px!important;
+    width:390px!important;
+    min-width:390px!important;
+  }
+
+  #sec-fundos #mobileFilterToggle{
+    width:132px!important;
+    min-width:132px!important;
+    max-width:132px!important;
+  }
+
+  #sec-fundos #filterButtonText{
+    width:82px!important;
+    min-width:82px!important;
+    max-width:82px!important;
+    display:inline-block!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-fundos #filterResultSummary{
+    width:176px!important;
+    min-width:176px!important;
+    max-width:176px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-fundos #clearFiltersTop{
+    width:74px!important;
+    min-width:74px!important;
+    max-width:74px!important;
+  }
+
+  #sec-fundos #clearFiltersTop[hidden]{
+    display:inline-flex!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  #sec-fundos #clearFiltersTop.is-visible-v83{
+    visibility:visible!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+  }
+
+  #sec-fundos .category-grid-head-v69{
+    justify-content:center!important;
+  }
+
+  #sec-fundos #categoryGridStatus{
+    width:270px!important;
+    min-width:270px!important;
+    max-width:270px!important;
+    font-weight:900!important;
+    color:#cbd5ee!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-fundos .active-filter-strip{
+    min-height:42px!important;
+    height:42px!important;
+    visibility:visible!important;
+    opacity:1!important;
+    pointer-events:auto!important;
+  }
+
+  #sec-fundos .active-filter-strip.desktop-active-filter-v83{
+    display:flex!important;
+    align-items:center!important;
+  }
+
+  #sec-fundos .active-filter-label{
+    flex:0 0 96px!important;
+    width:96px!important;
+  }
+
+  #sec-fundos .active-filter-pill-v83{
+    height:30px!important;
+    min-width:82px!important;
+    max-width:310px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    padding:0 14px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    font-weight:900!important;
+  }
+
+  #sec-fundos .active-filter-pill-v83 small{
+    display:none!important;
+  }
+
+  #sec-fundos .active-filter-pill-v83.all-filter-v83{
+    border-color:rgba(200,151,58,.52)!important;
+    color:#f5d48a!important;
+    background:rgba(200,151,58,.10)!important;
+  }
+
+  #sec-fundos .active-filter-clear-v83{
+    height:30px!important;
+    min-width:86px!important;
+  }
+}
+
+@media(min-width:821px) and (max-width:1320px){
+  #sec-fundos .fund-controls-v2{
+    grid-template-columns:minmax(260px,1fr) 360px 140px 185px 270px 165px!important;
+  }
+
+  #sec-fundos #mobileFilterBar{
+    grid-template-columns:128px 158px 68px!important;
+    width:360px!important;
+    min-width:360px!important;
+  }
+
+  #sec-fundos #mobileFilterToggle{
+    width:128px!important;
+    min-width:128px!important;
+    max-width:128px!important;
+  }
+
+  #sec-fundos #filterResultSummary{
+    width:158px!important;
+    min-width:158px!important;
+    max-width:158px!important;
+  }
+
+  #sec-fundos #clearFiltersTop{
+    width:68px!important;
+    min-width:68px!important;
+    max-width:68px!important;
+  }
+}
+

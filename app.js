@@ -8682,7 +8682,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82';
+  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8753,7 +8753,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_FILTER_LABELS_STABLE_20260606_v83');
   }catch(e){}
 })();
 
@@ -8767,7 +8767,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82';
+  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9096,7 +9096,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83');
 })();
 
 
@@ -9106,7 +9106,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_FILTER_STABLE_20260606_v82';
+  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9162,5 +9162,168 @@ async function sharePainelMercado(){
   window.addEventListener('resize',()=>setTimeout(normalizeDesktopFilterV82,80),{passive:true});
   setTimeout(normalizeDesktopFilterV82,600);
   setTimeout(normalizeDesktopFilterV82,1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v83 — Desktop: rótulos de filtros claros
+   - Botão "Categorias" legível.
+   - "Todos" também aparece em Filtros ativos.
+   - Remove termos Categoria/Grupo dos chips ativos.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
+  window.__ELTAUM_FILTER_LABELS_STABLE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+
+  const LABELS = {
+    'RENDA FIXA SIMPLES':'RENDA FIXA SIMPLES',
+    'RENDA FIXA':'RENDA FIXA',
+    'RENDA FIXA REFERENCIADO':'RENDA FIXA REFERENCIADO',
+    'RENDA FIXA CURTO PRAZO':'RENDA FIXA CURTO PRAZO',
+    'MULTIMERCADO':'MULTIMERCADO',
+    'CAMBIAL':'CAMBIAL',
+    'ACOES':'AÇÕES',
+    'FUNDO DE INDICE':'FUNDO DE ÍNDICE',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
+  };
+
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^\w\s]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function getActiveCatCanon(){
+    try{return canon(activeCat || '')}catch(e){return ''}
+  }
+
+  function activeLabel(){
+    const c = getActiveCatCanon();
+    return c ? (LABELS[c] || c) : 'Todos';
+  }
+
+  function normalizeActiveStripV83(){
+    const strip = qs('#activeFilterStrip');
+    if(!strip || !isDesktop()) return;
+
+    const label = activeLabel();
+    const hasSpecific = !!getActiveCatCanon();
+
+    strip.classList.add('active','desktop-active-filter-v83');
+    strip.style.visibility = 'visible';
+    strip.style.opacity = '1';
+    strip.style.pointerEvents = 'auto';
+
+    strip.innerHTML =
+      '<span class="active-filter-label">Filtros ativos</span>' +
+      `<button type="button" class="active-filter-pill active-filter-pill-v83 ${hasSpecific ? '' : 'all-filter-v83'}" ${hasSpecific ? 'data-clear-filter="cat"' : 'data-preset="all"'}>` +
+      `${label}${hasSpecific ? '<span>×</span>' : ''}</button>` +
+      (hasSpecific ? '<button type="button" class="active-filter-clear active-filter-clear-v83" data-clear-filter="all">Limpar tudo</button>' : '');
+  }
+
+  function normalizeTopControlsV83(){
+    if(!isDesktop()) return;
+
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    const btnText = qs('#filterButtonText');
+    if(btnText) btnText.textContent = 'Categorias';
+
+    const count = qs('#filterActiveCount');
+    if(count){
+      count.textContent = '1';
+      count.classList.add('has-active');
+    }
+
+    const result = qs('#filterResultSummary');
+    if(result){
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+      if(n !== null) result.textContent = `${n} fundos encontrados`;
+      result.title = result.textContent || '';
+    }
+
+    const status = qs('#categoryGridStatus');
+    if(status){
+      const c = getActiveCatCanon();
+      status.textContent = c ? activeLabel() : 'Todos os fundos';
+      status.title = status.textContent || '';
+    }
+
+    const clear = qs('#clearFiltersTop');
+    if(clear){
+      const specific = !!getActiveCatCanon();
+      clear.textContent = 'Limpar';
+      clear.hidden = !specific;
+      clear.classList.toggle('is-visible-v83', specific);
+    }
+
+    normalizeActiveStripV83();
+  }
+
+  function bindV83(){
+    normalizeTopControlsV83();
+
+    const strip = qs('#activeFilterStrip');
+    if(strip && strip.dataset.v83Bound !== '1'){
+      strip.dataset.v83Bound = '1';
+      strip.addEventListener('click', ev=>{
+        const clearCat = ev.target.closest('[data-clear-filter="cat"]');
+        const clearAll = ev.target.closest('[data-clear-filter="all"]');
+        if(!clearCat && !clearAll) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+
+        try{
+          activeCat = '';
+          activeBenchmark = '';
+          activePerfil = '';
+          activeRisco = '';
+          hideSemDados = false;
+          currentPage = 1;
+          if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+        }catch(e){}
+
+        const toggle = qs('#toggleSemDados');
+        if(toggle) toggle.checked = false;
+
+        try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+        try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+        setTimeout(normalizeTopControlsV83, 40);
+      });
+    }
+
+    setTimeout(normalizeTopControlsV83,300);
+    setTimeout(normalizeTopControlsV83,900);
+    setTimeout(normalizeTopControlsV83,1600);
+    console.info('[Catálogo CAIXA] Filtros desktop claros:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__filterLabelsV83){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeTopControlsV83();
+      return out;
+    };
+    wrapped.__filterLabelsV83 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV83,160));
+  else setTimeout(bindV83,160);
+
+  window.addEventListener('resize',()=>setTimeout(normalizeTopControlsV83,80),{passive:true});
+  window.__ELTAUM_FILTER_LABELS_STABLE_V83__ = {sync:normalizeTopControlsV83};
 })();
 
