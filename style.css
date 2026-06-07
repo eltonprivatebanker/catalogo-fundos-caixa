@@ -21624,3 +21624,75 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v89 — Resumo e toggle com texto completo
+════════════════════════════════════════════════════ */
+
+@media(min-width:821px){
+  #sec-fundos #filterResultSummary{
+    text-transform:none!important;
+    letter-spacing:0!important;
+    font-size:.72rem!important;
+    font-weight:900!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap{
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap .toggle-label{
+    max-width:none!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font-size:.70rem!important;
+  }
+
+  #sec-fundos .fund-controls-v2{
+    grid-template-columns:minmax(260px,1fr) 220px 220px 205px 290px 205px!important;
+  }
+
+  #sec-fundos .desktop-cdi-sort-control{
+    width:290px!important;
+    min-width:290px!important;
+    max-width:290px!important;
+  }
+}
+
+@media(min-width:821px) and (max-width:1380px){
+  #sec-fundos .fund-controls-v2{
+    grid-template-columns:minmax(230px,1fr) 190px 205px 195px 260px 190px!important;
+  }
+
+  #sec-fundos #mobileFilterBar{
+    width:190px!important;
+    min-width:190px!important;
+    max-width:190px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap{
+    width:190px!important;
+    min-width:190px!important;
+    max-width:190px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap .toggle-label{
+    font-size:.66rem!important;
+  }
+
+  #sec-fundos .desktop-cdi-sort-control{
+    width:260px!important;
+    min-width:260px!important;
+    max-width:260px!important;
+  }
+}
+
+@media(max-width:820px){
+  #mobileCategorySelectResultV74{
+    text-transform:none!important;
+  }
+}
+

@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
+  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_SUMMARY_LABELS_20260606_v89');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
+  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_SUMMARY_LABELS_20260606_v89');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
+  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
+  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
+  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
+  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9213,5 +9213,107 @@ async function sharePainelMercado(){
   window.addEventListener('resize',()=>setTimeout(normalizeTopbarV88,80),{passive:true});
   setTimeout(normalizeTopbarV88,700);
   setTimeout(normalizeTopbarV88,1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v89 — Resumo de quantidade e label do toggle
+   - Resultado fica padronizado: "1 fundo", "10 fundos", "171 fundos".
+   - Remove prefixos de categoria no resumo superior.
+   - Troca "Ocultar sem dados" por "Ocultar fundos sem dados".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_SUMMARY_LABELS_20260606_v89';
+  window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function countLabel(n){
+    const num = Number(n || 0);
+    return num === 1 ? '1 fundo' : `${num} fundos`;
+  }
+
+  function currentFilteredCount(){
+    try{
+      if(Array.isArray(filtered)) return filtered.length;
+    }catch(e){}
+    const cards = qsa('#mobileFundCards .fund-card-mobile').length;
+    if(cards) return cards;
+    const rows = qsa('#tableBody tr').length;
+    return rows || 0;
+  }
+
+  function normalizeSummaryLabelsV89(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const n = currentFilteredCount();
+      const txt = countLabel(n);
+
+      const result = qs('#filterResultSummary');
+      if(result){
+        result.textContent = txt;
+        result.title = txt;
+      }
+
+      const mobileResult = qs('#mobileCategorySelectResultV74');
+      if(mobileResult){
+        mobileResult.textContent = txt;
+        mobileResult.title = txt;
+      }
+
+      const applyBtn = qs('#filterApplyBtn');
+      if(applyBtn) applyBtn.title = txt;
+
+      const toggleLabel = qs('#toggleSemDados')?.closest('.toggle-wrap')?.querySelector('.toggle-label') || qs('.toggle-label');
+      if(toggleLabel && /Ocultar/i.test(toggleLabel.textContent || '')){
+        toggleLabel.textContent = 'Ocultar fundos sem dados';
+        toggleLabel.title = 'Ocultar fundos sem dados';
+      }
+
+      const toggleWrap = qs('#toggleSemDados')?.closest('.toggle-wrap');
+      if(toggleWrap) toggleWrap.title = 'Ocultar fundos sem dados';
+
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.setAttribute('aria-label','Ocultar fundos sem dados');
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__summaryLabelsV89){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeSummaryLabelsV89();
+      return out;
+    };
+    wrapped.__summaryLabelsV89 = true;
+    window.render = wrapped;
+  }
+
+  const oldApplyFilter = window.applyFilter || (typeof applyFilter === 'function' ? applyFilter : null);
+  if(typeof oldApplyFilter === 'function' && !oldApplyFilter.__summaryLabelsV89){
+    const wrappedApply = function(){
+      const out = oldApplyFilter.apply(this, arguments);
+      setTimeout(normalizeSummaryLabelsV89, 0);
+      return out;
+    };
+    wrappedApply.__summaryLabelsV89 = true;
+    try{ window.applyFilter = wrappedApply; }catch(e){}
+    try{ applyFilter = wrappedApply; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeSummaryLabelsV89,160));
+  else setTimeout(normalizeSummaryLabelsV89,160);
+
+  setTimeout(normalizeSummaryLabelsV89,600);
+  setTimeout(normalizeSummaryLabelsV89,1400);
+  setTimeout(normalizeSummaryLabelsV89,2600);
+
+  window.addEventListener('resize',()=>setTimeout(normalizeSummaryLabelsV89,80),{passive:true});
+  window.__ELTAUM_SUMMARY_LABELS_V89__ = {sync:normalizeSummaryLabelsV89};
 })();
 
