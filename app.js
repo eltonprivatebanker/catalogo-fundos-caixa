@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_PTAX_PRO_20260607_v98');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_20260607_v96';
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9891,5 +9891,169 @@ async function sharePainelMercado(){
   setTimeout(removeQuickNoteMetricsV96,2600);
 
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_V96__ = {sync:removeQuickNoteMetricsV96};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v97 — Mobile: paginação próxima dos cards
+   - Remove min-height/padding residual do container de cards.
+   - Mantém respiro apenas depois da paginação, para o rodapé fixo não cobrir.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function fixMobilePaginationSpacingV97(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(!isMobile()) return;
+
+      const cards = qs('#mobileFundCards');
+      if(cards){
+        cards.classList.add('mobile-pagination-close-v97');
+        /* Remove alturas temporárias deixadas por patches de estabilização, caso existam. */
+        if(cards.style.minHeight) cards.style.minHeight = '';
+        if(cards.style.height) cards.style.height = '';
+      }
+
+      const pagination = qs('#sec-fundos .pagination-row') || qs('.pagination-row');
+      if(pagination){
+        pagination.classList.add('mobile-pagination-row-close-v97');
+      }
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__mobilePaginationCloseV97){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      fixMobilePaginationSpacingV97();
+      return out;
+    };
+    wrapped.__mobilePaginationCloseV97 = true;
+    window.render = wrapped;
+  }
+
+  const oldRenderMobileCards = window.renderMobileFundCards || (typeof renderMobileFundCards === 'function' ? renderMobileFundCards : null);
+  if(typeof oldRenderMobileCards === 'function' && !oldRenderMobileCards.__mobilePaginationCloseV97){
+    const wrappedMobile = function(){
+      const out = oldRenderMobileCards.apply(this, arguments);
+      fixMobilePaginationSpacingV97();
+      return out;
+    };
+    wrappedMobile.__mobilePaginationCloseV97 = true;
+    try{ window.renderMobileFundCards = wrappedMobile; }catch(e){}
+    try{ renderMobileFundCards = wrappedMobile; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(fixMobilePaginationSpacingV97,120));
+  else setTimeout(fixMobilePaginationSpacingV97,120);
+
+  setTimeout(fixMobilePaginationSpacingV97,700);
+  setTimeout(fixMobilePaginationSpacingV97,1600);
+  document.addEventListener('click',()=>setTimeout(fixMobilePaginationSpacingV97,80),true);
+
+  window.__ELTAUM_MOBILE_PAGINATION_CLOSE_V97__ = {sync:fixMobilePaginationSpacingV97};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v98 — Mobile PTAX profissional
+   - Compacta títulos do bloco Dólar PTAX no mobile.
+   - Mantém dados existentes e reorganiza visualmente via CSS.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_PTAX_PRO_20260607_v98';
+  window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function normalizeMobilePtaxV98(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const sec = qs('#sec-dolar');
+      if(sec) sec.classList.add('dolar-mobile-pro-v98');
+
+      const title = qs('#sec-dolar .dolar-chart-title');
+      if(title && isMobile()){
+        title.textContent = 'Histórico PTAX';
+      }
+
+      const chartSub = qs('#dolar-chart-sub');
+      if(chartSub && isMobile()){
+        chartSub.textContent = chartSub.textContent || 'Série histórica do dólar PTAX';
+      }
+
+      const chartBtn = qs('#dolarChartToggle');
+      if(chartBtn && isMobile()){
+        const expanded = chartBtn.getAttribute('aria-expanded') === 'true';
+        chartBtn.textContent = expanded ? 'Ocultar' : 'Abrir gráfico';
+      }
+
+      const toggle = qs('#dolarTimelineToggle');
+      if(toggle && isMobile()){
+        toggle.setAttribute('aria-hidden','true');
+        toggle.tabIndex = -1;
+      }
+
+      qsa('#sec-dolar .dolar-mini-kpi').forEach(el=>{
+        el.classList.add('dolar-variation-chip-v98');
+      });
+
+      qsa('#sec-dolar .dolar-month-item').forEach(el=>{
+        el.classList.add('dolar-month-snap-v98');
+      });
+    }catch(e){}
+  }
+
+  const oldCarregarDolar = window.carregarDolarDia || (typeof carregarDolarDia === 'function' ? carregarDolarDia : null);
+  if(typeof oldCarregarDolar === 'function' && !oldCarregarDolar.__mobilePtaxProV98){
+    const wrappedDolar = async function(){
+      const out = await oldCarregarDolar.apply(this, arguments);
+      normalizeMobilePtaxV98();
+      setTimeout(normalizeMobilePtaxV98, 120);
+      return out;
+    };
+    wrappedDolar.__mobilePtaxProV98 = true;
+    try{ window.carregarDolarDia = wrappedDolar; }catch(e){}
+    try{ carregarDolarDia = wrappedDolar; }catch(e){}
+  }
+
+  const oldToggleChart = window.toggleDolarChartMobile || (typeof toggleDolarChartMobile === 'function' ? toggleDolarChartMobile : null);
+  if(typeof oldToggleChart === 'function' && !oldToggleChart.__mobilePtaxProV98){
+    const wrappedToggle = function(){
+      const out = oldToggleChart.apply(this, arguments);
+      setTimeout(normalizeMobilePtaxV98, 40);
+      return out;
+    };
+    wrappedToggle.__mobilePtaxProV98 = true;
+    try{ window.toggleDolarChartMobile = wrappedToggle; }catch(e){}
+    try{ toggleDolarChartMobile = wrappedToggle; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeMobilePtaxV98,120));
+  else setTimeout(normalizeMobilePtaxV98,120);
+
+  document.addEventListener('click',()=>setTimeout(normalizeMobilePtaxV98,80),true);
+  window.addEventListener('resize',()=>setTimeout(normalizeMobilePtaxV98,80),{passive:true});
+
+  setTimeout(normalizeMobilePtaxV98,700);
+  setTimeout(normalizeMobilePtaxV98,1600);
+  setTimeout(normalizeMobilePtaxV98,2800);
+
+  window.__ELTAUM_MOBILE_PTAX_PRO_V98__ = {sync:normalizeMobilePtaxV98};
 })();
 
