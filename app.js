@@ -8682,7 +8682,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8753,7 +8753,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_FILTER_LABELS_STABLE_20260606_v83');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85');
   }catch(e){}
 })();
 
@@ -8767,7 +8767,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9096,7 +9096,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85');
 })();
 
 
@@ -9106,7 +9106,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9174,7 +9174,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FILTER_LABELS_STABLE_20260606_v83';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
   window.__ELTAUM_FILTER_LABELS_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9325,5 +9325,267 @@ async function sharePainelMercado(){
 
   window.addEventListener('resize',()=>setTimeout(normalizeTopControlsV83,80),{passive:true});
   window.__ELTAUM_FILTER_LABELS_STABLE_V83__ = {sync:normalizeTopControlsV83};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v84 — Desativa gaveta legada de categorias
+   - Mantém o botão "Categorias" apenas como indicador visual.
+   - Impede abertura do drawer lateral legado.
+   - Mantém filtros principais pelo grid visível e pelo select mobile.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
+  window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+
+  function closeLegacyDrawerV84(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const drawer = qs('#fundFilterDrawer');
+      if(drawer){
+        drawer.classList.add('legacy-drawer-disabled-v84','mobile-filters-collapsed','desktop-filters-collapsed');
+        drawer.classList.remove('filter-sheet-open');
+        drawer.setAttribute('aria-hidden','true');
+        drawer.style.display = 'none';
+        drawer.style.visibility = 'hidden';
+        drawer.style.pointerEvents = 'none';
+      }
+
+      const btn = qs('#mobileFilterToggle');
+      if(btn){
+        btn.setAttribute('aria-expanded','false');
+        btn.setAttribute('aria-disabled','true');
+        btn.classList.add('filter-toggle-inert-v84');
+        btn.title = 'Categorias disponíveis no grid abaixo';
+      }
+
+      const label = qs('#filterButtonText');
+      if(label) label.textContent = 'Categorias';
+
+      document.body.classList.remove('filter-sheet-open');
+
+      const backdrop = qs('#filterBackdrop');
+      if(backdrop) backdrop.classList.remove('active');
+
+      const close = qs('#filterCloseBtn');
+      if(close) close.setAttribute('tabindex','-1');
+    }catch(e){}
+  }
+
+  function interceptLegacyToggleV84(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText, #fundFilterDrawer, #filterBackdrop') : null;
+    if(!target) return;
+
+    // Permite clique nos controles reais do drawer somente se, por alguma razão, o elemento estiver oculto
+    // mas intercepta abertura/uso da gaveta legada.
+    if(target.matches('#mobileFilterToggle, #filterButtonText, #filterBackdrop') || target.closest('#fundFilterDrawer')){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      closeLegacyDrawerV84();
+    }
+  }
+
+  function bindV84(){
+    closeLegacyDrawerV84();
+
+    if(document.documentElement.dataset.v84DrawerDisabled !== '1'){
+      document.documentElement.dataset.v84DrawerDisabled = '1';
+      window.addEventListener('click', interceptLegacyToggleV84, true);
+      window.addEventListener('pointerdown', function(ev){
+        const t = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText') : null;
+        if(!t) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+        closeLegacyDrawerV84();
+      }, true);
+    }
+
+    setTimeout(closeLegacyDrawerV84,120);
+    setTimeout(closeLegacyDrawerV84,500);
+    setTimeout(closeLegacyDrawerV84,1400);
+
+    console.info('[Catálogo CAIXA] Drawer legado desativado:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__drawerDisabledV84){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      closeLegacyDrawerV84();
+      return out;
+    };
+    wrapped.__drawerDisabledV84 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV84,180));
+  else setTimeout(bindV84,180);
+
+  window.addEventListener('resize',()=>setTimeout(closeLegacyDrawerV84,80),{passive:true});
+  window.__ELTAUM_DISABLE_LEGACY_DRAWER_V84__ = {close:closeLegacyDrawerV84};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v85 — Remove drawer legado e simplifica desktop
+   - Remove fisicamente qualquer #fundFilterDrawer remanescente.
+   - Botão "Categorias" vira indicador, sem abrir menu.
+   - Remove Limpar filtro/Limpar tudo do desktop.
+   - Filtros ativos mostra apenas: Todos ou o nome da categoria.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
+  window.__ELTAUM_REMOVE_LEGACY_DRAWER_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+
+  const LABELS = {
+    'RENDA FIXA SIMPLES':'RENDA FIXA SIMPLES',
+    'RENDA FIXA':'RENDA FIXA',
+    'RENDA FIXA REFERENCIADO':'RENDA FIXA REFERENCIADO',
+    'RENDA FIXA CURTO PRAZO':'RENDA FIXA CURTO PRAZO',
+    'MULTIMERCADO':'MULTIMERCADO',
+    'CAMBIAL':'CAMBIAL',
+    'ACOES':'AÇÕES',
+    'FUNDO DE INDICE':'FUNDO DE ÍNDICE',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
+  };
+
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^\w\s]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function activeCatCanon(){
+    try{return canon(activeCat || '')}catch(e){return ''}
+  }
+
+  function activeLabel(){
+    const c = activeCatCanon();
+    return c ? (LABELS[c] || c) : 'Todos';
+  }
+
+  function removeLegacyDrawerV85(){
+    try{
+      qsa('#fundFilterDrawer').forEach(el=>el.remove());
+      document.body.classList.remove('filter-sheet-open');
+      const backdrop = qs('#filterBackdrop');
+      if(backdrop) backdrop.remove();
+    }catch(e){}
+  }
+
+  function normalizeDesktopV85(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      removeLegacyDrawerV85();
+
+      const btn = qs('#mobileFilterToggle');
+      if(btn){
+        btn.setAttribute('aria-expanded','false');
+        btn.setAttribute('aria-disabled','true');
+        btn.classList.add('filter-toggle-inert-v85');
+        btn.title = 'Categorias disponíveis no grid abaixo';
+      }
+
+      const btnText = qs('#filterButtonText');
+      if(btnText) btnText.textContent = 'Categorias';
+
+      const count = qs('#filterActiveCount');
+      if(count){
+        count.textContent = '1';
+        count.classList.add('has-active');
+      }
+
+      const result = qs('#filterResultSummary');
+      if(result){
+        const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+        if(n !== null) result.textContent = `${n} fundos encontrados`;
+        result.title = result.textContent || '';
+      }
+
+      const clearTop = qs('#clearFiltersTop');
+      if(clearTop){
+        clearTop.hidden = true;
+        clearTop.classList.remove('is-visible','is-visible-v83');
+        clearTop.setAttribute('aria-hidden','true');
+        clearTop.style.display = 'none';
+      }
+
+      const status = qs('#categoryGridStatus');
+      if(status){
+        const c = activeCatCanon();
+        status.textContent = c ? activeLabel() : 'Todos os fundos';
+        status.title = status.textContent || '';
+      }
+
+      const strip = qs('#activeFilterStrip');
+      if(strip && isDesktop()){
+        strip.classList.add('active','desktop-active-filter-v85');
+        strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
+          `<span class="active-filter-pill active-filter-pill-v85">${activeLabel()}</span>`;
+      }
+    }catch(e){}
+  }
+
+  function interceptCategoriasV85(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText') : null;
+    if(!target) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+    normalizeDesktopV85();
+  }
+
+  function bindV85(){
+    normalizeDesktopV85();
+
+    if(document.documentElement.dataset.v85NoDrawer !== '1'){
+      document.documentElement.dataset.v85NoDrawer = '1';
+      window.addEventListener('click', interceptCategoriasV85, true);
+      window.addEventListener('pointerdown', interceptCategoriasV85, true);
+    }
+
+    setTimeout(normalizeDesktopV85,200);
+    setTimeout(normalizeDesktopV85,800);
+    setTimeout(normalizeDesktopV85,1800);
+
+    console.info('[Catálogo CAIXA] Drawer legado removido e desktop simplificado:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__noDrawerV85){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeDesktopV85();
+      return out;
+    };
+    wrapped.__noDrawerV85 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV85,180));
+  else setTimeout(bindV85,180);
+
+  window.addEventListener('resize',()=>setTimeout(normalizeDesktopV85,80),{passive:true});
+  window.__ELTAUM_REMOVE_LEGACY_DRAWER_V85__ = {sync:normalizeDesktopV85, remove:removeLegacyDrawerV85};
 })();
 

@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 desktop-filter-stable-v83">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 desktop-filter-stable-v85">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_FILTER_LABELS_STABLE_20260606_v83"/>
+<meta name="app-build" content="ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -60,12 +60,12 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=filter-labels-stable-v83" rel="stylesheet"/>
+<link href="style.css?v=remove-legacy-drawer-v85" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=filter-labels-stable-v83"></script>
+<script defer src="app.js?v=remove-legacy-drawer-v85"></script>
 
 </head>
 <body>
@@ -292,41 +292,15 @@ html:not(.app-booting) .page{
 
   <div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
 
-  <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed filter-drawer-category-only-v44" id="fundFilterDrawer" style="margin-bottom:14px" aria-label="Categorias dos fundos">
-    <div class="filter-sheet-head filter-sheet-head-compact category-filter-head-v44">
-      <div>
-        <strong>Categorias dos fundos</strong>
-        <span>Escolha uma classe CAIXA para filtrar rapidamente.</span>
-      </div>
-      <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar categorias">✕</button>
-    </div>
-
-    <div class="category-choice-grid-v44" id="mobileCategoryFiltersV44" aria-label="Selecionar categoria do fundo">
-      <button type="button" class="category-choice-v44 active" data-cat="">Todos os fundos</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA SIMPLES">RF Simples</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA">Renda Fixa</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA REFERENCIADO">RF Referenciado</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA CURTO PRAZO">RF Curto Prazo</button>
-      <button type="button" class="category-choice-v44" data-cat="MULTIMERCADO">Multimercado</button>
-      <button type="button" class="category-choice-v44" data-cat="CAMBIAL">Cambial</button>
-      <button type="button" class="category-choice-v44" data-cat="ACOES">Ações</button>
-      <button type="button" class="category-choice-v44" data-cat="FUNDO DE INDICE">Fundo de Índice</button>
-      <button type="button" class="category-choice-v44" data-cat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP / Privatização</button>
-    </div>
-
-    <!-- Motor legado preservado oculto para manter a filtragem existente funcionando -->
-    <div class="category-hidden-engine-v44" aria-hidden="true">
-      <div class="filter-row filter-group-panel" id="catFilters"><span class="filter-label">Categoria</span><button class="chip active" data-cat="">Todas</button></div>
-      <div class="filter-row filter-group-panel" id="benchmarkFilters"><span class="filter-label">Benchmark</span><button class="chip active" data-benchmark="">Todos</button></div>
-      <div class="filter-row filter-group-panel" id="perfilFilters"><span class="filter-label">Perfil</span><button class="chip active" data-perfil="">Todos</button></div>
-      <div class="filter-row filter-group-panel" id="riscoFilters"><span class="filter-label">Risco</span><button class="chip active" data-risco="">Todos</button></div>
-    </div>
-
-    <div class="filter-sheet-actions filter-sheet-actions-compact category-filter-actions-v44">
-      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar categoria</button>
-      <button type="button" class="filter-action-primary" id="filterApplyBtn">Fechar</button>
-    </div>
+  
+  <!-- Motor de filtros preservado sem gaveta lateral legada -->
+  <div class="category-hidden-engine-v85" aria-hidden="true">
+    <div class="filter-row filter-group-panel" id="catFilters"><span class="filter-label">Categoria</span><button class="chip active" data-cat="">Todas</button></div>
+    <div class="filter-row filter-group-panel" id="benchmarkFilters"><span class="filter-label">Benchmark</span><button class="chip active" data-benchmark="">Todos</button></div>
+    <div class="filter-row filter-group-panel" id="perfilFilters"><span class="filter-label">Perfil</span><button class="chip active" data-perfil="">Todos</button></div>
+    <div class="filter-row filter-group-panel" id="riscoFilters"><span class="filter-label">Risco</span><button class="chip active" data-risco="">Todos</button></div>
   </div>
+
 
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
