@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_MARKET_PRO_20260607_v101');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_RANKING_PRO_20260607_v100');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10262,115 +10262,5 @@ async function sharePainelMercado(){
   setTimeout(normalizeMobileRankingsV100,3000);
 
   window.__ELTAUM_MOBILE_RANKING_PRO_V100__ = {sync:normalizeMobileRankingsV100};
-})();
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v101 — Mobile Mercado profissional + espaçamentos
-   - Reduz espaço entre Rankings e Indicadores de Mercado.
-   - Organiza Resumo de Mercado, Selic/COPOM e CDI no mobile.
-   - Adiciona dicas discretas de arraste onde houver carrossel horizontal.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
-  window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  function ensureAfter(el, html, className){
-    if(!el || !el.parentElement) return null;
-    let hint = el.parentElement.querySelector('.' + className);
-    if(!hint){
-      hint = document.createElement('div');
-      hint.className = className;
-      hint.innerHTML = html;
-      el.insertAdjacentElement('afterend', hint);
-    }
-    return hint;
-  }
-
-  function setOverflowHint(row, hint){
-    if(!row || !hint) return;
-    const hasOverflow = row.scrollWidth > row.clientWidth + 8;
-    hint.hidden = !hasOverflow;
-    row.classList.toggle('market-has-overflow-v101', hasOverflow);
-    if(row.dataset.v101ScrollBound !== '1'){
-      row.dataset.v101ScrollBound = '1';
-      row.addEventListener('scroll', () => {
-        const max = Math.max(0, row.scrollWidth - row.clientWidth);
-        const atEnd = row.scrollLeft >= max - 8;
-        hint.classList.toggle('is-end-v101', atEnd);
-        row.classList.toggle('is-end-v101', atEnd);
-      }, {passive:true});
-    }
-  }
-
-  function normalizeMobileMarketV101(){
-    try{
-      const meta = qs('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-mobile-pro-v101');
-
-      const ranking = qs('#rankingsSection');
-      if(ranking) ranking.classList.add('ranking-market-gap-tight-v101');
-
-      if(!isMobile()) return;
-
-      const closed = qs('#closedMonthLaunch');
-      if(closed) closed.classList.add('closed-month-mobile-pro-v101');
-
-      const selic = qs('.selic-copom-card');
-      if(selic) selic.classList.add('selic-mobile-pro-v101');
-
-      const cdi = qs('.cdi-card-compacto, .cdi-card');
-      if(cdi) cdi.classList.add('cdi-mobile-pro-v101');
-
-      const copomGrid = qs('.selic-copom-card .copom-grid');
-      if(copomGrid){
-        const hint = ensureAfter(copomGrid, '<span>Próximas reuniões</span><strong>Arraste →</strong>', 'market-scroll-hint-v101 copom-scroll-hint-v101');
-        setOverflowHint(copomGrid, hint);
-      }
-
-      const cdiStrip = qs('#cdiMonthStrip');
-      if(cdiStrip){
-        const hint = ensureAfter(cdiStrip, '<span>Histórico mensal do CDI</span><strong>Arraste →</strong>', 'market-scroll-hint-v101 cdi-scroll-hint-v101');
-        setOverflowHint(cdiStrip, hint);
-      }
-
-      qsa('.closed-mini-item').forEach(el=>el.classList.add('closed-mini-mobile-v101'));
-      qsa('.cdi-month-chip').forEach(el=>el.classList.add('cdi-month-chip-mobile-v101'));
-      qsa('.copom-item').forEach(el=>el.classList.add('copom-item-mobile-v101'));
-    }catch(e){}
-  }
-
-  const oldRenderRankings = window.renderRankings || (typeof renderRankings === 'function' ? renderRankings : null);
-  if(typeof oldRenderRankings === 'function' && !oldRenderRankings.__mobileMarketProV101){
-    const wrappedRankings = function(){
-      const out = oldRenderRankings.apply(this, arguments);
-      setTimeout(normalizeMobileMarketV101,80);
-      return out;
-    };
-    wrappedRankings.__mobileMarketProV101 = true;
-    try{ window.renderRankings = wrappedRankings; }catch(e){}
-    try{ renderRankings = wrappedRankings; }catch(e){}
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeMobileMarketV101,180));
-  else setTimeout(normalizeMobileMarketV101,180);
-
-  document.addEventListener('click',()=>setTimeout(normalizeMobileMarketV101,100),true);
-  window.addEventListener('resize',()=>setTimeout(normalizeMobileMarketV101,120),{passive:true});
-
-  setTimeout(normalizeMobileMarketV101,800);
-  setTimeout(normalizeMobileMarketV101,1800);
-  setTimeout(normalizeMobileMarketV101,3200);
-
-  window.__ELTAUM_MOBILE_MARKET_PRO_V101__ = {sync:normalizeMobileMarketV101};
 })();
 
