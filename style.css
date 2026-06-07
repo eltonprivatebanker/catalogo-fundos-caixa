@@ -21717,3 +21717,44 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v91 — Oculta cabeçalho visual das categorias
+════════════════════════════════════════════════════ */
+
+.category-grid-head-v69,
+.category-grid-head-hidden-v91{
+  display:none!important;
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+  height:0!important;
+  min-height:0!important;
+  max-height:0!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+}
+
+@media(min-width:821px){
+  #sec-fundos .catalog-shortcuts-category-grid-v69{
+    min-height:86px!important;
+    padding-top:8px!important;
+    margin-top:8px!important;
+  }
+
+  #sec-fundos .category-grid-v69{
+    margin-top:0!important;
+  }
+
+  #sec-fundos .active-filter-strip{
+    margin-top:8px!important;
+  }
+}
+
+@media(max-width:820px){
+  .category-grid-head-v69{
+    display:none!important;
+  }
+}
+

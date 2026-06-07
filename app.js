@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_RESULT_COUNT_FINAL_20260606_v90');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RESULT_COUNT_FINAL_20260606_v90';
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9456,5 +9456,52 @@ async function sharePainelMercado(){
 
   window.addEventListener('resize',()=>setTimeout(scheduleNormalizeV90,80),{passive:true});
   window.__ELTAUM_RESULT_COUNT_FINAL_V90__ = {sync:scheduleNormalizeV90};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v91 — Oculta cabeçalho visual das categorias
+   - O bloco "Categorias + categoria ativa" era apenas informativo.
+   - A categoria ativa já aparece em "Filtros ativos".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function hideCategoryHeaderV91(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('.category-grid-head-v69').forEach(el=>{
+        el.setAttribute('aria-hidden','true');
+        el.classList.add('category-grid-head-hidden-v91');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__hideCategoryHeaderV91){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      hideCategoryHeaderV91();
+      return out;
+    };
+    wrapped.__hideCategoryHeaderV91 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(hideCategoryHeaderV91,120));
+  else setTimeout(hideCategoryHeaderV91,120);
+
+  setTimeout(hideCategoryHeaderV91,700);
+  setTimeout(hideCategoryHeaderV91,1600);
+
+  window.__ELTAUM_HIDE_CATEGORY_HEADER_V91__ = {sync:hideCategoryHeaderV91};
 })();
 
