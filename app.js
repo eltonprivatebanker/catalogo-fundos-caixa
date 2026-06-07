@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_MARKET_PRO_20260607_v101');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10274,7 +10274,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
+  const BUILD = 'ELTAUM_MOBILE_MARKET_PRO_20260607_v101';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10372,74 +10372,5 @@ async function sharePainelMercado(){
   setTimeout(normalizeMobileMarketV101,3200);
 
   window.__ELTAUM_MOBILE_MARKET_PRO_V101__ = {sync:normalizeMobileMarketV101};
-})();
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v102 — Botão Painel Consultivo Looker Studio
-   Como configurar:
-   1) Publique ou compartilhe seu relatório no Looker Studio.
-   2) Copie o link do relatório.
-   3) Cole abaixo em LOOKER_PANEL_URL.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_LOOKER_PANEL_BUTTON_20260607_v102';
-  window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
-
-  /* Cole aqui o link do seu relatório Looker Studio.
-     Exemplo:
-     const LOOKER_PANEL_URL = 'https://lookerstudio.google.com/reporting/SEU_RELATORIO';
-  */
-  const LOOKER_PANEL_URL = '';
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-
-  function setupLookerPanelButtonV102(){
-    try{
-      const meta = qs('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const btn = qs('#lookerPanelBtn');
-      if(!btn) return;
-
-      const url = (LOOKER_PANEL_URL || btn.dataset.lookerUrl || '').trim();
-
-      if(url){
-        btn.href = url;
-        btn.dataset.lookerUrl = url;
-        btn.classList.remove('is-disabled');
-        btn.removeAttribute('aria-disabled');
-        btn.title = 'Abrir painel consultivo no Looker Studio';
-      }else{
-        btn.href = '#';
-        btn.classList.add('is-disabled');
-        btn.setAttribute('aria-disabled','true');
-        btn.title = 'Cole o link do relatório Looker Studio no app.js, em LOOKER_PANEL_URL';
-      }
-
-      if(btn.dataset.v102Bound !== '1'){
-        btn.dataset.v102Bound = '1';
-        btn.addEventListener('click', function(ev){
-          const currentUrl = (LOOKER_PANEL_URL || btn.dataset.lookerUrl || '').trim();
-          if(currentUrl) return;
-
-          ev.preventDefault();
-          ev.stopPropagation();
-
-          alert('Painel consultivo ainda não configurado. Cole o link do Looker Studio no app.js, na constante LOOKER_PANEL_URL.');
-        });
-      }
-    }catch(e){}
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setupLookerPanelButtonV102,120));
-  else setTimeout(setupLookerPanelButtonV102,120);
-
-  setTimeout(setupLookerPanelButtonV102,700);
-  setTimeout(setupLookerPanelButtonV102,1600);
-
-  window.__ELTAUM_LOOKER_PANEL_BUTTON_V102__ = {sync:setupLookerPanelButtonV102};
 })();
 
