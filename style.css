@@ -21855,3 +21855,115 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v95 — Comparador: nomes de fundos legíveis
+════════════════════════════════════════════════════ */
+
+/* O comparador precisa de scroll horizontal quando há 4-6 fundos.
+   Forçar cada coluna a ter largura mínima evita os nomes encavalarem. */
+.compar-scroll,
+.compar-scroll-readable-v95{
+  overflow:auto!important;
+  max-width:100%!important;
+  scrollbar-gutter:stable both-edges;
+}
+
+.compar-table.compar-table-readable-v95,
+#comparTable.compar-table{
+  width:max-content!important;
+  min-width:100%!important;
+  table-layout:auto!important;
+  border-collapse:collapse!important;
+}
+
+#comparTable th.ct-campo,
+#comparTable td.ct-campo{
+  width:138px!important;
+  min-width:138px!important;
+  max-width:138px!important;
+}
+
+#comparTable th.ct-fundo,
+#comparTable td.ct-val{
+  width:220px!important;
+  min-width:220px!important;
+  max-width:220px!important;
+  box-sizing:border-box!important;
+}
+
+#comparTable th.ct-fundo{
+  vertical-align:top!important;
+  padding:12px 14px 10px!important;
+  white-space:normal!important;
+  overflow:hidden!important;
+}
+
+#comparTable .ct-fundo-nome{
+  display:-webkit-box!important;
+  -webkit-line-clamp:2;
+  -webkit-box-orient:vertical;
+  min-height:32px!important;
+  max-height:36px!important;
+  line-height:1.22!important;
+  white-space:normal!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  overflow-wrap:anywhere!important;
+  word-break:normal!important;
+  font-size:.68rem!important;
+  letter-spacing:.02em!important;
+}
+
+#comparTable .ct-fundo-cat{
+  margin-top:6px!important;
+}
+
+#comparTable .ct-remove{
+  margin-top:6px!important;
+}
+
+/* Ajuda visual: mostra que há rolagem horizontal quando a comparação tem muitas colunas. */
+.compar-scroll-readable-v95::after{
+  content:'';
+  position:sticky;
+  right:0;
+  top:0;
+  display:block;
+  width:18px;
+  height:1px;
+  margin-left:auto;
+  pointer-events:none;
+}
+
+@media(max-width:900px){
+  #comparTable th.ct-campo,
+  #comparTable td.ct-campo{
+    width:118px!important;
+    min-width:118px!important;
+    max-width:118px!important;
+  }
+
+  #comparTable th.ct-fundo,
+  #comparTable td.ct-val{
+    width:190px!important;
+    min-width:190px!important;
+    max-width:190px!important;
+  }
+
+  #comparTable .ct-fundo-nome{
+    font-size:.64rem!important;
+    min-height:31px!important;
+    max-height:34px!important;
+  }
+}
+
+@media(min-width:1200px){
+  #comparTable th.ct-fundo,
+  #comparTable td.ct-val{
+    width:235px!important;
+    min-width:235px!important;
+    max-width:235px!important;
+  }
+}
+

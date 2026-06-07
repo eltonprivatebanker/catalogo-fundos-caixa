@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_COMPARATOR_HEADERS_20260606_v95');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_COMPARATOR_HEADERS_20260606_v95');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9761,5 +9761,66 @@ async function sharePainelMercado(){
   else setTimeout(bindV94,120);
 
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_V94__ = {sync:removeAllNoteMetricsV94};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v95 — Comparador: cabeçalhos legíveis
+   - Evita nomes de fundos encavalados no comparador.
+   - Adiciona title com nome completo e classe de layout.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_COMPARATOR_HEADERS_20260606_v95';
+  window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function enhanceComparatorHeadersV95(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const table = qs('#comparTable');
+      if(table) table.classList.add('compar-table-readable-v95');
+
+      const scroll = qs('.compar-scroll');
+      if(scroll) scroll.classList.add('compar-scroll-readable-v95');
+
+      qsa('#comparTable .ct-fundo-nome').forEach(el=>{
+        const txt = (el.textContent || '').trim();
+        if(txt) el.title = txt;
+      });
+
+      qsa('#comparTable th.ct-fundo').forEach((th,i)=>{
+        th.classList.add('ct-fundo-readable-v95');
+        th.style.setProperty('--compar-col-index', String(i + 1));
+      });
+    }catch(e){}
+  }
+
+  const oldAbrir = window.abrirComparador || (typeof abrirComparador === 'function' ? abrirComparador : null);
+  if(typeof oldAbrir === 'function' && !oldAbrir.__comparatorHeadersV95){
+    const wrappedAbrir = function(){
+      const out = oldAbrir.apply(this, arguments);
+      enhanceComparatorHeadersV95();
+      setTimeout(enhanceComparatorHeadersV95, 60);
+      return out;
+    };
+    wrappedAbrir.__comparatorHeadersV95 = true;
+    try{ window.abrirComparador = wrappedAbrir; }catch(e){}
+    try{ abrirComparador = wrappedAbrir; }catch(e){}
+  }
+
+  document.addEventListener('click',()=>{
+    setTimeout(enhanceComparatorHeadersV95,80);
+  },true);
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(enhanceComparatorHeadersV95,160));
+  else setTimeout(enhanceComparatorHeadersV95,160);
+
+  window.__ELTAUM_COMPARATOR_HEADERS_V95__ = {sync:enhanceComparatorHeadersV95};
 })();
 
