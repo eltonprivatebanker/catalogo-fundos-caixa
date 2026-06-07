@@ -8682,7 +8682,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DATA_FIRST_INIT_20260606_v80';
+  const BUILD = 'ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8746,19 +8746,31 @@ async function sharePainelMercado(){
 })();
 
 
+/* PATCH v79 — app sem boot screen */
+(function(){
+  try{
+    document.documentElement.classList.remove('app-booting');
+    document.documentElement.classList.add('app-ready','no-boot-v79');
+    var boot=document.getElementById('appBootScreen');
+    if(boot) boot.remove();
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81');
+  }catch(e){}
+})();
+
+
 /* ════════════════════════════════════════════════════
-   PATCH v77 — Mobile: filtro unificado e botão limpar persistente
-   Motivo: em celular real, visualViewport/address bar + scripts v74/v75 disputavam
-   o atributo hidden do botão "Limpar filtros". Agora há um único controlador.
+   PATCH v81 — Mobile filtro unificado sem loop
+   - Remove MutationObserver do botão limpar que causava timeout.
+   - Mantém Categoria, Pessoa Física e Ordenação no mobile.
+   - Mantém init "dados primeiro".
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DATA_FIRST_INIT_20260606_v80';
-  window.__ELTAUM_MOBILE_FILTER_UNIFIED_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81';
+  window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
   function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
 
   const CANON_LABEL = {
@@ -8810,45 +8822,40 @@ async function sharePainelMercado(){
   }
 
   function getSortMode(){
-    try{return localStorage.getItem('mobileSortModeV77') || localStorage.getItem('mobileSortModeV75') || window.__mobileSortModeV77 || 'base'}
-    catch(e){return window.__mobileSortModeV77 || 'base'}
+    try{return localStorage.getItem('mobileSortModeV81') || localStorage.getItem('mobileSortModeV75') || 'base'}
+    catch(e){return 'base'}
   }
 
   function setSortMode(mode){
-    window.__mobileSortModeV77 = SORT_MAP[mode] ? mode : 'base';
+    const valid = SORT_MAP[mode] ? mode : 'base';
+    window.__mobileSortModeV81 = valid;
     try{
-      localStorage.setItem('mobileSortModeV77', window.__mobileSortModeV77);
-      localStorage.setItem('mobileSortModeV75', window.__mobileSortModeV77);
+      localStorage.setItem('mobileSortModeV81', valid);
+      localStorage.setItem('mobileSortModeV75', valid);
     }catch(e){}
   }
 
-  /* Ordenação mobile: usa o motor existente, mas o modo "base" preserva a ordem original. */
   try{
-    if(typeof ordenarPorMobileSort === 'function' && !ordenarPorMobileSort.__v77Wrapped){
+    if(typeof ordenarPorMobileSort === 'function' && !ordenarPorMobileSort.__v81Wrapped){
       const originalOrdenarPorMobileSort = ordenarPorMobileSort;
       ordenarPorMobileSort = function(rows){
         const mode = getSortMode();
         const cfg = SORT_MAP[mode] || SORT_MAP.base;
-
-        if(cfg.campo === 'base'){
-          return rows;
-        }
-
+        if(cfg.campo === 'base') return rows;
         try{
           activeMobileSortCampo = cfg.campo;
           activeMobileSortDir = cfg.dir;
         }catch(e){}
-
         return originalOrdenarPorMobileSort(rows);
       };
-      ordenarPorMobileSort.__v77Wrapped = true;
+      ordenarPorMobileSort.__v81Wrapped = true;
     }
   }catch(e){}
 
   function keepMobileCards(){
     try{
       if(!isMobile()) return;
-      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v77-mobile-cards-only');
+      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v81-mobile-cards-only');
       document.body.classList.remove('fund-list-mode');
       try{
         localStorage.setItem('fundMobileView','cards');
@@ -8857,33 +8864,17 @@ async function sharePainelMercado(){
     }catch(e){}
   }
 
-  function hasAnyMobileFilter(){
-    const active = activeCanonCat();
+  function hasMobileFilter(){
     let pf = false;
     try{pf = String(activePerfil || '') === 'PF'}catch(e){}
-    return !!(active || pf || getSortMode() !== 'base');
+    return !!(activeCanonCat() || pf || getSortMode() !== 'base');
   }
 
-  function forceClearButtonState(){
-    const clear = qs('#mobileCategoryClearV74');
-    if(!clear) return;
-
-    const has = hasAnyMobileFilter();
-
-    clear.textContent = 'Limpar filtros';
-    clear.toggleAttribute('hidden', !has);
-    clear.classList.toggle('is-visible-v77', has);
-    clear.setAttribute('aria-hidden', has ? 'false' : 'true');
-
-    document.body.classList.toggle('mobile-has-filter-v77', has);
-  }
-
-  function syncV77(){
+  function syncV81(){
     try{
       const active = activeCanonCat();
-      const label = active ? (CANON_LABEL[active] || active) : 'Todos os fundos';
       const pfActive = String(activePerfil || '') === 'PF';
-      const has = hasAnyMobileFilter();
+      const label = active ? (CANON_LABEL[active] || active) : 'Todos os fundos';
 
       const select = qs('#mobileCategorySelectV74');
       if(select && select.value !== active) select.value = active;
@@ -8901,10 +8892,14 @@ async function sharePainelMercado(){
       const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
       if(result && n !== null) result.textContent = `${n} fundos encontrados`;
 
-      forceClearButtonState();
-
-      const desktopStatus = qs('#categoryGridStatus');
-      if(desktopStatus) desktopStatus.textContent = active ? ('Categoria: ' + label) : 'Todos os fundos';
+      const clear = qs('#mobileCategoryClearV74');
+      if(clear){
+        const has = hasMobileFilter();
+        clear.textContent = 'Limpar filtros';
+        clear.hidden = !has;
+        clear.classList.toggle('is-visible-v81', has);
+        clear.setAttribute('aria-hidden', has ? 'false' : 'true');
+      }
 
       const filterResult = qs('#filterResultSummary');
       if(filterResult && n !== null) filterResult.textContent = `${n} fundos encontrados`;
@@ -8912,14 +8907,13 @@ async function sharePainelMercado(){
       const summary = qs('#mobileFilterSummary');
       if(summary) summary.textContent = active ? ('Categoria: ' + label) : 'Categoria: Todos os fundos';
 
-      /* No mobile, a faixa de filtros ativos fica fora para não alterar altura. */
       const strip = qs('#activeFilterStrip');
       if(strip && isMobile()){
         strip.classList.remove('active');
         strip.innerHTML = '';
       }
 
-      if(isMobile()) keepMobileCards();
+      keepMobileCards();
     }catch(e){}
   }
 
@@ -8936,7 +8930,7 @@ async function sharePainelMercado(){
       if(h > 0){
         locked.push([el, el.style.minHeight || '']);
         el.style.minHeight = h + 'px';
-        el.classList.add('v77-stabilizing');
+        el.classList.add('v81-stabilizing');
       }
     });
 
@@ -8956,24 +8950,23 @@ async function sharePainelMercado(){
         }
       };
 
-      syncV77();
+      syncV81();
       restore();
-      requestAnimationFrame(()=>{syncV77(); restore();});
-      setTimeout(()=>{syncV77(); restore();},90);
+      requestAnimationFrame(()=>{syncV81(); restore();});
+      setTimeout(()=>{syncV81(); restore();},90);
       setTimeout(()=>{
         locked.forEach(([el,old])=>{
           el.style.minHeight = old;
-          el.classList.remove('v77-stabilizing');
+          el.classList.remove('v81-stabilizing');
         });
-        syncV77();
+        syncV81();
         restore();
-      },280);
+      },260);
     }
   }
 
   function applyMobileControls(options){
     const opts = options || {};
-
     preserveViewport(()=>{
       const cat = opts.hasOwnProperty('category') ? opts.category : (qs('#mobileCategorySelectV74')?.value || '');
       const onlyPf = opts.hasOwnProperty('onlyPf') ? !!opts.onlyPf : !!qs('#mobileOnlyPfV75')?.checked;
@@ -8990,7 +8983,7 @@ async function sharePainelMercado(){
         sortCol = -1;
         sortDir = -1;
         window.__favListMode = false;
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'mobile-controls-v77';
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'mobile-controls-v81';
         if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
       }catch(e){}
 
@@ -9006,7 +8999,7 @@ async function sharePainelMercado(){
       try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
 
       keepMobileCards();
-      syncV77();
+      syncV81();
     });
   }
 
@@ -9014,132 +9007,95 @@ async function sharePainelMercado(){
     if(ev){
       ev.preventDefault();
       ev.stopPropagation();
-      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
     }
-
     const sel = qs('#mobileCategorySelectV74');
     const pf = qs('#mobileOnlyPfV75');
     const sort = qs('#mobileSortSelectV75');
-
     if(sel) sel.value = '';
     if(pf) pf.checked = false;
     if(sort) sort.value = 'base';
-
     applyMobileControls({category:'', onlyPf:false, sortMode:'base'});
   }
 
-  function bindV77(){
+  function bindV81(){
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
 
     const sel = qs('#mobileCategorySelectV74');
-    if(sel && sel.dataset.v77Bound !== '1'){
-      sel.dataset.v77Bound = '1';
-      sel.addEventListener('change', ev=>{
-        ev.stopPropagation();
-        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+    if(sel && sel.dataset.v81Bound !== '1'){
+      sel.dataset.v81Bound = '1';
+      sel.addEventListener('change', ()=>{
         applyMobileControls({category:sel.value});
         if(typeof sel.blur === 'function') sel.blur();
-      }, true);
+      });
     }
 
     const pf = qs('#mobileOnlyPfV75');
-    if(pf && pf.dataset.v77Bound !== '1'){
-      pf.dataset.v77Bound = '1';
-      pf.addEventListener('change', ev=>{
-        ev.stopPropagation();
-        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-        applyMobileControls({onlyPf:pf.checked});
-      }, true);
+    if(pf && pf.dataset.v81Bound !== '1'){
+      pf.dataset.v81Bound = '1';
+      pf.addEventListener('change', ()=>applyMobileControls({onlyPf:pf.checked}));
     }
 
     const sort = qs('#mobileSortSelectV75');
-    if(sort && sort.dataset.v77Bound !== '1'){
-      sort.dataset.v77Bound = '1';
+    if(sort && sort.dataset.v81Bound !== '1'){
+      sort.dataset.v81Bound = '1';
       sort.value = getSortMode();
-      sort.addEventListener('change', ev=>{
-        ev.stopPropagation();
-        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      sort.addEventListener('change', ()=>{
         applyMobileControls({sortMode:sort.value});
         if(typeof sort.blur === 'function') sort.blur();
-      }, true);
+      });
     }
 
     const clear = qs('#mobileCategoryClearV74');
-    if(clear && clear.dataset.v77Bound !== '1'){
-      clear.dataset.v77Bound = '1';
-      clear.addEventListener('click', clearMobileControls, true);
-
-      /* Se algum script legado tentar esconder o botão, este observer devolve o estado correto. */
-      try{
-        const obs = new MutationObserver(()=>forceClearButtonState());
-        obs.observe(clear,{attributes:true,attributeFilter:['hidden','class','style','aria-hidden']});
-      }catch(e){}
+    if(clear && clear.dataset.v81Bound !== '1'){
+      clear.dataset.v81Bound = '1';
+      clear.addEventListener('click', clearMobileControls);
     }
 
     keepMobileCards();
-    syncV77();
+    syncV81();
+    setTimeout(()=>{keepMobileCards(); syncV81();},350);
+    setTimeout(()=>{keepMobileCards(); syncV81();},1200);
 
-    setTimeout(()=>{keepMobileCards(); syncV77();},300);
-    setTimeout(()=>{keepMobileCards(); syncV77();},1000);
-    setTimeout(()=>{keepMobileCards(); syncV77();},1800);
+    window.addEventListener('resize',()=>setTimeout(syncV81,80),{passive:true});
+    window.addEventListener('orientationchange',()=>setTimeout(syncV81,250),{passive:true});
 
-    window.addEventListener('resize',()=>setTimeout(syncV77,80),{passive:true});
-    window.addEventListener('orientationchange',()=>setTimeout(syncV77,250),{passive:true});
-    if(window.visualViewport){
-      window.visualViewport.addEventListener('resize',()=>setTimeout(syncV77,80),{passive:true});
-      window.visualViewport.addEventListener('scroll',()=>setTimeout(syncV77,80),{passive:true});
-    }
-
-    console.info('[Catálogo CAIXA] Mobile filtro unificado:', BUILD);
+    console.info('[Catálogo CAIXA] Mobile filtro sem loop:', BUILD);
   }
 
   const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__mobileUnifiedFilterV77){
+  if(typeof oldRender === 'function' && !oldRender.__mobileNoLoopV81){
     const wrapped = function(){
       const out = oldRender.apply(this, arguments);
       keepMobileCards();
-      syncV77();
+      syncV81();
       return out;
     };
-    wrapped.__mobileUnifiedFilterV77 = true;
+    wrapped.__mobileNoLoopV81 = true;
     window.render = wrapped;
   }
 
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV77,180));
-  else setTimeout(bindV77,180);
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV81,180));
+  else setTimeout(bindV81,180);
 
-  window.__ELTAUM_MOBILE_FILTER_UNIFIED_V77__ = {
+  window.__ELTAUM_MOBILE_FILTER_NO_LOOP_V81__ = {
     apply: applyMobileControls,
     clear: clearMobileControls,
-    sync: syncV77
+    sync: syncV81
   };
 })();
 
-
-/* PATCH v79 — app sem boot screen */
-(function(){
-  try{
-    document.documentElement.classList.remove('app-booting');
-    document.documentElement.classList.add('app-ready','no-boot-v79');
-    var boot=document.getElementById('appBootScreen');
-    if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DATA_FIRST_INIT_20260606_v80');
-  }catch(e){}
-})();
-
-
-/* PATCH v80 — monitor de dados principais */
+/* PATCH v81 — monitor de dados principais */
 (function(){
   setTimeout(function(){
     try{
-      var hasRows = Array.isArray(window.allRows) && window.allRows.length > 0;
+      var hasRows = Array.isArray(allRows) && allRows.length > 0;
       var loadMsg = document.getElementById('loadMsg');
       if(loadMsg && loadMsg.style.display !== 'none' && !hasRows){
         loadMsg.innerHTML = '<div style="color:var(--muted)">Ainda tentando carregar <b>dados_atuais.csv</b>...<br><small>Se permanecer assim, confira no console se o arquivo existe na branch publicada.</small></div>';
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro:', 'ELTAUM_DATA_FIRST_INIT_20260606_v80');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_DATA_FIRST_NO_LOOP_20260606_v81');
 })();
 
