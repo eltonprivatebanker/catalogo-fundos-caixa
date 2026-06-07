@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_NOTE_METRICS_20260606_v92');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9555,5 +9555,211 @@ async function sharePainelMercado(){
   document.addEventListener('click',()=>setTimeout(removeNoteMetricsV92,80),true);
 
   window.__ELTAUM_REMOVE_NOTE_METRICS_V92__ = {sync:removeNoteMetricsV92};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v93 — ESC fecha detalhes expandidos
+   - Quando houver linha expandida pelo botão .exp-btn, ESC recolhe.
+   - Mantém tabela/cards e filtros no estado atual.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function hasOpenDetailsV93(){
+    try{
+      if(expandedRows && typeof expandedRows.size === 'number' && expandedRows.size > 0) return true;
+    }catch(e){}
+    return qsa('tr.detail-row, .detail-panel, .fund-card-mobile.expanded, .fund-card-mobile.is-expanded').length > 0 ||
+           qsa('.exp-btn').some(btn => String(btn.textContent || '').includes('▲'));
+  }
+
+  function closeOpenDetailsV93(){
+    let closed = false;
+
+    try{
+      if(expandedRows && typeof expandedRows.clear === 'function' && expandedRows.size > 0){
+        expandedRows.clear();
+        closed = true;
+      }
+    }catch(e){}
+
+    try{
+      qsa('tr.detail-row').forEach(row => {
+        row.remove();
+        closed = true;
+      });
+    }catch(e){}
+
+    try{
+      qsa('.exp-btn').forEach(btn => {
+        if(String(btn.textContent || '').includes('▲')){
+          btn.textContent = '▼';
+          btn.setAttribute('aria-expanded','false');
+          closed = true;
+        }
+      });
+    }catch(e){}
+
+    try{
+      qsa('.fund-card-mobile.expanded, .fund-card-mobile.is-expanded').forEach(card => {
+        card.classList.remove('expanded','is-expanded');
+        closed = true;
+      });
+    }catch(e){}
+
+    if(closed){
+      try{ if(typeof render === 'function') render(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+      setTimeout(()=>{
+        try{ if(window.__ELTAUM_RESULT_COUNT_FINAL_V90) window.__ELTAUM_RESULT_COUNT_FINAL_V90.sync(); }catch(e){}
+        try{ if(window.__ELTAUM_HIDE_CATEGORY_HEADER_V91) window.__ELTAUM_HIDE_CATEGORY_HEADER_V91.sync(); }catch(e){}
+        try{ if(window.__ELTAUM_REMOVE_NOTE_METRICS_V92) window.__ELTAUM_REMOVE_NOTE_METRICS_V92.sync(); }catch(e){}
+      },60);
+    }
+
+    return closed;
+  }
+
+  function handleEscV93(ev){
+    if(ev.key !== 'Escape') return;
+    if(!hasOpenDetailsV93()) return;
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+
+    closeOpenDetailsV93();
+  }
+
+  function enhanceButtonsV93(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('.exp-btn').forEach(btn=>{
+        if(btn.dataset.v93EscReady === '1') return;
+        btn.dataset.v93EscReady = '1';
+        btn.title = 'Abrir detalhes. Pressione ESC para fechar.';
+        btn.setAttribute('aria-label','Abrir ou fechar detalhes do fundo');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__escCloseDetailsV93){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      enhanceButtonsV93();
+      return out;
+    };
+    wrapped.__escCloseDetailsV93 = true;
+    window.render = wrapped;
+  }
+
+  if(document.documentElement.dataset.v93EscCloseBound !== '1'){
+    document.documentElement.dataset.v93EscCloseBound = '1';
+    document.addEventListener('keydown', handleEscV93, true);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(enhanceButtonsV93,120));
+  else setTimeout(enhanceButtonsV93,120);
+
+  setTimeout(enhanceButtonsV93,700);
+  setTimeout(enhanceButtonsV93,1600);
+
+  window.__ELTAUM_ESC_CLOSE_DETAILS_V93__ = {
+    close: closeOpenDetailsV93,
+    sync: enhanceButtonsV93
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v94 — Remove métricas redundantes também no mobile
+   - Remove Ano, 12M e % CDI da leitura rápida em detalhes desktop e mobile.
+   - Mantém apenas badge + texto interpretativo + disclaimer.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_REMOVE_MOBILE_NOTE_METRICS_20260606_v94';
+  window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function removeAllNoteMetricsV94(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const selectors = [
+        '.fund-note-metrics',
+        '.fund-quick-note-metrics',
+        '.mobile-fund-note-metrics',
+        '.mobile-note-metrics',
+        '.fund-card-note-metrics',
+        '.fund-card-mobile .fund-note-metrics',
+        '.fund-card-mobile .fund-quick-note-metrics'
+      ];
+
+      qsa(selectors.join(',')).forEach(el => el.remove());
+
+      qsa('.fund-note, .fund-quick-note, .fund-card-mobile, .mobile-fund-detail, .detail-panel').forEach(el => {
+        el.classList.add('note-metrics-removed-v94');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__removeMobileNoteMetricsV94){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      removeAllNoteMetricsV94();
+      return out;
+    };
+    wrapped.__removeMobileNoteMetricsV94 = true;
+    window.render = wrapped;
+  }
+
+  const oldRenderMobileCards = window.renderMobileFundCards || (typeof renderMobileFundCards === 'function' ? renderMobileFundCards : null);
+  if(typeof oldRenderMobileCards === 'function' && !oldRenderMobileCards.__removeMobileNoteMetricsV94){
+    const wrappedMobile = function(){
+      const out = oldRenderMobileCards.apply(this, arguments);
+      removeAllNoteMetricsV94();
+      return out;
+    };
+    wrappedMobile.__removeMobileNoteMetricsV94 = true;
+    try{ window.renderMobileFundCards = wrappedMobile; }catch(e){}
+    try{ renderMobileFundCards = wrappedMobile; }catch(e){}
+  }
+
+  function bindV94(){
+    removeAllNoteMetricsV94();
+
+    // Quando abrir "Mais detalhes" no mobile ou expandir linha no desktop, remove logo após renderizar.
+    document.addEventListener('click', () => {
+      setTimeout(removeAllNoteMetricsV94, 40);
+      setTimeout(removeAllNoteMetricsV94, 180);
+    }, true);
+
+    setTimeout(removeAllNoteMetricsV94, 600);
+    setTimeout(removeAllNoteMetricsV94, 1400);
+    setTimeout(removeAllNoteMetricsV94, 2600);
+
+    console.info('[Catálogo CAIXA] Métricas redundantes removidas da leitura rápida mobile:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV94,120));
+  else setTimeout(bindV94,120);
+
+  window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_V94__ = {sync:removeAllNoteMetricsV94};
 })();
 
