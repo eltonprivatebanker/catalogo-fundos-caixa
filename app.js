@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_RANKING_PRO_20260607_v100');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10262,5 +10262,284 @@ async function sharePainelMercado(){
   setTimeout(normalizeMobileRankingsV100,3000);
 
   window.__ELTAUM_MOBILE_RANKING_PRO_V100__ = {sync:normalizeMobileRankingsV100};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v101 — Mobile Mercado profissional + espaçamentos
+   - Reduz espaço entre Rankings e Indicadores de Mercado.
+   - Organiza Resumo de Mercado, Selic/COPOM e CDI no mobile.
+   - Adiciona dicas discretas de arraste onde houver carrossel horizontal.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function ensureAfter(el, html, className){
+    if(!el || !el.parentElement) return null;
+    let hint = el.parentElement.querySelector('.' + className);
+    if(!hint){
+      hint = document.createElement('div');
+      hint.className = className;
+      hint.innerHTML = html;
+      el.insertAdjacentElement('afterend', hint);
+    }
+    return hint;
+  }
+
+  function setOverflowHint(row, hint){
+    if(!row || !hint) return;
+    const hasOverflow = row.scrollWidth > row.clientWidth + 8;
+    hint.hidden = !hasOverflow;
+    row.classList.toggle('market-has-overflow-v101', hasOverflow);
+    if(row.dataset.v101ScrollBound !== '1'){
+      row.dataset.v101ScrollBound = '1';
+      row.addEventListener('scroll', () => {
+        const max = Math.max(0, row.scrollWidth - row.clientWidth);
+        const atEnd = row.scrollLeft >= max - 8;
+        hint.classList.toggle('is-end-v101', atEnd);
+        row.classList.toggle('is-end-v101', atEnd);
+      }, {passive:true});
+    }
+  }
+
+  function normalizeMobileMarketV101(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const mercado = qs('#sec-mercado');
+      if(mercado) mercado.classList.add('market-mobile-pro-v101');
+
+      const ranking = qs('#rankingsSection');
+      if(ranking) ranking.classList.add('ranking-market-gap-tight-v101');
+
+      if(!isMobile()) return;
+
+      const closed = qs('#closedMonthLaunch');
+      if(closed) closed.classList.add('closed-month-mobile-pro-v101');
+
+      const selic = qs('.selic-copom-card');
+      if(selic) selic.classList.add('selic-mobile-pro-v101');
+
+      const cdi = qs('.cdi-card-compacto, .cdi-card');
+      if(cdi) cdi.classList.add('cdi-mobile-pro-v101');
+
+      const copomGrid = qs('.selic-copom-card .copom-grid');
+      if(copomGrid){
+        const hint = ensureAfter(copomGrid, '<span>Próximas reuniões</span><strong>Arraste →</strong>', 'market-scroll-hint-v101 copom-scroll-hint-v101');
+        setOverflowHint(copomGrid, hint);
+      }
+
+      const cdiStrip = qs('#cdiMonthStrip');
+      if(cdiStrip){
+        const hint = ensureAfter(cdiStrip, '<span>Histórico mensal do CDI</span><strong>Arraste →</strong>', 'market-scroll-hint-v101 cdi-scroll-hint-v101');
+        setOverflowHint(cdiStrip, hint);
+      }
+
+      qsa('.closed-mini-item').forEach(el=>el.classList.add('closed-mini-mobile-v101'));
+      qsa('.cdi-month-chip').forEach(el=>el.classList.add('cdi-month-chip-mobile-v101'));
+      qsa('.copom-item').forEach(el=>el.classList.add('copom-item-mobile-v101'));
+    }catch(e){}
+  }
+
+  const oldRenderRankings = window.renderRankings || (typeof renderRankings === 'function' ? renderRankings : null);
+  if(typeof oldRenderRankings === 'function' && !oldRenderRankings.__mobileMarketProV101){
+    const wrappedRankings = function(){
+      const out = oldRenderRankings.apply(this, arguments);
+      setTimeout(normalizeMobileMarketV101,80);
+      return out;
+    };
+    wrappedRankings.__mobileMarketProV101 = true;
+    try{ window.renderRankings = wrappedRankings; }catch(e){}
+    try{ renderRankings = wrappedRankings; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeMobileMarketV101,180));
+  else setTimeout(normalizeMobileMarketV101,180);
+
+  document.addEventListener('click',()=>setTimeout(normalizeMobileMarketV101,100),true);
+  window.addEventListener('resize',()=>setTimeout(normalizeMobileMarketV101,120),{passive:true});
+
+  setTimeout(normalizeMobileMarketV101,800);
+  setTimeout(normalizeMobileMarketV101,1800);
+  setTimeout(normalizeMobileMarketV101,3200);
+
+  window.__ELTAUM_MOBILE_MARKET_PRO_V101__ = {sync:normalizeMobileMarketV101};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v102 — Botão Painel Consultivo Looker Studio
+   Como configurar:
+   1) Publique ou compartilhe seu relatório no Looker Studio.
+   2) Copie o link do relatório.
+   3) Cole abaixo em LOOKER_PANEL_URL.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
+
+  /* Cole aqui o link do seu relatório Looker Studio.
+     Exemplo:
+     const LOOKER_PANEL_URL = 'https://lookerstudio.google.com/reporting/SEU_RELATORIO';
+  */
+  const LOOKER_PANEL_URL = '';
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+
+  function setupLookerPanelButtonV102(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const btn = qs('#lookerPanelBtn');
+      if(!btn) return;
+
+      const url = (LOOKER_PANEL_URL || btn.dataset.lookerUrl || '').trim();
+
+      if(url){
+        btn.href = url;
+        btn.dataset.lookerUrl = url;
+        btn.classList.remove('is-disabled');
+        btn.removeAttribute('aria-disabled');
+        btn.title = 'Abrir painel consultivo no Looker Studio';
+      }else{
+        btn.href = '#';
+        btn.classList.add('is-disabled');
+        btn.setAttribute('aria-disabled','true');
+        btn.title = 'Cole o link do relatório Looker Studio no app.js, em LOOKER_PANEL_URL';
+      }
+
+      if(btn.dataset.v102Bound !== '1'){
+        btn.dataset.v102Bound = '1';
+        btn.addEventListener('click', function(ev){
+          const currentUrl = (LOOKER_PANEL_URL || btn.dataset.lookerUrl || '').trim();
+          if(currentUrl) return;
+
+          ev.preventDefault();
+          ev.stopPropagation();
+
+          alert('Painel consultivo ainda não configurado. Cole o link do Looker Studio no app.js, na constante LOOKER_PANEL_URL.');
+        });
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setupLookerPanelButtonV102,120));
+  else setTimeout(setupLookerPanelButtonV102,120);
+
+  setTimeout(setupLookerPanelButtonV102,700);
+  setTimeout(setupLookerPanelButtonV102,1600);
+
+  window.__ELTAUM_LOOKER_PANEL_BUTTON_V102__ = {sync:setupLookerPanelButtonV102};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v103 — Mobile: paginação volta ao primeiro card
+   Problema: ao trocar página no mobile, o usuário continuava no ponto
+   da paginação e precisava procurar o primeiro card novo.
+   Solução: após renderizar a nova página, rolar para o primeiro card.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_20260607_v103';
+  window.__ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function stickyOffsetV103(){
+    if(!isMobile()) return 24;
+
+    const topSearch = qs('.top-search, .global-search, .main-search, .search-shell, .search-wrap');
+    const measured = topSearch ? Math.ceil(topSearch.getBoundingClientRect().height) : 0;
+
+    /* Altura visual aproximada da busca fixa + respiro. */
+    return Math.max(88, Math.min(132, measured + 54));
+  }
+
+  function getFundListStartTargetV103(){
+    if(isMobile()){
+      return (
+        qs('#mobileFundCards .fund-card-mobile') ||
+        qs('#mobileFundCards > *') ||
+        qs('#mobileFundCards') ||
+        qs('#sec-fundos .fund-card-mobile') ||
+        qs('#sec-fundos')
+      );
+    }
+
+    return (
+      qs('#sec-fundos .table-wrap') ||
+      qs('#mainTable') ||
+      qs('#sec-fundos')
+    );
+  }
+
+  function scrollToFundResultsStartV103(opts){
+    const target = getFundListStartTargetV103();
+    if(!target) return;
+
+    const offset = stickyOffsetV103();
+    const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
+
+    window.scrollTo({
+      top: Math.max(0, y),
+      behavior: opts && opts.instant ? 'auto' : 'smooth'
+    });
+  }
+
+  /* Sobrescreve a função usada pelo renderPagination legado. */
+  try{
+    window.scrollToFundResultsStart = scrollToFundResultsStartV103;
+    // Em escopo global sem module, isso também atualiza a binding usada pelos listeners.
+    scrollToFundResultsStart = scrollToFundResultsStartV103;
+  }catch(e){}
+
+  function bindPaginationGuardV103(){
+    const pageBtns = qs('#pageBtns');
+    if(!pageBtns || pageBtns.dataset.v103Bound === '1') return;
+
+    pageBtns.dataset.v103Bound = '1';
+    pageBtns.addEventListener('click', function(ev){
+      const btn = ev.target && ev.target.closest ? ev.target.closest('.page-btn') : null;
+      if(!btn || btn.disabled) return;
+
+      /* Espera o clique legado atualizar currentPage e renderizar os cards. */
+      requestAnimationFrame(()=>requestAnimationFrame(()=>scrollToFundResultsStartV103()));
+      setTimeout(()=>scrollToFundResultsStartV103(), 160);
+      setTimeout(()=>scrollToFundResultsStartV103({instant:true}), 420);
+    }, true);
+  }
+
+  function setupV103(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      bindPaginationGuardV103();
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setupV103,120));
+  else setTimeout(setupV103,120);
+
+  setTimeout(setupV103,700);
+  setTimeout(setupV103,1600);
+
+  window.__ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_V103__ = {
+    sync: setupV103,
+    scroll: scrollToFundResultsStartV103
+  };
 })();
 
