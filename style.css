@@ -21474,3 +21474,153 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v88 — Desktop: topbar reorganizada e select legível
+════════════════════════════════════════════════════ */
+
+@media(min-width:821px){
+  #sec-fundos .fund-controls-v2{
+    display:grid!important;
+    grid-template-columns:minmax(280px,1fr) 220px 220px 205px 300px 170px!important;
+    align-items:center!important;
+    gap:10px!important;
+  }
+
+  #sec-fundos #mobileFilterBar{
+    width:220px!important;
+    min-width:220px!important;
+    max-width:220px!important;
+    height:40px!important;
+    padding:0 12px!important;
+  }
+
+  #sec-fundos #filterResultSummary{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    text-align:left!important;
+  }
+
+  #sec-fundos .exhibition-control{
+    width:220px!important;
+    min-width:220px!important;
+    max-width:220px!important;
+    height:40px!important;
+    display:grid!important;
+    grid-template-columns:auto 1fr!important;
+    align-items:center!important;
+    gap:8px!important;
+    padding:0 10px!important;
+    border-radius:12px!important;
+  }
+
+  #sec-fundos .exhibition-control span{
+    width:auto!important;
+    min-width:58px!important;
+    max-width:none!important;
+    display:inline-block!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font-size:.62rem!important;
+    letter-spacing:.10em!important;
+  }
+
+  #sec-fundos .exhibition-control .ctrl-select,
+  #sec-fundos #perPage{
+    width:100%!important;
+    min-width:132px!important;
+    max-width:none!important;
+    padding-left:10px!important;
+    padding-right:28px!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font-size:.72rem!important;
+  }
+
+  #sec-fundos .desktop-table-mode-control{
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+    height:40px!important;
+  }
+
+  #sec-fundos .desktop-cdi-sort-control{
+    width:300px!important;
+    min-width:300px!important;
+    max-width:300px!important;
+    height:40px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap{
+    width:170px!important;
+    min-width:170px!important;
+    max-width:170px!important;
+    height:40px!important;
+  }
+}
+
+@media(min-width:821px) and (max-width:1380px){
+  #sec-fundos .fund-controls-v2{
+    grid-template-columns:minmax(250px,1fr) 205px 205px 195px 275px 160px!important;
+  }
+
+  #sec-fundos #mobileFilterBar{
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+  }
+
+  #sec-fundos .exhibition-control{
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+    gap:6px!important;
+  }
+
+  #sec-fundos .exhibition-control span{
+    min-width:54px!important;
+    font-size:.58rem!important;
+  }
+
+  #sec-fundos #perPage{
+    min-width:125px!important;
+    font-size:.68rem!important;
+    padding-left:8px!important;
+    padding-right:24px!important;
+  }
+
+  #sec-fundos .desktop-table-mode-control{
+    width:195px!important;
+    min-width:195px!important;
+    max-width:195px!important;
+  }
+
+  #sec-fundos .desktop-cdi-sort-control{
+    width:275px!important;
+    min-width:275px!important;
+    max-width:275px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap{
+    width:160px!important;
+    min-width:160px!important;
+    max-width:160px!important;
+  }
+}
+
+@media(min-width:821px) and (max-width:1240px){
+  #sec-fundos .fund-controls-v2{
+    grid-template-columns:minmax(240px,1fr) 190px 200px 190px 255px!important;
+  }
+
+  #sec-fundos .compact-toggle-wrap{
+    grid-column:1 / -1!important;
+    width:100%!important;
+    max-width:none!important;
+    justify-content:flex-end!important;
+  }
+}
+

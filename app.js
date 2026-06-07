@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
+  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
+  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
+  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
+  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
+  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9148,5 +9148,70 @@ async function sharePainelMercado(){
 
   window.addEventListener('resize',()=>setTimeout(syncV87,80),{passive:true});
   window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__ = {sync:syncV87, apply:applyPresetExact};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v88 — Desktop: topbar reorganizada
+   - Mantém o filtro exato da v87.
+   - Ajusta textos/labels da barra para não cortar "Todos os fundos".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_DESKTOP_TOPBAR_REORG_20260606_v88';
+  window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+
+  function normalizeTopbarV88(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const perPage = qs('#perPage');
+      if(perPage){
+        const all = perPage.querySelector('option[value="9999"]');
+        if(all) all.textContent = 'Todos os fundos';
+        const five = perPage.querySelector('option[value="5"]');
+        if(five) five.textContent = '05 por página';
+        perPage.setAttribute('aria-label','Quantidade de fundos exibidos');
+        perPage.title = perPage.options[perPage.selectedIndex]?.textContent || 'Exibição';
+      }
+
+      const exhibition = qs('.exhibition-control');
+      if(exhibition){
+        exhibition.title = 'Quantidade de fundos exibidos na tabela';
+      }
+
+      const result = qs('#filterResultSummary');
+      if(result){
+        result.title = result.textContent || '';
+      }
+
+      if(isDesktop()){
+        document.body.classList.add('desktop-topbar-v88');
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeTopbarV88,160));
+  else setTimeout(normalizeTopbarV88,160);
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__desktopTopbarV88){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeTopbarV88();
+      return out;
+    };
+    wrapped.__desktopTopbarV88 = true;
+    window.render = wrapped;
+  }
+
+  window.addEventListener('resize',()=>setTimeout(normalizeTopbarV88,80),{passive:true});
+  setTimeout(normalizeTopbarV88,700);
+  setTimeout(normalizeTopbarV88,1600);
 })();
 
