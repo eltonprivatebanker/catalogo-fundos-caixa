@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MOBILE_RANKING_PRO_20260607_v100');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_PTAX_SCROLL_HINT_20260607_v99';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10173,5 +10173,94 @@ async function sharePainelMercado(){
   setTimeout(normalizePtaxScrollHintsV99,3000);
 
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__ = {sync:normalizePtaxScrollHintsV99};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v100 — Mobile Rankings profissional + paginação justa
+   - Reduz o espaço entre paginação de fundos e a seção Rankings.
+   - Deixa nomes dos fundos legíveis no mobile.
+   - Reorganiza os blocos de rankings para leitura vertical.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MOBILE_RANKING_PRO_20260607_v100';
+  window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function normalizeMobileRankingsV100(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(!isMobile()) return;
+
+      const secFundos = qs('#sec-fundos');
+      if(secFundos) secFundos.classList.add('funds-pagination-tight-v100');
+
+      const pagination = qs('#sec-fundos .pagination-row') || qs('.pagination-row');
+      if(pagination) pagination.classList.add('pagination-tight-v100');
+
+      const rankings = qs('#rankingsSection') || qs('#sec-ranking') || qs('.ranking-section');
+      if(rankings) rankings.classList.add('rankings-mobile-pro-v100');
+
+      qsa('#rankingsSection .ranking-exec-card, #sec-ranking .ranking-exec-card, .ranking-exec-card').forEach(card=>{
+        card.classList.add('ranking-summary-card-mobile-v100');
+      });
+
+      qsa('#rankingsSection .ranking-top-row, #sec-ranking .ranking-top-row, .ranking-top-row').forEach((row,idx)=>{
+        row.classList.add('ranking-top-row-mobile-v100');
+        row.style.setProperty('--rank-row-index', String(idx + 1));
+      });
+
+      qsa('#rankingsSection .ranking-cat-mini, #sec-ranking .ranking-cat-mini, .ranking-cat-mini').forEach(card=>{
+        card.classList.add('ranking-cat-mini-mobile-v100');
+      });
+
+      qsa('#rankingsSection .ranking-risk-row, #sec-ranking .ranking-risk-row, .ranking-risk-row').forEach(row=>{
+        row.classList.add('ranking-risk-row-mobile-v100');
+      });
+    }catch(e){}
+  }
+
+  const oldRenderRankings = window.renderRankings || (typeof renderRankings === 'function' ? renderRankings : null);
+  if(typeof oldRenderRankings === 'function' && !oldRenderRankings.__mobileRankingProV100){
+    const wrappedRankings = function(){
+      const out = oldRenderRankings.apply(this, arguments);
+      normalizeMobileRankingsV100();
+      setTimeout(normalizeMobileRankingsV100,80);
+      return out;
+    };
+    wrappedRankings.__mobileRankingProV100 = true;
+    try{ window.renderRankings = wrappedRankings; }catch(e){}
+    try{ renderRankings = wrappedRankings; }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__mobileRankingProV100){
+    const wrappedRender = function(){
+      const out = oldRender.apply(this, arguments);
+      setTimeout(normalizeMobileRankingsV100,80);
+      return out;
+    };
+    wrappedRender.__mobileRankingProV100 = true;
+    window.render = wrappedRender;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeMobileRankingsV100,160));
+  else setTimeout(normalizeMobileRankingsV100,160);
+
+  document.addEventListener('click',()=>setTimeout(normalizeMobileRankingsV100,100),true);
+  window.addEventListener('resize',()=>setTimeout(normalizeMobileRankingsV100,120),{passive:true});
+
+  setTimeout(normalizeMobileRankingsV100,700);
+  setTimeout(normalizeMobileRankingsV100,1600);
+  setTimeout(normalizeMobileRankingsV100,3000);
+
+  window.__ELTAUM_MOBILE_RANKING_PRO_V100__ = {sync:normalizeMobileRankingsV100};
 })();
 
