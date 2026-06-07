@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10274,7 +10274,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10385,7 +10385,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10458,7 +10458,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10571,7 +10571,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10708,7 +10708,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10835,7 +10835,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_DRAG_STANDARD_20260607_v109';
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
   window.__ELTAUM_MICRO_CDI_DRAG_STANDARD_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11028,5 +11028,120 @@ async function sharePainelMercado(){
   window.__ELTAUM_MICRO_CDI_DRAG_STANDARD_V109__ = {
     sync: syncV109
   };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v110 — Corrige sumiço dos rótulos/meses no mobile
+   Ajuste sobre a v109:
+   - Não depende de overflow para exibir "Arraste →".
+   - Reorganiza os chips existentes do CDI sem apagar o conteúdo.
+   - Preserva a solução de paginação v108.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_FIX_MOBILE_CDI_LABELS_20260607_v110';
+  window.__ELTAUM_FIX_MOBILE_CDI_LABELS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function setBuildV110(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  function ensureLabelV110(container, label, type){
+    if(!container || !container.parentElement || !isMobile()) return null;
+
+    const cls = type === 'copom' ? 'copom-scroll-label-v109' : 'cdi-scroll-label-v109';
+    let row = container.parentElement.querySelector('.' + cls);
+
+    if(!row){
+      row = document.createElement('div');
+      row.className = 'market-mobile-scroll-label-v109 ' + cls + ' label-fixed-v110';
+      row.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
+      container.insertAdjacentElement('beforebegin', row);
+    }else{
+      row.classList.add('label-fixed-v110');
+      const span = row.querySelector('span');
+      const strong = row.querySelector('strong');
+      if(span) span.textContent = label;
+      if(strong) strong.textContent = 'Arraste →';
+    }
+
+    /* Na v109 o hidden dependia de overflow. No mobile, deixamos visível para orientar o usuário. */
+    row.hidden = false;
+    row.removeAttribute('hidden');
+    return row;
+  }
+
+  function normalizeCdiMonthOrderV110(){
+    const strip = qs('#cdiMonthStrip');
+    if(!strip || !isMobile()) return;
+
+    const chips = qsa('.cdi-month-chip', strip);
+    if(chips.length < 2) return;
+
+    const monthMap = {
+      'JAN':1,'FEV':2,'MAR':3,'ABR':4,'MAI':5,'JUN':6,
+      'JUL':7,'AGO':8,'SET':9,'OUT':10,'NOV':11,'DEZ':12
+    };
+
+    function chipScore(chip){
+      const raw = (chip.querySelector('.m')?.textContent || chip.textContent || '').trim().toUpperCase();
+      const m = raw.match(/(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)(?:\/(\d{4}))?/);
+      if(!m) return -1;
+      const year = Number(m[2] || new Date().getFullYear());
+      return year * 100 + (monthMap[m[1]] || 0);
+    }
+
+    const ordered = [...chips].sort((a,b) => chipScore(b) - chipScore(a));
+    ordered.forEach(chip => strip.appendChild(chip));
+  }
+
+  function cleanupCompressedHintsV110(){
+    qsa('#sec-mercado .market-scroll-hint-v101, #sec-mercado .copom-scroll-hint-v101, #sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
+
+    qsa('#sec-mercado .market-old-hint-hidden-v109').forEach(el => {
+      const txt = (el.textContent || '').trim().toLowerCase();
+      if(txt.includes('arraste')) el.remove();
+    });
+  }
+
+  function syncV110(){
+    try{
+      setBuildV110();
+
+      cleanupCompressedHintsV110();
+
+      const copom = qs('#copomMeetings');
+      if(copom) ensureLabelV110(copom, 'Próximas reuniões', 'copom');
+
+      const cdi = qs('#cdiMonthStrip');
+      if(cdi){
+        normalizeCdiMonthOrderV110();
+        ensureLabelV110(cdi, 'Histórico mensal do CDI', 'cdi');
+      }
+
+      if(window.__ELTAUM_MICRO_CDI_DRAG_STANDARD_V109__){
+        window.__ELTAUM_MICRO_CDI_DRAG_STANDARD_V109__.sync = syncV110;
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(syncV110,160));
+  else setTimeout(syncV110,160);
+
+  document.addEventListener('click',()=>setTimeout(syncV110,80),true);
+  window.addEventListener('resize',()=>setTimeout(syncV110,120),{passive:true});
+
+  setTimeout(syncV110,700);
+  setTimeout(syncV110,1800);
+  setTimeout(syncV110,3200);
+
+  window.__ELTAUM_FIX_MOBILE_CDI_LABELS_V110__ = { sync: syncV110 };
 })();
 
