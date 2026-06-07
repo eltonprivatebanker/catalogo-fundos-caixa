@@ -7175,261 +7175,6 @@ async function sharePainelMercado(){
 
   console.info('[' + BUILD + '] instalado.');
 })();
-/* Patch final — atalhos do catálogo no desktop/mobile.
-   Build: ELTAUM_TABS_FORCE_20260602_v10
-   Ajuste v10: reduz piscadas/pulos ao filtrar grupos.
-   - Grupos (Renda Fixa, Multimercado, Ações, Cambial e FMP) filtram diretamente a base e renderizam uma vez.
-   - Remove o scrollIntoView automático que fazia a tela dar salto no desktop.
-   - Reduz os eventos de clique e aplica debounce para evitar renderizações duplicadas. */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v10';
-  const GROUP_PRESETS=new Set(['renda-fixa','multimercado','acoes','cambial','fmp']);
-  const VALID_PRESETS=new Set(['all','favoritos','cdi','conservador','ipca','renda-fixa','multimercado','acoes','cambial','fmp']);
-  window.__ELTAUM_SHORTCUT_FILTERS_BUILD__=BUILD;
-  window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'';
-  console.info('[Catálogo CAIXA] Patch atalhos/filtros ativo:', BUILD);
-  console.info('[Catálogo CAIXA] Correção de overlay/clique dos atalhos ativa: ELTAUM_OVERLAY_CLICK_FIX_20260602_v10');
-
-  function norm(v){
-    return String(v||'')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g,'')
-      .replace(/\s+/g,' ')
-      .trim()
-      .toUpperCase();
-  }
-
-  function rowCategory(row){ return norm(row && row['Categoria']); }
-  function rowName(row){ return norm(row && row['Fundo']); }
-
-  function rowMatchesGroup(row,preset){
-    const cat=rowCategory(row);
-    const nome=rowName(row);
-    if(preset==='renda-fixa') return cat.includes('RENDA FIXA');
-    if(preset==='multimercado') return cat.includes('MULTIMERCADO');
-    if(preset==='acoes') return cat.includes('ACOES') || cat.includes('ACAO') || nome.includes('ACOES') || nome.includes('ACAO');
-    if(preset==='cambial') return cat.includes('CAMBIAL') || nome.includes('CAMBIAL') || nome.includes('DOLAR') || nome.includes('CAMBIO');
-    if(preset==='fmp') return cat.includes('PRIVATIZACAO') || cat.includes('FMP') || nome.includes('FMP') || nome.includes('FGTS');
-    return true;
-  }
-
-  function rowMatchesSearch(row){
-    const input=document.getElementById('searchInput');
-    const q=norm(input && input.value);
-    if(!q) return true;
-    return norm(Object.values(row||{}).join(' ')).includes(q);
-  }
-
-  function presetLabel(preset){
-    return ({
-      'renda-fixa':'Renda Fixa',
-      'multimercado':'Multimercado',
-      'acoes':'Ações',
-      'cambial':'Cambial',
-      'fmp':'FMP',
-      'cdi':'CDI',
-      'ipca':'IPCA',
-      'conservador':'Conservador',
-      'favoritos':'Favoritos',
-      'all':'Todos'
-    })[preset] || preset || 'Todos';
-  }
-
-  function keepFundAreaStable(fn){
-    const wrap=document.querySelector('.table-wrap');
-    const cards=document.getElementById('mobileFundCards');
-    const wrapH=wrap ? Math.ceil(wrap.getBoundingClientRect().height) : 0;
-    const cardsH=cards ? Math.ceil(cards.getBoundingClientRect().height) : 0;
-
-    if(wrap && wrapH>0){
-      wrap.style.minHeight=wrapH+'px';
-      wrap.classList.add('elton-filter-stabilizing');
-    }
-    if(cards && cardsH>0){
-      cards.style.minHeight=cardsH+'px';
-      cards.classList.add('elton-filter-stabilizing');
-    }
-
-    let out;
-    try{ out=fn(); }
-    finally{
-      setTimeout(()=>{
-        if(wrap){ wrap.style.minHeight=''; wrap.classList.remove('elton-filter-stabilizing'); }
-        if(cards){ cards.style.minHeight=''; cards.classList.remove('elton-filter-stabilizing'); }
-      },180);
-    }
-    return out;
-  }
-
-  function syncShortcutVisual(preset){
-    const active=preset || window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ || 'all';
-    document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]').forEach(btn=>{
-      const on=(btn.dataset.preset||'')===active || (active==='all' && (btn.dataset.preset||'')==='all');
-      btn.classList.toggle('active',on);
-      btn.setAttribute('aria-pressed',on?'true':'false');
-    });
-
-    const summary=document.getElementById('mobileFilterSummary');
-    if(summary){
-      if(active==='all' || !active) summary.textContent='Filtros: todos';
-      else if(GROUP_PRESETS.has(active)) summary.textContent='Filtros: '+presetLabel(active);
-    }
-
-    const count=document.getElementById('filterActiveCount');
-    if(count){
-      if(active && active!=='all'){
-        count.textContent='1';
-        count.classList.add('has-active');
-      }else{
-        count.textContent='0';
-        count.classList.remove('has-active');
-      }
-    }
-
-    const strip=document.getElementById('activeFilterStrip');
-    if(strip && GROUP_PRESETS.has(active)){
-      strip.classList.add('active');
-      strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-elton-clear-shortcut="1"><small>Grupo</small>${presetLabel(active)}<span>×</span></button><button type="button" class="active-filter-clear" data-elton-clear-shortcut="1">Limpar tudo</button>`;
-    }else if(strip && (active==='all' || !active)){
-      strip.classList.remove('active');
-      if(strip.querySelector('[data-elton-clear-shortcut]')) strip.innerHTML='';
-    }
-  }
-
-  function resetBaseFiltersForShortcut(){
-    try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; }catch(e){}
-    try{ window.__favListMode=false; }catch(e){}
-    try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-  }
-
-  function renderFundListOnce(){
-    try{ currentPage=1; }catch(e){}
-    try{ if(expandedRows && typeof expandedRows.clear==='function') expandedRows.clear(); }catch(e){}
-    try{ if(typeof render==='function') render(); }catch(e){ console.warn('[Atalhos v10] render falhou:',e); }
-    try{ if(typeof renderMobileFundCards==='function') renderMobileFundCards(); }catch(e){}
-    try{ if(typeof updateFundResultSummary==='function') updateFundResultSummary(); }catch(e){}
-  }
-
-  function applyGroupPresetDirect(preset){
-    if(typeof allRows==='undefined' || !Array.isArray(allRows)) return false;
-    resetBaseFiltersForShortcut();
-    window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset;
-
-    keepFundAreaStable(()=>{
-      try{
-        filtered=allRows.filter(row=>rowMatchesGroup(row,preset) && rowMatchesSearch(row));
-      }catch(e){
-        console.warn('[Atalhos v10] filtro direto falhou:',e);
-        filtered=[];
-      }
-      renderFundListOnce();
-      syncShortcutVisual(preset);
-    });
-    return true;
-  }
-
-  function applyShortcutPreset(preset){
-    preset=String(preset||'all');
-
-    if(GROUP_PRESETS.has(preset)){
-      applyGroupPresetDirect(preset);
-      return;
-    }
-
-    keepFundAreaStable(()=>{
-      if(preset==='favoritos'){
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='favoritos';
-        try{ if(typeof toggleFavList==='function') toggleFavList(); else if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v10] favoritos falhou:',e); }
-        syncShortcutVisual('favoritos');
-        return;
-      }
-
-      if(preset==='all'){
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
-        try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; window.__favListMode=false; }catch(e){}
-        try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-        try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v10] todos falhou:',e); }
-        syncShortcutVisual('all');
-        return;
-      }
-
-      resetBaseFiltersForShortcut();
-      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset;
-      try{
-        if(preset==='cdi') activeBenchmark='CDI';
-        else if(preset==='ipca') activeBenchmark='IPCA';
-        else if(preset==='conservador') activeRisco='Conservador';
-      }catch(e){}
-
-      try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v10] aplicar filtro falhou:',e); }
-      syncShortcutVisual(preset);
-    });
-  }
-
-  let __lastShortcutClick={preset:'',t:0};
-
-  function shortcutHandler(ev){
-    const target=ev.target;
-    const btn=target && target.closest ? target.closest('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]') : null;
-    if(!btn) return;
-    const preset=btn.dataset.preset||'all';
-    if(!VALID_PRESETS.has(preset)) return;
-
-    ev.preventDefault();
-    ev.stopPropagation();
-    if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
-
-    const now=Date.now();
-    if(__lastShortcutClick.preset===preset && now-__lastShortcutClick.t<420) return;
-    __lastShortcutClick={preset,t:now};
-    applyShortcutPreset(preset);
-  }
-
-  let __setupDone=false;
-  function setup(){
-    if(__setupDone) return;
-    __setupDone=true;
-    ['pointerup','click','touchend'].forEach(type=>{
-      document.addEventListener(type, shortcutHandler, true);
-    });
-    document.getElementById('activeFilterStrip')?.addEventListener('click',ev=>{
-      const b=ev.target.closest('[data-elton-clear-shortcut]');
-      if(!b) return;
-      ev.preventDefault();
-      ev.stopPropagation();
-      if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
-      applyShortcutPreset('all');
-    },true);
-    syncShortcutVisual(window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'all');
-    console.info('[Catálogo CAIXA] Atalhos do catálogo prontos:', BUILD);
-  }
-
-  window.__eltonDiagnosticarAtalhos=function(){
-    const atalhos=[...document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]')];
-    const out={
-      buildIndex:document.querySelector('meta[name="app-build"]')?.content,
-      buildAtalhos:window.__ELTAUM_SHORTCUT_FILTERS_BUILD__,
-      presetAtivo:window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__,
-      qtdBotoes:atalhos.length,
-      filteredQtd:Array.isArray(filtered)?filtered.length:null,
-      allRowsQtd:Array.isArray(allRows)?allRows.length:null,
-      resultInfo:document.getElementById('resultInfo')?.textContent||'',
-      botoes:atalhos.map(b=>({texto:b.textContent.trim(),preset:b.dataset.preset,classe:b.className,aria:b.getAttribute('aria-pressed')}))
-    };
-    console.table(out.botoes);
-    console.log('[Diagnóstico atalhos]',out);
-    return out;
-  };
-
-  window.__eltonAplicarAtalhoSuave=applyShortcutPreset;
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
-  else setTimeout(setup,650);
-})();
-
-
 /* ════════════════════════════════════════════════════
    v24 — Mobile card-first para o catálogo de fundos
 ════════════════════════════════════════════════════ */
@@ -8569,111 +8314,6 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v69 — Mobile: categorias CAIXA em grid visível
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  const CAT_LABEL = {
-    'RENDA FIXA SIMPLES':'RF Simples',
-    'RENDA FIXA':'Renda Fixa',
-    'RENDA FIXA REFERENCIADO':'RF Referenciado',
-    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
-    'MULTIMERCADO':'Multimercado',
-    'CAMBIAL':'Cambial',
-    'ACOES':'Ações',
-    'FUNDO DE INDICE':'Fundo de Índice',
-    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
-  };
-
-  function syncCategoryGridV69(){
-    try{
-      const cat = typeof activeCat !== 'undefined' ? activeCat : '';
-      const bench = typeof activeBenchmark !== 'undefined' ? activeBenchmark : '';
-      const risco = typeof activeRisco !== 'undefined' ? activeRisco : '';
-      const perfil = typeof activePerfil !== 'undefined' ? activePerfil : '';
-      const semDados = typeof hideSemDados !== 'undefined' ? !!hideSemDados : false;
-
-      const presetCat = {
-        'renda-fixa-simples':'RENDA FIXA SIMPLES',
-        'renda-fixa':'RENDA FIXA',
-        'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
-        'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
-        'multimercado':'MULTIMERCADO',
-        'cambial':'CAMBIAL',
-        'acoes':'ACOES',
-        'fundo-de-indice':'FUNDO DE INDICE',
-        'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
-      };
-
-      qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip').forEach(btn=>{
-        const p = btn.dataset.preset || '';
-        let on = false;
-        if(p === 'all') on = !cat && !bench && !risco && !perfil && !semDados;
-        if(presetCat[p]) on = cat === presetCat[p];
-        btn.classList.toggle('active', on);
-        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
-      });
-
-      const status = qs('#categoryGridStatus');
-      if(status) status.textContent = cat ? ('Categoria: ' + (CAT_LABEL[cat] || cat)) : 'Todos os fundos';
-
-      const clearTop = qs('#clearFiltersTop');
-      if(clearTop){
-        const hasFilter = !!(cat || bench || risco || perfil || semDados || (qs('#searchInput')?.value || '').trim());
-        clearTop.hidden = !hasFilter;
-      }
-
-      const summary = qs('#mobileFilterSummary');
-      if(summary && isMobile()) summary.textContent = cat ? ('Categoria: ' + (CAT_LABEL[cat] || cat)) : 'Categoria: Todos os fundos';
-
-      const result = qs('#filterResultSummary');
-      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
-      if(result && n !== null) result.textContent = `${n} fundos encontrados`;
-    }catch(e){}
-  }
-
-  function bindCategoryGridV69(){
-    qsa('.catalog-shortcuts-category-grid-v69 .shortcut-preset').forEach(btn=>{
-      if(btn.dataset.v69Bound === '1') return;
-      btn.dataset.v69Bound = '1';
-      btn.addEventListener('click',()=>{
-        setTimeout(syncCategoryGridV69, 80);
-        setTimeout(syncCategoryGridV69, 260);
-      });
-    });
-    const search = qs('#searchInput');
-    if(search && search.dataset.v69Bound !== '1'){
-      search.dataset.v69Bound = '1';
-      search.addEventListener('input',()=>setTimeout(syncCategoryGridV69,80));
-    }
-  }
-
-  document.addEventListener('DOMContentLoaded',()=>{
-    bindCategoryGridV69();
-    syncCategoryGridV69();
-  });
-
-  const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__categoryGridV69){
-    const wrapped = function(){
-      const out = oldRender.apply(this, arguments);
-      try{syncCategoryGridV69();}catch(e){}
-      return out;
-    };
-    wrapped.__categoryGridV69 = true;
-    window.render = wrapped;
-  }
-
-  window.syncCategoryGridV69 = syncCategoryGridV69;
-  window.addEventListener('resize',syncCategoryGridV69);
-})();
-
-
-/* ════════════════════════════════════════════════════
    PATCH v76 — Mobile: rodapé seguro e compacto
    - Ajusta espaçamento inferior para o último card não ficar atrás do menu.
    - Renomeia item "Mês" para "Mercado" quando necessário.
@@ -8682,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
+  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8753,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86');
   }catch(e){}
 })();
 
@@ -8767,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
+  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9096,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86');
 })();
 
 
@@ -9106,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
+  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9166,169 +8806,6 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v83 — Desktop: rótulos de filtros claros
-   - Botão "Categorias" legível.
-   - "Todos" também aparece em Filtros ativos.
-   - Remove termos Categoria/Grupo dos chips ativos.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
-  window.__ELTAUM_FILTER_LABELS_STABLE_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
-
-  const LABELS = {
-    'RENDA FIXA SIMPLES':'RENDA FIXA SIMPLES',
-    'RENDA FIXA':'RENDA FIXA',
-    'RENDA FIXA REFERENCIADO':'RENDA FIXA REFERENCIADO',
-    'RENDA FIXA CURTO PRAZO':'RENDA FIXA CURTO PRAZO',
-    'MULTIMERCADO':'MULTIMERCADO',
-    'CAMBIAL':'CAMBIAL',
-    'ACOES':'AÇÕES',
-    'FUNDO DE INDICE':'FUNDO DE ÍNDICE',
-    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
-  };
-
-  function canon(v){
-    return String(v || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g,'')
-      .replace(/[^\w\s]/g,' ')
-      .replace(/\s+/g,' ')
-      .trim()
-      .toUpperCase();
-  }
-
-  function getActiveCatCanon(){
-    try{return canon(activeCat || '')}catch(e){return ''}
-  }
-
-  function activeLabel(){
-    const c = getActiveCatCanon();
-    return c ? (LABELS[c] || c) : 'Todos';
-  }
-
-  function normalizeActiveStripV83(){
-    const strip = qs('#activeFilterStrip');
-    if(!strip || !isDesktop()) return;
-
-    const label = activeLabel();
-    const hasSpecific = !!getActiveCatCanon();
-
-    strip.classList.add('active','desktop-active-filter-v83');
-    strip.style.visibility = 'visible';
-    strip.style.opacity = '1';
-    strip.style.pointerEvents = 'auto';
-
-    strip.innerHTML =
-      '<span class="active-filter-label">Filtros ativos</span>' +
-      `<button type="button" class="active-filter-pill active-filter-pill-v83 ${hasSpecific ? '' : 'all-filter-v83'}" ${hasSpecific ? 'data-clear-filter="cat"' : 'data-preset="all"'}>` +
-      `${label}${hasSpecific ? '<span>×</span>' : ''}</button>` +
-      (hasSpecific ? '<button type="button" class="active-filter-clear active-filter-clear-v83" data-clear-filter="all">Limpar tudo</button>' : '');
-  }
-
-  function normalizeTopControlsV83(){
-    if(!isDesktop()) return;
-
-    const meta = qs('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
-
-    const btnText = qs('#filterButtonText');
-    if(btnText) btnText.textContent = 'Categorias';
-
-    const count = qs('#filterActiveCount');
-    if(count){
-      count.textContent = '1';
-      count.classList.add('has-active');
-    }
-
-    const result = qs('#filterResultSummary');
-    if(result){
-      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
-      if(n !== null) result.textContent = `${n} fundos encontrados`;
-      result.title = result.textContent || '';
-    }
-
-    const status = qs('#categoryGridStatus');
-    if(status){
-      const c = getActiveCatCanon();
-      status.textContent = c ? activeLabel() : 'Todos os fundos';
-      status.title = status.textContent || '';
-    }
-
-    const clear = qs('#clearFiltersTop');
-    if(clear){
-      const specific = !!getActiveCatCanon();
-      clear.textContent = 'Limpar';
-      clear.hidden = !specific;
-      clear.classList.toggle('is-visible-v83', specific);
-    }
-
-    normalizeActiveStripV83();
-  }
-
-  function bindV83(){
-    normalizeTopControlsV83();
-
-    const strip = qs('#activeFilterStrip');
-    if(strip && strip.dataset.v83Bound !== '1'){
-      strip.dataset.v83Bound = '1';
-      strip.addEventListener('click', ev=>{
-        const clearCat = ev.target.closest('[data-clear-filter="cat"]');
-        const clearAll = ev.target.closest('[data-clear-filter="all"]');
-        if(!clearCat && !clearAll) return;
-        ev.preventDefault();
-        ev.stopPropagation();
-
-        try{
-          activeCat = '';
-          activeBenchmark = '';
-          activePerfil = '';
-          activeRisco = '';
-          hideSemDados = false;
-          currentPage = 1;
-          if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
-        }catch(e){}
-
-        const toggle = qs('#toggleSemDados');
-        if(toggle) toggle.checked = false;
-
-        try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-        try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-        setTimeout(normalizeTopControlsV83, 40);
-      });
-    }
-
-    setTimeout(normalizeTopControlsV83,300);
-    setTimeout(normalizeTopControlsV83,900);
-    setTimeout(normalizeTopControlsV83,1600);
-    console.info('[Catálogo CAIXA] Filtros desktop claros:', BUILD);
-  }
-
-  const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__filterLabelsV83){
-    const wrapped = function(){
-      const out = oldRender.apply(this, arguments);
-      normalizeTopControlsV83();
-      return out;
-    };
-    wrapped.__filterLabelsV83 = true;
-    window.render = wrapped;
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV83,160));
-  else setTimeout(bindV83,160);
-
-  window.addEventListener('resize',()=>setTimeout(normalizeTopControlsV83,80),{passive:true});
-  window.__ELTAUM_FILTER_LABELS_STABLE_V83__ = {sync:normalizeTopControlsV83};
-})();
-
-
-/* ════════════════════════════════════════════════════
    PATCH v84 — Desativa gaveta legada de categorias
    - Mantém o botão "Categorias" apenas como indicador visual.
    - Impede abertura do drawer lateral legado.
@@ -9337,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
+  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9435,23 +8912,39 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v85 — Remove drawer legado e simplifica desktop
-   - Remove fisicamente qualquer #fundFilterDrawer remanescente.
-   - Botão "Categorias" vira indicador, sem abrir menu.
-   - Remove Limpar filtro/Limpar tudo do desktop.
-   - Filtros ativos mostra apenas: Todos ou o nome da categoria.
+   PATCH v86 — Filtro de categoria limpo e exato
+   - Remove conflito do patch antigo de atalhos.
+   - Grid desktop filtra por activeCat exato, não por grupo.
+   - Drawer legado removido.
+   - Desktop: sem "Limpar filtro" e sem "Limpar tudo".
+   - Filtros ativos: Todos ou categoria selecionada.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_REMOVE_LEGACY_DRAWER_20260606_v85';
-  window.__ELTAUM_REMOVE_LEGACY_DRAWER_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
+  window.__ELTAUM_CLEAN_CATEGORY_FILTER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
   function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  const PRESET_CAT = {
+    'all':'',
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+  };
 
   const LABELS = {
+    '':'Todos',
     'RENDA FIXA SIMPLES':'RENDA FIXA SIMPLES',
     'RENDA FIXA':'RENDA FIXA',
     'RENDA FIXA REFERENCIADO':'RENDA FIXA REFERENCIADO',
@@ -9473,36 +8966,81 @@ async function sharePainelMercado(){
       .toUpperCase();
   }
 
-  function activeCatCanon(){
+  function activeCanon(){
     try{return canon(activeCat || '')}catch(e){return ''}
   }
 
-  function activeLabel(){
-    const c = activeCatCanon();
-    return c ? (LABELS[c] || c) : 'Todos';
+  function labelForActive(){
+    const c = activeCanon();
+    return LABELS[c] || c || 'Todos';
   }
 
-  function removeLegacyDrawerV85(){
+  function findRawCategory(canonTarget){
+    if(!canonTarget) return '';
+    try{
+      if(Array.isArray(allRows)){
+        const found = allRows.find(r => canon(r && r['Categoria']) === canonTarget);
+        if(found) return String(found['Categoria'] || '').trim();
+      }
+    }catch(e){}
+    return canonTarget;
+  }
+
+  function removeDrawer(){
     try{
       qsa('#fundFilterDrawer').forEach(el=>el.remove());
+      qsa('#filterBackdrop,.filter-backdrop').forEach(el=>el.remove());
       document.body.classList.remove('filter-sheet-open');
-      const backdrop = qs('#filterBackdrop');
-      if(backdrop) backdrop.remove();
     }catch(e){}
   }
 
-  function normalizeDesktopV85(){
+  function setCategoryByPreset(preset){
+    const wanted = PRESET_CAT.hasOwnProperty(preset) ? PRESET_CAT[preset] : '';
     try{
+      activeCat = wanted ? findRawCategory(wanted) : '';
+      activeBenchmark = '';
+      activePerfil = '';
+      activeRisco = '';
+      hideSemDados = false;
+      currentPage = 1;
+      window.__favListMode = false;
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
+      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+    }catch(e){}
+
+    const semDados = qs('#toggleSemDados');
+    if(semDados) semDados.checked = false;
+
+    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+
+    syncCleanFilterV86();
+  }
+
+  function syncCleanFilterV86(){
+    try{
+      removeDrawer();
+
       const meta = qs('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
 
-      removeLegacyDrawerV85();
+      const active = activeCanon();
+      const label = labelForActive();
+
+      qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset], .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset]').forEach(btn=>{
+        const p = btn.dataset.preset || 'all';
+        const wanted = PRESET_CAT[p] || '';
+        const on = p === 'all' ? !active : active === wanted;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
 
       const btn = qs('#mobileFilterToggle');
       if(btn){
         btn.setAttribute('aria-expanded','false');
         btn.setAttribute('aria-disabled','true');
-        btn.classList.add('filter-toggle-inert-v85');
+        btn.classList.add('filter-toggle-inert-v86');
         btn.title = 'Categorias disponíveis no grid abaixo';
       }
 
@@ -9515,77 +9053,94 @@ async function sharePainelMercado(){
         count.classList.add('has-active');
       }
 
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+
       const result = qs('#filterResultSummary');
-      if(result){
-        const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
-        if(n !== null) result.textContent = `${n} fundos encontrados`;
-        result.title = result.textContent || '';
+      if(result && n !== null){
+        result.textContent = `${n} fundos encontrados`;
+        result.title = result.textContent;
       }
 
       const clearTop = qs('#clearFiltersTop');
       if(clearTop){
         clearTop.hidden = true;
-        clearTop.classList.remove('is-visible','is-visible-v83');
+        clearTop.classList.remove('is-visible','is-visible-v83','is-visible-v81');
         clearTop.setAttribute('aria-hidden','true');
-        clearTop.style.display = 'none';
       }
 
       const status = qs('#categoryGridStatus');
       if(status){
-        const c = activeCatCanon();
-        status.textContent = c ? activeLabel() : 'Todos os fundos';
-        status.title = status.textContent || '';
+        status.textContent = active ? label : 'Todos os fundos';
+        status.title = status.textContent;
       }
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        strip.classList.add('active','desktop-active-filter-v85');
+        strip.classList.add('active','desktop-active-filter-v86');
         strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-          `<span class="active-filter-pill active-filter-pill-v85">${activeLabel()}</span>`;
+          `<span class="active-filter-pill active-filter-pill-v86">${label}</span>`;
       }
     }catch(e){}
   }
 
-  function interceptCategoriasV85(ev){
-    const target = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText') : null;
-    if(!target) return;
+  function interceptGridClick(ev){
+    const btn = ev.target && ev.target.closest ? ev.target.closest('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset], .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset]') : null;
+    if(!btn) return;
+
     ev.preventDefault();
     ev.stopPropagation();
     if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-    normalizeDesktopV85();
+
+    setCategoryByPreset(btn.dataset.preset || 'all');
   }
 
-  function bindV85(){
-    normalizeDesktopV85();
+  function interceptCategorias(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText') : null;
+    if(!target) return;
 
-    if(document.documentElement.dataset.v85NoDrawer !== '1'){
-      document.documentElement.dataset.v85NoDrawer = '1';
-      window.addEventListener('click', interceptCategoriasV85, true);
-      window.addEventListener('pointerdown', interceptCategoriasV85, true);
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+    syncCleanFilterV86();
+  }
+
+  function bindV86(){
+    removeDrawer();
+
+    if(document.documentElement.dataset.v86CleanCategory !== '1'){
+      document.documentElement.dataset.v86CleanCategory = '1';
+
+      // Window capture: roda antes dos handlers legados em document.
+      ['pointerdown','pointerup','touchend','click'].forEach(type=>{
+        window.addEventListener(type, interceptGridClick, true);
+      });
+      window.addEventListener('click', interceptCategorias, true);
+      window.addEventListener('pointerdown', interceptCategorias, true);
     }
 
-    setTimeout(normalizeDesktopV85,200);
-    setTimeout(normalizeDesktopV85,800);
-    setTimeout(normalizeDesktopV85,1800);
+    syncCleanFilterV86();
+    setTimeout(syncCleanFilterV86,200);
+    setTimeout(syncCleanFilterV86,800);
+    setTimeout(syncCleanFilterV86,1800);
 
-    console.info('[Catálogo CAIXA] Drawer legado removido e desktop simplificado:', BUILD);
+    console.info('[Catálogo CAIXA] Filtro de categoria limpo:', BUILD);
   }
 
   const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__noDrawerV85){
+  if(typeof oldRender === 'function' && !oldRender.__cleanCategoryV86){
     const wrapped = function(){
       const out = oldRender.apply(this, arguments);
-      normalizeDesktopV85();
+      syncCleanFilterV86();
       return out;
     };
-    wrapped.__noDrawerV85 = true;
+    wrapped.__cleanCategoryV86 = true;
     window.render = wrapped;
   }
 
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV85,180));
-  else setTimeout(bindV85,180);
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV86,180));
+  else setTimeout(bindV86,180);
 
-  window.addEventListener('resize',()=>setTimeout(normalizeDesktopV85,80),{passive:true});
-  window.__ELTAUM_REMOVE_LEGACY_DRAWER_V85__ = {sync:normalizeDesktopV85, remove:removeLegacyDrawerV85};
+  window.addEventListener('resize',()=>setTimeout(syncCleanFilterV86,80),{passive:true});
+  window.__ELTAUM_CLEAN_CATEGORY_FILTER_V86__ = {sync:syncCleanFilterV86, apply:setCategoryByPreset};
 })();
 
