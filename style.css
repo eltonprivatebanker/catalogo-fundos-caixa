@@ -23887,18 +23887,17 @@ html.no-smooth-scroll-v105 *{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v106 — Micro ajuste: paginação + espaço antes do Mercado
+   PATCH v107 — Micro ajuste: paginação com rolagem lisa
 ════════════════════════════════════════════════════ */
 
 @media(max-width:820px){
-  /* Primeiro card deve parar logo abaixo da busca fixa. */
   #mobileFundCards,
   #mobileFundCards .fund-card-mobile:first-child,
   .mobile-fund-cards .fund-card-mobile:first-child{
     scroll-margin-top:118px!important;
   }
 
-  /* Reduz o espaço gigante entre a paginação/lista de fundos/ranking e Indicadores de Mercado. */
+  /* Mantém o micro ajuste de espaço antes de Indicadores de Mercado da v106. */
   #sec-fundos{
     margin-bottom:8px!important;
     padding-bottom:8px!important;
@@ -23921,7 +23920,6 @@ html.no-smooth-scroll-v105 *{
     margin-bottom:10px!important;
   }
 
-  /* Se Indicadores vem depois de Rankings, não deixar um vão vertical exagerado. */
   #rankingsSection + #sec-mercado,
   #sec-mercado{
     margin-top:8px!important;
@@ -23933,7 +23931,6 @@ html.no-smooth-scroll-v105 *{
     margin-bottom:10px!important;
   }
 
-  /* Evita que o menu inferior crie safe-space antes da próxima seção. */
   #rankingsSection.rankings-mobile-pro-v100{
     padding-bottom:8px!important;
   }

@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_PAGINATION_GAP_20260607_v106');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10274,7 +10274,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10385,7 +10385,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10453,7 +10453,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10558,7 +10558,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10671,7 +10671,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10799,56 +10799,54 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v106 — Micro ajuste: paginação + espaço antes do Mercado
-   1) No mobile, ao trocar página dos fundos, rola para o primeiro card.
-   2) Mantém compatibilidade mesmo que a paginação seja re-renderizada.
+   PATCH v107 — Micro ajuste: paginação com rolagem lisa
+   Corrige a v106:
+   - A v106 fazia várias tentativas de scroll em sequência.
+   - No celular isso parecia "travado", subindo em 3 etapas.
+   - Agora faz 1 rolagem principal suave, após a renderização.
+   - Só faz correção final invisível se o destino ainda ficar fora do ponto.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_GAP_20260607_v106';
-  window.__ELTAUM_MICRO_PAGINATION_GAP_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  window.__ELTAUM_MICRO_PAGINATION_SMOOTH_BUILD__ = BUILD;
+
+  let scrollTimer = null;
+  let correctionTimer = null;
+  let lastPaginationClickAt = 0;
 
   function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
   function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
 
-  function setBuildV106(){
+  function setBuildV107(){
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
   }
 
-  function fixedTopOffsetV106(){
+  function topOffsetV107(){
     if(!isMobile()) return 24;
 
-    /*
-      Barra de busca fixa no topo + respiro.
-      Em aparelhos reais ela costuma ocupar entre 84 e 118px.
-    */
-    const candidates = [
-      '.top-search',
-      '.global-search',
-      '.search-fixed',
-      '.search-shell',
-      '.app-search',
-      '.hero-search',
-      '.main-search'
-    ];
+    const search =
+      qs('.top-search') ||
+      qs('.global-search') ||
+      qs('.search-fixed') ||
+      qs('.search-shell') ||
+      qs('.app-search') ||
+      qs('.hero-search') ||
+      qs('.main-search');
 
-    let h = 0;
-    for(const sel of candidates){
-      const el = qs(sel);
-      if(!el) continue;
-      const r = el.getBoundingClientRect();
-      if(r.height > 20 && r.top <= 90){
-        h = Math.max(h, r.bottom);
+    if(search){
+      const r = search.getBoundingClientRect();
+      if(r.height > 20 && r.top <= 100){
+        return Math.max(96, Math.min(132, Math.ceil(r.bottom) + 12));
       }
     }
 
-    return Math.max(104, Math.min(138, Math.ceil(h) + 14));
+    return 112;
   }
 
-  function firstFundCardV106(){
+  function firstFundCardV107(){
     return (
       qs('#mobileFundCards .fund-card-mobile') ||
       qs('#mobileFundCards [data-fund-card]') ||
@@ -10861,74 +10859,93 @@ async function sharePainelMercado(){
     );
   }
 
-  function scrollToFirstFundCardV106(instant){
-    if(!isMobile()) return;
+  function targetTopV107(){
+    const target = firstFundCardV107();
+    if(!target) return null;
 
-    const target = firstFundCardV106();
-    if(!target) return;
-
-    const offset = fixedTopOffsetV106();
-    const top = Math.max(0, target.getBoundingClientRect().top + window.pageYOffset - offset);
-
-    window.scrollTo({
-      top,
-      left: 0,
-      behavior: instant ? 'auto' : 'smooth'
-    });
+    return Math.max(0, target.getBoundingClientRect().top + window.pageYOffset - topOffsetV107());
   }
 
-  function scheduleScrollToFirstFundCardV106(){
+  function scrollOnceToFirstFundV107(){
     if(!isMobile()) return;
+
+    const y = targetTopV107();
+    if(y === null) return;
+
+    window.scrollTo({ top: y, left: 0, behavior: 'smooth' });
 
     /*
-      A paginação primeiro atualiza currentPage/render e só depois os cards existem.
-      Por isso usamos uma sequência curta de tentativas pós-render.
+      Correção final única:
+      se depois da rolagem suave ainda houver diferença relevante,
+      ajusta em auto uma vez só. Isso evita o "sobe em 3 vezes".
     */
-    requestAnimationFrame(() => requestAnimationFrame(() => scrollToFirstFundCardV106(false)));
-    setTimeout(() => scrollToFirstFundCardV106(false), 120);
-    setTimeout(() => scrollToFirstFundCardV106(true), 340);
-    setTimeout(() => scrollToFirstFundCardV106(true), 620);
+    clearTimeout(correctionTimer);
+    correctionTimer = setTimeout(() => {
+      const finalY = targetTopV107();
+      if(finalY === null) return;
+
+      if(Math.abs(window.pageYOffset - finalY) > 28){
+        window.scrollTo({ top: finalY, left: 0, behavior: 'auto' });
+      }
+    }, 650);
   }
 
-  function isPaginationClickV106(target){
+  function scheduleSmoothPaginationScrollV107(){
+    if(!isMobile()) return;
+
+    clearTimeout(scrollTimer);
+    clearTimeout(correctionTimer);
+
+    /*
+      Espera a renderização dos novos cards, mas executa apenas uma rolagem.
+      180ms costuma ser suficiente para o render antigo trocar os cards.
+    */
+    scrollTimer = setTimeout(scrollOnceToFirstFundV107, 180);
+  }
+
+  function isPaginationClickV107(target){
     if(!target || !target.closest) return false;
 
     return !!(
       target.closest('#pageBtns .page-btn') ||
-      target.closest('.page-btn') ||
+      target.closest('.pagination-row .page-btn') ||
       target.closest('.pagination-row button') ||
       target.closest('[data-page]')
     );
   }
 
-  function setupPaginationScrollV106(){
-    setBuildV106();
+  function setupPaginationSmoothV107(){
+    setBuildV107();
 
-    if(document.documentElement.dataset.v106PaginationScroll === '1') return;
-    document.documentElement.dataset.v106PaginationScroll = '1';
+    if(document.documentElement.dataset.v107PaginationSmooth === '1') return;
+    document.documentElement.dataset.v107PaginationSmooth = '1';
 
-    /*
-      Delegação no document: funciona mesmo se o bloco de paginação for re-renderizado.
-      Fase bubble para deixar o clique original executar antes.
-    */
     document.addEventListener('click', function(ev){
-      if(!isPaginationClickV106(ev.target)) return;
+      if(!isPaginationClickV107(ev.target)) return;
 
       const btn = ev.target.closest('button,.page-btn,[data-page]');
       if(btn && (btn.disabled || btn.getAttribute('aria-disabled') === 'true')) return;
 
-      scheduleScrollToFirstFundCardV106();
+      /*
+        Evita duplo disparo em alguns navegadores mobile/touch.
+      */
+      const now = Date.now();
+      if(now - lastPaginationClickAt < 260) return;
+      lastPaginationClickAt = now;
+
+      scheduleSmoothPaginationScrollV107();
     }, false);
   }
 
   /*
-    Reforço: se alguma função antiga chamar scrollToFundResultsStart, agora ela usa
-    o destino correto no mobile.
+    Se alguma função antiga chamar scrollToFundResultsStart,
+    usa a versão lisa e única no mobile.
   */
   try{
     window.scrollToFundResultsStart = function(){
-      if(isMobile()) scrollToFirstFundCardV106(false);
-      else {
+      if(isMobile()) {
+        scheduleSmoothPaginationScrollV107();
+      } else {
         const t = qs('#sec-fundos .table-wrap') || qs('#mainTable') || qs('#sec-fundos');
         if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
       }
@@ -10937,17 +10954,17 @@ async function sharePainelMercado(){
   }catch(e){}
 
   if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(setupPaginationScrollV106, 120));
+    document.addEventListener('DOMContentLoaded', () => setTimeout(setupPaginationSmoothV107, 120));
   } else {
-    setTimeout(setupPaginationScrollV106, 120);
+    setTimeout(setupPaginationSmoothV107, 120);
   }
 
-  setTimeout(setupPaginationScrollV106, 800);
-  setTimeout(setupPaginationScrollV106, 1800);
+  setTimeout(setupPaginationSmoothV107, 800);
+  setTimeout(setupPaginationSmoothV107, 1800);
 
-  window.__ELTAUM_MICRO_PAGINATION_GAP_V106__ = {
-    sync: setupPaginationScrollV106,
-    scrollToFirstFund: scrollToFirstFundCardV106
+  window.__ELTAUM_MICRO_PAGINATION_SMOOTH_V107__ = {
+    sync: setupPaginationSmoothV107,
+    scrollToFirstFund: scrollOnceToFirstFundV107
   };
 })();
 
