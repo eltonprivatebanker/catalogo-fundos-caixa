@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
+  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
+  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
+  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
+  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8912,23 +8912,21 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v86 — Filtro de categoria limpo e exato
-   - Remove conflito do patch antigo de atalhos.
-   - Grid desktop filtra por activeCat exato, não por grupo.
-   - Drawer legado removido.
-   - Desktop: sem "Limpar filtro" e sem "Limpar tudo".
-   - Filtros ativos: Todos ou categoria selecionada.
+   PATCH v87 — Categoria exata, sem pulo e sem botão drawer
+   - Clique de categoria roda uma única vez, somente no evento click.
+   - Evita destaque falso por foco/hover.
+   - Remove botão/área "Categorias" do topo como controle clicável.
+   - Topo fica só com resultado, para não variar largura.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_CATEGORY_FILTER_20260606_v86';
-  window.__ELTAUM_CLEAN_CATEGORY_FILTER_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_CATEGORY_EXACT_STABLE_20260606_v87';
+  window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
   function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
   function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
 
   const PRESET_CAT = {
     'all':'',
@@ -8970,9 +8968,8 @@ async function sharePainelMercado(){
     try{return canon(activeCat || '')}catch(e){return ''}
   }
 
-  function labelForActive(){
-    const c = activeCanon();
-    return LABELS[c] || c || 'Todos';
+  function labelFor(canonCat){
+    return LABELS[canonCat || ''] || canonCat || 'Todos';
   }
 
   function findRawCategory(canonTarget){
@@ -8986,72 +8983,78 @@ async function sharePainelMercado(){
     return canonTarget;
   }
 
-  function removeDrawer(){
+  function removeLegacyDrawer(){
     try{
-      qsa('#fundFilterDrawer').forEach(el=>el.remove());
-      qsa('#filterBackdrop,.filter-backdrop').forEach(el=>el.remove());
+      qsa('#fundFilterDrawer,#filterBackdrop,.filter-backdrop').forEach(el=>el.remove());
       document.body.classList.remove('filter-sheet-open');
     }catch(e){}
   }
 
-  function setCategoryByPreset(preset){
-    const wanted = PRESET_CAT.hasOwnProperty(preset) ? PRESET_CAT[preset] : '';
-    try{
-      activeCat = wanted ? findRawCategory(wanted) : '';
-      activeBenchmark = '';
-      activePerfil = '';
-      activeRisco = '';
-      hideSemDados = false;
-      currentPage = 1;
-      window.__favListMode = false;
-      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
-      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
-    }catch(e){}
-
-    const semDados = qs('#toggleSemDados');
-    if(semDados) semDados.checked = false;
-
-    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
-    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
-    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
-
-    syncCleanFilterV86();
+  function stabilizeFilterBox(task){
+    const shell = qs('#fundFilterShell');
+    const oldH = shell ? shell.style.minHeight : '';
+    const h = shell ? Math.ceil(shell.getBoundingClientRect().height) : 0;
+    if(shell && h > 0){
+      shell.style.minHeight = h + 'px';
+      shell.classList.add('v87-filter-stabilizing');
+    }
+    try{ task(); }
+    finally{
+      setTimeout(()=>{
+        if(shell){
+          shell.style.minHeight = oldH;
+          shell.classList.remove('v87-filter-stabilizing');
+        }
+      },180);
+    }
   }
 
-  function syncCleanFilterV86(){
+  function applyPresetExact(preset, sourceBtn){
+    const wanted = PRESET_CAT.hasOwnProperty(preset) ? PRESET_CAT[preset] : '';
+
+    stabilizeFilterBox(()=>{
+      try{
+        activeCat = wanted ? findRawCategory(wanted) : '';
+        activeBenchmark = '';
+        activePerfil = '';
+        activeRisco = '';
+        hideSemDados = false;
+        currentPage = 1;
+        window.__favListMode = false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+      }catch(e){}
+
+      const semDados = qs('#toggleSemDados');
+      if(semDados) semDados.checked = false;
+
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+
+      if(sourceBtn && typeof sourceBtn.blur === 'function') sourceBtn.blur();
+      syncV87();
+    });
+  }
+
+  function syncV87(){
     try{
-      removeDrawer();
+      removeLegacyDrawer();
 
       const meta = qs('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
 
       const active = activeCanon();
-      const label = labelForActive();
+      const label = labelFor(active);
 
-      qsa('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset], .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset]').forEach(btn=>{
+      qsa('.catalog-shortcuts-category-grid-v69 [data-preset]').forEach(btn=>{
         const p = btn.dataset.preset || 'all';
         const wanted = PRESET_CAT[p] || '';
         const on = p === 'all' ? !active : active === wanted;
         btn.classList.toggle('active', on);
         btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        if(!on) btn.classList.remove('pseudo-active-v87');
       });
-
-      const btn = qs('#mobileFilterToggle');
-      if(btn){
-        btn.setAttribute('aria-expanded','false');
-        btn.setAttribute('aria-disabled','true');
-        btn.classList.add('filter-toggle-inert-v86');
-        btn.title = 'Categorias disponíveis no grid abaixo';
-      }
-
-      const btnText = qs('#filterButtonText');
-      if(btnText) btnText.textContent = 'Categorias';
-
-      const count = qs('#filterActiveCount');
-      if(count){
-        count.textContent = '1';
-        count.classList.add('has-active');
-      }
 
       const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
 
@@ -9059,13 +9062,6 @@ async function sharePainelMercado(){
       if(result && n !== null){
         result.textContent = `${n} fundos encontrados`;
         result.title = result.textContent;
-      }
-
-      const clearTop = qs('#clearFiltersTop');
-      if(clearTop){
-        clearTop.hidden = true;
-        clearTop.classList.remove('is-visible','is-visible-v83','is-visible-v81');
-        clearTop.setAttribute('aria-hidden','true');
       }
 
       const status = qs('#categoryGridStatus');
@@ -9076,71 +9072,81 @@ async function sharePainelMercado(){
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        strip.classList.add('active','desktop-active-filter-v86');
+        strip.classList.add('active','desktop-active-filter-v87');
         strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-          `<span class="active-filter-pill active-filter-pill-v86">${label}</span>`;
+          `<span class="active-filter-pill active-filter-pill-v87">${label}</span>`;
+      }
+
+      const toggle = qs('#mobileFilterToggle');
+      if(toggle){
+        toggle.setAttribute('aria-expanded','false');
+        toggle.setAttribute('aria-disabled','true');
+        toggle.classList.add('filter-toggle-inert-v87');
+        toggle.title = 'Use as categorias abaixo';
+      }
+
+      const topClear = qs('#clearFiltersTop');
+      if(topClear){
+        topClear.hidden = true;
+        topClear.setAttribute('aria-hidden','true');
       }
     }catch(e){}
   }
 
-  function interceptGridClick(ev){
-    const btn = ev.target && ev.target.closest ? ev.target.closest('.catalog-shortcuts-category-grid-v69 .filter-preset-chip[data-preset], .catalog-shortcuts-category-grid-v69 .shortcut-preset[data-preset]') : null;
+  function captureCategoryClick(ev){
+    const btn = ev.target && ev.target.closest ? ev.target.closest('.catalog-shortcuts-category-grid-v69 [data-preset]') : null;
     if(!btn) return;
 
     ev.preventDefault();
     ev.stopPropagation();
     if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
 
-    setCategoryByPreset(btn.dataset.preset || 'all');
+    applyPresetExact(btn.dataset.preset || 'all', btn);
   }
 
-  function interceptCategorias(ev){
-    const target = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText') : null;
-    if(!target) return;
+  function captureDisabledToggle(ev){
+    const t = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle,#filterButtonText') : null;
+    if(!t) return;
 
     ev.preventDefault();
     ev.stopPropagation();
     if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-    syncCleanFilterV86();
+    syncV87();
   }
 
-  function bindV86(){
-    removeDrawer();
+  function bindV87(){
+    removeLegacyDrawer();
 
-    if(document.documentElement.dataset.v86CleanCategory !== '1'){
-      document.documentElement.dataset.v86CleanCategory = '1';
-
-      // Window capture: roda antes dos handlers legados em document.
-      ['pointerdown','pointerup','touchend','click'].forEach(type=>{
-        window.addEventListener(type, interceptGridClick, true);
-      });
-      window.addEventListener('click', interceptCategorias, true);
-      window.addEventListener('pointerdown', interceptCategorias, true);
+    if(document.documentElement.dataset.v87ExactCategory !== '1'){
+      document.documentElement.dataset.v87ExactCategory = '1';
+      window.addEventListener('click', captureCategoryClick, true);
+      window.addEventListener('click', captureDisabledToggle, true);
+      window.addEventListener('pointerdown', captureDisabledToggle, true);
     }
 
-    syncCleanFilterV86();
-    setTimeout(syncCleanFilterV86,200);
-    setTimeout(syncCleanFilterV86,800);
-    setTimeout(syncCleanFilterV86,1800);
+    syncV87();
+    setTimeout(syncV87,200);
+    setTimeout(syncV87,800);
+    setTimeout(syncV87,1800);
 
-    console.info('[Catálogo CAIXA] Filtro de categoria limpo:', BUILD);
+    console.info('[Catálogo CAIXA] Categoria exata estável:', BUILD);
   }
 
   const oldRender = window.render;
-  if(typeof oldRender === 'function' && !oldRender.__cleanCategoryV86){
+  if(typeof oldRender === 'function' && !oldRender.__exactCategoryV87){
     const wrapped = function(){
       const out = oldRender.apply(this, arguments);
-      syncCleanFilterV86();
+      syncV87();
       return out;
     };
-    wrapped.__cleanCategoryV86 = true;
+    wrapped.__exactCategoryV87 = true;
     window.render = wrapped;
   }
 
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV86,180));
-  else setTimeout(bindV86,180);
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV87,180));
+  else setTimeout(bindV87,180);
 
-  window.addEventListener('resize',()=>setTimeout(syncCleanFilterV86,80),{passive:true});
-  window.__ELTAUM_CLEAN_CATEGORY_FILTER_V86__ = {sync:syncCleanFilterV86, apply:setCategoryByPreset};
+  window.addEventListener('resize',()=>setTimeout(syncV87,80),{passive:true});
+  window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__ = {sync:syncV87, apply:applyPresetExact};
 })();
 
