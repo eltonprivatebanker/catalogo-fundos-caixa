@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_NOTE_METRICS_20260606_v92');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_HIDE_CATEGORY_HEADER_20260606_v91';
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9503,5 +9503,57 @@ async function sharePainelMercado(){
   setTimeout(hideCategoryHeaderV91,1600);
 
   window.__ELTAUM_HIDE_CATEGORY_HEADER_V91__ = {sync:hideCategoryHeaderV91};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v92 — Remove métricas redundantes da leitura rápida
+   - Ano, 12M e % CDI já aparecem na linha/tabela e nos cards.
+   - A leitura rápida passa a focar no comentário interpretativo.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_REMOVE_NOTE_METRICS_20260606_v92';
+  window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function removeNoteMetricsV92(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('.fund-note-metrics').forEach(el=>{
+        el.remove();
+      });
+
+      qsa('.fund-note').forEach(note=>{
+        note.classList.add('fund-note-clean-v92');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__removeNoteMetricsV92){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      removeNoteMetricsV92();
+      return out;
+    };
+    wrapped.__removeNoteMetricsV92 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(removeNoteMetricsV92,120));
+  else setTimeout(removeNoteMetricsV92,120);
+
+  setTimeout(removeNoteMetricsV92,700);
+  setTimeout(removeNoteMetricsV92,1600);
+
+  document.addEventListener('click',()=>setTimeout(removeNoteMetricsV92,80),true);
+
+  window.__ELTAUM_REMOVE_NOTE_METRICS_V92__ = {sync:removeNoteMetricsV92};
 })();
 

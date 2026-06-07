@@ -21758,3 +21758,34 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v92 — Leitura rápida sem métricas redundantes
+════════════════════════════════════════════════════ */
+
+.fund-note-metrics{
+  display:none!important;
+}
+
+.fund-note-clean-v92,
+.fund-note{
+  gap:10px!important;
+}
+
+.fund-note-clean-v92 .fund-note-text,
+.fund-note .fund-note-text{
+  margin-bottom:0!important;
+}
+
+.fund-note-clean-v92 .fund-note-disclaimer,
+.fund-note .fund-note-disclaimer{
+  margin-top:6px!important;
+}
+
+@media(min-width:821px){
+  .fund-note-clean-v92,
+  .fund-note{
+    padding-bottom:14px!important;
+  }
+}
+
