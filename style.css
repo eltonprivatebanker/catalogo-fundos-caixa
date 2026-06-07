@@ -23467,22 +23467,6 @@ body.filter-sheet-open{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v103 — Mobile: paginação volta ao primeiro card
-════════════════════════════════════════════════════ */
-
-@media(max-width:820px){
-  #mobileFundCards,
-  #mobileFundCards .fund-card-mobile:first-child{
-    scroll-margin-top:118px!important;
-  }
-
-  #sec-fundos .pagination-row{
-    scroll-margin-top:118px!important;
-  }
-}
-
-
-/* ════════════════════════════════════════════════════
    PATCH v104 — Corrige duplicação dos avisos "Arraste"
 ════════════════════════════════════════════════════ */
 
@@ -23887,7 +23871,7 @@ html.no-smooth-scroll-v105 *{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v107 — Micro ajuste: paginação com rolagem lisa
+   PATCH v108 — Mobile: paginação com rolagem nativa única
 ════════════════════════════════════════════════════ */
 
 @media(max-width:820px){
@@ -23897,7 +23881,7 @@ html.no-smooth-scroll-v105 *{
     scroll-margin-top:118px!important;
   }
 
-  /* Mantém o micro ajuste de espaço antes de Indicadores de Mercado da v106. */
+  /* Mantém o micro ajuste de espaço antes de Indicadores de Mercado. */
   #sec-fundos{
     margin-bottom:8px!important;
     padding-bottom:8px!important;

@@ -8322,7 +8322,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8393,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108');
   }catch(e){}
 })();
 
@@ -8407,7 +8407,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8736,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108');
 })();
 
 
@@ -8746,7 +8746,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8814,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8921,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9159,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9225,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9326,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9467,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9514,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9566,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9772,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9833,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9902,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9972,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10067,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10185,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10274,7 +10274,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10385,7 +10385,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10445,106 +10445,6 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v103 — Mobile: paginação volta ao primeiro card
-   Problema: ao trocar página no mobile, o usuário continuava no ponto
-   da paginação e precisava procurar o primeiro card novo.
-   Solução: após renderizar a nova página, rolar para o primeiro card.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
-  window.__ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  function stickyOffsetV103(){
-    if(!isMobile()) return 24;
-
-    const topSearch = qs('.top-search, .global-search, .main-search, .search-shell, .search-wrap');
-    const measured = topSearch ? Math.ceil(topSearch.getBoundingClientRect().height) : 0;
-
-    /* Altura visual aproximada da busca fixa + respiro. */
-    return Math.max(88, Math.min(132, measured + 54));
-  }
-
-  function getFundListStartTargetV103(){
-    if(isMobile()){
-      return (
-        qs('#mobileFundCards .fund-card-mobile') ||
-        qs('#mobileFundCards > *') ||
-        qs('#mobileFundCards') ||
-        qs('#sec-fundos .fund-card-mobile') ||
-        qs('#sec-fundos')
-      );
-    }
-
-    return (
-      qs('#sec-fundos .table-wrap') ||
-      qs('#mainTable') ||
-      qs('#sec-fundos')
-    );
-  }
-
-  function scrollToFundResultsStartV103(opts){
-    const target = getFundListStartTargetV103();
-    if(!target) return;
-
-    const offset = stickyOffsetV103();
-    const y = target.getBoundingClientRect().top + window.pageYOffset - offset;
-
-    window.scrollTo({
-      top: Math.max(0, y),
-      behavior: opts && opts.instant ? 'auto' : 'smooth'
-    });
-  }
-
-  /* Sobrescreve a função usada pelo renderPagination legado. */
-  try{
-    window.scrollToFundResultsStart = scrollToFundResultsStartV103;
-    // Em escopo global sem module, isso também atualiza a binding usada pelos listeners.
-    scrollToFundResultsStart = scrollToFundResultsStartV103;
-  }catch(e){}
-
-  function bindPaginationGuardV103(){
-    const pageBtns = qs('#pageBtns');
-    if(!pageBtns || pageBtns.dataset.v103Bound === '1') return;
-
-    pageBtns.dataset.v103Bound = '1';
-    pageBtns.addEventListener('click', function(ev){
-      const btn = ev.target && ev.target.closest ? ev.target.closest('.page-btn') : null;
-      if(!btn || btn.disabled) return;
-
-      /* Espera o clique legado atualizar currentPage e renderizar os cards. */
-      requestAnimationFrame(()=>requestAnimationFrame(()=>scrollToFundResultsStartV103()));
-      setTimeout(()=>scrollToFundResultsStartV103(), 160);
-      setTimeout(()=>scrollToFundResultsStartV103({instant:true}), 420);
-    }, true);
-  }
-
-  function setupV103(){
-    try{
-      const meta = qs('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-      bindPaginationGuardV103();
-    }catch(e){}
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setupV103,120));
-  else setTimeout(setupV103,120);
-
-  setTimeout(setupV103,700);
-  setTimeout(setupV103,1600);
-
-  window.__ELTAUM_MOBILE_PAGINATION_SCROLL_TOP_V103__ = {
-    sync: setupV103,
-    scroll: scrollToFundResultsStartV103
-  };
-})();
-
-
-/* ════════════════════════════════════════════════════
    PATCH v104 — Corrige duplicação dos avisos "Arraste"
    Problema vindo do v101:
    - O seletor que procurava o hint existente usava uma string com duas classes
@@ -10558,7 +10458,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10671,7 +10571,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10799,111 +10699,72 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v107 — Micro ajuste: paginação com rolagem lisa
-   Corrige a v106:
-   - A v106 fazia várias tentativas de scroll em sequência.
-   - No celular isso parecia "travado", subindo em 3 etapas.
-   - Agora faz 1 rolagem principal suave, após a renderização.
-   - Só faz correção final invisível se o destino ainda ficar fora do ponto.
+   PATCH v108 — Mobile: paginação com rolagem nativa única
+   - Remove a lógica de múltiplas tentativas das versões antigas.
+   - Não usa correção final por timeout.
+   - Usa requestAnimationFrame pós-render + scrollIntoView nativo.
+   - Resultado esperado: subida lisa, sem "degraus".
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_SMOOTH_20260607_v107';
-  window.__ELTAUM_MICRO_PAGINATION_SMOOTH_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
-  let correctionTimer = null;
-  let lastPaginationClickAt = 0;
+  let lastClick = 0;
 
   function qs(sel,root=document){return root.querySelector(sel)}
   function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
 
-  function setBuildV107(){
+  function setBuildV108(){
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
   }
 
-  function topOffsetV107(){
-    if(!isMobile()) return 24;
-
-    const search =
-      qs('.top-search') ||
-      qs('.global-search') ||
-      qs('.search-fixed') ||
-      qs('.search-shell') ||
-      qs('.app-search') ||
-      qs('.hero-search') ||
-      qs('.main-search');
-
-    if(search){
-      const r = search.getBoundingClientRect();
-      if(r.height > 20 && r.top <= 100){
-        return Math.max(96, Math.min(132, Math.ceil(r.bottom) + 12));
-      }
-    }
-
-    return 112;
-  }
-
-  function firstFundCardV107(){
+  function getFirstCardV108(){
     return (
       qs('#mobileFundCards .fund-card-mobile') ||
-      qs('#mobileFundCards [data-fund-card]') ||
       qs('#mobileFundCards article') ||
       qs('#mobileFundCards > div') ||
       qs('.mobile-fund-cards .fund-card-mobile') ||
       qs('.fund-card-mobile') ||
-      qs('#mobileFundCards') ||
-      qs('#sec-fundos')
+      qs('#mobileFundCards')
     );
   }
 
-  function targetTopV107(){
-    const target = firstFundCardV107();
-    if(!target) return null;
-
-    return Math.max(0, target.getBoundingClientRect().top + window.pageYOffset - topOffsetV107());
-  }
-
-  function scrollOnceToFirstFundV107(){
+  function scrollToFirstCardNativeV108(){
     if(!isMobile()) return;
 
-    const y = targetTopV107();
-    if(y === null) return;
-
-    window.scrollTo({ top: y, left: 0, behavior: 'smooth' });
+    const target = getFirstCardV108();
+    if(!target) return;
 
     /*
-      Correção final única:
-      se depois da rolagem suave ainda houver diferença relevante,
-      ajusta em auto uma vez só. Isso evita o "sobe em 3 vezes".
+      scrollIntoView com scroll-margin-top via CSS é mais suave no Android
+      do que window.scrollTo calculado manualmente.
     */
-    clearTimeout(correctionTimer);
-    correctionTimer = setTimeout(() => {
-      const finalY = targetTopV107();
-      if(finalY === null) return;
-
-      if(Math.abs(window.pageYOffset - finalY) > 28){
-        window.scrollTo({ top: finalY, left: 0, behavior: 'auto' });
-      }
-    }, 650);
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest'
+    });
   }
 
-  function scheduleSmoothPaginationScrollV107(){
+  function schedulePaginationScrollV108(){
     if(!isMobile()) return;
 
     clearTimeout(scrollTimer);
-    clearTimeout(correctionTimer);
 
     /*
-      Espera a renderização dos novos cards, mas executa apenas uma rolagem.
-      180ms costuma ser suficiente para o render antigo trocar os cards.
+      Uma única execução depois da troca dos cards.
+      Sem fallback em 3 tempos, sem correção final.
     */
-    scrollTimer = setTimeout(scrollOnceToFirstFundV107, 180);
+    scrollTimer = setTimeout(() => {
+      requestAnimationFrame(() => scrollToFirstCardNativeV108());
+    }, 140);
   }
 
-  function isPaginationClickV107(target){
+  function isPaginationClickV108(target){
     if(!target || !target.closest) return false;
 
     return !!(
@@ -10914,37 +10775,33 @@ async function sharePainelMercado(){
     );
   }
 
-  function setupPaginationSmoothV107(){
-    setBuildV107();
+  function setupPaginationNativeV108(){
+    setBuildV108();
 
-    if(document.documentElement.dataset.v107PaginationSmooth === '1') return;
-    document.documentElement.dataset.v107PaginationSmooth = '1';
+    if(document.documentElement.dataset.v108PaginationNative === '1') return;
+    document.documentElement.dataset.v108PaginationNative = '1';
 
     document.addEventListener('click', function(ev){
-      if(!isPaginationClickV107(ev.target)) return;
+      if(!isPaginationClickV108(ev.target)) return;
 
       const btn = ev.target.closest('button,.page-btn,[data-page]');
       if(btn && (btn.disabled || btn.getAttribute('aria-disabled') === 'true')) return;
 
-      /*
-        Evita duplo disparo em alguns navegadores mobile/touch.
-      */
       const now = Date.now();
-      if(now - lastPaginationClickAt < 260) return;
-      lastPaginationClickAt = now;
+      if(now - lastClick < 320) return;
+      lastClick = now;
 
-      scheduleSmoothPaginationScrollV107();
+      schedulePaginationScrollV108();
     }, false);
   }
 
   /*
-    Se alguma função antiga chamar scrollToFundResultsStart,
-    usa a versão lisa e única no mobile.
+    Se alguma parte legada chamar esta função, agora ela faz apenas uma rolagem nativa.
   */
   try{
     window.scrollToFundResultsStart = function(){
       if(isMobile()) {
-        scheduleSmoothPaginationScrollV107();
+        schedulePaginationScrollV108();
       } else {
         const t = qs('#sec-fundos .table-wrap') || qs('#mainTable') || qs('#sec-fundos');
         if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
@@ -10954,17 +10811,17 @@ async function sharePainelMercado(){
   }catch(e){}
 
   if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(setupPaginationSmoothV107, 120));
+    document.addEventListener('DOMContentLoaded', () => setTimeout(setupPaginationNativeV108, 120));
   } else {
-    setTimeout(setupPaginationSmoothV107, 120);
+    setTimeout(setupPaginationNativeV108, 120);
   }
 
-  setTimeout(setupPaginationSmoothV107, 800);
-  setTimeout(setupPaginationSmoothV107, 1800);
+  setTimeout(setupPaginationNativeV108, 800);
+  setTimeout(setupPaginationNativeV108, 1800);
 
-  window.__ELTAUM_MICRO_PAGINATION_SMOOTH_V107__ = {
-    sync: setupPaginationSmoothV107,
-    scrollToFirstFund: scrollOnceToFirstFundV107
+  window.__ELTAUM_MICRO_PAGINATION_NATIVE_V108__ = {
+    sync: setupPaginationNativeV108,
+    scrollToFirstFund: scrollToFirstCardNativeV108
   };
 })();
 
