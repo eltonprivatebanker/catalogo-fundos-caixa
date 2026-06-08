@@ -24591,3 +24591,321 @@ input.search-no-autofill-v123{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v124 — Design System Tokens + legibilidade
+   Objetivo:
+   - Criar tokens globais sem refatorar o projeto inteiro.
+   - Melhorar legibilidade e padronização visual dos blocos mais relevantes.
+   - Evitar regressão nos patches estáveis v108/v118/v119/v120/v121/v122/v123.
+════════════════════════════════════════════════════ */
+
+/* 1) Tokens globais: camada superior de Design System */
+:root{
+  /* Cores principais */
+  --ds-text-primary:#f4f7ff;
+  --ds-text-secondary:#a6b0c9;
+  --ds-text-muted:#7f8aa7;
+  --ds-text-soft:#cbd5ee;
+
+  --ds-bg-page:#050610;
+  --ds-bg-card:#0d0f1c;
+  --ds-bg-card-soft:#111426;
+  --ds-bg-panel:rgba(14,17,31,.82);
+  --ds-bg-panel-strong:rgba(18,22,38,.92);
+
+  --ds-border-soft:rgba(255,255,255,.08);
+  --ds-border-medium:rgba(255,255,255,.12);
+  --ds-border-gold:rgba(232,187,106,.34);
+  --ds-border-blue:rgba(91,141,218,.24);
+
+  --ds-accent:#e8bb6a;
+  --ds-accent-strong:#f0c878;
+  --ds-positive:#2ed17a;
+  --ds-negative:#ff5c7a;
+  --ds-warning:#f2c46f;
+  --ds-blue:#7ba7ff;
+
+  /* Tipografia */
+  --ds-font-ui:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --ds-font-data:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  --ds-font-display:'Cormorant Garamond',Georgia,serif;
+
+  --ds-font-2xs:.56rem;
+  --ds-font-xs:.62rem;
+  --ds-font-sm:.72rem;
+  --ds-font-md:.88rem;
+  --ds-font-lg:1.08rem;
+  --ds-font-xl:1.28rem;
+  --ds-font-2xl:1.55rem;
+
+  --ds-line-tight:1.08;
+  --ds-line-title:1.16;
+  --ds-line-body:1.38;
+
+  /* Espaçamentos */
+  --ds-gap-2xs:4px;
+  --ds-gap-xs:6px;
+  --ds-gap-sm:10px;
+  --ds-gap-md:14px;
+  --ds-gap-lg:18px;
+  --ds-gap-xl:24px;
+
+  /* Bordas e sombras */
+  --ds-radius-sm:10px;
+  --ds-radius-md:14px;
+  --ds-radius-lg:18px;
+  --ds-radius-card:22px;
+  --ds-radius-pill:999px;
+
+  --ds-shadow-card:0 18px 42px rgba(0,0,0,.24);
+  --ds-shadow-inner:inset 0 1px 0 rgba(255,255,255,.045);
+}
+
+/* 2) Aplicação segura nos blocos de maior impacto visual */
+.site-header-clean,
+.executive-summary,
+.fund-filter-shell,
+.market-ref-card,
+.indic-ref-card,
+.closed-month-launch,
+.ranking-card,
+.ranking-panel,
+.focus-card{
+  color:var(--ds-text-primary);
+}
+
+/* Títulos principais e seções */
+.site-header-clean .brand-text h1,
+.section-title h2,
+.market-title-left h2,
+.ranking-title-group h2,
+.focus-title-line h2,
+.market-table-title span{
+  font-family:var(--ds-font-ui)!important;
+  color:var(--ds-accent)!important;
+  font-weight:850!important;
+  line-height:var(--ds-line-title)!important;
+  letter-spacing:-.012em!important;
+}
+
+/* Subtítulos */
+.site-header-clean .brand-text p,
+.section-title p,
+.market-table-title small,
+.closed-month-launch-copy small,
+.cdi-rel,
+.indic-ref-sub,
+.fcad-sub{
+  font-family:var(--ds-font-ui)!important;
+  color:var(--ds-text-secondary)!important;
+  line-height:var(--ds-line-body)!important;
+}
+
+/* Labels técnicas */
+.kpi-label,
+.indic-ref-label,
+.macro-label,
+.closed-month-kicker,
+.closed-card-kicker,
+.detail-key,
+.fcad-label,
+.filter-label,
+.catalog-shortcuts-label,
+.market-drag-label-v118 span,
+.toggle-label,
+.exhibition-control span{
+  font-family:var(--ds-font-ui)!important;
+  color:var(--ds-text-secondary)!important;
+  font-weight:800!important;
+  letter-spacing:.075em!important;
+  text-transform:uppercase!important;
+}
+
+/* Valores de destaque */
+.kpi-value,
+.indic-ref-val,
+.macro-main-value,
+.closed-card-value,
+.market-big-value{
+  font-family:var(--ds-font-display)!important;
+  color:var(--ds-text-primary);
+  font-weight:760!important;
+  line-height:.98!important;
+  letter-spacing:-.025em!important;
+}
+
+/* Valores técnicos e percentuais */
+.closed-mini-item em,
+.closed-mini-item b,
+.cdi-month-chip .m,
+.cdi-month-chip .v,
+.cdi-month-chip .p,
+.copom-num,
+.copom-date,
+.copom-result,
+#resultInfo,
+.live-badge{
+  font-family:var(--ds-font-data)!important;
+}
+
+/* Cores semânticas reforçadas */
+.pos,
+.positive,
+.closed-mini-item em.pos,
+#closedMonthLaunch .closed-mini-item em.pos,
+#closedMiniCdi.pos,
+#closedMiniIpca.pos,
+#closedMiniDolar.pos{
+  color:var(--ds-positive)!important;
+}
+
+.neg,
+.negative,
+.closed-mini-item em.neg,
+#closedMonthLaunch .closed-mini-item em.neg,
+#closedMiniIbov.neg{
+  color:var(--ds-negative)!important;
+}
+
+/* 3) Fechamento mensal: legibilidade premium e consistente */
+#closedMonthLaunch.closed-month-tokenized-v124,
+#closedMonthLaunch.closed-month-launch{
+  border-color:var(--ds-border-blue)!important;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(91,141,218,.12),transparent 34%),
+    linear-gradient(180deg,rgba(18,22,38,.92),rgba(7,8,15,.88))!important;
+  box-shadow:var(--ds-shadow-card),var(--ds-shadow-inner)!important;
+}
+
+#closedMonthLaunch .closed-month-mini{
+  gap:var(--ds-gap-sm)!important;
+  border-top:1px solid var(--ds-border-soft)!important;
+}
+
+#closedMonthLaunch .closed-mini-item{
+  border-color:var(--ds-border-soft)!important;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),
+    rgba(7,8,15,.32)!important;
+  box-shadow:var(--ds-shadow-inner)!important;
+}
+
+#closedMonthLaunch .closed-mini-item b{
+  color:var(--ds-text-secondary)!important;
+}
+
+#closedMonthLaunch .closed-month-launch-action{
+  border-color:var(--ds-border-gold)!important;
+  color:var(--ds-accent-strong)!important;
+}
+
+/* 4) Mercado: Selic/CDI/PTAX com mais coerência visual */
+#sec-mercado.market-tokenized-v124 .market-ref-card,
+#sec-mercado.market-tokenized-v124 .indic-ref-card{
+  border-radius:var(--ds-radius-card)!important;
+  border-color:var(--ds-border-blue)!important;
+  background:
+    radial-gradient(circle at 0% 0%,rgba(91,141,218,.10),transparent 34%),
+    linear-gradient(180deg,rgba(18,22,38,.92),rgba(7,8,15,.86))!important;
+  box-shadow:var(--ds-shadow-card),var(--ds-shadow-inner)!important;
+}
+
+#sec-mercado .macro-main-value.gold{
+  color:var(--ds-accent-strong)!important;
+}
+
+#sec-mercado .indic-ref-val.green,
+#sec-mercado #mc-cdi{
+  color:var(--ds-positive)!important;
+}
+
+#sec-mercado .market-rate-suffix{
+  color:var(--ds-text-soft)!important;
+  font-family:var(--ds-font-ui)!important;
+}
+
+/* 5) Desktop: ganho de legibilidade nos mini indicadores */
+@media(min-width:1024px){
+  #closedMonthLaunch .closed-mini-item{
+    min-height:64px!important;
+    padding:12px 10px!important;
+  }
+
+  #closedMonthLaunch .closed-mini-item b{
+    font-size:var(--ds-font-sm)!important;
+    font-weight:800!important;
+    line-height:1.05!important;
+  }
+
+  #closedMonthLaunch .closed-mini-item em{
+    font-size:var(--ds-font-md)!important;
+    font-weight:900!important;
+    line-height:1.08!important;
+  }
+
+  #closedMonthLaunch .closed-month-kicker{
+    font-size:var(--ds-font-sm)!important;
+  }
+
+  #closedMonthLaunch #closedMonthLaunchTitle{
+    font-size:1.18rem!important;
+  }
+
+  #closedMonthLaunch #closedMonthLaunchSub{
+    font-size:var(--ds-font-sm)!important;
+  }
+}
+
+/* 6) Mobile: preserva compactação sem perder legibilidade */
+@media(max-width:820px){
+  :root{
+    --ds-font-xs:.58rem;
+    --ds-font-sm:.66rem;
+    --ds-font-md:.82rem;
+    --ds-font-lg:1.02rem;
+    --ds-gap-sm:9px;
+    --ds-gap-md:12px;
+  }
+
+  #closedMonthLaunch .closed-mini-item b{
+    font-size:.58rem!important;
+    color:var(--ds-text-secondary)!important;
+  }
+
+  #closedMonthLaunch .closed-mini-item em{
+    font-size:.82rem!important;
+  }
+
+  #sec-mercado .macro-label,
+  #sec-mercado .indic-ref-label{
+    font-size:.66rem!important;
+    color:var(--ds-text-soft)!important;
+  }
+
+  #sec-mercado .market-drag-label-v118{
+    color:var(--ds-text-secondary)!important;
+  }
+
+  #sec-mercado .market-drag-label-v118 strong{
+    color:var(--ds-accent-strong)!important;
+  }
+
+  .section-title h2,
+  .market-title-left h2,
+  .ranking-title-group h2,
+  .focus-title-line h2{
+    font-size:1.02rem!important;
+  }
+}
+
+@media(max-width:380px){
+  #closedMonthLaunch .closed-mini-item b{
+    font-size:.55rem!important;
+  }
+
+  #closedMonthLaunch .closed-mini-item em{
+    font-size:.78rem!important;
+  }
+}
+
