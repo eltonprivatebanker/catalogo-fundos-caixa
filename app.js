@@ -8323,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8394,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116');
   }catch(e){}
 })();
 
@@ -8408,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8737,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116');
 })();
 
 
@@ -8747,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8815,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8922,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9160,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9226,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9327,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9468,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9515,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9567,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9690,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9773,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9834,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9903,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9973,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10068,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10186,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10275,7 +10275,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10386,7 +10386,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10459,7 +10459,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10572,7 +10572,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10709,7 +10709,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10839,7 +10839,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_FIX_HEADER_DRAG_DUP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10969,7 +10969,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_CDI_PANEL_STABILITY_20260608_v115';
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
   window.__ELTAUM_MICRO_CDI_PANEL_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11095,5 +11095,104 @@ async function sharePainelMercado(){
   setTimeout(syncV115, 3200);
 
   window.__ELTAUM_MICRO_CDI_PANEL_STABILITY_V115__ = { sync: syncV115 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v116 — Arraste sem clique/foco e sem pulo
+   Base: v115.
+   - Remove listener de clique do v115, que ainda podia agir em áreas de mercado.
+   - Garante que "Arraste →" não receba foco nem clique.
+   - Bloqueia eventos no rótulo visual antes de outros handlers.
+   - Mantém paginação v108 intacta.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  window.__ELTAUM_FIX_DRAG_LABEL_NO_CLICK_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function setBuildV116(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  function neutralizeDragLabelsV116(){
+    qsa('#sec-mercado .market-drag-label-v114, #sec-mercado .market-drag-label-v115, #sec-mercado .market-drag-label-v116').forEach(el => {
+      el.classList.add('drag-label-no-click-v116');
+      el.setAttribute('aria-hidden','true');
+      el.setAttribute('tabindex','-1');
+      el.removeAttribute('role');
+
+      qsa('span,strong,button,a', el).forEach(child => {
+        child.setAttribute('aria-hidden','true');
+        child.setAttribute('tabindex','-1');
+        if(child.tagName === 'A') child.removeAttribute('href');
+      });
+    });
+
+    qsa('#sec-mercado .market-scroll-hint-v101,#sec-mercado .copom-scroll-hint-v101,#sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
+  }
+
+  function normalizeCdiAlignV116(){
+    const strip = qs('#cdiMonthStrip');
+    if(!strip || !isMobile()) return;
+    qsa('.cdi-month-chip', strip).forEach(chip => chip.classList.add('cdi-chip-aligned-v115','cdi-chip-aligned-v116'));
+  }
+
+  function hardBlockDragLabelEventsV116(){
+    if(document.documentElement.dataset.v116DragEventBlock === '1') return;
+    document.documentElement.dataset.v116DragEventBlock = '1';
+
+    const stop = function(ev){
+      const label = ev.target && ev.target.closest
+        ? ev.target.closest('#sec-mercado .market-drag-label-v114, #sec-mercado .market-drag-label-v115, #sec-mercado .market-drag-label-v116, #sec-mercado .drag-label-no-click-v116')
+        : null;
+
+      if(!label) return;
+
+      /*
+        Este texto é apenas orientação visual.
+        Impede que toque/click acione handlers antigos de mercado ou foco/scroll do browser.
+      */
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      return false;
+    };
+
+    ['click','mousedown','mouseup','pointerdown','pointerup','touchstart','touchend'].forEach(type => {
+      document.addEventListener(type, stop, true);
+    });
+  }
+
+  function syncV116(){
+    try{
+      setBuildV116();
+      neutralizeDragLabelsV116();
+      normalizeCdiAlignV116();
+      hardBlockDragLabelEventsV116();
+
+      const mercado = qs('#sec-mercado');
+      if(mercado) mercado.classList.add('market-fix-v116');
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV116, 180));
+  } else {
+    setTimeout(syncV116, 180);
+  }
+
+  window.addEventListener('resize', () => setTimeout(syncV116, 160), {passive:true});
+  setTimeout(syncV116, 700);
+  setTimeout(syncV116, 1600);
+  setTimeout(syncV116, 3000);
+
+  window.__ELTAUM_FIX_DRAG_LABEL_NO_CLICK_V116__ = { sync: syncV116 };
 })();
 

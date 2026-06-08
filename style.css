@@ -24260,3 +24260,64 @@ html.no-smooth-scroll-v105 *{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v116 — Arraste sem clique/foco e sem pulo
+════════════════════════════════════════════════════ */
+
+@media(max-width:820px){
+  /* "Arraste →" é só texto-guia. Não deve ter função, foco, clique nem highlight. */
+  #sec-mercado .market-drag-label-v114,
+  #sec-mercado .market-drag-label-v115,
+  #sec-mercado .market-drag-label-v116,
+  #sec-mercado .drag-label-no-click-v116{
+    pointer-events:none!important;
+    user-select:none!important;
+    -webkit-user-select:none!important;
+    -webkit-touch-callout:none!important;
+    -webkit-tap-highlight-color:transparent!important;
+    touch-action:none!important;
+    cursor:default!important;
+    outline:none!important;
+  }
+
+  #sec-mercado .market-drag-label-v114 *,
+  #sec-mercado .market-drag-label-v115 *,
+  #sec-mercado .market-drag-label-v116 *,
+  #sec-mercado .drag-label-no-click-v116 *{
+    pointer-events:none!important;
+    user-select:none!important;
+    -webkit-user-select:none!important;
+    -webkit-tap-highlight-color:transparent!important;
+    touch-action:none!important;
+    cursor:default!important;
+  }
+
+  /* Remove definitivamente hint antigo abaixo do botão COPOM. */
+  #sec-mercado .market-scroll-hint-v101,
+  #sec-mercado .copom-scroll-hint-v101,
+  #sec-mercado .cdi-scroll-hint-v101,
+  #sec-mercado .macro-copom::after,
+  #sec-mercado .cdi-year-history::after,
+  #sec-mercado .copom-grid::after,
+  #sec-mercado .cdi-month-strip::after{
+    content:none!important;
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Mantém o alinhamento dos meses do CDI. */
+  #sec-mercado .cdi-month-chip.cdi-chip-aligned-v116{
+    display:grid!important;
+    grid-template-rows:auto 1fr auto!important;
+    align-items:start!important;
+    justify-items:start!important;
+  }
+}
+
