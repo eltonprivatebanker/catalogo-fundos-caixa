@@ -1510,10 +1510,11 @@ function renderCdiYearHistory(d){
     ? byLabel(mesFechadoRef)
     : mesesAno[mesesAno.length - 2];
 
-  // Ordem consultiva no celular: último mês fechado + mês atual parcial sempre aparecem primeiro.
+  // Ordem natural no mobile: mês atual/parcial primeiro, depois último fechado e anteriores.
+  // Ex.: JUN/2026, MAI/2026, ABR/2026.
   const destaque = [];
-  if(ultimoFechado) destaque.push(ultimoFechado);
-  if(atualParcial && atualParcial !== ultimoFechado) destaque.push(atualParcial);
+  if(atualParcial) destaque.push(atualParcial);
+  if(ultimoFechado && ultimoFechado !== atualParcial) destaque.push(ultimoFechado);
 
   const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
   const exibicao = [...destaque, ...restantes];
@@ -8322,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8393,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112');
   }catch(e){}
 })();
 
@@ -8407,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8736,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112');
 })();
 
 
@@ -8746,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8814,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8921,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9159,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9225,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9326,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9467,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9514,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9566,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9689,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9772,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9833,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9902,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9972,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10067,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10185,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10274,7 +10275,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10385,7 +10386,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10458,7 +10459,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10571,7 +10572,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10708,7 +10709,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_PAGINATION_NATIVE_20260607_v108';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10823,5 +10824,105 @@ async function sharePainelMercado(){
     sync: setupPaginationNativeV108,
     scrollToFirstFund: scrollToFirstCardNativeV108
   };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v112 — Micro ajustes: cabeçalho, Mercado e CDI
+   Base: arquivos enviados como versão atual estável.
+   - Remove visualmente qualquer resíduo do Painel consultivo.
+   - Padroniza orientação "Arraste →" sem mexer na paginação v108.
+   - Reforça ordem natural do CDI: mês atual, último fechado, anterior.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  window.__ELTAUM_MICRO_HEADER_MARKET_CDI_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function setBuildV112(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  function removeLookerResidueV112(){
+    qsa('#lookerPanelBtn,.looker-panel-btn-v102').forEach(el => el.remove());
+  }
+
+  function ensureDragLabelV112(target, label, key){
+    if(!target || !target.parentElement || !isMobile()) return;
+
+    let row = qs(`[data-drag-label-v112="${key}"]`, target.parentElement);
+    if(!row){
+      row = document.createElement('div');
+      row.className = 'market-drag-label-v112';
+      row.dataset.dragLabelV112 = key;
+      row.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
+      target.insertAdjacentElement('beforebegin', row);
+    } else {
+      const span = row.querySelector('span');
+      const strong = row.querySelector('strong');
+      if(span) span.textContent = label;
+      if(strong) strong.textContent = 'Arraste →';
+    }
+  }
+
+  function removeOldDragHintsV112(){
+    qsa('#sec-mercado .market-scroll-hint-v101,#sec-mercado .copom-scroll-hint-v101,#sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
+  }
+
+  function reorderCdiV112(){
+    const strip = qs('#cdiMonthStrip');
+    if(!strip || !isMobile()) return;
+
+    const chips = qsa('.cdi-month-chip', strip);
+    if(chips.length < 2) return;
+
+    const month = {JAN:1,FEV:2,MAR:3,ABR:4,MAI:5,JUN:6,JUL:7,AGO:8,SET:9,OUT:10,NOV:11,DEZ:12};
+    function score(chip){
+      const txt = (chip.querySelector('.m')?.textContent || chip.textContent || '').toUpperCase();
+      const m = txt.match(/(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)(?:\/(\d{4}))?/);
+      if(!m) return -1;
+      const y = Number(m[2] || new Date().getFullYear());
+      return y * 100 + (month[m[1]] || 0);
+    }
+    [...chips].sort((a,b) => score(b) - score(a)).forEach(chip => strip.appendChild(chip));
+    strip.scrollLeft = 0;
+  }
+
+  function syncV112(){
+    try{
+      setBuildV112();
+      removeLookerResidueV112();
+      removeOldDragHintsV112();
+
+      const mercado = qs('#sec-mercado');
+      if(mercado) mercado.classList.add('market-compact-v112');
+
+      const copom = qs('#copomMeetings');
+      if(copom) ensureDragLabelV112(copom, 'Próximas reuniões', 'copom');
+
+      const cdi = qs('#cdiMonthStrip');
+      if(cdi){
+        reorderCdiV112();
+        ensureDragLabelV112(cdi, 'Histórico mensal do CDI', 'cdi');
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(syncV112,160));
+  else setTimeout(syncV112,160);
+
+  document.addEventListener('click',()=>setTimeout(syncV112,90),true);
+  window.addEventListener('resize',()=>setTimeout(syncV112,140),{passive:true});
+  setTimeout(syncV112,700);
+  setTimeout(syncV112,1800);
+  setTimeout(syncV112,3200);
+
+  window.__ELTAUM_MICRO_HEADER_MARKET_CDI_V112__ = { sync: syncV112 };
 })();
 
