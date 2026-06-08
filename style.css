@@ -25101,3 +25101,31 @@ label:has(.toggle-label[title="Ocultar fundos sem dados"]) input[type="checkbox"
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v126 — Corrige #toggleSemDados para checkbox
+════════════════════════════════════════════════════ */
+
+#toggleSemDados.hide-no-data-input-v126,
+#toggleSemDados[type="checkbox"]{
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  accent-color:var(--ds-accent,#e8bb6a)!important;
+}
+
+.toggle-sem-dados-fixed-v126,
+.toggle-sem-dados-fixed-v126 *,
+.hide-no-data-toggle-v125,
+.hide-no-data-toggle-v125 *{
+  pointer-events:auto;
+}
+
+.toggle-sem-dados-fixed-v126{
+  cursor:pointer!important;
+}
+
+/* Garante que a regra visual de search não atinja o toggle */
+#toggleSemDados.search-no-autofill-v123{
+  -webkit-text-security:none!important;
+}
+

@@ -8323,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8394,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126');
   }catch(e){}
 })();
 
@@ -8408,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8737,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126');
 })();
 
 
@@ -8747,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8815,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8922,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9160,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9226,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9327,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9468,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9515,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9567,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9690,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9773,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9834,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9903,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9973,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10068,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10186,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10276,7 +10276,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10345,7 +10345,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10475,7 +10475,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10638,7 +10638,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10687,7 +10687,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10722,7 +10722,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10760,7 +10760,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10801,7 +10801,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -10827,7 +10827,21 @@ async function sharePainelMercado(){
   }
 
   function hardenSearchInputV123(el){
-    if(!isSearchInput(el)) return;
+    
+    if(!el) return;
+    const originalTypeV126 = (el.getAttribute('type') || '').toLowerCase();
+    const idV126 = (el.id || '').toLowerCase();
+    const roleV126 = (el.getAttribute('role') || '').toLowerCase();
+    const clsV126 = (el.className || '').toString().toLowerCase();
+    if(
+      idV126 === 'togglesemdados' ||
+      originalTypeV126 === 'checkbox' ||
+      originalTypeV126 === 'radio' ||
+      roleV126 === 'switch' ||
+      clsV126.includes('toggle') ||
+      clsV126.includes('checkbox')
+    ) return;
+if(!isSearchInput(el)) return;
 
     try{ el.type = 'search'; }catch(e){}
 
@@ -10899,7 +10913,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10941,7 +10955,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -11054,6 +11068,143 @@ async function sharePainelMercado(){
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_V125__ = {
     sync: syncV125,
     findHideNoDataControl
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v126 — Corrige #toggleSemDados para checkbox
+   Causa confirmada:
+   - O patch v123 de anti-autofill transformou #toggleSemDados em type="search".
+   Correção:
+   - #toggleSemDados sempre volta a ser checkbox;
+   - remove atributos de busca/autofill do toggle;
+   - impede que o anti-autofill trate toggles como campos de busca;
+   - preserva v108/v118/v119/v120/v121/v122/v123/v124/v125.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_20260608_v126';
+  window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function normalizeToggleSemDadosV126(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.documentElement.classList.add('toggle-sem-dados-checkbox-fix-v126');
+
+      const input = qs('#toggleSemDados');
+      if(!input) return;
+
+      try{ input.type = 'checkbox'; }catch(e){ input.setAttribute('type', 'checkbox'); }
+
+      input.name = 'toggleSemDados';
+      input.removeAttribute('inputmode');
+      input.removeAttribute('enterkeyhint');
+      input.removeAttribute('autocomplete');
+      input.removeAttribute('autocapitalize');
+      input.removeAttribute('autocorrect');
+      input.removeAttribute('spellcheck');
+      input.removeAttribute('data-lpignore');
+      input.removeAttribute('data-form-type');
+      input.removeAttribute('data-1p-ignore');
+      input.removeAttribute('data-bwignore');
+
+      input.classList.remove('search-no-autofill-v123');
+      input.classList.add('hide-no-data-input-v126');
+
+      input.style.pointerEvents = 'auto';
+
+      const wrap = input.closest('.toggle-wrap');
+      const label = input.closest('label');
+      const text = wrap?.querySelector('.toggle-label');
+
+      if(wrap){
+        wrap.classList.add('toggle-sem-dados-fixed-v126');
+        wrap.style.pointerEvents = 'auto';
+      }
+
+      if(label){
+        label.style.pointerEvents = 'auto';
+      }
+
+      if(text){
+        text.style.pointerEvents = 'auto';
+        text.textContent = 'Ocultar fundos sem dados';
+        text.title = 'Ocultar fundos sem dados';
+      }
+
+      if(!input.dataset.v126Bound){
+        input.dataset.v126Bound = '1';
+        input.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+        }, true);
+
+        input.addEventListener('change', () => {
+          setTimeout(() => {
+            try{
+              if(typeof window.aplicarFiltros === 'function') window.aplicarFiltros();
+              else if(typeof window.applyFilters === 'function') window.applyFilters();
+              else if(typeof window.renderFunds === 'function') window.renderFunds();
+              else if(typeof window.renderTable === 'function') window.renderTable();
+            }catch(e){}
+          }, 0);
+        });
+      }
+
+      if(wrap && !wrap.dataset.v126ClickBound){
+        wrap.dataset.v126ClickBound = '1';
+        wrap.addEventListener('click', (ev) => {
+          if(ev.target === input || ev.target.closest('input,button,a,select')) return;
+          ev.preventDefault();
+          input.checked = !input.checked;
+          input.dispatchEvent(new Event('change', {bubbles:true}));
+        });
+      }
+
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(normalizeToggleSemDadosV126, 80), {once:true});
+  }else{
+    setTimeout(normalizeToggleSemDadosV126, 80);
+  }
+
+  setTimeout(normalizeToggleSemDadosV126, 400);
+  setTimeout(normalizeToggleSemDadosV126, 1000);
+  setTimeout(normalizeToggleSemDadosV126, 2200);
+  setTimeout(normalizeToggleSemDadosV126, 4000);
+
+  window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_V126__ = {
+    sync: normalizeToggleSemDadosV126,
+    diagnose(){
+      const input = qs('#toggleSemDados');
+      const wrap = input?.closest('.toggle-wrap');
+      const text = wrap?.querySelector('.toggle-label');
+      return {
+        build: qs('meta[name="app-build"]')?.content,
+        htmlClass: document.documentElement.className,
+        input: {
+          existe: !!input,
+          type: input?.type,
+          checked: input?.checked,
+          name: input?.name,
+          className: input?.className,
+          outerHTML: input?.outerHTML
+        },
+        wrap: {
+          existe: !!wrap,
+          className: wrap?.className,
+          pointerEvents: wrap ? getComputedStyle(wrap).pointerEvents : null
+        },
+        texto: text?.textContent?.trim()
+      };
+    }
   };
 })();
 
