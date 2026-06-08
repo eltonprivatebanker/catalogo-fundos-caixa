@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_20260608_v122"/>
+<meta name="app-build" content="ELTAUM_SEARCH_NO_AUTOFILL_20260608_v123"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,12 +61,12 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=closed-month-mobile-rebalance-v122" rel="stylesheet"/>
+<link href="style.css?v=search-no-autofill-v123" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=closed-month-mobile-rebalance-v122"></script>
+<script defer src="app.js?v=search-no-autofill-v123"></script>
 
 </head>
 <body>
@@ -160,7 +160,7 @@ html:not(.app-booting) .page{
     <div class="controls-bar fund-controls-v2">
       <div class="search-wrap fund-search-main">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input id="searchInput" type="text" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..."/>
+        <input id="searchInput" type="search" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..." autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="fund_search_no_autofill" class="search-no-autofill-v123">
       </div>
 
       <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo">
@@ -1130,7 +1130,7 @@ html:not(.app-booting) .page{
 
     <div id="gfb-search-wrap">
       <svg id="gfb-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="gfbSearch" type="search" placeholder="Buscar fundo, CNPJ..." autocomplete="off" aria-label="Buscar fundo"/>
+      <input id="gfbSearch" type="search" placeholder="Buscar fundo, CNPJ..." autocomplete="off" aria-label="Buscar fundo" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="fund_search_no_autofill" class="search-no-autofill-v123">
       <button id="gfbClear" aria-label="Limpar busca">✕</button>
     </div>
 

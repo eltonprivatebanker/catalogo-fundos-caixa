@@ -24567,3 +24567,27 @@ button,
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v123 — Busca sem autofill/senhas no mobile
+════════════════════════════════════════════════════ */
+
+input.search-no-autofill-v123::-webkit-search-decoration,
+input.search-no-autofill-v123::-webkit-search-cancel-button,
+input.search-no-autofill-v123::-webkit-search-results-button,
+input.search-no-autofill-v123::-webkit-search-results-decoration{
+  display:none!important;
+  -webkit-appearance:none!important;
+}
+
+input.search-no-autofill-v123{
+  -webkit-text-security:none!important;
+  caret-color:#e8bb6a!important;
+}
+
+@media(max-width:820px){
+  input.search-no-autofill-v123{
+    -webkit-tap-highlight-color:transparent!important;
+  }
+}
+
