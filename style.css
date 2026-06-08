@@ -23887,3 +23887,367 @@ body.filter-sheet-open{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v120 — Sistema tipográfico global
+   Objetivo:
+   - Padronizar títulos e labels para reduzir aparência de "remendo".
+   - Inter = estrutura e títulos.
+   - JetBrains Mono = dados técnicos e microdados.
+   - Cormorant Garamond = números grandes/destaques, não títulos gerais.
+   - Não altera estrutura, paginação v108, mercado v118 ou header v119.
+════════════════════════════════════════════════════ */
+
+:root{
+  --font-ui-v120:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --font-data-v120:'JetBrains Mono','SFMono-Regular',Consolas,monospace;
+  --font-display-v120:'Cormorant Garamond',Georgia,serif;
+
+  --typo-title-main-v120:clamp(1.04rem,2.1vw,1.36rem);
+  --typo-title-section-v120:clamp(1.04rem,1.7vw,1.22rem);
+  --typo-title-card-v120:.82rem;
+  --typo-title-small-v120:.74rem;
+  --typo-sub-v120:.70rem;
+  --typo-label-v120:.64rem;
+  --typo-micro-v120:.58rem;
+
+  --typo-title-letter-v120:-.012em;
+  --typo-label-letter-v120:.075em;
+}
+
+/* Base visual dos títulos: deixa todos falando a mesma língua. */
+.site-header-clean .brand-text h1,
+.section-title h2,
+.market-title-left h2,
+.ranking-title-group h2,
+.ranking-head h2,
+.rank-card-title,
+.market-table-title span,
+.focus-title-line h2,
+.fcad-title,
+.docs-title,
+.indic-title,
+.closed-card-head h3,
+.quick-note-title,
+.comparador-title,
+.modal-title,
+.sheet-title,
+.drawer-title{
+  font-family:var(--font-ui-v120)!important;
+  font-weight:850!important;
+  letter-spacing:var(--typo-title-letter-v120)!important;
+  line-height:1.14!important;
+  text-wrap:balance;
+}
+
+/* Título principal do app */
+.site-header-clean .brand-text h1{
+  font-size:var(--typo-title-main-v120)!important;
+  color:#e8bb6a!important;
+}
+
+/* Títulos das seções */
+.section-title h2,
+.market-title-left h2,
+.ranking-title-group h2,
+.ranking-head h2,
+.market-table-title span,
+.focus-title-line h2{
+  font-size:var(--typo-title-section-v120)!important;
+  color:#e8bb6a!important;
+}
+
+/* Títulos internos de cards */
+.rank-card-title,
+.fcad-title,
+.docs-title,
+.indic-title,
+.closed-card-head h3,
+.quick-note-title,
+.comparador-title,
+.modal-title,
+.sheet-title,
+.drawer-title{
+  font-size:var(--typo-title-card-v120)!important;
+  color:#edf1fb!important;
+}
+
+/* Subtítulos e descrições */
+.site-header-clean .brand-text p,
+.section-title p,
+.market-table-title small,
+.indic-ref-sub,
+.selic-change-badge,
+.cdi-rel,
+.poup-rule-sub,
+.indic-subtitle,
+.indic-val-sub,
+.v2-sub,
+.ind-v2-sub,
+.focus-ref,
+.fcad-sub,
+.rank-cat,
+.detail-val,
+.docs-note,
+.quick-note-sub,
+.closed-month-launch-copy small,
+.closed-month-launch-copy #closedMonthLaunchSub{
+  font-family:var(--font-ui-v120)!important;
+  font-size:var(--typo-sub-v120)!important;
+  font-weight:500!important;
+  line-height:1.36!important;
+  letter-spacing:0!important;
+  color:#a6b0c9!important;
+}
+
+/* Labels: todas com uppercase limpo, sem variações excessivas */
+.kpi-label,
+.indic-ref-label,
+.macro-label,
+.poup-rule-label,
+.fcad-label,
+.detail-key,
+.filter-label,
+.catalog-shortcuts-label,
+.indic-tabs-label,
+.closed-month-kicker,
+.closed-card-kicker,
+.market-drag-label-v118 span,
+.market-mobile-scroll-label-v109 span,
+.mobile-filter-summary,
+.filter-result-summary,
+.toggle-label,
+.exhibition-control span{
+  font-family:var(--font-ui-v120)!important;
+  font-size:var(--typo-label-v120)!important;
+  line-height:1.18!important;
+  font-weight:800!important;
+  letter-spacing:var(--typo-label-letter-v120)!important;
+  text-transform:uppercase!important;
+  color:#aeb8d1!important;
+}
+
+/* Microdados e dados técnicos */
+.live-badge,
+.section-badge,
+.kpi-sub,
+#resultInfo,
+.cnpj-pill,
+.fund-code,
+.codigo-fundo,
+.detail-key,
+.detail-val,
+.docs-meta,
+.card-meta,
+.fund-card-meta,
+.fund-note,
+.market-rate-suffix,
+.cdi-month-chip .m,
+.cdi-month-chip .p,
+.copom-num,
+.copom-result,
+.closed-mini-item b,
+.closed-mini-item em,
+.indic-tab,
+.ctrl-select,
+select,
+option{
+  font-family:var(--font-data-v120)!important;
+}
+
+/* Valores grandes: mantém identidade premium, mas de forma controlada */
+.kpi-value,
+.indic-ref-val,
+.macro-main-value,
+.dolar-day-rate,
+.closed-card-value,
+.closed-item-value,
+.market-big-value{
+  font-family:var(--font-display-v120)!important;
+  font-weight:760!important;
+  letter-spacing:-.025em!important;
+  line-height:.98!important;
+}
+
+/* Valores menores/percentuais em listas devem ser mono para leitura precisa */
+.ranking-return,
+.ranking-risk-row em,
+.fund-note-metric strong,
+.fund-card-mobile .metric strong,
+.fund-card-mobile strong[data-value],
+.table td[data-col*="Rentabilidade"],
+.table td[data-col*="CDI"],
+.cdi-month-chip .v,
+.copom-date,
+.closed-mini-item em{
+  font-family:var(--font-data-v120)!important;
+  font-weight:850!important;
+  letter-spacing:-.015em!important;
+}
+
+/* Botões e chips */
+button,
+.vista-btn,
+.filter-preset-chip,
+.category-choice-v44,
+.shortcut-preset,
+.page-btn,
+.rank-action-btn,
+.ranking-action-btn,
+.rank-more-btn,
+.section-toggle-btn,
+.mobile-filter-toggle,
+.compar-btn-primary,
+.closed-month-launch-action{
+  font-family:var(--font-ui-v120)!important;
+  font-weight:800!important;
+  letter-spacing:.005em!important;
+}
+
+/* Harmonização de cards específicos do Mercado */
+.market-ref-card-unified .indic-ref-label,
+.market-ref-card-unified .macro-label,
+#sec-mercado .indic-ref-label,
+#sec-mercado .macro-label{
+  font-size:.68rem!important;
+  font-weight:850!important;
+  letter-spacing:.065em!important;
+  color:#c2cbe0!important;
+}
+
+#sec-mercado .market-rate-suffix{
+  font-size:.64rem!important;
+  font-weight:800!important;
+  letter-spacing:.02em!important;
+  color:#b6c0d8!important;
+}
+
+#sec-mercado .cdi-rel{
+  font-size:.68rem!important;
+  color:#9fa9c2!important;
+}
+
+/* Painel consolidado */
+#sec-mercado-painel .market-table-title span{
+  font-family:var(--font-ui-v120)!important;
+  font-size:1.02rem!important;
+  font-weight:850!important;
+  color:#e8bb6a!important;
+}
+
+#sec-mercado-painel .market-table-title small{
+  font-family:var(--font-ui-v120)!important;
+  font-size:.68rem!important;
+  font-weight:500!important;
+}
+
+/* Ranking mobile/desktop: melhora legibilidade dos nomes */
+#rankingsSection h2,
+#rankingsSection .ranking-title,
+#rankingsSection .ranking-risk-head strong,
+#rankingsSection .ranking-category-head strong,
+#rankingsSection .ranking-risk-row strong{
+  font-family:var(--font-ui-v120)!important;
+  letter-spacing:-.01em!important;
+}
+
+#rankingsSection .ranking-risk-head strong,
+#rankingsSection .ranking-category-head strong{
+  font-size:.82rem!important;
+  font-weight:850!important;
+}
+
+/* Mobile: escala menor e consistente */
+@media(max-width:820px){
+  :root{
+    --typo-title-main-v120:1.04rem;
+    --typo-title-section-v120:1.02rem;
+    --typo-title-card-v120:.80rem;
+    --typo-sub-v120:.66rem;
+    --typo-label-v120:.61rem;
+    --typo-micro-v120:.55rem;
+  }
+
+  .site-header-clean .brand-text h1{
+    font-size:1.04rem!important;
+    line-height:1.12!important;
+  }
+
+  .site-header-clean .brand-text p{
+    font-size:.55rem!important;
+    line-height:1.25!important;
+    letter-spacing:.05em!important;
+  }
+
+  .section-title h2,
+  .market-title-left h2,
+  .ranking-title-group h2,
+  .ranking-head h2,
+  .market-table-title span,
+  .focus-title-line h2{
+    font-size:1.02rem!important;
+    line-height:1.14!important;
+  }
+
+  .indic-ref-label,
+  .macro-label,
+  .kpi-label,
+  .filter-label,
+  .catalog-shortcuts-label{
+    font-size:.60rem!important;
+    line-height:1.18!important;
+    letter-spacing:.07em!important;
+  }
+
+  .indic-ref-sub,
+  .selic-change-badge,
+  .cdi-rel,
+  .market-table-title small,
+  .section-title p{
+    font-size:.64rem!important;
+    line-height:1.34!important;
+  }
+
+  #sec-mercado .indic-ref-label,
+  #sec-mercado .macro-label{
+    font-size:.66rem!important;
+    line-height:1.22!important;
+  }
+
+  #sec-mercado .market-drag-label-v118{
+    font-family:var(--font-ui-v120)!important;
+    font-size:.66rem!important;
+  }
+
+  #sec-mercado .market-drag-label-v118 strong{
+    font-family:var(--font-ui-v120)!important;
+    font-size:.66rem!important;
+    font-weight:850!important;
+  }
+
+  #sec-mercado-painel .market-table-title span{
+    font-size:.98rem!important;
+  }
+
+  #sec-mercado-painel .market-table-title small{
+    font-size:.64rem!important;
+  }
+}
+
+@media(max-width:380px){
+  :root{
+    --typo-title-main-v120:.98rem;
+    --typo-title-section-v120:.98rem;
+    --typo-sub-v120:.62rem;
+    --typo-label-v120:.58rem;
+  }
+
+  .site-header-clean .brand-text h1{
+    font-size:.98rem!important;
+  }
+
+  .site-header-clean .brand-text p{
+    font-size:.52rem!important;
+  }
+}
+
