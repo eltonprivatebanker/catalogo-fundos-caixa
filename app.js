@@ -8323,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8394,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_CLEAN_MARKET_HINTS_20260608_v117');
   }catch(e){}
 })();
 
@@ -8408,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8737,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117');
 })();
 
 
@@ -8747,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8815,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8922,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9160,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9226,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9327,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9468,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9515,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9567,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9690,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9773,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9834,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9903,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9973,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10068,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10186,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10275,7 +10275,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10386,7 +10386,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10459,7 +10459,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10572,7 +10572,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10709,7 +10709,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10828,34 +10828,31 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v114 — Header mobile + Arraste único no Mercado
+   PATCH v117 — Limpeza única: hints de mercado sem disputa
    Base: v108 de paginação preservada.
-   - Remove duplicidade v112/v113 de "Arraste →".
-   - Mantém apenas 1 rótulo por carrossel: COPOM e CDI.
-   - Oculta hints legados v101.
-   - Reorganiza CDI sem recriar HTML.
-   - Ajusta sinais no resumo de mercado.
+   Objetivo:
+   - remover rótulos/hints antigos v101/v112/v113/v114/v115/v116;
+   - criar somente 1 rótulo estável por carrossel;
+   - não usar listener global de click;
+   - não fazer sync em click;
+   - não mexer no scroll vertical da página.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
-  window.__ELTAUM_FIX_HEADER_DRAG_DUP_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  window.__ELTAUM_CLEAN_MARKET_HINTS_BUILD__ = BUILD;
 
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function isMobile(){ return window.matchMedia && window.matchMedia('(max-width: 820px)').matches; }
 
-  function setBuildV114(){
+  function setBuildV117(){
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
   }
 
-  function removeLookerResidueV114(){
-    qsa('#lookerPanelBtn,.looker-panel-btn-v102').forEach(el => el.remove());
-  }
-
-  function normalizeClosedMiniSignsV114(){
+  function normalizeClosedMiniSignsV117(){
     qsa('#closedMiniCdi,#closedMiniIpca,#closedMiniDolar,#closedMiniIbov').forEach(el => {
       const txt = (el.textContent || '').trim();
       el.classList.remove('pos','neg','zero');
@@ -10865,39 +10862,63 @@ async function sharePainelMercado(){
     });
   }
 
-  function removeLegacyDragHintsV114(){
-    qsa('#sec-mercado .market-scroll-hint-v101,#sec-mercado .copom-scroll-hint-v101,#sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
+  function removeAllOldHintsV117(scope){
+    const root = scope || document;
+    qsa([
+      '#sec-mercado .market-scroll-hint-v101',
+      '#sec-mercado .copom-scroll-hint-v101',
+      '#sec-mercado .cdi-scroll-hint-v101',
+      '#sec-mercado .market-drag-label-v112',
+      '#sec-mercado .market-drag-label-v113',
+      '#sec-mercado .market-drag-label-v114',
+      '#sec-mercado .market-drag-label-v115',
+      '#sec-mercado .market-drag-label-v116'
+    ].join(','), root).forEach(el => el.remove());
   }
 
-  function ensureOneDragLabelV114(target, label, key){
+  function ensureCleanHintV117(target, label, key){
     if(!target || !target.parentElement || !isMobile()) return;
 
     const parent = target.parentElement;
 
-    /*
-      Remove todos os rótulos antigos do mesmo bloco, incluindo v112/v113.
-      Depois cria apenas um v114. Isso elimina a duplicidade de vez.
-    */
-    qsa(
-      `.market-drag-label-v112[data-drag-label-v112="${key}"],` +
-      `.market-drag-label-v113[data-drag-label-v113="${key}"],` +
-      `.market-drag-label-v114[data-drag-label-v114="${key}"]`,
-      parent
-    ).forEach(el => el.remove());
+    // Remove qualquer sobra no bloco específico antes de criar o único rótulo novo.
+    qsa([
+      `.market-drag-label-v112`,
+      `.market-drag-label-v113`,
+      `.market-drag-label-v114`,
+      `.market-drag-label-v115`,
+      `.market-drag-label-v116`,
+      `.market-drag-label-v117[data-drag-label-v117="${key}"]`,
+      `.market-scroll-hint-v101`,
+      `.copom-scroll-hint-v101`,
+      `.cdi-scroll-hint-v101`
+    ].join(','), parent).forEach(el => el.remove());
 
     const row = document.createElement('div');
-    row.className = 'market-drag-label-v114';
-    row.dataset.dragLabelV114 = key;
+    row.className = 'market-drag-label-v117';
+    row.dataset.dragLabelV117 = key;
+    row.setAttribute('aria-hidden','true');
+    row.setAttribute('tabindex','-1');
     row.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
     target.insertAdjacentElement('beforebegin', row);
   }
 
-  function normalizeCdiOrderV114(){
+  function normalizeCdiOrderAndAlignV117(){
     const strip = qs('#cdiMonthStrip');
     if(!strip || !isMobile()) return;
 
     const chips = qsa('.cdi-month-chip', strip);
-    if(chips.length < 2) return;
+    if(!chips.length) return;
+
+    chips.forEach(chip => {
+      chip.classList.add('cdi-chip-aligned-v117');
+      const m = chip.querySelector('.m');
+      const v = chip.querySelector('.v');
+      const p = chip.querySelector('.p');
+      if(m) m.textContent = m.textContent.trim().toUpperCase();
+      if(v) v.textContent = v.textContent.trim();
+      if(p) p.textContent = p.textContent.trim();
+    });
 
     const month = {JAN:1,FEV:2,MAR:3,ABR:4,MAI:5,JUN:6,JUL:7,AGO:8,SET:9,OUT:10,NOV:11,DEZ:12};
 
@@ -10917,282 +10938,41 @@ async function sharePainelMercado(){
     strip.scrollLeft = 0;
   }
 
-  function syncV114(){
+  function syncV117(){
     try{
-      setBuildV114();
-      removeLookerResidueV114();
-      removeLegacyDragHintsV114();
-      normalizeClosedMiniSignsV114();
+      setBuildV117();
+      normalizeClosedMiniSignsV117();
+      removeAllOldHintsV117();
 
       const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-fix-v114');
+      if(mercado) mercado.classList.add('market-clean-v117');
 
       const copom = qs('#copomMeetings');
-      if(copom) ensureOneDragLabelV114(copom, 'Próximas reuniões', 'copom');
+      if(copom) ensureCleanHintV117(copom, 'Próximas reuniões', 'copom');
 
       const cdi = qs('#cdiMonthStrip');
       if(cdi){
-        normalizeCdiOrderV114();
-        ensureOneDragLabelV114(cdi, 'Histórico mensal do CDI', 'cdi');
+        normalizeCdiOrderAndAlignV117();
+        ensureCleanHintV117(cdi, 'Histórico mensal do CDI', 'cdi');
       }
-    }catch(e){}
-  }
-
-  /*
-    Sem listener global de click para não causar "pulo" visual.
-    A sincronização acontece só no carregamento e em resize.
-  */
-  if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV114, 180));
-  } else {
-    setTimeout(syncV114, 180);
-  }
-
-  window.addEventListener('resize', () => setTimeout(syncV114, 160), {passive:true});
-  setTimeout(syncV114, 800);
-  setTimeout(syncV114, 1800);
-  setTimeout(syncV114, 3200);
-
-  window.__ELTAUM_FIX_HEADER_DRAG_DUP_V114__ = { sync: syncV114 };
-})();
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v115 — Micro ajuste: CDI alinhado + painel sem pulo
-   Base: v114.
-   - Alinha os meses dentro dos chips do CDI.
-   - Remove microtexto legado de "arraste para ver..." que ainda aparecia.
-   - Torna "Arraste →" puramente visual, sem capturar toque/clique.
-   - Estabiliza Ver mais/Ver menos do Painel Consolidado de Indicadores.
-   - Mantém a paginação v108 intacta.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
-  window.__ELTAUM_MICRO_CDI_PANEL_STABILITY_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  function setBuildV115(){
-    const meta = qs('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
-  }
-
-  function removeLegacyHintsV115(){
-    /*
-      Remove os elementos reais criados pelos patches antigos.
-      A parte via ::after fica neutralizada no CSS v115.
-    */
-    qsa('#sec-mercado .market-scroll-hint-v101,#sec-mercado .copom-scroll-hint-v101,#sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
-
-    /* Remove texto solto com "arraste para ver..." caso algum patch tenha inserido fora das classes. */
-    qsa('#sec-mercado *').forEach(el => {
-      if(!el || !el.textContent || el.children.length > 0) return;
-      const txt = el.textContent.trim().toLowerCase();
-      if(txt.includes('arraste para ver')){
-        el.classList.add('legacy-drag-text-hidden-v115');
-      }
-    });
-  }
-
-  function normalizeCdiChipsV115(){
-    const strip = qs('#cdiMonthStrip');
-    if(!strip || !isMobile()) return;
-
-    const chips = qsa('.cdi-month-chip', strip);
-    if(!chips.length) return;
-
-    chips.forEach(chip => {
-      const m = chip.querySelector('.m');
-      const v = chip.querySelector('.v');
-      const p = chip.querySelector('.p');
-
-      if(m) m.textContent = m.textContent.trim().toUpperCase();
-      if(v) v.textContent = v.textContent.trim();
-      if(p) p.textContent = p.textContent.trim();
-
-      chip.classList.add('cdi-chip-aligned-v115');
-    });
-
-    const month = {JAN:1,FEV:2,MAR:3,ABR:4,MAI:5,JUN:6,JUL:7,AGO:8,SET:9,OUT:10,NOV:11,DEZ:12};
-
-    function score(chip){
-      const txt = (chip.querySelector('.m')?.textContent || chip.textContent || '').toUpperCase();
-      const m = txt.match(/(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)(?:\/(\d{4}))?/);
-      if(!m) return -1;
-      const y = Number(m[2] || new Date().getFullYear());
-      return y * 100 + (month[m[1]] || 0);
+    }catch(e){
+      console.warn('[v117 mercado] falha ao sincronizar:', e);
     }
-
-    const current = chips.find(c => c.classList.contains('current') || /parcial/i.test(c.textContent || ''));
-    const closed = chips.find(c => c !== current && (c.classList.contains('closed') || /último mês|ultimo mês/i.test(c.textContent || '')));
-    const rest = chips.filter(c => c !== current && c !== closed).sort((a,b) => score(b) - score(a));
-
-    [current, closed, ...rest].filter(Boolean).forEach(chip => strip.appendChild(chip));
   }
 
-  function freezePanelClickV115(){
-    /*
-      O painel consolidado piscava/pulava por mudança de altura ao clicar em Ver mais/Ver menos.
-      A trava abaixo preserva o ponto visual do botão após o render.
-    */
-    if(document.documentElement.dataset.v115PanelFreeze === '1') return;
-    document.documentElement.dataset.v115PanelFreeze = '1';
-
-    document.addEventListener('click', function(ev){
-      if(!isMobile()) return;
-
-      const btn = ev.target && ev.target.closest
-        ? ev.target.closest('#sec-mercado-painel .section-toggle-btn, #sec-mercado-painel [data-section-toggle], #sec-mercado-painel button')
-        : null;
-
-      if(!btn) return;
-      if(btn.disabled || btn.getAttribute('aria-disabled') === 'true') return;
-
-      const text = (btn.textContent || '').toLowerCase();
-      const isMoreLess = text.includes('ver mais') || text.includes('ver menos') || text.includes('ocultar') || text.includes('mostrar');
-      if(!isMoreLess) return;
-
-      const before = btn.getBoundingClientRect().top;
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          const after = btn.getBoundingClientRect().top;
-          const delta = after - before;
-          if(Math.abs(delta) > 2){
-            window.scrollBy({top: delta, left: 0, behavior: 'auto'});
-          }
-        });
-      });
-    }, true);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV117, 180), {once:true});
+  }else{
+    setTimeout(syncV117, 180);
   }
 
-  function syncV115(){
-    try{
-      setBuildV115();
-      removeLegacyHintsV115();
-      normalizeCdiChipsV115();
+  // Apenas resize/orientation. Nada de click/touch/scroll.
+  window.addEventListener('resize', () => setTimeout(syncV117, 180), {passive:true});
+  window.addEventListener('orientationchange', () => setTimeout(syncV117, 280), {passive:true});
 
-      const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-fix-v115');
+  setTimeout(syncV117, 900);
+  setTimeout(syncV117, 2200);
 
-      freezePanelClickV115();
-    }catch(e){}
-  }
-
-  if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV115, 180));
-  } else {
-    setTimeout(syncV115, 180);
-  }
-
-  window.addEventListener('resize', () => setTimeout(syncV115, 160), {passive:true});
-  setTimeout(syncV115, 800);
-  setTimeout(syncV115, 1800);
-  setTimeout(syncV115, 3200);
-
-  window.__ELTAUM_MICRO_CDI_PANEL_STABILITY_V115__ = { sync: syncV115 };
-})();
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v116 — Arraste sem clique/foco e sem pulo
-   Base: v115.
-   - Remove listener de clique do v115, que ainda podia agir em áreas de mercado.
-   - Garante que "Arraste →" não receba foco nem clique.
-   - Bloqueia eventos no rótulo visual antes de outros handlers.
-   - Mantém paginação v108 intacta.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_FIX_DRAG_LABEL_NO_CLICK_20260608_v116';
-  window.__ELTAUM_FIX_DRAG_LABEL_NO_CLICK_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  function setBuildV116(){
-    const meta = qs('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
-  }
-
-  function neutralizeDragLabelsV116(){
-    qsa('#sec-mercado .market-drag-label-v114, #sec-mercado .market-drag-label-v115, #sec-mercado .market-drag-label-v116').forEach(el => {
-      el.classList.add('drag-label-no-click-v116');
-      el.setAttribute('aria-hidden','true');
-      el.setAttribute('tabindex','-1');
-      el.removeAttribute('role');
-
-      qsa('span,strong,button,a', el).forEach(child => {
-        child.setAttribute('aria-hidden','true');
-        child.setAttribute('tabindex','-1');
-        if(child.tagName === 'A') child.removeAttribute('href');
-      });
-    });
-
-    qsa('#sec-mercado .market-scroll-hint-v101,#sec-mercado .copom-scroll-hint-v101,#sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
-  }
-
-  function normalizeCdiAlignV116(){
-    const strip = qs('#cdiMonthStrip');
-    if(!strip || !isMobile()) return;
-    qsa('.cdi-month-chip', strip).forEach(chip => chip.classList.add('cdi-chip-aligned-v115','cdi-chip-aligned-v116'));
-  }
-
-  function hardBlockDragLabelEventsV116(){
-    if(document.documentElement.dataset.v116DragEventBlock === '1') return;
-    document.documentElement.dataset.v116DragEventBlock = '1';
-
-    const stop = function(ev){
-      const label = ev.target && ev.target.closest
-        ? ev.target.closest('#sec-mercado .market-drag-label-v114, #sec-mercado .market-drag-label-v115, #sec-mercado .market-drag-label-v116, #sec-mercado .drag-label-no-click-v116')
-        : null;
-
-      if(!label) return;
-
-      /*
-        Este texto é apenas orientação visual.
-        Impede que toque/click acione handlers antigos de mercado ou foco/scroll do browser.
-      */
-      ev.preventDefault();
-      ev.stopPropagation();
-      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-      return false;
-    };
-
-    ['click','mousedown','mouseup','pointerdown','pointerup','touchstart','touchend'].forEach(type => {
-      document.addEventListener(type, stop, true);
-    });
-  }
-
-  function syncV116(){
-    try{
-      setBuildV116();
-      neutralizeDragLabelsV116();
-      normalizeCdiAlignV116();
-      hardBlockDragLabelEventsV116();
-
-      const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-fix-v116');
-    }catch(e){}
-  }
-
-  if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV116, 180));
-  } else {
-    setTimeout(syncV116, 180);
-  }
-
-  window.addEventListener('resize', () => setTimeout(syncV116, 160), {passive:true});
-  setTimeout(syncV116, 700);
-  setTimeout(syncV116, 1600);
-  setTimeout(syncV116, 3000);
-
-  window.__ELTAUM_FIX_DRAG_LABEL_NO_CLICK_V116__ = { sync: syncV116 };
+  window.__ELTAUM_CLEAN_MARKET_HINTS_V117__ = { sync: syncV117 };
 })();
 
