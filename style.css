@@ -23467,410 +23467,6 @@ body.filter-sheet-open{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v104 — Corrige duplicação dos avisos "Arraste"
-════════════════════════════════════════════════════ */
-
-@media(max-width:820px){
-  /* Esconde qualquer duplicação residual por CSS, mesmo antes do JS limpar. */
-  #sec-mercado .copom-scroll-hint-v101 ~ .copom-scroll-hint-v101,
-  #sec-mercado .cdi-scroll-hint-v101 ~ .cdi-scroll-hint-v101{
-    display:none!important;
-    visibility:hidden!important;
-    height:0!important;
-    min-height:0!important;
-    max-height:0!important;
-    margin:0!important;
-    padding:0!important;
-    overflow:hidden!important;
-  }
-
-  #sec-mercado.market-hints-fixed-v104 .market-scroll-hint-v101{
-    display:flex!important;
-    align-items:center!important;
-    justify-content:space-between!important;
-    margin:4px 2px 8px!important;
-    padding:0!important;
-    min-height:18px!important;
-    height:auto!important;
-    font-size:.60rem!important;
-    line-height:1.2!important;
-  }
-
-  #sec-mercado.market-hints-fixed-v104 .market-scroll-hint-v101[hidden]{
-    display:none!important;
-  }
-
-  /* Ajusta respiro depois da limpeza para os cards voltarem ao tamanho correto. */
-  #sec-mercado .selic-copom-card .copom-grid,
-  #sec-mercado .cdi-month-strip{
-    margin-bottom:0!important;
-  }
-}
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v105 — Mercado mobile: estabilidade + formatação
-════════════════════════════════════════════════════ */
-
-html.no-smooth-scroll-v105,
-html.no-smooth-scroll-v105 *{
-  scroll-behavior:auto!important;
-}
-
-@media(max-width:820px){
-  /* Evita que o navegador tente compensar altura e gere "pulos" em blocos expansíveis. */
-  #sec-mercado,
-  #sec-mercado *,
-  #sec-mercado-painel,
-  #sec-mercado-painel *{
-    overflow-anchor:none!important;
-  }
-
-  #sec-mercado .market-scroll-hint-v101,
-  #sec-mercado .copom-scroll-hint-v101,
-  #sec-mercado .cdi-scroll-hint-v101{
-    display:none!important;
-    visibility:hidden!important;
-    height:0!important;
-    min-height:0!important;
-    max-height:0!important;
-    margin:0!important;
-    padding:0!important;
-    overflow:hidden!important;
-  }
-
-  #sec-mercado .section-collapsible-body,
-  #sec-mercado-painel .section-collapsible-body,
-  #poupExplain,
-  #poupScenarioPanel,
-  .poup-explain,
-  .poup-scenario-panel{
-    transition:none!important;
-    animation:none!important;
-  }
-
-  /* 1) Fechamento mensal: card mais limpo, centralizado e sem conteúdo espremido à direita. */
-  #sec-mercado #closedMonthLaunch.closed-month-launch,
-  #sec-mercado .closed-month-launch-premium{
-    width:100%!important;
-    display:flex!important;
-    flex-direction:column!important;
-    align-items:stretch!important;
-    gap:14px!important;
-    padding:18px 18px 16px!important;
-    margin:0 0 14px!important;
-    border-radius:20px!important;
-    text-align:left!important;
-    background:
-      radial-gradient(circle at 14% 0%,rgba(91,156,246,.10),transparent 34%),
-      linear-gradient(180deg,rgba(17,21,38,.96),rgba(8,10,18,.98))!important;
-  }
-
-  #sec-mercado .closed-month-launch-copy{
-    width:100%!important;
-    min-width:0!important;
-    display:block!important;
-    text-align:left!important;
-  }
-
-  #sec-mercado .closed-month-kicker{
-    display:block!important;
-    margin:0 0 5px!important;
-    color:#aeb8d1!important;
-    font-size:.62rem!important;
-    font-weight:900!important;
-    letter-spacing:.13em!important;
-    text-transform:uppercase!important;
-    text-align:left!important;
-  }
-
-  #sec-mercado #closedMonthLaunchTitle{
-    display:block!important;
-    margin:0!important;
-    color:#f3f6ff!important;
-    font-size:1.18rem!important;
-    line-height:1.12!important;
-    font-weight:950!important;
-    letter-spacing:-.02em!important;
-    text-align:left!important;
-  }
-
-  #sec-mercado #closedMonthLaunchSub{
-    display:block!important;
-    margin:5px 0 13px!important;
-    color:#a5afc8!important;
-    font-size:.72rem!important;
-    line-height:1.25!important;
-    text-align:left!important;
-  }
-
-  #sec-mercado .closed-month-mini{
-    width:100%!important;
-    display:grid!important;
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:8px!important;
-    margin:0!important;
-  }
-
-  #sec-mercado .closed-mini-item{
-    min-height:44px!important;
-    padding:10px 11px!important;
-    border-radius:13px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:space-between!important;
-    gap:8px!important;
-    background:rgba(7,8,15,.46)!important;
-    border:1px solid rgba(255,255,255,.08)!important;
-  }
-
-  #sec-mercado .closed-mini-item b{
-    min-width:0!important;
-    color:#cbd5ee!important;
-    font-size:.72rem!important;
-    font-weight:850!important;
-    white-space:nowrap!important;
-  }
-
-  #sec-mercado .closed-mini-item em{
-    color:#2ed17a!important;
-    font-size:.78rem!important;
-    font-style:normal!important;
-    font-weight:950!important;
-    font-family:'JetBrains Mono',monospace!important;
-    white-space:nowrap!important;
-  }
-
-  #sec-mercado .closed-month-launch-action{
-    width:100%!important;
-    min-height:42px!important;
-    display:flex!important;
-    align-items:center!important;
-    justify-content:center!important;
-    padding:0 14px!important;
-    border-radius:13px!important;
-    font-size:.78rem!important;
-    font-weight:950!important;
-    color:#e8bb6a!important;
-    background:linear-gradient(180deg,rgba(200,151,58,.14),rgba(200,151,58,.06))!important;
-    border:1px solid rgba(232,187,106,.32)!important;
-  }
-
-  /* 2) Selic e CDI: cabeçalhos mais equilibrados, menos gigantes e sem textos espremidos. */
-  #sec-mercado .selic-copom-card,
-  #sec-mercado .cdi-card,
-  #sec-mercado .cdi-card-compacto{
-    padding:16px!important;
-    border-radius:20px!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-selic,
-  #sec-mercado .cdi-card .indic-ref-head,
-  #sec-mercado .cdi-card-compacto .indic-ref-head{
-    display:grid!important;
-    grid-template-columns:minmax(0,1fr) auto!important;
-    gap:8px 12px!important;
-    align-items:start!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-label,
-  #sec-mercado .cdi-card .indic-ref-label,
-  #sec-mercado .cdi-card-compacto .indic-ref-label{
-    max-width:none!important;
-    color:#cbd5ee!important;
-    font-size:.78rem!important;
-    line-height:1.18!important;
-    font-weight:950!important;
-    letter-spacing:.055em!important;
-    text-wrap:balance!important;
-  }
-
-  #sec-mercado .selic-copom-card .market-rate-line,
-  #sec-mercado .cdi-card .market-rate-line,
-  #sec-mercado .cdi-card-compacto .market-rate-line{
-    grid-column:2!important;
-    grid-row:1!important;
-    justify-self:end!important;
-    margin:0!important;
-    align-items:flex-end!important;
-    gap:5px!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-main-value,
-  #sec-mercado .cdi-card .indic-ref-val,
-  #sec-mercado .cdi-card-compacto .indic-ref-val{
-    font-size:1.68rem!important;
-    line-height:.95!important;
-    letter-spacing:-.03em!important;
-  }
-
-  #sec-mercado .selic-copom-card .market-rate-suffix,
-  #sec-mercado .cdi-card .market-rate-suffix,
-  #sec-mercado .cdi-card-compacto .market-rate-suffix{
-    font-size:.66rem!important;
-    line-height:1!important;
-    margin-bottom:.12rem!important;
-    white-space:nowrap!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-note{
-    grid-column:1 / -1!important;
-    width:100%!important;
-    margin:10px 0 0!important;
-    padding:8px 10px!important;
-    border-radius:12px!important;
-    justify-content:center!important;
-    text-align:center!important;
-    font-size:.70rem!important;
-    line-height:1.25!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-copom{
-    margin-top:4px!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-copom .macro-label{
-    margin:0 0 10px!important;
-    font-size:.72rem!important;
-    letter-spacing:.07em!important;
-  }
-
-  #sec-mercado .selic-copom-card .copom-grid,
-  #sec-mercado .cdi-month-strip{
-    padding-bottom:6px!important;
-    margin-bottom:0!important;
-  }
-
-  #sec-mercado .selic-copom-card .copom-item{
-    flex-basis:142px!important;
-    min-height:80px!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-link{
-    margin-top:10px!important;
-    min-height:38px!important;
-    font-size:.70rem!important;
-    line-height:1.2!important;
-    text-align:center!important;
-  }
-
-  #sec-mercado .cdi-year-history{
-    margin-top:12px!important;
-    padding:13px!important;
-    border-radius:16px!important;
-  }
-
-  #sec-mercado .cdi-year-head{
-    display:flex!important;
-    align-items:center!important;
-    justify-content:space-between!important;
-    gap:10px!important;
-    margin-bottom:10px!important;
-  }
-
-  #sec-mercado .cdi-year-head span{
-    font-size:.70rem!important;
-    line-height:1.15!important;
-    color:#cbd5ee!important;
-    font-weight:950!important;
-    letter-spacing:.06em!important;
-  }
-
-  #sec-mercado .cdi-year-head strong{
-    flex:0 0 auto!important;
-    font-size:.66rem!important;
-    padding:6px 10px!important;
-    border-radius:999px!important;
-  }
-
-  #sec-mercado .cdi-rel{
-    margin-top:10px!important;
-    font-size:.70rem!important;
-    line-height:1.35!important;
-  }
-
-  /* 3) Painel consolidado: reduz piscada e deixa o cabeçalho mobile menos pesado. */
-  #sec-mercado-painel{
-    margin-top:14px!important;
-    overflow-anchor:none!important;
-  }
-
-  #sec-mercado-painel .market-table-toolbar{
-    padding:16px 16px 14px!important;
-    border-radius:18px!important;
-    gap:12px!important;
-  }
-
-  #sec-mercado-painel .market-table-title span{
-    font-size:.98rem!important;
-    line-height:1.20!important;
-    text-wrap:balance!important;
-  }
-
-  #sec-mercado-painel .market-table-title small{
-    font-size:.70rem!important;
-    line-height:1.35!important;
-  }
-
-  #sec-mercado-painel .indic-tabs{
-    display:grid!important;
-    grid-template-columns:repeat(3,minmax(0,1fr))!important;
-    gap:8px!important;
-  }
-
-  #sec-mercado-painel .indic-tab{
-    min-height:38px!important;
-    padding:8px 9px!important;
-    font-size:.72rem!important;
-  }
-
-  #sec-mercado-painel .section-toggle-btn{
-    width:100%!important;
-    justify-content:center!important;
-    min-height:40px!important;
-    margin-top:2px!important;
-  }
-
-  /* 4) Poupança: evita sensação de salto e melhora texto em mobile. */
-  #sec-mercado .poup-mobile-details-toggle,
-  #sec-mercado .poup-mobile-close-extra{
-    min-height:42px!important;
-    margin-top:12px!important;
-    font-size:.76rem!important;
-    border-radius:13px!important;
-  }
-
-  #sec-mercado .poup-explain-row{
-    display:grid!important;
-    grid-template-columns:64px minmax(0,1fr)!important;
-    gap:8px!important;
-    align-items:start!important;
-  }
-
-  #sec-mercado .poup-explain-text{
-    font-size:.70rem!important;
-    line-height:1.42!important;
-  }
-}
-
-@media(max-width:380px){
-  #sec-mercado #closedMonthLaunchTitle{
-    font-size:1.08rem!important;
-  }
-
-  #sec-mercado .closed-month-mini{
-    grid-template-columns:1fr!important;
-  }
-
-  #sec-mercado .selic-copom-card .macro-main-value,
-  #sec-mercado .cdi-card .indic-ref-val,
-  #sec-mercado .cdi-card-compacto .indic-ref-val{
-    font-size:1.48rem!important;
-  }
-}
-
-
-/* ════════════════════════════════════════════════════
    PATCH v108 — Mobile: paginação com rolagem nativa única
 ════════════════════════════════════════════════════ */
 
@@ -23922,11 +23518,10 @@ html.no-smooth-scroll-v105 *{
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v117 — Limpeza única: hints de mercado sem disputa
+   PATCH v118 — Remove criadores legados dos hints de mercado
 ════════════════════════════════════════════════════ */
 
 @media(max-width:820px){
-  /* Cabeçalho mobile compacto e sem espaço morto */
   header.site-header-clean,
   .site-header-clean{
     display:flex!important;
@@ -23954,25 +23549,17 @@ html.no-smooth-scroll-v105 *{
     font-size:1.42rem!important;
   }
 
-  .site-header-clean .brand-text{
-    min-width:0!important;
-    width:100%!important;
-  }
-
   .site-header-clean .brand-text h1{
-    display:block!important;
     margin:0 0 4px!important;
     color:#e8bb6a!important;
     font-size:1.04rem!important;
     line-height:1.12!important;
-    letter-spacing:-.012em!important;
     white-space:normal!important;
     overflow:visible!important;
     text-overflow:clip!important;
   }
 
   .site-header-clean .brand-text p{
-    display:block!important;
     max-width:34ch!important;
     margin:0!important;
     color:#a6b0c9!important;
@@ -24004,7 +23591,7 @@ html.no-smooth-scroll-v105 *{
     line-height:1.1!important;
   }
 
-  /* Hints antigos: removidos visualmente mesmo se algum patch legado recriar */
+  /* Kill-switch visual para qualquer hint antigo */
   #sec-mercado .market-scroll-hint-v101,
   #sec-mercado .copom-scroll-hint-v101,
   #sec-mercado .cdi-scroll-hint-v101,
@@ -24013,11 +23600,7 @@ html.no-smooth-scroll-v105 *{
   #sec-mercado .market-drag-label-v114,
   #sec-mercado .market-drag-label-v115,
   #sec-mercado .market-drag-label-v116,
-  #sec-mercado .macro-copom::after,
-  #sec-mercado .cdi-year-history::after,
-  #sec-mercado .copom-grid::after,
-  #sec-mercado .cdi-month-strip::after{
-    content:none!important;
+  #sec-mercado .market-drag-label-v117{
     display:none!important;
     visibility:hidden!important;
     height:0!important;
@@ -24025,11 +23608,21 @@ html.no-smooth-scroll-v105 *{
     max-height:0!important;
     margin:0!important;
     padding:0!important;
+    opacity:0!important;
+    pointer-events:none!important;
     overflow:hidden!important;
   }
 
-  /* Rótulo novo: somente visual, sem click, sem foco, sem handler */
-  #sec-mercado .market-drag-label-v117{
+  #sec-mercado .macro-copom::after,
+  #sec-mercado .cdi-year-history::after,
+  #sec-mercado .copom-grid::after,
+  #sec-mercado .cdi-month-strip::after{
+    content:none!important;
+    display:none!important;
+  }
+
+  /* Rótulo único válido */
+  #sec-mercado .market-drag-label-v118{
     display:flex!important;
     align-items:center!important;
     justify-content:space-between!important;
@@ -24053,7 +23646,7 @@ html.no-smooth-scroll-v105 *{
     cursor:default!important;
   }
 
-  #sec-mercado .market-drag-label-v117 *{
+  #sec-mercado .market-drag-label-v118 *{
     pointer-events:none!important;
     user-select:none!important;
     -webkit-user-select:none!important;
@@ -24061,18 +23654,16 @@ html.no-smooth-scroll-v105 *{
     touch-action:none!important;
   }
 
-  #sec-mercado .market-drag-label-v117 strong{
+  #sec-mercado .market-drag-label-v118 strong{
     flex:0 0 auto!important;
     color:#e8bb6a!important;
     font-size:.68rem!important;
     line-height:1.15!important;
     font-weight:950!important;
-    letter-spacing:.01em!important;
     text-transform:none!important;
     white-space:nowrap!important;
   }
 
-  /* Negativos no resumo de mercado */
   #sec-mercado .closed-mini-item em.neg,
   #sec-mercado #closedMiniIbov.neg,
   #sec-mercado .closed-mini-item .neg{
@@ -24089,7 +23680,6 @@ html.no-smooth-scroll-v105 *{
     color:#cbd5ee!important;
   }
 
-  /* CDI: alinhamento consistente */
   #sec-mercado #cdiMonthStrip,
   #sec-mercado .cdi-month-strip{
     align-items:stretch!important;
@@ -24101,7 +23691,7 @@ html.no-smooth-scroll-v105 *{
 
   #sec-mercado #cdiMonthStrip .cdi-month-chip,
   #sec-mercado .cdi-month-strip .cdi-month-chip,
-  #sec-mercado .cdi-month-chip.cdi-chip-aligned-v117{
+  #sec-mercado .cdi-month-chip.cdi-chip-aligned-v118{
     position:relative!important;
     display:grid!important;
     grid-template-rows:auto 1fr auto!important;
@@ -24160,7 +23750,6 @@ html.no-smooth-scroll-v105 *{
     white-space:nowrap!important;
   }
 
-  /* Painel consolidado: evita ancoragem e transições em mobile */
   #sec-mercado-painel,
   #sec-mercado-painel *{
     overflow-anchor:none!important;
@@ -24203,7 +23792,7 @@ html.no-smooth-scroll-v105 *{
 
   #sec-mercado #cdiMonthStrip .cdi-month-chip,
   #sec-mercado .cdi-month-strip .cdi-month-chip,
-  #sec-mercado .cdi-month-chip.cdi-chip-aligned-v117{
+  #sec-mercado .cdi-month-chip.cdi-chip-aligned-v118{
     flex-basis:106px!important;
     min-width:106px!important;
     padding-left:11px!important;

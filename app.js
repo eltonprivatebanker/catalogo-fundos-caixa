@@ -8323,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8394,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_CLEAN_MARKET_HINTS_20260608_v117');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118');
   }catch(e){}
 })();
 
@@ -8408,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8737,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118');
 })();
 
 
@@ -8747,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8815,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8922,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9160,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9226,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9327,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9468,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9515,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9567,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9690,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9773,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9834,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9903,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9973,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10068,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10186,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10267,116 +10267,6 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v101 — Mobile Mercado profissional + espaçamentos
-   - Reduz espaço entre Rankings e Indicadores de Mercado.
-   - Organiza Resumo de Mercado, Selic/COPOM e CDI no mobile.
-   - Adiciona dicas discretas de arraste onde houver carrossel horizontal.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
-  window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  function ensureAfter(el, html, className){
-    if(!el || !el.parentElement) return null;
-    let hint = el.parentElement.querySelector('.' + className);
-    if(!hint){
-      hint = document.createElement('div');
-      hint.className = className;
-      hint.innerHTML = html;
-      el.insertAdjacentElement('afterend', hint);
-    }
-    return hint;
-  }
-
-  function setOverflowHint(row, hint){
-    if(!row || !hint) return;
-    const hasOverflow = row.scrollWidth > row.clientWidth + 8;
-    hint.hidden = !hasOverflow;
-    row.classList.toggle('market-has-overflow-v101', hasOverflow);
-    if(row.dataset.v101ScrollBound !== '1'){
-      row.dataset.v101ScrollBound = '1';
-      row.addEventListener('scroll', () => {
-        const max = Math.max(0, row.scrollWidth - row.clientWidth);
-        const atEnd = row.scrollLeft >= max - 8;
-        hint.classList.toggle('is-end-v101', atEnd);
-        row.classList.toggle('is-end-v101', atEnd);
-      }, {passive:true});
-    }
-  }
-
-  function normalizeMobileMarketV101(){
-    try{
-      const meta = qs('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-mobile-pro-v101');
-
-      const ranking = qs('#rankingsSection');
-      if(ranking) ranking.classList.add('ranking-market-gap-tight-v101');
-
-      if(!isMobile()) return;
-
-      const closed = qs('#closedMonthLaunch');
-      if(closed) closed.classList.add('closed-month-mobile-pro-v101');
-
-      const selic = qs('.selic-copom-card');
-      if(selic) selic.classList.add('selic-mobile-pro-v101');
-
-      const cdi = qs('.cdi-card-compacto, .cdi-card');
-      if(cdi) cdi.classList.add('cdi-mobile-pro-v101');
-
-      const copomGrid = qs('.selic-copom-card .copom-grid');
-      if(copomGrid){
-        const hint = ensureAfter(copomGrid, '<span>Próximas reuniões</span><strong>Arraste →</strong>', 'market-scroll-hint-v101 copom-scroll-hint-v101');
-        setOverflowHint(copomGrid, hint);
-      }
-
-      const cdiStrip = qs('#cdiMonthStrip');
-      if(cdiStrip){
-        const hint = ensureAfter(cdiStrip, '<span>Histórico mensal do CDI</span><strong>Arraste →</strong>', 'market-scroll-hint-v101 cdi-scroll-hint-v101');
-        setOverflowHint(cdiStrip, hint);
-      }
-
-      qsa('.closed-mini-item').forEach(el=>el.classList.add('closed-mini-mobile-v101'));
-      qsa('.cdi-month-chip').forEach(el=>el.classList.add('cdi-month-chip-mobile-v101'));
-      qsa('.copom-item').forEach(el=>el.classList.add('copom-item-mobile-v101'));
-    }catch(e){}
-  }
-
-  const oldRenderRankings = window.renderRankings || (typeof renderRankings === 'function' ? renderRankings : null);
-  if(typeof oldRenderRankings === 'function' && !oldRenderRankings.__mobileMarketProV101){
-    const wrappedRankings = function(){
-      const out = oldRenderRankings.apply(this, arguments);
-      setTimeout(normalizeMobileMarketV101,80);
-      return out;
-    };
-    wrappedRankings.__mobileMarketProV101 = true;
-    try{ window.renderRankings = wrappedRankings; }catch(e){}
-    try{ renderRankings = wrappedRankings; }catch(e){}
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeMobileMarketV101,180));
-  else setTimeout(normalizeMobileMarketV101,180);
-
-  document.addEventListener('click',()=>setTimeout(normalizeMobileMarketV101,100),true);
-  window.addEventListener('resize',()=>setTimeout(normalizeMobileMarketV101,120),{passive:true});
-
-  setTimeout(normalizeMobileMarketV101,800);
-  setTimeout(normalizeMobileMarketV101,1800);
-  setTimeout(normalizeMobileMarketV101,3200);
-
-  window.__ELTAUM_MOBILE_MARKET_PRO_V101__ = {sync:normalizeMobileMarketV101};
-})();
-
-
-/* ════════════════════════════════════════════════════
    PATCH v102 — Botão Painel Consultivo Looker Studio
    Como configurar:
    1) Publique ou compartilhe seu relatório no Looker Studio.
@@ -10386,7 +10276,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10446,260 +10336,6 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v104 — Corrige duplicação dos avisos "Arraste"
-   Problema vindo do v101:
-   - O seletor que procurava o hint existente usava uma string com duas classes
-     como se fosse descendência, então não encontrava o próprio elemento.
-   - A cada resize/click/timeout criava outro aviso "Próximas reuniões / Arraste".
-   Correção:
-   - Remove duplicados.
-   - Mantém só 1 hint de COPOM e 1 hint de CDI.
-   - Desativa a execução repetida problemática do v101.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
-  window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  function ensureSingleHint(row, type, label){
-    if(!row || !row.parentElement) return null;
-
-    const className = type === 'copom' ? 'copom-scroll-hint-v101' : 'cdi-scroll-hint-v101';
-    const all = qsa('.' + className, row.parentElement);
-
-    let hint = all[0] || null;
-    all.slice(1).forEach(el => el.remove());
-
-    if(!hint){
-      hint = document.createElement('div');
-      hint.className = 'market-scroll-hint-v101 ' + className + ' market-scroll-hint-fixed-v104';
-      hint.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
-      row.insertAdjacentElement('afterend', hint);
-    }else{
-      hint.classList.add('market-scroll-hint-fixed-v104');
-      const span = hint.querySelector('span');
-      const strong = hint.querySelector('strong');
-      if(span) span.textContent = label;
-      if(strong) strong.textContent = 'Arraste →';
-    }
-
-    return hint;
-  }
-
-  function updateHintVisibility(row, hint){
-    if(!row || !hint) return;
-
-    const hasOverflow = row.scrollWidth > row.clientWidth + 8;
-    hint.hidden = !hasOverflow;
-    row.classList.toggle('market-has-overflow-v101', hasOverflow);
-
-    if(row.dataset.v104ScrollBound !== '1'){
-      row.dataset.v104ScrollBound = '1';
-      row.addEventListener('scroll', () => {
-        const max = Math.max(0, row.scrollWidth - row.clientWidth);
-        const atEnd = row.scrollLeft >= max - 8;
-        hint.classList.toggle('is-end-v101', atEnd);
-        row.classList.toggle('is-end-v101', atEnd);
-      }, {passive:true});
-    }
-  }
-
-  function fixMarketHintDuplicationV104(){
-    try{
-      const meta = qs('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-hints-fixed-v104');
-
-      /* Limpeza global de duplicados criados pelo v101 */
-      ['copom-scroll-hint-v101','cdi-scroll-hint-v101'].forEach(cls=>{
-        const items = qsa('#sec-mercado .' + cls);
-        items.slice(1).forEach(el => el.remove());
-      });
-
-      if(!isMobile()) return;
-
-      const copomGrid = qs('#sec-mercado .selic-copom-card .copom-grid');
-      const cdiStrip = qs('#sec-mercado .cdi-month-strip, #sec-mercado #cdiMonthStrip');
-
-      const copomHint = ensureSingleHint(copomGrid, 'copom', 'Próximas reuniões');
-      const cdiHint = ensureSingleHint(cdiStrip, 'cdi', 'Histórico mensal do CDI');
-
-      updateHintVisibility(copomGrid, copomHint);
-      updateHintVisibility(cdiStrip, cdiHint);
-    }catch(e){}
-  }
-
-  /* Desativa o sync antigo problemático e substitui por versão segura */
-  try{
-    if(window.__ELTAUM_MOBILE_MARKET_PRO_V101__){
-      window.__ELTAUM_MOBILE_MARKET_PRO_V101__.sync = fixMarketHintDuplicationV104;
-    }
-  }catch(e){}
-
-  if(document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded',()=>setTimeout(fixMarketHintDuplicationV104,120));
-  } else {
-    setTimeout(fixMarketHintDuplicationV104,120);
-  }
-
-  document.addEventListener('click',()=>setTimeout(fixMarketHintDuplicationV104,80),true);
-  window.addEventListener('resize',()=>setTimeout(fixMarketHintDuplicationV104,120),{passive:true});
-
-  setTimeout(fixMarketHintDuplicationV104,500);
-  setTimeout(fixMarketHintDuplicationV104,1200);
-  setTimeout(fixMarketHintDuplicationV104,2400);
-  setTimeout(fixMarketHintDuplicationV104,4200);
-
-  window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_V104__ = {
-    sync: fixMarketHintDuplicationV104
-  };
-})();
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v105 — Mercado mobile: estabilidade + sem pulos
-   - Mantém posição visual ao abrir/fechar Poupança e Painel Consolidado.
-   - Remove hints duplicados/residuais de arraste no mercado.
-   - Evita piscadas causadas por transições em blocos expansíveis.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
-  window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
-
-  function qs(sel,root=document){return root.querySelector(sel)}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
-  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
-
-  function cleanupMarketHintsV105(){
-    try{
-      qsa('#sec-mercado .market-scroll-hint-v101, #sec-mercado .copom-scroll-hint-v101, #sec-mercado .cdi-scroll-hint-v101').forEach(el=>el.remove());
-      const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-stable-v105');
-    }catch(e){}
-  }
-
-  function withViewportLockV105(anchor, action){
-    if(!isMobile() || !anchor){
-      return action ? action() : undefined;
-    }
-
-    const before = anchor.getBoundingClientRect().top;
-    let out;
-
-    try{
-      document.documentElement.classList.add('no-smooth-scroll-v105');
-      out = action ? action() : undefined;
-    }catch(e){
-      try{ document.documentElement.classList.remove('no-smooth-scroll-v105'); }catch(_){}
-      throw e;
-    }
-
-    const fix = () => {
-      try{
-        const after = anchor.getBoundingClientRect().top;
-        const delta = after - before;
-        if(Math.abs(delta) > 2){
-          window.scrollBy({top: delta, left: 0, behavior: 'auto'});
-        }
-      }catch(e){}
-    };
-
-    requestAnimationFrame(()=>requestAnimationFrame(fix));
-    setTimeout(fix,80);
-    setTimeout(fix,180);
-    setTimeout(()=>document.documentElement.classList.remove('no-smooth-scroll-v105'),260);
-
-    return out;
-  }
-
-  function wrapToggleFunctionV105(name, anchorSelector){
-    const fn = window[name] || (typeof globalThis[name] === 'function' ? globalThis[name] : null);
-    if(typeof fn !== 'function' || fn.__marketStableV105) return;
-
-    const wrapped = function(){
-      const evt = arguments && arguments[0] && arguments[0].target ? arguments[0] : null;
-      const anchor =
-        (evt && evt.target && evt.target.closest ? evt.target.closest('button,[role="button"],.market-ref-card,.section-gap') : null) ||
-        qs(anchorSelector) ||
-        document.activeElement;
-
-      return withViewportLockV105(anchor, () => fn.apply(this, arguments));
-    };
-
-    wrapped.__marketStableV105 = true;
-
-    try{ window[name] = wrapped; }catch(e){}
-    try{ globalThis[name] = wrapped; }catch(e){}
-    try{ eval(name + ' = wrapped'); }catch(e){}
-  }
-
-  function bindSpecificButtonsV105(){
-    const bind = (sel, anchorSel) => {
-      qsa(sel).forEach(btn=>{
-        if(btn.dataset.v105StableBound === '1') return;
-        btn.dataset.v105StableBound = '1';
-        btn.addEventListener('click', function(){
-          const anchor = btn.closest(anchorSel) || btn;
-          requestAnimationFrame(()=>withViewportLockV105(anchor, null));
-        }, true);
-      });
-    };
-
-    bind('#poupMobileDetailsToggle, .poup-mobile-close-extra, #poupExpandBtn', '.market-ref-card, .poup-card, .indic-ref-card');
-    bind('#sec-mercado-painel .section-toggle-btn, #sec-mercado-painel .section-title-collapsible', '#sec-mercado-painel');
-  }
-
-  function setupMarketStabilityV105(){
-    try{
-      const meta = qs('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      cleanupMarketHintsV105();
-
-      wrapToggleFunctionV105('togglePoupancaMobileDetails', '#sec-mercado .poup-card, #sec-mercado .market-ref-card');
-      wrapToggleFunctionV105('togglePoupanca', '#sec-mercado .poup-card, #sec-mercado .market-ref-card');
-      wrapToggleFunctionV105('handleSectionToggleClick', '#sec-mercado-painel');
-      wrapToggleFunctionV105('toggleSection', '#sec-mercado-painel');
-
-      bindSpecificButtonsV105();
-
-      /* Garante que o v101 não recrie os hints. */
-      if(window.__ELTAUM_MOBILE_MARKET_PRO_V101__){
-        window.__ELTAUM_MOBILE_MARKET_PRO_V101__.sync = cleanupMarketHintsV105;
-      }
-      if(window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_V104__){
-        window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_V104__.sync = cleanupMarketHintsV105;
-      }
-    }catch(e){}
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setupMarketStabilityV105,120));
-  else setTimeout(setupMarketStabilityV105,120);
-
-  document.addEventListener('click',()=>setTimeout(setupMarketStabilityV105,80),true);
-  window.addEventListener('resize',()=>setTimeout(setupMarketStabilityV105,120),{passive:true});
-
-  setTimeout(setupMarketStabilityV105,500);
-  setTimeout(setupMarketStabilityV105,1400);
-  setTimeout(setupMarketStabilityV105,3000);
-
-  window.__ELTAUM_MOBILE_MARKET_STABILITY_V105__ = {
-    sync: setupMarketStabilityV105,
-    cleanupHints: cleanupMarketHintsV105
-  };
-})();
-
-
-/* ════════════════════════════════════════════════════
    PATCH v108 — Mobile: paginação com rolagem nativa única
    - Remove a lógica de múltiplas tentativas das versões antigas.
    - Não usa correção final por timeout.
@@ -10709,7 +10345,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10828,31 +10464,42 @@ async function sharePainelMercado(){
 
 
 /* ════════════════════════════════════════════════════
-   PATCH v117 — Limpeza única: hints de mercado sem disputa
+   PATCH v118 — Remove criadores legados dos hints de mercado
    Base: v108 de paginação preservada.
-   Objetivo:
-   - remover rótulos/hints antigos v101/v112/v113/v114/v115/v116;
-   - criar somente 1 rótulo estável por carrossel;
-   - não usar listener global de click;
-   - não fazer sync em click;
-   - não mexer no scroll vertical da página.
+   Decisão:
+   - patches v101/v104/v105 removidos do app.js porque recriavam market-scroll-hint-v101;
+   - mantém apenas market-drag-label-v118;
+   - sem listener de click;
+   - observer só remove hints legados se algum código remanescente tentar recriá-los.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CLEAN_MARKET_HINTS_20260608_v117';
-  window.__ELTAUM_CLEAN_MARKET_HINTS_BUILD__ = BUILD;
+  const BUILD = 'ELTAUM_REMOVE_LEGACY_MARKET_HINTS_20260608_v118';
+  window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
   function isMobile(){ return window.matchMedia && window.matchMedia('(max-width: 820px)').matches; }
 
-  function setBuildV117(){
+  const LEGACY_HINTS = [
+    '#sec-mercado .market-scroll-hint-v101',
+    '#sec-mercado .copom-scroll-hint-v101',
+    '#sec-mercado .cdi-scroll-hint-v101',
+    '#sec-mercado .market-drag-label-v112',
+    '#sec-mercado .market-drag-label-v113',
+    '#sec-mercado .market-drag-label-v114',
+    '#sec-mercado .market-drag-label-v115',
+    '#sec-mercado .market-drag-label-v116',
+    '#sec-mercado .market-drag-label-v117'
+  ].join(',');
+
+  function setBuildV118(){
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
   }
 
-  function normalizeClosedMiniSignsV117(){
+  function normalizeClosedMiniSignsV118(){
     qsa('#closedMiniCdi,#closedMiniIpca,#closedMiniDolar,#closedMiniIbov').forEach(el => {
       const txt = (el.textContent || '').trim();
       el.classList.remove('pos','neg','zero');
@@ -10862,48 +10509,26 @@ async function sharePainelMercado(){
     });
   }
 
-  function removeAllOldHintsV117(scope){
-    const root = scope || document;
-    qsa([
-      '#sec-mercado .market-scroll-hint-v101',
-      '#sec-mercado .copom-scroll-hint-v101',
-      '#sec-mercado .cdi-scroll-hint-v101',
-      '#sec-mercado .market-drag-label-v112',
-      '#sec-mercado .market-drag-label-v113',
-      '#sec-mercado .market-drag-label-v114',
-      '#sec-mercado .market-drag-label-v115',
-      '#sec-mercado .market-drag-label-v116'
-    ].join(','), root).forEach(el => el.remove());
+  function removeLegacyHintsV118(){
+    qsa(LEGACY_HINTS).forEach(el => el.remove());
   }
 
-  function ensureCleanHintV117(target, label, key){
+  function ensureHintV118(target, label, key){
     if(!target || !target.parentElement || !isMobile()) return;
 
     const parent = target.parentElement;
-
-    // Remove qualquer sobra no bloco específico antes de criar o único rótulo novo.
-    qsa([
-      `.market-drag-label-v112`,
-      `.market-drag-label-v113`,
-      `.market-drag-label-v114`,
-      `.market-drag-label-v115`,
-      `.market-drag-label-v116`,
-      `.market-drag-label-v117[data-drag-label-v117="${key}"]`,
-      `.market-scroll-hint-v101`,
-      `.copom-scroll-hint-v101`,
-      `.cdi-scroll-hint-v101`
-    ].join(','), parent).forEach(el => el.remove());
+    qsa(`.market-drag-label-v118[data-drag-label-v118="${key}"]`, parent).forEach(el => el.remove());
 
     const row = document.createElement('div');
-    row.className = 'market-drag-label-v117';
-    row.dataset.dragLabelV117 = key;
-    row.setAttribute('aria-hidden','true');
-    row.setAttribute('tabindex','-1');
+    row.className = 'market-drag-label-v118';
+    row.dataset.dragLabelV118 = key;
+    row.setAttribute('aria-hidden', 'true');
+    row.setAttribute('tabindex', '-1');
     row.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
     target.insertAdjacentElement('beforebegin', row);
   }
 
-  function normalizeCdiOrderAndAlignV117(){
+  function normalizeCdiV118(){
     const strip = qs('#cdiMonthStrip');
     if(!strip || !isMobile()) return;
 
@@ -10911,7 +10536,7 @@ async function sharePainelMercado(){
     if(!chips.length) return;
 
     chips.forEach(chip => {
-      chip.classList.add('cdi-chip-aligned-v117');
+      chip.classList.add('cdi-chip-aligned-v118');
       const m = chip.querySelector('.m');
       const v = chip.querySelector('.v');
       const p = chip.querySelector('.p');
@@ -10933,46 +10558,73 @@ async function sharePainelMercado(){
     const current = chips.find(c => c.classList.contains('current') || /parcial/i.test(c.textContent || ''));
     const closed = chips.find(c => c !== current && (c.classList.contains('closed') || /último mês|ultimo mês/i.test(c.textContent || '')));
     const rest = chips.filter(c => c !== current && c !== closed).sort((a,b) => score(b) - score(a));
-
     [current, closed, ...rest].filter(Boolean).forEach(chip => strip.appendChild(chip));
     strip.scrollLeft = 0;
   }
 
-  function syncV117(){
+  function syncV118(){
     try{
-      setBuildV117();
-      normalizeClosedMiniSignsV117();
-      removeAllOldHintsV117();
+      setBuildV118();
+      removeLegacyHintsV118();
+      normalizeClosedMiniSignsV118();
 
       const mercado = qs('#sec-mercado');
-      if(mercado) mercado.classList.add('market-clean-v117');
+      if(mercado) mercado.classList.add('market-clean-v118');
 
       const copom = qs('#copomMeetings');
-      if(copom) ensureCleanHintV117(copom, 'Próximas reuniões', 'copom');
+      if(copom) ensureHintV118(copom, 'Próximas reuniões', 'copom');
 
       const cdi = qs('#cdiMonthStrip');
       if(cdi){
-        normalizeCdiOrderAndAlignV117();
-        ensureCleanHintV117(cdi, 'Histórico mensal do CDI', 'cdi');
+        normalizeCdiV118();
+        ensureHintV118(cdi, 'Histórico mensal do CDI', 'cdi');
       }
     }catch(e){
-      console.warn('[v117 mercado] falha ao sincronizar:', e);
+      console.warn('[v118 mercado] falha ao sincronizar:', e);
     }
   }
 
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV117, 180), {once:true});
-  }else{
-    setTimeout(syncV117, 180);
+  function installLegacyHintObserverV118(){
+    if(document.documentElement.dataset.v118HintObserver === '1') return;
+    document.documentElement.dataset.v118HintObserver = '1';
+
+    const obs = new MutationObserver((mutations) => {
+      let found = false;
+      for(const m of mutations){
+        for(const n of m.addedNodes || []){
+          if(n.nodeType !== 1) continue;
+          if(n.matches && n.matches(LEGACY_HINTS)){ found = true; break; }
+          if(n.querySelector && n.querySelector(LEGACY_HINTS)){ found = true; break; }
+        }
+        if(found) break;
+      }
+      if(found) {
+        requestAnimationFrame(removeLegacyHintsV118);
+      }
+    });
+
+    obs.observe(document.body, {childList:true, subtree:true});
+    window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_OBSERVER__ = obs;
   }
 
-  // Apenas resize/orientation. Nada de click/touch/scroll.
-  window.addEventListener('resize', () => setTimeout(syncV117, 180), {passive:true});
-  window.addEventListener('orientationchange', () => setTimeout(syncV117, 280), {passive:true});
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(syncV118, 180);
+      setTimeout(installLegacyHintObserverV118, 220);
+    }, {once:true});
+  }else{
+    setTimeout(syncV118, 180);
+    setTimeout(installLegacyHintObserverV118, 220);
+  }
 
-  setTimeout(syncV117, 900);
-  setTimeout(syncV117, 2200);
+  // Sem click/touch/scroll.
+  window.addEventListener('resize', () => setTimeout(syncV118, 180), {passive:true});
+  window.addEventListener('orientationchange', () => setTimeout(syncV118, 280), {passive:true});
 
-  window.__ELTAUM_CLEAN_MARKET_HINTS_V117__ = { sync: syncV117 };
+  setTimeout(syncV118, 900);
+  setTimeout(syncV118, 2200);
+  setTimeout(syncV118, 4200);
+
+  window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_V118__ = { sync: syncV118, removeLegacy: removeLegacyHintsV118 };
 })();
 
