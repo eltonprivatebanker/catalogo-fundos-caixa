@@ -1,5 +1,5 @@
 {
-  "gerado_em": "05/06/2026 16:10:19",
+  "gerado_em": "08/06/2026 16:45:54",
   "total": 195,
   "por_cnpj": {
     "00068305000135": {
@@ -58,6 +58,62 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0086.pdf"
       }
     },
+    "03191874000161": {
+      "codfundo": "46",
+      "nome": "CAIXA FIC FIF PATRIMONIO IND.DE PRECOS RF LP RESP LTDA",
+      "cnpj": "03.191.874/0001-61",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0046.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0046.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0046.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_46.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_46.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_46.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0046.pdf"
+      }
+    },
+    "03914671000156": {
+      "codfundo": "48",
+      "nome": "CAIXA FIF ACOES PETROBRAS RESP LTDA",
+      "cnpj": "03.914.671/0001-56",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0048.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0048.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0048.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0048.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_48.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_48.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0048.pdf"
+      }
+    },
+    "03737188000143": {
+      "codfundo": "82",
+      "nome": "CAIXA FIF RV 30 MM LONGO PRAZO RESP LTDA",
+      "cnpj": "03.737.188/0001-43",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0082.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0082.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0082.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0082.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_82.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_82.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0082.pdf"
+      }
+    },
+    "02201163000168": {
+      "codfundo": "83",
+      "nome": "CAIXA FIC FIF PERSONAL RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "02.201.163/0001-68",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0083.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0083.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0083.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0083.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_83.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_83.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0083.pdf"
+      }
+    },
     "00834074000123": {
       "codfundo": "55",
       "nome": "CAIXA PRATICO FIC FIF RF CURTO PRAZO - RESP LTDA",
@@ -112,62 +168,6 @@
         "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_58.pdf",
         "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_58.pdf",
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0058.pdf"
-      }
-    },
-    "05114716000133": {
-      "codfundo": "88",
-      "nome": "CAIXA FACIL FIC FIF RF SIMPLES - RESP LTDA",
-      "cnpj": "05.114.716/0001-33",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0088.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0088.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0088.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_88.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_88.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_88.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0088.pdf"
-      }
-    },
-    "03164294000185": {
-      "codfundo": "89",
-      "nome": "CAIXA FIC FIF INVESTIDOR RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "03.164.294/0001-85",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0089.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0089.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0089.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0089.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_89.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_89.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0089.pdf"
-      }
-    },
-    "03737227000102": {
-      "codfundo": "5053",
-      "nome": "CAIXA FIF SEBRAE RF LP - RESP LTDA",
-      "cnpj": "03.737.227/0001-02",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5053.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5053.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5053.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5053.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5053.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5053.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5053.pdf"
-      }
-    },
-    "10551353000133": {
-      "codfundo": "5154",
-      "nome": "CAIXA FIF QUALIFICADO RF CRED PRIV LP - RESP LTDA",
-      "cnpj": "10.551.353/0001-33",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5154.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5154.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5154.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5154.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5154.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5154.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5154.pdf"
       }
     },
     "01525057000177": {
@@ -226,62 +226,6 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5133.pdf"
       }
     },
-    "10646888000198": {
-      "codfundo": "5156",
-      "nome": "CAIXA FIC FIF EXPERTISE RF CRED PRIV LP - RESP LTDA",
-      "cnpj": "10.646.888/0001-98",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5156.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5156.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5156.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5156.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5156.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5156.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5156.pdf"
-      }
-    },
-    "04885824000147": {
-      "codfundo": "5206",
-      "nome": "CAIXA FMP FGTS VALE DO RIO DOCE II - RESP LTDA",
-      "cnpj": "04.885.824/0001-47",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5206.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5206.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5206.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5206.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5206.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5206.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5206.pdf"
-      }
-    },
-    "04602186000100": {
-      "codfundo": "5251",
-      "nome": "CAIXA FMP FGTS CL ABSOLUTO - RESP LTDA",
-      "cnpj": "04.602.186/0001-00",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5251.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5251.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5251.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5251.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5251.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5251.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5251.pdf"
-      }
-    },
-    "04885820000169": {
-      "codfundo": "5301",
-      "nome": "CAIXA FIF ACOES VALE DO RIO DOCE RESP LTDA",
-      "cnpj": "04.885.820/0001-69",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5301.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5301.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5301.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5301.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5301.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5301.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5301.pdf"
-      }
-    },
     "05164366000110": {
       "codfundo": "5066",
       "nome": "CAIXA FIF CNI RF LONGO PRAZO - RESP LTDA",
@@ -338,60 +282,172 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5157.pdf"
       }
     },
-    "03191874000161": {
-      "codfundo": "46",
-      "nome": "CAIXA FIC FIF PATRIMONIO IND.DE PRECOS RF LP RESP LTDA",
-      "cnpj": "03.191.874/0001-61",
+    "09181268000141": {
+      "codfundo": "5080",
+      "nome": "CAIXA FIf SAUDE SUPLEMENTAR - ANS RF LP - RESP LTDA",
+      "cnpj": "09.181.268/0001-41",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0046.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0046.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0046.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_46.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_46.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_46.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0046.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5080.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5080.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5080.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5080.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5080.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5080.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5080.pdf"
       }
     },
-    "03914671000156": {
-      "codfundo": "48",
-      "nome": "CAIXA FIF ACOES PETROBRAS RESP LTDA",
-      "cnpj": "03.914.671/0001-56",
+    "08046355000123": {
+      "codfundo": "5394",
+      "nome": "CAIXA FIF ACOES IBOVESPA ATIVO RESP LTDA",
+      "cnpj": "08.046.355/0001-23",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0048.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0048.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0048.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0048.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_48.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_48.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0048.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5394.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5394.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5394.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5394.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5394.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5394.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5394.pdf"
       }
     },
-    "03737188000143": {
-      "codfundo": "82",
-      "nome": "CAIXA FIF RV 30 MM LONGO PRAZO RESP LTDA",
-      "cnpj": "03.737.188/0001-43",
+    "08070838000163": {
+      "codfundo": "5395",
+      "nome": "CAIXA FIF ACOES SUSTENTABILIDADE EMPRESARIAL ISE-IS RESP LTDA",
+      "cnpj": "08.070.838/0001-63",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0082.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0082.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0082.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0082.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_82.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_82.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0082.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5395.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5395.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5395.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5395.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5395.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5395.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5395.pdf"
       }
     },
-    "02201163000168": {
-      "codfundo": "83",
-      "nome": "CAIXA FIC FIF PERSONAL RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "02.201.163/0001-68",
+    "03737217000177": {
+      "codfundo": "5396",
+      "nome": "CAIXA BRASIL IBX-50 FIF ACOES - RESP LTDA",
+      "cnpj": "03.737.217/0001-77",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0083.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0083.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0083.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0083.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_83.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_83.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0083.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5396.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5396.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5396.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5396.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5396.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5396.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5396.pdf"
+      }
+    },
+    "10646888000198": {
+      "codfundo": "5156",
+      "nome": "CAIXA FIC FIF EXPERTISE RF CRED PRIV LP - RESP LTDA",
+      "cnpj": "10.646.888/0001-98",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5156.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5156.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5156.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5156.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5156.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5156.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5156.pdf"
+      }
+    },
+    "04885824000147": {
+      "codfundo": "5206",
+      "nome": "CAIXA FMP FGTS VALE DO RIO DOCE II - RESP LTDA",
+      "cnpj": "04.885.824/0001-47",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5206.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5206.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5206.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5206.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5206.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5206.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5206.pdf"
+      }
+    },
+    "04602186000100": {
+      "codfundo": "5251",
+      "nome": "CAIXA FMP FGTS CL ABSOLUTO - RESP LTDA",
+      "cnpj": "04.602.186/0001-00",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5251.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5251.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5251.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5251.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5251.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5251.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5251.pdf"
+      }
+    },
+    "04885820000169": {
+      "codfundo": "5301",
+      "nome": "CAIXA FIF ACOES VALE DO RIO DOCE RESP LTDA",
+      "cnpj": "04.885.820/0001-69",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5301.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5301.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5301.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5301.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5301.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5301.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5301.pdf"
+      }
+    },
+    "05114716000133": {
+      "codfundo": "88",
+      "nome": "CAIXA FACIL FIC FIF RF SIMPLES - RESP LTDA",
+      "cnpj": "05.114.716/0001-33",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0088.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0088.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0088.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_88.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_88.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_88.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0088.pdf"
+      }
+    },
+    "03164294000185": {
+      "codfundo": "89",
+      "nome": "CAIXA FIC FIF INVESTIDOR RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "03.164.294/0001-85",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_0089.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_0089.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_0089.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_0089.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_89.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_89.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_0089.pdf"
+      }
+    },
+    "03737227000102": {
+      "codfundo": "5053",
+      "nome": "CAIXA FIF SEBRAE RF LP - RESP LTDA",
+      "cnpj": "03.737.227/0001-02",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5053.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5053.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5053.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5053.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5053.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5053.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5053.pdf"
+      }
+    },
+    "10551353000133": {
+      "codfundo": "5154",
+      "nome": "CAIXA FIF QUALIFICADO RF CRED PRIV LP - RESP LTDA",
+      "cnpj": "10.551.353/0001-33",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5154.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5154.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5154.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5154.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5154.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5154.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5154.pdf"
       }
     },
     "10646895000190": {
@@ -506,174 +562,6 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5408.pdf"
       }
     },
-    "09181268000141": {
-      "codfundo": "5080",
-      "nome": "CAIXA FIf SAUDE SUPLEMENTAR - ANS RF LP - RESP LTDA",
-      "cnpj": "09.181.268/0001-41",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5080.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5080.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5080.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5080.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5080.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5080.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5080.pdf"
-      }
-    },
-    "08046355000123": {
-      "codfundo": "5394",
-      "nome": "CAIXA FIF ACOES IBOVESPA ATIVO RESP LTDA",
-      "cnpj": "08.046.355/0001-23",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5394.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5394.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5394.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5394.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5394.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5394.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5394.pdf"
-      }
-    },
-    "08070838000163": {
-      "codfundo": "5395",
-      "nome": "CAIXA FIF ACOES SUSTENTABILIDADE EMPRESARIAL ISE-IS RESP LTDA",
-      "cnpj": "08.070.838/0001-63",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5395.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5395.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5395.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5395.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5395.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5395.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5395.pdf"
-      }
-    },
-    "03737217000177": {
-      "codfundo": "5396",
-      "nome": "CAIXA BRASIL IBX-50 FIF ACOES - RESP LTDA",
-      "cnpj": "03.737.217/0001-77",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5396.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5396.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5396.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5396.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5396.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5396.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5396.pdf"
-      }
-    },
-    "10731794000117": {
-      "codfundo": "5171",
-      "nome": "CAIXA FIC FIF SIGMA RF REF DI LONGO PRAZO - RESP LTDA",
-      "cnpj": "10.731.794/0001-17",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5171.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5171.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5171.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5171.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5171.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5171.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5171.pdf"
-      }
-    },
-    "11060913000110": {
-      "codfundo": "5187",
-      "nome": "CAIXA BRASIL IMA B 5 TP FIF RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "11.060.913/0001-10",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5187.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5187.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5187.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5187.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5187.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5187.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5187.pdf"
-      }
-    },
-    "11061217000128": {
-      "codfundo": "5188",
-      "nome": "CAIXA BRASIL IMA GERAL TP FIF RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "11.061.217/0001-28",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5188.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5188.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5188.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5188.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5188.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5188.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5188.pdf"
-      }
-    },
-    "11061230000187": {
-      "codfundo": "5189",
-      "nome": "CAIXA FIF TOPAZIO CORP RF REF DI LP - RESP LTDA",
-      "cnpj": "11.061.230/0001-87",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5189.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5189.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5189.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5189.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5189.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5189.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5189.pdf"
-      }
-    },
-    "03915910000192": {
-      "codfundo": "5202",
-      "nome": "CAIXA FMP FGTS PETROBRAS II - RESP LTDA",
-      "cnpj": "03.915.910/0001-92",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5202.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5202.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5202.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5202.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5202.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5202.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5202.pdf"
-      }
-    },
-    "03915903000190": {
-      "codfundo": "5203",
-      "nome": "CAIXA FMP FGTS PETROBRAS III - RESP LTDA",
-      "cnpj": "03.915.903/0001-90",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5203.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5203.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5203.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5203.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5203.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5203.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5203.pdf"
-      }
-    },
-    "03555959000181": {
-      "codfundo": "5204",
-      "nome": "CAIXA FMP FGTS PETROBRAS IV - RESP LTDA",
-      "cnpj": "03.555.959/0001-81",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5204.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5204.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5204.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5204.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5204.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5204.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5204.pdf"
-      }
-    },
-    "04885818000190": {
-      "codfundo": "5205",
-      "nome": "CAIXA FMP FGTS VALE DO RIO DOCE I - RESP LTDA",
-      "cnpj": "04.885.818/0001-90",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5205.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5205.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5205.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5205.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5205.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5205.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5205.pdf"
-      }
-    },
     "10551375000101": {
       "codfundo": "5397",
       "nome": "CAIXA FIF ACOES CONSTRUCAO CIVIL RESP LTDA",
@@ -728,566 +616,6 @@
         "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5413.pdf",
         "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5413.pdf",
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5413.pdf"
-      }
-    },
-    "04885832000193": {
-      "codfundo": "5253",
-      "nome": "CAIXA FMP FGTS VALE DO RIO DOCE MIGRACAO - RESP LTDA",
-      "cnpj": "04.885.832/0001-93",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5253.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5253.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5253.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5253.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5253.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5253.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5253.pdf"
-      }
-    },
-    "05114733000170": {
-      "codfundo": "5403",
-      "nome": "CAIXA FIC FIF INDEXA DOLAR CAMBIAL - RESP LTDA",
-      "cnpj": "05.114.733/0001-70",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5403.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5403.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5403.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5403.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5403.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5403.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5403.pdf"
-      }
-    },
-    "03737206000197": {
-      "codfundo": "5404",
-      "nome": "CAIXA BRASIL FIC FIF RF REFERENCIADO DI LONGO PRAZO - RESP LTDA",
-      "cnpj": "03.737.206/0001-97",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5404.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5404.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5404.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5404.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5404.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5404.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5404.pdf"
-      }
-    },
-    "07986172000125": {
-      "codfundo": "5405",
-      "nome": "CAIXA FIC FIF EQUILIBRIO MPE RF LP - RESP LTDA",
-      "cnpj": "07.986.172/0001-25",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5405.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5405.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5405.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5405.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5405.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5405.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5405.pdf"
-      }
-    },
-    "09548729000171": {
-      "codfundo": "5414",
-      "nome": "CAIXA FIC FIF FOCO IND. DE PRECOS RF LP - RESP LTDA",
-      "cnpj": "09.548.729/0001-71",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5414.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5414.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5414.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5414.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5414.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5414.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5414.pdf"
-      }
-    },
-    "13058816000118": {
-      "codfundo": "5445",
-      "nome": "CAIXA BRASIL INDEXA IBOVESPA FIF ACOES - RESP LTDA",
-      "cnpj": "13.058.816/0001-18",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5445.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5445.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5445.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5445.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5445.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5445.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5445.pdf"
-      }
-    },
-    "05164358000173": {
-      "codfundo": "5461",
-      "nome": "CAIXA FIF ALIANCA TITULOS PUBLICOS RF CURTO PRAZO - RESP LTDA",
-      "cnpj": "05.164.358/0001-73",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5461.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5461.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5461.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5461.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5461.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5461.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5461.pdf"
-      }
-    },
-    "05164356000184": {
-      "codfundo": "5462",
-      "nome": "CAIXA BRASIL TP FIF RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "05.164.356/0001-84",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5462.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5462.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5462.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5462.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5462.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5462.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5462.pdf"
-      }
-    },
-    "10740670000106": {
-      "codfundo": "5464",
-      "nome": "CAIXA BRASIL IRF-M 1 TP FIF RF - RESP LTDA",
-      "cnpj": "10.740.670/0001-06",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5464.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5464.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5464.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5464.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5464.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5464.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5464.pdf"
-      }
-    },
-    "10740508000180": {
-      "codfundo": "5498",
-      "nome": "CAIXA FIC FIF PLENO REF DI LP - RESP LTDA",
-      "cnpj": "10.740.508/0001-80",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5498.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5498.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5498.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5498.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5498.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5498.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5498.pdf"
-      }
-    },
-    "14507699000195": {
-      "codfundo": "5563",
-      "nome": "CAIXA EXPERT VINCI VALOR RPPS FIC FIF ACOES - RESP LTDA",
-      "cnpj": "14.507.699/0001-95",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5563.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5563.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5563.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5563.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5563.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5563.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5563.pdf"
-      }
-    },
-    "10577509000155": {
-      "codfundo": "5565",
-      "nome": "CAIXA FIC FIF RELACIONAMENTO PERSONAL RF LP - RESP LTDA",
-      "cnpj": "10.577.509/0001-55",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5565.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5565.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5565.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5565.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5565.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5565.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5565.pdf"
-      }
-    },
-    "07986178000100": {
-      "codfundo": "5406",
-      "nome": "CAIXA FIC FIF SUPREMO RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "07.986.178/0001-00",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5406.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5406.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5406.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5406.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5406.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5406.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5406.pdf"
-      }
-    },
-    "11060594000142": {
-      "codfundo": "5420",
-      "nome": "CAIXA FIF ACOES PETROBRAS PRE-SAL RESP LTDA",
-      "cnpj": "11.060.594/0001-42",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5420.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5420.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5420.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5420.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5420.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5420.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5420.pdf"
-      }
-    },
-    "14507897000159": {
-      "codfundo": "5487",
-      "nome": "CAIXA FIF EXTRAMERCADO COMUM IRFM-1 RF - RESP LTDA",
-      "cnpj": "14.507.897/0001-59",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5487.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5487.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5487.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5487.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5487.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5487.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5487.pdf"
-      }
-    },
-    "03737200000110": {
-      "codfundo": "5490",
-      "nome": "CAIXA FIC FIF ESTRATEGICO MULTIMERCADO LP RESP LTDA",
-      "cnpj": "03.737.200/0001-10",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5490.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5490.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5490.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5490.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5490.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5490.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5490.pdf"
-      }
-    },
-    "10322668000109": {
-      "codfundo": "5410",
-      "nome": "CAIXA FIF FIDELIDADE II RF CRED PRIV LP RESP LTDA",
-      "cnpj": "10.322.668/0001-09",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5410.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5410.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5410.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5410.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5410.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5410.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5410.pdf"
-      }
-    },
-    "05164364000120": {
-      "codfundo": "5460",
-      "nome": "CAIXA RS TP FIF RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "05.164.364/0001-20",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5460.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5460.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5460.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5460.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5460.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5460.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5460.pdf"
-      }
-    },
-    "08070841000187": {
-      "codfundo": "5492",
-      "nome": "CAIXA FIC FIF ALOCACAO MACRO MM LP RESP LTDA",
-      "cnpj": "08.070.841/0001-87",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5492.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5492.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5492.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5492.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5492.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5492.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5492.pdf"
-      }
-    },
-    "10577512000179": {
-      "codfundo": "5567",
-      "nome": "CAIXA FIF ACOES CONSUMO RESP LTDA",
-      "cnpj": "10.577.512/0001-79",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5567.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5567.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5567.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5567.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5567.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5567.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5567.pdf"
-      }
-    },
-    "10577519000190": {
-      "codfundo": "5569",
-      "nome": "CAIXA BRASIL IRF M 1 MAIS TP FIF RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "10.577.519/0001-90",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5569.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5569.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5569.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5569.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5569.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5569.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5569.pdf"
-      }
-    },
-    "14120511000151": {
-      "codfundo": "5576",
-      "nome": "CAIXA FIC FIF OBJETIVO PRE RF LP - RESP LTDA",
-      "cnpj": "14.120.511/0001-51",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5576.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5576.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5576.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5576.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5576.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5576.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5576.pdf"
-      }
-    },
-    "14508643000155": {
-      "codfundo": "5826",
-      "nome": "CAIXA BRASIL DISPONIBILIDADES FIC FIF RF SIMPLES - RESP LTDA",
-      "cnpj": "14.508.643/0001-55",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5826.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5826.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5826.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5826.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5826.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5826.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5826.pdf"
-      }
-    },
-    "15154429000100": {
-      "codfundo": "5833",
-      "nome": "CAIXA FIC FIF TITULO PUBLICO MPE RF LP - RESP LTDA",
-      "cnpj": "15.154.429/0001-00",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5833.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5833.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5833.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5833.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5833.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5833.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5833.pdf"
-      }
-    },
-    "15154236000150": {
-      "codfundo": "5842",
-      "nome": "CAIXA BRASIL ETF IBOVESPA FIF ACOES - RESP LTDA",
-      "cnpj": "15.154.236/0001-50",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5842.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5842.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5842.pdf",
-        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5842.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5842.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5842.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5842.pdf"
-      }
-    },
-    "16877609000183": {
-      "codfundo": "5892",
-      "nome": "CAIXA FIC FIF DESENVOLVER RF LP - RESP LTDA",
-      "cnpj": "16.877.609/0001-83",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5892.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5892.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5892.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5892.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5892.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5892.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5892.pdf"
-      }
-    },
-    "16916063000122": {
-      "codfundo": "5901",
-      "nome": "CAIXA GIRO EMPRESAS FIC FIF RF REF DI LP - RESP LTDA",
-      "cnpj": "16.916.063/0001-22",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5901.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5901.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5901.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5901.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5901.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5901.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5901.pdf"
-      }
-    },
-    "17322725000107": {
-      "codfundo": "5908",
-      "nome": "CAIXA FIC FIF MAXI RENDA FIXA CRED PRIV LP - RESP LTDA",
-      "cnpj": "17.322.725/0001-07",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5908.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5908.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5908.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5908.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5908.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5908.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5908.pdf"
-      }
-    },
-    "17503172000180": {
-      "codfundo": "5928",
-      "nome": "CAIXA FIF ACOES BDR NIVEL I - RESP LTDA",
-      "cnpj": "17.503.172/0001-80",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5928.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5928.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5928.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5928.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5928.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5928.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5928.pdf"
-      }
-    },
-    "19769018000180": {
-      "codfundo": "5969",
-      "nome": "CAIXA FIC FIF TOP PRIVATE RF REF DI LONGO PRAZO - RESP LTDA",
-      "cnpj": "19.769.018/0001-80",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5969.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5969.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5969.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5969.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5969.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5969.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5969.pdf"
-      }
-    },
-    "22791154000181": {
-      "codfundo": "5978",
-      "nome": "CAIXA ATENA FIC FIF ACOES LIVRE QUANT RESP LTDA",
-      "cnpj": "22.791.154/0001-81",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5978.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5978.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5978.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5978.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5978.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5978.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5978.pdf"
-      }
-    },
-    "15154441000115": {
-      "codfundo": "6160",
-      "nome": "CAIXA EXPERT VINCI VALOR DIVIDENDOS RPPS FIC FIF ACOES - RESP LTDA",
-      "cnpj": "15.154.441/0001-15",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6160.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6160.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6160.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6160.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6160.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6160.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6160.pdf"
-      }
-    },
-    "29157485000103": {
-      "codfundo": "6353",
-      "nome": "CAIXA FIC FIF JUROS E MOEDAS MUL PLUS LP - RESP LTDA",
-      "cnpj": "29.157.485/0001-03",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6353.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6353.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6353.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6353.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6353.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6353.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6353.pdf"
-      }
-    },
-    "31887401000139": {
-      "codfundo": "6360",
-      "nome": "CAIXA RIO BRAVO FUNDO DE FII II",
-      "cnpj": "31.887.401/0001-39",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6360.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6360.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6360.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6360.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6360.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6360.pdf",
-        "termo": ""
-      }
-    },
-    "30068224000104": {
-      "codfundo": "6421",
-      "nome": "CAIXA FIC FIF ACOES ACOES MULTIGESTOR RESP LTDA",
-      "cnpj": "30.068.224/0001-04",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6421.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6421.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6421.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6421.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6421.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6421.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6421.pdf"
-      }
-    },
-    "29157511000101": {
-      "codfundo": "6446",
-      "nome": "CAIXA FIF INDEXA SHORT DOLAR MM LP - RESP LTDA",
-      "cnpj": "29.157.511/0001-01",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6446.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6446.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6446.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6446.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6446.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6446.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6446.pdf"
-      }
-    },
-    "10577485000134": {
-      "codfundo": "5570",
-      "nome": "CAIXA FIC FIF GER JOVEM RF CREDITO PRIV LP - RESP LTDA",
-      "cnpj": "10.577.485/0001-34",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5570.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5570.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5570.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5570.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5570.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5570.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5570.pdf"
-      }
-    },
-    "10577516000157": {
-      "codfundo": "5571",
-      "nome": "CAIXA FIC FIF PERFORMANCE IMA B RF LP - RESP LTDA",
-      "cnpj": "10.577.516/0001-57",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5571.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5571.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5571.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5571.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5571.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5571.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5571.pdf"
-      }
-    },
-    "14508652000146": {
-      "codfundo": "5823",
-      "nome": "CAIXA MOVIMENTACOES AUTOMATICAS FIC FIF RF SIMPLES - RESP LTDA",
-      "cnpj": "14.508.652/0001-46",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5823.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5823.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5823.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5823.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5823.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5823.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5823.pdf"
-      }
-    },
-    "14508605000100": {
-      "codfundo": "5824",
-      "nome": "CAIXA BRASIL IRF-M TP FIF RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "14.508.605/0001-00",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5824.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5824.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5824.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5824.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5824.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5824.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5824.pdf"
       }
     },
     "14239659000100": {
@@ -1346,60 +674,452 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5582.pdf"
       }
     },
-    "15154410000164": {
-      "codfundo": "5832",
-      "nome": "CAIXA FIC FIF ACOES E FUNDO IBOVESPA RESP LTDA",
-      "cnpj": "15.154.410/0001-64",
+    "09548729000171": {
+      "codfundo": "5414",
+      "nome": "CAIXA FIC FIF FOCO IND. DE PRECOS RF LP - RESP LTDA",
+      "cnpj": "09.548.729/0001-71",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5832.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5832.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5832.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5832.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5832.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5832.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5832.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5414.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5414.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5414.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5414.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5414.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5414.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5414.pdf"
       }
     },
-    "17502937000168": {
-      "codfundo": "5929",
-      "nome": "CAIXA INSTITUCIONAL BDR NIVEL I FIF ACOES - RESP LTDA",
-      "cnpj": "17.502.937/0001-68",
+    "13058816000118": {
+      "codfundo": "5445",
+      "nome": "CAIXA BRASIL INDEXA IBOVESPA FIF ACOES - RESP LTDA",
+      "cnpj": "13.058.816/0001-18",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5929.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5929.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5929.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5929.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5929.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5929.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5929.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5445.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5445.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5445.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5445.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5445.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5445.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5445.pdf"
       }
     },
-    "17502869000137": {
-      "codfundo": "5930",
-      "nome": "CAIXA GIRO IMEDIATO FIC FIF RF REF DI LP - RESP LTDA",
-      "cnpj": "17.502.869/0001-37",
+    "05164358000173": {
+      "codfundo": "5461",
+      "nome": "CAIXA FIF ALIANCA TITULOS PUBLICOS RF CURTO PRAZO - RESP LTDA",
+      "cnpj": "05.164.358/0001-73",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5930.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5930.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5930.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5930.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5930.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5930.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5930.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5461.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5461.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5461.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5461.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5461.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5461.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5461.pdf"
       }
     },
-    "30068141000107": {
-      "codfundo": "5946",
-      "nome": "CAIXA FIC FIF TURQUESA CORPORATIVO RF CURTO PRAZO - RESP LTDA",
-      "cnpj": "30.068.141/0001-07",
+    "05164356000184": {
+      "codfundo": "5462",
+      "nome": "CAIXA BRASIL TP FIF RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "05.164.356/0001-84",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5946.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5946.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5946.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5946.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5946.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5946.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5946.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5462.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5462.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5462.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5462.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5462.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5462.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5462.pdf"
+      }
+    },
+    "10731794000117": {
+      "codfundo": "5171",
+      "nome": "CAIXA FIC FIF SIGMA RF REF DI LONGO PRAZO - RESP LTDA",
+      "cnpj": "10.731.794/0001-17",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5171.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5171.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5171.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5171.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5171.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5171.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5171.pdf"
+      }
+    },
+    "11060913000110": {
+      "codfundo": "5187",
+      "nome": "CAIXA BRASIL IMA B 5 TP FIF RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "11.060.913/0001-10",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5187.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5187.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5187.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5187.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5187.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5187.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5187.pdf"
+      }
+    },
+    "11061217000128": {
+      "codfundo": "5188",
+      "nome": "CAIXA BRASIL IMA GERAL TP FIF RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "11.061.217/0001-28",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5188.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5188.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5188.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5188.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5188.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5188.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5188.pdf"
+      }
+    },
+    "11061230000187": {
+      "codfundo": "5189",
+      "nome": "CAIXA FIF TOPAZIO CORP RF REF DI LP - RESP LTDA",
+      "cnpj": "11.061.230/0001-87",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5189.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5189.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5189.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5189.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5189.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5189.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5189.pdf"
+      }
+    },
+    "10322668000109": {
+      "codfundo": "5410",
+      "nome": "CAIXA FIF FIDELIDADE II RF CRED PRIV LP RESP LTDA",
+      "cnpj": "10.322.668/0001-09",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5410.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5410.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5410.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5410.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5410.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5410.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5410.pdf"
+      }
+    },
+    "05164364000120": {
+      "codfundo": "5460",
+      "nome": "CAIXA RS TP FIF RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "05.164.364/0001-20",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5460.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5460.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5460.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5460.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5460.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5460.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5460.pdf"
+      }
+    },
+    "08070841000187": {
+      "codfundo": "5492",
+      "nome": "CAIXA FIC FIF ALOCACAO MACRO MM LP RESP LTDA",
+      "cnpj": "08.070.841/0001-87",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5492.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5492.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5492.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5492.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5492.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5492.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5492.pdf"
+      }
+    },
+    "10577512000179": {
+      "codfundo": "5567",
+      "nome": "CAIXA FIF ACOES CONSUMO RESP LTDA",
+      "cnpj": "10.577.512/0001-79",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5567.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5567.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5567.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5567.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5567.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5567.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5567.pdf"
+      }
+    },
+    "10740670000106": {
+      "codfundo": "5464",
+      "nome": "CAIXA BRASIL IRF-M 1 TP FIF RF - RESP LTDA",
+      "cnpj": "10.740.670/0001-06",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5464.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5464.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5464.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5464.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5464.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5464.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5464.pdf"
+      }
+    },
+    "10740508000180": {
+      "codfundo": "5498",
+      "nome": "CAIXA FIC FIF PLENO REF DI LP - RESP LTDA",
+      "cnpj": "10.740.508/0001-80",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5498.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5498.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5498.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5498.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5498.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5498.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5498.pdf"
+      }
+    },
+    "14507699000195": {
+      "codfundo": "5563",
+      "nome": "CAIXA EXPERT VINCI VALOR RPPS FIC FIF ACOES - RESP LTDA",
+      "cnpj": "14.507.699/0001-95",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5563.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5563.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5563.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5563.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5563.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5563.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5563.pdf"
+      }
+    },
+    "10577509000155": {
+      "codfundo": "5565",
+      "nome": "CAIXA FIC FIF RELACIONAMENTO PERSONAL RF LP - RESP LTDA",
+      "cnpj": "10.577.509/0001-55",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5565.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5565.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5565.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5565.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5565.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5565.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5565.pdf"
+      }
+    },
+    "03915910000192": {
+      "codfundo": "5202",
+      "nome": "CAIXA FMP FGTS PETROBRAS II - RESP LTDA",
+      "cnpj": "03.915.910/0001-92",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5202.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5202.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5202.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5202.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5202.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5202.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5202.pdf"
+      }
+    },
+    "03915903000190": {
+      "codfundo": "5203",
+      "nome": "CAIXA FMP FGTS PETROBRAS III - RESP LTDA",
+      "cnpj": "03.915.903/0001-90",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5203.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5203.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5203.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5203.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5203.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5203.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5203.pdf"
+      }
+    },
+    "03555959000181": {
+      "codfundo": "5204",
+      "nome": "CAIXA FMP FGTS PETROBRAS IV - RESP LTDA",
+      "cnpj": "03.555.959/0001-81",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5204.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5204.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5204.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5204.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5204.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5204.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5204.pdf"
+      }
+    },
+    "04885818000190": {
+      "codfundo": "5205",
+      "nome": "CAIXA FMP FGTS VALE DO RIO DOCE I - RESP LTDA",
+      "cnpj": "04.885.818/0001-90",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5205.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5205.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5205.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5205.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5205.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5205.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5205.pdf"
+      }
+    },
+    "04885832000193": {
+      "codfundo": "5253",
+      "nome": "CAIXA FMP FGTS VALE DO RIO DOCE MIGRACAO - RESP LTDA",
+      "cnpj": "04.885.832/0001-93",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5253.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5253.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5253.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5253.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5253.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5253.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5253.pdf"
+      }
+    },
+    "05114733000170": {
+      "codfundo": "5403",
+      "nome": "CAIXA FIC FIF INDEXA DOLAR CAMBIAL - RESP LTDA",
+      "cnpj": "05.114.733/0001-70",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5403.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5403.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5403.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5403.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5403.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5403.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5403.pdf"
+      }
+    },
+    "03737206000197": {
+      "codfundo": "5404",
+      "nome": "CAIXA BRASIL FIC FIF RF REFERENCIADO DI LONGO PRAZO - RESP LTDA",
+      "cnpj": "03.737.206/0001-97",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5404.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5404.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5404.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5404.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5404.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5404.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5404.pdf"
+      }
+    },
+    "07986172000125": {
+      "codfundo": "5405",
+      "nome": "CAIXA FIC FIF EQUILIBRIO MPE RF LP - RESP LTDA",
+      "cnpj": "07.986.172/0001-25",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5405.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5405.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5405.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5405.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5405.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5405.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5405.pdf"
+      }
+    },
+    "07986178000100": {
+      "codfundo": "5406",
+      "nome": "CAIXA FIC FIF SUPREMO RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "07.986.178/0001-00",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5406.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5406.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5406.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5406.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5406.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5406.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5406.pdf"
+      }
+    },
+    "11060594000142": {
+      "codfundo": "5420",
+      "nome": "CAIXA FIF ACOES PETROBRAS PRE-SAL RESP LTDA",
+      "cnpj": "11.060.594/0001-42",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5420.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5420.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5420.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5420.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5420.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5420.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5420.pdf"
+      }
+    },
+    "14507897000159": {
+      "codfundo": "5487",
+      "nome": "CAIXA FIF EXTRAMERCADO COMUM IRFM-1 RF - RESP LTDA",
+      "cnpj": "14.507.897/0001-59",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5487.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5487.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5487.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5487.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5487.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5487.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5487.pdf"
+      }
+    },
+    "03737200000110": {
+      "codfundo": "5490",
+      "nome": "CAIXA FIC FIF ESTRATEGICO MULTIMERCADO LP RESP LTDA",
+      "cnpj": "03.737.200/0001-10",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5490.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5490.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5490.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5490.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5490.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5490.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5490.pdf"
+      }
+    },
+    "10577485000134": {
+      "codfundo": "5570",
+      "nome": "CAIXA FIC FIF GER JOVEM RF CREDITO PRIV LP - RESP LTDA",
+      "cnpj": "10.577.485/0001-34",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5570.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5570.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5570.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5570.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5570.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5570.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5570.pdf"
+      }
+    },
+    "10577516000157": {
+      "codfundo": "5571",
+      "nome": "CAIXA FIC FIF PERFORMANCE IMA B RF LP - RESP LTDA",
+      "cnpj": "10.577.516/0001-57",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5571.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5571.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5571.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5571.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5571.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5571.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5571.pdf"
+      }
+    },
+    "14508652000146": {
+      "codfundo": "5823",
+      "nome": "CAIXA MOVIMENTACOES AUTOMATICAS FIC FIF RF SIMPLES - RESP LTDA",
+      "cnpj": "14.508.652/0001-46",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5823.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5823.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5823.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5823.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5823.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5823.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5823.pdf"
+      }
+    },
+    "14508605000100": {
+      "codfundo": "5824",
+      "nome": "CAIXA BRASIL IRF-M TP FIF RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "14.508.605/0001-00",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5824.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5824.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5824.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5824.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5824.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5824.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5824.pdf"
       }
     },
     "15154220000147": {
@@ -1456,118 +1176,6 @@
         "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5972.pdf",
         "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5972.pdf",
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5972.pdf"
-      }
-    },
-    "14386926000171": {
-      "codfundo": "5825",
-      "nome": "CAIXA BRASIL IDKA IPCA 2A TP FIF RF LONGO PRAZO - RESP LTDA",
-      "cnpj": "14.386.926/0001-71",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5825.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5825.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5825.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5825.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5825.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5825.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5825.pdf"
-      }
-    },
-    "15154422000199": {
-      "codfundo": "5834",
-      "nome": "CAIXA FIC FIF E-FUNDO RF LP - RESP LTDA",
-      "cnpj": "15.154.422/0001-99",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5834.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5834.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5834.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5834.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5834.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5834.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5834.pdf"
-      }
-    },
-    "17098794000170": {
-      "codfundo": "5859",
-      "nome": "CAIXA RIO BRAVO FUNDO DE FII",
-      "cnpj": "17.098.794/0001-70",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5859.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5859.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5859.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5859.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5859.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5859.pdf",
-        "termo": ""
-      }
-    },
-    "16916060000199": {
-      "codfundo": "5902",
-      "nome": "CAIXA FIF INDEXA OURO MULTIMERCADO LP - RESP LTDA",
-      "cnpj": "16.916.060/0001-99",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5902.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5902.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5902.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5902.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5902.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5902.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5902.pdf"
-      }
-    },
-    "10551370000170": {
-      "codfundo": "5948",
-      "nome": "CAIXA GIRO MPE FIC FIF RF REF DI LP - RESP LTDA",
-      "cnpj": "10.551.370/0001-70",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5948.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5948.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5948.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5948.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5948.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5948.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5948.pdf"
-      }
-    },
-    "22791329000150": {
-      "codfundo": "5980",
-      "nome": "CAIXA E-SIMPLES FIF RF LP - RESP LTDA",
-      "cnpj": "22.791.329/0001-50",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5980.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5980.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5980.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5980.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5980.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5980.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5980.pdf"
-      }
-    },
-    "23215008000170": {
-      "codfundo": "5982",
-      "nome": "CAIXA BRASIL MATRIZ FIF RF - RESP LTDA",
-      "cnpj": "23.215.008/0001-70",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5982.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5982.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5982.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5982.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5982.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5982.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5982.pdf"
-      }
-    },
-    "30068060000107": {
-      "codfundo": "6397",
-      "nome": "CAIXA EXPERT CLARITAS VALOR FIC FIF AÇÕES - RESP LTDA",
-      "cnpj": "30.068.060/0001-07",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6397.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6397.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6397.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6397.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6397.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6397.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6397.pdf"
       }
     },
     "19769046000106": {
@@ -1640,6 +1248,230 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6440.pdf"
       }
     },
+    "10577519000190": {
+      "codfundo": "5569",
+      "nome": "CAIXA BRASIL IRF M 1 MAIS TP FIF RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "10.577.519/0001-90",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5569.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5569.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5569.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5569.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5569.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5569.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5569.pdf"
+      }
+    },
+    "14120511000151": {
+      "codfundo": "5576",
+      "nome": "CAIXA FIC FIF OBJETIVO PRE RF LP - RESP LTDA",
+      "cnpj": "14.120.511/0001-51",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5576.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5576.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5576.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5576.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5576.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5576.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5576.pdf"
+      }
+    },
+    "14508643000155": {
+      "codfundo": "5826",
+      "nome": "CAIXA BRASIL DISPONIBILIDADES FIC FIF RF SIMPLES - RESP LTDA",
+      "cnpj": "14.508.643/0001-55",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5826.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5826.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5826.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5826.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5826.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5826.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5826.pdf"
+      }
+    },
+    "15154429000100": {
+      "codfundo": "5833",
+      "nome": "CAIXA FIC FIF TITULO PUBLICO MPE RF LP - RESP LTDA",
+      "cnpj": "15.154.429/0001-00",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5833.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5833.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5833.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5833.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5833.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5833.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5833.pdf"
+      }
+    },
+    "15154410000164": {
+      "codfundo": "5832",
+      "nome": "CAIXA FIC FIF ACOES E FUNDO IBOVESPA RESP LTDA",
+      "cnpj": "15.154.410/0001-64",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5832.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5832.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5832.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5832.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5832.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5832.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5832.pdf"
+      }
+    },
+    "17502937000168": {
+      "codfundo": "5929",
+      "nome": "CAIXA INSTITUCIONAL BDR NIVEL I FIF ACOES - RESP LTDA",
+      "cnpj": "17.502.937/0001-68",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5929.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5929.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5929.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5929.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5929.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5929.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5929.pdf"
+      }
+    },
+    "17502869000137": {
+      "codfundo": "5930",
+      "nome": "CAIXA GIRO IMEDIATO FIC FIF RF REF DI LP - RESP LTDA",
+      "cnpj": "17.502.869/0001-37",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5930.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5930.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5930.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5930.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5930.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5930.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5930.pdf"
+      }
+    },
+    "30068141000107": {
+      "codfundo": "5946",
+      "nome": "CAIXA FIC FIF TURQUESA CORPORATIVO RF CURTO PRAZO - RESP LTDA",
+      "cnpj": "30.068.141/0001-07",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5946.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5946.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5946.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5946.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5946.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5946.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5946.pdf"
+      }
+    },
+    "14386926000171": {
+      "codfundo": "5825",
+      "nome": "CAIXA BRASIL IDKA IPCA 2A TP FIF RF LONGO PRAZO - RESP LTDA",
+      "cnpj": "14.386.926/0001-71",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5825.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5825.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5825.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5825.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5825.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5825.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5825.pdf"
+      }
+    },
+    "15154422000199": {
+      "codfundo": "5834",
+      "nome": "CAIXA FIC FIF E-FUNDO RF LP - RESP LTDA",
+      "cnpj": "15.154.422/0001-99",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5834.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5834.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5834.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5834.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5834.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5834.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5834.pdf"
+      }
+    },
+    "17098794000170": {
+      "codfundo": "5859",
+      "nome": "CAIXA RIO BRAVO FUNDO DE FII",
+      "cnpj": "17.098.794/0001-70",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5859.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5859.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5859.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5859.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5859.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5859.pdf",
+        "termo": ""
+      }
+    },
+    "16916060000199": {
+      "codfundo": "5902",
+      "nome": "CAIXA FIF INDEXA OURO MULTIMERCADO LP - RESP LTDA",
+      "cnpj": "16.916.060/0001-99",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5902.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5902.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5902.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5902.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5902.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5902.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5902.pdf"
+      }
+    },
+    "15154236000150": {
+      "codfundo": "5842",
+      "nome": "CAIXA BRASIL ETF IBOVESPA FIF ACOES - RESP LTDA",
+      "cnpj": "15.154.236/0001-50",
+      "docs": {
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5842.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5842.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5842.pdf",
+        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5842.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5842.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5842.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5842.pdf"
+      }
+    },
+    "16877609000183": {
+      "codfundo": "5892",
+      "nome": "CAIXA FIC FIF DESENVOLVER RF LP - RESP LTDA",
+      "cnpj": "16.877.609/0001-83",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5892.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5892.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5892.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5892.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5892.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5892.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5892.pdf"
+      }
+    },
+    "16916063000122": {
+      "codfundo": "5901",
+      "nome": "CAIXA GIRO EMPRESAS FIC FIF RF REF DI LP - RESP LTDA",
+      "cnpj": "16.916.063/0001-22",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5901.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5901.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5901.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5901.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5901.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5901.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5901.pdf"
+      }
+    },
+    "17322725000107": {
+      "codfundo": "5908",
+      "nome": "CAIXA FIC FIF MAXI RENDA FIXA CRED PRIV LP - RESP LTDA",
+      "cnpj": "17.322.725/0001-07",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5908.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5908.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5908.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5908.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5908.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5908.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5908.pdf"
+      }
+    },
     "17433039000103": {
       "codfundo": "5911",
       "nome": "CAIXA EXPERT BTG PACTUAL X 10 FIC FF MM LP - RESP LTDA",
@@ -1694,6 +1526,188 @@
         "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5993.pdf",
         "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5993.pdf",
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5993.pdf"
+      }
+    },
+    "10551370000170": {
+      "codfundo": "5948",
+      "nome": "CAIXA GIRO MPE FIC FIF RF REF DI LP - RESP LTDA",
+      "cnpj": "10.551.370/0001-70",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5948.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5948.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5948.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5948.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5948.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5948.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5948.pdf"
+      }
+    },
+    "22791329000150": {
+      "codfundo": "5980",
+      "nome": "CAIXA E-SIMPLES FIF RF LP - RESP LTDA",
+      "cnpj": "22.791.329/0001-50",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5980.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5980.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5980.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5980.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5980.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5980.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5980.pdf"
+      }
+    },
+    "23215008000170": {
+      "codfundo": "5982",
+      "nome": "CAIXA BRASIL MATRIZ FIF RF - RESP LTDA",
+      "cnpj": "23.215.008/0001-70",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5982.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5982.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5982.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5982.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5982.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5982.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5982.pdf"
+      }
+    },
+    "30068060000107": {
+      "codfundo": "6397",
+      "nome": "CAIXA EXPERT CLARITAS VALOR FIC FIF AÇÕES - RESP LTDA",
+      "cnpj": "30.068.060/0001-07",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6397.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6397.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6397.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6397.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6397.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6397.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6397.pdf"
+      }
+    },
+    "17503172000180": {
+      "codfundo": "5928",
+      "nome": "CAIXA FIF ACOES BDR NIVEL I - RESP LTDA",
+      "cnpj": "17.503.172/0001-80",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5928.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5928.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5928.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_5928.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5928.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5928.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5928.pdf"
+      }
+    },
+    "19769018000180": {
+      "codfundo": "5969",
+      "nome": "CAIXA FIC FIF TOP PRIVATE RF REF DI LONGO PRAZO - RESP LTDA",
+      "cnpj": "19.769.018/0001-80",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5969.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5969.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5969.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5969.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5969.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5969.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5969.pdf"
+      }
+    },
+    "22791154000181": {
+      "codfundo": "5978",
+      "nome": "CAIXA ATENA FIC FIF ACOES LIVRE QUANT RESP LTDA",
+      "cnpj": "22.791.154/0001-81",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_5978.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_5978.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_5978.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_5978.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_5978.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_5978.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_5978.pdf"
+      }
+    },
+    "15154441000115": {
+      "codfundo": "6160",
+      "nome": "CAIXA EXPERT VINCI VALOR DIVIDENDOS RPPS FIC FIF ACOES - RESP LTDA",
+      "cnpj": "15.154.441/0001-15",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6160.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6160.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6160.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6160.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6160.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6160.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6160.pdf"
+      }
+    },
+    "34660453000166": {
+      "codfundo": "6475",
+      "nome": "CAIXA EXPERT SPX NIMITZ FIC FIF MM - RESP LTDA",
+      "cnpj": "34.660.453/0001-66",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6475.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6475.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6475.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6475.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6475.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6475.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6475.pdf"
+      }
+    },
+    "42066916000194": {
+      "codfundo": "6589",
+      "nome": "FII CAIXA CARTEIRA IMOBILIÁRIA",
+      "cnpj": "42.066.916/0001-94",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6589.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6589.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6589.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6589.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6589.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6589.pdf",
+        "termo": ""
+      }
+    },
+    "42120405000103": {
+      "codfundo": "6591",
+      "nome": "CAIXA FIC FIF ACOES DIVIDENDOS QUANTITATIVO RESP LTDA",
+      "cnpj": "42.120.405/0001-03",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6591.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6591.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6591.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6591.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6591.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6591.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6591.pdf"
+      }
+    },
+    "43760251000187": {
+      "codfundo": "6593",
+      "nome": "CAIXA FIC FIF ACOES COMPROMISSO BDR NIVEL I RESP LTDA",
+      "cnpj": "43.760.251/0001-87",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6593.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6593.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6593.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6593.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6593.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6593.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6593.pdf"
+      }
+    },
+    "42196029000130": {
+      "codfundo": "6606",
+      "nome": "CAIXA FIC FIF INSTITUCIONAL SOBERANO PLUS RF - RESP LTDA",
+      "cnpj": "42.196.029/0001-30",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6606.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6606.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6606.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6606.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6606.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6606.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6606.pdf"
       }
     },
     "30068135000150": {
@@ -1864,130 +1878,60 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6600.pdf"
       }
     },
-    "34660453000166": {
-      "codfundo": "6475",
-      "nome": "CAIXA EXPERT SPX NIMITZ FIC FIF MM - RESP LTDA",
-      "cnpj": "34.660.453/0001-66",
+    "29157485000103": {
+      "codfundo": "6353",
+      "nome": "CAIXA FIC FIF JUROS E MOEDAS MUL PLUS LP - RESP LTDA",
+      "cnpj": "29.157.485/0001-03",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6475.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6475.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6475.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6475.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6475.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6475.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6475.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6353.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6353.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6353.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6353.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6353.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6353.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6353.pdf"
       }
     },
-    "42066916000194": {
-      "codfundo": "6589",
-      "nome": "FII CAIXA CARTEIRA IMOBILIÁRIA",
-      "cnpj": "42.066.916/0001-94",
+    "31887401000139": {
+      "codfundo": "6360",
+      "nome": "CAIXA RIO BRAVO FUNDO DE FII II",
+      "cnpj": "31.887.401/0001-39",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6589.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6589.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6589.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6589.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6589.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6589.pdf",
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6360.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6360.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6360.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6360.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6360.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6360.pdf",
         "termo": ""
       }
     },
-    "42120405000103": {
-      "codfundo": "6591",
-      "nome": "CAIXA FIC FIF ACOES DIVIDENDOS QUANTITATIVO RESP LTDA",
-      "cnpj": "42.120.405/0001-03",
+    "30068224000104": {
+      "codfundo": "6421",
+      "nome": "CAIXA FIC FIF ACOES ACOES MULTIGESTOR RESP LTDA",
+      "cnpj": "30.068.224/0001-04",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6591.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6591.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6591.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6591.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6591.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6591.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6591.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6421.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6421.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6421.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6421.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6421.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6421.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6421.pdf"
       }
     },
-    "43760251000187": {
-      "codfundo": "6593",
-      "nome": "CAIXA FIC FIF ACOES COMPROMISSO BDR NIVEL I RESP LTDA",
-      "cnpj": "43.760.251/0001-87",
+    "29157511000101": {
+      "codfundo": "6446",
+      "nome": "CAIXA FIF INDEXA SHORT DOLAR MM LP - RESP LTDA",
+      "cnpj": "29.157.511/0001-01",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6593.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6593.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6593.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6593.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6593.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6593.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6593.pdf"
-      }
-    },
-    "42196029000130": {
-      "codfundo": "6606",
-      "nome": "CAIXA FIC FIF INSTITUCIONAL SOBERANO PLUS RF - RESP LTDA",
-      "cnpj": "42.196.029/0001-30",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6606.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6606.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6606.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6606.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6606.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6606.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6606.pdf"
-      }
-    },
-    "45443366000173": {
-      "codfundo": "6601",
-      "nome": "CAIXA FMP FGTS ELETROBRAS MIGRAÇÃO - RESP LTDA",
-      "cnpj": "45.443.366/0001-73",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6601.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6601.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6601.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6601.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6601.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6601.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6601.pdf"
-      }
-    },
-    "45102454000101": {
-      "codfundo": "6617",
-      "nome": "CAIXA FI SENAR RENDA FIXA LONGO PRAZO",
-      "cnpj": "45.102.454/0001-01",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6617.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6617.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6617.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6617.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6617.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6617.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6617.pdf"
-      }
-    },
-    "45163710000170": {
-      "codfundo": "6634",
-      "nome": "CAIXA FIC FIF BRASIL IDKA PRE 2A RF LP - RESP LTDA",
-      "cnpj": "45.163.710/0001-70",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6634.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6634.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6634.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6634.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6634.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6634.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6634.pdf"
-      }
-    },
-    "54439846000151": {
-      "codfundo": "6950",
-      "nome": "CAIXA FIC FIF LONG BIAS MM - RL",
-      "cnpj": "54.439.846/0001-51",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6950.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6950.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6950.pdf",
-        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6950.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6950.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6950.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6950.pdf"
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6446.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6446.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6446.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6446.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6446.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6446.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6446.pdf"
       }
     },
     "35536497000141": {
@@ -2102,62 +2046,6 @@
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6620.pdf"
       }
     },
-    "44683343000173": {
-      "codfundo": "6608",
-      "nome": "CAIXA CAPITAL PROTEGIDO CICLICO III FIC FIF MM - RESP LTDA",
-      "cnpj": "44.683.343/0001-73",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6608.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6608.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6608.pdf",
-        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6608.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6608.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6608.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6608.pdf"
-      }
-    },
-    "45443651000194": {
-      "codfundo": "6623",
-      "nome": "CAIXA FIF FIC FIM CAPITAL PROTEGIDO CICLICO II LP - RESP LTDA",
-      "cnpj": "45.443.651/0001-94",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6623.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6623.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6623.pdf",
-        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6623.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6623.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6623.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6623.pdf"
-      }
-    },
-    "30068071000197": {
-      "codfundo": "6994",
-      "nome": "CAIXA EXPERT VERDE AM LONG BIAS FIC FIF ACOES - RESP LTDA",
-      "cnpj": "30.068.071/0001-97",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6994.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6994.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6994.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6994.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6994.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6994.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6994.pdf"
-      }
-    },
-    "51255391000126": {
-      "codfundo": "7861",
-      "nome": "CAIXA AMETISTA CORPORATIVO FIC FIF RF SIMPLES - RESP LTDA",
-      "cnpj": "51.255.391/0001-26",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7861.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7861.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7861.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7861.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7861.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7861.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7861.pdf"
-      }
-    },
     "42229068000197": {
       "codfundo": "6621",
       "nome": "CAIXA FIC FIF CAPITAL PROTEGIDO CESTA AGRO MM LP - RESP LTDA",
@@ -2212,6 +2100,118 @@
         "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7855.pdf",
         "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7855.pdf",
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7855.pdf"
+      }
+    },
+    "50658938000171": {
+      "codfundo": "7864",
+      "nome": "CAIXA FIF BRASIL 2030 X TP RF RESP LTDA",
+      "cnpj": "50.658.938/0001-71",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7864.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7864.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7864.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7864.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7864.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7864.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7864.pdf"
+      }
+    },
+    "51659921000100": {
+      "codfundo": "7875",
+      "nome": "CAIXA EXPERT PIMCO INCOME IE FIC FIF MM LP - RESP LTDA",
+      "cnpj": "51.659.921/0001-00",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7875.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7875.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7875.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7875.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7875.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7875.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7875.pdf"
+      }
+    },
+    "51943346000164": {
+      "codfundo": "7880",
+      "nome": "CAIXA FIC FIF FOF SMART CRED PRIV MM LP RESP LTDA",
+      "cnpj": "51.943.346/0001-64",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7880.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7880.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7880.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7880.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7880.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7880.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7880.pdf"
+      }
+    },
+    "54390771000161": {
+      "codfundo": "7909",
+      "nome": "CAIXA FIF BRASIL 2040 X TP RF - RL",
+      "cnpj": "54.390.771/0001-61",
+      "docs": {
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7909.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7909.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7909.pdf",
+        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_7909.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7909.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7909.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7909.pdf"
+      }
+    },
+    "45443366000173": {
+      "codfundo": "6601",
+      "nome": "CAIXA FMP FGTS ELETROBRAS MIGRAÇÃO - RESP LTDA",
+      "cnpj": "45.443.366/0001-73",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6601.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6601.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6601.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6601.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6601.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6601.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6601.pdf"
+      }
+    },
+    "45102454000101": {
+      "codfundo": "6617",
+      "nome": "CAIXA FI SENAR RENDA FIXA LONGO PRAZO",
+      "cnpj": "45.102.454/0001-01",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6617.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6617.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6617.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6617.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6617.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6617.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6617.pdf"
+      }
+    },
+    "45163710000170": {
+      "codfundo": "6634",
+      "nome": "CAIXA FIC FIF BRASIL IDKA PRE 2A RF LP - RESP LTDA",
+      "cnpj": "45.163.710/0001-70",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6634.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6634.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6634.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_6634.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6634.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6634.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6634.pdf"
+      }
+    },
+    "54439846000151": {
+      "codfundo": "6950",
+      "nome": "CAIXA FIC FIF LONG BIAS MM - RL",
+      "cnpj": "54.439.846/0001-51",
+      "docs": {
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6950.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6950.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6950.pdf",
+        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6950.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6950.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6950.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6950.pdf"
       }
     },
     "30036235000102": {
@@ -2270,60 +2270,130 @@
         "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7887.pdf"
       }
     },
-    "50658938000171": {
-      "codfundo": "7864",
-      "nome": "CAIXA FIF BRASIL 2030 X TP RF RESP LTDA",
-      "cnpj": "50.658.938/0001-71",
+    "55036101000104": {
+      "codfundo": "7914",
+      "nome": "CAIXA FIC FIF OMEGA PRIVATE RF REF DI LP - RESP LTDA",
+      "cnpj": "55.036.101/0001-04",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7864.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7864.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7864.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7864.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7864.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7864.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7864.pdf"
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7914.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7914.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7914.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7914.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7914.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7914.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7914.pdf"
       }
     },
-    "51659921000100": {
-      "codfundo": "7875",
-      "nome": "CAIXA EXPERT PIMCO INCOME IE FIC FIF MM LP - RESP LTDA",
-      "cnpj": "51.659.921/0001-00",
+    "55986292000175": {
+      "codfundo": "7916",
+      "nome": "CAIXA FIC FIF UNIQUE PRIVATE RF CRED PRIV LP - RESP LTDA",
+      "cnpj": "55.986.292/0001-75",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7875.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7875.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7875.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7875.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7875.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7875.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7875.pdf"
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7916.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7916.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7916.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7916.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7916.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7916.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7916.pdf"
       }
     },
-    "51943346000164": {
-      "codfundo": "7880",
-      "nome": "CAIXA FIC FIF FOF SMART CRED PRIV MM LP RESP LTDA",
-      "cnpj": "51.943.346/0001-64",
+    "56134800000150": {
+      "codfundo": "7923",
+      "nome": "CAIXA FIF BRASIL ESPECIAL 2026 TP RF - RESP LTDA",
+      "cnpj": "56.134.800/0001-50",
       "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7880.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7880.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7880.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7880.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7880.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7880.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7880.pdf"
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7923.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7923.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7923.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7923.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7923.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7923.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7923.pdf"
       }
     },
-    "54390771000161": {
-      "codfundo": "7909",
-      "nome": "CAIXA FIF BRASIL 2040 X TP RF - RL",
-      "cnpj": "54.390.771/0001-61",
+    "56209124000136": {
+      "codfundo": "7925",
+      "nome": "CAIXA FIF BRASIL ESPECIAL 2028 TP RF - RESP LTDA",
+      "cnpj": "56.209.124/0001-36",
       "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7909.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7909.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7909.pdf",
-        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_7909.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7909.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7909.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7909.pdf"
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7925.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7925.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7925.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7925.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7925.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7925.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7925.pdf"
+      }
+    },
+    "56209467000109": {
+      "codfundo": "7934",
+      "nome": "CAIXA FIF BRASIL ESPECIAL 2030 TP RF - RESP LTDA",
+      "cnpj": "56.209.467/0001-09",
+      "docs": {
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7934.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7934.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7934.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7934.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7934.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7934.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7934.pdf"
+      }
+    },
+    "44683343000173": {
+      "codfundo": "6608",
+      "nome": "CAIXA CAPITAL PROTEGIDO CICLICO III FIC FIF MM - RESP LTDA",
+      "cnpj": "44.683.343/0001-73",
+      "docs": {
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6608.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6608.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6608.pdf",
+        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6608.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6608.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6608.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6608.pdf"
+      }
+    },
+    "45443651000194": {
+      "codfundo": "6623",
+      "nome": "CAIXA FIF FIC FIM CAPITAL PROTEGIDO CICLICO II LP - RESP LTDA",
+      "cnpj": "45.443.651/0001-94",
+      "docs": {
+        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6623.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6623.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6623.pdf",
+        "comunicado": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6623.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6623.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6623.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6623.pdf"
+      }
+    },
+    "30068071000197": {
+      "codfundo": "6994",
+      "nome": "CAIXA EXPERT VERDE AM LONG BIAS FIC FIF ACOES - RESP LTDA",
+      "cnpj": "30.068.071/0001-97",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_6994.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_6994.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_6994.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/FR_6994.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_6994.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_6994.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_6994.pdf"
+      }
+    },
+    "51255391000126": {
+      "codfundo": "7861",
+      "nome": "CAIXA AMETISTA CORPORATIVO FIC FIF RF SIMPLES - RESP LTDA",
+      "cnpj": "51.255.391/0001-26",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7861.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7861.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7861.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7861.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7861.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7861.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7861.pdf"
       }
     },
     "50568762000167": {
@@ -2466,132 +2536,6 @@
         "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7913.pdf"
       }
     },
-    "55036101000104": {
-      "codfundo": "7914",
-      "nome": "CAIXA FIC FIF OMEGA PRIVATE RF REF DI LP - RESP LTDA",
-      "cnpj": "55.036.101/0001-04",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7914.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7914.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7914.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7914.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7914.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7914.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7914.pdf"
-      }
-    },
-    "55986292000175": {
-      "codfundo": "7916",
-      "nome": "CAIXA FIC FIF UNIQUE PRIVATE RF CRED PRIV LP - RESP LTDA",
-      "cnpj": "55.986.292/0001-75",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7916.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7916.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7916.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7916.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7916.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7916.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7916.pdf"
-      }
-    },
-    "56134800000150": {
-      "codfundo": "7923",
-      "nome": "CAIXA FIF BRASIL ESPECIAL 2026 TP RF - RESP LTDA",
-      "cnpj": "56.134.800/0001-50",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7923.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7923.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7923.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7923.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7923.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7923.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7923.pdf"
-      }
-    },
-    "56209124000136": {
-      "codfundo": "7925",
-      "nome": "CAIXA FIF BRASIL ESPECIAL 2028 TP RF - RESP LTDA",
-      "cnpj": "56.209.124/0001-36",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7925.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7925.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7925.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7925.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7925.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7925.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7925.pdf"
-      }
-    },
-    "56209467000109": {
-      "codfundo": "7934",
-      "nome": "CAIXA FIF BRASIL ESPECIAL 2030 TP RF - RESP LTDA",
-      "cnpj": "56.209.467/0001-09",
-      "docs": {
-        "lamina": "http://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_7934.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7934.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7934.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7934.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7934.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7934.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7934.pdf"
-      }
-    },
-    "59861817000105": {
-      "codfundo": "7940",
-      "nome": "CAIXA EXPERT ABSOLUTE CRETA FIC FIF RF CRED PRIV LP - RESP LTDA",
-      "cnpj": "59.861.817/0001-05",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7940.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7940.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7940.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7940.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7940.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7940.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7940.pdf"
-      }
-    },
-    "61160298000191": {
-      "codfundo": "7972",
-      "nome": "CAIXA AZULZINHA FIC FIF RF SIMPLES - RESP LTDA",
-      "cnpj": "61.160.298/0001-91",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7972.pdf",
-        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7972.pdf",
-        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7972.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7972.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7972.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7972.pdf",
-        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7972.pdf"
-      }
-    },
-    "65795043000156": {
-      "codfundo": "7990",
-      "nome": "CAIXA CARTEIRA QUANTITATIVA DUO FIC FIF MM LP - RESP LTDA",
-      "cnpj": "65.795.043/0001-56",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7990.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7990.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7990.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7990.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7990.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7990.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7990.pdf"
-      }
-    },
-    "65794476000197": {
-      "codfundo": "7992",
-      "nome": "CAIXA CARTEIRA QUANTITATIVA UNO FIC FIF MM LP - RESP LTDA",
-      "cnpj": "65.794.476/0001-97",
-      "docs": {
-        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7992.pdf",
-        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7992.pdf",
-        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7992.pdf",
-        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7992.pdf",
-        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7992.pdf",
-        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7992.pdf",
-        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7992.pdf"
-      }
-    },
     "56209706000112": {
       "codfundo": "7935",
       "nome": "CAIXA FIF BRASIL ESPECIAL 2032 TP RF - RL",
@@ -2716,6 +2660,62 @@
         "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7980.pdf",
         "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7980.pdf",
         "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7980.pdf"
+      }
+    },
+    "59861817000105": {
+      "codfundo": "7940",
+      "nome": "CAIXA EXPERT ABSOLUTE CRETA FIC FIF RF CRED PRIV LP - RESP LTDA",
+      "cnpj": "59.861.817/0001-05",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7940.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7940.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7940.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7940.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7940.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7940.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7940.pdf"
+      }
+    },
+    "61160298000191": {
+      "codfundo": "7972",
+      "nome": "CAIXA AZULZINHA FIC FIF RF SIMPLES - RESP LTDA",
+      "cnpj": "61.160.298/0001-91",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7972.pdf",
+        "regulamento": "http://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7972.pdf",
+        "inf_comp": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7972.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7972.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7972.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7972.pdf",
+        "termo": "http://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7972.pdf"
+      }
+    },
+    "65795043000156": {
+      "codfundo": "7990",
+      "nome": "CAIXA CARTEIRA QUANTITATIVA DUO FIC FIF MM LP - RESP LTDA",
+      "cnpj": "65.795.043/0001-56",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7990.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7990.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7990.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7990.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7990.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7990.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7990.pdf"
+      }
+    },
+    "65794476000197": {
+      "codfundo": "7992",
+      "nome": "CAIXA CARTEIRA QUANTITATIVA UNO FIC FIF MM LP - RESP LTDA",
+      "cnpj": "65.794.476/0001-97",
+      "docs": {
+        "lamina": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7992.pdf",
+        "regulamento": "https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_7992.pdf",
+        "inf_comp": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_7992.pdf",
+        "comunicado": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_7992.pdf",
+        "carta_mensal": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_7992.pdf",
+        "boletim": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_7992.pdf",
+        "termo": "https://www.caixa.gov.br/Downloads/aplicacao-financeira-termos-adesao/TA_7992.pdf"
       }
     },
     "65789297000161": {
