@@ -8323,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8394,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125');
   }catch(e){}
 })();
 
@@ -8408,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8737,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125');
 })();
 
 
@@ -8747,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8815,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8922,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9160,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9226,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9327,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9468,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9515,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9567,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9690,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9773,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9834,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9903,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9973,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10068,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10186,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10276,7 +10276,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10345,7 +10345,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10475,7 +10475,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10638,7 +10638,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10687,7 +10687,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10722,7 +10722,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10760,7 +10760,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10801,7 +10801,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -10899,7 +10899,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DESIGN_TOKENS_LEGIBILITY_20260608_v124';
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10929,5 +10929,131 @@ async function sharePainelMercado(){
   setTimeout(syncDesignTokensV124, 1800);
 
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_V124__ = { sync: syncDesignTokensV124 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v125 — KPI desktop + toggle "Ocultar fundos sem dados"
+   - Melhora legibilidade do nome do fundo nos KPIs no desktop.
+   - Reforça funcionamento do toggle no desktop sem alterar lógica existente.
+   - Preserva v108/v118/v119/v120/v121/v122/v123/v124.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_KPI_TOGGLE_DESKTOP_FIX_20260608_v125';
+  window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+  function syncBuildV125(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.documentElement.classList.add('kpi-toggle-desktop-fix-v125');
+    }catch(e){}
+  }
+
+  function findHideNoDataControl(){
+    const label = qsa('.toggle-label').find(el =>
+      (el.textContent || '').toLowerCase().includes('ocultar fundos sem dados') ||
+      (el.title || '').toLowerCase().includes('ocultar fundos sem dados')
+    );
+
+    const input =
+      qs('#hideNoData') ||
+      qs('#hideEmptyFunds') ||
+      qs('#hideWithoutData') ||
+      qs('#toggleNoData') ||
+      qs('input[type="checkbox"][data-hide-no-data]') ||
+      (label ? label.closest('label')?.querySelector('input[type="checkbox"]') : null) ||
+      (label ? label.parentElement?.querySelector('input[type="checkbox"]') : null) ||
+      (label ? label.closest('.toggle-control,.switch,.data-toggle,.no-data-toggle,.toggle-wrap')?.querySelector('input[type="checkbox"]') : null);
+
+    const wrap =
+      input?.closest('label') ||
+      input?.closest('.toggle-control,.switch,.data-toggle,.no-data-toggle,.toggle-wrap') ||
+      label?.closest('label') ||
+      label?.parentElement;
+
+    return {label, input, wrap};
+  }
+
+  function reinforceHideNoDataToggleV125(){
+    try{
+      const {label, input, wrap} = findHideNoDataControl();
+      if(label){
+        label.textContent = 'Ocultar fundos sem dados';
+        label.title = 'Ocultar fundos sem dados';
+        label.classList.add('toggle-label-v125');
+      }
+
+      if(wrap){
+        wrap.classList.add('hide-no-data-toggle-v125');
+        wrap.setAttribute('role', wrap.getAttribute('role') || 'switch');
+        wrap.style.pointerEvents = 'auto';
+      }
+
+      if(input){
+        input.classList.add('hide-no-data-input-v125');
+        input.style.pointerEvents = 'auto';
+
+        if(!input.dataset.v125Bound){
+          input.dataset.v125Bound = '1';
+          input.addEventListener('change', () => {
+            setTimeout(() => {
+              try{
+                if(typeof window.renderTable === 'function') window.renderTable();
+                if(typeof window.renderCards === 'function') window.renderCards();
+                if(typeof window.applyFilters === 'function') window.applyFilters();
+              }catch(e){}
+            }, 0);
+          });
+        }
+
+        if(label && !label.dataset.v125Bound){
+          label.dataset.v125Bound = '1';
+          label.addEventListener('click', (ev) => {
+            if(ev.target === input) return;
+            const container = label.closest('label');
+            if(container) return; // label nativo já resolve
+            ev.preventDefault();
+            input.click();
+          });
+        }
+
+        if(wrap && !wrap.dataset.v125Bound){
+          wrap.dataset.v125Bound = '1';
+          wrap.addEventListener('click', (ev) => {
+            if(ev.target === input || ev.target.closest('input')) return;
+            if(ev.target.closest('button,a,select')) return;
+            if(ev.target.classList && ev.target.classList.contains('toggle-label-v125')) return;
+            input.click();
+          });
+        }
+      }
+    }catch(e){}
+  }
+
+  function syncV125(){
+    syncBuildV125();
+    reinforceHideNoDataToggleV125();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV125, 120), {once:true});
+  }else{
+    setTimeout(syncV125, 120);
+  }
+
+  setTimeout(syncV125, 800);
+  setTimeout(syncV125, 1800);
+  setTimeout(syncV125, 3500);
+
+  window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_V125__ = {
+    sync: syncV125,
+    findHideNoDataControl
+  };
 })();
 
