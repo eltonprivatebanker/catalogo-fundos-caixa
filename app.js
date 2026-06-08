@@ -8323,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8394,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113');
   }catch(e){}
 })();
 
@@ -8408,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8737,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113');
 })();
 
 
@@ -8747,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8815,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8922,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9160,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9226,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9327,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9468,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9515,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9567,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9690,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9773,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9834,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9903,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9973,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10068,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10186,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10275,7 +10275,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MOBILE_MARKET_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10386,7 +10386,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10459,7 +10459,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_FIX_MARKET_HINT_DUPLICATION_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10572,7 +10572,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MOBILE_MARKET_STABILITY_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10709,7 +10709,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10837,7 +10837,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_20260608_v112';
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
   window.__ELTAUM_MICRO_HEADER_MARKET_CDI_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10924,5 +10924,143 @@ async function sharePainelMercado(){
   setTimeout(syncV112,3200);
 
   window.__ELTAUM_MICRO_HEADER_MARKET_CDI_V112__ = { sync: syncV112 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v113 — Micro correção: cabeçalho + Mercado mobile
+   Base: v112.
+   - Corrige cabeçalho mobile desformatado.
+   - Mantém negativos em vermelho no resumo de mercado.
+   - Remove hints antigos duplicados de "Arraste".
+   - Deixa "Arraste →" sem inserir/remover elementos a cada clique.
+   - CDI na ordem: mês atual, último fechado, anteriores.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_20260608_v113';
+  window.__ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function setBuildV113(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  function removeLookerResidueV113(){
+    qsa('#lookerPanelBtn,.looker-panel-btn-v102').forEach(el => el.remove());
+  }
+
+  function normalizeClosedMiniSignsV113(){
+    qsa('#closedMiniCdi,#closedMiniIpca,#closedMiniDolar,#closedMiniIbov').forEach(el => {
+      const txt = (el.textContent || '').trim();
+      el.classList.remove('pos','neg','zero');
+      if(/^-\s*/.test(txt)) el.classList.add('neg');
+      else if(/^\+/.test(txt)) el.classList.add('pos');
+      else el.classList.add('zero');
+    });
+  }
+
+  function removeOldDragHintsV113(){
+    qsa('#sec-mercado .market-scroll-hint-v101,#sec-mercado .copom-scroll-hint-v101,#sec-mercado .cdi-scroll-hint-v101').forEach(el => el.remove());
+  }
+
+  function ensureStaticDragLabelV113(target, label, key){
+    if(!target || !target.parentElement || !isMobile()) return;
+
+    let row = qs(`[data-drag-label-v113="${key}"]`, target.parentElement);
+
+    /* Se existir o rótulo da v112, reaproveita para evitar inserir outro elemento e causar pulo. */
+    const old = qs(`[data-drag-label-v112="${key}"]`, target.parentElement);
+    if(!row && old){
+      row = old;
+      row.classList.remove('market-drag-label-v112');
+      row.classList.add('market-drag-label-v113');
+      row.dataset.dragLabelV113 = key;
+      delete row.dataset.dragLabelV112;
+    }
+
+    if(!row){
+      row = document.createElement('div');
+      row.className = 'market-drag-label-v113';
+      row.dataset.dragLabelV113 = key;
+      row.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
+      target.insertAdjacentElement('beforebegin', row);
+    }
+
+    const span = row.querySelector('span');
+    const strong = row.querySelector('strong');
+    if(span) span.textContent = label;
+    if(strong) strong.textContent = 'Arraste →';
+    row.hidden = false;
+  }
+
+  function normalizeCdiOrderV113(){
+    const strip = qs('#cdiMonthStrip');
+    if(!strip || !isMobile()) return;
+
+    const chips = qsa('.cdi-month-chip', strip);
+    if(chips.length < 2) return;
+
+    const month = {JAN:1,FEV:2,MAR:3,ABR:4,MAI:5,JUN:6,JUL:7,AGO:8,SET:9,OUT:10,NOV:11,DEZ:12};
+
+    function score(chip){
+      const txt = (chip.querySelector('.m')?.textContent || chip.textContent || '').toUpperCase();
+      const m = txt.match(/(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)(?:\/(\d{4}))?/);
+      if(!m) return -1;
+      const year = Number(m[2] || new Date().getFullYear());
+      return year * 100 + (month[m[1]] || 0);
+    }
+
+    /*
+      Se já existe chip current/parcial, ele vem primeiro.
+      Depois closed/último mês.
+      Depois os anteriores em ordem desc.
+    */
+    const current = chips.find(c => c.classList.contains('current') || /parcial/i.test(c.textContent || ''));
+    const closed = chips.find(c => c !== current && (c.classList.contains('closed') || /último mês|ultimo mês/i.test(c.textContent || '')));
+    const rest = chips.filter(c => c !== current && c !== closed).sort((a,b) => score(b) - score(a));
+
+    [current, closed, ...rest].filter(Boolean).forEach(chip => strip.appendChild(chip));
+    strip.scrollLeft = 0;
+  }
+
+  function syncV113(){
+    try{
+      setBuildV113();
+      removeLookerResidueV113();
+      removeOldDragHintsV113();
+      normalizeClosedMiniSignsV113();
+
+      const mercado = qs('#sec-mercado');
+      if(mercado) mercado.classList.add('market-fix-v113');
+
+      const copom = qs('#copomMeetings');
+      if(copom) ensureStaticDragLabelV113(copom, 'Próximas reuniões', 'copom');
+
+      const cdi = qs('#cdiMonthStrip');
+      if(cdi){
+        normalizeCdiOrderV113();
+        ensureStaticDragLabelV113(cdi, 'Histórico mensal do CDI', 'cdi');
+      }
+    }catch(e){}
+  }
+
+  /*
+    Importante: não sincronizar em todo clique. Isso causava pulo visual no mobile.
+    Rodamos só após carregamento e resize.
+  */
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(syncV113,180));
+  else setTimeout(syncV113,180);
+
+  window.addEventListener('resize',()=>setTimeout(syncV113,160),{passive:true});
+  setTimeout(syncV113,800);
+  setTimeout(syncV113,1800);
+
+  window.__ELTAUM_MICRO_HEADER_MARKET_CDI_FIX_V113__ = { sync: syncV113 };
 })();
 
