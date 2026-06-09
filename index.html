@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_THEME_SWITCHER_20260609_v129"/>
+<meta name="app-build" content="ELTAUM_CAIXA_THEMES_20260609_v130"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,12 +61,12 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=theme-switcher-v129" rel="stylesheet"/>
+<link href="style.css?v=caixa-themes-v130" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=theme-switcher-v129"></script>
+<script defer src="app.js?v=caixa-themes-v130"></script>
 
 </head>
 <body>
@@ -1253,18 +1253,20 @@ html:not(.app-booting) .page{
       <button type="button" class="theme-close-v129" id="themeCloseV129" aria-label="Fechar preferências">×</button>
     </div>
     <p class="theme-panel-sub-v129">Escolha uma paleta visual. A preferência fica salva neste navegador.</p>
-    <div class="theme-options-v129" role="radiogroup" aria-label="Tema da plataforma">
+    <div class="theme-options-v129 theme-options-v130" role="radiogroup" aria-label="Tema da plataforma">
       <button type="button" class="theme-option-v129 active" data-theme-choice="gold" role="radio" aria-checked="true">
         <span class="theme-swatch-v129 swatch-gold-v129"></span>
         <span><strong>Private Gold</strong><small>Escuro premium · dourado</small></span>
       </button>
-      <button type="button" class="theme-option-v129" data-theme-choice="blue" role="radio" aria-checked="false">
-        <span class="theme-swatch-v129 swatch-blue-v129"></span>
-        <span><strong>Blue Corporate</strong><small>Escuro institucional · azul</small></span>
+
+      <button type="button" class="theme-option-v129" data-theme-choice="private" role="radio" aria-checked="false">
+        <span class="theme-swatch-v129 swatch-private-v130"></span>
+        <span><strong>CAIXA Private</strong><small>Grafite sofisticado · Private</small></span>
       </button>
-      <button type="button" class="theme-option-v129" data-theme-choice="light" role="radio" aria-checked="false">
-        <span class="theme-swatch-v129 swatch-light-v129"></span>
-        <span><strong>Light Professional</strong><small>Claro para leitura</small></span>
+
+      <button type="button" class="theme-option-v129" data-theme-choice="caixa" role="radio" aria-checked="false">
+        <span class="theme-swatch-v129 swatch-caixa-v130"></span>
+        <span><strong>CAIXA Institucional</strong><small>Claro · azul CAIXA</small></span>
       </button>
     </div>
   </div>

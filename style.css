@@ -25555,3 +25555,227 @@ html[data-theme="light"] .theme-option-v129.active{
   .theme-panel-card-v129{ padding:16px!important; border-radius:22px!important; }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v130 — Paletas CAIXA / Private
+   Base visual inspirada nas telas:
+   1) CAIXA Private: grafite, azul profundo, branco e cinzas frios.
+   2) CAIXA Institucional: azul CAIXA, fundo claro e leitura limpa.
+════════════════════════════════════════════════════ */
+
+/* Mantém o tema atual como opção principal */
+html[data-theme="gold"]{
+  --ds-bg-page:#050610;
+  --ds-bg-card:#0d0f1c;
+  --ds-bg-card-soft:#111426;
+  --ds-bg-panel:rgba(14,17,31,.82);
+  --ds-bg-panel-strong:rgba(18,22,38,.92);
+
+  --ds-text-primary:#f4f7ff;
+  --ds-text-secondary:#a6b0c9;
+  --ds-text-muted:#7f8aa7;
+  --ds-text-soft:#cbd5ee;
+
+  --ds-accent:#e8bb6a;
+  --ds-accent-strong:#f0c878;
+  --ds-positive:#2ed17a;
+  --ds-negative:#ff5c7a;
+
+  --ds-border-gold:rgba(232,187,106,.34);
+  --ds-border-blue:rgba(91,141,218,.24);
+}
+
+/* Nova paleta: CAIXA Private */
+html[data-theme="private"]{
+  --ds-bg-page:#080d18;
+  --ds-bg-card:#101724;
+  --ds-bg-card-soft:#182132;
+  --ds-bg-panel:rgba(16,23,36,.90);
+  --ds-bg-panel-strong:rgba(24,33,50,.96);
+
+  --ds-text-primary:#ffffff;
+  --ds-text-secondary:#c9d1df;
+  --ds-text-muted:#8995a8;
+  --ds-text-soft:#e3e8f2;
+
+  --ds-accent:#e7edf7;
+  --ds-accent-strong:#ffffff;
+  --ds-positive:#26c883;
+  --ds-negative:#ff6079;
+
+  --ds-border-gold:rgba(231,237,247,.24);
+  --ds-border-blue:rgba(64,101,143,.38);
+  --ds-private-blue:#163f68;
+  --ds-private-silver:#d7dde8;
+}
+
+/* Nova paleta: CAIXA Institucional */
+html[data-theme="caixa"]{
+  --ds-bg-page:#f4f7fa;
+  --ds-bg-card:#ffffff;
+  --ds-bg-card-soft:#edf3f8;
+  --ds-bg-panel:rgba(255,255,255,.94);
+  --ds-bg-panel-strong:rgba(255,255,255,.985);
+
+  --ds-text-primary:#1f2f46;
+  --ds-text-secondary:#52627a;
+  --ds-text-muted:#758398;
+  --ds-text-soft:#273a56;
+
+  --ds-accent:#006bb6;
+  --ds-accent-strong:#005ca8;
+  --ds-positive:#008c64;
+  --ds-negative:#c7384f;
+
+  --ds-border-gold:rgba(0,107,182,.24);
+  --ds-border-blue:rgba(0,107,182,.36);
+  --ds-caixa-orange:#f39200;
+  --ds-caixa-blue:#006bb6;
+}
+
+/* Aplica os tokens nos blocos principais sem redesenhar o layout */
+html.caixa-themes-v130 body{
+  background:var(--ds-bg-page)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+html.caixa-themes-v130 .site-header-clean,
+html.caixa-themes-v130 .executive-summary,
+html.caixa-themes-v130 .fund-filter-shell,
+html.caixa-themes-v130 .market-ref-card,
+html.caixa-themes-v130 .indic-ref-card,
+html.caixa-themes-v130 .ranking-card,
+html.caixa-themes-v130 .ranking-panel,
+html.caixa-themes-v130 .focus-card,
+html.caixa-themes-v130 .closed-month-launch,
+html.caixa-themes-v130 .fund-card-mobile,
+html.caixa-themes-v130 .fund-card,
+html.caixa-themes-v130 .closed-market-sheet,
+html.caixa-themes-v130 .theme-panel-card-v129{
+  background:
+    linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+  border-color:var(--ds-border-gold)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+/* Private ganha uma camada mais sofisticada */
+html[data-theme="private"] .site-header-clean,
+html[data-theme="private"] .executive-summary,
+html[data-theme="private"] .market-ref-card,
+html[data-theme="private"] .indic-ref-card,
+html[data-theme="private"] .fund-card-mobile,
+html[data-theme="private"] .fund-card{
+  background:
+    radial-gradient(circle at 4% 0%, rgba(120,145,180,.18), transparent 38%),
+    linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+}
+
+/* CAIXA Institucional claro */
+html[data-theme="caixa"] .site-header-clean,
+html[data-theme="caixa"] .executive-summary,
+html[data-theme="caixa"] .market-ref-card,
+html[data-theme="caixa"] .indic-ref-card,
+html[data-theme="caixa"] .fund-card-mobile,
+html[data-theme="caixa"] .fund-card,
+html[data-theme="caixa"] .closed-month-launch{
+  box-shadow:0 12px 28px rgba(16,33,58,.10)!important;
+}
+
+/* Tipografia e cores principais */
+html.caixa-themes-v130 h1,
+html.caixa-themes-v130 h2,
+html.caixa-themes-v130 h3,
+html.caixa-themes-v130 .section-title h2,
+html.caixa-themes-v130 .market-title-left h2,
+html.caixa-themes-v130 .ranking-title-group h2,
+html.caixa-themes-v130 .brand-text h1{
+  color:var(--ds-accent)!important;
+}
+
+html.caixa-themes-v130 p,
+html.caixa-themes-v130 small,
+html.caixa-themes-v130 .kpi-sub,
+html.caixa-themes-v130 .section-title p,
+html.caixa-themes-v130 .closed-month-launch-copy small,
+html.caixa-themes-v130 .cdi-rel,
+html.caixa-themes-v130 .brand-text p{
+  color:var(--ds-text-secondary)!important;
+}
+
+html.caixa-themes-v130 .pos,
+html.caixa-themes-v130 .positive{
+  color:var(--ds-positive)!important;
+}
+
+html.caixa-themes-v130 .neg,
+html.caixa-themes-v130 .negative{
+  color:var(--ds-negative)!important;
+}
+
+/* Botões e abas */
+html.caixa-themes-v130 button,
+html.caixa-themes-v130 .btn,
+html.caixa-themes-v130 .macro-link,
+html.caixa-themes-v130 .closed-month-launch-action,
+html.caixa-themes-v130 .theme-toggle-v129{
+  border-color:var(--ds-border-gold)!important;
+}
+
+html[data-theme="caixa"] input,
+html[data-theme="caixa"] select,
+html[data-theme="caixa"] textarea{
+  background:#ffffff!important;
+  color:var(--ds-text-primary)!important;
+  border-color:rgba(0,107,182,.24)!important;
+}
+
+html[data-theme="caixa"] .bottom-nav,
+html[data-theme="caixa"] .mobile-bottom-nav,
+html[data-theme="caixa"] .search-shell,
+html[data-theme="caixa"] .global-search-wrap{
+  background:rgba(255,255,255,.94)!important;
+  border-color:rgba(0,107,182,.18)!important;
+}
+
+/* Ajusta botão aparência para as novas paletas */
+.theme-toggle-v129{
+  border-color:var(--ds-border-gold,rgba(232,187,106,.34))!important;
+  color:var(--ds-accent-strong,#f0c878)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025))!important;
+}
+
+html[data-theme="caixa"] .theme-toggle-v129{
+  background:#ffffff!important;
+  color:var(--ds-caixa-blue,#006bb6)!important;
+  box-shadow:0 8px 18px rgba(0,107,182,.10)!important;
+}
+
+/* Swatches */
+.swatch-private-v130{
+  background:linear-gradient(135deg,#080d18 0 38%,#d7dde8 39% 62%,#163f68 63% 100%)!important;
+}
+
+.swatch-caixa-v130{
+  background:linear-gradient(135deg,#ffffff 0 37%,#006bb6 38% 72%,#f39200 73% 100%)!important;
+}
+
+/* Remove destaque dos temas antigos se ainda estiverem no cache */
+.swatch-blue-v129,
+.swatch-light-v129{
+  display:none!important;
+}
+
+/* Painel de temas com os novos nomes */
+.theme-options-v130 .theme-option-v129.active{
+  border-color:var(--ds-border-gold,rgba(232,187,106,.34))!important;
+  background:rgba(232,187,106,.10)!important;
+}
+
+html[data-theme="private"] .theme-options-v130 .theme-option-v129.active{
+  background:rgba(231,237,247,.10)!important;
+}
+
+html[data-theme="caixa"] .theme-options-v130 .theme-option-v129.active{
+  background:rgba(0,107,182,.08)!important;
+}
+
