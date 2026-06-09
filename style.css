@@ -25982,3 +25982,263 @@ html.caixa-themes-safe-v131 .theme-toggle-v129{
   background:rgba(255,255,255,.08)!important;
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v132 — 3 temas escuros profissionais
+   Três versões distintas sem tema claro:
+   1) Private Gold  — #101418 #2C3E50 #B08D57 #DCC9A6 #FBF6EE
+   2) CAIXA Blue    — #0A0F1E #1B2A41 #3B82F6 #94A3B8 #E2E8F0
+   3) Dark Finance  — preto/grafite/amarelo financeiro
+════════════════════════════════════════════════════ */
+
+/* Tema 1 — Private Gold Premium */
+html[data-theme="private-gold"]{
+  --ds-bg-page:#101418;
+  --ds-bg-card:#141a20;
+  --ds-bg-card-soft:#1b252f;
+  --ds-bg-panel:rgba(20,26,32,.90);
+  --ds-bg-panel-strong:rgba(44,62,80,.38);
+
+  --ds-text-primary:#FBF6EE;
+  --ds-text-secondary:#DCC9A6;
+  --ds-text-muted:#9fa6ad;
+  --ds-text-soft:#F5E8D1;
+
+  --ds-accent:#B08D57;
+  --ds-accent-strong:#DCC9A6;
+  --ds-positive:#27d486;
+  --ds-negative:#ff637d;
+
+  --ds-border-gold:rgba(176,141,87,.46);
+  --ds-border-blue:rgba(44,62,80,.52);
+  --ds-chip-bg:rgba(176,141,87,.12);
+}
+
+/* Tema 2 — CAIXA Blue Professional */
+html[data-theme="caixa-blue"]{
+  --ds-bg-page:#0A0F1E;
+  --ds-bg-card:#101b2e;
+  --ds-bg-card-soft:#1B2A41;
+  --ds-bg-panel:rgba(16,27,46,.90);
+  --ds-bg-panel-strong:rgba(27,42,65,.96);
+
+  --ds-text-primary:#E2E8F0;
+  --ds-text-secondary:#94A3B8;
+  --ds-text-muted:#718096;
+  --ds-text-soft:#F1F5F9;
+
+  --ds-accent:#3B82F6;
+  --ds-accent-strong:#8AB8FF;
+  --ds-positive:#29d391;
+  --ds-negative:#ff5f7a;
+
+  --ds-border-gold:rgba(59,130,246,.42);
+  --ds-border-blue:rgba(148,163,184,.28);
+  --ds-chip-bg:rgba(59,130,246,.13);
+}
+
+/* Tema 3 — Dark Finance Yellow */
+html[data-theme="dark-finance"]{
+  --ds-bg-page:#111111;
+  --ds-bg-card:#1C1C1C;
+  --ds-bg-card-soft:#242424;
+  --ds-bg-panel:rgba(28,28,28,.94);
+  --ds-bg-panel-strong:rgba(18,18,18,.98);
+
+  --ds-text-primary:#FFFFFF;
+  --ds-text-secondary:#C7C7C7;
+  --ds-text-muted:#8F8F8F;
+  --ds-text-soft:#F4F4F4;
+
+  --ds-accent:#F6C400;
+  --ds-accent-strong:#FFD21A;
+  --ds-positive:#21C878;
+  --ds-negative:#FF5C72;
+
+  --ds-border-gold:rgba(246,196,0,.42);
+  --ds-border-blue:rgba(255,255,255,.10);
+  --ds-chip-bg:rgba(246,196,0,.12);
+}
+
+/* Mantém compatibilidade com nomes antigos já salvos no browser */
+html[data-theme="gold"]{ color-scheme:dark; }
+html[data-theme="private"]{ color-scheme:dark; }
+html[data-theme="caixa"]{ color-scheme:dark; }
+
+/* Aplicação global segura */
+html.three-dark-themes-v132{
+  color-scheme:dark;
+}
+
+html.three-dark-themes-v132 body{
+  background:
+    radial-gradient(circle at 10% 0%, color-mix(in srgb, var(--ds-accent) 7%, transparent), transparent 30%),
+    var(--ds-bg-page)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+/* Fallback se color-mix não existir */
+@supports not (background: color-mix(in srgb, red 10%, transparent)){
+  html.three-dark-themes-v132 body{
+    background:var(--ds-bg-page)!important;
+  }
+}
+
+/* Cards principais */
+html.three-dark-themes-v132 .site-header-clean,
+html.three-dark-themes-v132 .executive-summary,
+html.three-dark-themes-v132 .fund-filter-shell,
+html.three-dark-themes-v132 .market-ref-card,
+html.three-dark-themes-v132 .indic-ref-card,
+html.three-dark-themes-v132 .ranking-card,
+html.three-dark-themes-v132 .ranking-panel,
+html.three-dark-themes-v132 .focus-card,
+html.three-dark-themes-v132 .closed-month-launch,
+html.three-dark-themes-v132 .fund-card-mobile,
+html.three-dark-themes-v132 .fund-card,
+html.three-dark-themes-v132 .closed-market-sheet,
+html.three-dark-themes-v132 .theme-panel-card-v129{
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,.045), transparent 34%),
+    linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+  border-color:var(--ds-border-gold)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+/* Fundos e áreas de filtro/tabela */
+html.three-dark-themes-v132 .filter-panel,
+html.three-dark-themes-v132 .fund-table,
+html.three-dark-themes-v132 table,
+html.three-dark-themes-v132 .view-toggle-bar,
+html.three-dark-themes-v132 .visualizacao-bar,
+html.three-dark-themes-v132 .visualization-panel,
+html.three-dark-themes-v132 .catalog-shortcuts,
+html.three-dark-themes-v132 .mobile-category-select-shell-v74,
+html.three-dark-themes-v132 .mobile-extra-controls-v75{
+  background:linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+  color:var(--ds-text-primary)!important;
+  border-color:var(--ds-border-blue)!important;
+}
+
+/* Inputs, selects e botões */
+html.three-dark-themes-v132 input,
+html.three-dark-themes-v132 select,
+html.three-dark-themes-v132 textarea{
+  background:rgba(0,0,0,.22)!important;
+  color:var(--ds-text-primary)!important;
+  border-color:var(--ds-border-blue)!important;
+}
+
+html.three-dark-themes-v132 button,
+html.three-dark-themes-v132 .btn,
+html.three-dark-themes-v132 .macro-link,
+html.three-dark-themes-v132 .closed-month-launch-action,
+html.three-dark-themes-v132 .theme-toggle-v129,
+html.three-dark-themes-v132 .category-chip,
+html.three-dark-themes-v132 .indic-tab,
+html.three-dark-themes-v132 .ranking-filter{
+  border-color:var(--ds-border-gold)!important;
+}
+
+/* Títulos */
+html.three-dark-themes-v132 h1,
+html.three-dark-themes-v132 h2,
+html.three-dark-themes-v132 h3,
+html.three-dark-themes-v132 .section-title h2,
+html.three-dark-themes-v132 .market-title-left h2,
+html.three-dark-themes-v132 .ranking-title-group h2,
+html.three-dark-themes-v132 .brand-text h1{
+  color:var(--ds-accent-strong)!important;
+}
+
+/* Texto de apoio */
+html.three-dark-themes-v132 p,
+html.three-dark-themes-v132 small,
+html.three-dark-themes-v132 .kpi-sub,
+html.three-dark-themes-v132 .section-title p,
+html.three-dark-themes-v132 .closed-month-launch-copy small,
+html.three-dark-themes-v132 .cdi-rel,
+html.three-dark-themes-v132 .brand-text p{
+  color:var(--ds-text-secondary)!important;
+}
+
+/* Tabela */
+html.three-dark-themes-v132 th{
+  color:var(--ds-accent-strong)!important;
+}
+
+html.three-dark-themes-v132 td{
+  color:var(--ds-text-primary)!important;
+}
+
+/* Positivo e negativo */
+html.three-dark-themes-v132 .pos,
+html.three-dark-themes-v132 .positive{
+  color:var(--ds-positive)!important;
+}
+
+html.three-dark-themes-v132 .neg,
+html.three-dark-themes-v132 .negative{
+  color:var(--ds-negative)!important;
+}
+
+/* Bottom nav e topo de busca */
+html.three-dark-themes-v132 .bottom-nav,
+html.three-dark-themes-v132 .mobile-bottom-nav,
+html.three-dark-themes-v132 .search-shell,
+html.three-dark-themes-v132 .global-search-wrap{
+  background:rgba(0,0,0,.42)!important;
+  border-color:var(--ds-border-blue)!important;
+}
+
+/* Botão Aparência */
+html.three-dark-themes-v132 .theme-toggle-v129{
+  color:var(--ds-accent-strong)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025))!important;
+}
+
+/* Painel de temas */
+html.three-dark-themes-v132 .theme-panel-card-v129{
+  box-shadow:0 24px 70px rgba(0,0,0,.44)!important;
+}
+
+html.three-dark-themes-v132 .theme-option-v129.active{
+  border-color:var(--ds-border-gold)!important;
+  background:var(--ds-chip-bg)!important;
+}
+
+/* Swatches */
+.swatch-private-gold-v132{
+  background:linear-gradient(135deg,#101418 0 28%,#2C3E50 29% 48%,#B08D57 49% 70%,#DCC9A6 71% 85%,#FBF6EE 86% 100%)!important;
+}
+
+.swatch-caixa-blue-v132{
+  background:linear-gradient(135deg,#0A0F1E 0 28%,#1B2A41 29% 48%,#3B82F6 49% 70%,#94A3B8 71% 85%,#E2E8F0 86% 100%)!important;
+}
+
+.swatch-dark-finance-v132{
+  background:linear-gradient(135deg,#111111 0 36%,#1C1C1C 37% 55%,#F6C400 56% 76%,#C7C7C7 77% 88%,#FFFFFF 89% 100%)!important;
+}
+
+/* Esconde swatches antigos, se cache antigo aparecer */
+.swatch-blue-v129,
+.swatch-light-v129,
+.swatch-caixa-v130,
+.swatch-caixa-v131,
+.swatch-private-v130{
+  display:none!important;
+}
+
+/* Ajuste de visibilidade dos KPIs nos temas */
+html.three-dark-themes-v132 .kpi-card,
+html.three-dark-themes-v132 .executive-kpi-grid > *{
+  border-color:var(--ds-border-gold)!important;
+}
+
+/* Mobile */
+@media(max-width:820px){
+  html.three-dark-themes-v132 .theme-toggle-v129{
+    font-size:.66rem!important;
+  }
+}
+
