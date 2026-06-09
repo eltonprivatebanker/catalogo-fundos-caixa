@@ -25779,3 +25779,206 @@ html[data-theme="caixa"] .theme-options-v130 .theme-option-v129.active{
   background:rgba(0,107,182,.08)!important;
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v131 — Temas CAIXA seguros para arquitetura dark
+   Ideia: o sistema atual nasceu dark. O tema claro da v130 mostrou baixo
+   contraste porque ainda existem muitos estilos fixos. Nesta versão,
+   todos os temas ficam em base escura e mudam a assinatura de cor.
+════════════════════════════════════════════════════ */
+
+/* Reforço do padrão atual */
+html[data-theme="gold"]{
+  --ds-bg-page:#050610;
+  --ds-bg-card:#0d0f1c;
+  --ds-bg-card-soft:#111426;
+  --ds-bg-panel:rgba(14,17,31,.84);
+  --ds-bg-panel-strong:rgba(18,22,38,.94);
+  --ds-text-primary:#f4f7ff;
+  --ds-text-secondary:#a6b0c9;
+  --ds-text-muted:#7f8aa7;
+  --ds-text-soft:#cbd5ee;
+  --ds-accent:#e8bb6a;
+  --ds-accent-strong:#f0c878;
+  --ds-positive:#2ed17a;
+  --ds-negative:#ff5c7a;
+  --ds-border-gold:rgba(232,187,106,.34);
+  --ds-border-blue:rgba(91,141,218,.24);
+}
+
+/* CAIXA Private: inspirado na imagem Private — grafite, prata, azul frio */
+html[data-theme="private"]{
+  --ds-bg-page:#070b14;
+  --ds-bg-card:#0e1421;
+  --ds-bg-card-soft:#171e2d;
+  --ds-bg-panel:rgba(14,20,33,.90);
+  --ds-bg-panel-strong:rgba(20,29,45,.96);
+  --ds-text-primary:#ffffff;
+  --ds-text-secondary:#c7d0df;
+  --ds-text-muted:#8b96aa;
+  --ds-text-soft:#e3e8f2;
+  --ds-accent:#e6edf7;
+  --ds-accent-strong:#ffffff;
+  --ds-positive:#25c982;
+  --ds-negative:#ff6079;
+  --ds-border-gold:rgba(231,237,247,.25);
+  --ds-border-blue:rgba(70,112,160,.38);
+}
+
+/* CAIXA Azul: institucional, mas mantendo modo escuro para não quebrar contraste */
+html[data-theme="caixa"]{
+  --ds-bg-page:#03111f;
+  --ds-bg-card:#071b31;
+  --ds-bg-card-soft:#0b2848;
+  --ds-bg-panel:rgba(7,27,49,.90);
+  --ds-bg-panel-strong:rgba(10,40,72,.96);
+  --ds-text-primary:#f7fbff;
+  --ds-text-secondary:#bad3ec;
+  --ds-text-muted:#7fa0c0;
+  --ds-text-soft:#d9ecff;
+  --ds-accent:#4fb3ff;
+  --ds-accent-strong:#79c8ff;
+  --ds-positive:#25d28b;
+  --ds-negative:#ff647f;
+  --ds-border-gold:rgba(79,179,255,.32);
+  --ds-border-blue:rgba(0,107,182,.48);
+  --ds-caixa-orange:#f39200;
+  --ds-caixa-blue:#006bb6;
+}
+
+/* Neutraliza o tema claro da v130, caso tenha ficado em cache */
+html[data-theme="caixa"] input,
+html[data-theme="caixa"] select,
+html[data-theme="caixa"] textarea{
+  background:rgba(3,12,24,.86)!important;
+  color:var(--ds-text-primary)!important;
+  border-color:rgba(79,179,255,.30)!important;
+}
+
+html[data-theme="caixa"] .bottom-nav,
+html[data-theme="caixa"] .mobile-bottom-nav,
+html[data-theme="caixa"] .search-shell,
+html[data-theme="caixa"] .global-search-wrap{
+  background:rgba(3,10,20,.94)!important;
+  border-color:rgba(79,179,255,.22)!important;
+}
+
+/* Aplicação controlada por tokens */
+html.caixa-themes-safe-v131 body{
+  background:
+    radial-gradient(circle at 10% 0%, rgba(79,179,255,.06), transparent 28%),
+    var(--ds-bg-page)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+html.caixa-themes-safe-v131 .site-header-clean,
+html.caixa-themes-safe-v131 .executive-summary,
+html.caixa-themes-safe-v131 .fund-filter-shell,
+html.caixa-themes-safe-v131 .market-ref-card,
+html.caixa-themes-safe-v131 .indic-ref-card,
+html.caixa-themes-safe-v131 .ranking-card,
+html.caixa-themes-safe-v131 .ranking-panel,
+html.caixa-themes-safe-v131 .focus-card,
+html.caixa-themes-safe-v131 .closed-month-launch,
+html.caixa-themes-safe-v131 .fund-card-mobile,
+html.caixa-themes-safe-v131 .fund-card,
+html.caixa-themes-safe-v131 .closed-market-sheet,
+html.caixa-themes-safe-v131 .theme-panel-card-v129{
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255,255,255,.045), transparent 34%),
+    linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+  border-color:var(--ds-border-gold)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+/* Títulos */
+html.caixa-themes-safe-v131 h1,
+html.caixa-themes-safe-v131 h2,
+html.caixa-themes-safe-v131 h3,
+html.caixa-themes-safe-v131 .section-title h2,
+html.caixa-themes-safe-v131 .market-title-left h2,
+html.caixa-themes-safe-v131 .ranking-title-group h2,
+html.caixa-themes-safe-v131 .brand-text h1{
+  color:var(--ds-accent)!important;
+}
+
+/* No Private, título principal fica branco/prata; no CAIXA, azul claro */
+html[data-theme="private"] .brand-text h1,
+html[data-theme="private"] .section-title h2{
+  color:#ffffff!important;
+}
+
+html[data-theme="caixa"] .brand-text h1,
+html[data-theme="caixa"] .section-title h2{
+  color:var(--ds-accent-strong)!important;
+}
+
+/* Textos de apoio */
+html.caixa-themes-safe-v131 p,
+html.caixa-themes-safe-v131 small,
+html.caixa-themes-safe-v131 .kpi-sub,
+html.caixa-themes-safe-v131 .section-title p,
+html.caixa-themes-safe-v131 .closed-month-launch-copy small,
+html.caixa-themes-safe-v131 .cdi-rel,
+html.caixa-themes-safe-v131 .brand-text p{
+  color:var(--ds-text-secondary)!important;
+}
+
+html.caixa-themes-safe-v131 .pos,
+html.caixa-themes-safe-v131 .positive{
+  color:var(--ds-positive)!important;
+}
+
+html.caixa-themes-safe-v131 .neg,
+html.caixa-themes-safe-v131 .negative{
+  color:var(--ds-negative)!important;
+}
+
+/* Elementos de filtro/tabela que ficaram ruins no claro */
+html.caixa-themes-safe-v131 .filter-panel,
+html.caixa-themes-safe-v131 .fund-table,
+html.caixa-themes-safe-v131 table,
+html.caixa-themes-safe-v131 .view-toggle-bar,
+html.caixa-themes-safe-v131 .visualizacao-bar,
+html.caixa-themes-safe-v131 .visualization-panel{
+  background:linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+  color:var(--ds-text-primary)!important;
+  border-color:var(--ds-border-blue)!important;
+}
+
+html.caixa-themes-safe-v131 th{
+  color:var(--ds-accent-strong)!important;
+}
+
+html.caixa-themes-safe-v131 td{
+  color:var(--ds-text-primary)!important;
+}
+
+/* Botão Aparência */
+html.caixa-themes-safe-v131 .theme-toggle-v129{
+  border-color:var(--ds-border-gold)!important;
+  color:var(--ds-accent-strong)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.025))!important;
+}
+
+/* Swatches */
+.swatch-caixa-v131{
+  background:linear-gradient(135deg,#03111f 0 36%,#006bb6 37% 70%,#f39200 71% 100%)!important;
+}
+
+.swatch-private-v130{
+  background:linear-gradient(135deg,#070b14 0 38%,#d7dde8 39% 62%,#163f68 63% 100%)!important;
+}
+
+/* Esconde qualquer resquício dos temas antigos */
+.swatch-blue-v129,
+.swatch-light-v129{
+  display:none!important;
+}
+
+/* Painel */
+.theme-options-v131 .theme-option-v129.active{
+  border-color:var(--ds-border-gold)!important;
+  background:rgba(255,255,255,.08)!important;
+}
+
