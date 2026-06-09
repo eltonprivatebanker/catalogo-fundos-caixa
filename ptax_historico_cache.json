@@ -1,5 +1,5 @@
 {
-  "gerado_em": "08/06/2026 16:59:44",
+  "gerado_em": "09/06/2026 16:19:45",
   "total": 37,
   "ptax_historico": [
     {
@@ -293,10 +293,10 @@
     {
       "key": "2026-06",
       "mes": "jun/2026",
-      "cotacao": 5.1695,
-      "var_pct": 2.23,
-      "data_ref": "2026-06-08",
-      "dataHoraCotacao": "2026-06-08 13:03:28.848"
+      "cotacao": 5.1693,
+      "var_pct": 2.22,
+      "data_ref": "2026-06-09",
+      "dataHoraCotacao": "2026-06-09 13:12:05.30888"
     }
   ]
 }
