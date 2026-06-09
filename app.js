@@ -8323,7 +8323,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8394,7 +8394,7 @@ async function sharePainelMercado(){
     document.documentElement.classList.add('app-ready','no-boot-v79');
     var boot=document.getElementById('appBootScreen');
     if(boot) boot.remove();
-    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_THREE_DARK_THEMES_20260609_v132');
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_THEME_VISUAL_FORCE_20260609_v133');
   }catch(e){}
 })();
 
@@ -8408,7 +8408,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8737,7 +8737,7 @@ async function sharePainelMercado(){
       }
     }catch(e){}
   }, 6500);
-  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_THREE_DARK_THEMES_20260609_v132');
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133');
 })();
 
 
@@ -8747,7 +8747,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8815,7 +8815,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -8922,7 +8922,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9160,7 +9160,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9226,7 +9226,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9327,7 +9327,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9468,7 +9468,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9515,7 +9515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9567,7 +9567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9690,7 +9690,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9773,7 +9773,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9834,7 +9834,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9903,7 +9903,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9973,7 +9973,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10068,7 +10068,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10186,7 +10186,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10276,7 +10276,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -10345,7 +10345,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -10475,7 +10475,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10638,7 +10638,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10687,7 +10687,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10722,7 +10722,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10760,7 +10760,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10801,7 +10801,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -10913,7 +10913,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -10955,7 +10955,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -11085,7 +11085,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -11222,7 +11222,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -11435,7 +11435,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -11493,7 +11493,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   const STORAGE_KEY = 'catalogoFundosThemeV129';
   const THEMES = ['gold','private','caixa'];
 
@@ -11634,7 +11634,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   const STORAGE_KEY = 'catalogoFundosThemeV129';
   const VALID = ['gold','private','caixa'];
   const LABELS = {
@@ -11764,7 +11764,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   const STORAGE_KEY = 'catalogoFundosThemeV129';
   const VALID = ['gold','private','caixa'];
 
@@ -11887,7 +11887,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_THREE_DARK_THEMES_20260609_v132';
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
   const STORAGE_KEY = 'catalogoFundosThemeV129';
   const VALID = ['private-gold','caixa-blue','dark-finance'];
 
@@ -12011,5 +12011,113 @@ if(!isSearchInput(el)) return;
       };
     }
   };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v133 — Força visual dos temas
+   Problema:
+   - A v132 carregava, mas muitos componentes ainda tinham cores fixas
+     e a diferença entre temas parecia pequena.
+   Solução:
+   - Adiciona classes por tema no <html>;
+   - Reforça meta build no final;
+   - Mantém a API da v132.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_THEME_VISUAL_FORCE_20260609_v133';
+  const STORAGE_KEY = 'catalogoFundosThemeV129';
+  const VALID = ['private-gold','caixa-blue','dark-finance'];
+
+  window.__ELTAUM_THEME_VISUAL_FORCE_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function normalize(theme){
+    const map = {
+      gold:'private-gold',
+      private:'private-gold',
+      caixa:'caixa-blue',
+      blue:'caixa-blue',
+      light:'caixa-blue',
+      'xp-dark':'dark-finance'
+    };
+    return map[theme] || (VALID.includes(theme) ? theme : 'private-gold');
+  }
+
+  function applyStrongThemeV133(theme){
+    const chosen = normalize(theme);
+    const html = document.documentElement;
+
+    html.setAttribute('data-theme', chosen);
+    html.classList.add('three-dark-themes-v132','theme-visual-force-v133');
+    html.classList.remove('theme-private-gold-v133','theme-caixa-blue-v133','theme-dark-finance-v133');
+    html.classList.add('theme-' + chosen + '-v133');
+
+    try{ localStorage.setItem(STORAGE_KEY, chosen); }catch(e){}
+
+    document.querySelectorAll('[data-theme-choice]').forEach(btn => {
+      const active = btn.dataset.themeChoice === chosen;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-checked', active ? 'true' : 'false');
+    });
+
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    const toggle = qs('#themeToggleV129');
+    if(toggle){
+      const label = chosen === 'private-gold' ? 'Private Gold' : chosen === 'caixa-blue' ? 'CAIXA Blue' : 'Dark Finance';
+      toggle.title = 'Tema atual: ' + label;
+      toggle.dataset.currentTheme = chosen;
+    }
+
+    return chosen;
+  }
+
+  function current(){
+    try{ return normalize(localStorage.getItem(STORAGE_KEY) || document.documentElement.getAttribute('data-theme') || 'private-gold'); }
+    catch(e){ return 'private-gold'; }
+  }
+
+  function installV133(){
+    applyStrongThemeV133(current());
+
+    // preserva e reforça a API pública
+    const oldApi = window.__ELTAUM_THREE_DARK_THEMES_V132__ || {};
+    window.__ELTAUM_THREE_DARK_THEMES_V132__ = {
+      ...oldApi,
+      apply: applyStrongThemeV133,
+      get: () => document.documentElement.getAttribute('data-theme') || current(),
+      diagnose(){
+        const css = getComputedStyle(document.documentElement);
+        return {
+          build: qs('meta[name="app-build"]')?.content,
+          htmlClass: document.documentElement.className,
+          theme: document.documentElement.getAttribute('data-theme'),
+          saved: (() => { try{return localStorage.getItem(STORAGE_KEY)}catch(e){return null} })(),
+          hasV133: document.documentElement.classList.contains('theme-visual-force-v133'),
+          accent: css.getPropertyValue('--ds-accent').trim(),
+          bgPage: css.getPropertyValue('--ds-bg-page').trim(),
+          bgCard: css.getPropertyValue('--ds-bg-card').trim(),
+          textPrimary: css.getPropertyValue('--ds-text-primary').trim()
+        };
+      }
+    };
+
+    window.__ELTAUM_THEME_VISUAL_FORCE_V133__ = window.__ELTAUM_THREE_DARK_THEMES_V132__;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(installV133, 80), {once:true});
+  }else{
+    setTimeout(installV133, 80);
+  }
+
+  setTimeout(installV133, 500);
+  setTimeout(installV133, 1200);
+  setTimeout(installV133, 2500);
 })();
 

@@ -26242,3 +26242,259 @@ html.three-dark-themes-v132 .executive-kpi-grid > *{
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v133 — Força visual dos temas
+   Objetivo:
+   - Tornar as 3 paletas visivelmente diferentes.
+   - Vencer cores fixas antigas com seletores mais específicos.
+   - Sem alterar funcionalidades.
+════════════════════════════════════════════════════ */
+
+/* Tokens reforçados */
+html.theme-visual-force-v133[data-theme="private-gold"],
+html.theme-private-gold-v133{
+  --ds-bg-page:#101418!important;
+  --ds-bg-card:#151B21!important;
+  --ds-bg-card-soft:#2C3E50!important;
+  --ds-bg-panel:rgba(21,27,33,.94)!important;
+  --ds-bg-panel-strong:rgba(44,62,80,.58)!important;
+  --ds-text-primary:#FBF6EE!important;
+  --ds-text-secondary:#DCC9A6!important;
+  --ds-text-muted:#A8A191!important;
+  --ds-text-soft:#FFF7E8!important;
+  --ds-accent:#B08D57!important;
+  --ds-accent-strong:#DCC9A6!important;
+  --ds-positive:#2ED17A!important;
+  --ds-negative:#FF647F!important;
+  --ds-border-gold:rgba(176,141,87,.62)!important;
+  --ds-border-blue:rgba(44,62,80,.70)!important;
+}
+
+html.theme-visual-force-v133[data-theme="caixa-blue"],
+html.theme-caixa-blue-v133{
+  --ds-bg-page:#0A0F1E!important;
+  --ds-bg-card:#101B31!important;
+  --ds-bg-card-soft:#1B2A41!important;
+  --ds-bg-panel:rgba(16,27,49,.95)!important;
+  --ds-bg-panel-strong:rgba(27,42,65,.98)!important;
+  --ds-text-primary:#E2E8F0!important;
+  --ds-text-secondary:#94A3B8!important;
+  --ds-text-muted:#7B8CA8!important;
+  --ds-text-soft:#F1F5F9!important;
+  --ds-accent:#3B82F6!important;
+  --ds-accent-strong:#93C5FD!important;
+  --ds-positive:#22C98B!important;
+  --ds-negative:#FF5F7A!important;
+  --ds-border-gold:rgba(59,130,246,.66)!important;
+  --ds-border-blue:rgba(148,163,184,.38)!important;
+}
+
+html.theme-visual-force-v133[data-theme="dark-finance"],
+html.theme-dark-finance-v133{
+  --ds-bg-page:#080808!important;
+  --ds-bg-card:#161616!important;
+  --ds-bg-card-soft:#242424!important;
+  --ds-bg-panel:rgba(22,22,22,.97)!important;
+  --ds-bg-panel-strong:rgba(10,10,10,.99)!important;
+  --ds-text-primary:#FFFFFF!important;
+  --ds-text-secondary:#C7C7C7!important;
+  --ds-text-muted:#8F8F8F!important;
+  --ds-text-soft:#FFFFFF!important;
+  --ds-accent:#F6C400!important;
+  --ds-accent-strong:#FFD21A!important;
+  --ds-positive:#21C878!important;
+  --ds-negative:#FF5C72!important;
+  --ds-border-gold:rgba(246,196,0,.72)!important;
+  --ds-border-blue:rgba(255,255,255,.14)!important;
+}
+
+/* Body: diferença visível logo no fundo */
+html.theme-visual-force-v133 body{
+  background:
+    radial-gradient(circle at 8% 0%, color-mix(in srgb, var(--ds-accent) 14%, transparent), transparent 30%),
+    radial-gradient(circle at 95% 8%, color-mix(in srgb, var(--ds-accent) 8%, transparent), transparent 28%),
+    var(--ds-bg-page)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+/* Fallback sem color-mix */
+@supports not (background: color-mix(in srgb, red 10%, transparent)){
+  html.theme-visual-force-v133 body{
+    background:var(--ds-bg-page)!important;
+  }
+}
+
+/* Zonas principais: força visual de card */
+html.theme-visual-force-v133 .site-header-clean,
+html.theme-visual-force-v133 .executive-summary,
+html.theme-visual-force-v133 .kpi-grid .kpi,
+html.theme-visual-force-v133 .mobile-kpi-card,
+html.theme-visual-force-v133 .fund-filter-shell,
+html.theme-visual-force-v133 .market-ref-card,
+html.theme-visual-force-v133 .indic-ref-card,
+html.theme-visual-force-v133 .ranking-card,
+html.theme-visual-force-v133 .ranking-panel,
+html.theme-visual-force-v133 .focus-card,
+html.theme-visual-force-v133 .closed-month-launch,
+html.theme-visual-force-v133 .fund-card-mobile,
+html.theme-visual-force-v133 .fund-card,
+html.theme-visual-force-v133 .closed-market-sheet,
+html.theme-visual-force-v133 .theme-panel-card-v129,
+html.theme-visual-force-v133 .catalog-shortcuts,
+html.theme-visual-force-v133 .filter-command-bar,
+html.theme-visual-force-v133 .fund-view-controls,
+html.theme-visual-force-v133 .market-table-toolbar,
+html.theme-visual-force-v133 .mobile-category-select-shell-v74,
+html.theme-visual-force-v133 .mobile-extra-controls-v75{
+  background:
+    linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+  border-color:var(--ds-border-gold)!important;
+  box-shadow:
+    0 18px 42px rgba(0,0,0,.28),
+    inset 0 1px 0 rgba(255,255,255,.06)!important;
+  color:var(--ds-text-primary)!important;
+}
+
+/* Tema por tema: assinatura diferente no header */
+html.theme-private-gold-v133 .site-header-clean{
+  background:
+    linear-gradient(135deg,#101418 0%,#151B21 48%,rgba(176,141,87,.20) 100%)!important;
+}
+
+html.theme-caixa-blue-v133 .site-header-clean{
+  background:
+    linear-gradient(135deg,#0A0F1E 0%,#1B2A41 54%,rgba(59,130,246,.24) 100%)!important;
+}
+
+html.theme-dark-finance-v133 .site-header-clean{
+  background:
+    linear-gradient(135deg,#080808 0%,#1C1C1C 62%,rgba(246,196,0,.18) 100%)!important;
+}
+
+/* Títulos e labels */
+html.theme-visual-force-v133 h1,
+html.theme-visual-force-v133 h2,
+html.theme-visual-force-v133 h3,
+html.theme-visual-force-v133 .brand-text h1,
+html.theme-visual-force-v133 .section-title h2,
+html.theme-visual-force-v133 .market-title-left h2,
+html.theme-visual-force-v133 .ranking-title-group h2,
+html.theme-visual-force-v133 .market-table-title span{
+  color:var(--ds-accent-strong)!important;
+  text-shadow:0 0 18px color-mix(in srgb, var(--ds-accent) 16%, transparent)!important;
+}
+
+/* Subtextos */
+html.theme-visual-force-v133 p,
+html.theme-visual-force-v133 small,
+html.theme-visual-force-v133 .brand-text p,
+html.theme-visual-force-v133 .kpi-sub,
+html.theme-visual-force-v133 .section-title p,
+html.theme-visual-force-v133 .cdi-rel,
+html.theme-visual-force-v133 .closed-month-launch-copy small{
+  color:var(--ds-text-secondary)!important;
+}
+
+/* Botões/chips/abas ativos */
+html.theme-visual-force-v133 button,
+html.theme-visual-force-v133 .filter-preset-chip,
+html.theme-visual-force-v133 .category-choice-v44,
+html.theme-visual-force-v133 .indic-tab,
+html.theme-visual-force-v133 .chart-tab,
+html.theme-visual-force-v133 .ranking-filter-chip,
+html.theme-visual-force-v133 .theme-toggle-v129{
+  border-color:var(--ds-border-gold)!important;
+}
+
+html.theme-visual-force-v133 .active,
+html.theme-visual-force-v133 button.active,
+html.theme-visual-force-v133 .filter-preset-chip.active,
+html.theme-visual-force-v133 .category-choice-v44.active,
+html.theme-visual-force-v133 .indic-tab.active,
+html.theme-visual-force-v133 .chart-tab.active,
+html.theme-visual-force-v133 .ranking-filter-chip.active{
+  background:color-mix(in srgb, var(--ds-accent) 18%, transparent)!important;
+  color:var(--ds-accent-strong)!important;
+  border-color:var(--ds-border-gold)!important;
+}
+
+/* Valores e KPIs */
+html.theme-visual-force-v133 .kpi-value,
+html.theme-visual-force-v133 .indic-ref-val,
+html.theme-visual-force-v133 .macro-main-value,
+html.theme-visual-force-v133 .closed-card-value{
+  color:var(--ds-accent-strong)!important;
+}
+
+html.theme-visual-force-v133 .pos,
+html.theme-visual-force-v133 .positive,
+html.theme-visual-force-v133 .closed-mini-item em.pos{
+  color:var(--ds-positive)!important;
+}
+
+html.theme-visual-force-v133 .neg,
+html.theme-visual-force-v133 .negative,
+html.theme-visual-force-v133 .closed-mini-item em.neg{
+  color:var(--ds-negative)!important;
+}
+
+/* Tabela e filtros */
+html.theme-visual-force-v133 table,
+html.theme-visual-force-v133 .fund-table,
+html.theme-visual-force-v133 .table-wrap,
+html.theme-visual-force-v133 .market-table-wrap{
+  background:var(--ds-bg-card)!important;
+  color:var(--ds-text-primary)!important;
+  border-color:var(--ds-border-blue)!important;
+}
+
+html.theme-visual-force-v133 th{
+  background:var(--ds-bg-card-soft)!important;
+  color:var(--ds-accent-strong)!important;
+}
+
+html.theme-visual-force-v133 td{
+  color:var(--ds-text-primary)!important;
+  border-color:rgba(255,255,255,.06)!important;
+}
+
+/* Inputs */
+html.theme-visual-force-v133 input,
+html.theme-visual-force-v133 select,
+html.theme-visual-force-v133 textarea{
+  background:rgba(0,0,0,.28)!important;
+  color:var(--ds-text-primary)!important;
+  border-color:var(--ds-border-blue)!important;
+}
+
+/* Bottom nav / busca fixa */
+html.theme-visual-force-v133 .bottom-nav,
+html.theme-visual-force-v133 .mobile-bottom-nav,
+html.theme-visual-force-v133 .search-shell,
+html.theme-visual-force-v133 .global-search-wrap,
+html.theme-visual-force-v133 .mobile-sticky-search,
+html.theme-visual-force-v133 .search-mobile-shell{
+  background:
+    linear-gradient(180deg,var(--ds-bg-panel-strong),var(--ds-bg-card))!important;
+  border-color:var(--ds-border-gold)!important;
+}
+
+/* Painel de aparência */
+html.theme-visual-force-v133 .theme-option-v129.active{
+  background:color-mix(in srgb, var(--ds-accent) 20%, transparent)!important;
+  border-color:var(--ds-border-gold)!important;
+}
+
+.swatch-private-gold-v132{
+  background:linear-gradient(135deg,#101418 0 28%,#2C3E50 29% 48%,#B08D57 49% 70%,#DCC9A6 71% 85%,#FBF6EE 86% 100%)!important;
+}
+
+.swatch-caixa-blue-v132{
+  background:linear-gradient(135deg,#0A0F1E 0 28%,#1B2A41 29% 48%,#3B82F6 49% 70%,#94A3B8 71% 85%,#E2E8F0 86% 100%)!important;
+}
+
+.swatch-dark-finance-v132{
+  background:linear-gradient(135deg,#111111 0 36%,#1C1C1C 37% 55%,#F6C400 56% 76%,#C7C7C7 77% 88%,#FFFFFF 89% 100%)!important;
+}
+
