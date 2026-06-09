@@ -25266,3 +25266,12 @@ label:has(.toggle-label[title="Ocultar fundos sem dados"]) input[type="checkbox"
   }
 }
 
+
+/* ════════════════════════════════════════════════════
+   PATCH v128 — W3C HTML Validate Fix
+   Ajuste estrutural/semântico. Sem impacto visual intencional.
+════════════════════════════════════════════════════ */
+html.w3c-html-validate-fix-v128 .closed-market-sheet[role="dialog"]{
+  outline:none;
+}
+

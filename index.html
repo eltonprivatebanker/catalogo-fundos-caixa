@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_20260608_v127"/>
+<meta name="app-build" content="ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,12 +61,12 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=toggle-sem-dados-native-fix-v127" rel="stylesheet"/>
+<link href="style.css?v=w3c-html-validate-fix-v128" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=toggle-sem-dados-native-fix-v127"></script>
+<script defer src="app.js?v=w3c-html-validate-fix-v128"></script>
 
 </head>
 <body>
@@ -85,7 +85,7 @@ html:not(.app-booting) .page{
 
 <!-- ════════════════ BLOCO 1: QUEBRA-GELO — visão geral ════════════════ -->
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
-<div class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi" aria-label="Resumo executivo do catálogo">
+<div class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi" aria-label="Resumo executivo do catálogo" role="group">
   <div class="kpi kpi-fundos"><div class="kpi-icon">📊</div><div class="kpi-label">Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
   <div class="kpi kpi-categorias"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub" id="kpiCatsSub">Tipos de estratégia</div></div>
   <div class="kpi kpi-pl"><div class="kpi-icon">💰</div><div class="kpi-label">PL consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">Patrimônio consolidado</div></div>
@@ -95,12 +95,12 @@ html:not(.app-booting) .page{
 </div>
 
 <!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
-<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo">
+<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo" role="group">
   <article class="mobile-kpi-card mobile-kpi-card-compact">
     <div class="mobile-kpi-head">
       <span class="mobile-kpi-emoji">📊</span>
       <div>
-        <h3>Resumo executivo</h3>
+        <h2>Resumo executivo</h2>
         <p>Principais números para consulta rápida</p>
       </div>
     </div>
@@ -163,7 +163,7 @@ html:not(.app-booting) .page{
         <input id="searchInput" type="search" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..." autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="fund_search_no_autofill" class="search-no-autofill-v123">
       </div>
 
-      <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo">
+      <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo" role="group">
         <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
           <span class="filter-button-icon">⚙️</span>
           <span id="filterButtonText">Categorias</span>
@@ -174,7 +174,7 @@ html:not(.app-booting) .page{
         <button type="button" class="filter-clear-inline" id="clearFiltersTop">Limpar</button>
       </div>
 
-      <div class="fund-view-controls" aria-label="Opções de visualização do catálogo">
+      <div class="fund-view-controls" aria-label="Opções de visualização do catálogo" role="group">
         <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
           <span>Exibição</span>
           <select id="perPage" class="ctrl-select">
@@ -202,7 +202,7 @@ html:not(.app-booting) .page{
       </div>
     </div>
 
-    <div class="catalog-shortcuts catalog-shortcuts-premium-v69 catalog-shortcuts-category-grid-v69" aria-label="Categorias dos fundos">
+    <div class="catalog-shortcuts catalog-shortcuts-premium-v69 catalog-shortcuts-category-grid-v69" aria-label="Categorias dos fundos" role="group">
       <div class="category-grid-head-v69">
         <span class="catalog-shortcuts-label">Categorias</span>
         <span class="category-grid-status-v69" id="categoryGridStatus">Todos os fundos</span>
@@ -221,7 +221,7 @@ html:not(.app-booting) .page{
       </div>
     </div>
 
-    <div class="mobile-category-select-shell-v74" id="mobileCategorySelectShellV74" aria-label="Filtro de categoria no celular">
+    <div class="mobile-category-select-shell-v74" id="mobileCategorySelectShellV74" aria-label="Filtro de categoria no celular" role="group">
       <div class="mobile-category-select-head-v74">
         <span>Categoria</span>
         <strong id="mobileCategorySelectStatusV74">Todos os fundos</strong>
@@ -242,7 +242,7 @@ html:not(.app-booting) .page{
         <span class="mobile-category-select-arrow-v74">⌄</span>
       </label>
 
-      <div class="mobile-extra-controls-v75" id="mobileExtraControlsV75" aria-label="Filtros complementares no celular">
+      <div class="mobile-extra-controls-v75" id="mobileExtraControlsV75" aria-label="Filtros complementares no celular" role="group">
         <label class="mobile-pf-toggle-v75" for="mobileOnlyPfV75">
           <input type="checkbox" id="mobileOnlyPfV75"/>
           <span class="mobile-pf-toggle-mark-v75">✓</span>
@@ -280,7 +280,7 @@ html:not(.app-booting) .page{
 
 
 
-  <div class="mobile-catalog-view-switch" id="mobileCatalogViewSwitch" aria-label="Escolher forma de visualização dos fundos no celular">
+  <div class="mobile-catalog-view-switch" id="mobileCatalogViewSwitch" aria-label="Escolher forma de visualização dos fundos no celular" role="group">
     <div class="mobile-catalog-view-copy">
       <strong>Visualização</strong>
       <small>Tabela compara mais fundos; cards priorizam leitura rápida.</small>
@@ -326,14 +326,14 @@ html:not(.app-booting) .page{
       <h2>🏆 Rankings dos Fundos</h2>
       <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
     </div>
-    <div class="ranking-actions" aria-label="Ações dos rankings">
+    <div class="ranking-actions" aria-label="Ações dos rankings" role="group">
       <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar visão</button>
       <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
       <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Print da visão</button>
     </div>
   </div>
 
-  <div class="ranking-toolbar" aria-label="Filtros dos rankings">
+  <div class="ranking-toolbar" aria-label="Filtros dos rankings" role="group">
     <div class="ranking-filter-row" id="rankingFilterRow">
       <span class="ranking-filter-label">Filtro</span>
       <button type="button" class="ranking-filter-chip active" data-rank-filter="todos">Todos</button>
@@ -344,7 +344,7 @@ html:not(.app-booting) .page{
     </div>
   </div>
 
-  <div class="ranking-view-tabs" id="rankingViewTabs" aria-label="Menu de rankings">
+  <div class="ranking-view-tabs" id="rankingViewTabs" aria-label="Menu de rankings" role="group">
     <button type="button" class="ranking-view-tab active" data-rank-view="top">🏆 Top fundos</button>
     <button type="button" class="ranking-view-tab" data-rank-view="categoria">🎖️ Por categoria</button>
     <button type="button" class="ranking-view-tab" data-rank-view="destaques">📅 Destaques</button>
@@ -403,7 +403,7 @@ html:not(.app-booting) .page{
 
       <div class="macro-side macro-copom">
         <div class="macro-label">📅 Reuniões COPOM 2026</div>
-        <div class="copom-grid" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026">
+        <div class="copom-grid" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026" role="list">
           <span style="color:var(--muted);font-size:.68rem">calendário carregando...</span>
         </div>
         <a href="https://www.bcb.gov.br/controleinflacao/copom" target="_blank" rel="noopener" class="macro-link">
@@ -420,7 +420,7 @@ html:not(.app-booting) .page{
         <span class="market-rate-suffix">a.a.</span>
       </div>
 
-      <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano">
+      <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano" role="group">
         <div class="cdi-year-head">
           <span id="cdiYearHistoryTitle">Mensal</span>
           <strong id="cdiYearHistoryTotal">Ano —</strong>
@@ -540,12 +540,12 @@ html:not(.app-booting) .page{
 
   <div class="market-table-toolbar section-title-collapsible"
        onclick="return handleSectionToggleClick(event,'sec-painel-body','sec-mercado-painel')"
-       role="button" aria-expanded="false" tabindex="0">
+       role="region" aria-expanded="false" tabindex="0">
     <div class="market-table-title">
       <span>📊 Painel consolidado de indicadores</span>
       <small>Taxas, inflação, câmbio e bolsas em uma visão comparativa</small>
     </div>
-    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela">
+    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela" role="group">
       <span class="indic-tabs-label">Período acumulado:</span>
       <div class="indic-tabs">
         <button class="indic-tab active" data-months="12" type="button" aria-pressed="true">12 Meses</button>
@@ -553,7 +553,7 @@ html:not(.app-booting) .page{
         <button class="indic-tab" data-months="36" type="button" aria-pressed="false">36 Meses</button>
       </div>
     </div>
-    <div class="market-toolbar-actions indic-actions" aria-label="Ações do painel consolidado">
+    <div class="market-toolbar-actions indic-actions" aria-label="Ações do painel consolidado" role="group">
       <button type="button" class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
   </div>
   </div>
@@ -573,7 +573,7 @@ html:not(.app-booting) .page{
   </div>
 
   <div class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()" aria-hidden="true"></div>
-  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-label="Fechamento de mercado" aria-hidden="true">
+  <div class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-label="Fechamento de mercado" aria-hidden="true">
     <div class="closed-market-handle" aria-hidden="true"></div>
     <div class="closed-market-sheet-head">
       <div class="closed-market-sheet-icon">📊</div>
@@ -588,7 +588,7 @@ html:not(.app-booting) .page{
       <button type="button" onclick="copiarResumoPainelMercado()">📋 Copiar resumo</button>
       <button type="button" onclick="sharePainelMercado()">📲 WhatsApp</button>
     </div>
-  </aside>
+  </div>
 
   <!-- Tabela linha do tempo -->
   <div class="indic-table-wrap">
@@ -873,7 +873,7 @@ html:not(.app-booting) .page{
           <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
         </div>
         <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
-        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar">
+        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar" role="group">
           <button class="chart-tab" data-dolar-range="year" type="button">2026</button>
           <button class="chart-tab" data-dolar-range="12m" type="button">12M</button>
           <button class="chart-tab active" data-dolar-range="24m" type="button">24M</button>
@@ -900,7 +900,7 @@ html:not(.app-booting) .page{
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
 <div class="section-gap collapsible-section" id="sec-focus">
   <div class="section-title focus-section-title section-title-collapsible"
-       onclick="toggleSection('sec-focus-body','sec-focus')" role="button" aria-expanded="false" tabindex="0">
+       onclick="toggleSection('sec-focus-body','sec-focus')" role="region" aria-expanded="false" tabindex="0">
     <div class="focus-title-block">
       <div class="focus-title-line">
         <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
@@ -952,7 +952,7 @@ html:not(.app-booting) .page{
 
 <div class="section-gap evolution-section collapsible-section" id="sec-graficos">
   <div class="section-title evolution-title section-title-collapsible"
-       onclick="toggleSection('sec-graficos-body','sec-graficos')" role="button" aria-expanded="false" tabindex="0">
+       onclick="toggleSection('sec-graficos-body','sec-graficos')" role="region" aria-expanded="false" tabindex="0">
     <div>
       <h2>📊 Evolução dos Indicadores</h2>
       <p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
@@ -963,7 +963,7 @@ html:not(.app-booting) .page{
   </div>
   <div class="section-collapsible-body" id="sec-graficos-body" hidden>
 
-  <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores">
+  <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores" role="group">
     <div class="evo-summary-card">
       <span class="evo-summary-kicker">IPCA mensal</span>
       <strong id="evoIpcaMensalVal">—</strong>
@@ -981,7 +981,7 @@ html:not(.app-booting) .page{
     </div>
   </div>
 
-  <div class="evo-view-tabs" aria-label="Selecionar gráfico no celular">
+  <div class="evo-view-tabs" aria-label="Selecionar gráfico no celular" role="group">
     <button class="evo-view-tab active" type="button" data-evo-chart="ipca">IPCA mensal</button>
     <button class="evo-view-tab" type="button" data-evo-chart="selic">Selic</button>
     <button class="evo-view-tab" type="button" data-evo-chart="meta">IPCA 12M</button>
@@ -1010,7 +1010,7 @@ html:not(.app-booting) .page{
         </div>
       </div>
       <div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
-      <div class="selic-summary-row" id="selicSummaryRow" aria-label="Resumo do período exibido no gráfico da Selic">
+      <div class="selic-summary-row" id="selicSummaryRow" aria-label="Resumo do período exibido no gráfico da Selic" role="group">
         <div class="selic-summary-chip max">
           <span class="selic-summary-dot"></span>
           <span class="selic-summary-text"><span class="selic-summary-label">Máxima</span><strong class="selic-summary-value" id="selicMaxResumo">—</strong><small class="selic-summary-date" id="selicMaxData">—</small></span>
@@ -1086,7 +1086,7 @@ html:not(.app-booting) .page{
         </div>
       </div>
 
-      <div class="footer-clean-sources" aria-label="Fontes públicas consultadas">
+      <div class="footer-clean-sources" aria-label="Fontes públicas consultadas" role="group">
         <span class="sources-title">Fontes públicas consultadas</span>
         <span>BCB</span>
         <span>IBGE</span>
@@ -1237,5 +1237,8 @@ html:not(.app-booting) .page{
 <!-- PATCH — Favoritos evidentes, persistentes e com estado vazio -->
 
 <!-- JavaScript principal carregado com defer no <head> -->
+</div><!-- /w3c-balance-v128 -->
+</div><!-- /w3c-balance-v128 -->
+
 </body>
 </html>
