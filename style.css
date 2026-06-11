@@ -25275,3 +25275,228 @@ html.w3c-html-validate-fix-v128 .closed-market-sheet[role="dialog"]{
   outline:none;
 }
 
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_DESKTOP_SIDE_NAV_20260610_v129
+   Menu lateral esquerdo apenas no desktop
+════════════════════════════════════════════════════════════ */
+.desktop-side-nav{
+  display:none;
+}
+
+@media (min-width:1220px){
+  html.desktop-side-nav-v129{
+    scroll-padding-top:28px;
+  }
+
+  html.desktop-side-nav-v129 .page{
+    max-width:none;
+    margin:0;
+    padding-left:304px;
+    padding-right:30px;
+  }
+
+  html.desktop-side-nav-v129 .desktop-side-nav{
+    position:fixed;
+    z-index:900;
+    left:22px;
+    top:22px;
+    bottom:22px;
+    width:246px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+    padding:16px;
+    border:1px solid rgba(200,151,58,.24);
+    border-radius:22px;
+    background:
+      radial-gradient(circle at 25% 0%,rgba(200,151,58,.13),transparent 35%),
+      linear-gradient(180deg,rgba(17,21,38,.94),rgba(8,10,19,.92));
+    box-shadow:0 24px 70px rgba(0,0,0,.34);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+  }
+
+  .desktop-nav-brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:10px 10px 14px;
+    color:var(--text,#edf1fb);
+    text-decoration:none;
+    border-bottom:1px solid rgba(255,255,255,.075);
+  }
+
+  .desktop-nav-logo{
+    width:42px;
+    height:42px;
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:linear-gradient(135deg,var(--gold,#c8973a),var(--gold2,#e8bb6a));
+    color:#07080f;
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:1.45rem;
+    font-weight:800;
+    box-shadow:0 0 28px rgba(200,151,58,.20);
+    flex-shrink:0;
+  }
+
+  .desktop-nav-brand-text{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    line-height:1.15;
+  }
+
+  .desktop-nav-brand-text strong{
+    color:var(--gold2,#e8bb6a);
+    font-size:.86rem;
+    letter-spacing:.02em;
+  }
+
+  .desktop-nav-brand-text small{
+    margin-top:3px;
+    color:var(--muted,#a6b0c9);
+    font-size:.66rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .desktop-nav-group{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+    overflow-y:auto;
+    padding-right:2px;
+    scrollbar-width:thin;
+    scrollbar-color:rgba(200,151,58,.35) transparent;
+  }
+
+  .desktop-nav-group::-webkit-scrollbar{width:4px;}
+  .desktop-nav-group::-webkit-scrollbar-thumb{background:rgba(200,151,58,.35);border-radius:999px;}
+
+  .desktop-nav-link{
+    position:relative;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-height:40px;
+    padding:9px 10px;
+    border:1px solid transparent;
+    border-radius:13px;
+    color:#b8c1d8;
+    text-decoration:none;
+    font-size:.78rem;
+    font-weight:700;
+    transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease;
+  }
+
+  .desktop-nav-link span{
+    width:24px;
+    text-align:center;
+    font-size:.98rem;
+    line-height:1;
+    opacity:.95;
+    flex-shrink:0;
+  }
+
+  .desktop-nav-link strong{
+    min-width:0;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    font-weight:750;
+  }
+
+  .desktop-nav-link:hover{
+    color:var(--gold2,#e8bb6a);
+    border-color:rgba(200,151,58,.18);
+    background:rgba(200,151,58,.075);
+    transform:translateX(2px);
+  }
+
+  .desktop-nav-link.active,
+  .desktop-nav-link[aria-current="page"]{
+    color:var(--gold2,#e8bb6a);
+    border-color:rgba(200,151,58,.34);
+    background:linear-gradient(90deg,rgba(200,151,58,.18),rgba(200,151,58,.055));
+    box-shadow:inset 3px 0 0 var(--gold,#c8973a);
+  }
+
+  .desktop-nav-link.active::after,
+  .desktop-nav-link[aria-current="page"]::after{
+    content:'';
+    position:absolute;
+    right:10px;
+    width:5px;
+    height:5px;
+    border-radius:50%;
+    background:var(--green,#2ed17a);
+    box-shadow:0 0 8px rgba(46,209,122,.75);
+  }
+
+  .desktop-nav-footer{
+    margin-top:auto;
+    padding:12px 10px 2px;
+    border-top:1px solid rgba(255,255,255,.075);
+    display:flex;
+    flex-direction:column;
+    gap:3px;
+    color:var(--muted2,#7f8aa8);
+    font-family:'JetBrains Mono',monospace;
+    font-size:.58rem;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  .desktop-nav-footer small{
+    color:var(--muted,#a6b0c9);
+    font-size:.56rem;
+    text-transform:none;
+    letter-spacing:0;
+  }
+
+  html.desktop-side-nav-v129 .site-header-clean,
+  html.desktop-side-nav-v129 #sec-kpi,
+  html.desktop-side-nav-v129 #sec-kpi-mobile,
+  html.desktop-side-nav-v129 #sec-fundos,
+  html.desktop-side-nav-v129 #rankingsSection,
+  html.desktop-side-nav-v129 #sec-mercado,
+  html.desktop-side-nav-v129 #sec-mercado-painel,
+  html.desktop-side-nav-v129 #sec-dolar,
+  html.desktop-side-nav-v129 #sec-focus,
+  html.desktop-side-nav-v129 #sec-graficos,
+  html.desktop-side-nav-v129 #sec-fontes{
+    scroll-margin-top:28px;
+  }
+}
+
+@media (min-width:1220px) and (max-width:1400px){
+  html.desktop-side-nav-v129 .page{
+    padding-left:286px;
+    padding-right:22px;
+  }
+
+  html.desktop-side-nav-v129 .desktop-side-nav{
+    left:16px;
+    top:16px;
+    bottom:16px;
+    width:232px;
+    padding:14px;
+    border-radius:20px;
+  }
+
+  .desktop-nav-link{
+    min-height:38px;
+    font-size:.74rem;
+    padding:8px 9px;
+  }
+}
+
+@media (max-width:1219px){
+  html.desktop-side-nav-v129 .desktop-side-nav{
+    display:none!important;
+  }
+}
+

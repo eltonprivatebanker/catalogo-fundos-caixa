@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-side-nav-v129">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128"/>
+<meta name="app-build" content="ELTAUM_DESKTOP_SIDE_NAV_20260610_v129"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,15 +61,42 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=w3c-html-validate-fix-v128" rel="stylesheet"/>
+<link href="style.css?v=desktop-side-nav-v129" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=w3c-html-validate-fix-v128"></script>
+<script defer src="app.js?v=desktop-side-nav-v129"></script>
 
 </head>
 <body>
+<nav class="desktop-side-nav" id="desktopSideNav" aria-label="Navegação principal do painel">
+  <a class="desktop-nav-brand" href="#topo" aria-label="Voltar ao início do Catálogo de Fundos CAIXA">
+    <span class="desktop-nav-logo" aria-hidden="true">E</span>
+    <span class="desktop-nav-brand-text">
+      <strong>Catálogo</strong>
+      <small>Fundos CAIXA</small>
+    </span>
+  </a>
+
+  <div class="desktop-nav-group" role="list">
+    <a href="#topo" data-section="topo" class="desktop-nav-link active" aria-current="page"><span>🏠</span><strong>Início</strong></a>
+    <a href="#sec-kpi" data-section="sec-kpi" class="desktop-nav-link"><span>📊</span><strong>Resumo</strong></a>
+    <a href="#sec-fundos" data-section="sec-fundos" class="desktop-nav-link"><span>📁</span><strong>Fundos</strong></a>
+    <a href="#rankingsSection" data-section="rankingsSection" class="desktop-nav-link"><span>🏆</span><strong>Rankings</strong></a>
+    <a href="#sec-mercado" data-section="sec-mercado" class="desktop-nav-link"><span>📈</span><strong>Mercado</strong></a>
+    <a href="#sec-mercado-painel" data-section="sec-mercado-painel" class="desktop-nav-link"><span>🗓️</span><strong>Fechamento</strong></a>
+    <a href="#sec-dolar" data-section="sec-dolar" class="desktop-nav-link"><span>💵</span><strong>Dólar</strong></a>
+    <a href="#sec-focus" data-section="sec-focus" class="desktop-nav-link"><span>📋</span><strong>Focus</strong></a>
+    <a href="#sec-graficos" data-section="sec-graficos" class="desktop-nav-link"><span>📉</span><strong>Gráficos</strong></a>
+    <a href="#sec-fontes" data-section="sec-fontes" class="desktop-nav-link"><span>ℹ️</span><strong>Fontes</strong></a>
+  </div>
+
+  <div class="desktop-nav-footer">
+    <span>Desktop</span>
+    <small>Navegação rápida</small>
+  </div>
+</nav>
 <div class="page" id="topo">
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header class="site-header-clean">
@@ -1060,7 +1087,7 @@ html:not(.app-booting) .page{
   </div>
 </div>
 
-<footer class="site-footer-clean site-footer-v2">
+<footer class="site-footer-clean site-footer-v2" id="sec-fontes">
   <details class="footer-disclaimer-clean footer-disclaimer-v2" id="footerDisclaimer">
     <summary>
       <span class="footer-summary-main">

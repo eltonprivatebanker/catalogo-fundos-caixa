@@ -11481,3 +11481,98 @@ if(!isSearchInput(el)) return;
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_V128__ = { sync: syncW3CV128 };
 })();
 
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_DESKTOP_SIDE_NAV_20260610_v129
+   Scroll suave e destaque automático do menu lateral desktop
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const MIN_DESKTOP_NAV = 1220;
+
+  function $$(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function isDesktopNav(){ return window.matchMedia && window.matchMedia('(min-width:'+MIN_DESKTOP_NAV+'px)').matches; }
+
+  function setActiveDesktopNav(id){
+    if(!id) return;
+    $$('.desktop-side-nav .desktop-nav-link').forEach(link=>{
+      const active = link.getAttribute('data-section') === id || link.getAttribute('href') === '#'+id;
+      link.classList.toggle('active', active);
+      if(active) link.setAttribute('aria-current','page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function openTargetIfNeeded(target){
+    if(!target) return;
+
+    if(target.id === 'sec-fontes'){
+      const details = target.querySelector('details');
+      if(details) details.open = true;
+    }
+
+    if(target.classList && target.classList.contains('collapsible-section')){
+      const body = target.querySelector('.section-collapsible-body[hidden]');
+      const toggle = target.querySelector('button[aria-expanded="false"], .section-collapsible-toggle[aria-expanded="false"], .section-toggle[aria-expanded="false"]');
+      if(body && toggle && typeof toggle.click === 'function'){
+        try{ toggle.click(); }catch(e){}
+      }
+    }
+  }
+
+  function scrollToTarget(target){
+    if(!target) return;
+    openTargetIfNeeded(target);
+    const offset = 24;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+
+  function setupDesktopSideNav(){
+    const nav = document.getElementById('desktopSideNav');
+    if(!nav) return;
+
+    const links = $$('.desktop-nav-link', nav);
+    links.forEach(link=>{
+      link.addEventListener('click', ev=>{
+        const href = link.getAttribute('href') || '';
+        if(!href.startsWith('#')) return;
+        const id = href.slice(1);
+        const target = document.getElementById(id);
+        if(!target) return;
+        ev.preventDefault();
+        setActiveDesktopNav(id);
+        scrollToTarget(target);
+        try{ history.replaceState(null,'',href); }catch(e){}
+      });
+    });
+
+    const sectionIds = links.map(link=>link.getAttribute('data-section')).filter(Boolean);
+    const sections = sectionIds.map(id=>document.getElementById(id)).filter(Boolean);
+
+    if('IntersectionObserver' in window && sections.length){
+      const observer = new IntersectionObserver(entries=>{
+        if(!isDesktopNav()) return;
+        const visible = entries
+          .filter(entry=>entry.isIntersecting)
+          .sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+        if(visible && visible.target && visible.target.id){
+          setActiveDesktopNav(visible.target.id);
+        }
+      },{root:null,rootMargin:'-28% 0px -58% 0px',threshold:[0.01,0.08,0.16,0.28,0.42]});
+      sections.forEach(sec=>observer.observe(sec));
+    }
+
+    if(location.hash){
+      const id = decodeURIComponent(location.hash.slice(1));
+      if(document.getElementById(id)) setActiveDesktopNav(id);
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setupDesktopSideNav);
+  }else{
+    setupDesktopSideNav();
+  }
+})();
+
