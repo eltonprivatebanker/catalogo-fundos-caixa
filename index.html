@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 ui-components-restored-v151">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 critical-ui-fix-v152">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_UI_COMPONENTS_RESTORED_20260611_v151"/>
+<meta name="app-build" content="ELTAUM_CRITICAL_UI_FIX_20260611_v152"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,12 +61,45 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=ui-components-restored-v151" rel="stylesheet"/>
+<link href="style.css?v=critical-ui-fix-v152" rel="stylesheet"/>
+<style id="critical-ui-v152">
+/* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
+.desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
+.desktop-anchor-nav-inner-v131{display:flex;align-items:center;gap:5px;min-height:48px;padding:6px 8px;overflow-x:auto;scrollbar-width:none}
+.desktop-anchor-nav-inner-v131::-webkit-scrollbar{display:none}
+.desktop-anchor-kicker-v131{flex:0 0 auto;padding:0 10px;color:#7f8aa8;font:800 .56rem/1 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.desktop-anchor-link-v131{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;min-height:34px;padding:7px 10px;border:1px solid transparent;border-radius:9px;color:#b8c2da!important;background:transparent;text-decoration:none!important;font:650 .69rem/1 'Inter',sans-serif;white-space:nowrap}
+.desktop-anchor-link-v131:hover{color:#f0c777!important;border-color:rgba(200,151,58,.24);background:rgba(200,151,58,.075)}
+.desktop-anchor-link-v131.active{color:#f4cf82!important;border-color:rgba(200,151,58,.48);background:linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.075));box-shadow:inset 3px 0 0 #c8973a}
+.desktop-anchor-search-v135{margin-left:auto;border-color:rgba(200,151,58,.26);background:rgba(200,151,58,.06)}
+#rankingsSection .ranking-toolbar-v136{display:grid;grid-template-columns:minmax(180px,220px) minmax(150px,180px) minmax(0,1fr);align-items:end;gap:10px;width:100%;margin:12px 0 14px;padding:12px;border:1px solid rgba(255,255,255,.075);border-radius:13px;background:linear-gradient(180deg,rgba(17,21,38,.72),rgba(10,12,22,.62))}
+#rankingsSection .ranking-control-card-v136{display:flex;flex-direction:column;gap:6px;min-width:0}
+#rankingsSection .ranking-control-card-v136 label{color:#8d99b8;font:800 .56rem/1 'Inter',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+#rankingsSection .ranking-select-v136{width:100%;min-height:38px;padding:8px 34px 8px 11px;border:1px solid rgba(200,151,58,.28);border-radius:9px;background:#0d1120;color:#eef2fb;font:650 .69rem/1.2 'Inter',sans-serif;outline:none;cursor:pointer;color-scheme:dark}
+#rankingsSection .ranking-filter-row-compat-v136{display:flex;align-items:center;gap:6px;min-width:0;min-height:38px;padding:2px 0;overflow-x:auto;scrollbar-width:none}
+#rankingsSection .ranking-filter-row-compat-v136::-webkit-scrollbar{display:none}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-label{flex:0 0 auto;margin-right:2px;color:#7f8aa8;font:800 .55rem/1 'JetBrains Mono',monospace;letter-spacing:.09em;text-transform:uppercase}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{flex:0 0 auto;min-height:30px;padding:6px 10px;border:1px solid rgba(255,255,255,.085);border-radius:999px;background:#0e1222;color:#bfc9df;font:700 .60rem/1 'Inter',sans-serif;cursor:pointer;white-space:nowrap}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip.active{border-color:rgba(200,151,58,.55);background:rgba(200,151,58,.14);color:#f0c777}
+#marketExecPanelV142{display:none!important}
+@media(max-width:1180px){#rankingsSection .ranking-toolbar-v136{grid-template-columns:minmax(170px,1fr) minmax(145px,.7fr)}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
+@media(max-width:900px){.desktop-anchor-nav-ui-v132{display:none!important}#rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr 1fr;padding:10px}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
+@media(max-width:620px){#rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr}}
+</style>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=ui-components-restored-v151"></script>
+<script>
+(function(){
+  function cleanupLegacyUi(){
+    document.querySelectorAll('#marketExecPanelV142').forEach(function(el){el.remove();});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', cleanupLegacyUi, {once:true});
+  else cleanupLegacyUi();
+})();
+</script>
+<script defer src="app.js?v=critical-ui-fix-v152"></script>
 
 </head>
 <body>
