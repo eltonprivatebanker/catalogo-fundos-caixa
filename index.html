@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v133">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_EXECUTIVE_HEADER_COMPACT_20260610_v133"/>
+<meta name="app-build" content="ELTAUM_EXECUTIVE_HEADER_ANCHOR_FIX_20260610_v134"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,18 +61,18 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=executive-header-compact-v133" rel="stylesheet"/>
+<link href="style.css?v=executive-header-anchor-fix-v134" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=executive-header-compact-v133"></script>
+<script defer src="app.js?v=executive-header-anchor-fix-v134"></script>
 
 </head>
 <body>
 <div class="page" id="topo">
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
-<header class="site-header-clean">
+<header class="site-header-clean executive-header-shell-v134">
   <div class="brand">
     <div class="brand-logo">E</div>
     <div class="brand-text">
@@ -81,9 +81,21 @@ html:not(.app-booting) .page{
       <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
     </div>
   </div>
+
+  <div class="header-search-panel-v134" role="search" aria-label="Busca rápida de fundos no cabeçalho">
+    <div class="header-search-copy-v134">
+      <strong>Busca rápida</strong>
+      <span>Fundo, CNPJ ou benchmark</span>
+    </div>
+    <div class="header-search-wrap-v134">
+      <svg class="header-search-icon-v134" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input id="headerFundSearchV134" type="search" placeholder="Buscar fundo, CNPJ, benchmark..." autocomplete="off" aria-label="Buscar fundo no cabeçalho" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="header_fund_search_v134" class="search-no-autofill-v123">
+      <button type="button" id="headerFundSearchClearV134" class="header-search-clear-v134" aria-label="Limpar busca">✕</button>
+    </div>
+  </div>
 </header>
 
-<!-- ════════════════ PATCH v133: Cabeçalho executivo compacto + navegação por âncoras ════════════════ -->
+<!-- ════════════════ PATCH v134: Cabeçalho executivo compacto + navegação alinhada ════════════════ -->
 <nav class="desktop-anchor-nav-ui-v132" id="desktopAnchorNavV131" aria-label="Navegação rápida por seções do painel">
   <div class="desktop-anchor-nav-inner-v131">
     <span class="desktop-anchor-kicker-v131">Navegação</span>
