@@ -25286,31 +25286,31 @@ html.w3c-html-validate-fix-v128 .closed-market-sheet[role="dialog"]{
 :root{
   --desktop-nav-height-v131:64px;
 }
-html.desktop-anchor-nav-v131{
+html.desktop-anchor-layout-v132{
   scroll-padding-top:96px;
 }
-html.desktop-anchor-nav-v131 .section-gap,
-html.desktop-anchor-nav-v131 #rankingsSection,
-html.desktop-anchor-nav-v131 #siteSources{
+html.desktop-anchor-layout-v132 .section-gap,
+html.desktop-anchor-layout-v132 #rankingsSection,
+html.desktop-anchor-layout-v132 #siteSources{
   scroll-margin-top:96px;
 }
-.desktop-anchor-nav-v131{
+.desktop-anchor-nav-ui-v132{
   display:none;
 }
 @media(min-width:1025px){
-  html.desktop-anchor-nav-v131 .page{
+  html.desktop-anchor-layout-v132 .page{
     padding-top:26px;
   }
-  html.desktop-anchor-nav-v131 .site-header-clean{
+  html.desktop-anchor-layout-v132 .site-header-clean{
     padding-bottom:18px;
   }
-  html.desktop-anchor-nav-v131 .brand-text h1{
+  html.desktop-anchor-layout-v132 .brand-text h1{
     font-size:clamp(1.42rem,2.1vw,1.9rem);
   }
-  html.desktop-anchor-nav-v131 .brand-text p{
+  html.desktop-anchor-layout-v132 .brand-text p{
     max-width:760px;
   }
-  .desktop-anchor-nav-v131{
+  .desktop-anchor-nav-ui-v132{
     position:sticky;
     top:0;
     z-index:70;
@@ -25416,45 +25416,45 @@ html.desktop-anchor-nav-v131 #siteSources{
   }
 
   /* Hierarquia visual das seções: página única, mas com blocos mais bem separados. */
-  html.desktop-anchor-nav-v131 #sec-fundos,
-  html.desktop-anchor-nav-v131 #rankingsSection,
-  html.desktop-anchor-nav-v131 #sec-mercado,
-  html.desktop-anchor-nav-v131 #sec-mercado-painel,
-  html.desktop-anchor-nav-v131 #sec-dolar,
-  html.desktop-anchor-nav-v131 #sec-focus,
-  html.desktop-anchor-nav-v131 #sec-graficos,
-  html.desktop-anchor-nav-v131 #siteSources{
+  html.desktop-anchor-layout-v132 #sec-fundos,
+  html.desktop-anchor-layout-v132 #rankingsSection,
+  html.desktop-anchor-layout-v132 #sec-mercado,
+  html.desktop-anchor-layout-v132 #sec-mercado-painel,
+  html.desktop-anchor-layout-v132 #sec-dolar,
+  html.desktop-anchor-layout-v132 #sec-focus,
+  html.desktop-anchor-layout-v132 #sec-graficos,
+  html.desktop-anchor-layout-v132 #siteSources{
     position:relative;
   }
-  html.desktop-anchor-nav-v131 #sec-fundos{
+  html.desktop-anchor-layout-v132 #sec-fundos{
     margin-top:26px;
   }
-  html.desktop-anchor-nav-v131 #sec-fundos>.section-title,
-  html.desktop-anchor-nav-v131 #sec-mercado>.section-title,
-  html.desktop-anchor-nav-v131 #sec-dolar>.section-title,
-  html.desktop-anchor-nav-v131 .ranking-head{
+  html.desktop-anchor-layout-v132 #sec-fundos>.section-title,
+  html.desktop-anchor-layout-v132 #sec-mercado>.section-title,
+  html.desktop-anchor-layout-v132 #sec-dolar>.section-title,
+  html.desktop-anchor-layout-v132 .ranking-head{
     padding:0 2px;
   }
-  html.desktop-anchor-nav-v131 #fundFilterShell{
+  html.desktop-anchor-layout-v132 #fundFilterShell{
     box-shadow:0 14px 50px rgba(0,0,0,.22);
   }
 
   /* Mercado e blocos secundários ficam com respiro, sem virarem “segunda tela”. */
-  html.desktop-anchor-nav-v131 #rankingsSection,
-  html.desktop-anchor-nav-v131 #sec-mercado,
-  html.desktop-anchor-nav-v131 #sec-dolar,
-  html.desktop-anchor-nav-v131 #sec-focus,
-  html.desktop-anchor-nav-v131 #sec-graficos{
+  html.desktop-anchor-layout-v132 #rankingsSection,
+  html.desktop-anchor-layout-v132 #sec-mercado,
+  html.desktop-anchor-layout-v132 #sec-dolar,
+  html.desktop-anchor-layout-v132 #sec-focus,
+  html.desktop-anchor-layout-v132 #sec-graficos{
     margin-top:34px;
   }
 
   /* Footer/fontes com comportamento de seção ancorável. */
-  html.desktop-anchor-nav-v131 #siteSources{
+  html.desktop-anchor-layout-v132 #siteSources{
     margin-top:34px;
   }
 }
 @media(max-width:1024px){
-  .desktop-anchor-nav-v131{
+  .desktop-anchor-nav-ui-v132{
     display:none!important;
   }
 }
@@ -25464,5 +25464,266 @@ html.desktop-anchor-nav-v131 #siteSources{
   }
   .desktop-anchor-link-v131 strong{
     font-size:.70rem;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v132 — Correção tela branca no mobile
+   Causa: a classe de navegação v131 foi usada no <html> e no <nav>.
+   Em telas até 1024px, a regra display:none da navegação atingia o <html>.
+   Este patch separa classe de layout (html) e classe visual do menu (nav).
+════════════════════════════════════════════════════ */
+html.desktop-anchor-nav-v131,
+html.desktop-anchor-layout-v132,
+html.mobile-blank-fix-v132{
+  display:block !important;
+  visibility:visible !important;
+}
+@media(max-width:1024px){
+  #desktopAnchorNavV131,
+  nav.desktop-anchor-nav-ui-v132,
+  nav.desktop-anchor-nav-v131{
+    display:none !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+  }
+  html.desktop-anchor-nav-v131,
+  html.desktop-anchor-layout-v132,
+  html.mobile-blank-fix-v132{
+    display:block !important;
+    visibility:visible !important;
+  }
+  body{
+    display:block !important;
+    visibility:visible !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v133 — Cabeçalho executivo compacto no desktop
+   Objetivo:
+   - Eliminar a busca solta ocupando uma faixa própria no topo.
+   - Integrar busca, marca e data de atualização em uma composição única.
+   - Afinar a navegação horizontal para reduzir o espaço vazio antes dos KPIs.
+   - Preservar o mobile corrigido na v132.
+════════════════════════════════════════════════════ */
+@media(min-width:1025px){
+  html.executive-header-v133{
+    scroll-padding-top:84px !important;
+  }
+
+  html.executive-header-v133 body{
+    padding-top:0 !important;
+  }
+
+  html.executive-header-v133 .page{
+    padding-top:22px !important;
+  }
+
+  /* A antiga barra global deixa de ser uma faixa própria e vira uma busca contextual no canto direito do cabeçalho. */
+  html.executive-header-v133 #gfb{
+    position:absolute !important;
+    top:26px !important;
+    left:auto !important;
+    right:max(28px,calc((100vw - 1760px)/2 + 28px)) !important;
+    width:min(520px,34vw) !important;
+    min-width:360px !important;
+    max-width:520px !important;
+    min-height:0 !important;
+    height:auto !important;
+    padding:0 !important;
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+    z-index:95 !important;
+  }
+
+  html.executive-header-v133 #gfb-inner{
+    width:100% !important;
+    max-width:none !important;
+    height:40px !important;
+    min-height:40px !important;
+    margin:0 !important;
+    padding:0 !important;
+    display:block !important;
+  }
+
+  html.executive-header-v133 #gfb-logo,
+  html.executive-header-v133 #gfb-chips,
+  html.executive-header-v133 #gfb-right,
+  html.executive-header-v133 #gfbCount,
+  html.executive-header-v133 #gfbGo{
+    display:none !important;
+  }
+
+  html.executive-header-v133 #gfb-search-wrap{
+    width:100% !important;
+    max-width:none !important;
+    min-width:0 !important;
+    flex:initial !important;
+  }
+
+  html.executive-header-v133 #gfbSearch{
+    height:40px !important;
+    padding:0 42px 0 42px !important;
+    border-radius:999px !important;
+    color:#eef3ff !important;
+    background:linear-gradient(180deg,rgba(17,21,38,.90),rgba(8,10,18,.94)) !important;
+    border:1px solid rgba(200,151,58,.24) !important;
+    box-shadow:0 14px 34px rgba(0,0,0,.30), inset 0 1px 0 rgba(255,255,255,.045) !important;
+    font-size:.80rem !important;
+  }
+
+  html.executive-header-v133 #gfbSearch:focus{
+    border-color:rgba(232,187,106,.58) !important;
+    box-shadow:0 0 0 3px rgba(200,151,58,.13),0 14px 34px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.055) !important;
+  }
+
+  html.executive-header-v133 #gfb-icon{
+    left:16px !important;
+    color:#aeb8d3 !important;
+  }
+
+  html.executive-header-v133 #gfbClear{
+    right:13px !important;
+  }
+
+  /* Header: marca, subtítulo e data ficam em bloco único, com reserva para a busca à direita. */
+  html.executive-header-v133 .site-header-clean,
+  html.executive-header-v133 header.site-header-clean{
+    min-height:76px !important;
+    margin:0 !important;
+    padding:16px min(570px,38vw) 16px 0 !important;
+    border-bottom:1px solid rgba(255,255,255,.075) !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-start !important;
+    gap:14px !important;
+  }
+
+  html.executive-header-v133 .site-header-clean .brand{
+    min-width:0 !important;
+    max-width:100% !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:13px !important;
+  }
+
+  html.executive-header-v133 .site-header-clean .brand-logo{
+    width:42px !important;
+    height:42px !important;
+    min-width:42px !important;
+    border-radius:12px !important;
+    font-size:1.18rem !important;
+    box-shadow:0 10px 26px rgba(200,151,58,.16) !important;
+  }
+
+  html.executive-header-v133 .site-header-clean .brand-text{
+    min-width:0 !important;
+  }
+
+  html.executive-header-v133 .site-header-clean .brand-text h1{
+    margin:0 !important;
+    font-size:clamp(1.28rem,1.72vw,1.62rem) !important;
+    line-height:1.04 !important;
+    letter-spacing:.01em !important;
+  }
+
+  html.executive-header-v133 .site-header-clean .brand-text p{
+    max-width:640px !important;
+    margin-top:5px !important;
+    font-size:.58rem !important;
+    line-height:1.24 !important;
+    letter-spacing:.075em !important;
+    color:#98a3bd !important;
+  }
+
+  html.executive-header-v133 .site-header-clean .live-badge{
+    width:max-content !important;
+    max-width:100% !important;
+    margin:7px 0 0 !important;
+    padding:4px 9px !important;
+    border-radius:999px !important;
+    background:rgba(255,255,255,.035) !important;
+    border:1px solid rgba(255,255,255,.09) !important;
+    color:#9ca8c2 !important;
+    font-size:.57rem !important;
+    box-shadow:none !important;
+  }
+
+  /* Navegação: deixa de parecer card grande e passa a ser trilho executivo compacto. */
+  html.executive-header-v133 .desktop-anchor-nav-ui-v132{
+    top:0 !important;
+    margin:10px 0 14px !important;
+    padding:5px !important;
+    border-radius:14px !important;
+    border-color:rgba(200,151,58,.18) !important;
+    background:linear-gradient(180deg,rgba(13,15,28,.78),rgba(8,10,18,.70)) !important;
+    box-shadow:0 10px 32px rgba(0,0,0,.20) !important;
+  }
+
+  html.executive-header-v133 .desktop-anchor-nav-inner-v131{
+    gap:4px !important;
+  }
+
+  html.executive-header-v133 .desktop-anchor-kicker-v131{
+    display:none !important;
+  }
+
+  html.executive-header-v133 .desktop-anchor-link-v131{
+    min-height:32px !important;
+    padding:6px 11px !important;
+    border-radius:10px !important;
+    gap:6px !important;
+    font-size:.69rem !important;
+  }
+
+  html.executive-header-v133 .desktop-anchor-link-v131 span{
+    font-size:.82rem !important;
+  }
+
+  html.executive-header-v133 .desktop-anchor-link-v131.active::after{
+    left:10px !important;
+    right:10px !important;
+    bottom:3px !important;
+    height:1px !important;
+  }
+
+  html.executive-header-v133 #sec-kpi.executive-kpi-grid{
+    margin-top:12px !important;
+  }
+
+  html.executive-header-v133 #sec-kpi .kpi{
+    min-height:96px !important;
+    padding:16px 17px 14px !important;
+  }
+
+  html.executive-header-v133 #sec-fundos{
+    margin-top:22px !important;
+  }
+}
+
+@media(min-width:1025px) and (max-width:1280px){
+  html.executive-header-v133 #gfb{
+    width:360px !important;
+    min-width:320px !important;
+    right:22px !important;
+  }
+  html.executive-header-v133 .site-header-clean,
+  html.executive-header-v133 header.site-header-clean{
+    padding-right:400px !important;
+  }
+  html.executive-header-v133 .desktop-anchor-link-v131{
+    padding-inline:9px !important;
+    font-size:.66rem !important;
+  }
+}
+
+@media(max-width:1024px){
+  /* O mobile permanece com o comportamento validado na v132/v39. */
+  html.executive-header-v133 body{
+    padding-top:46px !important;
   }
 }

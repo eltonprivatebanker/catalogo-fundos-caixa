@@ -11491,7 +11491,7 @@ if(!isSearchInput(el)) return;
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_DESKTOP_ANCHOR_NAV_20260610_v131';
+  const BUILD = 'ELTAUM_MOBILE_BLANK_FIX_ANCHOR_NAV_20260610_v132';
   window.__ELTAUM_DESKTOP_ANCHOR_NAV_V131_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -11526,7 +11526,8 @@ if(!isSearchInput(el)) return;
 
     const meta = qs('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
-    document.documentElement.classList.add('desktop-anchor-nav-v131','compact-dashboard-v131');
+    document.documentElement.classList.remove('desktop-anchor-nav-v131');
+    document.documentElement.classList.add('desktop-anchor-layout-v132','compact-dashboard-v131','mobile-blank-fix-v132');
 
     links.forEach(link => {
       link.addEventListener('click', () => {
