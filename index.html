@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-side-nav-v129">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-module-nav-v130 module-fundos-v130">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_DESKTOP_SIDE_NAV_20260610_v129"/>
+<meta name="app-build" content="ELTAUM_DESKTOP_MODULE_NAV_20260610_v130"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,42 +61,15 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=desktop-side-nav-v129" rel="stylesheet"/>
+<link href="style.css?v=desktop-module-nav-v130" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=desktop-side-nav-v129"></script>
+<script defer src="app.js?v=desktop-module-nav-v130"></script>
 
 </head>
 <body>
-<nav class="desktop-side-nav" id="desktopSideNav" aria-label="Navegação principal do painel">
-  <a class="desktop-nav-brand" href="#topo" aria-label="Voltar ao início do Catálogo de Fundos CAIXA">
-    <span class="desktop-nav-logo" aria-hidden="true">E</span>
-    <span class="desktop-nav-brand-text">
-      <strong>Catálogo</strong>
-      <small>Fundos CAIXA</small>
-    </span>
-  </a>
-
-  <div class="desktop-nav-group" role="list">
-    <a href="#topo" data-section="topo" class="desktop-nav-link active" aria-current="page"><span>🏠</span><strong>Início</strong></a>
-    <a href="#sec-kpi" data-section="sec-kpi" class="desktop-nav-link"><span>📊</span><strong>Resumo</strong></a>
-    <a href="#sec-fundos" data-section="sec-fundos" class="desktop-nav-link"><span>📁</span><strong>Fundos</strong></a>
-    <a href="#rankingsSection" data-section="rankingsSection" class="desktop-nav-link"><span>🏆</span><strong>Rankings</strong></a>
-    <a href="#sec-mercado" data-section="sec-mercado" class="desktop-nav-link"><span>📈</span><strong>Mercado</strong></a>
-    <a href="#sec-mercado-painel" data-section="sec-mercado-painel" class="desktop-nav-link"><span>🗓️</span><strong>Fechamento</strong></a>
-    <a href="#sec-dolar" data-section="sec-dolar" class="desktop-nav-link"><span>💵</span><strong>Dólar</strong></a>
-    <a href="#sec-focus" data-section="sec-focus" class="desktop-nav-link"><span>📋</span><strong>Focus</strong></a>
-    <a href="#sec-graficos" data-section="sec-graficos" class="desktop-nav-link"><span>📉</span><strong>Gráficos</strong></a>
-    <a href="#sec-fontes" data-section="sec-fontes" class="desktop-nav-link"><span>ℹ️</span><strong>Fontes</strong></a>
-  </div>
-
-  <div class="desktop-nav-footer">
-    <span>Desktop</span>
-    <small>Navegação rápida</small>
-  </div>
-</nav>
 <div class="page" id="topo">
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
 <header class="site-header-clean">
@@ -110,9 +83,28 @@ html:not(.app-booting) .page{
   </div>
 </header>
 
+<nav class="desktop-module-nav-v130" id="desktopModuleNavV130" aria-label="Navegação por seções do painel">
+  <div class="module-nav-topline-v130">
+    <div>
+      <strong>Modo de navegação</strong>
+      <span id="moduleNavStatusV130">Fundos disponíveis</span>
+    </div>
+    <button type="button" class="module-nav-all-v130" data-module-v130="tudo" aria-pressed="false">Ver tudo</button>
+  </div>
+  <div class="module-nav-tabs-v130" role="group" aria-label="Escolha uma seção para visualizar">
+    <button type="button" class="module-nav-tab-v130" data-module-v130="resumo" aria-pressed="false"><span>📊</span><strong>Resumo</strong></button>
+    <button type="button" class="module-nav-tab-v130 active" data-module-v130="fundos" aria-pressed="true"><span>📁</span><strong>Fundos</strong></button>
+    <button type="button" class="module-nav-tab-v130" data-module-v130="rankings" aria-pressed="false"><span>🏆</span><strong>Rankings</strong></button>
+    <button type="button" class="module-nav-tab-v130" data-module-v130="mercado" aria-pressed="false"><span>📈</span><strong>Mercado</strong></button>
+    <button type="button" class="module-nav-tab-v130" data-module-v130="dolar" aria-pressed="false"><span>💵</span><strong>Dólar</strong></button>
+    <button type="button" class="module-nav-tab-v130" data-module-v130="focus" aria-pressed="false"><span>📋</span><strong>Focus</strong></button>
+    <button type="button" class="module-nav-tab-v130" data-module-v130="fontes" aria-pressed="false"><span>ℹ️</span><strong>Fontes</strong></button>
+  </div>
+</nav>
+
 <!-- ════════════════ BLOCO 1: QUEBRA-GELO — visão geral ════════════════ -->
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
-<div class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi" aria-label="Resumo executivo do catálogo" role="group">
+<div class="kpi-grid section-gap executive-kpi-grid module-section-v130 module-resumo-v130" id="sec-kpi" aria-label="Resumo executivo do catálogo" role="group">
   <div class="kpi kpi-fundos"><div class="kpi-icon">📊</div><div class="kpi-label">Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
   <div class="kpi kpi-categorias"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub" id="kpiCatsSub">Tipos de estratégia</div></div>
   <div class="kpi kpi-pl"><div class="kpi-icon">💰</div><div class="kpi-label">PL consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">Patrimônio consolidado</div></div>
@@ -122,7 +114,7 @@ html:not(.app-booting) .page{
 </div>
 
 <!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
-<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo" role="group">
+<div class="mobile-kpi-overview section-gap module-section-v130 module-resumo-v130" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo" role="group">
   <article class="mobile-kpi-card mobile-kpi-card-compact">
     <div class="mobile-kpi-head">
       <span class="mobile-kpi-emoji">📊</span>
@@ -172,12 +164,28 @@ html:not(.app-booting) .page{
 
 
 
+<div class="desktop-section-launcher-v130 module-section-v130 module-resumo-v130" id="desktopSectionLauncherV130" aria-label="Acessos rápidos por seção" role="group">
+  <button type="button" class="section-launch-card-v130" data-module-v130="fundos">
+    <span>📁</span><strong>Fundos disponíveis</strong><small>Busca, filtros, tabela e cards</small>
+  </button>
+  <button type="button" class="section-launch-card-v130" data-module-v130="rankings">
+    <span>🏆</span><strong>Rankings</strong><small>Melhores, piores e categorias</small>
+  </button>
+  <button type="button" class="section-launch-card-v130" data-module-v130="mercado">
+    <span>📈</span><strong>Mercado</strong><small>Selic, CDI, IPCA, poupança e gráficos</small>
+  </button>
+  <button type="button" class="section-launch-card-v130" data-module-v130="dolar">
+    <span>💵</span><strong>Dólar</strong><small>PTAX, variações e histórico</small>
+  </button>
+</div>
+
+
 
 
 <!-- ════════════════ CATÁLOGO E RANKINGS ════════════════ -->
 <!-- ═══════════════════════════ CATÁLOGO COMPLETO DE FUNDOS ══ -->
 
-<div class="section-gap" id="sec-fundos">
+<div class="section-gap module-section-v130 module-fundos-v130" id="sec-fundos">
   <div class="section-title">
     <h2>📁 Fundos disponíveis</h2>
     <span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
@@ -347,7 +355,7 @@ html:not(.app-booting) .page{
 </div>
 
 <!-- ═══════════════════════════════════════════ RANKINGS ══ -->
-<div class="section-gap" id="rankingsSection">
+<div class="section-gap module-section-v130 module-rankings-v130" id="rankingsSection">
   <div class="ranking-head">
     <div class="ranking-title-group">
       <h2>🏆 Rankings dos Fundos</h2>
@@ -390,7 +398,7 @@ html:not(.app-booting) .page{
 
 
 <!-- ═════════════════════════════════ INDICADORES DE MERCADO ══ -->
-<div class="section-gap" id="sec-mercado">
+<div class="section-gap module-section-v130 module-mercado-v130" id="sec-mercado">
   <div class="section-title market-section-head">
     <div class="market-title-left">
       <h2>📡 Indicadores de Mercado</h2>
@@ -563,7 +571,7 @@ html:not(.app-booting) .page{
 <!-- ═════════════════════════════════ APROFUNDAMENTO MACRO ══ -->
 <!-- ════════════════ BLOCO 3: APROFUNDAMENTO MACRO ════════════════ -->
 <!-- ══════════════════ PAINEL CONSOLIDADO DE INDICADORES ══ -->
-<div class="section-gap collapsible-section" id="sec-mercado-painel">
+<div class="section-gap collapsible-section module-section-v130 module-mercado-v130" id="sec-mercado-painel">
 
   <div class="market-table-toolbar section-title-collapsible"
        onclick="return handleSectionToggleClick(event,'sec-painel-body','sec-mercado-painel')"
@@ -836,7 +844,7 @@ html:not(.app-booting) .page{
 </div><!-- /section painel consolidado -->
 
 <!-- ═══════════════════════════════════ SEÇÃO DÓLAR ══ -->
-<div class="section-gap dolar-compact-section" id="sec-dolar">
+<div class="section-gap dolar-compact-section module-section-v130 module-dolar-v130" id="sec-dolar">
   <div class="section-title">
     <h2>💵 Dólar PTAX</h2>
     <span class="section-badge"><span class="badge-dot green"></span>BCB · cotação oficial</span>
@@ -925,7 +933,7 @@ html:not(.app-booting) .page{
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
-<div class="section-gap collapsible-section" id="sec-focus">
+<div class="section-gap collapsible-section module-section-v130 module-focus-v130" id="sec-focus">
   <div class="section-title focus-section-title section-title-collapsible"
        onclick="toggleSection('sec-focus-body','sec-focus')" role="region" aria-expanded="false" tabindex="0">
     <div class="focus-title-block">
@@ -977,7 +985,7 @@ html:not(.app-booting) .page{
 <!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES ══ -->
   </div><!-- /focus-body -->
 
-<div class="section-gap evolution-section collapsible-section" id="sec-graficos">
+<div class="section-gap evolution-section collapsible-section module-section-v130 module-mercado-v130" id="sec-graficos">
   <div class="section-title evolution-title section-title-collapsible"
        onclick="toggleSection('sec-graficos-body','sec-graficos')" role="region" aria-expanded="false" tabindex="0">
     <div>
@@ -1087,7 +1095,7 @@ html:not(.app-booting) .page{
   </div>
 </div>
 
-<footer class="site-footer-clean site-footer-v2" id="sec-fontes">
+<footer class="site-footer-clean site-footer-v2 module-section-v130 module-fontes-v130" id="sec-fontes">
   <details class="footer-disclaimer-clean footer-disclaimer-v2" id="footerDisclaimer">
     <summary>
       <span class="footer-summary-main">

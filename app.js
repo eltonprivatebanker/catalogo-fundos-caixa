@@ -11576,3 +11576,179 @@ if(!isSearchInput(el)) return;
   }
 })();
 
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_DESKTOP_MODULE_NAV_20260610_v130
+   Navegação por módulos: exibe uma seção por vez no desktop
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_DESKTOP_MODULE_NAV_20260610_v130';
+  const MODULE_CLASSES = [
+    'module-resumo-v130','module-fundos-v130','module-rankings-v130','module-mercado-v130',
+    'module-dolar-v130','module-focus-v130','module-fontes-v130','module-tudo-v130'
+  ];
+
+  const MODULE_LABELS = {
+    resumo:'Resumo executivo',
+    fundos:'Fundos disponíveis',
+    rankings:'Rankings dos fundos',
+    mercado:'Indicadores de mercado',
+    dolar:'Dólar e PTAX',
+    focus:'Boletim Focus',
+    fontes:'Fontes e transparência',
+    tudo:'Visualização completa'
+  };
+
+  const HASH_TO_MODULE = {
+    '#topo':'fundos',
+    '#sec-kpi':'resumo',
+    '#sec-kpi-mobile':'resumo',
+    '#sec-fundos':'fundos',
+    '#rankingsSection':'rankings',
+    '#sec-mercado':'mercado',
+    '#sec-mercado-painel':'mercado',
+    '#sec-graficos':'mercado',
+    '#sec-dolar':'dolar',
+    '#sec-focus':'focus',
+    '#sec-fontes':'fontes',
+    '#mod-resumo':'resumo',
+    '#mod-fundos':'fundos',
+    '#mod-rankings':'rankings',
+    '#mod-mercado':'mercado',
+    '#mod-dolar':'dolar',
+    '#mod-focus':'focus',
+    '#mod-fontes':'fontes',
+    '#mod-tudo':'tudo'
+  };
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function isDesktop(){ return window.matchMedia && window.matchMedia('(min-width:1024px)').matches; }
+
+  function syncBuildMeta(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.documentElement.classList.add('desktop-module-nav-v130');
+      document.documentElement.classList.remove('desktop-side-nav-v129');
+    }catch(e){}
+  }
+
+  function normalizeModule(module){
+    return Object.prototype.hasOwnProperty.call(MODULE_LABELS, module) ? module : 'fundos';
+  }
+
+  function moduleFromHash(hash){
+    if(!hash) return null;
+    const decoded = '#'+decodeURIComponent(String(hash).replace(/^#/,''));
+    return HASH_TO_MODULE[decoded] || null;
+  }
+
+  function resizeVisibleCharts(){
+    const canvases = qsa('canvas');
+    canvases.forEach(canvas=>{
+      try{
+        const chart = window.Chart && Chart.getChart ? Chart.getChart(canvas) : null;
+        if(chart){
+          chart.resize();
+          chart.update('none');
+        }
+      }catch(e){}
+    });
+    try{ window.dispatchEvent(new Event('resize')); }catch(e){}
+  }
+
+  function openModuleInternals(module){
+    try{
+      if(module === 'focus' || module === 'tudo'){
+        const body = qs('#sec-focus-body');
+        if(body && body.hasAttribute('hidden') && typeof window.toggleSection === 'function'){
+          window.toggleSection('sec-focus-body','sec-focus');
+        }
+      }
+      if(module === 'fontes' || module === 'tudo'){
+        const details = qs('#sec-fontes details');
+        if(details) details.open = true;
+      }
+    }catch(e){}
+  }
+
+  function setModuleV130(module, options){
+    options = options || {};
+    const normalized = normalizeModule(module);
+    const root = document.documentElement;
+
+    MODULE_CLASSES.forEach(cls=>root.classList.remove(cls));
+    root.classList.add('module-'+normalized+'-v130');
+    root.setAttribute('data-active-module-v130', normalized);
+
+    qsa('[data-module-v130]').forEach(btn=>{
+      const active = btn.getAttribute('data-module-v130') === normalized;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+      if(active) btn.setAttribute('aria-current','page');
+      else btn.removeAttribute('aria-current');
+    });
+
+    const status = qs('#moduleNavStatusV130');
+    if(status) status.textContent = MODULE_LABELS[normalized] || '';
+
+    openModuleInternals(normalized);
+
+    if(options.updateHash !== false){
+      try{ history.replaceState(null,'','#mod-'+normalized); }catch(e){}
+    }
+
+    if(options.scroll !== false && isDesktop()){
+      const nav = qs('#desktopModuleNavV130');
+      const y = Math.max(0, (nav ? nav.getBoundingClientRect().top + window.scrollY - 16 : 0));
+      window.scrollTo({top:y, behavior: options.instant ? 'auto' : 'smooth'});
+    }
+
+    setTimeout(resizeVisibleCharts, 80);
+    setTimeout(resizeVisibleCharts, 260);
+    setTimeout(resizeVisibleCharts, 700);
+  }
+
+  function setupModuleNavV130(){
+    syncBuildMeta();
+
+    qsa('[data-module-v130]').forEach(btn=>{
+      btn.addEventListener('click', ev=>{
+        const module = btn.getAttribute('data-module-v130');
+        if(!module) return;
+        ev.preventDefault();
+        setModuleV130(module);
+      });
+    });
+
+    const initial = moduleFromHash(window.location.hash) || document.documentElement.getAttribute('data-active-module-v130') || 'fundos';
+    setModuleV130(initial, {scroll:false, updateHash:false, instant:true});
+
+    window.addEventListener('hashchange', ()=>{
+      const module = moduleFromHash(window.location.hash);
+      if(module) setModuleV130(module, {scroll:false, updateHash:false, instant:true});
+    });
+
+    setTimeout(syncBuildMeta, 400);
+    setTimeout(syncBuildMeta, 2100);
+    setTimeout(syncBuildMeta, 3400);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setupModuleNavV130, {once:true});
+  }else{
+    setupModuleNavV130();
+  }
+
+  window.setCatalogModuleV130 = setModuleV130;
+  window.__ELTAUM_DESKTOP_MODULE_NAV_V130__ = {
+    build: BUILD,
+    setModule: setModuleV130,
+    resizeCharts: resizeVisibleCharts,
+    labels: MODULE_LABELS
+  };
+})();
