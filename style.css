@@ -25997,3 +25997,17 @@ html.w3c-html-validate-fix-v128 .closed-market-sheet[role="dialog"]{
   #rankingsSection .ranking-filter-row-compat-v136{grid-column:auto}
   #rankingsSection .ranking-attention-panel-v136{display:none!important}
 }
+
+/* ==========================================================
+   ELTAUM v153 — navegação exata para o fundo no catálogo
+========================================================== */
+.table-wrap tbody tr.catalog-focus-row-v153{
+  position:relative;
+  background:linear-gradient(90deg,rgba(200,151,58,.12),rgba(200,151,58,.035))!important;
+  box-shadow:inset 3px 0 0 var(--gold),inset 0 1px 0 rgba(232,187,106,.18),inset 0 -1px 0 rgba(232,187,106,.12);
+  animation:catalogFocusPulseV153 1.25s ease-in-out 2;
+}
+@keyframes catalogFocusPulseV153{
+  0%,100%{filter:none}
+  50%{filter:brightness(1.12)}
+}

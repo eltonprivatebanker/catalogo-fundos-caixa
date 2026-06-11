@@ -2621,8 +2621,35 @@ function setCdiSort(dir){
   else setup();
 })();
 
+function normalizeCatalogSearch(v){
+  return String(v??'')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim()
+    .replace(/\s+/g,' ');
+}
+function digitsOnlyCatalogSearch(v){
+  return String(v??'').replace(/\D/g,'');
+}
+function rowMatchesCatalogSearch(row, query){
+  const raw=String(query??'').trim().toLowerCase();
+  if(!raw) return true;
+  const norm=normalizeCatalogSearch(raw);
+  const digits=digitsOnlyCatalogSearch(raw);
+  return Object.values(row||{}).some(value=>{
+    if(value===null || value===undefined || value==='') return false;
+    const text=String(value);
+    if(text.toLowerCase().includes(raw)) return true;
+    if(norm && normalizeCatalogSearch(text).includes(norm)) return true;
+    if(digits.length>=6 && digitsOnlyCatalogSearch(text).includes(digits)) return true;
+    return false;
+  });
+}
+
 function applyFilter(){
-  const q=activeSearch.toLowerCase();
+  const q=String(activeSearch||'').trim();
   const favModeAtivo = !!window.__favListMode;
   filtered=allRows.filter(r=>{
     if(favModeAtivo && !rowIsFavoritedForFilter(r)) return false;
@@ -2634,7 +2661,7 @@ function applyFilter(){
       if(!tokens.includes(activePerfil)) return false;
     }
     if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
-    if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
+    if(q&&!rowMatchesCatalogSearch(r,q)) return false;
     return true;
   });
   if(isMobileSortViewport()){
@@ -5498,6 +5525,51 @@ document.addEventListener('DOMContentLoaded', function(){
     showToast._t=setTimeout(()=>el.classList.remove('show'),2600);
   }
 
+  function goToFundInCatalog(row){
+    if(!row) return showToast('Fundo não localizado na base atual.');
+    const nome=String(row['Fundo']||'').trim();
+    const cnpj=String(row['CNPJ']||'').trim();
+    const busca=nome || cnpj;
+    if(!busca) return showToast('Não foi possível identificar o fundo.');
+
+    clearChipGroups();
+    try{ activeSearch=busca; }catch(e){}
+
+    const inp=$('searchInput');
+    if(inp) inp.value=busca;
+    const gfb=$('gfbSearch');
+    if(gfb) gfb.value=busca;
+
+    // "Ver na tabela" deve realmente abrir a visualização em tabela.
+    try{ localStorage.setItem('fundMobileView','table'); }catch(e){}
+    document.body.classList.remove('fund-card-mode');
+    document.querySelectorAll('.mobile-view-btn').forEach(btn=>{
+      btn.classList.toggle('active',btn.dataset.view==='table');
+    });
+
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){console.error('Falha ao localizar fundo no catálogo',e);}
+
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const table=document.querySelector('.table-wrap');
+      const sec=$('sec-fundos') || table;
+      const target=table || sec;
+      if(target){
+        const nav=document.getElementById('desktopAnchorNavV131');
+        const offset=(nav?.getBoundingClientRect().height||0)+18;
+        const top=target.getBoundingClientRect().top+window.scrollY-offset;
+        window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+      }
+      const firstRow=document.querySelector('#tableBody tr[data-idx], .table-wrap tbody tr[data-idx]');
+      if(firstRow){
+        firstRow.classList.add('catalog-focus-row-v153');
+        setTimeout(()=>firstRow.classList.remove('catalog-focus-row-v153'),2600);
+      }
+      if(Array.isArray(filtered) && filtered.length===0){
+        showToast('Fundo não localizado. A busca foi restaurada pelo nome.');
+      }
+    }));
+  }
+
   /* ═══════════════════════════════════════════
      FUND SPOTLIGHT MODAL — lógica de abertura
   ═══════════════════════════════════════════ */
@@ -5578,19 +5650,8 @@ document.addEventListener('DOMContentLoaded', function(){
     // Botão "Ver na tabela"
     el('fspotVerTabela').onclick = ()=>{
       closeFundSpotlight();
-      // Pequeno delay para o modal fechar antes de filtrar
-      setTimeout(()=>{
-        clearChipGroups();
-        const cnpj = cleanCnpj ? cleanCnpj(row['CNPJ']) : '';
-        const busca = cnpj || nome;
-        try{ activeSearch = busca.toLowerCase(); }catch(e){}
-        const inp = $('searchInput'); if(inp) inp.value = busca;
-        const gfb = $('gfbSearch'); if(gfb) gfb.value = busca;
-        try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
-        // Scroll até a tabela
-        const sec = $('sec-fundos') || document.querySelector('.table-wrap');
-        if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
-      }, 320);
+      // Usa o nome do fundo como busca visível e mantém compatibilidade com CNPJ formatado.
+      setTimeout(()=>goToFundInCatalog(row),220);
     };
 
     // Documentos
