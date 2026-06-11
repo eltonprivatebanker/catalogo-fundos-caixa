@@ -1858,23 +1858,6 @@ let activeRankPeriods = { topFundos:'12m', destaques:'mes' };
 function normRankTxt(v){
   return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 }
-function rankFilterMatchesCategoria(filter, categoria, nome=''){
-  const cat = normRankTxt(categoria);
-  const fund = normRankTxt(nome);
-  const base = cat + ' ' + fund;
-  if(!filter || filter === 'todos') return true;
-  if(filter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
-  if(filter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
-  if(filter === 'renda-fixa-simples') return cat.includes('RENDA FIXA SIMPLES');
-  if(filter === 'renda-fixa-referenciado') return cat.includes('RENDA FIXA REFERENCIADO') || base.includes('REF DI');
-  if(filter === 'renda-fixa-curto-prazo') return cat.includes('RENDA FIXA CURTO PRAZO') || base.includes('CURTO PRAZO');
-  if(filter === 'multimercado') return cat.includes('MULTIMERCADO');
-  if(filter === 'cambial') return cat.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO') || base.includes('CAMBIAL');
-  if(filter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
-  if(filter === 'fundo-de-indice') return cat.includes('FUNDO DE INDICE') || cat.includes('INDICE') || base.includes('ETF');
-  if(filter === 'fmp') return base.includes('FMP') || base.includes('PRIVATIZACAO');
-  return true;
-}
 function rankCampoPorPeriodo(periodo){
   if(periodo === 'dia') return 'Variacao Dia (%)';
   if(periodo === 'mes') return 'Acum. Mes (%)';
@@ -1904,7 +1887,14 @@ function fmtSummaryPl(v){
   return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
 }
 function passaFiltroRanking(r){
-  return rankFilterMatchesCategoria(activeRankFilter, r && r['Categoria'], r && r['Fundo']);
+  const cat = normRankTxt(r['Categoria']);
+  const nome = normRankTxt(r['Fundo']);
+  const base = cat + ' ' + nome;
+  if(activeRankFilter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
+  if(activeRankFilter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
+  if(activeRankFilter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
+  if(activeRankFilter === 'multimercado') return cat.includes('MULTIMERCADO');
+  return true;
 }
 function atualizarRankingFilterUI(){
   document.querySelectorAll('[data-rank-filter]').forEach(btn=>{
@@ -1950,7 +1940,14 @@ function renderRankings(){
   // Ranking agregado por categoria, vindo do kpis_dashboard.json.
   // Quando o filtro "sem FMP" está ativo, retiramos FMP/privatização também do agregado.
   const categoriasKpi = kpisDashboard?.categorias || {};
-  const passaFiltroCat = (cat) => rankFilterMatchesCategoria(activeRankFilter, cat, '');
+  const passaFiltroCat = (cat) => {
+    const c = normRankTxt(cat);
+    if(activeRankFilter === 'sem-fmp') return !(c.includes('FMP') || c.includes('PRIVATIZACAO'));
+    if(activeRankFilter === 'renda-fixa') return c.includes('RENDA FIXA');
+    if(activeRankFilter === 'acoes') return c.includes('ACOES');
+    if(activeRankFilter === 'multimercado') return c.includes('MULTIMERCADO');
+    return true;
+  };
   const catPonderada = Object.entries(categoriasKpi)
     .filter(([cat,d])=>passaFiltroCat(cat) && numKpi(d?.rent_12m_ponderada)!==null)
     .sort((a,b)=>numKpi(b[1].rent_12m_ponderada)-numKpi(a[1].rent_12m_ponderada));
@@ -4517,8 +4514,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function cdiRatioInfo(m12){
     const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(toNum(m12), indicState?.cdi?.m12) : null;
     if(ratio === null || ratio === undefined || !Number.isFinite(Number(ratio))) return {txt:'—', cls:''};
-    // v145: quando o retorno de 12M é negativo, o % do CDI também deve sinalizar negativo em vermelho.
-    const cls = ratio < 0 ? 'fund-cdi-ratio-negative' : ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
+    const cls = ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
     return {txt:`${ratio}% do CDI`, cls};
   }
 
@@ -4597,13 +4593,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="fund-card-performance-v68" aria-label="Rentabilidade do fundo">
         <div class="fund-card-performance-title-v68">Rentabilidade</div>
         <div class="fund-card-perf-short-v68">
-          <span class="fund-card-perf-chip-v68 ${diaInfo.cls}"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
-          <span class="fund-card-perf-chip-v68 ${mesInfo.cls}"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
-          <span class="fund-card-perf-chip-v68 ${anoInfo.cls}"><small>Ano</small><strong class="${anoInfo.cls}">${anoInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68"><small>Ano</small><strong class="${anoInfo.cls}">${anoInfo.txt}</strong></span>
         </div>
         <div class="fund-card-perf-highlight-v68">
-          <span class="fund-card-perf-main-v68 ${m12Info.cls}"><small>12 meses</small><strong class="${m12Info.cls}">${m12Info.txt}</strong></span>
-          <span class="fund-card-perf-main-v68 cdi ${ratioCdi.cls}"><small>% CDI 12M</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
+          <span class="fund-card-perf-main-v68"><small>12 meses</small><strong class="${m12Info.cls}">${m12Info.txt}</strong></span>
+          <span class="fund-card-perf-main-v68 cdi"><small>% CDI 12M</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
         </div>
       </div>
 
@@ -11485,980 +11481,101 @@ if(!isSearchInput(el)) return;
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_V128__ = { sync: syncW3CV128 };
 })();
 
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v131 — Desktop Anchor Navigation
-   - Navegação superior por âncoras, sem esconder seções.
-   - Destaque automático da seção ativa.
-   - Abre detalhes/colapsáveis quando o atalho exigir.
-════════════════════════════════════════════════════ */
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_DESKTOP_SIDE_NAV_20260610_v129
+   Scroll suave e destaque automático do menu lateral desktop
+════════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_MOBILE_BLANK_FIX_ANCHOR_NAV_20260610_v132';
-  window.__ELTAUM_DESKTOP_ANCHOR_NAV_V131_BUILD__ = BUILD;
 
-  function qs(sel, root=document){ return root.querySelector(sel); }
-  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  const MIN_DESKTOP_NAV = 1220;
 
-  function setActive(targetId){
-    qsa('.desktop-anchor-link-v131').forEach(link => {
-      const isSearchShortcut = link.getAttribute('data-search-focus') === '1';
-      link.classList.toggle('active', !isSearchShortcut && link.getAttribute('data-anchor-target') === targetId);
+  function $$(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function isDesktopNav(){ return window.matchMedia && window.matchMedia('(min-width:'+MIN_DESKTOP_NAV+'px)').matches; }
+
+  function setActiveDesktopNav(id){
+    if(!id) return;
+    $$('.desktop-side-nav .desktop-nav-link').forEach(link=>{
+      const active = link.getAttribute('data-section') === id || link.getAttribute('href') === '#'+id;
+      link.classList.toggle('active', active);
+      if(active) link.setAttribute('aria-current','page');
+      else link.removeAttribute('aria-current');
     });
   }
 
-  function openCollapsibleBody(bodyId){
-    if(!bodyId) return;
-    const body = document.getElementById(bodyId);
-    if(!body) return;
-    body.removeAttribute('hidden');
-    body.classList.add('open');
-    const container = body.closest('.collapsible-section');
-    if(container){
-      container.classList.add('section-expanded');
-      container.setAttribute('aria-expanded','true');
-      const label = container.querySelector('.toggle-label');
-      if(label) label.textContent = 'Ver menos';
+  function openTargetIfNeeded(target){
+    if(!target) return;
+
+    if(target.id === 'sec-fontes'){
+      const details = target.querySelector('details');
+      if(details) details.open = true;
+    }
+
+    if(target.classList && target.classList.contains('collapsible-section')){
+      const body = target.querySelector('.section-collapsible-body[hidden]');
+      const toggle = target.querySelector('button[aria-expanded="false"], .section-collapsible-toggle[aria-expanded="false"], .section-toggle[aria-expanded="false"]');
+      if(body && toggle && typeof toggle.click === 'function'){
+        try{ toggle.click(); }catch(e){}
+      }
     }
   }
 
-  function setupDesktopAnchorNavV131(){
-    const nav = qs('#desktopAnchorNavV131');
+  function scrollToTarget(target){
+    if(!target) return;
+    openTargetIfNeeded(target);
+    const offset = 24;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+
+  function setupDesktopSideNav(){
+    const nav = document.getElementById('desktopSideNav');
     if(!nav) return;
-    const links = qsa('.desktop-anchor-link-v131', nav);
-    if(!links.length) return;
 
-    const meta = qs('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
-    document.documentElement.classList.remove('desktop-anchor-nav-v131');
-    document.documentElement.classList.add('desktop-anchor-layout-v132','compact-dashboard-v131','mobile-blank-fix-v132');
-
-    links.forEach(link => {
-      link.addEventListener('click', () => {
-        const targetId = link.getAttribute('data-anchor-target');
-        const detailsId = link.getAttribute('data-open-details');
-        const bodyId = link.getAttribute('data-open-section');
-        if(detailsId){
-          const details = document.getElementById(detailsId);
-          if(details && details.tagName === 'DETAILS') details.open = true;
-        }
-        if(bodyId) openCollapsibleBody(bodyId);
-        if(targetId) setActive(targetId);
+    const links = $$('.desktop-nav-link', nav);
+    links.forEach(link=>{
+      link.addEventListener('click', ev=>{
+        const href = link.getAttribute('href') || '';
+        if(!href.startsWith('#')) return;
+        const id = href.slice(1);
+        const target = document.getElementById(id);
+        if(!target) return;
+        ev.preventDefault();
+        setActiveDesktopNav(id);
+        scrollToTarget(target);
+        try{ history.replaceState(null,'',href); }catch(e){}
       });
     });
 
-    const observed = links
-      .map(link => document.getElementById(link.getAttribute('data-anchor-target')))
-      .filter(Boolean);
+    const sectionIds = links.map(link=>link.getAttribute('data-section')).filter(Boolean);
+    const sections = sectionIds.map(id=>document.getElementById(id)).filter(Boolean);
 
-    if('IntersectionObserver' in window && observed.length){
-      const observer = new IntersectionObserver(entries => {
+    if('IntersectionObserver' in window && sections.length){
+      const observer = new IntersectionObserver(entries=>{
+        if(!isDesktopNav()) return;
         const visible = entries
-          .filter(entry => entry.isIntersecting)
-          .sort((a,b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top))[0];
-        if(visible && visible.target && visible.target.id) setActive(visible.target.id);
-      }, { root:null, rootMargin:'-22% 0px -62% 0px', threshold:[0, .08, .18] });
-      observed.forEach(el => observer.observe(el));
+          .filter(entry=>entry.isIntersecting)
+          .sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+        if(visible && visible.target && visible.target.id){
+          setActiveDesktopNav(visible.target.id);
+        }
+      },{root:null,rootMargin:'-28% 0px -58% 0px',threshold:[0.01,0.08,0.16,0.28,0.42]});
+      sections.forEach(sec=>observer.observe(sec));
+    }
+
+    if(location.hash){
+      const id = decodeURIComponent(location.hash.slice(1));
+      if(document.getElementById(id)) setActiveDesktopNav(id);
     }
   }
 
   if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', () => setTimeout(setupDesktopAnchorNavV131, 100), {once:true});
+    document.addEventListener('DOMContentLoaded', setupDesktopSideNav);
   }else{
-    setTimeout(setupDesktopAnchorNavV131, 100);
+    setupDesktopSideNav();
   }
-  setTimeout(setupDesktopAnchorNavV131, 900);
 })();
 
 
-/* ════════════════════════════════════════════════════════
-   PATCH v134 — Busca do cabeçalho + navegação alinhada
-   - Sincroniza a busca do cabeçalho com a busca principal do catálogo.
-   - Corrige o clique do menu superior para posicionar a seção no começo real.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_EXECUTIVE_HEADER_SEARCH_SHORTCUT_20260610_v135';
-  function qs(sel,root=document){return root.querySelector(sel);}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
-  function isDesktop(){try{return window.matchMedia('(min-width:1025px)').matches;}catch(e){return false;}}
-  function setBuild(){
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-    document.documentElement.classList.remove('executive-header-v133');
-    document.documentElement.classList.add('executive-header-v134','executive-header-v135','anchor-position-fix-v134');
-  }
-  function dispatchInput(el){
-    if(!el) return;
-    el.dispatchEvent(new Event('input',{bubbles:true}));
-  }
-  function syncValue(value, origin){
-    qsa('#searchInput,#gfbSearch,#headerFundSearchV134').forEach(input=>{
-      if(!input || input===origin) return;
-      if(input.value!==value) input.value=value;
-    });
-    const clear=qs('#headerFundSearchClearV134');
-    if(clear) clear.classList.toggle('visible',String(value||'').length>0);
-  }
-  function scrollToSection(target, immediate){
-    if(!target) return;
-    const nav=qs('#desktopAnchorNavV131');
-    const navVisible=nav && getComputedStyle(nav).display!=='none' && nav.getBoundingClientRect().height>0;
-    const navH=navVisible ? Math.ceil(nav.getBoundingClientRect().height) : 0;
-    const extra=isDesktop() ? 14 : 12;
-    const top=Math.max(0,target.getBoundingClientRect().top+window.scrollY-navH-extra);
-    window.scrollTo({top,behavior:immediate?'auto':'smooth'});
-  }
-  function setActive(targetId){
-    qsa('.desktop-anchor-link-v131').forEach(link=>{
-      const isSearchShortcut = link.getAttribute('data-search-focus') === '1';
-      link.classList.toggle('active', !isSearchShortcut && link.getAttribute('data-anchor-target')===targetId);
-    });
-  }
-  function openLinkedPanel(link){
-    const detailsId=link.getAttribute('data-open-details');
-    const bodyId=link.getAttribute('data-open-section');
-    if(detailsId){
-      const details=document.getElementById(detailsId);
-      if(details && details.tagName==='DETAILS') details.open=true;
-    }
-    if(bodyId){
-      const body=document.getElementById(bodyId);
-      if(body){
-        body.removeAttribute('hidden');
-        body.classList.add('open');
-        const container=body.closest('.collapsible-section');
-        if(container){
-          container.classList.add('section-expanded');
-          container.setAttribute('aria-expanded','true');
-          const label=container.querySelector('.toggle-label');
-          if(label) label.textContent='Ver menos';
-        }
-      }
-    }
-  }
-  function bindHeaderSearch(){
-    const header=qs('#headerFundSearchV134');
-    const main=qs('#searchInput');
-    const clear=qs('#headerFundSearchClearV134');
-    if(!header || header.dataset.v134Bound==='1') return;
-    header.dataset.v134Bound='1';
-    const initial=(main && main.value) || (qs('#gfbSearch') && qs('#gfbSearch').value) || '';
-    header.value=initial;
-    syncValue(initial,header);
-    header.addEventListener('input',()=>{
-      const v=header.value||'';
-      syncValue(v,header);
-      if(main && main.value!==v) main.value=v;
-      dispatchInput(main);
-      if(String(v).trim().length>=2){
-        const sec=qs('#sec-fundos');
-        if(sec) setTimeout(()=>scrollToSection(sec,false),140);
-      }
-    });
-    header.addEventListener('keydown',ev=>{
-      if(ev.key==='Enter'){
-        ev.preventDefault();
-        const sec=qs('#sec-fundos');
-        if(sec) scrollToSection(sec,false);
-        try{header.blur();}catch(e){}
-      }
-    });
-    clear?.addEventListener('click',()=>{
-      header.value='';
-      syncValue('',header);
-      if(main){main.value='';dispatchInput(main);}
-      header.focus();
-    });
-    main?.addEventListener('input',()=>{
-      if(document.activeElement!==header){
-        header.value=main.value||'';
-        syncValue(header.value,main);
-      }
-    });
-  }
-  function bindAnchorClicks(){
-    const nav=qs('#desktopAnchorNavV131');
-    if(!nav || nav.dataset.v134Bound==='1') return;
-    nav.dataset.v134Bound='1';
-    nav.addEventListener('click',ev=>{
-      const link=ev.target.closest('.desktop-anchor-link-v131');
-      if(!link) return;
-      const targetId=link.getAttribute('data-anchor-target');
-      const target=targetId ? document.getElementById(targetId) : null;
-      if(!target) return;
-      ev.preventDefault();
-      ev.stopImmediatePropagation();
-      openLinkedPanel(link);
-      setActive(targetId);
-      const isSearchShortcut = link.getAttribute('data-search-focus') === '1';
-      setTimeout(()=>{
-        scrollToSection(target,false);
-        if(isSearchShortcut) focusMainFundSearch();
-      }, link.getAttribute('data-open-section') ? 80 : 0);
-      try{ history.replaceState(null,'',window.location.pathname + window.location.search); }catch(e){}
-    },true);
-  }
-  function clearInitialAnchorHash(){
-    const hash = String(window.location.hash || '');
-    if(!hash || window.__ELTAUM_V135_HASH_CLEARED__) return;
-    const id = decodeURIComponent(hash.slice(1));
-    if(!id) return;
-    const hasNavTarget = qsa('.desktop-anchor-link-v131').some(link => link.getAttribute('data-anchor-target') === id);
-    if(!hasNavTarget) return;
-    window.__ELTAUM_V135_HASH_CLEARED__ = true;
-    try{ history.replaceState(null,'',window.location.pathname + window.location.search); }catch(e){}
-    setActive('sec-kpi');
-    setTimeout(()=>{ try{ window.scrollTo({top:0,left:0,behavior:'auto'}); }catch(e){ window.scrollTo(0,0); } }, 40);
-    setTimeout(()=>{ try{ window.scrollTo({top:0,left:0,behavior:'auto'}); }catch(e){ window.scrollTo(0,0); } }, 260);
-  }
-
-  function focusMainFundSearch(){
-    const main = qs('#searchInput');
-    if(!main) return;
-    setTimeout(()=>{
-      try{ main.focus({preventScroll:true}); }catch(e){ try{ main.focus(); }catch(_){} }
-      try{ main.select(); }catch(e){}
-    }, 260);
-  }
-
-  function init(){
-    setBuild();
-    clearInitialAnchorHash();
-    bindHeaderSearch();
-    bindAnchorClicks();
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  setTimeout(init,500);
-  setTimeout(init,1400);
-})();
-
-/* ════════════════════════════════════════════════════════
-   PATCH v136 — Rankings Pro UX
-   - Dropdown de classe/prazo para rankings.
-   - Sidebar consultiva com pontos de atenção.
-   - Clique no alerta leva o usuário ao fundo na busca principal.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_RANKINGS_PRO_UX_20260610_v136';
-  function qs(sel,root=document){return root.querySelector(sel);}
-  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
-  function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  function cleanFundName(v){return String(v||'').replace(/\s*\(\d+\)/g,'').trim();}
-  function nval(v){
-    try{ if(typeof toNum === 'function') return toNum(v); }catch(e){}
-    if(v===null || v===undefined || v==='') return null;
-    const n=Number(String(v).replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',', '.'));
-    return Number.isFinite(n) ? n : null;
-  }
-  function pct(v){
-    const n = typeof v === 'number' ? v : nval(v);
-    if(n===null || !Number.isFinite(n)) return '—';
-    return (n>0?'+':'') + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
-  }
-  function rowHasData(r){
-    try{ if(typeof temDados === 'function') return temDados(r); }catch(e){}
-    return ['Acum. 12M (%)','Acum. Ano (%)','Acum. Mes (%)','Variacao Dia (%)'].some(k=>nval(r?.[k])!==null);
-  }
-  function currentRows(){
-    try{ if(Array.isArray(allRows)) return allRows; }catch(e){}
-    return [];
-  }
-  function filteredRowsForRanking(){
-    let rows=currentRows().slice();
-    rows = rows.filter(rowHasData);
-    try{ if(typeof passaFiltroRanking === 'function') rows = rows.filter(passaFiltroRanking); }catch(e){}
-    try{
-      if(typeof activePerfil !== 'undefined' && activePerfil){
-        rows = rows.filter(r => String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
-      }
-    }catch(e){}
-    try{
-      if(typeof activeRisco !== 'undefined' && activeRisco){
-        rows = rows.filter(r => String(r['Perfil de Risco']||'').trim() === activeRisco);
-      }
-    }catch(e){}
-    return rows;
-  }
-  function setBuild(){
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-    document.documentElement.classList.add('rankings-ux-v136','executive-header-v135');
-  }
-  function syncControls(){
-    try{
-      const sel=qs('#rankingClassSelectV136');
-      if(sel && typeof activeRankFilter !== 'undefined' && sel.value !== activeRankFilter) sel.value=activeRankFilter || 'todos';
-    }catch(e){}
-    try{
-      const period=qs('#rankingPeriodSelectV136');
-      if(period && typeof activeRankPeriods !== 'undefined' && activeRankPeriods?.topFundos && period.value !== activeRankPeriods.topFundos){
-        period.value=activeRankPeriods.topFundos;
-      }
-    }catch(e){}
-  }
-  function scrollToFundSearch(){
-    const sec=qs('#sec-fundos');
-    const nav=qs('#desktopAnchorNavV131');
-    const navH=nav && getComputedStyle(nav).display!=='none' ? Math.ceil(nav.getBoundingClientRect().height) : 0;
-    if(sec){
-      const top=Math.max(0,sec.getBoundingClientRect().top + window.scrollY - navH - 14);
-      try{ window.scrollTo({top,behavior:'smooth'}); }catch(e){ window.scrollTo(0,top); }
-    }
-  }
-  function searchFundByName(name){
-    const input=qs('#searchInput');
-    if(!input || !name) return;
-    input.value=name;
-    input.dispatchEvent(new Event('input',{bubbles:true}));
-    const gfb=qs('#gfbSearch');
-    if(gfb) gfb.value=name;
-    scrollToFundSearch();
-    setTimeout(()=>{ try{input.focus({preventScroll:true}); input.select();}catch(e){} },300);
-  }
-  function attentionRow(r,campo,reason,extraClass=''){
-    const nome=cleanFundName(r?.Fundo || r?.['Fundo']);
-    const num=nval(r?.[campo]);
-    const val=pct(num);
-    const signal = num === null ? 'zero' : (num < 0 ? 'neg' : (num > 0 ? 'pos' : 'zero'));
-    return `<button type="button" class="attention-row-v136 ${extraClass} ${signal}" data-attention-fund="${esc(nome)}" title="Buscar ${esc(nome)}">
-      <span><span class="fund">${esc(nome || 'Fundo sem nome')}</span><span class="reason">${esc(reason)}</span></span>
-      <span class="value ${signal}">${esc(val)}</span>
-    </button>`;
-  }
-  function renderAttentionV136(){
-    const panel=qs('#rankingAttentionV136 .attention-body-v136');
-    if(!panel) return;
-    const rows=currentRows();
-    if(!rows.length){
-      panel.innerHTML='<div class="attention-empty-v136">Carregando insights...</div>';
-      return;
-    }
-    const base=filteredRowsForRanking();
-    const semDados=rows.filter(r=>!rowHasData(r));
-    const neg12=base.filter(r=>{const n=nval(r['Acum. 12M (%)']); return n!==null && n<0;}).sort((a,b)=>nval(a['Acum. 12M (%)'])-nval(b['Acum. 12M (%)']));
-    const negAno=base.filter(r=>{const n=nval(r['Acum. Ano (%)']); return n!==null && n<0;}).sort((a,b)=>nval(a['Acum. Ano (%)'])-nval(b['Acum. Ano (%)']));
-    const pioresMes=base.filter(r=>{const n=nval(r['Acum. Mes (%)']); return n!==null && n<0;}).sort((a,b)=>nval(a['Acum. Mes (%)'])-nval(b['Acum. Mes (%)']));
-    const qtdNeg12=neg12.length;
-    const qtdNegAno=negAno.length;
-    const qtdPipeline=semDados.length;
-    const worstList=(neg12.length?neg12:pioresMes).slice(0,4);
-    const yearList=negAno.slice(0,3);
-    const pipelineList=semDados.slice(0,3);
-    const principal = qtdNeg12 > 0
-      ? `<strong>${qtdNeg12}</strong> fundo(s) com 12M negativo no filtro atual. Use essa lista como ponto de partida para investigar classe, prazo, benchmark e aderência ao perfil.`
-      : `Nenhum 12M negativo identificado no filtro atual. Se também não houver mês negativo, mantenha o foco nos fundos sem dados e na aderência ao perfil.`;
-    const bloco12 = worstList.length ? `<div class="attention-block-v136"><h3>Piores leituras negativas</h3><div class="attention-list-v136">${worstList.map(r=>attentionRow(r, neg12.length?'Acum. 12M (%)':'Acum. Mes (%)', neg12.length?'12M negativo — avaliar contexto e benchmark':'Mês negativo — monitorar comportamento')).join('')}</div></div>` : '';
-    const blocoAno = yearList.length ? `<div class="attention-block-v136"><h3>Negativos no ano</h3><div class="attention-list-v136">${yearList.map(r=>attentionRow(r,'Acum. Ano (%)','Ano negativo — verificar se há tese de manutenção')).join('')}</div></div>` : '';
-    const blocoPipe = pipelineList.length ? `<div class="attention-block-v136"><h3>Sem dados / pipeline</h3><div class="attention-list-v136">${pipelineList.map(r=>`<button type="button" class="attention-row-v136 pipeline" data-attention-fund="${esc(cleanFundName(r.Fundo||r['Fundo']))}"><span><span class="fund">${esc(cleanFundName(r.Fundo||r['Fundo']) || 'Fundo sem nome')}</span><span class="reason">Sem cota/rentabilidade suficiente na base</span></span><span class="value">—</span></button>`).join('')}</div></div>` : '';
-    panel.innerHTML=`
-      <div class="attention-metric-grid-v136">
-        <div class="attention-metric-v136"><span>12M negativo</span><strong>${qtdNeg12}</strong></div>
-        <div class="attention-metric-v136"><span>Ano negativo</span><strong>${qtdNegAno}</strong></div>
-        <div class="attention-metric-v136"><span>Sem dados</span><strong>${qtdPipeline}</strong></div>
-      </div>
-      <div class="attention-block-v136"><h3>Insight SIPII</h3><div class="attention-insight-v136">${principal}</div></div>
-      ${bloco12}
-      ${blocoAno}
-      ${blocoPipe}
-      <div class="attention-foot-v136">Leitura automática e informativa. O alerta não substitui análise de suitability, objetivos, liquidez e horizonte do cliente.</div>`;
-  }
-  function bindControls(){
-    const classSel=qs('#rankingClassSelectV136');
-    if(classSel && classSel.dataset.v136Bound!=='1'){
-      classSel.dataset.v136Bound='1';
-      classSel.addEventListener('change',()=>{
-        const safeValue=String(classSel.value||'').replace(/[^a-z0-9-]/gi,'');
-        const btn=qs(`[data-rank-filter="${safeValue}"]`);
-        if(btn) btn.click();
-        else{
-          try{ activeRankFilter=classSel.value; if(typeof renderRankings==='function') renderRankings(); }catch(e){}
-        }
-        setTimeout(()=>{syncControls(); renderAttentionV136();},30);
-      });
-    }
-    const periodSel=qs('#rankingPeriodSelectV136');
-    if(periodSel && periodSel.dataset.v136Bound!=='1'){
-      periodSel.dataset.v136Bound='1';
-      periodSel.addEventListener('change',()=>{
-        try{
-          if(typeof activeRankPeriods !== 'undefined'){
-            activeRankPeriods.topFundos=periodSel.value;
-            activeRankPeriods.destaques=periodSel.value;
-          }
-          if(typeof activeRankView !== 'undefined') activeRankView='top';
-          if(typeof renderRankings==='function') renderRankings();
-        }catch(e){}
-        setTimeout(()=>{syncControls(); renderAttentionV136();},30);
-      });
-    }
-    const rankings=qs('#rankingsSection');
-    if(rankings && rankings.dataset.v136ClickBound!=='1'){
-      rankings.dataset.v136ClickBound='1';
-      rankings.addEventListener('click',ev=>{
-        const row=ev.target.closest('[data-attention-fund]');
-        if(row){
-          ev.preventDefault();
-          searchFundByName(row.getAttribute('data-attention-fund')||'');
-        }
-        setTimeout(()=>{syncControls(); renderAttentionV136();},80);
-      });
-    }
-  }
-  function wrapRender(){
-    if(window.__ELTAUM_RANKINGS_V136_WRAPPED__) return;
-    const original = (typeof renderRankings === 'function') ? renderRankings : window.renderRankings;
-    if(typeof original !== 'function') return;
-    window.__ELTAUM_RANKINGS_V136_WRAPPED__=true;
-    const patched=function(){
-      const ret=original.apply(this,arguments);
-      try{ syncControls(); renderAttentionV136(); }catch(e){ console.warn('v136 attention',e); }
-      return ret;
-    };
-    try{ renderRankings=patched; }catch(e){}
-    try{ window.renderRankings=patched; }catch(e){}
-  }
-  function init(){
-    setBuild();
-    bindControls();
-    wrapRender();
-    syncControls();
-    renderAttentionV136();
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [250,900,1700,2600].forEach(ms=>setTimeout(init,ms));
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v137 — Build + classe de ajuste fino desktop dos Rankings
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_RANKINGS_CATEGORY_PANEL_ALIGN_20260610_v138';
-  function init(){
-    try{ document.documentElement.classList.add('rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135'); }catch(e){}
-    try{ const meta=document.querySelector('meta[name="app-build"]'); if(meta) meta.content=BUILD; }catch(e){}
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  setTimeout(init,500);
-  setTimeout(init,1500);
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v138 — Categorias completas + alinhamento do painel de atenção
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_RANKINGS_CATEGORY_PANEL_ALIGN_20260610_v138';
-  function init(){
-    try{ document.documentElement.classList.add('rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135'); }catch(e){}
-    try{ const meta=document.querySelector('meta[name="app-build"]'); if(meta) meta.content=BUILD; }catch(e){}
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  setTimeout(init,500);
-  setTimeout(init,1500);
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v140 — Leitura rápida com rentabilidade negativa em vermelho
-   - Pós-processa o texto executivo dos rankings.
-   - Mantém o texto seguro usando textContent + escape antes de inserir spans.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_RANKINGS_INSIGHT_NEGATIVE_COLOR_20260610_v140';
-  function escHtml(v){
-    return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});
-  }
-  function colorizeInsightsV140(){
-    try{
-      document.documentElement.classList.add('rankings-ux-v140','rankings-ux-v139','rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135');
-      const meta=document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content=BUILD;
-      document.querySelectorAll('#rankingsSection .ranking-exec-insight p').forEach(function(p){
-        const raw=(p.textContent||'').trim();
-        if(!raw) return;
-        const html=escHtml(raw).replace(/([+-]?\d{1,3}(?:\.\d{3})*,\d{2}%)/g,function(match){
-          let cls='zero';
-          if(match.charAt(0)==='-') cls='neg';
-          else if(match.charAt(0)==='+') cls='pos';
-          return '<strong class="insight-pct '+cls+'">'+match+'</strong>';
-        });
-        p.innerHTML=html;
-      });
-    }catch(e){}
-  }
-  function wrapRenderV140(){
-    if(window.__ELTAUM_RANKINGS_V140_WRAPPED__) return;
-    const original=(typeof renderRankings==='function') ? renderRankings : window.renderRankings;
-    if(typeof original!=='function') return;
-    window.__ELTAUM_RANKINGS_V140_WRAPPED__=true;
-    const patched=function(){
-      const ret=original.apply(this,arguments);
-      setTimeout(colorizeInsightsV140,0);
-      return ret;
-    };
-    try{ renderRankings=patched; }catch(e){}
-    try{ window.renderRankings=patched; }catch(e){}
-  }
-  function init(){
-    wrapRenderV140();
-    colorizeInsightsV140();
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
-})();
-
-/* ════════════════════════════════════════════════════════
-   PATCH v141 — Numeric Legibility System
-   - Ativa a camada CSS de legibilidade dos números financeiros.
-   - Atualiza build/cache sem alterar a lógica dos rankings.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_NUMERIC_LEGIBILITY_SYSTEM_20260610_v141';
-  function init(){
-    try{
-      document.documentElement.classList.add('rankings-ux-v141','rankings-ux-v140','rankings-ux-v139','rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135');
-      const meta=document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content=BUILD;
-    }catch(e){}
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
-})();
-
-/* ════════════════════════════════════════════════════════
-   PATCH v142 — Indicadores de Mercado: painel macro compacto desktop
-   - Espelha os dados do bloco original para uma camada executiva desktop.
-   - O bloco original continua preservado para mobile e como detalhe avançado.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_MARKET_EXECUTIVE_COMPACT_20260610_v142';
-  const qs=(s,root=document)=>root.querySelector(s);
-  const qsa=(s,root=document)=>Array.from(root.querySelectorAll(s));
-  function txt(sel,fallback='—'){
-    const el=qs(sel);
-    const t=(el && el.textContent || '').trim();
-    return t || fallback;
-  }
-  function clsFrom(sel){
-    const el=qs(sel);
-    if(!el) return '';
-    if(el.classList.contains('pos')) return 'pos';
-    if(el.classList.contains('neg')) return 'neg';
-    if(el.classList.contains('zero')) return 'zero';
-    const t=(el.textContent||'').trim();
-    if(t.startsWith('-')) return 'neg';
-    if(t.startsWith('+')) return 'pos';
-    return '';
-  }
-  function setText(id,value){ const el=qs('#'+id); if(el) el.textContent=value; }
-  function setMini(id,src){
-    const el=qs('#'+id); if(!el) return;
-    el.textContent=txt(src);
-    el.className=clsFrom(src);
-  }
-  function cloneCdiStrip(){
-    const src=qs('#cdiMonthStrip');
-    const dst=qs('#marketV142CdiStrip');
-    if(!src || !dst) return;
-    dst.innerHTML=src.innerHTML;
-    qsa('[id]',dst).forEach(el=>el.removeAttribute('id'));
-  }
-  function cloneCopom(){
-    const src=qs('#copomMeetings');
-    if(!src) return;
-    const next=qs('.copom-item.next, .copom-item.featured-next',src) || qs('.copom-item',src);
-    const nextBox=qs('#marketV142NextCopom');
-    if(nextBox && next){
-      const date=(qs('.copom-date',next)?.textContent || '').trim() || '—';
-      const label=(qs('.copom-num',next)?.textContent || '').trim();
-      const result=(qs('.copom-result',next)?.textContent || '').trim();
-      nextBox.innerHTML='<strong>'+date+'</strong><small>'+[label,result].filter(Boolean).join(' · ')+'</small>';
-    }
-    const decisions=qs('#marketV142CopomDecisions');
-    if(decisions){
-      const items=qsa('.copom-item.hold, .copom-item.cut, .copom-item.next',src).slice(-3);
-      decisions.innerHTML=items.map(item=>{
-        const num=(qs('.copom-num',item)?.textContent || '').trim();
-        const date=(qs('.copom-date',item)?.textContent || '').trim();
-        const res=(qs('.copom-result',item)?.textContent || '').trim();
-        return '<div class="market-copom-decision-v142"><b>'+[num,date].filter(Boolean).join(' · ')+'</b><span>'+res+'</span></div>';
-      }).join('');
-    }
-    const full=qs('#marketV142CopomFull');
-    if(full){
-      full.innerHTML='<div class="copom-grid">'+src.innerHTML+'</div>';
-      qsa('[id]',full).forEach(el=>el.removeAttribute('id'));
-    }
-  }
-  function syncMarketV142(){
-    try{
-      document.documentElement.classList.add('market-exec-v142','rankings-ux-v141','executive-header-v135');
-      const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-      setText('marketV142ClosedTitle',txt('#closedMonthLaunchTitle','Resumo de mercado'));
-      setText('marketV142ClosedSub',txt('#closedMonthLaunchSub','Último mês fechado · indicadores consolidados'));
-      setMini('marketV142MiniCdi','#closedMiniCdi');
-      setMini('marketV142MiniIpca','#closedMiniIpca');
-      setMini('marketV142MiniDolar','#closedMiniDolar');
-      setMini('marketV142MiniIbov','#closedMiniIbov');
-      setText('marketV142Selic',txt('#mc-selic'));
-      setText('marketV142SelicDate',txt('#selic-last-change'));
-      setText('marketV142Cdi',txt('#mc-cdi'));
-      setText('marketV142CdiYear',txt('#cdiYearHistoryTotal','Ano —'));
-      setText('marketV142PoupNova',txt('#mc-poup'));
-      setText('marketV142PoupNovaSub',txt('#poupNewRuleText','regra conforme Selic'));
-      setText('marketV142PoupAntiga',txt('#poupOldMonthly'));
-      setText('marketV142PoupAntigaSub',txt('#poupOldRuleText','TR + 0,50%'));
-      setText('marketV142PoupNote',txt('#poupQuickNote','Carregando leitura da poupança...'));
-      setText('marketV142PoupStatus',txt('#poupScenarioStatus','Selic —'));
-      setText('marketV142PoupScenario',txt('#poupScenarioSummary','Carregando cenários...'));
-      setText('marketV142PoupToday',txt('#poupScenarioToday','—'));
-      setText('marketV142PoupScenarioNote',txt('#poupScenarioNote','Estimativa didática para comparação visual.'));
-      cloneCdiStrip();
-      cloneCopom();
-    }catch(e){}
-  }
-  function bindMarketV142(){
-    const copomBtn=qs('#marketV142ToggleCopom');
-    const copomFull=qs('#marketV142CopomFull');
-    if(copomBtn && copomFull && copomBtn.dataset.boundV142!=='1'){
-      copomBtn.dataset.boundV142='1';
-      copomBtn.addEventListener('click',()=>{
-        const open=copomFull.hasAttribute('hidden');
-        if(open) copomFull.removeAttribute('hidden'); else copomFull.setAttribute('hidden','');
-        copomBtn.setAttribute('aria-expanded',String(open));
-        copomBtn.textContent=open?'Ocultar calendário completo':'Ver calendário completo';
-      });
-    }
-    const poupBtn=qs('#marketV142TogglePoup');
-    const poupDetail=qs('#marketV142PoupDetail');
-    if(poupBtn && poupDetail && poupBtn.dataset.boundV142!=='1'){
-      poupBtn.dataset.boundV142='1';
-      poupBtn.addEventListener('click',()=>{
-        const open=poupDetail.hasAttribute('hidden');
-        if(open) poupDetail.removeAttribute('hidden'); else poupDetail.setAttribute('hidden','');
-        poupBtn.setAttribute('aria-expanded',String(open));
-        poupBtn.textContent=open?'Ocultar detalhes':'Ver detalhes';
-      });
-    }
-    const advBtn=qs('#marketV142ToggleAdvanced');
-    const sec=qs('#sec-mercado');
-    if(advBtn && sec && advBtn.dataset.boundV142!=='1'){
-      advBtn.dataset.boundV142='1';
-      advBtn.addEventListener('click',()=>{
-        const open=!sec.classList.contains('market-legacy-open-v142');
-        sec.classList.toggle('market-legacy-open-v142',open);
-        advBtn.setAttribute('aria-expanded',String(open));
-        advBtn.textContent=open?'Ocultar cards detalhados':'Mostrar cards detalhados de Selic, CDI e Poupança';
-        setTimeout(()=>{
-          try{ if(window.poupScenarioChart && typeof window.poupScenarioChart.resize==='function') window.poupScenarioChart.resize(); }catch(e){}
-          try{ if(window.Chart && Chart.instances){ Object.values(Chart.instances).forEach(ch=>{try{ch.resize();}catch(e){}}); } }catch(e){}
-        },80);
-      });
-    }
-  }
-  function init(){
-    bindMarketV142();
-    syncMarketV142();
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [150,500,1000,1800,3000].forEach(ms=>setTimeout(init,ms));
-  try{
-    const mo=new MutationObserver(()=>syncMarketV142());
-    const targets=['#closedMonthLaunch','#mc-selic','#mc-cdi','#cdiMonthStrip','#copomMeetings','#mc-poup','#poupScenarioSummary'].map(s=>qs(s)).filter(Boolean);
-    targets.forEach(t=>mo.observe(t,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']}));
-  }catch(e){}
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v143 — Pontos de atenção: somente rentabilidades negativas
-   - Piores leituras não lista rentabilidade mensal positiva.
-   - Cores no painel passam a respeitar o sinal do número.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_ATTENTION_NEGATIVES_ONLY_20260610_v143';
-  function init(){
-    try{
-      document.documentElement.classList.add('rankings-ux-v143','rankings-ux-v141','rankings-ux-v140','rankings-ux-v139','rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','market-exec-v142','executive-header-v135');
-      const meta=document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content=BUILD;
-      try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){}
-    }catch(e){}
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v144 — Mercado enxuto por padrão
-   - Mantém só o painel macro compacto aberto no desktop.
-   - O bloco antigo de Selic/CDI/Poupança fica como detalhe sob demanda.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_MARKET_LEAN_DEFAULT_20260610_v144';
-  function qs(s,r){ return (r||document).querySelector(s); }
-  function initButton(){
-    const sec=qs('#sec-mercado');
-    let btn=qs('#marketV142ToggleAdvanced');
-    if(!sec || !btn) return;
-
-    document.documentElement.classList.add('market-lean-v144','market-exec-v142','rankings-ux-v143','rankings-ux-v141','executive-header-v135');
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-
-    if(sec.dataset.marketV144Initialized!=='1'){
-      sec.classList.remove('market-legacy-open-v142','market-detail-open-v144');
-      sec.dataset.marketV144Initialized='1';
-    }
-
-    if(btn.dataset.boundV144==='1'){
-      const isOpen=sec.classList.contains('market-detail-open-v144');
-      btn.setAttribute('aria-expanded',String(isOpen));
-      btn.textContent=isOpen?'Ocultar detalhes de mercado':'Ver detalhes de mercado';
-      return;
-    }
-
-    /* Remove listeners antigos da v142 e evita que os timeouts da v142 religuem o evento antigo. */
-    const clone=btn.cloneNode(true);
-    clone.dataset.boundV144='1';
-    clone.dataset.boundV142='1';
-    btn.parentNode.replaceChild(clone,btn);
-    btn=clone;
-
-    function setState(open){
-      sec.classList.toggle('market-detail-open-v144',open);
-      sec.classList.toggle('market-legacy-open-v142',open);
-      btn.setAttribute('aria-expanded',String(open));
-      btn.textContent=open?'Ocultar detalhes de mercado':'Ver detalhes de mercado';
-      setTimeout(function(){
-        try{ if(window.poupScenarioChart && typeof window.poupScenarioChart.resize==='function') window.poupScenarioChart.resize(); }catch(e){}
-        try{
-          if(window.Chart && Chart.instances){
-            Object.values(Chart.instances).forEach(function(ch){ try{ ch.resize(); }catch(e){} });
-          }
-        }catch(e){}
-      },90);
-    }
-
-    setState(sec.classList.contains('market-detail-open-v144'));
-    btn.addEventListener('click',function(ev){
-      ev.preventDefault();
-      ev.stopPropagation();
-      setState(!sec.classList.contains('market-detail-open-v144'));
-    });
-  }
-  function init(){
-    try{ initButton(); }catch(e){}
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [200,700,1400,2600,4200].forEach(function(ms){ setTimeout(init,ms); });
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v146 — Painel consolidado executivo
-   - Cria uma primeira leitura em cards por grupo.
-   - Mantém a tabela completa como modo analítico sob demanda.
-════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_MARKET_DASHBOARD_SPACIOUS_20260611_v148';
-  const qs=(s,r=document)=>r.querySelector(s);
-  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
-  let usMode='brl';
-
-  function clean(t){ return String(t||'').replace(/\s+/g,' ').trim() || '—'; }
-  function text(sel, fallback='—'){
-    const el=typeof sel==='string'?qs(sel):sel;
-    const t=clean(el && el.textContent);
-    return t==='—'?fallback:t;
-  }
-  function clsByText(v){
-    const t=clean(v);
-    if(t==='—') return 'dash';
-    if(/^\-/.test(t) || /\s\-\d/.test(t)) return 'neg';
-    if(/^\+/.test(t) || /\s\+\d/.test(t)) return 'pos';
-    return 'neu';
-  }
-  function clsOf(sel){
-    const el=typeof sel==='string'?qs(sel):sel;
-    if(el){
-      if(el.classList.contains('neg')) return 'neg';
-      if(el.classList.contains('pos')) return 'pos';
-      if(el.classList.contains('dash')) return 'dash';
-      if(el.classList.contains('neu') || el.classList.contains('zero')) return 'neu';
-    }
-    return clsByText(text(el));
-  }
-  function getPeriodLabel(){
-    const last=text('#th-mes-ant-sub','último fechado');
-    const cur=text('#th-mes-cur-sub','mês atual');
-    return 'Último fechado: '+last+' · Mês atual: '+cur;
-  }
-  function usValue(id, mode){
-    const raw=text('#'+id,'—');
-    if(raw==='—') return {main:'—', sub:'', cls:'dash'};
-    const usd=raw.match(/USD\s*([+-]?\d{1,3}(?:\.\d{3})*,\d{2}%)/i);
-    const brl=raw.match(/BRL\s*([+-]?\d{1,3}(?:\.\d{3})*,\d{2}%)/i);
-    if(mode==='usd'){
-      const v=usd?usd[1]:'—';
-      return {main:v, sub:'USD', cls:clsByText(v)};
-    }
-    if(mode==='both'){
-      const u=usd?usd[1]:'—';
-      const b=brl?brl[1]:'—';
-      return {main:'USD '+u, sub:'BRL '+b, cls:clsByText(b!=='—'?b:u)};
-    }
-    const v=brl?brl[1]:(usd?usd[1]:'—');
-    return {main:v, sub:brl?'BRL':'USD', cls:clsByText(v)};
-  }
-  function valueObj(main, sub, cls){
-    return {main:clean(main), sub:clean(sub||''), cls:cls||clsByText(main)};
-  }
-  function valueFrom(sel, subSel){
-    return valueObj(text(sel), subSel?text(subSel,''):'', clsOf(sel));
-  }
-  function combo(mainSel, extraSel, subSel){
-    const main=text(mainSel);
-    const extra=text(extraSel,'');
-    return valueObj(main, extra, clsOf(extraSel));
-  }
-  function cell(label,v){
-    v=v||valueObj('—','','dash');
-    return '<div class="market-cell-v146"><b>'+label+'</b><span class="market-value-v146 '+(v.cls||clsByText(v.main))+'">'+v.main+'</span>'+(v.sub&&v.sub!=='—'?'<span class="market-subvalue-v146 '+clsByText(v.sub)+'">'+v.sub+'</span>':'')+'</div>';
-  }
-  function row(icon,name,sub,vals){
-    return '<div class="market-ind-row-v146"><div class="market-ind-name-v146"><span class="market-ind-icon-v146">'+icon+'</span><div><strong>'+name+'</strong><small>'+sub+'</small></div></div>'+cell('Fechado',vals[0])+cell('Atual',vals[1])+cell('Ano',vals[2])+cell('Acum.',vals[3])+'</div>';
-  }
-  function ensureDashboard(){
-    const body=qs('#sec-painel-body');
-    if(!body) return null;
-    let dash=qs('#marketDashboardV146');
-    if(dash) return dash;
-    const table=qs('.indic-table-wrap', body);
-    dash=document.createElement('div');
-    dash.id='marketDashboardV146';
-    dash.className='market-exec-dashboard-v146';
-    dash.innerHTML=''+
-      '<section class="market-dash-summary-v146" aria-label="Resumo executivo dos indicadores">'+
-        '<div class="market-dash-title-v146"><span>Painel consolidado</span><strong>Visão executiva dos indicadores</strong><small id="marketDashPeriodV146">Carregando períodos...</small></div>'+
-        '<div class="market-dash-kpi-v146"><b>CDI</b><strong id="marketDashCdiV146">—</strong><small id="marketDashCdiSubV146">último fechado</small></div>'+
-        '<div class="market-dash-kpi-v146"><b>IPCA</b><strong id="marketDashIpcaV146">—</strong><small id="marketDashIpcaSubV146">último fechado</small></div>'+
-        '<div class="market-dash-kpi-v146"><b>Dólar</b><strong id="marketDashDolarV146">—</strong><small id="marketDashDolarSubV146">mês atual</small></div>'+
-        '<div class="market-dash-kpi-v146"><b>Ibovespa</b><strong id="marketDashIbovV146">—</strong><small id="marketDashIbovSubV146">mês atual</small></div>'+
-      '</section>'+
-      '<section class="market-card-grid-v146" aria-label="Indicadores por grupo">'+
-        '<article class="market-data-card-v146"><div class="market-data-card-head-v146"><div><span>Taxas e inflação</span><small>CDI e IPCA em quatro recortes</small></div></div><div class="market-data-list-v146" id="marketTaxasListV146"></div></article>'+
-        '<article class="market-data-card-v146"><div class="market-data-card-head-v146"><div><span>Câmbio e Brasil</span><small>Dólar PTAX e Ibovespa</small></div></div><div class="market-data-list-v146" id="marketBrasilListV146"></div></article>'+
-        '<article class="market-data-card-v146"><div class="market-data-card-head-v146"><div><span>Bolsas EUA</span><small>Retornos em BRL, USD ou ambos</small></div><div class="market-us-toggle-v146" role="group" aria-label="Moeda dos índices dos EUA"><button type="button" data-us-mode="brl" class="active">BRL</button><button type="button" data-us-mode="usd">USD</button><button type="button" data-us-mode="both">Ambos</button></div></div><div class="market-data-list-v146" id="marketEuaListV146"></div></article>'+
-      '</section>'+
-      '<div class="market-analytic-toggle-v146"><button type="button" id="marketAnalyticToggleV146" aria-expanded="false">Ver tabela analítica completa</button></div>';
-    if(table) body.insertBefore(dash,table); else body.appendChild(dash);
-    qsa('[data-us-mode]',dash).forEach(btn=>{
-      btn.addEventListener('click',function(ev){
-        ev.preventDefault(); ev.stopPropagation();
-        usMode=this.getAttribute('data-us-mode')||'brl';
-        qsa('[data-us-mode]',dash).forEach(b=>b.classList.toggle('active',b===this));
-        syncDashboard();
-      });
-    });
-    const toggle=qs('#marketAnalyticToggleV146',dash);
-    if(toggle){
-      toggle.addEventListener('click',function(ev){
-        ev.preventDefault(); ev.stopPropagation();
-        const open=!body.classList.contains('market-analytics-open-v146');
-        body.classList.toggle('market-analytics-open-v146',open);
-        toggle.setAttribute('aria-expanded',String(open));
-        toggle.textContent=open?'Ocultar tabela analítica':'Ver tabela analítica completa';
-      });
-    }
-    return dash;
-  }
-  function setKpi(id,value,cls,sub){
-    const el=qs('#'+id); if(!el) return;
-    el.textContent=value;
-    el.className=cls||clsByText(value);
-    const subEl=qs('#'+id.replace('V146','SubV146'));
-    if(subEl) subEl.textContent=sub||'';
-  }
-  function syncDashboard(){
-    const dash=ensureDashboard(); if(!dash) return;
-    document.documentElement.classList.add('market-dashboard-stable-v147','market-dashboard-v146','market-lean-v144','market-exec-v142','fund-card-pro-v145');
-    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-    const period=qs('#marketDashPeriodV146'); if(period) period.textContent=getPeriodLabel();
-
-    setKpi('marketDashCdiV146', text('#cdi-mes-ant'), clsOf('#cdi-mes-ant'), text('#th-mes-ant-sub','último fechado'));
-    setKpi('marketDashIpcaV146', text('#ipca-mes-ant'), clsOf('#ipca-mes-ant'), text('#th-mes-ant-sub','último fechado'));
-    const dolarMain=text('#dolar-cur-cot');
-    const dolarVar=text('#dolar-cur-var','');
-    setKpi('marketDashDolarV146', dolarMain+(dolarVar&&dolarVar!=='—'?' · '+dolarVar:''), clsOf('#dolar-cur-var'), text('#th-mes-cur-sub','mês atual'));
-    const ibovPts=text('#ibov-cur-pts');
-    const ibovVar=text('#ibov-cur-var','');
-    setKpi('marketDashIbovV146', (ibovVar&&ibovVar!=='—'?ibovVar:ibovPts), clsOf('#ibov-cur-var'), ibovPts&&ibovPts!=='—'?ibovPts:text('#th-mes-cur-sub','mês atual'));
-
-    const taxas=qs('#marketTaxasListV146');
-    if(taxas){
-      taxas.innerHTML=
-        row('💰','CDI','Depósito interbancário',[valueFrom('#cdi-mes-ant','#cdi-mes-ant-sub'), valueFrom('#cdi-mes-cur','#cdi-cur-sub'), valueFrom('#cdi-ano','#cdi-ano-sub'), valueFrom('#cdi-acum-v2','#cdi-acum-src-v2')])+
-        row('🎯','IPCA','Inflação ao consumidor',[valueFrom('#ipca-mes-ant','#ipca-mes-ant-sub'), valueObj(text('#row-ipca .td-cur','—'),'mês atual',clsOf('#row-ipca .td-cur')), valueFrom('#ipca-ano-v2'), valueFrom('#ipca-acum-v2','#ipca-acum-sub-v2')]);
-    }
-    const brasil=qs('#marketBrasilListV146');
-    if(brasil){
-      brasil.innerHTML=
-        row('💵','Dólar','PTAX BRL/USD',[valueFrom('#dolar-ant-cot','#dolar-ant-sub'), combo('#dolar-cur-cot','#dolar-cur-var','#dolar-cur-sub'), valueFrom('#dolar-ano-v2'), valueFrom('#dolar-acum-v2','#dolar-acum-sub-v2')])+
-        row('📈','Ibovespa','B3 · pontos e variação',[combo('#ibov-ant-pts','#ibov-ant-var','#ibov-ant-sub'), combo('#ibov-cur-pts','#ibov-cur-var','#ibov-cur-sub'), valueFrom('#ibov-ano-v2'), valueFrom('#ibov-acum-v2','#ibov-acum-sub-v2')]);
-    }
-    const eua=qs('#marketEuaListV146');
-    if(eua){
-      function us(id){ const v=usValue(id,usMode); return valueObj(v.main,v.sub,v.cls); }
-      function curPts(varId,ptsId){ const v=usValue(varId,usMode); return valueObj(v.main,text(ptsId,'')+(v.sub&&v.sub!=='—'?' · '+v.sub:''),v.cls); }
-      eua.innerHTML=
-        row('🌎','S&P 500','índice amplo EUA',[us('sp-ant-var'), curPts('sp-cur-var','#sp-cur-pts'), us('sp-ano-var'), us('sp-acum-var')])+
-        row('🏛️','Dow Jones','blue chips EUA',[us('dow-ant-var'), curPts('dow-cur-var','#dow-cur-pts'), us('dow-ano-var'), us('dow-acum-var')])+
-        row('💻','Nasdaq','tecnologia EUA',[us('nasdaq-ant-var'), curPts('nasdaq-cur-var','#nasdaq-cur-pts'), us('nasdaq-ano-var'), us('nasdaq-acum-var')]);
-    }
-  }
-  function init(){
-    try{
-      ensureDashboard();
-      syncDashboard();
-    }catch(e){}
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [200,700,1400,2600,4200,6500].forEach(ms=>setTimeout(init,ms));
-  /* PATCH v147 — estabilidade: removido MutationObserver amplo em #sec-painel-body.
-     A v146 observava o mesmo bloco que atualizava via innerHTML, podendo criar loop de renderização
-     e travar o navegador antes mesmo de abrir o console. */
-})();
-
-
-/* ════════════════════════════════════════════════════════
-   PATCH v148 — Dashboard de mercado com mais respiro no desktop
-   - Ativa classe CSS para layout 2 colunas e linhas menos comprimidas.
-   - Mantém a estabilidade v147, sem MutationObserver amplo.
-════════════════════════════════════════════════════════ */
-(function(){
-  const BUILD='ELTAUM_MARKET_DASHBOARD_SPACIOUS_20260611_v148';
-  function init(){
-    try{
-      document.documentElement.classList.add('market-dashboard-spacious-v148');
-      const meta=document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content=BUILD;
-    }catch(e){}
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  setTimeout(init,300);
-  setTimeout(init,1200);
-})();
+/* ELTAUM_RANKING_CATEGORY_NAMES_FULL_20260611_v149
+   Ajuste visual feito em CSS: nomes completos nos cartões por categoria. */
