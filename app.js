@@ -8017,7 +8017,7 @@ async function sharePainelMercado(){
     const categorias=(typeof kpisDashboard!=='undefined' && kpisDashboard && kpisDashboard.categorias) ? kpisDashboard.categorias : {};
     const catPL=Object.entries(categorias).filter(([cat,d])=>{
       try{
-        const okFiltro=(typeof activeRankFilter==='undefined'||activeRankFilter==='todos')?true:(activeRankFilter==='sem-fmp'?!/FMP|PRIVATIZA/i.test(cat):activeRankFilter==='renda-fixa'?/RENDA FIXA/i.test(cat):activeRankFilter==='acoes'?/ACOES|AÇÕES/i.test(cat):activeRankFilter==='multimercado'?/MULTIMERCADO/i.test(cat):true);
+        const okFiltro=window.rankCategoryMatchesV151 ? window.rankCategoryMatchesV151(cat, activeRankFilter) : true;
         return okFiltro && numK(d?.pl_total)!==null && !Number.isNaN(numK(d?.pl_total));
       }catch(e){return false}
     }).sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
@@ -11803,4 +11803,203 @@ if(!isSearchInput(el)) return;
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
   window.__ELTAUM_MARKET_PANEL_V150__={sync:()=>sync(true),getClosedPeriod,getCurrentPeriod,state};
+})();
+
+
+/* ==========================================================
+   ELTAUM v151 — integração dos componentes restaurados
+   - navegação com offset e destaque da seção
+   - selects dos rankings sincronizados com os filtros existentes
+   - classes completas de ativo
+   - painel lateral de atenção alimentado apenas por retornos negativos
+========================================================== */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_UI_COMPONENTS_RESTORED_20260611_v151';
+
+  const q=(s,r=document)=>r.querySelector(s);
+  const qa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const esc=(v)=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const normalize=(v)=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  const nval=(v)=>{ try{return typeof toNum==='function'?toNum(v):Number(String(v??'').replace('%','').replace(',','.'));}catch(e){return null;} };
+  const pct=(v)=>{const n=nval(v);if(n===null||!Number.isFinite(n))return '—';return (n>0?'+':'')+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';};
+
+  function categoryMatches(text,filter){
+    const t=normalize(text);
+    const f=String(filter||'todos');
+    if(f==='todos') return true;
+    const isFmp=/\bFMP\b|PRIVATIZA/.test(t);
+    if(f==='sem-fmp') return !isFmp;
+    if(f==='fmp') return isFmp;
+    if(f==='renda-fixa-simples') return /RENDA FIXA SIMPLES|RF SIMPLES/.test(t);
+    if(f==='renda-fixa-referenciado') return /RENDA FIXA REFERENCIADO|RF REFERENCIADO|REF DI/.test(t);
+    if(f==='renda-fixa-curto-prazo') return /RENDA FIXA CURTO|RF CURTO|CURTO PRAZO/.test(t);
+    if(f==='renda-fixa') return /RENDA FIXA|\bRF\b/.test(t) && !/SIMPLES|REFERENCIADO|REF DI|CURTO PRAZO|RF CURTO/.test(t);
+    if(f==='multimercado') return /MULTIMERCADO|\bMM\b/.test(t);
+    if(f==='cambial') return /CAMBIAL|CAMBIO|DOLAR/.test(t);
+    if(f==='acoes') return /ACOES|IBOVESPA/.test(t) && !isFmp;
+    if(f==='fundo-de-indice') return /FUNDO DE INDICE|\bINDICE\b|\bETF\b/.test(t);
+    return true;
+  }
+  window.rankCategoryMatchesV151=categoryMatches;
+
+  // Substitui o filtro global usado pelo renderer legado sem reescrever o renderer inteiro.
+  try{
+    passaFiltroRanking=function(r){
+      const text=[r?.Categoria,r?.Fundo,r?.Benchmark].filter(Boolean).join(' ');
+      return categoryMatches(text,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
+    };
+  }catch(e){}
+
+  function navOffset(){
+    const nav=q('#desktopAnchorNavV131');
+    return nav && nav.offsetParent!==null ? nav.getBoundingClientRect().height+18 : 18;
+  }
+  function scrollToTarget(target,focusSearch){
+    if(!target) return;
+    const top=Math.max(0,target.getBoundingClientRect().top+window.scrollY-navOffset());
+    window.scrollTo({top,behavior:'smooth'});
+    if(focusSearch){
+      setTimeout(()=>{const inp=q('#searchInput');if(inp){try{inp.focus({preventScroll:true});}catch(e){inp.focus();}}},520);
+    }
+  }
+  function bindNavigation(){
+    const nav=q('#desktopAnchorNavV131');
+    if(!nav||nav.dataset.v151Bound==='1') return;
+    nav.dataset.v151Bound='1';
+    nav.addEventListener('click',ev=>{
+      const a=ev.target.closest('[data-anchor-target]');
+      if(!a) return;
+      ev.preventDefault();
+      const detailsId=a.dataset.openDetails;
+      const bodyId=a.dataset.openSection;
+      if(detailsId){const d=document.getElementById(detailsId);if(d&&'open' in d)d.open=true;}
+      if(bodyId){const b=document.getElementById(bodyId);if(b)b.hidden=false;}
+      const target=document.getElementById(a.dataset.anchorTarget);
+      qa('.desktop-anchor-link-v131',nav).forEach(x=>x.classList.toggle('active',x===a));
+      try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+      requestAnimationFrame(()=>scrollToTarget(target,a.dataset.searchFocus==='1'));
+    });
+
+    if('IntersectionObserver' in window){
+      const links=qa('[data-anchor-target]',nav).filter(a=>a.dataset.searchFocus!=='1');
+      const map=new Map(links.map(a=>[a.dataset.anchorTarget,a]));
+      const io=new IntersectionObserver(entries=>{
+        const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>Math.abs(a.boundingClientRect.top)-Math.abs(b.boundingClientRect.top))[0];
+        if(!visible) return;
+        const active=map.get(visible.target.id);
+        if(active) qa('.desktop-anchor-link-v131',nav).forEach(a=>a.classList.toggle('active',a===active));
+      },{rootMargin:'-18% 0px -70% 0px',threshold:[0,.01]});
+      map.forEach((_,id)=>{const el=document.getElementById(id);if(el)io.observe(el);});
+    }
+  }
+
+  function syncRankingControls(){
+    const cls=q('#rankingClassSelectV136');
+    const period=q('#rankingPeriodSelectV136');
+    if(cls && typeof activeRankFilter!=='undefined' && cls.value!==activeRankFilter) cls.value=activeRankFilter;
+    if(period && typeof activeRankPeriods!=='undefined'){
+      const p=activeRankPeriods.topFundos||'12m';
+      if(period.value!==p) period.value=p;
+    }
+  }
+
+  function filteredRankingRows(includeMissing=false){
+    if(typeof allRows==='undefined'||!Array.isArray(allRows)) return [];
+    return allRows.filter(r=>includeMissing ? true : (typeof temDados==='function'?temDados(r):true)).filter(r=>{
+      try{return passaFiltroRanking(r);}catch(e){return true;}
+    });
+  }
+
+  function attentionRows(rows,campo,reason,limit=4){
+    return rows
+      .filter(r=>{const n=nval(r[campo]);return n!==null&&Number.isFinite(n)&&n<0;})
+      .sort((a,b)=>nval(a[campo])-nval(b[campo]))
+      .slice(0,limit)
+      .map(r=>`<button type="button" class="attention-row-v136" data-attention-fund="${esc(r.Fundo||'')}"><span><span class="fund">${esc(r.Fundo||'—')}</span><span class="reason">${esc(reason)}</span></span><span class="value">${esc(pct(r[campo]))}</span></button>`).join('');
+  }
+
+  function renderAttention(){
+    const host=q('#rankingAttentionV136 .attention-body-v136');
+    if(!host) return;
+    const rows=filteredRankingRows(false);
+    const neg12=rows.filter(r=>{const n=nval(r['Acum. 12M (%)']);return n!==null&&n<0;});
+    const negAno=rows.filter(r=>{const n=nval(r['Acum. Ano (%)']);return n!==null&&n<0;});
+    const negMes=rows.filter(r=>{const n=nval(r['Acum. Mes (%)']);return n!==null&&n<0;});
+    const missing=(typeof allRows!=='undefined'&&Array.isArray(allRows)?allRows:[]).filter(r=>{
+      try{return (typeof temDados==='function'?!temDados(r):false)&&passaFiltroRanking(r);}catch(e){return false;}
+    });
+    let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
+    if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
+    const year=attentionRows(rows,'Acum. Ano (%)','Ano negativo — verificar a tese de manutenção',3);
+    const pipeline=missing.slice(0,3).map(r=>`<button type="button" class="attention-row-v136 pipeline" data-attention-fund="${esc(r.Fundo||'')}"><span><span class="fund">${esc(r.Fundo||'—')}</span><span class="reason">Sem cota/rentabilidade suficiente na base</span></span><span class="value">—</span></button>`).join('');
+    const insight=neg12.length
+      ? `<strong>${neg12.length}</strong> fundo(s) com retorno negativo em 12 meses no filtro atual. Use os alertas como ponto de partida para investigar classe, prazo, benchmark e aderência ao perfil.`
+      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês, no ano e fundos sem dados.`;
+    host.innerHTML=`
+      <div class="attention-metric-grid-v136">
+        <div class="attention-metric-v136"><span>12M negativo</span><strong>${neg12.length}</strong></div>
+        <div class="attention-metric-v136"><span>Ano negativo</span><strong>${negAno.length}</strong></div>
+        <div class="attention-metric-v136"><span>Sem dados</span><strong>${missing.length}</strong></div>
+      </div>
+      <div class="attention-block-v136"><h3>Insight SIPII</h3><div class="attention-insight-v136">${insight}</div></div>
+      ${worst?`<div class="attention-block-v136"><h3>Piores leituras</h3><div class="attention-list-v136">${worst}</div></div>`:''}
+      ${year?`<div class="attention-block-v136"><h3>Negativos no ano</h3><div class="attention-list-v136">${year}</div></div>`:''}
+      ${pipeline?`<div class="attention-block-v136"><h3>Sem dados / pipeline</h3><div class="attention-list-v136">${pipeline}</div></div>`:''}
+      <div class="attention-foot-v136">Leitura automática e informativa. O alerta não substitui suitability, objetivos, liquidez e horizonte do cliente.</div>`;
+  }
+
+  function renderRankingsAndAttention(){
+    try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){console.error('v151 ranking render',e);}
+    syncRankingControls();
+    renderAttention();
+  }
+
+  function bindRankingControls(){
+    const cls=q('#rankingClassSelectV136');
+    const period=q('#rankingPeriodSelectV136');
+    if(cls&&cls.dataset.v151Bound!=='1'){
+      cls.dataset.v151Bound='1';
+      cls.addEventListener('change',()=>{
+        try{activeRankFilter=cls.value||'todos';}catch(e){}
+        renderRankingsAndAttention();
+      });
+    }
+    if(period&&period.dataset.v151Bound!=='1'){
+      period.dataset.v151Bound='1';
+      period.addEventListener('change',()=>{
+        try{activeRankPeriods.topFundos=period.value||'12m';}catch(e){}
+        renderRankingsAndAttention();
+      });
+    }
+    const section=q('#rankingsSection');
+    if(section&&section.dataset.v151AttentionBound!=='1'){
+      section.dataset.v151AttentionBound='1';
+      section.addEventListener('click',ev=>{
+        const row=ev.target.closest('[data-attention-fund]');
+        if(!row) return;
+        const name=row.dataset.attentionFund||'';
+        const input=q('#searchInput');
+        if(input){
+          input.value=name;
+          input.dispatchEvent(new Event('input',{bubbles:true}));
+          scrollToTarget(q('#sec-fundos'),true);
+        }
+      });
+    }
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-rank-filter],[data-rank-period]')) setTimeout(()=>{syncRankingControls();renderAttention();},40);
+    },true);
+  }
+
+  function init(){
+    const meta=q('meta[name="app-build"]');if(meta)meta.content=BUILD;
+    document.documentElement.classList.add('ui-components-restored-v151');
+    bindNavigation();
+    bindRankingControls();
+    syncRankingControls();
+    setTimeout(renderRankingsAndAttention,250);
+    setTimeout(renderRankingsAndAttention,1100);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
 })();

@@ -25700,3 +25700,300 @@ html.w3c-html-validate-fix-v128 .closed-market-sheet[role="dialog"]{
   .market-v150-shell{display:none!important}
   #sec-painel-body > .indic-table-wrap{display:block!important}
 }
+
+
+/* ==========================================================
+   ELTAUM v151 — restauração visual e consolidação dos componentes
+   Corrige estilos ausentes do menu superior, toolbar dos rankings
+   e painel lateral de atenção. O painel v142 obsoleto foi removido
+   do HTML porque não possuía mais CSS/JS compatíveis no bundle atual.
+========================================================== */
+
+/* Navegação superior desktop */
+.desktop-anchor-nav-ui-v132{
+  position:sticky;
+  top:8px;
+  z-index:220;
+  width:100%;
+  margin:14px 0 18px;
+  padding:0;
+  border:1px solid rgba(200,151,58,.24);
+  border-radius:14px;
+  background:rgba(9,11,20,.92);
+  box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  overflow:hidden;
+}
+.desktop-anchor-nav-inner-v131{
+  display:flex;
+  align-items:center;
+  gap:5px;
+  min-height:48px;
+  padding:6px 8px;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+.desktop-anchor-nav-inner-v131::-webkit-scrollbar{display:none}
+.desktop-anchor-kicker-v131{
+  flex:0 0 auto;
+  padding:0 10px;
+  color:#7f8aa8;
+  font:800 .56rem/1 'JetBrains Mono',monospace;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.desktop-anchor-link-v131{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  flex:0 0 auto;
+  min-height:34px;
+  padding:7px 10px;
+  border:1px solid transparent;
+  border-radius:9px;
+  color:#b8c2da!important;
+  background:transparent;
+  text-decoration:none!important;
+  font:650 .69rem/1 'Inter',sans-serif;
+  white-space:nowrap;
+  transition:background .16s ease,border-color .16s ease,color .16s ease,transform .16s ease;
+}
+.desktop-anchor-link-v131 span{font-size:.76rem;line-height:1}
+.desktop-anchor-link-v131 strong{font:inherit;color:inherit}
+.desktop-anchor-link-v131:hover{
+  color:#f0c777!important;
+  border-color:rgba(200,151,58,.24);
+  background:rgba(200,151,58,.075);
+  transform:translateY(-1px);
+}
+.desktop-anchor-link-v131.active{
+  color:#f4cf82!important;
+  border-color:rgba(200,151,58,.48);
+  background:linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.075));
+  box-shadow:inset 3px 0 0 var(--gold),0 4px 14px rgba(0,0,0,.16);
+}
+.desktop-anchor-search-v135{margin-left:auto;border-color:rgba(200,151,58,.26);background:rgba(200,151,58,.06)}
+
+/* Toolbar dos rankings */
+#rankingsSection .ranking-toolbar-v136{
+  display:grid;
+  grid-template-columns:minmax(180px,220px) minmax(150px,180px) minmax(0,1fr);
+  align-items:end;
+  gap:10px;
+  width:100%;
+  margin:12px 0 14px;
+  padding:12px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:13px;
+  background:linear-gradient(180deg,rgba(17,21,38,.72),rgba(10,12,22,.62));
+}
+#rankingsSection .ranking-control-card-v136{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  min-width:0;
+}
+#rankingsSection .ranking-control-card-v136 label{
+  color:#8d99b8;
+  font:800 .56rem/1 'Inter',sans-serif;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+}
+#rankingsSection .ranking-select-v136{
+  width:100%;
+  min-height:38px;
+  padding:8px 34px 8px 11px;
+  border:1px solid rgba(200,151,58,.28);
+  border-radius:9px;
+  background:#0d1120;
+  color:#eef2fb;
+  font:650 .69rem/1.2 'Inter',sans-serif;
+  outline:none;
+  cursor:pointer;
+  color-scheme:dark;
+}
+#rankingsSection .ranking-select-v136:hover,
+#rankingsSection .ranking-select-v136:focus{
+  border-color:rgba(232,187,106,.66);
+  box-shadow:0 0 0 3px rgba(200,151,58,.09);
+}
+#rankingsSection .ranking-select-v136 option,
+#rankingsSection .ranking-select-v136 optgroup{background:#0d1120;color:#eef2fb}
+#rankingsSection .ranking-filter-row-compat-v136{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  min-width:0;
+  min-height:38px;
+  padding:2px 0;
+  overflow-x:auto;
+  scrollbar-width:none;
+}
+#rankingsSection .ranking-filter-row-compat-v136::-webkit-scrollbar{display:none}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-label{
+  flex:0 0 auto;
+  margin-right:2px;
+  color:#7f8aa8;
+  font:800 .55rem/1 'JetBrains Mono',monospace;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{
+  flex:0 0 auto;
+  min-height:30px;
+  padding:6px 10px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:999px;
+  background:#0e1222;
+  color:#bfc9df;
+  font:700 .60rem/1 'Inter',sans-serif;
+  cursor:pointer;
+  white-space:nowrap;
+}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip:hover{border-color:rgba(200,151,58,.35);color:#f0c777}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip.active{
+  border-color:rgba(200,151,58,.55);
+  background:rgba(200,151,58,.14);
+  color:#f0c777;
+  box-shadow:inset 0 0 0 1px rgba(200,151,58,.06);
+}
+
+/* Layout principal dos rankings e painel lateral de atenção */
+#rankingsSection .ranking-layout-v136{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(292px,322px);
+  align-items:start;
+  gap:12px;
+}
+#rankingsSection .ranking-main-v136{min-width:0}
+#rankingsSection .ranking-main-v136 .ranking-risk-panel{display:none!important}
+#rankingsSection .ranking-main-v136 .ranking-exec-secondary{grid-template-columns:1fr!important}
+#rankingsSection .ranking-attention-panel-v136{
+  position:sticky;
+  top:72px;
+  min-width:0;
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:14px;
+  overflow:hidden;
+  background:linear-gradient(180deg,rgba(17,21,38,.96),rgba(9,11,20,.97));
+  box-shadow:0 14px 36px rgba(0,0,0,.22);
+}
+#rankingsSection .attention-head-v136{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:13px 14px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+#rankingsSection .attention-head-v136>span{
+  display:grid;
+  place-items:center;
+  flex:0 0 31px;
+  width:31px;height:31px;
+  border:1px solid rgba(200,151,58,.28);
+  border-radius:10px;
+  background:rgba(200,151,58,.10);
+  font-size:.92rem;
+}
+#rankingsSection .attention-head-v136>div{min-width:0}
+#rankingsSection .attention-head-v136 strong{display:block;color:#f0c777;font-size:.79rem;line-height:1.2}
+#rankingsSection .attention-head-v136 small{display:block;margin-top:3px;color:#8e9ab7;font-size:.57rem;line-height:1.3}
+#rankingsSection .attention-body-v136{display:flex;flex-direction:column;gap:9px;padding:10px}
+#rankingsSection .attention-metric-grid-v136{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+#rankingsSection .attention-metric-v136{
+  min-width:0;
+  padding:9px 6px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:10px;
+  background:rgba(255,255,255,.025);
+  text-align:center;
+}
+#rankingsSection .attention-metric-v136 span{display:block;color:#8491af;font-size:.51rem;line-height:1.2;text-transform:uppercase;letter-spacing:.07em}
+#rankingsSection .attention-metric-v136 strong{display:block;margin-top:5px;color:#eef2fb;font:800 .84rem/1 'JetBrains Mono',monospace}
+#rankingsSection .attention-block-v136{
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:11px;
+  overflow:hidden;
+  background:rgba(7,9,17,.34);
+}
+#rankingsSection .attention-block-v136 h3{
+  margin:0;
+  padding:9px 10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  color:#f0c777;
+  font-size:.60rem;
+  line-height:1;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+#rankingsSection .attention-insight-v136{padding:10px;color:#b9c3da;font-size:.63rem;line-height:1.55}
+#rankingsSection .attention-insight-v136 strong{color:#f0c777}
+#rankingsSection .attention-list-v136{display:flex;flex-direction:column}
+#rankingsSection .attention-row-v136{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(58px,auto);
+  align-items:center;
+  gap:8px;
+  width:100%;
+  min-width:0;
+  padding:9px 10px;
+  border:0;
+  border-bottom:1px solid rgba(255,255,255,.055);
+  background:transparent;
+  color:inherit;
+  text-align:left;
+  cursor:pointer;
+}
+#rankingsSection .attention-row-v136:last-child{border-bottom:0}
+#rankingsSection .attention-row-v136:hover{background:rgba(200,151,58,.045)}
+#rankingsSection .attention-row-v136>span:first-child{min-width:0}
+#rankingsSection .attention-row-v136 .fund{
+  display:-webkit-box;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
+  color:#edf1fb;
+  font-size:.61rem;
+  line-height:1.28;
+  font-weight:760;
+}
+#rankingsSection .attention-row-v136 .reason{display:block;margin-top:3px;color:#8290ae;font-size:.52rem;line-height:1.3}
+#rankingsSection .attention-row-v136 .value{
+  justify-self:end;
+  min-width:58px;
+  color:#ff8290;
+  font:750 .66rem/1 'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+  text-align:right;
+  white-space:nowrap;
+}
+#rankingsSection .attention-row-v136.pipeline .value{color:#9fb0d0}
+#rankingsSection .attention-empty-v136{padding:18px 10px;color:#8e9ab7;font-size:.64rem;text-align:center}
+#rankingsSection .attention-foot-v136{padding:2px 2px 1px;color:#73809c;font-size:.51rem;line-height:1.45}
+
+/* O painel macro v142 era um bloco legado sem CSS/JS no bundle v150.
+   Se uma cópia antiga permanecer em cache, ela não deve aparecer no desktop. */
+@media(min-width:901px){#marketExecPanelV142{display:none!important}}
+
+/* Posições corretas das âncoras com o menu sticky */
+#sec-kpi,#sec-fundos,#rankingsSection,#sec-mercado,#sec-dolar,#sec-focus,#sec-graficos,#siteSources{scroll-margin-top:76px}
+
+@media(max-width:1180px){
+  #rankingsSection .ranking-toolbar-v136{grid-template-columns:minmax(170px,1fr) minmax(145px,.7fr)}
+  #rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}
+  #rankingsSection .ranking-layout-v136{grid-template-columns:1fr}
+  #rankingsSection .ranking-attention-panel-v136{position:relative;top:auto}
+}
+@media(max-width:900px){
+  .desktop-anchor-nav-ui-v132{display:none!important}
+  #rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr 1fr;padding:10px}
+  #rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}
+}
+@media(max-width:620px){
+  #rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr}
+  #rankingsSection .ranking-filter-row-compat-v136{grid-column:auto}
+  #rankingsSection .ranking-attention-panel-v136{display:none!important}
+}

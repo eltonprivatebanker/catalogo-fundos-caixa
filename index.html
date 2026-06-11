@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 market-exec-v142 rankings-ux-v143 market-panel-pro-v150">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 ui-components-restored-v151">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_MARKET_PANEL_PRO_20260611_v150"/>
+<meta name="app-build" content="ELTAUM_UI_COMPONENTS_RESTORED_20260611_v151"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,12 +61,12 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=market-panel-pro-v150" rel="stylesheet"/>
+<link href="style.css?v=ui-components-restored-v151" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=market-panel-pro-v150"></script>
+<script defer src="app.js?v=ui-components-restored-v151"></script>
 
 </head>
 <body>
@@ -436,95 +436,6 @@ html:not(.app-booting) .page{
       <h2>📡 Indicadores de Mercado</h2>
     </div>
   </div>
-
-  <section class="market-exec-panel-v142" id="marketExecPanelV142" aria-label="Painel macro compacto de indicadores">
-    <button type="button" class="market-close-strip-v142" data-open-closed-market="true" onclick="return openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês consolidado">
-      <span class="market-close-main-v142">
-        <span class="market-close-kicker-v142">Fechamento mensal</span>
-        <strong id="marketV142ClosedTitle">Resumo de mercado</strong>
-        <small id="marketV142ClosedSub">Último mês fechado · indicadores consolidados</small>
-      </span>
-      <span class="market-close-metrics-v142" aria-hidden="true">
-        <span><b>CDI</b><em id="marketV142MiniCdi">—</em></span>
-        <span><b>IPCA</b><em id="marketV142MiniIpca">—</em></span>
-        <span><b>Dólar</b><em id="marketV142MiniDolar">—</em></span>
-        <span><b>Ibov</b><em id="marketV142MiniIbov">—</em></span>
-      </span>
-      <span class="market-close-action-v142">Consultar ›</span>
-    </button>
-
-    <div class="market-exec-grid-v142">
-      <article class="market-exec-card-v142 market-rate-card-v142">
-        <div class="market-card-head-v142">
-          <div>
-            <span>Taxa básica</span>
-            <strong>Selic e CDI</strong>
-          </div>
-          <em>Base para fundos pós-fixados</em>
-        </div>
-        <div class="market-rate-duo-v142">
-          <div class="market-rate-box-v142 selic">
-            <span>Selic meta</span>
-            <strong id="marketV142Selic">—</strong>
-            <small>a.a. · última alteração: <b id="marketV142SelicDate">—</b></small>
-          </div>
-          <div class="market-rate-box-v142 cdi">
-            <span>CDI</span>
-            <strong id="marketV142Cdi">—</strong>
-            <small>a.a. · referência para comparativos</small>
-          </div>
-        </div>
-        <div class="market-cdi-compact-v142">
-          <div class="market-mini-title-v142"><span>CDI mensal</span><strong id="marketV142CdiYear">Ano —</strong></div>
-          <div class="market-cdi-strip-v142" id="marketV142CdiStrip"><span>carregando...</span></div>
-        </div>
-      </article>
-
-      <article class="market-exec-card-v142 market-copom-card-v142">
-        <div class="market-card-head-v142">
-          <div>
-            <span>COPOM</span>
-            <strong>Próxima reunião</strong>
-          </div>
-          <em>Calendário 2026</em>
-        </div>
-        <div class="market-next-copom-v142" id="marketV142NextCopom">
-          <strong>—</strong><small>carregando calendário...</small>
-        </div>
-        <div class="market-copom-decisions-v142" id="marketV142CopomDecisions"></div>
-        <button type="button" class="market-ghost-btn-v142" id="marketV142ToggleCopom" aria-expanded="false">Ver calendário completo</button>
-        <div class="market-copom-full-v142" id="marketV142CopomFull" hidden></div>
-      </article>
-    </div>
-
-    <article class="market-exec-card-v142 market-poup-card-v142">
-      <div class="market-card-head-v142">
-        <div>
-          <span>Poupança</span>
-          <strong>Regra nova x antiga</strong>
-        </div>
-        <em id="marketV142PoupStatus">Selic —</em>
-      </div>
-      <div class="market-poup-row-v142">
-        <div><span>Regra nova</span><strong id="marketV142PoupNova">—</strong><small id="marketV142PoupNovaSub">regra conforme Selic</small></div>
-        <div><span>Regra antiga</span><strong id="marketV142PoupAntiga">—</strong><small id="marketV142PoupAntigaSub">TR + 0,50%</small></div>
-        <p id="marketV142PoupNote">Carregando leitura da poupança...</p>
-        <button type="button" class="market-ghost-btn-v142" id="marketV142TogglePoup" aria-expanded="false">Ver detalhes</button>
-      </div>
-      <div class="market-poup-detail-v142" id="marketV142PoupDetail" hidden>
-        <p id="marketV142PoupScenario">Carregando cenários...</p>
-        <div class="market-poup-pills-v142">
-          <span><b>Situação hoje</b><em id="marketV142PoupToday">—</em></span>
-          <span><b>Virada da regra nova</b><em>Selic ≤ 8,50% a.a.</em></span>
-        </div>
-        <small id="marketV142PoupScenarioNote">Estimativa didática para comparação visual.</small>
-      </div>
-    </article>
-
-    <div class="market-advanced-line-v142">
-      <button type="button" class="market-advanced-toggle-v142" id="marketV142ToggleAdvanced" aria-expanded="false">Mostrar cards detalhados de Selic, CDI e Poupança</button>
-    </div>
-  </section>
 
   <button type="button" class="closed-month-launch closed-month-launch-premium" id="closedMonthLaunch" data-open-closed-market="true" onclick="return openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês consolidado">
     <span class="closed-month-launch-copy">
