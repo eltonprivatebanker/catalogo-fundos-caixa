@@ -11959,3 +11959,54 @@ if(!isSearchInput(el)) return;
   setTimeout(init,500);
   setTimeout(init,1500);
 })();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v140 — Leitura rápida com rentabilidade negativa em vermelho
+   - Pós-processa o texto executivo dos rankings.
+   - Mantém o texto seguro usando textContent + escape antes de inserir spans.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_RANKINGS_INSIGHT_NEGATIVE_COLOR_20260610_v140';
+  function escHtml(v){
+    return String(v??'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});
+  }
+  function colorizeInsightsV140(){
+    try{
+      document.documentElement.classList.add('rankings-ux-v140','rankings-ux-v139','rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135');
+      const meta=document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content=BUILD;
+      document.querySelectorAll('#rankingsSection .ranking-exec-insight p').forEach(function(p){
+        const raw=(p.textContent||'').trim();
+        if(!raw) return;
+        const html=escHtml(raw).replace(/([+-]?\d{1,3}(?:\.\d{3})*,\d{2}%)/g,function(match){
+          let cls='zero';
+          if(match.charAt(0)==='-') cls='neg';
+          else if(match.charAt(0)==='+') cls='pos';
+          return '<strong class="insight-pct '+cls+'">'+match+'</strong>';
+        });
+        p.innerHTML=html;
+      });
+    }catch(e){}
+  }
+  function wrapRenderV140(){
+    if(window.__ELTAUM_RANKINGS_V140_WRAPPED__) return;
+    const original=(typeof renderRankings==='function') ? renderRankings : window.renderRankings;
+    if(typeof original!=='function') return;
+    window.__ELTAUM_RANKINGS_V140_WRAPPED__=true;
+    const patched=function(){
+      const ret=original.apply(this,arguments);
+      setTimeout(colorizeInsightsV140,0);
+      return ret;
+    };
+    try{ renderRankings=patched; }catch(e){}
+    try{ window.renderRankings=patched; }catch(e){}
+  }
+  function init(){
+    wrapRenderV140();
+    colorizeInsightsV140();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
+})();

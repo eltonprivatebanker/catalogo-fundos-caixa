@@ -26833,3 +26833,36 @@ html.rankings-ux-v139 #rankingsSection .ranking-exec-card span{
     line-height:1.22 !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v140 — Valores positivos/negativos destacados na leitura rápida
+   - Rentabilidade negativa fica vermelha no texto executivo.
+   - Rentabilidade positiva fica verde, mantendo leitura sóbria.
+════════════════════════════════════════════════════════ */
+html.rankings-ux-v140 #rankingsSection .ranking-exec-insight p strong.insight-pct{
+  display:inline-flex;
+  align-items:center;
+  padding:1px 5px;
+  border-radius:7px;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.78em;
+  font-weight:900;
+  line-height:1.35;
+  white-space:nowrap;
+}
+html.rankings-ux-v140 #rankingsSection .ranking-exec-insight p strong.insight-pct.pos{
+  color:#29d982;
+  background:rgba(46,209,122,.08);
+  border:1px solid rgba(46,209,122,.16);
+}
+html.rankings-ux-v140 #rankingsSection .ranking-exec-insight p strong.insight-pct.neg{
+  color:#ff5b72;
+  background:rgba(240,85,101,.08);
+  border:1px solid rgba(240,85,101,.16);
+}
+html.rankings-ux-v140 #rankingsSection .ranking-exec-insight p strong.insight-pct.zero{
+  color:#aeb8d0;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.10);
+}
