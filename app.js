@@ -12274,7 +12274,7 @@ if(!isSearchInput(el)) return;
 ════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_MARKET_DASHBOARD_STABILITY_20260611_v147';
+  const BUILD='ELTAUM_MARKET_DASHBOARD_SPACIOUS_20260611_v148';
   const qs=(s,r=document)=>r.querySelector(s);
   const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
   let usMode='brl';
@@ -12441,4 +12441,24 @@ if(!isSearchInput(el)) return;
   /* PATCH v147 — estabilidade: removido MutationObserver amplo em #sec-painel-body.
      A v146 observava o mesmo bloco que atualizava via innerHTML, podendo criar loop de renderização
      e travar o navegador antes mesmo de abrir o console. */
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v148 — Dashboard de mercado com mais respiro no desktop
+   - Ativa classe CSS para layout 2 colunas e linhas menos comprimidas.
+   - Mantém a estabilidade v147, sem MutationObserver amplo.
+════════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_MARKET_DASHBOARD_SPACIOUS_20260611_v148';
+  function init(){
+    try{
+      document.documentElement.classList.add('market-dashboard-spacious-v148');
+      const meta=document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content=BUILD;
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  setTimeout(init,300);
+  setTimeout(init,1200);
 })();

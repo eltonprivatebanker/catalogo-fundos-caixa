@@ -28061,3 +28061,145 @@ html.market-dashboard-v146 .market-analytic-toggle-v146 button:hover{
 
 /* PATCH v147 — estabilidade do painel consolidado: JS sem MutationObserver amplo. */
 html.market-dashboard-stable-v147 #marketDashboardV146{contain:layout paint style;}
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v148 — Painel de mercado com mais respiro no desktop
+   Ideia: manter o resumo executivo, mas trocar a grade apertada de 3 colunas
+   por uma leitura em 2 colunas + Bolsa EUA em largura total.
+════════════════════════════════════════════════════════ */
+html.market-dashboard-spacious-v148 .market-exec-dashboard-v146{
+  gap:16px !important;
+}
+
+html.market-dashboard-spacious-v148 .market-dash-summary-v146{
+  padding:14px !important;
+  gap:12px !important;
+}
+
+@media(min-width:1181px){
+  html.market-dashboard-spacious-v148 .market-dash-summary-v146{
+    grid-template-columns:minmax(270px,.82fr) repeat(4,minmax(170px,1fr)) !important;
+  }
+
+  html.market-dashboard-spacious-v148 .market-card-grid-v146{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    gap:16px !important;
+    align-items:start !important;
+  }
+
+  html.market-dashboard-spacious-v148 .market-card-grid-v146 .market-data-card-v146:nth-child(3){
+    grid-column:1 / -1 !important;
+  }
+
+  html.market-dashboard-spacious-v148 .market-data-card-v146{
+    min-height:0 !important;
+  }
+
+  html.market-dashboard-spacious-v148 .market-data-card-head-v146{
+    padding:14px 16px !important;
+  }
+
+  html.market-dashboard-spacious-v148 .market-data-card-head-v146 span{
+    font-size:.86rem !important;
+  }
+
+  html.market-dashboard-spacious-v148 .market-data-card-head-v146 small{
+    font-size:.62rem !important;
+  }
+
+  /* Nos cards menores, o nome do indicador fica em uma linha própria.
+     Isso evita que 4 recortes de período fiquem espremidos na mesma linha. */
+  html.market-dashboard-spacious-v148 .market-card-grid-v146 .market-data-card-v146:not(:nth-child(3)) .market-ind-row-v146{
+    grid-template-columns:repeat(4,minmax(118px,1fr)) !important;
+    gap:10px !important;
+    align-items:stretch !important;
+    padding:15px 16px !important;
+  }
+
+  html.market-dashboard-spacious-v148 .market-card-grid-v146 .market-data-card-v146:not(:nth-child(3)) .market-ind-name-v146{
+    grid-column:1 / -1 !important;
+    padding-bottom:2px !important;
+  }
+
+  /* No card de Bolsas EUA, há largura suficiente para manter nome + recortes na mesma linha. */
+  html.market-dashboard-spacious-v148 .market-card-grid-v146 .market-data-card-v146:nth-child(3) .market-ind-row-v146{
+    grid-template-columns:minmax(240px,.82fr) repeat(4,minmax(130px,1fr)) !important;
+    gap:12px !important;
+    padding:15px 16px !important;
+  }
+}
+
+@media(min-width:821px) and (max-width:1180px){
+  html.market-dashboard-spacious-v148 .market-card-grid-v146{
+    grid-template-columns:1fr !important;
+    gap:14px !important;
+  }
+  html.market-dashboard-spacious-v148 .market-ind-row-v146{
+    grid-template-columns:minmax(210px,.9fr) repeat(4,minmax(110px,1fr)) !important;
+    gap:10px !important;
+    padding:14px 15px !important;
+  }
+}
+
+html.market-dashboard-spacious-v148 .market-ind-name-v146 strong{
+  font-size:.78rem !important;
+  letter-spacing:-.01em !important;
+}
+
+html.market-dashboard-spacious-v148 .market-ind-name-v146 small{
+  font-size:.59rem !important;
+  line-height:1.25 !important;
+}
+
+html.market-dashboard-spacious-v148 .market-cell-v146{
+  min-height:54px !important;
+  justify-content:center !important;
+  padding:8px 10px !important;
+  border:1px solid rgba(255,255,255,.06) !important;
+  border-radius:12px !important;
+  background:rgba(7,9,18,.38) !important;
+  text-align:left !important;
+}
+
+html.market-dashboard-spacious-v148 .market-cell-v146 b{
+  font-size:.52rem !important;
+  color:#8c98b8 !important;
+  margin-bottom:2px !important;
+}
+
+html.market-dashboard-spacious-v148 .market-cell-v146 .market-value-v146{
+  font-size:.82rem !important;
+  line-height:1.18 !important;
+  letter-spacing:-.02em !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+html.market-dashboard-spacious-v148 .market-cell-v146 .market-subvalue-v146{
+  font-size:.60rem !important;
+  line-height:1.2 !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+html.market-dashboard-spacious-v148 .market-dash-kpi-v146 strong{
+  font-size:1.08rem !important;
+  overflow:visible !important;
+  text-overflow:clip !important;
+}
+
+html.market-dashboard-spacious-v148 .market-dash-kpi-v146 small{
+  font-size:.61rem !important;
+}
+
+html.market-dashboard-spacious-v148 .market-analytic-toggle-v146{
+  margin-top:2px !important;
+}
+
+/* Segurança visual: em telas muito estreitas de desktop, evita compressão horizontal. */
+@media(min-width:821px){
+  html.market-dashboard-spacious-v148 #marketDashboardV146{
+    overflow:visible !important;
+  }
+}
