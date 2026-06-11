@@ -12265,3 +12265,184 @@ if(!isSearchInput(el)) return;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
   [200,700,1400,2600,4200].forEach(function(ms){ setTimeout(init,ms); });
 })();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v146 — Painel consolidado executivo
+   - Cria uma primeira leitura em cards por grupo.
+   - Mantém a tabela completa como modo analítico sob demanda.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_DASHBOARD_EXEC_20260611_v146';
+  const qs=(s,r=document)=>r.querySelector(s);
+  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  let usMode='brl';
+
+  function clean(t){ return String(t||'').replace(/\s+/g,' ').trim() || '—'; }
+  function text(sel, fallback='—'){
+    const el=typeof sel==='string'?qs(sel):sel;
+    const t=clean(el && el.textContent);
+    return t==='—'?fallback:t;
+  }
+  function clsByText(v){
+    const t=clean(v);
+    if(t==='—') return 'dash';
+    if(/^\-/.test(t) || /\s\-\d/.test(t)) return 'neg';
+    if(/^\+/.test(t) || /\s\+\d/.test(t)) return 'pos';
+    return 'neu';
+  }
+  function clsOf(sel){
+    const el=typeof sel==='string'?qs(sel):sel;
+    if(el){
+      if(el.classList.contains('neg')) return 'neg';
+      if(el.classList.contains('pos')) return 'pos';
+      if(el.classList.contains('dash')) return 'dash';
+      if(el.classList.contains('neu') || el.classList.contains('zero')) return 'neu';
+    }
+    return clsByText(text(el));
+  }
+  function getPeriodLabel(){
+    const last=text('#th-mes-ant-sub','último fechado');
+    const cur=text('#th-mes-cur-sub','mês atual');
+    return 'Último fechado: '+last+' · Mês atual: '+cur;
+  }
+  function usValue(id, mode){
+    const raw=text('#'+id,'—');
+    if(raw==='—') return {main:'—', sub:'', cls:'dash'};
+    const usd=raw.match(/USD\s*([+-]?\d{1,3}(?:\.\d{3})*,\d{2}%)/i);
+    const brl=raw.match(/BRL\s*([+-]?\d{1,3}(?:\.\d{3})*,\d{2}%)/i);
+    if(mode==='usd'){
+      const v=usd?usd[1]:'—';
+      return {main:v, sub:'USD', cls:clsByText(v)};
+    }
+    if(mode==='both'){
+      const u=usd?usd[1]:'—';
+      const b=brl?brl[1]:'—';
+      return {main:'USD '+u, sub:'BRL '+b, cls:clsByText(b!=='—'?b:u)};
+    }
+    const v=brl?brl[1]:(usd?usd[1]:'—');
+    return {main:v, sub:brl?'BRL':'USD', cls:clsByText(v)};
+  }
+  function valueObj(main, sub, cls){
+    return {main:clean(main), sub:clean(sub||''), cls:cls||clsByText(main)};
+  }
+  function valueFrom(sel, subSel){
+    return valueObj(text(sel), subSel?text(subSel,''):'', clsOf(sel));
+  }
+  function combo(mainSel, extraSel, subSel){
+    const main=text(mainSel);
+    const extra=text(extraSel,'');
+    return valueObj(main, extra, clsOf(extraSel));
+  }
+  function cell(label,v){
+    v=v||valueObj('—','','dash');
+    return '<div class="market-cell-v146"><b>'+label+'</b><span class="market-value-v146 '+(v.cls||clsByText(v.main))+'">'+v.main+'</span>'+(v.sub&&v.sub!=='—'?'<span class="market-subvalue-v146 '+clsByText(v.sub)+'">'+v.sub+'</span>':'')+'</div>';
+  }
+  function row(icon,name,sub,vals){
+    return '<div class="market-ind-row-v146"><div class="market-ind-name-v146"><span class="market-ind-icon-v146">'+icon+'</span><div><strong>'+name+'</strong><small>'+sub+'</small></div></div>'+cell('Fechado',vals[0])+cell('Atual',vals[1])+cell('Ano',vals[2])+cell('Acum.',vals[3])+'</div>';
+  }
+  function ensureDashboard(){
+    const body=qs('#sec-painel-body');
+    if(!body) return null;
+    let dash=qs('#marketDashboardV146');
+    if(dash) return dash;
+    const table=qs('.indic-table-wrap', body);
+    dash=document.createElement('div');
+    dash.id='marketDashboardV146';
+    dash.className='market-exec-dashboard-v146';
+    dash.innerHTML=''+
+      '<section class="market-dash-summary-v146" aria-label="Resumo executivo dos indicadores">'+
+        '<div class="market-dash-title-v146"><span>Painel consolidado</span><strong>Visão executiva dos indicadores</strong><small id="marketDashPeriodV146">Carregando períodos...</small></div>'+
+        '<div class="market-dash-kpi-v146"><b>CDI</b><strong id="marketDashCdiV146">—</strong><small id="marketDashCdiSubV146">último fechado</small></div>'+
+        '<div class="market-dash-kpi-v146"><b>IPCA</b><strong id="marketDashIpcaV146">—</strong><small id="marketDashIpcaSubV146">último fechado</small></div>'+
+        '<div class="market-dash-kpi-v146"><b>Dólar</b><strong id="marketDashDolarV146">—</strong><small id="marketDashDolarSubV146">mês atual</small></div>'+
+        '<div class="market-dash-kpi-v146"><b>Ibovespa</b><strong id="marketDashIbovV146">—</strong><small id="marketDashIbovSubV146">mês atual</small></div>'+
+      '</section>'+
+      '<section class="market-card-grid-v146" aria-label="Indicadores por grupo">'+
+        '<article class="market-data-card-v146"><div class="market-data-card-head-v146"><div><span>Taxas e inflação</span><small>CDI e IPCA em quatro recortes</small></div></div><div class="market-data-list-v146" id="marketTaxasListV146"></div></article>'+
+        '<article class="market-data-card-v146"><div class="market-data-card-head-v146"><div><span>Câmbio e Brasil</span><small>Dólar PTAX e Ibovespa</small></div></div><div class="market-data-list-v146" id="marketBrasilListV146"></div></article>'+
+        '<article class="market-data-card-v146"><div class="market-data-card-head-v146"><div><span>Bolsas EUA</span><small>Retornos em BRL, USD ou ambos</small></div><div class="market-us-toggle-v146" role="group" aria-label="Moeda dos índices dos EUA"><button type="button" data-us-mode="brl" class="active">BRL</button><button type="button" data-us-mode="usd">USD</button><button type="button" data-us-mode="both">Ambos</button></div></div><div class="market-data-list-v146" id="marketEuaListV146"></div></article>'+
+      '</section>'+
+      '<div class="market-analytic-toggle-v146"><button type="button" id="marketAnalyticToggleV146" aria-expanded="false">Ver tabela analítica completa</button></div>';
+    if(table) body.insertBefore(dash,table); else body.appendChild(dash);
+    qsa('[data-us-mode]',dash).forEach(btn=>{
+      btn.addEventListener('click',function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        usMode=this.getAttribute('data-us-mode')||'brl';
+        qsa('[data-us-mode]',dash).forEach(b=>b.classList.toggle('active',b===this));
+        syncDashboard();
+      });
+    });
+    const toggle=qs('#marketAnalyticToggleV146',dash);
+    if(toggle){
+      toggle.addEventListener('click',function(ev){
+        ev.preventDefault(); ev.stopPropagation();
+        const open=!body.classList.contains('market-analytics-open-v146');
+        body.classList.toggle('market-analytics-open-v146',open);
+        toggle.setAttribute('aria-expanded',String(open));
+        toggle.textContent=open?'Ocultar tabela analítica':'Ver tabela analítica completa';
+      });
+    }
+    return dash;
+  }
+  function setKpi(id,value,cls,sub){
+    const el=qs('#'+id); if(!el) return;
+    el.textContent=value;
+    el.className=cls||clsByText(value);
+    const subEl=qs('#'+id.replace('V146','SubV146'));
+    if(subEl) subEl.textContent=sub||'';
+  }
+  function syncDashboard(){
+    const dash=ensureDashboard(); if(!dash) return;
+    document.documentElement.classList.add('market-dashboard-v146','market-lean-v144','market-exec-v142','fund-card-pro-v145');
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    const period=qs('#marketDashPeriodV146'); if(period) period.textContent=getPeriodLabel();
+
+    setKpi('marketDashCdiV146', text('#cdi-mes-ant'), clsOf('#cdi-mes-ant'), text('#th-mes-ant-sub','último fechado'));
+    setKpi('marketDashIpcaV146', text('#ipca-mes-ant'), clsOf('#ipca-mes-ant'), text('#th-mes-ant-sub','último fechado'));
+    const dolarMain=text('#dolar-cur-cot');
+    const dolarVar=text('#dolar-cur-var','');
+    setKpi('marketDashDolarV146', dolarMain+(dolarVar&&dolarVar!=='—'?' · '+dolarVar:''), clsOf('#dolar-cur-var'), text('#th-mes-cur-sub','mês atual'));
+    const ibovPts=text('#ibov-cur-pts');
+    const ibovVar=text('#ibov-cur-var','');
+    setKpi('marketDashIbovV146', (ibovVar&&ibovVar!=='—'?ibovVar:ibovPts), clsOf('#ibov-cur-var'), ibovPts&&ibovPts!=='—'?ibovPts:text('#th-mes-cur-sub','mês atual'));
+
+    const taxas=qs('#marketTaxasListV146');
+    if(taxas){
+      taxas.innerHTML=
+        row('💰','CDI','Depósito interbancário',[valueFrom('#cdi-mes-ant','#cdi-mes-ant-sub'), valueFrom('#cdi-mes-cur','#cdi-cur-sub'), valueFrom('#cdi-ano','#cdi-ano-sub'), valueFrom('#cdi-acum-v2','#cdi-acum-src-v2')])+
+        row('🎯','IPCA','Inflação ao consumidor',[valueFrom('#ipca-mes-ant','#ipca-mes-ant-sub'), valueObj(text('#row-ipca .td-cur','—'),'mês atual',clsOf('#row-ipca .td-cur')), valueFrom('#ipca-ano-v2'), valueFrom('#ipca-acum-v2','#ipca-acum-sub-v2')]);
+    }
+    const brasil=qs('#marketBrasilListV146');
+    if(brasil){
+      brasil.innerHTML=
+        row('💵','Dólar','PTAX BRL/USD',[valueFrom('#dolar-ant-cot','#dolar-ant-sub'), combo('#dolar-cur-cot','#dolar-cur-var','#dolar-cur-sub'), valueFrom('#dolar-ano-v2'), valueFrom('#dolar-acum-v2','#dolar-acum-sub-v2')])+
+        row('📈','Ibovespa','B3 · pontos e variação',[combo('#ibov-ant-pts','#ibov-ant-var','#ibov-ant-sub'), combo('#ibov-cur-pts','#ibov-cur-var','#ibov-cur-sub'), valueFrom('#ibov-ano-v2'), valueFrom('#ibov-acum-v2','#ibov-acum-sub-v2')]);
+    }
+    const eua=qs('#marketEuaListV146');
+    if(eua){
+      function us(id){ const v=usValue(id,usMode); return valueObj(v.main,v.sub,v.cls); }
+      function curPts(varId,ptsId){ const v=usValue(varId,usMode); return valueObj(v.main,text(ptsId,'')+(v.sub&&v.sub!=='—'?' · '+v.sub:''),v.cls); }
+      eua.innerHTML=
+        row('🌎','S&P 500','índice amplo EUA',[us('sp-ant-var'), curPts('sp-cur-var','#sp-cur-pts'), us('sp-ano-var'), us('sp-acum-var')])+
+        row('🏛️','Dow Jones','blue chips EUA',[us('dow-ant-var'), curPts('dow-cur-var','#dow-cur-pts'), us('dow-ano-var'), us('dow-acum-var')])+
+        row('💻','Nasdaq','tecnologia EUA',[us('nasdaq-ant-var'), curPts('nasdaq-cur-var','#nasdaq-cur-pts'), us('nasdaq-ano-var'), us('nasdaq-acum-var')]);
+    }
+  }
+  function init(){
+    try{
+      ensureDashboard();
+      syncDashboard();
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  [200,700,1400,2600,4200].forEach(ms=>setTimeout(init,ms));
+  try{
+    const body=qs('#sec-painel-body');
+    if(body){
+      const mo=new MutationObserver(()=>syncDashboard());
+      mo.observe(body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class','style']});
+    }
+  }catch(e){}
+})();
