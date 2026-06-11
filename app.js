@@ -12010,3 +12010,22 @@ if(!isSearchInput(el)) return;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
   [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
 })();
+
+/* ════════════════════════════════════════════════════════
+   PATCH v141 — Numeric Legibility System
+   - Ativa a camada CSS de legibilidade dos números financeiros.
+   - Atualiza build/cache sem alterar a lógica dos rankings.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_NUMERIC_LEGIBILITY_SYSTEM_20260610_v141';
+  function init(){
+    try{
+      document.documentElement.classList.add('rankings-ux-v141','rankings-ux-v140','rankings-ux-v139','rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135');
+      const meta=document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content=BUILD;
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
+})();

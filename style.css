@@ -26866,3 +26866,188 @@ html.rankings-ux-v140 #rankingsSection .ranking-exec-insight p strong.insight-pc
   background:rgba(255,255,255,.055);
   border:1px solid rgba(255,255,255,.10);
 }
+
+/* ════════════════════════════════════════════════════════
+   PATCH v141 — Numeric Legibility System
+   - Padroniza a leitura de percentuais, PL, CDI e alertas no painel.
+   - Reduz saturação do vermelho/verde em tamanhos pequenos.
+   - Aplica números tabulares e mais respiro em badges/valores financeiros.
+   - Preserva o layout mobile e os KPIs principais.
+════════════════════════════════════════════════════════ */
+html.rankings-ux-v141{
+  --finance-up:#3fdaa0;
+  --finance-up-strong:#30d890;
+  --finance-up-bg:rgba(63,218,160,.095);
+  --finance-up-border:rgba(63,218,160,.18);
+  --finance-down:#ff8a96;
+  --finance-down-strong:#ff7d8b;
+  --finance-down-bg:rgba(255,138,150,.095);
+  --finance-down-border:rgba(255,138,150,.19);
+  --finance-neutral:#b9c5df;
+}
+
+html.rankings-ux-v141 .kpi-value,
+html.rankings-ux-v141 .ranking-exec-card strong,
+html.rankings-ux-v141 .ranking-return,
+html.rankings-ux-v141 .ranking-cdi,
+html.rankings-ux-v141 .rank-val,
+html.rankings-ux-v141 .pct-val,
+html.rankings-ux-v141 .fund-metric-value,
+html.rankings-ux-v141 .indic-pct,
+html.rankings-ux-v141 .dolar-month-var,
+html.rankings-ux-v141 .dolar-metric-val,
+html.rankings-ux-v141 .v2-val,
+html.rankings-ux-v141 .exec-val,
+html.rankings-ux-v141 .attention-row-v136 .value,
+html.rankings-ux-v141 #rankingsSection .ranking-exec-insight p strong.insight-pct{
+  font-variant-numeric:tabular-nums lining-nums;
+  font-feature-settings:'tnum' 1,'lnum' 1;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:geometricPrecision;
+  letter-spacing:0;
+  white-space:nowrap;
+  text-shadow:none;
+}
+
+/* Cores financeiras mais executivas em tamanhos pequenos */
+html.rankings-ux-v141 .ranking-return.pos,
+html.rankings-ux-v141 .rank-val.pos,
+html.rankings-ux-v141 .pct-val.pos,
+html.rankings-ux-v141 .fund-metric-value.pos,
+html.rankings-ux-v141 .indic-pct.pos,
+html.rankings-ux-v141 .dolar-month-var.pos,
+html.rankings-ux-v141 .dolar-metric-val.pos,
+html.rankings-ux-v141 .v2-val.pos,
+html.rankings-ux-v141 .exec-val.pos,
+html.rankings-ux-v141 .ranking-cat-mini strong.pos,
+html.rankings-ux-v141 .ranking-risk-row em.pos{
+  color:var(--finance-up) !important;
+}
+
+html.rankings-ux-v141 .ranking-return.neg,
+html.rankings-ux-v141 .rank-val.neg,
+html.rankings-ux-v141 .pct-val.neg,
+html.rankings-ux-v141 .fund-metric-value.neg,
+html.rankings-ux-v141 .indic-pct.neg,
+html.rankings-ux-v141 .dolar-month-var.neg,
+html.rankings-ux-v141 .dolar-metric-val.neg,
+html.rankings-ux-v141 .v2-val.neg,
+html.rankings-ux-v141 .exec-val.neg,
+html.rankings-ux-v141 .ranking-cat-mini strong.neg,
+html.rankings-ux-v141 .ranking-risk-row em.neg{
+  color:var(--finance-down) !important;
+}
+
+html.rankings-ux-v141 .ranking-return,
+html.rankings-ux-v141 .rank-val,
+html.rankings-ux-v141 .pct-val{
+  font-weight:760 !important;
+  line-height:1.25 !important;
+}
+
+/* Cards executivos: preserva destaque, mas reduz vibração visual */
+html.rankings-ux-v141 #rankingsSection .ranking-exec-card strong{
+  font-weight:760 !important;
+  letter-spacing:-.015em !important;
+  line-height:1.12 !important;
+}
+html.rankings-ux-v141 #rankingsSection .ranking-exec-card strong.pos{
+  color:var(--finance-up-strong) !important;
+}
+html.rankings-ux-v141 #rankingsSection .ranking-exec-card strong.neg{
+  color:var(--finance-down-strong) !important;
+}
+
+/* Leitura rápida: percentuais ganham respiro e contraste mais confortável */
+html.rankings-ux-v141 #rankingsSection .ranking-exec-insight p{
+  line-height:1.62 !important;
+}
+html.rankings-ux-v141 #rankingsSection .ranking-exec-insight p strong.insight-pct{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  min-width:58px !important;
+  padding:3px 8px !important;
+  margin:0 2px !important;
+  border-radius:8px !important;
+  font-size:.72rem !important;
+  font-weight:760 !important;
+  line-height:1.22 !important;
+  vertical-align:baseline !important;
+  letter-spacing:-.01em !important;
+}
+html.rankings-ux-v141 #rankingsSection .ranking-exec-insight p strong.insight-pct.pos{
+  color:var(--finance-up) !important;
+  background:var(--finance-up-bg) !important;
+  border-color:var(--finance-up-border) !important;
+}
+html.rankings-ux-v141 #rankingsSection .ranking-exec-insight p strong.insight-pct.neg{
+  color:var(--finance-down) !important;
+  background:var(--finance-down-bg) !important;
+  border-color:var(--finance-down-border) !important;
+}
+html.rankings-ux-v141 #rankingsSection .ranking-exec-insight p strong.insight-pct.zero{
+  color:var(--finance-neutral) !important;
+}
+
+/* Painel de atenção: valores negativos mais legíveis e alinhados */
+html.rankings-ux-v141 .attention-row-v136{
+  grid-template-columns:minmax(0,1fr) minmax(74px,max-content) !important;
+  gap:12px !important;
+}
+html.rankings-ux-v141 .attention-row-v136 .value{
+  justify-self:end !important;
+  min-width:74px !important;
+  max-width:88px !important;
+  text-align:right !important;
+  color:var(--finance-down) !important;
+  font-family:'JetBrains Mono',monospace !important;
+  font-size:.70rem !important;
+  font-weight:760 !important;
+  line-height:1.25 !important;
+  letter-spacing:-.015em !important;
+  overflow:visible !important;
+}
+html.rankings-ux-v141 .attention-row-v136.pipeline .value{
+  color:#9fb0cd !important;
+}
+
+/* Tabela de rankings: colunas numéricas com largura e alinhamento consistentes */
+@media(min-width:701px){
+  html.rankings-ux-v141 .ranking-top-header,
+  html.rankings-ux-v141 .ranking-top-row{
+    grid-template-columns:46px minmax(0,1fr) minmax(92px,110px) minmax(84px,104px) !important;
+  }
+  html.rankings-ux-v141 .ranking-return,
+  html.rankings-ux-v141 .ranking-cdi{
+    justify-self:end !important;
+    text-align:right !important;
+    min-width:76px !important;
+  }
+  html.rankings-ux-v141 .ranking-cdi{
+    color:#b8c7e9 !important;
+    font-weight:720 !important;
+  }
+}
+
+/* Tabela principal: melhora leitura dos percentuais sem aumentar demais a linha */
+html.rankings-ux-v141 #mainTable .pct-val{
+  min-width:58px !important;
+  font-size:.76rem !important;
+  font-weight:740 !important;
+}
+
+@media(max-width:700px){
+  html.rankings-ux-v141 #rankingsSection .ranking-exec-insight p strong.insight-pct{
+    min-width:54px !important;
+    padding:3px 7px !important;
+    font-size:.68rem !important;
+  }
+  html.rankings-ux-v141 .attention-row-v136{
+    grid-template-columns:minmax(0,1fr) minmax(66px,max-content) !important;
+  }
+  html.rankings-ux-v141 .attention-row-v136 .value{
+    min-width:66px !important;
+    font-size:.66rem !important;
+  }
+}
