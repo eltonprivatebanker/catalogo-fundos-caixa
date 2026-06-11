@@ -12274,7 +12274,7 @@ if(!isSearchInput(el)) return;
 ════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_MARKET_DASHBOARD_EXEC_20260611_v146';
+  const BUILD='ELTAUM_MARKET_DASHBOARD_STABILITY_20260611_v147';
   const qs=(s,r=document)=>r.querySelector(s);
   const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
   let usMode='brl';
@@ -12395,7 +12395,7 @@ if(!isSearchInput(el)) return;
   }
   function syncDashboard(){
     const dash=ensureDashboard(); if(!dash) return;
-    document.documentElement.classList.add('market-dashboard-v146','market-lean-v144','market-exec-v142','fund-card-pro-v145');
+    document.documentElement.classList.add('market-dashboard-stable-v147','market-dashboard-v146','market-lean-v144','market-exec-v142','fund-card-pro-v145');
     const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
     const period=qs('#marketDashPeriodV146'); if(period) period.textContent=getPeriodLabel();
 
@@ -12437,12 +12437,8 @@ if(!isSearchInput(el)) return;
     }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
-  [200,700,1400,2600,4200].forEach(ms=>setTimeout(init,ms));
-  try{
-    const body=qs('#sec-painel-body');
-    if(body){
-      const mo=new MutationObserver(()=>syncDashboard());
-      mo.observe(body,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class','style']});
-    }
-  }catch(e){}
+  [200,700,1400,2600,4200,6500].forEach(ms=>setTimeout(init,ms));
+  /* PATCH v147 — estabilidade: removido MutationObserver amplo em #sec-painel-body.
+     A v146 observava o mesmo bloco que atualizava via innerHTML, podendo criar loop de renderização
+     e travar o navegador antes mesmo de abrir o console. */
 })();

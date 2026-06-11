@@ -28057,3 +28057,7 @@ html.market-dashboard-v146 .market-analytic-toggle-v146 button:hover{
     display:block !important;
   }
 }
+
+
+/* PATCH v147 — estabilidade do painel consolidado: JS sem MutationObserver amplo. */
+html.market-dashboard-stable-v147 #marketDashboardV146{contain:layout paint style;}
