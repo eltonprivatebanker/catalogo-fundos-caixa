@@ -27368,3 +27368,84 @@ html.rankings-ux-v143 .attention-row-v136.pipeline .value{
 html.rankings-ux-v143 .attention-block-v136 h3{
   letter-spacing:.075em;
 }
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v144 — Indicadores de Mercado enxuto por padrão
+   - Desktop mostra apenas o painel macro compacto.
+   - Cards detalhados antigos ficam recolhidos e só aparecem por ação do usuário.
+   - Mobile preserva o bloco original.
+════════════════════════════════════════════════════════ */
+html.market-lean-v144 #sec-mercado .market-advanced-toggle-v142{
+  min-width:190px;
+}
+
+@media(min-width:901px){
+  html.market-lean-v144 #sec-mercado > .closed-month-launch{
+    display:none !important;
+  }
+
+  /* Regra mais forte que a v142: detalhe fechado por padrão, mesmo se sobrar classe antiga */
+  html.market-lean-v144 #sec-mercado > .market-ref-grid,
+  html.market-lean-v144 #sec-mercado.market-legacy-open-v142:not(.market-detail-open-v144) > .market-ref-grid{
+    display:none !important;
+  }
+
+  html.market-lean-v144 #sec-mercado.market-detail-open-v144 > .market-ref-grid{
+    display:grid !important;
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid rgba(200,151,58,.16);
+  }
+
+  html.market-lean-v144 #sec-mercado.market-detail-open-v144 .market-advanced-line-v142{
+    position:relative;
+    margin-top:16px;
+  }
+
+  html.market-lean-v144 #sec-mercado.market-detail-open-v144 .market-advanced-line-v142::before{
+    content:'Análise detalhada de mercado';
+    position:absolute;
+    left:0;
+    top:50%;
+    transform:translateY(-50%);
+    color:var(--gold2);
+    font-size:.70rem;
+    font-weight:850;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+    opacity:.92;
+  }
+
+  html.market-lean-v144 .market-advanced-line-v142{
+    display:flex;
+    justify-content:center;
+    margin-top:12px;
+  }
+
+  html.market-lean-v144 .market-advanced-toggle-v142{
+    border-color:rgba(200,151,58,.26) !important;
+    background:rgba(200,151,58,.065) !important;
+    box-shadow:0 8px 24px rgba(0,0,0,.16);
+  }
+
+  html.market-lean-v144 .market-advanced-toggle-v142::before{
+    content:'＋';
+    font-size:.78rem;
+    line-height:1;
+  }
+
+  html.market-lean-v144 #sec-mercado.market-detail-open-v144 .market-advanced-toggle-v142::before{
+    content:'−';
+  }
+
+  html.market-lean-v144 #sec-mercado.market-detail-open-v144 > .market-ref-grid .indic-ref-card{
+    box-shadow:0 8px 28px rgba(0,0,0,.18);
+  }
+}
+
+@media(max-width:900px){
+  html.market-lean-v144 #sec-mercado .market-exec-panel-v142{
+    display:none !important;
+  }
+}

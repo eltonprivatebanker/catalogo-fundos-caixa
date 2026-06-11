@@ -12197,3 +12197,70 @@ if(!isSearchInput(el)) return;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
   [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
 })();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v144 — Mercado enxuto por padrão
+   - Mantém só o painel macro compacto aberto no desktop.
+   - O bloco antigo de Selic/CDI/Poupança fica como detalhe sob demanda.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_LEAN_DEFAULT_20260610_v144';
+  function qs(s,r){ return (r||document).querySelector(s); }
+  function initButton(){
+    const sec=qs('#sec-mercado');
+    let btn=qs('#marketV142ToggleAdvanced');
+    if(!sec || !btn) return;
+
+    document.documentElement.classList.add('market-lean-v144','market-exec-v142','rankings-ux-v143','rankings-ux-v141','executive-header-v135');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+
+    if(sec.dataset.marketV144Initialized!=='1'){
+      sec.classList.remove('market-legacy-open-v142','market-detail-open-v144');
+      sec.dataset.marketV144Initialized='1';
+    }
+
+    if(btn.dataset.boundV144==='1'){
+      const isOpen=sec.classList.contains('market-detail-open-v144');
+      btn.setAttribute('aria-expanded',String(isOpen));
+      btn.textContent=isOpen?'Ocultar detalhes de mercado':'Ver detalhes de mercado';
+      return;
+    }
+
+    /* Remove listeners antigos da v142 e evita que os timeouts da v142 religuem o evento antigo. */
+    const clone=btn.cloneNode(true);
+    clone.dataset.boundV144='1';
+    clone.dataset.boundV142='1';
+    btn.parentNode.replaceChild(clone,btn);
+    btn=clone;
+
+    function setState(open){
+      sec.classList.toggle('market-detail-open-v144',open);
+      sec.classList.toggle('market-legacy-open-v142',open);
+      btn.setAttribute('aria-expanded',String(open));
+      btn.textContent=open?'Ocultar detalhes de mercado':'Ver detalhes de mercado';
+      setTimeout(function(){
+        try{ if(window.poupScenarioChart && typeof window.poupScenarioChart.resize==='function') window.poupScenarioChart.resize(); }catch(e){}
+        try{
+          if(window.Chart && Chart.instances){
+            Object.values(Chart.instances).forEach(function(ch){ try{ ch.resize(); }catch(e){} });
+          }
+        }catch(e){}
+      },90);
+    }
+
+    setState(sec.classList.contains('market-detail-open-v144'));
+    btn.addEventListener('click',function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      setState(!sec.classList.contains('market-detail-open-v144'));
+    });
+  }
+  function init(){
+    try{ initButton(); }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  [200,700,1400,2600,4200].forEach(function(ms){ setTimeout(init,ms); });
+})();
