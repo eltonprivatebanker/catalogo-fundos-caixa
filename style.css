@@ -26767,3 +26767,69 @@ html.rankings-ux-v138 .attention-body-v136{
 html.rankings-ux-v138 .attention-block-v136{
   min-width:0 !important;
 }
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v139 — Nomes longos nos cards executivos de Rankings
+   - Permite leitura em até 2 linhas nos cards de destaque.
+   - Evita nomes “comidos” por ellipsis excessivo no desktop.
+   - Preserva compactação no mobile e demais blocos do dashboard.
+════════════════════════════════════════════════════════ */
+html.rankings-ux-v139 #rankingsSection .ranking-exec-card{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:flex-start !important;
+  min-height:104px !important;
+}
+
+html.rankings-ux-v139 #rankingsSection .ranking-exec-card small{
+  display:-webkit-box !important;
+  white-space:normal !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+  -webkit-line-clamp:2 !important;
+  -webkit-box-orient:vertical !important;
+  line-height:1.28 !important;
+  min-height:calc(1.28em * 2) !important;
+  max-height:calc(1.28em * 2) !important;
+  overflow-wrap:anywhere !important;
+  word-break:normal !important;
+}
+
+html.rankings-ux-v139 #rankingsSection .ranking-exec-card em{
+  margin-top:4px !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+html.rankings-ux-v139 #rankingsSection .ranking-exec-card strong{
+  margin-bottom:6px !important;
+}
+
+html.rankings-ux-v139 #rankingsSection .ranking-exec-card span{
+  margin-bottom:6px !important;
+}
+
+@media(min-width:1025px){
+  html.rankings-ux-v139 #rankingsSection .ranking-exec-summary{
+    align-items:stretch !important;
+  }
+
+  html.rankings-ux-v139 #rankingsSection .ranking-exec-card{
+    padding:13px 15px !important;
+  }
+}
+
+@media(max-width:700px){
+  html.rankings-ux-v139 #rankingsSection .ranking-exec-card{
+    min-height:96px !important;
+  }
+
+  html.rankings-ux-v139 #rankingsSection .ranking-exec-card small{
+    -webkit-line-clamp:2 !important;
+    min-height:calc(1.22em * 2) !important;
+    max-height:calc(1.22em * 2) !important;
+    line-height:1.22 !important;
+  }
+}
