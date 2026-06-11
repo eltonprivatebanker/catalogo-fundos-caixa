@@ -11579,3 +11579,228 @@ if(!isSearchInput(el)) return;
 
 /* ELTAUM_RANKING_CATEGORY_NAMES_FULL_20260611_v149
    Ajuste visual feito em CSS: nomes completos nos cartões por categoria. */
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_PANEL_PRO_20260611_v150
+   - Um único modo visível: executivo OU tabela analítica.
+   - O período "Último fechado" é lido da base e replicado em todo o painel.
+   - O mês corrente permanece separado como parcial/aguardando.
+   - Sem MutationObserver amplo: atualizações controladas e finitas.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MARKET_PANEL_PRO_20260611_v150';
+  const DESKTOP = 901;
+  const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
+  const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
+  const monthNames = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function clean(v){ return String(v == null ? '' : v).replace(/\s+/g,' ').trim(); }
+  function text(id){ const el=document.getElementById(id); return el ? clean(el.textContent) : '—'; }
+  function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+  function pctClass(v){
+    const s=clean(v);
+    const m=s.match(/[+-]?\d+(?:[.,]\d+)?\s*%/);
+    if(!m) return s === '—' || !s ? 'dash' : 'neu';
+    const n=Number(m[0].replace('%','').replace('.','').replace(',','.'));
+    return n>0?'pos':n<0?'neg':'neu';
+  }
+  function periodToken(v){
+    const s=clean(v).toLowerCase();
+    const m=s.match(/\b(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\s*\/\s*(20\d{2})\b/i);
+    if(m) return `${m[1].toLowerCase()}/${m[2]}`;
+    const n=s.match(/\b(0?[1-9]|1[0-2])\s*\/\s*(20\d{2})\b/);
+    if(n) return `${monthNames[Number(n[1])-1]}/${n[2]}`;
+    return '';
+  }
+  function previousCalendarMonth(){
+    const d=new Date();
+    d.setDate(1); d.setMonth(d.getMonth()-1);
+    return `${monthNames[d.getMonth()]}/${d.getFullYear()}`;
+  }
+  function currentCalendarMonth(){
+    const d=new Date();
+    return `${monthNames[d.getMonth()]}/${d.getFullYear()}`;
+  }
+  function getClosedPeriod(){
+    const candidates=[
+      text('th-mes-ant-sub'), text('cdi-mes-ant-sub'), text('ipca-mes-ant-sub'),
+      text('dolar-ant-sub'), text('ibov-ant-sub'), text('sp-ant-sub'), text('dow-ant-sub'), text('nasdaq-ant-sub'),
+      text('closedCardPeriod'), text('closedMonthLaunchSub')
+    ];
+    for(const v of candidates){ const p=periodToken(v); if(p) return p; }
+    return previousCalendarMonth();
+  }
+  function getCurrentPeriod(){
+    const candidates=[text('th-mes-cur-sub'),text('cdi-cur-sub'),text('dolar-cur-sub'),text('ibov-cur-sub'),text('sp-cur-sub')];
+    for(const v of candidates){ const p=periodToken(v); if(p) return p; }
+    return currentCalendarMonth();
+  }
+  function getAccumLabel(){
+    const active=qs('.market-period-tabs .indic-tab.active[data-months]');
+    const months=active?.dataset.months || periodToken(text('th-acum-sub-v2')).replace(/\D/g,'') || '12';
+    return `${months}M`;
+  }
+  function valueOrDash(v){ const s=clean(v); return s && !/^(m[eê]s|ano|fechado|atual)$/i.test(s) ? s : '—'; }
+
+  function normalizeClosedPeriodLabels(closed, current){
+    const closedHeader=qs('#th-mes-ant-sub');
+    if(closedHeader) closedHeader.textContent=closed;
+    const currentHeader=qs('#th-mes-cur-sub');
+    if(currentHeader && !periodToken(currentHeader.textContent)) currentHeader.textContent=current;
+
+    ['cdi-mes-ant-sub','ipca-mes-ant-sub','dolar-ant-sub','ibov-ant-sub','sp-ant-sub','dow-ant-sub','nasdaq-ant-sub'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.textContent=`${closed} · fechado`;
+    });
+    const launch=document.getElementById('closedMonthLaunchSub');
+    if(launch) launch.textContent=`${closed} · indicadores consolidados`;
+    const cardPeriod=document.getElementById('closedCardPeriod');
+    if(cardPeriod) cardPeriod.textContent=closed;
+    const sheetNote=document.getElementById('closedMarketSheetNote');
+    if(sheetNote) sheetNote.textContent=`Último mês fechado · ${closed}`;
+  }
+
+  function parseUs(id){
+    const raw=text(id);
+    const result={usd:'—',brl:'—'};
+    const re=/(USD|BRL)\s*([+-]?\d+(?:[.,]\d+)?%|—)/ig;
+    let m;
+    while((m=re.exec(raw))){ result[m[1].toLowerCase()]=m[2]; }
+    if(result.usd==='—' && result.brl==='—'){
+      const vals=raw.match(/[+-]?\d+(?:[.,]\d+)?%/g)||[];
+      if(vals[0]) result.usd=vals[0];
+      if(vals[1]) result.brl=vals[1];
+      else if(vals[0]) result.brl=vals[0];
+    }
+    return result;
+  }
+  function usHtml(pair, mode){
+    if(mode==='both'){
+      return `<span class="market-v150-double"><span class="${pctClass(pair.usd)}">USD ${esc(pair.usd)}</span><span class="${pctClass(pair.brl)}">BRL ${esc(pair.brl)}</span></span>`;
+    }
+    const val=pair[mode]||'—';
+    return `<strong class="${pctClass(val)}">${esc(val)}</strong><small>${mode.toUpperCase()}</small>`;
+  }
+  function marketCell(main, sub='', mainClass){
+    const cls=mainClass || pctClass(main);
+    return `<div class="market-v150-cell"><strong class="${cls}">${esc(valueOrDash(main))}</strong>${sub?`<small class="market-v150-sub ${pctClass(sub)}">${esc(sub)}</small>`:''}</div>`;
+  }
+  function nameCell(icon,name,sub){
+    return `<div class="market-v150-name"><span class="market-v150-icon">${icon}</span><div><strong>${esc(name)}</strong><small>${esc(sub)}</small></div></div>`;
+  }
+  function standardRow(item){
+    return `<div class="market-v150-row">${nameCell(item.icon,item.name,item.sub)}${item.cells.map(c=>marketCell(c.main,c.sub,c.cls)).join('')}</div>`;
+  }
+  function groupCard(title, subtitle, rows, extraClass=''){
+    const accum=getAccumLabel();
+    return `<article class="market-v150-card ${extraClass}"><div class="market-v150-card-head"><div><span>${esc(title)}</span><small>${esc(subtitle)}</small></div></div><div class="market-v150-table-head"><span>Indicador</span><span>Fechado</span><span>Atual</span><span>Ano</span><span>${esc(accum)}</span></div>${rows.map(standardRow).join('')}</article>`;
+  }
+  function usCard(rows){
+    const accum=getAccumLabel();
+    return `<article class="market-v150-card us"><div class="market-v150-card-head"><div><span>Bolsas dos Estados Unidos</span><small>Retornos convertidos em BRL, em USD ou nas duas moedas</small></div><div class="market-v150-us-toggle" role="group" aria-label="Moeda dos índices dos Estados Unidos">${['brl','usd','both'].map(mode=>`<button type="button" data-v150-us="${mode}" class="${state.usMode===mode?'active':''}" aria-pressed="${state.usMode===mode}">${mode==='both'?'Ambos':mode.toUpperCase()}</button>`).join('')}</div></div><div class="market-v150-table-head"><span>Índice</span><span>Fechado</span><span>Atual</span><span>Ano</span><span>${esc(accum)}</span></div>${rows.map(r=>`<div class="market-v150-row">${nameCell(r.icon,r.name,r.sub)}<div class="market-v150-cell">${usHtml(r.closed,state.usMode)}</div><div class="market-v150-cell">${usHtml(r.current,state.usMode)}${r.points&&r.points!=='—'?`<small class="market-v150-points">${esc(r.points)}</small>`:''}</div><div class="market-v150-cell">${usHtml(r.year,state.usMode)}</div><div class="market-v150-cell">${usHtml(r.accum,state.usMode)}</div></div>`).join('')}</article>`;
+  }
+
+  function collectData(){
+    const closed=getClosedPeriod();
+    const current=getCurrentPeriod();
+    const accum=getAccumLabel();
+    const ipcaCurrentEl=qs('#row-ipca .td-cur');
+    const ipcaCurrentTxt=clean(ipcaCurrentEl?.textContent||'');
+    const ipcaCurrent = /aguard/i.test(ipcaCurrentTxt) ? '—' : valueOrDash(ipcaCurrentTxt.match(/[+-]?\d+(?:[.,]\d+)?%/)?.[0]||'—');
+    return {
+      closed,current,accum,
+      cdi:{closed:valueOrDash(text('cdi-mes-ant')),current:valueOrDash(text('cdi-mes-cur')),year:valueOrDash(text('cdi-ano')),accum:valueOrDash(text('cdi-acum-v2'))},
+      ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2'))},
+      dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
+      ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
+      us:[
+        {icon:'🌎',name:'S&P 500',sub:'índice amplo dos EUA',closed:parseUs('sp-ant-var'),current:parseUs('sp-cur-var'),year:parseUs('sp-ano-var'),accum:parseUs('sp-acum-var'),points:valueOrDash(text('sp-cur-pts'))},
+        {icon:'🏛️',name:'Dow Jones',sub:'empresas blue chips',closed:parseUs('dow-ant-var'),current:parseUs('dow-cur-var'),year:parseUs('dow-ano-var'),accum:parseUs('dow-acum-var'),points:valueOrDash(text('dow-cur-pts'))},
+        {icon:'💻',name:'Nasdaq',sub:'empresas de tecnologia',closed:parseUs('nasdaq-ant-var'),current:parseUs('nasdaq-cur-var'),year:parseUs('nasdaq-ano-var'),accum:parseUs('nasdaq-acum-var'),points:valueOrDash(text('nasdaq-cur-pts'))}
+      ]
+    };
+  }
+
+  function summaryKpi(label, main, sub, mainClass=''){
+    const cls=mainClass||pctClass(main);
+    return `<div class="market-v150-summary-kpi"><b>${esc(label)}</b><strong class="${cls}">${esc(main)}</strong><small class="${pctClass(sub)}">${esc(sub)}</small></div>`;
+  }
+  function buildDashboard(data){
+    const body=document.getElementById('sec-painel-body');
+    if(!body) return null;
+    qsa('#marketDashboardV146,.market-exec-dashboard-v146',body).forEach(el=>el.remove());
+    let shell=document.getElementById('marketDashboardV150');
+    if(!shell){
+      shell=document.createElement('div');
+      shell.id='marketDashboardV150';
+      shell.className='market-v150-shell';
+      const table=qs(':scope > .indic-table-wrap',body) || qs('.indic-table-wrap',body);
+      body.insertBefore(shell,table||body.firstChild);
+    }
+    const taxas=[
+      {icon:'💰',name:'CDI',sub:'Depósito interbancário',cells:[{main:data.cdi.closed,sub:`${data.closed} · fechado`},{main:data.cdi.current,sub:data.cdi.current==='—'?`${data.current} · aguardando`:`${data.current} · parcial`},{main:data.cdi.year,sub:`até ${data.closed}`},{main:data.cdi.accum,sub:data.accum}]},
+      {icon:'🎯',name:'IPCA',sub:'Inflação oficial ao consumidor',cells:[{main:data.ipca.closed,sub:`${data.closed} · fechado`},{main:data.ipca.current,sub:data.ipca.current==='—'?`${data.current} · aguardando`:`${data.current} · parcial`},{main:data.ipca.year,sub:`até ${data.closed}`},{main:data.ipca.accum,sub:data.accum}]}
+    ];
+    const brasil=[
+      {icon:'💵',name:'Dólar PTAX',sub:'Cotação BRL/USD',cells:[{main:data.dolar.closedQuote,sub:`${data.closed} · fechado`,cls:'neu'},{main:data.dolar.currentQuote,sub:data.dolar.currentVar,cls:'neu'},{main:data.dolar.year},{main:data.dolar.accum,sub:data.accum}]},
+      {icon:'📈',name:'Ibovespa',sub:'B3 · pontos e variação',cells:[{main:data.ibov.closedPoints,sub:data.ibov.closedVar,cls:'neu'},{main:data.ibov.currentPoints,sub:data.ibov.currentVar,cls:'neu'},{main:data.ibov.year},{main:data.ibov.accum,sub:data.accum}]}
+    ];
+    shell.innerHTML=`<div class="market-v150-head"><div class="market-v150-title"><span>Painel consolidado</span><strong>Indicadores de mercado</strong><div class="market-v150-periods"><b>Último fechado:</b><span class="closed-period">${esc(data.closed)} · fechado</span><b>Mês atual:</b><span class="current-period">${esc(data.current)} · parcial/aguardando</span></div></div><div class="market-v150-view-switch" role="group" aria-label="Modo de visualização do painel"><button type="button" data-v150-mode="exec" class="${state.mode==='exec'?'active':''}" aria-pressed="${state.mode==='exec'}">Visão executiva</button><button type="button" data-v150-mode="analytic" class="${state.mode==='analytic'?'active':''}" aria-pressed="${state.mode==='analytic'}">Tabela analítica</button></div></div><div class="market-v150-executive"><section class="market-v150-summary"><div class="market-v150-summary-intro"><span>Leitura rápida</span><strong>Visão executiva dos indicadores</strong><small>Dados fechados e dados correntes permanecem separados.</small></div>${summaryKpi('CDI',data.cdi.closed,`${data.closed} · fechado`)}${summaryKpi('IPCA',data.ipca.closed,`${data.closed} · fechado`)}${summaryKpi('Dólar',data.dolar.currentQuote,data.dolar.currentVar,'neu')}${summaryKpi('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar,'neu')}</section><section class="market-v150-grid">${groupCard('Taxas e inflação','CDI e IPCA organizados por período',taxas)}${groupCard('Câmbio e mercado brasileiro','Dólar PTAX e Ibovespa',brasil)}${usCard(data.us)}</section></div>`;
+    return shell;
+  }
+
+  function applyMode(){
+    const body=document.getElementById('sec-painel-body');
+    const shell=document.getElementById('marketDashboardV150');
+    const table=body && (qs(':scope > .indic-table-wrap',body)||qs('.indic-table-wrap',body));
+    if(!body||!shell||!table) return;
+    const mobile=window.innerWidth<DESKTOP;
+    body.classList.toggle('market-v150-mode-exec',!mobile && state.mode==='exec');
+    body.classList.toggle('market-v150-mode-analytic',!mobile && state.mode==='analytic');
+    shell.style.display=mobile?'none':'';
+    if(mobile){ table.style.display=''; table.hidden=false; }
+    else { table.style.display=''; table.hidden=false; }
+  }
+  function bind(shell){
+    if(!shell || shell.dataset.boundV150==='1') return;
+    shell.dataset.boundV150='1';
+    shell.addEventListener('click',ev=>{
+      const modeBtn=ev.target.closest('[data-v150-mode]');
+      if(modeBtn){ state.mode=modeBtn.dataset.v150Mode==='analytic'?'analytic':'exec'; state.lastFingerprint=''; sync(true); return; }
+      const usBtn=ev.target.closest('[data-v150-us]');
+      if(usBtn){ state.usMode=['brl','usd','both'].includes(usBtn.dataset.v150Us)?usBtn.dataset.v150Us:'brl'; state.lastFingerprint=''; sync(true); }
+    });
+  }
+  function fingerprint(data){ return JSON.stringify(data)+`|${state.mode}|${state.usMode}`; }
+  function sync(force=false){
+    try{
+      const body=document.getElementById('sec-painel-body');
+      if(!body) return;
+      const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+      document.documentElement.classList.add('market-panel-pro-v150');
+      const data=collectData();
+      normalizeClosedPeriodLabels(data.closed,data.current);
+      const fp=fingerprint(data);
+      let shell=document.getElementById('marketDashboardV150');
+      if(force || fp!==state.lastFingerprint || !shell){ shell=buildDashboard(data); state.lastFingerprint=fp; }
+      bind(shell);
+      applyMode();
+    }catch(err){ console.warn('[v150 mercado]',err); }
+  }
+  function debounce(fn,wait){ let t; return function(){ clearTimeout(t); t=setTimeout(fn,wait); }; }
+  function init(){
+    [120,450,900,1600,2800,4800,8000,12000].forEach(ms=>setTimeout(()=>sync(false),ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('.market-period-tabs .indic-tab[data-months],#sec-mercado-painel,.section-toggle-btn')) setTimeout(()=>sync(true),120);
+    },true);
+    window.addEventListener('resize',debounce(()=>{applyMode();},140),{passive:true});
+    window.addEventListener('pageshow',()=>setTimeout(()=>sync(true),120),{once:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  window.__ELTAUM_MARKET_PANEL_V150__={sync:()=>sync(true),getClosedPeriod,getCurrentPeriod,state};
+})();
