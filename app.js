@@ -4517,7 +4517,8 @@ document.addEventListener('DOMContentLoaded', function(){
   function cdiRatioInfo(m12){
     const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(toNum(m12), indicState?.cdi?.m12) : null;
     if(ratio === null || ratio === undefined || !Number.isFinite(Number(ratio))) return {txt:'—', cls:''};
-    const cls = ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
+    // v145: quando o retorno de 12M é negativo, o % do CDI também deve sinalizar negativo em vermelho.
+    const cls = ratio < 0 ? 'fund-cdi-ratio-negative' : ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
     return {txt:`${ratio}% do CDI`, cls};
   }
 
@@ -4596,13 +4597,13 @@ document.addEventListener('DOMContentLoaded', function(){
       <div class="fund-card-performance-v68" aria-label="Rentabilidade do fundo">
         <div class="fund-card-performance-title-v68">Rentabilidade</div>
         <div class="fund-card-perf-short-v68">
-          <span class="fund-card-perf-chip-v68"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
-          <span class="fund-card-perf-chip-v68"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
-          <span class="fund-card-perf-chip-v68"><small>Ano</small><strong class="${anoInfo.cls}">${anoInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68 ${diaInfo.cls}"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68 ${mesInfo.cls}"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68 ${anoInfo.cls}"><small>Ano</small><strong class="${anoInfo.cls}">${anoInfo.txt}</strong></span>
         </div>
         <div class="fund-card-perf-highlight-v68">
-          <span class="fund-card-perf-main-v68"><small>12 meses</small><strong class="${m12Info.cls}">${m12Info.txt}</strong></span>
-          <span class="fund-card-perf-main-v68 cdi"><small>% CDI 12M</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
+          <span class="fund-card-perf-main-v68 ${m12Info.cls}"><small>12 meses</small><strong class="${m12Info.cls}">${m12Info.txt}</strong></span>
+          <span class="fund-card-perf-main-v68 cdi ${ratioCdi.cls}"><small>% CDI 12M</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
         </div>
       </div>
 
