@@ -11819,10 +11819,12 @@ if(!isSearchInput(el)) return;
   }
   function attentionRow(r,campo,reason,extraClass=''){
     const nome=cleanFundName(r?.Fundo || r?.['Fundo']);
-    const val=pct(r?.[campo]);
-    return `<button type="button" class="attention-row-v136 ${extraClass}" data-attention-fund="${esc(nome)}" title="Buscar ${esc(nome)}">
+    const num=nval(r?.[campo]);
+    const val=pct(num);
+    const signal = num === null ? 'zero' : (num < 0 ? 'neg' : (num > 0 ? 'pos' : 'zero'));
+    return `<button type="button" class="attention-row-v136 ${extraClass} ${signal}" data-attention-fund="${esc(nome)}" title="Buscar ${esc(nome)}">
       <span><span class="fund">${esc(nome || 'Fundo sem nome')}</span><span class="reason">${esc(reason)}</span></span>
-      <span class="value">${esc(val)}</span>
+      <span class="value ${signal}">${esc(val)}</span>
     </button>`;
   }
   function renderAttentionV136(){
@@ -11837,7 +11839,7 @@ if(!isSearchInput(el)) return;
     const semDados=rows.filter(r=>!rowHasData(r));
     const neg12=base.filter(r=>{const n=nval(r['Acum. 12M (%)']); return n!==null && n<0;}).sort((a,b)=>nval(a['Acum. 12M (%)'])-nval(b['Acum. 12M (%)']));
     const negAno=base.filter(r=>{const n=nval(r['Acum. Ano (%)']); return n!==null && n<0;}).sort((a,b)=>nval(a['Acum. Ano (%)'])-nval(b['Acum. Ano (%)']));
-    const pioresMes=base.filter(r=>{const n=nval(r['Acum. Mes (%)']); return n!==null;}).sort((a,b)=>nval(a['Acum. Mes (%)'])-nval(b['Acum. Mes (%)']));
+    const pioresMes=base.filter(r=>{const n=nval(r['Acum. Mes (%)']); return n!==null && n<0;}).sort((a,b)=>nval(a['Acum. Mes (%)'])-nval(b['Acum. Mes (%)']));
     const qtdNeg12=neg12.length;
     const qtdNegAno=negAno.length;
     const qtdPipeline=semDados.length;
@@ -11846,8 +11848,8 @@ if(!isSearchInput(el)) return;
     const pipelineList=semDados.slice(0,3);
     const principal = qtdNeg12 > 0
       ? `<strong>${qtdNeg12}</strong> fundo(s) com 12M negativo no filtro atual. Use essa lista como ponto de partida para investigar classe, prazo, benchmark e aderência ao perfil.`
-      : `Nenhum 12M negativo identificado no filtro atual. Mesmo assim, confira fundos sem dados e quedas no mês antes da recomendação.`;
-    const bloco12 = worstList.length ? `<div class="attention-block-v136"><h3>Piores leituras</h3><div class="attention-list-v136">${worstList.map(r=>attentionRow(r, neg12.length?'Acum. 12M (%)':'Acum. Mes (%)', neg12.length?'12M negativo — avaliar contexto e benchmark':'Queda no mês — monitorar comportamento')).join('')}</div></div>` : '';
+      : `Nenhum 12M negativo identificado no filtro atual. Se também não houver mês negativo, mantenha o foco nos fundos sem dados e na aderência ao perfil.`;
+    const bloco12 = worstList.length ? `<div class="attention-block-v136"><h3>Piores leituras negativas</h3><div class="attention-list-v136">${worstList.map(r=>attentionRow(r, neg12.length?'Acum. 12M (%)':'Acum. Mes (%)', neg12.length?'12M negativo — avaliar contexto e benchmark':'Mês negativo — monitorar comportamento')).join('')}</div></div>` : '';
     const blocoAno = yearList.length ? `<div class="attention-block-v136"><h3>Negativos no ano</h3><div class="attention-list-v136">${yearList.map(r=>attentionRow(r,'Acum. Ano (%)','Ano negativo — verificar se há tese de manutenção')).join('')}</div></div>` : '';
     const blocoPipe = pipelineList.length ? `<div class="attention-block-v136"><h3>Sem dados / pipeline</h3><div class="attention-list-v136">${pipelineList.map(r=>`<button type="button" class="attention-row-v136 pipeline" data-attention-fund="${esc(cleanFundName(r.Fundo||r['Fundo']))}"><span><span class="fund">${esc(cleanFundName(r.Fundo||r['Fundo']) || 'Fundo sem nome')}</span><span class="reason">Sem cota/rentabilidade suficiente na base</span></span><span class="value">—</span></button>`).join('')}</div></div>` : '';
     panel.innerHTML=`
@@ -12024,6 +12026,172 @@ if(!isSearchInput(el)) return;
       document.documentElement.classList.add('rankings-ux-v141','rankings-ux-v140','rankings-ux-v139','rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135');
       const meta=document.querySelector('meta[name="app-build"]');
       if(meta) meta.content=BUILD;
+    }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  [250,900,1700,2600].forEach(function(ms){setTimeout(init,ms);});
+})();
+
+/* ════════════════════════════════════════════════════════
+   PATCH v142 — Indicadores de Mercado: painel macro compacto desktop
+   - Espelha os dados do bloco original para uma camada executiva desktop.
+   - O bloco original continua preservado para mobile e como detalhe avançado.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_EXECUTIVE_COMPACT_20260610_v142';
+  const qs=(s,root=document)=>root.querySelector(s);
+  const qsa=(s,root=document)=>Array.from(root.querySelectorAll(s));
+  function txt(sel,fallback='—'){
+    const el=qs(sel);
+    const t=(el && el.textContent || '').trim();
+    return t || fallback;
+  }
+  function clsFrom(sel){
+    const el=qs(sel);
+    if(!el) return '';
+    if(el.classList.contains('pos')) return 'pos';
+    if(el.classList.contains('neg')) return 'neg';
+    if(el.classList.contains('zero')) return 'zero';
+    const t=(el.textContent||'').trim();
+    if(t.startsWith('-')) return 'neg';
+    if(t.startsWith('+')) return 'pos';
+    return '';
+  }
+  function setText(id,value){ const el=qs('#'+id); if(el) el.textContent=value; }
+  function setMini(id,src){
+    const el=qs('#'+id); if(!el) return;
+    el.textContent=txt(src);
+    el.className=clsFrom(src);
+  }
+  function cloneCdiStrip(){
+    const src=qs('#cdiMonthStrip');
+    const dst=qs('#marketV142CdiStrip');
+    if(!src || !dst) return;
+    dst.innerHTML=src.innerHTML;
+    qsa('[id]',dst).forEach(el=>el.removeAttribute('id'));
+  }
+  function cloneCopom(){
+    const src=qs('#copomMeetings');
+    if(!src) return;
+    const next=qs('.copom-item.next, .copom-item.featured-next',src) || qs('.copom-item',src);
+    const nextBox=qs('#marketV142NextCopom');
+    if(nextBox && next){
+      const date=(qs('.copom-date',next)?.textContent || '').trim() || '—';
+      const label=(qs('.copom-num',next)?.textContent || '').trim();
+      const result=(qs('.copom-result',next)?.textContent || '').trim();
+      nextBox.innerHTML='<strong>'+date+'</strong><small>'+[label,result].filter(Boolean).join(' · ')+'</small>';
+    }
+    const decisions=qs('#marketV142CopomDecisions');
+    if(decisions){
+      const items=qsa('.copom-item.hold, .copom-item.cut, .copom-item.next',src).slice(-3);
+      decisions.innerHTML=items.map(item=>{
+        const num=(qs('.copom-num',item)?.textContent || '').trim();
+        const date=(qs('.copom-date',item)?.textContent || '').trim();
+        const res=(qs('.copom-result',item)?.textContent || '').trim();
+        return '<div class="market-copom-decision-v142"><b>'+[num,date].filter(Boolean).join(' · ')+'</b><span>'+res+'</span></div>';
+      }).join('');
+    }
+    const full=qs('#marketV142CopomFull');
+    if(full){
+      full.innerHTML='<div class="copom-grid">'+src.innerHTML+'</div>';
+      qsa('[id]',full).forEach(el=>el.removeAttribute('id'));
+    }
+  }
+  function syncMarketV142(){
+    try{
+      document.documentElement.classList.add('market-exec-v142','rankings-ux-v141','executive-header-v135');
+      const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+      setText('marketV142ClosedTitle',txt('#closedMonthLaunchTitle','Resumo de mercado'));
+      setText('marketV142ClosedSub',txt('#closedMonthLaunchSub','Último mês fechado · indicadores consolidados'));
+      setMini('marketV142MiniCdi','#closedMiniCdi');
+      setMini('marketV142MiniIpca','#closedMiniIpca');
+      setMini('marketV142MiniDolar','#closedMiniDolar');
+      setMini('marketV142MiniIbov','#closedMiniIbov');
+      setText('marketV142Selic',txt('#mc-selic'));
+      setText('marketV142SelicDate',txt('#selic-last-change'));
+      setText('marketV142Cdi',txt('#mc-cdi'));
+      setText('marketV142CdiYear',txt('#cdiYearHistoryTotal','Ano —'));
+      setText('marketV142PoupNova',txt('#mc-poup'));
+      setText('marketV142PoupNovaSub',txt('#poupNewRuleText','regra conforme Selic'));
+      setText('marketV142PoupAntiga',txt('#poupOldMonthly'));
+      setText('marketV142PoupAntigaSub',txt('#poupOldRuleText','TR + 0,50%'));
+      setText('marketV142PoupNote',txt('#poupQuickNote','Carregando leitura da poupança...'));
+      setText('marketV142PoupStatus',txt('#poupScenarioStatus','Selic —'));
+      setText('marketV142PoupScenario',txt('#poupScenarioSummary','Carregando cenários...'));
+      setText('marketV142PoupToday',txt('#poupScenarioToday','—'));
+      setText('marketV142PoupScenarioNote',txt('#poupScenarioNote','Estimativa didática para comparação visual.'));
+      cloneCdiStrip();
+      cloneCopom();
+    }catch(e){}
+  }
+  function bindMarketV142(){
+    const copomBtn=qs('#marketV142ToggleCopom');
+    const copomFull=qs('#marketV142CopomFull');
+    if(copomBtn && copomFull && copomBtn.dataset.boundV142!=='1'){
+      copomBtn.dataset.boundV142='1';
+      copomBtn.addEventListener('click',()=>{
+        const open=copomFull.hasAttribute('hidden');
+        if(open) copomFull.removeAttribute('hidden'); else copomFull.setAttribute('hidden','');
+        copomBtn.setAttribute('aria-expanded',String(open));
+        copomBtn.textContent=open?'Ocultar calendário completo':'Ver calendário completo';
+      });
+    }
+    const poupBtn=qs('#marketV142TogglePoup');
+    const poupDetail=qs('#marketV142PoupDetail');
+    if(poupBtn && poupDetail && poupBtn.dataset.boundV142!=='1'){
+      poupBtn.dataset.boundV142='1';
+      poupBtn.addEventListener('click',()=>{
+        const open=poupDetail.hasAttribute('hidden');
+        if(open) poupDetail.removeAttribute('hidden'); else poupDetail.setAttribute('hidden','');
+        poupBtn.setAttribute('aria-expanded',String(open));
+        poupBtn.textContent=open?'Ocultar detalhes':'Ver detalhes';
+      });
+    }
+    const advBtn=qs('#marketV142ToggleAdvanced');
+    const sec=qs('#sec-mercado');
+    if(advBtn && sec && advBtn.dataset.boundV142!=='1'){
+      advBtn.dataset.boundV142='1';
+      advBtn.addEventListener('click',()=>{
+        const open=!sec.classList.contains('market-legacy-open-v142');
+        sec.classList.toggle('market-legacy-open-v142',open);
+        advBtn.setAttribute('aria-expanded',String(open));
+        advBtn.textContent=open?'Ocultar cards detalhados':'Mostrar cards detalhados de Selic, CDI e Poupança';
+        setTimeout(()=>{
+          try{ if(window.poupScenarioChart && typeof window.poupScenarioChart.resize==='function') window.poupScenarioChart.resize(); }catch(e){}
+          try{ if(window.Chart && Chart.instances){ Object.values(Chart.instances).forEach(ch=>{try{ch.resize();}catch(e){}}); } }catch(e){}
+        },80);
+      });
+    }
+  }
+  function init(){
+    bindMarketV142();
+    syncMarketV142();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  [150,500,1000,1800,3000].forEach(ms=>setTimeout(init,ms));
+  try{
+    const mo=new MutationObserver(()=>syncMarketV142());
+    const targets=['#closedMonthLaunch','#mc-selic','#mc-cdi','#cdiMonthStrip','#copomMeetings','#mc-poup','#poupScenarioSummary'].map(s=>qs(s)).filter(Boolean);
+    targets.forEach(t=>mo.observe(t,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['class']}));
+  }catch(e){}
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v143 — Pontos de atenção: somente rentabilidades negativas
+   - Piores leituras não lista rentabilidade mensal positiva.
+   - Cores no painel passam a respeitar o sinal do número.
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_ATTENTION_NEGATIVES_ONLY_20260610_v143';
+  function init(){
+    try{
+      document.documentElement.classList.add('rankings-ux-v143','rankings-ux-v141','rankings-ux-v140','rankings-ux-v139','rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','market-exec-v142','executive-header-v135');
+      const meta=document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content=BUILD;
+      try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){}
     }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
