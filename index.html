@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_RANKINGS_DESKTOP_ALIGN_FIX_20260610_v137"/>
+<meta name="app-build" content="ELTAUM_RANKINGS_CATEGORY_PANEL_ALIGN_20260610_v138"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,12 +61,12 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=rankings-desktop-align-fix-v137" rel="stylesheet"/>
+<link href="style.css?v=rankings-category-panel-align-v138" rel="stylesheet"/>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=rankings-desktop-align-fix-v137"></script>
+<script defer src="app.js?v=rankings-category-panel-align-v138"></script>
 
 </head>
 <body>
@@ -353,13 +353,23 @@ html:not(.app-booting) .page{
 
   <div class="ranking-toolbar ranking-toolbar-v136" aria-label="Filtros dos rankings" role="group">
     <div class="ranking-control-card-v136">
-      <label for="rankingClassSelectV136">Classe</label>
-      <select id="rankingClassSelectV136" class="ranking-select-v136" aria-label="Filtrar rankings por classe de ativo">
-        <option value="todos">Todos os fundos</option>
-        <option value="sem-fmp">Sem FMP</option>
-        <option value="renda-fixa">Renda Fixa</option>
-        <option value="acoes">Ações</option>
-        <option value="multimercado">Multimercado</option>
+      <label for="rankingClassSelectV136">Universo / classe</label>
+      <select id="rankingClassSelectV136" class="ranking-select-v136" aria-label="Filtrar rankings por universo ou classe de ativo">
+        <optgroup label="Universo">
+          <option value="todos">Todos os fundos</option>
+          <option value="sem-fmp">Todos sem FMP</option>
+        </optgroup>
+        <optgroup label="Classes">
+          <option value="renda-fixa-simples">RF Simples</option>
+          <option value="renda-fixa">Renda Fixa</option>
+          <option value="renda-fixa-referenciado">RF Referenciado</option>
+          <option value="renda-fixa-curto-prazo">RF Curto Prazo</option>
+          <option value="multimercado">Multimercado</option>
+          <option value="cambial">Cambial</option>
+          <option value="acoes">Ações</option>
+          <option value="fundo-de-indice">Índice</option>
+          <option value="fmp">FMP</option>
+        </optgroup>
       </select>
     </div>
     <div class="ranking-control-card-v136">
@@ -374,9 +384,15 @@ html:not(.app-booting) .page{
       <span class="ranking-filter-label">Filtro</span>
       <button type="button" class="ranking-filter-chip active" data-rank-filter="todos">Todos</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="sem-fmp">Sem FMP</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa-simples">RF Simples</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa">Renda Fixa</button>
-      <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa-referenciado">RF Ref.</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa-curto-prazo">RF Curto</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="multimercado">Multimercado</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="cambial">Cambial</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="fundo-de-indice">Índice</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="fmp">FMP</button>
     </div>
   </div>
 

@@ -26698,3 +26698,72 @@ html.rankings-ux-v137 .attention-foot-v136{
     justify-content:flex-start !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════
+   PATCH v138 — Categorias completas + alinhamento do painel de atenção
+   - Dropdown de rankings passa a refletir a taxonomia do catálogo.
+   - Corrige a percepção de desalinhamento vertical do painel direito.
+   - Dá mais espaço para valores negativos e nomes longos no alerta.
+════════════════════════════════════════════════════════ */
+html.rankings-ux-v138 #rankingsSection .ranking-control-card-v136:first-child{
+  min-width:220px !important;
+}
+
+html.rankings-ux-v138 #rankingsSection .ranking-select-v136 optgroup{
+  background:#0b0f1d;
+  color:#e8bb6a;
+  font-weight:800;
+}
+
+html.rankings-ux-v138 #rankingsSection .ranking-select-v136 option{
+  background:#0b0f1d;
+  color:#e7ecfa;
+}
+
+@media(min-width:1025px){
+  html.rankings-ux-v138 #rankingsSection .ranking-toolbar-v136{
+    grid-template-columns:minmax(220px,250px) minmax(170px,210px) !important;
+  }
+
+  html.rankings-ux-v138 .ranking-layout-v136{
+    align-items:start !important;
+  }
+
+  html.rankings-ux-v138 .ranking-main-v136{
+    margin-top:0 !important;
+    align-self:start !important;
+  }
+
+  html.rankings-ux-v138 #rankingAttentionV136{
+    margin-top:8px !important;
+    align-self:start !important;
+  }
+}
+
+@media(min-width:1180px){
+  html.rankings-ux-v138 .ranking-layout-v136{
+    grid-template-columns:minmax(0,1fr) clamp(380px,23vw,420px) !important;
+    gap:15px !important;
+  }
+}
+
+html.rankings-ux-v138 .attention-row-v136{
+  grid-template-columns:minmax(0,1fr) minmax(66px,max-content) !important;
+  gap:12px !important;
+}
+
+html.rankings-ux-v138 .attention-row-v136 .value{
+  min-width:66px !important;
+  max-width:78px !important;
+  font-size:.66rem !important;
+  letter-spacing:-.04em !important;
+}
+
+html.rankings-ux-v138 .attention-head-v136,
+html.rankings-ux-v138 .attention-body-v136{
+  min-width:0 !important;
+}
+
+html.rankings-ux-v138 .attention-block-v136{
+  min-width:0 !important;
+}

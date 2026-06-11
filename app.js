@@ -1858,6 +1858,23 @@ let activeRankPeriods = { topFundos:'12m', destaques:'mes' };
 function normRankTxt(v){
   return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
 }
+function rankFilterMatchesCategoria(filter, categoria, nome=''){
+  const cat = normRankTxt(categoria);
+  const fund = normRankTxt(nome);
+  const base = cat + ' ' + fund;
+  if(!filter || filter === 'todos') return true;
+  if(filter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
+  if(filter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
+  if(filter === 'renda-fixa-simples') return cat.includes('RENDA FIXA SIMPLES');
+  if(filter === 'renda-fixa-referenciado') return cat.includes('RENDA FIXA REFERENCIADO') || base.includes('REF DI');
+  if(filter === 'renda-fixa-curto-prazo') return cat.includes('RENDA FIXA CURTO PRAZO') || base.includes('CURTO PRAZO');
+  if(filter === 'multimercado') return cat.includes('MULTIMERCADO');
+  if(filter === 'cambial') return cat.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO') || base.includes('CAMBIAL');
+  if(filter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
+  if(filter === 'fundo-de-indice') return cat.includes('FUNDO DE INDICE') || cat.includes('INDICE') || base.includes('ETF');
+  if(filter === 'fmp') return base.includes('FMP') || base.includes('PRIVATIZACAO');
+  return true;
+}
 function rankCampoPorPeriodo(periodo){
   if(periodo === 'dia') return 'Variacao Dia (%)';
   if(periodo === 'mes') return 'Acum. Mes (%)';
@@ -1887,14 +1904,7 @@ function fmtSummaryPl(v){
   return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
 }
 function passaFiltroRanking(r){
-  const cat = normRankTxt(r['Categoria']);
-  const nome = normRankTxt(r['Fundo']);
-  const base = cat + ' ' + nome;
-  if(activeRankFilter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
-  if(activeRankFilter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
-  if(activeRankFilter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
-  if(activeRankFilter === 'multimercado') return cat.includes('MULTIMERCADO');
-  return true;
+  return rankFilterMatchesCategoria(activeRankFilter, r && r['Categoria'], r && r['Fundo']);
 }
 function atualizarRankingFilterUI(){
   document.querySelectorAll('[data-rank-filter]').forEach(btn=>{
@@ -1940,14 +1950,7 @@ function renderRankings(){
   // Ranking agregado por categoria, vindo do kpis_dashboard.json.
   // Quando o filtro "sem FMP" está ativo, retiramos FMP/privatização também do agregado.
   const categoriasKpi = kpisDashboard?.categorias || {};
-  const passaFiltroCat = (cat) => {
-    const c = normRankTxt(cat);
-    if(activeRankFilter === 'sem-fmp') return !(c.includes('FMP') || c.includes('PRIVATIZACAO'));
-    if(activeRankFilter === 'renda-fixa') return c.includes('RENDA FIXA');
-    if(activeRankFilter === 'acoes') return c.includes('ACOES');
-    if(activeRankFilter === 'multimercado') return c.includes('MULTIMERCADO');
-    return true;
-  };
+  const passaFiltroCat = (cat) => rankFilterMatchesCategoria(activeRankFilter, cat, '');
   const catPonderada = Object.entries(categoriasKpi)
     .filter(([cat,d])=>passaFiltroCat(cat) && numKpi(d?.rent_12m_ponderada)!==null)
     .sort((a,b)=>numKpi(b[1].rent_12m_ponderada)-numKpi(a[1].rent_12m_ponderada));
@@ -11931,9 +11934,25 @@ if(!isSearchInput(el)) return;
 ════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_RANKINGS_DESKTOP_ALIGN_FIX_20260610_v137';
+  const BUILD='ELTAUM_RANKINGS_CATEGORY_PANEL_ALIGN_20260610_v138';
   function init(){
-    try{ document.documentElement.classList.add('rankings-ux-v137','rankings-ux-v136','executive-header-v135'); }catch(e){}
+    try{ document.documentElement.classList.add('rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135'); }catch(e){}
+    try{ const meta=document.querySelector('meta[name="app-build"]'); if(meta) meta.content=BUILD; }catch(e){}
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  setTimeout(init,500);
+  setTimeout(init,1500);
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   PATCH v138 — Categorias completas + alinhamento do painel de atenção
+════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_RANKINGS_CATEGORY_PANEL_ALIGN_20260610_v138';
+  function init(){
+    try{ document.documentElement.classList.add('rankings-ux-v138','rankings-ux-v137','rankings-ux-v136','executive-header-v135'); }catch(e){}
     try{ const meta=document.querySelector('meta[name="app-build"]'); if(meta) meta.content=BUILD; }catch(e){}
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
