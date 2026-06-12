@@ -3885,43 +3885,92 @@ function render(){
   renderPagination();
 }
 
-function scrollToFundResultsStart(){
+function scrollToFundResultsStart(options={}){
   const tableWrap = document.querySelector('#sec-fundos .table-wrap');
+  const mobileCards = document.getElementById('mobileFundCards');
   const fallback = document.getElementById('sec-fundos');
-  const target = tableWrap || fallback;
+  const isMobile = window.matchMedia('(max-width: 820px)').matches;
+  const target = isMobile ? (mobileCards || tableWrap || fallback) : (tableWrap || fallback);
   if(!target) return;
 
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  const stickyOffset = isMobile ? 118 : 24;
+  const stickyOffset = isMobile ? 96 : 20;
   const y = target.getBoundingClientRect().top + window.pageYOffset - stickyOffset;
-
   window.scrollTo({
     top: Math.max(0, y),
-    behavior: 'smooth'
+    behavior: options.behavior || (isMobile ? 'smooth' : 'auto')
   });
 }
 
+function changeFundPageV168(page){
+  const total=perPage===9999?1:Math.max(1,Math.ceil(filtered.length/perPage));
+  const nextPage=Math.min(total,Math.max(1,Number(page)||1));
+  if(nextPage===currentPage) return;
+
+  const section=document.getElementById('sec-fundos');
+  const isMobile=window.matchMedia('(max-width: 820px)').matches;
+  const tableWrap=section?.querySelector('.table-wrap');
+  const mobileCards=document.getElementById('mobileFundCards');
+  const stableBox=isMobile ? (mobileCards || tableWrap) : tableWrap;
+  const previousHeight=stableBox?.getBoundingClientRect().height || 0;
+
+  if(section) section.classList.add('pagination-switching-v168');
+  if(stableBox && previousHeight>0) stableBox.style.minHeight=`${Math.ceil(previousHeight)}px`;
+
+  currentPage=nextPage;
+  expandedRows.clear();
+  render();
+
+  requestAnimationFrame(()=>{
+    // No desktop, reposiciona sem animação para evitar o efeito de “pulo”.
+    // No mobile, o patch nativo v108 executa uma única rolagem até o primeiro card.
+    if(!isMobile) scrollToFundResultsStart({behavior:'auto'});
+
+    const active=document.querySelector('#pageBtns .page-btn.active');
+    if(active){
+      try{ active.focus({preventScroll:true}); }catch(_){ active.focus(); }
+    }
+
+    const release=()=>{
+      if(stableBox) stableBox.style.minHeight='';
+      if(section) section.classList.remove('pagination-switching-v168');
+    };
+    if(isMobile) setTimeout(release,220);
+    else requestAnimationFrame(release);
+  });
+}
+window.changeFundPageV168=changeFundPageV168;
+
 function renderPagination(){
   const total=perPage===9999?1:Math.ceil(filtered.length/perPage);
-  const c=$('pageBtns'); c.innerHTML='';
+  const c=$('pageBtns');
+  if(!c) return;
+  c.innerHTML='';
   if(total<=1) return;
-  const mk=(label,page,dis,act)=>{
+
+  c.setAttribute('role','navigation');
+  c.setAttribute('aria-label','Paginação dos fundos');
+
+  const mk=(label,page,dis,act,ariaLabel)=>{
     const b=document.createElement('button');
+    b.type='button';
     b.className='page-btn'+(act?' active':'');
-    b.textContent=label; b.disabled=dis;
-    if(!dis) b.addEventListener('click',()=>{
-      currentPage=page;
-      expandedRows.clear();
-      render();
-      requestAnimationFrame(scrollToFundResultsStart);
+    b.textContent=label;
+    b.disabled=dis;
+    b.dataset.page=String(page);
+    if(ariaLabel) b.setAttribute('aria-label',ariaLabel);
+    if(act) b.setAttribute('aria-current','page');
+    if(!dis) b.addEventListener('click',e=>{
+      e.preventDefault();
+      changeFundPageV168(page);
     });
     return b;
   };
-  c.appendChild(mk('‹',currentPage-1,currentPage===1));
+
+  c.appendChild(mk('‹',currentPage-1,currentPage===1,false,'Página anterior'));
   let from=Math.max(1,currentPage-2),to=Math.min(total,from+4);
   from=Math.max(1,to-4);
-  for(let i=from;i<=to;i++) c.appendChild(mk(i,i,false,i===currentPage));
-  c.appendChild(mk('›',currentPage+1,currentPage===total||total===0));
+  for(let i=from;i<=to;i++) c.appendChild(mk(i,i,false,i===currentPage,`Página ${i}`));
+  c.appendChild(mk('›',currentPage+1,currentPage===total||total===0,false,'Próxima página'));
 }
 
 function buildHeader(){
@@ -13051,3 +13100,37 @@ if(document.readyState === 'loading'){
 }else{
   initMarketReferenceExecutiveV167();
 }
+
+
+/* ════════════════════════════════════════════════════
+   v168 — PAGINAÇÃO ESTÁVEL E CENTRALIZADA
+   - impede rolagem suave no desktop;
+   - preserva a altura da área durante a troca;
+   - mantém foco no botão ativo sem mover a viewport.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_PAGINATION_STABLE_20260612_v168';
+  window.__ELTAUM_PAGINATION_STABLE_V168__={build:BUILD,changePage:window.changeFundPageV168};
+
+  function syncBuild(){
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  // Sobrescreve a função que o patch v108 redefine anteriormente.
+  window.scrollToFundResultsStart=function(options={}){
+    const isMobile=window.matchMedia('(max-width: 820px)').matches;
+    const target=isMobile
+      ? (document.querySelector('#mobileFundCards .fund-card-mobile') || document.getElementById('mobileFundCards') || document.querySelector('#sec-fundos .table-wrap'))
+      : (document.querySelector('#sec-fundos .table-wrap') || document.getElementById('sec-fundos'));
+    if(!target) return;
+    const offset=isMobile?96:20;
+    const top=Math.max(0,target.getBoundingClientRect().top+window.scrollY-offset);
+    window.scrollTo({top,behavior:options.behavior || (isMobile?'smooth':'auto')});
+  };
+  try{ scrollToFundResultsStart=window.scrollToFundResultsStart; }catch(_){ }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',syncBuild,{once:true});
+  else syncBuild();
+})();

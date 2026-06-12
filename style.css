@@ -28303,3 +28303,79 @@ html.fund-card-executive-v166 body.fund-card-mode #mobileFundCards .fund-card-li
   #sec-mercado .market-reference-source-v167{font-size:.54rem!important}
   #sec-mercado .cdi-history-v167 .cdi-month-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
 }
+
+
+/* ════════════════════════════════════════════════════
+   v168 — Paginação centralizada, estável e sem flash
+════════════════════════════════════════════════════ */
+@media(min-width:821px){
+  #sec-fundos .pagination-row{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:16px!important;
+    width:100%!important;
+    margin-top:14px!important;
+    padding:0 2px!important;
+  }
+  #sec-fundos .pagination-row #resultInfo{
+    grid-column:1!important;
+    justify-self:start!important;
+    margin:0!important;
+  }
+  #sec-fundos .pagination-row .page-btns{
+    grid-column:2!important;
+    justify-self:center!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    margin:0!important;
+  }
+}
+
+#sec-fundos.pagination-switching-v168,
+#sec-fundos.pagination-switching-v168 .table-wrap,
+#sec-fundos.pagination-switching-v168 #mainTable,
+#sec-fundos.pagination-switching-v168 #mobileFundCards,
+#sec-fundos.pagination-switching-v168 .page-btn{
+  scroll-behavior:auto!important;
+  transition:none!important;
+  animation:none!important;
+}
+#sec-fundos.pagination-switching-v168 .table-wrap,
+#sec-fundos.pagination-switching-v168 #mobileFundCards{
+  overflow-anchor:none!important;
+}
+#sec-fundos .page-btn:focus-visible{
+  outline:2px solid rgba(232,187,106,.78)!important;
+  outline-offset:2px!important;
+}
+#sec-fundos .page-btn[aria-current="page"]{
+  box-shadow:0 0 0 1px rgba(232,187,106,.12),inset 0 1px 0 rgba(255,255,255,.04)!important;
+}
+
+@media(max-width:820px){
+  #sec-fundos .pagination-row{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:9px!important;
+    width:100%!important;
+  }
+  #sec-fundos .pagination-row #resultInfo{
+    width:100%!important;
+    text-align:center!important;
+  }
+  #sec-fundos .pagination-row .page-btns{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    margin:0!important;
+    overflow-x:auto!important;
+    scrollbar-width:none!important;
+  }
+  #sec-fundos .pagination-row .page-btns::-webkit-scrollbar{display:none!important}
+}
