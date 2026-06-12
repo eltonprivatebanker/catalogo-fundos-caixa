@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-booting">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
-<meta name="app-build" content="ELTAUM_CARD_SIDE_PANEL_METRICS_20260606_v59"/>
+<meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
+<meta name="app-build" content="ELTAUM_MARKET_ANALYTIC_ALIGNMENT_20260612_v164"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -27,53 +28,114 @@
   .boot-bar::before{content:'';display:block;width:42%;height:100%;border-radius:999px;background:linear-gradient(90deg,#c8973a,#e8bb6a);animation:bootMove 1.1s ease-in-out infinite;}
   @keyframes bootMove{0%{transform:translateX(-105%)}100%{transform:translateX(245%)}}
 
+
+/* PATCH v78 — proteção contra loading infinito */
+html.app-ready .page,
+html:not(.app-booting) .page{
+  opacity:1!important;
+  transform:none!important;
+}
+#appBootScreen.boot-hidden-v78{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+
+/* PATCH v79 — sem tela inicial de carregamento */
+html.no-boot-v79 .page,
+html.app-ready .page,
+html:not(.app-booting) .page{
+  opacity:1!important;
+  transform:none!important;
+  visibility:visible!important;
+}
+#appBootScreen{
+  display:none!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
 </style>
 
-<script id="boot-reveal-v51">
-  window.__revealApp = function(){
-    try{
-      document.documentElement.classList.remove('app-booting');
-      document.documentElement.classList.add('app-ready');
-    }catch(e){}
-  };
-  window.setTimeout(window.__revealApp, 5200);
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=card-side-panel-metrics-v59" rel="stylesheet"/>
+<link href="style.css?v=market-analytic-alignment-v164" rel="stylesheet"/>
+<style id="critical-ui-v153">
+/* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
+.desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
+.desktop-anchor-nav-inner-v131{display:flex;align-items:center;gap:5px;min-height:48px;padding:6px 8px;overflow-x:auto;scrollbar-width:none}
+.desktop-anchor-nav-inner-v131::-webkit-scrollbar{display:none}
+.desktop-anchor-kicker-v131{flex:0 0 auto;padding:0 10px;color:#7f8aa8;font:800 .56rem/1 'JetBrains Mono',monospace;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+.desktop-anchor-link-v131{display:inline-flex;align-items:center;justify-content:center;gap:6px;flex:0 0 auto;min-height:34px;padding:7px 10px;border:1px solid transparent;border-radius:9px;color:#b8c2da!important;background:transparent;text-decoration:none!important;font:650 .69rem/1 'Inter',sans-serif;white-space:nowrap}
+.desktop-anchor-link-v131:hover{color:#f0c777!important;border-color:rgba(200,151,58,.24);background:rgba(200,151,58,.075)}
+.desktop-anchor-link-v131.active{color:#f4cf82!important;border-color:rgba(200,151,58,.48);background:linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.075));box-shadow:inset 3px 0 0 #c8973a}
+.desktop-anchor-search-v135{margin-left:auto;border-color:rgba(200,151,58,.26);background:rgba(200,151,58,.06)}
+#rankingsSection .ranking-toolbar-v136{display:grid;grid-template-columns:minmax(180px,220px) minmax(150px,180px) minmax(0,1fr);align-items:end;gap:10px;width:100%;margin:12px 0 14px;padding:12px;border:1px solid rgba(255,255,255,.075);border-radius:13px;background:linear-gradient(180deg,rgba(17,21,38,.72),rgba(10,12,22,.62))}
+#rankingsSection .ranking-control-card-v136{display:flex;flex-direction:column;gap:6px;min-width:0}
+#rankingsSection .ranking-control-card-v136 label{color:#8d99b8;font:800 .56rem/1 'Inter',sans-serif;letter-spacing:.1em;text-transform:uppercase}
+#rankingsSection .ranking-select-v136{width:100%;min-height:38px;padding:8px 34px 8px 11px;border:1px solid rgba(200,151,58,.28);border-radius:9px;background:#0d1120;color:#eef2fb;font:650 .69rem/1.2 'Inter',sans-serif;outline:none;cursor:pointer;color-scheme:dark}
+#rankingsSection .ranking-filter-row-compat-v136{display:flex;align-items:center;gap:6px;min-width:0;min-height:38px;padding:2px 0;overflow-x:auto;scrollbar-width:none}
+#rankingsSection .ranking-filter-row-compat-v136::-webkit-scrollbar{display:none}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-label{flex:0 0 auto;margin-right:2px;color:#7f8aa8;font:800 .55rem/1 'JetBrains Mono',monospace;letter-spacing:.09em;text-transform:uppercase}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{flex:0 0 auto;min-height:30px;padding:6px 10px;border:1px solid rgba(255,255,255,.085);border-radius:999px;background:#0e1222;color:#bfc9df;font:700 .60rem/1 'Inter',sans-serif;cursor:pointer;white-space:nowrap}
+#rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip.active{border-color:rgba(200,151,58,.55);background:rgba(200,151,58,.14);color:#f0c777}
+#marketExecPanelV142{display:none!important}
+@media(max-width:1180px){#rankingsSection .ranking-toolbar-v136{grid-template-columns:minmax(170px,1fr) minmax(145px,.7fr)}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
+@media(max-width:900px){.desktop-anchor-nav-ui-v132{display:none!important}#rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr 1fr;padding:10px}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
+@media(max-width:620px){#rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr}}
+</style>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
 <noscript><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/></noscript>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script defer src="app.js?v=card-side-panel-metrics-v59"></script>
+<script>
+(function(){
+  function cleanupLegacyUi(){
+    document.querySelectorAll('#marketExecPanelV142').forEach(function(el){el.remove();});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', cleanupLegacyUi, {once:true});
+  else cleanupLegacyUi();
+})();
+</script>
+<script defer src="app.js?v=market-analytic-alignment-v164"></script>
 
 </head>
 <body>
-<div id="appBootScreen" role="status" aria-live="polite" aria-label="Carregando catálogo">
-  <div class="boot-card">
-    <div class="boot-logo">E</div>
-    <p class="boot-title">Carregando Catálogo de Fundos</p>
-    <p class="boot-sub">Preparando dados, rankings e indicadores para uma abertura estável.</p>
-    <div class="boot-bar" aria-hidden="true"></div>
-  </div>
-</div>
-
 <div class="page" id="topo">
 <!-- ═══════════════════════════════════════════════ HEADER ══ -->
-<header class="site-header-clean">
+<header class="site-header-clean executive-header-shell-v134">
   <div class="brand">
     <div class="brand-logo">E</div>
     <div class="brand-text">
       <h1>Catálogo de Fundos CAIXA</h1>
       <p>Consulta e análise de informações públicas sobre fundos e mercado</p>
+      <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
     </div>
   </div>
-  <div class="live-badge" id="lastUpdate"><span class="live-dot"></span>Carregando...</div>
+
 </header>
+
+<!-- ════════════════ PATCH v135: Cabeçalho compacto + atalho de busca no menu ════════════════ -->
+<nav class="desktop-anchor-nav-ui-v132" id="desktopAnchorNavV131" aria-label="Navegação rápida por seções do painel">
+  <div class="desktop-anchor-nav-inner-v131">
+    <span class="desktop-anchor-kicker-v131">Navegação</span>
+    <a class="desktop-anchor-link-v131 active" href="#sec-kpi" data-anchor-target="sec-kpi"><span>📊</span><strong>Resumo</strong></a>
+    <a class="desktop-anchor-link-v131" href="#sec-fundos" data-anchor-target="sec-fundos"><span>📁</span><strong>Fundos</strong></a>
+    <a class="desktop-anchor-link-v131" href="#rankingsSection" data-anchor-target="rankingsSection"><span>🏆</span><strong>Rankings</strong></a>
+    <a class="desktop-anchor-link-v131" href="#sec-mercado" data-anchor-target="sec-mercado"><span>📈</span><strong>Mercado</strong></a>
+    <a class="desktop-anchor-link-v131" href="#sec-dolar" data-anchor-target="sec-dolar"><span>💵</span><strong>Dólar</strong></a>
+    <a class="desktop-anchor-link-v131" href="#sec-focus" data-anchor-target="sec-focus" data-open-section="sec-focus-body"><span>📋</span><strong>Focus</strong></a>
+    <a class="desktop-anchor-link-v131" href="#sec-graficos" data-anchor-target="sec-graficos" data-open-section="sec-graficos-body"><span>📉</span><strong>Gráficos</strong></a>
+    <a class="desktop-anchor-link-v131" href="#siteSources" data-anchor-target="siteSources" data-open-details="footerDisclaimer"><span>ℹ️</span><strong>Fontes</strong></a>
+    <a class="desktop-anchor-link-v131 desktop-anchor-search-v135" href="#sec-fundos" data-anchor-target="sec-fundos" data-search-focus="1"><span>🔎</span><strong>Buscar fundo</strong></a>
+  </div>
+</nav>
 
 <!-- ════════════════ BLOCO 1: QUEBRA-GELO — visão geral ════════════════ -->
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
-<div class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi" aria-label="Resumo executivo do catálogo">
+<div class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi" aria-label="Resumo executivo do catálogo" role="group">
   <div class="kpi kpi-fundos"><div class="kpi-icon">📊</div><div class="kpi-label">Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
   <div class="kpi kpi-categorias"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub" id="kpiCatsSub">Tipos de estratégia</div></div>
   <div class="kpi kpi-pl"><div class="kpi-icon">💰</div><div class="kpi-label">PL consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">Patrimônio consolidado</div></div>
@@ -83,12 +145,12 @@
 </div>
 
 <!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
-<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo">
+<div class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" aria-label="Resumo executivo compacto do catálogo" role="group">
   <article class="mobile-kpi-card mobile-kpi-card-compact">
     <div class="mobile-kpi-head">
       <span class="mobile-kpi-emoji">📊</span>
       <div>
-        <h3>Resumo executivo</h3>
+        <h2>Resumo executivo</h2>
         <p>Principais números para consulta rápida</p>
       </div>
     </div>
@@ -148,10 +210,10 @@
     <div class="controls-bar fund-controls-v2">
       <div class="search-wrap fund-search-main">
         <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input id="searchInput" type="text" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..."/>
+        <input id="searchInput" type="search" placeholder="Buscar fundo, benchmark, liquidez, CNPJ..." autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="fund_search_no_autofill" class="search-no-autofill-v123">
       </div>
 
-      <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo">
+      <div class="filter-command-bar" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo" role="group">
         <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
           <span class="filter-button-icon">⚙️</span>
           <span id="filterButtonText">Categorias</span>
@@ -162,7 +224,7 @@
         <button type="button" class="filter-clear-inline" id="clearFiltersTop">Limpar</button>
       </div>
 
-      <div class="fund-view-controls" aria-label="Opções de visualização do catálogo">
+      <div class="fund-view-controls" aria-label="Opções de visualização do catálogo" role="group">
         <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
           <span>Exibição</span>
           <select id="perPage" class="ctrl-select">
@@ -184,25 +246,83 @@
           <button type="button" class="cdi-sort-btn" data-cdi-sort="asc">Menor</button>
         </div>
         <div class="toggle-wrap compact-toggle-wrap">
-          <label class="toggle"><input type="checkbox" id="toggleSemDados"><span class="toggle-slider"></span></label>
-          <span class="toggle-label">Ocultar sem dados</span>
+          <label class="toggle"><input type="checkbox" id="toggleSemDados" name="toggleSemDados"><span class="toggle-slider"></span></label>
+          <span class="toggle-label">Ocultar fundos sem dados</span>
         </div>
       </div>
     </div>
 
-    <div class="catalog-shortcuts" aria-label="Atalhos rápidos do catálogo">
-      <span class="catalog-shortcuts-label">Atalhos</span>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="all">Todos</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="pf" aria-pressed="false">Pessoa Física</button>
-      <button type="button" class="filter-preset-chip shortcut-preset fav-shortcut-chip" data-preset="favoritos" aria-pressed="false">⭐ Favoritos <span class="fav-count-inline" id="favShortcutCount">0</span></button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cdi">CDI</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="conservador">Conservador</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="ipca">IPCA</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa">Renda Fixa</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado">Multimercado</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes">Ações</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial">Cambial</button>
-      <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp">FMP</button>
+    <div class="catalog-shortcuts catalog-shortcuts-premium-v69 catalog-shortcuts-category-grid-v69" aria-label="Categorias dos fundos" role="group">
+      <div class="category-grid-head-v69">
+        <span class="catalog-shortcuts-label">Categorias</span>
+        <span class="category-grid-status-v69" id="categoryGridStatus">Todos os fundos</span>
+      </div>
+      <div class="category-grid-v69" role="tablist" aria-label="Categorias padrão CAIXA">
+        <button type="button" class="filter-preset-chip shortcut-preset active" data-preset="all" aria-pressed="true">Todos</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-simples" aria-pressed="false">RF Simples</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" aria-pressed="false">Renda Fixa</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-referenciado" aria-pressed="false">RF Ref.</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-curto-prazo" aria-pressed="false">RF Curto</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado" aria-pressed="false">Multimercado</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial" aria-pressed="false">Cambial</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes" aria-pressed="false">Ações</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fundo-de-indice" aria-pressed="false">Índice</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp" aria-pressed="false">FMP</button>
+      </div>
+    </div>
+
+    <div class="mobile-category-select-shell-v74" id="mobileCategorySelectShellV74" aria-label="Filtro de categoria no celular" role="group">
+      <div class="mobile-category-select-head-v74">
+        <span>Categoria</span>
+        <strong id="mobileCategorySelectStatusV74">Todos os fundos</strong>
+      </div>
+      <label class="mobile-category-select-wrap-v74">
+        <select id="mobileCategorySelectV74" aria-label="Selecionar categoria do fundo">
+          <option value="">Todos os fundos</option>
+          <option value="RENDA FIXA SIMPLES">RF Simples</option>
+          <option value="RENDA FIXA">Renda Fixa</option>
+          <option value="RENDA FIXA REFERENCIADO">RF Referenciado</option>
+          <option value="RENDA FIXA CURTO PRAZO">RF Curto Prazo</option>
+          <option value="MULTIMERCADO">Multimercado</option>
+          <option value="CAMBIAL">Cambial</option>
+          <option value="ACOES">Ações</option>
+          <option value="FUNDO DE INDICE">Fundo de Índice</option>
+          <option value="FUNDOS MUTUOS DE PRIVATIZACAO">FMP / Privatização</option>
+        </select>
+        <span class="mobile-category-select-arrow-v74">⌄</span>
+      </label>
+
+      <div class="mobile-extra-controls-v75" id="mobileExtraControlsV75" aria-label="Filtros complementares no celular" role="group">
+        <label class="mobile-pf-toggle-v75" for="mobileOnlyPfV75">
+          <input type="checkbox" id="mobileOnlyPfV75"/>
+          <span class="mobile-pf-toggle-mark-v75">✓</span>
+          <span class="mobile-pf-toggle-text-v75">
+            <strong>Somente Pessoa Física</strong>
+            <small>Exibe apenas fundos disponíveis para PF</small>
+          </span>
+        </label>
+
+        <label class="mobile-sort-shell-v75" for="mobileSortSelectV75">
+          <span>Ordenar por</span>
+          <select id="mobileSortSelectV75" aria-label="Ordenar fundos no celular">
+            <option value="base">Padrão da base</option>
+            <option value="m12_desc">Maior rentabilidade 12M</option>
+            <option value="m12_asc">Menor rentabilidade 12M</option>
+            <option value="ano_desc">Maior rentabilidade no ano</option>
+            <option value="ano_asc">Menor rentabilidade no ano</option>
+            <option value="mes_desc">Maior rentabilidade no mês</option>
+            <option value="dia_desc">Maior rentabilidade no dia</option>
+            <option value="cdi_desc">Maior % do CDI 12M</option>
+            <option value="cdi_asc">Menor % do CDI 12M</option>
+          </select>
+          <span class="mobile-sort-arrow-v75">⌄</span>
+        </label>
+      </div>
+
+      <div class="mobile-category-select-foot-v74">
+        <span id="mobileCategorySelectResultV74">171 fundos encontrados</span>
+        <button type="button" id="mobileCategoryClearV74" hidden>Limpar filtro</button>
+      </div>
     </div>
 
     <div class="active-filter-strip" id="activeFilterStrip" aria-live="polite"></div>
@@ -210,7 +330,7 @@
 
 
 
-  <div class="mobile-catalog-view-switch" id="mobileCatalogViewSwitch" aria-label="Escolher forma de visualização dos fundos no celular">
+  <div class="mobile-catalog-view-switch" id="mobileCatalogViewSwitch" aria-label="Escolher forma de visualização dos fundos no celular" role="group">
     <div class="mobile-catalog-view-copy">
       <strong>Visualização</strong>
       <small>Tabela compara mais fundos; cards priorizam leitura rápida.</small>
@@ -223,41 +343,15 @@
 
   <div class="filter-backdrop" id="filterBackdrop" aria-hidden="true"></div>
 
-  <div class="filter-section filter-drawer mobile-filters-collapsed desktop-filters-collapsed filter-drawer-category-only-v44" id="fundFilterDrawer" style="margin-bottom:14px" aria-label="Categorias dos fundos">
-    <div class="filter-sheet-head filter-sheet-head-compact category-filter-head-v44">
-      <div>
-        <strong>Categorias dos fundos</strong>
-        <span>Escolha uma classe CAIXA para filtrar rapidamente.</span>
-      </div>
-      <button type="button" class="filter-sheet-close" id="filterCloseBtn" aria-label="Fechar categorias">✕</button>
-    </div>
-
-    <div class="category-choice-grid-v44" id="mobileCategoryFiltersV44" aria-label="Selecionar categoria do fundo">
-      <button type="button" class="category-choice-v44 active" data-cat="">Todos os fundos</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA SIMPLES">RF Simples</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA">Renda Fixa</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA REFERENCIADO">RF Referenciado</button>
-      <button type="button" class="category-choice-v44" data-cat="RENDA FIXA CURTO PRAZO">RF Curto Prazo</button>
-      <button type="button" class="category-choice-v44" data-cat="MULTIMERCADO">Multimercado</button>
-      <button type="button" class="category-choice-v44" data-cat="CAMBIAL">Cambial</button>
-      <button type="button" class="category-choice-v44" data-cat="ACOES">Ações</button>
-      <button type="button" class="category-choice-v44" data-cat="FUNDO DE INDICE">Fundo de Índice</button>
-      <button type="button" class="category-choice-v44" data-cat="FUNDOS MUTUOS DE PRIVATIZACAO">FMP / Privatização</button>
-    </div>
-
-    <!-- Motor legado preservado oculto para manter a filtragem existente funcionando -->
-    <div class="category-hidden-engine-v44" aria-hidden="true">
-      <div class="filter-row filter-group-panel" id="catFilters"><span class="filter-label">Categoria</span><button class="chip active" data-cat="">Todas</button></div>
-      <div class="filter-row filter-group-panel" id="benchmarkFilters"><span class="filter-label">Benchmark</span><button class="chip active" data-benchmark="">Todos</button></div>
-      <div class="filter-row filter-group-panel" id="perfilFilters"><span class="filter-label">Perfil</span><button class="chip active" data-perfil="">Todos</button></div>
-      <div class="filter-row filter-group-panel" id="riscoFilters"><span class="filter-label">Risco</span><button class="chip active" data-risco="">Todos</button></div>
-    </div>
-
-    <div class="filter-sheet-actions filter-sheet-actions-compact category-filter-actions-v44">
-      <button type="button" class="filter-action-secondary" id="clearFiltersBtn">Limpar categoria</button>
-      <button type="button" class="filter-action-primary" id="filterApplyBtn">Fechar</button>
-    </div>
+  
+  <!-- Motor de filtros preservado sem gaveta lateral legada -->
+  <div class="category-hidden-engine-v85" aria-hidden="true">
+    <div class="filter-row filter-group-panel" id="catFilters"><span class="filter-label">Categoria</span><button class="chip active" data-cat="">Todas</button></div>
+    <div class="filter-row filter-group-panel" id="benchmarkFilters"><span class="filter-label">Benchmark</span><button class="chip active" data-benchmark="">Todos</button></div>
+    <div class="filter-row filter-group-panel" id="perfilFilters"><span class="filter-label">Perfil</span><button class="chip active" data-perfil="">Todos</button></div>
+    <div class="filter-row filter-group-panel" id="riscoFilters"><span class="filter-label">Risco</span><button class="chip active" data-risco="">Todos</button></div>
   </div>
+
 
   <div class="table-wrap">
     <div id="loadMsg"><div class="spinner"></div>Carregando catálogo de fundos...</div>
@@ -281,26 +375,61 @@
     <div class="ranking-title-group">
       <h2>🏆 Rankings dos Fundos</h2>
       <span class="section-badge"><span class="badge-dot green"></span>Baseado em dados SIPII</span>
+      <p class="ranking-section-subtitle-v136">Comparação rápida dos fundos, com pontos de atenção para apoiar a conversa consultiva.</p>
     </div>
-    <div class="ranking-actions" aria-label="Ações dos rankings">
+    <div class="ranking-actions" aria-label="Ações dos rankings" role="group">
       <button type="button" class="ranking-action-btn" data-rank-action="copy-all">📋 Copiar visão</button>
       <button type="button" class="ranking-action-btn" data-rank-action="whatsapp-all">🟢 Enviar WhatsApp</button>
       <button type="button" class="ranking-action-btn" data-rank-action="png-all">🖼️ Print da visão</button>
     </div>
   </div>
 
-  <div class="ranking-toolbar" aria-label="Filtros dos rankings">
-    <div class="ranking-filter-row" id="rankingFilterRow">
+  <div class="ranking-toolbar ranking-toolbar-v136" aria-label="Filtros dos rankings" role="group">
+    <div class="ranking-control-card-v136">
+      <label for="rankingClassSelectV136">Universo / classe</label>
+      <select id="rankingClassSelectV136" class="ranking-select-v136" aria-label="Filtrar rankings por universo ou classe de ativo">
+        <optgroup label="Universo">
+          <option value="todos">Todos os fundos</option>
+          <option value="sem-fmp">Todos sem FMP</option>
+        </optgroup>
+        <optgroup label="Classes">
+          <option value="renda-fixa-simples">RF Simples</option>
+          <option value="renda-fixa">Renda Fixa</option>
+          <option value="renda-fixa-referenciado">RF Referenciado</option>
+          <option value="renda-fixa-curto-prazo">RF Curto Prazo</option>
+          <option value="multimercado">Multimercado</option>
+          <option value="cambial">Cambial</option>
+          <option value="acoes">Ações</option>
+          <option value="fundo-de-indice">Índice</option>
+          <option value="fmp">FMP</option>
+        </optgroup>
+      </select>
+    </div>
+    <div class="ranking-control-card-v136">
+      <label for="rankingPeriodSelectV136">Prazo principal</label>
+      <select id="rankingPeriodSelectV136" class="ranking-select-v136" aria-label="Selecionar prazo principal dos rankings">
+        <option value="mes">Mês</option>
+        <option value="ano">Ano</option>
+        <option value="12m" selected>12 meses</option>
+      </select>
+    </div>
+    <div class="ranking-filter-row ranking-filter-row-compat-v136" id="rankingFilterRow" aria-label="Filtros rápidos de compatibilidade">
       <span class="ranking-filter-label">Filtro</span>
       <button type="button" class="ranking-filter-chip active" data-rank-filter="todos">Todos</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="sem-fmp">Sem FMP</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa-simples">RF Simples</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa">Renda Fixa</button>
-      <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa-referenciado">RF Ref.</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="renda-fixa-curto-prazo">RF Curto</button>
       <button type="button" class="ranking-filter-chip" data-rank-filter="multimercado">Multimercado</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="cambial">Cambial</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="acoes">Ações</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="fundo-de-indice">Índice</button>
+      <button type="button" class="ranking-filter-chip" data-rank-filter="fmp">FMP</button>
     </div>
   </div>
 
-  <div class="ranking-view-tabs" id="rankingViewTabs" aria-label="Menu de rankings">
+  <div class="ranking-view-tabs" id="rankingViewTabs" aria-label="Menu de rankings" role="group">
     <button type="button" class="ranking-view-tab active" data-rank-view="top">🏆 Top fundos</button>
     <button type="button" class="ranking-view-tab" data-rank-view="categoria">🎖️ Por categoria</button>
     <button type="button" class="ranking-view-tab" data-rank-view="destaques">📅 Destaques</button>
@@ -308,10 +437,25 @@
     <button type="button" class="ranking-view-tab" data-rank-view="pl">🏦 Patrimônio</button>
   </div>
 
-  <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva ranking-grid-single">
-    <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
-      <div class="spinner"></div>Carregando rankings...
+  <div class="ranking-layout-v136" aria-label="Área de análise dos rankings">
+    <div id="rankingGrid" class="ranking-grid ranking-grid-consultiva ranking-grid-single ranking-main-v136">
+      <div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);font-size:.8rem">
+        <div class="spinner"></div>Carregando rankings...
+      </div>
     </div>
+
+    <aside class="ranking-attention-panel-v136" id="rankingAttentionV136" aria-label="Pontos de atenção dos fundos">
+      <div class="attention-head-v136">
+        <span>⚠️</span>
+        <div>
+          <strong>Pontos de atenção</strong>
+          <small>Alertas consultivos gerados pela base</small>
+        </div>
+      </div>
+      <div class="attention-body-v136">
+        <div class="attention-empty-v136">Carregando insights...</div>
+      </div>
+    </aside>
   </div>
 </div>
 <div id="rankShareToast" class="rank-share-toast" role="status" aria-live="polite"></div>
@@ -359,7 +503,7 @@
 
       <div class="macro-side macro-copom">
         <div class="macro-label">📅 Reuniões COPOM 2026</div>
-        <div class="copom-grid" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026">
+        <div class="copom-grid" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026" role="list">
           <span style="color:var(--muted);font-size:.68rem">calendário carregando...</span>
         </div>
         <a href="https://www.bcb.gov.br/controleinflacao/copom" target="_blank" rel="noopener" class="macro-link">
@@ -376,7 +520,7 @@
         <span class="market-rate-suffix">a.a.</span>
       </div>
 
-      <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano">
+      <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano" role="group">
         <div class="cdi-year-head">
           <span id="cdiYearHistoryTitle">Mensal</span>
           <strong id="cdiYearHistoryTotal">Ano —</strong>
@@ -496,12 +640,12 @@
 
   <div class="market-table-toolbar section-title-collapsible"
        onclick="return handleSectionToggleClick(event,'sec-painel-body','sec-mercado-painel')"
-       role="button" aria-expanded="false" tabindex="0">
+       role="region" aria-expanded="false" tabindex="0">
     <div class="market-table-title">
       <span>📊 Painel consolidado de indicadores</span>
       <small>Taxas, inflação, câmbio e bolsas em uma visão comparativa</small>
     </div>
-    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela">
+    <div class="indic-tabs-bar market-period-tabs" aria-label="Período acumulado exibido na tabela" role="group">
       <span class="indic-tabs-label">Período acumulado:</span>
       <div class="indic-tabs">
         <button class="indic-tab active" data-months="12" type="button" aria-pressed="true">12 Meses</button>
@@ -509,7 +653,7 @@
         <button class="indic-tab" data-months="36" type="button" aria-pressed="false">36 Meses</button>
       </div>
     </div>
-    <div class="market-toolbar-actions indic-actions" aria-label="Ações do painel consolidado">
+    <div class="market-toolbar-actions indic-actions" aria-label="Ações do painel consolidado" role="group">
       <button type="button" class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
   </div>
   </div>
@@ -529,7 +673,7 @@
   </div>
 
   <div class="closed-market-overlay" id="closedMarketOverlay" onclick="closeFechamentoMesSheet()" aria-hidden="true"></div>
-  <aside class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-label="Fechamento de mercado" aria-hidden="true">
+  <div class="closed-market-sheet" id="closedMarketSheet" role="dialog" aria-modal="true" aria-label="Fechamento de mercado" aria-hidden="true">
     <div class="closed-market-handle" aria-hidden="true"></div>
     <div class="closed-market-sheet-head">
       <div class="closed-market-sheet-icon">📊</div>
@@ -544,7 +688,7 @@
       <button type="button" onclick="copiarResumoPainelMercado()">📋 Copiar resumo</button>
       <button type="button" onclick="sharePainelMercado()">📲 WhatsApp</button>
     </div>
-  </aside>
+  </div>
 
   <!-- Tabela linha do tempo -->
   <div class="indic-table-wrap">
@@ -771,92 +915,99 @@
     <span class="section-badge"><span class="badge-dot green"></span>BCB · cotação oficial</span>
   </div>
 
-  <div class="dolar-compact-card dolar-mobile-priority">
+  <div class="dolar-compact-card dolar-mobile-priority dolar-information-architecture-v162">
     <div class="dolar-compact-loading" id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação PTAX...</div>
 
     <div id="dolar-day-content" style="display:none">
-      <div class="dolar-compact-top">
+      <header class="dolar-compact-top dolar-summary-v162">
         <div class="dolar-main-kpi">
-          <span class="dolar-kpi-label">Cotação PTAX</span>
+          <span class="dolar-kpi-label">Cotação PTAX atual</span>
           <strong id="dolar-day-rate">—</strong>
           <small id="dolar-day-ref">—</small>
         </div>
 
-        <div class="dolar-kpi-row">
-          <div class="dolar-mini-kpi">
-            <span>Mês</span>
-            <strong class="muted" id="dolar-var-mes-card">—</strong>
+        <div class="dolar-kpi-stack-v162">
+          <div class="dolar-current-kpis-v162" aria-label="Variações do mês e do ano">
+            <div class="dolar-mini-kpi dolar-variation-chip-v98">
+              <span>Mês atual</span>
+              <strong class="muted" id="dolar-var-mes-card">—</strong>
+              <small>Variação parcial</small>
+            </div>
+            <div class="dolar-mini-kpi dolar-variation-chip-v98">
+              <span>No ano</span>
+              <strong class="muted" id="dolar-var-ano-card">—</strong>
+              <small>Acumulado em 2026</small>
+            </div>
           </div>
-          <div class="dolar-mini-kpi">
-            <span>Ano</span>
-            <strong class="muted" id="dolar-var-ano-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi">
-            <span>12M</span>
-            <strong class="muted" id="dolar-var-12m-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi">
-            <span>24M</span>
-            <strong class="muted" id="dolar-var-24m-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi dolar-mini-kpi-36m">
-            <span>36M</span>
-            <strong class="muted" id="dolar-var-36m-card">—</strong>
+          <div class="dolar-history-kpis-v162" aria-label="Variações históricas da PTAX">
+            <div class="dolar-mini-kpi dolar-variation-chip-v98"><span>12M</span><strong class="muted" id="dolar-var-12m-card">—</strong></div>
+            <div class="dolar-mini-kpi dolar-variation-chip-v98"><span>24M</span><strong class="muted" id="dolar-var-24m-card">—</strong></div>
+            <div class="dolar-mini-kpi dolar-mini-kpi-36m dolar-variation-chip-v98"><span>36M</span><strong class="muted" id="dolar-var-36m-card">—</strong></div>
           </div>
         </div>
-      </div>
+      </header>
     </div>
 
-    <div class="dolar-compact-footer dolar-months-first">
+    <section class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel" aria-labelledby="dolarChartTitleV162">
+      <div class="dolar-compact-chart-header">
+        <div>
+          <div class="dolar-chart-title" id="dolarChartTitleV162">Histórico PTAX</div>
+          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
+        </div>
+        <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
+        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar" role="tablist">
+          <button class="chart-tab" data-dolar-range="year" type="button" role="tab" aria-selected="false">2026</button>
+          <button class="chart-tab" data-dolar-range="12m" type="button" role="tab" aria-selected="false">12M</button>
+          <button class="chart-tab active" data-dolar-range="24m" type="button" role="tab" aria-selected="true">24M</button>
+          <button class="chart-tab" data-dolar-range="36m" type="button" role="tab" aria-selected="false">36M</button>
+        </div>
+      </div>
+      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
+    </section>
+
+    <section class="ptax-stats-card ptax-stats-inline-v162" id="ptaxStatsCard" aria-labelledby="ptaxStatsTitleV162">
+      <div class="ptax-stats-title" id="ptaxStatsTitleV162">Estatísticas do período · 24 meses</div>
+      <div class="ptax-stats-grid">
+        <div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMaxLabel">Máxima</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMinLabel">Mínima</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMediaLabel">Média</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
+      </div>
+    </section>
+
+    <section class="dolar-current-month-v162" id="dolarCurrentMonthV162" hidden aria-label="Cotação parcial do mês atual">
+      <div class="dolar-current-month-copy-v162">
+        <span>Mês atual · parcial</span>
+        <small id="dolar-current-month-ref">—</small>
+      </div>
+      <strong id="dolar-current-month-rate">—</strong>
+      <em id="dolar-current-month-var" class="muted">—</em>
+    </section>
+
+    <section class="dolar-compact-footer dolar-months-first" aria-labelledby="dolarMonthsTitleV162">
       <div class="dolar-month-strip">
         <div class="dolar-month-strip-head">
-          <div class="dolar-month-strip-title">Fechamentos mensais</div>
-          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
+          <div>
+            <div class="dolar-month-strip-title" id="dolarMonthsTitleV162">Fechamentos mensais</div>
+            <small>Somente meses encerrados e consolidados</small>
+          </div>
+          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()" aria-expanded="true">Recolher ▲</button>
         </div>
         <div class="dolar-timeline-body open" id="dolarTimelineBody">
+          <div class="dolar-months-table-head-v162" aria-hidden="true"><span>Mês</span><span>Fechamento</span><span>Variação</span></div>
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
           </div>
         </div>
       </div>
-
-    </div>
-
-    <div class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel">
-      <div class="dolar-compact-chart-header">
-        <div>
-          <div class="dolar-chart-title">📈 Ver gráfico histórico PTAX</div>
-          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
-        </div>
-        <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
-        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar">
-          <button class="chart-tab" data-dolar-range="year" type="button">2026</button>
-          <button class="chart-tab" data-dolar-range="12m" type="button">12M</button>
-          <button class="chart-tab active" data-dolar-range="24m" type="button">24M</button>
-          <button class="chart-tab" data-dolar-range="36m" type="button">36M</button>
-        </div>
-      </div>
-      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
-    </div>
+    </section>
   </div>
-
-  <!-- Estatísticas PTAX 12M -->
-  <div class="ptax-stats-card" id="ptaxStatsCard">
-    <div class="ptax-stats-title">📊 Estatísticas PTAX — 12 meses</div>
-    <div class="ptax-stats-grid">
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Máxima 12M</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Mínima 12M</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Média 12M</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
-    </div>
-  </div>
-
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
 <div class="section-gap collapsible-section" id="sec-focus">
   <div class="section-title focus-section-title section-title-collapsible"
-       onclick="toggleSection('sec-focus-body','sec-focus')" role="button" aria-expanded="false" tabindex="0">
+       onclick="toggleSection('sec-focus-body','sec-focus')" role="region" aria-expanded="false" tabindex="0">
     <div class="focus-title-block">
       <div class="focus-title-line">
         <h2>📋 Boletim Focus — Expectativas de Mercado</h2>
@@ -908,7 +1059,7 @@
 
 <div class="section-gap evolution-section collapsible-section" id="sec-graficos">
   <div class="section-title evolution-title section-title-collapsible"
-       onclick="toggleSection('sec-graficos-body','sec-graficos')" role="button" aria-expanded="false" tabindex="0">
+       onclick="toggleSection('sec-graficos-body','sec-graficos')" role="region" aria-expanded="false" tabindex="0">
     <div>
       <h2>📊 Evolução dos Indicadores</h2>
       <p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
@@ -919,7 +1070,7 @@
   </div>
   <div class="section-collapsible-body" id="sec-graficos-body" hidden>
 
-  <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores">
+  <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores" role="group">
     <div class="evo-summary-card">
       <span class="evo-summary-kicker">IPCA mensal</span>
       <strong id="evoIpcaMensalVal">—</strong>
@@ -937,7 +1088,7 @@
     </div>
   </div>
 
-  <div class="evo-view-tabs" aria-label="Selecionar gráfico no celular">
+  <div class="evo-view-tabs" aria-label="Selecionar gráfico no celular" role="group">
     <button class="evo-view-tab active" type="button" data-evo-chart="ipca">IPCA mensal</button>
     <button class="evo-view-tab" type="button" data-evo-chart="selic">Selic</button>
     <button class="evo-view-tab" type="button" data-evo-chart="meta">IPCA 12M</button>
@@ -966,7 +1117,7 @@
         </div>
       </div>
       <div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
-      <div class="selic-summary-row" id="selicSummaryRow" aria-label="Resumo do período exibido no gráfico da Selic">
+      <div class="selic-summary-row" id="selicSummaryRow" aria-label="Resumo do período exibido no gráfico da Selic" role="group">
         <div class="selic-summary-chip max">
           <span class="selic-summary-dot"></span>
           <span class="selic-summary-text"><span class="selic-summary-label">Máxima</span><strong class="selic-summary-value" id="selicMaxResumo">—</strong><small class="selic-summary-date" id="selicMaxData">—</small></span>
@@ -1016,7 +1167,7 @@
   </div>
 </div>
 
-<footer class="site-footer-clean site-footer-v2">
+<footer class="site-footer-clean site-footer-v2" id="siteSources">
   <details class="footer-disclaimer-clean footer-disclaimer-v2" id="footerDisclaimer">
     <summary>
       <span class="footer-summary-main">
@@ -1042,7 +1193,7 @@
         </div>
       </div>
 
-      <div class="footer-clean-sources" aria-label="Fontes públicas consultadas">
+      <div class="footer-clean-sources" aria-label="Fontes públicas consultadas" role="group">
         <span class="sources-title">Fontes públicas consultadas</span>
         <span>BCB</span>
         <span>IBGE</span>
@@ -1064,7 +1215,7 @@
 <nav class="mobile-bottom-nav" aria-label="Atalhos principais no celular">
   <a href="#topo" data-target="topo"><span>🏠</span><small>Início</small></a>
   <a href="#sec-fundos" data-target="sec-fundos"><span>📁</span><small>Fundos</small></a>
-  <button type="button" class="mobile-nav-action" onclick="openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês"><span>📊</span><small>Mês</small></button>
+  <button type="button" class="mobile-nav-action" onclick="openFechamentoMesSheet()" aria-label="Abrir fechamento do último mês"><span>📊</span><small>Mercado</small></button>
   <a href="#rankingsSection" data-target="rankingsSection"><span>🏆</span><small>Ranking</small></a>
   <a href="#sec-focus" data-target="sec-focus" aria-label="Ir para o Boletim Focus"><span>📋</span><small>Focus</small></a>
 </nav>
@@ -1086,7 +1237,7 @@
 
     <div id="gfb-search-wrap">
       <svg id="gfb-icon" width="13" height="13" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      <input id="gfbSearch" type="search" placeholder="Buscar fundo, CNPJ..." autocomplete="off" aria-label="Buscar fundo"/>
+      <input id="gfbSearch" type="search" placeholder="Buscar fundo, CNPJ..." autocomplete="off" aria-label="Buscar fundo" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="fund_search_no_autofill" class="search-no-autofill-v123">
       <button id="gfbClear" aria-label="Limpar busca">✕</button>
     </div>
 
@@ -1151,11 +1302,13 @@
 
     <div class="fspot-liq" id="fspotLiq"></div>
 
+    <div class="fspot-facts-v154" id="fspotFacts"></div>
+
     <div class="fspot-note" id="fspotNote"></div>
 
     <div class="fspot-actions">
       <button class="fspot-btn-primary" id="fspotVerTabela">🔍 Ver na tabela</button>
-      <a class="fspot-btn-secondary" id="fspotLinkCaixa" href="#" target="_blank" rel="noopener">↗ Site CAIXA</a>
+      <a class="fspot-btn-secondary" id="fspotLinkCaixa" href="#" target="_blank" rel="noopener">↗ Página do fundo</a>
     </div>
 
     <div class="fspot-docs" id="fspotDocs"></div>
@@ -1193,5 +1346,8 @@
 <!-- PATCH — Favoritos evidentes, persistentes e com estado vazio -->
 
 <!-- JavaScript principal carregado com defer no <head> -->
+</div><!-- /w3c-balance-v128 -->
+</div><!-- /w3c-balance-v128 -->
+
 </body>
 </html>

@@ -1,3 +1,5 @@
+// ELTAUM_MARKET_ANALYTIC_TYPOGRAPHY_20260612_v161
+// ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){
   var bd=document.getElementById(b),ct=document.getElementById(c);
@@ -526,14 +528,15 @@ function hidratarDolarResumoDoJson(d){
 }
 
 
-function atualizarPTAXStats(){
+function atualizarPTAXStats(range='24m'){
   const setText = (id, value) => { const el = $(id); if(el) el.textContent = value; };
   const setClass = (id, cls) => { const el = $(id); if(el) el.className = cls; };
 
-  if(!_ptaxHistorico || !_ptaxHistorico.length){
+  const reset = () => {
     ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
-    return;
-  }
+  };
+
+  if(!_ptaxHistorico || !_ptaxHistorico.length){ reset(); return; }
 
   const byMonth = {};
   _ptaxHistorico.forEach(item => {
@@ -548,17 +551,29 @@ function atualizarPTAXStats(){
   });
 
   const asc = Object.values(byMonth).sort((a,b)=>a.key.localeCompare(b.key));
-  if(!asc.length){
-    ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
-    return;
+  if(!asc.length){ reset(); return; }
+
+  let janela;
+  let periodoTexto;
+  if(range === 'year'){
+    janela = asc.filter(item => item.dt.getFullYear() === ANO_ATUAL);
+    periodoTexto = String(ANO_ATUAL);
+  }else{
+    const meses = range === '12m' ? 12 : range === '36m' ? 36 : 24;
+    janela = asc.slice(-meses);
+    periodoTexto = `${meses} meses`;
   }
+  if(!janela.length) janela = asc;
 
-  const janela12 = asc.slice(-12);
   const atual = asc[asc.length-1];
-  const max = janela12.reduce((a,b)=> b.val > a.val ? b : a, janela12[0]);
-  const min = janela12.reduce((a,b)=> b.val < a.val ? b : a, janela12[0]);
-  const media = janela12.reduce((sum,item)=>sum+item.val,0) / janela12.length;
+  const max = janela.reduce((a,b)=> b.val > a.val ? b : a, janela[0]);
+  const min = janela.reduce((a,b)=> b.val < a.val ? b : a, janela[0]);
+  const media = janela.reduce((sum,item)=>sum+item.val,0) / janela.length;
 
+  setText('ptaxStatsTitleV162', `Estatísticas do período · ${periodoTexto}`);
+  setText('ptaxStatMaxLabel', 'Máxima');
+  setText('ptaxStatMinLabel', 'Mínima');
+  setText('ptaxStatMediaLabel', 'Média');
   setText('ptaxStatAtual', brl(atual.val));
   setText('ptaxStatMax', brl(max.val));
   setText('ptaxStatMaxRef', max.label);
@@ -675,7 +690,7 @@ function calcularDolarPeriodos(){
     $('dolar-day-content').style.display = 'block';
   }
   atualizarCardDolarResumo(refLabel);
-  atualizarPTAXStats();
+  atualizarPTAXStats('24m');
 
   atualizarTabelaIndicadores();
 }
@@ -777,15 +792,11 @@ function renderDolarMensais(){
   if(!_ptaxHistorico.length) return;
 
   const byMonth = {};
-
   _ptaxHistorico.forEach(item => {
     const dataRef = item.dataHoraCotacao || item.data_ref;
     const dt = new Date(dataRef);
     if(isNaN(dt)) return;
-
     const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-
-    // Guarda a última cotação disponível de cada mês.
     if(!byMonth[key] || new Date(dataRef) > new Date(byMonth[key].dataHoraCotacao || byMonth[key].data_ref)){
       byMonth[key] = item;
     }
@@ -794,42 +805,59 @@ function renderDolarMensais(){
   const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
   if(!sorted.length) return;
 
-  // Mostra sempre os últimos fechamentos disponíveis, com o mês mais recente primeiro.
-  // Isso evita que no mobile apareça jan/fev enquanto o fechamento atual fica escondido no fim.
-  const lastKey = sorted[sorted.length - 1][0];
-  const ultimosMeses = sorted.slice(-6).reverse();
+  const currentKey = `${HOJE.getFullYear()}-${String(HOJE.getMonth()+1).padStart(2,'0')}`;
+  const currentEntry = sorted.find(([key]) => key === currentKey);
+  const closedEntries = sorted.filter(([key]) => key !== currentKey).slice(-6).reverse();
 
-  const container = $('dolarMonths');
-  if(!container) return;
-
-  container.innerHTML = ultimosMeses.map(([key, item]) => {
-    const [ano, mes] = key.split('-');
-    const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
-    const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
-    const isCurrent = key === lastKey;
-
+  const calcVar = (key,item) => {
     let varPct = item._var_pct;
     if(varPct === null || varPct === undefined || Number.isNaN(Number(varPct))){
       const idxAsc = sorted.findIndex(([k]) => k === key);
       if(idxAsc > 0){
+        const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
         const prevVal = parseFloat(sorted[idxAsc-1][1].cotacaoVenda || sorted[idxAsc-1][1].cotacao || 0);
         if(prevVal) varPct = ((val - prevVal) / prevVal) * 100;
       }
     }
+    return (varPct !== null && varPct !== undefined && !Number.isNaN(Number(varPct))) ? Number(varPct) : null;
+  };
 
-    let varHtml = '<span class="dolar-month-var zero">—</span>';
-    if(varPct !== null && varPct !== undefined && !Number.isNaN(Number(varPct))){
-      const n = Number(varPct);
-      const cls = n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
-      varHtml = `<span class="dolar-month-var ${cls}">${signPct(n)}${fmt(n)}</span>`;
+  const currentCard = $('dolarCurrentMonthV162');
+  if(currentCard){
+    if(currentEntry){
+      const [key,item] = currentEntry;
+      const [ano,mes] = key.split('-');
+      const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+      const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
+      const varPct = calcVar(key,item);
+      const varEl = $('dolar-current-month-var');
+      currentCard.hidden = false;
+      if($('dolar-current-month-ref')) $('dolar-current-month-ref').textContent = label;
+      if($('dolar-current-month-rate')) $('dolar-current-month-rate').textContent = `R$ ${fmtBRL(val)}`;
+      if(varEl){
+        varEl.textContent = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
+        varEl.className = varPct === null ? 'muted' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'muted';
+      }
+    }else{
+      currentCard.hidden = true;
     }
+  }
 
-    return `<div class="dolar-month-item${isCurrent ? ' current' : ''}">
+  const container = $('dolarMonths');
+  if(!container) return;
+  container.innerHTML = closedEntries.map(([key,item]) => {
+    const [ano,mes] = key.split('-');
+    const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+    const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
+    const varPct = calcVar(key,item);
+    const cls = varPct === null ? 'zero' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
+    const varTxt = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
+    return `<div class="dolar-month-item dolar-month-row-v162">
       <span class="dolar-month-label">${label}</span>
       <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
-      ${varHtml}
+      <span class="dolar-month-var ${cls}">${varTxt}</span>
     </div>`;
-  }).join('');
+  }).join('') || '<div class="dolar-month-empty-v162">Nenhum mês fechado disponível.</div>';
 }
 
 function toggleDolarTimeline(){
@@ -839,6 +867,7 @@ function toggleDolarTimeline(){
 
   const isOpen = body.classList.toggle('open');
   toggle.textContent = isOpen ? 'Recolher ▲' : 'Mostrar ▼';
+  toggle.setAttribute('aria-expanded', String(isOpen));
 }
 
 function toggleDolarChartMobile(){
@@ -912,6 +941,8 @@ function buildChartDolar(range){
   }
 
   if(!dados.length) return;
+
+  atualizarPTAXStats(range);
 
   // Amostra para não sobrecarregar o gráfico (máx 200 pontos)
   const step = Math.max(1, Math.floor(dados.length/200));
@@ -996,8 +1027,12 @@ function buildChartDolar(range){
 // Tabs do gráfico dólar
 document.querySelectorAll('[data-dolar-range]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('[data-dolar-range]').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('[data-dolar-range]').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected','false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
     buildChartDolar(btn.dataset.dolarRange);
   });
 });
@@ -1509,10 +1544,11 @@ function renderCdiYearHistory(d){
     ? byLabel(mesFechadoRef)
     : mesesAno[mesesAno.length - 2];
 
-  // Ordem consultiva no celular: último mês fechado + mês atual parcial sempre aparecem primeiro.
+  // Ordem natural no mobile: mês atual/parcial primeiro, depois último fechado e anteriores.
+  // Ex.: JUN/2026, MAI/2026, ABR/2026.
   const destaque = [];
-  if(ultimoFechado) destaque.push(ultimoFechado);
-  if(atualParcial && atualParcial !== ultimoFechado) destaque.push(atualParcial);
+  if(atualParcial) destaque.push(atualParcial);
+  if(ultimoFechado && ultimoFechado !== atualParcial) destaque.push(ultimoFechado);
 
   const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
   const exibicao = [...destaque, ...restantes];
@@ -2256,7 +2292,7 @@ function compararOrdenacao(av,bv){
 }
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
-const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
+const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Aplicacao","Conversao Resgate","Pagamento Resgate","Benchmark","Benchmark Oficial","Estrategia","Estratégia","Adiantamento Resgate","Adiantamento de Resgate","Classificacao Tributaria","Classificação Tributária","Tributacao","Tributação","Status Captacao","Status Captação","Status de Captação","Captacao","Captação","Horário Limite Aplicação","Horario Limite Aplicacao","Horário Aplicação","Horario Aplicacao","Grade Aplicação","Grade Aplicacao","Horário Limite Resgate","Horario Limite Resgate","Horário Resgate","Horario Resgate","Grade Resgate","Grade de Resgate","Horário Limite Movimentação","Horario Limite Movimentacao","Grade de Movimentação","Grade de Movimentacao","Aplicacao Adicional Minima (R$)","Resgate Minimo (R$)","Saldo Minimo (R$)","Público Alvo","Publico Alvo","Movimentação Automática","Movimentacao Automatica","Carência","Carencia","ASG","Observação Operacional","Observacao Operacional","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim","doc_termo"]);
 const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
 
@@ -2619,8 +2655,35 @@ function setCdiSort(dir){
   else setup();
 })();
 
+function normalizeCatalogSearch(v){
+  return String(v??'')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim()
+    .replace(/\s+/g,' ');
+}
+function digitsOnlyCatalogSearch(v){
+  return String(v??'').replace(/\D/g,'');
+}
+function rowMatchesCatalogSearch(row, query){
+  const raw=String(query??'').trim().toLowerCase();
+  if(!raw) return true;
+  const norm=normalizeCatalogSearch(raw);
+  const digits=digitsOnlyCatalogSearch(raw);
+  return Object.values(row||{}).some(value=>{
+    if(value===null || value===undefined || value==='') return false;
+    const text=String(value);
+    if(text.toLowerCase().includes(raw)) return true;
+    if(norm && normalizeCatalogSearch(text).includes(norm)) return true;
+    if(digits.length>=6 && digitsOnlyCatalogSearch(text).includes(digits)) return true;
+    return false;
+  });
+}
+
 function applyFilter(){
-  const q=activeSearch.toLowerCase();
+  const q=String(activeSearch||'').trim();
   const favModeAtivo = !!window.__favListMode;
   filtered=allRows.filter(r=>{
     if(favModeAtivo && !rowIsFavoritedForFilter(r)) return false;
@@ -2632,7 +2695,7 @@ function applyFilter(){
       if(!tokens.includes(activePerfil)) return false;
     }
     if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
-    if(q&&!Object.values(r).some(v=>v&&String(v).toLowerCase().includes(q))) return false;
+    if(q&&!rowMatchesCatalogSearch(r,q)) return false;
     return true;
   });
   if(isMobileSortViewport()){
@@ -2667,6 +2730,158 @@ function applyFilter(){
    DOCUMENTOS — fundos_caixa.json (CAIXA Asset)
 ════════════════════════════════════════════════════ */
 let _fundosDocMap = {}; // CNPJ limpo → { codfundo, docs:{} }
+
+let _fundosMetaMap = {};      // CNPJ limpo → cadastro operacional completo de fundos.json
+let _fundosMetaByCode = {};   // código SIICO → cadastro
+let _fundosMetaByName = {};   // nome normalizado → cadastro
+
+function limparCnpjMeta(v){ return String(v || '').replace(/\D/g,'').slice(0,14); }
+function normalizarNomeMeta(v){
+  return String(v || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toUpperCase().replace(/[^A-Z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function valorMetaValido(v){
+  if(v === null || v === undefined) return false;
+  const s=String(v).trim();
+  return !!s && !/^(?:-|—|NULL|NONE|INDISPONIVEL)$/i.test(s);
+}
+function urlMetaValida(v){ return /^https?:\/\//i.test(String(v || '').trim()); }
+function formatarCnpjMeta(v){
+  const d=limparCnpjMeta(v);
+  return d.length===14 ? `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5,8)}/${d.slice(8,12)}-${d.slice(12)}` : String(v||'');
+}
+function formatarHoraMeta(v){
+  const s=String(v || '').trim();
+  const m=s.match(/^(\d{1,2})[:hH](\d{2})$/);
+  return m ? `${String(Number(m[1])).padStart(2,'0')}h${m[2]}` : s;
+}
+function formatarPercentualMeta(v){
+  if(v===null || v===undefined || String(v).trim()==='') return '';
+  const n=Number(v);
+  if(!Number.isFinite(n)) return '';
+  return n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:2})+'%';
+}
+function formatarAdiantamentoMeta(meta){
+  const flag=meta?.ic_adiantamento_resgate;
+  const modo=String(meta?.de_adiant_manual_automatico || '').trim();
+  const pct=formatarPercentualMeta(meta?.pc_adiant_resgate);
+  const modoNorm=normalizarStatusOperacional(modo);
+  if(flag === true){
+    const partes=['Sim'];
+    if(modo && !modoNorm.includes('NAO SE APLICA')) partes.push(modo.toLowerCase()==='automatico'?'Automático':modo.toLowerCase()==='manual'?'Manual':modo);
+    if(pct) partes.push(pct);
+    return partes.join(' · ');
+  }
+  if(flag === false) return 'Não disponível';
+  if(modoNorm.includes('NAO SE APLICA')) return 'Não se aplica';
+  if(modo) return modo;
+  return '';
+}
+function formatarCaptacaoMeta(meta){
+  if(meta?.ic_aberto_captacao === true) return 'Aberto para captação';
+  if(meta?.ic_aberto_captacao === false) return 'Fechado para captação';
+  return '';
+}
+function formatarListaMeta(v){
+  if(Array.isArray(v)) return v.filter(Boolean).join(' · ');
+  if(!valorMetaValido(v)) return '';
+  const s=String(v).trim();
+  try{
+    const parsed=JSON.parse(s);
+    if(Array.isArray(parsed)) return parsed.filter(Boolean).join(' · ');
+  }catch(e){}
+  return s;
+}
+function pontuarMeta(meta){
+  const campos=['no_benchmark','no_estrategia','no_classificacao_tributaria','de_horario_limite','de_horario_resgate','de_link_pagina_fundo','de_link_lamina','de_link_regulamento'];
+  return campos.reduce((n,k)=>n+(valorMetaValido(meta?.[k])?1:0),0);
+}
+
+async function carregarFundosMetaJson(){
+  try{
+    const r=await fetch(BASE_URL+'fundos.json?v='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const payload=await r.json();
+    const lista=Array.isArray(payload) ? payload : (payload?.value || payload?.fundos || payload?.data || []);
+    if(!Array.isArray(lista)) throw new Error('estrutura inesperada');
+
+    const porCnpj={}, porCodigo={}, porNome={};
+    lista.forEach(meta=>{
+      if(!meta || typeof meta!=='object') return;
+      const cnpj=limparCnpjMeta(meta.nu_cnpj || meta.cnpj);
+      const codigoRaw=String(meta.co_siico00 || meta.co_siico || meta.codfundo || '').replace(/\D/g,'');
+      const codigo=codigoRaw.replace(/^0+(?=\d)/,'');
+      const nome=normalizarNomeMeta(meta.no_fundo || meta.nome);
+      if(cnpj && (!porCnpj[cnpj] || pontuarMeta(meta)>=pontuarMeta(porCnpj[cnpj]))) porCnpj[cnpj]=meta;
+      [codigoRaw,codigo].filter(Boolean).forEach(ch=>{ if(!porCodigo[ch] || pontuarMeta(meta)>=pontuarMeta(porCodigo[ch])) porCodigo[ch]=meta; });
+      if(nome && (!porNome[nome] || pontuarMeta(meta)>=pontuarMeta(porNome[nome]))) porNome[nome]=meta;
+    });
+    _fundosMetaMap=porCnpj;
+    _fundosMetaByCode=porCodigo;
+    _fundosMetaByName=porNome;
+    console.log(`[fundos.json] ${lista.length} registros · ${Object.keys(porCnpj).length} CNPJs indexados`);
+    return lista;
+  }catch(e){
+    _fundosMetaMap={}; _fundosMetaByCode={}; _fundosMetaByName={};
+    console.info('[fundos.json] metadados operacionais não disponíveis:',e.message);
+    return [];
+  }
+}
+
+function obterMetaFundo(row){
+  const cnpj=limparCnpjMeta(row?.['CNPJ'] || row?.nu_cnpj);
+  if(cnpj && _fundosMetaMap[cnpj]) return _fundosMetaMap[cnpj];
+  const codigoRaw=String(row?.['codfundo'] || row?.co_siico00 || row?.co_siico || '').replace(/\D/g,'');
+  const codigo=codigoRaw.replace(/^0+(?=\d)/,'');
+  if(codigoRaw && _fundosMetaByCode[codigoRaw]) return _fundosMetaByCode[codigoRaw];
+  if(codigo && _fundosMetaByCode[codigo]) return _fundosMetaByCode[codigo];
+  const nome=normalizarNomeMeta(row?.['Fundo'] || row?.no_fundo);
+  return nome ? (_fundosMetaByName[nome] || null) : null;
+}
+
+function preencherSeVazio(row,chave,valor){
+  if(!valorMetaValido(row?.[chave]) && valorMetaValido(valor)) row[chave]=valor;
+}
+function mesclarMetadadosFundo(row){
+  const meta=obterMetaFundo(row);
+  if(!meta) return row;
+  try{ Object.defineProperty(row,'__fundosMeta',{value:meta,enumerable:false,configurable:true}); }catch(e){ row.__fundosMeta=meta; }
+
+  preencherSeVazio(row,'CNPJ',formatarCnpjMeta(meta.nu_cnpj));
+  preencherSeVazio(row,'codfundo',String(meta.co_siico00 || meta.co_siico || '').replace(/^0+(?=\d)/,''));
+  preencherSeVazio(row,'Perfil de Risco',meta.no_perfil_risco);
+  preencherSeVazio(row,'Taxa Adm (%)',meta.pc_taxa_adm_cliente);
+  preencherSeVazio(row,'Aplicacao Minima (R$)',meta.vr_aplicacao_inicial);
+  preencherSeVazio(row,'Conversao Aplicacao',meta.de_conversao_aplicacao);
+  preencherSeVazio(row,'Conversao Resgate',meta.de_conversao_resgate);
+  preencherSeVazio(row,'Pagamento Resgate',meta.de_pagamento_resgate);
+  preencherSeVazio(row,'Benchmark Oficial',String(meta.no_benchmark || '').trim());
+  preencherSeVazio(row,'Estratégia',String(meta.no_estrategia || '').trim());
+  preencherSeVazio(row,'Adiantamento de Resgate',formatarAdiantamentoMeta(meta));
+  preencherSeVazio(row,'Classificação Tributária',String(meta.no_classificacao_tributaria || '').trim());
+  preencherSeVazio(row,'Status de Captação',formatarCaptacaoMeta(meta));
+  preencherSeVazio(row,'Horário Limite Aplicação',formatarHoraMeta(meta.de_horario_limite));
+  preencherSeVazio(row,'Horário Limite Resgate',formatarHoraMeta(meta.de_horario_resgate || meta.de_horario_limite));
+
+  preencherSeVazio(row,'Aplicacao Adicional Minima (R$)',meta.vr_aplicacao_adicional_minima);
+  preencherSeVazio(row,'Resgate Minimo (R$)',meta.vr_resgate_minimo);
+  preencherSeVazio(row,'Saldo Minimo (R$)',meta.vr_saldo_minimo);
+  preencherSeVazio(row,'Público Alvo',formatarListaMeta(meta.lista_publico_alvo) || meta.no_classificacao_investidor);
+  preencherSeVazio(row,'Movimentação Automática',meta.ic_mov_automatica===true?'Sim':meta.ic_mov_automatica===false?'Não':'');
+  preencherSeVazio(row,'Carência',meta.ic_carencia===true?(meta.dt_fim_carencia?`Até ${meta.dt_fim_carencia}`:'Sim'):meta.ic_carencia===false?'Não':'');
+  preencherSeVazio(row,'ASG',meta.ic_asg===true?'Sim':meta.ic_asg===false?'Não':'');
+  preencherSeVazio(row,'Observação Operacional',String(meta.de_observacao_qs || '').trim());
+
+  preencherSeVazio(row,'URL',urlMetaValida(meta.de_link_pagina_fundo)?meta.de_link_pagina_fundo:'');
+  preencherSeVazio(row,'doc_lamina',urlMetaValida(meta.de_link_lamina)?meta.de_link_lamina:'');
+  preencherSeVazio(row,'doc_regulamento',urlMetaValida(meta.de_link_regulamento)?meta.de_link_regulamento:'');
+  preencherSeVazio(row,'doc_inf_comp',urlMetaValida(meta.de_link_info_compl)?meta.de_link_info_compl:'');
+  preencherSeVazio(row,'doc_comunicado',urlMetaValida(meta.de_link_fato_relevante)?meta.de_link_fato_relevante:'');
+  preencherSeVazio(row,'doc_boletim',urlMetaValida(meta.de_link_boletim_comercial)?meta.de_link_boletim_comercial:'');
+  preencherSeVazio(row,'doc_termo',urlMetaValida(meta.de_link_termo_adesao)?meta.de_link_termo_adesao:'');
+  return row;
+}
 
 async function carregarFundosJson(){
   try{
@@ -2709,12 +2924,13 @@ function marcarTodosDocs(btn, checked){
 
 function obterDocsFundoCompactos(row){
   const DOC_TIPOS = [
-    { label:'Boletim Comercial', curto:'BC', icon:'⭐', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
-    { label:'Lâmina', curto:'L', icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LAC', pasta:'laminas-comerciais' },
+    { label:'Boletim Comercial', curto:'BC', icon:'⭐', csvKey:'doc_boletim', jsonKey:'boletim', cod:'LAC', pasta:'laminas-comerciais' },
+    { label:'Lâmina', curto:'L', icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LA',  pasta:'laminas' },
     { label:'Regulamento', curto:'R', icon:'📋', csvKey:'doc_regulamento', jsonKey:'regulamento',  cod:'RG',  pasta:'regulamentos' },
     { label:'Inf. Compl.', curto:'IC', icon:'ℹ️', csvKey:'doc_inf_comp',    jsonKey:'inf_comp',     cod:'FIC', pasta:'inf-com' },
     { label:'Comunicado', curto:'C', icon:'📢', csvKey:'doc_comunicado',  jsonKey:'comunicado',   cod:'COM', pasta:'comunicado-aos-cotistas' },
     { label:'Carta Mensal', curto:'CM', icon:'📊', csvKey:'doc_carta',       jsonKey:'carta_mensal', cod:'CM',  pasta:'carta-mensal' },
+    { label:'Termo de Adesão', curto:'TA', icon:'✍️', csvKey:'doc_termo', jsonKey:'termo', cod:'TA', pasta:'termos-adesao' },
   ];
 
   const cnpjLimpo = String(row?.['CNPJ']||'').replace(/\D/g,'');
@@ -2795,13 +3011,151 @@ function buildDetailQuickActions(row, urlFund){
     mkBtn(boletim?.url, 'detail-action-primary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
     mkBtn(lamina?.url, 'detail-action-secondary', '📄', 'Lâmina', 'Abrir lâmina'),
     mkBtn(regulamento?.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento'),
-    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página CAIXA', 'Abrir página do fundo na CAIXA'),
+    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página do fundo', 'Abrir página do fundo'),
   ].filter(Boolean).join('');
 
   if(!buttons) return '';
-  return `<div class="detail-actions-card">
-    <div class="detail-actions-title">Ações rápidas</div>
+  return `<div class="detail-actions-card detail-actions-card-v158">
+    <div class="detail-actions-copy-v158">
+      <div class="detail-actions-title">Informações do fundo</div>
+      <small>Dados oficiais do cadastro e documentos essenciais</small>
+    </div>
     <div class="detail-actions-buttons">${buttons}</div>
+  </div>`;
+}
+
+function detailValueV158(r, keys, fallback='—'){
+  for(const key of keys){
+    const value = r?.[key];
+    if(value === null || value === undefined) continue;
+    const text = String(value).trim();
+    if(text && text !== '—' && text.toUpperCase() !== 'INDISPONIVEL') return text;
+  }
+  return fallback;
+}
+
+function detailMoneyV158(value){
+  const raw = String(value ?? '').trim();
+  if(!raw || raw === '—') return '—';
+  let normalized = raw.replace(/R\$/gi,'').replace(/\s/g,'');
+  if(normalized.includes(',') && normalized.includes('.')) normalized = normalized.replace(/\./g,'').replace(',','.');
+  else normalized = normalized.replace(',','.');
+  const number = Number(normalized);
+  if(!Number.isFinite(number)) return raw;
+  return number.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function detailPercentV158(value){
+  const raw = String(value ?? '').trim();
+  if(!raw || raw === '—') return '—';
+  return /%/.test(raw) ? raw : `${raw}%`;
+}
+
+function detailBoolV158(value){
+  const raw = String(value ?? '').trim();
+  const norm = normalizarTextoBase(raw);
+  if(!raw || raw === '—' || norm === 'NAO INFORMADO' || norm === 'INDISPONIVEL') return {label:'Não informado',state:'unknown',dot:'○'};
+  if(['SIM','TRUE','1','ATIVO','ATIVA'].includes(norm) || norm.startsWith('SIM ')) return {label:'Sim',state:'on',dot:'●'};
+  if(['NAO','FALSE','0','INATIVO','INATIVA'].includes(norm) || norm.startsWith('NAO ')) return {label:'Não',state:'off',dot:'○'};
+  return {label:raw,state:'unknown',dot:'○'};
+}
+
+function detailAudienceV158(value){
+  const raw = String(value ?? '').trim();
+  if(!raw || raw === '—') return [];
+  let values = [];
+  if(raw.startsWith('[')){
+    try{
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed)) values = parsed;
+    }catch(e){}
+  }
+  if(!values.length) values = raw.split(/\s*[·;,|]\s*/g);
+  return [...new Set(values.map(v=>String(v).trim()).filter(Boolean))];
+}
+
+function buildDetailExecutiveV158(r){
+  const d = obterDadosOperacionaisFundo(r);
+  const capCls = classeStatusOperacional(d.captacao.status,'captacao');
+  const adiCls = classeStatusOperacional(d.adiantamento.status,'adiantamento');
+  const profile = detailValueV158(r,['Perfil de Risco']);
+  const cnpj = detailValueV158(r,['CNPJ']);
+  const code = detailValueV158(r,['codfundo','Código do fundo','Codigo do fundo']);
+  const taxAdm = detailPercentV158(detailValueV158(r,['Taxa Adm (%)']));
+  const appInitial = detailMoneyV158(detailValueV158(r,['Aplicacao Minima (R$)','Aplicação Mínima','Aplicacao Minima']));
+  const appAdditional = detailMoneyV158(detailValueV158(r,['Aplicacao Adicional Minima (R$)','Aplicação Adicional Mínima']));
+  const redemptionMin = detailMoneyV158(detailValueV158(r,['Resgate Minimo (R$)','Resgate Mínimo']));
+  const balanceMin = detailMoneyV158(detailValueV158(r,['Saldo Minimo (R$)','Saldo Mínimo']));
+  const conversionApp = detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação']);
+  const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
+  const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
+  const audience = detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo']));
+  const automatic = detailBoolV158(detailValueV158(r,['Movimentação Automática','Movimentacao Automatica']));
+  const grace = detailBoolV158(detailValueV158(r,['Carência','Carencia']));
+  const asg = detailBoolV158(detailValueV158(r,['ASG']));
+  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
+
+  const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
+  const audienceHtml = audience.length
+    ? audience.map(v=>`<span class="detail-audience-chip-v158">${htmlAttr(v)}</span>`).join('')
+    : '<span class="detail-empty-v158">Não informado</span>';
+  const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
+
+  return `<div class="detail-executive-v158">
+    <section class="detail-summary-v158" aria-label="Resumo executivo do fundo">
+      <div class="detail-section-head-v158"><div><span>Visão geral</span><strong>Características principais</strong></div><small>${r?.__fundosMeta?'Cadastro oficial integrado':'Dados disponíveis no catálogo'}</small></div>
+      <div class="detail-summary-grid-v158">
+        <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
+        <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
+        <div class="detail-summary-item-v158"><span>Perfil</span><strong>${htmlAttr(profile)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Captação</span>${statusValue(d.captacao.texto,capCls)}</div>
+      </div>
+    </section>
+
+    <section class="detail-movement-v158" aria-label="Movimentação do fundo">
+      <div class="detail-section-head-v158"><div><span>Movimentação</span><strong>Prazos, horários e valores mínimos</strong></div><small>Solicitações após o limite podem seguir para o próximo dia útil</small></div>
+      <div class="detail-movement-grid-v158">
+        <article class="detail-movement-card-v158 application">
+          <div class="detail-movement-title-v158"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
+          <div class="detail-flow-v158">
+            <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
+            <i>→</i>
+            <div><span>Conversão</span><strong>${htmlAttr(conversionApp)}</strong></div>
+          </div>
+          <div class="detail-movement-meta-v158"><span><b>Inicial</b>${htmlAttr(appInitial)}</span><span><b>Adicional</b>${htmlAttr(appAdditional)}</span></div>
+        </article>
+        <article class="detail-movement-card-v158 redemption">
+          <div class="detail-movement-title-v158"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
+          <div class="detail-flow-v158 three">
+            <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
+            <i>→</i>
+            <div><span>Conversão</span><strong>${htmlAttr(conversionRed)}</strong></div>
+            <i>→</i>
+            <div><span>Pagamento</span><strong>${htmlAttr(paymentRed)}</strong></div>
+          </div>
+          <div class="detail-movement-meta-v158"><span><b>Mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(d.adiantamento.texto)}</span></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="detail-lower-grid-v158">
+      <section class="detail-info-card-v158" aria-label="Identificação e custos">
+        <div class="detail-card-head-v158"><span>Identificação e custos</span></div>
+        <dl class="detail-definition-list-v158">
+          <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
+          <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
+          <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
+          <div><dt>Código do fundo</dt><dd>${htmlAttr(code)}</dd></div>
+        </dl>
+      </section>
+      <section class="detail-info-card-v158" aria-label="Público e enquadramento">
+        <div class="detail-card-head-v158"><span>Público e enquadramento</span></div>
+        <div class="detail-audience-v158"><b>Público-alvo</b><div>${audienceHtml}</div></div>
+        <div class="detail-flags-v158">${flagHtml('Automático',automatic)}${flagHtml('Carência',grace)}${flagHtml('ASG',asg)}</div>
+      </section>
+    </div>
+    ${observation ? `<aside class="detail-observation-v158"><span>Observação operacional</span><p>${htmlAttr(observation)}</p></aside>` : ''}
   </div>`;
 }
 
@@ -2993,13 +3347,13 @@ function gerarLeituraRapidaFundo(r){
     return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
   };
 
-  const complementosHtml = complementos.length
-    ? `<div class="fund-note-metrics">${complementos.map(m => `<div class="fund-note-metric ${metricValueClass(m.label,m.value)}"><span>${htmlAttr(m.label)}</span><strong>${htmlAttr(m.value)}</strong></div>`).join('')}</div>`
-    : '';
+  // Métricas removidas da Leitura rápida para evitar duplicidade com o bloco Rentabilidade.
+  // Ano, 12M e % CDI já aparecem no card/tabela principal.
+  const complementosHtml = '';
 
   return `
     <div class="fund-quick-note">
-      <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
+      <div class="fund-quick-note-title">🧭 Leitura consultiva do fundo</div>
       ${tagsHtml}
       <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
       ${complementosHtml}
@@ -3011,39 +3365,14 @@ function gerarLeituraRapidaFundo(r){
 }
 
 function buildDetailPanel(r,colspan){
-  const DOC_DETAIL_KEYS = new Set(['doc_lamina','doc_regulamento','doc_inf_comp','doc_comunicado','doc_carta','doc_boletim']);
-  const LABELS = {
-    'codfundo':'Código do fundo',
-    'Aplicacao Minima (R$)':'Aplicação mínima',
-    'Taxa Adm (%)':'Taxa adm.',
-    'Conversao Resgate':'Conversão resgate',
-    'Pagamento Resgate':'Pagamento resgate',
-    'Perfil de Risco':'Perfil de risco'
-  };
-  const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k) && !DOC_DETAIL_KEYS.has(k));
-  const items=detailCols.map(k=>{
-    let val=String(r[k]||'').trim()||'—';
-
-    // CNPJ agora fica somente como texto copiável; sem link externo para Receita.
-    const extraClass = k==='CNPJ' ? ' copyable' : '';
-
-    if(k==='Taxa Adm (%)'&&val!=='—') val=val+'%';
-    if(k==='Aplicacao Minima (R$)'&&val!=='—'){
-      const n=parseFloat(val.replace(',','.'));
-      val=isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2});
-    }
-    const label = LABELS[k] || k;
-    return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
-  }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
-    <div class="detail-panel detail-panel-mobile-clean">
-      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
+    <div class="detail-panel detail-panel-mobile-clean detail-panel-v158">
+      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
-
 
 
 function normalizarTextoBase(v){
@@ -3106,6 +3435,139 @@ function detectarBenchmarkFundo(r){
     return {label:'CDI', cls:'bench-cdi', icon:'📌'};
   }
   return {label:'Outros', cls:'bench-outros', icon:'🧩'};
+}
+
+
+function primeiroCampoFundo(r, chaves){
+  for(const chave of chaves){
+    const valor = String(r?.[chave] ?? '').trim();
+    if(valor && valor !== '-' && valor !== '—' && valor.toLowerCase() !== 'null' && valor.toLowerCase() !== 'none') return valor;
+  }
+  return '';
+}
+
+function normalizarStatusOperacional(valor){
+  return String(valor || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .trim()
+    .toUpperCase();
+}
+
+function detectarEstrategiaFundo(r){
+  const oficial = primeiroCampoFundo(r,[
+    'Estratégia','Estrategia','Estratégia do Fundo','Estrategia do Fundo',
+    'Política de Investimento','Politica de Investimento','Composição da Carteira','Composicao da Carteira'
+  ]);
+  if(oficial) return {texto:oficial, estimada:false};
+
+  const nome = normalizarTextoBase(r?.['Fundo']);
+  const cat = normalizarTextoBase(r?.['Categoria']);
+  const base = `${cat} ${nome}`;
+  let texto = '';
+
+  if(base.includes('FUNDOS MUTUOS DE PRIVATIZACAO') || base.includes('FMP')) texto='FMP-FGTS com exposição concentrada a ações de empresa privatizada';
+  else if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV')) texto='Renda fixa com exposição a crédito privado';
+  else if(base.includes('IMA-B 5+') || base.includes('IMAB 5+')) texto='Renda fixa indexada à inflação com duration longa';
+  else if(base.includes('IMA-B 5') || base.includes('IMAB 5')) texto='Renda fixa indexada à inflação com duration intermediária';
+  else if(base.includes('IMA-B') || base.includes('IMAB') || base.includes('IPCA') || base.includes('IDKA')) texto='Renda fixa indexada à inflação';
+  else if(base.includes('IRF-M 1+') || base.includes('IRFM 1+')) texto='Renda fixa prefixada com duration longa';
+  else if(base.includes('IRF-M 1') || base.includes('IRFM 1')) texto='Renda fixa prefixada de prazo mais curto';
+  else if(base.includes('IRF-M') || base.includes('IRFM') || base.includes('PREFIXADO') || base.includes('PRE RF')) texto='Renda fixa prefixada';
+  else if(base.includes('REF DI') || base.includes('REFERENCIADO') || base.includes('CDI')) texto='Renda fixa referenciada ao CDI';
+  else if(base.includes('RENDA FIXA SIMPLES') || base.includes('RF SIMPLES')) texto='Renda fixa simples, com predominância de títulos públicos federais';
+  else if(base.includes('CURTO PRAZO')) texto='Renda fixa de curto prazo';
+  else if(base.includes('TITULOS PUBLICOS') || base.includes('TP RF') || base.includes('BRASIL TP')) texto='Renda fixa com predominância de títulos públicos federais';
+  else if(base.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO')) texto='Exposição cambial';
+  else if(base.includes('FUNDO DE INDICE') || base.includes('ETF')) texto='Gestão passiva para replicação de índice';
+  else if(base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('SMALL CAPS')) texto='Renda variável';
+  else if(base.includes('MULTIMERCADO')) texto='Multimercado com alocação em múltiplas classes';
+  else if(base.includes('RENDA FIXA')) texto='Renda fixa de estratégia ampla';
+  else texto='Estratégia não identificada na base';
+
+  return {texto, estimada:true};
+}
+
+function obterDadosOperacionaisFundo(r){
+  const benchmarkOficial = primeiroCampoFundo(r,['Benchmark Oficial','Benchmark','Índice de Referência','Indice de Referencia','Referência','Referencia']);
+  const benchmarkDetectado = detectarBenchmarkFundo(r);
+  const estrategia = detectarEstrategiaFundo(r);
+  const adiantamento = primeiroCampoFundo(r,[
+    'Adiantamento de Resgate','Adiantamento Resgate','Permite Adiantamento de Resgate',
+    'Permite Adiantamento','Adiantamento','Antecipação de Resgate','Antecipacao de Resgate'
+  ]);
+  const tributacao = primeiroCampoFundo(r,[
+    'Classificação Tributária','Classificacao Tributaria','Classificação Tributaria',
+    'Tributação','Tributacao','Regime Tributário','Regime Tributario'
+  ]);
+  const captacao = primeiroCampoFundo(r,[
+    'Status de Captação','Status Captação','Status Captacao','Captação','Captacao',
+    'Aberto para Captação','Aberto para Captacao','Situação de Captação','Situacao de Captacao'
+  ]);
+  const horarioMovimentacao = primeiroCampoFundo(r,[
+    'Horário Limite Movimentação','Horario Limite Movimentacao',
+    'Horário de Movimentação','Horario de Movimentacao',
+    'Grade de Movimentação','Grade de Movimentacao','Horário da Grade','Horario da Grade'
+  ]);
+  const horarioAplicacao = primeiroCampoFundo(r,[
+    'Horário Limite Aplicação','Horario Limite Aplicacao',
+    'Horário Limite de Aplicação','Horario Limite de Aplicacao',
+    'Horário Aplicação','Horario Aplicacao','Horário de Aplicação','Horario de Aplicacao',
+    'Grade Aplicação','Grade Aplicacao','Grade de Aplicação','Grade de Aplicacao'
+  ]) || horarioMovimentacao;
+  const horarioResgate = primeiroCampoFundo(r,[
+    'Horário Limite Resgate','Horario Limite Resgate',
+    'Horário Limite de Resgate','Horario Limite de Resgate',
+    'Horário Resgate','Horario Resgate','Horário de Resgate','Horario de Resgate',
+    'Grade Resgate','Grade de Resgate'
+  ]) || horarioMovimentacao;
+
+  return {
+    benchmark:{texto:benchmarkOficial || benchmarkDetectado.label || 'Não informado', estimado:!benchmarkOficial},
+    estrategia,
+    adiantamento:{texto:adiantamento || 'Não informado', status:normalizarStatusOperacional(adiantamento)},
+    tributacao:{texto:tributacao || 'Não informada'},
+    captacao:{texto:captacao || 'Não informada', status:normalizarStatusOperacional(captacao)},
+    horarios:{
+      aplicacao:horarioAplicacao || 'Não informado',
+      resgate:horarioResgate || 'Não informado',
+      informado:Boolean(horarioAplicacao || horarioResgate)
+    }
+  };
+}
+
+function classeStatusOperacional(status, tipo){
+  if(!status) return 'unknown';
+  if(tipo === 'captacao'){
+    if(status.includes('FECHAD') || status.includes('ENCERRAD') || status.includes('SUSPENS')) return 'negative';
+    if(status.includes('ABERT') || status.includes('DISPONIVEL') || status === 'SIM') return 'positive';
+  }
+  if(tipo === 'adiantamento'){
+    if(status.includes('NAO SE APLICA')) return 'unknown';
+    if(status === 'NAO' || status.startsWith('NAO ') || status.includes('NAO PERMITE') || status.includes('INDISPONIVEL')) return 'negative';
+    if(status === 'SIM' || status.startsWith('SIM ') || status.includes('PERMITE') || status.includes('DISPONIVEL')) return 'positive';
+  }
+  return 'unknown';
+}
+
+function buildFundOperationalFacts(r, variant='detail'){
+  const d = obterDadosOperacionaisFundo(r);
+  const capCls = classeStatusOperacional(d.captacao.status,'captacao');
+  const adiCls = classeStatusOperacional(d.adiantamento.status,'adiantamento');
+  const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
+  const adiDot = adiCls==='positive'?'●':adiCls==='negative'?'●':'○';
+  const estimateBadge = '<em class="fund-fact-estimated-v154">indicativo</em>';
+  return `<section class="fund-facts-v154 ${htmlAttr(variant)}" aria-label="Informações complementares do fundo">
+    <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>${r?.__fundosMeta?'Dados oficiais do cadastro do fundo':'Dados da base; indicação apenas quando sinalizada'}</small></div>
+    <div class="fund-facts-grid-v154">
+      <div class="fund-fact-v154"><span>Benchmark / referência</span><strong>${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}</strong></div>
+      <div class="fund-fact-v154 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}</strong></div>
+      <div class="fund-fact-v154"><span>Adiantamento de resgate</span><strong class="status-${adiCls}"><i>${adiDot}</i>${htmlAttr(d.adiantamento.texto)}</strong></div>
+      <div class="fund-fact-v154"><span>Classificação tributária</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
+      <div class="fund-fact-v154"><span>Captação</span><strong class="status-${capCls}"><i>${capDot}</i>${htmlAttr(d.captacao.texto)}</strong></div>
+      <div class="fund-fact-v154 movement-hours-v155"><span>Horários limite da grade diária</span><strong class="fund-hours-v155 ${d.horarios.informado?'has-data':'no-data'}"><em><b>Aplicação</b>${htmlAttr(d.horarios.aplicacao)}</em><em><b>Resgate</b>${htmlAttr(d.horarios.resgate)}</em></strong><small>Solicitações após o horário limite podem ser processadas no próximo dia útil.</small></div>
+    </div>
+  </section>`;
 }
 
 function prazoResgateCell(valor, tipo){
@@ -3383,7 +3845,7 @@ function updateFundResultSummary(){
   const total=Array.isArray(filtered)?filtered.length:0;
   const resultText=`Resultado: ${total.toLocaleString('pt-BR')} ${fundPlural(total)}`;
   const top=$('filterResultSummary');
-  if(top) top.textContent=resultText;
+  if(top) top.textContent=`${total.toLocaleString('pt-BR')} ${fundPlural(total)}`;
   const shell=$('fundFilterShell');
   if(shell) shell.setAttribute('data-result', resultText);
   const per=$('perPage');
@@ -3610,7 +4072,7 @@ async function carregarDados(){
   try{
     const raw=await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
     const result=parseCsv(raw);
-    allRows=result.data;
+    allRows=result.data.map(mesclarMetadadosFundo);
     const headers=Object.keys(allRows[0]||{});
     displayHeaders=headers;
     const di=displayHeaders.indexOf(DEFAULT_SORT);
@@ -4365,12 +4827,14 @@ function buildCopomCalendario(){
   requestAnimationFrame(() => { container.scrollLeft = 0; });
 }
 
+
 /* ════════════════════════════════════════════════════
-   INIT
+   INIT — v80 dados primeiro, indicadores depois
 ════════════════════════════════════════════════════ */
 async function iniciarDashboard(){
   const etapa = async function(nome, fn){
     try{
+      if(typeof fn !== 'function') return null;
       return await fn();
     }catch(e){
       console.warn('[INIT] Falha em ' + nome + ':', e);
@@ -4378,26 +4842,60 @@ async function iniciarDashboard(){
     }
   };
 
+  const revelar = function(){
+    try{
+      document.documentElement.classList.remove('app-booting');
+      document.documentElement.classList.add('app-ready','no-boot-v79','data-first-v80');
+      const boot=document.getElementById('appBootScreen');
+      if(boot) boot.remove();
+      if(typeof window.__revealApp === 'function') window.__revealApp('data-first-v80');
+    }catch(e){}
+  };
+
   try{
-    await etapa('carregarMercado', carregarMercado);
-    await etapa('carregarCDIPeriodos', carregarCDIPeriodos);
-    await etapa('carregarIPCAPeriodos', carregarIPCAPeriodos);
-    etapa('carregarDolarDia', carregarDolarDia);
-    etapa('carregarPTAXDiarioAno', carregarPTAXDiarioAno);
-    await etapa('carregarPTAXHistorico', carregarPTAXHistorico);
-    await etapa('carregarFundosJson', carregarFundosJson);
+    /* Principal: dados locais do catálogo não podem esperar endpoints externos. */
+    await Promise.all([
+      etapa('carregarFundosJson', carregarFundosJson),
+      etapa('carregarFundosMetaJson', carregarFundosMetaJson)
+    ]);
     await etapa('carregarDados', carregarDados);
     await etapa('carregarKPIs', carregarKPIs);
-  }finally{
-    // A interface fica pronta mesmo que algum endpoint externo falhe.
+
+    revelar();
     window.__dashboardReady = true;
-    try{ if(typeof window.__revealApp === 'function') window.__revealApp(); }catch(e){}
-    try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){}
-    try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){}
-    try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){}
+
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+    try{ if(typeof renderRankings === 'function') renderRankings(); }catch(e){}
+
+    /* Indicadores e gráficos rodam em segundo plano. Se algum endpoint atrasar,
+       a lista de fundos continua disponível. */
+    (async function carregarIndicadoresEmBackground(){
+      await etapa('carregarMercado', carregarMercado);
+      await etapa('carregarCDIPeriodos', carregarCDIPeriodos);
+      await etapa('carregarIPCAPeriodos', carregarIPCAPeriodos);
+      etapa('carregarDolarDia', carregarDolarDia);
+      etapa('carregarPTAXDiarioAno', carregarPTAXDiarioAno);
+      await etapa('carregarPTAXHistorico', carregarPTAXHistorico);
+
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderRankings === 'function') renderRankings(); }catch(e){}
+      try{ if(typeof atualizarResumoFechamentoMes==='function') atualizarResumoFechamentoMes(); }catch(e){}
+      try{ if(typeof atualizarPainelFechadoCard==='function') atualizarPainelFechadoCard(); }catch(e){}
+      try{ if(typeof renderClosedMarketSheet==='function') renderClosedMarketSheet(); }catch(e){}
+    })();
+
+  }catch(e){
+    console.error('[INIT] Falha crítica no carregamento principal:', e);
+    revelar();
+
+    const loadMsg = document.getElementById('loadMsg');
+    if(loadMsg){
+      loadMsg.innerHTML = `<div style="color:var(--red)">Erro ao carregar a base principal<br><small>${e.message || e}</small></div>`;
+    }
   }
 }
 iniciarDashboard();
+
 document.addEventListener('click', function(e){
   if(e.target.closest('.detail-row a, .detail-row button, .detail-row input, .docs-card')){
     e.stopPropagation();
@@ -4479,7 +4977,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function cdiRatioInfo(m12){
     const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(toNum(m12), indicState?.cdi?.m12) : null;
     if(ratio === null || ratio === undefined || !Number.isFinite(Number(ratio))) return {txt:'—', cls:''};
-    const cls = ratio < 0 ? 'fund-cdi-ratio-negative' : ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
+    const cls = ratio >= 100 ? 'fund-cdi-ratio-good' : ratio >= 80 ? 'fund-cdi-ratio-mid' : 'fund-cdi-ratio-low';
     return {txt:`${ratio}% do CDI`, cls};
   }
 
@@ -4490,6 +4988,14 @@ document.addEventListener('DOMContentLoaded', function(){
   function fmtDash(v){
     const s=String(v??'').trim();
     return s && s!=='-' && s!=='—' ? s : '—';
+  }
+
+  function fmtPctMobilePremium(v){
+    const n=toNum(v);
+    if(n===null || n===undefined || !Number.isFinite(Number(n))) return {txt:'—', cls:'zero'};
+    const sign=n>0?'+':'';
+    const txt=sign+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';
+    return {txt, cls:n>0?'pos':n<0?'neg':'zero'};
   }
 
   function getCampoPrazoMobile(row, key){
@@ -4513,7 +5019,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const cat=fmtDash(r['Categoria']);
     const risco=fmtDash(r['Perfil de Risco']);
     const cota=fmtDash(r['Cota (R$)']);
-    const dia=fmtDash(r['Variacao Dia (%)']);
+    const diaInfo=fmtPctMobilePremium(r['Variacao Dia (%)']);
+    const mesInfo=fmtPctMobilePremium(r['Acum. Mes (%)']);
+    const anoInfo=fmtPctMobilePremium(r['Acum. Ano (%)']);
+    const m12Info=fmtPctMobilePremium(r['Acum. 12M (%)']);
     const mes=fmtDash(r['Acum. Mes (%)']);
     const ano=fmtDash(r['Acum. Ano (%)']);
     const m12=fmtDash(r['Acum. 12M (%)']);
@@ -4532,11 +5041,8 @@ document.addEventListener('DOMContentLoaded', function(){
       ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim comercial ↗</a>`
       : '';
     const docsHtml = buildMobileDocsHtml(r);
-    const pageDetailHtml = url
-      ? `<div class="fund-card-detail-links-v59"><a class="fund-card-page-detail-btn-v59" href="${htmlAttr(url)}" target="_blank" rel="noopener">🏦 Abrir página do fundo na CAIXA ↗</a></div>`
-      : '';
     return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
-      <div class="fund-card-list-main">
+      <div class="fund-card-list-main fund-card-list-main-premium-v68">
         <div class="fund-card-list-left">
           <div class="fund-card-mobile-tags fund-card-list-tags">
             <span class="cat-badge cat-${cls}">${cat}</span>
@@ -4545,15 +5051,24 @@ document.addEventListener('DOMContentLoaded', function(){
           </div>
           <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
         </div>
-        <div class="fund-card-list-metrics" aria-label="Resumo de rentabilidade do fundo">
-          <span class="fund-card-list-metric"><small>Dia</small><strong class="${pctClass(dia)}">${dia}</strong></span>
-          <span class="fund-card-list-metric"><small>Ano</small><strong class="${pctClass(ano)}">${ano}</strong></span>
-          <span class="fund-card-list-metric"><small>12M</small><strong class="${pctClass(m12)}">${m12}</strong></span>
+      </div>
+
+      <div class="fund-card-performance-v68" aria-label="Rentabilidade do fundo">
+        <div class="fund-card-performance-title-v68">Rentabilidade</div>
+        <div class="fund-card-perf-short-v68">
+          <span class="fund-card-perf-chip-v68"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
+          <span class="fund-card-perf-chip-v68"><small>Ano</small><strong class="${anoInfo.cls}">${anoInfo.txt}</strong></span>
+        </div>
+        <div class="fund-card-perf-highlight-v68">
+          <span class="fund-card-perf-main-v68"><small>12 meses</small><strong class="${m12Info.cls}">${m12Info.txt}</strong></span>
+          <span class="fund-card-perf-main-v68 cdi"><small>% CDI 12M</small><strong class="${ratioCdi.cls}">${ratioCdi.txt}</strong></span>
         </div>
       </div>
 
       <div class="fund-card-mobile-actions fund-card-list-actions fund-card-list-actions-v26">
         ${boletimBtn}
+        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página do fundo ↗</a>
         <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Mais detalhes</button>
       </div>
 
@@ -4564,14 +5079,13 @@ document.addEventListener('DOMContentLoaded', function(){
         </div>
         <div class="fund-card-mobile-body">
           <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Ano</span><span class="fund-metric-value ${pctClass(ano)}">${ano}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
         </div>
-        ${pageDetailHtml}
+        ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
         <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
       </div>
@@ -4707,20 +5221,49 @@ document.addEventListener('DOMContentLoaded', function(){
     const cat=typeof activeCat!=='undefined' ? activeCat : '';
     const bench=typeof activeBenchmark!=='undefined' ? activeBenchmark : '';
     const risco=typeof activeRisco!=='undefined' ? activeRisco : '';
+    const perfil=typeof activePerfil!=='undefined' ? activePerfil : '';
+    const semDados=typeof hideSemDados!=='undefined' ? !!hideSemDados : false;
+
+    const presetByCat = {
+      'renda-fixa-simples':'RENDA FIXA SIMPLES',
+      'renda-fixa':'RENDA FIXA',
+      'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+      'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+      'multimercado':'MULTIMERCADO',
+      'cambial':'CAMBIAL',
+      'acoes':'ACOES',
+      'fundo-de-indice':'FUNDO DE INDICE',
+      'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+    };
+
     qsa('.filter-preset-chip').forEach(btn=>{
       const p=btn.dataset.preset;
       let on=false;
-      if(p==='all') on=!cat&&!bench&&!risco&&!(typeof activePerfil!=='undefined'&&activePerfil)&&!(typeof hideSemDados!=='undefined'&&hideSemDados);
+      if(p==='all') on=!cat&&!bench&&!risco&&!perfil&&!semDados;
       if(p==='cdi') on=bench==='CDI';
-      if(p==='conservador') on=risco==='Conservador';
       if(p==='ipca') on=bench==='IPCA';
-      if(p==='renda-fixa') on=cat==='RENDA FIXA';
-      if(p==='multimercado') on=cat==='MULTIMERCADO';
-      if(p==='acoes') on=cat==='ACOES';
-      if(p==='cambial') on=cat==='CAMBIAL';
-      if(p==='fmp') on=cat==='FUNDOS MUTUOS DE PRIVATIZACAO';
+      if(p==='conservador') on=risco==='Conservador';
+      if(p==='pf') on=perfil==='PF';
+      if(presetByCat[p]) on=cat===presetByCat[p];
       btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+
+    const status=qs('#categoryGridStatus');
+    if(status){
+      const labelMap={
+        'RENDA FIXA SIMPLES':'RF Simples',
+        'RENDA FIXA':'Renda Fixa',
+        'RENDA FIXA REFERENCIADO':'RF Referenciado',
+        'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+        'MULTIMERCADO':'Multimercado',
+        'CAMBIAL':'Cambial',
+        'ACOES':'Ações',
+        'FUNDO DE INDICE':'Fundo de Índice',
+        'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+      };
+      status.textContent = cat ? ('Categoria: '+(labelMap[cat] || cat)) : 'Todos os fundos';
+    }
   }
 
   function updateMobileFilterSummary(){
@@ -5007,11 +5550,20 @@ document.addEventListener('DOMContentLoaded', function(){
         if(typeof render==='function') render();
       }
 
-      /* Favoritos */
+      /* Favoritos
+         v66: favorito NÃO altera mais a ordenação da lista geral.
+         Antes, qualquer fundo favoritado era jogado para o topo depois da ordenação,
+         o que fazia o CAIXA FIC FIF INDEXA DOLAR CAMBIAL parecer "preso".
+         Agora: Favoritos clicado => filtra favoritos; Todos => ordena normalmente. */
       if(typeof filtered==='undefined') return;
       const favs=getFavs();
-      if(onlyFavs){ filtered=filtered.filter(r=>favs.has(getFundKey(r))); if(typeof render==='function') render(); }
-      else if(favs.size>0){ filtered.sort((a,b)=>(favs.has(getFundKey(a))?0:1)-(favs.has(getFundKey(b))?0:1)); if(typeof render==='function') render(); }
+      if(onlyFavs){
+        filtered=filtered.filter(r=>{
+          try{ return typeof rowIsFavoritedForFilter==='function' ? rowIsFavoritedForFilter(r) : favs.has(getFundKey(r)); }
+          catch(e){ return favs.has(getFundKey(r)); }
+        });
+        if(typeof render==='function') render();
+      }
 
       /* Atualiza contador na barra global */
       updateGfbCount();
@@ -5410,6 +5962,58 @@ document.addEventListener('DOMContentLoaded', function(){
     showToast._t=setTimeout(()=>el.classList.remove('show'),2600);
   }
 
+  function goToFundInCatalog(row){
+    if(!row) return showToast('Fundo não localizado na base atual.');
+    const nome=String(row['Fundo']||'').trim();
+    const cnpj=String(row['CNPJ']||'').trim();
+    const busca=nome || cnpj;
+    if(!busca) return showToast('Não foi possível identificar o fundo.');
+
+    clearChipGroups();
+    document.querySelectorAll('.filter-preset-chip[data-preset], .shortcut-preset[data-preset]').forEach(btn=>{
+      const isAll=btn.dataset.preset==='all';
+      btn.classList.toggle('active',isAll);
+      btn.setAttribute('aria-pressed',isAll?'true':'false');
+    });
+    const categoryStatus=document.getElementById('categoryGridStatus');
+    if(categoryStatus) categoryStatus.textContent='Todos os fundos';
+    try{ activeSearch=busca; }catch(e){}
+
+    const inp=$('searchInput');
+    if(inp) inp.value=busca;
+    const gfb=$('gfbSearch');
+    if(gfb) gfb.value=busca;
+
+    // "Ver na tabela" deve realmente abrir a visualização em tabela.
+    try{ localStorage.setItem('fundMobileView','table'); }catch(e){}
+    document.body.classList.remove('fund-card-mode');
+    document.querySelectorAll('.mobile-view-btn').forEach(btn=>{
+      btn.classList.toggle('active',btn.dataset.view==='table');
+    });
+
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){console.error('Falha ao localizar fundo no catálogo',e);}
+
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      const table=document.querySelector('.table-wrap');
+      const sec=$('sec-fundos') || table;
+      const target=table || sec;
+      if(target){
+        const nav=document.getElementById('desktopAnchorNavV131');
+        const offset=(nav?.getBoundingClientRect().height||0)+18;
+        const top=target.getBoundingClientRect().top+window.scrollY-offset;
+        window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+      }
+      const firstRow=document.querySelector('#tableBody tr[data-idx], .table-wrap tbody tr[data-idx]');
+      if(firstRow){
+        firstRow.classList.add('catalog-focus-row-v153');
+        setTimeout(()=>firstRow.classList.remove('catalog-focus-row-v153'),2600);
+      }
+      if(Array.isArray(filtered) && filtered.length===0){
+        showToast('Fundo não localizado. A busca foi restaurada pelo nome.');
+      }
+    }));
+  }
+
   /* ═══════════════════════════════════════════
      FUND SPOTLIGHT MODAL — lógica de abertura
   ═══════════════════════════════════════════ */
@@ -5468,13 +6072,20 @@ document.addEventListener('DOMContentLoaded', function(){
       : '';
     el('fspotLiq').style.display = liqParts.length ? '' : 'none';
 
+    // Informações complementares
+    const factsEl = el('fspotFacts');
+    if(factsEl){
+      factsEl.innerHTML = buildFundOperationalFacts(row,'spotlight');
+      factsEl.style.display = '';
+    }
+
     // Nota rápida
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
     const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura rápida</div>${noteTxt}`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -5482,7 +6093,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const urlFundo = getFundUrl(row);
     const linkEl = el('fspotLinkCaixa');
     if(urlFundo && !isFallbackUrl(row)){
-      linkEl.href = urlFundo; linkEl.style.display = '';
+      linkEl.href = urlFundo;
+      linkEl.textContent = '↗ Página do fundo';
+      linkEl.title = 'Abrir página do fundo';
+      linkEl.style.display = '';
     } else {
       linkEl.style.display = 'none';
     }
@@ -5490,19 +6104,8 @@ document.addEventListener('DOMContentLoaded', function(){
     // Botão "Ver na tabela"
     el('fspotVerTabela').onclick = ()=>{
       closeFundSpotlight();
-      // Pequeno delay para o modal fechar antes de filtrar
-      setTimeout(()=>{
-        clearChipGroups();
-        const cnpj = cleanCnpj ? cleanCnpj(row['CNPJ']) : '';
-        const busca = cnpj || nome;
-        try{ activeSearch = busca.toLowerCase(); }catch(e){}
-        const inp = $('searchInput'); if(inp) inp.value = busca;
-        const gfb = $('gfbSearch'); if(gfb) gfb.value = busca;
-        try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){}
-        // Scroll até a tabela
-        const sec = $('sec-fundos') || document.querySelector('.table-wrap');
-        if(sec) sec.scrollIntoView({behavior:'smooth', block:'start'});
-      }, 320);
+      // Usa o nome do fundo como busca visível e mantém compatibilidade com CNPJ formatado.
+      setTimeout(()=>goToFundInCatalog(row),220);
     };
 
     // Documentos
@@ -7088,261 +7691,6 @@ async function sharePainelMercado(){
 
   console.info('[' + BUILD + '] instalado.');
 })();
-/* Patch final — atalhos do catálogo no desktop/mobile.
-   Build: ELTAUM_TABS_FORCE_20260602_v10
-   Ajuste v10: reduz piscadas/pulos ao filtrar grupos.
-   - Grupos (Renda Fixa, Multimercado, Ações, Cambial e FMP) filtram diretamente a base e renderizam uma vez.
-   - Remove o scrollIntoView automático que fazia a tela dar salto no desktop.
-   - Reduz os eventos de clique e aplica debounce para evitar renderizações duplicadas. */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_SHORTCUT_FILTERS_FORCE_20260602_v10';
-  const GROUP_PRESETS=new Set(['renda-fixa','multimercado','acoes','cambial','fmp']);
-  const VALID_PRESETS=new Set(['all','favoritos','cdi','conservador','ipca','renda-fixa','multimercado','acoes','cambial','fmp']);
-  window.__ELTAUM_SHORTCUT_FILTERS_BUILD__=BUILD;
-  window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'';
-  console.info('[Catálogo CAIXA] Patch atalhos/filtros ativo:', BUILD);
-  console.info('[Catálogo CAIXA] Correção de overlay/clique dos atalhos ativa: ELTAUM_OVERLAY_CLICK_FIX_20260602_v10');
-
-  function norm(v){
-    return String(v||'')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g,'')
-      .replace(/\s+/g,' ')
-      .trim()
-      .toUpperCase();
-  }
-
-  function rowCategory(row){ return norm(row && row['Categoria']); }
-  function rowName(row){ return norm(row && row['Fundo']); }
-
-  function rowMatchesGroup(row,preset){
-    const cat=rowCategory(row);
-    const nome=rowName(row);
-    if(preset==='renda-fixa') return cat.includes('RENDA FIXA');
-    if(preset==='multimercado') return cat.includes('MULTIMERCADO');
-    if(preset==='acoes') return cat.includes('ACOES') || cat.includes('ACAO') || nome.includes('ACOES') || nome.includes('ACAO');
-    if(preset==='cambial') return cat.includes('CAMBIAL') || nome.includes('CAMBIAL') || nome.includes('DOLAR') || nome.includes('CAMBIO');
-    if(preset==='fmp') return cat.includes('PRIVATIZACAO') || cat.includes('FMP') || nome.includes('FMP') || nome.includes('FGTS');
-    return true;
-  }
-
-  function rowMatchesSearch(row){
-    const input=document.getElementById('searchInput');
-    const q=norm(input && input.value);
-    if(!q) return true;
-    return norm(Object.values(row||{}).join(' ')).includes(q);
-  }
-
-  function presetLabel(preset){
-    return ({
-      'renda-fixa':'Renda Fixa',
-      'multimercado':'Multimercado',
-      'acoes':'Ações',
-      'cambial':'Cambial',
-      'fmp':'FMP',
-      'cdi':'CDI',
-      'ipca':'IPCA',
-      'conservador':'Conservador',
-      'favoritos':'Favoritos',
-      'all':'Todos'
-    })[preset] || preset || 'Todos';
-  }
-
-  function keepFundAreaStable(fn){
-    const wrap=document.querySelector('.table-wrap');
-    const cards=document.getElementById('mobileFundCards');
-    const wrapH=wrap ? Math.ceil(wrap.getBoundingClientRect().height) : 0;
-    const cardsH=cards ? Math.ceil(cards.getBoundingClientRect().height) : 0;
-
-    if(wrap && wrapH>0){
-      wrap.style.minHeight=wrapH+'px';
-      wrap.classList.add('elton-filter-stabilizing');
-    }
-    if(cards && cardsH>0){
-      cards.style.minHeight=cardsH+'px';
-      cards.classList.add('elton-filter-stabilizing');
-    }
-
-    let out;
-    try{ out=fn(); }
-    finally{
-      setTimeout(()=>{
-        if(wrap){ wrap.style.minHeight=''; wrap.classList.remove('elton-filter-stabilizing'); }
-        if(cards){ cards.style.minHeight=''; cards.classList.remove('elton-filter-stabilizing'); }
-      },180);
-    }
-    return out;
-  }
-
-  function syncShortcutVisual(preset){
-    const active=preset || window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ || 'all';
-    document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]').forEach(btn=>{
-      const on=(btn.dataset.preset||'')===active || (active==='all' && (btn.dataset.preset||'')==='all');
-      btn.classList.toggle('active',on);
-      btn.setAttribute('aria-pressed',on?'true':'false');
-    });
-
-    const summary=document.getElementById('mobileFilterSummary');
-    if(summary){
-      if(active==='all' || !active) summary.textContent='Filtros: todos';
-      else if(GROUP_PRESETS.has(active)) summary.textContent='Filtros: '+presetLabel(active);
-    }
-
-    const count=document.getElementById('filterActiveCount');
-    if(count){
-      if(active && active!=='all'){
-        count.textContent='1';
-        count.classList.add('has-active');
-      }else{
-        count.textContent='0';
-        count.classList.remove('has-active');
-      }
-    }
-
-    const strip=document.getElementById('activeFilterStrip');
-    if(strip && GROUP_PRESETS.has(active)){
-      strip.classList.add('active');
-      strip.innerHTML=`<span class="active-filter-label">Filtros ativos</span><button type="button" class="active-filter-pill" data-elton-clear-shortcut="1"><small>Grupo</small>${presetLabel(active)}<span>×</span></button><button type="button" class="active-filter-clear" data-elton-clear-shortcut="1">Limpar tudo</button>`;
-    }else if(strip && (active==='all' || !active)){
-      strip.classList.remove('active');
-      if(strip.querySelector('[data-elton-clear-shortcut]')) strip.innerHTML='';
-    }
-  }
-
-  function resetBaseFiltersForShortcut(){
-    try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; }catch(e){}
-    try{ window.__favListMode=false; }catch(e){}
-    try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-  }
-
-  function renderFundListOnce(){
-    try{ currentPage=1; }catch(e){}
-    try{ if(expandedRows && typeof expandedRows.clear==='function') expandedRows.clear(); }catch(e){}
-    try{ if(typeof render==='function') render(); }catch(e){ console.warn('[Atalhos v10] render falhou:',e); }
-    try{ if(typeof renderMobileFundCards==='function') renderMobileFundCards(); }catch(e){}
-    try{ if(typeof updateFundResultSummary==='function') updateFundResultSummary(); }catch(e){}
-  }
-
-  function applyGroupPresetDirect(preset){
-    if(typeof allRows==='undefined' || !Array.isArray(allRows)) return false;
-    resetBaseFiltersForShortcut();
-    window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset;
-
-    keepFundAreaStable(()=>{
-      try{
-        filtered=allRows.filter(row=>rowMatchesGroup(row,preset) && rowMatchesSearch(row));
-      }catch(e){
-        console.warn('[Atalhos v10] filtro direto falhou:',e);
-        filtered=[];
-      }
-      renderFundListOnce();
-      syncShortcutVisual(preset);
-    });
-    return true;
-  }
-
-  function applyShortcutPreset(preset){
-    preset=String(preset||'all');
-
-    if(GROUP_PRESETS.has(preset)){
-      applyGroupPresetDirect(preset);
-      return;
-    }
-
-    keepFundAreaStable(()=>{
-      if(preset==='favoritos'){
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='favoritos';
-        try{ if(typeof toggleFavList==='function') toggleFavList(); else if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v10] favoritos falhou:',e); }
-        syncShortcutVisual('favoritos');
-        return;
-      }
-
-      if(preset==='all'){
-        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__='all';
-        try{ activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; window.__favListMode=false; }catch(e){}
-        try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-        try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v10] todos falhou:',e); }
-        syncShortcutVisual('all');
-        return;
-      }
-
-      resetBaseFiltersForShortcut();
-      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__=preset;
-      try{
-        if(preset==='cdi') activeBenchmark='CDI';
-        else if(preset==='ipca') activeBenchmark='IPCA';
-        else if(preset==='conservador') activeRisco='Conservador';
-      }catch(e){}
-
-      try{ if(typeof syncFilterControls==='function') syncFilterControls(); }catch(e){}
-      try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.warn('[Atalhos v10] aplicar filtro falhou:',e); }
-      syncShortcutVisual(preset);
-    });
-  }
-
-  let __lastShortcutClick={preset:'',t:0};
-
-  function shortcutHandler(ev){
-    const target=ev.target;
-    const btn=target && target.closest ? target.closest('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]') : null;
-    if(!btn) return;
-    const preset=btn.dataset.preset||'all';
-    if(!VALID_PRESETS.has(preset)) return;
-
-    ev.preventDefault();
-    ev.stopPropagation();
-    if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
-
-    const now=Date.now();
-    if(__lastShortcutClick.preset===preset && now-__lastShortcutClick.t<420) return;
-    __lastShortcutClick={preset,t:now};
-    applyShortcutPreset(preset);
-  }
-
-  let __setupDone=false;
-  function setup(){
-    if(__setupDone) return;
-    __setupDone=true;
-    ['pointerup','click','touchend'].forEach(type=>{
-      document.addEventListener(type, shortcutHandler, true);
-    });
-    document.getElementById('activeFilterStrip')?.addEventListener('click',ev=>{
-      const b=ev.target.closest('[data-elton-clear-shortcut]');
-      if(!b) return;
-      ev.preventDefault();
-      ev.stopPropagation();
-      if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
-      applyShortcutPreset('all');
-    },true);
-    syncShortcutVisual(window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__||'all');
-    console.info('[Catálogo CAIXA] Atalhos do catálogo prontos:', BUILD);
-  }
-
-  window.__eltonDiagnosticarAtalhos=function(){
-    const atalhos=[...document.querySelectorAll('.shortcut-preset[data-preset], .filter-preset-chip[data-preset]')];
-    const out={
-      buildIndex:document.querySelector('meta[name="app-build"]')?.content,
-      buildAtalhos:window.__ELTAUM_SHORTCUT_FILTERS_BUILD__,
-      presetAtivo:window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__,
-      qtdBotoes:atalhos.length,
-      filteredQtd:Array.isArray(filtered)?filtered.length:null,
-      allRowsQtd:Array.isArray(allRows)?allRows.length:null,
-      resultInfo:document.getElementById('resultInfo')?.textContent||'',
-      botoes:atalhos.map(b=>({texto:b.textContent.trim(),preset:b.dataset.preset,classe:b.className,aria:b.getAttribute('aria-pressed')}))
-    };
-    console.table(out.botoes);
-    console.log('[Diagnóstico atalhos]',out);
-    return out;
-  };
-
-  window.__eltonAplicarAtalhoSuave=applyShortcutPreset;
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setup,650));
-  else setTimeout(setup,650);
-})();
-
-
 /* ════════════════════════════════════════════════════
    v24 — Mobile card-first para o catálogo de fundos
 ════════════════════════════════════════════════════ */
@@ -7831,6 +8179,9 @@ async function sharePainelMercado(){
   }
   function normalizeMode(mode){return mode==='cards' ? 'cards' : 'list';}
   function getMode(){
+    // v67: no celular a experiência oficial é somente Cards.
+    // Desktop continua iniciando em Tabela, com opção de alternar para Cards.
+    if(isMobile()) return 'cards';
     try{return normalizeMode(localStorage.getItem(MODE_KEY)||'list');}catch(e){return 'list';}
   }
   function saveMode(mode){
@@ -7902,10 +8253,12 @@ async function sharePainelMercado(){
   }
   function applyMode(mode){
     mode=normalizeMode(mode);
-    saveMode(mode);
     const mobile=isMobile();
+    // v67: mobile não tem alternância Tabela/Cards; força Cards sempre.
+    if(mobile) mode='cards';
+    saveMode(mode);
     document.body.classList.toggle('fund-card-mode', mode==='cards' || mobile);
-    document.body.classList.toggle('fund-list-mode', mobile && mode==='list');
+    document.body.classList.toggle('fund-list-mode', false);
     syncButtons();
     renderByMode();
   }
@@ -7971,8 +8324,9 @@ async function sharePainelMercado(){
     return [s?.value,g?.value].some(v=>String(v||'').trim().length>=2);
   }
   function preferListMode(){
-    try{localStorage.setItem(MODE_KEY,'list');}catch(e){}
-    const btn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="list"]');
+    // v67: compatibilidade com patch antigo; no mobile mantém Cards.
+    try{localStorage.setItem(MODE_KEY,'cards');}catch(e){}
+    const btn=qs('.mobile-catalog-view-btn[data-mobile-catalog-view="cards"]');
     if(btn && !btn.classList.contains('active')){
       btn.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true,view:window}));
     }
@@ -7985,16 +8339,12 @@ async function sharePainelMercado(){
     return gfbH + 18;
   }
   function ensureHint(){
-    const sw=qs('#mobileCatalogViewSwitch');
-    if(!sw || qs('#mobileResultsHintV46')) return;
-    const hint=document.createElement('div');
-    hint.id='mobileResultsHintV46';
-    hint.className='mobile-results-hint-v46';
-    hint.textContent='Resultados atualizados abaixo. Use Lista para comparar mais fundos ou Cards para acessar documentos.';
-    sw.insertAdjacentElement('afterend',hint);
+    // v67: aviso removido no mobile para reduzir ruído visual.
+    const old=qs('#mobileResultsHintV46');
+    if(old) old.remove();
   }
   function resultsAnchor(){
-    return qs('#mobileCatalogViewSwitch') || qs('#mobileFundCards') || qs('#sec-fundos .table-wrap') || qs('#sec-fundos');
+    return qs('#mobileFundCards') || qs('#sec-fundos .table-wrap') || qs('#sec-fundos');
   }
   function scrollToResults(reason){
     if(!isMobile()) return;
@@ -8182,7 +8532,7 @@ async function sharePainelMercado(){
     const categorias=(typeof kpisDashboard!=='undefined' && kpisDashboard && kpisDashboard.categorias) ? kpisDashboard.categorias : {};
     const catPL=Object.entries(categorias).filter(([cat,d])=>{
       try{
-        const okFiltro=(typeof activeRankFilter==='undefined'||activeRankFilter==='todos')?true:(activeRankFilter==='sem-fmp'?!/FMP|PRIVATIZA/i.test(cat):activeRankFilter==='renda-fixa'?/RENDA FIXA/i.test(cat):activeRankFilter==='acoes'?/ACOES|AÇÕES/i.test(cat):activeRankFilter==='multimercado'?/MULTIMERCADO/i.test(cat):true);
+        const okFiltro=window.rankCategoryMatchesV151 ? window.rankCategoryMatchesV151(cat, activeRankFilter) : true;
         return okFiltro && numK(d?.pl_total)!==null && !Number.isNaN(numK(d?.pl_total));
       }catch(e){return false}
     }).sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
@@ -8273,7 +8623,7 @@ async function sharePainelMercado(){
    - No mobile, preserva o comportamento atual em bottom/lista.
 ════════════════════════════════════════════════════════ */
 (function(){
-  const BUILD='ELTAUM_CARD_SIDE_PANEL_METRICS_20260606_v59';
+  const BUILD='ELTAUM_MOBILE_CARDS_RANKING_FOCUS_20260606_v67';
   function isDesktopCards(){
     return window.matchMedia && window.matchMedia('(min-width: 821px)').matches && document.body.classList.contains('fund-card-mode');
   }
@@ -8402,4 +8752,4125 @@ async function sharePainelMercado(){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindSidePanel);
   else bindSidePanel();
+})();
+
+
+/* ════════════════════════════════════════════════════════
+   v68 — Mobile premium: filtros rápidos + cards com Dia/Mês/Ano/12M/%CDI
+   Mantém a base atual e apenas refina a experiência mobile.
+════════════════════════════════════════════════════════ */
+(function(){
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+  const PRESET_LABEL={
+    'all':'Todos','renda-fixa':'RF','cdi':'CDI','ipca':'IPCA','multimercado':'MM','acoes':'Ações','fmp':'FMP','cambial':'Cambial','conservador':'Conservador','favoritos':'Favoritos','pf':'PF'
+  };
+  function activePremiumLabel(){
+    try{
+      const preset=window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ || 'all';
+      if(preset && preset!=='all') return PRESET_LABEL[preset] || preset;
+      if(typeof activeCat!=='undefined' && activeCat) return String(activeCat).replace('RENDA FIXA','RF').replace('FUNDOS MUTUOS DE PRIVATIZACAO','FMP');
+      if(typeof activeBenchmark!=='undefined' && activeBenchmark) return String(activeBenchmark);
+      if(typeof activePerfil!=='undefined' && activePerfil) return String(activePerfil);
+      if(typeof activeRisco!=='undefined' && activeRisco) return String(activeRisco);
+      if(typeof hideSemDados!=='undefined' && hideSemDados) return 'Sem pipeline';
+    }catch(e){}
+    return '';
+  }
+  function syncMobilePremiumFilterState(){
+    const total=(typeof filtered!=='undefined' && Array.isArray(filtered)) ? filtered.length : null;
+    const label=activePremiumLabel();
+    const top=qs('#filterResultSummary');
+    if(top && total!==null){
+      top.textContent=label ? `${label} · ${total.toLocaleString('pt-BR')} fundos` : `${total.toLocaleString('pt-BR')} fundos encontrados`;
+    }
+    const clear=qs('#clearFiltersTop');
+    if(clear){
+      const active=!!label;
+      clear.hidden=!active;
+      clear.classList.toggle('is-visible',active);
+      clear.textContent=active?'Limpar filtro':'Limpar';
+    }
+    const more=qs('#mobileCategoryMoreBtn');
+    if(more){
+      more.setAttribute('aria-expanded', document.body.classList.contains('filter-sheet-open')?'true':'false');
+    }
+  }
+  function setupPremiumMobileCategoryButton(){
+    const more=qs('#mobileCategoryMoreBtn');
+    if(!more || more.dataset.readyPremiumV68==='1') return;
+    more.dataset.readyPremiumV68='1';
+    more.addEventListener('click',function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      const toggle=qs('#mobileFilterToggle');
+      if(toggle) toggle.click();
+    });
+  }
+  const prevRender=typeof render==='function' ? render : null;
+  if(prevRender && !window.__ELTAUM_RENDER_PREMIUM_V68__){
+    window.__ELTAUM_RENDER_PREMIUM_V68__=true;
+    render=function(){
+      const out=prevRender.apply(this,arguments);
+      try{syncMobilePremiumFilterState();}catch(e){}
+      return out;
+    };
+  }
+  document.addEventListener('DOMContentLoaded',function(){
+    setupPremiumMobileCategoryButton();
+    setTimeout(syncMobilePremiumFilterState,250);
+    setTimeout(syncMobilePremiumFilterState,900);
+  });
+  ['click','input','change','touchend','pointerup'].forEach(evt=>{
+    document.addEventListener(evt,function(){setTimeout(syncMobilePremiumFilterState,90);},true);
+  });
+  window.addEventListener('resize',function(){ if(isMobile()) setTimeout(syncMobilePremiumFilterState,80); });
+  window.__eltonSyncMobilePremiumV68=syncMobilePremiumFilterState;
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v76 — Mobile: rodapé seguro e compacto
+   - Ajusta espaçamento inferior para o último card não ficar atrás do menu.
+   - Renomeia item "Mês" para "Mercado" quando necessário.
+   - Recalcula altura real do rodapé em celulares com barra de navegação.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function updateFooterSafeAreaV76(){
+    try{
+      const nav = qs('.mobile-bottom-nav');
+      const root = document.documentElement;
+      const mobile = isMobile();
+
+      if(!mobile || !nav){
+        root.style.removeProperty('--mobile-bottom-nav-real-h');
+        root.style.removeProperty('--mobile-content-safe-bottom');
+        return;
+      }
+
+      // Renomeia "Mês" para "Mercado" sem depender de HTML específico.
+      qsa('.mobile-bottom-nav a, .mobile-bottom-nav button').forEach(item=>{
+        const text = (item.textContent || '').trim();
+        if(/^📊?\s*M[eê]s$/i.test(text) || text === 'Mês' || text === 'Mes'){
+          item.childNodes.forEach(n=>{
+            if(n.nodeType === 3 && /M[eê]s|Mes/.test(n.nodeValue || '')) n.nodeValue = n.nodeValue.replace(/M[eê]s|Mes/g,'Mercado');
+          });
+          const span = item.querySelector('span:last-child, small:last-child, b:last-child');
+          if(span && /M[eê]s|Mes/.test(span.textContent || '')) span.textContent = 'Mercado';
+        }
+      });
+
+      const rect = nav.getBoundingClientRect();
+      const h = Math.max(64, Math.ceil(rect.height || 0));
+      const safe = Math.max(108, h + 38);
+
+      root.style.setProperty('--mobile-bottom-nav-real-h', h + 'px');
+      root.style.setProperty('--mobile-content-safe-bottom', `calc(${safe}px + env(safe-area-inset-bottom, 0px))`);
+
+      document.body.classList.add('mobile-footer-safe-v76');
+    }catch(e){}
+  }
+
+  function bind(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    updateFooterSafeAreaV76();
+    setTimeout(updateFooterSafeAreaV76,300);
+    setTimeout(updateFooterSafeAreaV76,1000);
+    setTimeout(updateFooterSafeAreaV76,1800);
+
+    window.addEventListener('resize', updateFooterSafeAreaV76, {passive:true});
+    window.addEventListener('orientationchange', ()=>setTimeout(updateFooterSafeAreaV76,350), {passive:true});
+
+    console.info('[Catálogo CAIXA] Rodapé mobile seguro:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+
+  window.__ELTAUM_MOBILE_FOOTER_SAFE_V76__ = {sync:updateFooterSafeAreaV76};
+})();
+
+
+/* PATCH v79 — app sem boot screen */
+(function(){
+  try{
+    document.documentElement.classList.remove('app-booting');
+    document.documentElement.classList.add('app-ready','no-boot-v79');
+    var boot=document.getElementById('appBootScreen');
+    if(boot) boot.remove();
+    console.info('[Catálogo CAIXA] Sem tela inicial de carregamento: ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128');
+  }catch(e){}
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v81 — Mobile filtro unificado sem loop
+   - Remove MutationObserver do botão limpar que causava timeout.
+   - Mantém Categoria, Pessoa Física e Ordenação no mobile.
+   - Mantém init "dados primeiro".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  const CANON_LABEL = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  const SORT_MAP = {
+    base:{campo:'base',dir:'desc'},
+    m12_desc:{campo:'m12',dir:'desc'},
+    m12_asc:{campo:'m12',dir:'asc'},
+    ano_desc:{campo:'ano',dir:'desc'},
+    ano_asc:{campo:'ano',dir:'asc'},
+    mes_desc:{campo:'mes',dir:'desc'},
+    dia_desc:{campo:'dia',dir:'desc'},
+    cdi_desc:{campo:'cdi',dir:'desc'},
+    cdi_asc:{campo:'cdi',dir:'asc'}
+  };
+
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^\w\s]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function activeCanonCat(){
+    try{return canon(activeCat || '')}catch(e){return ''}
+  }
+
+  function findRawCategoryByCanon(canonTarget){
+    try{
+      if(!canonTarget || !Array.isArray(allRows)) return '';
+      const found = allRows.find(r => canon(r && r['Categoria']) === canonTarget);
+      return found ? String(found['Categoria'] || '').trim() : canonTarget;
+    }catch(e){
+      return canonTarget || '';
+    }
+  }
+
+  function getSortMode(){
+    try{return localStorage.getItem('mobileSortModeV81') || localStorage.getItem('mobileSortModeV75') || 'base'}
+    catch(e){return 'base'}
+  }
+
+  function setSortMode(mode){
+    const valid = SORT_MAP[mode] ? mode : 'base';
+    window.__mobileSortModeV81 = valid;
+    try{
+      localStorage.setItem('mobileSortModeV81', valid);
+      localStorage.setItem('mobileSortModeV75', valid);
+    }catch(e){}
+  }
+
+  try{
+    if(typeof ordenarPorMobileSort === 'function' && !ordenarPorMobileSort.__v81Wrapped){
+      const originalOrdenarPorMobileSort = ordenarPorMobileSort;
+      ordenarPorMobileSort = function(rows){
+        const mode = getSortMode();
+        const cfg = SORT_MAP[mode] || SORT_MAP.base;
+        if(cfg.campo === 'base') return rows;
+        try{
+          activeMobileSortCampo = cfg.campo;
+          activeMobileSortDir = cfg.dir;
+        }catch(e){}
+        return originalOrdenarPorMobileSort(rows);
+      };
+      ordenarPorMobileSort.__v81Wrapped = true;
+    }
+  }catch(e){}
+
+  function keepMobileCards(){
+    try{
+      if(!isMobile()) return;
+      document.body.classList.add('fund-card-mode','catalog-mobile-clean','catalog-mobile-v26','v81-mobile-cards-only');
+      document.body.classList.remove('fund-list-mode');
+      try{
+        localStorage.setItem('fundMobileView','cards');
+        localStorage.setItem('fundMobileViewV45','cards');
+      }catch(e){}
+    }catch(e){}
+  }
+
+  function hasMobileFilter(){
+    let pf = false;
+    try{pf = String(activePerfil || '') === 'PF'}catch(e){}
+    return !!(activeCanonCat() || pf || getSortMode() !== 'base');
+  }
+
+  function syncV81(){
+    try{
+      const active = activeCanonCat();
+      const pfActive = String(activePerfil || '') === 'PF';
+      const label = active ? (CANON_LABEL[active] || active) : 'Todos os fundos';
+
+      const select = qs('#mobileCategorySelectV74');
+      if(select && select.value !== active) select.value = active;
+
+      const pf = qs('#mobileOnlyPfV75');
+      if(pf) pf.checked = pfActive;
+
+      const sort = qs('#mobileSortSelectV75');
+      if(sort && sort.value !== getSortMode()) sort.value = getSortMode();
+
+      const status = qs('#mobileCategorySelectStatusV74');
+      if(status) status.textContent = label + (pfActive ? ' · PF' : '');
+
+      const result = qs('#mobileCategorySelectResultV74');
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+      if(result && n !== null) result.textContent = `${n} fundos encontrados`;
+
+      const clear = qs('#mobileCategoryClearV74');
+      if(clear){
+        const has = hasMobileFilter();
+        clear.textContent = 'Limpar filtros';
+        clear.hidden = !has;
+        clear.classList.toggle('is-visible-v81', has);
+        clear.setAttribute('aria-hidden', has ? 'false' : 'true');
+      }
+
+      const filterResult = qs('#filterResultSummary');
+      if(filterResult && n !== null) filterResult.textContent = `${n} fundos encontrados`;
+
+      const summary = qs('#mobileFilterSummary');
+      if(summary) summary.textContent = active ? ('Categoria: ' + label) : 'Categoria: Todos os fundos';
+
+      const strip = qs('#activeFilterStrip');
+      if(strip && isMobile()){
+        strip.classList.remove('active');
+        strip.innerHTML = '';
+      }
+
+      keepMobileCards();
+    }catch(e){}
+  }
+
+  function preserveViewport(task){
+    const y = window.scrollY || window.pageYOffset || 0;
+    const shell = qs('#fundFilterShell') || qs('#sec-fundos');
+    const beforeTop = shell ? shell.getBoundingClientRect().top : 0;
+
+    const locked = [];
+    ['#fundFilterShell','#mobileFundCards','#sec-fundos .table-wrap','.pagination-row'].forEach(sel=>{
+      const el = qs(sel);
+      if(!el) return;
+      const h = Math.ceil(el.getBoundingClientRect().height);
+      if(h > 0){
+        locked.push([el, el.style.minHeight || '']);
+        el.style.minHeight = h + 'px';
+        el.classList.add('v81-stabilizing');
+      }
+    });
+
+    try{ task(); }
+    finally{
+      const restore = () => {
+        try{
+          const nowTop = shell ? shell.getBoundingClientRect().top : beforeTop;
+          const delta = nowTop - beforeTop;
+          if(Math.abs(delta) > 0.5){
+            window.scrollBy({top:delta, left:0, behavior:'auto'});
+          }else{
+            window.scrollTo({top:y, left:0, behavior:'auto'});
+          }
+        }catch(e){
+          try{window.scrollTo(0,y)}catch(_){}
+        }
+      };
+
+      syncV81();
+      restore();
+      requestAnimationFrame(()=>{syncV81(); restore();});
+      setTimeout(()=>{syncV81(); restore();},90);
+      setTimeout(()=>{
+        locked.forEach(([el,old])=>{
+          el.style.minHeight = old;
+          el.classList.remove('v81-stabilizing');
+        });
+        syncV81();
+        restore();
+      },260);
+    }
+  }
+
+  function applyMobileControls(options){
+    const opts = options || {};
+    preserveViewport(()=>{
+      const cat = opts.hasOwnProperty('category') ? opts.category : (qs('#mobileCategorySelectV74')?.value || '');
+      const onlyPf = opts.hasOwnProperty('onlyPf') ? !!opts.onlyPf : !!qs('#mobileOnlyPfV75')?.checked;
+      const sortMode = opts.sortMode || qs('#mobileSortSelectV75')?.value || getSortMode();
+
+      try{
+        activeCat = cat ? findRawCategoryByCanon(cat) : '';
+        activePerfil = onlyPf ? 'PF' : '';
+        activeBenchmark = '';
+        activeRisco = '';
+        hideSemDados = false;
+        currentPage = 1;
+        activeCdiSort = null;
+        sortCol = -1;
+        sortDir = -1;
+        window.__favListMode = false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'mobile-controls-v81';
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+      }catch(e){}
+
+      setSortMode(sortMode);
+
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.checked = false;
+
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof updateCdiSortButtons === 'function') updateCdiSortButtons(); }catch(e){}
+      try{ if(typeof updateMobileSortButtons === 'function') updateMobileSortButtons(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+
+      keepMobileCards();
+      syncV81();
+    });
+  }
+
+  function clearMobileControls(ev){
+    if(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+    }
+    const sel = qs('#mobileCategorySelectV74');
+    const pf = qs('#mobileOnlyPfV75');
+    const sort = qs('#mobileSortSelectV75');
+    if(sel) sel.value = '';
+    if(pf) pf.checked = false;
+    if(sort) sort.value = 'base';
+    applyMobileControls({category:'', onlyPf:false, sortMode:'base'});
+  }
+
+  function bindV81(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    const sel = qs('#mobileCategorySelectV74');
+    if(sel && sel.dataset.v81Bound !== '1'){
+      sel.dataset.v81Bound = '1';
+      sel.addEventListener('change', ()=>{
+        applyMobileControls({category:sel.value});
+        if(typeof sel.blur === 'function') sel.blur();
+      });
+    }
+
+    const pf = qs('#mobileOnlyPfV75');
+    if(pf && pf.dataset.v81Bound !== '1'){
+      pf.dataset.v81Bound = '1';
+      pf.addEventListener('change', ()=>applyMobileControls({onlyPf:pf.checked}));
+    }
+
+    const sort = qs('#mobileSortSelectV75');
+    if(sort && sort.dataset.v81Bound !== '1'){
+      sort.dataset.v81Bound = '1';
+      sort.value = getSortMode();
+      sort.addEventListener('change', ()=>{
+        applyMobileControls({sortMode:sort.value});
+        if(typeof sort.blur === 'function') sort.blur();
+      });
+    }
+
+    const clear = qs('#mobileCategoryClearV74');
+    if(clear && clear.dataset.v81Bound !== '1'){
+      clear.dataset.v81Bound = '1';
+      clear.addEventListener('click', clearMobileControls);
+    }
+
+    keepMobileCards();
+    syncV81();
+    setTimeout(()=>{keepMobileCards(); syncV81();},350);
+    setTimeout(()=>{keepMobileCards(); syncV81();},1200);
+
+    window.addEventListener('resize',()=>setTimeout(syncV81,80),{passive:true});
+    window.addEventListener('orientationchange',()=>setTimeout(syncV81,250),{passive:true});
+
+    console.info('[Catálogo CAIXA] Mobile filtro sem loop:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__mobileNoLoopV81){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      keepMobileCards();
+      syncV81();
+      return out;
+    };
+    wrapped.__mobileNoLoopV81 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV81,180));
+  else setTimeout(bindV81,180);
+
+  window.__ELTAUM_MOBILE_FILTER_NO_LOOP_V81__ = {
+    apply: applyMobileControls,
+    clear: clearMobileControls,
+    sync: syncV81
+  };
+})();
+
+/* PATCH v81 — monitor de dados principais */
+(function(){
+  setTimeout(function(){
+    try{
+      var hasRows = Array.isArray(allRows) && allRows.length > 0;
+      var loadMsg = document.getElementById('loadMsg');
+      if(loadMsg && loadMsg.style.display !== 'none' && !hasRows){
+        loadMsg.innerHTML = '<div style="color:var(--muted)">Ainda tentando carregar <b>dados_atuais.csv</b>...<br><small>Se permanecer assim, confira no console se o arquivo existe na branch publicada.</small></div>';
+      }
+    }catch(e){}
+  }, 6500);
+  console.info('[Catálogo CAIXA] Init dados primeiro sem loop:', 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128');
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v82 — Desktop: normalização visual do filtro
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+
+  function normalizeDesktopFilterV82(){
+    try{
+      const meta=qs('meta[name="app-build"]');
+      if(meta) meta.content=BUILD;
+
+      if(!isDesktop()) return;
+
+      document.body.classList.add('desktop-filter-stable-v82');
+
+      const clear = qs('#clearFiltersTop');
+      if(clear){
+        clear.textContent = 'Limpar';
+      }
+
+      const result = qs('#filterResultSummary');
+      if(result){
+        const txt = (result.textContent || '').replace(/^Resultado:\s*/i,'').trim();
+        result.textContent = txt || '— fundos';
+      }
+
+      const status = qs('#categoryGridStatus');
+      if(status){
+        const txt = (status.textContent || '').trim();
+        if(!txt) status.textContent = 'Todos os fundos';
+      }
+
+      const strip = qs('#activeFilterStrip');
+      if(strip && strip.children.length === 0){
+        strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>';
+      }
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__desktopStableV82){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeDesktopFilterV82();
+      return out;
+    };
+    wrapped.__desktopStableV82 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeDesktopFilterV82,120));
+  else setTimeout(normalizeDesktopFilterV82,120);
+
+  window.addEventListener('resize',()=>setTimeout(normalizeDesktopFilterV82,80),{passive:true});
+  setTimeout(normalizeDesktopFilterV82,600);
+  setTimeout(normalizeDesktopFilterV82,1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v84 — Desativa gaveta legada de categorias
+   - Mantém o botão "Categorias" apenas como indicador visual.
+   - Impede abertura do drawer lateral legado.
+   - Mantém filtros principais pelo grid visível e pelo select mobile.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+
+  function closeLegacyDrawerV84(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const drawer = qs('#fundFilterDrawer');
+      if(drawer){
+        drawer.classList.add('legacy-drawer-disabled-v84','mobile-filters-collapsed','desktop-filters-collapsed');
+        drawer.classList.remove('filter-sheet-open');
+        drawer.setAttribute('aria-hidden','true');
+        drawer.style.display = 'none';
+        drawer.style.visibility = 'hidden';
+        drawer.style.pointerEvents = 'none';
+      }
+
+      const btn = qs('#mobileFilterToggle');
+      if(btn){
+        btn.setAttribute('aria-expanded','false');
+        btn.setAttribute('aria-disabled','true');
+        btn.classList.add('filter-toggle-inert-v84');
+        btn.title = 'Categorias disponíveis no grid abaixo';
+      }
+
+      const label = qs('#filterButtonText');
+      if(label) label.textContent = 'Categorias';
+
+      document.body.classList.remove('filter-sheet-open');
+
+      const backdrop = qs('#filterBackdrop');
+      if(backdrop) backdrop.classList.remove('active');
+
+      const close = qs('#filterCloseBtn');
+      if(close) close.setAttribute('tabindex','-1');
+    }catch(e){}
+  }
+
+  function interceptLegacyToggleV84(ev){
+    const target = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText, #fundFilterDrawer, #filterBackdrop') : null;
+    if(!target) return;
+
+    // Permite clique nos controles reais do drawer somente se, por alguma razão, o elemento estiver oculto
+    // mas intercepta abertura/uso da gaveta legada.
+    if(target.matches('#mobileFilterToggle, #filterButtonText, #filterBackdrop') || target.closest('#fundFilterDrawer')){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      closeLegacyDrawerV84();
+    }
+  }
+
+  function bindV84(){
+    closeLegacyDrawerV84();
+
+    if(document.documentElement.dataset.v84DrawerDisabled !== '1'){
+      document.documentElement.dataset.v84DrawerDisabled = '1';
+      window.addEventListener('click', interceptLegacyToggleV84, true);
+      window.addEventListener('pointerdown', function(ev){
+        const t = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle, #filterButtonText') : null;
+        if(!t) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+        closeLegacyDrawerV84();
+      }, true);
+    }
+
+    setTimeout(closeLegacyDrawerV84,120);
+    setTimeout(closeLegacyDrawerV84,500);
+    setTimeout(closeLegacyDrawerV84,1400);
+
+    console.info('[Catálogo CAIXA] Drawer legado desativado:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__drawerDisabledV84){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      closeLegacyDrawerV84();
+      return out;
+    };
+    wrapped.__drawerDisabledV84 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV84,180));
+  else setTimeout(bindV84,180);
+
+  window.addEventListener('resize',()=>setTimeout(closeLegacyDrawerV84,80),{passive:true});
+  window.__ELTAUM_DISABLE_LEGACY_DRAWER_V84__ = {close:closeLegacyDrawerV84};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v87 — Categoria exata, sem pulo e sem botão drawer
+   - Clique de categoria roda uma única vez, somente no evento click.
+   - Evita destaque falso por foco/hover.
+   - Remove botão/área "Categorias" do topo como controle clicável.
+   - Topo fica só com resultado, para não variar largura.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+
+  const PRESET_CAT = {
+    'all':'',
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+  };
+
+  const LABELS = {
+    '':'Todos',
+    'RENDA FIXA SIMPLES':'RENDA FIXA SIMPLES',
+    'RENDA FIXA':'RENDA FIXA',
+    'RENDA FIXA REFERENCIADO':'RENDA FIXA REFERENCIADO',
+    'RENDA FIXA CURTO PRAZO':'RENDA FIXA CURTO PRAZO',
+    'MULTIMERCADO':'MULTIMERCADO',
+    'CAMBIAL':'CAMBIAL',
+    'ACOES':'AÇÕES',
+    'FUNDO DE INDICE':'FUNDO DE ÍNDICE',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
+  };
+
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^\w\s]/g,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+
+  function activeCanon(){
+    try{return canon(activeCat || '')}catch(e){return ''}
+  }
+
+  function labelFor(canonCat){
+    return LABELS[canonCat || ''] || canonCat || 'Todos';
+  }
+
+  function findRawCategory(canonTarget){
+    if(!canonTarget) return '';
+    try{
+      if(Array.isArray(allRows)){
+        const found = allRows.find(r => canon(r && r['Categoria']) === canonTarget);
+        if(found) return String(found['Categoria'] || '').trim();
+      }
+    }catch(e){}
+    return canonTarget;
+  }
+
+  function removeLegacyDrawer(){
+    try{
+      qsa('#fundFilterDrawer,#filterBackdrop,.filter-backdrop').forEach(el=>el.remove());
+      document.body.classList.remove('filter-sheet-open');
+    }catch(e){}
+  }
+
+  function stabilizeFilterBox(task){
+    const shell = qs('#fundFilterShell');
+    const oldH = shell ? shell.style.minHeight : '';
+    const h = shell ? Math.ceil(shell.getBoundingClientRect().height) : 0;
+    if(shell && h > 0){
+      shell.style.minHeight = h + 'px';
+      shell.classList.add('v87-filter-stabilizing');
+    }
+    try{ task(); }
+    finally{
+      setTimeout(()=>{
+        if(shell){
+          shell.style.minHeight = oldH;
+          shell.classList.remove('v87-filter-stabilizing');
+        }
+      },180);
+    }
+  }
+
+  function applyPresetExact(preset, sourceBtn){
+    const wanted = PRESET_CAT.hasOwnProperty(preset) ? PRESET_CAT[preset] : '';
+
+    stabilizeFilterBox(()=>{
+      try{
+        activeCat = wanted ? findRawCategory(wanted) : '';
+        activeBenchmark = '';
+        activePerfil = '';
+        activeRisco = '';
+        hideSemDados = false;
+        currentPage = 1;
+        window.__favListMode = false;
+        window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
+        if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+      }catch(e){}
+
+      const semDados = qs('#toggleSemDados');
+      if(semDados) semDados.checked = false;
+
+      try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+      try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+
+      if(sourceBtn && typeof sourceBtn.blur === 'function') sourceBtn.blur();
+      syncV87();
+    });
+  }
+
+  function syncV87(){
+    try{
+      removeLegacyDrawer();
+
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const active = activeCanon();
+      const label = labelFor(active);
+
+      qsa('.catalog-shortcuts-category-grid-v69 [data-preset]').forEach(btn=>{
+        const p = btn.dataset.preset || 'all';
+        const wanted = PRESET_CAT[p] || '';
+        const on = p === 'all' ? !active : active === wanted;
+        btn.classList.toggle('active', on);
+        btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        if(!on) btn.classList.remove('pseudo-active-v87');
+      });
+
+      const n = (typeof filtered !== 'undefined' && Array.isArray(filtered)) ? filtered.length : null;
+
+      const result = qs('#filterResultSummary');
+      if(result && n !== null){
+        result.textContent = `${n} fundos encontrados`;
+        result.title = result.textContent;
+      }
+
+      const status = qs('#categoryGridStatus');
+      if(status){
+        status.textContent = active ? label : 'Todos os fundos';
+        status.title = status.textContent;
+      }
+
+      const strip = qs('#activeFilterStrip');
+      if(strip && isDesktop()){
+        strip.classList.add('active','desktop-active-filter-v87');
+        strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
+          `<span class="active-filter-pill active-filter-pill-v87">${label}</span>`;
+      }
+
+      const toggle = qs('#mobileFilterToggle');
+      if(toggle){
+        toggle.setAttribute('aria-expanded','false');
+        toggle.setAttribute('aria-disabled','true');
+        toggle.classList.add('filter-toggle-inert-v87');
+        toggle.title = 'Use as categorias abaixo';
+      }
+
+      const topClear = qs('#clearFiltersTop');
+      if(topClear){
+        topClear.hidden = true;
+        topClear.setAttribute('aria-hidden','true');
+      }
+    }catch(e){}
+  }
+
+  function captureCategoryClick(ev){
+    const btn = ev.target && ev.target.closest ? ev.target.closest('.catalog-shortcuts-category-grid-v69 [data-preset]') : null;
+    if(!btn) return;
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+
+    applyPresetExact(btn.dataset.preset || 'all', btn);
+  }
+
+  function captureDisabledToggle(ev){
+    const t = ev.target && ev.target.closest ? ev.target.closest('#mobileFilterToggle,#filterButtonText') : null;
+    if(!t) return;
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+    syncV87();
+  }
+
+  function bindV87(){
+    removeLegacyDrawer();
+
+    if(document.documentElement.dataset.v87ExactCategory !== '1'){
+      document.documentElement.dataset.v87ExactCategory = '1';
+      window.addEventListener('click', captureCategoryClick, true);
+      window.addEventListener('click', captureDisabledToggle, true);
+      window.addEventListener('pointerdown', captureDisabledToggle, true);
+    }
+
+    syncV87();
+    setTimeout(syncV87,200);
+    setTimeout(syncV87,800);
+    setTimeout(syncV87,1800);
+
+    console.info('[Catálogo CAIXA] Categoria exata estável:', BUILD);
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__exactCategoryV87){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      syncV87();
+      return out;
+    };
+    wrapped.__exactCategoryV87 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV87,180));
+  else setTimeout(bindV87,180);
+
+  window.addEventListener('resize',()=>setTimeout(syncV87,80),{passive:true});
+  window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__ = {sync:syncV87, apply:applyPresetExact};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v88 — Desktop: topbar reorganizada
+   - Mantém o filtro exato da v87.
+   - Ajusta textos/labels da barra para não cortar "Todos os fundos".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isDesktop(){return window.matchMedia && window.matchMedia('(min-width: 821px)').matches}
+
+  function normalizeTopbarV88(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const perPage = qs('#perPage');
+      if(perPage){
+        const all = perPage.querySelector('option[value="9999"]');
+        if(all) all.textContent = 'Todos os fundos';
+        const five = perPage.querySelector('option[value="5"]');
+        if(five) five.textContent = '05 por página';
+        perPage.setAttribute('aria-label','Quantidade de fundos exibidos');
+        perPage.title = perPage.options[perPage.selectedIndex]?.textContent || 'Exibição';
+      }
+
+      const exhibition = qs('.exhibition-control');
+      if(exhibition){
+        exhibition.title = 'Quantidade de fundos exibidos na tabela';
+      }
+
+      const result = qs('#filterResultSummary');
+      if(result){
+        result.title = result.textContent || '';
+      }
+
+      if(isDesktop()){
+        document.body.classList.add('desktop-topbar-v88');
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeTopbarV88,160));
+  else setTimeout(normalizeTopbarV88,160);
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__desktopTopbarV88){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeTopbarV88();
+      return out;
+    };
+    wrapped.__desktopTopbarV88 = true;
+    window.render = wrapped;
+  }
+
+  window.addEventListener('resize',()=>setTimeout(normalizeTopbarV88,80),{passive:true});
+  setTimeout(normalizeTopbarV88,700);
+  setTimeout(normalizeTopbarV88,1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v89 — Resumo de quantidade e label do toggle
+   - Resultado fica padronizado: "1 fundo", "10 fundos", "171 fundos".
+   - Remove prefixos de categoria no resumo superior.
+   - Troca "Ocultar sem dados" por "Ocultar fundos sem dados".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function countLabel(n){
+    const num = Number(n || 0);
+    return num === 1 ? '1 fundo' : `${num} fundos`;
+  }
+
+  function currentFilteredCount(){
+    try{
+      if(Array.isArray(filtered)) return filtered.length;
+    }catch(e){}
+    const cards = qsa('#mobileFundCards .fund-card-mobile').length;
+    if(cards) return cards;
+    const rows = qsa('#tableBody tr').length;
+    return rows || 0;
+  }
+
+  function normalizeSummaryLabelsV89(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const n = currentFilteredCount();
+      const txt = countLabel(n);
+
+      const result = qs('#filterResultSummary');
+      if(result){
+        result.textContent = txt;
+        result.title = txt;
+      }
+
+      const mobileResult = qs('#mobileCategorySelectResultV74');
+      if(mobileResult){
+        mobileResult.textContent = txt;
+        mobileResult.title = txt;
+      }
+
+      const applyBtn = qs('#filterApplyBtn');
+      if(applyBtn) applyBtn.title = txt;
+
+      const toggleLabel = qs('#toggleSemDados')?.closest('.toggle-wrap')?.querySelector('.toggle-label') || qs('.toggle-label');
+      if(toggleLabel && /Ocultar/i.test(toggleLabel.textContent || '')){
+        toggleLabel.textContent = 'Ocultar fundos sem dados';
+        toggleLabel.title = 'Ocultar fundos sem dados';
+      }
+
+      const toggleWrap = qs('#toggleSemDados')?.closest('.toggle-wrap');
+      if(toggleWrap) toggleWrap.title = 'Ocultar fundos sem dados';
+
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.setAttribute('aria-label','Ocultar fundos sem dados');
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__summaryLabelsV89){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      normalizeSummaryLabelsV89();
+      return out;
+    };
+    wrapped.__summaryLabelsV89 = true;
+    window.render = wrapped;
+  }
+
+  const oldApplyFilter = window.applyFilter || (typeof applyFilter === 'function' ? applyFilter : null);
+  if(typeof oldApplyFilter === 'function' && !oldApplyFilter.__summaryLabelsV89){
+    const wrappedApply = function(){
+      const out = oldApplyFilter.apply(this, arguments);
+      setTimeout(normalizeSummaryLabelsV89, 0);
+      return out;
+    };
+    wrappedApply.__summaryLabelsV89 = true;
+    try{ window.applyFilter = wrappedApply; }catch(e){}
+    try{ applyFilter = wrappedApply; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeSummaryLabelsV89,160));
+  else setTimeout(normalizeSummaryLabelsV89,160);
+
+  setTimeout(normalizeSummaryLabelsV89,600);
+  setTimeout(normalizeSummaryLabelsV89,1400);
+  setTimeout(normalizeSummaryLabelsV89,2600);
+
+  window.addEventListener('resize',()=>setTimeout(normalizeSummaryLabelsV89,80),{passive:true});
+  window.__ELTAUM_SUMMARY_LABELS_V89__ = {sync:normalizeSummaryLabelsV89};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v90 — Resultado somente com quantidade
+   - Força "1 fundo" / "N fundos", sem "encontrados" e sem prefixos.
+   - Corrige sobrescritas tardias de funções antigas.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function countLabel(n){
+    const num = Number(n || 0);
+    return num === 1 ? '1 fundo' : `${num} fundos`;
+  }
+
+  function readCountFromDomText(txt){
+    const m = String(txt || '').match(/(\d+)/);
+    return m ? Number(m[1]) : null;
+  }
+
+  function currentCount(){
+    try{
+      if(Array.isArray(filtered)) return filtered.length;
+    }catch(e){}
+    const fromMain = readCountFromDomText(qs('#filterResultSummary')?.textContent);
+    if(fromMain !== null) return fromMain;
+    const fromMobile = readCountFromDomText(qs('#mobileCategorySelectResultV74')?.textContent);
+    if(fromMobile !== null) return fromMobile;
+    const rows = qsa('#tableBody tr').length;
+    if(rows) return rows;
+    const cards = qsa('#mobileFundCards .fund-card-mobile').length;
+    return cards || 0;
+  }
+
+  let normalizing = false;
+
+  function setCleanText(el, txt){
+    if(!el) return;
+    if(el.textContent !== txt) el.textContent = txt;
+    if(el.title !== txt) el.title = txt;
+  }
+
+  function normalizeResultCountV90(){
+    if(normalizing) return;
+    normalizing = true;
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const txt = countLabel(currentCount());
+
+      setCleanText(qs('#filterResultSummary'), txt);
+      setCleanText(qs('#mobileCategorySelectResultV74'), txt);
+
+      const applyBtn = qs('#filterApplyBtn');
+      if(applyBtn) applyBtn.title = txt;
+
+      const toggleLabel = qs('#toggleSemDados')?.closest('.toggle-wrap')?.querySelector('.toggle-label') || qs('.toggle-label');
+      if(toggleLabel && /Ocultar/i.test(toggleLabel.textContent || '')){
+        toggleLabel.textContent = 'Ocultar fundos sem dados';
+        toggleLabel.title = 'Ocultar fundos sem dados';
+      }
+
+      const toggleWrap = qs('#toggleSemDados')?.closest('.toggle-wrap');
+      if(toggleWrap) toggleWrap.title = 'Ocultar fundos sem dados';
+
+      const toggle = qs('#toggleSemDados');
+      if(toggle) toggle.setAttribute('aria-label','Ocultar fundos sem dados');
+    }catch(e){}
+    finally{
+      normalizing = false;
+    }
+  }
+
+  function scheduleNormalizeV90(){
+    normalizeResultCountV90();
+    requestAnimationFrame(normalizeResultCountV90);
+    setTimeout(normalizeResultCountV90, 30);
+    setTimeout(normalizeResultCountV90, 120);
+    setTimeout(normalizeResultCountV90, 320);
+  }
+
+  function wrapFunction(name){
+    try{
+      const fn = window[name] || eval(name);
+      if(typeof fn !== 'function' || fn.__resultCountFinalV90) return;
+      const wrapped = function(){
+        const out = fn.apply(this, arguments);
+        scheduleNormalizeV90();
+        return out;
+      };
+      wrapped.__resultCountFinalV90 = true;
+      try{ window[name] = wrapped; }catch(e){}
+      try{ eval(name + ' = wrapped'); }catch(e){}
+    }catch(e){}
+  }
+
+  function bindObserver(){
+    ['#filterResultSummary','#mobileCategorySelectResultV74'].forEach(sel=>{
+      const el = qs(sel);
+      if(!el || el.dataset.v90Observed === '1') return;
+      el.dataset.v90Observed = '1';
+      try{
+        const obs = new MutationObserver(()=>{
+          if(normalizing) return;
+          setTimeout(normalizeResultCountV90, 0);
+        });
+        obs.observe(el,{childList:true,characterData:true,subtree:true});
+      }catch(e){}
+    });
+  }
+
+  function bindV90(){
+    ['render','applyFilter','updateFundResultSummary','updateMobileFilterSummary','syncCleanFilterV86','normalizeTopbarV88','normalizeSummaryLabelsV89'].forEach(wrapFunction);
+
+    bindObserver();
+    scheduleNormalizeV90();
+
+    document.addEventListener('click',()=>setTimeout(scheduleNormalizeV90,40),true);
+    document.addEventListener('change',()=>setTimeout(scheduleNormalizeV90,40),true);
+    document.addEventListener('input',()=>setTimeout(scheduleNormalizeV90,80),true);
+
+    setTimeout(scheduleNormalizeV90,700);
+    setTimeout(scheduleNormalizeV90,1600);
+    setTimeout(scheduleNormalizeV90,3000);
+
+    console.info('[Catálogo CAIXA] Resultado somente quantidade:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV90,180));
+  else setTimeout(bindV90,180);
+
+  window.addEventListener('resize',()=>setTimeout(scheduleNormalizeV90,80),{passive:true});
+  window.__ELTAUM_RESULT_COUNT_FINAL_V90__ = {sync:scheduleNormalizeV90};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v91 — Oculta cabeçalho visual das categorias
+   - O bloco "Categorias + categoria ativa" era apenas informativo.
+   - A categoria ativa já aparece em "Filtros ativos".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function hideCategoryHeaderV91(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('.category-grid-head-v69').forEach(el=>{
+        el.setAttribute('aria-hidden','true');
+        el.classList.add('category-grid-head-hidden-v91');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__hideCategoryHeaderV91){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      hideCategoryHeaderV91();
+      return out;
+    };
+    wrapped.__hideCategoryHeaderV91 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(hideCategoryHeaderV91,120));
+  else setTimeout(hideCategoryHeaderV91,120);
+
+  setTimeout(hideCategoryHeaderV91,700);
+  setTimeout(hideCategoryHeaderV91,1600);
+
+  window.__ELTAUM_HIDE_CATEGORY_HEADER_V91__ = {sync:hideCategoryHeaderV91};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v92 — Remove métricas redundantes da leitura rápida
+   - Ano, 12M e % CDI já aparecem na linha/tabela e nos cards.
+   - A leitura rápida passa a focar no comentário interpretativo.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function removeNoteMetricsV92(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('.fund-note-metrics').forEach(el=>{
+        el.remove();
+      });
+
+      qsa('.fund-note').forEach(note=>{
+        note.classList.add('fund-note-clean-v92');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__removeNoteMetricsV92){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      removeNoteMetricsV92();
+      return out;
+    };
+    wrapped.__removeNoteMetricsV92 = true;
+    window.render = wrapped;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(removeNoteMetricsV92,120));
+  else setTimeout(removeNoteMetricsV92,120);
+
+  setTimeout(removeNoteMetricsV92,700);
+  setTimeout(removeNoteMetricsV92,1600);
+
+  document.addEventListener('click',()=>setTimeout(removeNoteMetricsV92,80),true);
+
+  window.__ELTAUM_REMOVE_NOTE_METRICS_V92__ = {sync:removeNoteMetricsV92};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v93 — ESC fecha detalhes expandidos
+   - Quando houver linha expandida pelo botão .exp-btn, ESC recolhe.
+   - Mantém tabela/cards e filtros no estado atual.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function hasOpenDetailsV93(){
+    try{
+      if(expandedRows && typeof expandedRows.size === 'number' && expandedRows.size > 0) return true;
+    }catch(e){}
+    return qsa('tr.detail-row, .detail-panel, .fund-card-mobile.expanded, .fund-card-mobile.is-expanded').length > 0 ||
+           qsa('.exp-btn').some(btn => String(btn.textContent || '').includes('▲'));
+  }
+
+  function closeOpenDetailsV93(){
+    let closed = false;
+
+    try{
+      if(expandedRows && typeof expandedRows.clear === 'function' && expandedRows.size > 0){
+        expandedRows.clear();
+        closed = true;
+      }
+    }catch(e){}
+
+    try{
+      qsa('tr.detail-row').forEach(row => {
+        row.remove();
+        closed = true;
+      });
+    }catch(e){}
+
+    try{
+      qsa('.exp-btn').forEach(btn => {
+        if(String(btn.textContent || '').includes('▲')){
+          btn.textContent = '▼';
+          btn.setAttribute('aria-expanded','false');
+          closed = true;
+        }
+      });
+    }catch(e){}
+
+    try{
+      qsa('.fund-card-mobile.expanded, .fund-card-mobile.is-expanded').forEach(card => {
+        card.classList.remove('expanded','is-expanded');
+        closed = true;
+      });
+    }catch(e){}
+
+    if(closed){
+      try{ if(typeof render === 'function') render(); }catch(e){}
+      try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+      setTimeout(()=>{
+        try{ if(window.__ELTAUM_RESULT_COUNT_FINAL_V90) window.__ELTAUM_RESULT_COUNT_FINAL_V90.sync(); }catch(e){}
+        try{ if(window.__ELTAUM_HIDE_CATEGORY_HEADER_V91) window.__ELTAUM_HIDE_CATEGORY_HEADER_V91.sync(); }catch(e){}
+        try{ if(window.__ELTAUM_REMOVE_NOTE_METRICS_V92) window.__ELTAUM_REMOVE_NOTE_METRICS_V92.sync(); }catch(e){}
+      },60);
+    }
+
+    return closed;
+  }
+
+  function handleEscV93(ev){
+    if(ev.key !== 'Escape') return;
+    if(!hasOpenDetailsV93()) return;
+
+    ev.preventDefault();
+    ev.stopPropagation();
+    if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+
+    closeOpenDetailsV93();
+  }
+
+  function enhanceButtonsV93(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('.exp-btn').forEach(btn=>{
+        if(btn.dataset.v93EscReady === '1') return;
+        btn.dataset.v93EscReady = '1';
+        btn.title = 'Abrir detalhes. Pressione ESC para fechar.';
+        btn.setAttribute('aria-label','Abrir ou fechar detalhes do fundo');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__escCloseDetailsV93){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      enhanceButtonsV93();
+      return out;
+    };
+    wrapped.__escCloseDetailsV93 = true;
+    window.render = wrapped;
+  }
+
+  if(document.documentElement.dataset.v93EscCloseBound !== '1'){
+    document.documentElement.dataset.v93EscCloseBound = '1';
+    document.addEventListener('keydown', handleEscV93, true);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(enhanceButtonsV93,120));
+  else setTimeout(enhanceButtonsV93,120);
+
+  setTimeout(enhanceButtonsV93,700);
+  setTimeout(enhanceButtonsV93,1600);
+
+  window.__ELTAUM_ESC_CLOSE_DETAILS_V93__ = {
+    close: closeOpenDetailsV93,
+    sync: enhanceButtonsV93
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v94 — Remove métricas redundantes também no mobile
+   - Remove Ano, 12M e % CDI da leitura rápida em detalhes desktop e mobile.
+   - Mantém apenas badge + texto interpretativo + disclaimer.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function removeAllNoteMetricsV94(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const selectors = [
+        '.fund-note-metrics',
+        '.fund-quick-note-metrics',
+        '.mobile-fund-note-metrics',
+        '.mobile-note-metrics',
+        '.fund-card-note-metrics',
+        '.fund-card-mobile .fund-note-metrics',
+        '.fund-card-mobile .fund-quick-note-metrics'
+      ];
+
+      qsa(selectors.join(',')).forEach(el => el.remove());
+
+      qsa('.fund-note, .fund-quick-note, .fund-card-mobile, .mobile-fund-detail, .detail-panel').forEach(el => {
+        el.classList.add('note-metrics-removed-v94');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__removeMobileNoteMetricsV94){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      removeAllNoteMetricsV94();
+      return out;
+    };
+    wrapped.__removeMobileNoteMetricsV94 = true;
+    window.render = wrapped;
+  }
+
+  const oldRenderMobileCards = window.renderMobileFundCards || (typeof renderMobileFundCards === 'function' ? renderMobileFundCards : null);
+  if(typeof oldRenderMobileCards === 'function' && !oldRenderMobileCards.__removeMobileNoteMetricsV94){
+    const wrappedMobile = function(){
+      const out = oldRenderMobileCards.apply(this, arguments);
+      removeAllNoteMetricsV94();
+      return out;
+    };
+    wrappedMobile.__removeMobileNoteMetricsV94 = true;
+    try{ window.renderMobileFundCards = wrappedMobile; }catch(e){}
+    try{ renderMobileFundCards = wrappedMobile; }catch(e){}
+  }
+
+  function bindV94(){
+    removeAllNoteMetricsV94();
+
+    // Quando abrir "Mais detalhes" no mobile ou expandir linha no desktop, remove logo após renderizar.
+    document.addEventListener('click', () => {
+      setTimeout(removeAllNoteMetricsV94, 40);
+      setTimeout(removeAllNoteMetricsV94, 180);
+    }, true);
+
+    setTimeout(removeAllNoteMetricsV94, 600);
+    setTimeout(removeAllNoteMetricsV94, 1400);
+    setTimeout(removeAllNoteMetricsV94, 2600);
+
+    console.info('[Catálogo CAIXA] Métricas redundantes removidas da leitura rápida mobile:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV94,120));
+  else setTimeout(bindV94,120);
+
+  window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_V94__ = {sync:removeAllNoteMetricsV94};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v95 — Comparador: cabeçalhos legíveis
+   - Evita nomes de fundos encavalados no comparador.
+   - Adiciona title com nome completo e classe de layout.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function enhanceComparatorHeadersV95(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const table = qs('#comparTable');
+      if(table) table.classList.add('compar-table-readable-v95');
+
+      const scroll = qs('.compar-scroll');
+      if(scroll) scroll.classList.add('compar-scroll-readable-v95');
+
+      qsa('#comparTable .ct-fundo-nome').forEach(el=>{
+        const txt = (el.textContent || '').trim();
+        if(txt) el.title = txt;
+      });
+
+      qsa('#comparTable th.ct-fundo').forEach((th,i)=>{
+        th.classList.add('ct-fundo-readable-v95');
+        th.style.setProperty('--compar-col-index', String(i + 1));
+      });
+    }catch(e){}
+  }
+
+  const oldAbrir = window.abrirComparador || (typeof abrirComparador === 'function' ? abrirComparador : null);
+  if(typeof oldAbrir === 'function' && !oldAbrir.__comparatorHeadersV95){
+    const wrappedAbrir = function(){
+      const out = oldAbrir.apply(this, arguments);
+      enhanceComparatorHeadersV95();
+      setTimeout(enhanceComparatorHeadersV95, 60);
+      return out;
+    };
+    wrappedAbrir.__comparatorHeadersV95 = true;
+    try{ window.abrirComparador = wrappedAbrir; }catch(e){}
+    try{ abrirComparador = wrappedAbrir; }catch(e){}
+  }
+
+  document.addEventListener('click',()=>{
+    setTimeout(enhanceComparatorHeadersV95,80);
+  },true);
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(enhanceComparatorHeadersV95,160));
+  else setTimeout(enhanceComparatorHeadersV95,160);
+
+  window.__ELTAUM_COMPARATOR_HEADERS_V95__ = {sync:enhanceComparatorHeadersV95};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v96 — Remove métricas da Leitura rápida na origem
+   - Ano, 12M e % CDI já ficam no bloco Rentabilidade.
+   - Remove sobras no desktop e mobile mesmo se algum render legado recriar.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function removeQuickNoteMetricsV96(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('.fund-note-metrics, .fund-note-metric, .fund-quick-note-metrics, .mobile-fund-note-metrics, .mobile-note-metrics, .fund-card-note-metrics').forEach(el=>{
+        const parent = el.closest('.fund-note-metrics') || el;
+        if(parent && parent.remove) parent.remove();
+      });
+
+      qsa('.fund-quick-note, .fund-note, .fund-card-mobile, .detail-panel, .mobile-fund-detail').forEach(el=>{
+        el.classList.add('quick-note-no-metrics-v96');
+      });
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__removeQuickNoteMetricsV96){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      removeQuickNoteMetricsV96();
+      return out;
+    };
+    wrapped.__removeQuickNoteMetricsV96 = true;
+    window.render = wrapped;
+  }
+
+  const oldRenderMobileCards = window.renderMobileFundCards || (typeof renderMobileFundCards === 'function' ? renderMobileFundCards : null);
+  if(typeof oldRenderMobileCards === 'function' && !oldRenderMobileCards.__removeQuickNoteMetricsV96){
+    const wrappedMobile = function(){
+      const out = oldRenderMobileCards.apply(this, arguments);
+      removeQuickNoteMetricsV96();
+      return out;
+    };
+    wrappedMobile.__removeQuickNoteMetricsV96 = true;
+    try{ window.renderMobileFundCards = wrappedMobile; }catch(e){}
+    try{ renderMobileFundCards = wrappedMobile; }catch(e){}
+  }
+
+  document.addEventListener('click',()=>{
+    setTimeout(removeQuickNoteMetricsV96,40);
+    setTimeout(removeQuickNoteMetricsV96,180);
+  },true);
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(removeQuickNoteMetricsV96,120));
+  else setTimeout(removeQuickNoteMetricsV96,120);
+
+  setTimeout(removeQuickNoteMetricsV96,700);
+  setTimeout(removeQuickNoteMetricsV96,1600);
+  setTimeout(removeQuickNoteMetricsV96,2600);
+
+  window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_V96__ = {sync:removeQuickNoteMetricsV96};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v97 — Mobile: paginação próxima dos cards
+   - Remove min-height/padding residual do container de cards.
+   - Mantém respiro apenas depois da paginação, para o rodapé fixo não cobrir.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function fixMobilePaginationSpacingV97(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(!isMobile()) return;
+
+      const cards = qs('#mobileFundCards');
+      if(cards){
+        cards.classList.add('mobile-pagination-close-v97');
+        /* Remove alturas temporárias deixadas por patches de estabilização, caso existam. */
+        if(cards.style.minHeight) cards.style.minHeight = '';
+        if(cards.style.height) cards.style.height = '';
+      }
+
+      const pagination = qs('#sec-fundos .pagination-row') || qs('.pagination-row');
+      if(pagination){
+        pagination.classList.add('mobile-pagination-row-close-v97');
+      }
+    }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__mobilePaginationCloseV97){
+    const wrapped = function(){
+      const out = oldRender.apply(this, arguments);
+      fixMobilePaginationSpacingV97();
+      return out;
+    };
+    wrapped.__mobilePaginationCloseV97 = true;
+    window.render = wrapped;
+  }
+
+  const oldRenderMobileCards = window.renderMobileFundCards || (typeof renderMobileFundCards === 'function' ? renderMobileFundCards : null);
+  if(typeof oldRenderMobileCards === 'function' && !oldRenderMobileCards.__mobilePaginationCloseV97){
+    const wrappedMobile = function(){
+      const out = oldRenderMobileCards.apply(this, arguments);
+      fixMobilePaginationSpacingV97();
+      return out;
+    };
+    wrappedMobile.__mobilePaginationCloseV97 = true;
+    try{ window.renderMobileFundCards = wrappedMobile; }catch(e){}
+    try{ renderMobileFundCards = wrappedMobile; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(fixMobilePaginationSpacingV97,120));
+  else setTimeout(fixMobilePaginationSpacingV97,120);
+
+  setTimeout(fixMobilePaginationSpacingV97,700);
+  setTimeout(fixMobilePaginationSpacingV97,1600);
+  document.addEventListener('click',()=>setTimeout(fixMobilePaginationSpacingV97,80),true);
+
+  window.__ELTAUM_MOBILE_PAGINATION_CLOSE_V97__ = {sync:fixMobilePaginationSpacingV97};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v98 — Mobile PTAX profissional
+   - Compacta títulos do bloco Dólar PTAX no mobile.
+   - Mantém dados existentes e reorganiza visualmente via CSS.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function normalizeMobilePtaxV98(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const sec = qs('#sec-dolar');
+      if(sec) sec.classList.add('dolar-mobile-pro-v98');
+
+      const title = qs('#sec-dolar .dolar-chart-title');
+      if(title && isMobile()){
+        title.textContent = 'Histórico PTAX';
+      }
+
+      const chartSub = qs('#dolar-chart-sub');
+      if(chartSub && isMobile()){
+        chartSub.textContent = chartSub.textContent || 'Série histórica do dólar PTAX';
+      }
+
+      const chartBtn = qs('#dolarChartToggle');
+      if(chartBtn && isMobile()){
+        const expanded = chartBtn.getAttribute('aria-expanded') === 'true';
+        chartBtn.textContent = expanded ? 'Ocultar' : 'Abrir gráfico';
+      }
+
+      const toggle = qs('#dolarTimelineToggle');
+      if(toggle && isMobile()){
+        toggle.setAttribute('aria-hidden','true');
+        toggle.tabIndex = -1;
+      }
+
+      qsa('#sec-dolar .dolar-mini-kpi').forEach(el=>{
+        el.classList.add('dolar-variation-chip-v98');
+      });
+
+      qsa('#sec-dolar .dolar-month-item').forEach(el=>{
+        el.classList.add('dolar-month-snap-v98');
+      });
+    }catch(e){}
+  }
+
+  const oldCarregarDolar = window.carregarDolarDia || (typeof carregarDolarDia === 'function' ? carregarDolarDia : null);
+  if(typeof oldCarregarDolar === 'function' && !oldCarregarDolar.__mobilePtaxProV98){
+    const wrappedDolar = async function(){
+      const out = await oldCarregarDolar.apply(this, arguments);
+      normalizeMobilePtaxV98();
+      setTimeout(normalizeMobilePtaxV98, 120);
+      return out;
+    };
+    wrappedDolar.__mobilePtaxProV98 = true;
+    try{ window.carregarDolarDia = wrappedDolar; }catch(e){}
+    try{ carregarDolarDia = wrappedDolar; }catch(e){}
+  }
+
+  const oldToggleChart = window.toggleDolarChartMobile || (typeof toggleDolarChartMobile === 'function' ? toggleDolarChartMobile : null);
+  if(typeof oldToggleChart === 'function' && !oldToggleChart.__mobilePtaxProV98){
+    const wrappedToggle = function(){
+      const out = oldToggleChart.apply(this, arguments);
+      setTimeout(normalizeMobilePtaxV98, 40);
+      return out;
+    };
+    wrappedToggle.__mobilePtaxProV98 = true;
+    try{ window.toggleDolarChartMobile = wrappedToggle; }catch(e){}
+    try{ toggleDolarChartMobile = wrappedToggle; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeMobilePtaxV98,120));
+  else setTimeout(normalizeMobilePtaxV98,120);
+
+  document.addEventListener('click',()=>setTimeout(normalizeMobilePtaxV98,80),true);
+  window.addEventListener('resize',()=>setTimeout(normalizeMobilePtaxV98,80),{passive:true});
+
+  setTimeout(normalizeMobilePtaxV98,700);
+  setTimeout(normalizeMobilePtaxV98,1600);
+  setTimeout(normalizeMobilePtaxV98,2800);
+
+  window.__ELTAUM_MOBILE_PTAX_PRO_V98__ = {sync:normalizeMobilePtaxV98};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v99 — Mobile PTAX: indicação de rolagem horizontal
+   - Adiciona microcopy "arraste para ver mais" nos carrosséis.
+   - Adiciona classe quando há conteúdo fora da tela.
+   - Remove a dúvida visual de parecer conteúdo cortado.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function ensureHintBefore(row, text, id){
+    if(!row || !row.parentElement) return null;
+
+    let hint = row.parentElement.querySelector(`[data-scroll-hint-v99="${id}"]`);
+    if(!hint){
+      hint = document.createElement('div');
+      hint.className = 'ptax-scroll-hint-v99';
+      hint.dataset.scrollHintV99 = id;
+      hint.innerHTML = `<span>${text}</span><strong>Arraste →</strong>`;
+      row.parentElement.insertBefore(hint, row);
+    }else{
+      const span = hint.querySelector('span');
+      if(span) span.textContent = text;
+    }
+    return hint;
+  }
+
+  function updateOverflowState(row, hint){
+    if(!row) return;
+
+    const hasOverflow = row.scrollWidth > row.clientWidth + 8;
+    row.classList.toggle('has-horizontal-overflow-v99', hasOverflow);
+
+    if(hint){
+      hint.hidden = !hasOverflow;
+      hint.classList.toggle('is-hidden-v99', !hasOverflow);
+    }
+
+    const updateScrollClass = () => {
+      const max = Math.max(0, row.scrollWidth - row.clientWidth);
+      const atStart = row.scrollLeft <= 8;
+      const atEnd = row.scrollLeft >= max - 8;
+      row.classList.toggle('is-scroll-start-v99', atStart);
+      row.classList.toggle('is-scroll-end-v99', atEnd);
+      if(hint){
+        hint.classList.toggle('is-scroll-end-v99', atEnd);
+      }
+    };
+
+    if(row.dataset.v99ScrollBound !== '1'){
+      row.dataset.v99ScrollBound = '1';
+      row.addEventListener('scroll', updateScrollClass, {passive:true});
+    }
+    updateScrollClass();
+  }
+
+  function normalizePtaxScrollHintsV99(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const sec = qs('#sec-dolar');
+      if(sec) sec.classList.add('dolar-mobile-scroll-hint-v99');
+
+      if(!isMobile()) return;
+
+      const kpiRow = qs('#sec-dolar .dolar-kpi-row');
+      const monthRow = qs('#sec-dolar .dolar-compact-card .dolar-months');
+
+      const kpiHint = ensureHintBefore(kpiRow, 'Variações por período', 'ptax-variacoes');
+      const monthHint = ensureHintBefore(monthRow, 'Fechamentos anteriores', 'ptax-fechamentos');
+
+      updateOverflowState(kpiRow, kpiHint);
+      updateOverflowState(monthRow, monthHint);
+
+      /* Garante que os carrosséis comecem alinhados no primeiro item. */
+      if(kpiRow && !kpiRow.dataset.v99InitialScroll){
+        kpiRow.dataset.v99InitialScroll = '1';
+        kpiRow.scrollLeft = 0;
+      }
+      if(monthRow && !monthRow.dataset.v99InitialScroll){
+        monthRow.dataset.v99InitialScroll = '1';
+        monthRow.scrollLeft = 0;
+      }
+    }catch(e){}
+  }
+
+  const oldNormalize = window.__ELTAUM_MOBILE_PTAX_PRO_V98__?.sync;
+  if(typeof oldNormalize === 'function' && !oldNormalize.__scrollHintV99){
+    const wrapped = function(){
+      const out = oldNormalize.apply(this, arguments);
+      normalizePtaxScrollHintsV99();
+      return out;
+    };
+    wrapped.__scrollHintV99 = true;
+    try{ window.__ELTAUM_MOBILE_PTAX_PRO_V98__.sync = wrapped; }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizePtaxScrollHintsV99,160));
+  else setTimeout(normalizePtaxScrollHintsV99,160);
+
+  document.addEventListener('click',()=>setTimeout(normalizePtaxScrollHintsV99,100),true);
+  window.addEventListener('resize',()=>setTimeout(normalizePtaxScrollHintsV99,120),{passive:true});
+
+  setTimeout(normalizePtaxScrollHintsV99,700);
+  setTimeout(normalizePtaxScrollHintsV99,1600);
+  setTimeout(normalizePtaxScrollHintsV99,3000);
+
+  window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__ = {sync:normalizePtaxScrollHintsV99};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v100 — Mobile Rankings profissional + paginação justa
+   - Reduz o espaço entre paginação de fundos e a seção Rankings.
+   - Deixa nomes dos fundos legíveis no mobile.
+   - Reorganiza os blocos de rankings para leitura vertical.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function normalizeMobileRankingsV100(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(!isMobile()) return;
+
+      const secFundos = qs('#sec-fundos');
+      if(secFundos) secFundos.classList.add('funds-pagination-tight-v100');
+
+      const pagination = qs('#sec-fundos .pagination-row') || qs('.pagination-row');
+      if(pagination) pagination.classList.add('pagination-tight-v100');
+
+      const rankings = qs('#rankingsSection') || qs('#sec-ranking') || qs('.ranking-section');
+      if(rankings) rankings.classList.add('rankings-mobile-pro-v100');
+
+      qsa('#rankingsSection .ranking-exec-card, #sec-ranking .ranking-exec-card, .ranking-exec-card').forEach(card=>{
+        card.classList.add('ranking-summary-card-mobile-v100');
+      });
+
+      qsa('#rankingsSection .ranking-top-row, #sec-ranking .ranking-top-row, .ranking-top-row').forEach((row,idx)=>{
+        row.classList.add('ranking-top-row-mobile-v100');
+        row.style.setProperty('--rank-row-index', String(idx + 1));
+      });
+
+      qsa('#rankingsSection .ranking-cat-mini, #sec-ranking .ranking-cat-mini, .ranking-cat-mini').forEach(card=>{
+        card.classList.add('ranking-cat-mini-mobile-v100');
+      });
+
+      qsa('#rankingsSection .ranking-risk-row, #sec-ranking .ranking-risk-row, .ranking-risk-row').forEach(row=>{
+        row.classList.add('ranking-risk-row-mobile-v100');
+      });
+    }catch(e){}
+  }
+
+  const oldRenderRankings = window.renderRankings || (typeof renderRankings === 'function' ? renderRankings : null);
+  if(typeof oldRenderRankings === 'function' && !oldRenderRankings.__mobileRankingProV100){
+    const wrappedRankings = function(){
+      const out = oldRenderRankings.apply(this, arguments);
+      normalizeMobileRankingsV100();
+      setTimeout(normalizeMobileRankingsV100,80);
+      return out;
+    };
+    wrappedRankings.__mobileRankingProV100 = true;
+    try{ window.renderRankings = wrappedRankings; }catch(e){}
+    try{ renderRankings = wrappedRankings; }catch(e){}
+  }
+
+  const oldRender = window.render;
+  if(typeof oldRender === 'function' && !oldRender.__mobileRankingProV100){
+    const wrappedRender = function(){
+      const out = oldRender.apply(this, arguments);
+      setTimeout(normalizeMobileRankingsV100,80);
+      return out;
+    };
+    wrappedRender.__mobileRankingProV100 = true;
+    window.render = wrappedRender;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(normalizeMobileRankingsV100,160));
+  else setTimeout(normalizeMobileRankingsV100,160);
+
+  document.addEventListener('click',()=>setTimeout(normalizeMobileRankingsV100,100),true);
+  window.addEventListener('resize',()=>setTimeout(normalizeMobileRankingsV100,120),{passive:true});
+
+  setTimeout(normalizeMobileRankingsV100,700);
+  setTimeout(normalizeMobileRankingsV100,1600);
+  setTimeout(normalizeMobileRankingsV100,3000);
+
+  window.__ELTAUM_MOBILE_RANKING_PRO_V100__ = {sync:normalizeMobileRankingsV100};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v102 — Botão Painel Consultivo Looker Studio
+   Como configurar:
+   1) Publique ou compartilhe seu relatório no Looker Studio.
+   2) Copie o link do relatório.
+   3) Cole abaixo em LOOKER_PANEL_URL.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
+
+  /* Cole aqui o link do seu relatório Looker Studio.
+     Exemplo:
+     const LOOKER_PANEL_URL = 'https://lookerstudio.google.com/reporting/SEU_RELATORIO';
+  */
+  const LOOKER_PANEL_URL = '';
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+
+  function setupLookerPanelButtonV102(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const btn = qs('#lookerPanelBtn');
+      if(!btn) return;
+
+      const url = (LOOKER_PANEL_URL || btn.dataset.lookerUrl || '').trim();
+
+      if(url){
+        btn.href = url;
+        btn.dataset.lookerUrl = url;
+        btn.classList.remove('is-disabled');
+        btn.removeAttribute('aria-disabled');
+        btn.title = 'Abrir painel consultivo no Looker Studio';
+      }else{
+        btn.href = '#';
+        btn.classList.add('is-disabled');
+        btn.setAttribute('aria-disabled','true');
+        btn.title = 'Cole o link do relatório Looker Studio no app.js, em LOOKER_PANEL_URL';
+      }
+
+      if(btn.dataset.v102Bound !== '1'){
+        btn.dataset.v102Bound = '1';
+        btn.addEventListener('click', function(ev){
+          const currentUrl = (LOOKER_PANEL_URL || btn.dataset.lookerUrl || '').trim();
+          if(currentUrl) return;
+
+          ev.preventDefault();
+          ev.stopPropagation();
+
+          alert('Painel consultivo ainda não configurado. Cole o link do Looker Studio no app.js, na constante LOOKER_PANEL_URL.');
+        });
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(setupLookerPanelButtonV102,120));
+  else setTimeout(setupLookerPanelButtonV102,120);
+
+  setTimeout(setupLookerPanelButtonV102,700);
+  setTimeout(setupLookerPanelButtonV102,1600);
+
+  window.__ELTAUM_LOOKER_PANEL_BUTTON_V102__ = {sync:setupLookerPanelButtonV102};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v108 — Mobile: paginação com rolagem nativa única
+   - Remove a lógica de múltiplas tentativas das versões antigas.
+   - Não usa correção final por timeout.
+   - Usa requestAnimationFrame pós-render + scrollIntoView nativo.
+   - Resultado esperado: subida lisa, sem "degraus".
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
+
+  let scrollTimer = null;
+  let lastClick = 0;
+
+  function qs(sel,root=document){return root.querySelector(sel)}
+  function isMobile(){return window.matchMedia && window.matchMedia('(max-width: 820px)').matches}
+
+  function setBuildV108(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  function getFirstCardV108(){
+    return (
+      qs('#mobileFundCards .fund-card-mobile') ||
+      qs('#mobileFundCards article') ||
+      qs('#mobileFundCards > div') ||
+      qs('.mobile-fund-cards .fund-card-mobile') ||
+      qs('.fund-card-mobile') ||
+      qs('#mobileFundCards')
+    );
+  }
+
+  function scrollToFirstCardNativeV108(){
+    if(!isMobile()) return;
+
+    const target = getFirstCardV108();
+    if(!target) return;
+
+    /*
+      scrollIntoView com scroll-margin-top via CSS é mais suave no Android
+      do que window.scrollTo calculado manualmente.
+    */
+    target.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest'
+    });
+  }
+
+  function schedulePaginationScrollV108(){
+    if(!isMobile()) return;
+
+    clearTimeout(scrollTimer);
+
+    /*
+      Uma única execução depois da troca dos cards.
+      Sem fallback em 3 tempos, sem correção final.
+    */
+    scrollTimer = setTimeout(() => {
+      requestAnimationFrame(() => scrollToFirstCardNativeV108());
+    }, 140);
+  }
+
+  function isPaginationClickV108(target){
+    if(!target || !target.closest) return false;
+
+    return !!(
+      target.closest('#pageBtns .page-btn') ||
+      target.closest('.pagination-row .page-btn') ||
+      target.closest('.pagination-row button') ||
+      target.closest('[data-page]')
+    );
+  }
+
+  function setupPaginationNativeV108(){
+    setBuildV108();
+
+    if(document.documentElement.dataset.v108PaginationNative === '1') return;
+    document.documentElement.dataset.v108PaginationNative = '1';
+
+    document.addEventListener('click', function(ev){
+      if(!isPaginationClickV108(ev.target)) return;
+
+      const btn = ev.target.closest('button,.page-btn,[data-page]');
+      if(btn && (btn.disabled || btn.getAttribute('aria-disabled') === 'true')) return;
+
+      const now = Date.now();
+      if(now - lastClick < 320) return;
+      lastClick = now;
+
+      schedulePaginationScrollV108();
+    }, false);
+  }
+
+  /*
+    Se alguma parte legada chamar esta função, agora ela faz apenas uma rolagem nativa.
+  */
+  try{
+    window.scrollToFundResultsStart = function(){
+      if(isMobile()) {
+        schedulePaginationScrollV108();
+      } else {
+        const t = qs('#sec-fundos .table-wrap') || qs('#mainTable') || qs('#sec-fundos');
+        if(t) t.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+    };
+    scrollToFundResultsStart = window.scrollToFundResultsStart;
+  }catch(e){}
+
+  if(document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => setTimeout(setupPaginationNativeV108, 120));
+  } else {
+    setTimeout(setupPaginationNativeV108, 120);
+  }
+
+  setTimeout(setupPaginationNativeV108, 800);
+  setTimeout(setupPaginationNativeV108, 1800);
+
+  window.__ELTAUM_MICRO_PAGINATION_NATIVE_V108__ = {
+    sync: setupPaginationNativeV108,
+    scrollToFirstFund: scrollToFirstCardNativeV108
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v118 — Remove criadores legados dos hints de mercado
+   Base: v108 de paginação preservada.
+   Decisão:
+   - patches v101/v104/v105 removidos do app.js porque recriavam market-scroll-hint-v101;
+   - mantém apenas market-drag-label-v118;
+   - sem listener de click;
+   - observer só remove hints legados se algum código remanescente tentar recriá-los.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function isMobile(){ return window.matchMedia && window.matchMedia('(max-width: 820px)').matches; }
+
+  const LEGACY_HINTS = [
+    '#sec-mercado .market-scroll-hint-v101',
+    '#sec-mercado .copom-scroll-hint-v101',
+    '#sec-mercado .cdi-scroll-hint-v101',
+    '#sec-mercado .market-drag-label-v112',
+    '#sec-mercado .market-drag-label-v113',
+    '#sec-mercado .market-drag-label-v114',
+    '#sec-mercado .market-drag-label-v115',
+    '#sec-mercado .market-drag-label-v116',
+    '#sec-mercado .market-drag-label-v117'
+  ].join(',');
+
+  function setBuildV118(){
+    const meta = qs('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  function normalizeClosedMiniSignsV118(){
+    qsa('#closedMiniCdi,#closedMiniIpca,#closedMiniDolar,#closedMiniIbov').forEach(el => {
+      const txt = (el.textContent || '').trim();
+      el.classList.remove('pos','neg','zero');
+      if(/^-\s*/.test(txt)) el.classList.add('neg');
+      else if(/^\+/.test(txt)) el.classList.add('pos');
+      else el.classList.add('zero');
+    });
+  }
+
+  function removeLegacyHintsV118(){
+    qsa(LEGACY_HINTS).forEach(el => el.remove());
+  }
+
+  function ensureHintV118(target, label, key){
+    if(!target || !target.parentElement || !isMobile()) return;
+
+    const parent = target.parentElement;
+    qsa(`.market-drag-label-v118[data-drag-label-v118="${key}"]`, parent).forEach(el => el.remove());
+
+    const row = document.createElement('div');
+    row.className = 'market-drag-label-v118';
+    row.dataset.dragLabelV118 = key;
+    row.setAttribute('aria-hidden', 'true');
+    row.setAttribute('tabindex', '-1');
+    row.innerHTML = `<span>${label}</span><strong>Arraste →</strong>`;
+    target.insertAdjacentElement('beforebegin', row);
+  }
+
+  function normalizeCdiV118(){
+    const strip = qs('#cdiMonthStrip');
+    if(!strip || !isMobile()) return;
+
+    const chips = qsa('.cdi-month-chip', strip);
+    if(!chips.length) return;
+
+    chips.forEach(chip => {
+      chip.classList.add('cdi-chip-aligned-v118');
+      const m = chip.querySelector('.m');
+      const v = chip.querySelector('.v');
+      const p = chip.querySelector('.p');
+      if(m) m.textContent = m.textContent.trim().toUpperCase();
+      if(v) v.textContent = v.textContent.trim();
+      if(p) p.textContent = p.textContent.trim();
+    });
+
+    const month = {JAN:1,FEV:2,MAR:3,ABR:4,MAI:5,JUN:6,JUL:7,AGO:8,SET:9,OUT:10,NOV:11,DEZ:12};
+
+    function score(chip){
+      const txt = (chip.querySelector('.m')?.textContent || chip.textContent || '').toUpperCase();
+      const m = txt.match(/(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)(?:\/(\d{4}))?/);
+      if(!m) return -1;
+      const y = Number(m[2] || new Date().getFullYear());
+      return y * 100 + (month[m[1]] || 0);
+    }
+
+    const current = chips.find(c => c.classList.contains('current') || /parcial/i.test(c.textContent || ''));
+    const closed = chips.find(c => c !== current && (c.classList.contains('closed') || /último mês|ultimo mês/i.test(c.textContent || '')));
+    const rest = chips.filter(c => c !== current && c !== closed).sort((a,b) => score(b) - score(a));
+    [current, closed, ...rest].filter(Boolean).forEach(chip => strip.appendChild(chip));
+    strip.scrollLeft = 0;
+  }
+
+  function syncV118(){
+    try{
+      setBuildV118();
+      removeLegacyHintsV118();
+      normalizeClosedMiniSignsV118();
+
+      const mercado = qs('#sec-mercado');
+      if(mercado) mercado.classList.add('market-clean-v118');
+
+      const copom = qs('#copomMeetings');
+      if(copom) ensureHintV118(copom, 'Próximas reuniões', 'copom');
+
+      const cdi = qs('#cdiMonthStrip');
+      if(cdi){
+        normalizeCdiV118();
+        ensureHintV118(cdi, 'Histórico mensal do CDI', 'cdi');
+      }
+    }catch(e){
+      console.warn('[v118 mercado] falha ao sincronizar:', e);
+    }
+  }
+
+  function installLegacyHintObserverV118(){
+    if(document.documentElement.dataset.v118HintObserver === '1') return;
+    document.documentElement.dataset.v118HintObserver = '1';
+
+    const obs = new MutationObserver((mutations) => {
+      let found = false;
+      for(const m of mutations){
+        for(const n of m.addedNodes || []){
+          if(n.nodeType !== 1) continue;
+          if(n.matches && n.matches(LEGACY_HINTS)){ found = true; break; }
+          if(n.querySelector && n.querySelector(LEGACY_HINTS)){ found = true; break; }
+        }
+        if(found) break;
+      }
+      if(found) {
+        requestAnimationFrame(removeLegacyHintsV118);
+      }
+    });
+
+    obs.observe(document.body, {childList:true, subtree:true});
+    window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_OBSERVER__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(syncV118, 180);
+      setTimeout(installLegacyHintObserverV118, 220);
+    }, {once:true});
+  }else{
+    setTimeout(syncV118, 180);
+    setTimeout(installLegacyHintObserverV118, 220);
+  }
+
+  // Sem click/touch/scroll.
+  window.addEventListener('resize', () => setTimeout(syncV118, 180), {passive:true});
+  window.addEventListener('orientationchange', () => setTimeout(syncV118, 280), {passive:true});
+
+  setTimeout(syncV118, 900);
+  setTimeout(syncV118, 2200);
+  setTimeout(syncV118, 4200);
+
+  window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_V118__ = { sync: syncV118, removeLegacy: removeLegacyHintsV118 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v119 — Header: data dentro da brand-text
+   - Mantém v108 e v118.
+   - Garante que #lastUpdate fique logo abaixo da descrição.
+   - Corrige meta app-build no final para auditoria.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function syncHeaderV119(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const brandText = qs('.site-header-clean .brand-text');
+      const lastUpdate = qs('#lastUpdate');
+      const headerActions = qs('.site-header-clean .header-actions-v102');
+
+      if(brandText && lastUpdate && lastUpdate.parentElement !== brandText){
+        brandText.appendChild(lastUpdate);
+      }
+
+      if(headerActions && !headerActions.querySelector('#lastUpdate')){
+        headerActions.remove();
+      }
+
+      const html = document.documentElement;
+      html.classList.add('header-lastupdate-reorg-v119');
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncHeaderV119, 120), {once:true});
+  }else{
+    setTimeout(syncHeaderV119, 120);
+  }
+
+  setTimeout(syncHeaderV119, 700);
+  setTimeout(syncHeaderV119, 1800);
+  setTimeout(syncHeaderV119, 3500);
+
+  window.__ELTAUM_HEADER_LASTUPDATE_REORG_V119__ = { sync: syncHeaderV119 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v120 — Sistema tipográfico global
+   - Apenas auditoria/build.
+   - Não altera filtros, paginação v108, Mercado/Arraste v118 ou header v119.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function syncTypographyV120(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.documentElement.classList.add('typography-system-v120');
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncTypographyV120, 120), {once:true});
+  }else{
+    setTimeout(syncTypographyV120, 120);
+  }
+
+  setTimeout(syncTypographyV120, 800);
+  setTimeout(syncTypographyV120, 1800);
+
+  window.__ELTAUM_TYPOGRAPHY_SYSTEM_V120__ = { sync: syncTypographyV120 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v121 — Fechamento mensal: mini indicadores em modo painel
+   - Apenas build/auditoria.
+   - Não altera filtros, paginação v108, Mercado/Arraste v118, header v119 ou tipografia v120.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function syncClosedMonthMiniPanelV121(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const launch = qs('#closedMonthLaunch');
+      if(launch) launch.classList.add('closed-month-mini-panel-v121');
+
+      document.documentElement.classList.add('closed-month-mini-panel-v121');
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncClosedMonthMiniPanelV121, 120), {once:true});
+  }else{
+    setTimeout(syncClosedMonthMiniPanelV121, 120);
+  }
+
+  setTimeout(syncClosedMonthMiniPanelV121, 800);
+  setTimeout(syncClosedMonthMiniPanelV121, 1800);
+
+  window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_V121__ = { sync: syncClosedMonthMiniPanelV121 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v122 — Fechamento mensal mobile: rebalanceamento visual
+   - Corrige card que ficou centralizado demais no celular.
+   - Mantém v108, v118, v119, v120 e v121.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function syncClosedMonthMobileV122(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const launch = qs('#closedMonthLaunch');
+      if(launch) launch.classList.add('closed-month-mobile-rebalance-v122');
+
+      document.documentElement.classList.add('closed-month-mobile-rebalance-v122');
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncClosedMonthMobileV122, 120), {once:true});
+  }else{
+    setTimeout(syncClosedMonthMobileV122, 120);
+  }
+
+  setTimeout(syncClosedMonthMobileV122, 800);
+  setTimeout(syncClosedMonthMobileV122, 1800);
+
+  window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_V122__ = { sync: syncClosedMonthMobileV122 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v123 — Busca sem autofill/senhas no mobile
+   Problema:
+   - Chrome/Android exibia bottom sheet de senhas/endereço ao focar nos campos de busca.
+   Ajuste:
+   - força atributos anti-autofill nos inputs de busca;
+   - não altera filtros, paginação v108, mercado v118, header v119, tipografia v120 ou cards v121/v122.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
+
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function isSearchInput(el){
+    if(!el || el.tagName !== 'INPUT') return false;
+    const blob = [
+      el.id || '',
+      el.name || '',
+      el.className || '',
+      el.placeholder || '',
+      el.getAttribute('aria-label') || ''
+    ].join(' ').toLowerCase();
+
+    return (
+      blob.includes('buscar fundo') ||
+      blob.includes('benchmark') ||
+      blob.includes('cnpj') ||
+      blob.includes('search') ||
+      blob.includes('fundo')
+    );
+  }
+
+  function hardenSearchInputV123(el){
+    
+    if(!el) return;
+    const originalTypeV126 = (el.getAttribute('type') || '').toLowerCase();
+    const idV126 = (el.id || '').toLowerCase();
+    const roleV126 = (el.getAttribute('role') || '').toLowerCase();
+    const clsV126 = (el.className || '').toString().toLowerCase();
+    if(
+      idV126 === 'togglesemdados' ||
+      originalTypeV126 === 'checkbox' ||
+      originalTypeV126 === 'radio' ||
+      roleV126 === 'switch' ||
+      clsV126.includes('toggle') ||
+      clsV126.includes('checkbox')
+    ) return;
+if(!isSearchInput(el)) return;
+
+    try{ el.type = 'search'; }catch(e){}
+
+    el.setAttribute('autocomplete', 'off');
+    el.setAttribute('autocapitalize', 'none');
+    el.setAttribute('autocorrect', 'off');
+    el.setAttribute('spellcheck', 'false');
+    el.setAttribute('inputmode', 'search');
+    el.setAttribute('enterkeyhint', 'search');
+
+    el.setAttribute('data-lpignore', 'true');
+    el.setAttribute('data-form-type', 'other');
+    el.setAttribute('data-1p-ignore', 'true');
+    el.setAttribute('data-bwignore', 'true');
+
+    el.setAttribute('name', 'fund_search_no_autofill');
+
+    el.classList.add('search-no-autofill-v123');
+  }
+
+  function syncSearchNoAutofillV123(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      qsa('input').forEach(hardenSearchInputV123);
+      document.documentElement.classList.add('search-no-autofill-v123');
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncSearchNoAutofillV123, 100), {once:true});
+  }else{
+    setTimeout(syncSearchNoAutofillV123, 100);
+  }
+
+  setTimeout(syncSearchNoAutofillV123, 700);
+  setTimeout(syncSearchNoAutofillV123, 1800);
+  setTimeout(syncSearchNoAutofillV123, 3500);
+
+  const obs = new MutationObserver((mutations) => {
+    let shouldSync = false;
+    for(const m of mutations){
+      for(const n of m.addedNodes || []){
+        if(n.nodeType !== 1) continue;
+        if(n.tagName === 'INPUT' || (n.querySelector && n.querySelector('input'))){
+          shouldSync = true;
+          break;
+        }
+      }
+      if(shouldSync) break;
+    }
+    if(shouldSync) requestAnimationFrame(syncSearchNoAutofillV123);
+  });
+
+  if(document.body) obs.observe(document.body, {childList:true, subtree:true});
+
+  window.__ELTAUM_SEARCH_NO_AUTOFILL_V123__ = { sync: syncSearchNoAutofillV123 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v124 — Design System Tokens + legibilidade
+   - Cria camada de tokens visuais.
+   - Ajusta legibilidade dos blocos mais visíveis.
+   - Não altera filtros, paginação v108, Mercado/Arraste v118, header v119,
+     tipografia v120, cards v121/v122 ou busca v123.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function syncDesignTokensV124(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.documentElement.classList.add('design-tokens-legibility-v124');
+
+      const launch = qs('#closedMonthLaunch');
+      if(launch) launch.classList.add('closed-month-tokenized-v124');
+
+      const mercado = qs('#sec-mercado');
+      if(mercado) mercado.classList.add('market-tokenized-v124');
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncDesignTokensV124, 120), {once:true});
+  }else{
+    setTimeout(syncDesignTokensV124, 120);
+  }
+
+  setTimeout(syncDesignTokensV124, 800);
+  setTimeout(syncDesignTokensV124, 1800);
+
+  window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_V124__ = { sync: syncDesignTokensV124 };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v125 — KPI desktop + toggle "Ocultar fundos sem dados"
+   - Melhora legibilidade do nome do fundo nos KPIs no desktop.
+   - Reforça funcionamento do toggle no desktop sem alterar lógica existente.
+   - Preserva v108/v118/v119/v120/v121/v122/v123/v124.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+  function syncBuildV125(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.documentElement.classList.add('kpi-toggle-desktop-fix-v125');
+    }catch(e){}
+  }
+
+  function findHideNoDataControl(){
+    const label = qsa('.toggle-label').find(el =>
+      (el.textContent || '').toLowerCase().includes('ocultar fundos sem dados') ||
+      (el.title || '').toLowerCase().includes('ocultar fundos sem dados')
+    );
+
+    const input =
+      qs('#hideNoData') ||
+      qs('#hideEmptyFunds') ||
+      qs('#hideWithoutData') ||
+      qs('#toggleNoData') ||
+      qs('input[type="checkbox"][data-hide-no-data]') ||
+      (label ? label.closest('label')?.querySelector('input[type="checkbox"]') : null) ||
+      (label ? label.parentElement?.querySelector('input[type="checkbox"]') : null) ||
+      (label ? label.closest('.toggle-control,.switch,.data-toggle,.no-data-toggle,.toggle-wrap')?.querySelector('input[type="checkbox"]') : null);
+
+    const wrap =
+      input?.closest('label') ||
+      input?.closest('.toggle-control,.switch,.data-toggle,.no-data-toggle,.toggle-wrap') ||
+      label?.closest('label') ||
+      label?.parentElement;
+
+    return {label, input, wrap};
+  }
+
+  function reinforceHideNoDataToggleV125(){
+    try{
+      const {label, input, wrap} = findHideNoDataControl();
+      if(label){
+        label.textContent = 'Ocultar fundos sem dados';
+        label.title = 'Ocultar fundos sem dados';
+        label.classList.add('toggle-label-v125');
+      }
+
+      if(wrap){
+        wrap.classList.add('hide-no-data-toggle-v125');
+        wrap.setAttribute('role', wrap.getAttribute('role') || 'switch');
+        wrap.style.pointerEvents = 'auto';
+      }
+
+      if(input){
+        input.classList.add('hide-no-data-input-v125');
+        input.style.pointerEvents = 'auto';
+
+        if(!input.dataset.v125Bound){
+          input.dataset.v125Bound = '1';
+          input.addEventListener('change', () => {
+            setTimeout(() => {
+              try{
+                if(typeof window.renderTable === 'function') window.renderTable();
+                if(typeof window.renderCards === 'function') window.renderCards();
+                if(typeof window.applyFilters === 'function') window.applyFilters();
+              }catch(e){}
+            }, 0);
+          });
+        }
+
+        if(label && !label.dataset.v125Bound){
+          label.dataset.v125Bound = '1';
+          label.addEventListener('click', (ev) => {
+            if(ev.target === input) return;
+            const container = label.closest('label');
+            if(container) return; // label nativo já resolve
+            ev.preventDefault();
+            input.click();
+          });
+        }
+
+        if(wrap && !wrap.dataset.v125Bound){
+          wrap.dataset.v125Bound = '1';
+          wrap.addEventListener('click', (ev) => {
+            if(ev.target === input || ev.target.closest('input')) return;
+            if(ev.target.closest('button,a,select')) return;
+            if(ev.target.classList && ev.target.classList.contains('toggle-label-v125')) return;
+            input.click();
+          });
+        }
+      }
+    }catch(e){}
+  }
+
+  function syncV125(){
+    syncBuildV125();
+    reinforceHideNoDataToggleV125();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV125, 120), {once:true});
+  }else{
+    setTimeout(syncV125, 120);
+  }
+
+  setTimeout(syncV125, 800);
+  setTimeout(syncV125, 1800);
+  setTimeout(syncV125, 3500);
+
+  window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_V125__ = {
+    sync: syncV125,
+    findHideNoDataControl
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v126 — Corrige #toggleSemDados para checkbox
+   Causa confirmada:
+   - O patch v123 de anti-autofill transformou #toggleSemDados em type="search".
+   Correção:
+   - #toggleSemDados sempre volta a ser checkbox;
+   - remove atributos de busca/autofill do toggle;
+   - impede que o anti-autofill trate toggles como campos de busca;
+   - preserva v108/v118/v119/v120/v121/v122/v123/v124/v125.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function normalizeToggleSemDadosV126(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.documentElement.classList.add('toggle-sem-dados-checkbox-fix-v126');
+
+      const input = qs('#toggleSemDados');
+      if(!input) return;
+
+      try{ input.type = 'checkbox'; }catch(e){ input.setAttribute('type', 'checkbox'); }
+
+      input.name = 'toggleSemDados';
+      input.removeAttribute('inputmode');
+      input.removeAttribute('enterkeyhint');
+      input.removeAttribute('autocomplete');
+      input.removeAttribute('autocapitalize');
+      input.removeAttribute('autocorrect');
+      input.removeAttribute('spellcheck');
+      input.removeAttribute('data-lpignore');
+      input.removeAttribute('data-form-type');
+      input.removeAttribute('data-1p-ignore');
+      input.removeAttribute('data-bwignore');
+
+      input.classList.remove('search-no-autofill-v123');
+      input.classList.add('hide-no-data-input-v126');
+
+      input.style.pointerEvents = 'auto';
+
+      const wrap = input.closest('.toggle-wrap');
+      const label = input.closest('label');
+      const text = wrap?.querySelector('.toggle-label');
+
+      if(wrap){
+        wrap.classList.add('toggle-sem-dados-fixed-v126');
+        wrap.style.pointerEvents = 'auto';
+      }
+
+      if(label){
+        label.style.pointerEvents = 'auto';
+      }
+
+      if(text){
+        text.style.pointerEvents = 'auto';
+        text.textContent = 'Ocultar fundos sem dados';
+        text.title = 'Ocultar fundos sem dados';
+      }
+
+      if(!input.dataset.v126Bound){
+        input.dataset.v126Bound = '1';
+        input.addEventListener('click', (ev) => {
+          ev.stopPropagation();
+        }, true);
+
+        input.addEventListener('change', () => {
+          setTimeout(() => {
+            try{
+              if(typeof window.aplicarFiltros === 'function') window.aplicarFiltros();
+              else if(typeof window.applyFilters === 'function') window.applyFilters();
+              else if(typeof window.renderFunds === 'function') window.renderFunds();
+              else if(typeof window.renderTable === 'function') window.renderTable();
+            }catch(e){}
+          }, 0);
+        });
+      }
+
+      if(wrap && !wrap.dataset.v126ClickBound){
+        wrap.dataset.v126ClickBound = '1';
+        wrap.addEventListener('click', (ev) => {
+          if(ev.target === input || ev.target.closest('input,button,a,select')) return;
+          ev.preventDefault();
+          input.checked = !input.checked;
+          input.dispatchEvent(new Event('change', {bubbles:true}));
+        });
+      }
+
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(normalizeToggleSemDadosV126, 80), {once:true});
+  }else{
+    setTimeout(normalizeToggleSemDadosV126, 80);
+  }
+
+  setTimeout(normalizeToggleSemDadosV126, 400);
+  setTimeout(normalizeToggleSemDadosV126, 1000);
+  setTimeout(normalizeToggleSemDadosV126, 2200);
+  setTimeout(normalizeToggleSemDadosV126, 4000);
+
+  window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_V126__ = {
+    sync: normalizeToggleSemDadosV126,
+    diagnose(){
+      const input = qs('#toggleSemDados');
+      const wrap = input?.closest('.toggle-wrap');
+      const text = wrap?.querySelector('.toggle-label');
+      return {
+        build: qs('meta[name="app-build"]')?.content,
+        htmlClass: document.documentElement.className,
+        input: {
+          existe: !!input,
+          type: input?.type,
+          checked: input?.checked,
+          name: input?.name,
+          className: input?.className,
+          outerHTML: input?.outerHTML
+        },
+        wrap: {
+          existe: !!wrap,
+          className: wrap?.className,
+          pointerEvents: wrap ? getComputedStyle(wrap).pointerEvents : null
+        },
+        texto: text?.textContent?.trim()
+      };
+    }
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v127 — Toggle sem dados: clique nativo sem duplo evento
+   Causa identificada no diagnóstico:
+   - O clique no slider acionava o label/input nativo e também handlers manuais v125/v126.
+   - Isso gerava alternância duplicada: true -> false -> true.
+   Correção:
+   - Recria somente o controle do toggle para limpar handlers antigos.
+   - Usa 1 único listener no input checkbox.
+   - Mantém estado global e dispara rotinas de render/filtro quando disponíveis.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+  function getToggleStateV127(){
+    try{
+      const input = qs('#toggleSemDados');
+      if(input) return !!input.checked;
+      if(typeof window.ocultarSemDados === 'boolean') return !!window.ocultarSemDados;
+      if(typeof window.hideNoData === 'boolean') return !!window.hideNoData;
+      if(typeof window.__hideNoData === 'boolean') return !!window.__hideNoData;
+    }catch(e){}
+    return false;
+  }
+
+  function setPossibleGlobalStatesV127(checked){
+    try{ window.ocultarSemDados = checked; }catch(e){}
+    try{ window.hideNoData = checked; }catch(e){}
+    try{ window.__hideNoData = checked; }catch(e){}
+    try{ window.semDadosOcultos = checked; }catch(e){}
+  }
+
+  function callIfFnV127(name){
+    try{
+      if(typeof window[name] === 'function'){
+        window[name]();
+        return true;
+      }
+    }catch(e){}
+    return false;
+  }
+
+  function refreshFundsV127(){
+    const called = [
+      'aplicarFiltros',
+      'applyFilters',
+      'filtrarFundos',
+      'applyCurrentFilters',
+      'renderFundos',
+      'renderFunds',
+      'renderCards',
+      'renderTable',
+      'atualizarTabela',
+      'updateFundList'
+    ].some(callIfFnV127);
+
+    // Fallback: dispara eventos para listeners originais que escutem document/window.
+    try{ document.dispatchEvent(new CustomEvent('toggleSemDadosChange', {detail:{checked:getToggleStateV127()}})); }catch(e){}
+    try{ window.dispatchEvent(new CustomEvent('toggleSemDadosChange', {detail:{checked:getToggleStateV127()}})); }catch(e){}
+
+    return called;
+  }
+
+  function normalizeAndRebuildToggleV127(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.documentElement.classList.add('toggle-sem-dados-native-fix-v127');
+
+      const oldInput = qs('#toggleSemDados');
+      if(!oldInput) return null;
+
+      const oldWrap = oldInput.closest('.toggle-wrap') || oldInput.closest('.compact-toggle-wrap') || oldInput.parentElement;
+      if(!oldWrap) return null;
+
+      if(oldWrap.dataset.v127Rebuilt === '1'){
+        const input = qs('#toggleSemDados');
+        if(input && input.type !== 'checkbox') input.type = 'checkbox';
+        return input;
+      }
+
+      const checked = !!oldInput.checked;
+
+      // Recria estrutura limpa para remover handlers manuais antigos que causavam duplo toggle.
+      const newWrap = document.createElement('div');
+      newWrap.className = 'toggle-wrap compact-toggle-wrap toggle-sem-dados-clean-v127';
+      newWrap.title = 'Ocultar fundos sem dados';
+      newWrap.dataset.v127Rebuilt = '1';
+
+      const newLabel = document.createElement('label');
+      newLabel.className = 'toggle toggle-sem-dados-label-v127';
+      newLabel.setAttribute('aria-label', 'Ocultar fundos sem dados');
+
+      const newInput = document.createElement('input');
+      newInput.type = 'checkbox';
+      newInput.id = 'toggleSemDados';
+      newInput.name = 'toggleSemDados';
+      newInput.checked = checked;
+      newInput.className = 'toggle-sem-dados-input-v127';
+      newInput.setAttribute('aria-label', 'Ocultar fundos sem dados');
+
+      const newSlider = document.createElement('span');
+      newSlider.className = 'toggle-slider toggle-sem-dados-slider-v127';
+      newSlider.setAttribute('aria-hidden', 'true');
+
+      const newText = document.createElement('span');
+      newText.className = 'toggle-label toggle-sem-dados-text-v127';
+      newText.title = 'Ocultar fundos sem dados';
+      newText.textContent = 'Ocultar fundos sem dados';
+
+      newLabel.appendChild(newInput);
+      newLabel.appendChild(newSlider);
+      newWrap.appendChild(newLabel);
+      newWrap.appendChild(newText);
+
+      oldWrap.replaceWith(newWrap);
+
+      setPossibleGlobalStatesV127(checked);
+
+      newInput.addEventListener('change', () => {
+        const value = !!newInput.checked;
+        newWrap.classList.toggle('is-on', value);
+        setPossibleGlobalStatesV127(value);
+        setTimeout(refreshFundsV127, 0);
+      });
+
+      // Texto também aciona o input, mas apenas uma vez.
+      newText.addEventListener('click', (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        newInput.click();
+      });
+
+      newWrap.classList.toggle('is-on', checked);
+
+      return newInput;
+    }catch(e){
+      console.warn('[v127 toggleSemDados] falha ao reconstruir toggle', e);
+      return null;
+    }
+  }
+
+  function syncV127(){
+    normalizeAndRebuildToggleV127();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncV127, 120), {once:true});
+  }else{
+    setTimeout(syncV127, 120);
+  }
+
+  setTimeout(syncV127, 500);
+  setTimeout(syncV127, 1200);
+  setTimeout(syncV127, 2500);
+
+  window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_V127__ = {
+    sync: syncV127,
+    diagnose(){
+      const input = qs('#toggleSemDados');
+      const wrap = input?.closest('.toggle-wrap');
+      const label = input?.closest('label');
+      const text = wrap?.querySelector('.toggle-label');
+      const slider = label?.querySelector('.toggle-slider');
+      const info = (el) => {
+        if(!el) return null;
+        const cs = getComputedStyle(el);
+        const r = el.getBoundingClientRect();
+        return {
+          tag: el.tagName,
+          id: el.id || '',
+          type: el.type || '',
+          checked: typeof el.checked === 'boolean' ? el.checked : null,
+          className: el.className || '',
+          display: cs.display,
+          opacity: cs.opacity,
+          pointerEvents: cs.pointerEvents,
+          width: cs.width,
+          height: cs.height,
+          rect:{x:Math.round(r.x),y:Math.round(r.y),w:Math.round(r.width),h:Math.round(r.height)},
+          outerHTML: el.outerHTML
+        };
+      };
+      return {
+        build: qs('meta[name="app-build"]')?.content,
+        htmlClass: document.documentElement.className,
+        input: info(input),
+        label: info(label),
+        slider: info(slider),
+        wrap: info(wrap),
+        text: info(text),
+        globals:{
+          ocultarSemDados: window.ocultarSemDados,
+          hideNoData: window.hideNoData,
+          __hideNoData: window.__hideNoData
+        },
+        funcoes:{
+          aplicarFiltros: typeof window.aplicarFiltros,
+          applyFilters: typeof window.applyFilters,
+          filtrarFundos: typeof window.filtrarFundos,
+          renderFundos: typeof window.renderFundos,
+          renderFunds: typeof window.renderFunds,
+          renderCards: typeof window.renderCards,
+          renderTable: typeof window.renderTable
+        }
+      };
+    }
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v128 — W3C HTML Validate Fix
+   - Corrige marcações que o Nu Html Checker apontou.
+   - Não altera regras de negócio.
+   - Preserva v108/v118/v119/v120/v121/v122/v123/v124/v125/v126/v127.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+
+  function syncW3CV128(){
+    try{
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.documentElement.classList.add('w3c-html-validate-fix-v128');
+
+      // Fallback runtime: qualquer div com aria-label e sem role ganha role="group".
+      qsa('div[aria-label]').forEach(el => {
+        if(!el.getAttribute('role')) el.setAttribute('role', 'group');
+      });
+
+      // Evita containers role=button com botões/títulos dentro.
+      qsa('[role="button"]').forEach(el => {
+        if(el.tagName !== 'BUTTON' && (el.querySelector('button,h1,h2,h3,h4,h5,h6'))){
+          el.setAttribute('role','region');
+        }
+      });
+
+      // Dialog precisa estar coerente em runtime.
+      const sheet = qs('#closedMarketSheet');
+      if(sheet){
+        sheet.setAttribute('role','dialog');
+        sheet.setAttribute('aria-modal','true');
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => setTimeout(syncW3CV128, 120), {once:true});
+  }else{
+    setTimeout(syncW3CV128, 120);
+  }
+
+  setTimeout(syncW3CV128, 800);
+  setTimeout(syncW3CV128, 1800);
+
+  window.__ELTAUM_W3C_HTML_VALIDATE_FIX_V128__ = { sync: syncW3CV128 };
+})();
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_DESKTOP_SIDE_NAV_20260610_v129
+   Scroll suave e destaque automático do menu lateral desktop
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const MIN_DESKTOP_NAV = 1220;
+
+  function $$(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function isDesktopNav(){ return window.matchMedia && window.matchMedia('(min-width:'+MIN_DESKTOP_NAV+'px)').matches; }
+
+  function setActiveDesktopNav(id){
+    if(!id) return;
+    $$('.desktop-side-nav .desktop-nav-link').forEach(link=>{
+      const active = link.getAttribute('data-section') === id || link.getAttribute('href') === '#'+id;
+      link.classList.toggle('active', active);
+      if(active) link.setAttribute('aria-current','page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function openTargetIfNeeded(target){
+    if(!target) return;
+
+    if(target.id === 'sec-fontes'){
+      const details = target.querySelector('details');
+      if(details) details.open = true;
+    }
+
+    if(target.classList && target.classList.contains('collapsible-section')){
+      const body = target.querySelector('.section-collapsible-body[hidden]');
+      const toggle = target.querySelector('button[aria-expanded="false"], .section-collapsible-toggle[aria-expanded="false"], .section-toggle[aria-expanded="false"]');
+      if(body && toggle && typeof toggle.click === 'function'){
+        try{ toggle.click(); }catch(e){}
+      }
+    }
+  }
+
+  function scrollToTarget(target){
+    if(!target) return;
+    openTargetIfNeeded(target);
+    const offset = 24;
+    const top = target.getBoundingClientRect().top + window.scrollY - offset;
+    window.scrollTo({top:Math.max(0,top),behavior:'smooth'});
+  }
+
+  function setupDesktopSideNav(){
+    const nav = document.getElementById('desktopSideNav');
+    if(!nav) return;
+
+    const links = $$('.desktop-nav-link', nav);
+    links.forEach(link=>{
+      link.addEventListener('click', ev=>{
+        const href = link.getAttribute('href') || '';
+        if(!href.startsWith('#')) return;
+        const id = href.slice(1);
+        const target = document.getElementById(id);
+        if(!target) return;
+        ev.preventDefault();
+        setActiveDesktopNav(id);
+        scrollToTarget(target);
+        try{ history.replaceState(null,'',href); }catch(e){}
+      });
+    });
+
+    const sectionIds = links.map(link=>link.getAttribute('data-section')).filter(Boolean);
+    const sections = sectionIds.map(id=>document.getElementById(id)).filter(Boolean);
+
+    if('IntersectionObserver' in window && sections.length){
+      const observer = new IntersectionObserver(entries=>{
+        if(!isDesktopNav()) return;
+        const visible = entries
+          .filter(entry=>entry.isIntersecting)
+          .sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
+        if(visible && visible.target && visible.target.id){
+          setActiveDesktopNav(visible.target.id);
+        }
+      },{root:null,rootMargin:'-28% 0px -58% 0px',threshold:[0.01,0.08,0.16,0.28,0.42]});
+      sections.forEach(sec=>observer.observe(sec));
+    }
+
+    if(location.hash){
+      const id = decodeURIComponent(location.hash.slice(1));
+      if(document.getElementById(id)) setActiveDesktopNav(id);
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', setupDesktopSideNav);
+  }else{
+    setupDesktopSideNav();
+  }
+})();
+
+
+/* ELTAUM_RANKING_CATEGORY_NAMES_FULL_20260611_v149
+   Ajuste visual feito em CSS: nomes completos nos cartões por categoria. */
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_EXECUTIVE_SIMPLE_20260612_v159
+   - Um único modo visível: executivo OU tabela analítica.
+   - O período "Último fechado" é lido da base e replicado em todo o painel.
+   - O mês corrente permanece separado como parcial/aguardando.
+   - Sem MutationObserver amplo: atualizações controladas e finitas.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_MARKET_EXECUTIVE_SIMPLE_20260612_v159';
+  const DESKTOP = 901;
+  const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
+  const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
+  const monthNames = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+  function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
+  function clean(v){ return String(v == null ? '' : v).replace(/\s+/g,' ').trim(); }
+  function text(id){ const el=document.getElementById(id); return el ? clean(el.textContent) : '—'; }
+  function esc(v){ return String(v == null ? '' : v).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch])); }
+  function pctClass(v){
+    const s=clean(v);
+    const m=s.match(/[+-]?\d+(?:[.,]\d+)?\s*%/);
+    if(!m) return s === '—' || !s ? 'dash' : 'neu';
+    const n=Number(m[0].replace('%','').replace('.','').replace(',','.'));
+    return n>0?'pos':n<0?'neg':'neu';
+  }
+  function periodToken(v){
+    const s=clean(v).toLowerCase();
+    const m=s.match(/\b(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\s*\/\s*(20\d{2})\b/i);
+    if(m) return `${m[1].toLowerCase()}/${m[2]}`;
+    const n=s.match(/\b(0?[1-9]|1[0-2])\s*\/\s*(20\d{2})\b/);
+    if(n) return `${monthNames[Number(n[1])-1]}/${n[2]}`;
+    return '';
+  }
+  function previousCalendarMonth(){
+    const d=new Date();
+    d.setDate(1); d.setMonth(d.getMonth()-1);
+    return `${monthNames[d.getMonth()]}/${d.getFullYear()}`;
+  }
+  function currentCalendarMonth(){
+    const d=new Date();
+    return `${monthNames[d.getMonth()]}/${d.getFullYear()}`;
+  }
+  function getClosedPeriod(){
+    const candidates=[
+      text('th-mes-ant-sub'), text('cdi-mes-ant-sub'), text('ipca-mes-ant-sub'),
+      text('dolar-ant-sub'), text('ibov-ant-sub'), text('sp-ant-sub'), text('dow-ant-sub'), text('nasdaq-ant-sub'),
+      text('closedCardPeriod'), text('closedMonthLaunchSub')
+    ];
+    for(const v of candidates){ const p=periodToken(v); if(p) return p; }
+    return previousCalendarMonth();
+  }
+  function getCurrentPeriod(){
+    const candidates=[text('th-mes-cur-sub'),text('cdi-cur-sub'),text('dolar-cur-sub'),text('ibov-cur-sub'),text('sp-cur-sub')];
+    for(const v of candidates){ const p=periodToken(v); if(p) return p; }
+    return currentCalendarMonth();
+  }
+  function getAccumLabel(){
+    const active=qs('.market-period-tabs .indic-tab.active[data-months]');
+    const months=active?.dataset.months || periodToken(text('th-acum-sub-v2')).replace(/\D/g,'') || '12';
+    return `${months}M`;
+  }
+  function valueOrDash(v){ const s=clean(v); return s && !/^(m[eê]s|ano|fechado|atual)$/i.test(s) ? s : '—'; }
+
+  function normalizeClosedPeriodLabels(closed, current){
+    const closedHeader=qs('#th-mes-ant-sub');
+    if(closedHeader) closedHeader.textContent=closed;
+    const currentHeader=qs('#th-mes-cur-sub');
+    if(currentHeader && !periodToken(currentHeader.textContent)) currentHeader.textContent=current;
+
+    ['cdi-mes-ant-sub','ipca-mes-ant-sub','dolar-ant-sub','ibov-ant-sub','sp-ant-sub','dow-ant-sub','nasdaq-ant-sub'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el) el.textContent=`${closed} · fechado`;
+    });
+    const launch=document.getElementById('closedMonthLaunchSub');
+    if(launch) launch.textContent=`${closed} · indicadores consolidados`;
+    const cardPeriod=document.getElementById('closedCardPeriod');
+    if(cardPeriod) cardPeriod.textContent=closed;
+    const sheetNote=document.getElementById('closedMarketSheetNote');
+    if(sheetNote) sheetNote.textContent=`Último mês fechado · ${closed}`;
+  }
+
+  function parseUs(id){
+    const raw=text(id);
+    const result={usd:'—',brl:'—'};
+    const re=/(USD|BRL)\s*([+-]?\d+(?:[.,]\d+)?%|—)/ig;
+    let m;
+    while((m=re.exec(raw))){ result[m[1].toLowerCase()]=m[2]; }
+    if(result.usd==='—' && result.brl==='—'){
+      const vals=raw.match(/[+-]?\d+(?:[.,]\d+)?%/g)||[];
+      if(vals[0]) result.usd=vals[0];
+      if(vals[1]) result.brl=vals[1];
+      else if(vals[0]) result.brl=vals[0];
+    }
+    return result;
+  }
+  function usHtml(pair, mode){
+    if(mode==='both'){
+      return `<span class="market-v150-double"><span class="${pctClass(pair.usd)}">USD ${esc(pair.usd)}</span><span class="${pctClass(pair.brl)}">BRL ${esc(pair.brl)}</span></span>`;
+    }
+    const val=pair[mode]||'—';
+    return `<strong class="${pctClass(val)}">${esc(val)}</strong><small>${mode.toUpperCase()}</small>`;
+  }
+  function marketCell(main, sub='', mainClass){
+    const cls=mainClass || pctClass(main);
+    return `<div class="market-v150-cell"><strong class="${cls}">${esc(valueOrDash(main))}</strong>${sub?`<small class="market-v150-sub ${pctClass(sub)}">${esc(sub)}</small>`:''}</div>`;
+  }
+  function nameCell(icon,name,sub){
+    return `<div class="market-v150-name"><span class="market-v150-icon">${icon}</span><div><strong>${esc(name)}</strong><small>${esc(sub)}</small></div></div>`;
+  }
+  function standardRow(item){
+    return `<div class="market-v150-row">${nameCell(item.icon,item.name,item.sub)}${item.cells.map(c=>marketCell(c.main,c.sub,c.cls)).join('')}</div>`;
+  }
+  function groupCard(title, subtitle, rows, extraClass=''){
+    const accum=getAccumLabel();
+    return `<article class="market-v150-card ${extraClass}"><div class="market-v150-card-head"><div><span>${esc(title)}</span><small>${esc(subtitle)}</small></div></div><div class="market-v150-table-head"><span>Indicador</span><span>Fechado</span><span>Atual</span><span>Ano</span><span>${esc(accum)}</span></div>${rows.map(standardRow).join('')}</article>`;
+  }
+  function usCard(rows){
+    const accum=getAccumLabel();
+    return `<article class="market-v150-card us"><div class="market-v150-card-head"><div><span>Bolsas dos Estados Unidos</span><small>Retornos convertidos em BRL, em USD ou nas duas moedas</small></div><div class="market-v150-us-toggle" role="group" aria-label="Moeda dos índices dos Estados Unidos">${['brl','usd','both'].map(mode=>`<button type="button" data-v150-us="${mode}" class="${state.usMode===mode?'active':''}" aria-pressed="${state.usMode===mode}">${mode==='both'?'Ambos':mode.toUpperCase()}</button>`).join('')}</div></div><div class="market-v150-table-head"><span>Índice</span><span>Fechado</span><span>Atual</span><span>Ano</span><span>${esc(accum)}</span></div>${rows.map(r=>`<div class="market-v150-row">${nameCell(r.icon,r.name,r.sub)}<div class="market-v150-cell">${usHtml(r.closed,state.usMode)}</div><div class="market-v150-cell">${usHtml(r.current,state.usMode)}${r.points&&r.points!=='—'?`<small class="market-v150-points">${esc(r.points)}</small>`:''}</div><div class="market-v150-cell">${usHtml(r.year,state.usMode)}</div><div class="market-v150-cell">${usHtml(r.accum,state.usMode)}</div></div>`).join('')}</article>`;
+  }
+
+  function collectData(){
+    const closed=getClosedPeriod();
+    const current=getCurrentPeriod();
+    const accum=getAccumLabel();
+    const ipcaCurrentEl=qs('#row-ipca .td-cur');
+    const ipcaCurrentTxt=clean(ipcaCurrentEl?.textContent||'');
+    const ipcaCurrent = /aguard/i.test(ipcaCurrentTxt) ? '—' : valueOrDash(ipcaCurrentTxt.match(/[+-]?\d+(?:[.,]\d+)?%/)?.[0]||'—');
+    return {
+      closed,current,accum,
+      cdi:{closed:valueOrDash(text('cdi-mes-ant')),current:valueOrDash(text('cdi-mes-cur')),year:valueOrDash(text('cdi-ano')),accum:valueOrDash(text('cdi-acum-v2'))},
+      ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2'))},
+      dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
+      ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
+      us:[
+        {icon:'🌎',name:'S&P 500',sub:'índice amplo dos EUA',closed:parseUs('sp-ant-var'),current:parseUs('sp-cur-var'),year:parseUs('sp-ano-var'),accum:parseUs('sp-acum-var'),points:valueOrDash(text('sp-cur-pts'))},
+        {icon:'🏛️',name:'Dow Jones',sub:'empresas blue chips',closed:parseUs('dow-ant-var'),current:parseUs('dow-cur-var'),year:parseUs('dow-ano-var'),accum:parseUs('dow-acum-var'),points:valueOrDash(text('dow-cur-pts'))},
+        {icon:'💻',name:'Nasdaq',sub:'empresas de tecnologia',closed:parseUs('nasdaq-ant-var'),current:parseUs('nasdaq-cur-var'),year:parseUs('nasdaq-ano-var'),accum:parseUs('nasdaq-acum-var'),points:valueOrDash(text('nasdaq-cur-pts'))}
+      ]
+    };
+  }
+
+  function summaryKpi(label, main, sub, mainClass=''){
+    const cls=mainClass||pctClass(main);
+    return `<div class="market-v150-summary-kpi"><b>${esc(label)}</b><strong class="${cls}">${esc(main)}</strong><small class="${pctClass(sub)}">${esc(sub)}</small></div>`;
+  }
+  function compactUsValue(pair, mode){
+    const resolved = mode === 'usd' ? 'usd' : 'brl';
+    return valueOrDash(pair?.[resolved] || '—');
+  }
+  function closedMetric(label, main, subLabel, subValue, mainClass=''){
+    const cls=mainClass || pctClass(main);
+    return `<article class="market-v159-kpi"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong><small><b>${esc(subLabel)}</b><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))}</em></small></article>`;
+  }
+  function currentMetric(label, main, variation, mainClass='neu'){
+    return `<div class="market-v159-current-metric"><span>${esc(label)}</span><strong class="${mainClass}">${esc(valueOrDash(main))}</strong><em class="${pctClass(variation)}">${esc(valueOrDash(variation))}</em></div>`;
+  }
+  function usCompactCard(item, mode, accum){
+    const current=compactUsValue(item.current,mode);
+    const year=compactUsValue(item.year,mode);
+    const total=compactUsValue(item.accum,mode);
+    return `<article class="market-v159-us-card"><div class="market-v159-us-name"><span>${item.icon}</span><strong>${esc(item.name)}</strong></div><div class="market-v159-us-current"><span>Mês atual</span><strong class="${pctClass(current)}">${esc(current)}</strong></div><div class="market-v159-us-foot"><span><b>Ano</b><em class="${pctClass(year)}">${esc(year)}</em></span><span><b>${esc(accum)}</b><em class="${pctClass(total)}">${esc(total)}</em></span></div></article>`;
+  }
+  function buildDashboard(data){
+    const body=document.getElementById('sec-painel-body');
+    if(!body) return null;
+    qsa('#marketDashboardV146,.market-exec-dashboard-v146',body).forEach(el=>el.remove());
+    let shell=document.getElementById('marketDashboardV150');
+    if(!shell){
+      shell=document.createElement('div');
+      shell.id='marketDashboardV150';
+      shell.className='market-v150-shell market-v159-shell';
+      const table=qs(':scope > .indic-table-wrap',body) || qs('.indic-table-wrap',body);
+      body.insertBefore(shell,table||body.firstChild);
+    }
+    shell.classList.add('market-v159-shell');
+    const usMode=state.usMode==='usd'?'usd':'brl';
+    const awaiting=[];
+    if(data.cdi.current==='—') awaiting.push('CDI');
+    if(data.ipca.current==='—') awaiting.push('IPCA');
+    const awaitingText=awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : 'Indicadores correntes disponíveis';
+
+    shell.innerHTML=`
+      <div class="market-v150-head market-v159-head">
+        <div class="market-v150-title market-v159-title">
+          <strong>Indicadores de mercado</strong>
+          <div class="market-v150-periods market-v159-periods"><span><b>Fechado</b> ${esc(data.closed)}</span><i></i><span><b>Atual</b> ${esc(data.current)} parcial</span></div>
+        </div>
+        <div class="market-v150-view-switch" role="group" aria-label="Modo de visualização do painel">
+          <button type="button" data-v150-mode="exec" class="${state.mode==='exec'?'active':''}" aria-pressed="${state.mode==='exec'}">Visão executiva</button>
+          <button type="button" data-v150-mode="analytic" class="${state.mode==='analytic'?'active':''}" aria-pressed="${state.mode==='analytic'}">Tabela analítica</button>
+        </div>
+      </div>
+      <div class="market-v150-executive market-v159-executive">
+        <section class="market-v159-section market-v159-closed">
+          <div class="market-v159-section-head"><div><span>Fechamento</span><strong>${esc(data.closed)}</strong></div><small>Último mês consolidado</small></div>
+          <div class="market-v159-kpi-grid">
+            ${closedMetric('CDI',data.cdi.closed,data.accum,data.cdi.accum)}
+            ${closedMetric('IPCA',data.ipca.closed,data.accum,data.ipca.accum)}
+            ${closedMetric('Dólar PTAX',data.dolar.closedQuote,'Variação no mês',data.dolar.closedVar,'neu')}
+            ${closedMetric('Ibovespa',data.ibov.closedPoints,'Variação no mês',data.ibov.closedVar,'neu')}
+          </div>
+        </section>
+
+        <section class="market-v159-current" aria-label="Mês atual">
+          <div class="market-v159-current-copy"><span>Mês atual</span><strong>${esc(data.current)} · parcial</strong><small>${esc(awaitingText)}</small></div>
+          ${currentMetric('Dólar',data.dolar.currentQuote,data.dolar.currentVar)}
+          ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
+        </section>
+
+        <section class="market-v159-section market-v159-us">
+          <div class="market-v159-section-head">
+            <div><span>Bolsas dos EUA</span><strong>Retornos em ${usMode.toUpperCase()}</strong></div>
+            <div class="market-v150-us-toggle market-v159-us-toggle" role="group" aria-label="Moeda dos índices dos Estados Unidos">
+              ${['brl','usd'].map(mode=>`<button type="button" data-v150-us="${mode}" class="${usMode===mode?'active':''}" aria-pressed="${usMode===mode}">${mode.toUpperCase()}</button>`).join('')}
+            </div>
+          </div>
+          <div class="market-v159-us-grid">${data.us.map(item=>usCompactCard(item,usMode,data.accum)).join('')}</div>
+        </section>
+      </div>`;
+    return shell;
+  }
+
+  function applyMode(){
+    const body=document.getElementById('sec-painel-body');
+    const shell=document.getElementById('marketDashboardV150');
+    const table=body && (qs(':scope > .indic-table-wrap',body)||qs('.indic-table-wrap',body));
+    if(!body||!shell||!table) return;
+    const mobile=window.innerWidth<DESKTOP;
+    body.classList.toggle('market-v150-mode-exec',!mobile && state.mode==='exec');
+    body.classList.toggle('market-v150-mode-analytic',!mobile && state.mode==='analytic');
+    shell.style.display=mobile?'none':'';
+    if(mobile){ table.style.display=''; table.hidden=false; }
+    else { table.style.display=''; table.hidden=false; }
+  }
+  function bind(shell){
+    if(!shell || shell.dataset.boundV150==='1') return;
+    shell.dataset.boundV150='1';
+    shell.addEventListener('click',ev=>{
+      const modeBtn=ev.target.closest('[data-v150-mode]');
+      if(modeBtn){ state.mode=modeBtn.dataset.v150Mode==='analytic'?'analytic':'exec'; state.lastFingerprint=''; sync(true); return; }
+      const usBtn=ev.target.closest('[data-v150-us]');
+      if(usBtn){ state.usMode=['brl','usd','both'].includes(usBtn.dataset.v150Us)?usBtn.dataset.v150Us:'brl'; state.lastFingerprint=''; sync(true); }
+    });
+  }
+  function fingerprint(data){ return JSON.stringify(data)+`|${state.mode}|${state.usMode}`; }
+  function sync(force=false){
+    try{
+      const body=document.getElementById('sec-painel-body');
+      if(!body) return;
+      const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+      document.documentElement.classList.add('market-panel-pro-v150');
+      const data=collectData();
+      normalizeClosedPeriodLabels(data.closed,data.current);
+      const fp=fingerprint(data);
+      let shell=document.getElementById('marketDashboardV150');
+      if(force || fp!==state.lastFingerprint || !shell){ shell=buildDashboard(data); state.lastFingerprint=fp; }
+      bind(shell);
+      applyMode();
+    }catch(err){ console.warn('[v150 mercado]',err); }
+  }
+  function debounce(fn,wait){ let t; return function(){ clearTimeout(t); t=setTimeout(fn,wait); }; }
+  function init(){
+    [120,450,900,1600,2800,4800,8000,12000].forEach(ms=>setTimeout(()=>sync(false),ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('.market-period-tabs .indic-tab[data-months],#sec-mercado-painel,.section-toggle-btn')) setTimeout(()=>sync(true),120);
+    },true);
+    window.addEventListener('resize',debounce(()=>{applyMode();},140),{passive:true});
+    window.addEventListener('pageshow',()=>setTimeout(()=>sync(true),120),{once:true});
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  window.__ELTAUM_MARKET_PANEL_V150__={sync:()=>sync(true),getClosedPeriod,getCurrentPeriod,state};
+})();
+
+
+/* ==========================================================
+   ELTAUM v151 — integração dos componentes restaurados
+   - navegação com offset e destaque da seção
+   - selects dos rankings sincronizados com os filtros existentes
+   - classes completas de ativo
+   - painel lateral de atenção alimentado apenas por retornos negativos
+========================================================== */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_FUND_CATALOG_NAVIGATION_20260611_v153';
+
+  const q=(s,r=document)=>r.querySelector(s);
+  const qa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const esc=(v)=>String(v??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  const normalize=(v)=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  const nval=(v)=>{ try{return typeof toNum==='function'?toNum(v):Number(String(v??'').replace('%','').replace(',','.'));}catch(e){return null;} };
+  const pct=(v)=>{const n=nval(v);if(n===null||!Number.isFinite(n))return '—';return (n>0?'+':'')+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';};
+
+  function categoryMatches(text,filter){
+    const t=normalize(text);
+    const f=String(filter||'todos');
+    if(f==='todos') return true;
+    const isFmp=/\bFMP\b|PRIVATIZA/.test(t);
+    if(f==='sem-fmp') return !isFmp;
+    if(f==='fmp') return isFmp;
+    if(f==='renda-fixa-simples') return /RENDA FIXA SIMPLES|RF SIMPLES/.test(t);
+    if(f==='renda-fixa-referenciado') return /RENDA FIXA REFERENCIADO|RF REFERENCIADO|REF DI/.test(t);
+    if(f==='renda-fixa-curto-prazo') return /RENDA FIXA CURTO|RF CURTO|CURTO PRAZO/.test(t);
+    if(f==='renda-fixa') return /RENDA FIXA|\bRF\b/.test(t) && !/SIMPLES|REFERENCIADO|REF DI|CURTO PRAZO|RF CURTO/.test(t);
+    if(f==='multimercado') return /MULTIMERCADO|\bMM\b/.test(t);
+    if(f==='cambial') return /CAMBIAL|CAMBIO|DOLAR/.test(t);
+    if(f==='acoes') return /ACOES|IBOVESPA/.test(t) && !isFmp;
+    if(f==='fundo-de-indice') return /FUNDO DE INDICE|\bINDICE\b|\bETF\b/.test(t);
+    return true;
+  }
+  window.rankCategoryMatchesV151=categoryMatches;
+
+  // Substitui o filtro global usado pelo renderer legado sem reescrever o renderer inteiro.
+  try{
+    passaFiltroRanking=function(r){
+      const text=[r?.Categoria,r?.Fundo,r?.Benchmark].filter(Boolean).join(' ');
+      return categoryMatches(text,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
+    };
+  }catch(e){}
+
+  function navOffset(){
+    const nav=q('#desktopAnchorNavV131');
+    return nav && nav.offsetParent!==null ? nav.getBoundingClientRect().height+18 : 18;
+  }
+  function scrollToTarget(target,focusSearch){
+    if(!target) return;
+    const top=Math.max(0,target.getBoundingClientRect().top+window.scrollY-navOffset());
+    window.scrollTo({top,behavior:'smooth'});
+    if(focusSearch){
+      setTimeout(()=>{const inp=q('#searchInput');if(inp){try{inp.focus({preventScroll:true});}catch(e){inp.focus();}}},520);
+    }
+  }
+  function bindNavigation(){
+    const nav=q('#desktopAnchorNavV131');
+    if(!nav||nav.dataset.v151Bound==='1') return;
+    nav.dataset.v151Bound='1';
+    nav.addEventListener('click',ev=>{
+      const a=ev.target.closest('[data-anchor-target]');
+      if(!a) return;
+      ev.preventDefault();
+      const detailsId=a.dataset.openDetails;
+      const bodyId=a.dataset.openSection;
+      if(detailsId){const d=document.getElementById(detailsId);if(d&&'open' in d)d.open=true;}
+      if(bodyId){const b=document.getElementById(bodyId);if(b)b.hidden=false;}
+      const target=document.getElementById(a.dataset.anchorTarget);
+      qa('.desktop-anchor-link-v131',nav).forEach(x=>x.classList.toggle('active',x===a));
+      try{history.replaceState(null,'',location.pathname+location.search);}catch(e){}
+      requestAnimationFrame(()=>scrollToTarget(target,a.dataset.searchFocus==='1'));
+    });
+
+    if('IntersectionObserver' in window){
+      const links=qa('[data-anchor-target]',nav).filter(a=>a.dataset.searchFocus!=='1');
+      const map=new Map(links.map(a=>[a.dataset.anchorTarget,a]));
+      const io=new IntersectionObserver(entries=>{
+        const visible=entries.filter(e=>e.isIntersecting).sort((a,b)=>Math.abs(a.boundingClientRect.top)-Math.abs(b.boundingClientRect.top))[0];
+        if(!visible) return;
+        const active=map.get(visible.target.id);
+        if(active) qa('.desktop-anchor-link-v131',nav).forEach(a=>a.classList.toggle('active',a===active));
+      },{rootMargin:'-18% 0px -70% 0px',threshold:[0,.01]});
+      map.forEach((_,id)=>{const el=document.getElementById(id);if(el)io.observe(el);});
+    }
+  }
+
+  function syncRankingControls(){
+    const cls=q('#rankingClassSelectV136');
+    const period=q('#rankingPeriodSelectV136');
+    if(cls && typeof activeRankFilter!=='undefined' && cls.value!==activeRankFilter) cls.value=activeRankFilter;
+    if(period && typeof activeRankPeriods!=='undefined'){
+      const p=activeRankPeriods.topFundos||'12m';
+      if(period.value!==p) period.value=p;
+    }
+  }
+
+  function filteredRankingRows(includeMissing=false){
+    if(typeof allRows==='undefined'||!Array.isArray(allRows)) return [];
+    return allRows.filter(r=>includeMissing ? true : (typeof temDados==='function'?temDados(r):true)).filter(r=>{
+      try{return passaFiltroRanking(r);}catch(e){return true;}
+    });
+  }
+
+  function attentionRows(rows,campo,reason,limit=4){
+    return rows
+      .filter(r=>{const n=nval(r[campo]);return n!==null&&Number.isFinite(n)&&n<0;})
+      .sort((a,b)=>nval(a[campo])-nval(b[campo]))
+      .slice(0,limit)
+      .map(r=>`<button type="button" class="attention-row-v136" data-attention-fund="${esc(r.Fundo||'')}"><span><span class="fund">${esc(r.Fundo||'—')}</span><span class="reason">${esc(reason)}</span></span><span class="value">${esc(pct(r[campo]))}</span></button>`).join('');
+  }
+
+  function renderAttention(){
+    const host=q('#rankingAttentionV136 .attention-body-v136');
+    if(!host) return;
+    const rows=filteredRankingRows(false);
+    const neg12=rows.filter(r=>{const n=nval(r['Acum. 12M (%)']);return n!==null&&n<0;});
+    const negAno=rows.filter(r=>{const n=nval(r['Acum. Ano (%)']);return n!==null&&n<0;});
+    const negMes=rows.filter(r=>{const n=nval(r['Acum. Mes (%)']);return n!==null&&n<0;});
+    const missing=(typeof allRows!=='undefined'&&Array.isArray(allRows)?allRows:[]).filter(r=>{
+      try{return (typeof temDados==='function'?!temDados(r):false)&&passaFiltroRanking(r);}catch(e){return false;}
+    });
+    let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
+    if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
+    const year=attentionRows(rows,'Acum. Ano (%)','Ano negativo — verificar a tese de manutenção',3);
+    const pipeline=missing.slice(0,3).map(r=>`<button type="button" class="attention-row-v136 pipeline" data-attention-fund="${esc(r.Fundo||'')}"><span><span class="fund">${esc(r.Fundo||'—')}</span><span class="reason">Sem cota/rentabilidade suficiente na base</span></span><span class="value">—</span></button>`).join('');
+    const insight=neg12.length
+      ? `<strong>${neg12.length}</strong> fundo(s) com retorno negativo em 12 meses no filtro atual. Use os alertas como ponto de partida para investigar classe, prazo, benchmark e aderência ao perfil.`
+      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês, no ano e fundos sem dados.`;
+    host.innerHTML=`
+      <div class="attention-metric-grid-v136">
+        <div class="attention-metric-v136"><span>12M negativo</span><strong>${neg12.length}</strong></div>
+        <div class="attention-metric-v136"><span>Ano negativo</span><strong>${negAno.length}</strong></div>
+        <div class="attention-metric-v136"><span>Sem dados</span><strong>${missing.length}</strong></div>
+      </div>
+      <div class="attention-block-v136"><h3>Insight SIPII</h3><div class="attention-insight-v136">${insight}</div></div>
+      ${worst?`<div class="attention-block-v136"><h3>Piores leituras</h3><div class="attention-list-v136">${worst}</div></div>`:''}
+      ${year?`<div class="attention-block-v136"><h3>Negativos no ano</h3><div class="attention-list-v136">${year}</div></div>`:''}
+      ${pipeline?`<div class="attention-block-v136"><h3>Sem dados / pipeline</h3><div class="attention-list-v136">${pipeline}</div></div>`:''}
+      <div class="attention-foot-v136">Leitura automática e informativa. O alerta não substitui suitability, objetivos, liquidez e horizonte do cliente.</div>`;
+  }
+
+  function renderRankingsAndAttention(){
+    try{ if(typeof renderRankings==='function') renderRankings(); }catch(e){console.error('v151 ranking render',e);}
+    syncRankingControls();
+    renderAttention();
+  }
+
+  function bindRankingControls(){
+    const cls=q('#rankingClassSelectV136');
+    const period=q('#rankingPeriodSelectV136');
+    if(cls&&cls.dataset.v151Bound!=='1'){
+      cls.dataset.v151Bound='1';
+      cls.addEventListener('change',()=>{
+        try{activeRankFilter=cls.value||'todos';}catch(e){}
+        renderRankingsAndAttention();
+      });
+    }
+    if(period&&period.dataset.v151Bound!=='1'){
+      period.dataset.v151Bound='1';
+      period.addEventListener('change',()=>{
+        try{activeRankPeriods.topFundos=period.value||'12m';}catch(e){}
+        renderRankingsAndAttention();
+      });
+    }
+    const section=q('#rankingsSection');
+    if(section&&section.dataset.v151AttentionBound!=='1'){
+      section.dataset.v151AttentionBound='1';
+      section.addEventListener('click',ev=>{
+        const row=ev.target.closest('[data-attention-fund]');
+        if(!row) return;
+        const name=row.dataset.attentionFund||'';
+        const input=q('#searchInput');
+        if(input){
+          input.value=name;
+          input.dispatchEvent(new Event('input',{bubbles:true}));
+          scrollToTarget(q('#sec-fundos'),true);
+        }
+      });
+    }
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-rank-filter],[data-rank-period]')) setTimeout(()=>{syncRankingControls();renderAttention();},40);
+    },true);
+  }
+
+  function init(){
+    const meta=q('meta[name="app-build"]');if(meta)meta.content=BUILD;
+    document.documentElement.classList.add('fund-catalog-navigation-v153','fund-details-enrichment-v154');
+    bindNavigation();
+    bindRankingControls();
+    syncRankingControls();
+    setTimeout(renderRankingsAndAttention,250);
+    setTimeout(renderRankingsAndAttention,1100);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v156 — integração oficial fundos.json
+   Une metadados operacionais ao CSV por CNPJ, código ou nome.
+════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_FUNDOS_META_INTEGRATION_20260612_v156';
+  function syncBuild(){
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    document.documentElement.classList.add('fundos-meta-integration-v156');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',syncBuild,{once:true}); else syncBuild();
+  window.__ELTAUM_FUNDOS_META_V156__={
+    build:BUILD,
+    get totalCnpj(){ return Object.keys(_fundosMetaMap||{}).length; },
+    get totalCodigos(){ return Object.keys(_fundosMetaByCode||{}).length; },
+    localizar(cnpjOuCodigo){
+      const d=String(cnpjOuCodigo||'').replace(/\D/g,'');
+      return _fundosMetaMap[d] || _fundosMetaByCode[d] || null;
+    },
+    auditar(){
+      const rows=Array.isArray(allRows)?allRows:[];
+      const vinculados=rows.filter(r=>!!r.__fundosMeta).length;
+      return {linhasCsv:rows.length,vinculados,semVinculo:rows.length-vinculados,cnpjsMeta:Object.keys(_fundosMetaMap||{}).length};
+    }
+  };
+})();
+
+
+/* ==========================================================
+   ELTAUM v158 — detalhes do fundo organizados por jornada
+========================================================== */
+(function(){
+  const BUILD='ELTAUM_FUND_DETAIL_EXECUTIVE_20260612_v158';
+  function mark(){
+    document.documentElement.classList.add('fund-detail-executive-v158');
+    window.__ELTAUM_BUILD_V158__=BUILD;
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark,{once:true});
+  else mark();
+})();
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_ANALYTIC_COMPACT_20260612_v160
+   Compactação controlada da tabela analítica e seletor BRL/USD.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_ANALYTIC_COMPACT_20260612_v160';
+  const state={currency:'brl'};
+
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+
+  function renameGroups(table){
+    const cdi=document.getElementById('row-cdi');
+    const dolar=document.getElementById('row-dolar');
+    const ibov=document.getElementById('row-ibov');
+    if(cdi?.previousElementSibling?.classList.contains('group-row')){
+      const span=qs('.group-lbl>span',cdi.previousElementSibling);
+      if(span) span.textContent='Taxas e inflação';
+    }
+    if(dolar?.previousElementSibling?.classList.contains('group-row')){
+      const span=qs('.group-lbl>span',dolar.previousElementSibling);
+      if(span) span.textContent='Brasil — câmbio e bolsa';
+    }
+    if(ibov?.previousElementSibling?.classList.contains('group-row')){
+      ibov.previousElementSibling.hidden=true;
+      ibov.previousElementSibling.style.display='none';
+    }
+    const sp=document.getElementById('row-sp');
+    if(sp?.previousElementSibling?.classList.contains('group-row')){
+      const span=qs('.group-lbl>span',sp.previousElementSibling);
+      if(span) span.textContent='Bolsas dos Estados Unidos';
+    }
+  }
+
+  function applyCurrency(wrap,mode){
+    state.currency=['brl','usd','both'].includes(mode)?mode:'brl';
+    wrap.classList.remove('us-mode-brl','us-mode-usd','us-mode-both');
+    wrap.classList.add(`us-mode-${state.currency}`);
+    qsa('[data-analytic-currency]',wrap).forEach(btn=>{
+      const active=btn.dataset.analyticCurrency===state.currency;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',String(active));
+    });
+  }
+
+  function buildTools(wrap){
+    let tools=qs('.market-analytic-tools-v160',wrap);
+    if(tools) return tools;
+    tools=document.createElement('div');
+    tools.className='market-analytic-tools-v160';
+    tools.innerHTML=`
+      <div class="market-analytic-tools-title-v160">
+        <strong>Tabela analítica</strong>
+        <small>Comparação por período; cotações e pontos permanecem neutros</small>
+      </div>
+      <div class="market-analytic-currency-v160" role="group" aria-label="Moeda dos índices dos Estados Unidos">
+        <span>Bolsas EUA</span>
+        <button type="button" data-analytic-currency="brl" aria-pressed="true">BRL</button>
+        <button type="button" data-analytic-currency="usd" aria-pressed="false">USD</button>
+        <button type="button" data-analytic-currency="both" aria-pressed="false">Ambos</button>
+      </div>`;
+    wrap.insertBefore(tools,wrap.firstChild);
+    tools.addEventListener('click',ev=>{
+      const btn=ev.target.closest('[data-analytic-currency]');
+      if(!btn) return;
+      applyCurrency(wrap,btn.dataset.analyticCurrency);
+    });
+    return tools;
+  }
+
+  function setup(){
+    const body=document.getElementById('sec-painel-body');
+    const wrap=body && (qs(':scope > .indic-table-wrap',body)||qs('.indic-table-wrap',body));
+    const table=wrap && qs('.indic-table-v2',wrap);
+    if(!wrap||!table) return;
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    document.documentElement.classList.add('market-analytic-compact-v160');
+    wrap.classList.add('market-analytic-compact-v160');
+    renameGroups(table);
+    buildTools(wrap);
+    applyCurrency(wrap,state.currency);
+  }
+
+  function init(){
+    setup();
+    [250,700,1400,2800,5200,9000].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,#sec-mercado-painel')){
+        setTimeout(setup,100);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_ANALYTIC_V160__={setup,get currency(){return state.currency;}};
+})();
+
+/* ELTAUM_DOLAR_PTAX_REORG_20260612_v162 */
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_ANALYTIC_DEDUP_20260612_v163
+   Remove contexto repetido das células da tabela analítica.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_ANALYTIC_DEDUP_20260612_v163';
+
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function cleanStatus(value){
+    const text=String(value||'').trim().toLowerCase();
+    if(text.includes('aguard')) return 'aguardando';
+    if(text.includes('parcial')) return 'parcial';
+    return '';
+  }
+  function titleCase(value){
+    const s=String(value||'').trim();
+    return s ? s.charAt(0).toUpperCase()+s.slice(1) : '';
+  }
+  function hideContext(cell){
+    qsa(':scope > .v2-sub',cell).forEach(el=>{
+      el.classList.add('redundant-context-v163');
+      el.setAttribute('aria-hidden','true');
+    });
+  }
+  function compactCurrentCell(cell){
+    const sub=qs(':scope > .v2-sub',cell);
+    const statusNode=qs('.period-status',cell);
+    const primaryStatus=qs('.analytic-status-primary-v163',cell);
+    const dash=qs('.v2-val.dash',cell);
+    const status=cleanStatus(
+      statusNode?.textContent ||
+      sub?.textContent ||
+      primaryStatus?.textContent ||
+      dash?.textContent ||
+      ''
+    );
+
+    cell.classList.toggle('status-cell-v164',Boolean(status));
+
+    // O status aparece uma única vez, como chip centralizado.
+    // Esconde o antigo valor principal criado pela v163 para evitar duplicação
+    // em execuções repetidas do setup().
+    [dash,primaryStatus].filter(Boolean).forEach(el=>{
+      el.style.display='none';
+      el.setAttribute('aria-hidden','true');
+    });
+
+    if(status && sub){
+      sub.classList.remove('redundant-context-v163');
+      sub.removeAttribute('aria-hidden');
+      sub.classList.add('status-only-v163');
+      sub.innerHTML=`<span class="analytic-status-chip-v163 status-${status}">${titleCase(status)}</span>`;
+      return;
+    }
+
+    if(sub){
+      sub.classList.add('redundant-context-v163');
+      sub.setAttribute('aria-hidden','true');
+    }
+  }
+
+  function setup(){
+    const body=document.getElementById('sec-painel-body');
+    const wrap=body && (qs(':scope > .indic-table-wrap',body)||qs('.indic-table-wrap',body));
+    const table=wrap && qs('.indic-table-v2',wrap);
+    if(!wrap||!table) return;
+
+    document.documentElement.classList.add('market-analytic-dedup-v163');
+    wrap.classList.add('market-analytic-dedup-v163');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+
+    const toolSub=qs('.market-analytic-tools-title-v160 small',wrap);
+    if(toolSub) toolSub.textContent='Comparação por período';
+
+    const acumSub=document.getElementById('th-acum-sub-v2');
+    if(acumSub){
+      acumSub.classList.add('redundant-context-v163');
+      acumSub.setAttribute('aria-hidden','true');
+    }
+    const anoSub=document.getElementById('th-ano-sub');
+    if(anoSub) anoSub.textContent='até agora';
+
+    qsa('tbody tr.data-row',table).forEach(row=>{
+      const cells=qsa(':scope > td',row);
+      if(cells.length<5) return;
+      hideContext(cells[1]);       // período já está em "Último fechado"
+      compactCurrentCell(cells[2]); // mantém apenas Parcial/Aguardando
+      hideContext(cells[3]);       // "No ano" já está no cabeçalho
+      hideContext(cells[4]);       // "12M" já está no cabeçalho
+    });
+
+    qsa('#row-sp .ind-v2-sub,#row-dow .ind-v2-sub,#row-nasdaq .ind-v2-sub',table)
+      .forEach(el=>{ el.textContent='Pontos · variação'; });
+  }
+
+  function init(){
+    setup();
+    [180,500,1000,1800,3200,5600,9000].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel')){
+        setTimeout(setup,80);
+        setTimeout(setup,320);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_ANALYTIC_V163__={setup};
+})();
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_ANALYTIC_ALIGNMENT_20260612_v164
+   Alinhamento híbrido: nomes à esquerda, números à direita,
+   cabeçalhos e estados operacionais centralizados.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_ANALYTIC_ALIGNMENT_20260612_v164';
+  function setup(){
+    const wrap=document.querySelector('#sec-painel-body .indic-table-wrap');
+    const table=wrap && wrap.querySelector('.indic-table-v2');
+    if(!wrap||!table) return;
+    document.documentElement.classList.add('market-analytic-alignment-v164');
+    wrap.classList.add('market-analytic-alignment-v164');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+
+    // Segurança extra: se uma execução anterior deixou dois “Aguardando”,
+    // conserva somente o chip de status.
+    table.querySelectorAll('.status-cell-v164').forEach(cell=>{
+      const primary=cell.querySelector('.analytic-status-primary-v163');
+      if(primary){
+        primary.style.display='none';
+        primary.setAttribute('aria-hidden','true');
+      }
+    });
+  }
+  function init(){
+    setup();
+    [180,500,1000,1800,3200,5600].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel')){
+        setTimeout(setup,100);
+        setTimeout(setup,350);
+      }
+    },true);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_ANALYTIC_V164__={setup};
 })();
