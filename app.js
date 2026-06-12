@@ -12717,3 +12717,111 @@ if(!isSearchInput(el)) return;
 })();
 
 /* ELTAUM_DOLAR_PTAX_REORG_20260612_v162 */
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_ANALYTIC_DEDUP_20260612_v163
+   Remove contexto repetido das células da tabela analítica.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_ANALYTIC_DEDUP_20260612_v163';
+
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+  function cleanStatus(value){
+    const text=String(value||'').trim().toLowerCase();
+    if(text.includes('aguard')) return 'aguardando';
+    if(text.includes('parcial')) return 'parcial';
+    return '';
+  }
+  function titleCase(value){
+    const s=String(value||'').trim();
+    return s ? s.charAt(0).toUpperCase()+s.slice(1) : '';
+  }
+  function hideContext(cell){
+    qsa(':scope > .v2-sub',cell).forEach(el=>{
+      el.classList.add('redundant-context-v163');
+      el.setAttribute('aria-hidden','true');
+    });
+  }
+  function compactCurrentCell(cell){
+    const sub=qs(':scope > .v2-sub',cell);
+    const statusNode=qs('.period-status',cell);
+    const status=cleanStatus(statusNode?.textContent || sub?.textContent || '');
+    const dash=qs('.v2-val.dash',cell);
+
+    if(status==='aguardando' && dash){
+      dash.textContent='Aguardando';
+      dash.classList.remove('dash');
+      dash.classList.add('analytic-status-primary-v163');
+      if(sub){
+        sub.classList.add('redundant-context-v163');
+        sub.setAttribute('aria-hidden','true');
+      }
+      return;
+    }
+
+    if(status && sub){
+      sub.classList.remove('redundant-context-v163');
+      sub.removeAttribute('aria-hidden');
+      sub.classList.add('status-only-v163');
+      sub.innerHTML=`<span class="analytic-status-chip-v163 status-${status}">${titleCase(status)}</span>`;
+      return;
+    }
+
+    if(sub){
+      sub.classList.add('redundant-context-v163');
+      sub.setAttribute('aria-hidden','true');
+    }
+  }
+
+  function setup(){
+    const body=document.getElementById('sec-painel-body');
+    const wrap=body && (qs(':scope > .indic-table-wrap',body)||qs('.indic-table-wrap',body));
+    const table=wrap && qs('.indic-table-v2',wrap);
+    if(!wrap||!table) return;
+
+    document.documentElement.classList.add('market-analytic-dedup-v163');
+    wrap.classList.add('market-analytic-dedup-v163');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+
+    const toolSub=qs('.market-analytic-tools-title-v160 small',wrap);
+    if(toolSub) toolSub.textContent='Comparação por período';
+
+    const acumSub=document.getElementById('th-acum-sub-v2');
+    if(acumSub){
+      acumSub.classList.add('redundant-context-v163');
+      acumSub.setAttribute('aria-hidden','true');
+    }
+    const anoSub=document.getElementById('th-ano-sub');
+    if(anoSub) anoSub.textContent='até agora';
+
+    qsa('tbody tr.data-row',table).forEach(row=>{
+      const cells=qsa(':scope > td',row);
+      if(cells.length<5) return;
+      hideContext(cells[1]);       // período já está em "Último fechado"
+      compactCurrentCell(cells[2]); // mantém apenas Parcial/Aguardando
+      hideContext(cells[3]);       // "No ano" já está no cabeçalho
+      hideContext(cells[4]);       // "12M" já está no cabeçalho
+    });
+
+    qsa('#row-sp .ind-v2-sub,#row-dow .ind-v2-sub,#row-nasdaq .ind-v2-sub',table)
+      .forEach(el=>{ el.textContent='Pontos · variação'; });
+  }
+
+  function init(){
+    setup();
+    [180,500,1000,1800,3200,5600,9000].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel')){
+        setTimeout(setup,80);
+        setTimeout(setup,320);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_ANALYTIC_V163__={setup};
+})();

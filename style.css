@@ -27360,3 +27360,101 @@ html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-empty-v162{padding:14px 18px;
   html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162 .dolar-month-var{grid-column:2;grid-row:2}
   html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162 .dolar-month-val{grid-column:2;grid-row:1}
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   v163 — Tabela analítica sem contexto repetido
+   O período pertence ao cabeçalho; a célula mostra somente valor
+   e, quando necessário, o estado operacional (parcial/aguardando).
+   ═══════════════════════════════════════════════════════════════ */
+@media (min-width:901px){
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .v2-sub.redundant-context-v163,
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .th-sub.redundant-context-v163{
+    display:none!important;
+  }
+
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .data-row,
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .data-row td{
+    height:60px;
+  }
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .data-row td{
+    padding:10px 14px;
+    vertical-align:middle;
+  }
+
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .data-row td:not(:first-child){
+    text-align:right;
+  }
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .data-row td:not(:first-child) .v2-bar-row,
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .data-row td:not(:first-child) .us-market-block{
+    justify-content:flex-end;
+  }
+
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .status-only-v163{
+    display:flex!important;
+    justify-content:flex-end;
+    margin-top:5px!important;
+  }
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .analytic-status-chip-v163{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:20px;
+    padding:3px 7px;
+    border:1px solid rgba(126,146,183,.18);
+    border-radius:999px;
+    background:rgba(126,146,183,.07);
+    color:#94a2ba;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.57rem;
+    font-weight:720;
+    line-height:1;
+    letter-spacing:.025em;
+    text-transform:capitalize;
+    white-space:nowrap;
+  }
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .analytic-status-chip-v163.status-parcial{
+    border-color:rgba(86,157,232,.24);
+    background:rgba(86,157,232,.09);
+    color:#8fc5ff;
+  }
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .analytic-status-chip-v163.status-aguardando{
+    color:#929db2;
+  }
+
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .analytic-status-primary-v163{
+    display:inline-flex!important;
+    align-items:center;
+    justify-content:center;
+    min-height:25px;
+    padding:5px 9px;
+    border:1px solid rgba(126,146,183,.18);
+    border-radius:8px;
+    background:rgba(126,146,183,.06);
+    color:#98a4b9!important;
+    font-family:Inter,system-ui,sans-serif!important;
+    font-size:.65rem!important;
+    font-weight:680!important;
+    line-height:1!important;
+    letter-spacing:0!important;
+  }
+
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .market-analytic-tools-title-v160 small{
+    font-size:.61rem;
+  }
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .group-row td{
+    height:25px;
+    padding-top:6px;
+    padding-bottom:5px;
+  }
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .group-lbl > span{
+    color:#8f9bb1;
+  }
+
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .ind-v2-sub{
+    max-width:260px;
+  }
+
+  html.market-analytic-dedup-v163 .indic-table-wrap.market-analytic-compact-v160 .td-cur{
+    background:rgba(70,112,190,.025);
+  }
+}
