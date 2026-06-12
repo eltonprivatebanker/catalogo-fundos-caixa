@@ -1,4 +1,4 @@
-// ELTAUM_MARKET_ANALYTIC_TYPOGRAPHY_20260612_v161
+// ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){
@@ -4810,20 +4810,33 @@ function buildCopomCalendario(){
     return { ...r, _i:i, decisao, isNext, isFuture, klass, resultado };
   });
 
-  // Exibe a próxima reunião em primeiro plano; as demais continuam disponíveis no arraste.
-  const lista = proxIdx >= 0
-    ? [...base.slice(proxIdx), ...base.slice(0, proxIdx)]
-    : [...base].reverse();
+  // v167: primeiras leituras = três decisões mais recentes + próxima reunião.
+  const realizadas = base.filter(r => r.decisao).slice(-3).reverse();
+  const proxima = proxIdx >= 0 ? base[proxIdx] : null;
+  const futuras = base.filter((r,i) => i > proxIdx && !r.decisao);
+  const antigas = base.filter(r => !realizadas.includes(r) && r !== proxima && !futuras.includes(r));
+  const lista = [...realizadas, ...(proxima ? [proxima] : []), ...futuras, ...antigas];
 
-  container.innerHTML = lista.map((r) => {
-    return `<div class="copom-item ${r.klass} ${r.isNext ? 'next featured-next' : ''}" title="${r.num}ª reunião: ${r.datas}" data-original-order="${r._i}">
+  container.innerHTML = lista.map((r,position) => {
+    const extra = position >= 4 ? ' copom-extra-v167' : '';
+    return `<div class="copom-item ${r.klass} ${r.isNext ? 'next featured-next' : ''}${extra}" title="${r.num}ª reunião: ${r.datas}" data-original-order="${r._i}" role="listitem">
       <span class="copom-num">${r.num}ª reunião</span>
       <strong class="copom-date">${r.short}</strong>
       <small class="copom-result">${r.resultado}</small>
     </div>`;
   }).join('');
 
-  // Garante posição inicial no começo da faixa, onde agora fica a próxima reunião.
+  const nextDate = $('copomNextDateV167');
+  const nextStatus = $('copomNextStatusV167');
+  if(nextDate) nextDate.textContent = proxima ? proxima.short : 'Calendário concluído';
+  if(nextStatus) nextStatus.textContent = proxima ? (proxima.resultado || 'decisão pendente') : 'Sem novas reuniões em 2026';
+
+  container.classList.remove('is-expanded-v167');
+  const toggle = $('copomCalendarToggleV167');
+  if(toggle){
+    toggle.textContent = 'Ver calendário completo';
+    toggle.setAttribute('aria-expanded','false');
+  }
   requestAnimationFrame(() => { container.scrollLeft = 0; });
 }
 
@@ -5054,7 +5067,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
 
       <div class="fund-card-performance-v68" aria-label="Rentabilidade do fundo">
-        <div class="fund-card-performance-title-v68">Rentabilidade</div>
+        <div class="fund-card-performance-title-v68">Desempenho</div>
         <div class="fund-card-perf-short-v68">
           <span class="fund-card-perf-chip-v68"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
           <span class="fund-card-perf-chip-v68"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
@@ -12747,19 +12760,25 @@ if(!isSearchInput(el)) return;
   function compactCurrentCell(cell){
     const sub=qs(':scope > .v2-sub',cell);
     const statusNode=qs('.period-status',cell);
-    const status=cleanStatus(statusNode?.textContent || sub?.textContent || '');
+    const primaryStatus=qs('.analytic-status-primary-v163',cell);
     const dash=qs('.v2-val.dash',cell);
+    const status=cleanStatus(
+      statusNode?.textContent ||
+      sub?.textContent ||
+      primaryStatus?.textContent ||
+      dash?.textContent ||
+      ''
+    );
 
-    if(status==='aguardando' && dash){
-      dash.textContent='Aguardando';
-      dash.classList.remove('dash');
-      dash.classList.add('analytic-status-primary-v163');
-      if(sub){
-        sub.classList.add('redundant-context-v163');
-        sub.setAttribute('aria-hidden','true');
-      }
-      return;
-    }
+    cell.classList.toggle('status-cell-v164',Boolean(status));
+
+    // O status aparece uma única vez, como chip centralizado.
+    // Esconde o antigo valor principal criado pela v163 para evitar duplicação
+    // em execuções repetidas do setup().
+    [dash,primaryStatus].filter(Boolean).forEach(el=>{
+      el.style.display='none';
+      el.setAttribute('aria-hidden','true');
+    });
 
     if(status && sub){
       sub.classList.remove('redundant-context-v163');
@@ -12825,3 +12844,210 @@ if(!isSearchInput(el)) return;
   else init();
   window.__ELTAUM_MARKET_ANALYTIC_V163__={setup};
 })();
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_ANALYTIC_ALIGNMENT_20260612_v164
+   Alinhamento híbrido: nomes à esquerda, números à direita,
+   cabeçalhos e estados operacionais centralizados.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_ANALYTIC_ALIGNMENT_20260612_v164';
+  function setup(){
+    const wrap=document.querySelector('#sec-painel-body .indic-table-wrap');
+    const table=wrap && wrap.querySelector('.indic-table-v2');
+    if(!wrap||!table) return;
+    document.documentElement.classList.add('market-analytic-alignment-v164');
+    wrap.classList.add('market-analytic-alignment-v164');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+
+    // Segurança extra: se uma execução anterior deixou dois “Aguardando”,
+    // conserva somente o chip de status.
+    table.querySelectorAll('.status-cell-v164').forEach(cell=>{
+      const primary=cell.querySelector('.analytic-status-primary-v163');
+      if(primary){
+        primary.style.display='none';
+        primary.setAttribute('aria-hidden','true');
+      }
+    });
+  }
+  function init(){
+    setup();
+    [180,500,1000,1800,3200,5600].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel')){
+        setTimeout(setup,100);
+        setTimeout(setup,350);
+      }
+    },true);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_ANALYTIC_V164__={setup};
+})();
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MOBILE_UX_FIXES_20260612_v165
+   Status único, navegação estável dos rankings e ajustes mobile.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MOBILE_UX_FIXES_20260612_v165';
+  const qs=(s,r=document)=>r.querySelector(s);
+  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+
+  function setBuild(){
+    document.documentElement.classList.add('mobile-ux-fixes-v165');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function dedupeAnalyticStatuses(){
+    const table=qs('#sec-painel-body .indic-table-v2');
+    if(!table) return;
+    qsa('td',table).forEach(cell=>{
+      // Remove fisicamente o status principal legado; CSS !important antigo
+      // não poderá trazê-lo de volta em desktop ou mobile.
+      qsa('.analytic-status-primary-v163',cell).forEach(el=>el.remove());
+
+      const chips=qsa('.analytic-status-chip-v163',cell);
+      chips.slice(1).forEach(el=>el.remove());
+      if(chips.length){
+        cell.classList.add('status-cell-v164');
+        qsa(':scope > .v2-bar-row',cell).forEach(row=>{
+          if(!row.querySelector('.v2-val.neu,.v2-val.pos,.v2-val.neg,.us-market-stack')) row.remove();
+        });
+      }
+    });
+  }
+
+  function cssAttr(value){
+    return String(value||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+  }
+
+  function preserveRankingViewport(ev){
+    const btn=ev.target.closest('[data-rank-period][data-rank-target]');
+    if(!btn || !window.matchMedia('(max-width:900px)').matches) return;
+
+    const target=btn.dataset.rankTarget||'';
+    const period=btn.dataset.rankPeriod||'';
+    const beforeTop=btn.getBoundingClientRect().top;
+    const beforeScrollY=window.scrollY;
+    const tabs=btn.closest('.rank-period-tabs,.ranking-exec-periods');
+    const beforeScrollLeft=tabs ? tabs.scrollLeft : 0;
+
+    // O renderer legado substitui o botão inteiro. Depois da troca,
+    // recolocamos o novo botão exatamente na mesma posição visual.
+    setTimeout(()=>{
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          const selector=`[data-rank-target="${cssAttr(target)}"][data-rank-period="${cssAttr(period)}"]`;
+          const next=qs(selector);
+          if(!next){
+            window.scrollTo({top:beforeScrollY,behavior:'auto'});
+            return;
+          }
+          const nextTabs=next.closest('.rank-period-tabs,.ranking-exec-periods');
+          if(nextTabs) nextTabs.scrollLeft=beforeScrollLeft;
+          const afterTop=next.getBoundingClientRect().top;
+          const delta=afterTop-beforeTop;
+          if(Math.abs(delta)>1){
+            window.scrollTo({top:Math.max(0,window.scrollY+delta),behavior:'auto'});
+          }
+          try{next.focus({preventScroll:true});}catch(_){/* sem ação */}
+        });
+      });
+    },0);
+  }
+
+  function setup(){
+    setBuild();
+    dedupeAnalyticStatuses();
+  }
+
+  function init(){
+    setup();
+    [120,350,750,1400,2600,4800,8000].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',preserveRankingViewport,true);
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel')){
+        setTimeout(dedupeAnalyticStatuses,70);
+        setTimeout(dedupeAnalyticStatuses,280);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MOBILE_UX_V165__={setup,dedupeAnalyticStatuses};
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v167 — TAXAS DE REFERÊNCIA E POUPANÇA EXECUTIVAS
+════════════════════════════════════════════════════ */
+function toggleCopomCalendarV167(force){
+  const grid = document.getElementById('copomMeetings');
+  const btn = document.getElementById('copomCalendarToggleV167');
+  if(!grid) return false;
+  const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
+  grid.classList.toggle('is-expanded-v167', open);
+  if(btn){
+    btn.textContent = open ? 'Recolher calendário' : 'Ver calendário completo';
+    btn.setAttribute('aria-expanded', String(open));
+  }
+  return false;
+}
+window.toggleCopomCalendarV167 = toggleCopomCalendarV167;
+
+function togglePoupancaExecutiveV167(force){
+  const panel = document.getElementById('poupDetailsPanelV167');
+  const btn = document.getElementById('poupExpandBtn');
+  if(!panel) return false;
+  const open = typeof force === 'boolean' ? force : panel.hasAttribute('hidden');
+  panel.toggleAttribute('hidden', !open);
+  panel.classList.toggle('is-open-v167', open);
+  document.body.classList.toggle('poup-mobile-expanded', open);
+
+  const explain = document.getElementById('poupExplain');
+  if(explain) explain.classList.toggle('open', open);
+  if(btn){
+    btn.textContent = open ? 'Ocultar regras e cenários' : 'Ver regras e cenários';
+    btn.setAttribute('aria-expanded', String(open));
+  }
+
+  if(open){
+    setTimeout(function(){
+      try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
+      try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update(); }catch(e){}
+    }, 90);
+  }
+  return false;
+}
+
+// Mantém compatibilidade com os botões e chamadas já existentes.
+window.togglePoupanca = function(){ return togglePoupancaExecutiveV167(); };
+window.togglePoupancaMobileDetails = function(force){ return togglePoupancaExecutiveV167(force); };
+
+function initMarketReferenceExecutiveV167(){
+  const panel = document.getElementById('poupDetailsPanelV167');
+  if(panel){
+    panel.setAttribute('hidden','');
+    panel.classList.remove('is-open-v167');
+  }
+  const btn = document.getElementById('poupExpandBtn');
+  if(btn){
+    btn.textContent = 'Ver regras e cenários';
+    btn.setAttribute('aria-expanded','false');
+  }
+  toggleCopomCalendarV167(false);
+}
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initMarketReferenceExecutiveV167, {once:true});
+}else{
+  initMarketReferenceExecutiveV167();
+}
