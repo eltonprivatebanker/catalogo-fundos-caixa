@@ -1,0 +1,27 @@
+CATÁLOGO DE FUNDOS CAIXA — TESTE DASHBOARD v158
+
+Arquivos principais:
+- index.html
+- style.css
+- app.js
+- style-dashboard-v158.css
+- app-dashboard-v158.js
+
+O que foi ajustado nesta versão:
+1. Dashboard escuro refinado.
+2. Catálogo passou a ter prioridade de largura.
+3. Ranking lateral ficou mais estreito e compacto.
+4. Blocos duplicados e quebrados foram reduzidos/ocultados no dashboard.
+5. Painel "Mercado hoje" foi criado na lateral.
+6. Mobile preservado: o modo dashboard só aplica no desktop.
+
+Como testar:
+1. Suba todos os arquivos na mesma pasta do projeto.
+2. Abra a página no desktop.
+3. Clique em "Dashboard" no topo.
+4. Para voltar, clique em "Clássico".
+
+Se algo quebrar:
+- Remova do index.html as linhas:
+  <link href="style-dashboard-v158.css?v=dashboard-refino-v158" rel="stylesheet"/>
+  <script defer src="app-dashboard-v158.js?v=dashboard-refino-v158"></script>
