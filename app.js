@@ -12063,7 +12063,7 @@ if(!isSearchInput(el)) return;
 
 
 /* ════════════════════════════════════════════════════════════
-   ELTAUM_MARKET_PANEL_PRO_20260611_v150
+   ELTAUM_MARKET_EXECUTIVE_SIMPLE_20260612_v159
    - Um único modo visível: executivo OU tabela analítica.
    - O período "Último fechado" é lido da base e replicado em todo o painel.
    - O mês corrente permanece separado como parcial/aguardando.
@@ -12072,7 +12072,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MARKET_PANEL_PRO_20260611_v150';
+  const BUILD = 'ELTAUM_MARKET_EXECUTIVE_SIMPLE_20260612_v159';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -12197,7 +12197,7 @@ if(!isSearchInput(el)) return;
       closed,current,accum,
       cdi:{closed:valueOrDash(text('cdi-mes-ant')),current:valueOrDash(text('cdi-mes-cur')),year:valueOrDash(text('cdi-ano')),accum:valueOrDash(text('cdi-acum-v2'))},
       ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2'))},
-      dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
+      dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
       ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
       us:[
         {icon:'🌎',name:'S&P 500',sub:'índice amplo dos EUA',closed:parseUs('sp-ant-var'),current:parseUs('sp-cur-var'),year:parseUs('sp-ano-var'),accum:parseUs('sp-acum-var'),points:valueOrDash(text('sp-cur-pts'))},
@@ -12211,6 +12211,23 @@ if(!isSearchInput(el)) return;
     const cls=mainClass||pctClass(main);
     return `<div class="market-v150-summary-kpi"><b>${esc(label)}</b><strong class="${cls}">${esc(main)}</strong><small class="${pctClass(sub)}">${esc(sub)}</small></div>`;
   }
+  function compactUsValue(pair, mode){
+    const resolved = mode === 'usd' ? 'usd' : 'brl';
+    return valueOrDash(pair?.[resolved] || '—');
+  }
+  function closedMetric(label, main, subLabel, subValue, mainClass=''){
+    const cls=mainClass || pctClass(main);
+    return `<article class="market-v159-kpi"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong><small><b>${esc(subLabel)}</b><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))}</em></small></article>`;
+  }
+  function currentMetric(label, main, variation, mainClass='neu'){
+    return `<div class="market-v159-current-metric"><span>${esc(label)}</span><strong class="${mainClass}">${esc(valueOrDash(main))}</strong><em class="${pctClass(variation)}">${esc(valueOrDash(variation))}</em></div>`;
+  }
+  function usCompactCard(item, mode, accum){
+    const current=compactUsValue(item.current,mode);
+    const year=compactUsValue(item.year,mode);
+    const total=compactUsValue(item.accum,mode);
+    return `<article class="market-v159-us-card"><div class="market-v159-us-name"><span>${item.icon}</span><strong>${esc(item.name)}</strong></div><div class="market-v159-us-current"><span>Mês atual</span><strong class="${pctClass(current)}">${esc(current)}</strong></div><div class="market-v159-us-foot"><span><b>Ano</b><em class="${pctClass(year)}">${esc(year)}</em></span><span><b>${esc(accum)}</b><em class="${pctClass(total)}">${esc(total)}</em></span></div></article>`;
+  }
   function buildDashboard(data){
     const body=document.getElementById('sec-painel-body');
     if(!body) return null;
@@ -12219,19 +12236,55 @@ if(!isSearchInput(el)) return;
     if(!shell){
       shell=document.createElement('div');
       shell.id='marketDashboardV150';
-      shell.className='market-v150-shell';
+      shell.className='market-v150-shell market-v159-shell';
       const table=qs(':scope > .indic-table-wrap',body) || qs('.indic-table-wrap',body);
       body.insertBefore(shell,table||body.firstChild);
     }
-    const taxas=[
-      {icon:'💰',name:'CDI',sub:'Depósito interbancário',cells:[{main:data.cdi.closed,sub:`${data.closed} · fechado`},{main:data.cdi.current,sub:data.cdi.current==='—'?`${data.current} · aguardando`:`${data.current} · parcial`},{main:data.cdi.year,sub:`até ${data.closed}`},{main:data.cdi.accum,sub:data.accum}]},
-      {icon:'🎯',name:'IPCA',sub:'Inflação oficial ao consumidor',cells:[{main:data.ipca.closed,sub:`${data.closed} · fechado`},{main:data.ipca.current,sub:data.ipca.current==='—'?`${data.current} · aguardando`:`${data.current} · parcial`},{main:data.ipca.year,sub:`até ${data.closed}`},{main:data.ipca.accum,sub:data.accum}]}
-    ];
-    const brasil=[
-      {icon:'💵',name:'Dólar PTAX',sub:'Cotação BRL/USD',cells:[{main:data.dolar.closedQuote,sub:`${data.closed} · fechado`,cls:'neu'},{main:data.dolar.currentQuote,sub:data.dolar.currentVar,cls:'neu'},{main:data.dolar.year},{main:data.dolar.accum,sub:data.accum}]},
-      {icon:'📈',name:'Ibovespa',sub:'B3 · pontos e variação',cells:[{main:data.ibov.closedPoints,sub:data.ibov.closedVar,cls:'neu'},{main:data.ibov.currentPoints,sub:data.ibov.currentVar,cls:'neu'},{main:data.ibov.year},{main:data.ibov.accum,sub:data.accum}]}
-    ];
-    shell.innerHTML=`<div class="market-v150-head"><div class="market-v150-title"><span>Painel consolidado</span><strong>Indicadores de mercado</strong><div class="market-v150-periods"><b>Último fechado:</b><span class="closed-period">${esc(data.closed)} · fechado</span><b>Mês atual:</b><span class="current-period">${esc(data.current)} · parcial/aguardando</span></div></div><div class="market-v150-view-switch" role="group" aria-label="Modo de visualização do painel"><button type="button" data-v150-mode="exec" class="${state.mode==='exec'?'active':''}" aria-pressed="${state.mode==='exec'}">Visão executiva</button><button type="button" data-v150-mode="analytic" class="${state.mode==='analytic'?'active':''}" aria-pressed="${state.mode==='analytic'}">Tabela analítica</button></div></div><div class="market-v150-executive"><section class="market-v150-summary"><div class="market-v150-summary-intro"><span>Leitura rápida</span><strong>Visão executiva dos indicadores</strong><small>Dados fechados e dados correntes permanecem separados.</small></div>${summaryKpi('CDI',data.cdi.closed,`${data.closed} · fechado`)}${summaryKpi('IPCA',data.ipca.closed,`${data.closed} · fechado`)}${summaryKpi('Dólar',data.dolar.currentQuote,data.dolar.currentVar,'neu')}${summaryKpi('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar,'neu')}</section><section class="market-v150-grid">${groupCard('Taxas e inflação','CDI e IPCA organizados por período',taxas)}${groupCard('Câmbio e mercado brasileiro','Dólar PTAX e Ibovespa',brasil)}${usCard(data.us)}</section></div>`;
+    shell.classList.add('market-v159-shell');
+    const usMode=state.usMode==='usd'?'usd':'brl';
+    const awaiting=[];
+    if(data.cdi.current==='—') awaiting.push('CDI');
+    if(data.ipca.current==='—') awaiting.push('IPCA');
+    const awaitingText=awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : 'Indicadores correntes disponíveis';
+
+    shell.innerHTML=`
+      <div class="market-v150-head market-v159-head">
+        <div class="market-v150-title market-v159-title">
+          <strong>Indicadores de mercado</strong>
+          <div class="market-v150-periods market-v159-periods"><span><b>Fechado</b> ${esc(data.closed)}</span><i></i><span><b>Atual</b> ${esc(data.current)} parcial</span></div>
+        </div>
+        <div class="market-v150-view-switch" role="group" aria-label="Modo de visualização do painel">
+          <button type="button" data-v150-mode="exec" class="${state.mode==='exec'?'active':''}" aria-pressed="${state.mode==='exec'}">Visão executiva</button>
+          <button type="button" data-v150-mode="analytic" class="${state.mode==='analytic'?'active':''}" aria-pressed="${state.mode==='analytic'}">Tabela analítica</button>
+        </div>
+      </div>
+      <div class="market-v150-executive market-v159-executive">
+        <section class="market-v159-section market-v159-closed">
+          <div class="market-v159-section-head"><div><span>Fechamento</span><strong>${esc(data.closed)}</strong></div><small>Último mês consolidado</small></div>
+          <div class="market-v159-kpi-grid">
+            ${closedMetric('CDI',data.cdi.closed,data.accum,data.cdi.accum)}
+            ${closedMetric('IPCA',data.ipca.closed,data.accum,data.ipca.accum)}
+            ${closedMetric('Dólar PTAX',data.dolar.closedQuote,'Variação no mês',data.dolar.closedVar,'neu')}
+            ${closedMetric('Ibovespa',data.ibov.closedPoints,'Variação no mês',data.ibov.closedVar,'neu')}
+          </div>
+        </section>
+
+        <section class="market-v159-current" aria-label="Mês atual">
+          <div class="market-v159-current-copy"><span>Mês atual</span><strong>${esc(data.current)} · parcial</strong><small>${esc(awaitingText)}</small></div>
+          ${currentMetric('Dólar',data.dolar.currentQuote,data.dolar.currentVar)}
+          ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
+        </section>
+
+        <section class="market-v159-section market-v159-us">
+          <div class="market-v159-section-head">
+            <div><span>Bolsas dos EUA</span><strong>Retornos em ${usMode.toUpperCase()}</strong></div>
+            <div class="market-v150-us-toggle market-v159-us-toggle" role="group" aria-label="Moeda dos índices dos Estados Unidos">
+              ${['brl','usd'].map(mode=>`<button type="button" data-v150-us="${mode}" class="${usMode===mode?'active':''}" aria-pressed="${usMode===mode}">${mode.toUpperCase()}</button>`).join('')}
+            </div>
+          </div>
+          <div class="market-v159-us-grid">${data.us.map(item=>usCompactCard(item,usMode,data.accum)).join('')}</div>
+        </section>
+      </div>`;
     return shell;
   }
 
