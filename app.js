@@ -1,4 +1,4 @@
-// ELTAUM_MARKET_ANALYTIC_TYPOGRAPHY_20260612_v161
+// ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){
@@ -4810,20 +4810,33 @@ function buildCopomCalendario(){
     return { ...r, _i:i, decisao, isNext, isFuture, klass, resultado };
   });
 
-  // Exibe a próxima reunião em primeiro plano; as demais continuam disponíveis no arraste.
-  const lista = proxIdx >= 0
-    ? [...base.slice(proxIdx), ...base.slice(0, proxIdx)]
-    : [...base].reverse();
+  // v167: primeiras leituras = três decisões mais recentes + próxima reunião.
+  const realizadas = base.filter(r => r.decisao).slice(-3).reverse();
+  const proxima = proxIdx >= 0 ? base[proxIdx] : null;
+  const futuras = base.filter((r,i) => i > proxIdx && !r.decisao);
+  const antigas = base.filter(r => !realizadas.includes(r) && r !== proxima && !futuras.includes(r));
+  const lista = [...realizadas, ...(proxima ? [proxima] : []), ...futuras, ...antigas];
 
-  container.innerHTML = lista.map((r) => {
-    return `<div class="copom-item ${r.klass} ${r.isNext ? 'next featured-next' : ''}" title="${r.num}ª reunião: ${r.datas}" data-original-order="${r._i}">
+  container.innerHTML = lista.map((r,position) => {
+    const extra = position >= 4 ? ' copom-extra-v167' : '';
+    return `<div class="copom-item ${r.klass} ${r.isNext ? 'next featured-next' : ''}${extra}" title="${r.num}ª reunião: ${r.datas}" data-original-order="${r._i}" role="listitem">
       <span class="copom-num">${r.num}ª reunião</span>
       <strong class="copom-date">${r.short}</strong>
       <small class="copom-result">${r.resultado}</small>
     </div>`;
   }).join('');
 
-  // Garante posição inicial no começo da faixa, onde agora fica a próxima reunião.
+  const nextDate = $('copomNextDateV167');
+  const nextStatus = $('copomNextStatusV167');
+  if(nextDate) nextDate.textContent = proxima ? proxima.short : 'Calendário concluído';
+  if(nextStatus) nextStatus.textContent = proxima ? (proxima.resultado || 'decisão pendente') : 'Sem novas reuniões em 2026';
+
+  container.classList.remove('is-expanded-v167');
+  const toggle = $('copomCalendarToggleV167');
+  if(toggle){
+    toggle.textContent = 'Ver calendário completo';
+    toggle.setAttribute('aria-expanded','false');
+  }
   requestAnimationFrame(() => { container.scrollLeft = 0; });
 }
 
@@ -12971,3 +12984,70 @@ if(!isSearchInput(el)) return;
   else init();
   window.__ELTAUM_MOBILE_UX_V165__={setup,dedupeAnalyticStatuses};
 })();
+
+
+/* ════════════════════════════════════════════════════
+   v167 — TAXAS DE REFERÊNCIA E POUPANÇA EXECUTIVAS
+════════════════════════════════════════════════════ */
+function toggleCopomCalendarV167(force){
+  const grid = document.getElementById('copomMeetings');
+  const btn = document.getElementById('copomCalendarToggleV167');
+  if(!grid) return false;
+  const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
+  grid.classList.toggle('is-expanded-v167', open);
+  if(btn){
+    btn.textContent = open ? 'Recolher calendário' : 'Ver calendário completo';
+    btn.setAttribute('aria-expanded', String(open));
+  }
+  return false;
+}
+window.toggleCopomCalendarV167 = toggleCopomCalendarV167;
+
+function togglePoupancaExecutiveV167(force){
+  const panel = document.getElementById('poupDetailsPanelV167');
+  const btn = document.getElementById('poupExpandBtn');
+  if(!panel) return false;
+  const open = typeof force === 'boolean' ? force : panel.hasAttribute('hidden');
+  panel.toggleAttribute('hidden', !open);
+  panel.classList.toggle('is-open-v167', open);
+  document.body.classList.toggle('poup-mobile-expanded', open);
+
+  const explain = document.getElementById('poupExplain');
+  if(explain) explain.classList.toggle('open', open);
+  if(btn){
+    btn.textContent = open ? 'Ocultar regras e cenários' : 'Ver regras e cenários';
+    btn.setAttribute('aria-expanded', String(open));
+  }
+
+  if(open){
+    setTimeout(function(){
+      try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
+      try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update(); }catch(e){}
+    }, 90);
+  }
+  return false;
+}
+
+// Mantém compatibilidade com os botões e chamadas já existentes.
+window.togglePoupanca = function(){ return togglePoupancaExecutiveV167(); };
+window.togglePoupancaMobileDetails = function(force){ return togglePoupancaExecutiveV167(force); };
+
+function initMarketReferenceExecutiveV167(){
+  const panel = document.getElementById('poupDetailsPanelV167');
+  if(panel){
+    panel.setAttribute('hidden','');
+    panel.classList.remove('is-open-v167');
+  }
+  const btn = document.getElementById('poupExpandBtn');
+  if(btn){
+    btn.textContent = 'Ver regras e cenários';
+    btn.setAttribute('aria-expanded','false');
+  }
+  toggleCopomCalendarV167(false);
+}
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', initMarketReferenceExecutiveV167, {once:true});
+}else{
+  initMarketReferenceExecutiveV167();
+}
