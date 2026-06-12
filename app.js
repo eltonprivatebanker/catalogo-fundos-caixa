@@ -12580,3 +12580,104 @@ if(!isSearchInput(el)) return;
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark,{once:true});
   else mark();
 })();
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_ANALYTIC_COMPACT_20260612_v160
+   Compactação controlada da tabela analítica e seletor BRL/USD.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_ANALYTIC_COMPACT_20260612_v160';
+  const state={currency:'brl'};
+
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+
+  function renameGroups(table){
+    const cdi=document.getElementById('row-cdi');
+    const dolar=document.getElementById('row-dolar');
+    const ibov=document.getElementById('row-ibov');
+    if(cdi?.previousElementSibling?.classList.contains('group-row')){
+      const span=qs('.group-lbl>span',cdi.previousElementSibling);
+      if(span) span.textContent='Taxas e inflação';
+    }
+    if(dolar?.previousElementSibling?.classList.contains('group-row')){
+      const span=qs('.group-lbl>span',dolar.previousElementSibling);
+      if(span) span.textContent='Brasil — câmbio e bolsa';
+    }
+    if(ibov?.previousElementSibling?.classList.contains('group-row')){
+      ibov.previousElementSibling.hidden=true;
+      ibov.previousElementSibling.style.display='none';
+    }
+    const sp=document.getElementById('row-sp');
+    if(sp?.previousElementSibling?.classList.contains('group-row')){
+      const span=qs('.group-lbl>span',sp.previousElementSibling);
+      if(span) span.textContent='Bolsas dos Estados Unidos';
+    }
+  }
+
+  function applyCurrency(wrap,mode){
+    state.currency=['brl','usd','both'].includes(mode)?mode:'brl';
+    wrap.classList.remove('us-mode-brl','us-mode-usd','us-mode-both');
+    wrap.classList.add(`us-mode-${state.currency}`);
+    qsa('[data-analytic-currency]',wrap).forEach(btn=>{
+      const active=btn.dataset.analyticCurrency===state.currency;
+      btn.classList.toggle('active',active);
+      btn.setAttribute('aria-pressed',String(active));
+    });
+  }
+
+  function buildTools(wrap){
+    let tools=qs('.market-analytic-tools-v160',wrap);
+    if(tools) return tools;
+    tools=document.createElement('div');
+    tools.className='market-analytic-tools-v160';
+    tools.innerHTML=`
+      <div class="market-analytic-tools-title-v160">
+        <strong>Tabela analítica</strong>
+        <small>Comparação por período; cotações e pontos permanecem neutros</small>
+      </div>
+      <div class="market-analytic-currency-v160" role="group" aria-label="Moeda dos índices dos Estados Unidos">
+        <span>Bolsas EUA</span>
+        <button type="button" data-analytic-currency="brl" aria-pressed="true">BRL</button>
+        <button type="button" data-analytic-currency="usd" aria-pressed="false">USD</button>
+        <button type="button" data-analytic-currency="both" aria-pressed="false">Ambos</button>
+      </div>`;
+    wrap.insertBefore(tools,wrap.firstChild);
+    tools.addEventListener('click',ev=>{
+      const btn=ev.target.closest('[data-analytic-currency]');
+      if(!btn) return;
+      applyCurrency(wrap,btn.dataset.analyticCurrency);
+    });
+    return tools;
+  }
+
+  function setup(){
+    const body=document.getElementById('sec-painel-body');
+    const wrap=body && (qs(':scope > .indic-table-wrap',body)||qs('.indic-table-wrap',body));
+    const table=wrap && qs('.indic-table-v2',wrap);
+    if(!wrap||!table) return;
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    document.documentElement.classList.add('market-analytic-compact-v160');
+    wrap.classList.add('market-analytic-compact-v160');
+    renameGroups(table);
+    buildTools(wrap);
+    applyCurrency(wrap,state.currency);
+  }
+
+  function init(){
+    setup();
+    [250,700,1400,2800,5200,9000].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,#sec-mercado-painel')){
+        setTimeout(setup,100);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_ANALYTIC_V160__={setup,get currency(){return state.currency;}};
+})();
