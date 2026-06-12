@@ -2258,7 +2258,7 @@ function compararOrdenacao(av,bv){
 }
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
-const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
+const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","Benchmark","Benchmark Oficial","Estrategia","Estratégia","Adiantamento Resgate","Adiantamento de Resgate","Classificacao Tributaria","Classificação Tributária","Tributacao","Tributação","Status Captacao","Status Captação","Status de Captação","Captacao","Captação","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
 const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
 
@@ -2824,7 +2824,7 @@ function buildDetailQuickActions(row, urlFund){
     mkBtn(boletim?.url, 'detail-action-primary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
     mkBtn(lamina?.url, 'detail-action-secondary', '📄', 'Lâmina', 'Abrir lâmina'),
     mkBtn(regulamento?.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento'),
-    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página CAIXA', 'Abrir página do fundo na CAIXA'),
+    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página do fundo', 'Abrir página do fundo'),
   ].filter(Boolean).join('');
 
   if(!buttons) return '';
@@ -3028,7 +3028,7 @@ function gerarLeituraRapidaFundo(r){
 
   return `
     <div class="fund-quick-note">
-      <div class="fund-quick-note-title">🧭 Leitura rápida do fundo</div>
+      <div class="fund-quick-note-title">🧭 Leitura consultiva do fundo</div>
       ${tagsHtml}
       <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
       ${complementosHtml}
@@ -3068,7 +3068,7 @@ function buildDetailPanel(r,colspan){
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean">
-      <div class="detail-main">${detailActions}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}${buildFundOperationalFacts(r,'detail')}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
@@ -3135,6 +3135,115 @@ function detectarBenchmarkFundo(r){
     return {label:'CDI', cls:'bench-cdi', icon:'📌'};
   }
   return {label:'Outros', cls:'bench-outros', icon:'🧩'};
+}
+
+
+function primeiroCampoFundo(r, chaves){
+  for(const chave of chaves){
+    const valor = String(r?.[chave] ?? '').trim();
+    if(valor && valor !== '-' && valor !== '—' && valor.toLowerCase() !== 'null' && valor.toLowerCase() !== 'none') return valor;
+  }
+  return '';
+}
+
+function normalizarStatusOperacional(valor){
+  return String(valor || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .trim()
+    .toUpperCase();
+}
+
+function detectarEstrategiaFundo(r){
+  const oficial = primeiroCampoFundo(r,[
+    'Estratégia','Estrategia','Estratégia do Fundo','Estrategia do Fundo',
+    'Política de Investimento','Politica de Investimento','Composição da Carteira','Composicao da Carteira'
+  ]);
+  if(oficial) return {texto:oficial, estimada:false};
+
+  const nome = normalizarTextoBase(r?.['Fundo']);
+  const cat = normalizarTextoBase(r?.['Categoria']);
+  const base = `${cat} ${nome}`;
+  let texto = '';
+
+  if(base.includes('FUNDOS MUTUOS DE PRIVATIZACAO') || base.includes('FMP')) texto='FMP-FGTS com exposição concentrada a ações de empresa privatizada';
+  else if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV')) texto='Renda fixa com exposição a crédito privado';
+  else if(base.includes('IMA-B 5+') || base.includes('IMAB 5+')) texto='Renda fixa indexada à inflação com duration longa';
+  else if(base.includes('IMA-B 5') || base.includes('IMAB 5')) texto='Renda fixa indexada à inflação com duration intermediária';
+  else if(base.includes('IMA-B') || base.includes('IMAB') || base.includes('IPCA') || base.includes('IDKA')) texto='Renda fixa indexada à inflação';
+  else if(base.includes('IRF-M 1+') || base.includes('IRFM 1+')) texto='Renda fixa prefixada com duration longa';
+  else if(base.includes('IRF-M 1') || base.includes('IRFM 1')) texto='Renda fixa prefixada de prazo mais curto';
+  else if(base.includes('IRF-M') || base.includes('IRFM') || base.includes('PREFIXADO') || base.includes('PRE RF')) texto='Renda fixa prefixada';
+  else if(base.includes('REF DI') || base.includes('REFERENCIADO') || base.includes('CDI')) texto='Renda fixa referenciada ao CDI';
+  else if(base.includes('RENDA FIXA SIMPLES') || base.includes('RF SIMPLES')) texto='Renda fixa simples, com predominância de títulos públicos federais';
+  else if(base.includes('CURTO PRAZO')) texto='Renda fixa de curto prazo';
+  else if(base.includes('TITULOS PUBLICOS') || base.includes('TP RF') || base.includes('BRASIL TP')) texto='Renda fixa com predominância de títulos públicos federais';
+  else if(base.includes('CAMBIAL') || base.includes('DOLAR') || base.includes('EURO')) texto='Exposição cambial';
+  else if(base.includes('FUNDO DE INDICE') || base.includes('ETF')) texto='Gestão passiva para replicação de índice';
+  else if(base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('SMALL CAPS')) texto='Renda variável';
+  else if(base.includes('MULTIMERCADO')) texto='Multimercado com alocação em múltiplas classes';
+  else if(base.includes('RENDA FIXA')) texto='Renda fixa de estratégia ampla';
+  else texto='Estratégia não identificada na base';
+
+  return {texto, estimada:true};
+}
+
+function obterDadosOperacionaisFundo(r){
+  const benchmarkOficial = primeiroCampoFundo(r,['Benchmark Oficial','Benchmark','Índice de Referência','Indice de Referencia','Referência','Referencia']);
+  const benchmarkDetectado = detectarBenchmarkFundo(r);
+  const estrategia = detectarEstrategiaFundo(r);
+  const adiantamento = primeiroCampoFundo(r,[
+    'Adiantamento de Resgate','Adiantamento Resgate','Permite Adiantamento de Resgate',
+    'Permite Adiantamento','Adiantamento','Antecipação de Resgate','Antecipacao de Resgate'
+  ]);
+  const tributacao = primeiroCampoFundo(r,[
+    'Classificação Tributária','Classificacao Tributaria','Classificação Tributaria',
+    'Tributação','Tributacao','Regime Tributário','Regime Tributario'
+  ]);
+  const captacao = primeiroCampoFundo(r,[
+    'Status de Captação','Status Captação','Status Captacao','Captação','Captacao',
+    'Aberto para Captação','Aberto para Captacao','Situação de Captação','Situacao de Captacao'
+  ]);
+
+  return {
+    benchmark:{texto:benchmarkOficial || benchmarkDetectado.label || 'Não informado', estimado:!benchmarkOficial},
+    estrategia,
+    adiantamento:{texto:adiantamento || 'Não informado', status:normalizarStatusOperacional(adiantamento)},
+    tributacao:{texto:tributacao || 'Não informada'},
+    captacao:{texto:captacao || 'Não informada', status:normalizarStatusOperacional(captacao)}
+  };
+}
+
+function classeStatusOperacional(status, tipo){
+  if(!status) return 'unknown';
+  if(tipo === 'captacao'){
+    if(status.includes('FECHAD') || status.includes('ENCERRAD') || status.includes('SUSPENS')) return 'negative';
+    if(status.includes('ABERT') || status.includes('DISPONIVEL') || status === 'SIM') return 'positive';
+  }
+  if(tipo === 'adiantamento'){
+    if(status === 'NAO' || status.includes('NÃO') || status.includes('NAO PERMITE') || status.includes('INDISPONIVEL')) return 'negative';
+    if(status === 'SIM' || status.includes('PERMITE') || status.includes('DISPONIVEL')) return 'positive';
+  }
+  return 'unknown';
+}
+
+function buildFundOperationalFacts(r, variant='detail'){
+  const d = obterDadosOperacionaisFundo(r);
+  const capCls = classeStatusOperacional(d.captacao.status,'captacao');
+  const adiCls = classeStatusOperacional(d.adiantamento.status,'adiantamento');
+  const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
+  const adiDot = adiCls==='positive'?'●':adiCls==='negative'?'●':'○';
+  const estimateBadge = '<em class="fund-fact-estimated-v154">indicativo</em>';
+  return `<section class="fund-facts-v154 ${htmlAttr(variant)}" aria-label="Informações complementares do fundo">
+    <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>Dados da base e classificações consultivas</small></div>
+    <div class="fund-facts-grid-v154">
+      <div class="fund-fact-v154"><span>Benchmark / referência</span><strong>${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}</strong></div>
+      <div class="fund-fact-v154 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}</strong></div>
+      <div class="fund-fact-v154"><span>Adiantamento de resgate</span><strong class="status-${adiCls}"><i>${adiDot}</i>${htmlAttr(d.adiantamento.texto)}</strong></div>
+      <div class="fund-fact-v154"><span>Classificação tributária</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
+      <div class="fund-fact-v154"><span>Captação</span><strong class="status-${capCls}"><i>${capDot}</i>${htmlAttr(d.captacao.texto)}</strong></div>
+    </div>
+  </section>`;
 }
 
 function prazoResgateCell(valor, tipo){
@@ -4649,6 +4758,7 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
         </div>
+        ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
         <div class="fund-card-mobile-detail">${typeof gerarLeituraRapidaFundo==='function'?gerarLeituraRapidaFundo(r):''}</div>
       </div>
@@ -5533,6 +5643,13 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!busca) return showToast('Não foi possível identificar o fundo.');
 
     clearChipGroups();
+    document.querySelectorAll('.filter-preset-chip[data-preset], .shortcut-preset[data-preset]').forEach(btn=>{
+      const isAll=btn.dataset.preset==='all';
+      btn.classList.toggle('active',isAll);
+      btn.setAttribute('aria-pressed',isAll?'true':'false');
+    });
+    const categoryStatus=document.getElementById('categoryGridStatus');
+    if(categoryStatus) categoryStatus.textContent='Todos os fundos';
     try{ activeSearch=busca; }catch(e){}
 
     const inp=$('searchInput');
@@ -5628,13 +5745,20 @@ document.addEventListener('DOMContentLoaded', function(){
       : '';
     el('fspotLiq').style.display = liqParts.length ? '' : 'none';
 
+    // Informações complementares
+    const factsEl = el('fspotFacts');
+    if(factsEl){
+      factsEl.innerHTML = buildFundOperationalFacts(row,'spotlight');
+      factsEl.style.display = '';
+    }
+
     // Nota rápida
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
     const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura rápida</div>${noteTxt}`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -5642,7 +5766,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const urlFundo = getFundUrl(row);
     const linkEl = el('fspotLinkCaixa');
     if(urlFundo && !isFallbackUrl(row)){
-      linkEl.href = urlFundo; linkEl.style.display = '';
+      linkEl.href = urlFundo;
+      linkEl.textContent = '↗ Página do fundo';
+      linkEl.title = 'Abrir página do fundo';
+      linkEl.style.display = '';
     } else {
       linkEl.style.display = 'none';
     }
@@ -11876,7 +12003,7 @@ if(!isSearchInput(el)) return;
 ========================================================== */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_UI_COMPONENTS_RESTORED_20260611_v151';
+  const BUILD='ELTAUM_FUND_CATALOG_NAVIGATION_20260611_v153';
 
   const q=(s,r=document)=>r.querySelector(s);
   const qa=(s,r=document)=>Array.from(r.querySelectorAll(s));
@@ -12055,7 +12182,7 @@ if(!isSearchInput(el)) return;
 
   function init(){
     const meta=q('meta[name="app-build"]');if(meta)meta.content=BUILD;
-    document.documentElement.classList.add('ui-components-restored-v151');
+    document.documentElement.classList.add('fund-catalog-navigation-v153','fund-details-enrichment-v154');
     bindNavigation();
     bindRankingControls();
     syncRankingControls();
