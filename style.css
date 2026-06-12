@@ -28379,3 +28379,16 @@ html.fund-card-executive-v166 body.fund-card-mode #mobileFundCards .fund-card-li
   }
   #sec-fundos .pagination-row .page-btns::-webkit-scrollbar{display:none!important}
 }
+
+
+/* ════════════════════════════════════════════════════
+   v169 — Paginação: viewport imóvel no desktop
+   A troca de página não chama scrollTo no desktop.
+   O mobile mantém a rolagem nativa única do patch v108.
+════════════════════════════════════════════════════ */
+@media(min-width:821px){
+  html.pagination-switching-v169,
+  body.pagination-switching-v169{
+    scroll-behavior:auto!important;
+  }
+}

@@ -3921,13 +3921,16 @@ function changeFundPageV168(page){
   render();
 
   requestAnimationFrame(()=>{
-    // No desktop, reposiciona sem animação para evitar o efeito de “pulo”.
-    // No mobile, o patch nativo v108 executa uma única rolagem até o primeiro card.
-    if(!isMobile) scrollToFundResultsStart({behavior:'auto'});
-
+    /*
+      v169: no desktop a troca de página NÃO altera a posição da viewport.
+      O diagnóstico confirmou que o window.scrollTo era animado pelo
+      scroll-behavior:smooth global do <html>, produzindo o pulo.
+      No mobile, o patch v108 continua responsável pela única rolagem
+      até o primeiro card.
+    */
     const active=document.querySelector('#pageBtns .page-btn.active');
     if(active){
-      try{ active.focus({preventScroll:true}); }catch(_){ active.focus(); }
+      try{ active.focus({preventScroll:true}); }catch(_){ /* evita focus() comum, que pode mover a tela */ }
     }
 
     const release=()=>{
@@ -13103,15 +13106,15 @@ if(document.readyState === 'loading'){
 
 
 /* ════════════════════════════════════════════════════
-   v168 — PAGINAÇÃO ESTÁVEL E CENTRALIZADA
+   v169 — PAGINAÇÃO SEM MOVIMENTO NO DESKTOP
    - impede rolagem suave no desktop;
    - preserva a altura da área durante a troca;
    - mantém foco no botão ativo sem mover a viewport.
 ════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_PAGINATION_STABLE_20260612_v168';
-  window.__ELTAUM_PAGINATION_STABLE_V168__={build:BUILD,changePage:window.changeFundPageV168};
+  const BUILD='ELTAUM_PAGINATION_NO_DESKTOP_SCROLL_20260612_v169';
+  window.__ELTAUM_PAGINATION_NO_DESKTOP_SCROLL_V169__={build:BUILD,changePage:window.changeFundPageV168};
 
   function syncBuild(){
     const meta=document.querySelector('meta[name="app-build"]');
