@@ -12874,3 +12874,100 @@ if(!isSearchInput(el)) return;
   else init();
   window.__ELTAUM_MARKET_ANALYTIC_V164__={setup};
 })();
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MOBILE_UX_FIXES_20260612_v165
+   Status único, navegação estável dos rankings e ajustes mobile.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MOBILE_UX_FIXES_20260612_v165';
+  const qs=(s,r=document)=>r.querySelector(s);
+  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+
+  function setBuild(){
+    document.documentElement.classList.add('mobile-ux-fixes-v165');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function dedupeAnalyticStatuses(){
+    const table=qs('#sec-painel-body .indic-table-v2');
+    if(!table) return;
+    qsa('td',table).forEach(cell=>{
+      // Remove fisicamente o status principal legado; CSS !important antigo
+      // não poderá trazê-lo de volta em desktop ou mobile.
+      qsa('.analytic-status-primary-v163',cell).forEach(el=>el.remove());
+
+      const chips=qsa('.analytic-status-chip-v163',cell);
+      chips.slice(1).forEach(el=>el.remove());
+      if(chips.length){
+        cell.classList.add('status-cell-v164');
+        qsa(':scope > .v2-bar-row',cell).forEach(row=>{
+          if(!row.querySelector('.v2-val.neu,.v2-val.pos,.v2-val.neg,.us-market-stack')) row.remove();
+        });
+      }
+    });
+  }
+
+  function cssAttr(value){
+    return String(value||'').replace(/\\/g,'\\\\').replace(/"/g,'\\"');
+  }
+
+  function preserveRankingViewport(ev){
+    const btn=ev.target.closest('[data-rank-period][data-rank-target]');
+    if(!btn || !window.matchMedia('(max-width:900px)').matches) return;
+
+    const target=btn.dataset.rankTarget||'';
+    const period=btn.dataset.rankPeriod||'';
+    const beforeTop=btn.getBoundingClientRect().top;
+    const beforeScrollY=window.scrollY;
+    const tabs=btn.closest('.rank-period-tabs,.ranking-exec-periods');
+    const beforeScrollLeft=tabs ? tabs.scrollLeft : 0;
+
+    // O renderer legado substitui o botão inteiro. Depois da troca,
+    // recolocamos o novo botão exatamente na mesma posição visual.
+    setTimeout(()=>{
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          const selector=`[data-rank-target="${cssAttr(target)}"][data-rank-period="${cssAttr(period)}"]`;
+          const next=qs(selector);
+          if(!next){
+            window.scrollTo({top:beforeScrollY,behavior:'auto'});
+            return;
+          }
+          const nextTabs=next.closest('.rank-period-tabs,.ranking-exec-periods');
+          if(nextTabs) nextTabs.scrollLeft=beforeScrollLeft;
+          const afterTop=next.getBoundingClientRect().top;
+          const delta=afterTop-beforeTop;
+          if(Math.abs(delta)>1){
+            window.scrollTo({top:Math.max(0,window.scrollY+delta),behavior:'auto'});
+          }
+          try{next.focus({preventScroll:true});}catch(_){/* sem ação */}
+        });
+      });
+    },0);
+  }
+
+  function setup(){
+    setBuild();
+    dedupeAnalyticStatuses();
+  }
+
+  function init(){
+    setup();
+    [120,350,750,1400,2600,4800,8000].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',preserveRankingViewport,true);
+    document.addEventListener('click',ev=>{
+      if(ev.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel')){
+        setTimeout(dedupeAnalyticStatuses,70);
+        setTimeout(dedupeAnalyticStatuses,280);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MOBILE_UX_V165__={setup,dedupeAnalyticStatuses};
+})();

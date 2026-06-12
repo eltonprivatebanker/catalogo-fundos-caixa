@@ -27529,3 +27529,172 @@ html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-empty-v162{padding:14px 18px;
     text-align:right!important;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   v165 — correções de UX mobile e status únicos
+   - remove duplicação de “Aguardando”
+   - formata seletor BRL/USD/Ambos no celular
+   - evita corte dos KPIs de 36M do dólar
+   - compacta o destaque principal da PTAX no celular
+   - estabiliza os botões de período dos rankings
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Segurança visual global: o status principal legado nunca deve coexistir
+   com o chip operacional criado pela v163. */
+html.mobile-ux-fixes-v165 .indic-table-wrap .analytic-status-primary-v163{
+  display:none!important;
+}
+html.mobile-ux-fixes-v165 .indic-table-wrap td.status-cell-v164 > .v2-bar-row{
+  display:none!important;
+}
+html.mobile-ux-fixes-v165 .indic-table-wrap td.status-cell-v164 .status-only-v163{
+  display:flex!important;
+  width:100%;
+  align-items:center!important;
+  justify-content:center!important;
+  margin:0!important;
+  text-align:center!important;
+}
+
+/* O botão ativo não muda de tamanho, evitando deslocamentos do seletor. */
+html.mobile-ux-fixes-v165 .rank-period-tab{
+  box-sizing:border-box;
+  min-width:48px;
+  text-align:center;
+  border-width:1px!important;
+  transform:none!important;
+  touch-action:manipulation;
+}
+html.mobile-ux-fixes-v165 .rank-period-tab:focus{
+  outline:2px solid rgba(91,156,246,.42);
+  outline-offset:2px;
+}
+
+@media(max-width:900px){
+  /* Cabeçalho da tabela analítica em duas linhas claras no celular. */
+  html.mobile-ux-fixes-v165 .indic-table-wrap.market-analytic-compact-v160 .market-analytic-tools-v160{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:9px!important;
+    min-height:0!important;
+    padding:10px 11px!important;
+    border-bottom:1px solid rgba(255,255,255,.075)!important;
+    background:linear-gradient(180deg,rgba(20,24,41,.88),rgba(12,15,27,.84))!important;
+  }
+  html.mobile-ux-fixes-v165 .market-analytic-tools-title-v160{
+    display:flex!important;
+    align-items:baseline!important;
+    gap:7px!important;
+    min-width:0!important;
+    flex-wrap:wrap!important;
+  }
+  html.mobile-ux-fixes-v165 .market-analytic-tools-title-v160 strong{
+    color:#eef2fb!important;
+    font:780 .80rem/1.2 Inter,system-ui,sans-serif!important;
+  }
+  html.mobile-ux-fixes-v165 .market-analytic-tools-title-v160 small{
+    color:#8d99b0!important;
+    font:560 .62rem/1.25 Inter,system-ui,sans-serif!important;
+    white-space:normal!important;
+  }
+  html.mobile-ux-fixes-v165 .market-analytic-currency-v160{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+    gap:4px!important;
+    padding:5px!important;
+    border:1px solid rgba(255,255,255,.09)!important;
+    border-radius:10px!important;
+    background:#080b14!important;
+  }
+  html.mobile-ux-fixes-v165 .market-analytic-currency-v160 > span{
+    grid-column:1/-1;
+    padding:1px 3px 4px!important;
+    color:#8d99b0!important;
+    font:800 .57rem/1 Inter,system-ui,sans-serif!important;
+    letter-spacing:.08em!important;
+    text-transform:uppercase!important;
+  }
+  html.mobile-ux-fixes-v165 .market-analytic-currency-v160 button{
+    width:100%!important;
+    min-height:32px!important;
+    padding:7px 8px!important;
+    border:1px solid transparent!important;
+    border-radius:7px!important;
+    background:rgba(255,255,255,.025)!important;
+    color:#b8c2d8!important;
+    font:760 .64rem/1 Inter,system-ui,sans-serif!important;
+  }
+  html.mobile-ux-fixes-v165 .market-analytic-currency-v160 button.active{
+    border-color:rgba(200,151,58,.42)!important;
+    background:rgba(200,151,58,.16)!important;
+    color:#f2ca76!important;
+  }
+
+  /* Ranking: abas estáveis e sem alteração de largura ao ativar. */
+  html.mobile-ux-fixes-v165 #rankingsSection .rank-period-tabs,
+  html.mobile-ux-fixes-v165 #rankingsSection .ranking-exec-periods{
+    scroll-behavior:auto!important;
+    overscroll-behavior-inline:contain;
+  }
+  html.mobile-ux-fixes-v165 #rankingsSection .rank-period-tab{
+    min-width:54px!important;
+    min-height:34px!important;
+    padding:8px 10px!important;
+    font-size:.68rem!important;
+  }
+
+  /* Dólar: destaque principal mais compacto no celular. */
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162{
+    gap:9px!important;
+    padding:10px!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi{
+    min-height:82px!important;
+    padding:12px 13px!important;
+    border-radius:13px!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi .dolar-kpi-label{
+    margin-bottom:4px!important;
+    font-size:.57rem!important;
+    letter-spacing:.09em!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi strong{
+    margin-bottom:4px!important;
+    font-size:1.72rem!important;
+    line-height:1!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi small{
+    font-size:.62rem!important;
+    line-height:1.25!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162,
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{
+    min-width:0!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 > .dolar-mini-kpi{
+    min-width:0!important;
+    overflow:visible!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 strong{
+    max-width:100%!important;
+    overflow:visible!important;
+    white-space:nowrap!important;
+    text-overflow:clip!important;
+  }
+}
+
+@media(max-width:390px){
+  /* Em telas estreitas, 12M e 24M ficam lado a lado e 36M ocupa a linha inteira. */
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-mini-kpi-36m{
+    grid-column:1/-1!important;
+  }
+  html.mobile-ux-fixes-v165.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi{
+    min-height:52px!important;
+    padding:8px 10px!important;
+  }
+}
