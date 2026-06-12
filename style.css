@@ -28392,3 +28392,120 @@ html.fund-card-executive-v166 body.fund-card-mode #mobileFundCards .fund-card-li
     scroll-behavior:auto!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v171 — Tabela principal sem “vazamento” de colunas
+════════════════════════════════════════════════════ */
+#sec-fundos .table-wrap{
+  width:100%;
+  max-width:100%;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  overscroll-behavior-x:contain;
+  scrollbar-gutter:stable;
+}
+
+#sec-fundos #mainTable{
+  border-collapse:collapse!important;
+}
+
+#sec-fundos #mainTable th,
+#sec-fundos #mainTable td{
+  box-sizing:border-box;
+}
+
+@media(min-width:821px){
+  #sec-fundos .table-wrap{
+    position:relative;
+    isolation:isolate;
+  }
+
+  #sec-fundos #mainTable{
+    width:100%!important;
+    min-width:1060px!important;
+    table-layout:fixed!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="expandir"],
+  #sec-fundos #mainTable tbody td:first-child{
+    width:34px!important;
+    min-width:34px!important;
+    max-width:34px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="comparar"],
+  #sec-fundos #mainTable tbody td.comp-check-wrap{
+    width:34px!important;
+    min-width:34px!important;
+    max-width:34px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Fundo"],
+  #sec-fundos #mainTable td.col-fundo{
+    width:330px!important;
+    min-width:280px!important;
+    max-width:360px!important;
+  }
+
+  #sec-fundos #mainTable td.col-fundo{
+    overflow:hidden!important;
+  }
+
+  #sec-fundos #mainTable .fundo-cell-name{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:3;
+    white-space:normal!important;
+    overflow:hidden!important;
+    overflow-wrap:anywhere;
+    text-overflow:ellipsis;
+    line-height:1.35!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Conv / Pag"],
+  #sec-fundos #mainTable td.liq-unified-cell{
+    width:132px!important;
+    min-width:132px!important;
+    max-width:132px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Variacao Dia (%)"],
+  #sec-fundos #mainTable th[data-column="Acum. Mes (%)"],
+  #sec-fundos #mainTable th[data-column="Acum. Ano (%)"],
+  #sec-fundos #mainTable th[data-column="Acum. 12M (%)"],
+  #sec-fundos #mainTable td.col-pct,
+  #sec-fundos #mainTable td.col-pct-12m{
+    width:108px!important;
+    min-width:108px!important;
+    max-width:108px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Data Inicio"]{
+    width:112px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Cota (R$)"]{
+    width:110px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="PL (milhoes R$)"]{
+    width:126px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Documentos"],
+  #sec-fundos #mainTable td.col-docs{
+    width:132px!important;
+    min-width:132px!important;
+    max-width:132px!important;
+  }
+
+  #sec-fundos #mainTable td:not(.col-fundo):not(.detail-cell){
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  #sec-fundos .table-wrap.is-scrolled-x-v171{
+    box-shadow:inset 14px 0 18px -18px rgba(232,187,106,.65),0 4px 40px rgba(0,0,0,.3);
+  }
+}

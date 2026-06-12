@@ -13137,3 +13137,294 @@ if(document.readyState === 'loading'){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',syncBuild,{once:true});
   else syncBuild();
 })();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v171 — Tabela do catálogo: colunas controladas
+   - impede que novos campos técnicos do CSV apareçam na grade;
+   - reaproveita os campos operacionais no painel de detalhes;
+   - reinicia a rolagem horizontal após filtros, vista e paginação;
+   - mantém a tabela mobile resumida (Fundo + Rentabilidade).
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_CATALOG_TABLE_SANITIZED_20260612_v171';
+  const CORE_DESKTOP_ORDER = [
+    'Fundo',
+    'Data Inicio',
+    'Cota (R$)',
+    'Variacao Dia (%)',
+    'Acum. Mes (%)',
+    'Acum. Ano (%)',
+    'Acum. 12M (%)',
+    'PL (milhoes R$)'
+  ];
+
+  function hasValueV171(value){
+    if(value === null || value === undefined) return false;
+    const text = String(value).trim();
+    return !!text && !/^(?:-|—|null|none|indispon[ií]vel)$/i.test(text);
+  }
+
+  function firstValueV171(row, names){
+    for(const name of names){
+      if(hasValueV171(row?.[name])) return row[name];
+    }
+    return '';
+  }
+
+  function copyAliasV171(row, canonical, aliases){
+    if(hasValueV171(row?.[canonical])) return;
+    const value = firstValueV171(row, aliases);
+    if(hasValueV171(value)) row[canonical] = value;
+  }
+
+  function listValuesV171(value){
+    if(Array.isArray(value)) return value.map(v=>String(v).trim()).filter(Boolean);
+    if(!hasValueV171(value)) return [];
+    const text = String(value).trim();
+    try{
+      const parsed = JSON.parse(text);
+      if(Array.isArray(parsed)) return parsed.map(v=>String(v).trim()).filter(Boolean);
+    }catch(_){ /* valor textual comum */ }
+    return text.split(/\s*[|;,·]\s*/g).map(v=>v.trim()).filter(Boolean);
+  }
+
+  function formatDateV171(value){
+    if(!hasValueV171(value)) return '';
+    const text = String(value).trim();
+    const iso = text.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(iso) return `${iso[3]}/${iso[2]}/${iso[1]}`;
+    return text;
+  }
+
+  function formatPctV171(value){
+    if(!hasValueV171(value)) return '';
+    const raw = String(value).trim().replace('%','').replace(/\s/g,'').replace(',','.');
+    const number = Number(raw);
+    if(!Number.isFinite(number)) return String(value).trim();
+    return number.toLocaleString('pt-BR',{maximumFractionDigits:2}) + '%';
+  }
+
+  function normalizeOperationalColumnsV171(row){
+    if(!row || typeof row !== 'object') return row;
+
+    copyAliasV171(row,'Fundo',[
+      'Nome do Fundo','Nome Fundo','Razão Social','Razao Social','RAZÃO SOCIAL','RAZAO SOCIAL','no_fundo'
+    ]);
+    copyAliasV171(row,'Data Inicio',[
+      'Data Início','Data de Inicio','Data de Início','DATA INICIO','DATA INÍCIO'
+    ]);
+    copyAliasV171(row,'Variacao Dia (%)',['Variação Dia (%)','VARIACAO DIA (%)','VARIAÇÃO DIA (%)']);
+    copyAliasV171(row,'Acum. Mes (%)',['Acum. Mês (%)','ACUM. MES (%)','ACUM. MÊS (%)']);
+    copyAliasV171(row,'Acum. Ano (%)',['ACUM. ANO (%)']);
+    copyAliasV171(row,'Acum. 12M (%)',['Acum. 12 Meses (%)','ACUM. 12M (%)']);
+    copyAliasV171(row,'PL (milhoes R$)',['PL (milhões R$)','PL MILHOES R$','PL MILHÕES R$']);
+
+    const segments = listValuesV171(firstValueV171(row,[
+      'Segmentos','SEGMENTOS','Público Alvo','Publico Alvo','lista_publico_alvo'
+    ]));
+    if(segments.length && !hasValueV171(row['Público Alvo'])){
+      row['Público Alvo'] = segments.join(' · ');
+    }
+
+    const endGrace = firstValueV171(row,[
+      'Fim Carência','Fim Carencia','FIM CARÊNCIA','FIM CARENCIA','Data Fim Carência','Data Fim Carencia','dt_fim_carencia'
+    ]);
+    if(hasValueV171(endGrace) && !hasValueV171(row['Carência'])){
+      row['Carência'] = `Até ${formatDateV171(endGrace)}`;
+    }
+
+    const advanceRaw = firstValueV171(row,[
+      'Adiantamento','ADIANTAMENTO','Tipo Adiantamento','TIPO ADIANTAMENTO','Adiantamento Resgate'
+    ]);
+    const advancePct = firstValueV171(row,[
+      'Percentual Adiantamento (%)','PERCENTUAL ADIANTAMENTO (%)','Percentual de Adiantamento (%)','pc_adiant_resgate'
+    ]);
+    if(!hasValueV171(row['Adiantamento de Resgate']) && (hasValueV171(advanceRaw) || hasValueV171(advancePct))){
+      const rawText = String(advanceRaw || '').trim();
+      const norm = rawText.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+      const parts = [];
+      if(/^(TRUE|SIM|1)$/.test(norm)) parts.push('Sim');
+      else if(/^(FALSE|NAO|0)$/.test(norm)) parts.push('Não disponível');
+      else if(hasValueV171(rawText) && !/^\d+(?:[.,]\d+)?$/.test(rawText)) parts.push(rawText);
+      else if(hasValueV171(rawText)) parts.push(formatPctV171(rawText));
+      const pctText = formatPctV171(advancePct);
+      if(pctText && !parts.includes(pctText)) parts.push(pctText);
+      row['Adiantamento de Resgate'] = parts.join(' · ') || 'Não informado';
+    }
+
+    return row;
+  }
+
+  // Os dados novos continuam disponíveis para busca e detalhes, mas não viram
+  // automaticamente colunas da grade principal.
+  try{
+    const originalMergeV171 = mesclarMetadadosFundo;
+    mesclarMetadadosFundo = function(row){
+      return normalizeOperationalColumnsV171(originalMergeV171(row));
+    };
+  }catch(error){
+    console.warn('[v171] Não foi possível normalizar os metadados:', error);
+  }
+
+  function isMobileTableV171(){
+    try{
+      return window.matchMedia('(max-width: 820px)').matches;
+    }catch(_){
+      return window.innerWidth <= 820;
+    }
+  }
+
+  function desktopHeadersV171(){
+    const available = new Set(Array.isArray(displayHeaders) ? displayHeaders : []);
+    const core = CORE_DESKTOP_ORDER.filter(header=>available.has(header));
+    const output = [];
+
+    core.forEach(header=>{
+      output.push(header);
+      if(header === 'Fundo') output.push('Conv / Pag');
+    });
+
+    const meetingView = typeof vistaAtual === 'undefined' || vistaAtual === 'reuniao';
+    const filteredHeaders = meetingView
+      ? output.filter(header=>header !== 'Data Inicio' && header !== 'Cota (R$)' && header !== 'PL (milhoes R$)')
+      : output;
+
+    filteredHeaders.push('Documentos');
+    return filteredHeaders;
+  }
+
+  function mobileHeadersV171(){
+    const available = new Set(Array.isArray(displayHeaders) ? displayHeaders : []);
+    return available.has('Fundo') ? ['Fundo','Resumo Mobile'] : [];
+  }
+
+  try{
+    getVisibleHeaders = function(){
+      return isMobileTableV171() ? mobileHeadersV171() : desktopHeadersV171();
+    };
+  }catch(error){
+    console.warn('[v171] Não foi possível controlar as colunas da tabela:', error);
+  }
+
+  function decorateHeadersV171(){
+    const row = document.querySelector('#tableHead tr');
+    if(!row) return;
+    const headers = getVisibleHeaders();
+    [...row.children].forEach((th,index)=>{
+      if(index < 2){
+        th.dataset.column = index === 0 ? 'expandir' : 'comparar';
+        return;
+      }
+      const column = headers[index - 2];
+      if(column) th.dataset.column = column;
+    });
+  }
+
+  try{
+    const originalBuildHeaderV171 = buildHeader;
+    buildHeader = function(){
+      const result = originalBuildHeaderV171.apply(this,arguments);
+      decorateHeadersV171();
+      resetTableXScrollV171();
+      return result;
+    };
+  }catch(error){
+    console.warn('[v171] Não foi possível identificar os cabeçalhos:', error);
+  }
+
+  let resetFrameV171 = 0;
+  function resetTableXScrollV171(){
+    const wrap = document.querySelector('#sec-fundos .table-wrap');
+    if(!wrap) return;
+    cancelAnimationFrame(resetFrameV171);
+    resetFrameV171 = requestAnimationFrame(()=>{
+      wrap.scrollLeft = 0;
+      wrap.classList.remove('is-scrolled-x-v171');
+    });
+  }
+
+  function bindScrollStateV171(){
+    const wrap = document.querySelector('#sec-fundos .table-wrap');
+    if(!wrap || wrap.dataset.v171ScrollBound === '1') return;
+    wrap.dataset.v171ScrollBound = '1';
+    wrap.addEventListener('scroll',()=>{
+      wrap.classList.toggle('is-scrolled-x-v171',wrap.scrollLeft > 8);
+    },{passive:true});
+  }
+
+  function resetAfterResultV171(result){
+    if(result && typeof result.finally === 'function'){
+      return result.finally(resetTableXScrollV171);
+    }
+    resetTableXScrollV171();
+    return result;
+  }
+
+  try{
+    const originalApplyFilterV171 = applyFilter;
+    applyFilter = function(){
+      return resetAfterResultV171(originalApplyFilterV171.apply(this,arguments));
+    };
+    window.applyFilter = applyFilter;
+  }catch(error){
+    console.warn('[v171] Não foi possível ajustar applyFilter:',error);
+  }
+
+  try{
+    const originalSetVistaV171 = setVista;
+    setVista = function(){
+      return resetAfterResultV171(originalSetVistaV171.apply(this,arguments));
+    };
+    window.setVista = setVista;
+  }catch(error){
+    console.warn('[v171] Não foi possível ajustar setVista:',error);
+  }
+
+  try{
+    const originalChangePageV171 = changeFundPageV168;
+    changeFundPageV168 = function(){
+      return resetAfterResultV171(originalChangePageV171.apply(this,arguments));
+    };
+    window.changeFundPageV168 = changeFundPageV168;
+  }catch(error){
+    console.warn('[v171] Não foi possível ajustar changeFundPageV168:',error);
+  }
+
+  try{
+    const originalLoadDataV171 = carregarDados;
+    carregarDados = function(){
+      return resetAfterResultV171(originalLoadDataV171.apply(this,arguments));
+    };
+    window.carregarDados = carregarDados;
+  }catch(error){
+    console.warn('[v171] Não foi possível ajustar carregarDados:',error);
+  }
+
+  function setupV171(){
+    document.documentElement.classList.add('catalog-table-sanitized-v171');
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+    bindScrollStateV171();
+    decorateHeadersV171();
+    resetTableXScrollV171();
+
+    const perPageSelect = document.getElementById('perPage');
+    if(perPageSelect && perPageSelect.dataset.v171ResetBound !== '1'){
+      perPageSelect.dataset.v171ResetBound = '1';
+      perPageSelect.addEventListener('change',resetTableXScrollV171);
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded',setupV171,{once:true});
+  else setupV171();
+
+  window.__ELTAUM_CATALOG_TABLE_V171__ = {
+    build:BUILD,
+    normalizeRow:normalizeOperationalColumnsV171,
+    visibleHeaders:()=>getVisibleHeaders(),
+    resetHorizontalScroll:resetTableXScrollV171
+  };
+})();
