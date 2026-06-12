@@ -1,0 +1,28 @@
+PACOTE DE TESTE — DASHBOARD DARK v157
+
+Objetivo:
+- Corrigir o modo Dashboard que ficou com áreas brancas e desalinhadas.
+- Aproximar o visual da imagem escura enviada: sidebar, topo compacto, KPIs, catálogo à esquerda e painel rápido à direita.
+- Preservar o modo Clássico e o mobile.
+
+Arquivos principais:
+- index.html
+- style.css
+- app.js
+- style-dashboard-v157.css
+- app-dashboard-v157.js
+
+Como testar no GitHub:
+1. Suba todos os arquivos desta pasta na branch de teste.
+2. Abra a página no desktop.
+3. Clique em Dashboard no topo.
+4. Para voltar, clique em Clássico.
+
+Se quiser desfazer:
+- Remova do index.html as linhas:
+  <link href="style-dashboard-v157.css?v=dashboard-dark-v157" rel="stylesheet"/>
+  <script defer src="app-dashboard-v157.js?v=dashboard-dark-v157"></script>
+
+Observação:
+- O Dashboard escuro só é aplicado em telas desktop (1024px+).
+- No celular, mantém o comportamento atual.
