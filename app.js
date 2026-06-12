@@ -5054,7 +5054,7 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>
 
       <div class="fund-card-performance-v68" aria-label="Rentabilidade do fundo">
-        <div class="fund-card-performance-title-v68">Rentabilidade</div>
+        <div class="fund-card-performance-title-v68">Desempenho</div>
         <div class="fund-card-perf-short-v68">
           <span class="fund-card-perf-chip-v68"><small>Dia</small><strong class="${diaInfo.cls}">${diaInfo.txt}</strong></span>
           <span class="fund-card-perf-chip-v68"><small>Mês</small><strong class="${mesInfo.cls}">${mesInfo.txt}</strong></span>
