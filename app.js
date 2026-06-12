@@ -1,3 +1,4 @@
+// ELTAUM_MARKET_ANALYTIC_TYPOGRAPHY_20260612_v161
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
 function toggleSection(b,c){

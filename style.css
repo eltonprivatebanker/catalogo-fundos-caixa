@@ -26846,3 +26846,200 @@ html.fundos-meta-integration-v156 .detail-grid-compact .detail-val{
     overflow-x:auto;
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   v161 — Tipografia e respiro da tabela analítica de mercado
+   Objetivo: manter a compactação da v160 sem sacrificar legibilidade.
+   ═══════════════════════════════════════════════════════════════ */
+@media (min-width:901px){
+  html.market-analytic-typography-v161 .market-analytic-tools-v160{
+    min-height:46px;
+    padding:9px 12px;
+  }
+  html.market-analytic-typography-v161 .market-analytic-tools-title-v160{
+    gap:9px;
+  }
+  html.market-analytic-typography-v161 .market-analytic-tools-title-v160 strong{
+    color:#f1f4fb;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.81rem;
+    font-weight:760;
+    line-height:1.2;
+  }
+  html.market-analytic-typography-v161 .market-analytic-tools-title-v160 small{
+    color:#8995ad;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.62rem;
+    font-weight:520;
+    line-height:1.25;
+  }
+  html.market-analytic-typography-v161 .market-analytic-currency-v160 > span{
+    padding-inline:8px;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.56rem;
+    font-weight:780;
+    letter-spacing:.055em;
+  }
+  html.market-analytic-typography-v161 .market-analytic-currency-v160 button{
+    min-height:27px;
+    padding:6px 9px;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.61rem;
+    font-weight:720;
+  }
+
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .indic-table-v2 th{
+    height:46px;
+    padding:9px 13px;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.67rem;
+    font-weight:780;
+    line-height:1.18;
+    letter-spacing:.05em;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .indic-table-v2 .th-sub{
+    margin-top:4px;
+    color:#8a96ad;
+    font-family:'JetBrains Mono',monospace;
+    font-size:.60rem;
+    font-weight:560;
+    line-height:1.15;
+    letter-spacing:0;
+  }
+
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .group-row td{
+    height:28px;
+    padding:7px 13px 6px;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .group-lbl > span{
+    color:#9ca9bf;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.60rem;
+    font-weight:780;
+    line-height:1;
+    letter-spacing:.07em;
+  }
+
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .data-row,
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .data-row td{
+    height:66px;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .data-row td{
+    padding:12px 14px;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .ind-name-v2{
+    gap:11px;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .ind-icon-v2{
+    width:29px;
+    height:29px;
+    flex-basis:29px;
+    border-radius:8px;
+    font-size:.76rem;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .ind-v2-title{
+    color:#f0f3fa;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.81rem;
+    font-weight:760;
+    line-height:1.2;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .ind-v2-sub{
+    margin-top:4px;
+    color:#8d99b0;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.64rem;
+    font-weight:500;
+    line-height:1.3;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .badge-alrt{
+    margin-left:6px;
+    padding:3px 6px;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.52rem;
+    font-weight:760;
+    line-height:1;
+    vertical-align:1px;
+  }
+
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .v2-val,
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .v2-val[style]{
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.88rem!important;
+    font-weight:720!important;
+    line-height:1.16!important;
+    letter-spacing:-.018em;
+    font-variant-numeric:tabular-nums;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .v2-val.neu,
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .td-cur > .v2-val.neu{
+    color:#edf1f8;
+    font-size:.97rem!important;
+    font-weight:700!important;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .v2-val.dash{
+    font-size:.90rem!important;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .v2-sub,
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .period-line{
+    margin-top:5px;
+    color:#8a96ad;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.62rem!important;
+    font-weight:520;
+    line-height:1.25;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .period-status{
+    font-weight:700;
+  }
+
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .us-market-block{
+    gap:2px;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .us-market-line{
+    min-height:18px;
+    gap:8px;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .us-market-label{
+    min-width:25px;
+    color:#8390a8;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.57rem;
+    font-weight:760;
+    line-height:1;
+    letter-spacing:.035em;
+    text-align:right;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .us-market-value{
+    font-family:'JetBrains Mono',monospace;
+    font-size:.84rem!important;
+    font-weight:720;
+    line-height:1.1;
+    letter-spacing:-.018em;
+    font-variant-numeric:tabular-nums;
+  }
+  /* Quando uma moeda já está selecionada no topo, não repete o rótulo em cada célula. */
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160.us-mode-brl .us-market-label,
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160.us-mode-usd .us-market-label{
+    display:none;
+  }
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160.us-mode-brl .us-market-line,
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160.us-mode-usd .us-market-line{
+    justify-content:flex-end;
+  }
+
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .indic-source-note,
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 + .indic-source-note{
+    color:#7f8ba1;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.57rem;
+    line-height:1.35;
+  }
+}
+
+@media (max-width:1180px) and (min-width:901px){
+  html.market-analytic-typography-v161 .indic-table-wrap.market-analytic-compact-v160 .indic-table-v2{
+    min-width:980px;
+  }
+}
