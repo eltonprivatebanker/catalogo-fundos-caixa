@@ -2981,9 +2981,147 @@ function buildDetailQuickActions(row, urlFund){
   ].filter(Boolean).join('');
 
   if(!buttons) return '';
-  return `<div class="detail-actions-card">
-    <div class="detail-actions-title">Ações rápidas</div>
+  return `<div class="detail-actions-card detail-actions-card-v158">
+    <div class="detail-actions-copy-v158">
+      <div class="detail-actions-title">Informações do fundo</div>
+      <small>Dados oficiais do cadastro e documentos essenciais</small>
+    </div>
     <div class="detail-actions-buttons">${buttons}</div>
+  </div>`;
+}
+
+function detailValueV158(r, keys, fallback='—'){
+  for(const key of keys){
+    const value = r?.[key];
+    if(value === null || value === undefined) continue;
+    const text = String(value).trim();
+    if(text && text !== '—' && text.toUpperCase() !== 'INDISPONIVEL') return text;
+  }
+  return fallback;
+}
+
+function detailMoneyV158(value){
+  const raw = String(value ?? '').trim();
+  if(!raw || raw === '—') return '—';
+  let normalized = raw.replace(/R\$/gi,'').replace(/\s/g,'');
+  if(normalized.includes(',') && normalized.includes('.')) normalized = normalized.replace(/\./g,'').replace(',','.');
+  else normalized = normalized.replace(',','.');
+  const number = Number(normalized);
+  if(!Number.isFinite(number)) return raw;
+  return number.toLocaleString('pt-BR',{style:'currency',currency:'BRL',minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+function detailPercentV158(value){
+  const raw = String(value ?? '').trim();
+  if(!raw || raw === '—') return '—';
+  return /%/.test(raw) ? raw : `${raw}%`;
+}
+
+function detailBoolV158(value){
+  const raw = String(value ?? '').trim();
+  const norm = normalizarTextoBase(raw);
+  if(!raw || raw === '—' || norm === 'NAO INFORMADO' || norm === 'INDISPONIVEL') return {label:'Não informado',state:'unknown',dot:'○'};
+  if(['SIM','TRUE','1','ATIVO','ATIVA'].includes(norm) || norm.startsWith('SIM ')) return {label:'Sim',state:'on',dot:'●'};
+  if(['NAO','FALSE','0','INATIVO','INATIVA'].includes(norm) || norm.startsWith('NAO ')) return {label:'Não',state:'off',dot:'○'};
+  return {label:raw,state:'unknown',dot:'○'};
+}
+
+function detailAudienceV158(value){
+  const raw = String(value ?? '').trim();
+  if(!raw || raw === '—') return [];
+  let values = [];
+  if(raw.startsWith('[')){
+    try{
+      const parsed = JSON.parse(raw);
+      if(Array.isArray(parsed)) values = parsed;
+    }catch(e){}
+  }
+  if(!values.length) values = raw.split(/\s*[·;,|]\s*/g);
+  return [...new Set(values.map(v=>String(v).trim()).filter(Boolean))];
+}
+
+function buildDetailExecutiveV158(r){
+  const d = obterDadosOperacionaisFundo(r);
+  const capCls = classeStatusOperacional(d.captacao.status,'captacao');
+  const adiCls = classeStatusOperacional(d.adiantamento.status,'adiantamento');
+  const profile = detailValueV158(r,['Perfil de Risco']);
+  const cnpj = detailValueV158(r,['CNPJ']);
+  const code = detailValueV158(r,['codfundo','Código do fundo','Codigo do fundo']);
+  const taxAdm = detailPercentV158(detailValueV158(r,['Taxa Adm (%)']));
+  const appInitial = detailMoneyV158(detailValueV158(r,['Aplicacao Minima (R$)','Aplicação Mínima','Aplicacao Minima']));
+  const appAdditional = detailMoneyV158(detailValueV158(r,['Aplicacao Adicional Minima (R$)','Aplicação Adicional Mínima']));
+  const redemptionMin = detailMoneyV158(detailValueV158(r,['Resgate Minimo (R$)','Resgate Mínimo']));
+  const balanceMin = detailMoneyV158(detailValueV158(r,['Saldo Minimo (R$)','Saldo Mínimo']));
+  const conversionApp = detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação']);
+  const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
+  const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
+  const audience = detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo']));
+  const automatic = detailBoolV158(detailValueV158(r,['Movimentação Automática','Movimentacao Automatica']));
+  const grace = detailBoolV158(detailValueV158(r,['Carência','Carencia']));
+  const asg = detailBoolV158(detailValueV158(r,['ASG']));
+  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
+
+  const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
+  const audienceHtml = audience.length
+    ? audience.map(v=>`<span class="detail-audience-chip-v158">${htmlAttr(v)}</span>`).join('')
+    : '<span class="detail-empty-v158">Não informado</span>';
+  const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
+
+  return `<div class="detail-executive-v158">
+    <section class="detail-summary-v158" aria-label="Resumo executivo do fundo">
+      <div class="detail-section-head-v158"><div><span>Visão geral</span><strong>Características principais</strong></div><small>${r?.__fundosMeta?'Cadastro oficial integrado':'Dados disponíveis no catálogo'}</small></div>
+      <div class="detail-summary-grid-v158">
+        <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
+        <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
+        <div class="detail-summary-item-v158"><span>Perfil</span><strong>${htmlAttr(profile)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Captação</span>${statusValue(d.captacao.texto,capCls)}</div>
+      </div>
+    </section>
+
+    <section class="detail-movement-v158" aria-label="Movimentação do fundo">
+      <div class="detail-section-head-v158"><div><span>Movimentação</span><strong>Prazos, horários e valores mínimos</strong></div><small>Solicitações após o limite podem seguir para o próximo dia útil</small></div>
+      <div class="detail-movement-grid-v158">
+        <article class="detail-movement-card-v158 application">
+          <div class="detail-movement-title-v158"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
+          <div class="detail-flow-v158">
+            <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
+            <i>→</i>
+            <div><span>Conversão</span><strong>${htmlAttr(conversionApp)}</strong></div>
+          </div>
+          <div class="detail-movement-meta-v158"><span><b>Inicial</b>${htmlAttr(appInitial)}</span><span><b>Adicional</b>${htmlAttr(appAdditional)}</span></div>
+        </article>
+        <article class="detail-movement-card-v158 redemption">
+          <div class="detail-movement-title-v158"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
+          <div class="detail-flow-v158 three">
+            <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
+            <i>→</i>
+            <div><span>Conversão</span><strong>${htmlAttr(conversionRed)}</strong></div>
+            <i>→</i>
+            <div><span>Pagamento</span><strong>${htmlAttr(paymentRed)}</strong></div>
+          </div>
+          <div class="detail-movement-meta-v158"><span><b>Mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(d.adiantamento.texto)}</span></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="detail-lower-grid-v158">
+      <section class="detail-info-card-v158" aria-label="Identificação e custos">
+        <div class="detail-card-head-v158"><span>Identificação e custos</span></div>
+        <dl class="detail-definition-list-v158">
+          <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
+          <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
+          <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
+          <div><dt>Código do fundo</dt><dd>${htmlAttr(code)}</dd></div>
+        </dl>
+      </section>
+      <section class="detail-info-card-v158" aria-label="Público e enquadramento">
+        <div class="detail-card-head-v158"><span>Público e enquadramento</span></div>
+        <div class="detail-audience-v158"><b>Público-alvo</b><div>${audienceHtml}</div></div>
+        <div class="detail-flags-v158">${flagHtml('Automático',automatic)}${flagHtml('Carência',grace)}${flagHtml('ASG',asg)}</div>
+      </section>
+    </div>
+    ${observation ? `<aside class="detail-observation-v158"><span>Observação operacional</span><p>${htmlAttr(observation)}</p></aside>` : ''}
   </div>`;
 }
 
@@ -3193,48 +3331,14 @@ function gerarLeituraRapidaFundo(r){
 }
 
 function buildDetailPanel(r,colspan){
-  const DOC_DETAIL_KEYS = new Set(['doc_lamina','doc_regulamento','doc_inf_comp','doc_comunicado','doc_carta','doc_boletim','doc_termo']);
-  const FACT_DETAIL_KEYS = new Set(['Benchmark','Benchmark Oficial','Estrategia','Estratégia','Adiantamento Resgate','Adiantamento de Resgate','Classificacao Tributaria','Classificação Tributária','Tributacao','Tributação','Status Captacao','Status Captação','Status de Captação','Captacao','Captação','Horário Limite Aplicação','Horario Limite Aplicacao','Horário Aplicação','Horario Aplicacao','Grade Aplicação','Grade Aplicacao','Horário Limite Resgate','Horario Limite Resgate','Horário Resgate','Horario Resgate','Grade Resgate','Grade de Resgate','Horário Limite Movimentação','Horario Limite Movimentacao','Grade de Movimentação','Grade de Movimentacao','Observação Operacional','Observacao Operacional']);
-  const LABELS = {
-    'codfundo':'Código do fundo',
-    'Aplicacao Minima (R$)':'Aplicação mínima',
-    'Aplicacao Adicional Minima (R$)':'Aplicação adicional mínima',
-    'Resgate Minimo (R$)':'Resgate mínimo',
-    'Saldo Minimo (R$)':'Saldo mínimo',
-    'Conversao Aplicacao':'Conversão aplicação',
-    'Público Alvo':'Público-alvo',
-    'Movimentação Automática':'Movimentação automática',
-    'Carência':'Carência',
-    'ASG':'ASG',
-    'Taxa Adm (%)':'Taxa adm.',
-    'Conversao Resgate':'Conversão resgate',
-    'Pagamento Resgate':'Pagamento resgate',
-    'Perfil de Risco':'Perfil de risco'
-  };
-  const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k) && !DOC_DETAIL_KEYS.has(k) && !FACT_DETAIL_KEYS.has(k));
-  const items=detailCols.map(k=>{
-    let val=String(r[k]||'').trim()||'—';
-
-    // CNPJ agora fica somente como texto copiável; sem link externo para Receita.
-    const extraClass = k==='CNPJ' ? ' copyable' : '';
-
-    if(k==='Taxa Adm (%)'&&val!=='—') val=val+'%';
-    if(['Aplicacao Minima (R$)','Aplicacao Adicional Minima (R$)','Resgate Minimo (R$)','Saldo Minimo (R$)'].includes(k)&&val!=='—'){
-      const n=parseFloat(val.replace(',','.'));
-      val=isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
-    }
-    const label = LABELS[k] || k;
-    return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
-  }).join('');
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
-    <div class="detail-panel detail-panel-mobile-clean">
-      <div class="detail-main">${detailActions}${buildFundOperationalFacts(r,'detail')}<div class="detail-grid-compact">${items}</div>${gerarLeituraRapidaFundo(r)}</div>
+    <div class="detail-panel detail-panel-mobile-clean detail-panel-v158">
+      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
-
 
 
 function normalizarTextoBase(v){
@@ -12408,4 +12512,18 @@ if(!isSearchInput(el)) return;
       return {linhasCsv:rows.length,vinculados,semVinculo:rows.length-vinculados,cnpjsMeta:Object.keys(_fundosMetaMap||{}).length};
     }
   };
+})();
+
+
+/* ==========================================================
+   ELTAUM v158 — detalhes do fundo organizados por jornada
+========================================================== */
+(function(){
+  const BUILD='ELTAUM_FUND_DETAIL_EXECUTIVE_20260612_v158';
+  function mark(){
+    document.documentElement.classList.add('fund-detail-executive-v158');
+    window.__ELTAUM_BUILD_V158__=BUILD;
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',mark,{once:true});
+  else mark();
 })();
