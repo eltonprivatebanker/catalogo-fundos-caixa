@@ -1,0 +1,27 @@
+CATÁLOGO DE FUNDOS CAIXA — DASHBOARD SEGURO v159
+
+Arquivos do pacote:
+- index.html
+- style.css
+- app.js
+- style-dashboard-v159.css
+- app-dashboard-v159.js
+
+O que mudou na v159:
+- Começa no modo Clássico por segurança.
+- O usuário pode clicar em Dashboard no topo.
+- Sem MutationObserver.
+- Sem intervalo infinito.
+- O layout é aplicado uma única vez.
+- Se mudar para Clássico, os blocos voltam para o lugar original.
+- Mobile preservado.
+
+Para testar:
+1. Suba todos os arquivos na mesma pasta do GitHub Pages.
+2. Abra a página.
+3. Aguarde carregar no modo Clássico.
+4. Clique em Dashboard.
+
+Se algo ficar estranho:
+- No console, rode: ELTAUM_DASHBOARD_V159.restoreClassic()
+- Ou remova do index.html as linhas com style-dashboard-v159.css e app-dashboard-v159.js.
