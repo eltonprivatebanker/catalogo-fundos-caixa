@@ -1,7 +1,15 @@
 """
-ROBÔ SIPII CAIXA — v17.1 (Edição GitHub Repository)
+ROBÔ SIPII CAIXA — v18.0 (Automação integral GitHub)
 ==========================================================
-Novidades v17.1 vs v16:
+Novidades v18.0:
+  + Atualiza automaticamente o fundos.json integral a cada execução
+  + Exporta metadados operacionais/comerciais para dados_atuais.csv e Excel
+  + Mantém fundos_caixa.json como índice leve de documentos por CNPJ
+  + Corrige fallback de Lâmina (LA) separado do Boletim Comercial (LAC)
+  + Inclui Termo de Adesão, benchmark, estratégia, captação, tributação, horários,
+    adiantamento, mínimos, público-alvo, carência, ASG e observações
+
+Histórico v17.1 vs v16:
   + Poupança nova e antiga com acum. ano pré-calculado server-side
     → cards.poupanca_nova: { valor, mensal, acum_ano, historico_ano, nota }
     → cards.poupanca_antiga: { valor, mensal, acum_ano, historico_ano, nota }
@@ -123,7 +131,8 @@ FOCUS_CACHE_PATH    = BASE_DIR / "focus_cache.json"
 SELIC_BASE_PATH     = BASE_DIR / "historico da selic do BC.json"
 META_INFLACAO_PATH  = BASE_DIR / "meta-vs-inflacao-efetiva.json"
 FUNDOS_JSON_LOCAL   = BASE_DIR / "fundos.json"
-FUNDOS_CAIXA_PATH   = BASE_DIR / "fundos_caixa.json"   # ★ v16
+FUNDOS_CAIXA_PATH   = BASE_DIR / "fundos_caixa.json"   # índice leve de documentos
+FUNDOS_AUDITORIA_PATH = BASE_DIR / "auditoria_fundos.json"
 PTAX_CACHE_PATH    = BASE_DIR / "ptax_historico_cache.json"
 
 # ---------------------------------------------------------------------------
@@ -701,6 +710,53 @@ def _url_doc_valida(url):
     u = str(url).strip().upper()
     return u not in ("INDISPONIVEL", "NULL", "NONE", "") and str(url).startswith("http")
 
+
+def _salvar_json_atomico(caminho, dados):
+    """Grava JSON sem risco de deixar arquivo parcial se a execução for interrompida."""
+    caminho = Path(caminho)
+    temporario = caminho.with_suffix(caminho.suffix + ".tmp")
+    temporario.write_text(
+        json.dumps(dados, ensure_ascii=False, indent=2), encoding="utf-8"
+    )
+    temporario.replace(caminho)
+
+def _texto_limpo(valor):
+    if valor is None:
+        return ""
+    texto = str(valor).strip()
+    return "" if texto.upper() in {"INDISPONIVEL", "NULL", "NONE"} else texto
+
+def _sim_nao(valor):
+    if valor is True:
+        return "Sim"
+    if valor is False:
+        return "Não"
+    return ""
+
+def _status_captacao(valor):
+    if valor is True:
+        return "Aberto para captação"
+    if valor is False:
+        return "Fechado para captação"
+    return ""
+
+def _formatar_adiantamento(flag, modalidade, percentual):
+    modalidade = _texto_limpo(modalidade)
+    if flag is True:
+        partes = ["Sim"]
+        if modalidade and normalizar(modalidade) != "NAO SE APLICA":
+            partes.append(modalidade.title())
+        if percentual is not None and str(percentual).strip() != "":
+            try:
+                pct = float(percentual)
+                partes.append(f"{pct:g}%")
+            except (TypeError, ValueError):
+                partes.append(str(percentual))
+        return " · ".join(partes)
+    if flag is False:
+        return "Não se aplica" if normalizar(modalidade) == "NAO SE APLICA" else "Não disponível"
+    return modalidade
+
 def _inspecionar_campos_fundos_json(lista):
     """Debug: mostra campos do primeiro registro para identificar codfundo."""
     if not lista:
@@ -714,79 +770,106 @@ def _inspecionar_campos_fundos_json(lista):
             log(f"  {c!r:35s} = {str(val)[:60]!r}")
 
 def _parsear_lista_fundos(lista):
-    indice_exato   = {}
+    indice_exato = {}
     indice_palavras = []
-    mapa_cnpj      = {}   # ★ v16 — para fundos_caixa.json
+    mapa_cnpj = {}
 
     for f in lista:
         try:
-            nome = str(f.get("no_fundo") or "").strip()
-            if not nome: continue
-            url_raw = str(f.get("de_link_pagina_fundo") or "").strip()
-            codfundo  = _extrair_codfundo(f)
-            cnpj_raw  = formatar_cnpj(f.get("nu_cnpj"))
+            nome = _texto_limpo(f.get("no_fundo"))
+            if not nome:
+                continue
+
+            url_raw = _texto_limpo(f.get("de_link_pagina_fundo"))
+            codfundo = _extrair_codfundo(f)
+            codigo_doc = codfundo.zfill(4) if codfundo and len(codfundo) < 4 else codfundo
+            cnpj_raw = formatar_cnpj(f.get("nu_cnpj"))
             cnpj_limpo = re.sub(r'\D', '', cnpj_raw)
 
-            # ★ v16.2 — URLs de documentos direto do JSON da CAIXA (mais confiável)
-            doc_lamina    = f.get("de_link_lamina", "")
-            doc_reg       = f.get("de_link_regulamento", "")
-            doc_inf       = f.get("de_link_info_compl", "")
-            doc_comunicado= f.get("de_link_fato_relevante", "")
-            doc_boletim   = f.get("de_link_boletim_comercial", "")
-            doc_termo     = f.get("de_link_termo_adesao", "")
+            # URLs oficiais do catálogo integral.
+            doc_lamina = _texto_limpo(f.get("de_link_lamina"))
+            doc_reg = _texto_limpo(f.get("de_link_regulamento"))
+            doc_inf = _texto_limpo(f.get("de_link_info_compl"))
+            doc_comunicado = _texto_limpo(f.get("de_link_fato_relevante"))
+            doc_boletim = _texto_limpo(f.get("de_link_boletim_comercial"))
+            doc_termo = _texto_limpo(f.get("de_link_termo_adesao"))
+            doc_sumario = _texto_limpo(f.get("de_link_sumario"))
+            doc_raio_x = _texto_limpo(f.get("de_link_raio_x"))
 
-            # Carta mensal: não está no JSON, constrói com codfundo se disponível
-            doc_carta = (f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_{codfundo}.pdf"
-                         if codfundo else "")
-
-            # Fallback para lamina/regulamento construídos, se JSON não tiver URL válida
-            if not _url_doc_valida(doc_lamina) and codfundo:
-                doc_lamina = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_{codfundo}.pdf"
-            if not _url_doc_valida(doc_reg) and codfundo:
-                doc_reg = f"https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_{codfundo}.pdf"
-            if not _url_doc_valida(doc_inf) and codfundo:
-                doc_inf = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_{codfundo}.pdf"
+            # Somente documentos com padrão confiável recebem fallback.
+            doc_carta = (
+                f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-carta-mensal/CM_{codfundo}.pdf"
+                if codfundo else ""
+            )
+            if not _url_doc_valida(doc_lamina) and codigo_doc:
+                doc_lamina = f"https://www.caixa.gov.br/downloads/aplicacao-financeira-laminas/LA_{codigo_doc}.pdf"
+            if not _url_doc_valida(doc_reg) and codigo_doc:
+                doc_reg = f"https://www.caixa.gov.br/downloads/aplicacao-financeira-regulamentos/RG_{codigo_doc}.pdf"
+            if not _url_doc_valida(doc_inf) and codigo_doc:
+                doc_inf = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-com/FIC_{codigo_doc}.pdf"
             if not _url_doc_valida(doc_comunicado) and codfundo:
                 doc_comunicado = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-comunicado-aos-cotistas/COM_{codfundo}.pdf"
-
-            # ★ v17.2 — Boletim Comercial = LAC_{codfundo}.pdf (mesma URL da lâmina)
             if not _url_doc_valida(doc_boletim) and codfundo:
                 doc_boletim = f"https://www.caixa.gov.br/Downloads/aplicacao-financeira-laminas-comerciais/LAC_{codfundo}.pdf"
 
             dados = {
-                "url":               url_raw if _url_valida(url_raw) else "",
-                "cnpj":              cnpj_raw,
-                "codfundo":          codfundo,
-                "perfil_risco":      f.get("no_perfil_risco"),
-                "taxa_adm":          f.get("pc_taxa_adm_cliente"),
-                "aplicacao_minima":  f.get("vr_aplicacao_inicial"),
+                "url": url_raw if _url_valida(url_raw) else "",
+                "cnpj": cnpj_raw,
+                "codfundo": codfundo,
+                "perfil_risco": f.get("no_perfil_risco"),
+                "taxa_adm": f.get("pc_taxa_adm_cliente"),
+                "aplicacao_minima": f.get("vr_aplicacao_inicial"),
+                "aplicacao_adicional_minima": f.get("vr_aplicacao_adicional_minima"),
+                "resgate_minimo": f.get("vr_resgate_minimo"),
+                "saldo_minimo": f.get("vr_saldo_minimo"),
+                "conversao_aplicacao": f.get("de_conversao_aplicacao"),
                 "conversao_resgate": f.get("de_conversao_resgate"),
                 "pagamento_resgate": f.get("de_pagamento_resgate"),
-                # ★ v16.2 — URLs reais de documentos
+                "benchmark": _texto_limpo(f.get("no_benchmark")),
+                "estrategia": _texto_limpo(f.get("no_estrategia")),
+                "captacao_aberta": f.get("ic_aberto_captacao"),
+                "classificacao_tributaria": _texto_limpo(f.get("no_classificacao_tributaria")),
+                "classificacao_investidor": _texto_limpo(f.get("no_classificacao_investidor")),
+                "horario_limite": _texto_limpo(f.get("de_horario_limite")),
+                "horario_resgate": _texto_limpo(f.get("de_horario_resgate")),
+                "adiantamento_resgate": f.get("ic_adiantamento_resgate"),
+                "adiantamento_modalidade": _texto_limpo(f.get("de_adiant_manual_automatico")),
+                "adiantamento_percentual": f.get("pc_adiant_resgate"),
+                "publico_alvo": f.get("lista_publico_alvo"),
+                "segmentos": f.get("lista_segmento"),
+                "movimentacao_automatica": f.get("ic_mov_automatica"),
+                "carencia": f.get("ic_carencia"),
+                "fim_carencia": _texto_limpo(f.get("dt_fim_carencia")),
+                "asg": f.get("ic_asg"),
+                "observacao_operacional": _texto_limpo(f.get("de_observacao_qs")),
+                "razao_social": _texto_limpo(f.get("no_razao_social")),
                 "docs": {
-                    "lamina":       doc_lamina if _url_doc_valida(doc_lamina) else "",
-                    "regulamento":  doc_reg    if _url_doc_valida(doc_reg)    else "",
-                    "inf_comp":     doc_inf    if _url_doc_valida(doc_inf)    else "",
-                    "comunicado":   doc_comunicado if _url_doc_valida(doc_comunicado) else "",
+                    "lamina": doc_lamina if _url_doc_valida(doc_lamina) else "",
+                    "regulamento": doc_reg if _url_doc_valida(doc_reg) else "",
+                    "inf_comp": doc_inf if _url_doc_valida(doc_inf) else "",
+                    "comunicado": doc_comunicado if _url_doc_valida(doc_comunicado) else "",
                     "carta_mensal": doc_carta,
-                    "boletim":      doc_boletim if _url_doc_valida(doc_boletim) else "",
-                    "termo":        doc_termo   if _url_doc_valida(doc_termo)   else "",
+                    "boletim": doc_boletim if _url_doc_valida(doc_boletim) else "",
+                    "termo": doc_termo if _url_doc_valida(doc_termo) else "",
+                    "sumario": doc_sumario if _url_doc_valida(doc_sumario) else "",
+                    "raio_x": doc_raio_x if _url_doc_valida(doc_raio_x) else "",
                 },
             }
+
             indice_exato[_normalizar_nome_fundo(nome)] = dados
             palavras = _palavras_chave_fundo(nome)
             if palavras:
                 indice_palavras.append((frozenset(palavras), dados))
 
-            # ★ v16.2 — índice CNPJ para fundos_caixa.json (usa URLs reais)
             if cnpj_limpo:
                 mapa_cnpj[cnpj_limpo] = {
                     "codfundo": codfundo,
-                    "nome":     nome,
-                    "cnpj":     cnpj_raw,
-                    "docs":     dados["docs"],
+                    "nome": nome,
+                    "cnpj": cnpj_raw,
+                    "docs": dados["docs"],
                 }
-        except Exception:
+        except Exception as e:
+            log(f"[Fundos.json] Registro ignorado por erro: {e}")
             continue
 
     return {"exato": indice_exato, "palavras": indice_palavras, "cnpj": mapa_cnpj}
@@ -821,13 +904,21 @@ def _buscar_meta_json(nome_sipii, indice_json):
 
 def buscar_fundos_json(headers):
     lista = []
+    origem = "nenhuma"
     log("[Fundos.json] Baixando catálogo integral da CAIXA Asset...")
+
     try:
-        res = requests.get(FUNDOS_JSON_URL, headers=headers, timeout=25)
+        res = requests.get(FUNDOS_JSON_URL, headers=headers, timeout=35)
         if res.status_code == 200:
             raw = res.json()
-            lista = raw if isinstance(raw, list) else (raw.get("fundos") or raw.get("data") or [])
-            log(f"[Fundos.json] Download HTTP OK — {len(lista)} registros.")
+            lista = raw if isinstance(raw, list) else (raw.get("fundos") or raw.get("value") or raw.get("data") or [])
+            if not isinstance(lista, list):
+                lista = []
+            if lista:
+                origem = "http"
+                # O arquivo integral usado pela página é atualizado em toda execução bem-sucedida.
+                _salvar_json_atomico(FUNDOS_JSON_LOCAL, lista)
+                log(f"[Fundos.json] Download OK e arquivo local atualizado — {len(lista)} registros.")
         else:
             log(f"[Fundos.json] HTTP {res.status_code} — tentando arquivo local...")
     except Exception as e:
@@ -836,8 +927,12 @@ def buscar_fundos_json(headers):
     if not lista and FUNDOS_JSON_LOCAL.exists():
         try:
             raw = json.loads(FUNDOS_JSON_LOCAL.read_text(encoding="utf-8"))
-            lista = raw if isinstance(raw, list) else (raw.get("fundos") or raw.get("data") or [])
-            log(f"[Fundos.json] FALLBACK local OK — {len(lista)} registros.")
+            lista = raw if isinstance(raw, list) else (raw.get("fundos") or raw.get("value") or raw.get("data") or [])
+            if not isinstance(lista, list):
+                lista = []
+            if lista:
+                origem = "local"
+                log(f"[Fundos.json] FALLBACK local OK — {len(lista)} registros.")
         except Exception as e:
             log(f"[Fundos.json] Erro ao ler local: {e}")
 
@@ -845,26 +940,26 @@ def buscar_fundos_json(headers):
         log("[Fundos.json] Nenhuma fonte disponível. Continuando sem metadados.")
         return {}
 
-    # ★ v16.1 — inspeciona campos na primeira execução (ajuda a achar codfundo)
     _inspecionar_campos_fundos_json(lista[:1])
     indice = _parsear_lista_fundos(lista)
     log(f"[Fundos.json] {len(indice['exato'])} produtos indexados.")
 
-    # ★ v16 — salva fundos_caixa.json indexado por CNPJ para uso do HTML
     mapa_cnpj = indice.get("cnpj", {})
     if mapa_cnpj:
         saida_html = {
             "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
-            "total":     len(mapa_cnpj),
-            "por_cnpj":  mapa_cnpj,
+            "origem": origem,
+            "total": len(mapa_cnpj),
+            "por_cnpj": mapa_cnpj,
         }
         try:
-            FUNDOS_CAIXA_PATH.write_text(
-                json.dumps(saida_html, ensure_ascii=False, indent=2), encoding="utf-8")
+            _salvar_json_atomico(FUNDOS_CAIXA_PATH, saida_html)
             log(f"[Fundos.json] fundos_caixa.json salvo — {len(mapa_cnpj)} CNPJs indexados.")
         except Exception as e:
             log(f"[Fundos.json] Erro ao salvar fundos_caixa.json: {e}")
 
+    indice["_origem"] = origem
+    indice["_total_catalogo"] = len(lista)
     return indice
 
 # ★ v17.2 — Mapeamento estático para fundos sem CNPJ no SIPII
@@ -917,9 +1012,18 @@ def _buscar_codfundo_por_nome(nome_sipii, indice_json):
 def enriquecer_dados_com_fundos_json(df, indice_json):
     colunas_novas = [
         "CNPJ", "codfundo", "Perfil de Risco", "Taxa Adm (%)",
-        "Aplicacao Minima (R$)", "Conversao Resgate", "Pagamento Resgate",
-        "doc_lamina", "doc_regulamento", "doc_inf_comp",  # ★ v16.2: URLs reais
-        "doc_comunicado", "doc_carta", "doc_boletim",     # ★ v17.2: boletim LAC
+        "Aplicacao Minima (R$)", "Aplicacao Adicional Minima (R$)",
+        "Resgate Minimo (R$)", "Saldo Minimo (R$)",
+        "Conversao Aplicacao", "Conversao Resgate", "Pagamento Resgate",
+        "Benchmark Oficial", "Estratégia", "Status de Captação",
+        "Classificação Tributária", "Classificação Investidor",
+        "Horário Limite Aplicação", "Horário Limite Resgate",
+        "Adiantamento de Resgate", "Modalidade Adiantamento",
+        "Percentual Adiantamento (%)", "Público Alvo", "Segmentos",
+        "Movimentação Automática", "Carência", "Fim Carência", "ASG",
+        "Razão Social", "Observação Operacional",
+        "doc_lamina", "doc_regulamento", "doc_inf_comp", "doc_comunicado",
+        "doc_carta", "doc_boletim", "doc_termo", "doc_sumario", "doc_raio_x",
     ]
     for col in colunas_novas:
         if col not in df.columns:
@@ -927,33 +1031,89 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
     if not indice_json:
         return df
 
+    vinculados = 0
+
     def _processar_linha(row):
+        nonlocal vinculados
         url_atual = str(row.get("URL", "")).strip()
         meta = _buscar_meta_json(str(row.get("Fundo", "")), indice_json)
-        if meta:
-            if not _url_valida(url_atual):
-                row["URL"] = meta.get("url", "")
-            row["CNPJ"]                  = str(meta.get("cnpj") or "")
-            row["codfundo"]              = str(meta.get("codfundo") or "")
-            row["Perfil de Risco"]       = str(meta.get("perfil_risco") or "")
-            row["Taxa Adm (%)"]          = str(meta["taxa_adm"]) if meta.get("taxa_adm") is not None else ""
-            row["Aplicacao Minima (R$)"] = str(meta["aplicacao_minima"]) if meta.get("aplicacao_minima") is not None else ""
-            row["Conversao Resgate"]     = str(meta.get("conversao_resgate") or "")
-            row["Pagamento Resgate"]     = str(meta.get("pagamento_resgate") or "")
-            # ★ v16.2 — armazena URLs reais de documentos
-            docs = meta.get("docs", {})
-            row["doc_lamina"]     = docs.get("lamina", "")
-            row["doc_regulamento"]= docs.get("regulamento", "")
-            row["doc_inf_comp"]   = docs.get("inf_comp", "")
-            row["doc_comunicado"] = docs.get("comunicado", "")
-            row["doc_carta"]      = docs.get("carta_mensal", "")
-            row["doc_boletim"]    = docs.get("boletim", "")      # ★ v17.2: LAC_XXXX.pdf
+        if not meta:
+            return row
+
+        vinculados += 1
+        if not _url_valida(url_atual):
+            row["URL"] = meta.get("url", "")
+
+        row["CNPJ"] = str(meta.get("cnpj") or "")
+        row["codfundo"] = str(meta.get("codfundo") or "")
+        row["Perfil de Risco"] = str(meta.get("perfil_risco") or "")
+        row["Taxa Adm (%)"] = str(meta["taxa_adm"]) if meta.get("taxa_adm") is not None else ""
+        row["Aplicacao Minima (R$)"] = str(meta["aplicacao_minima"]) if meta.get("aplicacao_minima") is not None else ""
+        row["Aplicacao Adicional Minima (R$)"] = str(meta["aplicacao_adicional_minima"]) if meta.get("aplicacao_adicional_minima") is not None else ""
+        row["Resgate Minimo (R$)"] = str(meta["resgate_minimo"]) if meta.get("resgate_minimo") is not None else ""
+        row["Saldo Minimo (R$)"] = str(meta["saldo_minimo"]) if meta.get("saldo_minimo") is not None else ""
+        row["Conversao Aplicacao"] = str(meta.get("conversao_aplicacao") or "")
+        row["Conversao Resgate"] = str(meta.get("conversao_resgate") or "")
+        row["Pagamento Resgate"] = str(meta.get("pagamento_resgate") or "")
+        row["Benchmark Oficial"] = str(meta.get("benchmark") or "")
+        row["Estratégia"] = str(meta.get("estrategia") or "").strip()
+        row["Status de Captação"] = _status_captacao(meta.get("captacao_aberta"))
+        row["Classificação Tributária"] = str(meta.get("classificacao_tributaria") or "")
+        row["Classificação Investidor"] = str(meta.get("classificacao_investidor") or "")
+        row["Horário Limite Aplicação"] = str(meta.get("horario_limite") or "")
+        row["Horário Limite Resgate"] = str(meta.get("horario_resgate") or meta.get("horario_limite") or "")
+        row["Adiantamento de Resgate"] = _formatar_adiantamento(
+            meta.get("adiantamento_resgate"),
+            meta.get("adiantamento_modalidade"),
+            meta.get("adiantamento_percentual"),
+        )
+        row["Modalidade Adiantamento"] = str(meta.get("adiantamento_modalidade") or "")
+        row["Percentual Adiantamento (%)"] = str(meta["adiantamento_percentual"]) if meta.get("adiantamento_percentual") is not None else ""
+        row["Público Alvo"] = str(meta.get("publico_alvo") or "")
+        row["Segmentos"] = str(meta.get("segmentos") or "")
+        row["Movimentação Automática"] = _sim_nao(meta.get("movimentacao_automatica"))
+        row["Carência"] = _sim_nao(meta.get("carencia"))
+        row["Fim Carência"] = str(meta.get("fim_carencia") or "")
+        row["ASG"] = _sim_nao(meta.get("asg"))
+        row["Razão Social"] = str(meta.get("razao_social") or "")
+        row["Observação Operacional"] = str(meta.get("observacao_operacional") or "")
+
+        docs = meta.get("docs", {})
+        row["doc_lamina"] = docs.get("lamina", "")
+        row["doc_regulamento"] = docs.get("regulamento", "")
+        row["doc_inf_comp"] = docs.get("inf_comp", "")
+        row["doc_comunicado"] = docs.get("comunicado", "")
+        row["doc_carta"] = docs.get("carta_mensal", "")
+        row["doc_boletim"] = docs.get("boletim", "")
+        row["doc_termo"] = docs.get("termo", "")
+        row["doc_sumario"] = docs.get("sumario", "")
+        row["doc_raio_x"] = docs.get("raio_x", "")
         return row
 
     df = df.apply(_processar_linha, axis=1)
     preenchidas = df["URL"].apply(_url_valida).sum()
-    com_cod = (df.get("codfundo", pd.Series(dtype=str)) != "").sum()
-    log(f"[Fundos.json] URLs válidas: {preenchidas}/{len(df)} | codfundo: {com_cod}/{len(df)}")
+    com_cod = (df.get("codfundo", pd.Series(dtype=str)).astype(str).str.strip() != "").sum()
+    log(f"[Fundos.json] Vinculados: {vinculados}/{len(df)} | URLs válidas: {preenchidas}/{len(df)} | codfundo: {com_cod}/{len(df)}")
+
+    auditoria = {
+        "gerado_em": datetime.now().strftime("%d/%m/%Y %H:%M:%S"),
+        "origem_fundos_json": indice_json.get("_origem", "desconhecida"),
+        "registros_catalogo_oficial": indice_json.get("_total_catalogo", 0),
+        "linhas_csv": int(len(df)),
+        "vinculados": int(vinculados),
+        "sem_vinculo": int(len(df) - vinculados),
+        "com_cnpj": int((df["CNPJ"].astype(str).str.replace(r"\D", "", regex=True).str.len() == 14).sum()),
+        "com_benchmark": int((df["Benchmark Oficial"].astype(str).str.strip() != "").sum()),
+        "com_estrategia": int((df["Estratégia"].astype(str).str.strip() != "").sum()),
+        "com_horario": int((df["Horário Limite Aplicação"].astype(str).str.strip() != "").sum()),
+        "com_status_captacao": int((df["Status de Captação"].astype(str).str.strip() != "").sum()),
+    }
+    try:
+        _salvar_json_atomico(FUNDOS_AUDITORIA_PATH, auditoria)
+        log(f"[Auditoria] auditoria_fundos.json salvo — {vinculados}/{len(df)} vinculados.")
+    except Exception as e:
+        log(f"[Auditoria] Erro ao salvar auditoria_fundos.json: {e}")
+
     return df
 
 # ---------------------------------------------------------------------------
@@ -2502,7 +2662,13 @@ def salvar_excel(df, caminho):
             "Variacao Dia (%)":14,"Acum. Mes (%)":13,"Acum. Ano (%)":13,
             "Acum. 12M (%)":13,"PL (milhoes R$)":18,"Perfis":30,"URL":60,
             "CNPJ":22,"codfundo":12,"Perfil de Risco":16,"Taxa Adm (%)":14,
-            "Aplicacao Minima (R$)":22,"Conversao Resgate":18,"Pagamento Resgate":18,
+            "Aplicacao Minima (R$)":22,"Aplicacao Adicional Minima (R$)":25,
+            "Resgate Minimo (R$)":20,"Saldo Minimo (R$)":18,
+            "Conversao Aplicacao":20,"Conversao Resgate":18,"Pagamento Resgate":18,
+            "Benchmark Oficial":18,"Estratégia":34,"Status de Captação":22,
+            "Classificação Tributária":22,"Horário Limite Aplicação":22,
+            "Horário Limite Resgate":22,"Adiantamento de Resgate":28,
+            "Público Alvo":34,"Segmentos":34,"Observação Operacional":70,
         }
         for ci,cn in enumerate(cols,1):
             ws.column_dimensions[get_column_letter(ci)].width=widths.get(cn,15)
@@ -2516,7 +2682,7 @@ def salvar_excel(df, caminho):
 # ---------------------------------------------------------------------------
 def executar():
     log("=" * 65)
-    log("⚡ ROBÔ SIPII v17.3 — Poupança nova+antiga acum. ano + índices mercado")
+    log("⚡ ROBÔ SIPII v18.0 — atualização integral e automática do catálogo")
     log("=" * 65)
 
     # 1. URLs dinâmicas do portal CAIXA
@@ -2554,8 +2720,21 @@ def executar():
         lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
     df_consolidado['Fundo_norm'] = df_consolidado['Fundo_norm'].astype(str).apply(
         lambda x: re.sub(r'\s*\(\d+\)', '', x).strip())
-    for col in ["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)",
-                "Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate"]:
+    for col in [
+        "CNPJ", "codfundo", "Perfil de Risco", "Taxa Adm (%)",
+        "Aplicacao Minima (R$)", "Aplicacao Adicional Minima (R$)",
+        "Resgate Minimo (R$)", "Saldo Minimo (R$)",
+        "Conversao Aplicacao", "Conversao Resgate", "Pagamento Resgate",
+        "Benchmark Oficial", "Estratégia", "Status de Captação",
+        "Classificação Tributária", "Classificação Investidor",
+        "Horário Limite Aplicação", "Horário Limite Resgate",
+        "Adiantamento de Resgate", "Modalidade Adiantamento",
+        "Percentual Adiantamento (%)", "Público Alvo", "Segmentos",
+        "Movimentação Automática", "Carência", "Fim Carência", "ASG",
+        "Razão Social", "Observação Operacional",
+        "doc_lamina", "doc_regulamento", "doc_inf_comp", "doc_comunicado",
+        "doc_carta", "doc_boletim", "doc_termo", "doc_sumario", "doc_raio_x",
+    ]:
         if col in df_consolidado.columns:
             df_consolidado[col] = df_consolidado[col].fillna("")
 
@@ -2600,7 +2779,7 @@ def executar():
     limpar_backups_antigos(manter=5)
 
     log("=" * 65)
-    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v17.1 completo.")
+    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v18.0 automático completo.")
     log("=" * 65)
 
 

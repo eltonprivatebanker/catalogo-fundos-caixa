@@ -2258,7 +2258,7 @@ function compararOrdenacao(av,bv){
 }
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
-const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","Benchmark","Benchmark Oficial","Estrategia","Estratégia","Adiantamento Resgate","Adiantamento de Resgate","Classificacao Tributaria","Classificação Tributária","Tributacao","Tributação","Status Captacao","Status Captação","Status de Captação","Captacao","Captação","Horário Limite Aplicação","Horario Limite Aplicacao","Horário Aplicação","Horario Aplicacao","Grade Aplicação","Grade Aplicacao","Horário Limite Resgate","Horario Limite Resgate","Horário Resgate","Horario Resgate","Grade Resgate","Grade de Resgate","Horário Limite Movimentação","Horario Limite Movimentacao","Grade de Movimentação","Grade de Movimentacao","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
+const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Aplicacao","Conversao Resgate","Pagamento Resgate","Benchmark","Benchmark Oficial","Estrategia","Estratégia","Adiantamento Resgate","Adiantamento de Resgate","Classificacao Tributaria","Classificação Tributária","Tributacao","Tributação","Status Captacao","Status Captação","Status de Captação","Captacao","Captação","Horário Limite Aplicação","Horario Limite Aplicacao","Horário Aplicação","Horario Aplicacao","Grade Aplicação","Grade Aplicacao","Horário Limite Resgate","Horario Limite Resgate","Horário Resgate","Horario Resgate","Grade Resgate","Grade de Resgate","Horário Limite Movimentação","Horario Limite Movimentacao","Grade de Movimentação","Grade de Movimentacao","Aplicacao Adicional Minima (R$)","Resgate Minimo (R$)","Saldo Minimo (R$)","Público Alvo","Publico Alvo","Movimentação Automática","Movimentacao Automatica","Carência","Carencia","ASG","Observação Operacional","Observacao Operacional","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim","doc_termo"]);
 const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
 
@@ -2697,6 +2697,158 @@ function applyFilter(){
 ════════════════════════════════════════════════════ */
 let _fundosDocMap = {}; // CNPJ limpo → { codfundo, docs:{} }
 
+let _fundosMetaMap = {};      // CNPJ limpo → cadastro operacional completo de fundos.json
+let _fundosMetaByCode = {};   // código SIICO → cadastro
+let _fundosMetaByName = {};   // nome normalizado → cadastro
+
+function limparCnpjMeta(v){ return String(v || '').replace(/\D/g,'').slice(0,14); }
+function normalizarNomeMeta(v){
+  return String(v || '')
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toUpperCase().replace(/[^A-Z0-9]+/g,' ').replace(/\s+/g,' ').trim();
+}
+function valorMetaValido(v){
+  if(v === null || v === undefined) return false;
+  const s=String(v).trim();
+  return !!s && !/^(?:-|—|NULL|NONE|INDISPONIVEL)$/i.test(s);
+}
+function urlMetaValida(v){ return /^https?:\/\//i.test(String(v || '').trim()); }
+function formatarCnpjMeta(v){
+  const d=limparCnpjMeta(v);
+  return d.length===14 ? `${d.slice(0,2)}.${d.slice(2,5)}.${d.slice(5,8)}/${d.slice(8,12)}-${d.slice(12)}` : String(v||'');
+}
+function formatarHoraMeta(v){
+  const s=String(v || '').trim();
+  const m=s.match(/^(\d{1,2})[:hH](\d{2})$/);
+  return m ? `${String(Number(m[1])).padStart(2,'0')}h${m[2]}` : s;
+}
+function formatarPercentualMeta(v){
+  if(v===null || v===undefined || String(v).trim()==='') return '';
+  const n=Number(v);
+  if(!Number.isFinite(n)) return '';
+  return n.toLocaleString('pt-BR',{minimumFractionDigits:0,maximumFractionDigits:2})+'%';
+}
+function formatarAdiantamentoMeta(meta){
+  const flag=meta?.ic_adiantamento_resgate;
+  const modo=String(meta?.de_adiant_manual_automatico || '').trim();
+  const pct=formatarPercentualMeta(meta?.pc_adiant_resgate);
+  const modoNorm=normalizarStatusOperacional(modo);
+  if(flag === true){
+    const partes=['Sim'];
+    if(modo && !modoNorm.includes('NAO SE APLICA')) partes.push(modo.toLowerCase()==='automatico'?'Automático':modo.toLowerCase()==='manual'?'Manual':modo);
+    if(pct) partes.push(pct);
+    return partes.join(' · ');
+  }
+  if(flag === false) return 'Não disponível';
+  if(modoNorm.includes('NAO SE APLICA')) return 'Não se aplica';
+  if(modo) return modo;
+  return '';
+}
+function formatarCaptacaoMeta(meta){
+  if(meta?.ic_aberto_captacao === true) return 'Aberto para captação';
+  if(meta?.ic_aberto_captacao === false) return 'Fechado para captação';
+  return '';
+}
+function formatarListaMeta(v){
+  if(Array.isArray(v)) return v.filter(Boolean).join(' · ');
+  if(!valorMetaValido(v)) return '';
+  const s=String(v).trim();
+  try{
+    const parsed=JSON.parse(s);
+    if(Array.isArray(parsed)) return parsed.filter(Boolean).join(' · ');
+  }catch(e){}
+  return s;
+}
+function pontuarMeta(meta){
+  const campos=['no_benchmark','no_estrategia','no_classificacao_tributaria','de_horario_limite','de_horario_resgate','de_link_pagina_fundo','de_link_lamina','de_link_regulamento'];
+  return campos.reduce((n,k)=>n+(valorMetaValido(meta?.[k])?1:0),0);
+}
+
+async function carregarFundosMetaJson(){
+  try{
+    const r=await fetch(BASE_URL+'fundos.json?v='+Date.now());
+    if(!r.ok) throw new Error('HTTP '+r.status);
+    const payload=await r.json();
+    const lista=Array.isArray(payload) ? payload : (payload?.value || payload?.fundos || payload?.data || []);
+    if(!Array.isArray(lista)) throw new Error('estrutura inesperada');
+
+    const porCnpj={}, porCodigo={}, porNome={};
+    lista.forEach(meta=>{
+      if(!meta || typeof meta!=='object') return;
+      const cnpj=limparCnpjMeta(meta.nu_cnpj || meta.cnpj);
+      const codigoRaw=String(meta.co_siico00 || meta.co_siico || meta.codfundo || '').replace(/\D/g,'');
+      const codigo=codigoRaw.replace(/^0+(?=\d)/,'');
+      const nome=normalizarNomeMeta(meta.no_fundo || meta.nome);
+      if(cnpj && (!porCnpj[cnpj] || pontuarMeta(meta)>=pontuarMeta(porCnpj[cnpj]))) porCnpj[cnpj]=meta;
+      [codigoRaw,codigo].filter(Boolean).forEach(ch=>{ if(!porCodigo[ch] || pontuarMeta(meta)>=pontuarMeta(porCodigo[ch])) porCodigo[ch]=meta; });
+      if(nome && (!porNome[nome] || pontuarMeta(meta)>=pontuarMeta(porNome[nome]))) porNome[nome]=meta;
+    });
+    _fundosMetaMap=porCnpj;
+    _fundosMetaByCode=porCodigo;
+    _fundosMetaByName=porNome;
+    console.log(`[fundos.json] ${lista.length} registros · ${Object.keys(porCnpj).length} CNPJs indexados`);
+    return lista;
+  }catch(e){
+    _fundosMetaMap={}; _fundosMetaByCode={}; _fundosMetaByName={};
+    console.info('[fundos.json] metadados operacionais não disponíveis:',e.message);
+    return [];
+  }
+}
+
+function obterMetaFundo(row){
+  const cnpj=limparCnpjMeta(row?.['CNPJ'] || row?.nu_cnpj);
+  if(cnpj && _fundosMetaMap[cnpj]) return _fundosMetaMap[cnpj];
+  const codigoRaw=String(row?.['codfundo'] || row?.co_siico00 || row?.co_siico || '').replace(/\D/g,'');
+  const codigo=codigoRaw.replace(/^0+(?=\d)/,'');
+  if(codigoRaw && _fundosMetaByCode[codigoRaw]) return _fundosMetaByCode[codigoRaw];
+  if(codigo && _fundosMetaByCode[codigo]) return _fundosMetaByCode[codigo];
+  const nome=normalizarNomeMeta(row?.['Fundo'] || row?.no_fundo);
+  return nome ? (_fundosMetaByName[nome] || null) : null;
+}
+
+function preencherSeVazio(row,chave,valor){
+  if(!valorMetaValido(row?.[chave]) && valorMetaValido(valor)) row[chave]=valor;
+}
+function mesclarMetadadosFundo(row){
+  const meta=obterMetaFundo(row);
+  if(!meta) return row;
+  try{ Object.defineProperty(row,'__fundosMeta',{value:meta,enumerable:false,configurable:true}); }catch(e){ row.__fundosMeta=meta; }
+
+  preencherSeVazio(row,'CNPJ',formatarCnpjMeta(meta.nu_cnpj));
+  preencherSeVazio(row,'codfundo',String(meta.co_siico00 || meta.co_siico || '').replace(/^0+(?=\d)/,''));
+  preencherSeVazio(row,'Perfil de Risco',meta.no_perfil_risco);
+  preencherSeVazio(row,'Taxa Adm (%)',meta.pc_taxa_adm_cliente);
+  preencherSeVazio(row,'Aplicacao Minima (R$)',meta.vr_aplicacao_inicial);
+  preencherSeVazio(row,'Conversao Aplicacao',meta.de_conversao_aplicacao);
+  preencherSeVazio(row,'Conversao Resgate',meta.de_conversao_resgate);
+  preencherSeVazio(row,'Pagamento Resgate',meta.de_pagamento_resgate);
+  preencherSeVazio(row,'Benchmark Oficial',String(meta.no_benchmark || '').trim());
+  preencherSeVazio(row,'Estratégia',String(meta.no_estrategia || '').trim());
+  preencherSeVazio(row,'Adiantamento de Resgate',formatarAdiantamentoMeta(meta));
+  preencherSeVazio(row,'Classificação Tributária',String(meta.no_classificacao_tributaria || '').trim());
+  preencherSeVazio(row,'Status de Captação',formatarCaptacaoMeta(meta));
+  preencherSeVazio(row,'Horário Limite Aplicação',formatarHoraMeta(meta.de_horario_limite));
+  preencherSeVazio(row,'Horário Limite Resgate',formatarHoraMeta(meta.de_horario_resgate || meta.de_horario_limite));
+
+  preencherSeVazio(row,'Aplicacao Adicional Minima (R$)',meta.vr_aplicacao_adicional_minima);
+  preencherSeVazio(row,'Resgate Minimo (R$)',meta.vr_resgate_minimo);
+  preencherSeVazio(row,'Saldo Minimo (R$)',meta.vr_saldo_minimo);
+  preencherSeVazio(row,'Público Alvo',formatarListaMeta(meta.lista_publico_alvo) || meta.no_classificacao_investidor);
+  preencherSeVazio(row,'Movimentação Automática',meta.ic_mov_automatica===true?'Sim':meta.ic_mov_automatica===false?'Não':'');
+  preencherSeVazio(row,'Carência',meta.ic_carencia===true?(meta.dt_fim_carencia?`Até ${meta.dt_fim_carencia}`:'Sim'):meta.ic_carencia===false?'Não':'');
+  preencherSeVazio(row,'ASG',meta.ic_asg===true?'Sim':meta.ic_asg===false?'Não':'');
+  preencherSeVazio(row,'Observação Operacional',String(meta.de_observacao_qs || '').trim());
+
+  preencherSeVazio(row,'URL',urlMetaValida(meta.de_link_pagina_fundo)?meta.de_link_pagina_fundo:'');
+  preencherSeVazio(row,'doc_lamina',urlMetaValida(meta.de_link_lamina)?meta.de_link_lamina:'');
+  preencherSeVazio(row,'doc_regulamento',urlMetaValida(meta.de_link_regulamento)?meta.de_link_regulamento:'');
+  preencherSeVazio(row,'doc_inf_comp',urlMetaValida(meta.de_link_info_compl)?meta.de_link_info_compl:'');
+  preencherSeVazio(row,'doc_comunicado',urlMetaValida(meta.de_link_fato_relevante)?meta.de_link_fato_relevante:'');
+  preencherSeVazio(row,'doc_boletim',urlMetaValida(meta.de_link_boletim_comercial)?meta.de_link_boletim_comercial:'');
+  preencherSeVazio(row,'doc_termo',urlMetaValida(meta.de_link_termo_adesao)?meta.de_link_termo_adesao:'');
+  return row;
+}
+
 async function carregarFundosJson(){
   try{
     const r = await fetch(BASE_URL+'fundos_caixa.json?v='+Date.now());
@@ -2738,12 +2890,13 @@ function marcarTodosDocs(btn, checked){
 
 function obterDocsFundoCompactos(row){
   const DOC_TIPOS = [
-    { label:'Boletim Comercial', curto:'BC', icon:'⭐', csvKey:'doc_boletim', jsonKey:'boletim', cod:'', pasta:'' },
-    { label:'Lâmina', curto:'L', icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LAC', pasta:'laminas-comerciais' },
+    { label:'Boletim Comercial', curto:'BC', icon:'⭐', csvKey:'doc_boletim', jsonKey:'boletim', cod:'LAC', pasta:'laminas-comerciais' },
+    { label:'Lâmina', curto:'L', icon:'📄', csvKey:'doc_lamina',      jsonKey:'lamina',       cod:'LA',  pasta:'laminas' },
     { label:'Regulamento', curto:'R', icon:'📋', csvKey:'doc_regulamento', jsonKey:'regulamento',  cod:'RG',  pasta:'regulamentos' },
     { label:'Inf. Compl.', curto:'IC', icon:'ℹ️', csvKey:'doc_inf_comp',    jsonKey:'inf_comp',     cod:'FIC', pasta:'inf-com' },
     { label:'Comunicado', curto:'C', icon:'📢', csvKey:'doc_comunicado',  jsonKey:'comunicado',   cod:'COM', pasta:'comunicado-aos-cotistas' },
     { label:'Carta Mensal', curto:'CM', icon:'📊', csvKey:'doc_carta',       jsonKey:'carta_mensal', cod:'CM',  pasta:'carta-mensal' },
+    { label:'Termo de Adesão', curto:'TA', icon:'✍️', csvKey:'doc_termo', jsonKey:'termo', cod:'TA', pasta:'termos-adesao' },
   ];
 
   const cnpjLimpo = String(row?.['CNPJ']||'').replace(/\D/g,'');
@@ -3040,16 +3193,25 @@ function gerarLeituraRapidaFundo(r){
 }
 
 function buildDetailPanel(r,colspan){
-  const DOC_DETAIL_KEYS = new Set(['doc_lamina','doc_regulamento','doc_inf_comp','doc_comunicado','doc_carta','doc_boletim']);
+  const DOC_DETAIL_KEYS = new Set(['doc_lamina','doc_regulamento','doc_inf_comp','doc_comunicado','doc_carta','doc_boletim','doc_termo']);
+  const FACT_DETAIL_KEYS = new Set(['Benchmark','Benchmark Oficial','Estrategia','Estratégia','Adiantamento Resgate','Adiantamento de Resgate','Classificacao Tributaria','Classificação Tributária','Tributacao','Tributação','Status Captacao','Status Captação','Status de Captação','Captacao','Captação','Horário Limite Aplicação','Horario Limite Aplicacao','Horário Aplicação','Horario Aplicacao','Grade Aplicação','Grade Aplicacao','Horário Limite Resgate','Horario Limite Resgate','Horário Resgate','Horario Resgate','Grade Resgate','Grade de Resgate','Horário Limite Movimentação','Horario Limite Movimentacao','Grade de Movimentação','Grade de Movimentacao','Observação Operacional','Observacao Operacional']);
   const LABELS = {
     'codfundo':'Código do fundo',
     'Aplicacao Minima (R$)':'Aplicação mínima',
+    'Aplicacao Adicional Minima (R$)':'Aplicação adicional mínima',
+    'Resgate Minimo (R$)':'Resgate mínimo',
+    'Saldo Minimo (R$)':'Saldo mínimo',
+    'Conversao Aplicacao':'Conversão aplicação',
+    'Público Alvo':'Público-alvo',
+    'Movimentação Automática':'Movimentação automática',
+    'Carência':'Carência',
+    'ASG':'ASG',
     'Taxa Adm (%)':'Taxa adm.',
     'Conversao Resgate':'Conversão resgate',
     'Pagamento Resgate':'Pagamento resgate',
     'Perfil de Risco':'Perfil de risco'
   };
-  const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k) && !DOC_DETAIL_KEYS.has(k));
+  const detailCols=Object.keys(r).filter(k=>DETAIL_COLS.has(k) && !DOC_DETAIL_KEYS.has(k) && !FACT_DETAIL_KEYS.has(k));
   const items=detailCols.map(k=>{
     let val=String(r[k]||'').trim()||'—';
 
@@ -3057,9 +3219,9 @@ function buildDetailPanel(r,colspan){
     const extraClass = k==='CNPJ' ? ' copyable' : '';
 
     if(k==='Taxa Adm (%)'&&val!=='—') val=val+'%';
-    if(k==='Aplicacao Minima (R$)'&&val!=='—'){
+    if(['Aplicacao Minima (R$)','Aplicacao Adicional Minima (R$)','Resgate Minimo (R$)','Saldo Minimo (R$)'].includes(k)&&val!=='—'){
       const n=parseFloat(val.replace(',','.'));
-      val=isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2});
+      val=isNaN(n)?val:'R$ '+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
     }
     const label = LABELS[k] || k;
     return `<div class="detail-item"><div class="detail-key">${label}</div><div class="detail-val${extraClass}">${val}</div></div>`;
@@ -3243,8 +3405,9 @@ function classeStatusOperacional(status, tipo){
     if(status.includes('ABERT') || status.includes('DISPONIVEL') || status === 'SIM') return 'positive';
   }
   if(tipo === 'adiantamento'){
-    if(status === 'NAO' || status.includes('NÃO') || status.includes('NAO PERMITE') || status.includes('INDISPONIVEL')) return 'negative';
-    if(status === 'SIM' || status.includes('PERMITE') || status.includes('DISPONIVEL')) return 'positive';
+    if(status.includes('NAO SE APLICA')) return 'unknown';
+    if(status === 'NAO' || status.startsWith('NAO ') || status.includes('NAO PERMITE') || status.includes('INDISPONIVEL')) return 'negative';
+    if(status === 'SIM' || status.startsWith('SIM ') || status.includes('PERMITE') || status.includes('DISPONIVEL')) return 'positive';
   }
   return 'unknown';
 }
@@ -3257,7 +3420,7 @@ function buildFundOperationalFacts(r, variant='detail'){
   const adiDot = adiCls==='positive'?'●':adiCls==='negative'?'●':'○';
   const estimateBadge = '<em class="fund-fact-estimated-v154">indicativo</em>';
   return `<section class="fund-facts-v154 ${htmlAttr(variant)}" aria-label="Informações complementares do fundo">
-    <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>Dados da base e classificações consultivas</small></div>
+    <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>${r?.__fundosMeta?'Dados oficiais do cadastro do fundo':'Dados da base; indicação apenas quando sinalizada'}</small></div>
     <div class="fund-facts-grid-v154">
       <div class="fund-fact-v154"><span>Benchmark / referência</span><strong>${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}</strong></div>
       <div class="fund-fact-v154 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}</strong></div>
@@ -3771,7 +3934,7 @@ async function carregarDados(){
   try{
     const raw=await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
     const result=parseCsv(raw);
-    allRows=result.data;
+    allRows=result.data.map(mesclarMetadadosFundo);
     const headers=Object.keys(allRows[0]||{});
     displayHeaders=headers;
     const di=displayHeaders.indexOf(DEFAULT_SORT);
@@ -4553,7 +4716,10 @@ async function iniciarDashboard(){
 
   try{
     /* Principal: dados locais do catálogo não podem esperar endpoints externos. */
-    await etapa('carregarFundosJson', carregarFundosJson);
+    await Promise.all([
+      etapa('carregarFundosJson', carregarFundosJson),
+      etapa('carregarFundosMetaJson', carregarFundosMetaJson)
+    ]);
     await etapa('carregarDados', carregarDados);
     await etapa('carregarKPIs', carregarKPIs);
 
@@ -12213,4 +12379,33 @@ if(!isSearchInput(el)) return;
     setTimeout(renderRankingsAndAttention,1100);
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v156 — integração oficial fundos.json
+   Une metadados operacionais ao CSV por CNPJ, código ou nome.
+════════════════════════════════════════════════════ */
+(function(){
+  const BUILD='ELTAUM_FUNDOS_META_INTEGRATION_20260612_v156';
+  function syncBuild(){
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    document.documentElement.classList.add('fundos-meta-integration-v156');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',syncBuild,{once:true}); else syncBuild();
+  window.__ELTAUM_FUNDOS_META_V156__={
+    build:BUILD,
+    get totalCnpj(){ return Object.keys(_fundosMetaMap||{}).length; },
+    get totalCodigos(){ return Object.keys(_fundosMetaByCode||{}).length; },
+    localizar(cnpjOuCodigo){
+      const d=String(cnpjOuCodigo||'').replace(/\D/g,'');
+      return _fundosMetaMap[d] || _fundosMetaByCode[d] || null;
+    },
+    auditar(){
+      const rows=Array.isArray(allRows)?allRows:[];
+      const vinculados=rows.filter(r=>!!r.__fundosMeta).length;
+      return {linhasCsv:rows.length,vinculados,semVinculo:rows.length-vinculados,cnpjsMeta:Object.keys(_fundosMetaMap||{}).length};
+    }
+  };
 })();

@@ -26206,3 +26206,23 @@ html.w3c-html-validate-fix-v128 .closed-market-sheet[role="dialog"]{
 @media(max-width:420px){
   .fund-hours-v155{grid-template-columns:1fr}
 }
+
+
+/* ==========================================================
+   ELTAUM v156 — integração oficial do fundos.json
+========================================================== */
+html.fundos-meta-integration-v156 .fund-facts-head-v154 small{
+  color:#8da6c8;
+}
+html.fundos-meta-integration-v156 .fund-fact-v154>strong.status-positive,
+html.fundos-meta-integration-v156 .fund-fact-v154>strong.status-negative,
+html.fundos-meta-integration-v156 .fund-fact-v154>strong.status-unknown{
+  min-height:20px;
+  align-items:center;
+}
+html.fundos-meta-integration-v156 .detail-grid-compact .detail-item{
+  min-width:0;
+}
+html.fundos-meta-integration-v156 .detail-grid-compact .detail-val{
+  overflow-wrap:anywhere;
+}
