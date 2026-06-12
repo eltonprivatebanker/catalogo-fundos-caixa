@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164 mobile-ux-fixes-v165 fund-card-executive-v166 market-reference-executive-v167 pagination-stable-v168 pagination-no-desktop-scroll-v169 cumulative-ui-v170">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_PAGINATION_NO_DESKTOP_SCROLL_20260612_v169"/>
+<meta name="app-build" content="ELTAUM_CUMULATIVE_UI_FIX_20260612_v170"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=pagination-no-desktop-scroll-v169" rel="stylesheet"/>
+<link href="style.css?v=cumulative-ui-fix-v170" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer src="app.js?v=pagination-no-desktop-scroll-v169"></script>
+<script defer src="app.js?v=cumulative-ui-fix-v170"></script>
 
 </head>
 <body>
@@ -485,150 +485,156 @@ html:not(.app-booting) .page{
     <span class="closed-month-launch-action">Consultar fechamento ›</span>
   </button>
 
-  <!-- Cards de referência: Selic, CDI e Poupança separados -->
-  <div class="indic-ref-bar market-ref-grid">
+  <!-- v167 — Taxas de referência e Poupança em dois blocos executivos -->
+  <div class="indic-ref-bar market-ref-grid market-reference-v167">
 
-    <!-- Card 1: SELIC + COPOM -->
-    <div class="indic-ref-card macro-card selic-copom-card market-ref-card market-ref-card-unified">
-      <div class="macro-side macro-selic">
-        <div class="macro-label">🏦 Taxa Selic — Meta COPOM</div>
-        <div class="market-rate-line market-rate-line-selic">
-          <div class="macro-main-value gold" id="mc-selic">—</div>
-          <span class="market-rate-suffix">a.a.</span>
-        </div>
-        <div class="macro-note">Última alteração: <strong id="selic-last-change">—</strong></div>
-      </div>
-
-      <div class="macro-divider" aria-hidden="true"></div>
-
-      <div class="macro-side macro-copom">
-        <div class="macro-label">📅 Reuniões COPOM 2026</div>
-        <div class="copom-grid" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026" role="list">
-          <span style="color:var(--muted);font-size:.68rem">calendário carregando...</span>
-        </div>
-        <a href="https://www.bcb.gov.br/controleinflacao/copom" target="_blank" rel="noopener" class="macro-link">
-          Atas às 8h da terça seguinte · Fonte BCB ↗
-        </a>
-      </div>
-    </div>
-
-    <!-- Card 2: CDI -->
-    <div class="indic-ref-card cdi-card market-ref-card cdi-card-compacto market-ref-card-unified">
-      <div class="indic-ref-label">💰 CDI — Depósito Interbancário</div>
-      <div class="market-rate-line market-rate-line-cdi">
-        <div class="indic-ref-val green" id="mc-cdi">—</div>
-        <span class="market-rate-suffix">a.a.</span>
-      </div>
-
-      <div class="cdi-year-history" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano" role="group">
-        <div class="cdi-year-head">
-          <span id="cdiYearHistoryTitle">Mensal</span>
-          <strong id="cdiYearHistoryTotal">Ano —</strong>
-        </div>
-        <div class="cdi-month-strip" id="cdiMonthStrip">
-          <span class="cdi-month-empty">histórico carregando...</span>
-        </div>
-      </div>
-
-      <div class="cdi-rel" style="margin-top:6px">CDI ≈ Selic − 0,10 p.p. · 12M na tabela consolidada</div>
-    </div>
-
-    <!-- Card 3: Poupança antiga + nova + regra visível -->
-    <div class="indic-ref-card poup market-ref-card poup-card-consultivo market-ref-card-unified">
-      <div class="poup-header poup-header-clean unified-card-head">
+    <section class="market-reference-block-v167 rates-reference-v167" aria-labelledby="ratesReferenceTitleV167">
+      <header class="market-reference-head-v167">
         <div>
-          <div class="indic-ref-label">🏠 Poupança — Rendimentos</div>
-          <div class="poup-card-subtitle">Nova x antiga</div>
+          <span class="market-reference-kicker-v167">Cenário monetário</span>
+          <h3 id="ratesReferenceTitleV167">Taxas de referência</h3>
+          <p>Selic, CDI, decisões do COPOM e rendimento mensal.</p>
         </div>
-        <button class="poup-expand-btn" id="poupExpandBtn" onclick="togglePoupanca()">Detalhes ▼</button>
-      </div>
+        <a href="https://www.bcb.gov.br/controleinflacao/copom" target="_blank" rel="noopener" class="market-reference-source-v167">Fonte BCB ↗</a>
+      </header>
 
-      <div class="poup-values poup-rules-grid">
-        <div class="poup-rule poup-rule-card new-rule">
-          <div class="poup-rule-label">Regra nova</div>
-          <div class="poup-rule-period">A partir de 04/05/2012</div>
-          <div class="poup-rule-val blue" id="mc-poup">—</div>
-          <div class="poup-rule-sub" id="poupNewRuleText">a.m. · regra conforme nível da Selic</div>
-          <div class="poup-accum-pill" id="poupNewAccum">Acum. ano: —</div>
-        </div>
-
-        <div class="poup-rule-divider" aria-hidden="true"></div>
-
-        <div class="poup-rule poup-rule-card old-rule">
-          <div class="poup-rule-label">Regra antiga</div>
-          <div class="poup-rule-period">Até 03/05/2012</div>
-          <div class="poup-rule-val muted" id="poupOldMonthly">—</div>
-          <div class="poup-rule-sub" id="poupOldRuleText">a.m. · TR + 0,50%</div>
-          <div class="poup-accum-pill muted" id="poupOldAccum">Acum. ano: —</div>
-        </div>
-      </div>
-
-      <div class="poup-quick-note" id="poupQuickNote">
-        Com a Selic atual, a regra nova será definida automaticamente pelo nível da taxa básica.
-      </div>
-
-      <button type="button" class="poup-mobile-details-toggle" id="poupMobileDetailsToggle" onclick="togglePoupancaMobileDetails()" aria-expanded="false">
-        Ver cenários e regras ↓
-      </button>
-
-      <div class="poup-explain" id="poupExplain">
-        <div class="poup-explain-inner poup-explain-clean">
-          <div class="poup-explain-row">
-            <span class="poup-explain-tag tag-nova">Nova</span>
-            <span class="poup-explain-text">Se a Selic estiver acima de 8,5% a.a., rende TR + 0,50% a.m.; se estiver igual ou abaixo, rende TR + 70% da Selic meta anual, mensalizada.</span>
+      <div class="rates-summary-v167" aria-label="Resumo das taxas de referência">
+        <article class="rate-summary-card-v167 selic-summary-v167">
+          <span>Selic meta</span>
+          <div class="rate-summary-value-v167">
+            <strong class="gold" id="mc-selic">—</strong><em>a.a.</em>
           </div>
-          <div class="poup-explain-row">
-            <span class="poup-explain-tag tag-antiga">Antiga</span>
-            <span class="poup-explain-text">Rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
+          <small>Última alteração: <b id="selic-last-change">—</b></small>
+        </article>
+
+        <article class="rate-summary-card-v167 cdi-summary-v167">
+          <span>CDI</span>
+          <div class="rate-summary-value-v167">
+            <strong class="green" id="mc-cdi">—</strong><em>a.a.</em>
           </div>
-          <div class="poup-explain-row">
-            <span class="poup-explain-tag tag-antiga">BCB</span>
-            <span class="poup-explain-text">Use a calculadora oficial para correção de valores e conferência do rendimento acumulado por período.</span>
+          <small id="cdiYearHistoryTotal">Ano —</small>
+        </article>
+
+        <article class="rate-summary-card-v167 copom-next-summary-v167">
+          <span>Próximo COPOM</span>
+          <strong id="copomNextDateV167">—</strong>
+          <small id="copomNextStatusV167">Calendário 2026</small>
+        </article>
+      </div>
+
+      <div class="rates-detail-grid-v167">
+        <section class="copom-compact-v167" aria-labelledby="copomCompactTitleV167">
+          <div class="reference-subhead-v167">
+            <div>
+              <strong id="copomCompactTitleV167">Decisões e calendário</strong>
+              <small>Últimas decisões e próxima reunião em destaque.</small>
+            </div>
+            <button type="button" class="reference-toggle-v167" id="copomCalendarToggleV167" aria-expanded="false" onclick="return toggleCopomCalendarV167()">Ver calendário completo</button>
           </div>
-          <a class="poup-bcb-link" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">🏦 Correção de valores BCB ↗</a>
+          <div class="copom-grid copom-grid-v167" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026" role="list">
+            <span class="reference-loading-v167">Calendário carregando...</span>
+          </div>
+          <div class="reference-footnote-v167">Atas publicadas às 8h da terça-feira seguinte.</div>
+        </section>
+
+        <section class="cdi-year-history cdi-history-v167" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano">
+          <div class="reference-subhead-v167 cdi-year-head">
+            <div>
+              <strong id="cdiYearHistoryTitle">CDI mensal</strong>
+              <small>Fechamentos e parcial do mês corrente.</small>
+            </div>
+          </div>
+          <div class="cdi-month-strip" id="cdiMonthStrip" role="list">
+            <span class="cdi-month-empty">Histórico carregando...</span>
+          </div>
+          <div class="reference-footnote-v167">CDI ≈ Selic − 0,10 p.p. · Acumulados completos na tabela analítica.</div>
+        </section>
+      </div>
+    </section>
+
+    <section class="market-reference-block-v167 savings-reference-v167" aria-labelledby="savingsReferenceTitleV167">
+      <header class="market-reference-head-v167 savings-head-v167">
+        <div>
+          <span class="market-reference-kicker-v167">Rendimento da poupança</span>
+          <h3 id="savingsReferenceTitleV167">Poupança</h3>
+          <p>Comparação entre a regra nova e a regra antiga.</p>
+        </div>
+        <div class="savings-current-v167" aria-label="Rendimento mensal atual da poupança">
+          <span>Hoje</span>
+          <strong class="blue" id="mc-poup">—</strong>
+          <small>a.m.</small>
+        </div>
+      </header>
+
+      <div class="savings-overview-v167">
+        <div class="poup-values poup-rules-grid savings-rules-v167">
+          <article class="poup-rule poup-rule-card new-rule savings-rule-v167">
+            <div class="poup-rule-label">Regra nova</div>
+            <div class="poup-rule-period">Aplicações desde 04/05/2012</div>
+            <div class="poup-rule-sub" id="poupNewRuleText">Regra conforme o nível da Selic.</div>
+            <div class="poup-accum-pill" id="poupNewAccum">Acumulado no ano: —</div>
+          </article>
+
+          <article class="poup-rule poup-rule-card old-rule savings-rule-v167">
+            <div class="poup-rule-label">Regra antiga</div>
+            <div class="poup-rule-period">Aplicações até 03/05/2012</div>
+            <div class="poup-rule-current-v167"><span>Rendimento atual</span><strong id="poupOldMonthly">—</strong></div>
+            <div class="poup-rule-sub" id="poupOldRuleText">TR + 0,50% a.m.</div>
+            <div class="poup-accum-pill muted" id="poupOldAccum">Acumulado no ano: —</div>
+          </article>
+        </div>
+
+        <div class="savings-reading-v167">
+          <span>Leitura atual</span>
+          <p class="poup-quick-note" id="poupQuickNote">A regra será definida automaticamente pelo nível vigente da Selic.</p>
+          <div class="savings-threshold-v167">
+            <small>Ponto de mudança da regra nova</small>
+            <strong>Selic ≤ 8,50% a.a.</strong>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Card 4: Gráfico didático de cenários da Poupança -->
-    <div class="indic-ref-card market-ref-card poup-scenarios-card poup-mobile-extra">
-      <div class="poup-scenarios-head">
-        <div class="poup-scenarios-title">
-          <div class="indic-ref-label">📊 Poupança — Cenários</div>
-          <div class="poup-scenarios-subtitle">Comparativo didático entre regra nova e antiga</div>
+      <div class="savings-actions-v167">
+        <button class="reference-toggle-v167" id="poupExpandBtn" onclick="return togglePoupanca()" aria-expanded="false">Ver regras e cenários</button>
+        <a class="market-reference-source-v167" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener">Calculadora do BCB ↗</a>
+      </div>
+
+      <div class="savings-details-v167" id="poupDetailsPanelV167" hidden>
+        <div class="poup-explain" id="poupExplain">
+          <div class="poup-explain-inner poup-explain-clean">
+            <div class="poup-explain-row">
+              <span class="poup-explain-tag tag-nova">Nova</span>
+              <span class="poup-explain-text">Acima de 8,5% a.a., rende TR + 0,50% a.m.; em 8,5% a.a. ou abaixo, rende TR + 70% da Selic meta anual, mensalizada.</span>
+            </div>
+            <div class="poup-explain-row">
+              <span class="poup-explain-tag tag-antiga">Antiga</span>
+              <span class="poup-explain-text">Rende sempre TR + 0,50% a.m., independentemente do nível da Selic.</span>
+            </div>
+          </div>
         </div>
-        <span class="poup-scenario-status" id="poupScenarioStatus">Selic —</span>
+
+        <section class="poup-scenarios-card poup-mobile-extra savings-scenarios-v167" aria-labelledby="poupScenariosTitleV167">
+          <div class="poup-scenarios-head">
+            <div class="poup-scenarios-title">
+              <div class="indic-ref-label" id="poupScenariosTitleV167">Comparação de cenários</div>
+              <div class="poup-scenarios-subtitle">Estimativa didática entre regra nova e antiga.</div>
+            </div>
+            <span class="poup-scenario-status" id="poupScenarioStatus">Selic —</span>
+          </div>
+
+          <div class="poup-scenario-summary" id="poupScenarioSummary">Carregando comparação conforme o nível da Selic...</div>
+          <div class="poup-scenario-chart-wrap">
+            <canvas id="poupScenarioChart" aria-label="Gráfico comparando cenários da poupança pela Selic"></canvas>
+          </div>
+          <div class="poup-scenario-metrics">
+            <div class="poup-scenario-pill"><span>Situação hoje</span><strong id="poupScenarioToday">—</strong></div>
+            <div class="poup-scenario-pill"><span>Virada da regra nova</span><strong>Selic ≤ 8,50% a.a.</strong></div>
+          </div>
+          <div class="poup-scenario-note" id="poupScenarioNote">Estimativa didática; a TR pode variar conforme o período de aniversário.</div>
+        </section>
       </div>
-
-      <div class="poup-scenario-summary" id="poupScenarioSummary">
-        Carregando comparação das regras conforme o nível da Selic...
-      </div>
-
-      <div class="poup-scenario-chart-wrap">
-        <canvas id="poupScenarioChart" aria-label="Gráfico comparando cenários da poupança pela Selic"></canvas>
-      </div>
-
-      <div class="poup-scenario-metrics">
-        <div class="poup-scenario-pill">
-          <span>Situação hoje</span>
-          <strong id="poupScenarioToday">—</strong>
-        </div>
-        <div class="poup-scenario-pill">
-          <span>Virada da regra nova</span>
-          <strong>Selic ≤ 8,50% a.a.</strong>
-        </div>
-      </div>
-
-      <div class="poup-scenario-note" id="poupScenarioNote">
-        Estimativa didática: a TR pode variar conforme o período de aniversário da poupança.
-      </div>
-      <button type="button" class="poup-mobile-close-extra" onclick="togglePoupancaMobileDetails(false)">
-        Ocultar cenários ↑
-      </button>
-    </div>
-
-
-</div><!-- /indic-ref-bar -->
+    </section>
+  </div><!-- /indic-ref-bar -->
 
 </div><!-- /section cards mercado -->
 
@@ -915,86 +921,93 @@ html:not(.app-booting) .page{
     <span class="section-badge"><span class="badge-dot green"></span>BCB · cotação oficial</span>
   </div>
 
-  <div class="dolar-compact-card dolar-mobile-priority">
+  <div class="dolar-compact-card dolar-mobile-priority dolar-information-architecture-v162">
     <div class="dolar-compact-loading" id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação PTAX...</div>
 
     <div id="dolar-day-content" style="display:none">
-      <div class="dolar-compact-top">
+      <header class="dolar-compact-top dolar-summary-v162">
         <div class="dolar-main-kpi">
-          <span class="dolar-kpi-label">Cotação PTAX</span>
+          <span class="dolar-kpi-label">Cotação PTAX atual</span>
           <strong id="dolar-day-rate">—</strong>
           <small id="dolar-day-ref">—</small>
         </div>
 
-        <div class="dolar-kpi-row">
-          <div class="dolar-mini-kpi">
-            <span>Mês</span>
-            <strong class="muted" id="dolar-var-mes-card">—</strong>
+        <div class="dolar-kpi-stack-v162">
+          <div class="dolar-current-kpis-v162" aria-label="Variações do mês e do ano">
+            <div class="dolar-mini-kpi dolar-variation-chip-v98">
+              <span>Mês atual</span>
+              <strong class="muted" id="dolar-var-mes-card">—</strong>
+              <small>Variação parcial</small>
+            </div>
+            <div class="dolar-mini-kpi dolar-variation-chip-v98">
+              <span>No ano</span>
+              <strong class="muted" id="dolar-var-ano-card">—</strong>
+              <small>Acumulado em 2026</small>
+            </div>
           </div>
-          <div class="dolar-mini-kpi">
-            <span>Ano</span>
-            <strong class="muted" id="dolar-var-ano-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi">
-            <span>12M</span>
-            <strong class="muted" id="dolar-var-12m-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi">
-            <span>24M</span>
-            <strong class="muted" id="dolar-var-24m-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi dolar-mini-kpi-36m">
-            <span>36M</span>
-            <strong class="muted" id="dolar-var-36m-card">—</strong>
+          <div class="dolar-history-kpis-v162" aria-label="Variações históricas da PTAX">
+            <div class="dolar-mini-kpi dolar-variation-chip-v98"><span>12M</span><strong class="muted" id="dolar-var-12m-card">—</strong></div>
+            <div class="dolar-mini-kpi dolar-variation-chip-v98"><span>24M</span><strong class="muted" id="dolar-var-24m-card">—</strong></div>
+            <div class="dolar-mini-kpi dolar-mini-kpi-36m dolar-variation-chip-v98"><span>36M</span><strong class="muted" id="dolar-var-36m-card">—</strong></div>
           </div>
         </div>
-      </div>
+      </header>
     </div>
 
-    <div class="dolar-compact-footer dolar-months-first">
+    <section class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel" aria-labelledby="dolarChartTitleV162">
+      <div class="dolar-compact-chart-header">
+        <div>
+          <div class="dolar-chart-title" id="dolarChartTitleV162">Histórico PTAX</div>
+          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
+        </div>
+        <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
+        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar" role="tablist">
+          <button class="chart-tab" data-dolar-range="year" type="button" role="tab" aria-selected="false">2026</button>
+          <button class="chart-tab" data-dolar-range="12m" type="button" role="tab" aria-selected="false">12M</button>
+          <button class="chart-tab active" data-dolar-range="24m" type="button" role="tab" aria-selected="true">24M</button>
+          <button class="chart-tab" data-dolar-range="36m" type="button" role="tab" aria-selected="false">36M</button>
+        </div>
+      </div>
+      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
+    </section>
+
+    <section class="ptax-stats-card ptax-stats-inline-v162" id="ptaxStatsCard" aria-labelledby="ptaxStatsTitleV162">
+      <div class="ptax-stats-title" id="ptaxStatsTitleV162">Estatísticas do período · 24 meses</div>
+      <div class="ptax-stats-grid">
+        <div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMaxLabel">Máxima</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMinLabel">Mínima</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMediaLabel">Média</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
+      </div>
+    </section>
+
+    <section class="dolar-current-month-v162" id="dolarCurrentMonthV162" hidden aria-label="Cotação parcial do mês atual">
+      <div class="dolar-current-month-copy-v162">
+        <span>Mês atual · parcial</span>
+        <small id="dolar-current-month-ref">—</small>
+      </div>
+      <strong id="dolar-current-month-rate">—</strong>
+      <em id="dolar-current-month-var" class="muted">—</em>
+    </section>
+
+    <section class="dolar-compact-footer dolar-months-first" aria-labelledby="dolarMonthsTitleV162">
       <div class="dolar-month-strip">
         <div class="dolar-month-strip-head">
-          <div class="dolar-month-strip-title">Fechamentos mensais</div>
-          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
+          <div>
+            <div class="dolar-month-strip-title" id="dolarMonthsTitleV162">Fechamentos mensais</div>
+            <small>Somente meses encerrados e consolidados</small>
+          </div>
+          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()" aria-expanded="true">Recolher ▲</button>
         </div>
         <div class="dolar-timeline-body open" id="dolarTimelineBody">
+          <div class="dolar-months-table-head-v162" aria-hidden="true"><span>Mês</span><span>Fechamento</span><span>Variação</span></div>
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
           </div>
         </div>
       </div>
-
-    </div>
-
-    <div class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel">
-      <div class="dolar-compact-chart-header">
-        <div>
-          <div class="dolar-chart-title">📈 Ver gráfico histórico PTAX</div>
-          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
-        </div>
-        <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
-        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar" role="group">
-          <button class="chart-tab" data-dolar-range="year" type="button">2026</button>
-          <button class="chart-tab" data-dolar-range="12m" type="button">12M</button>
-          <button class="chart-tab active" data-dolar-range="24m" type="button">24M</button>
-          <button class="chart-tab" data-dolar-range="36m" type="button">36M</button>
-        </div>
-      </div>
-      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
-    </div>
+    </section>
   </div>
-
-  <!-- Estatísticas PTAX 12M -->
-  <div class="ptax-stats-card" id="ptaxStatsCard">
-    <div class="ptax-stats-title">📊 Estatísticas PTAX — 12 meses</div>
-    <div class="ptax-stats-grid">
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Máxima 12M</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Mínima 12M</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Média 12M</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
-    </div>
-  </div>
-
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
