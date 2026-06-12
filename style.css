@@ -27043,3 +27043,320 @@ html.fundos-meta-integration-v156 .detail-grid-compact .detail-val{
     min-width:980px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   v162 — Dólar PTAX: hierarquia cronológica e analítica
+   Atual → tendência → estatísticas → fechamentos
+═══════════════════════════════════════════════════════ */
+html.dolar-ptax-reorg-v162 #sec-dolar{
+  --dolar-neg-v162:#ff6f86;
+  --dolar-pos-v162:#48e6a0;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-information-architecture-v162{
+  max-width:1280px;
+  margin-inline:auto;
+  overflow:hidden;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162{
+  display:grid!important;
+  grid-template-columns:minmax(260px,.92fr) minmax(0,2.08fr)!important;
+  gap:14px!important;
+  padding:16px 18px!important;
+  align-items:stretch!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:126px;
+  padding:18px!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi strong{
+  font-family:'JetBrains Mono',monospace!important;
+  font-size:2rem!important;
+  letter-spacing:-.045em;
+  font-variant-numeric:tabular-nums;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-kpi-stack-v162{
+  display:grid;
+  grid-template-rows:auto auto;
+  gap:9px;
+  min-width:0;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:9px;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:9px;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi{
+  min-height:58px!important;
+  padding:10px 12px!important;
+  display:flex!important;
+  flex-direction:column;
+  justify-content:center;
+  gap:3px;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi{
+  min-height:68px!important;
+  border-color:rgba(200,151,58,.18)!important;
+  background:rgba(200,151,58,.035)!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi span{
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:.61rem!important;
+  font-weight:760!important;
+  letter-spacing:.07em!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi strong{
+  font-family:'JetBrains Mono',monospace!important;
+  font-size:.93rem!important;
+  line-height:1.1!important;
+  font-variant-numeric:tabular-nums;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi strong{
+  font-size:1.08rem!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi small{
+  color:#7f8aa4;
+  font-family:Inter,system-ui,sans-serif;
+  font-size:.58rem;
+  line-height:1.25;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .neg,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-metric-val.neg,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-var.neg{
+  color:var(--dolar-neg-v162)!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .pos,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-metric-val.pos,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-var.pos{
+  color:var(--dolar-pos-v162)!important;
+}
+
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-chart{
+  margin:0!important;
+  border-top:1px solid rgba(255,255,255,.065)!important;
+  border-bottom:1px solid rgba(255,255,255,.065)!important;
+  border-radius:0!important;
+  background:rgba(7,9,17,.28)!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-chart-header{
+  padding:13px 18px 8px!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-chart-title{
+  color:#e8bb6a!important;
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:.82rem!important;
+  font-weight:780!important;
+  letter-spacing:0!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-chart-sub{
+  margin-top:3px;
+  color:#8e99b3!important;
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:.63rem!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-range-tabs{
+  align-self:center;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-card .dolar-chart-body{
+  height:clamp(220px,20vw,280px)!important;
+  min-height:220px!important;
+  max-height:280px!important;
+  padding:4px 16px 14px!important;
+}
+
+html.dolar-ptax-reorg-v162 #sec-dolar .ptax-stats-inline-v162{
+  max-width:none!important;
+  margin:0!important;
+  padding:12px 18px 14px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(255,255,255,.065)!important;
+  border-radius:0!important;
+  background:rgba(12,15,28,.52)!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .ptax-stats-title{
+  margin-bottom:9px!important;
+  color:#aab4cc!important;
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:.64rem!important;
+  font-weight:760!important;
+  letter-spacing:.055em!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .ptax-stats-grid{
+  gap:8px!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .ptax-stat-item{
+  min-height:58px;
+  justify-content:center;
+  padding:8px 10px!important;
+  border:1px solid rgba(255,255,255,.055);
+  background:rgba(18,22,39,.72)!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .ptax-stat-label{
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:.57rem!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .ptax-stat-val{
+  font-family:'JetBrains Mono',monospace!important;
+  font-size:.88rem!important;
+  line-height:1.15;
+  font-variant-numeric:tabular-nums;
+}
+
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto auto;
+  align-items:center;
+  gap:16px;
+  padding:11px 18px;
+  border-bottom:1px solid rgba(255,255,255,.065);
+  background:linear-gradient(90deg,rgba(91,156,246,.07),rgba(91,156,246,.018));
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162[hidden]{display:none!important}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-copy-v162{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-copy-v162 span{
+  color:#a8c6ff;
+  font-family:Inter,system-ui,sans-serif;
+  font-size:.65rem;
+  font-weight:780;
+  text-transform:uppercase;
+  letter-spacing:.075em;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-copy-v162 small{
+  color:#8491aa;
+  font-family:'JetBrains Mono',monospace;
+  font-size:.61rem;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162 > strong,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162 > em{
+  font-family:'JetBrains Mono',monospace;
+  font-style:normal;
+  font-variant-numeric:tabular-nums;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162 > strong{font-size:.88rem;color:#edf2fb}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162 > em{font-size:.82rem;font-weight:780}
+
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-footer{
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-strip-head{
+  padding:12px 18px 9px!important;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-strip-head > div:first-child{
+  min-width:0;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-strip-head small{
+  display:block;
+  margin-top:2px;
+  color:#78859f;
+  font-family:Inter,system-ui,sans-serif;
+  font-size:.58rem;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-strip-title{
+  font-family:Inter,system-ui,sans-serif!important;
+  font-size:.69rem!important;
+  font-weight:780!important;
+  letter-spacing:.055em!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-timeline-body,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-timeline-body.open{
+  max-height:420px!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-months-table-head-v162,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162{
+  display:grid!important;
+  grid-template-columns:minmax(120px,1fr) minmax(120px,1fr) minmax(100px,.8fr)!important;
+  align-items:center;
+  gap:12px;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-months-table-head-v162{
+  padding:7px 18px;
+  color:#77839c;
+  background:rgba(255,255,255,.018);
+  border-bottom:1px solid rgba(255,255,255,.045);
+  font-family:Inter,system-ui,sans-serif;
+  font-size:.55rem;
+  font-weight:760;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-months-table-head-v162 span:nth-child(n+2){text-align:right}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-card .dolar-months{
+  display:block!important;
+  overflow:visible!important;
+  padding:0!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-card .dolar-month-item,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162{
+  min-width:0!important;
+  min-height:42px!important;
+  padding:8px 18px!important;
+  border:0!important;
+  border-bottom:1px solid rgba(255,255,255,.045)!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162:last-child{border-bottom:0!important}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-label,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-val,
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-var{
+  font-family:'JetBrains Mono',monospace!important;
+  font-size:.70rem!important;
+  line-height:1.2!important;
+  font-variant-numeric:tabular-nums;
+}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-label{color:#aab4cb!important;text-transform:none!important}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-val{color:#edf2fb!important;text-align:right}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-var{text-align:right;font-weight:780!important}
+html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-empty-v162{padding:14px 18px;color:#8792aa;font-size:.68rem}
+
+@media(max-width:820px){
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162{
+    grid-template-columns:1fr!important;
+    padding:12px!important;
+  }
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi{min-height:104px}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{grid-template-columns:repeat(3,minmax(0,1fr))}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-chart-header{padding:12px!important}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162{
+    grid-template-columns:1fr auto;
+    gap:6px 12px;
+    padding:10px 12px;
+  }
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-v162 > em{grid-column:2;grid-row:2}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-month-copy-v162{grid-row:1 / span 2;flex-direction:column;gap:2px}
+  html.dolar-ptax-reorg-v162 #sec-dolar .ptax-stats-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-months-table-head-v162,
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162{
+    grid-template-columns:1fr auto auto!important;
+    gap:8px;
+  }
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-months-table-head-v162{padding-inline:12px}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-compact-card .dolar-month-item{padding-inline:12px!important}
+}
+@media(max-width:480px){
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162{grid-template-columns:1fr 1fr}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{grid-template-columns:repeat(3,1fr)}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi{padding:8px!important}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi strong{font-size:.79rem!important}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-months-table-head-v162{display:none!important}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162{
+    grid-template-columns:1fr auto!important;
+    min-height:48px!important;
+  }
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162 .dolar-month-var{grid-column:2;grid-row:2}
+  html.dolar-ptax-reorg-v162 #sec-dolar .dolar-month-row-v162 .dolar-month-val{grid-column:2;grid-row:1}
+}

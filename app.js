@@ -528,14 +528,15 @@ function hidratarDolarResumoDoJson(d){
 }
 
 
-function atualizarPTAXStats(){
+function atualizarPTAXStats(range='24m'){
   const setText = (id, value) => { const el = $(id); if(el) el.textContent = value; };
   const setClass = (id, cls) => { const el = $(id); if(el) el.className = cls; };
 
-  if(!_ptaxHistorico || !_ptaxHistorico.length){
+  const reset = () => {
     ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
-    return;
-  }
+  };
+
+  if(!_ptaxHistorico || !_ptaxHistorico.length){ reset(); return; }
 
   const byMonth = {};
   _ptaxHistorico.forEach(item => {
@@ -550,17 +551,29 @@ function atualizarPTAXStats(){
   });
 
   const asc = Object.values(byMonth).sort((a,b)=>a.key.localeCompare(b.key));
-  if(!asc.length){
-    ['ptaxStatAtual','ptaxStatMax','ptaxStatMin','ptaxStatMedia','ptaxStatMaxRef','ptaxStatMinRef'].forEach(id => setText(id,'—'));
-    return;
+  if(!asc.length){ reset(); return; }
+
+  let janela;
+  let periodoTexto;
+  if(range === 'year'){
+    janela = asc.filter(item => item.dt.getFullYear() === ANO_ATUAL);
+    periodoTexto = String(ANO_ATUAL);
+  }else{
+    const meses = range === '12m' ? 12 : range === '36m' ? 36 : 24;
+    janela = asc.slice(-meses);
+    periodoTexto = `${meses} meses`;
   }
+  if(!janela.length) janela = asc;
 
-  const janela12 = asc.slice(-12);
   const atual = asc[asc.length-1];
-  const max = janela12.reduce((a,b)=> b.val > a.val ? b : a, janela12[0]);
-  const min = janela12.reduce((a,b)=> b.val < a.val ? b : a, janela12[0]);
-  const media = janela12.reduce((sum,item)=>sum+item.val,0) / janela12.length;
+  const max = janela.reduce((a,b)=> b.val > a.val ? b : a, janela[0]);
+  const min = janela.reduce((a,b)=> b.val < a.val ? b : a, janela[0]);
+  const media = janela.reduce((sum,item)=>sum+item.val,0) / janela.length;
 
+  setText('ptaxStatsTitleV162', `Estatísticas do período · ${periodoTexto}`);
+  setText('ptaxStatMaxLabel', 'Máxima');
+  setText('ptaxStatMinLabel', 'Mínima');
+  setText('ptaxStatMediaLabel', 'Média');
   setText('ptaxStatAtual', brl(atual.val));
   setText('ptaxStatMax', brl(max.val));
   setText('ptaxStatMaxRef', max.label);
@@ -677,7 +690,7 @@ function calcularDolarPeriodos(){
     $('dolar-day-content').style.display = 'block';
   }
   atualizarCardDolarResumo(refLabel);
-  atualizarPTAXStats();
+  atualizarPTAXStats('24m');
 
   atualizarTabelaIndicadores();
 }
@@ -779,15 +792,11 @@ function renderDolarMensais(){
   if(!_ptaxHistorico.length) return;
 
   const byMonth = {};
-
   _ptaxHistorico.forEach(item => {
     const dataRef = item.dataHoraCotacao || item.data_ref;
     const dt = new Date(dataRef);
     if(isNaN(dt)) return;
-
     const key = `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}`;
-
-    // Guarda a última cotação disponível de cada mês.
     if(!byMonth[key] || new Date(dataRef) > new Date(byMonth[key].dataHoraCotacao || byMonth[key].data_ref)){
       byMonth[key] = item;
     }
@@ -796,42 +805,59 @@ function renderDolarMensais(){
   const sorted = Object.entries(byMonth).sort(([a],[b]) => a.localeCompare(b));
   if(!sorted.length) return;
 
-  // Mostra sempre os últimos fechamentos disponíveis, com o mês mais recente primeiro.
-  // Isso evita que no mobile apareça jan/fev enquanto o fechamento atual fica escondido no fim.
-  const lastKey = sorted[sorted.length - 1][0];
-  const ultimosMeses = sorted.slice(-6).reverse();
+  const currentKey = `${HOJE.getFullYear()}-${String(HOJE.getMonth()+1).padStart(2,'0')}`;
+  const currentEntry = sorted.find(([key]) => key === currentKey);
+  const closedEntries = sorted.filter(([key]) => key !== currentKey).slice(-6).reverse();
 
-  const container = $('dolarMonths');
-  if(!container) return;
-
-  container.innerHTML = ultimosMeses.map(([key, item]) => {
-    const [ano, mes] = key.split('-');
-    const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
-    const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
-    const isCurrent = key === lastKey;
-
+  const calcVar = (key,item) => {
     let varPct = item._var_pct;
     if(varPct === null || varPct === undefined || Number.isNaN(Number(varPct))){
       const idxAsc = sorted.findIndex(([k]) => k === key);
       if(idxAsc > 0){
+        const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
         const prevVal = parseFloat(sorted[idxAsc-1][1].cotacaoVenda || sorted[idxAsc-1][1].cotacao || 0);
         if(prevVal) varPct = ((val - prevVal) / prevVal) * 100;
       }
     }
+    return (varPct !== null && varPct !== undefined && !Number.isNaN(Number(varPct))) ? Number(varPct) : null;
+  };
 
-    let varHtml = '<span class="dolar-month-var zero">—</span>';
-    if(varPct !== null && varPct !== undefined && !Number.isNaN(Number(varPct))){
-      const n = Number(varPct);
-      const cls = n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
-      varHtml = `<span class="dolar-month-var ${cls}">${signPct(n)}${fmt(n)}</span>`;
+  const currentCard = $('dolarCurrentMonthV162');
+  if(currentCard){
+    if(currentEntry){
+      const [key,item] = currentEntry;
+      const [ano,mes] = key.split('-');
+      const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+      const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
+      const varPct = calcVar(key,item);
+      const varEl = $('dolar-current-month-var');
+      currentCard.hidden = false;
+      if($('dolar-current-month-ref')) $('dolar-current-month-ref').textContent = label;
+      if($('dolar-current-month-rate')) $('dolar-current-month-rate').textContent = `R$ ${fmtBRL(val)}`;
+      if(varEl){
+        varEl.textContent = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
+        varEl.className = varPct === null ? 'muted' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'muted';
+      }
+    }else{
+      currentCard.hidden = true;
     }
+  }
 
-    return `<div class="dolar-month-item${isCurrent ? ' current' : ''}">
+  const container = $('dolarMonths');
+  if(!container) return;
+  container.innerHTML = closedEntries.map(([key,item]) => {
+    const [ano,mes] = key.split('-');
+    const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
+    const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
+    const varPct = calcVar(key,item);
+    const cls = varPct === null ? 'zero' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
+    const varTxt = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
+    return `<div class="dolar-month-item dolar-month-row-v162">
       <span class="dolar-month-label">${label}</span>
       <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
-      ${varHtml}
+      <span class="dolar-month-var ${cls}">${varTxt}</span>
     </div>`;
-  }).join('');
+  }).join('') || '<div class="dolar-month-empty-v162">Nenhum mês fechado disponível.</div>';
 }
 
 function toggleDolarTimeline(){
@@ -841,6 +867,7 @@ function toggleDolarTimeline(){
 
   const isOpen = body.classList.toggle('open');
   toggle.textContent = isOpen ? 'Recolher ▲' : 'Mostrar ▼';
+  toggle.setAttribute('aria-expanded', String(isOpen));
 }
 
 function toggleDolarChartMobile(){
@@ -914,6 +941,8 @@ function buildChartDolar(range){
   }
 
   if(!dados.length) return;
+
+  atualizarPTAXStats(range);
 
   // Amostra para não sobrecarregar o gráfico (máx 200 pontos)
   const step = Math.max(1, Math.floor(dados.length/200));
@@ -998,8 +1027,12 @@ function buildChartDolar(range){
 // Tabs do gráfico dólar
 document.querySelectorAll('[data-dolar-range]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('[data-dolar-range]').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('[data-dolar-range]').forEach(b => {
+      b.classList.remove('active');
+      b.setAttribute('aria-selected','false');
+    });
     btn.classList.add('active');
+    btn.setAttribute('aria-selected','true');
     buildChartDolar(btn.dataset.dolarRange);
   });
 });
@@ -12682,3 +12715,5 @@ if(!isSearchInput(el)) return;
   else init();
   window.__ELTAUM_MARKET_ANALYTIC_V160__={setup,get currency(){return state.currency;}};
 })();
+
+/* ELTAUM_DOLAR_PTAX_REORG_20260612_v162 */

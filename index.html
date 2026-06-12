@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_MARKET_ANALYTIC_TYPOGRAPHY_20260612_v161"/>
+<meta name="app-build" content="ELTAUM_DOLAR_PTAX_REORG_20260612_v162"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=market-analytic-typography-v161" rel="stylesheet"/>
+<link href="style.css?v=dolar-ptax-reorg-v162" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer src="app.js?v=market-analytic-typography-v161"></script>
+<script defer src="app.js?v=dolar-ptax-reorg-v162"></script>
 
 </head>
 <body>
@@ -915,86 +915,93 @@ html:not(.app-booting) .page{
     <span class="section-badge"><span class="badge-dot green"></span>BCB · cotação oficial</span>
   </div>
 
-  <div class="dolar-compact-card dolar-mobile-priority">
+  <div class="dolar-compact-card dolar-mobile-priority dolar-information-architecture-v162">
     <div class="dolar-compact-loading" id="dolar-day-loading"><span class="spinner-sm"></span>Buscando cotação PTAX...</div>
 
     <div id="dolar-day-content" style="display:none">
-      <div class="dolar-compact-top">
+      <header class="dolar-compact-top dolar-summary-v162">
         <div class="dolar-main-kpi">
-          <span class="dolar-kpi-label">Cotação PTAX</span>
+          <span class="dolar-kpi-label">Cotação PTAX atual</span>
           <strong id="dolar-day-rate">—</strong>
           <small id="dolar-day-ref">—</small>
         </div>
 
-        <div class="dolar-kpi-row">
-          <div class="dolar-mini-kpi">
-            <span>Mês</span>
-            <strong class="muted" id="dolar-var-mes-card">—</strong>
+        <div class="dolar-kpi-stack-v162">
+          <div class="dolar-current-kpis-v162" aria-label="Variações do mês e do ano">
+            <div class="dolar-mini-kpi dolar-variation-chip-v98">
+              <span>Mês atual</span>
+              <strong class="muted" id="dolar-var-mes-card">—</strong>
+              <small>Variação parcial</small>
+            </div>
+            <div class="dolar-mini-kpi dolar-variation-chip-v98">
+              <span>No ano</span>
+              <strong class="muted" id="dolar-var-ano-card">—</strong>
+              <small>Acumulado em 2026</small>
+            </div>
           </div>
-          <div class="dolar-mini-kpi">
-            <span>Ano</span>
-            <strong class="muted" id="dolar-var-ano-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi">
-            <span>12M</span>
-            <strong class="muted" id="dolar-var-12m-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi">
-            <span>24M</span>
-            <strong class="muted" id="dolar-var-24m-card">—</strong>
-          </div>
-          <div class="dolar-mini-kpi dolar-mini-kpi-36m">
-            <span>36M</span>
-            <strong class="muted" id="dolar-var-36m-card">—</strong>
+          <div class="dolar-history-kpis-v162" aria-label="Variações históricas da PTAX">
+            <div class="dolar-mini-kpi dolar-variation-chip-v98"><span>12M</span><strong class="muted" id="dolar-var-12m-card">—</strong></div>
+            <div class="dolar-mini-kpi dolar-variation-chip-v98"><span>24M</span><strong class="muted" id="dolar-var-24m-card">—</strong></div>
+            <div class="dolar-mini-kpi dolar-mini-kpi-36m dolar-variation-chip-v98"><span>36M</span><strong class="muted" id="dolar-var-36m-card">—</strong></div>
           </div>
         </div>
-      </div>
+      </header>
     </div>
 
-    <div class="dolar-compact-footer dolar-months-first">
+    <section class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel" aria-labelledby="dolarChartTitleV162">
+      <div class="dolar-compact-chart-header">
+        <div>
+          <div class="dolar-chart-title" id="dolarChartTitleV162">Histórico PTAX</div>
+          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
+        </div>
+        <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
+        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar" role="tablist">
+          <button class="chart-tab" data-dolar-range="year" type="button" role="tab" aria-selected="false">2026</button>
+          <button class="chart-tab" data-dolar-range="12m" type="button" role="tab" aria-selected="false">12M</button>
+          <button class="chart-tab active" data-dolar-range="24m" type="button" role="tab" aria-selected="true">24M</button>
+          <button class="chart-tab" data-dolar-range="36m" type="button" role="tab" aria-selected="false">36M</button>
+        </div>
+      </div>
+      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
+    </section>
+
+    <section class="ptax-stats-card ptax-stats-inline-v162" id="ptaxStatsCard" aria-labelledby="ptaxStatsTitleV162">
+      <div class="ptax-stats-title" id="ptaxStatsTitleV162">Estatísticas do período · 24 meses</div>
+      <div class="ptax-stats-grid">
+        <div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMaxLabel">Máxima</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMinLabel">Mínima</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
+        <div class="ptax-stat-item"><span class="ptax-stat-label" id="ptaxStatMediaLabel">Média</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
+      </div>
+    </section>
+
+    <section class="dolar-current-month-v162" id="dolarCurrentMonthV162" hidden aria-label="Cotação parcial do mês atual">
+      <div class="dolar-current-month-copy-v162">
+        <span>Mês atual · parcial</span>
+        <small id="dolar-current-month-ref">—</small>
+      </div>
+      <strong id="dolar-current-month-rate">—</strong>
+      <em id="dolar-current-month-var" class="muted">—</em>
+    </section>
+
+    <section class="dolar-compact-footer dolar-months-first" aria-labelledby="dolarMonthsTitleV162">
       <div class="dolar-month-strip">
         <div class="dolar-month-strip-head">
-          <div class="dolar-month-strip-title">Fechamentos mensais</div>
-          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()">Recolher ▲</button>
+          <div>
+            <div class="dolar-month-strip-title" id="dolarMonthsTitleV162">Fechamentos mensais</div>
+            <small>Somente meses encerrados e consolidados</small>
+          </div>
+          <button class="dolar-timeline-toggle" id="dolarTimelineToggle" onclick="toggleDolarTimeline()" aria-expanded="true">Recolher ▲</button>
         </div>
         <div class="dolar-timeline-body open" id="dolarTimelineBody">
+          <div class="dolar-months-table-head-v162" aria-hidden="true"><span>Mês</span><span>Fechamento</span><span>Variação</span></div>
           <div class="dolar-months" id="dolarMonths">
             <div style="padding:8px;color:var(--muted);font-size:.75rem"><span class="spinner-sm"></span>Carregando...</div>
           </div>
         </div>
       </div>
-
-    </div>
-
-    <div class="dolar-compact-chart is-mobile-collapsed" id="dolarChartPanel">
-      <div class="dolar-compact-chart-header">
-        <div>
-          <div class="dolar-chart-title">📈 Ver gráfico histórico PTAX</div>
-          <div class="dolar-chart-sub" id="dolar-chart-sub">Carregando histórico...</div>
-        </div>
-        <button type="button" class="dolar-chart-toggle-mobile" id="dolarChartToggle" onclick="toggleDolarChartMobile()" aria-expanded="false">Ver gráfico</button>
-        <div class="chart-tabs dolar-range-tabs" aria-label="Selecionar período do gráfico do dólar" role="group">
-          <button class="chart-tab" data-dolar-range="year" type="button">2026</button>
-          <button class="chart-tab" data-dolar-range="12m" type="button">12M</button>
-          <button class="chart-tab active" data-dolar-range="24m" type="button">24M</button>
-          <button class="chart-tab" data-dolar-range="36m" type="button">36M</button>
-        </div>
-      </div>
-      <div class="dolar-chart-body"><canvas id="chartDolar"></canvas></div>
-    </div>
+    </section>
   </div>
-
-  <!-- Estatísticas PTAX 12M -->
-  <div class="ptax-stats-card" id="ptaxStatsCard">
-    <div class="ptax-stats-title">📊 Estatísticas PTAX — 12 meses</div>
-    <div class="ptax-stats-grid">
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Atual</span><strong class="ptax-stat-val neu" id="ptaxStatAtual">—</strong></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Máxima 12M</span><strong class="ptax-stat-val neg" id="ptaxStatMax">—</strong><small class="ptax-stat-ref" id="ptaxStatMaxRef">—</small></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Mínima 12M</span><strong class="ptax-stat-val pos" id="ptaxStatMin">—</strong><small class="ptax-stat-ref" id="ptaxStatMinRef">—</small></div>
-      <div class="ptax-stat-item"><span class="ptax-stat-label">Média 12M</span><strong class="ptax-stat-val neu" id="ptaxStatMedia">—</strong></div>
-    </div>
-  </div>
-
 </div><!-- /section dolar -->
 
 <!-- ═══════════════════════════════════════ BOLETIM FOCUS ══ -->
