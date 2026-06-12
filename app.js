@@ -2258,7 +2258,7 @@ function compararOrdenacao(av,bv){
 }
 const DEFAULT_SORT="Acum. 12M (%)";
 const CAT_CLS={"RENDA FIXA SIMPLES":"RF-S","RENDA FIXA":"RF","RENDA FIXA REFERENCIADO":"RF-R","RENDA FIXA CURTO PRAZO":"RF-CP","MULTIMERCADO":"MM","CAMBIAL":"CAM","ACOES":"AC","FUNDO DE INDICE":"ETF","FUNDOS MUTUOS DE PRIVATIZACAO":"FMP"};
-const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","Benchmark","Benchmark Oficial","Estrategia","Estratégia","Adiantamento Resgate","Adiantamento de Resgate","Classificacao Tributaria","Classificação Tributária","Tributacao","Tributação","Status Captacao","Status Captação","Status de Captação","Captacao","Captação","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
+const DETAIL_COLS=new Set(["CNPJ","codfundo","Perfil de Risco","Taxa Adm (%)","Aplicacao Minima (R$)","Conversao Resgate","Pagamento Resgate","Benchmark","Benchmark Oficial","Estrategia","Estratégia","Adiantamento Resgate","Adiantamento de Resgate","Classificacao Tributaria","Classificação Tributária","Tributacao","Tributação","Status Captacao","Status Captação","Status de Captação","Captacao","Captação","Horário Limite Aplicação","Horario Limite Aplicacao","Horário Aplicação","Horario Aplicacao","Grade Aplicação","Grade Aplicacao","Horário Limite Resgate","Horario Limite Resgate","Horário Resgate","Horario Resgate","Grade Resgate","Grade de Resgate","Horário Limite Movimentação","Horario Limite Movimentacao","Grade de Movimentação","Grade de Movimentacao","doc_lamina","doc_regulamento","doc_inf_comp","doc_comunicado","doc_carta","doc_boletim"]);
 const HIDDEN_COLS=new Set(["Fundo_norm","Perfil","Perfis","URL"]);
 
 
@@ -3204,13 +3204,35 @@ function obterDadosOperacionaisFundo(r){
     'Status de Captação','Status Captação','Status Captacao','Captação','Captacao',
     'Aberto para Captação','Aberto para Captacao','Situação de Captação','Situacao de Captacao'
   ]);
+  const horarioMovimentacao = primeiroCampoFundo(r,[
+    'Horário Limite Movimentação','Horario Limite Movimentacao',
+    'Horário de Movimentação','Horario de Movimentacao',
+    'Grade de Movimentação','Grade de Movimentacao','Horário da Grade','Horario da Grade'
+  ]);
+  const horarioAplicacao = primeiroCampoFundo(r,[
+    'Horário Limite Aplicação','Horario Limite Aplicacao',
+    'Horário Limite de Aplicação','Horario Limite de Aplicacao',
+    'Horário Aplicação','Horario Aplicacao','Horário de Aplicação','Horario de Aplicacao',
+    'Grade Aplicação','Grade Aplicacao','Grade de Aplicação','Grade de Aplicacao'
+  ]) || horarioMovimentacao;
+  const horarioResgate = primeiroCampoFundo(r,[
+    'Horário Limite Resgate','Horario Limite Resgate',
+    'Horário Limite de Resgate','Horario Limite de Resgate',
+    'Horário Resgate','Horario Resgate','Horário de Resgate','Horario de Resgate',
+    'Grade Resgate','Grade de Resgate'
+  ]) || horarioMovimentacao;
 
   return {
     benchmark:{texto:benchmarkOficial || benchmarkDetectado.label || 'Não informado', estimado:!benchmarkOficial},
     estrategia,
     adiantamento:{texto:adiantamento || 'Não informado', status:normalizarStatusOperacional(adiantamento)},
     tributacao:{texto:tributacao || 'Não informada'},
-    captacao:{texto:captacao || 'Não informada', status:normalizarStatusOperacional(captacao)}
+    captacao:{texto:captacao || 'Não informada', status:normalizarStatusOperacional(captacao)},
+    horarios:{
+      aplicacao:horarioAplicacao || 'Não informado',
+      resgate:horarioResgate || 'Não informado',
+      informado:Boolean(horarioAplicacao || horarioResgate)
+    }
   };
 }
 
@@ -3242,6 +3264,7 @@ function buildFundOperationalFacts(r, variant='detail'){
       <div class="fund-fact-v154"><span>Adiantamento de resgate</span><strong class="status-${adiCls}"><i>${adiDot}</i>${htmlAttr(d.adiantamento.texto)}</strong></div>
       <div class="fund-fact-v154"><span>Classificação tributária</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
       <div class="fund-fact-v154"><span>Captação</span><strong class="status-${capCls}"><i>${capDot}</i>${htmlAttr(d.captacao.texto)}</strong></div>
+      <div class="fund-fact-v154 movement-hours-v155"><span>Horários limite da grade diária</span><strong class="fund-hours-v155 ${d.horarios.informado?'has-data':'no-data'}"><em><b>Aplicação</b>${htmlAttr(d.horarios.aplicacao)}</em><em><b>Resgate</b>${htmlAttr(d.horarios.resgate)}</em></strong><small>Solicitações após o horário limite podem ser processadas no próximo dia útil.</small></div>
     </div>
   </section>`;
 }

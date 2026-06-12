@@ -26148,3 +26148,61 @@ html.w3c-html-validate-fix-v128 .closed-market-sheet[role="dialog"]{
   .fspot-facts-v154 .fund-fact-v154.strategy{grid-column:1/-1}
   .fund-facts-head-v154 small{display:none}
 }
+
+/* ==========================================================
+   ELTAUM v155 — horários limite da grade de movimentação
+========================================================== */
+.fund-fact-v154.movement-hours-v155{
+  grid-column:1/-1;
+  display:grid;
+  grid-template-columns:minmax(150px,.65fr) minmax(0,1.35fr);
+  align-items:center;
+  gap:8px 14px;
+}
+.fund-hours-v155{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  min-width:0;
+}
+.fund-hours-v155 em{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+  padding:7px 9px;
+  border:1px solid rgba(91,156,246,.18);
+  border-radius:8px;
+  background:rgba(91,156,246,.055);
+  color:#d6deef;
+  font-style:normal;
+  font:700 .63rem/1.2 'JetBrains Mono',monospace;
+  white-space:nowrap;
+}
+.fund-hours-v155 em b{
+  color:#8fa0c2;
+  font:800 .53rem/1 'Inter',sans-serif;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+}
+.fund-hours-v155.has-data em::before{
+  content:'🕒';
+  flex:0 0 auto;
+  font-size:.68rem;
+}
+.fund-hours-v155.no-data em{color:#8b97b2;background:rgba(255,255,255,.025);border-color:rgba(255,255,255,.075)}
+.fund-fact-v154.movement-hours-v155>small{
+  grid-column:2;
+  color:#77849f;
+  font-size:.51rem;
+  line-height:1.4;
+}
+@media(max-width:700px){
+  .fund-fact-v154.movement-hours-v155{grid-template-columns:1fr;align-items:start}
+  .fund-hours-v155{grid-template-columns:1fr 1fr}
+  .fund-fact-v154.movement-hours-v155>small{grid-column:auto}
+}
+@media(max-width:420px){
+  .fund-hours-v155{grid-template-columns:1fr}
+}
