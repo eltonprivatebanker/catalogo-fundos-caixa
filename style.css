@@ -30615,3 +30615,37 @@ html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle:focus-visible{
     padding-inline:6px!important;
   }
 }
+
+
+/* ELTAUM_RANKING_MOBILE_SPACING_20260613_v194
+   Mobile: remove o subtítulo redundante dos Rankings e cria uma pequena
+   área de respiro entre o cabeçalho do Top 10 e a primeira linha. */
+@media (max-width:700px){
+  html.ranking-mobile-spacing-v194 #rankingsSection .ranking-section-subtitle-v136{
+    display:none!important;
+  }
+
+  html.ranking-mobile-spacing-v194 #rankingsSection .ranking-head{
+    margin-bottom:10px!important;
+    padding-bottom:0!important;
+  }
+
+  html.ranking-mobile-spacing-v194 #rankingsSection .ranking-title-group{
+    gap:0!important;
+  }
+
+  html.ranking-mobile-spacing-v194 #rankingsSection .ranking-title-group h2{
+    margin:0!important;
+    font-size:1.18rem!important;
+    line-height:1.2!important;
+  }
+
+  /* Respiro mínimo entre o cabeçalho/controles e a primeira linha do ranking. */
+  html.ranking-mobile-spacing-v194 #rankingsSection .ranking-exec-board-head{
+    margin-bottom:6px!important;
+  }
+
+  html.ranking-mobile-spacing-v194 #rankingsSection .ranking-top-table{
+    border-top:1px solid rgba(255,255,255,.035)!important;
+  }
+}
