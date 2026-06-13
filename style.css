@@ -30176,3 +30176,74 @@ html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle:focus-visible{
     display:none!important;
   }
 }
+
+
+/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
+   Descrição mais legível e atualização minimalista no cartão de marca. */
+@media (max-width: 768px){
+  html.mobile-brand-copy-v192 .site-header-clean .brand-text p{
+    width:100%!important;
+    max-width:none!important;
+    margin:4px 0 0!important;
+    color:#aeb8d0!important;
+    font-family:Inter,system-ui,sans-serif!important;
+    font-size:.61rem!important;
+    font-weight:500!important;
+    line-height:1.38!important;
+    letter-spacing:.01em!important;
+    text-transform:none!important;
+    text-wrap:balance;
+  }
+
+  html.mobile-brand-copy-v192 .site-header-clean .brand-text #lastUpdate{
+    display:inline-flex!important;
+    align-items:center!important;
+    width:max-content!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:7px 0 0!important;
+    padding:0!important;
+    gap:5px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    color:#7f8aa8!important;
+    font-family:Inter,system-ui,sans-serif!important;
+    font-size:.54rem!important;
+    font-weight:500!important;
+    line-height:1.2!important;
+    letter-spacing:.01em!important;
+    opacity:.88!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-brand-copy-v192 .site-header-clean .brand-text #lastUpdate .live-dot{
+    width:5px!important;
+    height:5px!important;
+    flex:0 0 5px!important;
+    margin:0!important;
+  }
+
+  html.mobile-brand-copy-v192 .site-header-clean .brand-text #lastUpdate .live-update-label{
+    color:#8f9ab4!important;
+    font-weight:650!important;
+  }
+
+  html.mobile-brand-copy-v192 .site-header-clean .brand-text #lastUpdate .live-update-time{
+    color:#77829d!important;
+    font-family:'JetBrains Mono',Consolas,monospace!important;
+    font-size:.52rem!important;
+  }
+}
+
+@media (max-width: 380px){
+  html.mobile-brand-copy-v192 .site-header-clean .brand-text p{
+    font-size:.58rem!important;
+  }
+
+  html.mobile-brand-copy-v192 .site-header-clean .brand-text #lastUpdate{
+    gap:4px!important;
+    font-size:.51rem!important;
+  }
+}

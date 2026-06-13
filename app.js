@@ -1597,6 +1597,58 @@ function renderCdiYearHistory(d){
   }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
 }
 
+/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
+   Formata a atualização do cabeçalho de forma compacta, preservando
+   a data completa em title/aria-label. */
+function formatarAtualizacaoHeader(valor){
+  const bruto=String(valor ?? '').trim();
+  const match=bruto.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})(?::(\d{2}))?/);
+  if(!match) return {compacto:bruto,completo:bruto,datetime:''};
+
+  const [,dia,mes,ano,hora,minuto,segundo='00']=match;
+  const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const nomeMes=meses[Math.max(0,Math.min(11,Number(mes)-1))];
+
+  return {
+    compacto:`${dia} ${nomeMes} · ${hora}:${minuto}`,
+    completo:`${dia}/${mes}/${ano} às ${hora}:${minuto}`,
+    datetime:`${ano}-${mes}-${dia}T${hora}:${minuto}:${segundo}`
+  };
+}
+
+function atualizarDataHeader(valor,opcoes={}){
+  const elemento=document.getElementById('lastUpdate');
+  if(!elemento) return;
+
+  const dot=document.createElement('span');
+  dot.className='live-dot';
+
+  if(opcoes.cache){
+    dot.style.background='var(--muted)';
+    const texto=document.createElement('span');
+    texto.className='live-update-label';
+    texto.textContent='Dados em cache';
+    elemento.replaceChildren(dot,texto);
+    elemento.title='Os dados mais recentes não puderam ser carregados.';
+    elemento.setAttribute('aria-label','Dados em cache');
+    return;
+  }
+
+  const data=formatarAtualizacaoHeader(valor);
+  const label=document.createElement('span');
+  label.className='live-update-label';
+  label.textContent='Atualizado ·';
+
+  const time=document.createElement('time');
+  time.className='live-update-time';
+  if(data.datetime) time.dateTime=data.datetime;
+  time.textContent=data.compacto || String(valor || '');
+
+  elemento.replaceChildren(dot,label,time);
+  elemento.title=`Dados atualizados em ${data.completo || valor}`;
+  elemento.setAttribute('aria-label',`Dados atualizados em ${data.completo || valor}`);
+}
+
 /* ════════════════════════════════════════════════════
    CARREGA mercado_atual.json
 ════════════════════════════════════════════════════ */
@@ -1616,7 +1668,7 @@ async function carregarMercado(){
     setTimeout(()=>{ try{ atualizarResumoFechamentoMes(); atualizarPainelFechadoCard(); renderClosedMarketSheet(); }catch(e){} }, 600);
     hidratarDolarResumoDoJson(d);
 
-    if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
+    if(d.atualizado_em) atualizarDataHeader(d.atualizado_em);
 
     const c = d.cards || {};
 
@@ -1735,7 +1787,7 @@ async function carregarMercado(){
 
   }catch(e){
     console.warn('mercado_atual.json indisponível:', e);
-    if($('lastUpdate')) $('lastUpdate').innerHTML = `<span class="live-dot" style="background:var(--muted)"></span>Dados em cache`;
+    if($('lastUpdate')) atualizarDataHeader('',{cache:true});
     carregarFocusFallback();
   }
 }
