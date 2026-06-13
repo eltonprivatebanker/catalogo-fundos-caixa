@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "13/06/2026 16:08:09",
+    "atualizado_em": "13/06/2026 18:27:50",
     "cards": {
         "selic_meta": {
             "valor": 14.5,
@@ -2248,12 +2248,12 @@
             "unidade": "% a.a."
         },
         "ipca": {
-            "ultimo_mes": 0.5,
+            "ultimo_mes": 0.58,
             "label_mes": "mai/2026",
-            "acum_ano": 3.7154,
-            "acum_12m": 4.9965,
-            "acum_24m": 10.6151,
-            "acum_36m": 15.2914,
+            "acum_ano": 3.1994,
+            "acum_12m": 4.7249,
+            "acum_24m": 10.2959,
+            "acum_36m": 14.6261,
             "historico": [
                 {
                     "label": "jan/1980",
@@ -4482,10 +4482,6 @@
                 {
                     "label": "mai/2026",
                     "valor": 0.58
-                },
-                {
-                    "label": "mai/2026",
-                    "valor": 0.5
                 }
             ],
             "meta_central": 3.0,
@@ -5188,7 +5184,7 @@
         }
     ],
     "focus": {
-        "data_coleta": "13/06/2026 16:08",
+        "data_coleta": "13/06/2026 18:27",
         "fonte": "odata",
         "IPCA": {
             "2026": {
