@@ -4496,9 +4496,55 @@ function buildChartSelic(historico,qtd){
   });
 }
 
+
+
+/* v185 — mantém o gráfico IPCA 12M × meta sincronizado com o card mais recente */
+function sincronizarSerieMetaComIpcaAtual(metaDados, ipca){
+  const lista = Array.isArray(metaDados) ? metaDados : [];
+  const valorAtual = Number(ipca?.acum_12m);
+  const labelAtual = String(ipca?.label_mes || '').trim().toLowerCase();
+
+  if(!Number.isFinite(valorAtual) || !labelAtual) return lista;
+
+  const meses = {
+    jan:1, fev:2, mar:3, abr:4, mai:5, jun:6,
+    jul:7, ago:8, set:9, out:10, nov:11, dez:12
+  };
+  const partes = labelAtual.match(/^([a-zç]{3})\/(\d{4})$/i);
+  if(!partes) return lista;
+
+  const mes = meses[partes[1].toLowerCase()];
+  const ano = Number(partes[2]);
+  if(!mes || !Number.isInteger(ano)) return lista;
+
+  const chaveAtual = `${ano}-${String(mes).padStart(2,'0')}`;
+  const porMes = new Map();
+
+  lista.forEach(item=>{
+    const data = String(item?.DataReferencia || '');
+    const chave = data.slice(0,7);
+    const valor = Number(item?.Inflacao12Meses);
+    if(/^\d{4}-\d{2}$/.test(chave) && Number.isFinite(valor)){
+      porMes.set(chave, {...item, Inflacao12Meses: valor});
+    }
+  });
+
+  const anterior = porMes.get(chaveAtual) || {};
+  porMes.set(chaveAtual, {
+    ...anterior,
+    DataReferencia: `${chaveAtual}-01T03:00:00Z`,
+    Inflacao12Meses: Number(valorAtual.toFixed(4)),
+    CartaAberta: anterior.CartaAberta || 'Não'
+  });
+
+  return [...porMes.values()].sort(
+    (a,b)=>new Date(b.DataReferencia)-new Date(a.DataReferencia)
+  );
+}
+
 function buildChartMeta(metaDados){
   if(!metaDados||!metaDados.length) return;
-  const sorted=[...metaDados].filter(d=>d.DataReferencia&&d.Inflacao12Meses).sort((a,b)=>new Date(a.DataReferencia)-new Date(b.DataReferencia));
+  const sorted=[...metaDados].filter(d=>d?.DataReferencia && d?.Inflacao12Meses != null && Number.isFinite(Number(d.Inflacao12Meses))).sort((a,b)=>new Date(a.DataReferencia)-new Date(b.DataReferencia));
   const labels=sorted.map(d=>{const dt=new Date(d.DataReferencia);return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;});
   const values=sorted.map(d=>parseFloat(d.Inflacao12Meses));
   const META=3.0,SUP=4.5,INF=1.5;
@@ -4513,7 +4559,7 @@ function buildChartMeta(metaDados){
   ]},
   options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,legend:{display:true,position:'bottom',labels:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:9},boxWidth:12,padding:8,filter:item=>item.text!==null}},
     tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>ctx.dataset.label?`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`:null,
-      afterBody:items=>{const v=items.find(i=>i.dataset.label==='IPCA 12M')?.parsed?.y;if(v===undefined) return[];if(v>SUP) return[`⚠️ Acima do teto (${SUP}%)`];if(v<INF) return[`⚠️ Abaixo do piso (${INF}%)`];return['✅ Dentro da meta'];}}}}}}
+      afterBody:items=>{const v=items.find(i=>i.dataset.label==='IPCA 12M')?.parsed?.y;if(v===undefined) return[];if(v>SUP) return[`⚠️ Acima do teto (${SUP}%)`];if(v<INF) return[`⚠️ Abaixo do piso (${INF}%)`];return['✅ Dentro da faixa de tolerância'];}}}}}}
   );
 }
 
@@ -4639,9 +4685,16 @@ async function inicializarGraficos(d){
     const jsMeta = await carregarJsonLocal('meta-vs-inflacao-efetiva.json');
     meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
     if(meta.length){
-      _dadosMercado.meta_vs_inflacao_efetiva = meta;
       console.info(`[IPCA x Meta] ${meta.length} registros carregados do arquivo local.`);
     }
+  }
+
+  // A série histórica externa pode chegar com um mês de atraso. O card de IPCA
+  // já contém o acumulado oficial mais recente calculado pela série 433; por isso
+  // ele é usado para inserir/substituir a competência mais atual antes do gráfico.
+  meta = sincronizarSerieMetaComIpcaAtual(meta, d?.cards?.ipca);
+  if(meta.length){
+    _dadosMercado.meta_vs_inflacao_efetiva = meta;
   }
 
   if(hist.length) buildChartIpca(hist,24);

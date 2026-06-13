@@ -1,6 +1,10 @@
 """
-ROBÔ SIPII CAIXA — v18.1 (Automação integral GitHub)
+ROBÔ SIPII CAIXA — v18.2 (Automação integral GitHub)
 ==========================================================
+Novidades v18.2:
+  + Sincroniza o gráfico IPCA 12M × meta com o acumulado oficial mais recente
+  + Mantém uma única competência mensal na série usada pelo gráfico
+
 Novidades v18.1:
   + Corrige duplicidade mensal do IPCA ao consolidar a série 433 por competência AAAA-MM
   + Remove o override incorreto de maio/2026 (0,50%); o valor oficial da série 433 é 0,58%
@@ -2225,6 +2229,58 @@ class ColetorMercado:
                 log(f"[META INFLAÇÃO] Erro: {e}")
         return []
 
+
+    def _sincronizar_meta_inflacao(self, serie, label_mes, valor_12m):
+        """Insere/substitui na série do gráfico o IPCA 12M mais recente.
+
+        A base meta-vs-inflacao-efetiva pode ser publicada com atraso em relação
+        à série mensal 433. Como o acumulado de 12 meses já foi calculado com os
+        dados oficiais, esta rotina garante que o gráfico termine na mesma
+        competência e no mesmo valor exibido pelo card.
+        """
+        if valor_12m is None or not label_mes:
+            return serie or []
+
+        mapa_meses = {nome: i + 1 for i, nome in enumerate(MESES_PT)}
+        try:
+            mes_txt, ano_txt = str(label_mes).strip().lower().split("/")
+            mes = mapa_meses[mes_txt]
+            ano = int(ano_txt)
+            chave_atual = f"{ano:04d}-{mes:02d}"
+        except (ValueError, KeyError):
+            log(f"[META INFLAÇÃO] Competência inválida: {label_mes!r}")
+            return serie or []
+
+        por_mes = {}
+        for item in serie or []:
+            if not isinstance(item, dict):
+                continue
+            data_ref = str(item.get("DataReferencia") or "")
+            chave = data_ref[:7]
+            try:
+                valor = float(item.get("Inflacao12Meses"))
+            except (TypeError, ValueError):
+                continue
+            if re.fullmatch(r"\d{4}-\d{2}", chave):
+                registro = dict(item)
+                registro["Inflacao12Meses"] = valor
+                por_mes[chave] = registro
+
+        anterior = por_mes.get(chave_atual, {})
+        por_mes[chave_atual] = {
+            **anterior,
+            "DataReferencia": f"{chave_atual}-01T03:00:00Z",
+            "Inflacao12Meses": round(float(valor_12m), 4),
+            "CartaAberta": anterior.get("CartaAberta", "Não"),
+        }
+
+        resultado = [por_mes[chave] for chave in sorted(por_mes, reverse=True)]
+        log(
+            f"  [META INFLAÇÃO] gráfico sincronizado: {label_mes} = "
+            f"{round(float(valor_12m), 4)}% em 12 meses."
+        )
+        return resultado
+
     # ──────────────────────────────────────────────────────────────────────
     # ★ v17.1 — Poupança nova + antiga: mensal atual + acum. ano
     #
@@ -2395,6 +2451,13 @@ class ColetorMercado:
             ipca_acum_36m   = self._acumular(ipca_serie, 36) if len(ipca_serie) >= 36 else None
             ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
             log(f"  [IPCA] 12M={ipca_acum_12m}% | 24M={ipca_acum_24m}% | 36M={ipca_acum_36m}%")
+
+        # Mantém o gráfico IPCA 12M × meta na mesma competência do card.
+        inflacao_meta_efetiva = self._sincronizar_meta_inflacao(
+            inflacao_meta_efetiva,
+            ipca_label_mes,
+            ipca_acum_12m,
+        )
 
         # PTAX histórico mensal — base única para card, tabela, timeline e gráfico do dólar.
         # 37 meses = mês atual + 36 meses anteriores.
