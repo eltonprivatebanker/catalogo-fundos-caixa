@@ -29238,3 +29238,134 @@ html.mobile-copom-carousel-v178 #sec-mercado .copom-item.featured-next .copom-re
 html.mobile-copom-carousel-v178 #sec-mercado .copom-item.future .copom-result{
   color:#8f9ab8!important;
 }
+
+/* ELTAUM_RANKING_MOBILE_READABILITY_20260613_v179
+   1) Aumenta levemente a área de Leitura rápida sem reintroduzir saltos de layout.
+   2) Dá mais largura útil ao nome do fundo.
+   3) Permite até três linhas e reserva altura uniforme para nomes longos. */
+@media(max-width:700px){
+  /* Leitura rápida: um pouco maior e com mais texto visível, mantendo altura estável. */
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight{
+    min-height:144px!important;
+    max-height:144px!important;
+    padding:14px 15px!important;
+    gap:10px!important;
+    overflow:hidden!important;
+    align-content:flex-start!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight>span{
+    min-height:24px!important;
+    padding:5px 10px!important;
+    font-size:.60rem!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight>p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:5!important;
+    min-height:86px!important;
+    max-height:86px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    font-size:.79rem!important;
+    line-height:1.52!important;
+  }
+
+  /* Lista Top 10: mais espaço para nomes extensos, sem alterar a altura ao trocar período. */
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-table{
+    min-height:1000px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row,
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row-mobile-v100{
+    display:grid!important;
+    grid-template-columns:32px minmax(0,1fr) 72px!important;
+    gap:8px!important;
+    align-items:center!important;
+    height:100px!important;
+    min-height:100px!important;
+    max-height:100px!important;
+    padding:12px 13px!important;
+    overflow:hidden!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-pos{
+    min-width:0!important;
+    text-align:left!important;
+    font-size:.76rem!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-fund{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-width:0!important;
+    height:76px!important;
+    overflow:hidden!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-fund strong{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    min-height:0!important;
+    max-height:53px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:normal!important;
+    font-size:.73rem!important;
+    line-height:1.20!important;
+    letter-spacing:-.012em!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-fund span{
+    display:block!important;
+    flex:0 0 17px!important;
+    min-height:17px!important;
+    max-height:17px!important;
+    margin-top:5px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    font-size:.64rem!important;
+    line-height:17px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-return{
+    min-width:0!important;
+    width:72px!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+    font-size:.82rem!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+}
+
+@media(max-width:380px){
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight{
+    min-height:150px!important;
+    max-height:150px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight>p{
+    min-height:92px!important;
+    max-height:92px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row,
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row-mobile-v100{
+    grid-template-columns:30px minmax(0,1fr) 68px!important;
+    gap:7px!important;
+    padding-inline:11px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-return{
+    width:68px!important;
+    font-size:.79rem!important;
+  }
+}
