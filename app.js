@@ -13669,3 +13669,113 @@ if(document.readyState === 'loading'){
   document.addEventListener('keydown',onKeyDown,true);
   window.addEventListener('resize',()=>{if(!isMobile()) snapshot=null;},{passive:true});
 })();
+
+/* ELTAUM_MOBILE_COPOM_CAROUSEL_RANK_UNIVERSE_20260613_v178
+   Sincroniza o rótulo Universo após qualquer rerender do ranking e
+   atualiza a orientação do carrossel do COPOM no mobile. */
+(function(){
+  'use strict';
+
+  const BUILD='ELTAUM_MOBILE_COPOM_CAROUSEL_RANK_UNIVERSE_20260613_v178';
+  let rankingObserver=null;
+
+  function qs(sel,root=document){return root.querySelector(sel);}
+  function qsa(sel,root=document){return Array.from(root.querySelectorAll(sel));}
+
+  function currentUniverseLabel(){
+    let value='';
+    try{
+      if(typeof activeRankFilter!=='undefined') value=String(activeRankFilter||'');
+    }catch(_){/* escopo legado indisponível */}
+
+    const select=qs('#rankingClassSelectV136');
+    if(!value && select) value=String(select.value||'');
+
+    if(select){
+      const option=Array.from(select.options||[]).find(opt=>String(opt.value)===value);
+      if(option && option.textContent.trim()) return option.textContent.trim();
+    }
+
+    const activeChip=qs('#rankingFilterRow .ranking-filter-chip.active,[data-rank-filter].active');
+    if(activeChip && activeChip.textContent.trim()) return activeChip.textContent.trim();
+
+    const map={
+      todos:'Todos os fundos',
+      'sem-fmp':'Todos sem FMP',
+      'renda-fixa-simples':'RF Simples',
+      'renda-fixa':'Renda Fixa',
+      'renda-fixa-referenciado':'RF Referenciado',
+      'renda-fixa-curto-prazo':'RF Curto Prazo',
+      multimercado:'Multimercado',
+      cambial:'Cambial',
+      acoes:'Ações',
+      'fundo-de-indice':'Índice',
+      fmp:'FMP'
+    };
+    return map[value]||'Todos os fundos';
+  }
+
+  function syncUniversePill(){
+    const label=currentUniverseLabel();
+    qsa('#rankingsSection .ranking-universe-pill').forEach(pill=>{
+      let strong=qs('strong',pill);
+      if(!strong){
+        strong=document.createElement('strong');
+        pill.appendChild(strong);
+      }
+      strong.textContent=label;
+      pill.title='Universo: '+label;
+      pill.setAttribute('aria-label','Universo: '+label);
+    });
+  }
+
+  function syncCopomDragLabel(){
+    const label=qs('#sec-mercado .market-drag-label-v118[data-drag-label-v118="copom"] span');
+    if(label) label.textContent='Decisões e próximas reuniões';
+  }
+
+  function syncAll(){
+    document.documentElement.classList.add('mobile-copom-carousel-v178','ranking-universe-mobile-v178');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    syncUniversePill();
+    syncCopomDragLabel();
+  }
+
+  function observeRanking(){
+    const grid=qs('#rankingGrid');
+    if(!grid || rankingObserver) return;
+    rankingObserver=new MutationObserver(()=>{
+      requestAnimationFrame(syncUniversePill);
+    });
+    rankingObserver.observe(grid,{childList:true,subtree:true});
+  }
+
+  function setup(){
+    syncAll();
+    observeRanking();
+    [120,350,800,1600,3200].forEach(ms=>setTimeout(syncAll,ms));
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup,{once:true});
+  else setup();
+
+  document.addEventListener('change',ev=>{
+    if(ev.target && ev.target.matches('#rankingClassSelectV136')){
+      setTimeout(syncUniversePill,0);
+      setTimeout(syncUniversePill,80);
+    }
+  },true);
+
+  document.addEventListener('click',ev=>{
+    if(ev.target.closest('[data-rank-filter],#copomCalendarToggleV167')){
+      setTimeout(syncAll,0);
+      setTimeout(syncAll,100);
+    }
+  },true);
+
+  window.addEventListener('resize',()=>setTimeout(syncAll,120),{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(syncAll,220),{passive:true});
+
+  window.__ELTAUM_V178__={sync:syncAll,syncUniverse:syncUniversePill};
+})();
