@@ -28923,3 +28923,116 @@ html.market-number-legibility-v176 .market-v159-kpi small b{
     font-size:.71rem!important;
   }
 }
+
+/* ELTAUM_RANKING_MOBILE_STABLE_20260613_v177
+   Estabiliza a seção Top 10 no mobile durante a troca Mês / Ano / 12M.
+   Evita alteração de altura por textos variáveis e reduz o scroll anchoring. */
+@media(max-width:700px){
+  html.rankings-mobile-stable-v177 #rankingsSection,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-grid,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-table{
+    overflow-anchor:none!important;
+  }
+
+  /* A leitura rápida fica sempre com a mesma ocupação visual. */
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight{
+    min-height:116px!important;
+    max-height:116px!important;
+    overflow:hidden!important;
+    align-content:flex-start!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight>span{
+    flex:0 0 auto!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight>p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    min-height:58px!important;
+    max-height:58px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    margin:0!important;
+  }
+
+  /* Cabeçalho e controles do Top 10 com dimensões previsíveis. */
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board-head{
+    min-height:174px!important;
+    align-content:flex-start!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board-head>div:first-child{
+    min-height:56px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-controls{
+    min-height:88px!important;
+    align-content:flex-start!important;
+    gap:10px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-periods{
+    flex:0 0 auto!important;
+    min-height:42px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-periods .rank-period-tab{
+    min-height:34px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-universe-pill{
+    flex:0 0 38px!important;
+    min-height:38px!important;
+    max-height:38px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-universe-pill strong{
+    min-width:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  /* Dez linhas com altura fixa: nomes maiores não empurram a lista. */
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-table{
+    min-height:840px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-row,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-row-mobile-v100{
+    height:84px!important;
+    min-height:84px!important;
+    max-height:84px!important;
+    overflow:hidden!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-fund strong{
+    min-height:38px!important;
+    max-height:38px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-fund span{
+    min-height:17px!important;
+    max-height:17px!important;
+    white-space:nowrap!important;
+    display:block!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-return{
+    min-width:72px!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+
+  /* Durante a substituição do HTML, evita transições que acentuem o pulo. */
+  html.rankings-mobile-stable-v177.ranking-period-switch-v177 #rankingsSection .ranking-exec-board,
+  html.rankings-mobile-stable-v177.ranking-period-switch-v177 #rankingsSection .ranking-exec-insight{
+    transition:none!important;
+  }
+}
+
+@media(max-width:380px){
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight{
+    min-height:122px!important;
+    max-height:122px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board-head{
+    min-height:180px!important;
+  }
+}

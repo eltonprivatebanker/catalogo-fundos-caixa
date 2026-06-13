@@ -13555,3 +13555,117 @@ if(document.readyState === 'loading'){
 
 /* ELTAUM_MARKET_NUMBER_LEGIBILITY_20260613_v176
    Build visual; sem alteração de lógica. */
+
+/* ELTAUM_RANKING_MOBILE_STABLE_20260613_v177
+   Mantém a mesma posição visual do bloco Top 10 quando Mês/Ano/12M
+   substitui o HTML da seção de rankings no mobile. */
+(function(){
+  'use strict';
+
+  const BUILD='ELTAUM_RANKING_MOBILE_STABLE_20260613_v177';
+  let snapshot=null;
+  let clearTimer=0;
+  let observer=null;
+
+  function isMobile(){
+    try{return window.matchMedia('(max-width:700px)').matches;}
+    catch(_){return window.innerWidth<=700;}
+  }
+
+  function rankingButton(target){
+    return target && target.closest
+      ? target.closest('#rankingsSection .ranking-exec-periods .rank-period-tab[data-rank-target="topFundos"]')
+      : null;
+  }
+
+  function capture(btn){
+    if(!btn || !isMobile()) return;
+    const board=btn.closest('.ranking-exec-board');
+    if(!board) return;
+    const tabs=btn.closest('.ranking-exec-periods');
+    snapshot={
+      period:btn.dataset.rankPeriod||'',
+      boardTop:board.getBoundingClientRect().top,
+      scrollY:window.scrollY,
+      tabsLeft:tabs?tabs.scrollLeft:0,
+      capturedAt:performance.now()
+    };
+    document.documentElement.classList.add('ranking-period-switch-v177');
+    window.clearTimeout(clearTimer);
+    clearTimer=window.setTimeout(()=>{
+      document.documentElement.classList.remove('ranking-period-switch-v177');
+      snapshot=null;
+    },520);
+  }
+
+  function restore(){
+    if(!snapshot || !isMobile()) return;
+    const board=document.querySelector('#rankingsSection .ranking-exec-board');
+    if(!board) return;
+
+    const currentTop=board.getBoundingClientRect().top;
+    const delta=currentTop-snapshot.boardTop;
+    if(Math.abs(delta)>0.5){
+      window.scrollTo({top:Math.max(0,window.scrollY+delta),behavior:'auto'});
+    }
+
+    const selected=document.querySelector(
+      `#rankingsSection .ranking-exec-periods .rank-period-tab[data-rank-target="topFundos"][data-rank-period="${CSS.escape(snapshot.period)}"]`
+    );
+    if(selected){
+      const tabs=selected.closest('.ranking-exec-periods');
+      if(tabs) tabs.scrollLeft=snapshot.tabsLeft;
+      try{selected.focus({preventScroll:true});}catch(_){/* navegador antigo */}
+    }
+  }
+
+  function scheduleRestore(){
+    [0,24,70,150,280].forEach(delay=>{
+      window.setTimeout(()=>{
+        requestAnimationFrame(()=>requestAnimationFrame(restore));
+      },delay);
+    });
+  }
+
+  function onPointerDown(ev){
+    const btn=rankingButton(ev.target);
+    if(btn) capture(btn);
+  }
+
+  function onClick(ev){
+    const btn=rankingButton(ev.target);
+    if(!btn || !isMobile()) return;
+    if(!snapshot) capture(btn);
+    scheduleRestore();
+  }
+
+  function onKeyDown(ev){
+    if(ev.key!=='Enter' && ev.key!==' ') return;
+    const btn=rankingButton(ev.target);
+    if(btn) capture(btn);
+  }
+
+  function setupObserver(){
+    const grid=document.getElementById('rankingGrid');
+    if(!grid || observer) return;
+    observer=new MutationObserver(()=>{
+      if(snapshot) scheduleRestore();
+    });
+    observer.observe(grid,{childList:true,subtree:false});
+  }
+
+  function setup(){
+    document.documentElement.classList.add('rankings-mobile-stable-v177');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    setupObserver();
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup,{once:true});
+  else setup();
+
+  document.addEventListener('pointerdown',onPointerDown,true);
+  document.addEventListener('click',onClick,true);
+  document.addEventListener('keydown',onKeyDown,true);
+  window.addEventListener('resize',()=>{if(!isMobile()) snapshot=null;},{passive:true});
+})();
