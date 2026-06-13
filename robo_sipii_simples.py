@@ -1,6 +1,11 @@
 """
-ROBÔ SIPII CAIXA — v18.0 (Automação integral GitHub)
+ROBÔ SIPII CAIXA — v18.1 (Automação integral GitHub)
 ==========================================================
+Novidades v18.1:
+  + Corrige duplicidade mensal do IPCA ao consolidar a série 433 por competência AAAA-MM
+  + Remove o override incorreto de maio/2026 (0,50%); o valor oficial da série 433 é 0,58%
+  + Limpa automaticamente duplicidades antigas da base local, priorizando dados oficiais
+
 Novidades v18.0:
   + Atualiza automaticamente o fundos.json integral a cada execução
   + Exporta metadados operacionais/comerciais para dados_atuais.csv e Excel
@@ -105,9 +110,9 @@ FECHAMENTOS_CONFIRMADOS = {
         "2026-04": 1.09,
         "2026-05": 1.07,
     },
-    "ipca_mensal": {
-        "2026-05": 0.50,
-    },
+    # IPCA deve vir da série oficial 433 do BCB.
+    # Overrides só devem ser usados excepcionalmente e com valor oficialmente validado.
+    "ipca_mensal": {},
     "ptax_mensal": {
         "2026-05": {"variacao_mes_fechado": 1.37},
     },
@@ -1745,32 +1750,97 @@ class ColetorMercado:
         return []
 
     def _merge_ipca(self, base, delta):
-        index = {item["data"]: item for item in base}
-        for item in delta:
-            d, m, y = item["data"].split("/")
-            index[item["data"]] = {
-                "data": item["data"],
-                "label": f"{MESES_PT[int(m)-1]}/{y}",
-                "valor": round(float(item["valor"]), 4)
-            }
+        """
+        Consolida o histórico mensal do IPCA mantendo somente um registro por
+        competência (AAAA-MM).
 
-        # Validação manual opcional para meses oficialmente/operacionalmente fechados
-        # que ainda não tenham aparecido no delta da série 433 no momento da execução.
-        for key, valor in FECHAMENTOS_CONFIRMADOS.get("ipca_mensal", {}).items():
+        Prioridade das fontes:
+          1. base local sem override antigo;
+          2. delta oficial da série 433 do BCB;
+          3. override manual explicitamente configurado.
+
+        A chave mensal evita que datas como 01/05/2026 e 31/05/2026 sejam
+        tratadas como meses diferentes. Também corrige automaticamente bases
+        antigas que já contenham duplicidades.
+        """
+        index = {}
+        prioridades = {}
+
+        def _normalizar_registro(data_br, valor, fonte_override=None):
+            d, m, y = str(data_br).split("/")
+            mes = int(m)
+            ano = int(y)
+            key = f"{ano:04d}-{mes:02d}"
+            registro = {
+                # A série 433 representa competência mensal; normalizamos para
+                # o primeiro dia apenas para manter um formato único no JSON.
+                "data": f"01/{mes:02d}/{ano:04d}",
+                "key": key,
+                "label": f"{MESES_PT[mes-1]}/{ano:04d}",
+                "valor": round(float(valor), 4),
+            }
+            if fonte_override:
+                registro["fonte_override"] = fonte_override
+            return key, registro
+
+        def _registrar(data_br, valor, prioridade, fonte_override=None):
+            try:
+                key, registro = _normalizar_registro(
+                    data_br, valor, fonte_override
+                )
+            except (TypeError, ValueError, IndexError):
+                return
+
+            if key not in index or prioridade >= prioridades.get(key, -1):
+                index[key] = registro
+                prioridades[key] = prioridade
+
+        # Base local. Registros antigos marcados como override recebem menor
+        # prioridade do que o dado histórico normal, para limpar automaticamente
+        # o caso mai/2026 0,50% versus o oficial 0,58%.
+        for item in base or []:
+            if not isinstance(item, dict):
+                continue
+            fonte_override = item.get("fonte_override")
+            prioridade = 5 if fonte_override else 10
+            _registrar(
+                item.get("data"),
+                item.get("valor"),
+                prioridade,
+                fonte_override,
+            )
+
+        # O delta oficial sempre substitui o valor já existente para o mês.
+        for item in delta or []:
+            if not isinstance(item, dict):
+                continue
+            _registrar(item.get("data"), item.get("valor"), 20)
+
+        # Override manual é a última prioridade, mas somente quando estiver
+        # expressamente configurado em FECHAMENTOS_CONFIRMADOS.
+        for key, valor in FECHAMENTOS_CONFIRMADOS.get(
+            "ipca_mensal", {}
+        ).items():
             try:
                 y, m = key.split("-")
-                d = calendar.monthrange(int(y), int(m))[1]
-                data_br = f"{d:02d}/{int(m):02d}/{y}"
-                index[data_br] = {
-                    "data": data_br,
-                    "label": f"{MESES_PT[int(m)-1]}/{y}",
-                    "valor": round(float(valor), 4),
-                    "fonte_override": "fechamento confirmado"
-                }
-            except Exception:
-                pass
+                data_br = f"01/{int(m):02d}/{int(y):04d}"
+                _registrar(
+                    data_br,
+                    valor,
+                    30,
+                    "fechamento confirmado",
+                )
+            except (TypeError, ValueError):
+                log(f"[IPCA] Override mensal inválido ignorado: {key!r}")
 
-        return sorted(index.values(), key=lambda x: (x["data"].split("/")[2], x["data"].split("/")[1], x["data"].split("/")[0]))
+        historico = [index[key] for key in sorted(index)]
+
+        # Defesa final: nunca permitir mais de um item para a mesma competência.
+        chaves = [item["key"] for item in historico]
+        if len(chaves) != len(set(chaves)):
+            raise RuntimeError("[IPCA] Falha ao eliminar competências duplicadas")
+
+        return historico
 
     def _salvar_base_ipca(self, historico):
         try:
