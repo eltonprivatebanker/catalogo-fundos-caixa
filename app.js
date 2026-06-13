@@ -1351,13 +1351,22 @@ function atualizarTabelaIndicadores(){
 }
 
 
-// Tabs 12M / 24M / 36M
-document.querySelectorAll('.indic-tab').forEach(btn => {
+// Tabs 12M / 24M / 36M — sincronizados com a tabela analítica e a visão executiva (v173)
+document.querySelectorAll('.indic-tab[data-months]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.indic-tab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activePeriodTab = parseInt(btn.dataset.months);
+    document.querySelectorAll('.indic-tab[data-months]').forEach(b => {
+      const isActive = b === btn;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', String(isActive));
+    });
+
+    activePeriodTab = parseInt(btn.dataset.months, 10) || 12;
     atualizarTabelaIndicadores();
+
+    // Notifica os componentes derivados somente depois de o período-base ser atualizado.
+    document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+      detail: { months: activePeriodTab }
+    }));
   });
 });
 
@@ -12171,7 +12180,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MARKET_IBOV_PERSPECTIVE_20260613_v172';
+  const BUILD = 'ELTAUM_MARKET_PERIOD_SYNC_20260613_v173';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -12488,7 +12497,7 @@ if(!isSearchInput(el)) return;
       const body=document.getElementById('sec-painel-body');
       if(!body) return;
       const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-      document.documentElement.classList.add('market-panel-pro-v150','market-ibov-perspective-v172','dolar-current-dedup-v172');
+      document.documentElement.classList.add('market-panel-pro-v150','market-ibov-perspective-v172','dolar-current-dedup-v172','market-period-sync-v173');
       const data=collectData();
       normalizeClosedPeriodLabels(data.closed,data.current);
       const fp=fingerprint(data);
@@ -12502,8 +12511,13 @@ if(!isSearchInput(el)) return;
   function init(){
     [120,450,900,1600,2800,4800,8000,12000].forEach(ms=>setTimeout(()=>sync(false),ms));
     document.addEventListener('click',ev=>{
-      if(ev.target.closest('.market-period-tabs .indic-tab[data-months],#sec-mercado-painel,.section-toggle-btn')) setTimeout(()=>sync(true),120);
+      if(ev.target.closest('#sec-mercado-painel,.section-toggle-btn')) setTimeout(()=>sync(true),120);
     },true);
+    document.addEventListener('elton:market-period-change',()=>{
+      // Duplo frame garante que CDI, IPCA e Ibovespa já tenham recebido os valores do novo período.
+      requestAnimationFrame(()=>requestAnimationFrame(()=>sync(true)));
+      setTimeout(()=>sync(true),140);
+    });
     window.addEventListener('resize',debounce(()=>{applyMode();},140),{passive:true});
     window.addEventListener('pageshow',()=>setTimeout(()=>sync(true),120),{once:true});
   }
