@@ -29971,3 +29971,156 @@ html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle:focus-visible{
     padding-inline:10px!important;
   }
 }
+
+
+/* ELTAUM_MOBILE_PTAX_CURRENT_DEDUP_20260613_v188
+   Mobile: remove a faixa redundante de cotação parcial do mês atual.
+   A cotação e a variação continuam visíveis nos KPIs superiores. */
+@media (max-width:700px){
+  #sec-dolar #dolarCurrentMonthV162{
+    display:none!important;
+  }
+}
+
+
+/* ELTAUM_MOBILE_EVOLUTION_FOCUS_20260613_v189
+   Mobile: um único resumo dinâmico por indicador e menos repetição vertical.
+   Desktop permanece com os três cards de resumo e os três gráficos. */
+.evo-mobile-summary{
+  display:none;
+}
+
+@media (max-width:700px){
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-summary-grid{
+    display:none!important;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-view-tabs{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+    width:100%;
+    margin:0 0 9px;
+    padding:0;
+    overflow:visible;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-view-tab{
+    min-width:0;
+    width:100%;
+    padding:9px 5px;
+    font-size:.67rem;
+    line-height:1.15;
+    text-align:center;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-mobile-summary{
+    display:block;
+    margin:0 0 10px;
+    padding:13px 14px;
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:14px;
+    background:linear-gradient(180deg,rgba(18,22,39,.94),rgba(11,13,25,.96));
+    box-shadow:0 10px 24px rgba(0,0,0,.18);
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-mobile-summary[data-evo-type="selic"]{
+    border-color:rgba(46,209,122,.34);
+    background:linear-gradient(180deg,rgba(20,42,39,.84),rgba(11,15,25,.96));
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-mobile-summary-kicker{
+    display:block;
+    margin:0 0 6px;
+    color:#aeb9d3;
+    font-family:Inter,system-ui,sans-serif;
+    font-size:.62rem;
+    font-weight:900;
+    letter-spacing:.10em;
+    text-transform:uppercase;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-mobile-summary strong{
+    display:block;
+    color:var(--gold2);
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:1.55rem;
+    font-weight:800;
+    line-height:1;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-mobile-summary[data-evo-type="selic"] strong{
+    color:var(--green);
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-mobile-summary small{
+    display:block;
+    margin-top:6px;
+    color:#b7c4df;
+    font-size:.69rem;
+    line-height:1.35;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-chart-card .chart-reading{
+    display:none!important;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-chart-card .chart-card-header{
+    align-items:stretch;
+    flex-direction:column;
+    gap:10px;
+    padding:13px 14px 11px;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-chart-card .chart-card-title{
+    font-size:.91rem;
+    line-height:1.25;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-chart-card .chart-card-sub{
+    margin-top:3px;
+    font-size:.63rem;
+    line-height:1.35;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-chart-card .chart-tabs{
+    display:grid!important;
+    grid-auto-flow:column;
+    grid-auto-columns:minmax(0,1fr);
+    gap:6px;
+    width:100%;
+    margin:0;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-chart-card .chart-tab{
+    width:100%;
+    min-width:0;
+    padding:8px 6px;
+    text-align:center;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .selic-summary-row{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    padding:10px 12px 0!important;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .selic-summary-chip.now{
+    display:none!important;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .selic-summary-chip{
+    min-width:0!important;
+    padding:10px!important;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos .evo-charts-grid .chart-body{
+    min-height:235px!important;
+    height:235px!important;
+  }
+
+  html.mobile-evolution-focus-v189 #sec-graficos #evoChartSelicCard .chart-body{
+    min-height:285px!important;
+    height:285px!important;
+  }
+}

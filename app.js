@@ -4647,16 +4647,69 @@ function atualizarResumoEvolucao(d){
   setText('evoCardMetaNote', ipca.acum_12m != null
     ? `IPCA em 12 meses · ${pct(ipca.acum_12m)} · ${metaStatus(ipca.acum_12m)}`
     : 'Meta central: 3,00% · faixa: 1,50% a 4,50%.');
+
+  const ativo = document.querySelector('.evo-view-tab.active')?.dataset.evoChart || 'ipca';
+  atualizarResumoMovelEvolucao(ativo, d);
+}
+
+function atualizarResumoMovelEvolucao(chave, d){
+  const box = document.getElementById('evoMobileSummary');
+  if(!box) return;
+
+  const target = chave || document.querySelector('.evo-view-tab.active')?.dataset.evoChart || 'ipca';
+  const ipca = d?.cards?.ipca || {};
+  const selic = d?.cards?.selic_meta || {};
+  const pct = v => formatPctCard(v);
+  const pp = v => `${Number(v).toFixed(2).replace('.',',')} p.p.`;
+
+  const metaStatus = (v) => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return 'Meta central: 3,00% · faixa: 1,50% a 4,50%';
+    if(n > 4.5) return `${pp(n - 4.5)} acima do teto de 4,50%`;
+    if(n < 1.5) return `${pp(1.5 - n)} abaixo do piso de 1,50%`;
+    return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
+  };
+
+  const selicHistorico = Array.isArray(selic.historico) ? selic.historico : [];
+  const selicRef = selic.data_ref || selic.ultima_alteracao || selicHistorico[0]?.data || '';
+  const selicValor = selic.valor != null
+    ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.`
+    : '—';
+
+  let kicker = 'IPCA do último mês';
+  let value = pct(ipca.ultimo_mes);
+  let description = ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial';
+
+  if(target === 'selic'){
+    kicker = 'Selic meta vigente';
+    value = selicValor;
+    description = selicRef ? `Definida pelo Copom · ${selicRef}` : 'Definida pelo Copom';
+  } else if(target === 'meta'){
+    kicker = 'IPCA em 12 meses';
+    value = pct(ipca.acum_12m);
+    description = metaStatus(ipca.acum_12m);
+  }
+
+  box.dataset.evoType = target;
+  const kickerEl = document.getElementById('evoMobileKicker');
+  const valueEl = document.getElementById('evoMobileValue');
+  const descriptionEl = document.getElementById('evoMobileDescription');
+  if(kickerEl) kickerEl.textContent = kicker;
+  if(valueEl) valueEl.textContent = value;
+  if(descriptionEl) descriptionEl.textContent = description;
 }
 
 function selecionarGraficoEvolucao(chave){
   const target = chave || 'ipca';
   document.querySelectorAll('.evo-view-tab').forEach(btn=>{
-    btn.classList.toggle('active', btn.dataset.evoChart === target);
+    const ativo = btn.dataset.evoChart === target;
+    btn.classList.toggle('active', ativo);
+    btn.setAttribute('aria-pressed', ativo ? 'true' : 'false');
   });
   document.querySelectorAll('.evo-chart-card').forEach(card=>{
     card.classList.toggle('active', card.dataset.evoPanel === target);
   });
+  atualizarResumoMovelEvolucao(target, _dadosMercado);
   setTimeout(()=>{
     [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{ if(ch && typeof ch.resize === 'function') ch.resize(); });
   }, 80);
@@ -14088,3 +14141,7 @@ if(document.readyState === 'loading'){
 
   window.__ELTAUM_MOBILE_PTAX_MONTH_CAROUSEL_V187__={setup:setup};
 })();
+
+
+/* ELTAUM_MOBILE_EVOLUTION_FOCUS_20260613_v189
+   Resumo móvel único e sincronizado com a aba ativa dos gráficos. */
