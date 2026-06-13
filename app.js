@@ -856,12 +856,17 @@ function renderDolarMensais(){
     const varPct = calcVar(key,item);
     const cls = varPct === null ? 'zero' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
     const varTxt = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
-    return `<div class="dolar-month-item dolar-month-row-v162">
+    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98">
       <span class="dolar-month-label">${label}</span>
       <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
       <span class="dolar-month-var ${cls}">${varTxt}</span>
     </div>`;
   }).join('') || '<div class="dolar-month-empty-v162">Nenhum mês fechado disponível.</div>';
+
+  requestAnimationFrame(() => {
+    try{ window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__?.sync?.(); }catch(_error){}
+    try{ window.__ELTAUM_MOBILE_PTAX_MONTH_CAROUSEL_V187__?.setup?.(); }catch(_error){}
+  });
 }
 
 function toggleDolarTimeline(){
@@ -13987,4 +13992,99 @@ if(document.readyState === 'loading'){
     inicializar();
   }
   console.info('[' + BUILD + '] títulos dinâmicos instalados.');
+})();
+
+
+/* ELTAUM_MOBILE_PTAX_MONTH_CAROUSEL_20260613_v187
+   Arraste horizontal por toque, mouse e emuladores responsivos. */
+(function(){
+  'use strict';
+
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width:820px)').matches;
+  }
+
+  function enablePointerDrag(strip){
+    if(!strip || strip.dataset.pointerDragV187==='1') return;
+    strip.dataset.pointerDragV187='1';
+
+    let active=false;
+    let moved=false;
+    let startX=0;
+    let startScroll=0;
+
+    strip.addEventListener('pointerdown',function(event){
+      if(!isMobile() || event.button>0) return;
+      active=true;
+      moved=false;
+      startX=event.clientX;
+      startScroll=strip.scrollLeft;
+      strip.classList.add('is-pointer-dragging-v187');
+      try{ strip.setPointerCapture(event.pointerId); }catch(_error){}
+    });
+
+    strip.addEventListener('pointermove',function(event){
+      if(!active) return;
+      const delta=event.clientX-startX;
+      if(Math.abs(delta)>4) moved=true;
+      strip.scrollLeft=startScroll-delta;
+    });
+
+    function finish(event){
+      if(!active) return;
+      active=false;
+      strip.classList.remove('is-pointer-dragging-v187');
+      try{ strip.releasePointerCapture(event.pointerId); }catch(_error){}
+      setTimeout(function(){
+        try{ window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__?.sync?.(); }catch(_error){}
+      },20);
+    }
+
+    strip.addEventListener('pointerup',finish);
+    strip.addEventListener('pointercancel',finish);
+    strip.addEventListener('lostpointercapture',function(){
+      active=false;
+      strip.classList.remove('is-pointer-dragging-v187');
+    });
+
+    strip.addEventListener('click',function(event){
+      if(!moved) return;
+      event.preventDefault();
+      event.stopPropagation();
+      moved=false;
+    },true);
+  }
+
+  function setup(){
+    const strip=document.getElementById('dolarMonths');
+    if(!strip) return;
+    enablePointerDrag(strip);
+    requestAnimationFrame(function(){
+      try{ window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__?.sync?.(); }catch(_error){}
+    });
+  }
+
+  function observe(){
+    const strip=document.getElementById('dolarMonths');
+    if(!strip || strip.dataset.observeCarouselV187==='1') return;
+    strip.dataset.observeCarouselV187='1';
+    new MutationObserver(function(){
+      setup();
+      setTimeout(setup,40);
+    }).observe(strip,{childList:true,subtree:false});
+  }
+
+  function init(){
+    setup();
+    observe();
+    [120,500,1200,2600].forEach(function(ms){setTimeout(function(){setup();observe();},ms);});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+
+  window.addEventListener('resize',function(){setTimeout(setup,100);},{passive:true});
+  window.addEventListener('orientationchange',function(){setTimeout(setup,180);},{passive:true});
+
+  window.__ELTAUM_MOBILE_PTAX_MONTH_CAROUSEL_V187__={setup:setup};
 })();
