@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164 mobile-ux-fixes-v165 fund-card-executive-v166 market-reference-executive-v167 pagination-stable-v168 pagination-no-desktop-scroll-v169 cumulative-ui-v170 catalog-table-sanitized-v171 market-ibov-perspective-v172 dolar-current-dedup-v172 market-us-legibility-v175 market-number-legibility-v176 rankings-mobile-stable-v177 mobile-copom-carousel-v178 ranking-universe-mobile-v178 rankings-mobile-readability-v179 desktop-ranking-insight-v181">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164 mobile-ux-fixes-v165 fund-card-executive-v166 market-reference-executive-v167 pagination-stable-v168 pagination-no-desktop-scroll-v169 cumulative-ui-v170 catalog-table-sanitized-v171 market-ibov-perspective-v172 dolar-current-dedup-v172 market-us-legibility-v175 market-number-legibility-v176 rankings-mobile-stable-v177 mobile-copom-carousel-v178 ranking-universe-mobile-v178 rankings-mobile-readability-v179 desktop-ranking-insight-v181 mobile-market-layout-v180 evolution-desktop-v182">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_DESKTOP_RANKING_INSIGHT_20260613_v181"/>
+<meta name="app-build" content="ELTAUM_EVOLUTION_DESKTOP_20260613_v182"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=desktop-ranking-insight-v181" rel="stylesheet"/>
+<link href="style.css?v=evolution-desktop-v182" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer src="app.js?v=desktop-ranking-insight-v181"></script>
+<script defer src="app.js?v=evolution-desktop-v182"></script>
 
 </head>
 <body>
@@ -1062,66 +1062,74 @@ html:not(.app-booting) .page{
 <!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES ══ -->
   </div><!-- /focus-body -->
 
-<div class="section-gap evolution-section collapsible-section" id="sec-graficos">
-  <div class="section-title evolution-title section-title-collapsible"
-       onclick="toggleSection('sec-graficos-body','sec-graficos')" role="region" aria-expanded="false" tabindex="0">
+<div class="section-gap evolution-section collapsible-section" id="sec-graficos" role="region" aria-labelledby="evolutionTitle">
+  <header class="section-title evolution-title">
     <div>
-      <h2>📊 Evolução dos Indicadores</h2>
-      <p class="section-subline">Leitura histórica para contextualizar inflação, juros e meta.</p>
+      <h2 id="evolutionTitle">📊 Inflação e juros</h2>
+      <p class="section-subline">Acompanhe o IPCA mensal, a inflação acumulada em 12 meses e a trajetória da Selic.</p>
     </div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <button type="button" class="section-toggle-btn" tabindex="-1"><span class="toggle-icon">›</span><span class="toggle-label">Ver mais</span></button>
-    </div>
-  </div>
+    <button
+      type="button"
+      class="section-toggle-btn"
+      id="evolutionToggle"
+      aria-expanded="false"
+      aria-controls="sec-graficos-body"
+      data-label-open="Ocultar gráficos"
+      data-label-closed="Exibir gráficos"
+      onclick="return toggleSection('sec-graficos-body','sec-graficos')">
+      <span class="toggle-icon" aria-hidden="true">›</span>
+      <span class="toggle-label">Exibir gráficos</span>
+    </button>
+  </header>
   <div class="section-collapsible-body" id="sec-graficos-body" hidden>
 
   <div class="evo-summary-grid" aria-label="Resumo dos gráficos de indicadores" role="group">
     <div class="evo-summary-card">
-      <span class="evo-summary-kicker">IPCA mensal</span>
+      <span class="evo-summary-kicker">IPCA do último mês</span>
       <strong id="evoIpcaMensalVal">—</strong>
-      <small id="evoIpcaMensalSub">último dado oficial</small>
+      <small id="evoIpcaMensalSub">dado oficial</small>
     </div>
     <div class="evo-summary-card emphasis">
-      <span class="evo-summary-kicker">Selic atual</span>
+      <span class="evo-summary-kicker">Selic meta vigente</span>
       <strong id="evoSelicAtualVal">—</strong>
-      <small id="evoSelicAtualSub">meta COPOM</small>
+      <small id="evoSelicAtualSub">Definida pelo Copom</small>
     </div>
     <div class="evo-summary-card">
-      <span class="evo-summary-kicker">IPCA 12M x meta</span>
+      <span class="evo-summary-kicker">IPCA em 12 meses</span>
       <strong id="evoIpca12Val">—</strong>
-      <small id="evoIpca12Sub">meta 3,00% · banda 1,50% a 4,50%</small>
+      <small id="evoIpca12Sub">Meta central: 3,00% · faixa: 1,50% a 4,50%</small>
     </div>
   </div>
 
   <div class="evo-view-tabs" aria-label="Selecionar gráfico no celular" role="group">
     <button class="evo-view-tab active" type="button" data-evo-chart="ipca">IPCA mensal</button>
-    <button class="evo-view-tab" type="button" data-evo-chart="selic">Selic</button>
+    <button class="evo-view-tab" type="button" data-evo-chart="selic">Selic meta</button>
     <button class="evo-view-tab" type="button" data-evo-chart="meta">IPCA 12M</button>
   </div>
 
   <div class="charts-grid evo-charts-grid">
     <div class="chart-card evo-chart-card active" id="evoChartIpcaCard" data-evo-panel="ipca">
       <div class="chart-card-header">
-        <div><div class="chart-card-title">🎯 IPCA mensal</div><div class="chart-card-sub">Variação oficial mês a mês</div></div>
+        <div><div class="chart-card-title">🎯 IPCA mensal — últimos 24 meses</div><div class="chart-card-sub">Variação percentual oficial em cada mês</div></div>
         <div class="chart-tabs">
           <button class="chart-tab active" data-chart="ipca" data-range="24" type="button" aria-pressed="true">24M</button>
           <button class="chart-tab" data-chart="ipca" data-range="60" type="button" aria-pressed="false">5A</button>
           <button class="chart-tab" data-chart="ipca" data-range="120" type="button" aria-pressed="false">10A</button>
         </div>
       </div>
-      <div class="chart-reading" id="evoCardIpcaNote">Último dado: aguardando atualização.</div>
+      <div class="chart-reading" id="evoCardIpcaNote">Último resultado: aguardando atualização.</div>
       <div class="chart-body"><canvas id="chartIpca"></canvas></div>
     </div>
     <div class="chart-card selic-chart-card evo-chart-card" id="evoChartSelicCard" data-evo-panel="selic">
       <div class="chart-card-header">
-        <div><div class="chart-card-title">🏦 Selic histórica</div><div class="chart-card-sub">Histórico COPOM desde 1999</div></div>
+        <div><div class="chart-card-title">🏦 Trajetória da Selic meta</div><div class="chart-card-sub">Evolução das decisões do Copom desde 1999</div></div>
         <div class="chart-tabs">
           <button class="chart-tab" data-chart="selic" data-range="12" type="button" aria-pressed="false">1A</button>
           <button class="chart-tab" data-chart="selic" data-range="60" type="button" aria-pressed="false">5A</button>
           <button class="chart-tab active" data-chart="selic" data-range="999" type="button" aria-pressed="true">Histórico</button>
         </div>
       </div>
-      <div class="chart-reading" id="evoCardSelicNote">Selic atual: aguardando atualização.</div>
+      <div class="chart-reading" id="evoCardSelicNote">Taxa vigente: aguardando atualização.</div>
       <div class="selic-summary-row" id="selicSummaryRow" aria-label="Resumo do período exibido no gráfico da Selic" role="group">
         <div class="selic-summary-chip max">
           <span class="selic-summary-dot"></span>
@@ -1133,16 +1141,16 @@ html:not(.app-booting) .page{
         </div>
         <div class="selic-summary-chip now">
           <span class="selic-summary-dot"></span>
-          <span class="selic-summary-text"><span class="selic-summary-label">Hoje</span><strong class="selic-summary-value" id="selicHojeResumo">—</strong><small class="selic-summary-date" id="selicHojeData">último dado</small></span>
+          <span class="selic-summary-text"><span class="selic-summary-label">Vigente</span><strong class="selic-summary-value" id="selicHojeResumo">—</strong><small class="selic-summary-date" id="selicHojeData">último dado</small></span>
         </div>
       </div>
       <div class="chart-body"><canvas id="chartSelic"></canvas></div>
     </div>
     <div class="chart-card evo-chart-card" id="evoChartMetaCard" data-evo-panel="meta">
       <div class="chart-card-header">
-        <div><div class="chart-card-title">🎯 IPCA acumulado em 12 meses</div><div class="chart-card-sub">Meta central e intervalo de tolerância</div></div>
+        <div><div class="chart-card-title">🎯 IPCA em 12 meses versus meta</div><div class="chart-card-sub">Comparação com a meta central e a faixa de tolerância</div></div>
       </div>
-      <div class="chart-reading" id="evoCardMetaNote">Meta: 3,00% · banda: 1,50% a 4,50%.</div>
+      <div class="chart-reading" id="evoCardMetaNote">Meta central: 3,00% · faixa: 1,50% a 4,50%.</div>
       <div class="chart-body"><canvas id="chartMeta"></canvas></div>
     </div>
   </div>

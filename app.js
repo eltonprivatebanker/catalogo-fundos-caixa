@@ -7,8 +7,12 @@ function toggleSection(b,c){
   var h=bd.hasAttribute('hidden');
   h?bd.removeAttribute('hidden'):bd.setAttribute('hidden','');
   if(ct){ct.classList.toggle('section-expanded',h);ct.setAttribute('aria-expanded',h?'true':'false');}
-  var l=ct?ct.querySelector('.toggle-label'):null;
-  if(l)l.textContent=h?'Ver menos':'Ver mais';
+  var btn=ct?ct.querySelector('.section-toggle-btn'):null;
+  if(btn)btn.setAttribute('aria-expanded',h?'true':'false');
+  var l=btn?btn.querySelector('.toggle-label'):(ct?ct.querySelector('.toggle-label'):null);
+  var openLabel=btn&&btn.dataset.labelOpen?btn.dataset.labelOpen:'Ver menos';
+  var closedLabel=btn&&btn.dataset.labelClosed?btn.dataset.labelClosed:'Ver mais';
+  if(l)l.textContent=h?openLabel:closedLabel;
   return false;
 }
 window.toggleSection=toggleSection;
@@ -4560,28 +4564,38 @@ async function carregarJsonLocal(nomeArquivo){
 function atualizarResumoEvolucao(d){
   const ipca = d?.cards?.ipca || {};
   const selic = d?.cards?.selic_meta || {};
-  const meta12 = Number(ipca.acum_12m);
 
   const setText = (id, value) => { const el = document.getElementById(id); if(el) el.textContent = value; };
   const pct = v => formatPctCard(v);
+  const pp = v => `${Number(v).toFixed(2).replace('.',',')} p.p.`;
   const metaStatus = (v) => {
     const n = Number(v);
-    if(!Number.isFinite(n)) return 'meta 3,00% · banda 1,50% a 4,50%';
-    if(n > 4.5) return 'acima do teto da meta · meta 3,00%';
-    if(n < 1.5) return 'abaixo do piso da meta · meta 3,00%';
-    return 'dentro da banda da meta · meta 3,00%';
+    if(!Number.isFinite(n)) return 'Meta central: 3,00% · faixa: 1,50% a 4,50%';
+    if(n > 4.5) return `${pp(n - 4.5)} acima do teto de 4,50%`;
+    if(n < 1.5) return `${pp(1.5 - n)} abaixo do piso de 1,50%`;
+    return 'dentro da faixa de 1,50% a 4,50%';
   };
 
+  const selicHistorico = Array.isArray(selic.historico) ? selic.historico : [];
+  const selicRef = selic.data_ref || selic.ultima_alteracao || selicHistorico[0]?.data || '';
+  const selicValor = selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.` : '—';
+
   setText('evoIpcaMensalVal', pct(ipca.ultimo_mes));
-  setText('evoIpcaMensalSub', ipca.label_mes ? `${ipca.label_mes} · último dado oficial` : 'último dado oficial');
-  setText('evoSelicAtualVal', selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.` : '—');
-  setText('evoSelicAtualSub', selic.data_ref || selic.ultima_alteracao || 'meta COPOM');
+  setText('evoIpcaMensalSub', ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial');
+  setText('evoSelicAtualVal', selicValor);
+  setText('evoSelicAtualSub', selicRef ? `Definida pelo Copom · ${selicRef}` : 'Definida pelo Copom');
   setText('evoIpca12Val', pct(ipca.acum_12m));
   setText('evoIpca12Sub', metaStatus(ipca.acum_12m));
 
-  setText('evoCardIpcaNote', ipca.ultimo_mes != null ? `Último dado: ${pct(ipca.ultimo_mes)} em ${ipca.label_mes || 'período recente'}.` : 'Último dado: aguardando atualização.');
-  setText('evoCardSelicNote', selic.valor != null ? `Selic atual: ${Number(selic.valor).toFixed(2).replace('.',',')}% a.a. · referência para CDI, crédito e renda fixa.` : 'Selic atual: aguardando atualização.');
-  setText('evoCardMetaNote', ipca.acum_12m != null ? `IPCA 12M: ${pct(ipca.acum_12m)} · ${metaStatus(ipca.acum_12m)}.` : 'Meta: 3,00% · banda: 1,50% a 4,50%.');
+  setText('evoCardIpcaNote', ipca.ultimo_mes != null
+    ? `Último resultado · ${ipca.label_mes || 'período recente'} · ${pct(ipca.ultimo_mes)}`
+    : 'Último resultado: aguardando atualização.');
+  setText('evoCardSelicNote', selic.valor != null
+    ? `Taxa vigente · ${selicValor}${selicRef ? ` · desde ${selicRef}` : ''}`
+    : 'Taxa vigente: aguardando atualização.');
+  setText('evoCardMetaNote', ipca.acum_12m != null
+    ? `IPCA em 12 meses · ${pct(ipca.acum_12m)} · ${metaStatus(ipca.acum_12m)}`
+    : 'Meta central: 3,00% · faixa: 1,50% a 4,50%.');
 }
 
 function selecionarGraficoEvolucao(chave){
