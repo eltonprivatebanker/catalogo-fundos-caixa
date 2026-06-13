@@ -30124,3 +30124,55 @@ html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle:focus-visible{
     height:285px!important;
   }
 }
+
+
+/* ELTAUM_MOBILE_REFERENCE_HEADER_20260613_v191
+   Cabeçalho compacto no mobile, melhor aproveitamento textual e remoção
+   da nota redundante do CDI apenas em telas pequenas. */
+@media (max-width: 760px){
+  #sec-mercado .rates-reference-v167 > .market-reference-head-v167{
+    position:relative!important;
+    display:block!important;
+    min-height:0!important;
+    padding:13px 13px 12px!important;
+  }
+
+  #sec-mercado .rates-reference-v167 > .market-reference-head-v167 > div{
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  #sec-mercado .rates-reference-v167 > .market-reference-head-v167 .market-reference-kicker-v167,
+  #sec-mercado .rates-reference-v167 > .market-reference-head-v167 h3{
+    padding-right:62px!important;
+  }
+
+  #sec-mercado .rates-reference-v167 > .market-reference-head-v167 p{
+    width:100%!important;
+    max-width:none!important;
+    margin-top:4px!important;
+    padding-right:0!important;
+    font-size:.63rem!important;
+    line-height:1.42!important;
+  }
+
+  #sec-mercado .rates-reference-v167 > .market-reference-head-v167 .market-reference-source-v167{
+    position:absolute!important;
+    top:11px!important;
+    right:11px!important;
+    min-width:48px!important;
+    min-height:29px!important;
+    padding:0 8px!important;
+    justify-content:center!important;
+    font-size:.56rem!important;
+    z-index:3!important;
+  }
+
+  #sec-mercado .rates-reference-v167 .market-reference-source-prefix-v191{
+    display:none!important;
+  }
+
+  #sec-mercado #cdiYearHistory > .reference-footnote-v167{
+    display:none!important;
+  }
+}
