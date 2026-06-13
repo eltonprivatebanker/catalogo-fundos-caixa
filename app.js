@@ -4657,13 +4657,49 @@ async function inicializarGraficos(d){
   selecionarGraficoEvolucao('ipca');
 
   bindEvolucaoChartPeriodTabs();
+  sincronizarTitulosGraficosAtivos();
 }
+
+/* v184 — títulos dos gráficos sincronizados com o período selecionado */
+function atualizarTituloPeriodoGrafico(chart, range){
+  const titulos = {
+    ipca: {
+      24: '🎯 IPCA mensal — últimos 24 meses',
+      60: '🎯 IPCA mensal — últimos 5 anos',
+      120: '🎯 IPCA mensal — últimos 10 anos'
+    },
+    selic: {
+      12: '🏦 Trajetória da Selic meta — último ano',
+      60: '🏦 Trajetória da Selic meta — últimos 5 anos',
+      999: '🏦 Trajetória da Selic meta — histórico completo'
+    }
+  };
+
+  const ids = {
+    ipca: 'chartIpcaTitle',
+    selic: 'chartSelicTitle'
+  };
+
+  const titulo = document.getElementById(ids[chart]);
+  const texto = titulos[chart]?.[Number(range)];
+  if(titulo && texto) titulo.textContent = texto;
+}
+
+function sincronizarTitulosGraficosAtivos(){
+  document.querySelectorAll('.chart-tab[data-chart][data-range].active').forEach(btn=>{
+    atualizarTituloPeriodoGrafico(btn.dataset.chart, Number(btn.dataset.range));
+  });
+}
+
+window.atualizarTituloPeriodoGrafico = atualizarTituloPeriodoGrafico;
 
 async function alterarPeriodoGraficoEvolucao(btn){
   if(!btn) return;
   const chart = btn.dataset.chart;
   const range = parseInt(btn.dataset.range, 10);
   if(!chart || !Number.isFinite(range)) return;
+
+  atualizarTituloPeriodoGrafico(chart, range);
 
   document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>{
     const ativo = b === btn;
@@ -13864,4 +13900,38 @@ if(document.readyState === 'loading'){
 
   window.addEventListener('resize',setup,{passive:true});
   window.__ELTAUM_V180__={setup:setup};
+})();
+
+
+/* ELTAUM_EVOLUTION_DYNAMIC_TITLES_20260613_v184
+   Segunda barreira: mantém o título sincronizado mesmo se um patch legado
+   alterar o botão ativo antes de chamar a função principal. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_EVOLUTION_DYNAMIC_TITLES_20260613_v184';
+
+  function atualizarPorBotao(btn){
+    if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
+    window.atualizarTituloPeriodoGrafico(btn.dataset.chart, Number(btn.dataset.range));
+  }
+
+  function capturar(ev){
+    const alvo = ev.target && ev.target.closest
+      ? ev.target.closest('.chart-tab[data-chart][data-range]')
+      : null;
+    if(alvo) atualizarPorBotao(alvo);
+  }
+
+  function inicializar(){
+    document.querySelectorAll('.chart-tab[data-chart][data-range].active').forEach(atualizarPorBotao);
+  }
+
+  document.addEventListener('click', capturar, true);
+  document.addEventListener('pointerup', capturar, true);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', inicializar, {once:true});
+  }else{
+    inicializar();
+  }
+  console.info('[' + BUILD + '] títulos dinâmicos instalados.');
 })();
