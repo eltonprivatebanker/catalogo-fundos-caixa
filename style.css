@@ -28392,3 +28392,1237 @@ html.fund-card-executive-v166 body.fund-card-mode #mobileFundCards .fund-card-li
     scroll-behavior:auto!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v171 — Tabela principal sem “vazamento” de colunas
+════════════════════════════════════════════════════ */
+#sec-fundos .table-wrap{
+  width:100%;
+  max-width:100%;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  overscroll-behavior-x:contain;
+  scrollbar-gutter:stable;
+}
+
+#sec-fundos #mainTable{
+  border-collapse:collapse!important;
+}
+
+#sec-fundos #mainTable th,
+#sec-fundos #mainTable td{
+  box-sizing:border-box;
+}
+
+@media(min-width:821px){
+  #sec-fundos .table-wrap{
+    position:relative;
+    isolation:isolate;
+  }
+
+  #sec-fundos #mainTable{
+    width:100%!important;
+    min-width:1060px!important;
+    table-layout:fixed!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="expandir"],
+  #sec-fundos #mainTable tbody td:first-child{
+    width:34px!important;
+    min-width:34px!important;
+    max-width:34px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="comparar"],
+  #sec-fundos #mainTable tbody td.comp-check-wrap{
+    width:34px!important;
+    min-width:34px!important;
+    max-width:34px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Fundo"],
+  #sec-fundos #mainTable td.col-fundo{
+    width:330px!important;
+    min-width:280px!important;
+    max-width:360px!important;
+  }
+
+  #sec-fundos #mainTable td.col-fundo{
+    overflow:hidden!important;
+  }
+
+  #sec-fundos #mainTable .fundo-cell-name{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical;
+    -webkit-line-clamp:3;
+    white-space:normal!important;
+    overflow:hidden!important;
+    overflow-wrap:anywhere;
+    text-overflow:ellipsis;
+    line-height:1.35!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Conv / Pag"],
+  #sec-fundos #mainTable td.liq-unified-cell{
+    width:132px!important;
+    min-width:132px!important;
+    max-width:132px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Variacao Dia (%)"],
+  #sec-fundos #mainTable th[data-column="Acum. Mes (%)"],
+  #sec-fundos #mainTable th[data-column="Acum. Ano (%)"],
+  #sec-fundos #mainTable th[data-column="Acum. 12M (%)"],
+  #sec-fundos #mainTable td.col-pct,
+  #sec-fundos #mainTable td.col-pct-12m{
+    width:108px!important;
+    min-width:108px!important;
+    max-width:108px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Data Inicio"]{
+    width:112px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Cota (R$)"]{
+    width:110px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="PL (milhoes R$)"]{
+    width:126px!important;
+  }
+
+  #sec-fundos #mainTable th[data-column="Documentos"],
+  #sec-fundos #mainTable td.col-docs{
+    width:132px!important;
+    min-width:132px!important;
+    max-width:132px!important;
+  }
+
+  #sec-fundos #mainTable td:not(.col-fundo):not(.detail-cell){
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  #sec-fundos .table-wrap.is-scrolled-x-v171{
+    box-shadow:inset 14px 0 18px -18px rgba(232,187,106,.65),0 4px 40px rgba(0,0,0,.3);
+  }
+}
+
+/* ════════════════════════════════════════════════════════════
+   v172 — Ibovespa em perspectiva + Dólar sem rótulo repetido
+   - Compara Ibovespa, CDI e IPCA no período selecionado.
+   - Usa os mesmos botões globais de 12M, 24M e 36M.
+   - Mantém o mês corrente separado e remove a repetição no rodapé PTAX.
+════════════════════════════════════════════════════════════ */
+html.market-ibov-perspective-v172 .market-v172-ibov-head small{
+  color:#9aa6bf;
+  font-weight:650;
+}
+html.market-ibov-perspective-v172 .market-v172-ibov-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);
+  min-width:0;
+}
+html.market-ibov-perspective-v172 .market-v172-compare{
+  min-width:0;
+  padding:15px 16px 13px;
+  border-right:1px solid rgba(148,163,184,.09);
+}
+html.market-ibov-perspective-v172 .market-v172-compare-row{
+  display:grid;
+  grid-template-columns:116px minmax(0,1fr);
+  align-items:center;
+  gap:12px;
+  min-height:42px;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-row+.market-v172-compare-row{
+  border-top:1px solid rgba(148,163,184,.065);
+}
+html.market-ibov-perspective-v172 .market-v172-compare-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-label span{
+  overflow:hidden;
+  color:#cbd3e3;
+  font:720 .66rem/1.2 Inter,system-ui,sans-serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-row.ibov .market-v172-compare-label span{color:#f0c46b}
+html.market-ibov-perspective-v172 .market-v172-compare-label strong{
+  flex:0 0 auto;
+  font:780 .70rem/1 'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track{
+  position:relative;
+  height:12px;
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,.075);
+  border-radius:999px;
+  background:linear-gradient(90deg,rgba(240,85,101,.035),rgba(255,255,255,.018) 50%,rgba(46,209,122,.035));
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track>i{
+  position:absolute;
+  top:-1px;
+  bottom:-1px;
+  left:50%;
+  width:1px;
+  background:rgba(213,220,234,.30);
+  transform:translateX(-.5px);
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b{
+  position:absolute;
+  top:2px;
+  bottom:2px;
+  min-width:0;
+  border-radius:999px;
+  opacity:.92;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b.pos{background:linear-gradient(90deg,#2bbf73,#57e5a1)}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b.neg{background:linear-gradient(90deg,#ff8290,#e95165)}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b.neu{background:#8995ad}
+html.market-ibov-perspective-v172 .market-v172-compare-row.ibov .market-v172-compare-track>b.pos{background:linear-gradient(90deg,#bd8530,#efc36b)}
+html.market-ibov-perspective-v172 .market-v172-compare-row.ibov .market-v172-compare-track>b.neg{background:linear-gradient(90deg,#f06a78,#c94f61)}
+html.market-ibov-perspective-v172 .market-v172-axis{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:8px;
+  margin:7px 0 0 128px;
+  color:#68758d;
+  font:600 .52rem/1 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-axis span:last-child{text-align:right}
+html.market-ibov-perspective-v172 .market-v172-axis b{color:#9ba7bd;font:700 .52rem/1 'JetBrains Mono',monospace}
+html.market-ibov-perspective-v172 .market-v172-reading{
+  min-width:0;
+  padding:15px 16px;
+  background:linear-gradient(180deg,rgba(200,151,58,.045),rgba(255,255,255,.012));
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title>span{
+  display:grid;
+  place-items:center;
+  width:27px;
+  height:27px;
+  flex:0 0 27px;
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:8px;
+  background:rgba(200,151,58,.08);
+  font-size:.72rem;
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title strong{
+  display:block;
+  color:#f0c777;
+  font:760 .70rem/1.2 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title small{
+  display:block;
+  margin-top:3px;
+  color:#74819a;
+  font:560 .57rem/1.2 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-reading p{
+  margin:12px 0;
+  color:#b9c3d7;
+  font:560 .66rem/1.55 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card{
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid rgba(148,163,184,.09);
+  border-radius:9px;
+  background:rgba(10,13,24,.64);
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card span{
+  display:block;
+  overflow:hidden;
+  color:#78859d;
+  font:700 .52rem/1.2 Inter,system-ui,sans-serif;
+  text-overflow:ellipsis;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong{
+  display:block;
+  overflow:hidden;
+  margin-top:6px;
+  color:#e9eef7;
+  font:760 .66rem/1.15 'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong.pos,
+html.market-ibov-perspective-v172 .market-v172-compare-label strong.pos{color:#48e6a0}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong.neg,
+html.market-ibov-perspective-v172 .market-v172-compare-label strong.neg{color:#ff7185}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong.dash,
+html.market-ibov-perspective-v172 .market-v172-compare-label strong.dash{color:#6f7b92}
+
+html.dolar-current-dedup-v172 #sec-dolar .dolar-current-month-copy-v162 small{
+  color:#d9aa50;
+  font-family:Inter,system-ui,sans-serif;
+  font-size:.64rem;
+  font-weight:780;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+
+@media(max-width:1180px) and (min-width:901px){
+  html.market-ibov-perspective-v172 .market-v172-ibov-grid{grid-template-columns:minmax(0,1.25fr) minmax(280px,.85fr)}
+  html.market-ibov-perspective-v172 .market-v172-compare-row{grid-template-columns:104px minmax(0,1fr)}
+  html.market-ibov-perspective-v172 .market-v172-axis{margin-left:116px}
+}
+@media(max-width:900px){
+  html.market-ibov-perspective-v172 .market-v172-ibov-grid{grid-template-columns:1fr}
+  html.market-ibov-perspective-v172 .market-v172-compare{border-right:0;border-bottom:1px solid rgba(148,163,184,.09)}
+}
+@media(max-width:560px){
+  html.market-ibov-perspective-v172 .market-v172-compare-row{grid-template-columns:94px minmax(0,1fr);gap:9px}
+  html.market-ibov-perspective-v172 .market-v172-axis{margin-left:103px;font-size:.48rem}
+  html.market-ibov-perspective-v172 .market-v172-diff-grid{grid-template-columns:1fr 1fr}
+}
+
+
+
+/* ELTAUM_MARKET_PERIOD_SYNC_20260613_v173 — seletor 12M/24M/36M sincronizado com a visão executiva */
+
+
+/* ELTAUM_MARKET_PERIOD_SYNC_RESILIENT_20260613_v174
+   Sem alteração visual: correção de sincronização feita no JavaScript. */
+
+
+/* ELTAUM_MARKET_US_LEGIBILITY_20260613_v175
+   Reforça a hierarquia visual e a legibilidade do bloco Bolsas dos EUA. */
+html.market-us-legibility-v175 .market-v159-us{
+  margin-top:12px;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head{
+  min-height:48px;
+  padding:11px 16px;
+  align-items:center;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head>div:first-child{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  min-width:0;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head>div:first-child>span{
+  color:#d9aa50;
+  font:800 .62rem/1 Inter,system-ui,sans-serif;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head>div:first-child>strong{
+  color:#eef2fb;
+  font:760 .82rem/1.15 Inter,system-ui,sans-serif;
+  white-space:nowrap;
+}
+html.market-us-legibility-v175 .market-v159-us-toggle{
+  padding:3px!important;
+  gap:3px;
+  border-radius:9px!important;
+}
+html.market-us-legibility-v175 .market-v159-us-toggle button{
+  min-width:40px;
+  min-height:27px;
+  padding:5px 10px!important;
+  font-size:.62rem!important;
+  font-weight:800;
+}
+html.market-us-legibility-v175 .market-v159-us-grid{
+  min-height:120px;
+}
+html.market-us-legibility-v175 .market-v159-us-card{
+  padding:15px 17px 14px;
+}
+html.market-us-legibility-v175 .market-v159-us-name{
+  gap:8px;
+  margin-bottom:15px;
+}
+html.market-us-legibility-v175 .market-v159-us-name>span{
+  width:25px;
+  height:25px;
+  flex-basis:25px;
+  font-size:.78rem;
+}
+html.market-us-legibility-v175 .market-v159-us-name>strong{
+  font-size:.76rem;
+  font-weight:760;
+}
+html.market-us-legibility-v175 .market-v159-us-current{
+  margin-top:0;
+  margin-bottom:12px;
+}
+html.market-us-legibility-v175 .market-v159-us-current>span{
+  font-size:.57rem;
+  letter-spacing:.08em;
+}
+html.market-us-legibility-v175 .market-v159-us-current>strong{
+  font-size:1rem;
+  font-weight:800;
+}
+html.market-us-legibility-v175 .market-v159-us-foot{
+  margin-top:0;
+  padding-top:0;
+  gap:14px;
+}
+html.market-us-legibility-v175 .market-v159-us-foot>span{
+  gap:6px;
+  padding-top:10px;
+}
+html.market-us-legibility-v175 .market-v159-us-foot b{
+  font-size:.57rem;
+}
+html.market-us-legibility-v175 .market-v159-us-foot em{
+  font-size:.72rem;
+  font-weight:800;
+}
+@media(max-width:700px){
+  html.market-us-legibility-v175 .market-v159-us .market-v159-section-head{
+    padding:10px 12px;
+  }
+  html.market-us-legibility-v175 .market-v159-us-grid{
+    min-height:0;
+  }
+  html.market-us-legibility-v175 .market-v159-us-card{
+    padding:14px;
+  }
+  html.market-us-legibility-v175 .market-v159-us-current>strong{
+    font-size:.95rem;
+  }
+}
+
+/* ELTAUM_MARKET_NUMBER_LEGIBILITY_20260613_v176
+   Melhora contraste, tamanho e nitidez dos números positivos e negativos
+   sem alterar a semântica visual do painel. */
+html.market-number-legibility-v176{
+  --market-positive-readable:#61e7aa;
+  --market-negative-readable:#ff8494;
+}
+
+/* Renderização numérica mais estável no painel executivo */
+html.market-number-legibility-v176 .market-v159-executive :is(
+  .market-v159-kpi strong,
+  .market-v159-kpi small em,
+  .market-v159-current-metric strong,
+  .market-v159-current-metric em,
+  .market-v172-compare-label strong,
+  .market-v172-diff-card strong,
+  .market-v159-us-current strong,
+  .market-v159-us-foot em
+){
+  font-variant-numeric:tabular-nums;
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  letter-spacing:0;
+}
+
+/* Cores com melhor leitura sobre o fundo escuro */
+html.market-number-legibility-v176 .market-v159-executive :is(
+  .market-v159-kpi strong.pos,
+  .market-v159-kpi small em.pos,
+  .market-v159-current-metric em.pos,
+  .market-v172-compare-label strong.pos,
+  .market-v172-diff-card strong.pos,
+  .market-v159-us-current strong.pos,
+  .market-v159-us-foot em.pos
+){
+  color:var(--market-positive-readable)!important;
+}
+html.market-number-legibility-v176 .market-v159-executive :is(
+  .market-v159-kpi strong.neg,
+  .market-v159-kpi small em.neg,
+  .market-v159-current-metric em.neg,
+  .market-v172-compare-label strong.neg,
+  .market-v172-diff-card strong.neg,
+  .market-v159-us-current strong.neg,
+  .market-v159-us-foot em.neg
+){
+  color:var(--market-negative-readable)!important;
+}
+
+/* Evita aspecto “estourado” causado pelo peso 800 em tamanhos pequenos */
+html.market-number-legibility-v176 .market-v159-kpi small em,
+html.market-number-legibility-v176 .market-v159-current-metric em,
+html.market-number-legibility-v176 .market-v159-us-foot em,
+html.market-number-legibility-v176 .market-v172-compare-label strong,
+html.market-number-legibility-v176 .market-v172-diff-card strong{
+  font-weight:700!important;
+}
+
+/* Fechamento e mês atual */
+html.market-number-legibility-v176 .market-v159-kpi small em{
+  font-size:.76rem!important;
+  line-height:1.15;
+}
+html.market-number-legibility-v176 .market-v159-current-metric em{
+  font-size:.86rem!important;
+  line-height:1.15;
+}
+
+/* Ibovespa em perspectiva */
+html.market-number-legibility-v176 .market-v172-compare-label strong{
+  font-size:.76rem!important;
+  line-height:1.15;
+}
+html.market-number-legibility-v176 .market-v172-diff-card strong{
+  font-size:.74rem!important;
+  line-height:1.18;
+}
+
+/* Bolsas dos EUA */
+html.market-number-legibility-v176 .market-v159-us-current>strong{
+  font-size:1.06rem!important;
+  line-height:1.12;
+  font-weight:740!important;
+}
+html.market-number-legibility-v176 .market-v159-us-foot em{
+  font-size:.78rem!important;
+  line-height:1.15;
+}
+html.market-number-legibility-v176 .market-v159-us-foot b,
+html.market-number-legibility-v176 .market-v159-us-current>span,
+html.market-number-legibility-v176 .market-v172-diff-card span,
+html.market-number-legibility-v176 .market-v159-kpi small b{
+  color:#91a0bb;
+  opacity:1;
+}
+
+@media(max-width:700px){
+  html.market-number-legibility-v176 .market-v159-us-current>strong{
+    font-size:1rem!important;
+  }
+  html.market-number-legibility-v176 .market-v159-us-foot em{
+    font-size:.75rem!important;
+  }
+  html.market-number-legibility-v176 .market-v172-diff-card strong{
+    font-size:.71rem!important;
+  }
+}
+
+/* ELTAUM_RANKING_MOBILE_STABLE_20260613_v177
+   Estabiliza a seção Top 10 no mobile durante a troca Mês / Ano / 12M.
+   Evita alteração de altura por textos variáveis e reduz o scroll anchoring. */
+@media(max-width:700px){
+  html.rankings-mobile-stable-v177 #rankingsSection,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-grid,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-table{
+    overflow-anchor:none!important;
+  }
+
+  /* A leitura rápida fica sempre com a mesma ocupação visual. */
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight{
+    min-height:116px!important;
+    max-height:116px!important;
+    overflow:hidden!important;
+    align-content:flex-start!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight>span{
+    flex:0 0 auto!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight>p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    min-height:58px!important;
+    max-height:58px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    margin:0!important;
+  }
+
+  /* Cabeçalho e controles do Top 10 com dimensões previsíveis. */
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board-head{
+    min-height:174px!important;
+    align-content:flex-start!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board-head>div:first-child{
+    min-height:56px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-controls{
+    min-height:88px!important;
+    align-content:flex-start!important;
+    gap:10px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-periods{
+    flex:0 0 auto!important;
+    min-height:42px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-periods .rank-period-tab{
+    min-height:34px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-universe-pill{
+    flex:0 0 38px!important;
+    min-height:38px!important;
+    max-height:38px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-universe-pill strong{
+    min-width:0!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  /* Dez linhas com altura fixa: nomes maiores não empurram a lista. */
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-table{
+    min-height:840px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-row,
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-top-row-mobile-v100{
+    height:84px!important;
+    min-height:84px!important;
+    max-height:84px!important;
+    overflow:hidden!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-fund strong{
+    min-height:38px!important;
+    max-height:38px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-fund span{
+    min-height:17px!important;
+    max-height:17px!important;
+    white-space:nowrap!important;
+    display:block!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-return{
+    min-width:72px!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+
+  /* Durante a substituição do HTML, evita transições que acentuem o pulo. */
+  html.rankings-mobile-stable-v177.ranking-period-switch-v177 #rankingsSection .ranking-exec-board,
+  html.rankings-mobile-stable-v177.ranking-period-switch-v177 #rankingsSection .ranking-exec-insight{
+    transition:none!important;
+  }
+}
+
+@media(max-width:380px){
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-insight{
+    min-height:122px!important;
+    max-height:122px!important;
+  }
+  html.rankings-mobile-stable-v177 #rankingsSection .ranking-exec-board-head{
+    min-height:180px!important;
+  }
+}
+
+/* ELTAUM_MOBILE_COPOM_CAROUSEL_RANK_UNIVERSE_20260613_v178
+   1) COPOM volta a usar carrossel horizontal no mobile, reduzindo altura.
+   2) Cortes da Selic recebem destaque coral suave, sem sugerir juízo econômico absoluto.
+   3) O seletor de período e o Universo do Top 10 ocupam linhas estáveis e legíveis. */
+
+@media(max-width:700px){
+  /* ── Ranking: controles em duas linhas, sem esmagar a pílula Universo ── */
+  html.ranking-universe-mobile-v178 #rankingsSection .ranking-exec-board-head{
+    min-height:174px!important;
+    max-height:174px!important;
+    overflow:hidden!important;
+  }
+
+  html.ranking-universe-mobile-v178 #rankingsSection .ranking-exec-controls{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:42px 38px!important;
+    align-items:center!important;
+    align-content:start!important;
+    justify-items:stretch!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:88px!important;
+    max-height:88px!important;
+    gap:8px!important;
+  }
+
+  html.ranking-universe-mobile-v178 #rankingsSection .ranking-exec-periods{
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:42px!important;
+    max-height:42px!important;
+    padding:3px!important;
+    gap:3px!important;
+    overflow:hidden!important;
+  }
+
+  html.ranking-universe-mobile-v178 #rankingsSection .ranking-exec-periods .rank-period-tab{
+    width:100%!important;
+    min-width:0!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    padding:6px 4px!important;
+    text-align:center!important;
+  }
+
+  html.ranking-universe-mobile-v178 #rankingsSection .ranking-universe-pill{
+    grid-row:2!important;
+    display:flex!important;
+    flex:0 0 auto!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:38px!important;
+    max-height:38px!important;
+    padding:7px 12px!important;
+    justify-content:center!important;
+    align-items:center!important;
+    border-radius:12px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.ranking-universe-mobile-v178 #rankingsSection .ranking-universe-pill strong{
+    display:block!important;
+    flex:0 1 auto!important;
+    min-width:0!important;
+    max-width:calc(100% - 66px)!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  /* ── COPOM: uma faixa horizontal, com parte do próximo card visível ── */
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-compact-v167{
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .market-drag-label-v118[data-drag-label-v118="copom"]{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    width:100%!important;
+    margin:10px 0 7px!important;
+    padding:0 2px!important;
+    color:#8f9ab8!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .market-drag-label-v118[data-drag-label-v118="copom"] span{
+    color:#8f9ab8!important;
+    font-weight:650!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .market-drag-label-v118[data-drag-label-v118="copom"] strong{
+    color:#e8bb6a!important;
+    font-size:.61rem!important;
+    font-weight:850!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-grid-v167{
+    display:flex!important;
+    grid-template-columns:none!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    gap:9px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:96px!important;
+    padding:1px 2px 10px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory!important;
+    scroll-padding-inline:2px!important;
+    overscroll-behavior-inline:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    touch-action:pan-x!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-grid-v167::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-grid-v167 .copom-item{
+    flex:0 0 min(72vw,230px)!important;
+    width:min(72vw,230px)!important;
+    min-width:min(72vw,230px)!important;
+    max-width:min(72vw,230px)!important;
+    min-height:90px!important;
+    padding:12px 13px!important;
+    scroll-snap-align:start!important;
+    scroll-snap-stop:normal!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-grid-v167 .copom-num{
+    font-size:.58rem!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-grid-v167 .copom-date{
+    margin-top:5px!important;
+    font-size:.84rem!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-grid-v167 .copom-result{
+    margin-top:6px!important;
+    font-size:.65rem!important;
+    line-height:1.3!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .copom-grid-v167.is-expanded-v167{
+    max-height:none!important;
+  }
+
+  html.mobile-copom-carousel-v178 #sec-mercado .reference-footnote-v167{
+    margin-top:3px!important;
+  }
+}
+
+/* Estados das decisões do COPOM — aplicados em todas as resoluções */
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.cut{
+  border-color:rgba(255,127,143,.26)!important;
+  background:linear-gradient(180deg,rgba(255,127,143,.055),rgba(8,10,19,.42))!important;
+}
+
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.cut .copom-result{
+  color:#ff8a98!important;
+  font-weight:750!important;
+}
+
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.cut .copom-result::before{
+  content:'↓ ';
+  font-weight:900;
+}
+
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.hold .copom-result{
+  color:#b8c2d8!important;
+  font-weight:650!important;
+}
+
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.next,
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.featured-next{
+  border-color:rgba(232,187,106,.44)!important;
+  background:linear-gradient(180deg,rgba(200,151,58,.105),rgba(8,10,19,.44))!important;
+}
+
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.next .copom-result,
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.featured-next .copom-result{
+  color:#e8bb6a!important;
+  font-weight:800!important;
+}
+
+html.mobile-copom-carousel-v178 #sec-mercado .copom-item.future .copom-result{
+  color:#8f9ab8!important;
+}
+
+/* ELTAUM_RANKING_MOBILE_READABILITY_20260613_v179
+   1) Aumenta levemente a área de Leitura rápida sem reintroduzir saltos de layout.
+   2) Dá mais largura útil ao nome do fundo.
+   3) Permite até três linhas e reserva altura uniforme para nomes longos. */
+@media(max-width:700px){
+  /* Leitura rápida: um pouco maior e com mais texto visível, mantendo altura estável. */
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight{
+    min-height:144px!important;
+    max-height:144px!important;
+    padding:14px 15px!important;
+    gap:10px!important;
+    overflow:hidden!important;
+    align-content:flex-start!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight>span{
+    min-height:24px!important;
+    padding:5px 10px!important;
+    font-size:.60rem!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight>p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:5!important;
+    min-height:86px!important;
+    max-height:86px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    font-size:.79rem!important;
+    line-height:1.52!important;
+  }
+
+  /* Lista Top 10: mais espaço para nomes extensos, sem alterar a altura ao trocar período. */
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-table{
+    min-height:1000px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row,
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row-mobile-v100{
+    display:grid!important;
+    grid-template-columns:32px minmax(0,1fr) 72px!important;
+    gap:8px!important;
+    align-items:center!important;
+    height:100px!important;
+    min-height:100px!important;
+    max-height:100px!important;
+    padding:12px 13px!important;
+    overflow:hidden!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-pos{
+    min-width:0!important;
+    text-align:left!important;
+    font-size:.76rem!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-fund{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-width:0!important;
+    height:76px!important;
+    overflow:hidden!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-fund strong{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    min-height:0!important;
+    max-height:53px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:normal!important;
+    font-size:.73rem!important;
+    line-height:1.20!important;
+    letter-spacing:-.012em!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-fund span{
+    display:block!important;
+    flex:0 0 17px!important;
+    min-height:17px!important;
+    max-height:17px!important;
+    margin-top:5px!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+    font-size:.64rem!important;
+    line-height:17px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-return{
+    min-width:0!important;
+    width:72px!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+    font-size:.82rem!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+}
+
+@media(max-width:380px){
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight{
+    min-height:150px!important;
+    max-height:150px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-exec-insight>p{
+    min-height:92px!important;
+    max-height:92px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row,
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-top-row-mobile-v100{
+    grid-template-columns:30px minmax(0,1fr) 68px!important;
+    gap:7px!important;
+    padding-inline:11px!important;
+  }
+
+  html.rankings-mobile-readability-v179 #rankingsSection .ranking-return{
+    width:68px!important;
+    font-size:.79rem!important;
+  }
+}
+
+/* ELTAUM_MOBILE_MARKET_LAYOUT_20260613_v180
+   1) Leitura rápida mais alta, com espaço estável para textos longos.
+   2) CDI mensal volta a ser uma faixa horizontal arrastável no mobile.
+   3) Resumo do Dólar PTAX usa a largura de forma uniforme e previsível. */
+@media(max-width:700px){
+  /* ── Ranking: leitura rápida sem corte e sem pulo ── */
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight{
+    min-height:184px!important;
+    max-height:184px!important;
+    padding:14px 15px 15px!important;
+    gap:10px!important;
+    overflow:hidden!important;
+    align-content:flex-start!important;
+  }
+
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight>p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:7!important;
+    min-height:122px!important;
+    max-height:122px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    font-size:.79rem!important;
+    line-height:1.50!important;
+  }
+
+  /* ── CDI mensal: carrossel horizontal nativo ── */
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167{
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .market-drag-label-v118[data-drag-label-v118="cdi"]{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    width:100%!important;
+    margin:10px 0 7px!important;
+    padding:0 2px!important;
+    color:#8f9ab8!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .market-drag-label-v118[data-drag-label-v118="cdi"] span{
+    color:#aab5cf!important;
+    font-weight:750!important;
+    letter-spacing:.07em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .market-drag-label-v118[data-drag-label-v118="cdi"] strong{
+    color:#e8bb6a!important;
+    font-size:.62rem!important;
+    font-weight:850!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-strip{
+    display:flex!important;
+    grid-template-columns:none!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    gap:9px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:94px!important;
+    padding:1px 2px 10px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory!important;
+    scroll-padding-inline:2px!important;
+    overscroll-behavior-inline:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    touch-action:pan-x!important;
+    cursor:grab!important;
+    mask-image:none!important;
+    -webkit-mask-image:none!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-strip.is-pointer-dragging-v180{
+    cursor:grabbing!important;
+    scroll-snap-type:none!important;
+    user-select:none!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-strip::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip{
+    flex:0 0 min(42vw,150px)!important;
+    width:min(42vw,150px)!important;
+    min-width:min(42vw,150px)!important;
+    max-width:min(42vw,150px)!important;
+    min-height:86px!important;
+    padding:11px 10px!important;
+    scroll-snap-align:start!important;
+    scroll-snap-stop:normal!important;
+    justify-content:center!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip .m{
+    font-size:.57rem!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip .v{
+    margin-top:8px!important;
+    font-size:.82rem!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip .p{
+    min-height:12px!important;
+    margin-top:7px!important;
+    font-size:.52rem!important;
+  }
+
+  /* ── Dólar PTAX: distribuição mobile equilibrada ── */
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    width:100%!important;
+    gap:10px!important;
+    padding:10px!important;
+    align-items:stretch!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:102px!important;
+    padding:14px 15px!important;
+    margin:0!important;
+    border-radius:13px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi strong{
+    font-size:1.82rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-kpi-stack-v162{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi,
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi,
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:10px 11px!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    border-radius:12px!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi{
+    min-height:74px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi{
+    min-height:62px!important;
+    grid-column:auto!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi span{
+    width:100%!important;
+    font-size:.58rem!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi strong{
+    margin-top:6px!important;
+    font-size:.94rem!important;
+    line-height:1.05!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi strong{
+    width:100%!important;
+    margin-top:7px!important;
+    font-size:.78rem!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi small{
+    display:block!important;
+    width:100%!important;
+    margin-top:5px!important;
+    font-size:.53rem!important;
+    line-height:1.2!important;
+    white-space:normal!important;
+  }
+}
+
+@media(max-width:360px){
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight{
+    min-height:192px!important;
+    max-height:192px!important;
+  }
+
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight>p{
+    min-height:130px!important;
+    max-height:130px!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip{
+    flex-basis:min(48vw,145px)!important;
+    width:min(48vw,145px)!important;
+    min-width:min(48vw,145px)!important;
+    max-width:min(48vw,145px)!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{
+    gap:6px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi{
+    padding:9px 7px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi strong{
+    font-size:.72rem!important;
+  }
+}
