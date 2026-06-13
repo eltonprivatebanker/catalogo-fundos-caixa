@@ -13779,3 +13779,75 @@ if(document.readyState === 'loading'){
 
   window.__ELTAUM_V178__={sync:syncAll,syncUniverse:syncUniversePill};
 })();
+
+/* ELTAUM_MOBILE_MARKET_LAYOUT_20260613_v180
+   Melhora o arraste horizontal do CDI em mouse, touch e emuladores responsivos. */
+(function(){
+  'use strict';
+
+  function enablePointerDrag(strip){
+    if(!strip || strip.dataset.pointerDragV180==='1') return;
+    strip.dataset.pointerDragV180='1';
+
+    let active=false;
+    let startX=0;
+    let startScroll=0;
+    let moved=false;
+
+    strip.addEventListener('pointerdown',function(event){
+      if(window.innerWidth>700 || event.button>0) return;
+      active=true;
+      moved=false;
+      startX=event.clientX;
+      startScroll=strip.scrollLeft;
+      strip.classList.add('is-pointer-dragging-v180');
+      try{ strip.setPointerCapture(event.pointerId); }catch(_error){}
+    });
+
+    strip.addEventListener('pointermove',function(event){
+      if(!active) return;
+      const delta=event.clientX-startX;
+      if(Math.abs(delta)>4) moved=true;
+      strip.scrollLeft=startScroll-delta;
+    });
+
+    function finish(event){
+      if(!active) return;
+      active=false;
+      strip.classList.remove('is-pointer-dragging-v180');
+      try{ strip.releasePointerCapture(event.pointerId); }catch(_error){}
+    }
+
+    strip.addEventListener('pointerup',finish);
+    strip.addEventListener('pointercancel',finish);
+    strip.addEventListener('lostpointercapture',function(){
+      active=false;
+      strip.classList.remove('is-pointer-dragging-v180');
+    });
+
+    strip.addEventListener('click',function(event){
+      if(!moved) return;
+      event.preventDefault();
+      event.stopPropagation();
+      moved=false;
+    },true);
+  }
+
+  function setup(){
+    enablePointerDrag(document.getElementById('cdiMonthStrip'));
+
+    const target=document.getElementById('cdiYearHistory');
+    if(target && !target.dataset.observeDragV180){
+      target.dataset.observeDragV180='1';
+      new MutationObserver(function(){
+        enablePointerDrag(document.getElementById('cdiMonthStrip'));
+      }).observe(target,{childList:true,subtree:true});
+    }
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup,{once:true});
+  else setup();
+
+  window.addEventListener('resize',setup,{passive:true});
+  window.__ELTAUM_V180__={setup:setup};
+})();

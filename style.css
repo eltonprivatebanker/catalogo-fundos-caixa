@@ -29369,3 +29369,260 @@ html.mobile-copom-carousel-v178 #sec-mercado .copom-item.future .copom-result{
     font-size:.79rem!important;
   }
 }
+
+/* ELTAUM_MOBILE_MARKET_LAYOUT_20260613_v180
+   1) Leitura rápida mais alta, com espaço estável para textos longos.
+   2) CDI mensal volta a ser uma faixa horizontal arrastável no mobile.
+   3) Resumo do Dólar PTAX usa a largura de forma uniforme e previsível. */
+@media(max-width:700px){
+  /* ── Ranking: leitura rápida sem corte e sem pulo ── */
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight{
+    min-height:184px!important;
+    max-height:184px!important;
+    padding:14px 15px 15px!important;
+    gap:10px!important;
+    overflow:hidden!important;
+    align-content:flex-start!important;
+  }
+
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight>p{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:7!important;
+    min-height:122px!important;
+    max-height:122px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    font-size:.79rem!important;
+    line-height:1.50!important;
+  }
+
+  /* ── CDI mensal: carrossel horizontal nativo ── */
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167{
+    min-width:0!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .market-drag-label-v118[data-drag-label-v118="cdi"]{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    width:100%!important;
+    margin:10px 0 7px!important;
+    padding:0 2px!important;
+    color:#8f9ab8!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .market-drag-label-v118[data-drag-label-v118="cdi"] span{
+    color:#aab5cf!important;
+    font-weight:750!important;
+    letter-spacing:.07em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .market-drag-label-v118[data-drag-label-v118="cdi"] strong{
+    color:#e8bb6a!important;
+    font-size:.62rem!important;
+    font-weight:850!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-strip{
+    display:flex!important;
+    grid-template-columns:none!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    gap:9px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:94px!important;
+    padding:1px 2px 10px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x mandatory!important;
+    scroll-padding-inline:2px!important;
+    overscroll-behavior-inline:contain!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    touch-action:pan-x!important;
+    cursor:grab!important;
+    mask-image:none!important;
+    -webkit-mask-image:none!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-strip.is-pointer-dragging-v180{
+    cursor:grabbing!important;
+    scroll-snap-type:none!important;
+    user-select:none!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-strip::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip{
+    flex:0 0 min(42vw,150px)!important;
+    width:min(42vw,150px)!important;
+    min-width:min(42vw,150px)!important;
+    max-width:min(42vw,150px)!important;
+    min-height:86px!important;
+    padding:11px 10px!important;
+    scroll-snap-align:start!important;
+    scroll-snap-stop:normal!important;
+    justify-content:center!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip .m{
+    font-size:.57rem!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip .v{
+    margin-top:8px!important;
+    font-size:.82rem!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip .p{
+    min-height:12px!important;
+    margin-top:7px!important;
+    font-size:.52rem!important;
+  }
+
+  /* ── Dólar PTAX: distribuição mobile equilibrada ── */
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    width:100%!important;
+    gap:10px!important;
+    padding:10px!important;
+    align-items:stretch!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:102px!important;
+    padding:14px 15px!important;
+    margin:0!important;
+    border-radius:13px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-main-kpi strong{
+    font-size:1.82rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-kpi-stack-v162{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+    min-width:0!important;
+    gap:8px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi,
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi,
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi{
+    box-sizing:border-box!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:10px 11px!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    border-radius:12px!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi{
+    min-height:74px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi{
+    min-height:62px!important;
+    grid-column:auto!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-summary-v162 .dolar-mini-kpi span{
+    width:100%!important;
+    font-size:.58rem!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi strong{
+    margin-top:6px!important;
+    font-size:.94rem!important;
+    line-height:1.05!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi strong{
+    width:100%!important;
+    margin-top:7px!important;
+    font-size:.78rem!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi small{
+    display:block!important;
+    width:100%!important;
+    margin-top:5px!important;
+    font-size:.53rem!important;
+    line-height:1.2!important;
+    white-space:normal!important;
+  }
+}
+
+@media(max-width:360px){
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight{
+    min-height:192px!important;
+    max-height:192px!important;
+  }
+
+  html.mobile-market-layout-v180 #rankingsSection .ranking-exec-insight>p{
+    min-height:130px!important;
+    max-height:130px!important;
+  }
+
+  html.mobile-market-layout-v180 #sec-mercado .cdi-history-v167 .cdi-month-chip{
+    flex-basis:min(48vw,145px)!important;
+    width:min(48vw,145px)!important;
+    min-width:min(48vw,145px)!important;
+    max-width:min(48vw,145px)!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162{
+    gap:6px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi{
+    padding:9px 7px!important;
+  }
+
+  html.mobile-market-layout-v180.dolar-ptax-reorg-v162 #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi strong{
+    font-size:.72rem!important;
+  }
+}
