@@ -7588,6 +7588,9 @@ async function sharePainelMercado(){
 
     if(typeof atualizarTabelaIndicadores === 'function'){
       atualizarTabelaIndicadores();
+      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+        detail: { months: meses, source: BUILD }
+      }));
     }else{
       console.warn('[' + BUILD + '] atualizarTabelaIndicadores ainda não está disponível.');
     }
@@ -7724,6 +7727,9 @@ async function sharePainelMercado(){
     document.documentElement.dataset.indicPeriod = String(meses);
     if(typeof window.atualizarTabelaIndicadores === 'function'){
       window.atualizarTabelaIndicadores();
+      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+        detail: { months: meses, source: BUILD }
+      }));
       return true;
     }
     console.warn('[' + BUILD + '] atualizarTabelaIndicadores não encontrada.');
@@ -12180,7 +12186,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MARKET_PERIOD_SYNC_20260613_v173';
+  const BUILD = 'ELTAUM_MARKET_PERIOD_SYNC_RESILIENT_20260613_v174';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -12230,8 +12236,14 @@ if(!isSearchInput(el)) return;
     return currentCalendarMonth();
   }
   function getAccumLabel(){
+    // A fonte primária passa a ser o estado global gravado pelos patches de clique.
+    // Isso evita divergência quando listeners legados interrompem a propagação do evento.
+    const datasetMonths=clean(document.documentElement.dataset.indicPeriod || '');
     const active=qs('.market-period-tabs .indic-tab.active[data-months]');
-    const months=active?.dataset.months || periodToken(text('th-acum-sub-v2')).replace(/\D/g,'') || '12';
+    const headerMonths=periodToken(text('th-acum-sub-v2')).replace(/\D/g,'');
+    const months=[datasetMonths,active?.dataset.months,headerMonths]
+      .map(v=>String(v||''))
+      .find(v=>['12','24','36'].includes(v)) || '12';
     return `${months}M`;
   }
   function valueOrDash(v){ const s=clean(v); return s && !/^(m[eê]s|ano|fechado|atual)$/i.test(s) ? s : '—'; }
@@ -12497,7 +12509,7 @@ if(!isSearchInput(el)) return;
       const body=document.getElementById('sec-painel-body');
       if(!body) return;
       const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-      document.documentElement.classList.add('market-panel-pro-v150','market-ibov-perspective-v172','dolar-current-dedup-v172','market-period-sync-v173');
+      document.documentElement.classList.add('market-panel-pro-v150','market-ibov-perspective-v172','dolar-current-dedup-v172','market-period-sync-v174');
       const data=collectData();
       normalizeClosedPeriodLabels(data.closed,data.current);
       const fp=fingerprint(data);
@@ -12518,6 +12530,19 @@ if(!isSearchInput(el)) return;
       requestAnimationFrame(()=>requestAnimationFrame(()=>sync(true)));
       setTimeout(()=>sync(true),140);
     });
+
+    // Segurança v174: o patch legado de alta prioridade usa stopImmediatePropagation
+    // no window. Por isso, o painel também observa diretamente o estado do período.
+    const periodObserver=new MutationObserver(mutations=>{
+      if(!mutations.some(m=>m.type==='attributes' && m.attributeName==='data-indic-period')) return;
+      requestAnimationFrame(()=>requestAnimationFrame(()=>sync(true)));
+      setTimeout(()=>sync(true),90);
+    });
+    periodObserver.observe(document.documentElement,{
+      attributes:true,
+      attributeFilter:['data-indic-period']
+    });
+
     window.addEventListener('resize',debounce(()=>{applyMode();},140),{passive:true});
     window.addEventListener('pageshow',()=>setTimeout(()=>sync(true),120),{once:true});
   }
