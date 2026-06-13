@@ -28509,3 +28509,196 @@ html.fund-card-executive-v166 body.fund-card-mode #mobileFundCards .fund-card-li
     box-shadow:inset 14px 0 18px -18px rgba(232,187,106,.65),0 4px 40px rgba(0,0,0,.3);
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   v172 — Ibovespa em perspectiva + Dólar sem rótulo repetido
+   - Compara Ibovespa, CDI e IPCA no período selecionado.
+   - Usa os mesmos botões globais de 12M, 24M e 36M.
+   - Mantém o mês corrente separado e remove a repetição no rodapé PTAX.
+════════════════════════════════════════════════════════════ */
+html.market-ibov-perspective-v172 .market-v172-ibov-head small{
+  color:#9aa6bf;
+  font-weight:650;
+}
+html.market-ibov-perspective-v172 .market-v172-ibov-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);
+  min-width:0;
+}
+html.market-ibov-perspective-v172 .market-v172-compare{
+  min-width:0;
+  padding:15px 16px 13px;
+  border-right:1px solid rgba(148,163,184,.09);
+}
+html.market-ibov-perspective-v172 .market-v172-compare-row{
+  display:grid;
+  grid-template-columns:116px minmax(0,1fr);
+  align-items:center;
+  gap:12px;
+  min-height:42px;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-row+.market-v172-compare-row{
+  border-top:1px solid rgba(148,163,184,.065);
+}
+html.market-ibov-perspective-v172 .market-v172-compare-label{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-label span{
+  overflow:hidden;
+  color:#cbd3e3;
+  font:720 .66rem/1.2 Inter,system-ui,sans-serif;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-row.ibov .market-v172-compare-label span{color:#f0c46b}
+html.market-ibov-perspective-v172 .market-v172-compare-label strong{
+  flex:0 0 auto;
+  font:780 .70rem/1 'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track{
+  position:relative;
+  height:12px;
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,.075);
+  border-radius:999px;
+  background:linear-gradient(90deg,rgba(240,85,101,.035),rgba(255,255,255,.018) 50%,rgba(46,209,122,.035));
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track>i{
+  position:absolute;
+  top:-1px;
+  bottom:-1px;
+  left:50%;
+  width:1px;
+  background:rgba(213,220,234,.30);
+  transform:translateX(-.5px);
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b{
+  position:absolute;
+  top:2px;
+  bottom:2px;
+  min-width:0;
+  border-radius:999px;
+  opacity:.92;
+}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b.pos{background:linear-gradient(90deg,#2bbf73,#57e5a1)}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b.neg{background:linear-gradient(90deg,#ff8290,#e95165)}
+html.market-ibov-perspective-v172 .market-v172-compare-track>b.neu{background:#8995ad}
+html.market-ibov-perspective-v172 .market-v172-compare-row.ibov .market-v172-compare-track>b.pos{background:linear-gradient(90deg,#bd8530,#efc36b)}
+html.market-ibov-perspective-v172 .market-v172-compare-row.ibov .market-v172-compare-track>b.neg{background:linear-gradient(90deg,#f06a78,#c94f61)}
+html.market-ibov-perspective-v172 .market-v172-axis{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:8px;
+  margin:7px 0 0 128px;
+  color:#68758d;
+  font:600 .52rem/1 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-axis span:last-child{text-align:right}
+html.market-ibov-perspective-v172 .market-v172-axis b{color:#9ba7bd;font:700 .52rem/1 'JetBrains Mono',monospace}
+html.market-ibov-perspective-v172 .market-v172-reading{
+  min-width:0;
+  padding:15px 16px;
+  background:linear-gradient(180deg,rgba(200,151,58,.045),rgba(255,255,255,.012));
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title>span{
+  display:grid;
+  place-items:center;
+  width:27px;
+  height:27px;
+  flex:0 0 27px;
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:8px;
+  background:rgba(200,151,58,.08);
+  font-size:.72rem;
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title strong{
+  display:block;
+  color:#f0c777;
+  font:760 .70rem/1.2 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-reading-title small{
+  display:block;
+  margin-top:3px;
+  color:#74819a;
+  font:560 .57rem/1.2 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-reading p{
+  margin:12px 0;
+  color:#b9c3d7;
+  font:560 .66rem/1.55 Inter,system-ui,sans-serif;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:7px;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card{
+  min-width:0;
+  padding:9px 10px;
+  border:1px solid rgba(148,163,184,.09);
+  border-radius:9px;
+  background:rgba(10,13,24,.64);
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card span{
+  display:block;
+  overflow:hidden;
+  color:#78859d;
+  font:700 .52rem/1.2 Inter,system-ui,sans-serif;
+  text-overflow:ellipsis;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong{
+  display:block;
+  overflow:hidden;
+  margin-top:6px;
+  color:#e9eef7;
+  font:760 .66rem/1.15 'JetBrains Mono',monospace;
+  font-variant-numeric:tabular-nums;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong.pos,
+html.market-ibov-perspective-v172 .market-v172-compare-label strong.pos{color:#48e6a0}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong.neg,
+html.market-ibov-perspective-v172 .market-v172-compare-label strong.neg{color:#ff7185}
+html.market-ibov-perspective-v172 .market-v172-diff-card strong.dash,
+html.market-ibov-perspective-v172 .market-v172-compare-label strong.dash{color:#6f7b92}
+
+html.dolar-current-dedup-v172 #sec-dolar .dolar-current-month-copy-v162 small{
+  color:#d9aa50;
+  font-family:Inter,system-ui,sans-serif;
+  font-size:.64rem;
+  font-weight:780;
+  letter-spacing:.055em;
+  text-transform:uppercase;
+}
+
+@media(max-width:1180px) and (min-width:901px){
+  html.market-ibov-perspective-v172 .market-v172-ibov-grid{grid-template-columns:minmax(0,1.25fr) minmax(280px,.85fr)}
+  html.market-ibov-perspective-v172 .market-v172-compare-row{grid-template-columns:104px minmax(0,1fr)}
+  html.market-ibov-perspective-v172 .market-v172-axis{margin-left:116px}
+}
+@media(max-width:900px){
+  html.market-ibov-perspective-v172 .market-v172-ibov-grid{grid-template-columns:1fr}
+  html.market-ibov-perspective-v172 .market-v172-compare{border-right:0;border-bottom:1px solid rgba(148,163,184,.09)}
+}
+@media(max-width:560px){
+  html.market-ibov-perspective-v172 .market-v172-compare-row{grid-template-columns:94px minmax(0,1fr);gap:9px}
+  html.market-ibov-perspective-v172 .market-v172-axis{margin-left:103px;font-size:.48rem}
+  html.market-ibov-perspective-v172 .market-v172-diff-grid{grid-template-columns:1fr 1fr}
+}
+

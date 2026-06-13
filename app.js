@@ -12171,7 +12171,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MARKET_EXECUTIVE_SIMPLE_20260612_v159';
+  const BUILD = 'ELTAUM_MARKET_IBOV_PERSPECTIVE_20260613_v172';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -12327,6 +12327,77 @@ if(!isSearchInput(el)) return;
     const total=compactUsValue(item.accum,mode);
     return `<article class="market-v159-us-card"><div class="market-v159-us-name"><span>${item.icon}</span><strong>${esc(item.name)}</strong></div><div class="market-v159-us-current"><span>Mês atual</span><strong class="${pctClass(current)}">${esc(current)}</strong></div><div class="market-v159-us-foot"><span><b>Ano</b><em class="${pctClass(year)}">${esc(year)}</em></span><span><b>${esc(accum)}</b><em class="${pctClass(total)}">${esc(total)}</em></span></div></article>`;
   }
+  function parsePctV172(value){
+    const match=clean(value).match(/[+-]?\d+(?:[.,]\d+)?\s*%/);
+    if(!match) return null;
+    let raw=match[0].replace('%','').replace(/\s+/g,'');
+    if(raw.includes(',') && raw.includes('.')) raw=raw.replace(/\./g,'').replace(',','.');
+    else if(raw.includes(',')) raw=raw.replace(',','.');
+    const n=Number(raw);
+    return Number.isFinite(n)?n:null;
+  }
+  function formatPctV172(value, suffix='%'){
+    if(value===null || !Number.isFinite(value)) return '—';
+    const abs=Math.abs(value).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+    return `${value>0?'+':value<0?'−':''}${abs}${suffix}`;
+  }
+  function comparisonRowV172(label, value, maxAbs, tone){
+    const n=parsePctV172(value);
+    const safeMax=Math.max(maxAbs||0,1);
+    const width=n===null?0:Math.min(Math.abs(n)/safeMax*50,50);
+    const left=n===null?50:(n<0?50-width:50);
+    const cls=n===null?'dash':n>0?'pos':n<0?'neg':'neu';
+    return `<div class="market-v172-compare-row ${tone||''}">
+      <div class="market-v172-compare-label"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(value))}</strong></div>
+      <div class="market-v172-compare-track" aria-hidden="true"><i></i><b class="${cls}" style="left:${left.toFixed(2)}%;width:${width.toFixed(2)}%"></b></div>
+    </div>`;
+  }
+  function differenceCardV172(label, diff){
+    const cls=diff===null?'dash':diff>0?'pos':diff<0?'neg':'neu';
+    return `<div class="market-v172-diff-card"><span>${esc(label)}</span><strong class="${cls}">${esc(formatPctV172(diff,' p.p.'))}</strong></div>`;
+  }
+  function ibovPerspectiveV172(data){
+    const ibov=parsePctV172(data.ibov.accum);
+    const cdi=parsePctV172(data.cdi.accum);
+    const ipca=parsePctV172(data.ipca.accum);
+    const values=[ibov,cdi,ipca].filter(Number.isFinite);
+    const maxAbs=values.length?Math.max(...values.map(Math.abs),1):1;
+    const vsCdi=ibov!==null && cdi!==null ? ibov-cdi : null;
+    const vsIpca=ibov!==null && ipca!==null ? ibov-ipca : null;
+    const relation=(name,diff)=>{
+      if(diff===null) return `sem comparação disponível com ${name}`;
+      if(Math.abs(diff)<0.005) return `empatado com ${name}`;
+      return `${Math.abs(diff).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})} p.p. ${diff>0?'acima':'abaixo'} de ${name}`;
+    };
+    const reading=ibov===null
+      ? `Aguardando o retorno acumulado do Ibovespa para ${data.accum}.`
+      : `Em ${data.accum}, o Ibovespa está ${relation('CDI',vsCdi)} e ${relation('IPCA',vsIpca)}.`;
+
+    return `<section class="market-v159-section market-v172-ibov" aria-label="Ibovespa em perspectiva">
+      <div class="market-v159-section-head market-v172-ibov-head">
+        <div><span>Bolsa brasileira</span><strong>Ibovespa em perspectiva</strong></div>
+        <small>Retorno acumulado · ${esc(data.accum)}</small>
+      </div>
+      <div class="market-v172-ibov-grid">
+        <div class="market-v172-compare" role="img" aria-label="Comparação do retorno acumulado do Ibovespa, CDI e IPCA em ${esc(data.accum)}">
+          ${comparisonRowV172('Ibovespa',data.ibov.accum,maxAbs,'ibov')}
+          ${comparisonRowV172('CDI',data.cdi.accum,maxAbs,'cdi')}
+          ${comparisonRowV172('IPCA',data.ipca.accum,maxAbs,'ipca')}
+          <div class="market-v172-axis"><span>Retorno negativo</span><b>0%</b><span>Retorno positivo</span></div>
+        </div>
+        <aside class="market-v172-reading">
+          <div class="market-v172-reading-title"><span>💡</span><div><strong>Leitura do período</strong><small>${esc(data.accum)} selecionados no painel</small></div></div>
+          <p>${esc(reading)}</p>
+          <div class="market-v172-diff-grid">
+            ${differenceCardV172('Ibovespa × CDI',vsCdi)}
+            ${differenceCardV172('Ibovespa × IPCA',vsIpca)}
+            <div class="market-v172-diff-card"><span>Mês atual</span><strong class="${pctClass(data.ibov.currentVar)}">${esc(valueOrDash(data.ibov.currentVar))}</strong></div>
+            <div class="market-v172-diff-card"><span>Pontuação atual</span><strong class="neu">${esc(valueOrDash(data.ibov.currentPoints))}</strong></div>
+          </div>
+        </aside>
+      </div>
+    </section>`;
+  }
   function buildDashboard(data){
     const body=document.getElementById('sec-painel-body');
     if(!body) return null;
@@ -12374,6 +12445,8 @@ if(!isSearchInput(el)) return;
           ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
         </section>
 
+        ${ibovPerspectiveV172(data)}
+
         <section class="market-v159-section market-v159-us">
           <div class="market-v159-section-head">
             <div><span>Bolsas dos EUA</span><strong>Retornos em ${usMode.toUpperCase()}</strong></div>
@@ -12415,7 +12488,7 @@ if(!isSearchInput(el)) return;
       const body=document.getElementById('sec-painel-body');
       if(!body) return;
       const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
-      document.documentElement.classList.add('market-panel-pro-v150');
+      document.documentElement.classList.add('market-panel-pro-v150','market-ibov-perspective-v172','dolar-current-dedup-v172');
       const data=collectData();
       normalizeClosedPeriodLabels(data.closed,data.current);
       const fp=fingerprint(data);
@@ -13427,4 +13500,16 @@ if(document.readyState === 'loading'){
     visibleHeaders:()=>getVisibleHeaders(),
     resetHorizontalScroll:resetTableXScrollV171
   };
+})();
+
+
+/* PATCH v172 — build final do painel de mercado */
+(function(){
+  const apply=()=>{
+    document.documentElement.classList.add('market-ibov-perspective-v172','dolar-current-dedup-v172');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content='ELTAUM_MARKET_IBOV_PERSPECTIVE_20260613_v172';
+  };
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true});
+  else apply();
 })();
