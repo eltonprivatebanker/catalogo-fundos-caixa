@@ -28709,3 +28709,217 @@ html.dolar-current-dedup-v172 #sec-dolar .dolar-current-month-copy-v162 small{
 
 /* ELTAUM_MARKET_PERIOD_SYNC_RESILIENT_20260613_v174
    Sem alteração visual: correção de sincronização feita no JavaScript. */
+
+
+/* ELTAUM_MARKET_US_LEGIBILITY_20260613_v175
+   Reforça a hierarquia visual e a legibilidade do bloco Bolsas dos EUA. */
+html.market-us-legibility-v175 .market-v159-us{
+  margin-top:12px;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head{
+  min-height:48px;
+  padding:11px 16px;
+  align-items:center;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head>div:first-child{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+  min-width:0;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head>div:first-child>span{
+  color:#d9aa50;
+  font:800 .62rem/1 Inter,system-ui,sans-serif;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+html.market-us-legibility-v175 .market-v159-us .market-v159-section-head>div:first-child>strong{
+  color:#eef2fb;
+  font:760 .82rem/1.15 Inter,system-ui,sans-serif;
+  white-space:nowrap;
+}
+html.market-us-legibility-v175 .market-v159-us-toggle{
+  padding:3px!important;
+  gap:3px;
+  border-radius:9px!important;
+}
+html.market-us-legibility-v175 .market-v159-us-toggle button{
+  min-width:40px;
+  min-height:27px;
+  padding:5px 10px!important;
+  font-size:.62rem!important;
+  font-weight:800;
+}
+html.market-us-legibility-v175 .market-v159-us-grid{
+  min-height:120px;
+}
+html.market-us-legibility-v175 .market-v159-us-card{
+  padding:15px 17px 14px;
+}
+html.market-us-legibility-v175 .market-v159-us-name{
+  gap:8px;
+  margin-bottom:15px;
+}
+html.market-us-legibility-v175 .market-v159-us-name>span{
+  width:25px;
+  height:25px;
+  flex-basis:25px;
+  font-size:.78rem;
+}
+html.market-us-legibility-v175 .market-v159-us-name>strong{
+  font-size:.76rem;
+  font-weight:760;
+}
+html.market-us-legibility-v175 .market-v159-us-current{
+  margin-top:0;
+  margin-bottom:12px;
+}
+html.market-us-legibility-v175 .market-v159-us-current>span{
+  font-size:.57rem;
+  letter-spacing:.08em;
+}
+html.market-us-legibility-v175 .market-v159-us-current>strong{
+  font-size:1rem;
+  font-weight:800;
+}
+html.market-us-legibility-v175 .market-v159-us-foot{
+  margin-top:0;
+  padding-top:0;
+  gap:14px;
+}
+html.market-us-legibility-v175 .market-v159-us-foot>span{
+  gap:6px;
+  padding-top:10px;
+}
+html.market-us-legibility-v175 .market-v159-us-foot b{
+  font-size:.57rem;
+}
+html.market-us-legibility-v175 .market-v159-us-foot em{
+  font-size:.72rem;
+  font-weight:800;
+}
+@media(max-width:700px){
+  html.market-us-legibility-v175 .market-v159-us .market-v159-section-head{
+    padding:10px 12px;
+  }
+  html.market-us-legibility-v175 .market-v159-us-grid{
+    min-height:0;
+  }
+  html.market-us-legibility-v175 .market-v159-us-card{
+    padding:14px;
+  }
+  html.market-us-legibility-v175 .market-v159-us-current>strong{
+    font-size:.95rem;
+  }
+}
+
+/* ELTAUM_MARKET_NUMBER_LEGIBILITY_20260613_v176
+   Melhora contraste, tamanho e nitidez dos números positivos e negativos
+   sem alterar a semântica visual do painel. */
+html.market-number-legibility-v176{
+  --market-positive-readable:#61e7aa;
+  --market-negative-readable:#ff8494;
+}
+
+/* Renderização numérica mais estável no painel executivo */
+html.market-number-legibility-v176 .market-v159-executive :is(
+  .market-v159-kpi strong,
+  .market-v159-kpi small em,
+  .market-v159-current-metric strong,
+  .market-v159-current-metric em,
+  .market-v172-compare-label strong,
+  .market-v172-diff-card strong,
+  .market-v159-us-current strong,
+  .market-v159-us-foot em
+){
+  font-variant-numeric:tabular-nums;
+  font-synthesis:none;
+  text-rendering:optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  letter-spacing:0;
+}
+
+/* Cores com melhor leitura sobre o fundo escuro */
+html.market-number-legibility-v176 .market-v159-executive :is(
+  .market-v159-kpi strong.pos,
+  .market-v159-kpi small em.pos,
+  .market-v159-current-metric em.pos,
+  .market-v172-compare-label strong.pos,
+  .market-v172-diff-card strong.pos,
+  .market-v159-us-current strong.pos,
+  .market-v159-us-foot em.pos
+){
+  color:var(--market-positive-readable)!important;
+}
+html.market-number-legibility-v176 .market-v159-executive :is(
+  .market-v159-kpi strong.neg,
+  .market-v159-kpi small em.neg,
+  .market-v159-current-metric em.neg,
+  .market-v172-compare-label strong.neg,
+  .market-v172-diff-card strong.neg,
+  .market-v159-us-current strong.neg,
+  .market-v159-us-foot em.neg
+){
+  color:var(--market-negative-readable)!important;
+}
+
+/* Evita aspecto “estourado” causado pelo peso 800 em tamanhos pequenos */
+html.market-number-legibility-v176 .market-v159-kpi small em,
+html.market-number-legibility-v176 .market-v159-current-metric em,
+html.market-number-legibility-v176 .market-v159-us-foot em,
+html.market-number-legibility-v176 .market-v172-compare-label strong,
+html.market-number-legibility-v176 .market-v172-diff-card strong{
+  font-weight:700!important;
+}
+
+/* Fechamento e mês atual */
+html.market-number-legibility-v176 .market-v159-kpi small em{
+  font-size:.76rem!important;
+  line-height:1.15;
+}
+html.market-number-legibility-v176 .market-v159-current-metric em{
+  font-size:.86rem!important;
+  line-height:1.15;
+}
+
+/* Ibovespa em perspectiva */
+html.market-number-legibility-v176 .market-v172-compare-label strong{
+  font-size:.76rem!important;
+  line-height:1.15;
+}
+html.market-number-legibility-v176 .market-v172-diff-card strong{
+  font-size:.74rem!important;
+  line-height:1.18;
+}
+
+/* Bolsas dos EUA */
+html.market-number-legibility-v176 .market-v159-us-current>strong{
+  font-size:1.06rem!important;
+  line-height:1.12;
+  font-weight:740!important;
+}
+html.market-number-legibility-v176 .market-v159-us-foot em{
+  font-size:.78rem!important;
+  line-height:1.15;
+}
+html.market-number-legibility-v176 .market-v159-us-foot b,
+html.market-number-legibility-v176 .market-v159-us-current>span,
+html.market-number-legibility-v176 .market-v172-diff-card span,
+html.market-number-legibility-v176 .market-v159-kpi small b{
+  color:#91a0bb;
+  opacity:1;
+}
+
+@media(max-width:700px){
+  html.market-number-legibility-v176 .market-v159-us-current>strong{
+    font-size:1rem!important;
+  }
+  html.market-number-legibility-v176 .market-v159-us-foot em{
+    font-size:.75rem!important;
+  }
+  html.market-number-legibility-v176 .market-v172-diff-card strong{
+    font-size:.71rem!important;
+  }
+}

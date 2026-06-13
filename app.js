@@ -13552,3 +13552,6 @@ if(document.readyState === 'loading'){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true});
   else apply();
 })();
+
+/* ELTAUM_MARKET_NUMBER_LEGIBILITY_20260613_v176
+   Build visual; sem alteração de lógica. */
