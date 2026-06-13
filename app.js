@@ -4634,7 +4634,7 @@ function atualizarResumoEvolucao(d){
   setText('evoIpcaMensalVal', pct(ipca.ultimo_mes));
   setText('evoIpcaMensalSub', ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial');
   setText('evoSelicAtualVal', selicValor);
-  setText('evoSelicAtualSub', selicRef ? `Definida pelo Copom · ${selicRef}` : 'Definida pelo Copom');
+  setText('evoSelicAtualSub', selicRef ? `Vigente desde ${selicRef} · definida pelo Copom` : 'Meta definida pelo Copom');
   setText('evoIpca12Val', pct(ipca.acum_12m));
   setText('evoIpca12Sub', metaStatus(ipca.acum_12m));
 
@@ -4683,7 +4683,7 @@ function atualizarResumoMovelEvolucao(chave, d){
   if(target === 'selic'){
     kicker = 'Selic meta vigente';
     value = selicValor;
-    description = selicRef ? `Definida pelo Copom · ${selicRef}` : 'Definida pelo Copom';
+    description = selicRef ? `Vigente desde ${selicRef} · definida pelo Copom` : 'Meta definida pelo Copom';
   } else if(target === 'meta'){
     kicker = 'IPCA em 12 meses';
     value = pct(ipca.acum_12m);
@@ -4773,27 +4773,40 @@ async function inicializarGraficos(d){
 
 /* v184 — títulos dos gráficos sincronizados com o período selecionado */
 function atualizarTituloPeriodoGrafico(chart, range){
-  const titulos = {
+  const periodo = Number(range);
+  const configuracoes = {
     ipca: {
-      24: '🎯 IPCA mensal — últimos 24 meses',
-      60: '🎯 IPCA mensal — últimos 5 anos',
-      120: '🎯 IPCA mensal — últimos 10 anos'
+      24: { titulo: '🎯 IPCA mensal — últimos 24 meses' },
+      60: { titulo: '🎯 IPCA mensal — últimos 5 anos' },
+      120: { titulo: '🎯 IPCA mensal — últimos 10 anos' }
     },
     selic: {
-      12: '🏦 Trajetória da Selic meta — último ano',
-      60: '🏦 Trajetória da Selic meta — últimos 5 anos',
-      999: '🏦 Trajetória da Selic meta — histórico completo'
+      12: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Último ano · evolução da meta definida pelo Copom'
+      },
+      60: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Últimos 5 anos · evolução da meta definida pelo Copom'
+      },
+      999: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Histórico completo desde 1999'
+      }
     }
   };
 
-  const ids = {
-    ipca: 'chartIpcaTitle',
-    selic: 'chartSelicTitle'
-  };
+  const config = configuracoes[chart]?.[periodo];
+  if(!config) return;
 
-  const titulo = document.getElementById(ids[chart]);
-  const texto = titulos[chart]?.[Number(range)];
-  if(titulo && texto) titulo.textContent = texto;
+  const tituloId = chart === 'ipca' ? 'chartIpcaTitle' : chart === 'selic' ? 'chartSelicTitle' : null;
+  const titulo = tituloId ? document.getElementById(tituloId) : null;
+  if(titulo && config.titulo) titulo.textContent = config.titulo;
+
+  if(chart === 'selic'){
+    const subtitulo = document.getElementById('chartSelicSub');
+    if(subtitulo && config.subtitulo) subtitulo.textContent = config.subtitulo;
+  }
 }
 
 function sincronizarTitulosGraficosAtivos(){
@@ -14143,5 +14156,10 @@ if(document.readyState === 'loading'){
 })();
 
 
-/* ELTAUM_MOBILE_EVOLUTION_FOCUS_20260613_v189
+/* ELTAUM_MOBILE_EVOLUTION_ORDER_SEMANTICS_20260613_v190
    Resumo móvel único e sincronizado com a aba ativa dos gráficos. */
+
+
+/* ELTAUM_MOBILE_EVOLUTION_ORDER_SEMANTICS_20260613_v190
+   Abas móveis agrupam os dois indicadores de IPCA antes da Selic.
+   Textos da Selic explicam vigência e período de forma mais direta. */
