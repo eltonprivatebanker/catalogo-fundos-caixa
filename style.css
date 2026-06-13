@@ -29763,3 +29763,19 @@ html.mobile-copom-carousel-v178 #sec-mercado .copom-item.future .copom-result{
     min-width:0;
   }
 }
+
+
+/* ELTAUM_EVOLUTION_TOGGLE_FIX_20260613_v183
+   Libera o clique do botão da seção Inflação e juros.
+   A regra legada usa pointer-events:none porque antes o cabeçalho inteiro era clicável. */
+html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle{
+  pointer-events:auto!important;
+  cursor:pointer!important;
+  position:relative;
+  z-index:2;
+}
+
+html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle:focus-visible{
+  outline:2px solid var(--gold);
+  outline-offset:3px;
+}
