@@ -29626,3 +29626,28 @@ html.mobile-copom-carousel-v178 #sec-mercado .copom-item.future .copom-result{
     font-size:.72rem!important;
   }
 }
+
+
+/* ELTAUM_DESKTOP_RANKING_INSIGHT_WIDTH_20260613_v181
+   Mantém o mobile intacto e faz a Leitura Rápida do desktop aproveitar melhor a largura. */
+@media (min-width: 701px){
+  #rankingsSection .ranking-exec-insight{
+    display:grid!important;
+    grid-template-columns:max-content minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:14px!important;
+    width:100%!important;
+  }
+
+  #rankingsSection .ranking-exec-insight>span{
+    align-self:center!important;
+  }
+
+  #rankingsSection .ranking-exec-insight>p{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    line-height:1.55!important;
+  }
+}
