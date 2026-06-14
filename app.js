@@ -1990,15 +1990,30 @@ function fmtSummaryPl(v){
   }
   return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
 }
+/* v197 — filtros de classe usam somente a coluna Categoria.
+   Evita falsos positivos por palavras no nome/benchmark, como
+   MOVIMENTACOES sendo interpretado como ACOES ou DOLAR MM como CAMBIAL. */
+const RANK_CATEGORY_BY_FILTER_V197 = Object.freeze({
+  'renda-fixa-simples': 'RENDA FIXA SIMPLES',
+  'renda-fixa': 'RENDA FIXA',
+  'renda-fixa-referenciado': 'RENDA FIXA REFERENCIADO',
+  'renda-fixa-curto-prazo': 'RENDA FIXA CURTO PRAZO',
+  'multimercado': 'MULTIMERCADO',
+  'cambial': 'CAMBIAL',
+  'acoes': 'ACOES',
+  'fundo-de-indice': 'FUNDO DE INDICE',
+  'fmp': 'FUNDOS MUTUOS DE PRIVATIZACAO'
+});
+function rankCategoriaCanonicaV197(v){
+  return normRankTxt(v).replace(/\s+/g,' ').trim();
+}
 function passaFiltroRanking(r){
-  const cat = normRankTxt(r['Categoria']);
-  const nome = normRankTxt(r['Fundo']);
-  const base = cat + ' ' + nome;
-  if(activeRankFilter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
-  if(activeRankFilter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
-  if(activeRankFilter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
-  if(activeRankFilter === 'multimercado') return cat.includes('MULTIMERCADO');
-  return true;
+  const filtro = String(activeRankFilter || 'todos');
+  const cat = rankCategoriaCanonicaV197(r?.['Categoria']);
+  if(filtro === 'todos') return true;
+  if(filtro === 'sem-fmp') return cat !== RANK_CATEGORY_BY_FILTER_V197.fmp;
+  const categoriaEsperada = RANK_CATEGORY_BY_FILTER_V197[filtro];
+  return categoriaEsperada ? cat === categoriaEsperada : true;
 }
 function atualizarRankingFilterUI(){
   document.querySelectorAll('[data-rank-filter]').forEach(btn=>{
@@ -12795,30 +12810,31 @@ if(!isSearchInput(el)) return;
   const nval=(v)=>{ try{return typeof toNum==='function'?toNum(v):Number(String(v??'').replace('%','').replace(',','.'));}catch(e){return null;} };
   const pct=(v)=>{const n=nval(v);if(n===null||!Number.isFinite(n))return '—';return (n>0?'+':'')+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';};
 
-  function categoryMatches(text,filter){
-    const t=normalize(text);
+  const CATEGORY_BY_FILTER_V197=Object.freeze({
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+  });
+  function categoryMatches(category,filter){
+    const cat=normalize(category).replace(/\s+/g,' ').trim();
     const f=String(filter||'todos');
     if(f==='todos') return true;
-    const isFmp=/\bFMP\b|PRIVATIZA/.test(t);
-    if(f==='sem-fmp') return !isFmp;
-    if(f==='fmp') return isFmp;
-    if(f==='renda-fixa-simples') return /RENDA FIXA SIMPLES|RF SIMPLES/.test(t);
-    if(f==='renda-fixa-referenciado') return /RENDA FIXA REFERENCIADO|RF REFERENCIADO|REF DI/.test(t);
-    if(f==='renda-fixa-curto-prazo') return /RENDA FIXA CURTO|RF CURTO|CURTO PRAZO/.test(t);
-    if(f==='renda-fixa') return /RENDA FIXA|\bRF\b/.test(t) && !/SIMPLES|REFERENCIADO|REF DI|CURTO PRAZO|RF CURTO/.test(t);
-    if(f==='multimercado') return /MULTIMERCADO|\bMM\b/.test(t);
-    if(f==='cambial') return /CAMBIAL|CAMBIO|DOLAR/.test(t);
-    if(f==='acoes') return /ACOES|IBOVESPA/.test(t) && !isFmp;
-    if(f==='fundo-de-indice') return /FUNDO DE INDICE|\bINDICE\b|\bETF\b/.test(t);
-    return true;
+    if(f==='sem-fmp') return cat!==CATEGORY_BY_FILTER_V197.fmp;
+    const expected=CATEGORY_BY_FILTER_V197[f];
+    return expected ? cat===expected : true;
   }
   window.rankCategoryMatchesV151=categoryMatches;
 
   // Substitui o filtro global usado pelo renderer legado sem reescrever o renderer inteiro.
   try{
     passaFiltroRanking=function(r){
-      const text=[r?.Categoria,r?.Fundo,r?.Benchmark].filter(Boolean).join(' ');
-      return categoryMatches(text,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
+      return categoryMatches(r?.Categoria,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
     };
   }catch(e){}
 
@@ -14473,3 +14489,6 @@ if(document.readyState === 'loading'){
   else init();
   window.__ELTAUM_MARKET_PERIOD_CARDS_V196__={build:BUILD,render,get currency(){return currency;}};
 })();
+
+
+/* ELTAUM_RANKING_CATEGORY_EXACT_20260614_v197 */
