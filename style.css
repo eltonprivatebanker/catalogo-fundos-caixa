@@ -30666,3 +30666,353 @@ html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle:focus-visible{
   width:100%!important;
   min-width:0!important;
 }
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_PERIOD_CARDS_20260614_v196
+   Reorganiza a tabela analítica em três blocos temáticos.
+   A tabela original permanece no DOM como fonte dos dados e
+   só é ocultada após a renderização segura dos novos cards.
+════════════════════════════════════════════════════════════ */
+html.market-period-cards-v196 .market-period-shell-v196{
+  border:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+html.market-period-cards-v196 .market-period-shell-v196.market-cards-ready-v196 > .market-period-source-table-v196,
+html.market-period-cards-v196 .market-period-shell-v196.market-cards-ready-v196 > .indic-footnote{
+  display:none!important;
+}
+html.market-period-cards-v196 .market-period-shell-v196.market-cards-ready-v196 > .market-analytic-tools-v160{
+  display:none!important;
+}
+.market-period-cards-v196{
+  display:grid;
+  gap:14px;
+  width:100%;
+}
+.market-period-cards-v196:empty{display:none}
+.market-period-card-v196{
+  overflow:hidden;
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(13,15,28,.98),rgba(8,10,19,.98));
+  box-shadow:0 10px 28px rgba(0,0,0,.16);
+}
+.market-period-card-head-v196{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:14px;
+  min-height:66px;
+  padding:14px 16px;
+  border-bottom:1px solid rgba(255,255,255,.075);
+  background:linear-gradient(90deg,rgba(200,151,58,.07),rgba(255,255,255,.012) 48%,transparent);
+}
+.market-period-card-title-v196{
+  min-width:0;
+}
+.market-period-card-title-v196 span{
+  display:block;
+  color:#e8bb6a;
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.08rem;
+  font-weight:700;
+  line-height:1.1;
+}
+.market-period-card-title-v196 small{
+  display:block;
+  margin-top:4px;
+  color:#9ea9c5;
+  font-size:.64rem;
+  line-height:1.35;
+}
+.market-period-source-v196{
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:5px 9px;
+  border:1px solid rgba(200,151,58,.22);
+  border-radius:999px;
+  background:rgba(200,151,58,.07);
+  color:#d8ba79;
+  font:700 .56rem/1 'JetBrains Mono',monospace;
+  letter-spacing:.05em;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.market-period-grid-head-v196,
+.market-period-row-v196{
+  display:grid;
+  grid-template-columns:minmax(250px,1.45fr) repeat(4,minmax(115px,.72fr));
+  align-items:stretch;
+}
+.market-period-grid-head-v196{
+  min-height:38px;
+  border-bottom:1px solid rgba(255,255,255,.065);
+  background:rgba(17,21,38,.65);
+}
+.market-period-grid-head-v196 span{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:8px 12px;
+  color:#8f9bb9;
+  font:800 .57rem/1.15 'Inter',sans-serif;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  text-align:center;
+}
+.market-period-grid-head-v196 span:first-child{
+  justify-content:flex-start;
+  color:#c7a55e;
+}
+.market-period-row-v196{
+  min-height:92px;
+  border-bottom:1px solid rgba(255,255,255,.065);
+}
+.market-period-row-v196:last-child{border-bottom:0}
+.market-period-row-v196:hover{background:rgba(200,151,58,.025)}
+.market-period-name-v196{
+  display:grid;
+  grid-template-columns:34px minmax(0,1fr);
+  align-items:center;
+  gap:11px;
+  padding:14px 16px;
+  min-width:0;
+}
+.market-period-icon-v196{
+  width:34px;
+  height:34px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:11px;
+  background:#151a2e;
+  font-size:.95rem;
+}
+.market-period-name-copy-v196{min-width:0}
+.market-period-name-line-v196{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:7px;
+}
+.market-period-name-line-v196 strong{
+  color:#f0f3fb;
+  font-size:.82rem;
+  line-height:1.25;
+}
+.market-period-name-copy-v196 > small{
+  display:block;
+  margin-top:3px;
+  color:#9aa6c2;
+  font-size:.61rem;
+  line-height:1.35;
+}
+.market-current-level-v196{
+  display:inline-flex;
+  align-items:baseline;
+  gap:5px;
+  margin-top:8px;
+  padding:5px 8px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:8px;
+  background:rgba(255,255,255,.035);
+  color:#edf1fb;
+  font:800 .72rem/1 'JetBrains Mono',monospace;
+  white-space:nowrap;
+}
+.market-current-level-v196 small{
+  color:#7f8aa8;
+  font:700 .52rem/1 'Inter',sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+}
+.market-period-metric-v196{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  justify-content:center;
+  gap:5px;
+  min-width:0;
+  padding:13px 14px;
+  border-left:1px solid rgba(255,255,255,.055);
+  text-align:right;
+}
+.market-period-metric-v196 > span{
+  display:none;
+  color:#7f8aa8;
+  font-size:.55rem;
+  font-weight:750;
+  text-transform:uppercase;
+  letter-spacing:.06em;
+}
+.market-period-metric-v196 strong{
+  color:#e8ecf8;
+  font:800 .87rem/1.15 'JetBrains Mono',monospace;
+  white-space:nowrap;
+}
+.market-period-metric-v196 strong.pos{color:#2ed17a}
+.market-period-metric-v196 strong.neg{color:#f05565}
+.market-period-metric-v196 strong.neu,
+.market-period-metric-v196 strong.dash{color:#d8deed}
+.market-period-metric-v196 small{
+  min-height:1em;
+  color:#7f8aa8;
+  font-size:.55rem;
+  line-height:1.2;
+  white-space:nowrap;
+}
+.market-period-status-v196{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:24px;
+  padding:5px 9px;
+  border:1px solid rgba(91,156,246,.24);
+  border-radius:999px;
+  background:rgba(91,156,246,.09);
+  color:#a9c7f4!important;
+  font:750 .57rem/1 'Inter',sans-serif!important;
+  text-transform:none;
+}
+.market-period-badge-v196{
+  display:inline-flex;
+  align-items:center;
+  padding:3px 7px;
+  border:1px solid rgba(200,151,58,.3);
+  border-radius:999px;
+  background:rgba(200,151,58,.1);
+  color:#e8bb6a;
+  font-size:.53rem;
+  font-weight:800;
+  white-space:nowrap;
+}
+.market-period-card-v196.brasil .market-period-icon-v196{background:rgba(46,209,122,.08)}
+.market-period-card-v196.usa .market-period-icon-v196{background:rgba(91,156,246,.08)}
+.market-period-us-toggle-v196{
+  display:flex;
+  align-items:center;
+  gap:3px;
+  padding:3px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  background:#090c16;
+}
+.market-period-us-toggle-v196 button{
+  min-height:29px;
+  padding:5px 10px;
+  border:1px solid transparent;
+  border-radius:7px;
+  background:transparent;
+  color:#9ca8c3;
+  font:750 .58rem/1 'Inter',sans-serif;
+  cursor:pointer;
+}
+.market-period-us-toggle-v196 button:hover{
+  color:#e8bb6a;
+  border-color:rgba(200,151,58,.2);
+}
+.market-period-us-toggle-v196 button.active{
+  color:#f2ca75;
+  border-color:rgba(200,151,58,.48);
+  background:rgba(200,151,58,.14);
+}
+.market-period-double-v196{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:3px;
+}
+.market-period-double-v196 em{
+  font:800 .66rem/1 'JetBrains Mono',monospace;
+  font-style:normal;
+  white-space:nowrap;
+}
+.market-period-double-v196 em.pos{color:#2ed17a}
+.market-period-double-v196 em.neg{color:#f05565}
+.market-period-double-v196 em.neu,
+.market-period-double-v196 em.dash{color:#aeb7cc}
+.market-period-card-foot-v196{
+  padding:9px 16px 10px;
+  border-top:1px solid rgba(255,255,255,.055);
+  color:#78839f;
+  font-size:.56rem;
+  line-height:1.4;
+}
+
+@media(max-width:900px){
+  .market-period-card-head-v196{
+    min-height:62px;
+    padding:13px 14px;
+  }
+  .market-period-grid-head-v196{display:none}
+  .market-period-row-v196{
+    display:block;
+    min-height:0;
+    padding:0 0 12px;
+  }
+  .market-period-name-v196{
+    padding:13px 14px 10px;
+  }
+  .market-period-row-v196 > .market-period-metric-v196{
+    display:inline-flex;
+    width:calc(25% - 4px);
+    min-height:65px;
+    padding:9px 8px;
+    border-left:0;
+    border-top:1px solid rgba(255,255,255,.045);
+    align-items:center;
+    text-align:center;
+    vertical-align:top;
+  }
+  .market-period-metric-v196 > span{display:block}
+  .market-period-metric-v196 strong{font-size:.75rem}
+  .market-period-metric-v196 small{white-space:normal;text-align:center}
+  .market-period-double-v196{align-items:center}
+}
+
+@media(max-width:560px){
+  .market-period-cards-v196{gap:12px}
+  .market-period-card-v196{border-radius:14px}
+  .market-period-card-head-v196{
+    align-items:flex-start;
+    gap:10px;
+  }
+  .market-period-card-title-v196 span{font-size:1rem}
+  .market-period-card-title-v196 small{font-size:.6rem}
+  .market-period-source-v196{display:none}
+  .market-period-us-toggle-v196{
+    flex:0 0 auto;
+    margin-top:-2px;
+  }
+  .market-period-us-toggle-v196 button{
+    min-height:31px;
+    padding:5px 8px;
+    font-size:.55rem;
+  }
+  .market-period-name-v196{
+    grid-template-columns:31px minmax(0,1fr);
+    gap:9px;
+    padding:12px 12px 9px;
+  }
+  .market-period-icon-v196{width:31px;height:31px;border-radius:10px}
+  .market-period-name-line-v196 strong{font-size:.78rem}
+  .market-current-level-v196{font-size:.66rem}
+  .market-period-row-v196 > .market-period-metric-v196{
+    width:calc(50% - 3px);
+    min-height:61px;
+    padding:8px 6px;
+  }
+  .market-period-row-v196 > .market-period-metric-v196:nth-of-type(3),
+  .market-period-row-v196 > .market-period-metric-v196:nth-of-type(5){
+    border-left:1px solid rgba(255,255,255,.045);
+  }
+  .market-period-row-v196 > .market-period-metric-v196:nth-of-type(n+4){
+    border-top:1px solid rgba(255,255,255,.065);
+  }
+  .market-period-card-foot-v196{padding:8px 12px 9px}
+}

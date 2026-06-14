@@ -14215,3 +14215,261 @@ if(document.readyState === 'loading'){
 /* ELTAUM_MOBILE_EVOLUTION_ORDER_SEMANTICS_20260613_v190
    Abas móveis agrupam os dois indicadores de IPCA antes da Selic.
    Textos da Selic explicam vigência e período de forma mais direta. */
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_PERIOD_CARDS_20260614_v196
+   Espelha a tabela analítica em três cards temáticos, mantendo
+   a tabela original no DOM como fonte compatível dos dados.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_PERIOD_CARDS_20260614_v196';
+  let currency='brl';
+  let observer=null;
+  let timer=0;
+
+  const qs=(sel,root=document)=>root.querySelector(sel);
+  const qsa=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
+  const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
+  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+  const text=id=>clean(document.getElementById(id)?.textContent||'—')||'—';
+
+  function tone(value){
+    const v=clean(value);
+    if(!v || v==='—' || v==='-') return 'dash';
+    if(/^\+/.test(v)) return 'pos';
+    if(/^[−-]/.test(v)) return 'neg';
+    return 'neu';
+  }
+
+  function period(id,fallback){
+    const value=text(id);
+    return value==='—'?fallback:value;
+  }
+
+  function statusFor(rowId){
+    const row=document.getElementById(rowId);
+    if(!row) return '';
+    const cell=qs('.td-cur',row);
+    if(!cell) return '';
+    const explicit=clean(
+      qs('.analytic-status-chip-v163',cell)?.textContent ||
+      qs('.period-status',cell)?.textContent ||
+      qs('.badge-await',cell)?.textContent ||
+      qs('.status-only-v163',cell)?.textContent || ''
+    );
+    if(/aguard/i.test(explicit)) return 'Aguardando';
+    if(/parcial/i.test(explicit)) return 'Parcial';
+    return '';
+  }
+
+  function alertBadge(){
+    const el=document.getElementById('ipca-alert-badge');
+    if(!el || getComputedStyle(el).display==='none') return '';
+    const value=clean(el.textContent);
+    return value?`<span class="market-period-badge-v196">${esc(value)}</span>`:'';
+  }
+
+  function metric(label,value,note='',options={}){
+    const status=options.status||'';
+    const main=status
+      ? `<strong class="market-period-status-v196">${esc(status)}</strong>`
+      : `<strong class="${tone(value)}">${esc(value||'—')}</strong>`;
+    return `<div class="market-period-metric-v196"><span>${esc(label)}</span>${main}<small>${esc(note||'')}</small></div>`;
+  }
+
+  function nameCell(icon,name,sub,level='',badge=''){
+    return `<div class="market-period-name-v196">
+      <div class="market-period-icon-v196">${icon}</div>
+      <div class="market-period-name-copy-v196">
+        <div class="market-period-name-line-v196"><strong>${esc(name)}</strong>${badge}</div>
+        <small>${esc(sub)}</small>
+        ${level&&level!=='—'?`<div class="market-current-level-v196"><small>Atual</small>${esc(level)}</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  function gridHead(first='Indicador'){
+    const closed=period('th-mes-ant-sub','Último fechado');
+    const current=period('th-mes-cur-sub','Mês atual');
+    return `<div class="market-period-grid-head-v196">
+      <span>${esc(first)}</span><span>Fechado<br>${esc(closed)}</span><span>Atual<br>${esc(current)}</span><span>No ano</span><span>12 meses</span>
+    </div>`;
+  }
+
+  function row(content){
+    return `<div class="market-period-row-v196">${content}</div>`;
+  }
+
+  function cardHeader(title,sub,source,extra=''){
+    return `<div class="market-period-card-head-v196">
+      <div class="market-period-card-title-v196"><span>${esc(title)}</span><small>${esc(sub)}</small></div>
+      ${extra||`<span class="market-period-source-v196">${esc(source)}</span>`}
+    </div>`;
+  }
+
+  function usPair(id){
+    const host=document.getElementById(id);
+    if(!host) return {usd:'—',brl:'—'};
+    const usd=clean(qs('.us-market-line.usd .us-market-value',host)?.textContent||'');
+    const brl=clean(qs('.us-market-line.brl .us-market-value',host)?.textContent||'');
+    if(usd||brl) return {usd:usd||'—',brl:brl||'—'};
+    const raw=clean(host.textContent);
+    const out={usd:'—',brl:'—'};
+    const re=/(USD|BRL)\s*([+−-]?\d+(?:[.,]\d+)?%|—)/ig;
+    let match;
+    while((match=re.exec(raw))) out[match[1].toLowerCase()]=match[2];
+    if(out.usd==='—'&&out.brl==='—'){
+      const values=raw.match(/[+−-]?\d+(?:[.,]\d+)?%/g)||[];
+      if(values[0]) out.usd=values[0];
+      if(values[1]) out.brl=values[1];
+      else if(values[0]) out.brl=values[0];
+    }
+    return out;
+  }
+
+  function usMetric(label,pair,note=''){
+    if(currency==='both'){
+      return `<div class="market-period-metric-v196"><span>${esc(label)}</span>
+        <div class="market-period-double-v196">
+          <em class="${tone(pair.usd)}">USD ${esc(pair.usd)}</em>
+          <em class="${tone(pair.brl)}">BRL ${esc(pair.brl)}</em>
+        </div><small>${esc(note)}</small></div>`;
+    }
+    const value=pair[currency]||'—';
+    return metric(label,value,currency.toUpperCase()+(note?` · ${note}`:''));
+  }
+
+  function buildTaxes(){
+    const cdiStatus=statusFor('row-cdi');
+    const ipcaStatus=statusFor('row-ipca');
+    return `<article class="market-period-card-v196 taxas">
+      ${cardHeader('Taxas e inflação','Retornos consolidados por período','BCB 4391 / 433')}
+      ${gridHead()}
+      ${row(
+        nameCell('💰','CDI','Certificado de Depósito Interbancário')+
+        metric('Fechado',text('cdi-mes-ant'))+
+        metric('Atual',text('cdi-mes-cur'),'',{status:cdiStatus})+
+        metric('No ano',text('cdi-ano'))+
+        metric('12 meses',text('cdi-acum-v2'))
+      )}
+      ${row(
+        nameCell('🎯','IPCA','Inflação ao consumidor · meta 3,0%','',alertBadge())+
+        metric('Fechado',text('ipca-mes-ant'))+
+        metric('Atual','—','',{status:ipcaStatus||'Aguardando'})+
+        metric('No ano',text('ipca-ano-v2'))+
+        metric('12 meses',text('ipca-acum-v2'))
+      )}
+      <div class="market-period-card-foot-v196">CDI e IPCA: séries públicas do Banco Central. O mês atual pode permanecer aguardando o fechamento oficial.</div>
+    </article>`;
+  }
+
+  function buildBrasil(){
+    const dolarStatus=statusFor('row-dolar');
+    const ibovStatus=statusFor('row-ibov');
+    return `<article class="market-period-card-v196 brasil">
+      ${cardHeader('Brasil — câmbio e bolsa','Nível atual separado da variação percentual','PTAX BCB / B3')}
+      ${gridHead()}
+      ${row(
+        nameCell('💵','Dólar BRL/USD','Cotação PTAX e desempenho em reais',text('dolar-cur-cot'))+
+        metric('Fechado',text('dolar-ant-cot'),'cotação de fechamento')+
+        metric('Atual',text('dolar-cur-var'),dolarStatus)+
+        metric('No ano',text('dolar-ano-v2'))+
+        metric('12 meses',text('dolar-acum-v2'))
+      )}
+      ${row(
+        nameCell('📈','Ibovespa','B3 · pontos e variação percentual',text('ibov-cur-pts'))+
+        metric('Fechado',text('ibov-ant-var'),text('ibov-ant-pts'))+
+        metric('Atual',text('ibov-cur-var'),ibovStatus)+
+        metric('No ano',text('ibov-ano-v2'))+
+        metric('12 meses',text('ibov-acum-v2'))
+      )}
+      <div class="market-period-card-foot-v196">O valor atual aparece junto ao indicador; as quatro colunas apresentam a comparação por período.</div>
+    </article>`;
+  }
+
+  function usToggle(){
+    return `<div class="market-period-us-toggle-v196" role="group" aria-label="Moeda das bolsas dos Estados Unidos">
+      ${['brl','usd','both'].map(mode=>`<button type="button" data-v196-currency="${mode}" class="${currency===mode?'active':''}" aria-pressed="${currency===mode?'true':'false'}">${mode==='both'?'Ambos':mode.toUpperCase()}</button>`).join('')}
+    </div>`;
+  }
+
+  function buildUs(){
+    const rows=[
+      {icon:'🌎',name:'S&P 500',sub:'Índice amplo dos Estados Unidos',points:text('sp-cur-pts'),closed:usPair('sp-ant-var'),current:usPair('sp-cur-var'),year:usPair('sp-ano-var'),accum:usPair('sp-acum-var'),status:statusFor('row-sp')},
+      {icon:'🏛️',name:'Dow Jones',sub:'Empresas blue chips',points:text('dow-cur-pts'),closed:usPair('dow-ant-var'),current:usPair('dow-cur-var'),year:usPair('dow-ano-var'),accum:usPair('dow-acum-var'),status:statusFor('row-dow')},
+      {icon:'💻',name:'Nasdaq',sub:'Empresas de tecnologia',points:text('nasdaq-cur-pts'),closed:usPair('nasdaq-ant-var'),current:usPair('nasdaq-cur-var'),year:usPair('nasdaq-ano-var'),accum:usPair('nasdaq-acum-var'),status:statusFor('row-nasdaq')}
+    ];
+    return `<article class="market-period-card-v196 usa">
+      ${cardHeader('Bolsas dos Estados Unidos','Rentabilidade em reais, dólares ou nas duas moedas','',usToggle())}
+      ${gridHead('Índice')}
+      ${rows.map(item=>row(
+        nameCell(item.icon,item.name,item.sub,item.points)+
+        usMetric('Fechado',item.closed)+
+        usMetric('Atual',item.current,item.status)+
+        usMetric('No ano',item.year)+
+        usMetric('12 meses',item.accum)
+      )).join('')}
+      <div class="market-period-card-foot-v196">BRL incorpora a variação cambial; USD representa o desempenho do índice em sua moeda de origem.</div>
+    </article>`;
+  }
+
+  function render(){
+    const shell=qs('#sec-painel-body .market-period-shell-v196') || qs('#sec-painel-body .indic-table-wrap');
+    const source=shell&&qs('.indic-table-v2',shell);
+    const host=document.getElementById('marketPeriodCardsV196');
+    if(!shell||!source||!host) return;
+
+    const wrapMode=['brl','usd','both'].find(mode=>shell.classList.contains(`us-mode-${mode}`));
+    if(wrapMode) currency=wrapMode;
+
+    host.innerHTML=buildTaxes()+buildBrasil()+buildUs();
+    shell.classList.add('market-cards-ready-v196');
+    document.documentElement.classList.add('market-period-cards-v196');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function schedule(){
+    clearTimeout(timer);
+    timer=setTimeout(render,60);
+  }
+
+  function bind(){
+    const host=document.getElementById('marketPeriodCardsV196');
+    if(host&&host.dataset.v196Bound!=='1'){
+      host.dataset.v196Bound='1';
+      host.addEventListener('click',event=>{
+        const button=event.target.closest('[data-v196-currency]');
+        if(!button) return;
+        currency=button.dataset.v196Currency||'brl';
+        const legacy=qs(`[data-analytic-currency="${currency}"]`);
+        if(legacy && legacy!==button) legacy.click();
+        render();
+      });
+    }
+    const source=qs('#sec-painel-body .indic-table-v2');
+    if(source&&!observer){
+      observer=new MutationObserver(schedule);
+      observer.observe(source,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','style']});
+    }
+  }
+
+  function setup(){bind();render();}
+  function init(){
+    setup();
+    [150,400,900,1600,3000,5200,8500].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',event=>{
+      if(event.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel,.section-toggle-btn')){
+        setTimeout(setup,80);
+        setTimeout(setup,320);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_PERIOD_CARDS_V196__={build:BUILD,render,get currency(){return currency;}};
+})();
