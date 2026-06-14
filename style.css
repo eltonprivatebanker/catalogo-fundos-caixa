@@ -30649,3 +30649,20 @@ html.evolution-toggle-fix-v183 #sec-graficos #evolutionToggle:focus-visible{
     border-top:1px solid rgba(255,255,255,.035)!important;
   }
 }
+
+
+/* ELTAUM_RANKING_ATTENTION_DEDUP_20260614_v195
+   Mantém apenas o painel lateral consultivo de atenção. O antigo bloco
+   "Pontos de atenção" do conteúdo principal repetia as mesmas piores leituras. */
+#rankingsSection #rankingGrid .ranking-risk-panel{
+  display:none!important;
+}
+#rankingsSection #rankingGrid.ranking-main-v136 .ranking-exec-secondary,
+#rankingsSection #rankingGrid .ranking-exec-secondary-single-v195{
+  grid-template-columns:minmax(0,1fr)!important;
+  width:100%!important;
+}
+#rankingsSection #rankingGrid .ranking-category-panel{
+  width:100%!important;
+  min-width:0!important;
+}

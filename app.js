@@ -8853,9 +8853,10 @@ async function sharePainelMercado(){
 
     const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
     const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
-    const riskRows=worst.map((r,i)=>worstMini(r,i,campo)).join('') || '<div class="ranking-empty-v50">Não há retornos negativos neste recorte.</div>';
-
-    grid.className='ranking-grid ranking-executive-v50';
+    // v195: o painel lateral de atenção já reúne piores leituras,
+    // negativos no ano e fundos sem dados. Evita duplicar a mesma informação
+    // dentro do bloco principal de rankings.
+    grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
       <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(insight(top[0],worst[0],periodo))}</p></section>
@@ -8869,9 +8870,8 @@ async function sharePainelMercado(){
           ${topRows}
         </div>
       </section>
-      <section class="ranking-exec-secondary">
+      <section class="ranking-exec-secondary ranking-exec-secondary-single-v195">
         <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Melhor fundo de cada categoria em 12 meses.</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
-        <div class="ranking-risk-panel"><div class="ranking-panel-head"><h3>Pontos de atenção</h3><p>Maiores quedas no recorte selecionado.</p></div><div class="ranking-risk-list">${riskRows}</div></div>
       </section>
     `;
   }
