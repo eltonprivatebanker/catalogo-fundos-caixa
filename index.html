@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164 mobile-ux-fixes-v165 fund-card-executive-v166 market-reference-executive-v167 pagination-stable-v168 pagination-no-desktop-scroll-v169 cumulative-ui-v170 catalog-table-sanitized-v171 market-ibov-perspective-v172 dolar-current-dedup-v172 market-us-legibility-v175 market-number-legibility-v176 rankings-mobile-stable-v177 mobile-copom-carousel-v178 ranking-universe-mobile-v178 rankings-mobile-readability-v179 desktop-ranking-insight-v181 mobile-market-layout-v180 evolution-desktop-v182 evolution-toggle-fix-v183 evolution-toggle-permanent-v186 mobile-ptax-month-carousel-v187 mobile-ptax-current-dedup-v188 mobile-reference-header-v191 mobile-brand-copy-v192 mobile-layout-uniform-v193 ranking-mobile-spacing-v194 ranking-attention-dedup-v195 ranking-category-exact-v197">
+<html lang="pt-br" class="app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164 mobile-ux-fixes-v165 fund-card-executive-v166 market-reference-executive-v167 pagination-stable-v168 pagination-no-desktop-scroll-v169 cumulative-ui-v170 catalog-table-sanitized-v171 market-ibov-perspective-v172 dolar-current-dedup-v172 market-us-legibility-v175 market-number-legibility-v176 rankings-mobile-stable-v177 mobile-copom-carousel-v178 ranking-universe-mobile-v178 rankings-mobile-readability-v179 desktop-ranking-insight-v181 mobile-market-layout-v180 evolution-desktop-v182 evolution-toggle-fix-v183 evolution-toggle-permanent-v186 mobile-ptax-month-carousel-v187 mobile-ptax-current-dedup-v188 mobile-reference-header-v191 mobile-brand-copy-v192 mobile-layout-uniform-v193 ranking-mobile-spacing-v194 ranking-attention-dedup-v195 ranking-category-exact-v197 risk-profile-filters-v198">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_RANKING_CATEGORY_EXACT_20260614_v197"/>
+<meta name="app-build" content="ELTAUM_RISK_PROFILE_FILTERS_20260614_v198"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=market-period-cards-v196" rel="stylesheet"/>
+<link href="style.css?v=risk-profile-filters-v198" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -72,7 +72,7 @@ html:not(.app-booting) .page{
 .desktop-anchor-link-v131:hover{color:#f0c777!important;border-color:rgba(200,151,58,.24);background:rgba(200,151,58,.075)}
 .desktop-anchor-link-v131.active{color:#f4cf82!important;border-color:rgba(200,151,58,.48);background:linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.075));box-shadow:inset 3px 0 0 #c8973a}
 .desktop-anchor-search-v135{margin-left:auto;border-color:rgba(200,151,58,.26);background:rgba(200,151,58,.06)}
-#rankingsSection .ranking-toolbar-v136{display:grid;grid-template-columns:minmax(180px,220px) minmax(150px,180px) minmax(0,1fr);align-items:end;gap:10px;width:100%;margin:12px 0 14px;padding:12px;border:1px solid rgba(255,255,255,.075);border-radius:13px;background:linear-gradient(180deg,rgba(17,21,38,.72),rgba(10,12,22,.62))}
+#rankingsSection .ranking-toolbar-v136{display:grid;grid-template-columns:minmax(180px,220px) minmax(150px,180px) minmax(160px,190px) minmax(0,1fr);align-items:end;gap:10px;width:100%;margin:12px 0 14px;padding:12px;border:1px solid rgba(255,255,255,.075);border-radius:13px;background:linear-gradient(180deg,rgba(17,21,38,.72),rgba(10,12,22,.62))}
 #rankingsSection .ranking-control-card-v136{display:flex;flex-direction:column;gap:6px;min-width:0}
 #rankingsSection .ranking-control-card-v136 label{color:#8d99b8;font:800 .56rem/1 'Inter',sans-serif;letter-spacing:.1em;text-transform:uppercase}
 #rankingsSection .ranking-select-v136{width:100%;min-height:38px;padding:8px 34px 8px 11px;border:1px solid rgba(200,151,58,.28);border-radius:9px;background:#0d1120;color:#eef2fb;font:650 .69rem/1.2 'Inter',sans-serif;outline:none;cursor:pointer;color-scheme:dark}
@@ -82,8 +82,8 @@ html:not(.app-booting) .page{
 #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{flex:0 0 auto;min-height:30px;padding:6px 10px;border:1px solid rgba(255,255,255,.085);border-radius:999px;background:#0e1222;color:#bfc9df;font:700 .60rem/1 'Inter',sans-serif;cursor:pointer;white-space:nowrap}
 #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip.active{border-color:rgba(200,151,58,.55);background:rgba(200,151,58,.14);color:#f0c777}
 #marketExecPanelV142{display:none!important}
-@media(max-width:1180px){#rankingsSection .ranking-toolbar-v136{grid-template-columns:minmax(170px,1fr) minmax(145px,.7fr)}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
-@media(max-width:900px){.desktop-anchor-nav-ui-v132{display:none!important}#rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr 1fr;padding:10px}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
+@media(max-width:1180px){#rankingsSection .ranking-toolbar-v136{grid-template-columns:minmax(170px,1fr) minmax(145px,.8fr) minmax(160px,.9fr)}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
+@media(max-width:900px){.desktop-anchor-nav-ui-v132{display:none!important}#rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr 1fr;padding:10px}#rankingsSection .ranking-risk-control-v198{grid-column:1/-1}#rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1}}
 @media(max-width:620px){#rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr}}
 </style>
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" onload="this.onload=null;this.rel='stylesheet'"/>
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer src="app.js?v=ranking-category-exact-v197"></script>
+<script defer src="app.js?v=risk-profile-filters-v198"></script>
 
 </head>
 <body>
@@ -271,6 +271,24 @@ html:not(.app-booting) .page{
       </div>
     </div>
 
+    <div class="catalog-risk-filter-v198" aria-label="Filtro por perfil de risco do fundo" role="group">
+      <label for="catalogRiskSelectV198">
+        <span>Perfil de risco do fundo</span>
+        <small>Combine com categoria, busca e demais filtros</small>
+      </label>
+      <div class="catalog-risk-select-wrap-v198">
+        <select id="catalogRiskSelectV198" aria-label="Selecionar perfil de risco do fundo no catálogo">
+          <option value="">Todos os perfis</option>
+          <option value="Conservador">Conservador</option>
+          <option value="Moderado">Moderado</option>
+          <option value="Arrojado">Arrojado</option>
+          <option value="Agressivo">Agressivo</option>
+          <option value="Sem classificação">Sem classificação</option>
+        </select>
+        <span aria-hidden="true">⌄</span>
+      </div>
+    </div>
+
     <div class="mobile-category-select-shell-v74" id="mobileCategorySelectShellV74" aria-label="Filtro de categoria no celular" role="group">
       <div class="mobile-category-select-head-v74">
         <span>Categoria</span>
@@ -293,6 +311,19 @@ html:not(.app-booting) .page{
       </label>
 
       <div class="mobile-extra-controls-v75" id="mobileExtraControlsV75" aria-label="Filtros complementares no celular" role="group">
+        <label class="mobile-risk-select-v198" for="mobileRiskSelectV198">
+          <span>Perfil de risco do fundo</span>
+          <select id="mobileRiskSelectV198" aria-label="Selecionar perfil de risco do fundo no celular">
+            <option value="">Todos os perfis</option>
+            <option value="Conservador">Conservador</option>
+            <option value="Moderado">Moderado</option>
+            <option value="Arrojado">Arrojado</option>
+            <option value="Agressivo">Agressivo</option>
+            <option value="Sem classificação">Sem classificação</option>
+          </select>
+          <span class="mobile-risk-arrow-v198" aria-hidden="true">⌄</span>
+        </label>
+
         <label class="mobile-pf-toggle-v75" for="mobileOnlyPfV75">
           <input type="checkbox" id="mobileOnlyPfV75"/>
           <span class="mobile-pf-toggle-mark-v75">✓</span>
@@ -411,6 +442,17 @@ html:not(.app-booting) .page{
         <option value="mes">Mês</option>
         <option value="ano">Ano</option>
         <option value="12m" selected>12 meses</option>
+      </select>
+    </div>
+    <div class="ranking-control-card-v136 ranking-risk-control-v198">
+      <label for="rankingRiskSelectV198">Perfil de risco</label>
+      <select id="rankingRiskSelectV198" class="ranking-select-v136" aria-label="Filtrar rankings pelo perfil de risco do fundo">
+        <option value="">Todos os perfis</option>
+        <option value="Conservador">Conservador</option>
+        <option value="Moderado">Moderado</option>
+        <option value="Arrojado">Arrojado</option>
+        <option value="Agressivo">Agressivo</option>
+        <option value="Sem classificação">Sem classificação</option>
       </select>
     </div>
     <div class="ranking-filter-row ranking-filter-row-compat-v136" id="rankingFilterRow" aria-label="Filtros rápidos de compatibilidade">

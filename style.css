@@ -31016,3 +31016,159 @@ html.market-period-cards-v196 .market-period-shell-v196.market-cards-ready-v196 
   }
   .market-period-card-foot-v196{padding:8px 12px 9px}
 }
+
+
+/* ==========================================================
+   ELTAUM_RISK_PROFILE_FILTERS_20260614_v198
+   Filtros independentes de perfil de risco no catálogo e rankings.
+========================================================== */
+.catalog-risk-filter-v198{
+  display:grid;
+  grid-template-columns:minmax(190px,1fr) minmax(220px,280px);
+  align-items:end;
+  gap:14px;
+  margin-top:12px;
+  padding:12px 14px;
+  border:1px solid rgba(255,255,255,.075);
+  border-radius:13px;
+  background:linear-gradient(180deg,rgba(17,21,38,.70),rgba(9,11,20,.62));
+}
+.catalog-risk-filter-v198>label{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
+}
+.catalog-risk-filter-v198>label span{
+  color:#dbe3f4;
+  font-size:.72rem;
+  font-weight:800;
+}
+.catalog-risk-filter-v198>label small{
+  color:#8794b2;
+  font-size:.60rem;
+  line-height:1.35;
+}
+.catalog-risk-select-wrap-v198{
+  position:relative;
+  min-width:0;
+}
+#catalogRiskSelectV198{
+  width:100%;
+  min-height:40px;
+  padding:9px 38px 9px 12px;
+  border:1px solid rgba(200,151,58,.30);
+  border-radius:10px;
+  background:#0d1120;
+  color:#eef2fb;
+  font:700 .72rem/1.2 'Inter',sans-serif;
+  outline:none;
+  appearance:none;
+  -webkit-appearance:none;
+  cursor:pointer;
+  color-scheme:dark;
+}
+#catalogRiskSelectV198:hover,
+#catalogRiskSelectV198:focus{
+  border-color:rgba(232,187,106,.70);
+  box-shadow:0 0 0 3px rgba(200,151,58,.09);
+}
+#catalogRiskSelectV198 option{background:#0d1120;color:#eef2fb}
+.catalog-risk-select-wrap-v198>span{
+  position:absolute;
+  right:14px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#e8bb6a;
+  pointer-events:none;
+}
+
+#rankingsSection .ranking-toolbar-v136{
+  grid-template-columns:minmax(180px,220px) minmax(150px,180px) minmax(160px,190px) minmax(0,1fr)!important;
+}
+#rankingsSection .ranking-risk-control-v198 .ranking-select-v136{
+  border-color:rgba(91,156,246,.28);
+}
+#rankingsSection .ranking-risk-control-v198 .ranking-select-v136:hover,
+#rankingsSection .ranking-risk-control-v198 .ranking-select-v136:focus{
+  border-color:rgba(143,180,255,.66);
+  box-shadow:0 0 0 3px rgba(91,156,246,.10);
+}
+.ranking-risk-pill-v198{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:7px 10px;
+  border-radius:999px;
+  border:1px solid rgba(91,156,246,.22);
+  background:rgba(91,156,246,.07);
+  color:#aebbd8;
+  font-size:.62rem;
+  white-space:nowrap;
+}
+.ranking-risk-pill-v198 strong{color:#dce7ff}
+
+.mobile-risk-select-v198{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+.mobile-risk-select-v198>span:first-child{
+  color:#9faac4;
+  font-size:.58rem;
+  font-weight:900;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+#mobileRiskSelectV198{
+  width:100%;
+  min-height:42px;
+  padding:9px 42px 9px 12px;
+  border-radius:12px;
+  border:1px solid rgba(200,151,58,.28);
+  background:#0d1020;
+  color:#edf1fb;
+  font:850 .78rem/1.2 'Inter',sans-serif;
+  outline:none;
+  appearance:none;
+  -webkit-appearance:none;
+  color-scheme:dark;
+}
+#mobileRiskSelectV198:focus{
+  border-color:rgba(232,187,106,.68);
+  box-shadow:0 0 0 3px rgba(200,151,58,.10);
+}
+#mobileRiskSelectV198 option{background:#111526;color:#edf1fb}
+.mobile-risk-arrow-v198{
+  position:absolute;
+  right:14px;
+  bottom:11px;
+  color:#e8bb6a;
+  font-size:1rem;
+  pointer-events:none;
+}
+
+@media(max-width:1180px){
+  #rankingsSection .ranking-toolbar-v136{
+    grid-template-columns:minmax(170px,1fr) minmax(145px,.8fr) minmax(160px,.9fr)!important;
+  }
+  #rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1!important}
+}
+@media(max-width:900px){
+  #rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr 1fr!important}
+  #rankingsSection .ranking-risk-control-v198{grid-column:1/-1}
+  #rankingsSection .ranking-filter-row-compat-v136{grid-column:1/-1!important}
+}
+@media(max-width:820px){
+  .catalog-risk-filter-v198{display:none!important}
+  .ranking-risk-pill-v198{width:100%;justify-content:center}
+}
+@media(min-width:821px){
+  .mobile-risk-select-v198{display:none!important}
+}
+@media(max-width:620px){
+  #rankingsSection .ranking-toolbar-v136{grid-template-columns:1fr!important}
+  #rankingsSection .ranking-risk-control-v198{grid-column:auto}
+  #rankingsSection .ranking-filter-row-compat-v136{grid-column:auto!important}
+}

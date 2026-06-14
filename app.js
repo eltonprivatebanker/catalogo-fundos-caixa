@@ -1956,11 +1956,44 @@ function fmtPlMi(v){
 
 
 let activeRankFilter = 'todos';
+let activeRankRisk = '';
 let activeRankView = 'top';
 let activeRankPeriods = { topFundos:'12m', destaques:'mes' };
 
 function normRankTxt(v){
   return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+}
+function normalizarPerfilRiscoV198(valor){
+  const n=normRankTxt(valor).replace(/[^A-Z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
+  if(!n) return 'sem-classificacao';
+  if(/\bCONSERVADOR\b/.test(n)) return 'conservador';
+  if(/\bMODERADO\b/.test(n)) return 'moderado';
+  if(/\bARROJADO\b/.test(n)) return 'arrojado';
+  if(/\bAGRESSIVO\b/.test(n)) return 'agressivo';
+  if(n.includes('SEM CLASSIFICACAO')||n.includes('NAO CLASSIFICADO')) return 'sem-classificacao';
+  return n.toLowerCase().replace(/\s+/g,'-');
+}
+function perfilRiscoCorrespondeV198(valor,filtro){
+  if(!String(filtro||'').trim()) return true;
+  return normalizarPerfilRiscoV198(valor)===normalizarPerfilRiscoV198(filtro);
+}
+function rotuloPerfilRiscoV198(filtro){
+  if(!String(filtro||'').trim()) return 'Todos os perfis';
+  const map={
+    conservador:'Conservador',moderado:'Moderado',arrojado:'Arrojado',
+    agressivo:'Agressivo','sem-classificacao':'Sem classificação'
+  };
+  return map[normalizarPerfilRiscoV198(filtro)]||'Todos os perfis';
+}
+function syncRiskProfileControlsV198(){
+  const catalogValue=typeof activeRisco!=='undefined'?(activeRisco||''):'';
+  ['catalogRiskSelectV198','mobileRiskSelectV198'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.value!==catalogValue) el.value=catalogValue;
+  });
+  const ranking=document.getElementById('rankingRiskSelectV198');
+  const rankValue=typeof activeRankRisk!=='undefined'?(activeRankRisk||''):'';
+  if(ranking&&ranking.value!==rankValue) ranking.value=rankValue;
 }
 function rankCampoPorPeriodo(periodo){
   if(periodo === 'dia') return 'Variacao Dia (%)';
@@ -2038,7 +2071,7 @@ function renderRankings(){
     const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
     return tokens.includes(activePerfil);
   });
-  if(activeRisco) base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
+  if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
 
   const ordenaCampo = (campo, asc=false) => base
     .filter(r=>toNum(r[campo])!==null)
@@ -2779,7 +2812,7 @@ function applyFilter(){
       const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
       if(!tokens.includes(activePerfil)) return false;
     }
-    if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
+    if(activeRisco&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRisco)) return false;
     if(q&&!rowMatchesCatalogSearch(r,q)) return false;
     return true;
   });
@@ -2809,6 +2842,7 @@ function applyFilter(){
     });
   }
   currentPage=1; expandedRows.clear(); render(); renderRankings(); updateCdiSortButtons();
+  syncRiskProfileControlsV198();
 }
 
 /* ════════════════════════════════════════════════════
@@ -5472,6 +5506,7 @@ document.addEventListener('DOMContentLoaded', function(){
     try{ activateFilterChip('#riscoFilters','data-risco',activeRisco||''); }catch(e){}
     const chk=qs('#toggleSemDados');
     if(chk) chk.checked=!!hideSemDados;
+    try{ syncRiskProfileControlsV198(); }catch(e){}
   }
 
   function setFilterPanelOpen(open){
@@ -8793,6 +8828,7 @@ async function sharePainelMercado(){
     return `<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">${periods.map(p=>`<button type="button" class="rank-period-tab ${active===p?'active':''}" data-rank-target="topFundos" data-rank-period="${p}">${p==='mes'?'Mês':p==='ano'?'Ano':'12M'}</button>`).join('')}</div>`;
   }
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
+  function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
     return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
@@ -8836,7 +8872,7 @@ async function sharePainelMercado(){
     let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
     try{
       if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
-      if(typeof activeRisco!=='undefined' && activeRisco) base=base.filter(r=>String(r['Perfil de Risco']||'').trim()===activeRisco);
+      if(typeof activeRankRisk!=='undefined' && activeRankRisk) base=base.filter(r=>perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
     }catch(e){}
     const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
     const top=sortBy(campo).slice(0,10);
@@ -8850,13 +8886,17 @@ async function sharePainelMercado(){
     top12.forEach(r=>{const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r;});
     const catTop=Object.entries(catMap).slice(0,8);
 
-    const categorias=(typeof kpisDashboard!=='undefined' && kpisDashboard && kpisDashboard.categorias) ? kpisDashboard.categorias : {};
-    const catPL=Object.entries(categorias).filter(([cat,d])=>{
-      try{
-        const okFiltro=window.rankCategoryMatchesV151 ? window.rankCategoryMatchesV151(cat, activeRankFilter) : true;
-        return okFiltro && numK(d?.pl_total)!==null && !Number.isNaN(numK(d?.pl_total));
-      }catch(e){return false}
-    }).sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
+    const categoriasFiltradas={};
+    base.forEach(r=>{
+      const cat=r['Categoria']||'Sem categoria';
+      const pl=numK(r['PL (milhoes R$)']||r['PL']||r['Patrimonio Liquido']);
+      if(!categoriasFiltradas[cat]) categoriasFiltradas[cat]={pl_total:0,qtd_ativos:0};
+      categoriasFiltradas[cat].qtd_ativos+=1;
+      if(pl!==null&&!Number.isNaN(pl)&&Number.isFinite(pl)) categoriasFiltradas[cat].pl_total+=pl;
+    });
+    const catPL=Object.entries(categoriasFiltradas)
+      .filter(([,d])=>d.qtd_ativos>0)
+      .sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
     const maiorPL=catPL[0];
 
     const cards=[
@@ -8878,7 +8918,7 @@ async function sharePainelMercado(){
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
-          <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}</div>
+          <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}${riskPill()}</div>
         </div>
         <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
           <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
@@ -12884,17 +12924,24 @@ if(!isSearchInput(el)) return;
   function syncRankingControls(){
     const cls=q('#rankingClassSelectV136');
     const period=q('#rankingPeriodSelectV136');
+    const risk=q('#rankingRiskSelectV198');
     if(cls && typeof activeRankFilter!=='undefined' && cls.value!==activeRankFilter) cls.value=activeRankFilter;
     if(period && typeof activeRankPeriods!=='undefined'){
       const p=activeRankPeriods.topFundos||'12m';
       if(period.value!==p) period.value=p;
     }
+    if(risk && typeof activeRankRisk!=='undefined' && risk.value!==(activeRankRisk||'')) risk.value=activeRankRisk||'';
+    try{syncRiskProfileControlsV198();}catch(e){}
   }
 
   function filteredRankingRows(includeMissing=false){
     if(typeof allRows==='undefined'||!Array.isArray(allRows)) return [];
     return allRows.filter(r=>includeMissing ? true : (typeof temDados==='function'?temDados(r):true)).filter(r=>{
-      try{return passaFiltroRanking(r);}catch(e){return true;}
+      try{
+        if(!passaFiltroRanking(r)) return false;
+        if(typeof activeRankRisk!=='undefined'&&activeRankRisk&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk)) return false;
+        return true;
+      }catch(e){return true;}
     });
   }
 
@@ -12913,8 +12960,8 @@ if(!isSearchInput(el)) return;
     const neg12=rows.filter(r=>{const n=nval(r['Acum. 12M (%)']);return n!==null&&n<0;});
     const negAno=rows.filter(r=>{const n=nval(r['Acum. Ano (%)']);return n!==null&&n<0;});
     const negMes=rows.filter(r=>{const n=nval(r['Acum. Mes (%)']);return n!==null&&n<0;});
-    const missing=(typeof allRows!=='undefined'&&Array.isArray(allRows)?allRows:[]).filter(r=>{
-      try{return (typeof temDados==='function'?!temDados(r):false)&&passaFiltroRanking(r);}catch(e){return false;}
+    const missing=filteredRankingRows(true).filter(r=>{
+      try{return typeof temDados==='function'?!temDados(r):false;}catch(e){return false;}
     });
     let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
     if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
@@ -12945,6 +12992,7 @@ if(!isSearchInput(el)) return;
   function bindRankingControls(){
     const cls=q('#rankingClassSelectV136');
     const period=q('#rankingPeriodSelectV136');
+    const risk=q('#rankingRiskSelectV198');
     if(cls&&cls.dataset.v151Bound!=='1'){
       cls.dataset.v151Bound='1';
       cls.addEventListener('change',()=>{
@@ -12956,6 +13004,13 @@ if(!isSearchInput(el)) return;
       period.dataset.v151Bound='1';
       period.addEventListener('change',()=>{
         try{activeRankPeriods.topFundos=period.value||'12m';}catch(e){}
+        renderRankingsAndAttention();
+      });
+    }
+    if(risk&&risk.dataset.v198Bound!=='1'){
+      risk.dataset.v198Bound='1';
+      risk.addEventListener('change',()=>{
+        try{activeRankRisk=risk.value||'';}catch(e){}
         renderRankingsAndAttention();
       });
     }
@@ -14491,4 +14546,34 @@ if(document.readyState === 'loading'){
 })();
 
 
-/* ELTAUM_RANKING_CATEGORY_EXACT_20260614_v197 */
+/* ELTAUM_RISK_PROFILE_FILTERS_20260614_v198 */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_RISK_PROFILE_FILTERS_20260614_v198';
+  function bindCatalogRiskSelect(id){
+    const select=document.getElementById(id);
+    if(!select||select.dataset.v198Bound==='1') return;
+    select.dataset.v198Bound='1';
+    select.addEventListener('change',()=>{
+      try{activeRisco=select.value||'';}catch(e){}
+      syncRiskProfileControlsV198();
+      try{applyFilter();}catch(e){console.error('v198 catalog risk filter',e);}
+    });
+  }
+  function setup(){
+    document.documentElement.classList.add('risk-profile-filters-v198');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    bindCatalogRiskSelect('catalogRiskSelectV198');
+    bindCatalogRiskSelect('mobileRiskSelectV198');
+    syncRiskProfileControlsV198();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup,{once:true});
+  else setup();
+  window.__ELTAUM_RISK_FILTERS_V198__={
+    build:BUILD,
+    normalize:normalizarPerfilRiscoV198,
+    matches:perfilRiscoCorrespondeV198,
+    sync:syncRiskProfileControlsV198
+  };
+})();
