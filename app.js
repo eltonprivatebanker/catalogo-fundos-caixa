@@ -395,8 +395,8 @@ function atualizarPoupancaCard(d, selicAtual){
 
   if(selic != null){
     textoNova = acima
-      ? 'a.m. · TR + 0,50% (Selic > 8,5%)'
-      : 'a.m. · TR + 70% da Selic meta anual, mensalizada (Selic ≤ 8,5%)';
+      ? 'TR + 0,50% a.m. · Selic > 8,5% a.a.'
+      : '70% da Selic + TR · Selic ≤ 8,5% a.a.';
   }
 
   if($('poupNewRuleText')){
@@ -404,7 +404,7 @@ function atualizarPoupancaCard(d, selicAtual){
   }
 
   if($('poupOldRuleText')){
-    $('poupOldRuleText').textContent = 'a.m. · TR + 0,50%';
+    $('poupOldRuleText').textContent = 'TR + 0,50% a.m.';
   }
 
   if($('poupQuickNote')){
@@ -413,10 +413,10 @@ function atualizarPoupancaCard(d, selicAtual){
         'Regra nova depende do nível da Selic. Para acumulado exato, conferir calculadora oficial do BCB.';
     }else if(acima){
       $('poupQuickNote').textContent =
-        `Com Selic em ${fmt(selic)}, a regra nova usa TR + 0,50% a.m.; a regra antiga também usa TR + 0,50% a.m.`;
+        `Cenário atual: com Selic em ${fmt(selic)}, aplica-se TR + 0,50% a.m.`;
     }else{
       $('poupQuickNote').textContent =
-        `Com Selic em ${fmt(selic)}, a regra nova usa TR + 70% da Selic meta anual, mensalizada; a regra antiga mantém TR + 0,50% a.m.`;
+        `Cenário atual: com Selic em ${fmt(selic)}, a regra vigente rende 70% da Selic + TR.`;
     }
   }
 
@@ -13484,7 +13484,7 @@ function togglePoupancaExecutiveV167(force){
   const explain = document.getElementById('poupExplain');
   if(explain) explain.classList.toggle('open', open);
   if(btn){
-    btn.textContent = open ? 'Ocultar regras e cenários' : 'Ver regras e cenários';
+    btn.textContent = open ? 'Ocultar detalhes' : 'Ver explicação e cenários';
     btn.setAttribute('aria-expanded', String(open));
   }
 
@@ -13509,7 +13509,7 @@ function initMarketReferenceExecutiveV167(){
   }
   const btn = document.getElementById('poupExpandBtn');
   if(btn){
-    btn.textContent = 'Ver regras e cenários';
+    btn.textContent = 'Ver explicação e cenários';
     btn.setAttribute('aria-expanded','false');
   }
   toggleCopomCalendarV167(false);
