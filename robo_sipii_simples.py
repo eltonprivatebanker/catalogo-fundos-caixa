@@ -1,6 +1,12 @@
 """
-ROBÔ SIPII CAIXA — v18.2 (Automação integral GitHub)
+ROBÔ SIPII CAIXA — v18.3 (Automação integral GitHub)
 ==========================================================
+Novidades v18.3:
+  + Corrige o vínculo de fundos com nomes abreviados no SIPII
+  + Cria índices completos por código e CNPJ para metadados do fundos.json
+  + Inclui fallback seguro para Hashdex Nasdaq Crypto e Carteira Quantitativa Quali
+  + Mantém a busca aproximada anterior como compatibilidade
+
 Novidades v18.2:
   + Sincroniza o gráfico IPCA 12M × meta com o acumulado oficial mais recente
   + Mantém uma única competência mensal na série usada pelo gráfico
@@ -781,6 +787,8 @@ def _inspecionar_campos_fundos_json(lista):
 def _parsear_lista_fundos(lista):
     indice_exato = {}
     indice_palavras = []
+    indice_codfundo = {}
+    indice_cnpj_completo = {}
     mapa_cnpj = {}
 
     for f in lista:
@@ -870,7 +878,12 @@ def _parsear_lista_fundos(lista):
             if palavras:
                 indice_palavras.append((frozenset(palavras), dados))
 
+            if codfundo:
+                chave_cod = str(codfundo).lstrip("0") or str(codfundo)
+                indice_codfundo[chave_cod] = dados
+
             if cnpj_limpo:
+                indice_cnpj_completo[cnpj_limpo] = dados
                 mapa_cnpj[cnpj_limpo] = {
                     "codfundo": codfundo,
                     "nome": nome,
@@ -881,34 +894,69 @@ def _parsear_lista_fundos(lista):
             log(f"[Fundos.json] Registro ignorado por erro: {e}")
             continue
 
-    return {"exato": indice_exato, "palavras": indice_palavras, "cnpj": mapa_cnpj}
+    return {
+        "exato": indice_exato,
+        "palavras": indice_palavras,
+        "codfundo": indice_codfundo,
+        "cnpj_completo": indice_cnpj_completo,
+        "cnpj": mapa_cnpj,
+    }
+
+def _tokens_equivalentes(a, b):
+    """Considera abreviações longas equivalentes sem relaxar demais o matching."""
+    if a == b:
+        return True
+    if len(a) >= 5 and len(b) >= 5:
+        return a.startswith(b) or b.startswith(a)
+    return False
+
+def _score_palavras_fundo(palavras_sipii, palavras_json):
+    """Pontuação compatível com a regra antiga, com bônus seguro para abreviações."""
+    if not palavras_sipii or not palavras_json:
+        return 0.0
+    usadas = set()
+    equivalentes = 0
+    for token_sipii in palavras_sipii:
+        for token_json in palavras_json:
+            if token_json in usadas:
+                continue
+            if _tokens_equivalentes(token_sipii, token_json):
+                usadas.add(token_json)
+                equivalentes += 1
+                break
+    return equivalentes / max(len(palavras_sipii), len(palavras_json))
 
 def _buscar_meta_json(nome_sipii, indice_json):
-    if not indice_json: return None
+    if not indice_json:
+        return None
+
     chave = _normalizar_nome_fundo(nome_sipii)
-    if chave in indice_json["exato"]:
+    if chave in indice_json.get("exato", {}):
         return indice_json["exato"][chave]
+
+    # Fallbacks estáticos são usados antes da aproximação porque apontam para
+    # códigos oficiais confirmados e evitam falso positivo em nomes abreviados.
+    cod_fb, razao_fb = _buscar_codfundo_por_nome(nome_sipii, indice_json)
+    if cod_fb:
+        chave_cod = str(cod_fb).lstrip("0") or str(cod_fb)
+        meta_cod = indice_json.get("codfundo", {}).get(chave_cod)
+        if meta_cod:
+            log(f"  [Meta] Fallback nome→codfundo {cod_fb} para '{nome_sipii[:55]}' ({razao_fb})")
+            return meta_cod
+
     palavras_sipii = _palavras_chave_fundo(nome_sipii)
-    if not palavras_sipii: return None
+    if not palavras_sipii:
+        return None
+
     melhor_meta, melhor_score = None, 0.0
-    for (palavras_json, dados) in indice_json["palavras"]:
-        if not palavras_json: continue
-        score = len(palavras_sipii & palavras_json) / max(len(palavras_sipii), len(palavras_json))
+    for (palavras_json, dados) in indice_json.get("palavras", []):
+        score = _score_palavras_fundo(palavras_sipii, palavras_json)
         if score > melhor_score:
             melhor_score = score
             melhor_meta = dados
+
     if melhor_score >= 0.65:
         return melhor_meta
-
-    # ★ v17.2 — Fallback estático para fundos sem CNPJ no SIPII
-    # Tenta o mapeamento _CODFUNDO_FALLBACK quando a busca por palavras não encontra
-    cod_fb, razao_fb = _buscar_codfundo_por_nome(nome_sipii, indice_json)
-    if cod_fb:
-        # Localiza o registro no índice pelo codfundo
-        for (_, dados) in indice_json["palavras"]:
-            if str(dados.get("codfundo","")).lstrip("0") == str(cod_fb).lstrip("0"):
-                log(f"  [Meta] Fallback nome→codfundo {cod_fb} para '{nome_sipii[:40]}' ({razao_fb})")
-                return dados
     return None
 
 def buscar_fundos_json(headers):
@@ -994,6 +1042,9 @@ _CODFUNDO_FALLBACK = {
     "transferencia voluntaria":  "5413",   # TRANSF VOLUNTARIAS POLIS FIC FIF RF CP
     "brasil idka ipca 2a":       "5825",   # BRASIL IDKA IPCA 2A TP FIF RF LP
     "idka ipca 2a":              "5825",
+    "hashdex nasdaq crypto":     "7980",   # EXPERT HASHDEX NASDAQ CRYPTO INDEX MM
+    "carteira quant quali":      "7991",   # CARTEIRA QUANTITATIVA QUALI MM LP
+    "carteira quantitativa quali":"7991",
     # RS TITULOS PUBLICOS e BRASIL RF REFER DI LONGO: não estão na API CAIXA
 }
 
