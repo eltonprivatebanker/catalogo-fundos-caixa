@@ -371,6 +371,14 @@ function atualizarPoupancaCard(d, selicAtual){
     $('mc-poup').textContent = valorNova != null ? fmt(valorNova) : '—';
   }
 
+  if($('poupTodayCompactV199')){
+    $('poupTodayCompactV199').textContent = valorNova != null ? fmt(valorNova) : '—';
+  }
+
+  if($('poupYearCompactV199')){
+    $('poupYearCompactV199').textContent = acumNova != null ? formatPctCard(acumNova) : '—';
+  }
+
   if($('poupOldMonthly')){
     $('poupOldMonthly').textContent = valorAntiga != null ? fmt(valorAntiga) : '—';
   }
