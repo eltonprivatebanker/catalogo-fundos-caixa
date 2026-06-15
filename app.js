@@ -14585,3 +14585,93 @@ if(document.readyState === 'loading'){
     sync:syncRiskProfileControlsV198
   };
 })();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v204 — Toggle "Ocultar fundos sem dados" estável
+   Causa: o patch v127 recriava o checkbox depois do listener original,
+   fazendo o controle mudar visualmente sem atualizar hideSemDados/applyFilter.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_STABLE_20260615_v204';
+
+  function bindToggleSemDadosV204(){
+    const input = document.getElementById('toggleSemDados');
+    if(!input) return false;
+
+    document.documentElement.classList.add('toggle-sem-dados-stable-v204');
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    if(input.type !== 'checkbox') input.type = 'checkbox';
+
+    const wrap = input.closest('.toggle-wrap');
+    if(wrap){
+      wrap.classList.add('toggle-sem-dados-v204');
+      wrap.setAttribute('role','group');
+    }
+
+    const syncVisual = () => {
+      const checked = !!input.checked;
+      if(wrap) wrap.classList.toggle('is-on', checked);
+      const label = input.closest('label');
+      if(label){
+        label.setAttribute('role','switch');
+        label.setAttribute('aria-checked', checked ? 'true' : 'false');
+      }
+    };
+
+    if(input.dataset.v204Bound !== '1'){
+      input.dataset.v204Bound = '1';
+      input.addEventListener('change', function(){
+        const checked = !!input.checked;
+        try{ hideSemDados = checked; }catch(e){}
+        try{ window.hideSemDados = checked; }catch(e){}
+        try{ window.ocultarSemDados = checked; }catch(e){}
+        try{ window.hideNoData = checked; }catch(e){}
+        syncVisual();
+        try{
+          if(typeof applyFilter === 'function') applyFilter();
+          else if(typeof window.applyFilter === 'function') window.applyFilter();
+        }catch(err){
+          console.warn('[v204 toggleSemDados] falha ao aplicar filtro', err);
+        }
+      });
+    }
+
+    // Torna toda a cápsula clicável, sem duplo acionamento no switch/texto.
+    if(wrap && wrap.dataset.v204ClickBound !== '1'){
+      wrap.dataset.v204ClickBound = '1';
+      wrap.addEventListener('click', function(ev){
+        if(ev.target === input || ev.target.closest('label')) return;
+        ev.preventDefault();
+        input.click();
+      });
+    }
+
+    // O estado real da variável do catálogo prevalece quando disponível.
+    try{ input.checked = !!hideSemDados; }catch(e){}
+    syncVisual();
+    return true;
+  }
+
+  function scheduleV204(){
+    [0,180,550,1300,2800].forEach(ms => setTimeout(bindToggleSemDadosV204, ms));
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', scheduleV204, {once:true});
+  }else{
+    scheduleV204();
+  }
+
+  window.__ELTAUM_TOGGLE_SEM_DADOS_V204__ = {
+    sync: bindToggleSemDadosV204,
+    state(){
+      const input=document.getElementById('toggleSemDados');
+      return {checked:!!input?.checked,bound:input?.dataset.v204Bound||'',build:BUILD};
+    }
+  };
+})();
