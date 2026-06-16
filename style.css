@@ -32022,3 +32022,101 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
   #sec-mercado .savings-balanced-v207 .savings-current-v207{width:100%!important;display:flex!important}
   #sec-mercado .savings-balanced-v207 .savings-actions-v207{grid-template-columns:1fr!important}
 }
+
+
+/* ==========================================================
+   ELTAUM_SAVINGS_TABLE_20260616_v208
+   Remove o gráfico e substitui por comparação textual compacta.
+========================================================== */
+#sec-mercado .savings-table-v208 .savings-summary-v207{
+  grid-template-columns:repeat(2,minmax(190px,230px))!important;
+  align-items:stretch!important;
+}
+#sec-mercado .savings-table-v208 .savings-reading-v207{
+  background:rgba(200,151,58,.055)!important;
+  border-color:rgba(200,151,58,.20)!important;
+}
+#sec-mercado .savings-table-v208 .savings-reading-v207 .poup-quick-note::first-letter{text-transform:uppercase}
+#sec-mercado .savings-table-v208 .savings-actions-v207{
+  justify-content:flex-start!important;
+}
+#sec-mercado .savings-table-v208 .savings-actions-v207 .market-reference-source-v167{
+  margin-left:0!important;
+}
+#sec-mercado .savings-table-v208 .savings-scenarios-v208{
+  padding:16px!important;
+}
+#sec-mercado .savings-table-v208 .savings-scenario-grid-v208{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-top:12px;
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-v208{
+  min-width:0;
+  padding:13px 14px;
+  border:1px solid rgba(255,255,255,.085);
+  border-radius:12px;
+  background:rgba(8,11,21,.68);
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-v208.current{
+  border-color:rgba(91,156,246,.34);
+  background:linear-gradient(180deg,rgba(91,156,246,.10),rgba(8,11,21,.68));
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-head-v208{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding-bottom:10px;
+  margin-bottom:8px;
+  border-bottom:1px solid rgba(255,255,255,.07);
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-head-v208 span{
+  color:#edf1fb;
+  font-size:.75rem;
+  font-weight:750;
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-head-v208 small{
+  color:#8e99b7;
+  font-size:.56rem;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-v208 dl{
+  display:grid;
+  gap:8px;
+  margin:0;
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-v208 dl>div{
+  display:grid;
+  gap:3px;
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-v208 dt{
+  color:#8995b2;
+  font-size:.56rem;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+#sec-mercado .savings-table-v208 .savings-scenario-card-v208 dd{
+  margin:0;
+  color:#e8edf8;
+  font-size:.68rem;
+  font-weight:650;
+  line-height:1.45;
+}
+#sec-mercado .savings-table-v208 .poup-scenario-note{
+  margin-top:10px;
+  padding-top:10px;
+  border-top:1px solid rgba(255,255,255,.07);
+}
+@media(max-width:820px){
+  #sec-mercado .savings-table-v208 .savings-scenario-grid-v208{grid-template-columns:1fr!important}
+  #sec-mercado .savings-table-v208 .savings-actions-v207{grid-template-columns:1fr 1fr!important}
+}
+@media(max-width:440px){
+  #sec-mercado .savings-table-v208 .savings-summary-v207{grid-template-columns:1fr!important}
+  #sec-mercado .savings-table-v208 .savings-actions-v207{grid-template-columns:1fr!important}
+}

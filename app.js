@@ -173,15 +173,10 @@ function calcularPoupancaAntigaMensal(trMensal=0){
 }
 
 function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
-  const canvas = $('poupScenarioChart');
-  if(!canvas || typeof Chart === 'undefined') return;
-
   const selicNum = getFirstNumber(selic);
   const valorNovaNum = getFirstNumber(valorNova);
   const valorAntigaNum = getFirstNumber(valorAntiga);
 
-  // A TR não é fixa no tempo. Para o gráfico ficar coerente com o card de hoje,
-  // usamos uma TR estimada apenas de forma didática, derivada do rendimento atual.
   let trEstimada = 0;
   if(selicNum != null && valorNovaNum != null){
     const baseNovaHoje = selicNum > 8.5
@@ -192,143 +187,45 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
     trEstimada = Math.max(0, valorAntigaNum - 0.5);
   }
 
-  const cenariosBase = [4, 6, 8.5];
-  if(selicNum != null && !cenariosBase.some(v => Math.abs(v - selicNum) < 0.01)){
-    cenariosBase.push(selicNum);
-  }
+  const mensalNova4 = calcularPoupancaNovaMensalPorSelic(4, trEstimada);
+  const mensalNova85 = calcularPoupancaNovaMensalPorSelic(8.5, trEstimada);
+  const mensalAntiga = calcularPoupancaAntigaMensal(trEstimada);
+  const mensalNovaAtual = selicNum != null
+    ? calcularPoupancaNovaMensalPorSelic(selicNum, trEstimada)
+    : valorNovaNum;
+  const mensalAntigaAtual = valorAntigaNum != null ? valorAntigaNum : mensalAntiga;
 
-  const cenarios = cenariosBase.map(v => {
-    const isHoje = selicNum != null && Math.abs(v - selicNum) < 0.01;
-    return {
-      selic: v,
-      // Chart.js interpreta array de strings como rótulo em múltiplas linhas.
-      // Assim evitamos aparecer o texto literal "\\n" no gráfico.
-      label: isHoje ? ['Hoje', fmt(v)] : ['Selic', fmt(v)]
-    };
-  });
-
-  const novaVals = cenarios.map(c => calcularPoupancaNovaMensalPorSelic(c.selic, trEstimada));
-  const antigaVals = cenarios.map(() => calcularPoupancaAntigaMensal(trEstimada));
-
-  const labels = cenarios.map(c => c.label);
-
-  const chartData = {
-    labels,
-    datasets:[
-      {
-        label:'Regra nova',
-        data:novaVals,
-        backgroundColor:'rgba(91,156,246,.62)',
-        borderColor:'rgba(91,156,246,.95)',
-        borderWidth:1,
-        borderRadius:6,
-        maxBarThickness:26
-      },
-      {
-        label:'Regra antiga',
-        data:antigaVals,
-        backgroundColor:'rgba(200,151,58,.52)',
-        borderColor:'rgba(232,187,106,.95)',
-        borderWidth:1,
-        borderRadius:6,
-        maxBarThickness:26
-      }
-    ]
+  const setText = (id, value) => {
+    const el = $(id);
+    if(el) el.textContent = value;
   };
+  const formatMensal = (v) => Number.isFinite(Number(v)) ? `${fmt(Number(v))} a.m.` : '—';
 
-  const maxY = Math.max(...novaVals, ...antigaVals, 0.8);
-  const chartOptions = {
-    responsive:true,
-    maintainAspectRatio:false,
-    animation:{duration:450},
-    plugins:{
-      legend:{
-        display:true,
-        position:'bottom',
-        labels:{
-          color:'#aeb7cf',
-          boxWidth:10,
-          boxHeight:10,
-          padding:10,
-          font:{size:10,family:'Inter'}
-        }
-      },
-      tooltip:{
-        callbacks:{
-          label:function(ctx){
-            const val = Number(ctx.raw);
-            return `${ctx.dataset.label}: ${Number.isFinite(val) ? fmt(val) : '—'} a.m.`;
-          },
-          afterBody:function(){
-            return trEstimada > 0 ? `TR estimada usada: ${fmt(trEstimada)}` : 'Simulação sem TR estimada';
-          }
-        }
-      }
-    },
-    scales:{
-      x:{
-        grid:{display:false},
-        ticks:{
-          color:'#9faac4',
-          font:{size:10,family:'JetBrains Mono'}
-        }
-      },
-      y:{
-        beginAtZero:true,
-        suggestedMax:maxY * 1.18,
-        grid:{color:'rgba(255,255,255,.055)'},
-        ticks:{
-          color:'#9faac4',
-          font:{size:10,family:'JetBrains Mono'},
-          callback:function(value){ return Number(value).toFixed(2).replace('.',',') + '%'; }
-        }
-      }
-    }
-  };
-
-  if(poupScenarioChart){
-    poupScenarioChart.data = chartData;
-    poupScenarioChart.options = chartOptions;
-    poupScenarioChart.update();
-  }else{
-    poupScenarioChart = new Chart(canvas, {
-      type:'bar',
-      data:chartData,
-      options:chartOptions
-    });
-  }
-
-  if($('poupScenarioStatus')){
-    $('poupScenarioStatus').textContent = selicNum != null ? `Selic ${fmt(selicNum)}` : 'Selic —';
-  }
-
-  if($('poupScenarioToday')){
-    if(selicNum == null){
-      $('poupScenarioToday').textContent = 'Aguardando Selic';
-    }else if(selicNum > 8.5){
-      $('poupScenarioToday').textContent = 'Mesma regra hoje';
-    }else{
-      $('poupScenarioToday').textContent = 'Regra nova menor';
-    }
-  }
+  setText('poupScenarioNew4', `70% da Selic + TR (${formatMensal(mensalNova4)})`);
+  setText('poupScenarioOld4', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
+  setText('poupScenarioNew85', `70% da Selic + TR (${formatMensal(mensalNova85)})`);
+  setText('poupScenarioOld85', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
+  setText('poupScenarioCurrentTitle', selicNum != null ? `Selic atual: ${fmt(selicNum)} a.a.` : 'Cenário atual');
+  setText('poupScenarioCurrentNew', formatMensal(mensalNovaAtual));
+  setText('poupScenarioCurrentOld', formatMensal(mensalAntigaAtual));
+  setText('poupScenarioStatus', selicNum != null ? `Selic ${fmt(selicNum)}` : 'Selic —');
 
   if($('poupScenarioSummary')){
     if(selicNum == null){
-      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, o gráfico compara a regra nova com a regra antiga em cenários selecionados.';
+      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, esta tabela mostrará como as duas regras se comportam em diferentes cenários.';
     }else if(selicNum > 8.5){
-      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, as duas regras convergem: TR + 0,50% a.m. A diferença aparece principalmente quando a Selic fica em 8,50% a.a. ou abaixo.`;
+      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, as duas regras utilizam TR + 0,50% a.m. A diferença aparece quando a Selic fica em 8,50% a.a. ou abaixo.`;
     }else{
-      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, a regra nova usa TR + 70% da Selic meta anual, mensalizada; a regra antiga mantém TR + 0,50% a.m.`;
+      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, a regra vigente passa a usar 70% da Selic + TR, enquanto a regra pré-2012 mantém TR + 0,50% a.m.`;
     }
   }
 
   if($('poupScenarioNote')){
     $('poupScenarioNote').textContent = trEstimada > 0
-      ? `Estimativa didática: gráfico mantém TR estimada de ${fmt(trEstimada)} a.m. apenas para comparação visual.`
-      : 'Estimativa didática: gráfico sem TR estimada. Para valor exato por período, conferir a calculadora do BCB.';
+      ? `Comparação didática com TR estimada de ${fmt(trEstimada)} a.m. A TR varia conforme o período de aniversário.`
+      : 'Comparação didática sem TR estimada. Para valor exato, consulte a Calculadora do Cidadão do BCB.';
   }
 }
-
 function atualizarPoupancaCard(d, selicAtual){
   const c = d?.cards || {};
   const nova = c.poupanca_nova || d?.poupanca_nova || d?.poupanca?.nova || {};
@@ -13509,24 +13406,6 @@ function togglePoupancaExecutiveV167(force){
     btn.setAttribute('aria-expanded', String(open));
   }
 
-  if(open){
-    const chartWrap = panel.querySelector('.poup-scenario-chart-wrap');
-    const chartCanvas = document.getElementById('poupScenarioChart');
-    if(chartWrap){ chartWrap.style.width = '100%'; }
-    if(chartCanvas){
-      chartCanvas.style.width = '100%';
-      chartCanvas.style.height = '100%';
-    }
-    requestAnimationFrame(function(){
-      requestAnimationFrame(function(){
-        try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
-        try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update('none'); }catch(e){}
-        setTimeout(function(){
-          try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
-        }, 160);
-      });
-    });
-  }
   return false;
 }
 
