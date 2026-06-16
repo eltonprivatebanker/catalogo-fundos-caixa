@@ -292,8 +292,8 @@ function atualizarPoupancaCard(d, selicAtual){
 
   if(selic != null){
     textoNova = acima
-      ? 'TR + 0,50% a.m. · Selic > 8,5% a.a.'
-      : '70% da Selic + TR · Selic ≤ 8,5% a.a.';
+      ? 'Com Selic acima de 8,5%: TR + 0,50% a.m.'
+      : 'Com Selic em até 8,5%: 70% da Selic + TR';
   }
 
   if($('poupNewRuleText')){
@@ -301,7 +301,7 @@ function atualizarPoupancaCard(d, selicAtual){
   }
 
   if($('poupOldRuleText')){
-    $('poupOldRuleText').textContent = 'TR + 0,50% a.m.';
+    $('poupOldRuleText').textContent = 'Rendimento: TR + 0,50% a.m.';
   }
 
   if($('poupQuickNote')){
@@ -310,10 +310,10 @@ function atualizarPoupancaCard(d, selicAtual){
         'Regra nova depende do nível da Selic. Para acumulado exato, conferir calculadora oficial do BCB.';
     }else if(acima){
       $('poupQuickNote').textContent =
-        `Cenário atual: com Selic em ${fmt(selic)}, aplica-se TR + 0,50% a.m.`;
+        `Com Selic em ${fmt(selic)}, as duas regras rendem TR + 0,50% a.m.`;
     }else{
       $('poupQuickNote').textContent =
-        `Cenário atual: com Selic em ${fmt(selic)}, a regra vigente rende 70% da Selic + TR.`;
+        `Com Selic em ${fmt(selic)}, a regra vigente rende 70% da Selic + TR.`;
     }
   }
 
