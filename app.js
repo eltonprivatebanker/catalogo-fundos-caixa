@@ -3135,9 +3135,9 @@ function buildDetailQuickActions(row, urlFund){
     : '';
 
   const buttons = [
-    mkBtn(boletim?.url, 'detail-action-primary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
-    mkBtn(lamina?.url, 'detail-action-secondary', '📄', 'Lâmina', 'Abrir lâmina'),
+    mkBtn(lamina?.url, 'detail-action-primary', '📄', 'Lâmina', 'Abrir lâmina'),
     mkBtn(regulamento?.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento'),
+    mkBtn(boletim?.url, 'detail-action-secondary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
     mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página do fundo', 'Abrir página do fundo'),
   ].filter(Boolean).join('');
 
@@ -3175,7 +3175,12 @@ function detailMoneyV158(value){
 function detailPercentV158(value){
   const raw = String(value ?? '').trim();
   if(!raw || raw === '—') return '—';
-  return /%/.test(raw) ? raw : `${raw}%`;
+  let normalized = raw.replace(/%/g,'').replace(/\s/g,'');
+  if(normalized.includes(',') && normalized.includes('.')) normalized = normalized.replace(/\./g,'').replace(',','.');
+  else normalized = normalized.replace(',','.');
+  const number = Number(normalized);
+  if(!Number.isFinite(number)) return /%/.test(raw) ? raw : `${raw}%`;
+  return `${number.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}% a.a.`;
 }
 
 function detailBoolV158(value){
@@ -3201,6 +3206,21 @@ function detailAudienceV158(value){
   return [...new Set(values.map(v=>String(v).trim()).filter(Boolean))];
 }
 
+function detailAdvanceSummaryV206(statusClass, text){
+  const raw = String(text ?? '').trim();
+  if(statusClass === 'negative') return 'Não';
+  if(statusClass === 'unknown') return raw && raw !== '—' ? raw : 'Não informado';
+  const match = raw.match(/(\d+(?:[.,]\d+)?)\s*%/);
+  return match ? `Sim · ${match[1].replace('.',',')}%` : 'Sim';
+}
+
+function detailObservationV206(r){
+  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
+  return observation
+    ? `<aside class="detail-observation-v158 detail-observation-v206"><span>Informação operacional importante</span><p>${htmlAttr(observation)}</p></aside>`
+    : '';
+}
+
 function buildDetailExecutiveV158(r){
   const d = obterDadosOperacionaisFundo(r);
   const capCls = classeStatusOperacional(d.captacao.status,'captacao');
@@ -3219,8 +3239,10 @@ function buildDetailExecutiveV158(r){
   const audience = detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo']));
   const automatic = detailBoolV158(detailValueV158(r,['Movimentação Automática','Movimentacao Automatica']));
   const grace = detailBoolV158(detailValueV158(r,['Carência','Carencia']));
-  const asg = detailBoolV158(detailValueV158(r,['ASG']));
-  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
+  const asgRaw = detailBoolV158(detailValueV158(r,['ASG']));
+  const asg = asgRaw.state === 'off' ? {...asgRaw,label:'Não identificada'} : asgRaw;
+  const capLabel = capCls === 'positive' ? 'Sim' : capCls === 'negative' ? 'Não' : 'Não informado';
+  const advanceSummary = detailAdvanceSummaryV206(adiCls,d.adiantamento.texto);
 
   const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
   const audienceHtml = audience.length
@@ -3228,15 +3250,15 @@ function buildDetailExecutiveV158(r){
     : '<span class="detail-empty-v158">Não informado</span>';
   const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
 
-  return `<div class="detail-executive-v158">
+  return `<div class="detail-executive-v158 detail-executive-v206">
     <section class="detail-summary-v158" aria-label="Resumo executivo do fundo">
       <div class="detail-section-head-v158"><div><span>Visão geral</span><strong>Características principais</strong></div><small>${r?.__fundosMeta?'Cadastro oficial integrado':'Dados disponíveis no catálogo'}</small></div>
-      <div class="detail-summary-grid-v158">
-        <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
+      <div class="detail-summary-grid-v158 detail-summary-grid-v206">
         <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
-        <div class="detail-summary-item-v158"><span>Perfil</span><strong>${htmlAttr(profile)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Perfil de risco</span><strong>${htmlAttr(profile)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
         <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
-        <div class="detail-summary-item-v158"><span>Captação</span>${statusValue(d.captacao.texto,capCls)}</div>
+        <div class="detail-summary-item-v158"><span>Aberto para captação?</span>${statusValue(capLabel,capCls)}</div>
       </div>
     </section>
 
@@ -3248,20 +3270,20 @@ function buildDetailExecutiveV158(r){
           <div class="detail-flow-v158">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
             <i>→</i>
-            <div><span>Conversão</span><strong>${htmlAttr(conversionApp)}</strong></div>
+            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionApp)}</strong></div>
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Inicial</b>${htmlAttr(appInitial)}</span><span><b>Adicional</b>${htmlAttr(appAdditional)}</span></div>
+          <div class="detail-movement-meta-v158"><span><b>Aplicação inicial</b>${htmlAttr(appInitial)}</span><span><b>Aplicação adicional</b>${htmlAttr(appAdditional)}</span></div>
         </article>
         <article class="detail-movement-card-v158 redemption">
           <div class="detail-movement-title-v158"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
           <div class="detail-flow-v158 three">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
             <i>→</i>
-            <div><span>Conversão</span><strong>${htmlAttr(conversionRed)}</strong></div>
+            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionRed)}</strong></div>
             <i>→</i>
-            <div><span>Pagamento</span><strong>${htmlAttr(paymentRed)}</strong></div>
+            <div><span>Crédito em conta</span><strong>${htmlAttr(paymentRed)}</strong></div>
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(d.adiantamento.texto)}</span></div>
+          <div class="detail-movement-meta-v158"><span><b>Resgate mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(advanceSummary)}</span></div>
         </article>
       </div>
     </section>
@@ -3273,16 +3295,15 @@ function buildDetailExecutiveV158(r){
           <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
           <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
           <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
-          <div><dt>Código do fundo</dt><dd>${htmlAttr(code)}</dd></div>
+          <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
         </dl>
       </section>
       <section class="detail-info-card-v158" aria-label="Público e enquadramento">
         <div class="detail-card-head-v158"><span>Público e enquadramento</span></div>
         <div class="detail-audience-v158"><b>Público-alvo</b><div>${audienceHtml}</div></div>
-        <div class="detail-flags-v158">${flagHtml('Automático',automatic)}${flagHtml('Carência',grace)}${flagHtml('ASG',asg)}</div>
+        <div class="detail-flags-v158">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
       </section>
     </div>
-    ${observation ? `<aside class="detail-observation-v158"><span>Observação operacional</span><p>${htmlAttr(observation)}</p></aside>` : ''}
   </div>`;
 }
 
@@ -3496,7 +3517,7 @@ function buildDetailPanel(r,colspan){
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean detail-panel-v158">
-      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}${detailObservationV206(r)}</div>
     </div>
   </td></tr>`;
 }

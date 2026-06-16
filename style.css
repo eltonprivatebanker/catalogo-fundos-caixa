@@ -31919,3 +31919,32 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_FUND_DETAIL_SEMANTIC_20260616_v206
+   Semântica consultiva, hierarquia documental e rótulos claros.
+════════════════════════════════════════════════════════════ */
+#sec-fundos .detail-summary-grid-v206 .detail-summary-item-v158.strategy{grid-column:auto}
+#sec-fundos .detail-summary-grid-v206 .detail-summary-item-v158>span{max-width:100%;white-space:normal;line-height:1.25}
+#sec-fundos .detail-observation-v206{
+  border-color:rgba(200,151,58,.22)!important;
+  background:linear-gradient(180deg,rgba(200,151,58,.055),rgba(2,6,23,.26))!important;
+}
+#sec-fundos .detail-observation-v206>span::before{content:'ℹ️';margin-right:6px}
+#sec-fundos .detail-movement-meta-v158 b{white-space:normal;line-height:1.15}
+#sec-fundos .detail-status-v158{white-space:nowrap}
+#sec-fundos .detail-actions-card-v158 .detail-action-primary{border-color:rgba(200,151,58,.58)}
+@media(max-width:1180px){
+  #sec-fundos .detail-summary-grid-v206{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #sec-fundos .detail-summary-grid-v206 .detail-summary-item-v158.strategy{grid-column:auto}
+}
+@media(max-width:900px){
+  #sec-fundos .detail-summary-grid-v206{grid-template-columns:1fr 1fr}
+  #sec-fundos .detail-summary-grid-v206 .detail-summary-item-v158.strategy{grid-column:auto}
+  #sec-fundos .detail-actions-card-v158 .detail-action-primary{grid-column:1/-1!important}
+}
+@media(max-width:520px){
+  #sec-fundos .detail-summary-grid-v206{grid-template-columns:1fr}
+  #sec-fundos .detail-movement-meta-v158>span{align-items:flex-start}
+}
