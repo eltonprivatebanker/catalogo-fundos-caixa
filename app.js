@@ -13510,10 +13510,22 @@ function togglePoupancaExecutiveV167(force){
   }
 
   if(open){
-    setTimeout(function(){
-      try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
-      try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update(); }catch(e){}
-    }, 90);
+    const chartWrap = panel.querySelector('.poup-scenario-chart-wrap');
+    const chartCanvas = document.getElementById('poupScenarioChart');
+    if(chartWrap){ chartWrap.style.width = '100%'; }
+    if(chartCanvas){
+      chartCanvas.style.width = '100%';
+      chartCanvas.style.height = '100%';
+    }
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
+        try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update('none'); }catch(e){}
+        setTimeout(function(){
+          try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
+        }, 160);
+      });
+    });
   }
   return false;
 }
