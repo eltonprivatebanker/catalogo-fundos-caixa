@@ -13484,7 +13484,7 @@ function togglePoupancaExecutiveV167(force){
   const explain = document.getElementById('poupExplain');
   if(explain) explain.classList.toggle('open', open);
   if(btn){
-    btn.textContent = open ? 'Ocultar detalhes' : 'Ver explicação e cenários';
+    btn.textContent = open ? 'Ocultar comparação' : 'Ver comparação de cenários';
     btn.setAttribute('aria-expanded', String(open));
   }
 
@@ -13509,7 +13509,7 @@ function initMarketReferenceExecutiveV167(){
   }
   const btn = document.getElementById('poupExpandBtn');
   if(btn){
-    btn.textContent = 'Ver explicação e cenários';
+    btn.textContent = 'Ver comparação de cenários';
     btn.setAttribute('aria-expanded','false');
   }
   toggleCopomCalendarV167(false);
