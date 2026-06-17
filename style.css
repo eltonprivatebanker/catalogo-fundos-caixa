@@ -33479,3 +33479,102 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     justify-self:start!important;
   }
 }
+
+/* ==========================================================
+   ELTAUM_SAVINGS_MOBILE_SUMMARY_20260617_v215
+   Poupança: alinhamento simétrico do resumo no mobile,
+   com duas colunas equivalentes, divisor central e rótulos
+   ocupando a mesma área vertical.
+========================================================== */
+@media (max-width:700px){
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    align-items:stretch!important;
+    width:100%!important;
+    margin:0!important;
+    padding:12px 0 13px!important;
+    border-top:1px solid rgba(255,255,255,.075)!important;
+    border-bottom:1px solid rgba(255,255,255,.075)!important;
+  }
+
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199{
+    position:relative!important;
+    display:grid!important;
+    grid-template-rows:auto minmax(2.45em,auto)!important;
+    align-content:start!important;
+    align-items:start!important;
+    justify-items:start!important;
+    gap:4px!important;
+    min-width:0!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0 14px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199 + .savings-kpi-v199{
+    border-left:0!important;
+  }
+
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199 + .savings-kpi-v199::before{
+    content:"";
+    position:absolute;
+    top:1px;
+    bottom:1px;
+    left:0;
+    width:1px;
+    background:rgba(255,255,255,.08);
+  }
+
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199 dd{
+    order:1!important;
+    width:100%!important;
+    margin:0!important;
+    color:#f4f7fd!important;
+    font-size:.93rem!important;
+    font-weight:800!important;
+    line-height:1.15!important;
+    letter-spacing:-.015em!important;
+    white-space:nowrap!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199 dt{
+    order:2!important;
+    width:100%!important;
+    margin:0!important;
+    color:#9da9c2!important;
+    font-size:.61rem!important;
+    font-weight:550!important;
+    line-height:1.32!important;
+    letter-spacing:0!important;
+    text-align:left!important;
+    text-transform:none!important;
+    overflow-wrap:normal!important;
+  }
+
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 output,
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 data{
+    color:inherit!important;
+    font:inherit!important;
+    letter-spacing:inherit!important;
+  }
+}
+
+@media (max-width:350px){
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199{
+    padding-inline:10px!important;
+  }
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199 dd{
+    font-size:.87rem!important;
+  }
+  #sec-mercado .savings-mobile-summary-v215 .savings-summary-v207 .savings-kpi-v199 dt{
+    font-size:.57rem!important;
+  }
+}
