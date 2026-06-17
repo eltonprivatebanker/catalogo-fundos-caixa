@@ -32715,3 +32715,181 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     width:100%!important;
   }
 }
+
+
+/* ==========================================================
+   ELTAUM_SAVINGS_MOBILE_MINIMAL_20260617_v212
+   Mobile: consulta rápida. Expansão mostra somente duas regras
+   compactas; cenários completos permanecem exclusivos do desktop.
+========================================================== */
+@media (max-width:700px){
+  #sec-mercado .savings-mobile-minimal-v212{
+    padding:12px!important;
+    border-radius:15px!important;
+    overflow:hidden!important;
+  }
+
+  /* Leitura atual em uma faixa curta, sem card interno pesado. */
+  #sec-mercado .savings-mobile-minimal-v212 .savings-reading-v207{
+    display:flex!important;
+    align-items:flex-start!important;
+    gap:8px!important;
+    min-height:0!important;
+    height:auto!important;
+    margin:9px 0 0!important;
+    padding:8px 10px!important;
+    border:0!important;
+    border-left:2px solid rgba(200,151,58,.72)!important;
+    border-radius:0 8px 8px 0!important;
+    background:rgba(200,151,58,.045)!important;
+    box-shadow:none!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-reading-label-v205{
+    flex:0 0 auto!important;
+    margin:2px 0 0!important;
+    color:#e8bb6a!important;
+    font-size:.49rem!important;
+    letter-spacing:.07em!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-reading-v207 .poup-quick-note{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:#d9deeb!important;
+    font-size:.63rem!important;
+    font-weight:600!important;
+    line-height:1.35!important;
+    text-align:left!important;
+  }
+
+  /* Rodapé da consulta: uma ação principal e uma fonte discreta. */
+  #sec-mercado .savings-mobile-minimal-v212 .savings-actions-v207{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:8px!important;
+    margin:9px 0 0!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-actions-v207 .reference-toggle-v167{
+    width:100%!important;
+    min-height:36px!important;
+    padding:7px 10px!important;
+    border-radius:9px!important;
+    font-size:.59rem!important;
+    font-weight:800!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-actions-v207 .market-reference-source-v167{
+    width:auto!important;
+    min-width:0!important;
+    min-height:36px!important;
+    padding:7px 5px!important;
+    border:0!important;
+    background:transparent!important;
+    color:#aeb8cf!important;
+    font-size:.56rem!important;
+    font-weight:700!important;
+    white-space:nowrap!important;
+    text-decoration:none!important;
+  }
+
+  /* O comparativo completo é técnico demais para esta tela curta. */
+  #sec-mercado .savings-mobile-minimal-v212 .savings-details-v207,
+  #sec-mercado .savings-mobile-minimal-v212 .savings-details-v207.is-open-v167{
+    display:none!important;
+  }
+
+  /* Expansão: uma única lista compacta, sem dois cards gigantes. */
+  body:not(.poup-mobile-expanded) #sec-mercado .savings-mobile-minimal-v212 .savings-rules-v207{
+    display:none!important;
+  }
+  body.poup-mobile-expanded #sec-mercado .savings-mobile-minimal-v212 .savings-rules-v207{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:9px 0 0!important;
+    padding:0 10px!important;
+    border:1px solid rgba(255,255,255,.08)!important;
+    border-radius:11px!important;
+    background:rgba(7,10,20,.46)!important;
+    overflow:hidden!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-rule-v207{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    flex:none!important;
+    align-self:auto!important;
+    aspect-ratio:auto!important;
+    overflow:visible!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-rule-v207 + .savings-rule-v207{
+    border-top:1px solid rgba(255,255,255,.075)!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-rule-head-v205{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:8px!important;
+    width:100%!important;
+    margin:0!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-rule-head-v205 h4{
+    margin:0!important;
+    color:#e8bb6a!important;
+    font-size:.68rem!important;
+    line-height:1.2!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-rule-badge-v205{
+    flex:0 0 auto!important;
+    max-width:none!important;
+    padding:2px 5px!important;
+    font-size:.44rem!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .poup-rule-period{
+    display:none!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .poup-rule-sub{
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:5px 0 0!important;
+    padding:0!important;
+    color:#dbe1ef!important;
+    font-size:.62rem!important;
+    font-weight:650!important;
+    line-height:1.35!important;
+  }
+
+  /* Evita que classes globais antigas voltem a esticar os artigos. */
+  #sec-mercado .savings-mobile-minimal-v212 .poup-rule{
+    min-width:0!important;
+    flex:0 0 auto!important;
+  }
+}
+
+@media (max-width:360px){
+  #sec-mercado .savings-mobile-minimal-v212 .savings-actions-v207{
+    grid-template-columns:1fr!important;
+  }
+  #sec-mercado .savings-mobile-minimal-v212 .savings-actions-v207 .market-reference-source-v167{
+    justify-self:center!important;
+    min-height:24px!important;
+    padding:3px 5px!important;
+  }
+}

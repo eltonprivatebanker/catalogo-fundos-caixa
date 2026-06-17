@@ -13394,15 +13394,30 @@ function togglePoupancaExecutiveV167(force){
   const panel = document.getElementById('poupDetailsPanelV167');
   const btn = document.getElementById('poupExpandBtn');
   if(!panel) return false;
-  const open = typeof force === 'boolean' ? force : panel.hasAttribute('hidden');
-  panel.toggleAttribute('hidden', !open);
-  panel.classList.toggle('is-open-v167', open);
+
+  const mobile = window.matchMedia('(max-width:700px)').matches;
+  const currentlyOpen = mobile
+    ? document.body.classList.contains('poup-mobile-expanded')
+    : !panel.hasAttribute('hidden');
+  const open = typeof force === 'boolean' ? force : !currentlyOpen;
+
   document.body.classList.toggle('poup-mobile-expanded', open);
+
+  if(mobile){
+    // No celular, a expansão mostra apenas as duas regras compactas.
+    panel.setAttribute('hidden','');
+    panel.classList.remove('is-open-v167');
+  }else{
+    panel.toggleAttribute('hidden', !open);
+    panel.classList.toggle('is-open-v167', open);
+  }
 
   const explain = document.getElementById('poupExplain');
   if(explain) explain.classList.toggle('open', open);
   if(btn){
-    btn.textContent = open ? 'Ocultar regras e cenários' : 'Ver regras e cenários';
+    btn.textContent = mobile
+      ? (open ? 'Ocultar detalhes' : 'Como funciona')
+      : (open ? 'Ocultar regras e cenários' : 'Ver regras e cenários');
     btn.setAttribute('aria-expanded', String(open));
   }
 
@@ -13419,9 +13434,11 @@ function initMarketReferenceExecutiveV167(){
     panel.setAttribute('hidden','');
     panel.classList.remove('is-open-v167');
   }
+  document.body.classList.remove('poup-mobile-expanded');
   const btn = document.getElementById('poupExpandBtn');
   if(btn){
-    btn.textContent = 'Ver regras e cenários';
+    const mobile = window.matchMedia('(max-width:700px)').matches;
+    btn.textContent = mobile ? 'Como funciona' : 'Ver regras e cenários';
     btn.setAttribute('aria-expanded','false');
   }
   toggleCopomCalendarV167(false);
