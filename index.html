@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_SAVINGS_MOBILE_PROFESSIONAL_20260617_v213"/>
+<meta name="app-build" content="ELTAUM_SAVINGS_MOBILE_SEMANTIC_20260617_v214"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=savings-mobile-professional-v213" rel="stylesheet"/>
+<link href="style.css?v=savings-mobile-semantic-v214" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer src="app.js?v=savings-mobile-professional-v213"></script>
+<script defer src="app.js?v=savings-mobile-semantic-v214"></script>
 
 </head>
 <body>
@@ -591,100 +591,106 @@ html:not(.app-booting) .page{
       </div>
     </section>
 
-    <section class="market-reference-block-v167 savings-reference-v167 savings-clean-v205 savings-balanced-v207 savings-table-v208 savings-cards-v209 savings-mobile-v210 savings-mobile-compact-v211 savings-mobile-minimal-v212 savings-mobile-professional-v213" aria-labelledby="savingsReferenceTitleV167">
+    <section class="market-reference-block-v167 savings-reference-v167 savings-clean-v205 savings-balanced-v207 savings-table-v208 savings-cards-v209 savings-mobile-v210 savings-mobile-compact-v211 savings-mobile-minimal-v212 savings-mobile-professional-v213 savings-mobile-semantic-v214" aria-labelledby="savingsReferenceTitleV167">
       <header class="market-reference-head-v167 savings-head-v167 savings-head-v207">
         <div class="savings-title-v207">
           <span class="market-reference-kicker-v167">Rendimento da poupança</span>
           <h3 id="savingsReferenceTitleV167">Poupança</h3>
-          <p>Rendimento e regras de cálculo.</p>
+          <p>Rendimento mensal e regras aplicáveis aos depósitos.</p>
         </div>
-        <div class="savings-current-v167 savings-current-v207" aria-label="Rendimento mensal atual da poupança" role="group">
-          <span>Rendimento atual</span>
-          <div><strong class="blue" id="mc-poup">—</strong><small>a.m.</small></div>
+
+        <div class="savings-current-v167 savings-current-v207" role="status" aria-live="polite" aria-labelledby="poupCurrentLabelV214">
+          <span id="poupCurrentLabelV214">Rendimento atual</span>
+          <div>
+            <output class="blue" id="mc-poup" aria-label="Rendimento mensal ainda não disponível">—</output>
+            <small aria-hidden="true">a.m.</small>
+          </div>
         </div>
       </header>
 
-      <div class="savings-kpi-strip-v199 savings-summary-v205 savings-summary-v207" aria-label="Resumo da poupança" role="group">
-        <article class="savings-kpi-v199 year">
-          <span>Acumulado no ano</span>
-          <strong id="poupYearCompactV199">—</strong>
-        </article>
-        <article class="savings-kpi-v199 threshold">
-          <span>Mudança de cálculo</span>
-          <strong>Selic ≤ 8,50% a.a.</strong>
-        </article>
-      </div>
+      <dl class="savings-kpi-strip-v199 savings-summary-v205 savings-summary-v207" aria-label="Resumo do rendimento da poupança">
+        <div class="savings-kpi-v199 year">
+          <dd><output id="poupYearCompactV199" aria-live="polite" aria-label="Acumulado no ano ainda não disponível">—</output></dd>
+          <dt>Acumulado no ano</dt>
+        </div>
+        <div class="savings-kpi-v199 threshold">
+          <dd>8,50% a.a.</dd>
+          <dt>Ponto de corte da Selic</dt>
+        </div>
+      </dl>
 
-      <div class="savings-rules-v207" id="poupRulesV213" aria-label="Regras de rendimento da poupança">
+      <section class="savings-rules-v207" id="poupRulesV214" aria-labelledby="poupRulesTitleV214">
+        <h4 class="visually-hidden-v214" id="poupRulesTitleV214">Regras de rendimento da poupança</h4>
+
         <article class="poup-rule poup-rule-card new-rule savings-rule-v167 savings-rule-v207">
-          <div class="savings-rule-head-v205">
-            <h4 class="poup-rule-label">Regra vigente</h4>
-            <span class="savings-rule-badge-v205 active">Desde 04/05/2012</span>
-          </div>
-          <div class="poup-rule-period">Depósitos efetuados a partir dessa data</div>
-          <div class="poup-rule-sub" id="poupNewRuleText">Regra conforme o nível da Selic.</div>
+          <header class="savings-rule-head-v205">
+            <h5 class="poup-rule-label">Depósitos desde <time datetime="2012-05-04">04/05/2012</time></h5>
+            <span class="savings-rule-badge-v205 active">Regra vigente</span>
+          </header>
+          <p class="poup-rule-period">O cálculo muda conforme o nível da Selic.</p>
+          <p class="poup-rule-sub" id="poupNewRuleText" aria-live="polite">Aguardando a Selic vigente.</p>
         </article>
 
         <article class="poup-rule poup-rule-card old-rule savings-rule-v167 savings-rule-v207">
-          <div class="savings-rule-head-v205">
-            <h4 class="poup-rule-label">Regra pré-2012</h4>
-            <span class="savings-rule-badge-v205">Até 03/05/2012</span>
-          </div>
-          <div class="poup-rule-period">Depósitos efetuados até essa data</div>
-          <div class="poup-rule-sub" id="poupOldRuleText">TR + 0,50% a.m.</div>
-          <span class="savings-data-sink-v205" id="poupOldMonthly">—</span>
-          <span class="savings-data-sink-v205" id="poupNewAccum">Acum. ano: —</span>
-          <span class="savings-data-sink-v205" id="poupOldAccum">Acum. ano: —</span>
+          <header class="savings-rule-head-v205">
+            <h5 class="poup-rule-label">Depósitos até <time datetime="2012-05-03">03/05/2012</time></h5>
+            <span class="savings-rule-badge-v205">Regra anterior</span>
+          </header>
+          <p class="poup-rule-period">A fórmula não muda com o nível da Selic.</p>
+          <p class="poup-rule-sub" id="poupOldRuleText">Rendimento: <strong>TR + 0,50% a.m.</strong></p>
+          <span hidden aria-hidden="true" id="poupOldMonthly">—</span>
+          <span hidden aria-hidden="true" id="poupNewAccum">Acum. ano: —</span>
+          <span hidden aria-hidden="true" id="poupOldAccum">Acum. ano: —</span>
         </article>
-      </div>
+      </section>
 
-      <aside class="savings-reading-v167 savings-reading-v205 savings-reading-v207" aria-label="Leitura do cenário atual">
-        <span class="savings-reading-label-v205">Cenário atual</span>
-        <p class="poup-quick-note" id="poupQuickNote">A regra será definida automaticamente pelo nível vigente da Selic.</p>
-      </aside>
+      <section class="savings-reading-v167 savings-reading-v205 savings-reading-v207" aria-labelledby="poupCurrentScenarioTitleV214">
+        <h4 class="savings-reading-label-v205" id="poupCurrentScenarioTitleV214">Regra aplicada hoje</h4>
+        <p class="poup-quick-note" id="poupQuickNote" aria-live="polite">A regra será definida automaticamente pelo nível vigente da Selic.</p>
+      </section>
 
       <div class="savings-actions-v167 savings-actions-v205 savings-actions-v207">
-        <button type="button" class="reference-toggle-v167" id="poupExpandBtn" onclick="return togglePoupanca()" aria-expanded="false" aria-controls="poupRulesV213 poupDetailsPanelV167">Ver regras</button>
-        <a class="market-reference-source-v167" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener" aria-label="Abrir a Calculadora do Cidadão do Banco Central">Calculadora BCB ↗</a>
+        <button type="button" class="reference-toggle-v167" id="poupExpandBtn" onclick="return togglePoupanca()" aria-expanded="false" aria-controls="poupRulesV214">Ver regras</button>
+        <a class="market-reference-source-v167" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener" aria-label="Abrir a Calculadora do Cidadão do Banco Central em uma nova guia">Calculadora do BCB <span aria-hidden="true">↗</span></a>
       </div>
 
       <div class="savings-details-v167 savings-details-v205 savings-details-v207 savings-details-v208" id="poupDetailsPanelV167" hidden>
         <section class="poup-scenarios-card poup-mobile-extra savings-scenarios-v167 savings-scenarios-v207 savings-scenarios-v208" aria-labelledby="poupScenariosTitleV167">
           <div class="poup-scenarios-head">
             <div class="poup-scenarios-title">
-              <div class="indic-ref-label" id="poupScenariosTitleV167">Comparação de cenários</div>
-              <div class="poup-scenarios-subtitle">Como cada regra funciona em diferentes níveis da Selic.</div>
+              <h4 class="indic-ref-label" id="poupScenariosTitleV167">Comparação de cenários</h4>
+              <p class="poup-scenarios-subtitle">Como cada regra funciona em diferentes níveis da Selic.</p>
             </div>
-            <span class="poup-scenario-status" id="poupScenarioStatus">Selic —</span>
+            <output class="poup-scenario-status" id="poupScenarioStatus" aria-live="polite">Selic —</output>
           </div>
 
-          <div class="poup-scenario-summary" id="poupScenarioSummary">Carregando comparação conforme o nível da Selic...</div>
+          <p class="poup-scenario-summary" id="poupScenarioSummary">Carregando comparação conforme o nível da Selic...</p>
 
-          <div class="savings-scenario-grid-v208" role="list" aria-label="Cenários comparativos da poupança">
-            <article class="savings-scenario-card-v208" role="listitem">
-              <div class="savings-scenario-card-head-v208"><span>Selic 4,00% a.a.</span><small>Abaixo do corte</small></div>
+          <div class="savings-scenario-grid-v208" aria-label="Cenários comparativos da poupança">
+            <article class="savings-scenario-card-v208" aria-labelledby="poupScenario4TitleV214">
+              <div class="savings-scenario-card-head-v208"><span id="poupScenario4TitleV214">Selic 4,00% a.a.</span><small>Abaixo do corte</small></div>
               <dl>
                 <div><dt>Regra vigente</dt><dd id="poupScenarioNew4">70% da Selic + TR</dd></div>
-                <div><dt>Regra pré-2012</dt><dd id="poupScenarioOld4">TR + 0,50% a.m.</dd></div>
+                <div><dt>Regra anterior</dt><dd id="poupScenarioOld4">TR + 0,50% a.m.</dd></div>
               </dl>
             </article>
-            <article class="savings-scenario-card-v208" role="listitem">
-              <div class="savings-scenario-card-head-v208"><span>Selic 8,50% a.a.</span><small>Ponto de corte</small></div>
+            <article class="savings-scenario-card-v208" aria-labelledby="poupScenario85TitleV214">
+              <div class="savings-scenario-card-head-v208"><span id="poupScenario85TitleV214">Selic 8,50% a.a.</span><small>Ponto de corte</small></div>
               <dl>
                 <div><dt>Regra vigente</dt><dd id="poupScenarioNew85">70% da Selic + TR</dd></div>
-                <div><dt>Regra pré-2012</dt><dd id="poupScenarioOld85">TR + 0,50% a.m.</dd></div>
+                <div><dt>Regra anterior</dt><dd id="poupScenarioOld85">TR + 0,50% a.m.</dd></div>
               </dl>
             </article>
-            <article class="savings-scenario-card-v208 current" role="listitem">
+            <article class="savings-scenario-card-v208 current" aria-labelledby="poupScenarioCurrentTitle">
               <div class="savings-scenario-card-head-v208"><span id="poupScenarioCurrentTitle">Cenário atual</span><small>Hoje</small></div>
               <dl>
                 <div><dt>Regra vigente</dt><dd id="poupScenarioCurrentNew">—</dd></div>
-                <div><dt>Regra pré-2012</dt><dd id="poupScenarioCurrentOld">—</dd></div>
+                <div><dt>Regra anterior</dt><dd id="poupScenarioCurrentOld">—</dd></div>
               </dl>
             </article>
           </div>
 
-          <div class="poup-scenario-note" id="poupScenarioNote">Comparação didática. A TR varia conforme o período de aniversário.</div>
+          <p class="poup-scenario-note" id="poupScenarioNote">Comparação didática. A TR varia conforme o período de aniversário.</p>
         </section>
       </div>
     </section>

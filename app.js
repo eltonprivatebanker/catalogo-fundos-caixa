@@ -265,7 +265,12 @@ function atualizarPoupancaCard(d, selicAtual){
   }
 
   if($('mc-poup')){
-    $('mc-poup').textContent = valorNova != null ? fmt(valorNova) : '—';
+    const valorMensalTexto = valorNova != null ? fmt(valorNova) : '—';
+    $('mc-poup').textContent = valorMensalTexto;
+    $('mc-poup').setAttribute(
+      'aria-label',
+      valorNova != null ? `Rendimento mensal atual: ${valorMensalTexto} ao mês` : 'Rendimento mensal ainda não disponível'
+    );
   }
 
   if($('poupTodayCompactV199')){
@@ -273,7 +278,12 @@ function atualizarPoupancaCard(d, selicAtual){
   }
 
   if($('poupYearCompactV199')){
-    $('poupYearCompactV199').textContent = acumNova != null ? formatPctCard(acumNova) : '—';
+    const acumuladoAnoTexto = acumNova != null ? formatPctCard(acumNova) : '—';
+    $('poupYearCompactV199').textContent = acumuladoAnoTexto;
+    $('poupYearCompactV199').setAttribute(
+      'aria-label',
+      acumNova != null ? `Acumulado da poupança no ano: ${acumuladoAnoTexto}` : 'Acumulado no ano ainda não disponível'
+    );
   }
 
   if($('poupOldMonthly')){
@@ -288,32 +298,30 @@ function atualizarPoupancaCard(d, selicAtual){
     $('poupOldAccum').textContent = 'Acum. ano: ' + (acumAntiga != null ? formatPctCard(acumAntiga) : '—');
   }
 
-  let textoNova = 'a.m. · regra conforme nível da Selic';
-
-  if(selic != null){
-    textoNova = acima
-      ? 'Com Selic acima de 8,5%: TR + 0,50% a.m.'
-      : 'Com Selic em até 8,5%: 70% da Selic + TR';
-  }
-
   if($('poupNewRuleText')){
-    $('poupNewRuleText').textContent = textoNova;
+    if(selic == null){
+      $('poupNewRuleText').textContent = 'Aguardando a Selic vigente.';
+    }else if(acima){
+      $('poupNewRuleText').innerHTML = 'Com Selic acima de 8,50% a.a.: <strong>TR + 0,50% a.m.</strong>';
+    }else{
+      $('poupNewRuleText').innerHTML = 'Com Selic em até 8,50% a.a.: <strong>70% da Selic + TR</strong>';
+    }
   }
 
   if($('poupOldRuleText')){
-    $('poupOldRuleText').textContent = 'Rendimento: TR + 0,50% a.m.';
+    $('poupOldRuleText').innerHTML = 'Rendimento: <strong>TR + 0,50% a.m.</strong>';
   }
 
   if($('poupQuickNote')){
     if(selic == null){
       $('poupQuickNote').textContent =
-        'Regra nova depende do nível da Selic. Para acumulado exato, conferir calculadora oficial do BCB.';
+        'A regra aplicada será exibida quando a Selic vigente estiver disponível.';
     }else if(acima){
-      $('poupQuickNote').textContent =
-        `Com Selic em ${fmt(selic)}, as duas regras rendem TR + 0,50% a.m.`;
+      $('poupQuickNote').innerHTML =
+        `Com a Selic em <strong>${fmt(selic)} a.a.</strong>, depósitos novos e antigos seguem <strong>TR + 0,50% a.m.</strong>`;
     }else{
-      $('poupQuickNote').textContent =
-        `Com Selic em ${fmt(selic)}, a regra vigente rende 70% da Selic + TR.`;
+      $('poupQuickNote').innerHTML =
+        `Com a Selic em <strong>${fmt(selic)} a.a.</strong>, depósitos desde 04/05/2012 rendem <strong>70% da Selic + TR</strong>. Os anteriores mantêm TR + 0,50% a.m.`;
     }
   }
 
@@ -13419,7 +13427,7 @@ function togglePoupancaExecutiveV167(force){
       ? (open ? 'Ocultar regras' : 'Ver regras')
       : (open ? 'Ocultar regras e cenários' : 'Ver regras e cenários');
     btn.setAttribute('aria-expanded', String(open));
-    btn.setAttribute('aria-controls', mobile ? 'poupRulesV213' : 'poupDetailsPanelV167');
+    btn.setAttribute('aria-controls', mobile ? 'poupRulesV214' : 'poupDetailsPanelV167');
   }
 
   return false;
@@ -13441,7 +13449,7 @@ function initMarketReferenceExecutiveV167(){
     const mobile = window.matchMedia('(max-width:700px)').matches;
     btn.textContent = mobile ? 'Ver regras' : 'Ver regras e cenários';
     btn.setAttribute('aria-expanded','false');
-    btn.setAttribute('aria-controls', mobile ? 'poupRulesV213' : 'poupDetailsPanelV167');
+    btn.setAttribute('aria-controls', mobile ? 'poupRulesV214' : 'poupDetailsPanelV167');
   }
   toggleCopomCalendarV167(false);
 }

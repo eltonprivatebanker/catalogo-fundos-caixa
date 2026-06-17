@@ -33257,3 +33257,225 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     font-size:.50rem!important;
   }
 }
+
+
+/* ==========================================================
+   ELTAUM_SAVINGS_MOBILE_SEMANTIC_20260617_v214
+   Poupança: tipografia legível, hierarquia semântica e
+   alinhamento profissional sem aumentar a altura do mobile.
+========================================================== */
+#sec-mercado .savings-mobile-semantic-v214 .visually-hidden-v214{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0,0,0,0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-current-v207 output{
+  grid-area:value!important;
+  color:#73aaff!important;
+  font:800 1.45rem/1 'Cormorant Garamond',Georgia,serif!important;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207{
+  margin-block:14px!important;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 .savings-kpi-v199{
+  display:flex!important;
+  flex-direction:column!important;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 dt{
+  order:1;
+  color:#9ca7c0;
+  font-size:.60rem;
+  font-weight:650;
+  line-height:1.3;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 dd{
+  order:2;
+  margin:5px 0 0;
+  color:#eef2fb;
+  font-size:1rem;
+  font-weight:800;
+  line-height:1.2;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 output{
+  color:inherit;
+  font:inherit;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-rule-head-v205 h5{
+  margin:0;
+  color:#e8bb6a;
+  font-size:.70rem;
+  font-weight:800;
+  line-height:1.3;
+}
+#sec-mercado .savings-mobile-semantic-v214 .savings-rule-head-v205 time{
+  color:inherit;
+  font:inherit;
+}
+#sec-mercado .savings-mobile-semantic-v214 .poup-rule-period,
+#sec-mercado .savings-mobile-semantic-v214 .poup-rule-sub,
+#sec-mercado .savings-mobile-semantic-v214 .poup-scenarios-subtitle,
+#sec-mercado .savings-mobile-semantic-v214 .poup-scenario-summary,
+#sec-mercado .savings-mobile-semantic-v214 .poup-scenario-note{
+  margin-inline:0;
+}
+#sec-mercado .savings-mobile-semantic-v214 .poup-rule-sub strong,
+#sec-mercado .savings-mobile-semantic-v214 .poup-quick-note strong{
+  color:#f6f8fd;
+  font-weight:800;
+}
+#sec-mercado .savings-mobile-semantic-v214 .poup-scenarios-title h4,
+#sec-mercado .savings-mobile-semantic-v214 .poup-scenarios-title p{
+  margin:0;
+}
+#sec-mercado .savings-mobile-semantic-v214 .poup-scenarios-title p{
+  margin-top:4px;
+}
+#sec-mercado .savings-mobile-semantic-v214 .poup-scenario-status{
+  color:inherit;
+  font:inherit;
+}
+
+@media (max-width:700px){
+  html body #sec-mercado .savings-mobile-semantic-v214{
+    padding:13px 14px 14px!important;
+  }
+
+  /* Cabeçalho */
+  #sec-mercado .savings-mobile-semantic-v214 .savings-title-v207 .market-reference-kicker-v167{
+    margin-bottom:5px!important;
+    font-size:.54rem!important;
+    line-height:1.15!important;
+    letter-spacing:.085em!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-title-v207 h3{
+    font-size:1.34rem!important;
+    line-height:1.02!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-current-v207{
+    min-width:96px!important;
+    min-height:42px!important;
+    padding:8px 11px!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-current-v207 output{
+    font-size:1.10rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-current-v207 small{
+    font-size:.54rem!important;
+  }
+
+  /* Resumo como pares termo/valor. */
+  #sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207{
+    margin:0!important;
+    padding:10px 0!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 .savings-kpi-v199{
+    gap:4px!important;
+    padding:2px 11px!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 dd{
+    order:1!important;
+    margin:0!important;
+    color:#f2f5fc!important;
+    font-size:.88rem!important;
+    font-weight:800!important;
+    line-height:1.18!important;
+    letter-spacing:-.01em!important;
+    white-space:nowrap!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 dt{
+    order:2!important;
+    margin:0!important;
+    color:#a0abc3!important;
+    font-size:.58rem!important;
+    font-weight:600!important;
+    line-height:1.28!important;
+    text-transform:none!important;
+  }
+
+  /* Cenário atual: rótulo acima do texto, sem coluna apertada. */
+  #sec-mercado .savings-mobile-semantic-v214 .savings-reading-v207{
+    display:block!important;
+    margin-top:10px!important;
+    padding:10px 11px!important;
+    border-radius:0 10px 10px 0!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-reading-label-v205{
+    display:block!important;
+    margin:0 0 6px!important;
+    font-size:.52rem!important;
+    line-height:1.2!important;
+    letter-spacing:.075em!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-reading-v207 .poup-quick-note{
+    font-size:.68rem!important;
+    font-weight:560!important;
+    line-height:1.48!important;
+  }
+
+  /* Regras: títulos descritivos, contexto visível e fórmulas destacadas. */
+  #sec-mercado .savings-mobile-semantic-v214 .savings-rule-head-v205 h5{
+    min-width:0!important;
+    margin:0!important;
+    color:#e8bb6a!important;
+    font-size:.69rem!important;
+    font-weight:800!important;
+    line-height:1.28!important;
+    letter-spacing:0!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-rule-badge-v205{
+    padding:3px 6px!important;
+    font-size:.47rem!important;
+    font-weight:800!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .poup-rule-period{
+    display:block!important;
+    margin:5px 0 0!important;
+    color:#909cb6!important;
+    font-size:.57rem!important;
+    font-weight:500!important;
+    line-height:1.35!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .poup-rule-sub{
+    margin:7px 0 0!important;
+    color:#e4e9f4!important;
+    font-size:.68rem!important;
+    font-weight:560!important;
+    line-height:1.46!important;
+  }
+
+  /* Ações */
+  #sec-mercado .savings-mobile-semantic-v214 .savings-actions-v207{
+    margin-top:10px!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-actions-v207 .reference-toggle-v167{
+    font-size:.59rem!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-actions-v207 .market-reference-source-v167{
+    color:#b4bed3!important;
+    font-size:.55rem!important;
+  }
+}
+
+@media (max-width:350px){
+  #sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 .savings-kpi-v199{
+    padding-inline:8px!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-summary-v207 dd{
+    font-size:.82rem!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-rule-head-v205{
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+  }
+  #sec-mercado .savings-mobile-semantic-v214 .savings-rule-badge-v205{
+    justify-self:start!important;
+  }
+}
