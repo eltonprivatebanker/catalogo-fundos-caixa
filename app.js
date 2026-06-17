@@ -13416,9 +13416,10 @@ function togglePoupancaExecutiveV167(force){
   if(explain) explain.classList.toggle('open', open);
   if(btn){
     btn.textContent = mobile
-      ? (open ? 'Ocultar detalhes' : 'Como funciona')
+      ? (open ? 'Ocultar regras' : 'Ver regras')
       : (open ? 'Ocultar regras e cenários' : 'Ver regras e cenários');
     btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-controls', mobile ? 'poupRulesV213' : 'poupDetailsPanelV167');
   }
 
   return false;
@@ -13438,8 +13439,9 @@ function initMarketReferenceExecutiveV167(){
   const btn = document.getElementById('poupExpandBtn');
   if(btn){
     const mobile = window.matchMedia('(max-width:700px)').matches;
-    btn.textContent = mobile ? 'Como funciona' : 'Ver regras e cenários';
+    btn.textContent = mobile ? 'Ver regras' : 'Ver regras e cenários';
     btn.setAttribute('aria-expanded','false');
+    btn.setAttribute('aria-controls', mobile ? 'poupRulesV213' : 'poupDetailsPanelV167');
   }
   toggleCopomCalendarV167(false);
 }
