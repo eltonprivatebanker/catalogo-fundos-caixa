@@ -35367,3 +35367,43 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
   }
 }
 
+/* ════════════════════════════════════════════════════
+   ELTAUM_MARKET_PERIOD_CONTROLLER_20260618_v228
+   Estado visual único dos botões 12M / 24M / 36M.
+════════════════════════════════════════════════════ */
+html.market-period-controller-v228 .market-period-tabs,
+html.market-period-controller-v228 .market-period-tabs .indic-tabs,
+html.market-period-controller-v228 .market-period-tabs .indic-tab{
+  pointer-events:auto;
+  z-index:auto!important;
+}
+
+html.market-period-controller-v228 .market-period-tabs .indic-tab{
+  position:relative;
+  cursor:pointer;
+  touch-action:manipulation;
+  user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html.market-period-controller-v228 .market-period-tabs .indic-tab.active,
+html.market-period-controller-v228 .market-period-tabs .indic-tab[aria-pressed="true"]{
+  border-color:rgba(232,187,106,.72);
+  background:linear-gradient(180deg,rgba(232,187,106,.96),rgba(200,151,58,.90));
+  color:#090b13;
+  font-weight:800;
+  box-shadow:0 4px 14px rgba(200,151,58,.18),inset 0 1px 0 rgba(255,255,255,.28);
+}
+
+html.market-period-controller-v228 .market-period-tabs .indic-tab:not(.active)[aria-pressed="false"]{
+  color:#b8c2d9;
+  border-color:rgba(255,255,255,.12);
+  background:rgba(17,21,38,.72);
+  box-shadow:none;
+}
+
+html.market-period-controller-v228 .market-period-tabs .indic-tab:focus-visible{
+  outline:2px solid var(--gold2);
+  outline-offset:2px;
+}
+

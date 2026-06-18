@@ -1,3 +1,4 @@
+// ELTAUM_MARKET_PERIOD_CONTROLLER_20260618_v228
 // ELTAUM_CDI_MONTH_ORDER_20260617_v216
 // ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
@@ -1274,25 +1275,86 @@ function atualizarTabelaIndicadores(){
 }
 
 
-// Tabs 12M / 24M / 36M — sincronizados com a tabela analítica e a visão executiva (v173)
-document.querySelectorAll('.indic-tab[data-months]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.indic-tab[data-months]').forEach(b => {
-      const isActive = b === btn;
-      b.classList.toggle('active', isActive);
-      b.setAttribute('aria-pressed', String(isActive));
-    });
+/* ════════════════════════════════════════════════════
+   v228 — CONTROLADOR ÚNICO DO PERÍODO DE MERCADO
+   - sincroniza estado, botões, aria-pressed, tabela e visão executiva;
+   - usa apenas o evento click, compatível com mouse, toque e teclado;
+   - remove a necessidade de z-index elevado e hit-test por coordenadas.
+════════════════════════════════════════════════════ */
+const MARKET_PERIOD_OPTIONS_V228 = Object.freeze([12, 24, 36]);
 
-    activePeriodTab = parseInt(btn.dataset.months, 10) || 12;
-    atualizarTabelaIndicadores();
+function normalizarPeriodoMercadoV228(value){
+  const months = Number.parseInt(value, 10);
+  return MARKET_PERIOD_OPTIONS_V228.includes(months) ? months : 12;
+}
 
-    // Notifica os componentes derivados somente depois de o período-base ser atualizado.
-    document.dispatchEvent(new CustomEvent('elton:market-period-change', {
-      detail: { months: activePeriodTab }
-    }));
+function sincronizarBotoesPeriodoMercadoV228(months){
+  const selected = normalizarPeriodoMercadoV228(months);
+
+  document.querySelectorAll('.indic-tab[data-months]').forEach(button => {
+    const isActive = Number.parseInt(button.dataset.months, 10) === selected;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
   });
-});
+}
 
+function selecionarPeriodoMercadoV228(value, options = {}){
+  const months = normalizarPeriodoMercadoV228(value);
+  const source = options.source || 'api';
+  const shouldRender = options.render !== false;
+
+  activePeriodTab = months;
+  document.documentElement.dataset.indicPeriod = String(months);
+  sincronizarBotoesPeriodoMercadoV228(months);
+
+  let renderOk = true;
+  if(shouldRender){
+    try{
+      atualizarTabelaIndicadores();
+    }catch(error){
+      renderOk = false;
+      console.error('[ELTAUM_MARKET_PERIOD_CONTROLLER_20260618_v228] Falha ao atualizar os indicadores:', error);
+    }
+  }
+
+  document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+    detail: { months, source, renderOk }
+  }));
+
+  return renderOk;
+}
+
+function inicializarPeriodoMercadoV228(){
+  const fromDataset = document.documentElement.dataset.indicPeriod;
+  const fromActiveButton = document.querySelector('.indic-tab.active[data-months]')?.dataset.months;
+  const initial = fromDataset || fromActiveButton || activePeriodTab || 12;
+  selecionarPeriodoMercadoV228(initial, { source: 'init', render: false });
+}
+
+// Exportações explícitas: evitam depender de propriedades globais implícitas.
+window.atualizarTabelaIndicadores = atualizarTabelaIndicadores;
+window.selecionarPeriodoMercado = selecionarPeriodoMercadoV228;
+window.getPeriodoMercado = () => activePeriodTab;
+
+// Captura única para impedir que o clique no botão abra/feche o bloco pai.
+document.addEventListener('click', event => {
+  const button = event.target?.closest?.('.indic-tab[data-months]');
+  if(!button) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  selecionarPeriodoMercadoV228(button.dataset.months, { source: 'user' });
+}, true);
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', inicializarPeriodoMercadoV228, { once: true });
+}else{
+  inicializarPeriodoMercadoV228();
+}
+
+window.addEventListener('pageshow', () => {
+  sincronizarBotoesPeriodoMercadoV228(activePeriodTab);
+});
 
 /* ════════════════════════════════════════════════════
    NORMALIZA mercado_atual.json PARA A TABELA DE INDICADORES
@@ -7997,232 +8059,7 @@ async function sharePainelMercado(){
   document.addEventListener('click', capturar, true);
   document.addEventListener('pointerup', capturar, true);
 })();
-(function(){
-  'use strict';
-  const BUILD = 'ELTAUM_INDIC_TABS_FORCE_20260602_v5';
-
-  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
-
-  function prepararIndicTabs(){
-    qsa('.indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
-      el.style.pointerEvents = 'auto';
-      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
-      el.style.zIndex = '80';
-    });
-
-    qsa('.indic-tab[data-months]').forEach(btn => {
-      btn.setAttribute('type', 'button');
-      btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
-      btn.style.pointerEvents = 'auto';
-      btn.style.cursor = 'pointer';
-      btn.style.touchAction = 'manipulation';
-      if(getComputedStyle(btn).position === 'static') btn.style.position = 'relative';
-      btn.style.zIndex = '90';
-    });
-  }
-
-  function setPeriodoIndicadores(btn){
-    const meses = Number(btn && btn.dataset ? btn.dataset.months : NaN);
-    if(![12,24,36].includes(meses)) return;
-
-    qsa('.indic-tab[data-months]').forEach(tab => {
-      const ativo = tab === btn;
-      tab.classList.toggle('active', ativo);
-      tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
-    });
-
-    try{
-      activePeriodTab = meses;
-    }catch(e){
-      window.activePeriodTab = meses;
-    }
-    document.documentElement.dataset.indicPeriod = String(meses);
-
-    if(typeof atualizarTabelaIndicadores === 'function'){
-      atualizarTabelaIndicadores();
-      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
-        detail: { months: meses, source: BUILD }
-      }));
-    }else{
-      console.warn('[' + BUILD + '] atualizarTabelaIndicadores ainda não está disponível.');
-    }
-  }
-
-  function acharIndicTab(evento){
-    const alvo = evento.target;
-    if(alvo && alvo.closest){
-      const direto = alvo.closest('.indic-tab[data-months]');
-      if(direto) return direto;
-    }
-    if(evento.composedPath){
-      const item = evento.composedPath().find(el => el && el.matches && el.matches('.indic-tab[data-months]'));
-      if(item) return item;
-    }
-    return null;
-  }
-
-  function capturarIndicTab(evento){
-    const btn = acharIndicTab(evento);
-    if(!btn) return;
-    evento.preventDefault();
-    if(typeof evento.stopImmediatePropagation === 'function') evento.stopImmediatePropagation();
-    setPeriodoIndicadores(btn);
-  }
-
-  function instalar(){
-    prepararIndicTabs();
-    document.addEventListener('click', capturarIndicTab, true);
-    document.addEventListener('pointerup', capturarIndicTab, true);
-    document.addEventListener('touchend', capturarIndicTab, true);
-    setTimeout(prepararIndicTabs, 400);
-    setTimeout(prepararIndicTabs, 1200);
-    setTimeout(prepararIndicTabs, 2500);
-    console.info('[' + BUILD + '] patch dos botões 12M/24M/36M instalado.');
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar, {once:true});
-  else instalar();
-})();
-/* Patch v6 — captura no window antes dos listeners antigos e usa hit-test por coordenada.
-   Objetivo: fazer os botões responderem mesmo se algum elemento/camada estiver interceptando o target. */
-(function(){
-  'use strict';
-  const BUILD = 'ELTAUM_WINDOW_HITTEST_TABS_FORCE_20260602_v6';
-  window.__ELTAUM_WINDOW_HITTEST_TABS_FORCE_BUILD__ = BUILD;
-
-  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
-
-  function eventoXY(ev){
-    if(ev && ev.touches && ev.touches[0]) return {x: ev.touches[0].clientX, y: ev.touches[0].clientY};
-    if(ev && ev.changedTouches && ev.changedTouches[0]) return {x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY};
-    if(ev && Number.isFinite(ev.clientX) && Number.isFinite(ev.clientY)) return {x: ev.clientX, y: ev.clientY};
-    return null;
-  }
-
-  function visivel(el){
-    if(!el) return false;
-    const st = getComputedStyle(el);
-    if(st.display === 'none' || st.visibility === 'hidden' || Number(st.opacity) === 0) return false;
-    const r = el.getBoundingClientRect();
-    return r.width > 0 && r.height > 0;
-  }
-
-  function dentro(el, pt){
-    if(!el || !pt || !visivel(el)) return false;
-    const r = el.getBoundingClientRect();
-    return pt.x >= r.left && pt.x <= r.right && pt.y >= r.top && pt.y <= r.bottom;
-  }
-
-  function tabDireta(ev){
-    const t = ev && ev.target;
-    if(!t || !t.closest) return null;
-    return t.closest('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
-  }
-
-  function tabPorCoordenada(ev){
-    const pt = eventoXY(ev);
-    if(!pt) return null;
-    const tabs = qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
-    // Inverte a ordem para privilegiar o último elemento pintado no DOM quando há sobreposição.
-    for(let i = tabs.length - 1; i >= 0; i--){
-      if(dentro(tabs[i], pt)) return tabs[i];
-    }
-    return null;
-  }
-
-  function prepararTab(tab){
-    if(!tab) return;
-    tab.setAttribute('type', 'button');
-    tab.style.pointerEvents = 'auto';
-    tab.style.cursor = 'pointer';
-    tab.style.touchAction = 'manipulation';
-    if(getComputedStyle(tab).position === 'static') tab.style.position = 'relative';
-    tab.style.zIndex = '999';
-  }
-
-  function prepararTodos(){
-    qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]').forEach(prepararTab);
-    qsa('.chart-tabs, .indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
-      el.style.pointerEvents = 'auto';
-      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
-      el.style.zIndex = '998';
-    });
-  }
-
-  function ativarGrupo(selector, ativo){
-    qsa(selector).forEach(btn => {
-      const isActive = btn === ativo;
-      btn.classList.toggle('active', isActive);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-  }
-
-  function acionarGrafico(btn){
-    prepararTab(btn);
-    const chart = btn.dataset.chart;
-    if(!chart) return false;
-    ativarGrupo('.chart-tab[data-chart="' + chart + '"]', btn);
-    if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
-      window.alterarPeriodoGraficoEvolucao(btn);
-      return true;
-    }
-    console.warn('[' + BUILD + '] alterarPeriodoGraficoEvolucao não encontrada.');
-    return false;
-  }
-
-  function acionarIndicador(btn){
-    prepararTab(btn);
-    const meses = Number(btn.dataset.months);
-    if(![12,24,36].includes(meses)) return false;
-    ativarGrupo('.indic-tab[data-months]', btn);
-    try { activePeriodTab = meses; } catch(e) { window.activePeriodTab = meses; }
-    document.documentElement.dataset.indicPeriod = String(meses);
-    if(typeof window.atualizarTabelaIndicadores === 'function'){
-      window.atualizarTabelaIndicadores();
-      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
-        detail: { months: meses, source: BUILD }
-      }));
-      return true;
-    }
-    console.warn('[' + BUILD + '] atualizarTabelaIndicadores não encontrada.');
-    return false;
-  }
-
-  function capturar(ev){
-    var _t = ev && ev.target;
-    if(_t && _t.closest && (
-      _t.closest('.closed-month-launch') ||
-      _t.closest('#closedMarketSheet') ||
-      _t.closest('#closedMarketOverlay')
-    )) return;
-    const btn = tabDireta(ev) || tabPorCoordenada(ev);
-    if(!btn) return;
-
-    let ok = false;
-    if(btn.matches('.chart-tab[data-chart][data-range]')) ok = acionarGrafico(btn);
-    if(btn.matches('.indic-tab[data-months]')) ok = acionarIndicador(btn);
-
-    if(ok){
-      ev.preventDefault();
-      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-      else if(typeof ev.stopPropagation === 'function') ev.stopPropagation();
-      console.info('[' + BUILD + '] botão acionado:', btn.textContent.trim(), Object.assign({}, btn.dataset));
-    }
-  }
-
-  prepararTodos();
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prepararTodos, {once:true});
-  setTimeout(prepararTodos, 300);
-  setTimeout(prepararTodos, 1200);
-  setTimeout(prepararTodos, 3000);
-
-  // Window capture roda antes dos listeners em document; isso contorna stopImmediatePropagation de patches anteriores.
-  ['pointerdown','pointerup','click','touchend'].forEach(tipo => {
-    window.addEventListener(tipo, capturar, true);
-  });
-
-  console.info('[' + BUILD + '] instalado.');
-})();
+/* Patches legados v5/v6 dos tabs removidos pela correção v228. */
 /* ════════════════════════════════════════════════════
    v24 — Mobile card-first para o catálogo de fundos
 ════════════════════════════════════════════════════ */
