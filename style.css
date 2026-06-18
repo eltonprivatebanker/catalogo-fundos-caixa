@@ -38968,3 +38968,153 @@ html.rates-reference-stable-v257 #sec-mercado .rates-executive-v255 .cdi-history
     display:none !important;
   }
 }
+
+
+/* ELTAUM_SELIC_MOBILE_FIT_20260618_v258
+   Corrige textos cortados nos cards da Selic em celulares com viewport/font-scaling diferente. */
+@media (max-width: 700px){
+  html.selic-mobile-fit-v258 #evoChartSelicCard{
+    overflow: hidden !important;
+  }
+
+  /* Botões de período: sem texto cortado. Em vez de carrossel apertado, vira grade de 2 linhas. */
+  html.selic-mobile-fit-v258 #evoChartSelicCard .chart-card-header{
+    padding: 12px 12px 8px !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .chart-tabs{
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    width: 100% !important;
+    overflow: visible !important;
+    padding: 0 !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .chart-tab{
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 9px 6px !important;
+    border-radius: 13px !important;
+    font-size: .72rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .chart-tab[data-range="120"]{
+    grid-column: 1 / 2 !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .chart-tab[data-range="999"]{
+    grid-column: 2 / 4 !important;
+    min-width: 0 !important;
+  }
+
+  /* Leitura vigente: mais compacta e sem quebrar feio. */
+  html.selic-mobile-fit-v258 #evoChartSelicCard .chart-reading{
+    margin: 0 12px 10px !important;
+    padding: 10px 12px !important;
+    font-size: .76rem !important;
+    line-height: 1.25 !important;
+    text-align: center !important;
+  }
+
+  /* Cards Máxima / Mínima / Vigente: deixam de competir em 3 colunas estreitas. */
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-row{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+    padding: 0 12px 12px !important;
+    overflow: visible !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-chip{
+    min-width: 0 !important;
+    min-height: 48px !important;
+    padding: 9px 11px !important;
+    border-radius: 13px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    gap: 9px !important;
+    overflow: hidden !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-dot{
+    flex: 0 0 10px !important;
+    width: 10px !important;
+    height: 10px !important;
+    margin: 0 !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-text{
+    flex: 1 1 auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "label value"
+      "date  value" !important;
+    align-items: center !important;
+    column-gap: 10px !important;
+    row-gap: 2px !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-label{
+    grid-area: label !important;
+    min-width: 0 !important;
+    font-size: .58rem !important;
+    line-height: 1.05 !important;
+    letter-spacing: .09em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-value{
+    grid-area: value !important;
+    justify-self: end !important;
+    align-self: center !important;
+    font-size: .82rem !important;
+    line-height: 1.05 !important;
+    white-space: nowrap !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-date{
+    grid-area: date !important;
+    display: block !important;
+    min-width: 0 !important;
+    margin: 0 !important;
+    font-size: .62rem !important;
+    line-height: 1.12 !important;
+    color: #c2cce3 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  /* Gráfico: reduz um pouco a área para compensar os cards em lista, sem perder leitura. */
+  html.selic-mobile-fit-v258 #evoChartSelicCard .chart-body{
+    min-height: 218px !important;
+    height: 218px !important;
+    padding: 6px 9px 8px !important;
+  }
+}
+
+/* Telas um pouco maiores: mantém 3 cards lado a lado, mas com fonte/datas seguras. */
+@media (min-width: 701px) and (max-width: 920px){
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-chip{
+    padding: 10px 11px !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-value{
+    font-size: .82rem !important;
+  }
+
+  html.selic-mobile-fit-v258 #evoChartSelicCard .selic-summary-date{
+    font-size: .58rem !important;
+    white-space: nowrap !important;
+  }
+}

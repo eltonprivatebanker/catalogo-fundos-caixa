@@ -1,4 +1,4 @@
-# Atualização v257 — Cenário monetário estabilizado
+# Atualização v258 — Selic mobile sem textos cortados
 
 Substitua na branch publicada os arquivos:
 
@@ -8,14 +8,13 @@ Substitua na branch publicada os arquivos:
 
 ## O que foi corrigido
 
-1. Ajuste feito por camada, sem novo redesenho pesado.
-2. Removidos os textos antigos de microcopy como **Próximas reuniões / Arraste** e **Histórico mensal do CDI / Arraste** dentro deste módulo.
-3. O calendário do Copom volta a mostrar apenas os 4 itens principais por padrão.
-4. As reuniões futuras extras só aparecem quando o usuário abre **Calendário completo**.
-5. No desktop, as decisões voltaram para cards compactos e estáveis, sem item cortado.
-6. No mobile, as decisões ficam em lista vertical legível.
-7. O CDI mensal fica como régua no desktop e carrossel no mobile.
-8. Mantidas as correções anteriores: **Vigente desde**, sem `title` técnico no campo da Selic.
+1. Corrigido o corte de datas nos cards **Máxima / Mínima / Vigente** no mobile.
+2. Os cards da Selic deixam de ficar em 3 colunas apertadas em telas pequenas.
+3. No celular, os cards passam a ser exibidos em lista compacta, com valor à direita e data abaixo.
+4. Os botões `1A / 2A / 5A / 10A / Histórico` deixam de cortar o texto **Histórico**.
+5. A área de botões vira uma grade responsiva de duas linhas no mobile.
+6. O gráfico foi levemente ajustado para compensar a nova organização sem perder leitura.
+7. Não houve alteração nos dados nem na lógica de cálculo.
 
 ## Depois da subida
 
