@@ -210,75 +210,71 @@ html:not(.app-booting) .page{
   </div>
 
   <div class="fund-filter-shell fund-filter-shell-v217" id="fundFilterShell">
-    <div class="fund-top-area-v220">
-      <div class="controls-bar fund-controls-v2 fund-primary-toolbar-v217 fund-primary-toolbar-v220">
-        <div class="search-wrap fund-search-main">
-          <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-          <label class="visually-hidden-v217" for="searchInput">Buscar fundos</label>
-          <input id="searchInput" type="search" placeholder="Buscar fundo, CNPJ, benchmark ou liquidez..." autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="fund_search_no_autofill" class="search-no-autofill-v123">
-        </div>
-
-        <div class="filter-command-bar fund-result-summary-v217" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo" role="group">
-          <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
-            <span class="filter-button-icon" aria-hidden="true">⚙️</span>
-            <span id="filterButtonText">Categorias</span>
-            <span class="filter-count-badge" id="filterActiveCount">0</span>
-          </button>
-          <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
-          <span class="filter-result-summary" id="filterResultSummary" aria-live="polite">Resultado: —</span>
-          <button type="button" class="filter-clear-inline" id="clearFiltersTop">Limpar</button>
-        </div>
+    <div class="controls-bar fund-controls-v2 fund-primary-toolbar-v217">
+      <div class="search-wrap fund-search-main">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <label class="visually-hidden-v217" for="searchInput">Buscar fundos</label>
+        <input id="searchInput" type="search" placeholder="Buscar fundo, CNPJ, benchmark ou liquidez..." autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="search" enterkeyhint="search" data-lpignore="true" data-form-type="other" data-1p-ignore="true" data-bwignore="true" name="fund_search_no_autofill" class="search-no-autofill-v123">
       </div>
 
-      <div class="fund-catalog-toolbar-v220" aria-label="Categorias, ordenação e visualização do catálogo">
-        <fieldset class="catalog-shortcuts catalog-shortcuts-premium-v69 catalog-shortcuts-category-grid-v69 catalog-category-fieldset-v217">
-          <legend class="catalog-filter-legend-v217">Categoria do fundo</legend>
-          <div class="fund-category-heading-v220">
-            <span class="control-caption-v217">Categoria do fundo</span>
-            <span class="category-grid-status-v69" id="categoryGridStatus">Todos os fundos</span>
-          </div>
-          <div class="category-grid-v69" role="group" aria-label="Filtrar por categoria do fundo">
-            <button type="button" class="filter-preset-chip shortcut-preset active" data-preset="all" aria-pressed="true">Todos</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-simples" aria-pressed="false">RF Simples</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" aria-pressed="false">Renda Fixa</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-referenciado" aria-pressed="false">RF Referenciado</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-curto-prazo" aria-pressed="false">Curto Prazo</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado" aria-pressed="false">Multimercado</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial" aria-pressed="false">Cambial</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes" aria-pressed="false">Ações</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fundo-de-indice" aria-pressed="false">Índice</button>
-            <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp" aria-pressed="false">FMP</button>
-          </div>
-        </fieldset>
+      <div class="filter-command-bar fund-result-summary-v217" id="mobileFilterBar" aria-label="Comandos de filtro do catálogo" role="group">
+        <button type="button" class="mobile-filter-toggle filter-panel-toggle" id="mobileFilterToggle" aria-expanded="false" aria-controls="fundFilterDrawer">
+          <span class="filter-button-icon" aria-hidden="true">⚙️</span>
+          <span id="filterButtonText">Categorias</span>
+          <span class="filter-count-badge" id="filterActiveCount">0</span>
+        </button>
+        <span class="mobile-filter-summary" id="mobileFilterSummary">Filtros: todos</span>
+        <span class="filter-result-summary" id="filterResultSummary" aria-live="polite">Resultado: —</span>
+        <button type="button" class="filter-clear-inline" id="clearFiltersTop">Limpar</button>
+      </div>
 
-        <div class="fund-view-controls fund-view-controls-v217" aria-label="Ordenação e visualização do catálogo" role="group">
-          <div class="cdi-sort-control desktop-cdi-sort-control" title="Ordenar os fundos pelo percentual do CDI acumulado em 12 meses">
-            <span class="control-caption-v217">Ordenar por</span>
-            <strong class="sort-metric-v217">% CDI em 12 meses</strong>
-            <button type="button" class="cdi-sort-btn" data-cdi-sort="desc" aria-label="Ordenar pelo maior percentual do CDI em 12 meses">Maior ↓</button>
-            <button type="button" class="cdi-sort-btn" data-cdi-sort="asc" aria-label="Ordenar pelo menor percentual do CDI em 12 meses">Menor ↑</button>
-          </div>
-
-          <div class="vista-toggle-wrap desktop-table-mode-control" title="Alternar entre a visualização executiva e a detalhada" aria-label="Modo de visualização" role="group">
-            <span class="control-caption-v217">Visualização</span>
-            <button type="button" class="vista-btn active" id="vistaBtnReuniao" onclick="setVista('reuniao')" aria-pressed="true">📊 Executiva</button>
-            <button type="button" class="vista-btn" id="vistaBtnCompleta" onclick="setVista('completa')" aria-pressed="false">⚙️ Detalhada</button>
-          </div>
-
-          <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
-            <span>Por página</span>
-            <select id="perPage" class="ctrl-select" aria-label="Quantidade de fundos por página">
-              <option value="5">05 por página</option>
-              <option value="10" selected>10 por página</option>
-              <option value="25">25 por página</option>
-              <option value="50">50 por página</option>
-              <option value="100">100 por página</option>
-              <option value="9999">Todos os fundos</option>
-            </select>
-          </label>
+      <div class="fund-view-controls fund-view-controls-v217" aria-label="Ordenação e visualização do catálogo" role="group">
+        <div class="cdi-sort-control desktop-cdi-sort-control" title="Ordenar os fundos pelo percentual do CDI acumulado em 12 meses">
+          <span class="control-caption-v217">Ordenar por</span>
+          <strong class="sort-metric-v217">% CDI em 12 meses</strong>
+          <button type="button" class="cdi-sort-btn" data-cdi-sort="desc" aria-label="Ordenar pelo maior percentual do CDI em 12 meses">Maior ↓</button>
+          <button type="button" class="cdi-sort-btn" data-cdi-sort="asc" aria-label="Ordenar pelo menor percentual do CDI em 12 meses">Menor ↑</button>
         </div>
+
+        <div class="vista-toggle-wrap desktop-table-mode-control" title="Alternar entre a visualização executiva e a detalhada" aria-label="Modo de visualização" role="group">
+          <span class="control-caption-v217">Visualização</span>
+          <button type="button" class="vista-btn active" id="vistaBtnReuniao" onclick="setVista('reuniao')" aria-pressed="true">📊 Executiva</button>
+          <button type="button" class="vista-btn" id="vistaBtnCompleta" onclick="setVista('completa')" aria-pressed="false">⚙️ Detalhada</button>
+        </div>
+
+        <label class="exhibition-control" title="Quantidade de fundos exibidos após aplicar busca e filtros">
+          <span>Por página</span>
+          <select id="perPage" class="ctrl-select" aria-label="Quantidade de fundos por página">
+            <option value="5">05 por página</option>
+            <option value="10" selected>10 por página</option>
+            <option value="25">25 por página</option>
+            <option value="50">50 por página</option>
+            <option value="100">100 por página</option>
+            <option value="9999">Todos os fundos</option>
+          </select>
+        </label>
       </div>
     </div>
+
+    <fieldset class="catalog-shortcuts catalog-shortcuts-premium-v69 catalog-shortcuts-category-grid-v69 catalog-category-fieldset-v217">
+      <legend class="catalog-filter-legend-v217">Categoria do fundo</legend>
+      <div class="category-grid-head-v69">
+        <span class="catalog-shortcuts-label">Categorias</span>
+        <span class="category-grid-status-v69" id="categoryGridStatus">Todos os fundos</span>
+      </div>
+      <div class="category-grid-v69" role="group" aria-label="Filtrar por categoria do fundo">
+        <button type="button" class="filter-preset-chip shortcut-preset active" data-preset="all" aria-pressed="true">Todos</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-simples" aria-pressed="false">RF Simples</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa" aria-pressed="false">Renda Fixa</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-referenciado" aria-pressed="false">RF Referenciado</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="renda-fixa-curto-prazo" aria-pressed="false">Curto Prazo</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="multimercado" aria-pressed="false">Multimercado</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="cambial" aria-pressed="false">Cambial</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="acoes" aria-pressed="false">Ações</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fundo-de-indice" aria-pressed="false">Índice</button>
+        <button type="button" class="filter-preset-chip shortcut-preset" data-preset="fmp" aria-pressed="false">FMP</button>
+      </div>
+    </fieldset>
 
     <div class="fund-secondary-controls-v217" aria-label="Filtros complementares" role="group">
       <div class="catalog-risk-filter-v198 catalog-risk-inline-v203" aria-label="Filtro por perfil de risco do fundo" role="group">
