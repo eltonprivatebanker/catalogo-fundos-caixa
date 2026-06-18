@@ -3056,18 +3056,39 @@ function buildDetailQuickActions(row, urlFund){
     ? `<a class="detail-action-btn ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(title || label)}"><span>${icon}</span>${label}</a>`
     : '';
 
-  const buttons = [
-    mkBtn(lamina?.url, 'detail-action-primary', '📄', 'Lâmina', 'Abrir lâmina'),
-    mkBtn(regulamento?.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento'),
-    mkBtn(boletim?.url, 'detail-action-secondary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
-    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página do fundo', 'Abrir página do fundo'),
-  ].filter(Boolean).join('');
+  // O Boletim Comercial é o documento principal desta área. Quando ele não
+  // estiver disponível, a lâmina assume o destaque para não deixar o cabeçalho vazio.
+  const principal = boletim || lamina || regulamento;
+  const principalLabel = principal === boletim ? 'Boletim Comercial' : principal === lamina ? 'Lâmina' : 'Regulamento';
+  const principalIcon = principal === boletim ? '⭐' : principal === lamina ? '📄' : '📋';
+  const principalTitle = principal === boletim ? 'Abrir Boletim Comercial' : `Abrir ${principalLabel.toLowerCase()}`;
 
+  const primary = principal
+    ? mkBtn(principal.url, 'detail-action-primary detail-action-commercial-v224', principalIcon, principalLabel, principalTitle)
+    : '';
+
+  const regulation = regulamento && regulamento !== principal
+    ? mkBtn(regulamento.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento')
+    : '';
+
+  const moreDocs = [
+    lamina && lamina !== principal ? {href:lamina.url, icon:'📄', label:'Lâmina'} : null,
+    urlFund ? {href:urlFund, icon:'🏦', label:'Página do fundo'} : null,
+  ].filter(Boolean);
+
+  const more = moreDocs.length ? `<details class="detail-more-docs-v224" onclick="event.stopPropagation()">
+    <summary title="Abrir outros documentos"><span>＋</span>Mais documentos</summary>
+    <div class="detail-more-docs-menu-v224">
+      ${moreDocs.map(d=>`<a href="${htmlAttr(d.href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span>${d.icon}</span>${d.label}</a>`).join('')}
+    </div>
+  </details>` : '';
+
+  const buttons = `${primary}${regulation}${more}`;
   if(!buttons) return '';
-  return `<div class="detail-actions-card detail-actions-card-v158">
+  return `<div class="detail-actions-card detail-actions-card-v158 detail-actions-card-v224">
     <div class="detail-actions-copy-v158">
       <div class="detail-actions-title">Informações do fundo</div>
-      <small>Dados oficiais do cadastro e documentos essenciais</small>
+      <small>Características operacionais e documentos oficiais</small>
     </div>
     <div class="detail-actions-buttons">${buttons}</div>
   </div>`;
@@ -3139,7 +3160,10 @@ function detailAdvanceSummaryV206(statusClass, text){
 function detailObservationV206(r){
   const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
   return observation
-    ? `<aside class="detail-observation-v158 detail-observation-v206"><span>Informação operacional importante</span><p>${htmlAttr(observation)}</p></aside>`
+    ? `<details class="detail-observation-v158 detail-observation-v206 detail-observation-v224">
+        <summary><span>⚠ Regras operacionais e carência</span><small>Ver detalhes</small></summary>
+        <p>${htmlAttr(observation)}</p>
+      </details>`
     : '';
 }
 
@@ -3163,8 +3187,10 @@ function buildDetailExecutiveV158(r){
   const grace = detailBoolV158(detailValueV158(r,['Carência','Carencia']));
   const asgRaw = detailBoolV158(detailValueV158(r,['ASG']));
   const asg = asgRaw.state === 'off' ? {...asgRaw,label:'Não identificada'} : asgRaw;
-  const capLabel = capCls === 'positive' ? 'Sim' : capCls === 'negative' ? 'Não' : 'Não informado';
+  const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : 'Não informado';
   const advanceSummary = detailAdvanceSummaryV206(adiCls,d.adiantamento.texto);
+  const audienceSummary = audience.length ? audience.slice(0,2).join(' · ') : 'Não informado';
+  const observationHtml = detailObservationV206(r);
 
   const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
   const audienceHtml = audience.length
@@ -3172,24 +3198,25 @@ function buildDetailExecutiveV158(r){
     : '<span class="detail-empty-v158">Não informado</span>';
   const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
 
-  return `<div class="detail-executive-v158 detail-executive-v206">
-    <section class="detail-summary-v158" aria-label="Resumo executivo do fundo">
-      <div class="detail-section-head-v158"><div><span>Visão geral</span><strong>Características principais</strong></div><small>${r?.__fundosMeta?'Cadastro oficial integrado':'Dados disponíveis no catálogo'}</small></div>
-      <div class="detail-summary-grid-v158 detail-summary-grid-v206">
+  return `<div class="detail-executive-v158 detail-executive-v206 detail-executive-v224">
+    <section class="detail-summary-v158 detail-summary-v224" aria-label="Características principais do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Características principais</strong></div>
+      <div class="detail-summary-grid-v158 detail-summary-grid-v206 detail-summary-grid-v224">
         <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
         <div class="detail-summary-item-v158"><span>Perfil de risco</span><strong>${htmlAttr(profile)}</strong></div>
         <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
         <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
-        <div class="detail-summary-item-v158"><span>Aberto para captação?</span>${statusValue(capLabel,capCls)}</div>
+        <div class="detail-summary-item-v158"><span>Público-alvo</span><strong>${htmlAttr(audienceSummary)}</strong></div>
+        <div class="detail-summary-item-v158 capture"><span>Captação</span>${statusValue(capLabel,capCls)}</div>
       </div>
     </section>
 
-    <section class="detail-movement-v158" aria-label="Movimentação do fundo">
-      <div class="detail-section-head-v158"><div><span>Movimentação</span><strong>Prazos, horários e valores mínimos</strong></div><small>Solicitações após o limite podem seguir para o próximo dia útil</small></div>
-      <div class="detail-movement-grid-v158">
+    <section class="detail-movement-v158 detail-movement-v224" aria-label="Movimentação do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Movimentação</strong><small>Prazos em dias úteis; solicitações após o horário limite podem seguir para o próximo dia útil.</small></div>
+      <div class="detail-movement-grid-v158 detail-movement-grid-v224">
         <article class="detail-movement-card-v158 application">
           <div class="detail-movement-title-v158"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
-          <div class="detail-flow-v158">
+          <div class="detail-flow-v158 detail-flow-v224">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
             <i>→</i>
             <div><span>Conversão da cota</span><strong>${htmlAttr(conversionApp)}</strong></div>
@@ -3198,7 +3225,7 @@ function buildDetailExecutiveV158(r){
         </article>
         <article class="detail-movement-card-v158 redemption">
           <div class="detail-movement-title-v158"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
-          <div class="detail-flow-v158 three">
+          <div class="detail-flow-v158 three detail-flow-v224">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
             <i>→</i>
             <div><span>Conversão da cota</span><strong>${htmlAttr(conversionRed)}</strong></div>
@@ -3208,24 +3235,28 @@ function buildDetailExecutiveV158(r){
           <div class="detail-movement-meta-v158"><span><b>Resgate mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(advanceSummary)}</span></div>
         </article>
       </div>
+      ${observationHtml}
     </section>
 
-    <div class="detail-lower-grid-v158">
-      <section class="detail-info-card-v158" aria-label="Identificação e custos">
-        <div class="detail-card-head-v158"><span>Identificação e custos</span></div>
-        <dl class="detail-definition-list-v158">
-          <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
-          <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
-          <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
-          <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
-        </dl>
-      </section>
-      <section class="detail-info-card-v158" aria-label="Público e enquadramento">
-        <div class="detail-card-head-v158"><span>Público e enquadramento</span></div>
-        <div class="detail-audience-v158"><b>Público-alvo</b><div>${audienceHtml}</div></div>
-        <div class="detail-flags-v158">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
-      </section>
-    </div>
+    <section class="detail-complementary-v224" aria-label="Informações complementares">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Informações complementares</strong></div>
+      <div class="detail-complementary-grid-v224">
+        <div class="detail-complementary-group-v224">
+          <span class="detail-complementary-kicker-v224">Custos e identificação</span>
+          <dl class="detail-definition-list-v158 detail-definition-list-v224">
+            <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
+            <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
+            <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
+            <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
+          </dl>
+        </div>
+        <div class="detail-complementary-group-v224">
+          <span class="detail-complementary-kicker-v224">Público e enquadramento</span>
+          <div class="detail-audience-v158 detail-audience-v224"><b>Público-alvo</b><div>${audienceHtml}</div></div>
+          <div class="detail-flags-v158 detail-flags-v224">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
+        </div>
+      </div>
+    </section>
   </div>`;
 }
 
@@ -3422,14 +3453,16 @@ function gerarLeituraRapidaFundo(r){
   const complementosHtml = '';
 
   return `
-    <div class="fund-quick-note">
-      <div class="fund-quick-note-title">🧭 Leitura consultiva do fundo</div>
-      ${tagsHtml}
-      <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
+    <div class="fund-quick-note fund-quick-note-v224">
+      <div class="fund-quick-note-head-v224">
+        <div class="fund-quick-note-title">🧭 Leitura consultiva</div>
+        ${tagsHtml}
+      </div>
+      <div class="fund-quick-note-text">${objetivo}</div>
       ${complementosHtml}
       ${alertaCdi}
       <div class="fund-quick-note-disclaimer">
-        Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
+        ⓘ Leitura interpretativa. Consulte o Boletim Comercial, a lâmina e o regulamento para as informações oficiais.
       </div>
     </div>`;
 }
@@ -3439,7 +3472,7 @@ function buildDetailPanel(r,colspan){
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean detail-panel-v158">
-      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}${detailObservationV206(r)}</div>
+      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}</div>
     </div>
   </td></tr>`;
 }
