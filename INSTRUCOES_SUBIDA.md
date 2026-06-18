@@ -1,4 +1,4 @@
-# Atualização v253 — Legendas do eixo X da Selic
+# Atualização v254 — Rodapé de transparência
 
 Substitua na branch publicada os arquivos:
 
@@ -6,14 +6,17 @@ Substitua na branch publicada os arquivos:
 - `style.css`
 - `app.js`
 
-## O que foi corrigido
+## O que mudou
 
-1. A legenda do eixo X no gráfico **Trajetória da Selic meta** foi simplificada.
-2. Em períodos curtos (`1A` e `2A`), o eixo mostra poucos meses de referência.
-3. Em `5A`, o eixo passa a mostrar principalmente anos.
-4. Em `10A`, o eixo mostra anos alternados.
-5. Em `Histórico`, o eixo mostra apenas marcos maiores, evitando excesso de texto.
-6. As labels ficam horizontais, sem rotação pesada, melhorando a leitura no desktop e no mobile.
+1. Removido o nome completo do aviso de transparência.
+2. O texto ficou mais neutro e profissional.
+3. “Finalidade” virou **Objetivo**.
+4. “Natureza” virou **Independência**.
+5. “Uso adequado” virou **Uso informativo**.
+6. O subtítulo foi encurtado para: `dados públicos · painel independente · uso informativo`.
+7. O botão mudou de **Ocultar** para **Recolher** e, fechado, aparece como **Ver aviso**.
+8. As fontes públicas passaram de `span` para lista semântica `ul/li`.
+9. `fundos.caixa.gov.br` foi trocado por **CAIXA Asset / Fundos**.
 
 ## Depois da subida
 

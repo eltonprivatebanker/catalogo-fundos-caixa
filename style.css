@@ -38072,3 +38072,146 @@ html.selic-axis-labels-v253 #evoChartSelicCard .chart-body{
     padding-bottom:10px !important;
   }
 }
+
+
+/* ELTAUM_FOOTER_PRIVACY_20260618_v254
+   Rodapé: remove nome completo, melhora semântica, tipografia e fontes em lista. */
+html.footer-privacy-v254 .footer-responsible-v254{
+  margin-top:32px !important;
+  padding-top:14px !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-disclaimer-v2{
+  max-width:1080px !important;
+  border-radius:16px !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-summary-title{
+  font-size:1.02rem !important;
+  letter-spacing:.005em !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-summary-sub{
+  font-size:.63rem !important;
+  color:#b7c4df !important;
+  letter-spacing:.01em !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-summary-action::before{
+  content:'Ver aviso' !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-disclaimer-clean[open] .footer-summary-action::before{
+  content:'Recolher' !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-grid{
+  gap:9px !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-item{
+  padding:11px 12px !important;
+  background:rgba(16,20,36,.48) !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-item strong{
+  font-size:.59rem !important;
+  letter-spacing:.085em !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-item span{
+  font-size:.62rem !important;
+  line-height:1.48 !important;
+  color:#c8d3e8 !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-sources{
+  list-style:none !important;
+  margin:10px 0 0 !important;
+  padding:10px 0 0 !important;
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  border-top:1px solid rgba(255,255,255,.055) !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-sources li{
+  display:inline-flex !important;
+  align-items:center !important;
+  min-height:23px !important;
+  padding:4px 8px !important;
+  border-radius:999px !important;
+  border:1px solid rgba(255,255,255,.09) !important;
+  background:rgba(17,21,38,.62) !important;
+  color:#aeb7cf !important;
+  font-size:.56rem !important;
+  line-height:1.15 !important;
+}
+
+html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-sources .sources-title{
+  color:var(--gold2) !important;
+  border:none !important;
+  background:transparent !important;
+  padding-left:0 !important;
+  text-transform:uppercase !important;
+  letter-spacing:.08em !important;
+  font-weight:800 !important;
+  font-size:.58rem !important;
+}
+
+@media(max-width:768px), (hover:none) and (pointer:coarse){
+  html.footer-privacy-v254 .footer-responsible-v254{
+    margin-top:26px !important;
+    padding-top:12px !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-disclaimer-v2 summary{
+    padding:10px 11px !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-summary-title{
+    font-size:.84rem !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-summary-sub{
+    font-size:.52rem !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-summary-action{
+    min-width:76px !important;
+    padding:5px 8px !important;
+    font-size:.49rem !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-grid{
+    grid-template-columns:1fr !important;
+    gap:7px !important;
+    padding-top:10px !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-item{
+    padding:9px 10px !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-item strong{
+    font-size:.54rem !important;
+    margin-bottom:4px !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-item span{
+    font-size:.58rem !important;
+    line-height:1.42 !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-sources .sources-title{
+    width:100% !important;
+    font-size:.52rem !important;
+  }
+
+  html.footer-privacy-v254 .footer-responsible-v254 .footer-clean-sources li:not(.sources-title){
+    font-size:.52rem !important;
+    padding:3px 7px !important;
+    min-height:21px !important;
+  }
+}
