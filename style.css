@@ -37853,3 +37853,48 @@ html.market-live-values-v234 .market-period-metric-v196 > strong.dash + small{
 
 
 /* ELTAUM_SELIC_VIGENTE_SYNC_20260618_v248 — sincroniza card Vigente da Selic com o valor oficial do painel. */
+
+
+/* ELTAUM_SELIC_PERIODS_20260618_v249
+   Selic: períodos 1A, 2A, 5A, 10A e Histórico com layout responsivo. */
+html.selic-periods-v249 #evoChartSelicCard .chart-tabs{
+  gap:7px !important;
+}
+
+html.selic-periods-v249 #evoChartSelicCard .chart-tab{
+  min-width:44px !important;
+  padding-inline:12px !important;
+}
+
+@media (max-width:700px){
+  html.selic-periods-v249 #evoChartSelicCard .chart-tabs{
+    display:flex !important;
+    width:100% !important;
+    gap:7px !important;
+    overflow-x:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    scrollbar-width:none !important;
+    padding:0 1px 2px !important;
+  }
+
+  html.selic-periods-v249 #evoChartSelicCard .chart-tabs::-webkit-scrollbar{
+    display:none !important;
+  }
+
+  html.selic-periods-v249 #evoChartSelicCard .chart-tab{
+    flex:1 0 auto !important;
+    min-width:54px !important;
+    padding:8px 10px !important;
+    font-size:.68rem !important;
+    border-radius:12px !important;
+    white-space:nowrap !important;
+  }
+
+  html.selic-periods-v249 #evoChartSelicCard .chart-tab[data-range="999"]{
+    min-width:82px !important;
+  }
+
+  html.selic-periods-v249 #evoChartSelicCard .chart-card-sub{
+    min-height:0 !important;
+  }
+}

@@ -1,4 +1,4 @@
-# Atualização v248 — Sincronização da Selic vigente
+# Atualização v249 — Períodos da Selic
 
 Substitua na branch publicada os arquivos:
 
@@ -8,11 +8,17 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. Corrigida a divergência no bloco **Trajetória da Selic meta**.
-2. O card **Vigente** agora usa a taxa vigente oficial do painel (`cards.selic_meta.valor`).
-3. O gráfico passa a reconciliar o histórico com a taxa vigente quando o histórico ainda estiver terminando na decisão anterior.
-4. Assim, o bloco deixa de mostrar **14,50% a.a.** quando o painel já informa **14,25% a.a.**.
-5. Mantive a máxima e a mínima calculadas pelo período selecionado.
+1. O gráfico **Trajetória da Selic meta** agora tem os períodos:
+   - `1A`
+   - `2A`
+   - `5A`
+   - `10A`
+   - `Histórico`
+2. O período padrão passou a ser **5A**, por ser a melhor visão executiva do ciclo recente de juros.
+3. O botão ativo inicial agora fica sincronizado com o período desenhado.
+4. O subtítulo do gráfico muda conforme o período selecionado.
+5. No mobile, os botões da Selic usam rolagem horizontal quando necessário para não ficar espremido.
+6. Mantida a sincronização da taxa vigente com o dado oficial do painel.
 
 ## Depois da subida
 

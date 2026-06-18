@@ -1,3 +1,4 @@
+// ELTAUM_SELIC_PERIODS_20260618_v249
 // ELTAUM_SELIC_VIGENTE_SYNC_20260618_v248
 // ELTAUM_DOLAR_MOBILE_EXECUTIVE_20260618_v247
 // ELTAUM_DOLAR_MOBILE_TYPOGRAPHY_20260618_v246
@@ -5060,7 +5061,55 @@ function buildChartSelic(historico,qtd){
 
   filtrado.sort((a,b)=>a._ts-b._ts);
 
-  // Nos botões da Selic, data-range passa a representar meses de janela: 12 = 1A, 60 = 5A, 999 = histórico completo.
+  // v249: também reconcilia o módulo antigo do gráfico com a taxa vigente oficial.
+  // Assim o desenho inicial e os cliques antigos usam o mesmo valor do painel.
+  try{
+    const card = _dadosMercado?.cards?.selic_meta || {};
+    const valorVigente = Number(card.valor);
+    if(Number.isFinite(valorVigente)){
+      const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+        ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
+        : null;
+      const dataRef = ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || '';
+      let dtVigente = null;
+      if(dataRef && typeof dataRef === 'string' && dataRef.includes('/')){
+        const p = dataRef.split('/');
+        if(p.length === 3) dtVigente = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+      }else if(dataRef){
+        dtVigente = new Date(dataRef);
+      }
+      if(!dtVigente || isNaN(dtVigente.getTime())){
+        const hoje = new Date();
+        dtVigente = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+      }
+      const tsVigente = dtVigente.getTime();
+      const mesmoDia = d => d?._dt
+        && d._dt.getFullYear() === dtVigente.getFullYear()
+        && d._dt.getMonth() === dtVigente.getMonth()
+        && d._dt.getDate() === dtVigente.getDate();
+
+      const ultimo = filtrado[filtrado.length - 1];
+      if(!(ultimo && ultimo._ts >= tsVigente && Math.abs(Number(ultimo._valor) - valorVigente) < .005)){
+        const idxMesmoDia = filtrado.findIndex(mesmoDia);
+        const ponto = {
+          data: dataRef,
+          valor: valorVigente,
+          _dt: dtVigente,
+          _ts: tsVigente,
+          _ano: dtVigente.getFullYear(),
+          _valor: valorVigente,
+          _vigenteSyncV249: true
+        };
+        if(idxMesmoDia >= 0) filtrado[idxMesmoDia] = {...filtrado[idxMesmoDia], ...ponto};
+        else filtrado.push(ponto);
+        filtrado.sort((a,b)=>a._ts-b._ts);
+      }
+    }
+  }catch(e){
+    console.warn('[Selic v249] Falha ao reconciliar buildChartSelic:', e);
+  }
+
+  // Nos botões da Selic, data-range representa meses de janela: 12 = 1A, 24 = 2A, 60 = 5A, 120 = 10A, 999 = histórico completo.
   let slice = filtrado;
   if(qtd < 999 && filtrado.length){
     const ultimo = filtrado[filtrado.length - 1]._dt;
@@ -5097,8 +5146,22 @@ function buildChartSelic(historico,qtd){
   setTxt('selicMaxData', fmtDataSelic(maxRow?._dt));
   setTxt('selicMinResumo', fmtSelic(minVal));
   setTxt('selicMinData', fmtDataSelic(minRow?._dt));
-  setTxt('selicHojeResumo', fmtSelic(values[currentIndex]));
-  setTxt('selicHojeData', fmtDataSelic(currentRow?._dt) || 'último dado');
+  let vigenteResumoValor = values[currentIndex];
+  let vigenteResumoData = fmtDataSelic(currentRow?._dt) || 'último dado';
+  try{
+    const card = _dadosMercado?.cards?.selic_meta || {};
+    const valorCard = Number(card.valor);
+    if(Number.isFinite(valorCard)){
+      vigenteResumoValor = valorCard;
+      const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+        ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
+        : null;
+      vigenteResumoData = ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || vigenteResumoData;
+      if(vigenteResumoData && !String(vigenteResumoData).toLowerCase().startsWith('desde')) vigenteResumoData = 'desde ' + vigenteResumoData;
+    }
+  }catch(e){}
+  setTxt('selicHojeResumo', fmtSelic(vigenteResumoValor));
+  setTxt('selicHojeData', vigenteResumoData);
 
   const markerMap = new Map();
   function addMarker(index, label, color, mode){
@@ -5431,7 +5494,7 @@ async function inicializarGraficos(d){
   if(hist.length) buildChartIpca(hist,24);
   else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
 
-  if(selic.length) buildChartSelic(selic,999);
+  if(selic.length) buildChartSelic(selic,60);
   else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
 
   if(meta.length) buildChartMeta(meta);
@@ -5456,11 +5519,19 @@ function atualizarTituloPeriodoGrafico(chart, range){
     selic: {
       12: {
         titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Último ano · evolução da meta definida pelo Copom'
+        subtitulo: 'Último ano · decisões recentes do Copom'
+      },
+      24: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Últimos 2 anos · ciclo atual de juros'
       },
       60: {
         titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Últimos 5 anos · evolução da meta definida pelo Copom'
+        subtitulo: 'Últimos 5 anos · visão executiva do ciclo'
+      },
+      120: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Últimos 10 anos · comparação com ciclos anteriores'
       },
       999: {
         titulo: '🏦 Trajetória da Selic meta',
