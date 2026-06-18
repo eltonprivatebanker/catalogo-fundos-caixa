@@ -8385,7 +8385,7 @@ async function sharePainelMercado(){
     set('selicMinResumo', pct(minVal) + ' a.a.');
     set('selicMinData', dataBR(minItem?._dt));
     set('selicHojeResumo', pct(hoje.valor) + ' a.a.');
-    set('selicHojeData', dataBR(hoje._dt));
+    set('selicHojeData', 'desde ' + dataBR(hoje._dt));
   }
 
   async function desenharSelic(range){
@@ -8401,12 +8401,129 @@ async function sharePainelMercado(){
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
     const maxVal = Math.max(...values);
+    const minVal = Math.min(...values);
+    const currentIndex = Math.max(0, values.length - 1);
+    const maxIndex = values.indexOf(maxVal);
+    const minIndex = values.indexOf(minVal);
+
+    const baseRadius = values.map(() => 2.4);
+    const pointColors = values.map(() => '#e8bb6a');
+    const pointBorders = values.map(() => 'rgba(16,18,30,.95)');
+    const hoverRadius = values.map(() => 5);
+
+    const applyMarker = (idx, color, radius) => {
+      if(idx < 0 || idx >= values.length) return;
+      baseRadius[idx] = Math.max(baseRadius[idx], radius);
+      pointColors[idx] = color;
+      pointBorders[idx] = 'rgba(8,10,18,.98)';
+      hoverRadius[idx] = Math.max(hoverRadius[idx], radius + 2);
+    };
+
+    applyMarker(maxIndex, '#e8bb6a', 5.6);
+    applyMarker(minIndex, '#5b9cf6', 5.6);
+    applyMarker(currentIndex, '#2ed17a', 6.2);
+
+    const markerDataset = (index, color, label) => ({
+      type:'scatter',
+      label,
+      data: values.map((v, i) => i === index ? v : null),
+      pointRadius: 6,
+      pointHoverRadius: 7,
+      pointBackgroundColor: color,
+      pointBorderColor: 'rgba(8,10,18,.98)',
+      pointBorderWidth: 2,
+      showLine: false,
+      spanGaps: false,
+      order: 1
+    });
+
+    const markerLabels = [
+      { index: maxIndex, text: 'Máx', color: '#e8bb6a', dx: 0, dy: -12 },
+      { index: minIndex, text: 'Mín', color: '#5b9cf6', dx: 0, dy: -12 },
+      { index: currentIndex, text: 'Hoje', color: '#2ed17a', dx: 0, dy: -12 }
+    ];
+
+    const dedup = new Map();
+    markerLabels.forEach(marker => {
+      const key = String(marker.index);
+      if(!dedup.has(key)) dedup.set(key, []);
+      dedup.get(key).push(marker);
+    });
+    const markerGroups = [];
+    dedup.forEach(list => {
+      list.forEach((marker, pos) => {
+        markerGroups.push({ ...marker, dy: -12 - (pos * 12) });
+      });
+    });
+
+    const selicMarkerLabelsPlugin = {
+      id:'selicMarkerLabelsV243',
+      afterDatasetsDraw(chart){
+        const { ctx, chartArea } = chart;
+        if(!ctx || !chartArea) return;
+        ctx.save();
+        ctx.font = '700 10px Inter, system-ui, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        markerGroups.forEach(marker => {
+          const xScale = chart.scales?.x;
+          const yScale = chart.scales?.y;
+          if(!xScale || !yScale) return;
+          const x = xScale.getPixelForValue(marker.index);
+          const y = yScale.getPixelForValue(values[marker.index]);
+          if(!Number.isFinite(x) || !Number.isFinite(y)) return;
+          let ty = y + marker.dy;
+          if(ty < chartArea.top + 10) ty = y + 14;
+          ctx.lineWidth = 3.5;
+          ctx.strokeStyle = 'rgba(6,8,16,.92)';
+          ctx.strokeText(marker.text, x + marker.dx, ty);
+          ctx.fillStyle = marker.color;
+          ctx.fillText(marker.text, x + marker.dx, ty);
+        });
+        ctx.restore();
+      }
+    };
+
     new Chart(ctx, {
       type:'line',
-      data:{ labels, datasets:[{ data:values, borderColor:'#c8973a', backgroundColor:'rgba(200,151,58,.08)', borderWidth:2, pointBackgroundColor:'#e8bb6a', pointRadius:2.6, pointHoverRadius:5, fill:true, stepped:'before', tension:0 }] },
+      data:{ labels, datasets:[
+        {
+          label:'Selic',
+          data:values,
+          borderColor:'#c8973a',
+          backgroundColor:'rgba(200,151,58,.08)',
+          borderWidth:2,
+          pointBackgroundColor:pointColors,
+          pointBorderColor:pointBorders,
+          pointBorderWidth:1.5,
+          pointRadius:baseRadius,
+          pointHoverRadius:hoverRadius,
+          fill:true,
+          stepped:'before',
+          tension:0,
+          order:3
+        },
+        markerDataset(maxIndex, '#e8bb6a', 'Máxima do período'),
+        markerDataset(minIndex, '#5b9cf6', 'Mínima do período'),
+        markerDataset(currentIndex, '#2ed17a', 'Taxa vigente')
+      ] },
+      plugins:[selicMarkerLabelsPlugin],
       options:{
         ...chartDefaults(),
-        plugins:{ ...chartDefaults().plugins, tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'Selic: ' + pct(ctx.parsed.y) + ' a.a.' } } },
+        plugins:{
+          ...chartDefaults().plugins,
+          tooltip:{
+            ...chartDefaults().plugins.tooltip,
+            callbacks:{
+              label:ctx=>{
+                const idx = ctx.dataIndex;
+                const prefix = idx === maxIndex ? 'Máxima' : idx === minIndex ? 'Mínima' : idx === currentIndex ? 'Vigente' : 'Selic';
+                return prefix + ': ' + pct(ctx.parsed.y) + ' a.a.';
+              }
+            }
+          },
+          legend:{ display:false }
+        },
         scales:{ ...chartDefaults().scales, y:{ ...chartDefaults().scales.y, suggestedMin:0, suggestedMax:maxVal * 1.10 } }
       }
     });
