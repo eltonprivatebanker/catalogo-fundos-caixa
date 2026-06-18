@@ -9739,7 +9739,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_CATALOG_DESKTOP_COMPACT_20260618_v219';
+  const BUILD = 'ELTAUM_CATALOG_DESKTOP_OVERLAP_FIX_20260618_v220';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}

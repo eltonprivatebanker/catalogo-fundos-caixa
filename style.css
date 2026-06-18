@@ -34395,3 +34395,117 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     display:none!important;
   }
 }
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_OVERLAP_FIX_20260618_v220
+   Corrige a colisão entre o total de fundos e o bloco de ordenação.
+   No desktop amplo, o total passa a funcionar como um selo interno
+   da busca, preservando mais largura útil para os demais controles.
+============================================================ */
+@media (min-width:1381px){
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-primary-toolbar-v217{
+    position:relative!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:"search controls"!important;
+    column-gap:10px!important;
+  }
+
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-search-main{
+    grid-area:search!important;
+    position:relative!important;
+    min-width:0!important;
+  }
+
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-search-main #searchInput{
+    padding-right:118px!important;
+  }
+
+  /* O contador usa a mesma área da busca, como um selo interno. */
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-result-summary-v217{
+    grid-area:search!important;
+    position:relative!important;
+    z-index:4!important;
+    justify-self:end!important;
+    align-self:center!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:104px!important;
+    height:28px!important;
+    min-height:28px!important;
+    margin:0 7px 0 0!important;
+    padding:0 9px!important;
+    border-color:rgba(200,151,58,.18)!important;
+    border-radius:8px!important;
+    background:rgba(12,14,26,.92)!important;
+    box-shadow:0 0 0 3px rgba(12,14,26,.55)!important;
+    pointer-events:none!important;
+  }
+
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-result-summary-v217 #filterResultSummary{
+    width:auto!important;
+    max-width:86px!important;
+    padding:0!important;
+    color:#dce3f3!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.60rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    letter-spacing:0!important;
+    text-transform:none!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-view-controls-v217{
+    grid-area:controls!important;
+    grid-template-columns:270px 220px 150px!important;
+    width:max-content!important;
+    min-width:0!important;
+    justify-self:end!important;
+  }
+
+  /* Reafirma dimensões internas para impedir qualquer transbordamento. */
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .desktop-cdi-sort-control{
+    width:270px!important;
+    min-width:270px!important;
+    max-width:270px!important;
+  }
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .desktop-table-mode-control{
+    width:220px!important;
+    min-width:220px!important;
+    max-width:220px!important;
+  }
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .exhibition-control{
+    width:150px!important;
+    min-width:150px!important;
+    max-width:150px!important;
+  }
+}
+
+/* Em desktops intermediários, mantém o contador em sua própria coluna
+   e evita que ele invada a linha dos controles. */
+@media (min-width:1181px) and (max-width:1380px){
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(0,1fr) 118px!important;
+    grid-template-areas:
+      "search count"
+      "controls controls"!important;
+  }
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-result-summary-v217{
+    grid-area:count!important;
+    position:static!important;
+    justify-self:stretch!important;
+    width:118px!important;
+    min-width:118px!important;
+    max-width:118px!important;
+    margin:0!important;
+    box-shadow:none!important;
+    pointer-events:auto!important;
+  }
+  .catalog-desktop-overlap-fix-v220 #sec-fundos .fund-view-controls-v217{
+    grid-area:controls!important;
+    width:100%!important;
+    justify-self:stretch!important;
+  }
+}
