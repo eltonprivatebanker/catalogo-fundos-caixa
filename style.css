@@ -35281,3 +35281,52 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     gap:5px!important;
   }
 }
+
+
+/* ============================================================
+   ELTAUM_CATALOG_SEARCH_WIDTH_20260618_v226
+   Amplia discretamente a busca no desktop, compactando os
+   controles laterais sem perder legibilidade ou alinhamento.
+============================================================ */
+@media (min-width:1381px){
+  .catalog-search-width-v226 #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    column-gap:8px!important;
+  }
+
+  .catalog-search-width-v226 #sec-fundos .fund-search-main{
+    min-width:0!important;
+    width:100%!important;
+  }
+
+  .catalog-search-width-v226 #sec-fundos .fund-search-main #searchInput{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  .catalog-search-width-v226 #sec-fundos .fund-view-controls-v217{
+    grid-template-columns:250px 210px 145px!important;
+    gap:7px!important;
+    width:auto!important;
+    min-width:0!important;
+  }
+
+  .catalog-search-width-v226 #sec-fundos .fund-view-controls-v217 .desktop-cdi-sort-control{
+    width:250px!important;
+    min-width:250px!important;
+    max-width:250px!important;
+  }
+
+  .catalog-search-width-v226 #sec-fundos .fund-view-controls-v217 .desktop-table-mode-control{
+    width:210px!important;
+    min-width:210px!important;
+    max-width:210px!important;
+  }
+
+  .catalog-search-width-v226 #sec-fundos .fund-view-controls-v217 .exhibition-control{
+    width:145px!important;
+    min-width:145px!important;
+    max-width:145px!important;
+  }
+}
