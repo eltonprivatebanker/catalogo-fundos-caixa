@@ -1,3 +1,4 @@
+// ELTAUM_IPCA_CHART_SUMMARY_20260618_v250
 // ELTAUM_SELIC_PERIODS_20260618_v249
 // ELTAUM_SELIC_VIGENTE_SYNC_20260618_v248
 // ELTAUM_DOLAR_MOBILE_EXECUTIVE_20260618_v247
@@ -5017,18 +5018,119 @@ async function carregarSelicHistoricoAmpliado(historicoAtual){
   return atual;
 }
 
+
+function fmtIPCALabelV250(item){
+  if(!item) return '—';
+  if(item._dt instanceof Date && !isNaN(item._dt.getTime())){
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return `${meses[item._dt.getMonth()]}/${item._dt.getFullYear()}`;
+  }
+  return String(item.label || '—');
+}
+
+function atualizarResumoIPCAMensalV250(slice){
+  if(!Array.isArray(slice) || !slice.length) return;
+  const values = slice.map(d => Number(d.valor)).filter(Number.isFinite);
+  if(!values.length) return;
+
+  const ultimo = slice[slice.length - 1];
+  const maxVal = Math.max(...slice.map(d => Number(d.valor)));
+  const minVal = Math.min(...slice.map(d => Number(d.valor)));
+  const maxItem = slice.find(d => Number(d.valor) === maxVal);
+  const minItem = slice.find(d => Number(d.valor) === minVal);
+  const set = (id, txt) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = txt;
+  };
+
+  set('ipcaResumoUltimoV250', pct(Number(ultimo.valor)));
+  set('ipcaResumoUltimoDataV250', fmtIPCALabelV250(ultimo));
+  set('ipcaResumoMaxV250', pct(maxVal));
+  set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxItem));
+  set('ipcaResumoMinV250', pct(minVal));
+  set('ipcaResumoMinDataV250', fmtIPCALabelV250(minItem));
+}
+
+function ipcaChartOptionsV250(range){
+  const isMobile = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+  const r = Number(range) || 24;
+  const maxTicks = r >= 120 ? (isMobile ? 5 : 9) : r >= 60 ? (isMobile ? 6 : 10) : (isMobile ? 6 : 12);
+  const base = typeof chartDefaults === 'function' ? chartDefaults() : CHART_DEFAULTS;
+  return {
+    ...base,
+    plugins:{
+      ...base.plugins,
+      tooltip:{
+        ...base.plugins?.tooltip,
+        callbacks:{
+          label:ctx=>'IPCA: ' + pct(ctx.parsed.y)
+        }
+      }
+    },
+    scales:{
+      ...base.scales,
+      x:{
+        ...base.scales?.x,
+        ticks:{
+          ...base.scales?.x?.ticks,
+          autoSkip:true,
+          maxTicksLimit:maxTicks,
+          maxRotation:isMobile ? 0 : 38,
+          minRotation:0,
+          font:{ size:isMobile ? 9 : 10 }
+        },
+        grid:{
+          ...base.scales?.x?.grid,
+          drawBorder:false
+        }
+      },
+      y:{
+        ...base.scales?.y,
+        ticks:{
+          ...base.scales?.y?.ticks,
+          maxTicksLimit:isMobile ? 6 : 7,
+          font:{ size:isMobile ? 9 : 10 }
+        }
+      }
+    }
+  };
+}
+
+
 function buildChartIpca(historico,meses){
+  const range = Number(meses) || 24;
   const base = normalizarHistoricoIPCA(historico);
-  const slice=base.slice(-meses);
-  const labels=slice.map(d=>d.label);
-  const values=slice.map(d=>d.valor);
-  const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');
+  const slice = base.slice(-range);
+  const labels = slice.map(d=>d.label);
+  const values = slice.map(d=>d.valor);
+  const colors = values.map(v=>v>=0?'rgba(46,209,122,.72)':'rgba(240,85,101,.78)');
+  const barPct = range >= 120 ? .62 : range >= 60 ? .70 : .82;
+  const catPct = range >= 120 ? .74 : range >= 60 ? .82 : .90;
+
+  atualizarResumoIPCAMensalV250(slice);
+
   if(_chartIpca) _chartIpca.destroy();
   const ctx=document.getElementById('chartIpca')?.getContext('2d'); if(!ctx) return;
   const emptyMsg = ctx.canvas?.parentElement?.querySelector('.chart-empty-msg');
   if(emptyMsg) emptyMsg.remove();
-  _chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},
-    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});
+
+  _chartIpca=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        data:values,
+        backgroundColor:colors,
+        borderColor:colors.map(c=>c.replace('.72)','.12)').replace('.78)','.12)')),
+        borderWidth:1,
+        borderRadius:range >= 120 ? 1 : 2,
+        barPercentage:barPct,
+        categoryPercentage:catPct,
+        maxBarThickness:range >= 120 ? 8 : range >= 60 ? 12 : 22
+      }]
+    },
+    options:ipcaChartOptionsV250(range)
+  });
 }
 
 function buildChartSelic(historico,qtd){
@@ -5512,9 +5614,18 @@ function atualizarTituloPeriodoGrafico(chart, range){
   const periodo = Number(range);
   const configuracoes = {
     ipca: {
-      24: { titulo: '🎯 IPCA mensal — últimos 24 meses' },
-      60: { titulo: '🎯 IPCA mensal — últimos 5 anos' },
-      120: { titulo: '🎯 IPCA mensal — últimos 10 anos' }
+      24: {
+        titulo: '🎯 IPCA mensal — últimos 24 meses',
+        subtitulo: 'Variação oficial mês a mês'
+      },
+      60: {
+        titulo: '🎯 IPCA mensal — últimos 5 anos',
+        subtitulo: 'Ciclo recente de inflação mensal'
+      },
+      120: {
+        titulo: '🎯 IPCA mensal — últimos 10 anos',
+        subtitulo: 'Histórico mensal mais amplo'
+      }
     },
     selic: {
       12: {
@@ -5547,10 +5658,9 @@ function atualizarTituloPeriodoGrafico(chart, range){
   const titulo = tituloId ? document.getElementById(tituloId) : null;
   if(titulo && config.titulo) titulo.textContent = config.titulo;
 
-  if(chart === 'selic'){
-    const subtitulo = document.getElementById('chartSelicSub');
-    if(subtitulo && config.subtitulo) subtitulo.textContent = config.subtitulo;
-  }
+  const subtituloId = chart === 'ipca' ? 'chartIpcaSub' : chart === 'selic' ? 'chartSelicSub' : null;
+  const subtitulo = subtituloId ? document.getElementById(subtituloId) : null;
+  if(subtitulo && config.subtitulo) subtitulo.textContent = config.subtitulo;
 }
 
 function sincronizarTitulosGraficosAtivos(){
@@ -8475,26 +8585,39 @@ async function sharePainelMercado(){
 
   async function desenharIPCA(range){
     if(!window.Chart){ mostrarMsg('chartIpca', 'Chart.js ainda não carregou. Recarregue a página.'); return; }
-    const dados = await carregarIPCA(range);
-    const slice = dados.slice(-range);
+    const r = Number(range) || 24;
+    const dados = await carregarIPCA(r);
+    const slice = dados.slice(-r);
     const canvas = byId('chartIpca');
     const ctx = canvas?.getContext('2d');
     if(!ctx || !slice.length){ mostrarMsg('chartIpca', 'Histórico de IPCA temporariamente indisponível.'); return; }
     limparMsg(canvas);
     destruirChart(canvas);
+
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
-    const colors = values.map(v => v >= 0 ? 'rgba(46,209,122,.7)' : 'rgba(240,85,101,.7)');
+    const colors = values.map(v => v >= 0 ? 'rgba(46,209,122,.72)' : 'rgba(240,85,101,.78)');
+    const barPct = r >= 120 ? .62 : r >= 60 ? .70 : .82;
+    const catPct = r >= 120 ? .74 : r >= 60 ? .82 : .90;
+
+    atualizarResumoIPCAMensalV250(slice);
+
     new Chart(ctx, {
       type:'bar',
-      data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderColor:colors, borderWidth:1, borderRadius:2 }] },
-      options:{
-        ...chartDefaults(),
-        plugins:{
-          ...chartDefaults().plugins,
-          tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'IPCA: ' + pct(ctx.parsed.y) } }
-        }
-      }
+      data:{
+        labels,
+        datasets:[{
+          data:values,
+          backgroundColor:colors,
+          borderColor:colors,
+          borderWidth:1,
+          borderRadius:r >= 120 ? 1 : 2,
+          barPercentage:barPct,
+          categoryPercentage:catPct,
+          maxBarThickness:r >= 120 ? 8 : r >= 60 ? 12 : 22
+        }]
+      },
+      options:ipcaChartOptionsV250(r)
     });
   }
 

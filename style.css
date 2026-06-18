@@ -37898,3 +37898,152 @@ html.selic-periods-v249 #evoChartSelicCard .chart-tab{
     min-height:0 !important;
   }
 }
+
+
+/* ELTAUM_IPCA_CHART_SUMMARY_20260618_v250
+   IPCA mensal: resumo executivo e melhor leitura para 24M, 5A e 10A. */
+html.ipca-chart-summary-v250 #evoChartIpcaCard .chart-card-sub{
+  color:#b9c9ee !important;
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-row-v250{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  padding:0 18px 12px;
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250{
+  min-width:0;
+  padding:12px 13px;
+  border-radius:14px;
+  background:rgba(12,16,32,.78);
+  border:1px solid rgba(139,160,205,.16);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035);
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250.latest{
+  background:rgba(16,24,45,.84);
+  border-color:rgba(116,158,238,.24);
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250.max{
+  background:rgba(10,38,30,.52);
+  border-color:rgba(46,209,122,.22);
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250.min{
+  background:rgba(45,13,22,.40);
+  border-color:rgba(240,85,101,.22);
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-label-v250{
+  display:block;
+  margin-bottom:5px;
+  font:800 .62rem/1.1 'Inter',sans-serif;
+  color:#a9b9dd;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250 strong{
+  display:block;
+  font:900 1rem/1.05 'Inter',sans-serif;
+  color:#eaf1ff;
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250.max strong{
+  color:#2ed17a;
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250.min strong{
+  color:#ff6b81;
+}
+
+html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250 small{
+  display:block;
+  margin-top:4px;
+  font:.68rem/1.2 'Inter',sans-serif;
+  color:#9eb0d4;
+}
+
+@media (max-width:700px){
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .chart-card-header{
+    gap:10px !important;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .chart-tabs{
+    display:flex !important;
+    gap:7px !important;
+    overflow-x:auto !important;
+    scrollbar-width:none !important;
+    padding-bottom:2px !important;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .chart-tabs::-webkit-scrollbar{
+    display:none !important;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .chart-tab{
+    min-width:58px !important;
+    padding:8px 10px !important;
+    font-size:.68rem !important;
+    border-radius:12px !important;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .chart-reading{
+    margin-bottom:9px !important;
+    font-size:.68rem !important;
+    line-height:1.25 !important;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-row-v250{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:7px;
+    padding:0 12px 10px;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250{
+    padding:9px 8px;
+    border-radius:12px;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-label-v250{
+    font-size:.50rem;
+    letter-spacing:.07em;
+    margin-bottom:4px;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250 strong{
+    font-size:.78rem;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250 small{
+    margin-top:3px;
+    font-size:.54rem;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .chart-body{
+    min-height:240px !important;
+    height:240px !important;
+    padding-inline:8px !important;
+  }
+}
+
+@media (max-width:380px){
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-row-v250{
+    gap:6px;
+    padding-inline:10px;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250{
+    padding:8px 7px;
+  }
+
+  html.ipca-chart-summary-v250 #evoChartIpcaCard .ipca-summary-chip-v250 strong{
+    font-size:.72rem;
+  }
+}

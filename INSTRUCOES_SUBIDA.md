@@ -1,4 +1,4 @@
-# Atualização v249 — Períodos da Selic
+# Atualização v250 — IPCA mensal com resumo executivo
 
 Substitua na branch publicada os arquivos:
 
@@ -8,17 +8,20 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. O gráfico **Trajetória da Selic meta** agora tem os períodos:
-   - `1A`
-   - `2A`
+1. O gráfico **IPCA mensal** permanece com os períodos:
+   - `24M`
    - `5A`
    - `10A`
-   - `Histórico`
-2. O período padrão passou a ser **5A**, por ser a melhor visão executiva do ciclo recente de juros.
-3. O botão ativo inicial agora fica sincronizado com o período desenhado.
-4. O subtítulo do gráfico muda conforme o período selecionado.
-5. No mobile, os botões da Selic usam rolagem horizontal quando necessário para não ficar espremido.
-6. Mantida a sincronização da taxa vigente com o dado oficial do painel.
+2. O título e o subtítulo mudam conforme o período selecionado.
+3. Foi adicionado um resumo executivo com:
+   - **Último IPCA**
+   - **Maior mês**
+   - **Menor mês**
+4. O gráfico ficou mais legível para 5A e 10A:
+   - menos rótulos no eixo X;
+   - barras mais finas em períodos longos;
+   - melhor leitura no mobile.
+5. Mantive a lógica atual de carregamento dos dados.
 
 ## Depois da subida
 
