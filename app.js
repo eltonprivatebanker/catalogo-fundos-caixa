@@ -9739,7 +9739,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  const BUILD = 'ELTAUM_CATALOG_DESKTOP_COMPACT_20260618_v219';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9890,9 +9890,15 @@ async function sharePainelMercado(){
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        strip.classList.add('active','desktop-active-filter-v87');
-        strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-          `<span class="active-filter-pill active-filter-pill-v87">${label}</span>`;
+        if(active){
+          strip.classList.add('active','desktop-active-filter-v87');
+          strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
+            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="cat"><small>Categoria</small>${label}<span aria-hidden="true">×</span></button>` +
+            '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
+        }else{
+          strip.classList.remove('active','desktop-active-filter-v87');
+          strip.innerHTML = '';
+        }
       }
 
       const toggle = qs('#mobileFilterToggle');

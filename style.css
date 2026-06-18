@@ -34255,3 +34255,143 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     justify-self:start!important;
   }
 }
+
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_COMPACT_20260618_v219
+   Compacta o cabeçalho do catálogo em duas faixas no desktop:
+   1) busca, total, ordenação, visualização e paginação;
+   2) categorias, perfil de risco e controle de dados.
+   O resumo de filtros fica oculto quando nenhum filtro está ativo.
+============================================================ */
+@media (min-width:1381px){
+  .catalog-desktop-compact-v219 #sec-fundos .fund-filter-shell-v217{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    column-gap:16px!important;
+    row-gap:10px!important;
+    padding:12px 16px!important;
+  }
+
+  /* Faixa 1: todos os comandos principais na mesma linha. */
+  .catalog-desktop-compact-v219 #sec-fundos .fund-primary-toolbar-v217{
+    grid-column:1 / -1!important;
+    display:grid!important;
+    grid-template-columns:minmax(420px,1fr) 110px minmax(650px,auto)!important;
+    grid-template-areas:"search count controls"!important;
+    align-items:center!important;
+    gap:10px!important;
+    width:100%!important;
+    padding:0 0 10px!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-search-main{
+    grid-area:search!important;
+    min-width:0!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-result-summary-v217{
+    grid-area:count!important;
+    justify-self:stretch!important;
+    width:110px!important;
+    min-width:110px!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-view-controls-v217{
+    grid-area:controls!important;
+    display:grid!important;
+    grid-template-columns:290px 230px 150px!important;
+    align-items:stretch!important;
+    justify-content:end!important;
+    gap:8px!important;
+    width:auto!important;
+    min-width:0!important;
+    height:auto!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-view-controls-v217 > *{
+    height:auto!important;
+    min-height:44px!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .desktop-cdi-sort-control,
+  .catalog-desktop-compact-v219 #sec-fundos .desktop-table-mode-control,
+  .catalog-desktop-compact-v219 #sec-fundos .exhibition-control{
+    padding-top:6px!important;
+    padding-bottom:6px!important;
+  }
+
+  /* Faixa 2: categorias à esquerda; filtros complementares à direita. */
+  .catalog-desktop-compact-v219 #sec-fundos .catalog-category-fieldset-v217{
+    grid-column:1!important;
+    min-width:0!important;
+    margin:0!important;
+    align-self:center!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .catalog-category-fieldset-v217 .category-grid-head-v69{
+    display:none!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .catalog-category-fieldset-v217 .category-grid-v69{
+    gap:7px!important;
+    row-gap:7px!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .catalog-category-fieldset-v217 .filter-preset-chip{
+    height:32px!important;
+    min-height:32px!important;
+    padding:0 14px!important;
+  }
+
+  .catalog-desktop-compact-v219 #sec-fundos .fund-secondary-controls-v217{
+    grid-column:2!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:10px!important;
+    min-width:max-content!important;
+    margin:0!important;
+    padding:0 0 0 16px!important;
+    border-top:0!important;
+    border-left:1px solid rgba(255,255,255,.06)!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-secondary-controls-v217 .catalog-risk-filter-v198{
+    min-height:34px!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-secondary-controls-v217 .catalog-risk-select-wrap-v198{
+    width:190px!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-secondary-controls-v217 .compact-toggle-label-v217{
+    justify-self:auto!important;
+    min-height:34px!important;
+    padding:7px 10px!important;
+    white-space:nowrap!important;
+  }
+
+  /* Só cria uma terceira faixa quando há filtros reais aplicados. */
+  .catalog-desktop-compact-v219 #sec-fundos .active-filter-strip{
+    grid-column:1 / -1!important;
+    margin:0!important;
+    padding:9px 0 0!important;
+    border-top:1px solid rgba(255,255,255,.05)!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .active-filter-strip:not(.active),
+  .catalog-desktop-compact-v219 #sec-fundos .active-filter-strip:empty{
+    display:none!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+  }
+}
+
+/* Ajuste intermediário: mantém a primeira faixa compacta, mas permite
+   que os filtros inferiores respirem em telas desktop menores. */
+@media (min-width:1181px) and (max-width:1380px){
+  .catalog-desktop-compact-v219 #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(360px,1fr) 118px!important;
+    grid-template-areas:
+      "search count"
+      "controls controls"!important;
+    row-gap:9px!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .fund-view-controls-v217{
+    justify-content:end!important;
+  }
+  .catalog-desktop-compact-v219 #sec-fundos .active-filter-strip:not(.active),
+  .catalog-desktop-compact-v219 #sec-fundos .active-filter-strip:empty{
+    display:none!important;
+  }
+}
