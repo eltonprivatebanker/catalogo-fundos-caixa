@@ -1,4 +1,4 @@
-# Atualização v245 — Polimento do gráfico da Selic no mobile
+# Atualização v246 — Dólar PTAX mobile mais profissional
 
 Substitua na branch publicada os arquivos:
 
@@ -8,12 +8,12 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. Removi os textos fixos **Máx / Mín / Hoje** de dentro do gráfico, porque eles estavam ficando espremidos e invadindo o layout.
-2. Mantive os pontos de **máxima**, **mínima** e **vigente** destacados visualmente no gráfico por cor e tamanho.
-3. Os cards de resumo acima do gráfico continuam informando claramente Máxima, Mínima e Vigente.
-4. Reduzi a quantidade de pontos visíveis em séries longas para melhorar a qualidade visual do gráfico no mobile.
-5. Ajustei os rótulos do eixo X para não ficarem tão embolados.
-6. Compactei os cards de Máxima / Mínima / Vigente para evitar texto estourado.
+1. O bloco **Dólar PTAX** no mobile ficou mais uniforme.
+2. A cotação principal `R$ 5,16` foi reduzida para não dominar o card.
+3. Os cards de **Mês atual**, **No ano**, **12M**, **24M** e **36M** ficaram mais compactos.
+4. A área de **Estatísticas do período** ficou menor, com fontes mais alinhadas ao restante da plataforma.
+5. O cabeçalho **Dólar PTAX** e o selo **BCB · cotação oficial** foram ajustados para ficarem mais proporcionais.
+6. Mantive os dados e a estrutura, alterando apenas a apresentação visual no mobile.
 
 ## Depois da subida
 
