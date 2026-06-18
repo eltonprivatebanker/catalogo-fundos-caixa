@@ -1,4 +1,4 @@
-# Atualização v250 — IPCA mensal com resumo executivo
+# Atualização v251 — Correção do gráfico IPCA mensal
 
 Substitua na branch publicada os arquivos:
 
@@ -6,22 +6,13 @@ Substitua na branch publicada os arquivos:
 - `style.css`
 - `app.js`
 
-## O que mudou
+## O que foi corrigido
 
-1. O gráfico **IPCA mensal** permanece com os períodos:
-   - `24M`
-   - `5A`
-   - `10A`
-2. O título e o subtítulo mudam conforme o período selecionado.
-3. Foi adicionado um resumo executivo com:
-   - **Último IPCA**
-   - **Maior mês**
-   - **Menor mês**
-4. O gráfico ficou mais legível para 5A e 10A:
-   - menos rótulos no eixo X;
-   - barras mais finas em períodos longos;
-   - melhor leitura no mobile.
-5. Mantive a lógica atual de carregamento dos dados.
+1. Corrigido o erro que impedia o gráfico **IPCA mensal** de redesenhar.
+2. O resumo executivo do IPCA agora usa um formatador próprio, sem depender da função `pct()` de outros blocos.
+3. A mensagem `Não consegui redesenhar este período agora` deve desaparecer.
+4. Os cards **Último IPCA**, **Maior mês** e **Menor mês** passam a carregar normalmente.
+5. O tooltip do gráfico também foi ajustado para usar o mesmo formatador seguro.
 
 ## Depois da subida
 

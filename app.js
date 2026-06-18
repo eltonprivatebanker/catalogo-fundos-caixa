@@ -1,3 +1,4 @@
+// ELTAUM_IPCA_CHART_FIX_20260618_v251
 // ELTAUM_IPCA_CHART_SUMMARY_20260618_v250
 // ELTAUM_SELIC_PERIODS_20260618_v249
 // ELTAUM_SELIC_VIGENTE_SYNC_20260618_v248
@@ -5028,6 +5029,13 @@ function fmtIPCALabelV250(item){
   return String(item.label || '—');
 }
 
+function fmtPctIPCAResumoV251(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return '—';
+  const sinal = n > 0 ? '+' : '';
+  return sinal + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+}
+
 function atualizarResumoIPCAMensalV250(slice){
   if(!Array.isArray(slice) || !slice.length) return;
   const values = slice.map(d => Number(d.valor)).filter(Number.isFinite);
@@ -5043,11 +5051,11 @@ function atualizarResumoIPCAMensalV250(slice){
     if(el) el.textContent = txt;
   };
 
-  set('ipcaResumoUltimoV250', pct(Number(ultimo.valor)));
+  set('ipcaResumoUltimoV250', fmtPctIPCAResumoV251(Number(ultimo.valor)));
   set('ipcaResumoUltimoDataV250', fmtIPCALabelV250(ultimo));
-  set('ipcaResumoMaxV250', pct(maxVal));
+  set('ipcaResumoMaxV250', fmtPctIPCAResumoV251(maxVal));
   set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxItem));
-  set('ipcaResumoMinV250', pct(minVal));
+  set('ipcaResumoMinV250', fmtPctIPCAResumoV251(minVal));
   set('ipcaResumoMinDataV250', fmtIPCALabelV250(minItem));
 }
 
@@ -5063,7 +5071,7 @@ function ipcaChartOptionsV250(range){
       tooltip:{
         ...base.plugins?.tooltip,
         callbacks:{
-          label:ctx=>'IPCA: ' + pct(ctx.parsed.y)
+          label:ctx=>'IPCA: ' + fmtPctIPCAResumoV251(ctx.parsed.y)
         }
       }
     },
