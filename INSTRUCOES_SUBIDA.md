@@ -1,4 +1,4 @@
-# Atualização v246 — Dólar PTAX mobile mais profissional
+# Atualização v247 — Dólar PTAX mobile mais compacto
 
 Substitua na branch publicada os arquivos:
 
@@ -8,12 +8,12 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. O bloco **Dólar PTAX** no mobile ficou mais uniforme.
-2. A cotação principal `R$ 5,16` foi reduzida para não dominar o card.
-3. Os cards de **Mês atual**, **No ano**, **12M**, **24M** e **36M** ficaram mais compactos.
-4. A área de **Estatísticas do período** ficou menor, com fontes mais alinhadas ao restante da plataforma.
-5. O cabeçalho **Dólar PTAX** e o selo **BCB · cotação oficial** foram ajustados para ficarem mais proporcionais.
-6. Mantive os dados e a estrutura, alterando apenas a apresentação visual no mobile.
+1. O bloco **Dólar PTAX** ficou ainda mais compacto no mobile.
+2. A cotação principal `R$ 5,16` foi reduzida novamente.
+3. Os cards de variação ficaram mais baixos.
+4. As estatísticas do período ficaram com fonte menor e altura mais executiva.
+5. O cabeçalho e o selo BCB ficaram mais proporcionais.
+6. Mantive a estrutura e os dados, alterando apenas a apresentação visual.
 
 ## Depois da subida
 
