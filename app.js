@@ -591,10 +591,10 @@ function atualizarPoupancaCard(d, selicAtual){
         'Aguardando Selic vigente para definir a regra aplicada.';
     }else if(acima){
       $('poupQuickNote').innerHTML =
-        `Selic acima de <strong>8,50% a.a.</strong>: <strong>TR + 0,50% a.m.</strong>`;
+        `Selic acima de <strong>8,50% a.a.</strong> · depósitos novos e antigos seguem <strong>TR + 0,50% a.m.</strong>`;
     }else{
       $('poupQuickNote').innerHTML =
-        `Selic até <strong>8,50% a.a.</strong>: depósitos novos rendem <strong>70% da Selic + TR</strong>. Depósitos antigos mantêm TR + 0,50% a.m.`;
+        `Selic até <strong>8,50% a.a.</strong> · depósitos novos rendem <strong>70% da Selic + TR</strong> e depósitos antigos mantêm <strong>TR + 0,50% a.m.</strong>`;
     }
   }
 
@@ -14541,21 +14541,12 @@ function togglePoupancaExecutiveV167(force){
   if(!panel) return false;
 
   const mobile = window.matchMedia('(max-width:700px)').matches;
-  const currentlyOpen = mobile
-    ? document.body.classList.contains('poup-mobile-expanded')
-    : !panel.hasAttribute('hidden');
+  const currentlyOpen = !panel.hasAttribute('hidden');
   const open = typeof force === 'boolean' ? force : !currentlyOpen;
 
   document.body.classList.toggle('poup-mobile-expanded', open);
-
-  if(mobile){
-    // No celular, a expansão mostra apenas as duas regras compactas.
-    panel.setAttribute('hidden','');
-    panel.classList.remove('is-open-v167');
-  }else{
-    panel.toggleAttribute('hidden', !open);
-    panel.classList.toggle('is-open-v167', open);
-  }
+  panel.toggleAttribute('hidden', !open);
+  panel.classList.toggle('is-open-v167', open);
 
   const explain = document.getElementById('poupExplain');
   if(explain) explain.classList.toggle('open', open);
@@ -14564,7 +14555,7 @@ function togglePoupancaExecutiveV167(force){
       ? (open ? 'Ocultar regras' : 'Ver regras')
       : (open ? 'Ocultar regras e cenários' : 'Ver regras e cenários');
     btn.setAttribute('aria-expanded', String(open));
-    btn.setAttribute('aria-controls', mobile ? 'poupRulesV214' : 'poupDetailsPanelV167');
+    btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
 
   return false;
@@ -14586,7 +14577,7 @@ function initMarketReferenceExecutiveV167(){
     const mobile = window.matchMedia('(max-width:700px)').matches;
     btn.textContent = mobile ? 'Ver regras' : 'Ver regras e cenários';
     btn.setAttribute('aria-expanded','false');
-    btn.setAttribute('aria-controls', mobile ? 'poupRulesV214' : 'poupDetailsPanelV167');
+    btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
   toggleCopomCalendarV167(false);
 }

@@ -1,22 +1,27 @@
-# Atualização v258 — Selic mobile sem textos cortados
+# Catálogo de Fundos CAIXA — v259
 
-Substitua na branch publicada os arquivos:
+Arquivos atualizados nesta versão:
+- index.html
+- style.css
+- app.js
 
-- `index.html`
-- `style.css`
-- `app.js`
+## O que foi ajustado nesta versão
+- reorganização do card da Poupança no desktop e no mobile;
+- destaque maior para a regra aplicada hoje;
+- texto principal mais direto e semântico;
+- resumo com KPIs mais curtos: "No ano" e "Corte da Selic";
+- regras detalhadas movidas para um painel expansível;
+- painel expansível agora funciona também no mobile;
+- refinamento visual dos cards de regra e cenários.
 
-## O que foi corrigido
+## Como subir no GitHub
+1. Abra seu repositório local ou os arquivos do projeto.
+2. Substitua os arquivos antigos por estes 3 novos arquivos.
+3. Faça commit das alterações.
+4. Envie para o GitHub.
+5. Aguarde o GitHub Pages publicar.
 
-1. Corrigido o corte de datas nos cards **Máxima / Mínima / Vigente** no mobile.
-2. Os cards da Selic deixam de ficar em 3 colunas apertadas em telas pequenas.
-3. No celular, os cards passam a ser exibidos em lista compacta, com valor à direita e data abaixo.
-4. Os botões `1A / 2A / 5A / 10A / Histórico` deixam de cortar o texto **Histórico**.
-5. A área de botões vira uma grade responsiva de duas linhas no mobile.
-6. O gráfico foi levemente ajustado para compensar a nova organização sem perder leitura.
-7. Não houve alteração nos dados nem na lógica de cálculo.
-
-## Depois da subida
-
-- Faça `Ctrl + F5` no desktop.
-- No celular, feche a aba e abra novamente.
+## Observação
+Se o navegador mantiver a versão antiga em cache, faça um hard refresh:
+- Windows/Linux: Ctrl + F5
+- Mac: Cmd + Shift + R
