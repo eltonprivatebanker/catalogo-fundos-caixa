@@ -35126,3 +35126,158 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* ============================================================
+   ELTAUM_FUND_DETAIL_AUDIENCE_COPY_20260618_v225
+   Ação explícita para copiar CNPJ + público-alvo semântico.
+============================================================ */
+.fund-detail-audience-v225 #sec-fundos .detail-copyable-v225{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:7px!important;
+  min-width:0;
+  user-select:text;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-text-v225{
+  min-width:0;
+  overflow-wrap:anywhere;
+  font-variant-numeric:tabular-nums;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-btn-v225{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  flex:0 0 auto;
+  min-height:25px;
+  padding:4px 7px;
+  border:1px solid rgba(200,151,58,.24);
+  border-radius:7px;
+  background:rgba(200,151,58,.065);
+  color:#d9bd80;
+  font:750 .52rem/1 Inter,system-ui,sans-serif;
+  cursor:pointer;
+  transition:border-color .16s ease,background .16s ease,color .16s ease,transform .16s ease;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-btn-v225:hover{
+  border-color:rgba(232,187,106,.52);
+  background:rgba(200,151,58,.13);
+  color:#f0ce88;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-btn-v225:focus-visible{
+  outline:2px solid rgba(232,187,106,.72);
+  outline-offset:2px;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-btn-v225:active{
+  transform:translateY(1px);
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-btn-v225.is-copied{
+  border-color:rgba(46,209,122,.40);
+  background:rgba(46,209,122,.09);
+  color:#60dfa0;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-btn-v225.copy-error{
+  border-color:rgba(240,85,101,.42);
+  background:rgba(240,85,101,.09);
+  color:#ff8792;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-copy-icon-v225{
+  font-size:.68rem;
+  line-height:1;
+}
+
+/* Público-alvo visível no resumo e detalhado no enquadramento */
+.fund-detail-audience-v225 #sec-fundos .detail-summary-grid-v224 .audience-v225{
+  justify-content:flex-start!important;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-compact-v225{
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:4px;
+  margin-top:5px;
+  min-width:0;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225{
+  min-height:21px;
+  padding:3px 7px;
+  border-color:rgba(148,163,184,.16);
+  background:rgba(148,163,184,.055);
+  color:#cbd4e5;
+  font-size:.52rem;
+  letter-spacing:0;
+  white-space:nowrap;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-compact-v225 .detail-audience-chip-v225{
+  min-height:19px;
+  padding:3px 6px;
+  font-size:.49rem;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.pf{
+  border-color:rgba(46,209,122,.24);
+  background:rgba(46,209,122,.075);
+  color:#66dca2;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.pj{
+  border-color:rgba(91,156,246,.27);
+  background:rgba(91,156,246,.08);
+  color:#8ebcff;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.private{
+  border-color:rgba(200,151,58,.28);
+  background:rgba(200,151,58,.085);
+  color:#e8c77e;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.gov,
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.rpps{
+  border-color:rgba(251,146,60,.25);
+  background:rgba(251,146,60,.075);
+  color:#f6ad73;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.qualified,
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.professional,
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.institutional{
+  border-color:rgba(167,139,250,.25);
+  background:rgba(167,139,250,.075);
+  color:#c3acf8;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.general,
+.fund-detail-audience-v225 #sec-fundos .detail-audience-chip-v225.retail{
+  border-color:rgba(56,189,248,.22);
+  background:rgba(56,189,248,.065);
+  color:#86d6f6;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-more-v225{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-height:19px;
+  padding:3px 6px;
+  border:1px solid rgba(148,163,184,.15);
+  border-radius:999px;
+  background:rgba(148,163,184,.04);
+  color:#93a0b8;
+  font:750 .48rem/1 Inter,system-ui,sans-serif;
+}
+.fund-detail-audience-v225 #sec-fundos .detail-audience-v224>b::after{
+  content:' · acesso permitido';
+  color:#67738c;
+  font-weight:600;
+  text-transform:none;
+  letter-spacing:0;
+}
+
+@media(max-width:680px){
+  .fund-detail-audience-v225 #sec-fundos .detail-copy-label-v225{
+    display:none;
+  }
+  .fund-detail-audience-v225 #sec-fundos .detail-copy-btn-v225{
+    width:27px;
+    padding:4px;
+  }
+  .fund-detail-audience-v225 #sec-fundos .detail-copyable-v225{
+    gap:5px!important;
+  }
+}

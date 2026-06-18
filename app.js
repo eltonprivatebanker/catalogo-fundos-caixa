@@ -3145,8 +3145,49 @@ function detailAudienceV158(value){
       if(Array.isArray(parsed)) values = parsed;
     }catch(e){}
   }
-  if(!values.length) values = raw.split(/\s*[·;,|]\s*/g);
+  if(!values.length) values = raw.split(/\s*[·;,|/]\s*/g);
   return [...new Set(values.map(v=>String(v).trim()).filter(Boolean))];
+}
+
+/* v225 — padronização semântica do público-alvo */
+function detailAudienceSemanticV225(values){
+  const out = [];
+  const add = (label, short, cls) => {
+    const key = normalizarTextoBase(label);
+    if(!out.some(item=>item.key === key)) out.push({key,label,short,cls});
+  };
+
+  (Array.isArray(values) ? values : []).forEach(value=>{
+    const raw = String(value ?? '').trim();
+    if(!raw) return;
+    const norm = normalizarTextoBase(raw);
+
+    if((norm.includes('PESSOA FISICA') || norm === 'PF') && (norm.includes('PESSOA JURIDICA') || norm === 'PJ')){
+      add('Pessoa Física','PF','pf');
+      add('Pessoa Jurídica','PJ','pj');
+      return;
+    }
+    if(norm === 'PF' || norm.includes('PESSOA FISICA')) return add('Pessoa Física','PF','pf');
+    if(norm === 'PJ' || norm.includes('PESSOA JURIDICA')) return add('Pessoa Jurídica','PJ','pj');
+    if(norm === 'GOV' || norm.includes('GOVERNO') || norm.includes('ENTE PUBLICO')) return add('Governo','Governo','gov');
+    if(norm.includes('RPPS')) return add('RPPS','RPPS','rpps');
+    if(norm.includes('PRIVATE')) return add('Private','Private','private');
+    if(norm.includes('QUALIFICAD')) return add('Investidor qualificado','Qualificado','qualified');
+    if(norm.includes('PROFISSIONAL')) return add('Investidor profissional','Profissional','professional');
+    if(norm.includes('INSTITUCIONAL')) return add('Institucional','Institucional','institutional');
+    if(norm.includes('NAO RESIDENTE')) return add('Não residente','Não residente','nonresident');
+    if(norm === 'GERAL' || norm === 'PUBLICO GERAL' || norm === 'TODOS' || norm === 'TODOS OS PUBLICOS') return add('Público geral','Geral','general');
+    if(norm.includes('VAREJO')) return add('Varejo','Varejo','retail');
+
+    add(raw,raw,'other');
+  });
+
+  return out;
+}
+
+function detailAudienceChipV225(item, compact=false){
+  const label = compact ? item.short : item.label;
+  return `<span class="detail-audience-chip-v158 detail-audience-chip-v225 ${htmlAttr(item.cls)}" title="${htmlAttr(item.label)}">${htmlAttr(label)}</span>`;
 }
 
 function detailAdvanceSummaryV206(statusClass, text){
@@ -3183,18 +3224,22 @@ function buildDetailExecutiveV158(r){
   const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
   const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
   const audience = detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo']));
+  const audienceSemantic = detailAudienceSemanticV225(audience);
   const automatic = detailBoolV158(detailValueV158(r,['Movimentação Automática','Movimentacao Automatica']));
   const grace = detailBoolV158(detailValueV158(r,['Carência','Carencia']));
   const asgRaw = detailBoolV158(detailValueV158(r,['ASG']));
   const asg = asgRaw.state === 'off' ? {...asgRaw,label:'Não identificada'} : asgRaw;
   const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : 'Não informado';
   const advanceSummary = detailAdvanceSummaryV206(adiCls,d.adiantamento.texto);
-  const audienceSummary = audience.length ? audience.slice(0,2).join(' · ') : 'Não informado';
+  const audienceSummaryHtml = audienceSemantic.length
+    ? `<div class="detail-audience-compact-v225" aria-label="Público-alvo: ${htmlAttr(audienceSemantic.map(item=>item.label).join(', '))}">${audienceSemantic.slice(0,3).map(item=>detailAudienceChipV225(item,true)).join('')}${audienceSemantic.length>3?`<span class="detail-audience-more-v225" title="${htmlAttr(audienceSemantic.slice(3).map(item=>item.label).join(', '))}">+${audienceSemantic.length-3}</span>`:''}</div>`
+    : '<strong>Não informado</strong>';
   const observationHtml = detailObservationV206(r);
+  const cnpjCopyValue = String(cnpj || '').replace(/\D/g,'') || String(cnpj || '').trim();
 
   const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
-  const audienceHtml = audience.length
-    ? audience.map(v=>`<span class="detail-audience-chip-v158">${htmlAttr(v)}</span>`).join('')
+  const audienceHtml = audienceSemantic.length
+    ? audienceSemantic.map(item=>detailAudienceChipV225(item,false)).join('')
     : '<span class="detail-empty-v158">Não informado</span>';
   const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
 
@@ -3206,7 +3251,7 @@ function buildDetailExecutiveV158(r){
         <div class="detail-summary-item-v158"><span>Perfil de risco</span><strong>${htmlAttr(profile)}</strong></div>
         <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
         <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
-        <div class="detail-summary-item-v158"><span>Público-alvo</span><strong>${htmlAttr(audienceSummary)}</strong></div>
+        <div class="detail-summary-item-v158 audience-v225"><span>Público-alvo</span>${audienceSummaryHtml}</div>
         <div class="detail-summary-item-v158 capture"><span>Captação</span>${statusValue(capLabel,capCls)}</div>
       </div>
     </section>
@@ -3246,7 +3291,7 @@ function buildDetailExecutiveV158(r){
           <dl class="detail-definition-list-v158 detail-definition-list-v224">
             <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
             <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
-            <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
+            <div><dt>CNPJ</dt><dd class="copyable detail-copyable-v225"><span class="detail-copy-text-v225">${htmlAttr(cnpj)}</span><button type="button" class="detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjCopyValue)}" aria-label="Copiar CNPJ ${htmlAttr(cnpj)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button></dd></div>
             <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
           </dl>
         </div>
@@ -3259,6 +3304,69 @@ function buildDetailExecutiveV158(r){
     </section>
   </div>`;
 }
+
+/* v225 — cópia explícita do CNPJ em fichas geradas dinamicamente */
+(function initDetailCopyV225(){
+  if(window.__ELTAUM_DETAIL_COPY_V225__) return;
+  window.__ELTAUM_DETAIL_COPY_V225__ = true;
+
+  async function copyTextV225(value){
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly','');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const ok = document.execCommand('copy');
+    textarea.remove();
+    if(!ok) throw new Error('Falha ao copiar');
+  }
+
+  document.addEventListener('click', async event=>{
+    const target = event.target instanceof Element ? event.target : null;
+    const button = target?.closest('.detail-copy-btn-v225');
+    if(!button) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if(button.dataset.copyBusy === '1') return;
+
+    const value = String(button.dataset.copyValue || '').trim();
+    if(!value) return;
+
+    const label = button.querySelector('.detail-copy-label-v225');
+    const icon = button.querySelector('.detail-copy-icon-v225');
+    const originalAria = button.getAttribute('aria-label') || 'Copiar CNPJ';
+    button.dataset.copyBusy = '1';
+
+    try{
+      await copyTextV225(value);
+      button.classList.add('is-copied');
+      button.setAttribute('aria-label','CNPJ copiado');
+      if(label) label.textContent = 'Copiado';
+      if(icon) icon.textContent = '✓';
+    }catch(error){
+      button.classList.add('copy-error');
+      button.setAttribute('aria-label','Não foi possível copiar o CNPJ');
+      if(label) label.textContent = 'Tente novamente';
+      if(icon) icon.textContent = '!';
+    }
+
+    clearTimeout(button._copyTimerV225);
+    button._copyTimerV225 = setTimeout(()=>{
+      button.classList.remove('is-copied','copy-error');
+      button.setAttribute('aria-label',originalAria);
+      if(label) label.textContent = 'Copiar';
+      if(icon) icon.textContent = '⧉';
+      delete button.dataset.copyBusy;
+    },1800);
+  });
+})();
 
 function buildDocsHtml(cnpjLimpo, urlFundo, row){
   let cod = String(row?.['codfundo']||'').trim();
