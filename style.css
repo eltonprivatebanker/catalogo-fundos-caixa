@@ -36039,3 +36039,88 @@ html.market-live-values-v234 .market-period-metric-v196 > strong.dash + small{
     color:#8194b7 !important;
   }
 }
+
+/* PATCH v237 — Leitura consultiva mobile mais alinhada e compacta */
+@media (max-width: 760px){
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-v237,
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-v224{
+    padding: 12px 12px 11px !important;
+    border-radius: 14px !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-head-v224{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8px !important;
+    margin-bottom:10px !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-title{
+    flex:0 0 auto !important;
+    margin:0 !important;
+    font-size:.69rem !important;
+    line-height:1.1 !important;
+    letter-spacing:.035em !important;
+    white-space:nowrap !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-note-badge-wrap{
+    display:flex !important;
+    justify-content:flex-end !important;
+    min-width:0 !important;
+    margin:0 !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-note-tag{
+    max-width:150px !important;
+    padding:5px 8px !important;
+    border-radius:8px !important;
+    font-size:.58rem !important;
+    line-height:1.05 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-text-v237,
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-text{
+    max-width:none !important;
+    margin:0 !important;
+    padding:0 !important;
+    font-size:.70rem !important;
+    line-height:1.46 !important;
+    letter-spacing:0 !important;
+    text-align:left !important;
+    text-wrap:pretty !important;
+    hyphens:auto !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-text-v237 p{
+    margin:0 0 7px !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-text-v237 p:last-child{
+    margin-bottom:0 !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-disclaimer{
+    margin-top:9px !important;
+    padding-top:8px !important;
+    border-top:1px solid rgba(255,255,255,.07) !important;
+    font-size:.56rem !important;
+    line-height:1.28 !important;
+    color:#8094b8 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-quick-note-head-v224{
+    align-items:flex-start !important;
+  }
+
+  html.fund-mobile-note-v237 body.fund-card-mode #mobileFundCards .fund-note-tag{
+    max-width:132px !important;
+    font-size:.56rem !important;
+  }
+}

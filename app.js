@@ -3846,7 +3846,7 @@ function gerarLeituraRapidaFundo(r){
   } else if(base.includes('IDKA')){
     objetivo = 'Fundo referenciado ao IDKA (Índice de Duração Constante ANBIMA), que mantém prazo médio fixo de títulos IPCA+. O retorno combina juro real com variação da inflação, com duration controlada para previsibilidade de risco.';
   } else if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV') || base.includes('EXPERTISE') || base.includes('DIAMANTE') || base.includes('FIDELIDADE')){
-    objetivo = 'Fundo de renda fixa com exposição a crédito privado (debêntures, CRIs, CRAs e outros títulos corporativos). Busca prêmio de risco acima do CDI, mas com menor liquidez e exposição ao risco de crédito dos emissores. Requer análise de spread e qualidade dos ativos.';
+    objetivo = 'Fundo de renda fixa com exposição a títulos corporativos, como debêntures, CRIs e CRAs. Busca prêmio acima do CDI, mas exige atenção à liquidez e ao risco de crédito dos emissores. Avaliar spread, qualidade dos ativos e prazo de resgate.';
   } else if(base.includes('MULTIMERCADO') && (base.includes('BTG') || base.includes('ZARATHUSTRA') || base.includes('PIMCO') || base.includes('VERDE') || base.includes('CLARITAS'))){
     objetivo = 'Fundo multimercado de gestão especializada (parceria com gestora renomada). Estratégia flexível com exposição a múltiplas classes de ativos. Avalie o histórico de risco/retorno, volatilidade e consistência da gestora em diferentes cenários de mercado.';
   } else if(base.includes('MULTIMERCADO')){
@@ -3922,17 +3922,56 @@ function gerarLeituraRapidaFundo(r){
   // Ano, 12M e % CDI já aparecem no card/tabela principal.
   const complementosHtml = '';
 
+  const escapeNoteV237 = (v) => String(v ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+
+  const formatarLeituraConsultivaV237 = (texto) => {
+    const clean = String(texto || '').replace(/\s+/g, ' ').trim();
+    if(!clean) return '';
+
+    // Quebra controlada para mobile: blocos curtos, sem justificar texto.
+    const isCredPriv = base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV');
+    if(isCredPriv){
+      return [
+        'Fundo de renda fixa com exposição a títulos corporativos, como debêntures, CRIs e CRAs.',
+        'Busca prêmio acima do CDI, mas exige atenção à liquidez e ao risco de crédito dos emissores.',
+        'Avaliar spread, qualidade dos ativos e prazo de resgate.'
+      ].map(p => `<p>${escapeNoteV237(p)}</p>`).join('');
+    }
+
+    const frases = clean
+      .split(/(?<=[.!?])\s+/)
+      .map(p => p.trim())
+      .filter(Boolean);
+
+    if(frases.length <= 1) return `<p>${escapeNoteV237(clean)}</p>`;
+
+    const blocos = [];
+    for(const frase of frases){
+      if(blocos.length && (blocos[blocos.length - 1] + ' ' + frase).length <= 128){
+        blocos[blocos.length - 1] += ' ' + frase;
+      }else{
+        blocos.push(frase);
+      }
+    }
+
+    return blocos.slice(0, 3).map(p => `<p>${escapeNoteV237(p)}</p>`).join('');
+  };
+
+  const objetivoHtml = formatarLeituraConsultivaV237(objetivo);
+
   return `
-    <div class="fund-quick-note fund-quick-note-v224">
+    <div class="fund-quick-note fund-quick-note-v224 fund-quick-note-v237">
       <div class="fund-quick-note-head-v224">
         <div class="fund-quick-note-title">🧭 Leitura consultiva</div>
         ${tagsHtml}
       </div>
-      <div class="fund-quick-note-text">${objetivo}</div>
+      <div class="fund-quick-note-text fund-quick-note-text-v237">${objetivoHtml}</div>
       ${complementosHtml}
       ${alertaCdi}
       <div class="fund-quick-note-disclaimer">
-        ⓘ Leitura interpretativa. Consulte o Boletim Comercial, a lâmina e o regulamento para as informações oficiais.
+        ⓘ Leitura interpretativa. Consulte os documentos oficiais.
       </div>
     </div>`;
 }
