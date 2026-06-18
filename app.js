@@ -1,4 +1,4 @@
-// ELTAUM_SAVINGS_MOBILE_SUMMARY_20260617_v215
+// ELTAUM_CDI_MONTH_ORDER_20260617_v216
 // ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
@@ -1463,7 +1463,7 @@ function renderCdiYearHistory(d){
   };
 
   const titulo = $('cdiYearHistoryTitle');
-  if(titulo) titulo.textContent = `CDI mensal ${ano}`;
+  if(titulo) titulo.textContent = `CDI mensal ${ano} — mais recente primeiro`;
 
   // Mantém no card o mesmo acumulado do painel consolidado: ano com parcial quando existir.
   const total = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano);
@@ -1500,7 +1500,7 @@ function renderCdiYearHistory(d){
     const subtitulo = isCurrent
       ? '<span class="p">parcial</span>'
       : isClosed
-        ? '<span class="p">último mês</span>'
+        ? '<span class="p">último mês fechado</span>'
         : '';
 
     return `<span class="${classes}" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">

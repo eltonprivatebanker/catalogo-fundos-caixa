@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#07080f"/>
 <meta name="description" content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento."/>
-<meta name="app-build" content="ELTAUM_SAVINGS_MOBILE_SUMMARY_20260617_v215"/>
+<meta name="app-build" content="ELTAUM_CDI_MONTH_ORDER_20260617_v216"/>
 <meta name="mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=savings-mobile-summary-v215" rel="stylesheet"/>
+<link href="style.css?v=cdi-month-order-v216" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer src="app.js?v=savings-mobile-summary-v215"></script>
+<script defer src="app.js?v=cdi-month-order-v216"></script>
 
 </head>
 <body>
@@ -576,14 +576,14 @@ html:not(.app-booting) .page{
           <div class="reference-footnote-v167">Atas publicadas às 8h da terça-feira seguinte.</div>
         </section>
 
-        <section class="cdi-year-history cdi-history-v167" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano">
+        <section class="cdi-year-history cdi-history-v167" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano, do mês mais recente para o mais antigo">
           <div class="reference-subhead-v167 cdi-year-head">
             <div>
-              <strong id="cdiYearHistoryTitle">CDI mensal</strong>
-              <small>Fechamentos e parcial do mês corrente.</small>
+              <strong id="cdiYearHistoryTitle">CDI mensal — mais recente primeiro</strong>
+              <small>Mês corrente parcial e fechamentos mensais anteriores.</small>
             </div>
           </div>
-          <div class="cdi-month-strip" id="cdiMonthStrip" role="list">
+          <div class="cdi-month-strip" id="cdiMonthStrip" role="list" aria-label="Meses exibidos do mais recente para o mais antigo">
             <span class="cdi-month-empty">Histórico carregando...</span>
           </div>
           <div class="reference-footnote-v167">CDI ≈ Selic − 0,10 p.p. · Acumulados completos na tabela analítica.</div>
