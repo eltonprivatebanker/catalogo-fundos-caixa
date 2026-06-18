@@ -34043,3 +34043,215 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     border:0!important;
   }
 }
+
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_BALANCE_20260618_v218
+   Ajuste fino da barra de filtros desktop para evitar elementos
+   tortos, espremidos e com hierarquia irregular.
+============================================================ */
+@media (min-width:821px){
+  .catalog-desktop-balance-v218 #sec-fundos .fund-filter-shell-v217{
+    padding:14px 16px 12px!important;
+  }
+
+  /* Primeira camada em 2 linhas: busca + contagem; controles em faixa própria. */
+  .catalog-desktop-balance-v218 #sec-fundos .fund-primary-toolbar-v217{
+    display:grid!important;
+    grid-template-columns:minmax(360px,1fr) 132px!important;
+    grid-template-areas:
+      "search count"
+      "controls controls"!important;
+    align-items:center!important;
+    gap:12px!important;
+    padding:0 0 12px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-search-main{grid-area:search!important;}
+  .catalog-desktop-balance-v218 #sec-fundos .fund-result-summary-v217{
+    grid-area:count!important;
+    justify-self:end!important;
+    width:132px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-view-controls-v217{
+    grid-area:controls!important;
+    display:grid!important;
+    grid-template-columns:minmax(275px,320px) minmax(240px,260px) minmax(148px,160px)!important;
+    align-items:stretch!important;
+    justify-content:end!important;
+    justify-items:stretch!important;
+    gap:10px!important;
+    width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-view-controls-v217 > *{
+    height:auto!important;
+    min-height:52px!important;
+  }
+
+  /* Blocos principais com alturas uniformes e padding mais respirado. */
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-cdi-sort-control,
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-table-mode-control,
+  .catalog-desktop-balance-v218 #sec-fundos .exhibition-control{
+    border:1px solid rgba(255,255,255,.09)!important;
+    background:rgba(255,255,255,.022)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.02)!important;
+  }
+
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-cdi-sort-control{
+    grid-template-columns:minmax(116px,1fr) minmax(64px,auto) minmax(64px,auto)!important;
+    grid-template-rows:12px auto!important;
+    gap:4px 8px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding:7px 9px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-cdi-sort-control .sort-metric-v217{
+    font-size:.62rem!important;
+    line-height:1.25!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-cdi-sort-control .cdi-sort-btn{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:0!important;
+    min-height:26px!important;
+    padding:4px 8px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-table-mode-control{
+    grid-template-columns:1fr 1fr!important;
+    grid-template-rows:12px auto!important;
+    gap:4px 6px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding:7px 8px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-table-mode-control .vista-btn{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:0!important;
+    min-height:26px!important;
+    padding:4px 8px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  .catalog-desktop-balance-v218 #sec-fundos .exhibition-control{
+    gap:4px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding:7px 8px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .exhibition-control > span{
+    font-size:.50rem!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos #perPage{
+    height:26px!important;
+    min-height:26px!important;
+    font-size:.60rem!important;
+  }
+
+  /* Categorias: remove sensação de desalinhamento e melhora espaçamento vertical. */
+  .catalog-desktop-balance-v218 #sec-fundos .catalog-category-fieldset-v217{
+    margin-top:12px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .catalog-category-fieldset-v217 .category-grid-head-v69{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    margin:0 0 10px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .catalog-category-fieldset-v217 .catalog-shortcuts-label{
+    font-size:.55rem!important;
+    letter-spacing:.12em!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .catalog-category-fieldset-v217 .category-grid-status-v69{
+    font-size:.60rem!important;
+    white-space:nowrap!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .catalog-category-fieldset-v217 .category-grid-v69{
+    row-gap:8px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .catalog-category-fieldset-v217 .filter-preset-chip{
+    height:33px!important;
+    min-height:33px!important;
+    padding:0 16px!important;
+    font-size:.62rem!important;
+    line-height:1!important;
+  }
+
+  /* Filtros complementares mais equilibrados, sem o toggle espremido. */
+  .catalog-desktop-balance-v218 #sec-fundos .fund-secondary-controls-v217{
+    display:grid!important;
+    grid-template-columns:minmax(250px,320px) minmax(220px,max-content)!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:14px 18px!important;
+    margin-top:12px!important;
+    padding-top:12px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-secondary-controls-v217 .catalog-risk-filter-v198{
+    min-height:40px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-secondary-controls-v217 .catalog-risk-select-wrap-v198{
+    width:220px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-secondary-controls-v217 .compact-toggle-label-v217{
+    justify-self:end!important;
+    padding:8px 12px!important;
+    border:1px solid rgba(255,255,255,.09)!important;
+    border-radius:12px!important;
+    background:rgba(255,255,255,.018)!important;
+  }
+
+  /* Filtros ativos mais próximos do conjunto. */
+  .catalog-desktop-balance-v218 #sec-fundos .active-filter-strip{
+    margin-top:10px!important;
+    padding-top:10px!important;
+    border-top:1px solid rgba(255,255,255,.05)!important;
+  }
+}
+
+@media (min-width:821px) and (max-width:1320px){
+  .catalog-desktop-balance-v218 #sec-fundos .fund-view-controls-v217{
+    grid-template-columns:minmax(245px,1fr) minmax(220px,1fr) minmax(145px,.7fr)!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .desktop-cdi-sort-control .sort-metric-v217{
+    font-size:.59rem!important;
+  }
+}
+
+@media (min-width:821px) and (max-width:1080px){
+  .catalog-desktop-balance-v218 #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(280px,1fr) 118px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-result-summary-v217{
+    width:118px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-view-controls-v217{
+    grid-template-columns:1fr 1fr!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .exhibition-control{
+    grid-column:1 / -1!important;
+    max-width:170px!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-secondary-controls-v217{
+    grid-template-columns:1fr!important;
+    justify-content:flex-start!important;
+  }
+  .catalog-desktop-balance-v218 #sec-fundos .fund-secondary-controls-v217 .compact-toggle-label-v217{
+    justify-self:start!important;
+  }
+}
