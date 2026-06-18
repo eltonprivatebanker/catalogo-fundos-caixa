@@ -14755,7 +14755,7 @@ if(document.readyState === 'loading'){
 ════════════════════════════════════════════════════════════ */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_MARKET_PERIOD_CARDS_20260614_v196';
+  const BUILD='ELTAUM_MARKET_MOBILE_DEDUP_LIVE_VALUES_20260618_v234';
   let currency='brl';
   let observer=null;
   let timer=0;
@@ -14779,6 +14779,99 @@ if(document.readyState === 'loading'){
   function period(id,fallback){
     const value=text(id);
     return value==='—'?fallback:value;
+  }
+
+  /* v234 — os cards temáticos passam a consultar o JSON normalizado diretamente.
+     A tabela original continua como fallback, evitando corrida de renderização e
+     valores “—” quando o card é montado antes de o DOM legado terminar de atualizar. */
+  function finiteV234(value){
+    if(value===null || value===undefined || value==='') return null;
+    let normalized=value;
+    if(typeof value==='string'){
+      normalized=value.trim().replace(/%/g,'').replace(/\s+/g,'');
+      // Strings vindas do DOM podem usar padrão brasileiro (1.234,56),
+      // enquanto o JSON usa ponto decimal (2.06). Só remove pontos quando
+      // há vírgula decimal explícita.
+      if(normalized.includes(',')) normalized=normalized.replace(/\./g,'').replace(',','.');
+    }
+    const number=Number(normalized);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function firstFiniteV234(...values){
+    for(const value of values){
+      const number=finiteV234(value);
+      if(number!==null) return number;
+    }
+    return null;
+  }
+
+  function pctV234(value,fallback='—'){
+    const number=finiteV234(value);
+    if(number===null) return fallback;
+    return `${number>0?'+':''}${number.toFixed(2).replace('.',',')}%`;
+  }
+
+  function brlV234(value,fallback='—'){
+    const number=finiteV234(value);
+    if(number===null) return fallback;
+    return `R$ ${number.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  }
+
+  function ptsV234(value,fallback='—'){
+    const number=finiteV234(value);
+    if(number===null) return fallback;
+    return `${number.toLocaleString('pt-BR',{maximumFractionDigits:0})} pts`;
+  }
+
+  function currentVariationV234(item,card){
+    const explicit=firstFiniteV234(
+      item?.variacao_mes_atual,
+      item?.variacao_mensal,
+      item?.variacao_mes,
+      card?.variacao_mes_atual,
+      card?.variacao_mensal,
+      card?.variacao_mes
+    );
+    if(explicit!==null) return explicit;
+
+    const current=firstFiniteV234(item?.fechamento_atual,card?.atual);
+    const previous=firstFiniteV234(item?.fechamento_mes_anterior,card?.anterior);
+    if(current!==null && previous!==null && previous!==0){
+      return ((current/previous)-1)*100;
+    }
+    return null;
+  }
+
+  function marketDataV234(key,cardKey=key){
+    const data=(typeof _dadosMercado!=='undefined' && _dadosMercado) || window.__mercadoAtualV230 || {};
+    const item=data?.indices_mercado?.[key] || {};
+    const card=data?.cards?.[cardKey] || {};
+    return {item,card};
+  }
+
+  function currentStatusV234(item,fallback=''){
+    if(item?.status_mes_atual) return /parcial/i.test(item.status_mes_atual)?'Parcial':fallback;
+    if(item?.tem_mes_atual===true) return 'Parcial';
+    const match=String(item?.data_atual||'').match(/^(\d{4})-(\d{2})/);
+    if(match){
+      const today=new Date();
+      const currentKey=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+      if(`${match[1]}-${match[2]}`===currentKey) return 'Parcial';
+    }
+    return fallback;
+  }
+
+  function periodValueV234(item,card,months){
+    return firstFiniteV234(item?.[`acum_${months}m`],card?.[`acum_${months}m`]);
+  }
+
+  function pairFromMarketV234(item,field,fallbackId){
+    const fallback=usPair(fallbackId);
+    return {
+      usd:pctV234(item?.[field],fallback.usd),
+      brl:pctV234(item?.[`${field}_brl`],fallback.brl)
+    };
   }
 
   function statusFor(rowId){
@@ -14808,12 +14901,12 @@ if(document.readyState === 'loading'){
     const status=options.status||'';
     const aguardando=/aguard/i.test(status);
     const parcial=/parcial/i.test(status);
+    const semValor=!value || value==='—' || value==='-';
     const main=aguardando
       ? `<strong class="market-period-status-v196">${esc(status)}</strong>`
       : `<strong class="${tone(value)}">${esc(value||'—')}</strong>`;
-    const detalhe=parcial && !aguardando
-      ? (note || status)
-      : note;
+    let detalhe=parcial && !aguardando ? (note || status) : note;
+    if(semValor && !aguardando && !detalhe) detalhe='Dado não disponível';
     return `<div class="market-period-metric-v196"><span>${esc(label)}</span>${main}<small>${esc(detalhe||'')}</small></div>`;
   }
 
@@ -14921,26 +15014,44 @@ if(document.readyState === 'loading'){
   }
 
   function buildBrasil(){
-    const dolarStatus=statusFor('row-dolar');
-    const ibovStatus=statusFor('row-ibov');
+    const months=selectedPeriodMonths();
+    const dolarData=marketDataV234('dolar','dolar');
+    const ibovData=marketDataV234('ibovespa','ibovespa');
+
+    const dolarStatus=currentStatusV234(dolarData.item,statusFor('row-dolar'));
+    const ibovStatus=currentStatusV234(ibovData.item,statusFor('row-ibov'));
+
+    const dolarAtual=firstFiniteV234(dolarData.item?.fechamento_atual,dolarData.card?.atual);
+    const dolarFechado=firstFiniteV234(dolarData.item?.fechamento_mes_anterior,dolarData.card?.anterior);
+    const dolarVarAtual=currentVariationV234(dolarData.item,dolarData.card);
+    const dolarAno=firstFiniteV234(dolarData.item?.acum_ano,dolarData.card?.acum_ano);
+    const dolarAcum=periodValueV234(dolarData.item,dolarData.card,months);
+
+    const ibovAtual=firstFiniteV234(ibovData.item?.fechamento_atual,ibovData.card?.atual);
+    const ibovFechado=firstFiniteV234(ibovData.item?.fechamento_mes_anterior,ibovData.card?.anterior);
+    const ibovVarFechado=firstFiniteV234(ibovData.item?.variacao_mes_fechado,ibovData.card?.variacao_mes_fechado);
+    const ibovVarAtual=currentVariationV234(ibovData.item,ibovData.card);
+    const ibovAno=firstFiniteV234(ibovData.item?.acum_ano,ibovData.card?.acum_ano);
+    const ibovAcum=periodValueV234(ibovData.item,ibovData.card,months);
+
     return `<article class="market-period-card-v196 brasil">
       ${cardHeader('Brasil — câmbio e bolsa','Nível atual separado da variação percentual','PTAX BCB / B3')}
       ${gridHead()}
       ${row(
-        nameCell('💵','Dólar BRL/USD','Cotação PTAX e desempenho em reais',text('dolar-cur-cot'))+
-        metric('Fechado',text('dolar-ant-cot'),'cotação de fechamento')+
-        metric('Atual',text('dolar-cur-var'),dolarStatus)+
-        metric('No ano',text('dolar-ano-v2'))+
-        metric(selectedPeriodLabel(),text('dolar-acum-v2'))
+        nameCell('💵','Dólar BRL/USD','Cotação PTAX e desempenho em reais',brlV234(dolarAtual,text('dolar-cur-cot')))+
+        metric('Fechado',brlV234(dolarFechado,text('dolar-ant-cot')),'cotação de fechamento')+
+        metric('Atual',pctV234(dolarVarAtual,text('dolar-cur-var')),dolarStatus)+
+        metric('No ano',pctV234(dolarAno,text('dolar-ano-v2')))+
+        metric(selectedPeriodLabel(),pctV234(dolarAcum,text('dolar-acum-v2')))
       )}
       ${row(
-        nameCell('📈','Ibovespa','B3 · pontos e variação percentual',text('ibov-cur-pts'))+
-        metric('Fechado',text('ibov-ant-var'),text('ibov-ant-pts'))+
-        metric('Atual',text('ibov-cur-var'),ibovStatus)+
-        metric('No ano',text('ibov-ano-v2'))+
-        metric(selectedPeriodLabel(),text('ibov-acum-v2'))
+        nameCell('📈','Ibovespa','B3 · pontos e variação percentual',ptsV234(ibovAtual,text('ibov-cur-pts')))+
+        metric('Fechado',pctV234(ibovVarFechado,text('ibov-ant-var')),ptsV234(ibovFechado,text('ibov-ant-pts')))+
+        metric('Atual',pctV234(ibovVarAtual,text('ibov-cur-var')),ibovStatus)+
+        metric('No ano',pctV234(ibovAno,text('ibov-ano-v2')))+
+        metric(selectedPeriodLabel(),pctV234(ibovAcum,text('ibov-acum-v2')))
       )}
-      <div class="market-period-card-foot-v196">O valor atual aparece junto ao indicador; as quatro colunas apresentam a comparação por período.</div>
+      <div class="market-period-card-foot-v196">Os cards leem diretamente o JSON atualizado; a tabela original permanece apenas como fonte de compatibilidade.</div>
     </article>`;
   }
 
@@ -14951,10 +15062,24 @@ if(document.readyState === 'loading'){
   }
 
   function buildUs(){
+    const months=selectedPeriodMonths();
+    const makeRow=(key,prefix,icon,name,sub)=>{
+      const data=marketDataV234(key,key);
+      const item=data.item||{};
+      return {
+        icon,name,sub,
+        points:ptsV234(item?.fechamento_atual,text(`${prefix}-cur-pts`)),
+        closed:pairFromMarketV234(item,'variacao_mes_fechado',`${prefix}-ant-var`),
+        current:pairFromMarketV234(item,'variacao_mes_atual',`${prefix}-cur-var`),
+        year:pairFromMarketV234(item,'acum_ano',`${prefix}-ano-var`),
+        accum:pairFromMarketV234(item,`acum_${months}m`,`${prefix}-acum-var`),
+        status:currentStatusV234(item,statusFor(`row-${prefix}`))
+      };
+    };
     const rows=[
-      {icon:'🌎',name:'S&P 500',sub:'Índice amplo dos Estados Unidos',points:text('sp-cur-pts'),closed:usPair('sp-ant-var'),current:usPair('sp-cur-var'),year:usPair('sp-ano-var'),accum:usPair('sp-acum-var'),status:statusFor('row-sp')},
-      {icon:'🏛️',name:'Dow Jones',sub:'Empresas blue chips',points:text('dow-cur-pts'),closed:usPair('dow-ant-var'),current:usPair('dow-cur-var'),year:usPair('dow-ano-var'),accum:usPair('dow-acum-var'),status:statusFor('row-dow')},
-      {icon:'💻',name:'Nasdaq',sub:'Empresas de tecnologia',points:text('nasdaq-cur-pts'),closed:usPair('nasdaq-ant-var'),current:usPair('nasdaq-cur-var'),year:usPair('nasdaq-ano-var'),accum:usPair('nasdaq-acum-var'),status:statusFor('row-nasdaq')}
+      makeRow('sp500','sp','🌎','S&P 500','Índice amplo dos Estados Unidos'),
+      makeRow('dow_jones','dow','🏛️','Dow Jones','Empresas blue chips'),
+      makeRow('nasdaq','nasdaq','💻','Nasdaq','Empresas de tecnologia')
     ];
     return `<article class="market-period-card-v196 usa">
       ${cardHeader('Bolsas dos Estados Unidos','Rentabilidade em reais, dólares ou nas duas moedas','',usToggle())}
@@ -15026,6 +15151,7 @@ if(document.readyState === 'loading'){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
   else init();
   window.__ELTAUM_MARKET_PERIOD_CARDS_V196__={build:BUILD,render,get currency(){return currency;}};
+  window.__ELTAUM_MARKET_LIVE_VALUES_V234__={build:BUILD,render};
 })();
 
 

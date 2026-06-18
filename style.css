@@ -35617,3 +35617,72 @@ html.cdi-current-context-v233 .cdi-period-context-v233 .period-status{
     text-align:left;
   }
 }
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_MOBILE_DEDUP_LIVE_VALUES_20260618_v234
+   - mantém a tabela analítica original somente como fonte de dados;
+   - remove a duplicidade visual criada pelos cards mobile legados;
+   - preserva apenas os cards temáticos v196 no celular e no desktop.
+════════════════════════════════════════════════════════════ */
+html.market-mobile-dedup-v234.market-period-cards-v196
+#sec-mercado-painel
+#sec-painel-body
+.market-period-shell-v196.market-cards-ready-v196
+> table.indic-table-v2.market-period-source-table-v196{
+  display:none!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+
+html.market-mobile-dedup-v234.market-period-cards-v196
+#sec-mercado-painel
+#sec-painel-body
+.market-period-shell-v196.market-cards-ready-v196::before{
+  content:none!important;
+  display:none!important;
+}
+
+html.market-mobile-dedup-v234.market-period-cards-v196
+#sec-mercado-painel
+#sec-painel-body
+.market-period-shell-v196.market-cards-ready-v196
+> .indic-footnote{
+  display:none!important;
+}
+
+html.market-mobile-dedup-v234.market-period-cards-v196
+#sec-mercado-painel
+#sec-painel-body
+.market-period-shell-v196.market-cards-ready-v196
+> #marketPeriodCardsV196{
+  display:grid!important;
+  width:100%!important;
+}
+
+@media (max-width:760px), (pointer:coarse) and (max-device-width:920px){
+  html.market-mobile-dedup-v234.market-period-cards-v196
+  #sec-mercado-painel
+  #sec-painel-body
+  .market-period-shell-v196.market-cards-ready-v196{
+    border:0!important;
+    background:transparent!important;
+    overflow:visible!important;
+  }
+
+  html.market-mobile-dedup-v234.market-period-cards-v196
+  #sec-mercado-painel
+  #sec-painel-body
+  .market-period-shell-v196.market-cards-ready-v196
+  > table.indic-table-v2.market-period-source-table-v196{
+    display:none!important;
+  }
+}
+
+/* Valores ausentes continuam neutros, mas a nota explica a ausência. */
+html.market-live-values-v234 .market-period-metric-v196 > strong.dash{
+  color:#91a0bf!important;
+}
+html.market-live-values-v234 .market-period-metric-v196 > strong.dash + small{
+  color:#7f8dab!important;
+}
