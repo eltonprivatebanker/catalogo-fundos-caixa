@@ -1,3 +1,4 @@
+// ELTAUM_FUND_MOBILE_SEMANTIC_20260618_v235
 // ELTAUM_CDI_CURRENT_CONTEXT_20260618_v233
 // ELTAUM_CDI_DAILY_AUTO_REFRESH_20260618_v232
 // ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
@@ -4122,6 +4123,31 @@ function classeStatusOperacional(status, tipo){
   return 'unknown';
 }
 
+
+function rotuloCaptacaoMobileV235(info){
+  const raw = String(info?.texto || '').trim();
+  const status = String(info?.status || normalizarStatusOperacional(raw) || '').toUpperCase();
+  const cls = classeStatusOperacional(status, 'captacao');
+  if(cls === 'positive') return {valor:'Sim', detalhe:'Aberto para novas aplicações', cls:'positive', dot:'●'};
+  if(cls === 'negative') return {valor:'Não', detalhe:'Fechado para novas aplicações', cls:'negative', dot:'●'};
+  return {valor: raw && raw !== 'Não informada' ? raw : 'Não informado', detalhe:'Status de captação não identificado na base', cls:'unknown', dot:'○'};
+}
+
+function deveExibirAdiantamentoMobileV235(info, cls){
+  const raw = String(info?.texto || '').trim();
+  const norm = normalizarStatusOperacional(raw);
+  if(!raw || raw === 'Não informado') return false;
+  if(norm.includes('NAO SE APLICA')) return false;
+  return cls !== 'unknown' || raw.length > 0;
+}
+
+function factMobileV235(label, value, opts={}){
+  const cls = opts.cls ? ` ${opts.cls}` : '';
+  const detail = opts.detail ? `<small>${htmlAttr(opts.detail)}</small>` : '';
+  const dot = opts.dot ? `<i>${opts.dot}</i>` : '';
+  return `<div class="fund-fact-v154 fund-fact-mobile-v235${cls}"><span>${htmlAttr(label)}</span><strong>${dot}${value}</strong>${detail}</div>`;
+}
+
 function buildFundOperationalFacts(r, variant='detail'){
   const d = obterDadosOperacionaisFundo(r);
   const capCls = classeStatusOperacional(d.captacao.status,'captacao');
@@ -4129,6 +4155,32 @@ function buildFundOperationalFacts(r, variant='detail'){
   const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
   const adiDot = adiCls==='positive'?'●':adiCls==='negative'?'●':'○';
   const estimateBadge = '<em class="fund-fact-estimated-v154">indicativo</em>';
+
+  if(String(variant || '').includes('mobile')){
+    const cap = rotuloCaptacaoMobileV235(d.captacao);
+    const adiantamentoHtml = deveExibirAdiantamentoMobileV235(d.adiantamento, adiCls)
+      ? factMobileV235('Antecipação de resgate', htmlAttr(d.adiantamento.texto), {cls:`status-${adiCls}`, dot:adiDot})
+      : '';
+
+    return `<section class="fund-facts-v154 mobile fund-facts-mobile-v235" aria-label="Dados operacionais e cadastrais do fundo">
+      <div class="fund-facts-head-v154 fund-facts-head-mobile-v235"><strong>Dados do fundo</strong><small>Operação, referência e disponibilidade</small></div>
+
+      <div class="fund-operation-strip-v235" aria-label="Horários limite de movimentação">
+        <div><span>Aplicação</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
+        <div><span>Resgate</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
+      </div>
+
+      <div class="fund-facts-grid-v154 fund-facts-grid-mobile-v235">
+        ${factMobileV235('Referência', `${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}`)}
+        ${factMobileV235('Estratégia', `${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}`, {cls:'strategy'})}
+        ${factMobileV235('Tributação', htmlAttr(d.tributacao.texto))}
+        ${factMobileV235('Novas aplicações', htmlAttr(cap.valor), {cls:`status-${cap.cls} availability`, dot:cap.dot, detail:cap.detalhe})}
+        ${adiantamentoHtml}
+      </div>
+      <p class="fund-operation-note-v235">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
+    </section>`;
+  }
+
   return `<section class="fund-facts-v154 ${htmlAttr(variant)}" aria-label="Informações complementares do fundo">
     <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>${r?.__fundosMeta?'Dados oficiais do cadastro do fundo':'Dados da base; indicação apenas quando sinalizada'}</small></div>
     <div class="fund-facts-grid-v154">
@@ -4141,7 +4193,6 @@ function buildFundOperationalFacts(r, variant='detail'){
     </div>
   </section>`;
 }
-
 function prazoResgateCell(valor, tipo){
   const v = String(valor || '').trim();
   const cls = v ? `prazo-badge ${tipo === 'pagamento' ? 'pagamento' : ''}` : 'prazo-badge muted';
@@ -5841,9 +5892,9 @@ document.addEventListener('DOMContentLoaded', function(){
     // Para evitar repetição dentro de "Mais detalhes", mostramos aqui apenas documentos complementares.
     if(!secundarios.length) return '';
 
-    const urls = secundarios.map(d => d.url);
-    const allBtn = secundarios.length > 1
-      ? `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`
+    const pageUrl = getFundUrl(row);
+    const pageBtn = pageUrl
+      ? `<a class="fund-card-docs-page-v235" href="${htmlAttr(pageUrl)}" target="_blank" rel="noopener">Página oficial ↗</a>`
       : '';
 
     const links = secundarios.map(d => {
@@ -5853,8 +5904,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     return `<div class="fund-card-mobile-docs">
       <div class="fund-card-docs-head">
-        <span class="fund-card-docs-title">Documentos complementares</span>
-        ${allBtn}
+        <span class="fund-card-docs-title">Documentos oficiais</span>
+        ${pageBtn}
       </div>
       <div class="fund-card-docs-list secundarios">${links}</div>
     </div>`;
@@ -5967,9 +6018,9 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Referência</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Patrimônio (mi)</span><span class="fund-metric-value">${pl}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Início do fundo</span><span class="fund-metric-value">${data}</span></div>
         </div>
         ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
