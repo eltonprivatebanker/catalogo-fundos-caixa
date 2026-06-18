@@ -2283,7 +2283,7 @@ document.addEventListener('click', (ev)=>{
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=10;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor primeiro
@@ -2348,8 +2348,14 @@ function setVista(vista){
   // Atualiza botões
   const btnR = $('vistaBtnReuniao');
   const btnC = $('vistaBtnCompleta');
-  if(btnR) { btnR.className = vista === 'reuniao' ? 'vista-btn active' : 'vista-btn'; }
-  if(btnC) { btnC.className = vista === 'completa' ? 'vista-btn active' : 'vista-btn'; }
+  if(btnR) {
+    btnR.className = vista === 'reuniao' ? 'vista-btn active' : 'vista-btn';
+    btnR.setAttribute('aria-pressed', vista === 'reuniao' ? 'true' : 'false');
+  }
+  if(btnC) {
+    btnC.className = vista === 'completa' ? 'vista-btn active' : 'vista-btn';
+    btnC.setAttribute('aria-pressed', vista === 'completa' ? 'true' : 'false');
+  }
   // Recria tabela com as novas colunas
   buildHeader();
   render();
@@ -14614,4 +14620,25 @@ if(document.readyState === 'loading'){
       return {checked:!!input?.checked,bound:input?.dataset.v204Bound||'',build:BUILD};
     }
   };
+})();
+
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_PRO_20260618_v217
+   Ajustes finais de rotulagem, acessibilidade e estado inicial.
+============================================================ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_CATALOG_DESKTOP_PRO_20260618_v217';
+  function applyV217(){
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    document.documentElement.classList.add('catalog-desktop-professional-v217');
+    const per=document.getElementById('perPage');
+    if(per && String(per.value)!=='10' && typeof window.perPage==='undefined') per.value='10';
+    const search=document.getElementById('searchInput');
+    if(search) search.setAttribute('aria-describedby','filterResultSummary');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyV217,{once:true});
+  else applyV217();
 })();

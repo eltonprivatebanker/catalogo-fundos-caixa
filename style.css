@@ -33602,3 +33602,444 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     line-height:1.3!important;
   }
 }
+
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_PRO_20260618_v217
+   Catálogo desktop: hierarquia mais clara, busca única,
+   filtros compactos e controles agrupados por finalidade.
+============================================================ */
+.visually-hidden-v217,
+.catalog-filter-legend-v217{
+  position:absolute!important;
+  width:1px!important;
+  height:1px!important;
+  padding:0!important;
+  margin:-1px!important;
+  overflow:hidden!important;
+  clip:rect(0 0 0 0)!important;
+  white-space:nowrap!important;
+  border:0!important;
+}
+
+@media (min-width:821px){
+  /* Busca global duplicada: no desktop permanece apenas o atalho do menu
+     e a busca contextual da seção Fundos. */
+  #gfb{
+    display:none!important;
+  }
+  body{
+    padding-top:0!important;
+  }
+
+  /* Cabeçalho institucional mais compacto. */
+  .site-header-v217,
+  header.site-header-v217{
+    min-height:94px!important;
+    margin:0!important;
+    padding:14px 0 15px!important;
+    align-items:center!important;
+  }
+  .site-header-v217 .brand{
+    gap:12px!important;
+  }
+  .site-header-v217 .brand-logo{
+    width:44px!important;
+    height:44px!important;
+    flex:0 0 44px!important;
+  }
+  .site-header-v217 .brand-text h1{
+    font-size:1.42rem!important;
+    line-height:1.08!important;
+  }
+  .site-header-v217 .brand-text p{
+    margin-top:5px!important;
+    font-size:.59rem!important;
+    line-height:1.3!important;
+  }
+  .site-header-v217 .header-update-v217{
+    margin:0!important;
+    align-self:center!important;
+    padding:6px 11px!important;
+    border-radius:999px!important;
+    font-size:.62rem!important;
+  }
+
+  /* Navegação com menor altura e leitura mais direta. */
+  .desktop-anchor-nav-ui-v132{
+    margin:12px 0 16px!important;
+  }
+  .desktop-anchor-nav-inner-v131{
+    min-height:46px!important;
+    padding:5px 7px!important;
+  }
+
+  /* KPIs: quatro informações essenciais, alinhadas e compactas. */
+  #sec-kpi.executive-kpi-grid{
+    display:grid!important;
+    grid-template-columns:minmax(170px,.9fr) minmax(240px,1.2fr) minmax(220px,1fr) minmax(220px,1fr)!important;
+    gap:10px!important;
+    margin-top:16px!important;
+  }
+  #sec-kpi .kpi-categorias,
+  #sec-kpi .kpi-pipeline{
+    display:none!important;
+  }
+  #sec-kpi .kpi{
+    min-height:102px!important;
+    padding:14px 16px!important;
+    border-radius:13px!important;
+  }
+  #sec-kpi .kpi-icon{
+    display:none!important;
+  }
+  #sec-kpi .kpi-label{
+    margin-bottom:10px!important;
+    font-size:.58rem!important;
+  }
+  #sec-kpi .kpi-value{
+    font-size:1.48rem!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+  #sec-kpi .kpi-value.pos,
+  #sec-kpi .kpi-value.neg{
+    font-size:1.32rem!important;
+  }
+  #sec-kpi .kpi-sub{
+    margin-top:7px!important;
+    font-size:.61rem!important;
+    text-decoration:none!important;
+  }
+  #sec-kpi .kpi-sub a{
+    color:inherit!important;
+    text-decoration:none!important;
+    border-bottom:1px solid transparent!important;
+  }
+  #sec-kpi .kpi:hover .kpi-sub a{
+    border-bottom-color:currentColor!important;
+  }
+
+  /* Cabeçalho da seção. */
+  #sec-fundos{
+    margin-top:22px!important;
+  }
+  #sec-fundos > .section-title{
+    margin-bottom:10px!important;
+  }
+  #sec-fundos > .section-title h2{
+    font-size:1.18rem!important;
+  }
+
+  /* Contêiner principal menos pesado. */
+  #sec-fundos .fund-filter-shell-v217{
+    padding:12px 14px 10px!important;
+    border-color:rgba(255,255,255,.095)!important;
+    border-radius:15px!important;
+    background:linear-gradient(180deg,rgba(17,21,38,.78),rgba(9,11,20,.72))!important;
+    overflow:visible!important;
+  }
+
+  /* Primeira camada: busca, quantidade e ações principais. */
+  #sec-fundos .fund-primary-toolbar-v217{
+    display:grid!important;
+    grid-template-columns:minmax(360px,1fr) 132px minmax(650px,auto)!important;
+    align-items:center!important;
+    gap:10px!important;
+    width:100%!important;
+    padding:0 0 11px!important;
+    border-bottom:1px solid rgba(255,255,255,.065)!important;
+  }
+  #sec-fundos .fund-search-main{
+    width:100%!important;
+    min-width:0!important;
+  }
+  #sec-fundos .fund-search-main #searchInput{
+    min-height:40px!important;
+    padding-left:39px!important;
+    border-radius:11px!important;
+    font-size:.78rem!important;
+  }
+
+  #sec-fundos .fund-result-summary-v217{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:132px!important;
+    min-width:132px!important;
+    height:40px!important;
+    min-height:40px!important;
+    margin:0!important;
+    padding:0 10px!important;
+    border:1px solid rgba(255,255,255,.085)!important;
+    border-radius:11px!important;
+    background:rgba(255,255,255,.025)!important;
+  }
+  #sec-fundos .fund-result-summary-v217 #mobileFilterToggle,
+  #sec-fundos .fund-result-summary-v217 #mobileFilterSummary,
+  #sec-fundos .fund-result-summary-v217 #clearFiltersTop{
+    display:none!important;
+  }
+  #sec-fundos .fund-result-summary-v217 #filterResultSummary{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    color:#eef2fb!important;
+    font-size:.70rem!important;
+    font-weight:800!important;
+    line-height:1.2!important;
+    text-align:center!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  #sec-fundos .fund-view-controls-v217{
+    display:flex!important;
+    align-items:stretch!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+    width:auto!important;
+    min-width:0!important;
+    height:40px!important;
+  }
+  #sec-fundos .fund-view-controls-v217 > *{
+    height:40px!important;
+    min-height:40px!important;
+    margin:0!important;
+  }
+  #sec-fundos .control-caption-v217{
+    color:#8f9ab5!important;
+    font:800 .49rem/1 'Inter',sans-serif!important;
+    letter-spacing:.09em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  /* Ordenação passa a ser um único grupo inteligível. */
+  #sec-fundos .fund-view-controls-v217 .desktop-cdi-sort-control{
+    display:grid!important;
+    grid-template-columns:auto auto auto!important;
+    grid-template-rows:11px 1fr!important;
+    grid-template-areas:
+      "caption caption caption"
+      "metric desc asc"!important;
+    align-items:center!important;
+    gap:2px 6px!important;
+    width:270px!important;
+    min-width:270px!important;
+    max-width:270px!important;
+    padding:5px 8px!important;
+    border-radius:11px!important;
+  }
+  #sec-fundos .desktop-cdi-sort-control .control-caption-v217{grid-area:caption!important;}
+  #sec-fundos .desktop-cdi-sort-control .sort-metric-v217{
+    grid-area:metric!important;
+    color:#cbd5ed!important;
+    font-size:.59rem!important;
+    font-weight:750!important;
+    white-space:nowrap!important;
+  }
+  #sec-fundos .desktop-cdi-sort-control .cdi-sort-btn[data-cdi-sort="desc"]{grid-area:desc!important;}
+  #sec-fundos .desktop-cdi-sort-control .cdi-sort-btn[data-cdi-sort="asc"]{grid-area:asc!important;}
+  #sec-fundos .desktop-cdi-sort-control .cdi-sort-btn{
+    min-height:23px!important;
+    padding:4px 7px!important;
+    border-radius:7px!important;
+    font-size:.57rem!important;
+    line-height:1!important;
+  }
+
+  /* Visualização: nomenclatura orientada à finalidade. */
+  #sec-fundos .fund-view-controls-v217 .desktop-table-mode-control{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    grid-template-rows:11px 1fr!important;
+    grid-template-areas:
+      "caption caption"
+      "executive detailed"!important;
+    align-items:center!important;
+    gap:2px 4px!important;
+    width:220px!important;
+    min-width:220px!important;
+    max-width:220px!important;
+    padding:5px 7px!important;
+    border-radius:11px!important;
+  }
+  #sec-fundos .desktop-table-mode-control .control-caption-v217{grid-area:caption!important;}
+  #sec-fundos #vistaBtnReuniao{grid-area:executive!important;}
+  #sec-fundos #vistaBtnCompleta{grid-area:detailed!important;}
+  #sec-fundos .desktop-table-mode-control .vista-btn{
+    min-height:23px!important;
+    padding:4px 7px!important;
+    border-radius:7px!important;
+    font-size:.57rem!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-fundos .fund-view-controls-v217 .exhibition-control{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:11px 1fr!important;
+    align-items:center!important;
+    gap:2px!important;
+    width:150px!important;
+    min-width:150px!important;
+    max-width:150px!important;
+    padding:5px 8px!important;
+    border-radius:11px!important;
+  }
+  #sec-fundos .fund-view-controls-v217 .exhibition-control > span{
+    min-width:0!important;
+    font-size:.49rem!important;
+    line-height:1!important;
+  }
+  #sec-fundos .fund-view-controls-v217 #perPage{
+    width:100%!important;
+    min-width:0!important;
+    height:23px!important;
+    min-height:23px!important;
+    padding:2px 23px 2px 7px!important;
+    border-radius:7px!important;
+    font-size:.58rem!important;
+  }
+
+  /* Segunda camada: categorias com largura natural. */
+  #sec-fundos .catalog-category-fieldset-v217{
+    min-width:0!important;
+    min-height:0!important;
+    margin:10px 0 0!important;
+    padding:0!important;
+    border:0!important;
+  }
+  #sec-fundos .catalog-category-fieldset-v217 .category-grid-v69{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:7px!important;
+    width:100%!important;
+    margin:0!important;
+  }
+  #sec-fundos .catalog-category-fieldset-v217 .filter-preset-chip{
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:31px!important;
+    min-height:31px!important;
+    padding:0 14px!important;
+    border-radius:999px!important;
+    font-size:.61rem!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  /* Terceira camada: filtros complementares. */
+  #sec-fundos .fund-secondary-controls-v217{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin-top:10px!important;
+    padding-top:10px!important;
+    border-top:1px solid rgba(255,255,255,.055)!important;
+  }
+  #sec-fundos .fund-secondary-controls-v217 .catalog-risk-filter-v198{
+    display:flex!important;
+    align-items:center!important;
+    gap:9px!important;
+    width:auto!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+  #sec-fundos .fund-secondary-controls-v217 .catalog-risk-filter-v198 > label{
+    margin:0!important;
+  }
+  #sec-fundos .fund-secondary-controls-v217 .catalog-risk-select-wrap-v198{
+    width:205px!important;
+  }
+  #sec-fundos .fund-secondary-controls-v217 .compact-toggle-label-v217{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:34px!important;
+    margin:0!important;
+    cursor:pointer!important;
+  }
+  #sec-fundos .fund-secondary-controls-v217 .compact-toggle-label-v217 .toggle-label{
+    font-size:.66rem!important;
+  }
+
+  /* Filtros ativos só ocupam espaço quando necessários. */
+  #sec-fundos .active-filter-strip{
+    min-height:0!important;
+    height:auto!important;
+    max-height:none!important;
+    margin-top:8px!important;
+    padding:8px 0 0!important;
+  }
+  #sec-fundos .active-filter-strip:not(.active):empty{
+    display:none!important;
+  }
+}
+
+@media (min-width:821px) and (max-width:1450px){
+  #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(280px,1fr) 118px minmax(590px,auto)!important;
+  }
+  #sec-fundos .fund-result-summary-v217{
+    width:118px!important;
+    min-width:118px!important;
+  }
+  #sec-fundos .fund-view-controls-v217 .desktop-cdi-sort-control{
+    width:245px!important;
+    min-width:245px!important;
+    max-width:245px!important;
+  }
+  #sec-fundos .fund-view-controls-v217 .desktop-table-mode-control{
+    width:205px!important;
+    min-width:205px!important;
+    max-width:205px!important;
+  }
+  #sec-fundos .fund-view-controls-v217 .exhibition-control{
+    width:138px!important;
+    min-width:138px!important;
+    max-width:138px!important;
+  }
+}
+
+@media (min-width:821px) and (max-width:1180px){
+  #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(280px,1fr) 118px!important;
+  }
+  #sec-fundos .fund-view-controls-v217{
+    grid-column:1 / -1!important;
+    justify-content:flex-start!important;
+    width:100%!important;
+    margin-top:1px!important;
+  }
+}
+
+@media (max-width:820px){
+  /* Mobile preserva a busca global e a organização já validada. */
+  #gfb{display:block!important;}
+  body{padding-top:46px!important;}
+  .site-header-v217 .header-update-v217{
+    margin-left:auto!important;
+  }
+  #sec-fundos .fund-secondary-controls-v217 .compact-toggle-label-v217{
+    display:none!important;
+  }
+  #sec-fundos .catalog-category-fieldset-v217{
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+  }
+}
