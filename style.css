@@ -34509,3 +34509,134 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     justify-self:stretch!important;
   }
 }
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_RESULT_CHIP_20260618_v221
+   Separa o contador desktop da barra de comandos mobile.
+   Evita que o container mobile ocupe uma faixa larga sobre a busca.
+============================================================ */
+.desktop-filter-result-summary-v221{
+  display:none;
+}
+
+@media (min-width:1381px){
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-primary-toolbar-v217{
+    position:relative!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:"search controls"!important;
+    column-gap:10px!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-search-main{
+    grid-area:search!important;
+    position:relative!important;
+    min-width:0!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos #mobileFilterBar{
+    display:none!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-search-main #searchInput{
+    padding-right:118px!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .desktop-filter-result-summary-v221{
+    position:absolute!important;
+    z-index:5!important;
+    top:50%!important;
+    right:8px!important;
+    transform:translateY(-50%)!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:max-content!important;
+    min-width:72px!important;
+    max-width:102px!important;
+    height:26px!important;
+    padding:0 10px!important;
+    border:1px solid rgba(200,151,58,.20)!important;
+    border-radius:8px!important;
+    background:#0c0e1a!important;
+    box-shadow:none!important;
+    color:#eef2fb!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.60rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    letter-spacing:0!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    pointer-events:none!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-view-controls-v217{
+    grid-area:controls!important;
+  }
+}
+
+@media (min-width:1181px) and (max-width:1380px){
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "search"
+      "controls"!important;
+    row-gap:9px!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos #mobileFilterBar{
+    display:none!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-search-main{
+    grid-area:search!important;
+    position:relative!important;
+    min-width:0!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-search-main #searchInput{
+    padding-right:118px!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .desktop-filter-result-summary-v221{
+    position:absolute!important;
+    z-index:5!important;
+    top:50%!important;
+    right:8px!important;
+    transform:translateY(-50%)!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:max-content!important;
+    min-width:72px!important;
+    max-width:102px!important;
+    height:26px!important;
+    padding:0 10px!important;
+    border:1px solid rgba(200,151,58,.20)!important;
+    border-radius:8px!important;
+    background:#0c0e1a!important;
+    color:#eef2fb!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.60rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    pointer-events:none!important;
+  }
+
+  .catalog-desktop-result-chip-v221 #sec-fundos .fund-view-controls-v217{
+    grid-area:controls!important;
+    width:100%!important;
+    justify-self:stretch!important;
+    justify-content:end!important;
+  }
+}
+
+@media (max-width:1180px){
+  .catalog-desktop-result-chip-v221 #sec-fundos .desktop-filter-result-summary-v221{
+    display:none!important;
+  }
+}

@@ -14648,3 +14648,60 @@ if(document.readyState === 'loading'){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyV217,{once:true});
   else applyV217();
 })();
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_RESULT_CHIP_20260618_v221
+   Espelha no selo desktop a contagem mantida pelo resumo mobile.
+============================================================ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_CATALOG_DESKTOP_RESULT_CHIP_20260618_v221';
+
+  function syncDesktopResultChipV221(){
+    const source=document.getElementById('filterResultSummary');
+    const target=document.getElementById('desktopFilterResultSummary');
+    if(!target) return;
+
+    const text=(source?.textContent || '—').trim() || '—';
+    if(target.textContent!==text) target.textContent=text;
+    target.title=text;
+
+    const search=document.getElementById('searchInput');
+    if(search){
+      const desktop=window.matchMedia && window.matchMedia('(min-width:1181px)').matches;
+      search.setAttribute('aria-describedby',desktop?'desktopFilterResultSummary':'filterResultSummary');
+    }
+
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function bindDesktopResultChipV221(){
+    const source=document.getElementById('filterResultSummary');
+    if(source && source.dataset.v221Observed!=='1'){
+      source.dataset.v221Observed='1';
+      try{
+        const observer=new MutationObserver(syncDesktopResultChipV221);
+        observer.observe(source,{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['title']});
+      }catch(e){}
+    }
+
+    syncDesktopResultChipV221();
+    requestAnimationFrame(syncDesktopResultChipV221);
+    setTimeout(syncDesktopResultChipV221,120);
+    setTimeout(syncDesktopResultChipV221,500);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',bindDesktopResultChipV221,{once:true});
+  }else{
+    bindDesktopResultChipV221();
+  }
+
+  ['input','change','click'].forEach(function(evt){
+    document.addEventListener(evt,function(){setTimeout(syncDesktopResultChipV221,40);},true);
+  });
+  window.addEventListener('resize',function(){setTimeout(syncDesktopResultChipV221,60);},{passive:true});
+
+  window.__ELTAUM_DESKTOP_RESULT_CHIP_V221__={sync:syncDesktopResultChipV221};
+})();
