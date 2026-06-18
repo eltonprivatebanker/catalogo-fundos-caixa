@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="style.css?v=savings-mobile-reorg-v242" rel="stylesheet"/>
+<link href="style.css?v=savings-simplified-v262" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer src="app.js?v=savings-mobile-reorg-v242"></script>
+<script defer src="app.js?v=savings-simplified-v262"></script>
 
 </head>
 <body>
@@ -606,12 +606,12 @@ html:not(.app-booting) .page{
       </div>
     </section>
 
-    <section class="market-reference-block-v167 savings-reference-v167 savings-clean-v205 savings-balanced-v207 savings-table-v208 savings-cards-v209 savings-mobile-v210 savings-mobile-compact-v211 savings-mobile-minimal-v212 savings-mobile-professional-v213 savings-mobile-semantic-v214 savings-mobile-summary-v215 savings-optimized-v259" aria-labelledby="savingsReferenceTitleV167">
+    <section class="market-reference-block-v167 savings-reference-v167 savings-clean-v205 savings-balanced-v207 savings-table-v208 savings-cards-v209 savings-mobile-v210 savings-mobile-compact-v211 savings-mobile-minimal-v212 savings-mobile-professional-v213 savings-mobile-semantic-v214 savings-mobile-summary-v215 savings-optimized-v259 savings-simplified-v262" aria-labelledby="savingsReferenceTitleV167">
       <header class="market-reference-head-v167 savings-head-v167 savings-head-v207">
         <div class="savings-title-v207">
           <span class="market-reference-kicker-v167">Rendimento da poupança</span>
           <h3 id="savingsReferenceTitleV167">Poupança</h3>
-          <p>Rendimento mensal e regra vigente para os depósitos.</p>
+          <p>Rendimento mensal e resumo das regras da poupança.</p>
         </div>
 
         <div class="savings-current-v167 savings-current-v207" role="status" aria-live="polite" aria-labelledby="poupCurrentLabelV214">
@@ -642,7 +642,7 @@ html:not(.app-booting) .page{
       </dl>
 
       <div class="savings-actions-v167 savings-actions-v205 savings-actions-v207">
-        <button type="button" class="reference-toggle-v167" id="poupExpandBtn" onclick="return togglePoupanca()" aria-expanded="false" aria-controls="poupDetailsPanelV167">Ver regras e cenários</button>
+        <button type="button" class="reference-toggle-v167" id="poupExpandBtn" onclick="return togglePoupanca()" aria-expanded="false" aria-controls="poupDetailsPanelV167">Ver regras</button>
         <a class="market-reference-source-v167" href="https://www3.bcb.gov.br/CALCIDADAO/publico/exibirFormCorrecaoValores.do?method=exibirFormCorrecaoValores" target="_blank" rel="noopener" aria-label="Abrir a Calculadora do Cidadão do Banco Central em uma nova guia">Calculadora do BCB <span aria-hidden="true">↗</span></a>
       </div>
 
@@ -650,7 +650,7 @@ html:not(.app-booting) .page{
         <section class="savings-rules-v207" id="poupRulesV214" aria-labelledby="poupRulesTitleV214">
           <div class="savings-detail-head-v259">
             <h4 id="poupRulesTitleV214">Regras da poupança</h4>
-            <p>Resumo das fórmulas aplicáveis para depósitos novos e antigos.</p>
+            <p>Resumo rápido das regras para depósitos novos e antigos.</p>
           </div>
 
           <article class="poup-rule poup-rule-card new-rule savings-rule-v167 savings-rule-v207">
@@ -679,7 +679,7 @@ html:not(.app-booting) .page{
           <div class="poup-scenarios-head">
             <div class="poup-scenarios-title">
               <h4 class="indic-ref-label" id="poupScenariosTitleV167">Comparação de cenários</h4>
-              <p class="poup-scenarios-subtitle">Como cada regra funciona em diferentes níveis da Selic.</p>
+              <p class="poup-scenarios-subtitle">Comparativo simplificado entre a regra atual e a anterior.</p>
             </div>
             <output class="poup-scenario-status" id="poupScenarioStatus" aria-live="polite">Selic —</output>
           </div>

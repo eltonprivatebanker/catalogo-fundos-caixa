@@ -487,7 +487,7 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
 
   if($('poupScenarioSummary')){
     if(selicNum == null){
-      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, esta tabela mostrará como as duas regras se comportam em diferentes cenários.';
+      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, o comparativo mostrará o efeito da regra atual e da regra anterior.';
     }else if(selicNum > 8.5){
       $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, as duas regras utilizam TR + 0,50% a.m. A diferença aparece quando a Selic fica em 8,50% a.a. ou abaixo.`;
     }else{
@@ -14557,7 +14557,7 @@ function togglePoupancaExecutiveV167(force){
   if(btn){
     btn.textContent = mobile
       ? (open ? 'Ocultar regras' : 'Ver regras')
-      : (open ? 'Ocultar regras e cenários' : 'Ver regras e cenários');
+      : (open ? 'Ocultar regras' : 'Ver regras');
     btn.setAttribute('aria-expanded', String(open));
     btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
@@ -14579,7 +14579,7 @@ function initMarketReferenceExecutiveV167(){
   const btn = document.getElementById('poupExpandBtn');
   if(btn){
     const mobile = window.matchMedia('(max-width:700px)').matches;
-    btn.textContent = mobile ? 'Ver regras' : 'Ver regras e cenários';
+    btn.textContent = 'Ver regras';
     btn.setAttribute('aria-expanded','false');
     btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
