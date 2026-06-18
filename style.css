@@ -36379,3 +36379,265 @@ html.market-live-values-v234 .market-period-metric-v196 > strong.dash + small{
     font-size:.56rem!important;
   }
 }
+
+
+/* ==========================================================
+   ELTAUM_RANKING_MOBILE_DENSITY_20260618_v240
+   Mobile: reduz altura fixa dos rankings, remove pílulas redundantes
+   e melhora a proporção entre Top 10 e Melhores por categoria.
+========================================================== */
+@media (max-width:700px){
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-board,
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-category-panel{
+    border-radius:17px!important;
+    overflow:hidden!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-board-head{
+    min-height:0!important;
+    max-height:none!important;
+    height:auto!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:10px!important;
+    padding:14px 16px 12px!important;
+    margin:0!important;
+    overflow:visible!important;
+    align-content:start!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-board-head>div:first-child{
+    min-height:0!important;
+    height:auto!important;
+    margin:0!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-board-head h3{
+    font-size:1.02rem!important;
+    line-height:1.14!important;
+    letter-spacing:-.01em!important;
+    margin:0!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-board-head p{
+    margin:4px 0 0!important;
+    font-size:.69rem!important;
+    line-height:1.25!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-controls{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:38px 34px!important;
+    gap:7px!important;
+    width:100%!important;
+    min-height:0!important;
+    max-height:none!important;
+    height:auto!important;
+    margin:0!important;
+    align-content:start!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-periods{
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    max-height:38px!important;
+    padding:3px!important;
+    gap:3px!important;
+    border-radius:14px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-periods .rank-period-tab{
+    height:30px!important;
+    min-height:30px!important;
+    max-height:30px!important;
+    padding:5px 4px!important;
+    border-radius:11px!important;
+    font-size:.68rem!important;
+    line-height:1!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-universe-pill{
+    grid-row:2!important;
+    width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    padding:6px 10px!important;
+    border-radius:12px!important;
+    font-size:.67rem!important;
+    line-height:1!important;
+    justify-content:center!important;
+    align-items:center!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-universe-pill strong{
+    max-width:calc(100% - 62px)!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+  }
+
+  /* No mobile o filtro de risco já existe na área de filtros. Evita repetir uma 3ª linha. */
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-risk-pill-v198{
+    display:none!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-top-table{
+    min-height:0!important;
+    height:auto!important;
+    border-top:1px solid rgba(255,255,255,.045)!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-top-row,
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-top-row-mobile-v100{
+    display:grid!important;
+    grid-template-columns:28px minmax(0,1fr) 78px!important;
+    column-gap:8px!important;
+    align-items:center!important;
+    width:100%!important;
+    height:78px!important;
+    min-height:78px!important;
+    max-height:78px!important;
+    padding:9px 13px!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-pos{
+    font-size:.72rem!important;
+    line-height:1!important;
+    text-align:left!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-fund{
+    display:grid!important;
+    grid-template-rows:35px 16px!important;
+    align-content:center!important;
+    min-width:0!important;
+    height:55px!important;
+    overflow:hidden!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-fund strong{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    min-height:0!important;
+    max-height:35px!important;
+    margin:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:normal!important;
+    font-size:.71rem!important;
+    line-height:1.17!important;
+    letter-spacing:-.015em!important;
+    overflow-wrap:normal!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-fund span{
+    display:block!important;
+    height:16px!important;
+    min-height:16px!important;
+    max-height:16px!important;
+    margin:4px 0 0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    font-size:.61rem!important;
+    line-height:16px!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-return{
+    width:78px!important;
+    min-width:78px!important;
+    font-size:.78rem!important;
+    line-height:1!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-panel-head{
+    padding:14px 16px 10px!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-panel-head h3{
+    font-size:1.02rem!important;
+    line-height:1.15!important;
+    margin:0!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-panel-head p{
+    margin:4px 0 0!important;
+    font-size:.69rem!important;
+    line-height:1.25!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-cat-grid-v50{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    padding:10px 12px 12px!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-cat-mini,
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-cat-mini-mobile-v100{
+    min-height:0!important;
+    height:auto!important;
+    padding:11px 12px!important;
+    border-radius:14px!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-cat-mini span{
+    font-size:.64rem!important;
+    line-height:1.05!important;
+    letter-spacing:.07em!important;
+    margin:0!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-cat-mini strong{
+    margin-top:6px!important;
+    font-size:.98rem!important;
+    line-height:1.05!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-cat-mini small{
+    margin-top:6px!important;
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:normal!important;
+    font-size:.70rem!important;
+    line-height:1.24!important;
+  }
+
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-exec-secondary{
+    gap:10px!important;
+  }
+}
+
+@media (max-width:380px){
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-top-row,
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-top-row-mobile-v100{
+    grid-template-columns:26px minmax(0,1fr) 74px!important;
+    padding-left:12px!important;
+    padding-right:12px!important;
+  }
+  html.ranking-mobile-density-v240 #rankingsSection .ranking-return{
+    width:74px!important;
+    min-width:74px!important;
+    font-size:.75rem!important;
+  }
+}
