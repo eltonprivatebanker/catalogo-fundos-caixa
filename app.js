@@ -5647,7 +5647,27 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function setupBottomNav(){
-    // v219: a navegação inferior é controlada pelo gerenciador de abas reais.
+    qsa('.mobile-bottom-nav a').forEach(a=>{
+      a.addEventListener('click',ev=>{
+        const id=a.getAttribute('href').slice(1);
+        const target=document.getElementById(id);
+        if(target){
+          ev.preventDefault();
+          target.scrollIntoView({behavior:'smooth',block:'start'});
+          history.replaceState(null,'','#'+id);
+        }
+      });
+    });
+    // v20: nova ordem — fundos e rankings antes do mercado macro
+    const ids=['topo','sec-fundos','rankingsSection','sec-mercado','sec-dolar','sec-focus'];
+    const obs=new IntersectionObserver(entries=>{
+      entries.forEach(en=>{
+        if(en.isIntersecting){
+          qsa('.mobile-bottom-nav a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id));
+        }
+      });
+    },{rootMargin:'-35% 0px -55% 0px',threshold:0.01});
+    ids.forEach(id=>{const el=document.getElementById(id);if(el) obs.observe(el);});
   }
 
   document.addEventListener('DOMContentLoaded',()=>{
@@ -5929,7 +5949,7 @@ document.addEventListener('DOMContentLoaded', function(){
     document.body.classList.add('fund-card-mode');
     try{ localStorage.setItem('fundMobileView','cards'); }catch(e){}
     document.querySelectorAll('.mobile-bottom-nav a').forEach(a=>{
-      a.classList.toggle('active',a.dataset.appTab==='fundos'||a.getAttribute('href')==='#sec-fundos');
+      a.classList.toggle('active',a.getAttribute('href')==='#sec-fundos');
     });
   }
 
@@ -14621,246 +14641,4 @@ if(document.readyState === 'loading'){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyV217,{once:true});
   else applyV217();
-})();
-
-
-/* ============================================================
-   ELTAUM_CONSULTIVE_TABS_20260618_v219
-   Abas reais para uso consultivo, com URL, teclado e preservação
-   dos estados internos de filtros, tabelas e gráficos.
-============================================================ */
-(function(){
-  'use strict';
-
-  const BUILD='ELTAUM_CONSULTIVE_TABS_20260618_v219';
-  const VALID_TABS=['resumo','fundos','rankings','mercado','dolar','focus','graficos','fontes'];
-  const LEGACY_HASH_TO_TAB={
-    topo:'resumo','sec-kpi':'resumo','sec-kpi-mobile':'resumo',
-    'sec-fundos':'fundos',rankingsSection:'rankings',
-    'sec-mercado':'mercado','sec-mercado-painel':'mercado',
-    'sec-dolar':'dolar','sec-focus':'focus','sec-graficos':'graficos',
-    siteSources:'fontes',footerDisclaimer:'fontes'
-  };
-
-  let activeTab='resumo';
-  let initialized=false;
-
-  const qa=(s,r=document)=>Array.from(r.querySelectorAll(s));
-  const q=(s,r=document)=>r.querySelector(s);
-
-  function canonicalHash(tab){ return '#'+tab; }
-
-  function tabFromHash(hash){
-    const raw=String(hash||'').replace(/^#/,'').trim();
-    if(!raw) return null;
-    if(VALID_TABS.includes(raw)) return raw;
-    if(LEGACY_HASH_TO_TAB[raw]) return LEGACY_HASH_TO_TAB[raw];
-    const target=document.getElementById(raw);
-    const panel=target?.closest?.('[data-app-tab-panel]');
-    return panel?.dataset?.appTabPanel || null;
-  }
-
-  function panelNodes(tab){
-    return qa('[data-app-tab-panel="'+tab+'"]');
-  }
-
-  function navOffset(){
-    const nav=q('#desktopAnchorNavV131');
-    if(nav && nav.offsetParent!==null) return nav.getBoundingClientRect().height+16;
-    const gfb=q('#gfb');
-    if(gfb && gfb.offsetParent!==null) return gfb.getBoundingClientRect().height+12;
-    return 12;
-  }
-
-  function revealCollapsibleContent(tab){
-    if(tab==='focus'){
-      const body=q('#sec-focus-body');
-      if(body) body.hidden=false;
-      const head=q('#sec-focus .collapsible-header');
-      if(head) head.setAttribute('aria-expanded','true');
-    }
-    if(tab==='graficos'){
-      const body=q('#sec-graficos-body');
-      if(body) body.hidden=false;
-      const btn=q('#sec-graficos [aria-controls="sec-graficos-body"]');
-      if(btn) btn.setAttribute('aria-expanded','true');
-    }
-    if(tab==='fontes'){
-      const details=q('#footerDisclaimer');
-      if(details && 'open' in details) details.open=true;
-    }
-  }
-
-  function refreshVisuals(){
-    try{ window.dispatchEvent(new Event('resize')); }catch(e){}
-    try{
-      if(window.Chart && typeof window.Chart.getChart==='function'){
-        qa('canvas').forEach(canvas=>{
-          const chart=window.Chart.getChart(canvas);
-          if(chart && typeof chart.resize==='function') chart.resize();
-        });
-      }
-    }catch(e){}
-  }
-
-  function syncNavigation(tab){
-    qa('[data-app-tab]').forEach(item=>{
-      const selected=item.dataset.appTab===tab;
-      item.classList.toggle('active',selected);
-      item.setAttribute('aria-selected',selected?'true':'false');
-      if(item.closest('#desktopAnchorNavV131')) item.tabIndex=selected?0:-1;
-    });
-  }
-
-  function syncPanels(tab){
-    qa('[data-app-tab-panel]').forEach(panel=>{
-      const selected=panel.dataset.appTabPanel===tab;
-      panel.classList.toggle('is-active-tab-panel',selected);
-      panel.hidden=!selected;
-      panel.setAttribute('aria-hidden',selected?'false':'true');
-    });
-  }
-
-  function scrollToPanel(tab,targetId,smooth){
-    const exact=targetId ? document.getElementById(targetId) : null;
-    const panel=exact || panelNodes(tab).find(el=>el.offsetParent!==null) || panelNodes(tab)[0];
-    if(!panel) return;
-    requestAnimationFrame(()=>{
-      const top=Math.max(0,panel.getBoundingClientRect().top+window.scrollY-navOffset());
-      window.scrollTo({top,behavior:smooth?'smooth':'auto'});
-    });
-  }
-
-  function updateHistory(tab,mode){
-    const url=location.pathname+location.search+canonicalHash(tab);
-    try{
-      if(mode==='push') history.pushState({appTab:tab},'',url);
-      else if(mode==='replace') history.replaceState({appTab:tab},'',url);
-    }catch(e){ location.hash=canonicalHash(tab); }
-  }
-
-  function activateTab(tab,options={}){
-    if(!VALID_TABS.includes(tab)) tab='resumo';
-    const changed=activeTab!==tab;
-    activeTab=tab;
-
-    syncPanels(tab);
-    syncNavigation(tab);
-    revealCollapsibleContent(tab);
-    document.documentElement.dataset.activeAppTab=tab;
-    try{sessionStorage.setItem('catalogActiveTabV219',tab);}catch(e){}
-
-    if(options.history==='push') updateHistory(tab,'push');
-    else if(options.history==='replace') updateHistory(tab,'replace');
-
-    const targetId=options.targetId||null;
-    if(options.scroll!==false) scrollToPanel(tab,targetId,options.smooth!==false);
-
-    if(options.focusSearch && tab==='fundos'){
-      setTimeout(()=>{
-        const input=q('#searchInput');
-        if(input){
-          try{input.focus({preventScroll:true});}catch(e){input.focus();}
-        }
-      },options.smooth===false?40:280);
-    }
-
-    if(changed || !initialized) setTimeout(refreshVisuals,80);
-    document.dispatchEvent(new CustomEvent('catalog:tabchange',{detail:{tab}}));
-    return tab;
-  }
-
-  function handleTabClick(ev){
-    const action=ev.target.closest('[data-app-tab-action]');
-    if(action){
-      ev.preventDefault();
-      activateTab(action.dataset.appTabAction,{history:'push',focusSearch:action.dataset.searchFocus==='1'});
-      return;
-    }
-    const tabControl=ev.target.closest('[data-app-tab]');
-    if(!tabControl) return;
-    ev.preventDefault();
-    activateTab(tabControl.dataset.appTab,{history:'push'});
-  }
-
-  function bindKeyboardTabs(){
-    qa('[role="tablist"]').forEach(tablist=>{
-      tablist.addEventListener('keydown',ev=>{
-        const tabs=qa('[data-app-tab][role="tab"]',tablist).filter(t=>t.offsetParent!==null);
-        if(!tabs.length) return;
-        const current=tabs.indexOf(document.activeElement);
-        if(current<0) return;
-        let next=current;
-        if(ev.key==='ArrowRight'||ev.key==='ArrowDown') next=(current+1)%tabs.length;
-        else if(ev.key==='ArrowLeft'||ev.key==='ArrowUp') next=(current-1+tabs.length)%tabs.length;
-        else if(ev.key==='Home') next=0;
-        else if(ev.key==='End') next=tabs.length-1;
-        else return;
-        ev.preventDefault();
-        tabs[next].focus();
-        activateTab(tabs[next].dataset.appTab,{history:'push'});
-      });
-    });
-  }
-
-  function bindDeepLinks(){
-    window.addEventListener('popstate',()=>{
-      const raw=String(location.hash||'').replace(/^#/,'');
-      const tab=tabFromHash(location.hash)||'resumo';
-      const targetId=VALID_TABS.includes(raw)?null:raw||null;
-      activateTab(tab,{history:null,targetId,smooth:false});
-    });
-    window.addEventListener('hashchange',()=>{
-      const raw=String(location.hash||'').replace(/^#/,'');
-      const tab=tabFromHash(location.hash);
-      if(!tab) return;
-      const targetId=VALID_TABS.includes(raw)?null:raw;
-      activateTab(tab,{history:null,targetId,smooth:false});
-    });
-  }
-
-  function bindGlobalFundSearch(){
-    const activateFunds=()=>{
-      if(activeTab!=='fundos') activateTab('fundos',{history:'replace',scroll:false});
-    };
-    const gfb=q('#gfb');
-    if(gfb){
-      gfb.addEventListener('focusin',activateFunds,true);
-      gfb.addEventListener('input',activateFunds,true);
-      gfb.addEventListener('click',ev=>{
-        if(ev.target.closest('input,button')) activateFunds();
-      },true);
-    }
-  }
-
-  function initTabsV219(){
-    if(initialized) return;
-    initialized=true;
-    const meta=q('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-    document.documentElement.classList.add('app-tabs-v219');
-
-    document.addEventListener('click',handleTabClick);
-    bindKeyboardTabs();
-    bindDeepLinks();
-    bindGlobalFundSearch();
-
-    const raw=String(location.hash||'').replace(/^#/,'');
-    let tab=tabFromHash(location.hash);
-    if(!tab){
-      try{tab=sessionStorage.getItem('catalogActiveTabV219');}catch(e){}
-    }
-    if(!VALID_TABS.includes(tab)) tab='resumo';
-    const targetId=raw && !VALID_TABS.includes(raw) ? raw : null;
-    activateTab(tab,{history:'replace',targetId,smooth:false});
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initTabsV219,{once:true});
-  else initTabsV219();
-
-  window.catalogTabsV219={
-    activate:activateTab,
-    current:()=>activeTab,
-    tabs:[...VALID_TABS]
-  };
 })();
