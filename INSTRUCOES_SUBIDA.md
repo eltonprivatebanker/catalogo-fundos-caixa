@@ -1,17 +1,24 @@
-# Catálogo de Fundos CAIXA — v262
+# Catálogo de Fundos CAIXA — v263
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que mudou na seção Poupança
-- regras e cenários ficaram mais compactos;
-- removido o vazio visual no bloco expandido;
-- duas regras agora aparecem de forma mais direta;
-- comparação de cenários ficou mais curta e organizada;
-- botão ficou mais simples: “Ver regras”;
-- mobile ficou mais estável e menos poluído.
+## O que foi corrigido
+
+1. Corrigido o trecho do mobile onde o toque parecia "não obedecer" para rolar a página.
+2. O CDI mensal deixou de funcionar como carrossel/grade cortada no mobile.
+3. O CDI mensal agora aparece como lista compacta, com mês, taxa e status alinhados.
+4. Removido o texto longo "mais recente primeiro".
+5. O calendário expandido do Copom não cria mais uma rolagem interna que prende o toque.
+6. Mantidos os dados e a lógica de cálculo.
 
 ## Como subir
-Substitua os 3 arquivos no GitHub e limpe o cache do navegador.
+
+Substitua no GitHub:
+- index.html
+- style.css
+- app.js
+
+Depois, no celular, feche a aba e abra novamente para limpar o cache.

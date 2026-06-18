@@ -1,3 +1,4 @@
+// ELTAUM_RATES_SCROLL_FIX_20260618_v263
 // ELTAUM_RATES_PREMIUM_20260618_v261
 // ELTAUM_RATES_MOBILE_COMPACT_20260618_v260
 // ELTAUM_SELIC_MOBILE_FIT_20260618_v258
@@ -15163,6 +15164,10 @@ if(document.readyState === 'loading'){
 
   function enablePointerDrag(strip){
     if(!strip || strip.dataset.pointerDragV180==='1') return;
+    if(strip.id === 'cdiMonthStrip' && document.documentElement.classList.contains('rates-scroll-fix-v263')){
+      strip.dataset.pointerDragV180 = 'disabled-v263';
+      return;
+    }
     strip.dataset.pointerDragV180='1';
 
     let active=false;
@@ -16038,4 +16043,23 @@ window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v
     }
   }, true);
   window.addEventListener('load', ajustarPoupancaMobileV242);
+})();
+
+
+/* ELTAUM_CDI_TITLE_SHORT_V263 */
+(function(){
+  function applyCdiTitleShortV263(){
+    const title = document.getElementById('cdiYearHistoryTitle');
+    if(title){
+      title.textContent = title.textContent.replace(/\s+—\s+mais recente primeiro/i,'').trim();
+      if(!title.textContent) title.textContent = 'CDI mensal 2026';
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyCdiTitleShortV263, {once:true});
+  }else{
+    applyCdiTitleShortV263();
+  }
+  setTimeout(applyCdiTitleShortV263, 300);
+  setTimeout(applyCdiTitleShortV263, 1200);
 })();

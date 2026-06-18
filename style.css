@@ -40384,3 +40384,143 @@ html.rates-premium-v261 #sec-mercado .rates-executive-v255 .reference-footnote-v
     grid-template-columns:1fr 1fr!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v263 — CORREÇÃO DE ROLAGEM + CDI MENSAL MOBILE
+   Resolve o trecho que "segurava" o toque no mobile e troca
+   o CDI mensal por lista compacta sem carrossel/grade cortada.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 760px){
+  /* Não deixar os blocos internos capturarem a rolagem vertical da página */
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255,
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .copom-compact-v167,
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167,
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 #copomMeetings,
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 #cdiMonthStrip{
+    touch-action: pan-y !important;
+    overscroll-behavior: auto !important;
+  }
+
+  /* Calendário: quando expandido, não cria rolagem interna; a página rola normalmente */
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .copom-grid-v167,
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .copom-grid-v167.is-expanded-v167{
+    max-height: none !important;
+    overflow: visible !important;
+    overflow-y: visible !important;
+    padding-right: 0 !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+
+  /* Sem carrossel/drag no CDI mensal */
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167{
+    padding: 12px !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-year-head{
+    display: block !important;
+    margin-bottom: 9px !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 #cdiYearHistoryTitle{
+    display: block !important;
+    width: auto !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #eef3ff !important;
+    font: 850 .90rem/1.15 'Inter', system-ui, sans-serif !important;
+    letter-spacing: -.015em !important;
+    white-space: normal !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-strip{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 6px !important;
+    overflow: visible !important;
+    overflow-x: visible !important;
+    overflow-y: visible !important;
+    padding: 0 !important;
+    transform: none !important;
+    scroll-snap-type: none !important;
+    -webkit-overflow-scrolling: auto !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip,
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip:nth-child(n+3){
+    display: grid !important;
+    grid-template-columns: 44px minmax(0,1fr) auto !important;
+    align-items: center !important;
+    gap: 8px !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 38px !important;
+    padding: 8px 10px !important;
+    border-radius: 11px !important;
+    border: 1px solid rgba(142,160,205,.12) !important;
+    background: rgba(12,15,29,.46) !important;
+    box-shadow: none !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip.current{
+    border-color: rgba(73,217,154,.32) !important;
+    background: rgba(73,217,154,.075) !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip.closed{
+    border-color: rgba(210,161,73,.26) !important;
+    background: rgba(210,161,73,.045) !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .m{
+    justify-self: start !important;
+    color: #aab5cf !important;
+    font: 850 .56rem/1 'Inter', system-ui, sans-serif !important;
+    letter-spacing: .08em !important;
+    text-transform: uppercase !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .v{
+    justify-self: start !important;
+    margin: 0 !important;
+    color: #49d99a !important;
+    font: 850 .78rem/1 'Inter', system-ui, sans-serif !important;
+    letter-spacing: -.01em !important;
+  }
+
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .p{
+    justify-self: end !important;
+    margin: 0 !important;
+    color: #8f9bbb !important;
+    font: 650 .50rem/1.1 'Inter', system-ui, sans-serif !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+  }
+
+  /* Se algum mês não tiver subtítulo, mantém alinhamento sem parecer vazio */
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip:not(.featured)::after{
+    content: "fechado" !important;
+    justify-self: end !important;
+    color: rgba(143,155,187,.62) !important;
+    font: 650 .50rem/1.1 'Inter', system-ui, sans-serif !important;
+  }
+
+  /* Evita cards cortados por regras antigas de carrossel */
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip *{
+    max-width: 100% !important;
+  }
+}
+
+/* Desktop: título do CDI mais limpo e sem aspecto de cápsula exagerada */
+@media (min-width: 761px){
+  html.rates-scroll-fix-v263 #sec-mercado .rates-executive-v255 #cdiYearHistoryTitle{
+    padding: 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    color: #eef3ff !important;
+    font: 850 .78rem/1.15 'Inter', system-ui, sans-serif !important;
+  }
+}
