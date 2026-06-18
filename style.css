@@ -36219,3 +36219,163 @@ html.market-live-values-v234 .market-period-metric-v196 > strong.dash + small{
     font-size:.64rem !important;
   }
 }
+
+
+/* ==========================================================
+   v239 — Cabeçalho mobile mais compacto e alinhado
+   - Usa o logotipo, título, subtítulo e atualização em uma grade única.
+   - Reduz quebra de texto e aproveita melhor o card superior no celular.
+   - Mantém o desktop sem alteração estrutural.
+========================================================== */
+@media (max-width: 768px){
+  html.mobile-header-compact-v239 header.site-header-clean,
+  html.mobile-header-compact-v239 .site-header-clean{
+    display:grid!important;
+    grid-template-columns:52px minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    column-gap:12px!important;
+    row-gap:0!important;
+    align-items:center!important;
+    width:100%!important;
+    padding:15px 17px!important;
+    min-height:0!important;
+    border-radius:18px!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand{
+    display:contents!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand-logo{
+    grid-column:1!important;
+    grid-row:1 / span 2!important;
+    align-self:center!important;
+    width:52px!important;
+    height:52px!important;
+    min-width:52px!important;
+    flex:0 0 52px!important;
+    margin:0!important;
+    border-radius:15px!important;
+    font-size:1.42rem!important;
+    line-height:1!important;
+    box-shadow:0 12px 28px rgba(200,151,58,.16)!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand-text{
+    grid-column:2!important;
+    grid-row:1!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:center!important;
+    min-width:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    gap:0!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand-text h1{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    color:#f0c36f!important;
+    font-size:clamp(1.02rem,4.15vw,1.13rem)!important;
+    line-height:1.08!important;
+    font-weight:850!important;
+    letter-spacing:-.025em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand-text p{
+    width:100%!important;
+    max-width:100%!important;
+    margin:4px 0 0!important;
+    color:#c5d3f2!important;
+    font-size:.70rem!important;
+    line-height:1.22!important;
+    font-weight:520!important;
+    letter-spacing:0!important;
+    text-transform:none!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean #lastUpdate,
+  html.mobile-header-compact-v239 .site-header-clean.header-update-v217,
+  html.mobile-header-compact-v239 .site-header-clean .live-badge{
+    grid-column:2!important;
+    grid-row:2!important;
+    justify-self:start!important;
+    align-self:start!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    width:auto!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:7px 0 0!important;
+    padding:0!important;
+    gap:5px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    color:#8f9fbe!important;
+    font-family:'JetBrains Mono',Consolas,monospace!important;
+    font-size:.60rem!important;
+    font-weight:560!important;
+    line-height:1.15!important;
+    letter-spacing:.01em!important;
+    opacity:.92!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean #lastUpdate .live-dot{
+    width:5px!important;
+    height:5px!important;
+    flex:0 0 5px!important;
+    margin:0!important;
+    box-shadow:0 0 8px rgba(46,209,122,.58)!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean #lastUpdate .live-update-label{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+
+@media (max-width: 380px){
+  html.mobile-header-compact-v239 header.site-header-clean,
+  html.mobile-header-compact-v239 .site-header-clean{
+    grid-template-columns:48px minmax(0,1fr)!important;
+    column-gap:10px!important;
+    padding:13px 14px!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand-logo{
+    width:48px!important;
+    height:48px!important;
+    min-width:48px!important;
+    border-radius:14px!important;
+    font-size:1.30rem!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand-text h1{
+    font-size:.98rem!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean .brand-text p{
+    font-size:.66rem!important;
+  }
+
+  html.mobile-header-compact-v239 .site-header-clean #lastUpdate,
+  html.mobile-header-compact-v239 .site-header-clean .live-badge{
+    font-size:.56rem!important;
+  }
+}
