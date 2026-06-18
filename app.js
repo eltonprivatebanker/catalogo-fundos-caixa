@@ -1,4 +1,4 @@
-// ELTAUM_FUND_MOBILE_SEMANTIC_20260618_v235
+// ELTAUM_FUND_MOBILE_POLISH_20260618_v236
 // ELTAUM_CDI_CURRENT_CONTEXT_20260618_v233
 // ELTAUM_CDI_DAILY_AUTO_REFRESH_20260618_v232
 // ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
@@ -4124,13 +4124,29 @@ function classeStatusOperacional(status, tipo){
 }
 
 
+
+function formatarHorarioGradeMobileV236(valor){
+  const raw = String(valor || '').trim();
+  if(!raw || raw === '—') return 'Não informado';
+  if(/não informado/i.test(raw)) return 'Não informado';
+  const m = raw.match(/^(\d{1,2})(?::|h)(\d{2})$/i);
+  if(m){
+    return `${String(m[1]).padStart(2,'0')}h${m[2]}`;
+  }
+  const m2 = raw.match(/^(\d{1,2})$/);
+  if(m2){
+    return `${String(m2[1]).padStart(2,'0')}h00`;
+  }
+  return raw.replace(/(\d{1,2}):(\d{2})/g, function(_,h,mi){return `${String(h).padStart(2,'0')}h${mi}`;});
+}
+
 function rotuloCaptacaoMobileV235(info){
   const raw = String(info?.texto || '').trim();
   const status = String(info?.status || normalizarStatusOperacional(raw) || '').toUpperCase();
   const cls = classeStatusOperacional(status, 'captacao');
-  if(cls === 'positive') return {valor:'Sim', detalhe:'Aberto para novas aplicações', cls:'positive', dot:'●'};
-  if(cls === 'negative') return {valor:'Não', detalhe:'Fechado para novas aplicações', cls:'negative', dot:'●'};
-  return {valor: raw && raw !== 'Não informada' ? raw : 'Não informado', detalhe:'Status de captação não identificado na base', cls:'unknown', dot:'○'};
+  if(cls === 'positive') return {valor:'Sim', detalhe:'Aberto', cls:'positive', dot:'●'};
+  if(cls === 'negative') return {valor:'Não', detalhe:'Fechado', cls:'negative', dot:'●'};
+  return {valor: raw && raw !== 'Não informada' ? raw : 'Não informado', detalhe:'Status não identificado', cls:'unknown', dot:'○'};
 }
 
 function deveExibirAdiantamentoMobileV235(info, cls){
@@ -4162,19 +4178,19 @@ function buildFundOperationalFacts(r, variant='detail'){
       ? factMobileV235('Antecipação de resgate', htmlAttr(d.adiantamento.texto), {cls:`status-${adiCls}`, dot:adiDot})
       : '';
 
-    return `<section class="fund-facts-v154 mobile fund-facts-mobile-v235" aria-label="Dados operacionais e cadastrais do fundo">
-      <div class="fund-facts-head-v154 fund-facts-head-mobile-v235"><strong>Dados do fundo</strong><small>Operação, referência e disponibilidade</small></div>
+    return `<section class="fund-facts-v154 mobile fund-facts-mobile-v235 fund-facts-mobile-v236" aria-label="Dados operacionais e cadastrais do fundo">
+      <div class="fund-facts-head-v154 fund-facts-head-mobile-v235 fund-facts-head-mobile-v236"><strong>Dados do fundo</strong><small>Operação, referência e disponibilidade</small></div>
 
-      <div class="fund-operation-strip-v235" aria-label="Horários limite de movimentação">
-        <div><span>Aplicação</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
-        <div><span>Resgate</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
+      <div class="fund-operation-strip-v235 fund-operation-strip-v236" aria-label="Horários limite de movimentação">
+        <div><span>Aplicação</span><strong>${htmlAttr(formatarHorarioGradeMobileV236(d.horarios.aplicacao))}</strong></div>
+        <div><span>Resgate</span><strong>${htmlAttr(formatarHorarioGradeMobileV236(d.horarios.resgate))}</strong></div>
       </div>
 
       <div class="fund-facts-grid-v154 fund-facts-grid-mobile-v235">
         ${factMobileV235('Referência', `${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}`)}
         ${factMobileV235('Estratégia', `${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}`, {cls:'strategy'})}
         ${factMobileV235('Tributação', htmlAttr(d.tributacao.texto))}
-        ${factMobileV235('Novas aplicações', htmlAttr(cap.valor), {cls:`status-${cap.cls} availability`, dot:cap.dot, detail:cap.detalhe})}
+        ${factMobileV235('Novas aplicações', htmlAttr(cap.valor), {cls:`status-${cap.cls} availability`, dot:cap.dot})}
         ${adiantamentoHtml}
       </div>
       <p class="fund-operation-note-v235">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
@@ -5902,12 +5918,12 @@ document.addEventListener('DOMContentLoaded', function(){
       return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
     }).join('');
 
-    return `<div class="fund-card-mobile-docs">
-      <div class="fund-card-docs-head">
+    return `<div class="fund-card-mobile-docs fund-card-mobile-docs-v236">
+      <div class="fund-card-docs-head fund-card-docs-head-v236">
         <span class="fund-card-docs-title">Documentos oficiais</span>
-        ${pageBtn}
       </div>
       <div class="fund-card-docs-list secundarios">${links}</div>
+      ${pageBtn}
     </div>`;
   }
 
