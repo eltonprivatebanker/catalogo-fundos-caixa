@@ -1,11 +1,19 @@
-# Atualização v240 — Ranking mobile mais compacto
+# Atualização v241 — Dólar PTAX mobile compacto
 
-Substitua na branch publicada:
+## Arquivos para substituir
+Substitua na branch publicada da plataforma:
 
-- index.html
-- style.css
-- app.js
+- `index.html`
+- `style.css`
+- `app.js`
 
-Depois faça commit e atualize a página com Ctrl + F5.
+## O que mudou
+- Cotação PTAX (`R$ 5,16`) ficou menor e mais proporcional no mobile.
+- Card principal do dólar ficou mais baixo.
+- Cards de mês atual, ano, 12M, 24M e 36M foram compactados.
+- Estatísticas do período ficaram menores e alinhadas à esquerda.
+- Botão `Abrir gráfico` e cabeçalho do histórico ficaram mais enxutos.
+- Cache atualizado para `dolar-mobile-compact-v241`.
 
-Esta versão ajusta a densidade do ranking no mobile: reduz altura do cabeçalho do Top 10, evita a pílula redundante de risco, compacta as linhas do ranking e deixa os cards de melhores por categoria com melhor proporção.
+## Após subir
+No computador, use `Ctrl + F5`. No celular, feche a aba e abra novamente.
