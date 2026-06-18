@@ -34640,3 +34640,24 @@ html.toggle-sem-dados-stable-v204 .toggle-sem-dados-clean-v127.is-on .toggle-sem
     display:none!important;
   }
 }
+
+
+/* ============================================================
+   ELTAUM_RANKINGS_SEMANTIC_20260618_v222
+   Padroniza a terminologia dos rankings e acomoda rótulos completos.
+============================================================ */
+.rankings-semantic-v222 #rankingsSection .ranking-filter-row-compat-v136{
+  gap:5px;
+}
+.rankings-semantic-v222 #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-label{
+  margin-right:4px;
+}
+.rankings-semantic-v222 #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{
+  padding-inline:9px;
+}
+@media (min-width:1181px) and (max-width:1540px){
+  .rankings-semantic-v222 #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{
+    padding-inline:8px;
+    font-size:.58rem;
+  }
+}

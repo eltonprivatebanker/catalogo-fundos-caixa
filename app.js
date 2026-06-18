@@ -13958,7 +13958,7 @@ if(document.readyState === 'loading'){
 
     const map={
       todos:'Todos os fundos',
-      'sem-fmp':'Todos sem FMP',
+      'sem-fmp':'Todos, exceto FMP',
       'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
       'renda-fixa-referenciado':'RF Referenciado',
