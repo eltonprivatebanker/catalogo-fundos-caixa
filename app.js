@@ -575,13 +575,13 @@ function atualizarPoupancaCard(d, selicAtual){
   if($('poupQuickNote')){
     if(selic == null){
       $('poupQuickNote').textContent =
-        'A regra aplicada será exibida quando a Selic vigente estiver disponível.';
+        'Aguardando Selic vigente para definir a regra aplicada.';
     }else if(acima){
       $('poupQuickNote').innerHTML =
-        `Com a Selic em <strong>${fmt(selic)} a.a.</strong>, depósitos novos e antigos seguem <strong>TR + 0,50% a.m.</strong>`;
+        `Selic acima de <strong>8,50% a.a.</strong>: <strong>TR + 0,50% a.m.</strong>`;
     }else{
       $('poupQuickNote').innerHTML =
-        `Com a Selic em <strong>${fmt(selic)} a.a.</strong>, depósitos desde 04/05/2012 rendem <strong>70% da Selic + TR</strong>. Os anteriores mantêm TR + 0,50% a.m.`;
+        `Selic até <strong>8,50% a.a.</strong>: depósitos novos rendem <strong>70% da Selic + TR</strong>. Depósitos antigos mantêm TR + 0,50% a.m.`;
     }
   }
 
@@ -15501,4 +15501,41 @@ window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true});
   else apply();
   window.setTimeout(apply,350);
+})();
+
+
+/* ============================================================
+   ELTAUM_SAVINGS_MOBILE_REORG_20260618_v242
+   Poupança mobile: textos mais curtos e ações mais equilibradas.
+============================================================ */
+(function(){
+  function ajustarPoupancaMobileV242(){
+    const title = document.getElementById('poupCurrentScenarioTitleV214');
+    if(title) title.textContent = 'Regra vigente';
+
+    const btn = document.getElementById('poupExpandBtn');
+    if(btn){
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+    }
+
+    const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+    if(source && !source.dataset.v242Short){
+      source.dataset.v242Short = '1';
+      source.innerHTML = 'Calculadora BCB <span aria-hidden="true">↗</span>';
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', ajustarPoupancaMobileV242, {once:true});
+  }else{
+    ajustarPoupancaMobileV242();
+  }
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(ajustarPoupancaMobileV242, 40);
+      setTimeout(ajustarPoupancaMobileV242, 220);
+    }
+  }, true);
+  window.addEventListener('load', ajustarPoupancaMobileV242);
 })();
