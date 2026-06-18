@@ -1,4 +1,4 @@
-// ELTAUM_MARKET_PERIOD_CONTROLLER_20260618_v228
+// ELTAUM_MARKET_PERIOD_DYNAMIC_CDI_20260618_v229
 // ELTAUM_CDI_MONTH_ORDER_20260617_v216
 // ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
@@ -86,6 +86,90 @@ const indicState = {
 };
 let activePeriodTab = 12; // 12, 24 ou 36
 let _ptaxHistorico = []; // cache para uso nos tabs
+
+/* ════════════════════════════════════════════════════
+   v229 — CDI DINÂMICO POR PERÍODO
+   - lê acum_12m/acum_24m/acum_36m diretamente do JSON;
+   - quando algum campo estiver ausente, recompõe pelo histórico mensal;
+   - independe da existência de cards.cdi.valor.
+════════════════════════════════════════════════════ */
+const CDI_PERIOD_OPTIONS_V229 = Object.freeze([12, 24, 36]);
+
+function numeroFinitoV229(value){
+  if(value === null || value === undefined || value === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function chaveMesDeRotuloV229(label){
+  const match = String(label || '').trim().toLowerCase().match(/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\/(\d{4})/);
+  if(!match) return null;
+  const monthIndex = MESES_PT.indexOf(match[1]);
+  return monthIndex >= 0 ? `${match[2]}-${String(monthIndex + 1).padStart(2, '0')}` : null;
+}
+
+function acumularPercentuaisMensaisV229(values){
+  if(!Array.isArray(values) || !values.length) return null;
+  let factor = 1;
+  let count = 0;
+  for(const value of values){
+    const n = numeroFinitoV229(value);
+    if(n === null) continue;
+    factor *= (1 + n / 100);
+    count += 1;
+  }
+  return count ? Number(((factor - 1) * 100).toFixed(4)) : null;
+}
+
+function calcularCdiDoHistoricoV229(cdiCard, months){
+  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
+  const historico = Array.isArray(cdiCard?.historico) ? cdiCard.historico : [];
+  if(!historico.length) return null;
+
+  const ultimoFechadoKey = chaveMesDeRotuloV229(cdiCard?.mes_ref);
+  const ordenado = historico
+    .map(item => ({
+      key: String(item?.key || item?.data_ref || '').slice(0, 7),
+      value: numeroFinitoV229(item?.valor ?? item?.value)
+    }))
+    .filter(item => /^\d{4}-\d{2}$/.test(item.key) && item.value !== null)
+    .filter(item => !ultimoFechadoKey || item.key <= ultimoFechadoKey)
+    .sort((a, b) => a.key.localeCompare(b.key));
+
+  if(ordenado.length < periodo) return null;
+  return acumularPercentuaisMensaisV229(ordenado.slice(-periodo).map(item => item.value));
+}
+
+function resolverCdiPeriodoV229(cdiCard, months){
+  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
+  const direto = numeroFinitoV229(cdiCard?.[`acum_${periodo}m`]);
+  if(direto !== null) return direto;
+
+  const historico = calcularCdiDoHistoricoV229(cdiCard, periodo);
+  if(historico !== null) return historico;
+
+  return numeroFinitoV229(indicState.cdi?.[`m${periodo}`]);
+}
+
+function sincronizarEstadoCdiV229(dados){
+  const cdiCard = dados?.cards?.cdi || {};
+  const mensal = numeroFinitoV229(cdiCard.mensal);
+  if(mensal !== null) indicState.cdi.mes = mensal;
+  if(cdiCard.mes_ref) indicState.cdi.mesRef = cdiCard.mes_ref;
+
+  CDI_PERIOD_OPTIONS_V229.forEach(periodo => {
+    const value = resolverCdiPeriodoV229(cdiCard, periodo);
+    if(value !== null) indicState.cdi[`m${periodo}`] = value;
+  });
+
+  return {
+    m12: numeroFinitoV229(indicState.cdi.m12),
+    m24: numeroFinitoV229(indicState.cdi.m24),
+    m36: numeroFinitoV229(indicState.cdi.m36)
+  };
+}
+window.sincronizarEstadoCdiV229 = sincronizarEstadoCdiV229;
+window.resolverCdiPeriodoV229 = resolverCdiPeriodoV229;
 
 /* ════════════════════════════════════════════════════
    POUPANÇA — TOGGLE
@@ -346,14 +430,18 @@ function toggleFocusExplain(){
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
-  // v17 local: não chama mais a API SGS 4391 pelo navegador.
-  // Os acumulados 12M/24M/36M já vêm pré-calculados no mercado_atual.json pelo atualização automatizada.
-  if(indicState.cdi.m12 !== null || indicState.cdi.m24 !== null || indicState.cdi.m36 !== null){
-    console.info('[CDI] Usando acumulados do mercado_atual.json');
-  } else {
-    console.warn('[CDI] mercado_atual.json não trouxe acumulados CDI. Execute o +.');
+  // v229: sincroniza os campos diretos e, quando necessário, recompõe
+  // 12M/24M/36M pelo histórico mensal já entregue no mercado_atual.json.
+  const periodos = sincronizarEstadoCdiV229(_dadosMercado);
+  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] !== null);
+
+  if(disponiveis.length){
+    console.info(`[CDI] Períodos disponíveis: ${disponiveis.join('M, ')}M`);
+  }else{
+    console.warn('[CDI] mercado_atual.json não trouxe acumulados nem histórico mensal suficiente.');
     if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'histórico indisponível';
   }
+
   atualizarTabelaIndicadores();
 }
 
@@ -1138,7 +1226,7 @@ function atualizarTabelaIndicadores(){
   const cdiParcial = num(cards.cdi?.parcial_mes_atual);
   const cdiParcialLabel = cards.cdi?.parcial_ref || mesAtualLabel;
   const cdiAno = (cdiParcial !== null ? num(cards.cdi?.acum_ano_com_parcial) : num(cards.cdi?.acum_ano)) ?? num(cards.cdi?.acum_ano_com_parcial) ?? null;
-  const cdiAcum = num(indicState.cdi[`m${m}`]) ?? num(cards.cdi?.[`acum_${m}m`]);
+  const cdiAcum = num(resolverCdiPeriodoV229(cards.cdi || {}, m));
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
   setSubStatus('cdi-mes-ant-sub', cards.cdi?.mes_ref || fallbackMesFechado, 'fechado');
@@ -1276,20 +1364,20 @@ function atualizarTabelaIndicadores(){
 
 
 /* ════════════════════════════════════════════════════
-   v228 — CONTROLADOR ÚNICO DO PERÍODO DE MERCADO
+   v229 — CONTROLADOR ÚNICO DO PERÍODO DE MERCADO
    - sincroniza estado, botões, aria-pressed, tabela e visão executiva;
    - usa apenas o evento click, compatível com mouse, toque e teclado;
    - remove a necessidade de z-index elevado e hit-test por coordenadas.
 ════════════════════════════════════════════════════ */
-const MARKET_PERIOD_OPTIONS_V228 = Object.freeze([12, 24, 36]);
+const MARKET_PERIOD_OPTIONS_V229 = Object.freeze([12, 24, 36]);
 
-function normalizarPeriodoMercadoV228(value){
+function normalizarPeriodoMercadoV229(value){
   const months = Number.parseInt(value, 10);
-  return MARKET_PERIOD_OPTIONS_V228.includes(months) ? months : 12;
+  return MARKET_PERIOD_OPTIONS_V229.includes(months) ? months : 12;
 }
 
-function sincronizarBotoesPeriodoMercadoV228(months){
-  const selected = normalizarPeriodoMercadoV228(months);
+function sincronizarBotoesPeriodoMercadoV229(months){
+  const selected = normalizarPeriodoMercadoV229(months);
 
   document.querySelectorAll('.indic-tab[data-months]').forEach(button => {
     const isActive = Number.parseInt(button.dataset.months, 10) === selected;
@@ -1298,14 +1386,14 @@ function sincronizarBotoesPeriodoMercadoV228(months){
   });
 }
 
-function selecionarPeriodoMercadoV228(value, options = {}){
-  const months = normalizarPeriodoMercadoV228(value);
+function selecionarPeriodoMercadoV229(value, options = {}){
+  const months = normalizarPeriodoMercadoV229(value);
   const source = options.source || 'api';
   const shouldRender = options.render !== false;
 
   activePeriodTab = months;
   document.documentElement.dataset.indicPeriod = String(months);
-  sincronizarBotoesPeriodoMercadoV228(months);
+  sincronizarBotoesPeriodoMercadoV229(months);
 
   let renderOk = true;
   if(shouldRender){
@@ -1313,7 +1401,7 @@ function selecionarPeriodoMercadoV228(value, options = {}){
       atualizarTabelaIndicadores();
     }catch(error){
       renderOk = false;
-      console.error('[ELTAUM_MARKET_PERIOD_CONTROLLER_20260618_v228] Falha ao atualizar os indicadores:', error);
+      console.error('[ELTAUM_MARKET_PERIOD_DYNAMIC_CDI_20260618_v229] Falha ao atualizar os indicadores:', error);
     }
   }
 
@@ -1324,16 +1412,16 @@ function selecionarPeriodoMercadoV228(value, options = {}){
   return renderOk;
 }
 
-function inicializarPeriodoMercadoV228(){
+function inicializarPeriodoMercadoV229(){
   const fromDataset = document.documentElement.dataset.indicPeriod;
   const fromActiveButton = document.querySelector('.indic-tab.active[data-months]')?.dataset.months;
   const initial = fromDataset || fromActiveButton || activePeriodTab || 12;
-  selecionarPeriodoMercadoV228(initial, { source: 'init', render: false });
+  selecionarPeriodoMercadoV229(initial, { source: 'init', render: false });
 }
 
 // Exportações explícitas: evitam depender de propriedades globais implícitas.
 window.atualizarTabelaIndicadores = atualizarTabelaIndicadores;
-window.selecionarPeriodoMercado = selecionarPeriodoMercadoV228;
+window.selecionarPeriodoMercado = selecionarPeriodoMercadoV229;
 window.getPeriodoMercado = () => activePeriodTab;
 
 // Captura única para impedir que o clique no botão abra/feche o bloco pai.
@@ -1343,17 +1431,17 @@ document.addEventListener('click', event => {
 
   event.preventDefault();
   event.stopPropagation();
-  selecionarPeriodoMercadoV228(button.dataset.months, { source: 'user' });
+  selecionarPeriodoMercadoV229(button.dataset.months, { source: 'user' });
 }, true);
 
 if(document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', inicializarPeriodoMercadoV228, { once: true });
+  document.addEventListener('DOMContentLoaded', inicializarPeriodoMercadoV229, { once: true });
 }else{
-  inicializarPeriodoMercadoV228();
+  inicializarPeriodoMercadoV229();
 }
 
 window.addEventListener('pageshow', () => {
-  sincronizarBotoesPeriodoMercadoV228(activePeriodTab);
+  sincronizarBotoesPeriodoMercadoV229(activePeriodTab);
 });
 
 /* ════════════════════════════════════════════════════
@@ -1670,43 +1758,49 @@ async function carregarMercado(){
 
     buildCopomCalendario();
 
-    // ── CDI — baseline + ★ v16: acumulados pré-calculados pelo robô ──
-    const cdi = c.cdi?.valor;
-    if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
-    if(cdi){
-      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1+cdi/100,1/12)-1)*100);
-      const isEst = c.cdi?.mensal == null;
-      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+'%';
-      // v17: exibe taxa + mês de referência no card CDI (ex: "+1,09% · abr/2026")
-      const mesRefLabel = c.cdi?.mes_ref ? ` · ${c.cdi.mes_ref}` : '';
+    // ── CDI — v229: taxa, mês e acumulados independentes entre si ──
+    const cdiCard = c.cdi || {};
+    const cdi = numeroFinitoV229(cdiCard.valor);
+    const cdiMensalInformado = numeroFinitoV229(cdiCard.mensal);
+    const cdiMensal = cdiMensalInformado ?? (cdi !== null ? ((Math.pow(1 + cdi / 100, 1 / 12) - 1) * 100) : null);
+
+    if($('mc-cdi')) $('mc-cdi').textContent = cdi !== null ? fmt(cdi) : '—';
+
+    // Esta sincronização não depende de cards.cdi.valor. Assim, versões do JSON
+    // que trazem apenas mensal, histórico e acumulados continuam funcionando.
+    sincronizarEstadoCdiV229(d);
+
+    if(cdiMensal !== null){
+      const isEst = cdiMensalInformado === null;
+      const fCdiMes = (cdiMensal > 0 ? '+' : '') + cdiMensal.toFixed(2).replace('.', ',') + '%';
+      const mesRefLabel = cdiCard.mes_ref ? ` · ${cdiCard.mes_ref}` : '';
       if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + mesRefLabel + (isEst ? '*' : '');
-
-      // Baseline
-      if(!indicState.cdi.mes) indicState.cdi.mes = cdiMensal;
-      if(!indicState.cdi.mesRef){
-        const h = new Date();
-        indicState.cdi.mesRef = c.cdi?.mes_ref ||
-          `${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;
-      }
-      // ★ v16 — usa acumulados pré-calculados server-side (resolve CORS/400 do browser)
-      if(c.cdi?.acum_12m != null) indicState.cdi.m12 = c.cdi.acum_12m;
-      if(c.cdi?.acum_24m != null) indicState.cdi.m24 = c.cdi.acum_24m;
-      if(c.cdi?.acum_36m != null) indicState.cdi.m36 = c.cdi.acum_36m;
-      // Fallback: se robô não calculou 12M, usa taxa anual como proxy
-      if(indicState.cdi.m12 == null) indicState.cdi.m12 = cdi;
-
-      const cdiMesAtual = c.cdi?.parcial_mes_atual ?? c.cdi?.mensal ?? cdiMensal;
-      const cdiMesAtualTxt = '+' + Number(cdiMesAtual).toFixed(2).replace('.',',') + '%';
-      const cdi12Txt = indicState.cdi.m12 !== null && indicState.cdi.m12 !== undefined
-        ? '+' + Number(indicState.cdi.m12).toFixed(2).replace('.',',') + '%'
-        : '—';
-      if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
-      if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
-      if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
-      renderCdiYearHistory(d);
-    } else {
-      renderCdiYearHistory(d);
+      indicState.cdi.mes = cdiMensal;
     }
+
+    if(!indicState.cdi.mesRef){
+      const h = new Date();
+      indicState.cdi.mesRef = cdiCard.mes_ref ||
+        `${MESES_PT[h.getMonth() === 0 ? 11 : h.getMonth() - 1]}/${h.getMonth() === 0 ? h.getFullYear() - 1 : h.getFullYear()}`;
+    }
+
+    // Compatibilidade conservadora com JSON muito antigo: somente 12M pode usar
+    // a taxa anual de referência como último recurso. 24M/36M nunca são simulados.
+    if(indicState.cdi.m12 == null && cdi !== null) indicState.cdi.m12 = cdi;
+
+    const cdiMesAtual = numeroFinitoV229(cdiCard.parcial_mes_atual) ?? cdiMensal;
+    const cdiMesAtualTxt = cdiMesAtual !== null
+      ? (cdiMesAtual > 0 ? '+' : '') + cdiMesAtual.toFixed(2).replace('.', ',') + '%'
+      : '—';
+    const cdi12 = resolverCdiPeriodoV229(cdiCard, 12);
+    const cdi12Txt = cdi12 !== null
+      ? (cdi12 > 0 ? '+' : '') + Number(cdi12).toFixed(2).replace('.', ',') + '%'
+      : '—';
+
+    if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
+    if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
+    if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
+    renderCdiYearHistory(d);
 
     // ── IPCA (do JSON — complementado pela série 433) ──
     const ipca = c.ipca || {};
@@ -14417,11 +14511,23 @@ if(document.readyState === 'loading'){
     </div>`;
   }
 
+  function selectedPeriodMonths(){
+    const fromDataset = Number.parseInt(document.documentElement.dataset.indicPeriod || '', 10);
+    const fromButton = Number.parseInt(qs('.market-period-tabs .indic-tab.active[data-months]')?.dataset.months || '', 10);
+    const fromState = typeof activePeriodTab !== 'undefined' ? Number(activePeriodTab) : NaN;
+    return [fromDataset, fromButton, fromState].find(value => [12, 24, 36].includes(value)) || 12;
+  }
+
+  function selectedPeriodLabel(){
+    return `${selectedPeriodMonths()} meses`;
+  }
+
   function gridHead(first='Indicador'){
     const closed=period('th-mes-ant-sub','Último fechado');
     const current=period('th-mes-cur-sub','Mês atual');
+    const accumulated=selectedPeriodLabel();
     return `<div class="market-period-grid-head-v196">
-      <span>${esc(first)}</span><span>Fechado<br>${esc(closed)}</span><span>Atual<br>${esc(current)}</span><span>No ano</span><span>12 meses</span>
+      <span>${esc(first)}</span><span>Fechado<br>${esc(closed)}</span><span>Atual<br>${esc(current)}</span><span>No ano</span><span>${esc(accumulated)}</span>
     </div>`;
   }
 
@@ -14479,14 +14585,14 @@ if(document.readyState === 'loading'){
         metric('Fechado',text('cdi-mes-ant'))+
         metric('Atual',text('cdi-mes-cur'),'',{status:cdiStatus})+
         metric('No ano',text('cdi-ano'))+
-        metric('12 meses',text('cdi-acum-v2'))
+        metric(selectedPeriodLabel(),text('cdi-acum-v2'))
       )}
       ${row(
         nameCell('🎯','IPCA','Inflação ao consumidor · meta 3,0%','',alertBadge())+
         metric('Fechado',text('ipca-mes-ant'))+
         metric('Atual','—','',{status:ipcaStatus||'Aguardando'})+
         metric('No ano',text('ipca-ano-v2'))+
-        metric('12 meses',text('ipca-acum-v2'))
+        metric(selectedPeriodLabel(),text('ipca-acum-v2'))
       )}
       <div class="market-period-card-foot-v196">CDI e IPCA: séries públicas do Banco Central. O mês atual pode permanecer aguardando o fechamento oficial.</div>
     </article>`;
@@ -14503,14 +14609,14 @@ if(document.readyState === 'loading'){
         metric('Fechado',text('dolar-ant-cot'),'cotação de fechamento')+
         metric('Atual',text('dolar-cur-var'),dolarStatus)+
         metric('No ano',text('dolar-ano-v2'))+
-        metric('12 meses',text('dolar-acum-v2'))
+        metric(selectedPeriodLabel(),text('dolar-acum-v2'))
       )}
       ${row(
         nameCell('📈','Ibovespa','B3 · pontos e variação percentual',text('ibov-cur-pts'))+
         metric('Fechado',text('ibov-ant-var'),text('ibov-ant-pts'))+
         metric('Atual',text('ibov-cur-var'),ibovStatus)+
         metric('No ano',text('ibov-ano-v2'))+
-        metric('12 meses',text('ibov-acum-v2'))
+        metric(selectedPeriodLabel(),text('ibov-acum-v2'))
       )}
       <div class="market-period-card-foot-v196">O valor atual aparece junto ao indicador; as quatro colunas apresentam a comparação por período.</div>
     </article>`;
@@ -14536,7 +14642,7 @@ if(document.readyState === 'loading'){
         usMetric('Fechado',item.closed)+
         usMetric('Atual',item.current,item.status)+
         usMetric('No ano',item.year)+
-        usMetric('12 meses',item.accum)
+        usMetric(selectedPeriodLabel(),item.accum)
       )).join('')}
       <div class="market-period-card-foot-v196">BRL incorpora a variação cambial; USD representa o desempenho do índice em sua moeda de origem.</div>
     </article>`;
