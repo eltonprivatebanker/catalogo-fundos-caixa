@@ -1,27 +1,40 @@
-# Atualização v233 — contexto do CDI acumulado no mês
+# Atualização v238 — CNPJ copiável no mobile
 
-Substitua na mesma branch publicada os arquivos:
+## Arquivos para substituir no GitHub
+
+Substitua na branch publicada da plataforma:
 
 - `index.html`
 - `style.css`
 - `app.js`
 
-Não é necessário substituir o robô Python nem o workflow nesta atualização visual.
+Não é necessário alterar o robô Python nem o workflow nesta versão.
 
-Depois do commit:
+## O que foi alterado
 
-1. Aguarde a publicação do GitHub Pages.
-2. No computador, use `Ctrl + F5`.
-3. No celular, feche a aba e abra novamente.
+- Adicionado o CNPJ no bloco mobile **Dados do fundo**.
+- O CNPJ aparece de forma compacta, sem poluir a listagem principal.
+- Incluído botão **Copiar** ao lado do CNPJ.
+- O botão mostra retorno visual: **Copiado** quando a cópia funciona.
+- Mantida a leitura consultiva separada, sem misturar dado cadastral com interpretação.
+- Ajustes de estilo para telas menores, incluindo quebra segura em celulares estreitos.
 
-## Resultado esperado
+## Depois de subir
 
-O bloco do CDI passa a mostrar:
+1. Faça o commit no GitHub.
+2. Aguarde a publicação do GitHub Pages.
+3. No computador, atualize com `Ctrl + F5`.
+4. No celular, feche a aba e abra novamente.
 
-- o valor, por exemplo `+0,64%`;
-- `Acumulado no mês`;
-- `Dados disponíveis até DD/MM`, quando a data for recente;
-- `Última referência disponível: DD/MM`, quando a referência estiver defasada;
-- `Atualização parcial de jun/2026`, quando a fonte mensal usar o primeiro dia apenas como marcador da competência.
+## Conferência rápida
 
-A data exibida nunca é substituída pela data atual do aparelho: ela continua representando a referência realmente recebida na base.
+Abra um fundo no mobile e toque em **Mais detalhes**. O bloco **Dados do fundo** deve mostrar:
+
+- CNPJ
+- botão **Copiar**
+- Aplicação
+- Resgate
+- Referência
+- Estratégia
+- Tributação
+- Novas aplicações

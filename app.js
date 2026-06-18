@@ -1,4 +1,4 @@
-// ELTAUM_FUND_MOBILE_POLISH_20260618_v236
+// ELTAUM_FUND_MOBILE_CNPJ_20260618_v238
 // ELTAUM_CDI_CURRENT_CONTEXT_20260618_v233
 // ELTAUM_CDI_DAILY_AUTO_REFRESH_20260618_v232
 // ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
@@ -4217,8 +4217,20 @@ function buildFundOperationalFacts(r, variant='detail'){
       ? factMobileV235('Antecipação de resgate', htmlAttr(d.adiantamento.texto), {cls:`status-${adiCls}`, dot:adiDot})
       : '';
 
-    return `<section class="fund-facts-v154 mobile fund-facts-mobile-v235 fund-facts-mobile-v236" aria-label="Dados operacionais e cadastrais do fundo">
-      <div class="fund-facts-head-v154 fund-facts-head-mobile-v235 fund-facts-head-mobile-v236"><strong>Dados do fundo</strong><small>Operação, referência e disponibilidade</small></div>
+    const cnpjBruto = detailValueV158(r,['CNPJ']);
+    const cnpjLimpo = String(cnpjBruto || '').replace(/\D/g,'').slice(0,14);
+    const cnpjFormatado = cnpjLimpo ? formatarCnpjMeta(cnpjLimpo) : String(cnpjBruto || '').trim();
+    const cnpjHtml = cnpjFormatado
+      ? `<div class="fund-cnpj-row-mobile-v238" aria-label="CNPJ do fundo">
+          <span>CNPJ</span>
+          <strong class="fund-cnpj-value-mobile-v238">${htmlAttr(cnpjFormatado)}</strong>
+          <button type="button" class="fund-cnpj-copy-mobile-v238 detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjLimpo || cnpjFormatado)}" aria-label="Copiar CNPJ ${htmlAttr(cnpjFormatado)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button>
+        </div>`
+      : '';
+
+    return `<section class="fund-facts-v154 mobile fund-facts-mobile-v235 fund-facts-mobile-v236 fund-facts-mobile-v238" aria-label="Dados operacionais e cadastrais do fundo">
+      <div class="fund-facts-head-v154 fund-facts-head-mobile-v235 fund-facts-head-mobile-v236 fund-facts-head-mobile-v238"><strong>Dados do fundo</strong><small>Operação, referência e disponibilidade</small></div>
+      ${cnpjHtml}
 
       <div class="fund-operation-strip-v235 fund-operation-strip-v236" aria-label="Horários limite de movimentação">
         <div><span>Aplicação</span><strong>${htmlAttr(formatarHorarioGradeMobileV236(d.horarios.aplicacao))}</strong></div>

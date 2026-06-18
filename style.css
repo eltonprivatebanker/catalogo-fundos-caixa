@@ -36124,3 +36124,98 @@ html.market-live-values-v234 .market-period-metric-v196 > strong.dash + small{
     font-size:.56rem !important;
   }
 }
+
+/* PATCH v238 — CNPJ copiável no mobile dentro de Dados do fundo */
+@media (max-width: 820px){
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-facts-mobile-v238{
+    gap:0 !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-facts-head-mobile-v238{
+    margin-bottom:8px !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-row-mobile-v238{
+    display:grid !important;
+    grid-template-columns:auto minmax(0,1fr) auto !important;
+    align-items:center !important;
+    gap:8px !important;
+    min-height:34px !important;
+    margin:0 0 8px !important;
+    padding:7px 8px !important;
+    border:1px solid rgba(148,163,184,.11) !important;
+    border-radius:11px !important;
+    background:rgba(2,6,23,.18) !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-row-mobile-v238 > span{
+    color:#9eb3db !important;
+    font:800 .52rem/1.1 'Inter',sans-serif !important;
+    letter-spacing:.085em !important;
+    text-transform:uppercase !important;
+    white-space:nowrap !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-value-mobile-v238{
+    min-width:0 !important;
+    color:#f3f7ff !important;
+    font-family:'JetBrains Mono','IBM Plex Mono',monospace !important;
+    font-size:.67rem !important;
+    font-weight:800 !important;
+    line-height:1.15 !important;
+    letter-spacing:.005em !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    font-variant-numeric:tabular-nums slashed-zero !important;
+    font-feature-settings:'tnum' 1,'zero' 1 !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-copy-mobile-v238{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:5px !important;
+    min-height:27px !important;
+    padding:6px 8px !important;
+    border:1px solid rgba(200,151,58,.32) !important;
+    border-radius:9px !important;
+    background:rgba(200,151,58,.09) !important;
+    color:#f3cb75 !important;
+    font:800 .58rem/1 'Inter',sans-serif !important;
+    letter-spacing:.01em !important;
+    white-space:nowrap !important;
+    cursor:pointer !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-copy-mobile-v238.is-copied{
+    border-color:rgba(52,211,153,.42) !important;
+    background:rgba(52,211,153,.10) !important;
+    color:#5df0a7 !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-copy-mobile-v238.copy-error{
+    border-color:rgba(255,104,121,.42) !important;
+    background:rgba(255,104,121,.09) !important;
+    color:#ff8794 !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-operation-strip-v236{
+    margin-top:0 !important;
+  }
+}
+
+@media (max-width: 370px){
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-row-mobile-v238{
+    grid-template-columns:1fr auto !important;
+    row-gap:4px !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-row-mobile-v238 > span{
+    grid-column:1/-1 !important;
+  }
+
+  html.fund-mobile-cnpj-v238 body.fund-card-mode #mobileFundCards .fund-cnpj-value-mobile-v238{
+    font-size:.64rem !important;
+  }
+}
