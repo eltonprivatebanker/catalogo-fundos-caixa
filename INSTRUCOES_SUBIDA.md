@@ -1,4 +1,4 @@
-# Atualização v251 — Correção do gráfico IPCA mensal
+# Atualização v252 — Correção das competências do IPCA mensal
 
 Substitua na branch publicada os arquivos:
 
@@ -8,11 +8,11 @@ Substitua na branch publicada os arquivos:
 
 ## O que foi corrigido
 
-1. Corrigido o erro que impedia o gráfico **IPCA mensal** de redesenhar.
-2. O resumo executivo do IPCA agora usa um formatador próprio, sem depender da função `pct()` de outros blocos.
-3. A mensagem `Não consegui redesenhar este período agora` deve desaparecer.
-4. Os cards **Último IPCA**, **Maior mês** e **Menor mês** passam a carregar normalmente.
-5. O tooltip do gráfico também foi ajustado para usar o mesmo formatador seguro.
+1. O card **Último IPCA** passa a usar a mesma competência oficial do painel principal.
+2. O resumo não mostra mais `jan/2026` quando o último resultado oficial é `mai/2026`.
+3. Os cards **Maior mês** e **Menor mês** agora usam o mesmo `label` exibido no gráfico/tooltip.
+4. Isso corrige divergências como tooltip em `fev/2025` e resumo em `jan/2025`.
+5. Não alterei o robô nem a base de dados, apenas a leitura/rotulagem do gráfico.
 
 ## Depois da subida
 

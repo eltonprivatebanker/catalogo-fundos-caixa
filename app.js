@@ -1,3 +1,4 @@
+// ELTAUM_IPCA_SUMMARY_LABEL_FIX_20260618_v252
 // ELTAUM_IPCA_CHART_FIX_20260618_v251
 // ELTAUM_IPCA_CHART_SUMMARY_20260618_v250
 // ELTAUM_SELIC_PERIODS_20260618_v249
@@ -5022,11 +5023,20 @@ async function carregarSelicHistoricoAmpliado(historicoAtual){
 
 function fmtIPCALabelV250(item){
   if(!item) return '—';
+
+  // v252: o gráfico usa o campo label como competência exibida.
+  // Algumas bases antigas vêm com data técnica diferente da competência do IPCA,
+  // então o resumo deve priorizar o mesmo label usado no eixo/tooltip.
+  const label = item.label || item.competencia || item.mes_ref || item.mes || '';
+  if(label && String(label).trim() && !String(label).startsWith('p')){
+    return String(label).trim();
+  }
+
   if(item._dt instanceof Date && !isNaN(item._dt.getTime())){
     const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
     return `${meses[item._dt.getMonth()]}/${item._dt.getFullYear()}`;
   }
-  return String(item.label || '—');
+  return '—';
 }
 
 function fmtPctIPCAResumoV251(v){
@@ -5038,25 +5048,40 @@ function fmtPctIPCAResumoV251(v){
 
 function atualizarResumoIPCAMensalV250(slice){
   if(!Array.isArray(slice) || !slice.length) return;
-  const values = slice.map(d => Number(d.valor)).filter(Number.isFinite);
-  if(!values.length) return;
+  const valoresValidos = slice
+    .map(d => ({ item:d, valor:Number(d.valor) }))
+    .filter(d => Number.isFinite(d.valor));
+  if(!valoresValidos.length) return;
 
-  const ultimo = slice[slice.length - 1];
-  const maxVal = Math.max(...slice.map(d => Number(d.valor)));
-  const minVal = Math.min(...slice.map(d => Number(d.valor)));
-  const maxItem = slice.find(d => Number(d.valor) === maxVal);
-  const minItem = slice.find(d => Number(d.valor) === minVal);
+  const ultimoGrafico = valoresValidos[valoresValidos.length - 1];
+  const maxObj = valoresValidos.reduce((acc, d) => d.valor > acc.valor ? d : acc, valoresValidos[0]);
+  const minObj = valoresValidos.reduce((acc, d) => d.valor < acc.valor ? d : acc, valoresValidos[0]);
+
+  let ultimoValor = ultimoGrafico.valor;
+  let ultimoLabel = fmtIPCALabelV250(ultimoGrafico.item);
+
+  // v252: o "Último IPCA" do resumo deve bater com o card oficial do painel,
+  // que já traz a competência consolidada mais recente.
+  try{
+    const ipcaCard = _dadosMercado?.cards?.ipca || {};
+    const valorCard = Number(ipcaCard.ultimo_mes);
+    if(Number.isFinite(valorCard)){
+      ultimoValor = valorCard;
+      ultimoLabel = ipcaCard.label_mes || ultimoLabel;
+    }
+  }catch(e){}
+
   const set = (id, txt) => {
     const el = document.getElementById(id);
     if(el) el.textContent = txt;
   };
 
-  set('ipcaResumoUltimoV250', fmtPctIPCAResumoV251(Number(ultimo.valor)));
-  set('ipcaResumoUltimoDataV250', fmtIPCALabelV250(ultimo));
-  set('ipcaResumoMaxV250', fmtPctIPCAResumoV251(maxVal));
-  set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxItem));
-  set('ipcaResumoMinV250', fmtPctIPCAResumoV251(minVal));
-  set('ipcaResumoMinDataV250', fmtIPCALabelV250(minItem));
+  set('ipcaResumoUltimoV250', fmtPctIPCAResumoV251(ultimoValor));
+  set('ipcaResumoUltimoDataV250', ultimoLabel || '—');
+  set('ipcaResumoMaxV250', fmtPctIPCAResumoV251(maxObj.valor));
+  set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxObj.item));
+  set('ipcaResumoMinV250', fmtPctIPCAResumoV251(minObj.valor));
+  set('ipcaResumoMinDataV250', fmtIPCALabelV250(minObj.item));
 }
 
 function ipcaChartOptionsV250(range){
