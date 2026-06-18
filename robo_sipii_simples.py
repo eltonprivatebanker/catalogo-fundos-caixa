@@ -1,6 +1,12 @@
 """
-ROBÔ SIPII CAIXA — v18.3 (Automação integral GitHub)
+ROBÔ SIPII CAIXA — v18.4 (Automação integral GitHub)
 ==========================================================
+Novidades v18.4:
+  + Reconhece automaticamente o CDI parcial do mês corrente na série SGS 4391
+  + Preserva a data do último dado diário disponível e exporta parcial_ate
+  + Mantém override local como prioridade, sem tratar o mês atual como fechamento
+  + Alimenta o painel executivo com CDI acumulado no mês
+
 Novidades v18.3:
   + Corrige o vínculo de fundos com nomes abreviados no SIPII
   + Cria índices completos por código e CNPJ para metadados do fundos.json
@@ -1376,16 +1382,25 @@ class ColetorMercado:
         )
 
         serie = {}
+        data_ref_por_mes = {}
         try:
             res = requests.get(url, headers=self.headers, timeout=25)
             if res.status_code == 200:
                 for item in res.json():
                     try:
-                        k = key_from_data_br(item["data"])
-                        serie[k] = float(str(item["valor"]).replace(",", "."))
+                        data_br = str(item["data"]).strip()
+                        data_item = datetime.strptime(data_br, "%d/%m/%Y")
+                        k = key_from_data_br(data_br)
+                        valor_item = float(str(item["valor"]).replace(",", "."))
+
+                        # A série 4391 pode trazer várias observações no mesmo mês.
+                        # Mantemos a observação mais recente de cada competência.
+                        if k not in data_ref_por_mes or data_item > data_ref_por_mes[k]:
+                            serie[k] = valor_item
+                            data_ref_por_mes[k] = data_item
                     except Exception:
                         pass
-                log(f"  [CDI] Série 4391 BCB carregada: {len(serie)} meses")
+                log(f"  [CDI] Série 4391 BCB carregada: {len(serie)} competências")
             else:
                 log(f"  [CDI] Série 4391 BCB HTTP {res.status_code}")
         except Exception as e:
@@ -1404,9 +1419,14 @@ class ColetorMercado:
                 # Se alguém informou o mês atual no arquivo legado, trata como parcial.
                 parciais[k] = float(v)
 
-        # Aplica parcial somente para o mês calendário atual.
+        # A série 4391 já pode trazer o acumulado parcial do mês corrente.
+        # O override local continua tendo prioridade quando existir.
+        parcial_bcb = serie.get(mes_atual_key)
+        parcial_origem = "bcb_sgs_4391" if parcial_bcb is not None else None
+
         if mes_atual_key in parciais:
             serie[mes_atual_key] = float(parciais[mes_atual_key])
+            parcial_origem = "override_local"
 
         if not serie:
             log("  [CDI] Sem série CDI disponível")
@@ -1415,7 +1435,10 @@ class ColetorMercado:
         # Todos os meses fechados até o mês anterior.
         chaves_fechadas = sorted(k for k in serie.keys() if k <= mes_fechado_key)
         mensal_fechado = serie.get(mes_fechado_key)
-        parcial_mes_atual = serie.get(mes_atual_key) if mes_atual_key in parciais else None
+        parcial_mes_atual = serie.get(mes_atual_key) if parcial_origem else None
+        parcial_data = data_ref_por_mes.get(mes_atual_key)
+        parcial_ate = parcial_data.strftime("%d/%m/%Y") if parcial_data else None
+        parcial_data_iso = parcial_data.strftime("%Y-%m-%d") if parcial_data else None
 
         # Se, por algum motivo, não houver mês anterior na série, usa o último fechado disponível.
         if mensal_fechado is None and chaves_fechadas:
@@ -1444,7 +1467,8 @@ class ColetorMercado:
 
         log(
             f"  [CDI] mês fechado={mensal_fechado}% ({label_from_key(mes_fechado_key)}) "
-            f"| parcial={parcial_mes_atual}% ({label_from_key(mes_atual_key)}) "
+            f"| parcial={parcial_mes_atual}% ({label_from_key(mes_atual_key)}"
+            f"{f' até {parcial_ate}' if parcial_ate else ''}; origem={parcial_origem or 'indisponível'}) "
             f"| ano fechado={acum_ano}% | ano c/ parcial={acum_ano_com_parcial}% "
             f"| 12M={acum_12m}% | 24M={acum_24m}% | 36M={acum_36m}%"
         )
@@ -1454,13 +1478,16 @@ class ColetorMercado:
             "mes_ref": label_from_key(mes_fechado_key),
             "parcial_mes_atual": parcial_mes_atual,
             "parcial_ref": label_from_key(mes_atual_key),
+            "parcial_ate": parcial_ate,
+            "parcial_data_iso": parcial_data_iso,
+            "parcial_origem": parcial_origem,
             "acum_ano": acum_ano,
             "acum_ano_com_parcial": acum_ano_com_parcial,
             "acum_12m": acum_12m,
             "acum_24m": acum_24m,
             "acum_36m": acum_36m,
             "n_meses": len(chaves_fechadas),
-            "fonte": "série 4391 BCB + fechamentos confirmados/override local",
+            "fonte": "BCB SGS 4391 (fechamentos e parcial do mês) + overrides locais",
             "status_mes_atual": "parcial" if parcial_mes_atual is not None else "sem_parcial",
             "historico": [{"key": k, "label": label_from_key(k), "valor": serie[k]} for k in sorted(serie.keys())],
         }
@@ -2564,6 +2591,9 @@ class ColetorMercado:
                     "mes_ref": cdi_acum["mes_ref"] if cdi_acum else None,
                     "parcial_mes_atual": cdi_acum.get("parcial_mes_atual") if cdi_acum else None,
                     "parcial_ref":       cdi_acum.get("parcial_ref") if cdi_acum else None,
+                    "parcial_ate":       cdi_acum.get("parcial_ate") if cdi_acum else None,
+                    "parcial_data_iso":  cdi_acum.get("parcial_data_iso") if cdi_acum else None,
+                    "parcial_origem":    cdi_acum.get("parcial_origem") if cdi_acum else None,
                     "acum_ano":          cdi_acum.get("acum_ano") if cdi_acum else None,
                     "acum_ano_com_parcial": cdi_acum.get("acum_ano_com_parcial") if cdi_acum else None,
                     "acum_12m": cdi_acum["acum_12m"] if cdi_acum else None,

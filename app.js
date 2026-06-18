@@ -12778,7 +12778,14 @@ if(!isSearchInput(el)) return;
     const ipcaCurrent = /aguard/i.test(ipcaCurrentTxt) ? '—' : valueOrDash(ipcaCurrentTxt.match(/[+-]?\d+(?:[.,]\d+)?%/)?.[0]||'—');
     return {
       closed,current,accum,
-      cdi:{closed:valueOrDash(text('cdi-mes-ant')),current:valueOrDash(text('cdi-mes-cur')),year:valueOrDash(text('cdi-ano')),accum:valueOrDash(text('cdi-acum-v2'))},
+      cdi:{
+        closed:valueOrDash(text('cdi-mes-ant')),
+        current:valueOrDash(text('cdi-mes-cur')),
+        currentRef:clean(_dadosMercado?.cards?.cdi?.parcial_ate || ''),
+        currentSource:clean(_dadosMercado?.cards?.cdi?.parcial_origem || ''),
+        year:valueOrDash(text('cdi-ano')),
+        accum:valueOrDash(text('cdi-acum-v2'))
+      },
       ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2'))},
       dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
       ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
@@ -12897,9 +12904,17 @@ if(!isSearchInput(el)) return;
     shell.classList.add('market-v159-shell');
     const usMode=state.usMode==='usd'?'usd':'brl';
     const awaiting=[];
-    if(data.cdi.current==='—') awaiting.push('CDI');
-    if(data.ipca.current==='—') awaiting.push('IPCA');
-    const awaitingText=awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : 'Indicadores correntes disponíveis';
+    const currentNotes=[];
+    const cdiAvailable=data.cdi.current!=='—';
+    const ipcaAvailable=data.ipca.current!=='—';
+    if(!cdiAvailable) awaiting.push('CDI');
+    else currentNotes.push(`CDI parcial${data.cdi.currentRef ? ` até ${data.cdi.currentRef.slice(0,5)}` : ''}`);
+    if(!ipcaAvailable) awaiting.push('IPCA');
+    else currentNotes.push('IPCA disponível');
+    const awaitingText=[
+      ...currentNotes,
+      awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : ''
+    ].filter(Boolean).join(' · ') || 'Indicadores correntes disponíveis';
 
     shell.innerHTML=`
       <div class="market-v150-head market-v159-head">
@@ -12923,8 +12938,9 @@ if(!isSearchInput(el)) return;
           </div>
         </section>
 
-        <section class="market-v159-current" aria-label="Mês atual">
+        <section class="market-v159-current market-v227-current" aria-label="Mês atual">
           <div class="market-v159-current-copy"><span>Mês atual</span><strong>${esc(data.current)} · parcial</strong><small>${esc(awaitingText)}</small></div>
+          ${currentMetric('CDI',data.cdi.current,data.cdi.currentRef ? `até ${data.cdi.currentRef.slice(0,5)}` : 'acumulado no mês',pctClass(data.cdi.current))}
           ${currentMetric('Dólar',data.dolar.currentQuote,data.dolar.currentVar)}
           ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
         </section>
@@ -13013,6 +13029,13 @@ if(!isSearchInput(el)) return;
   window.__ELTAUM_MARKET_PANEL_V150__={sync:()=>sync(true),getClosedPeriod,getCurrentPeriod,state};
 })();
 
+
+/* ==========================================================
+   ELTAUM v227 — CDI parcial automático no painel executivo
+   - lê cards.cdi.parcial_mes_atual gerado diariamente pelo robô
+   - mostra data do último dado disponível em cards.cdi.parcial_ate
+   - preserva mês fechado e acumulados históricos separadamente
+========================================================== */
 
 /* ==========================================================
    ELTAUM v151 — integração dos componentes restaurados
