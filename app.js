@@ -1,3 +1,4 @@
+// ELTAUM_SELIC_VIGENTE_SYNC_20260618_v248
 // ELTAUM_DOLAR_MOBILE_EXECUTIVE_20260618_v247
 // ELTAUM_DOLAR_MOBILE_TYPOGRAPHY_20260618_v246
 // ELTAUM_FUND_MOBILE_CNPJ_20260618_v238
@@ -8247,13 +8248,69 @@ async function sharePainelMercado(){
     return compacta;
   }
 
+  function reconciliarSelicVigenteV248(base, mercado){
+    const lista = Array.isArray(base) ? [...base] : [];
+    const card = mercado?.cards?.selic_meta || {};
+    const valor = Number(card.valor);
+    if(!Number.isFinite(valor)) return lista;
+
+    let dataRef = '';
+    try{
+      if(typeof resolverDataUltimaAlteracaoSelic === 'function'){
+        dataRef = resolverDataUltimaAlteracaoSelic(mercado)?.data || '';
+      }
+    }catch(e){}
+
+    dataRef = dataRef
+      || card.ultima_alteracao
+      || card.data_ultima_alteracao
+      || card.data_mudanca
+      || card.vigente_desde
+      || card.data_ref
+      || '';
+
+    let dt = parseDateAny(dataRef);
+    if(!dt || isNaN(dt.getTime())){
+      const hoje = new Date();
+      dt = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    }
+
+    const ts = dt.getTime();
+    const mesmoDia = (a,b) => {
+      if(!a || !b) return false;
+      return a.getFullYear() === b.getFullYear()
+        && a.getMonth() === b.getMonth()
+        && a.getDate() === b.getDate();
+    };
+
+    const ultimo = lista[lista.length - 1];
+    if(ultimo && ultimo._dt && ultimo._dt.getTime() >= ts && Math.abs(Number(ultimo.valor) - valor) < 0.005){
+      return lista;
+    }
+
+    const semDuplicarData = lista.filter(item => !(item?._dt && mesmoDia(item._dt, dt)));
+    semDuplicarData.push({
+      label: mesAno(dt),
+      valor,
+      _dt: dt,
+      _ts: ts,
+      _vigente_sync_v248: true
+    });
+
+    return semDuplicarData
+      .filter(d => Number.isFinite(Number(d.valor)))
+      .sort((a,b) => (a._ts || 0) - (b._ts || 0));
+  }
+
   async function carregarSelic(){
     if(cache.selic && cache.selic.length) return cache.selic;
 
     let base = [];
+    let mercadoAtual = null;
+
     try{
-      const mercado = await carregarMercadoAtual();
-      base = normalizarSelic(mercado?.historico_selic || mercado?.cards?.selic_meta?.historico || []);
+      mercadoAtual = await carregarMercadoAtual();
+      base = normalizarSelic(mercadoAtual?.historico_selic || mercadoAtual?.cards?.selic_meta?.historico || []);
     }catch(e){
       console.warn('[Gráficos v4] mercado_atual não trouxe Selic histórica:', e);
     }
@@ -8283,6 +8340,15 @@ async function sharePainelMercado(){
       }catch(e){
         console.warn('[Gráficos v4] Fallback BCB Selic não respondeu:', e);
       }
+    }
+
+    // v248: garante que a taxa vigente do card oficial entre no histórico do gráfico.
+    // Isso evita divergência quando o histórico ainda termina em uma decisão anterior.
+    try{
+      if(!mercadoAtual) mercadoAtual = await carregarMercadoAtual();
+      base = reconciliarSelicVigenteV248(base, mercadoAtual);
+    }catch(e){
+      console.warn('[Selic v248] Não consegui reconciliar a taxa vigente com o histórico:', e);
     }
 
     cache.selic = base;
@@ -8381,13 +8447,36 @@ async function sharePainelMercado(){
     const maxItem = slice[values.indexOf(maxVal)];
     const minItem = slice[values.indexOf(minVal)];
     const hoje = slice[slice.length - 1];
+
+    let vigenteValor = hoje.valor;
+    let vigenteData = dataBR(hoje._dt);
+
+    // v248: o card "Vigente" deve refletir a taxa vigente oficial do painel,
+    // não apenas o último ponto que veio no histórico antigo.
+    try{
+      const card = _dadosMercado?.cards?.selic_meta || {};
+      const valorCard = Number(card.valor);
+      if(Number.isFinite(valorCard)){
+        vigenteValor = valorCard;
+        const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+          ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
+          : null;
+        vigenteData = ref?.data
+          || card.ultima_alteracao
+          || card.data_ultima_alteracao
+          || card.vigente_desde
+          || card.data_ref
+          || vigenteData;
+      }
+    }catch(e){}
+
     const set = (id, txt) => { const el = byId(id); if(el) el.textContent = txt; };
     set('selicMaxResumo', pct(maxVal) + ' a.a.');
     set('selicMaxData', dataBR(maxItem?._dt));
     set('selicMinResumo', pct(minVal) + ' a.a.');
     set('selicMinData', dataBR(minItem?._dt));
-    set('selicHojeResumo', pct(hoje.valor) + ' a.a.');
-    set('selicHojeData', dataBR(hoje._dt));
+    set('selicHojeResumo', pct(vigenteValor) + ' a.a.');
+    set('selicHojeData', vigenteData ? `desde ${vigenteData}` : 'vigente');
   }
 
   async function desenharSelic(range){

@@ -1,4 +1,4 @@
-# Atualização v247 — Dólar PTAX mobile mais compacto
+# Atualização v248 — Sincronização da Selic vigente
 
 Substitua na branch publicada os arquivos:
 
@@ -8,12 +8,11 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. O bloco **Dólar PTAX** ficou ainda mais compacto no mobile.
-2. A cotação principal `R$ 5,16` foi reduzida novamente.
-3. Os cards de variação ficaram mais baixos.
-4. As estatísticas do período ficaram com fonte menor e altura mais executiva.
-5. O cabeçalho e o selo BCB ficaram mais proporcionais.
-6. Mantive a estrutura e os dados, alterando apenas a apresentação visual.
+1. Corrigida a divergência no bloco **Trajetória da Selic meta**.
+2. O card **Vigente** agora usa a taxa vigente oficial do painel (`cards.selic_meta.valor`).
+3. O gráfico passa a reconciliar o histórico com a taxa vigente quando o histórico ainda estiver terminando na decisão anterior.
+4. Assim, o bloco deixa de mostrar **14,50% a.a.** quando o painel já informa **14,25% a.a.**.
+5. Mantive a máxima e a mínima calculadas pelo período selecionado.
 
 ## Depois da subida
 
