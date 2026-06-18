@@ -38489,3 +38489,225 @@ html.rates-reference-exec-v255 #sec-mercado .rates-executive-v255 .reference-foo
     min-height:50px !important;
   }
 }
+
+
+/* ELTAUM_RATES_REFERENCE_CLEAN_20260618_v256
+   Cenário monetário: remove ruído técnico, transforma decisões em timeline e deixa o CDI mensal mais leve. */
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .market-reference-head-v167{
+  padding:16px 20px 13px !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .market-reference-head-v167 h3{
+  font-size:1.06rem !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .market-reference-head-v167 p{
+  font-size:.64rem !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .market-reference-source-v167{
+  min-height:28px !important;
+  padding:0 10px !important;
+  font-size:.54rem !important;
+  opacity:.92 !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .market-reference-source-prefix-v191{
+  margin-right:.22em !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rates-summary-v167{
+  padding:11px 18px 9px !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rate-summary-card-v167{
+  min-height:66px !important;
+  padding:10px 12px !important;
+  background:rgba(8,11,22,.38) !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rate-summary-card-v167>span{
+  font-size:.49rem !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rate-summary-value-v167{
+  margin:5px 0 4px !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rate-summary-value-v167 strong,
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-next-summary-v167>strong{
+  font-size:1.22rem !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rate-summary-card-v167 small{
+  font-size:.53rem !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+  gap:8px !important;
+  padding:0 18px 14px !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-compact-v167,
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167{
+  padding:11px 12px !important;
+  background:rgba(7,9,18,.30) !important;
+  border-color:rgba(255,255,255,.055) !important;
+}
+
+/* Decisões como timeline — menos cards, mais leitura */
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167{
+  display:flex !important;
+  gap:8px !important;
+  overflow-x:auto !important;
+  overflow-y:hidden !important;
+  padding-bottom:1px !important;
+  scrollbar-width:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167::-webkit-scrollbar{
+  display:none !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item{
+  flex:1 1 0 !important;
+  min-width:150px !important;
+  min-height:40px !important;
+  padding:8px 10px 8px 12px !important;
+  border-radius:10px !important;
+  display:grid !important;
+  grid-template-columns:auto minmax(0,1fr) !important;
+  grid-template-areas:"date result" "num result" !important;
+  align-items:center !important;
+  column-gap:8px !important;
+  row-gap:1px !important;
+  background:rgba(10,13,25,.40) !important;
+  border-color:rgba(255,255,255,.055) !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item::before{
+  top:8px !important;
+  bottom:8px !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item .copom-num{
+  grid-area:num !important;
+  font-size:.44rem !important;
+  opacity:.68 !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item .copom-date{
+  grid-area:date !important;
+  font-size:.66rem !important;
+  white-space:nowrap !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item .copom-result{
+  grid-area:result !important;
+  justify-self:end !important;
+  text-align:right !important;
+  font-size:.50rem !important;
+  max-width:100% !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item.featured-next{
+  background:rgba(200,151,58,.07) !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-footnote-v256{
+  margin-top:6px !important;
+  opacity:.72 !important;
+}
+
+/* CDI mensal como régua mais discreta */
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-strip{
+  display:flex !important;
+  gap:6px !important;
+  overflow-x:auto !important;
+  scrollbar-width:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-strip::-webkit-scrollbar{
+  display:none !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip{
+  flex:1 0 76px !important;
+  min-width:76px !important;
+  min-height:40px !important;
+  padding:6px 8px !important;
+  border-radius:10px !important;
+  justify-content:center !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .m{
+  font-size:.45rem !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .v{
+  margin-top:3px !important;
+  font-size:.62rem !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .p{
+  margin-top:2px !important;
+  font-size:.43rem !important;
+  opacity:.78 !important;
+}
+
+html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .reference-footnote-v167{
+  font-size:.49rem !important;
+  opacity:.76 !important;
+}
+
+@media (min-width: 1040px){
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+    grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr) !important;
+  }
+}
+
+@media (max-width: 760px){
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .market-reference-head-v167{
+    padding:14px 15px 11px !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rates-summary-v167{
+    grid-template-columns:1fr 1fr !important;
+    padding:10px 13px 8px !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .selic-summary-v167{
+    grid-column:1/-1 !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rate-summary-card-v167{
+    min-height:58px !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+    padding:0 13px 13px !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167{
+    flex-direction:column !important;
+    gap:6px !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item{
+    flex:0 0 auto !important;
+    min-width:0 !important;
+    min-height:38px !important;
+    grid-template-columns:minmax(0,.9fr) minmax(0,1.15fr) !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip{
+    flex:0 0 76px !important;
+  }
+
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .reference-subhead-v167 small,
+  html.rates-reference-clean-v256 #sec-mercado .rates-executive-v255 .reference-footnote-v167{
+    display:none !important;
+  }
+}

@@ -1,4 +1,4 @@
-# Atualização v255 — Cenário monetário mais limpo
+# Atualização v256 — Cenário monetário mais limpo
 
 Substitua na branch publicada os arquivos:
 
@@ -8,16 +8,13 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. O bloco de **Taxas de referência** foi reorganizado como **Cenário monetário**.
-2. A hierarquia ficou mais clara:
-   - Selic meta como principal;
-   - CDI e próxima reunião como apoio;
-   - decisões recentes em leitura compacta;
-   - CDI mensal em régua/chips mais enxutos.
-3. O botão de fonte ficou mais discreto: **Fonte: BCB ↗**.
-4. O texto foi simplificado para reduzir ruído visual.
-5. O layout ficou mais compacto no desktop e mais organizado no mobile.
-6. Não houve alteração na origem nem no cálculo dos dados.
+1. O campo da Selic agora mostra **Vigente desde** em vez de **Última alteração**.
+2. Removido o `title` técnico de reconciliação do campo `selic-last-change`.
+3. A informação de reconciliação não aparece mais para o usuário final.
+4. O bloco **Últimas decisões** ficou em formato de timeline compacta.
+5. O **CDI mensal 2026** ficou como régua de chips mais leve.
+6. O botão **Fonte: BCB ↗** ficou mais discreto e com espaçamento corrigido.
+7. O layout foi compactado no desktop e no mobile para reduzir ruído visual.
 
 ## Depois da subida
 

@@ -1,3 +1,4 @@
+// ELTAUM_RATES_REFERENCE_CLEAN_20260618_v256
 // ELTAUM_RATES_REFERENCE_EXEC_20260618_v255
 // ELTAUM_FOOTER_PRIVACY_20260618_v254
 // ELTAUM_SELIC_AXIS_LABELS_20260618_v253
@@ -1962,13 +1963,10 @@ async function carregarMercado(){
     const elSelicLastChange = $('selic-last-change');
     if(elSelicLastChange){
       elSelicLastChange.textContent = selicUltimaAlteracao.data || '—';
-      if(selicUltimaAlteracao.inferida){
-        elSelicLastChange.title = 'Data reconciliada com a reunião mais recente do Copom porque a taxa vigente já mudou e o histórico ainda não havia sido atualizado.';
-        elSelicLastChange.dataset.selicDateReconciled = 'true';
-      }else{
-        elSelicLastChange.removeAttribute('title');
-        delete elSelicLastChange.dataset.selicDateReconciled;
-      }
+      // v256: evita expor mensagem técnica de reconciliação para o usuário final.
+      // A auditoria continua no console/dados, mas o card fica limpo.
+      elSelicLastChange.removeAttribute('title');
+      delete elSelicLastChange.dataset.selicDateReconciled;
     }
 
     buildCopomCalendario();
@@ -6117,8 +6115,9 @@ function buildCopomCalendario(){
 
   container.classList.remove('is-expanded-v167');
   const toggle = $('copomCalendarToggleV167');
+  container.classList.add('copom-timeline-clean-v256');
   if(toggle){
-    toggle.textContent = 'Ver calendário completo';
+    toggle.textContent = 'Calendário completo';
     toggle.setAttribute('aria-expanded','false');
   }
   requestAnimationFrame(() => { container.scrollLeft = 0; });
@@ -14524,7 +14523,7 @@ function toggleCopomCalendarV167(force){
   const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Recolher calendário' : 'Ver calendário completo';
+    btn.textContent = open ? 'Recolher calendário' : 'Calendário completo';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;
