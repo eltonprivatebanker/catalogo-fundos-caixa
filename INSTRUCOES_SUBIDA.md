@@ -1,4 +1,4 @@
-# Atualização v252 — Correção das competências do IPCA mensal
+# Atualização v253 — Legendas do eixo X da Selic
 
 Substitua na branch publicada os arquivos:
 
@@ -8,11 +8,12 @@ Substitua na branch publicada os arquivos:
 
 ## O que foi corrigido
 
-1. O card **Último IPCA** passa a usar a mesma competência oficial do painel principal.
-2. O resumo não mostra mais `jan/2026` quando o último resultado oficial é `mai/2026`.
-3. Os cards **Maior mês** e **Menor mês** agora usam o mesmo `label` exibido no gráfico/tooltip.
-4. Isso corrige divergências como tooltip em `fev/2025` e resumo em `jan/2025`.
-5. Não alterei o robô nem a base de dados, apenas a leitura/rotulagem do gráfico.
+1. A legenda do eixo X no gráfico **Trajetória da Selic meta** foi simplificada.
+2. Em períodos curtos (`1A` e `2A`), o eixo mostra poucos meses de referência.
+3. Em `5A`, o eixo passa a mostrar principalmente anos.
+4. Em `10A`, o eixo mostra anos alternados.
+5. Em `Histórico`, o eixo mostra apenas marcos maiores, evitando excesso de texto.
+6. As labels ficam horizontais, sem rotação pesada, melhorando a leitura no desktop e no mobile.
 
 ## Depois da subida
 

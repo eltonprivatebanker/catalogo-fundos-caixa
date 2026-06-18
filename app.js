@@ -1,3 +1,4 @@
+// ELTAUM_SELIC_AXIS_LABELS_20260618_v253
 // ELTAUM_IPCA_SUMMARY_LABEL_FIX_20260618_v252
 // ELTAUM_IPCA_CHART_FIX_20260618_v251
 // ELTAUM_IPCA_CHART_SUMMARY_20260618_v250
@@ -5166,6 +5167,69 @@ function buildChartIpca(historico,meses){
   });
 }
 
+
+function selicAxisConfigV253(slice, rangeMeses){
+  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const r = Number(rangeMeses) || 999;
+  const isMobile = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+
+  function dtFromIndex(index){
+    const item = slice?.[Number(index)];
+    return item?._dt instanceof Date && !isNaN(item._dt.getTime()) ? item._dt : null;
+  }
+
+  function curto(dt){
+    return `${meses[dt.getMonth()]}/${String(dt.getFullYear()).slice(-2)}`;
+  }
+
+  const callback = function(value, index){
+    const dt = dtFromIndex(value) || dtFromIndex(index);
+    if(!dt) return '';
+
+    if(r <= 24){
+      // Curto prazo: rótulos por mês selecionado, sem inclinar demais.
+      const step = r <= 12 ? 2 : 4;
+      if(index === 0 || index === slice.length - 1 || index % step === 0) return curto(dt);
+      return '';
+    }
+
+    if(r <= 60){
+      // 5 anos: mostra apenas anos de forma limpa.
+      const prev = slice[index - 1]?._dt;
+      if(index === 0 || index === slice.length - 1 || !prev || prev.getFullYear() !== dt.getFullYear()){
+        return String(dt.getFullYear());
+      }
+      return '';
+    }
+
+    if(r <= 120){
+      // 10 anos: mostra anos alternados, preservando início e fim.
+      const prev = slice[index - 1]?._dt;
+      const virouAno = !prev || prev.getFullYear() !== dt.getFullYear();
+      if(index === 0 || index === slice.length - 1) return String(dt.getFullYear());
+      if(virouAno && dt.getFullYear() % 2 === 0) return String(dt.getFullYear());
+      return '';
+    }
+
+    // Histórico: mostra poucos marcos temporais.
+    const prev = slice[index - 1]?._dt;
+    const virouAno = !prev || prev.getFullYear() !== dt.getFullYear();
+    if(index === 0 || index === slice.length - 1) return String(dt.getFullYear());
+    if(virouAno && dt.getFullYear() % 5 === 0) return String(dt.getFullYear());
+    return '';
+  };
+
+  return {
+    callback,
+    autoSkip:false,
+    maxRotation:0,
+    minRotation:0,
+    maxTicksLimit:r <= 24 ? (isMobile ? 6 : 8) : r <= 60 ? 7 : r <= 120 ? 7 : 8,
+    font:{size:isMobile ? 9 : 10}
+  };
+}
+
+
 function buildChartSelic(historico,qtd){
   // Aceita os dois formatos:
   // 1) mercado_atual.json: [{data, valor}]
@@ -5254,8 +5318,11 @@ function buildChartSelic(historico,qtd){
     if(slice.length < 2) slice = filtrado.slice(-Math.max(2, Math.min(filtrado.length, qtd)));
   }
 
-  const labels=slice.map(d=>`${String(d._dt.getMonth()+1).padStart(2,'0')}/${d._dt.getFullYear()}`);
+  const mesesSelicLabelV253 = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const labels=slice.map(d=>`${mesesSelicLabelV253[d._dt.getMonth()]}/${d._dt.getFullYear()}`);
   const values=slice.map(d=>d._valor);
+  const xTicksSelicV253 = selicAxisConfigV253(slice, qtd);
+
 
   if(_chartSelic) _chartSelic.destroy();
   const ctx=document.getElementById('chartSelic')?.getContext('2d'); if(!ctx || !values.length) return;
@@ -5362,6 +5429,13 @@ function buildChartSelic(historico,qtd){
       },
       scales:{
         ...CHART_DEFAULTS.scales,
+        x:{
+          ...CHART_DEFAULTS.scales.x,
+          ticks:{
+            ...CHART_DEFAULTS.scales.x.ticks,
+            ...xTicksSelicV253
+          }
+        },
         y:{
           ...CHART_DEFAULTS.scales.y,
           suggestedMin:0,
@@ -8719,6 +8793,7 @@ async function sharePainelMercado(){
 
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
+    const xTicksSelicV253 = selicAxisConfigV253(slice, range);
     const maxVal = Math.max(...values);
     const minVal = Math.min(...values);
     const currentIndex = Math.max(0, values.length - 1);
