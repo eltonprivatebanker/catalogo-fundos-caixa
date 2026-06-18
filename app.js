@@ -1,4 +1,5 @@
-// ELTAUM_MARKET_PERIOD_DYNAMIC_CDI_20260618_v229
+// ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
+// ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230
 // ELTAUM_CDI_MONTH_ORDER_20260617_v216
 // ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
@@ -88,12 +89,16 @@ let activePeriodTab = 12; // 12, 24 ou 36
 let _ptaxHistorico = []; // cache para uso nos tabs
 
 /* ════════════════════════════════════════════════════
-   v229 — CDI DINÂMICO POR PERÍODO
-   - lê acum_12m/acum_24m/acum_36m diretamente do JSON;
-   - quando algum campo estiver ausente, recompõe pelo histórico mensal;
-   - independe da existência de cards.cdi.valor.
+   v230 — CDI DINÂMICO COM FONTE ÚNICA E RECARGA SEGURA
+   - centraliza 12M/24M/36M em um cache próprio;
+   - lê diretamente cards.cdi.acum_12m/24m/36m;
+   - recompõe pelo histórico mensal quando necessário;
+   - refaz somente a leitura de mercado_atual.json se o período estiver vazio;
+   - elimina dependência da ordem de carregamento do painel.
 ════════════════════════════════════════════════════ */
 const CDI_PERIOD_OPTIONS_V229 = Object.freeze([12, 24, 36]);
+const cdiPeriodoCacheV230 = Object.seal({ 12: null, 24: null, 36: null });
+let cdiRefreshPromiseV230 = null;
 
 function numeroFinitoV229(value){
   if(value === null || value === undefined || value === '') return null;
@@ -140,18 +145,57 @@ function calcularCdiDoHistoricoV229(cdiCard, months){
   return acumularPercentuaisMensaisV229(ordenado.slice(-periodo).map(item => item.value));
 }
 
+function fontesCdiV230(preferida){
+  const fontes = [];
+  const adicionar = value => {
+    if(value && typeof value === 'object' && !fontes.includes(value)) fontes.push(value);
+  };
+
+  adicionar(preferida);
+  try{ adicionar(_dadosMercado?.cards?.cdi); }catch(e){}
+  adicionar(window.__mercadoAtualV230?.cards?.cdi);
+  return fontes;
+}
+
+function cdiCardAtualV230(){
+  try{
+    return _dadosMercado?.cards?.cdi || window.__mercadoAtualV230?.cards?.cdi || {};
+  }catch(e){
+    return window.__mercadoAtualV230?.cards?.cdi || {};
+  }
+}
+
 function resolverCdiPeriodoV229(cdiCard, months){
   const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
-  const direto = numeroFinitoV229(cdiCard?.[`acum_${periodo}m`]);
-  if(direto !== null) return direto;
 
-  const historico = calcularCdiDoHistoricoV229(cdiCard, periodo);
-  if(historico !== null) return historico;
+  for(const fonte of fontesCdiV230(cdiCard)){
+    const direto = numeroFinitoV229(fonte?.[`acum_${periodo}m`]);
+    if(direto !== null){
+      cdiPeriodoCacheV230[periodo] = direto;
+      return direto;
+    }
+
+    const historico = calcularCdiDoHistoricoV229(fonte, periodo);
+    if(historico !== null){
+      cdiPeriodoCacheV230[periodo] = historico;
+      return historico;
+    }
+  }
+
+  const cache = numeroFinitoV229(cdiPeriodoCacheV230[periodo]);
+  if(cache !== null) return cache;
 
   return numeroFinitoV229(indicState.cdi?.[`m${periodo}`]);
 }
 
+function atualizarDiagnosticoCdiV230(){
+  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => numeroFinitoV229(cdiPeriodoCacheV230[periodo]) !== null);
+  document.documentElement.dataset.cdiPeriods = disponiveis.join(',');
+}
+
 function sincronizarEstadoCdiV229(dados){
+  if(dados && typeof dados === 'object') window.__mercadoAtualV230 = dados;
+
   const cdiCard = dados?.cards?.cdi || {};
   const mensal = numeroFinitoV229(cdiCard.mensal);
   if(mensal !== null) indicState.cdi.mes = mensal;
@@ -159,17 +203,70 @@ function sincronizarEstadoCdiV229(dados){
 
   CDI_PERIOD_OPTIONS_V229.forEach(periodo => {
     const value = resolverCdiPeriodoV229(cdiCard, periodo);
-    if(value !== null) indicState.cdi[`m${periodo}`] = value;
+    if(value !== null){
+      indicState.cdi[`m${periodo}`] = value;
+      cdiPeriodoCacheV230[periodo] = value;
+    }
   });
 
+  atualizarDiagnosticoCdiV230();
+
   return {
-    m12: numeroFinitoV229(indicState.cdi.m12),
-    m24: numeroFinitoV229(indicState.cdi.m24),
-    m36: numeroFinitoV229(indicState.cdi.m36)
+    m12: numeroFinitoV229(cdiPeriodoCacheV230[12] ?? indicState.cdi.m12),
+    m24: numeroFinitoV229(cdiPeriodoCacheV230[24] ?? indicState.cdi.m24),
+    m36: numeroFinitoV229(cdiPeriodoCacheV230[36] ?? indicState.cdi.m36)
   };
 }
+
+async function recarregarCdiPeriodosV230(){
+  if(cdiRefreshPromiseV230) return cdiRefreshPromiseV230;
+
+  cdiRefreshPromiseV230 = (async () => {
+    const url = BASE_URL + 'mercado_atual.json?v=market-cdi-v230-' + Date.now();
+    const response = await fetch(url, { cache: 'no-store' });
+    if(!response.ok) throw new Error(`HTTP ${response.status} ao carregar mercado_atual.json`);
+
+    const raw = await response.json();
+    const fresco = typeof normalizarMercadoAtual === 'function' ? normalizarMercadoAtual(raw) : raw;
+    const cdiFresco = fresco?.cards?.cdi;
+
+    if(cdiFresco){
+      try{
+        if(_dadosMercado && typeof _dadosMercado === 'object'){
+          if(!_dadosMercado.cards) _dadosMercado.cards = {};
+          _dadosMercado.cards.cdi = { ...(_dadosMercado.cards.cdi || {}), ...cdiFresco };
+          sincronizarEstadoCdiV229(_dadosMercado);
+        }else{
+          sincronizarEstadoCdiV229(fresco);
+        }
+      }catch(e){
+        sincronizarEstadoCdiV229(fresco);
+      }
+    }
+
+    return sincronizarEstadoCdiV229(fresco);
+  })().finally(() => {
+    cdiRefreshPromiseV230 = null;
+  });
+
+  return cdiRefreshPromiseV230;
+}
+
+async function garantirCdiPeriodoV230(months){
+  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
+  let value = resolverCdiPeriodoV229(cdiCardAtualV230(), periodo);
+  if(value !== null) return value;
+
+  await recarregarCdiPeriodosV230();
+  value = resolverCdiPeriodoV229(cdiCardAtualV230(), periodo);
+  return value;
+}
+
 window.sincronizarEstadoCdiV229 = sincronizarEstadoCdiV229;
 window.resolverCdiPeriodoV229 = resolverCdiPeriodoV229;
+window.recarregarCdiPeriodosV230 = recarregarCdiPeriodosV230;
+window.garantirCdiPeriodoV230 = garantirCdiPeriodoV230;
+window.getCdiPeriodosV230 = () => ({ ...cdiPeriodoCacheV230 });
 
 /* ════════════════════════════════════════════════════
    POUPANÇA — TOGGLE
@@ -430,15 +527,25 @@ function toggleFocusExplain(){
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
-  // v229: sincroniza os campos diretos e, quando necessário, recompõe
-  // 12M/24M/36M pelo histórico mensal já entregue no mercado_atual.json.
-  const periodos = sincronizarEstadoCdiV229(_dadosMercado);
-  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] !== null);
+  let periodos = sincronizarEstadoCdiV229(_dadosMercado);
+  let ausentes = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] === null);
 
+  if(ausentes.length){
+    try{
+      await recarregarCdiPeriodosV230();
+      periodos = sincronizarEstadoCdiV229(_dadosMercado || window.__mercadoAtualV230);
+      ausentes = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] === null);
+    }catch(error){
+      console.warn('[CDI v230] Não foi possível refazer a leitura dos acumulados:', error);
+    }
+  }
+
+  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] !== null);
   if(disponiveis.length){
-    console.info(`[CDI] Períodos disponíveis: ${disponiveis.join('M, ')}M`);
-  }else{
-    console.warn('[CDI] mercado_atual.json não trouxe acumulados nem histórico mensal suficiente.');
+    console.info(`[CDI v230] Períodos disponíveis: ${disponiveis.join('M, ')}M`);
+  }
+  if(ausentes.length){
+    console.warn(`[CDI v230] Períodos ainda ausentes: ${ausentes.join('M, ')}M`);
     if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'histórico indisponível';
   }
 
@@ -1401,8 +1508,19 @@ function selecionarPeriodoMercadoV229(value, options = {}){
       atualizarTabelaIndicadores();
     }catch(error){
       renderOk = false;
-      console.error('[ELTAUM_MARKET_PERIOD_DYNAMIC_CDI_20260618_v229] Falha ao atualizar os indicadores:', error);
+      console.error('[ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230] Falha ao atualizar os indicadores:', error);
     }
+  }
+
+  // Se o valor do período ainda não estiver no estado, busca novamente o JSON
+  // e redesenha apenas quando o usuário continuar no mesmo período.
+  if(resolverCdiPeriodoV229(cdiCardAtualV230(), months) === null){
+    garantirCdiPeriodoV230(months).then(value => {
+      if(value !== null && activePeriodTab === months){
+        atualizarTabelaIndicadores();
+        document.dispatchEvent(new CustomEvent('elton:market-cdi-ready', { detail: { months, value } }));
+      }
+    }).catch(error => console.warn(`[CDI v230] Falha ao garantir ${months}M:`, error));
   }
 
   document.dispatchEvent(new CustomEvent('elton:market-period-change', {
@@ -1423,6 +1541,7 @@ function inicializarPeriodoMercadoV229(){
 window.atualizarTabelaIndicadores = atualizarTabelaIndicadores;
 window.selecionarPeriodoMercado = selecionarPeriodoMercadoV229;
 window.getPeriodoMercado = () => activePeriodTab;
+window.__marketPeriodBuild = 'ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230';
 
 // Captura única para impedir que o clique no botão abra/feche o bloco pai.
 document.addEventListener('click', event => {
@@ -1718,7 +1837,7 @@ function atualizarDataHeader(valor,opcoes={}){
 ════════════════════════════════════════════════════ */
 async function carregarMercado(){
   try{
-    const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
+    const r = await fetch(BASE_URL+'mercado_atual.json?v=market-v230-'+Date.now(), { cache: 'no-store' });
     const raw = await r.json();
 
     // Complementa o mercado_atual.json com o arquivo de índices detalhados,
@@ -1729,6 +1848,8 @@ async function carregarMercado(){
 
     const d = normalizarMercadoAtual(rawUnificado);
     _dadosMercado = d;
+    window.__mercadoAtualV230 = d;
+    sincronizarEstadoCdiV229(d);
     setTimeout(()=>{ try{ atualizarResumoFechamentoMes(); atualizarPainelFechadoCard(); renderClosedMarketSheet(); }catch(e){} }, 600);
     hidratarDolarResumoDoJson(d);
 
@@ -7508,10 +7629,24 @@ function atualizarResumoFechamentoMes(){
   const sub=document.getElementById('closedMonthLaunchSub');
   if(title) title.textContent=`Resumo de mercado`;
   if(sub) sub.textContent=`${periodo} · indicadores consolidados`;
-  const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
+  const setMini=(id,val,mode='auto')=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    const txt=cleanTxt(val);
+    const isQuote=mode==='quote' || /^R\$\s*/i.test(txt);
+    el.textContent=txt;
+    el.className='finance-number-v231';
+    if(isQuote){
+      el.classList.add('market-quote-v231','zero');
+    }else{
+      el.classList.add(signClassFromText(txt));
+    }
+  };
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
-  setMini('closedMiniDolar', painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : painelText('dolar-ant-cot'));
+  const dolarVariacaoMini=painelText('dolar-ant-var');
+  const dolarCotacaoMini=painelText('dolar-ant-cot');
+  setMini('closedMiniDolar', dolarVariacaoMini !== '—' ? dolarVariacaoMini : dolarCotacaoMini, dolarVariacaoMini !== '—' ? 'variation' : 'quote');
   setMini('closedMiniIbov', painelText('ibov-ant-var'));
 }
 function renderClosedMarketSheet(){
@@ -11491,10 +11626,18 @@ async function sharePainelMercado(){
   function normalizeClosedMiniSignsV118(){
     qsa('#closedMiniCdi,#closedMiniIpca,#closedMiniDolar,#closedMiniIbov').forEach(el => {
       const txt = (el.textContent || '').trim();
-      el.classList.remove('pos','neg','zero');
-      if(/^-\s*/.test(txt)) el.classList.add('neg');
-      else if(/^\+/.test(txt)) el.classList.add('pos');
-      else el.classList.add('zero');
+      const isQuote = /^R\$\s*/i.test(txt);
+      el.classList.add('finance-number-v231');
+      el.classList.remove('pos','neg','zero','neu','market-quote-v231');
+      if(isQuote){
+        el.classList.add('market-quote-v231','zero');
+      }else if(/^-\s*/.test(txt)){
+        el.classList.add('neg');
+      }else if(/^\+/.test(txt)){
+        el.classList.add('pos');
+      }else{
+        el.classList.add('zero');
+      }
     });
   }
 
@@ -14910,3 +15053,29 @@ if(document.readyState === 'loading'){
 
 /* ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223 */
 window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223';
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v231 — LEGIBILIDADE NUMÉRICA
+   - mantém classes semânticas após atualizações dinâmicas;
+   - usa zero diferenciado e algarismos tabulares;
+   - reserva verde/vermelho para variações e mantém cotações neutras.
+════════════════════════════════════════════════════ */
+(function numericLegibilityV231(){
+  'use strict';
+  const MINI_IDS=['closedMiniCdi','closedMiniIpca','closedMiniDolar','closedMiniIbov'];
+  function apply(){
+    document.documentElement.classList.add('numeric-legibility-v231');
+    MINI_IDS.forEach(function(id){
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.classList.add('finance-number-v231');
+      const txt=(el.textContent||'').trim();
+      if(/^R\$\s*/i.test(txt)) el.classList.add('market-quote-v231');
+      else el.classList.remove('market-quote-v231');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true});
+  else apply();
+  window.setTimeout(apply,350);
+})();

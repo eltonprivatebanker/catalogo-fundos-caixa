@@ -35407,3 +35407,123 @@ html.market-period-dynamic-cdi-v229 .market-period-tabs .indic-tab:focus-visible
   outline-offset:2px;
 }
 
+
+
+/* ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230 — cache marker; visual sem alteração */
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
+   Legibilidade dos números financeiros e indicadores.
+   O zero recebe desenho diferenciado e os algarismos passam a
+   ocupar largura fixa, evitando confusão entre 0, 6 e 8.
+════════════════════════════════════════════════════════════ */
+html.numeric-legibility-v231{
+  --finance-number-neutral-v231:#f5f7ff;
+  --finance-number-muted-v231:#d7deef;
+  --finance-number-positive-v231:#45e49a;
+  --finance-number-negative-v231:#ff6b7d;
+}
+
+html.numeric-legibility-v231 #sec-mercado :is(
+  .finance-number-v231,
+  .closed-mini-item em,
+  .market-period-metric-v196 strong,
+  .market-current-level-v196,
+  .v2-val,
+  .indic-pct,
+  .indic-val,
+  .indic-ref-val,
+  .dolar-day-rate,
+  .dolar-metric-val,
+  .dolar-month-val,
+  .dolar-month-var,
+  .us-market-value,
+  .closed-market-row-value strong,
+  .closed-market-row-value small,
+  .closed-card-value
+){
+  font-family:'JetBrains Mono','SFMono-Regular',Consolas,'Liberation Mono',monospace!important;
+  font-variant-numeric:tabular-nums slashed-zero!important;
+  font-feature-settings:'tnum' 1,'zero' 1!important;
+  font-kerning:none!important;
+  text-rendering:geometricPrecision;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:.025em!important;
+}
+
+html.numeric-legibility-v231 #closedMonthLaunch .closed-mini-item em,
+html.numeric-legibility-v231 #sec-mercado #closedMonthLaunch .closed-mini-item em,
+html.numeric-legibility-v231 .closed-month-launch .closed-mini-item em{
+  color:var(--finance-number-neutral-v231)!important;
+  font-size:.90rem!important;
+  font-weight:700!important;
+  line-height:1.18!important;
+  letter-spacing:.045em!important;
+  text-shadow:0 0 1px rgba(255,255,255,.22);
+}
+
+html.numeric-legibility-v231 #closedMiniDolar.market-quote-v231,
+html.numeric-legibility-v231 #closedMiniDolar.zero,
+html.numeric-legibility-v231 .market-quote-v231{
+  color:var(--finance-number-neutral-v231)!important;
+}
+html.numeric-legibility-v231 #closedMonthLaunch .closed-mini-item em.pos,
+html.numeric-legibility-v231 #sec-mercado .finance-number-v231.pos{
+  color:var(--finance-number-positive-v231)!important;
+}
+html.numeric-legibility-v231 #closedMonthLaunch .closed-mini-item em.neg,
+html.numeric-legibility-v231 #sec-mercado .finance-number-v231.neg{
+  color:var(--finance-number-negative-v231)!important;
+}
+
+html.numeric-legibility-v231 #sec-mercado .market-period-metric-v196 strong{
+  font-size:.94rem!important;
+  font-weight:700!important;
+  line-height:1.22!important;
+  letter-spacing:.03em!important;
+}
+html.numeric-legibility-v231 #sec-mercado .market-current-level-v196{
+  color:var(--finance-number-neutral-v231)!important;
+  font-size:.76rem!important;
+  font-weight:700!important;
+  letter-spacing:.035em!important;
+}
+html.numeric-legibility-v231 #sec-mercado .indic-table-v2 .v2-val,
+html.numeric-legibility-v231 #sec-mercado .indic-table-v2 .v2-val[style]{
+  font-size:.82rem!important;
+  font-weight:700!important;
+  line-height:1.25!important;
+  letter-spacing:.03em!important;
+}
+html.numeric-legibility-v231 #sec-mercado .indic-table-v2 .v2-val.neu,
+html.numeric-legibility-v231 #sec-mercado .market-period-metric-v196 strong.neu{
+  color:var(--finance-number-neutral-v231)!important;
+}
+html.numeric-legibility-v231 #sec-mercado .indic-table-v2 .v2-val.dash,
+html.numeric-legibility-v231 #sec-mercado .market-period-metric-v196 strong.dash{
+  color:var(--finance-number-muted-v231)!important;
+  opacity:1!important;
+}
+
+html.numeric-legibility-v231 #sec-mercado :is(
+  .indic-pct,
+  .indic-val,
+  .dolar-day-rate,
+  .dolar-metric-val,
+  .dolar-month-val,
+  .dolar-month-var
+){
+  font-weight:700!important;
+}
+
+@media(max-width:768px){
+  html.numeric-legibility-v231 #closedMonthLaunch .closed-mini-item em,
+  html.numeric-legibility-v231 #sec-mercado #closedMonthLaunch .closed-mini-item em{
+    font-size:.84rem!important;
+    letter-spacing:.035em!important;
+  }
+  html.numeric-legibility-v231 #sec-mercado .market-period-metric-v196 strong{
+    font-size:.80rem!important;
+  }
+}
