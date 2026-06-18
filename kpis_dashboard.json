@@ -1,14 +1,14 @@
 {
     "resumo_geral": {
-        "pl_total_consolidado": 348852.51,
-        "concentracao_top5_percent": 32.19,
-        "pipeline_novos_fundos": 6
+        "pl_total_consolidado": 348765.88,
+        "concentracao_top5_percent": 32.2,
+        "pipeline_novos_fundos": 5
     },
     "categorias": {
         "ACOES": {
             "qtd_ativos": 36,
-            "pl_total": 9903.83,
-            "rent_12m_ponderada": 22.75
+            "pl_total": 9902.23,
+            "rent_12m_ponderada": 22.73
         },
         "CAMBIAL": {
             "qtd_ativos": 1,
@@ -26,13 +26,13 @@
             "rent_12m_ponderada": 51.87
         },
         "MULTIMERCADO": {
-            "qtd_ativos": 27,
-            "pl_total": 6590.14,
-            "rent_12m_ponderada": 23.25
+            "qtd_ativos": 28,
+            "pl_total": 6503.29,
+            "rent_12m_ponderada": 23.29
         },
         "RENDA FIXA": {
             "qtd_ativos": 67,
-            "pl_total": 138645.91,
+            "pl_total": 138646.31,
             "rent_12m_ponderada": 14.1
         },
         "RENDA FIXA CURTO PRAZO": {
@@ -47,7 +47,7 @@
         },
         "RENDA FIXA SIMPLES": {
             "qtd_ativos": 5,
-            "pl_total": 8454.02,
+            "pl_total": 8455.44,
             "rent_12m_ponderada": 12.58
         }
     },
@@ -55,22 +55,22 @@
         "GOV": {
             "qtd_fundos": 3,
             "pl_total": 53740.16,
-            "share_percent": 15.4
+            "share_percent": 15.41
         },
         "PF": {
             "qtd_fundos": 123,
-            "pl_total": 131114.52,
-            "share_percent": 37.58
+            "pl_total": 130896.69,
+            "share_percent": 37.53
         },
         "PJ": {
             "qtd_fundos": 17,
-            "pl_total": 70235.54,
-            "share_percent": 20.13
+            "pl_total": 70236.95,
+            "share_percent": 20.14
         },
         "RPPS": {
             "qtd_fundos": 27,
-            "pl_total": 88380.36,
-            "share_percent": 25.33
+            "pl_total": 88510.14,
+            "share_percent": 25.38
         },
         "TODOS": {
             "qtd_fundos": 1,
