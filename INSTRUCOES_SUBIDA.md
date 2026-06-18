@@ -1,27 +1,23 @@
-# Catálogo de Fundos CAIXA — v259
+# Catálogo de Fundos CAIXA — v260
 
-Arquivos atualizados nesta versão:
+Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que foi ajustado nesta versão
-- reorganização do card da Poupança no desktop e no mobile;
-- destaque maior para a regra aplicada hoje;
-- texto principal mais direto e semântico;
-- resumo com KPIs mais curtos: "No ano" e "Corte da Selic";
-- regras detalhadas movidas para um painel expansível;
-- painel expansível agora funciona também no mobile;
-- refinamento visual dos cards de regra e cenários.
+## O que foi corrigido
+- ajustes no bloco **Cenário monetário** no mobile;
+- redução da altura dos cards de Selic, CDI e Copom;
+- CDI e Próxima reunião ficam lado a lado no mobile quando houver espaço;
+- botão do calendário ficou menor;
+- lista do Copom ficou mais compacta;
+- ao expandir o calendário completo, a lista ganha rolagem interna controlada;
+- o bloco **CDI mensal 2026** mostra apenas os dois meses principais no mobile para evitar visual pesado;
+- o título do CDI mensal ficou mais curto;
+- o carrossel do CDI mensal volta sempre para o início ao carregar.
 
-## Como subir no GitHub
-1. Abra seu repositório local ou os arquivos do projeto.
-2. Substitua os arquivos antigos por estes 3 novos arquivos.
-3. Faça commit das alterações.
-4. Envie para o GitHub.
-5. Aguarde o GitHub Pages publicar.
-
-## Observação
-Se o navegador mantiver a versão antiga em cache, faça um hard refresh:
-- Windows/Linux: Ctrl + F5
-- Mac: Cmd + Shift + R
+## Como subir
+Substitua no GitHub os arquivos:
+- index.html
+- style.css
+- app.js
