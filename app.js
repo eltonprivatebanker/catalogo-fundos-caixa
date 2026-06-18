@@ -1589,11 +1589,21 @@ async function carregarMercado(){
     // ── Selic ──
     const selic = c.selic_meta?.valor;
     if($('mc-selic')) $('mc-selic').textContent = selic ? fmt(selic) : '—';
-    const selicHist = d.historico_selic || c.selic_meta?.historico || [];
-    if(selicHist.length){
-      const ultima = selicHist[0];
-      const el = $('selic-last-change');
-      if(el) el.textContent = ultima.data || '—';
+
+    // v223: a taxa vigente e a data precisam vir da mesma decisão.
+    // Quando o robô já atualizou o valor, mas o histórico ainda está atrasado,
+    // o painel reconcilia os dados com o calendário oficial do Copom.
+    const selicUltimaAlteracao = resolverDataUltimaAlteracaoSelic(d);
+    const elSelicLastChange = $('selic-last-change');
+    if(elSelicLastChange){
+      elSelicLastChange.textContent = selicUltimaAlteracao.data || '—';
+      if(selicUltimaAlteracao.inferida){
+        elSelicLastChange.title = 'Data reconciliada com a reunião mais recente do Copom porque a taxa vigente já mudou e o histórico ainda não havia sido atualizado.';
+        elSelicLastChange.dataset.selicDateReconciled = 'true';
+      }else{
+        elSelicLastChange.removeAttribute('title');
+        delete elSelicLastChange.dataset.selicDateReconciled;
+      }
     }
 
     buildCopomCalendario();
@@ -4669,8 +4679,7 @@ function atualizarResumoEvolucao(d){
     return 'dentro da faixa de 1,50% a 4,50%';
   };
 
-  const selicHistorico = Array.isArray(selic.historico) ? selic.historico : [];
-  const selicRef = selic.data_ref || selic.ultima_alteracao || selicHistorico[0]?.data || '';
+  const selicRef = resolverDataUltimaAlteracaoSelic(d).data || '';
   const selicValor = selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.` : '—';
 
   setText('evoIpcaMensalVal', pct(ipca.ultimo_mes));
@@ -4712,8 +4721,7 @@ function atualizarResumoMovelEvolucao(chave, d){
     return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
   };
 
-  const selicHistorico = Array.isArray(selic.historico) ? selic.historico : [];
-  const selicRef = selic.data_ref || selic.ultima_alteracao || selicHistorico[0]?.data || '';
+  const selicRef = resolverDataUltimaAlteracaoSelic(d).data || '';
   const selicValor = selic.valor != null
     ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.`
     : '—';
@@ -5044,12 +5052,93 @@ function _fmtPctCopom(v){
   if(!Number.isFinite(n)) return '—';
   return n.toFixed(2).replace('.',',') + '%';
 }
-function _historicoSelicOrdenado(){
-  const h = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
-  return (Array.isArray(h) ? h : [])
-    .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia), _valor:_selicValorRegistro(r)}))
+function _dataKeyHojeLocal(){
+  const hoje = new Date();
+  return `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-${String(hoje.getDate()).padStart(2,'0')}`;
+}
+function _dataBrCopom(key){
+  const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : String(key || '');
+}
+function _historicoSelicOrdenadoParaDados(dados){
+  const card = dados?.cards?.selic_meta || {};
+  const h = dados?.historico_selic || card.historico || [];
+  const historico = (Array.isArray(h) ? h : [])
+    .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia || r.data_ref), _valor:_selicValorRegistro(r)}))
     .filter(r => r._key && r._valor !== null)
     .sort((a,b) => b._key.localeCompare(a._key));
+
+  const vigente = Number(card.valor);
+  if(!Number.isFinite(vigente)) return historico;
+
+  const maisRecente = historico[0] || null;
+  const historicoJaAtual = maisRecente && Math.abs(maisRecente._valor - vigente) < 0.005;
+  if(historicoJaAtual) return historico;
+
+  // Prioridade para uma data explícita produzida pelo robô.
+  const dataExplicita = card.ultima_alteracao || card.data_ultima_alteracao || card.data_mudanca || card.vigente_desde || card.data_ref;
+  let decisionKey = _dateKeyCopom(dataExplicita);
+
+  // Proteção v223: se a taxa mudou antes de o histórico receber o novo registro,
+  // identifica a reunião mais recente do Copom posterior ao histórico disponível.
+  if(!decisionKey){
+    const hojeKey = _dataKeyHojeLocal();
+    const limiteInferior = maisRecente?._key || '';
+    const reuniao = COPOM_2026
+      .filter(r => r.decision <= hojeKey && (!limiteInferior || r.decision > limiteInferior))
+      .sort((a,b) => b.decision.localeCompare(a.decision))[0];
+    decisionKey = reuniao?.decision || '';
+  }
+
+  if(!decisionKey) return historico;
+  if(historico.some(r => r._key === decisionKey && Math.abs(r._valor - vigente) < 0.005)) return historico;
+
+  historico.push({
+    data:_dataBrCopom(decisionKey),
+    valor:vigente,
+    MetaSelic:vigente,
+    DataReuniaoCopom:`${decisionKey}T03:00:00Z`,
+    _key:decisionKey,
+    _valor:vigente,
+    _reconciliado_v223:true
+  });
+  return historico.sort((a,b) => b._key.localeCompare(a._key));
+}
+function _historicoSelicOrdenado(){
+  return _historicoSelicOrdenadoParaDados(_dadosMercado);
+}
+function resolverDataUltimaAlteracaoSelic(dados){
+  const card = dados?.cards?.selic_meta || {};
+  const vigente = Number(card.valor);
+  const historico = _historicoSelicOrdenadoParaDados(dados);
+
+  if(!Number.isFinite(vigente) || !historico.length){
+    const fallback = card.ultima_alteracao || card.data_ultima_alteracao || card.data_ref || '';
+    const key = _dateKeyCopom(fallback);
+    return { data:key ? _dataBrCopom(key) : String(fallback || ''), key, inferida:false };
+  }
+
+  // "Última alteração" não é necessariamente a última reunião.
+  // Percorre o bloco inicial de registros com a taxa vigente e retorna o
+  // registro mais antigo desse bloco: o momento em que a taxa passou a valer.
+  const vigentesConsecutivos = [];
+  for(const registro of historico){
+    if(Math.abs(registro._valor - vigente) < 0.005){
+      vigentesConsecutivos.push(registro);
+      continue;
+    }
+    if(vigentesConsecutivos.length) break;
+  }
+
+  const referencia = vigentesConsecutivos.length
+    ? vigentesConsecutivos[vigentesConsecutivos.length - 1]
+    : historico.find(r => Math.abs(r._valor - vigente) < 0.005) || historico[0];
+
+  return {
+    data: referencia?.data || _dataBrCopom(referencia?._key) || '—',
+    key: referencia?._key || '',
+    inferida: Boolean(referencia?._reconciliado_v223)
+  };
 }
 function _decisaoCopomPorData(decisionDate){
   const hist = _historicoSelicOrdenado();
@@ -5074,17 +5163,22 @@ function buildCopomCalendario(){
   const container = $('copomMeetings');
   if(!container) return;
 
-  const hoje = new Date();
-  const hojeKey = hoje.toISOString().slice(0,10);
-  const proxIdx = COPOM_2026.findIndex(r => r.decision >= hojeKey);
+  const hojeKey = _dataKeyHojeLocal();
+  const comDecisao = COPOM_2026.map((r,i) => ({
+    ...r,
+    _i:i,
+    decisao:_decisaoCopomPorData(r.decision)
+  }));
+  // A reunião do próprio dia deixa de ser tratada como "próxima" assim que
+  // a nova taxa já estiver disponível, evitando duplicidade no calendário.
+  const proxIdx = comDecisao.findIndex(r => !r.decisao && r.decision >= hojeKey);
 
-  const base = COPOM_2026.map((r,i) => {
-    const decisao = _decisaoCopomPorData(r.decision);
+  const base = comDecisao.map((r,i) => {
     const isNext = i === proxIdx;
-    const isFuture = r.decision >= hojeKey && !isNext;
-    const klass = decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
-    const resultado = decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
-    return { ...r, _i:i, decisao, isNext, isFuture, klass, resultado };
+    const isFuture = !r.decisao && r.decision >= hojeKey && !isNext;
+    const klass = r.decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
+    const resultado = r.decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
+    return { ...r, isNext, isFuture, klass, resultado };
   });
 
   // v167: primeiras leituras = três decisões mais recentes + próxima reunião.
@@ -14705,3 +14799,7 @@ if(document.readyState === 'loading'){
 
   window.__ELTAUM_DESKTOP_RESULT_CHIP_V221__={sync:syncDesktopResultChipV221};
 })();
+
+
+/* ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223 */
+window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223';
