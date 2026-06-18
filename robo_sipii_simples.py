@@ -1,6 +1,13 @@
 """
-ROBÔ SIPII CAIXA — v18.4 (Automação integral GitHub)
+ROBÔ SIPII CAIXA — v18.5 (Automação integral GitHub)
 ==========================================================
+Novidades v18.5:
+  + Calcula o CDI acumulado do mês pela série diária SGS 12
+  + Usa a última data diária disponível como referência real do parcial
+  + Mantém a série mensal SGS 4391 como fallback seguro
+  + Exporta parcial_ate, parcial_data_iso, parcial_dias_uteis e consultado_em
+  + Usa o horário de Brasília para definir mês e data de referência
+
 Novidades v18.4:
   + Reconhece automaticamente o CDI parcial do mês corrente na série SGS 4391
   + Preserva a data do último dado diário disponível e exporta parcial_ate
@@ -54,6 +61,7 @@ import glob
 import calendar
 from pathlib import Path
 from datetime import datetime, timedelta, date
+from zoneinfo import ZoneInfo
 import io
 import time, unicodedata, traceback, re, requests
 from bs4 import BeautifulSoup
@@ -1292,6 +1300,80 @@ class ColetorMercado:
             pass
         return None
 
+    @staticmethod
+    def _agora_brasilia():
+        """Retorna horário de Brasília sem timezone para compatibilidade interna."""
+        try:
+            return datetime.now(ZoneInfo("America/Sao_Paulo")).replace(tzinfo=None)
+        except Exception:
+            return datetime.now()
+
+    def _buscar_cdi_parcial_diario(self, hoje=None):
+        """
+        Calcula o CDI acumulado no mês pela série diária SGS 12.
+
+        A série 12 é tratada como taxa percentual ao dia. O acumulado mensal é
+        obtido por capitalização composta dos registros do primeiro dia do mês
+        até a última observação disponível. Retorna None quando a API não
+        responde ou quando ainda não há observações no mês.
+        """
+        hoje = hoje or self._agora_brasilia()
+        inicio_mes = hoje.replace(day=1)
+        url = (
+            "https://api.bcb.gov.br/dados/serie/bcdata.sgs.12/dados"
+            f"?dataInicial={inicio_mes.strftime('%d/%m/%Y')}"
+            f"&dataFinal={hoje.strftime('%d/%m/%Y')}&formato=json"
+        )
+
+        try:
+            res = requests.get(url, headers=self.headers, timeout=25)
+            if res.status_code != 200:
+                log(f"  [CDI] Série diária SGS 12 HTTP {res.status_code}")
+                return None
+
+            observacoes = []
+            for item in res.json():
+                try:
+                    data_item = datetime.strptime(str(item["data"]).strip(), "%d/%m/%Y")
+                    valor_item = float(str(item["valor"]).replace(",", "."))
+                    if inicio_mes.date() <= data_item.date() <= hoje.date():
+                        observacoes.append((data_item, valor_item))
+                except Exception:
+                    continue
+
+            if not observacoes:
+                log("  [CDI] Série diária SGS 12 sem observações no mês atual")
+                return None
+
+            # Remove eventual duplicidade por data e mantém a última ocorrência.
+            por_data = {}
+            for data_item, valor_item in observacoes:
+                por_data[data_item.date()] = (data_item, valor_item)
+            observacoes = sorted(por_data.values(), key=lambda x: x[0])
+
+            fator = 1.0
+            for _, taxa_diaria in observacoes:
+                fator *= 1.0 + (taxa_diaria / 100.0)
+
+            ultima_data = observacoes[-1][0]
+            acumulado = round((fator - 1.0) * 100.0, 4)
+            log(
+                f"  [CDI] Série diária SGS 12: {acumulado}% no mês "
+                f"até {ultima_data.strftime('%d/%m/%Y')} "
+                f"({len(observacoes)} observações)"
+            )
+            return {
+                "valor": acumulado,
+                "data": ultima_data,
+                "data_iso": ultima_data.strftime("%Y-%m-%d"),
+                "ate": ultima_data.strftime("%d/%m/%Y"),
+                "origem": "bcb_sgs_12_diario",
+                "n_dias_uteis": len(observacoes),
+            }
+        except Exception as e:
+            log(f"  [CDI] Erro ao buscar série diária SGS 12: {e}")
+            return None
+
     # ──────────────────────────────────────────────────────────────────────
     # ★ v16 — CDI acumulado 12M / 24M / 36M via série 4391 (server-side)
     # Resolve o HTTP 400 que ocorre quando o browser tenta buscar esses dados
@@ -1321,7 +1403,7 @@ class ColetorMercado:
         """
         log("[CDI] Calculando CDI mensal/ano/12M/24M/36M...")
 
-        hoje = datetime.now()
+        hoje = self._agora_brasilia()
         caminho_override = BASE_DIR / "cdi_mensal_override.json"
 
         confirmados = dict(FECHAMENTOS_CONFIRMADOS.get("cdi_mensal", {}))
@@ -1419,14 +1501,26 @@ class ColetorMercado:
                 # Se alguém informou o mês atual no arquivo legado, trata como parcial.
                 parciais[k] = float(v)
 
-        # A série 4391 já pode trazer o acumulado parcial do mês corrente.
-        # O override local continua tendo prioridade quando existir.
+        # O parcial diário (SGS 12) é a fonte preferencial porque informa a
+        # última data efetivamente disponível. A série 4391 permanece como
+        # fallback mensal. O override local continua com prioridade máxima.
         parcial_bcb = serie.get(mes_atual_key)
-        parcial_origem = "bcb_sgs_4391" if parcial_bcb is not None else None
+        parcial_origem = "bcb_sgs_4391_mensal" if parcial_bcb is not None else None
+        parcial_diario = self._buscar_cdi_parcial_diario(hoje)
+        parcial_data = None
+        parcial_dias_uteis = None
+
+        if parcial_diario and parcial_diario.get("valor") is not None:
+            serie[mes_atual_key] = float(parcial_diario["valor"])
+            parcial_origem = parcial_diario.get("origem") or "bcb_sgs_12_diario"
+            parcial_data = parcial_diario.get("data")
+            parcial_dias_uteis = parcial_diario.get("n_dias_uteis")
 
         if mes_atual_key in parciais:
             serie[mes_atual_key] = float(parciais[mes_atual_key])
             parcial_origem = "override_local"
+            # Override manual não carrega uma data própria; registra a data da execução.
+            parcial_data = hoje
 
         if not serie:
             log("  [CDI] Sem série CDI disponível")
@@ -1436,9 +1530,12 @@ class ColetorMercado:
         chaves_fechadas = sorted(k for k in serie.keys() if k <= mes_fechado_key)
         mensal_fechado = serie.get(mes_fechado_key)
         parcial_mes_atual = serie.get(mes_atual_key) if parcial_origem else None
-        parcial_data = data_ref_por_mes.get(mes_atual_key)
+        # A data da SGS 4391 representa a competência mensal e não deve ser
+        # exibida como data diária. Só publicamos parcial_ate quando a fonte
+        # diária (ou um override executado no dia) fornece referência segura.
         parcial_ate = parcial_data.strftime("%d/%m/%Y") if parcial_data else None
         parcial_data_iso = parcial_data.strftime("%Y-%m-%d") if parcial_data else None
+        consultado_em = hoje.strftime("%d/%m/%Y %H:%M:%S")
 
         # Se, por algum motivo, não houver mês anterior na série, usa o último fechado disponível.
         if mensal_fechado is None and chaves_fechadas:
@@ -1481,13 +1578,16 @@ class ColetorMercado:
             "parcial_ate": parcial_ate,
             "parcial_data_iso": parcial_data_iso,
             "parcial_origem": parcial_origem,
+            "parcial_dias_uteis": parcial_dias_uteis,
+            "consultado_em": consultado_em,
+            "timezone": "America/Sao_Paulo",
             "acum_ano": acum_ano,
             "acum_ano_com_parcial": acum_ano_com_parcial,
             "acum_12m": acum_12m,
             "acum_24m": acum_24m,
             "acum_36m": acum_36m,
             "n_meses": len(chaves_fechadas),
-            "fonte": "BCB SGS 4391 (fechamentos e parcial do mês) + overrides locais",
+            "fonte": "BCB SGS 12 (parcial diário) + SGS 4391 (fechamentos/fallback) + overrides locais",
             "status_mes_atual": "parcial" if parcial_mes_atual is not None else "sem_parcial",
             "historico": [{"key": k, "label": label_from_key(k), "valor": serie[k]} for k in sorted(serie.keys())],
         }

@@ -1,3 +1,4 @@
+// ELTAUM_CDI_DAILY_AUTO_REFRESH_20260618_v232
 // ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
 // ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230
 // ELTAUM_CDI_MONTH_ORDER_20260617_v216
@@ -87,6 +88,38 @@ const indicState = {
 };
 let activePeriodTab = 12; // 12, 24 ou 36
 let _ptaxHistorico = []; // cache para uso nos tabs
+
+/* ════════════════════════════════════════════════════
+   v232 — FONTE ÚNICA DO CDI DO MÊS ATUAL
+   Utilizada pela visão executiva, tabela analítica e atualização automática.
+════════════════════════════════════════════════════ */
+function obterCdiAtualV232(dados){
+  let base = dados;
+  if(!base){
+    try{ base = _dadosMercado; }catch(e){ base = null; }
+  }
+  const card = base?.cards?.cdi || window.__mercadoAtualV230?.cards?.cdi || {};
+  const valorRaw = card.parcial_mes_atual;
+  const valor = valorRaw === null || valorRaw === undefined || valorRaw === ''
+    ? null
+    : Number(valorRaw);
+  const data = String(card.parcial_ate || '').trim() || null;
+  const dataIso = String(card.parcial_data_iso || '').trim() || null;
+  const referencia = String(card.parcial_ref || '').trim() || null;
+  const origem = String(card.parcial_origem || '').trim() || null;
+  const consultadoEm = String(card.consultado_em || base?.atualizado_em || '').trim() || null;
+  return {
+    valor: Number.isFinite(valor) ? valor : null,
+    data,
+    dataIso,
+    referencia,
+    origem,
+    consultadoEm,
+    diasUteis: Number.isFinite(Number(card.parcial_dias_uteis)) ? Number(card.parcial_dias_uteis) : null,
+    status: Number.isFinite(valor) ? 'parcial' : 'aguardando'
+  };
+}
+window.obterCdiAtualV232 = obterCdiAtualV232;
 
 /* ════════════════════════════════════════════════════
    v230 — CDI DINÂMICO COM FONTE ÚNICA E RECARGA SEGURA
@@ -1330,8 +1363,9 @@ function atualizarTabelaIndicadores(){
 
   // ═══ CDI ═══
   const cdiMesFechado = num(cards.cdi?.mensal) ?? num(indicState.cdi.mes);
-  const cdiParcial = num(cards.cdi?.parcial_mes_atual);
-  const cdiParcialLabel = cards.cdi?.parcial_ref || mesAtualLabel;
+  const cdiAtualInfo = obterCdiAtualV232(_dadosMercado);
+  const cdiParcial = num(cdiAtualInfo.valor);
+  const cdiParcialLabel = cdiAtualInfo.referencia || mesAtualLabel;
   const cdiAno = (cdiParcial !== null ? num(cards.cdi?.acum_ano_com_parcial) : num(cards.cdi?.acum_ano)) ?? num(cards.cdi?.acum_ano_com_parcial) ?? null;
   const cdiAcum = num(resolverCdiPeriodoV229(cards.cdi || {}, m));
 
@@ -1340,6 +1374,12 @@ function atualizarTabelaIndicadores(){
 
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2, false, '—');
   setSubStatus('cdi-cur-sub', cdiParcialLabel, cdiParcial !== null ? 'parcial' : 'aguardando');
+  const cdiCurSub = $('cdi-cur-sub');
+  if(cdiCurSub && cdiParcial !== null && cdiAtualInfo.data){
+    const dataCurta = cdiAtualInfo.data.slice(0,5);
+    cdiCurSub.innerHTML = `<span class="period-line status-parcial"><span class="period-label">${limparStatus(cdiParcialLabel)}</span><span class="period-dot">·</span><span class="period-status">parcial até ${dataCurta}</span></span>`;
+    cdiCurSub.title = `CDI acumulado no mês até ${cdiAtualInfo.data}${cdiAtualInfo.origem ? ` · fonte ${cdiAtualInfo.origem}` : ''}`;
+  }
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
   setSubSimple('cdi-ano-sub', atePeriodo(cdiParcial !== null ? cdiParcialLabel : (cards.cdi?.mes_ref || fallbackMesFechado)));
@@ -1909,7 +1949,8 @@ async function carregarMercado(){
     // a taxa anual de referência como último recurso. 24M/36M nunca são simulados.
     if(indicState.cdi.m12 == null && cdi !== null) indicState.cdi.m12 = cdi;
 
-    const cdiMesAtual = numeroFinitoV229(cdiCard.parcial_mes_atual) ?? cdiMensal;
+    const cdiAtualInfoV232 = obterCdiAtualV232(d);
+    const cdiMesAtual = numeroFinitoV229(cdiAtualInfoV232.valor) ?? cdiMensal;
     const cdiMesAtualTxt = cdiMesAtual !== null
       ? (cdiMesAtual > 0 ? '+' : '') + cdiMesAtual.toFixed(2).replace('.', ',') + '%'
       : '—';
@@ -13112,6 +13153,79 @@ if(!isSearchInput(el)) return;
 ========================================================== */
 
 /* ==========================================================
+   ELTAUM v232 — atualização automática do mercado_atual.json
+   - consulta a base sem cache a cada 30 minutos;
+   - atualiza ao retornar para a aba ou focar a janela;
+   - mantém visão executiva e tabela analítica sincronizadas.
+========================================================== */
+(function(){
+  'use strict';
+  const INTERVALO_MS = 30 * 60 * 1000;
+  let executando = false;
+  let ultimaAssinatura = '';
+
+  function assinatura(raw){
+    const cdi = raw?.cards?.cdi || {};
+    return [raw?.atualizado_em||'',cdi.parcial_mes_atual??'',cdi.parcial_data_iso||'',cdi.acum_12m??'',cdi.acum_24m??'',cdi.acum_36m??''].join('|');
+  }
+
+  async function atualizarAgora(forcar=false){
+    if(executando) return false;
+    executando = true;
+    try{
+      const url = BASE_URL + 'mercado_atual.json?v=cdi-daily-v232-' + Date.now();
+      const response = await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+      if(!response.ok) throw new Error(`HTTP ${response.status}`);
+      const raw = await response.json();
+      const sig = assinatura(raw);
+      if(!forcar && sig && sig === ultimaAssinatura) return false;
+      ultimaAssinatura = sig;
+
+      const fresco = typeof normalizarMercadoAtual === 'function' ? normalizarMercadoAtual(raw) : raw;
+      try{
+        if(typeof _dadosMercado === 'object' && _dadosMercado){
+          _dadosMercado = {
+            ..._dadosMercado,
+            ...fresco,
+            cards:{...(_dadosMercado.cards||{}),...(fresco.cards||{})}
+          };
+        }else{
+          _dadosMercado = fresco;
+        }
+      }catch(e){
+        window.__mercadoAtualV230 = fresco;
+      }
+      window.__mercadoAtualV230 = _dadosMercado || fresco;
+      sincronizarEstadoCdiV229(_dadosMercado || fresco);
+      if((_dadosMercado||fresco)?.atualizado_em) atualizarDataHeader((_dadosMercado||fresco).atualizado_em);
+      atualizarTabelaIndicadores();
+      try{ window.__ELTAUM_MARKET_PANEL_V150__?.sync?.(); }catch(e){}
+      try{ window.__ELTAUM_MARKET_PERIOD_CARDS_V196__?.render?.(); }catch(e){}
+      document.dispatchEvent(new CustomEvent('elton:market-data-refresh',{detail:{build:'v232',cdi:obterCdiAtualV232(_dadosMercado||fresco)}}));
+      return true;
+    }catch(error){
+      console.warn('[v232] Atualização automática dos indicadores indisponível:',error);
+      return false;
+    }finally{
+      executando = false;
+    }
+  }
+
+  function iniciar(){
+    setTimeout(()=>atualizarAgora(true),60*1000);
+    setInterval(()=>atualizarAgora(false),INTERVALO_MS);
+    document.addEventListener('visibilitychange',()=>{
+      if(document.visibilityState==='visible') atualizarAgora(false);
+    });
+    window.addEventListener('focus',()=>atualizarAgora(false),{passive:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciar,{once:true});
+  else iniciar();
+  window.atualizarIndicadoresAgoraV232 = atualizarAgora;
+})();
+
+/* ==========================================================
    ELTAUM v151 — integração dos componentes restaurados
    - navegação com offset e destaque da seção
    - selects dos rankings sincronizados com os filtros existentes
@@ -14637,10 +14751,15 @@ if(document.readyState === 'loading'){
 
   function metric(label,value,note='',options={}){
     const status=options.status||'';
-    const main=status
+    const aguardando=/aguard/i.test(status);
+    const parcial=/parcial/i.test(status);
+    const main=aguardando
       ? `<strong class="market-period-status-v196">${esc(status)}</strong>`
       : `<strong class="${tone(value)}">${esc(value||'—')}</strong>`;
-    return `<div class="market-period-metric-v196"><span>${esc(label)}</span>${main}<small>${esc(note||'')}</small></div>`;
+    const detalhe=parcial && !aguardando
+      ? (note || status)
+      : note;
+    return `<div class="market-period-metric-v196"><span>${esc(label)}</span>${main}<small>${esc(detalhe||'')}</small></div>`;
   }
 
   function nameCell(icon,name,sub,level='',badge=''){
@@ -14720,13 +14839,15 @@ if(document.readyState === 'loading'){
   function buildTaxes(){
     const cdiStatus=statusFor('row-cdi');
     const ipcaStatus=statusFor('row-ipca');
+    const cdiInfo=typeof obterCdiAtualV232==='function' ? obterCdiAtualV232() : {};
+    const cdiAtualNota=cdiInfo?.data ? `Parcial até ${String(cdiInfo.data).slice(0,5)}` : (cdiStatus||'');
     return `<article class="market-period-card-v196 taxas">
       ${cardHeader('Taxas e inflação','Retornos consolidados por período','BCB 4391 / 433')}
       ${gridHead()}
       ${row(
         nameCell('💰','CDI','Certificado de Depósito Interbancário')+
         metric('Fechado',text('cdi-mes-ant'))+
-        metric('Atual',text('cdi-mes-cur'),'',{status:cdiStatus})+
+        metric('Atual',text('cdi-mes-cur'),cdiAtualNota,{status:cdiStatus})+
         metric('No ano',text('cdi-ano'))+
         metric(selectedPeriodLabel(),text('cdi-acum-v2'))
       )}

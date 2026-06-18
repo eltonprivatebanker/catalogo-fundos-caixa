@@ -1,0 +1,79 @@
+name: Atualização diária CAIXA
+
+on:
+  schedule:
+    # GitHub Actions usa UTC: 14:30 = 11:30 em Brasília; 21:30 = 18:30.
+    - cron: '30 14 * * 1-5'
+    - cron: '30 21 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: atualizacao-diaria-caixa
+  cancel-in-progress: false
+
+env:
+  TARGET_BRANCH: Testes-da-versão-01
+  TZ: America/Sao_Paulo
+
+jobs:
+  atualizar-dados:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Baixar a branch publicada
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TARGET_BRANCH }}
+          fetch-depth: 0
+          persist-credentials: true
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Instalar Chrome
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y google-chrome-stable
+
+      - name: Instalar dependências
+        run: python -m pip install --upgrade pip && pip install -r requirements.txt
+
+      - name: Executar o robô
+        run: python robo_sipii_simples.py
+
+      - name: Validar mercado_atual.json
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('mercado_atual.json')
+          if not p.exists():
+              raise SystemExit('mercado_atual.json não foi gerado')
+          dados = json.loads(p.read_text(encoding='utf-8'))
+          cdi = (dados.get('cards') or {}).get('cdi') or {}
+          print('Atualizado em:', dados.get('atualizado_em'))
+          print('CDI parcial:', cdi.get('parcial_mes_atual'))
+          print('CDI até:', cdi.get('parcial_ate'))
+          print('Origem:', cdi.get('parcial_origem'))
+          if cdi.get('parcial_mes_atual') is None:
+              print('AVISO: BCB ainda não disponibilizou parcial do mês.')
+          PY
+
+      - name: Salvar resultados no GitHub
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "Sem mudanças para salvar"
+          else
+            git commit -m "Dados atualizados via robô: $(date +'%d/%m/%Y %H:%M')"
+            git push origin HEAD:${TARGET_BRANCH}
+          fi
