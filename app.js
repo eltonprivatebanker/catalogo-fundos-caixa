@@ -1,3 +1,4 @@
+// ELTAUM_RATES_REFERENCE_STABLE_20260618_v257
 // ELTAUM_RATES_REFERENCE_CLEAN_20260618_v256
 // ELTAUM_RATES_REFERENCE_EXEC_20260618_v255
 // ELTAUM_FOOTER_PRIVACY_20260618_v254
@@ -12406,12 +12407,15 @@ async function sharePainelMercado(){
       if(mercado) mercado.classList.add('market-clean-v118');
 
       const copom = qs('#copomMeetings');
-      if(copom) ensureHintV118(copom, 'Próximas reuniões', 'copom');
+      if(copom){
+        // v257: o bloco de Cenário monetário já possui título próprio.
+        // Não criar microcopy "Arraste" aqui para não poluir desktop/mobile.
+      }
 
       const cdi = qs('#cdiMonthStrip');
       if(cdi){
         normalizeCdiV118();
-        ensureHintV118(cdi, 'Histórico mensal do CDI', 'cdi');
+        // v257: sem hint "Histórico mensal do CDI / Arraste" neste módulo.
       }
     }catch(e){
       console.warn('[v118 mercado] falha ao sincronizar:', e);
