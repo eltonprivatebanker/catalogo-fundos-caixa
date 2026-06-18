@@ -1,4 +1,4 @@
-# Atualização v243 — Mobile Selic e barra superior
+# Atualização v244 — Ajuste visual do CNPJ no mobile
 
 Substitua na branch publicada os arquivos:
 
@@ -8,13 +8,12 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. Barra de busca superior (`gfb`) mais compacta no mobile.
-2. Card **Trajetória da Selic meta** reorganizado no mobile.
-3. Resumo de **Máxima / Mínima / Vigente** agora aparece completo no mobile (sem ocultar a vigente).
-4. O gráfico da Selic agora destaca visualmente os pontos de **máxima**, **mínima** e **vigente** em qualquer período (`1A`, `5A` e `Histórico`).
-5. O bloco “Taxa vigente” acima do gráfico permanece visível no mobile para dar contexto.
+1. O CNPJ no bloco **Dados do fundo** ficou visualmente mais discreto e alinhado com o restante do card.
+2. O tamanho da fonte do CNPJ foi reduzido.
+3. A tipografia do CNPJ saiu de mono forte para um estilo mais equilibrado com o layout.
+4. O botão de copiar ficou mais compacto e passou a mostrar só o ícone no mobile.
 
 ## Depois da subida
 
 - Faça `Ctrl + F5` no desktop.
-- No celular, feche a aba e abra novamente.
+- No celular, feche e abra a aba novamente.
