@@ -1,4 +1,4 @@
-# Atualização v254 — Rodapé de transparência
+# Atualização v255 — Cenário monetário mais limpo
 
 Substitua na branch publicada os arquivos:
 
@@ -8,15 +8,16 @@ Substitua na branch publicada os arquivos:
 
 ## O que mudou
 
-1. Removido o nome completo do aviso de transparência.
-2. O texto ficou mais neutro e profissional.
-3. “Finalidade” virou **Objetivo**.
-4. “Natureza” virou **Independência**.
-5. “Uso adequado” virou **Uso informativo**.
-6. O subtítulo foi encurtado para: `dados públicos · painel independente · uso informativo`.
-7. O botão mudou de **Ocultar** para **Recolher** e, fechado, aparece como **Ver aviso**.
-8. As fontes públicas passaram de `span` para lista semântica `ul/li`.
-9. `fundos.caixa.gov.br` foi trocado por **CAIXA Asset / Fundos**.
+1. O bloco de **Taxas de referência** foi reorganizado como **Cenário monetário**.
+2. A hierarquia ficou mais clara:
+   - Selic meta como principal;
+   - CDI e próxima reunião como apoio;
+   - decisões recentes em leitura compacta;
+   - CDI mensal em régua/chips mais enxutos.
+3. O botão de fonte ficou mais discreto: **Fonte: BCB ↗**.
+4. O texto foi simplificado para reduzir ruído visual.
+5. O layout ficou mais compacto no desktop e mais organizado no mobile.
+6. Não houve alteração na origem nem no cálculo dos dados.
 
 ## Depois da subida
 
