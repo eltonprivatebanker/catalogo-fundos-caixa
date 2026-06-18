@@ -1,3 +1,4 @@
+// ELTAUM_CDI_CURRENT_CONTEXT_20260618_v233
 // ELTAUM_CDI_DAILY_AUTO_REFRESH_20260618_v232
 // ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
 // ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230
@@ -120,6 +121,48 @@ function obterCdiAtualV232(dados){
   };
 }
 window.obterCdiAtualV232 = obterCdiAtualV232;
+
+/* ════════════════════════════════════════════════════
+   v233 — CONTEXTO CLARO DO CDI PARCIAL
+   Distingue o valor acumulado no mês da data/referência
+   da última observação disponível.
+════════════════════════════════════════════════════ */
+function contextoCdiAtualV233(info){
+  const source = String(info?.origem || '').trim();
+  const reference = String(info?.referencia || '').trim();
+  const rawDate = String(info?.data || '').trim();
+  const shortDate = /^\d{2}\/\d{2}/.test(rawDate) ? rawDate.slice(0, 5) : '';
+
+  let stale = false;
+  if(info?.dataIso){
+    const parsed = new Date(`${info.dataIso}T12:00:00`);
+    if(!Number.isNaN(parsed.getTime())){
+      stale = (Date.now() - parsed.getTime()) > (3 * 24 * 60 * 60 * 1000);
+    }
+  }
+
+  const monthlyMarker = /4391/i.test(source) && /^01\//.test(rawDate);
+  let detail = 'Atualização parcial';
+
+  if(monthlyMarker && reference){
+    detail = `Atualização parcial de ${reference}`;
+  }else if(shortDate){
+    detail = stale
+      ? `Última referência disponível: ${shortDate}`
+      : `Dados disponíveis até ${shortDate}`;
+  }else if(reference){
+    detail = `Atualização parcial de ${reference}`;
+  }
+
+  return {
+    title: 'Acumulado no mês',
+    detail,
+    shortDate,
+    stale,
+    monthlyMarker
+  };
+}
+window.contextoCdiAtualV233 = contextoCdiAtualV233;
 
 /* ════════════════════════════════════════════════════
    v230 — CDI DINÂMICO COM FONTE ÚNICA E RECARGA SEGURA
@@ -1375,10 +1418,10 @@ function atualizarTabelaIndicadores(){
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2, false, '—');
   setSubStatus('cdi-cur-sub', cdiParcialLabel, cdiParcial !== null ? 'parcial' : 'aguardando');
   const cdiCurSub = $('cdi-cur-sub');
-  if(cdiCurSub && cdiParcial !== null && cdiAtualInfo.data){
-    const dataCurta = cdiAtualInfo.data.slice(0,5);
-    cdiCurSub.innerHTML = `<span class="period-line status-parcial"><span class="period-label">${limparStatus(cdiParcialLabel)}</span><span class="period-dot">·</span><span class="period-status">parcial até ${dataCurta}</span></span>`;
-    cdiCurSub.title = `CDI acumulado no mês até ${cdiAtualInfo.data}${cdiAtualInfo.origem ? ` · fonte ${cdiAtualInfo.origem}` : ''}`;
+  if(cdiCurSub && cdiParcial !== null){
+    const contexto = contextoCdiAtualV233(cdiAtualInfo);
+    cdiCurSub.innerHTML = `<span class="period-line status-parcial cdi-period-context-v233"><span class="period-label">${contexto.title}</span><span class="period-dot">·</span><span class="period-status">${contexto.detail}</span></span>`;
+    cdiCurSub.title = `${contexto.title}. ${contexto.detail}${cdiAtualInfo.origem ? ` · fonte ${cdiAtualInfo.origem}` : ''}`;
   }
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
@@ -12897,6 +12940,8 @@ if(!isSearchInput(el)) return;
         closed:valueOrDash(text('cdi-mes-ant')),
         current:valueOrDash(text('cdi-mes-cur')),
         currentRef:clean(_dadosMercado?.cards?.cdi?.parcial_ate || ''),
+        currentDateIso:clean(_dadosMercado?.cards?.cdi?.parcial_data_iso || ''),
+        currentPeriodRef:clean(_dadosMercado?.cards?.cdi?.parcial_ref || ''),
         currentSource:clean(_dadosMercado?.cards?.cdi?.parcial_origem || ''),
         year:valueOrDash(text('cdi-ano')),
         accum:valueOrDash(text('cdi-acum-v2'))
@@ -12926,6 +12971,16 @@ if(!isSearchInput(el)) return;
   }
   function currentMetric(label, main, variation, mainClass='neu'){
     return `<div class="market-v159-current-metric"><span>${esc(label)}</span><strong class="${mainClass}">${esc(valueOrDash(main))}</strong><em class="${pctClass(variation)}">${esc(valueOrDash(variation))}</em></div>`;
+  }
+  function currentCdiMetricV233(data){
+    const info={
+      data:data?.cdi?.currentRef || '',
+      dataIso:data?.cdi?.currentDateIso || '',
+      referencia:data?.cdi?.currentPeriodRef || data?.current || '',
+      origem:data?.cdi?.currentSource || ''
+    };
+    const contexto=contextoCdiAtualV233(info);
+    return `<div class="market-v159-current-metric market-current-cdi-v233"><span>CDI</span><strong class="${pctClass(data?.cdi?.current)}">${esc(valueOrDash(data?.cdi?.current))}</strong><div class="market-current-cdi-meta-v233"><b>${esc(contexto.title)}</b><em>${esc(contexto.detail)}</em></div></div>`;
   }
   function usCompactCard(item, mode, accum){
     const current=compactUsValue(item.current,mode);
@@ -13023,7 +13078,7 @@ if(!isSearchInput(el)) return;
     const cdiAvailable=data.cdi.current!=='—';
     const ipcaAvailable=data.ipca.current!=='—';
     if(!cdiAvailable) awaiting.push('CDI');
-    else currentNotes.push(`CDI parcial${data.cdi.currentRef ? ` até ${data.cdi.currentRef.slice(0,5)}` : ''}`);
+    else currentNotes.push('CDI acumulado no mês');
     if(!ipcaAvailable) awaiting.push('IPCA');
     else currentNotes.push('IPCA disponível');
     const awaitingText=[
@@ -13055,7 +13110,7 @@ if(!isSearchInput(el)) return;
 
         <section class="market-v159-current market-v227-current" aria-label="Mês atual">
           <div class="market-v159-current-copy"><span>Mês atual</span><strong>${esc(data.current)} · parcial</strong><small>${esc(awaitingText)}</small></div>
-          ${currentMetric('CDI',data.cdi.current,data.cdi.currentRef ? `até ${data.cdi.currentRef.slice(0,5)}` : 'acumulado no mês',pctClass(data.cdi.current))}
+          ${currentCdiMetricV233(data)}
           ${currentMetric('Dólar',data.dolar.currentQuote,data.dolar.currentVar)}
           ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
         </section>
@@ -14840,7 +14895,10 @@ if(document.readyState === 'loading'){
     const cdiStatus=statusFor('row-cdi');
     const ipcaStatus=statusFor('row-ipca');
     const cdiInfo=typeof obterCdiAtualV232==='function' ? obterCdiAtualV232() : {};
-    const cdiAtualNota=cdiInfo?.data ? `Parcial até ${String(cdiInfo.data).slice(0,5)}` : (cdiStatus||'');
+    const cdiContexto=contextoCdiAtualV233(cdiInfo);
+    const cdiAtualNota=cdiInfo?.valor!==null && cdiInfo?.valor!==undefined
+      ? `${cdiContexto.title} · ${cdiContexto.detail}`
+      : (cdiStatus||'');
     return `<article class="market-period-card-v196 taxas">
       ${cardHeader('Taxas e inflação','Retornos consolidados por período','BCB 4391 / 433')}
       ${gridHead()}

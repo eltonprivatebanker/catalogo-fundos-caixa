@@ -35527,3 +35527,93 @@ html.numeric-legibility-v231 #sec-mercado :is(
     font-size:.80rem!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_CDI_CURRENT_CONTEXT_20260618_v233
+   Separa visualmente o acumulado no mês da data/referência.
+════════════════════════════════════════════════════════════ */
+html.cdi-current-context-v233 .market-current-cdi-v233{
+  align-items:flex-start!important;
+}
+html.cdi-current-context-v233 .market-current-cdi-v233 > strong{
+  margin-top:2px;
+}
+html.cdi-current-context-v233 .market-current-cdi-meta-v233{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:3px;
+  margin-left:auto;
+  min-width:170px;
+  text-align:right;
+}
+html.cdi-current-context-v233 .market-current-cdi-meta-v233 b{
+  color:#dce5f7;
+  font-family:'Inter',sans-serif;
+  font-size:.63rem;
+  font-weight:750;
+  line-height:1.2;
+  white-space:nowrap;
+}
+html.cdi-current-context-v233 .market-current-cdi-meta-v233 em{
+  color:#94a8cf!important;
+  font-family:'JetBrains Mono','SFMono-Regular',Consolas,monospace!important;
+  font-size:.58rem!important;
+  font-weight:650!important;
+  font-style:normal;
+  line-height:1.25!important;
+  letter-spacing:.01em!important;
+  white-space:nowrap;
+}
+html.cdi-current-context-v233 .cdi-period-context-v233 .period-label{
+  color:#dce5f7;
+  font-weight:700;
+}
+html.cdi-current-context-v233 .cdi-period-context-v233 .period-status{
+  color:#94a8cf;
+  font-weight:600;
+}
+@media(max-width:1180px){
+  html.cdi-current-context-v233 .market-current-cdi-meta-v233{
+    min-width:145px;
+  }
+  html.cdi-current-context-v233 .market-current-cdi-meta-v233 em{
+    white-space:normal;
+    max-width:165px;
+  }
+}
+@media(max-width:900px){
+  html.cdi-current-context-v233 .market-current-cdi-v233{
+    display:grid!important;
+    grid-template-columns:auto 1fr;
+    column-gap:12px;
+    row-gap:4px;
+    align-items:center!important;
+  }
+  html.cdi-current-context-v233 .market-current-cdi-v233 > span{
+    grid-column:1/-1;
+  }
+  html.cdi-current-context-v233 .market-current-cdi-v233 > strong{
+    grid-column:1;
+  }
+  html.cdi-current-context-v233 .market-current-cdi-meta-v233{
+    grid-column:2;
+    min-width:0;
+    align-items:flex-end;
+  }
+}
+@media(max-width:560px){
+  html.cdi-current-context-v233 .market-current-cdi-v233{
+    grid-template-columns:1fr;
+  }
+  html.cdi-current-context-v233 .market-current-cdi-v233 > span,
+  html.cdi-current-context-v233 .market-current-cdi-v233 > strong,
+  html.cdi-current-context-v233 .market-current-cdi-meta-v233{
+    grid-column:1;
+  }
+  html.cdi-current-context-v233 .market-current-cdi-meta-v233{
+    align-items:flex-start;
+    text-align:left;
+  }
+}
