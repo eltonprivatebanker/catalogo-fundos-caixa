@@ -1,3 +1,25 @@
+// ELTAUM_RATES_SCROLL_FIX_20260618_v263
+// ELTAUM_RATES_PREMIUM_20260618_v261
+// ELTAUM_RATES_MOBILE_COMPACT_20260618_v260
+// ELTAUM_SELIC_MOBILE_FIT_20260618_v258
+// ELTAUM_RATES_REFERENCE_STABLE_20260618_v257
+// ELTAUM_RATES_REFERENCE_CLEAN_20260618_v256
+// ELTAUM_RATES_REFERENCE_EXEC_20260618_v255
+// ELTAUM_FOOTER_PRIVACY_20260618_v254
+// ELTAUM_SELIC_AXIS_LABELS_20260618_v253
+// ELTAUM_IPCA_SUMMARY_LABEL_FIX_20260618_v252
+// ELTAUM_IPCA_CHART_FIX_20260618_v251
+// ELTAUM_IPCA_CHART_SUMMARY_20260618_v250
+// ELTAUM_SELIC_PERIODS_20260618_v249
+// ELTAUM_SELIC_VIGENTE_SYNC_20260618_v248
+// ELTAUM_DOLAR_MOBILE_EXECUTIVE_20260618_v247
+// ELTAUM_DOLAR_MOBILE_TYPOGRAPHY_20260618_v246
+// ELTAUM_FUND_MOBILE_CNPJ_20260618_v238
+// ELTAUM_CDI_CURRENT_CONTEXT_20260618_v233
+// ELTAUM_CDI_DAILY_AUTO_REFRESH_20260618_v232
+// ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
+// ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230
+// ELTAUM_CDI_MONTH_ORDER_20260617_v216
 // ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
@@ -7,8 +29,12 @@ function toggleSection(b,c){
   var h=bd.hasAttribute('hidden');
   h?bd.removeAttribute('hidden'):bd.setAttribute('hidden','');
   if(ct){ct.classList.toggle('section-expanded',h);ct.setAttribute('aria-expanded',h?'true':'false');}
-  var l=ct?ct.querySelector('.toggle-label'):null;
-  if(l)l.textContent=h?'Ver menos':'Ver mais';
+  var btn=ct?ct.querySelector('.section-toggle-btn'):null;
+  if(btn)btn.setAttribute('aria-expanded',h?'true':'false');
+  var l=btn?btn.querySelector('.toggle-label'):(ct?ct.querySelector('.toggle-label'):null);
+  var openLabel=btn&&btn.dataset.labelOpen?btn.dataset.labelOpen:'Ver menos';
+  var closedLabel=btn&&btn.dataset.labelClosed?btn.dataset.labelClosed:'Ver mais';
+  if(l)l.textContent=h?openLabel:closedLabel;
   return false;
 }
 window.toggleSection=toggleSection;
@@ -80,6 +106,260 @@ const indicState = {
 };
 let activePeriodTab = 12; // 12, 24 ou 36
 let _ptaxHistorico = []; // cache para uso nos tabs
+
+/* ════════════════════════════════════════════════════
+   v232 — FONTE ÚNICA DO CDI DO MÊS ATUAL
+   Utilizada pela visão executiva, tabela analítica e atualização automática.
+════════════════════════════════════════════════════ */
+function obterCdiAtualV232(dados){
+  let base = dados;
+  if(!base){
+    try{ base = _dadosMercado; }catch(e){ base = null; }
+  }
+  const card = base?.cards?.cdi || window.__mercadoAtualV230?.cards?.cdi || {};
+  const valorRaw = card.parcial_mes_atual;
+  const valor = valorRaw === null || valorRaw === undefined || valorRaw === ''
+    ? null
+    : Number(valorRaw);
+  const data = String(card.parcial_ate || '').trim() || null;
+  const dataIso = String(card.parcial_data_iso || '').trim() || null;
+  const referencia = String(card.parcial_ref || '').trim() || null;
+  const origem = String(card.parcial_origem || '').trim() || null;
+  const consultadoEm = String(card.consultado_em || base?.atualizado_em || '').trim() || null;
+  return {
+    valor: Number.isFinite(valor) ? valor : null,
+    data,
+    dataIso,
+    referencia,
+    origem,
+    consultadoEm,
+    diasUteis: Number.isFinite(Number(card.parcial_dias_uteis)) ? Number(card.parcial_dias_uteis) : null,
+    status: Number.isFinite(valor) ? 'parcial' : 'aguardando'
+  };
+}
+window.obterCdiAtualV232 = obterCdiAtualV232;
+
+/* ════════════════════════════════════════════════════
+   v233 — CONTEXTO CLARO DO CDI PARCIAL
+   Distingue o valor acumulado no mês da data/referência
+   da última observação disponível.
+════════════════════════════════════════════════════ */
+function contextoCdiAtualV233(info){
+  const source = String(info?.origem || '').trim();
+  const reference = String(info?.referencia || '').trim();
+  const rawDate = String(info?.data || '').trim();
+  const shortDate = /^\d{2}\/\d{2}/.test(rawDate) ? rawDate.slice(0, 5) : '';
+
+  let stale = false;
+  if(info?.dataIso){
+    const parsed = new Date(`${info.dataIso}T12:00:00`);
+    if(!Number.isNaN(parsed.getTime())){
+      stale = (Date.now() - parsed.getTime()) > (3 * 24 * 60 * 60 * 1000);
+    }
+  }
+
+  const monthlyMarker = /4391/i.test(source) && /^01\//.test(rawDate);
+  let detail = 'Atualização parcial';
+
+  if(monthlyMarker && reference){
+    detail = `Atualização parcial de ${reference}`;
+  }else if(shortDate){
+    detail = stale
+      ? `Última referência disponível: ${shortDate}`
+      : `Dados disponíveis até ${shortDate}`;
+  }else if(reference){
+    detail = `Atualização parcial de ${reference}`;
+  }
+
+  return {
+    title: 'Acumulado no mês',
+    detail,
+    shortDate,
+    stale,
+    monthlyMarker
+  };
+}
+window.contextoCdiAtualV233 = contextoCdiAtualV233;
+
+/* ════════════════════════════════════════════════════
+   v230 — CDI DINÂMICO COM FONTE ÚNICA E RECARGA SEGURA
+   - centraliza 12M/24M/36M em um cache próprio;
+   - lê diretamente cards.cdi.acum_12m/24m/36m;
+   - recompõe pelo histórico mensal quando necessário;
+   - refaz somente a leitura de mercado_atual.json se o período estiver vazio;
+   - elimina dependência da ordem de carregamento do painel.
+════════════════════════════════════════════════════ */
+const CDI_PERIOD_OPTIONS_V229 = Object.freeze([12, 24, 36]);
+const cdiPeriodoCacheV230 = Object.seal({ 12: null, 24: null, 36: null });
+let cdiRefreshPromiseV230 = null;
+
+function numeroFinitoV229(value){
+  if(value === null || value === undefined || value === '') return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
+function chaveMesDeRotuloV229(label){
+  const match = String(label || '').trim().toLowerCase().match(/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\/(\d{4})/);
+  if(!match) return null;
+  const monthIndex = MESES_PT.indexOf(match[1]);
+  return monthIndex >= 0 ? `${match[2]}-${String(monthIndex + 1).padStart(2, '0')}` : null;
+}
+
+function acumularPercentuaisMensaisV229(values){
+  if(!Array.isArray(values) || !values.length) return null;
+  let factor = 1;
+  let count = 0;
+  for(const value of values){
+    const n = numeroFinitoV229(value);
+    if(n === null) continue;
+    factor *= (1 + n / 100);
+    count += 1;
+  }
+  return count ? Number(((factor - 1) * 100).toFixed(4)) : null;
+}
+
+function calcularCdiDoHistoricoV229(cdiCard, months){
+  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
+  const historico = Array.isArray(cdiCard?.historico) ? cdiCard.historico : [];
+  if(!historico.length) return null;
+
+  const ultimoFechadoKey = chaveMesDeRotuloV229(cdiCard?.mes_ref);
+  const ordenado = historico
+    .map(item => ({
+      key: String(item?.key || item?.data_ref || '').slice(0, 7),
+      value: numeroFinitoV229(item?.valor ?? item?.value)
+    }))
+    .filter(item => /^\d{4}-\d{2}$/.test(item.key) && item.value !== null)
+    .filter(item => !ultimoFechadoKey || item.key <= ultimoFechadoKey)
+    .sort((a, b) => a.key.localeCompare(b.key));
+
+  if(ordenado.length < periodo) return null;
+  return acumularPercentuaisMensaisV229(ordenado.slice(-periodo).map(item => item.value));
+}
+
+function fontesCdiV230(preferida){
+  const fontes = [];
+  const adicionar = value => {
+    if(value && typeof value === 'object' && !fontes.includes(value)) fontes.push(value);
+  };
+
+  adicionar(preferida);
+  try{ adicionar(_dadosMercado?.cards?.cdi); }catch(e){}
+  adicionar(window.__mercadoAtualV230?.cards?.cdi);
+  return fontes;
+}
+
+function cdiCardAtualV230(){
+  try{
+    return _dadosMercado?.cards?.cdi || window.__mercadoAtualV230?.cards?.cdi || {};
+  }catch(e){
+    return window.__mercadoAtualV230?.cards?.cdi || {};
+  }
+}
+
+function resolverCdiPeriodoV229(cdiCard, months){
+  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
+
+  for(const fonte of fontesCdiV230(cdiCard)){
+    const direto = numeroFinitoV229(fonte?.[`acum_${periodo}m`]);
+    if(direto !== null){
+      cdiPeriodoCacheV230[periodo] = direto;
+      return direto;
+    }
+
+    const historico = calcularCdiDoHistoricoV229(fonte, periodo);
+    if(historico !== null){
+      cdiPeriodoCacheV230[periodo] = historico;
+      return historico;
+    }
+  }
+
+  const cache = numeroFinitoV229(cdiPeriodoCacheV230[periodo]);
+  if(cache !== null) return cache;
+
+  return numeroFinitoV229(indicState.cdi?.[`m${periodo}`]);
+}
+
+function atualizarDiagnosticoCdiV230(){
+  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => numeroFinitoV229(cdiPeriodoCacheV230[periodo]) !== null);
+  document.documentElement.dataset.cdiPeriods = disponiveis.join(',');
+}
+
+function sincronizarEstadoCdiV229(dados){
+  if(dados && typeof dados === 'object') window.__mercadoAtualV230 = dados;
+
+  const cdiCard = dados?.cards?.cdi || {};
+  const mensal = numeroFinitoV229(cdiCard.mensal);
+  if(mensal !== null) indicState.cdi.mes = mensal;
+  if(cdiCard.mes_ref) indicState.cdi.mesRef = cdiCard.mes_ref;
+
+  CDI_PERIOD_OPTIONS_V229.forEach(periodo => {
+    const value = resolverCdiPeriodoV229(cdiCard, periodo);
+    if(value !== null){
+      indicState.cdi[`m${periodo}`] = value;
+      cdiPeriodoCacheV230[periodo] = value;
+    }
+  });
+
+  atualizarDiagnosticoCdiV230();
+
+  return {
+    m12: numeroFinitoV229(cdiPeriodoCacheV230[12] ?? indicState.cdi.m12),
+    m24: numeroFinitoV229(cdiPeriodoCacheV230[24] ?? indicState.cdi.m24),
+    m36: numeroFinitoV229(cdiPeriodoCacheV230[36] ?? indicState.cdi.m36)
+  };
+}
+
+async function recarregarCdiPeriodosV230(){
+  if(cdiRefreshPromiseV230) return cdiRefreshPromiseV230;
+
+  cdiRefreshPromiseV230 = (async () => {
+    const url = BASE_URL + 'mercado_atual.json?v=market-cdi-v230-' + Date.now();
+    const response = await fetch(url, { cache: 'no-store' });
+    if(!response.ok) throw new Error(`HTTP ${response.status} ao carregar mercado_atual.json`);
+
+    const raw = await response.json();
+    const fresco = typeof normalizarMercadoAtual === 'function' ? normalizarMercadoAtual(raw) : raw;
+    const cdiFresco = fresco?.cards?.cdi;
+
+    if(cdiFresco){
+      try{
+        if(_dadosMercado && typeof _dadosMercado === 'object'){
+          if(!_dadosMercado.cards) _dadosMercado.cards = {};
+          _dadosMercado.cards.cdi = { ...(_dadosMercado.cards.cdi || {}), ...cdiFresco };
+          sincronizarEstadoCdiV229(_dadosMercado);
+        }else{
+          sincronizarEstadoCdiV229(fresco);
+        }
+      }catch(e){
+        sincronizarEstadoCdiV229(fresco);
+      }
+    }
+
+    return sincronizarEstadoCdiV229(fresco);
+  })().finally(() => {
+    cdiRefreshPromiseV230 = null;
+  });
+
+  return cdiRefreshPromiseV230;
+}
+
+async function garantirCdiPeriodoV230(months){
+  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
+  let value = resolverCdiPeriodoV229(cdiCardAtualV230(), periodo);
+  if(value !== null) return value;
+
+  await recarregarCdiPeriodosV230();
+  value = resolverCdiPeriodoV229(cdiCardAtualV230(), periodo);
+  return value;
+}
+
+window.sincronizarEstadoCdiV229 = sincronizarEstadoCdiV229;
+window.resolverCdiPeriodoV229 = resolverCdiPeriodoV229;
+window.recarregarCdiPeriodosV230 = recarregarCdiPeriodosV230;
+window.garantirCdiPeriodoV230 = garantirCdiPeriodoV230;
+window.getCdiPeriodosV230 = () => ({ ...cdiPeriodoCacheV230 });
 
 /* ════════════════════════════════════════════════════
    POUPANÇA — TOGGLE
@@ -169,15 +449,10 @@ function calcularPoupancaAntigaMensal(trMensal=0){
 }
 
 function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
-  const canvas = $('poupScenarioChart');
-  if(!canvas || typeof Chart === 'undefined') return;
-
   const selicNum = getFirstNumber(selic);
   const valorNovaNum = getFirstNumber(valorNova);
   const valorAntigaNum = getFirstNumber(valorAntiga);
 
-  // A TR não é fixa no tempo. Para o gráfico ficar coerente com o card de hoje,
-  // usamos uma TR estimada apenas de forma didática, derivada do rendimento atual.
   let trEstimada = 0;
   if(selicNum != null && valorNovaNum != null){
     const baseNovaHoje = selicNum > 8.5
@@ -188,143 +463,45 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
     trEstimada = Math.max(0, valorAntigaNum - 0.5);
   }
 
-  const cenariosBase = [4, 6, 8.5];
-  if(selicNum != null && !cenariosBase.some(v => Math.abs(v - selicNum) < 0.01)){
-    cenariosBase.push(selicNum);
-  }
+  const mensalNova4 = calcularPoupancaNovaMensalPorSelic(4, trEstimada);
+  const mensalNova85 = calcularPoupancaNovaMensalPorSelic(8.5, trEstimada);
+  const mensalAntiga = calcularPoupancaAntigaMensal(trEstimada);
+  const mensalNovaAtual = selicNum != null
+    ? calcularPoupancaNovaMensalPorSelic(selicNum, trEstimada)
+    : valorNovaNum;
+  const mensalAntigaAtual = valorAntigaNum != null ? valorAntigaNum : mensalAntiga;
 
-  const cenarios = cenariosBase.map(v => {
-    const isHoje = selicNum != null && Math.abs(v - selicNum) < 0.01;
-    return {
-      selic: v,
-      // Chart.js interpreta array de strings como rótulo em múltiplas linhas.
-      // Assim evitamos aparecer o texto literal "\\n" no gráfico.
-      label: isHoje ? ['Hoje', fmt(v)] : ['Selic', fmt(v)]
-    };
-  });
-
-  const novaVals = cenarios.map(c => calcularPoupancaNovaMensalPorSelic(c.selic, trEstimada));
-  const antigaVals = cenarios.map(() => calcularPoupancaAntigaMensal(trEstimada));
-
-  const labels = cenarios.map(c => c.label);
-
-  const chartData = {
-    labels,
-    datasets:[
-      {
-        label:'Regra nova',
-        data:novaVals,
-        backgroundColor:'rgba(91,156,246,.62)',
-        borderColor:'rgba(91,156,246,.95)',
-        borderWidth:1,
-        borderRadius:6,
-        maxBarThickness:26
-      },
-      {
-        label:'Regra antiga',
-        data:antigaVals,
-        backgroundColor:'rgba(200,151,58,.52)',
-        borderColor:'rgba(232,187,106,.95)',
-        borderWidth:1,
-        borderRadius:6,
-        maxBarThickness:26
-      }
-    ]
+  const setText = (id, value) => {
+    const el = $(id);
+    if(el) el.textContent = value;
   };
+  const formatMensal = (v) => Number.isFinite(Number(v)) ? `${fmt(Number(v))} a.m.` : '—';
 
-  const maxY = Math.max(...novaVals, ...antigaVals, 0.8);
-  const chartOptions = {
-    responsive:true,
-    maintainAspectRatio:false,
-    animation:{duration:450},
-    plugins:{
-      legend:{
-        display:true,
-        position:'bottom',
-        labels:{
-          color:'#aeb7cf',
-          boxWidth:10,
-          boxHeight:10,
-          padding:10,
-          font:{size:10,family:'Inter'}
-        }
-      },
-      tooltip:{
-        callbacks:{
-          label:function(ctx){
-            const val = Number(ctx.raw);
-            return `${ctx.dataset.label}: ${Number.isFinite(val) ? fmt(val) : '—'} a.m.`;
-          },
-          afterBody:function(){
-            return trEstimada > 0 ? `TR estimada usada: ${fmt(trEstimada)}` : 'Simulação sem TR estimada';
-          }
-        }
-      }
-    },
-    scales:{
-      x:{
-        grid:{display:false},
-        ticks:{
-          color:'#9faac4',
-          font:{size:10,family:'JetBrains Mono'}
-        }
-      },
-      y:{
-        beginAtZero:true,
-        suggestedMax:maxY * 1.18,
-        grid:{color:'rgba(255,255,255,.055)'},
-        ticks:{
-          color:'#9faac4',
-          font:{size:10,family:'JetBrains Mono'},
-          callback:function(value){ return Number(value).toFixed(2).replace('.',',') + '%'; }
-        }
-      }
-    }
-  };
-
-  if(poupScenarioChart){
-    poupScenarioChart.data = chartData;
-    poupScenarioChart.options = chartOptions;
-    poupScenarioChart.update();
-  }else{
-    poupScenarioChart = new Chart(canvas, {
-      type:'bar',
-      data:chartData,
-      options:chartOptions
-    });
-  }
-
-  if($('poupScenarioStatus')){
-    $('poupScenarioStatus').textContent = selicNum != null ? `Selic ${fmt(selicNum)}` : 'Selic —';
-  }
-
-  if($('poupScenarioToday')){
-    if(selicNum == null){
-      $('poupScenarioToday').textContent = 'Aguardando Selic';
-    }else if(selicNum > 8.5){
-      $('poupScenarioToday').textContent = 'Mesma regra hoje';
-    }else{
-      $('poupScenarioToday').textContent = 'Regra nova menor';
-    }
-  }
+  setText('poupScenarioNew4', `70% da Selic + TR (${formatMensal(mensalNova4)})`);
+  setText('poupScenarioOld4', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
+  setText('poupScenarioNew85', `70% da Selic + TR (${formatMensal(mensalNova85)})`);
+  setText('poupScenarioOld85', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
+  setText('poupScenarioCurrentTitle', selicNum != null ? `Selic atual: ${fmt(selicNum)} a.a.` : 'Cenário atual');
+  setText('poupScenarioCurrentNew', formatMensal(mensalNovaAtual));
+  setText('poupScenarioCurrentOld', formatMensal(mensalAntigaAtual));
+  setText('poupScenarioStatus', selicNum != null ? `Selic ${fmt(selicNum)}` : 'Selic —');
 
   if($('poupScenarioSummary')){
     if(selicNum == null){
-      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, o gráfico compara a regra nova com a regra antiga em cenários selecionados.';
+      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, o comparativo mostrará o efeito da regra atual e da regra anterior.';
     }else if(selicNum > 8.5){
-      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, as duas regras convergem: TR + 0,50% a.m. A diferença aparece principalmente quando a Selic fica em 8,50% a.a. ou abaixo.`;
+      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, as duas regras utilizam TR + 0,50% a.m. A diferença aparece quando a Selic fica em 8,50% a.a. ou abaixo.`;
     }else{
-      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, a regra nova usa TR + 70% da Selic meta anual, mensalizada; a regra antiga mantém TR + 0,50% a.m.`;
+      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, a regra vigente passa a usar 70% da Selic + TR, enquanto a regra pré-2012 mantém TR + 0,50% a.m.`;
     }
   }
 
   if($('poupScenarioNote')){
     $('poupScenarioNote').textContent = trEstimada > 0
-      ? `Estimativa didática: gráfico mantém TR estimada de ${fmt(trEstimada)} a.m. apenas para comparação visual.`
-      : 'Estimativa didática: gráfico sem TR estimada. Para valor exato por período, conferir a calculadora do BCB.';
+      ? `Comparação didática com TR estimada de ${fmt(trEstimada)} a.m. A TR varia conforme o período de aniversário.`
+      : 'Comparação didática sem TR estimada. Para valor exato, consulte a Calculadora do Cidadão do BCB.';
   }
 }
-
 function atualizarPoupancaCard(d, selicAtual){
   const c = d?.cards || {};
   const nova = c.poupanca_nova || d?.poupanca_nova || d?.poupanca?.nova || {};
@@ -364,7 +541,25 @@ function atualizarPoupancaCard(d, selicAtual){
   }
 
   if($('mc-poup')){
-    $('mc-poup').textContent = valorNova != null ? fmt(valorNova) : '—';
+    const valorMensalTexto = valorNova != null ? fmt(valorNova) : '—';
+    $('mc-poup').textContent = valorMensalTexto;
+    $('mc-poup').setAttribute(
+      'aria-label',
+      valorNova != null ? `Rendimento mensal atual: ${valorMensalTexto} ao mês` : 'Rendimento mensal ainda não disponível'
+    );
+  }
+
+  if($('poupTodayCompactV199')){
+    $('poupTodayCompactV199').textContent = valorNova != null ? fmt(valorNova) : '—';
+  }
+
+  if($('poupYearCompactV199')){
+    const acumuladoAnoTexto = acumNova != null ? formatPctCard(acumNova) : '—';
+    $('poupYearCompactV199').textContent = acumuladoAnoTexto;
+    $('poupYearCompactV199').setAttribute(
+      'aria-label',
+      acumNova != null ? `Acumulado da poupança no ano: ${acumuladoAnoTexto}` : 'Acumulado no ano ainda não disponível'
+    );
   }
 
   if($('poupOldMonthly')){
@@ -379,32 +574,30 @@ function atualizarPoupancaCard(d, selicAtual){
     $('poupOldAccum').textContent = 'Acum. ano: ' + (acumAntiga != null ? formatPctCard(acumAntiga) : '—');
   }
 
-  let textoNova = 'a.m. · regra conforme nível da Selic';
-
-  if(selic != null){
-    textoNova = acima
-      ? 'a.m. · TR + 0,50% (Selic > 8,5%)'
-      : 'a.m. · TR + 70% da Selic meta anual, mensalizada (Selic ≤ 8,5%)';
-  }
-
   if($('poupNewRuleText')){
-    $('poupNewRuleText').textContent = textoNova;
+    if(selic == null){
+      $('poupNewRuleText').textContent = 'Aguardando a Selic vigente.';
+    }else if(acima){
+      $('poupNewRuleText').innerHTML = 'Com Selic acima de 8,50% a.a.: <strong>TR + 0,50% a.m.</strong>';
+    }else{
+      $('poupNewRuleText').innerHTML = 'Com Selic em até 8,50% a.a.: <strong>70% da Selic + TR</strong>';
+    }
   }
 
   if($('poupOldRuleText')){
-    $('poupOldRuleText').textContent = 'a.m. · TR + 0,50%';
+    $('poupOldRuleText').innerHTML = 'Rendimento: <strong>TR + 0,50% a.m.</strong>';
   }
 
   if($('poupQuickNote')){
     if(selic == null){
       $('poupQuickNote').textContent =
-        'Regra nova depende do nível da Selic. Para acumulado exato, conferir calculadora oficial do BCB.';
+        'Aguardando Selic vigente para definir a regra aplicada.';
     }else if(acima){
-      $('poupQuickNote').textContent =
-        `Com Selic em ${fmt(selic)}, a regra nova usa TR + 0,50% a.m.; a regra antiga também usa TR + 0,50% a.m.`;
+      $('poupQuickNote').innerHTML =
+        `Selic acima de <strong>8,50% a.a.</strong> · depósitos novos e antigos seguem <strong>TR + 0,50% a.m.</strong>`;
     }else{
-      $('poupQuickNote').textContent =
-        `Com Selic em ${fmt(selic)}, a regra nova usa TR + 70% da Selic meta anual, mensalizada; a regra antiga mantém TR + 0,50% a.m.`;
+      $('poupQuickNote').innerHTML =
+        `Selic até <strong>8,50% a.a.</strong> · depósitos novos rendem <strong>70% da Selic + TR</strong> e depósitos antigos mantêm <strong>TR + 0,50% a.m.</strong>`;
     }
   }
 
@@ -427,14 +620,28 @@ function toggleFocusExplain(){
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
-  // v17 local: não chama mais a API SGS 4391 pelo navegador.
-  // Os acumulados 12M/24M/36M já vêm pré-calculados no mercado_atual.json pelo atualização automatizada.
-  if(indicState.cdi.m12 !== null || indicState.cdi.m24 !== null || indicState.cdi.m36 !== null){
-    console.info('[CDI] Usando acumulados do mercado_atual.json');
-  } else {
-    console.warn('[CDI] mercado_atual.json não trouxe acumulados CDI. Execute o +.');
+  let periodos = sincronizarEstadoCdiV229(_dadosMercado);
+  let ausentes = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] === null);
+
+  if(ausentes.length){
+    try{
+      await recarregarCdiPeriodosV230();
+      periodos = sincronizarEstadoCdiV229(_dadosMercado || window.__mercadoAtualV230);
+      ausentes = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] === null);
+    }catch(error){
+      console.warn('[CDI v230] Não foi possível refazer a leitura dos acumulados:', error);
+    }
+  }
+
+  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] !== null);
+  if(disponiveis.length){
+    console.info(`[CDI v230] Períodos disponíveis: ${disponiveis.join('M, ')}M`);
+  }
+  if(ausentes.length){
+    console.warn(`[CDI v230] Períodos ainda ausentes: ${ausentes.join('M, ')}M`);
     if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'histórico indisponível';
   }
+
   atualizarTabelaIndicadores();
 }
 
@@ -852,12 +1059,17 @@ function renderDolarMensais(){
     const varPct = calcVar(key,item);
     const cls = varPct === null ? 'zero' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
     const varTxt = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
-    return `<div class="dolar-month-item dolar-month-row-v162">
+    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98">
       <span class="dolar-month-label">${label}</span>
       <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
       <span class="dolar-month-var ${cls}">${varTxt}</span>
     </div>`;
   }).join('') || '<div class="dolar-month-empty-v162">Nenhum mês fechado disponível.</div>';
+
+  requestAnimationFrame(() => {
+    try{ window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__?.sync?.(); }catch(_error){}
+    try{ window.__ELTAUM_MOBILE_PTAX_MONTH_CAROUSEL_V187__?.setup?.(); }catch(_error){}
+  });
 }
 
 function toggleDolarTimeline(){
@@ -1211,16 +1423,23 @@ function atualizarTabelaIndicadores(){
 
   // ═══ CDI ═══
   const cdiMesFechado = num(cards.cdi?.mensal) ?? num(indicState.cdi.mes);
-  const cdiParcial = num(cards.cdi?.parcial_mes_atual);
-  const cdiParcialLabel = cards.cdi?.parcial_ref || mesAtualLabel;
+  const cdiAtualInfo = obterCdiAtualV232(_dadosMercado);
+  const cdiParcial = num(cdiAtualInfo.valor);
+  const cdiParcialLabel = cdiAtualInfo.referencia || mesAtualLabel;
   const cdiAno = (cdiParcial !== null ? num(cards.cdi?.acum_ano_com_parcial) : num(cards.cdi?.acum_ano)) ?? num(cards.cdi?.acum_ano_com_parcial) ?? null;
-  const cdiAcum = num(indicState.cdi[`m${m}`]) ?? num(cards.cdi?.[`acum_${m}m`]);
+  const cdiAcum = num(resolverCdiPeriodoV229(cards.cdi || {}, m));
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
   setSubStatus('cdi-mes-ant-sub', cards.cdi?.mes_ref || fallbackMesFechado, 'fechado');
 
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2, false, '—');
   setSubStatus('cdi-cur-sub', cdiParcialLabel, cdiParcial !== null ? 'parcial' : 'aguardando');
+  const cdiCurSub = $('cdi-cur-sub');
+  if(cdiCurSub && cdiParcial !== null){
+    const contexto = contextoCdiAtualV233(cdiAtualInfo);
+    cdiCurSub.innerHTML = `<span class="period-line status-parcial cdi-period-context-v233"><span class="period-label">${contexto.title}</span><span class="period-dot">·</span><span class="period-status">${contexto.detail}</span></span>`;
+    cdiCurSub.title = `${contexto.title}. ${contexto.detail}${cdiAtualInfo.origem ? ` · fonte ${cdiAtualInfo.origem}` : ''}`;
+  }
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
   setSubSimple('cdi-ano-sub', atePeriodo(cdiParcial !== null ? cdiParcialLabel : (cards.cdi?.mes_ref || fallbackMesFechado)));
@@ -1351,25 +1570,98 @@ function atualizarTabelaIndicadores(){
 }
 
 
-// Tabs 12M / 24M / 36M — sincronizados com a tabela analítica e a visão executiva (v173)
-document.querySelectorAll('.indic-tab[data-months]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.indic-tab[data-months]').forEach(b => {
-      const isActive = b === btn;
-      b.classList.toggle('active', isActive);
-      b.setAttribute('aria-pressed', String(isActive));
-    });
+/* ════════════════════════════════════════════════════
+   v229 — CONTROLADOR ÚNICO DO PERÍODO DE MERCADO
+   - sincroniza estado, botões, aria-pressed, tabela e visão executiva;
+   - usa apenas o evento click, compatível com mouse, toque e teclado;
+   - remove a necessidade de z-index elevado e hit-test por coordenadas.
+════════════════════════════════════════════════════ */
+const MARKET_PERIOD_OPTIONS_V229 = Object.freeze([12, 24, 36]);
 
-    activePeriodTab = parseInt(btn.dataset.months, 10) || 12;
-    atualizarTabelaIndicadores();
+function normalizarPeriodoMercadoV229(value){
+  const months = Number.parseInt(value, 10);
+  return MARKET_PERIOD_OPTIONS_V229.includes(months) ? months : 12;
+}
 
-    // Notifica os componentes derivados somente depois de o período-base ser atualizado.
-    document.dispatchEvent(new CustomEvent('elton:market-period-change', {
-      detail: { months: activePeriodTab }
-    }));
+function sincronizarBotoesPeriodoMercadoV229(months){
+  const selected = normalizarPeriodoMercadoV229(months);
+
+  document.querySelectorAll('.indic-tab[data-months]').forEach(button => {
+    const isActive = Number.parseInt(button.dataset.months, 10) === selected;
+    button.classList.toggle('active', isActive);
+    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
   });
-});
+}
 
+function selecionarPeriodoMercadoV229(value, options = {}){
+  const months = normalizarPeriodoMercadoV229(value);
+  const source = options.source || 'api';
+  const shouldRender = options.render !== false;
+
+  activePeriodTab = months;
+  document.documentElement.dataset.indicPeriod = String(months);
+  sincronizarBotoesPeriodoMercadoV229(months);
+
+  let renderOk = true;
+  if(shouldRender){
+    try{
+      atualizarTabelaIndicadores();
+    }catch(error){
+      renderOk = false;
+      console.error('[ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230] Falha ao atualizar os indicadores:', error);
+    }
+  }
+
+  // Se o valor do período ainda não estiver no estado, busca novamente o JSON
+  // e redesenha apenas quando o usuário continuar no mesmo período.
+  if(resolverCdiPeriodoV229(cdiCardAtualV230(), months) === null){
+    garantirCdiPeriodoV230(months).then(value => {
+      if(value !== null && activePeriodTab === months){
+        atualizarTabelaIndicadores();
+        document.dispatchEvent(new CustomEvent('elton:market-cdi-ready', { detail: { months, value } }));
+      }
+    }).catch(error => console.warn(`[CDI v230] Falha ao garantir ${months}M:`, error));
+  }
+
+  document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+    detail: { months, source, renderOk }
+  }));
+
+  return renderOk;
+}
+
+function inicializarPeriodoMercadoV229(){
+  const fromDataset = document.documentElement.dataset.indicPeriod;
+  const fromActiveButton = document.querySelector('.indic-tab.active[data-months]')?.dataset.months;
+  const initial = fromDataset || fromActiveButton || activePeriodTab || 12;
+  selecionarPeriodoMercadoV229(initial, { source: 'init', render: false });
+}
+
+// Exportações explícitas: evitam depender de propriedades globais implícitas.
+window.atualizarTabelaIndicadores = atualizarTabelaIndicadores;
+window.selecionarPeriodoMercado = selecionarPeriodoMercadoV229;
+window.getPeriodoMercado = () => activePeriodTab;
+window.__marketPeriodBuild = 'ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230';
+
+// Captura única para impedir que o clique no botão abra/feche o bloco pai.
+document.addEventListener('click', event => {
+  const button = event.target?.closest?.('.indic-tab[data-months]');
+  if(!button) return;
+
+  event.preventDefault();
+  event.stopPropagation();
+  selecionarPeriodoMercadoV229(button.dataset.months, { source: 'user' });
+}, true);
+
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', inicializarPeriodoMercadoV229, { once: true });
+}else{
+  inicializarPeriodoMercadoV229();
+}
+
+window.addEventListener('pageshow', () => {
+  sincronizarBotoesPeriodoMercadoV229(activePeriodTab);
+});
 
 /* ════════════════════════════════════════════════════
    NORMALIZA mercado_atual.json PARA A TABELA DE INDICADORES
@@ -1577,7 +1869,7 @@ function renderCdiYearHistory(d){
     const subtitulo = isCurrent
       ? '<span class="p">parcial</span>'
       : isClosed
-        ? '<span class="p">último mês</span>'
+        ? '<span class="p">último mês fechado</span>'
         : '';
 
     return `<span class="${classes}" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
@@ -1586,6 +1878,60 @@ function renderCdiYearHistory(d){
       ${subtitulo}
     </span>`;
   }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
+  requestAnimationFrame(() => { try{ strip.scrollLeft = 0; }catch(e){} });
+  // ELTAUM_RATES_PREMIUM_CDI_SCROLLSTART_V261
+}
+
+/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
+   Formata a atualização do cabeçalho de forma compacta, preservando
+   a data completa em title/aria-label. */
+function formatarAtualizacaoHeader(valor){
+  const bruto=String(valor ?? '').trim();
+  const match=bruto.match(/^(\d{2})\/(\d{2})\/(\d{4})\s+(\d{2}):(\d{2})(?::(\d{2}))?/);
+  if(!match) return {compacto:bruto,completo:bruto,datetime:''};
+
+  const [,dia,mes,ano,hora,minuto,segundo='00']=match;
+  const meses=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const nomeMes=meses[Math.max(0,Math.min(11,Number(mes)-1))];
+
+  return {
+    compacto:`${dia} ${nomeMes} · ${hora}:${minuto}`,
+    completo:`${dia}/${mes}/${ano} às ${hora}:${minuto}`,
+    datetime:`${ano}-${mes}-${dia}T${hora}:${minuto}:${segundo}`
+  };
+}
+
+function atualizarDataHeader(valor,opcoes={}){
+  const elemento=document.getElementById('lastUpdate');
+  if(!elemento) return;
+
+  const dot=document.createElement('span');
+  dot.className='live-dot';
+
+  if(opcoes.cache){
+    dot.style.background='var(--muted)';
+    const texto=document.createElement('span');
+    texto.className='live-update-label';
+    texto.textContent='Dados em cache';
+    elemento.replaceChildren(dot,texto);
+    elemento.title='Os dados mais recentes não puderam ser carregados.';
+    elemento.setAttribute('aria-label','Dados em cache');
+    return;
+  }
+
+  const data=formatarAtualizacaoHeader(valor);
+  const label=document.createElement('span');
+  label.className='live-update-label';
+  label.textContent='Atualizado ·';
+
+  const time=document.createElement('time');
+  time.className='live-update-time';
+  if(data.datetime) time.dateTime=data.datetime;
+  time.textContent=data.compacto || String(valor || '');
+
+  elemento.replaceChildren(dot,label,time);
+  elemento.title=`Dados atualizados em ${data.completo || valor}`;
+  elemento.setAttribute('aria-label',`Dados atualizados em ${data.completo || valor}`);
 }
 
 /* ════════════════════════════════════════════════════
@@ -1593,7 +1939,7 @@ function renderCdiYearHistory(d){
 ════════════════════════════════════════════════════ */
 async function carregarMercado(){
   try{
-    const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
+    const r = await fetch(BASE_URL+'mercado_atual.json?v=market-v230-'+Date.now(), { cache: 'no-store' });
     const raw = await r.json();
 
     // Complementa o mercado_atual.json com o arquivo de índices detalhados,
@@ -1604,62 +1950,78 @@ async function carregarMercado(){
 
     const d = normalizarMercadoAtual(rawUnificado);
     _dadosMercado = d;
+    window.__mercadoAtualV230 = d;
+    sincronizarEstadoCdiV229(d);
     setTimeout(()=>{ try{ atualizarResumoFechamentoMes(); atualizarPainelFechadoCard(); renderClosedMarketSheet(); }catch(e){} }, 600);
     hidratarDolarResumoDoJson(d);
 
-    if(d.atualizado_em) $('lastUpdate').innerHTML = `<span class="live-dot"></span>${d.atualizado_em}`;
+    if(d.atualizado_em) atualizarDataHeader(d.atualizado_em);
 
     const c = d.cards || {};
 
     // ── Selic ──
     const selic = c.selic_meta?.valor;
     if($('mc-selic')) $('mc-selic').textContent = selic ? fmt(selic) : '—';
-    const selicHist = d.historico_selic || c.selic_meta?.historico || [];
-    if(selicHist.length){
-      const ultima = selicHist[0];
-      const el = $('selic-last-change');
-      if(el) el.textContent = ultima.data || '—';
+
+    // v223: a taxa vigente e a data precisam vir da mesma decisão.
+    // Quando o robô já atualizou o valor, mas o histórico ainda está atrasado,
+    // o painel reconcilia os dados com o calendário oficial do Copom.
+    const selicUltimaAlteracao = resolverDataUltimaAlteracaoSelic(d);
+    const elSelicLastChange = $('selic-last-change');
+    if(elSelicLastChange){
+      elSelicLastChange.textContent = selicUltimaAlteracao.data || '—';
+      // v256: evita expor mensagem técnica de reconciliação para o usuário final.
+      // A auditoria continua no console/dados, mas o card fica limpo.
+      elSelicLastChange.removeAttribute('title');
+      delete elSelicLastChange.dataset.selicDateReconciled;
     }
 
     buildCopomCalendario();
 
-    // ── CDI — baseline + ★ v16: acumulados pré-calculados pelo robô ──
-    const cdi = c.cdi?.valor;
-    if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
-    if(cdi){
-      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1+cdi/100,1/12)-1)*100);
-      const isEst = c.cdi?.mensal == null;
-      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+'%';
-      // v17: exibe taxa + mês de referência no card CDI (ex: "+1,09% · abr/2026")
-      const mesRefLabel = c.cdi?.mes_ref ? ` · ${c.cdi.mes_ref}` : '';
+    // ── CDI — v229: taxa, mês e acumulados independentes entre si ──
+    const cdiCard = c.cdi || {};
+    const cdi = numeroFinitoV229(cdiCard.valor);
+    const cdiMensalInformado = numeroFinitoV229(cdiCard.mensal);
+    const cdiMensal = cdiMensalInformado ?? (cdi !== null ? ((Math.pow(1 + cdi / 100, 1 / 12) - 1) * 100) : null);
+
+    if($('mc-cdi')) $('mc-cdi').textContent = cdi !== null ? fmt(cdi) : '—';
+
+    // Esta sincronização não depende de cards.cdi.valor. Assim, versões do JSON
+    // que trazem apenas mensal, histórico e acumulados continuam funcionando.
+    sincronizarEstadoCdiV229(d);
+
+    if(cdiMensal !== null){
+      const isEst = cdiMensalInformado === null;
+      const fCdiMes = (cdiMensal > 0 ? '+' : '') + cdiMensal.toFixed(2).replace('.', ',') + '%';
+      const mesRefLabel = cdiCard.mes_ref ? ` · ${cdiCard.mes_ref}` : '';
       if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + mesRefLabel + (isEst ? '*' : '');
-
-      // Baseline
-      if(!indicState.cdi.mes) indicState.cdi.mes = cdiMensal;
-      if(!indicState.cdi.mesRef){
-        const h = new Date();
-        indicState.cdi.mesRef = c.cdi?.mes_ref ||
-          `${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;
-      }
-      // ★ v16 — usa acumulados pré-calculados server-side (resolve CORS/400 do browser)
-      if(c.cdi?.acum_12m != null) indicState.cdi.m12 = c.cdi.acum_12m;
-      if(c.cdi?.acum_24m != null) indicState.cdi.m24 = c.cdi.acum_24m;
-      if(c.cdi?.acum_36m != null) indicState.cdi.m36 = c.cdi.acum_36m;
-      // Fallback: se robô não calculou 12M, usa taxa anual como proxy
-      if(indicState.cdi.m12 == null) indicState.cdi.m12 = cdi;
-
-      const cdiMesAtual = c.cdi?.parcial_mes_atual ?? c.cdi?.mensal ?? cdiMensal;
-      const cdiMesAtualTxt = '+' + Number(cdiMesAtual).toFixed(2).replace('.',',') + '%';
-      const cdi12Txt = indicState.cdi.m12 !== null && indicState.cdi.m12 !== undefined
-        ? '+' + Number(indicState.cdi.m12).toFixed(2).replace('.',',') + '%'
-        : '—';
-      if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
-      if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
-      if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
-      renderCdiYearHistory(d);
-    } else {
-      renderCdiYearHistory(d);
+      indicState.cdi.mes = cdiMensal;
     }
+
+    if(!indicState.cdi.mesRef){
+      const h = new Date();
+      indicState.cdi.mesRef = cdiCard.mes_ref ||
+        `${MESES_PT[h.getMonth() === 0 ? 11 : h.getMonth() - 1]}/${h.getMonth() === 0 ? h.getFullYear() - 1 : h.getFullYear()}`;
+    }
+
+    // Compatibilidade conservadora com JSON muito antigo: somente 12M pode usar
+    // a taxa anual de referência como último recurso. 24M/36M nunca são simulados.
+    if(indicState.cdi.m12 == null && cdi !== null) indicState.cdi.m12 = cdi;
+
+    const cdiAtualInfoV232 = obterCdiAtualV232(d);
+    const cdiMesAtual = numeroFinitoV229(cdiAtualInfoV232.valor) ?? cdiMensal;
+    const cdiMesAtualTxt = cdiMesAtual !== null
+      ? (cdiMesAtual > 0 ? '+' : '') + cdiMesAtual.toFixed(2).replace('.', ',') + '%'
+      : '—';
+    const cdi12 = resolverCdiPeriodoV229(cdiCard, 12);
+    const cdi12Txt = cdi12 !== null
+      ? (cdi12 > 0 ? '+' : '') + Number(cdi12).toFixed(2).replace('.', ',') + '%'
+      : '—';
+
+    if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
+    if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
+    if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
+    renderCdiYearHistory(d);
 
     // ── IPCA (do JSON — complementado pela série 433) ──
     const ipca = c.ipca || {};
@@ -1726,7 +2088,7 @@ async function carregarMercado(){
 
   }catch(e){
     console.warn('mercado_atual.json indisponível:', e);
-    if($('lastUpdate')) $('lastUpdate').innerHTML = `<span class="live-dot" style="background:var(--muted)"></span>Dados em cache`;
+    if($('lastUpdate')) atualizarDataHeader('',{cache:true});
     carregarFocusFallback();
   }
 }
@@ -1895,11 +2257,44 @@ function fmtPlMi(v){
 
 
 let activeRankFilter = 'todos';
+let activeRankRisk = '';
 let activeRankView = 'top';
 let activeRankPeriods = { topFundos:'12m', destaques:'mes' };
 
 function normRankTxt(v){
   return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+}
+function normalizarPerfilRiscoV198(valor){
+  const n=normRankTxt(valor).replace(/[^A-Z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
+  if(!n) return 'sem-classificacao';
+  if(/\bCONSERVADOR\b/.test(n)) return 'conservador';
+  if(/\bMODERADO\b/.test(n)) return 'moderado';
+  if(/\bARROJADO\b/.test(n)) return 'arrojado';
+  if(/\bAGRESSIVO\b/.test(n)) return 'agressivo';
+  if(n.includes('SEM CLASSIFICACAO')||n.includes('NAO CLASSIFICADO')) return 'sem-classificacao';
+  return n.toLowerCase().replace(/\s+/g,'-');
+}
+function perfilRiscoCorrespondeV198(valor,filtro){
+  if(!String(filtro||'').trim()) return true;
+  return normalizarPerfilRiscoV198(valor)===normalizarPerfilRiscoV198(filtro);
+}
+function rotuloPerfilRiscoV198(filtro){
+  if(!String(filtro||'').trim()) return 'Todos os perfis';
+  const map={
+    conservador:'Conservador',moderado:'Moderado',arrojado:'Arrojado',
+    agressivo:'Agressivo','sem-classificacao':'Sem classificação'
+  };
+  return map[normalizarPerfilRiscoV198(filtro)]||'Todos os perfis';
+}
+function syncRiskProfileControlsV198(){
+  const catalogValue=typeof activeRisco!=='undefined'?(activeRisco||''):'';
+  ['catalogRiskSelectV198','mobileRiskSelectV198'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.value!==catalogValue) el.value=catalogValue;
+  });
+  const ranking=document.getElementById('rankingRiskSelectV198');
+  const rankValue=typeof activeRankRisk!=='undefined'?(activeRankRisk||''):'';
+  if(ranking&&ranking.value!==rankValue) ranking.value=rankValue;
 }
 function rankCampoPorPeriodo(periodo){
   if(periodo === 'dia') return 'Variacao Dia (%)';
@@ -1929,15 +2324,30 @@ function fmtSummaryPl(v){
   }
   return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
 }
+/* v197 — filtros de classe usam somente a coluna Categoria.
+   Evita falsos positivos por palavras no nome/benchmark, como
+   MOVIMENTACOES sendo interpretado como ACOES ou DOLAR MM como CAMBIAL. */
+const RANK_CATEGORY_BY_FILTER_V197 = Object.freeze({
+  'renda-fixa-simples': 'RENDA FIXA SIMPLES',
+  'renda-fixa': 'RENDA FIXA',
+  'renda-fixa-referenciado': 'RENDA FIXA REFERENCIADO',
+  'renda-fixa-curto-prazo': 'RENDA FIXA CURTO PRAZO',
+  'multimercado': 'MULTIMERCADO',
+  'cambial': 'CAMBIAL',
+  'acoes': 'ACOES',
+  'fundo-de-indice': 'FUNDO DE INDICE',
+  'fmp': 'FUNDOS MUTUOS DE PRIVATIZACAO'
+});
+function rankCategoriaCanonicaV197(v){
+  return normRankTxt(v).replace(/\s+/g,' ').trim();
+}
 function passaFiltroRanking(r){
-  const cat = normRankTxt(r['Categoria']);
-  const nome = normRankTxt(r['Fundo']);
-  const base = cat + ' ' + nome;
-  if(activeRankFilter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
-  if(activeRankFilter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
-  if(activeRankFilter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
-  if(activeRankFilter === 'multimercado') return cat.includes('MULTIMERCADO');
-  return true;
+  const filtro = String(activeRankFilter || 'todos');
+  const cat = rankCategoriaCanonicaV197(r?.['Categoria']);
+  if(filtro === 'todos') return true;
+  if(filtro === 'sem-fmp') return cat !== RANK_CATEGORY_BY_FILTER_V197.fmp;
+  const categoriaEsperada = RANK_CATEGORY_BY_FILTER_V197[filtro];
+  return categoriaEsperada ? cat === categoriaEsperada : true;
 }
 function atualizarRankingFilterUI(){
   document.querySelectorAll('[data-rank-filter]').forEach(btn=>{
@@ -1962,7 +2372,7 @@ function renderRankings(){
     const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
     return tokens.includes(activePerfil);
   });
-  if(activeRisco) base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
+  if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
 
   const ordenaCampo = (campo, asc=false) => base
     .filter(r=>toNum(r[campo])!==null)
@@ -2260,7 +2670,7 @@ document.addEventListener('click', (ev)=>{
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=10;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor primeiro
@@ -2325,8 +2735,14 @@ function setVista(vista){
   // Atualiza botões
   const btnR = $('vistaBtnReuniao');
   const btnC = $('vistaBtnCompleta');
-  if(btnR) { btnR.className = vista === 'reuniao' ? 'vista-btn active' : 'vista-btn'; }
-  if(btnC) { btnC.className = vista === 'completa' ? 'vista-btn active' : 'vista-btn'; }
+  if(btnR) {
+    btnR.className = vista === 'reuniao' ? 'vista-btn active' : 'vista-btn';
+    btnR.setAttribute('aria-pressed', vista === 'reuniao' ? 'true' : 'false');
+  }
+  if(btnC) {
+    btnC.className = vista === 'completa' ? 'vista-btn active' : 'vista-btn';
+    btnC.setAttribute('aria-pressed', vista === 'completa' ? 'true' : 'false');
+  }
   // Recria tabela com as novas colunas
   buildHeader();
   render();
@@ -2703,7 +3119,7 @@ function applyFilter(){
       const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
       if(!tokens.includes(activePerfil)) return false;
     }
-    if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
+    if(activeRisco&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRisco)) return false;
     if(q&&!rowMatchesCatalogSearch(r,q)) return false;
     return true;
   });
@@ -2733,6 +3149,7 @@ function applyFilter(){
     });
   }
   currentPage=1; expandedRows.clear(); render(); renderRankings(); updateCdiSortButtons();
+  syncRiskProfileControlsV198();
 }
 
 /* ════════════════════════════════════════════════════
@@ -3016,18 +3433,39 @@ function buildDetailQuickActions(row, urlFund){
     ? `<a class="detail-action-btn ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(title || label)}"><span>${icon}</span>${label}</a>`
     : '';
 
-  const buttons = [
-    mkBtn(boletim?.url, 'detail-action-primary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
-    mkBtn(lamina?.url, 'detail-action-secondary', '📄', 'Lâmina', 'Abrir lâmina'),
-    mkBtn(regulamento?.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento'),
-    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página do fundo', 'Abrir página do fundo'),
-  ].filter(Boolean).join('');
+  // O Boletim Comercial é o documento principal desta área. Quando ele não
+  // estiver disponível, a lâmina assume o destaque para não deixar o cabeçalho vazio.
+  const principal = boletim || lamina || regulamento;
+  const principalLabel = principal === boletim ? 'Boletim Comercial' : principal === lamina ? 'Lâmina' : 'Regulamento';
+  const principalIcon = principal === boletim ? '⭐' : principal === lamina ? '📄' : '📋';
+  const principalTitle = principal === boletim ? 'Abrir Boletim Comercial' : `Abrir ${principalLabel.toLowerCase()}`;
 
+  const primary = principal
+    ? mkBtn(principal.url, 'detail-action-primary detail-action-commercial-v224', principalIcon, principalLabel, principalTitle)
+    : '';
+
+  const regulation = regulamento && regulamento !== principal
+    ? mkBtn(regulamento.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento')
+    : '';
+
+  const moreDocs = [
+    lamina && lamina !== principal ? {href:lamina.url, icon:'📄', label:'Lâmina'} : null,
+    urlFund ? {href:urlFund, icon:'🏦', label:'Página do fundo'} : null,
+  ].filter(Boolean);
+
+  const more = moreDocs.length ? `<details class="detail-more-docs-v224" onclick="event.stopPropagation()">
+    <summary title="Abrir outros documentos"><span>＋</span>Mais documentos</summary>
+    <div class="detail-more-docs-menu-v224">
+      ${moreDocs.map(d=>`<a href="${htmlAttr(d.href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span>${d.icon}</span>${d.label}</a>`).join('')}
+    </div>
+  </details>` : '';
+
+  const buttons = `${primary}${regulation}${more}`;
   if(!buttons) return '';
-  return `<div class="detail-actions-card detail-actions-card-v158">
+  return `<div class="detail-actions-card detail-actions-card-v158 detail-actions-card-v224">
     <div class="detail-actions-copy-v158">
       <div class="detail-actions-title">Informações do fundo</div>
-      <small>Dados oficiais do cadastro e documentos essenciais</small>
+      <small>Características operacionais e documentos oficiais</small>
     </div>
     <div class="detail-actions-buttons">${buttons}</div>
   </div>`;
@@ -3057,7 +3495,12 @@ function detailMoneyV158(value){
 function detailPercentV158(value){
   const raw = String(value ?? '').trim();
   if(!raw || raw === '—') return '—';
-  return /%/.test(raw) ? raw : `${raw}%`;
+  let normalized = raw.replace(/%/g,'').replace(/\s/g,'');
+  if(normalized.includes(',') && normalized.includes('.')) normalized = normalized.replace(/\./g,'').replace(',','.');
+  else normalized = normalized.replace(',','.');
+  const number = Number(normalized);
+  if(!Number.isFinite(number)) return /%/.test(raw) ? raw : `${raw}%`;
+  return `${number.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}% a.a.`;
 }
 
 function detailBoolV158(value){
@@ -3079,8 +3522,67 @@ function detailAudienceV158(value){
       if(Array.isArray(parsed)) values = parsed;
     }catch(e){}
   }
-  if(!values.length) values = raw.split(/\s*[·;,|]\s*/g);
+  if(!values.length) values = raw.split(/\s*[·;,|/]\s*/g);
   return [...new Set(values.map(v=>String(v).trim()).filter(Boolean))];
+}
+
+/* v225 — padronização semântica do público-alvo */
+function detailAudienceSemanticV225(values){
+  const out = [];
+  const add = (label, short, cls) => {
+    const key = normalizarTextoBase(label);
+    if(!out.some(item=>item.key === key)) out.push({key,label,short,cls});
+  };
+
+  (Array.isArray(values) ? values : []).forEach(value=>{
+    const raw = String(value ?? '').trim();
+    if(!raw) return;
+    const norm = normalizarTextoBase(raw);
+
+    if((norm.includes('PESSOA FISICA') || norm === 'PF') && (norm.includes('PESSOA JURIDICA') || norm === 'PJ')){
+      add('Pessoa Física','PF','pf');
+      add('Pessoa Jurídica','PJ','pj');
+      return;
+    }
+    if(norm === 'PF' || norm.includes('PESSOA FISICA')) return add('Pessoa Física','PF','pf');
+    if(norm === 'PJ' || norm.includes('PESSOA JURIDICA')) return add('Pessoa Jurídica','PJ','pj');
+    if(norm === 'GOV' || norm.includes('GOVERNO') || norm.includes('ENTE PUBLICO')) return add('Governo','Governo','gov');
+    if(norm.includes('RPPS')) return add('RPPS','RPPS','rpps');
+    if(norm.includes('PRIVATE')) return add('Private','Private','private');
+    if(norm.includes('QUALIFICAD')) return add('Investidor qualificado','Qualificado','qualified');
+    if(norm.includes('PROFISSIONAL')) return add('Investidor profissional','Profissional','professional');
+    if(norm.includes('INSTITUCIONAL')) return add('Institucional','Institucional','institutional');
+    if(norm.includes('NAO RESIDENTE')) return add('Não residente','Não residente','nonresident');
+    if(norm === 'GERAL' || norm === 'PUBLICO GERAL' || norm === 'TODOS' || norm === 'TODOS OS PUBLICOS') return add('Público geral','Geral','general');
+    if(norm.includes('VAREJO')) return add('Varejo','Varejo','retail');
+
+    add(raw,raw,'other');
+  });
+
+  return out;
+}
+
+function detailAudienceChipV225(item, compact=false){
+  const label = compact ? item.short : item.label;
+  return `<span class="detail-audience-chip-v158 detail-audience-chip-v225 ${htmlAttr(item.cls)}" title="${htmlAttr(item.label)}">${htmlAttr(label)}</span>`;
+}
+
+function detailAdvanceSummaryV206(statusClass, text){
+  const raw = String(text ?? '').trim();
+  if(statusClass === 'negative') return 'Não';
+  if(statusClass === 'unknown') return raw && raw !== '—' ? raw : 'Não informado';
+  const match = raw.match(/(\d+(?:[.,]\d+)?)\s*%/);
+  return match ? `Sim · ${match[1].replace('.',',')}%` : 'Sim';
+}
+
+function detailObservationV206(r){
+  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
+  return observation
+    ? `<details class="detail-observation-v158 detail-observation-v206 detail-observation-v224">
+        <summary><span>⚠ Regras operacionais e carência</span><small>Ver detalhes</small></summary>
+        <p>${htmlAttr(observation)}</p>
+      </details>`
+    : '';
 }
 
 function buildDetailExecutiveV158(r){
@@ -3099,74 +3601,149 @@ function buildDetailExecutiveV158(r){
   const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
   const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
   const audience = detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo']));
+  const audienceSemantic = detailAudienceSemanticV225(audience);
   const automatic = detailBoolV158(detailValueV158(r,['Movimentação Automática','Movimentacao Automatica']));
   const grace = detailBoolV158(detailValueV158(r,['Carência','Carencia']));
-  const asg = detailBoolV158(detailValueV158(r,['ASG']));
-  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
+  const asgRaw = detailBoolV158(detailValueV158(r,['ASG']));
+  const asg = asgRaw.state === 'off' ? {...asgRaw,label:'Não identificada'} : asgRaw;
+  const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : 'Não informado';
+  const advanceSummary = detailAdvanceSummaryV206(adiCls,d.adiantamento.texto);
+  const audienceSummaryHtml = audienceSemantic.length
+    ? `<div class="detail-audience-compact-v225" aria-label="Público-alvo: ${htmlAttr(audienceSemantic.map(item=>item.label).join(', '))}">${audienceSemantic.slice(0,3).map(item=>detailAudienceChipV225(item,true)).join('')}${audienceSemantic.length>3?`<span class="detail-audience-more-v225" title="${htmlAttr(audienceSemantic.slice(3).map(item=>item.label).join(', '))}">+${audienceSemantic.length-3}</span>`:''}</div>`
+    : '<strong>Não informado</strong>';
+  const observationHtml = detailObservationV206(r);
+  const cnpjCopyValue = String(cnpj || '').replace(/\D/g,'') || String(cnpj || '').trim();
 
   const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
-  const audienceHtml = audience.length
-    ? audience.map(v=>`<span class="detail-audience-chip-v158">${htmlAttr(v)}</span>`).join('')
+  const audienceHtml = audienceSemantic.length
+    ? audienceSemantic.map(item=>detailAudienceChipV225(item,false)).join('')
     : '<span class="detail-empty-v158">Não informado</span>';
   const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
 
-  return `<div class="detail-executive-v158">
-    <section class="detail-summary-v158" aria-label="Resumo executivo do fundo">
-      <div class="detail-section-head-v158"><div><span>Visão geral</span><strong>Características principais</strong></div><small>${r?.__fundosMeta?'Cadastro oficial integrado':'Dados disponíveis no catálogo'}</small></div>
-      <div class="detail-summary-grid-v158">
-        <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
+  return `<div class="detail-executive-v158 detail-executive-v206 detail-executive-v224">
+    <section class="detail-summary-v158 detail-summary-v224" aria-label="Características principais do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Características principais</strong></div>
+      <div class="detail-summary-grid-v158 detail-summary-grid-v206 detail-summary-grid-v224">
         <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
-        <div class="detail-summary-item-v158"><span>Perfil</span><strong>${htmlAttr(profile)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Perfil de risco</span><strong>${htmlAttr(profile)}</strong></div>
+        <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
         <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
-        <div class="detail-summary-item-v158"><span>Captação</span>${statusValue(d.captacao.texto,capCls)}</div>
+        <div class="detail-summary-item-v158 audience-v225"><span>Público-alvo</span>${audienceSummaryHtml}</div>
+        <div class="detail-summary-item-v158 capture"><span>Captação</span>${statusValue(capLabel,capCls)}</div>
       </div>
     </section>
 
-    <section class="detail-movement-v158" aria-label="Movimentação do fundo">
-      <div class="detail-section-head-v158"><div><span>Movimentação</span><strong>Prazos, horários e valores mínimos</strong></div><small>Solicitações após o limite podem seguir para o próximo dia útil</small></div>
-      <div class="detail-movement-grid-v158">
+    <section class="detail-movement-v158 detail-movement-v224" aria-label="Movimentação do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Movimentação</strong><small>Prazos em dias úteis; solicitações após o horário limite podem seguir para o próximo dia útil.</small></div>
+      <div class="detail-movement-grid-v158 detail-movement-grid-v224">
         <article class="detail-movement-card-v158 application">
           <div class="detail-movement-title-v158"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
-          <div class="detail-flow-v158">
+          <div class="detail-flow-v158 detail-flow-v224">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
             <i>→</i>
-            <div><span>Conversão</span><strong>${htmlAttr(conversionApp)}</strong></div>
+            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionApp)}</strong></div>
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Inicial</b>${htmlAttr(appInitial)}</span><span><b>Adicional</b>${htmlAttr(appAdditional)}</span></div>
+          <div class="detail-movement-meta-v158"><span><b>Aplicação inicial</b>${htmlAttr(appInitial)}</span><span><b>Aplicação adicional</b>${htmlAttr(appAdditional)}</span></div>
         </article>
         <article class="detail-movement-card-v158 redemption">
           <div class="detail-movement-title-v158"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
-          <div class="detail-flow-v158 three">
+          <div class="detail-flow-v158 three detail-flow-v224">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
             <i>→</i>
-            <div><span>Conversão</span><strong>${htmlAttr(conversionRed)}</strong></div>
+            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionRed)}</strong></div>
             <i>→</i>
-            <div><span>Pagamento</span><strong>${htmlAttr(paymentRed)}</strong></div>
+            <div><span>Crédito em conta</span><strong>${htmlAttr(paymentRed)}</strong></div>
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(d.adiantamento.texto)}</span></div>
+          <div class="detail-movement-meta-v158"><span><b>Resgate mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(advanceSummary)}</span></div>
         </article>
       </div>
+      ${observationHtml}
     </section>
 
-    <div class="detail-lower-grid-v158">
-      <section class="detail-info-card-v158" aria-label="Identificação e custos">
-        <div class="detail-card-head-v158"><span>Identificação e custos</span></div>
-        <dl class="detail-definition-list-v158">
-          <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
-          <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
-          <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
-          <div><dt>Código do fundo</dt><dd>${htmlAttr(code)}</dd></div>
-        </dl>
-      </section>
-      <section class="detail-info-card-v158" aria-label="Público e enquadramento">
-        <div class="detail-card-head-v158"><span>Público e enquadramento</span></div>
-        <div class="detail-audience-v158"><b>Público-alvo</b><div>${audienceHtml}</div></div>
-        <div class="detail-flags-v158">${flagHtml('Automático',automatic)}${flagHtml('Carência',grace)}${flagHtml('ASG',asg)}</div>
-      </section>
-    </div>
-    ${observation ? `<aside class="detail-observation-v158"><span>Observação operacional</span><p>${htmlAttr(observation)}</p></aside>` : ''}
+    <section class="detail-complementary-v224" aria-label="Informações complementares">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Informações complementares</strong></div>
+      <div class="detail-complementary-grid-v224">
+        <div class="detail-complementary-group-v224">
+          <span class="detail-complementary-kicker-v224">Custos e identificação</span>
+          <dl class="detail-definition-list-v158 detail-definition-list-v224">
+            <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
+            <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
+            <div><dt>CNPJ</dt><dd class="copyable detail-copyable-v225"><span class="detail-copy-text-v225">${htmlAttr(cnpj)}</span><button type="button" class="detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjCopyValue)}" aria-label="Copiar CNPJ ${htmlAttr(cnpj)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button></dd></div>
+            <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
+          </dl>
+        </div>
+        <div class="detail-complementary-group-v224">
+          <span class="detail-complementary-kicker-v224">Público e enquadramento</span>
+          <div class="detail-audience-v158 detail-audience-v224"><b>Público-alvo</b><div>${audienceHtml}</div></div>
+          <div class="detail-flags-v158 detail-flags-v224">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
+        </div>
+      </div>
+    </section>
   </div>`;
 }
+
+/* v225 — cópia explícita do CNPJ em fichas geradas dinamicamente */
+(function initDetailCopyV225(){
+  if(window.__ELTAUM_DETAIL_COPY_V225__) return;
+  window.__ELTAUM_DETAIL_COPY_V225__ = true;
+
+  async function copyTextV225(value){
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(value);
+      return;
+    }
+    const textarea = document.createElement('textarea');
+    textarea.value = value;
+    textarea.setAttribute('readonly','');
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-9999px';
+    document.body.appendChild(textarea);
+    textarea.select();
+    const ok = document.execCommand('copy');
+    textarea.remove();
+    if(!ok) throw new Error('Falha ao copiar');
+  }
+
+  document.addEventListener('click', async event=>{
+    const target = event.target instanceof Element ? event.target : null;
+    const button = target?.closest('.detail-copy-btn-v225');
+    if(!button) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if(button.dataset.copyBusy === '1') return;
+
+    const value = String(button.dataset.copyValue || '').trim();
+    if(!value) return;
+
+    const label = button.querySelector('.detail-copy-label-v225');
+    const icon = button.querySelector('.detail-copy-icon-v225');
+    const originalAria = button.getAttribute('aria-label') || 'Copiar CNPJ';
+    button.dataset.copyBusy = '1';
+
+    try{
+      await copyTextV225(value);
+      button.classList.add('is-copied');
+      button.setAttribute('aria-label','CNPJ copiado');
+      if(label) label.textContent = 'Copiado';
+      if(icon) icon.textContent = '✓';
+    }catch(error){
+      button.classList.add('copy-error');
+      button.setAttribute('aria-label','Não foi possível copiar o CNPJ');
+      if(label) label.textContent = 'Tente novamente';
+      if(icon) icon.textContent = '!';
+    }
+
+    clearTimeout(button._copyTimerV225);
+    button._copyTimerV225 = setTimeout(()=>{
+      button.classList.remove('is-copied','copy-error');
+      button.setAttribute('aria-label',originalAria);
+      if(label) label.textContent = 'Copiar';
+      if(icon) icon.textContent = '⧉';
+      delete button.dataset.copyBusy;
+    },1800);
+  });
+})();
 
 function buildDocsHtml(cnpjLimpo, urlFundo, row){
   let cod = String(row?.['codfundo']||'').trim();
@@ -3284,7 +3861,7 @@ function gerarLeituraRapidaFundo(r){
   } else if(base.includes('IDKA')){
     objetivo = 'Fundo referenciado ao IDKA (Índice de Duração Constante ANBIMA), que mantém prazo médio fixo de títulos IPCA+. O retorno combina juro real com variação da inflação, com duration controlada para previsibilidade de risco.';
   } else if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV') || base.includes('EXPERTISE') || base.includes('DIAMANTE') || base.includes('FIDELIDADE')){
-    objetivo = 'Fundo de renda fixa com exposição a crédito privado (debêntures, CRIs, CRAs e outros títulos corporativos). Busca prêmio de risco acima do CDI, mas com menor liquidez e exposição ao risco de crédito dos emissores. Requer análise de spread e qualidade dos ativos.';
+    objetivo = 'Fundo de renda fixa com exposição a títulos corporativos, como debêntures, CRIs e CRAs. Busca prêmio acima do CDI, mas exige atenção à liquidez e ao risco de crédito dos emissores. Avaliar spread, qualidade dos ativos e prazo de resgate.';
   } else if(base.includes('MULTIMERCADO') && (base.includes('BTG') || base.includes('ZARATHUSTRA') || base.includes('PIMCO') || base.includes('VERDE') || base.includes('CLARITAS'))){
     objetivo = 'Fundo multimercado de gestão especializada (parceria com gestora renomada). Estratégia flexível com exposição a múltiplas classes de ativos. Avalie o histórico de risco/retorno, volatilidade e consistência da gestora em diferentes cenários de mercado.';
   } else if(base.includes('MULTIMERCADO')){
@@ -3360,15 +3937,56 @@ function gerarLeituraRapidaFundo(r){
   // Ano, 12M e % CDI já aparecem no card/tabela principal.
   const complementosHtml = '';
 
+  const escapeNoteV237 = (v) => String(v ?? '').replace(/[&<>"']/g, ch => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+  }[ch]));
+
+  const formatarLeituraConsultivaV237 = (texto) => {
+    const clean = String(texto || '').replace(/\s+/g, ' ').trim();
+    if(!clean) return '';
+
+    // Quebra controlada para mobile: blocos curtos, sem justificar texto.
+    const isCredPriv = base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV');
+    if(isCredPriv){
+      return [
+        'Fundo de renda fixa com exposição a títulos corporativos, como debêntures, CRIs e CRAs.',
+        'Busca prêmio acima do CDI, mas exige atenção à liquidez e ao risco de crédito dos emissores.',
+        'Avaliar spread, qualidade dos ativos e prazo de resgate.'
+      ].map(p => `<p>${escapeNoteV237(p)}</p>`).join('');
+    }
+
+    const frases = clean
+      .split(/(?<=[.!?])\s+/)
+      .map(p => p.trim())
+      .filter(Boolean);
+
+    if(frases.length <= 1) return `<p>${escapeNoteV237(clean)}</p>`;
+
+    const blocos = [];
+    for(const frase of frases){
+      if(blocos.length && (blocos[blocos.length - 1] + ' ' + frase).length <= 128){
+        blocos[blocos.length - 1] += ' ' + frase;
+      }else{
+        blocos.push(frase);
+      }
+    }
+
+    return blocos.slice(0, 3).map(p => `<p>${escapeNoteV237(p)}</p>`).join('');
+  };
+
+  const objetivoHtml = formatarLeituraConsultivaV237(objetivo);
+
   return `
-    <div class="fund-quick-note">
-      <div class="fund-quick-note-title">🧭 Leitura consultiva do fundo</div>
-      ${tagsHtml}
-      <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
+    <div class="fund-quick-note fund-quick-note-v224 fund-quick-note-v237">
+      <div class="fund-quick-note-head-v224">
+        <div class="fund-quick-note-title">🧭 Leitura consultiva</div>
+        ${tagsHtml}
+      </div>
+      <div class="fund-quick-note-text fund-quick-note-text-v237">${objetivoHtml}</div>
       ${complementosHtml}
       ${alertaCdi}
       <div class="fund-quick-note-disclaimer">
-        Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
+        ⓘ Leitura interpretativa. Consulte os documentos oficiais.
       </div>
     </div>`;
 }
@@ -3559,6 +4177,47 @@ function classeStatusOperacional(status, tipo){
   return 'unknown';
 }
 
+
+
+function formatarHorarioGradeMobileV236(valor){
+  const raw = String(valor || '').trim();
+  if(!raw || raw === '—') return 'Não informado';
+  if(/não informado/i.test(raw)) return 'Não informado';
+  const m = raw.match(/^(\d{1,2})(?::|h)(\d{2})$/i);
+  if(m){
+    return `${String(m[1]).padStart(2,'0')}h${m[2]}`;
+  }
+  const m2 = raw.match(/^(\d{1,2})$/);
+  if(m2){
+    return `${String(m2[1]).padStart(2,'0')}h00`;
+  }
+  return raw.replace(/(\d{1,2}):(\d{2})/g, function(_,h,mi){return `${String(h).padStart(2,'0')}h${mi}`;});
+}
+
+function rotuloCaptacaoMobileV235(info){
+  const raw = String(info?.texto || '').trim();
+  const status = String(info?.status || normalizarStatusOperacional(raw) || '').toUpperCase();
+  const cls = classeStatusOperacional(status, 'captacao');
+  if(cls === 'positive') return {valor:'Sim', detalhe:'Aberto', cls:'positive', dot:'●'};
+  if(cls === 'negative') return {valor:'Não', detalhe:'Fechado', cls:'negative', dot:'●'};
+  return {valor: raw && raw !== 'Não informada' ? raw : 'Não informado', detalhe:'Status não identificado', cls:'unknown', dot:'○'};
+}
+
+function deveExibirAdiantamentoMobileV235(info, cls){
+  const raw = String(info?.texto || '').trim();
+  const norm = normalizarStatusOperacional(raw);
+  if(!raw || raw === 'Não informado') return false;
+  if(norm.includes('NAO SE APLICA')) return false;
+  return cls !== 'unknown' || raw.length > 0;
+}
+
+function factMobileV235(label, value, opts={}){
+  const cls = opts.cls ? ` ${opts.cls}` : '';
+  const detail = opts.detail ? `<small>${htmlAttr(opts.detail)}</small>` : '';
+  const dot = opts.dot ? `<i>${opts.dot}</i>` : '';
+  return `<div class="fund-fact-v154 fund-fact-mobile-v235${cls}"><span>${htmlAttr(label)}</span><strong>${dot}${value}</strong>${detail}</div>`;
+}
+
 function buildFundOperationalFacts(r, variant='detail'){
   const d = obterDadosOperacionaisFundo(r);
   const capCls = classeStatusOperacional(d.captacao.status,'captacao');
@@ -3566,6 +4225,44 @@ function buildFundOperationalFacts(r, variant='detail'){
   const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
   const adiDot = adiCls==='positive'?'●':adiCls==='negative'?'●':'○';
   const estimateBadge = '<em class="fund-fact-estimated-v154">indicativo</em>';
+
+  if(String(variant || '').includes('mobile')){
+    const cap = rotuloCaptacaoMobileV235(d.captacao);
+    const adiantamentoHtml = deveExibirAdiantamentoMobileV235(d.adiantamento, adiCls)
+      ? factMobileV235('Antecipação de resgate', htmlAttr(d.adiantamento.texto), {cls:`status-${adiCls}`, dot:adiDot})
+      : '';
+
+    const cnpjBruto = detailValueV158(r,['CNPJ']);
+    const cnpjLimpo = String(cnpjBruto || '').replace(/\D/g,'').slice(0,14);
+    const cnpjFormatado = cnpjLimpo ? formatarCnpjMeta(cnpjLimpo) : String(cnpjBruto || '').trim();
+    const cnpjHtml = cnpjFormatado
+      ? `<div class="fund-cnpj-row-mobile-v238" aria-label="CNPJ do fundo">
+          <span>CNPJ</span>
+          <strong class="fund-cnpj-value-mobile-v238">${htmlAttr(cnpjFormatado)}</strong>
+          <button type="button" class="fund-cnpj-copy-mobile-v238 detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjLimpo || cnpjFormatado)}" aria-label="Copiar CNPJ ${htmlAttr(cnpjFormatado)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button>
+        </div>`
+      : '';
+
+    return `<section class="fund-facts-v154 mobile fund-facts-mobile-v235 fund-facts-mobile-v236 fund-facts-mobile-v238" aria-label="Dados operacionais e cadastrais do fundo">
+      <div class="fund-facts-head-v154 fund-facts-head-mobile-v235 fund-facts-head-mobile-v236 fund-facts-head-mobile-v238"><strong>Dados do fundo</strong><small>Operação, referência e disponibilidade</small></div>
+      ${cnpjHtml}
+
+      <div class="fund-operation-strip-v235 fund-operation-strip-v236" aria-label="Horários limite de movimentação">
+        <div><span>Aplicação</span><strong>${htmlAttr(formatarHorarioGradeMobileV236(d.horarios.aplicacao))}</strong></div>
+        <div><span>Resgate</span><strong>${htmlAttr(formatarHorarioGradeMobileV236(d.horarios.resgate))}</strong></div>
+      </div>
+
+      <div class="fund-facts-grid-v154 fund-facts-grid-mobile-v235">
+        ${factMobileV235('Referência', `${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}`)}
+        ${factMobileV235('Estratégia', `${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}`, {cls:'strategy'})}
+        ${factMobileV235('Tributação', htmlAttr(d.tributacao.texto))}
+        ${factMobileV235('Novas aplicações', htmlAttr(cap.valor), {cls:`status-${cap.cls} availability`, dot:cap.dot})}
+        ${adiantamentoHtml}
+      </div>
+      <p class="fund-operation-note-v235">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
+    </section>`;
+  }
+
   return `<section class="fund-facts-v154 ${htmlAttr(variant)}" aria-label="Informações complementares do fundo">
     <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>${r?.__fundosMeta?'Dados oficiais do cadastro do fundo':'Dados da base; indicação apenas quando sinalizada'}</small></div>
     <div class="fund-facts-grid-v154">
@@ -3578,7 +4275,6 @@ function buildFundOperationalFacts(r, variant='detail'){
     </div>
   </section>`;
 }
-
 function prazoResgateCell(valor, tipo){
   const v = String(valor || '').trim();
   const cls = v ? `prazo-badge ${tipo === 'pagamento' ? 'pagamento' : ''}` : 'prazo-badge muted';
@@ -4332,19 +5028,214 @@ async function carregarSelicHistoricoAmpliado(historicoAtual){
   return atual;
 }
 
+
+function fmtIPCALabelV250(item){
+  if(!item) return '—';
+
+  // v252: o gráfico usa o campo label como competência exibida.
+  // Algumas bases antigas vêm com data técnica diferente da competência do IPCA,
+  // então o resumo deve priorizar o mesmo label usado no eixo/tooltip.
+  const label = item.label || item.competencia || item.mes_ref || item.mes || '';
+  if(label && String(label).trim() && !String(label).startsWith('p')){
+    return String(label).trim();
+  }
+
+  if(item._dt instanceof Date && !isNaN(item._dt.getTime())){
+    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return `${meses[item._dt.getMonth()]}/${item._dt.getFullYear()}`;
+  }
+  return '—';
+}
+
+function fmtPctIPCAResumoV251(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return '—';
+  const sinal = n > 0 ? '+' : '';
+  return sinal + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
+}
+
+function atualizarResumoIPCAMensalV250(slice){
+  if(!Array.isArray(slice) || !slice.length) return;
+  const valoresValidos = slice
+    .map(d => ({ item:d, valor:Number(d.valor) }))
+    .filter(d => Number.isFinite(d.valor));
+  if(!valoresValidos.length) return;
+
+  const ultimoGrafico = valoresValidos[valoresValidos.length - 1];
+  const maxObj = valoresValidos.reduce((acc, d) => d.valor > acc.valor ? d : acc, valoresValidos[0]);
+  const minObj = valoresValidos.reduce((acc, d) => d.valor < acc.valor ? d : acc, valoresValidos[0]);
+
+  let ultimoValor = ultimoGrafico.valor;
+  let ultimoLabel = fmtIPCALabelV250(ultimoGrafico.item);
+
+  // v252: o "Último IPCA" do resumo deve bater com o card oficial do painel,
+  // que já traz a competência consolidada mais recente.
+  try{
+    const ipcaCard = _dadosMercado?.cards?.ipca || {};
+    const valorCard = Number(ipcaCard.ultimo_mes);
+    if(Number.isFinite(valorCard)){
+      ultimoValor = valorCard;
+      ultimoLabel = ipcaCard.label_mes || ultimoLabel;
+    }
+  }catch(e){}
+
+  const set = (id, txt) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = txt;
+  };
+
+  set('ipcaResumoUltimoV250', fmtPctIPCAResumoV251(ultimoValor));
+  set('ipcaResumoUltimoDataV250', ultimoLabel || '—');
+  set('ipcaResumoMaxV250', fmtPctIPCAResumoV251(maxObj.valor));
+  set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxObj.item));
+  set('ipcaResumoMinV250', fmtPctIPCAResumoV251(minObj.valor));
+  set('ipcaResumoMinDataV250', fmtIPCALabelV250(minObj.item));
+}
+
+function ipcaChartOptionsV250(range){
+  const isMobile = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+  const r = Number(range) || 24;
+  const maxTicks = r >= 120 ? (isMobile ? 5 : 9) : r >= 60 ? (isMobile ? 6 : 10) : (isMobile ? 6 : 12);
+  const base = typeof chartDefaults === 'function' ? chartDefaults() : CHART_DEFAULTS;
+  return {
+    ...base,
+    plugins:{
+      ...base.plugins,
+      tooltip:{
+        ...base.plugins?.tooltip,
+        callbacks:{
+          label:ctx=>'IPCA: ' + fmtPctIPCAResumoV251(ctx.parsed.y)
+        }
+      }
+    },
+    scales:{
+      ...base.scales,
+      x:{
+        ...base.scales?.x,
+        ticks:{
+          ...base.scales?.x?.ticks,
+          autoSkip:true,
+          maxTicksLimit:maxTicks,
+          maxRotation:isMobile ? 0 : 38,
+          minRotation:0,
+          font:{ size:isMobile ? 9 : 10 }
+        },
+        grid:{
+          ...base.scales?.x?.grid,
+          drawBorder:false
+        }
+      },
+      y:{
+        ...base.scales?.y,
+        ticks:{
+          ...base.scales?.y?.ticks,
+          maxTicksLimit:isMobile ? 6 : 7,
+          font:{ size:isMobile ? 9 : 10 }
+        }
+      }
+    }
+  };
+}
+
+
 function buildChartIpca(historico,meses){
+  const range = Number(meses) || 24;
   const base = normalizarHistoricoIPCA(historico);
-  const slice=base.slice(-meses);
-  const labels=slice.map(d=>d.label);
-  const values=slice.map(d=>d.valor);
-  const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');
+  const slice = base.slice(-range);
+  const labels = slice.map(d=>d.label);
+  const values = slice.map(d=>d.valor);
+  const colors = values.map(v=>v>=0?'rgba(46,209,122,.72)':'rgba(240,85,101,.78)');
+  const barPct = range >= 120 ? .62 : range >= 60 ? .70 : .82;
+  const catPct = range >= 120 ? .74 : range >= 60 ? .82 : .90;
+
+  atualizarResumoIPCAMensalV250(slice);
+
   if(_chartIpca) _chartIpca.destroy();
   const ctx=document.getElementById('chartIpca')?.getContext('2d'); if(!ctx) return;
   const emptyMsg = ctx.canvas?.parentElement?.querySelector('.chart-empty-msg');
   if(emptyMsg) emptyMsg.remove();
-  _chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},
-    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});
+
+  _chartIpca=new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[{
+        data:values,
+        backgroundColor:colors,
+        borderColor:colors.map(c=>c.replace('.72)','.12)').replace('.78)','.12)')),
+        borderWidth:1,
+        borderRadius:range >= 120 ? 1 : 2,
+        barPercentage:barPct,
+        categoryPercentage:catPct,
+        maxBarThickness:range >= 120 ? 8 : range >= 60 ? 12 : 22
+      }]
+    },
+    options:ipcaChartOptionsV250(range)
+  });
 }
+
+
+function selicAxisConfigV253(slice, rangeMeses){
+  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const r = Number(rangeMeses) || 999;
+  const isMobile = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
+
+  function dtFromIndex(index){
+    const item = slice?.[Number(index)];
+    return item?._dt instanceof Date && !isNaN(item._dt.getTime()) ? item._dt : null;
+  }
+
+  function curto(dt){
+    return `${meses[dt.getMonth()]}/${String(dt.getFullYear()).slice(-2)}`;
+  }
+
+  const callback = function(value, index){
+    const dt = dtFromIndex(value) || dtFromIndex(index);
+    if(!dt) return '';
+
+    if(r <= 24){
+      // Curto prazo: rótulos por mês selecionado, sem inclinar demais.
+      const step = r <= 12 ? 2 : 4;
+      if(index === 0 || index === slice.length - 1 || index % step === 0) return curto(dt);
+      return '';
+    }
+
+    if(r <= 60){
+      // 5 anos: mostra apenas anos de forma limpa.
+      const prev = slice[index - 1]?._dt;
+      if(index === 0 || index === slice.length - 1 || !prev || prev.getFullYear() !== dt.getFullYear()){
+        return String(dt.getFullYear());
+      }
+      return '';
+    }
+
+    if(r <= 120){
+      // 10 anos: mostra anos alternados, preservando início e fim.
+      const prev = slice[index - 1]?._dt;
+      const virouAno = !prev || prev.getFullYear() !== dt.getFullYear();
+      if(index === 0 || index === slice.length - 1) return String(dt.getFullYear());
+      if(virouAno && dt.getFullYear() % 2 === 0) return String(dt.getFullYear());
+      return '';
+    }
+
+    // Histórico: mostra poucos marcos temporais.
+    const prev = slice[index - 1]?._dt;
+    const virouAno = !prev || prev.getFullYear() !== dt.getFullYear();
+    if(index === 0 || index === slice.length - 1) return String(dt.getFullYear());
+    if(virouAno && dt.getFullYear() % 5 === 0) return String(dt.getFullYear());
+    return '';
+  };
+
+  return {
+    callback,
+    autoSkip:false,
+    maxRotation:0,
+    minRotation:0,
+    maxTicksLimit:r <= 24 ? (isMobile ? 6 : 8) : r <= 60 ? 7 : r <= 120 ? 7 : 8,
+    font:{size:isMobile ? 9 : 10}
+  };
+}
+
 
 function buildChartSelic(historico,qtd){
   // Aceita os dois formatos:
@@ -4376,7 +5267,55 @@ function buildChartSelic(historico,qtd){
 
   filtrado.sort((a,b)=>a._ts-b._ts);
 
-  // Nos botões da Selic, data-range passa a representar meses de janela: 12 = 1A, 60 = 5A, 999 = histórico completo.
+  // v249: também reconcilia o módulo antigo do gráfico com a taxa vigente oficial.
+  // Assim o desenho inicial e os cliques antigos usam o mesmo valor do painel.
+  try{
+    const card = _dadosMercado?.cards?.selic_meta || {};
+    const valorVigente = Number(card.valor);
+    if(Number.isFinite(valorVigente)){
+      const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+        ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
+        : null;
+      const dataRef = ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || '';
+      let dtVigente = null;
+      if(dataRef && typeof dataRef === 'string' && dataRef.includes('/')){
+        const p = dataRef.split('/');
+        if(p.length === 3) dtVigente = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+      }else if(dataRef){
+        dtVigente = new Date(dataRef);
+      }
+      if(!dtVigente || isNaN(dtVigente.getTime())){
+        const hoje = new Date();
+        dtVigente = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+      }
+      const tsVigente = dtVigente.getTime();
+      const mesmoDia = d => d?._dt
+        && d._dt.getFullYear() === dtVigente.getFullYear()
+        && d._dt.getMonth() === dtVigente.getMonth()
+        && d._dt.getDate() === dtVigente.getDate();
+
+      const ultimo = filtrado[filtrado.length - 1];
+      if(!(ultimo && ultimo._ts >= tsVigente && Math.abs(Number(ultimo._valor) - valorVigente) < .005)){
+        const idxMesmoDia = filtrado.findIndex(mesmoDia);
+        const ponto = {
+          data: dataRef,
+          valor: valorVigente,
+          _dt: dtVigente,
+          _ts: tsVigente,
+          _ano: dtVigente.getFullYear(),
+          _valor: valorVigente,
+          _vigenteSyncV249: true
+        };
+        if(idxMesmoDia >= 0) filtrado[idxMesmoDia] = {...filtrado[idxMesmoDia], ...ponto};
+        else filtrado.push(ponto);
+        filtrado.sort((a,b)=>a._ts-b._ts);
+      }
+    }
+  }catch(e){
+    console.warn('[Selic v249] Falha ao reconciliar buildChartSelic:', e);
+  }
+
+  // Nos botões da Selic, data-range representa meses de janela: 12 = 1A, 24 = 2A, 60 = 5A, 120 = 10A, 999 = histórico completo.
   let slice = filtrado;
   if(qtd < 999 && filtrado.length){
     const ultimo = filtrado[filtrado.length - 1]._dt;
@@ -4386,8 +5325,11 @@ function buildChartSelic(historico,qtd){
     if(slice.length < 2) slice = filtrado.slice(-Math.max(2, Math.min(filtrado.length, qtd)));
   }
 
-  const labels=slice.map(d=>`${String(d._dt.getMonth()+1).padStart(2,'0')}/${d._dt.getFullYear()}`);
+  const mesesSelicLabelV253 = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  const labels=slice.map(d=>`${mesesSelicLabelV253[d._dt.getMonth()]}/${d._dt.getFullYear()}`);
   const values=slice.map(d=>d._valor);
+  const xTicksSelicV253 = selicAxisConfigV253(slice, qtd);
+
 
   if(_chartSelic) _chartSelic.destroy();
   const ctx=document.getElementById('chartSelic')?.getContext('2d'); if(!ctx || !values.length) return;
@@ -4413,8 +5355,22 @@ function buildChartSelic(historico,qtd){
   setTxt('selicMaxData', fmtDataSelic(maxRow?._dt));
   setTxt('selicMinResumo', fmtSelic(minVal));
   setTxt('selicMinData', fmtDataSelic(minRow?._dt));
-  setTxt('selicHojeResumo', fmtSelic(values[currentIndex]));
-  setTxt('selicHojeData', fmtDataSelic(currentRow?._dt) || 'último dado');
+  let vigenteResumoValor = values[currentIndex];
+  let vigenteResumoData = fmtDataSelic(currentRow?._dt) || 'último dado';
+  try{
+    const card = _dadosMercado?.cards?.selic_meta || {};
+    const valorCard = Number(card.valor);
+    if(Number.isFinite(valorCard)){
+      vigenteResumoValor = valorCard;
+      const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+        ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
+        : null;
+      vigenteResumoData = ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || vigenteResumoData;
+      if(vigenteResumoData && !String(vigenteResumoData).toLowerCase().startsWith('desde')) vigenteResumoData = 'desde ' + vigenteResumoData;
+    }
+  }catch(e){}
+  setTxt('selicHojeResumo', fmtSelic(vigenteResumoValor));
+  setTxt('selicHojeData', vigenteResumoData);
 
   const markerMap = new Map();
   function addMarker(index, label, color, mode){
@@ -4480,6 +5436,13 @@ function buildChartSelic(historico,qtd){
       },
       scales:{
         ...CHART_DEFAULTS.scales,
+        x:{
+          ...CHART_DEFAULTS.scales.x,
+          ticks:{
+            ...CHART_DEFAULTS.scales.x.ticks,
+            ...xTicksSelicV253
+          }
+        },
         y:{
           ...CHART_DEFAULTS.scales.y,
           suggestedMin:0,
@@ -4492,9 +5455,55 @@ function buildChartSelic(historico,qtd){
   });
 }
 
+
+
+/* v185 — mantém o gráfico IPCA 12M × meta sincronizado com o card mais recente */
+function sincronizarSerieMetaComIpcaAtual(metaDados, ipca){
+  const lista = Array.isArray(metaDados) ? metaDados : [];
+  const valorAtual = Number(ipca?.acum_12m);
+  const labelAtual = String(ipca?.label_mes || '').trim().toLowerCase();
+
+  if(!Number.isFinite(valorAtual) || !labelAtual) return lista;
+
+  const meses = {
+    jan:1, fev:2, mar:3, abr:4, mai:5, jun:6,
+    jul:7, ago:8, set:9, out:10, nov:11, dez:12
+  };
+  const partes = labelAtual.match(/^([a-zç]{3})\/(\d{4})$/i);
+  if(!partes) return lista;
+
+  const mes = meses[partes[1].toLowerCase()];
+  const ano = Number(partes[2]);
+  if(!mes || !Number.isInteger(ano)) return lista;
+
+  const chaveAtual = `${ano}-${String(mes).padStart(2,'0')}`;
+  const porMes = new Map();
+
+  lista.forEach(item=>{
+    const data = String(item?.DataReferencia || '');
+    const chave = data.slice(0,7);
+    const valor = Number(item?.Inflacao12Meses);
+    if(/^\d{4}-\d{2}$/.test(chave) && Number.isFinite(valor)){
+      porMes.set(chave, {...item, Inflacao12Meses: valor});
+    }
+  });
+
+  const anterior = porMes.get(chaveAtual) || {};
+  porMes.set(chaveAtual, {
+    ...anterior,
+    DataReferencia: `${chaveAtual}-01T03:00:00Z`,
+    Inflacao12Meses: Number(valorAtual.toFixed(4)),
+    CartaAberta: anterior.CartaAberta || 'Não'
+  });
+
+  return [...porMes.values()].sort(
+    (a,b)=>new Date(b.DataReferencia)-new Date(a.DataReferencia)
+  );
+}
+
 function buildChartMeta(metaDados){
   if(!metaDados||!metaDados.length) return;
-  const sorted=[...metaDados].filter(d=>d.DataReferencia&&d.Inflacao12Meses).sort((a,b)=>new Date(a.DataReferencia)-new Date(b.DataReferencia));
+  const sorted=[...metaDados].filter(d=>d?.DataReferencia && d?.Inflacao12Meses != null && Number.isFinite(Number(d.Inflacao12Meses))).sort((a,b)=>new Date(a.DataReferencia)-new Date(b.DataReferencia));
   const labels=sorted.map(d=>{const dt=new Date(d.DataReferencia);return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;});
   const values=sorted.map(d=>parseFloat(d.Inflacao12Meses));
   const META=3.0,SUP=4.5,INF=1.5;
@@ -4509,7 +5518,7 @@ function buildChartMeta(metaDados){
   ]},
   options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,legend:{display:true,position:'bottom',labels:{color:'#5e6b8a',font:{family:'JetBrains Mono',size:9},boxWidth:12,padding:8,filter:item=>item.text!==null}},
     tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>ctx.dataset.label?`${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`:null,
-      afterBody:items=>{const v=items.find(i=>i.dataset.label==='IPCA 12M')?.parsed?.y;if(v===undefined) return[];if(v>SUP) return[`⚠️ Acima do teto (${SUP}%)`];if(v<INF) return[`⚠️ Abaixo do piso (${INF}%)`];return['✅ Dentro da meta'];}}}}}}
+      afterBody:items=>{const v=items.find(i=>i.dataset.label==='IPCA 12M')?.parsed?.y;if(v===undefined) return[];if(v>SUP) return[`⚠️ Acima do teto (${SUP}%)`];if(v<INF) return[`⚠️ Abaixo do piso (${INF}%)`];return['✅ Dentro da faixa de tolerância'];}}}}}}
   );
 }
 
@@ -4560,38 +5569,99 @@ async function carregarJsonLocal(nomeArquivo){
 function atualizarResumoEvolucao(d){
   const ipca = d?.cards?.ipca || {};
   const selic = d?.cards?.selic_meta || {};
-  const meta12 = Number(ipca.acum_12m);
 
   const setText = (id, value) => { const el = document.getElementById(id); if(el) el.textContent = value; };
   const pct = v => formatPctCard(v);
+  const pp = v => `${Number(v).toFixed(2).replace('.',',')} p.p.`;
   const metaStatus = (v) => {
     const n = Number(v);
-    if(!Number.isFinite(n)) return 'meta 3,00% · banda 1,50% a 4,50%';
-    if(n > 4.5) return 'acima do teto da meta · meta 3,00%';
-    if(n < 1.5) return 'abaixo do piso da meta · meta 3,00%';
-    return 'dentro da banda da meta · meta 3,00%';
+    if(!Number.isFinite(n)) return 'Meta central: 3,00% · faixa: 1,50% a 4,50%';
+    if(n > 4.5) return `${pp(n - 4.5)} acima do teto de 4,50%`;
+    if(n < 1.5) return `${pp(1.5 - n)} abaixo do piso de 1,50%`;
+    return 'dentro da faixa de 1,50% a 4,50%';
   };
 
+  const selicRef = resolverDataUltimaAlteracaoSelic(d).data || '';
+  const selicValor = selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.` : '—';
+
   setText('evoIpcaMensalVal', pct(ipca.ultimo_mes));
-  setText('evoIpcaMensalSub', ipca.label_mes ? `${ipca.label_mes} · último dado oficial` : 'último dado oficial');
-  setText('evoSelicAtualVal', selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.` : '—');
-  setText('evoSelicAtualSub', selic.data_ref || selic.ultima_alteracao || 'meta COPOM');
+  setText('evoIpcaMensalSub', ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial');
+  setText('evoSelicAtualVal', selicValor);
+  setText('evoSelicAtualSub', selicRef ? `Vigente desde ${selicRef} · definida pelo Copom` : 'Meta definida pelo Copom');
   setText('evoIpca12Val', pct(ipca.acum_12m));
   setText('evoIpca12Sub', metaStatus(ipca.acum_12m));
 
-  setText('evoCardIpcaNote', ipca.ultimo_mes != null ? `Último dado: ${pct(ipca.ultimo_mes)} em ${ipca.label_mes || 'período recente'}.` : 'Último dado: aguardando atualização.');
-  setText('evoCardSelicNote', selic.valor != null ? `Selic atual: ${Number(selic.valor).toFixed(2).replace('.',',')}% a.a. · referência para CDI, crédito e renda fixa.` : 'Selic atual: aguardando atualização.');
-  setText('evoCardMetaNote', ipca.acum_12m != null ? `IPCA 12M: ${pct(ipca.acum_12m)} · ${metaStatus(ipca.acum_12m)}.` : 'Meta: 3,00% · banda: 1,50% a 4,50%.');
+  setText('evoCardIpcaNote', ipca.ultimo_mes != null
+    ? `Último resultado · ${ipca.label_mes || 'período recente'} · ${pct(ipca.ultimo_mes)}`
+    : 'Último resultado: aguardando atualização.');
+  setText('evoCardSelicNote', selic.valor != null
+    ? `Taxa vigente · ${selicValor}${selicRef ? ` · desde ${selicRef}` : ''}`
+    : 'Taxa vigente: aguardando atualização.');
+  setText('evoCardMetaNote', ipca.acum_12m != null
+    ? `IPCA em 12 meses · ${pct(ipca.acum_12m)} · ${metaStatus(ipca.acum_12m)}`
+    : 'Meta central: 3,00% · faixa: 1,50% a 4,50%.');
+
+  const ativo = document.querySelector('.evo-view-tab.active')?.dataset.evoChart || 'ipca';
+  atualizarResumoMovelEvolucao(ativo, d);
+}
+
+function atualizarResumoMovelEvolucao(chave, d){
+  const box = document.getElementById('evoMobileSummary');
+  if(!box) return;
+
+  const target = chave || document.querySelector('.evo-view-tab.active')?.dataset.evoChart || 'ipca';
+  const ipca = d?.cards?.ipca || {};
+  const selic = d?.cards?.selic_meta || {};
+  const pct = v => formatPctCard(v);
+  const pp = v => `${Number(v).toFixed(2).replace('.',',')} p.p.`;
+
+  const metaStatus = (v) => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return 'Meta central: 3,00% · faixa: 1,50% a 4,50%';
+    if(n > 4.5) return `${pp(n - 4.5)} acima do teto de 4,50%`;
+    if(n < 1.5) return `${pp(1.5 - n)} abaixo do piso de 1,50%`;
+    return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
+  };
+
+  const selicRef = resolverDataUltimaAlteracaoSelic(d).data || '';
+  const selicValor = selic.valor != null
+    ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.`
+    : '—';
+
+  let kicker = 'IPCA do último mês';
+  let value = pct(ipca.ultimo_mes);
+  let description = ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial';
+
+  if(target === 'selic'){
+    kicker = 'Selic meta vigente';
+    value = selicValor;
+    description = selicRef ? `Vigente desde ${selicRef} · definida pelo Copom` : 'Meta definida pelo Copom';
+  } else if(target === 'meta'){
+    kicker = 'IPCA em 12 meses';
+    value = pct(ipca.acum_12m);
+    description = metaStatus(ipca.acum_12m);
+  }
+
+  box.dataset.evoType = target;
+  const kickerEl = document.getElementById('evoMobileKicker');
+  const valueEl = document.getElementById('evoMobileValue');
+  const descriptionEl = document.getElementById('evoMobileDescription');
+  if(kickerEl) kickerEl.textContent = kicker;
+  if(valueEl) valueEl.textContent = value;
+  if(descriptionEl) descriptionEl.textContent = description;
 }
 
 function selecionarGraficoEvolucao(chave){
   const target = chave || 'ipca';
   document.querySelectorAll('.evo-view-tab').forEach(btn=>{
-    btn.classList.toggle('active', btn.dataset.evoChart === target);
+    const ativo = btn.dataset.evoChart === target;
+    btn.classList.toggle('active', ativo);
+    btn.setAttribute('aria-pressed', ativo ? 'true' : 'false');
   });
   document.querySelectorAll('.evo-chart-card').forEach(card=>{
     card.classList.toggle('active', card.dataset.evoPanel === target);
   });
+  atualizarResumoMovelEvolucao(target, _dadosMercado);
   setTimeout(()=>{
     [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{ if(ch && typeof ch.resize === 'function') ch.resize(); });
   }, 80);
@@ -4625,15 +5695,22 @@ async function inicializarGraficos(d){
     const jsMeta = await carregarJsonLocal('meta-vs-inflacao-efetiva.json');
     meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
     if(meta.length){
-      _dadosMercado.meta_vs_inflacao_efetiva = meta;
       console.info(`[IPCA x Meta] ${meta.length} registros carregados do arquivo local.`);
     }
+  }
+
+  // A série histórica externa pode chegar com um mês de atraso. O card de IPCA
+  // já contém o acumulado oficial mais recente calculado pela série 433; por isso
+  // ele é usado para inserir/substituir a competência mais atual antes do gráfico.
+  meta = sincronizarSerieMetaComIpcaAtual(meta, d?.cards?.ipca);
+  if(meta.length){
+    _dadosMercado.meta_vs_inflacao_efetiva = meta;
   }
 
   if(hist.length) buildChartIpca(hist,24);
   else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
 
-  if(selic.length) buildChartSelic(selic,999);
+  if(selic.length) buildChartSelic(selic,60);
   else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
 
   if(meta.length) buildChartMeta(meta);
@@ -4643,13 +5720,78 @@ async function inicializarGraficos(d){
   selecionarGraficoEvolucao('ipca');
 
   bindEvolucaoChartPeriodTabs();
+  sincronizarTitulosGraficosAtivos();
 }
+
+/* v184 — títulos dos gráficos sincronizados com o período selecionado */
+function atualizarTituloPeriodoGrafico(chart, range){
+  const periodo = Number(range);
+  const configuracoes = {
+    ipca: {
+      24: {
+        titulo: '🎯 IPCA mensal — últimos 24 meses',
+        subtitulo: 'Variação oficial mês a mês'
+      },
+      60: {
+        titulo: '🎯 IPCA mensal — últimos 5 anos',
+        subtitulo: 'Ciclo recente de inflação mensal'
+      },
+      120: {
+        titulo: '🎯 IPCA mensal — últimos 10 anos',
+        subtitulo: 'Histórico mensal mais amplo'
+      }
+    },
+    selic: {
+      12: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Último ano · decisões recentes do Copom'
+      },
+      24: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Últimos 2 anos · ciclo atual de juros'
+      },
+      60: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Últimos 5 anos · visão executiva do ciclo'
+      },
+      120: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Últimos 10 anos · comparação com ciclos anteriores'
+      },
+      999: {
+        titulo: '🏦 Trajetória da Selic meta',
+        subtitulo: 'Histórico completo desde 1999'
+      }
+    }
+  };
+
+  const config = configuracoes[chart]?.[periodo];
+  if(!config) return;
+
+  const tituloId = chart === 'ipca' ? 'chartIpcaTitle' : chart === 'selic' ? 'chartSelicTitle' : null;
+  const titulo = tituloId ? document.getElementById(tituloId) : null;
+  if(titulo && config.titulo) titulo.textContent = config.titulo;
+
+  const subtituloId = chart === 'ipca' ? 'chartIpcaSub' : chart === 'selic' ? 'chartSelicSub' : null;
+  const subtitulo = subtituloId ? document.getElementById(subtituloId) : null;
+  if(subtitulo && config.subtitulo) subtitulo.textContent = config.subtitulo;
+}
+
+function sincronizarTitulosGraficosAtivos(){
+  document.querySelectorAll('.chart-tab[data-chart][data-range].active').forEach(btn=>{
+    atualizarTituloPeriodoGrafico(btn.dataset.chart, Number(btn.dataset.range));
+  });
+}
+
+window.atualizarTituloPeriodoGrafico = atualizarTituloPeriodoGrafico;
 
 async function alterarPeriodoGraficoEvolucao(btn){
   if(!btn) return;
   const chart = btn.dataset.chart;
   const range = parseInt(btn.dataset.range, 10);
   if(!chart || !Number.isFinite(range)) return;
+
+  atualizarTituloPeriodoGrafico(chart, range);
 
   document.querySelectorAll(`.chart-tab[data-chart="${chart}"]`).forEach(b=>{
     const ativo = b === btn;
@@ -4828,12 +5970,93 @@ function _fmtPctCopom(v){
   if(!Number.isFinite(n)) return '—';
   return n.toFixed(2).replace('.',',') + '%';
 }
-function _historicoSelicOrdenado(){
-  const h = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
-  return (Array.isArray(h) ? h : [])
-    .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia), _valor:_selicValorRegistro(r)}))
+function _dataKeyHojeLocal(){
+  const hoje = new Date();
+  return `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-${String(hoje.getDate()).padStart(2,'0')}`;
+}
+function _dataBrCopom(key){
+  const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : String(key || '');
+}
+function _historicoSelicOrdenadoParaDados(dados){
+  const card = dados?.cards?.selic_meta || {};
+  const h = dados?.historico_selic || card.historico || [];
+  const historico = (Array.isArray(h) ? h : [])
+    .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia || r.data_ref), _valor:_selicValorRegistro(r)}))
     .filter(r => r._key && r._valor !== null)
     .sort((a,b) => b._key.localeCompare(a._key));
+
+  const vigente = Number(card.valor);
+  if(!Number.isFinite(vigente)) return historico;
+
+  const maisRecente = historico[0] || null;
+  const historicoJaAtual = maisRecente && Math.abs(maisRecente._valor - vigente) < 0.005;
+  if(historicoJaAtual) return historico;
+
+  // Prioridade para uma data explícita produzida pelo robô.
+  const dataExplicita = card.ultima_alteracao || card.data_ultima_alteracao || card.data_mudanca || card.vigente_desde || card.data_ref;
+  let decisionKey = _dateKeyCopom(dataExplicita);
+
+  // Proteção v223: se a taxa mudou antes de o histórico receber o novo registro,
+  // identifica a reunião mais recente do Copom posterior ao histórico disponível.
+  if(!decisionKey){
+    const hojeKey = _dataKeyHojeLocal();
+    const limiteInferior = maisRecente?._key || '';
+    const reuniao = COPOM_2026
+      .filter(r => r.decision <= hojeKey && (!limiteInferior || r.decision > limiteInferior))
+      .sort((a,b) => b.decision.localeCompare(a.decision))[0];
+    decisionKey = reuniao?.decision || '';
+  }
+
+  if(!decisionKey) return historico;
+  if(historico.some(r => r._key === decisionKey && Math.abs(r._valor - vigente) < 0.005)) return historico;
+
+  historico.push({
+    data:_dataBrCopom(decisionKey),
+    valor:vigente,
+    MetaSelic:vigente,
+    DataReuniaoCopom:`${decisionKey}T03:00:00Z`,
+    _key:decisionKey,
+    _valor:vigente,
+    _reconciliado_v223:true
+  });
+  return historico.sort((a,b) => b._key.localeCompare(a._key));
+}
+function _historicoSelicOrdenado(){
+  return _historicoSelicOrdenadoParaDados(_dadosMercado);
+}
+function resolverDataUltimaAlteracaoSelic(dados){
+  const card = dados?.cards?.selic_meta || {};
+  const vigente = Number(card.valor);
+  const historico = _historicoSelicOrdenadoParaDados(dados);
+
+  if(!Number.isFinite(vigente) || !historico.length){
+    const fallback = card.ultima_alteracao || card.data_ultima_alteracao || card.data_ref || '';
+    const key = _dateKeyCopom(fallback);
+    return { data:key ? _dataBrCopom(key) : String(fallback || ''), key, inferida:false };
+  }
+
+  // "Última alteração" não é necessariamente a última reunião.
+  // Percorre o bloco inicial de registros com a taxa vigente e retorna o
+  // registro mais antigo desse bloco: o momento em que a taxa passou a valer.
+  const vigentesConsecutivos = [];
+  for(const registro of historico){
+    if(Math.abs(registro._valor - vigente) < 0.005){
+      vigentesConsecutivos.push(registro);
+      continue;
+    }
+    if(vigentesConsecutivos.length) break;
+  }
+
+  const referencia = vigentesConsecutivos.length
+    ? vigentesConsecutivos[vigentesConsecutivos.length - 1]
+    : historico.find(r => Math.abs(r._valor - vigente) < 0.005) || historico[0];
+
+  return {
+    data: referencia?.data || _dataBrCopom(referencia?._key) || '—',
+    key: referencia?._key || '',
+    inferida: Boolean(referencia?._reconciliado_v223)
+  };
 }
 function _decisaoCopomPorData(decisionDate){
   const hist = _historicoSelicOrdenado();
@@ -4858,17 +6081,22 @@ function buildCopomCalendario(){
   const container = $('copomMeetings');
   if(!container) return;
 
-  const hoje = new Date();
-  const hojeKey = hoje.toISOString().slice(0,10);
-  const proxIdx = COPOM_2026.findIndex(r => r.decision >= hojeKey);
+  const hojeKey = _dataKeyHojeLocal();
+  const comDecisao = COPOM_2026.map((r,i) => ({
+    ...r,
+    _i:i,
+    decisao:_decisaoCopomPorData(r.decision)
+  }));
+  // A reunião do próprio dia deixa de ser tratada como "próxima" assim que
+  // a nova taxa já estiver disponível, evitando duplicidade no calendário.
+  const proxIdx = comDecisao.findIndex(r => !r.decisao && r.decision >= hojeKey);
 
-  const base = COPOM_2026.map((r,i) => {
-    const decisao = _decisaoCopomPorData(r.decision);
+  const base = comDecisao.map((r,i) => {
     const isNext = i === proxIdx;
-    const isFuture = r.decision >= hojeKey && !isNext;
-    const klass = decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
-    const resultado = decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
-    return { ...r, _i:i, decisao, isNext, isFuture, klass, resultado };
+    const isFuture = !r.decisao && r.decision >= hojeKey && !isNext;
+    const klass = r.decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
+    const resultado = r.decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
+    return { ...r, isNext, isFuture, klass, resultado };
   });
 
   // v167: primeiras leituras = três decisões mais recentes + próxima reunião.
@@ -4894,8 +6122,9 @@ function buildCopomCalendario(){
 
   container.classList.remove('is-expanded-v167');
   const toggle = $('copomCalendarToggleV167');
+  container.classList.add('copom-timeline-clean-v256');
   if(toggle){
-    toggle.textContent = 'Ver calendário completo';
+    toggle.textContent = 'Calendário completo';
     toggle.setAttribute('aria-expanded','false');
   }
   requestAnimationFrame(() => { container.scrollLeft = 0; });
@@ -5029,9 +6258,9 @@ document.addEventListener('DOMContentLoaded', function(){
     // Para evitar repetição dentro de "Mais detalhes", mostramos aqui apenas documentos complementares.
     if(!secundarios.length) return '';
 
-    const urls = secundarios.map(d => d.url);
-    const allBtn = secundarios.length > 1
-      ? `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`
+    const pageUrl = getFundUrl(row);
+    const pageBtn = pageUrl
+      ? `<a class="fund-card-docs-page-v235" href="${htmlAttr(pageUrl)}" target="_blank" rel="noopener">Página oficial ↗</a>`
       : '';
 
     const links = secundarios.map(d => {
@@ -5039,12 +6268,12 @@ document.addEventListener('DOMContentLoaded', function(){
       return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
     }).join('');
 
-    return `<div class="fund-card-mobile-docs">
-      <div class="fund-card-docs-head">
-        <span class="fund-card-docs-title">Documentos complementares</span>
-        ${allBtn}
+    return `<div class="fund-card-mobile-docs fund-card-mobile-docs-v236">
+      <div class="fund-card-docs-head fund-card-docs-head-v236">
+        <span class="fund-card-docs-title">Documentos oficiais</span>
       </div>
       <div class="fund-card-docs-list secundarios">${links}</div>
+      ${pageBtn}
     </div>`;
   }
 
@@ -5155,9 +6384,9 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Referência</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Patrimônio (mi)</span><span class="fund-metric-value">${pl}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Início do fundo</span><span class="fund-metric-value">${data}</span></div>
         </div>
         ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
@@ -5231,6 +6460,7 @@ document.addEventListener('DOMContentLoaded', function(){
     try{ activateFilterChip('#riscoFilters','data-risco',activeRisco||''); }catch(e){}
     const chk=qs('#toggleSemDados');
     if(chk) chk.checked=!!hideSemDados;
+    try{ syncRiskProfileControlsV198(); }catch(e){}
   }
 
   function setFilterPanelOpen(open){
@@ -6900,10 +8130,24 @@ function atualizarResumoFechamentoMes(){
   const sub=document.getElementById('closedMonthLaunchSub');
   if(title) title.textContent=`Resumo de mercado`;
   if(sub) sub.textContent=`${periodo} · indicadores consolidados`;
-  const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
+  const setMini=(id,val,mode='auto')=>{
+    const el=document.getElementById(id);
+    if(!el) return;
+    const txt=cleanTxt(val);
+    const isQuote=mode==='quote' || /^R\$\s*/i.test(txt);
+    el.textContent=txt;
+    el.className='finance-number-v231';
+    if(isQuote){
+      el.classList.add('market-quote-v231','zero');
+    }else{
+      el.classList.add(signClassFromText(txt));
+    }
+  };
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
-  setMini('closedMiniDolar', painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : painelText('dolar-ant-cot'));
+  const dolarVariacaoMini=painelText('dolar-ant-var');
+  const dolarCotacaoMini=painelText('dolar-ant-cot');
+  setMini('closedMiniDolar', dolarVariacaoMini !== '—' ? dolarVariacaoMini : dolarCotacaoMini, dolarVariacaoMini !== '—' ? 'variation' : 'quote');
   setMini('closedMiniIbov', painelText('ibov-ant-var'));
 }
 function renderClosedMarketSheet(){
@@ -7300,13 +8544,69 @@ async function sharePainelMercado(){
     return compacta;
   }
 
+  function reconciliarSelicVigenteV248(base, mercado){
+    const lista = Array.isArray(base) ? [...base] : [];
+    const card = mercado?.cards?.selic_meta || {};
+    const valor = Number(card.valor);
+    if(!Number.isFinite(valor)) return lista;
+
+    let dataRef = '';
+    try{
+      if(typeof resolverDataUltimaAlteracaoSelic === 'function'){
+        dataRef = resolverDataUltimaAlteracaoSelic(mercado)?.data || '';
+      }
+    }catch(e){}
+
+    dataRef = dataRef
+      || card.ultima_alteracao
+      || card.data_ultima_alteracao
+      || card.data_mudanca
+      || card.vigente_desde
+      || card.data_ref
+      || '';
+
+    let dt = parseDateAny(dataRef);
+    if(!dt || isNaN(dt.getTime())){
+      const hoje = new Date();
+      dt = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+    }
+
+    const ts = dt.getTime();
+    const mesmoDia = (a,b) => {
+      if(!a || !b) return false;
+      return a.getFullYear() === b.getFullYear()
+        && a.getMonth() === b.getMonth()
+        && a.getDate() === b.getDate();
+    };
+
+    const ultimo = lista[lista.length - 1];
+    if(ultimo && ultimo._dt && ultimo._dt.getTime() >= ts && Math.abs(Number(ultimo.valor) - valor) < 0.005){
+      return lista;
+    }
+
+    const semDuplicarData = lista.filter(item => !(item?._dt && mesmoDia(item._dt, dt)));
+    semDuplicarData.push({
+      label: mesAno(dt),
+      valor,
+      _dt: dt,
+      _ts: ts,
+      _vigente_sync_v248: true
+    });
+
+    return semDuplicarData
+      .filter(d => Number.isFinite(Number(d.valor)))
+      .sort((a,b) => (a._ts || 0) - (b._ts || 0));
+  }
+
   async function carregarSelic(){
     if(cache.selic && cache.selic.length) return cache.selic;
 
     let base = [];
+    let mercadoAtual = null;
+
     try{
-      const mercado = await carregarMercadoAtual();
-      base = normalizarSelic(mercado?.historico_selic || mercado?.cards?.selic_meta?.historico || []);
+      mercadoAtual = await carregarMercadoAtual();
+      base = normalizarSelic(mercadoAtual?.historico_selic || mercadoAtual?.cards?.selic_meta?.historico || []);
     }catch(e){
       console.warn('[Gráficos v4] mercado_atual não trouxe Selic histórica:', e);
     }
@@ -7336,6 +8636,15 @@ async function sharePainelMercado(){
       }catch(e){
         console.warn('[Gráficos v4] Fallback BCB Selic não respondeu:', e);
       }
+    }
+
+    // v248: garante que a taxa vigente do card oficial entre no histórico do gráfico.
+    // Isso evita divergência quando o histórico ainda termina em uma decisão anterior.
+    try{
+      if(!mercadoAtual) mercadoAtual = await carregarMercadoAtual();
+      base = reconciliarSelicVigenteV248(base, mercadoAtual);
+    }catch(e){
+      console.warn('[Selic v248] Não consegui reconciliar a taxa vigente com o histórico:', e);
     }
 
     cache.selic = base;
@@ -7391,26 +8700,39 @@ async function sharePainelMercado(){
 
   async function desenharIPCA(range){
     if(!window.Chart){ mostrarMsg('chartIpca', 'Chart.js ainda não carregou. Recarregue a página.'); return; }
-    const dados = await carregarIPCA(range);
-    const slice = dados.slice(-range);
+    const r = Number(range) || 24;
+    const dados = await carregarIPCA(r);
+    const slice = dados.slice(-r);
     const canvas = byId('chartIpca');
     const ctx = canvas?.getContext('2d');
     if(!ctx || !slice.length){ mostrarMsg('chartIpca', 'Histórico de IPCA temporariamente indisponível.'); return; }
     limparMsg(canvas);
     destruirChart(canvas);
+
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
-    const colors = values.map(v => v >= 0 ? 'rgba(46,209,122,.7)' : 'rgba(240,85,101,.7)');
+    const colors = values.map(v => v >= 0 ? 'rgba(46,209,122,.72)' : 'rgba(240,85,101,.78)');
+    const barPct = r >= 120 ? .62 : r >= 60 ? .70 : .82;
+    const catPct = r >= 120 ? .74 : r >= 60 ? .82 : .90;
+
+    atualizarResumoIPCAMensalV250(slice);
+
     new Chart(ctx, {
       type:'bar',
-      data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderColor:colors, borderWidth:1, borderRadius:2 }] },
-      options:{
-        ...chartDefaults(),
-        plugins:{
-          ...chartDefaults().plugins,
-          tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'IPCA: ' + pct(ctx.parsed.y) } }
-        }
-      }
+      data:{
+        labels,
+        datasets:[{
+          data:values,
+          backgroundColor:colors,
+          borderColor:colors,
+          borderWidth:1,
+          borderRadius:r >= 120 ? 1 : 2,
+          barPercentage:barPct,
+          categoryPercentage:catPct,
+          maxBarThickness:r >= 120 ? 8 : r >= 60 ? 12 : 22
+        }]
+      },
+      options:ipcaChartOptionsV250(r)
     });
   }
 
@@ -7434,13 +8756,36 @@ async function sharePainelMercado(){
     const maxItem = slice[values.indexOf(maxVal)];
     const minItem = slice[values.indexOf(minVal)];
     const hoje = slice[slice.length - 1];
+
+    let vigenteValor = hoje.valor;
+    let vigenteData = dataBR(hoje._dt);
+
+    // v248: o card "Vigente" deve refletir a taxa vigente oficial do painel,
+    // não apenas o último ponto que veio no histórico antigo.
+    try{
+      const card = _dadosMercado?.cards?.selic_meta || {};
+      const valorCard = Number(card.valor);
+      if(Number.isFinite(valorCard)){
+        vigenteValor = valorCard;
+        const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+          ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
+          : null;
+        vigenteData = ref?.data
+          || card.ultima_alteracao
+          || card.data_ultima_alteracao
+          || card.vigente_desde
+          || card.data_ref
+          || vigenteData;
+      }
+    }catch(e){}
+
     const set = (id, txt) => { const el = byId(id); if(el) el.textContent = txt; };
     set('selicMaxResumo', pct(maxVal) + ' a.a.');
     set('selicMaxData', dataBR(maxItem?._dt));
     set('selicMinResumo', pct(minVal) + ' a.a.');
     set('selicMinData', dataBR(minItem?._dt));
-    set('selicHojeResumo', pct(hoje.valor) + ' a.a.');
-    set('selicHojeData', dataBR(hoje._dt));
+    set('selicHojeResumo', pct(vigenteValor) + ' a.a.');
+    set('selicHojeData', vigenteData ? `desde ${vigenteData}` : 'vigente');
   }
 
   async function desenharSelic(range){
@@ -7453,16 +8798,123 @@ async function sharePainelMercado(){
     limparMsg(canvas);
     atualizarResumoSelic(slice);
     destruirChart(canvas);
+
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
+    const xTicksSelicV253 = selicAxisConfigV253(slice, range);
     const maxVal = Math.max(...values);
+    const minVal = Math.min(...values);
+    const currentIndex = Math.max(0, values.length - 1);
+    const maxIndex = values.indexOf(maxVal);
+    const minIndex = values.indexOf(minVal);
+
+    // v245: melhora a leitura no mobile. A linha fica mais limpa e apenas
+    // máxima, mínima e vigente recebem marcadores de destaque.
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
+    const dense = values.length > 70;
+    const medium = values.length > 28;
+    const basePointRadius = isMobile ? (dense ? 0 : medium ? 1.2 : 2.2) : (dense ? 1.3 : 2.6);
+    const baseHoverRadius = isMobile ? 4.2 : 5;
+    const baseRadius = values.map(() => basePointRadius);
+    const pointColors = values.map(() => '#e8bb6a');
+    const pointBorders = values.map(() => 'rgba(16,18,30,.95)');
+    const hoverRadius = values.map(() => baseHoverRadius);
+
+    const applyMarker = (idx, color, radius) => {
+      if(idx < 0 || idx >= values.length) return;
+      baseRadius[idx] = Math.max(baseRadius[idx], radius);
+      pointColors[idx] = color;
+      pointBorders[idx] = 'rgba(8,10,18,.98)';
+      hoverRadius[idx] = Math.max(hoverRadius[idx], radius + 1.8);
+    };
+
+    applyMarker(maxIndex, '#e8bb6a', isMobile ? 4.8 : 5.6);
+    applyMarker(minIndex, '#5b9cf6', isMobile ? 4.8 : 5.6);
+    applyMarker(currentIndex, '#2ed17a', isMobile ? 5.4 : 6.2);
+
+    const markerDataset = (index, color, label, radius) => ({
+      type:'scatter',
+      label,
+      data: values.map((v, i) => i === index ? v : null),
+      pointRadius: radius,
+      pointHoverRadius: radius + 1.5,
+      pointBackgroundColor: color,
+      pointBorderColor: 'rgba(8,10,18,.98)',
+      pointBorderWidth: 2,
+      showLine: false,
+      spanGaps: false,
+      order: 1
+    });
+
+    const defaults = chartDefaults();
+    const maxTicks = isMobile ? (range >= 999 ? 6 : range >= 60 ? 5 : 4) : undefined;
+
     new Chart(ctx, {
       type:'line',
-      data:{ labels, datasets:[{ data:values, borderColor:'#c8973a', backgroundColor:'rgba(200,151,58,.08)', borderWidth:2, pointBackgroundColor:'#e8bb6a', pointRadius:2.6, pointHoverRadius:5, fill:true, stepped:'before', tension:0 }] },
+      data:{ labels, datasets:[
+        {
+          label:'Selic',
+          data:values,
+          borderColor:'#c8973a',
+          backgroundColor:'rgba(200,151,58,.07)',
+          borderWidth:isMobile ? 2.15 : 2,
+          pointBackgroundColor:pointColors,
+          pointBorderColor:pointBorders,
+          pointBorderWidth:1.25,
+          pointRadius:baseRadius,
+          pointHoverRadius:hoverRadius,
+          fill:true,
+          stepped:'before',
+          tension:0,
+          order:3
+        },
+        markerDataset(maxIndex, '#e8bb6a', 'Máxima do período', isMobile ? 5.4 : 6),
+        markerDataset(minIndex, '#5b9cf6', 'Mínima do período', isMobile ? 5.4 : 6),
+        markerDataset(currentIndex, '#2ed17a', 'Taxa vigente', isMobile ? 6 : 6.8)
+      ] },
       options:{
-        ...chartDefaults(),
-        plugins:{ ...chartDefaults().plugins, tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'Selic: ' + pct(ctx.parsed.y) + ' a.a.' } } },
-        scales:{ ...chartDefaults().scales, y:{ ...chartDefaults().scales.y, suggestedMin:0, suggestedMax:maxVal * 1.10 } }
+        ...defaults,
+        maintainAspectRatio:false,
+        layout:{ padding:{ top:isMobile ? 6 : 10, right:isMobile ? 8 : 12, bottom:isMobile ? 2 : 6, left:isMobile ? 0 : 4 } },
+        plugins:{
+          ...defaults.plugins,
+          tooltip:{
+            ...defaults.plugins.tooltip,
+            callbacks:{
+              label:ctx=>{
+                const idx = ctx.dataIndex;
+                const prefix = idx === maxIndex ? 'Máxima' : idx === minIndex ? 'Mínima' : idx === currentIndex ? 'Vigente' : 'Selic';
+                return prefix + ': ' + pct(ctx.parsed.y) + ' a.a.';
+              }
+            }
+          },
+          legend:{ display:false }
+        },
+        scales:{
+          ...defaults.scales,
+          x:{
+            ...defaults.scales.x,
+            ticks:{
+              ...defaults.scales.x.ticks,
+              autoSkip:true,
+              maxTicksLimit:maxTicks,
+              maxRotation:isMobile ? 42 : 35,
+              minRotation:isMobile ? 42 : 0,
+              font:{ size:isMobile ? 9 : 10 }
+            },
+            grid:{ ...defaults.scales.x.grid, drawBorder:false }
+          },
+          y:{
+            ...defaults.scales.y,
+            suggestedMin:0,
+            suggestedMax:maxVal * 1.10,
+            ticks:{
+              ...defaults.scales.y.ticks,
+              maxTicksLimit:isMobile ? 7 : 8,
+              font:{ size:isMobile ? 9 : 10 }
+            }
+          }
+        }
       }
     });
   }
@@ -7545,232 +8997,7 @@ async function sharePainelMercado(){
   document.addEventListener('click', capturar, true);
   document.addEventListener('pointerup', capturar, true);
 })();
-(function(){
-  'use strict';
-  const BUILD = 'ELTAUM_INDIC_TABS_FORCE_20260602_v5';
-
-  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
-
-  function prepararIndicTabs(){
-    qsa('.indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
-      el.style.pointerEvents = 'auto';
-      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
-      el.style.zIndex = '80';
-    });
-
-    qsa('.indic-tab[data-months]').forEach(btn => {
-      btn.setAttribute('type', 'button');
-      btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
-      btn.style.pointerEvents = 'auto';
-      btn.style.cursor = 'pointer';
-      btn.style.touchAction = 'manipulation';
-      if(getComputedStyle(btn).position === 'static') btn.style.position = 'relative';
-      btn.style.zIndex = '90';
-    });
-  }
-
-  function setPeriodoIndicadores(btn){
-    const meses = Number(btn && btn.dataset ? btn.dataset.months : NaN);
-    if(![12,24,36].includes(meses)) return;
-
-    qsa('.indic-tab[data-months]').forEach(tab => {
-      const ativo = tab === btn;
-      tab.classList.toggle('active', ativo);
-      tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
-    });
-
-    try{
-      activePeriodTab = meses;
-    }catch(e){
-      window.activePeriodTab = meses;
-    }
-    document.documentElement.dataset.indicPeriod = String(meses);
-
-    if(typeof atualizarTabelaIndicadores === 'function'){
-      atualizarTabelaIndicadores();
-      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
-        detail: { months: meses, source: BUILD }
-      }));
-    }else{
-      console.warn('[' + BUILD + '] atualizarTabelaIndicadores ainda não está disponível.');
-    }
-  }
-
-  function acharIndicTab(evento){
-    const alvo = evento.target;
-    if(alvo && alvo.closest){
-      const direto = alvo.closest('.indic-tab[data-months]');
-      if(direto) return direto;
-    }
-    if(evento.composedPath){
-      const item = evento.composedPath().find(el => el && el.matches && el.matches('.indic-tab[data-months]'));
-      if(item) return item;
-    }
-    return null;
-  }
-
-  function capturarIndicTab(evento){
-    const btn = acharIndicTab(evento);
-    if(!btn) return;
-    evento.preventDefault();
-    if(typeof evento.stopImmediatePropagation === 'function') evento.stopImmediatePropagation();
-    setPeriodoIndicadores(btn);
-  }
-
-  function instalar(){
-    prepararIndicTabs();
-    document.addEventListener('click', capturarIndicTab, true);
-    document.addEventListener('pointerup', capturarIndicTab, true);
-    document.addEventListener('touchend', capturarIndicTab, true);
-    setTimeout(prepararIndicTabs, 400);
-    setTimeout(prepararIndicTabs, 1200);
-    setTimeout(prepararIndicTabs, 2500);
-    console.info('[' + BUILD + '] patch dos botões 12M/24M/36M instalado.');
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar, {once:true});
-  else instalar();
-})();
-/* Patch v6 — captura no window antes dos listeners antigos e usa hit-test por coordenada.
-   Objetivo: fazer os botões responderem mesmo se algum elemento/camada estiver interceptando o target. */
-(function(){
-  'use strict';
-  const BUILD = 'ELTAUM_WINDOW_HITTEST_TABS_FORCE_20260602_v6';
-  window.__ELTAUM_WINDOW_HITTEST_TABS_FORCE_BUILD__ = BUILD;
-
-  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
-
-  function eventoXY(ev){
-    if(ev && ev.touches && ev.touches[0]) return {x: ev.touches[0].clientX, y: ev.touches[0].clientY};
-    if(ev && ev.changedTouches && ev.changedTouches[0]) return {x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY};
-    if(ev && Number.isFinite(ev.clientX) && Number.isFinite(ev.clientY)) return {x: ev.clientX, y: ev.clientY};
-    return null;
-  }
-
-  function visivel(el){
-    if(!el) return false;
-    const st = getComputedStyle(el);
-    if(st.display === 'none' || st.visibility === 'hidden' || Number(st.opacity) === 0) return false;
-    const r = el.getBoundingClientRect();
-    return r.width > 0 && r.height > 0;
-  }
-
-  function dentro(el, pt){
-    if(!el || !pt || !visivel(el)) return false;
-    const r = el.getBoundingClientRect();
-    return pt.x >= r.left && pt.x <= r.right && pt.y >= r.top && pt.y <= r.bottom;
-  }
-
-  function tabDireta(ev){
-    const t = ev && ev.target;
-    if(!t || !t.closest) return null;
-    return t.closest('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
-  }
-
-  function tabPorCoordenada(ev){
-    const pt = eventoXY(ev);
-    if(!pt) return null;
-    const tabs = qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
-    // Inverte a ordem para privilegiar o último elemento pintado no DOM quando há sobreposição.
-    for(let i = tabs.length - 1; i >= 0; i--){
-      if(dentro(tabs[i], pt)) return tabs[i];
-    }
-    return null;
-  }
-
-  function prepararTab(tab){
-    if(!tab) return;
-    tab.setAttribute('type', 'button');
-    tab.style.pointerEvents = 'auto';
-    tab.style.cursor = 'pointer';
-    tab.style.touchAction = 'manipulation';
-    if(getComputedStyle(tab).position === 'static') tab.style.position = 'relative';
-    tab.style.zIndex = '999';
-  }
-
-  function prepararTodos(){
-    qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]').forEach(prepararTab);
-    qsa('.chart-tabs, .indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
-      el.style.pointerEvents = 'auto';
-      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
-      el.style.zIndex = '998';
-    });
-  }
-
-  function ativarGrupo(selector, ativo){
-    qsa(selector).forEach(btn => {
-      const isActive = btn === ativo;
-      btn.classList.toggle('active', isActive);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-  }
-
-  function acionarGrafico(btn){
-    prepararTab(btn);
-    const chart = btn.dataset.chart;
-    if(!chart) return false;
-    ativarGrupo('.chart-tab[data-chart="' + chart + '"]', btn);
-    if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
-      window.alterarPeriodoGraficoEvolucao(btn);
-      return true;
-    }
-    console.warn('[' + BUILD + '] alterarPeriodoGraficoEvolucao não encontrada.');
-    return false;
-  }
-
-  function acionarIndicador(btn){
-    prepararTab(btn);
-    const meses = Number(btn.dataset.months);
-    if(![12,24,36].includes(meses)) return false;
-    ativarGrupo('.indic-tab[data-months]', btn);
-    try { activePeriodTab = meses; } catch(e) { window.activePeriodTab = meses; }
-    document.documentElement.dataset.indicPeriod = String(meses);
-    if(typeof window.atualizarTabelaIndicadores === 'function'){
-      window.atualizarTabelaIndicadores();
-      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
-        detail: { months: meses, source: BUILD }
-      }));
-      return true;
-    }
-    console.warn('[' + BUILD + '] atualizarTabelaIndicadores não encontrada.');
-    return false;
-  }
-
-  function capturar(ev){
-    var _t = ev && ev.target;
-    if(_t && _t.closest && (
-      _t.closest('.closed-month-launch') ||
-      _t.closest('#closedMarketSheet') ||
-      _t.closest('#closedMarketOverlay')
-    )) return;
-    const btn = tabDireta(ev) || tabPorCoordenada(ev);
-    if(!btn) return;
-
-    let ok = false;
-    if(btn.matches('.chart-tab[data-chart][data-range]')) ok = acionarGrafico(btn);
-    if(btn.matches('.indic-tab[data-months]')) ok = acionarIndicador(btn);
-
-    if(ok){
-      ev.preventDefault();
-      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
-      else if(typeof ev.stopPropagation === 'function') ev.stopPropagation();
-      console.info('[' + BUILD + '] botão acionado:', btn.textContent.trim(), Object.assign({}, btn.dataset));
-    }
-  }
-
-  prepararTodos();
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prepararTodos, {once:true});
-  setTimeout(prepararTodos, 300);
-  setTimeout(prepararTodos, 1200);
-  setTimeout(prepararTodos, 3000);
-
-  // Window capture roda antes dos listeners em document; isso contorna stopImmediatePropagation de patches anteriores.
-  ['pointerdown','pointerup','click','touchend'].forEach(tipo => {
-    window.addEventListener(tipo, capturar, true);
-  });
-
-  console.info('[' + BUILD + '] instalado.');
-})();
+/* Patches legados v5/v6 dos tabs removidos pela correção v228. */
 /* ════════════════════════════════════════════════════
    v24 — Mobile card-first para o catálogo de fundos
 ════════════════════════════════════════════════════ */
@@ -8552,6 +9779,7 @@ async function sharePainelMercado(){
     return `<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">${periods.map(p=>`<button type="button" class="rank-period-tab ${active===p?'active':''}" data-rank-target="topFundos" data-rank-period="${p}">${p==='mes'?'Mês':p==='ano'?'Ano':'12M'}</button>`).join('')}</div>`;
   }
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
+  function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
     return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
@@ -8595,7 +9823,7 @@ async function sharePainelMercado(){
     let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
     try{
       if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
-      if(typeof activeRisco!=='undefined' && activeRisco) base=base.filter(r=>String(r['Perfil de Risco']||'').trim()===activeRisco);
+      if(typeof activeRankRisk!=='undefined' && activeRankRisk) base=base.filter(r=>perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
     }catch(e){}
     const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
     const top=sortBy(campo).slice(0,10);
@@ -8609,13 +9837,17 @@ async function sharePainelMercado(){
     top12.forEach(r=>{const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r;});
     const catTop=Object.entries(catMap).slice(0,8);
 
-    const categorias=(typeof kpisDashboard!=='undefined' && kpisDashboard && kpisDashboard.categorias) ? kpisDashboard.categorias : {};
-    const catPL=Object.entries(categorias).filter(([cat,d])=>{
-      try{
-        const okFiltro=window.rankCategoryMatchesV151 ? window.rankCategoryMatchesV151(cat, activeRankFilter) : true;
-        return okFiltro && numK(d?.pl_total)!==null && !Number.isNaN(numK(d?.pl_total));
-      }catch(e){return false}
-    }).sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
+    const categoriasFiltradas={};
+    base.forEach(r=>{
+      const cat=r['Categoria']||'Sem categoria';
+      const pl=numK(r['PL (milhoes R$)']||r['PL']||r['Patrimonio Liquido']);
+      if(!categoriasFiltradas[cat]) categoriasFiltradas[cat]={pl_total:0,qtd_ativos:0};
+      categoriasFiltradas[cat].qtd_ativos+=1;
+      if(pl!==null&&!Number.isNaN(pl)&&Number.isFinite(pl)) categoriasFiltradas[cat].pl_total+=pl;
+    });
+    const catPL=Object.entries(categoriasFiltradas)
+      .filter(([,d])=>d.qtd_ativos>0)
+      .sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
     const maiorPL=catPL[0];
 
     const cards=[
@@ -8627,25 +9859,25 @@ async function sharePainelMercado(){
 
     const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
     const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
-    const riskRows=worst.map((r,i)=>worstMini(r,i,campo)).join('') || '<div class="ranking-empty-v50">Não há retornos negativos neste recorte.</div>';
-
-    grid.className='ranking-grid ranking-executive-v50';
+    // v195: o painel lateral de atenção já reúne piores leituras,
+    // negativos no ano e fundos sem dados. Evita duplicar a mesma informação
+    // dentro do bloco principal de rankings.
+    grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
       <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(insight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
-          <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}</div>
+          <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}${riskPill()}</div>
         </div>
         <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
           <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
           ${topRows}
         </div>
       </section>
-      <section class="ranking-exec-secondary">
+      <section class="ranking-exec-secondary ranking-exec-secondary-single-v195">
         <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Melhor fundo de cada categoria em 12 meses.</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
-        <div class="ranking-risk-panel"><div class="ranking-panel-head"><h3>Pontos de atenção</h3><p>Maiores quedas no recorte selecionado.</p></div><div class="ranking-risk-list">${riskRows}</div></div>
       </section>
     `;
   }
@@ -9517,7 +10749,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
+  const BUILD = 'ELTAUM_CATALOG_DESKTOP_OVERLAP_FIX_20260618_v220';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -9668,9 +10900,15 @@ async function sharePainelMercado(){
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        strip.classList.add('active','desktop-active-filter-v87');
-        strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-          `<span class="active-filter-pill active-filter-pill-v87">${label}</span>`;
+        if(active){
+          strip.classList.add('active','desktop-active-filter-v87');
+          strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
+            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="cat"><small>Categoria</small>${label}<span aria-hidden="true">×</span></button>` +
+            '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
+        }else{
+          strip.classList.remove('active','desktop-active-filter-v87');
+          strip.innerHTML = '';
+        }
       }
 
       const toggle = qs('#mobileFilterToggle');
@@ -11097,10 +12335,18 @@ async function sharePainelMercado(){
   function normalizeClosedMiniSignsV118(){
     qsa('#closedMiniCdi,#closedMiniIpca,#closedMiniDolar,#closedMiniIbov').forEach(el => {
       const txt = (el.textContent || '').trim();
-      el.classList.remove('pos','neg','zero');
-      if(/^-\s*/.test(txt)) el.classList.add('neg');
-      else if(/^\+/.test(txt)) el.classList.add('pos');
-      else el.classList.add('zero');
+      const isQuote = /^R\$\s*/i.test(txt);
+      el.classList.add('finance-number-v231');
+      el.classList.remove('pos','neg','zero','neu','market-quote-v231');
+      if(isQuote){
+        el.classList.add('market-quote-v231','zero');
+      }else if(/^-\s*/.test(txt)){
+        el.classList.add('neg');
+      }else if(/^\+/.test(txt)){
+        el.classList.add('pos');
+      }else{
+        el.classList.add('zero');
+      }
     });
   }
 
@@ -11167,12 +12413,15 @@ async function sharePainelMercado(){
       if(mercado) mercado.classList.add('market-clean-v118');
 
       const copom = qs('#copomMeetings');
-      if(copom) ensureHintV118(copom, 'Próximas reuniões', 'copom');
+      if(copom){
+        // v257: o bloco de Cenário monetário já possui título próprio.
+        // Não criar microcopy "Arraste" aqui para não poluir desktop/mobile.
+      }
 
       const cdi = qs('#cdiMonthStrip');
       if(cdi){
         normalizeCdiV118();
-        ensureHintV118(cdi, 'Histórico mensal do CDI', 'cdi');
+        // v257: sem hint "Histórico mensal do CDI / Arraste" neste módulo.
       }
     }catch(e){
       console.warn('[v118 mercado] falha ao sincronizar:', e);
@@ -12315,7 +13564,16 @@ if(!isSearchInput(el)) return;
     const ipcaCurrent = /aguard/i.test(ipcaCurrentTxt) ? '—' : valueOrDash(ipcaCurrentTxt.match(/[+-]?\d+(?:[.,]\d+)?%/)?.[0]||'—');
     return {
       closed,current,accum,
-      cdi:{closed:valueOrDash(text('cdi-mes-ant')),current:valueOrDash(text('cdi-mes-cur')),year:valueOrDash(text('cdi-ano')),accum:valueOrDash(text('cdi-acum-v2'))},
+      cdi:{
+        closed:valueOrDash(text('cdi-mes-ant')),
+        current:valueOrDash(text('cdi-mes-cur')),
+        currentRef:clean(_dadosMercado?.cards?.cdi?.parcial_ate || ''),
+        currentDateIso:clean(_dadosMercado?.cards?.cdi?.parcial_data_iso || ''),
+        currentPeriodRef:clean(_dadosMercado?.cards?.cdi?.parcial_ref || ''),
+        currentSource:clean(_dadosMercado?.cards?.cdi?.parcial_origem || ''),
+        year:valueOrDash(text('cdi-ano')),
+        accum:valueOrDash(text('cdi-acum-v2'))
+      },
       ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2'))},
       dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
       ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
@@ -12341,6 +13599,16 @@ if(!isSearchInput(el)) return;
   }
   function currentMetric(label, main, variation, mainClass='neu'){
     return `<div class="market-v159-current-metric"><span>${esc(label)}</span><strong class="${mainClass}">${esc(valueOrDash(main))}</strong><em class="${pctClass(variation)}">${esc(valueOrDash(variation))}</em></div>`;
+  }
+  function currentCdiMetricV233(data){
+    const info={
+      data:data?.cdi?.currentRef || '',
+      dataIso:data?.cdi?.currentDateIso || '',
+      referencia:data?.cdi?.currentPeriodRef || data?.current || '',
+      origem:data?.cdi?.currentSource || ''
+    };
+    const contexto=contextoCdiAtualV233(info);
+    return `<div class="market-v159-current-metric market-current-cdi-v233"><span>CDI</span><strong class="${pctClass(data?.cdi?.current)}">${esc(valueOrDash(data?.cdi?.current))}</strong><div class="market-current-cdi-meta-v233"><b>${esc(contexto.title)}</b><em>${esc(contexto.detail)}</em></div></div>`;
   }
   function usCompactCard(item, mode, accum){
     const current=compactUsValue(item.current,mode);
@@ -12434,9 +13702,17 @@ if(!isSearchInput(el)) return;
     shell.classList.add('market-v159-shell');
     const usMode=state.usMode==='usd'?'usd':'brl';
     const awaiting=[];
-    if(data.cdi.current==='—') awaiting.push('CDI');
-    if(data.ipca.current==='—') awaiting.push('IPCA');
-    const awaitingText=awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : 'Indicadores correntes disponíveis';
+    const currentNotes=[];
+    const cdiAvailable=data.cdi.current!=='—';
+    const ipcaAvailable=data.ipca.current!=='—';
+    if(!cdiAvailable) awaiting.push('CDI');
+    else currentNotes.push('CDI acumulado no mês');
+    if(!ipcaAvailable) awaiting.push('IPCA');
+    else currentNotes.push('IPCA disponível');
+    const awaitingText=[
+      ...currentNotes,
+      awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : ''
+    ].filter(Boolean).join(' · ') || 'Indicadores correntes disponíveis';
 
     shell.innerHTML=`
       <div class="market-v150-head market-v159-head">
@@ -12460,8 +13736,9 @@ if(!isSearchInput(el)) return;
           </div>
         </section>
 
-        <section class="market-v159-current" aria-label="Mês atual">
+        <section class="market-v159-current market-v227-current" aria-label="Mês atual">
           <div class="market-v159-current-copy"><span>Mês atual</span><strong>${esc(data.current)} · parcial</strong><small>${esc(awaitingText)}</small></div>
+          ${currentCdiMetricV233(data)}
           ${currentMetric('Dólar',data.dolar.currentQuote,data.dolar.currentVar)}
           ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
         </section>
@@ -12552,6 +13829,86 @@ if(!isSearchInput(el)) return;
 
 
 /* ==========================================================
+   ELTAUM v227 — CDI parcial automático no painel executivo
+   - lê cards.cdi.parcial_mes_atual gerado diariamente pelo robô
+   - mostra data do último dado disponível em cards.cdi.parcial_ate
+   - preserva mês fechado e acumulados históricos separadamente
+========================================================== */
+
+/* ==========================================================
+   ELTAUM v232 — atualização automática do mercado_atual.json
+   - consulta a base sem cache a cada 30 minutos;
+   - atualiza ao retornar para a aba ou focar a janela;
+   - mantém visão executiva e tabela analítica sincronizadas.
+========================================================== */
+(function(){
+  'use strict';
+  const INTERVALO_MS = 30 * 60 * 1000;
+  let executando = false;
+  let ultimaAssinatura = '';
+
+  function assinatura(raw){
+    const cdi = raw?.cards?.cdi || {};
+    return [raw?.atualizado_em||'',cdi.parcial_mes_atual??'',cdi.parcial_data_iso||'',cdi.acum_12m??'',cdi.acum_24m??'',cdi.acum_36m??''].join('|');
+  }
+
+  async function atualizarAgora(forcar=false){
+    if(executando) return false;
+    executando = true;
+    try{
+      const url = BASE_URL + 'mercado_atual.json?v=cdi-daily-v232-' + Date.now();
+      const response = await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
+      if(!response.ok) throw new Error(`HTTP ${response.status}`);
+      const raw = await response.json();
+      const sig = assinatura(raw);
+      if(!forcar && sig && sig === ultimaAssinatura) return false;
+      ultimaAssinatura = sig;
+
+      const fresco = typeof normalizarMercadoAtual === 'function' ? normalizarMercadoAtual(raw) : raw;
+      try{
+        if(typeof _dadosMercado === 'object' && _dadosMercado){
+          _dadosMercado = {
+            ..._dadosMercado,
+            ...fresco,
+            cards:{...(_dadosMercado.cards||{}),...(fresco.cards||{})}
+          };
+        }else{
+          _dadosMercado = fresco;
+        }
+      }catch(e){
+        window.__mercadoAtualV230 = fresco;
+      }
+      window.__mercadoAtualV230 = _dadosMercado || fresco;
+      sincronizarEstadoCdiV229(_dadosMercado || fresco);
+      if((_dadosMercado||fresco)?.atualizado_em) atualizarDataHeader((_dadosMercado||fresco).atualizado_em);
+      atualizarTabelaIndicadores();
+      try{ window.__ELTAUM_MARKET_PANEL_V150__?.sync?.(); }catch(e){}
+      try{ window.__ELTAUM_MARKET_PERIOD_CARDS_V196__?.render?.(); }catch(e){}
+      document.dispatchEvent(new CustomEvent('elton:market-data-refresh',{detail:{build:'v232',cdi:obterCdiAtualV232(_dadosMercado||fresco)}}));
+      return true;
+    }catch(error){
+      console.warn('[v232] Atualização automática dos indicadores indisponível:',error);
+      return false;
+    }finally{
+      executando = false;
+    }
+  }
+
+  function iniciar(){
+    setTimeout(()=>atualizarAgora(true),60*1000);
+    setInterval(()=>atualizarAgora(false),INTERVALO_MS);
+    document.addEventListener('visibilitychange',()=>{
+      if(document.visibilityState==='visible') atualizarAgora(false);
+    });
+    window.addEventListener('focus',()=>atualizarAgora(false),{passive:true});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciar,{once:true});
+  else iniciar();
+  window.atualizarIndicadoresAgoraV232 = atualizarAgora;
+})();
+
+/* ==========================================================
    ELTAUM v151 — integração dos componentes restaurados
    - navegação com offset e destaque da seção
    - selects dos rankings sincronizados com os filtros existentes
@@ -12569,30 +13926,31 @@ if(!isSearchInput(el)) return;
   const nval=(v)=>{ try{return typeof toNum==='function'?toNum(v):Number(String(v??'').replace('%','').replace(',','.'));}catch(e){return null;} };
   const pct=(v)=>{const n=nval(v);if(n===null||!Number.isFinite(n))return '—';return (n>0?'+':'')+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';};
 
-  function categoryMatches(text,filter){
-    const t=normalize(text);
+  const CATEGORY_BY_FILTER_V197=Object.freeze({
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+  });
+  function categoryMatches(category,filter){
+    const cat=normalize(category).replace(/\s+/g,' ').trim();
     const f=String(filter||'todos');
     if(f==='todos') return true;
-    const isFmp=/\bFMP\b|PRIVATIZA/.test(t);
-    if(f==='sem-fmp') return !isFmp;
-    if(f==='fmp') return isFmp;
-    if(f==='renda-fixa-simples') return /RENDA FIXA SIMPLES|RF SIMPLES/.test(t);
-    if(f==='renda-fixa-referenciado') return /RENDA FIXA REFERENCIADO|RF REFERENCIADO|REF DI/.test(t);
-    if(f==='renda-fixa-curto-prazo') return /RENDA FIXA CURTO|RF CURTO|CURTO PRAZO/.test(t);
-    if(f==='renda-fixa') return /RENDA FIXA|\bRF\b/.test(t) && !/SIMPLES|REFERENCIADO|REF DI|CURTO PRAZO|RF CURTO/.test(t);
-    if(f==='multimercado') return /MULTIMERCADO|\bMM\b/.test(t);
-    if(f==='cambial') return /CAMBIAL|CAMBIO|DOLAR/.test(t);
-    if(f==='acoes') return /ACOES|IBOVESPA/.test(t) && !isFmp;
-    if(f==='fundo-de-indice') return /FUNDO DE INDICE|\bINDICE\b|\bETF\b/.test(t);
-    return true;
+    if(f==='sem-fmp') return cat!==CATEGORY_BY_FILTER_V197.fmp;
+    const expected=CATEGORY_BY_FILTER_V197[f];
+    return expected ? cat===expected : true;
   }
   window.rankCategoryMatchesV151=categoryMatches;
 
   // Substitui o filtro global usado pelo renderer legado sem reescrever o renderer inteiro.
   try{
     passaFiltroRanking=function(r){
-      const text=[r?.Categoria,r?.Fundo,r?.Benchmark].filter(Boolean).join(' ');
-      return categoryMatches(text,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
+      return categoryMatches(r?.Categoria,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
     };
   }catch(e){}
 
@@ -12642,17 +14000,24 @@ if(!isSearchInput(el)) return;
   function syncRankingControls(){
     const cls=q('#rankingClassSelectV136');
     const period=q('#rankingPeriodSelectV136');
+    const risk=q('#rankingRiskSelectV198');
     if(cls && typeof activeRankFilter!=='undefined' && cls.value!==activeRankFilter) cls.value=activeRankFilter;
     if(period && typeof activeRankPeriods!=='undefined'){
       const p=activeRankPeriods.topFundos||'12m';
       if(period.value!==p) period.value=p;
     }
+    if(risk && typeof activeRankRisk!=='undefined' && risk.value!==(activeRankRisk||'')) risk.value=activeRankRisk||'';
+    try{syncRiskProfileControlsV198();}catch(e){}
   }
 
   function filteredRankingRows(includeMissing=false){
     if(typeof allRows==='undefined'||!Array.isArray(allRows)) return [];
     return allRows.filter(r=>includeMissing ? true : (typeof temDados==='function'?temDados(r):true)).filter(r=>{
-      try{return passaFiltroRanking(r);}catch(e){return true;}
+      try{
+        if(!passaFiltroRanking(r)) return false;
+        if(typeof activeRankRisk!=='undefined'&&activeRankRisk&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk)) return false;
+        return true;
+      }catch(e){return true;}
     });
   }
 
@@ -12671,8 +14036,8 @@ if(!isSearchInput(el)) return;
     const neg12=rows.filter(r=>{const n=nval(r['Acum. 12M (%)']);return n!==null&&n<0;});
     const negAno=rows.filter(r=>{const n=nval(r['Acum. Ano (%)']);return n!==null&&n<0;});
     const negMes=rows.filter(r=>{const n=nval(r['Acum. Mes (%)']);return n!==null&&n<0;});
-    const missing=(typeof allRows!=='undefined'&&Array.isArray(allRows)?allRows:[]).filter(r=>{
-      try{return (typeof temDados==='function'?!temDados(r):false)&&passaFiltroRanking(r);}catch(e){return false;}
+    const missing=filteredRankingRows(true).filter(r=>{
+      try{return typeof temDados==='function'?!temDados(r):false;}catch(e){return false;}
     });
     let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
     if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
@@ -12703,6 +14068,7 @@ if(!isSearchInput(el)) return;
   function bindRankingControls(){
     const cls=q('#rankingClassSelectV136');
     const period=q('#rankingPeriodSelectV136');
+    const risk=q('#rankingRiskSelectV198');
     if(cls&&cls.dataset.v151Bound!=='1'){
       cls.dataset.v151Bound='1';
       cls.addEventListener('change',()=>{
@@ -12714,6 +14080,13 @@ if(!isSearchInput(el)) return;
       period.dataset.v151Bound='1';
       period.addEventListener('change',()=>{
         try{activeRankPeriods.topFundos=period.value||'12m';}catch(e){}
+        renderRankingsAndAttention();
+      });
+    }
+    if(risk&&risk.dataset.v198Bound!=='1'){
+      risk.dataset.v198Bound='1';
+      risk.addEventListener('change',()=>{
+        try{activeRankRisk=risk.value||'';}catch(e){}
         renderRankingsAndAttention();
       });
     }
@@ -13160,7 +14533,7 @@ function toggleCopomCalendarV167(force){
   const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Recolher calendário' : 'Ver calendário completo';
+    btn.textContent = open ? 'Recolher' : 'Calendário';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;
@@ -13171,24 +14544,25 @@ function togglePoupancaExecutiveV167(force){
   const panel = document.getElementById('poupDetailsPanelV167');
   const btn = document.getElementById('poupExpandBtn');
   if(!panel) return false;
-  const open = typeof force === 'boolean' ? force : panel.hasAttribute('hidden');
+
+  const mobile = window.matchMedia('(max-width:700px)').matches;
+  const currentlyOpen = !panel.hasAttribute('hidden');
+  const open = typeof force === 'boolean' ? force : !currentlyOpen;
+
+  document.body.classList.toggle('poup-mobile-expanded', open);
   panel.toggleAttribute('hidden', !open);
   panel.classList.toggle('is-open-v167', open);
-  document.body.classList.toggle('poup-mobile-expanded', open);
 
   const explain = document.getElementById('poupExplain');
   if(explain) explain.classList.toggle('open', open);
   if(btn){
-    btn.textContent = open ? 'Ocultar regras e cenários' : 'Ver regras e cenários';
+    btn.textContent = mobile
+      ? (open ? 'Ocultar regras' : 'Ver regras')
+      : (open ? 'Ocultar regras' : 'Ver regras');
     btn.setAttribute('aria-expanded', String(open));
+    btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
 
-  if(open){
-    setTimeout(function(){
-      try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
-      try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update(); }catch(e){}
-    }, 90);
-  }
   return false;
 }
 
@@ -13202,10 +14576,13 @@ function initMarketReferenceExecutiveV167(){
     panel.setAttribute('hidden','');
     panel.classList.remove('is-open-v167');
   }
+  document.body.classList.remove('poup-mobile-expanded');
   const btn = document.getElementById('poupExpandBtn');
   if(btn){
-    btn.textContent = 'Ver regras e cenários';
+    const mobile = window.matchMedia('(max-width:700px)').matches;
+    btn.textContent = 'Ver regras';
     btn.setAttribute('aria-expanded','false');
+    btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
   toggleCopomCalendarV167(false);
 }
@@ -13701,7 +15078,7 @@ if(document.readyState === 'loading'){
 
     const map={
       todos:'Todos os fundos',
-      'sem-fmp':'Todos sem FMP',
+      'sem-fmp':'Todos, exceto FMP',
       'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
       'renda-fixa-referenciado':'RF Referenciado',
@@ -13787,6 +15164,10 @@ if(document.readyState === 'loading'){
 
   function enablePointerDrag(strip){
     if(!strip || strip.dataset.pointerDragV180==='1') return;
+    if(strip.id === 'cdiMonthStrip' && document.documentElement.classList.contains('rates-scroll-fix-v263')){
+      strip.dataset.pointerDragV180 = 'disabled-v263';
+      return;
+    }
     strip.dataset.pointerDragV180='1';
 
     let active=false;
@@ -13850,4 +15231,835 @@ if(document.readyState === 'loading'){
 
   window.addEventListener('resize',setup,{passive:true});
   window.__ELTAUM_V180__={setup:setup};
+})();
+
+
+/* ELTAUM_EVOLUTION_DYNAMIC_TITLES_20260613_v184
+   Segunda barreira: mantém o título sincronizado mesmo se um patch legado
+   alterar o botão ativo antes de chamar a função principal. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_EVOLUTION_DYNAMIC_TITLES_20260613_v184';
+
+  function atualizarPorBotao(btn){
+    if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
+    window.atualizarTituloPeriodoGrafico(btn.dataset.chart, Number(btn.dataset.range));
+  }
+
+  function capturar(ev){
+    const alvo = ev.target && ev.target.closest
+      ? ev.target.closest('.chart-tab[data-chart][data-range]')
+      : null;
+    if(alvo) atualizarPorBotao(alvo);
+  }
+
+  function inicializar(){
+    document.querySelectorAll('.chart-tab[data-chart][data-range].active').forEach(atualizarPorBotao);
+  }
+
+  document.addEventListener('click', capturar, true);
+  document.addEventListener('pointerup', capturar, true);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', inicializar, {once:true});
+  }else{
+    inicializar();
+  }
+  console.info('[' + BUILD + '] títulos dinâmicos instalados.');
+})();
+
+
+/* ELTAUM_MOBILE_PTAX_MONTH_CAROUSEL_20260613_v187
+   Arraste horizontal por toque, mouse e emuladores responsivos. */
+(function(){
+  'use strict';
+
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width:820px)').matches;
+  }
+
+  function enablePointerDrag(strip){
+    if(!strip || strip.dataset.pointerDragV187==='1') return;
+    strip.dataset.pointerDragV187='1';
+
+    let active=false;
+    let moved=false;
+    let startX=0;
+    let startScroll=0;
+
+    strip.addEventListener('pointerdown',function(event){
+      if(!isMobile() || event.button>0) return;
+      active=true;
+      moved=false;
+      startX=event.clientX;
+      startScroll=strip.scrollLeft;
+      strip.classList.add('is-pointer-dragging-v187');
+      try{ strip.setPointerCapture(event.pointerId); }catch(_error){}
+    });
+
+    strip.addEventListener('pointermove',function(event){
+      if(!active) return;
+      const delta=event.clientX-startX;
+      if(Math.abs(delta)>4) moved=true;
+      strip.scrollLeft=startScroll-delta;
+    });
+
+    function finish(event){
+      if(!active) return;
+      active=false;
+      strip.classList.remove('is-pointer-dragging-v187');
+      try{ strip.releasePointerCapture(event.pointerId); }catch(_error){}
+      setTimeout(function(){
+        try{ window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__?.sync?.(); }catch(_error){}
+      },20);
+    }
+
+    strip.addEventListener('pointerup',finish);
+    strip.addEventListener('pointercancel',finish);
+    strip.addEventListener('lostpointercapture',function(){
+      active=false;
+      strip.classList.remove('is-pointer-dragging-v187');
+    });
+
+    strip.addEventListener('click',function(event){
+      if(!moved) return;
+      event.preventDefault();
+      event.stopPropagation();
+      moved=false;
+    },true);
+  }
+
+  function setup(){
+    const strip=document.getElementById('dolarMonths');
+    if(!strip) return;
+    enablePointerDrag(strip);
+    requestAnimationFrame(function(){
+      try{ window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__?.sync?.(); }catch(_error){}
+    });
+  }
+
+  function observe(){
+    const strip=document.getElementById('dolarMonths');
+    if(!strip || strip.dataset.observeCarouselV187==='1') return;
+    strip.dataset.observeCarouselV187='1';
+    new MutationObserver(function(){
+      setup();
+      setTimeout(setup,40);
+    }).observe(strip,{childList:true,subtree:false});
+  }
+
+  function init(){
+    setup();
+    observe();
+    [120,500,1200,2600].forEach(function(ms){setTimeout(function(){setup();observe();},ms);});
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+
+  window.addEventListener('resize',function(){setTimeout(setup,100);},{passive:true});
+  window.addEventListener('orientationchange',function(){setTimeout(setup,180);},{passive:true});
+
+  window.__ELTAUM_MOBILE_PTAX_MONTH_CAROUSEL_V187__={setup:setup};
+})();
+
+
+/* ELTAUM_MOBILE_EVOLUTION_ORDER_SEMANTICS_20260613_v190
+   Resumo móvel único e sincronizado com a aba ativa dos gráficos. */
+
+
+/* ELTAUM_MOBILE_EVOLUTION_ORDER_SEMANTICS_20260613_v190
+   Abas móveis agrupam os dois indicadores de IPCA antes da Selic.
+   Textos da Selic explicam vigência e período de forma mais direta. */
+
+/* ════════════════════════════════════════════════════════════
+   ELTAUM_MARKET_PERIOD_CARDS_20260614_v196
+   Espelha a tabela analítica em três cards temáticos, mantendo
+   a tabela original no DOM como fonte compatível dos dados.
+════════════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_MARKET_MOBILE_DEDUP_LIVE_VALUES_20260618_v234';
+  let currency='brl';
+  let observer=null;
+  let timer=0;
+
+  const qs=(sel,root=document)=>root.querySelector(sel);
+  const qsa=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
+  const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
+  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+  const text=id=>clean(document.getElementById(id)?.textContent||'—')||'—';
+
+  function tone(value){
+    const v=clean(value);
+    if(!v || v==='—' || v==='-') return 'dash';
+    if(/^\+/.test(v)) return 'pos';
+    if(/^[−-]/.test(v)) return 'neg';
+    return 'neu';
+  }
+
+  function period(id,fallback){
+    const value=text(id);
+    return value==='—'?fallback:value;
+  }
+
+  /* v234 — os cards temáticos passam a consultar o JSON normalizado diretamente.
+     A tabela original continua como fallback, evitando corrida de renderização e
+     valores “—” quando o card é montado antes de o DOM legado terminar de atualizar. */
+  function finiteV234(value){
+    if(value===null || value===undefined || value==='') return null;
+    let normalized=value;
+    if(typeof value==='string'){
+      normalized=value.trim().replace(/%/g,'').replace(/\s+/g,'');
+      // Strings vindas do DOM podem usar padrão brasileiro (1.234,56),
+      // enquanto o JSON usa ponto decimal (2.06). Só remove pontos quando
+      // há vírgula decimal explícita.
+      if(normalized.includes(',')) normalized=normalized.replace(/\./g,'').replace(',','.');
+    }
+    const number=Number(normalized);
+    return Number.isFinite(number) ? number : null;
+  }
+
+  function firstFiniteV234(...values){
+    for(const value of values){
+      const number=finiteV234(value);
+      if(number!==null) return number;
+    }
+    return null;
+  }
+
+  function pctV234(value,fallback='—'){
+    const number=finiteV234(value);
+    if(number===null) return fallback;
+    return `${number>0?'+':''}${number.toFixed(2).replace('.',',')}%`;
+  }
+
+  function brlV234(value,fallback='—'){
+    const number=finiteV234(value);
+    if(number===null) return fallback;
+    return `R$ ${number.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+  }
+
+  function ptsV234(value,fallback='—'){
+    const number=finiteV234(value);
+    if(number===null) return fallback;
+    return `${number.toLocaleString('pt-BR',{maximumFractionDigits:0})} pts`;
+  }
+
+  function currentVariationV234(item,card){
+    const explicit=firstFiniteV234(
+      item?.variacao_mes_atual,
+      item?.variacao_mensal,
+      item?.variacao_mes,
+      card?.variacao_mes_atual,
+      card?.variacao_mensal,
+      card?.variacao_mes
+    );
+    if(explicit!==null) return explicit;
+
+    const current=firstFiniteV234(item?.fechamento_atual,card?.atual);
+    const previous=firstFiniteV234(item?.fechamento_mes_anterior,card?.anterior);
+    if(current!==null && previous!==null && previous!==0){
+      return ((current/previous)-1)*100;
+    }
+    return null;
+  }
+
+  function marketDataV234(key,cardKey=key){
+    const data=(typeof _dadosMercado!=='undefined' && _dadosMercado) || window.__mercadoAtualV230 || {};
+    const item=data?.indices_mercado?.[key] || {};
+    const card=data?.cards?.[cardKey] || {};
+    return {item,card};
+  }
+
+  function currentStatusV234(item,fallback=''){
+    if(item?.status_mes_atual) return /parcial/i.test(item.status_mes_atual)?'Parcial':fallback;
+    if(item?.tem_mes_atual===true) return 'Parcial';
+    const match=String(item?.data_atual||'').match(/^(\d{4})-(\d{2})/);
+    if(match){
+      const today=new Date();
+      const currentKey=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
+      if(`${match[1]}-${match[2]}`===currentKey) return 'Parcial';
+    }
+    return fallback;
+  }
+
+  function periodValueV234(item,card,months){
+    return firstFiniteV234(item?.[`acum_${months}m`],card?.[`acum_${months}m`]);
+  }
+
+  function pairFromMarketV234(item,field,fallbackId){
+    const fallback=usPair(fallbackId);
+    return {
+      usd:pctV234(item?.[field],fallback.usd),
+      brl:pctV234(item?.[`${field}_brl`],fallback.brl)
+    };
+  }
+
+  function statusFor(rowId){
+    const row=document.getElementById(rowId);
+    if(!row) return '';
+    const cell=qs('.td-cur',row);
+    if(!cell) return '';
+    const explicit=clean(
+      qs('.analytic-status-chip-v163',cell)?.textContent ||
+      qs('.period-status',cell)?.textContent ||
+      qs('.badge-await',cell)?.textContent ||
+      qs('.status-only-v163',cell)?.textContent || ''
+    );
+    if(/aguard/i.test(explicit)) return 'Aguardando';
+    if(/parcial/i.test(explicit)) return 'Parcial';
+    return '';
+  }
+
+  function alertBadge(){
+    const el=document.getElementById('ipca-alert-badge');
+    if(!el || getComputedStyle(el).display==='none') return '';
+    const value=clean(el.textContent);
+    return value?`<span class="market-period-badge-v196">${esc(value)}</span>`:'';
+  }
+
+  function metric(label,value,note='',options={}){
+    const status=options.status||'';
+    const aguardando=/aguard/i.test(status);
+    const parcial=/parcial/i.test(status);
+    const semValor=!value || value==='—' || value==='-';
+    const main=aguardando
+      ? `<strong class="market-period-status-v196">${esc(status)}</strong>`
+      : `<strong class="${tone(value)}">${esc(value||'—')}</strong>`;
+    let detalhe=parcial && !aguardando ? (note || status) : note;
+    if(semValor && !aguardando && !detalhe) detalhe='Dado não disponível';
+    return `<div class="market-period-metric-v196"><span>${esc(label)}</span>${main}<small>${esc(detalhe||'')}</small></div>`;
+  }
+
+  function nameCell(icon,name,sub,level='',badge=''){
+    return `<div class="market-period-name-v196">
+      <div class="market-period-icon-v196">${icon}</div>
+      <div class="market-period-name-copy-v196">
+        <div class="market-period-name-line-v196"><strong>${esc(name)}</strong>${badge}</div>
+        <small>${esc(sub)}</small>
+        ${level&&level!=='—'?`<div class="market-current-level-v196"><small>Atual</small>${esc(level)}</div>`:''}
+      </div>
+    </div>`;
+  }
+
+  function selectedPeriodMonths(){
+    const fromDataset = Number.parseInt(document.documentElement.dataset.indicPeriod || '', 10);
+    const fromButton = Number.parseInt(qs('.market-period-tabs .indic-tab.active[data-months]')?.dataset.months || '', 10);
+    const fromState = typeof activePeriodTab !== 'undefined' ? Number(activePeriodTab) : NaN;
+    return [fromDataset, fromButton, fromState].find(value => [12, 24, 36].includes(value)) || 12;
+  }
+
+  function selectedPeriodLabel(){
+    return `${selectedPeriodMonths()} meses`;
+  }
+
+  function gridHead(first='Indicador'){
+    const closed=period('th-mes-ant-sub','Último fechado');
+    const current=period('th-mes-cur-sub','Mês atual');
+    const accumulated=selectedPeriodLabel();
+    return `<div class="market-period-grid-head-v196">
+      <span>${esc(first)}</span><span>Fechado<br>${esc(closed)}</span><span>Atual<br>${esc(current)}</span><span>No ano</span><span>${esc(accumulated)}</span>
+    </div>`;
+  }
+
+  function row(content){
+    return `<div class="market-period-row-v196">${content}</div>`;
+  }
+
+  function cardHeader(title,sub,source,extra=''){
+    return `<div class="market-period-card-head-v196">
+      <div class="market-period-card-title-v196"><span>${esc(title)}</span><small>${esc(sub)}</small></div>
+      ${extra||`<span class="market-period-source-v196">${esc(source)}</span>`}
+    </div>`;
+  }
+
+  function usPair(id){
+    const host=document.getElementById(id);
+    if(!host) return {usd:'—',brl:'—'};
+    const usd=clean(qs('.us-market-line.usd .us-market-value',host)?.textContent||'');
+    const brl=clean(qs('.us-market-line.brl .us-market-value',host)?.textContent||'');
+    if(usd||brl) return {usd:usd||'—',brl:brl||'—'};
+    const raw=clean(host.textContent);
+    const out={usd:'—',brl:'—'};
+    const re=/(USD|BRL)\s*([+−-]?\d+(?:[.,]\d+)?%|—)/ig;
+    let match;
+    while((match=re.exec(raw))) out[match[1].toLowerCase()]=match[2];
+    if(out.usd==='—'&&out.brl==='—'){
+      const values=raw.match(/[+−-]?\d+(?:[.,]\d+)?%/g)||[];
+      if(values[0]) out.usd=values[0];
+      if(values[1]) out.brl=values[1];
+      else if(values[0]) out.brl=values[0];
+    }
+    return out;
+  }
+
+  function usMetric(label,pair,note=''){
+    if(currency==='both'){
+      return `<div class="market-period-metric-v196"><span>${esc(label)}</span>
+        <div class="market-period-double-v196">
+          <em class="${tone(pair.usd)}">USD ${esc(pair.usd)}</em>
+          <em class="${tone(pair.brl)}">BRL ${esc(pair.brl)}</em>
+        </div><small>${esc(note)}</small></div>`;
+    }
+    const value=pair[currency]||'—';
+    return metric(label,value,currency.toUpperCase()+(note?` · ${note}`:''));
+  }
+
+  function buildTaxes(){
+    const cdiStatus=statusFor('row-cdi');
+    const ipcaStatus=statusFor('row-ipca');
+    const cdiInfo=typeof obterCdiAtualV232==='function' ? obterCdiAtualV232() : {};
+    const cdiContexto=contextoCdiAtualV233(cdiInfo);
+    const cdiAtualNota=cdiInfo?.valor!==null && cdiInfo?.valor!==undefined
+      ? `${cdiContexto.title} · ${cdiContexto.detail}`
+      : (cdiStatus||'');
+    return `<article class="market-period-card-v196 taxas">
+      ${cardHeader('Taxas e inflação','Retornos consolidados por período','BCB 4391 / 433')}
+      ${gridHead()}
+      ${row(
+        nameCell('💰','CDI','Certificado de Depósito Interbancário')+
+        metric('Fechado',text('cdi-mes-ant'))+
+        metric('Atual',text('cdi-mes-cur'),cdiAtualNota,{status:cdiStatus})+
+        metric('No ano',text('cdi-ano'))+
+        metric(selectedPeriodLabel(),text('cdi-acum-v2'))
+      )}
+      ${row(
+        nameCell('🎯','IPCA','Inflação ao consumidor · meta 3,0%','',alertBadge())+
+        metric('Fechado',text('ipca-mes-ant'))+
+        metric('Atual','—','',{status:ipcaStatus||'Aguardando'})+
+        metric('No ano',text('ipca-ano-v2'))+
+        metric(selectedPeriodLabel(),text('ipca-acum-v2'))
+      )}
+      <div class="market-period-card-foot-v196">CDI e IPCA: séries públicas do Banco Central. O mês atual pode permanecer aguardando o fechamento oficial.</div>
+    </article>`;
+  }
+
+  function buildBrasil(){
+    const months=selectedPeriodMonths();
+    const dolarData=marketDataV234('dolar','dolar');
+    const ibovData=marketDataV234('ibovespa','ibovespa');
+
+    const dolarStatus=currentStatusV234(dolarData.item,statusFor('row-dolar'));
+    const ibovStatus=currentStatusV234(ibovData.item,statusFor('row-ibov'));
+
+    const dolarAtual=firstFiniteV234(dolarData.item?.fechamento_atual,dolarData.card?.atual);
+    const dolarFechado=firstFiniteV234(dolarData.item?.fechamento_mes_anterior,dolarData.card?.anterior);
+    const dolarVarAtual=currentVariationV234(dolarData.item,dolarData.card);
+    const dolarAno=firstFiniteV234(dolarData.item?.acum_ano,dolarData.card?.acum_ano);
+    const dolarAcum=periodValueV234(dolarData.item,dolarData.card,months);
+
+    const ibovAtual=firstFiniteV234(ibovData.item?.fechamento_atual,ibovData.card?.atual);
+    const ibovFechado=firstFiniteV234(ibovData.item?.fechamento_mes_anterior,ibovData.card?.anterior);
+    const ibovVarFechado=firstFiniteV234(ibovData.item?.variacao_mes_fechado,ibovData.card?.variacao_mes_fechado);
+    const ibovVarAtual=currentVariationV234(ibovData.item,ibovData.card);
+    const ibovAno=firstFiniteV234(ibovData.item?.acum_ano,ibovData.card?.acum_ano);
+    const ibovAcum=periodValueV234(ibovData.item,ibovData.card,months);
+
+    return `<article class="market-period-card-v196 brasil">
+      ${cardHeader('Brasil — câmbio e bolsa','Nível atual separado da variação percentual','PTAX BCB / B3')}
+      ${gridHead()}
+      ${row(
+        nameCell('💵','Dólar BRL/USD','Cotação PTAX e desempenho em reais',brlV234(dolarAtual,text('dolar-cur-cot')))+
+        metric('Fechado',brlV234(dolarFechado,text('dolar-ant-cot')),'cotação de fechamento')+
+        metric('Atual',pctV234(dolarVarAtual,text('dolar-cur-var')),dolarStatus)+
+        metric('No ano',pctV234(dolarAno,text('dolar-ano-v2')))+
+        metric(selectedPeriodLabel(),pctV234(dolarAcum,text('dolar-acum-v2')))
+      )}
+      ${row(
+        nameCell('📈','Ibovespa','B3 · pontos e variação percentual',ptsV234(ibovAtual,text('ibov-cur-pts')))+
+        metric('Fechado',pctV234(ibovVarFechado,text('ibov-ant-var')),ptsV234(ibovFechado,text('ibov-ant-pts')))+
+        metric('Atual',pctV234(ibovVarAtual,text('ibov-cur-var')),ibovStatus)+
+        metric('No ano',pctV234(ibovAno,text('ibov-ano-v2')))+
+        metric(selectedPeriodLabel(),pctV234(ibovAcum,text('ibov-acum-v2')))
+      )}
+      <div class="market-period-card-foot-v196">Os cards leem diretamente o JSON atualizado; a tabela original permanece apenas como fonte de compatibilidade.</div>
+    </article>`;
+  }
+
+  function usToggle(){
+    return `<div class="market-period-us-toggle-v196" role="group" aria-label="Moeda das bolsas dos Estados Unidos">
+      ${['brl','usd','both'].map(mode=>`<button type="button" data-v196-currency="${mode}" class="${currency===mode?'active':''}" aria-pressed="${currency===mode?'true':'false'}">${mode==='both'?'Ambos':mode.toUpperCase()}</button>`).join('')}
+    </div>`;
+  }
+
+  function buildUs(){
+    const months=selectedPeriodMonths();
+    const makeRow=(key,prefix,icon,name,sub)=>{
+      const data=marketDataV234(key,key);
+      const item=data.item||{};
+      return {
+        icon,name,sub,
+        points:ptsV234(item?.fechamento_atual,text(`${prefix}-cur-pts`)),
+        closed:pairFromMarketV234(item,'variacao_mes_fechado',`${prefix}-ant-var`),
+        current:pairFromMarketV234(item,'variacao_mes_atual',`${prefix}-cur-var`),
+        year:pairFromMarketV234(item,'acum_ano',`${prefix}-ano-var`),
+        accum:pairFromMarketV234(item,`acum_${months}m`,`${prefix}-acum-var`),
+        status:currentStatusV234(item,statusFor(`row-${prefix}`))
+      };
+    };
+    const rows=[
+      makeRow('sp500','sp','🌎','S&P 500','Índice amplo dos Estados Unidos'),
+      makeRow('dow_jones','dow','🏛️','Dow Jones','Empresas blue chips'),
+      makeRow('nasdaq','nasdaq','💻','Nasdaq','Empresas de tecnologia')
+    ];
+    return `<article class="market-period-card-v196 usa">
+      ${cardHeader('Bolsas dos Estados Unidos','Rentabilidade em reais, dólares ou nas duas moedas','',usToggle())}
+      ${gridHead('Índice')}
+      ${rows.map(item=>row(
+        nameCell(item.icon,item.name,item.sub,item.points)+
+        usMetric('Fechado',item.closed)+
+        usMetric('Atual',item.current,item.status)+
+        usMetric('No ano',item.year)+
+        usMetric(selectedPeriodLabel(),item.accum)
+      )).join('')}
+      <div class="market-period-card-foot-v196">BRL incorpora a variação cambial; USD representa o desempenho do índice em sua moeda de origem.</div>
+    </article>`;
+  }
+
+  function render(){
+    const shell=qs('#sec-painel-body .market-period-shell-v196') || qs('#sec-painel-body .indic-table-wrap');
+    const source=shell&&qs('.indic-table-v2',shell);
+    const host=document.getElementById('marketPeriodCardsV196');
+    if(!shell||!source||!host) return;
+
+    const wrapMode=['brl','usd','both'].find(mode=>shell.classList.contains(`us-mode-${mode}`));
+    if(wrapMode) currency=wrapMode;
+
+    host.innerHTML=buildTaxes()+buildBrasil()+buildUs();
+    shell.classList.add('market-cards-ready-v196');
+    document.documentElement.classList.add('market-period-cards-v196');
+    const meta=qs('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function schedule(){
+    clearTimeout(timer);
+    timer=setTimeout(render,60);
+  }
+
+  function bind(){
+    const host=document.getElementById('marketPeriodCardsV196');
+    if(host&&host.dataset.v196Bound!=='1'){
+      host.dataset.v196Bound='1';
+      host.addEventListener('click',event=>{
+        const button=event.target.closest('[data-v196-currency]');
+        if(!button) return;
+        currency=button.dataset.v196Currency||'brl';
+        const legacy=qs(`[data-analytic-currency="${currency}"]`);
+        if(legacy && legacy!==button) legacy.click();
+        render();
+      });
+    }
+    const source=qs('#sec-painel-body .indic-table-v2');
+    if(source&&!observer){
+      observer=new MutationObserver(schedule);
+      observer.observe(source,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','style']});
+    }
+  }
+
+  function setup(){bind();render();}
+  function init(){
+    setup();
+    [150,400,900,1600,3000,5200,8500].forEach(ms=>setTimeout(setup,ms));
+    document.addEventListener('click',event=>{
+      if(event.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel,.section-toggle-btn')){
+        setTimeout(setup,80);
+        setTimeout(setup,320);
+      }
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.__ELTAUM_MARKET_PERIOD_CARDS_V196__={build:BUILD,render,get currency(){return currency;}};
+  window.__ELTAUM_MARKET_LIVE_VALUES_V234__={build:BUILD,render};
+})();
+
+
+/* ELTAUM_RISK_PROFILE_FILTERS_20260614_v198 */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_RISK_PROFILE_FILTERS_20260614_v198';
+  function bindCatalogRiskSelect(id){
+    const select=document.getElementById(id);
+    if(!select||select.dataset.v198Bound==='1') return;
+    select.dataset.v198Bound='1';
+    select.addEventListener('change',()=>{
+      try{activeRisco=select.value||'';}catch(e){}
+      syncRiskProfileControlsV198();
+      try{applyFilter();}catch(e){console.error('v198 catalog risk filter',e);}
+    });
+  }
+  function setup(){
+    document.documentElement.classList.add('risk-profile-filters-v198');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    bindCatalogRiskSelect('catalogRiskSelectV198');
+    bindCatalogRiskSelect('mobileRiskSelectV198');
+    syncRiskProfileControlsV198();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup,{once:true});
+  else setup();
+  window.__ELTAUM_RISK_FILTERS_V198__={
+    build:BUILD,
+    normalize:normalizarPerfilRiscoV198,
+    matches:perfilRiscoCorrespondeV198,
+    sync:syncRiskProfileControlsV198
+  };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v204 — Toggle "Ocultar fundos sem dados" estável
+   Causa: o patch v127 recriava o checkbox depois do listener original,
+   fazendo o controle mudar visualmente sem atualizar hideSemDados/applyFilter.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_TOGGLE_SEM_DADOS_STABLE_20260615_v204';
+
+  function bindToggleSemDadosV204(){
+    const input = document.getElementById('toggleSemDados');
+    if(!input) return false;
+
+    document.documentElement.classList.add('toggle-sem-dados-stable-v204');
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    if(input.type !== 'checkbox') input.type = 'checkbox';
+
+    const wrap = input.closest('.toggle-wrap');
+    if(wrap){
+      wrap.classList.add('toggle-sem-dados-v204');
+      wrap.setAttribute('role','group');
+    }
+
+    const syncVisual = () => {
+      const checked = !!input.checked;
+      if(wrap) wrap.classList.toggle('is-on', checked);
+      const label = input.closest('label');
+      if(label){
+        label.setAttribute('role','switch');
+        label.setAttribute('aria-checked', checked ? 'true' : 'false');
+      }
+    };
+
+    if(input.dataset.v204Bound !== '1'){
+      input.dataset.v204Bound = '1';
+      input.addEventListener('change', function(){
+        const checked = !!input.checked;
+        try{ hideSemDados = checked; }catch(e){}
+        try{ window.hideSemDados = checked; }catch(e){}
+        try{ window.ocultarSemDados = checked; }catch(e){}
+        try{ window.hideNoData = checked; }catch(e){}
+        syncVisual();
+        try{
+          if(typeof applyFilter === 'function') applyFilter();
+          else if(typeof window.applyFilter === 'function') window.applyFilter();
+        }catch(err){
+          console.warn('[v204 toggleSemDados] falha ao aplicar filtro', err);
+        }
+      });
+    }
+
+    // Torna toda a cápsula clicável, sem duplo acionamento no switch/texto.
+    if(wrap && wrap.dataset.v204ClickBound !== '1'){
+      wrap.dataset.v204ClickBound = '1';
+      wrap.addEventListener('click', function(ev){
+        if(ev.target === input || ev.target.closest('label')) return;
+        ev.preventDefault();
+        input.click();
+      });
+    }
+
+    // O estado real da variável do catálogo prevalece quando disponível.
+    try{ input.checked = !!hideSemDados; }catch(e){}
+    syncVisual();
+    return true;
+  }
+
+  function scheduleV204(){
+    [0,180,550,1300,2800].forEach(ms => setTimeout(bindToggleSemDadosV204, ms));
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', scheduleV204, {once:true});
+  }else{
+    scheduleV204();
+  }
+
+  window.__ELTAUM_TOGGLE_SEM_DADOS_V204__ = {
+    sync: bindToggleSemDadosV204,
+    state(){
+      const input=document.getElementById('toggleSemDados');
+      return {checked:!!input?.checked,bound:input?.dataset.v204Bound||'',build:BUILD};
+    }
+  };
+})();
+
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_PRO_20260618_v217
+   Ajustes finais de rotulagem, acessibilidade e estado inicial.
+============================================================ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_CATALOG_DESKTOP_PRO_20260618_v217';
+  function applyV217(){
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+    document.documentElement.classList.add('catalog-desktop-professional-v217');
+    const per=document.getElementById('perPage');
+    if(per && String(per.value)!=='10' && typeof window.perPage==='undefined') per.value='10';
+    const search=document.getElementById('searchInput');
+    if(search) search.setAttribute('aria-describedby','filterResultSummary');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyV217,{once:true});
+  else applyV217();
+})();
+
+/* ============================================================
+   ELTAUM_CATALOG_DESKTOP_RESULT_CHIP_20260618_v221
+   Espelha no selo desktop a contagem mantida pelo resumo mobile.
+============================================================ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_CATALOG_DESKTOP_RESULT_CHIP_20260618_v221';
+
+  function syncDesktopResultChipV221(){
+    const source=document.getElementById('filterResultSummary');
+    const target=document.getElementById('desktopFilterResultSummary');
+    if(!target) return;
+
+    const text=(source?.textContent || '—').trim() || '—';
+    if(target.textContent!==text) target.textContent=text;
+    target.title=text;
+
+    const search=document.getElementById('searchInput');
+    if(search){
+      const desktop=window.matchMedia && window.matchMedia('(min-width:1181px)').matches;
+      search.setAttribute('aria-describedby',desktop?'desktopFilterResultSummary':'filterResultSummary');
+    }
+
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function bindDesktopResultChipV221(){
+    const source=document.getElementById('filterResultSummary');
+    if(source && source.dataset.v221Observed!=='1'){
+      source.dataset.v221Observed='1';
+      try{
+        const observer=new MutationObserver(syncDesktopResultChipV221);
+        observer.observe(source,{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['title']});
+      }catch(e){}
+    }
+
+    syncDesktopResultChipV221();
+    requestAnimationFrame(syncDesktopResultChipV221);
+    setTimeout(syncDesktopResultChipV221,120);
+    setTimeout(syncDesktopResultChipV221,500);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',bindDesktopResultChipV221,{once:true});
+  }else{
+    bindDesktopResultChipV221();
+  }
+
+  ['input','change','click'].forEach(function(evt){
+    document.addEventListener(evt,function(){setTimeout(syncDesktopResultChipV221,40);},true);
+  });
+  window.addEventListener('resize',function(){setTimeout(syncDesktopResultChipV221,60);},{passive:true});
+
+  window.__ELTAUM_DESKTOP_RESULT_CHIP_V221__={sync:syncDesktopResultChipV221};
+})();
+
+
+/* ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223 */
+window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223';
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v231 — LEGIBILIDADE NUMÉRICA
+   - mantém classes semânticas após atualizações dinâmicas;
+   - usa zero diferenciado e algarismos tabulares;
+   - reserva verde/vermelho para variações e mantém cotações neutras.
+════════════════════════════════════════════════════ */
+(function numericLegibilityV231(){
+  'use strict';
+  const MINI_IDS=['closedMiniCdi','closedMiniIpca','closedMiniDolar','closedMiniIbov'];
+  function apply(){
+    document.documentElement.classList.add('numeric-legibility-v231');
+    MINI_IDS.forEach(function(id){
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.classList.add('finance-number-v231');
+      const txt=(el.textContent||'').trim();
+      if(/^R\$\s*/i.test(txt)) el.classList.add('market-quote-v231');
+      else el.classList.remove('market-quote-v231');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true});
+  else apply();
+  window.setTimeout(apply,350);
+})();
+
+
+/* ============================================================
+   ELTAUM_SAVINGS_MOBILE_REORG_20260618_v242
+   Poupança mobile: textos mais curtos e ações mais equilibradas.
+============================================================ */
+(function(){
+  function ajustarPoupancaMobileV242(){
+    const title = document.getElementById('poupCurrentScenarioTitleV214');
+    if(title) title.textContent = 'Regra vigente';
+
+    const btn = document.getElementById('poupExpandBtn');
+    if(btn){
+      const expanded = btn.getAttribute('aria-expanded') === 'true';
+      btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+    }
+
+    const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+    if(source && !source.dataset.v242Short){
+      source.dataset.v242Short = '1';
+      source.innerHTML = 'Calculadora BCB <span aria-hidden="true">↗</span>';
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', ajustarPoupancaMobileV242, {once:true});
+  }else{
+    ajustarPoupancaMobileV242();
+  }
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(ajustarPoupancaMobileV242, 40);
+      setTimeout(ajustarPoupancaMobileV242, 220);
+    }
+  }, true);
+  window.addEventListener('load', ajustarPoupancaMobileV242);
+})();
+
+
+/* ELTAUM_CDI_TITLE_SHORT_V263 */
+(function(){
+  function applyCdiTitleShortV263(){
+    const title = document.getElementById('cdiYearHistoryTitle');
+    if(title){
+      title.textContent = title.textContent.replace(/\s+—\s+mais recente primeiro/i,'').trim();
+      if(!title.textContent) title.textContent = 'CDI mensal 2026';
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyCdiTitleShortV263, {once:true});
+  }else{
+    applyCdiTitleShortV263();
+  }
+  setTimeout(applyCdiTitleShortV263, 300);
+  setTimeout(applyCdiTitleShortV263, 1200);
 })();
