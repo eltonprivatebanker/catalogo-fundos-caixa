@@ -1,3 +1,4 @@
+// ELTAUM_RATES_PREMIUM_20260618_v261
 // ELTAUM_RATES_MOBILE_COMPACT_20260618_v260
 // ELTAUM_SELIC_MOBILE_FIT_20260618_v258
 // ELTAUM_RATES_REFERENCE_STABLE_20260618_v257
@@ -1877,6 +1878,7 @@ function renderCdiYearHistory(d){
     </span>`;
   }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
   requestAnimationFrame(() => { try{ strip.scrollLeft = 0; }catch(e){} });
+  // ELTAUM_RATES_PREMIUM_CDI_SCROLLSTART_V261
 }
 
 /* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
@@ -14530,7 +14532,7 @@ function toggleCopomCalendarV167(force){
   const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Recolher' : 'Ver calendário';
+    btn.textContent = open ? 'Recolher' : 'Calendário';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;
