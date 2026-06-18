@@ -8385,7 +8385,7 @@ async function sharePainelMercado(){
     set('selicMinResumo', pct(minVal) + ' a.a.');
     set('selicMinData', dataBR(minItem?._dt));
     set('selicHojeResumo', pct(hoje.valor) + ' a.a.');
-    set('selicHojeData', 'desde ' + dataBR(hoje._dt));
+    set('selicHojeData', dataBR(hoje._dt));
   }
 
   async function desenharSelic(range){
@@ -8398,6 +8398,7 @@ async function sharePainelMercado(){
     limparMsg(canvas);
     atualizarResumoSelic(slice);
     destruirChart(canvas);
+
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
     const maxVal = Math.max(...values);
@@ -8406,29 +8407,36 @@ async function sharePainelMercado(){
     const maxIndex = values.indexOf(maxVal);
     const minIndex = values.indexOf(minVal);
 
-    const baseRadius = values.map(() => 2.4);
+    // v245: melhora a leitura no mobile. A linha fica mais limpa e apenas
+    // máxima, mínima e vigente recebem marcadores de destaque.
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
+    const dense = values.length > 70;
+    const medium = values.length > 28;
+    const basePointRadius = isMobile ? (dense ? 0 : medium ? 1.2 : 2.2) : (dense ? 1.3 : 2.6);
+    const baseHoverRadius = isMobile ? 4.2 : 5;
+    const baseRadius = values.map(() => basePointRadius);
     const pointColors = values.map(() => '#e8bb6a');
     const pointBorders = values.map(() => 'rgba(16,18,30,.95)');
-    const hoverRadius = values.map(() => 5);
+    const hoverRadius = values.map(() => baseHoverRadius);
 
     const applyMarker = (idx, color, radius) => {
       if(idx < 0 || idx >= values.length) return;
       baseRadius[idx] = Math.max(baseRadius[idx], radius);
       pointColors[idx] = color;
       pointBorders[idx] = 'rgba(8,10,18,.98)';
-      hoverRadius[idx] = Math.max(hoverRadius[idx], radius + 2);
+      hoverRadius[idx] = Math.max(hoverRadius[idx], radius + 1.8);
     };
 
-    applyMarker(maxIndex, '#e8bb6a', 5.6);
-    applyMarker(minIndex, '#5b9cf6', 5.6);
-    applyMarker(currentIndex, '#2ed17a', 6.2);
+    applyMarker(maxIndex, '#e8bb6a', isMobile ? 4.8 : 5.6);
+    applyMarker(minIndex, '#5b9cf6', isMobile ? 4.8 : 5.6);
+    applyMarker(currentIndex, '#2ed17a', isMobile ? 5.4 : 6.2);
 
-    const markerDataset = (index, color, label) => ({
+    const markerDataset = (index, color, label, radius) => ({
       type:'scatter',
       label,
       data: values.map((v, i) => i === index ? v : null),
-      pointRadius: 6,
-      pointHoverRadius: 7,
+      pointRadius: radius,
+      pointHoverRadius: radius + 1.5,
       pointBackgroundColor: color,
       pointBorderColor: 'rgba(8,10,18,.98)',
       pointBorderWidth: 2,
@@ -8437,52 +8445,8 @@ async function sharePainelMercado(){
       order: 1
     });
 
-    const markerLabels = [
-      { index: maxIndex, text: 'Máx', color: '#e8bb6a', dx: 0, dy: -12 },
-      { index: minIndex, text: 'Mín', color: '#5b9cf6', dx: 0, dy: -12 },
-      { index: currentIndex, text: 'Hoje', color: '#2ed17a', dx: 0, dy: -12 }
-    ];
-
-    const dedup = new Map();
-    markerLabels.forEach(marker => {
-      const key = String(marker.index);
-      if(!dedup.has(key)) dedup.set(key, []);
-      dedup.get(key).push(marker);
-    });
-    const markerGroups = [];
-    dedup.forEach(list => {
-      list.forEach((marker, pos) => {
-        markerGroups.push({ ...marker, dy: -12 - (pos * 12) });
-      });
-    });
-
-    const selicMarkerLabelsPlugin = {
-      id:'selicMarkerLabelsV243',
-      afterDatasetsDraw(chart){
-        const { ctx, chartArea } = chart;
-        if(!ctx || !chartArea) return;
-        ctx.save();
-        ctx.font = '700 10px Inter, system-ui, sans-serif';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        markerGroups.forEach(marker => {
-          const xScale = chart.scales?.x;
-          const yScale = chart.scales?.y;
-          if(!xScale || !yScale) return;
-          const x = xScale.getPixelForValue(marker.index);
-          const y = yScale.getPixelForValue(values[marker.index]);
-          if(!Number.isFinite(x) || !Number.isFinite(y)) return;
-          let ty = y + marker.dy;
-          if(ty < chartArea.top + 10) ty = y + 14;
-          ctx.lineWidth = 3.5;
-          ctx.strokeStyle = 'rgba(6,8,16,.92)';
-          ctx.strokeText(marker.text, x + marker.dx, ty);
-          ctx.fillStyle = marker.color;
-          ctx.fillText(marker.text, x + marker.dx, ty);
-        });
-        ctx.restore();
-      }
-    };
+    const defaults = chartDefaults();
+    const maxTicks = isMobile ? (range >= 999 ? 6 : range >= 60 ? 5 : 4) : undefined;
 
     new Chart(ctx, {
       type:'line',
@@ -8491,11 +8455,11 @@ async function sharePainelMercado(){
           label:'Selic',
           data:values,
           borderColor:'#c8973a',
-          backgroundColor:'rgba(200,151,58,.08)',
-          borderWidth:2,
+          backgroundColor:'rgba(200,151,58,.07)',
+          borderWidth:isMobile ? 2.15 : 2,
           pointBackgroundColor:pointColors,
           pointBorderColor:pointBorders,
-          pointBorderWidth:1.5,
+          pointBorderWidth:1.25,
           pointRadius:baseRadius,
           pointHoverRadius:hoverRadius,
           fill:true,
@@ -8503,17 +8467,18 @@ async function sharePainelMercado(){
           tension:0,
           order:3
         },
-        markerDataset(maxIndex, '#e8bb6a', 'Máxima do período'),
-        markerDataset(minIndex, '#5b9cf6', 'Mínima do período'),
-        markerDataset(currentIndex, '#2ed17a', 'Taxa vigente')
+        markerDataset(maxIndex, '#e8bb6a', 'Máxima do período', isMobile ? 5.4 : 6),
+        markerDataset(minIndex, '#5b9cf6', 'Mínima do período', isMobile ? 5.4 : 6),
+        markerDataset(currentIndex, '#2ed17a', 'Taxa vigente', isMobile ? 6 : 6.8)
       ] },
-      plugins:[selicMarkerLabelsPlugin],
       options:{
-        ...chartDefaults(),
+        ...defaults,
+        maintainAspectRatio:false,
+        layout:{ padding:{ top:isMobile ? 6 : 10, right:isMobile ? 8 : 12, bottom:isMobile ? 2 : 6, left:isMobile ? 0 : 4 } },
         plugins:{
-          ...chartDefaults().plugins,
+          ...defaults.plugins,
           tooltip:{
-            ...chartDefaults().plugins.tooltip,
+            ...defaults.plugins.tooltip,
             callbacks:{
               label:ctx=>{
                 const idx = ctx.dataIndex;
@@ -8524,7 +8489,31 @@ async function sharePainelMercado(){
           },
           legend:{ display:false }
         },
-        scales:{ ...chartDefaults().scales, y:{ ...chartDefaults().scales.y, suggestedMin:0, suggestedMax:maxVal * 1.10 } }
+        scales:{
+          ...defaults.scales,
+          x:{
+            ...defaults.scales.x,
+            ticks:{
+              ...defaults.scales.x.ticks,
+              autoSkip:true,
+              maxTicksLimit:maxTicks,
+              maxRotation:isMobile ? 42 : 35,
+              minRotation:isMobile ? 42 : 0,
+              font:{ size:isMobile ? 9 : 10 }
+            },
+            grid:{ ...defaults.scales.x.grid, drawBorder:false }
+          },
+          y:{
+            ...defaults.scales.y,
+            suggestedMin:0,
+            suggestedMax:maxVal * 1.10,
+            ticks:{
+              ...defaults.scales.y.ticks,
+              maxTicksLimit:isMobile ? 7 : 8,
+              font:{ size:isMobile ? 9 : 10 }
+            }
+          }
+        }
       }
     });
   }

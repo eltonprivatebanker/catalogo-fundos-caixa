@@ -37337,3 +37337,91 @@ html.market-live-values-v234 .market-period-metric-v196 > strong.dash + small{
     font-size:.54rem !important;
   }
 }
+
+
+/* ELTAUM_SELIC_CHART_POLISH_20260618_v245
+   Remove rótulos espremidos no gráfico e compacta os cards de resumo no mobile. */
+@media (max-width:700px){
+  html.selic-chart-polish-v245 #evoChartSelicCard{
+    border-radius:18px !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .chart-card-header{
+    padding:12px 14px 9px !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .chart-card-title{
+    font-size:.91rem !important;
+    line-height:1.18 !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .chart-card-sub{
+    font-size:.64rem !important;
+    line-height:1.25 !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .chart-tabs{
+    gap:7px !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .chart-tab{
+    min-height:37px !important;
+    padding:8px 4px !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .chart-reading{
+    margin:0 14px 8px !important;
+    padding:9px 10px !important;
+    font-size:.73rem !important;
+    line-height:1.24 !important;
+    border-radius:12px !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .selic-summary-row{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:6px !important;
+    padding:0 14px 9px !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .selic-summary-chip{
+    min-height:66px !important;
+    padding:8px 7px !important;
+    border-radius:13px !important;
+    overflow:hidden !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .selic-summary-dot{
+    width:9px !important;
+    height:9px !important;
+    flex:0 0 9px !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .selic-summary-label{
+    font-size:.55rem !important;
+    letter-spacing:.075em !important;
+    line-height:1.05 !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .selic-summary-value{
+    font-size:.67rem !important;
+    line-height:1.05 !important;
+    white-space:nowrap !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .selic-summary-date{
+    font-size:.52rem !important;
+    line-height:1.1 !important;
+    white-space:nowrap !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard .chart-body{
+    height:268px !important;
+    min-height:268px !important;
+    padding:4px 8px 10px !important;
+    overflow:hidden !important;
+  }
+
+  html.selic-chart-polish-v245 #evoChartSelicCard canvas#chartSelic{
+    max-width:100% !important;
+  }
+}
