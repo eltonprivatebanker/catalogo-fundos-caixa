@@ -1,3 +1,4 @@
+// ELTAUM_TITLE_NORMALIZED_JS_v303
 // ELTAUM_TITLE_UNIFIED_v302
 // ELTAUM_SECTION_TITLE_FORCE_v301
 // ELTAUM_SECTION_TITLE_SYSTEM_v300
@@ -16434,3 +16435,114 @@ function openCdiAnalyticTableV274(){
 
   return false;
 }
+
+
+/* ════════════════════════════════════════════════════
+   v303 — normalizador final de títulos
+   Motivo: regras antigas de algumas seções ainda tinham !important e
+   venciam o CSS da v302. Aqui a padronização é aplicada com
+   element.style.setProperty(..., 'important'), que vence o legado.
+════════════════════════════════════════════════════ */
+(function normalizeSectionTitlesV303(){
+  const TARGETS = [
+    'Resumo executivo',
+    'Fundos disponíveis',
+    'Rankings dos fundos',
+    'Indicadores de mercado',
+    'Dólar PTAX',
+    'Boletim Focus',
+    'Inflação e juros',
+    'Comparador de fundos'
+  ];
+
+  function txt(el){
+    return String(el?.innerText || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function isTarget(h2){
+    const t = txt(h2).replace(/^[^\p{L}\p{N}]+/u, '').trim().toLowerCase();
+    return TARGETS.some(x => t === x.toLowerCase());
+  }
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    document.documentElement.classList.add('title-normalized-v303');
+
+    document.querySelectorAll('h2.section-title-v302, h2.page-section-title-v302, h2.compar-title').forEach(h2 => {
+      if(!isTarget(h2)) return;
+
+      h2.classList.add('section-title-v303-final');
+
+      const isNarrow = window.matchMedia('(max-width: 390px)').matches;
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const titleSize = isNarrow ? '1.16rem' : (isMobile ? '1.22rem' : '1.34rem');
+      const iconSize = isNarrow ? '26px' : (isMobile ? '28px' : '30px');
+      const iconFont = isNarrow ? '.82rem' : (isMobile ? '.88rem' : '.95rem');
+
+      setImportant(h2, 'display', 'flex');
+      setImportant(h2, 'align-items', 'center');
+      setImportant(h2, 'justify-content', 'flex-start');
+      setImportant(h2, 'gap', isNarrow ? '8px' : '9px');
+      setImportant(h2, 'margin', '0 0 12px');
+      setImportant(h2, 'padding', '0');
+      setImportant(h2, 'width', '100%');
+      setImportant(h2, 'color', '#f8fafc');
+      setImportant(h2, 'font-family', 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif');
+      setImportant(h2, 'font-size', titleSize);
+      setImportant(h2, 'line-height', '1.12');
+      setImportant(h2, 'font-weight', '800');
+      setImportant(h2, 'letter-spacing', '-0.032em');
+      setImportant(h2, 'text-transform', 'none');
+      setImportant(h2, 'text-shadow', 'none');
+      setImportant(h2, 'background', 'transparent');
+      setImportant(h2, 'border', '0');
+
+      const icon = h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
+      if(icon){
+        icon.classList.add('section-title-icon-v303-final');
+        setImportant(icon, 'width', iconSize);
+        setImportant(icon, 'height', iconSize);
+        setImportant(icon, 'min-width', iconSize);
+        setImportant(icon, 'max-width', iconSize);
+        setImportant(icon, 'flex', `0 0 ${iconSize}`);
+        setImportant(icon, 'border-radius', isNarrow ? '8px' : '9px');
+        setImportant(icon, 'display', 'inline-flex');
+        setImportant(icon, 'align-items', 'center');
+        setImportant(icon, 'justify-content', 'center');
+        setImportant(icon, 'background', 'linear-gradient(135deg, rgba(246,200,97,.18), rgba(76,104,255,.13))');
+        setImportant(icon, 'border', '1px solid rgba(246,200,97,.22)');
+        setImportant(icon, 'box-shadow', 'inset 0 1px 0 rgba(255,255,255,.08), 0 6px 14px rgba(0,0,0,.18)');
+        setImportant(icon, 'color', 'inherit');
+        setImportant(icon, 'font-size', iconFont);
+        setImportant(icon, 'font-weight', '400');
+        setImportant(icon, 'line-height', '1');
+        setImportant(icon, 'letter-spacing', '0');
+        setImportant(icon, 'text-shadow', 'none');
+      }
+
+      const label = h2.querySelector('.section-title-text-v302, .section-title-text-v300, span:last-child');
+      if(label){
+        label.classList.add('section-title-text-v303-final');
+        setImportant(label, 'display', 'inline-block');
+        setImportant(label, 'min-width', '0');
+        setImportant(label, 'color', '#f8fafc');
+        setImportant(label, 'font-size', 'inherit');
+        setImportant(label, 'line-height', 'inherit');
+        setImportant(label, 'font-weight', 'inherit');
+        setImportant(label, 'letter-spacing', 'inherit');
+        setImportant(label, 'text-transform', 'none');
+        setImportant(label, 'text-shadow', 'none');
+      }
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();

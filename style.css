@@ -46744,3 +46744,22 @@ html.title-unified-v302 .section-subline{
     font-size: .82rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v303 — apoio visual para títulos normalizados por JS
+════════════════════════════════════════════════════ */
+
+html.title-normalized-v303 h2.section-title-v303-final::before,
+html.title-normalized-v303 h2.section-title-v303-final::after{
+  content: none !important;
+  display: none !important;
+}
+
+html.title-normalized-v303 h2.section-title-v303-final{
+  color: #f8fafc !important;
+}
+
+html.title-normalized-v303 h2.section-title-v303-final .section-title-icon-v303-final{
+  pointer-events: none !important;
+}
