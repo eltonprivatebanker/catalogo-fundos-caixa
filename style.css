@@ -43062,3 +43062,168 @@ html.palette-applied-v278 .footer-summary-sub{
     min-height: auto !important;
   }
 }
+
+
+/* ==========================================================================
+   v280 — RANKING MOBILE: RENTABILIDADE NO TOPO DIREITO
+   Melhora escaneabilidade dos cards-resumo no celular.
+========================================================================== */
+
+@media (max-width: 760px){
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-head{
+    margin-bottom: 16px !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-title-group h2{
+    line-height: 1.08 !important;
+    letter-spacing: -.035em !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-summary{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card{
+    min-height: 122px !important;
+    padding: 18px 18px 16px !important;
+    border-radius: 20px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    grid-template-areas:
+      "label value"
+      "name name"
+      "meta meta" !important;
+    column-gap: 14px !important;
+    row-gap: 8px !important;
+    align-items: start !important;
+    background: linear-gradient(180deg, rgba(15,22,40,.94), rgba(8,12,23,.98)) !important;
+    border-color: rgba(148,163,184,.18) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 12px 32px rgba(0,0,0,.22) !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card::before{
+    inset: 0 auto 0 0 !important;
+    width: 3px !important;
+    height: auto !important;
+    border-radius: 20px 0 0 20px !important;
+    background: linear-gradient(180deg, rgba(216,170,84,.92), rgba(216,170,84,.10)) !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.best::before,
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.month::before{
+    background: linear-gradient(180deg, rgba(45,212,160,.92), rgba(45,212,160,.12)) !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.worst::before{
+    background: linear-gradient(180deg, rgba(255,111,145,.92), rgba(255,111,145,.12)) !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.pl::before{
+    background: linear-gradient(180deg, rgba(125,162,255,.85), rgba(125,162,255,.10)) !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card span{
+    grid-area: label !important;
+    align-self: center !important;
+    margin: 0 !important;
+    min-width: 0 !important;
+    color: var(--gold3, #f2ca78) !important;
+    font-size: .78rem !important;
+    line-height: 1.15 !important;
+    letter-spacing: .095em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card strong{
+    grid-area: value !important;
+    justify-self: end !important;
+    align-self: center !important;
+    margin: 0 !important;
+    text-align: right !important;
+    font-size: clamp(1.18rem, 6.7vw, 1.82rem) !important;
+    line-height: 1 !important;
+    letter-spacing: -.04em !important;
+    white-space: nowrap !important;
+    max-width: 46vw !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.pl strong{
+    font-size: clamp(1.05rem, 5.8vw, 1.48rem) !important;
+    max-width: 54vw !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card small{
+    grid-area: name !important;
+    margin-top: 4px !important;
+    color: var(--text, #f6f8ff) !important;
+    font-size: .93rem !important;
+    line-height: 1.26 !important;
+    font-weight: 850 !important;
+    letter-spacing: -.018em !important;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card em{
+    grid-area: meta !important;
+    margin-top: 0 !important;
+    color: var(--muted, #aeb9d4) !important;
+    font-size: .80rem !important;
+    line-height: 1.25 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.best,
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.month{
+    border-color: rgba(45,212,160,.24) !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.pl{
+    border-color: rgba(125,162,255,.24) !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.worst{
+    border-color: rgba(255,111,145,.24) !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card{
+    padding: 16px 15px 15px !important;
+    column-gap: 10px !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card span{
+    font-size: .70rem !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card strong{
+    font-size: clamp(1.08rem, 6vw, 1.52rem) !important;
+    max-width: 44vw !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card.pl strong{
+    font-size: clamp(1rem, 5.4vw, 1.30rem) !important;
+    max-width: 50vw !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card small{
+    font-size: .86rem !important;
+  }
+
+  html.ranking-mobile-value-right-v280 #rankingsSection .ranking-exec-card em{
+    font-size: .74rem !important;
+  }
+}
