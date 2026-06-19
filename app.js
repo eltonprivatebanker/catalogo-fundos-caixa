@@ -1907,9 +1907,18 @@ function renderCdiYearHistory(d){
     return;
   }
 
-  const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 0.32)' : i === idxFechado ? 'rgba(232, 187, 106, 0.20)' : 'rgba(66, 116, 255, 0.18)');
-  const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 0.92)' : i === idxFechado ? 'rgba(232, 187, 106, 0.78)' : 'rgba(109, 133, 205, 0.55)');
+  const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 0.72)' : i === idxFechado ? 'rgba(232, 187, 106, 0.62)' : 'rgba(73, 112, 205, 0.56)');
+  const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 1)' : i === idxFechado ? 'rgba(232, 187, 106, 0.95)' : 'rgba(114, 145, 235, 0.80)');
   const isMobile = window.matchMedia('(max-width: 760px)').matches;
+  const maxMensal = Math.max(0.1, ...mensal.filter(Number.isFinite));
+  const maxAcumulado = Math.max(1, ...acumulado.filter(Number.isFinite), Number.isFinite(acumAno) ? acumAno : 0);
+  const yMonthlyMax = Math.max(1.5, Math.ceil((maxMensal + 0.18) * 10) / 10);
+  const yAccumMax = Math.max(4, Math.ceil((maxAcumulado + 0.45) * 2) / 2);
+  const fmtAxis1 = value => {
+    const n = Number(value);
+    if(!Number.isFinite(n)) return '—';
+    return n.toFixed(n % 1 === 0 ? 0 : 1).replace('.',',') + '%';
+  };
 
   if(_chartCdiYearV271){
     try{ _chartCdiYearV271.destroy(); }catch(e){}
@@ -1929,10 +1938,10 @@ function renderCdiYearHistory(d){
           backgroundColor: barBg,
           borderColor: barBorder,
           borderWidth: 1.4,
-          borderRadius: 10,
+          borderRadius: { topLeft: 8, topRight: 8, bottomLeft: 3, bottomRight: 3 },
           borderSkipped: false,
-          barThickness: isMobile ? 18 : 24,
-          maxBarThickness: isMobile ? 20 : 28
+          barThickness: isMobile ? 22 : 34,
+          maxBarThickness: isMobile ? 24 : 38
         },
         {
           type: 'line',
@@ -1941,14 +1950,14 @@ function renderCdiYearHistory(d){
           yAxisID: 'y1',
           borderColor: '#e8bb6a',
           backgroundColor: 'rgba(232, 187, 106, 0.10)',
-          borderWidth: 2.2,
+          borderWidth: 2.6,
           tension: 0.25,
           fill: false,
           pointBackgroundColor: acumulado.map((_,i) => i === idxAtual ? '#35d09a' : '#e8bb6a'),
           pointBorderColor: '#0b1021',
           pointBorderWidth: 1.4,
-          pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? 4 : 2.6),
-          pointHoverRadius: 5
+          pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? 4.5 : 3),
+          pointHoverRadius: 5.5
         }
       ]
     },
@@ -1988,11 +1997,13 @@ function renderCdiYearHistory(d){
         },
         y: {
           beginAtZero: true,
-          suggestedMax: Math.max(1.5, ...mensal) * 1.35,
+          max: yMonthlyMax,
           ticks: {
             color: 'rgba(188,200,234,0.72)',
             padding: 8,
-            callback: value => fmtAxis(value)
+            stepSize: 0.5,
+            maxTicksLimit: 5,
+            callback: value => fmtAxis1(value)
           },
           grid: {
             color: 'rgba(255,255,255,0.06)',
@@ -2002,11 +2013,13 @@ function renderCdiYearHistory(d){
         y1: {
           beginAtZero: true,
           position: 'right',
-          suggestedMax: Math.max(4, ...acumulado, acumAno) * 1.14,
+          max: yAccumMax,
           display: !isMobile,
           ticks: {
             color: 'rgba(232,187,106,0.76)',
-            callback: value => fmtAxis(value)
+            stepSize: 1,
+            maxTicksLimit: 6,
+            callback: value => fmtAxis1(value)
           },
           grid: { drawOnChartArea: false }
         }
@@ -2015,7 +2028,7 @@ function renderCdiYearHistory(d){
   });
 }
 
-/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
+/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
    Formata a atualização do cabeçalho de forma compacta, preservando
    a data completa em title/aria-label. */
 function formatarAtualizacaoHeader(valor){

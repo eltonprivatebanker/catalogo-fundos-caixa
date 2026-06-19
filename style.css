@@ -42081,3 +42081,68 @@ html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .copom-footnote-v
     gap:10px;
   }
 }
+
+/* ELTAUM_CDI_GRAFICO_PROPORCAO_V272
+   Ajuste de proporção do gráfico CDI: escala mensal menor,
+   barras mais legíveis e card menos espichado. */
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-chart-block-v271{
+  min-height: auto !important;
+  padding-bottom: 16px !important;
+}
+
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-chart-canvas-wrap-v271{
+  height: 238px !important;
+  min-height: 238px !important;
+  padding: 8px 10px 2px !important;
+  border-radius: 16px !important;
+  background:
+    linear-gradient(180deg, rgba(9,16,32,.90), rgba(7,12,24,.98)) !important;
+}
+
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-kpis-v271{
+  margin-bottom: 12px !important;
+}
+
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-kpi-v271{
+  padding: 10px 13px !important;
+  border-radius: 14px !important;
+}
+
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-kpi-label-v271{
+  font-size: .66rem !important;
+  margin-bottom: 5px !important;
+}
+
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-kpi-value-v271{
+  font-size: 1.06rem !important;
+}
+
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-chart-legend-v271{
+  margin-top: 8px !important;
+  font-size: .68rem !important;
+}
+
+html.cdi-chart-proportion-v272 #sec-mercado .cdi-chart-legend-v271 .legend-bar-v271{
+  background: rgba(73,112,205,.72) !important;
+  border-color: rgba(114,145,235,.85) !important;
+}
+
+@media (min-width: 1100px){
+  html.cdi-chart-proportion-v272 #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+    grid-template-columns: minmax(390px,.86fr) minmax(560px,1.14fr) !important;
+  }
+}
+
+@media (max-width: 860px){
+  html.cdi-chart-proportion-v272 #sec-mercado .cdi-chart-canvas-wrap-v271{
+    height: 220px !important;
+    min-height: 220px !important;
+  }
+}
+
+@media (max-width: 700px){
+  html.cdi-chart-proportion-v272 #sec-mercado .cdi-chart-canvas-wrap-v271{
+    height: 205px !important;
+    min-height: 205px !important;
+  }
+}

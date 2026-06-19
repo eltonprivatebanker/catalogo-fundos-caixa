@@ -1,16 +1,25 @@
-# Catálogo de Fundos CAIXA — versão v271
+# Catálogo de Fundos CAIXA — v272
 
-Arquivos desta entrega:
+Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Principais ajustes da v271
-- CDI reformulado com gráfico executivo (barras para o CDI mensal + linha para o CDI acumulado no ano).
-- Bloco do CDI simplificado para evitar excesso de cards e reduzir a sensação de compressão no desktop.
-- KPIs do CDI adicionados: mês atual, último mês fechado e acumulado no ano.
-- Bloco do Copom simplificado: mantém apenas última decisão e próxima reunião.
-- Calendário anual do Copom removido da exibição da página (mantido apenas o link externo para o BCB).
+## Ajuste desta versão
 
-## Observação
-Se o navegador estiver usando cache antigo, faça atualização forçada após subir os arquivos.
+Corrigida a proporção do gráfico do CDI.
+
+Principais mudanças:
+- escala do CDI mensal ajustada para não ficar de 0% a 3% sem necessidade;
+- eixo esquerdo agora mostra casas decimais quando necessário, evitando rótulos repetidos como 1%, 1%, 2%;
+- barras do CDI mensal ficaram mais cheias e legíveis;
+- linha do CDI acumulado ficou mais estável visualmente;
+- altura do card foi reduzida para ficar menos “espichado”;
+- o bloco continua mostrando: mês atual, último fechado e acumulado no ano.
+
+## Como subir
+
+Substitua no GitHub:
+- index.html
+- style.css
+- app.js
