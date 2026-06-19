@@ -41919,3 +41919,165 @@ html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .copom-footnote-v
   html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item,
   html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-extra-v167{min-height:72px !important;}
 }
+
+
+/* ELTAUM_CDI_GRAFICO_EXECUTIVO_V271 */
+#sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+  align-items:stretch;
+}
+#sec-mercado .copom-refined-v271 .reference-subhead-v167{
+  margin-bottom:14px;
+}
+#sec-mercado .copom-refined-v271 .reference-subhead-v167 small{
+  max-width:42ch;
+}
+#sec-mercado .copom-refined-v271 .copom-link-v271{
+  text-decoration:none;
+}
+#sec-mercado .copom-refined-v271 .copom-meetings-store-v271{
+  display:none !important;
+}
+#sec-mercado .copom-refined-v271 .copom-exec-summary-v270{
+  margin-bottom:14px;
+}
+#sec-mercado .cdi-chart-block-v271{
+  display:flex;
+  flex-direction:column;
+  min-height:100%;
+}
+#sec-mercado .cdi-chart-head-v271{
+  margin-bottom:12px;
+}
+#sec-mercado .cdi-kpis-v271{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:12px;
+  margin-bottom:14px;
+}
+#sec-mercado .cdi-kpi-v271{
+  padding:12px 14px;
+  border-radius:16px;
+  border:1px solid rgba(120,140,210,.20);
+  background:rgba(10,16,34,.72);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+}
+#sec-mercado .cdi-kpi-v271.is-current{
+  border-color:rgba(42,191,138,.45);
+  background:linear-gradient(180deg, rgba(8,50,44,.88), rgba(10,16,34,.88));
+}
+#sec-mercado .cdi-kpi-v271.is-lastclosed{
+  border-color:rgba(200,151,58,.42);
+  background:linear-gradient(180deg, rgba(36,29,19,.92), rgba(10,16,34,.88));
+}
+#sec-mercado .cdi-kpi-v271.is-total{
+  border-color:rgba(94,138,255,.34);
+}
+#sec-mercado .cdi-kpi-label-v271{
+  display:block;
+  font-size:.72rem;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:7px;
+}
+#sec-mercado .cdi-kpi-value-v271{
+  display:block;
+  font-size:1.2rem;
+  line-height:1.1;
+  color:var(--text);
+}
+#sec-mercado .cdi-kpi-v271.is-current .cdi-kpi-value-v271{
+  color:#3ad69b;
+}
+#sec-mercado .cdi-kpi-v271.is-lastclosed .cdi-kpi-value-v271,
+#sec-mercado .cdi-kpi-v271.is-total .cdi-kpi-value-v271{
+  color:#e8bb6a;
+}
+#sec-mercado .cdi-chart-canvas-wrap-v271{
+  position:relative;
+  min-height:280px;
+  height:280px;
+  padding:10px 8px 4px;
+  border-radius:18px;
+  border:1px solid rgba(120,140,210,.16);
+  background:linear-gradient(180deg, rgba(9,16,32,.92), rgba(7,12,24,.98));
+}
+#sec-mercado .cdi-chart-canvas-wrap-v271 canvas{
+  width:100% !important;
+  height:100% !important;
+}
+#sec-mercado .cdi-chart-legend-v271{
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  align-items:center;
+  margin:10px 2px 0;
+  font-size:.74rem;
+  color:var(--muted);
+}
+#sec-mercado .cdi-chart-legend-v271 span{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+#sec-mercado .cdi-chart-legend-v271 i{
+  display:inline-block;
+  flex:0 0 auto;
+}
+#sec-mercado .cdi-chart-legend-v271 .legend-bar-v271{
+  width:12px;
+  height:12px;
+  border-radius:4px;
+  background:rgba(66,116,255,.48);
+  border:1px solid rgba(109,133,205,.7);
+}
+#sec-mercado .cdi-chart-legend-v271 .legend-line-v271{
+  width:18px;
+  height:2px;
+  border-radius:999px;
+  background:#e8bb6a;
+  position:relative;
+}
+#sec-mercado .cdi-chart-legend-v271 .legend-line-v271::after{
+  content:'';
+  position:absolute;
+  right:-1px;
+  top:50%;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#e8bb6a;
+  transform:translateY(-50%);
+}
+@media (min-width:1100px){
+  #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+    grid-template-columns:minmax(380px,.9fr) minmax(520px,1.1fr);
+    gap:18px;
+  }
+}
+@media (max-width:860px){
+  #sec-mercado .cdi-kpis-v271{
+    grid-template-columns:1fr;
+    gap:10px;
+  }
+  #sec-mercado .cdi-chart-canvas-wrap-v271{
+    min-height:240px;
+    height:240px;
+  }
+  #sec-mercado .cdi-chart-legend-v271{
+    gap:12px;
+  }
+}
+@media (max-width:700px){
+  #sec-mercado .cdi-chart-canvas-wrap-v271{
+    min-height:220px;
+    height:220px;
+    padding:8px 4px 2px;
+  }
+  #sec-mercado .cdi-kpi-value-v271{
+    font-size:1.08rem;
+  }
+  #sec-mercado .copom-refined-v271 .reference-subhead-v167{
+    gap:10px;
+  }
+}

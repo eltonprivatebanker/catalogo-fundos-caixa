@@ -1810,15 +1810,62 @@ function atualizarResumoCenario(d){
 }
 
 
+let _chartCdiYearV271 = null;
+
 function renderCdiYearHistory(d){
-  const strip = $('cdiMonthStrip');
-  if(!strip) return;
+  const chartCanvas = $('cdiYearChartV271');
+  if(!chartCanvas) return;
 
   const cdi = d?.cards?.cdi || {};
   const hist = Array.isArray(cdi.historico) ? cdi.historico : [];
+  const title = $('cdiYearHistoryTitle');
+  const totalEl = $('cdiYearHistoryTotal');
+  const currentLabelEl = $('cdiCurrentMonthLabelV271');
+  const currentValueEl = $('cdiCurrentMonthValueV271');
+  const lastLabelEl = $('cdiLastClosedLabelV271');
+  const lastValueEl = $('cdiLastClosedValueV271');
+  const accumEl = $('cdiAccumYearValueV271');
+
+  const fmtPctLocal = v => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
+  };
+  const fmtAxis = v => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return n.toFixed(0).replace('.',',') + '%';
+  };
+  const normalizar = txt => String(txt || '').trim().toLowerCase();
+  const mesCurto = item => {
+    const raw = String(item?.label || item?.key || '').trim();
+    const m = raw.match(/^(\d{4})-(\d{2})/);
+    if(m){
+      const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      return nomes[Math.max(0, Math.min(11, Number(m[2]) - 1))];
+    }
+    return raw.replace(/\/\d{4}/,'').slice(0,3).toLowerCase();
+  };
+  const labelMesAno = item => {
+    const raw = String(item?.label || item?.key || '').trim();
+    if(raw.includes('/')) return raw;
+    const m = raw.match(/^(\d{4})-(\d{2})/);
+    if(m){
+      const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      return nomes[Math.max(0, Math.min(11, Number(m[2]) - 1))] + '/' + m[1];
+    }
+    return raw;
+  };
 
   if(!hist.length){
-    strip.innerHTML = '<span class="cdi-month-empty">histórico indisponível</span>';
+    if(title) title.textContent = 'CDI no ano';
+    if(totalEl) totalEl.textContent = 'Ano —';
+    if(currentLabelEl) currentLabelEl.textContent = 'Mês atual';
+    if(currentValueEl) currentValueEl.textContent = '—';
+    if(lastLabelEl) lastLabelEl.textContent = 'Último fechado';
+    if(lastValueEl) lastValueEl.textContent = '—';
+    if(accumEl) accumEl.textContent = '—';
+    if(_chartCdiYearV271){ _chartCdiYearV271.destroy(); _chartCdiYearV271 = null; }
     return;
   }
 
@@ -1827,60 +1874,148 @@ function renderCdiYearHistory(d){
   const ano = String(last?.key || '').slice(0,4) || String(new Date().getFullYear());
   const mesesAno = ordenado.filter(x => String(x?.key || '').startsWith(ano + '-'));
 
-  const parcialRef = String(cdi.parcial_ref || '').toLowerCase();
-  const mesFechadoRef = String(cdi.mes_ref || '').toLowerCase();
-
-  const fmtPctLocal = v => {
-    const n = Number(v);
-    if(!Number.isFinite(n)) return '—';
-    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
-  };
-
-  const titulo = $('cdiYearHistoryTitle');
-  if(titulo) titulo.textContent = `CDI mensal ${ano}`;
-
-  // Mantém no card o mesmo acumulado do painel consolidado: ano com parcial quando existir.
-  const total = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano);
-  const totalEl = $('cdiYearHistoryTotal');
-  if(totalEl) totalEl.textContent = Number.isFinite(total) ? `Ano ${fmtPctLocal(total)}` : 'Ano —';
-
-  const byLabel = (label) => mesesAno.find(x => String(x?.label || '').toLowerCase() === label);
+  const parcialRef = normalizar(cdi.parcial_ref);
+  const mesFechadoRef = normalizar(cdi.mes_ref);
+  const byLabel = label => mesesAno.find(x => normalizar(x?.label) === label || normalizar(mesCurto(x)) === label);
   const atualParcial = parcialRef ? byLabel(parcialRef) : mesesAno[mesesAno.length - 1];
-  const ultimoFechado = mesFechadoRef
-    ? byLabel(mesFechadoRef)
-    : mesesAno[mesesAno.length - 2];
+  const ultimoFechado = mesFechadoRef ? byLabel(mesFechadoRef) : [...mesesAno].reverse().find(x => x !== atualParcial) || mesesAno[mesesAno.length - 1];
 
-  // Ordem natural no mobile: mês atual/parcial primeiro, depois último fechado e anteriores.
-  // Ex.: JUN/2026, MAI/2026, ABR/2026.
-  const destaque = [];
-  if(atualParcial) destaque.push(atualParcial);
-  if(ultimoFechado && ultimoFechado !== atualParcial) destaque.push(ultimoFechado);
+  const labels = mesesAno.map(mesCurto).map(s => s.toUpperCase());
+  const mensal = mesesAno.map(item => Number(item?.valor ?? 0));
+  const acumulado = [];
+  let running = 0;
+  mensal.forEach((valor) => {
+    const n = Number.isFinite(valor) ? valor : 0;
+    running += n;
+    acumulado.push(Number(running.toFixed(2)));
+  });
 
-  const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
-  const exibicao = [...destaque, ...restantes];
+  const idxAtual = Math.max(0, mesesAno.indexOf(atualParcial));
+  const idxFechado = Math.max(0, mesesAno.indexOf(ultimoFechado));
+  const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? running);
 
-  strip.classList.add('cdi-month-list-v264');
-  strip.setAttribute('data-cdi-layout-v264','list');
+  if(title) title.textContent = `CDI mensal + acumulado ${ano}`;
+  if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
+  if(currentLabelEl) currentLabelEl.textContent = atualParcial ? `${mesCurto(atualParcial).toUpperCase()} · parcial` : 'Mês atual';
+  if(currentValueEl) currentValueEl.textContent = atualParcial ? fmtPctLocal(atualParcial.valor) : '—';
+  if(lastLabelEl) lastLabelEl.textContent = ultimoFechado ? `${mesCurto(ultimoFechado).toUpperCase()} · fechado` : 'Último fechado';
+  if(lastValueEl) lastValueEl.textContent = ultimoFechado ? fmtPctLocal(ultimoFechado.valor) : '—';
+  if(accumEl) accumEl.textContent = Number.isFinite(acumAno) ? fmtPctLocal(acumAno) : '—';
 
-  strip.innerHTML = exibicao.map((item) => {
-    const labelCompleta = String(item.label || item.key || '');
-    const label = labelCompleta.replace('/'+ano,'');
-    const isCurrent = atualParcial && item === atualParcial;
-    const isClosed = ultimoFechado && item === ultimoFechado;
-    const state = isCurrent ? 'partial' : isClosed ? 'lastclosed' : 'closed';
-    const status = isCurrent ? 'parcial' : isClosed ? 'último fechado' : '';
+  if(!window.Chart){
+    setTimeout(() => renderCdiYearHistory(d), 300);
+    return;
+  }
 
-    return `<span class="cdi-rate-row-v264 is-${state}" role="listitem" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
-      <span class="cdi-rate-month-v264">${label}</span>
-      <strong class="cdi-rate-value-v264">${fmtPctLocal(item.valor)}</strong>
-      <span class="cdi-rate-status-v264">${status}</span>
-    </span>`;
-  }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
-  requestAnimationFrame(() => { try{ strip.scrollLeft = 0; }catch(e){} });
-  // ELTAUM_RATES_PREMIUM_CDI_SCROLLSTART_V261
+  const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 0.32)' : i === idxFechado ? 'rgba(232, 187, 106, 0.20)' : 'rgba(66, 116, 255, 0.18)');
+  const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 0.92)' : i === idxFechado ? 'rgba(232, 187, 106, 0.78)' : 'rgba(109, 133, 205, 0.55)');
+  const isMobile = window.matchMedia('(max-width: 760px)').matches;
+
+  if(_chartCdiYearV271){
+    try{ _chartCdiYearV271.destroy(); }catch(e){}
+    _chartCdiYearV271 = null;
+  }
+
+  const ctx = chartCanvas.getContext('2d');
+  _chartCdiYearV271 = new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'CDI mensal',
+          data: mensal,
+          yAxisID: 'y',
+          backgroundColor: barBg,
+          borderColor: barBorder,
+          borderWidth: 1.4,
+          borderRadius: 10,
+          borderSkipped: false,
+          barThickness: isMobile ? 18 : 24,
+          maxBarThickness: isMobile ? 20 : 28
+        },
+        {
+          type: 'line',
+          label: 'CDI acumulado',
+          data: acumulado,
+          yAxisID: 'y1',
+          borderColor: '#e8bb6a',
+          backgroundColor: 'rgba(232, 187, 106, 0.10)',
+          borderWidth: 2.2,
+          tension: 0.25,
+          fill: false,
+          pointBackgroundColor: acumulado.map((_,i) => i === idxAtual ? '#35d09a' : '#e8bb6a'),
+          pointBorderColor: '#0b1021',
+          pointBorderWidth: 1.4,
+          pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? 4 : 2.6),
+          pointHoverRadius: 5
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(11,16,33,.96)',
+          titleColor: '#ffffff',
+          bodyColor: '#dfe7ff',
+          borderColor: 'rgba(255,255,255,.08)',
+          borderWidth: 1,
+          displayColors: true,
+          callbacks: {
+            title(items){
+              const i = items?.[0]?.dataIndex ?? 0;
+              return labelMesAno(mesesAno[i]);
+            },
+            label(context){
+              const value = Number(context.parsed.y);
+              const txt = fmtPctLocal(value);
+              return `${context.dataset.label}: ${txt}`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: 'rgba(229,235,255,0.74)',
+            font: { size: isMobile ? 10 : 11, weight: '700' }
+          }
+        },
+        y: {
+          beginAtZero: true,
+          suggestedMax: Math.max(1.5, ...mensal) * 1.35,
+          ticks: {
+            color: 'rgba(188,200,234,0.72)',
+            padding: 8,
+            callback: value => fmtAxis(value)
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.06)',
+            tickLength: 0
+          }
+        },
+        y1: {
+          beginAtZero: true,
+          position: 'right',
+          suggestedMax: Math.max(4, ...acumulado, acumAno) * 1.14,
+          display: !isMobile,
+          ticks: {
+            color: 'rgba(232,187,106,0.76)',
+            callback: value => fmtAxis(value)
+          },
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
 }
 
-/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
+/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192/* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
    Formata a atualização do cabeçalho de forma compacta, preservando
    a data completa em title/aria-label. */
 function formatarAtualizacaoHeader(valor){

@@ -577,13 +577,13 @@ html:not(.app-booting) .page{
       </div>
 
       <div class="rates-detail-grid-v167">
-        <section class="copom-compact-v167 copom-premium-block-v270" aria-labelledby="copomCompactTitleV167">
+        <section class="copom-compact-v167 copom-premium-block-v270 copom-refined-v271" aria-labelledby="copomCompactTitleV167">
           <div class="reference-subhead-v167">
             <div>
               <strong id="copomCompactTitleV167">Copom executivo</strong>
-              <small>Última decisão, próxima reunião e calendário anual.</small>
+              <small>Última decisão e próxima reunião, sem poluição visual.</small>
             </div>
-            <button type="button" class="reference-toggle-v167" id="copomCalendarToggleV167" aria-expanded="false" aria-controls="copomCalendarSecondaryV270" onclick="return toggleCopomCalendarV167()">Ver calendário completo</button>
+            <a href="https://www.bcb.gov.br/controleinflacao/copom" target="_blank" rel="noopener" class="reference-toggle-v167 copom-link-v271" aria-label="Abrir o calendário do Copom no Banco Central do Brasil">Calendário BCB</a>
           </div>
 
           <div class="copom-exec-summary-v270" id="copomExecutiveSummaryV270" role="group" aria-label="Resumo executivo do Copom">
@@ -608,25 +608,39 @@ html:not(.app-booting) .page{
             </article>
           </div>
 
-          <div class="copom-calendar-secondary-v270" id="copomCalendarSecondaryV270">
-            <div class="copom-calendar-label-v270">Calendário anual do Copom 2026</div>
-            <div class="copom-grid copom-grid-v167" id="copomMeetings" aria-label="Calendário de reuniões do COPOM em 2026" role="list">
-              <span class="reference-loading-v167">Calendário carregando...</span>
-            </div>
-            <div class="reference-footnote-v167 copom-footnote-v256">Atas publicadas na terça-feira seguinte.</div>
-          </div>
+          <div id="copomMeetings" class="copom-meetings-store-v271" hidden aria-hidden="true"></div>
+          <div class="reference-footnote-v167 copom-footnote-v256">Atas publicadas na terça-feira seguinte.</div>
         </section>
 
-        <section class="cdi-year-history cdi-history-v167" id="cdiYearHistory" aria-label="Histórico mensal do CDI no ano, do mês mais recente para o mais antigo">
-          <div class="reference-subhead-v167 cdi-year-head">
+        <section class="cdi-year-history cdi-history-v167 cdi-chart-block-v271" id="cdiYearHistory" aria-label="Leitura gráfica do CDI no ano">
+          <div class="reference-subhead-v167 cdi-year-head cdi-chart-head-v271">
             <div>
-              <strong id="cdiYearHistoryTitle">CDI mensal 2026</strong>
-              <small>Mês atual e último fechamento.</small>
+              <strong id="cdiYearHistoryTitle">CDI no ano</strong>
+              <small>Mensal e acumulado em leitura executiva.</small>
             </div>
-            <button type="button" class="reference-toggle-v167 cdi-months-toggle-v268" id="cdiMonthsToggleV268" aria-expanded="false" onclick="return toggleCdiMonthsV268()">Ver meses</button>
           </div>
-          <div class="cdi-month-strip" id="cdiMonthStrip" role="list" aria-label="Meses exibidos do mais recente para o mais antigo">
-            <span class="cdi-month-empty">Histórico carregando...</span>
+
+          <div class="cdi-kpis-v271" role="group" aria-label="Resumo do CDI no ano">
+            <article class="cdi-kpi-v271 is-current">
+              <span class="cdi-kpi-label-v271" id="cdiCurrentMonthLabelV271">Mês atual</span>
+              <strong class="cdi-kpi-value-v271" id="cdiCurrentMonthValueV271">—</strong>
+            </article>
+            <article class="cdi-kpi-v271 is-lastclosed">
+              <span class="cdi-kpi-label-v271" id="cdiLastClosedLabelV271">Último fechado</span>
+              <strong class="cdi-kpi-value-v271" id="cdiLastClosedValueV271">—</strong>
+            </article>
+            <article class="cdi-kpi-v271 is-total">
+              <span class="cdi-kpi-label-v271">Acumulado no ano</span>
+              <strong class="cdi-kpi-value-v271" id="cdiAccumYearValueV271">—</strong>
+            </article>
+          </div>
+
+          <div class="cdi-chart-canvas-wrap-v271">
+            <canvas id="cdiYearChartV271" role="img" aria-label="Gráfico do CDI mensal em barras e do CDI acumulado no ano em linha"></canvas>
+          </div>
+          <div class="cdi-chart-legend-v271" aria-hidden="true">
+            <span><i class="legend-bar-v271"></i> CDI mensal</span>
+            <span><i class="legend-line-v271"></i> CDI acumulado</span>
           </div>
           <div class="reference-footnote-v167">CDI ≈ Selic − 0,10 p.p. · Acumulados completos na tabela analítica.</div>
         </section>
