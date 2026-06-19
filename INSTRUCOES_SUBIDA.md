@@ -1,24 +1,27 @@
-# Catálogo de Fundos CAIXA — v295
+# Catálogo de Fundos CAIXA — v296
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste aplicado
+## Foco
 
-Refino premium do bloco “Leitura rápida” no mobile.
+Compactar a seção “CDI mensal + acumulado” no mobile, preservando o desktop.
 
-## O que mudou
+## Ajustes aplicados
 
-- O bloco deixou de ficar espremido.
-- A altura não é mais fixa/agressiva.
-- O texto tem até 5 linhas no mobile.
-- Adicionada camada de fade no final para evitar corte visual duro.
-- Removido `word-break` agressivo, evitando palavras quebradas de forma feia.
-- Tipografia mais limpa e profissional.
-- Estrutura continua estável e sem grandes pulos de layout.
-- O texto gerado pelo JS foi encurtado quando o template correspondente existe.
+- Desktop preservado.
+- No mobile, os KPIs viram carrossel horizontal.
+- Mantidos os dados essenciais:
+  - mês atual/parcial;
+  - último mês fechado;
+  - acumulado no ano;
+  - últimos 12 meses.
+- Adicionado card “Últimos 12 meses”.
+- Gráfico ficou mais baixo, menos largo e menos pesado.
+- Reduzidos legenda e rodapé no mobile.
+- Incluído bloco comentado para ocultar o gráfico totalmente no mobile, se desejar no futuro.
 
 ## Como subir
 

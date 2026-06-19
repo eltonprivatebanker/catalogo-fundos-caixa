@@ -45975,3 +45975,147 @@ html.palette-applied-v278 .footer-summary-sub{
   }
 }
 */
+
+
+/* ════════════════════════════════════════════════════
+   v296 — CDI MOBILE COMPACTO
+   Desktop preservado. No mobile:
+   - mantém KPIs essenciais: mês atual, último fechado, ano e 12M;
+   - transforma KPIs em carrossel horizontal;
+   - reduz peso visual do gráfico;
+   - gráfico vira opcional/discreto e menos largo.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.cdi-mobile-compact-v296 #cdiYearHistory.cdi-chart-block-v271{
+    padding: 12px !important;
+    border-radius: 18px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-year-head,
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-head-v271{
+    margin-bottom: 10px !important;
+    gap: 8px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistoryTitle{
+    font-size: .96rem !important;
+    line-height: 1.15 !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .reference-subhead-v167 small{
+    display: none !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-analytic-link-v274{
+    min-height: 30px !important;
+    padding: 6px 10px !important;
+    font-size: .62rem !important;
+    border-radius: 999px !important;
+  }
+
+  /* KPIs como carrossel/chips horizontais */
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-kpis-v271{
+    display: flex !important;
+    gap: 8px !important;
+    overflow-x: auto !important;
+    overscroll-behavior-x: contain !important;
+    scroll-snap-type: x proximity !important;
+    padding: 2px 2px 8px !important;
+    margin: 0 -2px 8px !important;
+    scrollbar-width: none !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-kpis-v271::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-kpi-v271{
+    flex: 0 0 136px !important;
+    min-height: 62px !important;
+    scroll-snap-align: start !important;
+    padding: 10px 11px !important;
+    border-radius: 14px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-kpi-label-v271{
+    font-size: .58rem !important;
+    line-height: 1.15 !important;
+    letter-spacing: .075em !important;
+    white-space: nowrap !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-kpi-value-v271{
+    margin-top: 5px !important;
+    font-size: 1.02rem !important;
+    line-height: 1.08 !important;
+  }
+
+  /* Gráfico menos pesado no mobile */
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-canvas-wrap-v271{
+    margin-top: 4px !important;
+    border-radius: 15px !important;
+    padding: 8px 8px 6px !important;
+    max-height: 128px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scrollbar-width: thin !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-scroll-inner-v273{
+    min-width: 360px !important;
+    height: 112px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearChartV271{
+    height: 112px !important;
+    max-height: 112px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-legend-v271{
+    margin-top: 7px !important;
+    gap: 10px !important;
+    font-size: .62rem !important;
+    opacity: .82 !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .reference-footnote-v167{
+    display: none !important;
+  }
+}
+
+/* Variante ultra-compacta em telas muito estreitas */
+@media (max-width: 390px){
+  html.cdi-mobile-compact-v296 #cdiYearHistory.cdi-chart-block-v271{
+    padding: 11px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-kpi-v271{
+    flex-basis: 128px !important;
+    min-height: 58px !important;
+    padding: 9px 10px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-kpi-value-v271{
+    font-size: .96rem !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-canvas-wrap-v271{
+    max-height: 118px !important;
+  }
+
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-scroll-inner-v273,
+  html.cdi-mobile-compact-v296 #cdiYearChartV271{
+    height: 102px !important;
+    max-height: 102px !important;
+  }
+}
+
+/* Caso futuramente queira esconder o gráfico no mobile e manter só os KPIs:
+@media (max-width: 768px){
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-canvas-wrap-v271,
+  html.cdi-mobile-compact-v296 #cdiYearHistory .cdi-chart-legend-v271{
+    display:none!important;
+  }
+}
+*/

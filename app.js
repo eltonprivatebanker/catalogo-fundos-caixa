@@ -1,3 +1,4 @@
+// ELTAUM_CDI_MOBILE_COMPACT_v296
 // ELTAUM_RANKING_INSIGHT_PREMIUM_v295
 // ELTAUM_MOBILE_HIDE_GFB_SEARCH_v294
 // ELTAUM_RANKING_INSIGHT_STABLE_v293
@@ -1842,6 +1843,7 @@ function renderCdiYearHistory(d){
   const lastLabelEl = $('cdiLastClosedLabelV271');
   const lastValueEl = $('cdiLastClosedValueV271');
   const accumEl = $('cdiAccumYearValueV271');
+  const last12mElV296 = $('cdiLast12mValueV296');
 
   const fmtPctLocal = v => {
     const n = Number(v);
@@ -1882,6 +1884,7 @@ function renderCdiYearHistory(d){
     if(lastLabelEl) lastLabelEl.textContent = 'Último fechado';
     if(lastValueEl) lastValueEl.textContent = '—';
     if(accumEl) accumEl.textContent = '—';
+    if(last12mElV296) last12mElV296.textContent = '—';
     if(_chartCdiYearV271){ _chartCdiYearV271.destroy(); _chartCdiYearV271 = null; }
     return;
   }
@@ -1910,6 +1913,7 @@ function renderCdiYearHistory(d){
   const idxAtual = Math.max(0, mesesAno.indexOf(atualParcial));
   const idxFechado = Math.max(0, mesesAno.indexOf(ultimoFechado));
   const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? acumulado[acumulado.length - 1]);
+  const cdi12mV296 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(cdi, 12) : Number(cdi.acum_12m ?? cdi.m12);
 
   if(title) title.textContent = `CDI mensal + acumulado ${ano}`;
   if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
@@ -1954,11 +1958,11 @@ function renderCdiYearHistory(d){
 
   const chartInnerV273 = document.getElementById('cdiChartScrollInnerV273');
   const totalMesesV273 = labels.length;
-  const minChartWidthV273 = isMobile ? Math.max(540, totalMesesV273 * 46) : '100%';
+  const minChartWidthV273 = isMobile ? Math.max(360, totalMesesV273 * 34) : '100%';
   if(chartInnerV273){
     chartInnerV273.style.minWidth = typeof minChartWidthV273 === 'number' ? `${minChartWidthV273}px` : minChartWidthV273;
   }
-  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 11 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 13 : 22) : (isMobile ? 17 : 26));
+  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 8 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 10 : 22) : (isMobile ? 13 : 26));
   const raioPontoV273 = totalMesesV273 >= 10 ? 2.2 : 2.8;
   const raioPontoDestaqueV273 = totalMesesV273 >= 10 ? 3.6 : 4.2;
   const mostrarTodosMesesV273 = true;
