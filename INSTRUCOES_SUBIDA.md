@@ -1,22 +1,28 @@
-# Catálogo de Fundos CAIXA — v281 (refino mobile do cenário monetário)
+# Catálogo de Fundos CAIXA — v282
 
 Arquivos atualizados:
-- `index.html`
-- `style.css`
-- `app.js`
+- index.html
+- style.css
+- app.js
 
-## O que foi ajustado nesta versão
+## O que mudou
 
-### Mobile — seção “Cenário monetário”
-- compactação dos cards de Selic, CDI e Próxima reunião;
-- bloco **Copom executivo** reduzido e com leitura mais objetiva;
-- botão **Calendário BCB** menor no celular;
-- bloco **CDI mensal + acumulado** reorganizado para ocupar menos altura;
-- KPIs do CDI em grade compacta no mobile;
-- gráfico do CDI com altura menor e rolagem horizontal mais leve;
-- remoção do texto “Arraste o gráfico...” para reduzir ruído visual;
-- legenda e rodapé do gráfico mais compactos.
+Versão focada em padronizar a área de Rankings no mobile.
 
-## Arquivo ZIP
-Use o pacote:
-- `catalogo_fundos_v281_mobile_cenario_monetario.zip`
+Principais ajustes:
+- rentabilidade/valor mantido no lado superior direito;
+- mesma hierarquia visual para cards de resumo;
+- mesma lógica aplicada aos cards de “melhores por categoria”;
+- tipografia padronizada para rótulo, valor, nome do fundo e metadados;
+- cards com altura, padding e bordas mais consistentes;
+- lista Top 10 com valor fixo à direita e fonte mais uniforme;
+- redução de quebras estranhas e excesso de variação de tamanho.
+
+## Como subir
+
+Substitua no GitHub:
+- index.html
+- style.css
+- app.js
+
+Depois faça atualização forçada no celular para limpar cache.
