@@ -1,3 +1,6 @@
+// ELTAUM_DESKTOP_RATES_REFINE_20260618_v266
+// ELTAUM_COMPACT_MOBILE_20260618_v265
+// ELTAUM_RATES_CDI_REAL_20260618_v264
 // ELTAUM_RATES_SCROLL_FIX_20260618_v263
 // ELTAUM_RATES_PREMIUM_20260618_v261
 // ELTAUM_RATES_MOBILE_COMPACT_20260618_v260
@@ -1854,28 +1857,21 @@ function renderCdiYearHistory(d){
   const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
   const exibicao = [...destaque, ...restantes];
 
+  strip.classList.add('cdi-month-list-v264');
+  strip.setAttribute('data-cdi-layout-v264','list');
+
   strip.innerHTML = exibicao.map((item) => {
     const labelCompleta = String(item.label || item.key || '');
     const label = labelCompleta.replace('/'+ano,'');
     const isCurrent = atualParcial && item === atualParcial;
     const isClosed = ultimoFechado && item === ultimoFechado;
-    const classes = [
-      'cdi-month-chip',
-      (isCurrent || isClosed) ? 'featured' : '',
-      isCurrent ? 'current' : '',
-      isClosed ? 'closed' : ''
-    ].filter(Boolean).join(' ');
+    const state = isCurrent ? 'partial' : isClosed ? 'lastclosed' : 'closed';
+    const status = isCurrent ? 'parcial' : isClosed ? 'último fechado' : '';
 
-    const subtitulo = isCurrent
-      ? '<span class="p">parcial</span>'
-      : isClosed
-        ? '<span class="p">último mês fechado</span>'
-        : '';
-
-    return `<span class="${classes}" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
-      <span class="m">${label}</span>
-      <span class="v">${fmtPctLocal(item.valor)}</span>
-      ${subtitulo}
+    return `<span class="cdi-rate-row-v264 is-${state}" role="listitem" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
+      <span class="cdi-rate-month-v264">${label}</span>
+      <strong class="cdi-rate-value-v264">${fmtPctLocal(item.valor)}</strong>
+      <span class="cdi-rate-status-v264">${status}</span>
     </span>`;
   }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
   requestAnimationFrame(() => { try{ strip.scrollLeft = 0; }catch(e){} });
@@ -15164,7 +15160,7 @@ if(document.readyState === 'loading'){
 
   function enablePointerDrag(strip){
     if(!strip || strip.dataset.pointerDragV180==='1') return;
-    if(strip.id === 'cdiMonthStrip' && document.documentElement.classList.contains('rates-scroll-fix-v263')){
+    if(strip.id === 'cdiMonthStrip' && (document.documentElement.classList.contains('rates-scroll-fix-v263') || document.documentElement.classList.contains('rates-cdi-real-v264'))){
       strip.dataset.pointerDragV180 = 'disabled-v263';
       return;
     }
@@ -16062,4 +16058,24 @@ window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v
   }
   setTimeout(applyCdiTitleShortV263, 300);
   setTimeout(applyCdiTitleShortV263, 1200);
+})();
+
+
+/* ELTAUM_CDI_REAL_STARTUP_V264 */
+(function(){
+  function fixCdiRealV264(){
+    const title = document.getElementById('cdiYearHistoryTitle');
+    if(title) title.textContent = title.textContent.replace(/\s+—\s+mais recente primeiro/i,'').trim() || 'CDI mensal 2026';
+    const strip = document.getElementById('cdiMonthStrip');
+    if(strip){
+      strip.classList.add('cdi-month-list-v264');
+      strip.setAttribute('data-cdi-layout-v264','list');
+      strip.style.overflow = 'visible';
+      strip.style.touchAction = 'pan-y';
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fixCdiRealV264, {once:true});
+  else fixCdiRealV264();
+  setTimeout(fixCdiRealV264, 250);
+  setTimeout(fixCdiRealV264, 1000);
 })();

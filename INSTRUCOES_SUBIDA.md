@@ -1,24 +1,26 @@
-# Catálogo de Fundos CAIXA — v263
+# Catálogo de Fundos CAIXA — v266
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que foi corrigido
+## Foco desta versão
+Refinamento da versão desktop do bloco **Cenário monetário**.
 
-1. Corrigido o trecho do mobile onde o toque parecia "não obedecer" para rolar a página.
-2. O CDI mensal deixou de funcionar como carrossel/grade cortada no mobile.
-3. O CDI mensal agora aparece como lista compacta, com mês, taxa e status alinhados.
-4. Removido o texto longo "mais recente primeiro".
-5. O calendário expandido do Copom não cria mais uma rolagem interna que prende o toque.
-6. Mantidos os dados e a lógica de cálculo.
+## O que mudou
+- corrigido o `<html>` duplicado com duas classes;
+- cards superiores ficaram mais proporcionais;
+- bloco de Copom ficou mais legível no desktop;
+- datas e resultados do Copom ganharam hierarquia melhor;
+- bloco CDI mensal ficou mais compacto no desktop;
+- menos ruído visual e melhor espaçamento geral;
+- mantida a versão mobile já compactada.
 
 ## Como subir
-
 Substitua no GitHub:
-- index.html
-- style.css
-- app.js
+- `index.html`
+- `style.css`
+- `app.js`
 
-Depois, no celular, feche a aba e abra novamente para limpar o cache.
+Depois faça Ctrl + F5 no desktop.
