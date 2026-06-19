@@ -45509,3 +45509,122 @@ html.palette-applied-v278 .footer-summary-sub{
     min-width: 60px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v291 — RANKING MOBILE: VALORES MENORES + MAIOR PL INLINE
+   Ajustes solicitados:
+   1) No card "Maior PL", "Renda Fixa" e "67 fundos" ficam na mesma linha.
+   2) Percentuais/valores principais ficam menores e mais discretos.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-values-compact-v291 #rankingsSection{
+    --rnk-value-v291: clamp(.98rem, 4.35vw, 1.14rem);
+    --rnk-value-pl-v291: clamp(.88rem, 3.95vw, 1.02rem);
+    --rnk-list-value-v291: .80rem;
+  }
+
+  /* Valores dos cards principais: menores, sem perder destaque */
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-values-compact-v291 #rankingsSection .ranking-cat-mini > strong{
+    font-size: var(--rnk-value-v291) !important;
+    line-height: 1.26 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    letter-spacing: -.012em !important;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: var(--rnk-value-pl-v291) !important;
+    line-height: 1.24 !important;
+    max-width: 48vw !important;
+  }
+
+  /* Card Maior PL: meta na mesma linha do nome */
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card.pl{
+    grid-template-areas:
+      "label value"
+      "name  meta" !important;
+    grid-template-rows: auto auto !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 11px 14px 10px !important;
+    row-gap: 5px !important;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card.pl > small{
+    grid-area: name !important;
+    width: auto !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    font-size: .74rem !important;
+    line-height: 1.18 !important;
+    font-weight: 720 !important;
+    white-space: nowrap !important;
+    display: block !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card.pl > em{
+    grid-area: meta !important;
+    justify-self: end !important;
+    align-self: center !important;
+    width: auto !important;
+    max-width: 40vw !important;
+    min-height: 0 !important;
+    font-size: .64rem !important;
+    line-height: 1.18 !important;
+    font-weight: 560 !important;
+    white-space: nowrap !important;
+    text-align: right !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Top 10: valores também mais discretos */
+  html.ranking-values-compact-v291 #rankingsSection .ranking-return{
+    font-size: var(--rnk-list-value-v291) !important;
+    line-height: 1.24 !important;
+    min-height: 0 !important;
+    min-width: 58px !important;
+    max-width: 24vw !important;
+    letter-spacing: -.01em !important;
+  }
+
+  /* Categorias: reduz ligeiramente o vazio visual mantendo leitura */
+  html.ranking-values-compact-v291 #rankingsSection .ranking-cat-mini{
+    padding-top: 12px !important;
+    padding-bottom: 12px !important;
+    row-gap: 7px !important;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card{
+    row-gap: 5px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-values-compact-v291 #rankingsSection{
+    --rnk-value-v291: clamp(.94rem, 4.2vw, 1.06rem);
+    --rnk-value-pl-v291: clamp(.84rem, 3.8vw, .96rem);
+    --rnk-list-value-v291: .76rem;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card.pl{
+    padding: 10px 13px 9px !important;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card.pl > small{
+    font-size: .72rem !important;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-exec-card.pl > em{
+    font-size: .62rem !important;
+  }
+
+  html.ranking-values-compact-v291 #rankingsSection .ranking-return{
+    min-width: 56px !important;
+  }
+}
