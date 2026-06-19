@@ -42354,3 +42354,13 @@ html.cdi-executive-final-v274 #sec-mercado .cdi-chart-block-v271 .reference-foot
     min-width:620px !important;
   }
 }
+
+
+/* v275 — correção do botão Tabela analítica do CDI */
+html.cdi-analytic-fix-v275 #sec-mercado .cdi-analytic-link-v274{
+  cursor:pointer;
+}
+html.cdi-analytic-fix-v275 #sec-mercado .cdi-analytic-link-v274:focus-visible{
+  outline:2px solid rgba(232,187,106,.72);
+  outline-offset:3px;
+}

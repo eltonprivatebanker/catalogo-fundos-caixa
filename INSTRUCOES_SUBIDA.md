@@ -1,22 +1,15 @@
-# Catálogo de Fundos CAIXA — v274
+# Catálogo de Fundos CAIXA — v275
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes desta versão
-- Bloco do CDI estruturado em 3 KPIs + gráfico combinado.
-- KPI de acumulado no ano ganhou maior destaque visual.
-- Gráfico preparado para jan–dez no desktop sem virar 12 cards.
-- No mobile, o gráfico mantém rolagem horizontal própria para comportar todos os meses.
-- Cálculo da linha acumulada passou a usar composição mensal, e não soma simples.
-- Incluído botão discreto “Tabela analítica”.
+## Correção
+O botão "Tabela analítica" do bloco de CDI agora:
+- alterna o painel de indicadores para o modo "Tabela analítica";
+- rola a página até o painel analítico;
+- não tenta mais clicar nele mesmo.
 
-## Como subir
-Substitua no GitHub:
-- index.html
-- style.css
-- app.js
-
-Depois faça atualização forçada no navegador para limpar cache.
+## Motivo do problema
+O botão do CDI tinha o mesmo texto da aba "Tabela analítica" e não possuía ID próprio. A função procurava por um botão com esse texto e acabava encontrando o próprio botão do CDI, sem acionar a aba correta.

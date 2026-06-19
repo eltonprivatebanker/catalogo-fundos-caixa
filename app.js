@@ -16350,17 +16350,36 @@ function toggleCdiMonthsV268(force){
 })();
 
 
-/* ELTAUM_CDI_ANALYTIC_LINK_V274 */
+/* ELTAUM_CDI_ANALYTIC_LINK_V275 */
 function openCdiAnalyticTableV274(){
-  const candidates = Array.from(document.querySelectorAll('button, a'));
-  const analytic = candidates.find(el => /tabela analítica/i.test(el.textContent || '') && el.id !== 'cdiAnalyticLinkV274');
-  if(analytic && typeof analytic.click === 'function'){
-    analytic.click();
-    const market = document.getElementById('marketReferencePanelV150') || document.getElementById('sec-mercado');
-    if(market && typeof market.scrollIntoView === 'function') market.scrollIntoView({behavior:'smooth', block:'start'});
-    return false;
+  // Este botão leva o usuário para a Tabela Analítica do painel de indicadores
+  // e alterna o modo de visualização para "Tabela analítica".
+  const analyticBtn = document.querySelector('#marketDashboardV150 [data-v150-mode="analytic"], [data-v150-mode="analytic"]');
+  const panel = document.getElementById('marketDashboardV150')
+    || document.getElementById('sec-mercado-painel')
+    || document.querySelector('#sec-painel-body .indic-table-wrap')
+    || document.getElementById('sec-mercado');
+
+  if(analyticBtn && typeof analyticBtn.click === 'function'){
+    analyticBtn.click();
+  }else{
+    // Fallback: se o painel executivo ainda não foi montado, mostra a tabela nativa.
+    const tableWrap = document.querySelector('#sec-painel-body .indic-table-wrap, .indic-table-wrap');
+    if(tableWrap){
+      tableWrap.hidden = false;
+      tableWrap.style.display = '';
+    }
   }
-  const target = document.getElementById('marketReferencePanelV150') || document.getElementById('sec-mercado');
-  if(target && typeof target.scrollIntoView === 'function') target.scrollIntoView({behavior:'smooth', block:'start'});
+
+  setTimeout(() => {
+    const target = document.getElementById('marketDashboardV150')
+      || document.getElementById('sec-mercado-painel')
+      || document.querySelector('#sec-painel-body .indic-table-wrap')
+      || panel;
+    if(target && typeof target.scrollIntoView === 'function'){
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }, 80);
+
   return false;
 }
