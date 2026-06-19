@@ -44388,3 +44388,408 @@ html.palette-applied-v278 .footer-summary-sub{
     font-size: 1rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v285 — RANKING MOBILE: PROPORÇÃO REAL DE FONTES
+   Diagnóstico: em 362px, o nome do fundo estava recebendo
+   só ~167px nos cards-resumo e ~152px no Top 10.
+   Correção: nome volta a ocupar linha completa; valor fica à direita
+   no topo; tipografia passa a ter escala única.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-proportion-v285 #rankingsSection{
+    --rank-fs-label-v285: .68rem;
+    --rank-fs-value-v285: clamp(1.22rem, 5.9vw, 1.58rem);
+    --rank-fs-name-v285: .86rem;
+    --rank-fs-meta-v285: .74rem;
+    --rank-lh-name-v285: 1.22;
+  }
+
+  /* Cards-resumo: nome em largura total, valor no topo direito */
+  html.ranking-proportion-v285 #rankingsSection .ranking-exec-card{
+    width: 100% !important;
+    min-height: 132px !important;
+    height: auto !important;
+    padding: 16px 16px 15px !important;
+    border-radius: 18px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    grid-template-areas:
+      "label value"
+      "name  name"
+      "meta  meta" !important;
+    column-gap: 10px !important;
+    row-gap: 9px !important;
+    align-content: start !important;
+    align-items: start !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-exec-card > span{
+    grid-area: label !important;
+    width: auto !important;
+    max-width: 100% !important;
+    font-size: var(--rank-fs-label-v285) !important;
+    line-height: 1.15 !important;
+    letter-spacing: .085em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-exec-card > strong{
+    grid-area: value !important;
+    justify-self: end !important;
+    align-self: start !important;
+    width: auto !important;
+    max-width: 42vw !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: var(--rank-fs-value-v285) !important;
+    line-height: 1 !important;
+    letter-spacing: -.028em !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(1.05rem, 5.1vw, 1.34rem) !important;
+    max-width: 46vw !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-exec-card > small{
+    grid-area: name !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    color: #edf3ff !important;
+    font-size: var(--rank-fs-name-v285) !important;
+    line-height: var(--rank-lh-name-v285) !important;
+    font-weight: 760 !important;
+    letter-spacing: -.012em !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-exec-card > em{
+    grid-area: meta !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    font-size: var(--rank-fs-meta-v285) !important;
+    line-height: 1.25 !important;
+    color: #9ca8c5 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Melhores por categoria: igual ao card-resumo, sem nome espremido */
+  html.ranking-proportion-v285 #rankingsSection .ranking-cat-mini{
+    width: 100% !important;
+    min-height: 126px !important;
+    height: auto !important;
+    padding: 16px 16px 15px !important;
+    border-radius: 18px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    grid-template-areas:
+      "label value"
+      "name  name" !important;
+    column-gap: 10px !important;
+    row-gap: 12px !important;
+    align-content: start !important;
+    align-items: start !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-cat-mini > span{
+    grid-area: label !important;
+    width: auto !important;
+    max-width: 100% !important;
+    font-size: var(--rank-fs-label-v285) !important;
+    line-height: 1.15 !important;
+    letter-spacing: .085em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-cat-mini > strong{
+    grid-area: value !important;
+    justify-self: end !important;
+    align-self: start !important;
+    width: auto !important;
+    max-width: 42vw !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: var(--rank-fs-value-v285) !important;
+    line-height: 1 !important;
+    letter-spacing: -.028em !important;
+    text-align: right !important;
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-cat-mini > small{
+    grid-area: name !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    color: #dfe7f8 !important;
+    font-size: var(--rank-fs-name-v285) !important;
+    line-height: var(--rank-lh-name-v285) !important;
+    font-weight: 720 !important;
+    letter-spacing: -.01em !important;
+    text-transform: none !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Top 10: reduzir coluna da posição e dar mais largura ao fundo */
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row,
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row-mobile-v100{
+    min-height: 94px !important;
+    padding: 13px 10px !important;
+    display: grid !important;
+    grid-template-columns: 28px minmax(0, 1fr) max-content !important;
+    grid-template-areas:
+      "pos fund value"
+      "pos fund value" !important;
+    gap: 6px 10px !important;
+    align-items: center !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-pos{
+    grid-area: pos !important;
+    width: 28px !important;
+    min-width: 28px !important;
+    text-align: center !important;
+    font-size: .82rem !important;
+    line-height: 1 !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-fund{
+    grid-area: fund !important;
+    min-width: 0 !important;
+    display: block !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-fund strong{
+    width: 100% !important;
+    min-height: 0 !important;
+    font-size: .82rem !important;
+    line-height: 1.18 !important;
+    font-weight: 760 !important;
+    letter-spacing: -.01em !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-fund span{
+    width: 100% !important;
+    margin-top: 6px !important;
+    font-size: .72rem !important;
+    line-height: 1.18 !important;
+    color: #98a6c6 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-return{
+    grid-area: value !important;
+    justify-self: end !important;
+    width: auto !important;
+    min-width: 74px !important;
+    max-width: 25vw !important;
+    text-align: right !important;
+    font-size: clamp(.94rem, 4.4vw, 1.08rem) !important;
+    line-height: 1 !important;
+    font-weight: 850 !important;
+    letter-spacing: -.02em !important;
+    white-space: nowrap !important;
+    font-variant-numeric: tabular-nums !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-proportion-v285 #rankingsSection{
+    --rank-fs-label-v285: .64rem;
+    --rank-fs-value-v285: clamp(1.12rem, 5.6vw, 1.42rem);
+    --rank-fs-name-v285: .80rem;
+    --rank-fs-meta-v285: .70rem;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-exec-card{
+    min-height: 126px !important;
+    padding: 15px 14px 14px !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-cat-mini{
+    min-height: 120px !important;
+    padding: 15px 14px 14px !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row,
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row-mobile-v100{
+    min-height: 90px !important;
+    grid-template-columns: 26px minmax(0, 1fr) max-content !important;
+    gap: 6px 8px !important;
+    padding: 12px 9px !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-pos{
+    width: 26px !important;
+    min-width: 26px !important;
+    font-size: .78rem !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-fund strong{
+    font-size: .78rem !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-fund span{
+    font-size: .68rem !important;
+  }
+
+  html.ranking-proportion-v285 #rankingsSection .ranking-top-row .ranking-return{
+    min-width: 70px !important;
+    max-width: 25vw !important;
+    font-size: .94rem !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   v286 — RANKING MOBILE: CORREÇÃO DE OVERFLOW VERTICAL
+   Diagnóstico do console:
+   - sem overflow horizontal;
+   - valores tinham scrollHeight maior que clientHeight;
+   - causa: line-height/altura muito justos para a fonte numérica.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini > strong,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-return{
+    line-height: 1.16 !important;
+    min-height: 1.18em !important;
+    height: auto !important;
+    overflow: visible !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    padding-top: 0 !important;
+    padding-bottom: 1px !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini > strong{
+    font-size: clamp(1.14rem, 5.4vw, 1.48rem) !important;
+    max-width: 44vw !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(1rem, 4.8vw, 1.28rem) !important;
+    max-width: 48vw !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-return{
+    font-size: clamp(.92rem, 4.2vw, 1.04rem) !important;
+    min-width: 74px !important;
+    max-width: 25vw !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card > small,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini > small,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-fund strong{
+    display: -webkit-box !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card > small,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini > small{
+    font-size: .82rem !important;
+    line-height: 1.24 !important;
+    font-weight: 720 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-fund strong{
+    font-size: .78rem !important;
+    line-height: 1.22 !important;
+    font-weight: 720 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-fund span{
+    font-size: .70rem !important;
+    line-height: 1.22 !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card{
+    min-height: 122px !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini{
+    min-height: 116px !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-top-row,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-top-row-mobile-v100{
+    min-height: 86px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini > strong{
+    font-size: clamp(1.08rem, 5.1vw, 1.32rem) !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(.96rem, 4.6vw, 1.18rem) !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-return{
+    font-size: .90rem !important;
+    min-width: 68px !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card > small,
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini > small{
+    font-size: .78rem !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-fund strong{
+    font-size: .74rem !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-exec-card{
+    min-height: 118px !important;
+  }
+
+  html.ranking-value-fix-v286 #rankingsSection .ranking-cat-mini{
+    min-height: 112px !important;
+  }
+}
