@@ -40524,3 +40524,167 @@ html.rates-premium-v261 #sec-mercado .rates-executive-v255 .reference-footnote-v
     font: 850 .78rem/1.15 'Inter', system-ui, sans-serif !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v264 — CDI MENSAL REALISTA + ROLAGEM NATIVA
+   Substitui o visual antigo do CDI por linhas/cards próprios.
+   Não depende mais de .cdi-month-chip, carrossel ou drag.
+════════════════════════════════════════════════════ */
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-history-v167{
+  overflow: visible !important;
+  touch-action: pan-y !important;
+}
+
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 #cdiYearHistoryTitle{
+  display:block !important;
+  width:auto !important;
+  max-width:100% !important;
+  padding:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#eef3ff !important;
+  font:850 .88rem/1.15 'Inter', system-ui, sans-serif !important;
+  letter-spacing:-.015em !important;
+  white-space:normal !important;
+}
+
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 #cdiMonthStrip.cdi-month-list-v264,
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 #cdiMonthStrip[data-cdi-layout-v264="list"]{
+  display:grid !important;
+  grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  gap:8px !important;
+  width:100% !important;
+  min-width:0 !important;
+  max-width:100% !important;
+  overflow:visible !important;
+  overflow-x:visible !important;
+  overflow-y:visible !important;
+  scroll-snap-type:none !important;
+  transform:none !important;
+  padding:0 !important;
+  margin:0 !important;
+  touch-action:pan-y !important;
+  overscroll-behavior:auto !important;
+  -webkit-overflow-scrolling:auto !important;
+  cursor:default !important;
+}
+
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-row-v264{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) auto !important;
+  grid-template-areas:"month status" "value value" !important;
+  align-items:center !important;
+  gap:6px 8px !important;
+  min-height:58px !important;
+  padding:10px 11px !important;
+  border-radius:13px !important;
+  border:1px solid rgba(142,160,205,.14) !important;
+  background:rgba(12,15,29,.54) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025) !important;
+  min-width:0 !important;
+  width:100% !important;
+  max-width:100% !important;
+}
+
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-row-v264.is-partial{
+  border-color:rgba(73,217,154,.34) !important;
+  background:rgba(73,217,154,.075) !important;
+}
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-row-v264.is-lastclosed{
+  border-color:rgba(210,161,73,.30) !important;
+  background:rgba(210,161,73,.05) !important;
+}
+
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-month-v264{
+  grid-area:month !important;
+  justify-self:start !important;
+  min-width:0 !important;
+  color:#aeb9d3 !important;
+  font:850 .52rem/1 'Inter', system-ui, sans-serif !important;
+  letter-spacing:.095em !important;
+  text-transform:uppercase !important;
+}
+
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-value-v264{
+  grid-area:value !important;
+  justify-self:start !important;
+  color:#49d99a !important;
+  font:850 .82rem/1 'Inter', system-ui, sans-serif !important;
+  letter-spacing:-.01em !important;
+  white-space:nowrap !important;
+}
+
+html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-status-v264{
+  grid-area:status !important;
+  justify-self:end !important;
+  max-width:100% !important;
+  color:#8d99b7 !important;
+  font:700 .48rem/1.05 'Inter', system-ui, sans-serif !important;
+  text-align:right !important;
+  white-space:nowrap !important;
+  overflow:hidden !important;
+  text-overflow:ellipsis !important;
+}
+
+@media (max-width:760px){
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .copom-grid-v167,
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .copom-grid-v167.is-expanded-v167{
+    max-height:none !important;
+    overflow:visible !important;
+    padding-right:0 !important;
+    touch-action:pan-y !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-history-v167{
+    padding:12px !important;
+    overflow:visible !important;
+    touch-action:pan-y !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-year-head{
+    display:block !important;
+    margin-bottom:9px !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 #cdiYearHistoryTitle{
+    font-size:.96rem !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 #cdiMonthStrip.cdi-month-list-v264,
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 #cdiMonthStrip[data-cdi-layout-v264="list"]{
+    grid-template-columns:1fr !important;
+    gap:7px !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-row-v264{
+    grid-template-columns:52px minmax(0,1fr) auto !important;
+    grid-template-areas:"month value status" !important;
+    min-height:40px !important;
+    padding:8px 10px !important;
+    border-radius:11px !important;
+    gap:8px !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-month-v264{
+    font-size:.55rem !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-value-v264{
+    font-size:.78rem !important;
+  }
+
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-status-v264{
+    font-size:.50rem !important;
+  }
+}
+
+@media (max-width:380px){
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-row-v264{
+    grid-template-columns:46px minmax(0,1fr) auto !important;
+  }
+  html.rates-cdi-real-v264 #sec-mercado .rates-executive-v255 .cdi-rate-status-v264{
+    max-width:80px !important;
+  }
+}
