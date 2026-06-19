@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v267
+# Catálogo de Fundos CAIXA — v268
 
 Arquivos atualizados:
 - index.html
@@ -7,15 +7,15 @@ Arquivos atualizados:
 
 ## O que mudou
 
-Esta versão muda a solução do desktop do bloco Cenário monetário.
+Esta versão resolve o problema de excesso de campos no desktop.
 
-Em vez de tentar mostrar tudo ao mesmo tempo, o desktop agora prioriza:
-- cards superiores maiores e mais legíveis;
-- Copom com apenas a última decisão e a próxima reunião visíveis por padrão;
-- demais reuniões aparecem ao clicar em "Ver calendário";
-- CDI mensal com apenas o mês atual e o último mês fechado por padrão;
-- demais meses deixam de competir visualmente no desktop;
-- espaçamento maior e menos sensação de bloco comprimido.
+Agora:
+- o Copom mostra só a última decisão e a próxima reunião por padrão;
+- o calendário completo aparece apenas no botão "Ver calendário";
+- o CDI mensal mostra só o mês atual e o último mês fechado por padrão;
+- os demais meses aparecem apenas no botão "Ver meses";
+- se no futuro houver 12 meses, eles não vão ocupar a tela inteira por padrão;
+- o bloco ficou menos comprimido e mais executivo.
 
 ## Como subir
 

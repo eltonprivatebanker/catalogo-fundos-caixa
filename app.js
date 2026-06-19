@@ -1,3 +1,4 @@
+// ELTAUM_RATES_EXECUTIVE_LEAN_20260618_v268
 // ELTAUM_RATES_DECOMPRESSED_20260618_v267
 // ELTAUM_DESKTOP_RATES_REFINE_20260618_v266
 // ELTAUM_COMPACT_MOBILE_20260618_v265
@@ -14530,7 +14531,7 @@ function toggleCopomCalendarV167(force){
   const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Recolher' : 'Ver calendário';
+    btn.textContent = open ? 'Ocultar' : 'Ver calendário';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;
@@ -16079,4 +16080,43 @@ window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v
   else fixCdiRealV264();
   setTimeout(fixCdiRealV264, 250);
   setTimeout(fixCdiRealV264, 1000);
+})();
+
+
+/* ELTAUM_CDI_MONTHS_TOGGLE_V268 */
+function toggleCdiMonthsV268(force){
+  const box = document.getElementById('cdiYearHistory');
+  const strip = document.getElementById('cdiMonthStrip');
+  const btn = document.getElementById('cdiMonthsToggleV268');
+  if(!box || !strip) return false;
+  const open = typeof force === 'boolean' ? force : !box.classList.contains('is-expanded-v268');
+  box.classList.toggle('is-expanded-v268', open);
+  strip.classList.toggle('is-expanded-v268', open);
+  if(btn){
+    btn.textContent = open ? 'Ocultar' : 'Ver meses';
+    btn.setAttribute('aria-expanded', String(open));
+  }
+  return false;
+}
+
+(function(){
+  function initCdiToggleV268(){
+    const box = document.getElementById('cdiYearHistory');
+    const strip = document.getElementById('cdiMonthStrip');
+    const btn = document.getElementById('cdiMonthsToggleV268');
+    if(box && strip){
+      box.classList.remove('is-expanded-v268');
+      strip.classList.remove('is-expanded-v268');
+    }
+    if(btn){
+      btn.textContent = 'Ver meses';
+      btn.setAttribute('aria-expanded','false');
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initCdiToggleV268, {once:true});
+  }else{
+    initCdiToggleV268();
+  }
+  setTimeout(initCdiToggleV268, 500);
 })();
