@@ -1,31 +1,33 @@
-# Catálogo de Fundos CAIXA — v303
+# Catálogo de Fundos CAIXA — v304
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Diagnóstico
+## O que foi corrigido
 
-A v302 estruturou corretamente os títulos, mas o console mostrou que regras antigas com `!important` ainda venciam o CSS em alguns H2:
-- Fundos disponíveis
-- Rankings dos fundos
-- Indicadores de mercado
+A v303 cuidou dos H2 principais. A v304 começa a padronizar os títulos internos dos cards/blocos.
 
-## Correção
+## Foco desta versão
 
-A v303 adiciona um normalizador final em JavaScript que aplica a regra visual diretamente nos títulos com `style.setProperty(..., 'important')`.
+Card da Poupança e blocos internos de Indicadores de Mercado.
 
-Isso vence os estilos legados mais agressivos.
+## Ajustes
 
-## Resultado esperado
+- Kicker padrão: texto pequeno, dourado, uppercase.
+- Título interno H3 menor que H2 principal.
+- Subtítulos H4 padronizados.
+- Badge da poupança ajustado para separar melhor valor e “a.m.”.
+- Regra vigente ficou mais informativa e menos pesada.
+- KPIs “No ano” e “Corte da Selic” com hierarquia mais uniforme.
+- Botões do card mais consistentes.
 
-Todos os títulos principais devem ficar com:
-- `fontWeight: 800`
-- mesma cor `rgb(248, 250, 252)`
-- tamanhos coerentes e padronizados
-- `iconsV302: 1`
-- `display: flex`
+## Regra semântica
+
+- H2 = grandes seções da página.
+- H3 = cards/blocos internos.
+- H4 = subtítulos dentro dos cards.
 
 ## Como subir
 
