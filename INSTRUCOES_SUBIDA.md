@@ -1,25 +1,27 @@
-# Catálogo de Fundos CAIXA — v287
+# Catálogo de Fundos CAIXA — v288
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Diagnóstico usado
+## Diagnóstico
 
-O console final mostrou:
-- todos os principais elementos sem overflow;
-- rentabilidade corrigida;
-- nomes legíveis, mas ainda com proporção visual um pouco pequena em relação aos cards.
+No card “Maior PL”, o console mostrou:
+- altura do card: 118px;
+- conteúdo real + padding + gaps: cerca de 97px;
+- sobra aproximada: 21px.
 
-## Ajuste aplicado
+O principal causador era `min-height: 118px`, não apenas padding.
 
-- calibração final da escala de fontes no mobile;
-- valores continuam no lado direito e sem overflow;
-- nomes dos fundos ficam um pouco mais equilibrados;
-- metadados mais discretos;
-- Top 10 com proporção mais estável;
-- cards ligeiramente mais compactos e com acabamento mais limpo.
+## Correção aplicada
+
+- card “Maior PL” recebeu regra especial;
+- `min-height` reduzido;
+- padding interno reduzido;
+- row-gap menor;
+- valor mantido no topo direito;
+- nome/metadado em 1 linha, pois esse card é resumo de categoria e não fundo.
 
 ## Como subir
 

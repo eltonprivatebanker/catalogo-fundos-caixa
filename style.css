@@ -44942,3 +44942,71 @@ html.palette-applied-v278 .footer-summary-sub{
     min-width: 66px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v288 — RANKING MOBILE: CARD MAIOR PL COMPACTO
+   Diagnóstico real:
+   - card PL tinha 118px de altura;
+   - conteúdo + padding + gaps ocupava ~97px;
+   - sobravam ~21px por min-height fixo.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl{
+    min-height: 96px !important;
+    height: auto !important;
+    padding: 12px 14px 11px !important;
+    row-gap: 5px !important;
+    column-gap: 10px !important;
+    align-content: start !important;
+  }
+
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl > span{
+    font-size: .62rem !important;
+    line-height: 1.12 !important;
+    letter-spacing: .075em !important;
+  }
+
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(.98rem, 4.55vw, 1.18rem) !important;
+    line-height: 1.15 !important;
+    min-height: 1.16em !important;
+    max-width: 50vw !important;
+    padding: 0 !important;
+  }
+
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl > small{
+    font-size: .78rem !important;
+    line-height: 1.16 !important;
+    font-weight: 720 !important;
+    -webkit-line-clamp: 1 !important;
+  }
+
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl > em{
+    font-size: .68rem !important;
+    line-height: 1.16 !important;
+    font-weight: 560 !important;
+    -webkit-line-clamp: 1 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl{
+    min-height: 92px !important;
+    padding: 11px 13px 10px !important;
+    row-gap: 5px !important;
+  }
+
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(.94rem, 4.35vw, 1.10rem) !important;
+  }
+
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl > small{
+    font-size: .76rem !important;
+  }
+
+  html.ranking-pl-compact-v288 #rankingsSection .ranking-exec-card.pl > em{
+    font-size: .66rem !important;
+  }
+}
