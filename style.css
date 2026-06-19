@@ -44053,3 +44053,338 @@ html.palette-applied-v278 .footer-summary-sub{
     font-size: .98rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v284 — RANKING MOBILE PREMIUM
+   Refinamento visual com mais respiro, hierarquia e acabamento.
+════════════════════════════════════════════════════ */
+@media (max-width: 768px){
+  html.ranking-premium-v284 #rankingsSection{
+    margin-top: 16px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-head{
+    margin-bottom: 18px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-title-group h2{
+    font-size: 1.70rem !important;
+    line-height: 1.04 !important;
+    letter-spacing: -.03em !important;
+    margin-bottom: 8px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-section-subtitle-v136,
+  html.ranking-premium-v284 #rankingsSection .ranking-subtitle{
+    max-width: none !important;
+    color: #aeb9d2 !important;
+    font-size: .82rem !important;
+    line-height: 1.5 !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-toolbar-v136{
+    padding: 14px !important;
+    gap: 12px !important;
+    border-radius: 18px !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    background:
+      radial-gradient(circle at top left, rgba(200,151,58,.08), transparent 34%),
+      linear-gradient(180deg, rgba(18,23,40,.88), rgba(9,12,22,.96)) !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,.18) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-control-card-v136{
+    gap: 7px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-control-card-v136 label{
+    color: #96a5c6 !important;
+    font-size: .58rem !important;
+    letter-spacing: .11em !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-select-v136{
+    min-height: 42px !important;
+    padding: 10px 38px 10px 13px !important;
+    border-radius: 13px !important;
+    font-size: .76rem !important;
+    background: rgba(10,14,27,.92) !important;
+    border-color: rgba(200,151,58,.26) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.03) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-filter-row-compat-v136{
+    min-height: 40px !important;
+    gap: 7px !important;
+    padding-top: 1px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-label{
+    color: #8f9ec0 !important;
+    font-size: .56rem !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{
+    min-height: 34px !important;
+    padding: 7px 13px !important;
+    border-radius: 999px !important;
+    font-size: .66rem !important;
+    background: rgba(14,18,34,.94) !important;
+    border-color: rgba(255,255,255,.08) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-view-tabs{
+    margin: 12px 0 14px !important;
+    padding: 8px !important;
+    gap: 8px !important;
+    border-radius: 16px !important;
+    background: rgba(10,14,26,.72) !important;
+    border: 1px solid rgba(255,255,255,.06) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-view-tab{
+    min-height: 36px !important;
+    padding: 8px 12px !important;
+    border-radius: 12px !important;
+    font-size: .68rem !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-summary{
+    gap: 12px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card{
+    min-height: 166px !important;
+    padding: 18px 18px 17px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(255,255,255,.03), transparent 28%),
+      radial-gradient(circle at top left, rgba(200,151,58,.08), transparent 36%),
+      linear-gradient(180deg, rgba(17,22,39,.96), rgba(8,10,18,.98)) !important;
+    box-shadow: 0 14px 34px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.02) !important;
+    row-gap: 13px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card::before{
+    height: 100% !important;
+    width: 3px !important;
+    inset: 0 auto 0 0 !important;
+    background: linear-gradient(180deg, rgba(64,228,185,.85), rgba(64,228,185,.18)) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card.worst::before{
+    background: linear-gradient(180deg, rgba(255,96,128,.92), rgba(255,96,128,.20)) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card.pl::before{
+    background: linear-gradient(180deg, rgba(124,146,255,.85), rgba(124,146,255,.20)) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card > span{
+    font-size: .75rem !important;
+    letter-spacing: .095em !important;
+    margin-bottom: 0 !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card > strong{
+    font-size: clamp(1.34rem, 6vw, 1.72rem) !important;
+    line-height: .98 !important;
+    letter-spacing: -.03em !important;
+    margin-bottom: 0 !important;
+    justify-self: end !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(1.16rem, 5.2vw, 1.42rem) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card > small{
+    color: #eef3ff !important;
+    font-size: .95rem !important;
+    line-height: 1.18 !important;
+    font-weight: 820 !important;
+    letter-spacing: -.02em !important;
+    -webkit-line-clamp: 3 !important;
+    min-height: calc(1.18em * 3) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card > em{
+    color: #9ca8c5 !important;
+    font-size: .79rem !important;
+    line-height: 1.28 !important;
+    margin-top: 0 !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-board,
+  html.ranking-premium-v284 #rankingsSection .ranking-category-panel,
+  html.ranking-premium-v284 #rankingsSection .ranking-risk-panel{
+    border-radius: 20px !important;
+    border: 1px solid rgba(255,255,255,.075) !important;
+    background: linear-gradient(180deg, rgba(13,17,31,.94), rgba(8,11,20,.98)) !important;
+    box-shadow: 0 14px 34px rgba(0,0,0,.15) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-panel-head,
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-board-head{
+    padding: 18px 18px 14px !important;
+    border-bottom: 1px solid rgba(255,255,255,.055) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-panel-head h3,
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-board-head h3{
+    font-size: 1.16rem !important;
+    line-height: 1.12 !important;
+    letter-spacing: -.02em !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-panel-head p,
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-board-head p{
+    color: #98a6c6 !important;
+    font-size: .78rem !important;
+    line-height: 1.45 !important;
+    margin-top: 6px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-cat-grid-v50{
+    gap: 12px !important;
+    padding: 14px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-cat-mini{
+    min-height: 160px !important;
+    padding: 18px 18px 17px !important;
+    border-radius: 20px !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    background:
+      radial-gradient(circle at top left, rgba(88,238,196,.07), transparent 34%),
+      linear-gradient(180deg, rgba(17,22,39,.96), rgba(9,12,21,.98)) !important;
+    box-shadow: 0 12px 30px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.02) !important;
+    row-gap: 14px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-cat-mini > span{
+    font-size: .76rem !important;
+    letter-spacing: .10em !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-cat-mini > strong{
+    font-size: clamp(1.24rem, 6vw, 1.66rem) !important;
+    line-height: .98 !important;
+    letter-spacing: -.03em !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-cat-mini > small{
+    color: #e7edf9 !important;
+    font-size: .95rem !important;
+    line-height: 1.18 !important;
+    font-weight: 800 !important;
+    -webkit-line-clamp: 3 !important;
+    min-height: calc(1.18em * 3) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-top-table{
+    background: transparent !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-top-row,
+  html.ranking-premium-v284 #rankingsSection .ranking-top-row-mobile-v100{
+    grid-template-columns: 38px minmax(0,1fr) minmax(92px, 27vw) !important;
+    min-height: 116px !important;
+    padding: 15px 14px !important;
+    gap: 8px 14px !important;
+    border-bottom: 1px solid rgba(255,255,255,.06) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-pos{
+    font-size: .94rem !important;
+    font-weight: 800 !important;
+    color: #d6e1ff !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-fund strong{
+    color: #f5f8ff !important;
+    font-size: .96rem !important;
+    line-height: 1.16 !important;
+    font-weight: 810 !important;
+    letter-spacing: -.015em !important;
+    -webkit-line-clamp: 3 !important;
+    min-height: calc(1.16em * 3) !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-fund span{
+    color: #9aa7c6 !important;
+    font-size: .81rem !important;
+    line-height: 1.18 !important;
+    margin-top: 6px !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-return{
+    justify-self: end !important;
+    min-width: 92px !important;
+    font-size: clamp(1.06rem, 5vw, 1.24rem) !important;
+    line-height: .98 !important;
+    letter-spacing: -.02em !important;
+    font-weight: 900 !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-risk-row,
+  html.ranking-premium-v284 #rankingsSection .ranking-risk-row-mobile-v100{
+    grid-template-columns: 34px minmax(0,1fr) 84px !important;
+    min-height: 76px !important;
+    padding: 14px 16px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-risk-row strong{
+    font-size: .78rem !important;
+    line-height: 1.2 !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-risk-row em{
+    font-size: .84rem !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-premium-v284 #rankingsSection .ranking-title-group h2{
+    font-size: 1.58rem !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card{
+    min-height: 158px !important;
+    padding: 16px 15px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-exec-card > small,
+  html.ranking-premium-v284 #rankingsSection .ranking-cat-mini > small{
+    font-size: .88rem !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-cat-mini{
+    min-height: 152px !important;
+    padding: 16px 15px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-top-row,
+  html.ranking-premium-v284 #rankingsSection .ranking-top-row-mobile-v100{
+    grid-template-columns: 34px minmax(0,1fr) minmax(82px, 26vw) !important;
+    min-height: 110px !important;
+    padding: 14px 12px !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-fund strong{
+    font-size: .90rem !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-fund span{
+    font-size: .76rem !important;
+  }
+
+  html.ranking-premium-v284 #rankingsSection .ranking-return{
+    min-width: 82px !important;
+    font-size: 1rem !important;
+  }
+}
