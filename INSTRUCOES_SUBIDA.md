@@ -1,25 +1,31 @@
-# Catálogo de Fundos CAIXA — v299
+# Catálogo de Fundos CAIXA — v300
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Diagnóstico
+## Ajuste aplicado
 
-O console mostrou:
-- o canvas existe e está visível;
-- o canvas tinha 265x94;
-- o wrapper do gráfico ainda estava com `min-height: 178px`, mesmo com `max-height: 108px`;
-- o canvas estava `display: inline` e sem atributos width/height, sinal de renderização instável.
+Sistema único para os títulos principais da página.
 
-## Correção aplicada
+## Títulos padronizados
 
-- zerei o `min-height` antigo do wrapper no mobile;
-- forcei canvas como `display: block`;
-- estabilizei altura do wrapper, inner e canvas;
-- mantive legenda e rodapé ocultos no mobile;
-- adicionei uma proteção no JS para garantir que `isMobile` exista antes de qualquer uso dentro de `renderCdiYearHistory`.
+- Resumo executivo
+- Fundos disponíveis
+- Rankings dos fundos
+- Indicadores de mercado
+
+## O que mudou
+
+- mesma fonte;
+- mesmo tamanho;
+- mesmo peso;
+- mesma cor;
+- mesma distância entre ícone e texto;
+- ícones agora ficam dentro de uma caixa visual fixa;
+- emojis deixam de “quebrar” o alinhamento do texto;
+- mobile e desktop usam a mesma regra visual.
 
 ## Como subir
 
@@ -28,4 +34,4 @@ Substitua:
 - style.css
 - app.js
 
-Depois atualize forçado no celular.
+Depois atualize forçado no navegador.
