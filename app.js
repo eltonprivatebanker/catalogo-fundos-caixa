@@ -1912,7 +1912,7 @@ function renderCdiYearHistory(d){
 
   const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(45, 212, 160, 0.62)' : i === idxFechado ? 'rgba(232, 180, 92, 0.50)' : 'rgba(125, 162, 255, 0.28)');
   const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(45, 212, 160, 0.96)' : i === idxFechado ? 'rgba(232, 180, 92, 0.86)' : 'rgba(125, 162, 255, 0.52)');
-  const isMobile = window.matchMedia('(max-width: 760px)').matches;
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const maxMensal = Math.max(0.1, ...mensal.filter(Number.isFinite));
   const maxAcumulado = Math.max(1, ...acumulado.filter(Number.isFinite), Number.isFinite(acumAno) ? acumAno : 0);
 
@@ -1940,11 +1940,11 @@ function renderCdiYearHistory(d){
 
   const chartInnerV273 = document.getElementById('cdiChartScrollInnerV273');
   const totalMesesV273 = labels.length;
-  const minChartWidthV273 = isMobile ? Math.max(640, totalMesesV273 * 58) : '100%';
+  const minChartWidthV273 = isMobile ? Math.max(540, totalMesesV273 * 46) : '100%';
   if(chartInnerV273){
     chartInnerV273.style.minWidth = typeof minChartWidthV273 === 'number' ? `${minChartWidthV273}px` : minChartWidthV273;
   }
-  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 14 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 16 : 22) : (isMobile ? 20 : 26));
+  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 11 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 13 : 22) : (isMobile ? 17 : 26));
   const raioPontoV273 = totalMesesV273 >= 10 ? 2.2 : 2.8;
   const raioPontoDestaqueV273 = totalMesesV273 >= 10 ? 3.6 : 4.2;
   const mostrarTodosMesesV273 = true;
@@ -2019,9 +2019,9 @@ function renderCdiYearHistory(d){
           ticks: {
             color: 'rgba(229,235,255,0.74)',
             autoSkip: false,
-            maxRotation: isMobile ? 0 : 0,
+            maxRotation: 0,
             minRotation: 0,
-            font: { size: totalMesesV273 >= 11 ? (isMobile ? 9 : 10) : (isMobile ? 10 : 11), weight: '700' }
+            font: { size: totalMesesV273 >= 11 ? (isMobile ? 8 : 10) : (isMobile ? 9 : 11), weight: '700' }
           }
         },
         y: {

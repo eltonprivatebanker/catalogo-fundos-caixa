@@ -43227,3 +43227,296 @@ html.palette-applied-v278 .footer-summary-sub{
     font-size: .74rem !important;
   }
 }
+
+/* ════════════════════════════════════════════════════
+   v281 — REFINO MOBILE DO CENÁRIO MONETÁRIO
+   Objetivo: reduzir altura, compactar CDI e Copom,
+   melhorar leitura no celular e diminuir espaços vazios.
+════════════════════════════════════════════════════ */
+@media (max-width: 768px){
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255{
+    padding: 0 !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .market-reference-head-v167{
+    padding: 16px 16px 14px !important;
+    gap: 10px !important;
+    align-items: flex-start !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .market-reference-head-v167 h3{
+    font-size: 1.02rem !important;
+    line-height: 1.1 !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .market-reference-head-v167 p{
+    font-size: .76rem !important;
+    margin-top: 4px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .market-reference-source-v167{
+    min-height: 36px !important;
+    padding: 0 14px !important;
+    border-radius: 14px !important;
+    font-size: .72rem !important;
+    align-self: flex-end !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rates-summary-v167{
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    padding: 14px 16px 12px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rate-summary-card-v167{
+    min-height: auto !important;
+    padding: 14px 16px !important;
+    border-radius: 18px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rate-summary-card-v167 > span{
+    font-size: .74rem !important;
+    margin-bottom: 6px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rate-summary-value-v167 strong,
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .copom-next-summary-v167 > strong{
+    font-size: 1.28rem !important;
+    line-height: 1 !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rate-summary-value-v167 em{
+    font-size: .84rem !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rate-summary-card-v167 small,
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .copom-next-summary-v167 small{
+    font-size: .74rem !important;
+    margin-top: 4px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+    gap: 12px !important;
+    padding: 0 16px 16px !important;
+  }
+
+  /* Copom mais enxuto */
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270{
+    padding: 14px !important;
+    border-radius: 20px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167{
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: start !important;
+    gap: 8px 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167 strong{
+    font-size: 1rem !important;
+    line-height: 1.08 !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167 small{
+    font-size: .72rem !important;
+    line-height: 1.3 !important;
+    margin-top: 3px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270 .reference-toggle-v167{
+    width: auto !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    border-radius: 12px !important;
+    font-size: .66rem !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-summary-v270{
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+    margin-bottom: 8px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-card-v270{
+    min-height: auto !important;
+    padding: 12px 14px 12px 16px !important;
+    border-radius: 16px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-card-v270::before{
+    top: 12px !important;
+    bottom: 12px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-kicker-v270{
+    font-size: .64rem !important;
+    margin-bottom: 4px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-date-v270{
+    font-size: 1.02rem !important;
+    margin-top: 2px !important;
+    line-height: 1.05 !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-meta-v270{
+    gap: 8px !important;
+    margin-top: 8px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-pill-v270,
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-status-v270{
+    min-height: 22px !important;
+    padding: 0 9px !important;
+    font-size: .56rem !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-exec-desc-v270{
+    margin-top: 8px !important;
+    font-size: .72rem !important;
+    line-height: 1.33 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270 .copom-footnote-v256{
+    margin-top: 8px !important;
+    font-size: .58rem !important;
+  }
+
+  /* CDI mais compacto e leve no mobile */
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-block-v271{
+    padding: 14px !important;
+    border-radius: 20px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-head-v274{
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    align-items: start !important;
+    gap: 8px 10px !important;
+    margin-bottom: 10px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-head-v274 strong{
+    font-size: 1rem !important;
+    line-height: 1.1 !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-head-v274 small{
+    font-size: .72rem !important;
+    margin-top: 3px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-analytic-link-v274{
+    width: auto !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    border-radius: 12px !important;
+    font-size: .66rem !important;
+    white-space: nowrap !important;
+    justify-content: center !important;
+    align-self: start !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-kpis-v271{
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 8px !important;
+    margin-bottom: 10px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-kpi-v271{
+    min-height: auto !important;
+    padding: 10px 10px 11px !important;
+    border-radius: 14px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-kpi-label-v271{
+    font-size: .54rem !important;
+    line-height: 1.15 !important;
+    letter-spacing: .08em !important;
+    margin-bottom: 5px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-kpi-value-v271{
+    font-size: 1rem !important;
+    line-height: 1 !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-kpi-v271.is-total .cdi-kpi-value-v271{
+    font-size: 1.06rem !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-canvas-wrap-v271{
+    height: 186px !important;
+    min-height: 186px !important;
+    padding: 8px 6px 2px !important;
+    border-radius: 16px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    touch-action: pan-x pan-y !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-scroll-wrap-v273{
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-scroll-inner-v273{
+    min-width: 540px !important;
+    height: 100% !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-legend-v271{
+    margin-top: 8px !important;
+    gap: 12px !important;
+    row-gap: 6px !important;
+    font-size: .66rem !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-legend-v271::after{
+    display: none !important;
+    content: none !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-block-v271 .reference-footnote-v167{
+    margin-top: 6px !important;
+    font-size: .56rem !important;
+    line-height: 1.3 !important;
+  }
+}
+
+@media (max-width: 420px){
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .market-reference-head-v167,
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rates-summary-v167,
+  html.rates-mobile-refine-v281 #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-kpis-v271{
+    grid-template-columns: 1fr !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-head-v274,
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167{
+    grid-template-columns: 1fr !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-analytic-link-v274,
+  html.rates-mobile-refine-v281 #sec-mercado .copom-premium-block-v270 .reference-toggle-v167{
+    justify-self: start !important;
+  }
+
+  html.rates-mobile-refine-v281 #sec-mercado .cdi-chart-canvas-wrap-v271{
+    height: 178px !important;
+    min-height: 178px !important;
+  }
+}
