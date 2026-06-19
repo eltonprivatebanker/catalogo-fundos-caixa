@@ -1883,16 +1883,16 @@ function renderCdiYearHistory(d){
   const labels = mesesAno.map(mesCurto).map(s => s.toUpperCase());
   const mensal = mesesAno.map(item => Number(item?.valor ?? 0));
   const acumulado = [];
-  let running = 0;
+  let running = 1;
   mensal.forEach((valor) => {
     const n = Number.isFinite(valor) ? valor : 0;
-    running += n;
-    acumulado.push(Number(running.toFixed(2)));
+    running *= (1 + n / 100);
+    acumulado.push(Number(((running - 1) * 100).toFixed(2)));
   });
 
   const idxAtual = Math.max(0, mesesAno.indexOf(atualParcial));
   const idxFechado = Math.max(0, mesesAno.indexOf(ultimoFechado));
-  const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? running);
+  const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? acumulado[acumulado.length - 1]);
 
   if(title) title.textContent = `CDI mensal + acumulado ${ano}`;
   if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
@@ -1912,8 +1912,8 @@ function renderCdiYearHistory(d){
   const isMobile = window.matchMedia('(max-width: 760px)').matches;
   const maxMensal = Math.max(0.1, ...mensal.filter(Number.isFinite));
   const maxAcumulado = Math.max(1, ...acumulado.filter(Number.isFinite), Number.isFinite(acumAno) ? acumAno : 0);
-  const yMonthlyMax = Math.max(1.5, Math.ceil((maxMensal + 0.18) * 10) / 10);
-  const yAccumMax = Math.max(4, Math.ceil((maxAcumulado + 0.45) * 2) / 2);
+  const yMonthlyMax = Math.min(2.25, Math.max(1.5, Math.ceil((maxMensal + 0.12) * 4) / 4));
+  const yAccumMax = Math.max(4, Math.ceil((maxAcumulado + 0.35) * 2) / 2);
   const fmtAxis1 = value => {
     const n = Number(value);
     if(!Number.isFinite(n)) return '—';
@@ -1924,6 +1924,17 @@ function renderCdiYearHistory(d){
     try{ _chartCdiYearV271.destroy(); }catch(e){}
     _chartCdiYearV271 = null;
   }
+
+  const chartInnerV273 = document.getElementById('cdiChartScrollInnerV273');
+  const totalMesesV273 = labels.length;
+  const minChartWidthV273 = isMobile ? Math.max(640, totalMesesV273 * 58) : '100%';
+  if(chartInnerV273){
+    chartInnerV273.style.minWidth = typeof minChartWidthV273 === 'number' ? `${minChartWidthV273}px` : minChartWidthV273;
+  }
+  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 14 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 16 : 22) : (isMobile ? 20 : 26));
+  const raioPontoV273 = totalMesesV273 >= 10 ? 2.2 : 2.8;
+  const raioPontoDestaqueV273 = totalMesesV273 >= 10 ? 3.6 : 4.2;
+  const mostrarTodosMesesV273 = true;
 
   const ctx = chartCanvas.getContext('2d');
   _chartCdiYearV271 = new Chart(ctx, {
@@ -1940,8 +1951,8 @@ function renderCdiYearHistory(d){
           borderWidth: 1.4,
           borderRadius: { topLeft: 8, topRight: 8, bottomLeft: 3, bottomRight: 3 },
           borderSkipped: false,
-          barThickness: isMobile ? 22 : 34,
-          maxBarThickness: isMobile ? 24 : 38
+          barThickness: barraEspessuraV273,
+          maxBarThickness: barraEspessuraV273 + 4
         },
         {
           type: 'line',
@@ -1950,20 +1961,22 @@ function renderCdiYearHistory(d){
           yAxisID: 'y1',
           borderColor: '#e8bb6a',
           backgroundColor: 'rgba(232, 187, 106, 0.10)',
-          borderWidth: 2.6,
+          borderWidth: totalMesesV273 >= 10 ? 2.2 : 2.5,
           tension: 0.25,
           fill: false,
           pointBackgroundColor: acumulado.map((_,i) => i === idxAtual ? '#35d09a' : '#e8bb6a'),
           pointBorderColor: '#0b1021',
           pointBorderWidth: 1.4,
-          pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? 4.5 : 3),
-          pointHoverRadius: 5.5
+          pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? raioPontoDestaqueV273 : raioPontoV273),
+          pointHoverRadius: raioPontoDestaqueV273 + 1
         }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      resizeDelay: 80,
+      layout: { padding: { left: 4, right: isMobile ? 8 : 12, top: 4, bottom: 0 } },
       interaction: { mode: 'index', intersect: false },
       plugins: {
         legend: { display: false },
@@ -1992,7 +2005,10 @@ function renderCdiYearHistory(d){
           grid: { display: false },
           ticks: {
             color: 'rgba(229,235,255,0.74)',
-            font: { size: isMobile ? 10 : 11, weight: '700' }
+            autoSkip: false,
+            maxRotation: isMobile ? 0 : 0,
+            minRotation: 0,
+            font: { size: totalMesesV273 >= 11 ? (isMobile ? 9 : 10) : (isMobile ? 10 : 11), weight: '700' }
           }
         },
         y: {
@@ -2001,8 +2017,8 @@ function renderCdiYearHistory(d){
           ticks: {
             color: 'rgba(188,200,234,0.72)',
             padding: 8,
-            stepSize: 0.5,
-            maxTicksLimit: 5,
+            stepSize: 0.25,
+            maxTicksLimit: 6,
             callback: value => fmtAxis1(value)
           },
           grid: {
@@ -2017,7 +2033,7 @@ function renderCdiYearHistory(d){
           display: !isMobile,
           ticks: {
             color: 'rgba(232,187,106,0.76)',
-            stepSize: 1,
+            stepSize: maxAcumulado >= 10 ? 2 : 1,
             maxTicksLimit: 6,
             callback: value => fmtAxis1(value)
           },
@@ -16332,3 +16348,19 @@ function toggleCdiMonthsV268(force){
   }
   setTimeout(initCdiToggleV268, 500);
 })();
+
+
+/* ELTAUM_CDI_ANALYTIC_LINK_V274 */
+function openCdiAnalyticTableV274(){
+  const candidates = Array.from(document.querySelectorAll('button, a'));
+  const analytic = candidates.find(el => /tabela analítica/i.test(el.textContent || '') && el.id !== 'cdiAnalyticLinkV274');
+  if(analytic && typeof analytic.click === 'function'){
+    analytic.click();
+    const market = document.getElementById('marketReferencePanelV150') || document.getElementById('sec-mercado');
+    if(market && typeof market.scrollIntoView === 'function') market.scrollIntoView({behavior:'smooth', block:'start'});
+    return false;
+  }
+  const target = document.getElementById('marketReferencePanelV150') || document.getElementById('sec-mercado');
+  if(target && typeof target.scrollIntoView === 'function') target.scrollIntoView({behavior:'smooth', block:'start'});
+  return false;
+}
