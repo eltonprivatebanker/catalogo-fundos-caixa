@@ -1,28 +1,20 @@
-# Catálogo de Fundos CAIXA — v282
+# Catálogo de Fundos CAIXA — v283
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que mudou
+## Foco desta versão
+Padronização visual da área de Ranking no mobile.
 
-Versão focada em padronizar a área de Rankings no mobile.
-
-Principais ajustes:
-- rentabilidade/valor mantido no lado superior direito;
-- mesma hierarquia visual para cards de resumo;
-- mesma lógica aplicada aos cards de “melhores por categoria”;
-- tipografia padronizada para rótulo, valor, nome do fundo e metadados;
-- cards com altura, padding e bordas mais consistentes;
-- lista Top 10 com valor fixo à direita e fonte mais uniforme;
-- redução de quebras estranhas e excesso de variação de tamanho.
+## Ajustes aplicados
+- cards “Melhores por categoria” com altura mais uniforme;
+- cards-resumo com estrutura mais estável e valor mantido no topo direito;
+- nomes dos fundos com até 3 linhas, reduzindo cortes bruscos;
+- quebra de linha mais inteligente em nomes longos;
+- lista Top do ranking com linha mais alta e leitura mais equilibrada;
+- tipografia mais consistente entre rótulo, rentabilidade e nome do fundo.
 
 ## Como subir
-
-Substitua no GitHub:
-- index.html
-- style.css
-- app.js
-
-Depois faça atualização forçada no celular para limpar cache.
+Substitua os arquivos no GitHub e depois faça atualização forçada no navegador do celular.
