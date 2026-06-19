@@ -1,31 +1,31 @@
-# Catálogo de Fundos CAIXA — v300
+# Catálogo de Fundos CAIXA — v301
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste aplicado
+## Diagnóstico
 
-Sistema único para os títulos principais da página.
+A v300 subiu corretamente, mas regras antigas e mais específicas de cada seção ainda estavam vencendo a regra dos títulos.
 
-## Títulos padronizados
+Exemplos encontrados no console:
+- Fundos disponíveis: 15.68px
+- Rankings: 26.4px
+- Indicadores: dourado e font-weight 900
 
-- Resumo executivo
-- Fundos disponíveis
-- Rankings dos fundos
-- Indicadores de mercado
+## Correção
 
-## O que mudou
+A v301 adiciona uma regra final mais forte no CSS, no final do arquivo, para forçar o mesmo padrão em todos os H2 principais com `.section-title-v300`.
 
-- mesma fonte;
-- mesmo tamanho;
-- mesmo peso;
+## Resultado esperado
+
+Os quatro títulos principais devem ficar com:
 - mesma cor;
-- mesma distância entre ícone e texto;
-- ícones agora ficam dentro de uma caixa visual fixa;
-- emojis deixam de “quebrar” o alinhamento do texto;
-- mobile e desktop usam a mesma regra visual.
+- mesmo peso;
+- mesmo tamanho;
+- mesmo espaçamento;
+- mesmo padrão de ícone.
 
 ## Como subir
 
