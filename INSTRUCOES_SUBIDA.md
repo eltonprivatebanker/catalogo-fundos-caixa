@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v264
+# Catálogo de Fundos CAIXA — v265
 
 Arquivos atualizados:
 - index.html
@@ -6,12 +6,14 @@ Arquivos atualizados:
 - app.js
 
 ## O que mudou
-- O bloco **CDI mensal 2026** foi refeito de forma realista no código, não apenas por mockup.
-- O CDI mensal não usa mais o visual antigo de carrossel/cards grandes.
-- No mobile, o CDI mensal aparece como lista compacta: mês, taxa e status na mesma linha.
-- No desktop, o CDI mensal aparece em grade compacta de 3 colunas.
-- A rolagem da página não deve mais travar ao passar o dedo sobre essa área.
-- Mantidos os dados e IDs principais.
+
+1. CDI mensal no mobile ficou mais compacto, em linhas baixas.
+2. Status “fechado” foi removido dos meses comuns para reduzir ruído.
+3. Mantidos apenas os status relevantes: “parcial” e “último fechado”.
+4. Últimas decisões do Copom ficaram mais baixas.
+5. Poupança ficou mais compacta no mobile.
+6. Removido o duplicador visual de seta do botão “Ver regras”.
+7. Nenhum cálculo foi alterado.
 
 ## Como subir
 Substitua no GitHub:
@@ -19,4 +21,4 @@ Substitua no GitHub:
 - style.css
 - app.js
 
-Depois limpe o cache no celular fechando a aba e abrindo novamente.
+Depois limpe o cache do navegador ou reabra a aba no celular.

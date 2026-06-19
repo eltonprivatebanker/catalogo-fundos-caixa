@@ -1,3 +1,4 @@
+// ELTAUM_COMPACT_MOBILE_20260618_v265
 // ELTAUM_RATES_CDI_REAL_20260618_v264
 // ELTAUM_RATES_SCROLL_FIX_20260618_v263
 // ELTAUM_RATES_PREMIUM_20260618_v261
@@ -1864,7 +1865,7 @@ function renderCdiYearHistory(d){
     const isCurrent = atualParcial && item === atualParcial;
     const isClosed = ultimoFechado && item === ultimoFechado;
     const state = isCurrent ? 'partial' : isClosed ? 'lastclosed' : 'closed';
-    const status = isCurrent ? 'parcial' : isClosed ? 'último fechado' : 'fechado';
+    const status = isCurrent ? 'parcial' : isClosed ? 'último fechado' : '';
 
     return `<span class="cdi-rate-row-v264 is-${state}" role="listitem" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
       <span class="cdi-rate-month-v264">${label}</span>
