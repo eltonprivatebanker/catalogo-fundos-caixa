@@ -41193,3 +41193,209 @@ html.rates-compact-v265 #sec-mercado .rates-executive-v255 .copom-grid-v167 .cop
     grid-template-columns:repeat(4,minmax(0,1fr))!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v267 — CENÁRIO MONETÁRIO DESCOMPRIMIDO
+   Solução desktop: menos coisas visíveis ao mesmo tempo.
+   Mostra apenas decisão recente + próxima agenda e CDI atual + último fechado.
+════════════════════════════════════════════════════ */
+
+@media (min-width: 900px){
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255{
+    max-width: none !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .market-reference-head-v167{
+    padding: 22px 28px 18px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .market-reference-head-v167 h3{
+    font-size: 1.34rem !important;
+    letter-spacing: -.025em !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .market-reference-head-v167 p{
+    font-size: .78rem !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .rates-summary-v167{
+    grid-template-columns: 1.15fr 1fr 1fr !important;
+    gap: 18px !important;
+    padding: 18px 28px 16px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .rate-summary-card-v167{
+    min-height: 106px !important;
+    padding: 18px 20px !important;
+    border-radius: 20px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .rate-summary-card-v167>span{
+    font-size: .64rem !important;
+    letter-spacing: .11em !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .rate-summary-value-v167 strong,
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-next-summary-v167>strong{
+    font-size: 2rem !important;
+    line-height: .95 !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .rate-summary-value-v167 em{
+    font-size: .78rem !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .rate-summary-card-v167 small{
+    font-size: .66rem !important;
+  }
+
+  /* Two large panels with less visible content */
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .rates-detail-grid-v167{
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 18px !important;
+    padding: 0 28px 22px !important;
+    align-items: stretch !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-compact-v167,
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .cdi-history-v167{
+    min-height: 210px !important;
+    padding: 20px !important;
+    border-radius: 22px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .reference-subhead-v167{
+    margin-bottom: 16px !important;
+    align-items: center !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .reference-subhead-v167 strong,
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 #cdiYearHistoryTitle{
+    font-size: 1.08rem !important;
+    line-height: 1.1 !important;
+    letter-spacing: -.02em !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .reference-subhead-v167 small{
+    font-size: .66rem !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .reference-toggle-v167{
+    min-height: 38px !important;
+    padding: 0 16px !important;
+    border-radius: 14px !important;
+    font-size: .64rem !important;
+  }
+
+  /* Desktop Copom: show only last decision and next meeting by default */
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item{
+    min-height: 98px !important;
+    padding: 16px 18px !important;
+    border-radius: 18px !important;
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "num"
+      "date"
+      "result" !important;
+    justify-content: center !important;
+    align-content: center !important;
+    gap: 7px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item:not(:first-child):not(.featured-next){
+    display: none !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167.is-expanded-v167 .copom-item{
+    display: grid !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167.is-expanded-v167{
+    grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167.is-expanded-v167 .copom-item{
+    min-height: 82px !important;
+    padding: 13px 14px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-date{
+    font-size: 1.18rem !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-num{
+    font-size: .58rem !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-result{
+    justify-self: start !important;
+    text-align: left !important;
+    font-size: .72rem !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Desktop CDI: show only current + last closed by default */
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-strip{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 14px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip{
+    min-height: 98px !important;
+    padding: 16px 18px !important;
+    border-radius: 18px !important;
+    display: grid !important;
+    grid-template-columns: 1fr auto !important;
+    grid-template-areas:
+      "month status"
+      "value value" !important;
+    align-content: center !important;
+    gap: 8px !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip:nth-child(n+3){
+    display: none !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .m{
+    grid-area: month !important;
+    font-size: .64rem !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .v{
+    grid-area: value !important;
+    font-size: 1.42rem !important;
+    margin: 0 !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .cdi-history-v167 .cdi-month-chip .p{
+    grid-area: status !important;
+    justify-self: end !important;
+    font-size: .58rem !important;
+    margin: 0 !important;
+    text-align: right !important;
+  }
+
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .reference-footnote-v167{
+    margin-top: 14px !important;
+    font-size: .58rem !important;
+  }
+}
+
+/* Mobile: preserve v265/v263 compact behavior, only reduce Copom a little more */
+@media (max-width: 760px){
+  html.rates-decompressed-v267 #sec-mercado .rates-executive-v255 .copom-grid-v167 .copom-item{
+    min-height: 38px !important;
+  }
+}

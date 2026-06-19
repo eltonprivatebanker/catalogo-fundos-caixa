@@ -1,3 +1,4 @@
+// ELTAUM_RATES_DECOMPRESSED_20260618_v267
 // ELTAUM_DESKTOP_RATES_REFINE_20260618_v266
 // ELTAUM_COMPACT_MOBILE_20260618_v265
 // ELTAUM_RATES_CDI_REAL_20260618_v264
@@ -14529,7 +14530,7 @@ function toggleCopomCalendarV167(force){
   const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Recolher' : 'Calendário';
+    btn.textContent = open ? 'Recolher' : 'Ver calendário';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;
