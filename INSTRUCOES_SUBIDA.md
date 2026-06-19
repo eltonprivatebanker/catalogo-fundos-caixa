@@ -1,22 +1,33 @@
-# Catálogo de Fundos CAIXA — v289
+# Catálogo de Fundos CAIXA — v290
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Foco
-Uniformização da área de Ranking no mobile.
+## Diagnóstico
 
-## Ajustes aplicados
-- régua única de fontes para cards-resumo, cards por categoria e Top 10;
-- redução dos espaços internos sobrando;
-- padronização de padding, gap, min-height e line-height;
-- card “Maior PL” permanece compacto por ser card de categoria, não de fundo;
-- rentabilidade permanece no lado direito;
-- nomes com comportamento consistente em até 2 linhas;
-- Top 10 com linhas mais compactas e alinhadas.
+A v289 carregou corretamente, mas o diagnóstico mostrou:
+- cards ainda com min-height fixo;
+- cards por categoria ainda com espaço sobrando;
+- valores dos cards com overflowY residual;
+- visual ainda pouco uniforme.
+
+## Correção aplicada
+
+- removido min-height inflado dos cards de ranking;
+- altura passa a ser definida pelo conteúdo;
+- régua única de label, valor, nome e meta;
+- valores com line-height maior e sem overflow vertical;
+- cards por categoria mais compactos;
+- Top 10 mais enxuto;
+- espaçamento entre cards reduzido.
 
 ## Como subir
-Substitua index.html, style.css e app.js.
+
+Substitua:
+- index.html
+- style.css
+- app.js
+
 Depois atualize forçado no celular.

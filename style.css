@@ -45188,3 +45188,324 @@ html.palette-applied-v278 .footer-summary-sub{
   html.ranking-uniform-final-v289 #rankingsSection .ranking-pos{width:24px!important;min-width:24px!important;font-size:.72rem!important;}
   html.ranking-uniform-final-v289 #rankingsSection .ranking-return{min-width:62px!important;}
 }
+
+
+/* ════════════════════════════════════════════════════
+   v290 — RANKING MOBILE: UNIFORME, SEM SOBRAS
+   Baseado no diagnóstico real v289:
+   - v289 carregou corretamente;
+   - ainda havia min-height maior que o conteúdo;
+   - valores dos cards tinham overflowY residual;
+   - cards de categoria ainda sobravam muito espaço.
+   Esta camada final usa altura automática e padding uniforme.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-tight-uniform-v290 #rankingsSection{
+    --rnk-label-v290: .64rem;
+    --rnk-value-v290: clamp(1.04rem, 4.85vw, 1.24rem);
+    --rnk-name-v290: .78rem;
+    --rnk-meta-v290: .67rem;
+    --rnk-list-value-v290: .86rem;
+    --rnk-card-py-v290: 13px;
+    --rnk-card-px-v290: 14px;
+    --rnk-gap-v290: 6px;
+  }
+
+  /* Cards de resumo: altura pelo conteúdo, sem min-height inflado */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card{
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: var(--rnk-card-py-v290) var(--rnk-card-px-v290) !important;
+    border-radius: 16px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    grid-template-areas:
+      "label value"
+      "name  name"
+      "meta  meta" !important;
+    grid-template-rows: auto auto auto !important;
+    column-gap: 10px !important;
+    row-gap: var(--rnk-gap-v290) !important;
+    align-content: start !important;
+    align-items: start !important;
+    overflow: hidden !important;
+  }
+
+  /* Card PL também na mesma régua, só com gap menor */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card.pl{
+    min-height: 0 !important;
+    padding-top: 11px !important;
+    padding-bottom: 10px !important;
+    row-gap: 4px !important;
+  }
+
+  /* Cards por categoria: mesma lógica, mais compactos */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-mini{
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: var(--rnk-card-py-v290) var(--rnk-card-px-v290) !important;
+    border-radius: 16px !important;
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) max-content !important;
+    grid-template-areas:
+      "label value"
+      "name  name" !important;
+    grid-template-rows: auto auto !important;
+    column-gap: 10px !important;
+    row-gap: 8px !important;
+    align-content: start !important;
+    align-items: start !important;
+    overflow: hidden !important;
+  }
+
+  /* Label único */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card > span,
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-mini > span{
+    grid-area: label !important;
+    width: auto !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #f2ca78 !important;
+    font-size: var(--rnk-label-v290) !important;
+    line-height: 1.15 !important;
+    font-weight: 820 !important;
+    letter-spacing: .075em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Valor único, sem overflow vertical */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-mini > strong{
+    grid-area: value !important;
+    justify-self: end !important;
+    align-self: start !important;
+    width: auto !important;
+    max-width: 46vw !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+    color: #36d6a5 !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: var(--rnk-value-v290) !important;
+    line-height: 1.24 !important;
+    font-weight: 850 !important;
+    letter-spacing: -.018em !important;
+    font-variant-numeric: tabular-nums !important;
+    text-align: right !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card > strong.neg,
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-mini > strong.neg{
+    color: #ff6f91 !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(.90rem, 4.2vw, 1.06rem) !important;
+    line-height: 1.24 !important;
+    max-width: 52vw !important;
+  }
+
+  /* Nome único */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card > small,
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-mini > small{
+    grid-area: name !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #edf3ff !important;
+    font-size: var(--rnk-name-v290) !important;
+    line-height: 1.22 !important;
+    font-weight: 720 !important;
+    letter-spacing: -.01em !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card.pl > small{
+    -webkit-line-clamp: 1 !important;
+  }
+
+  /* Meta única */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card > em{
+    grid-area: meta !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    color: #a7b2cf !important;
+    font-size: var(--rnk-meta-v290) !important;
+    line-height: 1.18 !important;
+    font-weight: 560 !important;
+    font-style: normal !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Espaçamentos das grades */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-summary,
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-grid-v50{
+    gap: 10px !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-grid-v50{
+    padding: 12px !important;
+  }
+
+  /* Top 10: altura automática, sem linhas gigantes */
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-top-row,
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-top-row-mobile-v100{
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 11px 9px !important;
+    display: grid !important;
+    grid-template-columns: 24px minmax(0, 1fr) max-content !important;
+    grid-template-areas: "pos fund value" !important;
+    column-gap: 8px !important;
+    row-gap: 0 !important;
+    align-items: center !important;
+    border-bottom: 1px solid rgba(255,255,255,.055) !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-pos{
+    grid-area: pos !important;
+    width: 24px !important;
+    min-width: 24px !important;
+    text-align: center !important;
+    color: #aeb9d4 !important;
+    font-size: .72rem !important;
+    line-height: 1 !important;
+    font-weight: 760 !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-fund{
+    grid-area: fund !important;
+    min-width: 0 !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-fund strong{
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 !important;
+    color: #f3f7ff !important;
+    font-size: var(--rnk-name-v290) !important;
+    line-height: 1.20 !important;
+    font-weight: 720 !important;
+    letter-spacing: -.01em !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-fund span{
+    width: 100% !important;
+    min-height: 0 !important;
+    margin: 4px 0 0 !important;
+    color: #9da8c5 !important;
+    font-size: var(--rnk-meta-v290) !important;
+    line-height: 1.18 !important;
+    font-weight: 480 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-return{
+    grid-area: value !important;
+    justify-self: end !important;
+    width: auto !important;
+    min-width: 62px !important;
+    max-width: 25vw !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    overflow: visible !important;
+    white-space: nowrap !important;
+    color: #36d6a5 !important;
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: var(--rnk-list-value-v290) !important;
+    line-height: 1.24 !important;
+    font-weight: 850 !important;
+    letter-spacing: -.015em !important;
+    font-variant-numeric: tabular-nums !important;
+    text-align: right !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-return.neg{
+    color: #ff6f91 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-tight-uniform-v290 #rankingsSection{
+    --rnk-label-v290: .61rem;
+    --rnk-value-v290: clamp(1rem, 4.7vw, 1.16rem);
+    --rnk-name-v290: .74rem;
+    --rnk-meta-v290: .65rem;
+    --rnk-list-value-v290: .82rem;
+    --rnk-card-py-v290: 12px;
+    --rnk-card-px-v290: 13px;
+    --rnk-gap-v290: 5px;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-cat-mini{
+    row-gap: 7px !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-exec-card.pl{
+    padding-top: 10px !important;
+    padding-bottom: 9px !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-top-row,
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-top-row-mobile-v100{
+    padding: 10px 8px !important;
+    grid-template-columns: 22px minmax(0, 1fr) max-content !important;
+    column-gap: 7px !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-pos{
+    width: 22px !important;
+    min-width: 22px !important;
+    font-size: .70rem !important;
+  }
+
+  html.ranking-tight-uniform-v290 #rankingsSection .ranking-return{
+    min-width: 60px !important;
+  }
+}
