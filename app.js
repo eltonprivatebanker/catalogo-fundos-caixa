@@ -6075,6 +6075,62 @@ function _decisaoCopomPorData(decisionDate){
   }
   return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
 }
+function _resumoCopomTexto(resultado){
+  const raw = String(resultado || '').trim();
+  if(!raw) return 'Sem atualização disponível.';
+  let m = raw.match(/^corte\s+([^→]+)\s+→\s+(.+)$/i);
+  if(m) return `Selic em ${m[2].trim()} após corte ${m[1].trim()}.`;
+  m = raw.match(/^alta\s+([^→]+)\s+→\s+(.+)$/i);
+  if(m) return `Selic em ${m[2].trim()} após alta ${m[1].trim()}.`;
+  m = raw.match(/^mantida em\s+(.+)$/i);
+  if(m) return `Selic mantida em ${m[1].trim()}.`;
+  return raw;
+}
+
+function _statusCopomCurto(tipo, resultado){
+  if(tipo === 'cut') return 'corte';
+  if(tipo === 'hike') return 'alta';
+  if(tipo === 'hold') return 'manutenção';
+  if(String(resultado||'').toLowerCase().includes('próxima')) return 'agenda';
+  return 'status';
+}
+
+function _renderCopomExecutiveCardsV270(ultima, proxima){
+  const last = $('copomLastExecutiveV270');
+  const next = $('copomNextExecutiveV270');
+  if(last && ultima){
+    last.innerHTML = `
+      <span class="copom-exec-kicker-v270">Última decisão</span>
+      <strong class="copom-exec-date-v270">${ultima.short || '—'}</strong>
+      <div class="copom-exec-meta-v270">
+        <span class="copom-exec-pill-v270">${ultima.num}ª reunião</span>
+        <span class="copom-exec-status-v270 is-${ultima.klass || 'done'}">${_statusCopomCurto(ultima.decisao?.tipo, ultima.resultado)}</span>
+      </div>
+      <p class="copom-exec-desc-v270">${_resumoCopomTexto(ultima.resultado)}</p>`;
+  }
+  if(next){
+    if(proxima){
+      next.innerHTML = `
+        <span class="copom-exec-kicker-v270">Próxima reunião</span>
+        <strong class="copom-exec-date-v270">${proxima.short || '—'}</strong>
+        <div class="copom-exec-meta-v270">
+          <span class="copom-exec-pill-v270">${proxima.num}ª reunião</span>
+          <span class="copom-exec-status-v270 is-next">agenda</span>
+        </div>
+        <p class="copom-exec-desc-v270">Reunião programada para ${proxima.datas}. Próxima decisão prevista do Copom.</p>`;
+    } else {
+      next.innerHTML = `
+        <span class="copom-exec-kicker-v270">Próxima reunião</span>
+        <strong class="copom-exec-date-v270">Calendário concluído</strong>
+        <div class="copom-exec-meta-v270">
+          <span class="copom-exec-pill-v270">2026</span>
+          <span class="copom-exec-status-v270 is-hold">encerrado</span>
+        </div>
+        <p class="copom-exec-desc-v270">Não há novas reuniões previstas para o restante do calendário informado.</p>`;
+    }
+  }
+}
+
 function buildCopomCalendario(){
   const container = $('copomMeetings');
   if(!container) return;
@@ -6113,16 +6169,21 @@ function buildCopomCalendario(){
     </div>`;
   }).join('');
 
+  const ultimaDecisao = realizadas[0] || base.filter(r => r.decisao).slice(-1)[0] || null;
+  _renderCopomExecutiveCardsV270(ultimaDecisao, proxima);
+
   const nextDate = $('copomNextDateV167');
   const nextStatus = $('copomNextStatusV167');
   if(nextDate) nextDate.textContent = proxima ? proxima.short : 'Calendário concluído';
   if(nextStatus) nextStatus.textContent = proxima ? (proxima.resultado || 'decisão pendente') : 'Sem novas reuniões em 2026';
 
   container.classList.remove('is-expanded-v167');
+  const panel = $('copomCalendarSecondaryV270');
+  if(panel) panel.classList.remove('is-open-v270');
   const toggle = $('copomCalendarToggleV167');
   container.classList.add('copom-timeline-clean-v256');
   if(toggle){
-    toggle.textContent = 'Calendário completo';
+    toggle.textContent = 'Ver calendário completo';
     toggle.setAttribute('aria-expanded','false');
   }
   requestAnimationFrame(() => { container.scrollLeft = 0; });
@@ -14526,12 +14587,15 @@ if(!isSearchInput(el)) return;
 ════════════════════════════════════════════════════ */
 function toggleCopomCalendarV167(force){
   const grid = document.getElementById('copomMeetings');
+  const panel = document.getElementById('copomCalendarSecondaryV270');
   const btn = document.getElementById('copomCalendarToggleV167');
-  if(!grid) return false;
-  const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
+  const target = panel || grid;
+  if(!grid || !target) return false;
+  const open = typeof force === 'boolean' ? force : !target.classList.contains('is-open-v270');
+  target.classList.toggle('is-open-v270', open);
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Ocultar' : 'Ver calendário';
+    btn.textContent = open ? 'Ocultar calendário' : 'Ver calendário completo';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;

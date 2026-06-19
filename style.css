@@ -41732,3 +41732,190 @@ html.rates-compact-v265 #sec-mercado .rates-executive-v255 .copom-grid-v167 .cop
     font-size:.57rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v270 — COPOM premium executivo
+════════════════════════════════════════════════════ */
+html.copom-premium-v270 #sec-mercado .copom-premium-block-v270{
+  position: relative;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-summary-v270{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:14px;
+  margin: 0 0 14px;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-card-v270{
+  position:relative;
+  min-height:132px;
+  padding:18px 18px 16px;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(16,20,33,.92), rgba(9,12,22,.98));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03);
+  overflow:hidden;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-card-v270::before{
+  content:'';
+  position:absolute;
+  left:0; top:16px; bottom:16px; width:4px; border-radius:4px;
+  background:rgba(118,130,160,.35);
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-card-v270.is-last::before{
+  background:linear-gradient(180deg,#ff7a97,#ff5478);
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-card-v270.is-next::before{
+  background:linear-gradient(180deg,#d8ad54,#f0c86f);
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-kicker-v270{
+  display:block;
+  font-size:.66rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#95a3c5;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-date-v270{
+  display:block;
+  margin-top:6px;
+  font-size:1.46rem;
+  line-height:1.05;
+  color:#f4f7ff;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-card-v270.is-next .copom-exec-date-v270{
+  color:#f0c66f;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-card-v270.is-last .copom-exec-date-v270{
+  color:#f4f7ff;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-meta-v270{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-pill-v270,
+html.copom-premium-v270 #sec-mercado .copom-exec-status-v270{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:24px; padding:0 10px; border-radius:999px;
+  font-size:.58rem; font-weight:800; letter-spacing:.05em; text-transform:uppercase;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-pill-v270{
+  color:#d6def3; border:1px solid rgba(255,255,255,.09); background:rgba(255,255,255,.03);
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-status-v270{
+  color:#f7a1b3; background:rgba(255,90,120,.08); border:1px solid rgba(255,90,120,.18);
+}
+
+html.copom-premium-v270 #sec-mercado .copom-exec-status-v270.is-cut{ color:#ff97aa; background:rgba(255,102,140,.08); border-color:rgba(255,102,140,.18); }
+html.copom-premium-v270 #sec-mercado .copom-exec-status-v270.is-hike{ color:#78d7ff; background:rgba(85,160,255,.08); border-color:rgba(85,160,255,.18); }
+html.copom-premium-v270 #sec-mercado .copom-exec-status-v270.is-hold{ color:#f0c66f; background:rgba(214,169,75,.08); border-color:rgba(214,169,75,.18); }
+html.copom-premium-v270 #sec-mercado .copom-exec-status-v270.is-next{ color:#f0c66f; background:rgba(214,169,75,.08); border-color:rgba(214,169,75,.18); }
+
+html.copom-premium-v270 #sec-mercado .copom-exec-desc-v270{
+  margin:12px 0 0;
+  font-size:.78rem;
+  line-height:1.38;
+  color:#c8d1e8;
+  max-width:44ch;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270{
+  display:none;
+  margin-top:8px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.06);
+}
+
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270.is-open-v270{
+  display:block;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-calendar-label-v270{
+  margin-bottom:10px;
+  font-size:.62rem;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:#94a2c4;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167{
+  display:grid !important;
+  grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+  gap:10px !important;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item,
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-extra-v167{
+  display:flex !important;
+  flex-direction:column !important;
+  justify-content:center !important;
+  min-height:82px !important;
+  padding:12px 14px 12px 16px !important;
+  border-radius:14px !important;
+  position:relative !important;
+  overflow:hidden !important;
+  background:linear-gradient(180deg, rgba(14,18,31,.84), rgba(10,13,24,.94)) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+}
+
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item::before{
+  content:'' !important;
+  position:absolute !important;
+  left:0 !important; top:12px !important; bottom:12px !important; width:3px !important; border-radius:4px !important;
+  background:rgba(120,130,160,.35) !important;
+}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.cut::before{background:linear-gradient(180deg,#ff7a97,#ff5478)!important;}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.hold::before{background:linear-gradient(180deg,#c9a04c,#e7bf68)!important;}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.next::before,
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.featured-next::before{background:linear-gradient(180deg,#d6a94b,#f0c66f)!important;}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.featured-next{background:linear-gradient(180deg, rgba(200,151,58,.14), rgba(18,19,28,.96)) !important; border-color:rgba(200,151,58,.38)!important;}
+
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-num{font-size:.56rem !important; letter-spacing:.08em !important; text-transform:uppercase !important; color:#93a0be !important;}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-date{margin-top:4px !important; font-size:.96rem !important; line-height:1.1 !important;}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-result{margin-top:5px !important; font-size:.58rem !important; line-height:1.2 !important; color:#cdd6ee !important;}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.cut .copom-result{color:#ff97aa !important;}
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.featured-next .copom-result,
+html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item.next .copom-result{color:#e8bb6a !important;}
+
+html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .copom-footnote-v256{
+  margin-top:10px !important;
+  font-size:.56rem !important;
+}
+
+@media (min-width: 900px){
+  html.copom-premium-v270 #sec-mercado .copom-premium-block-v270{padding:18px 18px 16px !important; border-radius:20px !important; min-height: auto !important;}
+  html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167{align-items:flex-start !important; gap:12px !important; margin-bottom:14px !important;}
+  html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167 strong{font-size:1.02rem !important; line-height:1.15 !important;}
+  html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167 small{font-size:.66rem !important; margin-top:4px !important;}
+  html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .reference-toggle-v167{min-height:36px !important; padding:0 15px !important; border-radius:12px !important; font-size:.64rem !important; font-weight:800 !important;}
+}
+
+@media (max-width: 899px){
+  html.copom-premium-v270 #sec-mercado .copom-exec-summary-v270{grid-template-columns:1fr !important; gap:12px !important;}
+  html.copom-premium-v270 #sec-mercado .copom-exec-card-v270{min-height:auto !important; padding:16px 16px 14px !important; border-radius:16px !important;}
+  html.copom-premium-v270 #sec-mercado .copom-exec-date-v270{font-size:1.28rem !important;}
+  html.copom-premium-v270 #sec-mercado .copom-exec-desc-v270{font-size:.76rem !important; max-width:none !important;}
+  html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .reference-subhead-v167{margin-bottom:12px !important;}
+  html.copom-premium-v270 #sec-mercado .copom-premium-block-v270 .reference-toggle-v167{width:100% !important; justify-content:center !important;}
+  html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270{margin-top:14px !important;}
+  html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167{grid-template-columns:1fr !important; gap:10px !important;}
+  html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-item,
+  html.copom-premium-v270 #sec-mercado .copom-calendar-secondary-v270 .copom-grid-v167 .copom-extra-v167{min-height:72px !important;}
+}
