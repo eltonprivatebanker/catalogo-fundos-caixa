@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v292
+# Catálogo de Fundos CAIXA — v293
 
 Arquivos atualizados:
 - index.html
@@ -7,24 +7,23 @@ Arquivos atualizados:
 
 ## Foco
 
-Aplicação de uma classe utilitária única para os valores/percentuais de rentabilidade dos rankings.
+Estabilizar o bloco “Leitura rápida” no Ranking mobile.
 
-## O que foi aplicado
+## Problema
 
-- criada a classe `.ranking-value-standard`;
-- aplicada no JS aos valores gerados em:
-  - cards-resumo: `.ranking-exec-card > strong`;
-  - cards “Melhores por categoria”: `.ranking-cat-mini > strong`;
-  - lista Top 10: `.ranking-return`;
-- unificação de:
-  - font-size;
-  - font-weight;
-  - line-height;
-  - letter-spacing;
-  - alinhamento à direita;
-  - font-variant-numeric: tabular-nums;
-- mantidas as cores `.pos`, `.neg` e `.zero`;
-- regra scoped em `#rankingsSection` para evitar afetar outras áreas.
+O texto muda conforme categoria, período e filtros. Quando o texto fica maior ou menor:
+- a tela pode pular;
+- o card pode sobrar espaço;
+- a navegação perde sensação de estabilidade.
+
+## Solução aplicada
+
+- Mantive a seção, mas compacta no mobile.
+- Defini altura mínima e máxima controlada.
+- Apliquei `line-clamp` em 3 linhas.
+- O conteúdo maior é cortado com reticências.
+- Desktop continua preservado.
+- Incluí no CSS um bloco comentado caso você queira ocultar totalmente essa seção no mobile no futuro.
 
 ## Como subir
 

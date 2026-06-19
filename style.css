@@ -45724,3 +45724,83 @@ html.palette-applied-v278 .footer-summary-sub{
     max-width: 38vw !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v293 — RANKING MOBILE: LEITURA RÁPIDA ESTÁVEL
+   Problema:
+   - texto do insight varia conforme filtro/período/categoria;
+   - quando o texto muda de tamanho, a tela "pula";
+   - quando reserva muito espaço, fica sobrando vazio.
+   Solução:
+   - no mobile, transformar em insight compacto;
+   - altura controlada;
+   - texto com line-clamp;
+   - sem remover no desktop.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight{
+    min-height: 86px !important;
+    max-height: 104px !important;
+    height: auto !important;
+    padding: 12px 14px !important;
+    margin: 10px 0 12px !important;
+    border-radius: 16px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    gap: 7px !important;
+    overflow: hidden !important;
+  }
+
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight > span,
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight .ranking-insight-label,
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight .ranking-insight-badge{
+    width: max-content !important;
+    max-width: 100% !important;
+    min-height: 22px !important;
+    padding: 5px 10px !important;
+    border-radius: 999px !important;
+    font-size: .58rem !important;
+    line-height: 1 !important;
+    letter-spacing: .08em !important;
+    white-space: nowrap !important;
+  }
+
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight p{
+    margin: 0 !important;
+    color: #dfe7fb !important;
+    font-size: .73rem !important;
+    line-height: 1.34 !important;
+    font-weight: 500 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight{
+    min-height: 82px !important;
+    max-height: 98px !important;
+    padding: 11px 13px !important;
+    gap: 6px !important;
+  }
+
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight p{
+    font-size: .70rem !important;
+    line-height: 1.32 !important;
+    -webkit-line-clamp: 3 !important;
+  }
+}
+
+/* Caso queira remover totalmente no mobile no futuro:
+@media (max-width: 768px){
+  html.ranking-insight-stable-v293 #rankingsSection .ranking-exec-insight{
+    display:none!important;
+  }
+}
+*/
