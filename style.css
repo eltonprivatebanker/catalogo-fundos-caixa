@@ -46119,3 +46119,103 @@ html.palette-applied-v278 .footer-summary-sub{
   }
 }
 */
+
+
+/* ════════════════════════════════════════════════════
+   v297 — CDI MOBILE: BARRAS SIMPLES
+   Desktop preservado.
+   Mobile:
+   - remove botão "Tabela analítica";
+   - gráfico fica só com CDI mensal em barras;
+   - linha de CDI acumulado sai do gráfico, mas o valor acumulado
+     continua nos cards/KPIs.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-analytic-link-v274,
+  html.cdi-mobile-bars-v297 #cdiAnalyticLinkV274{
+    display: none !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory.cdi-chart-block-v271{
+    padding: 12px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-year-head,
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-chart-head-v271{
+    display: block !important;
+    margin-bottom: 10px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistoryTitle{
+    font-size: .98rem !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-kpis-v271{
+    margin-bottom: 8px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-kpi-v271{
+    flex: 0 0 132px !important;
+    min-height: 58px !important;
+    padding: 9px 10px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-kpi-label-v271{
+    font-size: .56rem !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-kpi-value-v271{
+    font-size: .94rem !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-chart-canvas-wrap-v271{
+    margin-top: 6px !important;
+    padding: 8px 8px 6px !important;
+    height: 124px !important;
+    max-height: 124px !important;
+    overflow: hidden !important;
+    border-radius: 15px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-chart-scroll-inner-v273{
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 106px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearChartV271{
+    width: 100% !important;
+    height: 106px !important;
+    max-height: 106px !important;
+  }
+
+  /* Mobile: legenda só do CDI mensal, pois o acumulado está nos cards */
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-chart-legend-v271{
+    margin-top: 6px !important;
+    font-size: .60rem !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-chart-legend-v271 span:nth-child(2){
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-chart-canvas-wrap-v271{
+    height: 114px !important;
+    max-height: 114px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-chart-scroll-inner-v273,
+  html.cdi-mobile-bars-v297 #cdiYearChartV271{
+    height: 98px !important;
+    max-height: 98px !important;
+  }
+
+  html.cdi-mobile-bars-v297 #cdiYearHistory .cdi-kpi-v271{
+    flex-basis: 126px !important;
+  }
+}

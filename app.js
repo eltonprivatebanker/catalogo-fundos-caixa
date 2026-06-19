@@ -1,3 +1,4 @@
+// ELTAUM_CDI_MOBILE_BARS_v297
 // ELTAUM_CDI_MOBILE_COMPACT_v296
 // ELTAUM_RANKING_INSIGHT_PREMIUM_v295
 // ELTAUM_MOBILE_HIDE_GFB_SEARCH_v294
@@ -1958,11 +1959,11 @@ function renderCdiYearHistory(d){
 
   const chartInnerV273 = document.getElementById('cdiChartScrollInnerV273');
   const totalMesesV273 = labels.length;
-  const minChartWidthV273 = isMobile ? Math.max(360, totalMesesV273 * 34) : '100%';
+  const minChartWidthV273 = isMobile ? '100%' : '100%';
   if(chartInnerV273){
     chartInnerV273.style.minWidth = typeof minChartWidthV273 === 'number' ? `${minChartWidthV273}px` : minChartWidthV273;
   }
-  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 8 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 10 : 22) : (isMobile ? 13 : 26));
+  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 10 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 12 : 22) : (isMobile ? 16 : 26));
   const raioPontoV273 = totalMesesV273 >= 10 ? 2.2 : 2.8;
   const raioPontoDestaqueV273 = totalMesesV273 >= 10 ? 3.6 : 4.2;
   const mostrarTodosMesesV273 = true;
@@ -1989,6 +1990,7 @@ function renderCdiYearHistory(d){
           type: 'line',
           label: 'CDI acumulado',
           data: acumulado,
+          hidden: isMobile,
           yAxisID: 'y1',
           borderColor: '#e8b45c',
           backgroundColor: 'rgba(232, 180, 92, 0.10)',
@@ -2027,6 +2029,9 @@ function renderCdiYearHistory(d){
               const value = Number(context.parsed.y);
               const txt = fmtPctLocal(value);
               return `${context.dataset.label}: ${txt}`;
+            },
+            afterBody(){
+              return isMobile ? '' : undefined;
             }
           }
         }

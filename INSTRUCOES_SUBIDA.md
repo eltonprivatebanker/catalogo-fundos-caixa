@@ -1,27 +1,29 @@
-# Catálogo de Fundos CAIXA — v296
+# Catálogo de Fundos CAIXA — v297
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Foco
+## Ajuste aplicado
 
-Compactar a seção “CDI mensal + acumulado” no mobile, preservando o desktop.
+Refino mobile da seção “CDI mensal + acumulado”.
 
-## Ajustes aplicados
+## O que mudou no mobile
 
-- Desktop preservado.
-- No mobile, os KPIs viram carrossel horizontal.
-- Mantidos os dados essenciais:
+- Removido o botão “Tabela analítica”.
+- O gráfico passa a exibir somente o CDI mensal em barras.
+- A linha de CDI acumulado foi removida do gráfico mobile.
+- O acumulado continua disponível nos cards/KPIs:
   - mês atual/parcial;
-  - último mês fechado;
+  - último fechado;
   - acumulado no ano;
   - últimos 12 meses.
-- Adicionado card “Últimos 12 meses”.
-- Gráfico ficou mais baixo, menos largo e menos pesado.
-- Reduzidos legenda e rodapé no mobile.
-- Incluído bloco comentado para ocultar o gráfico totalmente no mobile, se desejar no futuro.
+- Gráfico ficou menor, mais limpo e sem carrossel horizontal pesado.
+
+## Desktop
+
+Desktop preservado com a visão completa.
 
 ## Como subir
 
