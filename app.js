@@ -1,3 +1,4 @@
+// ELTAUM_RANKING_VALUE_STANDARD_v292
 // ELTAUM_RANKING_VALUES_COMPACT_v291
 // ELTAUM_RANKING_TIGHT_UNIFORM_v290
 // ELTAUM_RANKING_UNIFORM_FINAL_v289
@@ -10031,7 +10032,7 @@ async function sharePainelMercado(){
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
   function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
-    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
+    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
   function topRow(r,i,campo,showCdi){
     const cat=shortCat(r['Categoria']);
@@ -10042,14 +10043,14 @@ async function sharePainelMercado(){
     return `<div class="ranking-top-row">
       <div class="ranking-pos">${medal(i)}</div>
       <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
-      <div class="ranking-return ${cls}">${esc(val)}</div>
+      <div class="ranking-value-standard ranking-return ${cls}">${esc(val)}</div>
       <div class="ranking-cdi">${esc(cdi)}</div>
     </div>`;
   }
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
+    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
   }
   function worstMini(r,i,campo){
     const nome=cleanFund(r['Fundo']);

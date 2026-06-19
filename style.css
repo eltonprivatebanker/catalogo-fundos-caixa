@@ -45628,3 +45628,99 @@ html.palette-applied-v278 .footer-summary-sub{
     min-width: 56px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v292 — RANKING VALUE STANDARD
+   Classe utilitária única para percentuais/valores dos rankings.
+   Objetivo: impedir que cards-resumo, categoria e Top 10 usem
+   escalas diferentes para rentabilidade.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-value-standard-v292 #rankingsSection{
+    --ranking-value-size-v292: clamp(.88rem, 4.05vw, 1.02rem);
+    --ranking-value-line-v292: 1.24;
+    --ranking-value-weight-v292: 840;
+    --ranking-value-letter-v292: -.012em;
+    --ranking-value-minw-v292: 60px;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-value-standard,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-cat-mini > strong,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-return{
+    width: auto !important;
+    min-width: var(--ranking-value-minw-v292) !important;
+    max-width: 28vw !important;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+
+    overflow: visible !important;
+    white-space: nowrap !important;
+    text-overflow: clip !important;
+
+    font-family: "JetBrains Mono", monospace !important;
+    font-size: var(--ranking-value-size-v292) !important;
+    line-height: var(--ranking-value-line-v292) !important;
+    font-weight: var(--ranking-value-weight-v292) !important;
+    letter-spacing: var(--ranking-value-letter-v292) !important;
+    font-variant-numeric: tabular-nums !important;
+    text-align: right !important;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-cat-mini > strong{
+    grid-area: value !important;
+    justify-self: end !important;
+    align-self: start !important;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-return{
+    grid-area: value !important;
+    justify-self: end !important;
+    align-self: center !important;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-value-standard.pos,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-exec-card > strong.pos,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-cat-mini > strong.pos,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-return.pos{
+    color: #36d6a5 !important;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-value-standard.neg,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-exec-card > strong.neg,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-cat-mini > strong.neg,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-return.neg{
+    color: #ff6f91 !important;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-value-standard.zero,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-exec-card > strong.zero,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-cat-mini > strong.zero,
+  html.ranking-value-standard-v292 #rankingsSection .ranking-return.zero{
+    color: #a8b3cc !important;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-exec-card.pl > strong{
+    max-width: 36vw !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-value-standard-v292 #rankingsSection{
+    --ranking-value-size-v292: .84rem;
+    --ranking-value-minw-v292: 56px;
+  }
+
+  html.ranking-value-standard-v292 #rankingsSection .ranking-exec-card.pl > strong{
+    max-width: 38vw !important;
+  }
+}
