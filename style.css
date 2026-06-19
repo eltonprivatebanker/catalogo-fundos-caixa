@@ -45804,3 +45804,174 @@ html.palette-applied-v278 .footer-summary-sub{
   }
 }
 */
+
+
+/* ════════════════════════════════════════════════════
+   v294 — MOBILE: REMOVER PRIMEIRA BUSCA GLOBAL
+   Remove no mobile o campo #gfbSearch do topo para reduzir
+   redundância e deixar o cabeçalho mais limpo.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.mobile-hide-gfb-search-v294 #gfbSearch,
+  html.mobile-hide-gfb-search-v294 label[for="gfbSearch"]{
+    display: none !important;
+  }
+
+  /* Oculta também o invólucro visual do campo, quando for um container exclusivo da busca */
+  html.mobile-hide-gfb-search-v294 .global-fund-search:has(#gfbSearch),
+  html.mobile-hide-gfb-search-v294 .gfb-search-wrap:has(#gfbSearch),
+  html.mobile-hide-gfb-search-v294 .fund-search-bar:has(#gfbSearch),
+  html.mobile-hide-gfb-search-v294 .header-search:has(#gfbSearch),
+  html.mobile-hide-gfb-search-v294 .mobile-search-shell:has(#gfbSearch),
+  html.mobile-hide-gfb-search-v294 .search-shell:has(#gfbSearch),
+  html.mobile-hide-gfb-search-v294 .search-box:has(#gfbSearch){
+    display: none !important;
+  }
+
+  /* Caso o navegador não aplique :has em algum cenário, remove o bloco pelo pai imediato via CSS de fallback visual */
+  html.mobile-hide-gfb-search-v294 #gfbSearch{
+    position: absolute !important;
+    width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   v295 — RANKING MOBILE: LEITURA RÁPIDA PREMIUM
+   Ajuste:
+   - remove o aspecto espremido;
+   - evita corte feio de palavras;
+   - cria um bloco premium, legível e estável;
+   - em vez de esconder texto por altura fixa agressiva, usa resumo com fade
+     e controle de linhas confortável.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight{
+    position: relative !important;
+    min-height: 0 !important;
+    max-height: none !important;
+    height: auto !important;
+
+    padding: 14px 15px 15px !important;
+    margin: 12px 0 14px !important;
+    border-radius: 18px !important;
+
+    display: block !important;
+    overflow: hidden !important;
+
+    border: 1px solid rgba(125, 162, 255, .18) !important;
+    background:
+      radial-gradient(circle at 0% 0%, rgba(125, 162, 255, .10), transparent 34%),
+      linear-gradient(180deg, rgba(14, 20, 38, .98), rgba(8, 12, 24, .98)) !important;
+    box-shadow:
+      0 12px 28px rgba(0,0,0,.16),
+      inset 0 1px 0 rgba(255,255,255,.025) !important;
+  }
+
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight::after{
+    content: "" !important;
+    position: absolute !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    height: 18px !important;
+    pointer-events: none !important;
+    background: linear-gradient(180deg, rgba(8,12,24,0), rgba(8,12,24,.92)) !important;
+  }
+
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight > span,
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight .ranking-insight-label,
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight .ranking-insight-badge{
+    display: inline-flex !important;
+    align-items: center !important;
+
+    width: auto !important;
+    max-width: 100% !important;
+    min-height: 22px !important;
+    height: 22px !important;
+
+    margin: 0 0 9px !important;
+    padding: 0 10px !important;
+
+    border-radius: 999px !important;
+    border: 1px solid rgba(125,162,255,.28) !important;
+    background: rgba(125,162,255,.10) !important;
+
+    color: #9fc0ff !important;
+    font-size: .58rem !important;
+    line-height: 1 !important;
+    font-weight: 850 !important;
+    letter-spacing: .09em !important;
+    text-transform: uppercase !important;
+    white-space: nowrap !important;
+  }
+
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p{
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 0 4px !important;
+
+    color: #e7edfb !important;
+    font-size: .76rem !important;
+    line-height: 1.42 !important;
+    font-weight: 520 !important;
+    letter-spacing: -.005em !important;
+
+    display: -webkit-box !important;
+    -webkit-line-clamp: 5 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+
+    white-space: normal !important;
+    text-overflow: ellipsis !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+    hyphens: none !important;
+  }
+
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p strong{
+    color: #f3f7ff !important;
+    font-weight: 760 !important;
+  }
+
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p .pos,
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p strong.pos{
+    color: #36d6a5 !important;
+  }
+
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p .neg,
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p strong.neg{
+    color: #ff6f91 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight{
+    padding: 13px 14px 14px !important;
+    margin: 11px 0 13px !important;
+    border-radius: 17px !important;
+  }
+
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p{
+    font-size: .72rem !important;
+    line-height: 1.40 !important;
+    -webkit-line-clamp: 5 !important;
+  }
+}
+
+/* Alternativa futura: transformar em chip compacto no mobile
+@media (max-width: 768px){
+  html.ranking-insight-premium-v295 #rankingsSection .ranking-exec-insight p{
+    -webkit-line-clamp: 2 !important;
+  }
+}
+*/

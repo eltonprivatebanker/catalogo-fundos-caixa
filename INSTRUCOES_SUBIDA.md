@@ -1,29 +1,24 @@
-# Catálogo de Fundos CAIXA — v293
+# Catálogo de Fundos CAIXA — v295
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Foco
+## Ajuste aplicado
 
-Estabilizar o bloco “Leitura rápida” no Ranking mobile.
+Refino premium do bloco “Leitura rápida” no mobile.
 
-## Problema
+## O que mudou
 
-O texto muda conforme categoria, período e filtros. Quando o texto fica maior ou menor:
-- a tela pode pular;
-- o card pode sobrar espaço;
-- a navegação perde sensação de estabilidade.
-
-## Solução aplicada
-
-- Mantive a seção, mas compacta no mobile.
-- Defini altura mínima e máxima controlada.
-- Apliquei `line-clamp` em 3 linhas.
-- O conteúdo maior é cortado com reticências.
-- Desktop continua preservado.
-- Incluí no CSS um bloco comentado caso você queira ocultar totalmente essa seção no mobile no futuro.
+- O bloco deixou de ficar espremido.
+- A altura não é mais fixa/agressiva.
+- O texto tem até 5 linhas no mobile.
+- Adicionada camada de fade no final para evitar corte visual duro.
+- Removido `word-break` agressivo, evitando palavras quebradas de forma feia.
+- Tipografia mais limpa e profissional.
+- Estrutura continua estável e sem grandes pulos de layout.
+- O texto gerado pelo JS foi encurtado quando o template correspondente existe.
 
 ## Como subir
 
