@@ -46300,3 +46300,63 @@ html.palette-applied-v278 .footer-summary-sub{
     max-height: 94px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v299 — CDI MOBILE: FIX CANVAS / ALTURA
+   Diagnóstico do console:
+   - canvas existe e mede 265x94;
+   - wrapper continuava com min-height 178px, maior que o max-height;
+   - canvas estava inline e sem atributos width/height, sinal de render instável.
+   Correção: zera min-height antigo, fixa display block e estabiliza
+   a área do gráfico no mobile.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .cdi-chart-canvas-wrap-v271,
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .cdi-chart-scroll-wrap-v273{
+    min-height: 0 !important;
+    height: 116px !important;
+    max-height: 116px !important;
+    padding: 8px 8px 4px !important;
+    margin-top: 6px !important;
+    overflow: hidden !important;
+    display: block !important;
+  }
+
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .cdi-chart-scroll-inner-v273{
+    min-width: 100% !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: 100px !important;
+    max-height: 100px !important;
+    display: block !important;
+  }
+
+  html.cdi-mobile-canvas-fix-v299 #cdiYearChartV271{
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 100px !important;
+    max-height: 100px !important;
+  }
+
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .cdi-chart-legend-v271,
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .reference-footnote-v167{
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .cdi-chart-canvas-wrap-v271,
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .cdi-chart-scroll-wrap-v273{
+    height: 108px !important;
+    max-height: 108px !important;
+  }
+
+  html.cdi-mobile-canvas-fix-v299 #cdiYearHistory .cdi-chart-scroll-inner-v273,
+  html.cdi-mobile-canvas-fix-v299 #cdiYearChartV271{
+    height: 94px !important;
+    max-height: 94px !important;
+  }
+}

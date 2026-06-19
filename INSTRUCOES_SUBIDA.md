@@ -1,30 +1,25 @@
-# Catálogo de Fundos CAIXA — v298
+# Catálogo de Fundos CAIXA — v299
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste aplicado
+## Diagnóstico
 
-Refino semântico da seção CDI no mobile.
+O console mostrou:
+- o canvas existe e está visível;
+- o canvas tinha 265x94;
+- o wrapper do gráfico ainda estava com `min-height: 178px`, mesmo com `max-height: 108px`;
+- o canvas estava `display: inline` e sem atributos width/height, sinal de renderização instável.
 
-## O que mudou
+## Correção aplicada
 
-- Desktop preservado.
-- No mobile, a legenda do gráfico foi removida porque o gráfico agora tem apenas uma série: CDI mensal.
-- O título no mobile passou para “CDI — resumo 2026”.
-- Os acumulados continuam nos cards/KPIs:
-  - mês atual/parcial;
-  - último mês fechado;
-  - ano;
-  - 12 meses.
-- O gráfico ficou mais próximo dos cards, com menos área sobrando embaixo.
-- Reduzi a altura visual do bloco no mobile.
-
-## Por que ficou melhor semanticamente
-
-Como a linha do CDI acumulado saiu do gráfico mobile, a legenda “CDI mensal” ficou redundante. A informação acumulada permanece nos cards, onde é mais clara no celular.
+- zerei o `min-height` antigo do wrapper no mobile;
+- forcei canvas como `display: block`;
+- estabilizei altura do wrapper, inner e canvas;
+- mantive legenda e rodapé ocultos no mobile;
+- adicionei uma proteção no JS para garantir que `isMobile` exista antes de qualquer uso dentro de `renderCdiYearHistory`.
 
 ## Como subir
 
