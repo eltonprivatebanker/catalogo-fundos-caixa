@@ -1,31 +1,32 @@
-# Catálogo de Fundos CAIXA — v301
+# Catálogo de Fundos CAIXA — v302
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Diagnóstico
+## O que foi corrigido
 
-A v300 subiu corretamente, mas regras antigas e mais específicas de cada seção ainda estavam vencendo a regra dos títulos.
+- Removido o risco de ícone duplicado nos títulos.
+- Padronizados também os H2 que ficaram fora da v300/v301:
+  - Dólar PTAX
+  - Boletim Focus
+  - Inflação e juros
+  - Comparador de fundos
+- Todos os H2 principais agora usam a mesma estrutura:
+  - `section-title-v302`
+  - `section-title-icon-v302`
+  - `section-title-text-v302`
 
-Exemplos encontrados no console:
-- Fundos disponíveis: 15.68px
-- Rankings: 26.4px
-- Indicadores: dourado e font-weight 900
+## Regra visual
 
-## Correção
-
-A v301 adiciona uma regra final mais forte no CSS, no final do arquivo, para forçar o mesmo padrão em todos os H2 principais com `.section-title-v300`.
-
-## Resultado esperado
-
-Os quatro títulos principais devem ficar com:
+Todos os títulos principais ficam com:
 - mesma cor;
-- mesmo peso;
 - mesmo tamanho;
+- mesmo peso;
 - mesmo espaçamento;
-- mesmo padrão de ícone.
+- ícone dentro de caixa fixa;
+- sem emoji solto no texto.
 
 ## Como subir
 
