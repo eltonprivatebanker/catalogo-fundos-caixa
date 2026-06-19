@@ -44793,3 +44793,152 @@ html.palette-applied-v278 .footer-summary-sub{
     min-height: 112px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v287 — RANKING MOBILE: ESCALA FINAL DE FONTES
+   Baseado no diagnóstico real:
+   - sem overflow;
+   - valores seguros;
+   - nomes estavam legíveis, porém levemente pequenos.
+   Ajuste fino de hierarquia visual sem voltar a causar cortes.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-scale-final-v287 #rankingsSection{
+    --rank-label-final-v287: .67rem;
+    --rank-value-final-v287: clamp(1.18rem, 5.45vw, 1.50rem);
+    --rank-name-final-v287: .82rem;
+    --rank-meta-final-v287: .72rem;
+    --rank-list-name-final-v287: .80rem;
+    --rank-list-meta-final-v287: .70rem;
+    --rank-list-value-final-v287: clamp(.92rem, 4.15vw, 1.02rem);
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card,
+  html.ranking-scale-final-v287 #rankingsSection .ranking-cat-mini{
+    border-radius: 17px !important;
+    box-shadow: 0 10px 24px rgba(0,0,0,.14), inset 0 1px 0 rgba(255,255,255,.025) !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card{
+    min-height: 124px !important;
+    padding: 15px 16px 14px !important;
+    row-gap: 8px !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-cat-mini{
+    min-height: 120px !important;
+    padding: 15px 16px 14px !important;
+    row-gap: 10px !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card > span,
+  html.ranking-scale-final-v287 #rankingsSection .ranking-cat-mini > span{
+    font-size: var(--rank-label-final-v287) !important;
+    line-height: 1.18 !important;
+    letter-spacing: .08em !important;
+    font-weight: 830 !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card > strong,
+  html.ranking-scale-final-v287 #rankingsSection .ranking-cat-mini > strong{
+    font-size: var(--rank-value-final-v287) !important;
+    line-height: 1.18 !important;
+    min-height: 1.22em !important;
+    font-weight: 850 !important;
+    letter-spacing: -.024em !important;
+    padding-bottom: 0 !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card.pl > strong{
+    font-size: clamp(1rem, 4.75vw, 1.24rem) !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card > small,
+  html.ranking-scale-final-v287 #rankingsSection .ranking-cat-mini > small{
+    font-size: var(--rank-name-final-v287) !important;
+    line-height: 1.24 !important;
+    font-weight: 740 !important;
+    letter-spacing: -.01em !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card > em{
+    font-size: var(--rank-meta-final-v287) !important;
+    line-height: 1.24 !important;
+    font-weight: 560 !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row,
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row-mobile-v100{
+    min-height: 88px !important;
+    padding: 12px 10px !important;
+    grid-template-columns: 28px minmax(0, 1fr) max-content !important;
+    gap: 6px 10px !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row .ranking-pos{
+    font-size: .80rem !important;
+    line-height: 1 !important;
+    color: #aeb9d4 !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row .ranking-fund strong{
+    font-size: var(--rank-list-name-final-v287) !important;
+    line-height: 1.22 !important;
+    font-weight: 740 !important;
+    letter-spacing: -.01em !important;
+    -webkit-line-clamp: 2 !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row .ranking-fund span{
+    font-size: var(--rank-list-meta-final-v287) !important;
+    line-height: 1.2 !important;
+    margin-top: 5px !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row .ranking-return{
+    font-size: var(--rank-list-value-final-v287) !important;
+    line-height: 1.18 !important;
+    min-height: 1.20em !important;
+    min-width: 70px !important;
+    font-weight: 850 !important;
+    letter-spacing: -.018em !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-scale-final-v287 #rankingsSection{
+    --rank-label-final-v287: .64rem;
+    --rank-value-final-v287: clamp(1.10rem, 5.15vw, 1.32rem);
+    --rank-name-final-v287: .79rem;
+    --rank-meta-final-v287: .69rem;
+    --rank-list-name-final-v287: .76rem;
+    --rank-list-meta-final-v287: .67rem;
+    --rank-list-value-final-v287: .90rem;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-exec-card{
+    min-height: 120px !important;
+    padding: 14px 14px 13px !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-cat-mini{
+    min-height: 116px !important;
+    padding: 14px 14px 13px !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row,
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row-mobile-v100{
+    min-height: 84px !important;
+    padding: 11px 9px !important;
+    grid-template-columns: 26px minmax(0, 1fr) max-content !important;
+    gap: 6px 8px !important;
+  }
+
+  html.ranking-scale-final-v287 #rankingsSection .ranking-top-row .ranking-return{
+    min-width: 66px !important;
+  }
+}
