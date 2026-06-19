@@ -42384,3 +42384,253 @@ html.cdi-axis-linear-v276 #sec-mercado .cdi-chart-legend-v271{
     padding-right: 8px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v277 — PALETA PREMIUM / DESIGN TOKENS
+   Objetivo: reduzir excesso de dourado, suavizar vermelho,
+   padronizar verde/azul e melhorar contraste dos textos.
+════════════════════════════════════════════════════ */
+
+html.palette-premium-v277{
+  color-scheme: dark;
+
+  /* Superfícies */
+  --bg-page: #050812;
+  --bg-section: #090d19;
+  --bg-card: #0d1324;
+  --bg-card-elevated: #121a2f;
+
+  /* Compatibilidade com variáveis antigas */
+  --bg: #050812;
+  --bg2: #090d19;
+  --bg3: #0d1324;
+  --bg4: #121a2f;
+
+  /* Texto */
+  --text-main: #f5f7ff;
+  --text-muted: #aab6d3;
+  --text-soft: #7886a8;
+
+  --text: #f5f7ff;
+  --muted: #aab6d3;
+  --muted2: #7886a8;
+
+  /* Bordas */
+  --border-soft: rgba(148, 163, 184, 0.14);
+  --border-medium: rgba(148, 163, 184, 0.22);
+  --border-strong: rgba(148, 163, 184, 0.30);
+
+  --border: rgba(148, 163, 184, 0.14);
+  --border2: rgba(148, 163, 184, 0.13);
+  --border3: rgba(148, 163, 184, 0.20);
+
+  /* Cores semânticas */
+  --accent-gold: #e3b45b;
+  --accent-gold-strong: #f0c86f;
+  --accent-gold-soft: rgba(227, 180, 91, 0.13);
+  --accent-gold-border: rgba(227, 180, 91, 0.36);
+
+  --gold: #d6a94b;
+  --gold2: #e3b45b;
+  --gold3: #f0c86f;
+  --gold-dim: rgba(227, 180, 91, 0.10);
+  --gold-glow: rgba(227, 180, 91, 0.16);
+
+  --positive: #35d99b;
+  --positive-soft: rgba(53, 217, 155, 0.12);
+  --green: #35d99b;
+  --green-dim: rgba(53, 217, 155, 0.11);
+
+  --negative: #ff6f91;
+  --negative-soft: rgba(255, 111, 145, 0.12);
+  --red: #ff6f91;
+  --red-dim: rgba(255, 111, 145, 0.11);
+
+  --info: #7aa7ff;
+  --info-soft: rgba(122, 167, 255, 0.12);
+  --blue: #7aa7ff;
+  --blue-dim: rgba(122, 167, 255, 0.11);
+
+  --status-open: #52e0a3;
+}
+
+/* fundo mais sóbrio e menos dourado */
+html.palette-premium-v277 body{
+  background: var(--bg-page) !important;
+  color: var(--text-main) !important;
+}
+
+html.palette-premium-v277 body::before{
+  background:
+    radial-gradient(ellipse 80% 50% at 10% -5%, rgba(122,167,255,.035) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 60% at 90% 105%, rgba(227,180,91,.040) 0%, transparent 55%) !important;
+}
+
+html.palette-premium-v277 body::after{
+  background-image:
+    linear-gradient(rgba(148,163,184,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148,163,184,.018) 1px, transparent 1px) !important;
+}
+
+/* textos */
+html.palette-premium-v277 .muted,
+html.palette-premium-v277 small,
+html.palette-premium-v277 .reference-footnote-v167,
+html.palette-premium-v277 .v2-sub,
+html.palette-premium-v277 .fund-subtitle,
+html.palette-premium-v277 .chart-card-sub{
+  color: var(--text-muted) !important;
+}
+
+html.palette-premium-v277 .reference-footnote-v167,
+html.palette-premium-v277 .footnote,
+html.palette-premium-v277 .microcopy,
+html.palette-premium-v277 .helper-text{
+  color: var(--text-soft) !important;
+}
+
+/* cards comuns: bordas neutras para reduzir ruído */
+html.palette-premium-v277 .card,
+html.palette-premium-v277 .fund-card,
+html.palette-premium-v277 .market-reference-block-v167,
+html.palette-premium-v277 .chart-card,
+html.palette-premium-v277 .dolar-compact-card,
+html.palette-premium-v277 .rate-summary-card-v167,
+html.palette-premium-v277 .copom-compact-v167,
+html.palette-premium-v277 .cdi-history-v167,
+html.palette-premium-v277 .savings-reference-v167,
+html.palette-premium-v277 .ranking-exec-board,
+html.palette-premium-v277 .ptax-stats-card{
+  border-color: var(--border-soft) !important;
+  background-color: var(--bg-card) !important;
+}
+
+/* cards importantes podem manter borda dourada discreta */
+html.palette-premium-v277 .selic-summary-v167,
+html.palette-premium-v277 .active,
+html.palette-premium-v277 [aria-pressed="true"],
+html.palette-premium-v277 .is-selected,
+html.palette-premium-v277 .featured-next,
+html.palette-premium-v277 .cdi-kpi-v271.is-total{
+  border-color: var(--accent-gold-border) !important;
+}
+
+/* botões e seleção: dourado mais reservado */
+html.palette-premium-v277 .reference-toggle-v167,
+html.palette-premium-v277 .chart-tab.active,
+html.palette-premium-v277 .indic-tab.active,
+html.palette-premium-v277 .rank-period-tab.active,
+html.palette-premium-v277 .vista-toggle-wrap .active,
+html.palette-premium-v277 button.active{
+  border-color: var(--accent-gold-border) !important;
+  background: linear-gradient(180deg, rgba(227,180,91,.18), rgba(227,180,91,.08)) !important;
+  color: var(--accent-gold-strong) !important;
+  box-shadow: 0 0 0 1px rgba(227,180,91,.05), 0 10px 24px rgba(0,0,0,.14) !important;
+}
+
+/* botões secundários: menos dourado */
+html.palette-premium-v277 .reference-toggle-v167:not(.active):not([aria-pressed="true"]),
+html.palette-premium-v277 .market-reference-source-v167,
+html.palette-premium-v277 .section-badge{
+  border-color: var(--border-medium) !important;
+  background: rgba(13,19,36,.72) !important;
+}
+
+/* valores semânticos */
+html.palette-premium-v277 .green,
+html.palette-premium-v277 .pos,
+html.palette-premium-v277 .positive,
+html.palette-premium-v277 .value-positive,
+html.palette-premium-v277 .cdi-summary-v167 strong,
+html.palette-premium-v277 .cdi-kpi-v271.is-current .cdi-kpi-value-v271{
+  color: var(--positive) !important;
+}
+
+html.palette-premium-v277 .red,
+html.palette-premium-v277 .neg,
+html.palette-premium-v277 .negative,
+html.palette-premium-v277 .value-negative,
+html.palette-premium-v277 .copom-exec-status-v270.is-cut,
+html.palette-premium-v277 .copom-item.cut .copom-result{
+  color: var(--negative) !important;
+}
+
+html.palette-premium-v277 .blue,
+html.palette-premium-v277 .info,
+html.palette-premium-v277 a:not(.reference-toggle-v167):not(.market-reference-source-v167){
+  color: var(--info) !important;
+}
+
+html.palette-premium-v277 .gold,
+html.palette-premium-v277 .value-highlight,
+html.palette-premium-v277 .selic-summary-v167 strong,
+html.palette-premium-v277 .copom-next-summary-v167 > strong,
+html.palette-premium-v277 .cdi-kpi-v271.is-total .cdi-kpi-value-v271,
+html.palette-premium-v277 .cdi-kpi-v271.is-lastclosed .cdi-kpi-value-v271{
+  color: var(--accent-gold-strong) !important;
+}
+
+/* estados de fundo suaves */
+html.palette-premium-v277 .status-open,
+html.palette-premium-v277 .status-positive,
+html.palette-premium-v277 .cdi-kpi-v271.is-current,
+html.palette-premium-v277 .cdi-month-chip.current{
+  background: linear-gradient(180deg, rgba(53,217,155,.10), rgba(13,19,36,.88)) !important;
+  border-color: rgba(53,217,155,.32) !important;
+}
+
+html.palette-premium-v277 .status-negative,
+html.palette-premium-v277 .copom-exec-status-v270.is-cut{
+  background: var(--negative-soft) !important;
+  border-color: rgba(255,111,145,.22) !important;
+}
+
+html.palette-premium-v277 .status-info,
+html.palette-premium-v277 .analytic-status-chip-v163{
+  background: var(--info-soft) !important;
+  border-color: rgba(122,167,255,.24) !important;
+}
+
+/* CDI gráfico: legenda e canvas alinhados com a nova paleta */
+html.palette-premium-v277 #sec-mercado .cdi-chart-legend-v271 .legend-bar-v271{
+  background: rgba(122,167,255,.30) !important;
+  border-color: rgba(122,167,255,.54) !important;
+}
+
+html.palette-premium-v277 #sec-mercado .cdi-chart-legend-v271 .legend-line-v271,
+html.palette-premium-v277 #sec-mercado .cdi-chart-legend-v271 .legend-line-v271::after{
+  background: var(--accent-gold) !important;
+}
+
+html.palette-premium-v277 #sec-mercado .cdi-chart-canvas-wrap-v271{
+  border-color: var(--border-soft) !important;
+  background: linear-gradient(180deg, rgba(9,13,25,.94), rgba(5,8,18,.98)) !important;
+}
+
+/* Copom premium: vermelho menos agressivo e amarelo mais institucional */
+html.palette-premium-v277 #sec-mercado .copom-exec-card-v270.is-last::before,
+html.palette-premium-v277 #sec-mercado .copom-grid-v167 .copom-item.cut::before{
+  background: linear-gradient(180deg, rgba(255,111,145,.95), rgba(255,111,145,.70)) !important;
+}
+
+html.palette-premium-v277 #sec-mercado .copom-exec-card-v270.is-next::before,
+html.palette-premium-v277 #sec-mercado .copom-grid-v167 .copom-item.next::before,
+html.palette-premium-v277 #sec-mercado .copom-grid-v167 .copom-item.featured-next::before{
+  background: linear-gradient(180deg, rgba(227,180,91,.95), rgba(227,180,91,.70)) !important;
+}
+
+/* foco/acessibilidade */
+html.palette-premium-v277 :focus-visible{
+  outline: 2px solid rgba(122,167,255,.75) !important;
+  outline-offset: 3px !important;
+}
+
+/* mobile: mantém contraste dos textos pequenos */
+@media (max-width: 760px){
+  html.palette-premium-v277 .reference-footnote-v167,
+  html.palette-premium-v277 small,
+  html.palette-premium-v277 .v2-sub{
+    color: var(--text-muted) !important;
+  }
+}

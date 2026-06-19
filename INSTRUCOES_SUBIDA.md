@@ -1,20 +1,26 @@
-# Catálogo de Fundos CAIXA — v276
+# Catálogo de Fundos CAIXA — v277
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Correção principal
-O gráfico do CDI agora usa eixos lineares com limites e degraus explícitos:
+## O que mudou nesta versão
 
-- eixo esquerdo, CDI mensal: 0% a 2%, com passos de 0,5 p.p.;
-- eixo direito, CDI acumulado: 0% a 8% enquanto o acumulado couber nesse intervalo, com passos de 2 p.p.;
-- quando o acumulado anual passar de 8%, o eixo direito sobe para 12%, 16%, etc., mantendo 4 degraus proporcionais;
-- removidos os limites automáticos que podiam gerar marcações irregulares, como 0/2/4/7;
-- barras e linha ficam matematicamente proporcionais às escalas.
+Versão focada em paleta de cores e consistência visual, sem redesenhar a estrutura da página.
+
+Principais ajustes:
+- redução do excesso de dourado;
+- bordas comuns ficaram mais neutras;
+- dourado ficou reservado para seleção, destaque premium e Selic;
+- verde padronizado para resultado positivo/CDI;
+- vermelho suavizado para quedas, cortes e alertas;
+- azul reservado para informação, links e estados neutros;
+- textos secundários ganharam mais contraste;
+- gráfico do CDI recebeu cores mais consistentes com a nova paleta.
 
 ## Como subir
+
 Substitua no GitHub:
 - index.html
 - style.css

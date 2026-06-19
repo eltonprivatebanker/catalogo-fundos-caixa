@@ -1,3 +1,4 @@
+// ELTAUM_PALETTE_PREMIUM_20260618_v277
 // ELTAUM_RATES_EXECUTIVE_LEAN_20260618_v268
 // ELTAUM_RATES_DECOMPRESSED_20260618_v267
 // ELTAUM_DESKTOP_RATES_REFINE_20260618_v266
@@ -1907,8 +1908,8 @@ function renderCdiYearHistory(d){
     return;
   }
 
-  const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 0.72)' : i === idxFechado ? 'rgba(232, 187, 106, 0.62)' : 'rgba(73, 112, 205, 0.56)');
-  const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(58, 214, 155, 1)' : i === idxFechado ? 'rgba(232, 187, 106, 0.95)' : 'rgba(114, 145, 235, 0.80)');
+  const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(53, 217, 155, 0.64)' : i === idxFechado ? 'rgba(227, 180, 91, 0.52)' : 'rgba(122, 167, 255, 0.30)');
+  const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(53, 217, 155, 0.96)' : i === idxFechado ? 'rgba(227, 180, 91, 0.88)' : 'rgba(122, 167, 255, 0.54)');
   const isMobile = window.matchMedia('(max-width: 760px)').matches;
   const maxMensal = Math.max(0.1, ...mensal.filter(Number.isFinite));
   const maxAcumulado = Math.max(1, ...acumulado.filter(Number.isFinite), Number.isFinite(acumAno) ? acumAno : 0);
@@ -1969,13 +1970,13 @@ function renderCdiYearHistory(d){
           label: 'CDI acumulado',
           data: acumulado,
           yAxisID: 'y1',
-          borderColor: '#e8bb6a',
-          backgroundColor: 'rgba(232, 187, 106, 0.10)',
+          borderColor: '#e3b45b',
+          backgroundColor: 'rgba(227, 180, 91, 0.10)',
           borderWidth: totalMesesV273 >= 10 ? 2.2 : 2.5,
           tension: 0.25,
           fill: false,
-          pointBackgroundColor: acumulado.map((_,i) => i === idxAtual ? '#35d09a' : '#e8bb6a'),
-          pointBorderColor: '#0b1021',
+          pointBackgroundColor: acumulado.map((_,i) => i === idxAtual ? '#35d99b' : '#e3b45b'),
+          pointBorderColor: '#09101f',
           pointBorderWidth: 1.4,
           pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? raioPontoDestaqueV273 : raioPontoV273),
           pointHoverRadius: raioPontoDestaqueV273 + 1
@@ -1991,7 +1992,7 @@ function renderCdiYearHistory(d){
       plugins: {
         legend: { display: false },
         tooltip: {
-          backgroundColor: 'rgba(11,16,33,.96)',
+          backgroundColor: 'rgba(9, 13, 25, .96)',
           titleColor: '#ffffff',
           bodyColor: '#dfe7ff',
           borderColor: 'rgba(255,255,255,.08)',
