@@ -42364,3 +42364,23 @@ html.cdi-analytic-fix-v275 #sec-mercado .cdi-analytic-link-v274:focus-visible{
   outline:2px solid rgba(232,187,106,.72);
   outline-offset:3px;
 }
+
+
+/* v276 — CDI: eixos lineares e proporção corrigida */
+html.cdi-axis-linear-v276 #sec-mercado .cdi-chart-canvas-wrap-v271{
+  padding-right: 12px !important;
+}
+html.cdi-axis-linear-v276 #sec-mercado .cdi-chart-legend-v271{
+  margin-top: 8px !important;
+}
+@media (min-width: 900px){
+  html.cdi-axis-linear-v276 #sec-mercado .cdi-chart-canvas-wrap-v271{
+    min-height: 255px !important;
+    height: 255px !important;
+  }
+}
+@media (max-width: 760px){
+  html.cdi-axis-linear-v276 #sec-mercado .cdi-chart-canvas-wrap-v271{
+    padding-right: 8px !important;
+  }
+}

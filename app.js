@@ -1912,8 +1912,18 @@ function renderCdiYearHistory(d){
   const isMobile = window.matchMedia('(max-width: 760px)').matches;
   const maxMensal = Math.max(0.1, ...mensal.filter(Number.isFinite));
   const maxAcumulado = Math.max(1, ...acumulado.filter(Number.isFinite), Number.isFinite(acumAno) ? acumAno : 0);
-  const yMonthlyMax = Math.min(2.25, Math.max(1.5, Math.ceil((maxMensal + 0.12) * 4) / 4));
-  const yAccumMax = Math.max(4, Math.ceil((maxAcumulado + 0.35) * 2) / 2);
+
+  // v276: eixos com escala linear explícita e degraus sincronizados.
+  // Evita o Chart.js escolher ticks irregulares como 0/2/4/7 no eixo direito.
+  const yGridStepsV276 = 4;
+  const yMonthlyMax = maxMensal <= 1.75
+    ? 2
+    : Math.ceil((maxMensal + 0.10) / 0.5) * 0.5;
+  const yMonthlyStepV276 = yMonthlyMax / yGridStepsV276;
+  const yAccumMax = maxAcumulado <= 8
+    ? 8
+    : Math.ceil((maxAcumulado + 0.35) / 4) * 4;
+  const yAccumStepV276 = yAccumMax / yGridStepsV276;
   const fmtAxis1 = value => {
     const n = Number(value);
     if(!Number.isFinite(n)) return '—';
@@ -2012,13 +2022,15 @@ function renderCdiYearHistory(d){
           }
         },
         y: {
+          type: 'linear',
           beginAtZero: true,
+          min: 0,
           max: yMonthlyMax,
+          bounds: 'ticks',
           ticks: {
             color: 'rgba(188,200,234,0.72)',
             padding: 8,
-            stepSize: 0.25,
-            maxTicksLimit: 6,
+            stepSize: yMonthlyStepV276,
             callback: value => fmtAxis1(value)
           },
           grid: {
@@ -2027,14 +2039,16 @@ function renderCdiYearHistory(d){
           }
         },
         y1: {
+          type: 'linear',
           beginAtZero: true,
+          min: 0,
           position: 'right',
           max: yAccumMax,
+          bounds: 'ticks',
           display: !isMobile,
           ticks: {
             color: 'rgba(232,187,106,0.76)',
-            stepSize: maxAcumulado >= 10 ? 2 : 1,
-            maxTicksLimit: 6,
+            stepSize: yAccumStepV276,
             callback: value => fmtAxis1(value)
           },
           grid: { drawOnChartArea: false }

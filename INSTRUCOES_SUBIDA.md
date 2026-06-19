@@ -1,15 +1,23 @@
-# Catálogo de Fundos CAIXA — v275
+# Catálogo de Fundos CAIXA — v276
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Correção
-O botão "Tabela analítica" do bloco de CDI agora:
-- alterna o painel de indicadores para o modo "Tabela analítica";
-- rola a página até o painel analítico;
-- não tenta mais clicar nele mesmo.
+## Correção principal
+O gráfico do CDI agora usa eixos lineares com limites e degraus explícitos:
 
-## Motivo do problema
-O botão do CDI tinha o mesmo texto da aba "Tabela analítica" e não possuía ID próprio. A função procurava por um botão com esse texto e acabava encontrando o próprio botão do CDI, sem acionar a aba correta.
+- eixo esquerdo, CDI mensal: 0% a 2%, com passos de 0,5 p.p.;
+- eixo direito, CDI acumulado: 0% a 8% enquanto o acumulado couber nesse intervalo, com passos de 2 p.p.;
+- quando o acumulado anual passar de 8%, o eixo direito sobe para 12%, 16%, etc., mantendo 4 degraus proporcionais;
+- removidos os limites automáticos que podiam gerar marcações irregulares, como 0/2/4/7;
+- barras e linha ficam matematicamente proporcionais às escalas.
+
+## Como subir
+Substitua no GitHub:
+- index.html
+- style.css
+- app.js
+
+Depois faça atualização forçada no navegador/celular para limpar cache.
