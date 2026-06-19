@@ -1,3 +1,4 @@
+// ELTAUM_CDI_MOBILE_SEMANTIC_v298
 // ELTAUM_CDI_MOBILE_BARS_v297
 // ELTAUM_CDI_MOBILE_COMPACT_v296
 // ELTAUM_RANKING_INSIGHT_PREMIUM_v295
@@ -1844,7 +1845,9 @@ function renderCdiYearHistory(d){
   const lastLabelEl = $('cdiLastClosedLabelV271');
   const lastValueEl = $('cdiLastClosedValueV271');
   const accumEl = $('cdiAccumYearValueV271');
+  const accumLabelElV298 = $('cdiAccumYearLabelV298');
   const last12mElV296 = $('cdiLast12mValueV296');
+  const last12mLabelElV298 = $('cdiLast12mLabelV298');
 
   const fmtPctLocal = v => {
     const n = Number(v);
@@ -1885,7 +1888,9 @@ function renderCdiYearHistory(d){
     if(lastLabelEl) lastLabelEl.textContent = 'Último fechado';
     if(lastValueEl) lastValueEl.textContent = '—';
     if(accumEl) accumEl.textContent = '—';
+    if(accumLabelElV298) accumLabelElV298.textContent = 'Ano';
     if(last12mElV296) last12mElV296.textContent = '—';
+    if(last12mLabelElV298) last12mLabelElV298.textContent = '12 meses';
     if(_chartCdiYearV271){ _chartCdiYearV271.destroy(); _chartCdiYearV271 = null; }
     return;
   }
@@ -1916,7 +1921,9 @@ function renderCdiYearHistory(d){
   const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? acumulado[acumulado.length - 1]);
   const cdi12mV296 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(cdi, 12) : Number(cdi.acum_12m ?? cdi.m12);
 
-  if(title) title.textContent = `CDI mensal + acumulado ${ano}`;
+  if(title) title.textContent = isMobile ? `CDI — resumo ${ano}` : `CDI mensal + acumulado ${ano}`;
+  if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
+  if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? '12 meses' : 'Últimos 12 meses';
   if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
   if(currentLabelEl) currentLabelEl.textContent = atualParcial ? `${mesCurto(atualParcial).toUpperCase()} · parcial` : 'Mês atual';
   if(currentValueEl) currentValueEl.textContent = atualParcial ? fmtPctLocal(atualParcial.valor) : '—';

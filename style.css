@@ -46219,3 +46219,84 @@ html.palette-applied-v278 .footer-summary-sub{
     flex-basis: 126px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v298 — CDI MOBILE: SEMÂNTICA E LEGENDA ENXUTA
+   Mobile:
+   - como o gráfico agora mostra apenas CDI mensal, a legenda foi removida;
+   - o título passa a comunicar "resumo", pois os acumulados estão nos KPIs;
+   - KPIs ficam mais semânticos: parcial, fechado, ano e 12 meses;
+   - gráfico fica mais próximo dos cards, sem área sobrando embaixo.
+   Desktop preservado.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.cdi-mobile-semantic-v298 #cdiYearHistoryTitle{
+    font-size: .98rem !important;
+    line-height: 1.12 !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-kpis-v271{
+    margin-bottom: 6px !important;
+    padding-bottom: 6px !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-kpi-v271{
+    flex-basis: 126px !important;
+    min-height: 56px !important;
+    padding: 9px 10px !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-kpi-label-v271{
+    font-size: .55rem !important;
+    letter-spacing: .07em !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-kpi-value-v271{
+    font-size: .92rem !important;
+    line-height: 1.08 !important;
+    margin-top: 4px !important;
+  }
+
+  /* Com apenas uma série no mobile, legenda vira ruído visual. */
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-chart-legend-v271{
+    display: none !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-chart-canvas-wrap-v271{
+    margin-top: 4px !important;
+    height: 116px !important;
+    max-height: 116px !important;
+    padding: 8px 8px 4px !important;
+    border-radius: 15px !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-chart-scroll-inner-v273,
+  html.cdi-mobile-semantic-v298 #cdiYearChartV271{
+    height: 100px !important;
+    max-height: 100px !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .reference-footnote-v167{
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-kpi-v271{
+    flex-basis: 120px !important;
+    min-height: 54px !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-chart-canvas-wrap-v271{
+    height: 108px !important;
+    max-height: 108px !important;
+  }
+
+  html.cdi-mobile-semantic-v298 #cdiYearHistory .cdi-chart-scroll-inner-v273,
+  html.cdi-mobile-semantic-v298 #cdiYearChartV271{
+    height: 94px !important;
+    max-height: 94px !important;
+  }
+}

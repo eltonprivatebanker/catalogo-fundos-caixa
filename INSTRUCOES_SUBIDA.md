@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v297
+# Catálogo de Fundos CAIXA — v298
 
 Arquivos atualizados:
 - index.html
@@ -7,23 +7,24 @@ Arquivos atualizados:
 
 ## Ajuste aplicado
 
-Refino mobile da seção “CDI mensal + acumulado”.
+Refino semântico da seção CDI no mobile.
 
-## O que mudou no mobile
+## O que mudou
 
-- Removido o botão “Tabela analítica”.
-- O gráfico passa a exibir somente o CDI mensal em barras.
-- A linha de CDI acumulado foi removida do gráfico mobile.
-- O acumulado continua disponível nos cards/KPIs:
+- Desktop preservado.
+- No mobile, a legenda do gráfico foi removida porque o gráfico agora tem apenas uma série: CDI mensal.
+- O título no mobile passou para “CDI — resumo 2026”.
+- Os acumulados continuam nos cards/KPIs:
   - mês atual/parcial;
-  - último fechado;
-  - acumulado no ano;
-  - últimos 12 meses.
-- Gráfico ficou menor, mais limpo e sem carrossel horizontal pesado.
+  - último mês fechado;
+  - ano;
+  - 12 meses.
+- O gráfico ficou mais próximo dos cards, com menos área sobrando embaixo.
+- Reduzi a altura visual do bloco no mobile.
 
-## Desktop
+## Por que ficou melhor semanticamente
 
-Desktop preservado com a visão completa.
+Como a linha do CDI acumulado saiu do gráfico mobile, a legenda “CDI mensal” ficou redundante. A informação acumulada permanece nos cards, onde é mais clara no celular.
 
 ## Como subir
 
