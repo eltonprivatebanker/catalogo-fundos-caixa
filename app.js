@@ -6145,11 +6145,11 @@ function econRenderLineV367(containerId, rows, getValue, getLabel, opts = {}){
 
 function econMetaStatusV367(v){
   const n = Number(v);
-  if(!Number.isFinite(n)) return 'Meta central: 3,00% · faixa: 1,50% a 4,50%';
+  if(!Number.isFinite(n)) return 'Meta central: 3,00% · banda de 1,50% a 4,50%';
   const fmt = x => Number(x).toFixed(2).replace('.', ',') + ' p.p.';
-  if(n > 4.5) return `${fmt(n - 4.5)} acima do teto de 4,50%`;
-  if(n < 1.5) return `${fmt(1.5 - n)} abaixo do piso de 1,50%`;
-  return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
+  if(n > 4.5) return `Acima do teto da meta em ${fmt(n - 4.5)}`;
+  if(n < 1.5) return `Abaixo do piso da meta em ${fmt(1.5 - n)}`;
+  return 'Dentro da banda da meta';
 }
 
 
@@ -6249,6 +6249,16 @@ function econRenderMetaGaugeV368(containerId, value){
   `;
 }
 
+
+function econAtualizarTextoMetaV370(ipca){
+  const atual = econPctV367(ipca?.acum_12m);
+  const status = econMetaStatusV367(ipca?.acum_12m);
+  const note = `Atual: ${atual} · ${status.charAt(0).toLowerCase()}${status.slice(1)}`;
+  econSetTextV367('evoCardMetaNote', note);
+  econSetTextV367('econMetaTrendLabelV367', status);
+  econSetTextV367('evoIpca12Sub', status);
+}
+
 function econAtualizarMobileSummaryV367(view, d){
   const ipca = d?.cards?.ipca || {};
   const selic = d?.cards?.selic_meta || {};
@@ -6333,6 +6343,8 @@ async function renderIndicadoresCleanV367(d){
     meta = sincronizarSerieMetaComIpcaAtual(meta, ipca);
   }catch(e){}
 
+  econAtualizarTextoMetaV370(ipca);
+
   // IPCA mensal
   const ipcaNorm = normalizarHistoricoIPCA(histIpca);
   econRenderBarsV367('econSparkIpcaV367', ipcaNorm, d => Number(d.valor), d => fmtIPCALabelV250(d));
@@ -6387,11 +6399,11 @@ async function renderIndicadoresCleanV367(d){
     }, {limit:36, band:true, bandMin:1.5, bandMax:4.5, bandMid:3.0, lineClass:'line-alert', dotClass:'dot-alert', bandClass:'band-meta'});
 
     const last = metaNorm[metaNorm.length - 1];
-    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)).replace('Dentro da faixa de tolerância de ', 'Na faixa '));
+    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)));
   }else{
     // v368: se o histórico completo não carregar, ainda exibe o dado atual do card em forma de régua.
     econRenderMetaGaugeV368('econSparkMetaV367', ipca.acum_12m);
-    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(ipca.acum_12m)).replace('Dentro da faixa de tolerância de ', 'Na faixa '));
+    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(ipca.acum_12m)));
   }
 
   selecionarIndicadorCleanV367('ipca');
@@ -19296,7 +19308,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_RED_BAND_20260620_v369';
+  const BUILD = 'ELTAUM_EVO_META_PREMIUM_20260620_v370';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
