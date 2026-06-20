@@ -1,3 +1,4 @@
+// ELTAUM_MARKET_CARD_156_v331
 // ELTAUM_MARKET_CARD_WIDTH_UNIFORM_v330
 // ELTAUM_MARKET_MICROCOPY_CLEAN_v329
 // ELTAUM_SAVINGS_MICRO_POLISH_v327
@@ -17902,6 +17903,66 @@ function openCdiAnalyticTableV274(){
         setImportant(track, 'padding-left', '1px');
         setImportant(track, 'padding-right', '1px');
       });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v331 — cards Copom/CDI com largura igual aos cards Selic/CDI
+   Diagnóstico do console:
+   - Selic/CDI: 156px
+   - Copom/CDI mensal: 130px
+   Correção: carrosséis com cards de 156px no mobile.
+════════════════════════════════════════════════════ */
+(function marketCard156V331(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function cleanCopomResult(txt){
+    return String(txt || '')
+      .replace(/corte\s+-0,25\s+p\.p\.\s+→\s+/i, 'Corte → ')
+      .replace(/mantida em/i, 'Mantida ')
+      .trim();
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    const cardWidth = '156px';
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+      .forEach(card => {
+        setImportant(card, 'flex', `0 0 ${cardWidth}`);
+        setImportant(card, 'min-width', cardWidth);
+        setImportant(card, 'max-width', cardWidth);
+        setImportant(card, 'box-sizing', 'border-box');
+      });
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+      .forEach(track => {
+        setImportant(track, 'gap', '9px');
+        setImportant(track, 'padding-left', '1px');
+        setImportant(track, 'padding-right', '18px');
+        setImportant(track, 'scroll-padding-left', '1px');
+      });
+
+    document.querySelectorAll('#sec-mercado .copom-carousel-result-v321').forEach(small => {
+      const original = small.textContent;
+      const clean = cleanCopomResult(original);
+      if(clean && clean !== original) small.textContent = clean;
+    });
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);

@@ -1,26 +1,25 @@
-# Catálogo de Fundos CAIXA — v330
+# Catálogo de Fundos CAIXA — v331
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
+## Diagnóstico do console
+
+- Cards Selic/CDI do topo: 156px.
+- Cards do Copom: 130px.
+- Cards do CDI mensal: 130px.
+
 ## Ajuste aplicado
 
-Padronizei a largura dos cards no bloco “Cenário monetário”.
+Copom e CDI mensal agora usam cards de 156px no mobile, para seguir a mesma largura visual dos cards Selic/CDI.
 
-## O que mudou
+## Também ajustado
 
-- Cards do Copom executivo agora seguem a mesma régua visual dos cards Selic/CDI.
-- Cards do CDI mensal também seguem a mesma largura.
-- O padrão fica: 2 cards visíveis por linha/tela + rolagem horizontal para os demais.
-
-## Resultado esperado
-
-O bloco fica mais uniforme:
-- Selic/CDI no topo: 2 colunas.
-- Copom: cards com mesma largura visual.
-- CDI mensal: cards com mesma largura visual.
+Texto do resultado do Copom foi encurtado em alguns casos:
+- “corte -0,25 p.p. → 14,75%” vira “Corte → 14,75%”
+- “mantida em 15,00%” vira “Mantida 15,00%”
 
 ## Como subir
 

@@ -50087,3 +50087,55 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     gap: 8px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v331 — CARDS 156PX NO COPOM E CDI MENSAL
+   Console confirmou:
+   - Selic/CDI topo = 156px
+   - Copom/CDI mensal = 130px
+   Agora os carrosséis usam 156px, mantendo a mesma régua visual.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.market-card-156-v331 #sec-mercado #copomExecutiveSummaryV270,
+  html.market-card-156-v331 #sec-mercado #cdiMonthCarouselV322{
+    gap: 9px !important;
+    padding-left: 1px !important;
+    padding-right: 18px !important;
+    scroll-padding-left: 1px !important;
+  }
+
+  html.market-card-156-v331 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.market-card-156-v331 #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321,
+  html.market-card-156-v331 #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    flex: 0 0 156px !important;
+    min-width: 156px !important;
+    max-width: 156px !important;
+    box-sizing: border-box !important;
+  }
+
+  html.market-card-156-v331 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.market-card-156-v331 #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321{
+    min-height: 100px !important;
+  }
+
+  html.market-card-156-v331 #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    min-height: 86px !important;
+  }
+
+  html.market-card-156-v331 #sec-mercado .copom-carousel-result-v321{
+    font-size: .56rem !important;
+    line-height: 1.16 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.market-card-156-v331 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.market-card-156-v331 #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321,
+  html.market-card-156-v331 #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    flex-basis: 148px !important;
+    min-width: 148px !important;
+    max-width: 148px !important;
+  }
+}
