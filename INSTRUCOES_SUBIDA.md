@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v309
+# Catálogo de Fundos CAIXA — v310
 
 Arquivos atualizados:
 - index.html
@@ -7,21 +7,18 @@ Arquivos atualizados:
 
 ## O que foi corrigido
 
-No mobile, o título do Ranking estava com muito espaço acima e abaixo. Além disso, o normalizador v303 aplicava estilos inline no H2 do Ranking e quebrava a centralização do hero.
+O card Resumo executivo estava com dois ícones porque existiam dois elementos:
 
-## Ajustes
+1. `span.mobile-kpi-emoji` — ícone antigo do layout mobile.
+2. `span.section-title-icon-v302` — ícone novo padronizado no H2.
 
-- Ranking hero centralizado novamente.
-- Medalhão do troféu mais compacto.
-- Menos espaço acima do título.
-- Menos espaço entre título e card de filtros.
-- Card de filtros sobe.
-- Normalizador v303 deixa de interferir no Ranking hero.
+A v310 oculta o ícone antigo no mobile e mantém apenas o ícone novo do título.
 
-## Escopo
+## Também ajustado
 
-- Mobile: Ranking hero compacto e centralizado.
-- Desktop: preservado.
+O normalizador v303 deixa de interferir nos títulos hero discretos:
+- Resumo executivo
+- Indicadores de mercado
 
 ## Como subir
 

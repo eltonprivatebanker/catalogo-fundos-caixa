@@ -47551,3 +47551,49 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     width: 20vw !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v310 — RESUMO EXECUTIVO: REMOVE ÍCONE DUPLICADO
+   O card Resumo tinha:
+   1) .mobile-kpi-emoji legado
+   2) .section-title-icon-v302 no H2
+   Resultado: dois ícones.
+   A regra abaixo remove apenas o ícone legado no mobile.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.summary-icon-dedup-v310 #sec-kpi .mobile-kpi-head > .mobile-kpi-emoji,
+  html.summary-icon-dedup-v310 .mobile-kpi-head > .mobile-kpi-emoji,
+  html.summary-icon-dedup-v310 .mobile-kpi-emoji-legacy-v310{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* deixa o cabeçalho do resumo usar só o H2 novo */
+  html.summary-icon-dedup-v310 .mobile-kpi-head{
+    gap: 0 !important;
+  }
+
+  html.summary-icon-dedup-v310 .mobile-kpi-head > div{
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* o resumo usa o hero discreto v306 sem interferência do ícone antigo */
+  html.summary-icon-dedup-v310 h2.summary-hero-v306{
+    margin-top: 4px !important;
+    margin-bottom: 12px !important;
+  }
+}

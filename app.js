@@ -1,3 +1,4 @@
+// ELTAUM_SUMMARY_ICON_DEDUP_v310
 // ELTAUM_RANKING_HERO_SPACING_v309
 // ELTAUM_REMOVE_GFB_FULL_v308
 // ELTAUM_REMOVE_GFB_TOP_v307
@@ -16479,7 +16480,13 @@ function openCdiAnalyticTableV274(){
 
     document.querySelectorAll('h2.section-title-v302, h2.page-section-title-v302, h2.compar-title').forEach(h2 => {
       if(!isTarget(h2)) return;
-      if(h2.classList.contains('ranking-title-hero-v305') || h2.classList.contains('section-hero-premium-v306')) return;
+      if(
+        h2.classList.contains('ranking-title-hero-v305') ||
+        h2.classList.contains('section-hero-premium-v306') ||
+        h2.classList.contains('section-hero-soft-v306') ||
+        h2.classList.contains('summary-hero-v306') ||
+        h2.classList.contains('market-hero-v306')
+      ) return;
 
       h2.classList.add('section-title-v303-final');
 
@@ -16691,6 +16698,44 @@ function openCdiAnalyticTableV274(){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
 
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v310 — resumo sem ícone duplicado
+   O bloco .mobile-kpi-head já tinha um ícone legado .mobile-kpi-emoji.
+   Como o H2 ganhou o ícone padronizado, o legado precisa sair.
+════════════════════════════════════════════════════ */
+(function dedupeSummaryIconV310(){
+  function apply(){
+    const legacy = document.querySelector('#sec-kpi .mobile-kpi-head > .mobile-kpi-emoji, .mobile-kpi-head > .mobile-kpi-emoji');
+    if(!legacy) return;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(isMobile){
+      legacy.setAttribute('aria-hidden','true');
+      legacy.style.setProperty('display','none','important');
+      legacy.style.setProperty('visibility','hidden','important');
+      legacy.style.setProperty('width','0','important');
+      legacy.style.setProperty('height','0','important');
+      legacy.style.setProperty('margin','0','important');
+      legacy.style.setProperty('padding','0','important');
+      legacy.style.setProperty('overflow','hidden','important');
+    }else{
+      legacy.removeAttribute('aria-hidden');
+      legacy.style.removeProperty('display');
+      legacy.style.removeProperty('visibility');
+      legacy.style.removeProperty('width');
+      legacy.style.removeProperty('height');
+      legacy.style.removeProperty('margin');
+      legacy.style.removeProperty('padding');
+      legacy.style.removeProperty('overflow');
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 900);
