@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_BODY_FIT_20260620_v346';
+  const BUILD = 'ELTAUM_MOBILE_RATES_FINAL_20260620_v352';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18993,5 +18993,281 @@ function openCdiAnalyticTableV274(){
   }else{
     boot();
   }
+})();
+
+/* ════════════════════════════════════════════════════
+   ELTAUM_MOBILE_RATES_FINAL_20260620_v352
+   Mobile:
+   - "Juros e CDI" como título.
+   - CDI em 2026 em resumo executivo, sem gráfico.
+   - Meses anteriores em carrossel sem duplicidade.
+   - Copom começa na última decisão e próxima reunião.
+════════════════════════════════════════════════════ */
+(function mobileRatesFinalV352(){
+  const BUILD = 'ELTAUM_MOBILE_RATES_FINAL_20260620_v352';
+
+  const MONTH_ORDER = {
+    JAN:1, FEV:2, MAR:3, ABR:4, MAI:5, JUN:6,
+    JUL:7, AGO:8, SET:9, OUT:10, NOV:11, DEZ:12
+  };
+
+  function isMobile(){
+    return window.matchMedia('(max-width: 820px)').matches;
+  }
+
+  function txt(el){
+    return String(el?.textContent || el?.innerText || '').replace(/\s+/g,' ').trim();
+  }
+
+  function esc(value){
+    return String(value ?? '')
+      .replace(/&/g,'&amp;')
+      .replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;')
+      .replace(/'/g,'&#39;');
+  }
+
+  function monthFromText(value){
+    return (String(value || '').match(/\b(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)\b/i) || [])[1]?.toUpperCase() || '';
+  }
+
+  function setStaticLabels(){
+    const title = document.getElementById('ratesReferenceTitleV167');
+    if(title) title.textContent = 'Juros e CDI';
+
+    const cdiTopSmall = document.getElementById('cdiYearHistoryTotal');
+    if(cdiTopSmall) cdiTopSmall.textContent = 'Taxa anualizada';
+  }
+
+  function collectCdiMonths(excludeMonths){
+    const src = document.getElementById('cdiMonthCarouselV322');
+    if(!src) return [];
+
+    const byMonth = new Map();
+
+    [...src.querySelectorAll('.cdi-month-card-v322')].forEach(card => {
+      const label = txt(card.querySelector('.cdi-month-kicker-v322')) || txt(card);
+      const mes = monthFromText(label);
+      if(!mes || excludeMonths.has(mes)) return;
+
+      const value = txt(card.querySelector('.cdi-month-value-v322')) || '—';
+      const accum = txt(card.querySelector('.cdi-month-accum-v322')) || 'Leitura mensal';
+      const isPartial = /PARCIAL/i.test(label) || card.classList.contains('is-current');
+
+      const item = {
+        mes,
+        label: label.toUpperCase(),
+        value,
+        accum,
+        isPartial,
+        score: /Acum\.?\s*ano/i.test(accum) ? 2 : 1
+      };
+
+      const current = byMonth.get(mes);
+      if(!current || item.score > current.score) byMonth.set(mes, item);
+    });
+
+    return [...byMonth.values()].sort((a,b) => (MONTH_ORDER[b.mes] || 0) - (MONTH_ORDER[a.mes] || 0));
+  }
+
+  function buildCdiMobile(){
+    const original = document.getElementById('cdiYearHistory');
+    if(!original) return;
+
+    const existing = document.getElementById('cdiMobileReadableV352');
+    const titleText = txt(document.getElementById('cdiYearHistoryTitle'));
+    const ano =
+      (titleText.match(/\b(20\d{2})\b/) || [])[1] ||
+      (txt(document.getElementById('cdiAccumYearLabelV298')).match(/\b(20\d{2})\b/) || [])[1] ||
+      String(new Date().getFullYear());
+
+    const anoVal = txt(document.getElementById('cdiAccumYearValueV271')) || '—';
+    const cdi12m = txt(document.getElementById('cdiLast12mValueV296')) || '—';
+
+    const currentLabel = txt(document.getElementById('cdiCurrentMonthLabelV271')) || 'Mês atual';
+    const currentValue = txt(document.getElementById('cdiCurrentMonthValueV271')) || '—';
+    const lastLabel = txt(document.getElementById('cdiLastClosedLabelV271')) || 'Último fechado';
+    const lastValue = txt(document.getElementById('cdiLastClosedValueV271')) || '—';
+
+    const excludeMonths = new Set([monthFromText(currentLabel), monthFromText(lastLabel)].filter(Boolean));
+    const meses = collectCdiMonths(excludeMonths);
+
+    const monthsHtml = meses.length
+      ? meses.map(item => `
+        <article class="cdi-mobile-month-v352 ${item.isPartial ? 'is-partial' : ''}">
+          <span>${esc(item.label)}</span>
+          <strong>${esc(item.value)}</strong>
+          <small>${esc(item.accum)}</small>
+        </article>`).join('')
+      : `<span class="cdi-mobile-empty-v352">Sem meses anteriores disponíveis.</span>`;
+
+    const html = `
+      <div class="cdi-mobile-head-v352">
+        <div>
+          <span>CDI</span>
+          <strong>CDI em ${esc(ano)}</strong>
+        </div>
+        <small>Resumo executivo</small>
+      </div>
+
+      <div class="cdi-mobile-grid-v352">
+        <article class="cdi-mobile-card-v352 is-year">
+          <span>Ano ${esc(ano)}</span>
+          <strong>${esc(anoVal)}</strong>
+          <small>Acumulado no ano</small>
+        </article>
+
+        <article class="cdi-mobile-card-v352 is-12m">
+          <span>CDI 12M</span>
+          <strong>${esc(cdi12m)}</strong>
+          <small>Últimos 12 meses</small>
+        </article>
+
+        <article class="cdi-mobile-card-v352 is-current">
+          <span>${esc(currentLabel)}</span>
+          <strong>${esc(currentValue)}</strong>
+          <small>Mês em andamento</small>
+        </article>
+
+        <article class="cdi-mobile-card-v352 is-closed">
+          <span>${esc(lastLabel)}</span>
+          <strong>${esc(lastValue)}</strong>
+          <small>Último mês fechado</small>
+        </article>
+      </div>
+
+      <div class="cdi-mobile-months-head-v352">
+        <strong>Meses anteriores</strong>
+        <small>Arraste para ver</small>
+      </div>
+
+      <div class="cdi-mobile-months-carousel-v352" aria-label="Carrossel dos meses anteriores do CDI">
+        ${monthsHtml}
+      </div>`;
+
+    if(existing){
+      if(existing.dataset.renderKeyV352 !== html){
+        existing.innerHTML = html;
+        existing.dataset.renderKeyV352 = html;
+      }
+    }else{
+      const box = document.createElement('section');
+      box.id = 'cdiMobileReadableV352';
+      box.className = 'cdi-mobile-readable-v352';
+      box.setAttribute('aria-label', 'Resumo mobile do CDI em 2026');
+      box.innerHTML = html;
+      box.dataset.renderKeyV352 = html;
+      original.insertAdjacentElement('beforebegin', box);
+    }
+  }
+
+  function meetingNumber(card){
+    const m = txt(card).match(/(\d+)\s*[ªa]\s*reuni/i);
+    return m ? Number(m[1]) : 999;
+  }
+
+  function orderCopom(){
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(!summary || !isMobile()) return;
+
+    const cards = [...summary.querySelectorAll('article')];
+    if(cards.length < 3) return;
+
+    const decisions = cards
+      .filter(card => card.classList.contains('is-cut') || card.classList.contains('is-hold') || /corte|mantida/i.test(txt(card)))
+      .sort((a,b) => meetingNumber(b) - meetingNumber(a));
+
+    const lastDecision = decisions[0] || null;
+    const next = cards.find(card => card.classList.contains('is-next') || /agenda|próxima|proxima/i.test(txt(card))) || null;
+
+    const first = [lastDecision, next].filter(Boolean);
+    const firstSet = new Set(first);
+    const rest = cards.filter(card => !firstSet.has(card));
+
+    const ordered = [...first, ...rest];
+    let changed = false;
+    ordered.forEach((card, idx) => {
+      if(summary.children[idx] !== card) changed = true;
+    });
+
+    if(changed){
+      ordered.forEach(card => summary.appendChild(card));
+      summary.scrollLeft = 0;
+    }
+  }
+
+  function compactCopom(){
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(!summary || !isMobile()) return;
+
+    const gap = 8;
+    const cardsPerView = 2;
+    const width = Math.max(116, Math.floor((summary.clientWidth - gap) / cardsPerView));
+
+    summary.style.setProperty('gap', `${gap}px`, 'important');
+    summary.style.setProperty('padding-left', '0', 'important');
+    summary.style.setProperty('padding-right', '0', 'important');
+    summary.style.setProperty('scroll-padding-left', '0', 'important');
+
+    summary.querySelectorAll('article').forEach(card => {
+      card.style.setProperty('flex', `0 0 ${width}px`, 'important');
+      card.style.setProperty('width', `${width}px`, 'important');
+      card.style.setProperty('min-width', `${width}px`, 'important');
+      card.style.setProperty('max-width', `${width}px`, 'important');
+      card.style.setProperty('min-height', '64px', 'important');
+      card.style.setProperty('padding', '8px 9px 8px 11px', 'important');
+      card.style.setProperty('border', '0', 'important');
+      card.style.setProperty('outline', '0', 'important');
+      card.style.setProperty('box-shadow', 'none', 'important');
+      card.style.setProperty('border-radius', '10px', 'important');
+    });
+  }
+
+  let scheduled = false;
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      apply();
+    });
+  }
+
+  function apply(){
+    setStaticLabels();
+    buildCdiMobile();
+    orderCopom();
+    compactCopom();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+
+  [150, 400, 900, 1600, 2600].forEach(ms => setTimeout(apply, ms));
+  window.addEventListener('resize', schedule, {passive:true});
+
+  const observer = new MutationObserver(schedule);
+  function observeTargets(){
+    ['cdiYearHistory','cdiMonthCarouselV322','copomExecutiveSummaryV270','cdiAccumYearValueV271','cdiLast12mValueV296','cdiCurrentMonthValueV271','cdiLastClosedValueV271'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el && !el.dataset.v352Observed){
+        el.dataset.v352Observed = '1';
+        observer.observe(el, {childList:true, subtree:true, characterData:true});
+      }
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', observeTargets, {once:true});
+  }else{
+    observeTargets();
+  }
+
+  [500, 1200, 2400].forEach(ms => setTimeout(observeTargets, ms));
+  window.__ELTAUM_MOBILE_RATES_FINAL_V352__ = { build: BUILD, apply };
 })();
 
