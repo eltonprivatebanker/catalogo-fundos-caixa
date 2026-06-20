@@ -50938,3 +50938,23 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: .62rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v340 — ESTABILIZAÇÃO DOS GRÁFICOS
+   Sem MutationObserver contínuo.
+   A estabilidade vem do CSS + aplicação pontual no JS.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.charts-loop-fix-v340 #sec-graficos .chart-tabs,
+  html.charts-loop-fix-v340 #sec-graficos .evo-range-tabs,
+  html.charts-loop-fix-v340 #sec-graficos .selic-range-tabs,
+  html.charts-loop-fix-v340 #sec-graficos .ipca-range-tabs{
+    contain: layout style !important;
+  }
+
+  html.charts-loop-fix-v340 #sec-graficos canvas{
+    transform: translateZ(0) !important;
+  }
+}

@@ -1,3 +1,4 @@
+// ELTAUM_CHARTS_LOOP_FIX_v340
 // ELTAUM_CHARTS_TABS_FIX_v339
 // ELTAUM_INFLATION_RATES_CLEAN_v338
 // ELTAUM_DOLAR_CHART_CLOSED_v337
@@ -5989,7 +5990,12 @@ function selecionarGraficoEvolucao(chave){
   });
   atualizarResumoMovelEvolucao(target, _dadosMercado);
   setTimeout(()=>{
-    [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{ if(ch && typeof ch.resize === 'function') ch.resize(); });
+    [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{
+      if(!ch || typeof ch.resize !== 'function') return;
+      const canvas = ch.canvas || ch.ctx?.canvas;
+      if(!canvas || !canvas.isConnected || !canvas.ownerDocument) return;
+      try{ ch.resize(); }catch(err){ console.warn('[gráficos] resize ignorado:', err?.message || err); }
+    });
   }, 80);
 }
 
@@ -18672,12 +18678,57 @@ function openCdiAnalyticTableV274(){
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
 
-  const target = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body');
-  if(target && 'MutationObserver' in window){
-    const obs = new MutationObserver(() => {
-      clearTimeout(window.__chartsTabsFixV339Timer);
-      window.__chartsTabsFixV339Timer = setTimeout(apply, 90);
-    });
-    obs.observe(target, { childList:true, subtree:true, characterData:true });
+  // v340: MutationObserver removido.
+  // Motivo: a própria função apply() altera estilos/atributos e isso gerava loop de mutações/piscadas.
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v340 — correção do loop/pisca em Inflação e Juros
+   Diagnóstico:
+   - v339 criou MutationObserver em #sec-graficos;
+   - apply() alterava style/atributos;
+   - o MutationObserver chamava apply() de novo;
+   - resultado: mutações contínuas, tela piscando e pulando.
+════════════════════════════════════════════════════ */
+(function chartsLoopFixV340(){
+  function safeChartUpdate(chart){
+    if(!chart || typeof chart.update !== 'function') return;
+    const canvas = chart.canvas || chart.ctx?.canvas;
+    if(!canvas || !canvas.isConnected || !canvas.ownerDocument) return;
+    try{ chart.update('none'); }catch(err){ console.warn('[v340] chart.update ignorado:', err?.message || err); }
   }
+
+  function safeFixCharts(){
+    if(!window.Chart) return;
+    ['chartSelic', 'chartIpca', 'chartIpca12m', 'chartDolar', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if(!canvas || !canvas.isConnected) return;
+      const chart = Chart.getChart(canvas);
+      if(!chart?.options?.scales?.x?.ticks) return;
+      const ticks = chart.options.scales.x.ticks;
+      ticks.maxRotation = 0;
+      ticks.minRotation = 0;
+      ticks.autoSkip = true;
+      ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+      safeChartUpdate(chart);
+    });
+  }
+
+  function stabilize(){
+    // Reaplica só uma vez, sem observador de mutações.
+    document.documentElement.classList.add('charts-loop-stable-v340');
+    safeFixCharts();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', stabilize);
+  else stabilize();
+
+  window.addEventListener('resize', () => requestAnimationFrame(safeFixCharts), { passive:true });
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button')){
+      setTimeout(safeFixCharts, 160);
+      setTimeout(safeFixCharts, 500);
+    }
+  }, { passive:true });
 })();

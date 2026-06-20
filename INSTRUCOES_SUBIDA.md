@@ -1,35 +1,32 @@
-# Catálogo de Fundos CAIXA — v339
+# Catálogo de Fundos CAIXA — v340
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Correções aplicadas
+## Problema identificado
 
-### 1. Botões de prazo
-Corrigido o problema em que o botão “1A” esticava e escondia os demais.
+O console confirmou um loop de mutações em `#sec-graficos`.
 
-Agora os botões ficam em carrossel horizontal:
-- 12M
-- 1A
-- 2A
-- 5A
-- 10A
-- Histórico
+A causa principal estava na v339:
+- um `MutationObserver` observava `#sec-graficos`;
+- a função `apply()` alterava estilos/atributos;
+- essas alterações disparavam o observer novamente;
+- o observer chamava `apply()` outra vez;
+- isso gerava piscadas, pulos e muitas mutações.
 
-### 2. Cards Máxima/Mínima
-Corrigido o atropelamento de texto nos cards de estatística da Selic e IPCA.
+Também havia erro do Chart.js:
+- `can't access property "ownerDocument", t is null`
+- causado por `resize()` em gráfico/canvas que não estava conectado ao DOM.
 
-### 3. Eixo X dos gráficos
-Forçado:
-- maxRotation: 0
-- minRotation: 0
-- autoSkip: true
-- maxTicksLimit: 5
+## Correções v340
 
-### 4. Título do IPCA
-O texto “últimos 24 meses” passa a ser dinâmico conforme o filtro escolhido.
+1. Removido o MutationObserver contínuo da v339.
+2. Adicionado resize seguro para os gráficos.
+3. O eixo X continua horizontal.
+4. As abas continuam compactas.
+5. Redução de piscada/pulo na área de Inflação e Juros.
 
 ## Como subir
 
