@@ -47597,3 +47597,17 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     margin-bottom: 12px !important;
   }
 }
+
+
+/* v311 — remove cabeçalho do resumo executivo no mobile */
+@media (max-width: 768px){
+  html.summary-head-removed-v311 #sec-kpi-mobile .mobile-kpi-head{
+    display:none !important;
+  }
+  html.summary-head-removed-v311 #sec-kpi-mobile .mobile-kpi-card-compact{
+    padding-top: 12px !important;
+  }
+  html.summary-head-removed-v311 #sec-kpi-mobile .mobile-kpi-compact-grid{
+    margin-top: 0 !important;
+  }
+}
