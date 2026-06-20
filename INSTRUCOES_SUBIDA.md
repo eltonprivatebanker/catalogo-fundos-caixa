@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v326
+# Catálogo de Fundos CAIXA — v327
 
 Arquivos atualizados:
 - index.html
@@ -7,20 +7,17 @@ Arquivos atualizados:
 
 ## Ajustes aplicados na Poupança
 
-1. Corte de redundância
-- Removido o texto longo `#poupScenarioSummary`.
+1. Removida pílula redundante
+- Removido `#poupScenarioStatus` com “Selic 14,25%”.
 
-2. Alinhamento
-- Todos os cards de cenários agora ficam alinhados à esquerda.
-- O card “Selic atual” também segue o mesmo padrão.
+2. Texto da regra vigente mais objetivo
+- Agora destaca primeiro o rendimento:
+  “Rendimento de TR + 0,50% a.m. (Selic acima de 8,50% a.a.)”.
 
-3. Hierarquia tipográfica
-- `dt` fica menor, uppercase e com menor opacidade.
-- `dd` vira o destaque principal, com peso maior e cor clara.
-
-4. Respiro e largura
-- Cards do carrossel ficaram levemente mais largos.
-- Padding interno aumentado para reduzir quebras excessivas.
+3. Títulos dos cenários mais limpos
+- “Selic 4,00% a.a.” virou “Selic 4,00%”.
+- “Selic 8,50% a.a.” virou “Selic 8,50%”.
+- “Selic atual: 14,25% a.a.” vira “Selic atual: 14,25%”.
 
 ## Escopo
 

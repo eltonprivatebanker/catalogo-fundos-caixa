@@ -49838,3 +49838,58 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: 11.5px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v327 — POUPANÇA: MICRO-POLIMENTO FINAL
+   - remove pílula "Selic 14,25%" no cabeçalho dos cenários;
+   - quick note com foco no rendimento;
+   - títulos de cenários sem "a.a.";
+   - preserva alinhamento e largura premium dos cards.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.savings-micro-polish-v327 #sec-mercado #poupScenarioStatus,
+  html.savings-micro-polish-v327 #sec-mercado .poup-scenario-status{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html.savings-micro-polish-v327 #sec-mercado .poup-scenarios-head{
+    align-items: flex-start !important;
+  }
+
+  html.savings-micro-polish-v327 #sec-mercado .poup-note-muted-v327{
+    color: rgba(220,228,250,.68) !important;
+    font-weight: 650 !important;
+  }
+
+  html.savings-micro-polish-v327 #sec-mercado #poupQuickNote{
+    line-height: 1.28 !important;
+  }
+
+  html.savings-micro-polish-v327 #sec-mercado .savings-scenario-card-v208{
+    flex-basis: 190px !important;
+    min-width: 190px !important;
+    max-width: 190px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.savings-micro-polish-v327 #sec-mercado .savings-scenario-card-v208{
+    flex-basis: 182px !important;
+    min-width: 182px !important;
+    max-width: 182px !important;
+  }
+}

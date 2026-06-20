@@ -1,3 +1,4 @@
+// ELTAUM_SAVINGS_MICRO_POLISH_v327
 // ELTAUM_SAVINGS_SCENARIOS_POLISH_v326
 // ELTAUM_SAVINGS_CLEAN_MOBILE_v325
 // ELTAUM_CDI_SEMANTIC_CARDS_v324
@@ -533,10 +534,9 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
   setText('poupScenarioOld4', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
   setText('poupScenarioNew85', `70% da Selic + TR (${formatMensal(mensalNova85)})`);
   setText('poupScenarioOld85', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
-  setText('poupScenarioCurrentTitle', selicNum != null ? `Selic atual: ${fmt(selicNum)} a.a.` : 'Cenário atual');
+  setText('poupScenarioCurrentTitle', selicNum != null ? `Selic atual: ${fmt(selicNum)}` : 'Cenário atual');
   setText('poupScenarioCurrentNew', formatMensal(mensalNovaAtual));
   setText('poupScenarioCurrentOld', formatMensal(mensalAntigaAtual));
-  setText('poupScenarioStatus', selicNum != null ? `Selic ${fmt(selicNum)}` : 'Selic —');
 
   if($('poupScenarioSummary')){
     if(selicNum == null){
@@ -646,10 +646,10 @@ function atualizarPoupancaCard(d, selicAtual){
         'Aguardando Selic vigente para definir a regra aplicada.';
     }else if(acima){
       $('poupQuickNote').innerHTML =
-        `Selic acima de <strong>8,50% a.a.</strong> · depósitos novos e antigos seguem <strong>TR + 0,50% a.m.</strong>`;
+        `Rendimento de <strong>TR + 0,50% a.m.</strong> <span class="poup-note-muted-v327">(Selic acima de 8,50% a.a.)</span>`;
     }else{
       $('poupQuickNote').innerHTML =
-        `Selic até <strong>8,50% a.a.</strong> · depósitos novos rendem <strong>70% da Selic + TR</strong> e depósitos antigos mantêm <strong>TR + 0,50% a.m.</strong>`;
+        `Depósitos novos: <strong>70% da Selic + TR</strong> <span class="poup-note-muted-v327">(regra vigente)</span>`;
     }
   }
 
@@ -17734,6 +17734,40 @@ function openCdiAnalyticTableV274(){
   else apply();
 
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v327 — Poupança: micro-polimento final
+   - remove pílula Selic 14,25%;
+   - limpa títulos dos cenários;
+   - reforça quick note mais orientado ao rendimento.
+════════════════════════════════════════════════════ */
+(function savingsMicroPolishV327(){
+  function apply(){
+    const status = document.getElementById('poupScenarioStatus');
+    if(status) status.remove();
+
+    const title4 = document.getElementById('poupScenario4TitleV214');
+    if(title4) title4.textContent = 'Selic 4,00%';
+
+    const title85 = document.getElementById('poupScenario85TitleV214');
+    if(title85) title85.textContent = 'Selic 8,50%';
+
+    const current = document.getElementById('poupScenarioCurrentTitle');
+    if(current) current.textContent = current.textContent.replace(/\s+a\.a\.$/i, '');
+
+    const quick = document.getElementById('poupQuickNote');
+    if(quick && /depósitos novos e antigos seguem/i.test(quick.textContent || '')){
+      quick.innerHTML = 'Rendimento de <strong>TR + 0,50% a.m.</strong> <span class="poup-note-muted-v327">(Selic acima de 8,50% a.a.)</span>';
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
   setTimeout(apply, 250);
   setTimeout(apply, 900);
 })();
