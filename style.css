@@ -50489,3 +50489,22 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     color: #ff5b7a !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v335 — DÓLAR PTAX: EIXO X MOBILE LIMPO
+   A correção principal está no Chart.js, mas o CSS ajuda a manter
+   o canvas compacto e sem pressão visual no mobile.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.dolar-xaxis-mobile-v335 #sec-dolar .dolar-chart-body{
+    min-height: 190px !important;
+    max-height: 220px !important;
+    overflow: hidden !important;
+  }
+
+  html.dolar-xaxis-mobile-v335 #sec-dolar #chartDolar{
+    max-height: 210px !important;
+  }
+}

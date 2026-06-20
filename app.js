@@ -1,3 +1,4 @@
+// ELTAUM_DOLAR_XAXIS_MOBILE_v335
 // ELTAUM_DOLAR_CHART_STATS_v334
 // ELTAUM_DOLAR_EXECUTIVE_MOBILE_v333
 // ELTAUM_MARKET_MICROCOPY_FORCE_v332
@@ -1306,10 +1307,19 @@ function buildChartDolar(range){
           ticks: {
             color: '#3d4560',
             font: { family: 'JetBrains Mono', size: 9 },
-            maxTicksLimit: window.innerWidth <= 768 ? (range === '36m' ? 4 : 5) : 10,
+            maxTicksLimit: window.innerWidth <= 768 ? 5 : 10,
             maxRotation: 0,
             minRotation: 0,
-            autoSkip: true
+            autoSkip: false,
+            callback: function(value, index, ticks){
+              const total = Array.isArray(ticks) ? ticks.length : (this.chart?.data?.labels?.length || 0);
+              const maxLabels = window.innerWidth <= 768 ? 5 : 10;
+              const label = this.getLabelForValue(value);
+              if(total <= maxLabels) return label;
+              const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
+              if(index === 0 || index === total - 1 || index % step === 0) return label;
+              return '';
+            }
           }
         },
         y: {
@@ -18214,4 +18224,55 @@ function openCdiAnalyticTableV274(){
   setTimeout(apply, 300);
   setTimeout(apply, 1000);
   setTimeout(apply, 2000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v335 — força eixo X do gráfico PTAX horizontal no mobile
+   Evita labels diagonais em 24M/36M:
+   - maxRotation/minRotation 0
+   - apenas 5 labels visíveis
+   - demais labels ficam vazios
+════════════════════════════════════════════════════ */
+(function dolarXAxisMobileV335(){
+  function apply(){
+    const canvas = document.getElementById('chartDolar');
+    if(!canvas || !window.Chart) return;
+
+    const chart = Chart.getChart(canvas);
+    if(!chart?.options?.scales?.x?.ticks) return;
+
+    const ticks = chart.options.scales.x.ticks;
+    ticks.maxRotation = 0;
+    ticks.minRotation = 0;
+    ticks.autoSkip = false;
+    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+    ticks.callback = function(value, index, tickList){
+      const total = Array.isArray(tickList) ? tickList.length : (this.chart?.data?.labels?.length || 0);
+      const maxLabels = window.innerWidth <= 768 ? 5 : 10;
+      const label = this.getLabelForValue(value);
+      if(total <= maxLabels) return label;
+
+      const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
+      if(index === 0 || index === total - 1 || index % step === 0) return label;
+      return '';
+    };
+
+    chart.update('none');
+  }
+
+  function schedule(){
+    [80, 250, 700, 1200].forEach(ms => setTimeout(apply, ms));
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule);
+  else schedule();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  document.querySelectorAll('[data-dolar-range]').forEach(btn => {
+    btn.addEventListener('click', schedule, { passive:true });
+  });
+
+  const chartToggle = document.getElementById('dolarChartToggle');
+  if(chartToggle) chartToggle.addEventListener('click', schedule, { passive:true });
 })();

@@ -1,22 +1,26 @@
-# Catálogo de Fundos CAIXA — v334
+# Catálogo de Fundos CAIXA — v335
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes aplicados no Dólar PTAX
+## Correção aplicada
 
-### 1. Gráfico
-- Eixo X limitado a poucos rótulos no mobile.
-- Rótulos sempre horizontais.
-- Data completa fica no tooltip ao tocar no gráfico.
+Corrigido o eixo X do gráfico Dólar PTAX no mobile.
 
-### 2. Estatísticas
-- Card “Atual” virou “Variação”.
-- O valor exibido passa a ser a variação percentual do período selecionado.
-- Máxima, Mínima e Média usam cor neutra.
-- Verde/vermelho ficam reservados para variações percentuais.
+## O que mudou
+
+- Rótulos do eixo X não ficam mais inclinados.
+- `maxRotation: 0`
+- `minRotation: 0`
+- máximo de 5 rótulos visíveis no mobile.
+- datas intermediárias ficam ocultas no eixo.
+- a data completa permanece no tooltip ao tocar no gráfico.
+
+## Motivo
+
+Em períodos longos, como 24M e 36M, havia excesso de datas no eixo X e o Chart.js inclinava os textos automaticamente.
 
 ## Como subir
 
