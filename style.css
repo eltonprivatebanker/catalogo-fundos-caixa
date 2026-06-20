@@ -52388,235 +52388,418 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
 }
 
 /* ════════════════════════════════════════════════════
-   PATCH v362 — EVO HARD FREEZE MOBILE
-   Corrige o piscar no scroll da seção "Inflação e juros".
-   Diagnóstico confirmado: Chart.js estava fazendo resize/update durante rolagem.
+   PATCH v367 — SEÇÃO LIMPA "INFLAÇÃO E JUROS"
+   Nova seção sem canvas/Chart.js no bloco de indicadores.
 ════════════════════════════════════════════════════ */
 
-@media (max-width:820px){
-  html.evo-hard-freeze-v362 #sec-graficos,
-  html.evo-hard-freeze-v362 #sec-graficos *{
-    animation:none !important;
-    transition:none !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos{
-    padding-bottom:108px !important;
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .section-collapsible-body{
-    overflow:visible !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .evo-charts-grid{
-    position:relative !important;
-    min-height:470px !important;
-    padding-bottom:98px !important;
-    overflow:visible !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .evo-chart-card,
-  html.evo-hard-freeze-v362 #sec-graficos .chart-card{
-    transition:none !important;
-    animation:none !important;
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .evo-chart-card.active{
-    display:block !important;
-    opacity:1 !important;
-    visibility:visible !important;
-    min-height:424px !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos #evoChartSelicCard.active{
-    min-height:456px !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos #evoChartMetaCard.active{
-    min-height:424px !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .evo-chart-card:not(.active){
-    display:none !important;
-    opacity:0 !important;
-    visibility:hidden !important;
-    pointer-events:none !important;
-    height:0 !important;
-    min-height:0 !important;
-    max-height:0 !important;
-    overflow:hidden !important;
-    padding-top:0 !important;
-    padding-bottom:0 !important;
-    margin-top:0 !important;
-    margin-bottom:0 !important;
-    border:0 !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .chart-body{
-    width:100% !important;
-    max-width:100% !important;
-    height:188px !important;
-    min-height:188px !important;
-    max-height:188px !important;
-    overflow:hidden !important;
-    margin-top:8px !important;
-    contain:layout paint style !important;
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
-    background:rgba(7,10,20,.18) !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .chart-body canvas,
-  html.evo-hard-freeze-v362 #sec-graficos canvas{
-    width:100% !important;
-    max-width:100% !important;
-    height:188px !important;
-    max-height:188px !important;
-    display:block !important;
-    transition:none !important;
-    animation:none !important;
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .ipca-summary-row-v250,
-  html.evo-hard-freeze-v362 #sec-graficos .selic-summary-row{
-    min-height:76px !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos .evo-summary-grid{
-    min-height:151px !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos #evoChartSelicCard .chart-tabs{
-    display:grid !important;
-    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
-    gap:6px !important;
-    width:100% !important;
-    max-width:100% !important;
-    overflow:visible !important;
-    padding:0 !important;
-    margin:8px 0 0 !important;
-  }
-
-  html.evo-hard-freeze-v362 #sec-graficos #evoChartSelicCard .chart-tab{
-    min-width:0 !important;
-    width:100% !important;
-    max-width:100% !important;
-    padding:0 4px !important;
-    font-size:.58rem !important;
-    overflow:hidden !important;
-    text-overflow:ellipsis !important;
-    white-space:nowrap !important;
-  }
+.econ-clean-section-v367 .section-subline{
+  max-width:760px;
 }
 
-/* ════════════════════════════════════════════════════
-   PATCH v363 — EVO POINTER SANE MOBILE
-   Complementa a v362: impede que gestos de rolagem sobre abas
-   disparem redraw dos gráficos de Inflação e juros.
-════════════════════════════════════════════════════ */
-
-@media (max-width:820px){
-  html.evo-pointer-sane-v363 #sec-graficos .chart-tab,
-  html.evo-pointer-sane-v363 #sec-graficos .evo-view-tab{
-    touch-action:manipulation !important;
-  }
-
-  html.evo-pointer-sane-v363 #sec-graficos .chart-body{
-    overscroll-behavior:contain !important;
-  }
+.econ-clean-summary-v367{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:14px;
 }
 
-/* ════════════════════════════════════════════════════
-   PATCH v366 — EVO MOBILE VIEWPORT LOCK
-   Correção para celular real:
-   - a barra do navegador altera visualViewport/window height;
-   - isso disparava resize/update nos charts;
-   - travamos a seção contra redraw durante resize/scroll.
-════════════════════════════════════════════════════ */
+.econ-clean-card-v367{
+  border:1px solid rgba(148,163,184,.16);
+  border-radius:20px;
+  padding:16px;
+  background:linear-gradient(145deg,rgba(15,23,42,.82),rgba(15,23,42,.50));
+  box-shadow:0 16px 42px rgba(0,0,0,.18);
+  min-width:0;
+}
+
+.econ-clean-card-v367.featured{
+  border-color:rgba(200,151,58,.36);
+  background:linear-gradient(145deg,rgba(63,46,15,.66),rgba(15,23,42,.58));
+}
+
+.econ-clean-card-v367 span,
+.econ-panel-kicker-v367{
+  display:block;
+  font-size:.66rem;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  color:#91a0b7;
+  font-weight:800;
+}
+
+.econ-clean-card-v367 strong{
+  display:block;
+  margin-top:8px;
+  font-family:"JetBrains Mono",monospace;
+  font-size:1.45rem;
+  color:#f8fafc;
+}
+
+.econ-clean-card-v367 small{
+  display:block;
+  margin-top:6px;
+  color:#9aa8bb;
+  line-height:1.35;
+}
+
+.econ-clean-mobile-reading-v367{
+  display:none;
+}
+
+.econ-clean-tabs-v367{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0 14px;
+}
+
+.econ-clean-tab-v367{
+  appearance:none;
+  border:1px solid rgba(148,163,184,.20);
+  background:rgba(15,23,42,.72);
+  color:#cbd5e1;
+  border-radius:999px;
+  min-height:36px;
+  padding:0 14px;
+  font-weight:850;
+  font-size:.78rem;
+  cursor:pointer;
+}
+
+.econ-clean-tab-v367.active{
+  background:linear-gradient(135deg,rgba(200,151,58,.95),rgba(151,108,31,.92));
+  color:#0b1020;
+  border-color:rgba(200,151,58,.70);
+}
+
+.econ-clean-panels-v367{
+  display:block;
+}
+
+.econ-clean-panel-v367{
+  display:none;
+  border:1px solid rgba(148,163,184,.16);
+  border-radius:22px;
+  padding:16px;
+  background:rgba(15,23,42,.62);
+  box-shadow:0 18px 48px rgba(0,0,0,.18);
+}
+
+.econ-clean-panel-v367.active{
+  display:block;
+}
+
+.econ-panel-head-v367{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:8px;
+}
+
+.econ-panel-head-v367 h3{
+  margin:.2rem 0 0;
+  font-size:1.12rem;
+  color:#f8fafc;
+}
+
+.econ-panel-head-v367 > strong{
+  flex:0 0 auto;
+  font-family:"JetBrains Mono",monospace;
+  font-size:.82rem;
+  color:#e8bb6a;
+  border:1px solid rgba(200,151,58,.28);
+  border-radius:999px;
+  padding:6px 10px;
+  background:rgba(200,151,58,.08);
+}
+
+.econ-panel-note-v367{
+  margin:0 0 12px;
+  color:#aebacf;
+  font-size:.82rem;
+  line-height:1.45;
+}
+
+.econ-chip-row-v367{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:14px;
+}
+
+.econ-chip-row-v367 > div{
+  border:1px solid rgba(148,163,184,.13);
+  border-radius:14px;
+  padding:10px;
+  background:rgba(2,6,23,.24);
+  min-width:0;
+}
+
+.econ-chip-row-v367 span{
+  display:block;
+  font-size:.62rem;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:#8997ad;
+  font-weight:800;
+}
+
+.econ-chip-row-v367 strong{
+  display:block;
+  margin-top:4px;
+  font-family:"JetBrains Mono",monospace;
+  color:#f8fafc;
+  font-size:.96rem;
+}
+
+.econ-chip-row-v367 small{
+  display:block;
+  margin-top:2px;
+  color:#8d9aad;
+  font-size:.68rem;
+}
+
+.econ-mini-chart-v367{
+  width:100%;
+  min-height:150px;
+  border:1px solid rgba(148,163,184,.13);
+  border-radius:18px;
+  background:linear-gradient(180deg,rgba(2,6,23,.34),rgba(15,23,42,.18));
+  padding:14px;
+  overflow:hidden;
+}
+
+.econ-bars-track-v367{
+  height:112px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  border-bottom:1px solid rgba(148,163,184,.16);
+}
+
+.econ-bars-track-v367 i{
+  flex:1 1 0;
+  min-width:3px;
+  height:var(--h);
+  max-height:100%;
+  border-radius:6px 6px 2px 2px;
+  background:rgba(46,209,122,.72);
+  align-self:flex-end;
+}
+
+.econ-bars-track-v367 i.neg{
+  background:rgba(240,85,101,.74);
+}
+
+.econ-axis-caption-v367{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  margin-top:8px;
+  color:#8d9aad;
+  font-size:.68rem;
+  font-family:"JetBrains Mono",monospace;
+}
+
+.econ-svg-v367{
+  width:100%;
+  height:112px;
+  display:block;
+  overflow:visible;
+}
+
+.econ-svg-v367 .line{
+  stroke:#5b9cf6;
+  stroke-width:3;
+  vector-effect:non-scaling-stroke;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.econ-svg-v367 .dot{
+  fill:#e8bb6a;
+  stroke:#101827;
+  stroke-width:2;
+  vector-effect:non-scaling-stroke;
+}
+
+.econ-svg-v367 .band{
+  fill:rgba(46,209,122,.07);
+  stroke:rgba(46,209,122,.16);
+  vector-effect:non-scaling-stroke;
+}
+
+.econ-meta-band-v367{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:8px;
+  border:1px solid rgba(46,209,122,.17);
+  background:rgba(46,209,122,.06);
+  color:#9fb0c7;
+  border-radius:14px;
+  padding:10px 12px;
+  margin-bottom:12px;
+  font-size:.72rem;
+}
+
+.econ-meta-band-v367 strong{
+  color:#d9f99d;
+}
+
+.econ-empty-v367{
+  display:grid;
+  place-items:center;
+  min-height:112px;
+  color:#8d9aad;
+  font-size:.75rem;
+}
 
 @media (max-width:820px){
-  html.evo-mobile-viewport-lock-v366 #sec-graficos,
-  html.evo-mobile-viewport-lock-v366 #sec-graficos *{
+  html.evo-clean-indicators-v367 #sec-graficos,
+  html.evo-clean-indicators-v367 #sec-graficos *{
     animation:none !important;
     transition:none !important;
   }
 
-  html.evo-mobile-viewport-lock-v366 #sec-graficos{
-    padding-bottom:112px !important;
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
-    contain:layout paint !important;
+  .econ-clean-summary-v367{
+    grid-template-columns:1fr 1fr;
+    gap:10px;
   }
 
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .section-collapsible-body{
-    overflow:visible !important;
+  .econ-clean-card-v367{
+    padding:12px;
+    border-radius:16px;
   }
 
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .evo-charts-grid{
-    min-height:470px !important;
-    padding-bottom:104px !important;
-    overflow:visible !important;
-    contain:layout paint !important;
+  .econ-clean-card-v367:nth-child(3){
+    grid-column:1/-1;
   }
 
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .evo-chart-card,
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .chart-card{
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
+  .econ-clean-card-v367 strong{
+    font-size:1.08rem;
   }
 
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .evo-chart-card.active{
-    display:block !important;
-    opacity:1 !important;
-    visibility:visible !important;
+  .econ-clean-card-v367 small{
+    font-size:.68rem;
   }
 
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .evo-chart-card:not(.active){
+  .econ-clean-mobile-reading-v367{
+    display:block;
+    border:1px solid rgba(200,151,58,.22);
+    border-radius:16px;
+    padding:12px;
+    margin:10px 0;
+    background:linear-gradient(135deg,rgba(200,151,58,.12),rgba(15,23,42,.56));
+  }
+
+  .econ-clean-mobile-reading-v367 span{
+    display:block;
+    font-size:.64rem;
+    letter-spacing:.09em;
+    text-transform:uppercase;
+    color:#aebacf;
+    font-weight:850;
+  }
+
+  .econ-clean-mobile-reading-v367 strong{
+    display:block;
+    margin-top:4px;
+    font-family:"JetBrains Mono",monospace;
+    font-size:1.08rem;
+    color:#fff;
+  }
+
+  .econ-clean-mobile-reading-v367 small{
+    display:block;
+    margin-top:4px;
+    color:#9fb0c7;
+    font-size:.70rem;
+  }
+
+  .econ-clean-tabs-v367{
+    display:grid;
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .econ-clean-tab-v367{
+    width:100%;
+    min-height:34px;
+    padding:0 6px;
+    font-size:.66rem;
+    touch-action:manipulation;
+  }
+
+  .econ-clean-panel-v367{
+    border-radius:18px;
+    padding:12px;
+    box-shadow:none;
+    contain:layout paint;
+  }
+
+  .econ-panel-head-v367 h3{
+    font-size:.98rem;
+  }
+
+  .econ-panel-head-v367 > strong{
+    font-size:.68rem;
+    padding:5px 8px;
+  }
+
+  .econ-panel-note-v367{
+    font-size:.72rem;
+  }
+
+  .econ-chip-row-v367{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .econ-chip-row-v367 > div{
+    padding:8px 6px;
+    border-radius:12px;
+  }
+
+  .econ-chip-row-v367 span{
+    font-size:.54rem;
+  }
+
+  .econ-chip-row-v367 strong{
+    font-size:.76rem;
+  }
+
+  .econ-chip-row-v367 small{
+    font-size:.56rem;
+  }
+
+  .econ-mini-chart-v367{
+    min-height:136px;
+    height:136px;
+    padding:12px;
+    contain:layout paint size;
+  }
+
+  .econ-bars-track-v367,
+  .econ-svg-v367{
+    height:92px;
+  }
+
+  .econ-axis-caption-v367{
+    font-size:.58rem;
+  }
+
+  .econ-meta-band-v367{
+    font-size:.62rem;
+    padding:8px;
+  }
+
+  html.evo-clean-indicators-v367 #sec-graficos canvas,
+  html.evo-clean-indicators-v367 #sec-graficos .chart-body,
+  html.evo-clean-indicators-v367 #sec-graficos .chart-tab,
+  html.evo-clean-indicators-v367 #sec-graficos .evo-view-tab{
     display:none !important;
-    opacity:0 !important;
-    visibility:hidden !important;
-    pointer-events:none !important;
-    height:0 !important;
-    min-height:0 !important;
-    max-height:0 !important;
-    overflow:hidden !important;
-    padding-top:0 !important;
-    padding-bottom:0 !important;
-    margin-top:0 !important;
-    margin-bottom:0 !important;
-    border:0 !important;
-  }
-
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .chart-body{
-    width:100% !important;
-    height:188px !important;
-    min-height:188px !important;
-    max-height:188px !important;
-    overflow:hidden !important;
-    contain:layout paint size !important;
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
-    background:rgba(7,10,20,.18) !important;
-  }
-
-  html.evo-mobile-viewport-lock-v366 #sec-graficos canvas{
-    width:100% !important;
-    height:188px !important;
-    max-height:188px !important;
-    display:block !important;
-    transform:translateZ(0) !important;
-    backface-visibility:hidden !important;
-  }
-
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .evo-view-tab,
-  html.evo-mobile-viewport-lock-v366 #sec-graficos .chart-tab{
-    touch-action:manipulation !important;
   }
 }
 

@@ -6009,53 +6009,263 @@ function bindEvolucaoTabs(){
   });
 }
 
+
 async function inicializarGraficos(d){
-  _dadosMercado=d;
+  _dadosMercado = d;
+  bindIndicadoresCleanV367();
+  await renderIndicadoresCleanV367(d);
+}
 
-  const hist=await carregarIPCAHistoricoAmpliado(d?.cards?.ipca?.historico||[]);
-  if(!_dadosMercado.cards) _dadosMercado.cards = {};
-  if(!_dadosMercado.cards.ipca) _dadosMercado.cards.ipca = {};
-  _dadosMercado.cards.ipca.historico = hist;
+function econPctV367(v){
+  if(typeof formatPctCard === 'function') return formatPctCard(v);
+  const n = Number(v);
+  if(!Number.isFinite(n)) return '—';
+  const sinal = n > 0 ? '+' : '';
+  return sinal + n.toFixed(2).replace('.', ',') + '%';
+}
 
-  // Força base histórica completa quando o mercado_atual.json trouxer apenas recorte curto.
-  let selic = await carregarSelicHistoricoAmpliado(d?.historico_selic || d?.cards?.selic_meta?.historico || []);
-  if(selic.length){
-    _dadosMercado.historico_selic = selic;
+function econSetTextV367(id, value){
+  const el = document.getElementById(id);
+  if(el) el.textContent = value;
+}
+
+function econLabelFromDateV367(item){
+  if(!item) return '—';
+  if(item.label) return String(item.label);
+  const raw = item.DataReferencia || item.data || item.DataInicioVigencia || item.DataReuniaoCopom || '';
+  const dt = raw ? new Date(raw) : null;
+  if(dt && !isNaN(dt.getTime())){
+    return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
+  }
+  return '—';
+}
+
+function econNumberV367(v){
+  const n = Number(String(v ?? '').replace(',', '.'));
+  return Number.isFinite(n) ? n : null;
+}
+
+function econRenderBarsV367(containerId, rows, getValue, getLabel){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+
+  const data = (rows || [])
+    .map(item => ({ item, value: getValue(item), label: getLabel(item) }))
+    .filter(d => Number.isFinite(d.value))
+    .slice(-24);
+
+  if(!data.length){
+    el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
+    return;
   }
 
-  // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
-  let meta=d?.meta_vs_inflacao_efetiva||[];
+  const maxAbs = Math.max(...data.map(d => Math.abs(d.value)), .01);
+
+  el.innerHTML = `
+    <div class="econ-bars-track-v367">
+      ${data.map(d => {
+        const h = Math.max(8, Math.min(100, Math.round((Math.abs(d.value) / maxAbs) * 100)));
+        const sign = d.value >= 0 ? 'pos' : 'neg';
+        const title = `${d.label}: ${econPctV367(d.value)}`;
+        return `<i class="${sign}" style="--h:${h}%" title="${title}" aria-label="${title}"></i>`;
+      }).join('')}
+    </div>
+    <div class="econ-axis-caption-v367"><span>${data[0].label}</span><span>${data[data.length-1].label}</span></div>
+  `;
+}
+
+function econRenderLineV367(containerId, rows, getValue, getLabel, opts = {}){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+
+  const data = (rows || [])
+    .map(item => ({ item, value: getValue(item), label: getLabel(item) }))
+    .filter(d => Number.isFinite(d.value))
+    .slice(-(opts.limit || 36));
+
+  if(!data.length){
+    el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
+    return;
+  }
+
+  const values = data.map(d => d.value);
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const pad = Math.max((max - min) * .12, .1);
+  const lo = min - pad;
+  const hi = max + pad;
+  const w = 320;
+  const h = 112;
+  const step = data.length > 1 ? w / (data.length - 1) : w;
+  const yFor = v => h - ((v - lo) / (hi - lo || 1)) * h;
+  const points = data.map((d, i) => `${Math.round(i * step)},${Math.round(yFor(d.value))}`).join(' ');
+  const last = data[data.length - 1];
+  const first = data[0];
+
+  el.innerHTML = `
+    <svg class="econ-svg-v367" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+      ${opts.band ? '<rect x="0" y="22" width="320" height="50" rx="10" class="band"></rect>' : ''}
+      <polyline points="${points}" fill="none" class="line"></polyline>
+      <circle cx="${Math.round((data.length-1) * step)}" cy="${Math.round(yFor(last.value))}" r="4" class="dot"></circle>
+    </svg>
+    <div class="econ-axis-caption-v367"><span>${first.label}</span><span>${last.label} · ${econPctV367(last.value)}</span></div>
+  `;
+}
+
+function econMetaStatusV367(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return 'Meta central: 3,00% · faixa: 1,50% a 4,50%';
+  const fmt = x => Number(x).toFixed(2).replace('.', ',') + ' p.p.';
+  if(n > 4.5) return `${fmt(n - 4.5)} acima do teto de 4,50%`;
+  if(n < 1.5) return `${fmt(1.5 - n)} abaixo do piso de 1,50%`;
+  return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
+}
+
+function econAtualizarMobileSummaryV367(view, d){
+  const ipca = d?.cards?.ipca || {};
+  const selic = d?.cards?.selic_meta || {};
+  const selicRef = typeof resolverDataUltimaAlteracaoSelic === 'function'
+    ? (resolverDataUltimaAlteracaoSelic(d).data || '')
+    : '';
+  const selicValor = selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.', ',')}% a.a.` : '—';
+
+  let kicker = 'IPCA mensal';
+  let value = econPctV367(ipca.ultimo_mes);
+  let desc = ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial';
+
+  if(view === 'selic'){
+    kicker = 'Selic meta';
+    value = selicValor;
+    desc = selicRef ? `Vigente desde ${selicRef}` : 'Meta definida pelo Copom';
+  }
+
+  if(view === 'meta'){
+    kicker = 'IPCA 12 meses';
+    value = econPctV367(ipca.acum_12m);
+    desc = econMetaStatusV367(ipca.acum_12m);
+  }
+
+  econSetTextV367('evoMobileKicker', kicker);
+  econSetTextV367('evoMobileValue', value);
+  econSetTextV367('evoMobileDescription', desc);
+}
+
+function selecionarIndicadorCleanV367(view){
+  const target = view || 'ipca';
+
+  document.querySelectorAll('#sec-graficos .econ-clean-tab-v367').forEach(btn => {
+    const active = btn.dataset.econView === target;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+
+  document.querySelectorAll('#sec-graficos .econ-clean-panel-v367').forEach(panel => {
+    panel.classList.toggle('active', panel.dataset.econPanel === target);
+  });
+
+  econAtualizarMobileSummaryV367(target, _dadosMercado || {});
+}
+
+function bindIndicadoresCleanV367(){
+  document.querySelectorAll('#sec-graficos .econ-clean-tab-v367').forEach(btn => {
+    if(btn.dataset.cleanBoundV367 === '1') return;
+    btn.dataset.cleanBoundV367 = '1';
+    btn.addEventListener('click', () => selecionarIndicadorCleanV367(btn.dataset.econView || 'ipca'));
+  });
+}
+
+async function renderIndicadoresCleanV367(d){
+  const ipca = d?.cards?.ipca || {};
+  const selic = d?.cards?.selic_meta || {};
+
+  atualizarResumoEvolucao(d);
+
+  let histIpca = [];
+  try{
+    histIpca = await carregarIPCAHistoricoAmpliado(ipca.historico || []);
+  }catch(e){
+    histIpca = normalizarHistoricoIPCA(ipca.historico || []);
+  }
+
+  let histSelic = [];
+  try{
+    histSelic = await carregarSelicHistoricoAmpliado(d?.historico_selic || selic.historico || []);
+  }catch(e){
+    histSelic = d?.historico_selic || selic.historico || [];
+  }
+
+  let meta = d?.meta_vs_inflacao_efetiva || [];
   if(!meta.length){
-    const jsMeta = await carregarJsonLocal('meta-vs-inflacao-efetiva.json');
-    meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
-    if(meta.length){
-      console.info(`[IPCA x Meta] ${meta.length} registros carregados do arquivo local.`);
+    try{
+      const jsMeta = await carregarJsonLocal('meta-vs-inflacao-efetiva.json');
+      meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
+    }catch(e){}
+  }
+  try{
+    meta = sincronizarSerieMetaComIpcaAtual(meta, ipca);
+  }catch(e){}
+
+  // IPCA mensal
+  const ipcaNorm = normalizarHistoricoIPCA(histIpca);
+  econRenderBarsV367('econSparkIpcaV367', ipcaNorm, d => Number(d.valor), d => fmtIPCALabelV250(d));
+
+  if(ipcaNorm.length){
+    atualizarResumoIPCAMensalV250(ipcaNorm.slice(-24));
+    const last = ipcaNorm[ipcaNorm.length - 1];
+    const prev = ipcaNorm[ipcaNorm.length - 2];
+    if(last && prev){
+      const dif = Number(last.valor) - Number(prev.valor);
+      econSetTextV367('econIpcaTrendLabelV367', dif >= 0 ? `+${dif.toFixed(2).replace('.', ',')} p.p.` : `${dif.toFixed(2).replace('.', ',')} p.p.`);
     }
   }
 
-  // A série histórica externa pode chegar com um mês de atraso. O card de IPCA
-  // já contém o acumulado oficial mais recente calculado pela série 433; por isso
-  // ele é usado para inserir/substituir a competência mais atual antes do gráfico.
-  meta = sincronizarSerieMetaComIpcaAtual(meta, d?.cards?.ipca);
-  if(meta.length){
-    _dadosMercado.meta_vs_inflacao_efetiva = meta;
+  // Selic
+  const selicNorm = (histSelic || [])
+    .map((item, idx) => {
+      const dataRaw = item.DataReuniaoCopom || item.data || item.DataInicioVigencia || item.Data || '';
+      let dt = dataRaw ? new Date(dataRaw) : null;
+      if((!dt || isNaN(dt.getTime())) && typeof dataRaw === 'string' && dataRaw.includes('/')){
+        const p = dataRaw.split('/');
+        if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+      }
+      const valor = econNumberV367(item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa);
+      return {...item, _dt:dt, _ts:dt && !isNaN(dt.getTime()) ? dt.getTime() : idx, _valor:valor};
+    })
+    .filter(x => Number.isFinite(x._valor))
+    .sort((a,b) => a._ts - b._ts);
+
+  econRenderLineV367('econSparkSelicV367', selicNorm, d => d._valor, d => {
+    if(d._dt && !isNaN(d._dt.getTime())) return String(d._dt.getFullYear());
+    return econLabelFromDateV367(d);
+  }, {limit:36});
+
+  if(selicNorm.length){
+    atualizarResumoSelicV248(selicNorm.slice(-60));
+    const last = selicNorm[selicNorm.length - 1];
+    const first = selicNorm[Math.max(0, selicNorm.length - 13)];
+    const dif = Number(last._valor) - Number(first._valor);
+    econSetTextV367('econSelicTrendLabelV367', dif >= 0 ? `+${dif.toFixed(2).replace('.', ',')} p.p.` : `${dif.toFixed(2).replace('.', ',')} p.p.`);
   }
 
-  if(hist.length) buildChartIpca(hist,24);
-  else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
+  // IPCA 12M x meta
+  const metaNorm = (meta || [])
+    .filter(x => x?.DataReferencia && Number.isFinite(Number(x.Inflacao12Meses)))
+    .sort((a,b) => new Date(a.DataReferencia) - new Date(b.DataReferencia));
 
-  if(selic.length) buildChartSelic(selic,60);
-  else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
+  econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
+    const dt = new Date(d.DataReferencia);
+    return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
+  }, {limit:36, band:true});
 
-  if(meta.length) buildChartMeta(meta);
-  else marcarGraficoSemDados('chartMeta', 'Histórico de inflação e meta temporariamente indisponível.');
+  if(metaNorm.length){
+    const last = metaNorm[metaNorm.length - 1];
+    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)).replace('Dentro da faixa de tolerância de ', 'Na faixa '));
+  }
 
-  bindEvolucaoTabs();
-  selecionarGraficoEvolucao('ipca');
-
-  bindEvolucaoChartPeriodTabs();
-  sincronizarTitulosGraficosAtivos();
+  selecionarIndicadorCleanV367('ipca');
 }
+
+
 
 /* v184 — títulos dos gráficos sincronizados com o período selecionado */
 function atualizarTituloPeriodoGrafico(chart, range){
@@ -14290,12 +14500,11 @@ if(!isSearchInput(el)) return;
   }
 
   function iniciar(){
-    // v366: no mobile real, o refresh recorrente cdi-daily acordava a página
-    // e podia disparar redraw dos gráficos durante a rolagem. O carregamento
-    // inicial permanece normal em carregarMercado().
+    // v367: no mobile real, o refresh recorrente pode acordar rotinas visuais.
+    // O carregamento inicial do mercado_atual.json permanece normal.
     const mobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
     if(mobile){
-      window.__ELTAUM_CDI_DAILY_REFRESH_MOBILE_DISABLED_V366__ = true;
+      window.__ELTAUM_CDI_DAILY_REFRESH_MOBILE_DISABLED_V367__ = true;
       return;
     }
     setTimeout(()=>atualizarAgora(true),60*1000);
@@ -16677,16 +16886,7 @@ function openCdiAnalyticTableV274(){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
 
-  // v366: no mobile, ignorar resize causado só pela altura da barra do navegador.
-  // Só reaplica quando a largura muda de verdade.
-  let __evoV366LastWidth = window.innerWidth;
-  window.addEventListener('resize', () => {
-    const mobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
-    const currentWidth = window.innerWidth;
-    if(mobile && Math.abs(currentWidth - __evoV366LastWidth) < 2) return;
-    __evoV366LastWidth = currentWidth;
-    requestAnimationFrame(apply);
-  }, { passive:true });
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 900);
 })();
@@ -18898,9 +19098,6 @@ function openCdiAnalyticTableV274(){
       const chart = Chart.getChart(canvas);
       if(!chart) return;
       formatSparseTicks(chart);
-      const mobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
-      const isEvoChart = !!canvas.closest && !!canvas.closest('#sec-graficos');
-      if(mobile && isEvoChart && !window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__) return;
       try{ chart.update('none'); }catch(_){}
     });
   }
@@ -18967,7 +19164,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_MOBILE_VIEWPORT_LOCK_20260620_v366';
+  const BUILD = 'ELTAUM_EVO_CLEAN_INDICATORS_20260620_v367';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -19013,239 +19210,5 @@ function openCdiAnalyticTableV274(){
   }else{
     boot();
   }
-})();
-
-/* ════════════════════════════════════════════════════
-   ELTAUM_EVO_MOBILE_VIEWPORT_LOCK_20260620_v366
-   Diagnóstico v365:
-   visualViewport.resize/window.resize no celular real disparavam Chart.update.
-   Esta versão bloqueia redraw de #sec-graficos durante resize/scroll e
-   libera apenas após clique real nas abas.
-════════════════════════════════════════════════════ */
-(function evoMobileViewportLockV366(){
-  const BUILD = 'ELTAUM_EVO_MOBILE_VIEWPORT_LOCK_20260620_v366';
-
-  const state = window.__ELTAUM_EVO_VIEWPORT_LOCK_V366_STATE__ || {
-    scroll:0,
-    visualResize:0,
-    winResize:0,
-    blocked:0,
-    allowed:0,
-    allowUntil:0,
-    lastViewportAt:0,
-    lastScrollAt:0,
-    downX:0,
-    downY:0,
-    movedAt:0,
-    calls:{}
-  };
-
-  window.__ELTAUM_EVO_VIEWPORT_LOCK_V366_STATE__ = state;
-
-  function isMobile(){
-    return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
-  }
-
-  function isEvoChart(chart){
-    return !!chart?.canvas?.closest?.('#sec-graficos');
-  }
-
-  function isEvoControl(target){
-    return !!target?.closest?.('#sec-graficos .evo-view-tab, #sec-graficos .chart-tab, #evolutionToggle');
-  }
-
-  function markCall(method, allowed){
-    const key = method + (allowed ? ':allowed' : ':blocked');
-    state.calls[key] = (state.calls[key] || 0) + 1;
-    if(allowed) state.allowed++;
-    else state.blocked++;
-  }
-
-  function allowRedraw(ms){
-    window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__ = true;
-    state.allowUntil = Math.max(state.allowUntil, performance.now() + (ms || 900));
-    clearTimeout(window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_TIMER_V366__);
-    window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_TIMER_V366__ = setTimeout(() => {
-      if(performance.now() >= state.allowUntil){
-        window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__ = false;
-      }
-    }, ms || 900);
-  }
-
-  function inViewportLock(){
-    if(!isMobile()) return false;
-    const now = performance.now();
-    return (now - state.lastViewportAt < 1800) || (now - state.lastScrollAt < 420);
-  }
-
-  function isAllowed(){
-    if(!isMobile()) return true;
-    return performance.now() < state.allowUntil;
-  }
-
-  function patchChart(){
-    if(!window.Chart?.prototype){
-      setTimeout(patchChart, 300);
-      return;
-    }
-
-    if(Chart.prototype.__ELTAUM_EVO_VIEWPORT_LOCK_PATCHED_V366__) return;
-    Chart.prototype.__ELTAUM_EVO_VIEWPORT_LOCK_PATCHED_V366__ = true;
-
-    ['resize','update','render','draw'].forEach(method => {
-      if(typeof Chart.prototype[method] !== 'function') return;
-
-      const original = Chart.prototype[method];
-
-      Chart.prototype[method] = function(...args){
-        if(isEvoChart(this) && isMobile()){
-          const allowed = isAllowed();
-          const locked = inViewportLock();
-
-          // Regra principal: durante scroll/resize visual do celular, bloqueia.
-          // Fora disso, também bloqueia chamadas automáticas; só clique real libera.
-          if(!allowed || locked){
-            markCall(method, false);
-            return this;
-          }
-
-          markCall(method, true);
-        }
-
-        return original.apply(this, args);
-      };
-    });
-
-    try{
-      if(Chart.defaults){
-        Chart.defaults.animation = false;
-        Chart.defaults.animations = {};
-        Chart.defaults.transitions = {
-          active:{animation:{duration:0}},
-          resize:{animation:{duration:0}},
-          show:{animations:{}},
-          hide:{animations:{}}
-        };
-      }
-    }catch(e){}
-  }
-
-  function resizeActiveAfterClick(){
-    if(!isMobile()) return;
-
-    const canvas = document.querySelector('#sec-graficos .evo-chart-card.active canvas');
-    if(!canvas) return;
-
-    canvas.style.setProperty('width', '100%', 'important');
-    canvas.style.setProperty('height', '188px', 'important');
-    canvas.style.setProperty('max-height', '188px', 'important');
-
-    allowRedraw(1200);
-
-    try{
-      const chart = window.Chart?.getChart?.(canvas);
-      if(chart){
-        chart.resize();
-        chart.update('none');
-      }
-    }catch(e){}
-  }
-
-  function bind(){
-    if(window.__ELTAUM_EVO_VIEWPORT_LOCK_BOUND_V366__) return;
-    window.__ELTAUM_EVO_VIEWPORT_LOCK_BOUND_V366__ = true;
-
-    window.addEventListener('scroll', () => {
-      if(!isMobile()) return;
-      state.scroll++;
-      state.lastScrollAt = performance.now();
-    }, {passive:true});
-
-    window.addEventListener('resize', () => {
-      if(!isMobile()) return;
-      state.winResize++;
-      state.lastViewportAt = performance.now();
-    }, {passive:true});
-
-    window.visualViewport?.addEventListener('resize', () => {
-      if(!isMobile()) return;
-      state.visualResize++;
-      state.lastViewportAt = performance.now();
-    }, {passive:true});
-
-    document.addEventListener('pointerdown', ev => {
-      if(!isMobile() || !ev.target?.closest?.('#sec-graficos')) return;
-      state.downX = ev.clientX || 0;
-      state.downY = ev.clientY || 0;
-    }, true);
-
-    document.addEventListener('pointermove', ev => {
-      if(!isMobile() || !ev.target?.closest?.('#sec-graficos')) return;
-      const dx = Math.abs((ev.clientX || 0) - state.downX);
-      const dy = Math.abs((ev.clientY || 0) - state.downY);
-      if(dx > 8 || dy > 8) state.movedAt = performance.now();
-    }, true);
-
-    // Click real nas abas é o único cenário que libera redraw no mobile.
-    document.addEventListener('click', ev => {
-      if(!isMobile() || !isEvoControl(ev.target)) return;
-
-      if(performance.now() - state.movedAt < 520){
-        ev.preventDefault();
-        ev.stopPropagation();
-        ev.stopImmediatePropagation?.();
-        return;
-      }
-
-      allowRedraw(1500);
-      setTimeout(resizeActiveAfterClick, 120);
-      setTimeout(resizeActiveAfterClick, 360);
-    }, true);
-  }
-
-  function applyLabels(){
-    try{
-      const hist = document.querySelector('#evoChartSelicCard .chart-tab[data-range="999"]');
-      if(isMobile() && hist && hist.textContent.trim() !== 'Tudo') hist.textContent = 'Tudo';
-    }catch(e){}
-  }
-
-  function init(){
-    patchChart();
-    bind();
-    applyLabels();
-
-    // Janela curta inicial para eventuais ajustes pós-load.
-    allowRedraw(1200);
-    setTimeout(() => {
-      if(performance.now() >= state.allowUntil){
-        window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__ = false;
-      }
-    }, 1400);
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', init, {once:true});
-  }else{
-    init();
-  }
-
-  window.__ELTAUM_EVO_VIEWPORT_LOCK_V366__ = {
-    build: BUILD,
-    state,
-    allowRedraw,
-    report(){
-      console.table({
-        scroll:state.scroll,
-        visualResize:state.visualResize,
-        winResize:state.winResize,
-        blocked:state.blocked,
-        allowed:state.allowed,
-        allowMsLeft:Math.max(0, Math.round(state.allowUntil - performance.now())),
-        calls:JSON.stringify(state.calls)
-      });
-      return state;
-    }
-  };
 })();
 
