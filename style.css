@@ -51198,3 +51198,44 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v345 — CENTRALIZAÇÃO REAL DA PÁGINA NO DESKTOP
+   Diagnóstico:
+   - Em telas largas, a .page estava com largura de 1760px, mas sobrava
+     espaço apenas no lado esquerdo em alguns carregamentos.
+   - Resultado visual: header, menu, KPIs e catálogo pareciam nascer com
+     recuo lateral esquerdo.
+   Correção:
+   - Força a .page a respeitar largura máxima, margem automática dos dois
+     lados e respiro interno simétrico.
+   - Aplicado somente em desktop para não alterar a experiência mobile.
+════════════════════════════════════════════════════ */
+
+@media (min-width:1100px){
+  html.page-center-v345 body .page,
+  html.page-center-v345 body #topo.page,
+  body .page.mobile-anchor-target#topo{
+    width:min(1760px, calc(100vw - 32px)) !important;
+    max-width:1760px !important;
+    margin-left:auto !important;
+    margin-right:auto !important;
+    padding-left:16px !important;
+    padding-right:16px !important;
+  }
+
+  html.page-center-v345 body .page > header,
+  html.page-center-v345 body .page > nav,
+  html.page-center-v345 body .page > .section-gap,
+  html.page-center-v345 body .page > footer{
+    max-width:100% !important;
+  }
+}
+
+@media (min-width:1760px){
+  html.page-center-v345 body .page,
+  html.page-center-v345 body #topo.page,
+  body .page.mobile-anchor-target#topo{
+    box-sizing:border-box !important;
+  }
+}
+
