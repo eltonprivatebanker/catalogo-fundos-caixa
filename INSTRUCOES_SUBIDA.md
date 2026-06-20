@@ -1,25 +1,28 @@
-# Catálogo de Fundos CAIXA — v331
+# Catálogo de Fundos CAIXA — v332
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Diagnóstico do console
+## Correção aplicada
 
-- Cards Selic/CDI do topo: 156px.
-- Cards do Copom: 130px.
-- Cards do CDI mensal: 130px.
+A v329 carregava, mas alguns textos do Painel Consolidado eram recriados pelo JavaScript depois do carregamento. Por isso, visualmente a limpeza não aparecia.
 
-## Ajuste aplicado
+A v332 força a limpeza depois da renderização e observa mudanças no bloco de mercado.
 
-Copom e CDI mensal agora usam cards de 156px no mobile, para seguir a mesma largura visual dos cards Selic/CDI.
+## Ajustes forçados
 
-## Também ajustado
+1. CDI
+- “Acumulado no mês · Dados disponíveis até 18/06”
+- vira “Parcial até 18/06”
 
-Texto do resultado do Copom foi encurtado em alguns casos:
-- “corte -0,25 p.p. → 14,75%” vira “Corte → 14,75%”
-- “mantida em 15,00%” vira “Mantida 15,00%”
+2. Tag nominal
+- Dólar: “Atual” vira “Cotação”
+- Ibovespa, S&P 500, Dow Jones e Nasdaq: “Atual” vira “Pontos”
+
+3. Grid de variação
+- “Atual” vira “Mês atual”
 
 ## Como subir
 

@@ -50139,3 +50139,28 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     max-width: 148px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v332 — MICROCOPY FORÇADO NO PAINEL CONSOLIDADO
+   A limpeza anterior carregou, mas alguns textos são recriados pelo JS.
+   Este bloco reduz a quebra visual e melhora a leitura.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.market-microcopy-force-v332 #sec-mercado .market-period-cards-v196 .market-period-metric-v196 small,
+  html.market-microcopy-force-v332 #sec-mercado .market-period-metric-v196 small{
+    max-width: 92px !important;
+    line-height: 1.12 !important;
+    font-size: .56rem !important;
+  }
+
+  html.market-microcopy-force-v332 #sec-mercado .market-current-level-v196{
+    white-space: nowrap !important;
+  }
+
+  html.market-microcopy-force-v332 #sec-mercado .market-period-metric-v196 span,
+  html.market-microcopy-force-v332 #sec-mercado .market-period-metric-v196 dt{
+    white-space: nowrap !important;
+  }
+}
