@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_RATES_FINAL_20260620_v352';
+  const BUILD = 'ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18996,7 +18996,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_MOBILE_RATES_FINAL_20260620_v352
+   ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353
    Mobile:
    - "Juros e CDI" como título.
    - CDI em 2026 em resumo executivo, sem gráfico.
@@ -19004,7 +19004,7 @@ function openCdiAnalyticTableV274(){
    - Copom começa na última decisão e próxima reunião.
 ════════════════════════════════════════════════════ */
 (function mobileRatesFinalV352(){
-  const BUILD = 'ELTAUM_MOBILE_RATES_FINAL_20260620_v352';
+  const BUILD = 'ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353';
 
   const MONTH_ORDER = {
     JAN:1, FEV:2, MAR:3, ABR:4, MAI:5, JUN:6,
@@ -19269,5 +19269,89 @@ function openCdiAnalyticTableV274(){
 
   [500, 1200, 2400].forEach(ms => setTimeout(observeTargets, ms));
   window.__ELTAUM_MOBILE_RATES_FINAL_V352__ = { build: BUILD, apply };
+})();
+
+/* ════════════════════════════════════════════════════
+   ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353
+   Força inline no mobile para remover bordas do Copom geradas por patches antigos.
+════════════════════════════════════════════════════ */
+(function copomTrueBorderlessV353(){
+  function isMobile(){
+    return window.matchMedia('(max-width: 820px)').matches;
+  }
+
+  function setImportant(el, prop, value){
+    if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function apply(){
+    if(!isMobile()) return;
+
+    document
+      .querySelectorAll('#sec-mercado .copom-compact-v167, #sec-mercado .copom-premium-block-v270, #sec-mercado .copom-refined-v271')
+      .forEach(el => {
+        setImportant(el, 'border', '0');
+        setImportant(el, 'outline', '0');
+        setImportant(el, 'box-shadow', 'none');
+        setImportant(el, 'background', 'transparent');
+        setImportant(el, 'background-image', 'none');
+        setImportant(el, 'border-radius', '0');
+        setImportant(el, 'padding', '8px 0 2px');
+        setImportant(el, 'margin', '10px 0 8px');
+        setImportant(el, 'overflow', 'visible');
+      });
+
+    document
+      .querySelectorAll('#sec-mercado .copom-compact-v167 .reference-subhead-v167')
+      .forEach(el => {
+        setImportant(el, 'border', '0');
+        setImportant(el, 'border-bottom', '0');
+        setImportant(el, 'outline', '0');
+        setImportant(el, 'box-shadow', 'none');
+        setImportant(el, 'background', 'transparent');
+        setImportant(el, 'padding', '0');
+        setImportant(el, 'margin', '0 0 8px');
+      });
+
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(summary){
+      setImportant(summary, 'border', '0');
+      setImportant(summary, 'outline', '0');
+      setImportant(summary, 'box-shadow', 'none');
+      setImportant(summary, 'background', 'transparent');
+      setImportant(summary, 'background-image', 'none');
+      setImportant(summary, 'padding', '0');
+      setImportant(summary, 'margin', '0');
+      setImportant(summary, 'gap', '8px');
+
+      const width = Math.max(116, Math.floor((summary.clientWidth - 8) / 2));
+
+      summary.querySelectorAll('article').forEach(card => {
+        setImportant(card, 'border', '0');
+        setImportant(card, 'outline', '0');
+        setImportant(card, 'box-shadow', 'none');
+        setImportant(card, 'background', 'rgba(17,21,38,.52)');
+        setImportant(card, 'background-image', 'none');
+        setImportant(card, 'border-radius', '10px');
+        setImportant(card, 'min-height', '62px');
+        setImportant(card, 'padding', '8px 9px 8px 11px');
+        setImportant(card, 'flex', `0 0 ${width}px`);
+        setImportant(card, 'width', `${width}px`);
+        setImportant(card, 'min-width', `${width}px`);
+        setImportant(card, 'max-width', `${width}px`);
+      });
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+
+  [100, 350, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
+  window.addEventListener('resize', apply, {passive:true});
+
+  window.__ELTAUM_COPOM_TRUE_BORDERLESS_V353__ = { apply };
 })();
 

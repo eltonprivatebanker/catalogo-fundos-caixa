@@ -51767,3 +51767,124 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v353 — COPOM TRUE BORDERLESS MOBILE
+   Remove de vez a borda/contorno do bloco "Copom executivo" no mobile.
+   Mantém apenas fundo sutil nos itens e filete lateral por status.
+════════════════════════════════════════════════════ */
+
+@media (max-width:820px){
+  html.copom-true-borderless-v353 #sec-mercado .copom-compact-v167,
+  html.copom-true-borderless-v353 #sec-mercado section.copom-compact-v167,
+  html.copom-true-borderless-v353 #sec-mercado .copom-premium-block-v270,
+  html.copom-true-borderless-v353 #sec-mercado .copom-refined-v271{
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
+    background-image:none !important;
+    border-radius:0 !important;
+    padding:8px 0 2px !important;
+    margin:10px 0 8px !important;
+    overflow:visible !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado .copom-compact-v167::before,
+  html.copom-true-borderless-v353 #sec-mercado .copom-compact-v167::after,
+  html.copom-true-borderless-v353 #sec-mercado .copom-premium-block-v270::before,
+  html.copom-true-borderless-v353 #sec-mercado .copom-premium-block-v270::after,
+  html.copom-true-borderless-v353 #sec-mercado .copom-refined-v271::before,
+  html.copom-true-borderless-v353 #sec-mercado .copom-refined-v271::after{
+    display:none !important;
+    content:none !important;
+    border:0 !important;
+    box-shadow:none !important;
+    background:none !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado .copom-compact-v167 .reference-subhead-v167{
+    border:0 !important;
+    border-bottom:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
+    padding:0 !important;
+    margin:0 0 8px !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado .copom-compact-v167 .reference-subhead-v167::before,
+  html.copom-true-borderless-v353 #sec-mercado .copom-compact-v167 .reference-subhead-v167::after{
+    display:none !important;
+    content:none !important;
+    border:0 !important;
+    box-shadow:none !important;
+    background:none !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270{
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
+    background-image:none !important;
+    padding:0 !important;
+    margin:0 !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270 > article,
+  html.copom-true-borderless-v353 #sec-mercado .copom-exec-card-v270,
+  html.copom-true-borderless-v353 #sec-mercado .copom-carousel-card-v321{
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    background:rgba(17,21,38,.52) !important;
+    background-image:none !important;
+    border-radius:10px !important;
+    min-height:62px !important;
+    padding:8px 9px 8px 11px !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270 > article::after,
+  html.copom-true-borderless-v353 #sec-mercado .copom-exec-card-v270::after,
+  html.copom-true-borderless-v353 #sec-mercado .copom-carousel-card-v321::after{
+    display:none !important;
+    content:none !important;
+    border:0 !important;
+    box-shadow:none !important;
+    background:none !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270 > article::before{
+    content:"" !important;
+    position:absolute !important;
+    left:0 !important;
+    top:8px !important;
+    bottom:8px !important;
+    width:3px !important;
+    border-radius:999px !important;
+    box-shadow:none !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270 > article.is-cut::before{
+    background:rgba(240,85,101,.92) !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270 > article.is-next::before{
+    background:rgba(232,187,106,.92) !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270 > article.is-hold::before{
+    background:rgba(91,156,246,.82) !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado #copomExecutiveSummaryV270 > article.is-future::before{
+    background:rgba(148,163,184,.45) !important;
+  }
+
+  html.copom-true-borderless-v353 #sec-mercado .copom-footnote-v256{
+    display:none !important;
+  }
+}
+
