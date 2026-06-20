@@ -1,3 +1,4 @@
+// ELTAUM_SELIC_REMOVE_2A_STABLE_v344
 // ELTAUM_SELIC_TABS_COMPACT_v343
 // ELTAUM_REMOVE_12M_XAXIS_v342
 // ELTAUM_INFLATION_SUMMARY_COMPACT_v341
@@ -19012,4 +19013,104 @@ function openCdiAnalyticTableV274(){
   }, { passive:true });
 
   [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v344 — Selic: remove 2A de forma definitiva + estabiliza piscada
+   - remove qualquer botão Selic 2A criado antes/depois;
+   - renomeia Histórico para Completo;
+   - reduz updates repetidos de Chart.js durante scroll;
+   - aplica correções só em eventos pontuais, sem MutationObserver.
+════════════════════════════════════════════════════ */
+(function selicRemove2AStableV344(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function remove2A(){
+    const root = document.querySelector('#sec-graficos') || document;
+
+    root.querySelectorAll('button, .chart-tab').forEach(btn => {
+      const text = (btn.textContent || '').trim().toLowerCase();
+      const chart = String(btn.dataset?.chart || '').toLowerCase();
+      const range = String(btn.dataset?.range || '').toLowerCase();
+
+      if(chart === 'selic' && (range === '24' || text === '2a')){
+        btn.remove();
+        return;
+      }
+
+      if(chart === 'selic' && range === '999' && /hist/i.test(btn.textContent || '')){
+        btn.textContent = 'Completo';
+        btn.setAttribute('aria-label', 'Ver série completa da Selic');
+      }
+    });
+  }
+
+  function fixSelicTabs(){
+    const root = document.querySelector('#sec-graficos') || document;
+    const title = document.getElementById('chartSelicTitle');
+    const card = title?.closest('.chart-card, .evo-chart-card, .chart-card-v250, section, div');
+    const tabs = card?.querySelector('.chart-tabs') || root.querySelector('#evoChartSelicCard .chart-tabs');
+    if(!tabs) return;
+
+    setImportant(tabs, 'display', 'grid');
+    setImportant(tabs, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
+    setImportant(tabs, 'gap', '7px');
+    setImportant(tabs, 'overflow', 'visible');
+    setImportant(tabs, 'padding', '1px 0 8px');
+    setImportant(tabs, 'width', '100%');
+
+    tabs.querySelectorAll('button, .chart-tab').forEach(btn => {
+      setImportant(btn, 'min-width', '0');
+      setImportant(btn, 'width', '100%');
+      setImportant(btn, 'max-width', 'none');
+      setImportant(btn, 'padding', '0 8px');
+      setImportant(btn, 'font-size', '.64rem');
+      setImportant(btn, 'white-space', 'nowrap');
+      setImportant(btn, 'overflow', 'hidden');
+      setImportant(btn, 'text-overflow', 'ellipsis');
+    });
+  }
+
+  function forceXAxisNoRotation(){
+    if(!window.Chart) return;
+
+    ['chartSelic', 'chartIpca', 'chartIpca12m', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if(!canvas || !canvas.isConnected) return;
+      const chart = Chart.getChart(canvas);
+      if(!chart?.options?.scales?.x?.ticks) return;
+
+      const ticks = chart.options.scales.x.ticks;
+      ticks.maxRotation = 0;
+      ticks.minRotation = 0;
+      ticks.autoSkip = true;
+      ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+
+      try{ chart.update('none'); }catch(_){}
+    });
+  }
+
+  function apply(){
+    remove2A();
+    fixSelicTabs();
+    forceXAxisNoRotation();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-view-tab')){
+      setTimeout(apply, 80);
+      setTimeout(apply, 350);
+    }
+  }, { passive:true });
+
+  // Aplicações pontuais; sem MutationObserver para não gerar pisca/pula.
+  [250, 900, 1800].forEach(ms => setTimeout(apply, ms));
 })();

@@ -1,28 +1,22 @@
-# Catálogo de Fundos CAIXA — v343
+# Catálogo de Fundos CAIXA — v344
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes aplicados na aba Selic
+## Correções aplicadas
 
-### 1. Removido botão 2A
-O botão “2A” foi removido da Selic para reduzir ruído e evitar que o botão final fique cortado.
+### 1. Botão 2A removido definitivamente
+O botão Selic 2A estava voltando por renderização dinâmica.
+Agora ele é removido pelo JS e também ocultado por CSS forte.
 
-### 2. “Histórico” virou “Completo”
-A palavra “Completo” é mais curta e funciona melhor no mobile.
+### 2. Botão Histórico
+Continua como “Completo”, mais curto e adequado ao mobile.
 
-### 3. Botões em grid estável
-A Selic agora usa 4 botões em uma linha:
-- 1A
-- 5A
-- 10A
-- Completo
-
-## Motivo
-
-O botão “Histórico” estava sendo cortado no mobile. Com menos opções e texto menor, a linha fica mais limpa e previsível.
+### 3. Estabilidade
+Mantido o eixo X horizontal e removida a lógica com observer contínuo.
+As correções são aplicadas apenas em eventos pontuais para evitar pisca/pulo.
 
 ## Como subir
 

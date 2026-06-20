@@ -51157,3 +51157,57 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     padding: 0 6px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v344 — REMOVE 2A DEFINITIVO + SELIC ESTÁVEL
+   O botão 2A estava voltando por renderização dinâmica.
+   Este bloco remove/oculta por seletor forte e mantém o grid de 4 botões.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.selic-remove-2a-stable-v344 #sec-graficos button[data-chart="selic"][data-range="24"],
+  html.selic-remove-2a-stable-v344 #sec-graficos .chart-tab[data-chart="selic"][data-range="24"]{
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.selic-remove-2a-stable-v344 #sec-graficos #evoChartSelicCard .chart-tabs,
+  html.selic-remove-2a-stable-v344 #sec-graficos #chartSelicTitle ~ .chart-tabs{
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 7px !important;
+    overflow: visible !important;
+    padding: 1px 0 8px !important;
+    width: 100% !important;
+  }
+
+  html.selic-remove-2a-stable-v344 #sec-graficos #evoChartSelicCard .chart-tabs button,
+  html.selic-remove-2a-stable-v344 #sec-graficos #evoChartSelicCard .chart-tab{
+    min-width: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    min-height: 34px !important;
+    padding: 0 8px !important;
+    font-size: .64rem !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* diminui repintura visual em scroll */
+  html.selic-remove-2a-stable-v344 #sec-graficos canvas{
+    backface-visibility: hidden !important;
+    transform: translateZ(0) !important;
+  }
+}
