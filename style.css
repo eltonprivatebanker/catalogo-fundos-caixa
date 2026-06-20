@@ -49363,3 +49363,19 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: .92rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v323 — CDI 12M VISÍVEL
+   Pequeno reforço visual para o card de 12 meses quando preenchido.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.cdi-12m-fix-v323 #sec-mercado #cdiLast12mValueV296:not(:empty){
+    color: #f8fafc !important;
+  }
+
+  html.cdi-12m-fix-v323 #sec-mercado #cdiMonthCarouselV322 .cdi-month-card-v322 .cdi-month-value-v322{
+    min-height: 1em !important;
+  }
+}

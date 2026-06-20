@@ -1,3 +1,4 @@
+// ELTAUM_CDI_12M_FIX_v323
 // ELTAUM_CDI_MONTH_CAROUSEL_v322
 // ELTAUM_COPOM_CAROUSEL_v321
 // ELTAUM_REMOVE_NEXT_SUMMARY_v320
@@ -1947,6 +1948,24 @@ function renderCdiYearHistory(d){
   const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? acumulado[acumulado.length - 1]);
   const cdi12mV296 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(cdi, 12) : Number(cdi.acum_12m ?? cdi.m12);
 
+  const cdi12mFixV323 = (() => {
+    const direto = Number(cdi.acum_12m ?? cdi.m12 ?? cdi.acumulado_12m ?? cdi.acum12m);
+    if(Number.isFinite(direto)) return direto;
+
+    if(typeof resolverCdiPeriodoV229 === 'function'){
+      const resolvido = Number(resolverCdiPeriodoV229(cdi, 12));
+      if(Number.isFinite(resolvido)) return resolvido;
+    }
+
+    const ultimos12 = ordenado.slice(-12).map(item => Number(item?.valor)).filter(Number.isFinite);
+    if(ultimos12.length){
+      const fator = ultimos12.reduce((acc, v) => acc * (1 + v / 100), 1);
+      return Number(((fator - 1) * 100).toFixed(2));
+    }
+
+    return NaN;
+  })();
+
   if(title) title.textContent = isMobile ? `CDI — resumo ${ano}` : `CDI mensal + acumulado ${ano}`;
   if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
   if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? '12 meses' : 'Últimos 12 meses';
@@ -1956,6 +1975,7 @@ function renderCdiYearHistory(d){
   if(lastLabelEl) lastLabelEl.textContent = ultimoFechado ? `${mesCurto(ultimoFechado).toUpperCase()} · fechado` : 'Último fechado';
   if(lastValueEl) lastValueEl.textContent = ultimoFechado ? fmtPctLocal(ultimoFechado.valor) : '—';
   if(accumEl) accumEl.textContent = Number.isFinite(acumAno) ? fmtPctLocal(acumAno) : '—';
+  if(last12mElV296) last12mElV296.textContent = Number.isFinite(cdi12mFixV323) ? fmtPctLocal(cdi12mFixV323) : '—';
 
   if(cdiMonthCarouselV322){
     cdiMonthCarouselV322.innerHTML = mesesAno.map((item, idx) => {
@@ -17491,6 +17511,71 @@ function openCdiAnalyticTableV274(){
   else apply();
 
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
+  setTimeout(apply, 2000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v323 — correção CDI 12 meses
+   Preenche o KPI/card "12 meses" com:
+   1) cards.cdi.acum_12m;
+   2) fallback calculado pelos últimos 12 meses do histórico.
+════════════════════════════════════════════════════ */
+(function fixCdi12mV323(){
+  function fmt(v){
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.', ',') + '%';
+  }
+
+  function calcFromHistory(hist){
+    const vals = (Array.isArray(hist) ? hist : [])
+      .slice()
+      .sort((a,b) => String(a?.key || '').localeCompare(String(b?.key || '')))
+      .slice(-12)
+      .map(x => Number(x?.valor))
+      .filter(Number.isFinite);
+
+    if(!vals.length) return NaN;
+    const fator = vals.reduce((acc, v) => acc * (1 + v / 100), 1);
+    return Number(((fator - 1) * 100).toFixed(2));
+  }
+
+  function getCdi(){
+    return window._mercadoV230?.cards?.cdi
+      || window.__dadosMercado?.cards?.cdi
+      || window.dadosMercado?.cards?.cdi
+      || null;
+  }
+
+  function apply(){
+    const cdi = getCdi();
+    if(!cdi) return;
+
+    const direto = Number(cdi.acum_12m ?? cdi.m12 ?? cdi.acumulado_12m ?? cdi.acum12m);
+    const valor = Number.isFinite(direto) ? direto : calcFromHistory(cdi.historico);
+    if(!Number.isFinite(valor)) return;
+
+    const txt = fmt(valor);
+    const kpi = document.getElementById('cdiLast12mValueV296');
+    if(kpi) kpi.textContent = txt;
+
+    document
+      .querySelectorAll('#cdiMonthCarouselV322 .cdi-month-card-v322')
+      .forEach(card => {
+        const label = (card.querySelector('.cdi-month-kicker-v322')?.textContent || '').toLowerCase();
+        if(label.includes('12 meses')){
+          const strong = card.querySelector('.cdi-month-value-v322, strong');
+          if(strong) strong.textContent = txt;
+        }
+      });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
   setTimeout(apply, 300);
   setTimeout(apply, 1000);
   setTimeout(apply, 2000);

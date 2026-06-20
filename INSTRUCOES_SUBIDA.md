@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v322
+# Catálogo de Fundos CAIXA — v323
 
 Arquivos atualizados:
 - index.html
@@ -7,23 +7,20 @@ Arquivos atualizados:
 
 ## Ajuste aplicado
 
-CDI mês a mês em carrossel horizontal no mobile.
+Corrigido o KPI/card “CDI 12 meses”, que estava aparecendo sem valor.
 
-## Como funciona
+## Motivo provável
 
-A página usa o histórico mensal já existente em `cards.cdi.historico` e monta uma trilha com os meses do ano.
+O valor `acum_12m` existia nos dados, mas não estava sendo aplicado no elemento:
 
-## Vantagens
+- `#cdiLast12mValueV296`
 
-- Mostra todos os meses sem gráfico pesado.
-- Mantém KPIs principais.
-- Ocupa pouca altura.
-- Segue a mesma lógica visual do carrossel do Copom.
+## Correção
 
-## Escopo
+A v323 preenche o 12M usando:
 
-- Mobile: carrossel mensal do CDI.
-- Desktop: preservado.
+1. `cards.cdi.acum_12m`, quando disponível;
+2. fallback calculado com os últimos 12 meses do histórico mensal.
 
 ## Como subir
 
