@@ -49238,3 +49238,128 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: .92rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v322 — CDI MÊS A MÊS EM CARROSSEL NO MOBILE
+   Substitui a ideia do gráfico por uma trilha de cards mensais:
+   - todos os meses do ano visíveis por rolagem horizontal;
+   - mantém KPIs principais;
+   - reduz peso visual no mobile.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.cdi-month-carousel-v322 #sec-mercado #cdiYearHistory{
+    padding-bottom: 12px !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado #cdiYearHistory .cdi-kpis-v271{
+    margin-bottom: 10px !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado #cdiMonthCarouselV322{
+    display: flex !important;
+    gap: 9px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity !important;
+    overscroll-behavior-x: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 1px 1px 9px !important;
+    margin: 0 !important;
+    scrollbar-width: none !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado #cdiMonthCarouselV322::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-card-v322{
+    flex: 0 0 104px !important;
+    min-width: 104px !important;
+    max-width: 104px !important;
+    scroll-snap-align: start !important;
+    border-radius: 13px !important;
+    padding: 9px 10px !important;
+    min-height: 74px !important;
+    background: rgba(255,255,255,.035) !important;
+    border: 1px solid rgba(255,255,255,.075) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.045) !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-card-v322.is-current{
+    background: rgba(45,212,160,.075) !important;
+    border-color: rgba(45,212,160,.28) !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-card-v322.is-lastclosed{
+    background: rgba(246,200,97,.065) !important;
+    border-color: rgba(246,200,97,.26) !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-kicker-v322{
+    display: block !important;
+    color: rgba(206,216,246,.74) !important;
+    font-size: .51rem !important;
+    line-height: 1.05 !important;
+    font-weight: 800 !important;
+    letter-spacing: .055em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 7px !important;
+    white-space: nowrap !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-value-v322{
+    display: block !important;
+    color: #2dd4a0 !important;
+    font-size: .98rem !important;
+    line-height: 1.05 !important;
+    font-weight: 850 !important;
+    letter-spacing: -.025em !important;
+    margin-bottom: 5px !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-card-v322.neg .cdi-month-value-v322{
+    color: #ff5b7a !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-card-v322.is-lastclosed .cdi-month-value-v322{
+    color: #f6c861 !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-accum-v322{
+    display: block !important;
+    color: rgba(220,228,250,.62) !important;
+    font-size: .55rem !important;
+    line-height: 1.12 !important;
+    white-space: nowrap !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-empty-v322{
+    color: rgba(220,228,250,.62) !important;
+    font-size: .72rem !important;
+  }
+
+  /* mantém o gráfico fora do mobile quando o carrossel mensal está ativo */
+  html.cdi-month-carousel-v322 #sec-mercado #cdiYearHistory .cdi-chart-canvas-wrap-v271,
+  html.cdi-month-carousel-v322 #sec-mercado #cdiYearHistory .cdi-chart-scroll-wrap-v273,
+  html.cdi-month-carousel-v322 #sec-mercado #cdiYearHistory #cdiChartScrollInnerV273,
+  html.cdi-month-carousel-v322 #sec-mercado #cdiYearHistory #cdiYearChartV271,
+  html.cdi-month-carousel-v322 #sec-mercado #cdiYearHistory .cdi-chart-legend-v271{
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-card-v322{
+    flex-basis: 98px !important;
+    min-width: 98px !important;
+    max-width: 98px !important;
+    min-height: 70px !important;
+    padding: 8px 9px !important;
+  }
+
+  html.cdi-month-carousel-v322 #sec-mercado .cdi-month-value-v322{
+    font-size: .92rem !important;
+  }
+}

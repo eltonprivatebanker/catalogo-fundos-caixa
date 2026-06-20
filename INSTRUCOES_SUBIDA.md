@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v321
+# Catálogo de Fundos CAIXA — v322
 
 Arquivos atualizados:
 - index.html
@@ -7,22 +7,22 @@ Arquivos atualizados:
 
 ## Ajuste aplicado
 
-Transformei o bloco “Copom executivo” em um carrossel horizontal no mobile.
+CDI mês a mês em carrossel horizontal no mobile.
 
 ## Como funciona
 
-A página usa os dados já existentes em `#copomMeetings` e monta uma trilha com as 8 reuniões do ano.
+A página usa o histórico mensal já existente em `cards.cdi.historico` e monta uma trilha com os meses do ano.
 
 ## Vantagens
 
-- Mostra as 8 reuniões sem ocupar muita altura.
-- Mantém a informação completa.
-- Evita empilhar cards demais.
-- Visual mais próximo de app financeiro.
+- Mostra todos os meses sem gráfico pesado.
+- Mantém KPIs principais.
+- Ocupa pouca altura.
+- Segue a mesma lógica visual do carrossel do Copom.
 
 ## Escopo
 
-- Mobile: carrossel horizontal das reuniões.
+- Mobile: carrossel mensal do CDI.
 - Desktop: preservado.
 
 ## Como subir

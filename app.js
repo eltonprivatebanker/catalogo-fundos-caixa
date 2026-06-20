@@ -1,3 +1,4 @@
+// ELTAUM_CDI_MONTH_CAROUSEL_v322
 // ELTAUM_COPOM_CAROUSEL_v321
 // ELTAUM_REMOVE_NEXT_SUMMARY_v320
 // ELTAUM_MARKET_RATES_GRID_FORCE_v319
@@ -1871,6 +1872,7 @@ function renderCdiYearHistory(d){
   const accumLabelElV298 = $('cdiAccumYearLabelV298');
   const last12mElV296 = $('cdiLast12mValueV296');
   const last12mLabelElV298 = $('cdiLast12mLabelV298');
+  const cdiMonthCarouselV322 = $('cdiMonthCarouselV322');
 
   const fmtPctLocal = v => {
     const n = Number(v);
@@ -1914,6 +1916,7 @@ function renderCdiYearHistory(d){
     if(accumLabelElV298) accumLabelElV298.textContent = 'Ano';
     if(last12mElV296) last12mElV296.textContent = '—';
     if(last12mLabelElV298) last12mLabelElV298.textContent = '12 meses';
+    if(cdiMonthCarouselV322) cdiMonthCarouselV322.innerHTML = '<span class="cdi-month-empty-v322">Histórico mensal indisponível.</span>';
     if(_chartCdiYearV271){ _chartCdiYearV271.destroy(); _chartCdiYearV271 = null; }
     return;
   }
@@ -1953,6 +1956,25 @@ function renderCdiYearHistory(d){
   if(lastLabelEl) lastLabelEl.textContent = ultimoFechado ? `${mesCurto(ultimoFechado).toUpperCase()} · fechado` : 'Último fechado';
   if(lastValueEl) lastValueEl.textContent = ultimoFechado ? fmtPctLocal(ultimoFechado.valor) : '—';
   if(accumEl) accumEl.textContent = Number.isFinite(acumAno) ? fmtPctLocal(acumAno) : '—';
+
+  if(cdiMonthCarouselV322){
+    cdiMonthCarouselV322.innerHTML = mesesAno.map((item, idx) => {
+      const valor = Number(item?.valor);
+      const acum = acumulado[idx];
+      const isAtual = item === atualParcial;
+      const isFechado = item === ultimoFechado;
+      const sinal = Number.isFinite(valor) && valor < 0 ? 'neg' : 'pos';
+      const label = mesCurto(item).toUpperCase();
+      const status = isAtual ? 'parcial' : (isFechado ? 'fechado' : 'mês');
+      const acumTxt = Number.isFinite(acum) ? fmtPctLocal(acum) : '—';
+      return `
+        <article class="cdi-month-card-v322 ${sinal} ${isAtual ? 'is-current' : ''} ${isFechado ? 'is-lastclosed' : ''}" role="listitem">
+          <span class="cdi-month-kicker-v322">${label} · ${status}</span>
+          <strong class="cdi-month-value-v322">${Number.isFinite(valor) ? fmtPctLocal(valor) : '—'}</strong>
+          <small class="cdi-month-accum-v322">Acum. ${acumTxt}</small>
+        </article>`;
+    }).join('');
+  }
 
   if(!window.Chart){
     setTimeout(() => renderCdiYearHistory(d), 300);
