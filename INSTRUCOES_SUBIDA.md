@@ -1,33 +1,34 @@
-# Catálogo de Fundos CAIXA — v304
+# Catálogo de Fundos CAIXA — v306
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que foi corrigido
+## O que foi aplicado
 
-A v303 cuidou dos H2 principais. A v304 começa a padronizar os títulos internos dos cards/blocos.
+Criei uma hierarquia de títulos hero:
 
-## Foco desta versão
+1. Hero premium:
+   - Rankings dos fundos
 
-Card da Poupança e blocos internos de Indicadores de Mercado.
+2. Hero discreto:
+   - Resumo executivo
+   - Indicadores de mercado
 
-## Ajustes
+3. Título padrão:
+   - Fundos disponíveis
+   - Dólar PTAX
+   - Boletim Focus
+   - Inflação e juros
+   - Poupança
+   - Comparador de fundos
 
-- Kicker padrão: texto pequeno, dourado, uppercase.
-- Título interno H3 menor que H2 principal.
-- Subtítulos H4 padronizados.
-- Badge da poupança ajustado para separar melhor valor e “a.m.”.
-- Regra vigente ficou mais informativa e menos pesada.
-- KPIs “No ano” e “Corte da Selic” com hierarquia mais uniforme.
-- Botões do card mais consistentes.
+## Escopo
 
-## Regra semântica
-
-- H2 = grandes seções da página.
-- H3 = cards/blocos internos.
-- H4 = subtítulos dentro dos cards.
+- Mobile: Resumo e Indicadores ganham selo/ícone mais nobre e centralizado, mas mais discreto que o Ranking.
+- Ranking mantém o medalhão premium.
+- Desktop fica mais sóbrio e preservado.
 
 ## Como subir
 

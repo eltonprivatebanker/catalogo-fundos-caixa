@@ -46955,3 +46955,315 @@ html.card-title-system-v304 .savings-actions-v207 button{
     min-width: 86px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v305 — RANKING HERO ICON MOBILE
+   Recria o ícone premium do mockup sem usar imagem externa:
+   - troféu em medalhão circular;
+   - brilho dourado;
+   - linhas laterais sutis;
+   - título centralizado apenas no mobile.
+   Desktop preservado.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-hero-icon-v305 .ranking-title-group{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin: 18px 0 22px !important;
+  }
+
+  html.ranking-hero-icon-v305 .ranking-title-group .section-badge,
+  html.ranking-hero-icon-v305 .ranking-title-group .ranking-section-subtitle-v136{
+    display: none !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305,
+  html.ranking-hero-icon-v305 .ranking-title-group h2.ranking-title-hero-v305{
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #f8fafc !important;
+    font-size: 1.56rem !important;
+    line-height: 1.08 !important;
+    font-weight: 850 !important;
+    letter-spacing: -0.045em !important;
+    text-align: center !important;
+  }
+
+  /* linhas laterais do medalhão */
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305::before,
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305::after{
+    content: "" !important;
+    position: absolute !important;
+    top: 34px !important;
+    width: min(28vw, 116px) !important;
+    height: 1px !important;
+    display: block !important;
+    background: linear-gradient(90deg, transparent, rgba(246,200,97,.65), transparent) !important;
+    pointer-events: none !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305::before{
+    left: 0 !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305::after{
+    right: 0 !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305 .section-title-icon-v302{
+    position: relative !important;
+    width: 70px !important;
+    height: 70px !important;
+    min-width: 70px !important;
+    max-width: 70px !important;
+    flex: 0 0 70px !important;
+    border-radius: 999px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(255,223,135,.22), rgba(246,200,97,.08) 42%, rgba(8,10,20,.92) 72%),
+      linear-gradient(145deg, rgba(246,200,97,.20), rgba(20,24,42,.86)) !important;
+    border: 1px solid rgba(246,200,97,.52) !important;
+    box-shadow:
+      0 0 0 1px rgba(246,200,97,.08),
+      0 0 34px rgba(246,200,97,.30),
+      0 14px 28px rgba(0,0,0,.36),
+      inset 0 1px 0 rgba(255,255,255,.12) !important;
+    color: #ffd36f !important;
+    font-size: 2.08rem !important;
+    font-weight: 400 !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+    text-shadow: 0 0 18px rgba(255,211,111,.38) !important;
+    transform: translateZ(0) !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305 .section-title-icon-v302::before{
+    content: "" !important;
+    position: absolute !important;
+    inset: -7px !important;
+    border-radius: inherit !important;
+    border: 1px solid rgba(246,200,97,.14) !important;
+    background: radial-gradient(circle, rgba(246,200,97,.10), transparent 62%) !important;
+    z-index: -1 !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305 .section-title-text-v302{
+    display: block !important;
+    color: #f8fafc !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    letter-spacing: inherit !important;
+    text-align: center !important;
+    text-shadow: 0 10px 28px rgba(0,0,0,.35) !important;
+  }
+
+  /* Reaproxima o card de filtros do hero */
+  html.ranking-hero-icon-v305 .ranking-title-group + .ranking-controls-v136,
+  html.ranking-hero-icon-v305 .ranking-title-group + .ranking-panel-v136,
+  html.ranking-hero-icon-v305 .ranking-title-group + .ranking-filter-panel-v136{
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305,
+  html.ranking-hero-icon-v305 .ranking-title-group h2.ranking-title-hero-v305{
+    font-size: 1.44rem !important;
+    gap: 11px !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305 .section-title-icon-v302{
+    width: 62px !important;
+    height: 62px !important;
+    min-width: 62px !important;
+    max-width: 62px !important;
+    flex-basis: 62px !important;
+    font-size: 1.86rem !important;
+  }
+
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305::before,
+  html.ranking-hero-icon-v305 h2.ranking-title-hero-v305::after{
+    top: 30px !important;
+    width: 25vw !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   v306 — HIERARQUIA DE TÍTULOS HERO
+   Nível 1: Ranking = hero premium.
+   Nível 2: Resumo executivo e Indicadores = hero discreto.
+   Nível 3: demais títulos = padrão v302/v303/v304.
+   Mobile recebe mais destaque; desktop permanece sóbrio.
+════════════════════════════════════════════════════ */
+
+html.title-hero-levels-v306{
+  --hero-gold-v306: #f6c861;
+  --hero-white-v306: #f8fafc;
+  --hero-muted-v306: #a8b4d4;
+  --hero-blue-v306: #7fa4ff;
+}
+
+/* Base: elimina pseudoícones antigos nas três áreas hero */
+html.title-hero-levels-v306 h2.section-hero-soft-v306::before,
+html.title-hero-levels-v306 h2.section-hero-soft-v306::after,
+html.title-hero-levels-v306 h2.section-hero-premium-v306::before,
+html.title-hero-levels-v306 h2.section-hero-premium-v306::after{
+  content: none !important;
+  display: none !important;
+}
+
+/* Desktop: os heroes continuam elegantes, mas não exagerados */
+html.title-hero-levels-v306 h2.section-hero-soft-v306,
+html.title-hero-levels-v306 h2.section-hero-premium-v306{
+  color: var(--hero-white-v306) !important;
+}
+
+/* Nível 2 — Hero discreto: Resumo e Mercado */
+html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
+  background:
+    radial-gradient(circle at 45% 35%, rgba(127,164,255,.20), rgba(246,200,97,.09) 48%, rgba(12,16,31,.92) 78%),
+    linear-gradient(145deg, rgba(127,164,255,.12), rgba(246,200,97,.10)) !important;
+  border-color: rgba(127,164,255,.22) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 8px 18px rgba(0,0,0,.20) !important;
+}
+
+/* Mobile: Resumo e Indicadores viram "mini hero" discreto */
+@media (max-width: 768px){
+  html.title-hero-levels-v306 h2.section-hero-soft-v306{
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    width: 100% !important;
+    margin: 10px 0 16px !important;
+    padding: 0 !important;
+    text-align: center !important;
+    font-size: 1.26rem !important;
+    line-height: 1.10 !important;
+    font-weight: 840 !important;
+    letter-spacing: -0.040em !important;
+    color: var(--hero-white-v306) !important;
+  }
+
+  html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    flex: 0 0 48px !important;
+    border-radius: 16px !important;
+    font-size: 1.32rem !important;
+    color: var(--hero-gold-v306) !important;
+    text-shadow: 0 0 14px rgba(246,200,97,.26) !important;
+    box-shadow:
+      0 0 0 1px rgba(246,200,97,.06),
+      0 0 22px rgba(127,164,255,.12),
+      0 12px 22px rgba(0,0,0,.30),
+      inset 0 1px 0 rgba(255,255,255,.10) !important;
+  }
+
+  html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-text-v302{
+    display: block !important;
+    text-align: center !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    letter-spacing: inherit !important;
+    color: var(--hero-white-v306) !important;
+  }
+
+  /* Resumo: mini hero mais compacto para não roubar a tela inicial */
+  html.title-hero-levels-v306 h2.summary-hero-v306{
+    margin-top: 6px !important;
+    margin-bottom: 12px !important;
+  }
+
+  html.title-hero-levels-v306 h2.summary-hero-v306 .section-title-icon-v302{
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    flex-basis: 44px !important;
+    border-radius: 14px !important;
+    font-size: 1.22rem !important;
+  }
+
+  /* Mercado: selo técnico, menos brilho que Ranking */
+  html.title-hero-levels-v306 h2.market-hero-v306 .section-title-icon-v302{
+    background:
+      radial-gradient(circle at 50% 38%, rgba(127,164,255,.24), rgba(48,220,160,.08) 50%, rgba(12,16,31,.92) 78%),
+      linear-gradient(145deg, rgba(127,164,255,.16), rgba(246,200,97,.08)) !important;
+    border-color: rgba(127,164,255,.24) !important;
+    color: #9bb7ff !important;
+  }
+
+  /* Ranking: mantém premium, mas agora com espaçamento mais controlado */
+  html.title-hero-levels-v306 h2.section-hero-premium-v306,
+  html.title-hero-levels-v306 h2.ranking-title-hero-v305.section-hero-premium-v306{
+    margin-bottom: 4px !important;
+  }
+}
+
+/* Mobile estreito */
+@media (max-width: 390px){
+  html.title-hero-levels-v306 h2.section-hero-soft-v306{
+    font-size: 1.18rem !important;
+    gap: 7px !important;
+    margin-bottom: 12px !important;
+  }
+
+  html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    flex-basis: 42px !important;
+    border-radius: 13px !important;
+    font-size: 1.16rem !important;
+  }
+
+  html.title-hero-levels-v306 h2.summary-hero-v306 .section-title-icon-v302{
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    flex-basis: 40px !important;
+  }
+}
+
+/* Desktop: Resumo e Mercado seguem alinhados à esquerda para preservar leitura executiva */
+@media (min-width: 769px){
+  html.title-hero-levels-v306 h2.section-hero-soft-v306{
+    flex-direction: row !important;
+    text-align: left !important;
+    justify-content: flex-start !important;
+  }
+
+  html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+    flex-basis: 32px !important;
+    border-radius: 11px !important;
+  }
+}
