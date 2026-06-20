@@ -1,3 +1,4 @@
+// ELTAUM_DOLAR_EXECUTIVE_MOBILE_v333
 // ELTAUM_MARKET_MICROCOPY_FORCE_v332
 // ELTAUM_MARKET_CARD_156_v331
 // ELTAUM_MARKET_CARD_WIDTH_UNIFORM_v330
@@ -18056,4 +18057,90 @@ function openCdiAnalyticTableV274(){
     });
     obs.observe(target, { childList:true, subtree:true, characterData:true });
   }
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v333 — Dólar PTAX executivo mobile
+   Organiza a seção em:
+   1) cotação principal;
+   2) variações resumidas;
+   3) gráfico/estatísticas sob demanda;
+   4) fechamentos mensais recolhidos por padrão.
+════════════════════════════════════════════════════ */
+(function dolarExecutiveMobileV333(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sec = document.getElementById('sec-dolar');
+    if(!sec) return;
+
+    const timelineBody = document.getElementById('dolarTimelineBody');
+    const timelineToggle = document.getElementById('dolarTimelineToggle');
+    const chartPanel = document.getElementById('dolarChartPanel');
+    const chartToggle = document.getElementById('dolarChartToggle');
+    const currentMonth = document.getElementById('dolarCurrentMonthV162');
+
+    if(!isMobile){
+      if(timelineBody) timelineBody.classList.add('open');
+      if(timelineToggle){
+        timelineToggle.textContent = 'Recolher ▲';
+        timelineToggle.setAttribute('aria-expanded','true');
+      }
+      if(currentMonth) currentMonth.hidden = true;
+      return;
+    }
+
+    sec.classList.add('dolar-exec-mobile-v333-active');
+
+    // O mês atual já aparece no card de variações. Evita duplicidade.
+    if(currentMonth){
+      currentMonth.hidden = true;
+      setImportant(currentMonth, 'display', 'none');
+    }
+
+    // Gráfico fechado por padrão, estatísticas aparecem quando o gráfico abre.
+    if(chartPanel && !chartPanel.dataset.v333UserTouched){
+      chartPanel.classList.add('is-mobile-collapsed');
+    }
+    if(chartToggle && !chartToggle.dataset.v333Bound){
+      chartToggle.textContent = chartPanel?.classList.contains('is-mobile-collapsed') ? 'Abrir gráfico' : 'Ocultar gráfico';
+      chartToggle.setAttribute('aria-expanded', String(!chartPanel?.classList.contains('is-mobile-collapsed')));
+      chartToggle.dataset.v333Bound = '1';
+      chartToggle.addEventListener('click', () => {
+        if(chartPanel) chartPanel.dataset.v333UserTouched = '1';
+        setTimeout(() => {
+          chartToggle.textContent = chartPanel?.classList.contains('is-mobile-collapsed') ? 'Abrir gráfico' : 'Ocultar gráfico';
+        }, 60);
+      }, { passive:true });
+    }
+
+    // Fechamentos recolhidos por padrão para reduzir altura.
+    if(timelineBody && !timelineBody.dataset.v333UserTouched){
+      timelineBody.classList.remove('open');
+    }
+    if(timelineToggle && !timelineToggle.dataset.v333Bound){
+      timelineToggle.textContent = 'Ver fechamentos';
+      timelineToggle.setAttribute('aria-expanded','false');
+      timelineToggle.dataset.v333Bound = '1';
+      timelineToggle.addEventListener('click', () => {
+        timelineBody && (timelineBody.dataset.v333UserTouched = '1');
+        setTimeout(() => {
+          const open = timelineBody?.classList.contains('open');
+          timelineToggle.textContent = open ? 'Ocultar fechamentos' : 'Ver fechamentos';
+          timelineToggle.setAttribute('aria-expanded', String(!!open));
+        }, 60);
+      }, { passive:true });
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
 })();

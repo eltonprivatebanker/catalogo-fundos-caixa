@@ -1,28 +1,25 @@
-# Catálogo de Fundos CAIXA — v332
+# Catálogo de Fundos CAIXA — v333
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Correção aplicada
+## Ajuste aplicado
 
-A v329 carregava, mas alguns textos do Painel Consolidado eram recriados pelo JavaScript depois do carregamento. Por isso, visualmente a limpeza não aparecia.
+Refino da seção “Dólar PTAX” no mobile.
 
-A v332 força a limpeza depois da renderização e observa mudanças no bloco de mercado.
+## Organização nova
 
-## Ajustes forçados
+1. Cotação PTAX principal no topo.
+2. Variações do mês/ano logo abaixo.
+3. 12M, 24M e 36M em trilha horizontal.
+4. Gráfico e estatísticas ficam sob demanda.
+5. Fechamentos mensais ficam recolhidos por padrão.
 
-1. CDI
-- “Acumulado no mês · Dados disponíveis até 18/06”
-- vira “Parcial até 18/06”
+## Objetivo
 
-2. Tag nominal
-- Dólar: “Atual” vira “Cotação”
-- Ibovespa, S&P 500, Dow Jones e Nasdaq: “Atual” vira “Pontos”
-
-3. Grid de variação
-- “Atual” vira “Mês atual”
+Reduzir altura, evitar duplicidade e transformar a seção em um bloco executivo de consulta rápida.
 
 ## Como subir
 
