@@ -1,3 +1,4 @@
+// ELTAUM_DOLAR_CHART_STATS_v334
 // ELTAUM_DOLAR_EXECUTIVE_MOBILE_v333
 // ELTAUM_MARKET_MICROCOPY_FORCE_v332
 // ELTAUM_MARKET_CARD_156_v331
@@ -835,19 +836,30 @@ function atualizarPTAXStats(range='24m'){
   const media = janela.reduce((sum,item)=>sum+item.val,0) / janela.length;
 
   setText('ptaxStatsTitleV162', `Estatísticas do período · ${periodoTexto}`);
+  const primeiroPeriodo = janela[0];
+  const ultimoPeriodo = janela[janela.length - 1] || atual;
+  const variacaoPeriodo = primeiroPeriodo && Number.isFinite(primeiroPeriodo.val) && primeiroPeriodo.val !== 0
+    ? ((ultimoPeriodo.val / primeiroPeriodo.val - 1) * 100)
+    : NaN;
+  const varPeriodoTxt = Number.isFinite(variacaoPeriodo)
+    ? `${variacaoPeriodo > 0 ? '+' : ''}${variacaoPeriodo.toFixed(2).replace('.', ',')}%`
+    : '—';
+  const varPeriodoCls = !Number.isFinite(variacaoPeriodo) ? 'neu' : variacaoPeriodo > 0 ? 'pos' : variacaoPeriodo < 0 ? 'neg' : 'neu';
+
+  setText('ptaxStatVarLabelV334', 'Variação');
   setText('ptaxStatMaxLabel', 'Máxima');
   setText('ptaxStatMinLabel', 'Mínima');
   setText('ptaxStatMediaLabel', 'Média');
-  setText('ptaxStatAtual', brl(atual.val));
+  setText('ptaxStatAtual', varPeriodoTxt);
   setText('ptaxStatMax', brl(max.val));
   setText('ptaxStatMaxRef', max.label);
   setText('ptaxStatMin', brl(min.val));
   setText('ptaxStatMinRef', min.label);
   setText('ptaxStatMedia', brl(media));
 
-  setClass('ptaxStatAtual', 'ptax-stat-val neu');
-  setClass('ptaxStatMax', 'ptax-stat-val neg');
-  setClass('ptaxStatMin', 'ptax-stat-val pos');
+  setClass('ptaxStatAtual', `ptax-stat-val ${varPeriodoCls}`);
+  setClass('ptaxStatMax', 'ptax-stat-val neu');
+  setClass('ptaxStatMin', 'ptax-stat-val neu');
   setClass('ptaxStatMedia', 'ptax-stat-val neu');
 }
 
@@ -1217,8 +1229,12 @@ function buildChartDolar(range){
   const step = Math.max(1, Math.floor(dados.length/200));
   const sample = dados.filter((_,i) => i % step === 0 || i === dados.length-1);
 
-  const labels = sample.map(d => {
+  const labels = sample.map((d, idx) => {
     const dt = new Date(d.dataHoraCotacao);
+    const mes = MESES_PT[dt.getMonth()] || String(dt.getMonth()+1).padStart(2,'0');
+    const yy = String(dt.getFullYear()).slice(-2);
+    if(range === '36m') return idx === 0 || idx === sample.length - 1 || dt.getMonth() === 0 ? String(dt.getFullYear()) : `${mes}/${yy}`;
+    if(range === '24m' || range === '12m') return `${mes}/${yy}`;
     return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}`;
   });
   const values = sample.map(d => parseFloat(d.cotacaoVenda));
@@ -1267,6 +1283,14 @@ function buildChartDolar(range){
           titleFont: { family: 'Cormorant Garamond', size: 13, weight: '700' },
           bodyFont: { family: 'JetBrains Mono', size: 11 },
           callbacks: {
+            title: items => {
+              const item = items && items[0];
+              const raw = sample[item?.dataIndex || 0]?.dataHoraCotacao;
+              const dt = raw ? new Date(raw) : null;
+              return dt && !isNaN(dt)
+                ? `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`
+                : (item?.label || '');
+            },
             label: ctx => `${brl(ctx.parsed.y)}`,
             afterLabel: ctx => {
               const v = ctx.parsed.y;
@@ -1279,7 +1303,14 @@ function buildChartDolar(range){
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
-          ticks: { color: '#3d4560', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 10 }
+          ticks: {
+            color: '#3d4560',
+            font: { family: 'JetBrains Mono', size: 9 },
+            maxTicksLimit: window.innerWidth <= 768 ? (range === '36m' ? 4 : 5) : 10,
+            maxRotation: 0,
+            minRotation: 0,
+            autoSkip: true
+          }
         },
         y: {
           grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
@@ -18143,4 +18174,44 @@ function openCdiAnalyticTableV274(){
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 300);
   setTimeout(apply, 1000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v334 — Dólar: eixo X limpo + estatísticas sem redundância
+   - eixo X horizontal, com poucos ticks;
+   - card "Atual" vira "Variação";
+   - Máxima/Mínima em cor neutra.
+════════════════════════════════════════════════════ */
+(function dolarChartStatsV334(){
+  function apply(){
+    const varLabel = document.getElementById('ptaxStatVarLabelV334')
+      || document.querySelector('#ptaxStatsCard .ptax-stat-item:first-child .ptax-stat-label');
+    if(varLabel) varLabel.textContent = 'Variação';
+
+    ['ptaxStatMax', 'ptaxStatMin', 'ptaxStatMedia'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.className = 'ptax-stat-val neu';
+    });
+
+    const chart = window.Chart && document.getElementById('chartDolar')
+      ? Chart.getChart(document.getElementById('chartDolar'))
+      : null;
+
+    if(chart?.options?.scales?.x?.ticks){
+      chart.options.scales.x.ticks.maxRotation = 0;
+      chart.options.scales.x.ticks.minRotation = 0;
+      chart.options.scales.x.ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+      chart.options.scales.x.ticks.autoSkip = true;
+      chart.update('none');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
+  setTimeout(apply, 2000);
 })();

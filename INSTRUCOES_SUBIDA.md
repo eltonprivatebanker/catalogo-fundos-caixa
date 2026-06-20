@@ -1,25 +1,22 @@
-# Catálogo de Fundos CAIXA — v333
+# Catálogo de Fundos CAIXA — v334
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste aplicado
+## Ajustes aplicados no Dólar PTAX
 
-Refino da seção “Dólar PTAX” no mobile.
+### 1. Gráfico
+- Eixo X limitado a poucos rótulos no mobile.
+- Rótulos sempre horizontais.
+- Data completa fica no tooltip ao tocar no gráfico.
 
-## Organização nova
-
-1. Cotação PTAX principal no topo.
-2. Variações do mês/ano logo abaixo.
-3. 12M, 24M e 36M em trilha horizontal.
-4. Gráfico e estatísticas ficam sob demanda.
-5. Fechamentos mensais ficam recolhidos por padrão.
-
-## Objetivo
-
-Reduzir altura, evitar duplicidade e transformar a seção em um bloco executivo de consulta rápida.
+### 2. Estatísticas
+- Card “Atual” virou “Variação”.
+- O valor exibido passa a ser a variação percentual do período selecionado.
+- Máxima, Mínima e Média usam cor neutra.
+- Verde/vermelho ficam reservados para variações percentuais.
 
 ## Como subir
 

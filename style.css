@@ -50452,3 +50452,40 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     max-width: 98px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v334 — DÓLAR: GRÁFICO LIMPO + ESTATÍSTICAS REFINADAS
+   - Eixo X do gráfico sempre horizontal no mobile.
+   - Estatística "Atual" vira "Variação".
+   - Máxima/Mínima/Média usam cor neutra; verde/vermelho só em variações.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.dolar-chart-stats-v334 #sec-dolar #chartDolar{
+    max-height: 210px !important;
+  }
+
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatsCard .ptax-stat-val.neu,
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatMax,
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatMin,
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatMedia{
+    color: #f8fafc !important;
+  }
+
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatsCard .ptax-stat-label{
+    color: rgba(220,228,250,.66) !important;
+  }
+
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatsCard .ptax-stat-ref{
+    color: rgba(220,228,250,.56) !important;
+  }
+
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatAtual.pos{
+    color: #2dd4a0 !important;
+  }
+
+  html.dolar-chart-stats-v334 #sec-dolar #ptaxStatAtual.neg{
+    color: #ff5b7a !important;
+  }
+}
