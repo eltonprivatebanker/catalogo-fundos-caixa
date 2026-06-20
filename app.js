@@ -1,3 +1,4 @@
+// ELTAUM_PAGINATION_RANKING_TIGHT_v314
 // ELTAUM_RANKING_GAP_CLEANUP_v312
 // SUMMARY_HEAD_REMOVED_v311
 // ELTAUM_SUMMARY_ICON_DEDUP_v310
@@ -16831,3 +16832,111 @@ function openCdiAnalyticTableV274(){
 
 
 // RANKING_GAP_RAYS_V313
+
+
+/* ════════════════════════════════════════════════════
+   v314 — aproximação extrema paginação → ranking
+   Complemento JS para remover altura/margens fantasmas que estilos
+   legados ou inline possam manter entre .pagination-row e .ranking-head.
+════════════════════════════════════════════════════ */
+(function paginationRankingTightV314(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const ranking = document.getElementById('rankingsSection');
+    if(!ranking) return;
+
+    const rankingHead = ranking.querySelector('.ranking-head');
+    const titleGroup = ranking.querySelector('.ranking-title-group');
+    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+    const actions = ranking.querySelector('.ranking-actions');
+
+    const paginationCandidates = [
+      ...document.querySelectorAll('.pagination-row, .pagination-controls, .pagination, .catalog-pagination, .fund-pagination-wrap, #pageBtns')
+    ];
+
+    if(!isMobile){
+      [ranking, rankingHead, titleGroup, h2, toolbar, actions, ...paginationCandidates].forEach(el => {
+        if(!el) return;
+        el.style.removeProperty('margin-top');
+        el.style.removeProperty('margin-bottom');
+        el.style.removeProperty('padding-top');
+        el.style.removeProperty('padding-bottom');
+        el.style.removeProperty('min-height');
+        el.style.removeProperty('height');
+      });
+      if(actions){
+        actions.removeAttribute('aria-hidden');
+        try{ actions.inert = false; }catch(_){}
+      }
+      return;
+    }
+
+    paginationCandidates.forEach(el => {
+      setImportant(el, 'margin-bottom', '0');
+      setImportant(el, 'padding-bottom', '0');
+    });
+
+    const funds = document.getElementById('sec-fundos');
+    if(funds){
+      setImportant(funds, 'margin-bottom', '0');
+      setImportant(funds, 'padding-bottom', '0');
+    }
+
+    setImportant(ranking, 'margin-top', '0');
+    setImportant(ranking, 'padding-top', '0');
+    setImportant(ranking, 'scroll-margin-top', '82px');
+
+    if(rankingHead){
+      setImportant(rankingHead, 'margin-top', '0');
+      setImportant(rankingHead, 'margin-bottom', '0');
+      setImportant(rankingHead, 'padding-top', '0');
+      setImportant(rankingHead, 'padding-bottom', '0');
+      setImportant(rankingHead, 'min-height', '0');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden', 'true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'margin-top', '0');
+      setImportant(titleGroup, 'margin-bottom', '8px');
+      setImportant(titleGroup, 'padding-top', '0');
+      setImportant(titleGroup, 'padding-bottom', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'margin-top', '0');
+      setImportant(h2, 'margin-bottom', '0');
+      setImportant(h2, 'padding-top', '0');
+      setImportant(h2, 'padding-bottom', '0');
+      setImportant(h2, 'gap', '7px');
+    }
+
+    if(toolbar){
+      setImportant(toolbar, 'margin-top', '0');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 200);
+  setTimeout(apply, 800);
+  setTimeout(apply, 1600);
+})();

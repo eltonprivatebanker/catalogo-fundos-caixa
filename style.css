@@ -47885,3 +47885,158 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     width: 13px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v314 — PAGINAÇÃO COLADA AO RANKING NO MOBILE
+   Correção cirúrgica:
+   - .pagination-row e variantes: margin-bottom 0;
+   - #sec-fundos/.section-gap final do catálogo: margin/padding bottom 0;
+   - .ranking-head e wrappers do troféu: margin/padding top 0;
+   - objetivo: troféu a no máximo ~20px da paginação.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.pagination-ranking-tight-v314 .pagination-row,
+  html.pagination-ranking-tight-v314 .pagination-controls,
+  html.pagination-ranking-tight-v314 .catalog-pagination,
+  html.pagination-ranking-tight-v314 .fund-pagination-wrap,
+  html.pagination-ranking-tight-v314 .pagination,
+  html.pagination-ranking-tight-v314 #pageBtns{
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  html.pagination-ranking-tight-v314 #sec-fundos.section-gap,
+  html.pagination-ranking-tight-v314 #sec-fundos,
+  html.pagination-ranking-tight-v314 .section-gap.funds-pagination-tight-v100,
+  html.pagination-ranking-tight-v314 .mobile-anchor-target.funds-pagination-tight-v100{
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection,
+  html.pagination-ranking-tight-v314 #rankingsSection.section-gap{
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-head{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-actions{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-title-group,
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-title-group-v309-fixed{
+    margin-top: 0 !important;
+    margin-bottom: 8px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 0 !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-v309-fixed{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    gap: 7px !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-toolbar,
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-toolbar-v136{
+    margin-top: 0 !important;
+  }
+
+  /* troféu compacto e próximo da paginação */
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    flex-basis: 42px !important;
+    font-size: 1.20rem !important;
+  }
+
+  /* raios/traços laterais do medalhão */
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    width: 14px !important;
+    height: 12px !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+    opacity: .95 !important;
+    background-repeat: no-repeat !important;
+    filter: drop-shadow(0 0 5px rgba(246,200,97,.38)) !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before{
+    left: -15px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.92) 65%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.78) 65%, rgba(246,200,97,0)) !important;
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 3px 3px, 0 8px !important;
+    transform: translateY(-50%) rotate(-14deg) !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    right: -15px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.92) 35%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.78) 35%, rgba(246,200,97,0)) !important;
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 0 3px, 7px 8px !important;
+    transform: translateY(-50%) rotate(14deg) !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-title-group,
+  html.pagination-ranking-tight-v314 #rankingsSection .ranking-title-group-v309-fixed{
+    margin-bottom: 7px !important;
+  }
+
+  html.pagination-ranking-tight-v314 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.pagination-ranking-tight-v314 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    flex-basis: 40px !important;
+    font-size: 1.14rem !important;
+  }
+}
