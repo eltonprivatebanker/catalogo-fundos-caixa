@@ -1,3 +1,4 @@
+// ELTAUM_MARKET_RATES_COMPACT_v318
 // ELTAUM_RANKING_MARKET_CLEAN_v317
 // ELTAUM_MARKET_MOBILE_CARD_SYSTEM_v316
 // ELTAUM_RANKING_PROFESSIONAL_BREATH_v315
@@ -17231,4 +17232,39 @@ function openCdiAnalyticTableV274(){
   setTimeout(apply, 250);
   setTimeout(apply, 900);
   setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v318 — cenário monetário compacto no mobile
+   Remove fonte BCB do topo e compacta os cards de taxas/Copom.
+════════════════════════════════════════════════════ */
+(function marketRatesCompactV318(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    document.querySelectorAll('#sec-mercado .rates-reference-v167 .market-reference-source-v167').forEach(el => {
+      el.setAttribute('aria-hidden','true');
+      try{ el.inert = true; }catch(_){}
+      setImportant(el, 'display', 'none');
+    });
+
+    // Remove descrições longas do Copom no mobile: os cards ficam de consulta rápida.
+    document.querySelectorAll('#sec-mercado .copom-exec-desc-v270').forEach(el => {
+      el.setAttribute('aria-hidden','true');
+      setImportant(el, 'display', 'none');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
 })();
