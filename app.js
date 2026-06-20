@@ -6121,6 +6121,103 @@ function econMetaStatusV367(v){
   return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
 }
 
+
+function econFmtSelicV368(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return '—';
+  return `${n.toFixed(2).replace('.', ',')}% a.a.`;
+}
+
+function econFmtDateV368(dt){
+  if(!dt || isNaN(dt.getTime())) return '—';
+  return dt.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' });
+}
+
+function atualizarResumoSelicCleanV368(rows, mercado){
+  const lista = (rows || [])
+    .map(item => {
+      const valor = econNumberV367(item._valor ?? item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
+      const dt = item._dt instanceof Date && !isNaN(item._dt.getTime())
+        ? item._dt
+        : item._dtSelic instanceof Date && !isNaN(item._dtSelic.getTime())
+          ? item._dtSelic
+          : null;
+      return {...item, _v368valor:valor, _v368dt:dt};
+    })
+    .filter(item => Number.isFinite(item._v368valor));
+
+  const set = (id, txt) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = txt;
+  };
+
+  const selicCard = mercado?.cards?.selic_meta || {};
+  const atualCard = econNumberV367(selicCard.valor);
+
+  if(!lista.length){
+    set('selicMaxResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
+    set('selicMaxData', 'vigente');
+    set('selicMinResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
+    set('selicMinData', 'vigente');
+    set('selicHojeResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
+    set('selicHojeData', 'último dado');
+    return;
+  }
+
+  const max = lista.reduce((acc, cur) => cur._v368valor > acc._v368valor ? cur : acc, lista[0]);
+  const min = lista.reduce((acc, cur) => cur._v368valor < acc._v368valor ? cur : acc, lista[0]);
+  const last = lista[lista.length - 1];
+
+  let hojeValor = Number.isFinite(atualCard) ? atualCard : last._v368valor;
+  let hojeData = 'último dado';
+  try{
+    const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
+      ? resolverDataUltimaAlteracaoSelic(mercado)
+      : null;
+    hojeData = ref?.data || econFmtDateV368(last._v368dt) || 'último dado';
+  }catch(e){
+    hojeData = econFmtDateV368(last._v368dt) || 'último dado';
+  }
+
+  set('selicMaxResumo', econFmtSelicV368(max._v368valor));
+  set('selicMaxData', econFmtDateV368(max._v368dt));
+  set('selicMinResumo', econFmtSelicV368(min._v368valor));
+  set('selicMinData', econFmtDateV368(min._v368dt));
+  set('selicHojeResumo', econFmtSelicV368(hojeValor));
+  set('selicHojeData', hojeData);
+}
+
+function econRenderMetaGaugeV368(containerId, value){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+
+  const n = Number(value);
+  if(!Number.isFinite(n)){
+    el.innerHTML = '<div class="econ-empty-v367">IPCA 12 meses indisponível no momento.</div>';
+    return;
+  }
+
+  const minScale = 0;
+  const maxScale = Math.max(8, Math.ceil(n + 1));
+  const pct = Math.max(0, Math.min(100, ((n - minScale) / (maxScale - minScale)) * 100));
+  const status = econMetaStatusV367(n);
+
+  el.innerHTML = `
+    <div class="econ-gauge-v368" aria-label="IPCA 12 meses atual ${econPctV367(n)}">
+      <div class="econ-gauge-scale-v368">
+        <span class="band target" style="left:${(1.5/maxScale)*100}%;width:${((4.5-1.5)/maxScale)*100}%"></span>
+        <i class="marker" style="left:${pct}%"></i>
+      </div>
+      <div class="econ-axis-caption-v367">
+        <span>0,00%</span>
+        <span>Atual · ${econPctV367(n)}</span>
+        <span>${maxScale.toFixed(0)},00%</span>
+      </div>
+      <small class="econ-gauge-status-v368">${status}</small>
+    </div>
+  `;
+}
+
 function econAtualizarMobileSummaryV367(view, d){
   const ipca = d?.cards?.ipca || {};
   const selic = d?.cards?.selic_meta || {};
@@ -6222,13 +6319,13 @@ async function renderIndicadoresCleanV367(d){
   // Selic
   const selicNorm = (histSelic || [])
     .map((item, idx) => {
-      const dataRaw = item.DataReuniaoCopom || item.data || item.DataInicioVigencia || item.Data || '';
-      let dt = dataRaw ? new Date(dataRaw) : null;
+      const dataRaw = item._dtSelic || item.DataReuniaoCopom || item.data || item.DataInicioVigencia || item.Data || '';
+      let dt = dataRaw instanceof Date ? dataRaw : (dataRaw ? new Date(dataRaw) : null);
       if((!dt || isNaN(dt.getTime())) && typeof dataRaw === 'string' && dataRaw.includes('/')){
         const p = dataRaw.split('/');
         if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
       }
-      const valor = econNumberV367(item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa);
+      const valor = econNumberV367(item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
       return {...item, _dt:dt, _ts:dt && !isNaN(dt.getTime()) ? dt.getTime() : idx, _valor:valor};
     })
     .filter(x => Number.isFinite(x._valor))
@@ -6240,7 +6337,7 @@ async function renderIndicadoresCleanV367(d){
   }, {limit:36});
 
   if(selicNorm.length){
-    atualizarResumoSelicV248(selicNorm.slice(-60));
+    atualizarResumoSelicCleanV368(selicNorm.slice(-60), d);
     const last = selicNorm[selicNorm.length - 1];
     const first = selicNorm[Math.max(0, selicNorm.length - 13)];
     const dif = Number(last._valor) - Number(first._valor);
@@ -6252,14 +6349,18 @@ async function renderIndicadoresCleanV367(d){
     .filter(x => x?.DataReferencia && Number.isFinite(Number(x.Inflacao12Meses)))
     .sort((a,b) => new Date(a.DataReferencia) - new Date(b.DataReferencia));
 
-  econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
-    const dt = new Date(d.DataReferencia);
-    return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
-  }, {limit:36, band:true});
+  if(metaNorm.length >= 2){
+    econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
+      const dt = new Date(d.DataReferencia);
+      return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
+    }, {limit:36, band:true});
 
-  if(metaNorm.length){
     const last = metaNorm[metaNorm.length - 1];
     econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)).replace('Dentro da faixa de tolerância de ', 'Na faixa '));
+  }else{
+    // v368: se o histórico completo não carregar, ainda exibe o dado atual do card em forma de régua.
+    econRenderMetaGaugeV368('econSparkMetaV367', ipca.acum_12m);
+    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(ipca.acum_12m)).replace('Dentro da faixa de tolerância de ', 'Na faixa '));
   }
 
   selecionarIndicadorCleanV367('ipca');
@@ -19164,7 +19265,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_CLEAN_INDICATORS_20260620_v367';
+  const BUILD = 'ELTAUM_EVO_CLEAN_INDICATORS_FIX_20260620_v368';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
