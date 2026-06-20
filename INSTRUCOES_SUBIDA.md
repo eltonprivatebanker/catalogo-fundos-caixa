@@ -1,28 +1,31 @@
-# Catálogo de Fundos CAIXA — v316
+# Catálogo de Fundos CAIXA — v317
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste aplicado
+## Correções aplicadas
 
-Refino mobile da seção “Indicadores de mercado”.
+1. Ranking
+- Corrigido o retorno do espaço exagerado no cabeçalho do Ranking.
+- Reduzido o `margin-top` da `.ranking-head`.
+- Mantido troféu compacto com raios laterais.
+- Botões antigos de ações continuam ocultos no mobile.
 
-## O que mudou
+2. Copom
+- Removido o botão “Calendário BCB” no mobile.
+- Removido o texto longo da próxima reunião:
+  “Reunião programada para 4 e 5 de agosto...”
 
-- Cenário monetário e Poupança agora seguem linguagem visual de cards.
-- Selic, CDI e Próxima reunião viraram uma trilha horizontal com scroll.
-- Copom foi mantido como resumo executivo, sem timeline pesada no mobile.
-- CDI ficou mais compacto e sem botão técnico “Tabela analítica” no mobile.
-- Poupança ganhou hierarquia mais limpa e botões uniformes.
-- Rótulos secundários ficaram com menor opacidade para reduzir ruído visual.
-- Respiros entre blocos foram padronizados.
+3. CDI
+- Removido o gráfico/canvas do CDI no mobile.
+- KPIs do CDI continuam visíveis.
 
 ## Escopo
 
-- Mobile: layout refinado e mais consultivo.
-- Desktop: preservado.
+- Mobile refinado.
+- Desktop preservado.
 
 ## Como subir
 

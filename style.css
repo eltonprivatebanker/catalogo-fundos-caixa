@@ -48522,3 +48522,189 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: .98rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v317 — LIMPEZA RANKING + COPOM + CDI MOBILE
+   Corrige problemas que voltaram:
+   1) Ranking: reduz o margin-top de 44px criado na v315.
+   2) Copom: remove botão "Calendário BCB".
+   3) Copom: remove descrição longa da próxima reunião.
+   4) CDI: remove gráfico no mobile, mantendo os KPIs.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  /* 1) Ranking: respiro médio, sem buraco e sem sobreposição */
+  html.ranking-market-clean-v317 #rankingsSection,
+  html.ranking-market-clean-v317 #rankingsSection.section-gap{
+    margin-top: 8px !important;
+    padding-top: 0 !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection .ranking-head{
+    display: block !important;
+    margin: 18px 0 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection .ranking-title-group,
+  html.ranking-market-clean-v317 #rankingsSection .ranking-title-group-v309-fixed{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin: 0 0 10px !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection .ranking-title-group .section-badge,
+  html.ranking-market-clean-v317 #rankingsSection .ranking-title-group .ranking-section-subtitle-v136{
+    display: none !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-market-clean-v317 #rankingsSection h2.section-hero-premium-v306,
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-v309-fixed{
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    font-size: 1.26rem !important;
+    line-height: 1.08 !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-market-clean-v317 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    flex: 0 0 44px !important;
+    font-size: 1.26rem !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection .ranking-actions{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection .ranking-toolbar,
+  html.ranking-market-clean-v317 #rankingsSection .ranking-toolbar-v136{
+    margin-top: 0 !important;
+  }
+
+  /* Mantém pequenos raios laterais no troféu */
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.ranking-market-clean-v317 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before,
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.ranking-market-clean-v317 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    width: 14px !important;
+    height: 12px !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+    opacity: .90 !important;
+    background-repeat: no-repeat !important;
+    filter: drop-shadow(0 0 5px rgba(246,200,97,.35)) !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.ranking-market-clean-v317 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before{
+    left: -15px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.90) 65%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.72) 65%, rgba(246,200,97,0)) !important;
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 3px 3px, 0 8px !important;
+    transform: translateY(-50%) rotate(-14deg) !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.ranking-market-clean-v317 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    right: -15px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.90) 35%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.72) 35%, rgba(246,200,97,0)) !important;
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 0 3px, 7px 8px !important;
+    transform: translateY(-50%) rotate(14deg) !important;
+  }
+
+  /* 2) Remove botão Calendário BCB no Copom */
+  html.ranking-market-clean-v317 #sec-mercado .copom-link-v271,
+  html.ranking-market-clean-v317 #sec-mercado a.reference-toggle-v167.copom-link-v271{
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* 3) Remove descrição longa da próxima reunião */
+  html.ranking-market-clean-v317 #sec-mercado #copomNextExecutiveV270 .copom-exec-desc-v270,
+  html.ranking-market-clean-v317 #sec-mercado .copom-exec-card-v270.is-next .copom-exec-desc-v270{
+    display: none !important;
+  }
+
+  /* 4) Remove gráfico do CDI no mobile; KPIs ficam */
+  html.ranking-market-clean-v317 #sec-mercado #cdiYearHistory .cdi-chart-canvas-wrap-v271,
+  html.ranking-market-clean-v317 #sec-mercado #cdiYearHistory .cdi-chart-scroll-wrap-v273,
+  html.ranking-market-clean-v317 #sec-mercado #cdiYearHistory #cdiChartScrollInnerV273,
+  html.ranking-market-clean-v317 #sec-mercado #cdiYearHistory #cdiYearChartV271,
+  html.ranking-market-clean-v317 #sec-mercado #cdiYearHistory .cdi-chart-legend-v271,
+  html.ranking-market-clean-v317 #sec-mercado #cdiYearHistory .reference-footnote-v167{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    pointer-events: none !important;
+  }
+
+  html.ranking-market-clean-v317 #sec-mercado #cdiYearHistory{
+    padding-bottom: 12px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-market-clean-v317 #rankingsSection .ranking-head{
+    margin-top: 16px !important;
+  }
+
+  html.ranking-market-clean-v317 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-market-clean-v317 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    flex-basis: 42px !important;
+    font-size: 1.20rem !important;
+  }
+}

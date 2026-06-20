@@ -1,3 +1,4 @@
+// ELTAUM_RANKING_MARKET_CLEAN_v317
 // ELTAUM_MARKET_MOBILE_CARD_SYSTEM_v316
 // ELTAUM_RANKING_PROFESSIONAL_BREATH_v315
 // ELTAUM_PAGINATION_RANKING_TIGHT_v314
@@ -17084,4 +17085,150 @@ function openCdiAnalyticTableV274(){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v317 — limpeza ranking / Copom / CDI mobile
+   - corrige o retorno do espaço no Ranking gerado por v315;
+   - remove botão Calendário BCB no Copom mobile;
+   - remove texto descritivo da próxima reunião;
+   - oculta e destrói o gráfico CDI no mobile, mantendo KPIs.
+════════════════════════════════════════════════════ */
+(function rankingMarketCleanV317(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function cleanRanking(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const ranking = document.getElementById('rankingsSection');
+    if(!ranking || !isMobile) return;
+
+    const head = ranking.querySelector('.ranking-head');
+    const titleGroup = ranking.querySelector('.ranking-title-group');
+    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const icon = h2?.querySelector('.section-title-icon-v302');
+    const actions = ranking.querySelector('.ranking-actions');
+    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+
+    setImportant(ranking, 'margin-top', '8px');
+    setImportant(ranking, 'padding-top', '0');
+
+    if(head){
+      setImportant(head, 'display', 'block');
+      setImportant(head, 'margin', '18px 0 0');
+      setImportant(head, 'padding', '0');
+      setImportant(head, 'min-height', '0');
+      setImportant(head, 'height', 'auto');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'display', 'flex');
+      setImportant(titleGroup, 'flex-direction', 'column');
+      setImportant(titleGroup, 'align-items', 'center');
+      setImportant(titleGroup, 'text-align', 'center');
+      setImportant(titleGroup, 'width', '100%');
+      setImportant(titleGroup, 'margin', '0 0 10px');
+      setImportant(titleGroup, 'padding', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'position', 'relative');
+      setImportant(h2, 'display', 'flex');
+      setImportant(h2, 'flex-direction', 'column');
+      setImportant(h2, 'align-items', 'center');
+      setImportant(h2, 'justify-content', 'center');
+      setImportant(h2, 'gap', '7px');
+      setImportant(h2, 'margin', '0');
+      setImportant(h2, 'padding', '0');
+      setImportant(h2, 'font-size', '1.26rem');
+      setImportant(h2, 'line-height', '1.08');
+    }
+
+    if(icon){
+      setImportant(icon, 'width', '44px');
+      setImportant(icon, 'height', '44px');
+      setImportant(icon, 'min-width', '44px');
+      setImportant(icon, 'max-width', '44px');
+      setImportant(icon, 'flex', '0 0 44px');
+      setImportant(icon, 'font-size', '1.26rem');
+      setImportant(icon, 'position', 'relative');
+      setImportant(icon, 'overflow', 'visible');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden','true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(toolbar) setImportant(toolbar, 'margin-top', '0');
+  }
+
+  function cleanCopom(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    document.querySelectorAll('.copom-link-v271').forEach(el => {
+      el.setAttribute('aria-hidden','true');
+      try{ el.inert = true; }catch(_){}
+      setImportant(el, 'display', 'none');
+    });
+
+    document.querySelectorAll('#copomNextExecutiveV270 .copom-exec-desc-v270, .copom-exec-card-v270.is-next .copom-exec-desc-v270').forEach(el => {
+      el.remove();
+    });
+  }
+
+  function cleanCdiChart(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const canvas = document.getElementById('cdiYearChartV271');
+    const wrap = document.querySelector('#cdiYearHistory .cdi-chart-canvas-wrap-v271');
+    const inner = document.getElementById('cdiChartScrollInnerV273');
+    const legend = document.querySelector('#cdiYearHistory .cdi-chart-legend-v271');
+    const foot = document.querySelector('#cdiYearHistory .reference-footnote-v167');
+
+    if(!isMobile) return;
+
+    try{
+      if(window.Chart && canvas){
+        const chart = Chart.getChart(canvas);
+        if(chart) chart.destroy();
+      }
+    }catch(_){}
+
+    [wrap, inner, canvas, legend, foot].forEach(el => {
+      if(!el) return;
+      el.setAttribute('aria-hidden','true');
+      setImportant(el, 'display', 'none');
+      setImportant(el, 'height', '0');
+      setImportant(el, 'min-height', '0');
+      setImportant(el, 'max-height', '0');
+      setImportant(el, 'margin', '0');
+      setImportant(el, 'padding', '0');
+      setImportant(el, 'overflow', 'hidden');
+    });
+  }
+
+  function apply(){
+    cleanRanking();
+    cleanCopom();
+    cleanCdiChart();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
 })();
