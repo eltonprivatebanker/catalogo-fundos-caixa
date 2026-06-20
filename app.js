@@ -1,3 +1,71 @@
+// ELTAUM_SELIC_TABS_COMPACT_v343
+// ELTAUM_REMOVE_12M_XAXIS_v342
+// ELTAUM_INFLATION_SUMMARY_COMPACT_v341
+// ELTAUM_CHARTS_LOOP_FIX_v340
+// ELTAUM_CHARTS_TABS_FIX_v339
+// ELTAUM_INFLATION_RATES_CLEAN_v338
+// ELTAUM_DOLAR_CHART_CLOSED_v337
+// ELTAUM_DOLAR_BADGE_MONTHS_v336
+// ELTAUM_DOLAR_XAXIS_MOBILE_v335
+// ELTAUM_DOLAR_CHART_STATS_v334
+// ELTAUM_DOLAR_EXECUTIVE_MOBILE_v333
+// ELTAUM_MARKET_MICROCOPY_FORCE_v332
+// ELTAUM_MARKET_CARD_156_v331
+// ELTAUM_MARKET_CARD_WIDTH_UNIFORM_v330
+// ELTAUM_MARKET_MICROCOPY_CLEAN_v329
+// ELTAUM_SAVINGS_MICRO_POLISH_v327
+// ELTAUM_SAVINGS_SCENARIOS_POLISH_v326
+// ELTAUM_SAVINGS_CLEAN_MOBILE_v325
+// ELTAUM_CDI_SEMANTIC_CARDS_v324
+// ELTAUM_CDI_12M_FIX_v323
+// ELTAUM_CDI_MONTH_CAROUSEL_v322
+// ELTAUM_COPOM_CAROUSEL_v321
+// ELTAUM_REMOVE_NEXT_SUMMARY_v320
+// ELTAUM_MARKET_RATES_GRID_FORCE_v319
+// ELTAUM_MARKET_RATES_COMPACT_v318
+// ELTAUM_RANKING_MARKET_CLEAN_v317
+// ELTAUM_MARKET_MOBILE_CARD_SYSTEM_v316
+// ELTAUM_RANKING_PROFESSIONAL_BREATH_v315
+// ELTAUM_PAGINATION_RANKING_TIGHT_v314
+// ELTAUM_RANKING_GAP_CLEANUP_v312
+// SUMMARY_HEAD_REMOVED_v311
+// ELTAUM_SUMMARY_ICON_DEDUP_v310
+// ELTAUM_RANKING_HERO_SPACING_v309
+// ELTAUM_REMOVE_GFB_FULL_v308
+// ELTAUM_REMOVE_GFB_TOP_v307
+// ELTAUM_TITLE_HERO_LEVELS_v306
+// ELTAUM_RANKING_HERO_ICON_v305
+// ELTAUM_CARD_TITLE_SYSTEM_v304
+// ELTAUM_TITLE_NORMALIZED_JS_v303
+// ELTAUM_TITLE_UNIFIED_v302
+// ELTAUM_SECTION_TITLE_FORCE_v301
+// ELTAUM_SECTION_TITLE_SYSTEM_v300
+// ELTAUM_CDI_MOBILE_CANVAS_FIX_v299
+// ELTAUM_CDI_MOBILE_SEMANTIC_v298
+// ELTAUM_CDI_MOBILE_BARS_v297
+// ELTAUM_CDI_MOBILE_COMPACT_v296
+// ELTAUM_RANKING_INSIGHT_PREMIUM_v295
+// ELTAUM_MOBILE_HIDE_GFB_SEARCH_v294
+// ELTAUM_RANKING_INSIGHT_STABLE_v293
+// ELTAUM_RANKING_VALUE_STANDARD_v292
+// ELTAUM_RANKING_VALUES_COMPACT_v291
+// ELTAUM_RANKING_TIGHT_UNIFORM_v290
+// ELTAUM_RANKING_UNIFORM_FINAL_v289
+// ELTAUM_RANKING_PL_COMPACT_v288
+// ELTAUM_RANKING_SCALE_FINAL_v287
+// ELTAUM_RANKING_VALUE_FIX_v286
+// ELTAUM_RANKING_PROPORTION_v285
+// ELTAUM_RANKING_PREMIUM_v284
+// ELTAUM_RANKING_MOBILE_REFINEMENT_v283
+// ELTAUM_RANKING_MOBILE_STANDARD_20260619_v282
+// ELTAUM_RANKING_MOBILE_VALUE_RIGHT_20260619_v280
+// ELTAUM_LAYOUT_EXECUTIVO_20260618_v279
+// ELTAUM_PALETTE_APPLIED_20260618_v278
+// ELTAUM_RATES_EXECUTIVE_LEAN_20260618_v268
+// ELTAUM_RATES_DECOMPRESSED_20260618_v267
+// ELTAUM_DESKTOP_RATES_REFINE_20260618_v266
+// ELTAUM_COMPACT_MOBILE_20260618_v265
+// ELTAUM_RATES_CDI_REAL_20260618_v264
 // ELTAUM_RATES_SCROLL_FIX_20260618_v263
 // ELTAUM_RATES_PREMIUM_20260618_v261
 // ELTAUM_RATES_MOBILE_COMPACT_20260618_v260
@@ -481,10 +549,9 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
   setText('poupScenarioOld4', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
   setText('poupScenarioNew85', `70% da Selic + TR (${formatMensal(mensalNova85)})`);
   setText('poupScenarioOld85', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
-  setText('poupScenarioCurrentTitle', selicNum != null ? `Selic atual: ${fmt(selicNum)} a.a.` : 'Cenário atual');
+  setText('poupScenarioCurrentTitle', selicNum != null ? `Selic atual: ${fmt(selicNum)}` : 'Cenário atual');
   setText('poupScenarioCurrentNew', formatMensal(mensalNovaAtual));
   setText('poupScenarioCurrentOld', formatMensal(mensalAntigaAtual));
-  setText('poupScenarioStatus', selicNum != null ? `Selic ${fmt(selicNum)}` : 'Selic —');
 
   if($('poupScenarioSummary')){
     if(selicNum == null){
@@ -594,10 +661,10 @@ function atualizarPoupancaCard(d, selicAtual){
         'Aguardando Selic vigente para definir a regra aplicada.';
     }else if(acima){
       $('poupQuickNote').innerHTML =
-        `Selic acima de <strong>8,50% a.a.</strong> · depósitos novos e antigos seguem <strong>TR + 0,50% a.m.</strong>`;
+        `Rendimento de <strong>TR + 0,50% a.m.</strong> <span class="poup-note-muted-v327">(Selic acima de 8,50% a.a.)</span>`;
     }else{
       $('poupQuickNote').innerHTML =
-        `Selic até <strong>8,50% a.a.</strong> · depósitos novos rendem <strong>70% da Selic + TR</strong> e depósitos antigos mantêm <strong>TR + 0,50% a.m.</strong>`;
+        `Depósitos novos: <strong>70% da Selic + TR</strong> <span class="poup-note-muted-v327">(regra vigente)</span>`;
     }
   }
 
@@ -778,19 +845,30 @@ function atualizarPTAXStats(range='24m'){
   const media = janela.reduce((sum,item)=>sum+item.val,0) / janela.length;
 
   setText('ptaxStatsTitleV162', `Estatísticas do período · ${periodoTexto}`);
+  const primeiroPeriodo = janela[0];
+  const ultimoPeriodo = janela[janela.length - 1] || atual;
+  const variacaoPeriodo = primeiroPeriodo && Number.isFinite(primeiroPeriodo.val) && primeiroPeriodo.val !== 0
+    ? ((ultimoPeriodo.val / primeiroPeriodo.val - 1) * 100)
+    : NaN;
+  const varPeriodoTxt = Number.isFinite(variacaoPeriodo)
+    ? `${variacaoPeriodo > 0 ? '+' : ''}${variacaoPeriodo.toFixed(2).replace('.', ',')}%`
+    : '—';
+  const varPeriodoCls = !Number.isFinite(variacaoPeriodo) ? 'neu' : variacaoPeriodo > 0 ? 'pos' : variacaoPeriodo < 0 ? 'neg' : 'neu';
+
+  setText('ptaxStatVarLabelV334', 'Variação');
   setText('ptaxStatMaxLabel', 'Máxima');
   setText('ptaxStatMinLabel', 'Mínima');
   setText('ptaxStatMediaLabel', 'Média');
-  setText('ptaxStatAtual', brl(atual.val));
+  setText('ptaxStatAtual', varPeriodoTxt);
   setText('ptaxStatMax', brl(max.val));
   setText('ptaxStatMaxRef', max.label);
   setText('ptaxStatMin', brl(min.val));
   setText('ptaxStatMinRef', min.label);
   setText('ptaxStatMedia', brl(media));
 
-  setClass('ptaxStatAtual', 'ptax-stat-val neu');
-  setClass('ptaxStatMax', 'ptax-stat-val neg');
-  setClass('ptaxStatMin', 'ptax-stat-val pos');
+  setClass('ptaxStatAtual', `ptax-stat-val ${varPeriodoCls}`);
+  setClass('ptaxStatMax', 'ptax-stat-val neu');
+  setClass('ptaxStatMin', 'ptax-stat-val neu');
   setClass('ptaxStatMedia', 'ptax-stat-val neu');
 }
 
@@ -1160,8 +1238,12 @@ function buildChartDolar(range){
   const step = Math.max(1, Math.floor(dados.length/200));
   const sample = dados.filter((_,i) => i % step === 0 || i === dados.length-1);
 
-  const labels = sample.map(d => {
+  const labels = sample.map((d, idx) => {
     const dt = new Date(d.dataHoraCotacao);
+    const mes = MESES_PT[dt.getMonth()] || String(dt.getMonth()+1).padStart(2,'0');
+    const yy = String(dt.getFullYear()).slice(-2);
+    if(range === '36m') return idx === 0 || idx === sample.length - 1 || dt.getMonth() === 0 ? String(dt.getFullYear()) : `${mes}/${yy}`;
+    if(range === '24m' || range === '12m') return `${mes}/${yy}`;
     return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}`;
   });
   const values = sample.map(d => parseFloat(d.cotacaoVenda));
@@ -1210,6 +1292,14 @@ function buildChartDolar(range){
           titleFont: { family: 'Cormorant Garamond', size: 13, weight: '700' },
           bodyFont: { family: 'JetBrains Mono', size: 11 },
           callbacks: {
+            title: items => {
+              const item = items && items[0];
+              const raw = sample[item?.dataIndex || 0]?.dataHoraCotacao;
+              const dt = raw ? new Date(raw) : null;
+              return dt && !isNaN(dt)
+                ? `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`
+                : (item?.label || '');
+            },
             label: ctx => `${brl(ctx.parsed.y)}`,
             afterLabel: ctx => {
               const v = ctx.parsed.y;
@@ -1222,7 +1312,23 @@ function buildChartDolar(range){
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
-          ticks: { color: '#3d4560', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 10 }
+          ticks: {
+            color: '#3d4560',
+            font: { family: 'JetBrains Mono', size: 9 },
+            maxTicksLimit: window.innerWidth <= 768 ? 5 : 10,
+            maxRotation: 0,
+            minRotation: 0,
+            autoSkip: false,
+            callback: function(value, index, ticks){
+              const total = Array.isArray(ticks) ? ticks.length : (this.chart?.data?.labels?.length || 0);
+              const maxLabels = window.innerWidth <= 768 ? 5 : 10;
+              const label = this.getLabelForValue(value);
+              if(total <= maxLabels) return label;
+              const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
+              if(index === 0 || index === total - 1 || index % step === 0) return label;
+              return '';
+            }
+          }
         },
         y: {
           grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
@@ -1805,15 +1911,71 @@ function atualizarResumoCenario(d){
 }
 
 
-function renderCdiYearHistory(d){
-  const strip = $('cdiMonthStrip');
-  if(!strip) return;
+let _chartCdiYearV271 = null;
 
+function renderCdiYearHistory(d){
+  const chartCanvas = $('cdiYearChartV271');
+  if(!chartCanvas) return;
+
+  const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const cdi = d?.cards?.cdi || {};
   const hist = Array.isArray(cdi.historico) ? cdi.historico : [];
+  const title = $('cdiYearHistoryTitle');
+  const totalEl = $('cdiYearHistoryTotal');
+  const currentLabelEl = $('cdiCurrentMonthLabelV271');
+  const currentValueEl = $('cdiCurrentMonthValueV271');
+  const lastLabelEl = $('cdiLastClosedLabelV271');
+  const lastValueEl = $('cdiLastClosedValueV271');
+  const accumEl = $('cdiAccumYearValueV271');
+  const accumLabelElV298 = $('cdiAccumYearLabelV298');
+  const last12mElV296 = $('cdiLast12mValueV296');
+  const last12mLabelElV298 = $('cdiLast12mLabelV298');
+  const cdiMonthCarouselV322 = $('cdiMonthCarouselV322');
+
+  const fmtPctLocal = v => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
+  };
+  const fmtAxis = v => {
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return n.toFixed(0).replace('.',',') + '%';
+  };
+  const normalizar = txt => String(txt || '').trim().toLowerCase();
+  const mesCurto = item => {
+    const raw = String(item?.label || item?.key || '').trim();
+    const m = raw.match(/^(\d{4})-(\d{2})/);
+    if(m){
+      const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      return nomes[Math.max(0, Math.min(11, Number(m[2]) - 1))];
+    }
+    return raw.replace(/\/\d{4}/,'').slice(0,3).toLowerCase();
+  };
+  const labelMesAno = item => {
+    const raw = String(item?.label || item?.key || '').trim();
+    if(raw.includes('/')) return raw;
+    const m = raw.match(/^(\d{4})-(\d{2})/);
+    if(m){
+      const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      return nomes[Math.max(0, Math.min(11, Number(m[2]) - 1))] + '/' + m[1];
+    }
+    return raw;
+  };
 
   if(!hist.length){
-    strip.innerHTML = '<span class="cdi-month-empty">histórico indisponível</span>';
+    if(title) title.textContent = 'CDI no ano';
+    if(totalEl) totalEl.textContent = 'Ano —';
+    if(currentLabelEl) currentLabelEl.textContent = 'Mês atual';
+    if(currentValueEl) currentValueEl.textContent = '—';
+    if(lastLabelEl) lastLabelEl.textContent = 'Último fechado';
+    if(lastValueEl) lastValueEl.textContent = '—';
+    if(accumEl) accumEl.textContent = '—';
+    if(accumLabelElV298) accumLabelElV298.textContent = 'Ano';
+    if(last12mElV296) last12mElV296.textContent = '—';
+    if(last12mLabelElV298) last12mLabelElV298.textContent = '12 meses';
+    if(cdiMonthCarouselV322) cdiMonthCarouselV322.innerHTML = '<span class="cdi-month-empty-v322">Histórico mensal indisponível.</span>';
+    if(_chartCdiYearV271){ _chartCdiYearV271.destroy(); _chartCdiYearV271 = null; }
     return;
   }
 
@@ -1822,64 +1984,232 @@ function renderCdiYearHistory(d){
   const ano = String(last?.key || '').slice(0,4) || String(new Date().getFullYear());
   const mesesAno = ordenado.filter(x => String(x?.key || '').startsWith(ano + '-'));
 
-  const parcialRef = String(cdi.parcial_ref || '').toLowerCase();
-  const mesFechadoRef = String(cdi.mes_ref || '').toLowerCase();
+  const parcialRef = normalizar(cdi.parcial_ref);
+  const mesFechadoRef = normalizar(cdi.mes_ref);
+  const byLabel = label => mesesAno.find(x => normalizar(x?.label) === label || normalizar(mesCurto(x)) === label);
+  const atualParcial = parcialRef ? byLabel(parcialRef) : mesesAno[mesesAno.length - 1];
+  const ultimoFechado = mesFechadoRef ? byLabel(mesFechadoRef) : [...mesesAno].reverse().find(x => x !== atualParcial) || mesesAno[mesesAno.length - 1];
 
-  const fmtPctLocal = v => {
-    const n = Number(v);
+  const labels = mesesAno.map(mesCurto).map(s => s.toUpperCase());
+  const mensal = mesesAno.map(item => Number(item?.valor ?? 0));
+  const acumulado = [];
+  let running = 1;
+  mensal.forEach((valor) => {
+    const n = Number.isFinite(valor) ? valor : 0;
+    running *= (1 + n / 100);
+    acumulado.push(Number(((running - 1) * 100).toFixed(2)));
+  });
+
+  const idxAtual = Math.max(0, mesesAno.indexOf(atualParcial));
+  const idxFechado = Math.max(0, mesesAno.indexOf(ultimoFechado));
+  const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? acumulado[acumulado.length - 1]);
+  const cdi12mV296 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(cdi, 12) : Number(cdi.acum_12m ?? cdi.m12);
+
+  const cdi12mFixV323 = (() => {
+    const direto = Number(cdi.acum_12m ?? cdi.m12 ?? cdi.acumulado_12m ?? cdi.acum12m);
+    if(Number.isFinite(direto)) return direto;
+
+    if(typeof resolverCdiPeriodoV229 === 'function'){
+      const resolvido = Number(resolverCdiPeriodoV229(cdi, 12));
+      if(Number.isFinite(resolvido)) return resolvido;
+    }
+
+    const ultimos12 = ordenado.slice(-12).map(item => Number(item?.valor)).filter(Number.isFinite);
+    if(ultimos12.length){
+      const fator = ultimos12.reduce((acc, v) => acc * (1 + v / 100), 1);
+      return Number(((fator - 1) * 100).toFixed(2));
+    }
+
+    return NaN;
+  })();
+
+  if(title) title.textContent = isMobile ? `CDI — visão mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
+  if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
+  if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? 'CDI 12M' : 'Últimos 12 meses';
+  if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
+  if(currentLabelEl) currentLabelEl.textContent = atualParcial ? `${mesCurto(atualParcial).toUpperCase()} · parcial` : 'Mês atual';
+  if(currentValueEl) currentValueEl.textContent = atualParcial ? fmtPctLocal(atualParcial.valor) : '—';
+  if(lastLabelEl) lastLabelEl.textContent = ultimoFechado ? `${mesCurto(ultimoFechado).toUpperCase()} · fechado` : 'Último fechado';
+  if(lastValueEl) lastValueEl.textContent = ultimoFechado ? fmtPctLocal(ultimoFechado.valor) : '—';
+  if(accumEl) accumEl.textContent = Number.isFinite(acumAno) ? fmtPctLocal(acumAno) : '—';
+  if(last12mElV296) last12mElV296.textContent = Number.isFinite(cdi12mFixV323) ? fmtPctLocal(cdi12mFixV323) : '—';
+
+  if(cdiMonthCarouselV322){
+    cdiMonthCarouselV322.innerHTML = mesesAno.map((item, idx) => {
+      const valor = Number(item?.valor);
+      const acum = acumulado[idx];
+      const isAtual = item === atualParcial;
+      const isFechado = item === ultimoFechado;
+      const sinal = Number.isFinite(valor) && valor < 0 ? 'neg' : 'pos';
+      const label = mesCurto(item).toUpperCase();
+      const status = isAtual ? 'parcial' : 'fechado';
+      const acumTxt = Number.isFinite(acum) ? fmtPctLocal(acum) : '—';
+      return `
+        <article class="cdi-month-card-v322 ${sinal} ${isAtual ? 'is-current' : ''} ${isFechado ? 'is-lastclosed' : ''}" role="listitem">
+          <span class="cdi-month-kicker-v322">${label} · ${status}</span>
+          <strong class="cdi-month-value-v322">${Number.isFinite(valor) ? fmtPctLocal(valor) : '—'}</strong>
+          <small class="cdi-month-accum-v322">Acum. ano ${acumTxt}</small>
+        </article>`;
+    }).join('');
+  }
+
+  if(!window.Chart){
+    setTimeout(() => renderCdiYearHistory(d), 300);
+    return;
+  }
+
+  const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(45, 212, 160, 0.62)' : i === idxFechado ? 'rgba(232, 180, 92, 0.50)' : 'rgba(125, 162, 255, 0.28)');
+  const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(45, 212, 160, 0.96)' : i === idxFechado ? 'rgba(232, 180, 92, 0.86)' : 'rgba(125, 162, 255, 0.52)');
+  const maxMensal = Math.max(0.1, ...mensal.filter(Number.isFinite));
+  const maxAcumulado = Math.max(1, ...acumulado.filter(Number.isFinite), Number.isFinite(acumAno) ? acumAno : 0);
+
+  // v276: eixos com escala linear explícita e degraus sincronizados.
+  // Evita o Chart.js escolher ticks irregulares como 0/2/4/7 no eixo direito.
+  const yGridStepsV276 = 4;
+  const yMonthlyMax = maxMensal <= 1.75
+    ? 2
+    : Math.ceil((maxMensal + 0.10) / 0.5) * 0.5;
+  const yMonthlyStepV276 = yMonthlyMax / yGridStepsV276;
+  const yAccumMax = maxAcumulado <= 8
+    ? 8
+    : Math.ceil((maxAcumulado + 0.35) / 4) * 4;
+  const yAccumStepV276 = yAccumMax / yGridStepsV276;
+  const fmtAxis1 = value => {
+    const n = Number(value);
     if(!Number.isFinite(n)) return '—';
-    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
+    return n.toFixed(n % 1 === 0 ? 0 : 1).replace('.',',') + '%';
   };
 
-  const titulo = $('cdiYearHistoryTitle');
-  if(titulo) titulo.textContent = `CDI mensal ${ano}`;
+  if(_chartCdiYearV271){
+    try{ _chartCdiYearV271.destroy(); }catch(e){}
+    _chartCdiYearV271 = null;
+  }
 
-  // Mantém no card o mesmo acumulado do painel consolidado: ano com parcial quando existir.
-  const total = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano);
-  const totalEl = $('cdiYearHistoryTotal');
-  if(totalEl) totalEl.textContent = Number.isFinite(total) ? `Ano ${fmtPctLocal(total)}` : 'Ano —';
+  const chartInnerV273 = document.getElementById('cdiChartScrollInnerV273');
+  const totalMesesV273 = labels.length;
+  const minChartWidthV273 = isMobile ? '100%' : '100%';
+  if(chartInnerV273){
+    chartInnerV273.style.minWidth = typeof minChartWidthV273 === 'number' ? `${minChartWidthV273}px` : minChartWidthV273;
+  }
+  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 10 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 12 : 22) : (isMobile ? 16 : 26));
+  const raioPontoV273 = totalMesesV273 >= 10 ? 2.2 : 2.8;
+  const raioPontoDestaqueV273 = totalMesesV273 >= 10 ? 3.6 : 4.2;
+  const mostrarTodosMesesV273 = true;
 
-  const byLabel = (label) => mesesAno.find(x => String(x?.label || '').toLowerCase() === label);
-  const atualParcial = parcialRef ? byLabel(parcialRef) : mesesAno[mesesAno.length - 1];
-  const ultimoFechado = mesFechadoRef
-    ? byLabel(mesFechadoRef)
-    : mesesAno[mesesAno.length - 2];
-
-  // Ordem natural no mobile: mês atual/parcial primeiro, depois último fechado e anteriores.
-  // Ex.: JUN/2026, MAI/2026, ABR/2026.
-  const destaque = [];
-  if(atualParcial) destaque.push(atualParcial);
-  if(ultimoFechado && ultimoFechado !== atualParcial) destaque.push(ultimoFechado);
-
-  const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
-  const exibicao = [...destaque, ...restantes];
-
-  strip.innerHTML = exibicao.map((item) => {
-    const labelCompleta = String(item.label || item.key || '');
-    const label = labelCompleta.replace('/'+ano,'');
-    const isCurrent = atualParcial && item === atualParcial;
-    const isClosed = ultimoFechado && item === ultimoFechado;
-    const classes = [
-      'cdi-month-chip',
-      (isCurrent || isClosed) ? 'featured' : '',
-      isCurrent ? 'current' : '',
-      isClosed ? 'closed' : ''
-    ].filter(Boolean).join(' ');
-
-    const subtitulo = isCurrent
-      ? '<span class="p">parcial</span>'
-      : isClosed
-        ? '<span class="p">último mês fechado</span>'
-        : '';
-
-    return `<span class="${classes}" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
-      <span class="m">${label}</span>
-      <span class="v">${fmtPctLocal(item.valor)}</span>
-      ${subtitulo}
-    </span>`;
-  }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
-  requestAnimationFrame(() => { try{ strip.scrollLeft = 0; }catch(e){} });
-  // ELTAUM_RATES_PREMIUM_CDI_SCROLLSTART_V261
+  const ctx = chartCanvas.getContext('2d');
+  _chartCdiYearV271 = new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'CDI mensal',
+          data: mensal,
+          yAxisID: 'y',
+          backgroundColor: barBg,
+          borderColor: barBorder,
+          borderWidth: 1.4,
+          borderRadius: { topLeft: 8, topRight: 8, bottomLeft: 3, bottomRight: 3 },
+          borderSkipped: false,
+          barThickness: barraEspessuraV273,
+          maxBarThickness: barraEspessuraV273 + 4
+        },
+        {
+          type: 'line',
+          label: 'CDI acumulado',
+          data: acumulado,
+          hidden: isMobile,
+          yAxisID: 'y1',
+          borderColor: '#e8b45c',
+          backgroundColor: 'rgba(232, 180, 92, 0.10)',
+          borderWidth: totalMesesV273 >= 10 ? 2.2 : 2.5,
+          tension: 0.25,
+          fill: false,
+          pointBackgroundColor: acumulado.map((_,i) => i === idxAtual ? '#2dd4a0' : '#e8b45c'),
+          pointBorderColor: '#080d18',
+          pointBorderWidth: 1.4,
+          pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? raioPontoDestaqueV273 : raioPontoV273),
+          pointHoverRadius: raioPontoDestaqueV273 + 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      resizeDelay: 80,
+      layout: { padding: { left: 4, right: isMobile ? 8 : 12, top: 4, bottom: 0 } },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: 'rgba(11,16,33,.96)',
+          titleColor: '#ffffff',
+          bodyColor: '#dfe7ff',
+          borderColor: 'rgba(255,255,255,.08)',
+          borderWidth: 1,
+          displayColors: true,
+          callbacks: {
+            title(items){
+              const i = items?.[0]?.dataIndex ?? 0;
+              return labelMesAno(mesesAno[i]);
+            },
+            label(context){
+              const value = Number(context.parsed.y);
+              const txt = fmtPctLocal(value);
+              return `${context.dataset.label}: ${txt}`;
+            },
+            afterBody(){
+              return isMobile ? '' : undefined;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: {
+            color: 'rgba(229,235,255,0.74)',
+            autoSkip: false,
+            maxRotation: 0,
+            minRotation: 0,
+            font: { size: totalMesesV273 >= 11 ? (isMobile ? 8 : 10) : (isMobile ? 9 : 11), weight: '700' }
+          }
+        },
+        y: {
+          type: 'linear',
+          beginAtZero: true,
+          min: 0,
+          max: yMonthlyMax,
+          bounds: 'ticks',
+          ticks: {
+            color: 'rgba(188,200,234,0.72)',
+            padding: 8,
+            stepSize: yMonthlyStepV276,
+            callback: value => fmtAxis1(value)
+          },
+          grid: {
+            color: 'rgba(255,255,255,0.06)',
+            tickLength: 0
+          }
+        },
+        y1: {
+          type: 'linear',
+          beginAtZero: true,
+          min: 0,
+          position: 'right',
+          max: yAccumMax,
+          bounds: 'ticks',
+          display: !isMobile,
+          ticks: {
+            color: 'rgba(232,187,106,0.76)',
+            stepSize: yAccumStepV276,
+            callback: value => fmtAxis1(value)
+          },
+          grid: { drawOnChartArea: false }
+        }
+      }
+    }
+  });
 }
 
 /* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
@@ -5663,7 +5993,12 @@ function selecionarGraficoEvolucao(chave){
   });
   atualizarResumoMovelEvolucao(target, _dadosMercado);
   setTimeout(()=>{
-    [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{ if(ch && typeof ch.resize === 'function') ch.resize(); });
+    [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{
+      if(!ch || typeof ch.resize !== 'function') return;
+      const canvas = ch.canvas || ch.ctx?.canvas;
+      if(!canvas || !canvas.isConnected || !canvas.ownerDocument) return;
+      try{ ch.resize(); }catch(err){ console.warn('[gráficos] resize ignorado:', err?.message || err); }
+    });
   }, 80);
 }
 
@@ -6077,6 +6412,62 @@ function _decisaoCopomPorData(decisionDate){
   }
   return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
 }
+function _resumoCopomTexto(resultado){
+  const raw = String(resultado || '').trim();
+  if(!raw) return 'Sem atualização disponível.';
+  let m = raw.match(/^corte\s+([^→]+)\s+→\s+(.+)$/i);
+  if(m) return `Selic em ${m[2].trim()} após corte ${m[1].trim()}.`;
+  m = raw.match(/^alta\s+([^→]+)\s+→\s+(.+)$/i);
+  if(m) return `Selic em ${m[2].trim()} após alta ${m[1].trim()}.`;
+  m = raw.match(/^mantida em\s+(.+)$/i);
+  if(m) return `Selic mantida em ${m[1].trim()}.`;
+  return raw;
+}
+
+function _statusCopomCurto(tipo, resultado){
+  if(tipo === 'cut') return 'corte';
+  if(tipo === 'hike') return 'alta';
+  if(tipo === 'hold') return 'manutenção';
+  if(String(resultado||'').toLowerCase().includes('próxima')) return 'agenda';
+  return 'status';
+}
+
+function _renderCopomExecutiveCardsV270(ultima, proxima){
+  const last = $('copomLastExecutiveV270');
+  const next = $('copomNextExecutiveV270');
+  if(last && ultima){
+    last.innerHTML = `
+      <span class="copom-exec-kicker-v270">Última decisão</span>
+      <strong class="copom-exec-date-v270">${ultima.short || '—'}</strong>
+      <div class="copom-exec-meta-v270">
+        <span class="copom-exec-pill-v270">${ultima.num}ª reunião</span>
+        <span class="copom-exec-status-v270 is-${ultima.klass || 'done'}">${_statusCopomCurto(ultima.decisao?.tipo, ultima.resultado)}</span>
+      </div>
+      <p class="copom-exec-desc-v270">${_resumoCopomTexto(ultima.resultado)}</p>`;
+  }
+  if(next){
+    if(proxima){
+      next.innerHTML = `
+        <span class="copom-exec-kicker-v270">Próxima reunião</span>
+        <strong class="copom-exec-date-v270">${proxima.short || '—'}</strong>
+        <div class="copom-exec-meta-v270">
+          <span class="copom-exec-pill-v270">${proxima.num}ª reunião</span>
+          <span class="copom-exec-status-v270 is-next">agenda</span>
+        </div>
+        <p class="copom-exec-desc-v270">Reunião programada para ${proxima.datas}. Próxima decisão prevista do Copom.</p>`;
+    } else {
+      next.innerHTML = `
+        <span class="copom-exec-kicker-v270">Próxima reunião</span>
+        <strong class="copom-exec-date-v270">Calendário concluído</strong>
+        <div class="copom-exec-meta-v270">
+          <span class="copom-exec-pill-v270">2026</span>
+          <span class="copom-exec-status-v270 is-hold">encerrado</span>
+        </div>
+        <p class="copom-exec-desc-v270">Não há novas reuniões previstas para o restante do calendário informado.</p>`;
+    }
+  }
+}
+
 function buildCopomCalendario(){
   const container = $('copomMeetings');
   if(!container) return;
@@ -6115,16 +6506,21 @@ function buildCopomCalendario(){
     </div>`;
   }).join('');
 
+  const ultimaDecisao = realizadas[0] || base.filter(r => r.decisao).slice(-1)[0] || null;
+  _renderCopomExecutiveCardsV270(ultimaDecisao, proxima);
+
   const nextDate = $('copomNextDateV167');
   const nextStatus = $('copomNextStatusV167');
   if(nextDate) nextDate.textContent = proxima ? proxima.short : 'Calendário concluído';
   if(nextStatus) nextStatus.textContent = proxima ? (proxima.resultado || 'decisão pendente') : 'Sem novas reuniões em 2026';
 
   container.classList.remove('is-expanded-v167');
+  const panel = $('copomCalendarSecondaryV270');
+  if(panel) panel.classList.remove('is-open-v270');
   const toggle = $('copomCalendarToggleV167');
   container.classList.add('copom-timeline-clean-v256');
   if(toggle){
-    toggle.textContent = 'Calendário completo';
+    toggle.textContent = 'Ver calendário completo';
     toggle.setAttribute('aria-expanded','false');
   }
   requestAnimationFrame(() => { container.scrollLeft = 0; });
@@ -9781,7 +10177,7 @@ async function sharePainelMercado(){
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
   function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
-    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
+    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
   function topRow(r,i,campo,showCdi){
     const cat=shortCat(r['Categoria']);
@@ -9792,14 +10188,14 @@ async function sharePainelMercado(){
     return `<div class="ranking-top-row">
       <div class="ranking-pos">${medal(i)}</div>
       <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
-      <div class="ranking-return ${cls}">${esc(val)}</div>
+      <div class="ranking-value-standard ranking-return ${cls}">${esc(val)}</div>
       <div class="ranking-cdi">${esc(cdi)}</div>
     </div>`;
   }
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
+    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
   }
   function worstMini(r,i,campo){
     const nome=cleanFund(r['Fundo']);
@@ -14528,12 +14924,15 @@ if(!isSearchInput(el)) return;
 ════════════════════════════════════════════════════ */
 function toggleCopomCalendarV167(force){
   const grid = document.getElementById('copomMeetings');
+  const panel = document.getElementById('copomCalendarSecondaryV270');
   const btn = document.getElementById('copomCalendarToggleV167');
-  if(!grid) return false;
-  const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
+  const target = panel || grid;
+  if(!grid || !target) return false;
+  const open = typeof force === 'boolean' ? force : !target.classList.contains('is-open-v270');
+  target.classList.toggle('is-open-v270', open);
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Recolher' : 'Calendário';
+    btn.textContent = open ? 'Ocultar calendário' : 'Ver calendário completo';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;
@@ -15164,7 +15563,7 @@ if(document.readyState === 'loading'){
 
   function enablePointerDrag(strip){
     if(!strip || strip.dataset.pointerDragV180==='1') return;
-    if(strip.id === 'cdiMonthStrip' && document.documentElement.classList.contains('rates-scroll-fix-v263')){
+    if(strip.id === 'cdiMonthStrip' && (document.documentElement.classList.contains('rates-scroll-fix-v263') || document.documentElement.classList.contains('rates-cdi-real-v264'))){
       strip.dataset.pointerDragV180 = 'disabled-v263';
       return;
     }
@@ -16062,4 +16461,2555 @@ window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v
   }
   setTimeout(applyCdiTitleShortV263, 300);
   setTimeout(applyCdiTitleShortV263, 1200);
+})();
+
+
+/* ELTAUM_CDI_REAL_STARTUP_V264 */
+(function(){
+  function fixCdiRealV264(){
+    const title = document.getElementById('cdiYearHistoryTitle');
+    if(title) title.textContent = title.textContent.replace(/\s+—\s+mais recente primeiro/i,'').trim() || 'CDI mensal 2026';
+    const strip = document.getElementById('cdiMonthStrip');
+    if(strip){
+      strip.classList.add('cdi-month-list-v264');
+      strip.setAttribute('data-cdi-layout-v264','list');
+      strip.style.overflow = 'visible';
+      strip.style.touchAction = 'pan-y';
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fixCdiRealV264, {once:true});
+  else fixCdiRealV264();
+  setTimeout(fixCdiRealV264, 250);
+  setTimeout(fixCdiRealV264, 1000);
+})();
+
+
+/* ELTAUM_CDI_MONTHS_TOGGLE_V268 */
+function toggleCdiMonthsV268(force){
+  const box = document.getElementById('cdiYearHistory');
+  const strip = document.getElementById('cdiMonthStrip');
+  const btn = document.getElementById('cdiMonthsToggleV268');
+  if(!box || !strip) return false;
+  const open = typeof force === 'boolean' ? force : !box.classList.contains('is-expanded-v268');
+  box.classList.toggle('is-expanded-v268', open);
+  strip.classList.toggle('is-expanded-v268', open);
+  if(btn){
+    btn.textContent = open ? 'Ocultar' : 'Ver meses';
+    btn.setAttribute('aria-expanded', String(open));
+  }
+  return false;
+}
+
+(function(){
+  function initCdiToggleV268(){
+    const box = document.getElementById('cdiYearHistory');
+    const strip = document.getElementById('cdiMonthStrip');
+    const btn = document.getElementById('cdiMonthsToggleV268');
+    if(box && strip){
+      box.classList.remove('is-expanded-v268');
+      strip.classList.remove('is-expanded-v268');
+    }
+    if(btn){
+      btn.textContent = 'Ver meses';
+      btn.setAttribute('aria-expanded','false');
+    }
+  }
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initCdiToggleV268, {once:true});
+  }else{
+    initCdiToggleV268();
+  }
+  setTimeout(initCdiToggleV268, 500);
+})();
+
+
+/* ELTAUM_CDI_ANALYTIC_LINK_V275 */
+function openCdiAnalyticTableV274(){
+  // Este botão leva o usuário para a Tabela Analítica do painel de indicadores
+  // e alterna o modo de visualização para "Tabela analítica".
+  const analyticBtn = document.querySelector('#marketDashboardV150 [data-v150-mode="analytic"], [data-v150-mode="analytic"]');
+  const panel = document.getElementById('marketDashboardV150')
+    || document.getElementById('sec-mercado-painel')
+    || document.querySelector('#sec-painel-body .indic-table-wrap')
+    || document.getElementById('sec-mercado');
+
+  if(analyticBtn && typeof analyticBtn.click === 'function'){
+    analyticBtn.click();
+  }else{
+    // Fallback: se o painel executivo ainda não foi montado, mostra a tabela nativa.
+    const tableWrap = document.querySelector('#sec-painel-body .indic-table-wrap, .indic-table-wrap');
+    if(tableWrap){
+      tableWrap.hidden = false;
+      tableWrap.style.display = '';
+    }
+  }
+
+  setTimeout(() => {
+    const target = document.getElementById('marketDashboardV150')
+      || document.getElementById('sec-mercado-painel')
+      || document.querySelector('#sec-painel-body .indic-table-wrap')
+      || panel;
+    if(target && typeof target.scrollIntoView === 'function'){
+      target.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+  }, 80);
+
+  return false;
+}
+
+
+/* ════════════════════════════════════════════════════
+   v303 — normalizador final de títulos
+   Motivo: regras antigas de algumas seções ainda tinham !important e
+   venciam o CSS da v302. Aqui a padronização é aplicada com
+   element.style.setProperty(..., 'important'), que vence o legado.
+════════════════════════════════════════════════════ */
+(function normalizeSectionTitlesV303(){
+  const TARGETS = [
+    'Resumo executivo',
+    'Fundos disponíveis',
+    'Rankings dos fundos',
+    'Indicadores de mercado',
+    'Dólar PTAX',
+    'Boletim Focus',
+    'Inflação e juros',
+    'Comparador de fundos'
+  ];
+
+  function txt(el){
+    return String(el?.innerText || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function isTarget(h2){
+    const t = txt(h2).replace(/^[^\p{L}\p{N}]+/u, '').trim().toLowerCase();
+    return TARGETS.some(x => t === x.toLowerCase());
+  }
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    document.documentElement.classList.add('title-normalized-v303');
+
+    document.querySelectorAll('h2.section-title-v302, h2.page-section-title-v302, h2.compar-title').forEach(h2 => {
+      if(!isTarget(h2)) return;
+      if(
+        h2.classList.contains('ranking-title-hero-v305') ||
+        h2.classList.contains('section-hero-premium-v306') ||
+        h2.classList.contains('section-hero-soft-v306') ||
+        h2.classList.contains('summary-hero-v306') ||
+        h2.classList.contains('market-hero-v306')
+      ) return;
+
+      h2.classList.add('section-title-v303-final');
+
+      const isNarrow = window.matchMedia('(max-width: 390px)').matches;
+      const isMobile = window.matchMedia('(max-width: 768px)').matches;
+      const titleSize = isNarrow ? '1.16rem' : (isMobile ? '1.22rem' : '1.34rem');
+      const iconSize = isNarrow ? '26px' : (isMobile ? '28px' : '30px');
+      const iconFont = isNarrow ? '.82rem' : (isMobile ? '.88rem' : '.95rem');
+
+      setImportant(h2, 'display', 'flex');
+      setImportant(h2, 'align-items', 'center');
+      setImportant(h2, 'justify-content', 'flex-start');
+      setImportant(h2, 'gap', isNarrow ? '8px' : '9px');
+      setImportant(h2, 'margin', '0 0 12px');
+      setImportant(h2, 'padding', '0');
+      setImportant(h2, 'width', '100%');
+      setImportant(h2, 'color', '#f8fafc');
+      setImportant(h2, 'font-family', 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif');
+      setImportant(h2, 'font-size', titleSize);
+      setImportant(h2, 'line-height', '1.12');
+      setImportant(h2, 'font-weight', '800');
+      setImportant(h2, 'letter-spacing', '-0.032em');
+      setImportant(h2, 'text-transform', 'none');
+      setImportant(h2, 'text-shadow', 'none');
+      setImportant(h2, 'background', 'transparent');
+      setImportant(h2, 'border', '0');
+
+      const icon = h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
+      if(icon){
+        icon.classList.add('section-title-icon-v303-final');
+        setImportant(icon, 'width', iconSize);
+        setImportant(icon, 'height', iconSize);
+        setImportant(icon, 'min-width', iconSize);
+        setImportant(icon, 'max-width', iconSize);
+        setImportant(icon, 'flex', `0 0 ${iconSize}`);
+        setImportant(icon, 'border-radius', isNarrow ? '8px' : '9px');
+        setImportant(icon, 'display', 'inline-flex');
+        setImportant(icon, 'align-items', 'center');
+        setImportant(icon, 'justify-content', 'center');
+        setImportant(icon, 'background', 'linear-gradient(135deg, rgba(246,200,97,.18), rgba(76,104,255,.13))');
+        setImportant(icon, 'border', '1px solid rgba(246,200,97,.22)');
+        setImportant(icon, 'box-shadow', 'inset 0 1px 0 rgba(255,255,255,.08), 0 6px 14px rgba(0,0,0,.18)');
+        setImportant(icon, 'color', 'inherit');
+        setImportant(icon, 'font-size', iconFont);
+        setImportant(icon, 'font-weight', '400');
+        setImportant(icon, 'line-height', '1');
+        setImportant(icon, 'letter-spacing', '0');
+        setImportant(icon, 'text-shadow', 'none');
+      }
+
+      const label = h2.querySelector('.section-title-text-v302, .section-title-text-v300, span:last-child');
+      if(label){
+        label.classList.add('section-title-text-v303-final');
+        setImportant(label, 'display', 'inline-block');
+        setImportant(label, 'min-width', '0');
+        setImportant(label, 'color', '#f8fafc');
+        setImportant(label, 'font-size', 'inherit');
+        setImportant(label, 'line-height', 'inherit');
+        setImportant(label, 'font-weight', 'inherit');
+        setImportant(label, 'letter-spacing', 'inherit');
+        setImportant(label, 'text-transform', 'none');
+        setImportant(label, 'text-shadow', 'none');
+      }
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v308 — remove GFB completo no mobile
+   O CSS oculta o container inteiro #gfb. Este complemento garante
+   também aria-hidden/inert no mobile, sem afetar desktop.
+════════════════════════════════════════════════════ */
+(function removeGlobalFundBarMobileV308(){
+  function apply(){
+    const gfb = document.getElementById('gfb');
+    if(!gfb) return;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(isMobile){
+      gfb.setAttribute('aria-hidden','true');
+      try{ gfb.inert = true; }catch(_){}
+      gfb.style.setProperty('display','none','important');
+      gfb.style.setProperty('height','0','important');
+      gfb.style.setProperty('min-height','0','important');
+      gfb.style.setProperty('max-height','0','important');
+      gfb.style.setProperty('margin','0','important');
+      gfb.style.setProperty('padding','0','important');
+      gfb.style.setProperty('overflow','hidden','important');
+    }else{
+      gfb.removeAttribute('aria-hidden');
+      try{ gfb.inert = false; }catch(_){}
+      gfb.style.removeProperty('display');
+      gfb.style.removeProperty('height');
+      gfb.style.removeProperty('min-height');
+      gfb.style.removeProperty('max-height');
+      gfb.style.removeProperty('margin');
+      gfb.style.removeProperty('padding');
+      gfb.style.removeProperty('overflow');
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 1000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v309 — ranking hero spacing/fix
+   Remove estilos inline herdados do normalizador v303 no título do Ranking
+   e reaplica centralização/medalhão compacto apenas no mobile.
+════════════════════════════════════════════════════ */
+(function fixRankingHeroV309(){
+  function clearImportantInline(el, props){
+    if(!el) return;
+    props.forEach(p => el.style.removeProperty(p));
+  }
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const h2 = document.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    if(!h2) return;
+
+    const icon = h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
+    const text = h2.querySelector('.section-title-text-v302, .section-title-text-v300, span:last-child');
+    const group = h2.closest('.ranking-title-group');
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isNarrow = window.matchMedia('(max-width: 390px)').matches;
+
+    if(!isMobile){
+      [h2, icon, text, group].forEach(el => el && el.removeAttribute('style'));
+      return;
+    }
+
+    h2.classList.add('ranking-title-v309-fixed');
+    if(group) group.classList.add('ranking-title-group-v309-fixed');
+
+    const iconSize = isNarrow ? '48px' : '54px';
+    const iconFont = isNarrow ? '1.42rem' : '1.58rem';
+    const titleSize = isNarrow ? '1.28rem' : '1.38rem';
+
+    setImportant(group, 'display', 'flex');
+    setImportant(group, 'flex-direction', 'column');
+    setImportant(group, 'align-items', 'center');
+    setImportant(group, 'text-align', 'center');
+    setImportant(group, 'width', '100%');
+    setImportant(group, 'margin', '6px 0 14px');
+    setImportant(group, 'padding', '0');
+
+    setImportant(h2, 'position', 'relative');
+    setImportant(h2, 'display', 'flex');
+    setImportant(h2, 'flex-direction', 'column');
+    setImportant(h2, 'align-items', 'center');
+    setImportant(h2, 'justify-content', 'center');
+    setImportant(h2, 'gap', isNarrow ? '8px' : '9px');
+    setImportant(h2, 'width', '100%');
+    setImportant(h2, 'margin', '0');
+    setImportant(h2, 'padding', '0');
+    setImportant(h2, 'text-align', 'center');
+    setImportant(h2, 'color', '#f8fafc');
+    setImportant(h2, 'font-size', titleSize);
+    setImportant(h2, 'line-height', '1.08');
+    setImportant(h2, 'font-weight', '850');
+    setImportant(h2, 'letter-spacing', '-0.042em');
+    setImportant(h2, 'text-shadow', 'none');
+    setImportant(h2, 'background', 'transparent');
+    setImportant(h2, 'border', '0');
+
+    setImportant(icon, 'width', iconSize);
+    setImportant(icon, 'height', iconSize);
+    setImportant(icon, 'min-width', iconSize);
+    setImportant(icon, 'max-width', iconSize);
+    setImportant(icon, 'flex', `0 0 ${iconSize}`);
+    setImportant(icon, 'border-radius', '999px');
+    setImportant(icon, 'display', 'inline-flex');
+    setImportant(icon, 'align-items', 'center');
+    setImportant(icon, 'justify-content', 'center');
+    setImportant(icon, 'background', 'radial-gradient(circle at 50% 40%, rgba(255,223,135,.22), rgba(246,200,97,.08) 42%, rgba(8,10,20,.92) 72%), linear-gradient(145deg, rgba(246,200,97,.20), rgba(20,24,42,.86))');
+    setImportant(icon, 'border', '1px solid rgba(246,200,97,.52)');
+    setImportant(icon, 'box-shadow', '0 0 0 1px rgba(246,200,97,.08), 0 0 26px rgba(246,200,97,.22), 0 10px 22px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12)');
+    setImportant(icon, 'color', '#ffd36f');
+    setImportant(icon, 'font-size', iconFont);
+    setImportant(icon, 'font-weight', '400');
+    setImportant(icon, 'line-height', '1');
+    setImportant(icon, 'letter-spacing', '0');
+    setImportant(icon, 'text-shadow', '0 0 14px rgba(255,211,111,.34)');
+
+    setImportant(text, 'display', 'block');
+    setImportant(text, 'text-align', 'center');
+    setImportant(text, 'color', '#f8fafc');
+    setImportant(text, 'font-size', 'inherit');
+    setImportant(text, 'font-weight', 'inherit');
+    setImportant(text, 'line-height', 'inherit');
+    setImportant(text, 'letter-spacing', 'inherit');
+    setImportant(text, 'text-shadow', '0 8px 22px rgba(0,0,0,.34)');
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v310 — resumo sem ícone duplicado
+   O bloco .mobile-kpi-head já tinha um ícone legado .mobile-kpi-emoji.
+   Como o H2 ganhou o ícone padronizado, o legado precisa sair.
+════════════════════════════════════════════════════ */
+(function dedupeSummaryIconV310(){
+  function apply(){
+    const legacy = document.querySelector('#sec-kpi .mobile-kpi-head > .mobile-kpi-emoji, .mobile-kpi-head > .mobile-kpi-emoji');
+    if(!legacy) return;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(isMobile){
+      legacy.setAttribute('aria-hidden','true');
+      legacy.style.setProperty('display','none','important');
+      legacy.style.setProperty('visibility','hidden','important');
+      legacy.style.setProperty('width','0','important');
+      legacy.style.setProperty('height','0','important');
+      legacy.style.setProperty('margin','0','important');
+      legacy.style.setProperty('padding','0','important');
+      legacy.style.setProperty('overflow','hidden','important');
+    }else{
+      legacy.removeAttribute('aria-hidden');
+      legacy.style.removeProperty('display');
+      legacy.style.removeProperty('visibility');
+      legacy.style.removeProperty('width');
+      legacy.style.removeProperty('height');
+      legacy.style.removeProperty('margin');
+      legacy.style.removeProperty('padding');
+      legacy.style.removeProperty('overflow');
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v312 — limpeza de gap antes do ranking no mobile
+   Remove ações ocultas/fantasmas e força o bloco Ranking a ficar
+   compacto logo após a paginação/fundos.
+════════════════════════════════════════════════════ */
+(function rankingGapCleanupV312(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const section = document.getElementById('rankingsSection');
+    if(!section) return;
+
+    const head = section.querySelector('.ranking-head');
+    const actions = section.querySelector('.ranking-actions');
+    const titleGroup = section.querySelector('.ranking-title-group');
+    const h2 = section.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const toolbar = section.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+
+    if(!isMobile){
+      [section, head, actions, titleGroup, h2, toolbar].forEach(el => el && el.removeAttribute('style'));
+      if(actions){
+        actions.removeAttribute('aria-hidden');
+        try{ actions.inert = false; }catch(_){}
+      }
+      return;
+    }
+
+    section.classList.add('ranking-gap-clean-v312-active');
+
+    setImportant(section, 'padding-top', '6px');
+    setImportant(section, 'margin-top', '10px');
+    setImportant(section, 'scroll-margin-top', '82px');
+
+    if(head){
+      setImportant(head, 'display', 'block');
+      setImportant(head, 'margin', '0');
+      setImportant(head, 'padding', '0');
+      setImportant(head, 'min-height', '0');
+      setImportant(head, 'height', 'auto');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden','true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'display', 'flex');
+      setImportant(titleGroup, 'flex-direction', 'column');
+      setImportant(titleGroup, 'align-items', 'center');
+      setImportant(titleGroup, 'text-align', 'center');
+      setImportant(titleGroup, 'margin', '2px 0 10px');
+      setImportant(titleGroup, 'padding', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'margin', '0');
+      setImportant(h2, 'padding', '0');
+      setImportant(h2, 'gap', '7px');
+    }
+
+    if(toolbar){
+      setImportant(toolbar, 'margin-top', '0');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+// RANKING_GAP_RAYS_V313
+
+
+/* ════════════════════════════════════════════════════
+   v314 — aproximação extrema paginação → ranking
+   Complemento JS para remover altura/margens fantasmas que estilos
+   legados ou inline possam manter entre .pagination-row e .ranking-head.
+════════════════════════════════════════════════════ */
+(function paginationRankingTightV314(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const ranking = document.getElementById('rankingsSection');
+    if(!ranking) return;
+
+    const rankingHead = ranking.querySelector('.ranking-head');
+    const titleGroup = ranking.querySelector('.ranking-title-group');
+    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+    const actions = ranking.querySelector('.ranking-actions');
+
+    const paginationCandidates = [
+      ...document.querySelectorAll('.pagination-row, .pagination-controls, .pagination, .catalog-pagination, .fund-pagination-wrap, #pageBtns')
+    ];
+
+    if(!isMobile){
+      [ranking, rankingHead, titleGroup, h2, toolbar, actions, ...paginationCandidates].forEach(el => {
+        if(!el) return;
+        el.style.removeProperty('margin-top');
+        el.style.removeProperty('margin-bottom');
+        el.style.removeProperty('padding-top');
+        el.style.removeProperty('padding-bottom');
+        el.style.removeProperty('min-height');
+        el.style.removeProperty('height');
+      });
+      if(actions){
+        actions.removeAttribute('aria-hidden');
+        try{ actions.inert = false; }catch(_){}
+      }
+      return;
+    }
+
+    paginationCandidates.forEach(el => {
+      setImportant(el, 'margin-bottom', '0');
+      setImportant(el, 'padding-bottom', '0');
+    });
+
+    const funds = document.getElementById('sec-fundos');
+    if(funds){
+      setImportant(funds, 'margin-bottom', '0');
+      setImportant(funds, 'padding-bottom', '0');
+    }
+
+    setImportant(ranking, 'margin-top', '0');
+    setImportant(ranking, 'padding-top', '0');
+    setImportant(ranking, 'scroll-margin-top', '82px');
+
+    if(rankingHead){
+      setImportant(rankingHead, 'margin-top', '0');
+      setImportant(rankingHead, 'margin-bottom', '0');
+      setImportant(rankingHead, 'padding-top', '0');
+      setImportant(rankingHead, 'padding-bottom', '0');
+      setImportant(rankingHead, 'min-height', '0');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden', 'true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'margin-top', '0');
+      setImportant(titleGroup, 'margin-bottom', '8px');
+      setImportant(titleGroup, 'padding-top', '0');
+      setImportant(titleGroup, 'padding-bottom', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'margin-top', '0');
+      setImportant(h2, 'margin-bottom', '0');
+      setImportant(h2, 'padding-top', '0');
+      setImportant(h2, 'padding-bottom', '0');
+      setImportant(h2, 'gap', '7px');
+    }
+
+    if(toolbar){
+      setImportant(toolbar, 'margin-top', '0');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 200);
+  setTimeout(apply, 800);
+  setTimeout(apply, 1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v315 — respiro profissional paginação → ranking
+   Corrige a sobreposição criada pela aproximação extrema da v314.
+   Objetivo: cerca de 52–64px entre paginação e troféu, sem colisão.
+════════════════════════════════════════════════════ */
+(function rankingProfessionalBreathV315(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const ranking = document.getElementById('rankingsSection');
+    if(!ranking) return;
+
+    const rankingHead = ranking.querySelector('.ranking-head');
+    const titleGroup = ranking.querySelector('.ranking-title-group');
+    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+    const actions = ranking.querySelector('.ranking-actions');
+
+    const paginationCandidates = [
+      ...document.querySelectorAll('.pagination-row, .pagination-controls, .pagination, .catalog-pagination, .fund-pagination-wrap, #pageBtns')
+    ];
+
+    if(!isMobile){
+      [ranking, rankingHead, titleGroup, h2, toolbar, actions, ...paginationCandidates].forEach(el => {
+        if(!el) return;
+        el.style.removeProperty('margin-top');
+        el.style.removeProperty('margin-bottom');
+        el.style.removeProperty('padding-top');
+        el.style.removeProperty('padding-bottom');
+        el.style.removeProperty('min-height');
+        el.style.removeProperty('height');
+      });
+      if(actions){
+        actions.removeAttribute('aria-hidden');
+        try{ actions.inert = false; }catch(_){}
+      }
+      return;
+    }
+
+    paginationCandidates.forEach(el => {
+      setImportant(el, 'margin-bottom', '16px');
+      setImportant(el, 'padding-bottom', '0');
+    });
+
+    const funds = document.getElementById('sec-fundos');
+    if(funds){
+      setImportant(funds, 'margin-bottom', '16px');
+      setImportant(funds, 'padding-bottom', '0');
+    }
+
+    setImportant(ranking, 'margin-top', '0');
+    setImportant(ranking, 'padding-top', '0');
+    setImportant(ranking, 'scroll-margin-top', '82px');
+
+    if(rankingHead){
+      setImportant(rankingHead, 'margin-top', '44px');
+      setImportant(rankingHead, 'margin-bottom', '0');
+      setImportant(rankingHead, 'padding-top', '0');
+      setImportant(rankingHead, 'padding-bottom', '0');
+      setImportant(rankingHead, 'min-height', '0');
+      setImportant(rankingHead, 'height', 'auto');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden', 'true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'margin-top', '0');
+      setImportant(titleGroup, 'margin-bottom', '12px');
+      setImportant(titleGroup, 'padding-top', '0');
+      setImportant(titleGroup, 'padding-bottom', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'margin-top', '0');
+      setImportant(h2, 'margin-bottom', '0');
+      setImportant(h2, 'padding-top', '0');
+      setImportant(h2, 'padding-bottom', '0');
+      setImportant(h2, 'gap', '8px');
+    }
+
+    if(toolbar){
+      setImportant(toolbar, 'margin-top', '0');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 200);
+  setTimeout(apply, 800);
+  setTimeout(apply, 1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v316 — Mercado mobile cards/progressive disclosure
+   Complemento leve para não ocupar espaço com botões técnicos no mobile.
+════════════════════════════════════════════════════ */
+(function marketMobileCardsV316(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const cdiBtn = document.getElementById('cdiAnalyticLinkV274');
+    const cdiLegend = document.querySelector('#cdiYearHistory .cdi-chart-legend-v271');
+    const cdiFoot = document.querySelector('#cdiYearHistory .reference-footnote-v167');
+
+    if(isMobile){
+      [cdiBtn, cdiLegend, cdiFoot].forEach(el => {
+        if(!el) return;
+        setImportant(el, 'display', 'none');
+      });
+    }else{
+      [cdiBtn, cdiLegend, cdiFoot].forEach(el => {
+        if(!el) return;
+        el.style.removeProperty('display');
+      });
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v317 — limpeza ranking / Copom / CDI mobile
+   - corrige o retorno do espaço no Ranking gerado por v315;
+   - remove botão Calendário BCB no Copom mobile;
+   - remove texto descritivo da próxima reunião;
+   - oculta e destrói o gráfico CDI no mobile, mantendo KPIs.
+════════════════════════════════════════════════════ */
+(function rankingMarketCleanV317(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function cleanRanking(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const ranking = document.getElementById('rankingsSection');
+    if(!ranking || !isMobile) return;
+
+    const head = ranking.querySelector('.ranking-head');
+    const titleGroup = ranking.querySelector('.ranking-title-group');
+    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const icon = h2?.querySelector('.section-title-icon-v302');
+    const actions = ranking.querySelector('.ranking-actions');
+    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+
+    setImportant(ranking, 'margin-top', '8px');
+    setImportant(ranking, 'padding-top', '0');
+
+    if(head){
+      setImportant(head, 'display', 'block');
+      setImportant(head, 'margin', '18px 0 0');
+      setImportant(head, 'padding', '0');
+      setImportant(head, 'min-height', '0');
+      setImportant(head, 'height', 'auto');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'display', 'flex');
+      setImportant(titleGroup, 'flex-direction', 'column');
+      setImportant(titleGroup, 'align-items', 'center');
+      setImportant(titleGroup, 'text-align', 'center');
+      setImportant(titleGroup, 'width', '100%');
+      setImportant(titleGroup, 'margin', '0 0 10px');
+      setImportant(titleGroup, 'padding', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'position', 'relative');
+      setImportant(h2, 'display', 'flex');
+      setImportant(h2, 'flex-direction', 'column');
+      setImportant(h2, 'align-items', 'center');
+      setImportant(h2, 'justify-content', 'center');
+      setImportant(h2, 'gap', '7px');
+      setImportant(h2, 'margin', '0');
+      setImportant(h2, 'padding', '0');
+      setImportant(h2, 'font-size', '1.26rem');
+      setImportant(h2, 'line-height', '1.08');
+    }
+
+    if(icon){
+      setImportant(icon, 'width', '44px');
+      setImportant(icon, 'height', '44px');
+      setImportant(icon, 'min-width', '44px');
+      setImportant(icon, 'max-width', '44px');
+      setImportant(icon, 'flex', '0 0 44px');
+      setImportant(icon, 'font-size', '1.26rem');
+      setImportant(icon, 'position', 'relative');
+      setImportant(icon, 'overflow', 'visible');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden','true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(toolbar) setImportant(toolbar, 'margin-top', '0');
+  }
+
+  function cleanCopom(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    document.querySelectorAll('.copom-link-v271').forEach(el => {
+      el.setAttribute('aria-hidden','true');
+      try{ el.inert = true; }catch(_){}
+      setImportant(el, 'display', 'none');
+    });
+
+    document.querySelectorAll('#copomNextExecutiveV270 .copom-exec-desc-v270, .copom-exec-card-v270.is-next .copom-exec-desc-v270').forEach(el => {
+      el.remove();
+    });
+  }
+
+  function cleanCdiChart(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const canvas = document.getElementById('cdiYearChartV271');
+    const wrap = document.querySelector('#cdiYearHistory .cdi-chart-canvas-wrap-v271');
+    const inner = document.getElementById('cdiChartScrollInnerV273');
+    const legend = document.querySelector('#cdiYearHistory .cdi-chart-legend-v271');
+    const foot = document.querySelector('#cdiYearHistory .reference-footnote-v167');
+
+    if(!isMobile) return;
+
+    try{
+      if(window.Chart && canvas){
+        const chart = Chart.getChart(canvas);
+        if(chart) chart.destroy();
+      }
+    }catch(_){}
+
+    [wrap, inner, canvas, legend, foot].forEach(el => {
+      if(!el) return;
+      el.setAttribute('aria-hidden','true');
+      setImportant(el, 'display', 'none');
+      setImportant(el, 'height', '0');
+      setImportant(el, 'min-height', '0');
+      setImportant(el, 'max-height', '0');
+      setImportant(el, 'margin', '0');
+      setImportant(el, 'padding', '0');
+      setImportant(el, 'overflow', 'hidden');
+    });
+  }
+
+  function apply(){
+    cleanRanking();
+    cleanCopom();
+    cleanCdiChart();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v318 — cenário monetário compacto no mobile
+   Remove fonte BCB do topo e compacta os cards de taxas/Copom.
+════════════════════════════════════════════════════ */
+(function marketRatesCompactV318(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    document.querySelectorAll('#sec-mercado .rates-reference-v167 .market-reference-source-v167').forEach(el => {
+      el.setAttribute('aria-hidden','true');
+      try{ el.inert = true; }catch(_){}
+      setImportant(el, 'display', 'none');
+    });
+
+    // Remove descrições longas do Copom no mobile: os cards ficam de consulta rápida.
+    document.querySelectorAll('#sec-mercado .copom-exec-desc-v270').forEach(el => {
+      el.setAttribute('aria-hidden','true');
+      setImportant(el, 'display', 'none');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v319 — força grid 2 colunas cenário monetário mobile
+   Diagnóstico: v318 carregou, mas regras antigas ainda deixaram
+   .rates-summary-v167 com 1 coluna e cards em largura total.
+════════════════════════════════════════════════════ */
+(function forceRatesGridV319(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const wrap = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
+    if(!wrap) return;
+
+    const cards = [...wrap.querySelectorAll('.rate-summary-card-v167')];
+    const bcb = document.querySelector('#sec-mercado .rates-reference-v167 .market-reference-source-v167');
+
+    if(!isMobile){
+      [wrap, bcb, ...cards].forEach(el => {
+        if(!el) return;
+        el.removeAttribute('style');
+      });
+      return;
+    }
+
+    // remove botão/fonte BCB do topo
+    if(bcb){
+      bcb.setAttribute('aria-hidden', 'true');
+      try{ bcb.inert = true; }catch(_){}
+      setImportant(bcb, 'display', 'none');
+      setImportant(bcb, 'height', '0');
+      setImportant(bcb, 'margin', '0');
+      setImportant(bcb, 'padding', '0');
+      setImportant(bcb, 'overflow', 'hidden');
+    }
+
+    setImportant(wrap, 'display', 'grid');
+    setImportant(wrap, 'grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)');
+    setImportant(wrap, 'gap', '9px');
+    setImportant(wrap, 'overflow', 'visible');
+    setImportant(wrap, 'padding', '0');
+    setImportant(wrap, 'margin', '0 0 12px');
+    setImportant(wrap, 'width', '100%');
+
+    cards.forEach((card, idx) => {
+      setImportant(card, 'display', 'block');
+      setImportant(card, 'width', 'auto');
+      setImportant(card, 'min-width', '0');
+      setImportant(card, 'max-width', 'none');
+      setImportant(card, 'flex', 'initial');
+      setImportant(card, 'border-radius', '13px');
+      setImportant(card, 'padding', '10px 11px');
+      setImportant(card, 'min-height', idx === 2 ? '62px' : '76px');
+      setImportant(card, 'box-sizing', 'border-box');
+
+      if(idx === 0 || idx === 1){
+        setImportant(card, 'grid-column', 'auto');
+      }else{
+        setImportant(card, 'grid-column', '1 / -1');
+        setImportant(card, 'display', 'grid');
+        setImportant(card, 'grid-template-columns', '1fr auto');
+        setImportant(card, 'align-items', 'center');
+        setImportant(card, 'column-gap', '10px');
+      }
+    });
+
+    const next = wrap.querySelector('.copom-next-summary-v167');
+    if(next){
+      const label = next.querySelector(':scope > span');
+      const status = next.querySelector(':scope > small');
+      if(label) setImportant(label, 'grid-column', '1 / -1');
+      if(status){
+        setImportant(status, 'justify-self', 'end');
+        setImportant(status, 'margin', '0');
+        setImportant(status, 'padding', '3px 8px');
+      }
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v320 — remove card "Próxima reunião" do resumo superior
+   Mantém a informação no bloco "Copom executivo", evitando duplicidade.
+════════════════════════════════════════════════════ */
+(function removeNextSummaryCardV320(){
+  function apply(){
+    const cards = document.querySelectorAll('#sec-mercado .rates-summary-v167 .copom-next-summary-v167');
+    cards.forEach(card => card.remove());
+
+    const wrap = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
+    if(wrap && window.matchMedia('(max-width: 768px)').matches){
+      wrap.style.setProperty('grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)', 'important');
+      wrap.style.setProperty('gap', '9px', 'important');
+      wrap.style.setProperty('margin-bottom', '12px', 'important');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v321 — carrossel das 8 reuniões do Copom no mobile
+   Usa a store #copomMeetings como fonte e cria uma trilha horizontal
+   dentro de #copomExecutiveSummaryV270.
+════════════════════════════════════════════════════ */
+(function copomCarouselV321(){
+  function norm(txt){
+    return String(txt || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function classify(item, result){
+    const cls = String(item.className || '').toLowerCase();
+    const r = String(result || '').toLowerCase();
+    if(cls.includes('next') || r.includes('próxima') || r.includes('proxima')) return 'is-next';
+    if(cls.includes('future') || r.includes('prevista')) return 'is-future';
+    if(cls.includes('cut') || r.includes('corte')) return 'is-cut';
+    if(cls.includes('hold') || r.includes('mantida')) return 'is-hold';
+    return 'is-neutral';
+  }
+
+  function statusLabel(result){
+    const r = norm(result);
+    if(!r) return 'agenda';
+    if(/próxima|proxima/i.test(r)) return 'agenda';
+    if(/prevista/i.test(r)) return 'prevista';
+    if(/corte/i.test(r)) return 'corte';
+    if(/mantida/i.test(r)) return 'mantida';
+    return r.replace(/→/g, '').slice(0, 18);
+  }
+
+  function build(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    const store = document.getElementById('copomMeetings');
+    if(!summary || !store || !isMobile) return;
+
+    const items = [...store.querySelectorAll('.copom-item')]
+      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
+
+    if(!items.length || summary.dataset.v321Built === '1') return;
+
+    const html = items.map(item => {
+      const num = norm(item.querySelector('.copom-num')?.textContent);
+      const date = norm(item.querySelector('.copom-date')?.textContent);
+      const result = norm(item.querySelector('.copom-result')?.textContent);
+      const kind = classify(item, result);
+      const label = statusLabel(result);
+      return `
+        <article class="copom-exec-card-v270 copom-carousel-card-v321 ${kind}" role="listitem">
+          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
+          <strong class="copom-exec-date-v270">${date || '—'}</strong>
+          <div class="copom-exec-meta-v270">
+            <span class="copom-exec-status-v270 ${kind}">${label}</span>
+          </div>
+          ${result && !/próxima|proxima|prevista/i.test(result) ? `<small class="copom-carousel-result-v321">${result}</small>` : ''}
+        </article>`;
+    }).join('');
+
+    summary.dataset.v321Built = '1';
+    summary.setAttribute('role', 'list');
+    summary.setAttribute('aria-label', 'Carrossel das reuniões do Copom');
+    summary.innerHTML = html;
+  }
+
+  function resetDesktop(){
+    if(window.matchMedia('(max-width: 768px)').matches) return;
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(summary?.dataset.v321Built === '1'){
+      summary.dataset.v321Built = '0';
+    }
+  }
+
+  function apply(){
+    build();
+    resetDesktop();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
+  setTimeout(apply, 2000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v323 — correção CDI 12 meses
+   Preenche o KPI/card "12 meses" com:
+   1) cards.cdi.acum_12m;
+   2) fallback calculado pelos últimos 12 meses do histórico.
+════════════════════════════════════════════════════ */
+(function fixCdi12mV323(){
+  function fmt(v){
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.', ',') + '%';
+  }
+
+  function calcFromHistory(hist){
+    const vals = (Array.isArray(hist) ? hist : [])
+      .slice()
+      .sort((a,b) => String(a?.key || '').localeCompare(String(b?.key || '')))
+      .slice(-12)
+      .map(x => Number(x?.valor))
+      .filter(Number.isFinite);
+
+    if(!vals.length) return NaN;
+    const fator = vals.reduce((acc, v) => acc * (1 + v / 100), 1);
+    return Number(((fator - 1) * 100).toFixed(2));
+  }
+
+  function getCdi(){
+    return window._mercadoV230?.cards?.cdi
+      || window.__dadosMercado?.cards?.cdi
+      || window.dadosMercado?.cards?.cdi
+      || null;
+  }
+
+  function apply(){
+    const cdi = getCdi();
+    if(!cdi) return;
+
+    const direto = Number(cdi.acum_12m ?? cdi.m12 ?? cdi.acumulado_12m ?? cdi.acum12m);
+    const valor = Number.isFinite(direto) ? direto : calcFromHistory(cdi.historico);
+    if(!Number.isFinite(valor)) return;
+
+    const txt = fmt(valor);
+    const kpi = document.getElementById('cdiLast12mValueV296');
+    if(kpi) kpi.textContent = txt;
+
+    document
+      .querySelectorAll('#cdiMonthCarouselV322 .cdi-month-card-v322')
+      .forEach(card => {
+        const label = (card.querySelector('.cdi-month-kicker-v322')?.textContent || '').toLowerCase();
+        if(label.includes('12 meses')){
+          const strong = card.querySelector('.cdi-month-value-v322, strong');
+          if(strong) strong.textContent = txt;
+        }
+      });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
+  setTimeout(apply, 2000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v325 — Poupança: limpeza mobile e correção cenários
+   - oculta bloco textual longo #poupRulesV214 no mobile;
+   - mantém apenas Comparação de cenários ao expandir;
+   - corrige sobreposição de dt/dd nos cards;
+   - dá respiro após botões.
+════════════════════════════════════════════════════ */
+(function savingsCleanMobileV325(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const rules = document.getElementById('poupRulesV214');
+    const details = document.getElementById('poupDetailsPanelV167');
+    const scenarios = document.querySelector('#poupDetailsPanelV167 .savings-scenarios-v167, #poupDetailsPanelV167 .savings-scenarios-v207, #poupDetailsPanelV167 .savings-scenarios-v208');
+    const actions = document.querySelector('#sec-mercado .savings-actions-v167, #sec-mercado .savings-actions-v205, #sec-mercado .savings-actions-v207');
+
+    if(!isMobile){
+      if(rules){
+        rules.removeAttribute('aria-hidden');
+        rules.style.removeProperty('display');
+      }
+      return;
+    }
+
+    if(rules){
+      rules.setAttribute('aria-hidden','true');
+      try{ rules.inert = true; }catch(_){}
+      setImportant(rules, 'display', 'none');
+      setImportant(rules, 'height', '0');
+      setImportant(rules, 'min-height', '0');
+      setImportant(rules, 'max-height', '0');
+      setImportant(rules, 'margin', '0');
+      setImportant(rules, 'padding', '0');
+      setImportant(rules, 'overflow', 'hidden');
+    }
+
+    if(actions){
+      setImportant(actions, 'margin-bottom', '16px');
+    }
+
+    if(scenarios){
+      setImportant(scenarios, 'display', 'block');
+      setImportant(scenarios, 'margin-top', '0');
+    }
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dl > div').forEach(pair => {
+      setImportant(pair, 'display', 'flex');
+      setImportant(pair, 'flex-direction', 'column');
+      setImportant(pair, 'align-items', 'flex-start');
+      setImportant(pair, 'gap', '4px');
+      setImportant(pair, 'min-height', 'auto');
+      setImportant(pair, 'padding', '0');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dt, #sec-mercado .savings-scenario-card-v208 dd').forEach(el => {
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'width', '100%');
+      setImportant(el, 'margin', '0');
+      setImportant(el, 'padding', '0');
+      setImportant(el, 'line-height', '1.22');
+      setImportant(el, 'white-space', 'normal');
+      setImportant(el, 'overflow-wrap', 'anywhere');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v326 — Poupança: refinamento final dos cenários mobile
+   - remove texto longo redundante #poupScenarioSummary;
+   - padroniza alinhamento à esquerda;
+   - corrige hierarquia dt/dd;
+   - aumenta largura dos cards.
+════════════════════════════════════════════════════ */
+(function savingsScenariosPolishV326(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    const summary = document.getElementById('poupScenarioSummary');
+    if(summary) summary.remove();
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208').forEach(card => {
+      setImportant(card, 'text-align', 'left');
+      setImportant(card, 'flex', '0 0 188px');
+      setImportant(card, 'min-width', '188px');
+      setImportant(card, 'max-width', '188px');
+      setImportant(card, 'padding', '14px');
+      setImportant(card, 'box-sizing', 'border-box');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dl > div').forEach(pair => {
+      setImportant(pair, 'display', 'flex');
+      setImportant(pair, 'flex-direction', 'column');
+      setImportant(pair, 'align-items', 'flex-start');
+      setImportant(pair, 'justify-content', 'flex-start');
+      setImportant(pair, 'text-align', 'left');
+      setImportant(pair, 'gap', '5px');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dt').forEach(dt => {
+      setImportant(dt, 'display', 'block');
+      setImportant(dt, 'width', '100%');
+      setImportant(dt, 'text-align', 'left');
+      setImportant(dt, 'font-size', '10px');
+      setImportant(dt, 'line-height', '1.1');
+      setImportant(dt, 'font-weight', '800');
+      setImportant(dt, 'letter-spacing', '.07em');
+      setImportant(dt, 'text-transform', 'uppercase');
+      setImportant(dt, 'color', 'rgba(220,228,250,.58)');
+      setImportant(dt, 'margin', '0');
+      setImportant(dt, 'padding', '0');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dd').forEach(dd => {
+      setImportant(dd, 'display', 'block');
+      setImportant(dd, 'width', '100%');
+      setImportant(dd, 'text-align', 'left');
+      setImportant(dd, 'font-size', '12px');
+      setImportant(dd, 'line-height', '1.22');
+      setImportant(dd, 'font-weight', '760');
+      setImportant(dd, 'letter-spacing', '-.01em');
+      setImportant(dd, 'color', '#f8fafc');
+      setImportant(dd, 'margin', '0');
+      setImportant(dd, 'padding', '0');
+      setImportant(dd, 'white-space', 'normal');
+      setImportant(dd, 'overflow-wrap', 'normal');
+      setImportant(dd, 'word-break', 'normal');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v327 — Poupança: micro-polimento final
+   - remove pílula Selic 14,25%;
+   - limpa títulos dos cenários;
+   - reforça quick note mais orientado ao rendimento.
+════════════════════════════════════════════════════ */
+(function savingsMicroPolishV327(){
+  function apply(){
+    const status = document.getElementById('poupScenarioStatus');
+    if(status) status.remove();
+
+    const title4 = document.getElementById('poupScenario4TitleV214');
+    if(title4) title4.textContent = 'Selic 4,00%';
+
+    const title85 = document.getElementById('poupScenario85TitleV214');
+    if(title85) title85.textContent = 'Selic 8,50%';
+
+    const current = document.getElementById('poupScenarioCurrentTitle');
+    if(current) current.textContent = current.textContent.replace(/\s+a\.a\.$/i, '');
+
+    const quick = document.getElementById('poupQuickNote');
+    if(quick && /depósitos novos e antigos seguem/i.test(quick.textContent || '')){
+      quick.innerHTML = 'Rendimento de <strong>TR + 0,50% a.m.</strong> <span class="poup-note-muted-v327">(Selic acima de 8,50% a.a.)</span>';
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* v328 - Poupança no topo direito (mobile) */
+(function(){
+  function apply(){
+    var lbl=document.getElementById("poupCurrentLabelV214");
+    if(lbl) lbl.textContent = window.innerWidth <= 480 ? "Rendimento do mês" : lbl.textContent;
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", apply); else apply();
+  window.addEventListener("resize", apply, {passive:true});
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v329 — limpeza de microcopy dos indicadores
+   - CDI: texto longo vira "Parcial até dd/mm";
+   - Tags: Atual vira Cotação/Pontos conforme indicador;
+   - Grid: Atual vira Mês atual.
+════════════════════════════════════════════════════ */
+(function marketMicrocopyCleanV329(){
+  function norm(txt){
+    return String(txt || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function findAncestorText(el){
+    const article = el.closest('article, .market-period-card-v196, .market-asset-card, .period-card, .market-card');
+    return norm(article?.innerText || el.closest('section')?.innerText || '');
+  }
+
+  function cleanCdi(){
+    document.querySelectorAll('#sec-mercado small, #sec-mercado .market-period-metric-v196 small').forEach(small => {
+      const t = norm(small.textContent);
+      if(/Acumulado no mês/i.test(t) && /Dados disponíveis até/i.test(t)){
+        const data = t.match(/até\s+(\d{1,2}\/\d{1,2})/i)?.[1] || '';
+        small.textContent = data ? `Parcial até ${data}` : 'Parcial do mês';
+      }
+    });
+  }
+
+  function cleanCurrentLevelTags(){
+    document.querySelectorAll('#sec-mercado .market-current-level-v196 small, #sec-mercado .market-current-level-v196 span, #sec-mercado .market-current-level-v196').forEach(el => {
+      const txt = norm(el.textContent);
+      if(!/^Atual$/i.test(txt)) return;
+
+      const ctx = findAncestorText(el).toLowerCase();
+
+      if(ctx.includes('dólar') || ctx.includes('ptax') || ctx.includes('brl/usd')){
+        el.textContent = 'Cotação';
+        return;
+      }
+
+      if(ctx.includes('ibovespa') || ctx.includes('s&p') || ctx.includes('dow jones') || ctx.includes('nasdaq')){
+        el.textContent = 'Pontos';
+      }
+    });
+
+    // fallback para tags que vêm como texto completo "ATUAL R$..." ou "ATUAL 168.289 pts"
+    document.querySelectorAll('#sec-mercado .market-current-level-v196').forEach(el => {
+      const ctx = findAncestorText(el).toLowerCase();
+      el.childNodes.forEach(node => {
+        if(node.nodeType !== Node.TEXT_NODE) return;
+        const val = String(node.nodeValue || '');
+        if(/^\s*Atual\s+/i.test(val)){
+          if(ctx.includes('dólar') || ctx.includes('ptax') || ctx.includes('brl/usd')){
+            node.nodeValue = val.replace(/Atual/i, 'Cotação');
+          }else if(ctx.includes('ibovespa') || ctx.includes('s&p') || ctx.includes('dow jones') || ctx.includes('nasdaq')){
+            node.nodeValue = val.replace(/Atual/i, 'Pontos');
+          }
+        }
+      });
+    });
+  }
+
+  function cleanMetricGridLabels(){
+    document.querySelectorAll('#sec-mercado .market-period-metric-v196 span, #sec-mercado .market-period-metric-v196 dt').forEach(label => {
+      const t = norm(label.textContent);
+      if(/^Atual$/i.test(t)){
+        label.textContent = 'Mês atual';
+      }
+    });
+  }
+
+  function apply(){
+    cleanCdi();
+    cleanCurrentLevelTags();
+    cleanMetricGridLabels();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v330 — largura uniforme dos cards do cenário monetário
+   Copom e CDI mensal passam a usar a mesma régua dos cards 2 colunas:
+   2 cards visíveis por vez + próximo card levemente sugerido no scroll.
+════════════════════════════════════════════════════ */
+(function marketCardWidthUniformV330(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    const width = 'calc((100% - 9px) / 2)';
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+      .forEach(card => {
+        setImportant(card, 'flex', `0 0 ${width}`);
+        setImportant(card, 'min-width', width);
+        setImportant(card, 'max-width', width);
+        setImportant(card, 'box-sizing', 'border-box');
+      });
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+      .forEach(track => {
+        setImportant(track, 'gap', '9px');
+        setImportant(track, 'padding-left', '1px');
+        setImportant(track, 'padding-right', '1px');
+      });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v331 — cards Copom/CDI com largura igual aos cards Selic/CDI
+   Diagnóstico do console:
+   - Selic/CDI: 156px
+   - Copom/CDI mensal: 130px
+   Correção: carrosséis com cards de 156px no mobile.
+════════════════════════════════════════════════════ */
+(function marketCard156V331(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function cleanCopomResult(txt){
+    return String(txt || '')
+      .replace(/corte\s+-0,25\s+p\.p\.\s+→\s+/i, 'Corte → ')
+      .replace(/mantida em/i, 'Mantida ')
+      .trim();
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    const cardWidth = '156px';
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+      .forEach(card => {
+        setImportant(card, 'flex', `0 0 ${cardWidth}`);
+        setImportant(card, 'min-width', cardWidth);
+        setImportant(card, 'max-width', cardWidth);
+        setImportant(card, 'box-sizing', 'border-box');
+      });
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+      .forEach(track => {
+        setImportant(track, 'gap', '9px');
+        setImportant(track, 'padding-left', '1px');
+        setImportant(track, 'padding-right', '18px');
+        setImportant(track, 'scroll-padding-left', '1px');
+      });
+
+    document.querySelectorAll('#sec-mercado .copom-carousel-result-v321').forEach(small => {
+      const original = small.textContent;
+      const clean = cleanCopomResult(original);
+      if(clean && clean !== original) small.textContent = clean;
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v332 — força microcopy no painel consolidado
+   Corrige textos que podem ser recriados depois do carregamento:
+   - CDI: "Acumulado no mês..." => "Parcial até dd/mm"
+   - Tags nominais: Atual => Cotação/Pontos
+   - Grid de variação: Atual => Mês atual
+════════════════════════════════════════════════════ */
+(function marketMicrocopyForceV332(){
+  function txt(el){
+    return String(el?.textContent || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function context(el){
+    const block = el.closest(
+      '.market-period-card-v196, .market-period-group-v196, .market-asset-card, article, .period-card, .market-card, .market-v172-card, .market-reference-block-v167'
+    );
+    return txt(block || el).toLowerCase();
+  }
+
+  function replaceTextNodePrefix(el, from, to){
+    [...el.childNodes].forEach(node => {
+      if(node.nodeType === Node.TEXT_NODE && new RegExp('^\\s*' + from + '\\b', 'i').test(node.nodeValue || '')){
+        node.nodeValue = String(node.nodeValue).replace(new RegExp(from, 'i'), to);
+      }
+    });
+  }
+
+  function cleanCdiLongText(root){
+    root.querySelectorAll('small, .market-period-metric-v196 small, .market-period-metric-v196 p, .market-period-metric-v196 div').forEach(el => {
+      const t = txt(el);
+      if(/Acumulado no mês/i.test(t) && /Dados disponíveis até/i.test(t)){
+        const data = t.match(/até\s+(\d{1,2}\/\d{1,2})/i)?.[1] || '';
+        el.textContent = data ? `Parcial até ${data}` : 'Parcial do mês';
+      }
+    });
+  }
+
+  function cleanCurrentNominalTags(root){
+    root.querySelectorAll('.market-current-level-v196, .market-current-level-v196 small, .market-current-level-v196 span, .market-current-level-v196 b, .market-current-level-v196 strong').forEach(el => {
+      const t = txt(el);
+      const ctx = context(el);
+
+      if(/^Atual$/i.test(t)){
+        if(/dólar|dolar|ptax|brl\/usd/.test(ctx)) el.textContent = 'Cotação';
+        if(/ibovespa|s&p|dow jones|nasdaq/.test(ctx)) el.textContent = 'Pontos';
+      }
+
+      if(/^Atual\s+/i.test(t)){
+        if(/dólar|dolar|ptax|brl\/usd/.test(ctx)) replaceTextNodePrefix(el, 'Atual', 'Cotação');
+        if(/ibovespa|s&p|dow jones|nasdaq/.test(ctx)) replaceTextNodePrefix(el, 'Atual', 'Pontos');
+      }
+    });
+  }
+
+  function cleanMetricCurrent(root){
+    root.querySelectorAll('.market-period-metric-v196 span, .market-period-metric-v196 dt, .market-period-metric-v196 .metric-label, .market-period-metric-v196 label').forEach(el => {
+      if(/^Atual$/i.test(txt(el))) el.textContent = 'Mês atual';
+    });
+  }
+
+  function cleanAll(){
+    const root = document.querySelector('#sec-mercado') || document;
+    cleanCdiLongText(root);
+    cleanCurrentNominalTags(root);
+    cleanMetricCurrent(root);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', cleanAll);
+  else cleanAll();
+
+  [250, 750, 1500, 2500, 4000].forEach(ms => setTimeout(cleanAll, ms));
+
+  const target = document.querySelector('#sec-mercado');
+  if(target && 'MutationObserver' in window){
+    const obs = new MutationObserver(() => {
+      clearTimeout(window.__marketMicrocopyForceV332Timer);
+      window.__marketMicrocopyForceV332Timer = setTimeout(cleanAll, 80);
+    });
+    obs.observe(target, { childList:true, subtree:true, characterData:true });
+  }
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v333 — Dólar PTAX executivo mobile
+   Organiza a seção em:
+   1) cotação principal;
+   2) variações resumidas;
+   3) gráfico/estatísticas sob demanda;
+   4) fechamentos mensais recolhidos por padrão.
+════════════════════════════════════════════════════ */
+(function dolarExecutiveMobileV333(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sec = document.getElementById('sec-dolar');
+    if(!sec) return;
+
+    const timelineBody = document.getElementById('dolarTimelineBody');
+    const timelineToggle = document.getElementById('dolarTimelineToggle');
+    const chartPanel = document.getElementById('dolarChartPanel');
+    const chartToggle = document.getElementById('dolarChartToggle');
+    const currentMonth = document.getElementById('dolarCurrentMonthV162');
+
+    if(!isMobile){
+      if(timelineBody) timelineBody.classList.add('open');
+      if(timelineToggle){
+        timelineToggle.textContent = 'Recolher ▲';
+        timelineToggle.setAttribute('aria-expanded','true');
+      }
+      if(currentMonth) currentMonth.hidden = true;
+      return;
+    }
+
+    sec.classList.add('dolar-exec-mobile-v333-active');
+
+    // O mês atual já aparece no card de variações. Evita duplicidade.
+    if(currentMonth){
+      currentMonth.hidden = true;
+      setImportant(currentMonth, 'display', 'none');
+    }
+
+    // Gráfico fechado por padrão, estatísticas aparecem quando o gráfico abre.
+    if(chartPanel && !chartPanel.dataset.v333UserTouched){
+      chartPanel.classList.add('is-mobile-collapsed');
+    }
+    if(chartToggle && !chartToggle.dataset.v333Bound){
+      chartToggle.textContent = chartPanel?.classList.contains('is-mobile-collapsed') ? 'Abrir gráfico' : 'Ocultar gráfico';
+      chartToggle.setAttribute('aria-expanded', String(!chartPanel?.classList.contains('is-mobile-collapsed')));
+      chartToggle.dataset.v333Bound = '1';
+      chartToggle.addEventListener('click', () => {
+        if(chartPanel) chartPanel.dataset.v333UserTouched = '1';
+        setTimeout(() => {
+          chartToggle.textContent = chartPanel?.classList.contains('is-mobile-collapsed') ? 'Abrir gráfico' : 'Ocultar gráfico';
+        }, 60);
+      }, { passive:true });
+    }
+
+    // Fechamentos recolhidos por padrão para reduzir altura.
+    if(timelineBody && !timelineBody.dataset.v333UserTouched){
+      timelineBody.classList.remove('open');
+    }
+    if(timelineToggle && !timelineToggle.dataset.v333Bound){
+      timelineToggle.textContent = 'Ver fechamentos';
+      timelineToggle.setAttribute('aria-expanded','false');
+      timelineToggle.dataset.v333Bound = '1';
+      timelineToggle.addEventListener('click', () => {
+        timelineBody && (timelineBody.dataset.v333UserTouched = '1');
+        setTimeout(() => {
+          const open = timelineBody?.classList.contains('open');
+          timelineToggle.textContent = open ? 'Ocultar fechamentos' : 'Ver fechamentos';
+          timelineToggle.setAttribute('aria-expanded', String(!!open));
+        }, 60);
+      }, { passive:true });
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v334 — Dólar: eixo X limpo + estatísticas sem redundância
+   - eixo X horizontal, com poucos ticks;
+   - card "Atual" vira "Variação";
+   - Máxima/Mínima em cor neutra.
+════════════════════════════════════════════════════ */
+(function dolarChartStatsV334(){
+  function apply(){
+    const varLabel = document.getElementById('ptaxStatVarLabelV334')
+      || document.querySelector('#ptaxStatsCard .ptax-stat-item:first-child .ptax-stat-label');
+    if(varLabel) varLabel.textContent = 'Variação';
+
+    ['ptaxStatMax', 'ptaxStatMin', 'ptaxStatMedia'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.className = 'ptax-stat-val neu';
+    });
+
+    const chart = window.Chart && document.getElementById('chartDolar')
+      ? Chart.getChart(document.getElementById('chartDolar'))
+      : null;
+
+    if(chart?.options?.scales?.x?.ticks){
+      chart.options.scales.x.ticks.maxRotation = 0;
+      chart.options.scales.x.ticks.minRotation = 0;
+      chart.options.scales.x.ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+      chart.options.scales.x.ticks.autoSkip = true;
+      chart.update('none');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
+  setTimeout(apply, 2000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v335 — força eixo X do gráfico PTAX horizontal no mobile
+   Evita labels diagonais em 24M/36M:
+   - maxRotation/minRotation 0
+   - apenas 5 labels visíveis
+   - demais labels ficam vazios
+════════════════════════════════════════════════════ */
+(function dolarXAxisMobileV335(){
+  function apply(){
+    const canvas = document.getElementById('chartDolar');
+    if(!canvas || !window.Chart) return;
+
+    const chart = Chart.getChart(canvas);
+    if(!chart?.options?.scales?.x?.ticks) return;
+
+    const ticks = chart.options.scales.x.ticks;
+    ticks.maxRotation = 0;
+    ticks.minRotation = 0;
+    ticks.autoSkip = false;
+    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+    ticks.callback = function(value, index, tickList){
+      const total = Array.isArray(tickList) ? tickList.length : (this.chart?.data?.labels?.length || 0);
+      const maxLabels = window.innerWidth <= 768 ? 5 : 10;
+      const label = this.getLabelForValue(value);
+      if(total <= maxLabels) return label;
+
+      const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
+      if(index === 0 || index === total - 1 || index % step === 0) return label;
+      return '';
+    };
+
+    chart.update('none');
+  }
+
+  function schedule(){
+    [80, 250, 700, 1200].forEach(ms => setTimeout(apply, ms));
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule);
+  else schedule();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  document.querySelectorAll('[data-dolar-range]').forEach(btn => {
+    btn.addEventListener('click', schedule, { passive:true });
+  });
+
+  const chartToggle = document.getElementById('dolarChartToggle');
+  if(chartToggle) chartToggle.addEventListener('click', schedule, { passive:true });
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v336 — Dólar: badge na linha do título + fechamentos visíveis
+   - reposiciona a fonte BCB/PTAX na mesma linha do título;
+   - reabre o carrossel de fechamentos mensais no mobile;
+   - evita que o v333 feche novamente a timeline.
+════════════════════════════════════════════════════ */
+(function dolarBadgeMonthsV336(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sec = document.getElementById('sec-dolar');
+    if(!sec || !isMobile) return;
+
+    const badge = sec.querySelector('.section-badge');
+    if(badge){
+      badge.classList.add('dolar-source-badge-v336');
+      badge.innerHTML = '<span class="badge-dot green"></span>BCB · PTAX';
+      badge.removeAttribute('aria-hidden');
+      setImportant(badge, 'display', 'inline-flex');
+    }
+
+    const body = document.getElementById('dolarTimelineBody');
+    const toggle = document.getElementById('dolarTimelineToggle');
+    const footer = sec.querySelector('.dolar-compact-footer');
+    const months = document.getElementById('dolarMonths');
+
+    if(body){
+      body.dataset.v333UserTouched = '1';
+      body.classList.add('open');
+      body.removeAttribute('hidden');
+      setImportant(body, 'display', 'block');
+      setImportant(body, 'margin-top', '12px');
+    }
+
+    if(toggle){
+      toggle.setAttribute('aria-hidden','true');
+      toggle.setAttribute('tabindex','-1');
+      setImportant(toggle, 'display', 'none');
+    }
+
+    if(footer){
+      setImportant(footer, 'display', 'block');
+    }
+
+    if(months){
+      setImportant(months, 'display', 'flex');
+      setImportant(months, 'overflow-x', 'auto');
+      setImportant(months, 'gap', '9px');
+      setImportant(months, 'padding-bottom', '8px');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v337 — Dólar: gráfico fechado por padrão no mobile
+   O gráfico fica sob demanda para reduzir altura e ruído visual.
+   Botão: "Abrir gráfico" / "Ocultar gráfico".
+════════════════════════════════════════════════════ */
+(function dolarChartClosedV337(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function applyInitial(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const panel = document.getElementById('dolarChartPanel');
+    const toggle = document.getElementById('dolarChartToggle');
+    if(!panel || !toggle || !isMobile) return;
+
+    if(!panel.dataset.v337UserOpened){
+      panel.classList.add('is-mobile-collapsed');
+      toggle.textContent = 'Abrir gráfico';
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    setImportant(toggle, 'display', 'inline-flex');
+  }
+
+  function bind(){
+    const panel = document.getElementById('dolarChartPanel');
+    const toggle = document.getElementById('dolarChartToggle');
+    if(!panel || !toggle || toggle.dataset.v337Bound) return;
+
+    toggle.dataset.v337Bound = '1';
+    toggle.addEventListener('click', () => {
+      setTimeout(() => {
+        const isCollapsed = panel.classList.contains('is-mobile-collapsed');
+        panel.dataset.v337UserOpened = isCollapsed ? '' : '1';
+        toggle.textContent = isCollapsed ? 'Abrir gráfico' : 'Ocultar gráfico';
+        toggle.setAttribute('aria-expanded', String(!isCollapsed));
+      }, 70);
+    }, { passive:true });
+  }
+
+  function apply(){
+    applyInitial();
+    bind();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v338 — Inflação e juros: limpeza de redundâncias mobile
+   - remove pílulas de leitura dos gráficos;
+   - remove cards "vigente/último" redundantes;
+   - compacta botões de prazo em trilha horizontal.
+════════════════════════════════════════════════════ */
+(function inflationRatesCleanV338(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function hide(el){
+    if(!el) return;
+    el.setAttribute('aria-hidden','true');
+    try{ el.inert = true; }catch(_){}
+    setImportant(el, 'display', 'none');
+    setImportant(el, 'height', '0');
+    setImportant(el, 'min-height', '0');
+    setImportant(el, 'max-height', '0');
+    setImportant(el, 'margin', '0');
+    setImportant(el, 'padding', '0');
+    setImportant(el, 'overflow', 'hidden');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const root = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body') || document;
+    if(!root || !isMobile) return;
+
+    // 1) Pílulas/leituras redundantes dos gráficos
+    ['evoCardIpcaNote', 'evoCardSelicNote', 'evoCardMetaNote'].forEach(id => hide(document.getElementById(id)));
+    root.querySelectorAll('.chart-reading, .evo-card-reading, .evo-chart-reading').forEach(hide);
+
+    // 2) Selic: remover cartão da taxa vigente dentro do grid
+    root.querySelectorAll(
+      '#selicSummaryRow .selic-summary-chip.now, ' +
+      '#selicSummaryRow .selic-summary-chip.vigente, ' +
+      '#selicSummaryRow .selic-summary-chip.current, ' +
+      '#selicSummaryRow .selic-summary-chip.is-current'
+    ).forEach(hide);
+
+    // fallback por texto
+    root.querySelectorAll('#selicSummaryRow .selic-summary-chip').forEach(el => {
+      const t = (el.innerText || '').toLowerCase();
+      if(t.includes('vigente') || t.includes('taxa vigente')) hide(el);
+    });
+
+    // 3) IPCA: remover cartão último IPCA/último resultado
+    root.querySelectorAll(
+      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.latest, ' +
+      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.current, ' +
+      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.is-latest'
+    ).forEach(hide);
+
+    root.querySelectorAll('#ipcaSummaryRowV250 .ipca-summary-chip-v250').forEach(el => {
+      const t = (el.innerText || '').toLowerCase();
+      if(t.includes('último') || t.includes('ultimo') || t.includes('ipca do último')) hide(el);
+    });
+
+    // 4) Botões de prazo em uma linha rolável
+    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
+      setImportant(tabs, 'display', 'flex');
+      setImportant(tabs, 'flex-wrap', 'nowrap');
+      setImportant(tabs, 'overflow-x', 'auto');
+      setImportant(tabs, 'overflow-y', 'hidden');
+      setImportant(tabs, 'gap', '7px');
+      setImportant(tabs, 'padding', '1px 1px 8px');
+      setImportant(tabs, 'scroll-snap-type', 'x proximity');
+      setImportant(tabs, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      setImportant(btn, 'flex', '0 0 auto');
+      setImportant(btn, 'min-width', '72px');
+      setImportant(btn, 'min-height', '34px');
+      setImportant(btn, 'padding', '0 12px');
+      setImportant(btn, 'font-size', '.66rem');
+      setImportant(btn, 'border-radius', '12px');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
+
+  const target = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body');
+  if(target && 'MutationObserver' in window){
+    const obs = new MutationObserver(() => {
+      clearTimeout(window.__inflationRatesCleanV338Timer);
+      window.__inflationRatesCleanV338Timer = setTimeout(apply, 80);
+    });
+    obs.observe(target, { childList:true, subtree:true, characterData:true });
+  }
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v339 — gráficos Inflação/Juros: tabs, cards e eixo X
+   - Restaura botões em carrossel horizontal.
+   - Adiciona 12M quando ausente.
+   - Corrige chips Máxima/Mínima.
+   - Força eixo X horizontal nos charts.
+   - Atualiza título IPCA conforme prazo escolhido.
+════════════════════════════════════════════════════ */
+(function chartsTabsFixV339(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function normalizeRangeLabel(raw){
+    const r = String(raw || '').toLowerCase();
+    if(r.includes('12')) return 'últimos 12 meses';
+    if(r.includes('24')) return 'últimos 24 meses';
+    if(r.includes('36')) return 'últimos 36 meses';
+    if(r.includes('1a') || r === '1' || r === 'year') return 'últimos 12 meses';
+    if(r.includes('2a')) return 'últimos 24 meses';
+    if(r.includes('5a')) return 'últimos 5 anos';
+    if(r.includes('10a')) return 'últimos 10 anos';
+    if(r.includes('hist')) return 'histórico';
+    return 'período selecionado';
+  }
+
+  function inferRangeFromButton(btn){
+    return btn?.dataset?.range
+      || btn?.dataset?.ipcaRange
+      || btn?.dataset?.selicRange
+      || btn?.dataset?.months
+      || btn?.textContent
+      || '';
+  }
+
+  function updateIpcaTitle(range){
+    const title = document.getElementById('chartIpcaTitle');
+    if(!title) return;
+    title.textContent = `🎯 IPCA mensal — ${normalizeRangeLabel(range)}`;
+  }
+
+  function ensure12MButtons(){
+    // v342: 12M removido por redundância/bug; não reinserir.
+    return;
+  }
+
+  function fixTabs(){
+    const root = document.getElementById('sec-graficos') || document;
+    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
+      setImportant(tabs, 'display', 'flex');
+      setImportant(tabs, 'flex-wrap', 'nowrap');
+      setImportant(tabs, 'overflow-x', 'auto');
+      setImportant(tabs, 'overflow-y', 'hidden');
+      setImportant(tabs, 'justify-content', 'flex-start');
+      setImportant(tabs, 'gap', '8px');
+      setImportant(tabs, 'padding', '1px 1px 8px');
+      setImportant(tabs, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      setImportant(btn, 'flex', '0 0 auto');
+      setImportant(btn, 'width', 'auto');
+      setImportant(btn, 'min-width', '68px');
+      setImportant(btn, 'max-width', 'none');
+      setImportant(btn, 'white-space', 'nowrap');
+      setImportant(btn, 'min-height', '34px');
+      setImportant(btn, 'padding', '0 12px');
+      setImportant(btn, 'font-size', '.66rem');
+    });
+  }
+
+  function fixSummaryChips(){
+    const root = document.getElementById('sec-graficos') || document;
+
+    root.querySelectorAll('#selicSummaryRow .selic-summary-chip, #ipcaSummaryRowV250 .ipca-summary-chip-v250').forEach(chip => {
+      setImportant(chip, 'display', 'grid');
+      setImportant(chip, 'grid-template-columns', '1fr');
+      setImportant(chip, 'gap', '5px');
+      setImportant(chip, 'align-items', 'start');
+      setImportant(chip, 'min-height', '64px');
+      setImportant(chip, 'height', 'auto');
+      setImportant(chip, 'overflow', 'visible');
+      setImportant(chip, 'padding', '10px 11px');
+    });
+
+    root.querySelectorAll('#selicSummaryRow .selic-summary-text, #ipcaSummaryRowV250 .ipca-summary-text-v250').forEach(txt => {
+      setImportant(txt, 'display', 'flex');
+      setImportant(txt, 'flex-direction', 'column');
+      setImportant(txt, 'align-items', 'flex-start');
+      setImportant(txt, 'gap', '4px');
+      setImportant(txt, 'min-width', '0');
+      setImportant(txt, 'width', '100%');
+      setImportant(txt, 'line-height', '1.12');
+    });
+
+    root.querySelectorAll('#selicSummaryRow .selic-summary-chip span, #selicSummaryRow .selic-summary-chip small, #selicSummaryRow .selic-summary-chip strong, #ipcaSummaryRowV250 .ipca-summary-chip-v250 span, #ipcaSummaryRowV250 .ipca-summary-chip-v250 small, #ipcaSummaryRowV250 .ipca-summary-chip-v250 strong').forEach(el => {
+      setImportant(el, 'position', 'static');
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'white-space', 'normal');
+      setImportant(el, 'line-height', '1.15');
+      setImportant(el, 'max-width', '100%');
+      setImportant(el, 'overflow', 'visible');
+      setImportant(el, 'text-overflow', 'clip');
+    });
+  }
+
+  function fixChartXAxis(chart){
+    if(!chart?.options?.scales?.x?.ticks) return;
+    const ticks = chart.options.scales.x.ticks;
+    ticks.maxRotation = 0;
+    ticks.minRotation = 0;
+    ticks.autoSkip = true;
+    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+    chart.update('none');
+  }
+
+  function fixAllCharts(){
+    if(!window.Chart) return;
+    ['chartSelic', 'chartIpca', 'chartIpca12m', 'chartDolar', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if(!canvas) return;
+      const chart = Chart.getChart(canvas);
+      if(chart) fixChartXAxis(chart);
+    });
+  }
+
+  function bindTitleUpdates(){
+    if(window.__chartsTabsFixV339Bound) return;
+    window.__chartsTabsFixV339Bound = true;
+
+    document.addEventListener('click', ev => {
+      const btn = ev.target.closest('#sec-graficos .chart-tabs button, #sec-graficos .chart-tab, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button');
+      if(!btn) return;
+      const range = inferRangeFromButton(btn);
+      setTimeout(() => {
+        updateIpcaTitle(range);
+        fixAllCharts();
+      }, 120);
+      setTimeout(fixAllCharts, 500);
+    }, { passive:true });
+  }
+
+  function apply(){
+    ensure12MButtons();
+    fixTabs();
+    fixSummaryChips();
+    fixAllCharts();
+
+    const activeIpca = document.querySelector('#sec-graficos .ipca-range-tabs .active, #sec-graficos [data-ipca-range].active, #sec-graficos #chartIpcaTitle')?.closest?.('button');
+    updateIpcaTitle(inferRangeFromButton(activeIpca) || '24m');
+    bindTitleUpdates();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
+
+  // v340: MutationObserver removido.
+  // Motivo: a própria função apply() altera estilos/atributos e isso gerava loop de mutações/piscadas.
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v340 — correção do loop/pisca em Inflação e Juros
+   Diagnóstico:
+   - v339 criou MutationObserver em #sec-graficos;
+   - apply() alterava style/atributos;
+   - o MutationObserver chamava apply() de novo;
+   - resultado: mutações contínuas, tela piscando e pulando.
+════════════════════════════════════════════════════ */
+(function chartsLoopFixV340(){
+  function safeChartUpdate(chart){
+    if(!chart || typeof chart.update !== 'function') return;
+    const canvas = chart.canvas || chart.ctx?.canvas;
+    if(!canvas || !canvas.isConnected || !canvas.ownerDocument) return;
+    try{ chart.update('none'); }catch(err){ console.warn('[v340] chart.update ignorado:', err?.message || err); }
+  }
+
+  function safeFixCharts(){
+    if(!window.Chart) return;
+    ['chartSelic', 'chartIpca', 'chartIpca12m', 'chartDolar', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if(!canvas || !canvas.isConnected) return;
+      const chart = Chart.getChart(canvas);
+      if(!chart?.options?.scales?.x?.ticks) return;
+      const ticks = chart.options.scales.x.ticks;
+      ticks.maxRotation = 0;
+      ticks.minRotation = 0;
+      ticks.autoSkip = true;
+      ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+      safeChartUpdate(chart);
+    });
+  }
+
+  function stabilize(){
+    // Reaplica só uma vez, sem observador de mutações.
+    document.documentElement.classList.add('charts-loop-stable-v340');
+    safeFixCharts();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', stabilize);
+  else stabilize();
+
+  window.addEventListener('resize', () => requestAnimationFrame(safeFixCharts), { passive:true });
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button')){
+      setTimeout(safeFixCharts, 160);
+      setTimeout(safeFixCharts, 500);
+    }
+  }, { passive:true });
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v341 — Inflação/Juros compacto sem redundância
+   - remove 12M das abas da Selic quando 1A já existe;
+   - impede v339 de reinserir 12M no bloco Selic;
+   - dá respiro nos valores de máxima/mínima;
+   - transforma os cards-resumo superiores em carrossel mobile.
+════════════════════════════════════════════════════ */
+(function inflationSummaryCompactV341(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function removeRedundantSelic12m(){
+    const root = document.querySelector('#sec-graficos') || document;
+    root.querySelectorAll(
+      '#evoChartSelicCard .chart-tabs button, ' +
+      '#evoChartSelicCard .chart-tab, ' +
+      '#evoChartSelicCard .selic-range-tabs button, ' +
+      '[data-chart="selic"][data-range="12"], ' +
+      '[data-selic-range="12m"], ' +
+      '[data-selic-range="12"]'
+    ).forEach(btn => {
+      const text = (btn.textContent || '').trim().toLowerCase();
+      const range = String(btn.dataset?.range || btn.dataset?.selicRange || '').toLowerCase();
+      if(text === '12m' || range === '12m' || range === '12'){
+        btn.remove();
+      }
+    });
+  }
+
+  function compactSummaryCards(){
+    const root = document.querySelector('#sec-graficos') || document;
+    const grids = root.querySelectorAll('.evo-summary-grid, .evo-summary-cards, .evo-kpi-grid, .evo-overview-grid');
+    grids.forEach(grid => {
+      setImportant(grid, 'display', 'flex');
+      setImportant(grid, 'flex-wrap', 'nowrap');
+      setImportant(grid, 'overflow-x', 'auto');
+      setImportant(grid, 'overflow-y', 'hidden');
+      setImportant(grid, 'gap', '10px');
+      setImportant(grid, 'padding', '1px 1px 10px');
+      setImportant(grid, 'scroll-snap-type', 'x proximity');
+      setImportant(grid, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.evo-summary-card, .evo-kpi-card, .evo-overview-card').forEach(card => {
+      setImportant(card, 'flex', '0 0 232px');
+      setImportant(card, 'min-width', '232px');
+      setImportant(card, 'max-width', '232px');
+      setImportant(card, 'min-height', '86px');
+      setImportant(card, 'padding', '12px 13px');
+      setImportant(card, 'scroll-snap-align', 'start');
+      setImportant(card, 'box-sizing', 'border-box');
+    });
+  }
+
+  function improveSummaryChipSpacing(){
+    const root = document.querySelector('#sec-graficos') || document;
+    root.querySelectorAll(
+      '#selicSummaryRow .selic-summary-value, ' +
+      '#selicSummaryRow .selic-summary-chip strong, ' +
+      '#selicSummaryRow .selic-summary-chip .value, ' +
+      '#selicSummaryRow .selic-summary-chip output'
+    ).forEach(el => {
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'margin-bottom', '4px');
+      setImportant(el, 'line-height', '1.08');
+    });
+
+    root.querySelectorAll(
+      '#selicSummaryRow .selic-summary-date, ' +
+      '#selicSummaryRow .selic-summary-chip small'
+    ).forEach(el => {
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'line-height', '1.12');
+      setImportant(el, 'margin-top', '2px');
+    });
+  }
+
+  function fixSelicTitleIfNeeded(){
+    const title = document.querySelector('#chartSelicTitle');
+    if(title && /últimos\s+12\s+meses/i.test(title.textContent || '')){
+      title.textContent = title.textContent.replace(/últimos\s+12\s+meses/i, 'último ano');
+    }
+  }
+
+  function apply(){
+    if(!window.matchMedia('(max-width: 768px)').matches) return;
+    removeRedundantSelic12m();
+    compactSummaryCards();
+    improveSummaryChipSpacing();
+    fixSelicTitleIfNeeded();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .selic-range-tabs button')){
+      setTimeout(apply, 90);
+      setTimeout(apply, 350);
+    }
+  }, { passive:true });
+
+  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v342 — remove 12M e força eixo X horizontal
+   Correções:
+   - remove qualquer botão 12M dos gráficos de Inflação/Juros;
+   - impede reinserção dinâmica do 12M;
+   - força Chart.js a manter labels horizontais em qualquer update;
+   - limita rótulos do eixo X para não inclinar.
+════════════════════════════════════════════════════ */
+(function remove12mAndForceXAxisV342(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function remove12mButtons(){
+    const root = document.getElementById('sec-graficos') || document;
+    root.querySelectorAll(
+      'button[data-range="12m"], button[data-range="12"], ' +
+      'button[data-ipca-range="12m"], button[data-selic-range="12m"], ' +
+      '.chart-tab[data-range="12m"], .chart-tab[data-ipca-range="12m"], .chart-tab[data-selic-range="12m"]'
+    ).forEach(btn => btn.remove());
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      if((btn.textContent || '').trim().toLowerCase() === '12m') btn.remove();
+    });
+  }
+
+  function formatSparseTicks(chart){
+    if(!chart?.options?.scales?.x?.ticks) return;
+    const ticks = chart.options.scales.x.ticks;
+    ticks.maxRotation = 0;
+    ticks.minRotation = 0;
+    ticks.autoSkip = false;
+    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+    ticks.callback = function(value, index, tickList){
+      const total = Array.isArray(tickList) ? tickList.length : (this.chart?.data?.labels?.length || 0);
+      const label = this.getLabelForValue ? this.getLabelForValue(value) : String(value ?? '');
+      const maxLabels = window.innerWidth <= 768 ? 5 : 10;
+      if(total <= maxLabels) return label;
+
+      const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
+      if(index === 0 || index === total - 1 || index % step === 0) return label;
+      return '';
+    };
+  }
+
+  function forceAllCharts(){
+    if(!window.Chart) return;
+    ['chartSelic', 'chartIpca', 'chartIpca12m', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta', 'chartDolar'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if(!canvas || !canvas.isConnected) return;
+      const chart = Chart.getChart(canvas);
+      if(!chart) return;
+      formatSparseTicks(chart);
+      try{ chart.update('none'); }catch(_){}
+    });
+  }
+
+  function patchChartUpdate(){
+    if(!window.Chart || Chart.__v342XAxisPatched) return;
+    Chart.__v342XAxisPatched = true;
+
+    const originalUpdate = Chart.prototype.update;
+    Chart.prototype.update = function(...args){
+      formatSparseTicks(this);
+      return originalUpdate.apply(this, args);
+    };
+  }
+
+  function stabilizeTabs(){
+    const root = document.getElementById('sec-graficos') || document;
+    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
+      setImportant(tabs, 'display', 'flex');
+      setImportant(tabs, 'flex-wrap', 'nowrap');
+      setImportant(tabs, 'overflow-x', 'auto');
+      setImportant(tabs, 'overflow-y', 'hidden');
+      setImportant(tabs, 'justify-content', 'flex-start');
+      setImportant(tabs, 'gap', '8px');
+      setImportant(tabs, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      setImportant(btn, 'flex', '0 0 auto');
+      setImportant(btn, 'width', 'auto');
+      setImportant(btn, 'min-width', '68px');
+      setImportant(btn, 'white-space', 'nowrap');
+    });
+  }
+
+  function apply(){
+    remove12mButtons();
+    patchChartUpdate();
+    stabilizeTabs();
+    forceAllCharts();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button')){
+      setTimeout(apply, 80);
+      setTimeout(forceAllCharts, 260);
+      setTimeout(forceAllCharts, 700);
+    }
+  }, { passive:true });
+
+  [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v343 — Selic: abas compactas e sem 2A
+   Decisão UX:
+   - remove 2A para reduzir ruído e evitar corte do botão final;
+   - "Histórico" vira "Completo", mais curto e semanticamente claro.
+════════════════════════════════════════════════════ */
+(function selicTabsCompactV343(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const root = document.querySelector('#sec-graficos') || document;
+
+    // Remove 2A apenas da Selic
+    root.querySelectorAll(
+      '#evoChartSelicCard button[data-chart="selic"][data-range="24"], ' +
+      '#evoChartSelicCard .chart-tab[data-chart="selic"][data-range="24"], ' +
+      '#chartSelicTitle ~ .chart-tabs button[data-range="24"]'
+    ).forEach(btn => {
+      const txt = (btn.textContent || '').trim().toLowerCase();
+      if(txt === '2a' || btn.dataset?.range === '24') btn.remove();
+    });
+
+    // Renomeia Histórico para Completo
+    root.querySelectorAll(
+      '#evoChartSelicCard button[data-chart="selic"][data-range="999"], ' +
+      '#evoChartSelicCard .chart-tab[data-chart="selic"][data-range="999"]'
+    ).forEach(btn => {
+      if((btn.textContent || '').trim().toLowerCase().includes('hist')) {
+        btn.textContent = 'Completo';
+      }
+      btn.setAttribute('aria-label', 'Ver série completa da Selic');
+    });
+
+    // Seletor Selic mais compacto e sem corte
+    const tabs = root.querySelector('#evoChartSelicCard .chart-tabs') 
+      || document.querySelector('#chartSelicTitle')?.closest('.chart-card-header')?.querySelector('.chart-tabs');
+
+    if(tabs){
+      setImportant(tabs, 'display', 'grid');
+      setImportant(tabs, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
+      setImportant(tabs, 'gap', '7px');
+      setImportant(tabs, 'overflow', 'visible');
+      setImportant(tabs, 'padding', '1px 0 8px');
+      setImportant(tabs, 'width', '100%');
+    }
+
+    root.querySelectorAll('#evoChartSelicCard .chart-tabs button, #evoChartSelicCard .chart-tab').forEach(btn => {
+      setImportant(btn, 'min-width', '0');
+      setImportant(btn, 'width', '100%');
+      setImportant(btn, 'max-width', 'none');
+      setImportant(btn, 'padding', '0 8px');
+      setImportant(btn, 'font-size', '.64rem');
+      setImportant(btn, 'white-space', 'nowrap');
+      setImportant(btn, 'overflow', 'hidden');
+      setImportant(btn, 'text-overflow', 'ellipsis');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .evo-view-tab, #sec-graficos .chart-tab, #sec-graficos .chart-tabs button')){
+      setTimeout(apply, 80);
+      setTimeout(apply, 320);
+    }
+  }, { passive:true });
+
+  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
 })();

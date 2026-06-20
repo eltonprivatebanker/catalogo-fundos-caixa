@@ -1,24 +1,34 @@
-# Catálogo de Fundos CAIXA — v263
+# Catálogo de Fundos CAIXA — v343
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que foi corrigido
+## Ajustes aplicados na aba Selic
 
-1. Corrigido o trecho do mobile onde o toque parecia "não obedecer" para rolar a página.
-2. O CDI mensal deixou de funcionar como carrossel/grade cortada no mobile.
-3. O CDI mensal agora aparece como lista compacta, com mês, taxa e status alinhados.
-4. Removido o texto longo "mais recente primeiro".
-5. O calendário expandido do Copom não cria mais uma rolagem interna que prende o toque.
-6. Mantidos os dados e a lógica de cálculo.
+### 1. Removido botão 2A
+O botão “2A” foi removido da Selic para reduzir ruído e evitar que o botão final fique cortado.
+
+### 2. “Histórico” virou “Completo”
+A palavra “Completo” é mais curta e funciona melhor no mobile.
+
+### 3. Botões em grid estável
+A Selic agora usa 4 botões em uma linha:
+- 1A
+- 5A
+- 10A
+- Completo
+
+## Motivo
+
+O botão “Histórico” estava sendo cortado no mobile. Com menos opções e texto menor, a linha fica mais limpa e previsível.
 
 ## Como subir
 
-Substitua no GitHub:
+Substitua:
 - index.html
 - style.css
 - app.js
 
-Depois, no celular, feche a aba e abra novamente para limpar o cache.
+Depois atualize forçado no navegador.
