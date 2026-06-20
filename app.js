@@ -1,3 +1,4 @@
+// ELTAUM_MARKET_CARD_WIDTH_UNIFORM_v330
 // ELTAUM_MARKET_MICROCOPY_CLEAN_v329
 // ELTAUM_SAVINGS_MICRO_POLISH_v327
 // ELTAUM_SAVINGS_SCENARIOS_POLISH_v326
@@ -17863,6 +17864,50 @@ function openCdiAnalyticTableV274(){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
 
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v330 — largura uniforme dos cards do cenário monetário
+   Copom e CDI mensal passam a usar a mesma régua dos cards 2 colunas:
+   2 cards visíveis por vez + próximo card levemente sugerido no scroll.
+════════════════════════════════════════════════════ */
+(function marketCardWidthUniformV330(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    const width = 'calc((100% - 9px) / 2)';
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+      .forEach(card => {
+        setImportant(card, 'flex', `0 0 ${width}`);
+        setImportant(card, 'min-width', width);
+        setImportant(card, 'max-width', width);
+        setImportant(card, 'box-sizing', 'border-box');
+      });
+
+    document
+      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+      .forEach(track => {
+        setImportant(track, 'gap', '9px');
+        setImportant(track, 'padding-left', '1px');
+        setImportant(track, 'padding-right', '1px');
+      });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 900);
   setTimeout(apply, 1800);

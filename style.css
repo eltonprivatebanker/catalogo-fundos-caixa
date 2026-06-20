@@ -50025,3 +50025,65 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: .58rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v330 — CARDS UNIFORMES NO CENÁRIO MONETÁRIO
+   Objetivo:
+   - Selic/CDI já usam grade de 2 colunas.
+   - Copom e CDI mensal agora seguem a mesma largura visual.
+   - Resultado: 2 cards por tela e carrossel mais previsível.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270,
+  html.market-card-width-uniform-v330 #sec-mercado #cdiMonthCarouselV322{
+    gap: 9px !important;
+    padding-left: 1px !important;
+    padding-right: 1px !important;
+    scroll-padding-left: 1px !important;
+  }
+
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321,
+  html.market-card-width-uniform-v330 #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    flex: 0 0 calc((100% - 9px) / 2) !important;
+    min-width: calc((100% - 9px) / 2) !important;
+    max-width: calc((100% - 9px) / 2) !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Copom: mantém altura mais estável com 2 cards por tela */
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321{
+    min-height: 98px !important;
+    padding: 10px !important;
+  }
+
+  /* CDI mensal: iguala régua ao Copom */
+  html.market-card-width-uniform-v330 #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    min-height: 86px !important;
+    padding: 10px !important;
+  }
+
+  /* Topo Selic/CDI: garante mesma régua visual dos carrosséis */
+  html.market-card-width-uniform-v330 #sec-mercado .rates-reference-v167 .rates-summary-v167{
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 9px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321,
+  html.market-card-width-uniform-v330 #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    flex-basis: calc((100% - 8px) / 2) !important;
+    min-width: calc((100% - 8px) / 2) !important;
+    max-width: calc((100% - 8px) / 2) !important;
+  }
+
+  html.market-card-width-uniform-v330 #sec-mercado #copomExecutiveSummaryV270,
+  html.market-card-width-uniform-v330 #sec-mercado #cdiMonthCarouselV322{
+    gap: 8px !important;
+  }
+}

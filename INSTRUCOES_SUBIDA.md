@@ -1,31 +1,26 @@
-# Catálogo de Fundos CAIXA — v329
+# Catálogo de Fundos CAIXA — v330
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes aplicados
+## Ajuste aplicado
 
-### 1. CDI
-Texto longo reduzido:
-- De: “Acumulado no mês · Dados disponíveis até 18/06”
-- Para: “Parcial até 18/06”
+Padronizei a largura dos cards no bloco “Cenário monetário”.
 
-### 2. Tags de valor nominal
-A palavra “Atual” foi ajustada para evitar ambiguidade:
-- Dólar: “Cotação”
-- Ibovespa, S&P 500, Dow Jones e Nasdaq: “Pontos”
+## O que mudou
 
-### 3. Grid de variação
-Nos quadrantes de métricas:
-- “Atual” virou “Mês atual”
+- Cards do Copom executivo agora seguem a mesma régua visual dos cards Selic/CDI.
+- Cards do CDI mensal também seguem a mesma largura.
+- O padrão fica: 2 cards visíveis por linha/tela + rolagem horizontal para os demais.
 
-## Objetivo
+## Resultado esperado
 
-Separar melhor:
-- valor nominal atual/cotação/pontos;
-- variação do mês atual.
+O bloco fica mais uniforme:
+- Selic/CDI no topo: 2 colunas.
+- Copom: cards com mesma largura visual.
+- CDI mensal: cards com mesma largura visual.
 
 ## Como subir
 
