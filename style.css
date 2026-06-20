@@ -52284,3 +52284,106 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v360 — EVO NO FLICKER MOBILE
+   Reduz o "piscar" da seção Inflação e juros.
+   A correção é CSS-first e JS leve: sem MutationObserver e sem resize repetido.
+════════════════════════════════════════════════════ */
+
+@media (max-width:820px){
+  html.evo-no-flicker-v360 #sec-graficos,
+  html.evo-no-flicker-v360 #sec-graficos *{
+    animation:none !important;
+    transition:none !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos{
+    padding-bottom:104px !important;
+    transform:translateZ(0) !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos .section-collapsible-body{
+    overflow:visible !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos .evo-charts-grid{
+    position:relative !important;
+    min-height:470px !important;
+    padding-bottom:96px !important;
+    overflow:visible !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos .evo-chart-card,
+  html.evo-no-flicker-v360 #sec-graficos .chart-card{
+    backface-visibility:hidden !important;
+    transform:translateZ(0) !important;
+    transition:none !important;
+    animation:none !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos .evo-chart-card.active{
+    display:block !important;
+    opacity:1 !important;
+    visibility:visible !important;
+    min-height:424px !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos #evoChartSelicCard.active{
+    min-height:456px !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos .evo-chart-card:not(.active){
+    display:none !important;
+    opacity:0 !important;
+    visibility:hidden !important;
+    pointer-events:none !important;
+    height:0 !important;
+    min-height:0 !important;
+    max-height:0 !important;
+    overflow:hidden !important;
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+    border:0 !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos .chart-body{
+    width:100% !important;
+    max-width:100% !important;
+    height:188px !important;
+    min-height:188px !important;
+    max-height:188px !important;
+    overflow:hidden !important;
+    margin-top:8px !important;
+    background:rgba(7,10,20,.18) !important;
+    contain:layout paint !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos .chart-body canvas{
+    width:100% !important;
+    max-width:100% !important;
+    height:188px !important;
+    max-height:188px !important;
+    display:block !important;
+    opacity:1 !important;
+    transition:none !important;
+    animation:none !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos #evoChartSelicCard .chart-tabs{
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:6px !important;
+    overflow:visible !important;
+  }
+
+  html.evo-no-flicker-v360 #sec-graficos #evoChartSelicCard .chart-tab{
+    min-width:0 !important;
+    width:100% !important;
+    padding:0 4px !important;
+    font-size:.58rem !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+}
+
