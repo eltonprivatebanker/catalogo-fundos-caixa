@@ -1,3 +1,4 @@
+// ELTAUM_SAVINGS_SCENARIOS_POLISH_v326
 // ELTAUM_SAVINGS_CLEAN_MOBILE_v325
 // ELTAUM_CDI_SEMANTIC_CARDS_v324
 // ELTAUM_CDI_12M_FIX_v323
@@ -17649,6 +17650,83 @@ function openCdiAnalyticTableV274(){
       setImportant(el, 'line-height', '1.22');
       setImportant(el, 'white-space', 'normal');
       setImportant(el, 'overflow-wrap', 'anywhere');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v326 — Poupança: refinamento final dos cenários mobile
+   - remove texto longo redundante #poupScenarioSummary;
+   - padroniza alinhamento à esquerda;
+   - corrige hierarquia dt/dd;
+   - aumenta largura dos cards.
+════════════════════════════════════════════════════ */
+(function savingsScenariosPolishV326(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    const summary = document.getElementById('poupScenarioSummary');
+    if(summary) summary.remove();
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208').forEach(card => {
+      setImportant(card, 'text-align', 'left');
+      setImportant(card, 'flex', '0 0 188px');
+      setImportant(card, 'min-width', '188px');
+      setImportant(card, 'max-width', '188px');
+      setImportant(card, 'padding', '14px');
+      setImportant(card, 'box-sizing', 'border-box');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dl > div').forEach(pair => {
+      setImportant(pair, 'display', 'flex');
+      setImportant(pair, 'flex-direction', 'column');
+      setImportant(pair, 'align-items', 'flex-start');
+      setImportant(pair, 'justify-content', 'flex-start');
+      setImportant(pair, 'text-align', 'left');
+      setImportant(pair, 'gap', '5px');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dt').forEach(dt => {
+      setImportant(dt, 'display', 'block');
+      setImportant(dt, 'width', '100%');
+      setImportant(dt, 'text-align', 'left');
+      setImportant(dt, 'font-size', '10px');
+      setImportant(dt, 'line-height', '1.1');
+      setImportant(dt, 'font-weight', '800');
+      setImportant(dt, 'letter-spacing', '.07em');
+      setImportant(dt, 'text-transform', 'uppercase');
+      setImportant(dt, 'color', 'rgba(220,228,250,.58)');
+      setImportant(dt, 'margin', '0');
+      setImportant(dt, 'padding', '0');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dd').forEach(dd => {
+      setImportant(dd, 'display', 'block');
+      setImportant(dd, 'width', '100%');
+      setImportant(dd, 'text-align', 'left');
+      setImportant(dd, 'font-size', '12px');
+      setImportant(dd, 'line-height', '1.22');
+      setImportant(dd, 'font-weight', '760');
+      setImportant(dd, 'letter-spacing', '-.01em');
+      setImportant(dd, 'color', '#f8fafc');
+      setImportant(dd, 'margin', '0');
+      setImportant(dd, 'padding', '0');
+      setImportant(dd, 'white-space', 'normal');
+      setImportant(dd, 'overflow-wrap', 'normal');
+      setImportant(dd, 'word-break', 'normal');
     });
   }
 

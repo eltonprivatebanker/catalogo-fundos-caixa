@@ -49657,3 +49657,184 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     padding: 12px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v326 — POUPANÇA: REFINO PREMIUM DOS CENÁRIOS
+   Ajustes finais:
+   1) remove o texto longo #poupScenarioSummary;
+   2) força alinhamento à esquerda em todos os cards;
+   3) deixa dt pequeno/sutil e dd como informação principal;
+   4) aumenta largura dos cards para evitar quebras excessivas.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  /* Remove texto redundante: os cards já explicam visualmente */
+  html.savings-scenarios-polish-v326 #sec-mercado #poupScenarioSummary,
+  html.savings-scenarios-polish-v326 #sec-mercado .poup-scenario-summary{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .poup-scenarios-card,
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenarios-v167,
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenarios-v207,
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenarios-v208{
+    padding: 13px !important;
+    text-align: left !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .poup-scenarios-head{
+    margin-bottom: 12px !important;
+    text-align: left !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .poup-scenarios-title,
+  html.savings-scenarios-polish-v326 #sec-mercado .poup-scenarios-title *{
+    text-align: left !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .poup-scenarios-subtitle{
+    font-size: .62rem !important;
+    color: rgba(220,228,250,.62) !important;
+    line-height: 1.22 !important;
+  }
+
+  /* Carrossel com cards um pouco mais largos */
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-grid-v208{
+    display: flex !important;
+    gap: 11px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity !important;
+    overscroll-behavior-x: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    padding: 1px 1px 10px !important;
+    scrollbar-width: none !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-grid-v208::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208{
+    flex: 0 0 188px !important;
+    min-width: 188px !important;
+    max-width: 188px !important;
+    min-height: 188px !important;
+    padding: 14px !important;
+    border-radius: 14px !important;
+    scroll-snap-align: start !important;
+    text-align: left !important;
+    box-sizing: border-box !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208.current,
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208.current *{
+    text-align: left !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-head-v208{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    margin-bottom: 12px !important;
+    text-align: left !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-head-v208 span{
+    font-size: .82rem !important;
+    line-height: 1.12 !important;
+    font-weight: 850 !important;
+    color: #f8fafc !important;
+    text-align: left !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-head-v208 small{
+    font-size: .52rem !important;
+    line-height: 1.08 !important;
+    font-weight: 800 !important;
+    text-transform: uppercase !important;
+    letter-spacing: .06em !important;
+    color: rgba(246,200,97,.86) !important;
+    text-align: left !important;
+  }
+
+  /* Pares dt/dd verticais e sem sobreposição */
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208 dl{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 13px !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208 dl > div{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 5px !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208 dt{
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: rgba(220,228,250,.58) !important;
+    font-size: 10px !important;
+    line-height: 1.10 !important;
+    font-weight: 800 !important;
+    letter-spacing: .07em !important;
+    text-transform: uppercase !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208 dd{
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #f8fafc !important;
+    font-size: 12px !important;
+    line-height: 1.22 !important;
+    font-weight: 760 !important;
+    letter-spacing: -.01em !important;
+    text-align: left !important;
+    white-space: normal !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .poup-scenario-note{
+    display: none !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208{
+    flex-basis: 180px !important;
+    min-width: 180px !important;
+    max-width: 180px !important;
+    min-height: 184px !important;
+    padding: 13px !important;
+  }
+
+  html.savings-scenarios-polish-v326 #sec-mercado .savings-scenario-card-v208 dd{
+    font-size: 11.5px !important;
+  }
+}

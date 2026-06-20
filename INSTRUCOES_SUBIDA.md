@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v325
+# Catálogo de Fundos CAIXA — v326
 
 Arquivos atualizados:
 - index.html
@@ -7,17 +7,20 @@ Arquivos atualizados:
 
 ## Ajustes aplicados na Poupança
 
-1. Corrigido bug de sobreposição
-- Nos cards de “Comparação de cenários”, os pares `dt/dd` agora ficam em blocos verticais.
+1. Corte de redundância
+- Removido o texto longo `#poupScenarioSummary`.
 
-2. Removido conteúdo redundante
-- O bloco textual longo `#poupRulesV214` fica oculto no mobile.
+2. Alinhamento
+- Todos os cards de cenários agora ficam alinhados à esquerda.
+- O card “Selic atual” também segue o mesmo padrão.
 
-3. Expansão mais limpa
-- Ao clicar em “Ver regras”, a área expandida mostra apenas “Comparação de cenários”.
+3. Hierarquia tipográfica
+- `dt` fica menor, uppercase e com menor opacidade.
+- `dd` vira o destaque principal, com peso maior e cor clara.
 
-4. Melhor respiro
-- Adicionado espaçamento abaixo dos botões para não colar no bloco de cenários.
+4. Respiro e largura
+- Cards do carrossel ficaram levemente mais largos.
+- Padding interno aumentado para reduzir quebras excessivas.
 
 ## Escopo
 
