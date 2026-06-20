@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
+  const BUILD = 'ELTAUM_EVO_MOBILE_POLISH_20260620_v357';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18996,7 +18996,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
+   ELTAUM_EVO_MOBILE_POLISH_20260620_v357
    Mobile:
    - "Juros e CDI" como título.
    - CDI em 2026 em resumo executivo, sem gráfico.
@@ -19004,7 +19004,7 @@ function openCdiAnalyticTableV274(){
    - Copom começa na última decisão e próxima reunião.
 ════════════════════════════════════════════════════ */
 (function mobileRatesFinalV352(){
-  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
+  const BUILD = 'ELTAUM_EVO_MOBILE_POLISH_20260620_v357';
 
   const MONTH_ORDER = {
     JAN:1, FEV:2, MAR:3, ABR:4, MAI:5, JUN:6,
@@ -19272,7 +19272,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
+   ELTAUM_EVO_MOBILE_POLISH_20260620_v357
    Força inline no mobile para remover bordas do Copom geradas por patches antigos.
 ════════════════════════════════════════════════════ */
 (function copomTrueBorderlessV353(){
@@ -19356,7 +19356,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
+   ELTAUM_EVO_MOBILE_POLISH_20260620_v357
    Mobile:
    - "Agenda Copom" no lugar de "Copom executivo".
    - "CDI em 2026" sem rótulo auxiliar e sem "Resumo executivo".
@@ -19364,7 +19364,7 @@ function openCdiAnalyticTableV274(){
    - Meses anteriores com nome do mês por extenso e sem "fechado".
 ════════════════════════════════════════════════════ */
 (function mobileSemanticCleanV354(){
-  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
+  const BUILD = 'ELTAUM_EVO_MOBILE_POLISH_20260620_v357';
 
   const MONTH_NAMES = {
     JAN:'Janeiro',
@@ -19493,14 +19493,14 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
+   ELTAUM_EVO_MOBILE_POLISH_20260620_v357
    Mobile:
    - Adiciona "Deslize →" em carrosséis.
    - Adiciona barra fina de progresso.
    - Mantém sem poluir quando não há overflow.
 ════════════════════════════════════════════════════ */
 (function mobileCarouselAffordanceV355(){
-  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
+  const BUILD = 'ELTAUM_EVO_MOBILE_POLISH_20260620_v357';
 
   function isMobile(){
     return window.matchMedia('(max-width: 820px)').matches;
@@ -19647,14 +19647,14 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
+   ELTAUM_EVO_MOBILE_POLISH_20260620_v357
    Mobile:
    - Fechamentos mensais do dólar com "Deslize →".
    - Barra fina de progresso.
    - Remove visualmente "Meses fechados".
 ════════════════════════════════════════════════════ */
 (function dolarCarouselAffordanceV356(){
-  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
+  const BUILD = 'ELTAUM_EVO_MOBILE_POLISH_20260620_v357';
 
   function isMobile(){
     return window.matchMedia('(max-width: 820px)').matches;
@@ -19798,5 +19798,94 @@ function openCdiAnalyticTableV274(){
   [500, 1200, 2600].forEach(ms => setTimeout(observe, ms));
 
   window.__ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_V356__ = { build: BUILD, apply };
+})();
+
+/* ════════════════════════════════════════════════════
+   ELTAUM_EVO_MOBILE_POLISH_20260620_v357
+   Mobile:
+   - Polimento da seção "Inflação e juros".
+   - Reduz cortes, compacta cards, simplifica títulos.
+   - Ajusta inline styles legados gerados por patches anteriores.
+════════════════════════════════════════════════════ */
+(function evoMobilePolishV357(){
+  const BUILD='ELTAUM_EVO_MOBILE_POLISH_20260620_v357';
+  function isMobile(){return window.matchMedia('(max-width: 820px)').matches;}
+  function setText(sel,value){const el=typeof sel==='string'?document.querySelector(sel):sel;if(el&&el.textContent!==value)el.textContent=value;}
+  function setImportant(el,prop,value){if(el)el.style.setProperty(prop,value,'important');}
+
+  function labels(){
+    setText('#sec-graficos .section-subline','IPCA, inflação em 12 meses e Selic meta.');
+    setText('#evolutionToggle .toggle-label','Ocultar');
+    setText('#chartIpcaTitle','IPCA mensal');
+    setText('#chartIpcaSub','Variação oficial mês a mês');
+    setText('#chartSelicTitle','Selic meta');
+    setText('#chartSelicSub','Trajetória da taxa básica');
+    setText('#evoChartMetaCard .chart-card-title','IPCA em 12 meses');
+    setText('#evoChartMetaCard .chart-card-sub','Comparação com a meta e o teto');
+    setText('#sec-graficos .evo-summary-card:nth-child(1) .evo-summary-kicker','IPCA mensal');
+    setText('#sec-graficos .evo-summary-card:nth-child(2) .evo-summary-kicker','Selic meta');
+    setText('#sec-graficos .evo-summary-card:nth-child(3) .evo-summary-kicker','IPCA 12 meses');
+  }
+
+  function inlineFixes(){
+    if(!isMobile())return;
+    const summary=document.querySelector('#sec-graficos .evo-summary-grid');
+    if(summary){
+      setImportant(summary,'display','grid');setImportant(summary,'grid-template-columns','repeat(2,minmax(0,1fr))');setImportant(summary,'gap','8px');setImportant(summary,'width','100%');setImportant(summary,'max-width','100%');setImportant(summary,'overflow','visible');setImportant(summary,'padding','0');setImportant(summary,'margin','0 0 12px');setImportant(summary,'scroll-snap-type','none');
+    }
+    document.querySelectorAll('#sec-graficos .evo-summary-card').forEach((card,idx)=>{
+      setImportant(card,'flex','initial');setImportant(card,'width','100%');setImportant(card,'min-width','0');setImportant(card,'max-width','100%');setImportant(card,'min-height','66px');setImportant(card,'padding','9px 10px');setImportant(card,'border-radius','12px');setImportant(card,'box-sizing','border-box');setImportant(card,'overflow','hidden');if(idx===2)setImportant(card,'grid-column','1 / -1');
+    });
+    document.querySelectorAll('#sec-graficos .chart-tabs').forEach(tabs=>{
+      const isSelic=!!tabs.closest('#evoChartSelicCard');
+      setImportant(tabs,'display','grid');setImportant(tabs,'grid-template-columns',isSelic?'repeat(4,minmax(0,1fr))':'repeat(3,minmax(0,1fr))');setImportant(tabs,'gap','7px');setImportant(tabs,'width','100%');setImportant(tabs,'max-width','100%');setImportant(tabs,'overflow','visible');setImportant(tabs,'padding','0');setImportant(tabs,'margin','8px 0 0');setImportant(tabs,'scroll-snap-type','none');setImportant(tabs,'justify-content','stretch');
+    });
+    document.querySelectorAll('#sec-graficos .chart-tab').forEach(tab=>{
+      setImportant(tab,'flex','initial');setImportant(tab,'width','100%');setImportant(tab,'min-width','0');setImportant(tab,'max-width','100%');setImportant(tab,'min-height','32px');setImportant(tab,'padding','0 6px');setImportant(tab,'font-size','.60rem');setImportant(tab,'border-radius','11px');setImportant(tab,'white-space','nowrap');
+    });
+    document.querySelectorAll('#sec-graficos .ipca-summary-row-v250, #sec-graficos .selic-summary-row').forEach(row=>{
+      setImportant(row,'display','grid');setImportant(row,'grid-template-columns','repeat(2,minmax(0,1fr))');setImportant(row,'gap','8px');setImportant(row,'width','100%');setImportant(row,'margin','10px 0 12px');
+    });
+    document.querySelectorAll('#sec-graficos .ipca-summary-chip-v250, #sec-graficos .selic-summary-chip').forEach(chip=>{
+      if(chip.hasAttribute('inert')||chip.getAttribute('aria-hidden')==='true')return;
+      setImportant(chip,'display','grid');setImportant(chip,'grid-template-columns','1fr');setImportant(chip,'gap','4px');setImportant(chip,'align-items','start');setImportant(chip,'min-height','58px');setImportant(chip,'height','auto');setImportant(chip,'overflow','hidden');setImportant(chip,'padding','9px 10px');setImportant(chip,'border-radius','12px');setImportant(chip,'box-sizing','border-box');
+    });
+    document.querySelectorAll('#sec-graficos .chart-body').forEach(body=>{
+      setImportant(body,'width','100%');setImportant(body,'max-width','100%');setImportant(body,'height','190px');setImportant(body,'min-height','190px');setImportant(body,'overflow','hidden');setImportant(body,'margin-top','8px');setImportant(body,'box-sizing','border-box');
+    });
+    document.querySelectorAll('#sec-graficos .chart-body canvas').forEach(canvas=>{
+      setImportant(canvas,'width','100%');setImportant(canvas,'max-width','100%');setImportant(canvas,'height','190px');setImportant(canvas,'max-height','190px');setImportant(canvas,'box-sizing','border-box');
+    });
+  }
+
+  function chartResize(){
+    if(!isMobile())return;
+    requestAnimationFrame(()=>{
+      window.dispatchEvent(new Event('resize'));
+      try{
+        if(window.Chart&&Chart.instances){
+          Object.values(Chart.instances).forEach(chart=>{if(chart&&typeof chart.resize==='function')chart.resize();});
+        }
+      }catch(e){}
+    });
+  }
+
+  function apply(){labels();inlineFixes();chartResize();window.__ELTAUM_EVO_MOBILE_POLISH_APPLIED__=BUILD;}
+  let scheduled=false;
+  function schedule(){if(scheduled)return;scheduled=true;requestAnimationFrame(()=>{scheduled=false;apply();});}
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',apply,{once:true});}else{apply();}
+  [100,350,800,1400,2600,4200].forEach(ms=>setTimeout(apply,ms));
+  window.addEventListener('resize',schedule,{passive:true});
+  const observer=new MutationObserver(schedule);
+  function observe(){
+    const root=document.getElementById('sec-graficos');
+    if(root&&!root.dataset.v357Observed){
+      root.dataset.v357Observed='1';
+      observer.observe(root,{childList:true,subtree:true,characterData:true,attributes:true,attributeFilter:['style','class','aria-pressed']});
+    }
+  }
+  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',observe,{once:true});}else{observe();}
+  [500,1200,2600].forEach(ms=>setTimeout(observe,ms));
+  window.__ELTAUM_EVO_MOBILE_POLISH_V357__={build:BUILD,apply};
 })();
 

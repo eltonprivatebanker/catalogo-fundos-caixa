@@ -52130,3 +52130,78 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v357 — EVO MOBILE POLISH / INFLAÇÃO E JUROS
+   Mobile:
+   - Reduz cortes e excesso de altura em "Inflação e juros".
+   - Cards do topo viram grid compacto.
+   - Abas e períodos ficam dentro da largura útil.
+   - Gráficos com altura segura e padding inferior para menu fixo.
+   - Títulos e microcopy ficam mais objetivos.
+════════════════════════════════════════════════════ */
+
+@media (max-width:820px){
+  html.evo-mobile-polish-v357 #sec-graficos{padding-bottom:88px !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .section-title{margin-bottom:10px !important;}
+  html.evo-mobile-polish-v357 #sec-graficos #evolutionTitle{margin-bottom:6px !important;font-size:1.08rem !important;line-height:1.1 !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .section-subline{font-size:.72rem !important;line-height:1.35 !important;color:#b7c2df !important;margin:0 0 10px !important;}
+  html.evo-mobile-polish-v357 #sec-graficos #evolutionToggle{min-height:30px !important;padding:0 10px !important;border-radius:10px !important;font-size:.58rem !important;}
+
+  html.evo-mobile-polish-v357 #sec-graficos .evo-summary-grid{
+    display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px !important;width:100% !important;max-width:100% !important;overflow:visible !important;padding:0 !important;margin:0 0 12px !important;scroll-snap-type:none !important;box-sizing:border-box !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .evo-summary-card{
+    flex:initial !important;width:100% !important;min-width:0 !important;max-width:100% !important;min-height:66px !important;padding:9px 10px !important;border-radius:12px !important;box-sizing:border-box !important;overflow:hidden !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .evo-summary-card:nth-child(3){grid-column:1/-1 !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .evo-summary-kicker{font-size:.54rem !important;letter-spacing:.08em !important;line-height:1.05 !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .evo-summary-card strong{margin-top:5px !important;font-size:1.04rem !important;line-height:1 !important;white-space:nowrap !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .evo-summary-card small{margin-top:5px !important;font-size:.56rem !important;line-height:1.15 !important;white-space:nowrap !important;overflow:hidden !important;text-overflow:ellipsis !important;}
+
+  html.evo-mobile-polish-v357 #sec-graficos .evo-view-tabs{
+    display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:8px !important;width:100% !important;margin:0 0 10px !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .evo-view-tab{
+    min-width:0 !important;width:100% !important;min-height:34px !important;padding:0 8px !important;border-radius:12px !important;font-size:.64rem !important;white-space:nowrap !important;
+  }
+
+  html.evo-mobile-polish-v357 #sec-graficos .evo-chart-card,
+  html.evo-mobile-polish-v357 #sec-graficos .chart-card{
+    width:100% !important;max-width:100% !important;padding:12px !important;border-radius:16px !important;overflow:hidden !important;box-sizing:border-box !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .chart-card-header{gap:10px !important;margin-bottom:10px !important;padding-bottom:10px !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .chart-card-title{font-size:.88rem !important;line-height:1.12 !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .chart-card-sub{font-size:.62rem !important;line-height:1.2 !important;margin-top:2px !important;}
+
+  html.evo-mobile-polish-v357 #sec-graficos .chart-tabs{
+    display:grid !important;grid-template-columns:repeat(3,minmax(0,1fr)) !important;gap:7px !important;width:100% !important;overflow:visible !important;padding:0 !important;margin:8px 0 0 !important;scroll-snap-type:none !important;box-sizing:border-box !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos #evoChartSelicCard .chart-tabs{grid-template-columns:repeat(4,minmax(0,1fr)) !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .chart-tab{
+    width:100% !important;min-width:0 !important;max-width:100% !important;min-height:32px !important;padding:0 6px !important;border-radius:11px !important;font-size:.60rem !important;white-space:nowrap !important;box-sizing:border-box !important;
+  }
+
+  html.evo-mobile-polish-v357 #sec-graficos .ipca-summary-row-v250,
+  html.evo-mobile-polish-v357 #sec-graficos .selic-summary-row{
+    display:grid !important;grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:8px !important;width:100% !important;margin:10px 0 12px !important;box-sizing:border-box !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .ipca-summary-chip-v250,
+  html.evo-mobile-polish-v357 #sec-graficos .selic-summary-chip{
+    min-height:58px !important;padding:9px 10px !important;border-radius:12px !important;overflow:hidden !important;box-sizing:border-box !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .ipca-summary-label-v250,
+  html.evo-mobile-polish-v357 #sec-graficos .selic-summary-label{font-size:.52rem !important;letter-spacing:.08em !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .ipca-summary-chip-v250 strong,
+  html.evo-mobile-polish-v357 #sec-graficos .selic-summary-value{font-size:.96rem !important;line-height:1 !important;}
+  html.evo-mobile-polish-v357 #sec-graficos .ipca-summary-chip-v250 small,
+  html.evo-mobile-polish-v357 #sec-graficos .selic-summary-date{font-size:.56rem !important;line-height:1.15 !important;}
+
+  html.evo-mobile-polish-v357 #sec-graficos .chart-body{
+    width:100% !important;max-width:100% !important;height:190px !important;min-height:190px !important;overflow:hidden !important;margin-top:8px !important;box-sizing:border-box !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .chart-body canvas{
+    width:100% !important;max-width:100% !important;height:190px !important;max-height:190px !important;box-sizing:border-box !important;
+  }
+  html.evo-mobile-polish-v357 #sec-graficos .evo-charts-grid{padding-bottom:78px !important;}
+}
+
