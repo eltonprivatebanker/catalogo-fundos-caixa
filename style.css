@@ -52859,3 +52859,44 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+
+
+/* PATCH v369 — IPCA 12M em vermelho + bandas destacadas */
+.econ-svg-v367 .line.line-alert{
+  stroke:#ff5b6e;
+  stroke-width:3.2;
+}
+
+.econ-svg-v367 .dot.dot-alert{
+  fill:#f6c453;
+  stroke:#2a0f14;
+  stroke-width:2.4;
+  r:4.5;
+}
+
+.econ-svg-v367 .band.band-meta{
+  fill:rgba(46,209,122,.12);
+  stroke:rgba(46,209,122,.26);
+}
+
+.econ-svg-v367 .threshold{
+  vector-effect:non-scaling-stroke;
+  stroke-width:1.5;
+  stroke-linecap:round;
+}
+
+.econ-svg-v367 .threshold.threshold-top,
+.econ-svg-v367 .threshold.threshold-bottom{
+  stroke:rgba(255,205,86,.88);
+  stroke-dasharray:5 4;
+}
+
+.econ-svg-v367 .threshold.threshold-mid{
+  stroke:rgba(74,222,128,.70);
+  stroke-dasharray:3 4;
+}
+
+.econ-meta-band-v367{
+  background:linear-gradient(90deg, rgba(255,205,86,.08) 0%, rgba(46,209,122,.11) 50%, rgba(255,205,86,.08) 100%);
+  border-color:rgba(255,205,86,.22);
+}

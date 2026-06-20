@@ -6092,8 +6092,18 @@ function econRenderLineV367(containerId, rows, getValue, getLabel, opts = {}){
   const min = Math.min(...values);
   const max = Math.max(...values);
   const pad = Math.max((max - min) * .12, .1);
-  const lo = min - pad;
-  const hi = max + pad;
+  let lo = min - pad;
+  let hi = max + pad;
+
+  const bandMin = Number(opts.bandMin);
+  const bandMax = Number(opts.bandMax);
+  const bandMid = Number(opts.bandMid);
+
+  if(opts.band){
+    if(Number.isFinite(bandMin)) lo = Math.min(lo, bandMin - Math.max(pad, 0.25));
+    if(Number.isFinite(bandMax)) hi = Math.max(hi, bandMax + Math.max(pad, 0.25));
+  }
+
   const w = 320;
   const h = 112;
   const step = data.length > 1 ? w / (data.length - 1) : w;
@@ -6101,12 +6111,33 @@ function econRenderLineV367(containerId, rows, getValue, getLabel, opts = {}){
   const points = data.map((d, i) => `${Math.round(i * step)},${Math.round(yFor(d.value))}`).join(' ');
   const last = data[data.length - 1];
   const first = data[0];
+  const lineClass = ['line', opts.lineClass || ''].filter(Boolean).join(' ');
+  const dotClass = ['dot', opts.dotClass || ''].filter(Boolean).join(' ');
+
+  let bandMarkup = '';
+  if(opts.band){
+    if(Number.isFinite(bandMin) && Number.isFinite(bandMax)){
+      const y1 = Math.max(0, Math.min(h, yFor(bandMax)));
+      const y2 = Math.max(0, Math.min(h, yFor(bandMin)));
+      const top = Math.min(y1, y2);
+      const height = Math.max(8, Math.abs(y2 - y1));
+      bandMarkup += `<rect x="0" y="${top.toFixed(1)}" width="320" height="${height.toFixed(1)}" rx="10" class="band ${opts.bandClass || ''}"></rect>`;
+      bandMarkup += `<line x1="0" y1="${y1.toFixed(1)}" x2="320" y2="${y1.toFixed(1)}" class="threshold threshold-top"></line>`;
+      bandMarkup += `<line x1="0" y1="${y2.toFixed(1)}" x2="320" y2="${y2.toFixed(1)}" class="threshold threshold-bottom"></line>`;
+    }else{
+      bandMarkup += '<rect x="0" y="22" width="320" height="50" rx="10" class="band"></rect>';
+    }
+    if(Number.isFinite(bandMid)){
+      const ym = Math.max(0, Math.min(h, yFor(bandMid)));
+      bandMarkup += `<line x1="0" y1="${ym.toFixed(1)}" x2="320" y2="${ym.toFixed(1)}" class="threshold threshold-mid"></line>`;
+    }
+  }
 
   el.innerHTML = `
-    <svg class="econ-svg-v367" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-      ${opts.band ? '<rect x="0" y="22" width="320" height="50" rx="10" class="band"></rect>' : ''}
-      <polyline points="${points}" fill="none" class="line"></polyline>
-      <circle cx="${Math.round((data.length-1) * step)}" cy="${Math.round(yFor(last.value))}" r="4" class="dot"></circle>
+    <svg class="econ-svg-v367 ${opts.svgClass || ''}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
+      ${bandMarkup}
+      <polyline points="${points}" fill="none" class="${lineClass}"></polyline>
+      <circle cx="${Math.round((data.length-1) * step)}" cy="${Math.round(yFor(last.value))}" r="4" class="${dotClass}"></circle>
     </svg>
     <div class="econ-axis-caption-v367"><span>${first.label}</span><span>${last.label} · ${econPctV367(last.value)}</span></div>
   `;
@@ -6353,7 +6384,7 @@ async function renderIndicadoresCleanV367(d){
     econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
       const dt = new Date(d.DataReferencia);
       return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
-    }, {limit:36, band:true});
+    }, {limit:36, band:true, bandMin:1.5, bandMax:4.5, bandMid:3.0, lineClass:'line-alert', dotClass:'dot-alert', bandClass:'band-meta'});
 
     const last = metaNorm[metaNorm.length - 1];
     econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)).replace('Dentro da faixa de tolerância de ', 'Na faixa '));
@@ -19265,7 +19296,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_CLEAN_INDICATORS_FIX_20260620_v368';
+  const BUILD = 'ELTAUM_EVO_META_RED_BAND_20260620_v369';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
