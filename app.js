@@ -17771,3 +17771,14 @@ function openCdiAnalyticTableV274(){
   setTimeout(apply, 250);
   setTimeout(apply, 900);
 })();
+
+
+/* v328 - Poupança no topo direito (mobile) */
+(function(){
+  function apply(){
+    var lbl=document.getElementById("poupCurrentLabelV214");
+    if(lbl) lbl.textContent = window.innerWidth <= 480 ? "Rendimento do mês" : lbl.textContent;
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", apply); else apply();
+  window.addEventListener("resize", apply, {passive:true});
+})();

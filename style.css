@@ -49893,3 +49893,105 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     max-width: 182px !important;
   }
 }
+
+
+/* ==========================================================
+   v328 — POUPANÇA NO TOPO DIREITO (mobile)
+   - leva a rentabilidade mensal para o canto superior direito;
+   - reduz o vazio visual do cabeçalho;
+   - preserva o restante do card.
+========================================================== */
+@media (max-width: 768px){
+  html.savings-header-topright-v328 #sec-mercado .savings-head-v167,
+  html.savings-header-topright-v328 #sec-mercado .savings-head-v207{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    align-items:start !important;
+    column-gap:12px !important;
+    row-gap:6px !important;
+    padding-bottom:10px !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-title-v207{
+    min-width:0 !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-title-v207 p{
+    max-width:190px !important;
+    margin-top:4px !important;
+    font-size:.66rem !important;
+    line-height:1.28 !important;
+    color:rgba(220,228,250,.62) !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v167,
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v207{
+    justify-self:end !important;
+    align-self:start !important;
+    min-width:108px !important;
+    width:auto !important;
+    margin:0 !important;
+    padding:8px 10px !important;
+    border-radius:12px !important;
+    display:block !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v167 > span,
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v207 > span{
+    display:block !important;
+    margin:0 0 3px 0 !important;
+    font-size:.48rem !important;
+    line-height:1.1 !important;
+    letter-spacing:.06em !important;
+    white-space:normal !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v167 > div,
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v207 > div{
+    display:flex !important;
+    align-items:baseline !important;
+    justify-content:flex-start !important;
+    gap:2px !important;
+    margin-top:0 !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v167 output,
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v207 output{
+    font-size:1.18rem !important;
+    line-height:1 !important;
+    letter-spacing:-.03em !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v167 small,
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v207 small{
+    font-size:.56rem !important;
+    line-height:1 !important;
+  }
+}
+
+@media (max-width: 440px){
+  html.savings-header-topright-v328 #sec-mercado .savings-balanced-v207 .savings-head-v207{
+    grid-template-columns:minmax(0,1fr) auto !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-title-v207 p{
+    max-width:165px !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v167,
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v207{
+    min-width:102px !important;
+    padding:7px 9px !important;
+  }
+}
+
+@media (max-width: 360px){
+  html.savings-header-topright-v328 #sec-mercado .savings-title-v207 p{
+    display:none !important;
+  }
+
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v167,
+  html.savings-header-topright-v328 #sec-mercado .savings-current-v207{
+    min-width:96px !important;
+  }
+}
