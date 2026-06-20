@@ -47395,3 +47395,159 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     pointer-events: auto;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v309 — RANKING HERO COMPACTO / ESPAÇAMENTO MOBILE
+   Problema visto no print:
+   - muito espaço acima do título;
+   - muito espaço entre o título e o card de filtros;
+   - normalizador v303 aplicou inline flex-start no hero.
+   Correção:
+   - hero centralizado e compacto;
+   - medalhão menor;
+   - menos margem vertical;
+   - card de filtros sobe.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-hero-spacing-v309 .ranking-title-group,
+  html.ranking-hero-spacing-v309 .ranking-title-group-v309-fixed{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    width: 100% !important;
+    margin: 6px 0 14px !important;
+    padding: 0 !important;
+  }
+
+  html.ranking-hero-spacing-v309 .ranking-title-group .section-badge,
+  html.ranking-hero-spacing-v309 .ranking-title-group .ranking-section-subtitle-v136{
+    display: none !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306,
+  html.ranking-hero-spacing-v309 h2.ranking-title-v309-fixed{
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 9px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    text-align: center !important;
+    color: #f8fafc !important;
+    font-size: 1.38rem !important;
+    line-height: 1.08 !important;
+    font-weight: 850 !important;
+    letter-spacing: -0.042em !important;
+    background: transparent !important;
+    border: 0 !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305::before,
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305::after,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306::before,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306::after{
+    content: "" !important;
+    position: absolute !important;
+    top: 27px !important;
+    width: min(22vw, 84px) !important;
+    height: 1px !important;
+    display: block !important;
+    background: linear-gradient(90deg, transparent, rgba(246,200,97,.50), transparent) !important;
+    pointer-events: none !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305::before,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306::before{
+    left: 7px !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305::after,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306::after{
+    right: 7px !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+    max-width: 54px !important;
+    flex: 0 0 54px !important;
+    border-radius: 999px !important;
+    font-size: 1.58rem !important;
+    background:
+      radial-gradient(circle at 50% 40%, rgba(255,223,135,.22), rgba(246,200,97,.08) 42%, rgba(8,10,20,.92) 72%),
+      linear-gradient(145deg, rgba(246,200,97,.20), rgba(20,24,42,.86)) !important;
+    border: 1px solid rgba(246,200,97,.52) !important;
+    box-shadow:
+      0 0 0 1px rgba(246,200,97,.08),
+      0 0 26px rgba(246,200,97,.22),
+      0 10px 22px rgba(0,0,0,.34),
+      inset 0 1px 0 rgba(255,255,255,.12) !important;
+    color: #ffd36f !important;
+    text-shadow: 0 0 14px rgba(255,211,111,.34) !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305 .section-title-text-v302,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306 .section-title-text-v302{
+    display: block !important;
+    text-align: center !important;
+    color: #f8fafc !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    letter-spacing: inherit !important;
+    text-shadow: 0 8px 22px rgba(0,0,0,.34) !important;
+  }
+
+  /* Sobe o card de filtros do ranking e reduz respiro anterior */
+  html.ranking-hero-spacing-v309 .ranking-title-group + *,
+  html.ranking-hero-spacing-v309 .ranking-title-group ~ .ranking-controls-panel-v178,
+  html.ranking-hero-spacing-v309 .ranking-title-group ~ .ranking-controls-v136,
+  html.ranking-hero-spacing-v309 .ranking-title-group ~ .ranking-filter-panel-v136{
+    margin-top: 0 !important;
+  }
+
+  html.ranking-hero-spacing-v309 #rankingsSection{
+    padding-top: 10px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-hero-spacing-v309 .ranking-title-group,
+  html.ranking-hero-spacing-v309 .ranking-title-group-v309-fixed{
+    margin: 4px 0 12px !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306,
+  html.ranking-hero-spacing-v309 h2.ranking-title-v309-fixed{
+    font-size: 1.28rem !important;
+    gap: 8px !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    max-width: 48px !important;
+    flex-basis: 48px !important;
+    font-size: 1.42rem !important;
+  }
+
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305::before,
+  html.ranking-hero-spacing-v309 h2.ranking-title-hero-v305::after,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306::before,
+  html.ranking-hero-spacing-v309 h2.section-hero-premium-v306::after{
+    top: 24px !important;
+    width: 20vw !important;
+  }
+}

@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v308
+# Catálogo de Fundos CAIXA — v309
 
 Arquivos atualizados:
 - index.html
@@ -7,22 +7,20 @@ Arquivos atualizados:
 
 ## O que foi corrigido
 
-A v307 ocultava o `#gfb-inner`, mas o container pai `#gfb` ainda existia e continuava reservando área/estrutura no topo.
+No mobile, o título do Ranking estava com muito espaço acima e abaixo. Além disso, o normalizador v303 aplicava estilos inline no H2 do Ranking e quebrava a centralização do hero.
 
-A v308 remove visualmente o container completo no mobile:
+## Ajustes
 
-- `#gfb`
-- `#gfb-inner`
-- `#gfbSearch`
-- `#gfb-chips`
-
-## Importante
-
-A busca e os filtros próprios da seção Fundos continuam preservados.
+- Ranking hero centralizado novamente.
+- Medalhão do troféu mais compacto.
+- Menos espaço acima do título.
+- Menos espaço entre título e card de filtros.
+- Card de filtros sobe.
+- Normalizador v303 deixa de interferir no Ranking hero.
 
 ## Escopo
 
-- Mobile: `#gfb` inteiro sai do fluxo.
+- Mobile: Ranking hero compacto e centralizado.
 - Desktop: preservado.
 
 ## Como subir

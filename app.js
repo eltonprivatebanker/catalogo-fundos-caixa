@@ -1,3 +1,4 @@
+// ELTAUM_RANKING_HERO_SPACING_v309
 // ELTAUM_REMOVE_GFB_FULL_v308
 // ELTAUM_REMOVE_GFB_TOP_v307
 // ELTAUM_TITLE_HERO_LEVELS_v306
@@ -16478,6 +16479,7 @@ function openCdiAnalyticTableV274(){
 
     document.querySelectorAll('h2.section-title-v302, h2.page-section-title-v302, h2.compar-title').forEach(h2 => {
       if(!isTarget(h2)) return;
+      if(h2.classList.contains('ranking-title-hero-v305') || h2.classList.contains('section-hero-premium-v306')) return;
 
       h2.classList.add('section-title-v303-final');
 
@@ -16590,4 +16592,106 @@ function openCdiAnalyticTableV274(){
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 1000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v309 — ranking hero spacing/fix
+   Remove estilos inline herdados do normalizador v303 no título do Ranking
+   e reaplica centralização/medalhão compacto apenas no mobile.
+════════════════════════════════════════════════════ */
+(function fixRankingHeroV309(){
+  function clearImportantInline(el, props){
+    if(!el) return;
+    props.forEach(p => el.style.removeProperty(p));
+  }
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const h2 = document.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    if(!h2) return;
+
+    const icon = h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
+    const text = h2.querySelector('.section-title-text-v302, .section-title-text-v300, span:last-child');
+    const group = h2.closest('.ranking-title-group');
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const isNarrow = window.matchMedia('(max-width: 390px)').matches;
+
+    if(!isMobile){
+      [h2, icon, text, group].forEach(el => el && el.removeAttribute('style'));
+      return;
+    }
+
+    h2.classList.add('ranking-title-v309-fixed');
+    if(group) group.classList.add('ranking-title-group-v309-fixed');
+
+    const iconSize = isNarrow ? '48px' : '54px';
+    const iconFont = isNarrow ? '1.42rem' : '1.58rem';
+    const titleSize = isNarrow ? '1.28rem' : '1.38rem';
+
+    setImportant(group, 'display', 'flex');
+    setImportant(group, 'flex-direction', 'column');
+    setImportant(group, 'align-items', 'center');
+    setImportant(group, 'text-align', 'center');
+    setImportant(group, 'width', '100%');
+    setImportant(group, 'margin', '6px 0 14px');
+    setImportant(group, 'padding', '0');
+
+    setImportant(h2, 'position', 'relative');
+    setImportant(h2, 'display', 'flex');
+    setImportant(h2, 'flex-direction', 'column');
+    setImportant(h2, 'align-items', 'center');
+    setImportant(h2, 'justify-content', 'center');
+    setImportant(h2, 'gap', isNarrow ? '8px' : '9px');
+    setImportant(h2, 'width', '100%');
+    setImportant(h2, 'margin', '0');
+    setImportant(h2, 'padding', '0');
+    setImportant(h2, 'text-align', 'center');
+    setImportant(h2, 'color', '#f8fafc');
+    setImportant(h2, 'font-size', titleSize);
+    setImportant(h2, 'line-height', '1.08');
+    setImportant(h2, 'font-weight', '850');
+    setImportant(h2, 'letter-spacing', '-0.042em');
+    setImportant(h2, 'text-shadow', 'none');
+    setImportant(h2, 'background', 'transparent');
+    setImportant(h2, 'border', '0');
+
+    setImportant(icon, 'width', iconSize);
+    setImportant(icon, 'height', iconSize);
+    setImportant(icon, 'min-width', iconSize);
+    setImportant(icon, 'max-width', iconSize);
+    setImportant(icon, 'flex', `0 0 ${iconSize}`);
+    setImportant(icon, 'border-radius', '999px');
+    setImportant(icon, 'display', 'inline-flex');
+    setImportant(icon, 'align-items', 'center');
+    setImportant(icon, 'justify-content', 'center');
+    setImportant(icon, 'background', 'radial-gradient(circle at 50% 40%, rgba(255,223,135,.22), rgba(246,200,97,.08) 42%, rgba(8,10,20,.92) 72%), linear-gradient(145deg, rgba(246,200,97,.20), rgba(20,24,42,.86))');
+    setImportant(icon, 'border', '1px solid rgba(246,200,97,.52)');
+    setImportant(icon, 'box-shadow', '0 0 0 1px rgba(246,200,97,.08), 0 0 26px rgba(246,200,97,.22), 0 10px 22px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12)');
+    setImportant(icon, 'color', '#ffd36f');
+    setImportant(icon, 'font-size', iconFont);
+    setImportant(icon, 'font-weight', '400');
+    setImportant(icon, 'line-height', '1');
+    setImportant(icon, 'letter-spacing', '0');
+    setImportant(icon, 'text-shadow', '0 0 14px rgba(255,211,111,.34)');
+
+    setImportant(text, 'display', 'block');
+    setImportant(text, 'text-align', 'center');
+    setImportant(text, 'color', '#f8fafc');
+    setImportant(text, 'font-size', 'inherit');
+    setImportant(text, 'font-weight', 'inherit');
+    setImportant(text, 'line-height', 'inherit');
+    setImportant(text, 'letter-spacing', 'inherit');
+    setImportant(text, 'text-shadow', '0 8px 22px rgba(0,0,0,.34)');
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
 })();
