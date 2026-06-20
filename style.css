@@ -47267,3 +47267,56 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     border-radius: 11px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v307 — REMOVE BUSCA/FILTRO GLOBAL DO TOPO NO MOBILE
+   Remove visualmente o bloco:
+   #gfb-inner / #gfbSearch / #gfb-chips
+   do topo da página no mobile.
+   Mantém a área de Fundos com seus filtros próprios.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.remove-gfb-top-v307 #gfb-inner,
+  html.remove-gfb-top-v307 .gfb-inner-v307,
+  html.remove-gfb-top-v307 #globalFundBar,
+  html.remove-gfb-top-v307 .global-fund-bar,
+  html.remove-gfb-top-v307 .global-fund-search,
+  html.remove-gfb-top-v307 [id="gfb-inner"]{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* Caso algum wrapper reserve espaço mesmo com o inner oculto */
+  html.remove-gfb-top-v307 .gfb-shell,
+  html.remove-gfb-top-v307 .gfb-wrap,
+  html.remove-gfb-top-v307 .gfb-container{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Garante que a busca interna da seção Fundos continue existindo */
+  html.remove-gfb-top-v307 #searchInput,
+  html.remove-gfb-top-v307 #fundFilterDrawer,
+  html.remove-gfb-top-v307 #mobileFilterBar{
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* Desktop preservado */
+@media (min-width: 769px){
+  html.remove-gfb-top-v307 #gfb-inner,
+  html.remove-gfb-top-v307 .gfb-inner-v307{
+    display: inherit;
+  }
+}

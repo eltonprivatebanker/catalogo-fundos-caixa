@@ -1,34 +1,28 @@
-# Catálogo de Fundos CAIXA — v306
+# Catálogo de Fundos CAIXA — v307
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que foi aplicado
+## O que foi corrigido
 
-Criei uma hierarquia de títulos hero:
+Removido visualmente no mobile o bloco superior:
 
-1. Hero premium:
-   - Rankings dos fundos
+- `#gfb-inner`
+- `#gfbSearch`
+- `#gfb-chips`
 
-2. Hero discreto:
-   - Resumo executivo
-   - Indicadores de mercado
+Esse era o bloco de busca/filtros global que aparecia no topo e deixava a tela duplicada/confusa.
 
-3. Título padrão:
-   - Fundos disponíveis
-   - Dólar PTAX
-   - Boletim Focus
-   - Inflação e juros
-   - Poupança
-   - Comparador de fundos
+## Importante
+
+A busca e os filtros próprios da seção Fundos foram preservados.
 
 ## Escopo
 
-- Mobile: Resumo e Indicadores ganham selo/ícone mais nobre e centralizado, mas mais discreto que o Ranking.
-- Ranking mantém o medalhão premium.
-- Desktop fica mais sóbrio e preservado.
+- Mobile: bloco global do topo oculto.
+- Desktop: preservado.
 
 ## Como subir
 
