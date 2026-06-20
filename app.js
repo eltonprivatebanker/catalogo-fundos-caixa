@@ -1,3 +1,4 @@
+// ELTAUM_COPOM_CAROUSEL_v321
 // ELTAUM_REMOVE_NEXT_SUMMARY_v320
 // ELTAUM_MARKET_RATES_GRID_FORCE_v319
 // ELTAUM_MARKET_RATES_COMPACT_v318
@@ -17384,4 +17385,91 @@ function openCdiAnalyticTableV274(){
 
   setTimeout(apply, 250);
   setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v321 — carrossel das 8 reuniões do Copom no mobile
+   Usa a store #copomMeetings como fonte e cria uma trilha horizontal
+   dentro de #copomExecutiveSummaryV270.
+════════════════════════════════════════════════════ */
+(function copomCarouselV321(){
+  function norm(txt){
+    return String(txt || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function classify(item, result){
+    const cls = String(item.className || '').toLowerCase();
+    const r = String(result || '').toLowerCase();
+    if(cls.includes('next') || r.includes('próxima') || r.includes('proxima')) return 'is-next';
+    if(cls.includes('future') || r.includes('prevista')) return 'is-future';
+    if(cls.includes('cut') || r.includes('corte')) return 'is-cut';
+    if(cls.includes('hold') || r.includes('mantida')) return 'is-hold';
+    return 'is-neutral';
+  }
+
+  function statusLabel(result){
+    const r = norm(result);
+    if(!r) return 'agenda';
+    if(/próxima|proxima/i.test(r)) return 'agenda';
+    if(/prevista/i.test(r)) return 'prevista';
+    if(/corte/i.test(r)) return 'corte';
+    if(/mantida/i.test(r)) return 'mantida';
+    return r.replace(/→/g, '').slice(0, 18);
+  }
+
+  function build(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    const store = document.getElementById('copomMeetings');
+    if(!summary || !store || !isMobile) return;
+
+    const items = [...store.querySelectorAll('.copom-item')]
+      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
+
+    if(!items.length || summary.dataset.v321Built === '1') return;
+
+    const html = items.map(item => {
+      const num = norm(item.querySelector('.copom-num')?.textContent);
+      const date = norm(item.querySelector('.copom-date')?.textContent);
+      const result = norm(item.querySelector('.copom-result')?.textContent);
+      const kind = classify(item, result);
+      const label = statusLabel(result);
+      return `
+        <article class="copom-exec-card-v270 copom-carousel-card-v321 ${kind}" role="listitem">
+          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
+          <strong class="copom-exec-date-v270">${date || '—'}</strong>
+          <div class="copom-exec-meta-v270">
+            <span class="copom-exec-status-v270 ${kind}">${label}</span>
+          </div>
+          ${result && !/próxima|proxima|prevista/i.test(result) ? `<small class="copom-carousel-result-v321">${result}</small>` : ''}
+        </article>`;
+    }).join('');
+
+    summary.dataset.v321Built = '1';
+    summary.setAttribute('role', 'list');
+    summary.setAttribute('aria-label', 'Carrossel das reuniões do Copom');
+    summary.innerHTML = html;
+  }
+
+  function resetDesktop(){
+    if(window.matchMedia('(max-width: 768px)').matches) return;
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(summary?.dataset.v321Built === '1'){
+      summary.dataset.v321Built = '0';
+    }
+  }
+
+  function apply(){
+    build();
+    resetDesktop();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 300);
+  setTimeout(apply, 1000);
+  setTimeout(apply, 2000);
 })();

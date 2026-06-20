@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v320
+# Catálogo de Fundos CAIXA — v321
 
 Arquivos atualizados:
 - index.html
@@ -7,24 +7,23 @@ Arquivos atualizados:
 
 ## Ajuste aplicado
 
-Removido o card superior:
+Transformei o bloco “Copom executivo” em um carrossel horizontal no mobile.
 
-- “Próxima reunião”
-- “4–5 ago”
-- “próxima ★”
+## Como funciona
 
-## Motivo
+A página usa os dados já existentes em `#copomMeetings` e monta uma trilha com as 8 reuniões do ano.
 
-Essa informação já aparece logo abaixo dentro do bloco “Copom executivo”. Assim evitamos duplicidade e deixamos o card “Cenário monetário” mais compacto.
+## Vantagens
 
-## Resultado esperado
+- Mostra as 8 reuniões sem ocupar muita altura.
+- Mantém a informação completa.
+- Evita empilhar cards demais.
+- Visual mais próximo de app financeiro.
 
-No topo do Cenário monetário ficam apenas:
+## Escopo
 
-- Selic meta
-- CDI
-
-A próxima reunião permanece somente dentro de “Copom executivo”.
+- Mobile: carrossel horizontal das reuniões.
+- Desktop: preservado.
 
 ## Como subir
 
