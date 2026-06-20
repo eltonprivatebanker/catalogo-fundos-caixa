@@ -18937,3 +18937,61 @@ function openCdiAnalyticTableV274(){
 
   [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
 })();
+
+/* ════════════════════════════════════════════════════
+   PATCH v344 — Header metadata desktop
+   - Impede o legado v119 de manter #lastUpdate dentro da .brand-text.
+   - Garante que #lastUpdate fique no bloco de metadados junto do SIPII.
+   - Não altera a lógica de dados; só corrige o posicionamento do cabeçalho.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_HEADER_METADATA_DESKTOP_20260620_v344';
+  window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
+
+  function qs(sel, root=document){ return root.querySelector(sel); }
+
+  function syncHeaderMetadataV344(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('header-metadata-v344');
+
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const shell = qs('.header-metadata-v344.header-data-status-v344') || qs('.header-data-status-v344') || qs('.header-metadata-v344');
+      const lastUpdate = qs('#lastUpdate');
+      const source = qs('.header-source-pill-v344');
+
+      if(shell && source && source.parentElement !== shell){
+        shell.prepend(source);
+      }
+
+      if(shell && lastUpdate && lastUpdate.parentElement !== shell){
+        shell.appendChild(lastUpdate);
+      }
+    }catch(e){}
+  }
+
+  function boot(){
+    syncHeaderMetadataV344();
+    [120, 320, 760, 1400, 2400, 3800, 5200].forEach(function(ms){
+      setTimeout(syncHeaderMetadataV344, ms);
+    });
+
+    try{
+      const observer = new MutationObserver(function(){ syncHeaderMetadataV344(); });
+      observer.observe(document.body || document.documentElement, {childList:true, subtree:true});
+      window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__.observer = observer;
+      window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__.sync = syncHeaderMetadataV344;
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', boot, {once:true});
+  }else{
+    boot();
+  }
+})();
+
