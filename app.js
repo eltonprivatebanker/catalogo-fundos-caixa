@@ -19271,3 +19271,464 @@ function openCdiAnalyticTableV274(){
   window.__ELTAUM_EVO_POINTER_SANE_V363__ = { build: BUILD, state };
 })();
 
+/* ════════════════════════════════════════════════════
+   ELTAUM_EVO_DEBUG_MOBILE_20260620_v365
+   Painel de diagnóstico no celular real.
+   Ativar: ?debug=1 ou ?evoDebug=1.
+   Não altera comportamento por padrão; só mede. Botões permitem isolar:
+   - Freeze Chart
+   - Freeze Network
+   - Hide Canvas
+   - Block Tabs
+════════════════════════════════════════════════════ */
+(function evoDebugMobileV365(){
+  const BUILD = 'ELTAUM_EVO_DEBUG_MOBILE_20260620_v365';
+
+  function shouldRun(){
+    try{
+      const params = new URLSearchParams(location.search);
+      return params.has('debug') || params.has('evoDebug') || location.hash.includes('debug');
+    }catch(e){
+      return false;
+    }
+  }
+
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
+  }
+
+  if(!shouldRun()) return;
+
+  const rootHtml = document.documentElement;
+  rootHtml.classList.add('evo-debug-active-v365');
+
+  const S = window.__EVO_DEBUG_MOBILE_V365_STATE__ || {
+    build:BUILD,
+    started:performance.now(),
+    scroll:0,
+    winResize:0,
+    visualResize:0,
+    chartResize:0,
+    chartUpdate:0,
+    chartRender:0,
+    chartDraw:0,
+    network:0,
+    tabs:0,
+    mutations:0,
+    canvasResize:0,
+    freezeChart:false,
+    freezeNetwork:false,
+    hideCanvas:false,
+    blockTabs:false,
+    last:[],
+    originals:{}
+  };
+
+  window.__EVO_DEBUG_MOBILE_V365_STATE__ = S;
+
+  function root(){
+    return document.querySelector('#sec-graficos');
+  }
+
+  function inEvo(el){
+    const r = root();
+    try{ return !!r && !!el && (el === r || r.contains(el)); }
+    catch(e){ return false; }
+  }
+
+  function isEvoChart(chart){
+    return !!chart?.canvas && inEvo(chart.canvas);
+  }
+
+  function isTabTarget(target){
+    try{
+      return !!target?.closest?.('#sec-graficos .evo-view-tab, #sec-graficos .chart-tab, #evolutionToggle');
+    }catch(e){
+      return false;
+    }
+  }
+
+  function isTargetUrl(url){
+    url = String(url || '');
+    return url.includes('mercado_atual.json') ||
+           url.includes('dados_atuais.csv') ||
+           url.includes('kpis_dashboard.json') ||
+           url.includes('olinda') ||
+           url.includes('bcb.gov');
+  }
+
+  function log(type, detail){
+    const item = {
+      t:Math.round((performance.now() - S.started) / 100) / 10,
+      y:Math.round(window.scrollY || 0),
+      type,
+      ...(detail || {})
+    };
+
+    S.last.push(item);
+    if(S.last.length > 28) S.last.shift();
+
+    updatePanel();
+  }
+
+  function patchChart(){
+    if(!window.Chart?.prototype){
+      setTimeout(patchChart, 300);
+      return;
+    }
+
+    if(window.__EVO_DEBUG_MOBILE_V365_CHART_PATCHED__) return;
+    window.__EVO_DEBUG_MOBILE_V365_CHART_PATCHED__ = true;
+
+    ['resize','update','render','draw'].forEach(method => {
+      if(typeof Chart.prototype[method] !== 'function') return;
+
+      const original = Chart.prototype[method];
+      S.originals['Chart.' + method] = original;
+
+      Chart.prototype[method] = function(...args){
+        if(isEvoChart(this)){
+          if(method === 'resize') S.chartResize++;
+          if(method === 'update') S.chartUpdate++;
+          if(method === 'render') S.chartRender++;
+          if(method === 'draw') S.chartDraw++;
+
+          log('Chart.' + method, {
+            canvas:this.canvas?.id || '',
+            args:args.map(String).join(',').slice(0,60),
+            frozen:S.freezeChart
+          });
+
+          if(S.freezeChart){
+            return this;
+          }
+        }
+
+        return original.apply(this, args);
+      };
+    });
+  }
+
+  function patchNetwork(){
+    if(window.__EVO_DEBUG_MOBILE_V365_NETWORK_PATCHED__) return;
+    window.__EVO_DEBUG_MOBILE_V365_NETWORK_PATCHED__ = true;
+
+    const originalFetch = window.fetch;
+    S.originals.fetch = originalFetch;
+
+    window.fetch = function(...args){
+      const url = String(args[0]?.url || args[0] || '');
+
+      if(isTargetUrl(url)){
+        S.network++;
+        log('fetch', {url:url.split('?')[0], frozen:S.freezeNetwork});
+
+        if(S.freezeNetwork){
+          return Promise.reject(new Error('Bloqueado pelo debug mobile v365'));
+        }
+      }
+
+      return originalFetch.apply(this, args);
+    };
+
+    const originalOpen = XMLHttpRequest.prototype.open;
+    const originalSend = XMLHttpRequest.prototype.send;
+    S.originals.xhrOpen = originalOpen;
+    S.originals.xhrSend = originalSend;
+
+    XMLHttpRequest.prototype.open = function(method, url, ...rest){
+      this.__evoDebugUrlV365 = String(url || '');
+      this.__evoDebugMethodV365 = method;
+      return originalOpen.call(this, method, url, ...rest);
+    };
+
+    XMLHttpRequest.prototype.send = function(...args){
+      const url = this.__evoDebugUrlV365 || '';
+
+      if(isTargetUrl(url)){
+        S.network++;
+        log('xhr', {url:url.split('?')[0], frozen:S.freezeNetwork});
+
+        if(S.freezeNetwork){
+          try{ this.abort(); }catch(e){}
+          return;
+        }
+      }
+
+      return originalSend.apply(this, args);
+    };
+  }
+
+  function patchEvents(){
+    if(window.__EVO_DEBUG_MOBILE_V365_EVENTS_PATCHED__) return;
+    window.__EVO_DEBUG_MOBILE_V365_EVENTS_PATCHED__ = true;
+
+    window.addEventListener('scroll', () => {
+      S.scroll++;
+      if(S.scroll % 12 === 0) updatePanel();
+    }, {passive:true});
+
+    window.addEventListener('resize', () => {
+      S.winResize++;
+      log('window.resize', {
+        w:window.innerWidth,
+        h:window.innerHeight
+      });
+    }, {passive:true});
+
+    window.visualViewport?.addEventListener('resize', () => {
+      S.visualResize++;
+      log('visualViewport.resize', {
+        w:Math.round(window.visualViewport.width || 0),
+        h:Math.round(window.visualViewport.height || 0)
+      });
+    }, {passive:true});
+
+    ['pointerdown','pointerup','touchstart','touchend','click'].forEach(type => {
+      document.addEventListener(type, ev => {
+        if(!isTabTarget(ev.target)) return;
+
+        S.tabs++;
+        const text = ev.target.closest('button')?.textContent?.trim() || '';
+
+        log('tab.' + type, {text, blocked:S.blockTabs});
+
+        if(S.blockTabs){
+          ev.preventDefault();
+          ev.stopPropagation();
+          ev.stopImmediatePropagation?.();
+        }
+      }, true);
+    });
+
+    const r = root();
+    if(r && window.MutationObserver){
+      const mo = new MutationObserver(muts => {
+        S.mutations += muts.length;
+        if(S.mutations % 20 === 0) updatePanel();
+      });
+      mo.observe(r, {
+        subtree:true,
+        childList:true,
+        attributes:true,
+        attributeFilter:['style','class','aria-pressed','aria-expanded','hidden','width','height']
+      });
+      S.originals.mo = mo;
+    }
+
+    if(r && window.ResizeObserver){
+      const ro = new ResizeObserver(entries => {
+        entries.forEach(entry => {
+          const el = entry.target;
+          if(el.tagName === 'CANVAS'){
+            S.canvasResize++;
+            log('canvas.resize', {
+              id:el.id || '',
+              w:Math.round(el.getBoundingClientRect().width || 0),
+              h:Math.round(el.getBoundingClientRect().height || 0),
+              attrW:el.getAttribute('width'),
+              attrH:el.getAttribute('height')
+            });
+          }
+        });
+      });
+
+      r.querySelectorAll('canvas').forEach(c => ro.observe(c));
+      S.originals.ro = ro;
+    }
+  }
+
+  function panelHtml(){
+    return `
+      <div class="evo-debug-head-v365">
+        <div class="evo-debug-title-v365">
+          <strong>Debug mobile v365</strong>
+          <span>${BUILD}</span>
+        </div>
+        <button class="evo-debug-mini-btn-v365" data-debug-close>Fechar</button>
+      </div>
+      <div class="evo-debug-grid-v365">
+        <div class="evo-debug-kpi-v365"><span>Scroll</span><strong data-kpi="scroll">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Viewport</span><strong data-kpi="vp">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Network</span><strong data-kpi="network">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Chart resize</span><strong data-kpi="chartResize">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Chart update</span><strong data-kpi="chartUpdate">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Tabs</span><strong data-kpi="tabs">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Mutations</span><strong data-kpi="mutations">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Canvas resize</span><strong data-kpi="canvasResize">0</strong></div>
+        <div class="evo-debug-kpi-v365"><span>Draw</span><strong data-kpi="draw">0</strong></div>
+      </div>
+      <div class="evo-debug-actions-v365">
+        <button class="evo-debug-action-v365" data-debug-toggle="freezeChart">Freeze Chart</button>
+        <button class="evo-debug-action-v365" data-debug-toggle="freezeNetwork">Freeze Network</button>
+        <button class="evo-debug-action-v365" data-debug-toggle="hideCanvas">Hide Canvas</button>
+        <button class="evo-debug-action-v365" data-debug-toggle="blockTabs">Block Tabs</button>
+        <button class="evo-debug-action-v365" data-debug-copy>Copiar relatório</button>
+        <button class="evo-debug-action-v365" data-debug-clear>Limpar</button>
+      </div>
+      <pre class="evo-debug-log-v365" data-debug-log></pre>
+    `;
+  }
+
+  function ensurePanel(){
+    if(document.getElementById('evoDebugPanelV365')) return;
+
+    const panel = document.createElement('div');
+    panel.id = 'evoDebugPanelV365';
+    panel.innerHTML = panelHtml();
+    document.body.appendChild(panel);
+
+    panel.addEventListener('click', ev => {
+      const close = ev.target.closest('[data-debug-close]');
+      if(close){
+        panel.style.display = 'none';
+        return;
+      }
+
+      const toggle = ev.target.closest('[data-debug-toggle]');
+      if(toggle){
+        const key = toggle.getAttribute('data-debug-toggle');
+        S[key] = !S[key];
+
+        if(key === 'hideCanvas'){
+          rootHtml.classList.toggle('evo-debug-hide-canvas-v365', !!S[key]);
+        }
+
+        updatePanel();
+        return;
+      }
+
+      if(ev.target.closest('[data-debug-clear]')){
+        S.scroll = S.winResize = S.visualResize = S.chartResize = S.chartUpdate = 0;
+        S.chartRender = S.chartDraw = S.network = S.tabs = S.mutations = S.canvasResize = 0;
+        S.last = [];
+        updatePanel();
+        return;
+      }
+
+      if(ev.target.closest('[data-debug-copy]')){
+        copyReport();
+      }
+    });
+  }
+
+  function setKpi(panel, key, value){
+    const el = panel.querySelector(`[data-kpi="${key}"]`);
+    if(el) el.textContent = String(value);
+  }
+
+  let updateTimer = 0;
+  function updatePanel(){
+    clearTimeout(updateTimer);
+    updateTimer = setTimeout(() => {
+      const panel = document.getElementById('evoDebugPanelV365');
+      if(!panel) return;
+
+      setKpi(panel, 'scroll', S.scroll);
+      setKpi(panel, 'vp', S.visualResize + '/' + S.winResize);
+      setKpi(panel, 'network', S.network);
+      setKpi(panel, 'chartResize', S.chartResize);
+      setKpi(panel, 'chartUpdate', S.chartUpdate);
+      setKpi(panel, 'tabs', S.tabs);
+      setKpi(panel, 'mutations', S.mutations);
+      setKpi(panel, 'canvasResize', S.canvasResize);
+      setKpi(panel, 'draw', S.chartDraw);
+
+      panel.querySelectorAll('[data-debug-toggle]').forEach(btn => {
+        const key = btn.getAttribute('data-debug-toggle');
+        btn.classList.toggle('active', !!S[key]);
+      });
+
+      const logEl = panel.querySelector('[data-debug-log]');
+      if(logEl){
+        logEl.textContent = S.last.slice(-12).map(x => {
+          const info = Object.entries(x)
+            .filter(([k]) => !['t','type'].includes(k))
+            .map(([k,v]) => `${k}:${String(v).slice(0,44)}`)
+            .join(' · ');
+          return `${x.t}s ${x.type} ${info}`;
+        }).join('\n');
+      }
+    }, 40);
+  }
+
+  function reportData(){
+    return {
+      build:BUILD,
+      url:location.href,
+      viewport:{
+        innerWidth:window.innerWidth,
+        innerHeight:window.innerHeight,
+        visualWidth:Math.round(window.visualViewport?.width || 0),
+        visualHeight:Math.round(window.visualViewport?.height || 0),
+        dpr:window.devicePixelRatio
+      },
+      counters:{
+        scroll:S.scroll,
+        winResize:S.winResize,
+        visualResize:S.visualResize,
+        chartResize:S.chartResize,
+        chartUpdate:S.chartUpdate,
+        chartRender:S.chartRender,
+        chartDraw:S.chartDraw,
+        network:S.network,
+        tabs:S.tabs,
+        mutations:S.mutations,
+        canvasResize:S.canvasResize
+      },
+      toggles:{
+        freezeChart:S.freezeChart,
+        freezeNetwork:S.freezeNetwork,
+        hideCanvas:S.hideCanvas,
+        blockTabs:S.blockTabs
+      },
+      last:S.last
+    };
+  }
+
+  function copyReport(){
+    const txt = JSON.stringify(reportData(), null, 2);
+
+    if(typeof navigator !== 'undefined' && navigator.clipboard?.writeText){
+      navigator.clipboard.writeText(txt).then(() => {
+        alert('Relatório copiado.');
+      }).catch(() => {
+        console.log(txt);
+        alert('Não consegui copiar automaticamente. Relatório enviado ao console.');
+      });
+    }else{
+      console.log(txt);
+      alert('Relatório enviado ao console.');
+    }
+  }
+
+  function init(){
+    ensurePanel();
+    patchChart();
+    patchNetwork();
+    patchEvents();
+    updatePanel();
+
+    window.__EVO_DEBUG_MOBILE_V365__ = {
+      build:BUILD,
+      state:S,
+      report:reportData,
+      copyReport,
+      toggle(key){
+        S[key] = !S[key];
+        if(key === 'hideCanvas') rootHtml.classList.toggle('evo-debug-hide-canvas-v365', !!S[key]);
+        updatePanel();
+        return S[key];
+      }
+    };
+
+    console.log('✅ EVO debug mobile v365 ativo. Use o painel na tela ou window.__EVO_DEBUG_MOBILE_V365__.report()');
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init, {once:true});
+  }else{
+    init();
+  }
+})();
+
