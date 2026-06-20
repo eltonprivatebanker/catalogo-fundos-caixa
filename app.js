@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353';
+  const BUILD = 'ELTAUM_MOBILE_SEMANTIC_CLEAN_20260620_v354';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18996,7 +18996,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353
+   ELTAUM_MOBILE_SEMANTIC_CLEAN_20260620_v354
    Mobile:
    - "Juros e CDI" como título.
    - CDI em 2026 em resumo executivo, sem gráfico.
@@ -19004,7 +19004,7 @@ function openCdiAnalyticTableV274(){
    - Copom começa na última decisão e próxima reunião.
 ════════════════════════════════════════════════════ */
 (function mobileRatesFinalV352(){
-  const BUILD = 'ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353';
+  const BUILD = 'ELTAUM_MOBILE_SEMANTIC_CLEAN_20260620_v354';
 
   const MONTH_ORDER = {
     JAN:1, FEV:2, MAR:3, ABR:4, MAI:5, JUN:6,
@@ -19272,7 +19272,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_COPOM_TRUE_BORDERLESS_20260620_v353
+   ELTAUM_MOBILE_SEMANTIC_CLEAN_20260620_v354
    Força inline no mobile para remover bordas do Copom geradas por patches antigos.
 ════════════════════════════════════════════════════ */
 (function copomTrueBorderlessV353(){
@@ -19353,5 +19353,142 @@ function openCdiAnalyticTableV274(){
   window.addEventListener('resize', apply, {passive:true});
 
   window.__ELTAUM_COPOM_TRUE_BORDERLESS_V353__ = { apply };
+})();
+
+/* ════════════════════════════════════════════════════
+   ELTAUM_MOBILE_SEMANTIC_CLEAN_20260620_v354
+   Mobile:
+   - "Agenda Copom" no lugar de "Copom executivo".
+   - "CDI em 2026" sem rótulo auxiliar e sem "Resumo executivo".
+   - Cards CDI com labels mais curtos e sem legendas redundantes.
+   - Meses anteriores com nome do mês por extenso e sem "fechado".
+════════════════════════════════════════════════════ */
+(function mobileSemanticCleanV354(){
+  const BUILD = 'ELTAUM_MOBILE_SEMANTIC_CLEAN_20260620_v354';
+
+  const MONTH_NAMES = {
+    JAN:'Janeiro',
+    FEV:'Fevereiro',
+    MAR:'Março',
+    ABR:'Abril',
+    MAI:'Maio',
+    JUN:'Junho',
+    JUL:'Julho',
+    AGO:'Agosto',
+    SET:'Setembro',
+    OUT:'Outubro',
+    NOV:'Novembro',
+    DEZ:'Dezembro'
+  };
+
+  function isMobile(){
+    return window.matchMedia('(max-width: 820px)').matches;
+  }
+
+  function txt(el){
+    return String(el?.textContent || el?.innerText || '').replace(/\s+/g,' ').trim();
+  }
+
+  function monthToken(value){
+    return (String(value || '').match(/\b(JAN|FEV|MAR|ABR|MAI|JUN|JUL|AGO|SET|OUT|NOV|DEZ)\b/i) || [])[1]?.toUpperCase() || '';
+  }
+
+  function setText(el, value){
+    if(el && el.textContent !== value) el.textContent = value;
+  }
+
+  function removeEl(el){
+    if(el && el.parentNode) el.parentNode.removeChild(el);
+  }
+
+  function apply(){
+    const ratesTitle = document.getElementById('ratesReferenceTitleV167');
+    setText(ratesTitle, 'Juros e CDI');
+
+    const cdiTopSmall = document.getElementById('cdiYearHistoryTotal');
+    setText(cdiTopSmall, 'Taxa anualizada');
+
+    const copomTitle = document.getElementById('copomCompactTitleV167');
+    setText(copomTitle, 'Agenda Copom');
+
+    if(!isMobile()) return;
+
+    const cdiBox = document.getElementById('cdiMobileReadableV352');
+    if(cdiBox){
+      const cdiTitle = cdiBox.querySelector('.cdi-mobile-head-v352 strong');
+      setText(cdiTitle, 'CDI em 2026');
+
+      cdiBox.querySelectorAll('.cdi-mobile-head-v352 span, .cdi-mobile-head-v352 small').forEach(removeEl);
+
+      cdiBox.querySelectorAll('.cdi-mobile-card-v352').forEach(card => {
+        const label = card.querySelector('span');
+        card.querySelectorAll('small').forEach(removeEl);
+
+        if(card.classList.contains('is-year')){
+          setText(label, 'Acumulado');
+        }else if(card.classList.contains('is-12m')){
+          setText(label, '12 meses');
+        }else if(card.classList.contains('is-current')){
+          const mes = monthToken(txt(label));
+          setText(label, mes && MONTH_NAMES[mes] ? `${MONTH_NAMES[mes]} parcial` : 'Mês atual');
+        }else if(card.classList.contains('is-closed')){
+          setText(label, 'Último fechado');
+        }
+      });
+
+      const monthsTitle = cdiBox.querySelector('.cdi-mobile-months-head-v352 strong');
+      setText(monthsTitle, 'Meses anteriores');
+
+      cdiBox.querySelectorAll('.cdi-mobile-months-head-v352 small').forEach(removeEl);
+
+      cdiBox.querySelectorAll('.cdi-mobile-month-v352').forEach(card => {
+        const label = card.querySelector('span');
+        const mes = monthToken(txt(label));
+        if(mes && MONTH_NAMES[mes]) setText(label, MONTH_NAMES[mes]);
+        card.querySelectorAll('small').forEach(removeEl);
+      });
+    }
+
+    window.__ELTAUM_MOBILE_SEMANTIC_CLEAN_APPLIED__ = BUILD;
+  }
+
+  let scheduled = false;
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      apply();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+
+  [100, 350, 800, 1400, 2400, 3600].forEach(ms => setTimeout(apply, ms));
+  window.addEventListener('resize', schedule, {passive:true});
+
+  const observer = new MutationObserver(schedule);
+  function observe(){
+    ['cdiMobileReadableV352','cdiYearHistoryTotal','copomCompactTitleV167','ratesReferenceTitleV167'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el && !el.dataset.v354Observed){
+        el.dataset.v354Observed = '1';
+        observer.observe(el, {childList:true, subtree:true, characterData:true});
+      }
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', observe, {once:true});
+  }else{
+    observe();
+  }
+
+  [500, 1200, 2600].forEach(ms => setTimeout(observe, ms));
+  window.__ELTAUM_MOBILE_SEMANTIC_CLEAN_V354__ = { build: BUILD, apply };
 })();
 

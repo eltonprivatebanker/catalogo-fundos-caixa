@@ -51888,3 +51888,66 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v354 — MOBILE SEMANTIC CLEAN
+   Reduz textos redundantes e deixa a seção "Juros e CDI" mais objetiva.
+   Escopo: somente mobile.
+════════════════════════════════════════════════════ */
+
+@media (max-width:820px){
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-head-v352{
+    display:block !important;
+    padding-bottom:8px !important;
+    margin-bottom:10px !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-head-v352 span,
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-head-v352 small{
+    display:none !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-head-v352 strong{
+    display:block !important;
+    margin:0 !important;
+    font-size:1.04rem !important;
+    line-height:1.08 !important;
+    font-weight:850 !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-card-v352 small,
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-month-v352 small{
+    display:none !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-card-v352{
+    min-height:62px !important;
+    padding:9px 10px !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-month-v352{
+    min-height:62px !important;
+    padding:9px 10px 9px 12px !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-card-v352 strong,
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-month-v352 strong{
+    margin-top:6px !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-months-head-v352 small{
+    display:none !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-months-head-v352{
+    margin:12px 0 8px !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .cdi-mobile-months-head-v352 strong{
+    font-size:.72rem !important;
+  }
+
+  html.mobile-semantic-clean-v354 #sec-mercado .copom-compact-v167 .reference-subhead-v167 strong{
+    font-size:1rem !important;
+  }
+}
+
