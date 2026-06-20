@@ -1,25 +1,35 @@
-# Catálogo de Fundos CAIXA — v338
+# Catálogo de Fundos CAIXA — v339
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes aplicados em Inflação e Juros
+## Correções aplicadas
 
-### 1. Menos redundância
-Ocultadas as pílulas de leitura dos gráficos:
-- #evoCardIpcaNote
-- #evoCardSelicNote
-- #evoCardMetaNote
+### 1. Botões de prazo
+Corrigido o problema em que o botão “1A” esticava e escondia os demais.
 
-### 2. Cards de estatística mais limpos
-- Removido o chip de “Vigente” no gráfico da Selic.
-- Removido o chip de “Último IPCA” no gráfico do IPCA mensal.
-- Mantidos os extremos relevantes, como máxima e mínima.
+Agora os botões ficam em carrossel horizontal:
+- 12M
+- 1A
+- 2A
+- 5A
+- 10A
+- Histórico
 
-### 3. Botões de prazo compactos
-Os botões 1A, 2A, 5A, 10A e Histórico ficam em linha horizontal com rolagem, ocupando menos altura.
+### 2. Cards Máxima/Mínima
+Corrigido o atropelamento de texto nos cards de estatística da Selic e IPCA.
+
+### 3. Eixo X dos gráficos
+Forçado:
+- maxRotation: 0
+- minRotation: 0
+- autoSkip: true
+- maxTicksLimit: 5
+
+### 4. Título do IPCA
+O texto “últimos 24 meses” passa a ser dinâmico conforme o filtro escolhido.
 
 ## Como subir
 

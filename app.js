@@ -1,3 +1,4 @@
+// ELTAUM_CHARTS_TABS_FIX_v339
 // ELTAUM_INFLATION_RATES_CLEAN_v338
 // ELTAUM_DOLAR_CHART_CLOSED_v337
 // ELTAUM_DOLAR_BADGE_MONTHS_v336
@@ -18490,6 +18491,192 @@ function openCdiAnalyticTableV274(){
     const obs = new MutationObserver(() => {
       clearTimeout(window.__inflationRatesCleanV338Timer);
       window.__inflationRatesCleanV338Timer = setTimeout(apply, 80);
+    });
+    obs.observe(target, { childList:true, subtree:true, characterData:true });
+  }
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v339 — gráficos Inflação/Juros: tabs, cards e eixo X
+   - Restaura botões em carrossel horizontal.
+   - Adiciona 12M quando ausente.
+   - Corrige chips Máxima/Mínima.
+   - Força eixo X horizontal nos charts.
+   - Atualiza título IPCA conforme prazo escolhido.
+════════════════════════════════════════════════════ */
+(function chartsTabsFixV339(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function normalizeRangeLabel(raw){
+    const r = String(raw || '').toLowerCase();
+    if(r.includes('12')) return 'últimos 12 meses';
+    if(r.includes('24')) return 'últimos 24 meses';
+    if(r.includes('36')) return 'últimos 36 meses';
+    if(r.includes('1a') || r === '1' || r === 'year') return 'últimos 12 meses';
+    if(r.includes('2a')) return 'últimos 24 meses';
+    if(r.includes('5a')) return 'últimos 5 anos';
+    if(r.includes('10a')) return 'últimos 10 anos';
+    if(r.includes('hist')) return 'histórico';
+    return 'período selecionado';
+  }
+
+  function inferRangeFromButton(btn){
+    return btn?.dataset?.range
+      || btn?.dataset?.ipcaRange
+      || btn?.dataset?.selicRange
+      || btn?.dataset?.months
+      || btn?.textContent
+      || '';
+  }
+
+  function updateIpcaTitle(range){
+    const title = document.getElementById('chartIpcaTitle');
+    if(!title) return;
+    title.textContent = `🎯 IPCA mensal — ${normalizeRangeLabel(range)}`;
+  }
+
+  function ensure12MButtons(){
+    document.querySelectorAll('#sec-graficos .chart-tabs, #sec-graficos .evo-range-tabs, #sec-graficos .selic-range-tabs, #sec-graficos .ipca-range-tabs').forEach(tabs => {
+      const text = (tabs.innerText || '').toLowerCase();
+      if(text.includes('12m')) return;
+
+      const btns = [...tabs.querySelectorAll('button, .chart-tab')];
+      if(!btns.length) return;
+
+      const first = btns[0];
+      const btn = first.cloneNode(true);
+      btn.textContent = '12M';
+      btn.classList.remove('active');
+      btn.setAttribute('aria-selected','false');
+      btn.dataset.range = '12m';
+      btn.dataset.ipcaRange = '12m';
+      btn.dataset.selicRange = '12m';
+      btn.type = 'button';
+      first.insertAdjacentElement('afterend', btn);
+    });
+  }
+
+  function fixTabs(){
+    const root = document.getElementById('sec-graficos') || document;
+    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
+      setImportant(tabs, 'display', 'flex');
+      setImportant(tabs, 'flex-wrap', 'nowrap');
+      setImportant(tabs, 'overflow-x', 'auto');
+      setImportant(tabs, 'overflow-y', 'hidden');
+      setImportant(tabs, 'justify-content', 'flex-start');
+      setImportant(tabs, 'gap', '8px');
+      setImportant(tabs, 'padding', '1px 1px 8px');
+      setImportant(tabs, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      setImportant(btn, 'flex', '0 0 auto');
+      setImportant(btn, 'width', 'auto');
+      setImportant(btn, 'min-width', '68px');
+      setImportant(btn, 'max-width', 'none');
+      setImportant(btn, 'white-space', 'nowrap');
+      setImportant(btn, 'min-height', '34px');
+      setImportant(btn, 'padding', '0 12px');
+      setImportant(btn, 'font-size', '.66rem');
+    });
+  }
+
+  function fixSummaryChips(){
+    const root = document.getElementById('sec-graficos') || document;
+
+    root.querySelectorAll('#selicSummaryRow .selic-summary-chip, #ipcaSummaryRowV250 .ipca-summary-chip-v250').forEach(chip => {
+      setImportant(chip, 'display', 'grid');
+      setImportant(chip, 'grid-template-columns', '1fr');
+      setImportant(chip, 'gap', '5px');
+      setImportant(chip, 'align-items', 'start');
+      setImportant(chip, 'min-height', '64px');
+      setImportant(chip, 'height', 'auto');
+      setImportant(chip, 'overflow', 'visible');
+      setImportant(chip, 'padding', '10px 11px');
+    });
+
+    root.querySelectorAll('#selicSummaryRow .selic-summary-text, #ipcaSummaryRowV250 .ipca-summary-text-v250').forEach(txt => {
+      setImportant(txt, 'display', 'flex');
+      setImportant(txt, 'flex-direction', 'column');
+      setImportant(txt, 'align-items', 'flex-start');
+      setImportant(txt, 'gap', '4px');
+      setImportant(txt, 'min-width', '0');
+      setImportant(txt, 'width', '100%');
+      setImportant(txt, 'line-height', '1.12');
+    });
+
+    root.querySelectorAll('#selicSummaryRow .selic-summary-chip span, #selicSummaryRow .selic-summary-chip small, #selicSummaryRow .selic-summary-chip strong, #ipcaSummaryRowV250 .ipca-summary-chip-v250 span, #ipcaSummaryRowV250 .ipca-summary-chip-v250 small, #ipcaSummaryRowV250 .ipca-summary-chip-v250 strong').forEach(el => {
+      setImportant(el, 'position', 'static');
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'white-space', 'normal');
+      setImportant(el, 'line-height', '1.15');
+      setImportant(el, 'max-width', '100%');
+      setImportant(el, 'overflow', 'visible');
+      setImportant(el, 'text-overflow', 'clip');
+    });
+  }
+
+  function fixChartXAxis(chart){
+    if(!chart?.options?.scales?.x?.ticks) return;
+    const ticks = chart.options.scales.x.ticks;
+    ticks.maxRotation = 0;
+    ticks.minRotation = 0;
+    ticks.autoSkip = true;
+    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+    chart.update('none');
+  }
+
+  function fixAllCharts(){
+    if(!window.Chart) return;
+    ['chartSelic', 'chartIpca', 'chartIpca12m', 'chartDolar', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if(!canvas) return;
+      const chart = Chart.getChart(canvas);
+      if(chart) fixChartXAxis(chart);
+    });
+  }
+
+  function bindTitleUpdates(){
+    if(window.__chartsTabsFixV339Bound) return;
+    window.__chartsTabsFixV339Bound = true;
+
+    document.addEventListener('click', ev => {
+      const btn = ev.target.closest('#sec-graficos .chart-tabs button, #sec-graficos .chart-tab, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button');
+      if(!btn) return;
+      const range = inferRangeFromButton(btn);
+      setTimeout(() => {
+        updateIpcaTitle(range);
+        fixAllCharts();
+      }, 120);
+      setTimeout(fixAllCharts, 500);
+    }, { passive:true });
+  }
+
+  function apply(){
+    ensure12MButtons();
+    fixTabs();
+    fixSummaryChips();
+    fixAllCharts();
+
+    const activeIpca = document.querySelector('#sec-graficos .ipca-range-tabs .active, #sec-graficos [data-ipca-range].active, #sec-graficos #chartIpcaTitle')?.closest?.('button');
+    updateIpcaTitle(inferRangeFromButton(activeIpca) || '24m');
+    bindTitleUpdates();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
+
+  const target = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body');
+  if(target && 'MutationObserver' in window){
+    const obs = new MutationObserver(() => {
+      clearTimeout(window.__chartsTabsFixV339Timer);
+      window.__chartsTabsFixV339Timer = setTimeout(apply, 90);
     });
     obs.observe(target, { childList:true, subtree:true, characterData:true });
   }

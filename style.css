@@ -50832,3 +50832,109 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: .62rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v339 — GRÁFICOS: TABS, CHIPS E EIXO X MOBILE
+   Correções:
+   - botões de período deixam de esticar;
+   - tabs viram carrossel horizontal;
+   - chips Máxima/Mínima deixam de atropelar texto;
+   - eixo X fica horizontal.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.charts-tabs-fix-v339 #sec-graficos .chart-tabs,
+  html.charts-tabs-fix-v339 #sec-graficos .evo-range-tabs,
+  html.charts-tabs-fix-v339 #sec-graficos .selic-range-tabs,
+  html.charts-tabs-fix-v339 #sec-graficos .ipca-range-tabs{
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    padding: 1px 1px 8px !important;
+    margin: 10px 0 12px !important;
+    scroll-snap-type: x proximity !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html.charts-tabs-fix-v339 #sec-graficos .chart-tabs::-webkit-scrollbar,
+  html.charts-tabs-fix-v339 #sec-graficos .evo-range-tabs::-webkit-scrollbar,
+  html.charts-tabs-fix-v339 #sec-graficos .selic-range-tabs::-webkit-scrollbar,
+  html.charts-tabs-fix-v339 #sec-graficos .ipca-range-tabs::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.charts-tabs-fix-v339 #sec-graficos .chart-tabs button,
+  html.charts-tabs-fix-v339 #sec-graficos .chart-tab,
+  html.charts-tabs-fix-v339 #sec-graficos .evo-range-tabs button,
+  html.charts-tabs-fix-v339 #sec-graficos .selic-range-tabs button,
+  html.charts-tabs-fix-v339 #sec-graficos .ipca-range-tabs button{
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 68px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    font-size: .66rem !important;
+    line-height: 1 !important;
+    border-radius: 12px !important;
+    scroll-snap-align: start !important;
+  }
+
+  /* Chips de máximo/mínimo com conteúdo empilhado */
+  html.charts-tabs-fix-v339 #sec-graficos #selicSummaryRow .selic-summary-chip,
+  html.charts-tabs-fix-v339 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-chip-v250{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+    align-items: start !important;
+    min-height: 64px !important;
+    height: auto !important;
+    overflow: visible !important;
+    padding: 10px 11px !important;
+  }
+
+  html.charts-tabs-fix-v339 #sec-graficos #selicSummaryRow .selic-summary-text,
+  html.charts-tabs-fix-v339 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-text-v250{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    line-height: 1.12 !important;
+  }
+
+  html.charts-tabs-fix-v339 #sec-graficos #selicSummaryRow .selic-summary-chip span,
+  html.charts-tabs-fix-v339 #sec-graficos #selicSummaryRow .selic-summary-chip small,
+  html.charts-tabs-fix-v339 #sec-graficos #selicSummaryRow .selic-summary-chip strong,
+  html.charts-tabs-fix-v339 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-chip-v250 span,
+  html.charts-tabs-fix-v339 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-chip-v250 small,
+  html.charts-tabs-fix-v339 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-chip-v250 strong{
+    position: static !important;
+    display: block !important;
+    white-space: normal !important;
+    line-height: 1.15 !important;
+    max-width: 100% !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.charts-tabs-fix-v339 #sec-graficos .chart-tabs button,
+  html.charts-tabs-fix-v339 #sec-graficos .chart-tab,
+  html.charts-tabs-fix-v339 #sec-graficos .evo-range-tabs button,
+  html.charts-tabs-fix-v339 #sec-graficos .selic-range-tabs button,
+  html.charts-tabs-fix-v339 #sec-graficos .ipca-range-tabs button{
+    min-width: 62px !important;
+    min-height: 32px !important;
+    padding: 0 10px !important;
+    font-size: .62rem !important;
+  }
+}
