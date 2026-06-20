@@ -48040,3 +48040,485 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: 1.14rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v315 — RESPIRO PROFISSIONAL ENTRE PAGINAÇÃO E RANKING
+   A v314 colou demais e o troféu sobrepôs a paginação.
+   Aqui devolvemos um respiro controlado:
+   - paginação com margin-bottom 16px;
+   - ranking-head com margin-top 44px;
+   - sem margens negativas;
+   - distância visual final ~52–64px, sem colisão.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-professional-breath-v315 .pagination-row,
+  html.ranking-professional-breath-v315 .pagination-controls,
+  html.ranking-professional-breath-v315 .catalog-pagination,
+  html.ranking-professional-breath-v315 .fund-pagination-wrap,
+  html.ranking-professional-breath-v315 .pagination,
+  html.ranking-professional-breath-v315 #pageBtns{
+    margin-bottom: 16px !important;
+    padding-bottom: 0 !important;
+  }
+
+  html.ranking-professional-breath-v315 #sec-fundos.section-gap,
+  html.ranking-professional-breath-v315 #sec-fundos,
+  html.ranking-professional-breath-v315 .section-gap.funds-pagination-tight-v100,
+  html.ranking-professional-breath-v315 .mobile-anchor-target.funds-pagination-tight-v100{
+    margin-bottom: 16px !important;
+    padding-bottom: 0 !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection,
+  html.ranking-professional-breath-v315 #rankingsSection.section-gap{
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection .ranking-head{
+    margin-top: 44px !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection .ranking-actions{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection .ranking-title-group,
+  html.ranking-professional-breath-v315 #rankingsSection .ranking-title-group-v309-fixed{
+    margin-top: 0 !important;
+    margin-bottom: 12px !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    min-height: 0 !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-professional-breath-v315 #rankingsSection h2.section-hero-premium-v306,
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-v309-fixed{
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    gap: 8px !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection .ranking-toolbar,
+  html.ranking-professional-breath-v315 #rankingsSection .ranking-toolbar-v136{
+    margin-top: 0 !important;
+  }
+
+  /* Mantém troféu premium, mas sem exagerar no tamanho */
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-professional-breath-v315 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    flex-basis: 44px !important;
+    font-size: 1.26rem !important;
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  /* raios laterais preservados */
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.ranking-professional-breath-v315 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before,
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.ranking-professional-breath-v315 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    width: 14px !important;
+    height: 12px !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+    opacity: .90 !important;
+    background-repeat: no-repeat !important;
+    filter: drop-shadow(0 0 5px rgba(246,200,97,.35)) !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.ranking-professional-breath-v315 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before{
+    left: -15px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.90) 65%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.72) 65%, rgba(246,200,97,0)) !important;
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 3px 3px, 0 8px !important;
+    transform: translateY(-50%) rotate(-14deg) !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.ranking-professional-breath-v315 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    right: -15px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.90) 35%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.72) 35%, rgba(246,200,97,0)) !important;
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 0 3px, 7px 8px !important;
+    transform: translateY(-50%) rotate(14deg) !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-professional-breath-v315 #rankingsSection .ranking-head{
+    margin-top: 40px !important;
+  }
+
+  html.ranking-professional-breath-v315 .pagination-row,
+  html.ranking-professional-breath-v315 .pagination-controls,
+  html.ranking-professional-breath-v315 .catalog-pagination,
+  html.ranking-professional-breath-v315 .fund-pagination-wrap,
+  html.ranking-professional-breath-v315 .pagination,
+  html.ranking-professional-breath-v315 #pageBtns{
+    margin-bottom: 14px !important;
+  }
+
+  html.ranking-professional-breath-v315 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-professional-breath-v315 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    max-width: 42px !important;
+    flex-basis: 42px !important;
+    font-size: 1.20rem !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   v316 — INDICADORES DE MERCADO MOBILE EM CARDS
+   Objetivo:
+   - preservar o bom padrão do "Resumo de mercado";
+   - transformar Cenário monetário e Poupança em cards consistentes;
+   - reduzir sobrecarga visual;
+   - usar scroll horizontal em Selic/CDI/Copom;
+   - esconder elementos técnicos/pesados no mobile.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.market-mobile-card-system-v316 #sec-mercado{
+    gap: 18px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .market-section-head{
+    margin-bottom: 12px !important;
+  }
+
+  /* O card do Fechamento Mensal continua sendo a referência visual */
+  html.market-mobile-card-system-v316 #closedMonthLaunch{
+    margin-bottom: 22px !important;
+  }
+
+  /* Grid de referência vira uma coluna limpa no mobile */
+  html.market-mobile-card-system-v316 #sec-mercado .indic-ref-bar,
+  html.market-mobile-card-system-v316 #sec-mercado .market-ref-grid,
+  html.market-mobile-card-system-v316 #sec-mercado .market-reference-v167{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 22px !important;
+    margin-top: 0 !important;
+  }
+
+  /* Cards principais: Cenário monetário e Poupança */
+  html.market-mobile-card-system-v316 #sec-mercado .market-reference-block-v167,
+  html.market-mobile-card-system-v316 #sec-mercado .rates-reference-v167,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-reference-v167{
+    background:
+      linear-gradient(180deg, rgba(18,23,43,.96), rgba(8,11,22,.98)) !important;
+    border: 1px solid rgba(255,255,255,.08) !important;
+    border-radius: 18px !important;
+    padding: 16px !important;
+    margin: 0 !important;
+    box-shadow:
+      0 14px 34px rgba(0,0,0,.26),
+      inset 0 1px 0 rgba(255,255,255,.045) !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .market-reference-head-v167{
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 12px !important;
+    margin-bottom: 14px !important;
+    padding-bottom: 12px !important;
+    border-bottom: 1px solid rgba(255,255,255,.075) !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .market-reference-kicker-v167{
+    color: #f6c861 !important;
+    font-size: .62rem !important;
+    font-weight: 850 !important;
+    letter-spacing: .075em !important;
+    text-transform: uppercase !important;
+    line-height: 1.05 !important;
+    margin-bottom: 4px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .card-title-v304,
+  html.market-mobile-card-system-v316 #sec-mercado #ratesReferenceTitleV167,
+  html.market-mobile-card-system-v316 #sec-mercado #savingsReferenceTitleV167{
+    color: #f8fafc !important;
+    font-size: 1.13rem !important;
+    line-height: 1.08 !important;
+    font-weight: 820 !important;
+    letter-spacing: -.032em !important;
+    margin: 0 !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .market-reference-head-v167 p,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-title-v207 p{
+    display: none !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .market-reference-source-v167{
+    min-height: 30px !important;
+    padding: 7px 10px !important;
+    border-radius: 999px !important;
+    font-size: .62rem !important;
+    white-space: nowrap !important;
+  }
+
+  /* Selic/CDI/Copom em trilha horizontal */
+  html.market-mobile-card-system-v316 #sec-mercado .rates-summary-v167{
+    display: flex !important;
+    gap: 10px !important;
+    overflow-x: auto !important;
+    overscroll-behavior-x: contain !important;
+    scroll-snap-type: x proximity !important;
+    padding: 2px 2px 10px !important;
+    margin: 0 0 14px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rates-summary-v167::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-card-v167{
+    flex: 0 0 138px !important;
+    min-width: 138px !important;
+    scroll-snap-align: start !important;
+    background: rgba(255,255,255,.035) !important;
+    border: 1px solid rgba(255,255,255,.07) !important;
+    border-radius: 14px !important;
+    padding: 11px 12px !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.045) !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-card-v167 > span{
+    display: block !important;
+    color: rgba(210,220,245,.72) !important;
+    font-size: .58rem !important;
+    line-height: 1.05 !important;
+    font-weight: 800 !important;
+    letter-spacing: .055em !important;
+    text-transform: uppercase !important;
+    margin-bottom: 8px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-value-v167{
+    display: flex !important;
+    align-items: baseline !important;
+    gap: 4px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-value-v167 strong,
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-card-v167 > strong{
+    color: #f8fafc !important;
+    font-size: 1.04rem !important;
+    line-height: 1 !important;
+    font-weight: 860 !important;
+    letter-spacing: -.025em !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-value-v167 em{
+    color: rgba(220,228,250,.68) !important;
+    font-size: .62rem !important;
+    font-style: normal !important;
+    font-weight: 700 !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-card-v167 small{
+    display: block !important;
+    color: rgba(220,228,250,.58) !important;
+    font-size: .62rem !important;
+    line-height: 1.20 !important;
+    margin-top: 7px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-card-v167 small b{
+    color: rgba(248,250,252,.84) !important;
+    font-weight: 750 !important;
+  }
+
+  /* Detalhes de taxas: Copom e CDI em coluna, com respiro */
+  html.market-mobile-card-system-v316 #sec-mercado .rates-detail-grid-v167{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 14px !important;
+    margin-top: 2px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .copom-compact-v167,
+  html.market-mobile-card-system-v316 #sec-mercado #cdiYearHistory{
+    background: rgba(255,255,255,.028) !important;
+    border: 1px solid rgba(255,255,255,.065) !important;
+    border-radius: 15px !important;
+    padding: 13px !important;
+    margin: 0 !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .reference-subhead-v167{
+    margin-bottom: 10px !important;
+    padding-bottom: 10px !important;
+    border-bottom: 1px solid rgba(255,255,255,.06) !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .reference-subhead-v167 strong{
+    color: #f8fafc !important;
+    font-size: .92rem !important;
+    font-weight: 800 !important;
+    letter-spacing: -.02em !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .reference-subhead-v167 small{
+    color: rgba(220,228,250,.58) !important;
+    font-size: .66rem !important;
+  }
+
+  /* Copom: mantém só resumo executivo, sem timeline pesada */
+  html.market-mobile-card-system-v316 #sec-mercado .copom-meetings-store-v271,
+  html.market-mobile-card-system-v316 #sec-mercado #copomMeetings,
+  html.market-mobile-card-system-v316 #sec-mercado .copom-footnote-v256{
+    display: none !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .copom-exec-summary-v270{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .copom-exec-card-v270{
+    border-radius: 13px !important;
+    padding: 12px !important;
+    background: rgba(255,255,255,.035) !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .copom-exec-desc-v270{
+    color: rgba(235,240,255,.68) !important;
+    font-size: .70rem !important;
+    line-height: 1.28 !important;
+  }
+
+  /* CDI: compacto, sem botão técnico */
+  html.market-mobile-card-system-v316 #sec-mercado #cdiAnalyticLinkV274,
+  html.market-mobile-card-system-v316 #sec-mercado #cdiYearHistory .cdi-chart-legend-v271,
+  html.market-mobile-card-system-v316 #sec-mercado #cdiYearHistory .reference-footnote-v167{
+    display: none !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado #cdiYearHistory .cdi-kpis-v271{
+    margin-bottom: 8px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado #cdiYearHistory .cdi-chart-canvas-wrap-v271{
+    height: 108px !important;
+    max-height: 108px !important;
+    min-height: 0 !important;
+    padding: 8px !important;
+  }
+
+  /* Poupança: card alinhado ao cenário monetário */
+  html.market-mobile-card-system-v316 #sec-mercado .savings-current-v167,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-current-v207{
+    min-width: 90px !important;
+    padding: 8px 10px !important;
+    border-radius: 13px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .savings-current-v167 > span,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-current-v207 > span{
+    color: rgba(220,228,250,.60) !important;
+    font-size: .52rem !important;
+    letter-spacing: .06em !important;
+    text-transform: uppercase !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .savings-reading-v167,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-reading-v205,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-reading-v207{
+    margin-top: 12px !important;
+    border-radius: 14px !important;
+    padding: 12px !important;
+    background: rgba(246,200,97,.055) !important;
+    border: 1px solid rgba(246,200,97,.16) !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .poup-quick-note{
+    color: rgba(248,250,252,.88) !important;
+    font-size: .72rem !important;
+    line-height: 1.32 !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .savings-kpi-strip-v199,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-summary-v205,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-summary-v207{
+    margin: 12px 0 !important;
+    padding: 10px 0 !important;
+    border-top: 1px solid rgba(255,255,255,.075) !important;
+    border-bottom: 1px solid rgba(255,255,255,.075) !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .savings-actions-v167,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-actions-v205,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-actions-v207{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 10px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .savings-actions-v167 button,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-actions-v167 a{
+    min-height: 38px !important;
+    border-radius: 11px !important;
+    font-size: .66rem !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.market-mobile-card-system-v316 #sec-mercado .market-reference-block-v167,
+  html.market-mobile-card-system-v316 #sec-mercado .rates-reference-v167,
+  html.market-mobile-card-system-v316 #sec-mercado .savings-reference-v167{
+    padding: 14px !important;
+    border-radius: 17px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-card-v167{
+    flex-basis: 130px !important;
+    min-width: 130px !important;
+  }
+
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-value-v167 strong,
+  html.market-mobile-card-system-v316 #sec-mercado .rate-summary-card-v167 > strong{
+    font-size: .98rem !important;
+  }
+}

@@ -1,3 +1,5 @@
+// ELTAUM_MARKET_MOBILE_CARD_SYSTEM_v316
+// ELTAUM_RANKING_PROFESSIONAL_BREATH_v315
 // ELTAUM_PAGINATION_RANKING_TIGHT_v314
 // ELTAUM_RANKING_GAP_CLEANUP_v312
 // SUMMARY_HEAD_REMOVED_v311
@@ -16939,4 +16941,147 @@ function openCdiAnalyticTableV274(){
   setTimeout(apply, 200);
   setTimeout(apply, 800);
   setTimeout(apply, 1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v315 — respiro profissional paginação → ranking
+   Corrige a sobreposição criada pela aproximação extrema da v314.
+   Objetivo: cerca de 52–64px entre paginação e troféu, sem colisão.
+════════════════════════════════════════════════════ */
+(function rankingProfessionalBreathV315(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const ranking = document.getElementById('rankingsSection');
+    if(!ranking) return;
+
+    const rankingHead = ranking.querySelector('.ranking-head');
+    const titleGroup = ranking.querySelector('.ranking-title-group');
+    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+    const actions = ranking.querySelector('.ranking-actions');
+
+    const paginationCandidates = [
+      ...document.querySelectorAll('.pagination-row, .pagination-controls, .pagination, .catalog-pagination, .fund-pagination-wrap, #pageBtns')
+    ];
+
+    if(!isMobile){
+      [ranking, rankingHead, titleGroup, h2, toolbar, actions, ...paginationCandidates].forEach(el => {
+        if(!el) return;
+        el.style.removeProperty('margin-top');
+        el.style.removeProperty('margin-bottom');
+        el.style.removeProperty('padding-top');
+        el.style.removeProperty('padding-bottom');
+        el.style.removeProperty('min-height');
+        el.style.removeProperty('height');
+      });
+      if(actions){
+        actions.removeAttribute('aria-hidden');
+        try{ actions.inert = false; }catch(_){}
+      }
+      return;
+    }
+
+    paginationCandidates.forEach(el => {
+      setImportant(el, 'margin-bottom', '16px');
+      setImportant(el, 'padding-bottom', '0');
+    });
+
+    const funds = document.getElementById('sec-fundos');
+    if(funds){
+      setImportant(funds, 'margin-bottom', '16px');
+      setImportant(funds, 'padding-bottom', '0');
+    }
+
+    setImportant(ranking, 'margin-top', '0');
+    setImportant(ranking, 'padding-top', '0');
+    setImportant(ranking, 'scroll-margin-top', '82px');
+
+    if(rankingHead){
+      setImportant(rankingHead, 'margin-top', '44px');
+      setImportant(rankingHead, 'margin-bottom', '0');
+      setImportant(rankingHead, 'padding-top', '0');
+      setImportant(rankingHead, 'padding-bottom', '0');
+      setImportant(rankingHead, 'min-height', '0');
+      setImportant(rankingHead, 'height', 'auto');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden', 'true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'margin-top', '0');
+      setImportant(titleGroup, 'margin-bottom', '12px');
+      setImportant(titleGroup, 'padding-top', '0');
+      setImportant(titleGroup, 'padding-bottom', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'margin-top', '0');
+      setImportant(h2, 'margin-bottom', '0');
+      setImportant(h2, 'padding-top', '0');
+      setImportant(h2, 'padding-bottom', '0');
+      setImportant(h2, 'gap', '8px');
+    }
+
+    if(toolbar){
+      setImportant(toolbar, 'margin-top', '0');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 200);
+  setTimeout(apply, 800);
+  setTimeout(apply, 1600);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v316 — Mercado mobile cards/progressive disclosure
+   Complemento leve para não ocupar espaço com botões técnicos no mobile.
+════════════════════════════════════════════════════ */
+(function marketMobileCardsV316(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const cdiBtn = document.getElementById('cdiAnalyticLinkV274');
+    const cdiLegend = document.querySelector('#cdiYearHistory .cdi-chart-legend-v271');
+    const cdiFoot = document.querySelector('#cdiYearHistory .reference-footnote-v167');
+
+    if(isMobile){
+      [cdiBtn, cdiLegend, cdiFoot].forEach(el => {
+        if(!el) return;
+        setImportant(el, 'display', 'none');
+      });
+    }else{
+      [cdiBtn, cdiLegend, cdiFoot].forEach(el => {
+        if(!el) return;
+        el.style.removeProperty('display');
+      });
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
 })();

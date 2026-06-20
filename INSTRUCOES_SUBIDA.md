@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v314
+# Catálogo de Fundos CAIXA — v316
 
 Arquivos atualizados:
 - index.html
@@ -7,22 +7,22 @@ Arquivos atualizados:
 
 ## Ajuste aplicado
 
-Correção cirúrgica para aproximar a paginação do catálogo ao bloco “Rankings dos fundos”.
+Refino mobile da seção “Indicadores de mercado”.
 
-## O que foi feito
+## O que mudou
 
-- `.pagination-row` e variantes: `margin-bottom: 0`.
-- `#sec-fundos.section-gap`: `margin-bottom` e `padding-bottom` zerados.
-- `#rankingsSection`: `margin-top` e `padding-top` zerados.
-- `.ranking-head`: `margin-top` e `padding-top` zerados.
-- `.ranking-title-group`: margem superior zerada.
-- Ações antigas do ranking continuam ocultas no mobile.
-- Troféu ficou mais compacto.
-- Adicionados raios/traços laterais no medalhão.
+- Cenário monetário e Poupança agora seguem linguagem visual de cards.
+- Selic, CDI e Próxima reunião viraram uma trilha horizontal com scroll.
+- Copom foi mantido como resumo executivo, sem timeline pesada no mobile.
+- CDI ficou mais compacto e sem botão técnico “Tabela analítica” no mobile.
+- Poupança ganhou hierarquia mais limpa e botões uniformes.
+- Rótulos secundários ficaram com menor opacidade para reduzir ruído visual.
+- Respiros entre blocos foram padronizados.
 
-## Objetivo
+## Escopo
 
-Troféu a no máximo cerca de 20px dos botões de paginação.
+- Mobile: layout refinado e mais consultivo.
+- Desktop: preservado.
 
 ## Como subir
 
