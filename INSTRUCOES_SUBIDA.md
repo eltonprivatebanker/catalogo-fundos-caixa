@@ -1,27 +1,30 @@
-# Catálogo de Fundos CAIXA — v319
+# Catálogo de Fundos CAIXA — v320
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Diagnóstico
+## Ajuste aplicado
 
-A v318 carregou corretamente, mas o console mostrou que as regras antigas ainda venciam:
+Removido o card superior:
 
-- `gridTemplateColumns`: 1 coluna.
-- Cards com largura total.
-- Cards ainda com padding antigo `14px 16px`.
-- Selic, CDI e Próxima reunião continuavam empilhados.
+- “Próxima reunião”
+- “4–5 ago”
+- “próxima ★”
 
-## Correção aplicada
+## Motivo
 
-A v319 força com seletor mais específico e complemento JS:
+Essa informação já aparece logo abaixo dentro do bloco “Copom executivo”. Assim evitamos duplicidade e deixamos o card “Cenário monetário” mais compacto.
 
-- Selic e CDI lado a lado.
-- Próxima reunião em largura total compacta.
-- Cards com padding menor.
-- Botão BCB oculto no mobile.
+## Resultado esperado
+
+No topo do Cenário monetário ficam apenas:
+
+- Selic meta
+- CDI
+
+A próxima reunião permanece somente dentro de “Copom executivo”.
 
 ## Como subir
 

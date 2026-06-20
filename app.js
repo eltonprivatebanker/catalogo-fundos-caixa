@@ -1,3 +1,4 @@
+// ELTAUM_REMOVE_NEXT_SUMMARY_v320
 // ELTAUM_MARKET_RATES_GRID_FORCE_v319
 // ELTAUM_MARKET_RATES_COMPACT_v318
 // ELTAUM_RANKING_MARKET_CLEAN_v317
@@ -17358,4 +17359,29 @@ function openCdiAnalyticTableV274(){
   setTimeout(apply, 250);
   setTimeout(apply, 900);
   setTimeout(apply, 1800);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v320 — remove card "Próxima reunião" do resumo superior
+   Mantém a informação no bloco "Copom executivo", evitando duplicidade.
+════════════════════════════════════════════════════ */
+(function removeNextSummaryCardV320(){
+  function apply(){
+    const cards = document.querySelectorAll('#sec-mercado .rates-summary-v167 .copom-next-summary-v167');
+    cards.forEach(card => card.remove());
+
+    const wrap = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
+    if(wrap && window.matchMedia('(max-width: 768px)').matches){
+      wrap.style.setProperty('grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)', 'important');
+      wrap.style.setProperty('gap', '9px', 'important');
+      wrap.style.setProperty('margin-bottom', '12px', 'important');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
 })();

@@ -49053,3 +49053,37 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: .92rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v320 — REMOVE CARD "PRÓXIMA REUNIÃO" DO RESUMO SUPERIOR
+   A próxima reunião já aparece no "Copom executivo".
+   Removemos o card duplicado do resumo de taxas para compactar o bloco.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.market-remove-next-summary-v320 #sec-mercado .rates-summary-v167 .copom-next-summary-v167{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.market-remove-next-summary-v320 #sec-mercado .rates-reference-v167 .rates-summary-v167{
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 9px !important;
+    margin-bottom: 12px !important;
+  }
+
+  html.market-remove-next-summary-v320 #sec-mercado .rates-reference-v167 .rates-summary-v167 > .rate-summary-card-v167:not(.copom-next-summary-v167){
+    grid-column: auto !important;
+    min-height: 76px !important;
+  }
+}
