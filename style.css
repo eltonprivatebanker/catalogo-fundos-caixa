@@ -50958,3 +50958,154 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     transform: translateZ(0) !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v341 — INFLAÇÃO E JUROS: CARDS COMPACTOS + SEM 12M NA SELIC
+   Ajustes:
+   1) Selic fica com 1A, 2A, 5A, 10A, Histórico — sem 12M.
+   2) Cards superiores viram carrossel horizontal no mobile.
+   3) Máxima/Mínima ganham respiro entre valor e data.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  /* Remove 12M redundante apenas na Selic */
+  html.inflation-summary-compact-v341 #sec-graficos #evoChartSelicCard [data-range="12"],
+  html.inflation-summary-compact-v341 #sec-graficos #evoChartSelicCard [data-selic-range="12"],
+  html.inflation-summary-compact-v341 #sec-graficos #evoChartSelicCard [data-selic-range="12m"]{
+    display: none !important;
+  }
+
+  /* Cards resumo superiores em carrossel, estilo app financeiro */
+  html.inflation-summary-compact-v341 #sec-graficos .evo-summary-grid,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-summary-cards,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-kpi-grid,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-overview-grid{
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 10px !important;
+    padding: 1px 1px 10px !important;
+    margin-bottom: 12px !important;
+    scroll-snap-type: x proximity !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html.inflation-summary-compact-v341 #sec-graficos .evo-summary-grid::-webkit-scrollbar,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-summary-cards::-webkit-scrollbar,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-kpi-grid::-webkit-scrollbar,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-overview-grid::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.inflation-summary-compact-v341 #sec-graficos .evo-summary-card,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-kpi-card,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-overview-card{
+    flex: 0 0 232px !important;
+    min-width: 232px !important;
+    max-width: 232px !important;
+    min-height: 86px !important;
+    padding: 12px 13px !important;
+    scroll-snap-align: start !important;
+    box-sizing: border-box !important;
+  }
+
+  /* Respiro Máxima/Mínima Selic */
+  html.inflation-summary-compact-v341 #sec-graficos #selicSummaryRow .selic-summary-value,
+  html.inflation-summary-compact-v341 #sec-graficos #selicSummaryRow .selic-summary-chip strong,
+  html.inflation-summary-compact-v341 #sec-graficos #selicSummaryRow .selic-summary-chip output,
+  html.inflation-summary-compact-v341 #sec-graficos #selicSummaryRow .selic-summary-chip .value{
+    display: block !important;
+    margin-bottom: 4px !important;
+    line-height: 1.08 !important;
+  }
+
+  html.inflation-summary-compact-v341 #sec-graficos #selicSummaryRow .selic-summary-date,
+  html.inflation-summary-compact-v341 #sec-graficos #selicSummaryRow .selic-summary-chip small{
+    display: block !important;
+    margin-top: 2px !important;
+    line-height: 1.12 !important;
+  }
+
+  /* Reforça que as tabs não estiquem */
+  html.inflation-summary-compact-v341 #sec-graficos #evoChartSelicCard .chart-tabs button,
+  html.inflation-summary-compact-v341 #sec-graficos #evoChartSelicCard .chart-tab{
+    flex: 0 0 auto !important;
+    width: auto !important;
+    white-space: nowrap !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.inflation-summary-compact-v341 #sec-graficos .evo-summary-card,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-kpi-card,
+  html.inflation-summary-compact-v341 #sec-graficos .evo-overview-card{
+    flex-basis: 218px !important;
+    min-width: 218px !important;
+    max-width: 218px !important;
+  }
+}
+
+
+/* ════════════════════════════════════════════════════
+   v342 — REMOVE 12M + EIXO X HORIZONTAL
+   - Remove 12M dos gráficos de Inflação/Juros.
+   - Mantém apenas 24M, 5A e 10A no IPCA mensal.
+   - Mantém 1A, 2A, 5A, 10A, Histórico na Selic.
+   - Reforça tabs horizontais sem esticar.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.charts-remove-12m-xaxis-v342 #sec-graficos button[data-range="12m"],
+  html.charts-remove-12m-xaxis-v342 #sec-graficos button[data-range="12"],
+  html.charts-remove-12m-xaxis-v342 #sec-graficos button[data-ipca-range="12m"],
+  html.charts-remove-12m-xaxis-v342 #sec-graficos button[data-selic-range="12m"],
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .chart-tab[data-range="12m"],
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .chart-tab[data-ipca-range="12m"],
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .chart-tab[data-selic-range="12m"]{
+    display: none !important;
+  }
+
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .chart-tabs,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .evo-range-tabs,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .selic-range-tabs,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .ipca-range-tabs{
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    justify-content: flex-start !important;
+    gap: 8px !important;
+    padding: 1px 1px 8px !important;
+    scrollbar-width: none !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
+
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .chart-tabs::-webkit-scrollbar,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .evo-range-tabs::-webkit-scrollbar,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .selic-range-tabs::-webkit-scrollbar,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .ipca-range-tabs::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .chart-tabs button,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .chart-tab,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .evo-range-tabs button,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .selic-range-tabs button,
+  html.charts-remove-12m-xaxis-v342 #sec-graficos .ipca-range-tabs button{
+    flex: 0 0 auto !important;
+    width: auto !important;
+    min-width: 68px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+  }
+
+  /* ajuda o canvas a não recalcular largura em looping */
+  html.charts-remove-12m-xaxis-v342 #sec-graficos canvas{
+    max-width: 100% !important;
+  }
+}

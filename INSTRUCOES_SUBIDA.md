@@ -1,32 +1,29 @@
-# Catálogo de Fundos CAIXA — v340
+# Catálogo de Fundos CAIXA — v342
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Problema identificado
+## Correções aplicadas
 
-O console confirmou um loop de mutações em `#sec-graficos`.
+### 1. Remoção do botão 12M
+Removido o botão 12M dos gráficos de Inflação/Juros.
 
-A causa principal estava na v339:
-- um `MutationObserver` observava `#sec-graficos`;
-- a função `apply()` alterava estilos/atributos;
-- essas alterações disparavam o observer novamente;
-- o observer chamava `apply()` outra vez;
-- isso gerava piscadas, pulos e muitas mutações.
+Motivo:
+- No IPCA mensal, o 12M não estava funcionando corretamente.
+- Na Selic, ele era redundante em relação ao 1A.
 
-Também havia erro do Chart.js:
-- `can't access property "ownerDocument", t is null`
-- causado por `resize()` em gráfico/canvas que não estava conectado ao DOM.
+### 2. Impedir reinserção do 12M
+A função que tentava criar o 12M dinamicamente foi desativada.
 
-## Correções v340
+### 3. Eixo X horizontal
+Foi aplicado um patch no Chart.js para manter:
+- maxRotation: 0
+- minRotation: 0
+- no máximo 5 labels visíveis no mobile
 
-1. Removido o MutationObserver contínuo da v339.
-2. Adicionado resize seguro para os gráficos.
-3. O eixo X continua horizontal.
-4. As abas continuam compactas.
-5. Redução de piscada/pulo na área de Inflação e Juros.
+Isso impede que as datas fiquem inclinadas após o gráfico renderizar ou atualizar.
 
 ## Como subir
 

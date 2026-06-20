@@ -1,3 +1,5 @@
+// ELTAUM_REMOVE_12M_XAXIS_v342
+// ELTAUM_INFLATION_SUMMARY_COMPACT_v341
 // ELTAUM_CHARTS_LOOP_FIX_v340
 // ELTAUM_CHARTS_TABS_FIX_v339
 // ELTAUM_INFLATION_RATES_CLEAN_v338
@@ -18545,24 +18547,8 @@ function openCdiAnalyticTableV274(){
   }
 
   function ensure12MButtons(){
-    document.querySelectorAll('#sec-graficos .chart-tabs, #sec-graficos .evo-range-tabs, #sec-graficos .selic-range-tabs, #sec-graficos .ipca-range-tabs').forEach(tabs => {
-      const text = (tabs.innerText || '').toLowerCase();
-      if(text.includes('12m')) return;
-
-      const btns = [...tabs.querySelectorAll('button, .chart-tab')];
-      if(!btns.length) return;
-
-      const first = btns[0];
-      const btn = first.cloneNode(true);
-      btn.textContent = '12M';
-      btn.classList.remove('active');
-      btn.setAttribute('aria-selected','false');
-      btn.dataset.range = '12m';
-      btn.dataset.ipcaRange = '12m';
-      btn.dataset.selicRange = '12m';
-      btn.type = 'button';
-      first.insertAdjacentElement('afterend', btn);
-    });
+    // v342: 12M removido por redundância/bug; não reinserir.
+    return;
   }
 
   function fixTabs(){
@@ -18731,4 +18717,223 @@ function openCdiAnalyticTableV274(){
       setTimeout(safeFixCharts, 500);
     }
   }, { passive:true });
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v341 — Inflação/Juros compacto sem redundância
+   - remove 12M das abas da Selic quando 1A já existe;
+   - impede v339 de reinserir 12M no bloco Selic;
+   - dá respiro nos valores de máxima/mínima;
+   - transforma os cards-resumo superiores em carrossel mobile.
+════════════════════════════════════════════════════ */
+(function inflationSummaryCompactV341(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function removeRedundantSelic12m(){
+    const root = document.querySelector('#sec-graficos') || document;
+    root.querySelectorAll(
+      '#evoChartSelicCard .chart-tabs button, ' +
+      '#evoChartSelicCard .chart-tab, ' +
+      '#evoChartSelicCard .selic-range-tabs button, ' +
+      '[data-chart="selic"][data-range="12"], ' +
+      '[data-selic-range="12m"], ' +
+      '[data-selic-range="12"]'
+    ).forEach(btn => {
+      const text = (btn.textContent || '').trim().toLowerCase();
+      const range = String(btn.dataset?.range || btn.dataset?.selicRange || '').toLowerCase();
+      if(text === '12m' || range === '12m' || range === '12'){
+        btn.remove();
+      }
+    });
+  }
+
+  function compactSummaryCards(){
+    const root = document.querySelector('#sec-graficos') || document;
+    const grids = root.querySelectorAll('.evo-summary-grid, .evo-summary-cards, .evo-kpi-grid, .evo-overview-grid');
+    grids.forEach(grid => {
+      setImportant(grid, 'display', 'flex');
+      setImportant(grid, 'flex-wrap', 'nowrap');
+      setImportant(grid, 'overflow-x', 'auto');
+      setImportant(grid, 'overflow-y', 'hidden');
+      setImportant(grid, 'gap', '10px');
+      setImportant(grid, 'padding', '1px 1px 10px');
+      setImportant(grid, 'scroll-snap-type', 'x proximity');
+      setImportant(grid, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.evo-summary-card, .evo-kpi-card, .evo-overview-card').forEach(card => {
+      setImportant(card, 'flex', '0 0 232px');
+      setImportant(card, 'min-width', '232px');
+      setImportant(card, 'max-width', '232px');
+      setImportant(card, 'min-height', '86px');
+      setImportant(card, 'padding', '12px 13px');
+      setImportant(card, 'scroll-snap-align', 'start');
+      setImportant(card, 'box-sizing', 'border-box');
+    });
+  }
+
+  function improveSummaryChipSpacing(){
+    const root = document.querySelector('#sec-graficos') || document;
+    root.querySelectorAll(
+      '#selicSummaryRow .selic-summary-value, ' +
+      '#selicSummaryRow .selic-summary-chip strong, ' +
+      '#selicSummaryRow .selic-summary-chip .value, ' +
+      '#selicSummaryRow .selic-summary-chip output'
+    ).forEach(el => {
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'margin-bottom', '4px');
+      setImportant(el, 'line-height', '1.08');
+    });
+
+    root.querySelectorAll(
+      '#selicSummaryRow .selic-summary-date, ' +
+      '#selicSummaryRow .selic-summary-chip small'
+    ).forEach(el => {
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'line-height', '1.12');
+      setImportant(el, 'margin-top', '2px');
+    });
+  }
+
+  function fixSelicTitleIfNeeded(){
+    const title = document.querySelector('#chartSelicTitle');
+    if(title && /últimos\s+12\s+meses/i.test(title.textContent || '')){
+      title.textContent = title.textContent.replace(/últimos\s+12\s+meses/i, 'último ano');
+    }
+  }
+
+  function apply(){
+    if(!window.matchMedia('(max-width: 768px)').matches) return;
+    removeRedundantSelic12m();
+    compactSummaryCards();
+    improveSummaryChipSpacing();
+    fixSelicTitleIfNeeded();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .selic-range-tabs button')){
+      setTimeout(apply, 90);
+      setTimeout(apply, 350);
+    }
+  }, { passive:true });
+
+  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v342 — remove 12M e força eixo X horizontal
+   Correções:
+   - remove qualquer botão 12M dos gráficos de Inflação/Juros;
+   - impede reinserção dinâmica do 12M;
+   - força Chart.js a manter labels horizontais em qualquer update;
+   - limita rótulos do eixo X para não inclinar.
+════════════════════════════════════════════════════ */
+(function remove12mAndForceXAxisV342(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function remove12mButtons(){
+    const root = document.getElementById('sec-graficos') || document;
+    root.querySelectorAll(
+      'button[data-range="12m"], button[data-range="12"], ' +
+      'button[data-ipca-range="12m"], button[data-selic-range="12m"], ' +
+      '.chart-tab[data-range="12m"], .chart-tab[data-ipca-range="12m"], .chart-tab[data-selic-range="12m"]'
+    ).forEach(btn => btn.remove());
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      if((btn.textContent || '').trim().toLowerCase() === '12m') btn.remove();
+    });
+  }
+
+  function formatSparseTicks(chart){
+    if(!chart?.options?.scales?.x?.ticks) return;
+    const ticks = chart.options.scales.x.ticks;
+    ticks.maxRotation = 0;
+    ticks.minRotation = 0;
+    ticks.autoSkip = false;
+    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
+    ticks.callback = function(value, index, tickList){
+      const total = Array.isArray(tickList) ? tickList.length : (this.chart?.data?.labels?.length || 0);
+      const label = this.getLabelForValue ? this.getLabelForValue(value) : String(value ?? '');
+      const maxLabels = window.innerWidth <= 768 ? 5 : 10;
+      if(total <= maxLabels) return label;
+
+      const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
+      if(index === 0 || index === total - 1 || index % step === 0) return label;
+      return '';
+    };
+  }
+
+  function forceAllCharts(){
+    if(!window.Chart) return;
+    ['chartSelic', 'chartIpca', 'chartIpca12m', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta', 'chartDolar'].forEach(id => {
+      const canvas = document.getElementById(id);
+      if(!canvas || !canvas.isConnected) return;
+      const chart = Chart.getChart(canvas);
+      if(!chart) return;
+      formatSparseTicks(chart);
+      try{ chart.update('none'); }catch(_){}
+    });
+  }
+
+  function patchChartUpdate(){
+    if(!window.Chart || Chart.__v342XAxisPatched) return;
+    Chart.__v342XAxisPatched = true;
+
+    const originalUpdate = Chart.prototype.update;
+    Chart.prototype.update = function(...args){
+      formatSparseTicks(this);
+      return originalUpdate.apply(this, args);
+    };
+  }
+
+  function stabilizeTabs(){
+    const root = document.getElementById('sec-graficos') || document;
+    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
+      setImportant(tabs, 'display', 'flex');
+      setImportant(tabs, 'flex-wrap', 'nowrap');
+      setImportant(tabs, 'overflow-x', 'auto');
+      setImportant(tabs, 'overflow-y', 'hidden');
+      setImportant(tabs, 'justify-content', 'flex-start');
+      setImportant(tabs, 'gap', '8px');
+      setImportant(tabs, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      setImportant(btn, 'flex', '0 0 auto');
+      setImportant(btn, 'width', 'auto');
+      setImportant(btn, 'min-width', '68px');
+      setImportant(btn, 'white-space', 'nowrap');
+    });
+  }
+
+  function apply(){
+    remove12mButtons();
+    patchChartUpdate();
+    stabilizeTabs();
+    forceAllCharts();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  document.addEventListener('click', ev => {
+    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button')){
+      setTimeout(apply, 80);
+      setTimeout(forceAllCharts, 260);
+      setTimeout(forceAllCharts, 700);
+    }
+  }, { passive:true });
+
+  [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
 })();
