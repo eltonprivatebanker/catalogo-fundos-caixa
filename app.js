@@ -14290,6 +14290,14 @@ if(!isSearchInput(el)) return;
   }
 
   function iniciar(){
+    // v366: no mobile real, o refresh recorrente cdi-daily acordava a página
+    // e podia disparar redraw dos gráficos durante a rolagem. O carregamento
+    // inicial permanece normal em carregarMercado().
+    const mobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
+    if(mobile){
+      window.__ELTAUM_CDI_DAILY_REFRESH_MOBILE_DISABLED_V366__ = true;
+      return;
+    }
     setTimeout(()=>atualizarAgora(true),60*1000);
     setInterval(()=>atualizarAgora(false),INTERVALO_MS);
     document.addEventListener('visibilitychange',()=>{
@@ -16669,7 +16677,16 @@ function openCdiAnalyticTableV274(){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
 
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  // v366: no mobile, ignorar resize causado só pela altura da barra do navegador.
+  // Só reaplica quando a largura muda de verdade.
+  let __evoV366LastWidth = window.innerWidth;
+  window.addEventListener('resize', () => {
+    const mobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
+    const currentWidth = window.innerWidth;
+    if(mobile && Math.abs(currentWidth - __evoV366LastWidth) < 2) return;
+    __evoV366LastWidth = currentWidth;
+    requestAnimationFrame(apply);
+  }, { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 900);
 })();
@@ -18881,6 +18898,9 @@ function openCdiAnalyticTableV274(){
       const chart = Chart.getChart(canvas);
       if(!chart) return;
       formatSparseTicks(chart);
+      const mobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
+      const isEvoChart = !!canvas.closest && !!canvas.closest('#sec-graficos');
+      if(mobile && isEvoChart && !window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__) return;
       try{ chart.update('none'); }catch(_){}
     });
   }
@@ -18947,7 +18967,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_POINTER_SANE_20260620_v363';
+  const BUILD = 'ELTAUM_EVO_MOBILE_VIEWPORT_LOCK_20260620_v366';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18996,139 +19016,118 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_EVO_POINTER_SANE_20260620_v363
-   Saneamento definitivo do piscar em "Inflação e juros".
-   - Bloqueia resize/update/render/draw do Chart.js durante scroll mobile.
-   - Libera redesenho apenas por janela curta após clique real nas abas.
-   - Não usa MutationObserver.
+   ELTAUM_EVO_MOBILE_VIEWPORT_LOCK_20260620_v366
+   Diagnóstico v365:
+   visualViewport.resize/window.resize no celular real disparavam Chart.update.
+   Esta versão bloqueia redraw de #sec-graficos durante resize/scroll e
+   libera apenas após clique real nas abas.
 ════════════════════════════════════════════════════ */
-(function evoHardFreezeV362(){
-  const BUILD = 'ELTAUM_EVO_POINTER_SANE_20260620_v363';
+(function evoMobileViewportLockV366(){
+  const BUILD = 'ELTAUM_EVO_MOBILE_VIEWPORT_LOCK_20260620_v366';
 
-  const state = window.__ELTAUM_EVO_HARD_FREEZE_V362_STATE__ || {
-    active:true,
-    scrollEvents:0,
-    blockedResize:0,
-    blockedUpdate:0,
-    blockedRender:0,
-    blockedDraw:0,
-    allowedByClick:0,
+  const state = window.__ELTAUM_EVO_VIEWPORT_LOCK_V366_STATE__ || {
+    scroll:0,
+    visualResize:0,
+    winResize:0,
+    blocked:0,
+    allowed:0,
+    allowUntil:0,
+    lastViewportAt:0,
     lastScrollAt:0,
-    allowUntil:0
+    downX:0,
+    downY:0,
+    movedAt:0,
+    calls:{}
   };
 
-  window.__ELTAUM_EVO_HARD_FREEZE_V362_STATE__ = state;
+  window.__ELTAUM_EVO_VIEWPORT_LOCK_V366_STATE__ = state;
 
   function isMobile(){
-    return window.matchMedia('(max-width: 820px)').matches;
-  }
-
-  function setText(selector, value){
-    const el = typeof selector === 'string' ? document.querySelector(selector) : selector;
-    if(el && el.textContent !== value) el.textContent = value;
-  }
-
-  function applyLabels(){
-    setText('#sec-graficos .section-subline', 'IPCA, inflação em 12 meses e Selic meta.');
-    setText('#evolutionToggle .toggle-label', 'Ocultar');
-    setText('#chartIpcaTitle', 'IPCA mensal');
-    setText('#chartIpcaSub', 'Variação oficial mês a mês');
-    setText('#chartSelicTitle', 'Selic meta');
-    setText('#chartSelicSub', 'Trajetória da taxa básica');
-    setText('#evoChartMetaCard .chart-card-title', 'IPCA em 12 meses');
-    setText('#evoChartMetaCard .chart-card-sub', 'Comparação com a meta e o teto');
-    setText('#sec-graficos .evo-summary-card:nth-child(1) .evo-summary-kicker', 'IPCA mensal');
-    setText('#sec-graficos .evo-summary-card:nth-child(2) .evo-summary-kicker', 'Selic meta');
-    setText('#sec-graficos .evo-summary-card:nth-child(3) .evo-summary-kicker', 'IPCA 12 meses');
-
-    if(isMobile()){
-      const hist = document.querySelector('#evoChartSelicCard .chart-tab[data-range="999"]');
-      if(hist && hist.textContent.trim() !== 'Tudo') hist.textContent = 'Tudo';
-    }
+    return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
   }
 
   function isEvoChart(chart){
-    return !!chart && !!chart.canvas && !!chart.canvas.closest && !!chart.canvas.closest('#sec-graficos');
+    return !!chart?.canvas?.closest?.('#sec-graficos');
   }
 
-  function markScroll(){
-    if(!isMobile()) return;
-    state.scrollEvents++;
-    state.lastScrollAt = performance.now();
+  function isEvoControl(target){
+    return !!target?.closest?.('#sec-graficos .evo-view-tab, #sec-graficos .chart-tab, #evolutionToggle');
   }
 
-  function isFrozen(){
-    return isMobile() && (performance.now() - state.lastScrollAt < 1800);
+  function markCall(method, allowed){
+    const key = method + (allowed ? ':allowed' : ':blocked');
+    state.calls[key] = (state.calls[key] || 0) + 1;
+    if(allowed) state.allowed++;
+    else state.blocked++;
   }
 
-  function isClickAllowed(){
+  function allowRedraw(ms){
+    window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__ = true;
+    state.allowUntil = Math.max(state.allowUntil, performance.now() + (ms || 900));
+    clearTimeout(window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_TIMER_V366__);
+    window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_TIMER_V366__ = setTimeout(() => {
+      if(performance.now() >= state.allowUntil){
+        window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__ = false;
+      }
+    }, ms || 900);
+  }
+
+  function inViewportLock(){
+    if(!isMobile()) return false;
+    const now = performance.now();
+    return (now - state.lastViewportAt < 1800) || (now - state.lastScrollAt < 420);
+  }
+
+  function isAllowed(){
+    if(!isMobile()) return true;
     return performance.now() < state.allowUntil;
   }
 
   function patchChart(){
-    if(!window.Chart || !Chart.prototype){
+    if(!window.Chart?.prototype){
       setTimeout(patchChart, 300);
       return;
     }
 
-    if(Chart.prototype.__ELTAUM_EVO_HARD_FREEZE_PATCHED_V362__) return;
-    Chart.prototype.__ELTAUM_EVO_HARD_FREEZE_PATCHED_V362__ = true;
+    if(Chart.prototype.__ELTAUM_EVO_VIEWPORT_LOCK_PATCHED_V366__) return;
+    Chart.prototype.__ELTAUM_EVO_VIEWPORT_LOCK_PATCHED_V366__ = true;
 
-    const originalResize = Chart.prototype.resize;
-    const originalUpdate = Chart.prototype.update;
-    const originalRender = Chart.prototype.render;
-    const originalDraw = Chart.prototype.draw;
+    ['resize','update','render','draw'].forEach(method => {
+      if(typeof Chart.prototype[method] !== 'function') return;
 
-    Chart.prototype.resize = function(...args){
-      if(isEvoChart(this)){
-        if(isFrozen() && !isClickAllowed()){
-          state.blockedResize++;
-          return this;
+      const original = Chart.prototype[method];
+
+      Chart.prototype[method] = function(...args){
+        if(isEvoChart(this) && isMobile()){
+          const allowed = isAllowed();
+          const locked = inViewportLock();
+
+          // Regra principal: durante scroll/resize visual do celular, bloqueia.
+          // Fora disso, também bloqueia chamadas automáticas; só clique real libera.
+          if(!allowed || locked){
+            markCall(method, false);
+            return this;
+          }
+
+          markCall(method, true);
         }
-        if(isClickAllowed()) state.allowedByClick++;
-      }
-      return originalResize.apply(this, args);
-    };
 
-    Chart.prototype.update = function(...args){
-      if(isEvoChart(this) && isFrozen() && !isClickAllowed()){
-        state.blockedUpdate++;
-        return this;
-      }
-      return originalUpdate.apply(this, args);
-    };
-
-    Chart.prototype.render = function(...args){
-      if(isEvoChart(this) && isFrozen() && !isClickAllowed()){
-        state.blockedRender++;
-        return this;
-      }
-      return originalRender.apply(this, args);
-    };
-
-    Chart.prototype.draw = function(...args){
-      if(isEvoChart(this) && isFrozen() && !isClickAllowed()){
-        state.blockedDraw++;
-        return this;
-      }
-      return originalDraw.apply(this, args);
-    };
+        return original.apply(this, args);
+      };
+    });
 
     try{
-      if(window.Chart && Chart.defaults){
+      if(Chart.defaults){
         Chart.defaults.animation = false;
-        if(Chart.defaults.animations) Chart.defaults.animations = {};
+        Chart.defaults.animations = {};
+        Chart.defaults.transitions = {
+          active:{animation:{duration:0}},
+          resize:{animation:{duration:0}},
+          show:{animations:{}},
+          hide:{animations:{}}
+        };
       }
     }catch(e){}
-  }
-
-  function getActiveChart(){
-    const canvas = document.querySelector('#sec-graficos .evo-chart-card.active canvas');
-    if(!canvas) return null;
-    try{
-      if(window.Chart && typeof Chart.getChart === 'function') return Chart.getChart(canvas);
-    }catch(e){}
-    return null;
   }
 
   function resizeActiveAfterClick(){
@@ -19141,588 +19140,88 @@ function openCdiAnalyticTableV274(){
     canvas.style.setProperty('height', '188px', 'important');
     canvas.style.setProperty('max-height', '188px', 'important');
 
-    const chart = getActiveChart();
-    if(!chart) return;
-
-    state.allowUntil = performance.now() + 800;
+    allowRedraw(1200);
 
     try{
-      if(typeof chart.resize === 'function') chart.resize();
-      if(typeof chart.update === 'function') chart.update('none');
+      const chart = window.Chart?.getChart?.(canvas);
+      if(chart){
+        chart.resize();
+        chart.update('none');
+      }
     }catch(e){}
   }
 
-  function bindEvents(){
-    if(window.__ELTAUM_EVO_HARD_FREEZE_BOUND_V362__) return;
-    window.__ELTAUM_EVO_HARD_FREEZE_BOUND_V362__ = true;
+  function bind(){
+    if(window.__ELTAUM_EVO_VIEWPORT_LOCK_BOUND_V366__) return;
+    window.__ELTAUM_EVO_VIEWPORT_LOCK_BOUND_V366__ = true;
 
-    window.addEventListener('scroll', markScroll, {passive:true});
-    window.visualViewport?.addEventListener('resize', markScroll, {passive:true});
-    window.addEventListener('resize', markScroll, {passive:true});
+    window.addEventListener('scroll', () => {
+      if(!isMobile()) return;
+      state.scroll++;
+      state.lastScrollAt = performance.now();
+    }, {passive:true});
 
-    document.addEventListener('click', event => {
-      const target = event.target.closest('#sec-graficos .evo-view-tab, #sec-graficos .chart-tab, #evolutionToggle');
-      if(!target) return;
+    window.addEventListener('resize', () => {
+      if(!isMobile()) return;
+      state.winResize++;
+      state.lastViewportAt = performance.now();
+    }, {passive:true});
 
-      state.allowUntil = performance.now() + 1000;
+    window.visualViewport?.addEventListener('resize', () => {
+      if(!isMobile()) return;
+      state.visualResize++;
+      state.lastViewportAt = performance.now();
+    }, {passive:true});
+
+    document.addEventListener('pointerdown', ev => {
+      if(!isMobile() || !ev.target?.closest?.('#sec-graficos')) return;
+      state.downX = ev.clientX || 0;
+      state.downY = ev.clientY || 0;
+    }, true);
+
+    document.addEventListener('pointermove', ev => {
+      if(!isMobile() || !ev.target?.closest?.('#sec-graficos')) return;
+      const dx = Math.abs((ev.clientX || 0) - state.downX);
+      const dy = Math.abs((ev.clientY || 0) - state.downY);
+      if(dx > 8 || dy > 8) state.movedAt = performance.now();
+    }, true);
+
+    // Click real nas abas é o único cenário que libera redraw no mobile.
+    document.addEventListener('click', ev => {
+      if(!isMobile() || !isEvoControl(ev.target)) return;
+
+      if(performance.now() - state.movedAt < 520){
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation?.();
+        return;
+      }
+
+      allowRedraw(1500);
       setTimeout(resizeActiveAfterClick, 120);
       setTimeout(resizeActiveAfterClick, 360);
     }, true);
   }
 
-  function apply(){
-    applyLabels();
-    patchChart();
-    bindEvents();
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', apply, {once:true});
-  }else{
-    apply();
-  }
-
-  [250, 900, 1800].forEach(ms => setTimeout(apply, ms));
-
-  window.__ELTAUM_EVO_HARD_FREEZE_V362__ = {
-    build:BUILD,
-    state,
-    apply,
-    report(){
-      console.table({
-        scrollEvents:state.scrollEvents,
-        blockedResize:state.blockedResize,
-        blockedUpdate:state.blockedUpdate,
-        blockedRender:state.blockedRender,
-        blockedDraw:state.blockedDraw,
-        allowedByClick:state.allowedByClick,
-        lastScrollMsAgo:Math.round(performance.now() - state.lastScrollAt)
-      });
-      return state;
-    }
-  };
-})();
-
-/* ════════════════════════════════════════════════════
-   ELTAUM_EVO_POINTER_SANE_20260620_v363
-   Corrige o gatilho residual do piscar:
-   - remove/neutraliza pointerup em abas de gráfico;
-   - bloqueia pointerup/click acidental quando houve rolagem;
-   - mantém click real funcionando.
-════════════════════════════════════════════════════ */
-(function evoPointerSaneV363(){
-  const BUILD = 'ELTAUM_EVO_POINTER_SANE_20260620_v363';
-
-  function isMobile(){
-    return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
-  }
-
-  const state = {
-    downX:0,
-    downY:0,
-    moved:false,
-    lastMoveAt:0,
-    lastBlockedAt:0
-  };
-
-  function isEvoControl(target){
-    return !!(target && target.closest && target.closest('#sec-graficos .chart-tab[data-chart], #sec-graficos .evo-view-tab'));
-  }
-
-  window.addEventListener('pointerdown', event => {
-    if(!isMobile() || !event.target.closest || !event.target.closest('#sec-graficos')) return;
-    state.downX = event.clientX || 0;
-    state.downY = event.clientY || 0;
-    state.moved = false;
-  }, true);
-
-  window.addEventListener('pointermove', event => {
-    if(!isMobile() || !event.target.closest || !event.target.closest('#sec-graficos')) return;
-    const dx = Math.abs((event.clientX || 0) - state.downX);
-    const dy = Math.abs((event.clientY || 0) - state.downY);
-    if(dx > 8 || dy > 8){
-      state.moved = true;
-      state.lastMoveAt = performance.now();
-    }
-  }, true);
-
-  window.addEventListener('pointerup', event => {
-    if(!isMobile() || !isEvoControl(event.target)) return;
-
-    const scrollGesture = state.moved || (performance.now() - state.lastMoveAt < 450);
-    if(scrollGesture){
-      state.lastBlockedAt = performance.now();
-      event.preventDefault();
-      event.stopPropagation();
-      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-    }
-  }, true);
-
-  window.addEventListener('click', event => {
-    if(!isMobile() || !isEvoControl(event.target)) return;
-
-    if(performance.now() - state.lastBlockedAt < 520){
-      event.preventDefault();
-      event.stopPropagation();
-      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-    }
-  }, true);
-
-  window.__ELTAUM_EVO_POINTER_SANE_V363__ = { build: BUILD, state };
-})();
-
-/* ════════════════════════════════════════════════════
-   ELTAUM_EVO_DEBUG_MOBILE_20260620_v365
-   Painel de diagnóstico no celular real.
-   Ativar: ?debug=1 ou ?evoDebug=1.
-   Não altera comportamento por padrão; só mede. Botões permitem isolar:
-   - Freeze Chart
-   - Freeze Network
-   - Hide Canvas
-   - Block Tabs
-════════════════════════════════════════════════════ */
-(function evoDebugMobileV365(){
-  const BUILD = 'ELTAUM_EVO_DEBUG_MOBILE_20260620_v365';
-
-  function shouldRun(){
+  function applyLabels(){
     try{
-      const params = new URLSearchParams(location.search);
-      return params.has('debug') || params.has('evoDebug') || location.hash.includes('debug');
-    }catch(e){
-      return false;
-    }
-  }
-
-  function isMobile(){
-    return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
-  }
-
-  if(!shouldRun()) return;
-
-  const rootHtml = document.documentElement;
-  rootHtml.classList.add('evo-debug-active-v365');
-
-  const S = window.__EVO_DEBUG_MOBILE_V365_STATE__ || {
-    build:BUILD,
-    started:performance.now(),
-    scroll:0,
-    winResize:0,
-    visualResize:0,
-    chartResize:0,
-    chartUpdate:0,
-    chartRender:0,
-    chartDraw:0,
-    network:0,
-    tabs:0,
-    mutations:0,
-    canvasResize:0,
-    freezeChart:false,
-    freezeNetwork:false,
-    hideCanvas:false,
-    blockTabs:false,
-    last:[],
-    originals:{}
-  };
-
-  window.__EVO_DEBUG_MOBILE_V365_STATE__ = S;
-
-  function root(){
-    return document.querySelector('#sec-graficos');
-  }
-
-  function inEvo(el){
-    const r = root();
-    try{ return !!r && !!el && (el === r || r.contains(el)); }
-    catch(e){ return false; }
-  }
-
-  function isEvoChart(chart){
-    return !!chart?.canvas && inEvo(chart.canvas);
-  }
-
-  function isTabTarget(target){
-    try{
-      return !!target?.closest?.('#sec-graficos .evo-view-tab, #sec-graficos .chart-tab, #evolutionToggle');
-    }catch(e){
-      return false;
-    }
-  }
-
-  function isTargetUrl(url){
-    url = String(url || '');
-    return url.includes('mercado_atual.json') ||
-           url.includes('dados_atuais.csv') ||
-           url.includes('kpis_dashboard.json') ||
-           url.includes('olinda') ||
-           url.includes('bcb.gov');
-  }
-
-  function log(type, detail){
-    const item = {
-      t:Math.round((performance.now() - S.started) / 100) / 10,
-      y:Math.round(window.scrollY || 0),
-      type,
-      ...(detail || {})
-    };
-
-    S.last.push(item);
-    if(S.last.length > 28) S.last.shift();
-
-    updatePanel();
-  }
-
-  function patchChart(){
-    if(!window.Chart?.prototype){
-      setTimeout(patchChart, 300);
-      return;
-    }
-
-    if(window.__EVO_DEBUG_MOBILE_V365_CHART_PATCHED__) return;
-    window.__EVO_DEBUG_MOBILE_V365_CHART_PATCHED__ = true;
-
-    ['resize','update','render','draw'].forEach(method => {
-      if(typeof Chart.prototype[method] !== 'function') return;
-
-      const original = Chart.prototype[method];
-      S.originals['Chart.' + method] = original;
-
-      Chart.prototype[method] = function(...args){
-        if(isEvoChart(this)){
-          if(method === 'resize') S.chartResize++;
-          if(method === 'update') S.chartUpdate++;
-          if(method === 'render') S.chartRender++;
-          if(method === 'draw') S.chartDraw++;
-
-          log('Chart.' + method, {
-            canvas:this.canvas?.id || '',
-            args:args.map(String).join(',').slice(0,60),
-            frozen:S.freezeChart
-          });
-
-          if(S.freezeChart){
-            return this;
-          }
-        }
-
-        return original.apply(this, args);
-      };
-    });
-  }
-
-  function patchNetwork(){
-    if(window.__EVO_DEBUG_MOBILE_V365_NETWORK_PATCHED__) return;
-    window.__EVO_DEBUG_MOBILE_V365_NETWORK_PATCHED__ = true;
-
-    const originalFetch = window.fetch;
-    S.originals.fetch = originalFetch;
-
-    window.fetch = function(...args){
-      const url = String(args[0]?.url || args[0] || '');
-
-      if(isTargetUrl(url)){
-        S.network++;
-        log('fetch', {url:url.split('?')[0], frozen:S.freezeNetwork});
-
-        if(S.freezeNetwork){
-          return Promise.reject(new Error('Bloqueado pelo debug mobile v365'));
-        }
-      }
-
-      return originalFetch.apply(this, args);
-    };
-
-    const originalOpen = XMLHttpRequest.prototype.open;
-    const originalSend = XMLHttpRequest.prototype.send;
-    S.originals.xhrOpen = originalOpen;
-    S.originals.xhrSend = originalSend;
-
-    XMLHttpRequest.prototype.open = function(method, url, ...rest){
-      this.__evoDebugUrlV365 = String(url || '');
-      this.__evoDebugMethodV365 = method;
-      return originalOpen.call(this, method, url, ...rest);
-    };
-
-    XMLHttpRequest.prototype.send = function(...args){
-      const url = this.__evoDebugUrlV365 || '';
-
-      if(isTargetUrl(url)){
-        S.network++;
-        log('xhr', {url:url.split('?')[0], frozen:S.freezeNetwork});
-
-        if(S.freezeNetwork){
-          try{ this.abort(); }catch(e){}
-          return;
-        }
-      }
-
-      return originalSend.apply(this, args);
-    };
-  }
-
-  function patchEvents(){
-    if(window.__EVO_DEBUG_MOBILE_V365_EVENTS_PATCHED__) return;
-    window.__EVO_DEBUG_MOBILE_V365_EVENTS_PATCHED__ = true;
-
-    window.addEventListener('scroll', () => {
-      S.scroll++;
-      if(S.scroll % 12 === 0) updatePanel();
-    }, {passive:true});
-
-    window.addEventListener('resize', () => {
-      S.winResize++;
-      log('window.resize', {
-        w:window.innerWidth,
-        h:window.innerHeight
-      });
-    }, {passive:true});
-
-    window.visualViewport?.addEventListener('resize', () => {
-      S.visualResize++;
-      log('visualViewport.resize', {
-        w:Math.round(window.visualViewport.width || 0),
-        h:Math.round(window.visualViewport.height || 0)
-      });
-    }, {passive:true});
-
-    ['pointerdown','pointerup','touchstart','touchend','click'].forEach(type => {
-      document.addEventListener(type, ev => {
-        if(!isTabTarget(ev.target)) return;
-
-        S.tabs++;
-        const text = ev.target.closest('button')?.textContent?.trim() || '';
-
-        log('tab.' + type, {text, blocked:S.blockTabs});
-
-        if(S.blockTabs){
-          ev.preventDefault();
-          ev.stopPropagation();
-          ev.stopImmediatePropagation?.();
-        }
-      }, true);
-    });
-
-    const r = root();
-    if(r && window.MutationObserver){
-      const mo = new MutationObserver(muts => {
-        S.mutations += muts.length;
-        if(S.mutations % 20 === 0) updatePanel();
-      });
-      mo.observe(r, {
-        subtree:true,
-        childList:true,
-        attributes:true,
-        attributeFilter:['style','class','aria-pressed','aria-expanded','hidden','width','height']
-      });
-      S.originals.mo = mo;
-    }
-
-    if(r && window.ResizeObserver){
-      const ro = new ResizeObserver(entries => {
-        entries.forEach(entry => {
-          const el = entry.target;
-          if(el.tagName === 'CANVAS'){
-            S.canvasResize++;
-            log('canvas.resize', {
-              id:el.id || '',
-              w:Math.round(el.getBoundingClientRect().width || 0),
-              h:Math.round(el.getBoundingClientRect().height || 0),
-              attrW:el.getAttribute('width'),
-              attrH:el.getAttribute('height')
-            });
-          }
-        });
-      });
-
-      r.querySelectorAll('canvas').forEach(c => ro.observe(c));
-      S.originals.ro = ro;
-    }
-  }
-
-  function panelHtml(){
-    return `
-      <div class="evo-debug-head-v365">
-        <div class="evo-debug-title-v365">
-          <strong>Debug mobile v365</strong>
-          <span>${BUILD}</span>
-        </div>
-        <button class="evo-debug-mini-btn-v365" data-debug-close>Fechar</button>
-      </div>
-      <div class="evo-debug-grid-v365">
-        <div class="evo-debug-kpi-v365"><span>Scroll</span><strong data-kpi="scroll">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Viewport</span><strong data-kpi="vp">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Network</span><strong data-kpi="network">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Chart resize</span><strong data-kpi="chartResize">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Chart update</span><strong data-kpi="chartUpdate">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Tabs</span><strong data-kpi="tabs">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Mutations</span><strong data-kpi="mutations">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Canvas resize</span><strong data-kpi="canvasResize">0</strong></div>
-        <div class="evo-debug-kpi-v365"><span>Draw</span><strong data-kpi="draw">0</strong></div>
-      </div>
-      <div class="evo-debug-actions-v365">
-        <button class="evo-debug-action-v365" data-debug-toggle="freezeChart">Freeze Chart</button>
-        <button class="evo-debug-action-v365" data-debug-toggle="freezeNetwork">Freeze Network</button>
-        <button class="evo-debug-action-v365" data-debug-toggle="hideCanvas">Hide Canvas</button>
-        <button class="evo-debug-action-v365" data-debug-toggle="blockTabs">Block Tabs</button>
-        <button class="evo-debug-action-v365" data-debug-copy>Copiar relatório</button>
-        <button class="evo-debug-action-v365" data-debug-clear>Limpar</button>
-      </div>
-      <pre class="evo-debug-log-v365" data-debug-log></pre>
-    `;
-  }
-
-  function ensurePanel(){
-    if(document.getElementById('evoDebugPanelV365')) return;
-
-    const panel = document.createElement('div');
-    panel.id = 'evoDebugPanelV365';
-    panel.innerHTML = panelHtml();
-    document.body.appendChild(panel);
-
-    panel.addEventListener('click', ev => {
-      const close = ev.target.closest('[data-debug-close]');
-      if(close){
-        panel.style.display = 'none';
-        return;
-      }
-
-      const toggle = ev.target.closest('[data-debug-toggle]');
-      if(toggle){
-        const key = toggle.getAttribute('data-debug-toggle');
-        S[key] = !S[key];
-
-        if(key === 'hideCanvas'){
-          rootHtml.classList.toggle('evo-debug-hide-canvas-v365', !!S[key]);
-        }
-
-        updatePanel();
-        return;
-      }
-
-      if(ev.target.closest('[data-debug-clear]')){
-        S.scroll = S.winResize = S.visualResize = S.chartResize = S.chartUpdate = 0;
-        S.chartRender = S.chartDraw = S.network = S.tabs = S.mutations = S.canvasResize = 0;
-        S.last = [];
-        updatePanel();
-        return;
-      }
-
-      if(ev.target.closest('[data-debug-copy]')){
-        copyReport();
-      }
-    });
-  }
-
-  function setKpi(panel, key, value){
-    const el = panel.querySelector(`[data-kpi="${key}"]`);
-    if(el) el.textContent = String(value);
-  }
-
-  let updateTimer = 0;
-  function updatePanel(){
-    clearTimeout(updateTimer);
-    updateTimer = setTimeout(() => {
-      const panel = document.getElementById('evoDebugPanelV365');
-      if(!panel) return;
-
-      setKpi(panel, 'scroll', S.scroll);
-      setKpi(panel, 'vp', S.visualResize + '/' + S.winResize);
-      setKpi(panel, 'network', S.network);
-      setKpi(panel, 'chartResize', S.chartResize);
-      setKpi(panel, 'chartUpdate', S.chartUpdate);
-      setKpi(panel, 'tabs', S.tabs);
-      setKpi(panel, 'mutations', S.mutations);
-      setKpi(panel, 'canvasResize', S.canvasResize);
-      setKpi(panel, 'draw', S.chartDraw);
-
-      panel.querySelectorAll('[data-debug-toggle]').forEach(btn => {
-        const key = btn.getAttribute('data-debug-toggle');
-        btn.classList.toggle('active', !!S[key]);
-      });
-
-      const logEl = panel.querySelector('[data-debug-log]');
-      if(logEl){
-        logEl.textContent = S.last.slice(-12).map(x => {
-          const info = Object.entries(x)
-            .filter(([k]) => !['t','type'].includes(k))
-            .map(([k,v]) => `${k}:${String(v).slice(0,44)}`)
-            .join(' · ');
-          return `${x.t}s ${x.type} ${info}`;
-        }).join('\n');
-      }
-    }, 40);
-  }
-
-  function reportData(){
-    return {
-      build:BUILD,
-      url:location.href,
-      viewport:{
-        innerWidth:window.innerWidth,
-        innerHeight:window.innerHeight,
-        visualWidth:Math.round(window.visualViewport?.width || 0),
-        visualHeight:Math.round(window.visualViewport?.height || 0),
-        dpr:window.devicePixelRatio
-      },
-      counters:{
-        scroll:S.scroll,
-        winResize:S.winResize,
-        visualResize:S.visualResize,
-        chartResize:S.chartResize,
-        chartUpdate:S.chartUpdate,
-        chartRender:S.chartRender,
-        chartDraw:S.chartDraw,
-        network:S.network,
-        tabs:S.tabs,
-        mutations:S.mutations,
-        canvasResize:S.canvasResize
-      },
-      toggles:{
-        freezeChart:S.freezeChart,
-        freezeNetwork:S.freezeNetwork,
-        hideCanvas:S.hideCanvas,
-        blockTabs:S.blockTabs
-      },
-      last:S.last
-    };
-  }
-
-  function copyReport(){
-    const txt = JSON.stringify(reportData(), null, 2);
-
-    if(typeof navigator !== 'undefined' && navigator.clipboard?.writeText){
-      navigator.clipboard.writeText(txt).then(() => {
-        alert('Relatório copiado.');
-      }).catch(() => {
-        console.log(txt);
-        alert('Não consegui copiar automaticamente. Relatório enviado ao console.');
-      });
-    }else{
-      console.log(txt);
-      alert('Relatório enviado ao console.');
-    }
+      const hist = document.querySelector('#evoChartSelicCard .chart-tab[data-range="999"]');
+      if(isMobile() && hist && hist.textContent.trim() !== 'Tudo') hist.textContent = 'Tudo';
+    }catch(e){}
   }
 
   function init(){
-    ensurePanel();
     patchChart();
-    patchNetwork();
-    patchEvents();
-    updatePanel();
+    bind();
+    applyLabels();
 
-    window.__EVO_DEBUG_MOBILE_V365__ = {
-      build:BUILD,
-      state:S,
-      report:reportData,
-      copyReport,
-      toggle(key){
-        S[key] = !S[key];
-        if(key === 'hideCanvas') rootHtml.classList.toggle('evo-debug-hide-canvas-v365', !!S[key]);
-        updatePanel();
-        return S[key];
+    // Janela curta inicial para eventuais ajustes pós-load.
+    allowRedraw(1200);
+    setTimeout(() => {
+      if(performance.now() >= state.allowUntil){
+        window.__ELTAUM_EVO_ALLOW_CHART_REDRAW_V366__ = false;
       }
-    };
-
-    console.log('✅ EVO debug mobile v365 ativo. Use o painel na tela ou window.__EVO_DEBUG_MOBILE_V365__.report()');
+    }, 1400);
   }
 
   if(document.readyState === 'loading'){
@@ -19730,5 +19229,23 @@ function openCdiAnalyticTableV274(){
   }else{
     init();
   }
+
+  window.__ELTAUM_EVO_VIEWPORT_LOCK_V366__ = {
+    build: BUILD,
+    state,
+    allowRedraw,
+    report(){
+      console.table({
+        scroll:state.scroll,
+        visualResize:state.visualResize,
+        winResize:state.winResize,
+        blocked:state.blocked,
+        allowed:state.allowed,
+        allowMsLeft:Math.max(0, Math.round(state.allowUntil - performance.now())),
+        calls:JSON.stringify(state.calls)
+      });
+      return state;
+    }
+  };
 })();
 
