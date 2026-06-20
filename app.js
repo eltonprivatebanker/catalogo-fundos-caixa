@@ -1,3 +1,4 @@
+// ELTAUM_INFLATION_RATES_CLEAN_v338
 // ELTAUM_DOLAR_CHART_CLOSED_v337
 // ELTAUM_DOLAR_BADGE_MONTHS_v336
 // ELTAUM_DOLAR_XAXIS_MOBILE_v335
@@ -18394,4 +18395,102 @@ function openCdiAnalyticTableV274(){
 
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v338 — Inflação e juros: limpeza de redundâncias mobile
+   - remove pílulas de leitura dos gráficos;
+   - remove cards "vigente/último" redundantes;
+   - compacta botões de prazo em trilha horizontal.
+════════════════════════════════════════════════════ */
+(function inflationRatesCleanV338(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function hide(el){
+    if(!el) return;
+    el.setAttribute('aria-hidden','true');
+    try{ el.inert = true; }catch(_){}
+    setImportant(el, 'display', 'none');
+    setImportant(el, 'height', '0');
+    setImportant(el, 'min-height', '0');
+    setImportant(el, 'max-height', '0');
+    setImportant(el, 'margin', '0');
+    setImportant(el, 'padding', '0');
+    setImportant(el, 'overflow', 'hidden');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const root = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body') || document;
+    if(!root || !isMobile) return;
+
+    // 1) Pílulas/leituras redundantes dos gráficos
+    ['evoCardIpcaNote', 'evoCardSelicNote', 'evoCardMetaNote'].forEach(id => hide(document.getElementById(id)));
+    root.querySelectorAll('.chart-reading, .evo-card-reading, .evo-chart-reading').forEach(hide);
+
+    // 2) Selic: remover cartão da taxa vigente dentro do grid
+    root.querySelectorAll(
+      '#selicSummaryRow .selic-summary-chip.now, ' +
+      '#selicSummaryRow .selic-summary-chip.vigente, ' +
+      '#selicSummaryRow .selic-summary-chip.current, ' +
+      '#selicSummaryRow .selic-summary-chip.is-current'
+    ).forEach(hide);
+
+    // fallback por texto
+    root.querySelectorAll('#selicSummaryRow .selic-summary-chip').forEach(el => {
+      const t = (el.innerText || '').toLowerCase();
+      if(t.includes('vigente') || t.includes('taxa vigente')) hide(el);
+    });
+
+    // 3) IPCA: remover cartão último IPCA/último resultado
+    root.querySelectorAll(
+      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.latest, ' +
+      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.current, ' +
+      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.is-latest'
+    ).forEach(hide);
+
+    root.querySelectorAll('#ipcaSummaryRowV250 .ipca-summary-chip-v250').forEach(el => {
+      const t = (el.innerText || '').toLowerCase();
+      if(t.includes('último') || t.includes('ultimo') || t.includes('ipca do último')) hide(el);
+    });
+
+    // 4) Botões de prazo em uma linha rolável
+    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
+      setImportant(tabs, 'display', 'flex');
+      setImportant(tabs, 'flex-wrap', 'nowrap');
+      setImportant(tabs, 'overflow-x', 'auto');
+      setImportant(tabs, 'overflow-y', 'hidden');
+      setImportant(tabs, 'gap', '7px');
+      setImportant(tabs, 'padding', '1px 1px 8px');
+      setImportant(tabs, 'scroll-snap-type', 'x proximity');
+      setImportant(tabs, 'scrollbar-width', 'none');
+    });
+
+    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
+      setImportant(btn, 'flex', '0 0 auto');
+      setImportant(btn, 'min-width', '72px');
+      setImportant(btn, 'min-height', '34px');
+      setImportant(btn, 'padding', '0 12px');
+      setImportant(btn, 'font-size', '.66rem');
+      setImportant(btn, 'border-radius', '12px');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
+
+  const target = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body');
+  if(target && 'MutationObserver' in window){
+    const obs = new MutationObserver(() => {
+      clearTimeout(window.__inflationRatesCleanV338Timer);
+      window.__inflationRatesCleanV338Timer = setTimeout(apply, 80);
+    });
+    obs.observe(target, { childList:true, subtree:true, characterData:true });
+  }
 })();

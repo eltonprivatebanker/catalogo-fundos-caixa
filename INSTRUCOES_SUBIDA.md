@@ -1,24 +1,25 @@
-# Catálogo de Fundos CAIXA — v337
+# Catálogo de Fundos CAIXA — v338
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste aplicado
+## Ajustes aplicados em Inflação e Juros
 
-O gráfico do Dólar PTAX fica fechado por padrão no mobile.
+### 1. Menos redundância
+Ocultadas as pílulas de leitura dos gráficos:
+- #evoCardIpcaNote
+- #evoCardSelicNote
+- #evoCardMetaNote
 
-## Por quê
+### 2. Cards de estatística mais limpos
+- Removido o chip de “Vigente” no gráfico da Selic.
+- Removido o chip de “Último IPCA” no gráfico do IPCA mensal.
+- Mantidos os extremos relevantes, como máxima e mínima.
 
-O gráfico é uma informação de aprofundamento. Fechado por padrão, a seção fica mais curta e mais executiva.
-
-## Comportamento
-
-- Botão inicial: “Abrir gráfico”.
-- Ao abrir: mostra abas 2026 / 12M / 24M / 36M e o gráfico.
-- Estatísticas do período aparecem somente com o gráfico aberto.
-- Ao fechar: volta ao resumo executivo.
+### 3. Botões de prazo compactos
+Os botões 1A, 2A, 5A, 10A e Histórico ficam em linha horizontal com rolagem, ocupando menos altura.
 
 ## Como subir
 

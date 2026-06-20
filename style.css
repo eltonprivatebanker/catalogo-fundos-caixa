@@ -50714,3 +50714,121 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     min-height: 190px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v338 — INFLAÇÃO E JUROS: LIMPEZA E COMPACTAÇÃO MOBILE
+   Objetivo:
+   - cortar informações repetidas;
+   - remover pílulas que parecem botões;
+   - deixar seletor de prazo em uma única linha;
+   - dar mais protagonismo ao gráfico.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  /* 1) Remove pílulas de leitura redundantes */
+  html.inflation-rates-clean-v338 #sec-graficos #evoCardIpcaNote,
+  html.inflation-rates-clean-v338 #sec-graficos #evoCardSelicNote,
+  html.inflation-rates-clean-v338 #sec-graficos #evoCardMetaNote,
+  html.inflation-rates-clean-v338 #sec-graficos .chart-reading,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-card-reading,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-chart-reading{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* 2) Remove cards redundantes de taxa vigente/último resultado */
+  html.inflation-rates-clean-v338 #sec-graficos #selicSummaryRow .selic-summary-chip.now,
+  html.inflation-rates-clean-v338 #sec-graficos #selicSummaryRow .selic-summary-chip.vigente,
+  html.inflation-rates-clean-v338 #sec-graficos #selicSummaryRow .selic-summary-chip.current,
+  html.inflation-rates-clean-v338 #sec-graficos #selicSummaryRow .selic-summary-chip.is-current,
+  html.inflation-rates-clean-v338 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-chip-v250.latest,
+  html.inflation-rates-clean-v338 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-chip-v250.current,
+  html.inflation-rates-clean-v338 #sec-graficos #ipcaSummaryRowV250 .ipca-summary-chip-v250.is-latest{
+    display: none !important;
+  }
+
+  /* Grids de estatísticas mais leves */
+  html.inflation-rates-clean-v338 #sec-graficos #selicSummaryRow,
+  html.inflation-rates-clean-v338 #sec-graficos #ipcaSummaryRowV250{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: 9px !important;
+    margin: 10px 0 12px !important;
+  }
+
+  html.inflation-rates-clean-v338 #sec-graficos .selic-summary-chip,
+  html.inflation-rates-clean-v338 #sec-graficos .ipca-summary-chip-v250{
+    min-height: 62px !important;
+    padding: 10px 11px !important;
+    border-radius: 13px !important;
+  }
+
+  /* 4) Botões de prazo em linha única horizontal */
+  html.inflation-rates-clean-v338 #sec-graficos .chart-tabs,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-range-tabs,
+  html.inflation-rates-clean-v338 #sec-graficos .selic-range-tabs,
+  html.inflation-rates-clean-v338 #sec-graficos .ipca-range-tabs{
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    gap: 7px !important;
+    padding: 1px 1px 8px !important;
+    margin: 10px 0 12px !important;
+    scroll-snap-type: x proximity !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+  }
+
+  html.inflation-rates-clean-v338 #sec-graficos .chart-tabs::-webkit-scrollbar,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-range-tabs::-webkit-scrollbar,
+  html.inflation-rates-clean-v338 #sec-graficos .selic-range-tabs::-webkit-scrollbar,
+  html.inflation-rates-clean-v338 #sec-graficos .ipca-range-tabs::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.inflation-rates-clean-v338 #sec-graficos .chart-tabs button,
+  html.inflation-rates-clean-v338 #sec-graficos .chart-tab,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-range-tabs button,
+  html.inflation-rates-clean-v338 #sec-graficos .selic-range-tabs button,
+  html.inflation-rates-clean-v338 #sec-graficos .ipca-range-tabs button{
+    flex: 0 0 auto !important;
+    min-width: 72px !important;
+    min-height: 34px !important;
+    padding: 0 12px !important;
+    font-size: .66rem !important;
+    line-height: 1 !important;
+    border-radius: 12px !important;
+    scroll-snap-align: start !important;
+  }
+
+  /* Compacta um pouco o card do gráfico */
+  html.inflation-rates-clean-v338 #sec-graficos .evo-chart-card,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-chart-card-v250,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-chart-card-v251,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-chart-card-v252{
+    padding-top: 12px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.inflation-rates-clean-v338 #sec-graficos .chart-tabs button,
+  html.inflation-rates-clean-v338 #sec-graficos .chart-tab,
+  html.inflation-rates-clean-v338 #sec-graficos .evo-range-tabs button,
+  html.inflation-rates-clean-v338 #sec-graficos .selic-range-tabs button,
+  html.inflation-rates-clean-v338 #sec-graficos .ipca-range-tabs button{
+    min-width: 66px !important;
+    min-height: 32px !important;
+    padding: 0 10px !important;
+    font-size: .62rem !important;
+  }
+}
