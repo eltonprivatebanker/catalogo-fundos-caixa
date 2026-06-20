@@ -1,3 +1,4 @@
+// ELTAUM_MARKET_MICROCOPY_CLEAN_v329
 // ELTAUM_SAVINGS_MICRO_POLISH_v327
 // ELTAUM_SAVINGS_SCENARIOS_POLISH_v326
 // ELTAUM_SAVINGS_CLEAN_MOBILE_v325
@@ -17781,4 +17782,88 @@ function openCdiAnalyticTableV274(){
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", apply); else apply();
   window.addEventListener("resize", apply, {passive:true});
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v329 — limpeza de microcopy dos indicadores
+   - CDI: texto longo vira "Parcial até dd/mm";
+   - Tags: Atual vira Cotação/Pontos conforme indicador;
+   - Grid: Atual vira Mês atual.
+════════════════════════════════════════════════════ */
+(function marketMicrocopyCleanV329(){
+  function norm(txt){
+    return String(txt || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function findAncestorText(el){
+    const article = el.closest('article, .market-period-card-v196, .market-asset-card, .period-card, .market-card');
+    return norm(article?.innerText || el.closest('section')?.innerText || '');
+  }
+
+  function cleanCdi(){
+    document.querySelectorAll('#sec-mercado small, #sec-mercado .market-period-metric-v196 small').forEach(small => {
+      const t = norm(small.textContent);
+      if(/Acumulado no mês/i.test(t) && /Dados disponíveis até/i.test(t)){
+        const data = t.match(/até\s+(\d{1,2}\/\d{1,2})/i)?.[1] || '';
+        small.textContent = data ? `Parcial até ${data}` : 'Parcial do mês';
+      }
+    });
+  }
+
+  function cleanCurrentLevelTags(){
+    document.querySelectorAll('#sec-mercado .market-current-level-v196 small, #sec-mercado .market-current-level-v196 span, #sec-mercado .market-current-level-v196').forEach(el => {
+      const txt = norm(el.textContent);
+      if(!/^Atual$/i.test(txt)) return;
+
+      const ctx = findAncestorText(el).toLowerCase();
+
+      if(ctx.includes('dólar') || ctx.includes('ptax') || ctx.includes('brl/usd')){
+        el.textContent = 'Cotação';
+        return;
+      }
+
+      if(ctx.includes('ibovespa') || ctx.includes('s&p') || ctx.includes('dow jones') || ctx.includes('nasdaq')){
+        el.textContent = 'Pontos';
+      }
+    });
+
+    // fallback para tags que vêm como texto completo "ATUAL R$..." ou "ATUAL 168.289 pts"
+    document.querySelectorAll('#sec-mercado .market-current-level-v196').forEach(el => {
+      const ctx = findAncestorText(el).toLowerCase();
+      el.childNodes.forEach(node => {
+        if(node.nodeType !== Node.TEXT_NODE) return;
+        const val = String(node.nodeValue || '');
+        if(/^\s*Atual\s+/i.test(val)){
+          if(ctx.includes('dólar') || ctx.includes('ptax') || ctx.includes('brl/usd')){
+            node.nodeValue = val.replace(/Atual/i, 'Cotação');
+          }else if(ctx.includes('ibovespa') || ctx.includes('s&p') || ctx.includes('dow jones') || ctx.includes('nasdaq')){
+            node.nodeValue = val.replace(/Atual/i, 'Pontos');
+          }
+        }
+      });
+    });
+  }
+
+  function cleanMetricGridLabels(){
+    document.querySelectorAll('#sec-mercado .market-period-metric-v196 span, #sec-mercado .market-period-metric-v196 dt').forEach(label => {
+      const t = norm(label.textContent);
+      if(/^Atual$/i.test(t)){
+        label.textContent = 'Mês atual';
+      }
+    });
+  }
+
+  function apply(){
+    cleanCdi();
+    cleanCurrentLevelTags();
+    cleanMetricGridLabels();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
 })();

@@ -49995,3 +49995,33 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     min-width:96px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v329 — MICROCOPY LIMPO DOS INDICADORES
+   Objetivo:
+   - reduzir textos longos nos cards analíticos;
+   - diferenciar valor nominal de variação percentual;
+   - trocar "Atual" do grid por "Mês atual".
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.market-microcopy-clean-v329 #sec-mercado .market-current-level-v196{
+    white-space: nowrap !important;
+  }
+
+  html.market-microcopy-clean-v329 #sec-mercado .market-period-metric-v196 span,
+  html.market-microcopy-clean-v329 #sec-mercado .market-period-metric-v196 dt{
+    letter-spacing: .055em !important;
+  }
+
+  html.market-microcopy-clean-v329 #sec-mercado .market-period-metric-v196 small{
+    max-width: 100% !important;
+    line-height: 1.15 !important;
+  }
+
+  /* evita textão quebrado no CDI */
+  html.market-microcopy-clean-v329 #sec-mercado .market-period-metric-v196 small{
+    font-size: .58rem !important;
+  }
+}
