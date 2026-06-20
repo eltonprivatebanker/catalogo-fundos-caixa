@@ -1,34 +1,21 @@
-# Catálogo de Fundos CAIXA — v312
+# Catálogo de Fundos CAIXA — v313
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## O que foi corrigido
+## Ajustes desta versão
 
-Havia muito espaço entre a paginação/lista de fundos e o bloco “Rankings dos fundos”.
-
-## Ajustes aplicados
-
-- Remove visualmente no mobile as ações antigas do ranking:
-  - Copiar visão
-  - Enviar WhatsApp
-  - Print da visão
-- Reduz margin/padding do container do ranking.
-- Compacta o medalhão do troféu.
-- Aproxima o card de filtros do título.
-- Reduz eventual margem inferior da seção anterior.
-
-## Resultado esperado
-
-No mobile, o bloco de Ranking deve começar logo após a paginação, com espaçamento mais controlado e sem “buraco” visual.
+1. Reduzi ainda mais o espaço entre a paginação e o hero do Ranking no mobile.
+2. Adicionei pequenos traços/raios laterais no medalhão do troféu para reforçar o destaque visual.
+3. Encurtei as linhas laterais do hero para a composição ficar mais limpa.
 
 ## Como subir
 
-Substitua:
+Substitua no GitHub Pages:
 - index.html
 - style.css
 - app.js
 
-Depois atualize forçado no navegador.
+Depois faça atualização forçada no navegador.

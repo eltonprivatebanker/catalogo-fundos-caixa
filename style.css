@@ -47749,3 +47749,139 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     font-size: 1.18rem !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v313 — Ranking mobile mais colado + raios laterais
+   - reduz ainda mais o espaço entre paginação e hero do ranking
+   - adiciona traços luminosos laterais ao medalhão do troféu
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-gap-rays-v313 #rankingsSection{
+    margin-top: 2px !important;
+    padding-top: 0 !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection .ranking-head{
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection .ranking-title-group,
+  html.ranking-gap-rays-v313 #rankingsSection .ranking-title-group-v309-fixed{
+    margin: 0 0 10px !important;
+    padding-top: 0 !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306,
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-v309-fixed{
+    gap: 8px !important;
+    margin: 0 !important;
+  }
+
+  /* aproxima ainda mais da paginação */
+  html.ranking-gap-rays-v313 #pageBtns,
+  html.ranking-gap-rays-v313 .pagination-controls,
+  html.ranking-gap-rays-v313 .pagination,
+  html.ranking-gap-rays-v313 .catalog-pagination,
+  html.ranking-gap-rays-v313 .fund-pagination-wrap{
+    margin-bottom: 4px !important;
+    padding-bottom: 0 !important;
+  }
+
+  html.ranking-gap-rays-v313 #sec-fundos,
+  html.ranking-gap-rays-v313 #catalogoSection,
+  html.ranking-gap-rays-v313 #fundosSection{
+    margin-bottom: 4px !important;
+    padding-bottom: 0 !important;
+  }
+
+  /* medalhão com pequenos raios laterais */
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    position: relative !important;
+    overflow: visible !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before,
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    content: "" !important;
+    position: absolute !important;
+    top: 50% !important;
+    width: 16px !important;
+    height: 12px !important;
+    transform: translateY(-50%) !important;
+    pointer-events: none !important;
+    opacity: .95 !important;
+    background-repeat: no-repeat !important;
+    filter: drop-shadow(0 0 5px rgba(246,200,97,.38)) !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before{
+    left: -18px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.90) 60%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.78) 60%, rgba(246,200,97,0));
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 4px 3px, 0 8px !important;
+    transform: translateY(-50%) rotate(-14deg) !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    right: -18px !important;
+    background-image:
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.90) 40%, rgba(246,200,97,0)),
+      linear-gradient(90deg, rgba(246,200,97,0), rgba(246,200,97,.78) 40%, rgba(246,200,97,0));
+    background-size: 12px 2px, 8px 2px !important;
+    background-position: 0 3px, 8px 8px !important;
+    transform: translateY(-50%) rotate(14deg) !important;
+  }
+
+  /* encurta as linhas externas do hero para não competir com os raios */
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305::before,
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305::after,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306::before,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306::after{
+    width: min(16vw, 54px) !important;
+    top: 22px !important;
+    opacity: .82 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-gap-rays-v313 #rankingsSection{
+    margin-top: 0 !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection .ranking-title-group,
+  html.ranking-gap-rays-v313 #rankingsSection .ranking-title-group-v309-fixed{
+    margin: 0 0 8px !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 46px !important;
+    height: 46px !important;
+    min-width: 46px !important;
+    max-width: 46px !important;
+    flex-basis: 46px !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::before,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::before{
+    left: -15px !important;
+    width: 13px !important;
+  }
+
+  html.ranking-gap-rays-v313 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302::after,
+  html.ranking-gap-rays-v313 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302::after{
+    right: -15px !important;
+    width: 13px !important;
+  }
+}
