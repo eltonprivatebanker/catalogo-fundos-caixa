@@ -52170,3 +52170,117 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   html.evo-stable-v358 #sec-graficos .evo-charts-grid{padding-bottom:78px !important;}
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v359 — EVO MOBILE STABILITY
+   Estabiliza definitivamente a seção "Inflação e juros" no mobile:
+   - alturas previsíveis por painel;
+   - painéis inativos sem ocupar espaço;
+   - canvas com altura fixa;
+   - abas da Selic sem corte;
+   - respiro inferior para menu fixo.
+   Sem MutationObserver e sem loop de estilos inline.
+════════════════════════════════════════════════════ */
+
+@media (max-width:820px){
+  html.evo-stability-v359 #sec-graficos,
+  html.evo-stability-v359 #sec-graficos *{
+    scroll-margin-top:80px !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos{
+    padding-bottom:104px !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .section-collapsible-body{
+    overflow:visible !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .evo-chart-card,
+  html.evo-stability-v359 #sec-graficos .chart-card{
+    transition:none !important;
+    transform:none !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .evo-chart-card.active{
+    display:block !important;
+    min-height:424px !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos #evoChartSelicCard.active{
+    min-height:456px !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos #evoChartMetaCard.active{
+    min-height:424px !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .evo-chart-card:not(.active){
+    display:none !important;
+    height:0 !important;
+    min-height:0 !important;
+    max-height:0 !important;
+    overflow:hidden !important;
+    padding-top:0 !important;
+    padding-bottom:0 !important;
+    margin-top:0 !important;
+    margin-bottom:0 !important;
+    border:0 !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .chart-body{
+    height:188px !important;
+    min-height:188px !important;
+    max-height:188px !important;
+    overflow:hidden !important;
+    margin-top:8px !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .chart-body canvas{
+    width:100% !important;
+    height:188px !important;
+    max-height:188px !important;
+    box-sizing:border-box !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .ipca-summary-row-v250,
+  html.evo-stability-v359 #sec-graficos .selic-summary-row{
+    min-height:76px !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos .evo-summary-grid{
+    min-height:151px !important;
+  }
+
+  /* Abas de período da Selic sem corte */
+  html.evo-stability-v359 #sec-graficos #evoChartSelicCard .chart-tabs{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:6px !important;
+    width:100% !important;
+    max-width:100% !important;
+    overflow:visible !important;
+    padding:0 !important;
+    margin:8px 0 0 !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos #evoChartSelicCard .chart-tab{
+    min-width:0 !important;
+    width:100% !important;
+    max-width:100% !important;
+    padding:0 4px !important;
+    font-size:.58rem !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+  }
+
+  html.evo-stability-v359 #sec-graficos #evoChartSelicCard .chart-tab[data-range="999"]{
+    font-size:.56rem !important;
+  }
+
+  /* Menos risco de o menu inferior cobrir o gráfico */
+  html.evo-stability-v359 #sec-graficos .evo-charts-grid{
+    padding-bottom:96px !important;
+  }
+}
+
