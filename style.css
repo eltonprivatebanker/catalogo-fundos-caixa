@@ -47320,3 +47320,78 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     display: inherit;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v308 — REMOVE CONTAINER GLOBAL #gfb COMPLETO NO MOBILE
+   Na v307 o #gfb-inner foi ocultado, mas o wrapper #gfb ainda
+   reservava área visual. Agora o container inteiro sai do fluxo.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.remove-gfb-full-v308 #gfb,
+  html.remove-gfb-full-v308 .gfb-root-v308,
+  html.remove-gfb-full-v308 div#gfb[role="search"],
+  html.remove-gfb-full-v308 div[aria-label="Barra de busca global de fundos"]#gfb{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    position: absolute !important;
+    left: -9999px !important;
+    top: auto !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    max-width: 0 !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.remove-gfb-full-v308 #gfb *,
+  html.remove-gfb-full-v308 .gfb-root-v308 *{
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+
+  /* remove sobras de wrappers antigos ligados à busca global */
+  html.remove-gfb-full-v308 .gfb-shell,
+  html.remove-gfb-full-v308 .gfb-wrap,
+  html.remove-gfb-full-v308 .gfb-container,
+  html.remove-gfb-full-v308 .global-fund-bar,
+  html.remove-gfb-full-v308 .global-fund-search{
+    display: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  /* filtros internos da seção Fundos continuam ativos */
+  html.remove-gfb-full-v308 #searchInput,
+  html.remove-gfb-full-v308 #fundFilterDrawer,
+  html.remove-gfb-full-v308 #mobileFilterBar,
+  html.remove-gfb-full-v308 .fund-filter-panel,
+  html.remove-gfb-full-v308 .filter-command-bar{
+    display: revert;
+    visibility: visible !important;
+    pointer-events: auto !important;
+  }
+}
+
+/* desktop preservado */
+@media (min-width: 769px){
+  html.remove-gfb-full-v308 #gfb,
+  html.remove-gfb-full-v308 .gfb-root-v308{
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}

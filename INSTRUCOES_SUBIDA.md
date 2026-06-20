@@ -1,4 +1,4 @@
-# Catálogo de Fundos CAIXA — v307
+# Catálogo de Fundos CAIXA — v308
 
 Arquivos atualizados:
 - index.html
@@ -7,21 +7,22 @@ Arquivos atualizados:
 
 ## O que foi corrigido
 
-Removido visualmente no mobile o bloco superior:
+A v307 ocultava o `#gfb-inner`, mas o container pai `#gfb` ainda existia e continuava reservando área/estrutura no topo.
 
+A v308 remove visualmente o container completo no mobile:
+
+- `#gfb`
 - `#gfb-inner`
 - `#gfbSearch`
 - `#gfb-chips`
 
-Esse era o bloco de busca/filtros global que aparecia no topo e deixava a tela duplicada/confusa.
-
 ## Importante
 
-A busca e os filtros próprios da seção Fundos foram preservados.
+A busca e os filtros próprios da seção Fundos continuam preservados.
 
 ## Escopo
 
-- Mobile: bloco global do topo oculto.
+- Mobile: `#gfb` inteiro sai do fluxo.
 - Desktop: preservado.
 
 ## Como subir

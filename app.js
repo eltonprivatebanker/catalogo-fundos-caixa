@@ -1,3 +1,4 @@
+// ELTAUM_REMOVE_GFB_FULL_v308
 // ELTAUM_REMOVE_GFB_TOP_v307
 // ELTAUM_TITLE_HERO_LEVELS_v306
 // ELTAUM_RANKING_HERO_ICON_v305
@@ -16549,4 +16550,44 @@ function openCdiAnalyticTableV274(){
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v308 — remove GFB completo no mobile
+   O CSS oculta o container inteiro #gfb. Este complemento garante
+   também aria-hidden/inert no mobile, sem afetar desktop.
+════════════════════════════════════════════════════ */
+(function removeGlobalFundBarMobileV308(){
+  function apply(){
+    const gfb = document.getElementById('gfb');
+    if(!gfb) return;
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(isMobile){
+      gfb.setAttribute('aria-hidden','true');
+      try{ gfb.inert = true; }catch(_){}
+      gfb.style.setProperty('display','none','important');
+      gfb.style.setProperty('height','0','important');
+      gfb.style.setProperty('min-height','0','important');
+      gfb.style.setProperty('max-height','0','important');
+      gfb.style.setProperty('margin','0','important');
+      gfb.style.setProperty('padding','0','important');
+      gfb.style.setProperty('overflow','hidden','important');
+    }else{
+      gfb.removeAttribute('aria-hidden');
+      try{ gfb.inert = false; }catch(_){}
+      gfb.style.removeProperty('display');
+      gfb.style.removeProperty('height');
+      gfb.style.removeProperty('min-height');
+      gfb.style.removeProperty('max-height');
+      gfb.style.removeProperty('margin');
+      gfb.style.removeProperty('padding');
+      gfb.style.removeProperty('overflow');
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 1000);
 })();
