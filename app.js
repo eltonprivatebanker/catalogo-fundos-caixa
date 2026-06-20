@@ -9388,9 +9388,8 @@ async function sharePainelMercado(){
   setTimeout(prepararBotoes, 700);
   setTimeout(prepararBotoes, 2000);
 
-  // Usa click e pointerup em captura. Assim, mesmo que algum listener antigo ou overlay lógico interfira, o botão responde.
+  // v363: usa somente click. Pointerup em captura disparava redraw durante rolagem mobile.
   document.addEventListener('click', capturar, true);
-  document.addEventListener('pointerup', capturar, true);
 })();
 /* Patches legados v5/v6 dos tabs removidos pela correção v228. */
 /* ════════════════════════════════════════════════════
@@ -10528,7 +10527,8 @@ async function sharePainelMercado(){
     setTimeout(syncMobilePremiumFilterState,250);
     setTimeout(syncMobilePremiumFilterState,900);
   });
-  ['click','input','change','touchend','pointerup'].forEach(evt=>{
+  // v363: touchend/pointerup removidos; em mobile isso executava em gestos de rolagem.
+  ['click','input','change'].forEach(evt=>{
     document.addEventListener(evt,function(){setTimeout(syncMobilePremiumFilterState,90);},true);
   });
   window.addEventListener('resize',function(){ if(isMobile()) setTimeout(syncMobilePremiumFilterState,80); });
@@ -15655,8 +15655,8 @@ if(document.readyState === 'loading'){
     document.querySelectorAll('.chart-tab[data-chart][data-range].active').forEach(atualizarPorBotao);
   }
 
+  // v363: pointerup removido para não reagir a gesto de scroll sobre abas.
   document.addEventListener('click', capturar, true);
-  document.addEventListener('pointerup', capturar, true);
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', inicializar, {once:true});
   }else{
@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_HARD_FREEZE_20260620_v362';
+  const BUILD = 'ELTAUM_EVO_POINTER_SANE_20260620_v363';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18996,14 +18996,14 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_EVO_HARD_FREEZE_20260620_v362
+   ELTAUM_EVO_POINTER_SANE_20260620_v363
    Saneamento definitivo do piscar em "Inflação e juros".
    - Bloqueia resize/update/render/draw do Chart.js durante scroll mobile.
    - Libera redesenho apenas por janela curta após clique real nas abas.
    - Não usa MutationObserver.
 ════════════════════════════════════════════════════ */
 (function evoHardFreezeV362(){
-  const BUILD = 'ELTAUM_EVO_HARD_FREEZE_20260620_v362';
+  const BUILD = 'ELTAUM_EVO_POINTER_SANE_20260620_v363';
 
   const state = window.__ELTAUM_EVO_HARD_FREEZE_V362_STATE__ || {
     active:true,
@@ -19201,5 +19201,73 @@ function openCdiAnalyticTableV274(){
       return state;
     }
   };
+})();
+
+/* ════════════════════════════════════════════════════
+   ELTAUM_EVO_POINTER_SANE_20260620_v363
+   Corrige o gatilho residual do piscar:
+   - remove/neutraliza pointerup em abas de gráfico;
+   - bloqueia pointerup/click acidental quando houve rolagem;
+   - mantém click real funcionando.
+════════════════════════════════════════════════════ */
+(function evoPointerSaneV363(){
+  const BUILD = 'ELTAUM_EVO_POINTER_SANE_20260620_v363';
+
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
+  }
+
+  const state = {
+    downX:0,
+    downY:0,
+    moved:false,
+    lastMoveAt:0,
+    lastBlockedAt:0
+  };
+
+  function isEvoControl(target){
+    return !!(target && target.closest && target.closest('#sec-graficos .chart-tab[data-chart], #sec-graficos .evo-view-tab'));
+  }
+
+  window.addEventListener('pointerdown', event => {
+    if(!isMobile() || !event.target.closest || !event.target.closest('#sec-graficos')) return;
+    state.downX = event.clientX || 0;
+    state.downY = event.clientY || 0;
+    state.moved = false;
+  }, true);
+
+  window.addEventListener('pointermove', event => {
+    if(!isMobile() || !event.target.closest || !event.target.closest('#sec-graficos')) return;
+    const dx = Math.abs((event.clientX || 0) - state.downX);
+    const dy = Math.abs((event.clientY || 0) - state.downY);
+    if(dx > 8 || dy > 8){
+      state.moved = true;
+      state.lastMoveAt = performance.now();
+    }
+  }, true);
+
+  window.addEventListener('pointerup', event => {
+    if(!isMobile() || !isEvoControl(event.target)) return;
+
+    const scrollGesture = state.moved || (performance.now() - state.lastMoveAt < 450);
+    if(scrollGesture){
+      state.lastBlockedAt = performance.now();
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+    }
+  }, true);
+
+  window.addEventListener('click', event => {
+    if(!isMobile() || !isEvoControl(event.target)) return;
+
+    if(performance.now() - state.lastBlockedAt < 520){
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+    }
+  }, true);
+
+  window.__ELTAUM_EVO_POINTER_SANE_V363__ = { build: BUILD, state };
 })();
 

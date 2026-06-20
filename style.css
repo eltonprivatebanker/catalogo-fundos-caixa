@@ -52515,3 +52515,20 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v363 — EVO POINTER SANE MOBILE
+   Complementa a v362: impede que gestos de rolagem sobre abas
+   disparem redraw dos gráficos de Inflação e juros.
+════════════════════════════════════════════════════ */
+
+@media (max-width:820px){
+  html.evo-pointer-sane-v363 #sec-graficos .chart-tab,
+  html.evo-pointer-sane-v363 #sec-graficos .evo-view-tab{
+    touch-action:manipulation !important;
+  }
+
+  html.evo-pointer-sane-v363 #sec-graficos .chart-body{
+    overscroll-behavior:contain !important;
+  }
+}
+
