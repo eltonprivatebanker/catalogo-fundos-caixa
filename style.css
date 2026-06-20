@@ -50662,3 +50662,55 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     max-width: 108px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v337 — DÓLAR: GRÁFICO FECHADO POR PADRÃO
+   No mobile, o gráfico é informação de aprofundamento.
+   Fica fechado e abre por botão para preservar a leitura executiva.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.dolar-chart-closed-v337 #sec-dolar #dolarChartPanel{
+    margin-top: 12px !important;
+  }
+
+  html.dolar-chart-closed-v337 #sec-dolar #dolarChartPanel.is-mobile-collapsed .chart-tabs,
+  html.dolar-chart-closed-v337 #sec-dolar #dolarChartPanel.is-mobile-collapsed .dolar-chart-body{
+    display: none !important;
+  }
+
+  html.dolar-chart-closed-v337 #sec-dolar #dolarChartPanel.is-mobile-collapsed{
+    padding: 11px 12px !important;
+  }
+
+  html.dolar-chart-closed-v337 #sec-dolar #dolarChartPanel.is-mobile-collapsed + #ptaxStatsCard{
+    display: none !important;
+  }
+
+  html.dolar-chart-closed-v337 #sec-dolar .dolar-chart-toggle-mobile{
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 32px !important;
+    padding: 0 12px !important;
+    border-radius: 999px !important;
+    font-size: .60rem !important;
+    font-weight: 850 !important;
+    white-space: nowrap !important;
+  }
+
+  html.dolar-chart-closed-v337 #sec-dolar #dolarChartPanel:not(.is-mobile-collapsed) .chart-tabs{
+    grid-column: 1 / -1 !important;
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 6px !important;
+    margin-top: 10px !important;
+  }
+
+  html.dolar-chart-closed-v337 #sec-dolar #dolarChartPanel:not(.is-mobile-collapsed) .dolar-chart-body{
+    display: block !important;
+    margin-top: 12px !important;
+    min-height: 190px !important;
+  }
+}

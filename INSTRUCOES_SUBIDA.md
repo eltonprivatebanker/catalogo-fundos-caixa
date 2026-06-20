@@ -1,29 +1,24 @@
-# Catálogo de Fundos CAIXA — v336
+# Catálogo de Fundos CAIXA — v337
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes aplicados no Dólar PTAX
+## Ajuste aplicado
 
-### 1. Badge BCB
-- O selo “BCB · cotação oficial” foi encurtado para “BCB · PTAX”.
-- Agora ele fica na mesma linha do título “Dólar PTAX”.
-- A ideia é manter a fonte oficial, mas com menos peso visual.
+O gráfico do Dólar PTAX fica fechado por padrão no mobile.
 
-### 2. Fechamentos mensais
-- O carrossel mensal voltou a ficar visível por padrão.
-- O botão “Ver fechamentos” foi ocultado no mobile.
-- Os meses fechados aparecem em cards horizontais compactos.
+## Por quê
 
-## Resultado esperado
+O gráfico é uma informação de aprofundamento. Fechado por padrão, a seção fica mais curta e mais executiva.
 
-A seção fica com:
-- título + fonte na mesma linha;
-- cotação principal no topo;
-- variações rápidas;
-- histórico mensal visível e rolável.
+## Comportamento
+
+- Botão inicial: “Abrir gráfico”.
+- Ao abrir: mostra abas 2026 / 12M / 24M / 36M e o gráfico.
+- Estatísticas do período aparecem somente com o gráfico aberto.
+- Ao fechar: volta ao resumo executivo.
 
 ## Como subir
 

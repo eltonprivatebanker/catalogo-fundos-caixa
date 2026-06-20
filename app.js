@@ -1,3 +1,4 @@
+// ELTAUM_DOLAR_CHART_CLOSED_v337
 // ELTAUM_DOLAR_BADGE_MONTHS_v336
 // ELTAUM_DOLAR_XAXIS_MOBILE_v335
 // ELTAUM_DOLAR_CHART_STATS_v334
@@ -18339,4 +18340,58 @@ function openCdiAnalyticTableV274(){
 
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   [250, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v337 — Dólar: gráfico fechado por padrão no mobile
+   O gráfico fica sob demanda para reduzir altura e ruído visual.
+   Botão: "Abrir gráfico" / "Ocultar gráfico".
+════════════════════════════════════════════════════ */
+(function dolarChartClosedV337(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function applyInitial(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const panel = document.getElementById('dolarChartPanel');
+    const toggle = document.getElementById('dolarChartToggle');
+    if(!panel || !toggle || !isMobile) return;
+
+    if(!panel.dataset.v337UserOpened){
+      panel.classList.add('is-mobile-collapsed');
+      toggle.textContent = 'Abrir gráfico';
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+
+    setImportant(toggle, 'display', 'inline-flex');
+  }
+
+  function bind(){
+    const panel = document.getElementById('dolarChartPanel');
+    const toggle = document.getElementById('dolarChartToggle');
+    if(!panel || !toggle || toggle.dataset.v337Bound) return;
+
+    toggle.dataset.v337Bound = '1';
+    toggle.addEventListener('click', () => {
+      setTimeout(() => {
+        const isCollapsed = panel.classList.contains('is-mobile-collapsed');
+        panel.dataset.v337UserOpened = isCollapsed ? '' : '1';
+        toggle.textContent = isCollapsed ? 'Abrir gráfico' : 'Ocultar gráfico';
+        toggle.setAttribute('aria-expanded', String(!isCollapsed));
+      }, 70);
+    }, { passive:true });
+  }
+
+  function apply(){
+    applyInitial();
+    bind();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
 })();
