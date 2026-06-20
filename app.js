@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355';
+  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18996,7 +18996,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355
+   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
    Mobile:
    - "Juros e CDI" como título.
    - CDI em 2026 em resumo executivo, sem gráfico.
@@ -19004,7 +19004,7 @@ function openCdiAnalyticTableV274(){
    - Copom começa na última decisão e próxima reunião.
 ════════════════════════════════════════════════════ */
 (function mobileRatesFinalV352(){
-  const BUILD = 'ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355';
+  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
 
   const MONTH_ORDER = {
     JAN:1, FEV:2, MAR:3, ABR:4, MAI:5, JUN:6,
@@ -19272,7 +19272,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355
+   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
    Força inline no mobile para remover bordas do Copom geradas por patches antigos.
 ════════════════════════════════════════════════════ */
 (function copomTrueBorderlessV353(){
@@ -19356,7 +19356,7 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355
+   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
    Mobile:
    - "Agenda Copom" no lugar de "Copom executivo".
    - "CDI em 2026" sem rótulo auxiliar e sem "Resumo executivo".
@@ -19364,7 +19364,7 @@ function openCdiAnalyticTableV274(){
    - Meses anteriores com nome do mês por extenso e sem "fechado".
 ════════════════════════════════════════════════════ */
 (function mobileSemanticCleanV354(){
-  const BUILD = 'ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355';
+  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
 
   const MONTH_NAMES = {
     JAN:'Janeiro',
@@ -19493,14 +19493,14 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355
+   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
    Mobile:
    - Adiciona "Deslize →" em carrosséis.
    - Adiciona barra fina de progresso.
    - Mantém sem poluir quando não há overflow.
 ════════════════════════════════════════════════════ */
 (function mobileCarouselAffordanceV355(){
-  const BUILD = 'ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_20260620_v355';
+  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
 
   function isMobile(){
     return window.matchMedia('(max-width: 820px)').matches;
@@ -19644,5 +19644,159 @@ function openCdiAnalyticTableV274(){
   [500, 1200, 2600].forEach(ms => setTimeout(observe, ms));
 
   window.__ELTAUM_MOBILE_CAROUSEL_AFFORDANCE_V355__ = { build: BUILD, apply };
+})();
+
+/* ════════════════════════════════════════════════════
+   ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356
+   Mobile:
+   - Fechamentos mensais do dólar com "Deslize →".
+   - Barra fina de progresso.
+   - Remove visualmente "Meses fechados".
+════════════════════════════════════════════════════ */
+(function dolarCarouselAffordanceV356(){
+  const BUILD = 'ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_20260620_v356';
+
+  function isMobile(){
+    return window.matchMedia('(max-width: 820px)').matches;
+  }
+
+  function findDolarCarousel(){
+    return (
+      document.querySelector('#sec-dolar #dolarMonths') ||
+      document.querySelector('#sec-dolar .dolar-months') ||
+      document.querySelector('#sec-dolar #dolarTimelineBody') ||
+      document.querySelector('#sec-dolar .dolar-timeline-body')
+    );
+  }
+
+  function ensureHint(head){
+    if(!head) return;
+
+    const small = head.querySelector('small');
+    if(small) small.style.setProperty('display', 'none', 'important');
+
+    let hint = head.querySelector('.dolar-carousel-hint-v356');
+    if(!hint){
+      hint = document.createElement('span');
+      hint.className = 'dolar-carousel-hint-v356';
+      head.appendChild(hint);
+    }
+
+    hint.textContent = 'Deslize →';
+  }
+
+  function ensureProgress(carousel){
+    if(!carousel) return;
+
+    const wrap =
+      carousel.closest('#sec-dolar .dolar-month-strip') ||
+      carousel.closest('#sec-dolar .dolar-compact-footer') ||
+      carousel.parentElement;
+
+    if(!wrap) return;
+
+    wrap.classList.add('dolar-carousel-wrap-v356');
+
+    let progress = wrap.querySelector('.dolar-carousel-progress-v356');
+    if(!progress){
+      progress = document.createElement('span');
+      progress.className = 'dolar-carousel-progress-v356';
+      progress.innerHTML = '<i></i>';
+      carousel.insertAdjacentElement('afterend', progress);
+    }
+
+    const bar = progress.querySelector('i');
+
+    function update(){
+      if(!isMobile()){
+        progress.style.display = 'none';
+        wrap.classList.remove('is-end', 'is-no-scroll');
+        return;
+      }
+
+      const max = carousel.scrollWidth - carousel.clientWidth;
+
+      if(max <= 2){
+        wrap.classList.add('is-no-scroll');
+        wrap.classList.add('is-end');
+        progress.style.display = 'none';
+        return;
+      }
+
+      wrap.classList.remove('is-no-scroll');
+      progress.style.display = 'block';
+
+      const ratio = Math.max(0, Math.min(1, carousel.scrollLeft / max));
+      const width = Math.max(24, Math.min(100, 28 + ratio * 72));
+
+      if(bar) bar.style.width = `${width}%`;
+
+      if(ratio >= .96){
+        wrap.classList.add('is-end');
+      }else{
+        wrap.classList.remove('is-end');
+      }
+    }
+
+    if(!carousel.dataset.v356ScrollBound){
+      carousel.dataset.v356ScrollBound = '1';
+      carousel.addEventListener('scroll', update, { passive:true });
+    }
+
+    update();
+  }
+
+  function apply(){
+    if(!isMobile()) return;
+
+    const head = document.querySelector('#sec-dolar .dolar-month-strip-head');
+    const carousel = findDolarCarousel();
+
+    if(!head || !carousel) return;
+
+    ensureHint(head);
+    ensureProgress(carousel);
+  }
+
+  let scheduled = false;
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      apply();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+
+  [100, 350, 800, 1400, 2600, 4200].forEach(ms => setTimeout(apply, ms));
+  window.addEventListener('resize', schedule, { passive:true });
+
+  const observer = new MutationObserver(schedule);
+
+  function observe(){
+    ['dolarMonths', 'dolarTimelineBody', 'sec-dolar'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el && !el.dataset.v356Observed){
+        el.dataset.v356Observed = '1';
+        observer.observe(el, { childList:true, subtree:true, characterData:true });
+      }
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', observe, {once:true});
+  }else{
+    observe();
+  }
+
+  [500, 1200, 2600].forEach(ms => setTimeout(observe, ms));
+
+  window.__ELTAUM_DOLAR_CAROUSEL_AFFORDANCE_V356__ = { build: BUILD, apply };
 })();
 
