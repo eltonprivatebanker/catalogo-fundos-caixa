@@ -47611,3 +47611,141 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     margin-top: 0 !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v312 — LIMPA GAP ANTES DO RANKING NO MOBILE
+   Problema:
+   Entre a paginação/lista de fundos e o título Ranking havia um respiro
+   excessivo. Ações antigas do ranking e margens do cabeçalho também
+   podiam reservar área.
+   Solução:
+   - remove ações do ranking no mobile;
+   - reduz margem/padding do ranking;
+   - compacta medalhão e título;
+   - aproxima card de filtros.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.ranking-gap-cleanup-v312 #rankingsSection{
+    margin-top: 10px !important;
+    padding-top: 6px !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-head{
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-actions{
+    display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-title-group{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    margin: 2px 0 10px !important;
+    padding: 0 !important;
+    min-height: 0 !important;
+    width: 100% !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-title-group .section-badge,
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-title-group .ranking-section-subtitle-v136{
+    display: none !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.section-hero-premium-v306,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-v309-fixed{
+    margin: 0 !important;
+    padding: 0 !important;
+    gap: 7px !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    max-width: 44px !important;
+    flex-basis: 44px !important;
+    font-size: 1.26rem !important;
+    box-shadow:
+      0 0 0 1px rgba(246,200,97,.08),
+      0 0 18px rgba(246,200,97,.18),
+      0 8px 16px rgba(0,0,0,.30),
+      inset 0 1px 0 rgba(255,255,255,.12) !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.section-hero-premium-v306{
+    font-size: 1.26rem !important;
+    line-height: 1.08 !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-hero-v305::before,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-hero-v305::after,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.section-hero-premium-v306::before,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.section-hero-premium-v306::after{
+    top: 22px !important;
+    width: 18vw !important;
+    max-width: 66px !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-toolbar,
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-toolbar-v136{
+    margin-top: 0 !important;
+  }
+
+  /* Se a seção anterior deixar respiro embaixo, reduz só no mobile */
+  html.ranking-gap-cleanup-v312 #sec-fundos{
+    margin-bottom: 8px !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #pageBtns,
+  html.ranking-gap-cleanup-v312 .pagination-controls,
+  html.ranking-gap-cleanup-v312 .pagination{
+    margin-bottom: 8px !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.ranking-gap-cleanup-v312 #rankingsSection{
+    margin-top: 8px !important;
+    padding-top: 4px !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection .ranking-title-group{
+    margin: 0 0 8px !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-hero-v305 .section-title-icon-v302,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.section-hero-premium-v306 .section-title-icon-v302{
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    max-width: 40px !important;
+    flex-basis: 40px !important;
+    font-size: 1.16rem !important;
+  }
+
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-gap-cleanup-v312 #rankingsSection h2.section-hero-premium-v306{
+    font-size: 1.18rem !important;
+  }
+}

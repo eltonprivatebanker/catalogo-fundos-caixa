@@ -1,16 +1,34 @@
-# Catálogo de Fundos CAIXA — v311
+# Catálogo de Fundos CAIXA — v312
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste feito
-- Removido do mobile o cabeçalho do card **Resumo executivo**.
-- Foram retirados:
-  - o ícone
-  - o texto "Resumo executivo"
-  - o subtítulo "Principais números para consulta rápida"
+## O que foi corrigido
+
+Havia muito espaço entre a paginação/lista de fundos e o bloco “Rankings dos fundos”.
+
+## Ajustes aplicados
+
+- Remove visualmente no mobile as ações antigas do ranking:
+  - Copiar visão
+  - Enviar WhatsApp
+  - Print da visão
+- Reduz margin/padding do container do ranking.
+- Compacta o medalhão do troféu.
+- Aproxima o card de filtros do título.
+- Reduz eventual margem inferior da seção anterior.
 
 ## Resultado esperado
-No mobile, o card de resumo começa direto na grade dos KPIs, com visual mais limpo e compacto.
+
+No mobile, o bloco de Ranking deve começar logo após a paginação, com espaçamento mais controlado e sem “buraco” visual.
+
+## Como subir
+
+Substitua:
+- index.html
+- style.css
+- app.js
+
+Depois atualize forçado no navegador.

@@ -1,3 +1,4 @@
+// ELTAUM_RANKING_GAP_CLEANUP_v312
 // SUMMARY_HEAD_REMOVED_v311
 // ELTAUM_SUMMARY_ICON_DEDUP_v310
 // ELTAUM_RANKING_HERO_SPACING_v309
@@ -16737,6 +16738,92 @@ function openCdiAnalyticTableV274(){
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v312 — limpeza de gap antes do ranking no mobile
+   Remove ações ocultas/fantasmas e força o bloco Ranking a ficar
+   compacto logo após a paginação/fundos.
+════════════════════════════════════════════════════ */
+(function rankingGapCleanupV312(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const section = document.getElementById('rankingsSection');
+    if(!section) return;
+
+    const head = section.querySelector('.ranking-head');
+    const actions = section.querySelector('.ranking-actions');
+    const titleGroup = section.querySelector('.ranking-title-group');
+    const h2 = section.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
+    const toolbar = section.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
+
+    if(!isMobile){
+      [section, head, actions, titleGroup, h2, toolbar].forEach(el => el && el.removeAttribute('style'));
+      if(actions){
+        actions.removeAttribute('aria-hidden');
+        try{ actions.inert = false; }catch(_){}
+      }
+      return;
+    }
+
+    section.classList.add('ranking-gap-clean-v312-active');
+
+    setImportant(section, 'padding-top', '6px');
+    setImportant(section, 'margin-top', '10px');
+    setImportant(section, 'scroll-margin-top', '82px');
+
+    if(head){
+      setImportant(head, 'display', 'block');
+      setImportant(head, 'margin', '0');
+      setImportant(head, 'padding', '0');
+      setImportant(head, 'min-height', '0');
+      setImportant(head, 'height', 'auto');
+    }
+
+    if(actions){
+      actions.setAttribute('aria-hidden','true');
+      try{ actions.inert = true; }catch(_){}
+      setImportant(actions, 'display', 'none');
+      setImportant(actions, 'height', '0');
+      setImportant(actions, 'min-height', '0');
+      setImportant(actions, 'max-height', '0');
+      setImportant(actions, 'margin', '0');
+      setImportant(actions, 'padding', '0');
+      setImportant(actions, 'overflow', 'hidden');
+    }
+
+    if(titleGroup){
+      setImportant(titleGroup, 'display', 'flex');
+      setImportant(titleGroup, 'flex-direction', 'column');
+      setImportant(titleGroup, 'align-items', 'center');
+      setImportant(titleGroup, 'text-align', 'center');
+      setImportant(titleGroup, 'margin', '2px 0 10px');
+      setImportant(titleGroup, 'padding', '0');
+      setImportant(titleGroup, 'min-height', '0');
+    }
+
+    if(h2){
+      setImportant(h2, 'margin', '0');
+      setImportant(h2, 'padding', '0');
+      setImportant(h2, 'gap', '7px');
+    }
+
+    if(toolbar){
+      setImportant(toolbar, 'margin-top', '0');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 900);
