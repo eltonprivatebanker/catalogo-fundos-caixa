@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_NO_FLICKER_20260620_v360';
+  const BUILD = 'ELTAUM_EVO_HARD_FREEZE_20260620_v362';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -18996,14 +18996,28 @@ function openCdiAnalyticTableV274(){
 })();
 
 /* ════════════════════════════════════════════════════
-   ELTAUM_EVO_NO_FLICKER_20260620_v360
-   Corrige piscar em "Inflação e juros":
-   - desativa animações do Chart.js no mobile;
-   - faz no máximo 1 resize controlado após clique;
-   - preserva scroll sem loops e sem MutationObserver.
+   ELTAUM_EVO_HARD_FREEZE_20260620_v362
+   Saneamento definitivo do piscar em "Inflação e juros".
+   - Bloqueia resize/update/render/draw do Chart.js durante scroll mobile.
+   - Libera redesenho apenas por janela curta após clique real nas abas.
+   - Não usa MutationObserver.
 ════════════════════════════════════════════════════ */
-(function evoNoFlickerV360(){
-  const BUILD = 'ELTAUM_EVO_NO_FLICKER_20260620_v360';
+(function evoHardFreezeV362(){
+  const BUILD = 'ELTAUM_EVO_HARD_FREEZE_20260620_v362';
+
+  const state = window.__ELTAUM_EVO_HARD_FREEZE_V362_STATE__ || {
+    active:true,
+    scrollEvents:0,
+    blockedResize:0,
+    blockedUpdate:0,
+    blockedRender:0,
+    blockedDraw:0,
+    allowedByClick:0,
+    lastScrollAt:0,
+    allowUntil:0
+  };
+
+  window.__ELTAUM_EVO_HARD_FREEZE_V362_STATE__ = state;
 
   function isMobile(){
     return window.matchMedia('(max-width: 820px)').matches;
@@ -19033,126 +19047,133 @@ function openCdiAnalyticTableV274(){
     }
   }
 
-  function getCharts(){
-    const charts = [];
-
-    try{
-      if(window.Chart && Chart.instances){
-        Object.values(Chart.instances).forEach(chart => {
-          if(chart) charts.push(chart);
-        });
-      }
-    }catch(e){}
-
-    try{
-      if(window.Chart && typeof Chart.getChart === 'function'){
-        document.querySelectorAll('#sec-graficos canvas').forEach(canvas => {
-          const chart = Chart.getChart(canvas);
-          if(chart && !charts.includes(chart)) charts.push(chart);
-        });
-      }
-    }catch(e){}
-
-    return charts;
+  function isEvoChart(chart){
+    return !!chart && !!chart.canvas && !!chart.canvas.closest && !!chart.canvas.closest('#sec-graficos');
   }
 
-  function disableChartAnimations(){
+  function markScroll(){
     if(!isMobile()) return;
+    state.scrollEvents++;
+    state.lastScrollAt = performance.now();
+  }
+
+  function isFrozen(){
+    return isMobile() && (performance.now() - state.lastScrollAt < 1800);
+  }
+
+  function isClickAllowed(){
+    return performance.now() < state.allowUntil;
+  }
+
+  function patchChart(){
+    if(!window.Chart || !Chart.prototype){
+      setTimeout(patchChart, 300);
+      return;
+    }
+
+    if(Chart.prototype.__ELTAUM_EVO_HARD_FREEZE_PATCHED_V362__) return;
+    Chart.prototype.__ELTAUM_EVO_HARD_FREEZE_PATCHED_V362__ = true;
+
+    const originalResize = Chart.prototype.resize;
+    const originalUpdate = Chart.prototype.update;
+    const originalRender = Chart.prototype.render;
+    const originalDraw = Chart.prototype.draw;
+
+    Chart.prototype.resize = function(...args){
+      if(isEvoChart(this)){
+        if(isFrozen() && !isClickAllowed()){
+          state.blockedResize++;
+          return this;
+        }
+        if(isClickAllowed()) state.allowedByClick++;
+      }
+      return originalResize.apply(this, args);
+    };
+
+    Chart.prototype.update = function(...args){
+      if(isEvoChart(this) && isFrozen() && !isClickAllowed()){
+        state.blockedUpdate++;
+        return this;
+      }
+      return originalUpdate.apply(this, args);
+    };
+
+    Chart.prototype.render = function(...args){
+      if(isEvoChart(this) && isFrozen() && !isClickAllowed()){
+        state.blockedRender++;
+        return this;
+      }
+      return originalRender.apply(this, args);
+    };
+
+    Chart.prototype.draw = function(...args){
+      if(isEvoChart(this) && isFrozen() && !isClickAllowed()){
+        state.blockedDraw++;
+        return this;
+      }
+      return originalDraw.apply(this, args);
+    };
 
     try{
       if(window.Chart && Chart.defaults){
         Chart.defaults.animation = false;
         if(Chart.defaults.animations) Chart.defaults.animations = {};
-        if(Chart.defaults.transitions){
-          Chart.defaults.transitions.active = { animation: { duration: 0 } };
-          Chart.defaults.transitions.resize = { animation: { duration: 0 } };
-          Chart.defaults.transitions.show = { animations: {} };
-          Chart.defaults.transitions.hide = { animations: {} };
-        }
       }
     }catch(e){}
-
-    getCharts().forEach(chart => {
-      try{
-        chart.options.animation = false;
-        chart.options.animations = {};
-        chart.options.transitions = {
-          active: { animation: { duration: 0 } },
-          resize: { animation: { duration: 0 } },
-          show: { animations: {} },
-          hide: { animations: {} }
-        };
-        if(typeof chart.update === 'function') chart.update('none');
-      }catch(e){}
-    });
   }
 
-  function resizeActiveChartOnce(){
+  function getActiveChart(){
+    const canvas = document.querySelector('#sec-graficos .evo-chart-card.active canvas');
+    if(!canvas) return null;
+    try{
+      if(window.Chart && typeof Chart.getChart === 'function') return Chart.getChart(canvas);
+    }catch(e){}
+    return null;
+  }
+
+  function resizeActiveAfterClick(){
     if(!isMobile()) return;
 
-    const activeCard = document.querySelector('#sec-graficos .evo-chart-card.active');
-    if(!activeCard) return;
-
-    const canvas = activeCard.querySelector('canvas');
+    const canvas = document.querySelector('#sec-graficos .evo-chart-card.active canvas');
     if(!canvas) return;
 
     canvas.style.setProperty('width', '100%', 'important');
     canvas.style.setProperty('height', '188px', 'important');
     canvas.style.setProperty('max-height', '188px', 'important');
 
+    const chart = getActiveChart();
+    if(!chart) return;
+
+    state.allowUntil = performance.now() + 800;
+
     try{
-      let chart = null;
-      if(window.Chart && typeof Chart.getChart === 'function') chart = Chart.getChart(canvas);
-      if(chart && typeof chart.resize === 'function'){
-        chart.resize();
-        if(typeof chart.update === 'function') chart.update('none');
-      }
+      if(typeof chart.resize === 'function') chart.resize();
+      if(typeof chart.update === 'function') chart.update('none');
     }catch(e){}
   }
 
-  let pending = 0;
-  function stableAfterClick(sectionTopBefore){
-    clearTimeout(pending);
-    pending = setTimeout(() => {
-      applyLabels();
-      disableChartAnimations();
-      resizeActiveChartOnce();
+  function bindEvents(){
+    if(window.__ELTAUM_EVO_HARD_FREEZE_BOUND_V362__) return;
+    window.__ELTAUM_EVO_HARD_FREEZE_BOUND_V362__ = true;
 
-      const section = document.querySelector('#sec-graficos');
-      if(section && typeof sectionTopBefore === 'number'){
-        const topAfter = section.getBoundingClientRect().top;
-        const delta = topAfter - sectionTopBefore;
-        if(Math.abs(delta) > 2){
-          try{
-            window.scrollBy({ top: delta, left: 0, behavior: 'instant' });
-          }catch(e){
-            window.scrollBy(0, delta);
-          }
-        }
-      }
-    }, 160);
-  }
-
-  function bind(){
-    if(window.__ELTAUM_EVO_NO_FLICKER_V360_BOUND__) return;
-    window.__ELTAUM_EVO_NO_FLICKER_V360_BOUND__ = true;
+    window.addEventListener('scroll', markScroll, {passive:true});
+    window.visualViewport?.addEventListener('resize', markScroll, {passive:true});
+    window.addEventListener('resize', markScroll, {passive:true});
 
     document.addEventListener('click', event => {
       const target = event.target.closest('#sec-graficos .evo-view-tab, #sec-graficos .chart-tab, #evolutionToggle');
-      if(!target || !isMobile()) return;
+      if(!target) return;
 
-      const section = document.querySelector('#sec-graficos');
-      const topBefore = section ? section.getBoundingClientRect().top : null;
-
-      stableAfterClick(topBefore);
+      state.allowUntil = performance.now() + 1000;
+      setTimeout(resizeActiveAfterClick, 120);
+      setTimeout(resizeActiveAfterClick, 360);
     }, true);
   }
 
   function apply(){
     applyLabels();
-    disableChartAnimations();
-    resizeActiveChartOnce();
-    bind();
+    patchChart();
+    bindEvents();
   }
 
   if(document.readyState === 'loading'){
@@ -19161,15 +19182,24 @@ function openCdiAnalyticTableV274(){
     apply();
   }
 
-  [200, 800, 1600].forEach(ms => setTimeout(apply, ms));
-  window.addEventListener('resize', () => {
-    clearTimeout(pending);
-    pending = setTimeout(() => {
-      disableChartAnimations();
-      resizeActiveChartOnce();
-    }, 180);
-  }, {passive:true});
+  [250, 900, 1800].forEach(ms => setTimeout(apply, ms));
 
-  window.__ELTAUM_EVO_NO_FLICKER_V360__ = { build: BUILD, apply };
+  window.__ELTAUM_EVO_HARD_FREEZE_V362__ = {
+    build:BUILD,
+    state,
+    apply,
+    report(){
+      console.table({
+        scrollEvents:state.scrollEvents,
+        blockedResize:state.blockedResize,
+        blockedUpdate:state.blockedUpdate,
+        blockedRender:state.blockedRender,
+        blockedDraw:state.blockedDraw,
+        allowedByClick:state.allowedByClick,
+        lastScrollMsAgo:Math.round(performance.now() - state.lastScrollAt)
+      });
+      return state;
+    }
+  };
 })();
 
