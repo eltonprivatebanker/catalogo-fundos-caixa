@@ -1,3 +1,4 @@
+// ELTAUM_MARKET_RATES_GRID_FORCE_v319
 // ELTAUM_MARKET_RATES_COMPACT_v318
 // ELTAUM_RANKING_MARKET_CLEAN_v317
 // ELTAUM_MARKET_MOBILE_CARD_SYSTEM_v316
@@ -17267,4 +17268,94 @@ function openCdiAnalyticTableV274(){
   window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
   setTimeout(apply, 250);
   setTimeout(apply, 900);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v319 — força grid 2 colunas cenário monetário mobile
+   Diagnóstico: v318 carregou, mas regras antigas ainda deixaram
+   .rates-summary-v167 com 1 coluna e cards em largura total.
+════════════════════════════════════════════════════ */
+(function forceRatesGridV319(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const wrap = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
+    if(!wrap) return;
+
+    const cards = [...wrap.querySelectorAll('.rate-summary-card-v167')];
+    const bcb = document.querySelector('#sec-mercado .rates-reference-v167 .market-reference-source-v167');
+
+    if(!isMobile){
+      [wrap, bcb, ...cards].forEach(el => {
+        if(!el) return;
+        el.removeAttribute('style');
+      });
+      return;
+    }
+
+    // remove botão/fonte BCB do topo
+    if(bcb){
+      bcb.setAttribute('aria-hidden', 'true');
+      try{ bcb.inert = true; }catch(_){}
+      setImportant(bcb, 'display', 'none');
+      setImportant(bcb, 'height', '0');
+      setImportant(bcb, 'margin', '0');
+      setImportant(bcb, 'padding', '0');
+      setImportant(bcb, 'overflow', 'hidden');
+    }
+
+    setImportant(wrap, 'display', 'grid');
+    setImportant(wrap, 'grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)');
+    setImportant(wrap, 'gap', '9px');
+    setImportant(wrap, 'overflow', 'visible');
+    setImportant(wrap, 'padding', '0');
+    setImportant(wrap, 'margin', '0 0 12px');
+    setImportant(wrap, 'width', '100%');
+
+    cards.forEach((card, idx) => {
+      setImportant(card, 'display', 'block');
+      setImportant(card, 'width', 'auto');
+      setImportant(card, 'min-width', '0');
+      setImportant(card, 'max-width', 'none');
+      setImportant(card, 'flex', 'initial');
+      setImportant(card, 'border-radius', '13px');
+      setImportant(card, 'padding', '10px 11px');
+      setImportant(card, 'min-height', idx === 2 ? '62px' : '76px');
+      setImportant(card, 'box-sizing', 'border-box');
+
+      if(idx === 0 || idx === 1){
+        setImportant(card, 'grid-column', 'auto');
+      }else{
+        setImportant(card, 'grid-column', '1 / -1');
+        setImportant(card, 'display', 'grid');
+        setImportant(card, 'grid-template-columns', '1fr auto');
+        setImportant(card, 'align-items', 'center');
+        setImportant(card, 'column-gap', '10px');
+      }
+    });
+
+    const next = wrap.querySelector('.copom-next-summary-v167');
+    if(next){
+      const label = next.querySelector(':scope > span');
+      const status = next.querySelector(':scope > small');
+      if(label) setImportant(label, 'grid-column', '1 / -1');
+      if(status){
+        setImportant(status, 'justify-self', 'end');
+        setImportant(status, 'margin', '0');
+        setImportant(status, 'padding', '3px 8px');
+      }
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
 })();

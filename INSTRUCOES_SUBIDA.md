@@ -1,33 +1,27 @@
-# Catálogo de Fundos CAIXA — v318
+# Catálogo de Fundos CAIXA — v319
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes aplicados
+## Diagnóstico
 
-1. Removido do topo do card “Cenário monetário”:
-- botão/fonte “BCB ↗”.
+A v318 carregou corretamente, mas o console mostrou que as regras antigas ainda venciam:
 
-2. Cards de taxas mais compactos:
-- Selic e CDI em duas colunas;
-- próxima reunião em card compacto de largura total.
+- `gridTemplateColumns`: 1 coluna.
+- Cards com largura total.
+- Cards ainda com padding antigo `14px 16px`.
+- Selic, CDI e Próxima reunião continuavam empilhados.
 
-3. Copom executivo mais enxuto:
-- dois cards lado a lado;
-- removidos textos longos;
-- chips menores.
+## Correção aplicada
 
-4. CDI:
-- mantém KPIs;
-- segue sem gráfico no mobile;
-- bloco ficou mais compacto.
+A v319 força com seletor mais específico e complemento JS:
 
-## Escopo
-
-- Mobile refinado.
-- Desktop preservado.
+- Selic e CDI lado a lado.
+- Próxima reunião em largura total compacta.
+- Cards com padding menor.
+- Botão BCB oculto no mobile.
 
 ## Como subir
 
