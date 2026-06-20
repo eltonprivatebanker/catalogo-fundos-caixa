@@ -50508,3 +50508,157 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
     max-height: 210px !important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v336 — DÓLAR: BADGE INLINE + CARROSSEL MENSAL VISÍVEL
+   Ajustes:
+   1) A fonte "BCB · PTAX" fica na mesma linha do título.
+   2) O carrossel de fechamentos mensais volta a aparecer por padrão.
+   3) O botão "Ver fechamentos" fica oculto, pois a informação é útil e compacta.
+════════════════════════════════════════════════════ */
+
+@media (max-width: 768px){
+  html.dolar-badge-months-v336 #sec-dolar .section-title{
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) auto !important;
+    align-items: center !important;
+    column-gap: 10px !important;
+    row-gap: 6px !important;
+    margin-bottom: 10px !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .section-title h2{
+    min-width: 0 !important;
+    margin: 0 !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .section-badge,
+  html.dolar-badge-months-v336 #sec-dolar .dolar-source-badge-v336{
+    justify-self: end !important;
+    align-self: center !important;
+    display: inline-flex !important;
+    width: auto !important;
+    max-width: 116px !important;
+    min-height: 26px !important;
+    padding: 5px 8px !important;
+    border-radius: 999px !important;
+    font-size: .56rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    letter-spacing: .035em !important;
+  }
+
+  /* Fechamentos mensais voltam como carrossel útil e compacto */
+  html.dolar-badge-months-v336 #sec-dolar .dolar-compact-footer{
+    display: block !important;
+    margin-top: 12px !important;
+    padding: 12px !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-strip-head{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 2px !important;
+    margin-bottom: 10px !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-strip-title{
+    font-size: .86rem !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-strip-head small{
+    font-size: .60rem !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar #dolarTimelineToggle{
+    display: none !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+    height: 0 !important;
+    min-height: 0 !important;
+    max-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar #dolarTimelineBody,
+  html.dolar-badge-months-v336 #sec-dolar #dolarTimelineBody.open{
+    display: block !important;
+    margin-top: 10px !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-months-table-head-v162,
+  html.dolar-badge-months-v336 #sec-dolar .ptax-scroll-hint-v99{
+    display: none !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar #dolarMonths{
+    display: flex !important;
+    gap: 9px !important;
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    scroll-snap-type: x proximity !important;
+    overscroll-behavior-x: contain !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    padding: 1px 1px 8px !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar #dolarMonths::-webkit-scrollbar{
+    display: none !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-item{
+    flex: 0 0 116px !important;
+    min-width: 116px !important;
+    max-width: 116px !important;
+    scroll-snap-align: start !important;
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    gap: 5px !important;
+    padding: 10px !important;
+    border-radius: 13px !important;
+    background: rgba(255,255,255,.035) !important;
+    border: 1px solid rgba(255,255,255,.075) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.045) !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-label{
+    color: rgba(220,228,250,.68) !important;
+    font-size: .54rem !important;
+    line-height: 1.05 !important;
+    font-weight: 850 !important;
+    letter-spacing: .055em !important;
+    text-transform: uppercase !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-val{
+    color: #f8fafc !important;
+    font-size: .86rem !important;
+    line-height: 1.05 !important;
+    font-weight: 820 !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-var{
+    font-size: .78rem !important;
+    line-height: 1.05 !important;
+    font-weight: 850 !important;
+  }
+}
+
+@media (max-width: 390px){
+  html.dolar-badge-months-v336 #sec-dolar .section-badge,
+  html.dolar-badge-months-v336 #sec-dolar .dolar-source-badge-v336{
+    max-width: 96px !important;
+    font-size: .52rem !important;
+    padding-inline: 7px !important;
+  }
+
+  html.dolar-badge-months-v336 #sec-dolar .dolar-month-item{
+    flex-basis: 108px !important;
+    min-width: 108px !important;
+    max-width: 108px !important;
+  }
+}

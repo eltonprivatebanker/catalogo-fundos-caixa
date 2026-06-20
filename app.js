@@ -1,3 +1,4 @@
+// ELTAUM_DOLAR_BADGE_MONTHS_v336
 // ELTAUM_DOLAR_XAXIS_MOBILE_v335
 // ELTAUM_DOLAR_CHART_STATS_v334
 // ELTAUM_DOLAR_EXECUTIVE_MOBILE_v333
@@ -18275,4 +18276,67 @@ function openCdiAnalyticTableV274(){
 
   const chartToggle = document.getElementById('dolarChartToggle');
   if(chartToggle) chartToggle.addEventListener('click', schedule, { passive:true });
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v336 — Dólar: badge na linha do título + fechamentos visíveis
+   - reposiciona a fonte BCB/PTAX na mesma linha do título;
+   - reabre o carrossel de fechamentos mensais no mobile;
+   - evita que o v333 feche novamente a timeline.
+════════════════════════════════════════════════════ */
+(function dolarBadgeMonthsV336(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const sec = document.getElementById('sec-dolar');
+    if(!sec || !isMobile) return;
+
+    const badge = sec.querySelector('.section-badge');
+    if(badge){
+      badge.classList.add('dolar-source-badge-v336');
+      badge.innerHTML = '<span class="badge-dot green"></span>BCB · PTAX';
+      badge.removeAttribute('aria-hidden');
+      setImportant(badge, 'display', 'inline-flex');
+    }
+
+    const body = document.getElementById('dolarTimelineBody');
+    const toggle = document.getElementById('dolarTimelineToggle');
+    const footer = sec.querySelector('.dolar-compact-footer');
+    const months = document.getElementById('dolarMonths');
+
+    if(body){
+      body.dataset.v333UserTouched = '1';
+      body.classList.add('open');
+      body.removeAttribute('hidden');
+      setImportant(body, 'display', 'block');
+      setImportant(body, 'margin-top', '12px');
+    }
+
+    if(toggle){
+      toggle.setAttribute('aria-hidden','true');
+      toggle.setAttribute('tabindex','-1');
+      setImportant(toggle, 'display', 'none');
+    }
+
+    if(footer){
+      setImportant(footer, 'display', 'block');
+    }
+
+    if(months){
+      setImportant(months, 'display', 'flex');
+      setImportant(months, 'overflow-x', 'auto');
+      setImportant(months, 'gap', '9px');
+      setImportant(months, 'padding-bottom', '8px');
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  [250, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
 })();

@@ -1,26 +1,29 @@
-# Catálogo de Fundos CAIXA — v335
+# Catálogo de Fundos CAIXA — v336
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Correção aplicada
+## Ajustes aplicados no Dólar PTAX
 
-Corrigido o eixo X do gráfico Dólar PTAX no mobile.
+### 1. Badge BCB
+- O selo “BCB · cotação oficial” foi encurtado para “BCB · PTAX”.
+- Agora ele fica na mesma linha do título “Dólar PTAX”.
+- A ideia é manter a fonte oficial, mas com menos peso visual.
 
-## O que mudou
+### 2. Fechamentos mensais
+- O carrossel mensal voltou a ficar visível por padrão.
+- O botão “Ver fechamentos” foi ocultado no mobile.
+- Os meses fechados aparecem em cards horizontais compactos.
 
-- Rótulos do eixo X não ficam mais inclinados.
-- `maxRotation: 0`
-- `minRotation: 0`
-- máximo de 5 rótulos visíveis no mobile.
-- datas intermediárias ficam ocultas no eixo.
-- a data completa permanece no tooltip ao tocar no gráfico.
+## Resultado esperado
 
-## Motivo
-
-Em períodos longos, como 24M e 36M, havia excesso de datas no eixo X e o Chart.js inclinava os textos automaticamente.
+A seção fica com:
+- título + fonte na mesma linha;
+- cotação principal no topo;
+- variações rápidas;
+- histórico mensal visível e rolável.
 
 ## Como subir
 
