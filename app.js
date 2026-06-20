@@ -18947,7 +18947,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_PAGE_CENTER_DESKTOP_20260620_v345';
+  const BUILD = 'ELTAUM_MOBILE_BODY_FIT_20260620_v346';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }

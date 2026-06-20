@@ -51239,3 +51239,80 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v346 — MOBILE BODY FIT / WIDTH SAFETY
+   Diagnóstico validado em viewport 378px:
+   - html estava como display:flex em algum estado de cascata/legado.
+   - body e .page encolhiam para ~168px, deixando o dashboard espremido
+     numa coluna estreita à esquerda.
+   Correção:
+   - No mobile, força html/body/.page a ocuparem 100% da viewport.
+   - Mantém o patch v345 de centralização desktop intacto.
+   - Não altera dados, ranking, robô ou lógica de atualização.
+════════════════════════════════════════════════════ */
+
+@media (max-width:820px){
+  html.mobile-body-fit-v346,
+  html.mobile-body-fit-v346 body{
+    width:100% !important;
+    min-width:100% !important;
+    max-width:100% !important;
+    margin:0 !important;
+    overflow-x:hidden !important;
+  }
+
+  html.mobile-body-fit-v346{
+    display:block !important;
+  }
+
+  html.mobile-body-fit-v346 body{
+    display:block !important;
+    min-height:100vh !important;
+  }
+
+  html.mobile-body-fit-v346 body #topo.page,
+  html.mobile-body-fit-v346 body .page{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    padding-left:10px !important;
+    padding-right:10px !important;
+    box-sizing:border-box !important;
+  }
+
+  html.mobile-body-fit-v346 body header.site-header-v217,
+  html.mobile-body-fit-v346 body .site-header-v217,
+  html.mobile-body-fit-v346 body header.site-header-clean,
+  html.mobile-body-fit-v346 body .site-header-clean{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  html.mobile-body-fit-v346 body .brand,
+  html.mobile-body-fit-v346 body .brand-text,
+  html.mobile-body-fit-v346 body .brand-text h1,
+  html.mobile-body-fit-v346 body .brand-text p{
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  html.mobile-body-fit-v346 body #sec-kpi-mobile,
+  html.mobile-body-fit-v346 body #sec-fundos,
+  html.mobile-body-fit-v346 body .fund-filter-shell,
+  html.mobile-body-fit-v346 body .fund-primary-toolbar-v217,
+  html.mobile-body-fit-v346 body .search-wrap,
+  html.mobile-body-fit-v346 body .mobile-category-select-shell-v74,
+  html.mobile-body-fit-v346 body .fund-secondary-controls-v217,
+  html.mobile-body-fit-v346 body #mobileFundCards{
+    width:100% !important;
+    min-width:0 !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+}
+
