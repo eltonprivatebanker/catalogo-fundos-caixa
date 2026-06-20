@@ -1,26 +1,26 @@
-# Catálogo de Fundos CAIXA — v323
+# Catálogo de Fundos CAIXA — v324
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajuste aplicado
+## Ajustes aplicados
 
-Corrigido o KPI/card “CDI 12 meses”, que estava aparecendo sem valor.
+1. Largura dos cards
+- Cards do CDI agora seguem a mesma largura visual dos cards do Copom.
+- KPIs superiores e histórico mensal usam a mesma régua de largura.
 
-## Motivo provável
+2. Escrita e semântica
+- Título do bloco: “CDI — visão mensal 2026”.
+- Cards mensais usam “fechado” ou “parcial”.
+- “Acum.” virou “Acum. ano”.
+- “12 meses” virou “CDI 12M”.
 
-O valor `acum_12m` existia nos dados, mas não estava sendo aplicado no elemento:
+## Escopo
 
-- `#cdiLast12mValueV296`
-
-## Correção
-
-A v323 preenche o 12M usando:
-
-1. `cards.cdi.acum_12m`, quando disponível;
-2. fallback calculado com os últimos 12 meses do histórico mensal.
+- Mobile refinado.
+- Desktop preservado.
 
 ## Como subir
 

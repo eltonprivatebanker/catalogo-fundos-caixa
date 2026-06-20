@@ -1,3 +1,4 @@
+// ELTAUM_CDI_SEMANTIC_CARDS_v324
 // ELTAUM_CDI_12M_FIX_v323
 // ELTAUM_CDI_MONTH_CAROUSEL_v322
 // ELTAUM_COPOM_CAROUSEL_v321
@@ -1966,9 +1967,9 @@ function renderCdiYearHistory(d){
     return NaN;
   })();
 
-  if(title) title.textContent = isMobile ? `CDI — resumo ${ano}` : `CDI mensal + acumulado ${ano}`;
+  if(title) title.textContent = isMobile ? `CDI — visão mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
   if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
-  if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? '12 meses' : 'Últimos 12 meses';
+  if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? 'CDI 12M' : 'Últimos 12 meses';
   if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
   if(currentLabelEl) currentLabelEl.textContent = atualParcial ? `${mesCurto(atualParcial).toUpperCase()} · parcial` : 'Mês atual';
   if(currentValueEl) currentValueEl.textContent = atualParcial ? fmtPctLocal(atualParcial.valor) : '—';
@@ -1985,13 +1986,13 @@ function renderCdiYearHistory(d){
       const isFechado = item === ultimoFechado;
       const sinal = Number.isFinite(valor) && valor < 0 ? 'neg' : 'pos';
       const label = mesCurto(item).toUpperCase();
-      const status = isAtual ? 'parcial' : (isFechado ? 'fechado' : 'mês');
+      const status = isAtual ? 'parcial' : 'fechado';
       const acumTxt = Number.isFinite(acum) ? fmtPctLocal(acum) : '—';
       return `
         <article class="cdi-month-card-v322 ${sinal} ${isAtual ? 'is-current' : ''} ${isFechado ? 'is-lastclosed' : ''}" role="listitem">
           <span class="cdi-month-kicker-v322">${label} · ${status}</span>
           <strong class="cdi-month-value-v322">${Number.isFinite(valor) ? fmtPctLocal(valor) : '—'}</strong>
-          <small class="cdi-month-accum-v322">Acum. ${acumTxt}</small>
+          <small class="cdi-month-accum-v322">Acum. ano ${acumTxt}</small>
         </article>`;
     }).join('');
   }
