@@ -1,3 +1,4 @@
+// ELTAUM_SAVINGS_CLEAN_MOBILE_v325
 // ELTAUM_CDI_SEMANTIC_CARDS_v324
 // ELTAUM_CDI_12M_FIX_v323
 // ELTAUM_CDI_MONTH_CAROUSEL_v322
@@ -17580,4 +17581,81 @@ function openCdiAnalyticTableV274(){
   setTimeout(apply, 300);
   setTimeout(apply, 1000);
   setTimeout(apply, 2000);
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v325 — Poupança: limpeza mobile e correção cenários
+   - oculta bloco textual longo #poupRulesV214 no mobile;
+   - mantém apenas Comparação de cenários ao expandir;
+   - corrige sobreposição de dt/dd nos cards;
+   - dá respiro após botões.
+════════════════════════════════════════════════════ */
+(function savingsCleanMobileV325(){
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    const rules = document.getElementById('poupRulesV214');
+    const details = document.getElementById('poupDetailsPanelV167');
+    const scenarios = document.querySelector('#poupDetailsPanelV167 .savings-scenarios-v167, #poupDetailsPanelV167 .savings-scenarios-v207, #poupDetailsPanelV167 .savings-scenarios-v208');
+    const actions = document.querySelector('#sec-mercado .savings-actions-v167, #sec-mercado .savings-actions-v205, #sec-mercado .savings-actions-v207');
+
+    if(!isMobile){
+      if(rules){
+        rules.removeAttribute('aria-hidden');
+        rules.style.removeProperty('display');
+      }
+      return;
+    }
+
+    if(rules){
+      rules.setAttribute('aria-hidden','true');
+      try{ rules.inert = true; }catch(_){}
+      setImportant(rules, 'display', 'none');
+      setImportant(rules, 'height', '0');
+      setImportant(rules, 'min-height', '0');
+      setImportant(rules, 'max-height', '0');
+      setImportant(rules, 'margin', '0');
+      setImportant(rules, 'padding', '0');
+      setImportant(rules, 'overflow', 'hidden');
+    }
+
+    if(actions){
+      setImportant(actions, 'margin-bottom', '16px');
+    }
+
+    if(scenarios){
+      setImportant(scenarios, 'display', 'block');
+      setImportant(scenarios, 'margin-top', '0');
+    }
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dl > div').forEach(pair => {
+      setImportant(pair, 'display', 'flex');
+      setImportant(pair, 'flex-direction', 'column');
+      setImportant(pair, 'align-items', 'flex-start');
+      setImportant(pair, 'gap', '4px');
+      setImportant(pair, 'min-height', 'auto');
+      setImportant(pair, 'padding', '0');
+    });
+
+    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dt, #sec-mercado .savings-scenario-card-v208 dd').forEach(el => {
+      setImportant(el, 'display', 'block');
+      setImportant(el, 'width', '100%');
+      setImportant(el, 'margin', '0');
+      setImportant(el, 'padding', '0');
+      setImportant(el, 'line-height', '1.22');
+      setImportant(el, 'white-space', 'normal');
+      setImportant(el, 'overflow-wrap', 'anywhere');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
 })();

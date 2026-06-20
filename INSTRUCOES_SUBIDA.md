@@ -1,21 +1,23 @@
-# Catálogo de Fundos CAIXA — v324
+# Catálogo de Fundos CAIXA — v325
 
 Arquivos atualizados:
 - index.html
 - style.css
 - app.js
 
-## Ajustes aplicados
+## Ajustes aplicados na Poupança
 
-1. Largura dos cards
-- Cards do CDI agora seguem a mesma largura visual dos cards do Copom.
-- KPIs superiores e histórico mensal usam a mesma régua de largura.
+1. Corrigido bug de sobreposição
+- Nos cards de “Comparação de cenários”, os pares `dt/dd` agora ficam em blocos verticais.
 
-2. Escrita e semântica
-- Título do bloco: “CDI — visão mensal 2026”.
-- Cards mensais usam “fechado” ou “parcial”.
-- “Acum.” virou “Acum. ano”.
-- “12 meses” virou “CDI 12M”.
+2. Removido conteúdo redundante
+- O bloco textual longo `#poupRulesV214` fica oculto no mobile.
+
+3. Expansão mais limpa
+- Ao clicar em “Ver regras”, a área expandida mostra apenas “Comparação de cenários”.
+
+4. Melhor respiro
+- Adicionado espaçamento abaixo dos botões para não colar no bloco de cenários.
 
 ## Escopo
 
