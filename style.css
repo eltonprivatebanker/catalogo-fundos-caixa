@@ -56301,3 +56301,163 @@ html.mobile-v402 body #sec-graficos .econ-meta-band-v378 strong{
     padding-bottom:10px !important;
   }
 }
+
+
+/* PATCH v406 — Mobile: topo sem sobra vertical + texto em uma linha
+   Objetivo: remover o vazio no topo causado pelo header/update absoluto
+   e permitir que a descrição aproveite melhor a largura disponível. */
+@media (max-width:760px){
+  html.mobile-v406 body{
+    overflow-x:hidden !important;
+  }
+
+  html.mobile-v406 body .page{
+    padding-top:0 !important;
+  }
+
+  html.mobile-v406 body header.site-header-clean,
+  html.mobile-v406 body .site-header-clean,
+  html.mobile-v406 body header.site-header-v217,
+  html.mobile-v406 body .site-header-v217{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:6px !important;
+    align-items:center !important;
+    justify-items:stretch !important;
+    min-height:0 !important;
+    height:auto !important;
+    margin:0 0 8px !important;
+    padding:10px 12px 8px !important;
+    overflow:hidden !important;
+  }
+
+  html.mobile-v406 body .site-header-clean .brand,
+  html.mobile-v406 body .site-header-v217 .brand{
+    display:grid !important;
+    grid-template-columns:38px minmax(0,1fr) !important;
+    align-items:center !important;
+    gap:10px !important;
+    width:100% !important;
+    min-width:0 !important;
+    padding:0 !important;
+    margin:0 !important;
+  }
+
+  html.mobile-v406 body .site-header-clean .brand-logo,
+  html.mobile-v406 body .site-header-v217 .brand-logo{
+    width:38px !important;
+    height:38px !important;
+    min-width:38px !important;
+    border-radius:11px !important;
+    font-size:1rem !important;
+  }
+
+  html.mobile-v406 body .site-header-clean .brand-text,
+  html.mobile-v406 body .site-header-v217 .brand-text{
+    min-width:0 !important;
+    width:100% !important;
+  }
+
+  html.mobile-v406 body .site-header-clean .brand-text h1,
+  html.mobile-v406 body .site-header-v217 .brand-text h1{
+    margin:0 !important;
+    font-size:.96rem !important;
+    line-height:1.08 !important;
+    letter-spacing:-.035em !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.mobile-v406 body .site-header-clean .brand-text p,
+  html.mobile-v406 body .site-header-v217 .brand-text p{
+    margin:2px 0 0 !important;
+    width:100% !important;
+    max-width:none !important;
+    font-size:.50rem !important;
+    line-height:1.12 !important;
+    letter-spacing:-.02em !important;
+    text-transform:none !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  /* Remove o bloco de origem para não reservar espaço no topo mobile */
+  html.mobile-v406 body .site-header-clean .header-data-status-v343,
+  html.mobile-v406 body .site-header-v217 .header-data-status-v343,
+  html.mobile-v406 body .site-header-clean .header-source-pill-v343,
+  html.mobile-v406 body .site-header-v217 .header-source-pill-v343{
+    display:none !important;
+    height:0 !important;
+    min-height:0 !important;
+    max-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    overflow:hidden !important;
+  }
+
+  /* Atualização deixa de ficar absoluta: vira micro-pílula discreta abaixo da marca, sem criar vazio. */
+  html.mobile-v406 body .site-header-clean .header-update-host-v374,
+  html.mobile-v406 body .site-header-v217 .header-update-host-v374{
+    position:static !important;
+    transform:none !important;
+    display:flex !important;
+    justify-content:center !important;
+    align-items:center !important;
+    width:100% !important;
+    max-width:none !important;
+    height:auto !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  html.mobile-v406 body .site-header-clean #lastUpdate,
+  html.mobile-v406 body .site-header-v217 #lastUpdate,
+  html.mobile-v406 body .site-header-clean .live-badge,
+  html.mobile-v406 body .site-header-v217 .live-badge{
+    position:static !important;
+    left:auto !important;
+    right:auto !important;
+    bottom:auto !important;
+    top:auto !important;
+    transform:none !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    width:auto !important;
+    max-width:max-content !important;
+    min-height:18px !important;
+    height:18px !important;
+    margin:0 auto !important;
+    padding:2px 7px !important;
+    border-radius:999px !important;
+    border:1px solid rgba(91,156,246,.14) !important;
+    background:rgba(8,12,24,.58) !important;
+    box-shadow:none !important;
+    gap:5px !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+  }
+
+  html.mobile-v406 body .site-header-clean #lastUpdate .live-update-label,
+  html.mobile-v406 body .site-header-v217 #lastUpdate .live-update-label{
+    display:none !important;
+  }
+
+  html.mobile-v406 body .site-header-clean #lastUpdate .live-dot,
+  html.mobile-v406 body .site-header-v217 #lastUpdate .live-dot{
+    width:4px !important;
+    height:4px !important;
+    min-width:4px !important;
+  }
+
+  html.mobile-v406 body .site-header-clean #lastUpdate .live-update-time,
+  html.mobile-v406 body .site-header-v217 #lastUpdate .live-update-time{
+    font-family:'JetBrains Mono',monospace !important;
+    font-size:.50rem !important;
+    color:#aeb9d2 !important;
+  }
+}
