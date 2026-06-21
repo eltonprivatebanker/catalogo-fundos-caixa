@@ -53212,3 +53212,15 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   gap:4px;
 }
 
+/* PATCH v383 — correção da função helper da Selic */
+.evo-selic-helper-fix-v383 .econ-selic-legacy-svg-v380 .dot.context{
+  fill:#d8a23e;
+  opacity:.28;
+  stroke:none;
+}
+
+.evo-selic-helper-fix-v383 #selicMaxLabelV381,
+.evo-selic-helper-fix-v383 #selicMinLabelV381{
+  color:#b7c5dc;
+}
+

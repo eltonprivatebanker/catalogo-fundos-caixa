@@ -6434,6 +6434,75 @@ function econRenderMetaVersusMetaV379(containerId, rows, range){
 
 
 
+
+/* v383 — Helper global para sincronizar gráfico e KPIs da Selic por período real */
+function econSelicVisibleRowsV381(rows, range){
+  const sorted = (rows || [])
+    .filter(x => Number.isFinite(Number(x._valor)))
+    .sort((a,b) => (a._ts || 0) - (b._ts || 0));
+
+  if(range === 'all') return sorted;
+
+  const months = Number(range || 12);
+  const lastWithDate = [...sorted].reverse().find(x => x._dt && !isNaN(x._dt.getTime()));
+  const endDate = lastWithDate?._dt || new Date();
+
+  const startDate = new Date(endDate);
+  startDate.setMonth(startDate.getMonth() - months);
+
+  let filtered = sorted.filter(x => x._dt && x._dt >= startDate && x._dt <= endDate);
+
+  // Inclui um ponto imediatamente anterior ao início apenas para continuidade visual da linha,
+  // mas esse ponto não entra no cálculo de máxima/mínima do período.
+  const previous = [...sorted].reverse().find(x => x._dt && x._dt < startDate);
+  if(previous && filtered.length){
+    filtered = [{...previous, _periodContextOnly:true}, ...filtered];
+  }
+
+  if(filtered.length >= 2) return filtered;
+
+  return sorted.slice(-Math.max(2, Math.min(12, months)));
+}
+
+function econAtualizarSelicKpiLabelsV381(range){
+  const maxLabel = document.getElementById('selicMaxLabelV381');
+  const minLabel = document.getElementById('selicMinLabelV381');
+
+  if(range === 'all'){
+    if(maxLabel) maxLabel.textContent = 'Máxima histórica';
+    if(minLabel) minLabel.textContent = 'Mínima histórica';
+    return;
+  }
+
+  if(maxLabel) maxLabel.textContent = 'Máxima do período';
+  if(minLabel) minLabel.textContent = 'Mínima do período';
+}
+
+function econAtualizarSelicPeriodoTextoV381(range){
+  const note = document.getElementById('evoCardSelicNote');
+  if(!note) return;
+
+  const mercado = window.__ECON_DASH_STATE_V378__?.mercado || econDashStateV378?.mercado || {};
+  const selic = mercado?.cards?.selic_meta || {};
+  const valor = Number(selic.valor);
+  let data = 'último dado';
+
+  try{
+    const ref = typeof resolverDataUltimaAlteracaoSelic === 'function' ? resolverDataUltimaAlteracaoSelic(mercado) : null;
+    data = ref?.data || data;
+  }catch(e){}
+
+  const periodo =
+    range === 'all' ? 'histórico completo' :
+    Number(range) === 12 ? 'último 1 ano' :
+    Number(range) === 60 ? 'últimos 5 anos' :
+    Number(range) === 120 ? 'últimos 10 anos' :
+    `últimos ${range} meses`;
+
+  note.textContent = `Taxa vigente · ${Number.isFinite(valor) ? valor.toFixed(2).replace('.', ',') : '—'}% a.a. · desde ${data} · período: ${periodo}`;
+}
+
+
 function econRenderSelicLegacyV380(containerId, rows, range){
   const el = document.getElementById(containerId);
   if(!el) return;
@@ -9362,7 +9431,7 @@ async function sharePainelMercado(){
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -11125,7 +11194,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11210,7 +11279,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11549,7 +11618,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11617,7 +11686,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11724,7 +11793,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11968,7 +12037,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12034,7 +12103,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12135,7 +12204,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12276,7 +12345,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12323,7 +12392,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12375,7 +12444,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12498,7 +12567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12581,7 +12650,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12642,7 +12711,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12711,7 +12780,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12781,7 +12850,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12876,7 +12945,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12994,7 +13063,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -13084,7 +13153,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -13153,7 +13222,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -13283,7 +13352,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13457,7 +13526,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13506,7 +13575,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13541,7 +13610,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13579,7 +13648,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13620,7 +13689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -13732,7 +13801,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13774,7 +13843,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13904,7 +13973,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14041,7 +14110,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14254,7 +14323,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14410,7 +14479,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -15623,7 +15692,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   const CORE_DESKTOP_ORDER = [
     'Fundo',
     'Data Inicio',
@@ -16224,7 +16293,7 @@ if(document.readyState === 'loading'){
    alterar o botão ativo antes de chamar a função principal. */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
 
   function atualizarPorBotao(btn){
     if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
@@ -16804,7 +16873,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
 
   function bindToggleSemDadosV204(){
     const input = document.getElementById('toggleSemDados');
@@ -19313,7 +19382,7 @@ function openCdiAnalyticTableV274(){
    Move para o bloco correto do header e impede reinserções erradas.
 ════════════════════════════════════════════════════ */
 (function headerUpdateFixV374(){
-  const BUILD = 'ELTAUM_EVO_SELIC_PERIOD_SYNC_20260620_v382';
+  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
   window.__ELTAUM_HEADER_UPDATE_FIX_V374__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
