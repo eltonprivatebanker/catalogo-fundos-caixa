@@ -53443,3 +53443,85 @@ html.evo-ipca-terminal-no-all-v375 #econSparkIpcaV367{
   }
 }
 
+/* PATCH v376 — IPCA mensal final: compacto, sem badge de variação mensal */
+#econIpcaTrendLabelV367{
+  display:none !important;
+}
+
+html.evo-ipca-clean-final-v376 #econSparkIpcaV367{
+  height:210px !important;
+  min-height:210px !important;
+  padding:14px 16px 12px !important;
+  overflow:hidden !important;
+}
+
+.ipca-compact-svg-v376{
+  width:100% !important;
+  height:172px !important;
+  display:block !important;
+  overflow:visible !important;
+}
+
+.ipca-compact-bg-v376{
+  fill:rgba(2,6,23,.12);
+  stroke:rgba(148,163,184,.10);
+  vector-effect:non-scaling-stroke;
+}
+
+.ipca-compact-svg-v376 .ipca-grid{
+  stroke:rgba(148,163,184,.10);
+  stroke-width:1;
+  vector-effect:non-scaling-stroke;
+}
+
+.ipca-compact-svg-v376 .ipca-zero{
+  stroke:rgba(148,163,184,.46);
+  stroke-width:1.25;
+  vector-effect:non-scaling-stroke;
+}
+
+.ipca-compact-svg-v376 .ipca-bar-pos{
+  fill:#22c55e;
+  opacity:.88;
+}
+
+.ipca-compact-svg-v376 .ipca-bar-neg{
+  fill:#f43f5e;
+  opacity:.90;
+}
+
+.ipca-compact-svg-v376 .ipca-axis-text{
+  fill:#70819b;
+  font-family:"JetBrains Mono",monospace;
+  font-size:9px;
+}
+
+.ipca-compact-svg-v376 .ipca-axis-zero{
+  fill:#94a3b8;
+  font-weight:800;
+}
+
+/* Remove elementos residuais das tentativas anteriores, caso algum fique em cache */
+html.evo-ipca-clean-final-v376 #econSparkIpcaV367 .ipca-caption,
+html.evo-ipca-clean-final-v376 #econSparkIpcaV367 .econ-bars-scale-v372,
+html.evo-ipca-clean-final-v376 #econSparkIpcaV367 .econ-ipca-legend-v373,
+html.evo-ipca-clean-final-v376 #econSparkIpcaV367 .econ-bars-zero-label-v371{
+  display:none !important;
+}
+
+@media (max-width:820px){
+  html.evo-ipca-clean-final-v376 #econSparkIpcaV367{
+    height:178px !important;
+    min-height:178px !important;
+    padding:10px !important;
+  }
+
+  .ipca-compact-svg-v376{
+    height:142px !important;
+  }
+
+  .ipca-compact-svg-v376 .ipca-axis-text{
+    font-size:7px;
+  }
+}
+
