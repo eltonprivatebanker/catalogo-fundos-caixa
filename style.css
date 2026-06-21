@@ -53187,3 +53187,17 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* PATCH v381 — KPIs da Selic acompanham o período selecionado */
+.evo-selic-kpis-by-period-v381 .selic-kpis-v378 span{
+  color:#a8b6cc;
+}
+
+.evo-selic-kpis-by-period-v381 #selicMaxLabelV381,
+.evo-selic-kpis-by-period-v381 #selicMinLabelV381{
+  color:#b7c5dc;
+}
+
+.evo-selic-kpis-by-period-v381 .econ-dash-card-selic-v378 .econ-dash-pill-v378.ok{
+  color:#bbf7d0;
+}
+

@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380" name="app-build"/>
+<meta content="ELTAUM_EVO_SELIC_KPIS_BY_PERIOD_20260620_v381" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 </style>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="style.css?v=evo-selic-legacy-style-v380" rel="stylesheet"/>
+<link href="style.css?v=evo-selic-kpis-by-period-v381" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=evo-selic-legacy-style-v380"></script>
+<script defer="" src="app.js?v=evo-selic-kpis-by-period-v381"></script>
 </head>
 <body>
 <div class="page" id="topo">
@@ -1149,9 +1149,9 @@ html:not(.app-booting) .page{
         <div class="econ-dash-pill-v378 ok" id="evoCardSelicNote">Taxa vigente: aguardando atualização.</div>
 
         <div aria-label="Resumo da Selic" class="econ-dash-mini-kpis-v378 selic-kpis-v378">
-          <div><span>Máxima</span><strong id="selicMaxResumo">—</strong><small id="selicMaxData">—</small></div>
-          <div><span>Mínima</span><strong id="selicMinResumo">—</strong><small id="selicMinData">—</small></div>
-          <div><span>Vigente</span><strong id="selicHojeResumo">—</strong><small id="selicHojeData">último dado</small></div>
+          <div><span id="selicMaxLabelV381">Máxima do período</span><strong id="selicMaxResumo">—</strong><small id="selicMaxData">—</small></div>
+          <div><span id="selicMinLabelV381">Mínima do período</span><strong id="selicMinResumo">—</strong><small id="selicMinData">—</small></div>
+          <div><span>Taxa vigente</span><strong id="selicHojeResumo">—</strong><small id="selicHojeData">último dado</small></div>
         </div>
 
         <div class="econ-dash-chart-v378 econ-dash-chart-selic-v378" id="econSparkSelicV367" aria-label="Gráfico da trajetória da Selic meta"></div>
