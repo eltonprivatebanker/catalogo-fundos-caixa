@@ -6060,31 +6060,46 @@ function econRenderBarsV367(containerId, rows, getValue, getLabel, limit){
     return;
   }
 
-  const maxAbs = Math.max(...data.map(d => Math.abs(d.value)), 0.01);
+  const values = data.map(d => d.value);
+  const maxAbs = Math.max(...values.map(v => Math.abs(v)), 0.01);
+  const w = 320;
+  const h = 112;
+  const padX = 8;
+  const zeroY = Math.round(h / 2);
+  const gap = data.length > 18 ? 2 : 4;
+  const usableW = w - padX * 2;
+  const barW = Math.max(3, (usableW - gap * (data.length - 1)) / data.length);
+  const scale = (h * 0.42) / maxAbs;
+
+  const bars = data.map((d, i) => {
+    const x = padX + i * (barW + gap);
+    const rawH = Math.max(3, Math.abs(d.value) * scale);
+    const bh = Math.min(h * 0.44, rawH);
+    const positive = d.value >= 0;
+    const y = positive ? zeroY - bh : zeroY;
+    const cls = positive ? 'bar pos' : 'bar neg';
+    const title = `${d.label}: ${econPctV367(d.value)}`;
+    return `<rect class="${cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" rx="2.5"><title>${title}</title></rect>`;
+  }).join('');
+
+  const last = data[data.length - 1];
+  const first = data[0];
+  const maxLabel = maxAbs.toFixed(2).replace('.', ',');
 
   el.innerHTML = `
-    <div class="econ-bars-scale-v372">
-      <span>positivo</span>
+    <div class="econ-ipca-legend-v373">
+      <span class="pos">positivo</span>
       <strong>linha zero</strong>
-      <span>negativo</span>
+      <span class="neg">negativo</span>
     </div>
-    <div class="econ-bars-track-v372" style="--bars:${data.length}">
-      <span class="econ-zero-line-v372" aria-hidden="true"></span>
-      ${data.map(d => {
-        const h = Math.max(5, Math.min(46, Math.round((Math.abs(d.value) / maxAbs) * 46)));
-        const sign = d.value >= 0 ? 'pos' : 'neg';
-        const title = `${d.label}: ${econPctV367(d.value)}`;
-        return `
-          <span class="econ-bar-slot-v372" title="${title}" aria-label="${title}">
-            <i class="${sign}" style="--h:${h}%"></i>
-          </span>
-        `;
-      }).join('')}
-    </div>
-    <div class="econ-axis-caption-v367">
-      <span>${data[0].label}</span>
-      <span>${data[data.length-1].label}</span>
-    </div>
+    <svg class="econ-ipca-bars-svg-v373" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-label="IPCA mensal com barras positivas e negativas">
+      <line class="zero" x1="0" y1="${zeroY}" x2="${w}" y2="${zeroY}"></line>
+      <text class="axis-label axis-top" x="2" y="11">+${maxLabel}%</text>
+      <text class="axis-label axis-zero" x="${w - 44}" y="${zeroY - 4}">0,00%</text>
+      <text class="axis-label axis-bottom" x="2" y="${h - 4}">-${maxLabel}%</text>
+      ${bars}
+    </svg>
+    <div class="econ-axis-caption-v367"><span>${first.label}</span><span>${last.label}</span></div>
   `;
 }
 
@@ -19386,7 +19401,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_BARS_FIX_20260620_v372';
+  const BUILD = 'ELTAUM_EVO_IPCA_SVG_BARS_20260620_v373';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }

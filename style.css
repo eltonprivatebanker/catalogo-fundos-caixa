@@ -53193,3 +53193,85 @@ html.evo-ipca-bars-fix-v372 .econ-bars-zero-label-v371{
   }
 }
 
+/* PATCH v373 — IPCA mensal em SVG, positivo para cima e negativo para baixo */
+.econ-ipca-legend-v373{
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:10px;
+  margin:0 0 6px;
+  font-family:"JetBrains Mono",monospace;
+  font-size:.60rem;
+  color:#7b8aa3;
+}
+
+.econ-ipca-legend-v373 .pos{
+  color:#86efac;
+}
+
+.econ-ipca-legend-v373 .neg{
+  color:#fda4af;
+  text-align:right;
+}
+
+.econ-ipca-legend-v373 strong{
+  color:#aab6c8;
+  font-size:.58rem;
+  font-weight:850;
+}
+
+.econ-ipca-bars-svg-v373{
+  width:100%;
+  height:112px;
+  display:block;
+  overflow:visible;
+  border-radius:14px;
+}
+
+.econ-ipca-bars-svg-v373 .zero{
+  stroke:rgba(148,163,184,.42);
+  stroke-width:1.2;
+  vector-effect:non-scaling-stroke;
+}
+
+.econ-ipca-bars-svg-v373 .bar.pos{
+  fill:url(#none);
+  fill:#22c55e;
+  opacity:.86;
+}
+
+.econ-ipca-bars-svg-v373 .bar.neg{
+  fill:#f43f5e;
+  opacity:.88;
+}
+
+.econ-ipca-bars-svg-v373 .axis-label{
+  fill:#64748b;
+  font-family:"JetBrains Mono",monospace;
+  font-size:7px;
+  letter-spacing:.02em;
+}
+
+.econ-ipca-bars-svg-v373 .axis-zero{
+  fill:#94a3b8;
+}
+
+@media (max-width:820px){
+  .econ-ipca-legend-v373{
+    font-size:.52rem;
+    gap:6px;
+  }
+
+  .econ-ipca-legend-v373 strong{
+    font-size:.50rem;
+  }
+
+  .econ-ipca-bars-svg-v373{
+    height:92px;
+  }
+
+  .econ-ipca-bars-svg-v373 .axis-label{
+    font-size:6px;
+  }
+}
+

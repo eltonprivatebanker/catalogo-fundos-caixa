@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_EVO_IPCA_BARS_FIX_20260620_v372" name="app-build"/>
+<meta content="ELTAUM_EVO_IPCA_SVG_BARS_20260620_v373" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 </style>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="style.css?v=evo-ipca-bars-fix-v372" rel="stylesheet"/>
+<link href="style.css?v=evo-ipca-svg-bars-v373" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=evo-ipca-bars-fix-v372"></script>
+<script defer="" src="app.js?v=evo-ipca-svg-bars-v373"></script>
 </head>
 <body>
 <div class="page" id="topo">
@@ -1080,7 +1080,7 @@ html:not(.app-booting) .page{
         <span aria-hidden="true" class="section-title-icon-v302">📈</span>
         <span class="section-title-text-v302">Inflação e juros</span>
       </h2>
-      <p class="section-subline">Leitura rápida do IPCA, da inflação em 12 meses e da Selic meta — sem canvas no celular.</p>
+      <p class="section-subline">Leitura rápida do IPCA, da inflação em 12 meses e da Selic meta — gráficos leves em SVG/HTML.</p>
     </div>
     <button aria-controls="sec-graficos-body" aria-expanded="false" class="section-toggle-btn" data-label-closed="Exibir indicadores" data-label-open="Ocultar indicadores" id="evolutionToggle" onclick="return toggleSection('sec-graficos-body','sec-graficos')" type="button">
       <span aria-hidden="true" class="toggle-icon">›</span>
