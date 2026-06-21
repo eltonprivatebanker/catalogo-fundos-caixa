@@ -53290,3 +53290,301 @@ html.evo-overflow-zoom-fix-v384 .ranking-table-wrap{
   overscroll-behavior-x:contain !important;
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v385 — DESKTOP ONLY
+   Refinamento da seção "Juros e CDI".
+   Mobile preservado: ajustes aplicados apenas acima de 821px.
+════════════════════════════════════════════════════ */
+
+@media (min-width:821px){
+  html.rates-desktop-refine-v385 .rates-reference-v167{
+    overflow:hidden;
+    border-radius:22px;
+    border-color:rgba(200,151,58,.30);
+    background:
+      linear-gradient(180deg, rgba(15,23,42,.78), rgba(15,23,42,.40)),
+      radial-gradient(circle at 18% 0%, rgba(200,151,58,.10), transparent 36%),
+      rgba(2,6,23,.22);
+  }
+
+  html.rates-desktop-refine-v385 .rates-reference-v167 .market-reference-head-v167{
+    padding:22px 24px 18px;
+    border-bottom:1px solid rgba(148,163,184,.12);
+    background:linear-gradient(90deg, rgba(200,151,58,.08), rgba(30,64,175,.05), transparent);
+  }
+
+  html.rates-desktop-refine-v385 .rates-reference-v167 .market-reference-kicker-v167{
+    color:#d6a84d;
+    letter-spacing:.12em;
+    font-size:.68rem;
+  }
+
+  html.rates-desktop-refine-v385 .rates-reference-v167 .card-title-v304{
+    font-size:1.48rem;
+    line-height:1.05;
+    margin-top:6px;
+  }
+
+  html.rates-desktop-refine-v385 .rates-reference-v167 .market-reference-head-v167 p{
+    color:#aebacf;
+    font-size:.82rem;
+  }
+
+  html.rates-desktop-refine-v385 .rates-summary-v167{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+    gap:14px;
+    max-width:980px;
+    padding:16px 24px 0;
+  }
+
+  html.rates-desktop-refine-v385 .rate-summary-card-v167{
+    min-height:104px;
+    padding:18px 20px;
+    border-radius:18px;
+    background:
+      linear-gradient(180deg, rgba(15,23,42,.72), rgba(15,23,42,.38)),
+      rgba(2,6,23,.24);
+    border-color:rgba(148,163,184,.16);
+  }
+
+  html.rates-desktop-refine-v385 .rate-summary-card-v167.selic-summary-v167{
+    border-color:rgba(200,151,58,.44);
+    box-shadow:inset 3px 0 0 rgba(200,151,58,.70);
+  }
+
+  html.rates-desktop-refine-v385 .rate-summary-card-v167.cdi-summary-v167{
+    border-color:rgba(16,185,129,.28);
+    box-shadow:inset 3px 0 0 rgba(16,185,129,.68);
+  }
+
+  html.rates-desktop-refine-v385 .rate-summary-value-v167 strong{
+    font-size:2.25rem;
+    line-height:1;
+  }
+
+  html.rates-desktop-refine-v385 .rate-summary-value-v167 em{
+    font-size:.82rem;
+  }
+
+  html.rates-desktop-refine-v385 .rates-detail-grid-v167{
+    display:grid;
+    grid-template-columns:minmax(360px,.88fr) minmax(560px,1.32fr);
+    gap:16px;
+    align-items:stretch;
+    padding:14px 24px 22px;
+  }
+
+  html.rates-desktop-refine-v385 .copom-compact-v167,
+  html.rates-desktop-refine-v385 .cdi-year-history{
+    min-width:0;
+    border-radius:18px;
+    background:
+      linear-gradient(180deg, rgba(15,23,42,.62), rgba(15,23,42,.30)),
+      rgba(2,6,23,.18);
+    border:1px solid rgba(148,163,184,.14);
+  }
+
+  html.rates-desktop-refine-v385 .copom-compact-v167{
+    display:flex;
+    flex-direction:column;
+    padding:18px;
+  }
+
+  html.rates-desktop-refine-v385 .reference-subhead-v167{
+    margin-bottom:14px;
+  }
+
+  html.rates-desktop-refine-v385 .reference-subhead-v167 strong{
+    font-size:1.02rem;
+  }
+
+  html.rates-desktop-refine-v385 .reference-subhead-v167 small{
+    color:#97a6bd;
+    font-size:.72rem;
+  }
+
+  html.rates-desktop-refine-v385 .copom-exec-summary-v270{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  html.rates-desktop-refine-v385 .copom-exec-card-v270{
+    min-height:146px;
+    border-radius:16px;
+    padding:18px;
+    background:
+      linear-gradient(180deg, rgba(2,6,23,.32), rgba(15,23,42,.24)),
+      rgba(2,6,23,.20);
+    border-color:rgba(148,163,184,.15);
+  }
+
+  html.rates-desktop-refine-v385 .copom-exec-card-v270.is-last{
+    box-shadow:inset 4px 0 0 rgba(248,113,113,.78);
+  }
+
+  html.rates-desktop-refine-v385 .copom-exec-card-v270.is-next{
+    box-shadow:inset 4px 0 0 rgba(200,151,58,.78);
+  }
+
+  html.rates-desktop-refine-v385 .copom-exec-date-v270{
+    font-size:1.72rem;
+    line-height:1.1;
+  }
+
+  html.rates-desktop-refine-v385 .copom-exec-desc-v270{
+    color:#c7d2e4;
+    font-size:.78rem;
+    line-height:1.45;
+  }
+
+  html.rates-desktop-refine-v385 .copom-footnote-v256{
+    margin-top:auto;
+    padding-top:14px;
+    color:#6f7e95;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-chart-block-v271{
+    padding:18px;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-head-v274{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:12px;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-analytic-link-v274{
+    border-color:rgba(200,151,58,.42);
+    background:rgba(200,151,58,.10);
+    color:#ffd17a;
+    min-height:34px;
+    padding-inline:14px;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-kpis-v271{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    margin-bottom:12px;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-kpi-v271{
+    min-height:78px;
+    border-radius:14px;
+    padding:14px;
+    background:rgba(2,6,23,.24);
+    border:1px solid rgba(148,163,184,.14);
+  }
+
+  html.rates-desktop-refine-v385 .cdi-kpi-v271.is-current{
+    border-color:rgba(16,185,129,.40);
+    background:linear-gradient(180deg, rgba(20,83,45,.22), rgba(2,6,23,.18));
+  }
+
+  html.rates-desktop-refine-v385 .cdi-kpi-v271.is-lastclosed,
+  html.rates-desktop-refine-v385 .cdi-kpi-v271.is-total{
+    border-color:rgba(200,151,58,.34);
+    background:linear-gradient(180deg, rgba(200,151,58,.14), rgba(2,6,23,.18));
+  }
+
+  html.rates-desktop-refine-v385 .cdi-kpi-value-v271{
+    font-size:1.48rem;
+    line-height:1.05;
+  }
+
+  /* O carrossel estava virando lista textual grande. No desktop, vira grade de chips. */
+  html.rates-desktop-refine-v385 .cdi-month-carousel-v322{
+    display:grid !important;
+    grid-template-columns:repeat(6,minmax(0,1fr));
+    gap:8px;
+    margin:10px 0 12px !important;
+    overflow:visible !important;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-month-card-v322{
+    display:flex !important;
+    flex-direction:column;
+    gap:3px;
+    min-width:0 !important;
+    border:1px solid rgba(148,163,184,.13);
+    border-radius:12px;
+    padding:9px 10px;
+    background:rgba(2,6,23,.22);
+  }
+
+  html.rates-desktop-refine-v385 .cdi-month-card-v322.is-current{
+    border-color:rgba(16,185,129,.44);
+    background:rgba(20,83,45,.16);
+  }
+
+  html.rates-desktop-refine-v385 .cdi-month-card-v322.is-lastclosed{
+    border-color:rgba(200,151,58,.40);
+    background:rgba(200,151,58,.12);
+  }
+
+  html.rates-desktop-refine-v385 .cdi-month-kicker-v322{
+    color:#90a0b7;
+    font-size:.56rem;
+    font-weight:850;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-month-value-v322{
+    color:#2df6a2;
+    font-size:.90rem;
+    font-family:"JetBrains Mono",monospace;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-month-accum-v322{
+    color:#8fa0b7;
+    font-size:.56rem;
+    line-height:1.25;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-chart-canvas-wrap-v271{
+    height:260px;
+    border:1px solid rgba(148,163,184,.13);
+    border-radius:16px;
+    background:
+      linear-gradient(180deg, rgba(2,6,23,.28), rgba(15,23,42,.12)),
+      repeating-linear-gradient(to right, rgba(148,163,184,.035) 0, rgba(148,163,184,.035) 1px, transparent 1px, transparent 82px);
+    overflow:hidden;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-chart-scroll-wrap-v273,
+  html.rates-desktop-refine-v385 .cdi-chart-scroll-inner-v273{
+    max-width:100%;
+    min-width:0 !important;
+    width:100% !important;
+  }
+
+  html.rates-desktop-refine-v385 #cdiYearChartV271{
+    width:100% !important;
+    max-width:100% !important;
+    height:244px !important;
+  }
+
+  html.rates-desktop-refine-v385 .cdi-chart-legend-v271{
+    justify-content:flex-start;
+    gap:18px;
+    padding-top:9px;
+    color:#8fa0bb;
+  }
+
+  html.rates-desktop-refine-v385 .reference-footnote-v167{
+    color:#6f7e95;
+  }
+}
+
+/* Desktop amplo: evita sobras visuais exageradas */
+@media (min-width:1280px){
+  html.rates-desktop-refine-v385 .rates-detail-grid-v167{
+    grid-template-columns:minmax(420px,.78fr) minmax(680px,1.42fr);
+  }
+}
+
