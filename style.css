@@ -53275,3 +53275,171 @@ html.evo-ipca-bars-fix-v372 .econ-bars-zero-label-v371{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v374 — corrige badge "Atualizado" perdido
+   O #lastUpdate deve ficar somente no cabeçalho/metadados.
+════════════════════════════════════════════════════ */
+
+.header-update-fix-v374 #lastUpdate.live-badge,
+.header-update-fix-v374 .header-update-host-v374 #lastUpdate{
+  position:static !important;
+  inset:auto !important;
+  float:none !important;
+  transform:none !important;
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:6px !important;
+  width:auto !important;
+  max-width:max-content !important;
+  min-height:28px !important;
+  margin:0 !important;
+  white-space:nowrap !important;
+  vertical-align:middle !important;
+  z-index:auto !important;
+}
+
+.header-update-host-v374{
+  display:inline-flex !important;
+  align-items:center !important;
+  gap:8px !important;
+  margin-left:auto !important;
+  min-width:0 !important;
+}
+
+.header-update-fix-v374 .header-update-host-v374 .live-update-label{
+  display:inline !important;
+  font-size:.68rem !important;
+  line-height:1 !important;
+  color:inherit !important;
+}
+
+.header-update-fix-v374 .header-update-host-v374 .live-update-time{
+  display:inline !important;
+  font-size:.68rem !important;
+  line-height:1 !important;
+  color:inherit !important;
+}
+
+.header-update-fix-v374 #lastUpdate .live-dot{
+  flex:0 0 auto !important;
+}
+
+/* Impede que o badge seja tratado como elemento solto dentro do conteúdo */
+.header-update-fix-v374 main #lastUpdate,
+.header-update-fix-v374 .page-shell #lastUpdate,
+.header-update-fix-v374 .catalog-shell #lastUpdate,
+.header-update-fix-v374 .content-shell #lastUpdate{
+  position:static !important;
+}
+
+/* Mobile: deixa compacto para não quebrar o header */
+@media (max-width:820px){
+  .header-update-host-v374{
+    width:100% !important;
+    justify-content:flex-start !important;
+    margin-left:0 !important;
+    margin-top:6px !important;
+  }
+
+  .header-update-fix-v374 .header-update-host-v374 #lastUpdate{
+    min-height:24px !important;
+    padding:0 9px !important;
+  }
+
+  .header-update-fix-v374 .header-update-host-v374 .live-update-label{
+    display:none !important;
+  }
+
+  .header-update-fix-v374 .header-update-host-v374 .live-update-time{
+    font-size:.64rem !important;
+  }
+}
+
+/* PATCH v375 — IPCA mensal estilo terminal + sem botão Tudo */
+.econ-ipca-terminal-svg-v375{
+  width:100%;
+  height:168px;
+  display:block;
+  overflow:visible;
+  border-radius:14px;
+  background:
+    linear-gradient(180deg, rgba(2,6,23,.18), rgba(15,23,42,.06)),
+    repeating-linear-gradient(
+      to right,
+      rgba(148,163,184,.035) 0,
+      rgba(148,163,184,.035) 1px,
+      transparent 1px,
+      transparent 42px
+    );
+}
+
+.econ-ipca-terminal-svg-v375 .plot-bg{
+  fill:rgba(2,6,23,.10);
+  stroke:rgba(148,163,184,.10);
+  vector-effect:non-scaling-stroke;
+}
+
+.econ-ipca-terminal-svg-v375 .grid{
+  stroke:rgba(148,163,184,.105);
+  stroke-width:1;
+  vector-effect:non-scaling-stroke;
+}
+
+.econ-ipca-terminal-svg-v375 .zero-grid{
+  stroke:rgba(148,163,184,.44);
+  stroke-width:1.25;
+}
+
+.econ-ipca-terminal-svg-v375 .tick,
+.econ-ipca-terminal-svg-v375 .x-label{
+  fill:#64748b;
+  font-family:"JetBrains Mono",monospace;
+  font-size:7px;
+  letter-spacing:.01em;
+}
+
+.econ-ipca-terminal-svg-v375 .zero-label{
+  fill:#94a3b8;
+  font-weight:800;
+}
+
+.econ-ipca-terminal-svg-v375 .bar.pos{
+  fill:#22c55e;
+  opacity:.88;
+}
+
+.econ-ipca-terminal-svg-v375 .bar.neg{
+  fill:#f43f5e;
+  opacity:.88;
+}
+
+/* O gráfico SVG já tem altura própria; evita conflito com barras antigas. */
+html.evo-ipca-terminal-no-all-v375 #econSparkIpcaV367{
+  min-height:190px !important;
+  height:190px !important;
+  padding:12px 14px !important;
+}
+
+@media (max-width:820px){
+  .econ-ipca-terminal-svg-v375{
+    height:146px;
+  }
+
+  .econ-ipca-terminal-svg-v375 .tick,
+  .econ-ipca-terminal-svg-v375 .x-label{
+    font-size:6px;
+  }
+
+  html.evo-ipca-terminal-no-all-v375 #econSparkIpcaV367{
+    min-height:168px !important;
+    height:168px !important;
+    padding:10px !important;
+  }
+
+  html.evo-ipca-terminal-no-all-v375 #sec-graficos .econ-range-tabs-v371[data-ipca-range],
+  html.evo-ipca-terminal-no-all-v375 #sec-graficos .econ-range-tabs-v371{
+    gap:6px;
+  }
+}
+
