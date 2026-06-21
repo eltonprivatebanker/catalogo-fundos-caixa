@@ -6323,6 +6323,116 @@ function atualizarResumoSelicDashboardV378(rows, mercado){
   set('selicHojeData', hojeData);
 }
 
+
+function econRenderMetaVersusMetaV379(containerId, rows, range){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+
+  const limit = range === 'all' ? 9999 : Number(range || 12);
+  const data = (rows || [])
+    .map(item => ({
+      value:Number(item.Inflacao12Meses),
+      date:item.DataReferencia,
+      label:econLabelMonthV378(item.DataReferencia)
+    }))
+    .filter(d => Number.isFinite(d.value) && d.date)
+    .slice(-limit);
+
+  if(data.length < 2){
+    el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
+    return;
+  }
+
+  const width = 720;
+  const height = 250;
+  const left = 48;
+  const right = 16;
+  const topPad = 18;
+  const bottomPad = 42;
+  const plotW = width - left - right;
+  const plotH = height - topPad - bottomPad;
+
+  const values = data.map(d => d.value);
+  const lo = Math.max(0, Math.min(1.5, Math.floor((Math.min(...values) - 0.4) * 2) / 2));
+  const hi = Math.max(6, Math.ceil((Math.max(...values) + 0.4) * 2) / 2);
+
+  const yFor = v => topPad + ((hi - v) / (hi - lo || 1)) * plotH;
+  const xFor = i => left + (i / (data.length - 1)) * plotW;
+
+  const ticks = [];
+  for(let v = Math.ceil(lo * 2) / 2; v <= hi + 0.001; v += 0.5){
+    ticks.push(Number(v.toFixed(1)));
+  }
+
+  const grid = ticks.map(v => {
+    const y = yFor(v);
+    const special = Math.abs(v - 1.5) < .001 || Math.abs(v - 3) < .001 || Math.abs(v - 4.5) < .001;
+    return `
+      <line class="grid ${special ? 'special' : ''}" x1="${left}" y1="${y.toFixed(1)}" x2="${left+plotW}" y2="${y.toFixed(1)}"></line>
+      <text class="axis y" x="${left - 8}" y="${(y + 3).toFixed(1)}" text-anchor="end">${econPctV378(v, false)}</text>
+    `;
+  }).join('');
+
+  const yBandTop = yFor(4.5);
+  const yBandBottom = yFor(1.5);
+  const yMeta = yFor(3);
+
+  const band = `
+    <rect class="band" x="${left}" y="${Math.min(yBandTop,yBandBottom).toFixed(1)}" width="${plotW}" height="${Math.abs(yBandBottom-yBandTop).toFixed(1)}" rx="10"></rect>
+    <line class="threshold teto" x1="${left}" y1="${yBandTop.toFixed(1)}" x2="${left+plotW}" y2="${yBandTop.toFixed(1)}"></line>
+    <line class="threshold meta" x1="${left}" y1="${yMeta.toFixed(1)}" x2="${left+plotW}" y2="${yMeta.toFixed(1)}"></line>
+    <line class="threshold piso" x1="${left}" y1="${yBandBottom.toFixed(1)}" x2="${left+plotW}" y2="${yBandBottom.toFixed(1)}"></line>
+  `;
+
+  const points = data.map((d, i) => `${xFor(i).toFixed(1)},${yFor(d.value).toFixed(1)}`);
+
+  const segments = data.slice(1).map((d, i) => {
+    const prev = data[i];
+    const avg = (prev.value + d.value) / 2;
+    let cls = 'seg ok';
+    if(avg > 4.5) cls = 'seg high';
+    else if(avg < 1.5) cls = 'seg low';
+    const p1 = `${xFor(i).toFixed(1)},${yFor(prev.value).toFixed(1)}`;
+    const p2 = `${xFor(i+1).toFixed(1)},${yFor(d.value).toFixed(1)}`;
+    return `<line class="${cls}" x1="${p1.split(',')[0]}" y1="${p1.split(',')[1]}" x2="${p2.split(',')[0]}" y2="${p2.split(',')[1]}"></line>`;
+  }).join('');
+
+  const dots = data.map((d, i) => {
+    let cls = 'dot ok';
+    if(d.value > 4.5) cls = 'dot high';
+    else if(d.value < 1.5) cls = 'dot low';
+    return `<circle class="${cls}" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="4.2"><title>${d.label} · ${econPctV378(d.value)}</title></circle>`;
+  }).join('');
+
+  const labelStep = Math.max(1, Math.round(data.length / 5));
+  const labels = data.map((d, i) => {
+    const show = i === 0 || i === data.length - 1 || i % labelStep === 0;
+    if(!show) return '';
+    const x = xFor(i);
+    return `<text class="axis x" x="${x.toFixed(1)}" y="${height - 24}" text-anchor="${i === 0 ? 'start' : i === data.length - 1 ? 'end' : 'middle'}">${d.label}</text>`;
+  }).join('');
+
+  const last = data[data.length - 1];
+
+  el.innerHTML = `
+    <svg class="econ-meta-legacy-svg-v379" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="IPCA em 12 meses versus meta">
+      <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
+      ${band}
+      ${grid}
+      ${segments}
+      ${dots}
+      ${labels}
+    </svg>
+    <div class="econ-meta-legend-v379" aria-hidden="true">
+      <span><i class="ipca"></i> IPCA 12M</span>
+      <span><i class="meta"></i> Meta 3%</span>
+      <span><i class="banda"></i> Banda 1,5%–4,5%</span>
+      <strong>Atual · ${econPctV378(last.value)}</strong>
+    </div>
+  `;
+}
+
+
 function econRenderTargetV378(target){
   if(target === 'ipca'){
     const range = econDashStateV378.range.ipca;
@@ -6336,9 +6446,7 @@ function econRenderTargetV378(target){
     const meta = econDashStateV378.metaNorm || [];
     const ipca = econDashStateV378.mercado?.cards?.ipca || {};
     if(meta.length >= 2){
-      econRenderLineSvgV378('econSparkMetaV367', meta, x => Number(x.Inflacao12Meses), x => x.DataReferencia, {
-        limit:range, band:true, className:'meta-line-v378', h:240, ticks:[1.5,3,4.5,5,5.5,6]
-      });
+      econRenderMetaVersusMetaV379('econSparkMetaV367', meta, range);
     }else{
       document.getElementById('econSparkMetaV367').innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
     }
@@ -9149,7 +9257,7 @@ async function sharePainelMercado(){
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -10912,7 +11020,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -10997,7 +11105,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11336,7 +11444,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11404,7 +11512,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11511,7 +11619,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11755,7 +11863,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11821,7 +11929,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11922,7 +12030,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12063,7 +12171,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12110,7 +12218,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12162,7 +12270,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12285,7 +12393,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12368,7 +12476,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12429,7 +12537,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12498,7 +12606,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12568,7 +12676,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12663,7 +12771,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12781,7 +12889,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12871,7 +12979,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -12940,7 +13048,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -13070,7 +13178,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13244,7 +13352,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13293,7 +13401,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13328,7 +13436,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13366,7 +13474,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13407,7 +13515,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -13519,7 +13627,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13561,7 +13669,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13691,7 +13799,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13828,7 +13936,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14041,7 +14149,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14197,7 +14305,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -15410,7 +15518,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   const CORE_DESKTOP_ORDER = [
     'Fundo',
     'Data Inicio',
@@ -16011,7 +16119,7 @@ if(document.readyState === 'loading'){
    alterar o botão ativo antes de chamar a função principal. */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
 
   function atualizarPorBotao(btn){
     if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
@@ -16591,7 +16699,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
 
   function bindToggleSemDadosV204(){
     const input = document.getElementById('toggleSemDados');
@@ -19100,7 +19208,7 @@ function openCdiAnalyticTableV274(){
    Move para o bloco correto do header e impede reinserções erradas.
 ════════════════════════════════════════════════════ */
 (function headerUpdateFixV374(){
-  const BUILD = 'ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377';
+  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
   window.__ELTAUM_HEADER_UPDATE_FIX_V374__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
