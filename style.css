@@ -56534,3 +56534,90 @@ html.mobile-v402 body #sec-graficos .econ-meta-band-v378 strong{
     font-weight:800!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v408 — Mobile IPCA resumo em card único + Selic copy
+   Objetivo: reduzir peso visual dos cards de IPCA mensal no mobile,
+   mantendo os 3 dados no mesmo bloco, sem bordas separadas fortes.
+   ========================================================= */
+html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
+  max-width:100%;
+}
+
+@media (max-width: 768px){
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:0!important;
+    margin-top:10px!important;
+    padding:12px 14px!important;
+    border:1px solid rgba(255,255,255,.08)!important;
+    border-radius:14px!important;
+    background:linear-gradient(180deg,rgba(12,16,31,.72),rgba(7,10,20,.58))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 > div{
+    min-height:auto!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "label value"
+      "date value"!important;
+    align-items:center!important;
+    gap:2px 12px!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 > div + div{
+    border-top:1px solid rgba(255,255,255,.065)!important;
+  }
+
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 span{
+    grid-area:label!important;
+    color:#9aa6c3!important;
+    font-size:.62rem!important;
+    line-height:1.05!important;
+    letter-spacing:.10em!important;
+    text-transform:uppercase!important;
+    font-weight:800!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong{
+    grid-area:value!important;
+    justify-self:end!important;
+    align-self:center!important;
+    font-size:1.06rem!important;
+    line-height:1!important;
+    letter-spacing:-.02em!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 small{
+    grid-area:date!important;
+    color:#aeb8cf!important;
+    font-size:.64rem!important;
+    line-height:1.12!important;
+    margin:0!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong.valor-negativo-v402,
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong.neg,
+  html.mobile-v408 body #mobileIpcaMensalV400 #ipcaResumoMinV250.valor-negativo-v402{
+    color:#fb7185!important;
+    text-shadow:0 0 10px rgba(251,113,133,.10)!important;
+  }
+
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong.valor-positivo-v402,
+  html.mobile-v408 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong.pos{
+    color:#86efac!important;
+  }
+}

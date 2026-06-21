@@ -6781,7 +6781,7 @@ function atualizarTituloPeriodoGrafico(chart, range){
       },
       999: {
         titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Histórico completo desde 1999'
+        subtitulo: 'Série histórica da Selic meta.'
       }
     }
   };
