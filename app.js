@@ -6045,26 +6045,29 @@ function econNumberV367(v){
   return Number.isFinite(n) ? n : null;
 }
 
-function econRenderBarsV367(containerId, rows, getValue, getLabel){
+function econRenderBarsV367(containerId, rows, getValue, getLabel, limit){
   const el = document.getElementById(containerId);
   if(!el) return;
 
+  const take = limit === 'all' ? 9999 : Number(limit || 12);
   const data = (rows || [])
     .map(item => ({ item, value: getValue(item), label: getLabel(item) }))
     .filter(d => Number.isFinite(d.value))
-    .slice(-24);
+    .slice(-take);
 
   if(!data.length){
     el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
     return;
   }
 
-  const maxAbs = Math.max(...data.map(d => Math.abs(d.value)), .01);
+  const maxAbs = Math.max(...data.map(d => Math.abs(d.value)), 0.01);
 
   el.innerHTML = `
-    <div class="econ-bars-track-v367">
+    <div class="econ-bars-zero-label-v371">linha zero</div>
+    <div class="econ-bars-track-v367 econ-bars-track-v371">
+      <span class="econ-zero-line-v371" aria-hidden="true"></span>
       ${data.map(d => {
-        const h = Math.max(8, Math.min(100, Math.round((Math.abs(d.value) / maxAbs) * 100)));
+        const h = Math.max(6, Math.min(46, Math.round((Math.abs(d.value) / maxAbs) * 46)));
         const sign = d.value >= 0 ? 'pos' : 'neg';
         const title = `${d.label}: ${econPctV367(d.value)}`;
         return `<i class="${sign}" style="--h:${h}%" title="${title}" aria-label="${title}"></i>`;
@@ -6305,6 +6308,7 @@ function selecionarIndicadorCleanV367(view){
 }
 
 function bindIndicadoresCleanV367(){
+  econBindRangeTabsV371();
   document.querySelectorAll('#sec-graficos .econ-clean-tab-v367').forEach(btn => {
     if(btn.dataset.cleanBoundV367 === '1') return;
     btn.dataset.cleanBoundV367 = '1';
@@ -6312,7 +6316,75 @@ function bindIndicadoresCleanV367(){
   });
 }
 
+
+const econCleanStateV371 = window.__ECON_CLEAN_STATE_V371__ || {
+  range:{ ipca:12, selic:12, meta:12 },
+  ipcaNorm:[],
+  selicNorm:[],
+  metaNorm:[],
+  mercado:null
+};
+window.__ECON_CLEAN_STATE_V371__ = econCleanStateV371;
+
+function econGetRangeV371(target){
+  return econCleanStateV371.range[target] || 12;
+}
+
+function econSetRangeV371(target, range){
+  econCleanStateV371.range[target] = range === 'all' ? 'all' : Number(range || 12);
+
+  document.querySelectorAll(`#sec-graficos .econ-range-tab-v371[data-econ-range-target="${target}"]`).forEach(btn => {
+    const active = String(btn.dataset.econRange) === String(range);
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+
+  econRenderRangeTargetV371(target);
+}
+
+function econBindRangeTabsV371(){
+  document.querySelectorAll('#sec-graficos .econ-range-tab-v371').forEach(btn => {
+    if(btn.dataset.rangeBoundV371 === '1') return;
+    btn.dataset.rangeBoundV371 = '1';
+    btn.addEventListener('click', () => econSetRangeV371(btn.dataset.econRangeTarget, btn.dataset.econRange));
+  });
+}
+
+function econRenderRangeTargetV371(target){
+  if(target === 'ipca'){
+    const range = econGetRangeV371('ipca');
+    const data = econCleanStateV371.ipcaNorm || [];
+    econRenderBarsV367('econSparkIpcaV367', data, d => Number(d.valor), d => fmtIPCALabelV250(d), range);
+    const take = range === 'all' ? data.length : Number(range || 12);
+    const visible = data.slice(-take);
+    if(visible.length) atualizarResumoIPCAMensalV250(visible);
+  }
+
+  if(target === 'selic'){
+    const range = econGetRangeV371('selic');
+    econRenderLineV367('econSparkSelicV367', econCleanStateV371.selicNorm || [], d => d._valor, d => {
+      if(d._dt && !isNaN(d._dt.getTime())) return String(d._dt.getFullYear());
+      return econLabelFromDateV367(d);
+    }, {limit: range});
+  }
+
+  if(target === 'meta'){
+    const range = econGetRangeV371('meta');
+    const metaNorm = econCleanStateV371.metaNorm || [];
+    const ipca = econCleanStateV371.mercado?.cards?.ipca || {};
+    if(metaNorm.length >= 2){
+      econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
+        const dt = new Date(d.DataReferencia);
+        return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
+      }, {limit: range, band:true, bandMin:1.5, bandMax:4.5, bandMid:3.0, lineClass:'line-alert', dotClass:'dot-alert', bandClass:'band-meta'});
+    }else{
+      econRenderMetaGaugeV368('econSparkMetaV367', ipca.acum_12m);
+    }
+  }
+}
+
 async function renderIndicadoresCleanV367(d){
+  econCleanStateV371.mercado = d;
   const ipca = d?.cards?.ipca || {};
   const selic = d?.cards?.selic_meta || {};
 
@@ -6347,7 +6419,8 @@ async function renderIndicadoresCleanV367(d){
 
   // IPCA mensal
   const ipcaNorm = normalizarHistoricoIPCA(histIpca);
-  econRenderBarsV367('econSparkIpcaV367', ipcaNorm, d => Number(d.valor), d => fmtIPCALabelV250(d));
+  econCleanStateV371.ipcaNorm = ipcaNorm;
+  econRenderRangeTargetV371('ipca');
 
   if(ipcaNorm.length){
     atualizarResumoIPCAMensalV250(ipcaNorm.slice(-24));
@@ -6374,10 +6447,8 @@ async function renderIndicadoresCleanV367(d){
     .filter(x => Number.isFinite(x._valor))
     .sort((a,b) => a._ts - b._ts);
 
-  econRenderLineV367('econSparkSelicV367', selicNorm, d => d._valor, d => {
-    if(d._dt && !isNaN(d._dt.getTime())) return String(d._dt.getFullYear());
-    return econLabelFromDateV367(d);
-  }, {limit:36});
+  econCleanStateV371.selicNorm = selicNorm;
+  econRenderRangeTargetV371('selic');
 
   if(selicNorm.length){
     atualizarResumoSelicCleanV368(selicNorm.slice(-60), d);
@@ -6392,17 +6463,13 @@ async function renderIndicadoresCleanV367(d){
     .filter(x => x?.DataReferencia && Number.isFinite(Number(x.Inflacao12Meses)))
     .sort((a,b) => new Date(a.DataReferencia) - new Date(b.DataReferencia));
 
-  if(metaNorm.length >= 2){
-    econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
-      const dt = new Date(d.DataReferencia);
-      return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
-    }, {limit:36, band:true, bandMin:1.5, bandMax:4.5, bandMid:3.0, lineClass:'line-alert', dotClass:'dot-alert', bandClass:'band-meta'});
+  econCleanStateV371.metaNorm = metaNorm;
+  econRenderRangeTargetV371('meta');
 
+  if(metaNorm.length >= 2){
     const last = metaNorm[metaNorm.length - 1];
     econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)));
   }else{
-    // v368: se o histórico completo não carregar, ainda exibe o dado atual do card em forma de régua.
-    econRenderMetaGaugeV368('econSparkMetaV367', ipca.acum_12m);
     econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(ipca.acum_12m)));
   }
 
@@ -19308,7 +19375,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_PREMIUM_20260620_v370';
+  const BUILD = 'ELTAUM_EVO_PERIODS_NEGATIVE_BARS_20260620_v371';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }

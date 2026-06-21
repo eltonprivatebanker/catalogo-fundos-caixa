@@ -52994,3 +52994,110 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   }
 }
 
+/* PATCH v371 — barras negativas para baixo + seletores de período */
+.econ-range-tabs-v371{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:8px 0 12px;
+}
+
+.econ-range-tab-v371{
+  appearance:none;
+  border:1px solid rgba(148,163,184,.18);
+  background:rgba(15,23,42,.58);
+  color:#cbd5e1;
+  border-radius:999px;
+  min-height:30px;
+  padding:0 11px;
+  font-size:.68rem;
+  font-weight:850;
+  cursor:pointer;
+}
+
+.econ-range-tab-v371.active{
+  border-color:rgba(200,151,58,.52);
+  background:rgba(200,151,58,.14);
+  color:#ffd17a;
+}
+
+.econ-bars-track-v371{
+  position:relative;
+  height:112px;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  border-bottom:0 !important;
+}
+
+.econ-zero-line-v371{
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:1px;
+  background:rgba(148,163,184,.30);
+  z-index:0;
+}
+
+.econ-bars-zero-label-v371{
+  display:flex;
+  justify-content:flex-end;
+  margin:0 0 2px;
+  color:#64748b;
+  font-size:.58rem;
+  font-family:"JetBrains Mono",monospace;
+}
+
+.econ-bars-track-v371 i{
+  position:relative;
+  z-index:1;
+  flex:1 1 0;
+  min-width:3px;
+  height:var(--h);
+  max-height:46%;
+  background:rgba(46,209,122,.78);
+}
+
+.econ-bars-track-v371 i.pos{
+  align-self:center;
+  margin-bottom:var(--h);
+  transform:translateY(50%);
+  border-radius:6px 6px 2px 2px;
+}
+
+.econ-bars-track-v371 i.neg{
+  align-self:center;
+  margin-top:var(--h);
+  transform:translateY(-50%);
+  border-radius:2px 2px 6px 6px;
+  background:rgba(240,85,101,.82);
+}
+
+@media (max-width:820px){
+  .econ-range-tabs-v371{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .econ-range-tab-v371{
+    width:100%;
+    padding:0 4px;
+    min-height:28px;
+    font-size:.58rem;
+  }
+
+  [data-econ-range-target="selic"].econ-range-tab-v371{
+    font-size:.54rem;
+  }
+
+  .econ-bars-track-v371{
+    height:92px;
+  }
+
+  .econ-bars-zero-label-v371{
+    font-size:.52rem;
+  }
+}
+
