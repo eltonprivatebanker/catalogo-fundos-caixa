@@ -54511,3 +54511,174 @@ html.evo-overflow-zoom-fix-v384 .ranking-table-wrap{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v390 — Desktop Only
+   Balanceamento estrutural da seção Juros e CDI.
+   Resolve o vazio superior à direita e o vazio inferior à esquerda
+   sem alterar HTML, IDs, classes dinâmicas ou JavaScript.
+════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .market-reference-block-v167.rates-reference-v167 {
+    display: grid !important;
+    grid-template-columns: minmax(420px, 0.72fr) minmax(720px, 1.28fr) !important;
+    grid-template-rows: auto auto minmax(0, 1fr) !important;
+    column-gap: 24px !important;
+    row-gap: 16px !important;
+    align-items: stretch !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .market-reference-head-v167 {
+    grid-column: 1 / -1 !important;
+    grid-row: 1 !important;
+  }
+
+  /* Topo esquerdo: Selic + CDI ocupam somente a coluna esquerda.
+     Isso libera a coluna direita para o painel CDI subir e eliminar o vazio superior. */
+  .market-reference-block-v167.rates-reference-v167 .rates-summary-v167 {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    align-self: stretch !important;
+    width: auto !important;
+    max-width: none !important;
+    margin: 24px 0 0 28px !important;
+    padding: 0 !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .rate-summary-card-v167 {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  /* O wrapper antigo vira "transparente" para permitir um grid real no componente pai. */
+  .market-reference-block-v167.rates-reference-v167 .rates-detail-grid-v167 {
+    display: contents !important;
+  }
+
+  /* Agenda Copom ocupa a coluna esquerda abaixo dos cards Selic/CDI. */
+  .market-reference-block-v167.rates-reference-v167 .copom-compact-v167 {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+    align-self: stretch !important;
+    justify-self: stretch !important;
+    width: auto !important;
+    height: 100% !important;
+    min-height: 360px !important;
+    margin: 0 0 28px 28px !important;
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .copom-compact-v167 .reference-subhead-v167 {
+    margin: 0 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .copom-exec-summary-v270 {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .copom-exec-card-v270 {
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 148px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .copom-footnote-v256 {
+    margin-top: auto !important;
+    padding-top: 12px !important;
+  }
+
+  /* Painel CDI sobe para a direita e passa a ocupar a altura dos cards + Copom. */
+  .market-reference-block-v167.rates-reference-v167 .cdi-year-history {
+    grid-column: 2 !important;
+    grid-row: 2 / 4 !important;
+    align-self: stretch !important;
+    justify-self: stretch !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 24px 28px 28px 0 !important;
+    padding: 24px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-year-head {
+    margin: 0 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpis-v271 {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpi-v271 {
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 88px !important;
+    grid-column: auto !important;
+    grid-row: auto !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-month-carousel-v322 {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-month-card-v322 {
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 12px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-chart-canvas-wrap-v271 {
+    flex: 1 1 auto !important;
+    min-height: 220px !important;
+    height: auto !important;
+    margin: 0 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-chart-scroll-wrap-v273,
+  .market-reference-block-v167.rates-reference-v167 .cdi-chart-scroll-inner-v273 {
+    height: 100% !important;
+    min-height: 220px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 #cdiYearChartV271 {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100% !important;
+    min-height: 220px !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1240px) {
+  .market-reference-block-v167.rates-reference-v167 {
+    grid-template-columns: minmax(360px, 0.78fr) minmax(560px, 1.22fr) !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpis-v271 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-month-carousel-v322 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
