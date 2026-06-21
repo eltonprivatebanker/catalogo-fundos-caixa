@@ -9431,7 +9431,7 @@ async function sharePainelMercado(){
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -11194,7 +11194,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11279,7 +11279,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11618,7 +11618,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11686,7 +11686,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11793,7 +11793,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12037,7 +12037,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12103,7 +12103,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12204,7 +12204,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12345,7 +12345,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12392,7 +12392,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12444,7 +12444,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12567,7 +12567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12650,7 +12650,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12711,7 +12711,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12780,7 +12780,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12850,7 +12850,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12945,7 +12945,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -13063,7 +13063,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -13153,7 +13153,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -13222,7 +13222,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -13352,7 +13352,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13526,7 +13526,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13575,7 +13575,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13610,7 +13610,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13648,7 +13648,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13689,7 +13689,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -13801,7 +13801,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13843,7 +13843,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13973,7 +13973,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14110,7 +14110,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14323,7 +14323,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14479,7 +14479,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -15692,7 +15692,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   const CORE_DESKTOP_ORDER = [
     'Fundo',
     'Data Inicio',
@@ -16293,7 +16293,7 @@ if(document.readyState === 'loading'){
    alterar o botão ativo antes de chamar a função principal. */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
 
   function atualizarPorBotao(btn){
     if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
@@ -16873,7 +16873,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
 
   function bindToggleSemDadosV204(){
     const input = document.getElementById('toggleSemDados');
@@ -19382,7 +19382,7 @@ function openCdiAnalyticTableV274(){
    Move para o bloco correto do header e impede reinserções erradas.
 ════════════════════════════════════════════════════ */
 (function headerUpdateFixV374(){
-  const BUILD = 'ELTAUM_EVO_SELIC_HELPER_FIX_20260620_v383';
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
   window.__ELTAUM_HEADER_UPDATE_FIX_V374__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -19465,5 +19465,40 @@ function openCdiAnalyticTableV274(){
   }else{
     boot();
   }
+})();
+
+/* PATCH v384 — proteção leve contra deslocamento horizontal */
+(function overflowZoomGuardV384(){
+  const BUILD = 'ELTAUM_EVO_OVERFLOW_ZOOM_FIX_20260620_v384';
+  window.__ELTAUM_OVERFLOW_ZOOM_FIX_V384__ = { build: BUILD };
+
+  function guard(){
+    try{
+      document.documentElement.classList.add('evo-overflow-zoom-fix-v384');
+
+      // Se algum componente causar scroll horizontal, volta para a origem.
+      if(window.scrollX && Math.abs(window.scrollX) > 0){
+        window.scrollTo({ left:0, top:window.scrollY, behavior:'auto' });
+      }
+
+      // Diagnóstico apenas no console, não altera zoom do usuário.
+      const approxZoom = Math.round((window.devicePixelRatio || 1) * 100);
+      if(approxZoom < 50 && !window.__ELTAUM_ZOOM_WARNED_V384__){
+        window.__ELTAUM_ZOOM_WARNED_V384__ = true;
+        console.warn('[v384] Zoom do navegador parece muito baixo:', approxZoom + '%. Use Ctrl+0 para voltar a 100%.');
+      }
+    }catch(e){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', guard, {once:true});
+  }else{
+    guard();
+  }
+
+  window.addEventListener('resize', guard, {passive:true});
+  window.addEventListener('scroll', () => {
+    if(window.scrollX && Math.abs(window.scrollX) > 0) guard();
+  }, {passive:true});
 })();
 

@@ -53224,3 +53224,69 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   color:#b7c5dc;
 }
 
+/* PATCH v384 — trava de overflow horizontal / zoom acidental
+   Diagnóstico: a página estava em zoom ~25% e o carrossel mensal do dólar
+   estava criando largura horizontal fora da viewport. */
+html.evo-overflow-zoom-fix-v384,
+html.evo-overflow-zoom-fix-v384 body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden !important;
+}
+
+html.evo-overflow-zoom-fix-v384 *{
+  box-sizing:border-box;
+}
+
+/* Evita que grids/cards empurrem o documento para fora da tela */
+html.evo-overflow-zoom-fix-v384 .app-shell,
+html.evo-overflow-zoom-fix-v384 .page-shell,
+html.evo-overflow-zoom-fix-v384 main,
+html.evo-overflow-zoom-fix-v384 section,
+html.evo-overflow-zoom-fix-v384 .section-gap,
+html.evo-overflow-zoom-fix-v384 .market-section,
+html.evo-overflow-zoom-fix-v384 #sec-mercado,
+html.evo-overflow-zoom-fix-v384 #sec-graficos{
+  max-width:100% !important;
+}
+
+/* O culpado do diagnóstico: itens mensais do dólar/snap para fora da viewport.
+   Mantém rolagem dentro do componente, sem deslocar a página inteira. */
+html.evo-overflow-zoom-fix-v384 .dolar-month-row-v162,
+html.evo-overflow-zoom-fix-v384 .dolar-month-snap-v98,
+html.evo-overflow-zoom-fix-v384 .dolar-month-item{
+  max-width:100% !important;
+}
+
+html.evo-overflow-zoom-fix-v384 .dolar-month-strip,
+html.evo-overflow-zoom-fix-v384 .dolar-month-list,
+html.evo-overflow-zoom-fix-v384 .dolar-months,
+html.evo-overflow-zoom-fix-v384 [class*="dolar-month"]{
+  min-width:0 !important;
+}
+
+/* Preserva carrossel horizontal quando existir, mas dentro do próprio bloco */
+html.evo-overflow-zoom-fix-v384 .dolar-month-scroll,
+html.evo-overflow-zoom-fix-v384 .dolar-month-carousel,
+html.evo-overflow-zoom-fix-v384 .market-v162-dollar-months,
+html.evo-overflow-zoom-fix-v384 .market-v150-dollar-months{
+  max-width:100% !important;
+  overflow-x:auto !important;
+  overscroll-behavior-x:contain !important;
+}
+
+/* SVGs novos da seção de indicadores nunca devem criar largura documental */
+html.evo-overflow-zoom-fix-v384 #sec-graficos svg{
+  max-width:100% !important;
+  width:100% !important;
+}
+
+/* Tabelas grandes continuam rolando dentro do wrapper, não no body */
+html.evo-overflow-zoom-fix-v384 .table-wrap,
+html.evo-overflow-zoom-fix-v384 .fund-table-wrap,
+html.evo-overflow-zoom-fix-v384 .ranking-table-wrap{
+  max-width:100% !important;
+  overflow-x:auto !important;
+  overscroll-behavior-x:contain !important;
+}
+
