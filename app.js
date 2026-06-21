@@ -6433,6 +6433,102 @@ function econRenderMetaVersusMetaV379(containerId, rows, range){
 }
 
 
+
+function econRenderSelicLegacyV380(containerId, rows, range){
+  const el = document.getElementById(containerId);
+  if(!el) return;
+
+  const limit = range === 'all' ? 9999 : Number(range || 120);
+  const data = (rows || [])
+    .filter(x => Number.isFinite(Number(x._valor)) && x._dt)
+    .sort((a,b) => a._ts - b._ts)
+    .slice(-limit)
+    .map(x => ({
+      value:Number(x._valor),
+      date:x._dt,
+      label:econLabelMonthV378(x._dt)
+    }));
+
+  if(data.length < 2){
+    el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
+    return;
+  }
+
+  const width = 1280;
+  const height = 350;
+  const left = 56;
+  const right = 26;
+  const topPad = 26;
+  const bottomPad = 40;
+  const plotW = width - left - right;
+  const plotH = height - topPad - bottomPad;
+
+  const values = data.map(d => d.value);
+  const maxValue = Math.max(...values);
+  const top = Math.max(16, Math.ceil(Math.max(maxValue, 15) / 5) * 5);
+  const lo = 0;
+
+  const yFor = v => topPad + ((top - v) / (top - lo || 1)) * plotH;
+  const xFor = i => left + (i / (data.length - 1)) * plotW;
+
+  const ticks = [];
+  for(let v = 0; v <= top + .001; v += 5) ticks.push(v);
+
+  const grid = ticks.map(v => {
+    const y = yFor(v);
+    return `
+      <line class="grid" x1="${left}" y1="${y.toFixed(1)}" x2="${left + plotW}" y2="${y.toFixed(1)}"></line>
+      <text class="axis y" x="${left - 8}" y="${(y + 3).toFixed(1)}" text-anchor="end">${econPctV378(v, false)}</text>
+    `;
+  }).join('');
+
+  const points = data.map((d, i) => `${xFor(i).toFixed(1)},${yFor(d.value).toFixed(1)}`).join(' ');
+  const area = `${left},${yFor(0).toFixed(1)} ${points} ${left + plotW},${yFor(0).toFixed(1)}`;
+
+  const maxIdx = values.indexOf(maxValue);
+  const minValue = Math.min(...values);
+  const minIdx = values.indexOf(minValue);
+  const lastIdx = data.length - 1;
+
+  const dots = data.map((d, i) => {
+    let cls = 'dot small';
+    let r = 2.4;
+    if(i === maxIdx){ cls = 'dot max'; r = 6; }
+    if(i === minIdx){ cls = 'dot min'; r = 5.4; }
+    if(i === lastIdx){ cls = 'dot current'; r = 6.4; }
+    return `<circle class="${cls}" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="${r}"><title>${d.label} · ${econPctV378(d.value, false)} a.a.</title></circle>`;
+  }).join('');
+
+  const labelTargetCount = range === 'all' ? 7 : range === 12 ? 4 : range === 60 ? 5 : 6;
+  const labelStep = Math.max(1, Math.round(data.length / labelTargetCount));
+  const labels = data.map((d, i) => {
+    const show = i === 0 || i === data.length - 1 || i % labelStep === 0;
+    if(!show) return '';
+    const x = xFor(i);
+    return `<text class="axis x" x="${x.toFixed(1)}" y="${height - 10}" text-anchor="${i === 0 ? 'start' : i === data.length - 1 ? 'end' : 'middle'}">${d.label}</text>`;
+  }).join('');
+
+  const last = data[lastIdx];
+
+  el.innerHTML = `
+    <svg class="econ-selic-legacy-svg-v380" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="Trajetória histórica da Selic meta">
+      <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
+      ${grid}
+      <polygon class="area" points="${area}"></polygon>
+      <polyline class="main-line" points="${points}" fill="none"></polyline>
+      ${dots}
+      ${labels}
+    </svg>
+    <div class="econ-selic-legend-v380" aria-hidden="true">
+      <span><i class="max"></i> máxima</span>
+      <span><i class="min"></i> mínima</span>
+      <span><i class="current"></i> vigente</span>
+      <strong>Atual · ${econPctV378(last.value, false)} a.a.</strong>
+    </div>
+  `;
+}
+
+
 function econRenderTargetV378(target){
   if(target === 'ipca'){
     const range = econDashStateV378.range.ipca;
@@ -6456,10 +6552,7 @@ function econRenderTargetV378(target){
   if(target === 'selic'){
     const range = econDashStateV378.range.selic;
     const selic = econDashStateV378.selicNorm || [];
-    econRenderLineSvgV378('econSparkSelicV367', selic, x => Number(x._valor), x => x._dt, {
-      limit:range, className:'selic-line-v378', area:true, w:1280, h:330, left:54, bottomPad:34,
-      ticks:[0,5,10,15,20,25,30,35,40,45,50], min:0
-    });
+    econRenderSelicLegacyV380('econSparkSelicV367', selic, range);
   }
 }
 
@@ -9257,7 +9350,7 @@ async function sharePainelMercado(){
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -11020,7 +11113,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11105,7 +11198,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11444,7 +11537,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11512,7 +11605,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11619,7 +11712,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11863,7 +11956,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11929,7 +12022,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12030,7 +12123,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12171,7 +12264,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12218,7 +12311,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12270,7 +12363,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12393,7 +12486,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12476,7 +12569,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12537,7 +12630,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12606,7 +12699,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12676,7 +12769,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12771,7 +12864,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12889,7 +12982,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12979,7 +13072,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -13048,7 +13141,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -13178,7 +13271,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13352,7 +13445,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13401,7 +13494,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13436,7 +13529,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13474,7 +13567,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13515,7 +13608,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -13627,7 +13720,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13669,7 +13762,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13799,7 +13892,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13936,7 +14029,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14149,7 +14242,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14305,7 +14398,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -15518,7 +15611,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   const CORE_DESKTOP_ORDER = [
     'Fundo',
     'Data Inicio',
@@ -16119,7 +16212,7 @@ if(document.readyState === 'loading'){
    alterar o botão ativo antes de chamar a função principal. */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
 
   function atualizarPorBotao(btn){
     if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
@@ -16699,7 +16792,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
 
   function bindToggleSemDadosV204(){
     const input = document.getElementById('toggleSemDados');
@@ -19208,7 +19301,7 @@ function openCdiAnalyticTableV274(){
    Move para o bloco correto do header e impede reinserções erradas.
 ════════════════════════════════════════════════════ */
 (function headerUpdateFixV374(){
-  const BUILD = 'ELTAUM_EVO_META_CHART_LEGACY_STYLE_20260620_v379';
+  const BUILD = 'ELTAUM_EVO_SELIC_LEGACY_STYLE_20260620_v380';
   window.__ELTAUM_HEADER_UPDATE_FIX_V374__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
