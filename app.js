@@ -5418,6 +5418,12 @@ function atualizarResumoIPCAMensalV250(slice){
   set('ipcaResumoMaxV250', fmtPctIPCAResumoV251(maxObj.valor));
   set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxObj.item));
   set('ipcaResumoMinV250', fmtPctIPCAResumoV251(minObj.valor));
+  const ipcaMinElV402 = document.getElementById('ipcaResumoMinV250');
+  if(ipcaMinElV402){
+    const nMinV402 = Number(minObj.valor);
+    ipcaMinElV402.classList.toggle('valor-negativo-v402', Number.isFinite(nMinV402) && nMinV402 < 0);
+    ipcaMinElV402.classList.toggle('valor-positivo-v402', Number.isFinite(nMinV402) && nMinV402 > 0);
+  }
   set('ipcaResumoMinDataV250', fmtIPCALabelV250(minObj.item));
 }
 
@@ -6085,6 +6091,7 @@ function econRangeLabelV378(range, suffix = 'M'){
   if(range === 'all') return 'histórico completo';
   const n = Number(range || 12);
   if(suffix === 'A'){
+    if(n === 36) return '3 anos';
     if(n === 12) return '1 ano';
     if(n === 60) return '5 anos';
     if(n === 120) return '10 anos';
@@ -6292,6 +6299,12 @@ function atualizarResumoIPCADashboardV378(rows){
   econSetTextV378('ipcaResumoMaxV250', econPctV378(max.valor));
   econSetTextV378('ipcaResumoMaxDataV250', econLabelFromItemV378(max));
   econSetTextV378('ipcaResumoMinV250', econPctV378(min.valor));
+  const ipcaMinElV402 = document.getElementById('ipcaResumoMinV250');
+  if(ipcaMinElV402){
+    const nMinV402 = Number(min.valor);
+    ipcaMinElV402.classList.toggle('valor-negativo-v402', Number.isFinite(nMinV402) && nMinV402 < 0);
+    ipcaMinElV402.classList.toggle('valor-positivo-v402', Number.isFinite(nMinV402) && nMinV402 > 0);
+  }
   econSetTextV378('ipcaResumoMinDataV250', econLabelFromItemV378(min));
 }
 
@@ -6535,14 +6548,22 @@ function econRenderSelicLegacyV380(containerId, rows, range){
   const kpiData = data.filter(d => !d.contextOnly);
   const values = data.map(d => d.value);
   const maxValue = Math.max(...values);
-  const top = Math.max(16, Math.ceil(Math.max(maxValue, 15) / 5) * 5);
-  const lo = 0;
+  const minValue = Math.min(...values);
+  const amplitude = maxValue - minValue;
+  const useDynamicScale = range !== 'all' && amplitude > 0 && amplitude < 3;
+  const top = useDynamicScale ? Math.ceil((maxValue + 0.35) * 4) / 4 : Math.max(16, Math.ceil(Math.max(maxValue, 15) / 5) * 5);
+  const lo = useDynamicScale ? Math.max(0, Math.floor((minValue - 0.35) * 4) / 4) : 0;
 
   const yFor = v => topPad + ((top - v) / (top - lo || 1)) * plotH;
   const xFor = i => left + (i / (data.length - 1)) * plotW;
 
   const ticks = [];
-  for(let v = 0; v <= top + .001; v += 5) ticks.push(v);
+  if(useDynamicScale){
+    const mid = (top + lo) / 2;
+    [lo, mid, top].forEach(v => ticks.push(v));
+  }else{
+    for(let v = 0; v <= top + .001; v += 5) ticks.push(v);
+  }
 
   const grid = ticks.map(v => {
     const y = yFor(v);
@@ -6553,7 +6574,7 @@ function econRenderSelicLegacyV380(containerId, rows, range){
   }).join('');
 
   const points = data.map((d, i) => `${xFor(i).toFixed(1)},${yFor(d.value).toFixed(1)}`).join(' ');
-  const area = `${left},${yFor(0).toFixed(1)} ${points} ${left + plotW},${yFor(0).toFixed(1)}`;
+  const area = `${left},${yFor(lo).toFixed(1)} ${points} ${left + plotW},${yFor(lo).toFixed(1)}`;
 
   const kpiValues = kpiData.length ? kpiData.map(d => d.value) : values;
   const maxPeriodValue = Math.max(...kpiValues);
@@ -6571,7 +6592,7 @@ function econRenderSelicLegacyV380(containerId, rows, range){
     return `<circle class="${cls}" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="${r}"><title>${d.label} · ${econPctV378(d.value, false)} a.a.</title></circle>`;
   }).join('');
 
-  const labelTargetCount = range === 'all' ? 7 : range === 12 ? 4 : range === 60 ? 5 : 6;
+  const labelTargetCount = range === 'all' ? 7 : range === 36 ? 4 : range === 60 ? 5 : 6;
   const labelStep = Math.max(1, Math.round(data.length / labelTargetCount));
   const labels = data.map((d, i) => {
     const show = i === 0 || i === data.length - 1 || i % labelStep === 0;
@@ -6585,7 +6606,7 @@ function econRenderSelicLegacyV380(containerId, rows, range){
   const periodEnd = kpiData[kpiData.length - 1]?.label || last.label;
 
   el.innerHTML = `
-    <svg class="econ-selic-legacy-svg-v380" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="Trajetória histórica da Selic meta">
+    <svg class="econ-selic-legacy-svg-v380" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" aria-label="Trajetória histórica da Selic meta">
       <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
       ${grid}
       <polygon class="area" points="${area}"></polygon>
@@ -6667,6 +6688,23 @@ async function renderIndicadoresDashboardV378(d){
     const valor = econNumberV378(item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
     return {...item, _dt:dt, _ts:dt ? dt.getTime() : idx, _valor:valor};
   }).filter(x => Number.isFinite(x._valor)).sort((a,b) => a._ts - b._ts);
+
+  try{
+    const refAtualV402 = typeof resolverDataUltimaAlteracaoSelic === 'function' ? resolverDataUltimaAlteracaoSelic(d) : null;
+    const dtAtualV402 = econParseDateV378(refAtualV402?.data || selic.data || selic.data_referencia || '');
+    const valorAtualV402 = econNumberV378(selic.valor ?? selic.MetaSelic ?? selic.taxa);
+    const ultimoV402 = selicNorm[selicNorm.length - 1];
+    if(dtAtualV402 && Number.isFinite(valorAtualV402) && (!ultimoV402 || dtAtualV402.getTime() > ultimoV402._ts || Math.abs(Number(ultimoV402._valor) - valorAtualV402) > 0.0001)){
+      selicNorm.push({
+        DataReuniaoCopom: refAtualV402?.data || selic.data || selic.data_referencia,
+        _dt: dtAtualV402,
+        _ts: dtAtualV402.getTime(),
+        _valor: valorAtualV402,
+        _currentInjectedV402: true
+      });
+      selicNorm.sort((a,b) => a._ts - b._ts);
+    }
+  }catch(e){}
 
   econDashStateV378.selicNorm = selicNorm;
   // v381: KPIs da Selic agora são atualizados dentro de econRenderTargetV378,
