@@ -56026,3 +56026,186 @@ html.mobile-v402 body #sec-graficos .econ-meta-band-v378 strong{
   html.mobile-v403 body #sec-graficos .econ-meta-band-v378 b{font-size:.52rem !important;}
   html.mobile-v403 body #sec-graficos .econ-meta-legend-v379{font-size:.54rem !important;}
 }
+
+
+/* =========================================================
+   PATCH MOBILE v404 — topo mais compacto + atualização discreta
+   - Centraliza/compacta o horário de atualização no header mobile
+   - Remove qualquer sobra visual da antiga barra global de busca
+   - Reduz espaço vazio no topo da página
+   ========================================================= */
+@media (max-width: 760px){
+  html.mobile-v404 body{
+    overflow-x:hidden !important;
+  }
+
+  html.mobile-v404 .page{
+    padding-top:8px !important;
+  }
+
+  html.mobile-v404 header.site-header-clean,
+  html.mobile-v404 .site-header-clean,
+  html.mobile-v404 header.site-header-v217,
+  html.mobile-v404 .site-header-v217{
+    position:relative !important;
+    margin-top:0 !important;
+    margin-bottom:10px !important;
+    padding:14px 14px 40px !important;
+    min-height:104px !important;
+    align-items:center !important;
+    overflow:hidden !important;
+  }
+
+  html.mobile-v404 .site-header-clean .brand,
+  html.mobile-v404 .site-header-v217 .brand{
+    width:100% !important;
+    min-width:0 !important;
+    padding-right:0 !important;
+  }
+
+  html.mobile-v404 .site-header-clean .brand-logo,
+  html.mobile-v404 .site-header-v217 .brand-logo{
+    width:42px !important;
+    height:42px !important;
+    min-width:42px !important;
+    border-radius:12px !important;
+    font-size:1.08rem !important;
+  }
+
+  html.mobile-v404 .site-header-clean .brand-text h1,
+  html.mobile-v404 .site-header-v217 .brand-text h1{
+    font-size:.98rem !important;
+    line-height:1.15 !important;
+    letter-spacing:-.02em !important;
+  }
+
+  html.mobile-v404 .site-header-clean .brand-text p,
+  html.mobile-v404 .site-header-v217 .brand-text p{
+    margin-top:3px !important;
+    font-size:.56rem !important;
+    line-height:1.25 !important;
+    letter-spacing:0 !important;
+    text-transform:none !important;
+    max-width:210px !important;
+  }
+
+  /* Esconde a pílula de origem no mobile para não competir com o horário */
+  html.mobile-v404 .site-header-clean .header-source-pill-v343,
+  html.mobile-v404 .site-header-v217 .header-source-pill-v343{
+    display:none !important;
+  }
+
+  /* O app pode manter o update dentro de .header-data-status-v343 ou mover para .header-update-host-v374. Cobrimos os dois casos. */
+  html.mobile-v404 .site-header-clean .header-data-status-v343,
+  html.mobile-v404 .site-header-v217 .header-data-status-v343{
+    position:static !important;
+    display:block !important;
+    width:0 !important;
+    min-width:0 !important;
+    height:0 !important;
+    padding:0 !important;
+    margin:0 !important;
+    border:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  html.mobile-v404 .site-header-clean .header-update-host-v374,
+  html.mobile-v404 .site-header-v217 .header-update-host-v374{
+    position:absolute !important;
+    left:50% !important;
+    bottom:10px !important;
+    transform:translateX(-50%) !important;
+    z-index:4 !important;
+    display:flex !important;
+    justify-content:center !important;
+    width:auto !important;
+    max-width:calc(100% - 28px) !important;
+    margin:0 !important;
+    padding:0 !important;
+  }
+
+  html.mobile-v404 .site-header-clean #lastUpdate,
+  html.mobile-v404 .site-header-v217 #lastUpdate,
+  html.mobile-v404 .site-header-clean .live-badge,
+  html.mobile-v404 .site-header-v217 .live-badge{
+    position:absolute !important;
+    left:50% !important;
+    bottom:10px !important;
+    transform:translateX(-50%) !important;
+    width:auto !important;
+    max-width:calc(100% - 28px) !important;
+    min-height:22px !important;
+    height:22px !important;
+    padding:3px 9px !important;
+    margin:0 !important;
+    border-radius:999px !important;
+    border:1px solid rgba(91,156,246,.16) !important;
+    background:rgba(8,12,24,.72) !important;
+    box-shadow:0 8px 18px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.035) !important;
+    color:#aeb9d2 !important;
+    font-size:.56rem !important;
+    line-height:1 !important;
+    letter-spacing:.02em !important;
+    white-space:nowrap !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:6px !important;
+  }
+
+  html.mobile-v404 .site-header-clean .header-update-host-v374 #lastUpdate,
+  html.mobile-v404 .site-header-v217 .header-update-host-v374 #lastUpdate{
+    position:static !important;
+    left:auto !important;
+    bottom:auto !important;
+    transform:none !important;
+  }
+
+  html.mobile-v404 #lastUpdate .live-update-label,
+  html.mobile-v404 .live-badge .live-update-label{
+    display:none !important;
+  }
+
+  html.mobile-v404 #lastUpdate .live-dot,
+  html.mobile-v404 .live-badge .live-dot{
+    width:5px !important;
+    height:5px !important;
+    min-width:5px !important;
+    box-shadow:0 0 8px rgba(46,209,122,.8) !important;
+  }
+
+  html.mobile-v404 #lastUpdate .live-update-time,
+  html.mobile-v404 .live-badge .live-update-time{
+    font-family:'JetBrains Mono',monospace !important;
+    font-size:.56rem !important;
+    color:#b7c2dc !important;
+  }
+
+  /* Remove qualquer sobra da antiga busca global que ficava no topo/overlay */
+  html.mobile-v404 #gfb,
+  html.mobile-v404 .gfb-root-v308,
+  html.mobile-v404 #gfb-inner,
+  html.mobile-v404 #gfb-search-wrap,
+  html.mobile-v404 #gfb-chips{
+    display:none !important;
+    visibility:hidden !important;
+    opacity:0 !important;
+    height:0 !important;
+    min-height:0 !important;
+    max-height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    border:0 !important;
+    overflow:hidden !important;
+    pointer-events:none !important;
+  }
+
+  html.mobile-v404 .desktop-anchor-nav-ui-v132{
+    display:none !important;
+    height:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+}
