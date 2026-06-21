@@ -53201,3 +53201,14 @@ html.title-hero-levels-v306 h2.section-hero-soft-v306 .section-title-icon-v302{
   color:#bbf7d0;
 }
 
+/* PATCH v382 — gráfico e KPIs da Selic sincronizados por período real */
+.evo-selic-period-sync-v382 .econ-selic-legacy-svg-v380 .dot.context{
+  fill:#d8a23e;
+  opacity:.28;
+  stroke:none;
+}
+
+.evo-selic-period-sync-v382 .econ-selic-legend-v380 strong{
+  gap:4px;
+}
+
