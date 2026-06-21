@@ -6010,65 +6010,129 @@ function bindEvolucaoTabs(){
 }
 
 
+
 async function inicializarGraficos(d){
   _dadosMercado = d;
-  bindIndicadoresCleanV367();
-  await renderIndicadoresCleanV367(d);
+  await renderIndicadoresDashboardV378(d);
+  bindIndicadoresDashboardV378();
 }
 
-function econPctV367(v){
-  if(typeof formatPctCard === 'function') return formatPctCard(v);
+const econDashStateV378 = window.__ECON_DASH_STATE_V378__ || {
+  range:{ ipca:12, meta:12, selic:'all' },
+  ipcaNorm:[],
+  metaNorm:[],
+  selicNorm:[],
+  mercado:null
+};
+window.__ECON_DASH_STATE_V378__ = econDashStateV378;
+
+function econPctV378(v, withPlus = true){
   const n = Number(v);
   if(!Number.isFinite(n)) return '—';
-  const sinal = n > 0 ? '+' : '';
-  return sinal + n.toFixed(2).replace('.', ',') + '%';
+  const sign = withPlus && n > 0 ? '+' : '';
+  return sign + n.toFixed(2).replace('.', ',') + '%';
 }
 
-function econSetTextV367(id, value){
+function econSetTextV378(id, value){
   const el = document.getElementById(id);
   if(el) el.textContent = value;
 }
 
-function econLabelFromDateV367(item){
-  if(!item) return '—';
-  if(item.label) return String(item.label);
-  const raw = item.DataReferencia || item.data || item.DataInicioVigencia || item.DataReuniaoCopom || '';
-  const dt = raw ? new Date(raw) : null;
-  if(dt && !isNaN(dt.getTime())){
-    return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
-  }
-  return '—';
-}
-
-function econNumberV367(v){
+function econNumberV378(v){
   const n = Number(String(v ?? '').replace(',', '.'));
   return Number.isFinite(n) ? n : null;
 }
 
-function econRenderBarsV367(containerId, rows, getValue, getLabel, limit){
+function econParseDateV378(raw){
+  if(raw instanceof Date && !isNaN(raw.getTime())) return raw;
+  if(!raw) return null;
+  let dt = new Date(raw);
+  if(dt && !isNaN(dt.getTime())) return dt;
+  if(typeof raw === 'string' && raw.includes('/')){
+    const p = raw.split('/');
+    if(p.length === 3){
+      dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
+      if(dt && !isNaN(dt.getTime())) return dt;
+    }
+  }
+  return null;
+}
+
+function econLabelMonthV378(date, longYear = false){
+  const dt = econParseDateV378(date);
+  if(!dt) return '—';
+  const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  return `${months[dt.getMonth()]}/${longYear ? dt.getFullYear() : String(dt.getFullYear()).slice(-2)}`;
+}
+
+function econLabelFromItemV378(item){
+  if(!item) return '—';
+  if(item.label) return String(item.label);
+  const raw = item.DataReferencia || item.data || item.DataInicioVigencia || item.DataReuniaoCopom || item.Data || '';
+  return econLabelMonthV378(raw);
+}
+
+function econMetaStatusV378(v){
+  const n = Number(v);
+  if(!Number.isFinite(n)) return 'Meta central: 3,00% · banda de 1,50% a 4,50%';
+  const fmt = x => Number(x).toFixed(2).replace('.', ',') + ' p.p.';
+  if(n > 4.5) return `Acima do teto da meta em ${fmt(n - 4.5)}`;
+  if(n < 1.5) return `Abaixo do piso da meta em ${fmt(1.5 - n)}`;
+  return 'Dentro da banda da meta';
+}
+
+function econRangeLabelV378(range, suffix = 'M'){
+  if(range === 'all') return 'histórico completo';
+  const n = Number(range || 12);
+  if(suffix === 'A'){
+    if(n === 12) return '1 ano';
+    if(n === 60) return '5 anos';
+    if(n === 120) return '10 anos';
+  }
+  return `${n} meses`;
+}
+
+function econUpdateRangeButtonsV378(target, range){
+  document.querySelectorAll(`#sec-graficos [data-dash-range-target="${target}"]`).forEach(btn => {
+    const active = String(btn.dataset.dashRange) === String(range);
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+}
+
+function bindIndicadoresDashboardV378(){
+  document.querySelectorAll('#sec-graficos [data-dash-range-target]').forEach(btn => {
+    if(btn.dataset.dashBoundV378 === '1') return;
+    btn.dataset.dashBoundV378 = '1';
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.dashRangeTarget;
+      const raw = btn.dataset.dashRange;
+      const range = raw === 'all' ? 'all' : Number(raw || 12);
+      econDashStateV378.range[target] = range;
+      econUpdateRangeButtonsV378(target, raw);
+      econRenderTargetV378(target);
+    });
+  });
+}
+
+function econRenderIpcaBarsV378(containerId, rows, range){
   const el = document.getElementById(containerId);
   if(!el) return;
 
-  // v376: IPCA mensal não usa "Tudo"; histórico longo distorce a leitura executiva.
-  const take = limit === 'all' ? 36 : Number(limit || 12);
-
-  const data = (rows || [])
-    .map(item => ({ item, value: getValue(item), label: getLabel(item) }))
-    .filter(d => Number.isFinite(d.value))
-    .slice(-take);
+  const take = range === 'all' ? 36 : Number(range || 24);
+  const data = (rows || []).slice(-take).map(item => ({
+    label:econLabelFromItemV378(item),
+    value:Number(item.valor),
+    date:item.data || item.DataReferencia || ''
+  })).filter(x => Number.isFinite(x.value));
 
   if(!data.length){
     el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
     return;
   }
 
-  const width = Math.max(720, Math.round(el.getBoundingClientRect().width || 1100));
-  const height = window.matchMedia && window.matchMedia('(max-width: 820px)').matches ? 158 : 224;
-
-  const left = 54;
-  const right = 16;
-  const topPad = 12;
-  const bottomPad = window.matchMedia && window.matchMedia('(max-width: 820px)').matches ? 28 : 34;
+  const width = 720, height = 260;
+  const left = 48, right = 14, topPad = 22, bottomPad = 36;
   const plotW = width - left - right;
   const plotH = height - topPad - bottomPad;
 
@@ -6078,32 +6142,22 @@ function econRenderBarsV367(containerId, rows, getValue, getLabel, limit){
   const top = Math.ceil(max * 10) / 10;
   const bottom = Math.floor(min * 10) / 10;
   const size = top - bottom || 1;
-
   const yFor = v => topPad + ((top - v) / size) * plotH;
   const zeroY = yFor(0);
 
-  const pct = value => {
-    const n = Number(value);
-    if(!Number.isFinite(n)) return '—';
-    return n.toFixed(2).replace('.', ',') + '%';
-  };
-
   const ticks = [];
-  for(let v = bottom; v <= top + 0.0001; v += 0.2){
-    ticks.push(Number(v.toFixed(1)));
-  }
+  for(let v = bottom; v <= top + 0.0001; v += 0.2) ticks.push(Number(v.toFixed(1)));
 
   const grid = ticks.map(v => {
     const y = yFor(v);
-    const cls = Math.abs(v) < 0.0001 ? 'ipca-zero' : 'ipca-grid';
-    const labelClass = Math.abs(v) < 0.0001 ? 'ipca-axis-zero' : '';
+    const cls = Math.abs(v) < 0.0001 ? 'zero' : 'grid';
     return `
-      <line class="${cls}" x1="${left}" y1="${y}" x2="${width - right}" y2="${y}"></line>
-      <text class="ipca-axis-text ${labelClass}" x="${left - 10}" y="${y + 3}" text-anchor="end">${pct(v)}</text>
+      <line class="${cls}" x1="${left}" y1="${y.toFixed(1)}" x2="${width - right}" y2="${y.toFixed(1)}"></line>
+      <text class="axis y ${Math.abs(v) < 0.0001 ? 'zero-label' : ''}" x="${left - 8}" y="${(y + 3).toFixed(1)}" text-anchor="end">${econPctV378(v, false)}</text>
     `;
   }).join('');
 
-  const gap = data.length > 24 ? 4 : 8;
+  const gap = data.length > 24 ? 4 : 7;
   const barW = Math.max(7, (plotW - gap * (data.length - 1)) / data.length);
 
   const bars = data.map((d, i) => {
@@ -6111,349 +6165,200 @@ function econRenderBarsV367(containerId, rows, getValue, getLabel, limit){
     const yValue = yFor(d.value);
     const y = Math.min(yValue, zeroY);
     const h = Math.max(3, Math.abs(yValue - zeroY));
-    const cls = d.value >= 0 ? 'ipca-bar-pos' : 'ipca-bar-neg';
-    const title = `${d.label} · ${pct(d.value)}`;
-
-    return `
-      <rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3">
-        <title>${title}</title>
-      </rect>
-    `;
+    const cls = d.value >= 0 ? 'bar pos' : 'bar neg';
+    return `<rect class="${cls}" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${barW.toFixed(1)}" height="${h.toFixed(1)}" rx="3"><title>${d.label} · ${econPctV378(d.value)}</title></rect>`;
   }).join('');
 
   const labelStep = Math.max(1, Math.round(data.length / 6));
-  const xLabels = data.map((d, i) => {
+  const labels = data.map((d, i) => {
     const show = i === 0 || i === data.length - 1 || i % labelStep === 0;
     if(!show) return '';
-    const x = left + i * (barW + gap) + barW / 2;
-    return `<text class="ipca-axis-text" x="${x}" y="${height - 8}" text-anchor="middle">${d.label}</text>`;
+    const x = left + i * (barW + gap) + barW/2;
+    return `<text class="axis x" x="${x.toFixed(1)}" y="${height - 10}" text-anchor="middle">${d.label}</text>`;
   }).join('');
 
   el.innerHTML = `
-    <svg class="ipca-compact-svg-v376" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="IPCA mensal por período">
-      <rect class="ipca-compact-bg-v376" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
+    <svg class="econ-svg-ipca-bars-v378" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+      <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
       ${grid}
       ${bars}
-      ${xLabels}
+      ${labels}
     </svg>
   `;
+
+  econSetTextV378('ipcaDashRangeLabelV378', range === 12 ? '12 meses' : range === 24 ? '24 meses' : '36 meses');
 }
 
-
-function econRenderLineV367(containerId, rows, getValue, getLabel, opts = {}){
+function econRenderLineSvgV378(containerId, rows, getValue, getDate, opts = {}){
   const el = document.getElementById(containerId);
   if(!el) return;
 
-  const data = (rows || [])
-    .map(item => ({ item, value: getValue(item), label: getLabel(item) }))
-    .filter(d => Number.isFinite(d.value))
-    .slice(-(opts.limit || 36));
+  const rawLimit = opts.limit ?? 36;
+  const limit = rawLimit === 'all' ? 99999 : Number(rawLimit || 36);
+  const data = (rows || []).map(item => ({
+    item,
+    value:Number(getValue(item)),
+    date:getDate(item),
+    label:econLabelMonthV378(getDate(item))
+  })).filter(d => Number.isFinite(d.value)).slice(-limit);
 
   if(!data.length){
     el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
     return;
   }
 
+  const width = opts.w || 720;
+  const height = opts.h || 260;
+  const left = opts.left || 48;
+  const right = opts.right || 14;
+  const topPad = opts.topPad || 24;
+  const bottomPad = opts.bottomPad || 34;
+  const plotW = width - left - right;
+  const plotH = height - topPad - bottomPad;
+
   const values = data.map(d => d.value);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const pad = Math.max((max - min) * .12, .1);
-  let lo = min - pad;
-  let hi = max + pad;
-
-  const bandMin = Number(opts.bandMin);
-  const bandMax = Number(opts.bandMax);
-  const bandMid = Number(opts.bandMid);
-
+  let min = Math.min(...values);
+  let max = Math.max(...values);
   if(opts.band){
-    if(Number.isFinite(bandMin)) lo = Math.min(lo, bandMin - Math.max(pad, 0.25));
-    if(Number.isFinite(bandMax)) hi = Math.max(hi, bandMax + Math.max(pad, 0.25));
+    min = Math.min(min, 1.5);
+    max = Math.max(max, 4.5);
   }
+  if(Number.isFinite(opts.min)) min = Math.min(min, opts.min);
+  if(Number.isFinite(opts.max)) max = Math.max(max, opts.max);
 
-  const w = 320;
-  const h = 112;
-  const step = data.length > 1 ? w / (data.length - 1) : w;
-  const yFor = v => h - ((v - lo) / (hi - lo || 1)) * h;
-  const points = data.map((d, i) => `${Math.round(i * step)},${Math.round(yFor(d.value))}`).join(' ');
+  const pad = Math.max((max - min) * 0.12, opts.pad ?? 0.25);
+  const lo = Math.max(0, min - pad);
+  const hi = max + pad;
+  const size = hi - lo || 1;
+  const yFor = v => topPad + ((hi - v) / size) * plotH;
+  const xFor = i => left + (data.length === 1 ? plotW : (i / (data.length - 1)) * plotW);
+
+  const points = data.map((d, i) => `${xFor(i).toFixed(1)},${yFor(d.value).toFixed(1)}`).join(' ');
+  const area = `${left},${topPad + plotH} ${points} ${left + plotW},${topPad + plotH}`;
   const last = data[data.length - 1];
   const first = data[0];
-  const lineClass = ['line', opts.lineClass || ''].filter(Boolean).join(' ');
-  const dotClass = ['dot', opts.dotClass || ''].filter(Boolean).join(' ');
 
-  let bandMarkup = '';
+  const ticks = opts.ticks || (opts.band ? [1.5,3,4.5,5,5.5,6] : []);
+  const grid = ticks.map(v => {
+    if(v < lo || v > hi) return '';
+    const y = yFor(v);
+    return `
+      <line class="grid ${opts.band && [1.5,3,4.5].includes(v) ? 'threshold' : ''}" x1="${left}" y1="${y.toFixed(1)}" x2="${left+plotW}" y2="${y.toFixed(1)}"></line>
+      <text class="axis y" x="${left-8}" y="${(y+3).toFixed(1)}" text-anchor="end">${econPctV378(v, false)}</text>
+    `;
+  }).join('');
+
+  let band = '';
   if(opts.band){
-    if(Number.isFinite(bandMin) && Number.isFinite(bandMax)){
-      const y1 = Math.max(0, Math.min(h, yFor(bandMax)));
-      const y2 = Math.max(0, Math.min(h, yFor(bandMin)));
-      const top = Math.min(y1, y2);
-      const height = Math.max(8, Math.abs(y2 - y1));
-      bandMarkup += `<rect x="0" y="${top.toFixed(1)}" width="320" height="${height.toFixed(1)}" rx="10" class="band ${opts.bandClass || ''}"></rect>`;
-      bandMarkup += `<line x1="0" y1="${y1.toFixed(1)}" x2="320" y2="${y1.toFixed(1)}" class="threshold threshold-top"></line>`;
-      bandMarkup += `<line x1="0" y1="${y2.toFixed(1)}" x2="320" y2="${y2.toFixed(1)}" class="threshold threshold-bottom"></line>`;
-    }else{
-      bandMarkup += '<rect x="0" y="22" width="320" height="50" rx="10" class="band"></rect>';
-    }
-    if(Number.isFinite(bandMid)){
-      const ym = Math.max(0, Math.min(h, yFor(bandMid)));
-      bandMarkup += `<line x1="0" y1="${ym.toFixed(1)}" x2="320" y2="${ym.toFixed(1)}" class="threshold threshold-mid"></line>`;
-    }
+    const yTop = yFor(4.5), yBottom = yFor(1.5), yMid = yFor(3);
+    band = `
+      <rect class="band" x="${left}" y="${Math.min(yTop,yBottom).toFixed(1)}" width="${plotW}" height="${Math.abs(yBottom-yTop).toFixed(1)}" rx="10"></rect>
+      <line class="threshold top" x1="${left}" y1="${yTop.toFixed(1)}" x2="${left+plotW}" y2="${yTop.toFixed(1)}"></line>
+      <line class="threshold mid" x1="${left}" y1="${yMid.toFixed(1)}" x2="${left+plotW}" y2="${yMid.toFixed(1)}"></line>
+      <line class="threshold bottom" x1="${left}" y1="${yBottom.toFixed(1)}" x2="${left+plotW}" y2="${yBottom.toFixed(1)}"></line>
+    `;
   }
 
+  const labels = [first, data[Math.floor(data.length/2)], last].map((d, idx) => {
+    const i = idx === 0 ? 0 : idx === 1 ? Math.floor(data.length/2) : data.length - 1;
+    return `<text class="axis x" x="${xFor(i).toFixed(1)}" y="${height - 9}" text-anchor="${idx === 0 ? 'start' : idx === 2 ? 'end' : 'middle'}">${d.label}</text>`;
+  }).join('');
+
+  const markerIndex = data.length - 1;
+  const markerX = xFor(markerIndex), markerY = yFor(last.value);
+
   el.innerHTML = `
-    <svg class="econ-svg-v367 ${opts.svgClass || ''}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-      ${bandMarkup}
-      <polyline points="${points}" fill="none" class="${lineClass}"></polyline>
-      <circle cx="${Math.round((data.length-1) * step)}" cy="${Math.round(yFor(last.value))}" r="4" class="${dotClass}"></circle>
+    <svg class="econ-line-svg-v378 ${opts.className || ''}" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-hidden="true">
+      <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
+      ${band}
+      ${grid}
+      ${opts.area ? `<polygon class="area" points="${area}"></polygon>` : ''}
+      <polyline class="main-line" points="${points}" fill="none"></polyline>
+      <circle class="last-dot" cx="${markerX.toFixed(1)}" cy="${markerY.toFixed(1)}" r="4.5"></circle>
+      ${labels}
     </svg>
-    <div class="econ-axis-caption-v367"><span>${first.label}</span><span>${last.label} · ${econPctV367(last.value)}</span></div>
+    <div class="econ-axis-caption-v367"><span>${first.label}</span><span>${last.label} · ${econPctV378(last.value)}</span></div>
   `;
 }
 
-function econMetaStatusV367(v){
-  const n = Number(v);
-  if(!Number.isFinite(n)) return 'Meta central: 3,00% · banda de 1,50% a 4,50%';
-  const fmt = x => Number(x).toFixed(2).replace('.', ',') + ' p.p.';
-  if(n > 4.5) return `Acima do teto da meta em ${fmt(n - 4.5)}`;
-  if(n < 1.5) return `Abaixo do piso da meta em ${fmt(1.5 - n)}`;
-  return 'Dentro da banda da meta';
+function atualizarResumoIPCADashboardV378(rows){
+  const data = (rows || []).filter(x => Number.isFinite(Number(x.valor)));
+  if(!data.length) return;
+  const last = data[data.length - 1];
+  const max = data.reduce((acc, cur) => Number(cur.valor) > Number(acc.valor) ? cur : acc, data[0]);
+  const min = data.reduce((acc, cur) => Number(cur.valor) < Number(acc.valor) ? cur : acc, data[0]);
+  econSetTextV378('ipcaResumoUltimoV250', econPctV378(last.valor));
+  econSetTextV378('ipcaResumoUltimoDataV250', econLabelFromItemV378(last));
+  econSetTextV378('ipcaResumoMaxV250', econPctV378(max.valor));
+  econSetTextV378('ipcaResumoMaxDataV250', econLabelFromItemV378(max));
+  econSetTextV378('ipcaResumoMinV250', econPctV378(min.valor));
+  econSetTextV378('ipcaResumoMinDataV250', econLabelFromItemV378(min));
 }
 
-
-function econFmtSelicV368(v){
-  const n = Number(v);
-  if(!Number.isFinite(n)) return '—';
-  return `${n.toFixed(2).replace('.', ',')}% a.a.`;
-}
-
-function econFmtDateV368(dt){
-  if(!dt || isNaN(dt.getTime())) return '—';
-  return dt.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' });
-}
-
-function atualizarResumoSelicCleanV368(rows, mercado){
-  const lista = (rows || [])
-    .map(item => {
-      const valor = econNumberV367(item._valor ?? item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
-      const dt = item._dt instanceof Date && !isNaN(item._dt.getTime())
-        ? item._dt
-        : item._dtSelic instanceof Date && !isNaN(item._dtSelic.getTime())
-          ? item._dtSelic
-          : null;
-      return {...item, _v368valor:valor, _v368dt:dt};
-    })
-    .filter(item => Number.isFinite(item._v368valor));
-
-  const set = (id, txt) => {
-    const el = document.getElementById(id);
-    if(el) el.textContent = txt;
-  };
-
+function atualizarResumoSelicDashboardV378(rows, mercado){
+  const lista = (rows || []).filter(x => Number.isFinite(Number(x._valor)));
+  const set = econSetTextV378;
   const selicCard = mercado?.cards?.selic_meta || {};
-  const atualCard = econNumberV367(selicCard.valor);
-
+  const atualCard = econNumberV378(selicCard.valor);
   if(!lista.length){
-    set('selicMaxResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
-    set('selicMaxData', 'vigente');
-    set('selicMinResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
-    set('selicMinData', 'vigente');
-    set('selicHojeResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
-    set('selicHojeData', 'último dado');
+    set('selicMaxResumo', atualCard != null ? `${atualCard.toFixed(2).replace('.', ',')}% a.a.` : '—');
+    set('selicMinResumo', atualCard != null ? `${atualCard.toFixed(2).replace('.', ',')}% a.a.` : '—');
+    set('selicHojeResumo', atualCard != null ? `${atualCard.toFixed(2).replace('.', ',')}% a.a.` : '—');
     return;
   }
-
-  const max = lista.reduce((acc, cur) => cur._v368valor > acc._v368valor ? cur : acc, lista[0]);
-  const min = lista.reduce((acc, cur) => cur._v368valor < acc._v368valor ? cur : acc, lista[0]);
+  const max = lista.reduce((a,b) => b._valor > a._valor ? b : a, lista[0]);
+  const min = lista.reduce((a,b) => b._valor < a._valor ? b : a, lista[0]);
   const last = lista[lista.length - 1];
-
-  let hojeValor = Number.isFinite(atualCard) ? atualCard : last._v368valor;
-  let hojeData = 'último dado';
+  const fmt = v => `${Number(v).toFixed(2).replace('.', ',')}% a.a.`;
+  set('selicMaxResumo', fmt(max._valor));
+  set('selicMaxData', max._dt ? max._dt.toLocaleDateString('pt-BR') : '—');
+  set('selicMinResumo', fmt(min._valor));
+  set('selicMinData', min._dt ? min._dt.toLocaleDateString('pt-BR') : '—');
+  set('selicHojeResumo', fmt(Number.isFinite(atualCard) ? atualCard : last._valor));
+  let hojeData = last._dt ? last._dt.toLocaleDateString('pt-BR') : 'último dado';
   try{
-    const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
-      ? resolverDataUltimaAlteracaoSelic(mercado)
-      : null;
-    hojeData = ref?.data || econFmtDateV368(last._v368dt) || 'último dado';
-  }catch(e){
-    hojeData = econFmtDateV368(last._v368dt) || 'último dado';
-  }
-
-  set('selicMaxResumo', econFmtSelicV368(max._v368valor));
-  set('selicMaxData', econFmtDateV368(max._v368dt));
-  set('selicMinResumo', econFmtSelicV368(min._v368valor));
-  set('selicMinData', econFmtDateV368(min._v368dt));
-  set('selicHojeResumo', econFmtSelicV368(hojeValor));
+    const ref = typeof resolverDataUltimaAlteracaoSelic === 'function' ? resolverDataUltimaAlteracaoSelic(mercado) : null;
+    hojeData = ref?.data || hojeData;
+  }catch(e){}
   set('selicHojeData', hojeData);
 }
 
-function econRenderMetaGaugeV368(containerId, value){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-
-  const n = Number(value);
-  if(!Number.isFinite(n)){
-    el.innerHTML = '<div class="econ-empty-v367">IPCA 12 meses indisponível no momento.</div>';
-    return;
-  }
-
-  const minScale = 0;
-  const maxScale = Math.max(8, Math.ceil(n + 1));
-  const pct = Math.max(0, Math.min(100, ((n - minScale) / (maxScale - minScale)) * 100));
-  const status = econMetaStatusV367(n);
-
-  el.innerHTML = `
-    <div class="econ-gauge-v368" aria-label="IPCA 12 meses atual ${econPctV367(n)}">
-      <div class="econ-gauge-scale-v368">
-        <span class="band target" style="left:${(1.5/maxScale)*100}%;width:${((4.5-1.5)/maxScale)*100}%"></span>
-        <i class="marker" style="left:${pct}%"></i>
-      </div>
-      <div class="econ-axis-caption-v367">
-        <span>0,00%</span>
-        <span>Atual · ${econPctV367(n)}</span>
-        <span>${maxScale.toFixed(0)},00%</span>
-      </div>
-      <small class="econ-gauge-status-v368">${status}</small>
-    </div>
-  `;
-}
-
-
-function econAtualizarTextoMetaV370(ipca){
-  const atual = econPctV367(ipca?.acum_12m);
-  const status = econMetaStatusV367(ipca?.acum_12m);
-  const note = `Atual: ${atual} · ${status.charAt(0).toLowerCase()}${status.slice(1)}`;
-  econSetTextV367('evoCardMetaNote', note);
-  econSetTextV367('econMetaTrendLabelV367', status);
-  econSetTextV367('evoIpca12Sub', status);
-}
-
-function econAtualizarMobileSummaryV367(view, d){
-  const ipca = d?.cards?.ipca || {};
-  const selic = d?.cards?.selic_meta || {};
-  const selicRef = typeof resolverDataUltimaAlteracaoSelic === 'function'
-    ? (resolverDataUltimaAlteracaoSelic(d).data || '')
-    : '';
-  const selicValor = selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.', ',')}% a.a.` : '—';
-
-  let kicker = 'IPCA mensal';
-  let value = econPctV367(ipca.ultimo_mes);
-  let desc = ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial';
-
-  if(view === 'selic'){
-    kicker = 'Selic meta';
-    value = selicValor;
-    desc = selicRef ? `Vigente desde ${selicRef}` : 'Meta definida pelo Copom';
-  }
-
-  if(view === 'meta'){
-    kicker = 'IPCA 12 meses';
-    value = econPctV367(ipca.acum_12m);
-    desc = econMetaStatusV367(ipca.acum_12m);
-  }
-
-  econSetTextV367('evoMobileKicker', kicker);
-  econSetTextV367('evoMobileValue', value);
-  econSetTextV367('evoMobileDescription', desc);
-}
-
-function selecionarIndicadorCleanV367(view){
-  const target = view || 'ipca';
-
-  document.querySelectorAll('#sec-graficos .econ-clean-tab-v367').forEach(btn => {
-    const active = btn.dataset.econView === target;
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-pressed', String(active));
-  });
-
-  document.querySelectorAll('#sec-graficos .econ-clean-panel-v367').forEach(panel => {
-    panel.classList.toggle('active', panel.dataset.econPanel === target);
-  });
-
-  econAtualizarMobileSummaryV367(target, _dadosMercado || {});
-}
-
-function bindIndicadoresCleanV367(){
-  econBindRangeTabsV371();
-  document.querySelectorAll('#sec-graficos .econ-clean-tab-v367').forEach(btn => {
-    if(btn.dataset.cleanBoundV367 === '1') return;
-    btn.dataset.cleanBoundV367 = '1';
-    btn.addEventListener('click', () => selecionarIndicadorCleanV367(btn.dataset.econView || 'ipca'));
-  });
-}
-
-
-const econCleanStateV371 = window.__ECON_CLEAN_STATE_V371__ || {
-  range:{ ipca:12, selic:12, meta:12 },
-  ipcaNorm:[],
-  selicNorm:[],
-  metaNorm:[],
-  mercado:null
-};
-window.__ECON_CLEAN_STATE_V371__ = econCleanStateV371;
-
-function econGetRangeV371(target){
-  const value = econCleanStateV371.range[target] || 12;
-  if(target === 'ipca' && value === 'all') return 36;
-  return value;
-}
-
-function econSetRangeV371(target, range){
-  econCleanStateV371.range[target] = range === 'all' ? 'all' : Number(range || 12);
-
-  document.querySelectorAll(`#sec-graficos .econ-range-tab-v371[data-econ-range-target="${target}"]`).forEach(btn => {
-    const active = String(btn.dataset.econRange) === String(range);
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-pressed', String(active));
-  });
-
-  econRenderRangeTargetV371(target);
-}
-
-function econBindRangeTabsV371(){
-  document.querySelectorAll('#sec-graficos .econ-range-tab-v371').forEach(btn => {
-    if(btn.dataset.rangeBoundV371 === '1') return;
-    btn.dataset.rangeBoundV371 = '1';
-    btn.addEventListener('click', () => econSetRangeV371(btn.dataset.econRangeTarget, btn.dataset.econRange));
-  });
-}
-
-function econRenderRangeTargetV371(target){
+function econRenderTargetV378(target){
   if(target === 'ipca'){
-    const range = econGetRangeV371('ipca');
-    const data = econCleanStateV371.ipcaNorm || [];
-    econRenderBarsV367('econSparkIpcaV367', data, d => Number(d.valor), d => fmtIPCALabelV250(d), range);
-    const take = range === 'all' ? data.length : Number(range || 12);
-    const visible = data.slice(-take);
-    if(visible.length) atualizarResumoIPCAMensalV250(visible);
-  }
-
-  if(target === 'selic'){
-    const range = econGetRangeV371('selic');
-    econRenderLineV367('econSparkSelicV367', econCleanStateV371.selicNorm || [], d => d._valor, d => {
-      if(d._dt && !isNaN(d._dt.getTime())) return String(d._dt.getFullYear());
-      return econLabelFromDateV367(d);
-    }, {limit: range});
+    const range = econDashStateV378.range.ipca;
+    const data = econDashStateV378.ipcaNorm || [];
+    econRenderIpcaBarsV378('econSparkIpcaV367', data, range);
+    atualizarResumoIPCADashboardV378(data.slice(-Number(range || 24)));
   }
 
   if(target === 'meta'){
-    const range = econGetRangeV371('meta');
-    const metaNorm = econCleanStateV371.metaNorm || [];
-    const ipca = econCleanStateV371.mercado?.cards?.ipca || {};
-    if(metaNorm.length >= 2){
-      econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
-        const dt = new Date(d.DataReferencia);
-        return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
-      }, {limit: range, band:true, bandMin:1.5, bandMax:4.5, bandMid:3.0, lineClass:'line-alert', dotClass:'dot-alert', bandClass:'band-meta'});
+    const range = econDashStateV378.range.meta;
+    const meta = econDashStateV378.metaNorm || [];
+    const ipca = econDashStateV378.mercado?.cards?.ipca || {};
+    if(meta.length >= 2){
+      econRenderLineSvgV378('econSparkMetaV367', meta, x => Number(x.Inflacao12Meses), x => x.DataReferencia, {
+        limit:range, band:true, className:'meta-line-v378', h:240, ticks:[1.5,3,4.5,5,5.5,6]
+      });
     }else{
-      econRenderMetaGaugeV368('econSparkMetaV367', ipca.acum_12m);
+      document.getElementById('econSparkMetaV367').innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
     }
+    econSetTextV378('evoCardMetaNote', `IPCA em 12 meses · ${econPctV378(ipca.acum_12m)} · ${econMetaStatusV378(ipca.acum_12m).toLowerCase()}`);
+  }
+
+  if(target === 'selic'){
+    const range = econDashStateV378.range.selic;
+    const selic = econDashStateV378.selicNorm || [];
+    econRenderLineSvgV378('econSparkSelicV367', selic, x => Number(x._valor), x => x._dt, {
+      limit:range, className:'selic-line-v378', area:true, w:1280, h:330, left:54, bottomPad:34,
+      ticks:[0,5,10,15,20,25,30,35,40,45,50], min:0
+    });
   }
 }
 
-async function renderIndicadoresCleanV367(d){
-  econCleanStateV371.mercado = d;
+async function renderIndicadoresDashboardV378(d){
+  econDashStateV378.mercado = d || {};
   const ipca = d?.cards?.ipca || {};
   const selic = d?.cards?.selic_meta || {};
-
-  atualizarResumoEvolucao(d);
 
   let histIpca = [];
   try{
@@ -6462,12 +6367,36 @@ async function renderIndicadoresCleanV367(d){
     histIpca = normalizarHistoricoIPCA(ipca.historico || []);
   }
 
+  const ipcaNorm = normalizarHistoricoIPCA(histIpca);
+  econDashStateV378.ipcaNorm = ipcaNorm;
+
+  const lastIpca = ipcaNorm[ipcaNorm.length - 1];
+  const lastLabel = lastIpca ? econLabelFromItemV378(lastIpca) : (ipca.label_mes || 'último dado');
+  econSetTextV378('evoCardIpcaNote', `Último resultado · ${lastLabel} · ${econPctV378(ipca.ultimo_mes ?? lastIpca?.valor)}`);
+
   let histSelic = [];
   try{
     histSelic = await carregarSelicHistoricoAmpliado(d?.historico_selic || selic.historico || []);
   }catch(e){
     histSelic = d?.historico_selic || selic.historico || [];
   }
+
+  const selicNorm = (histSelic || []).map((item, idx) => {
+    const dt = econParseDateV378(item._dtSelic || item.DataReuniaoCopom || item.data || item.DataInicioVigencia || item.Data || '');
+    const valor = econNumberV378(item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
+    return {...item, _dt:dt, _ts:dt ? dt.getTime() : idx, _valor:valor};
+  }).filter(x => Number.isFinite(x._valor)).sort((a,b) => a._ts - b._ts);
+
+  econDashStateV378.selicNorm = selicNorm;
+  atualizarResumoSelicDashboardV378(selicNorm, d);
+
+  let selicData = 'último dado';
+  try{
+    const ref = typeof resolverDataUltimaAlteracaoSelic === 'function' ? resolverDataUltimaAlteracaoSelic(d) : null;
+    selicData = ref?.data || selicData;
+  }catch(e){}
+  const selicValor = Number(selic.valor);
+  econSetTextV378('evoCardSelicNote', `Taxa vigente · ${Number.isFinite(selicValor) ? selicValor.toFixed(2).replace('.', ',') : '—'}% a.a. · desde ${selicData}`);
 
   let meta = d?.meta_vs_inflacao_efetiva || [];
   if(!meta.length){
@@ -6476,68 +6405,21 @@ async function renderIndicadoresCleanV367(d){
       meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
     }catch(e){}
   }
+
   try{
     meta = sincronizarSerieMetaComIpcaAtual(meta, ipca);
   }catch(e){}
 
-  econAtualizarTextoMetaV370(ipca);
-
-  // IPCA mensal
-  const ipcaNorm = normalizarHistoricoIPCA(histIpca);
-  econCleanStateV371.ipcaNorm = ipcaNorm;
-  econRenderRangeTargetV371('ipca');
-
-  if(ipcaNorm.length){
-    atualizarResumoIPCAMensalV250(ipcaNorm.slice(-24));
-    const last = ipcaNorm[ipcaNorm.length - 1];
-    const prev = ipcaNorm[ipcaNorm.length - 2];
-    if(last && prev){
-      const dif = Number(last.valor) - Number(prev.valor);
-    }
-  }
-
-  // Selic
-  const selicNorm = (histSelic || [])
-    .map((item, idx) => {
-      const dataRaw = item._dtSelic || item.DataReuniaoCopom || item.data || item.DataInicioVigencia || item.Data || '';
-      let dt = dataRaw instanceof Date ? dataRaw : (dataRaw ? new Date(dataRaw) : null);
-      if((!dt || isNaN(dt.getTime())) && typeof dataRaw === 'string' && dataRaw.includes('/')){
-        const p = dataRaw.split('/');
-        if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
-      }
-      const valor = econNumberV367(item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
-      return {...item, _dt:dt, _ts:dt && !isNaN(dt.getTime()) ? dt.getTime() : idx, _valor:valor};
-    })
-    .filter(x => Number.isFinite(x._valor))
-    .sort((a,b) => a._ts - b._ts);
-
-  econCleanStateV371.selicNorm = selicNorm;
-  econRenderRangeTargetV371('selic');
-
-  if(selicNorm.length){
-    atualizarResumoSelicCleanV368(selicNorm.slice(-60), d);
-    const last = selicNorm[selicNorm.length - 1];
-    const first = selicNorm[Math.max(0, selicNorm.length - 13)];
-    const dif = Number(last._valor) - Number(first._valor);
-    econSetTextV367('econSelicTrendLabelV367', dif >= 0 ? `+${dif.toFixed(2).replace('.', ',')} p.p.` : `${dif.toFixed(2).replace('.', ',')} p.p.`);
-  }
-
-  // IPCA 12M x meta
   const metaNorm = (meta || [])
     .filter(x => x?.DataReferencia && Number.isFinite(Number(x.Inflacao12Meses)))
     .sort((a,b) => new Date(a.DataReferencia) - new Date(b.DataReferencia));
 
-  econCleanStateV371.metaNorm = metaNorm;
-  econRenderRangeTargetV371('meta');
+  econDashStateV378.metaNorm = metaNorm;
 
-  if(metaNorm.length >= 2){
-    const last = metaNorm[metaNorm.length - 1];
-    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)));
-  }else{
-    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(ipca.acum_12m)));
-  }
-
-  selecionarIndicadorCleanV367('ipca');
+  econRenderTargetV378('ipca');
+  econRenderTargetV378('meta');
+  econRenderTargetV378('selic');
+  bindIndicadoresDashboardV378();
 }
 
 
@@ -19213,225 +19095,7 @@ function openCdiAnalyticTableV274(){
 
 
 /* ════════════════════════════════════════════════════
-   v341 — Inflação/Juros compacto sem redundância
-   - remove 12M das abas da Selic quando 1A já existe;
-   - impede v339 de reinserir 12M no bloco Selic;
-   - dá respiro nos valores de máxima/mínima;
-   - transforma os cards-resumo superiores em carrossel mobile.
-════════════════════════════════════════════════════ */
-(function inflationSummaryCompactV341(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function removeRedundantSelic12m(){
-    const root = document.querySelector('#sec-graficos') || document;
-    root.querySelectorAll(
-      '#evoChartSelicCard .chart-tabs button, ' +
-      '#evoChartSelicCard .chart-tab, ' +
-      '#evoChartSelicCard .selic-range-tabs button, ' +
-      '[data-chart="selic"][data-range="12"], ' +
-      '[data-selic-range="12m"], ' +
-      '[data-selic-range="12"]'
-    ).forEach(btn => {
-      const text = (btn.textContent || '').trim().toLowerCase();
-      const range = String(btn.dataset?.range || btn.dataset?.selicRange || '').toLowerCase();
-      if(text === '12m' || range === '12m' || range === '12'){
-        btn.remove();
-      }
-    });
-  }
-
-  function compactSummaryCards(){
-    const root = document.querySelector('#sec-graficos') || document;
-    const grids = root.querySelectorAll('.evo-summary-grid, .evo-summary-cards, .evo-kpi-grid, .evo-overview-grid');
-    grids.forEach(grid => {
-      setImportant(grid, 'display', 'flex');
-      setImportant(grid, 'flex-wrap', 'nowrap');
-      setImportant(grid, 'overflow-x', 'auto');
-      setImportant(grid, 'overflow-y', 'hidden');
-      setImportant(grid, 'gap', '10px');
-      setImportant(grid, 'padding', '1px 1px 10px');
-      setImportant(grid, 'scroll-snap-type', 'x proximity');
-      setImportant(grid, 'scrollbar-width', 'none');
-    });
-
-    root.querySelectorAll('.evo-summary-card, .evo-kpi-card, .evo-overview-card').forEach(card => {
-      setImportant(card, 'flex', '0 0 232px');
-      setImportant(card, 'min-width', '232px');
-      setImportant(card, 'max-width', '232px');
-      setImportant(card, 'min-height', '86px');
-      setImportant(card, 'padding', '12px 13px');
-      setImportant(card, 'scroll-snap-align', 'start');
-      setImportant(card, 'box-sizing', 'border-box');
-    });
-  }
-
-  function improveSummaryChipSpacing(){
-    const root = document.querySelector('#sec-graficos') || document;
-    root.querySelectorAll(
-      '#selicSummaryRow .selic-summary-value, ' +
-      '#selicSummaryRow .selic-summary-chip strong, ' +
-      '#selicSummaryRow .selic-summary-chip .value, ' +
-      '#selicSummaryRow .selic-summary-chip output'
-    ).forEach(el => {
-      setImportant(el, 'display', 'block');
-      setImportant(el, 'margin-bottom', '4px');
-      setImportant(el, 'line-height', '1.08');
-    });
-
-    root.querySelectorAll(
-      '#selicSummaryRow .selic-summary-date, ' +
-      '#selicSummaryRow .selic-summary-chip small'
-    ).forEach(el => {
-      setImportant(el, 'display', 'block');
-      setImportant(el, 'line-height', '1.12');
-      setImportant(el, 'margin-top', '2px');
-    });
-  }
-
-  function fixSelicTitleIfNeeded(){
-    const title = document.querySelector('#chartSelicTitle');
-    if(title && /últimos\s+12\s+meses/i.test(title.textContent || '')){
-      title.textContent = title.textContent.replace(/últimos\s+12\s+meses/i, 'último ano');
-    }
-  }
-
-  function apply(){
-    if(!window.matchMedia('(max-width: 768px)').matches) return;
-    removeRedundantSelic12m();
-    compactSummaryCards();
-    improveSummaryChipSpacing();
-    fixSelicTitleIfNeeded();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  document.addEventListener('click', ev => {
-    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .selic-range-tabs button')){
-      setTimeout(apply, 90);
-      setTimeout(apply, 350);
-    }
-  }, { passive:true });
-
-  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v342 — remove 12M e força eixo X horizontal
-   Correções:
-   - remove qualquer botão 12M dos gráficos de Inflação/Juros;
-   - impede reinserção dinâmica do 12M;
-   - força Chart.js a manter labels horizontais em qualquer update;
-   - limita rótulos do eixo X para não inclinar.
-════════════════════════════════════════════════════ */
-(function remove12mAndForceXAxisV342(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function remove12mButtons(){
-    const root = document.getElementById('sec-graficos') || document;
-    root.querySelectorAll(
-      'button[data-range="12m"], button[data-range="12"], ' +
-      'button[data-ipca-range="12m"], button[data-selic-range="12m"], ' +
-      '.chart-tab[data-range="12m"], .chart-tab[data-ipca-range="12m"], .chart-tab[data-selic-range="12m"]'
-    ).forEach(btn => btn.remove());
-
-    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
-      if((btn.textContent || '').trim().toLowerCase() === '12m') btn.remove();
-    });
-  }
-
-  function formatSparseTicks(chart){
-    if(!chart?.options?.scales?.x?.ticks) return;
-    const ticks = chart.options.scales.x.ticks;
-    ticks.maxRotation = 0;
-    ticks.minRotation = 0;
-    ticks.autoSkip = false;
-    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
-    ticks.callback = function(value, index, tickList){
-      const total = Array.isArray(tickList) ? tickList.length : (this.chart?.data?.labels?.length || 0);
-      const label = this.getLabelForValue ? this.getLabelForValue(value) : String(value ?? '');
-      const maxLabels = window.innerWidth <= 768 ? 5 : 10;
-      if(total <= maxLabels) return label;
-
-      const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
-      if(index === 0 || index === total - 1 || index % step === 0) return label;
-      return '';
-    };
-  }
-
-  function forceAllCharts(){
-    if(!window.Chart) return;
-    ['chartSelic', 'chartIpca', 'chartIpca12m', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta', 'chartDolar'].forEach(id => {
-      const canvas = document.getElementById(id);
-      if(!canvas || !canvas.isConnected) return;
-      const chart = Chart.getChart(canvas);
-      if(!chart) return;
-      formatSparseTicks(chart);
-      try{ chart.update('none'); }catch(_){}
-    });
-  }
-
-  function patchChartUpdate(){
-    if(!window.Chart || Chart.__v342XAxisPatched) return;
-    Chart.__v342XAxisPatched = true;
-
-    const originalUpdate = Chart.prototype.update;
-    Chart.prototype.update = function(...args){
-      formatSparseTicks(this);
-      return originalUpdate.apply(this, args);
-    };
-  }
-
-  function stabilizeTabs(){
-    const root = document.getElementById('sec-graficos') || document;
-    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
-      setImportant(tabs, 'display', 'flex');
-      setImportant(tabs, 'flex-wrap', 'nowrap');
-      setImportant(tabs, 'overflow-x', 'auto');
-      setImportant(tabs, 'overflow-y', 'hidden');
-      setImportant(tabs, 'justify-content', 'flex-start');
-      setImportant(tabs, 'gap', '8px');
-      setImportant(tabs, 'scrollbar-width', 'none');
-    });
-
-    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
-      setImportant(btn, 'flex', '0 0 auto');
-      setImportant(btn, 'width', 'auto');
-      setImportant(btn, 'min-width', '68px');
-      setImportant(btn, 'white-space', 'nowrap');
-    });
-  }
-
-  function apply(){
-    remove12mButtons();
-    patchChartUpdate();
-    stabilizeTabs();
-    forceAllCharts();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  document.addEventListener('click', ev => {
-    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button')){
-      setTimeout(apply, 80);
-      setTimeout(forceAllCharts, 260);
-      setTimeout(forceAllCharts, 700);
-    }
-  }, { passive:true });
-
-  [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
-})();
-
-/* ════════════════════════════════════════════════════
-   ELTAUM_HEADER_UPDATE_FIX_20260620_v374
+   ELTAUM_EVO_DASHBOARD_INDICATORS_SVG_20260620_v378
    Garante que o badge #lastUpdate não fique perdido no corpo da tela.
    Move para o bloco correto do header e impede reinserções erradas.
 ════════════════════════════════════════════════════ */

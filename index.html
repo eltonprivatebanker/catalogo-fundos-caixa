@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_EVO_IPCA_HEIGHT_REFINE_20260620_v377" name="app-build"/>
+<meta content="ELTAUM_EVO_DASHBOARD_INDICATORS_SVG_20260620_v378" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 </style>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="style.css?v=evo-ipca-height-refine-v377" rel="stylesheet"/>
+<link href="style.css?v=evo-dashboard-indicators-svg-v378" rel="stylesheet"/>
 <style id="critical-ui-v153">
 /* v152 — critical UI safety layer for desktop nav, rankings toolbar and legacy market cleanup */
 .desktop-anchor-nav-ui-v132{position:sticky;top:8px;z-index:220;width:100%;margin:14px 0 18px;border:1px solid rgba(200,151,58,.24);border-radius:14px;background:rgba(9,11,20,.92);box-shadow:0 12px 36px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);overflow:hidden}
@@ -99,7 +99,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=evo-ipca-height-refine-v377"></script>
+<script defer="" src="app.js?v=evo-dashboard-indicators-svg-v378"></script>
 </head>
 <body>
 <div class="page" id="topo">
@@ -1071,16 +1071,16 @@ html:not(.app-booting) .page{
     </div>
 </div>
 </div>
-<!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES — v367 LIMPA ══ -->
+<!-- ═══════════════════════════════ EVOLUÇÃO DOS INDICADORES — v378 DASHBOARD SVG ══ -->
 </div><!-- /focus-body -->
-<div aria-labelledby="evolutionTitle" class="section-gap evolution-section collapsible-section econ-clean-section-v367" id="sec-graficos" role="region">
-  <header class="section-title evolution-title econ-clean-title-v367">
+<div aria-labelledby="evolutionTitle" class="section-gap evolution-section collapsible-section econ-dashboard-section-v378" id="sec-graficos" role="region">
+  <header class="section-title evolution-title econ-dashboard-title-v378">
     <div>
       <h2 class="section-title-v302 page-section-title-v302" id="evolutionTitle">
         <span aria-hidden="true" class="section-title-icon-v302">📈</span>
         <span class="section-title-text-v302">Inflação e juros</span>
       </h2>
-      <p class="section-subline">Leitura rápida do IPCA, da inflação em 12 meses e da Selic meta — gráficos leves em SVG/HTML.</p>
+      <p class="section-subline">IPCA mensal, IPCA em 12 meses versus meta e trajetória da Selic — gráficos leves em SVG.</p>
     </div>
     <button aria-controls="sec-graficos-body" aria-expanded="false" class="section-toggle-btn" data-label-closed="Exibir indicadores" data-label-open="Ocultar indicadores" id="evolutionToggle" onclick="return toggleSection('sec-graficos-body','sec-graficos')" type="button">
       <span aria-hidden="true" class="toggle-icon">›</span>
@@ -1089,103 +1089,72 @@ html:not(.app-booting) .page{
   </header>
 
   <div class="section-collapsible-body" hidden="" id="sec-graficos-body">
-    <div aria-label="Resumo dos indicadores econômicos" class="econ-clean-summary-v367" role="group">
-      <article class="econ-clean-card-v367">
-        <span>IPCA mensal</span>
-        <strong id="evoIpcaMensalVal">—</strong>
-        <small id="evoIpcaMensalSub">dado oficial</small>
-      </article>
-      <article class="econ-clean-card-v367 featured">
-        <span>Selic meta</span>
-        <strong id="evoSelicAtualVal">—</strong>
-        <small id="evoSelicAtualSub">Meta definida pelo Copom</small>
-      </article>
-      <article class="econ-clean-card-v367">
-        <span>IPCA 12 meses</span>
-        <strong id="evoIpca12Val">—</strong>
-        <small id="evoIpca12Sub">Meta central: 3,00% · faixa: 1,50% a 4,50%</small>
-      </article>
-    </div>
-
-    <section aria-atomic="true" aria-live="polite" class="econ-clean-mobile-reading-v367" data-evo-type="ipca" id="evoMobileSummary">
-      <span id="evoMobileKicker">Leitura rápida</span>
-      <strong id="evoMobileValue">—</strong>
-      <small id="evoMobileDescription">Selecione um indicador abaixo.</small>
-    </section>
-
-    <div aria-label="Selecionar indicador econômico" class="econ-clean-tabs-v367" role="group">
-      <button aria-pressed="true" class="econ-clean-tab-v367 active" data-econ-view="ipca" type="button">IPCA mensal</button>
-      <button aria-pressed="false" class="econ-clean-tab-v367" data-econ-view="selic" type="button">Selic meta</button>
-      <button aria-pressed="false" class="econ-clean-tab-v367" data-econ-view="meta" type="button">IPCA 12M</button>
-    </div>
-
-    <div class="econ-clean-panels-v367">
-      <article class="econ-clean-panel-v367 active" data-econ-panel="ipca">
-        <div class="econ-panel-head-v367">
+    <div class="econ-dashboard-grid-v378">
+      <article class="econ-dash-card-v378 econ-dash-card-ipca-v378">
+        <header class="econ-dash-card-head-v378">
           <div>
-            <span class="econ-panel-kicker-v367">Inflação mensal</span>
-            <h3>IPCA mensal</h3>
+            <h3><span aria-hidden="true">🎯</span> IPCA mensal — últimos <span id="ipcaDashRangeLabelV378">24 meses</span></h3>
+            <p>Variação percentual oficial em cada mês.</p>
           </div>
-</div>
-        <p class="econ-panel-note-v367" id="evoCardIpcaNote">Último resultado: aguardando atualização.</p>
-        <div aria-label="Período do IPCA mensal" class="econ-range-tabs-v371" role="group">
-          <button class="econ-range-tab-v371 active" data-econ-range-target="ipca" data-econ-range="12" type="button" aria-pressed="true">12M</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="ipca" data-econ-range="24" type="button" aria-pressed="false">24M</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="ipca" data-econ-range="36" type="button" aria-pressed="false">36M</button>
-        </div>
-        <div aria-label="Resumo do período do IPCA mensal" class="econ-chip-row-v367">
+          <div aria-label="Período do IPCA mensal" class="econ-dash-range-v378" role="group">
+            <button class="active" data-dash-range-target="ipca" data-dash-range="12" type="button" aria-pressed="true">12M</button>
+            <button data-dash-range-target="ipca" data-dash-range="24" type="button" aria-pressed="false">24M</button>
+            <button data-dash-range-target="ipca" data-dash-range="36" type="button" aria-pressed="false">36M</button>
+          </div>
+        </header>
+        <div class="econ-dash-pill-v378" id="evoCardIpcaNote">Último resultado: aguardando atualização.</div>
+        <div class="econ-dash-chart-v378 econ-dash-chart-ipca-v378" id="econSparkIpcaV367" aria-label="Gráfico do IPCA mensal"></div>
+        <div class="econ-dash-mini-kpis-v378 ipca-kpis-v378">
           <div><span>Último IPCA</span><strong id="ipcaResumoUltimoV250">—</strong><small id="ipcaResumoUltimoDataV250">—</small></div>
           <div><span>Maior mês</span><strong id="ipcaResumoMaxV250">—</strong><small id="ipcaResumoMaxDataV250">—</small></div>
           <div><span>Menor mês</span><strong id="ipcaResumoMinV250">—</strong><small id="ipcaResumoMinDataV250">—</small></div>
         </div>
-        <div class="econ-mini-chart-v367 bars" id="econSparkIpcaV367" aria-label="Mini tendência do IPCA mensal"></div>
       </article>
 
-      <article class="econ-clean-panel-v367" data-econ-panel="selic">
-        <div class="econ-panel-head-v367">
+      <article class="econ-dash-card-v378 econ-dash-card-meta-v378">
+        <header class="econ-dash-card-head-v378">
           <div>
-            <span class="econ-panel-kicker-v367">Juros básicos</span>
-            <h3>Selic meta</h3>
+            <h3><span aria-hidden="true">🎯</span> IPCA em 12 meses versus meta</h3>
+            <p>Comparação com a meta central e a faixa de tolerância.</p>
           </div>
-          <strong id="econSelicTrendLabelV367">—</strong>
+          <div aria-label="Período do IPCA em 12 meses" class="econ-dash-range-v378" role="group">
+            <button class="active" data-dash-range-target="meta" data-dash-range="12" type="button" aria-pressed="true">12M</button>
+            <button data-dash-range-target="meta" data-dash-range="24" type="button" aria-pressed="false">24M</button>
+            <button data-dash-range-target="meta" data-dash-range="36" type="button" aria-pressed="false">36M</button>
+          </div>
+        </header>
+        <div class="econ-dash-pill-v378 alert" id="evoCardMetaNote">Atual: aguardando atualização.</div>
+        <div class="econ-meta-band-v378">
+          <span>Piso 1,50%</span>
+          <strong>Meta 3,00%</strong>
+          <span>Teto 4,50%</span>
         </div>
-        <p class="econ-panel-note-v367" id="evoCardSelicNote">Taxa vigente: aguardando atualização.</p>
-        <div aria-label="Período da Selic meta" class="econ-range-tabs-v371" role="group">
-          <button class="econ-range-tab-v371 active" data-econ-range-target="selic" data-econ-range="12" type="button" aria-pressed="true">1A</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="selic" data-econ-range="24" type="button" aria-pressed="false">2A</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="selic" data-econ-range="60" type="button" aria-pressed="false">5A</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="selic" data-econ-range="120" type="button" aria-pressed="false">10A</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="selic" data-econ-range="all" type="button" aria-pressed="false">Tudo</button>
-        </div>
-        <div aria-label="Resumo da Selic" class="econ-chip-row-v367">
+        <div class="econ-dash-chart-v378 econ-dash-chart-meta-v378" id="econSparkMetaV367" aria-label="Gráfico do IPCA em 12 meses versus meta"></div>
+      </article>
+
+      <article class="econ-dash-card-v378 econ-dash-card-selic-v378">
+        <header class="econ-dash-card-head-v378">
+          <div>
+            <h3><span aria-hidden="true">🏦</span> Trajetória da Selic meta</h3>
+            <p>Histórico da taxa básica definida pelo Copom.</p>
+          </div>
+          <div aria-label="Período da Selic meta" class="econ-dash-range-v378" role="group">
+            <button data-dash-range-target="selic" data-dash-range="12" type="button" aria-pressed="false">1A</button>
+            <button data-dash-range-target="selic" data-dash-range="60" type="button" aria-pressed="false">5A</button>
+            <button data-dash-range-target="selic" data-dash-range="120" type="button" aria-pressed="false">10A</button>
+            <button class="active" data-dash-range-target="selic" data-dash-range="all" type="button" aria-pressed="true">Histórico</button>
+          </div>
+        </header>
+
+        <div class="econ-dash-pill-v378 ok" id="evoCardSelicNote">Taxa vigente: aguardando atualização.</div>
+
+        <div aria-label="Resumo da Selic" class="econ-dash-mini-kpis-v378 selic-kpis-v378">
           <div><span>Máxima</span><strong id="selicMaxResumo">—</strong><small id="selicMaxData">—</small></div>
           <div><span>Mínima</span><strong id="selicMinResumo">—</strong><small id="selicMinData">—</small></div>
           <div><span>Vigente</span><strong id="selicHojeResumo">—</strong><small id="selicHojeData">último dado</small></div>
         </div>
-        <div class="econ-mini-chart-v367 line" id="econSparkSelicV367" aria-label="Mini tendência da Selic meta"></div>
-      </article>
 
-      <article class="econ-clean-panel-v367" data-econ-panel="meta">
-        <div class="econ-panel-head-v367">
-          <div>
-            <span class="econ-panel-kicker-v367">Meta de inflação</span>
-            <h3>IPCA em 12 meses</h3>
-          </div>
-          <strong id="econMetaTrendLabelV367">—</strong>
-        </div>
-        <p class="econ-panel-note-v367" id="evoCardMetaNote">Atual: +4,72% · acima do teto da meta.</p>
-        <div aria-label="Período do IPCA em 12 meses" class="econ-range-tabs-v371" role="group">
-          <button class="econ-range-tab-v371 active" data-econ-range-target="meta" data-econ-range="12" type="button" aria-pressed="true">12M</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="meta" data-econ-range="24" type="button" aria-pressed="false">24M</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="meta" data-econ-range="36" type="button" aria-pressed="false">36M</button>
-          <button class="econ-range-tab-v371" data-econ-range-target="meta" data-econ-range="all" type="button" aria-pressed="false">Tudo</button>
-        </div>
-        <div class="econ-meta-band-v367" aria-label="Faixa da meta de inflação">
-          <span>Piso da banda · 1,50%</span>
-          <strong>Meta central · 3,00%</strong>
-          <span>Teto da banda · 4,50%</span>
-        </div>
-        <div class="econ-mini-chart-v367 line" id="econSparkMetaV367" aria-label="Mini tendência do IPCA em 12 meses"></div>
+        <div class="econ-dash-chart-v378 econ-dash-chart-selic-v378" id="econSparkSelicV367" aria-label="Gráfico da trajetória da Selic meta"></div>
       </article>
     </div>
   </div>
