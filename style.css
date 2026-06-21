@@ -54405,3 +54405,109 @@ html.evo-overflow-zoom-fix-v384 .ranking-table-wrap{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v389 — Desktop Only
+   Correção fina de geometria: KPIs CDI, Copom e meses.
+   Escopo: Juros e CDI. Não altera HTML nem JavaScript.
+════════════════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .market-reference-block-v167.rates-reference-v167 .rates-detail-grid-v167 {
+    display: grid !important;
+    grid-template-columns: minmax(420px, 0.72fr) minmax(720px, 1.28fr) !important;
+    gap: 24px !important;
+    align-items: start !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .copom-compact-v167 {
+    align-self: start !important;
+    height: auto !important;
+    min-height: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .copom-exec-summary-v270 {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 16px !important;
+    width: 100% !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .copom-exec-card-v270 {
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-year-history {
+    align-self: start !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpis-v271 {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    grid-auto-flow: column !important;
+    gap: 16px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpi-v271 {
+    grid-column: auto !important;
+    grid-row: auto !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    min-height: 88px !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpi-v271.is-current {
+    order: 1 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpi-v271.is-lastclosed {
+    order: 2 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpi-v271.is-total {
+    order: 3 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpi-v271.is-12m {
+    order: 4 !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-month-carousel-v322 {
+    display: grid !important;
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+    gap: 12px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-month-card-v322 {
+    min-width: 0 !important;
+    width: 100% !important;
+    padding: 12px !important;
+  }
+}
+
+@media (min-width: 1024px) and (max-width: 1240px) {
+  .market-reference-block-v167.rates-reference-v167 .rates-detail-grid-v167 {
+    grid-template-columns: minmax(360px, 0.78fr) minmax(560px, 1.22fr) !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-kpis-v271 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-flow: row !important;
+  }
+
+  .market-reference-block-v167.rates-reference-v167 .cdi-month-carousel-v322 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
