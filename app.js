@@ -6063,17 +6063,28 @@ function econRenderBarsV367(containerId, rows, getValue, getLabel, limit){
   const maxAbs = Math.max(...data.map(d => Math.abs(d.value)), 0.01);
 
   el.innerHTML = `
-    <div class="econ-bars-zero-label-v371">linha zero</div>
-    <div class="econ-bars-track-v367 econ-bars-track-v371">
-      <span class="econ-zero-line-v371" aria-hidden="true"></span>
+    <div class="econ-bars-scale-v372">
+      <span>positivo</span>
+      <strong>linha zero</strong>
+      <span>negativo</span>
+    </div>
+    <div class="econ-bars-track-v372" style="--bars:${data.length}">
+      <span class="econ-zero-line-v372" aria-hidden="true"></span>
       ${data.map(d => {
-        const h = Math.max(6, Math.min(46, Math.round((Math.abs(d.value) / maxAbs) * 46)));
+        const h = Math.max(5, Math.min(46, Math.round((Math.abs(d.value) / maxAbs) * 46)));
         const sign = d.value >= 0 ? 'pos' : 'neg';
         const title = `${d.label}: ${econPctV367(d.value)}`;
-        return `<i class="${sign}" style="--h:${h}%" title="${title}" aria-label="${title}"></i>`;
+        return `
+          <span class="econ-bar-slot-v372" title="${title}" aria-label="${title}">
+            <i class="${sign}" style="--h:${h}%"></i>
+          </span>
+        `;
       }).join('')}
     </div>
-    <div class="econ-axis-caption-v367"><span>${data[0].label}</span><span>${data[data.length-1].label}</span></div>
+    <div class="econ-axis-caption-v367">
+      <span>${data[0].label}</span>
+      <span>${data[data.length-1].label}</span>
+    </div>
   `;
 }
 
@@ -19375,7 +19386,7 @@ function openCdiAnalyticTableV274(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_PERIODS_NEGATIVE_BARS_20260620_v371';
+  const BUILD = 'ELTAUM_EVO_IPCA_BARS_FIX_20260620_v372';
   window.__ELTAUM_HEADER_METADATA_DESKTOP_V344__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
