@@ -1,92 +1,3 @@
-// ELTAUM_REMOVE_12M_XAXIS_v342
-// ELTAUM_INFLATION_SUMMARY_COMPACT_v341
-// ELTAUM_CHARTS_LOOP_FIX_v340
-// ELTAUM_CHARTS_TABS_FIX_v339
-// ELTAUM_INFLATION_RATES_CLEAN_v338
-// ELTAUM_DOLAR_CHART_CLOSED_v337
-// ELTAUM_DOLAR_BADGE_MONTHS_v336
-// ELTAUM_DOLAR_XAXIS_MOBILE_v335
-// ELTAUM_DOLAR_CHART_STATS_v334
-// ELTAUM_DOLAR_EXECUTIVE_MOBILE_v333
-// ELTAUM_MARKET_MICROCOPY_FORCE_v332
-// ELTAUM_MARKET_CARD_156_v331
-// ELTAUM_MARKET_CARD_WIDTH_UNIFORM_v330
-// ELTAUM_MARKET_MICROCOPY_CLEAN_v329
-// ELTAUM_SAVINGS_MICRO_POLISH_v327
-// ELTAUM_SAVINGS_SCENARIOS_POLISH_v326
-// ELTAUM_SAVINGS_CLEAN_MOBILE_v325
-// ELTAUM_CDI_SEMANTIC_CARDS_v324
-// ELTAUM_CDI_12M_FIX_v323
-// ELTAUM_CDI_MONTH_CAROUSEL_v322
-// ELTAUM_COPOM_CAROUSEL_v321
-// ELTAUM_REMOVE_NEXT_SUMMARY_v320
-// ELTAUM_MARKET_RATES_GRID_FORCE_v319
-// ELTAUM_MARKET_RATES_COMPACT_v318
-// ELTAUM_RANKING_MARKET_CLEAN_v317
-// ELTAUM_MARKET_MOBILE_CARD_SYSTEM_v316
-// ELTAUM_RANKING_PROFESSIONAL_BREATH_v315
-// ELTAUM_PAGINATION_RANKING_TIGHT_v314
-// ELTAUM_RANKING_GAP_CLEANUP_v312
-// SUMMARY_HEAD_REMOVED_v311
-// ELTAUM_SUMMARY_ICON_DEDUP_v310
-// ELTAUM_RANKING_HERO_SPACING_v309
-// ELTAUM_REMOVE_GFB_FULL_v308
-// ELTAUM_REMOVE_GFB_TOP_v307
-// ELTAUM_TITLE_HERO_LEVELS_v306
-// ELTAUM_RANKING_HERO_ICON_v305
-// ELTAUM_CARD_TITLE_SYSTEM_v304
-// ELTAUM_TITLE_NORMALIZED_JS_v303
-// ELTAUM_TITLE_UNIFIED_v302
-// ELTAUM_SECTION_TITLE_FORCE_v301
-// ELTAUM_SECTION_TITLE_SYSTEM_v300
-// ELTAUM_CDI_MOBILE_CANVAS_FIX_v299
-// ELTAUM_CDI_MOBILE_SEMANTIC_v298
-// ELTAUM_CDI_MOBILE_BARS_v297
-// ELTAUM_CDI_MOBILE_COMPACT_v296
-// ELTAUM_RANKING_INSIGHT_PREMIUM_v295
-// ELTAUM_MOBILE_HIDE_GFB_SEARCH_v294
-// ELTAUM_RANKING_INSIGHT_STABLE_v293
-// ELTAUM_RANKING_VALUE_STANDARD_v292
-// ELTAUM_RANKING_VALUES_COMPACT_v291
-// ELTAUM_RANKING_TIGHT_UNIFORM_v290
-// ELTAUM_RANKING_UNIFORM_FINAL_v289
-// ELTAUM_RANKING_PL_COMPACT_v288
-// ELTAUM_RANKING_SCALE_FINAL_v287
-// ELTAUM_RANKING_VALUE_FIX_v286
-// ELTAUM_RANKING_PROPORTION_v285
-// ELTAUM_RANKING_PREMIUM_v284
-// ELTAUM_RANKING_MOBILE_REFINEMENT_v283
-// ELTAUM_RANKING_MOBILE_STANDARD_20260619_v282
-// ELTAUM_RANKING_MOBILE_VALUE_RIGHT_20260619_v280
-// ELTAUM_LAYOUT_EXECUTIVO_20260618_v279
-// ELTAUM_PALETTE_APPLIED_20260618_v278
-// ELTAUM_RATES_EXECUTIVE_LEAN_20260618_v268
-// ELTAUM_RATES_DECOMPRESSED_20260618_v267
-// ELTAUM_DESKTOP_RATES_REFINE_20260618_v266
-// ELTAUM_COMPACT_MOBILE_20260618_v265
-// ELTAUM_RATES_CDI_REAL_20260618_v264
-// ELTAUM_RATES_SCROLL_FIX_20260618_v263
-// ELTAUM_RATES_PREMIUM_20260618_v261
-// ELTAUM_RATES_MOBILE_COMPACT_20260618_v260
-// ELTAUM_SELIC_MOBILE_FIT_20260618_v258
-// ELTAUM_RATES_REFERENCE_STABLE_20260618_v257
-// ELTAUM_RATES_REFERENCE_CLEAN_20260618_v256
-// ELTAUM_RATES_REFERENCE_EXEC_20260618_v255
-// ELTAUM_FOOTER_PRIVACY_20260618_v254
-// ELTAUM_SELIC_AXIS_LABELS_20260618_v253
-// ELTAUM_IPCA_SUMMARY_LABEL_FIX_20260618_v252
-// ELTAUM_IPCA_CHART_FIX_20260618_v251
-// ELTAUM_IPCA_CHART_SUMMARY_20260618_v250
-// ELTAUM_SELIC_PERIODS_20260618_v249
-// ELTAUM_SELIC_VIGENTE_SYNC_20260618_v248
-// ELTAUM_DOLAR_MOBILE_EXECUTIVE_20260618_v247
-// ELTAUM_DOLAR_MOBILE_TYPOGRAPHY_20260618_v246
-// ELTAUM_FUND_MOBILE_CNPJ_20260618_v238
-// ELTAUM_CDI_CURRENT_CONTEXT_20260618_v233
-// ELTAUM_CDI_DAILY_AUTO_REFRESH_20260618_v232
-// ELTAUM_NUMERIC_LEGIBILITY_20260618_v231
-// ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230
-// ELTAUM_CDI_MONTH_ORDER_20260617_v216
 // ELTAUM_MARKET_REFERENCE_EXECUTIVE_20260612_v167
 // ELTAUM_MOBILE_PREMIUM_FILTERS_CARDS_20260606_v68
 /* PATCH v19 — Topo de mercado reorganizado + CDI sem encavalamento */
@@ -173,260 +84,6 @@ const indicState = {
 };
 let activePeriodTab = 12; // 12, 24 ou 36
 let _ptaxHistorico = []; // cache para uso nos tabs
-
-/* ════════════════════════════════════════════════════
-   v232 — FONTE ÚNICA DO CDI DO MÊS ATUAL
-   Utilizada pela visão executiva, tabela analítica e atualização automática.
-════════════════════════════════════════════════════ */
-function obterCdiAtualV232(dados){
-  let base = dados;
-  if(!base){
-    try{ base = _dadosMercado; }catch(e){ base = null; }
-  }
-  const card = base?.cards?.cdi || window.__mercadoAtualV230?.cards?.cdi || {};
-  const valorRaw = card.parcial_mes_atual;
-  const valor = valorRaw === null || valorRaw === undefined || valorRaw === ''
-    ? null
-    : Number(valorRaw);
-  const data = String(card.parcial_ate || '').trim() || null;
-  const dataIso = String(card.parcial_data_iso || '').trim() || null;
-  const referencia = String(card.parcial_ref || '').trim() || null;
-  const origem = String(card.parcial_origem || '').trim() || null;
-  const consultadoEm = String(card.consultado_em || base?.atualizado_em || '').trim() || null;
-  return {
-    valor: Number.isFinite(valor) ? valor : null,
-    data,
-    dataIso,
-    referencia,
-    origem,
-    consultadoEm,
-    diasUteis: Number.isFinite(Number(card.parcial_dias_uteis)) ? Number(card.parcial_dias_uteis) : null,
-    status: Number.isFinite(valor) ? 'parcial' : 'aguardando'
-  };
-}
-window.obterCdiAtualV232 = obterCdiAtualV232;
-
-/* ════════════════════════════════════════════════════
-   v233 — CONTEXTO CLARO DO CDI PARCIAL
-   Distingue o valor acumulado no mês da data/referência
-   da última observação disponível.
-════════════════════════════════════════════════════ */
-function contextoCdiAtualV233(info){
-  const source = String(info?.origem || '').trim();
-  const reference = String(info?.referencia || '').trim();
-  const rawDate = String(info?.data || '').trim();
-  const shortDate = /^\d{2}\/\d{2}/.test(rawDate) ? rawDate.slice(0, 5) : '';
-
-  let stale = false;
-  if(info?.dataIso){
-    const parsed = new Date(`${info.dataIso}T12:00:00`);
-    if(!Number.isNaN(parsed.getTime())){
-      stale = (Date.now() - parsed.getTime()) > (3 * 24 * 60 * 60 * 1000);
-    }
-  }
-
-  const monthlyMarker = /4391/i.test(source) && /^01\//.test(rawDate);
-  let detail = 'Atualização parcial';
-
-  if(monthlyMarker && reference){
-    detail = `Atualização parcial de ${reference}`;
-  }else if(shortDate){
-    detail = stale
-      ? `Última referência disponível: ${shortDate}`
-      : `Dados disponíveis até ${shortDate}`;
-  }else if(reference){
-    detail = `Atualização parcial de ${reference}`;
-  }
-
-  return {
-    title: 'Acumulado no mês',
-    detail,
-    shortDate,
-    stale,
-    monthlyMarker
-  };
-}
-window.contextoCdiAtualV233 = contextoCdiAtualV233;
-
-/* ════════════════════════════════════════════════════
-   v230 — CDI DINÂMICO COM FONTE ÚNICA E RECARGA SEGURA
-   - centraliza 12M/24M/36M em um cache próprio;
-   - lê diretamente cards.cdi.acum_12m/24m/36m;
-   - recompõe pelo histórico mensal quando necessário;
-   - refaz somente a leitura de mercado_atual.json se o período estiver vazio;
-   - elimina dependência da ordem de carregamento do painel.
-════════════════════════════════════════════════════ */
-const CDI_PERIOD_OPTIONS_V229 = Object.freeze([12, 24, 36]);
-const cdiPeriodoCacheV230 = Object.seal({ 12: null, 24: null, 36: null });
-let cdiRefreshPromiseV230 = null;
-
-function numeroFinitoV229(value){
-  if(value === null || value === undefined || value === '') return null;
-  const n = Number(value);
-  return Number.isFinite(n) ? n : null;
-}
-
-function chaveMesDeRotuloV229(label){
-  const match = String(label || '').trim().toLowerCase().match(/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\/(\d{4})/);
-  if(!match) return null;
-  const monthIndex = MESES_PT.indexOf(match[1]);
-  return monthIndex >= 0 ? `${match[2]}-${String(monthIndex + 1).padStart(2, '0')}` : null;
-}
-
-function acumularPercentuaisMensaisV229(values){
-  if(!Array.isArray(values) || !values.length) return null;
-  let factor = 1;
-  let count = 0;
-  for(const value of values){
-    const n = numeroFinitoV229(value);
-    if(n === null) continue;
-    factor *= (1 + n / 100);
-    count += 1;
-  }
-  return count ? Number(((factor - 1) * 100).toFixed(4)) : null;
-}
-
-function calcularCdiDoHistoricoV229(cdiCard, months){
-  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
-  const historico = Array.isArray(cdiCard?.historico) ? cdiCard.historico : [];
-  if(!historico.length) return null;
-
-  const ultimoFechadoKey = chaveMesDeRotuloV229(cdiCard?.mes_ref);
-  const ordenado = historico
-    .map(item => ({
-      key: String(item?.key || item?.data_ref || '').slice(0, 7),
-      value: numeroFinitoV229(item?.valor ?? item?.value)
-    }))
-    .filter(item => /^\d{4}-\d{2}$/.test(item.key) && item.value !== null)
-    .filter(item => !ultimoFechadoKey || item.key <= ultimoFechadoKey)
-    .sort((a, b) => a.key.localeCompare(b.key));
-
-  if(ordenado.length < periodo) return null;
-  return acumularPercentuaisMensaisV229(ordenado.slice(-periodo).map(item => item.value));
-}
-
-function fontesCdiV230(preferida){
-  const fontes = [];
-  const adicionar = value => {
-    if(value && typeof value === 'object' && !fontes.includes(value)) fontes.push(value);
-  };
-
-  adicionar(preferida);
-  try{ adicionar(_dadosMercado?.cards?.cdi); }catch(e){}
-  adicionar(window.__mercadoAtualV230?.cards?.cdi);
-  return fontes;
-}
-
-function cdiCardAtualV230(){
-  try{
-    return _dadosMercado?.cards?.cdi || window.__mercadoAtualV230?.cards?.cdi || {};
-  }catch(e){
-    return window.__mercadoAtualV230?.cards?.cdi || {};
-  }
-}
-
-function resolverCdiPeriodoV229(cdiCard, months){
-  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
-
-  for(const fonte of fontesCdiV230(cdiCard)){
-    const direto = numeroFinitoV229(fonte?.[`acum_${periodo}m`]);
-    if(direto !== null){
-      cdiPeriodoCacheV230[periodo] = direto;
-      return direto;
-    }
-
-    const historico = calcularCdiDoHistoricoV229(fonte, periodo);
-    if(historico !== null){
-      cdiPeriodoCacheV230[periodo] = historico;
-      return historico;
-    }
-  }
-
-  const cache = numeroFinitoV229(cdiPeriodoCacheV230[periodo]);
-  if(cache !== null) return cache;
-
-  return numeroFinitoV229(indicState.cdi?.[`m${periodo}`]);
-}
-
-function atualizarDiagnosticoCdiV230(){
-  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => numeroFinitoV229(cdiPeriodoCacheV230[periodo]) !== null);
-  document.documentElement.dataset.cdiPeriods = disponiveis.join(',');
-}
-
-function sincronizarEstadoCdiV229(dados){
-  if(dados && typeof dados === 'object') window.__mercadoAtualV230 = dados;
-
-  const cdiCard = dados?.cards?.cdi || {};
-  const mensal = numeroFinitoV229(cdiCard.mensal);
-  if(mensal !== null) indicState.cdi.mes = mensal;
-  if(cdiCard.mes_ref) indicState.cdi.mesRef = cdiCard.mes_ref;
-
-  CDI_PERIOD_OPTIONS_V229.forEach(periodo => {
-    const value = resolverCdiPeriodoV229(cdiCard, periodo);
-    if(value !== null){
-      indicState.cdi[`m${periodo}`] = value;
-      cdiPeriodoCacheV230[periodo] = value;
-    }
-  });
-
-  atualizarDiagnosticoCdiV230();
-
-  return {
-    m12: numeroFinitoV229(cdiPeriodoCacheV230[12] ?? indicState.cdi.m12),
-    m24: numeroFinitoV229(cdiPeriodoCacheV230[24] ?? indicState.cdi.m24),
-    m36: numeroFinitoV229(cdiPeriodoCacheV230[36] ?? indicState.cdi.m36)
-  };
-}
-
-async function recarregarCdiPeriodosV230(){
-  if(cdiRefreshPromiseV230) return cdiRefreshPromiseV230;
-
-  cdiRefreshPromiseV230 = (async () => {
-    const url = BASE_URL + 'mercado_atual.json?v=market-cdi-v230-' + Date.now();
-    const response = await fetch(url, { cache: 'no-store' });
-    if(!response.ok) throw new Error(`HTTP ${response.status} ao carregar mercado_atual.json`);
-
-    const raw = await response.json();
-    const fresco = typeof normalizarMercadoAtual === 'function' ? normalizarMercadoAtual(raw) : raw;
-    const cdiFresco = fresco?.cards?.cdi;
-
-    if(cdiFresco){
-      try{
-        if(_dadosMercado && typeof _dadosMercado === 'object'){
-          if(!_dadosMercado.cards) _dadosMercado.cards = {};
-          _dadosMercado.cards.cdi = { ...(_dadosMercado.cards.cdi || {}), ...cdiFresco };
-          sincronizarEstadoCdiV229(_dadosMercado);
-        }else{
-          sincronizarEstadoCdiV229(fresco);
-        }
-      }catch(e){
-        sincronizarEstadoCdiV229(fresco);
-      }
-    }
-
-    return sincronizarEstadoCdiV229(fresco);
-  })().finally(() => {
-    cdiRefreshPromiseV230 = null;
-  });
-
-  return cdiRefreshPromiseV230;
-}
-
-async function garantirCdiPeriodoV230(months){
-  const periodo = CDI_PERIOD_OPTIONS_V229.includes(Number(months)) ? Number(months) : 12;
-  let value = resolverCdiPeriodoV229(cdiCardAtualV230(), periodo);
-  if(value !== null) return value;
-
-  await recarregarCdiPeriodosV230();
-  value = resolverCdiPeriodoV229(cdiCardAtualV230(), periodo);
-  return value;
-}
-
-window.sincronizarEstadoCdiV229 = sincronizarEstadoCdiV229;
-window.resolverCdiPeriodoV229 = resolverCdiPeriodoV229;
-window.recarregarCdiPeriodosV230 = recarregarCdiPeriodosV230;
-window.garantirCdiPeriodoV230 = garantirCdiPeriodoV230;
-window.getCdiPeriodosV230 = () => ({ ...cdiPeriodoCacheV230 });
 
 /* ════════════════════════════════════════════════════
    POUPANÇA — TOGGLE
@@ -516,10 +173,15 @@ function calcularPoupancaAntigaMensal(trMensal=0){
 }
 
 function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
+  const canvas = $('poupScenarioChart');
+  if(!canvas || typeof Chart === 'undefined') return;
+
   const selicNum = getFirstNumber(selic);
   const valorNovaNum = getFirstNumber(valorNova);
   const valorAntigaNum = getFirstNumber(valorAntiga);
 
+  // A TR não é fixa no tempo. Para o gráfico ficar coerente com o card de hoje,
+  // usamos uma TR estimada apenas de forma didática, derivada do rendimento atual.
   let trEstimada = 0;
   if(selicNum != null && valorNovaNum != null){
     const baseNovaHoje = selicNum > 8.5
@@ -530,44 +192,143 @@ function atualizarPoupancaCenarios({selic, valorNova, valorAntiga} = {}){
     trEstimada = Math.max(0, valorAntigaNum - 0.5);
   }
 
-  const mensalNova4 = calcularPoupancaNovaMensalPorSelic(4, trEstimada);
-  const mensalNova85 = calcularPoupancaNovaMensalPorSelic(8.5, trEstimada);
-  const mensalAntiga = calcularPoupancaAntigaMensal(trEstimada);
-  const mensalNovaAtual = selicNum != null
-    ? calcularPoupancaNovaMensalPorSelic(selicNum, trEstimada)
-    : valorNovaNum;
-  const mensalAntigaAtual = valorAntigaNum != null ? valorAntigaNum : mensalAntiga;
+  const cenariosBase = [4, 6, 8.5];
+  if(selicNum != null && !cenariosBase.some(v => Math.abs(v - selicNum) < 0.01)){
+    cenariosBase.push(selicNum);
+  }
 
-  const setText = (id, value) => {
-    const el = $(id);
-    if(el) el.textContent = value;
+  const cenarios = cenariosBase.map(v => {
+    const isHoje = selicNum != null && Math.abs(v - selicNum) < 0.01;
+    return {
+      selic: v,
+      // Chart.js interpreta array de strings como rótulo em múltiplas linhas.
+      // Assim evitamos aparecer o texto literal "\\n" no gráfico.
+      label: isHoje ? ['Hoje', fmt(v)] : ['Selic', fmt(v)]
+    };
+  });
+
+  const novaVals = cenarios.map(c => calcularPoupancaNovaMensalPorSelic(c.selic, trEstimada));
+  const antigaVals = cenarios.map(() => calcularPoupancaAntigaMensal(trEstimada));
+
+  const labels = cenarios.map(c => c.label);
+
+  const chartData = {
+    labels,
+    datasets:[
+      {
+        label:'Regra nova',
+        data:novaVals,
+        backgroundColor:'rgba(91,156,246,.62)',
+        borderColor:'rgba(91,156,246,.95)',
+        borderWidth:1,
+        borderRadius:6,
+        maxBarThickness:26
+      },
+      {
+        label:'Regra antiga',
+        data:antigaVals,
+        backgroundColor:'rgba(200,151,58,.52)',
+        borderColor:'rgba(232,187,106,.95)',
+        borderWidth:1,
+        borderRadius:6,
+        maxBarThickness:26
+      }
+    ]
   };
-  const formatMensal = (v) => Number.isFinite(Number(v)) ? `${fmt(Number(v))} a.m.` : '—';
 
-  setText('poupScenarioNew4', `70% da Selic + TR (${formatMensal(mensalNova4)})`);
-  setText('poupScenarioOld4', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
-  setText('poupScenarioNew85', `70% da Selic + TR (${formatMensal(mensalNova85)})`);
-  setText('poupScenarioOld85', `TR + 0,50% a.m. (${formatMensal(mensalAntiga)})`);
-  setText('poupScenarioCurrentTitle', selicNum != null ? `Selic atual: ${fmt(selicNum)}` : 'Cenário atual');
-  setText('poupScenarioCurrentNew', formatMensal(mensalNovaAtual));
-  setText('poupScenarioCurrentOld', formatMensal(mensalAntigaAtual));
+  const maxY = Math.max(...novaVals, ...antigaVals, 0.8);
+  const chartOptions = {
+    responsive:true,
+    maintainAspectRatio:false,
+    animation:{duration:450},
+    plugins:{
+      legend:{
+        display:true,
+        position:'bottom',
+        labels:{
+          color:'#aeb7cf',
+          boxWidth:10,
+          boxHeight:10,
+          padding:10,
+          font:{size:10,family:'Inter'}
+        }
+      },
+      tooltip:{
+        callbacks:{
+          label:function(ctx){
+            const val = Number(ctx.raw);
+            return `${ctx.dataset.label}: ${Number.isFinite(val) ? fmt(val) : '—'} a.m.`;
+          },
+          afterBody:function(){
+            return trEstimada > 0 ? `TR estimada usada: ${fmt(trEstimada)}` : 'Simulação sem TR estimada';
+          }
+        }
+      }
+    },
+    scales:{
+      x:{
+        grid:{display:false},
+        ticks:{
+          color:'#9faac4',
+          font:{size:10,family:'JetBrains Mono'}
+        }
+      },
+      y:{
+        beginAtZero:true,
+        suggestedMax:maxY * 1.18,
+        grid:{color:'rgba(255,255,255,.055)'},
+        ticks:{
+          color:'#9faac4',
+          font:{size:10,family:'JetBrains Mono'},
+          callback:function(value){ return Number(value).toFixed(2).replace('.',',') + '%'; }
+        }
+      }
+    }
+  };
+
+  if(poupScenarioChart){
+    poupScenarioChart.data = chartData;
+    poupScenarioChart.options = chartOptions;
+    poupScenarioChart.update();
+  }else{
+    poupScenarioChart = new Chart(canvas, {
+      type:'bar',
+      data:chartData,
+      options:chartOptions
+    });
+  }
+
+  if($('poupScenarioStatus')){
+    $('poupScenarioStatus').textContent = selicNum != null ? `Selic ${fmt(selicNum)}` : 'Selic —';
+  }
+
+  if($('poupScenarioToday')){
+    if(selicNum == null){
+      $('poupScenarioToday').textContent = 'Aguardando Selic';
+    }else if(selicNum > 8.5){
+      $('poupScenarioToday').textContent = 'Mesma regra hoje';
+    }else{
+      $('poupScenarioToday').textContent = 'Regra nova menor';
+    }
+  }
 
   if($('poupScenarioSummary')){
     if(selicNum == null){
-      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, o comparativo mostrará o efeito da regra atual e da regra anterior.';
+      $('poupScenarioSummary').textContent = 'Quando a Selic carregar, o gráfico compara a regra nova com a regra antiga em cenários selecionados.';
     }else if(selicNum > 8.5){
-      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, as duas regras utilizam TR + 0,50% a.m. A diferença aparece quando a Selic fica em 8,50% a.a. ou abaixo.`;
+      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, as duas regras convergem: TR + 0,50% a.m. A diferença aparece principalmente quando a Selic fica em 8,50% a.a. ou abaixo.`;
     }else{
-      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, a regra vigente passa a usar 70% da Selic + TR, enquanto a regra pré-2012 mantém TR + 0,50% a.m.`;
+      $('poupScenarioSummary').textContent = `Com Selic em ${fmt(selicNum)}, a regra nova usa TR + 70% da Selic meta anual, mensalizada; a regra antiga mantém TR + 0,50% a.m.`;
     }
   }
 
   if($('poupScenarioNote')){
     $('poupScenarioNote').textContent = trEstimada > 0
-      ? `Comparação didática com TR estimada de ${fmt(trEstimada)} a.m. A TR varia conforme o período de aniversário.`
-      : 'Comparação didática sem TR estimada. Para valor exato, consulte a Calculadora do Cidadão do BCB.';
+      ? `Estimativa didática: gráfico mantém TR estimada de ${fmt(trEstimada)} a.m. apenas para comparação visual.`
+      : 'Estimativa didática: gráfico sem TR estimada. Para valor exato por período, conferir a calculadora do BCB.';
   }
 }
+
 function atualizarPoupancaCard(d, selicAtual){
   const c = d?.cards || {};
   const nova = c.poupanca_nova || d?.poupanca_nova || d?.poupanca?.nova || {};
@@ -607,25 +368,7 @@ function atualizarPoupancaCard(d, selicAtual){
   }
 
   if($('mc-poup')){
-    const valorMensalTexto = valorNova != null ? fmt(valorNova) : '—';
-    $('mc-poup').textContent = valorMensalTexto;
-    $('mc-poup').setAttribute(
-      'aria-label',
-      valorNova != null ? `Rendimento mensal atual: ${valorMensalTexto} ao mês` : 'Rendimento mensal ainda não disponível'
-    );
-  }
-
-  if($('poupTodayCompactV199')){
-    $('poupTodayCompactV199').textContent = valorNova != null ? fmt(valorNova) : '—';
-  }
-
-  if($('poupYearCompactV199')){
-    const acumuladoAnoTexto = acumNova != null ? formatPctCard(acumNova) : '—';
-    $('poupYearCompactV199').textContent = acumuladoAnoTexto;
-    $('poupYearCompactV199').setAttribute(
-      'aria-label',
-      acumNova != null ? `Acumulado da poupança no ano: ${acumuladoAnoTexto}` : 'Acumulado no ano ainda não disponível'
-    );
+    $('mc-poup').textContent = valorNova != null ? fmt(valorNova) : '—';
   }
 
   if($('poupOldMonthly')){
@@ -640,30 +383,32 @@ function atualizarPoupancaCard(d, selicAtual){
     $('poupOldAccum').textContent = 'Acum. ano: ' + (acumAntiga != null ? formatPctCard(acumAntiga) : '—');
   }
 
+  let textoNova = 'a.m. · regra conforme nível da Selic';
+
+  if(selic != null){
+    textoNova = acima
+      ? 'a.m. · TR + 0,50% (Selic > 8,5%)'
+      : 'a.m. · TR + 70% da Selic meta anual, mensalizada (Selic ≤ 8,5%)';
+  }
+
   if($('poupNewRuleText')){
-    if(selic == null){
-      $('poupNewRuleText').textContent = 'Aguardando a Selic vigente.';
-    }else if(acima){
-      $('poupNewRuleText').innerHTML = 'Com Selic acima de 8,50% a.a.: <strong>TR + 0,50% a.m.</strong>';
-    }else{
-      $('poupNewRuleText').innerHTML = 'Com Selic em até 8,50% a.a.: <strong>70% da Selic + TR</strong>';
-    }
+    $('poupNewRuleText').textContent = textoNova;
   }
 
   if($('poupOldRuleText')){
-    $('poupOldRuleText').innerHTML = 'Rendimento: <strong>TR + 0,50% a.m.</strong>';
+    $('poupOldRuleText').textContent = 'a.m. · TR + 0,50%';
   }
 
   if($('poupQuickNote')){
     if(selic == null){
       $('poupQuickNote').textContent =
-        'Aguardando Selic vigente para definir a regra aplicada.';
+        'Regra nova depende do nível da Selic. Para acumulado exato, conferir calculadora oficial do BCB.';
     }else if(acima){
-      $('poupQuickNote').innerHTML =
-        `Rendimento de <strong>TR + 0,50% a.m.</strong> <span class="poup-note-muted-v327">(Selic acima de 8,50% a.a.)</span>`;
+      $('poupQuickNote').textContent =
+        `Com Selic em ${fmt(selic)}, a regra nova usa TR + 0,50% a.m.; a regra antiga também usa TR + 0,50% a.m.`;
     }else{
-      $('poupQuickNote').innerHTML =
-        `Depósitos novos: <strong>70% da Selic + TR</strong> <span class="poup-note-muted-v327">(regra vigente)</span>`;
+      $('poupQuickNote').textContent =
+        `Com Selic em ${fmt(selic)}, a regra nova usa TR + 70% da Selic meta anual, mensalizada; a regra antiga mantém TR + 0,50% a.m.`;
     }
   }
 
@@ -686,28 +431,14 @@ function toggleFocusExplain(){
    CDI — SÉRIE 4391 BCB (12M / 24M / 36M)
 ════════════════════════════════════════════════════ */
 async function carregarCDIPeriodos(){
-  let periodos = sincronizarEstadoCdiV229(_dadosMercado);
-  let ausentes = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] === null);
-
-  if(ausentes.length){
-    try{
-      await recarregarCdiPeriodosV230();
-      periodos = sincronizarEstadoCdiV229(_dadosMercado || window.__mercadoAtualV230);
-      ausentes = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] === null);
-    }catch(error){
-      console.warn('[CDI v230] Não foi possível refazer a leitura dos acumulados:', error);
-    }
-  }
-
-  const disponiveis = CDI_PERIOD_OPTIONS_V229.filter(periodo => periodos[`m${periodo}`] !== null);
-  if(disponiveis.length){
-    console.info(`[CDI v230] Períodos disponíveis: ${disponiveis.join('M, ')}M`);
-  }
-  if(ausentes.length){
-    console.warn(`[CDI v230] Períodos ainda ausentes: ${ausentes.join('M, ')}M`);
+  // v17 local: não chama mais a API SGS 4391 pelo navegador.
+  // Os acumulados 12M/24M/36M já vêm pré-calculados no mercado_atual.json pelo atualização automatizada.
+  if(indicState.cdi.m12 !== null || indicState.cdi.m24 !== null || indicState.cdi.m36 !== null){
+    console.info('[CDI] Usando acumulados do mercado_atual.json');
+  } else {
+    console.warn('[CDI] mercado_atual.json não trouxe acumulados CDI. Execute o +.');
     if($('cdi-acum-src-v2')) $('cdi-acum-src-v2').textContent = 'histórico indisponível';
   }
-
   atualizarTabelaIndicadores();
 }
 
@@ -844,30 +575,19 @@ function atualizarPTAXStats(range='24m'){
   const media = janela.reduce((sum,item)=>sum+item.val,0) / janela.length;
 
   setText('ptaxStatsTitleV162', `Estatísticas do período · ${periodoTexto}`);
-  const primeiroPeriodo = janela[0];
-  const ultimoPeriodo = janela[janela.length - 1] || atual;
-  const variacaoPeriodo = primeiroPeriodo && Number.isFinite(primeiroPeriodo.val) && primeiroPeriodo.val !== 0
-    ? ((ultimoPeriodo.val / primeiroPeriodo.val - 1) * 100)
-    : NaN;
-  const varPeriodoTxt = Number.isFinite(variacaoPeriodo)
-    ? `${variacaoPeriodo > 0 ? '+' : ''}${variacaoPeriodo.toFixed(2).replace('.', ',')}%`
-    : '—';
-  const varPeriodoCls = !Number.isFinite(variacaoPeriodo) ? 'neu' : variacaoPeriodo > 0 ? 'pos' : variacaoPeriodo < 0 ? 'neg' : 'neu';
-
-  setText('ptaxStatVarLabelV334', 'Variação');
   setText('ptaxStatMaxLabel', 'Máxima');
   setText('ptaxStatMinLabel', 'Mínima');
   setText('ptaxStatMediaLabel', 'Média');
-  setText('ptaxStatAtual', varPeriodoTxt);
+  setText('ptaxStatAtual', brl(atual.val));
   setText('ptaxStatMax', brl(max.val));
   setText('ptaxStatMaxRef', max.label);
   setText('ptaxStatMin', brl(min.val));
   setText('ptaxStatMinRef', min.label);
   setText('ptaxStatMedia', brl(media));
 
-  setClass('ptaxStatAtual', `ptax-stat-val ${varPeriodoCls}`);
-  setClass('ptaxStatMax', 'ptax-stat-val neu');
-  setClass('ptaxStatMin', 'ptax-stat-val neu');
+  setClass('ptaxStatAtual', 'ptax-stat-val neu');
+  setClass('ptaxStatMax', 'ptax-stat-val neg');
+  setClass('ptaxStatMin', 'ptax-stat-val pos');
   setClass('ptaxStatMedia', 'ptax-stat-val neu');
 }
 
@@ -1237,12 +957,8 @@ function buildChartDolar(range){
   const step = Math.max(1, Math.floor(dados.length/200));
   const sample = dados.filter((_,i) => i % step === 0 || i === dados.length-1);
 
-  const labels = sample.map((d, idx) => {
+  const labels = sample.map(d => {
     const dt = new Date(d.dataHoraCotacao);
-    const mes = MESES_PT[dt.getMonth()] || String(dt.getMonth()+1).padStart(2,'0');
-    const yy = String(dt.getFullYear()).slice(-2);
-    if(range === '36m') return idx === 0 || idx === sample.length - 1 || dt.getMonth() === 0 ? String(dt.getFullYear()) : `${mes}/${yy}`;
-    if(range === '24m' || range === '12m') return `${mes}/${yy}`;
     return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}`;
   });
   const values = sample.map(d => parseFloat(d.cotacaoVenda));
@@ -1291,14 +1007,6 @@ function buildChartDolar(range){
           titleFont: { family: 'Cormorant Garamond', size: 13, weight: '700' },
           bodyFont: { family: 'JetBrains Mono', size: 11 },
           callbacks: {
-            title: items => {
-              const item = items && items[0];
-              const raw = sample[item?.dataIndex || 0]?.dataHoraCotacao;
-              const dt = raw ? new Date(raw) : null;
-              return dt && !isNaN(dt)
-                ? `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`
-                : (item?.label || '');
-            },
             label: ctx => `${brl(ctx.parsed.y)}`,
             afterLabel: ctx => {
               const v = ctx.parsed.y;
@@ -1311,23 +1019,7 @@ function buildChartDolar(range){
       scales: {
         x: {
           grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
-          ticks: {
-            color: '#3d4560',
-            font: { family: 'JetBrains Mono', size: 9 },
-            maxTicksLimit: window.innerWidth <= 768 ? 5 : 10,
-            maxRotation: 0,
-            minRotation: 0,
-            autoSkip: false,
-            callback: function(value, index, ticks){
-              const total = Array.isArray(ticks) ? ticks.length : (this.chart?.data?.labels?.length || 0);
-              const maxLabels = window.innerWidth <= 768 ? 5 : 10;
-              const label = this.getLabelForValue(value);
-              if(total <= maxLabels) return label;
-              const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
-              if(index === 0 || index === total - 1 || index % step === 0) return label;
-              return '';
-            }
-          }
+          ticks: { color: '#3d4560', font: { family: 'JetBrains Mono', size: 9 }, maxTicksLimit: 10 }
         },
         y: {
           grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
@@ -1528,23 +1220,16 @@ function atualizarTabelaIndicadores(){
 
   // ═══ CDI ═══
   const cdiMesFechado = num(cards.cdi?.mensal) ?? num(indicState.cdi.mes);
-  const cdiAtualInfo = obterCdiAtualV232(_dadosMercado);
-  const cdiParcial = num(cdiAtualInfo.valor);
-  const cdiParcialLabel = cdiAtualInfo.referencia || mesAtualLabel;
+  const cdiParcial = num(cards.cdi?.parcial_mes_atual);
+  const cdiParcialLabel = cards.cdi?.parcial_ref || mesAtualLabel;
   const cdiAno = (cdiParcial !== null ? num(cards.cdi?.acum_ano_com_parcial) : num(cards.cdi?.acum_ano)) ?? num(cards.cdi?.acum_ano_com_parcial) ?? null;
-  const cdiAcum = num(resolverCdiPeriodoV229(cards.cdi || {}, m));
+  const cdiAcum = num(indicState.cdi[`m${m}`]) ?? num(cards.cdi?.[`acum_${m}m`]);
 
   setPct('cdi-mes-ant', cdiMesFechado, 'bar-cdi-ant', 2);
   setSubStatus('cdi-mes-ant-sub', cards.cdi?.mes_ref || fallbackMesFechado, 'fechado');
 
   setPct('cdi-mes-cur', cdiParcial, 'bar-cdi-cur', 2, false, '—');
   setSubStatus('cdi-cur-sub', cdiParcialLabel, cdiParcial !== null ? 'parcial' : 'aguardando');
-  const cdiCurSub = $('cdi-cur-sub');
-  if(cdiCurSub && cdiParcial !== null){
-    const contexto = contextoCdiAtualV233(cdiAtualInfo);
-    cdiCurSub.innerHTML = `<span class="period-line status-parcial cdi-period-context-v233"><span class="period-label">${contexto.title}</span><span class="period-dot">·</span><span class="period-status">${contexto.detail}</span></span>`;
-    cdiCurSub.title = `${contexto.title}. ${contexto.detail}${cdiAtualInfo.origem ? ` · fonte ${cdiAtualInfo.origem}` : ''}`;
-  }
 
   setPct('cdi-ano', cdiAno, 'bar-cdi-ano', 15);
   setSubSimple('cdi-ano-sub', atePeriodo(cdiParcial !== null ? cdiParcialLabel : (cards.cdi?.mes_ref || fallbackMesFechado)));
@@ -1675,98 +1360,25 @@ function atualizarTabelaIndicadores(){
 }
 
 
-/* ════════════════════════════════════════════════════
-   v229 — CONTROLADOR ÚNICO DO PERÍODO DE MERCADO
-   - sincroniza estado, botões, aria-pressed, tabela e visão executiva;
-   - usa apenas o evento click, compatível com mouse, toque e teclado;
-   - remove a necessidade de z-index elevado e hit-test por coordenadas.
-════════════════════════════════════════════════════ */
-const MARKET_PERIOD_OPTIONS_V229 = Object.freeze([12, 24, 36]);
+// Tabs 12M / 24M / 36M — sincronizados com a tabela analítica e a visão executiva (v173)
+document.querySelectorAll('.indic-tab[data-months]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.indic-tab[data-months]').forEach(b => {
+      const isActive = b === btn;
+      b.classList.toggle('active', isActive);
+      b.setAttribute('aria-pressed', String(isActive));
+    });
 
-function normalizarPeriodoMercadoV229(value){
-  const months = Number.parseInt(value, 10);
-  return MARKET_PERIOD_OPTIONS_V229.includes(months) ? months : 12;
-}
+    activePeriodTab = parseInt(btn.dataset.months, 10) || 12;
+    atualizarTabelaIndicadores();
 
-function sincronizarBotoesPeriodoMercadoV229(months){
-  const selected = normalizarPeriodoMercadoV229(months);
-
-  document.querySelectorAll('.indic-tab[data-months]').forEach(button => {
-    const isActive = Number.parseInt(button.dataset.months, 10) === selected;
-    button.classList.toggle('active', isActive);
-    button.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    // Notifica os componentes derivados somente depois de o período-base ser atualizado.
+    document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+      detail: { months: activePeriodTab }
+    }));
   });
-}
-
-function selecionarPeriodoMercadoV229(value, options = {}){
-  const months = normalizarPeriodoMercadoV229(value);
-  const source = options.source || 'api';
-  const shouldRender = options.render !== false;
-
-  activePeriodTab = months;
-  document.documentElement.dataset.indicPeriod = String(months);
-  sincronizarBotoesPeriodoMercadoV229(months);
-
-  let renderOk = true;
-  if(shouldRender){
-    try{
-      atualizarTabelaIndicadores();
-    }catch(error){
-      renderOk = false;
-      console.error('[ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230] Falha ao atualizar os indicadores:', error);
-    }
-  }
-
-  // Se o valor do período ainda não estiver no estado, busca novamente o JSON
-  // e redesenha apenas quando o usuário continuar no mesmo período.
-  if(resolverCdiPeriodoV229(cdiCardAtualV230(), months) === null){
-    garantirCdiPeriodoV230(months).then(value => {
-      if(value !== null && activePeriodTab === months){
-        atualizarTabelaIndicadores();
-        document.dispatchEvent(new CustomEvent('elton:market-cdi-ready', { detail: { months, value } }));
-      }
-    }).catch(error => console.warn(`[CDI v230] Falha ao garantir ${months}M:`, error));
-  }
-
-  document.dispatchEvent(new CustomEvent('elton:market-period-change', {
-    detail: { months, source, renderOk }
-  }));
-
-  return renderOk;
-}
-
-function inicializarPeriodoMercadoV229(){
-  const fromDataset = document.documentElement.dataset.indicPeriod;
-  const fromActiveButton = document.querySelector('.indic-tab.active[data-months]')?.dataset.months;
-  const initial = fromDataset || fromActiveButton || activePeriodTab || 12;
-  selecionarPeriodoMercadoV229(initial, { source: 'init', render: false });
-}
-
-// Exportações explícitas: evitam depender de propriedades globais implícitas.
-window.atualizarTabelaIndicadores = atualizarTabelaIndicadores;
-window.selecionarPeriodoMercado = selecionarPeriodoMercadoV229;
-window.getPeriodoMercado = () => activePeriodTab;
-window.__marketPeriodBuild = 'ELTAUM_MARKET_PERIOD_CDI_SOURCE_20260618_v230';
-
-// Captura única para impedir que o clique no botão abra/feche o bloco pai.
-document.addEventListener('click', event => {
-  const button = event.target?.closest?.('.indic-tab[data-months]');
-  if(!button) return;
-
-  event.preventDefault();
-  event.stopPropagation();
-  selecionarPeriodoMercadoV229(button.dataset.months, { source: 'user' });
-}, true);
-
-if(document.readyState === 'loading'){
-  document.addEventListener('DOMContentLoaded', inicializarPeriodoMercadoV229, { once: true });
-}else{
-  inicializarPeriodoMercadoV229();
-}
-
-window.addEventListener('pageshow', () => {
-  sincronizarBotoesPeriodoMercadoV229(activePeriodTab);
 });
+
 
 /* ════════════════════════════════════════════════════
    NORMALIZA mercado_atual.json PARA A TABELA DE INDICADORES
@@ -1910,71 +1522,15 @@ function atualizarResumoCenario(d){
 }
 
 
-let _chartCdiYearV271 = null;
-
 function renderCdiYearHistory(d){
-  const chartCanvas = $('cdiYearChartV271');
-  if(!chartCanvas) return;
+  const strip = $('cdiMonthStrip');
+  if(!strip) return;
 
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
   const cdi = d?.cards?.cdi || {};
   const hist = Array.isArray(cdi.historico) ? cdi.historico : [];
-  const title = $('cdiYearHistoryTitle');
-  const totalEl = $('cdiYearHistoryTotal');
-  const currentLabelEl = $('cdiCurrentMonthLabelV271');
-  const currentValueEl = $('cdiCurrentMonthValueV271');
-  const lastLabelEl = $('cdiLastClosedLabelV271');
-  const lastValueEl = $('cdiLastClosedValueV271');
-  const accumEl = $('cdiAccumYearValueV271');
-  const accumLabelElV298 = $('cdiAccumYearLabelV298');
-  const last12mElV296 = $('cdiLast12mValueV296');
-  const last12mLabelElV298 = $('cdiLast12mLabelV298');
-  const cdiMonthCarouselV322 = $('cdiMonthCarouselV322');
-
-  const fmtPctLocal = v => {
-    const n = Number(v);
-    if(!Number.isFinite(n)) return '—';
-    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
-  };
-  const fmtAxis = v => {
-    const n = Number(v);
-    if(!Number.isFinite(n)) return '—';
-    return n.toFixed(0).replace('.',',') + '%';
-  };
-  const normalizar = txt => String(txt || '').trim().toLowerCase();
-  const mesCurto = item => {
-    const raw = String(item?.label || item?.key || '').trim();
-    const m = raw.match(/^(\d{4})-(\d{2})/);
-    if(m){
-      const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-      return nomes[Math.max(0, Math.min(11, Number(m[2]) - 1))];
-    }
-    return raw.replace(/\/\d{4}/,'').slice(0,3).toLowerCase();
-  };
-  const labelMesAno = item => {
-    const raw = String(item?.label || item?.key || '').trim();
-    if(raw.includes('/')) return raw;
-    const m = raw.match(/^(\d{4})-(\d{2})/);
-    if(m){
-      const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-      return nomes[Math.max(0, Math.min(11, Number(m[2]) - 1))] + '/' + m[1];
-    }
-    return raw;
-  };
 
   if(!hist.length){
-    if(title) title.textContent = 'CDI no ano';
-    if(totalEl) totalEl.textContent = 'Ano —';
-    if(currentLabelEl) currentLabelEl.textContent = 'Mês atual';
-    if(currentValueEl) currentValueEl.textContent = '—';
-    if(lastLabelEl) lastLabelEl.textContent = 'Último fechado';
-    if(lastValueEl) lastValueEl.textContent = '—';
-    if(accumEl) accumEl.textContent = '—';
-    if(accumLabelElV298) accumLabelElV298.textContent = 'Ano';
-    if(last12mElV296) last12mElV296.textContent = '—';
-    if(last12mLabelElV298) last12mLabelElV298.textContent = '12 meses';
-    if(cdiMonthCarouselV322) cdiMonthCarouselV322.innerHTML = '<span class="cdi-month-empty-v322">Histórico mensal indisponível.</span>';
-    if(_chartCdiYearV271){ _chartCdiYearV271.destroy(); _chartCdiYearV271 = null; }
+    strip.innerHTML = '<span class="cdi-month-empty">histórico indisponível</span>';
     return;
   }
 
@@ -1983,232 +1539,62 @@ function renderCdiYearHistory(d){
   const ano = String(last?.key || '').slice(0,4) || String(new Date().getFullYear());
   const mesesAno = ordenado.filter(x => String(x?.key || '').startsWith(ano + '-'));
 
-  const parcialRef = normalizar(cdi.parcial_ref);
-  const mesFechadoRef = normalizar(cdi.mes_ref);
-  const byLabel = label => mesesAno.find(x => normalizar(x?.label) === label || normalizar(mesCurto(x)) === label);
-  const atualParcial = parcialRef ? byLabel(parcialRef) : mesesAno[mesesAno.length - 1];
-  const ultimoFechado = mesFechadoRef ? byLabel(mesFechadoRef) : [...mesesAno].reverse().find(x => x !== atualParcial) || mesesAno[mesesAno.length - 1];
+  const parcialRef = String(cdi.parcial_ref || '').toLowerCase();
+  const mesFechadoRef = String(cdi.mes_ref || '').toLowerCase();
 
-  const labels = mesesAno.map(mesCurto).map(s => s.toUpperCase());
-  const mensal = mesesAno.map(item => Number(item?.valor ?? 0));
-  const acumulado = [];
-  let running = 1;
-  mensal.forEach((valor) => {
-    const n = Number.isFinite(valor) ? valor : 0;
-    running *= (1 + n / 100);
-    acumulado.push(Number(((running - 1) * 100).toFixed(2)));
-  });
-
-  const idxAtual = Math.max(0, mesesAno.indexOf(atualParcial));
-  const idxFechado = Math.max(0, mesesAno.indexOf(ultimoFechado));
-  const acumAno = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano ?? acumulado[acumulado.length - 1]);
-  const cdi12mV296 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(cdi, 12) : Number(cdi.acum_12m ?? cdi.m12);
-
-  const cdi12mFixV323 = (() => {
-    const direto = Number(cdi.acum_12m ?? cdi.m12 ?? cdi.acumulado_12m ?? cdi.acum12m);
-    if(Number.isFinite(direto)) return direto;
-
-    if(typeof resolverCdiPeriodoV229 === 'function'){
-      const resolvido = Number(resolverCdiPeriodoV229(cdi, 12));
-      if(Number.isFinite(resolvido)) return resolvido;
-    }
-
-    const ultimos12 = ordenado.slice(-12).map(item => Number(item?.valor)).filter(Number.isFinite);
-    if(ultimos12.length){
-      const fator = ultimos12.reduce((acc, v) => acc * (1 + v / 100), 1);
-      return Number(((fator - 1) * 100).toFixed(2));
-    }
-
-    return NaN;
-  })();
-
-  if(title) title.textContent = isMobile ? `CDI — visão mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
-  if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
-  if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? 'CDI 12M' : 'Últimos 12 meses';
-  if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
-  if(currentLabelEl) currentLabelEl.textContent = atualParcial ? `${mesCurto(atualParcial).toUpperCase()} · parcial` : 'Mês atual';
-  if(currentValueEl) currentValueEl.textContent = atualParcial ? fmtPctLocal(atualParcial.valor) : '—';
-  if(lastLabelEl) lastLabelEl.textContent = ultimoFechado ? `${mesCurto(ultimoFechado).toUpperCase()} · fechado` : 'Último fechado';
-  if(lastValueEl) lastValueEl.textContent = ultimoFechado ? fmtPctLocal(ultimoFechado.valor) : '—';
-  if(accumEl) accumEl.textContent = Number.isFinite(acumAno) ? fmtPctLocal(acumAno) : '—';
-  if(last12mElV296) last12mElV296.textContent = Number.isFinite(cdi12mFixV323) ? fmtPctLocal(cdi12mFixV323) : '—';
-
-  if(cdiMonthCarouselV322){
-    cdiMonthCarouselV322.innerHTML = mesesAno.map((item, idx) => {
-      const valor = Number(item?.valor);
-      const acum = acumulado[idx];
-      const isAtual = item === atualParcial;
-      const isFechado = item === ultimoFechado;
-      const sinal = Number.isFinite(valor) && valor < 0 ? 'neg' : 'pos';
-      const label = mesCurto(item).toUpperCase();
-      const status = isAtual ? 'parcial' : 'fechado';
-      const acumTxt = Number.isFinite(acum) ? fmtPctLocal(acum) : '—';
-      return `
-        <article class="cdi-month-card-v322 ${sinal} ${isAtual ? 'is-current' : ''} ${isFechado ? 'is-lastclosed' : ''}" role="listitem">
-          <span class="cdi-month-kicker-v322">${label} · ${status}</span>
-          <strong class="cdi-month-value-v322">${Number.isFinite(valor) ? fmtPctLocal(valor) : '—'}</strong>
-          <small class="cdi-month-accum-v322">Acum. ano ${acumTxt}</small>
-        </article>`;
-    }).join('');
-  }
-
-  if(!window.Chart){
-    setTimeout(() => renderCdiYearHistory(d), 300);
-    return;
-  }
-
-  const barBg = mensal.map((_,i) => i === idxAtual ? 'rgba(45, 212, 160, 0.62)' : i === idxFechado ? 'rgba(232, 180, 92, 0.50)' : 'rgba(125, 162, 255, 0.28)');
-  const barBorder = mensal.map((_,i) => i === idxAtual ? 'rgba(45, 212, 160, 0.96)' : i === idxFechado ? 'rgba(232, 180, 92, 0.86)' : 'rgba(125, 162, 255, 0.52)');
-  const maxMensal = Math.max(0.1, ...mensal.filter(Number.isFinite));
-  const maxAcumulado = Math.max(1, ...acumulado.filter(Number.isFinite), Number.isFinite(acumAno) ? acumAno : 0);
-
-  // v276: eixos com escala linear explícita e degraus sincronizados.
-  // Evita o Chart.js escolher ticks irregulares como 0/2/4/7 no eixo direito.
-  const yGridStepsV276 = 4;
-  const yMonthlyMax = maxMensal <= 1.75
-    ? 2
-    : Math.ceil((maxMensal + 0.10) / 0.5) * 0.5;
-  const yMonthlyStepV276 = yMonthlyMax / yGridStepsV276;
-  const yAccumMax = maxAcumulado <= 8
-    ? 8
-    : Math.ceil((maxAcumulado + 0.35) / 4) * 4;
-  const yAccumStepV276 = yAccumMax / yGridStepsV276;
-  const fmtAxis1 = value => {
-    const n = Number(value);
+  const fmtPctLocal = v => {
+    const n = Number(v);
     if(!Number.isFinite(n)) return '—';
-    return n.toFixed(n % 1 === 0 ? 0 : 1).replace('.',',') + '%';
+    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.',',') + '%';
   };
 
-  if(_chartCdiYearV271){
-    try{ _chartCdiYearV271.destroy(); }catch(e){}
-    _chartCdiYearV271 = null;
-  }
+  const titulo = $('cdiYearHistoryTitle');
+  if(titulo) titulo.textContent = `CDI mensal ${ano}`;
 
-  const chartInnerV273 = document.getElementById('cdiChartScrollInnerV273');
-  const totalMesesV273 = labels.length;
-  const minChartWidthV273 = isMobile ? '100%' : '100%';
-  if(chartInnerV273){
-    chartInnerV273.style.minWidth = typeof minChartWidthV273 === 'number' ? `${minChartWidthV273}px` : minChartWidthV273;
-  }
-  const barraEspessuraV273 = totalMesesV273 >= 11 ? (isMobile ? 10 : 18) : (totalMesesV273 >= 8 ? (isMobile ? 12 : 22) : (isMobile ? 16 : 26));
-  const raioPontoV273 = totalMesesV273 >= 10 ? 2.2 : 2.8;
-  const raioPontoDestaqueV273 = totalMesesV273 >= 10 ? 3.6 : 4.2;
-  const mostrarTodosMesesV273 = true;
+  // Mantém no card o mesmo acumulado do painel consolidado: ano com parcial quando existir.
+  const total = Number(cdi.acum_ano_com_parcial ?? cdi.acum_ano);
+  const totalEl = $('cdiYearHistoryTotal');
+  if(totalEl) totalEl.textContent = Number.isFinite(total) ? `Ano ${fmtPctLocal(total)}` : 'Ano —';
 
-  const ctx = chartCanvas.getContext('2d');
-  _chartCdiYearV271 = new Chart(ctx, {
-    data: {
-      labels,
-      datasets: [
-        {
-          type: 'bar',
-          label: 'CDI mensal',
-          data: mensal,
-          yAxisID: 'y',
-          backgroundColor: barBg,
-          borderColor: barBorder,
-          borderWidth: 1.4,
-          borderRadius: { topLeft: 8, topRight: 8, bottomLeft: 3, bottomRight: 3 },
-          borderSkipped: false,
-          barThickness: barraEspessuraV273,
-          maxBarThickness: barraEspessuraV273 + 4
-        },
-        {
-          type: 'line',
-          label: 'CDI acumulado',
-          data: acumulado,
-          hidden: isMobile,
-          yAxisID: 'y1',
-          borderColor: '#e8b45c',
-          backgroundColor: 'rgba(232, 180, 92, 0.10)',
-          borderWidth: totalMesesV273 >= 10 ? 2.2 : 2.5,
-          tension: 0.25,
-          fill: false,
-          pointBackgroundColor: acumulado.map((_,i) => i === idxAtual ? '#2dd4a0' : '#e8b45c'),
-          pointBorderColor: '#080d18',
-          pointBorderWidth: 1.4,
-          pointRadius: acumulado.map((_,i) => i === idxAtual || i === idxFechado ? raioPontoDestaqueV273 : raioPontoV273),
-          pointHoverRadius: raioPontoDestaqueV273 + 1
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      resizeDelay: 80,
-      layout: { padding: { left: 4, right: isMobile ? 8 : 12, top: 4, bottom: 0 } },
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: 'rgba(11,16,33,.96)',
-          titleColor: '#ffffff',
-          bodyColor: '#dfe7ff',
-          borderColor: 'rgba(255,255,255,.08)',
-          borderWidth: 1,
-          displayColors: true,
-          callbacks: {
-            title(items){
-              const i = items?.[0]?.dataIndex ?? 0;
-              return labelMesAno(mesesAno[i]);
-            },
-            label(context){
-              const value = Number(context.parsed.y);
-              const txt = fmtPctLocal(value);
-              return `${context.dataset.label}: ${txt}`;
-            },
-            afterBody(){
-              return isMobile ? '' : undefined;
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: {
-            color: 'rgba(229,235,255,0.74)',
-            autoSkip: false,
-            maxRotation: 0,
-            minRotation: 0,
-            font: { size: totalMesesV273 >= 11 ? (isMobile ? 8 : 10) : (isMobile ? 9 : 11), weight: '700' }
-          }
-        },
-        y: {
-          type: 'linear',
-          beginAtZero: true,
-          min: 0,
-          max: yMonthlyMax,
-          bounds: 'ticks',
-          ticks: {
-            color: 'rgba(188,200,234,0.72)',
-            padding: 8,
-            stepSize: yMonthlyStepV276,
-            callback: value => fmtAxis1(value)
-          },
-          grid: {
-            color: 'rgba(255,255,255,0.06)',
-            tickLength: 0
-          }
-        },
-        y1: {
-          type: 'linear',
-          beginAtZero: true,
-          min: 0,
-          position: 'right',
-          max: yAccumMax,
-          bounds: 'ticks',
-          display: !isMobile,
-          ticks: {
-            color: 'rgba(232,187,106,0.76)',
-            stepSize: yAccumStepV276,
-            callback: value => fmtAxis1(value)
-          },
-          grid: { drawOnChartArea: false }
-        }
-      }
-    }
-  });
+  const byLabel = (label) => mesesAno.find(x => String(x?.label || '').toLowerCase() === label);
+  const atualParcial = parcialRef ? byLabel(parcialRef) : mesesAno[mesesAno.length - 1];
+  const ultimoFechado = mesFechadoRef
+    ? byLabel(mesFechadoRef)
+    : mesesAno[mesesAno.length - 2];
+
+  // Ordem natural no mobile: mês atual/parcial primeiro, depois último fechado e anteriores.
+  // Ex.: JUN/2026, MAI/2026, ABR/2026.
+  const destaque = [];
+  if(atualParcial) destaque.push(atualParcial);
+  if(ultimoFechado && ultimoFechado !== atualParcial) destaque.push(ultimoFechado);
+
+  const restantes = mesesAno.filter(item => !destaque.includes(item)).reverse();
+  const exibicao = [...destaque, ...restantes];
+
+  strip.innerHTML = exibicao.map((item) => {
+    const labelCompleta = String(item.label || item.key || '');
+    const label = labelCompleta.replace('/'+ano,'');
+    const isCurrent = atualParcial && item === atualParcial;
+    const isClosed = ultimoFechado && item === ultimoFechado;
+    const classes = [
+      'cdi-month-chip',
+      (isCurrent || isClosed) ? 'featured' : '',
+      isCurrent ? 'current' : '',
+      isClosed ? 'closed' : ''
+    ].filter(Boolean).join(' ');
+
+    const subtitulo = isCurrent
+      ? '<span class="p">parcial</span>'
+      : isClosed
+        ? '<span class="p">último mês</span>'
+        : '';
+
+    return `<span class="${classes}" title="CDI ${labelCompleta}: ${fmtPctLocal(item.valor)}">
+      <span class="m">${label}</span>
+      <span class="v">${fmtPctLocal(item.valor)}</span>
+      ${subtitulo}
+    </span>`;
+  }).join('') || '<span class="cdi-month-empty">sem meses no ano</span>';
 }
 
 /* ELTAUM_MOBILE_BRAND_COPY_20260613_v192
@@ -2268,7 +1654,7 @@ function atualizarDataHeader(valor,opcoes={}){
 ════════════════════════════════════════════════════ */
 async function carregarMercado(){
   try{
-    const r = await fetch(BASE_URL+'mercado_atual.json?v=market-v230-'+Date.now(), { cache: 'no-store' });
+    const r = await fetch(BASE_URL+'mercado_atual.json?v='+Date.now());
     const raw = await r.json();
 
     // Complementa o mercado_atual.json com o arquivo de índices detalhados,
@@ -2279,8 +1665,6 @@ async function carregarMercado(){
 
     const d = normalizarMercadoAtual(rawUnificado);
     _dadosMercado = d;
-    window.__mercadoAtualV230 = d;
-    sincronizarEstadoCdiV229(d);
     setTimeout(()=>{ try{ atualizarResumoFechamentoMes(); atualizarPainelFechadoCard(); renderClosedMarketSheet(); }catch(e){} }, 600);
     hidratarDolarResumoDoJson(d);
 
@@ -2291,66 +1675,52 @@ async function carregarMercado(){
     // ── Selic ──
     const selic = c.selic_meta?.valor;
     if($('mc-selic')) $('mc-selic').textContent = selic ? fmt(selic) : '—';
-
-    // v223: a taxa vigente e a data precisam vir da mesma decisão.
-    // Quando o robô já atualizou o valor, mas o histórico ainda está atrasado,
-    // o painel reconcilia os dados com o calendário oficial do Copom.
-    const selicUltimaAlteracao = resolverDataUltimaAlteracaoSelic(d);
-    const elSelicLastChange = $('selic-last-change');
-    if(elSelicLastChange){
-      elSelicLastChange.textContent = selicUltimaAlteracao.data || '—';
-      // v256: evita expor mensagem técnica de reconciliação para o usuário final.
-      // A auditoria continua no console/dados, mas o card fica limpo.
-      elSelicLastChange.removeAttribute('title');
-      delete elSelicLastChange.dataset.selicDateReconciled;
+    const selicHist = d.historico_selic || c.selic_meta?.historico || [];
+    if(selicHist.length){
+      const ultima = selicHist[0];
+      const el = $('selic-last-change');
+      if(el) el.textContent = ultima.data || '—';
     }
 
     buildCopomCalendario();
 
-    // ── CDI — v229: taxa, mês e acumulados independentes entre si ──
-    const cdiCard = c.cdi || {};
-    const cdi = numeroFinitoV229(cdiCard.valor);
-    const cdiMensalInformado = numeroFinitoV229(cdiCard.mensal);
-    const cdiMensal = cdiMensalInformado ?? (cdi !== null ? ((Math.pow(1 + cdi / 100, 1 / 12) - 1) * 100) : null);
-
-    if($('mc-cdi')) $('mc-cdi').textContent = cdi !== null ? fmt(cdi) : '—';
-
-    // Esta sincronização não depende de cards.cdi.valor. Assim, versões do JSON
-    // que trazem apenas mensal, histórico e acumulados continuam funcionando.
-    sincronizarEstadoCdiV229(d);
-
-    if(cdiMensal !== null){
-      const isEst = cdiMensalInformado === null;
-      const fCdiMes = (cdiMensal > 0 ? '+' : '') + cdiMensal.toFixed(2).replace('.', ',') + '%';
-      const mesRefLabel = cdiCard.mes_ref ? ` · ${cdiCard.mes_ref}` : '';
+    // ── CDI — baseline + ★ v16: acumulados pré-calculados pelo robô ──
+    const cdi = c.cdi?.valor;
+    if($('mc-cdi')) $('mc-cdi').textContent = cdi ? fmt(cdi) : '—';
+    if(cdi){
+      const cdiMensal = c.cdi?.mensal ?? ((Math.pow(1+cdi/100,1/12)-1)*100);
+      const isEst = c.cdi?.mensal == null;
+      const fCdiMes = '+'+cdiMensal.toFixed(2).replace('.',',')+'%';
+      // v17: exibe taxa + mês de referência no card CDI (ex: "+1,09% · abr/2026")
+      const mesRefLabel = c.cdi?.mes_ref ? ` · ${c.cdi.mes_ref}` : '';
       if($('mc-cdi-mes-ref')) $('mc-cdi-mes-ref').textContent = fCdiMes + mesRefLabel + (isEst ? '*' : '');
-      indicState.cdi.mes = cdiMensal;
+
+      // Baseline
+      if(!indicState.cdi.mes) indicState.cdi.mes = cdiMensal;
+      if(!indicState.cdi.mesRef){
+        const h = new Date();
+        indicState.cdi.mesRef = c.cdi?.mes_ref ||
+          `${MESES_PT[h.getMonth()===0?11:h.getMonth()-1]}/${h.getMonth()===0?h.getFullYear()-1:h.getFullYear()}`;
+      }
+      // ★ v16 — usa acumulados pré-calculados server-side (resolve CORS/400 do browser)
+      if(c.cdi?.acum_12m != null) indicState.cdi.m12 = c.cdi.acum_12m;
+      if(c.cdi?.acum_24m != null) indicState.cdi.m24 = c.cdi.acum_24m;
+      if(c.cdi?.acum_36m != null) indicState.cdi.m36 = c.cdi.acum_36m;
+      // Fallback: se robô não calculou 12M, usa taxa anual como proxy
+      if(indicState.cdi.m12 == null) indicState.cdi.m12 = cdi;
+
+      const cdiMesAtual = c.cdi?.parcial_mes_atual ?? c.cdi?.mensal ?? cdiMensal;
+      const cdiMesAtualTxt = '+' + Number(cdiMesAtual).toFixed(2).replace('.',',') + '%';
+      const cdi12Txt = indicState.cdi.m12 !== null && indicState.cdi.m12 !== undefined
+        ? '+' + Number(indicState.cdi.m12).toFixed(2).replace('.',',') + '%'
+        : '—';
+      if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
+      if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
+      if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
+      renderCdiYearHistory(d);
+    } else {
+      renderCdiYearHistory(d);
     }
-
-    if(!indicState.cdi.mesRef){
-      const h = new Date();
-      indicState.cdi.mesRef = cdiCard.mes_ref ||
-        `${MESES_PT[h.getMonth() === 0 ? 11 : h.getMonth() - 1]}/${h.getMonth() === 0 ? h.getFullYear() - 1 : h.getFullYear()}`;
-    }
-
-    // Compatibilidade conservadora com JSON muito antigo: somente 12M pode usar
-    // a taxa anual de referência como último recurso. 24M/36M nunca são simulados.
-    if(indicState.cdi.m12 == null && cdi !== null) indicState.cdi.m12 = cdi;
-
-    const cdiAtualInfoV232 = obterCdiAtualV232(d);
-    const cdiMesAtual = numeroFinitoV229(cdiAtualInfoV232.valor) ?? cdiMensal;
-    const cdiMesAtualTxt = cdiMesAtual !== null
-      ? (cdiMesAtual > 0 ? '+' : '') + cdiMesAtual.toFixed(2).replace('.', ',') + '%'
-      : '—';
-    const cdi12 = resolverCdiPeriodoV229(cdiCard, 12);
-    const cdi12Txt = cdi12 !== null
-      ? (cdi12 > 0 ? '+' : '') + Number(cdi12).toFixed(2).replace('.', ',') + '%'
-      : '—';
-
-    if($('mc-cdi-mes-atual')) $('mc-cdi-mes-atual').textContent = cdiMesAtualTxt;
-    if($('mc-cdi-12m-val-hero')) $('mc-cdi-12m-val-hero').textContent = cdi12Txt;
-    if($('mc-cdi-12m-val')) $('mc-cdi-12m-val').textContent = cdi12Txt;
-    renderCdiYearHistory(d);
 
     // ── IPCA (do JSON — complementado pela série 433) ──
     const ipca = c.ipca || {};
@@ -2586,44 +1956,11 @@ function fmtPlMi(v){
 
 
 let activeRankFilter = 'todos';
-let activeRankRisk = '';
 let activeRankView = 'top';
 let activeRankPeriods = { topFundos:'12m', destaques:'mes' };
 
 function normRankTxt(v){
   return String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
-}
-function normalizarPerfilRiscoV198(valor){
-  const n=normRankTxt(valor).replace(/[^A-Z0-9 ]+/g,' ').replace(/\s+/g,' ').trim();
-  if(!n) return 'sem-classificacao';
-  if(/\bCONSERVADOR\b/.test(n)) return 'conservador';
-  if(/\bMODERADO\b/.test(n)) return 'moderado';
-  if(/\bARROJADO\b/.test(n)) return 'arrojado';
-  if(/\bAGRESSIVO\b/.test(n)) return 'agressivo';
-  if(n.includes('SEM CLASSIFICACAO')||n.includes('NAO CLASSIFICADO')) return 'sem-classificacao';
-  return n.toLowerCase().replace(/\s+/g,'-');
-}
-function perfilRiscoCorrespondeV198(valor,filtro){
-  if(!String(filtro||'').trim()) return true;
-  return normalizarPerfilRiscoV198(valor)===normalizarPerfilRiscoV198(filtro);
-}
-function rotuloPerfilRiscoV198(filtro){
-  if(!String(filtro||'').trim()) return 'Todos os perfis';
-  const map={
-    conservador:'Conservador',moderado:'Moderado',arrojado:'Arrojado',
-    agressivo:'Agressivo','sem-classificacao':'Sem classificação'
-  };
-  return map[normalizarPerfilRiscoV198(filtro)]||'Todos os perfis';
-}
-function syncRiskProfileControlsV198(){
-  const catalogValue=typeof activeRisco!=='undefined'?(activeRisco||''):'';
-  ['catalogRiskSelectV198','mobileRiskSelectV198'].forEach(id=>{
-    const el=document.getElementById(id);
-    if(el&&el.value!==catalogValue) el.value=catalogValue;
-  });
-  const ranking=document.getElementById('rankingRiskSelectV198');
-  const rankValue=typeof activeRankRisk!=='undefined'?(activeRankRisk||''):'';
-  if(ranking&&ranking.value!==rankValue) ranking.value=rankValue;
 }
 function rankCampoPorPeriodo(periodo){
   if(periodo === 'dia') return 'Variacao Dia (%)';
@@ -2653,30 +1990,15 @@ function fmtSummaryPl(v){
   }
   return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
 }
-/* v197 — filtros de classe usam somente a coluna Categoria.
-   Evita falsos positivos por palavras no nome/benchmark, como
-   MOVIMENTACOES sendo interpretado como ACOES ou DOLAR MM como CAMBIAL. */
-const RANK_CATEGORY_BY_FILTER_V197 = Object.freeze({
-  'renda-fixa-simples': 'RENDA FIXA SIMPLES',
-  'renda-fixa': 'RENDA FIXA',
-  'renda-fixa-referenciado': 'RENDA FIXA REFERENCIADO',
-  'renda-fixa-curto-prazo': 'RENDA FIXA CURTO PRAZO',
-  'multimercado': 'MULTIMERCADO',
-  'cambial': 'CAMBIAL',
-  'acoes': 'ACOES',
-  'fundo-de-indice': 'FUNDO DE INDICE',
-  'fmp': 'FUNDOS MUTUOS DE PRIVATIZACAO'
-});
-function rankCategoriaCanonicaV197(v){
-  return normRankTxt(v).replace(/\s+/g,' ').trim();
-}
 function passaFiltroRanking(r){
-  const filtro = String(activeRankFilter || 'todos');
-  const cat = rankCategoriaCanonicaV197(r?.['Categoria']);
-  if(filtro === 'todos') return true;
-  if(filtro === 'sem-fmp') return cat !== RANK_CATEGORY_BY_FILTER_V197.fmp;
-  const categoriaEsperada = RANK_CATEGORY_BY_FILTER_V197[filtro];
-  return categoriaEsperada ? cat === categoriaEsperada : true;
+  const cat = normRankTxt(r['Categoria']);
+  const nome = normRankTxt(r['Fundo']);
+  const base = cat + ' ' + nome;
+  if(activeRankFilter === 'sem-fmp') return !(base.includes('FMP') || base.includes('PRIVATIZACAO'));
+  if(activeRankFilter === 'renda-fixa') return cat.includes('RENDA FIXA') || base.includes('REF DI') || base.includes('CDI');
+  if(activeRankFilter === 'acoes') return cat.includes('ACOES') || base.includes('ACOES') || base.includes('IBOVESPA') || base.includes('ELETROBRAS') || base.includes('PETROBRAS') || base.includes('VALE');
+  if(activeRankFilter === 'multimercado') return cat.includes('MULTIMERCADO');
+  return true;
 }
 function atualizarRankingFilterUI(){
   document.querySelectorAll('[data-rank-filter]').forEach(btn=>{
@@ -2701,7 +2023,7 @@ function renderRankings(){
     const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
     return tokens.includes(activePerfil);
   });
-  if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
+  if(activeRisco) base = base.filter(r => (r['Perfil de Risco']||'').trim() === activeRisco);
 
   const ordenaCampo = (campo, asc=false) => base
     .filter(r=>toNum(r[campo])!==null)
@@ -2999,7 +2321,7 @@ document.addEventListener('click', (ev)=>{
 /* ════════════════════════════════════════════════════
    TABELA DE FUNDOS
 ════════════════════════════════════════════════════ */
-let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=10;
+let allRows=[],filtered=[],sortCol=-1,sortDir=-1,currentPage=1,perPage=5;
 let activeSearch='',activeCat='',activeBenchmark='',activePerfil='',activeRisco='',hideSemDados=false,displayHeaders=[];
 let activePerf=null,activePerfCampo='Acum. 12M (%)';
 let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor primeiro
@@ -3064,14 +2386,8 @@ function setVista(vista){
   // Atualiza botões
   const btnR = $('vistaBtnReuniao');
   const btnC = $('vistaBtnCompleta');
-  if(btnR) {
-    btnR.className = vista === 'reuniao' ? 'vista-btn active' : 'vista-btn';
-    btnR.setAttribute('aria-pressed', vista === 'reuniao' ? 'true' : 'false');
-  }
-  if(btnC) {
-    btnC.className = vista === 'completa' ? 'vista-btn active' : 'vista-btn';
-    btnC.setAttribute('aria-pressed', vista === 'completa' ? 'true' : 'false');
-  }
+  if(btnR) { btnR.className = vista === 'reuniao' ? 'vista-btn active' : 'vista-btn'; }
+  if(btnC) { btnC.className = vista === 'completa' ? 'vista-btn active' : 'vista-btn'; }
   // Recria tabela com as novas colunas
   buildHeader();
   render();
@@ -3448,7 +2764,7 @@ function applyFilter(){
       const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
       if(!tokens.includes(activePerfil)) return false;
     }
-    if(activeRisco&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRisco)) return false;
+    if(activeRisco&&(r['Perfil de Risco']||'').trim()!==activeRisco) return false;
     if(q&&!rowMatchesCatalogSearch(r,q)) return false;
     return true;
   });
@@ -3478,7 +2794,6 @@ function applyFilter(){
     });
   }
   currentPage=1; expandedRows.clear(); render(); renderRankings(); updateCdiSortButtons();
-  syncRiskProfileControlsV198();
 }
 
 /* ════════════════════════════════════════════════════
@@ -3762,39 +3077,18 @@ function buildDetailQuickActions(row, urlFund){
     ? `<a class="detail-action-btn ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(title || label)}"><span>${icon}</span>${label}</a>`
     : '';
 
-  // O Boletim Comercial é o documento principal desta área. Quando ele não
-  // estiver disponível, a lâmina assume o destaque para não deixar o cabeçalho vazio.
-  const principal = boletim || lamina || regulamento;
-  const principalLabel = principal === boletim ? 'Boletim Comercial' : principal === lamina ? 'Lâmina' : 'Regulamento';
-  const principalIcon = principal === boletim ? '⭐' : principal === lamina ? '📄' : '📋';
-  const principalTitle = principal === boletim ? 'Abrir Boletim Comercial' : `Abrir ${principalLabel.toLowerCase()}`;
+  const buttons = [
+    mkBtn(boletim?.url, 'detail-action-primary', '⭐', 'Boletim Comercial', 'Abrir Boletim Comercial'),
+    mkBtn(lamina?.url, 'detail-action-secondary', '📄', 'Lâmina', 'Abrir lâmina'),
+    mkBtn(regulamento?.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento'),
+    mkBtn(urlFund, 'detail-action-secondary', '🏦', 'Página do fundo', 'Abrir página do fundo'),
+  ].filter(Boolean).join('');
 
-  const primary = principal
-    ? mkBtn(principal.url, 'detail-action-primary detail-action-commercial-v224', principalIcon, principalLabel, principalTitle)
-    : '';
-
-  const regulation = regulamento && regulamento !== principal
-    ? mkBtn(regulamento.url, 'detail-action-secondary', '📋', 'Regulamento', 'Abrir regulamento')
-    : '';
-
-  const moreDocs = [
-    lamina && lamina !== principal ? {href:lamina.url, icon:'📄', label:'Lâmina'} : null,
-    urlFund ? {href:urlFund, icon:'🏦', label:'Página do fundo'} : null,
-  ].filter(Boolean);
-
-  const more = moreDocs.length ? `<details class="detail-more-docs-v224" onclick="event.stopPropagation()">
-    <summary title="Abrir outros documentos"><span>＋</span>Mais documentos</summary>
-    <div class="detail-more-docs-menu-v224">
-      ${moreDocs.map(d=>`<a href="${htmlAttr(d.href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()"><span>${d.icon}</span>${d.label}</a>`).join('')}
-    </div>
-  </details>` : '';
-
-  const buttons = `${primary}${regulation}${more}`;
   if(!buttons) return '';
-  return `<div class="detail-actions-card detail-actions-card-v158 detail-actions-card-v224">
+  return `<div class="detail-actions-card detail-actions-card-v158">
     <div class="detail-actions-copy-v158">
       <div class="detail-actions-title">Informações do fundo</div>
-      <small>Características operacionais e documentos oficiais</small>
+      <small>Dados oficiais do cadastro e documentos essenciais</small>
     </div>
     <div class="detail-actions-buttons">${buttons}</div>
   </div>`;
@@ -3824,12 +3118,7 @@ function detailMoneyV158(value){
 function detailPercentV158(value){
   const raw = String(value ?? '').trim();
   if(!raw || raw === '—') return '—';
-  let normalized = raw.replace(/%/g,'').replace(/\s/g,'');
-  if(normalized.includes(',') && normalized.includes('.')) normalized = normalized.replace(/\./g,'').replace(',','.');
-  else normalized = normalized.replace(',','.');
-  const number = Number(normalized);
-  if(!Number.isFinite(number)) return /%/.test(raw) ? raw : `${raw}%`;
-  return `${number.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}% a.a.`;
+  return /%/.test(raw) ? raw : `${raw}%`;
 }
 
 function detailBoolV158(value){
@@ -3851,67 +3140,8 @@ function detailAudienceV158(value){
       if(Array.isArray(parsed)) values = parsed;
     }catch(e){}
   }
-  if(!values.length) values = raw.split(/\s*[·;,|/]\s*/g);
+  if(!values.length) values = raw.split(/\s*[·;,|]\s*/g);
   return [...new Set(values.map(v=>String(v).trim()).filter(Boolean))];
-}
-
-/* v225 — padronização semântica do público-alvo */
-function detailAudienceSemanticV225(values){
-  const out = [];
-  const add = (label, short, cls) => {
-    const key = normalizarTextoBase(label);
-    if(!out.some(item=>item.key === key)) out.push({key,label,short,cls});
-  };
-
-  (Array.isArray(values) ? values : []).forEach(value=>{
-    const raw = String(value ?? '').trim();
-    if(!raw) return;
-    const norm = normalizarTextoBase(raw);
-
-    if((norm.includes('PESSOA FISICA') || norm === 'PF') && (norm.includes('PESSOA JURIDICA') || norm === 'PJ')){
-      add('Pessoa Física','PF','pf');
-      add('Pessoa Jurídica','PJ','pj');
-      return;
-    }
-    if(norm === 'PF' || norm.includes('PESSOA FISICA')) return add('Pessoa Física','PF','pf');
-    if(norm === 'PJ' || norm.includes('PESSOA JURIDICA')) return add('Pessoa Jurídica','PJ','pj');
-    if(norm === 'GOV' || norm.includes('GOVERNO') || norm.includes('ENTE PUBLICO')) return add('Governo','Governo','gov');
-    if(norm.includes('RPPS')) return add('RPPS','RPPS','rpps');
-    if(norm.includes('PRIVATE')) return add('Private','Private','private');
-    if(norm.includes('QUALIFICAD')) return add('Investidor qualificado','Qualificado','qualified');
-    if(norm.includes('PROFISSIONAL')) return add('Investidor profissional','Profissional','professional');
-    if(norm.includes('INSTITUCIONAL')) return add('Institucional','Institucional','institutional');
-    if(norm.includes('NAO RESIDENTE')) return add('Não residente','Não residente','nonresident');
-    if(norm === 'GERAL' || norm === 'PUBLICO GERAL' || norm === 'TODOS' || norm === 'TODOS OS PUBLICOS') return add('Público geral','Geral','general');
-    if(norm.includes('VAREJO')) return add('Varejo','Varejo','retail');
-
-    add(raw,raw,'other');
-  });
-
-  return out;
-}
-
-function detailAudienceChipV225(item, compact=false){
-  const label = compact ? item.short : item.label;
-  return `<span class="detail-audience-chip-v158 detail-audience-chip-v225 ${htmlAttr(item.cls)}" title="${htmlAttr(item.label)}">${htmlAttr(label)}</span>`;
-}
-
-function detailAdvanceSummaryV206(statusClass, text){
-  const raw = String(text ?? '').trim();
-  if(statusClass === 'negative') return 'Não';
-  if(statusClass === 'unknown') return raw && raw !== '—' ? raw : 'Não informado';
-  const match = raw.match(/(\d+(?:[.,]\d+)?)\s*%/);
-  return match ? `Sim · ${match[1].replace('.',',')}%` : 'Sim';
-}
-
-function detailObservationV206(r){
-  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
-  return observation
-    ? `<details class="detail-observation-v158 detail-observation-v206 detail-observation-v224">
-        <summary><span>⚠ Regras operacionais e carência</span><small>Ver detalhes</small></summary>
-        <p>${htmlAttr(observation)}</p>
-      </details>`
-    : '';
 }
 
 function buildDetailExecutiveV158(r){
@@ -3930,149 +3160,74 @@ function buildDetailExecutiveV158(r){
   const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
   const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
   const audience = detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo']));
-  const audienceSemantic = detailAudienceSemanticV225(audience);
   const automatic = detailBoolV158(detailValueV158(r,['Movimentação Automática','Movimentacao Automatica']));
   const grace = detailBoolV158(detailValueV158(r,['Carência','Carencia']));
-  const asgRaw = detailBoolV158(detailValueV158(r,['ASG']));
-  const asg = asgRaw.state === 'off' ? {...asgRaw,label:'Não identificada'} : asgRaw;
-  const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : 'Não informado';
-  const advanceSummary = detailAdvanceSummaryV206(adiCls,d.adiantamento.texto);
-  const audienceSummaryHtml = audienceSemantic.length
-    ? `<div class="detail-audience-compact-v225" aria-label="Público-alvo: ${htmlAttr(audienceSemantic.map(item=>item.label).join(', '))}">${audienceSemantic.slice(0,3).map(item=>detailAudienceChipV225(item,true)).join('')}${audienceSemantic.length>3?`<span class="detail-audience-more-v225" title="${htmlAttr(audienceSemantic.slice(3).map(item=>item.label).join(', '))}">+${audienceSemantic.length-3}</span>`:''}</div>`
-    : '<strong>Não informado</strong>';
-  const observationHtml = detailObservationV206(r);
-  const cnpjCopyValue = String(cnpj || '').replace(/\D/g,'') || String(cnpj || '').trim();
+  const asg = detailBoolV158(detailValueV158(r,['ASG']));
+  const observation = detailValueV158(r,['Observação Operacional','Observacao Operacional'],'');
 
   const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
-  const audienceHtml = audienceSemantic.length
-    ? audienceSemantic.map(item=>detailAudienceChipV225(item,false)).join('')
+  const audienceHtml = audience.length
+    ? audience.map(v=>`<span class="detail-audience-chip-v158">${htmlAttr(v)}</span>`).join('')
     : '<span class="detail-empty-v158">Não informado</span>';
   const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
 
-  return `<div class="detail-executive-v158 detail-executive-v206 detail-executive-v224">
-    <section class="detail-summary-v158 detail-summary-v224" aria-label="Características principais do fundo">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Características principais</strong></div>
-      <div class="detail-summary-grid-v158 detail-summary-grid-v206 detail-summary-grid-v224">
-        <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
-        <div class="detail-summary-item-v158"><span>Perfil de risco</span><strong>${htmlAttr(profile)}</strong></div>
+  return `<div class="detail-executive-v158">
+    <section class="detail-summary-v158" aria-label="Resumo executivo do fundo">
+      <div class="detail-section-head-v158"><div><span>Visão geral</span><strong>Características principais</strong></div><small>${r?.__fundosMeta?'Cadastro oficial integrado':'Dados disponíveis no catálogo'}</small></div>
+      <div class="detail-summary-grid-v158">
         <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
+        <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
+        <div class="detail-summary-item-v158"><span>Perfil</span><strong>${htmlAttr(profile)}</strong></div>
         <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
-        <div class="detail-summary-item-v158 audience-v225"><span>Público-alvo</span>${audienceSummaryHtml}</div>
-        <div class="detail-summary-item-v158 capture"><span>Captação</span>${statusValue(capLabel,capCls)}</div>
+        <div class="detail-summary-item-v158"><span>Captação</span>${statusValue(d.captacao.texto,capCls)}</div>
       </div>
     </section>
 
-    <section class="detail-movement-v158 detail-movement-v224" aria-label="Movimentação do fundo">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Movimentação</strong><small>Prazos em dias úteis; solicitações após o horário limite podem seguir para o próximo dia útil.</small></div>
-      <div class="detail-movement-grid-v158 detail-movement-grid-v224">
+    <section class="detail-movement-v158" aria-label="Movimentação do fundo">
+      <div class="detail-section-head-v158"><div><span>Movimentação</span><strong>Prazos, horários e valores mínimos</strong></div><small>Solicitações após o limite podem seguir para o próximo dia útil</small></div>
+      <div class="detail-movement-grid-v158">
         <article class="detail-movement-card-v158 application">
           <div class="detail-movement-title-v158"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
-          <div class="detail-flow-v158 detail-flow-v224">
+          <div class="detail-flow-v158">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
             <i>→</i>
-            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionApp)}</strong></div>
+            <div><span>Conversão</span><strong>${htmlAttr(conversionApp)}</strong></div>
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Aplicação inicial</b>${htmlAttr(appInitial)}</span><span><b>Aplicação adicional</b>${htmlAttr(appAdditional)}</span></div>
+          <div class="detail-movement-meta-v158"><span><b>Inicial</b>${htmlAttr(appInitial)}</span><span><b>Adicional</b>${htmlAttr(appAdditional)}</span></div>
         </article>
         <article class="detail-movement-card-v158 redemption">
           <div class="detail-movement-title-v158"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
-          <div class="detail-flow-v158 three detail-flow-v224">
+          <div class="detail-flow-v158 three">
             <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
             <i>→</i>
-            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionRed)}</strong></div>
+            <div><span>Conversão</span><strong>${htmlAttr(conversionRed)}</strong></div>
             <i>→</i>
-            <div><span>Crédito em conta</span><strong>${htmlAttr(paymentRed)}</strong></div>
+            <div><span>Pagamento</span><strong>${htmlAttr(paymentRed)}</strong></div>
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Resgate mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(advanceSummary)}</span></div>
+          <div class="detail-movement-meta-v158"><span><b>Mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(d.adiantamento.texto)}</span></div>
         </article>
       </div>
-      ${observationHtml}
     </section>
 
-    <section class="detail-complementary-v224" aria-label="Informações complementares">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Informações complementares</strong></div>
-      <div class="detail-complementary-grid-v224">
-        <div class="detail-complementary-group-v224">
-          <span class="detail-complementary-kicker-v224">Custos e identificação</span>
-          <dl class="detail-definition-list-v158 detail-definition-list-v224">
-            <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
-            <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
-            <div><dt>CNPJ</dt><dd class="copyable detail-copyable-v225"><span class="detail-copy-text-v225">${htmlAttr(cnpj)}</span><button type="button" class="detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjCopyValue)}" aria-label="Copiar CNPJ ${htmlAttr(cnpj)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button></dd></div>
-            <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
-          </dl>
-        </div>
-        <div class="detail-complementary-group-v224">
-          <span class="detail-complementary-kicker-v224">Público e enquadramento</span>
-          <div class="detail-audience-v158 detail-audience-v224"><b>Público-alvo</b><div>${audienceHtml}</div></div>
-          <div class="detail-flags-v158 detail-flags-v224">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
-        </div>
-      </div>
-    </section>
+    <div class="detail-lower-grid-v158">
+      <section class="detail-info-card-v158" aria-label="Identificação e custos">
+        <div class="detail-card-head-v158"><span>Identificação e custos</span></div>
+        <dl class="detail-definition-list-v158">
+          <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
+          <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
+          <div><dt>CNPJ</dt><dd class="copyable">${htmlAttr(cnpj)}</dd></div>
+          <div><dt>Código do fundo</dt><dd>${htmlAttr(code)}</dd></div>
+        </dl>
+      </section>
+      <section class="detail-info-card-v158" aria-label="Público e enquadramento">
+        <div class="detail-card-head-v158"><span>Público e enquadramento</span></div>
+        <div class="detail-audience-v158"><b>Público-alvo</b><div>${audienceHtml}</div></div>
+        <div class="detail-flags-v158">${flagHtml('Automático',automatic)}${flagHtml('Carência',grace)}${flagHtml('ASG',asg)}</div>
+      </section>
+    </div>
+    ${observation ? `<aside class="detail-observation-v158"><span>Observação operacional</span><p>${htmlAttr(observation)}</p></aside>` : ''}
   </div>`;
 }
-
-/* v225 — cópia explícita do CNPJ em fichas geradas dinamicamente */
-(function initDetailCopyV225(){
-  if(window.__ELTAUM_DETAIL_COPY_V225__) return;
-  window.__ELTAUM_DETAIL_COPY_V225__ = true;
-
-  async function copyTextV225(value){
-    if(navigator.clipboard && window.isSecureContext){
-      await navigator.clipboard.writeText(value);
-      return;
-    }
-    const textarea = document.createElement('textarea');
-    textarea.value = value;
-    textarea.setAttribute('readonly','');
-    textarea.style.position = 'fixed';
-    textarea.style.left = '-9999px';
-    document.body.appendChild(textarea);
-    textarea.select();
-    const ok = document.execCommand('copy');
-    textarea.remove();
-    if(!ok) throw new Error('Falha ao copiar');
-  }
-
-  document.addEventListener('click', async event=>{
-    const target = event.target instanceof Element ? event.target : null;
-    const button = target?.closest('.detail-copy-btn-v225');
-    if(!button) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-    if(button.dataset.copyBusy === '1') return;
-
-    const value = String(button.dataset.copyValue || '').trim();
-    if(!value) return;
-
-    const label = button.querySelector('.detail-copy-label-v225');
-    const icon = button.querySelector('.detail-copy-icon-v225');
-    const originalAria = button.getAttribute('aria-label') || 'Copiar CNPJ';
-    button.dataset.copyBusy = '1';
-
-    try{
-      await copyTextV225(value);
-      button.classList.add('is-copied');
-      button.setAttribute('aria-label','CNPJ copiado');
-      if(label) label.textContent = 'Copiado';
-      if(icon) icon.textContent = '✓';
-    }catch(error){
-      button.classList.add('copy-error');
-      button.setAttribute('aria-label','Não foi possível copiar o CNPJ');
-      if(label) label.textContent = 'Tente novamente';
-      if(icon) icon.textContent = '!';
-    }
-
-    clearTimeout(button._copyTimerV225);
-    button._copyTimerV225 = setTimeout(()=>{
-      button.classList.remove('is-copied','copy-error');
-      button.setAttribute('aria-label',originalAria);
-      if(label) label.textContent = 'Copiar';
-      if(icon) icon.textContent = '⧉';
-      delete button.dataset.copyBusy;
-    },1800);
-  });
-})();
 
 function buildDocsHtml(cnpjLimpo, urlFundo, row){
   let cod = String(row?.['codfundo']||'').trim();
@@ -4190,7 +3345,7 @@ function gerarLeituraRapidaFundo(r){
   } else if(base.includes('IDKA')){
     objetivo = 'Fundo referenciado ao IDKA (Índice de Duração Constante ANBIMA), que mantém prazo médio fixo de títulos IPCA+. O retorno combina juro real com variação da inflação, com duration controlada para previsibilidade de risco.';
   } else if(base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV') || base.includes('EXPERTISE') || base.includes('DIAMANTE') || base.includes('FIDELIDADE')){
-    objetivo = 'Fundo de renda fixa com exposição a títulos corporativos, como debêntures, CRIs e CRAs. Busca prêmio acima do CDI, mas exige atenção à liquidez e ao risco de crédito dos emissores. Avaliar spread, qualidade dos ativos e prazo de resgate.';
+    objetivo = 'Fundo de renda fixa com exposição a crédito privado (debêntures, CRIs, CRAs e outros títulos corporativos). Busca prêmio de risco acima do CDI, mas com menor liquidez e exposição ao risco de crédito dos emissores. Requer análise de spread e qualidade dos ativos.';
   } else if(base.includes('MULTIMERCADO') && (base.includes('BTG') || base.includes('ZARATHUSTRA') || base.includes('PIMCO') || base.includes('VERDE') || base.includes('CLARITAS'))){
     objetivo = 'Fundo multimercado de gestão especializada (parceria com gestora renomada). Estratégia flexível com exposição a múltiplas classes de ativos. Avalie o histórico de risco/retorno, volatilidade e consistência da gestora em diferentes cenários de mercado.';
   } else if(base.includes('MULTIMERCADO')){
@@ -4266,56 +3421,15 @@ function gerarLeituraRapidaFundo(r){
   // Ano, 12M e % CDI já aparecem no card/tabela principal.
   const complementosHtml = '';
 
-  const escapeNoteV237 = (v) => String(v ?? '').replace(/[&<>"']/g, ch => ({
-    '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
-  }[ch]));
-
-  const formatarLeituraConsultivaV237 = (texto) => {
-    const clean = String(texto || '').replace(/\s+/g, ' ').trim();
-    if(!clean) return '';
-
-    // Quebra controlada para mobile: blocos curtos, sem justificar texto.
-    const isCredPriv = base.includes('CREDITO PRIVADO') || base.includes('CRED PRIV');
-    if(isCredPriv){
-      return [
-        'Fundo de renda fixa com exposição a títulos corporativos, como debêntures, CRIs e CRAs.',
-        'Busca prêmio acima do CDI, mas exige atenção à liquidez e ao risco de crédito dos emissores.',
-        'Avaliar spread, qualidade dos ativos e prazo de resgate.'
-      ].map(p => `<p>${escapeNoteV237(p)}</p>`).join('');
-    }
-
-    const frases = clean
-      .split(/(?<=[.!?])\s+/)
-      .map(p => p.trim())
-      .filter(Boolean);
-
-    if(frases.length <= 1) return `<p>${escapeNoteV237(clean)}</p>`;
-
-    const blocos = [];
-    for(const frase of frases){
-      if(blocos.length && (blocos[blocos.length - 1] + ' ' + frase).length <= 128){
-        blocos[blocos.length - 1] += ' ' + frase;
-      }else{
-        blocos.push(frase);
-      }
-    }
-
-    return blocos.slice(0, 3).map(p => `<p>${escapeNoteV237(p)}</p>`).join('');
-  };
-
-  const objetivoHtml = formatarLeituraConsultivaV237(objetivo);
-
   return `
-    <div class="fund-quick-note fund-quick-note-v224 fund-quick-note-v237">
-      <div class="fund-quick-note-head-v224">
-        <div class="fund-quick-note-title">🧭 Leitura consultiva</div>
-        ${tagsHtml}
-      </div>
-      <div class="fund-quick-note-text fund-quick-note-text-v237">${objetivoHtml}</div>
+    <div class="fund-quick-note">
+      <div class="fund-quick-note-title">🧭 Leitura consultiva do fundo</div>
+      ${tagsHtml}
+      <div class="fund-quick-note-text" style="margin-top:${tags.length?'8px':'0'}">${objetivo}</div>
       ${complementosHtml}
       ${alertaCdi}
       <div class="fund-quick-note-disclaimer">
-        ⓘ Leitura interpretativa. Consulte os documentos oficiais.
+        Texto interpretativo gerado a partir dos dados do catálogo. Consulte a lâmina e o regulamento para objetivo oficial, riscos e política de investimento completa.
       </div>
     </div>`;
 }
@@ -4506,47 +3620,6 @@ function classeStatusOperacional(status, tipo){
   return 'unknown';
 }
 
-
-
-function formatarHorarioGradeMobileV236(valor){
-  const raw = String(valor || '').trim();
-  if(!raw || raw === '—') return 'Não informado';
-  if(/não informado/i.test(raw)) return 'Não informado';
-  const m = raw.match(/^(\d{1,2})(?::|h)(\d{2})$/i);
-  if(m){
-    return `${String(m[1]).padStart(2,'0')}h${m[2]}`;
-  }
-  const m2 = raw.match(/^(\d{1,2})$/);
-  if(m2){
-    return `${String(m2[1]).padStart(2,'0')}h00`;
-  }
-  return raw.replace(/(\d{1,2}):(\d{2})/g, function(_,h,mi){return `${String(h).padStart(2,'0')}h${mi}`;});
-}
-
-function rotuloCaptacaoMobileV235(info){
-  const raw = String(info?.texto || '').trim();
-  const status = String(info?.status || normalizarStatusOperacional(raw) || '').toUpperCase();
-  const cls = classeStatusOperacional(status, 'captacao');
-  if(cls === 'positive') return {valor:'Sim', detalhe:'Aberto', cls:'positive', dot:'●'};
-  if(cls === 'negative') return {valor:'Não', detalhe:'Fechado', cls:'negative', dot:'●'};
-  return {valor: raw && raw !== 'Não informada' ? raw : 'Não informado', detalhe:'Status não identificado', cls:'unknown', dot:'○'};
-}
-
-function deveExibirAdiantamentoMobileV235(info, cls){
-  const raw = String(info?.texto || '').trim();
-  const norm = normalizarStatusOperacional(raw);
-  if(!raw || raw === 'Não informado') return false;
-  if(norm.includes('NAO SE APLICA')) return false;
-  return cls !== 'unknown' || raw.length > 0;
-}
-
-function factMobileV235(label, value, opts={}){
-  const cls = opts.cls ? ` ${opts.cls}` : '';
-  const detail = opts.detail ? `<small>${htmlAttr(opts.detail)}</small>` : '';
-  const dot = opts.dot ? `<i>${opts.dot}</i>` : '';
-  return `<div class="fund-fact-v154 fund-fact-mobile-v235${cls}"><span>${htmlAttr(label)}</span><strong>${dot}${value}</strong>${detail}</div>`;
-}
-
 function buildFundOperationalFacts(r, variant='detail'){
   const d = obterDadosOperacionaisFundo(r);
   const capCls = classeStatusOperacional(d.captacao.status,'captacao');
@@ -4554,44 +3627,6 @@ function buildFundOperationalFacts(r, variant='detail'){
   const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
   const adiDot = adiCls==='positive'?'●':adiCls==='negative'?'●':'○';
   const estimateBadge = '<em class="fund-fact-estimated-v154">indicativo</em>';
-
-  if(String(variant || '').includes('mobile')){
-    const cap = rotuloCaptacaoMobileV235(d.captacao);
-    const adiantamentoHtml = deveExibirAdiantamentoMobileV235(d.adiantamento, adiCls)
-      ? factMobileV235('Antecipação de resgate', htmlAttr(d.adiantamento.texto), {cls:`status-${adiCls}`, dot:adiDot})
-      : '';
-
-    const cnpjBruto = detailValueV158(r,['CNPJ']);
-    const cnpjLimpo = String(cnpjBruto || '').replace(/\D/g,'').slice(0,14);
-    const cnpjFormatado = cnpjLimpo ? formatarCnpjMeta(cnpjLimpo) : String(cnpjBruto || '').trim();
-    const cnpjHtml = cnpjFormatado
-      ? `<div class="fund-cnpj-row-mobile-v238" aria-label="CNPJ do fundo">
-          <span>CNPJ</span>
-          <strong class="fund-cnpj-value-mobile-v238">${htmlAttr(cnpjFormatado)}</strong>
-          <button type="button" class="fund-cnpj-copy-mobile-v238 detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjLimpo || cnpjFormatado)}" aria-label="Copiar CNPJ ${htmlAttr(cnpjFormatado)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button>
-        </div>`
-      : '';
-
-    return `<section class="fund-facts-v154 mobile fund-facts-mobile-v235 fund-facts-mobile-v236 fund-facts-mobile-v238" aria-label="Dados operacionais e cadastrais do fundo">
-      <div class="fund-facts-head-v154 fund-facts-head-mobile-v235 fund-facts-head-mobile-v236 fund-facts-head-mobile-v238"><strong>Dados do fundo</strong><small>Operação, referência e disponibilidade</small></div>
-      ${cnpjHtml}
-
-      <div class="fund-operation-strip-v235 fund-operation-strip-v236" aria-label="Horários limite de movimentação">
-        <div><span>Aplicação</span><strong>${htmlAttr(formatarHorarioGradeMobileV236(d.horarios.aplicacao))}</strong></div>
-        <div><span>Resgate</span><strong>${htmlAttr(formatarHorarioGradeMobileV236(d.horarios.resgate))}</strong></div>
-      </div>
-
-      <div class="fund-facts-grid-v154 fund-facts-grid-mobile-v235">
-        ${factMobileV235('Referência', `${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}`)}
-        ${factMobileV235('Estratégia', `${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}`, {cls:'strategy'})}
-        ${factMobileV235('Tributação', htmlAttr(d.tributacao.texto))}
-        ${factMobileV235('Novas aplicações', htmlAttr(cap.valor), {cls:`status-${cap.cls} availability`, dot:cap.dot})}
-        ${adiantamentoHtml}
-      </div>
-      <p class="fund-operation-note-v235">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
-    </section>`;
-  }
-
   return `<section class="fund-facts-v154 ${htmlAttr(variant)}" aria-label="Informações complementares do fundo">
     <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>${r?.__fundosMeta?'Dados oficiais do cadastro do fundo':'Dados da base; indicação apenas quando sinalizada'}</small></div>
     <div class="fund-facts-grid-v154">
@@ -4604,6 +3639,7 @@ function buildFundOperationalFacts(r, variant='detail'){
     </div>
   </section>`;
 }
+
 function prazoResgateCell(valor, tipo){
   const v = String(valor || '').trim();
   const cls = v ? `prazo-badge ${tipo === 'pagamento' ? 'pagamento' : ''}` : 'prazo-badge muted';
@@ -5357,214 +4393,19 @@ async function carregarSelicHistoricoAmpliado(historicoAtual){
   return atual;
 }
 
-
-function fmtIPCALabelV250(item){
-  if(!item) return '—';
-
-  // v252: o gráfico usa o campo label como competência exibida.
-  // Algumas bases antigas vêm com data técnica diferente da competência do IPCA,
-  // então o resumo deve priorizar o mesmo label usado no eixo/tooltip.
-  const label = item.label || item.competencia || item.mes_ref || item.mes || '';
-  if(label && String(label).trim() && !String(label).startsWith('p')){
-    return String(label).trim();
-  }
-
-  if(item._dt instanceof Date && !isNaN(item._dt.getTime())){
-    const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-    return `${meses[item._dt.getMonth()]}/${item._dt.getFullYear()}`;
-  }
-  return '—';
-}
-
-function fmtPctIPCAResumoV251(v){
-  const n = Number(v);
-  if(!Number.isFinite(n)) return '—';
-  const sinal = n > 0 ? '+' : '';
-  return sinal + n.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
-}
-
-function atualizarResumoIPCAMensalV250(slice){
-  if(!Array.isArray(slice) || !slice.length) return;
-  const valoresValidos = slice
-    .map(d => ({ item:d, valor:Number(d.valor) }))
-    .filter(d => Number.isFinite(d.valor));
-  if(!valoresValidos.length) return;
-
-  const ultimoGrafico = valoresValidos[valoresValidos.length - 1];
-  const maxObj = valoresValidos.reduce((acc, d) => d.valor > acc.valor ? d : acc, valoresValidos[0]);
-  const minObj = valoresValidos.reduce((acc, d) => d.valor < acc.valor ? d : acc, valoresValidos[0]);
-
-  let ultimoValor = ultimoGrafico.valor;
-  let ultimoLabel = fmtIPCALabelV250(ultimoGrafico.item);
-
-  // v252: o "Último IPCA" do resumo deve bater com o card oficial do painel,
-  // que já traz a competência consolidada mais recente.
-  try{
-    const ipcaCard = _dadosMercado?.cards?.ipca || {};
-    const valorCard = Number(ipcaCard.ultimo_mes);
-    if(Number.isFinite(valorCard)){
-      ultimoValor = valorCard;
-      ultimoLabel = ipcaCard.label_mes || ultimoLabel;
-    }
-  }catch(e){}
-
-  const set = (id, txt) => {
-    const el = document.getElementById(id);
-    if(el) el.textContent = txt;
-  };
-
-  set('ipcaResumoUltimoV250', fmtPctIPCAResumoV251(ultimoValor));
-  set('ipcaResumoUltimoDataV250', ultimoLabel || '—');
-  set('ipcaResumoMaxV250', fmtPctIPCAResumoV251(maxObj.valor));
-  set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxObj.item));
-  set('ipcaResumoMinV250', fmtPctIPCAResumoV251(minObj.valor));
-  set('ipcaResumoMinDataV250', fmtIPCALabelV250(minObj.item));
-}
-
-function ipcaChartOptionsV250(range){
-  const isMobile = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
-  const r = Number(range) || 24;
-  const maxTicks = r >= 120 ? (isMobile ? 5 : 9) : r >= 60 ? (isMobile ? 6 : 10) : (isMobile ? 6 : 12);
-  const base = typeof chartDefaults === 'function' ? chartDefaults() : CHART_DEFAULTS;
-  return {
-    ...base,
-    plugins:{
-      ...base.plugins,
-      tooltip:{
-        ...base.plugins?.tooltip,
-        callbacks:{
-          label:ctx=>'IPCA: ' + fmtPctIPCAResumoV251(ctx.parsed.y)
-        }
-      }
-    },
-    scales:{
-      ...base.scales,
-      x:{
-        ...base.scales?.x,
-        ticks:{
-          ...base.scales?.x?.ticks,
-          autoSkip:true,
-          maxTicksLimit:maxTicks,
-          maxRotation:isMobile ? 0 : 38,
-          minRotation:0,
-          font:{ size:isMobile ? 9 : 10 }
-        },
-        grid:{
-          ...base.scales?.x?.grid,
-          drawBorder:false
-        }
-      },
-      y:{
-        ...base.scales?.y,
-        ticks:{
-          ...base.scales?.y?.ticks,
-          maxTicksLimit:isMobile ? 6 : 7,
-          font:{ size:isMobile ? 9 : 10 }
-        }
-      }
-    }
-  };
-}
-
-
 function buildChartIpca(historico,meses){
-  const range = Number(meses) || 24;
   const base = normalizarHistoricoIPCA(historico);
-  const slice = base.slice(-range);
-  const labels = slice.map(d=>d.label);
-  const values = slice.map(d=>d.valor);
-  const colors = values.map(v=>v>=0?'rgba(46,209,122,.72)':'rgba(240,85,101,.78)');
-  const barPct = range >= 120 ? .62 : range >= 60 ? .70 : .82;
-  const catPct = range >= 120 ? .74 : range >= 60 ? .82 : .90;
-
-  atualizarResumoIPCAMensalV250(slice);
-
+  const slice=base.slice(-meses);
+  const labels=slice.map(d=>d.label);
+  const values=slice.map(d=>d.valor);
+  const colors=values.map(v=>v>0?'rgba(46,209,122,.7)':'rgba(240,85,101,.7)');
   if(_chartIpca) _chartIpca.destroy();
   const ctx=document.getElementById('chartIpca')?.getContext('2d'); if(!ctx) return;
   const emptyMsg = ctx.canvas?.parentElement?.querySelector('.chart-empty-msg');
   if(emptyMsg) emptyMsg.remove();
-
-  _chartIpca=new Chart(ctx,{
-    type:'bar',
-    data:{
-      labels,
-      datasets:[{
-        data:values,
-        backgroundColor:colors,
-        borderColor:colors.map(c=>c.replace('.72)','.12)').replace('.78)','.12)')),
-        borderWidth:1,
-        borderRadius:range >= 120 ? 1 : 2,
-        barPercentage:barPct,
-        categoryPercentage:catPct,
-        maxBarThickness:range >= 120 ? 8 : range >= 60 ? 12 : 22
-      }]
-    },
-    options:ipcaChartOptionsV250(range)
-  });
+  _chartIpca=new Chart(ctx,{type:'bar',data:{labels,datasets:[{data:values,backgroundColor:colors,borderColor:colors.map(c=>c.replace('.7)','.1)')),borderWidth:1,borderRadius:2}]},
+    options:{...CHART_DEFAULTS,plugins:{...CHART_DEFAULTS.plugins,tooltip:{...CHART_DEFAULTS.plugins.tooltip,callbacks:{label:ctx=>`IPCA: ${ctx.parsed.y.toFixed(2).replace('.',',')}%`}}}}});
 }
-
-
-function selicAxisConfigV253(slice, rangeMeses){
-  const meses = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-  const r = Number(rangeMeses) || 999;
-  const isMobile = window.matchMedia && window.matchMedia('(max-width:700px)').matches;
-
-  function dtFromIndex(index){
-    const item = slice?.[Number(index)];
-    return item?._dt instanceof Date && !isNaN(item._dt.getTime()) ? item._dt : null;
-  }
-
-  function curto(dt){
-    return `${meses[dt.getMonth()]}/${String(dt.getFullYear()).slice(-2)}`;
-  }
-
-  const callback = function(value, index){
-    const dt = dtFromIndex(value) || dtFromIndex(index);
-    if(!dt) return '';
-
-    if(r <= 24){
-      // Curto prazo: rótulos por mês selecionado, sem inclinar demais.
-      const step = r <= 12 ? 2 : 4;
-      if(index === 0 || index === slice.length - 1 || index % step === 0) return curto(dt);
-      return '';
-    }
-
-    if(r <= 60){
-      // 5 anos: mostra apenas anos de forma limpa.
-      const prev = slice[index - 1]?._dt;
-      if(index === 0 || index === slice.length - 1 || !prev || prev.getFullYear() !== dt.getFullYear()){
-        return String(dt.getFullYear());
-      }
-      return '';
-    }
-
-    if(r <= 120){
-      // 10 anos: mostra anos alternados, preservando início e fim.
-      const prev = slice[index - 1]?._dt;
-      const virouAno = !prev || prev.getFullYear() !== dt.getFullYear();
-      if(index === 0 || index === slice.length - 1) return String(dt.getFullYear());
-      if(virouAno && dt.getFullYear() % 2 === 0) return String(dt.getFullYear());
-      return '';
-    }
-
-    // Histórico: mostra poucos marcos temporais.
-    const prev = slice[index - 1]?._dt;
-    const virouAno = !prev || prev.getFullYear() !== dt.getFullYear();
-    if(index === 0 || index === slice.length - 1) return String(dt.getFullYear());
-    if(virouAno && dt.getFullYear() % 5 === 0) return String(dt.getFullYear());
-    return '';
-  };
-
-  return {
-    callback,
-    autoSkip:false,
-    maxRotation:0,
-    minRotation:0,
-    maxTicksLimit:r <= 24 ? (isMobile ? 6 : 8) : r <= 60 ? 7 : r <= 120 ? 7 : 8,
-    font:{size:isMobile ? 9 : 10}
-  };
-}
-
 
 function buildChartSelic(historico,qtd){
   // Aceita os dois formatos:
@@ -5596,55 +4437,7 @@ function buildChartSelic(historico,qtd){
 
   filtrado.sort((a,b)=>a._ts-b._ts);
 
-  // v249: também reconcilia o módulo antigo do gráfico com a taxa vigente oficial.
-  // Assim o desenho inicial e os cliques antigos usam o mesmo valor do painel.
-  try{
-    const card = _dadosMercado?.cards?.selic_meta || {};
-    const valorVigente = Number(card.valor);
-    if(Number.isFinite(valorVigente)){
-      const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
-        ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
-        : null;
-      const dataRef = ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || '';
-      let dtVigente = null;
-      if(dataRef && typeof dataRef === 'string' && dataRef.includes('/')){
-        const p = dataRef.split('/');
-        if(p.length === 3) dtVigente = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
-      }else if(dataRef){
-        dtVigente = new Date(dataRef);
-      }
-      if(!dtVigente || isNaN(dtVigente.getTime())){
-        const hoje = new Date();
-        dtVigente = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-      }
-      const tsVigente = dtVigente.getTime();
-      const mesmoDia = d => d?._dt
-        && d._dt.getFullYear() === dtVigente.getFullYear()
-        && d._dt.getMonth() === dtVigente.getMonth()
-        && d._dt.getDate() === dtVigente.getDate();
-
-      const ultimo = filtrado[filtrado.length - 1];
-      if(!(ultimo && ultimo._ts >= tsVigente && Math.abs(Number(ultimo._valor) - valorVigente) < .005)){
-        const idxMesmoDia = filtrado.findIndex(mesmoDia);
-        const ponto = {
-          data: dataRef,
-          valor: valorVigente,
-          _dt: dtVigente,
-          _ts: tsVigente,
-          _ano: dtVigente.getFullYear(),
-          _valor: valorVigente,
-          _vigenteSyncV249: true
-        };
-        if(idxMesmoDia >= 0) filtrado[idxMesmoDia] = {...filtrado[idxMesmoDia], ...ponto};
-        else filtrado.push(ponto);
-        filtrado.sort((a,b)=>a._ts-b._ts);
-      }
-    }
-  }catch(e){
-    console.warn('[Selic v249] Falha ao reconciliar buildChartSelic:', e);
-  }
-
-  // Nos botões da Selic, data-range representa meses de janela: 12 = 1A, 24 = 2A, 60 = 5A, 120 = 10A, 999 = histórico completo.
+  // Nos botões da Selic, data-range passa a representar meses de janela: 12 = 1A, 60 = 5A, 999 = histórico completo.
   let slice = filtrado;
   if(qtd < 999 && filtrado.length){
     const ultimo = filtrado[filtrado.length - 1]._dt;
@@ -5654,11 +4447,8 @@ function buildChartSelic(historico,qtd){
     if(slice.length < 2) slice = filtrado.slice(-Math.max(2, Math.min(filtrado.length, qtd)));
   }
 
-  const mesesSelicLabelV253 = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
-  const labels=slice.map(d=>`${mesesSelicLabelV253[d._dt.getMonth()]}/${d._dt.getFullYear()}`);
+  const labels=slice.map(d=>`${String(d._dt.getMonth()+1).padStart(2,'0')}/${d._dt.getFullYear()}`);
   const values=slice.map(d=>d._valor);
-  const xTicksSelicV253 = selicAxisConfigV253(slice, qtd);
-
 
   if(_chartSelic) _chartSelic.destroy();
   const ctx=document.getElementById('chartSelic')?.getContext('2d'); if(!ctx || !values.length) return;
@@ -5684,22 +4474,8 @@ function buildChartSelic(historico,qtd){
   setTxt('selicMaxData', fmtDataSelic(maxRow?._dt));
   setTxt('selicMinResumo', fmtSelic(minVal));
   setTxt('selicMinData', fmtDataSelic(minRow?._dt));
-  let vigenteResumoValor = values[currentIndex];
-  let vigenteResumoData = fmtDataSelic(currentRow?._dt) || 'último dado';
-  try{
-    const card = _dadosMercado?.cards?.selic_meta || {};
-    const valorCard = Number(card.valor);
-    if(Number.isFinite(valorCard)){
-      vigenteResumoValor = valorCard;
-      const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
-        ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
-        : null;
-      vigenteResumoData = ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || vigenteResumoData;
-      if(vigenteResumoData && !String(vigenteResumoData).toLowerCase().startsWith('desde')) vigenteResumoData = 'desde ' + vigenteResumoData;
-    }
-  }catch(e){}
-  setTxt('selicHojeResumo', fmtSelic(vigenteResumoValor));
-  setTxt('selicHojeData', vigenteResumoData);
+  setTxt('selicHojeResumo', fmtSelic(values[currentIndex]));
+  setTxt('selicHojeData', fmtDataSelic(currentRow?._dt) || 'último dado');
 
   const markerMap = new Map();
   function addMarker(index, label, color, mode){
@@ -5765,13 +4541,6 @@ function buildChartSelic(historico,qtd){
       },
       scales:{
         ...CHART_DEFAULTS.scales,
-        x:{
-          ...CHART_DEFAULTS.scales.x,
-          ticks:{
-            ...CHART_DEFAULTS.scales.x.ticks,
-            ...xTicksSelicV253
-          }
-        },
         y:{
           ...CHART_DEFAULTS.scales.y,
           suggestedMin:0,
@@ -5910,7 +4679,8 @@ function atualizarResumoEvolucao(d){
     return 'dentro da faixa de 1,50% a 4,50%';
   };
 
-  const selicRef = resolverDataUltimaAlteracaoSelic(d).data || '';
+  const selicHistorico = Array.isArray(selic.historico) ? selic.historico : [];
+  const selicRef = selic.data_ref || selic.ultima_alteracao || selicHistorico[0]?.data || '';
   const selicValor = selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.` : '—';
 
   setText('evoIpcaMensalVal', pct(ipca.ultimo_mes));
@@ -5952,7 +4722,8 @@ function atualizarResumoMovelEvolucao(chave, d){
     return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
   };
 
-  const selicRef = resolverDataUltimaAlteracaoSelic(d).data || '';
+  const selicHistorico = Array.isArray(selic.historico) ? selic.historico : [];
+  const selicRef = selic.data_ref || selic.ultima_alteracao || selicHistorico[0]?.data || '';
   const selicValor = selic.valor != null
     ? `${Number(selic.valor).toFixed(2).replace('.',',')}% a.a.`
     : '—';
@@ -5992,12 +4763,7 @@ function selecionarGraficoEvolucao(chave){
   });
   atualizarResumoMovelEvolucao(target, _dadosMercado);
   setTimeout(()=>{
-    [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{
-      if(!ch || typeof ch.resize !== 'function') return;
-      const canvas = ch.canvas || ch.ctx?.canvas;
-      if(!canvas || !canvas.isConnected || !canvas.ownerDocument) return;
-      try{ ch.resize(); }catch(err){ console.warn('[gráficos] resize ignorado:', err?.message || err); }
-    });
+    [_chartIpca,_chartSelic,_chartMeta].forEach(ch=>{ if(ch && typeof ch.resize === 'function') ch.resize(); });
   }, 80);
 }
 
@@ -6009,573 +4775,71 @@ function bindEvolucaoTabs(){
   });
 }
 
-
 async function inicializarGraficos(d){
-  _dadosMercado = d;
-  bindIndicadoresCleanV367();
-  await renderIndicadoresCleanV367(d);
-}
+  _dadosMercado=d;
 
-function econPctV367(v){
-  if(typeof formatPctCard === 'function') return formatPctCard(v);
-  const n = Number(v);
-  if(!Number.isFinite(n)) return '—';
-  const sinal = n > 0 ? '+' : '';
-  return sinal + n.toFixed(2).replace('.', ',') + '%';
-}
+  const hist=await carregarIPCAHistoricoAmpliado(d?.cards?.ipca?.historico||[]);
+  if(!_dadosMercado.cards) _dadosMercado.cards = {};
+  if(!_dadosMercado.cards.ipca) _dadosMercado.cards.ipca = {};
+  _dadosMercado.cards.ipca.historico = hist;
 
-function econSetTextV367(id, value){
-  const el = document.getElementById(id);
-  if(el) el.textContent = value;
-}
-
-function econLabelFromDateV367(item){
-  if(!item) return '—';
-  if(item.label) return String(item.label);
-  const raw = item.DataReferencia || item.data || item.DataInicioVigencia || item.DataReuniaoCopom || '';
-  const dt = raw ? new Date(raw) : null;
-  if(dt && !isNaN(dt.getTime())){
-    return `${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
-  }
-  return '—';
-}
-
-function econNumberV367(v){
-  const n = Number(String(v ?? '').replace(',', '.'));
-  return Number.isFinite(n) ? n : null;
-}
-
-function econRenderBarsV367(containerId, rows, getValue, getLabel, limit){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-
-  // v376: IPCA mensal não usa "Tudo"; histórico longo distorce a leitura executiva.
-  const take = limit === 'all' ? 36 : Number(limit || 12);
-
-  const data = (rows || [])
-    .map(item => ({ item, value: getValue(item), label: getLabel(item) }))
-    .filter(d => Number.isFinite(d.value))
-    .slice(-take);
-
-  if(!data.length){
-    el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
-    return;
+  // Força base histórica completa quando o mercado_atual.json trouxer apenas recorte curto.
+  let selic = await carregarSelicHistoricoAmpliado(d?.historico_selic || d?.cards?.selic_meta?.historico || []);
+  if(selic.length){
+    _dadosMercado.historico_selic = selic;
   }
 
-  const width = Math.max(720, Math.round(el.getBoundingClientRect().width || 1100));
-  const height = window.matchMedia && window.matchMedia('(max-width: 820px)').matches ? 148 : 182;
-
-  const left = 54;
-  const right = 16;
-  const topPad = 12;
-  const bottomPad = 30;
-  const plotW = width - left - right;
-  const plotH = height - topPad - bottomPad;
-
-  const values = data.map(d => d.value);
-  const max = Math.max(...values, 1.4);
-  const min = Math.min(...values, -0.2);
-  const top = Math.ceil(max * 10) / 10;
-  const bottom = Math.floor(min * 10) / 10;
-  const size = top - bottom || 1;
-
-  const yFor = v => topPad + ((top - v) / size) * plotH;
-  const zeroY = yFor(0);
-
-  const pct = value => {
-    const n = Number(value);
-    if(!Number.isFinite(n)) return '—';
-    return n.toFixed(2).replace('.', ',') + '%';
-  };
-
-  const ticks = [];
-  for(let v = bottom; v <= top + 0.0001; v += 0.2){
-    ticks.push(Number(v.toFixed(1)));
-  }
-
-  const grid = ticks.map(v => {
-    const y = yFor(v);
-    const cls = Math.abs(v) < 0.0001 ? 'ipca-zero' : 'ipca-grid';
-    const labelClass = Math.abs(v) < 0.0001 ? 'ipca-axis-zero' : '';
-    return `
-      <line class="${cls}" x1="${left}" y1="${y}" x2="${width - right}" y2="${y}"></line>
-      <text class="ipca-axis-text ${labelClass}" x="${left - 10}" y="${y + 3}" text-anchor="end">${pct(v)}</text>
-    `;
-  }).join('');
-
-  const gap = data.length > 24 ? 4 : 8;
-  const barW = Math.max(7, (plotW - gap * (data.length - 1)) / data.length);
-
-  const bars = data.map((d, i) => {
-    const x = left + i * (barW + gap);
-    const yValue = yFor(d.value);
-    const y = Math.min(yValue, zeroY);
-    const h = Math.max(3, Math.abs(yValue - zeroY));
-    const cls = d.value >= 0 ? 'ipca-bar-pos' : 'ipca-bar-neg';
-    const title = `${d.label} · ${pct(d.value)}`;
-
-    return `
-      <rect class="${cls}" x="${x}" y="${y}" width="${barW}" height="${h}" rx="3">
-        <title>${title}</title>
-      </rect>
-    `;
-  }).join('');
-
-  const labelStep = Math.max(1, Math.round(data.length / 6));
-  const xLabels = data.map((d, i) => {
-    const show = i === 0 || i === data.length - 1 || i % labelStep === 0;
-    if(!show) return '';
-    const x = left + i * (barW + gap) + barW / 2;
-    return `<text class="ipca-axis-text" x="${x}" y="${height - 8}" text-anchor="middle">${d.label}</text>`;
-  }).join('');
-
-  el.innerHTML = `
-    <svg class="ipca-compact-svg-v376" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="IPCA mensal por período">
-      <rect class="ipca-compact-bg-v376" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
-      ${grid}
-      ${bars}
-      ${xLabels}
-    </svg>
-  `;
-}
-
-
-function econRenderLineV367(containerId, rows, getValue, getLabel, opts = {}){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-
-  const data = (rows || [])
-    .map(item => ({ item, value: getValue(item), label: getLabel(item) }))
-    .filter(d => Number.isFinite(d.value))
-    .slice(-(opts.limit || 36));
-
-  if(!data.length){
-    el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
-    return;
-  }
-
-  const values = data.map(d => d.value);
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-  const pad = Math.max((max - min) * .12, .1);
-  let lo = min - pad;
-  let hi = max + pad;
-
-  const bandMin = Number(opts.bandMin);
-  const bandMax = Number(opts.bandMax);
-  const bandMid = Number(opts.bandMid);
-
-  if(opts.band){
-    if(Number.isFinite(bandMin)) lo = Math.min(lo, bandMin - Math.max(pad, 0.25));
-    if(Number.isFinite(bandMax)) hi = Math.max(hi, bandMax + Math.max(pad, 0.25));
-  }
-
-  const w = 320;
-  const h = 112;
-  const step = data.length > 1 ? w / (data.length - 1) : w;
-  const yFor = v => h - ((v - lo) / (hi - lo || 1)) * h;
-  const points = data.map((d, i) => `${Math.round(i * step)},${Math.round(yFor(d.value))}`).join(' ');
-  const last = data[data.length - 1];
-  const first = data[0];
-  const lineClass = ['line', opts.lineClass || ''].filter(Boolean).join(' ');
-  const dotClass = ['dot', opts.dotClass || ''].filter(Boolean).join(' ');
-
-  let bandMarkup = '';
-  if(opts.band){
-    if(Number.isFinite(bandMin) && Number.isFinite(bandMax)){
-      const y1 = Math.max(0, Math.min(h, yFor(bandMax)));
-      const y2 = Math.max(0, Math.min(h, yFor(bandMin)));
-      const top = Math.min(y1, y2);
-      const height = Math.max(8, Math.abs(y2 - y1));
-      bandMarkup += `<rect x="0" y="${top.toFixed(1)}" width="320" height="${height.toFixed(1)}" rx="10" class="band ${opts.bandClass || ''}"></rect>`;
-      bandMarkup += `<line x1="0" y1="${y1.toFixed(1)}" x2="320" y2="${y1.toFixed(1)}" class="threshold threshold-top"></line>`;
-      bandMarkup += `<line x1="0" y1="${y2.toFixed(1)}" x2="320" y2="${y2.toFixed(1)}" class="threshold threshold-bottom"></line>`;
-    }else{
-      bandMarkup += '<rect x="0" y="22" width="320" height="50" rx="10" class="band"></rect>';
-    }
-    if(Number.isFinite(bandMid)){
-      const ym = Math.max(0, Math.min(h, yFor(bandMid)));
-      bandMarkup += `<line x1="0" y1="${ym.toFixed(1)}" x2="320" y2="${ym.toFixed(1)}" class="threshold threshold-mid"></line>`;
-    }
-  }
-
-  el.innerHTML = `
-    <svg class="econ-svg-v367 ${opts.svgClass || ''}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none" aria-hidden="true">
-      ${bandMarkup}
-      <polyline points="${points}" fill="none" class="${lineClass}"></polyline>
-      <circle cx="${Math.round((data.length-1) * step)}" cy="${Math.round(yFor(last.value))}" r="4" class="${dotClass}"></circle>
-    </svg>
-    <div class="econ-axis-caption-v367"><span>${first.label}</span><span>${last.label} · ${econPctV367(last.value)}</span></div>
-  `;
-}
-
-function econMetaStatusV367(v){
-  const n = Number(v);
-  if(!Number.isFinite(n)) return 'Meta central: 3,00% · banda de 1,50% a 4,50%';
-  const fmt = x => Number(x).toFixed(2).replace('.', ',') + ' p.p.';
-  if(n > 4.5) return `Acima do teto da meta em ${fmt(n - 4.5)}`;
-  if(n < 1.5) return `Abaixo do piso da meta em ${fmt(1.5 - n)}`;
-  return 'Dentro da banda da meta';
-}
-
-
-function econFmtSelicV368(v){
-  const n = Number(v);
-  if(!Number.isFinite(n)) return '—';
-  return `${n.toFixed(2).replace('.', ',')}% a.a.`;
-}
-
-function econFmtDateV368(dt){
-  if(!dt || isNaN(dt.getTime())) return '—';
-  return dt.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' });
-}
-
-function atualizarResumoSelicCleanV368(rows, mercado){
-  const lista = (rows || [])
-    .map(item => {
-      const valor = econNumberV367(item._valor ?? item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
-      const dt = item._dt instanceof Date && !isNaN(item._dt.getTime())
-        ? item._dt
-        : item._dtSelic instanceof Date && !isNaN(item._dtSelic.getTime())
-          ? item._dtSelic
-          : null;
-      return {...item, _v368valor:valor, _v368dt:dt};
-    })
-    .filter(item => Number.isFinite(item._v368valor));
-
-  const set = (id, txt) => {
-    const el = document.getElementById(id);
-    if(el) el.textContent = txt;
-  };
-
-  const selicCard = mercado?.cards?.selic_meta || {};
-  const atualCard = econNumberV367(selicCard.valor);
-
-  if(!lista.length){
-    set('selicMaxResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
-    set('selicMaxData', 'vigente');
-    set('selicMinResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
-    set('selicMinData', 'vigente');
-    set('selicHojeResumo', atualCard != null ? econFmtSelicV368(atualCard) : '—');
-    set('selicHojeData', 'último dado');
-    return;
-  }
-
-  const max = lista.reduce((acc, cur) => cur._v368valor > acc._v368valor ? cur : acc, lista[0]);
-  const min = lista.reduce((acc, cur) => cur._v368valor < acc._v368valor ? cur : acc, lista[0]);
-  const last = lista[lista.length - 1];
-
-  let hojeValor = Number.isFinite(atualCard) ? atualCard : last._v368valor;
-  let hojeData = 'último dado';
-  try{
-    const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
-      ? resolverDataUltimaAlteracaoSelic(mercado)
-      : null;
-    hojeData = ref?.data || econFmtDateV368(last._v368dt) || 'último dado';
-  }catch(e){
-    hojeData = econFmtDateV368(last._v368dt) || 'último dado';
-  }
-
-  set('selicMaxResumo', econFmtSelicV368(max._v368valor));
-  set('selicMaxData', econFmtDateV368(max._v368dt));
-  set('selicMinResumo', econFmtSelicV368(min._v368valor));
-  set('selicMinData', econFmtDateV368(min._v368dt));
-  set('selicHojeResumo', econFmtSelicV368(hojeValor));
-  set('selicHojeData', hojeData);
-}
-
-function econRenderMetaGaugeV368(containerId, value){
-  const el = document.getElementById(containerId);
-  if(!el) return;
-
-  const n = Number(value);
-  if(!Number.isFinite(n)){
-    el.innerHTML = '<div class="econ-empty-v367">IPCA 12 meses indisponível no momento.</div>';
-    return;
-  }
-
-  const minScale = 0;
-  const maxScale = Math.max(8, Math.ceil(n + 1));
-  const pct = Math.max(0, Math.min(100, ((n - minScale) / (maxScale - minScale)) * 100));
-  const status = econMetaStatusV367(n);
-
-  el.innerHTML = `
-    <div class="econ-gauge-v368" aria-label="IPCA 12 meses atual ${econPctV367(n)}">
-      <div class="econ-gauge-scale-v368">
-        <span class="band target" style="left:${(1.5/maxScale)*100}%;width:${((4.5-1.5)/maxScale)*100}%"></span>
-        <i class="marker" style="left:${pct}%"></i>
-      </div>
-      <div class="econ-axis-caption-v367">
-        <span>0,00%</span>
-        <span>Atual · ${econPctV367(n)}</span>
-        <span>${maxScale.toFixed(0)},00%</span>
-      </div>
-      <small class="econ-gauge-status-v368">${status}</small>
-    </div>
-  `;
-}
-
-
-function econAtualizarTextoMetaV370(ipca){
-  const atual = econPctV367(ipca?.acum_12m);
-  const status = econMetaStatusV367(ipca?.acum_12m);
-  const note = `Atual: ${atual} · ${status.charAt(0).toLowerCase()}${status.slice(1)}`;
-  econSetTextV367('evoCardMetaNote', note);
-  econSetTextV367('econMetaTrendLabelV367', status);
-  econSetTextV367('evoIpca12Sub', status);
-}
-
-function econAtualizarMobileSummaryV367(view, d){
-  const ipca = d?.cards?.ipca || {};
-  const selic = d?.cards?.selic_meta || {};
-  const selicRef = typeof resolverDataUltimaAlteracaoSelic === 'function'
-    ? (resolverDataUltimaAlteracaoSelic(d).data || '')
-    : '';
-  const selicValor = selic.valor != null ? `${Number(selic.valor).toFixed(2).replace('.', ',')}% a.a.` : '—';
-
-  let kicker = 'IPCA mensal';
-  let value = econPctV367(ipca.ultimo_mes);
-  let desc = ipca.label_mes ? `${ipca.label_mes} · dado oficial` : 'dado oficial';
-
-  if(view === 'selic'){
-    kicker = 'Selic meta';
-    value = selicValor;
-    desc = selicRef ? `Vigente desde ${selicRef}` : 'Meta definida pelo Copom';
-  }
-
-  if(view === 'meta'){
-    kicker = 'IPCA 12 meses';
-    value = econPctV367(ipca.acum_12m);
-    desc = econMetaStatusV367(ipca.acum_12m);
-  }
-
-  econSetTextV367('evoMobileKicker', kicker);
-  econSetTextV367('evoMobileValue', value);
-  econSetTextV367('evoMobileDescription', desc);
-}
-
-function selecionarIndicadorCleanV367(view){
-  const target = view || 'ipca';
-
-  document.querySelectorAll('#sec-graficos .econ-clean-tab-v367').forEach(btn => {
-    const active = btn.dataset.econView === target;
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-pressed', String(active));
-  });
-
-  document.querySelectorAll('#sec-graficos .econ-clean-panel-v367').forEach(panel => {
-    panel.classList.toggle('active', panel.dataset.econPanel === target);
-  });
-
-  econAtualizarMobileSummaryV367(target, _dadosMercado || {});
-}
-
-function bindIndicadoresCleanV367(){
-  econBindRangeTabsV371();
-  document.querySelectorAll('#sec-graficos .econ-clean-tab-v367').forEach(btn => {
-    if(btn.dataset.cleanBoundV367 === '1') return;
-    btn.dataset.cleanBoundV367 = '1';
-    btn.addEventListener('click', () => selecionarIndicadorCleanV367(btn.dataset.econView || 'ipca'));
-  });
-}
-
-
-const econCleanStateV371 = window.__ECON_CLEAN_STATE_V371__ || {
-  range:{ ipca:12, selic:12, meta:12 },
-  ipcaNorm:[],
-  selicNorm:[],
-  metaNorm:[],
-  mercado:null
-};
-window.__ECON_CLEAN_STATE_V371__ = econCleanStateV371;
-
-function econGetRangeV371(target){
-  const value = econCleanStateV371.range[target] || 12;
-  if(target === 'ipca' && value === 'all') return 36;
-  return value;
-}
-
-function econSetRangeV371(target, range){
-  econCleanStateV371.range[target] = range === 'all' ? 'all' : Number(range || 12);
-
-  document.querySelectorAll(`#sec-graficos .econ-range-tab-v371[data-econ-range-target="${target}"]`).forEach(btn => {
-    const active = String(btn.dataset.econRange) === String(range);
-    btn.classList.toggle('active', active);
-    btn.setAttribute('aria-pressed', String(active));
-  });
-
-  econRenderRangeTargetV371(target);
-}
-
-function econBindRangeTabsV371(){
-  document.querySelectorAll('#sec-graficos .econ-range-tab-v371').forEach(btn => {
-    if(btn.dataset.rangeBoundV371 === '1') return;
-    btn.dataset.rangeBoundV371 = '1';
-    btn.addEventListener('click', () => econSetRangeV371(btn.dataset.econRangeTarget, btn.dataset.econRange));
-  });
-}
-
-function econRenderRangeTargetV371(target){
-  if(target === 'ipca'){
-    const range = econGetRangeV371('ipca');
-    const data = econCleanStateV371.ipcaNorm || [];
-    econRenderBarsV367('econSparkIpcaV367', data, d => Number(d.valor), d => fmtIPCALabelV250(d), range);
-    const take = range === 'all' ? data.length : Number(range || 12);
-    const visible = data.slice(-take);
-    if(visible.length) atualizarResumoIPCAMensalV250(visible);
-  }
-
-  if(target === 'selic'){
-    const range = econGetRangeV371('selic');
-    econRenderLineV367('econSparkSelicV367', econCleanStateV371.selicNorm || [], d => d._valor, d => {
-      if(d._dt && !isNaN(d._dt.getTime())) return String(d._dt.getFullYear());
-      return econLabelFromDateV367(d);
-    }, {limit: range});
-  }
-
-  if(target === 'meta'){
-    const range = econGetRangeV371('meta');
-    const metaNorm = econCleanStateV371.metaNorm || [];
-    const ipca = econCleanStateV371.mercado?.cards?.ipca || {};
-    if(metaNorm.length >= 2){
-      econRenderLineV367('econSparkMetaV367', metaNorm, d => Number(d.Inflacao12Meses), d => {
-        const dt = new Date(d.DataReferencia);
-        return dt && !isNaN(dt.getTime()) ? `${String(dt.getMonth()+1).padStart(2,'0')}/${String(dt.getFullYear()).slice(-2)}` : '—';
-      }, {limit: range, band:true, bandMin:1.5, bandMax:4.5, bandMid:3.0, lineClass:'line-alert', dotClass:'dot-alert', bandClass:'band-meta'});
-    }else{
-      econRenderMetaGaugeV368('econSparkMetaV367', ipca.acum_12m);
-    }
-  }
-}
-
-async function renderIndicadoresCleanV367(d){
-  econCleanStateV371.mercado = d;
-  const ipca = d?.cards?.ipca || {};
-  const selic = d?.cards?.selic_meta || {};
-
-  atualizarResumoEvolucao(d);
-
-  let histIpca = [];
-  try{
-    histIpca = await carregarIPCAHistoricoAmpliado(ipca.historico || []);
-  }catch(e){
-    histIpca = normalizarHistoricoIPCA(ipca.historico || []);
-  }
-
-  let histSelic = [];
-  try{
-    histSelic = await carregarSelicHistoricoAmpliado(d?.historico_selic || selic.historico || []);
-  }catch(e){
-    histSelic = d?.historico_selic || selic.historico || [];
-  }
-
-  let meta = d?.meta_vs_inflacao_efetiva || [];
+  // Primeiro tenta o mercado_atual.json. Se não vier, busca o arquivo local separado.
+  let meta=d?.meta_vs_inflacao_efetiva||[];
   if(!meta.length){
-    try{
-      const jsMeta = await carregarJsonLocal('meta-vs-inflacao-efetiva.json');
-      meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
-    }catch(e){}
-  }
-  try{
-    meta = sincronizarSerieMetaComIpcaAtual(meta, ipca);
-  }catch(e){}
-
-  econAtualizarTextoMetaV370(ipca);
-
-  // IPCA mensal
-  const ipcaNorm = normalizarHistoricoIPCA(histIpca);
-  econCleanStateV371.ipcaNorm = ipcaNorm;
-  econRenderRangeTargetV371('ipca');
-
-  if(ipcaNorm.length){
-    atualizarResumoIPCAMensalV250(ipcaNorm.slice(-24));
-    const last = ipcaNorm[ipcaNorm.length - 1];
-    const prev = ipcaNorm[ipcaNorm.length - 2];
-    if(last && prev){
-      const dif = Number(last.valor) - Number(prev.valor);
+    const jsMeta = await carregarJsonLocal('meta-vs-inflacao-efetiva.json');
+    meta = jsMeta?.conteudo || jsMeta?.dados || (Array.isArray(jsMeta) ? jsMeta : []);
+    if(meta.length){
+      console.info(`[IPCA x Meta] ${meta.length} registros carregados do arquivo local.`);
     }
   }
 
-  // Selic
-  const selicNorm = (histSelic || [])
-    .map((item, idx) => {
-      const dataRaw = item._dtSelic || item.DataReuniaoCopom || item.data || item.DataInicioVigencia || item.Data || '';
-      let dt = dataRaw instanceof Date ? dataRaw : (dataRaw ? new Date(dataRaw) : null);
-      if((!dt || isNaN(dt.getTime())) && typeof dataRaw === 'string' && dataRaw.includes('/')){
-        const p = dataRaw.split('/');
-        if(p.length === 3) dt = new Date(`${p[2]}-${p[1]}-${p[0]}T00:00:00`);
-      }
-      const valor = econNumberV367(item._valorSelic ?? item.MetaSelic ?? item.valor ?? item.TaxaSelic ?? item.taxa ?? item.Selic);
-      return {...item, _dt:dt, _ts:dt && !isNaN(dt.getTime()) ? dt.getTime() : idx, _valor:valor};
-    })
-    .filter(x => Number.isFinite(x._valor))
-    .sort((a,b) => a._ts - b._ts);
-
-  econCleanStateV371.selicNorm = selicNorm;
-  econRenderRangeTargetV371('selic');
-
-  if(selicNorm.length){
-    atualizarResumoSelicCleanV368(selicNorm.slice(-60), d);
-    const last = selicNorm[selicNorm.length - 1];
-    const first = selicNorm[Math.max(0, selicNorm.length - 13)];
-    const dif = Number(last._valor) - Number(first._valor);
-    econSetTextV367('econSelicTrendLabelV367', dif >= 0 ? `+${dif.toFixed(2).replace('.', ',')} p.p.` : `${dif.toFixed(2).replace('.', ',')} p.p.`);
+  // A série histórica externa pode chegar com um mês de atraso. O card de IPCA
+  // já contém o acumulado oficial mais recente calculado pela série 433; por isso
+  // ele é usado para inserir/substituir a competência mais atual antes do gráfico.
+  meta = sincronizarSerieMetaComIpcaAtual(meta, d?.cards?.ipca);
+  if(meta.length){
+    _dadosMercado.meta_vs_inflacao_efetiva = meta;
   }
 
-  // IPCA 12M x meta
-  const metaNorm = (meta || [])
-    .filter(x => x?.DataReferencia && Number.isFinite(Number(x.Inflacao12Meses)))
-    .sort((a,b) => new Date(a.DataReferencia) - new Date(b.DataReferencia));
+  if(hist.length) buildChartIpca(hist,24);
+  else marcarGraficoSemDados('chartIpca', 'Histórico de IPCA temporariamente indisponível.');
 
-  econCleanStateV371.metaNorm = metaNorm;
-  econRenderRangeTargetV371('meta');
+  if(selic.length) buildChartSelic(selic,999);
+  else marcarGraficoSemDados('chartSelic', 'Histórico da Selic temporariamente indisponível.');
 
-  if(metaNorm.length >= 2){
-    const last = metaNorm[metaNorm.length - 1];
-    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(last.Inflacao12Meses)));
-  }else{
-    econSetTextV367('econMetaTrendLabelV367', econMetaStatusV367(Number(ipca.acum_12m)));
-  }
+  if(meta.length) buildChartMeta(meta);
+  else marcarGraficoSemDados('chartMeta', 'Histórico de inflação e meta temporariamente indisponível.');
 
-  selecionarIndicadorCleanV367('ipca');
+  bindEvolucaoTabs();
+  selecionarGraficoEvolucao('ipca');
+
+  bindEvolucaoChartPeriodTabs();
+  sincronizarTitulosGraficosAtivos();
 }
-
-
 
 /* v184 — títulos dos gráficos sincronizados com o período selecionado */
 function atualizarTituloPeriodoGrafico(chart, range){
   const periodo = Number(range);
   const configuracoes = {
     ipca: {
-      24: {
-        titulo: '🎯 IPCA mensal — últimos 24 meses',
-        subtitulo: 'Variação oficial mês a mês'
-      },
-      60: {
-        titulo: '🎯 IPCA mensal — últimos 5 anos',
-        subtitulo: 'Ciclo recente de inflação mensal'
-      },
-      120: {
-        titulo: '🎯 IPCA mensal — últimos 10 anos',
-        subtitulo: 'Histórico mensal mais amplo'
-      }
+      24: { titulo: '🎯 IPCA mensal — últimos 24 meses' },
+      60: { titulo: '🎯 IPCA mensal — últimos 5 anos' },
+      120: { titulo: '🎯 IPCA mensal — últimos 10 anos' }
     },
     selic: {
       12: {
         titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Último ano · decisões recentes do Copom'
-      },
-      24: {
-        titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Últimos 2 anos · ciclo atual de juros'
+        subtitulo: 'Último ano · evolução da meta definida pelo Copom'
       },
       60: {
         titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Últimos 5 anos · visão executiva do ciclo'
-      },
-      120: {
-        titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Últimos 10 anos · comparação com ciclos anteriores'
+        subtitulo: 'Últimos 5 anos · evolução da meta definida pelo Copom'
       },
       999: {
         titulo: '🏦 Trajetória da Selic meta',
@@ -6591,9 +4855,10 @@ function atualizarTituloPeriodoGrafico(chart, range){
   const titulo = tituloId ? document.getElementById(tituloId) : null;
   if(titulo && config.titulo) titulo.textContent = config.titulo;
 
-  const subtituloId = chart === 'ipca' ? 'chartIpcaSub' : chart === 'selic' ? 'chartSelicSub' : null;
-  const subtitulo = subtituloId ? document.getElementById(subtituloId) : null;
-  if(subtitulo && config.subtitulo) subtitulo.textContent = config.subtitulo;
+  if(chart === 'selic'){
+    const subtitulo = document.getElementById('chartSelicSub');
+    if(subtitulo && config.subtitulo) subtitulo.textContent = config.subtitulo;
+  }
 }
 
 function sincronizarTitulosGraficosAtivos(){
@@ -6789,93 +5054,12 @@ function _fmtPctCopom(v){
   if(!Number.isFinite(n)) return '—';
   return n.toFixed(2).replace('.',',') + '%';
 }
-function _dataKeyHojeLocal(){
-  const hoje = new Date();
-  return `${hoje.getFullYear()}-${String(hoje.getMonth()+1).padStart(2,'0')}-${String(hoje.getDate()).padStart(2,'0')}`;
-}
-function _dataBrCopom(key){
-  const m = String(key || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
-  return m ? `${m[3]}/${m[2]}/${m[1]}` : String(key || '');
-}
-function _historicoSelicOrdenadoParaDados(dados){
-  const card = dados?.cards?.selic_meta || {};
-  const h = dados?.historico_selic || card.historico || [];
-  const historico = (Array.isArray(h) ? h : [])
-    .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia || r.data_ref), _valor:_selicValorRegistro(r)}))
+function _historicoSelicOrdenado(){
+  const h = _dadosMercado?.historico_selic || _dadosMercado?.cards?.selic_meta?.historico || [];
+  return (Array.isArray(h) ? h : [])
+    .map(r => ({...r, _key:_dateKeyCopom(r.DataReuniaoCopom || r.data || r.DataInicioVigencia), _valor:_selicValorRegistro(r)}))
     .filter(r => r._key && r._valor !== null)
     .sort((a,b) => b._key.localeCompare(a._key));
-
-  const vigente = Number(card.valor);
-  if(!Number.isFinite(vigente)) return historico;
-
-  const maisRecente = historico[0] || null;
-  const historicoJaAtual = maisRecente && Math.abs(maisRecente._valor - vigente) < 0.005;
-  if(historicoJaAtual) return historico;
-
-  // Prioridade para uma data explícita produzida pelo robô.
-  const dataExplicita = card.ultima_alteracao || card.data_ultima_alteracao || card.data_mudanca || card.vigente_desde || card.data_ref;
-  let decisionKey = _dateKeyCopom(dataExplicita);
-
-  // Proteção v223: se a taxa mudou antes de o histórico receber o novo registro,
-  // identifica a reunião mais recente do Copom posterior ao histórico disponível.
-  if(!decisionKey){
-    const hojeKey = _dataKeyHojeLocal();
-    const limiteInferior = maisRecente?._key || '';
-    const reuniao = COPOM_2026
-      .filter(r => r.decision <= hojeKey && (!limiteInferior || r.decision > limiteInferior))
-      .sort((a,b) => b.decision.localeCompare(a.decision))[0];
-    decisionKey = reuniao?.decision || '';
-  }
-
-  if(!decisionKey) return historico;
-  if(historico.some(r => r._key === decisionKey && Math.abs(r._valor - vigente) < 0.005)) return historico;
-
-  historico.push({
-    data:_dataBrCopom(decisionKey),
-    valor:vigente,
-    MetaSelic:vigente,
-    DataReuniaoCopom:`${decisionKey}T03:00:00Z`,
-    _key:decisionKey,
-    _valor:vigente,
-    _reconciliado_v223:true
-  });
-  return historico.sort((a,b) => b._key.localeCompare(a._key));
-}
-function _historicoSelicOrdenado(){
-  return _historicoSelicOrdenadoParaDados(_dadosMercado);
-}
-function resolverDataUltimaAlteracaoSelic(dados){
-  const card = dados?.cards?.selic_meta || {};
-  const vigente = Number(card.valor);
-  const historico = _historicoSelicOrdenadoParaDados(dados);
-
-  if(!Number.isFinite(vigente) || !historico.length){
-    const fallback = card.ultima_alteracao || card.data_ultima_alteracao || card.data_ref || '';
-    const key = _dateKeyCopom(fallback);
-    return { data:key ? _dataBrCopom(key) : String(fallback || ''), key, inferida:false };
-  }
-
-  // "Última alteração" não é necessariamente a última reunião.
-  // Percorre o bloco inicial de registros com a taxa vigente e retorna o
-  // registro mais antigo desse bloco: o momento em que a taxa passou a valer.
-  const vigentesConsecutivos = [];
-  for(const registro of historico){
-    if(Math.abs(registro._valor - vigente) < 0.005){
-      vigentesConsecutivos.push(registro);
-      continue;
-    }
-    if(vigentesConsecutivos.length) break;
-  }
-
-  const referencia = vigentesConsecutivos.length
-    ? vigentesConsecutivos[vigentesConsecutivos.length - 1]
-    : historico.find(r => Math.abs(r._valor - vigente) < 0.005) || historico[0];
-
-  return {
-    data: referencia?.data || _dataBrCopom(referencia?._key) || '—',
-    key: referencia?._key || '',
-    inferida: Boolean(referencia?._reconciliado_v223)
-  };
 }
 function _decisaoCopomPorData(decisionDate){
   const hist = _historicoSelicOrdenado();
@@ -6896,82 +5080,21 @@ function _decisaoCopomPorData(decisionDate){
   }
   return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
 }
-function _resumoCopomTexto(resultado){
-  const raw = String(resultado || '').trim();
-  if(!raw) return 'Sem atualização disponível.';
-  let m = raw.match(/^corte\s+([^→]+)\s+→\s+(.+)$/i);
-  if(m) return `Selic em ${m[2].trim()} após corte ${m[1].trim()}.`;
-  m = raw.match(/^alta\s+([^→]+)\s+→\s+(.+)$/i);
-  if(m) return `Selic em ${m[2].trim()} após alta ${m[1].trim()}.`;
-  m = raw.match(/^mantida em\s+(.+)$/i);
-  if(m) return `Selic mantida em ${m[1].trim()}.`;
-  return raw;
-}
-
-function _statusCopomCurto(tipo, resultado){
-  if(tipo === 'cut') return 'corte';
-  if(tipo === 'hike') return 'alta';
-  if(tipo === 'hold') return 'manutenção';
-  if(String(resultado||'').toLowerCase().includes('próxima')) return 'agenda';
-  return 'status';
-}
-
-function _renderCopomExecutiveCardsV270(ultima, proxima){
-  const last = $('copomLastExecutiveV270');
-  const next = $('copomNextExecutiveV270');
-  if(last && ultima){
-    last.innerHTML = `
-      <span class="copom-exec-kicker-v270">Última decisão</span>
-      <strong class="copom-exec-date-v270">${ultima.short || '—'}</strong>
-      <div class="copom-exec-meta-v270">
-        <span class="copom-exec-pill-v270">${ultima.num}ª reunião</span>
-        <span class="copom-exec-status-v270 is-${ultima.klass || 'done'}">${_statusCopomCurto(ultima.decisao?.tipo, ultima.resultado)}</span>
-      </div>
-      <p class="copom-exec-desc-v270">${_resumoCopomTexto(ultima.resultado)}</p>`;
-  }
-  if(next){
-    if(proxima){
-      next.innerHTML = `
-        <span class="copom-exec-kicker-v270">Próxima reunião</span>
-        <strong class="copom-exec-date-v270">${proxima.short || '—'}</strong>
-        <div class="copom-exec-meta-v270">
-          <span class="copom-exec-pill-v270">${proxima.num}ª reunião</span>
-          <span class="copom-exec-status-v270 is-next">agenda</span>
-        </div>
-        <p class="copom-exec-desc-v270">Reunião programada para ${proxima.datas}. Próxima decisão prevista do Copom.</p>`;
-    } else {
-      next.innerHTML = `
-        <span class="copom-exec-kicker-v270">Próxima reunião</span>
-        <strong class="copom-exec-date-v270">Calendário concluído</strong>
-        <div class="copom-exec-meta-v270">
-          <span class="copom-exec-pill-v270">2026</span>
-          <span class="copom-exec-status-v270 is-hold">encerrado</span>
-        </div>
-        <p class="copom-exec-desc-v270">Não há novas reuniões previstas para o restante do calendário informado.</p>`;
-    }
-  }
-}
-
 function buildCopomCalendario(){
   const container = $('copomMeetings');
   if(!container) return;
 
-  const hojeKey = _dataKeyHojeLocal();
-  const comDecisao = COPOM_2026.map((r,i) => ({
-    ...r,
-    _i:i,
-    decisao:_decisaoCopomPorData(r.decision)
-  }));
-  // A reunião do próprio dia deixa de ser tratada como "próxima" assim que
-  // a nova taxa já estiver disponível, evitando duplicidade no calendário.
-  const proxIdx = comDecisao.findIndex(r => !r.decisao && r.decision >= hojeKey);
+  const hoje = new Date();
+  const hojeKey = hoje.toISOString().slice(0,10);
+  const proxIdx = COPOM_2026.findIndex(r => r.decision >= hojeKey);
 
-  const base = comDecisao.map((r,i) => {
+  const base = COPOM_2026.map((r,i) => {
+    const decisao = _decisaoCopomPorData(r.decision);
     const isNext = i === proxIdx;
-    const isFuture = !r.decisao && r.decision >= hojeKey && !isNext;
-    const klass = r.decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
-    const resultado = r.decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
-    return { ...r, isNext, isFuture, klass, resultado };
+    const isFuture = r.decision >= hojeKey && !isNext;
+    const klass = decisao?.tipo || (isNext ? 'next' : isFuture ? 'future' : 'done');
+    const resultado = decisao?.texto || (isNext ? 'próxima ★' : isFuture ? 'prevista' : 'realizada');
+    return { ...r, _i:i, decisao, isNext, isFuture, klass, resultado };
   });
 
   // v167: primeiras leituras = três decisões mais recentes + próxima reunião.
@@ -6990,19 +5113,13 @@ function buildCopomCalendario(){
     </div>`;
   }).join('');
 
-  const ultimaDecisao = realizadas[0] || base.filter(r => r.decisao).slice(-1)[0] || null;
-  _renderCopomExecutiveCardsV270(ultimaDecisao, proxima);
-
   const nextDate = $('copomNextDateV167');
   const nextStatus = $('copomNextStatusV167');
   if(nextDate) nextDate.textContent = proxima ? proxima.short : 'Calendário concluído';
   if(nextStatus) nextStatus.textContent = proxima ? (proxima.resultado || 'decisão pendente') : 'Sem novas reuniões em 2026';
 
   container.classList.remove('is-expanded-v167');
-  const panel = $('copomCalendarSecondaryV270');
-  if(panel) panel.classList.remove('is-open-v270');
   const toggle = $('copomCalendarToggleV167');
-  container.classList.add('copom-timeline-clean-v256');
   if(toggle){
     toggle.textContent = 'Ver calendário completo';
     toggle.setAttribute('aria-expanded','false');
@@ -7138,9 +5255,9 @@ document.addEventListener('DOMContentLoaded', function(){
     // Para evitar repetição dentro de "Mais detalhes", mostramos aqui apenas documentos complementares.
     if(!secundarios.length) return '';
 
-    const pageUrl = getFundUrl(row);
-    const pageBtn = pageUrl
-      ? `<a class="fund-card-docs-page-v235" href="${htmlAttr(pageUrl)}" target="_blank" rel="noopener">Página oficial ↗</a>`
+    const urls = secundarios.map(d => d.url);
+    const allBtn = secundarios.length > 1
+      ? `<button type="button" class="fund-card-docs-all" data-urls="${encodeURIComponent(JSON.stringify(urls))}" onclick="abrirDocsDaLinha(event,this)">Abrir todos</button>`
       : '';
 
     const links = secundarios.map(d => {
@@ -7148,12 +5265,12 @@ document.addEventListener('DOMContentLoaded', function(){
       return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
     }).join('');
 
-    return `<div class="fund-card-mobile-docs fund-card-mobile-docs-v236">
-      <div class="fund-card-docs-head fund-card-docs-head-v236">
-        <span class="fund-card-docs-title">Documentos oficiais</span>
+    return `<div class="fund-card-mobile-docs">
+      <div class="fund-card-docs-head">
+        <span class="fund-card-docs-title">Documentos complementares</span>
+        ${allBtn}
       </div>
       <div class="fund-card-docs-list secundarios">${links}</div>
-      ${pageBtn}
     </div>`;
   }
 
@@ -7264,9 +5381,9 @@ document.addEventListener('DOMContentLoaded', function(){
           <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Referência</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Patrimônio (mi)</span><span class="fund-metric-value">${pl}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Início do fundo</span><span class="fund-metric-value">${data}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Benchmark</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">PL mi</span><span class="fund-metric-value">${pl}</span></div>
+          <div class="fund-metric"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
         </div>
         ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
@@ -7340,7 +5457,6 @@ document.addEventListener('DOMContentLoaded', function(){
     try{ activateFilterChip('#riscoFilters','data-risco',activeRisco||''); }catch(e){}
     const chk=qs('#toggleSemDados');
     if(chk) chk.checked=!!hideSemDados;
-    try{ syncRiskProfileControlsV198(); }catch(e){}
   }
 
   function setFilterPanelOpen(open){
@@ -9010,24 +7126,10 @@ function atualizarResumoFechamentoMes(){
   const sub=document.getElementById('closedMonthLaunchSub');
   if(title) title.textContent=`Resumo de mercado`;
   if(sub) sub.textContent=`${periodo} · indicadores consolidados`;
-  const setMini=(id,val,mode='auto')=>{
-    const el=document.getElementById(id);
-    if(!el) return;
-    const txt=cleanTxt(val);
-    const isQuote=mode==='quote' || /^R\$\s*/i.test(txt);
-    el.textContent=txt;
-    el.className='finance-number-v231';
-    if(isQuote){
-      el.classList.add('market-quote-v231','zero');
-    }else{
-      el.classList.add(signClassFromText(txt));
-    }
-  };
+  const setMini=(id,val)=>{ const el=document.getElementById(id); if(el){ el.textContent=cleanTxt(val); el.className=signClassFromText(val); } };
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
-  const dolarVariacaoMini=painelText('dolar-ant-var');
-  const dolarCotacaoMini=painelText('dolar-ant-cot');
-  setMini('closedMiniDolar', dolarVariacaoMini !== '—' ? dolarVariacaoMini : dolarCotacaoMini, dolarVariacaoMini !== '—' ? 'variation' : 'quote');
+  setMini('closedMiniDolar', painelText('dolar-ant-var') !== '—' ? painelText('dolar-ant-var') : painelText('dolar-ant-cot'));
   setMini('closedMiniIbov', painelText('ibov-ant-var'));
 }
 function renderClosedMarketSheet(){
@@ -9267,7 +7369,7 @@ async function sharePainelMercado(){
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_TABS_FORCE_20260602_v10';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -9424,69 +7526,13 @@ async function sharePainelMercado(){
     return compacta;
   }
 
-  function reconciliarSelicVigenteV248(base, mercado){
-    const lista = Array.isArray(base) ? [...base] : [];
-    const card = mercado?.cards?.selic_meta || {};
-    const valor = Number(card.valor);
-    if(!Number.isFinite(valor)) return lista;
-
-    let dataRef = '';
-    try{
-      if(typeof resolverDataUltimaAlteracaoSelic === 'function'){
-        dataRef = resolverDataUltimaAlteracaoSelic(mercado)?.data || '';
-      }
-    }catch(e){}
-
-    dataRef = dataRef
-      || card.ultima_alteracao
-      || card.data_ultima_alteracao
-      || card.data_mudanca
-      || card.vigente_desde
-      || card.data_ref
-      || '';
-
-    let dt = parseDateAny(dataRef);
-    if(!dt || isNaN(dt.getTime())){
-      const hoje = new Date();
-      dt = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
-    }
-
-    const ts = dt.getTime();
-    const mesmoDia = (a,b) => {
-      if(!a || !b) return false;
-      return a.getFullYear() === b.getFullYear()
-        && a.getMonth() === b.getMonth()
-        && a.getDate() === b.getDate();
-    };
-
-    const ultimo = lista[lista.length - 1];
-    if(ultimo && ultimo._dt && ultimo._dt.getTime() >= ts && Math.abs(Number(ultimo.valor) - valor) < 0.005){
-      return lista;
-    }
-
-    const semDuplicarData = lista.filter(item => !(item?._dt && mesmoDia(item._dt, dt)));
-    semDuplicarData.push({
-      label: mesAno(dt),
-      valor,
-      _dt: dt,
-      _ts: ts,
-      _vigente_sync_v248: true
-    });
-
-    return semDuplicarData
-      .filter(d => Number.isFinite(Number(d.valor)))
-      .sort((a,b) => (a._ts || 0) - (b._ts || 0));
-  }
-
   async function carregarSelic(){
     if(cache.selic && cache.selic.length) return cache.selic;
 
     let base = [];
-    let mercadoAtual = null;
-
     try{
-      mercadoAtual = await carregarMercadoAtual();
-      base = normalizarSelic(mercadoAtual?.historico_selic || mercadoAtual?.cards?.selic_meta?.historico || []);
+      const mercado = await carregarMercadoAtual();
+      base = normalizarSelic(mercado?.historico_selic || mercado?.cards?.selic_meta?.historico || []);
     }catch(e){
       console.warn('[Gráficos v4] mercado_atual não trouxe Selic histórica:', e);
     }
@@ -9516,15 +7562,6 @@ async function sharePainelMercado(){
       }catch(e){
         console.warn('[Gráficos v4] Fallback BCB Selic não respondeu:', e);
       }
-    }
-
-    // v248: garante que a taxa vigente do card oficial entre no histórico do gráfico.
-    // Isso evita divergência quando o histórico ainda termina em uma decisão anterior.
-    try{
-      if(!mercadoAtual) mercadoAtual = await carregarMercadoAtual();
-      base = reconciliarSelicVigenteV248(base, mercadoAtual);
-    }catch(e){
-      console.warn('[Selic v248] Não consegui reconciliar a taxa vigente com o histórico:', e);
     }
 
     cache.selic = base;
@@ -9580,39 +7617,26 @@ async function sharePainelMercado(){
 
   async function desenharIPCA(range){
     if(!window.Chart){ mostrarMsg('chartIpca', 'Chart.js ainda não carregou. Recarregue a página.'); return; }
-    const r = Number(range) || 24;
-    const dados = await carregarIPCA(r);
-    const slice = dados.slice(-r);
+    const dados = await carregarIPCA(range);
+    const slice = dados.slice(-range);
     const canvas = byId('chartIpca');
     const ctx = canvas?.getContext('2d');
     if(!ctx || !slice.length){ mostrarMsg('chartIpca', 'Histórico de IPCA temporariamente indisponível.'); return; }
     limparMsg(canvas);
     destruirChart(canvas);
-
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
-    const colors = values.map(v => v >= 0 ? 'rgba(46,209,122,.72)' : 'rgba(240,85,101,.78)');
-    const barPct = r >= 120 ? .62 : r >= 60 ? .70 : .82;
-    const catPct = r >= 120 ? .74 : r >= 60 ? .82 : .90;
-
-    atualizarResumoIPCAMensalV250(slice);
-
+    const colors = values.map(v => v >= 0 ? 'rgba(46,209,122,.7)' : 'rgba(240,85,101,.7)');
     new Chart(ctx, {
       type:'bar',
-      data:{
-        labels,
-        datasets:[{
-          data:values,
-          backgroundColor:colors,
-          borderColor:colors,
-          borderWidth:1,
-          borderRadius:r >= 120 ? 1 : 2,
-          barPercentage:barPct,
-          categoryPercentage:catPct,
-          maxBarThickness:r >= 120 ? 8 : r >= 60 ? 12 : 22
-        }]
-      },
-      options:ipcaChartOptionsV250(r)
+      data:{ labels, datasets:[{ data:values, backgroundColor:colors, borderColor:colors, borderWidth:1, borderRadius:2 }] },
+      options:{
+        ...chartDefaults(),
+        plugins:{
+          ...chartDefaults().plugins,
+          tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'IPCA: ' + pct(ctx.parsed.y) } }
+        }
+      }
     });
   }
 
@@ -9636,36 +7660,13 @@ async function sharePainelMercado(){
     const maxItem = slice[values.indexOf(maxVal)];
     const minItem = slice[values.indexOf(minVal)];
     const hoje = slice[slice.length - 1];
-
-    let vigenteValor = hoje.valor;
-    let vigenteData = dataBR(hoje._dt);
-
-    // v248: o card "Vigente" deve refletir a taxa vigente oficial do painel,
-    // não apenas o último ponto que veio no histórico antigo.
-    try{
-      const card = _dadosMercado?.cards?.selic_meta || {};
-      const valorCard = Number(card.valor);
-      if(Number.isFinite(valorCard)){
-        vigenteValor = valorCard;
-        const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
-          ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
-          : null;
-        vigenteData = ref?.data
-          || card.ultima_alteracao
-          || card.data_ultima_alteracao
-          || card.vigente_desde
-          || card.data_ref
-          || vigenteData;
-      }
-    }catch(e){}
-
     const set = (id, txt) => { const el = byId(id); if(el) el.textContent = txt; };
     set('selicMaxResumo', pct(maxVal) + ' a.a.');
     set('selicMaxData', dataBR(maxItem?._dt));
     set('selicMinResumo', pct(minVal) + ' a.a.');
     set('selicMinData', dataBR(minItem?._dt));
-    set('selicHojeResumo', pct(vigenteValor) + ' a.a.');
-    set('selicHojeData', vigenteData ? `desde ${vigenteData}` : 'vigente');
+    set('selicHojeResumo', pct(hoje.valor) + ' a.a.');
+    set('selicHojeData', dataBR(hoje._dt));
   }
 
   async function desenharSelic(range){
@@ -9678,123 +7679,16 @@ async function sharePainelMercado(){
     limparMsg(canvas);
     atualizarResumoSelic(slice);
     destruirChart(canvas);
-
     const labels = slice.map(d => d.label);
     const values = slice.map(d => d.valor);
-    const xTicksSelicV253 = selicAxisConfigV253(slice, range);
     const maxVal = Math.max(...values);
-    const minVal = Math.min(...values);
-    const currentIndex = Math.max(0, values.length - 1);
-    const maxIndex = values.indexOf(maxVal);
-    const minIndex = values.indexOf(minVal);
-
-    // v245: melhora a leitura no mobile. A linha fica mais limpa e apenas
-    // máxima, mínima e vigente recebem marcadores de destaque.
-    const isMobile = window.matchMedia && window.matchMedia('(max-width: 760px)').matches;
-    const dense = values.length > 70;
-    const medium = values.length > 28;
-    const basePointRadius = isMobile ? (dense ? 0 : medium ? 1.2 : 2.2) : (dense ? 1.3 : 2.6);
-    const baseHoverRadius = isMobile ? 4.2 : 5;
-    const baseRadius = values.map(() => basePointRadius);
-    const pointColors = values.map(() => '#e8bb6a');
-    const pointBorders = values.map(() => 'rgba(16,18,30,.95)');
-    const hoverRadius = values.map(() => baseHoverRadius);
-
-    const applyMarker = (idx, color, radius) => {
-      if(idx < 0 || idx >= values.length) return;
-      baseRadius[idx] = Math.max(baseRadius[idx], radius);
-      pointColors[idx] = color;
-      pointBorders[idx] = 'rgba(8,10,18,.98)';
-      hoverRadius[idx] = Math.max(hoverRadius[idx], radius + 1.8);
-    };
-
-    applyMarker(maxIndex, '#e8bb6a', isMobile ? 4.8 : 5.6);
-    applyMarker(minIndex, '#5b9cf6', isMobile ? 4.8 : 5.6);
-    applyMarker(currentIndex, '#2ed17a', isMobile ? 5.4 : 6.2);
-
-    const markerDataset = (index, color, label, radius) => ({
-      type:'scatter',
-      label,
-      data: values.map((v, i) => i === index ? v : null),
-      pointRadius: radius,
-      pointHoverRadius: radius + 1.5,
-      pointBackgroundColor: color,
-      pointBorderColor: 'rgba(8,10,18,.98)',
-      pointBorderWidth: 2,
-      showLine: false,
-      spanGaps: false,
-      order: 1
-    });
-
-    const defaults = chartDefaults();
-    const maxTicks = isMobile ? (range >= 999 ? 6 : range >= 60 ? 5 : 4) : undefined;
-
     new Chart(ctx, {
       type:'line',
-      data:{ labels, datasets:[
-        {
-          label:'Selic',
-          data:values,
-          borderColor:'#c8973a',
-          backgroundColor:'rgba(200,151,58,.07)',
-          borderWidth:isMobile ? 2.15 : 2,
-          pointBackgroundColor:pointColors,
-          pointBorderColor:pointBorders,
-          pointBorderWidth:1.25,
-          pointRadius:baseRadius,
-          pointHoverRadius:hoverRadius,
-          fill:true,
-          stepped:'before',
-          tension:0,
-          order:3
-        },
-        markerDataset(maxIndex, '#e8bb6a', 'Máxima do período', isMobile ? 5.4 : 6),
-        markerDataset(minIndex, '#5b9cf6', 'Mínima do período', isMobile ? 5.4 : 6),
-        markerDataset(currentIndex, '#2ed17a', 'Taxa vigente', isMobile ? 6 : 6.8)
-      ] },
+      data:{ labels, datasets:[{ data:values, borderColor:'#c8973a', backgroundColor:'rgba(200,151,58,.08)', borderWidth:2, pointBackgroundColor:'#e8bb6a', pointRadius:2.6, pointHoverRadius:5, fill:true, stepped:'before', tension:0 }] },
       options:{
-        ...defaults,
-        maintainAspectRatio:false,
-        layout:{ padding:{ top:isMobile ? 6 : 10, right:isMobile ? 8 : 12, bottom:isMobile ? 2 : 6, left:isMobile ? 0 : 4 } },
-        plugins:{
-          ...defaults.plugins,
-          tooltip:{
-            ...defaults.plugins.tooltip,
-            callbacks:{
-              label:ctx=>{
-                const idx = ctx.dataIndex;
-                const prefix = idx === maxIndex ? 'Máxima' : idx === minIndex ? 'Mínima' : idx === currentIndex ? 'Vigente' : 'Selic';
-                return prefix + ': ' + pct(ctx.parsed.y) + ' a.a.';
-              }
-            }
-          },
-          legend:{ display:false }
-        },
-        scales:{
-          ...defaults.scales,
-          x:{
-            ...defaults.scales.x,
-            ticks:{
-              ...defaults.scales.x.ticks,
-              autoSkip:true,
-              maxTicksLimit:maxTicks,
-              maxRotation:isMobile ? 42 : 35,
-              minRotation:isMobile ? 42 : 0,
-              font:{ size:isMobile ? 9 : 10 }
-            },
-            grid:{ ...defaults.scales.x.grid, drawBorder:false }
-          },
-          y:{
-            ...defaults.scales.y,
-            suggestedMin:0,
-            suggestedMax:maxVal * 1.10,
-            ticks:{
-              ...defaults.scales.y.ticks,
-              maxTicksLimit:isMobile ? 7 : 8,
-              font:{ size:isMobile ? 9 : 10 }
-            }
-          }
-        }
+        ...chartDefaults(),
+        plugins:{ ...chartDefaults().plugins, tooltip:{ ...chartDefaults().plugins.tooltip, callbacks:{ label:ctx=>'Selic: ' + pct(ctx.parsed.y) + ' a.a.' } } },
+        scales:{ ...chartDefaults().scales, y:{ ...chartDefaults().scales.y, suggestedMin:0, suggestedMax:maxVal * 1.10 } }
       }
     });
   }
@@ -9873,10 +7767,236 @@ async function sharePainelMercado(){
   setTimeout(prepararBotoes, 700);
   setTimeout(prepararBotoes, 2000);
 
-  // v363: usa somente click. Pointerup em captura disparava redraw durante rolagem mobile.
+  // Usa click e pointerup em captura. Assim, mesmo que algum listener antigo ou overlay lógico interfira, o botão responde.
   document.addEventListener('click', capturar, true);
+  document.addEventListener('pointerup', capturar, true);
 })();
-/* Patches legados v5/v6 dos tabs removidos pela correção v228. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_INDIC_TABS_FORCE_20260602_v5';
+
+  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+
+  function prepararIndicTabs(){
+    qsa('.indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
+      el.style.pointerEvents = 'auto';
+      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
+      el.style.zIndex = '80';
+    });
+
+    qsa('.indic-tab[data-months]').forEach(btn => {
+      btn.setAttribute('type', 'button');
+      btn.setAttribute('aria-pressed', btn.classList.contains('active') ? 'true' : 'false');
+      btn.style.pointerEvents = 'auto';
+      btn.style.cursor = 'pointer';
+      btn.style.touchAction = 'manipulation';
+      if(getComputedStyle(btn).position === 'static') btn.style.position = 'relative';
+      btn.style.zIndex = '90';
+    });
+  }
+
+  function setPeriodoIndicadores(btn){
+    const meses = Number(btn && btn.dataset ? btn.dataset.months : NaN);
+    if(![12,24,36].includes(meses)) return;
+
+    qsa('.indic-tab[data-months]').forEach(tab => {
+      const ativo = tab === btn;
+      tab.classList.toggle('active', ativo);
+      tab.setAttribute('aria-pressed', ativo ? 'true' : 'false');
+    });
+
+    try{
+      activePeriodTab = meses;
+    }catch(e){
+      window.activePeriodTab = meses;
+    }
+    document.documentElement.dataset.indicPeriod = String(meses);
+
+    if(typeof atualizarTabelaIndicadores === 'function'){
+      atualizarTabelaIndicadores();
+      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+        detail: { months: meses, source: BUILD }
+      }));
+    }else{
+      console.warn('[' + BUILD + '] atualizarTabelaIndicadores ainda não está disponível.');
+    }
+  }
+
+  function acharIndicTab(evento){
+    const alvo = evento.target;
+    if(alvo && alvo.closest){
+      const direto = alvo.closest('.indic-tab[data-months]');
+      if(direto) return direto;
+    }
+    if(evento.composedPath){
+      const item = evento.composedPath().find(el => el && el.matches && el.matches('.indic-tab[data-months]'));
+      if(item) return item;
+    }
+    return null;
+  }
+
+  function capturarIndicTab(evento){
+    const btn = acharIndicTab(evento);
+    if(!btn) return;
+    evento.preventDefault();
+    if(typeof evento.stopImmediatePropagation === 'function') evento.stopImmediatePropagation();
+    setPeriodoIndicadores(btn);
+  }
+
+  function instalar(){
+    prepararIndicTabs();
+    document.addEventListener('click', capturarIndicTab, true);
+    document.addEventListener('pointerup', capturarIndicTab, true);
+    document.addEventListener('touchend', capturarIndicTab, true);
+    setTimeout(prepararIndicTabs, 400);
+    setTimeout(prepararIndicTabs, 1200);
+    setTimeout(prepararIndicTabs, 2500);
+    console.info('[' + BUILD + '] patch dos botões 12M/24M/36M instalado.');
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', instalar, {once:true});
+  else instalar();
+})();
+/* Patch v6 — captura no window antes dos listeners antigos e usa hit-test por coordenada.
+   Objetivo: fazer os botões responderem mesmo se algum elemento/camada estiver interceptando o target. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_WINDOW_HITTEST_TABS_FORCE_20260602_v6';
+  window.__ELTAUM_WINDOW_HITTEST_TABS_FORCE_BUILD__ = BUILD;
+
+  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+
+  function eventoXY(ev){
+    if(ev && ev.touches && ev.touches[0]) return {x: ev.touches[0].clientX, y: ev.touches[0].clientY};
+    if(ev && ev.changedTouches && ev.changedTouches[0]) return {x: ev.changedTouches[0].clientX, y: ev.changedTouches[0].clientY};
+    if(ev && Number.isFinite(ev.clientX) && Number.isFinite(ev.clientY)) return {x: ev.clientX, y: ev.clientY};
+    return null;
+  }
+
+  function visivel(el){
+    if(!el) return false;
+    const st = getComputedStyle(el);
+    if(st.display === 'none' || st.visibility === 'hidden' || Number(st.opacity) === 0) return false;
+    const r = el.getBoundingClientRect();
+    return r.width > 0 && r.height > 0;
+  }
+
+  function dentro(el, pt){
+    if(!el || !pt || !visivel(el)) return false;
+    const r = el.getBoundingClientRect();
+    return pt.x >= r.left && pt.x <= r.right && pt.y >= r.top && pt.y <= r.bottom;
+  }
+
+  function tabDireta(ev){
+    const t = ev && ev.target;
+    if(!t || !t.closest) return null;
+    return t.closest('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
+  }
+
+  function tabPorCoordenada(ev){
+    const pt = eventoXY(ev);
+    if(!pt) return null;
+    const tabs = qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]');
+    // Inverte a ordem para privilegiar o último elemento pintado no DOM quando há sobreposição.
+    for(let i = tabs.length - 1; i >= 0; i--){
+      if(dentro(tabs[i], pt)) return tabs[i];
+    }
+    return null;
+  }
+
+  function prepararTab(tab){
+    if(!tab) return;
+    tab.setAttribute('type', 'button');
+    tab.style.pointerEvents = 'auto';
+    tab.style.cursor = 'pointer';
+    tab.style.touchAction = 'manipulation';
+    if(getComputedStyle(tab).position === 'static') tab.style.position = 'relative';
+    tab.style.zIndex = '999';
+  }
+
+  function prepararTodos(){
+    qsa('.chart-tab[data-chart][data-range], .indic-tab[data-months]').forEach(prepararTab);
+    qsa('.chart-tabs, .indic-tabs, .indic-tabs-bar, .market-period-tabs').forEach(el => {
+      el.style.pointerEvents = 'auto';
+      if(getComputedStyle(el).position === 'static') el.style.position = 'relative';
+      el.style.zIndex = '998';
+    });
+  }
+
+  function ativarGrupo(selector, ativo){
+    qsa(selector).forEach(btn => {
+      const isActive = btn === ativo;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
+  function acionarGrafico(btn){
+    prepararTab(btn);
+    const chart = btn.dataset.chart;
+    if(!chart) return false;
+    ativarGrupo('.chart-tab[data-chart="' + chart + '"]', btn);
+    if(typeof window.alterarPeriodoGraficoEvolucao === 'function'){
+      window.alterarPeriodoGraficoEvolucao(btn);
+      return true;
+    }
+    console.warn('[' + BUILD + '] alterarPeriodoGraficoEvolucao não encontrada.');
+    return false;
+  }
+
+  function acionarIndicador(btn){
+    prepararTab(btn);
+    const meses = Number(btn.dataset.months);
+    if(![12,24,36].includes(meses)) return false;
+    ativarGrupo('.indic-tab[data-months]', btn);
+    try { activePeriodTab = meses; } catch(e) { window.activePeriodTab = meses; }
+    document.documentElement.dataset.indicPeriod = String(meses);
+    if(typeof window.atualizarTabelaIndicadores === 'function'){
+      window.atualizarTabelaIndicadores();
+      document.dispatchEvent(new CustomEvent('elton:market-period-change', {
+        detail: { months: meses, source: BUILD }
+      }));
+      return true;
+    }
+    console.warn('[' + BUILD + '] atualizarTabelaIndicadores não encontrada.');
+    return false;
+  }
+
+  function capturar(ev){
+    var _t = ev && ev.target;
+    if(_t && _t.closest && (
+      _t.closest('.closed-month-launch') ||
+      _t.closest('#closedMarketSheet') ||
+      _t.closest('#closedMarketOverlay')
+    )) return;
+    const btn = tabDireta(ev) || tabPorCoordenada(ev);
+    if(!btn) return;
+
+    let ok = false;
+    if(btn.matches('.chart-tab[data-chart][data-range]')) ok = acionarGrafico(btn);
+    if(btn.matches('.indic-tab[data-months]')) ok = acionarIndicador(btn);
+
+    if(ok){
+      ev.preventDefault();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      else if(typeof ev.stopPropagation === 'function') ev.stopPropagation();
+      console.info('[' + BUILD + '] botão acionado:', btn.textContent.trim(), Object.assign({}, btn.dataset));
+    }
+  }
+
+  prepararTodos();
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', prepararTodos, {once:true});
+  setTimeout(prepararTodos, 300);
+  setTimeout(prepararTodos, 1200);
+  setTimeout(prepararTodos, 3000);
+
+  // Window capture roda antes dos listeners em document; isso contorna stopImmediatePropagation de patches anteriores.
+  ['pointerdown','pointerup','click','touchend'].forEach(tipo => {
+    window.addEventListener(tipo, capturar, true);
+  });
+
+  console.info('[' + BUILD + '] instalado.');
+})();
 /* ════════════════════════════════════════════════════
    v24 — Mobile card-first para o catálogo de fundos
 ════════════════════════════════════════════════════ */
@@ -10658,9 +8778,8 @@ async function sharePainelMercado(){
     return `<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">${periods.map(p=>`<button type="button" class="rank-period-tab ${active===p?'active':''}" data-rank-target="topFundos" data-rank-period="${p}">${p==='mes'?'Mês':p==='ano'?'Ano':'12M'}</button>`).join('')}</div>`;
   }
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
-  function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
-    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
+    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
   function topRow(r,i,campo,showCdi){
     const cat=shortCat(r['Categoria']);
@@ -10671,14 +8790,14 @@ async function sharePainelMercado(){
     return `<div class="ranking-top-row">
       <div class="ranking-pos">${medal(i)}</div>
       <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
-      <div class="ranking-value-standard ranking-return ${cls}">${esc(val)}</div>
+      <div class="ranking-return ${cls}">${esc(val)}</div>
       <div class="ranking-cdi">${esc(cdi)}</div>
     </div>`;
   }
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
+    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
   }
   function worstMini(r,i,campo){
     const nome=cleanFund(r['Fundo']);
@@ -10702,7 +8821,7 @@ async function sharePainelMercado(){
     let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
     try{
       if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
-      if(typeof activeRankRisk!=='undefined' && activeRankRisk) base=base.filter(r=>perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
+      if(typeof activeRisco!=='undefined' && activeRisco) base=base.filter(r=>String(r['Perfil de Risco']||'').trim()===activeRisco);
     }catch(e){}
     const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
     const top=sortBy(campo).slice(0,10);
@@ -10716,17 +8835,13 @@ async function sharePainelMercado(){
     top12.forEach(r=>{const cat=r['Categoria']||'—'; if(!catMap[cat]) catMap[cat]=r;});
     const catTop=Object.entries(catMap).slice(0,8);
 
-    const categoriasFiltradas={};
-    base.forEach(r=>{
-      const cat=r['Categoria']||'Sem categoria';
-      const pl=numK(r['PL (milhoes R$)']||r['PL']||r['Patrimonio Liquido']);
-      if(!categoriasFiltradas[cat]) categoriasFiltradas[cat]={pl_total:0,qtd_ativos:0};
-      categoriasFiltradas[cat].qtd_ativos+=1;
-      if(pl!==null&&!Number.isNaN(pl)&&Number.isFinite(pl)) categoriasFiltradas[cat].pl_total+=pl;
-    });
-    const catPL=Object.entries(categoriasFiltradas)
-      .filter(([,d])=>d.qtd_ativos>0)
-      .sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
+    const categorias=(typeof kpisDashboard!=='undefined' && kpisDashboard && kpisDashboard.categorias) ? kpisDashboard.categorias : {};
+    const catPL=Object.entries(categorias).filter(([cat,d])=>{
+      try{
+        const okFiltro=window.rankCategoryMatchesV151 ? window.rankCategoryMatchesV151(cat, activeRankFilter) : true;
+        return okFiltro && numK(d?.pl_total)!==null && !Number.isNaN(numK(d?.pl_total));
+      }catch(e){return false}
+    }).sort((a,b)=>numK(b[1].pl_total)-numK(a[1].pl_total));
     const maiorPL=catPL[0];
 
     const cards=[
@@ -10738,25 +8853,25 @@ async function sharePainelMercado(){
 
     const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
     const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
-    // v195: o painel lateral de atenção já reúne piores leituras,
-    // negativos no ano e fundos sem dados. Evita duplicar a mesma informação
-    // dentro do bloco principal de rankings.
-    grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
+    const riskRows=worst.map((r,i)=>worstMini(r,i,campo)).join('') || '<div class="ranking-empty-v50">Não há retornos negativos neste recorte.</div>';
+
+    grid.className='ranking-grid ranking-executive-v50';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
       <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(insight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
-          <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}${riskPill()}</div>
+          <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}</div>
         </div>
         <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
           <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
           ${topRows}
         </div>
       </section>
-      <section class="ranking-exec-secondary ranking-exec-secondary-single-v195">
+      <section class="ranking-exec-secondary">
         <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Melhor fundo de cada categoria em 12 meses.</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
+        <div class="ranking-risk-panel"><div class="ranking-panel-head"><h3>Pontos de atenção</h3><p>Maiores quedas no recorte selecionado.</p></div><div class="ranking-risk-list">${riskRows}</div></div>
       </section>
     `;
   }
@@ -11012,8 +9127,7 @@ async function sharePainelMercado(){
     setTimeout(syncMobilePremiumFilterState,250);
     setTimeout(syncMobilePremiumFilterState,900);
   });
-  // v363: touchend/pointerup removidos; em mobile isso executava em gestos de rolagem.
-  ['click','input','change'].forEach(evt=>{
+  ['click','input','change','touchend','pointerup'].forEach(evt=>{
     document.addEventListener(evt,function(){setTimeout(syncMobilePremiumFilterState,90);},true);
   });
   window.addEventListener('resize',function(){ if(isMobile()) setTimeout(syncMobilePremiumFilterState,80); });
@@ -11030,7 +9144,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11115,7 +9229,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11454,7 +9568,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11522,7 +9636,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11629,7 +9743,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11780,15 +9894,9 @@ async function sharePainelMercado(){
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        if(active){
-          strip.classList.add('active','desktop-active-filter-v87');
-          strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="cat"><small>Categoria</small>${label}<span aria-hidden="true">×</span></button>` +
-            '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
-        }else{
-          strip.classList.remove('active','desktop-active-filter-v87');
-          strip.innerHTML = '';
-        }
+        strip.classList.add('active','desktop-active-filter-v87');
+        strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
+          `<span class="active-filter-pill active-filter-pill-v87">${label}</span>`;
       }
 
       const toggle = qs('#mobileFilterToggle');
@@ -11873,7 +9981,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11939,7 +10047,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12040,7 +10148,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12181,7 +10289,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12228,7 +10336,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12280,7 +10388,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12403,7 +10511,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12486,7 +10594,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12547,7 +10655,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12616,7 +10724,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12686,7 +10794,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12781,7 +10889,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12899,7 +11007,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12989,7 +11097,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -13058,7 +11166,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -13188,7 +11296,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13215,18 +11323,10 @@ async function sharePainelMercado(){
   function normalizeClosedMiniSignsV118(){
     qsa('#closedMiniCdi,#closedMiniIpca,#closedMiniDolar,#closedMiniIbov').forEach(el => {
       const txt = (el.textContent || '').trim();
-      const isQuote = /^R\$\s*/i.test(txt);
-      el.classList.add('finance-number-v231');
-      el.classList.remove('pos','neg','zero','neu','market-quote-v231');
-      if(isQuote){
-        el.classList.add('market-quote-v231','zero');
-      }else if(/^-\s*/.test(txt)){
-        el.classList.add('neg');
-      }else if(/^\+/.test(txt)){
-        el.classList.add('pos');
-      }else{
-        el.classList.add('zero');
-      }
+      el.classList.remove('pos','neg','zero');
+      if(/^-\s*/.test(txt)) el.classList.add('neg');
+      else if(/^\+/.test(txt)) el.classList.add('pos');
+      else el.classList.add('zero');
     });
   }
 
@@ -13293,15 +11393,12 @@ async function sharePainelMercado(){
       if(mercado) mercado.classList.add('market-clean-v118');
 
       const copom = qs('#copomMeetings');
-      if(copom){
-        // v257: o bloco de Cenário monetário já possui título próprio.
-        // Não criar microcopy "Arraste" aqui para não poluir desktop/mobile.
-      }
+      if(copom) ensureHintV118(copom, 'Próximas reuniões', 'copom');
 
       const cdi = qs('#cdiMonthStrip');
       if(cdi){
         normalizeCdiV118();
-        // v257: sem hint "Histórico mensal do CDI / Arraste" neste módulo.
+        ensureHintV118(cdi, 'Histórico mensal do CDI', 'cdi');
       }
     }catch(e){
       console.warn('[v118 mercado] falha ao sincronizar:', e);
@@ -13362,7 +11459,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13411,7 +11508,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13446,7 +11543,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13484,7 +11581,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13525,7 +11622,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -13637,7 +11734,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13679,7 +11776,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13809,7 +11906,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13946,7 +12043,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14159,7 +12256,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_W3C_HTML_VALIDATE_FIX_20260608_v128';
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14315,7 +12412,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_MARKET_PERIOD_SYNC_RESILIENT_20260613_v174';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -14444,16 +12541,7 @@ if(!isSearchInput(el)) return;
     const ipcaCurrent = /aguard/i.test(ipcaCurrentTxt) ? '—' : valueOrDash(ipcaCurrentTxt.match(/[+-]?\d+(?:[.,]\d+)?%/)?.[0]||'—');
     return {
       closed,current,accum,
-      cdi:{
-        closed:valueOrDash(text('cdi-mes-ant')),
-        current:valueOrDash(text('cdi-mes-cur')),
-        currentRef:clean(_dadosMercado?.cards?.cdi?.parcial_ate || ''),
-        currentDateIso:clean(_dadosMercado?.cards?.cdi?.parcial_data_iso || ''),
-        currentPeriodRef:clean(_dadosMercado?.cards?.cdi?.parcial_ref || ''),
-        currentSource:clean(_dadosMercado?.cards?.cdi?.parcial_origem || ''),
-        year:valueOrDash(text('cdi-ano')),
-        accum:valueOrDash(text('cdi-acum-v2'))
-      },
+      cdi:{closed:valueOrDash(text('cdi-mes-ant')),current:valueOrDash(text('cdi-mes-cur')),year:valueOrDash(text('cdi-ano')),accum:valueOrDash(text('cdi-acum-v2'))},
       ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2'))},
       dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
       ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
@@ -14479,16 +12567,6 @@ if(!isSearchInput(el)) return;
   }
   function currentMetric(label, main, variation, mainClass='neu'){
     return `<div class="market-v159-current-metric"><span>${esc(label)}</span><strong class="${mainClass}">${esc(valueOrDash(main))}</strong><em class="${pctClass(variation)}">${esc(valueOrDash(variation))}</em></div>`;
-  }
-  function currentCdiMetricV233(data){
-    const info={
-      data:data?.cdi?.currentRef || '',
-      dataIso:data?.cdi?.currentDateIso || '',
-      referencia:data?.cdi?.currentPeriodRef || data?.current || '',
-      origem:data?.cdi?.currentSource || ''
-    };
-    const contexto=contextoCdiAtualV233(info);
-    return `<div class="market-v159-current-metric market-current-cdi-v233"><span>CDI</span><strong class="${pctClass(data?.cdi?.current)}">${esc(valueOrDash(data?.cdi?.current))}</strong><div class="market-current-cdi-meta-v233"><b>${esc(contexto.title)}</b><em>${esc(contexto.detail)}</em></div></div>`;
   }
   function usCompactCard(item, mode, accum){
     const current=compactUsValue(item.current,mode);
@@ -14582,17 +12660,9 @@ if(!isSearchInput(el)) return;
     shell.classList.add('market-v159-shell');
     const usMode=state.usMode==='usd'?'usd':'brl';
     const awaiting=[];
-    const currentNotes=[];
-    const cdiAvailable=data.cdi.current!=='—';
-    const ipcaAvailable=data.ipca.current!=='—';
-    if(!cdiAvailable) awaiting.push('CDI');
-    else currentNotes.push('CDI acumulado no mês');
-    if(!ipcaAvailable) awaiting.push('IPCA');
-    else currentNotes.push('IPCA disponível');
-    const awaitingText=[
-      ...currentNotes,
-      awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : ''
-    ].filter(Boolean).join(' · ') || 'Indicadores correntes disponíveis';
+    if(data.cdi.current==='—') awaiting.push('CDI');
+    if(data.ipca.current==='—') awaiting.push('IPCA');
+    const awaitingText=awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : 'Indicadores correntes disponíveis';
 
     shell.innerHTML=`
       <div class="market-v150-head market-v159-head">
@@ -14616,9 +12686,8 @@ if(!isSearchInput(el)) return;
           </div>
         </section>
 
-        <section class="market-v159-current market-v227-current" aria-label="Mês atual">
+        <section class="market-v159-current" aria-label="Mês atual">
           <div class="market-v159-current-copy"><span>Mês atual</span><strong>${esc(data.current)} · parcial</strong><small>${esc(awaitingText)}</small></div>
-          ${currentCdiMetricV233(data)}
           ${currentMetric('Dólar',data.dolar.currentQuote,data.dolar.currentVar)}
           ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
         </section>
@@ -14709,93 +12778,6 @@ if(!isSearchInput(el)) return;
 
 
 /* ==========================================================
-   ELTAUM v227 — CDI parcial automático no painel executivo
-   - lê cards.cdi.parcial_mes_atual gerado diariamente pelo robô
-   - mostra data do último dado disponível em cards.cdi.parcial_ate
-   - preserva mês fechado e acumulados históricos separadamente
-========================================================== */
-
-/* ==========================================================
-   ELTAUM v232 — atualização automática do mercado_atual.json
-   - consulta a base sem cache a cada 30 minutos;
-   - atualiza ao retornar para a aba ou focar a janela;
-   - mantém visão executiva e tabela analítica sincronizadas.
-========================================================== */
-(function(){
-  'use strict';
-  const INTERVALO_MS = 30 * 60 * 1000;
-  let executando = false;
-  let ultimaAssinatura = '';
-
-  function assinatura(raw){
-    const cdi = raw?.cards?.cdi || {};
-    return [raw?.atualizado_em||'',cdi.parcial_mes_atual??'',cdi.parcial_data_iso||'',cdi.acum_12m??'',cdi.acum_24m??'',cdi.acum_36m??''].join('|');
-  }
-
-  async function atualizarAgora(forcar=false){
-    if(executando) return false;
-    executando = true;
-    try{
-      const url = BASE_URL + 'mercado_atual.json?v=cdi-daily-v232-' + Date.now();
-      const response = await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
-      if(!response.ok) throw new Error(`HTTP ${response.status}`);
-      const raw = await response.json();
-      const sig = assinatura(raw);
-      if(!forcar && sig && sig === ultimaAssinatura) return false;
-      ultimaAssinatura = sig;
-
-      const fresco = typeof normalizarMercadoAtual === 'function' ? normalizarMercadoAtual(raw) : raw;
-      try{
-        if(typeof _dadosMercado === 'object' && _dadosMercado){
-          _dadosMercado = {
-            ..._dadosMercado,
-            ...fresco,
-            cards:{...(_dadosMercado.cards||{}),...(fresco.cards||{})}
-          };
-        }else{
-          _dadosMercado = fresco;
-        }
-      }catch(e){
-        window.__mercadoAtualV230 = fresco;
-      }
-      window.__mercadoAtualV230 = _dadosMercado || fresco;
-      sincronizarEstadoCdiV229(_dadosMercado || fresco);
-      if((_dadosMercado||fresco)?.atualizado_em) atualizarDataHeader((_dadosMercado||fresco).atualizado_em);
-      atualizarTabelaIndicadores();
-      try{ window.__ELTAUM_MARKET_PANEL_V150__?.sync?.(); }catch(e){}
-      try{ window.__ELTAUM_MARKET_PERIOD_CARDS_V196__?.render?.(); }catch(e){}
-      document.dispatchEvent(new CustomEvent('elton:market-data-refresh',{detail:{build:'v232',cdi:obterCdiAtualV232(_dadosMercado||fresco)}}));
-      return true;
-    }catch(error){
-      console.warn('[v232] Atualização automática dos indicadores indisponível:',error);
-      return false;
-    }finally{
-      executando = false;
-    }
-  }
-
-  function iniciar(){
-    // v367: no mobile real, o refresh recorrente pode acordar rotinas visuais.
-    // O carregamento inicial do mercado_atual.json permanece normal.
-    const mobile = window.matchMedia && window.matchMedia('(max-width: 820px)').matches;
-    if(mobile){
-      window.__ELTAUM_CDI_DAILY_REFRESH_MOBILE_DISABLED_V367__ = true;
-      return;
-    }
-    setTimeout(()=>atualizarAgora(true),60*1000);
-    setInterval(()=>atualizarAgora(false),INTERVALO_MS);
-    document.addEventListener('visibilitychange',()=>{
-      if(document.visibilityState==='visible') atualizarAgora(false);
-    });
-    window.addEventListener('focus',()=>atualizarAgora(false),{passive:true});
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',iniciar,{once:true});
-  else iniciar();
-  window.atualizarIndicadoresAgoraV232 = atualizarAgora;
-})();
-
-/* ==========================================================
    ELTAUM v151 — integração dos componentes restaurados
    - navegação com offset e destaque da seção
    - selects dos rankings sincronizados com os filtros existentes
@@ -14813,31 +12795,30 @@ if(!isSearchInput(el)) return;
   const nval=(v)=>{ try{return typeof toNum==='function'?toNum(v):Number(String(v??'').replace('%','').replace(',','.'));}catch(e){return null;} };
   const pct=(v)=>{const n=nval(v);if(n===null||!Number.isFinite(n))return '—';return (n>0?'+':'')+n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%';};
 
-  const CATEGORY_BY_FILTER_V197=Object.freeze({
-    'renda-fixa-simples':'RENDA FIXA SIMPLES',
-    'renda-fixa':'RENDA FIXA',
-    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
-    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
-    'multimercado':'MULTIMERCADO',
-    'cambial':'CAMBIAL',
-    'acoes':'ACOES',
-    'fundo-de-indice':'FUNDO DE INDICE',
-    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
-  });
-  function categoryMatches(category,filter){
-    const cat=normalize(category).replace(/\s+/g,' ').trim();
+  function categoryMatches(text,filter){
+    const t=normalize(text);
     const f=String(filter||'todos');
     if(f==='todos') return true;
-    if(f==='sem-fmp') return cat!==CATEGORY_BY_FILTER_V197.fmp;
-    const expected=CATEGORY_BY_FILTER_V197[f];
-    return expected ? cat===expected : true;
+    const isFmp=/\bFMP\b|PRIVATIZA/.test(t);
+    if(f==='sem-fmp') return !isFmp;
+    if(f==='fmp') return isFmp;
+    if(f==='renda-fixa-simples') return /RENDA FIXA SIMPLES|RF SIMPLES/.test(t);
+    if(f==='renda-fixa-referenciado') return /RENDA FIXA REFERENCIADO|RF REFERENCIADO|REF DI/.test(t);
+    if(f==='renda-fixa-curto-prazo') return /RENDA FIXA CURTO|RF CURTO|CURTO PRAZO/.test(t);
+    if(f==='renda-fixa') return /RENDA FIXA|\bRF\b/.test(t) && !/SIMPLES|REFERENCIADO|REF DI|CURTO PRAZO|RF CURTO/.test(t);
+    if(f==='multimercado') return /MULTIMERCADO|\bMM\b/.test(t);
+    if(f==='cambial') return /CAMBIAL|CAMBIO|DOLAR/.test(t);
+    if(f==='acoes') return /ACOES|IBOVESPA/.test(t) && !isFmp;
+    if(f==='fundo-de-indice') return /FUNDO DE INDICE|\bINDICE\b|\bETF\b/.test(t);
+    return true;
   }
   window.rankCategoryMatchesV151=categoryMatches;
 
   // Substitui o filtro global usado pelo renderer legado sem reescrever o renderer inteiro.
   try{
     passaFiltroRanking=function(r){
-      return categoryMatches(r?.Categoria,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
+      const text=[r?.Categoria,r?.Fundo,r?.Benchmark].filter(Boolean).join(' ');
+      return categoryMatches(text,typeof activeRankFilter!=='undefined'?activeRankFilter:'todos');
     };
   }catch(e){}
 
@@ -14887,24 +12868,17 @@ if(!isSearchInput(el)) return;
   function syncRankingControls(){
     const cls=q('#rankingClassSelectV136');
     const period=q('#rankingPeriodSelectV136');
-    const risk=q('#rankingRiskSelectV198');
     if(cls && typeof activeRankFilter!=='undefined' && cls.value!==activeRankFilter) cls.value=activeRankFilter;
     if(period && typeof activeRankPeriods!=='undefined'){
       const p=activeRankPeriods.topFundos||'12m';
       if(period.value!==p) period.value=p;
     }
-    if(risk && typeof activeRankRisk!=='undefined' && risk.value!==(activeRankRisk||'')) risk.value=activeRankRisk||'';
-    try{syncRiskProfileControlsV198();}catch(e){}
   }
 
   function filteredRankingRows(includeMissing=false){
     if(typeof allRows==='undefined'||!Array.isArray(allRows)) return [];
     return allRows.filter(r=>includeMissing ? true : (typeof temDados==='function'?temDados(r):true)).filter(r=>{
-      try{
-        if(!passaFiltroRanking(r)) return false;
-        if(typeof activeRankRisk!=='undefined'&&activeRankRisk&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk)) return false;
-        return true;
-      }catch(e){return true;}
+      try{return passaFiltroRanking(r);}catch(e){return true;}
     });
   }
 
@@ -14923,8 +12897,8 @@ if(!isSearchInput(el)) return;
     const neg12=rows.filter(r=>{const n=nval(r['Acum. 12M (%)']);return n!==null&&n<0;});
     const negAno=rows.filter(r=>{const n=nval(r['Acum. Ano (%)']);return n!==null&&n<0;});
     const negMes=rows.filter(r=>{const n=nval(r['Acum. Mes (%)']);return n!==null&&n<0;});
-    const missing=filteredRankingRows(true).filter(r=>{
-      try{return typeof temDados==='function'?!temDados(r):false;}catch(e){return false;}
+    const missing=(typeof allRows!=='undefined'&&Array.isArray(allRows)?allRows:[]).filter(r=>{
+      try{return (typeof temDados==='function'?!temDados(r):false)&&passaFiltroRanking(r);}catch(e){return false;}
     });
     let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
     if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
@@ -14955,7 +12929,6 @@ if(!isSearchInput(el)) return;
   function bindRankingControls(){
     const cls=q('#rankingClassSelectV136');
     const period=q('#rankingPeriodSelectV136');
-    const risk=q('#rankingRiskSelectV198');
     if(cls&&cls.dataset.v151Bound!=='1'){
       cls.dataset.v151Bound='1';
       cls.addEventListener('change',()=>{
@@ -14967,13 +12940,6 @@ if(!isSearchInput(el)) return;
       period.dataset.v151Bound='1';
       period.addEventListener('change',()=>{
         try{activeRankPeriods.topFundos=period.value||'12m';}catch(e){}
-        renderRankingsAndAttention();
-      });
-    }
-    if(risk&&risk.dataset.v198Bound!=='1'){
-      risk.dataset.v198Bound='1';
-      risk.addEventListener('change',()=>{
-        try{activeRankRisk=risk.value||'';}catch(e){}
         renderRankingsAndAttention();
       });
     }
@@ -15415,15 +13381,12 @@ if(!isSearchInput(el)) return;
 ════════════════════════════════════════════════════ */
 function toggleCopomCalendarV167(force){
   const grid = document.getElementById('copomMeetings');
-  const panel = document.getElementById('copomCalendarSecondaryV270');
   const btn = document.getElementById('copomCalendarToggleV167');
-  const target = panel || grid;
-  if(!grid || !target) return false;
-  const open = typeof force === 'boolean' ? force : !target.classList.contains('is-open-v270');
-  target.classList.toggle('is-open-v270', open);
+  if(!grid) return false;
+  const open = typeof force === 'boolean' ? force : !grid.classList.contains('is-expanded-v167');
   grid.classList.toggle('is-expanded-v167', open);
   if(btn){
-    btn.textContent = open ? 'Ocultar calendário' : 'Ver calendário completo';
+    btn.textContent = open ? 'Recolher calendário' : 'Ver calendário completo';
     btn.setAttribute('aria-expanded', String(open));
   }
   return false;
@@ -15434,25 +13397,24 @@ function togglePoupancaExecutiveV167(force){
   const panel = document.getElementById('poupDetailsPanelV167');
   const btn = document.getElementById('poupExpandBtn');
   if(!panel) return false;
-
-  const mobile = window.matchMedia('(max-width:700px)').matches;
-  const currentlyOpen = !panel.hasAttribute('hidden');
-  const open = typeof force === 'boolean' ? force : !currentlyOpen;
-
-  document.body.classList.toggle('poup-mobile-expanded', open);
+  const open = typeof force === 'boolean' ? force : panel.hasAttribute('hidden');
   panel.toggleAttribute('hidden', !open);
   panel.classList.toggle('is-open-v167', open);
+  document.body.classList.toggle('poup-mobile-expanded', open);
 
   const explain = document.getElementById('poupExplain');
   if(explain) explain.classList.toggle('open', open);
   if(btn){
-    btn.textContent = mobile
-      ? (open ? 'Ocultar regras' : 'Ver regras')
-      : (open ? 'Ocultar regras' : 'Ver regras');
+    btn.textContent = open ? 'Ocultar regras e cenários' : 'Ver regras e cenários';
     btn.setAttribute('aria-expanded', String(open));
-    btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
 
+  if(open){
+    setTimeout(function(){
+      try{ if(poupScenarioChart && typeof poupScenarioChart.resize === 'function') poupScenarioChart.resize(); }catch(e){}
+      try{ if(poupScenarioChart && typeof poupScenarioChart.update === 'function') poupScenarioChart.update(); }catch(e){}
+    }, 90);
+  }
   return false;
 }
 
@@ -15466,13 +13428,10 @@ function initMarketReferenceExecutiveV167(){
     panel.setAttribute('hidden','');
     panel.classList.remove('is-open-v167');
   }
-  document.body.classList.remove('poup-mobile-expanded');
   const btn = document.getElementById('poupExpandBtn');
   if(btn){
-    const mobile = window.matchMedia('(max-width:700px)').matches;
-    btn.textContent = 'Ver regras';
+    btn.textContent = 'Ver regras e cenários';
     btn.setAttribute('aria-expanded','false');
-    btn.setAttribute('aria-controls', 'poupDetailsPanelV167');
   }
   toggleCopomCalendarV167(false);
 }
@@ -15528,7 +13487,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_CATALOG_TABLE_SANITIZED_20260612_v171';
   const CORE_DESKTOP_ORDER = [
     'Fundo',
     'Data Inicio',
@@ -15968,7 +13927,7 @@ if(document.readyState === 'loading'){
 
     const map={
       todos:'Todos os fundos',
-      'sem-fmp':'Todos, exceto FMP',
+      'sem-fmp':'Todos sem FMP',
       'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
       'renda-fixa-referenciado':'RF Referenciado',
@@ -16054,10 +14013,6 @@ if(document.readyState === 'loading'){
 
   function enablePointerDrag(strip){
     if(!strip || strip.dataset.pointerDragV180==='1') return;
-    if(strip.id === 'cdiMonthStrip' && (document.documentElement.classList.contains('rates-scroll-fix-v263') || document.documentElement.classList.contains('rates-cdi-real-v264'))){
-      strip.dataset.pointerDragV180 = 'disabled-v263';
-      return;
-    }
     strip.dataset.pointerDragV180='1';
 
     let active=false;
@@ -16129,7 +14084,7 @@ if(document.readyState === 'loading'){
    alterar o botão ativo antes de chamar a função principal. */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
+  const BUILD = 'ELTAUM_EVOLUTION_DYNAMIC_TITLES_20260613_v184';
 
   function atualizarPorBotao(btn){
     if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
@@ -16147,8 +14102,8 @@ if(document.readyState === 'loading'){
     document.querySelectorAll('.chart-tab[data-chart][data-range].active').forEach(atualizarPorBotao);
   }
 
-  // v363: pointerup removido para não reagir a gesto de scroll sobre abas.
   document.addEventListener('click', capturar, true);
+  document.addEventListener('pointerup', capturar, true);
   if(document.readyState === 'loading'){
     document.addEventListener('DOMContentLoaded', inicializar, {once:true});
   }else{
@@ -16260,3264 +14215,3 @@ if(document.readyState === 'loading'){
 /* ELTAUM_MOBILE_EVOLUTION_ORDER_SEMANTICS_20260613_v190
    Abas móveis agrupam os dois indicadores de IPCA antes da Selic.
    Textos da Selic explicam vigência e período de forma mais direta. */
-
-/* ════════════════════════════════════════════════════════════
-   ELTAUM_MARKET_PERIOD_CARDS_20260614_v196
-   Espelha a tabela analítica em três cards temáticos, mantendo
-   a tabela original no DOM como fonte compatível dos dados.
-════════════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_MARKET_MOBILE_DEDUP_LIVE_VALUES_20260618_v234';
-  let currency='brl';
-  let observer=null;
-  let timer=0;
-
-  const qs=(sel,root=document)=>root.querySelector(sel);
-  const qsa=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
-  const clean=value=>String(value??'').replace(/\s+/g,' ').trim();
-  const esc=value=>String(value??'').replace(/[&<>"']/g,ch=>({
-    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
-  }[ch]));
-  const text=id=>clean(document.getElementById(id)?.textContent||'—')||'—';
-
-  function tone(value){
-    const v=clean(value);
-    if(!v || v==='—' || v==='-') return 'dash';
-    if(/^\+/.test(v)) return 'pos';
-    if(/^[−-]/.test(v)) return 'neg';
-    return 'neu';
-  }
-
-  function period(id,fallback){
-    const value=text(id);
-    return value==='—'?fallback:value;
-  }
-
-  /* v234 — os cards temáticos passam a consultar o JSON normalizado diretamente.
-     A tabela original continua como fallback, evitando corrida de renderização e
-     valores “—” quando o card é montado antes de o DOM legado terminar de atualizar. */
-  function finiteV234(value){
-    if(value===null || value===undefined || value==='') return null;
-    let normalized=value;
-    if(typeof value==='string'){
-      normalized=value.trim().replace(/%/g,'').replace(/\s+/g,'');
-      // Strings vindas do DOM podem usar padrão brasileiro (1.234,56),
-      // enquanto o JSON usa ponto decimal (2.06). Só remove pontos quando
-      // há vírgula decimal explícita.
-      if(normalized.includes(',')) normalized=normalized.replace(/\./g,'').replace(',','.');
-    }
-    const number=Number(normalized);
-    return Number.isFinite(number) ? number : null;
-  }
-
-  function firstFiniteV234(...values){
-    for(const value of values){
-      const number=finiteV234(value);
-      if(number!==null) return number;
-    }
-    return null;
-  }
-
-  function pctV234(value,fallback='—'){
-    const number=finiteV234(value);
-    if(number===null) return fallback;
-    return `${number>0?'+':''}${number.toFixed(2).replace('.',',')}%`;
-  }
-
-  function brlV234(value,fallback='—'){
-    const number=finiteV234(value);
-    if(number===null) return fallback;
-    return `R$ ${number.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-  }
-
-  function ptsV234(value,fallback='—'){
-    const number=finiteV234(value);
-    if(number===null) return fallback;
-    return `${number.toLocaleString('pt-BR',{maximumFractionDigits:0})} pts`;
-  }
-
-  function currentVariationV234(item,card){
-    const explicit=firstFiniteV234(
-      item?.variacao_mes_atual,
-      item?.variacao_mensal,
-      item?.variacao_mes,
-      card?.variacao_mes_atual,
-      card?.variacao_mensal,
-      card?.variacao_mes
-    );
-    if(explicit!==null) return explicit;
-
-    const current=firstFiniteV234(item?.fechamento_atual,card?.atual);
-    const previous=firstFiniteV234(item?.fechamento_mes_anterior,card?.anterior);
-    if(current!==null && previous!==null && previous!==0){
-      return ((current/previous)-1)*100;
-    }
-    return null;
-  }
-
-  function marketDataV234(key,cardKey=key){
-    const data=(typeof _dadosMercado!=='undefined' && _dadosMercado) || window.__mercadoAtualV230 || {};
-    const item=data?.indices_mercado?.[key] || {};
-    const card=data?.cards?.[cardKey] || {};
-    return {item,card};
-  }
-
-  function currentStatusV234(item,fallback=''){
-    if(item?.status_mes_atual) return /parcial/i.test(item.status_mes_atual)?'Parcial':fallback;
-    if(item?.tem_mes_atual===true) return 'Parcial';
-    const match=String(item?.data_atual||'').match(/^(\d{4})-(\d{2})/);
-    if(match){
-      const today=new Date();
-      const currentKey=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,'0')}`;
-      if(`${match[1]}-${match[2]}`===currentKey) return 'Parcial';
-    }
-    return fallback;
-  }
-
-  function periodValueV234(item,card,months){
-    return firstFiniteV234(item?.[`acum_${months}m`],card?.[`acum_${months}m`]);
-  }
-
-  function pairFromMarketV234(item,field,fallbackId){
-    const fallback=usPair(fallbackId);
-    return {
-      usd:pctV234(item?.[field],fallback.usd),
-      brl:pctV234(item?.[`${field}_brl`],fallback.brl)
-    };
-  }
-
-  function statusFor(rowId){
-    const row=document.getElementById(rowId);
-    if(!row) return '';
-    const cell=qs('.td-cur',row);
-    if(!cell) return '';
-    const explicit=clean(
-      qs('.analytic-status-chip-v163',cell)?.textContent ||
-      qs('.period-status',cell)?.textContent ||
-      qs('.badge-await',cell)?.textContent ||
-      qs('.status-only-v163',cell)?.textContent || ''
-    );
-    if(/aguard/i.test(explicit)) return 'Aguardando';
-    if(/parcial/i.test(explicit)) return 'Parcial';
-    return '';
-  }
-
-  function alertBadge(){
-    const el=document.getElementById('ipca-alert-badge');
-    if(!el || getComputedStyle(el).display==='none') return '';
-    const value=clean(el.textContent);
-    return value?`<span class="market-period-badge-v196">${esc(value)}</span>`:'';
-  }
-
-  function metric(label,value,note='',options={}){
-    const status=options.status||'';
-    const aguardando=/aguard/i.test(status);
-    const parcial=/parcial/i.test(status);
-    const semValor=!value || value==='—' || value==='-';
-    const main=aguardando
-      ? `<strong class="market-period-status-v196">${esc(status)}</strong>`
-      : `<strong class="${tone(value)}">${esc(value||'—')}</strong>`;
-    let detalhe=parcial && !aguardando ? (note || status) : note;
-    if(semValor && !aguardando && !detalhe) detalhe='Dado não disponível';
-    return `<div class="market-period-metric-v196"><span>${esc(label)}</span>${main}<small>${esc(detalhe||'')}</small></div>`;
-  }
-
-  function nameCell(icon,name,sub,level='',badge=''){
-    return `<div class="market-period-name-v196">
-      <div class="market-period-icon-v196">${icon}</div>
-      <div class="market-period-name-copy-v196">
-        <div class="market-period-name-line-v196"><strong>${esc(name)}</strong>${badge}</div>
-        <small>${esc(sub)}</small>
-        ${level&&level!=='—'?`<div class="market-current-level-v196"><small>Atual</small>${esc(level)}</div>`:''}
-      </div>
-    </div>`;
-  }
-
-  function selectedPeriodMonths(){
-    const fromDataset = Number.parseInt(document.documentElement.dataset.indicPeriod || '', 10);
-    const fromButton = Number.parseInt(qs('.market-period-tabs .indic-tab.active[data-months]')?.dataset.months || '', 10);
-    const fromState = typeof activePeriodTab !== 'undefined' ? Number(activePeriodTab) : NaN;
-    return [fromDataset, fromButton, fromState].find(value => [12, 24, 36].includes(value)) || 12;
-  }
-
-  function selectedPeriodLabel(){
-    return `${selectedPeriodMonths()} meses`;
-  }
-
-  function gridHead(first='Indicador'){
-    const closed=period('th-mes-ant-sub','Último fechado');
-    const current=period('th-mes-cur-sub','Mês atual');
-    const accumulated=selectedPeriodLabel();
-    return `<div class="market-period-grid-head-v196">
-      <span>${esc(first)}</span><span>Fechado<br>${esc(closed)}</span><span>Atual<br>${esc(current)}</span><span>No ano</span><span>${esc(accumulated)}</span>
-    </div>`;
-  }
-
-  function row(content){
-    return `<div class="market-period-row-v196">${content}</div>`;
-  }
-
-  function cardHeader(title,sub,source,extra=''){
-    return `<div class="market-period-card-head-v196">
-      <div class="market-period-card-title-v196"><span>${esc(title)}</span><small>${esc(sub)}</small></div>
-      ${extra||`<span class="market-period-source-v196">${esc(source)}</span>`}
-    </div>`;
-  }
-
-  function usPair(id){
-    const host=document.getElementById(id);
-    if(!host) return {usd:'—',brl:'—'};
-    const usd=clean(qs('.us-market-line.usd .us-market-value',host)?.textContent||'');
-    const brl=clean(qs('.us-market-line.brl .us-market-value',host)?.textContent||'');
-    if(usd||brl) return {usd:usd||'—',brl:brl||'—'};
-    const raw=clean(host.textContent);
-    const out={usd:'—',brl:'—'};
-    const re=/(USD|BRL)\s*([+−-]?\d+(?:[.,]\d+)?%|—)/ig;
-    let match;
-    while((match=re.exec(raw))) out[match[1].toLowerCase()]=match[2];
-    if(out.usd==='—'&&out.brl==='—'){
-      const values=raw.match(/[+−-]?\d+(?:[.,]\d+)?%/g)||[];
-      if(values[0]) out.usd=values[0];
-      if(values[1]) out.brl=values[1];
-      else if(values[0]) out.brl=values[0];
-    }
-    return out;
-  }
-
-  function usMetric(label,pair,note=''){
-    if(currency==='both'){
-      return `<div class="market-period-metric-v196"><span>${esc(label)}</span>
-        <div class="market-period-double-v196">
-          <em class="${tone(pair.usd)}">USD ${esc(pair.usd)}</em>
-          <em class="${tone(pair.brl)}">BRL ${esc(pair.brl)}</em>
-        </div><small>${esc(note)}</small></div>`;
-    }
-    const value=pair[currency]||'—';
-    return metric(label,value,currency.toUpperCase()+(note?` · ${note}`:''));
-  }
-
-  function buildTaxes(){
-    const cdiStatus=statusFor('row-cdi');
-    const ipcaStatus=statusFor('row-ipca');
-    const cdiInfo=typeof obterCdiAtualV232==='function' ? obterCdiAtualV232() : {};
-    const cdiContexto=contextoCdiAtualV233(cdiInfo);
-    const cdiAtualNota=cdiInfo?.valor!==null && cdiInfo?.valor!==undefined
-      ? `${cdiContexto.title} · ${cdiContexto.detail}`
-      : (cdiStatus||'');
-    return `<article class="market-period-card-v196 taxas">
-      ${cardHeader('Taxas e inflação','Retornos consolidados por período','BCB 4391 / 433')}
-      ${gridHead()}
-      ${row(
-        nameCell('💰','CDI','Certificado de Depósito Interbancário')+
-        metric('Fechado',text('cdi-mes-ant'))+
-        metric('Atual',text('cdi-mes-cur'),cdiAtualNota,{status:cdiStatus})+
-        metric('No ano',text('cdi-ano'))+
-        metric(selectedPeriodLabel(),text('cdi-acum-v2'))
-      )}
-      ${row(
-        nameCell('🎯','IPCA','Inflação ao consumidor · meta 3,0%','',alertBadge())+
-        metric('Fechado',text('ipca-mes-ant'))+
-        metric('Atual','—','',{status:ipcaStatus||'Aguardando'})+
-        metric('No ano',text('ipca-ano-v2'))+
-        metric(selectedPeriodLabel(),text('ipca-acum-v2'))
-      )}
-      <div class="market-period-card-foot-v196">CDI e IPCA: séries públicas do Banco Central. O mês atual pode permanecer aguardando o fechamento oficial.</div>
-    </article>`;
-  }
-
-  function buildBrasil(){
-    const months=selectedPeriodMonths();
-    const dolarData=marketDataV234('dolar','dolar');
-    const ibovData=marketDataV234('ibovespa','ibovespa');
-
-    const dolarStatus=currentStatusV234(dolarData.item,statusFor('row-dolar'));
-    const ibovStatus=currentStatusV234(ibovData.item,statusFor('row-ibov'));
-
-    const dolarAtual=firstFiniteV234(dolarData.item?.fechamento_atual,dolarData.card?.atual);
-    const dolarFechado=firstFiniteV234(dolarData.item?.fechamento_mes_anterior,dolarData.card?.anterior);
-    const dolarVarAtual=currentVariationV234(dolarData.item,dolarData.card);
-    const dolarAno=firstFiniteV234(dolarData.item?.acum_ano,dolarData.card?.acum_ano);
-    const dolarAcum=periodValueV234(dolarData.item,dolarData.card,months);
-
-    const ibovAtual=firstFiniteV234(ibovData.item?.fechamento_atual,ibovData.card?.atual);
-    const ibovFechado=firstFiniteV234(ibovData.item?.fechamento_mes_anterior,ibovData.card?.anterior);
-    const ibovVarFechado=firstFiniteV234(ibovData.item?.variacao_mes_fechado,ibovData.card?.variacao_mes_fechado);
-    const ibovVarAtual=currentVariationV234(ibovData.item,ibovData.card);
-    const ibovAno=firstFiniteV234(ibovData.item?.acum_ano,ibovData.card?.acum_ano);
-    const ibovAcum=periodValueV234(ibovData.item,ibovData.card,months);
-
-    return `<article class="market-period-card-v196 brasil">
-      ${cardHeader('Brasil — câmbio e bolsa','Nível atual separado da variação percentual','PTAX BCB / B3')}
-      ${gridHead()}
-      ${row(
-        nameCell('💵','Dólar BRL/USD','Cotação PTAX e desempenho em reais',brlV234(dolarAtual,text('dolar-cur-cot')))+
-        metric('Fechado',brlV234(dolarFechado,text('dolar-ant-cot')),'cotação de fechamento')+
-        metric('Atual',pctV234(dolarVarAtual,text('dolar-cur-var')),dolarStatus)+
-        metric('No ano',pctV234(dolarAno,text('dolar-ano-v2')))+
-        metric(selectedPeriodLabel(),pctV234(dolarAcum,text('dolar-acum-v2')))
-      )}
-      ${row(
-        nameCell('📈','Ibovespa','B3 · pontos e variação percentual',ptsV234(ibovAtual,text('ibov-cur-pts')))+
-        metric('Fechado',pctV234(ibovVarFechado,text('ibov-ant-var')),ptsV234(ibovFechado,text('ibov-ant-pts')))+
-        metric('Atual',pctV234(ibovVarAtual,text('ibov-cur-var')),ibovStatus)+
-        metric('No ano',pctV234(ibovAno,text('ibov-ano-v2')))+
-        metric(selectedPeriodLabel(),pctV234(ibovAcum,text('ibov-acum-v2')))
-      )}
-      <div class="market-period-card-foot-v196">Os cards leem diretamente o JSON atualizado; a tabela original permanece apenas como fonte de compatibilidade.</div>
-    </article>`;
-  }
-
-  function usToggle(){
-    return `<div class="market-period-us-toggle-v196" role="group" aria-label="Moeda das bolsas dos Estados Unidos">
-      ${['brl','usd','both'].map(mode=>`<button type="button" data-v196-currency="${mode}" class="${currency===mode?'active':''}" aria-pressed="${currency===mode?'true':'false'}">${mode==='both'?'Ambos':mode.toUpperCase()}</button>`).join('')}
-    </div>`;
-  }
-
-  function buildUs(){
-    const months=selectedPeriodMonths();
-    const makeRow=(key,prefix,icon,name,sub)=>{
-      const data=marketDataV234(key,key);
-      const item=data.item||{};
-      return {
-        icon,name,sub,
-        points:ptsV234(item?.fechamento_atual,text(`${prefix}-cur-pts`)),
-        closed:pairFromMarketV234(item,'variacao_mes_fechado',`${prefix}-ant-var`),
-        current:pairFromMarketV234(item,'variacao_mes_atual',`${prefix}-cur-var`),
-        year:pairFromMarketV234(item,'acum_ano',`${prefix}-ano-var`),
-        accum:pairFromMarketV234(item,`acum_${months}m`,`${prefix}-acum-var`),
-        status:currentStatusV234(item,statusFor(`row-${prefix}`))
-      };
-    };
-    const rows=[
-      makeRow('sp500','sp','🌎','S&P 500','Índice amplo dos Estados Unidos'),
-      makeRow('dow_jones','dow','🏛️','Dow Jones','Empresas blue chips'),
-      makeRow('nasdaq','nasdaq','💻','Nasdaq','Empresas de tecnologia')
-    ];
-    return `<article class="market-period-card-v196 usa">
-      ${cardHeader('Bolsas dos Estados Unidos','Rentabilidade em reais, dólares ou nas duas moedas','',usToggle())}
-      ${gridHead('Índice')}
-      ${rows.map(item=>row(
-        nameCell(item.icon,item.name,item.sub,item.points)+
-        usMetric('Fechado',item.closed)+
-        usMetric('Atual',item.current,item.status)+
-        usMetric('No ano',item.year)+
-        usMetric(selectedPeriodLabel(),item.accum)
-      )).join('')}
-      <div class="market-period-card-foot-v196">BRL incorpora a variação cambial; USD representa o desempenho do índice em sua moeda de origem.</div>
-    </article>`;
-  }
-
-  function render(){
-    const shell=qs('#sec-painel-body .market-period-shell-v196') || qs('#sec-painel-body .indic-table-wrap');
-    const source=shell&&qs('.indic-table-v2',shell);
-    const host=document.getElementById('marketPeriodCardsV196');
-    if(!shell||!source||!host) return;
-
-    const wrapMode=['brl','usd','both'].find(mode=>shell.classList.contains(`us-mode-${mode}`));
-    if(wrapMode) currency=wrapMode;
-
-    host.innerHTML=buildTaxes()+buildBrasil()+buildUs();
-    shell.classList.add('market-cards-ready-v196');
-    document.documentElement.classList.add('market-period-cards-v196');
-    const meta=qs('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-  }
-
-  function schedule(){
-    clearTimeout(timer);
-    timer=setTimeout(render,60);
-  }
-
-  function bind(){
-    const host=document.getElementById('marketPeriodCardsV196');
-    if(host&&host.dataset.v196Bound!=='1'){
-      host.dataset.v196Bound='1';
-      host.addEventListener('click',event=>{
-        const button=event.target.closest('[data-v196-currency]');
-        if(!button) return;
-        currency=button.dataset.v196Currency||'brl';
-        const legacy=qs(`[data-analytic-currency="${currency}"]`);
-        if(legacy && legacy!==button) legacy.click();
-        render();
-      });
-    }
-    const source=qs('#sec-painel-body .indic-table-v2');
-    if(source&&!observer){
-      observer=new MutationObserver(schedule);
-      observer.observe(source,{subtree:true,childList:true,characterData:true,attributes:true,attributeFilter:['class','style']});
-    }
-  }
-
-  function setup(){bind();render();}
-  function init(){
-    setup();
-    [150,400,900,1600,3000,5200,8500].forEach(ms=>setTimeout(setup,ms));
-    document.addEventListener('click',event=>{
-      if(event.target.closest('[data-v150-mode="analytic"],.market-period-tabs .indic-tab,[data-analytic-currency],#sec-mercado-painel,.section-toggle-btn')){
-        setTimeout(setup,80);
-        setTimeout(setup,320);
-      }
-    },true);
-  }
-
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
-  else init();
-  window.__ELTAUM_MARKET_PERIOD_CARDS_V196__={build:BUILD,render,get currency(){return currency;}};
-  window.__ELTAUM_MARKET_LIVE_VALUES_V234__={build:BUILD,render};
-})();
-
-
-/* ELTAUM_RISK_PROFILE_FILTERS_20260614_v198 */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_RISK_PROFILE_FILTERS_20260614_v198';
-  function bindCatalogRiskSelect(id){
-    const select=document.getElementById(id);
-    if(!select||select.dataset.v198Bound==='1') return;
-    select.dataset.v198Bound='1';
-    select.addEventListener('change',()=>{
-      try{activeRisco=select.value||'';}catch(e){}
-      syncRiskProfileControlsV198();
-      try{applyFilter();}catch(e){console.error('v198 catalog risk filter',e);}
-    });
-  }
-  function setup(){
-    document.documentElement.classList.add('risk-profile-filters-v198');
-    const meta=document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-    bindCatalogRiskSelect('catalogRiskSelectV198');
-    bindCatalogRiskSelect('mobileRiskSelectV198');
-    syncRiskProfileControlsV198();
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',setup,{once:true});
-  else setup();
-  window.__ELTAUM_RISK_FILTERS_V198__={
-    build:BUILD,
-    normalize:normalizarPerfilRiscoV198,
-    matches:perfilRiscoCorrespondeV198,
-    sync:syncRiskProfileControlsV198
-  };
-})();
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v204 — Toggle "Ocultar fundos sem dados" estável
-   Causa: o patch v127 recriava o checkbox depois do listener original,
-   fazendo o controle mudar visualmente sem atualizar hideSemDados/applyFilter.
-════════════════════════════════════════════════════ */
-(function(){
-  'use strict';
-
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
-
-  function bindToggleSemDadosV204(){
-    const input = document.getElementById('toggleSemDados');
-    if(!input) return false;
-
-    document.documentElement.classList.add('toggle-sem-dados-stable-v204');
-    const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
-
-    if(input.type !== 'checkbox') input.type = 'checkbox';
-
-    const wrap = input.closest('.toggle-wrap');
-    if(wrap){
-      wrap.classList.add('toggle-sem-dados-v204');
-      wrap.setAttribute('role','group');
-    }
-
-    const syncVisual = () => {
-      const checked = !!input.checked;
-      if(wrap) wrap.classList.toggle('is-on', checked);
-      const label = input.closest('label');
-      if(label){
-        label.setAttribute('role','switch');
-        label.setAttribute('aria-checked', checked ? 'true' : 'false');
-      }
-    };
-
-    if(input.dataset.v204Bound !== '1'){
-      input.dataset.v204Bound = '1';
-      input.addEventListener('change', function(){
-        const checked = !!input.checked;
-        try{ hideSemDados = checked; }catch(e){}
-        try{ window.hideSemDados = checked; }catch(e){}
-        try{ window.ocultarSemDados = checked; }catch(e){}
-        try{ window.hideNoData = checked; }catch(e){}
-        syncVisual();
-        try{
-          if(typeof applyFilter === 'function') applyFilter();
-          else if(typeof window.applyFilter === 'function') window.applyFilter();
-        }catch(err){
-          console.warn('[v204 toggleSemDados] falha ao aplicar filtro', err);
-        }
-      });
-    }
-
-    // Torna toda a cápsula clicável, sem duplo acionamento no switch/texto.
-    if(wrap && wrap.dataset.v204ClickBound !== '1'){
-      wrap.dataset.v204ClickBound = '1';
-      wrap.addEventListener('click', function(ev){
-        if(ev.target === input || ev.target.closest('label')) return;
-        ev.preventDefault();
-        input.click();
-      });
-    }
-
-    // O estado real da variável do catálogo prevalece quando disponível.
-    try{ input.checked = !!hideSemDados; }catch(e){}
-    syncVisual();
-    return true;
-  }
-
-  function scheduleV204(){
-    [0,180,550,1300,2800].forEach(ms => setTimeout(bindToggleSemDadosV204, ms));
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', scheduleV204, {once:true});
-  }else{
-    scheduleV204();
-  }
-
-  window.__ELTAUM_TOGGLE_SEM_DADOS_V204__ = {
-    sync: bindToggleSemDadosV204,
-    state(){
-      const input=document.getElementById('toggleSemDados');
-      return {checked:!!input?.checked,bound:input?.dataset.v204Bound||'',build:BUILD};
-    }
-  };
-})();
-
-
-/* ============================================================
-   ELTAUM_CATALOG_DESKTOP_PRO_20260618_v217
-   Ajustes finais de rotulagem, acessibilidade e estado inicial.
-============================================================ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_CATALOG_DESKTOP_PRO_20260618_v217';
-  function applyV217(){
-    const meta=document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-    document.documentElement.classList.add('catalog-desktop-professional-v217');
-    const per=document.getElementById('perPage');
-    if(per && String(per.value)!=='10' && typeof window.perPage==='undefined') per.value='10';
-    const search=document.getElementById('searchInput');
-    if(search) search.setAttribute('aria-describedby','filterResultSummary');
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',applyV217,{once:true});
-  else applyV217();
-})();
-
-/* ============================================================
-   ELTAUM_CATALOG_DESKTOP_RESULT_CHIP_20260618_v221
-   Espelha no selo desktop a contagem mantida pelo resumo mobile.
-============================================================ */
-(function(){
-  'use strict';
-  const BUILD='ELTAUM_CATALOG_DESKTOP_RESULT_CHIP_20260618_v221';
-
-  function syncDesktopResultChipV221(){
-    const source=document.getElementById('filterResultSummary');
-    const target=document.getElementById('desktopFilterResultSummary');
-    if(!target) return;
-
-    const text=(source?.textContent || '—').trim() || '—';
-    if(target.textContent!==text) target.textContent=text;
-    target.title=text;
-
-    const search=document.getElementById('searchInput');
-    if(search){
-      const desktop=window.matchMedia && window.matchMedia('(min-width:1181px)').matches;
-      search.setAttribute('aria-describedby',desktop?'desktopFilterResultSummary':'filterResultSummary');
-    }
-
-    const meta=document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content=BUILD;
-  }
-
-  function bindDesktopResultChipV221(){
-    const source=document.getElementById('filterResultSummary');
-    if(source && source.dataset.v221Observed!=='1'){
-      source.dataset.v221Observed='1';
-      try{
-        const observer=new MutationObserver(syncDesktopResultChipV221);
-        observer.observe(source,{childList:true,characterData:true,subtree:true,attributes:true,attributeFilter:['title']});
-      }catch(e){}
-    }
-
-    syncDesktopResultChipV221();
-    requestAnimationFrame(syncDesktopResultChipV221);
-    setTimeout(syncDesktopResultChipV221,120);
-    setTimeout(syncDesktopResultChipV221,500);
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',bindDesktopResultChipV221,{once:true});
-  }else{
-    bindDesktopResultChipV221();
-  }
-
-  ['input','change','click'].forEach(function(evt){
-    document.addEventListener(evt,function(){setTimeout(syncDesktopResultChipV221,40);},true);
-  });
-  window.addEventListener('resize',function(){setTimeout(syncDesktopResultChipV221,60);},{passive:true});
-
-  window.__ELTAUM_DESKTOP_RESULT_CHIP_V221__={sync:syncDesktopResultChipV221};
-})();
-
-
-/* ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223 */
-window.__ELTAUM_SELIC_DATE_V223__ = 'ELTAUM_SELIC_DATE_RECONCILIATION_20260618_v223';
-
-
-/* ════════════════════════════════════════════════════
-   PATCH v231 — LEGIBILIDADE NUMÉRICA
-   - mantém classes semânticas após atualizações dinâmicas;
-   - usa zero diferenciado e algarismos tabulares;
-   - reserva verde/vermelho para variações e mantém cotações neutras.
-════════════════════════════════════════════════════ */
-(function numericLegibilityV231(){
-  'use strict';
-  const MINI_IDS=['closedMiniCdi','closedMiniIpca','closedMiniDolar','closedMiniIbov'];
-  function apply(){
-    document.documentElement.classList.add('numeric-legibility-v231');
-    MINI_IDS.forEach(function(id){
-      const el=document.getElementById(id);
-      if(!el) return;
-      el.classList.add('finance-number-v231');
-      const txt=(el.textContent||'').trim();
-      if(/^R\$\s*/i.test(txt)) el.classList.add('market-quote-v231');
-      else el.classList.remove('market-quote-v231');
-    });
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true});
-  else apply();
-  window.setTimeout(apply,350);
-})();
-
-
-/* ============================================================
-   ELTAUM_SAVINGS_MOBILE_REORG_20260618_v242
-   Poupança mobile: textos mais curtos e ações mais equilibradas.
-============================================================ */
-(function(){
-  function ajustarPoupancaMobileV242(){
-    const title = document.getElementById('poupCurrentScenarioTitleV214');
-    if(title) title.textContent = 'Regra vigente';
-
-    const btn = document.getElementById('poupExpandBtn');
-    if(btn){
-      const expanded = btn.getAttribute('aria-expanded') === 'true';
-      btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
-    }
-
-    const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
-    if(source && !source.dataset.v242Short){
-      source.dataset.v242Short = '1';
-      source.innerHTML = 'Calculadora BCB <span aria-hidden="true">↗</span>';
-    }
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', ajustarPoupancaMobileV242, {once:true});
-  }else{
-    ajustarPoupancaMobileV242();
-  }
-  document.addEventListener('click', function(event){
-    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
-      setTimeout(ajustarPoupancaMobileV242, 40);
-      setTimeout(ajustarPoupancaMobileV242, 220);
-    }
-  }, true);
-  window.addEventListener('load', ajustarPoupancaMobileV242);
-})();
-
-
-/* ELTAUM_CDI_TITLE_SHORT_V263 */
-(function(){
-  function applyCdiTitleShortV263(){
-    const title = document.getElementById('cdiYearHistoryTitle');
-    if(title){
-      title.textContent = title.textContent.replace(/\s+—\s+mais recente primeiro/i,'').trim();
-      if(!title.textContent) title.textContent = 'CDI mensal 2026';
-    }
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', applyCdiTitleShortV263, {once:true});
-  }else{
-    applyCdiTitleShortV263();
-  }
-  setTimeout(applyCdiTitleShortV263, 300);
-  setTimeout(applyCdiTitleShortV263, 1200);
-})();
-
-
-/* ELTAUM_CDI_REAL_STARTUP_V264 */
-(function(){
-  function fixCdiRealV264(){
-    const title = document.getElementById('cdiYearHistoryTitle');
-    if(title) title.textContent = title.textContent.replace(/\s+—\s+mais recente primeiro/i,'').trim() || 'CDI mensal 2026';
-    const strip = document.getElementById('cdiMonthStrip');
-    if(strip){
-      strip.classList.add('cdi-month-list-v264');
-      strip.setAttribute('data-cdi-layout-v264','list');
-      strip.style.overflow = 'visible';
-      strip.style.touchAction = 'pan-y';
-    }
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fixCdiRealV264, {once:true});
-  else fixCdiRealV264();
-  setTimeout(fixCdiRealV264, 250);
-  setTimeout(fixCdiRealV264, 1000);
-})();
-
-
-/* ELTAUM_CDI_MONTHS_TOGGLE_V268 */
-function toggleCdiMonthsV268(force){
-  const box = document.getElementById('cdiYearHistory');
-  const strip = document.getElementById('cdiMonthStrip');
-  const btn = document.getElementById('cdiMonthsToggleV268');
-  if(!box || !strip) return false;
-  const open = typeof force === 'boolean' ? force : !box.classList.contains('is-expanded-v268');
-  box.classList.toggle('is-expanded-v268', open);
-  strip.classList.toggle('is-expanded-v268', open);
-  if(btn){
-    btn.textContent = open ? 'Ocultar' : 'Ver meses';
-    btn.setAttribute('aria-expanded', String(open));
-  }
-  return false;
-}
-
-(function(){
-  function initCdiToggleV268(){
-    const box = document.getElementById('cdiYearHistory');
-    const strip = document.getElementById('cdiMonthStrip');
-    const btn = document.getElementById('cdiMonthsToggleV268');
-    if(box && strip){
-      box.classList.remove('is-expanded-v268');
-      strip.classList.remove('is-expanded-v268');
-    }
-    if(btn){
-      btn.textContent = 'Ver meses';
-      btn.setAttribute('aria-expanded','false');
-    }
-  }
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', initCdiToggleV268, {once:true});
-  }else{
-    initCdiToggleV268();
-  }
-  setTimeout(initCdiToggleV268, 500);
-})();
-
-
-/* ELTAUM_CDI_ANALYTIC_LINK_V275 */
-function openCdiAnalyticTableV274(){
-  // Este botão leva o usuário para a Tabela Analítica do painel de indicadores
-  // e alterna o modo de visualização para "Tabela analítica".
-  const analyticBtn = document.querySelector('#marketDashboardV150 [data-v150-mode="analytic"], [data-v150-mode="analytic"]');
-  const panel = document.getElementById('marketDashboardV150')
-    || document.getElementById('sec-mercado-painel')
-    || document.querySelector('#sec-painel-body .indic-table-wrap')
-    || document.getElementById('sec-mercado');
-
-  if(analyticBtn && typeof analyticBtn.click === 'function'){
-    analyticBtn.click();
-  }else{
-    // Fallback: se o painel executivo ainda não foi montado, mostra a tabela nativa.
-    const tableWrap = document.querySelector('#sec-painel-body .indic-table-wrap, .indic-table-wrap');
-    if(tableWrap){
-      tableWrap.hidden = false;
-      tableWrap.style.display = '';
-    }
-  }
-
-  setTimeout(() => {
-    const target = document.getElementById('marketDashboardV150')
-      || document.getElementById('sec-mercado-painel')
-      || document.querySelector('#sec-painel-body .indic-table-wrap')
-      || panel;
-    if(target && typeof target.scrollIntoView === 'function'){
-      target.scrollIntoView({behavior:'smooth', block:'start'});
-    }
-  }, 80);
-
-  return false;
-}
-
-
-/* ════════════════════════════════════════════════════
-   v303 — normalizador final de títulos
-   Motivo: regras antigas de algumas seções ainda tinham !important e
-   venciam o CSS da v302. Aqui a padronização é aplicada com
-   element.style.setProperty(..., 'important'), que vence o legado.
-════════════════════════════════════════════════════ */
-(function normalizeSectionTitlesV303(){
-  const TARGETS = [
-    'Resumo executivo',
-    'Fundos disponíveis',
-    'Rankings dos fundos',
-    'Indicadores de mercado',
-    'Dólar PTAX',
-    'Boletim Focus',
-    'Inflação e juros',
-    'Comparador de fundos'
-  ];
-
-  function txt(el){
-    return String(el?.innerText || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function isTarget(h2){
-    const t = txt(h2).replace(/^[^\p{L}\p{N}]+/u, '').trim().toLowerCase();
-    return TARGETS.some(x => t === x.toLowerCase());
-  }
-
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    document.documentElement.classList.add('title-normalized-v303');
-
-    document.querySelectorAll('h2.section-title-v302, h2.page-section-title-v302, h2.compar-title').forEach(h2 => {
-      if(!isTarget(h2)) return;
-      if(
-        h2.classList.contains('ranking-title-hero-v305') ||
-        h2.classList.contains('section-hero-premium-v306') ||
-        h2.classList.contains('section-hero-soft-v306') ||
-        h2.classList.contains('summary-hero-v306') ||
-        h2.classList.contains('market-hero-v306')
-      ) return;
-
-      h2.classList.add('section-title-v303-final');
-
-      const isNarrow = window.matchMedia('(max-width: 390px)').matches;
-      const isMobile = window.matchMedia('(max-width: 768px)').matches;
-      const titleSize = isNarrow ? '1.16rem' : (isMobile ? '1.22rem' : '1.34rem');
-      const iconSize = isNarrow ? '26px' : (isMobile ? '28px' : '30px');
-      const iconFont = isNarrow ? '.82rem' : (isMobile ? '.88rem' : '.95rem');
-
-      setImportant(h2, 'display', 'flex');
-      setImportant(h2, 'align-items', 'center');
-      setImportant(h2, 'justify-content', 'flex-start');
-      setImportant(h2, 'gap', isNarrow ? '8px' : '9px');
-      setImportant(h2, 'margin', '0 0 12px');
-      setImportant(h2, 'padding', '0');
-      setImportant(h2, 'width', '100%');
-      setImportant(h2, 'color', '#f8fafc');
-      setImportant(h2, 'font-family', 'Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif');
-      setImportant(h2, 'font-size', titleSize);
-      setImportant(h2, 'line-height', '1.12');
-      setImportant(h2, 'font-weight', '800');
-      setImportant(h2, 'letter-spacing', '-0.032em');
-      setImportant(h2, 'text-transform', 'none');
-      setImportant(h2, 'text-shadow', 'none');
-      setImportant(h2, 'background', 'transparent');
-      setImportant(h2, 'border', '0');
-
-      const icon = h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
-      if(icon){
-        icon.classList.add('section-title-icon-v303-final');
-        setImportant(icon, 'width', iconSize);
-        setImportant(icon, 'height', iconSize);
-        setImportant(icon, 'min-width', iconSize);
-        setImportant(icon, 'max-width', iconSize);
-        setImportant(icon, 'flex', `0 0 ${iconSize}`);
-        setImportant(icon, 'border-radius', isNarrow ? '8px' : '9px');
-        setImportant(icon, 'display', 'inline-flex');
-        setImportant(icon, 'align-items', 'center');
-        setImportant(icon, 'justify-content', 'center');
-        setImportant(icon, 'background', 'linear-gradient(135deg, rgba(246,200,97,.18), rgba(76,104,255,.13))');
-        setImportant(icon, 'border', '1px solid rgba(246,200,97,.22)');
-        setImportant(icon, 'box-shadow', 'inset 0 1px 0 rgba(255,255,255,.08), 0 6px 14px rgba(0,0,0,.18)');
-        setImportant(icon, 'color', 'inherit');
-        setImportant(icon, 'font-size', iconFont);
-        setImportant(icon, 'font-weight', '400');
-        setImportant(icon, 'line-height', '1');
-        setImportant(icon, 'letter-spacing', '0');
-        setImportant(icon, 'text-shadow', 'none');
-      }
-
-      const label = h2.querySelector('.section-title-text-v302, .section-title-text-v300, span:last-child');
-      if(label){
-        label.classList.add('section-title-text-v303-final');
-        setImportant(label, 'display', 'inline-block');
-        setImportant(label, 'min-width', '0');
-        setImportant(label, 'color', '#f8fafc');
-        setImportant(label, 'font-size', 'inherit');
-        setImportant(label, 'line-height', 'inherit');
-        setImportant(label, 'font-weight', 'inherit');
-        setImportant(label, 'letter-spacing', 'inherit');
-        setImportant(label, 'text-transform', 'none');
-        setImportant(label, 'text-shadow', 'none');
-      }
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v308 — remove GFB completo no mobile
-   O CSS oculta o container inteiro #gfb. Este complemento garante
-   também aria-hidden/inert no mobile, sem afetar desktop.
-════════════════════════════════════════════════════ */
-(function removeGlobalFundBarMobileV308(){
-  function apply(){
-    const gfb = document.getElementById('gfb');
-    if(!gfb) return;
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(isMobile){
-      gfb.setAttribute('aria-hidden','true');
-      try{ gfb.inert = true; }catch(_){}
-      gfb.style.setProperty('display','none','important');
-      gfb.style.setProperty('height','0','important');
-      gfb.style.setProperty('min-height','0','important');
-      gfb.style.setProperty('max-height','0','important');
-      gfb.style.setProperty('margin','0','important');
-      gfb.style.setProperty('padding','0','important');
-      gfb.style.setProperty('overflow','hidden','important');
-    }else{
-      gfb.removeAttribute('aria-hidden');
-      try{ gfb.inert = false; }catch(_){}
-      gfb.style.removeProperty('display');
-      gfb.style.removeProperty('height');
-      gfb.style.removeProperty('min-height');
-      gfb.style.removeProperty('max-height');
-      gfb.style.removeProperty('margin');
-      gfb.style.removeProperty('padding');
-      gfb.style.removeProperty('overflow');
-    }
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 1000);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v309 — ranking hero spacing/fix
-   Remove estilos inline herdados do normalizador v303 no título do Ranking
-   e reaplica centralização/medalhão compacto apenas no mobile.
-════════════════════════════════════════════════════ */
-(function fixRankingHeroV309(){
-  function clearImportantInline(el, props){
-    if(!el) return;
-    props.forEach(p => el.style.removeProperty(p));
-  }
-
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const h2 = document.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
-    if(!h2) return;
-
-    const icon = h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
-    const text = h2.querySelector('.section-title-text-v302, .section-title-text-v300, span:last-child');
-    const group = h2.closest('.ranking-title-group');
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const isNarrow = window.matchMedia('(max-width: 390px)').matches;
-
-    if(!isMobile){
-      [h2, icon, text, group].forEach(el => el && el.removeAttribute('style'));
-      return;
-    }
-
-    h2.classList.add('ranking-title-v309-fixed');
-    if(group) group.classList.add('ranking-title-group-v309-fixed');
-
-    const iconSize = isNarrow ? '48px' : '54px';
-    const iconFont = isNarrow ? '1.42rem' : '1.58rem';
-    const titleSize = isNarrow ? '1.28rem' : '1.38rem';
-
-    setImportant(group, 'display', 'flex');
-    setImportant(group, 'flex-direction', 'column');
-    setImportant(group, 'align-items', 'center');
-    setImportant(group, 'text-align', 'center');
-    setImportant(group, 'width', '100%');
-    setImportant(group, 'margin', '6px 0 14px');
-    setImportant(group, 'padding', '0');
-
-    setImportant(h2, 'position', 'relative');
-    setImportant(h2, 'display', 'flex');
-    setImportant(h2, 'flex-direction', 'column');
-    setImportant(h2, 'align-items', 'center');
-    setImportant(h2, 'justify-content', 'center');
-    setImportant(h2, 'gap', isNarrow ? '8px' : '9px');
-    setImportant(h2, 'width', '100%');
-    setImportant(h2, 'margin', '0');
-    setImportant(h2, 'padding', '0');
-    setImportant(h2, 'text-align', 'center');
-    setImportant(h2, 'color', '#f8fafc');
-    setImportant(h2, 'font-size', titleSize);
-    setImportant(h2, 'line-height', '1.08');
-    setImportant(h2, 'font-weight', '850');
-    setImportant(h2, 'letter-spacing', '-0.042em');
-    setImportant(h2, 'text-shadow', 'none');
-    setImportant(h2, 'background', 'transparent');
-    setImportant(h2, 'border', '0');
-
-    setImportant(icon, 'width', iconSize);
-    setImportant(icon, 'height', iconSize);
-    setImportant(icon, 'min-width', iconSize);
-    setImportant(icon, 'max-width', iconSize);
-    setImportant(icon, 'flex', `0 0 ${iconSize}`);
-    setImportant(icon, 'border-radius', '999px');
-    setImportant(icon, 'display', 'inline-flex');
-    setImportant(icon, 'align-items', 'center');
-    setImportant(icon, 'justify-content', 'center');
-    setImportant(icon, 'background', 'radial-gradient(circle at 50% 40%, rgba(255,223,135,.22), rgba(246,200,97,.08) 42%, rgba(8,10,20,.92) 72%), linear-gradient(145deg, rgba(246,200,97,.20), rgba(20,24,42,.86))');
-    setImportant(icon, 'border', '1px solid rgba(246,200,97,.52)');
-    setImportant(icon, 'box-shadow', '0 0 0 1px rgba(246,200,97,.08), 0 0 26px rgba(246,200,97,.22), 0 10px 22px rgba(0,0,0,.34), inset 0 1px 0 rgba(255,255,255,.12)');
-    setImportant(icon, 'color', '#ffd36f');
-    setImportant(icon, 'font-size', iconFont);
-    setImportant(icon, 'font-weight', '400');
-    setImportant(icon, 'line-height', '1');
-    setImportant(icon, 'letter-spacing', '0');
-    setImportant(icon, 'text-shadow', '0 0 14px rgba(255,211,111,.34)');
-
-    setImportant(text, 'display', 'block');
-    setImportant(text, 'text-align', 'center');
-    setImportant(text, 'color', '#f8fafc');
-    setImportant(text, 'font-size', 'inherit');
-    setImportant(text, 'font-weight', 'inherit');
-    setImportant(text, 'line-height', 'inherit');
-    setImportant(text, 'letter-spacing', 'inherit');
-    setImportant(text, 'text-shadow', '0 8px 22px rgba(0,0,0,.34)');
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v310 — resumo sem ícone duplicado
-   O bloco .mobile-kpi-head já tinha um ícone legado .mobile-kpi-emoji.
-   Como o H2 ganhou o ícone padronizado, o legado precisa sair.
-════════════════════════════════════════════════════ */
-(function dedupeSummaryIconV310(){
-  function apply(){
-    const legacy = document.querySelector('#sec-kpi .mobile-kpi-head > .mobile-kpi-emoji, .mobile-kpi-head > .mobile-kpi-emoji');
-    if(!legacy) return;
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(isMobile){
-      legacy.setAttribute('aria-hidden','true');
-      legacy.style.setProperty('display','none','important');
-      legacy.style.setProperty('visibility','hidden','important');
-      legacy.style.setProperty('width','0','important');
-      legacy.style.setProperty('height','0','important');
-      legacy.style.setProperty('margin','0','important');
-      legacy.style.setProperty('padding','0','important');
-      legacy.style.setProperty('overflow','hidden','important');
-    }else{
-      legacy.removeAttribute('aria-hidden');
-      legacy.style.removeProperty('display');
-      legacy.style.removeProperty('visibility');
-      legacy.style.removeProperty('width');
-      legacy.style.removeProperty('height');
-      legacy.style.removeProperty('margin');
-      legacy.style.removeProperty('padding');
-      legacy.style.removeProperty('overflow');
-    }
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v312 — limpeza de gap antes do ranking no mobile
-   Remove ações ocultas/fantasmas e força o bloco Ranking a ficar
-   compacto logo após a paginação/fundos.
-════════════════════════════════════════════════════ */
-(function rankingGapCleanupV312(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const section = document.getElementById('rankingsSection');
-    if(!section) return;
-
-    const head = section.querySelector('.ranking-head');
-    const actions = section.querySelector('.ranking-actions');
-    const titleGroup = section.querySelector('.ranking-title-group');
-    const h2 = section.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
-    const toolbar = section.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
-
-    if(!isMobile){
-      [section, head, actions, titleGroup, h2, toolbar].forEach(el => el && el.removeAttribute('style'));
-      if(actions){
-        actions.removeAttribute('aria-hidden');
-        try{ actions.inert = false; }catch(_){}
-      }
-      return;
-    }
-
-    section.classList.add('ranking-gap-clean-v312-active');
-
-    setImportant(section, 'padding-top', '6px');
-    setImportant(section, 'margin-top', '10px');
-    setImportant(section, 'scroll-margin-top', '82px');
-
-    if(head){
-      setImportant(head, 'display', 'block');
-      setImportant(head, 'margin', '0');
-      setImportant(head, 'padding', '0');
-      setImportant(head, 'min-height', '0');
-      setImportant(head, 'height', 'auto');
-    }
-
-    if(actions){
-      actions.setAttribute('aria-hidden','true');
-      try{ actions.inert = true; }catch(_){}
-      setImportant(actions, 'display', 'none');
-      setImportant(actions, 'height', '0');
-      setImportant(actions, 'min-height', '0');
-      setImportant(actions, 'max-height', '0');
-      setImportant(actions, 'margin', '0');
-      setImportant(actions, 'padding', '0');
-      setImportant(actions, 'overflow', 'hidden');
-    }
-
-    if(titleGroup){
-      setImportant(titleGroup, 'display', 'flex');
-      setImportant(titleGroup, 'flex-direction', 'column');
-      setImportant(titleGroup, 'align-items', 'center');
-      setImportant(titleGroup, 'text-align', 'center');
-      setImportant(titleGroup, 'margin', '2px 0 10px');
-      setImportant(titleGroup, 'padding', '0');
-      setImportant(titleGroup, 'min-height', '0');
-    }
-
-    if(h2){
-      setImportant(h2, 'margin', '0');
-      setImportant(h2, 'padding', '0');
-      setImportant(h2, 'gap', '7px');
-    }
-
-    if(toolbar){
-      setImportant(toolbar, 'margin-top', '0');
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-// RANKING_GAP_RAYS_V313
-
-
-/* ════════════════════════════════════════════════════
-   v314 — aproximação extrema paginação → ranking
-   Complemento JS para remover altura/margens fantasmas que estilos
-   legados ou inline possam manter entre .pagination-row e .ranking-head.
-════════════════════════════════════════════════════ */
-(function paginationRankingTightV314(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const ranking = document.getElementById('rankingsSection');
-    if(!ranking) return;
-
-    const rankingHead = ranking.querySelector('.ranking-head');
-    const titleGroup = ranking.querySelector('.ranking-title-group');
-    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
-    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
-    const actions = ranking.querySelector('.ranking-actions');
-
-    const paginationCandidates = [
-      ...document.querySelectorAll('.pagination-row, .pagination-controls, .pagination, .catalog-pagination, .fund-pagination-wrap, #pageBtns')
-    ];
-
-    if(!isMobile){
-      [ranking, rankingHead, titleGroup, h2, toolbar, actions, ...paginationCandidates].forEach(el => {
-        if(!el) return;
-        el.style.removeProperty('margin-top');
-        el.style.removeProperty('margin-bottom');
-        el.style.removeProperty('padding-top');
-        el.style.removeProperty('padding-bottom');
-        el.style.removeProperty('min-height');
-        el.style.removeProperty('height');
-      });
-      if(actions){
-        actions.removeAttribute('aria-hidden');
-        try{ actions.inert = false; }catch(_){}
-      }
-      return;
-    }
-
-    paginationCandidates.forEach(el => {
-      setImportant(el, 'margin-bottom', '0');
-      setImportant(el, 'padding-bottom', '0');
-    });
-
-    const funds = document.getElementById('sec-fundos');
-    if(funds){
-      setImportant(funds, 'margin-bottom', '0');
-      setImportant(funds, 'padding-bottom', '0');
-    }
-
-    setImportant(ranking, 'margin-top', '0');
-    setImportant(ranking, 'padding-top', '0');
-    setImportant(ranking, 'scroll-margin-top', '82px');
-
-    if(rankingHead){
-      setImportant(rankingHead, 'margin-top', '0');
-      setImportant(rankingHead, 'margin-bottom', '0');
-      setImportant(rankingHead, 'padding-top', '0');
-      setImportant(rankingHead, 'padding-bottom', '0');
-      setImportant(rankingHead, 'min-height', '0');
-    }
-
-    if(actions){
-      actions.setAttribute('aria-hidden', 'true');
-      try{ actions.inert = true; }catch(_){}
-      setImportant(actions, 'display', 'none');
-      setImportant(actions, 'height', '0');
-      setImportant(actions, 'min-height', '0');
-      setImportant(actions, 'max-height', '0');
-      setImportant(actions, 'margin', '0');
-      setImportant(actions, 'padding', '0');
-      setImportant(actions, 'overflow', 'hidden');
-    }
-
-    if(titleGroup){
-      setImportant(titleGroup, 'margin-top', '0');
-      setImportant(titleGroup, 'margin-bottom', '8px');
-      setImportant(titleGroup, 'padding-top', '0');
-      setImportant(titleGroup, 'padding-bottom', '0');
-      setImportant(titleGroup, 'min-height', '0');
-    }
-
-    if(h2){
-      setImportant(h2, 'margin-top', '0');
-      setImportant(h2, 'margin-bottom', '0');
-      setImportant(h2, 'padding-top', '0');
-      setImportant(h2, 'padding-bottom', '0');
-      setImportant(h2, 'gap', '7px');
-    }
-
-    if(toolbar){
-      setImportant(toolbar, 'margin-top', '0');
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 200);
-  setTimeout(apply, 800);
-  setTimeout(apply, 1600);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v315 — respiro profissional paginação → ranking
-   Corrige a sobreposição criada pela aproximação extrema da v314.
-   Objetivo: cerca de 52–64px entre paginação e troféu, sem colisão.
-════════════════════════════════════════════════════ */
-(function rankingProfessionalBreathV315(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const ranking = document.getElementById('rankingsSection');
-    if(!ranking) return;
-
-    const rankingHead = ranking.querySelector('.ranking-head');
-    const titleGroup = ranking.querySelector('.ranking-title-group');
-    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
-    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
-    const actions = ranking.querySelector('.ranking-actions');
-
-    const paginationCandidates = [
-      ...document.querySelectorAll('.pagination-row, .pagination-controls, .pagination, .catalog-pagination, .fund-pagination-wrap, #pageBtns')
-    ];
-
-    if(!isMobile){
-      [ranking, rankingHead, titleGroup, h2, toolbar, actions, ...paginationCandidates].forEach(el => {
-        if(!el) return;
-        el.style.removeProperty('margin-top');
-        el.style.removeProperty('margin-bottom');
-        el.style.removeProperty('padding-top');
-        el.style.removeProperty('padding-bottom');
-        el.style.removeProperty('min-height');
-        el.style.removeProperty('height');
-      });
-      if(actions){
-        actions.removeAttribute('aria-hidden');
-        try{ actions.inert = false; }catch(_){}
-      }
-      return;
-    }
-
-    paginationCandidates.forEach(el => {
-      setImportant(el, 'margin-bottom', '16px');
-      setImportant(el, 'padding-bottom', '0');
-    });
-
-    const funds = document.getElementById('sec-fundos');
-    if(funds){
-      setImportant(funds, 'margin-bottom', '16px');
-      setImportant(funds, 'padding-bottom', '0');
-    }
-
-    setImportant(ranking, 'margin-top', '0');
-    setImportant(ranking, 'padding-top', '0');
-    setImportant(ranking, 'scroll-margin-top', '82px');
-
-    if(rankingHead){
-      setImportant(rankingHead, 'margin-top', '44px');
-      setImportant(rankingHead, 'margin-bottom', '0');
-      setImportant(rankingHead, 'padding-top', '0');
-      setImportant(rankingHead, 'padding-bottom', '0');
-      setImportant(rankingHead, 'min-height', '0');
-      setImportant(rankingHead, 'height', 'auto');
-    }
-
-    if(actions){
-      actions.setAttribute('aria-hidden', 'true');
-      try{ actions.inert = true; }catch(_){}
-      setImportant(actions, 'display', 'none');
-      setImportant(actions, 'height', '0');
-      setImportant(actions, 'min-height', '0');
-      setImportant(actions, 'max-height', '0');
-      setImportant(actions, 'margin', '0');
-      setImportant(actions, 'padding', '0');
-      setImportant(actions, 'overflow', 'hidden');
-    }
-
-    if(titleGroup){
-      setImportant(titleGroup, 'margin-top', '0');
-      setImportant(titleGroup, 'margin-bottom', '12px');
-      setImportant(titleGroup, 'padding-top', '0');
-      setImportant(titleGroup, 'padding-bottom', '0');
-      setImportant(titleGroup, 'min-height', '0');
-    }
-
-    if(h2){
-      setImportant(h2, 'margin-top', '0');
-      setImportant(h2, 'margin-bottom', '0');
-      setImportant(h2, 'padding-top', '0');
-      setImportant(h2, 'padding-bottom', '0');
-      setImportant(h2, 'gap', '8px');
-    }
-
-    if(toolbar){
-      setImportant(toolbar, 'margin-top', '0');
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 200);
-  setTimeout(apply, 800);
-  setTimeout(apply, 1600);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v316 — Mercado mobile cards/progressive disclosure
-   Complemento leve para não ocupar espaço com botões técnicos no mobile.
-════════════════════════════════════════════════════ */
-(function marketMobileCardsV316(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const cdiBtn = document.getElementById('cdiAnalyticLinkV274');
-    const cdiLegend = document.querySelector('#cdiYearHistory .cdi-chart-legend-v271');
-    const cdiFoot = document.querySelector('#cdiYearHistory .reference-footnote-v167');
-
-    if(isMobile){
-      [cdiBtn, cdiLegend, cdiFoot].forEach(el => {
-        if(!el) return;
-        setImportant(el, 'display', 'none');
-      });
-    }else{
-      [cdiBtn, cdiLegend, cdiFoot].forEach(el => {
-        if(!el) return;
-        el.style.removeProperty('display');
-      });
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v317 — limpeza ranking / Copom / CDI mobile
-   - corrige o retorno do espaço no Ranking gerado por v315;
-   - remove botão Calendário BCB no Copom mobile;
-   - remove texto descritivo da próxima reunião;
-   - oculta e destrói o gráfico CDI no mobile, mantendo KPIs.
-════════════════════════════════════════════════════ */
-(function rankingMarketCleanV317(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function cleanRanking(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const ranking = document.getElementById('rankingsSection');
-    if(!ranking || !isMobile) return;
-
-    const head = ranking.querySelector('.ranking-head');
-    const titleGroup = ranking.querySelector('.ranking-title-group');
-    const h2 = ranking.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306');
-    const icon = h2?.querySelector('.section-title-icon-v302');
-    const actions = ranking.querySelector('.ranking-actions');
-    const toolbar = ranking.querySelector('.ranking-toolbar, .ranking-toolbar-v136');
-
-    setImportant(ranking, 'margin-top', '8px');
-    setImportant(ranking, 'padding-top', '0');
-
-    if(head){
-      setImportant(head, 'display', 'block');
-      setImportant(head, 'margin', '18px 0 0');
-      setImportant(head, 'padding', '0');
-      setImportant(head, 'min-height', '0');
-      setImportant(head, 'height', 'auto');
-    }
-
-    if(titleGroup){
-      setImportant(titleGroup, 'display', 'flex');
-      setImportant(titleGroup, 'flex-direction', 'column');
-      setImportant(titleGroup, 'align-items', 'center');
-      setImportant(titleGroup, 'text-align', 'center');
-      setImportant(titleGroup, 'width', '100%');
-      setImportant(titleGroup, 'margin', '0 0 10px');
-      setImportant(titleGroup, 'padding', '0');
-      setImportant(titleGroup, 'min-height', '0');
-    }
-
-    if(h2){
-      setImportant(h2, 'position', 'relative');
-      setImportant(h2, 'display', 'flex');
-      setImportant(h2, 'flex-direction', 'column');
-      setImportant(h2, 'align-items', 'center');
-      setImportant(h2, 'justify-content', 'center');
-      setImportant(h2, 'gap', '7px');
-      setImportant(h2, 'margin', '0');
-      setImportant(h2, 'padding', '0');
-      setImportant(h2, 'font-size', '1.26rem');
-      setImportant(h2, 'line-height', '1.08');
-    }
-
-    if(icon){
-      setImportant(icon, 'width', '44px');
-      setImportant(icon, 'height', '44px');
-      setImportant(icon, 'min-width', '44px');
-      setImportant(icon, 'max-width', '44px');
-      setImportant(icon, 'flex', '0 0 44px');
-      setImportant(icon, 'font-size', '1.26rem');
-      setImportant(icon, 'position', 'relative');
-      setImportant(icon, 'overflow', 'visible');
-    }
-
-    if(actions){
-      actions.setAttribute('aria-hidden','true');
-      try{ actions.inert = true; }catch(_){}
-      setImportant(actions, 'display', 'none');
-      setImportant(actions, 'height', '0');
-      setImportant(actions, 'min-height', '0');
-      setImportant(actions, 'max-height', '0');
-      setImportant(actions, 'margin', '0');
-      setImportant(actions, 'padding', '0');
-      setImportant(actions, 'overflow', 'hidden');
-    }
-
-    if(toolbar) setImportant(toolbar, 'margin-top', '0');
-  }
-
-  function cleanCopom(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(!isMobile) return;
-
-    document.querySelectorAll('.copom-link-v271').forEach(el => {
-      el.setAttribute('aria-hidden','true');
-      try{ el.inert = true; }catch(_){}
-      setImportant(el, 'display', 'none');
-    });
-
-    document.querySelectorAll('#copomNextExecutiveV270 .copom-exec-desc-v270, .copom-exec-card-v270.is-next .copom-exec-desc-v270').forEach(el => {
-      el.remove();
-    });
-  }
-
-  function cleanCdiChart(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const canvas = document.getElementById('cdiYearChartV271');
-    const wrap = document.querySelector('#cdiYearHistory .cdi-chart-canvas-wrap-v271');
-    const inner = document.getElementById('cdiChartScrollInnerV273');
-    const legend = document.querySelector('#cdiYearHistory .cdi-chart-legend-v271');
-    const foot = document.querySelector('#cdiYearHistory .reference-footnote-v167');
-
-    if(!isMobile) return;
-
-    try{
-      if(window.Chart && canvas){
-        const chart = Chart.getChart(canvas);
-        if(chart) chart.destroy();
-      }
-    }catch(_){}
-
-    [wrap, inner, canvas, legend, foot].forEach(el => {
-      if(!el) return;
-      el.setAttribute('aria-hidden','true');
-      setImportant(el, 'display', 'none');
-      setImportant(el, 'height', '0');
-      setImportant(el, 'min-height', '0');
-      setImportant(el, 'max-height', '0');
-      setImportant(el, 'margin', '0');
-      setImportant(el, 'padding', '0');
-      setImportant(el, 'overflow', 'hidden');
-    });
-  }
-
-  function apply(){
-    cleanRanking();
-    cleanCopom();
-    cleanCdiChart();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-  setTimeout(apply, 1800);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v318 — cenário monetário compacto no mobile
-   Remove fonte BCB do topo e compacta os cards de taxas/Copom.
-════════════════════════════════════════════════════ */
-(function marketRatesCompactV318(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(!isMobile) return;
-
-    document.querySelectorAll('#sec-mercado .rates-reference-v167 .market-reference-source-v167').forEach(el => {
-      el.setAttribute('aria-hidden','true');
-      try{ el.inert = true; }catch(_){}
-      setImportant(el, 'display', 'none');
-    });
-
-    // Remove descrições longas do Copom no mobile: os cards ficam de consulta rápida.
-    document.querySelectorAll('#sec-mercado .copom-exec-desc-v270').forEach(el => {
-      el.setAttribute('aria-hidden','true');
-      setImportant(el, 'display', 'none');
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v319 — força grid 2 colunas cenário monetário mobile
-   Diagnóstico: v318 carregou, mas regras antigas ainda deixaram
-   .rates-summary-v167 com 1 coluna e cards em largura total.
-════════════════════════════════════════════════════ */
-(function forceRatesGridV319(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const wrap = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
-    if(!wrap) return;
-
-    const cards = [...wrap.querySelectorAll('.rate-summary-card-v167')];
-    const bcb = document.querySelector('#sec-mercado .rates-reference-v167 .market-reference-source-v167');
-
-    if(!isMobile){
-      [wrap, bcb, ...cards].forEach(el => {
-        if(!el) return;
-        el.removeAttribute('style');
-      });
-      return;
-    }
-
-    // remove botão/fonte BCB do topo
-    if(bcb){
-      bcb.setAttribute('aria-hidden', 'true');
-      try{ bcb.inert = true; }catch(_){}
-      setImportant(bcb, 'display', 'none');
-      setImportant(bcb, 'height', '0');
-      setImportant(bcb, 'margin', '0');
-      setImportant(bcb, 'padding', '0');
-      setImportant(bcb, 'overflow', 'hidden');
-    }
-
-    setImportant(wrap, 'display', 'grid');
-    setImportant(wrap, 'grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)');
-    setImportant(wrap, 'gap', '9px');
-    setImportant(wrap, 'overflow', 'visible');
-    setImportant(wrap, 'padding', '0');
-    setImportant(wrap, 'margin', '0 0 12px');
-    setImportant(wrap, 'width', '100%');
-
-    cards.forEach((card, idx) => {
-      setImportant(card, 'display', 'block');
-      setImportant(card, 'width', 'auto');
-      setImportant(card, 'min-width', '0');
-      setImportant(card, 'max-width', 'none');
-      setImportant(card, 'flex', 'initial');
-      setImportant(card, 'border-radius', '13px');
-      setImportant(card, 'padding', '10px 11px');
-      setImportant(card, 'min-height', idx === 2 ? '62px' : '76px');
-      setImportant(card, 'box-sizing', 'border-box');
-
-      if(idx === 0 || idx === 1){
-        setImportant(card, 'grid-column', 'auto');
-      }else{
-        setImportant(card, 'grid-column', '1 / -1');
-        setImportant(card, 'display', 'grid');
-        setImportant(card, 'grid-template-columns', '1fr auto');
-        setImportant(card, 'align-items', 'center');
-        setImportant(card, 'column-gap', '10px');
-      }
-    });
-
-    const next = wrap.querySelector('.copom-next-summary-v167');
-    if(next){
-      const label = next.querySelector(':scope > span');
-      const status = next.querySelector(':scope > small');
-      if(label) setImportant(label, 'grid-column', '1 / -1');
-      if(status){
-        setImportant(status, 'justify-self', 'end');
-        setImportant(status, 'margin', '0');
-        setImportant(status, 'padding', '3px 8px');
-      }
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-  setTimeout(apply, 1800);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v320 — remove card "Próxima reunião" do resumo superior
-   Mantém a informação no bloco "Copom executivo", evitando duplicidade.
-════════════════════════════════════════════════════ */
-(function removeNextSummaryCardV320(){
-  function apply(){
-    const cards = document.querySelectorAll('#sec-mercado .rates-summary-v167 .copom-next-summary-v167');
-    cards.forEach(card => card.remove());
-
-    const wrap = document.querySelector('#sec-mercado .rates-reference-v167 .rates-summary-v167');
-    if(wrap && window.matchMedia('(max-width: 768px)').matches){
-      wrap.style.setProperty('grid-template-columns', 'minmax(0, 1fr) minmax(0, 1fr)', 'important');
-      wrap.style.setProperty('gap', '9px', 'important');
-      wrap.style.setProperty('margin-bottom', '12px', 'important');
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v321 — carrossel das 8 reuniões do Copom no mobile
-   Usa a store #copomMeetings como fonte e cria uma trilha horizontal
-   dentro de #copomExecutiveSummaryV270.
-════════════════════════════════════════════════════ */
-(function copomCarouselV321(){
-  function norm(txt){
-    return String(txt || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function classify(item, result){
-    const cls = String(item.className || '').toLowerCase();
-    const r = String(result || '').toLowerCase();
-    if(cls.includes('next') || r.includes('próxima') || r.includes('proxima')) return 'is-next';
-    if(cls.includes('future') || r.includes('prevista')) return 'is-future';
-    if(cls.includes('cut') || r.includes('corte')) return 'is-cut';
-    if(cls.includes('hold') || r.includes('mantida')) return 'is-hold';
-    return 'is-neutral';
-  }
-
-  function statusLabel(result){
-    const r = norm(result);
-    if(!r) return 'agenda';
-    if(/próxima|proxima/i.test(r)) return 'agenda';
-    if(/prevista/i.test(r)) return 'prevista';
-    if(/corte/i.test(r)) return 'corte';
-    if(/mantida/i.test(r)) return 'mantida';
-    return r.replace(/→/g, '').slice(0, 18);
-  }
-
-  function build(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const summary = document.getElementById('copomExecutiveSummaryV270');
-    const store = document.getElementById('copomMeetings');
-    if(!summary || !store || !isMobile) return;
-
-    const items = [...store.querySelectorAll('.copom-item')]
-      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
-
-    if(!items.length || summary.dataset.v321Built === '1') return;
-
-    const html = items.map(item => {
-      const num = norm(item.querySelector('.copom-num')?.textContent);
-      const date = norm(item.querySelector('.copom-date')?.textContent);
-      const result = norm(item.querySelector('.copom-result')?.textContent);
-      const kind = classify(item, result);
-      const label = statusLabel(result);
-      return `
-        <article class="copom-exec-card-v270 copom-carousel-card-v321 ${kind}" role="listitem">
-          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
-          <strong class="copom-exec-date-v270">${date || '—'}</strong>
-          <div class="copom-exec-meta-v270">
-            <span class="copom-exec-status-v270 ${kind}">${label}</span>
-          </div>
-          ${result && !/próxima|proxima|prevista/i.test(result) ? `<small class="copom-carousel-result-v321">${result}</small>` : ''}
-        </article>`;
-    }).join('');
-
-    summary.dataset.v321Built = '1';
-    summary.setAttribute('role', 'list');
-    summary.setAttribute('aria-label', 'Carrossel das reuniões do Copom');
-    summary.innerHTML = html;
-  }
-
-  function resetDesktop(){
-    if(window.matchMedia('(max-width: 768px)').matches) return;
-    const summary = document.getElementById('copomExecutiveSummaryV270');
-    if(summary?.dataset.v321Built === '1'){
-      summary.dataset.v321Built = '0';
-    }
-  }
-
-  function apply(){
-    build();
-    resetDesktop();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 300);
-  setTimeout(apply, 1000);
-  setTimeout(apply, 2000);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v323 — correção CDI 12 meses
-   Preenche o KPI/card "12 meses" com:
-   1) cards.cdi.acum_12m;
-   2) fallback calculado pelos últimos 12 meses do histórico.
-════════════════════════════════════════════════════ */
-(function fixCdi12mV323(){
-  function fmt(v){
-    const n = Number(v);
-    if(!Number.isFinite(n)) return '—';
-    return (n >= 0 ? '+' : '') + n.toFixed(2).replace('.', ',') + '%';
-  }
-
-  function calcFromHistory(hist){
-    const vals = (Array.isArray(hist) ? hist : [])
-      .slice()
-      .sort((a,b) => String(a?.key || '').localeCompare(String(b?.key || '')))
-      .slice(-12)
-      .map(x => Number(x?.valor))
-      .filter(Number.isFinite);
-
-    if(!vals.length) return NaN;
-    const fator = vals.reduce((acc, v) => acc * (1 + v / 100), 1);
-    return Number(((fator - 1) * 100).toFixed(2));
-  }
-
-  function getCdi(){
-    return window._mercadoV230?.cards?.cdi
-      || window.__dadosMercado?.cards?.cdi
-      || window.dadosMercado?.cards?.cdi
-      || null;
-  }
-
-  function apply(){
-    const cdi = getCdi();
-    if(!cdi) return;
-
-    const direto = Number(cdi.acum_12m ?? cdi.m12 ?? cdi.acumulado_12m ?? cdi.acum12m);
-    const valor = Number.isFinite(direto) ? direto : calcFromHistory(cdi.historico);
-    if(!Number.isFinite(valor)) return;
-
-    const txt = fmt(valor);
-    const kpi = document.getElementById('cdiLast12mValueV296');
-    if(kpi) kpi.textContent = txt;
-
-    document
-      .querySelectorAll('#cdiMonthCarouselV322 .cdi-month-card-v322')
-      .forEach(card => {
-        const label = (card.querySelector('.cdi-month-kicker-v322')?.textContent || '').toLowerCase();
-        if(label.includes('12 meses')){
-          const strong = card.querySelector('.cdi-month-value-v322, strong');
-          if(strong) strong.textContent = txt;
-        }
-      });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  setTimeout(apply, 300);
-  setTimeout(apply, 1000);
-  setTimeout(apply, 2000);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v325 — Poupança: limpeza mobile e correção cenários
-   - oculta bloco textual longo #poupRulesV214 no mobile;
-   - mantém apenas Comparação de cenários ao expandir;
-   - corrige sobreposição de dt/dd nos cards;
-   - dá respiro após botões.
-════════════════════════════════════════════════════ */
-(function savingsCleanMobileV325(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const rules = document.getElementById('poupRulesV214');
-    const details = document.getElementById('poupDetailsPanelV167');
-    const scenarios = document.querySelector('#poupDetailsPanelV167 .savings-scenarios-v167, #poupDetailsPanelV167 .savings-scenarios-v207, #poupDetailsPanelV167 .savings-scenarios-v208');
-    const actions = document.querySelector('#sec-mercado .savings-actions-v167, #sec-mercado .savings-actions-v205, #sec-mercado .savings-actions-v207');
-
-    if(!isMobile){
-      if(rules){
-        rules.removeAttribute('aria-hidden');
-        rules.style.removeProperty('display');
-      }
-      return;
-    }
-
-    if(rules){
-      rules.setAttribute('aria-hidden','true');
-      try{ rules.inert = true; }catch(_){}
-      setImportant(rules, 'display', 'none');
-      setImportant(rules, 'height', '0');
-      setImportant(rules, 'min-height', '0');
-      setImportant(rules, 'max-height', '0');
-      setImportant(rules, 'margin', '0');
-      setImportant(rules, 'padding', '0');
-      setImportant(rules, 'overflow', 'hidden');
-    }
-
-    if(actions){
-      setImportant(actions, 'margin-bottom', '16px');
-    }
-
-    if(scenarios){
-      setImportant(scenarios, 'display', 'block');
-      setImportant(scenarios, 'margin-top', '0');
-    }
-
-    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dl > div').forEach(pair => {
-      setImportant(pair, 'display', 'flex');
-      setImportant(pair, 'flex-direction', 'column');
-      setImportant(pair, 'align-items', 'flex-start');
-      setImportant(pair, 'gap', '4px');
-      setImportant(pair, 'min-height', 'auto');
-      setImportant(pair, 'padding', '0');
-    });
-
-    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dt, #sec-mercado .savings-scenario-card-v208 dd').forEach(el => {
-      setImportant(el, 'display', 'block');
-      setImportant(el, 'width', '100%');
-      setImportant(el, 'margin', '0');
-      setImportant(el, 'padding', '0');
-      setImportant(el, 'line-height', '1.22');
-      setImportant(el, 'white-space', 'normal');
-      setImportant(el, 'overflow-wrap', 'anywhere');
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v326 — Poupança: refinamento final dos cenários mobile
-   - remove texto longo redundante #poupScenarioSummary;
-   - padroniza alinhamento à esquerda;
-   - corrige hierarquia dt/dd;
-   - aumenta largura dos cards.
-════════════════════════════════════════════════════ */
-(function savingsScenariosPolishV326(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(!isMobile) return;
-
-    const summary = document.getElementById('poupScenarioSummary');
-    if(summary) summary.remove();
-
-    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208').forEach(card => {
-      setImportant(card, 'text-align', 'left');
-      setImportant(card, 'flex', '0 0 188px');
-      setImportant(card, 'min-width', '188px');
-      setImportant(card, 'max-width', '188px');
-      setImportant(card, 'padding', '14px');
-      setImportant(card, 'box-sizing', 'border-box');
-    });
-
-    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dl > div').forEach(pair => {
-      setImportant(pair, 'display', 'flex');
-      setImportant(pair, 'flex-direction', 'column');
-      setImportant(pair, 'align-items', 'flex-start');
-      setImportant(pair, 'justify-content', 'flex-start');
-      setImportant(pair, 'text-align', 'left');
-      setImportant(pair, 'gap', '5px');
-    });
-
-    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dt').forEach(dt => {
-      setImportant(dt, 'display', 'block');
-      setImportant(dt, 'width', '100%');
-      setImportant(dt, 'text-align', 'left');
-      setImportant(dt, 'font-size', '10px');
-      setImportant(dt, 'line-height', '1.1');
-      setImportant(dt, 'font-weight', '800');
-      setImportant(dt, 'letter-spacing', '.07em');
-      setImportant(dt, 'text-transform', 'uppercase');
-      setImportant(dt, 'color', 'rgba(220,228,250,.58)');
-      setImportant(dt, 'margin', '0');
-      setImportant(dt, 'padding', '0');
-    });
-
-    document.querySelectorAll('#sec-mercado .savings-scenario-card-v208 dd').forEach(dd => {
-      setImportant(dd, 'display', 'block');
-      setImportant(dd, 'width', '100%');
-      setImportant(dd, 'text-align', 'left');
-      setImportant(dd, 'font-size', '12px');
-      setImportant(dd, 'line-height', '1.22');
-      setImportant(dd, 'font-weight', '760');
-      setImportant(dd, 'letter-spacing', '-.01em');
-      setImportant(dd, 'color', '#f8fafc');
-      setImportant(dd, 'margin', '0');
-      setImportant(dd, 'padding', '0');
-      setImportant(dd, 'white-space', 'normal');
-      setImportant(dd, 'overflow-wrap', 'normal');
-      setImportant(dd, 'word-break', 'normal');
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v327 — Poupança: micro-polimento final
-   - remove pílula Selic 14,25%;
-   - limpa títulos dos cenários;
-   - reforça quick note mais orientado ao rendimento.
-════════════════════════════════════════════════════ */
-(function savingsMicroPolishV327(){
-  function apply(){
-    const status = document.getElementById('poupScenarioStatus');
-    if(status) status.remove();
-
-    const title4 = document.getElementById('poupScenario4TitleV214');
-    if(title4) title4.textContent = 'Selic 4,00%';
-
-    const title85 = document.getElementById('poupScenario85TitleV214');
-    if(title85) title85.textContent = 'Selic 8,50%';
-
-    const current = document.getElementById('poupScenarioCurrentTitle');
-    if(current) current.textContent = current.textContent.replace(/\s+a\.a\.$/i, '');
-
-    const quick = document.getElementById('poupQuickNote');
-    if(quick && /depósitos novos e antigos seguem/i.test(quick.textContent || '')){
-      quick.innerHTML = 'Rendimento de <strong>TR + 0,50% a.m.</strong> <span class="poup-note-muted-v327">(Selic acima de 8,50% a.a.)</span>';
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-})();
-
-
-/* v328 - Poupança no topo direito (mobile) */
-(function(){
-  function apply(){
-    var lbl=document.getElementById("poupCurrentLabelV214");
-    if(lbl) lbl.textContent = window.innerWidth <= 480 ? "Rendimento do mês" : lbl.textContent;
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", apply); else apply();
-  window.addEventListener("resize", apply, {passive:true});
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v329 — limpeza de microcopy dos indicadores
-   - CDI: texto longo vira "Parcial até dd/mm";
-   - Tags: Atual vira Cotação/Pontos conforme indicador;
-   - Grid: Atual vira Mês atual.
-════════════════════════════════════════════════════ */
-(function marketMicrocopyCleanV329(){
-  function norm(txt){
-    return String(txt || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function findAncestorText(el){
-    const article = el.closest('article, .market-period-card-v196, .market-asset-card, .period-card, .market-card');
-    return norm(article?.innerText || el.closest('section')?.innerText || '');
-  }
-
-  function cleanCdi(){
-    document.querySelectorAll('#sec-mercado small, #sec-mercado .market-period-metric-v196 small').forEach(small => {
-      const t = norm(small.textContent);
-      if(/Acumulado no mês/i.test(t) && /Dados disponíveis até/i.test(t)){
-        const data = t.match(/até\s+(\d{1,2}\/\d{1,2})/i)?.[1] || '';
-        small.textContent = data ? `Parcial até ${data}` : 'Parcial do mês';
-      }
-    });
-  }
-
-  function cleanCurrentLevelTags(){
-    document.querySelectorAll('#sec-mercado .market-current-level-v196 small, #sec-mercado .market-current-level-v196 span, #sec-mercado .market-current-level-v196').forEach(el => {
-      const txt = norm(el.textContent);
-      if(!/^Atual$/i.test(txt)) return;
-
-      const ctx = findAncestorText(el).toLowerCase();
-
-      if(ctx.includes('dólar') || ctx.includes('ptax') || ctx.includes('brl/usd')){
-        el.textContent = 'Cotação';
-        return;
-      }
-
-      if(ctx.includes('ibovespa') || ctx.includes('s&p') || ctx.includes('dow jones') || ctx.includes('nasdaq')){
-        el.textContent = 'Pontos';
-      }
-    });
-
-    // fallback para tags que vêm como texto completo "ATUAL R$..." ou "ATUAL 168.289 pts"
-    document.querySelectorAll('#sec-mercado .market-current-level-v196').forEach(el => {
-      const ctx = findAncestorText(el).toLowerCase();
-      el.childNodes.forEach(node => {
-        if(node.nodeType !== Node.TEXT_NODE) return;
-        const val = String(node.nodeValue || '');
-        if(/^\s*Atual\s+/i.test(val)){
-          if(ctx.includes('dólar') || ctx.includes('ptax') || ctx.includes('brl/usd')){
-            node.nodeValue = val.replace(/Atual/i, 'Cotação');
-          }else if(ctx.includes('ibovespa') || ctx.includes('s&p') || ctx.includes('dow jones') || ctx.includes('nasdaq')){
-            node.nodeValue = val.replace(/Atual/i, 'Pontos');
-          }
-        }
-      });
-    });
-  }
-
-  function cleanMetricGridLabels(){
-    document.querySelectorAll('#sec-mercado .market-period-metric-v196 span, #sec-mercado .market-period-metric-v196 dt').forEach(label => {
-      const t = norm(label.textContent);
-      if(/^Atual$/i.test(t)){
-        label.textContent = 'Mês atual';
-      }
-    });
-  }
-
-  function apply(){
-    cleanCdi();
-    cleanCurrentLevelTags();
-    cleanMetricGridLabels();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-  setTimeout(apply, 1800);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v330 — largura uniforme dos cards do cenário monetário
-   Copom e CDI mensal passam a usar a mesma régua dos cards 2 colunas:
-   2 cards visíveis por vez + próximo card levemente sugerido no scroll.
-════════════════════════════════════════════════════ */
-(function marketCardWidthUniformV330(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(!isMobile) return;
-
-    const width = 'calc((100% - 9px) / 2)';
-
-    document
-      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
-      .forEach(card => {
-        setImportant(card, 'flex', `0 0 ${width}`);
-        setImportant(card, 'min-width', width);
-        setImportant(card, 'max-width', width);
-        setImportant(card, 'box-sizing', 'border-box');
-      });
-
-    document
-      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
-      .forEach(track => {
-        setImportant(track, 'gap', '9px');
-        setImportant(track, 'padding-left', '1px');
-        setImportant(track, 'padding-right', '1px');
-      });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-  setTimeout(apply, 1800);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v331 — cards Copom/CDI com largura igual aos cards Selic/CDI
-   Diagnóstico do console:
-   - Selic/CDI: 156px
-   - Copom/CDI mensal: 130px
-   Correção: carrosséis com cards de 156px no mobile.
-════════════════════════════════════════════════════ */
-(function marketCard156V331(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function cleanCopomResult(txt){
-    return String(txt || '')
-      .replace(/corte\s+-0,25\s+p\.p\.\s+→\s+/i, 'Corte → ')
-      .replace(/mantida em/i, 'Mantida ')
-      .trim();
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(!isMobile) return;
-
-    const cardWidth = '156px';
-
-    document
-      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
-      .forEach(card => {
-        setImportant(card, 'flex', `0 0 ${cardWidth}`);
-        setImportant(card, 'min-width', cardWidth);
-        setImportant(card, 'max-width', cardWidth);
-        setImportant(card, 'box-sizing', 'border-box');
-      });
-
-    document
-      .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
-      .forEach(track => {
-        setImportant(track, 'gap', '9px');
-        setImportant(track, 'padding-left', '1px');
-        setImportant(track, 'padding-right', '18px');
-        setImportant(track, 'scroll-padding-left', '1px');
-      });
-
-    document.querySelectorAll('#sec-mercado .copom-carousel-result-v321').forEach(small => {
-      const original = small.textContent;
-      const clean = cleanCopomResult(original);
-      if(clean && clean !== original) small.textContent = clean;
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-  setTimeout(apply, 1800);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v332 — força microcopy no painel consolidado
-   Corrige textos que podem ser recriados depois do carregamento:
-   - CDI: "Acumulado no mês..." => "Parcial até dd/mm"
-   - Tags nominais: Atual => Cotação/Pontos
-   - Grid de variação: Atual => Mês atual
-════════════════════════════════════════════════════ */
-(function marketMicrocopyForceV332(){
-  function txt(el){
-    return String(el?.textContent || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function context(el){
-    const block = el.closest(
-      '.market-period-card-v196, .market-period-group-v196, .market-asset-card, article, .period-card, .market-card, .market-v172-card, .market-reference-block-v167'
-    );
-    return txt(block || el).toLowerCase();
-  }
-
-  function replaceTextNodePrefix(el, from, to){
-    [...el.childNodes].forEach(node => {
-      if(node.nodeType === Node.TEXT_NODE && new RegExp('^\\s*' + from + '\\b', 'i').test(node.nodeValue || '')){
-        node.nodeValue = String(node.nodeValue).replace(new RegExp(from, 'i'), to);
-      }
-    });
-  }
-
-  function cleanCdiLongText(root){
-    root.querySelectorAll('small, .market-period-metric-v196 small, .market-period-metric-v196 p, .market-period-metric-v196 div').forEach(el => {
-      const t = txt(el);
-      if(/Acumulado no mês/i.test(t) && /Dados disponíveis até/i.test(t)){
-        const data = t.match(/até\s+(\d{1,2}\/\d{1,2})/i)?.[1] || '';
-        el.textContent = data ? `Parcial até ${data}` : 'Parcial do mês';
-      }
-    });
-  }
-
-  function cleanCurrentNominalTags(root){
-    root.querySelectorAll('.market-current-level-v196, .market-current-level-v196 small, .market-current-level-v196 span, .market-current-level-v196 b, .market-current-level-v196 strong').forEach(el => {
-      const t = txt(el);
-      const ctx = context(el);
-
-      if(/^Atual$/i.test(t)){
-        if(/dólar|dolar|ptax|brl\/usd/.test(ctx)) el.textContent = 'Cotação';
-        if(/ibovespa|s&p|dow jones|nasdaq/.test(ctx)) el.textContent = 'Pontos';
-      }
-
-      if(/^Atual\s+/i.test(t)){
-        if(/dólar|dolar|ptax|brl\/usd/.test(ctx)) replaceTextNodePrefix(el, 'Atual', 'Cotação');
-        if(/ibovespa|s&p|dow jones|nasdaq/.test(ctx)) replaceTextNodePrefix(el, 'Atual', 'Pontos');
-      }
-    });
-  }
-
-  function cleanMetricCurrent(root){
-    root.querySelectorAll('.market-period-metric-v196 span, .market-period-metric-v196 dt, .market-period-metric-v196 .metric-label, .market-period-metric-v196 label').forEach(el => {
-      if(/^Atual$/i.test(txt(el))) el.textContent = 'Mês atual';
-    });
-  }
-
-  function cleanAll(){
-    const root = document.querySelector('#sec-mercado') || document;
-    cleanCdiLongText(root);
-    cleanCurrentNominalTags(root);
-    cleanMetricCurrent(root);
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', cleanAll);
-  else cleanAll();
-
-  [250, 750, 1500, 2500, 4000].forEach(ms => setTimeout(cleanAll, ms));
-
-  const target = document.querySelector('#sec-mercado');
-  if(target && 'MutationObserver' in window){
-    const obs = new MutationObserver(() => {
-      clearTimeout(window.__marketMicrocopyForceV332Timer);
-      window.__marketMicrocopyForceV332Timer = setTimeout(cleanAll, 80);
-    });
-    obs.observe(target, { childList:true, subtree:true, characterData:true });
-  }
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v333 — Dólar PTAX executivo mobile
-   Organiza a seção em:
-   1) cotação principal;
-   2) variações resumidas;
-   3) gráfico/estatísticas sob demanda;
-   4) fechamentos mensais recolhidos por padrão.
-════════════════════════════════════════════════════ */
-(function dolarExecutiveMobileV333(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const sec = document.getElementById('sec-dolar');
-    if(!sec) return;
-
-    const timelineBody = document.getElementById('dolarTimelineBody');
-    const timelineToggle = document.getElementById('dolarTimelineToggle');
-    const chartPanel = document.getElementById('dolarChartPanel');
-    const chartToggle = document.getElementById('dolarChartToggle');
-    const currentMonth = document.getElementById('dolarCurrentMonthV162');
-
-    if(!isMobile){
-      if(timelineBody) timelineBody.classList.add('open');
-      if(timelineToggle){
-        timelineToggle.textContent = 'Recolher ▲';
-        timelineToggle.setAttribute('aria-expanded','true');
-      }
-      if(currentMonth) currentMonth.hidden = true;
-      return;
-    }
-
-    sec.classList.add('dolar-exec-mobile-v333-active');
-
-    // O mês atual já aparece no card de variações. Evita duplicidade.
-    if(currentMonth){
-      currentMonth.hidden = true;
-      setImportant(currentMonth, 'display', 'none');
-    }
-
-    // Gráfico fechado por padrão, estatísticas aparecem quando o gráfico abre.
-    if(chartPanel && !chartPanel.dataset.v333UserTouched){
-      chartPanel.classList.add('is-mobile-collapsed');
-    }
-    if(chartToggle && !chartToggle.dataset.v333Bound){
-      chartToggle.textContent = chartPanel?.classList.contains('is-mobile-collapsed') ? 'Abrir gráfico' : 'Ocultar gráfico';
-      chartToggle.setAttribute('aria-expanded', String(!chartPanel?.classList.contains('is-mobile-collapsed')));
-      chartToggle.dataset.v333Bound = '1';
-      chartToggle.addEventListener('click', () => {
-        if(chartPanel) chartPanel.dataset.v333UserTouched = '1';
-        setTimeout(() => {
-          chartToggle.textContent = chartPanel?.classList.contains('is-mobile-collapsed') ? 'Abrir gráfico' : 'Ocultar gráfico';
-        }, 60);
-      }, { passive:true });
-    }
-
-    // Fechamentos recolhidos por padrão para reduzir altura.
-    if(timelineBody && !timelineBody.dataset.v333UserTouched){
-      timelineBody.classList.remove('open');
-    }
-    if(timelineToggle && !timelineToggle.dataset.v333Bound){
-      timelineToggle.textContent = 'Ver fechamentos';
-      timelineToggle.setAttribute('aria-expanded','false');
-      timelineToggle.dataset.v333Bound = '1';
-      timelineToggle.addEventListener('click', () => {
-        timelineBody && (timelineBody.dataset.v333UserTouched = '1');
-        setTimeout(() => {
-          const open = timelineBody?.classList.contains('open');
-          timelineToggle.textContent = open ? 'Ocultar fechamentos' : 'Ver fechamentos';
-          timelineToggle.setAttribute('aria-expanded', String(!!open));
-        }, 60);
-      }, { passive:true });
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 300);
-  setTimeout(apply, 1000);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v334 — Dólar: eixo X limpo + estatísticas sem redundância
-   - eixo X horizontal, com poucos ticks;
-   - card "Atual" vira "Variação";
-   - Máxima/Mínima em cor neutra.
-════════════════════════════════════════════════════ */
-(function dolarChartStatsV334(){
-  function apply(){
-    const varLabel = document.getElementById('ptaxStatVarLabelV334')
-      || document.querySelector('#ptaxStatsCard .ptax-stat-item:first-child .ptax-stat-label');
-    if(varLabel) varLabel.textContent = 'Variação';
-
-    ['ptaxStatMax', 'ptaxStatMin', 'ptaxStatMedia'].forEach(id => {
-      const el = document.getElementById(id);
-      if(el) el.className = 'ptax-stat-val neu';
-    });
-
-    const chart = window.Chart && document.getElementById('chartDolar')
-      ? Chart.getChart(document.getElementById('chartDolar'))
-      : null;
-
-    if(chart?.options?.scales?.x?.ticks){
-      chart.options.scales.x.ticks.maxRotation = 0;
-      chart.options.scales.x.ticks.minRotation = 0;
-      chart.options.scales.x.ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
-      chart.options.scales.x.ticks.autoSkip = true;
-      chart.update('none');
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 300);
-  setTimeout(apply, 1000);
-  setTimeout(apply, 2000);
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v335 — força eixo X do gráfico PTAX horizontal no mobile
-   Evita labels diagonais em 24M/36M:
-   - maxRotation/minRotation 0
-   - apenas 5 labels visíveis
-   - demais labels ficam vazios
-════════════════════════════════════════════════════ */
-(function dolarXAxisMobileV335(){
-  function apply(){
-    const canvas = document.getElementById('chartDolar');
-    if(!canvas || !window.Chart) return;
-
-    const chart = Chart.getChart(canvas);
-    if(!chart?.options?.scales?.x?.ticks) return;
-
-    const ticks = chart.options.scales.x.ticks;
-    ticks.maxRotation = 0;
-    ticks.minRotation = 0;
-    ticks.autoSkip = false;
-    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
-    ticks.callback = function(value, index, tickList){
-      const total = Array.isArray(tickList) ? tickList.length : (this.chart?.data?.labels?.length || 0);
-      const maxLabels = window.innerWidth <= 768 ? 5 : 10;
-      const label = this.getLabelForValue(value);
-      if(total <= maxLabels) return label;
-
-      const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
-      if(index === 0 || index === total - 1 || index % step === 0) return label;
-      return '';
-    };
-
-    chart.update('none');
-  }
-
-  function schedule(){
-    [80, 250, 700, 1200].forEach(ms => setTimeout(apply, ms));
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule);
-  else schedule();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  document.querySelectorAll('[data-dolar-range]').forEach(btn => {
-    btn.addEventListener('click', schedule, { passive:true });
-  });
-
-  const chartToggle = document.getElementById('dolarChartToggle');
-  if(chartToggle) chartToggle.addEventListener('click', schedule, { passive:true });
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v336 — Dólar: badge na linha do título + fechamentos visíveis
-   - reposiciona a fonte BCB/PTAX na mesma linha do título;
-   - reabre o carrossel de fechamentos mensais no mobile;
-   - evita que o v333 feche novamente a timeline.
-════════════════════════════════════════════════════ */
-(function dolarBadgeMonthsV336(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const sec = document.getElementById('sec-dolar');
-    if(!sec || !isMobile) return;
-
-    const badge = sec.querySelector('.section-badge');
-    if(badge){
-      badge.classList.add('dolar-source-badge-v336');
-      badge.innerHTML = '<span class="badge-dot green"></span>BCB · PTAX';
-      badge.removeAttribute('aria-hidden');
-      setImportant(badge, 'display', 'inline-flex');
-    }
-
-    const body = document.getElementById('dolarTimelineBody');
-    const toggle = document.getElementById('dolarTimelineToggle');
-    const footer = sec.querySelector('.dolar-compact-footer');
-    const months = document.getElementById('dolarMonths');
-
-    if(body){
-      body.dataset.v333UserTouched = '1';
-      body.classList.add('open');
-      body.removeAttribute('hidden');
-      setImportant(body, 'display', 'block');
-      setImportant(body, 'margin-top', '12px');
-    }
-
-    if(toggle){
-      toggle.setAttribute('aria-hidden','true');
-      toggle.setAttribute('tabindex','-1');
-      setImportant(toggle, 'display', 'none');
-    }
-
-    if(footer){
-      setImportant(footer, 'display', 'block');
-    }
-
-    if(months){
-      setImportant(months, 'display', 'flex');
-      setImportant(months, 'overflow-x', 'auto');
-      setImportant(months, 'gap', '9px');
-      setImportant(months, 'padding-bottom', '8px');
-    }
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  [250, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v337 — Dólar: gráfico fechado por padrão no mobile
-   O gráfico fica sob demanda para reduzir altura e ruído visual.
-   Botão: "Abrir gráfico" / "Ocultar gráfico".
-════════════════════════════════════════════════════ */
-(function dolarChartClosedV337(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function applyInitial(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const panel = document.getElementById('dolarChartPanel');
-    const toggle = document.getElementById('dolarChartToggle');
-    if(!panel || !toggle || !isMobile) return;
-
-    if(!panel.dataset.v337UserOpened){
-      panel.classList.add('is-mobile-collapsed');
-      toggle.textContent = 'Abrir gráfico';
-      toggle.setAttribute('aria-expanded', 'false');
-    }
-
-    setImportant(toggle, 'display', 'inline-flex');
-  }
-
-  function bind(){
-    const panel = document.getElementById('dolarChartPanel');
-    const toggle = document.getElementById('dolarChartToggle');
-    if(!panel || !toggle || toggle.dataset.v337Bound) return;
-
-    toggle.dataset.v337Bound = '1';
-    toggle.addEventListener('click', () => {
-      setTimeout(() => {
-        const isCollapsed = panel.classList.contains('is-mobile-collapsed');
-        panel.dataset.v337UserOpened = isCollapsed ? '' : '1';
-        toggle.textContent = isCollapsed ? 'Abrir gráfico' : 'Ocultar gráfico';
-        toggle.setAttribute('aria-expanded', String(!isCollapsed));
-      }, 70);
-    }, { passive:true });
-  }
-
-  function apply(){
-    applyInitial();
-    bind();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v338 — Inflação e juros: limpeza de redundâncias mobile
-   - remove pílulas de leitura dos gráficos;
-   - remove cards "vigente/último" redundantes;
-   - compacta botões de prazo em trilha horizontal.
-════════════════════════════════════════════════════ */
-(function inflationRatesCleanV338(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function hide(el){
-    if(!el) return;
-    el.setAttribute('aria-hidden','true');
-    try{ el.inert = true; }catch(_){}
-    setImportant(el, 'display', 'none');
-    setImportant(el, 'height', '0');
-    setImportant(el, 'min-height', '0');
-    setImportant(el, 'max-height', '0');
-    setImportant(el, 'margin', '0');
-    setImportant(el, 'padding', '0');
-    setImportant(el, 'overflow', 'hidden');
-  }
-
-  function apply(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    const root = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body') || document;
-    if(!root || !isMobile) return;
-
-    // 1) Pílulas/leituras redundantes dos gráficos
-    ['evoCardIpcaNote', 'evoCardSelicNote', 'evoCardMetaNote'].forEach(id => hide(document.getElementById(id)));
-    root.querySelectorAll('.chart-reading, .evo-card-reading, .evo-chart-reading').forEach(hide);
-
-    // 2) Selic: remover cartão da taxa vigente dentro do grid
-    root.querySelectorAll(
-      '#selicSummaryRow .selic-summary-chip.now, ' +
-      '#selicSummaryRow .selic-summary-chip.vigente, ' +
-      '#selicSummaryRow .selic-summary-chip.current, ' +
-      '#selicSummaryRow .selic-summary-chip.is-current'
-    ).forEach(hide);
-
-    // fallback por texto
-    root.querySelectorAll('#selicSummaryRow .selic-summary-chip').forEach(el => {
-      const t = (el.innerText || '').toLowerCase();
-      if(t.includes('vigente') || t.includes('taxa vigente')) hide(el);
-    });
-
-    // 3) IPCA: remover cartão último IPCA/último resultado
-    root.querySelectorAll(
-      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.latest, ' +
-      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.current, ' +
-      '#ipcaSummaryRowV250 .ipca-summary-chip-v250.is-latest'
-    ).forEach(hide);
-
-    root.querySelectorAll('#ipcaSummaryRowV250 .ipca-summary-chip-v250').forEach(el => {
-      const t = (el.innerText || '').toLowerCase();
-      if(t.includes('último') || t.includes('ultimo') || t.includes('ipca do último')) hide(el);
-    });
-
-    // 4) Botões de prazo em uma linha rolável
-    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
-      setImportant(tabs, 'display', 'flex');
-      setImportant(tabs, 'flex-wrap', 'nowrap');
-      setImportant(tabs, 'overflow-x', 'auto');
-      setImportant(tabs, 'overflow-y', 'hidden');
-      setImportant(tabs, 'gap', '7px');
-      setImportant(tabs, 'padding', '1px 1px 8px');
-      setImportant(tabs, 'scroll-snap-type', 'x proximity');
-      setImportant(tabs, 'scrollbar-width', 'none');
-    });
-
-    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
-      setImportant(btn, 'flex', '0 0 auto');
-      setImportant(btn, 'min-width', '72px');
-      setImportant(btn, 'min-height', '34px');
-      setImportant(btn, 'padding', '0 12px');
-      setImportant(btn, 'font-size', '.66rem');
-      setImportant(btn, 'border-radius', '12px');
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  [250, 800, 1600, 2600].forEach(ms => setTimeout(apply, ms));
-
-  const target = document.getElementById('sec-graficos') || document.getElementById('sec-graficos-body');
-  if(target && 'MutationObserver' in window){
-    const obs = new MutationObserver(() => {
-      clearTimeout(window.__inflationRatesCleanV338Timer);
-      window.__inflationRatesCleanV338Timer = setTimeout(apply, 80);
-    });
-    obs.observe(target, { childList:true, subtree:true, characterData:true });
-  }
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v339 — gráficos Inflação/Juros: tabs, cards e eixo X
-   - Restaura botões em carrossel horizontal.
-   - Adiciona 12M quando ausente.
-   - Corrige chips Máxima/Mínima.
-   - Força eixo X horizontal nos charts.
-   - Atualiza título IPCA conforme prazo escolhido.
-════════════════════════════════════════════════════ */
-(function chartsTabsFixV339(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function normalizeRangeLabel(raw){
-    const r = String(raw || '').toLowerCase();
-    if(r.includes('12')) return 'últimos 12 meses';
-    if(r.includes('24')) return 'últimos 24 meses';
-    if(r.includes('36')) return 'últimos 36 meses';
-    if(r.includes('1a') || r === '1' || r === 'year') return 'últimos 12 meses';
-    if(r.includes('2a')) return 'últimos 24 meses';
-    if(r.includes('5a')) return 'últimos 5 anos';
-    if(r.includes('10a')) return 'últimos 10 anos';
-    if(r.includes('hist')) return 'histórico';
-    return 'período selecionado';
-  }
-
-  function inferRangeFromButton(btn){
-    return btn?.dataset?.range
-      || btn?.dataset?.ipcaRange
-      || btn?.dataset?.selicRange
-      || btn?.dataset?.months
-      || btn?.textContent
-      || '';
-  }
-
-  function updateIpcaTitle(range){
-    const title = document.getElementById('chartIpcaTitle');
-    if(!title) return;
-    title.textContent = `🎯 IPCA mensal — ${normalizeRangeLabel(range)}`;
-  }
-
-  function ensure12MButtons(){
-    // v342: 12M removido por redundância/bug; não reinserir.
-    return;
-  }
-
-  function fixTabs(){
-    const root = document.getElementById('sec-graficos') || document;
-    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
-      setImportant(tabs, 'display', 'flex');
-      setImportant(tabs, 'flex-wrap', 'nowrap');
-      setImportant(tabs, 'overflow-x', 'auto');
-      setImportant(tabs, 'overflow-y', 'hidden');
-      setImportant(tabs, 'justify-content', 'flex-start');
-      setImportant(tabs, 'gap', '8px');
-      setImportant(tabs, 'padding', '1px 1px 8px');
-      setImportant(tabs, 'scrollbar-width', 'none');
-    });
-
-    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
-      setImportant(btn, 'flex', '0 0 auto');
-      setImportant(btn, 'width', 'auto');
-      setImportant(btn, 'min-width', '68px');
-      setImportant(btn, 'max-width', 'none');
-      setImportant(btn, 'white-space', 'nowrap');
-      setImportant(btn, 'min-height', '34px');
-      setImportant(btn, 'padding', '0 12px');
-      setImportant(btn, 'font-size', '.66rem');
-    });
-  }
-
-  function fixSummaryChips(){
-    const root = document.getElementById('sec-graficos') || document;
-
-    root.querySelectorAll('#selicSummaryRow .selic-summary-chip, #ipcaSummaryRowV250 .ipca-summary-chip-v250').forEach(chip => {
-      setImportant(chip, 'display', 'grid');
-      setImportant(chip, 'grid-template-columns', '1fr');
-      setImportant(chip, 'gap', '5px');
-      setImportant(chip, 'align-items', 'start');
-      setImportant(chip, 'min-height', '64px');
-      setImportant(chip, 'height', 'auto');
-      setImportant(chip, 'overflow', 'visible');
-      setImportant(chip, 'padding', '10px 11px');
-    });
-
-    root.querySelectorAll('#selicSummaryRow .selic-summary-text, #ipcaSummaryRowV250 .ipca-summary-text-v250').forEach(txt => {
-      setImportant(txt, 'display', 'flex');
-      setImportant(txt, 'flex-direction', 'column');
-      setImportant(txt, 'align-items', 'flex-start');
-      setImportant(txt, 'gap', '4px');
-      setImportant(txt, 'min-width', '0');
-      setImportant(txt, 'width', '100%');
-      setImportant(txt, 'line-height', '1.12');
-    });
-
-    root.querySelectorAll('#selicSummaryRow .selic-summary-chip span, #selicSummaryRow .selic-summary-chip small, #selicSummaryRow .selic-summary-chip strong, #ipcaSummaryRowV250 .ipca-summary-chip-v250 span, #ipcaSummaryRowV250 .ipca-summary-chip-v250 small, #ipcaSummaryRowV250 .ipca-summary-chip-v250 strong').forEach(el => {
-      setImportant(el, 'position', 'static');
-      setImportant(el, 'display', 'block');
-      setImportant(el, 'white-space', 'normal');
-      setImportant(el, 'line-height', '1.15');
-      setImportant(el, 'max-width', '100%');
-      setImportant(el, 'overflow', 'visible');
-      setImportant(el, 'text-overflow', 'clip');
-    });
-  }
-
-  function fixChartXAxis(chart){
-    if(!chart?.options?.scales?.x?.ticks) return;
-    const ticks = chart.options.scales.x.ticks;
-    ticks.maxRotation = 0;
-    ticks.minRotation = 0;
-    ticks.autoSkip = true;
-    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
-    chart.update('none');
-  }
-
-  function fixAllCharts(){
-    if(!window.Chart) return;
-    ['chartSelic', 'chartIpca', 'chartIpca12m', 'chartDolar', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta'].forEach(id => {
-      const canvas = document.getElementById(id);
-      if(!canvas) return;
-      const chart = Chart.getChart(canvas);
-      if(chart) fixChartXAxis(chart);
-    });
-  }
-
-  function bindTitleUpdates(){
-    if(window.__chartsTabsFixV339Bound) return;
-    window.__chartsTabsFixV339Bound = true;
-
-    document.addEventListener('click', ev => {
-      const btn = ev.target.closest('#sec-graficos .chart-tabs button, #sec-graficos .chart-tab, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button');
-      if(!btn) return;
-      const range = inferRangeFromButton(btn);
-      setTimeout(() => {
-        updateIpcaTitle(range);
-        fixAllCharts();
-      }, 120);
-      setTimeout(fixAllCharts, 500);
-    }, { passive:true });
-  }
-
-  function apply(){
-    ensure12MButtons();
-    fixTabs();
-    fixSummaryChips();
-    fixAllCharts();
-
-    const activeIpca = document.querySelector('#sec-graficos .ipca-range-tabs .active, #sec-graficos [data-ipca-range].active, #sec-graficos #chartIpcaTitle')?.closest?.('button');
-    updateIpcaTitle(inferRangeFromButton(activeIpca) || '24m');
-    bindTitleUpdates();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
-
-  // v340: MutationObserver removido.
-  // Motivo: a própria função apply() altera estilos/atributos e isso gerava loop de mutações/piscadas.
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v340 — correção do loop/pisca em Inflação e Juros
-   Diagnóstico:
-   - v339 criou MutationObserver em #sec-graficos;
-   - apply() alterava style/atributos;
-   - o MutationObserver chamava apply() de novo;
-   - resultado: mutações contínuas, tela piscando e pulando.
-════════════════════════════════════════════════════ */
-(function chartsLoopFixV340(){
-  function safeChartUpdate(chart){
-    if(!chart || typeof chart.update !== 'function') return;
-    const canvas = chart.canvas || chart.ctx?.canvas;
-    if(!canvas || !canvas.isConnected || !canvas.ownerDocument) return;
-    try{ chart.update('none'); }catch(err){ console.warn('[v340] chart.update ignorado:', err?.message || err); }
-  }
-
-  function safeFixCharts(){
-    if(!window.Chart) return;
-    ['chartSelic', 'chartIpca', 'chartIpca12m', 'chartDolar', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta'].forEach(id => {
-      const canvas = document.getElementById(id);
-      if(!canvas || !canvas.isConnected) return;
-      const chart = Chart.getChart(canvas);
-      if(!chart?.options?.scales?.x?.ticks) return;
-      const ticks = chart.options.scales.x.ticks;
-      ticks.maxRotation = 0;
-      ticks.minRotation = 0;
-      ticks.autoSkip = true;
-      ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
-      safeChartUpdate(chart);
-    });
-  }
-
-  function stabilize(){
-    // Reaplica só uma vez, sem observador de mutações.
-    document.documentElement.classList.add('charts-loop-stable-v340');
-    safeFixCharts();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', stabilize);
-  else stabilize();
-
-  window.addEventListener('resize', () => requestAnimationFrame(safeFixCharts), { passive:true });
-  document.addEventListener('click', ev => {
-    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button')){
-      setTimeout(safeFixCharts, 160);
-      setTimeout(safeFixCharts, 500);
-    }
-  }, { passive:true });
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v341 — Inflação/Juros compacto sem redundância
-   - remove 12M das abas da Selic quando 1A já existe;
-   - impede v339 de reinserir 12M no bloco Selic;
-   - dá respiro nos valores de máxima/mínima;
-   - transforma os cards-resumo superiores em carrossel mobile.
-════════════════════════════════════════════════════ */
-(function inflationSummaryCompactV341(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function removeRedundantSelic12m(){
-    const root = document.querySelector('#sec-graficos') || document;
-    root.querySelectorAll(
-      '#evoChartSelicCard .chart-tabs button, ' +
-      '#evoChartSelicCard .chart-tab, ' +
-      '#evoChartSelicCard .selic-range-tabs button, ' +
-      '[data-chart="selic"][data-range="12"], ' +
-      '[data-selic-range="12m"], ' +
-      '[data-selic-range="12"]'
-    ).forEach(btn => {
-      const text = (btn.textContent || '').trim().toLowerCase();
-      const range = String(btn.dataset?.range || btn.dataset?.selicRange || '').toLowerCase();
-      if(text === '12m' || range === '12m' || range === '12'){
-        btn.remove();
-      }
-    });
-  }
-
-  function compactSummaryCards(){
-    const root = document.querySelector('#sec-graficos') || document;
-    const grids = root.querySelectorAll('.evo-summary-grid, .evo-summary-cards, .evo-kpi-grid, .evo-overview-grid');
-    grids.forEach(grid => {
-      setImportant(grid, 'display', 'flex');
-      setImportant(grid, 'flex-wrap', 'nowrap');
-      setImportant(grid, 'overflow-x', 'auto');
-      setImportant(grid, 'overflow-y', 'hidden');
-      setImportant(grid, 'gap', '10px');
-      setImportant(grid, 'padding', '1px 1px 10px');
-      setImportant(grid, 'scroll-snap-type', 'x proximity');
-      setImportant(grid, 'scrollbar-width', 'none');
-    });
-
-    root.querySelectorAll('.evo-summary-card, .evo-kpi-card, .evo-overview-card').forEach(card => {
-      setImportant(card, 'flex', '0 0 232px');
-      setImportant(card, 'min-width', '232px');
-      setImportant(card, 'max-width', '232px');
-      setImportant(card, 'min-height', '86px');
-      setImportant(card, 'padding', '12px 13px');
-      setImportant(card, 'scroll-snap-align', 'start');
-      setImportant(card, 'box-sizing', 'border-box');
-    });
-  }
-
-  function improveSummaryChipSpacing(){
-    const root = document.querySelector('#sec-graficos') || document;
-    root.querySelectorAll(
-      '#selicSummaryRow .selic-summary-value, ' +
-      '#selicSummaryRow .selic-summary-chip strong, ' +
-      '#selicSummaryRow .selic-summary-chip .value, ' +
-      '#selicSummaryRow .selic-summary-chip output'
-    ).forEach(el => {
-      setImportant(el, 'display', 'block');
-      setImportant(el, 'margin-bottom', '4px');
-      setImportant(el, 'line-height', '1.08');
-    });
-
-    root.querySelectorAll(
-      '#selicSummaryRow .selic-summary-date, ' +
-      '#selicSummaryRow .selic-summary-chip small'
-    ).forEach(el => {
-      setImportant(el, 'display', 'block');
-      setImportant(el, 'line-height', '1.12');
-      setImportant(el, 'margin-top', '2px');
-    });
-  }
-
-  function fixSelicTitleIfNeeded(){
-    const title = document.querySelector('#chartSelicTitle');
-    if(title && /últimos\s+12\s+meses/i.test(title.textContent || '')){
-      title.textContent = title.textContent.replace(/últimos\s+12\s+meses/i, 'último ano');
-    }
-  }
-
-  function apply(){
-    if(!window.matchMedia('(max-width: 768px)').matches) return;
-    removeRedundantSelic12m();
-    compactSummaryCards();
-    improveSummaryChipSpacing();
-    fixSelicTitleIfNeeded();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  document.addEventListener('click', ev => {
-    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .selic-range-tabs button')){
-      setTimeout(apply, 90);
-      setTimeout(apply, 350);
-    }
-  }, { passive:true });
-
-  [250, 800, 1600].forEach(ms => setTimeout(apply, ms));
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v342 — remove 12M e força eixo X horizontal
-   Correções:
-   - remove qualquer botão 12M dos gráficos de Inflação/Juros;
-   - impede reinserção dinâmica do 12M;
-   - força Chart.js a manter labels horizontais em qualquer update;
-   - limita rótulos do eixo X para não inclinar.
-════════════════════════════════════════════════════ */
-(function remove12mAndForceXAxisV342(){
-  function setImportant(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
-  }
-
-  function remove12mButtons(){
-    const root = document.getElementById('sec-graficos') || document;
-    root.querySelectorAll(
-      'button[data-range="12m"], button[data-range="12"], ' +
-      'button[data-ipca-range="12m"], button[data-selic-range="12m"], ' +
-      '.chart-tab[data-range="12m"], .chart-tab[data-ipca-range="12m"], .chart-tab[data-selic-range="12m"]'
-    ).forEach(btn => btn.remove());
-
-    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
-      if((btn.textContent || '').trim().toLowerCase() === '12m') btn.remove();
-    });
-  }
-
-  function formatSparseTicks(chart){
-    if(!chart?.options?.scales?.x?.ticks) return;
-    const ticks = chart.options.scales.x.ticks;
-    ticks.maxRotation = 0;
-    ticks.minRotation = 0;
-    ticks.autoSkip = false;
-    ticks.maxTicksLimit = window.innerWidth <= 768 ? 5 : 10;
-    ticks.callback = function(value, index, tickList){
-      const total = Array.isArray(tickList) ? tickList.length : (this.chart?.data?.labels?.length || 0);
-      const label = this.getLabelForValue ? this.getLabelForValue(value) : String(value ?? '');
-      const maxLabels = window.innerWidth <= 768 ? 5 : 10;
-      if(total <= maxLabels) return label;
-
-      const step = Math.max(1, Math.ceil((total - 1) / (maxLabels - 1)));
-      if(index === 0 || index === total - 1 || index % step === 0) return label;
-      return '';
-    };
-  }
-
-  function forceAllCharts(){
-    if(!window.Chart) return;
-    ['chartSelic', 'chartIpca', 'chartIpca12m', 'evoChartSelic', 'evoChartIpca', 'evoChartMeta', 'chartDolar'].forEach(id => {
-      const canvas = document.getElementById(id);
-      if(!canvas || !canvas.isConnected) return;
-      const chart = Chart.getChart(canvas);
-      if(!chart) return;
-      formatSparseTicks(chart);
-      try{ chart.update('none'); }catch(_){}
-    });
-  }
-
-  function patchChartUpdate(){
-    if(!window.Chart || Chart.__v342XAxisPatched) return;
-    Chart.__v342XAxisPatched = true;
-
-    const originalUpdate = Chart.prototype.update;
-    Chart.prototype.update = function(...args){
-      formatSparseTicks(this);
-      return originalUpdate.apply(this, args);
-    };
-  }
-
-  function stabilizeTabs(){
-    const root = document.getElementById('sec-graficos') || document;
-    root.querySelectorAll('.chart-tabs, .evo-range-tabs, .selic-range-tabs, .ipca-range-tabs').forEach(tabs => {
-      setImportant(tabs, 'display', 'flex');
-      setImportant(tabs, 'flex-wrap', 'nowrap');
-      setImportant(tabs, 'overflow-x', 'auto');
-      setImportant(tabs, 'overflow-y', 'hidden');
-      setImportant(tabs, 'justify-content', 'flex-start');
-      setImportant(tabs, 'gap', '8px');
-      setImportant(tabs, 'scrollbar-width', 'none');
-    });
-
-    root.querySelectorAll('.chart-tabs button, .chart-tab, .evo-range-tabs button, .selic-range-tabs button, .ipca-range-tabs button').forEach(btn => {
-      setImportant(btn, 'flex', '0 0 auto');
-      setImportant(btn, 'width', 'auto');
-      setImportant(btn, 'min-width', '68px');
-      setImportant(btn, 'white-space', 'nowrap');
-    });
-  }
-
-  function apply(){
-    remove12mButtons();
-    patchChartUpdate();
-    stabilizeTabs();
-    forceAllCharts();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  document.addEventListener('click', ev => {
-    if(ev.target.closest('#sec-graficos .chart-tab, #sec-graficos .chart-tabs button, #sec-graficos .evo-range-tabs button, #sec-graficos .selic-range-tabs button, #sec-graficos .ipca-range-tabs button')){
-      setTimeout(apply, 80);
-      setTimeout(forceAllCharts, 260);
-      setTimeout(forceAllCharts, 700);
-    }
-  }, { passive:true });
-
-  [250, 800, 1600, 2800].forEach(ms => setTimeout(apply, ms));
-})();
-
-/* ════════════════════════════════════════════════════
-   ELTAUM_HEADER_UPDATE_FIX_20260620_v374
-   Garante que o badge #lastUpdate não fique perdido no corpo da tela.
-   Move para o bloco correto do header e impede reinserções erradas.
-════════════════════════════════════════════════════ */
-(function headerUpdateFixV374(){
-  const BUILD = 'ELTAUM_EVO_IPCA_CLEAN_FINAL_20260620_v376';
-  window.__ELTAUM_HEADER_UPDATE_FIX_V374__ = { build: BUILD };
-
-  function qs(sel, root=document){ return root.querySelector(sel); }
-
-  function ensureHost(){
-    let host = qs('.header-update-host-v374');
-    if(host) return host;
-
-    // Preferências de encaixe: onde já ficam metadados do cabeçalho.
-    const shell =
-      qs('.header-data-status-v344') ||
-      qs('.header-metadata-v344') ||
-      qs('.header-meta') ||
-      qs('.header-actions') ||
-      qs('.topbar-actions') ||
-      qs('.app-header') ||
-      qs('header');
-
-    host = document.createElement('span');
-    host.className = 'header-update-host-v374';
-    host.setAttribute('aria-label', 'Status de atualização dos dados');
-
-    if(shell){
-      shell.appendChild(host);
-    }else if(document.body){
-      document.body.prepend(host);
-    }
-
-    return host;
-  }
-
-  function normalizeLastUpdate(){
-    try{
-      document.documentElement.classList.add('header-update-fix-v374');
-
-      const meta = qs('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const last = qs('#lastUpdate');
-      if(!last) return;
-
-      const host = ensureHost();
-      if(last.parentElement !== host){
-        host.appendChild(last);
-      }
-
-      last.classList.add('header-update-v374');
-      last.style.position = '';
-      last.style.left = '';
-      last.style.right = '';
-      last.style.top = '';
-      last.style.bottom = '';
-      last.style.transform = '';
-      last.style.float = '';
-
-      const label = qs('.live-update-label', last);
-      if(label && label.textContent.trim() !== 'Atualizado ·'){
-        label.textContent = 'Atualizado ·';
-      }
-    }catch(e){}
-  }
-
-  function boot(){
-    normalizeLastUpdate();
-
-    [80, 200, 500, 1000, 1800, 3000, 5200].forEach(ms => {
-      setTimeout(normalizeLastUpdate, ms);
-    });
-
-    try{
-      const obs = new MutationObserver(() => normalizeLastUpdate());
-      obs.observe(document.body || document.documentElement, { childList:true, subtree:true });
-      window.__ELTAUM_HEADER_UPDATE_FIX_V374__.observer = obs;
-      window.__ELTAUM_HEADER_UPDATE_FIX_V374__.sync = normalizeLastUpdate;
-    }catch(e){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', boot, {once:true});
-  }else{
-    boot();
-  }
-})();
-
