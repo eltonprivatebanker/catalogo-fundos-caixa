@@ -56621,3 +56621,127 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     color:#86efac!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v409 — Header mobile limpo, sem subtítulo
+   Objetivo: eliminar quebra do subtítulo, reduzir ruído visual
+   e reorganizar logo, título e atualização dentro do card.
+   ========================================================= */
+@media (max-width: 768px){
+  html.mobile-v409 body header.site-header-clean,
+  html.mobile-v409 body .site-header-clean.executive-header-shell-v134,
+  html.mobile-v409 body .site-header-v217{
+    padding:16px 18px 14px!important;
+    min-height:auto!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:0!important;
+  }
+
+  html.mobile-v409 body header.site-header-clean .brand{
+    width:100%!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:12px!important;
+    min-width:0!important;
+  }
+
+  html.mobile-v409 body .brand-logo{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    border-radius:12px!important;
+    font-size:1rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-v409 body .brand-text{
+    flex:0 1 auto!important;
+    min-width:0!important;
+    width:auto!important;
+    max-width:calc(100vw - 120px)!important;
+  }
+
+  html.mobile-v409 body .brand-text h1{
+    margin:0!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    font-size:1.02rem!important;
+    line-height:1.08!important;
+    letter-spacing:-.035em!important;
+    text-align:left!important;
+    color:#f8fafc!important;
+  }
+
+  html.mobile-v409 body .brand-text p{
+    display:none!important;
+  }
+
+  /* Oculta a pílula de fonte no mobile para não competir com o update */
+  html.mobile-v409 body .header-source-pill-v343,
+  html.mobile-v409 body .header-data-status-v343 > .header-source-pill-v343{
+    display:none!important;
+  }
+
+  /* Compatível com estrutura antiga e nova do update */
+  html.mobile-v409 body .header-data-status-v343,
+  html.mobile-v409 body .header-update-host-v374{
+    width:100%!important;
+    display:flex!important;
+    justify-content:center!important;
+    align-items:center!important;
+    margin:9px 0 0!important;
+    padding:0!important;
+    min-height:0!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-v409 body #lastUpdate,
+  html.mobile-v409 body .header-update-v374,
+  html.mobile-v409 body .header-update-v217{
+    position:static!important;
+    transform:none!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    margin:0!important;
+    padding:0!important;
+    min-height:auto!important;
+    height:auto!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    color:#9fa9c3!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    opacity:.92!important;
+  }
+
+  html.mobile-v409 body #lastUpdate .live-update-label{
+    display:none!important;
+  }
+
+  html.mobile-v409 body #lastUpdate .live-dot{
+    width:5px!important;
+    height:5px!important;
+    margin:0!important;
+  }
+
+  html.mobile-v409 body #lastUpdate .live-update-time,
+  html.mobile-v409 body #lastUpdate time{
+    color:#b7c0d8!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+}
