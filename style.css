@@ -56745,3 +56745,36 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     white-space:nowrap!important;
   }
 }
+
+
+/* CHATGPT MOBILE PATCH v410 */
+@media (max-width:768px){
+  .brand-text p{display:none!important;}
+  .site-header-clean .brand{align-items:center!important;}
+  .header-update-host-v374{margin-top:8px!important;display:flex!important;justify-content:center!important;width:100%!important;}
+  .header-update-v374{border:none!important;background:transparent!important;box-shadow:none!important;padding:4px 0!important;}
+
+  .ptax-scroll-hint-v99{
+    display:flex!important;align-items:center;justify-content:space-between;
+    margin:0 0 8px 0;padding:0 4px;
+    font-size:.62rem;color:var(--muted);
+  }
+  .ptax-scroll-hint-v99 strong{color:var(--gold2);}
+
+  .dolar-months{
+    overflow-x:auto!important;
+    display:flex!important;
+    gap:10px!important;
+    scroll-snap-type:x proximity;
+    padding-bottom:8px!important;
+    mask-image:linear-gradient(to right,black 0%,black 85%,transparent 100%);
+  }
+
+  .dolar-month-item{
+    flex:0 0 92px!important;
+    min-width:92px!important;
+    border:none!important;
+    background:rgba(255,255,255,.03)!important;
+    scroll-snap-align:start;
+  }
+}
