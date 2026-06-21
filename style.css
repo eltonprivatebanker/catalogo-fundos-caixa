@@ -56461,3 +56461,76 @@ html.mobile-v402 body #sec-graficos .econ-meta-band-v378 strong{
     color:#aeb9d2 !important;
   }
 }
+
+
+/* PATCH v407 — gráfico Selic mobile-first */
+@media (max-width:700px){
+  #mobileSelicV400 .econ-dash-chart-selic-v378{
+    height:auto!important;
+    min-height:0!important;
+    padding:10px 10px 12px!important;
+    margin-top:12px!important;
+    overflow:visible!important;
+  }
+  #mobileSelicV400 .econ-selic-legacy-svg-v380{
+    display:none!important;
+  }
+  #mobileSelicV400 .econ-selic-mobile-svg-v407{
+    display:block!important;
+    width:100%!important;
+    height:156px!important;
+    min-height:156px!important;
+    overflow:visible!important;
+  }
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .plot-bg{
+    fill:rgba(7,11,24,.72)!important;
+    stroke:rgba(255,255,255,.065)!important;
+    stroke-width:1!important;
+  }
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .area{
+    fill:rgba(200,151,58,.115)!important;
+  }
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .main-line{
+    stroke:#d7a23f!important;
+    stroke-width:6!important;
+    stroke-linecap:round!important;
+    stroke-linejoin:round!important;
+    filter:drop-shadow(0 0 8px rgba(200,151,58,.22));
+  }
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .mobile-ref-line{
+    stroke:rgba(46,209,122,.30)!important;
+    stroke-width:1.4!important;
+    stroke-dasharray:7 8!important;
+  }
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .dot{
+    stroke:#07080f!important;
+    stroke-width:3!important;
+    filter:drop-shadow(0 0 7px rgba(255,255,255,.10));
+  }
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .dot.max{fill:#e8bb6a!important;}
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .dot.min{fill:#7fb6ff!important;}
+  #mobileSelicV400 .econ-selic-mobile-svg-v407 .dot.current{fill:#2ed17a!important;}
+  #mobileSelicV400 .econ-selic-legend-v380{
+    display:none!important;
+  }
+  #mobileSelicV400 .econ-selic-mobile-summary-v407{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:8px!important;
+    margin:8px 2px 0!important;
+    padding:7px 9px!important;
+    border-radius:10px!important;
+    background:rgba(255,255,255,.035)!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    color:#aab4ce!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.60rem!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+  }
+  #mobileSelicV400 .econ-selic-mobile-summary-v407 strong{
+    color:#b8f4ca!important;
+    font-weight:800!important;
+  }
+}

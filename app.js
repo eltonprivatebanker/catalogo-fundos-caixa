@@ -19540,3 +19540,120 @@ function openCdiAnalyticTableV274(){
   }, {passive:true});
 })();
 
+
+
+/* PATCH v407 — Selic mobile-first: sparkline específico para celular
+   Objetivo: parar de encolher o gráfico desktop no mobile. No celular, ocultamos eixos/grades,
+   mostramos apenas a curva, os pontos-chave e um rodapé legível com período + taxa atual. */
+(function(){
+  const originalRenderSelic = window.econRenderSelicLegacyV380;
+  if(typeof originalRenderSelic !== 'function') return;
+
+  function fmtPct(v){
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return n.toFixed(2).replace('.', ',') + '%';
+  }
+
+  function renderMobileSelicV407(containerId, rows, range){
+    const el = document.getElementById(containerId);
+    if(!el) return;
+
+    const visibleRows = (typeof econSelicVisibleRowsV381 === 'function')
+      ? econSelicVisibleRowsV381(rows || [], range)
+      : (rows || []);
+
+    const data = visibleRows
+      .filter(x => Number.isFinite(Number(x._valor)) && x._dt)
+      .sort((a,b) => (a._ts || +a._dt) - (b._ts || +b._dt))
+      .map(x => ({
+        value: Number(x._valor),
+        date: x._dt,
+        label: (typeof econLabelMonthV378 === 'function') ? econLabelMonthV378(x._dt) : '',
+        contextOnly: !!x._periodContextOnly
+      }));
+
+    if(data.length < 2){
+      el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
+      return;
+    }
+
+    const width = 720;
+    const height = 188;
+    const left = 16;
+    const right = 16;
+    const topPad = 18;
+    const bottomPad = 18;
+    const plotW = width - left - right;
+    const plotH = height - topPad - bottomPad;
+
+    const kpiData = data.filter(d => !d.contextOnly);
+    const kpiValues = kpiData.length ? kpiData.map(d => d.value) : data.map(d => d.value);
+    const allValues = data.map(d => d.value);
+    const maxValue = Math.max(...allValues);
+    const minValue = Math.min(...allValues);
+    const amplitude = Math.max(.01, maxValue - minValue);
+
+    // Escala com respiro: no mobile interessa a forma, não o eixo completo.
+    let top = maxValue + Math.max(.45, amplitude * .18);
+    let lo = Math.max(0, minValue - Math.max(.45, amplitude * .18));
+    if(range === 'all'){
+      // Histórico preserva o zero para mostrar a dimensão real dos extremos.
+      lo = 0;
+      top = Math.max(16, Math.ceil((maxValue + 1) / 5) * 5);
+    }
+
+    const yFor = v => topPad + ((top - v) / (top - lo || 1)) * plotH;
+    const xFor = i => left + (i / (data.length - 1)) * plotW;
+    const points = data.map((d, i) => `${xFor(i).toFixed(1)},${yFor(d.value).toFixed(1)}`).join(' ');
+    const area = `${left},${yFor(lo).toFixed(1)} ${points} ${left + plotW},${yFor(lo).toFixed(1)}`;
+
+    const maxPeriodValue = Math.max(...kpiValues);
+    const minPeriodValue = Math.min(...kpiValues);
+    const maxIdx = data.findIndex(d => !d.contextOnly && d.value === maxPeriodValue);
+    const minIdx = data.findIndex(d => !d.contextOnly && d.value === minPeriodValue);
+    const lastIdx = data.length - 1;
+    const last = data[lastIdx];
+
+    function dot(idx, cls, r, title){
+      if(idx < 0 || idx >= data.length) return '';
+      const d = data[idx];
+      return `<circle class="${cls}" cx="${xFor(idx).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="${r}"><title>${title}</title></circle>`;
+    }
+
+    const periodStart = (kpiData[0] || data[0]).label;
+    const periodEnd = (kpiData[kpiData.length - 1] || last).label;
+    const atual = `${fmtPct(last.value)} a.a.`;
+
+    el.innerHTML = `
+      <svg class="econ-selic-mobile-svg-v407" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="Trajetória da Selic meta em versão compacta para celular">
+        <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="18"></rect>
+        <line class="mobile-ref-line" x1="${left}" y1="${yFor(last.value).toFixed(1)}" x2="${left + plotW}" y2="${yFor(last.value).toFixed(1)}"></line>
+        <polygon class="area" points="${area}"></polygon>
+        <polyline class="main-line" points="${points}" fill="none"></polyline>
+        ${dot(maxIdx, 'dot max', 6.4, `Máxima · ${fmtPct(maxPeriodValue)} a.a.`)}
+        ${dot(minIdx, 'dot min', 6.0, `Mínima · ${fmtPct(minPeriodValue)} a.a.`)}
+        ${dot(lastIdx, 'dot current', 7.2, `Atual · ${atual}`)}
+      </svg>
+      <div class="econ-selic-mobile-summary-v407" aria-hidden="true">
+        <span>${periodStart} → ${periodEnd}</span>
+        <strong>Atual · ${atual}</strong>
+      </div>
+    `;
+  }
+
+  window.econRenderSelicLegacyV380 = function(containerId, rows, range){
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
+    if(isMobile) return renderMobileSelicV407(containerId, rows, range);
+    return originalRenderSelic.apply(this, arguments);
+  };
+
+  window.addEventListener('resize', function(){
+    clearTimeout(window.__selicMobileV407ResizeT);
+    window.__selicMobileV407ResizeT = setTimeout(function(){
+      try{
+        if(typeof econRenderTargetV378 === 'function') econRenderTargetV378('selic');
+      }catch(e){}
+    }, 180);
+  }, {passive:true});
+})();
