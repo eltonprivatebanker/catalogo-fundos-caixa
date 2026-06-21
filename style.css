@@ -53588,3 +53588,259 @@ html.evo-overflow-zoom-fix-v384 .ranking-table-wrap{
   }
 }
 
+/* ════════════════════════════════════════════════════
+   PATCH v386 — DESKTOP ONLY
+   Acabamento premium da seção Juros e CDI.
+   Mobile preservado: alterações apenas acima de 821px.
+════════════════════════════════════════════════════ */
+
+@media (min-width:821px){
+  html.rates-desktop-premium-v386 .rates-reference-v167{
+    border-radius:22px !important;
+    overflow:hidden !important;
+    background:
+      linear-gradient(180deg, rgba(15,23,42,.78), rgba(15,23,42,.44)),
+      radial-gradient(circle at 18% 0%, rgba(200,151,58,.10), transparent 34%),
+      rgba(2,6,23,.22) !important;
+    border:1px solid rgba(200,151,58,.28) !important;
+  }
+
+  html.rates-desktop-premium-v386 .rates-reference-v167 .market-reference-head-v167{
+    padding:20px 24px 16px !important;
+    background:linear-gradient(90deg, rgba(200,151,58,.07), rgba(30,64,175,.04), transparent) !important;
+    border-bottom:1px solid rgba(148,163,184,.12) !important;
+  }
+
+  html.rates-desktop-premium-v386 .rates-reference-v167 .market-reference-kicker-v167{
+    color:#d8aa50 !important;
+    letter-spacing:.12em !important;
+    font-size:.66rem !important;
+  }
+
+  html.rates-desktop-premium-v386 .rates-reference-v167 .card-title-v304{
+    font-size:1.42rem !important;
+    line-height:1.08 !important;
+  }
+
+  html.rates-desktop-premium-v386 .rates-summary-v167{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr) !important;
+    gap:14px !important;
+    max-width:1020px !important;
+    padding:16px 24px 0 !important;
+  }
+
+  html.rates-desktop-premium-v386 .rate-summary-card-v167{
+    min-height:96px !important;
+    padding:17px 18px !important;
+    border-radius:18px !important;
+  }
+
+  html.rates-desktop-premium-v386 .rate-summary-value-v167 strong{
+    font-size:2.12rem !important;
+    line-height:1 !important;
+  }
+
+  /* Grid principal: Agenda não estica com o CDI */
+  html.rates-desktop-premium-v386 .rates-detail-grid-v167{
+    display:grid !important;
+    grid-template-columns:minmax(390px,.72fr) minmax(720px,1.28fr) !important;
+    gap:16px !important;
+    align-items:start !important;
+    padding:14px 24px 22px !important;
+  }
+
+  html.rates-desktop-premium-v386 .copom-compact-v167{
+    align-self:start !important;
+    height:auto !important;
+    min-height:0 !important;
+    max-height:none !important;
+    padding:18px !important;
+    border-radius:18px !important;
+    background:
+      linear-gradient(180deg, rgba(15,23,42,.62), rgba(15,23,42,.30)),
+      rgba(2,6,23,.18) !important;
+    border:1px solid rgba(148,163,184,.14) !important;
+  }
+
+  html.rates-desktop-premium-v386 .copom-exec-summary-v270{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:12px !important;
+  }
+
+  html.rates-desktop-premium-v386 .copom-exec-card-v270{
+    min-height:132px !important;
+    padding:16px !important;
+    border-radius:16px !important;
+  }
+
+  html.rates-desktop-premium-v386 .copom-exec-date-v270{
+    font-size:1.58rem !important;
+  }
+
+  html.rates-desktop-premium-v386 .copom-exec-desc-v270{
+    font-size:.74rem !important;
+    line-height:1.38 !important;
+    display:-webkit-box !important;
+    -webkit-line-clamp:2 !important;
+    -webkit-box-orient:vertical !important;
+    overflow:hidden !important;
+  }
+
+  html.rates-desktop-premium-v386 .copom-footnote-v256{
+    margin-top:12px !important;
+    padding-top:10px !important;
+    border-top:1px solid rgba(148,163,184,.08) !important;
+  }
+
+  /* Painel CDI: mais limpo, com KPIs em linha e chips mensais */
+  html.rates-desktop-premium-v386 .cdi-year-history{
+    align-self:start !important;
+    padding:18px !important;
+    border-radius:18px !important;
+    background:
+      linear-gradient(180deg, rgba(15,23,42,.62), rgba(15,23,42,.30)),
+      rgba(2,6,23,.18) !important;
+    border:1px solid rgba(148,163,184,.14) !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-head-v274{
+    margin-bottom:14px !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-kpis-v271{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:10px !important;
+    margin:0 0 12px !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-kpi-v271{
+    grid-column:auto !important;
+    min-width:0 !important;
+    min-height:74px !important;
+    padding:13px 14px !important;
+    border-radius:14px !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-kpi-label-v271{
+    font-size:.58rem !important;
+    letter-spacing:.08em !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-kpi-value-v271{
+    font-size:1.34rem !important;
+    line-height:1.05 !important;
+  }
+
+  /* Meses do CDI viram chips/cards de verdade */
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322.cdi-month-carousel-v322{
+    display:grid !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+    gap:8px !important;
+    margin:8px 0 12px !important;
+    padding:0 !important;
+    overflow:visible !important;
+    white-space:normal !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-card-v322{
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:center !important;
+    gap:3px !important;
+    min-width:0 !important;
+    width:auto !important;
+    padding:9px 10px !important;
+    border:1px solid rgba(148,163,184,.14) !important;
+    border-radius:12px !important;
+    background:rgba(2,6,23,.22) !important;
+    line-height:1.15 !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-card-v322.is-current{
+    border-color:rgba(16,185,129,.46) !important;
+    background:linear-gradient(180deg, rgba(20,83,45,.22), rgba(2,6,23,.18)) !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-card-v322.is-lastclosed{
+    border-color:rgba(200,151,58,.42) !important;
+    background:linear-gradient(180deg, rgba(200,151,58,.16), rgba(2,6,23,.18)) !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-kicker-v322,
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-value-v322,
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-accum-v322{
+    display:block !important;
+    margin:0 !important;
+    white-space:normal !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-kicker-v322{
+    color:#9aaac2 !important;
+    font-size:.54rem !important;
+    text-transform:uppercase !important;
+    letter-spacing:.06em !important;
+    font-weight:850 !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-value-v322{
+    color:#2df6a2 !important;
+    font-family:"JetBrains Mono",monospace !important;
+    font-size:.86rem !important;
+    font-weight:900 !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiMonthCarouselV322 .cdi-month-accum-v322{
+    color:#8796ad !important;
+    font-size:.52rem !important;
+    line-height:1.18 !important;
+  }
+
+  /* Gráfico mantido, mas com menos peso visual.
+     Não removi porque ele mostra a relação mensal x acumulado. */
+  html.rates-desktop-premium-v386 .cdi-chart-canvas-wrap-v271{
+    height:210px !important;
+    min-height:210px !important;
+    border:1px solid rgba(148,163,184,.12) !important;
+    border-radius:16px !important;
+    background:
+      linear-gradient(180deg, rgba(2,6,23,.26), rgba(15,23,42,.10)),
+      repeating-linear-gradient(to right, rgba(148,163,184,.030) 0, rgba(148,163,184,.030) 1px, transparent 1px, transparent 82px) !important;
+    overflow:hidden !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-chart-scroll-wrap-v273,
+  html.rates-desktop-premium-v386 .cdi-chart-scroll-inner-v273{
+    width:100% !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+
+  html.rates-desktop-premium-v386 #cdiYearChartV271{
+    width:100% !important;
+    max-width:100% !important;
+    height:196px !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-chart-legend-v271{
+    justify-content:flex-start !important;
+    gap:18px !important;
+    padding-top:8px !important;
+  }
+
+  html.rates-desktop-premium-v386 .cdi-chart-block-v271 .reference-footnote-v167{
+    margin-top:6px !important;
+  }
+}
+
+/* Desktop grande: mantém bloco mais proporcional */
+@media (min-width:1280px){
+  html.rates-desktop-premium-v386 .rates-detail-grid-v167{
+    grid-template-columns:minmax(430px,.70fr) minmax(760px,1.30fr) !important;
+  }
+}
+
