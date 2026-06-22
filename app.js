@@ -18221,22 +18221,10 @@ function openCdiAnalyticTableV274(){
     const store = document.getElementById('copomMeetings');
     if(!summary || !store || !isMobile) return;
 
-    // v420: não substituir o resumo executivo (Última decisão + Próxima reunião)
-    // por 8 cards no mobile. A agenda completa continua disponível em #copomMeetings.
-    // Isso evita conflito com o layout mobile limpo do bloco Juros e CDI.
-    return;
-
     const items = [...store.querySelectorAll('.copom-item')]
       .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
 
     if(!items.length || summary.dataset.v321Built === '1') return;
-
-    // v413 — pista visual mobile para o carrossel da Agenda Copom
-    // Mantém o aviso fora da trilha para não atrapalhar o scroll dos cards.
-    const oldHint = document.getElementById('copomScrollHintV413');
-    if(!oldHint){
-      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true">Deslize para ver mais reuniões →</div>');
-    }
 
     const html = items.map(item => {
       const num = norm(item.querySelector('.copom-num')?.textContent);
@@ -19672,210 +19660,128 @@ function openCdiAnalyticTableV274(){
 
 
 /* ════════════════════════════════════════════════════
-   v419 — estabilização final do Copom mobile
-   Motivo: v321 recria 8 cards no #copomExecutiveSummaryV270 e
-   v330/v331 aplicam estilos inline. Este patch roda depois deles,
-   remove hints duplicados e força carrossel horizontal limpo.
+   v421 — Reconstrói Agenda Copom mobile do zero
+   Mantém carrossel com 8 reuniões e evita conflito com v321/v330/v331.
 ════════════════════════════════════════════════════ */
-(function copomMobileStableV419(){
-  function setImp(el, prop, val){
-    if(el) el.style.setProperty(prop, val, 'important');
+(function copomPremiumMobileV421(){
+  function norm(txt){
+    return String(txt || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function classify(text){
+    const t = String(text || '').toLowerCase();
+    if(t.includes('próxima') || t.includes('proxima') || t.includes('agenda')) return 'is-next';
+    if(t.includes('prevista')) return 'is-future';
+    if(t.includes('corte')) return 'is-cut';
+    if(t.includes('mantida')) return 'is-hold';
+    return 'is-hold';
+  }
+
+  function statusFromResult(result, cls){
+    const t = String(result || '').toLowerCase();
+    if(cls.includes('is-next') || t.includes('próxima') || t.includes('proxima')) return 'agenda';
+    if(cls.includes('is-future') || t.includes('prevista')) return 'prevista';
+    if(t.includes('corte')) return 'corte';
+    if(t.includes('mantida')) return 'mantida';
+    return 'agenda';
+  }
+
+  function cleanResult(result){
+    return norm(result)
+      .replace(/corte\s+-?0,25\s*p\.p\.\s*→\s*/i, 'corte -0,25 p.p. → ')
+      .replace(/mantida\s+em/i, 'mantida em')
+      .replace(/próxima\s*★/i, 'próxima decisão')
+      .replace(/prevista/i, 'reunião prevista');
+  }
+
+  function getItems(){
+    const store = document.getElementById('copomMeetings');
+    if(store){
+      return [...store.querySelectorAll('.copom-item')]
+        .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999))
+        .map(item => {
+          const num = norm(item.querySelector('.copom-num')?.textContent);
+          const date = norm(item.querySelector('.copom-date')?.textContent);
+          const result = norm(item.querySelector('.copom-result')?.textContent);
+          const cls = classify(result + ' ' + item.className);
+          return {num,date,result:cleanResult(result),cls,status:statusFromResult(result, cls)};
+        });
+    }
+
+    return [...document.querySelectorAll('#copomExecutiveSummaryV270 .copom-exec-card-v270')]
+      .map(card => {
+        const num = norm(card.querySelector('.copom-exec-kicker-v270')?.textContent);
+        const date = norm(card.querySelector('.copom-exec-date-v270')?.textContent);
+        const result = norm(card.querySelector('.copom-carousel-result-v321, .copom-exec-desc-v270, small')?.textContent);
+        const cls = classify(result + ' ' + card.className);
+        return {num,date,result:cleanResult(result),cls,status:statusFromResult(result, cls)};
+      });
+  }
+
+  function build(){
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    if(!isMobile) return;
+
+    const section = document.querySelector('#sec-mercado .copom-compact-v167');
+    if(!section || section.dataset.v421Built === '1') return;
+
+    const items = getItems().filter(item => item.date);
+    if(!items.length) return;
+
+    const cards = items.map((item, idx) => `
+      <article class="copom-premium-card-v421 ${item.cls}" role="listitem" aria-label="${item.num || 'Reunião'} ${item.date}">
+        <span class="copom-premium-kicker-v421">${item.num || `${idx + 1}ª reunião`}</span>
+        <strong class="copom-premium-date-v421">${item.date}</strong>
+        <span class="copom-premium-status-v421">${item.status}</span>
+        <small class="copom-premium-result-v421">${item.result || (item.status === 'agenda' ? 'próxima decisão' : 'reunião prevista')}</small>
+      </article>`).join('');
+
+    const dots = items.map((_, idx) => `<span class="copom-premium-dot-v421${idx === 0 ? ' active' : ''}" aria-hidden="true"></span>`).join('');
+
+    section.dataset.v421Built = '1';
+    section.innerHTML = `
+      <div class="copom-premium-v421" aria-label="Agenda Copom" role="region">
+        <div class="copom-premium-head-v421">
+          <strong class="copom-premium-title-v421">Agenda Copom</strong>
+          <span class="copom-premium-hint-v421">Deslize →</span>
+        </div>
+        <div class="copom-premium-track-v421" role="list" aria-label="Carrossel das reuniões do Copom">
+          ${cards}
+        </div>
+        <div class="copom-premium-dots-v421" aria-hidden="true">${dots}</div>
+      </div>`;
+
+    const track = section.querySelector('.copom-premium-track-v421');
+    const dotEls = [...section.querySelectorAll('.copom-premium-dot-v421')];
+    if(track && dotEls.length){
+      const updateDots = () => {
+        const first = track.querySelector('.copom-premium-card-v421');
+        const step = first ? (first.getBoundingClientRect().width + 12) : 160;
+        const idx = Math.max(0, Math.min(dotEls.length - 1, Math.round(track.scrollLeft / step)));
+        dotEls.forEach((dot, i) => dot.classList.toggle('active', i === idx));
+      };
+      track.addEventListener('scroll', () => requestAnimationFrame(updateDots), {passive:true});
+      updateDots();
+    }
+  }
+
+  function resetIfDesktop(){
+    if(window.matchMedia('(max-width: 768px)').matches) return;
+    const section = document.querySelector('#sec-mercado .copom-compact-v167[data-v421-built="1"]');
+    if(section) section.dataset.v421Built = 'desktop-skip';
   }
 
   function apply(){
-    if(!window.matchMedia('(max-width: 768px)').matches) return;
-
-    const title = document.getElementById('copomCompactTitleV167');
-    const section = title?.closest('.copom-compact-v167');
-    const head = title?.closest('.reference-subhead-v167');
-    const summary = document.getElementById('copomExecutiveSummaryV270');
-    if(!title || !section || !head || !summary) return;
-
-    // limpa hints antigos criados por testes ou patches anteriores
-    document.querySelectorAll(
-      '.copom-scroll-hint-v412,.copom-carousel-hint-v419,.copom-inline-hint-force,.copom-hint-inline-test,.copom-mobile-hint-v419'
-    ).forEach(el => el.remove());
-
-    const small = head.querySelector('small');
-    if(small) setImp(small, 'display', 'none');
-
-    const hint = document.createElement('span');
-    hint.className = 'copom-mobile-hint-v419';
-    hint.textContent = 'Deslize →';
-    head.appendChild(hint);
-
-    title.textContent = 'Agenda Copom';
-
-    setImp(section, 'border', '0');
-    setImp(section, 'background', 'transparent');
-    setImp(section, 'box-shadow', 'none');
-    setImp(section, 'padding', '0');
-    setImp(section, 'margin-top', '18px');
-
-    setImp(head, 'display', 'flex');
-    setImp(head, 'align-items', 'flex-end');
-    setImp(head, 'justify-content', 'space-between');
-    setImp(head, 'gap', '10px');
-    setImp(head, 'margin', '0 0 14px');
-    setImp(head, 'padding', '0');
-    setImp(head, 'text-align', 'left');
-
-    setImp(title, 'font-size', '1.05rem');
-    setImp(title, 'line-height', '1.05');
-    setImp(title, 'white-space', 'nowrap');
-    setImp(title, 'text-align', 'left');
-    setImp(title, 'margin', '0');
-
-    setImp(hint, 'display', 'inline-flex');
-    setImp(hint, 'color', '#e8bb6a');
-    setImp(hint, 'font-size', '.58rem');
-    setImp(hint, 'font-weight', '800');
-    setImp(hint, 'line-height', '1');
-    setImp(hint, 'white-space', 'nowrap');
-    setImp(hint, 'margin-left', 'auto');
-
-    setImp(summary, 'display', 'flex');
-    setImp(summary, 'flex-wrap', 'nowrap');
-    setImp(summary, 'gap', '22px');
-    setImp(summary, 'overflow-x', 'auto');
-    setImp(summary, 'overflow-y', 'hidden');
-    setImp(summary, 'padding', '0 28px 8px 0');
-    setImp(summary, 'margin', '0');
-    setImp(summary, 'scroll-snap-type', 'x proximity');
-    setImp(summary, 'scrollbar-width', 'none');
-    setImp(summary, '-webkit-overflow-scrolling', 'touch');
-    setImp(summary, 'mask-image', 'linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)');
-    setImp(summary, '-webkit-mask-image', 'linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)');
-
-    summary.querySelectorAll('.copom-exec-card-v270').forEach(card => {
-      setImp(card, 'flex', '0 0 128px');
-      setImp(card, 'width', '128px');
-      setImp(card, 'min-width', '128px');
-      setImp(card, 'max-width', '128px');
-      setImp(card, 'border', '0');
-      setImp(card, 'background', 'transparent');
-      setImp(card, 'box-shadow', 'none');
-      setImp(card, 'outline', '0');
-      setImp(card, 'padding', '6px 0 7px 18px');
-      setImp(card, 'margin', '0');
-      setImp(card, 'position', 'relative');
-      setImp(card, 'scroll-snap-align', 'start');
-    });
-
-    summary.querySelectorAll('.copom-carousel-result-v321,.copom-exec-desc-v270').forEach(el => {
-      setImp(el, 'white-space', 'nowrap');
-      setImp(el, 'overflow', 'hidden');
-      setImp(el, 'text-overflow', 'ellipsis');
-      setImp(el, 'max-width', '100%');
-    });
+    build();
+    resetIfDesktop();
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
   else apply();
 
-  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
-  setTimeout(apply, 120);
-  setTimeout(apply, 450);
-  setTimeout(apply, 1100);
-  setTimeout(apply, 2100);
-  setTimeout(apply, 3200);
-
-  const mo = new MutationObserver(() => requestAnimationFrame(apply));
-  const startObserver = () => {
-    const summary = document.getElementById('copomExecutiveSummaryV270');
-    if(summary) mo.observe(summary, { childList:true, subtree:false, attributes:true, attributeFilter:['style','class'] });
-  };
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startObserver);
-  else startObserver();
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v420 — Copom mobile: manter apenas resumo executivo
-   Evita que estilos inline antigos de carrossel deformem a seção.
-════════════════════════════════════════════════════ */
-(function copomExecutiveOnlyV420(){
-  function setImp(el, prop, val){ if(el) el.style.setProperty(prop, val, 'important'); }
-  function apply(){
-    if(!window.matchMedia('(max-width: 768px)').matches) return;
-    const title = document.getElementById('copomCompactTitleV167');
-    const section = title?.closest('.copom-compact-v167');
-    const head = title?.closest('.reference-subhead-v167');
-    const summary = document.getElementById('copomExecutiveSummaryV270');
-    if(!title || !section || !head || !summary) return;
-
-    document.querySelectorAll('.copom-scroll-hint-v413,.copom-scroll-hint-v412,.copom-mobile-hint-v419,.copom-carousel-hint-v419,.copom-inline-hint-force,.copom-hint-inline-test').forEach(el => el.remove());
-
-    // Se algum código anterior já criou 8 cards, preserva só os dois executivos.
-    const cards = [...summary.querySelectorAll('.copom-exec-card-v270')];
-    if(cards.length > 2){
-      const keep = cards.filter(card => card.id === 'copomLastExecutiveV270' || card.id === 'copomNextExecutiveV270');
-      if(keep.length === 2){
-        summary.innerHTML = '';
-        keep.forEach(card => summary.appendChild(card));
-      }else{
-        cards.slice(2).forEach(card => card.remove());
-      }
-    }
-
-    title.textContent = 'Agenda Copom';
-    const small = head.querySelector('small');
-    if(small) small.textContent = 'Última decisão e próxima reunião.';
-
-    setImp(section, 'border', '0');
-    setImp(section, 'background', 'transparent');
-    setImp(section, 'box-shadow', 'none');
-    setImp(section, 'padding', '0');
-    setImp(section, 'margin-top', '18px');
-
-    setImp(head, 'display', 'block');
-    setImp(head, 'margin', '0 0 14px');
-    setImp(head, 'padding', '0');
-    setImp(head, 'text-align', 'left');
-    setImp(title, 'font-size', '1.05rem');
-    setImp(title, 'line-height', '1.05');
-    setImp(title, 'text-align', 'left');
-    setImp(title, 'margin', '0');
-    if(small){
-      setImp(small, 'display', 'block');
-      setImp(small, 'margin-top', '4px');
-      setImp(small, 'font-size', '.62rem');
-      setImp(small, 'color', '#9fa9c3');
-    }
-
-    setImp(summary, 'display', 'grid');
-    setImp(summary, 'grid-template-columns', '1fr 1fr');
-    setImp(summary, 'gap', '22px');
-    setImp(summary, 'padding', '0');
-    setImp(summary, 'margin', '0');
-    setImp(summary, 'overflow', 'visible');
-    setImp(summary, 'mask-image', 'none');
-    setImp(summary, '-webkit-mask-image', 'none');
-
-    summary.querySelectorAll('.copom-exec-card-v270').forEach(card => {
-      card.removeAttribute('style');
-      setImp(card, 'width', 'auto');
-      setImp(card, 'min-width', '0');
-      setImp(card, 'max-width', 'none');
-      setImp(card, 'border', '0');
-      setImp(card, 'background', 'transparent');
-      setImp(card, 'box-shadow', 'none');
-      setImp(card, 'outline', '0');
-      setImp(card, 'padding', '6px 0 7px 18px');
-      setImp(card, 'margin', '0');
-      setImp(card, 'position', 'relative');
-    });
-
-    summary.querySelectorAll('.copom-carousel-result-v321,.copom-exec-desc-v270').forEach(el => {
-      setImp(el, 'white-space', 'nowrap');
-      setImp(el, 'overflow', 'hidden');
-      setImp(el, 'text-overflow', 'ellipsis');
-    });
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
   window.addEventListener('resize', () => requestAnimationFrame(apply), {passive:true});
-  setTimeout(apply, 250);
-  setTimeout(apply, 900);
-  setTimeout(apply, 1800);
+  setTimeout(apply, 120);
+  setTimeout(apply, 700);
+  setTimeout(apply, 1400);
+  setTimeout(apply, 2300);
 })();
