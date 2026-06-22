@@ -57953,3 +57953,54 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
   html.selic-kpi-compact-v416 body #mobileSelicV400 .econ-selic-mobile-svg-v407{height:132px!important;min-height:132px!important}
   html.selic-kpi-compact-v416 body #mobileSelicV400 .econ-selic-mobile-summary-v407{margin-top:6px!important;padding:6px 8px!important;border-radius:9px!important;font-size:.52rem!important}
 }
+
+
+/* PATCH v417 — rodapé do gráfico Selic sem taxa duplicada */
+@media (max-width: 768px){
+  html.selic-chart-period-v417 body #mobileSelicV400 .econ-selic-mobile-summary-v407{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    margin:6px 0 0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    font-family:"JetBrains Mono",monospace!important;
+  }
+
+  html.selic-chart-period-v417 body #mobileSelicV400 .econ-selic-mobile-summary-v407 strong{
+    display:none!important;
+  }
+
+  html.selic-chart-period-v417 body #mobileSelicV400 .econ-selic-mobile-summary-v407 span{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:6px!important;
+    min-width:0!important;
+    min-height:24px!important;
+    padding:6px 8px!important;
+    border:1px solid rgba(255,255,255,.06)!important;
+    border-radius:9px!important;
+    background:rgba(8,14,28,.72)!important;
+    color:#b5bfd5!important;
+    font-size:.50rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  html.selic-chart-period-v417 body #mobileSelicV400 .econ-selic-mobile-summary-v407 em{
+    color:#7f8aa8!important;
+    font-style:normal!important;
+    font-weight:800!important;
+    text-transform:uppercase!important;
+    letter-spacing:.08em!important;
+  }
+
+  html.selic-chart-period-v417 body #mobileSelicV400 .econ-selic-mobile-summary-v407 b{
+    color:#dfe7f8!important;
+    font-weight:850!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}

@@ -19643,8 +19643,8 @@ function openCdiAnalyticTableV274(){
         ${dot(lastIdx, 'dot current', 7.2, `Atual · ${atual}`)}
       </svg>
       <div class="econ-selic-mobile-summary-v407" aria-hidden="true">
-        <span>${periodStart} → ${periodEnd}</span>
-        <strong>Atual · ${atual}</strong>
+        <span><em>Início</em><b>${periodStart}</b></span>
+        <span><em>Fim</em><b>${periodEnd}</b></span>
       </div>
     `;
   }
