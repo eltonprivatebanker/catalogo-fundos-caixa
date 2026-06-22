@@ -57409,3 +57409,143 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     max-width:100%!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v416 — limpeza mobile Juros/CDI + Agenda Copom
+   Escopo: somente mobile. Desktop preservado.
+   - remove duplicidade do texto de deslize da Agenda Copom
+   - remove bordas dos cards Selic Meta e CDI
+   - aproxima visual do padrão "Fechamentos mensais" do dólar
+════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  /* Agenda Copom: uma única instrução de deslize */
+  html.mobile-v416 #sec-mercado .copom-scroll-hint-v413,
+  html.mobile-v416 #sec-mercado .copom-scroll-hint-v415{
+    display:flex!important;
+    justify-content:flex-end!important;
+    align-items:center!important;
+    width:100%!important;
+    margin:0 0 10px!important;
+    padding:0 2px!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    color:#e8bb6a!important;
+    font-size:0!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-v416 #sec-mercado .copom-scroll-hint-v413::before,
+  html.mobile-v416 #sec-mercado .copom-scroll-hint-v415::before{
+    content:'Deslize para ver mais reuniões →'!important;
+    font-size:.62rem!important;
+    line-height:1.15!important;
+    font-weight:800!important;
+    letter-spacing:.01em!important;
+    color:#e8bb6a!important;
+  }
+
+  /* Evita que textos antigos dentro do hint apareçam junto */
+  html.mobile-v416 #sec-mercado .copom-scroll-hint-v413 *,
+  html.mobile-v416 #sec-mercado .copom-scroll-hint-v415 *{
+    display:none!important;
+  }
+
+  /* Selic e CDI: remove bordas/caixas pesadas no mobile */
+  html.mobile-v416 #sec-mercado .rates-summary-v167{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:18px!important;
+    margin:18px 0 22px!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-card-v167,
+  html.mobile-v416 #sec-mercado .rate-summary-card-v167.selic-summary-v167,
+  html.mobile-v416 #sec-mercado .rate-summary-card-v167.cdi-summary-v167{
+    border:0!important;
+    outline:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    border-radius:0!important;
+    padding:0 0 0 13px!important;
+    min-height:auto!important;
+    position:relative!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-card-v167::before{
+    content:''!important;
+    position:absolute!important;
+    left:0!important;
+    top:3px!important;
+    bottom:3px!important;
+    width:3px!important;
+    border-radius:999px!important;
+    background:#e8bb6a!important;
+    box-shadow:0 0 12px rgba(232,187,106,.18)!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-card-v167.cdi-summary-v167::before{
+    background:#2ed17a!important;
+    box-shadow:0 0 12px rgba(46,209,122,.16)!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-card-v167 span{
+    display:block!important;
+    color:#aeb8d1!important;
+    font-size:.66rem!important;
+    line-height:1.05!important;
+    letter-spacing:.10em!important;
+    font-weight:850!important;
+    text-transform:uppercase!important;
+    margin:0 0 8px!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-value-v167{
+    display:flex!important;
+    align-items:baseline!important;
+    gap:4px!important;
+    margin:0!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-value-v167 strong{
+    font-size:1.22rem!important;
+    line-height:1!important;
+    letter-spacing:-.03em!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-value-v167 em{
+    font-size:.82rem!important;
+    line-height:1!important;
+    color:#dfe5f4!important;
+    font-style:normal!important;
+    font-weight:800!important;
+  }
+
+  html.mobile-v416 #sec-mercado .rate-summary-card-v167 small{
+    display:block!important;
+    margin-top:8px!important;
+    color:#aab4cc!important;
+    font-size:.66rem!important;
+    line-height:1.15!important;
+    font-weight:700!important;
+  }
+
+  /* Agenda: deixa os itens mais parecidos com os meses do dólar */
+  html.mobile-v416 #sec-mercado #copomExecutiveSummaryV270 > article,
+  html.mobile-v416 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.mobile-v416 #sec-mercado .copom-exec-summary-v270 > article,
+  html.mobile-v416 #sec-mercado .copom-exec-summary-v270 > .copom-exec-card-v270{
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    border-radius:0!important;
+  }
+}
