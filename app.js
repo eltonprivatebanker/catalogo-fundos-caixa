@@ -5418,6 +5418,12 @@ function atualizarResumoIPCAMensalV250(slice){
   set('ipcaResumoMaxV250', fmtPctIPCAResumoV251(maxObj.valor));
   set('ipcaResumoMaxDataV250', fmtIPCALabelV250(maxObj.item));
   set('ipcaResumoMinV250', fmtPctIPCAResumoV251(minObj.valor));
+  const ipcaMinElV402 = document.getElementById('ipcaResumoMinV250');
+  if(ipcaMinElV402){
+    const nMinV402 = Number(minObj.valor);
+    ipcaMinElV402.classList.toggle('valor-negativo-v402', Number.isFinite(nMinV402) && nMinV402 < 0);
+    ipcaMinElV402.classList.toggle('valor-positivo-v402', Number.isFinite(nMinV402) && nMinV402 > 0);
+  }
   set('ipcaResumoMinDataV250', fmtIPCALabelV250(minObj.item));
 }
 
@@ -6085,6 +6091,7 @@ function econRangeLabelV378(range, suffix = 'M'){
   if(range === 'all') return 'histórico completo';
   const n = Number(range || 12);
   if(suffix === 'A'){
+    if(n === 36) return '3 anos';
     if(n === 12) return '1 ano';
     if(n === 60) return '5 anos';
     if(n === 120) return '10 anos';
@@ -6292,6 +6299,12 @@ function atualizarResumoIPCADashboardV378(rows){
   econSetTextV378('ipcaResumoMaxV250', econPctV378(max.valor));
   econSetTextV378('ipcaResumoMaxDataV250', econLabelFromItemV378(max));
   econSetTextV378('ipcaResumoMinV250', econPctV378(min.valor));
+  const ipcaMinElV402 = document.getElementById('ipcaResumoMinV250');
+  if(ipcaMinElV402){
+    const nMinV402 = Number(min.valor);
+    ipcaMinElV402.classList.toggle('valor-negativo-v402', Number.isFinite(nMinV402) && nMinV402 < 0);
+    ipcaMinElV402.classList.toggle('valor-positivo-v402', Number.isFinite(nMinV402) && nMinV402 > 0);
+  }
   econSetTextV378('ipcaResumoMinDataV250', econLabelFromItemV378(min));
 }
 
@@ -6535,14 +6548,22 @@ function econRenderSelicLegacyV380(containerId, rows, range){
   const kpiData = data.filter(d => !d.contextOnly);
   const values = data.map(d => d.value);
   const maxValue = Math.max(...values);
-  const top = Math.max(16, Math.ceil(Math.max(maxValue, 15) / 5) * 5);
-  const lo = 0;
+  const minValue = Math.min(...values);
+  const amplitude = maxValue - minValue;
+  const useDynamicScale = range !== 'all' && amplitude > 0 && amplitude < 3;
+  const top = useDynamicScale ? Math.ceil((maxValue + 0.35) * 4) / 4 : Math.max(16, Math.ceil(Math.max(maxValue, 15) / 5) * 5);
+  const lo = useDynamicScale ? Math.max(0, Math.floor((minValue - 0.35) * 4) / 4) : 0;
 
   const yFor = v => topPad + ((top - v) / (top - lo || 1)) * plotH;
   const xFor = i => left + (i / (data.length - 1)) * plotW;
 
   const ticks = [];
-  for(let v = 0; v <= top + .001; v += 5) ticks.push(v);
+  if(useDynamicScale){
+    const mid = (top + lo) / 2;
+    [lo, mid, top].forEach(v => ticks.push(v));
+  }else{
+    for(let v = 0; v <= top + .001; v += 5) ticks.push(v);
+  }
 
   const grid = ticks.map(v => {
     const y = yFor(v);
@@ -6553,7 +6574,7 @@ function econRenderSelicLegacyV380(containerId, rows, range){
   }).join('');
 
   const points = data.map((d, i) => `${xFor(i).toFixed(1)},${yFor(d.value).toFixed(1)}`).join(' ');
-  const area = `${left},${yFor(0).toFixed(1)} ${points} ${left + plotW},${yFor(0).toFixed(1)}`;
+  const area = `${left},${yFor(lo).toFixed(1)} ${points} ${left + plotW},${yFor(lo).toFixed(1)}`;
 
   const kpiValues = kpiData.length ? kpiData.map(d => d.value) : values;
   const maxPeriodValue = Math.max(...kpiValues);
@@ -6571,7 +6592,7 @@ function econRenderSelicLegacyV380(containerId, rows, range){
     return `<circle class="${cls}" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="${r}"><title>${d.label} · ${econPctV378(d.value, false)} a.a.</title></circle>`;
   }).join('');
 
-  const labelTargetCount = range === 'all' ? 7 : range === 12 ? 4 : range === 60 ? 5 : 6;
+  const labelTargetCount = range === 'all' ? 7 : range === 36 ? 4 : range === 60 ? 5 : 6;
   const labelStep = Math.max(1, Math.round(data.length / labelTargetCount));
   const labels = data.map((d, i) => {
     const show = i === 0 || i === data.length - 1 || i % labelStep === 0;
@@ -6585,7 +6606,7 @@ function econRenderSelicLegacyV380(containerId, rows, range){
   const periodEnd = kpiData[kpiData.length - 1]?.label || last.label;
 
   el.innerHTML = `
-    <svg class="econ-selic-legacy-svg-v380" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="Trajetória histórica da Selic meta">
+    <svg class="econ-selic-legacy-svg-v380" viewBox="0 0 ${width} ${height}" preserveAspectRatio="xMidYMid meet" aria-label="Trajetória histórica da Selic meta">
       <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="10"></rect>
       ${grid}
       <polygon class="area" points="${area}"></polygon>
@@ -6668,6 +6689,23 @@ async function renderIndicadoresDashboardV378(d){
     return {...item, _dt:dt, _ts:dt ? dt.getTime() : idx, _valor:valor};
   }).filter(x => Number.isFinite(x._valor)).sort((a,b) => a._ts - b._ts);
 
+  try{
+    const refAtualV402 = typeof resolverDataUltimaAlteracaoSelic === 'function' ? resolverDataUltimaAlteracaoSelic(d) : null;
+    const dtAtualV402 = econParseDateV378(refAtualV402?.data || selic.data || selic.data_referencia || '');
+    const valorAtualV402 = econNumberV378(selic.valor ?? selic.MetaSelic ?? selic.taxa);
+    const ultimoV402 = selicNorm[selicNorm.length - 1];
+    if(dtAtualV402 && Number.isFinite(valorAtualV402) && (!ultimoV402 || dtAtualV402.getTime() > ultimoV402._ts || Math.abs(Number(ultimoV402._valor) - valorAtualV402) > 0.0001)){
+      selicNorm.push({
+        DataReuniaoCopom: refAtualV402?.data || selic.data || selic.data_referencia,
+        _dt: dtAtualV402,
+        _ts: dtAtualV402.getTime(),
+        _valor: valorAtualV402,
+        _currentInjectedV402: true
+      });
+      selicNorm.sort((a,b) => a._ts - b._ts);
+    }
+  }catch(e){}
+
   econDashStateV378.selicNorm = selicNorm;
   // v381: KPIs da Selic agora são atualizados dentro de econRenderTargetV378,
   // respeitando o período selecionado.
@@ -6743,7 +6781,7 @@ function atualizarTituloPeriodoGrafico(chart, range){
       },
       999: {
         titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Histórico completo desde 1999'
+        subtitulo: 'Série histórica da Selic meta.'
       }
     }
   };
@@ -9431,7 +9469,7 @@ async function sharePainelMercado(){
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -11194,7 +11232,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_MOBILE_FOOTER_SAFE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11279,7 +11317,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_DATA_FIRST_NO_LOOP_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11618,7 +11656,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_DESKTOP_FILTER_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11686,7 +11724,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_DISABLE_LEGACY_DRAWER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -11793,7 +11831,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_CATEGORY_EXACT_STABLE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12037,7 +12075,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_DESKTOP_TOPBAR_REORG_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12103,7 +12141,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_SUMMARY_LABELS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12204,7 +12242,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_RESULT_COUNT_FINAL_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12345,7 +12383,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_HIDE_CATEGORY_HEADER_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12392,7 +12430,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_REMOVE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12444,7 +12482,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_ESC_CLOSE_DETAILS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12567,7 +12605,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_REMOVE_MOBILE_NOTE_METRICS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12650,7 +12688,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_COMPARATOR_HEADERS_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12711,7 +12749,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_REMOVE_QUICK_NOTE_METRICS_SOURCE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12780,7 +12818,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_MOBILE_PAGINATION_CLOSE_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12850,7 +12888,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_MOBILE_PTAX_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -12945,7 +12983,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -13063,7 +13101,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_MOBILE_RANKING_PRO_BUILD__ = BUILD;
 
   function qs(sel,root=document){return root.querySelector(sel)}
@@ -13153,7 +13191,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_LOOKER_PANEL_BUTTON_BUILD__ = BUILD;
 
   /* Cole aqui o link do seu relatório Looker Studio.
@@ -13222,7 +13260,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_MICRO_PAGINATION_NATIVE_BUILD__ = BUILD;
 
   let scrollTimer = null;
@@ -13352,7 +13390,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_REMOVE_LEGACY_MARKET_HINTS_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13526,7 +13564,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_HEADER_LASTUPDATE_REORG_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13575,7 +13613,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_TYPOGRAPHY_SYSTEM_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13610,7 +13648,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_CLOSED_MONTH_MINI_PANEL_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13648,7 +13686,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_CLOSED_MONTH_MOBILE_REBALANCE_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13689,7 +13727,7 @@ async function sharePainelMercado(){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_SEARCH_NO_AUTOFILL_BUILD__ = BUILD;
 
   function qsa(sel, root=document){ return Array.from(root.querySelectorAll(sel)); }
@@ -13801,7 +13839,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_DESIGN_TOKENS_LEGIBILITY_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13843,7 +13881,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_KPI_TOGGLE_DESKTOP_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -13973,7 +14011,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_TOGGLE_SEM_DADOS_CHECKBOX_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14110,7 +14148,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_TOGGLE_SEM_DADOS_NATIVE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14323,7 +14361,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_W3C_HTML_VALIDATE_FIX_BUILD__ = BUILD;
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -14479,7 +14517,7 @@ if(!isSearchInput(el)) return;
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   const DESKTOP = 901;
   const state = { mode:'exec', usMode:'brl', lastFingerprint:'' };
   const monthMap = {jan:0,fev:1,mar:2,abr:3,mai:4,jun:5,jul:6,ago:7,set:8,out:9,nov:10,dez:11};
@@ -15692,7 +15730,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   const CORE_DESKTOP_ORDER = [
     'Fundo',
     'Data Inicio',
@@ -16293,7 +16331,7 @@ if(document.readyState === 'loading'){
    alterar o botão ativo antes de chamar a função principal. */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
 
   function atualizarPorBotao(btn){
     if(!btn || typeof window.atualizarTituloPeriodoGrafico !== 'function') return;
@@ -16873,7 +16911,7 @@ if(document.readyState === 'loading'){
 (function(){
   'use strict';
 
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
 
   function bindToggleSemDadosV204(){
     const input = document.getElementById('toggleSemDados');
@@ -19382,7 +19420,7 @@ function openCdiAnalyticTableV274(){
    Move para o bloco correto do header e impede reinserções erradas.
 ════════════════════════════════════════════════════ */
 (function headerUpdateFixV374(){
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_HEADER_UPDATE_FIX_V374__ = { build: BUILD };
 
   function qs(sel, root=document){ return root.querySelector(sel); }
@@ -19469,7 +19507,7 @@ function openCdiAnalyticTableV274(){
 
 /* PATCH v384 — proteção leve contra deslocamento horizontal */
 (function overflowZoomGuardV384(){
-  const BUILD = 'ELTAUM_RATES_BALANCED_SPACE_20260620_v394';
+  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
   window.__ELTAUM_OVERFLOW_ZOOM_FIX_V384__ = { build: BUILD };
 
   function guard(){
@@ -19502,3 +19540,120 @@ function openCdiAnalyticTableV274(){
   }, {passive:true});
 })();
 
+
+
+/* PATCH v407 — Selic mobile-first: sparkline específico para celular
+   Objetivo: parar de encolher o gráfico desktop no mobile. No celular, ocultamos eixos/grades,
+   mostramos apenas a curva, os pontos-chave e um rodapé legível com período + taxa atual. */
+(function(){
+  const originalRenderSelic = window.econRenderSelicLegacyV380;
+  if(typeof originalRenderSelic !== 'function') return;
+
+  function fmtPct(v){
+    const n = Number(v);
+    if(!Number.isFinite(n)) return '—';
+    return n.toFixed(2).replace('.', ',') + '%';
+  }
+
+  function renderMobileSelicV407(containerId, rows, range){
+    const el = document.getElementById(containerId);
+    if(!el) return;
+
+    const visibleRows = (typeof econSelicVisibleRowsV381 === 'function')
+      ? econSelicVisibleRowsV381(rows || [], range)
+      : (rows || []);
+
+    const data = visibleRows
+      .filter(x => Number.isFinite(Number(x._valor)) && x._dt)
+      .sort((a,b) => (a._ts || +a._dt) - (b._ts || +b._dt))
+      .map(x => ({
+        value: Number(x._valor),
+        date: x._dt,
+        label: (typeof econLabelMonthV378 === 'function') ? econLabelMonthV378(x._dt) : '',
+        contextOnly: !!x._periodContextOnly
+      }));
+
+    if(data.length < 2){
+      el.innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
+      return;
+    }
+
+    const width = 720;
+    const height = 188;
+    const left = 16;
+    const right = 16;
+    const topPad = 18;
+    const bottomPad = 18;
+    const plotW = width - left - right;
+    const plotH = height - topPad - bottomPad;
+
+    const kpiData = data.filter(d => !d.contextOnly);
+    const kpiValues = kpiData.length ? kpiData.map(d => d.value) : data.map(d => d.value);
+    const allValues = data.map(d => d.value);
+    const maxValue = Math.max(...allValues);
+    const minValue = Math.min(...allValues);
+    const amplitude = Math.max(.01, maxValue - minValue);
+
+    // Escala com respiro: no mobile interessa a forma, não o eixo completo.
+    let top = maxValue + Math.max(.45, amplitude * .18);
+    let lo = Math.max(0, minValue - Math.max(.45, amplitude * .18));
+    if(range === 'all'){
+      // Histórico preserva o zero para mostrar a dimensão real dos extremos.
+      lo = 0;
+      top = Math.max(16, Math.ceil((maxValue + 1) / 5) * 5);
+    }
+
+    const yFor = v => topPad + ((top - v) / (top - lo || 1)) * plotH;
+    const xFor = i => left + (i / (data.length - 1)) * plotW;
+    const points = data.map((d, i) => `${xFor(i).toFixed(1)},${yFor(d.value).toFixed(1)}`).join(' ');
+    const area = `${left},${yFor(lo).toFixed(1)} ${points} ${left + plotW},${yFor(lo).toFixed(1)}`;
+
+    const maxPeriodValue = Math.max(...kpiValues);
+    const minPeriodValue = Math.min(...kpiValues);
+    const maxIdx = data.findIndex(d => !d.contextOnly && d.value === maxPeriodValue);
+    const minIdx = data.findIndex(d => !d.contextOnly && d.value === minPeriodValue);
+    const lastIdx = data.length - 1;
+    const last = data[lastIdx];
+
+    function dot(idx, cls, r, title){
+      if(idx < 0 || idx >= data.length) return '';
+      const d = data[idx];
+      return `<circle class="${cls}" cx="${xFor(idx).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="${r}"><title>${title}</title></circle>`;
+    }
+
+    const periodStart = (kpiData[0] || data[0]).label;
+    const periodEnd = (kpiData[kpiData.length - 1] || last).label;
+    const atual = `${fmtPct(last.value)} a.a.`;
+
+    el.innerHTML = `
+      <svg class="econ-selic-mobile-svg-v407" viewBox="0 0 ${width} ${height}" preserveAspectRatio="none" aria-label="Trajetória da Selic meta em versão compacta para celular">
+        <rect class="plot-bg" x="${left}" y="${topPad}" width="${plotW}" height="${plotH}" rx="18"></rect>
+        <line class="mobile-ref-line" x1="${left}" y1="${yFor(last.value).toFixed(1)}" x2="${left + plotW}" y2="${yFor(last.value).toFixed(1)}"></line>
+        <polygon class="area" points="${area}"></polygon>
+        <polyline class="main-line" points="${points}" fill="none"></polyline>
+        ${dot(maxIdx, 'dot max', 6.4, `Máxima · ${fmtPct(maxPeriodValue)} a.a.`)}
+        ${dot(minIdx, 'dot min', 6.0, `Mínima · ${fmtPct(minPeriodValue)} a.a.`)}
+        ${dot(lastIdx, 'dot current', 7.2, `Atual · ${atual}`)}
+      </svg>
+      <div class="econ-selic-mobile-summary-v407" aria-hidden="true">
+        <span>${periodStart} → ${periodEnd}</span>
+        <strong>Atual · ${atual}</strong>
+      </div>
+    `;
+  }
+
+  window.econRenderSelicLegacyV380 = function(containerId, rows, range){
+    const isMobile = window.matchMedia && window.matchMedia('(max-width: 700px)').matches;
+    if(isMobile) return renderMobileSelicV407(containerId, rows, range);
+    return originalRenderSelic.apply(this, arguments);
+  };
+
+  window.addEventListener('resize', function(){
+    clearTimeout(window.__selicMobileV407ResizeT);
+    window.__selicMobileV407ResizeT = setTimeout(function(){
+      try{
+        if(typeof econRenderTargetV378 === 'function') econRenderTargetV378('selic');
+      }catch(e){}
+    }, 180);
+  }, {passive:true});
+})();
