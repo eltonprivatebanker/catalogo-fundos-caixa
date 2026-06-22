@@ -18221,6 +18221,11 @@ function openCdiAnalyticTableV274(){
     const store = document.getElementById('copomMeetings');
     if(!summary || !store || !isMobile) return;
 
+    // v420: não substituir o resumo executivo (Última decisão + Próxima reunião)
+    // por 8 cards no mobile. A agenda completa continua disponível em #copomMeetings.
+    // Isso evita conflito com o layout mobile limpo do bloco Juros e CDI.
+    return;
+
     const items = [...store.querySelectorAll('.copom-item')]
       .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
 
@@ -19782,4 +19787,95 @@ function openCdiAnalyticTableV274(){
   };
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startObserver);
   else startObserver();
+})();
+
+
+/* ════════════════════════════════════════════════════
+   v420 — Copom mobile: manter apenas resumo executivo
+   Evita que estilos inline antigos de carrossel deformem a seção.
+════════════════════════════════════════════════════ */
+(function copomExecutiveOnlyV420(){
+  function setImp(el, prop, val){ if(el) el.style.setProperty(prop, val, 'important'); }
+  function apply(){
+    if(!window.matchMedia('(max-width: 768px)').matches) return;
+    const title = document.getElementById('copomCompactTitleV167');
+    const section = title?.closest('.copom-compact-v167');
+    const head = title?.closest('.reference-subhead-v167');
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(!title || !section || !head || !summary) return;
+
+    document.querySelectorAll('.copom-scroll-hint-v413,.copom-scroll-hint-v412,.copom-mobile-hint-v419,.copom-carousel-hint-v419,.copom-inline-hint-force,.copom-hint-inline-test').forEach(el => el.remove());
+
+    // Se algum código anterior já criou 8 cards, preserva só os dois executivos.
+    const cards = [...summary.querySelectorAll('.copom-exec-card-v270')];
+    if(cards.length > 2){
+      const keep = cards.filter(card => card.id === 'copomLastExecutiveV270' || card.id === 'copomNextExecutiveV270');
+      if(keep.length === 2){
+        summary.innerHTML = '';
+        keep.forEach(card => summary.appendChild(card));
+      }else{
+        cards.slice(2).forEach(card => card.remove());
+      }
+    }
+
+    title.textContent = 'Agenda Copom';
+    const small = head.querySelector('small');
+    if(small) small.textContent = 'Última decisão e próxima reunião.';
+
+    setImp(section, 'border', '0');
+    setImp(section, 'background', 'transparent');
+    setImp(section, 'box-shadow', 'none');
+    setImp(section, 'padding', '0');
+    setImp(section, 'margin-top', '18px');
+
+    setImp(head, 'display', 'block');
+    setImp(head, 'margin', '0 0 14px');
+    setImp(head, 'padding', '0');
+    setImp(head, 'text-align', 'left');
+    setImp(title, 'font-size', '1.05rem');
+    setImp(title, 'line-height', '1.05');
+    setImp(title, 'text-align', 'left');
+    setImp(title, 'margin', '0');
+    if(small){
+      setImp(small, 'display', 'block');
+      setImp(small, 'margin-top', '4px');
+      setImp(small, 'font-size', '.62rem');
+      setImp(small, 'color', '#9fa9c3');
+    }
+
+    setImp(summary, 'display', 'grid');
+    setImp(summary, 'grid-template-columns', '1fr 1fr');
+    setImp(summary, 'gap', '22px');
+    setImp(summary, 'padding', '0');
+    setImp(summary, 'margin', '0');
+    setImp(summary, 'overflow', 'visible');
+    setImp(summary, 'mask-image', 'none');
+    setImp(summary, '-webkit-mask-image', 'none');
+
+    summary.querySelectorAll('.copom-exec-card-v270').forEach(card => {
+      card.removeAttribute('style');
+      setImp(card, 'width', 'auto');
+      setImp(card, 'min-width', '0');
+      setImp(card, 'max-width', 'none');
+      setImp(card, 'border', '0');
+      setImp(card, 'background', 'transparent');
+      setImp(card, 'box-shadow', 'none');
+      setImp(card, 'outline', '0');
+      setImp(card, 'padding', '6px 0 7px 18px');
+      setImp(card, 'margin', '0');
+      setImp(card, 'position', 'relative');
+    });
+
+    summary.querySelectorAll('.copom-carousel-result-v321,.copom-exec-desc-v270').forEach(el => {
+      setImp(el, 'white-space', 'nowrap');
+      setImp(el, 'overflow', 'hidden');
+      setImp(el, 'text-overflow', 'ellipsis');
+    });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+  window.addEventListener('resize', () => requestAnimationFrame(apply), {passive:true});
+  setTimeout(apply, 250);
+  setTimeout(apply, 900);
+  setTimeout(apply, 1800);
 })();
