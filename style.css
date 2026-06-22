@@ -58288,3 +58288,150 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     line-height:1.1!important;
   }
 }
+
+
+/* PATCH v424 — PTAX: fechamentos mensais com dica unica e mais compactos */
+@media (max-width: 768px){
+  html.dolar-months-clean-v424 body #sec-dolar .dolar-month-strip{
+    padding:0!important;
+    margin-top:14px!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar .dolar-month-strip-head{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:10px!important;
+    margin:0 0 12px!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar .dolar-month-strip-head > div:first-child{
+    min-width:0!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar .dolar-month-strip-title{
+    color:#f4c96f!important;
+    font-size:.70rem!important;
+    line-height:1.05!important;
+    letter-spacing:.11em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar .dolar-month-strip-head small,
+  html.dolar-months-clean-v424 body #sec-dolar #dolarTimelineToggle,
+  html.dolar-months-clean-v424 body #sec-dolar .dolar-months-table-head-v162{
+    display:none!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar .dolar-month-strip-head::after{
+    content:'Deslize →'!important;
+    color:#e8bb6a!important;
+    font-family:"Inter",sans-serif!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:.01em!important;
+    white-space:nowrap!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar .ptax-scroll-hint-v99,
+  html.dolar-months-clean-v424 body #sec-dolar .ptax-scroll-hint-v99 strong,
+  html.dolar-months-clean-v424 body #sec-dolar .ptax-scroll-hint-v99 strong::before,
+  html.dolar-months-clean-v424 body #sec-dolar .ptax-scroll-hint-v99 span{
+    display:none!important;
+    content:none!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar #dolarTimelineBody{
+    display:block!important;
+    margin-top:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    gap:9px!important;
+    margin:0!important;
+    padding:2px 30px 8px 0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x proximity!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    touch-action:pan-x!important;
+    mask-image:linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)!important;
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths .dolar-month-item,
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths .dolar-month-row-v162,
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths .dolar-month-snap-v98{
+    flex:0 0 88px!important;
+    width:88px!important;
+    min-width:88px!important;
+    max-width:88px!important;
+    min-height:68px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:4px!important;
+    padding:9px 8px!important;
+    margin:0!important;
+    border:0!important;
+    border-radius:12px!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    outline:0!important;
+    scroll-snap-align:start!important;
+    transform:none!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths .dolar-month-label{
+    display:block!important;
+    color:#aeb8d2!important;
+    font-family:"JetBrains Mono",monospace!important;
+    font-size:.50rem!important;
+    line-height:1.05!important;
+    font-weight:850!important;
+    letter-spacing:.04em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths .dolar-month-val{
+    display:block!important;
+    color:#f8fafc!important;
+    font-family:"JetBrains Mono",monospace!important;
+    font-size:.72rem!important;
+    line-height:1.05!important;
+    font-weight:850!important;
+    white-space:nowrap!important;
+  }
+
+  html.dolar-months-clean-v424 body #sec-dolar #dolarMonths .dolar-month-var{
+    display:block!important;
+    font-family:"JetBrains Mono",monospace!important;
+    font-size:.58rem!important;
+    line-height:1.05!important;
+    font-weight:850!important;
+    white-space:nowrap!important;
+  }
+}

@@ -13009,7 +13009,7 @@ async function sharePainelMercado(){
       hint = document.createElement('div');
       hint.className = 'ptax-scroll-hint-v99';
       hint.dataset.scrollHintV99 = id;
-      hint.innerHTML = `<span>${text}</span><strong>Arraste →</strong>`;
+      hint.innerHTML = `<span>${text}</span>`;
       row.parentElement.insertBefore(hint, row);
     }else{
       const span = hint.querySelector('span');
@@ -13100,6 +13100,41 @@ async function sharePainelMercado(){
   setTimeout(normalizePtaxScrollHintsV99,3000);
 
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__ = {sync:normalizePtaxScrollHintsV99};
+})();
+
+
+/* PATCH v424 — PTAX mobile: dica única e fechamentos mais compactos */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_DOLAR_MONTHS_CLEAN_v424';
+
+  function syncDolarMonthsCleanV424(){
+    try{
+      document.documentElement.classList.add('mobile-v424','dolar-months-clean-v424');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document
+        .querySelectorAll('#sec-dolar .ptax-scroll-hint-v99 strong')
+        .forEach((node) => node.remove());
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMonthsCleanV424, {once:true});
+  }else{
+    syncDolarMonthsCleanV424();
+  }
+
+  setTimeout(syncDolarMonthsCleanV424, 450);
+  setTimeout(syncDolarMonthsCleanV424, 1400);
+  setTimeout(syncDolarMonthsCleanV424, 2800);
+
+  window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__ = {
+    build: BUILD,
+    sync: syncDolarMonthsCleanV424
+  };
 })();
 
 
@@ -19558,8 +19593,6 @@ function openCdiAnalyticTableV274(){
   }, {passive:true});
 })();
 
-
-
 /* PATCH v407 — Selic mobile-first: sparkline específico para celular
    Objetivo: parar de encolher o gráfico desktop no mobile. No celular, ocultamos eixos/grades,
    mostramos apenas a curva, os pontos-chave e um rodapé legível com período + taxa atual. */
@@ -19674,4 +19707,27 @@ function openCdiAnalyticTableV274(){
       }catch(e){}
     }, 180);
   }, {passive:true});
+})();
+
+/* PATCH v424 — marcador final para evitar overwrite por rotinas antigas */
+(function(){
+  function syncFinalBuildV424(){
+    try{
+      document.documentElement.classList.add('mobile-v424','dolar-months-clean-v424');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_DOLAR_MONTHS_CLEAN_v424';
+      if(window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__?.sync){
+        window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncFinalBuildV424, {once:true});
+  }else{
+    syncFinalBuildV424();
+  }
+
+  window.addEventListener('load', syncFinalBuildV424, {once:true});
+  setTimeout(syncFinalBuildV424, 3200);
 })();
