@@ -18276,7 +18276,9 @@ function openCdiAnalyticTableV274(){
     // Mantém o aviso fora da trilha para não atrapalhar o scroll dos cards.
     const oldHint = document.getElementById('copomScrollHintV413');
     if(!oldHint){
-      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true">Deslize para ver mais reuniões →</div>');
+      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true"></div>');
+    }else{
+      oldHint.textContent = '';
     }
 
     const html = items.map(item => {
@@ -19730,4 +19732,235 @@ function openCdiAnalyticTableV274(){
 
   window.addEventListener('load', syncFinalBuildV424, {once:true});
   setTimeout(syncFinalBuildV424, 3200);
+})();
+
+/* PATCH v425 — Juros e CDI: Copom/CDI mensal em carrosseis padronizados */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_CDI_CAROUSELS_v425';
+
+  function syncRatesCarouselsV425(){
+    try{
+      document.documentElement.classList.add('mobile-v425','rates-copom-cdi-carousels-v425');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const copomHint = document.getElementById('copomScrollHintV413');
+      if(copomHint) copomHint.textContent = '';
+
+      const cdiBox = document.getElementById('cdiYearHistory');
+      if(cdiBox){
+        cdiBox.removeAttribute('hidden');
+        cdiBox.removeAttribute('aria-hidden');
+      }
+
+      const setImportant = (el, prop, val) => {
+        if(el) el.style.setProperty(prop, val, 'important');
+      };
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'display', 'flex');
+          setImportant(track, 'gap', '9px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '28px');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'overflow-y', 'hidden');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+        });
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', '0 0 112px');
+          setImportant(card, 'width', '112px');
+          setImportant(card, 'min-width', '112px');
+          setImportant(card, 'max-width', '112px');
+          setImportant(card, 'box-sizing', 'border-box');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesCarouselsV425, {once:true});
+  }else{
+    syncRatesCarouselsV425();
+  }
+
+  window.addEventListener('load', syncRatesCarouselsV425, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesCarouselsV425), {passive:true});
+  setTimeout(syncRatesCarouselsV425, 450);
+  setTimeout(syncRatesCarouselsV425, 1500);
+  setTimeout(syncRatesCarouselsV425, 3400);
+
+  window.__ELTAUM_RATES_COPOM_CDI_CAROUSELS_V425__ = {
+    build: BUILD,
+    sync: syncRatesCarouselsV425
+  };
+})();
+
+/* PATCH v426 — Juros e CDI: tres cards visiveis por tela */
+(function(){
+  const BUILD = 'ELTAUM_RATES_THREE_VISIBLE_v426';
+
+  function syncRatesThreeVisibleV426(){
+    try{
+      document.documentElement.classList.add('mobile-v426','rates-three-visible-v426');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const setImportant = (el, prop, val) => {
+        if(el) el.style.setProperty(prop, val, 'important');
+      };
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'gap', '8px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '14px');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+        });
+
+      const width = 'calc((100% - 16px) / 3)';
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', `0 0 ${width}`);
+          setImportant(card, 'width', width);
+          setImportant(card, 'min-width', width);
+          setImportant(card, 'max-width', width);
+          setImportant(card, 'box-sizing', 'border-box');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesThreeVisibleV426, {once:true});
+  }else{
+    syncRatesThreeVisibleV426();
+  }
+
+  window.addEventListener('load', syncRatesThreeVisibleV426, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesThreeVisibleV426), {passive:true});
+  setTimeout(syncRatesThreeVisibleV426, 520);
+  setTimeout(syncRatesThreeVisibleV426, 1650);
+  setTimeout(syncRatesThreeVisibleV426, 3600);
+
+  window.__ELTAUM_RATES_THREE_VISIBLE_V426__ = {
+    build: BUILD,
+    sync: syncRatesThreeVisibleV426
+  };
+})();
+
+/* PATCH v427 — Juros e CDI: remove conflitos legados e fixa 3 cards */
+(function(){
+  const BUILD = 'ELTAUM_RATES_HARD_THREE_v427';
+  let observerStarted = false;
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function forceThreeCardsV427(){
+    try{
+      const root = document.documentElement;
+      root.classList.add('mobile-v427','rates-hard-three-v427');
+      root.classList.remove('mobile-rates-final-v352','mobile-v414','mobile-v413');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const sec = document.getElementById('sec-mercado');
+      if(sec) sec.classList.add('rates-hard-three-v427');
+
+      document.querySelectorAll('#sec-mercado .copom-scroll-hint-v413').forEach(el => el.remove());
+
+      const cdiBox = document.getElementById('cdiYearHistory');
+      if(cdiBox){
+        cdiBox.removeAttribute('hidden');
+        cdiBox.removeAttribute('aria-hidden');
+        setImportant(cdiBox, 'display', 'block');
+        setImportant(cdiBox, 'visibility', 'visible');
+        setImportant(cdiBox, 'height', 'auto');
+        setImportant(cdiBox, 'max-height', 'none');
+        setImportant(cdiBox, 'overflow', 'hidden');
+        setImportant(cdiBox, 'margin', '12px 0 0');
+        setImportant(cdiBox, 'padding', '11px 10px 13px');
+      }
+
+      const oldCdi = document.getElementById('cdiMobileReadableV352');
+      if(oldCdi){
+        oldCdi.setAttribute('aria-hidden','true');
+        try{ oldCdi.inert = true; }catch(_error){}
+        setImportant(oldCdi, 'display', 'none');
+        setImportant(oldCdi, 'height', '0');
+        setImportant(oldCdi, 'max-height', '0');
+        setImportant(oldCdi, 'overflow', 'hidden');
+      }
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'display', 'flex');
+          setImportant(track, 'flex-wrap', 'nowrap');
+          setImportant(track, 'gap', '8px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '0');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'overflow-y', 'hidden');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+          setImportant(track, 'scrollbar-width', 'none');
+        });
+
+      const width = 'calc((100% - 16px) / 3)';
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', `0 0 ${width}`);
+          setImportant(card, 'width', width);
+          setImportant(card, 'min-width', width);
+          setImportant(card, 'max-width', width);
+          setImportant(card, 'box-sizing', 'border-box');
+          setImportant(card, 'min-height', '66px');
+          setImportant(card, 'padding', '8px 6px 8px 9px');
+        });
+
+      if(!observerStarted){
+        observerStarted = true;
+        const targets = [
+          document.getElementById('copomExecutiveSummaryV270'),
+          document.getElementById('cdiMonthCarouselV322'),
+          document.getElementById('cdiYearHistory')
+        ].filter(Boolean);
+
+        const obs = new MutationObserver(() => {
+          requestAnimationFrame(forceThreeCardsV427);
+        });
+        targets.forEach(target => obs.observe(target, {
+          childList:true,
+          subtree:true,
+          attributes:true,
+          attributeFilter:['style','class','hidden','aria-hidden']
+        }));
+        window.__ELTAUM_RATES_HARD_THREE_OBSERVER_V427__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', forceThreeCardsV427, {once:true});
+  }else{
+    forceThreeCardsV427();
+  }
+
+  window.addEventListener('load', forceThreeCardsV427, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(forceThreeCardsV427), {passive:true});
+  [350, 800, 1400, 2400, 4200, 6500].forEach(ms => setTimeout(forceThreeCardsV427, ms));
+
+  window.__ELTAUM_RATES_HARD_THREE_V427__ = {
+    build: BUILD,
+    sync: forceThreeCardsV427
+  };
 })();
