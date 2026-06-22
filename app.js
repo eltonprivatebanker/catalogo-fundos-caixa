@@ -20127,3 +20127,103 @@ function openCdiAnalyticTableV274(){
     sync: syncCopomMoveV430
   };
 })();
+
+/* PATCH v431 — Agenda Copom: movimento em p.p. persistente apos rebuild */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_MOVE_PERSISTENT_v431';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function extractMoveText(result){
+    const text = String(result || '').replace(/\u2212/g, '-').replace(/\s+/g, ' ').trim();
+    const match = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(!match) return '';
+    return match[2]
+      .replace(/\s*p\.?\s*p\.?/i, ' p.p.')
+      .replace(/^\+?/, match[1].toLowerCase() === 'alta' ? '+' : '');
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      syncCopomMovePersistentV431();
+    });
+  }
+
+  function syncCard(card){
+    const status = card.querySelector('.copom-exec-status-v270');
+    const result = card.querySelector('.copom-carousel-result-v321');
+    const move = extractMoveText(result?.textContent || '');
+    const existing = card.querySelector('.copom-move-v430, .copom-move-v431');
+
+    if(!move){
+      card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(el => el.remove());
+      return;
+    }
+
+    if(result){
+      result.setAttribute('aria-hidden', 'true');
+      result.style.setProperty('display', 'none', 'important');
+    }
+
+    if(existing){
+      existing.className = 'copom-move-v430 copom-move-v431';
+      if(existing.textContent !== move) existing.textContent = move;
+      if(status && existing.previousElementSibling !== status){
+        status.insertAdjacentElement('afterend', existing);
+      }
+      card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(el => {
+        if(el !== existing) el.remove();
+      });
+      return;
+    }
+
+    if(!status) return;
+    const el = document.createElement('small');
+    el.className = 'copom-move-v430 copom-move-v431';
+    el.textContent = move;
+    status.insertAdjacentElement('afterend', el);
+  }
+
+  function startObserver(summary){
+    if(observerStarted || !summary || !window.MutationObserver) return;
+    observerStarted = true;
+    const target = document.getElementById('sec-mercado') || summary;
+    const obs = new MutationObserver(schedule);
+    obs.observe(target, {
+      childList:true,
+      subtree:true
+    });
+    window.__ELTAUM_RATES_COPOM_MOVE_OBSERVER_V431__ = obs;
+  }
+
+  function syncCopomMovePersistentV431(){
+    try{
+      document.documentElement.classList.add('mobile-v430','rates-copom-move-v430','mobile-v431','rates-copom-move-persistent-v431');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+      summary.querySelectorAll(':scope > article').forEach(syncCard);
+      startObserver(summary);
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomMovePersistentV431, {once:true});
+  }else{
+    syncCopomMovePersistentV431();
+  }
+
+  window.addEventListener('load', syncCopomMovePersistentV431, {once:true});
+  window.addEventListener('pageshow', syncCopomMovePersistentV431, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomMovePersistentV431, ms));
+
+  window.__ELTAUM_RATES_COPOM_MOVE_PERSISTENT_V431__ = {
+    build: BUILD,
+    sync: syncCopomMovePersistentV431
+  };
+})();
