@@ -18226,6 +18226,13 @@ function openCdiAnalyticTableV274(){
 
     if(!items.length || summary.dataset.v321Built === '1') return;
 
+    // v413 — pista visual mobile para o carrossel da Agenda Copom
+    // Mantém o aviso fora da trilha para não atrapalhar o scroll dos cards.
+    const oldHint = document.getElementById('copomScrollHintV413');
+    if(!oldHint){
+      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true">Deslize para ver mais reuniões →</div>');
+    }
+
     const html = items.map(item => {
       const num = norm(item.querySelector('.copom-num')?.textContent);
       const date = norm(item.querySelector('.copom-date')?.textContent);

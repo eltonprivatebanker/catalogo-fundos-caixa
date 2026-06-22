@@ -56958,3 +56958,131 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     display:none!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v413 — Agenda Copom mobile: carrossel limpo + pista de deslize
+   Escopo: somente mobile. Desktop preservado.
+════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  #sec-mercado .copom-scroll-hint-v413{
+    display:flex!important;
+    justify-content:flex-end!important;
+    align-items:center!important;
+    margin:2px 0 8px!important;
+    padding:0 2px!important;
+    border:0!important;
+    background:transparent!important;
+    color:#e8bb6a!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.62rem!important;
+    line-height:1.15!important;
+    font-weight:800!important;
+    letter-spacing:.01em!important;
+    pointer-events:none!important;
+  }
+
+  #sec-mercado #copomExecutiveSummaryV270{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    gap:8px!important;
+    padding:4px 22px 10px 0!important;
+    margin:0!important;
+    scroll-snap-type:x mandatory!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+    scrollbar-width:none!important;
+    mask-image:linear-gradient(90deg,#000 0%,#000 78%,transparent 100%)!important;
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 78%,transparent 100%)!important;
+  }
+
+  #sec-mercado #copomExecutiveSummaryV270::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321{
+    flex:0 0 118px!important;
+    width:118px!important;
+    min-width:118px!important;
+    max-width:118px!important;
+    min-height:88px!important;
+    scroll-snap-align:start!important;
+    border:0!important;
+    outline:0!important;
+    box-shadow:none!important;
+    padding:10px 9px 9px 11px!important;
+    margin:0!important;
+    border-radius:12px!important;
+    background:rgba(12,16,31,.52)!important;
+    overflow:hidden!important;
+  }
+
+  #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270::after,
+  #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321::after{
+    display:none!important;
+    content:none!important;
+  }
+
+  #sec-mercado .copom-carousel-card-v321 .copom-exec-kicker-v270,
+  #sec-mercado #copomExecutiveSummaryV270 .copom-exec-kicker-v270{
+    display:block!important;
+    font-size:.51rem!important;
+    line-height:1.05!important;
+    letter-spacing:.065em!important;
+    color:#8ea2d8!important;
+    margin:0 0 5px!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-mercado .copom-carousel-card-v321 .copom-exec-date-v270,
+  #sec-mercado #copomExecutiveSummaryV270 .copom-exec-date-v270{
+    display:block!important;
+    font-size:.92rem!important;
+    line-height:1.05!important;
+    font-weight:850!important;
+    color:#f8fafc!important;
+    margin:0 0 7px!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-mercado .copom-carousel-card-v321 .copom-exec-meta-v270,
+  #sec-mercado #copomExecutiveSummaryV270 .copom-exec-meta-v270{
+    margin:0!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:5px!important;
+  }
+
+  #sec-mercado .copom-carousel-card-v321 .copom-exec-status-v270,
+  #sec-mercado #copomExecutiveSummaryV270 .copom-exec-status-v270{
+    min-height:17px!important;
+    padding:3px 7px!important;
+    border-radius:999px!important;
+    font-size:.48rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    text-transform:uppercase!important;
+    letter-spacing:.035em!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-mercado .copom-carousel-result-v321{
+    display:block!important;
+    margin-top:6px!important;
+    font-size:.54rem!important;
+    line-height:1.13!important;
+    color:rgba(220,228,250,.66)!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+
+@media(min-width:769px){
+  #sec-mercado .copom-scroll-hint-v413{
+    display:none!important;
+  }
+}
