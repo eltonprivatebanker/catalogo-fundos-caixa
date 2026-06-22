@@ -58044,3 +58044,45 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     text-overflow:ellipsis!important;
   }
 }
+
+
+/* PATCH v419 — datas da Selic alinhadas aos extremos do gráfico */
+@media (max-width: 768px){
+  html.selic-chart-dates-edge-v419 body #mobileSelicV400 .econ-selic-mobile-summary-v407{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:6px!important;
+    width:100%!important;
+    margin:6px 0 0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  html.selic-chart-dates-edge-v419 body #mobileSelicV400 .econ-selic-mobile-summary-v407 span{
+    min-width:0!important;
+    min-height:22px!important;
+    padding:6px 8px!important;
+    border:1px solid rgba(255,255,255,.055)!important;
+    border-radius:9px!important;
+    background:rgba(8,14,28,.62)!important;
+    color:#dfe7f8!important;
+    font-family:"JetBrains Mono",monospace!important;
+    font-size:.52rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    white-space:nowrap!important;
+  }
+
+  html.selic-chart-dates-edge-v419 body #mobileSelicV400 .econ-selic-mobile-summary-v407 span:first-child{
+    display:flex!important;
+    justify-content:flex-start!important;
+    text-align:left!important;
+  }
+
+  html.selic-chart-dates-edge-v419 body #mobileSelicV400 .econ-selic-mobile-summary-v407 span:last-child{
+    display:flex!important;
+    justify-content:flex-end!important;
+    text-align:right!important;
+  }
+}
