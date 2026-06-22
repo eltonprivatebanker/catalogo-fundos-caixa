@@ -18276,9 +18276,7 @@ function openCdiAnalyticTableV274(){
     // Mantém o aviso fora da trilha para não atrapalhar o scroll dos cards.
     const oldHint = document.getElementById('copomScrollHintV413');
     if(!oldHint){
-      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true"></div>');
-    }else{
-      oldHint.textContent = '';
+      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true">Deslize para ver mais reuniões →</div>');
     }
 
     const html = items.map(item => {
@@ -19732,69 +19730,4 @@ function openCdiAnalyticTableV274(){
 
   window.addEventListener('load', syncFinalBuildV424, {once:true});
   setTimeout(syncFinalBuildV424, 3200);
-})();
-
-/* PATCH v425 — Juros e CDI: Copom/CDI mensal em carrosseis padronizados */
-(function(){
-  const BUILD = 'ELTAUM_RATES_COPOM_CDI_CAROUSELS_v425';
-
-  function syncRatesCarouselsV425(){
-    try{
-      document.documentElement.classList.add('mobile-v425','rates-copom-cdi-carousels-v425');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const copomHint = document.getElementById('copomScrollHintV413');
-      if(copomHint) copomHint.textContent = '';
-
-      const cdiBox = document.getElementById('cdiYearHistory');
-      if(cdiBox){
-        cdiBox.removeAttribute('hidden');
-        cdiBox.removeAttribute('aria-hidden');
-      }
-
-      const setImportant = (el, prop, val) => {
-        if(el) el.style.setProperty(prop, val, 'important');
-      };
-
-      document
-        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
-        .forEach(track => {
-          setImportant(track, 'display', 'flex');
-          setImportant(track, 'gap', '9px');
-          setImportant(track, 'padding-left', '0');
-          setImportant(track, 'padding-right', '28px');
-          setImportant(track, 'overflow-x', 'auto');
-          setImportant(track, 'overflow-y', 'hidden');
-          setImportant(track, 'scroll-snap-type', 'x proximity');
-        });
-
-      document
-        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
-        .forEach(card => {
-          setImportant(card, 'flex', '0 0 112px');
-          setImportant(card, 'width', '112px');
-          setImportant(card, 'min-width', '112px');
-          setImportant(card, 'max-width', '112px');
-          setImportant(card, 'box-sizing', 'border-box');
-        });
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncRatesCarouselsV425, {once:true});
-  }else{
-    syncRatesCarouselsV425();
-  }
-
-  window.addEventListener('load', syncRatesCarouselsV425, {once:true});
-  window.addEventListener('resize', () => requestAnimationFrame(syncRatesCarouselsV425), {passive:true});
-  setTimeout(syncRatesCarouselsV425, 450);
-  setTimeout(syncRatesCarouselsV425, 1500);
-  setTimeout(syncRatesCarouselsV425, 3400);
-
-  window.__ELTAUM_RATES_COPOM_CDI_CAROUSELS_V425__ = {
-    build: BUILD,
-    sync: syncRatesCarouselsV425
-  };
 })();
