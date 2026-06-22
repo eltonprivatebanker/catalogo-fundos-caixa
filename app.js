@@ -20227,3 +20227,79 @@ function openCdiAnalyticTableV274(){
     sync: syncCopomMovePersistentV431
   };
 })();
+
+/* PATCH v432 — Poupanca mobile: hierarquia de KPI e regra mais clara */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_HERO_v432';
+
+  function applySavingsMobileHeroV432(){
+    try{
+      const root = document.documentElement;
+      root.classList.add('mobile-v432','savings-mobile-hero-v432');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const label = document.getElementById('poupCurrentLabelV214');
+      if(label) label.textContent = 'Rendimento do mês';
+
+      const ruleTitle = document.getElementById('poupCurrentScenarioTitleV214');
+      if(ruleTitle) ruleTitle.textContent = 'Regra vigente';
+
+      const yearLabel = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.year dt');
+      if(yearLabel) yearLabel.textContent = 'Acumulado 2026';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic > 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra será definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Aplicável com Selic em até 8,50% a.a.</span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Aplicável com Selic acima de 8,50% a.a.</span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+        source.setAttribute('aria-label', 'Abrir simulador de rendimento da poupança do Banco Central em uma nova guia');
+      }
+
+      const btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileHeroV432, {once:true});
+  }else{
+    applySavingsMobileHeroV432();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobileHeroV432, 40);
+      setTimeout(applySavingsMobileHeroV432, 220);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobileHeroV432, {once:true});
+  [400, 1200, 2600, 5200, 9000, 14000, 24500].forEach(ms => setTimeout(applySavingsMobileHeroV432, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_HERO_V432__ = {
+    build: BUILD,
+    sync: applySavingsMobileHeroV432
+  };
+})();
