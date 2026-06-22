@@ -57549,3 +57549,184 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     border-radius:0!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   v417 — Juros/CDI e Agenda Copom mobile ultra clean
+   Escopo: somente mobile. Desktop preservado.
+   - remove borda/caixa do bloco Agenda Copom
+   - alinha barras laterais de Selic/CDI e cards do Copom
+   - mantém somente barras coloridas como referência visual
+════════════════════════════════════════════════════ */
+@media(max-width:768px){
+  /* Bloco Agenda Copom sem card interno/borda pesada */
+  html.mobile-v417 #sec-mercado .copom-compact-v167,
+  html.mobile-v417 #sec-mercado section.copom-compact-v167,
+  html.mobile-v417 #sec-mercado .copom-premium-block-v270,
+  html.mobile-v417 #sec-mercado .copom-refined-v271,
+  html.mobile-v417 #sec-mercado .rates-detail-grid-v167 .copom-compact-v167{
+    border:0!important;
+    outline:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    border-radius:0!important;
+    padding:18px 0 4px!important;
+    margin:10px 0 0!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-v417 #sec-mercado .copom-compact-v167::before,
+  html.mobile-v417 #sec-mercado .copom-compact-v167::after,
+  html.mobile-v417 #sec-mercado .copom-premium-block-v270::before,
+  html.mobile-v417 #sec-mercado .copom-premium-block-v270::after,
+  html.mobile-v417 #sec-mercado .copom-refined-v271::before,
+  html.mobile-v417 #sec-mercado .copom-refined-v271::after{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.mobile-v417 #sec-mercado .copom-compact-v167 .reference-subhead-v167{
+    padding:0!important;
+    margin:0 0 12px!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-v417 #sec-mercado .copom-compact-v167 .reference-subhead-v167 small,
+  html.mobile-v417 #sec-mercado .copom-footnote-v256,
+  html.mobile-v417 #sec-mercado .copom-compact-v167 .reference-footnote-v167{
+    display:none!important;
+  }
+
+  html.mobile-v417 #sec-mercado .copom-compact-v167 .reference-subhead-v167 strong{
+    color:#f8fafc!important;
+    font-size:1.08rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.035em!important;
+    font-weight:850!important;
+  }
+
+  /* Selic/CDI: barras laterais com a mesma régua vertical */
+  html.mobile-v417 #sec-mercado .rates-summary-v167{
+    align-items:stretch!important;
+    gap:18px!important;
+  }
+
+  html.mobile-v417 #sec-mercado .rate-summary-card-v167{
+    padding:0 0 0 14px!important;
+  }
+
+  html.mobile-v417 #sec-mercado .rate-summary-card-v167::before{
+    left:0!important;
+    top:0!important;
+    bottom:0!important;
+    width:3px!important;
+    border-radius:999px!important;
+  }
+
+  /* Agenda Copom: remove bordas dos itens e alinha as barras */
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    align-items:stretch!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    gap:22px!important;
+    padding:4px 22px 10px 0!important;
+    margin:0!important;
+    scroll-padding-left:0!important;
+    scroll-snap-type:x proximity!important;
+    -webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;
+    mask-image:linear-gradient(90deg,#000 0%,#000 78%,transparent 100%)!important;
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 78%,transparent 100%)!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270::-webkit-scrollbar,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > article,
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > article,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > .copom-exec-card-v270{
+    flex:0 0 142px!important;
+    min-width:142px!important;
+    max-width:142px!important;
+    min-height:118px!important;
+    border:0!important;
+    outline:0!important;
+    box-shadow:none!important;
+    background:transparent!important;
+    border-radius:0!important;
+    padding:7px 0 6px 18px!important;
+    margin:0!important;
+    position:relative!important;
+    scroll-snap-align:start!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > article::before,
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270::before,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > article::before,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > .copom-exec-card-v270::before{
+    content:''!important;
+    display:block!important;
+    position:absolute!important;
+    left:0!important;
+    top:7px!important;
+    bottom:7px!important;
+    width:4px!important;
+    border-radius:999px!important;
+    background:#5b9cf6!important;
+    box-shadow:0 0 12px rgba(91,156,246,.22)!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > article.is-next::before,
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270.is-next::before,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > article.is-next::before,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > .copom-exec-card-v270.is-next::before,
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > article.is-cut::before,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > article.is-cut::before{
+    background:#f05565!important;
+    box-shadow:0 0 12px rgba(240,85,101,.20)!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > article::after,
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270::after,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > article::after,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 > .copom-exec-card-v270::after{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 .copom-exec-kicker-v270,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 .copom-exec-kicker-v270{
+    margin:0 0 8px!important;
+    font-size:.58rem!important;
+    line-height:1.05!important;
+    color:#aeb8d1!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 .copom-exec-date-v270,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 .copom-exec-date-v270{
+    margin:0 0 9px!important;
+    font-size:1.04rem!important;
+    line-height:1.05!important;
+    color:#f8fafc!important;
+  }
+
+  html.mobile-v417 #sec-mercado #copomExecutiveSummaryV270 .copom-exec-desc-v270,
+  html.mobile-v417 #sec-mercado .copom-exec-summary-v270 .copom-exec-desc-v270{
+    display:block!important;
+    margin-top:8px!important;
+    max-width:118px!important;
+    color:#aeb8d1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
