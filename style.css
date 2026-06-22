@@ -58069,3 +58069,110 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     line-height:1.15!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v419 — Copom mobile estabilizado
+   Causa raiz: o app.js v321 reconstrói #copomExecutiveSummaryV270
+   com 8 reuniões e o v330/v331 aplicava estilos inline nos cards.
+   Este CSS define o visual desejado; o JS v419 reforça após a montagem.
+   ========================================================= */
+@media (max-width: 768px){
+  html.mobile-v419 body #sec-mercado .copom-compact-v167{
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    padding:0!important;
+    margin-top:18px!important;
+  }
+
+  html.mobile-v419 body #sec-mercado .copom-compact-v167 .reference-subhead-v167{
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    margin:0 0 14px!important;
+    padding:0!important;
+    text-align:left!important;
+  }
+
+  html.mobile-v419 body #sec-mercado #copomCompactTitleV167{
+    display:block!important;
+    text-align:left!important;
+    font-size:1.05rem!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    margin:0!important;
+  }
+
+  html.mobile-v419 body #sec-mercado .copom-compact-v167 .reference-subhead-v167 small{
+    display:none!important;
+  }
+
+  html.mobile-v419 body #sec-mercado .copom-mobile-hint-v419{
+    display:inline-flex!important;
+    color:#e8bb6a!important;
+    font-size:.58rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+    margin-left:auto!important;
+  }
+
+  html.mobile-v419 body #sec-mercado #copomExecutiveSummaryV270{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:22px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 28px 8px 0!important;
+    margin:0!important;
+    scroll-snap-type:x proximity!important;
+    scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch!important;
+    mask-image:linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)!important;
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)!important;
+  }
+
+  html.mobile-v419 body #sec-mercado #copomExecutiveSummaryV270::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-v419 body #sec-mercado #copomExecutiveSummaryV270 .copom-exec-card-v270{
+    flex:0 0 128px!important;
+    width:128px!important;
+    min-width:128px!important;
+    max-width:128px!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    outline:0!important;
+    padding:6px 0 7px 18px!important;
+    margin:0!important;
+    position:relative!important;
+    scroll-snap-align:start!important;
+  }
+
+  html.mobile-v419 body #sec-mercado #copomExecutiveSummaryV270 .copom-exec-card-v270::before{
+    left:0!important;
+    top:0!important;
+    bottom:0!important;
+    width:3px!important;
+    height:auto!important;
+    border-radius:999px!important;
+  }
+
+  html.mobile-v419 body #sec-mercado #copomExecutiveSummaryV270 .copom-exec-kicker-v270{
+    margin:0!important;
+    padding:0!important;
+    line-height:1.1!important;
+  }
+
+  html.mobile-v419 body #sec-mercado #copomExecutiveSummaryV270 .copom-carousel-result-v321,
+  html.mobile-v419 body #sec-mercado #copomExecutiveSummaryV270 .copom-exec-desc-v270{
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    max-width:100%!important;
+  }
+}

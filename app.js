@@ -19664,3 +19664,122 @@ function openCdiAnalyticTableV274(){
     }, 180);
   }, {passive:true});
 })();
+
+
+/* ════════════════════════════════════════════════════
+   v419 — estabilização final do Copom mobile
+   Motivo: v321 recria 8 cards no #copomExecutiveSummaryV270 e
+   v330/v331 aplicam estilos inline. Este patch roda depois deles,
+   remove hints duplicados e força carrossel horizontal limpo.
+════════════════════════════════════════════════════ */
+(function copomMobileStableV419(){
+  function setImp(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function apply(){
+    if(!window.matchMedia('(max-width: 768px)').matches) return;
+
+    const title = document.getElementById('copomCompactTitleV167');
+    const section = title?.closest('.copom-compact-v167');
+    const head = title?.closest('.reference-subhead-v167');
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(!title || !section || !head || !summary) return;
+
+    // limpa hints antigos criados por testes ou patches anteriores
+    document.querySelectorAll(
+      '.copom-scroll-hint-v412,.copom-carousel-hint-v419,.copom-inline-hint-force,.copom-hint-inline-test,.copom-mobile-hint-v419'
+    ).forEach(el => el.remove());
+
+    const small = head.querySelector('small');
+    if(small) setImp(small, 'display', 'none');
+
+    const hint = document.createElement('span');
+    hint.className = 'copom-mobile-hint-v419';
+    hint.textContent = 'Deslize →';
+    head.appendChild(hint);
+
+    title.textContent = 'Agenda Copom';
+
+    setImp(section, 'border', '0');
+    setImp(section, 'background', 'transparent');
+    setImp(section, 'box-shadow', 'none');
+    setImp(section, 'padding', '0');
+    setImp(section, 'margin-top', '18px');
+
+    setImp(head, 'display', 'flex');
+    setImp(head, 'align-items', 'flex-end');
+    setImp(head, 'justify-content', 'space-between');
+    setImp(head, 'gap', '10px');
+    setImp(head, 'margin', '0 0 14px');
+    setImp(head, 'padding', '0');
+    setImp(head, 'text-align', 'left');
+
+    setImp(title, 'font-size', '1.05rem');
+    setImp(title, 'line-height', '1.05');
+    setImp(title, 'white-space', 'nowrap');
+    setImp(title, 'text-align', 'left');
+    setImp(title, 'margin', '0');
+
+    setImp(hint, 'display', 'inline-flex');
+    setImp(hint, 'color', '#e8bb6a');
+    setImp(hint, 'font-size', '.58rem');
+    setImp(hint, 'font-weight', '800');
+    setImp(hint, 'line-height', '1');
+    setImp(hint, 'white-space', 'nowrap');
+    setImp(hint, 'margin-left', 'auto');
+
+    setImp(summary, 'display', 'flex');
+    setImp(summary, 'flex-wrap', 'nowrap');
+    setImp(summary, 'gap', '22px');
+    setImp(summary, 'overflow-x', 'auto');
+    setImp(summary, 'overflow-y', 'hidden');
+    setImp(summary, 'padding', '0 28px 8px 0');
+    setImp(summary, 'margin', '0');
+    setImp(summary, 'scroll-snap-type', 'x proximity');
+    setImp(summary, 'scrollbar-width', 'none');
+    setImp(summary, '-webkit-overflow-scrolling', 'touch');
+    setImp(summary, 'mask-image', 'linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)');
+    setImp(summary, '-webkit-mask-image', 'linear-gradient(90deg,#000 0%,#000 82%,transparent 100%)');
+
+    summary.querySelectorAll('.copom-exec-card-v270').forEach(card => {
+      setImp(card, 'flex', '0 0 128px');
+      setImp(card, 'width', '128px');
+      setImp(card, 'min-width', '128px');
+      setImp(card, 'max-width', '128px');
+      setImp(card, 'border', '0');
+      setImp(card, 'background', 'transparent');
+      setImp(card, 'box-shadow', 'none');
+      setImp(card, 'outline', '0');
+      setImp(card, 'padding', '6px 0 7px 18px');
+      setImp(card, 'margin', '0');
+      setImp(card, 'position', 'relative');
+      setImp(card, 'scroll-snap-align', 'start');
+    });
+
+    summary.querySelectorAll('.copom-carousel-result-v321,.copom-exec-desc-v270').forEach(el => {
+      setImp(el, 'white-space', 'nowrap');
+      setImp(el, 'overflow', 'hidden');
+      setImp(el, 'text-overflow', 'ellipsis');
+      setImp(el, 'max-width', '100%');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
+  else apply();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), { passive:true });
+  setTimeout(apply, 120);
+  setTimeout(apply, 450);
+  setTimeout(apply, 1100);
+  setTimeout(apply, 2100);
+  setTimeout(apply, 3200);
+
+  const mo = new MutationObserver(() => requestAnimationFrame(apply));
+  const startObserver = () => {
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    if(summary) mo.observe(summary, { childList:true, subtree:false, attributes:true, attributeFilter:['style','class'] });
+  };
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', startObserver);
+  else startObserver();
+})();
