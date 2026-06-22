@@ -7,7 +7,6 @@
   --ds-ease:cubic-bezier(.4,0,.2,1);--ds-duration-normal:200ms;
 }
 
-
 /* =========================================================
    PATCH v415 — Selic KPIs com hierarquia visual mobile
    Máxima e mínima ficam comparáveis em duas colunas.
@@ -58963,5 +58962,65 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
 
   html.rates-semantic-clean-v428 body #sec-mercado .cdi-month-accum-v322{
     color:#8f9ab5!important;
+  }
+}
+
+/* PATCH v429 — Juros e CDI: cards internos sem borda no Copom e CDI mensal */
+@media (max-width: 768px){
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > article,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321,
+  html.rates-borderless-carousel-v429 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    background:transparent!important;
+    border:0!important;
+    outline:0!important;
+    box-shadow:none!important;
+  }
+
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > article::after,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270::after,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321::after,
+  html.rates-borderless-carousel-v429 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322::before,
+  html.rates-borderless-carousel-v429 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322::after{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > article::before,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .copom-exec-card-v270::before,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .copom-carousel-card-v321::before{
+    content:''!important;
+    display:block!important;
+    position:absolute!important;
+    left:0!important;
+    top:8px!important;
+    bottom:8px!important;
+    width:2px!important;
+    border-radius:999px!important;
+  }
+
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > article.is-cut::before,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .is-cut::before{
+    background:rgba(240,85,101,.90)!important;
+  }
+
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > article.is-next::before,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .is-next::before{
+    background:rgba(232,187,106,.92)!important;
+  }
+
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hold::before,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .is-hold::before{
+    background:rgba(91,156,246,.80)!important;
+  }
+
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > article.is-future::before,
+  html.rates-borderless-carousel-v429 body #sec-mercado #copomExecutiveSummaryV270 > .is-future::before{
+    background:rgba(148,163,184,.45)!important;
+  }
+
+  html.rates-borderless-carousel-v429 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    padding-left:6px!important;
+    padding-right:6px!important;
   }
 }

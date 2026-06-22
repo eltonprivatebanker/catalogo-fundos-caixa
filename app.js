@@ -20019,3 +20019,51 @@ function openCdiAnalyticTableV274(){
     sync: syncRatesSemanticCleanV428
   };
 })();
+
+/* PATCH v429 — Juros e CDI: Copom e CDI mensal com cards internos borderless */
+(function(){
+  const BUILD = 'ELTAUM_RATES_BORDERLESS_CAROUSELS_v429';
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function syncRatesBorderlessCarouselsV429(){
+    try{
+      document.documentElement.classList.add('mobile-v429','rates-borderless-carousel-v429');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'background', 'transparent');
+          setImportant(card, 'border', '0');
+          setImportant(card, 'outline', '0');
+          setImportant(card, 'box-shadow', 'none');
+        });
+
+      document
+        .querySelectorAll('#sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'padding-left', '6px');
+          setImportant(card, 'padding-right', '6px');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesBorderlessCarouselsV429, {once:true});
+  }else{
+    syncRatesBorderlessCarouselsV429();
+  }
+
+  window.addEventListener('load', syncRatesBorderlessCarouselsV429, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesBorderlessCarouselsV429), {passive:true});
+  [600, 1600, 3200, 5200, 7600, 9800].forEach(ms => setTimeout(syncRatesBorderlessCarouselsV429, ms));
+
+  window.__ELTAUM_RATES_BORDERLESS_CAROUSELS_V429__ = {
+    build: BUILD,
+    sync: syncRatesBorderlessCarouselsV429
+  };
+})();
