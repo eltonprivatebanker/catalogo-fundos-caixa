@@ -20067,3 +20067,63 @@ function openCdiAnalyticTableV274(){
     sync: syncRatesBorderlessCarouselsV429
   };
 })();
+
+/* PATCH v430 — Agenda Copom: mostra apenas movimento em p.p. para corte/alta */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_MOVE_v430';
+
+  function extractMoveText(result){
+    const text = String(result || '').replace(/\u2212/g, '-').replace(/\s+/g, ' ').trim();
+    const match = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(!match) return '';
+    const value = match[2]
+      .replace(/\s*p\.?\s*p\.?/i, ' p.p.')
+      .replace(/^\+?/, match[1].toLowerCase() === 'alta' ? '+' : '');
+    return value;
+  }
+
+  function syncCopomMoveV430(){
+    try{
+      document.documentElement.classList.add('mobile-v430','rates-copom-move-v430');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article').forEach(card => {
+        const status = card.querySelector('.copom-exec-status-v270');
+        const result = card.querySelector('.copom-carousel-result-v321');
+        const raw = result?.textContent || '';
+        const move = extractMoveText(raw);
+
+        card.querySelectorAll('.copom-move-v430').forEach(el => el.remove());
+
+        if(result){
+          result.setAttribute('aria-hidden', move ? 'true' : 'false');
+          if(move){
+            result.style.setProperty('display', 'none', 'important');
+          }
+        }
+
+        if(!move || !status) return;
+
+        const el = document.createElement('small');
+        el.className = 'copom-move-v430';
+        el.textContent = move;
+        status.insertAdjacentElement('afterend', el);
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomMoveV430, {once:true});
+  }else{
+    syncCopomMoveV430();
+  }
+
+  window.addEventListener('load', syncCopomMoveV430, {once:true});
+  [700, 1700, 3300, 5400, 7800, 10200].forEach(ms => setTimeout(syncCopomMoveV430, ms));
+
+  window.__ELTAUM_RATES_COPOM_MOVE_V430__ = {
+    build: BUILD,
+    sync: syncCopomMoveV430
+  };
+})();

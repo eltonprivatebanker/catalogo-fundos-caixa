@@ -59024,3 +59024,43 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     padding-right:6px!important;
   }
 }
+
+/* PATCH v430 — Agenda Copom: movimento compacto em pontos percentuais */
+@media (max-width: 768px){
+  html.rates-copom-move-v430 body #sec-mercado #copomExecutiveSummaryV270 > article{
+    min-height:72px!important;
+    gap:2px!important;
+    justify-content:center!important;
+  }
+
+  html.rates-copom-move-v430 body #sec-mercado #copomExecutiveSummaryV270 .copom-exec-meta-v270{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:3px!important;
+    margin-top:1px!important;
+  }
+
+  html.rates-copom-move-v430 body #sec-mercado #copomExecutiveSummaryV270 .copom-move-v430{
+    display:block!important;
+    margin:0!important;
+    color:#aeb9d2!important;
+    font-size:.43rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:.015em!important;
+    white-space:nowrap!important;
+  }
+
+  html.rates-copom-move-v430 body #sec-mercado #copomExecutiveSummaryV270 > article.is-cut .copom-move-v430{
+    color:#ff7893!important;
+  }
+
+  html.rates-copom-move-v430 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hike .copom-move-v430{
+    color:#78d7ff!important;
+  }
+
+  html.rates-copom-move-v430 body #sec-mercado #copomExecutiveSummaryV270 .copom-carousel-result-v321[aria-hidden="true"]{
+    display:none!important;
+  }
+}
