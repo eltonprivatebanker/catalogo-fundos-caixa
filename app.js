@@ -18226,6 +18226,13 @@ function openCdiAnalyticTableV274(){
 
     if(!items.length || summary.dataset.v321Built === '1') return;
 
+    // v413 — pista visual mobile para o carrossel da Agenda Copom
+    // Mantém o aviso fora da trilha para não atrapalhar o scroll dos cards.
+    const oldHint = document.getElementById('copomScrollHintV413');
+    if(!oldHint){
+      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true">Deslize para ver mais reuniões →</div>');
+    }
+
     const html = items.map(item => {
       const num = norm(item.querySelector('.copom-num')?.textContent);
       const date = norm(item.querySelector('.copom-date')?.textContent);
@@ -19656,132 +19663,4 @@ function openCdiAnalyticTableV274(){
       }catch(e){}
     }, 180);
   }, {passive:true});
-})();
-
-
-/* ════════════════════════════════════════════════════
-   v421 — Reconstrói Agenda Copom mobile do zero
-   Mantém carrossel com 8 reuniões e evita conflito com v321/v330/v331.
-════════════════════════════════════════════════════ */
-(function copomPremiumMobileV421(){
-  function norm(txt){
-    return String(txt || '').replace(/\s+/g, ' ').trim();
-  }
-
-  function classify(text){
-    const t = String(text || '').toLowerCase();
-    if(t.includes('próxima') || t.includes('proxima') || t.includes('agenda')) return 'is-next';
-    if(t.includes('prevista')) return 'is-future';
-    if(t.includes('corte')) return 'is-cut';
-    if(t.includes('mantida')) return 'is-hold';
-    return 'is-hold';
-  }
-
-  function statusFromResult(result, cls){
-    const t = String(result || '').toLowerCase();
-    if(cls.includes('is-next') || t.includes('próxima') || t.includes('proxima')) return 'agenda';
-    if(cls.includes('is-future') || t.includes('prevista')) return 'prevista';
-    if(t.includes('corte')) return 'corte';
-    if(t.includes('mantida')) return 'mantida';
-    return 'agenda';
-  }
-
-  function cleanResult(result){
-    return norm(result)
-      .replace(/corte\s+-?0,25\s*p\.p\.\s*→\s*/i, 'corte -0,25 p.p. → ')
-      .replace(/mantida\s+em/i, 'mantida em')
-      .replace(/próxima\s*★/i, 'próxima decisão')
-      .replace(/prevista/i, 'reunião prevista');
-  }
-
-  function getItems(){
-    const store = document.getElementById('copomMeetings');
-    if(store){
-      return [...store.querySelectorAll('.copom-item')]
-        .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999))
-        .map(item => {
-          const num = norm(item.querySelector('.copom-num')?.textContent);
-          const date = norm(item.querySelector('.copom-date')?.textContent);
-          const result = norm(item.querySelector('.copom-result')?.textContent);
-          const cls = classify(result + ' ' + item.className);
-          return {num,date,result:cleanResult(result),cls,status:statusFromResult(result, cls)};
-        });
-    }
-
-    return [...document.querySelectorAll('#copomExecutiveSummaryV270 .copom-exec-card-v270')]
-      .map(card => {
-        const num = norm(card.querySelector('.copom-exec-kicker-v270')?.textContent);
-        const date = norm(card.querySelector('.copom-exec-date-v270')?.textContent);
-        const result = norm(card.querySelector('.copom-carousel-result-v321, .copom-exec-desc-v270, small')?.textContent);
-        const cls = classify(result + ' ' + card.className);
-        return {num,date,result:cleanResult(result),cls,status:statusFromResult(result, cls)};
-      });
-  }
-
-  function build(){
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    if(!isMobile) return;
-
-    const section = document.querySelector('#sec-mercado .copom-compact-v167');
-    if(!section || section.dataset.v421Built === '1') return;
-
-    const items = getItems().filter(item => item.date);
-    if(!items.length) return;
-
-    const cards = items.map((item, idx) => `
-      <article class="copom-premium-card-v421 ${item.cls}" role="listitem" aria-label="${item.num || 'Reunião'} ${item.date}">
-        <span class="copom-premium-kicker-v421">${item.num || `${idx + 1}ª reunião`}</span>
-        <strong class="copom-premium-date-v421">${item.date}</strong>
-        <span class="copom-premium-status-v421">${item.status}</span>
-        <small class="copom-premium-result-v421">${item.result || (item.status === 'agenda' ? 'próxima decisão' : 'reunião prevista')}</small>
-      </article>`).join('');
-
-    const dots = items.map((_, idx) => `<span class="copom-premium-dot-v421${idx === 0 ? ' active' : ''}" aria-hidden="true"></span>`).join('');
-
-    section.dataset.v421Built = '1';
-    section.innerHTML = `
-      <div class="copom-premium-v421" aria-label="Agenda Copom" role="region">
-        <div class="copom-premium-head-v421">
-          <strong class="copom-premium-title-v421">Agenda Copom</strong>
-          <span class="copom-premium-hint-v421">Deslize →</span>
-        </div>
-        <div class="copom-premium-track-v421" role="list" aria-label="Carrossel das reuniões do Copom">
-          ${cards}
-        </div>
-        <div class="copom-premium-dots-v421" aria-hidden="true">${dots}</div>
-      </div>`;
-
-    const track = section.querySelector('.copom-premium-track-v421');
-    const dotEls = [...section.querySelectorAll('.copom-premium-dot-v421')];
-    if(track && dotEls.length){
-      const updateDots = () => {
-        const first = track.querySelector('.copom-premium-card-v421');
-        const step = first ? (first.getBoundingClientRect().width + 12) : 160;
-        const idx = Math.max(0, Math.min(dotEls.length - 1, Math.round(track.scrollLeft / step)));
-        dotEls.forEach((dot, i) => dot.classList.toggle('active', i === idx));
-      };
-      track.addEventListener('scroll', () => requestAnimationFrame(updateDots), {passive:true});
-      updateDots();
-    }
-  }
-
-  function resetIfDesktop(){
-    if(window.matchMedia('(max-width: 768px)').matches) return;
-    const section = document.querySelector('#sec-mercado .copom-compact-v167[data-v421-built="1"]');
-    if(section) section.dataset.v421Built = 'desktop-skip';
-  }
-
-  function apply(){
-    build();
-    resetIfDesktop();
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply);
-  else apply();
-
-  window.addEventListener('resize', () => requestAnimationFrame(apply), {passive:true});
-  setTimeout(apply, 120);
-  setTimeout(apply, 700);
-  setTimeout(apply, 1400);
-  setTimeout(apply, 2300);
 })();
