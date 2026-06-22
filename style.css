@@ -56927,3 +56927,34 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     white-space:nowrap!important;
   }
 }
+
+
+/* CHATGPT MOBILE PATCH v412 — remove redundância do aviso PTAX */
+@media (max-width:768px){
+  #sec-dolar .ptax-scroll-hint-v99 strong,
+  html.mobile-v412 #sec-dolar .ptax-scroll-hint-v99 strong,
+  html.mobile-v411 #sec-dolar .ptax-scroll-hint-v99 strong,
+  body #sec-dolar .ptax-scroll-hint-v99 strong{
+    font-size:0!important;
+    color:transparent!important;
+  }
+
+  #sec-dolar .ptax-scroll-hint-v99 strong::before,
+  html.mobile-v412 #sec-dolar .ptax-scroll-hint-v99 strong::before,
+  html.mobile-v411 #sec-dolar .ptax-scroll-hint-v99 strong::before,
+  body #sec-dolar .ptax-scroll-hint-v99 strong::before{
+    content:'Deslize para ver mais meses →'!important;
+    font-size:.62rem!important;
+    color:#e8bb6a!important;
+    font-weight:800!important;
+    letter-spacing:.01em!important;
+    white-space:nowrap!important;
+  }
+
+  #sec-dolar .ptax-scroll-hint-v99 span,
+  html.mobile-v412 #sec-dolar .ptax-scroll-hint-v99 span,
+  html.mobile-v411 #sec-dolar .ptax-scroll-hint-v99 span,
+  body #sec-dolar .ptax-scroll-hint-v99 span{
+    display:none!important;
+  }
+}
