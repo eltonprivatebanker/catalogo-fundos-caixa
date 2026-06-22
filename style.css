@@ -58229,3 +58229,62 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     display:none!important;
   }
 }
+
+
+/* PATCH v423 — Maior e Menor IPCA lado a lado */
+@media (max-width: 768px){
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    margin-top:10px!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378 > div,
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378 > div:last-child{
+    grid-column:auto!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:66px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:3px!important;
+    padding:9px 10px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    border-radius:13px!important;
+    background:linear-gradient(145deg,rgba(10,18,36,.92),rgba(7,12,25,.96))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378 > div + div{
+    border-top:1px solid rgba(148,163,184,.13)!important;
+  }
+
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378 > .ipca-accum-card-v420{
+    border-color:rgba(46,209,122,.28)!important;
+    background:
+      radial-gradient(circle at 16% 0%,rgba(46,209,122,.18),transparent 46%),
+      linear-gradient(145deg,rgba(8,35,31,.82),rgba(7,12,25,.96))!important;
+  }
+
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378 span{
+    font-size:.48rem!important;
+    line-height:1.05!important;
+  }
+
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378 strong{
+    font-size:.94rem!important;
+    line-height:1!important;
+  }
+
+  html.ipca-extremes-side-v423 body #sec-graficos #mobileIpcaMensalV400 .ipca-kpis-v378 small{
+    font-size:.53rem!important;
+    line-height:1.1!important;
+  }
+}
