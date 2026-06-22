@@ -2022,7 +2022,7 @@ function renderCdiYearHistory(d){
     return NaN;
   })();
 
-  if(title) title.textContent = isMobile ? `CDI — visão mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
+  if(title) title.textContent = isMobile ? `CDI mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
   if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
   if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? 'CDI 12M' : 'Últimos 12 meses';
   if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
@@ -2041,13 +2041,13 @@ function renderCdiYearHistory(d){
       const isFechado = item === ultimoFechado;
       const sinal = Number.isFinite(valor) && valor < 0 ? 'neg' : 'pos';
       const label = mesCurto(item).toUpperCase();
-      const status = isAtual ? 'parcial' : 'fechado';
+      const status = isAtual ? `${label} · parcial` : label;
       const acumTxt = Number.isFinite(acum) ? fmtPctLocal(acum) : '—';
       return `
         <article class="cdi-month-card-v322 ${sinal} ${isAtual ? 'is-current' : ''} ${isFechado ? 'is-lastclosed' : ''}" role="listitem">
-          <span class="cdi-month-kicker-v322">${label} · ${status}</span>
+          <span class="cdi-month-kicker-v322">${status}</span>
           <strong class="cdi-month-value-v322">${Number.isFinite(valor) ? fmtPctLocal(valor) : '—'}</strong>
-          <small class="cdi-month-accum-v322">Acum. ano ${acumTxt}</small>
+          <small class="cdi-month-accum-v322">Ano ${acumTxt}</small>
         </article>`;
     }).join('');
   }
@@ -18283,13 +18283,14 @@ function openCdiAnalyticTableV274(){
 
     const html = items.map(item => {
       const num = norm(item.querySelector('.copom-num')?.textContent);
+      const numShort = num.replace(/\s*reuni[aã]o\b/i, '').trim();
       const date = norm(item.querySelector('.copom-date')?.textContent);
       const result = norm(item.querySelector('.copom-result')?.textContent);
       const kind = classify(item, result);
       const label = statusLabel(result);
       return `
         <article class="copom-exec-card-v270 copom-carousel-card-v321 ${kind}" role="listitem">
-          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
+          <span class="copom-exec-kicker-v270">${numShort || num || 'Reunião'}</span>
           <strong class="copom-exec-date-v270">${date || '—'}</strong>
           <div class="copom-exec-meta-v270">
             <span class="copom-exec-status-v270 ${kind}">${label}</span>
@@ -19962,5 +19963,59 @@ function openCdiAnalyticTableV274(){
   window.__ELTAUM_RATES_HARD_THREE_V427__ = {
     build: BUILD,
     sync: forceThreeCardsV427
+  };
+})();
+
+/* PATCH v428 — Juros e CDI: limpeza semantica dos textos */
+(function(){
+  const BUILD = 'ELTAUM_RATES_SEMANTIC_CLEAN_v428';
+
+  function syncRatesSemanticCleanV428(){
+    try{
+      document.documentElement.classList.add('mobile-v428','rates-semantic-clean-v428');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const cdiTitle = document.getElementById('cdiYearHistoryTitle');
+      if(cdiTitle){
+        cdiTitle.textContent = cdiTitle.textContent
+          .replace(/CDI\s+—\s+vis[aã]o mensal/i, 'CDI mensal')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      document.querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 .copom-exec-kicker-v270').forEach(el => {
+        el.textContent = el.textContent.replace(/\s*reuni[aã]o\b/i, '').trim();
+      });
+
+      document.querySelectorAll('#sec-mercado #cdiMonthCarouselV322 .cdi-month-card-v322').forEach(card => {
+        const kicker = card.querySelector('.cdi-month-kicker-v322');
+        if(kicker){
+          const text = kicker.textContent.trim();
+          kicker.textContent = /parcial/i.test(text)
+            ? text.replace(/\s*·\s*fechado/i, '').replace(/\s+/g, ' ')
+            : text.replace(/\s*·\s*fechado/i, '').trim();
+        }
+
+        const accum = card.querySelector('.cdi-month-accum-v322');
+        if(accum){
+          accum.textContent = accum.textContent.replace(/^Acum\.\s*ano/i, 'Ano').replace(/\s+/g, ' ').trim();
+        }
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesSemanticCleanV428, {once:true});
+  }else{
+    syncRatesSemanticCleanV428();
+  }
+
+  window.addEventListener('load', syncRatesSemanticCleanV428, {once:true});
+  [500, 1200, 2600, 4600, 7000, 9200].forEach(ms => setTimeout(syncRatesSemanticCleanV428, ms));
+
+  window.__ELTAUM_RATES_SEMANTIC_CLEAN_V428__ = {
+    build: BUILD,
+    sync: syncRatesSemanticCleanV428
   };
 })();

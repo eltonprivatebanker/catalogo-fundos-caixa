@@ -58911,3 +58911,57 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     overflow:hidden!important;
   }
 }
+
+
+/* PATCH v428 — Juros e CDI: limpeza semantica e menos redundancia */
+@media (max-width: 768px){
+  html.rates-semantic-clean-v428 body #sec-mercado .rates-reference-v167 > .market-reference-head-v167 .market-reference-kicker-v167{
+    display:none!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado .rates-reference-v167 > .market-reference-head-v167{
+    margin-bottom:10px!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado .rates-reference-v167 > .market-reference-head-v167 p{
+    display:none!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado #cdiYearHistory .reference-subhead-v167::after{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado #cdiYearHistoryTitle{
+    font-size:.86rem!important;
+    letter-spacing:-.01em!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado #copomExecutiveSummaryV270 > article,
+  html.rates-semantic-clean-v428 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    background:rgba(255,255,255,.018)!important;
+    border:1px solid rgba(255,255,255,.055)!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado #copomExecutiveSummaryV270 > article.is-cut{
+    border-color:rgba(240,85,101,.16)!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hold{
+    border-color:rgba(91,156,246,.16)!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322.is-current,
+  html.rates-semantic-clean-v428 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322.is-lastclosed{
+    border-color:rgba(46,209,122,.16)!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado .copom-exec-kicker-v270,
+  html.rates-semantic-clean-v428 body #sec-mercado .cdi-month-kicker-v322{
+    font-size:.42rem!important;
+  }
+
+  html.rates-semantic-clean-v428 body #sec-mercado .cdi-month-accum-v322{
+    color:#8f9ab5!important;
+  }
+}
