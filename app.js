@@ -6294,6 +6294,17 @@ function atualizarResumoIPCADashboardV378(rows){
   const last = data[data.length - 1];
   const max = data.reduce((acc, cur) => Number(cur.valor) > Number(acc.valor) ? cur : acc, data[0]);
   const min = data.reduce((acc, cur) => Number(cur.valor) < Number(acc.valor) ? cur : acc, data[0]);
+  const acumulado = (data.reduce((acc, cur) => acc * (1 + Number(cur.valor) / 100), 1) - 1) * 100;
+  const periodoLabel = data.length === 12 ? '12M' : data.length === 24 ? '24M' : data.length === 36 ? '36M' : `${data.length}M`;
+  const periodoDatas = `${econLabelFromItemV378(data[0])} → ${econLabelFromItemV378(last)}`;
+  econSetTextV378('ipcaResumoAcumLabelV420', `Acumulado ${periodoLabel}`);
+  econSetTextV378('ipcaResumoAcumV420', econPctV378(acumulado));
+  econSetTextV378('ipcaResumoAcumDataV420', periodoDatas);
+  const ipcaAcumElV420 = document.getElementById('ipcaResumoAcumV420');
+  if(ipcaAcumElV420){
+    ipcaAcumElV420.classList.toggle('valor-negativo-v402', Number.isFinite(acumulado) && acumulado < 0);
+    ipcaAcumElV420.classList.toggle('valor-positivo-v402', Number.isFinite(acumulado) && acumulado > 0);
+  }
   econSetTextV378('ipcaResumoUltimoV250', econPctV378(last.valor));
   econSetTextV378('ipcaResumoUltimoDataV250', econLabelFromItemV378(last));
   econSetTextV378('ipcaResumoMaxV250', econPctV378(max.valor));

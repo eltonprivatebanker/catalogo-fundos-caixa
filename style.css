@@ -58086,3 +58086,87 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     text-align:right!important;
   }
 }
+
+
+/* PATCH v420 — IPCA acumulado conforme seletor 12M/24M/36M */
+@media (max-width: 768px){
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:8px!important;
+    margin-top:10px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 > div{
+    min-height:72px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:4px!important;
+    padding:10px 11px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    border-radius:14px!important;
+    background:linear-gradient(145deg,rgba(10,18,36,.92),rgba(7,12,25,.96))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 > div + div{
+    border-top:1px solid rgba(148,163,184,.13)!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 > .ipca-accum-card-v420{
+    border-color:rgba(46,209,122,.28)!important;
+    background:
+      radial-gradient(circle at 16% 0%,rgba(46,209,122,.18),transparent 46%),
+      linear-gradient(145deg,rgba(8,35,31,.82),rgba(7,12,25,.96))!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 span{
+    display:block!important;
+    color:#9aa6c3!important;
+    font-size:.50rem!important;
+    line-height:1.05!important;
+    letter-spacing:.10em!important;
+    text-transform:uppercase!important;
+    font-weight:850!important;
+    white-space:nowrap!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong{
+    display:block!important;
+    margin:0!important;
+    color:#f8fafc!important;
+    font-family:"JetBrains Mono",monospace!important;
+    font-size:1rem!important;
+    line-height:1!important;
+    letter-spacing:-.03em!important;
+    text-align:left!important;
+    white-space:nowrap!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 small{
+    display:block!important;
+    margin:0!important;
+    color:#aeb8cf!important;
+    font-size:.56rem!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 #ipcaResumoAcumV420,
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong.valor-positivo-v402{
+    color:#86efac!important;
+  }
+
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 .ipca-kpis-v378 strong.valor-negativo-v402,
+  html.ipca-accum-v420 body #mobileIpcaMensalV400 #ipcaResumoMinV250.valor-negativo-v402{
+    color:#fb7185!important;
+  }
+}
