@@ -58211,3 +58211,21 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
       linear-gradient(145deg,rgba(8,35,31,.82),rgba(7,12,25,.96))!important;
   }
 }
+
+
+/* PATCH v422 — cabeçalho limpo em Inflação e juros */
+@media (max-width: 768px){
+  html.inflation-header-clean-v422 body #sec-graficos .econ-dashboard-title-v378{
+    align-items:center!important;
+    gap:10px!important;
+    padding-bottom:10px!important;
+  }
+
+  html.inflation-header-clean-v422 body #sec-graficos .section-title-v302{
+    margin-bottom:0!important;
+  }
+
+  html.inflation-header-clean-v422 body #sec-graficos .section-subline{
+    display:none!important;
+  }
+}
