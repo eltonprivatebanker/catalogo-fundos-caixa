@@ -61738,3 +61738,59 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     max-width:54px!important;
   }
 }
+
+/* PATCH v450 — Mobile: 2026 só com meses preenchidos e colunas cabendo na tela */
+@media(max-width:768px){
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-shell-v445{
+    overflow-x:hidden!important;
+  }
+
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"]{
+    width:100%!important;
+    min-width:100%!important;
+  }
+
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th,
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td{
+    width:calc((100% - 48px) / 4)!important;
+    min-width:0!important;
+    max-width:none!important;
+    padding:8px 4px!important;
+    font-size:.505rem!important;
+    line-height:1.05!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th{
+    font-size:.45rem!important;
+    letter-spacing:.06em!important;
+  }
+
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th:first-child,
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td:first-child{
+    width:48px!important;
+    min-width:48px!important;
+    max-width:48px!important;
+    padding-left:7px!important;
+    padding-right:3px!important;
+    text-align:left!important;
+    box-shadow:4px 0 8px rgba(0,0,0,.18)!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th,
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td{
+    padding-left:3px!important;
+    padding-right:3px!important;
+    font-size:.47rem!important;
+  }
+
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th:first-child,
+  html.mobile-monthly-indicators-fit-v450 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td:first-child{
+    width:44px!important;
+    min-width:44px!important;
+    max-width:44px!important;
+  }
+}

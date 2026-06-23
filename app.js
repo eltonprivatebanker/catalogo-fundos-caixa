@@ -21134,7 +21134,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
 /* PATCH v445 — Mobile: Indicadores por mês */
 (function(){
-  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_COMPACT_v449';
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_FIT_v450';
   let range = 'year';
   let view = 'all';
 
@@ -21270,7 +21270,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   function getMonthKeysV445(maps){
     const currentYear = (new Date()).getFullYear();
     if(range === 'year'){
-      return Array.from({length:12}, (_,index) => keyFromPartsV445(currentYear, index));
+      const yearKeys = Array.from({length:12}, (_,index) => keyFromPartsV445(currentYear, index));
+      const keysWithData = yearKeys.filter(key => maps.some(map => toNumV445(map?.get(key)) !== null));
+      if(keysWithData.length) return keysWithData;
+      const currentMonth = (new Date()).getMonth();
+      return yearKeys.slice(0, currentMonth + 1);
     }
 
     const union = new Set();
@@ -21361,7 +21365,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const table = root?.querySelector('.monthly-indicators-table-v445');
     if(!root || !tbody) return;
 
-    document.documentElement.classList.add('mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
+    document.documentElement.classList.add('mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
     const meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
 
@@ -21510,6 +21514,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   };
 
   window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_COMPACT_V449__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_FIT_V450__ = {
     build: BUILD,
     render: renderMonthlyIndicatorsV445
   };
