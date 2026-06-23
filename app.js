@@ -7434,10 +7434,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const docs = getMobileDocs(r);
     const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
     const boletimBtn = boletim
-      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim comercial ↗</a>`
+      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim ↗</a>`
       : '';
     const docsHtml = buildMobileDocsHtml(r);
-    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
+    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26 fund-card-hierarchy-v444" data-card-idx="${idx}" data-idx="${idx}">
       <div class="fund-card-list-main fund-card-list-main-premium-v68">
         <div class="fund-card-list-left">
           <div class="fund-card-mobile-tags fund-card-list-tags">
@@ -7464,8 +7464,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
       <div class="fund-card-mobile-actions fund-card-list-actions fund-card-list-actions-v26">
         ${boletimBtn}
-        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página do fundo ↗</a>
-        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Mais detalhes</button>
+        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página ↗</a>
+        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Detalhes</button>
       </div>
 
       <div class="fund-card-list-expanded" aria-hidden="true">
@@ -7506,7 +7506,7 @@ document.addEventListener('DOMContentLoaded', function(){
         const open=card.classList.toggle('open');
         const expanded=card.querySelector('.fund-card-list-expanded');
         if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
-        btn.textContent=open?'Ocultar':'Mais detalhes';
+        btn.textContent=open?'Ocultar':'Detalhes';
         btn.setAttribute('aria-expanded', open?'true':'false');
         try{
           const key=fundKeyFromIdx(btn.dataset.cardIdx || card.dataset.idx);
@@ -8187,7 +8187,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if(expanded) expanded.setAttribute('aria-hidden', should?'false':'true');
       const btn=card.querySelector('.fund-card-detail-btn');
       if(btn){
-        btn.textContent=should?'Ocultar':'Mais detalhes';
+        btn.textContent=should?'Ocultar':'Detalhes';
         btn.setAttribute('aria-expanded', should?'true':'false');
       }
     });
@@ -8216,7 +8216,7 @@ document.addEventListener('DOMContentLoaded', function(){
       const expanded=card.querySelector('.fund-card-list-expanded');
       if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
       if(mainBtn){
-        mainBtn.textContent=open?'Ocultar':'Mais detalhes';
+        mainBtn.textContent=open?'Ocultar':'Detalhes';
         mainBtn.setAttribute('aria-expanded', open?'true':'false');
       }
       if(open) openCards.add(key); else openCards.delete(key);
@@ -21096,8 +21096,38 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
   window.addEventListener('load', applyMobileRankingToolbarCompactV443, {once:true});
   [300, 1000, 2500, 6000].forEach(ms => setTimeout(applyMobileRankingToolbarCompactV443, ms));
 
-  window.__ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_V443__ = {
+window.__ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_V443__ = {
     build: BUILD,
     sync: applyMobileRankingToolbarCompactV443
+  };
+})();
+
+/* PATCH v444 — Mobile: hierarquia visual dos cards de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_HIERARCHY_v444';
+
+  function applyMobileFundCardHierarchyV444(){
+    try{
+      document.documentElement.classList.add('mobile-v444','mobile-fund-card-hierarchy-v444');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-card-hierarchy-v444');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundCardHierarchyV444, {once:true});
+  }else{
+    applyMobileFundCardHierarchyV444();
+  }
+
+  window.addEventListener('load', applyMobileFundCardHierarchyV444, {once:true});
+  [250, 800, 1800, 3600, 7000].forEach(ms => setTimeout(applyMobileFundCardHierarchyV444, ms));
+
+  window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
+    build: BUILD,
+    sync: applyMobileFundCardHierarchyV444
   };
 })();
