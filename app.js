@@ -20620,3 +20620,90 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     sync: applyMobileHeaderMinimalV436
   };
 })();
+
+/* PATCH v437 — Mobile: remove wrapper antigo da data e zera topo excedente */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_TIGHT_v437';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function disableLegacyHeaderObserver(){
+    try{
+      const legacy = window.__ELTAUM_HEADER_UPDATE_FIX_V374__;
+      if(legacy?.observer && typeof legacy.observer.disconnect === 'function'){
+        legacy.observer.disconnect();
+      }
+      if(legacy){
+        legacy.sync = function(){};
+        legacy.disabledByV437 = true;
+      }
+    }catch(_error){}
+  }
+
+  function unwrapLegacyHost(){
+    const header = document.querySelector('.site-header-clean');
+    const brandText = header?.querySelector('.brand-text');
+    const title = brandText?.querySelector('h1');
+    const last = document.getElementById('lastUpdate');
+    if(!brandText || !last) return;
+
+    last.classList.remove('header-update-v374');
+    last.removeAttribute('style');
+
+    if(last.parentElement !== brandText){
+      if(title?.nextSibling){
+        brandText.insertBefore(last, title.nextSibling);
+      }else{
+        brandText.appendChild(last);
+      }
+    }
+
+    document.querySelectorAll('.header-update-host-v374').forEach(host => {
+      if(!host.contains(last) && !host.textContent.trim()) host.remove();
+    });
+  }
+
+  function applyMobileHeaderTightV437(){
+    try{
+      document.documentElement.classList.add('mobile-v437','mobile-header-tight-v437');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      disableLegacyHeaderObserver();
+      unwrapLegacyHost();
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderTightV437();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true, attributes:true, attributeFilter:['class','style']});
+    window.__ELTAUM_MOBILE_HEADER_TIGHT_OBSERVER_V437__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderTightV437, {once:true});
+  }else{
+    applyMobileHeaderTightV437();
+  }
+
+  window.addEventListener('load', applyMobileHeaderTightV437, {once:true});
+  [50, 120, 260, 600, 1100, 2200, 4200, 6500, 10000, 16000, 26000].forEach(ms => setTimeout(applyMobileHeaderTightV437, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_TIGHT_V437__ = {
+    build: BUILD,
+    sync: applyMobileHeaderTightV437
+  };
+})();
