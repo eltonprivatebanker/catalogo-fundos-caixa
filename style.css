@@ -59296,3 +59296,34 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     background:rgba(37,99,235,.12)!important;
   }
 }
+
+/* PATCH v433 — Poupanca mobile: polimento fino */
+@media (max-width: 768px){
+  html.savings-mobile-polish-v433 body #sec-mercado .savings-reference-v167 .savings-current-v167,
+  html.savings-mobile-polish-v433 body #sec-mercado .savings-reference-v167 .savings-current-v207{
+    padding:10px 13px!important;
+    border-color:rgba(46,209,122,.14)!important;
+    background:linear-gradient(135deg,rgba(6,78,59,.30),rgba(9,15,30,.38))!important;
+  }
+
+  html.savings-mobile-polish-v433 body #sec-mercado .savings-reference-v167 .savings-current-v167 output,
+  html.savings-mobile-polish-v433 body #sec-mercado .savings-reference-v167 .savings-current-v207 output{
+    font-size:1.60rem!important;
+    letter-spacing:-.045em!important;
+  }
+
+  html.savings-mobile-polish-v433 body #sec-mercado .savings-reference-v167 .savings-summary-v207 .threshold data{
+    font-size:.92rem!important;
+    letter-spacing:-.035em!important;
+    white-space:nowrap!important;
+  }
+
+  html.savings-mobile-polish-v433 body #sec-mercado #poupQuickNote span{
+    max-width:31ch!important;
+  }
+
+  html.savings-mobile-polish-v433 body #sec-mercado .savings-reference-v167 .savings-actions-v207 .market-reference-source-v167 span[aria-hidden="true"]{
+    display:inline-block!important;
+    margin-left:4px!important;
+  }
+}

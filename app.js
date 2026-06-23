@@ -20303,3 +20303,65 @@ function openCdiAnalyticTableV274(){
     sync: applySavingsMobileHeroV432
   };
 })();
+
+/* PATCH v433 — Poupanca mobile: microajustes de texto e leitura */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_POLISH_v433';
+
+  function applySavingsMobilePolishV433(){
+    try{
+      document.documentElement.classList.add('mobile-v433','savings-mobile-polish-v433');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const kicker = document.querySelector('#sec-mercado .savings-reference-v167 .savings-title-v207 .market-reference-kicker-v167');
+      if(kicker) kicker.textContent = 'Rendimento';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até 8,50% a.a.</span>';
+        }else if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de 8,50% a.a.</span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobilePolishV433, {once:true});
+  }else{
+    applySavingsMobilePolishV433();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobilePolishV433, 60);
+      setTimeout(applySavingsMobilePolishV433, 260);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobilePolishV433, {once:true});
+  [600, 1600, 3200, 6200, 10200, 15000, 25200].forEach(ms => setTimeout(applySavingsMobilePolishV433, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_POLISH_V433__ = {
+    build: BUILD,
+    sync: applySavingsMobilePolishV433
+  };
+})();
