@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "22/06/2026 17:59:47",
+    "atualizado_em": "23/06/2026 17:46:04",
     "cards": {
         "selic_meta": {
             "valor": 14.25,
@@ -2015,13 +2015,13 @@
             "fonte_valor": "Referência estimada: Selic Meta - 0,10 p.p.; CDI mensal/acumulado: BCB SGS 4391",
             "mensal": 1.07,
             "mes_ref": "mai/2026",
-            "parcial_mes_atual": 0.7485,
+            "parcial_mes_atual": 0.8014,
             "parcial_ref": "jun/2026",
-            "parcial_ate": "19/06/2026",
-            "parcial_data_iso": "2026-06-19",
+            "parcial_ate": "22/06/2026",
+            "parcial_data_iso": "2026-06-22",
             "parcial_origem": "bcb_sgs_12_diario",
             "acum_ano": 5.6535,
-            "acum_ano_com_parcial": 6.4444,
+            "acum_ano_com_parcial": 6.5003,
             "acum_12m": 14.752,
             "acum_24m": 28.3096,
             "acum_36m": 43.6966,
@@ -2244,7 +2244,7 @@
                 {
                     "key": "2026-06",
                     "label": "jun/2026",
-                    "valor": 0.7485
+                    "valor": 0.8014
                 }
             ],
             "fonte_acum": "BCB SGS 12 (parcial diário) + SGS 4391 (fechamentos/fallback) + overrides locais",
@@ -2259,2230 +2259,2787 @@
             "acum_36m": 14.6261,
             "historico": [
                 {
+                    "key": "1980-01",
                     "label": "jan/1980",
                     "valor": 6.62
                 },
                 {
+                    "key": "1980-02",
                     "label": "fev/1980",
                     "valor": 4.62
                 },
                 {
+                    "key": "1980-03",
                     "label": "mar/1980",
                     "valor": 6.04
                 },
                 {
+                    "key": "1980-04",
                     "label": "abr/1980",
                     "valor": 5.29
                 },
                 {
+                    "key": "1980-05",
                     "label": "mai/1980",
                     "valor": 5.7
                 },
                 {
+                    "key": "1980-06",
                     "label": "jun/1980",
                     "valor": 5.31
                 },
                 {
+                    "key": "1980-07",
                     "label": "jul/1980",
                     "valor": 5.55
                 },
                 {
+                    "key": "1980-08",
                     "label": "ago/1980",
                     "valor": 4.95
                 },
                 {
+                    "key": "1980-09",
                     "label": "set/1980",
                     "valor": 4.23
                 },
                 {
+                    "key": "1980-10",
                     "label": "out/1980",
                     "valor": 9.48
                 },
                 {
+                    "key": "1980-11",
                     "label": "nov/1980",
                     "valor": 6.67
                 },
                 {
+                    "key": "1980-12",
                     "label": "dez/1980",
                     "valor": 6.61
                 },
                 {
+                    "key": "1981-01",
                     "label": "jan/1981",
                     "valor": 6.84
                 },
                 {
+                    "key": "1981-02",
                     "label": "fev/1981",
                     "valor": 6.4
                 },
                 {
+                    "key": "1981-03",
                     "label": "mar/1981",
                     "valor": 4.97
                 },
                 {
+                    "key": "1981-04",
                     "label": "abr/1981",
                     "valor": 6.46
                 },
                 {
+                    "key": "1981-05",
                     "label": "mai/1981",
                     "valor": 5.56
                 },
                 {
+                    "key": "1981-06",
                     "label": "jun/1981",
                     "valor": 5.52
                 },
                 {
+                    "key": "1981-07",
                     "label": "jul/1981",
                     "valor": 6.26
                 },
                 {
+                    "key": "1981-08",
                     "label": "ago/1981",
                     "valor": 5.5
                 },
                 {
+                    "key": "1981-09",
                     "label": "set/1981",
                     "valor": 5.26
                 },
                 {
+                    "key": "1981-10",
                     "label": "out/1981",
                     "valor": 5.08
                 },
                 {
+                    "key": "1981-11",
                     "label": "nov/1981",
                     "valor": 5.27
                 },
                 {
+                    "key": "1981-12",
                     "label": "dez/1981",
                     "valor": 5.93
                 },
                 {
+                    "key": "1982-01",
                     "label": "jan/1982",
                     "valor": 6.97
                 },
                 {
+                    "key": "1982-02",
                     "label": "fev/1982",
                     "valor": 6.64
                 },
                 {
+                    "key": "1982-03",
                     "label": "mar/1982",
                     "valor": 5.71
                 },
                 {
+                    "key": "1982-04",
                     "label": "abr/1982",
                     "valor": 5.89
                 },
                 {
+                    "key": "1982-05",
                     "label": "mai/1982",
                     "valor": 6.66
                 },
                 {
+                    "key": "1982-06",
                     "label": "jun/1982",
                     "valor": 7.1
                 },
                 {
+                    "key": "1982-07",
                     "label": "jul/1982",
                     "valor": 6.36
                 },
                 {
+                    "key": "1982-08",
                     "label": "ago/1982",
                     "valor": 5.97
                 },
                 {
+                    "key": "1982-09",
                     "label": "set/1982",
                     "valor": 5.08
                 },
                 {
+                    "key": "1982-10",
                     "label": "out/1982",
                     "valor": 4.44
                 },
                 {
+                    "key": "1982-11",
                     "label": "nov/1982",
                     "valor": 5.29
                 },
                 {
+                    "key": "1982-12",
                     "label": "dez/1982",
                     "valor": 7.81
                 },
                 {
+                    "key": "1983-01",
                     "label": "jan/1983",
                     "valor": 8.64
                 },
                 {
+                    "key": "1983-02",
                     "label": "fev/1983",
                     "valor": 7.86
                 },
                 {
+                    "key": "1983-03",
                     "label": "mar/1983",
                     "valor": 7.34
                 },
                 {
+                    "key": "1983-04",
                     "label": "abr/1983",
                     "valor": 6.58
                 },
                 {
+                    "key": "1983-05",
                     "label": "mai/1983",
                     "valor": 6.48
                 },
                 {
+                    "key": "1983-06",
                     "label": "jun/1983",
                     "valor": 9.88
                 },
                 {
+                    "key": "1983-07",
                     "label": "jul/1983",
                     "valor": 10.08
                 },
                 {
+                    "key": "1983-08",
                     "label": "ago/1983",
                     "valor": 9.11
                 },
                 {
+                    "key": "1983-09",
                     "label": "set/1983",
                     "valor": 10.3
                 },
                 {
+                    "key": "1983-10",
                     "label": "out/1983",
                     "valor": 8.87
                 },
                 {
+                    "key": "1983-11",
                     "label": "nov/1983",
                     "valor": 7.38
                 },
                 {
+                    "key": "1983-12",
                     "label": "dez/1983",
                     "valor": 8.68
                 },
                 {
+                    "key": "1984-01",
                     "label": "jan/1984",
                     "valor": 9.67
                 },
                 {
+                    "key": "1984-02",
                     "label": "fev/1984",
                     "valor": 9.5
                 },
                 {
+                    "key": "1984-03",
                     "label": "mar/1984",
                     "valor": 8.94
                 },
                 {
+                    "key": "1984-04",
                     "label": "abr/1984",
                     "valor": 9.54
                 },
                 {
+                    "key": "1984-05",
                     "label": "mai/1984",
                     "valor": 9.05
                 },
                 {
+                    "key": "1984-06",
                     "label": "jun/1984",
                     "valor": 10.08
                 },
                 {
+                    "key": "1984-07",
                     "label": "jul/1984",
                     "valor": 9.72
                 },
                 {
+                    "key": "1984-08",
                     "label": "ago/1984",
                     "valor": 9.35
                 },
                 {
+                    "key": "1984-09",
                     "label": "set/1984",
                     "valor": 11.75
                 },
                 {
+                    "key": "1984-10",
                     "label": "out/1984",
                     "valor": 10.44
                 },
                 {
+                    "key": "1984-11",
                     "label": "nov/1984",
                     "valor": 10.53
                 },
                 {
+                    "key": "1984-12",
                     "label": "dez/1984",
                     "valor": 11.98
                 },
                 {
+                    "key": "1985-01",
                     "label": "jan/1985",
                     "valor": 11.76
                 },
                 {
+                    "key": "1985-02",
                     "label": "fev/1985",
                     "valor": 10.87
                 },
                 {
+                    "key": "1985-03",
                     "label": "mar/1985",
                     "valor": 10.16
                 },
                 {
+                    "key": "1985-04",
                     "label": "abr/1985",
                     "valor": 8.2
                 },
                 {
+                    "key": "1985-05",
                     "label": "mai/1985",
                     "valor": 7.2
                 },
                 {
+                    "key": "1985-06",
                     "label": "jun/1985",
                     "valor": 8.49
                 },
                 {
+                    "key": "1985-07",
                     "label": "jul/1985",
                     "valor": 10.31
                 },
                 {
+                    "key": "1985-08",
                     "label": "ago/1985",
                     "valor": 12.05
                 },
                 {
+                    "key": "1985-09",
                     "label": "set/1985",
                     "valor": 11.12
                 },
                 {
+                    "key": "1985-10",
                     "label": "out/1985",
                     "valor": 10.62
                 },
                 {
+                    "key": "1985-11",
                     "label": "nov/1985",
                     "valor": 13.97
                 },
                 {
+                    "key": "1985-12",
                     "label": "dez/1985",
                     "valor": 15.07
                 },
                 {
+                    "key": "1986-01",
                     "label": "jan/1986",
                     "valor": 14.37
                 },
                 {
+                    "key": "1986-02",
                     "label": "fev/1986",
                     "valor": 12.72
                 },
                 {
+                    "key": "1986-03",
                     "label": "mar/1986",
                     "valor": 4.77
                 },
                 {
+                    "key": "1986-04",
                     "label": "abr/1986",
                     "valor": 0.78
                 },
                 {
+                    "key": "1986-05",
                     "label": "mai/1986",
                     "valor": 1.4
                 },
                 {
+                    "key": "1986-06",
                     "label": "jun/1986",
                     "valor": 1.27
                 },
                 {
+                    "key": "1986-07",
                     "label": "jul/1986",
                     "valor": 1.71
                 },
                 {
+                    "key": "1986-08",
                     "label": "ago/1986",
                     "valor": 3.55
                 },
                 {
+                    "key": "1986-09",
                     "label": "set/1986",
                     "valor": 1.72
                 },
                 {
+                    "key": "1986-10",
                     "label": "out/1986",
                     "valor": 1.9
                 },
                 {
+                    "key": "1986-11",
                     "label": "nov/1986",
                     "valor": 5.45
                 },
                 {
+                    "key": "1986-12",
                     "label": "dez/1986",
                     "valor": 11.65
                 },
                 {
+                    "key": "1987-01",
                     "label": "jan/1987",
                     "valor": 13.21
                 },
                 {
+                    "key": "1987-02",
                     "label": "fev/1987",
                     "valor": 12.64
                 },
                 {
+                    "key": "1987-03",
                     "label": "mar/1987",
                     "valor": 16.37
                 },
                 {
+                    "key": "1987-04",
                     "label": "abr/1987",
                     "valor": 19.1
                 },
                 {
+                    "key": "1987-05",
                     "label": "mai/1987",
                     "valor": 21.45
                 },
                 {
+                    "key": "1987-06",
                     "label": "jun/1987",
                     "valor": 19.71
                 },
                 {
+                    "key": "1987-07",
                     "label": "jul/1987",
                     "valor": 9.21
                 },
                 {
+                    "key": "1987-08",
                     "label": "ago/1987",
                     "valor": 4.87
                 },
                 {
+                    "key": "1987-09",
                     "label": "set/1987",
                     "valor": 7.78
                 },
                 {
+                    "key": "1987-10",
                     "label": "out/1987",
                     "valor": 11.22
                 },
                 {
+                    "key": "1987-11",
                     "label": "nov/1987",
                     "valor": 15.08
                 },
                 {
+                    "key": "1987-12",
                     "label": "dez/1987",
                     "valor": 14.15
                 },
                 {
+                    "key": "1988-01",
                     "label": "jan/1988",
                     "valor": 18.89
                 },
                 {
+                    "key": "1988-02",
                     "label": "fev/1988",
                     "valor": 15.7
                 },
                 {
+                    "key": "1988-03",
                     "label": "mar/1988",
                     "valor": 17.6
                 },
                 {
+                    "key": "1988-04",
                     "label": "abr/1988",
                     "valor": 19.29
                 },
                 {
+                    "key": "1988-05",
                     "label": "mai/1988",
                     "valor": 17.42
                 },
                 {
+                    "key": "1988-06",
                     "label": "jun/1988",
                     "valor": 22.0
                 },
                 {
+                    "key": "1988-07",
                     "label": "jul/1988",
                     "valor": 21.91
                 },
                 {
+                    "key": "1988-08",
                     "label": "ago/1988",
                     "valor": 21.59
                 },
                 {
+                    "key": "1988-09",
                     "label": "set/1988",
                     "valor": 27.45
                 },
                 {
+                    "key": "1988-10",
                     "label": "out/1988",
                     "valor": 25.62
                 },
                 {
+                    "key": "1988-11",
                     "label": "nov/1988",
                     "valor": 27.94
                 },
                 {
+                    "key": "1988-12",
                     "label": "dez/1988",
                     "valor": 28.7
                 },
                 {
+                    "key": "1989-01",
                     "label": "jan/1989",
                     "valor": 37.49
                 },
                 {
+                    "key": "1989-02",
                     "label": "fev/1989",
                     "valor": 16.78
                 },
                 {
+                    "key": "1989-03",
                     "label": "mar/1989",
                     "valor": 6.82
                 },
                 {
+                    "key": "1989-04",
                     "label": "abr/1989",
                     "valor": 8.33
                 },
                 {
+                    "key": "1989-05",
                     "label": "mai/1989",
                     "valor": 17.92
                 },
                 {
+                    "key": "1989-06",
                     "label": "jun/1989",
                     "valor": 28.65
                 },
                 {
+                    "key": "1989-07",
                     "label": "jul/1989",
                     "valor": 27.74
                 },
                 {
+                    "key": "1989-08",
                     "label": "ago/1989",
                     "valor": 33.71
                 },
                 {
+                    "key": "1989-09",
                     "label": "set/1989",
                     "valor": 37.56
                 },
                 {
+                    "key": "1989-10",
                     "label": "out/1989",
                     "valor": 39.77
                 },
                 {
+                    "key": "1989-11",
                     "label": "nov/1989",
                     "valor": 47.82
                 },
                 {
+                    "key": "1989-12",
                     "label": "dez/1989",
                     "valor": 51.5
                 },
                 {
+                    "key": "1990-01",
                     "label": "jan/1990",
                     "valor": 67.55
                 },
                 {
+                    "key": "1990-02",
                     "label": "fev/1990",
                     "valor": 75.73
                 },
                 {
+                    "key": "1990-03",
                     "label": "mar/1990",
                     "valor": 82.39
                 },
                 {
+                    "key": "1990-04",
                     "label": "abr/1990",
                     "valor": 15.52
                 },
                 {
+                    "key": "1990-05",
                     "label": "mai/1990",
                     "valor": 7.59
                 },
                 {
+                    "key": "1990-06",
                     "label": "jun/1990",
                     "valor": 11.75
                 },
                 {
+                    "key": "1990-07",
                     "label": "jul/1990",
                     "valor": 12.92
                 },
                 {
+                    "key": "1990-08",
                     "label": "ago/1990",
                     "valor": 12.88
                 },
                 {
+                    "key": "1990-09",
                     "label": "set/1990",
                     "valor": 14.41
                 },
                 {
+                    "key": "1990-10",
                     "label": "out/1990",
                     "valor": 14.36
                 },
                 {
+                    "key": "1990-11",
                     "label": "nov/1990",
                     "valor": 16.81
                 },
                 {
+                    "key": "1990-12",
                     "label": "dez/1990",
                     "valor": 18.44
                 },
                 {
+                    "key": "1991-01",
                     "label": "jan/1991",
                     "valor": 20.75
                 },
                 {
+                    "key": "1991-02",
                     "label": "fev/1991",
                     "valor": 20.72
                 },
                 {
+                    "key": "1991-03",
                     "label": "mar/1991",
                     "valor": 11.92
                 },
                 {
+                    "key": "1991-04",
                     "label": "abr/1991",
                     "valor": 4.99
                 },
                 {
+                    "key": "1991-05",
                     "label": "mai/1991",
                     "valor": 7.43
                 },
                 {
+                    "key": "1991-06",
                     "label": "jun/1991",
                     "valor": 11.19
                 },
                 {
+                    "key": "1991-07",
                     "label": "jul/1991",
                     "valor": 12.41
                 },
                 {
+                    "key": "1991-08",
                     "label": "ago/1991",
                     "valor": 15.63
                 },
                 {
+                    "key": "1991-09",
                     "label": "set/1991",
                     "valor": 15.63
                 },
                 {
+                    "key": "1991-10",
                     "label": "out/1991",
                     "valor": 20.23
                 },
                 {
+                    "key": "1991-11",
                     "label": "nov/1991",
                     "valor": 25.21
                 },
                 {
+                    "key": "1991-12",
                     "label": "dez/1991",
                     "valor": 23.71
                 },
                 {
+                    "key": "1992-01",
                     "label": "jan/1992",
                     "valor": 25.94
                 },
                 {
+                    "key": "1992-02",
                     "label": "fev/1992",
                     "valor": 24.32
                 },
                 {
+                    "key": "1992-03",
                     "label": "mar/1992",
                     "valor": 21.4
                 },
                 {
+                    "key": "1992-04",
                     "label": "abr/1992",
                     "valor": 19.93
                 },
                 {
+                    "key": "1992-05",
                     "label": "mai/1992",
                     "valor": 24.86
                 },
                 {
+                    "key": "1992-06",
                     "label": "jun/1992",
                     "valor": 20.21
                 },
                 {
+                    "key": "1992-07",
                     "label": "jul/1992",
                     "valor": 21.83
                 },
                 {
+                    "key": "1992-08",
                     "label": "ago/1992",
                     "valor": 22.14
                 },
                 {
+                    "key": "1992-09",
                     "label": "set/1992",
                     "valor": 24.63
                 },
                 {
+                    "key": "1992-10",
                     "label": "out/1992",
                     "valor": 25.24
                 },
                 {
+                    "key": "1992-11",
                     "label": "nov/1992",
                     "valor": 22.49
                 },
                 {
+                    "key": "1992-12",
                     "label": "dez/1992",
                     "valor": 25.24
                 },
                 {
+                    "key": "1993-01",
                     "label": "jan/1993",
                     "valor": 30.35
                 },
                 {
+                    "key": "1993-02",
                     "label": "fev/1993",
                     "valor": 24.98
                 },
                 {
+                    "key": "1993-03",
                     "label": "mar/1993",
                     "valor": 27.26
                 },
                 {
+                    "key": "1993-04",
                     "label": "abr/1993",
                     "valor": 27.75
                 },
                 {
+                    "key": "1993-05",
                     "label": "mai/1993",
                     "valor": 27.69
                 },
                 {
+                    "key": "1993-06",
                     "label": "jun/1993",
                     "valor": 30.07
                 },
                 {
+                    "key": "1993-07",
                     "label": "jul/1993",
                     "valor": 30.72
                 },
                 {
+                    "key": "1993-08",
                     "label": "ago/1993",
                     "valor": 32.96
                 },
                 {
+                    "key": "1993-09",
                     "label": "set/1993",
                     "valor": 35.69
                 },
                 {
+                    "key": "1993-10",
                     "label": "out/1993",
                     "valor": 33.92
                 },
                 {
+                    "key": "1993-11",
                     "label": "nov/1993",
                     "valor": 35.56
                 },
                 {
+                    "key": "1993-12",
                     "label": "dez/1993",
                     "valor": 36.84
                 },
                 {
+                    "key": "1994-01",
                     "label": "jan/1994",
                     "valor": 41.31
                 },
                 {
+                    "key": "1994-02",
                     "label": "fev/1994",
                     "valor": 40.27
                 },
                 {
+                    "key": "1994-03",
                     "label": "mar/1994",
                     "valor": 42.75
                 },
                 {
+                    "key": "1994-04",
                     "label": "abr/1994",
                     "valor": 42.68
                 },
                 {
+                    "key": "1994-05",
                     "label": "mai/1994",
                     "valor": 44.03
                 },
                 {
+                    "key": "1994-06",
                     "label": "jun/1994",
                     "valor": 47.43
                 },
                 {
+                    "key": "1994-07",
                     "label": "jul/1994",
                     "valor": 6.84
                 },
                 {
+                    "key": "1994-08",
                     "label": "ago/1994",
                     "valor": 1.86
                 },
                 {
+                    "key": "1994-09",
                     "label": "set/1994",
                     "valor": 1.53
                 },
                 {
+                    "key": "1994-10",
                     "label": "out/1994",
                     "valor": 2.62
                 },
                 {
+                    "key": "1994-11",
                     "label": "nov/1994",
                     "valor": 2.81
                 },
                 {
+                    "key": "1994-12",
                     "label": "dez/1994",
                     "valor": 1.71
                 },
                 {
+                    "key": "1995-01",
                     "label": "jan/1995",
                     "valor": 1.7
                 },
                 {
+                    "key": "1995-02",
                     "label": "fev/1995",
                     "valor": 1.02
                 },
                 {
+                    "key": "1995-03",
                     "label": "mar/1995",
                     "valor": 1.55
                 },
                 {
+                    "key": "1995-04",
                     "label": "abr/1995",
                     "valor": 2.43
                 },
                 {
+                    "key": "1995-05",
                     "label": "mai/1995",
                     "valor": 2.67
                 },
                 {
+                    "key": "1995-06",
                     "label": "jun/1995",
                     "valor": 2.26
                 },
                 {
+                    "key": "1995-07",
                     "label": "jul/1995",
                     "valor": 2.36
                 },
                 {
+                    "key": "1995-08",
                     "label": "ago/1995",
                     "valor": 0.99
                 },
                 {
+                    "key": "1995-09",
                     "label": "set/1995",
                     "valor": 0.99
                 },
                 {
+                    "key": "1995-10",
                     "label": "out/1995",
                     "valor": 1.41
                 },
                 {
+                    "key": "1995-11",
                     "label": "nov/1995",
                     "valor": 1.47
                 },
                 {
+                    "key": "1995-12",
                     "label": "dez/1995",
                     "valor": 1.56
                 },
                 {
+                    "key": "1996-01",
                     "label": "jan/1996",
                     "valor": 1.34
                 },
                 {
+                    "key": "1996-02",
                     "label": "fev/1996",
                     "valor": 1.03
                 },
                 {
+                    "key": "1996-03",
                     "label": "mar/1996",
                     "valor": 0.35
                 },
                 {
+                    "key": "1996-04",
                     "label": "abr/1996",
                     "valor": 1.26
                 },
                 {
+                    "key": "1996-05",
                     "label": "mai/1996",
                     "valor": 1.22
                 },
                 {
+                    "key": "1996-06",
                     "label": "jun/1996",
                     "valor": 1.19
                 },
                 {
+                    "key": "1996-07",
                     "label": "jul/1996",
                     "valor": 1.11
                 },
                 {
+                    "key": "1996-08",
                     "label": "ago/1996",
                     "valor": 0.44
                 },
                 {
+                    "key": "1996-09",
                     "label": "set/1996",
                     "valor": 0.15
                 },
                 {
+                    "key": "1996-10",
                     "label": "out/1996",
                     "valor": 0.3
                 },
                 {
+                    "key": "1996-11",
                     "label": "nov/1996",
                     "valor": 0.32
                 },
                 {
+                    "key": "1996-12",
                     "label": "dez/1996",
                     "valor": 0.47
                 },
                 {
+                    "key": "1997-01",
                     "label": "jan/1997",
                     "valor": 1.18
                 },
                 {
+                    "key": "1997-02",
                     "label": "fev/1997",
                     "valor": 0.5
                 },
                 {
+                    "key": "1997-03",
                     "label": "mar/1997",
                     "valor": 0.51
                 },
                 {
+                    "key": "1997-04",
                     "label": "abr/1997",
                     "valor": 0.88
                 },
                 {
+                    "key": "1997-05",
                     "label": "mai/1997",
                     "valor": 0.41
                 },
                 {
+                    "key": "1997-06",
                     "label": "jun/1997",
                     "valor": 0.54
                 },
                 {
+                    "key": "1997-07",
                     "label": "jul/1997",
                     "valor": 0.22
                 },
                 {
+                    "key": "1997-08",
                     "label": "ago/1997",
                     "valor": -0.02
                 },
                 {
+                    "key": "1997-09",
                     "label": "set/1997",
                     "valor": 0.06
                 },
                 {
+                    "key": "1997-10",
                     "label": "out/1997",
                     "valor": 0.23
                 },
                 {
+                    "key": "1997-11",
                     "label": "nov/1997",
                     "valor": 0.17
                 },
                 {
+                    "key": "1997-12",
                     "label": "dez/1997",
                     "valor": 0.43
                 },
                 {
+                    "key": "1998-01",
                     "label": "jan/1998",
                     "valor": 0.71
                 },
                 {
+                    "key": "1998-02",
                     "label": "fev/1998",
                     "valor": 0.46
                 },
                 {
+                    "key": "1998-03",
                     "label": "mar/1998",
                     "valor": 0.34
                 },
                 {
+                    "key": "1998-04",
                     "label": "abr/1998",
                     "valor": 0.24
                 },
                 {
+                    "key": "1998-05",
                     "label": "mai/1998",
                     "valor": 0.5
                 },
                 {
+                    "key": "1998-06",
                     "label": "jun/1998",
                     "valor": 0.02
                 },
                 {
+                    "key": "1998-07",
                     "label": "jul/1998",
                     "valor": -0.12
                 },
                 {
+                    "key": "1998-08",
                     "label": "ago/1998",
                     "valor": -0.51
                 },
                 {
+                    "key": "1998-09",
                     "label": "set/1998",
                     "valor": -0.22
                 },
                 {
+                    "key": "1998-10",
                     "label": "out/1998",
                     "valor": 0.02
                 },
                 {
+                    "key": "1998-11",
                     "label": "nov/1998",
                     "valor": -0.12
                 },
                 {
+                    "key": "1998-12",
                     "label": "dez/1998",
                     "valor": 0.33
                 },
                 {
+                    "key": "1999-01",
                     "label": "jan/1999",
                     "valor": 0.7
                 },
                 {
+                    "key": "1999-02",
                     "label": "fev/1999",
                     "valor": 1.05
                 },
                 {
+                    "key": "1999-03",
                     "label": "mar/1999",
                     "valor": 1.1
                 },
                 {
+                    "key": "1999-04",
                     "label": "abr/1999",
                     "valor": 0.56
                 },
                 {
+                    "key": "1999-05",
                     "label": "mai/1999",
                     "valor": 0.3
                 },
                 {
+                    "key": "1999-06",
                     "label": "jun/1999",
                     "valor": 0.19
                 },
                 {
+                    "key": "1999-07",
                     "label": "jul/1999",
                     "valor": 1.09
                 },
                 {
+                    "key": "1999-08",
                     "label": "ago/1999",
                     "valor": 0.56
                 },
                 {
+                    "key": "1999-09",
                     "label": "set/1999",
                     "valor": 0.31
                 },
                 {
+                    "key": "1999-10",
                     "label": "out/1999",
                     "valor": 1.19
                 },
                 {
+                    "key": "1999-11",
                     "label": "nov/1999",
                     "valor": 0.95
                 },
                 {
+                    "key": "1999-12",
                     "label": "dez/1999",
                     "valor": 0.6
                 },
                 {
+                    "key": "2000-01",
                     "label": "jan/2000",
                     "valor": 0.62
                 },
                 {
+                    "key": "2000-02",
                     "label": "fev/2000",
                     "valor": 0.13
                 },
                 {
+                    "key": "2000-03",
                     "label": "mar/2000",
                     "valor": 0.22
                 },
                 {
+                    "key": "2000-04",
                     "label": "abr/2000",
                     "valor": 0.42
                 },
                 {
+                    "key": "2000-05",
                     "label": "mai/2000",
                     "valor": 0.01
                 },
                 {
+                    "key": "2000-06",
                     "label": "jun/2000",
                     "valor": 0.23
                 },
                 {
+                    "key": "2000-07",
                     "label": "jul/2000",
                     "valor": 1.61
                 },
                 {
+                    "key": "2000-08",
                     "label": "ago/2000",
                     "valor": 1.31
                 },
                 {
+                    "key": "2000-09",
                     "label": "set/2000",
                     "valor": 0.23
                 },
                 {
+                    "key": "2000-10",
                     "label": "out/2000",
                     "valor": 0.14
                 },
                 {
+                    "key": "2000-11",
                     "label": "nov/2000",
                     "valor": 0.32
                 },
                 {
+                    "key": "2000-12",
                     "label": "dez/2000",
                     "valor": 0.59
                 },
                 {
+                    "key": "2001-01",
                     "label": "jan/2001",
                     "valor": 0.57
                 },
                 {
+                    "key": "2001-02",
                     "label": "fev/2001",
                     "valor": 0.46
                 },
                 {
+                    "key": "2001-03",
                     "label": "mar/2001",
                     "valor": 0.38
                 },
                 {
+                    "key": "2001-04",
                     "label": "abr/2001",
                     "valor": 0.58
                 },
                 {
+                    "key": "2001-05",
                     "label": "mai/2001",
                     "valor": 0.41
                 },
                 {
+                    "key": "2001-06",
                     "label": "jun/2001",
                     "valor": 0.52
                 },
                 {
+                    "key": "2001-07",
                     "label": "jul/2001",
                     "valor": 1.33
                 },
                 {
+                    "key": "2001-08",
                     "label": "ago/2001",
                     "valor": 0.7
                 },
                 {
+                    "key": "2001-09",
                     "label": "set/2001",
                     "valor": 0.28
                 },
                 {
+                    "key": "2001-10",
                     "label": "out/2001",
                     "valor": 0.83
                 },
                 {
+                    "key": "2001-11",
                     "label": "nov/2001",
                     "valor": 0.71
                 },
                 {
+                    "key": "2001-12",
                     "label": "dez/2001",
                     "valor": 0.65
                 },
                 {
+                    "key": "2002-01",
                     "label": "jan/2002",
                     "valor": 0.52
                 },
                 {
+                    "key": "2002-02",
                     "label": "fev/2002",
                     "valor": 0.36
                 },
                 {
+                    "key": "2002-03",
                     "label": "mar/2002",
                     "valor": 0.6
                 },
                 {
+                    "key": "2002-04",
                     "label": "abr/2002",
                     "valor": 0.8
                 },
                 {
+                    "key": "2002-05",
                     "label": "mai/2002",
                     "valor": 0.21
                 },
                 {
+                    "key": "2002-06",
                     "label": "jun/2002",
                     "valor": 0.42
                 },
                 {
+                    "key": "2002-07",
                     "label": "jul/2002",
                     "valor": 1.19
                 },
                 {
+                    "key": "2002-08",
                     "label": "ago/2002",
                     "valor": 0.65
                 },
                 {
+                    "key": "2002-09",
                     "label": "set/2002",
                     "valor": 0.72
                 },
                 {
+                    "key": "2002-10",
                     "label": "out/2002",
                     "valor": 1.31
                 },
                 {
+                    "key": "2002-11",
                     "label": "nov/2002",
                     "valor": 3.02
                 },
                 {
+                    "key": "2002-12",
                     "label": "dez/2002",
                     "valor": 2.1
                 },
                 {
+                    "key": "2003-01",
                     "label": "jan/2003",
                     "valor": 2.25
                 },
                 {
+                    "key": "2003-02",
                     "label": "fev/2003",
                     "valor": 1.57
                 },
                 {
+                    "key": "2003-03",
                     "label": "mar/2003",
                     "valor": 1.23
                 },
                 {
+                    "key": "2003-04",
                     "label": "abr/2003",
                     "valor": 0.97
                 },
                 {
+                    "key": "2003-05",
                     "label": "mai/2003",
                     "valor": 0.61
                 },
                 {
+                    "key": "2003-06",
                     "label": "jun/2003",
                     "valor": -0.15
                 },
                 {
+                    "key": "2003-07",
                     "label": "jul/2003",
                     "valor": 0.2
                 },
                 {
+                    "key": "2003-08",
                     "label": "ago/2003",
                     "valor": 0.34
                 },
                 {
+                    "key": "2003-09",
                     "label": "set/2003",
                     "valor": 0.78
                 },
                 {
+                    "key": "2003-10",
                     "label": "out/2003",
                     "valor": 0.29
                 },
                 {
+                    "key": "2003-11",
                     "label": "nov/2003",
                     "valor": 0.34
                 },
                 {
+                    "key": "2003-12",
                     "label": "dez/2003",
                     "valor": 0.52
                 },
                 {
+                    "key": "2004-01",
                     "label": "jan/2004",
                     "valor": 0.76
                 },
                 {
+                    "key": "2004-02",
                     "label": "fev/2004",
                     "valor": 0.61
                 },
                 {
+                    "key": "2004-03",
                     "label": "mar/2004",
                     "valor": 0.47
                 },
                 {
+                    "key": "2004-04",
                     "label": "abr/2004",
                     "valor": 0.37
                 },
                 {
+                    "key": "2004-05",
                     "label": "mai/2004",
                     "valor": 0.51
                 },
                 {
+                    "key": "2004-06",
                     "label": "jun/2004",
                     "valor": 0.71
                 },
                 {
+                    "key": "2004-07",
                     "label": "jul/2004",
                     "valor": 0.91
                 },
                 {
+                    "key": "2004-08",
                     "label": "ago/2004",
                     "valor": 0.69
                 },
                 {
+                    "key": "2004-09",
                     "label": "set/2004",
                     "valor": 0.33
                 },
                 {
+                    "key": "2004-10",
                     "label": "out/2004",
                     "valor": 0.44
                 },
                 {
+                    "key": "2004-11",
                     "label": "nov/2004",
                     "valor": 0.69
                 },
                 {
+                    "key": "2004-12",
                     "label": "dez/2004",
                     "valor": 0.86
                 },
                 {
+                    "key": "2005-01",
                     "label": "jan/2005",
                     "valor": 0.58
                 },
                 {
+                    "key": "2005-02",
                     "label": "fev/2005",
                     "valor": 0.59
                 },
                 {
+                    "key": "2005-03",
                     "label": "mar/2005",
                     "valor": 0.61
                 },
                 {
+                    "key": "2005-04",
                     "label": "abr/2005",
                     "valor": 0.87
                 },
                 {
+                    "key": "2005-05",
                     "label": "mai/2005",
                     "valor": 0.49
                 },
                 {
+                    "key": "2005-06",
                     "label": "jun/2005",
                     "valor": -0.02
                 },
                 {
+                    "key": "2005-07",
                     "label": "jul/2005",
                     "valor": 0.25
                 },
                 {
+                    "key": "2005-08",
                     "label": "ago/2005",
                     "valor": 0.17
                 },
                 {
+                    "key": "2005-09",
                     "label": "set/2005",
                     "valor": 0.35
                 },
                 {
+                    "key": "2005-10",
                     "label": "out/2005",
                     "valor": 0.75
                 },
                 {
+                    "key": "2005-11",
                     "label": "nov/2005",
                     "valor": 0.55
                 },
                 {
+                    "key": "2005-12",
                     "label": "dez/2005",
                     "valor": 0.36
                 },
                 {
+                    "key": "2006-01",
                     "label": "jan/2006",
                     "valor": 0.59
                 },
                 {
+                    "key": "2006-02",
                     "label": "fev/2006",
                     "valor": 0.41
                 },
                 {
+                    "key": "2006-03",
                     "label": "mar/2006",
                     "valor": 0.43
                 },
                 {
+                    "key": "2006-04",
                     "label": "abr/2006",
                     "valor": 0.21
                 },
                 {
+                    "key": "2006-05",
                     "label": "mai/2006",
                     "valor": 0.1
                 },
                 {
+                    "key": "2006-06",
                     "label": "jun/2006",
                     "valor": -0.21
                 },
                 {
+                    "key": "2006-07",
                     "label": "jul/2006",
                     "valor": 0.19
                 },
                 {
+                    "key": "2006-08",
                     "label": "ago/2006",
                     "valor": 0.05
                 },
                 {
+                    "key": "2006-09",
                     "label": "set/2006",
                     "valor": 0.21
                 },
                 {
+                    "key": "2006-10",
                     "label": "out/2006",
                     "valor": 0.33
                 },
                 {
+                    "key": "2006-11",
                     "label": "nov/2006",
                     "valor": 0.31
                 },
                 {
+                    "key": "2006-12",
                     "label": "dez/2006",
                     "valor": 0.48
                 },
                 {
+                    "key": "2007-01",
                     "label": "jan/2007",
                     "valor": 0.44
                 },
                 {
+                    "key": "2007-02",
                     "label": "fev/2007",
                     "valor": 0.44
                 },
                 {
+                    "key": "2007-03",
                     "label": "mar/2007",
                     "valor": 0.37
                 },
                 {
+                    "key": "2007-04",
                     "label": "abr/2007",
                     "valor": 0.25
                 },
                 {
+                    "key": "2007-05",
                     "label": "mai/2007",
                     "valor": 0.28
                 },
                 {
+                    "key": "2007-06",
                     "label": "jun/2007",
                     "valor": 0.28
                 },
                 {
+                    "key": "2007-07",
                     "label": "jul/2007",
                     "valor": 0.24
                 },
                 {
+                    "key": "2007-08",
                     "label": "ago/2007",
                     "valor": 0.47
                 },
                 {
+                    "key": "2007-09",
                     "label": "set/2007",
                     "valor": 0.18
                 },
                 {
+                    "key": "2007-10",
                     "label": "out/2007",
                     "valor": 0.3
                 },
                 {
+                    "key": "2007-11",
                     "label": "nov/2007",
                     "valor": 0.38
                 },
                 {
+                    "key": "2007-12",
                     "label": "dez/2007",
                     "valor": 0.74
                 },
                 {
+                    "key": "2008-01",
                     "label": "jan/2008",
                     "valor": 0.54
                 },
                 {
+                    "key": "2008-02",
                     "label": "fev/2008",
                     "valor": 0.49
                 },
                 {
+                    "key": "2008-03",
                     "label": "mar/2008",
                     "valor": 0.48
                 },
                 {
+                    "key": "2008-04",
                     "label": "abr/2008",
                     "valor": 0.55
                 },
                 {
+                    "key": "2008-05",
                     "label": "mai/2008",
                     "valor": 0.79
                 },
                 {
+                    "key": "2008-06",
                     "label": "jun/2008",
                     "valor": 0.74
                 },
                 {
+                    "key": "2008-07",
                     "label": "jul/2008",
                     "valor": 0.53
                 },
                 {
+                    "key": "2008-08",
                     "label": "ago/2008",
                     "valor": 0.28
                 },
                 {
+                    "key": "2008-09",
                     "label": "set/2008",
                     "valor": 0.26
                 },
                 {
+                    "key": "2008-10",
                     "label": "out/2008",
                     "valor": 0.45
                 },
                 {
+                    "key": "2008-11",
                     "label": "nov/2008",
                     "valor": 0.36
                 },
                 {
+                    "key": "2008-12",
                     "label": "dez/2008",
                     "valor": 0.28
                 },
                 {
+                    "key": "2009-01",
                     "label": "jan/2009",
                     "valor": 0.48
                 },
                 {
+                    "key": "2009-02",
                     "label": "fev/2009",
                     "valor": 0.55
                 },
                 {
+                    "key": "2009-03",
                     "label": "mar/2009",
                     "valor": 0.2
                 },
                 {
+                    "key": "2009-04",
                     "label": "abr/2009",
                     "valor": 0.48
                 },
                 {
+                    "key": "2009-05",
                     "label": "mai/2009",
                     "valor": 0.47
                 },
                 {
+                    "key": "2009-06",
                     "label": "jun/2009",
                     "valor": 0.36
                 },
                 {
+                    "key": "2009-07",
                     "label": "jul/2009",
                     "valor": 0.24
                 },
                 {
+                    "key": "2009-08",
                     "label": "ago/2009",
                     "valor": 0.15
                 },
                 {
+                    "key": "2009-09",
                     "label": "set/2009",
                     "valor": 0.24
                 },
                 {
+                    "key": "2009-10",
                     "label": "out/2009",
                     "valor": 0.28
                 },
                 {
+                    "key": "2009-11",
                     "label": "nov/2009",
                     "valor": 0.41
                 },
                 {
+                    "key": "2009-12",
                     "label": "dez/2009",
                     "valor": 0.37
                 },
                 {
+                    "key": "2010-01",
                     "label": "jan/2010",
                     "valor": 0.75
                 },
                 {
+                    "key": "2010-02",
                     "label": "fev/2010",
                     "valor": 0.78
                 },
                 {
+                    "key": "2010-03",
                     "label": "mar/2010",
                     "valor": 0.52
                 },
                 {
+                    "key": "2010-04",
                     "label": "abr/2010",
                     "valor": 0.57
                 },
                 {
+                    "key": "2010-05",
                     "label": "mai/2010",
                     "valor": 0.43
                 },
                 {
+                    "key": "2010-06",
                     "label": "jun/2010",
                     "valor": 0.0
                 },
                 {
+                    "key": "2010-07",
                     "label": "jul/2010",
                     "valor": 0.01
                 },
                 {
+                    "key": "2010-08",
                     "label": "ago/2010",
                     "valor": 0.04
                 },
                 {
+                    "key": "2010-09",
                     "label": "set/2010",
                     "valor": 0.45
                 },
                 {
+                    "key": "2010-10",
                     "label": "out/2010",
                     "valor": 0.75
                 },
                 {
+                    "key": "2010-11",
                     "label": "nov/2010",
                     "valor": 0.83
                 },
                 {
+                    "key": "2010-12",
                     "label": "dez/2010",
                     "valor": 0.63
                 },
                 {
+                    "key": "2011-01",
                     "label": "jan/2011",
                     "valor": 0.83
                 },
                 {
+                    "key": "2011-02",
                     "label": "fev/2011",
                     "valor": 0.8
                 },
                 {
+                    "key": "2011-03",
                     "label": "mar/2011",
                     "valor": 0.79
                 },
                 {
+                    "key": "2011-04",
                     "label": "abr/2011",
                     "valor": 0.77
                 },
                 {
+                    "key": "2011-05",
                     "label": "mai/2011",
                     "valor": 0.47
                 },
                 {
+                    "key": "2011-06",
                     "label": "jun/2011",
                     "valor": 0.15
                 },
                 {
+                    "key": "2011-07",
                     "label": "jul/2011",
                     "valor": 0.16
                 },
                 {
+                    "key": "2011-08",
                     "label": "ago/2011",
                     "valor": 0.37
                 },
                 {
+                    "key": "2011-09",
                     "label": "set/2011",
                     "valor": 0.53
                 },
                 {
+                    "key": "2011-10",
                     "label": "out/2011",
                     "valor": 0.43
                 },
                 {
+                    "key": "2011-11",
                     "label": "nov/2011",
                     "valor": 0.52
                 },
                 {
+                    "key": "2011-12",
                     "label": "dez/2011",
                     "valor": 0.5
                 },
                 {
+                    "key": "2012-01",
                     "label": "jan/2012",
                     "valor": 0.56
                 },
                 {
+                    "key": "2012-02",
                     "label": "fev/2012",
                     "valor": 0.45
                 },
                 {
+                    "key": "2012-03",
                     "label": "mar/2012",
                     "valor": 0.21
                 },
                 {
+                    "key": "2012-04",
                     "label": "abr/2012",
                     "valor": 0.64
                 },
                 {
+                    "key": "2012-05",
                     "label": "mai/2012",
                     "valor": 0.36
                 },
                 {
+                    "key": "2012-06",
                     "label": "jun/2012",
                     "valor": 0.08
                 },
                 {
+                    "key": "2012-07",
                     "label": "jul/2012",
                     "valor": 0.43
                 },
                 {
+                    "key": "2012-08",
                     "label": "ago/2012",
                     "valor": 0.41
                 },
                 {
+                    "key": "2012-09",
                     "label": "set/2012",
                     "valor": 0.57
                 },
                 {
+                    "key": "2012-10",
                     "label": "out/2012",
                     "valor": 0.59
                 },
                 {
+                    "key": "2012-11",
                     "label": "nov/2012",
                     "valor": 0.6
                 },
                 {
+                    "key": "2012-12",
                     "label": "dez/2012",
                     "valor": 0.79
                 },
                 {
+                    "key": "2013-01",
                     "label": "jan/2013",
                     "valor": 0.86
                 },
                 {
+                    "key": "2013-02",
                     "label": "fev/2013",
                     "valor": 0.6
                 },
                 {
+                    "key": "2013-03",
                     "label": "mar/2013",
                     "valor": 0.47
                 },
                 {
+                    "key": "2013-04",
                     "label": "abr/2013",
                     "valor": 0.55
                 },
                 {
+                    "key": "2013-05",
                     "label": "mai/2013",
                     "valor": 0.37
                 },
                 {
+                    "key": "2013-06",
                     "label": "jun/2013",
                     "valor": 0.26
                 },
                 {
+                    "key": "2013-07",
                     "label": "jul/2013",
                     "valor": 0.03
                 },
                 {
+                    "key": "2013-08",
                     "label": "ago/2013",
                     "valor": 0.24
                 },
                 {
+                    "key": "2013-09",
                     "label": "set/2013",
                     "valor": 0.35
                 },
                 {
+                    "key": "2013-10",
                     "label": "out/2013",
                     "valor": 0.57
                 },
                 {
+                    "key": "2013-11",
                     "label": "nov/2013",
                     "valor": 0.54
                 },
                 {
+                    "key": "2013-12",
                     "label": "dez/2013",
                     "valor": 0.92
                 },
                 {
+                    "key": "2014-01",
                     "label": "jan/2014",
                     "valor": 0.55
                 },
                 {
+                    "key": "2014-02",
                     "label": "fev/2014",
                     "valor": 0.69
                 },
                 {
+                    "key": "2014-03",
                     "label": "mar/2014",
                     "valor": 0.92
                 },
                 {
+                    "key": "2014-04",
                     "label": "abr/2014",
                     "valor": 0.67
                 },
                 {
+                    "key": "2014-05",
                     "label": "mai/2014",
                     "valor": 0.46
                 },
                 {
+                    "key": "2014-06",
                     "label": "jun/2014",
                     "valor": 0.4
                 },
                 {
+                    "key": "2014-07",
                     "label": "jul/2014",
                     "valor": 0.01
                 },
                 {
+                    "key": "2014-08",
                     "label": "ago/2014",
                     "valor": 0.25
                 },
                 {
+                    "key": "2014-09",
                     "label": "set/2014",
                     "valor": 0.57
                 },
                 {
+                    "key": "2014-10",
                     "label": "out/2014",
                     "valor": 0.42
                 },
                 {
+                    "key": "2014-11",
                     "label": "nov/2014",
                     "valor": 0.51
                 },
                 {
+                    "key": "2014-12",
                     "label": "dez/2014",
                     "valor": 0.78
                 },
                 {
+                    "key": "2015-01",
                     "label": "jan/2015",
                     "valor": 1.24
                 },
                 {
+                    "key": "2015-02",
                     "label": "fev/2015",
                     "valor": 1.22
                 },
                 {
+                    "key": "2015-03",
                     "label": "mar/2015",
                     "valor": 1.32
                 },
                 {
+                    "key": "2015-04",
                     "label": "abr/2015",
                     "valor": 0.71
                 },
                 {
+                    "key": "2015-05",
                     "label": "mai/2015",
                     "valor": 0.74
                 },
                 {
+                    "key": "2015-06",
                     "label": "jun/2015",
                     "valor": 0.79
                 },
                 {
+                    "key": "2015-07",
                     "label": "jul/2015",
                     "valor": 0.62
                 },
                 {
+                    "key": "2015-08",
                     "label": "ago/2015",
                     "valor": 0.22
                 },
                 {
+                    "key": "2015-09",
                     "label": "set/2015",
                     "valor": 0.54
                 },
                 {
+                    "key": "2015-10",
                     "label": "out/2015",
                     "valor": 0.82
                 },
                 {
+                    "key": "2015-11",
                     "label": "nov/2015",
                     "valor": 1.01
                 },
                 {
+                    "key": "2015-12",
                     "label": "dez/2015",
                     "valor": 0.96
                 },
                 {
+                    "key": "2016-01",
                     "label": "jan/2016",
                     "valor": 1.27
                 },
                 {
+                    "key": "2016-02",
                     "label": "fev/2016",
                     "valor": 0.9
                 },
                 {
+                    "key": "2016-03",
                     "label": "mar/2016",
                     "valor": 0.43
                 },
                 {
+                    "key": "2016-04",
                     "label": "abr/2016",
                     "valor": 0.61
                 },
                 {
+                    "key": "2016-05",
                     "label": "mai/2016",
                     "valor": 0.78
                 },
                 {
+                    "key": "2016-06",
                     "label": "jun/2016",
                     "valor": 0.35
                 },
                 {
+                    "key": "2016-07",
                     "label": "jul/2016",
                     "valor": 0.52
                 },
                 {
+                    "key": "2016-08",
                     "label": "ago/2016",
                     "valor": 0.44
                 },
                 {
+                    "key": "2016-09",
                     "label": "set/2016",
                     "valor": 0.08
                 },
                 {
+                    "key": "2016-10",
                     "label": "out/2016",
                     "valor": 0.26
                 },
                 {
+                    "key": "2016-11",
                     "label": "nov/2016",
                     "valor": 0.18
                 },
                 {
+                    "key": "2016-12",
                     "label": "dez/2016",
                     "valor": 0.3
                 },
                 {
+                    "key": "2017-01",
                     "label": "jan/2017",
                     "valor": 0.38
                 },
                 {
+                    "key": "2017-02",
                     "label": "fev/2017",
                     "valor": 0.33
                 },
                 {
+                    "key": "2017-03",
                     "label": "mar/2017",
                     "valor": 0.25
                 },
                 {
+                    "key": "2017-04",
                     "label": "abr/2017",
                     "valor": 0.14
                 },
                 {
+                    "key": "2017-05",
                     "label": "mai/2017",
                     "valor": 0.31
                 },
                 {
+                    "key": "2017-06",
                     "label": "jun/2017",
                     "valor": -0.23
                 },
                 {
+                    "key": "2017-07",
                     "label": "jul/2017",
                     "valor": 0.24
                 },
                 {
+                    "key": "2017-08",
                     "label": "ago/2017",
                     "valor": 0.19
                 },
                 {
+                    "key": "2017-09",
                     "label": "set/2017",
                     "valor": 0.16
                 },
                 {
+                    "key": "2017-10",
                     "label": "out/2017",
                     "valor": 0.42
                 },
                 {
+                    "key": "2017-11",
                     "label": "nov/2017",
                     "valor": 0.28
                 },
                 {
+                    "key": "2017-12",
                     "label": "dez/2017",
                     "valor": 0.44
                 },
                 {
+                    "key": "2018-01",
                     "label": "jan/2018",
                     "valor": 0.29
                 },
                 {
+                    "key": "2018-02",
                     "label": "fev/2018",
                     "valor": 0.32
                 },
                 {
+                    "key": "2018-03",
                     "label": "mar/2018",
                     "valor": 0.09
                 },
                 {
+                    "key": "2018-04",
                     "label": "abr/2018",
                     "valor": 0.22
                 },
                 {
+                    "key": "2018-05",
                     "label": "mai/2018",
                     "valor": 0.4
                 },
                 {
+                    "key": "2018-06",
                     "label": "jun/2018",
                     "valor": 1.26
                 },
                 {
+                    "key": "2018-07",
                     "label": "jul/2018",
                     "valor": 0.33
                 },
                 {
+                    "key": "2018-08",
                     "label": "ago/2018",
                     "valor": -0.09
                 },
                 {
+                    "key": "2018-09",
                     "label": "set/2018",
                     "valor": 0.48
                 },
                 {
+                    "key": "2018-10",
                     "label": "out/2018",
                     "valor": 0.45
                 },
                 {
+                    "key": "2018-11",
                     "label": "nov/2018",
                     "valor": -0.21
                 },
                 {
+                    "key": "2018-12",
                     "label": "dez/2018",
                     "valor": 0.15
                 },
                 {
+                    "key": "2019-01",
                     "label": "jan/2019",
                     "valor": 0.32
                 },
                 {
+                    "key": "2019-02",
                     "label": "fev/2019",
                     "valor": 0.43
                 },
                 {
+                    "key": "2019-03",
                     "label": "mar/2019",
                     "valor": 0.75
                 },
                 {
+                    "key": "2019-04",
                     "label": "abr/2019",
                     "valor": 0.57
                 },
                 {
+                    "key": "2019-05",
                     "label": "mai/2019",
                     "valor": 0.13
                 },
                 {
+                    "key": "2019-06",
                     "label": "jun/2019",
                     "valor": 0.01
                 },
                 {
+                    "key": "2019-07",
                     "label": "jul/2019",
                     "valor": 0.19
                 },
                 {
+                    "key": "2019-08",
                     "label": "ago/2019",
                     "valor": 0.11
                 },
                 {
+                    "key": "2019-09",
                     "label": "set/2019",
                     "valor": -0.04
                 },
                 {
+                    "key": "2019-10",
                     "label": "out/2019",
                     "valor": 0.1
                 },
                 {
+                    "key": "2019-11",
                     "label": "nov/2019",
                     "valor": 0.51
                 },
                 {
+                    "key": "2019-12",
                     "label": "dez/2019",
                     "valor": 1.15
                 },
                 {
+                    "key": "2020-01",
                     "label": "jan/2020",
                     "valor": 0.21
                 },
                 {
+                    "key": "2020-02",
                     "label": "fev/2020",
                     "valor": 0.25
                 },
                 {
+                    "key": "2020-03",
                     "label": "mar/2020",
                     "valor": 0.07
                 },
                 {
+                    "key": "2020-04",
                     "label": "abr/2020",
                     "valor": -0.31
                 },
                 {
+                    "key": "2020-05",
                     "label": "mai/2020",
                     "valor": -0.38
                 },
                 {
+                    "key": "2020-06",
                     "label": "jun/2020",
                     "valor": 0.26
                 },
                 {
+                    "key": "2020-07",
                     "label": "jul/2020",
                     "valor": 0.36
                 },
                 {
+                    "key": "2020-08",
                     "label": "ago/2020",
                     "valor": 0.24
                 },
                 {
+                    "key": "2020-09",
                     "label": "set/2020",
                     "valor": 0.64
                 },
                 {
+                    "key": "2020-10",
                     "label": "out/2020",
                     "valor": 0.86
                 },
                 {
+                    "key": "2020-11",
                     "label": "nov/2020",
                     "valor": 0.89
                 },
                 {
+                    "key": "2020-12",
                     "label": "dez/2020",
                     "valor": 1.35
                 },
                 {
+                    "key": "2021-01",
                     "label": "jan/2021",
                     "valor": 0.25
                 },
                 {
+                    "key": "2021-02",
                     "label": "fev/2021",
                     "valor": 0.86
                 },
                 {
+                    "key": "2021-03",
                     "label": "mar/2021",
                     "valor": 0.93
                 },
                 {
+                    "key": "2021-04",
                     "label": "abr/2021",
                     "valor": 0.31
                 },
                 {
+                    "key": "2021-05",
                     "label": "mai/2021",
                     "valor": 0.83
                 },
                 {
+                    "key": "2021-06",
                     "label": "jun/2021",
                     "valor": 0.53
                 },
                 {
+                    "key": "2021-07",
                     "label": "jul/2021",
                     "valor": 0.96
                 },
                 {
+                    "key": "2021-08",
                     "label": "ago/2021",
                     "valor": 0.87
                 },
                 {
+                    "key": "2021-09",
                     "label": "set/2021",
                     "valor": 1.16
                 },
                 {
+                    "key": "2021-10",
                     "label": "out/2021",
                     "valor": 1.25
                 },
                 {
+                    "key": "2021-11",
                     "label": "nov/2021",
                     "valor": 0.95
                 },
                 {
+                    "key": "2021-12",
                     "label": "dez/2021",
                     "valor": 0.73
                 },
                 {
+                    "key": "2022-01",
                     "label": "jan/2022",
                     "valor": 0.54
                 },
                 {
+                    "key": "2022-02",
                     "label": "fev/2022",
                     "valor": 1.01
                 },
                 {
+                    "key": "2022-03",
                     "label": "mar/2022",
                     "valor": 1.62
                 },
                 {
+                    "key": "2022-04",
                     "label": "abr/2022",
                     "valor": 1.06
                 },
                 {
+                    "key": "2022-05",
                     "label": "mai/2022",
                     "valor": 0.47
                 },
                 {
+                    "key": "2022-06",
                     "label": "jun/2022",
                     "valor": 0.67
                 },
                 {
+                    "key": "2022-07",
                     "label": "jul/2022",
                     "valor": -0.68
                 },
                 {
+                    "key": "2022-08",
                     "label": "ago/2022",
                     "valor": -0.36
                 },
                 {
+                    "key": "2022-09",
                     "label": "set/2022",
                     "valor": -0.29
                 },
                 {
+                    "key": "2022-10",
                     "label": "out/2022",
                     "valor": 0.59
                 },
                 {
+                    "key": "2022-11",
                     "label": "nov/2022",
                     "valor": 0.41
                 },
                 {
+                    "key": "2022-12",
                     "label": "dez/2022",
                     "valor": 0.62
                 },
                 {
+                    "key": "2023-01",
                     "label": "jan/2023",
                     "valor": 0.53
                 },
                 {
+                    "key": "2023-02",
                     "label": "fev/2023",
                     "valor": 0.84
                 },
                 {
+                    "key": "2023-03",
                     "label": "mar/2023",
                     "valor": 0.71
                 },
                 {
+                    "key": "2023-04",
                     "label": "abr/2023",
                     "valor": 0.61
                 },
                 {
+                    "key": "2023-05",
                     "label": "mai/2023",
                     "valor": 0.23
                 },
                 {
+                    "key": "2023-06",
                     "label": "jun/2023",
                     "valor": -0.08
                 },
                 {
+                    "key": "2023-07",
                     "label": "jul/2023",
                     "valor": 0.12
                 },
                 {
+                    "key": "2023-08",
                     "label": "ago/2023",
                     "valor": 0.23
                 },
                 {
+                    "key": "2023-09",
                     "label": "set/2023",
                     "valor": 0.26
                 },
                 {
+                    "key": "2023-10",
                     "label": "out/2023",
                     "valor": 0.24
                 },
                 {
+                    "key": "2023-11",
                     "label": "nov/2023",
                     "valor": 0.28
                 },
                 {
+                    "key": "2023-12",
                     "label": "dez/2023",
                     "valor": 0.56
                 },
                 {
+                    "key": "2024-01",
                     "label": "jan/2024",
                     "valor": 0.42
                 },
                 {
+                    "key": "2024-02",
                     "label": "fev/2024",
                     "valor": 0.83
                 },
                 {
+                    "key": "2024-03",
                     "label": "mar/2024",
                     "valor": 0.16
                 },
                 {
+                    "key": "2024-04",
                     "label": "abr/2024",
                     "valor": 0.38
                 },
                 {
+                    "key": "2024-05",
                     "label": "mai/2024",
                     "valor": 0.46
                 },
                 {
+                    "key": "2024-06",
                     "label": "jun/2024",
                     "valor": 0.21
                 },
                 {
+                    "key": "2024-07",
                     "label": "jul/2024",
                     "valor": 0.38
                 },
                 {
+                    "key": "2024-08",
                     "label": "ago/2024",
                     "valor": -0.02
                 },
                 {
+                    "key": "2024-09",
                     "label": "set/2024",
                     "valor": 0.44
                 },
                 {
+                    "key": "2024-10",
                     "label": "out/2024",
                     "valor": 0.56
                 },
                 {
+                    "key": "2024-11",
                     "label": "nov/2024",
                     "valor": 0.39
                 },
                 {
+                    "key": "2024-12",
                     "label": "dez/2024",
                     "valor": 0.52
                 },
                 {
+                    "key": "2025-01",
                     "label": "jan/2025",
                     "valor": 0.16
                 },
                 {
+                    "key": "2025-02",
                     "label": "fev/2025",
                     "valor": 1.31
                 },
                 {
+                    "key": "2025-03",
                     "label": "mar/2025",
                     "valor": 0.56
                 },
                 {
+                    "key": "2025-04",
                     "label": "abr/2025",
                     "valor": 0.43
                 },
                 {
+                    "key": "2025-05",
                     "label": "mai/2025",
                     "valor": 0.26
                 },
                 {
+                    "key": "2025-06",
                     "label": "jun/2025",
                     "valor": 0.24
                 },
                 {
+                    "key": "2025-07",
                     "label": "jul/2025",
                     "valor": 0.26
                 },
                 {
+                    "key": "2025-08",
                     "label": "ago/2025",
                     "valor": -0.11
                 },
                 {
+                    "key": "2025-09",
                     "label": "set/2025",
                     "valor": 0.48
                 },
                 {
+                    "key": "2025-10",
                     "label": "out/2025",
                     "valor": 0.09
                 },
                 {
+                    "key": "2025-11",
                     "label": "nov/2025",
                     "valor": 0.18
                 },
                 {
+                    "key": "2025-12",
                     "label": "dez/2025",
                     "valor": 0.33
                 },
                 {
+                    "key": "2026-01",
                     "label": "jan/2026",
                     "valor": 0.33
                 },
                 {
+                    "key": "2026-02",
                     "label": "fev/2026",
                     "valor": 0.7
                 },
                 {
+                    "key": "2026-03",
                     "label": "mar/2026",
                     "valor": 0.88
                 },
                 {
+                    "key": "2026-04",
                     "label": "abr/2026",
                     "valor": 0.67
                 },
                 {
+                    "key": "2026-05",
                     "label": "mai/2026",
                     "valor": 0.58
                 }
@@ -4559,42 +5116,825 @@
             "nota": "TR + 0,50% a.m. — independente da Selic"
         },
         "ibovespa": {
-            "atual": 170178.67,
+            "atual": 171496.95,
             "anterior": 173787.0,
-            "variacao_mensal": -2.08,
+            "variacao_mensal": -1.32,
             "fechamento_mes_anterior": 173787.0,
             "fechamento_mes_base": 187318.0,
             "variacao_mes_fechado": -7.22,
-            "variacao_mes_atual": -2.08,
-            "acum_ano": 5.62,
-            "acum_12m": 24.11,
-            "acum_24m": 40.25,
-            "acum_36m": 43.09,
+            "variacao_mes_atual": -1.32,
+            "acum_ano": 6.44,
+            "acum_12m": 25.59,
+            "acum_24m": 41.33,
+            "acum_36m": 44.14,
             "mes_anterior_label": "mai/2026",
             "mes_base_label": "abr/2026",
             "data_mes_anterior": "2026-05-29",
-            "data_atual": "2026-06-22",
+            "data_atual": "2026-06-23",
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 9.0,
+                    "fechamento": 118087.0
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 3.27,
+                    "fechamento": 121943.0
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -5.09,
+                    "fechamento": 115742.0
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": 0.71,
+                    "fechamento": 116565.0
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -2.93,
+                    "fechamento": 113144.0
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 12.54,
+                    "fechamento": 127331.0
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 5.38,
+                    "fechamento": 134185.0
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": -4.79,
+                    "fechamento": 127752.0
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 0.99,
+                    "fechamento": 129020.0
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": -0.71,
+                    "fechamento": 128106.0
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -1.7,
+                    "fechamento": 125924.0
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": -3.04,
+                    "fechamento": 122098.0
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 1.48,
+                    "fechamento": 123907.0
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 3.02,
+                    "fechamento": 127652.0
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 6.54,
+                    "fechamento": 136004.0
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": -3.08,
+                    "fechamento": 131816.0
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -1.6,
+                    "fechamento": 129713.0
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": -3.12,
+                    "fechamento": 125668.0
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": -4.29,
+                    "fechamento": 120283.0
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 4.87,
+                    "fechamento": 126135.0
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -2.64,
+                    "fechamento": 122799.0
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": 6.08,
+                    "fechamento": 130260.0
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": 3.69,
+                    "fechamento": 135067.0
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 1.45,
+                    "fechamento": 137027.0
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 1.33,
+                    "fechamento": 138855.0
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": -4.17,
+                    "fechamento": 133071.0
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 6.28,
+                    "fechamento": 141422.0
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 3.4,
+                    "fechamento": 146237.0
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 2.26,
+                    "fechamento": 149540.0
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": 6.37,
+                    "fechamento": 159072.0
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": 1.29,
+                    "fechamento": 161125.0
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 12.56,
+                    "fechamento": 181364.0
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": 4.09,
+                    "fechamento": 188787.0
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -0.7,
+                    "fechamento": 187462.0
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": -0.08,
+                    "fechamento": 187318.0
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": -7.22,
+                    "fechamento": 173787.0
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": -1.32,
+                    "fechamento": 171496.95
+                }
+            ],
             "fonte": "Yahoo Finance"
         },
         "dolar": {
-            "atual": 5.1395,
+            "atual": 5.1743,
             "anterior": 5.0569,
-            "variacao_mensal": 1.63,
+            "variacao_mensal": 2.32,
             "fechamento_mes_anterior": 5.0569,
             "fechamento_mes_base": 4.9886,
             "variacao_mes_fechado": 1.37,
-            "variacao_mes_atual": 1.63,
-            "acum_ano": -6.6,
-            "acum_12m": -5.82,
-            "acum_24m": -7.54,
-            "acum_36m": 6.65,
+            "variacao_mes_atual": 2.32,
+            "acum_ano": -5.96,
+            "acum_12m": -5.18,
+            "acum_24m": -6.92,
+            "acum_36m": 7.37,
             "mes_anterior_label": "mai/2026",
             "mes_base_label": "abr/2026",
             "data_mes_anterior": "2026-05-29",
-            "data_atual": "2026-06-22",
+            "data_atual": "2026-06-23",
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": null,
+                    "cotacao": 4.8192,
+                    "data_ref": "2023-06-30"
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": -1.61,
+                    "cotacao": 4.7415,
+                    "data_ref": "2023-07-31"
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": 3.8,
+                    "cotacao": 4.9219,
+                    "data_ref": "2023-08-31"
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": 1.74,
+                    "cotacao": 5.0076,
+                    "data_ref": "2023-09-29"
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": 1.0,
+                    "cotacao": 5.0575,
+                    "data_ref": "2023-10-31"
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": -2.41,
+                    "cotacao": 4.9355,
+                    "data_ref": "2023-11-30"
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": -1.91,
+                    "cotacao": 4.8413,
+                    "data_ref": "2023-12-29"
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 2.32,
+                    "cotacao": 4.9535,
+                    "data_ref": "2024-01-31"
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 0.6,
+                    "cotacao": 4.9833,
+                    "data_ref": "2024-02-29"
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 0.26,
+                    "cotacao": 4.9962,
+                    "data_ref": "2024-03-28"
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": 3.51,
+                    "cotacao": 5.1718,
+                    "data_ref": "2024-04-30"
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 1.35,
+                    "cotacao": 5.2416,
+                    "data_ref": "2024-05-31"
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 6.05,
+                    "cotacao": 5.5589,
+                    "data_ref": "2024-06-28"
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 1.86,
+                    "cotacao": 5.6621,
+                    "data_ref": "2024-07-31"
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": -0.1,
+                    "cotacao": 5.6562,
+                    "data_ref": "2024-08-30"
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": -3.68,
+                    "cotacao": 5.4481,
+                    "data_ref": "2024-09-30"
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": 6.05,
+                    "cotacao": 5.7779,
+                    "data_ref": "2024-10-31"
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 4.77,
+                    "cotacao": 6.0535,
+                    "data_ref": "2024-11-29"
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": 2.29,
+                    "cotacao": 6.1923,
+                    "data_ref": "2024-12-31"
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": -5.85,
+                    "cotacao": 5.8301,
+                    "data_ref": "2025-01-31"
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": 0.32,
+                    "cotacao": 5.8488,
+                    "data_ref": "2025-02-28"
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -1.82,
+                    "cotacao": 5.7422,
+                    "data_ref": "2025-03-31"
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": -1.42,
+                    "cotacao": 5.6608,
+                    "data_ref": "2025-04-30"
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 0.85,
+                    "cotacao": 5.7087,
+                    "data_ref": "2025-05-30"
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": -4.41,
+                    "cotacao": 5.4571,
+                    "data_ref": "2025-06-30"
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 2.66,
+                    "cotacao": 5.6021,
+                    "data_ref": "2025-07-31"
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": -3.14,
+                    "cotacao": 5.4264,
+                    "data_ref": "2025-08-29"
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": -1.99,
+                    "cotacao": 5.3186,
+                    "data_ref": "2025-09-30"
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 1.24,
+                    "cotacao": 5.3843,
+                    "data_ref": "2025-10-31"
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": -0.94,
+                    "cotacao": 5.3338,
+                    "data_ref": "2025-11-28"
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": 3.16,
+                    "cotacao": 5.5024,
+                    "data_ref": "2025-12-31"
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": -4.95,
+                    "cotacao": 5.2301,
+                    "data_ref": "2026-01-30"
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": -1.54,
+                    "cotacao": 5.1495,
+                    "data_ref": "2026-02-27"
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": 1.36,
+                    "cotacao": 5.2194,
+                    "data_ref": "2026-03-31"
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": -4.42,
+                    "cotacao": 4.9886,
+                    "data_ref": "2026-04-30"
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 1.37,
+                    "cotacao": 5.0569,
+                    "data_ref": "2026-05-29"
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": 2.32,
+                    "cotacao": 5.1743,
+                    "data_ref": "2026-06-23"
+                }
+            ],
             "fonte": "Banco Central do Brasil - PTAX"
         }
     },
+    "indicadores_mensais": [
+        {
+            "key": "2023-06",
+            "label": "jun/2023",
+            "cdi": 1.07,
+            "ipca": -0.08,
+            "ibov": 9.0,
+            "dolar": null
+        },
+        {
+            "key": "2023-07",
+            "label": "jul/2023",
+            "cdi": 1.07,
+            "ipca": 0.12,
+            "ibov": 3.27,
+            "dolar": -1.61
+        },
+        {
+            "key": "2023-08",
+            "label": "ago/2023",
+            "cdi": 1.14,
+            "ipca": 0.23,
+            "ibov": -5.09,
+            "dolar": 3.8
+        },
+        {
+            "key": "2023-09",
+            "label": "set/2023",
+            "cdi": 0.97,
+            "ipca": 0.26,
+            "ibov": 0.71,
+            "dolar": 1.74
+        },
+        {
+            "key": "2023-10",
+            "label": "out/2023",
+            "cdi": 1.0,
+            "ipca": 0.24,
+            "ibov": -2.93,
+            "dolar": 1.0
+        },
+        {
+            "key": "2023-11",
+            "label": "nov/2023",
+            "cdi": 0.92,
+            "ipca": 0.28,
+            "ibov": 12.54,
+            "dolar": -2.41
+        },
+        {
+            "key": "2023-12",
+            "label": "dez/2023",
+            "cdi": 0.89,
+            "ipca": 0.56,
+            "ibov": 5.38,
+            "dolar": -1.91
+        },
+        {
+            "key": "2024-01",
+            "label": "jan/2024",
+            "cdi": 0.97,
+            "ipca": 0.42,
+            "ibov": -4.79,
+            "dolar": 2.32
+        },
+        {
+            "key": "2024-02",
+            "label": "fev/2024",
+            "cdi": 0.8,
+            "ipca": 0.83,
+            "ibov": 0.99,
+            "dolar": 0.6
+        },
+        {
+            "key": "2024-03",
+            "label": "mar/2024",
+            "cdi": 0.83,
+            "ipca": 0.16,
+            "ibov": -0.71,
+            "dolar": 0.26
+        },
+        {
+            "key": "2024-04",
+            "label": "abr/2024",
+            "cdi": 0.89,
+            "ipca": 0.38,
+            "ibov": -1.7,
+            "dolar": 3.51
+        },
+        {
+            "key": "2024-05",
+            "label": "mai/2024",
+            "cdi": 0.83,
+            "ipca": 0.46,
+            "ibov": -3.04,
+            "dolar": 1.35
+        },
+        {
+            "key": "2024-06",
+            "label": "jun/2024",
+            "cdi": 0.79,
+            "ipca": 0.21,
+            "ibov": 1.48,
+            "dolar": 6.05
+        },
+        {
+            "key": "2024-07",
+            "label": "jul/2024",
+            "cdi": 0.91,
+            "ipca": 0.38,
+            "ibov": 3.02,
+            "dolar": 1.86
+        },
+        {
+            "key": "2024-08",
+            "label": "ago/2024",
+            "cdi": 0.87,
+            "ipca": -0.02,
+            "ibov": 6.54,
+            "dolar": -0.1
+        },
+        {
+            "key": "2024-09",
+            "label": "set/2024",
+            "cdi": 0.84,
+            "ipca": 0.44,
+            "ibov": -3.08,
+            "dolar": -3.68
+        },
+        {
+            "key": "2024-10",
+            "label": "out/2024",
+            "cdi": 0.93,
+            "ipca": 0.56,
+            "ibov": -1.6,
+            "dolar": 6.05
+        },
+        {
+            "key": "2024-11",
+            "label": "nov/2024",
+            "cdi": 0.79,
+            "ipca": 0.39,
+            "ibov": -3.12,
+            "dolar": 4.77
+        },
+        {
+            "key": "2024-12",
+            "label": "dez/2024",
+            "cdi": 0.93,
+            "ipca": 0.52,
+            "ibov": -4.29,
+            "dolar": 2.29
+        },
+        {
+            "key": "2025-01",
+            "label": "jan/2025",
+            "cdi": 1.01,
+            "ipca": 0.16,
+            "ibov": 4.87,
+            "dolar": -5.85
+        },
+        {
+            "key": "2025-02",
+            "label": "fev/2025",
+            "cdi": 0.99,
+            "ipca": 1.31,
+            "ibov": -2.64,
+            "dolar": 0.32
+        },
+        {
+            "key": "2025-03",
+            "label": "mar/2025",
+            "cdi": 0.96,
+            "ipca": 0.56,
+            "ibov": 6.08,
+            "dolar": -1.82
+        },
+        {
+            "key": "2025-04",
+            "label": "abr/2025",
+            "cdi": 1.06,
+            "ipca": 0.43,
+            "ibov": 3.69,
+            "dolar": -1.42
+        },
+        {
+            "key": "2025-05",
+            "label": "mai/2025",
+            "cdi": 1.14,
+            "ipca": 0.26,
+            "ibov": 1.45,
+            "dolar": 0.85
+        },
+        {
+            "key": "2025-06",
+            "label": "jun/2025",
+            "cdi": 1.1,
+            "ipca": 0.24,
+            "ibov": 1.33,
+            "dolar": -4.41
+        },
+        {
+            "key": "2025-07",
+            "label": "jul/2025",
+            "cdi": 1.28,
+            "ipca": 0.26,
+            "ibov": -4.17,
+            "dolar": 2.66
+        },
+        {
+            "key": "2025-08",
+            "label": "ago/2025",
+            "cdi": 1.16,
+            "ipca": -0.11,
+            "ibov": 6.28,
+            "dolar": -3.14
+        },
+        {
+            "key": "2025-09",
+            "label": "set/2025",
+            "cdi": 1.22,
+            "ipca": 0.48,
+            "ibov": 3.4,
+            "dolar": -1.99
+        },
+        {
+            "key": "2025-10",
+            "label": "out/2025",
+            "cdi": 1.28,
+            "ipca": 0.09,
+            "ibov": 2.26,
+            "dolar": 1.24
+        },
+        {
+            "key": "2025-11",
+            "label": "nov/2025",
+            "cdi": 1.05,
+            "ipca": 0.18,
+            "ibov": 6.37,
+            "dolar": -0.94
+        },
+        {
+            "key": "2025-12",
+            "label": "dez/2025",
+            "cdi": 1.22,
+            "ipca": 0.33,
+            "ibov": 1.29,
+            "dolar": 3.16
+        },
+        {
+            "key": "2026-01",
+            "label": "jan/2026",
+            "cdi": 1.16,
+            "ipca": 0.33,
+            "ibov": 12.56,
+            "dolar": -4.95
+        },
+        {
+            "key": "2026-02",
+            "label": "fev/2026",
+            "cdi": 1.0,
+            "ipca": 0.7,
+            "ibov": 4.09,
+            "dolar": -1.54
+        },
+        {
+            "key": "2026-03",
+            "label": "mar/2026",
+            "cdi": 1.21,
+            "ipca": 0.88,
+            "ibov": -0.7,
+            "dolar": 1.36
+        },
+        {
+            "key": "2026-04",
+            "label": "abr/2026",
+            "cdi": 1.09,
+            "ipca": 0.67,
+            "ibov": -0.08,
+            "dolar": -4.42
+        },
+        {
+            "key": "2026-05",
+            "label": "mai/2026",
+            "cdi": 1.07,
+            "ipca": 0.58,
+            "ibov": -7.22,
+            "dolar": 1.37
+        },
+        {
+            "key": "2026-06",
+            "label": "jun/2026",
+            "cdi": 0.8014,
+            "ipca": null,
+            "ibov": -1.32,
+            "dolar": 2.32
+        }
+    ],
     "indices_mercado": {
         "dolar": {
             "nome": "Dólar BRL/USD",
@@ -4607,19 +5947,280 @@
             "fechamento_mes_base": 4.9886,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": 1.37,
-            "fechamento_atual": 5.1395,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": 1.63,
-            "acum_ano": -6.6,
-            "acum_12m": -5.82,
-            "acum_24m": -7.54,
-            "acum_36m": 6.65,
+            "fechamento_atual": 5.1743,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": 2.32,
+            "acum_ano": -5.96,
+            "acum_12m": -5.18,
+            "acum_24m": -6.92,
+            "acum_36m": 7.37,
             "base_ano": 5.5024,
             "base_12m": 5.4571,
             "base_24m": 5.5589,
             "base_36m": 4.8192,
             "tem_mes_atual": true,
-            "status_mes_atual": "parcial"
+            "status_mes_atual": "parcial",
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": null,
+                    "cotacao": 4.8192,
+                    "data_ref": "2023-06-30"
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": -1.61,
+                    "cotacao": 4.7415,
+                    "data_ref": "2023-07-31"
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": 3.8,
+                    "cotacao": 4.9219,
+                    "data_ref": "2023-08-31"
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": 1.74,
+                    "cotacao": 5.0076,
+                    "data_ref": "2023-09-29"
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": 1.0,
+                    "cotacao": 5.0575,
+                    "data_ref": "2023-10-31"
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": -2.41,
+                    "cotacao": 4.9355,
+                    "data_ref": "2023-11-30"
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": -1.91,
+                    "cotacao": 4.8413,
+                    "data_ref": "2023-12-29"
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 2.32,
+                    "cotacao": 4.9535,
+                    "data_ref": "2024-01-31"
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 0.6,
+                    "cotacao": 4.9833,
+                    "data_ref": "2024-02-29"
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 0.26,
+                    "cotacao": 4.9962,
+                    "data_ref": "2024-03-28"
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": 3.51,
+                    "cotacao": 5.1718,
+                    "data_ref": "2024-04-30"
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 1.35,
+                    "cotacao": 5.2416,
+                    "data_ref": "2024-05-31"
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 6.05,
+                    "cotacao": 5.5589,
+                    "data_ref": "2024-06-28"
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 1.86,
+                    "cotacao": 5.6621,
+                    "data_ref": "2024-07-31"
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": -0.1,
+                    "cotacao": 5.6562,
+                    "data_ref": "2024-08-30"
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": -3.68,
+                    "cotacao": 5.4481,
+                    "data_ref": "2024-09-30"
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": 6.05,
+                    "cotacao": 5.7779,
+                    "data_ref": "2024-10-31"
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 4.77,
+                    "cotacao": 6.0535,
+                    "data_ref": "2024-11-29"
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": 2.29,
+                    "cotacao": 6.1923,
+                    "data_ref": "2024-12-31"
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": -5.85,
+                    "cotacao": 5.8301,
+                    "data_ref": "2025-01-31"
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": 0.32,
+                    "cotacao": 5.8488,
+                    "data_ref": "2025-02-28"
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -1.82,
+                    "cotacao": 5.7422,
+                    "data_ref": "2025-03-31"
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": -1.42,
+                    "cotacao": 5.6608,
+                    "data_ref": "2025-04-30"
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 0.85,
+                    "cotacao": 5.7087,
+                    "data_ref": "2025-05-30"
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": -4.41,
+                    "cotacao": 5.4571,
+                    "data_ref": "2025-06-30"
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 2.66,
+                    "cotacao": 5.6021,
+                    "data_ref": "2025-07-31"
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": -3.14,
+                    "cotacao": 5.4264,
+                    "data_ref": "2025-08-29"
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": -1.99,
+                    "cotacao": 5.3186,
+                    "data_ref": "2025-09-30"
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 1.24,
+                    "cotacao": 5.3843,
+                    "data_ref": "2025-10-31"
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": -0.94,
+                    "cotacao": 5.3338,
+                    "data_ref": "2025-11-28"
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": 3.16,
+                    "cotacao": 5.5024,
+                    "data_ref": "2025-12-31"
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": -4.95,
+                    "cotacao": 5.2301,
+                    "data_ref": "2026-01-30"
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": -1.54,
+                    "cotacao": 5.1495,
+                    "data_ref": "2026-02-27"
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": 1.36,
+                    "cotacao": 5.2194,
+                    "data_ref": "2026-03-31"
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": -4.42,
+                    "cotacao": 4.9886,
+                    "data_ref": "2026-04-30"
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 1.37,
+                    "cotacao": 5.0569,
+                    "data_ref": "2026-05-29"
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": 2.32,
+                    "cotacao": 5.1743,
+                    "data_ref": "2026-06-23"
+                }
+            ]
         },
         "ibovespa": {
             "nome": "Ibovespa",
@@ -4632,19 +6233,243 @@
             "fechamento_mes_base": 187318.0,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": -7.22,
-            "fechamento_atual": 170178.67,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": -2.08,
-            "acum_ano": 5.62,
-            "acum_12m": 24.11,
-            "acum_24m": 40.25,
-            "acum_36m": 43.09,
+            "fechamento_atual": 171496.95,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": -1.32,
+            "acum_ano": 6.44,
+            "acum_12m": 25.59,
+            "acum_24m": 41.33,
+            "acum_36m": 44.14,
             "base_ano": 161125.0,
-            "base_12m": 137116.0,
+            "base_12m": 136551.0,
             "base_24m": 121341.0,
-            "base_36m": 118934.0,
+            "base_36m": 118977.0,
             "tem_mes_atual": true,
-            "status_mes_atual": "parcial"
+            "status_mes_atual": "parcial",
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 9.0,
+                    "fechamento": 118087.0
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 3.27,
+                    "fechamento": 121943.0
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -5.09,
+                    "fechamento": 115742.0
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": 0.71,
+                    "fechamento": 116565.0
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -2.93,
+                    "fechamento": 113144.0
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 12.54,
+                    "fechamento": 127331.0
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 5.38,
+                    "fechamento": 134185.0
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": -4.79,
+                    "fechamento": 127752.0
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 0.99,
+                    "fechamento": 129020.0
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": -0.71,
+                    "fechamento": 128106.0
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -1.7,
+                    "fechamento": 125924.0
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": -3.04,
+                    "fechamento": 122098.0
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 1.48,
+                    "fechamento": 123907.0
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 3.02,
+                    "fechamento": 127652.0
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 6.54,
+                    "fechamento": 136004.0
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": -3.08,
+                    "fechamento": 131816.0
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -1.6,
+                    "fechamento": 129713.0
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": -3.12,
+                    "fechamento": 125668.0
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": -4.29,
+                    "fechamento": 120283.0
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 4.87,
+                    "fechamento": 126135.0
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -2.64,
+                    "fechamento": 122799.0
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": 6.08,
+                    "fechamento": 130260.0
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": 3.69,
+                    "fechamento": 135067.0
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 1.45,
+                    "fechamento": 137027.0
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 1.33,
+                    "fechamento": 138855.0
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": -4.17,
+                    "fechamento": 133071.0
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 6.28,
+                    "fechamento": 141422.0
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 3.4,
+                    "fechamento": 146237.0
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 2.26,
+                    "fechamento": 149540.0
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": 6.37,
+                    "fechamento": 159072.0
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": 1.29,
+                    "fechamento": 161125.0
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 12.56,
+                    "fechamento": 181364.0
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": 4.09,
+                    "fechamento": 188787.0
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -0.7,
+                    "fechamento": 187462.0
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": -0.08,
+                    "fechamento": 187318.0
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": -7.22,
+                    "fechamento": 173787.0
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": -1.32,
+                    "fechamento": 171496.95
+                }
+            ]
         },
         "ifix": {
             "nome": "IFIX",
@@ -4664,32 +6489,256 @@
             "fechamento_mes_base": 7209.01,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": 5.15,
-            "fechamento_atual": 7476.81,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": -1.36,
-            "acum_ano": 9.22,
-            "acum_12m": 25.29,
-            "acum_24m": 36.82,
-            "acum_36m": 70.63,
+            "fechamento_atual": 7401.9,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": -2.35,
+            "acum_ano": 8.13,
+            "acum_12m": 22.85,
+            "acum_24m": 35.45,
+            "acum_36m": 70.22,
             "base_ano": 6845.5,
-            "base_12m": 5967.84,
+            "base_12m": 6025.17,
             "base_24m": 5464.62,
-            "base_36m": 4381.89,
+            "base_36m": 4348.33,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
-            "fechamento_atual_brl": 38427.06,
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 6.47,
+                    "fechamento": 4450.38
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 3.11,
+                    "fechamento": 4588.96
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -1.77,
+                    "fechamento": 4507.66
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": -4.87,
+                    "fechamento": 4288.05
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -2.2,
+                    "fechamento": 4193.8
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 8.92,
+                    "fechamento": 4567.8
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 4.42,
+                    "fechamento": 4769.83
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 1.59,
+                    "fechamento": 4845.65
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 5.17,
+                    "fechamento": 5096.27
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 3.1,
+                    "fechamento": 5254.35
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -4.16,
+                    "fechamento": 5035.69
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 4.8,
+                    "fechamento": 5277.51
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 3.47,
+                    "fechamento": 5460.48
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 1.13,
+                    "fechamento": 5522.3
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 2.28,
+                    "fechamento": 5648.4
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": 2.02,
+                    "fechamento": 5762.48
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -0.99,
+                    "fechamento": 5705.45
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 5.73,
+                    "fechamento": 6032.38
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": -2.5,
+                    "fechamento": 5881.63
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 2.7,
+                    "fechamento": 6040.53
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -1.42,
+                    "fechamento": 5954.5
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -5.75,
+                    "fechamento": 5611.85
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": -0.76,
+                    "fechamento": 5569.06
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 6.15,
+                    "fechamento": 5911.69
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 4.96,
+                    "fechamento": 6204.95
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 2.17,
+                    "fechamento": 6339.39
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 1.91,
+                    "fechamento": 6460.26
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 3.53,
+                    "fechamento": 6688.46
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 2.27,
+                    "fechamento": 6840.2
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": 0.13,
+                    "fechamento": 6849.09
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": -0.05,
+                    "fechamento": 6845.5
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 1.37,
+                    "fechamento": 6939.03
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": -0.87,
+                    "fechamento": 6878.88
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -5.09,
+                    "fechamento": 6528.52
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": 10.42,
+                    "fechamento": 7209.01
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 5.15,
+                    "fechamento": 7580.06
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": -2.35,
+                    "fechamento": 7401.9
+                }
+            ],
+            "fechamento_atual_brl": 38299.65,
             "fechamento_mes_anterior_brl": 38331.61,
             "fechamento_mes_base_brl": 35962.87,
             "base_ano_brl": 37666.68,
-            "base_12m_brl": 32567.1,
+            "base_12m_brl": 32879.96,
             "base_24m_brl": 30377.28,
-            "base_36m_brl": 21117.2,
+            "base_36m_brl": 20955.47,
             "variacao_mes_fechado_brl": 6.59,
-            "variacao_mes_atual_brl": 0.25,
-            "acum_ano_brl": 2.02,
-            "acum_12m_brl": 17.99,
-            "acum_24m_brl": 26.5,
-            "acum_36m_brl": 81.97
+            "variacao_mes_atual_brl": -0.08,
+            "acum_ano_brl": 1.68,
+            "acum_12m_brl": 16.48,
+            "acum_24m_brl": 26.08,
+            "acum_36m_brl": 82.77
         },
         "dow_jones": {
             "nome": "Dow Jones",
@@ -4702,32 +6751,256 @@
             "fechamento_mes_base": 49652.14,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": 1.99,
-            "fechamento_atual": 51715.7,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": 1.34,
-            "acum_ano": 7.6,
-            "acum_12m": 22.53,
-            "acum_24m": 32.1,
-            "acum_36m": 52.34,
+            "fechamento_atual": 51838.27,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": 1.58,
+            "acum_ano": 7.85,
+            "acum_12m": 21.74,
+            "acum_24m": 32.41,
+            "acum_36m": 53.7,
             "base_ano": 48063.29,
-            "base_12m": 42206.82,
+            "base_12m": 42581.78,
             "base_24m": 39150.33,
-            "base_36m": 33946.71,
+            "base_36m": 33727.43,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
-            "fechamento_atual_brl": 265792.84,
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 4.56,
+                    "fechamento": 34407.6
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 3.35,
+                    "fechamento": 35559.53
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -2.36,
+                    "fechamento": 34721.91
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": -3.5,
+                    "fechamento": 33507.5
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -1.36,
+                    "fechamento": 33052.87
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 8.77,
+                    "fechamento": 35950.89
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 4.84,
+                    "fechamento": 37689.54
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 1.22,
+                    "fechamento": 38150.3
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 2.22,
+                    "fechamento": 38996.39
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 2.08,
+                    "fechamento": 39807.37
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -5.0,
+                    "fechamento": 37815.92
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 2.3,
+                    "fechamento": 38686.32
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 1.12,
+                    "fechamento": 39118.86
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 4.41,
+                    "fechamento": 40842.79
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 1.76,
+                    "fechamento": 41563.08
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": 1.85,
+                    "fechamento": 42330.15
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -1.34,
+                    "fechamento": 41763.46
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 7.54,
+                    "fechamento": 44910.65
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": -5.27,
+                    "fechamento": 42544.22
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 4.7,
+                    "fechamento": 44544.66
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -1.58,
+                    "fechamento": 43840.91
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -4.2,
+                    "fechamento": 42001.76
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": -3.17,
+                    "fechamento": 40669.36
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 3.94,
+                    "fechamento": 42270.07
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 4.32,
+                    "fechamento": 44094.77
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 0.08,
+                    "fechamento": 44130.98
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 3.2,
+                    "fechamento": 45544.88
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 1.87,
+                    "fechamento": 46397.89
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 2.51,
+                    "fechamento": 47562.87
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": 0.32,
+                    "fechamento": 47716.42
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": 0.73,
+                    "fechamento": 48063.29
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 1.73,
+                    "fechamento": 48892.47
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": 0.17,
+                    "fechamento": 48977.92
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -5.38,
+                    "fechamento": 46341.51
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": 7.14,
+                    "fechamento": 49652.14
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 1.99,
+                    "fechamento": 51032.46
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": 1.58,
+                    "fechamento": 51838.27
+                }
+            ],
+            "fechamento_atual_brl": 268226.76,
             "fechamento_mes_anterior_brl": 258066.05,
             "fechamento_mes_base_brl": 247694.67,
             "base_ano_brl": 264463.45,
-            "base_12m_brl": 230326.84,
+            "base_12m_brl": 232373.03,
             "base_24m_brl": 217632.77,
-            "base_36m_brl": 163595.98,
+            "base_36m_brl": 162539.23,
             "variacao_mes_fechado_brl": 4.19,
-            "variacao_mes_atual_brl": 2.99,
-            "acum_ano_brl": 0.5,
-            "acum_12m_brl": 15.4,
-            "acum_24m_brl": 22.13,
-            "acum_36m_brl": 62.47
+            "variacao_mes_atual_brl": 3.94,
+            "acum_ano_brl": 1.42,
+            "acum_12m_brl": 15.43,
+            "acum_24m_brl": 23.25,
+            "acum_36m_brl": 65.02
         },
         "nasdaq": {
             "nome": "Nasdaq",
@@ -4740,39 +7013,263 @@
             "fechamento_mes_base": 24892.31,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": 8.36,
-            "fechamento_atual": 26230.1,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": -2.75,
-            "acum_ano": 12.86,
-            "acum_12m": 34.88,
-            "acum_24m": 48.28,
-            "acum_36m": 92.44,
+            "fechamento_atual": 25779.67,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": -4.42,
+            "acum_ano": 10.92,
+            "acum_12m": 31.32,
+            "acum_24m": 45.74,
+            "acum_36m": 91.07,
             "base_ano": 23241.99,
-            "base_12m": 19447.41,
+            "base_12m": 19630.97,
             "base_24m": 17689.36,
-            "base_36m": 13630.61,
+            "base_36m": 13492.52,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
-            "fechamento_atual_brl": 134809.6,
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 6.59,
+                    "fechamento": 13787.92
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 4.05,
+                    "fechamento": 14346.02
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -2.17,
+                    "fechamento": 14034.97
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": -5.81,
+                    "fechamento": 13219.32
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -2.78,
+                    "fechamento": 12851.24
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 10.7,
+                    "fechamento": 14226.22
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 5.52,
+                    "fechamento": 15011.35
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 1.02,
+                    "fechamento": 15164.01
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 6.12,
+                    "fechamento": 16091.92
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 1.79,
+                    "fechamento": 16379.46
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -4.41,
+                    "fechamento": 15657.82
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 6.88,
+                    "fechamento": 16735.02
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 5.96,
+                    "fechamento": 17732.6
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": -0.75,
+                    "fechamento": 17599.4
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 0.65,
+                    "fechamento": 17713.62
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": 2.68,
+                    "fechamento": 18189.17
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -0.52,
+                    "fechamento": 18095.15
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 6.21,
+                    "fechamento": 19218.17
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": 0.48,
+                    "fechamento": 19310.79
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 1.64,
+                    "fechamento": 19627.44
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -3.97,
+                    "fechamento": 18847.28
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -8.21,
+                    "fechamento": 17299.29
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": 0.85,
+                    "fechamento": 17446.34
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 9.56,
+                    "fechamento": 19113.77
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 6.57,
+                    "fechamento": 20369.73
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 3.7,
+                    "fechamento": 21122.45
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 1.58,
+                    "fechamento": 21455.55
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 5.61,
+                    "fechamento": 22660.01
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 4.7,
+                    "fechamento": 23724.96
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": -1.51,
+                    "fechamento": 23365.69
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": -0.53,
+                    "fechamento": 23241.99
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 0.95,
+                    "fechamento": 23461.82
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": -3.38,
+                    "fechamento": 22668.21
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -4.75,
+                    "fechamento": 21590.63
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": 15.29,
+                    "fechamento": 24892.31
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 8.36,
+                    "fechamento": 26972.62
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": -4.42,
+                    "fechamento": 25779.67
+                }
+            ],
+            "fechamento_atual_brl": 133391.75,
             "fechamento_mes_anterior_brl": 136397.84,
             "fechamento_mes_base_brl": 124177.78,
             "base_ano_brl": 127886.73,
-            "base_12m_brl": 106126.46,
+            "base_12m_brl": 107128.17,
             "base_24m_brl": 98333.38,
-            "base_36m_brl": 65688.64,
+            "base_36m_brl": 65023.15,
             "variacao_mes_fechado_brl": 9.84,
-            "variacao_mes_atual_brl": -1.16,
-            "acum_ano_brl": 5.41,
-            "acum_12m_brl": 27.03,
-            "acum_24m_brl": 37.09,
-            "acum_36m_brl": 105.23
+            "variacao_mes_atual_brl": -2.2,
+            "acum_ano_brl": 4.3,
+            "acum_12m_brl": 24.52,
+            "acum_24m_brl": 35.65,
+            "acum_36m_brl": 105.15
         }
     },
     "indices_internacionais": {
-        "sp500_usd": 7476.81,
-        "sp500_brl": 38427.06,
-        "dow_jones": 51715.7,
-        "nasdaq": 26230.1,
+        "sp500_usd": 7401.9,
+        "sp500_brl": 38299.65,
+        "dow_jones": 51838.27,
+        "nasdaq": 25779.67,
         "sp500": {
             "nome": "S&P 500",
             "ticker": "^GSPC",
@@ -4784,32 +7281,256 @@
             "fechamento_mes_base": 7209.01,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": 5.15,
-            "fechamento_atual": 7476.81,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": -1.36,
-            "acum_ano": 9.22,
-            "acum_12m": 25.29,
-            "acum_24m": 36.82,
-            "acum_36m": 70.63,
+            "fechamento_atual": 7401.9,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": -2.35,
+            "acum_ano": 8.13,
+            "acum_12m": 22.85,
+            "acum_24m": 35.45,
+            "acum_36m": 70.22,
             "base_ano": 6845.5,
-            "base_12m": 5967.84,
+            "base_12m": 6025.17,
             "base_24m": 5464.62,
-            "base_36m": 4381.89,
+            "base_36m": 4348.33,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
-            "fechamento_atual_brl": 38427.06,
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 6.47,
+                    "fechamento": 4450.38
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 3.11,
+                    "fechamento": 4588.96
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -1.77,
+                    "fechamento": 4507.66
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": -4.87,
+                    "fechamento": 4288.05
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -2.2,
+                    "fechamento": 4193.8
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 8.92,
+                    "fechamento": 4567.8
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 4.42,
+                    "fechamento": 4769.83
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 1.59,
+                    "fechamento": 4845.65
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 5.17,
+                    "fechamento": 5096.27
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 3.1,
+                    "fechamento": 5254.35
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -4.16,
+                    "fechamento": 5035.69
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 4.8,
+                    "fechamento": 5277.51
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 3.47,
+                    "fechamento": 5460.48
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 1.13,
+                    "fechamento": 5522.3
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 2.28,
+                    "fechamento": 5648.4
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": 2.02,
+                    "fechamento": 5762.48
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -0.99,
+                    "fechamento": 5705.45
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 5.73,
+                    "fechamento": 6032.38
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": -2.5,
+                    "fechamento": 5881.63
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 2.7,
+                    "fechamento": 6040.53
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -1.42,
+                    "fechamento": 5954.5
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -5.75,
+                    "fechamento": 5611.85
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": -0.76,
+                    "fechamento": 5569.06
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 6.15,
+                    "fechamento": 5911.69
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 4.96,
+                    "fechamento": 6204.95
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 2.17,
+                    "fechamento": 6339.39
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 1.91,
+                    "fechamento": 6460.26
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 3.53,
+                    "fechamento": 6688.46
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 2.27,
+                    "fechamento": 6840.2
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": 0.13,
+                    "fechamento": 6849.09
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": -0.05,
+                    "fechamento": 6845.5
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 1.37,
+                    "fechamento": 6939.03
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": -0.87,
+                    "fechamento": 6878.88
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -5.09,
+                    "fechamento": 6528.52
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": 10.42,
+                    "fechamento": 7209.01
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 5.15,
+                    "fechamento": 7580.06
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": -2.35,
+                    "fechamento": 7401.9
+                }
+            ],
+            "fechamento_atual_brl": 38299.65,
             "fechamento_mes_anterior_brl": 38331.61,
             "fechamento_mes_base_brl": 35962.87,
             "base_ano_brl": 37666.68,
-            "base_12m_brl": 32567.1,
+            "base_12m_brl": 32879.96,
             "base_24m_brl": 30377.28,
-            "base_36m_brl": 21117.2,
+            "base_36m_brl": 20955.47,
             "variacao_mes_fechado_brl": 6.59,
-            "variacao_mes_atual_brl": 0.25,
-            "acum_ano_brl": 2.02,
-            "acum_12m_brl": 17.99,
-            "acum_24m_brl": 26.5,
-            "acum_36m_brl": 81.97
+            "variacao_mes_atual_brl": -0.08,
+            "acum_ano_brl": 1.68,
+            "acum_12m_brl": 16.48,
+            "acum_24m_brl": 26.08,
+            "acum_36m_brl": 82.77
         },
         "dow_jones_detalhado": {
             "nome": "Dow Jones",
@@ -4822,32 +7543,256 @@
             "fechamento_mes_base": 49652.14,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": 1.99,
-            "fechamento_atual": 51715.7,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": 1.34,
-            "acum_ano": 7.6,
-            "acum_12m": 22.53,
-            "acum_24m": 32.1,
-            "acum_36m": 52.34,
+            "fechamento_atual": 51838.27,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": 1.58,
+            "acum_ano": 7.85,
+            "acum_12m": 21.74,
+            "acum_24m": 32.41,
+            "acum_36m": 53.7,
             "base_ano": 48063.29,
-            "base_12m": 42206.82,
+            "base_12m": 42581.78,
             "base_24m": 39150.33,
-            "base_36m": 33946.71,
+            "base_36m": 33727.43,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
-            "fechamento_atual_brl": 265792.84,
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 4.56,
+                    "fechamento": 34407.6
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 3.35,
+                    "fechamento": 35559.53
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -2.36,
+                    "fechamento": 34721.91
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": -3.5,
+                    "fechamento": 33507.5
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -1.36,
+                    "fechamento": 33052.87
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 8.77,
+                    "fechamento": 35950.89
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 4.84,
+                    "fechamento": 37689.54
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 1.22,
+                    "fechamento": 38150.3
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 2.22,
+                    "fechamento": 38996.39
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 2.08,
+                    "fechamento": 39807.37
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -5.0,
+                    "fechamento": 37815.92
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 2.3,
+                    "fechamento": 38686.32
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 1.12,
+                    "fechamento": 39118.86
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": 4.41,
+                    "fechamento": 40842.79
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 1.76,
+                    "fechamento": 41563.08
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": 1.85,
+                    "fechamento": 42330.15
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -1.34,
+                    "fechamento": 41763.46
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 7.54,
+                    "fechamento": 44910.65
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": -5.27,
+                    "fechamento": 42544.22
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 4.7,
+                    "fechamento": 44544.66
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -1.58,
+                    "fechamento": 43840.91
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -4.2,
+                    "fechamento": 42001.76
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": -3.17,
+                    "fechamento": 40669.36
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 3.94,
+                    "fechamento": 42270.07
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 4.32,
+                    "fechamento": 44094.77
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 0.08,
+                    "fechamento": 44130.98
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 3.2,
+                    "fechamento": 45544.88
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 1.87,
+                    "fechamento": 46397.89
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 2.51,
+                    "fechamento": 47562.87
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": 0.32,
+                    "fechamento": 47716.42
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": 0.73,
+                    "fechamento": 48063.29
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 1.73,
+                    "fechamento": 48892.47
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": 0.17,
+                    "fechamento": 48977.92
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -5.38,
+                    "fechamento": 46341.51
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": 7.14,
+                    "fechamento": 49652.14
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 1.99,
+                    "fechamento": 51032.46
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": 1.58,
+                    "fechamento": 51838.27
+                }
+            ],
+            "fechamento_atual_brl": 268226.76,
             "fechamento_mes_anterior_brl": 258066.05,
             "fechamento_mes_base_brl": 247694.67,
             "base_ano_brl": 264463.45,
-            "base_12m_brl": 230326.84,
+            "base_12m_brl": 232373.03,
             "base_24m_brl": 217632.77,
-            "base_36m_brl": 163595.98,
+            "base_36m_brl": 162539.23,
             "variacao_mes_fechado_brl": 4.19,
-            "variacao_mes_atual_brl": 2.99,
-            "acum_ano_brl": 0.5,
-            "acum_12m_brl": 15.4,
-            "acum_24m_brl": 22.13,
-            "acum_36m_brl": 62.47
+            "variacao_mes_atual_brl": 3.94,
+            "acum_ano_brl": 1.42,
+            "acum_12m_brl": 15.43,
+            "acum_24m_brl": 23.25,
+            "acum_36m_brl": 65.02
         },
         "nasdaq_detalhado": {
             "nome": "Nasdaq",
@@ -4860,32 +7805,256 @@
             "fechamento_mes_base": 24892.31,
             "data_mes_base": "2026-04-30",
             "variacao_mes_fechado": 8.36,
-            "fechamento_atual": 26230.1,
-            "data_atual": "2026-06-22",
-            "variacao_mes_atual": -2.75,
-            "acum_ano": 12.86,
-            "acum_12m": 34.88,
-            "acum_24m": 48.28,
-            "acum_36m": 92.44,
+            "fechamento_atual": 25779.67,
+            "data_atual": "2026-06-23",
+            "variacao_mes_atual": -4.42,
+            "acum_ano": 10.92,
+            "acum_12m": 31.32,
+            "acum_24m": 45.74,
+            "acum_36m": 91.07,
             "base_ano": 23241.99,
-            "base_12m": 19447.41,
+            "base_12m": 19630.97,
             "base_24m": 17689.36,
-            "base_36m": 13630.61,
+            "base_36m": 13492.52,
             "tem_mes_atual": true,
             "status_mes_atual": "parcial",
-            "fechamento_atual_brl": 134809.6,
+            "historico": [
+                {
+                    "key": "2023-06",
+                    "label": "jun/2023",
+                    "valor": 6.59,
+                    "fechamento": 13787.92
+                },
+                {
+                    "key": "2023-07",
+                    "label": "jul/2023",
+                    "valor": 4.05,
+                    "fechamento": 14346.02
+                },
+                {
+                    "key": "2023-08",
+                    "label": "ago/2023",
+                    "valor": -2.17,
+                    "fechamento": 14034.97
+                },
+                {
+                    "key": "2023-09",
+                    "label": "set/2023",
+                    "valor": -5.81,
+                    "fechamento": 13219.32
+                },
+                {
+                    "key": "2023-10",
+                    "label": "out/2023",
+                    "valor": -2.78,
+                    "fechamento": 12851.24
+                },
+                {
+                    "key": "2023-11",
+                    "label": "nov/2023",
+                    "valor": 10.7,
+                    "fechamento": 14226.22
+                },
+                {
+                    "key": "2023-12",
+                    "label": "dez/2023",
+                    "valor": 5.52,
+                    "fechamento": 15011.35
+                },
+                {
+                    "key": "2024-01",
+                    "label": "jan/2024",
+                    "valor": 1.02,
+                    "fechamento": 15164.01
+                },
+                {
+                    "key": "2024-02",
+                    "label": "fev/2024",
+                    "valor": 6.12,
+                    "fechamento": 16091.92
+                },
+                {
+                    "key": "2024-03",
+                    "label": "mar/2024",
+                    "valor": 1.79,
+                    "fechamento": 16379.46
+                },
+                {
+                    "key": "2024-04",
+                    "label": "abr/2024",
+                    "valor": -4.41,
+                    "fechamento": 15657.82
+                },
+                {
+                    "key": "2024-05",
+                    "label": "mai/2024",
+                    "valor": 6.88,
+                    "fechamento": 16735.02
+                },
+                {
+                    "key": "2024-06",
+                    "label": "jun/2024",
+                    "valor": 5.96,
+                    "fechamento": 17732.6
+                },
+                {
+                    "key": "2024-07",
+                    "label": "jul/2024",
+                    "valor": -0.75,
+                    "fechamento": 17599.4
+                },
+                {
+                    "key": "2024-08",
+                    "label": "ago/2024",
+                    "valor": 0.65,
+                    "fechamento": 17713.62
+                },
+                {
+                    "key": "2024-09",
+                    "label": "set/2024",
+                    "valor": 2.68,
+                    "fechamento": 18189.17
+                },
+                {
+                    "key": "2024-10",
+                    "label": "out/2024",
+                    "valor": -0.52,
+                    "fechamento": 18095.15
+                },
+                {
+                    "key": "2024-11",
+                    "label": "nov/2024",
+                    "valor": 6.21,
+                    "fechamento": 19218.17
+                },
+                {
+                    "key": "2024-12",
+                    "label": "dez/2024",
+                    "valor": 0.48,
+                    "fechamento": 19310.79
+                },
+                {
+                    "key": "2025-01",
+                    "label": "jan/2025",
+                    "valor": 1.64,
+                    "fechamento": 19627.44
+                },
+                {
+                    "key": "2025-02",
+                    "label": "fev/2025",
+                    "valor": -3.97,
+                    "fechamento": 18847.28
+                },
+                {
+                    "key": "2025-03",
+                    "label": "mar/2025",
+                    "valor": -8.21,
+                    "fechamento": 17299.29
+                },
+                {
+                    "key": "2025-04",
+                    "label": "abr/2025",
+                    "valor": 0.85,
+                    "fechamento": 17446.34
+                },
+                {
+                    "key": "2025-05",
+                    "label": "mai/2025",
+                    "valor": 9.56,
+                    "fechamento": 19113.77
+                },
+                {
+                    "key": "2025-06",
+                    "label": "jun/2025",
+                    "valor": 6.57,
+                    "fechamento": 20369.73
+                },
+                {
+                    "key": "2025-07",
+                    "label": "jul/2025",
+                    "valor": 3.7,
+                    "fechamento": 21122.45
+                },
+                {
+                    "key": "2025-08",
+                    "label": "ago/2025",
+                    "valor": 1.58,
+                    "fechamento": 21455.55
+                },
+                {
+                    "key": "2025-09",
+                    "label": "set/2025",
+                    "valor": 5.61,
+                    "fechamento": 22660.01
+                },
+                {
+                    "key": "2025-10",
+                    "label": "out/2025",
+                    "valor": 4.7,
+                    "fechamento": 23724.96
+                },
+                {
+                    "key": "2025-11",
+                    "label": "nov/2025",
+                    "valor": -1.51,
+                    "fechamento": 23365.69
+                },
+                {
+                    "key": "2025-12",
+                    "label": "dez/2025",
+                    "valor": -0.53,
+                    "fechamento": 23241.99
+                },
+                {
+                    "key": "2026-01",
+                    "label": "jan/2026",
+                    "valor": 0.95,
+                    "fechamento": 23461.82
+                },
+                {
+                    "key": "2026-02",
+                    "label": "fev/2026",
+                    "valor": -3.38,
+                    "fechamento": 22668.21
+                },
+                {
+                    "key": "2026-03",
+                    "label": "mar/2026",
+                    "valor": -4.75,
+                    "fechamento": 21590.63
+                },
+                {
+                    "key": "2026-04",
+                    "label": "abr/2026",
+                    "valor": 15.29,
+                    "fechamento": 24892.31
+                },
+                {
+                    "key": "2026-05",
+                    "label": "mai/2026",
+                    "valor": 8.36,
+                    "fechamento": 26972.62
+                },
+                {
+                    "key": "2026-06",
+                    "label": "jun/2026",
+                    "valor": -4.42,
+                    "fechamento": 25779.67
+                }
+            ],
+            "fechamento_atual_brl": 133391.75,
             "fechamento_mes_anterior_brl": 136397.84,
             "fechamento_mes_base_brl": 124177.78,
             "base_ano_brl": 127886.73,
-            "base_12m_brl": 106126.46,
+            "base_12m_brl": 107128.17,
             "base_24m_brl": 98333.38,
-            "base_36m_brl": 65688.64,
+            "base_36m_brl": 65023.15,
             "variacao_mes_fechado_brl": 9.84,
-            "variacao_mes_atual_brl": -1.16,
-            "acum_ano_brl": 5.41,
-            "acum_12m_brl": 27.03,
-            "acum_24m_brl": 37.09,
-            "acum_36m_brl": 105.23
+            "variacao_mes_atual_brl": -2.2,
+            "acum_ano_brl": 4.3,
+            "acum_12m_brl": 24.52,
+            "acum_24m_brl": 35.65,
+            "acum_36m_brl": 105.15
         }
     },
     "ptax_historico": [
@@ -5180,14 +8349,14 @@
         {
             "key": "2026-06",
             "mes": "jun/2026",
-            "cotacao": 5.1395,
-            "var_pct": 1.63,
-            "data_ref": "2026-06-22",
-            "dataHoraCotacao": "2026-06-22 13:06:19.750415"
+            "cotacao": 5.1743,
+            "var_pct": 2.32,
+            "data_ref": "2026-06-23",
+            "dataHoraCotacao": "2026-06-23 13:08:03.250886"
         }
     ],
     "focus": {
-        "data_coleta": "22/06/2026 17:59",
+        "data_coleta": "23/06/2026 17:46",
         "fonte": "odata",
         "IPCA": {
             "2026": {

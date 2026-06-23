@@ -1,13 +1,13 @@
 {
-  "gerado_em": "22/06/2026 17:59:10",
+  "gerado_em": "23/06/2026 17:45:22",
   "origem_fundos_json": "http",
   "registros_catalogo_oficial": 196,
   "linhas_csv": 171,
-  "vinculados": 168,
-  "sem_vinculo": 3,
-  "com_cnpj": 168,
-  "com_benchmark": 168,
-  "com_estrategia": 168,
-  "com_horario": 161,
-  "com_status_captacao": 168
+  "vinculados": 169,
+  "sem_vinculo": 2,
+  "com_cnpj": 169,
+  "com_benchmark": 171,
+  "com_estrategia": 171,
+  "com_horario": 164,
+  "com_status_captacao": 171
 }
