@@ -61324,3 +61324,87 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     font-size:.59rem!important;
   }
 }
+
+/* PATCH v446 — Mobile: seletor de indicador mensal */
+@media(max-width:768px){
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-picker-v446{
+    display:flex!important;
+    gap:6px!important;
+    margin:0 0 10px!important;
+    padding:2px!important;
+    overflow-x:auto!important;
+    scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-picker-v446::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-picker-v446 button{
+    flex:0 0 auto!important;
+    min-height:30px!important;
+    padding:0 12px!important;
+    border:1px solid rgba(255,255,255,.08)!important;
+    border-radius:999px!important;
+    background:rgba(8,12,24,.62)!important;
+    color:#aeb9d4!important;
+    font-size:.62rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-picker-v446 button.active{
+    color:#10131f!important;
+    border-color:rgba(232,187,106,.80)!important;
+    background:#e8bb6a!important;
+    box-shadow:0 8px 18px rgba(232,187,106,.18)!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445 th,
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445 td{
+    font-size:.61rem!important;
+    padding:9px 4px!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th:first-child,
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td:first-child{
+    width:16%!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446]:not([data-view-v446="all"]){
+    table-layout:auto!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446]:not([data-view-v446="all"]) th,
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446]:not([data-view-v446="all"]) td{
+    padding:10px 12px!important;
+    font-size:.74rem!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446]:not([data-view-v446="all"]) th:first-child,
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446]:not([data-view-v446="all"]) td:first-child{
+    width:42%!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446]:not([data-view-v446="all"]) th:last-child,
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446]:not([data-view-v446="all"]) td:last-child{
+    width:58%!important;
+    text-align:right!important;
+    font-size:.82rem!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-picker-v446 button{
+    padding:0 10px!important;
+    font-size:.58rem!important;
+  }
+
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th,
+  html.mobile-monthly-indicators-select-v446 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td{
+    font-size:.55rem!important;
+    padding:8px 3px!important;
+  }
+}
