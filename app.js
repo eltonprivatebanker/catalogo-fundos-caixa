@@ -20437,8 +20437,122 @@ function openCdiAnalyticTableV274(){
   window.addEventListener('load', applySavingsMobileTextStableV434, {once:true});
   [800, 1800, 3600, 7000, 11200, 16000, 26000].forEach(ms => setTimeout(applySavingsMobileTextStableV434, ms));
 
-  window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
+window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     build: BUILD,
     sync: applySavingsMobileTextStableV434
+  };
+})();
+
+/* PATCH v435 — Mobile: topo compacto e KPIs com icones */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_ICONS_v435';
+  let observerStarted = false;
+  let scheduled = false;
+
+  const ICONS = {
+    fundos: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4-8 4-8-4 8-4Z"/><path d="m4 12 8 4 8-4"/><path d="m4 17 8 4 8-4"/></svg>',
+    pl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9h9Z"/><path d="M12 3a9 9 0 0 1 9 9h-9V3Z"/></svg>',
+    best: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17 9 11l4 4 8-8"/><path d="M14 7h7v7"/></svg>',
+    worst: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 7 6 6 4-4 8 8"/><path d="M14 17h7v-7"/></svg>'
+  };
+
+  function setLabel(cell, text){
+    const label = cell?.querySelector(':scope > span:not(.mobile-kpi-icon-v435)');
+    if(label && label.textContent.trim() !== text) label.textContent = text;
+  }
+
+  function ensureIcon(cell, type){
+    if(!cell) return;
+    cell.classList.add(`is-${type}-v435`);
+    let icon = cell.querySelector(':scope > .mobile-kpi-icon-v435');
+    if(!icon){
+      icon = document.createElement('span');
+      icon.className = 'mobile-kpi-icon-v435';
+      icon.setAttribute('aria-hidden','true');
+      cell.prepend(icon);
+    }
+    const html = ICONS[type] || '';
+    if(icon.innerHTML !== html) icon.innerHTML = html;
+  }
+
+  function applyMobileTopKpiIconsV435(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v435','mobile-top-kpi-icons-v435');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const header = document.querySelector('.site-header-clean');
+      const status = header?.querySelector('.header-data-status-v343');
+      const last = document.getElementById('lastUpdate');
+      if(status && last && last.parentElement !== status){
+        status.appendChild(last);
+      }
+
+      const grid = document.querySelector('#sec-kpi-mobile .mobile-kpi-compact-grid');
+      if(grid){
+        grid.setAttribute('data-mobile-kpi-icons-v435','1');
+        const cells = Array.from(grid.querySelectorAll(':scope > .mobile-kpi-cell'));
+        const fundos = cells[0];
+        const pl = cells[1];
+        const categorias = cells[2];
+        const pipeline = cells[3];
+        const best = cells[4];
+        const worst = cells[5];
+
+        ensureIcon(fundos, 'fundos');
+        ensureIcon(pl, 'pl');
+        ensureIcon(best, 'best');
+        ensureIcon(worst, 'worst');
+
+        setLabel(fundos, 'Fundos');
+        setLabel(pl, 'PL');
+        setLabel(best, 'Melhor 12M');
+        setLabel(worst, 'Pior 12M');
+
+        categorias?.setAttribute('aria-hidden','true');
+        pipeline?.setAttribute('aria-hidden','true');
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileTopKpiIconsV435();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const targets = [
+      document.querySelector('.site-header-clean'),
+      document.getElementById('sec-kpi-mobile')
+    ].filter(Boolean);
+    if(!targets.length) return;
+
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    targets.forEach(target => obs.observe(target, {childList:true, subtree:true, characterData:true}));
+    window.__ELTAUM_MOBILE_TOP_KPI_ICONS_OBSERVER_V435__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileTopKpiIconsV435, {once:true});
+  }else{
+    applyMobileTopKpiIconsV435();
+  }
+
+  window.addEventListener('load', applyMobileTopKpiIconsV435, {once:true});
+  [300, 900, 1800, 3600, 7000, 12000, 18000, 27000].forEach(ms => setTimeout(applyMobileTopKpiIconsV435, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_ICONS_V435__ = {
+    build: BUILD,
+    sync: applyMobileTopKpiIconsV435
   };
 })();
