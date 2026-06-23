@@ -21074,3 +21074,30 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     sync: ensureStableNoDataToggleV442
   };
 })();
+
+/* PATCH v443 — Mobile: ranking toolbar compacto */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_v443';
+
+  function applyMobileRankingToolbarCompactV443(){
+    try{
+      document.documentElement.classList.add('mobile-v443','mobile-ranking-toolbar-compact-v443');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileRankingToolbarCompactV443, {once:true});
+  }else{
+    applyMobileRankingToolbarCompactV443();
+  }
+
+  window.addEventListener('load', applyMobileRankingToolbarCompactV443, {once:true});
+  [300, 1000, 2500, 6000].forEach(ms => setTimeout(applyMobileRankingToolbarCompactV443, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_V443__ = {
+    build: BUILD,
+    sync: applyMobileRankingToolbarCompactV443
+  };
+})();
