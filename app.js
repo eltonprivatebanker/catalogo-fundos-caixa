@@ -21134,7 +21134,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
 /* PATCH v445 — Mobile: Indicadores por mês */
 (function(){
-  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_SELECT_v446';
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_CLEAN_v447';
   let range = 'year';
   let view = 'all';
 
@@ -21169,6 +21169,16 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
   function keyFromPartsV445(year, monthIndex){
     return `${year}-${String(monthIndex + 1).padStart(2,'0')}`;
+  }
+
+  function labelFromKeyV447(key){
+    const monthIndex = Math.max(0, Math.min(11, Number(String(key).slice(5,7)) - 1));
+    const base = monthNameV445(monthIndex);
+    if(range === '12m'){
+      const year = String(key).slice(2,4);
+      return year ? `${base}/${year}` : base;
+    }
+    return base;
   }
 
   function normalizeMonthKeyV445(item){
@@ -21304,13 +21314,30 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     }
   }
 
+  function mapHasDataForKeysV447(map, keys){
+    return keys.some(key => toNumV445(map?.get(key)) !== null);
+  }
+
+  function syncIndicatorButtonsV447(root, maps, keys, activeView){
+    root.querySelectorAll('[data-monthly-indicators-view-v446]').forEach(btn => {
+      const key = btn.dataset.monthlyIndicatorsViewV446 || 'all';
+      const hasData = key === 'all' || mapHasDataForKeysV447(maps[key], keys);
+      const isActive = key === activeView;
+      btn.classList.toggle('active', isActive);
+      btn.classList.toggle('is-unavailable-v447', !hasData);
+      btn.disabled = !hasData;
+      btn.setAttribute('aria-disabled', hasData ? 'false' : 'true');
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
   function renderMonthlyIndicatorsV445(){
     const root = document.getElementById('monthlyIndicatorsV445');
     const tbody = document.getElementById('monthlyIndicatorsRowsV445');
     const table = root?.querySelector('.monthly-indicators-table-v445');
     if(!root || !tbody) return;
 
-    document.documentElement.classList.add('mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
+    document.documentElement.classList.add('mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
     const meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
 
@@ -21328,7 +21355,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const dolarMap = mapSeriesV445(getPtaxSeriesV445(dados));
     const keys = getMonthKeysV445([cdiMap, ipcaMap, ibovMap, dolarMap]);
     const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap};
-    const activeView = indicatorMetaV446[view] ? view : 'all';
+    let activeView = indicatorMetaV446[view] ? view : 'all';
+    if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
+      activeView = 'all';
+      view = 'all';
+    }
 
     renderMonthlyHeaderV446(table, activeView);
 
@@ -21338,8 +21369,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     setSummaryV445('monthlySummaryDolarV445', summaryValueV445(dados, 'dolar', dolarMap, [dolarIdx.acum_ano, dolarCard.acum_ano]));
 
     tbody.innerHTML = keys.map(key => {
-      const monthIndex = Math.max(0, Math.min(11, Number(key.slice(5,7)) - 1));
-      const label = monthNameV445(monthIndex);
+      const label = labelFromKeyV447(key);
       if(activeView !== 'all'){
         const value = maps[activeView]?.get(key);
         return `<tr><td>${label}</td><td class="${clsV445(value)}">${pctV445(value)}</td></tr>`;
@@ -21351,6 +21381,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       </tr>`;
     }).join('');
 
+    if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
+      const label = indicatorMetaV446[activeView]?.label || 'indicador';
+      tbody.innerHTML = `<tr class="monthly-empty-row-v447"><td colspan="2">Série mensal de ${label} indisponível no JSON atual.</td></tr>`;
+    }
+
     const active = root.querySelector(`[data-monthly-indicators-range-v445="${range}"]`);
     root.querySelectorAll('[data-monthly-indicators-range-v445]').forEach(btn => {
       const isActive = btn === active;
@@ -21358,11 +21393,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
     });
 
-    root.querySelectorAll('[data-monthly-indicators-view-v446]').forEach(btn => {
-      const isActive = (btn.dataset.monthlyIndicatorsViewV446 || 'all') === activeView;
-      btn.classList.toggle('active', isActive);
-      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
+    syncIndicatorButtonsV447(root, maps, keys, activeView);
   }
 
   function bindMonthlyIndicatorsV445(){
@@ -21380,6 +21411,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
       const viewBtn = event.target.closest('[data-monthly-indicators-view-v446]');
       if(viewBtn){
+        if(viewBtn.disabled || viewBtn.getAttribute('aria-disabled') === 'true') return;
         view = viewBtn.dataset.monthlyIndicatorsViewV446 || 'all';
         renderMonthlyIndicatorsV445();
         return;
@@ -21415,6 +21447,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   };
 
   window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_SELECT_V446__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_CLEAN_V447__ = {
     build: BUILD,
     render: renderMonthlyIndicatorsV445
   };
