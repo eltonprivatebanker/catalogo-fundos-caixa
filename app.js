@@ -20899,3 +20899,64 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     sync: applyMobileFundsFiltersCompactV440
   };
 })();
+
+/* PATCH v441 — Mobile: ajustes finos dos filtros de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUNDS_FILTERS_FIX_v441';
+  let scheduled = false;
+
+  function applyMobileFundsFiltersFixV441(){
+    try{
+      document.documentElement.classList.add('mobile-v441','mobile-funds-filters-fix-v441');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const search = document.getElementById('searchInput');
+      if(search && !search.dataset.mobilePlaceholderV441){
+        search.dataset.desktopPlaceholderV441 = search.getAttribute('placeholder') || '';
+        search.dataset.mobilePlaceholderV441 = '1';
+      }
+      if(search && window.matchMedia?.('(max-width: 768px)').matches){
+        search.setAttribute('placeholder','Buscar fundo ou CNPJ...');
+      }
+
+      const pf = document.getElementById('mobileOnlyPfV75');
+      const pfLabel = document.querySelector('label[for="mobileOnlyPfV75"]');
+      if(pf && pfLabel){
+        pfLabel.classList.toggle('is-checked-v441', !!pf.checked);
+      }
+
+      const noDataToggle = document.querySelector('#mobileCategorySelectShellV74 .mobile-moved-toggle-v440');
+      if(noDataToggle){
+        noDataToggle.setAttribute('data-mobile-fixed-v441','1');
+      }
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileFundsFiltersFixV441();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundsFiltersFixV441, {once:true});
+  }else{
+    applyMobileFundsFiltersFixV441();
+  }
+
+  document.addEventListener('change', event => {
+    if(event.target?.id === 'mobileOnlyPfV75' || event.target?.id === 'toggleSemDados') schedule();
+  }, true);
+  window.addEventListener('resize', schedule, {passive:true});
+  window.addEventListener('load', applyMobileFundsFiltersFixV441, {once:true});
+  [250, 800, 1600, 3200, 6400, 12000].forEach(ms => setTimeout(applyMobileFundsFiltersFixV441, ms));
+
+  window.__ELTAUM_MOBILE_FUNDS_FILTERS_FIX_V441__ = {
+    build: BUILD,
+    sync: applyMobileFundsFiltersFixV441
+  };
+})();
