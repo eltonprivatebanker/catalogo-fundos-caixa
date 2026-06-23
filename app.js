@@ -20253,7 +20253,7 @@ function openCdiAnalyticTableV274(){
         const dt = threshold.querySelector('dt');
         const data = threshold.querySelector('data');
         if(dt) dt.textContent = 'Regra atual';
-        if(data) data.textContent = 'Selic > 8,50%';
+        if(data) data.textContent = 'Selic acima de 8,50%';
       }
 
       const quick = document.getElementById('poupQuickNote');
@@ -20262,9 +20262,9 @@ function openCdiAnalyticTableV274(){
         if(raw.includes('aguardando')){
           quick.innerHTML = '<strong>Regra será definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
         }else if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
-          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Aplicável com Selic em até 8,50% a.a.</span>';
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
         }else{
-          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Aplicável com Selic acima de 8,50% a.a.</span>';
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
         }
       }
 
@@ -20322,18 +20322,18 @@ function openCdiAnalyticTableV274(){
         const dt = threshold.querySelector('dt');
         const data = threshold.querySelector('data');
         if(dt) dt.textContent = 'Regra atual';
-        if(data) data.textContent = 'Selic acima 8,50%';
+        if(data) data.textContent = 'Selic acima de 8,50%';
       }
 
       const quick = document.getElementById('poupQuickNote');
       if(quick){
         const raw = quick.textContent.toLowerCase();
         if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
-          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até 8,50% a.a.</span>';
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
         }else if(raw.includes('aguardando')){
           quick.innerHTML = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
         }else{
-          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de 8,50% a.a.</span>';
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
         }
       }
 
@@ -20363,5 +20363,82 @@ function openCdiAnalyticTableV274(){
   window.__ELTAUM_SAVINGS_MOBILE_POLISH_V433__ = {
     build: BUILD,
     sync: applySavingsMobilePolishV433
+  };
+})();
+
+/* PATCH v434 — Poupanca mobile: estabiliza textos finais sem piscar */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_v434';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function applySavingsMobileTextStableV434(){
+    try{
+      document.documentElement.classList.add('mobile-v434','savings-mobile-text-stable-v434');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt && dt.textContent !== 'Regra atual') dt.textContent = 'Regra atual';
+        if(data && data.textContent !== 'Selic acima de 8,50%') data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        let html = '';
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          html = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else if(raw.includes('aguardando') || raw.includes('definida')){
+          html = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          html = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+        if(html && quick.innerHTML !== html) quick.innerHTML = html;
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source && !source.textContent.includes('Simular rendimento')){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applySavingsMobileTextStableV434();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const target = document.querySelector('#sec-mercado .savings-reference-v167');
+    if(!target) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(target, {childList:true, subtree:true, characterData:true});
+    window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_OBSERVER_V434__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileTextStableV434, {once:true});
+  }else{
+    applySavingsMobileTextStableV434();
+  }
+
+  window.addEventListener('load', applySavingsMobileTextStableV434, {once:true});
+  [800, 1800, 3600, 7000, 11200, 16000, 26000].forEach(ms => setTimeout(applySavingsMobileTextStableV434, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
+    build: BUILD,
+    sync: applySavingsMobileTextStableV434
   };
 })();

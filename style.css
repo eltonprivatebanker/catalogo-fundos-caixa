@@ -59327,3 +59327,28 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     margin-left:4px!important;
   }
 }
+
+/* PATCH v434 — Poupanca mobile: estabilidade textual e ajuste do card Selic */
+@media (max-width: 768px){
+  html.savings-mobile-text-stable-v434 body #sec-mercado .savings-reference-v167 .savings-summary-v207 .threshold data{
+    display:block!important;
+    color:#e8bb6a!important;
+    font-size:.84rem!important;
+    line-height:1.05!important;
+    font-weight:950!important;
+    letter-spacing:-.04em!important;
+    white-space:nowrap!important;
+  }
+
+  html.savings-mobile-text-stable-v434 body #sec-mercado #poupQuickNote span{
+    max-width:none!important;
+  }
+
+  html.savings-mobile-text-stable-v434 body #sec-mercado #poupQuickNote .poup-nowrap-v434{
+    display:inline!important;
+    color:inherit!important;
+    font:inherit!important;
+    font-weight:800!important;
+    white-space:nowrap!important;
+  }
+}
