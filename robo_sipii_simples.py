@@ -1877,6 +1877,16 @@ class ColetorMercado:
             "base_36m": round(base_36m.get("cotacao"), 4) if base_36m else None,
             "tem_mes_atual": tem_mes_atual,
             "status_mes_atual": "parcial" if tem_mes_atual else "sem_parcial",
+            "historico": [
+                {
+                    "key": item.get("key"),
+                    "label": item.get("mes"),
+                    "valor": item.get("var_pct"),
+                    "cotacao": item.get("cotacao"),
+                    "data_ref": item.get("data_ref"),
+                }
+                for item in hist
+            ],
         }
 
         log(
@@ -2254,6 +2264,40 @@ class ColetorMercado:
         if override_mes.get("variacao_mes_fechado") is not None:
             variacao_mes_fechado = float(override_mes["variacao_mes_fechado"])
 
+        historico_mensal = []
+        try:
+            fechamentos = (
+                df.sort_values("data")
+                .groupby("ano_mes", as_index=False)
+                .tail(1)
+                .sort_values("ano_mes")
+            )
+            fechamento_anterior = None
+            for _, row in fechamentos.iterrows():
+                key = str(row.get("ano_mes") or "")
+                if not re.fullmatch(r"\d{4}-\d{2}", key):
+                    continue
+
+                y, m = key.split("-")
+                fechamento = float(row.get("fechamento"))
+                override_hist = overrides_ticker.get(key, {})
+                if override_hist.get("fechamento") is not None:
+                    fechamento = float(override_hist["fechamento"])
+
+                variacao = self._variacao_pct(fechamento, fechamento_anterior)
+                if override_hist.get("variacao_mes_fechado") is not None:
+                    variacao = float(override_hist["variacao_mes_fechado"])
+
+                historico_mensal.append({
+                    "key": key,
+                    "label": f"{MESES_PT[int(m)-1]}/{y}",
+                    "valor": variacao,
+                    "fechamento": round(fechamento, 2),
+                })
+                fechamento_anterior = fechamento
+        except Exception as e:
+            log(f"[Índices] Não foi possível montar histórico mensal de {nome}: {e}")
+
         resultado = {
             "nome": nome,
             "ticker": ticker,
@@ -2285,6 +2329,7 @@ class ColetorMercado:
             "base_36m": round(base_36m, 2) if base_36m is not None else None,
             "tem_mes_atual": tem_mes_atual,
             "status_mes_atual": "parcial" if tem_mes_atual else "sem_parcial",
+            "historico": historico_mensal[-37:],
         }
 
         log(
@@ -2459,6 +2504,70 @@ class ColetorMercado:
         )
         return resultado
 
+    def _montar_indicadores_mensais(self, cdi_acum, ipca_historico, ibov_indice, dolar_indice, meses=37):
+        """
+        Consolida CDI, IPCA, Ibovespa e Dólar em uma única série mensal.
+
+        A página mobile usa este bloco para evitar lógica frágil no browser,
+        já que cada indicador nasce em uma estrutura diferente do JSON.
+        """
+        def normalizar_numero(valor):
+            try:
+                if valor is None:
+                    return None
+                return round(float(valor), 4)
+            except (TypeError, ValueError):
+                return None
+
+        def label_from_key(key):
+            try:
+                y, m = str(key).split("-")
+                return f"{MESES_PT[int(m)-1]}/{y}"
+            except Exception:
+                return str(key or "")
+
+        mapas = {
+            "cdi": {},
+            "ipca": {},
+            "ibov": {},
+            "dolar": {},
+        }
+
+        for item in (cdi_acum or {}).get("historico", []) or []:
+            key = item.get("key")
+            if re.fullmatch(r"\d{4}-\d{2}", str(key or "")):
+                mapas["cdi"][key] = normalizar_numero(item.get("valor"))
+
+        for item in ipca_historico or []:
+            key = item.get("key")
+            if re.fullmatch(r"\d{4}-\d{2}", str(key or "")):
+                mapas["ipca"][key] = normalizar_numero(item.get("valor"))
+
+        for item in (ibov_indice or {}).get("historico", []) or []:
+            key = item.get("key")
+            if re.fullmatch(r"\d{4}-\d{2}", str(key or "")):
+                mapas["ibov"][key] = normalizar_numero(item.get("valor"))
+
+        for item in (dolar_indice or {}).get("historico", []) or []:
+            key = item.get("key")
+            if re.fullmatch(r"\d{4}-\d{2}", str(key or "")):
+                mapas["dolar"][key] = normalizar_numero(item.get("valor"))
+
+        chaves = sorted(set().union(*[set(mapa.keys()) for mapa in mapas.values()]))
+        resultado = []
+        for key in chaves[-meses:]:
+            resultado.append({
+                "key": key,
+                "label": label_from_key(key),
+                "cdi": mapas["cdi"].get(key),
+                "ipca": mapas["ipca"].get(key),
+                "ibov": mapas["ibov"].get(key),
+                "dolar": mapas["dolar"].get(key),
+            })
+
+        log(f"[Indicadores mensais] Série consolidada: {len(resultado)} competências")
+        return resultado
+
     # ──────────────────────────────────────────────────────────────────────
     # ★ v17.1 — Poupança nova + antiga: mensal atual + acum. ano
     #
@@ -2627,7 +2736,7 @@ class ColetorMercado:
             ipca_acum_12m   = self._acumular(ipca_serie, 12)
             ipca_acum_24m   = self._acumular(ipca_serie, 24) if len(ipca_serie) >= 24 else None
             ipca_acum_36m   = self._acumular(ipca_serie, 36) if len(ipca_serie) >= 36 else None
-            ipca_historico  = [{"label": i["label"], "valor": i["valor"]} for i in ipca_serie]
+            ipca_historico  = [{"key": i.get("key"), "label": i["label"], "valor": i["valor"]} for i in ipca_serie]
             log(f"  [IPCA] 12M={ipca_acum_12m}% | 24M={ipca_acum_24m}% | 36M={ipca_acum_36m}%")
 
         # Mantém o gráfico IPCA 12M × meta na mesma competência do card.
@@ -2670,6 +2779,14 @@ class ColetorMercado:
         sp500_indice  = self._converter_indice_usd_para_brl(sp500_indice, dolar_indice)
         dow_indice    = self._converter_indice_usd_para_brl(dow_indice, dolar_indice)
         nasdaq_indice = self._converter_indice_usd_para_brl(nasdaq_indice, dolar_indice)
+
+        indicadores_mensais = self._montar_indicadores_mensais(
+            cdi_acum,
+            ipca_historico,
+            ibov_indice,
+            dolar_indice,
+            meses=37,
+        )
 
         # Focus
         focus_data = buscar_focus(self.headers)
@@ -2755,6 +2872,7 @@ class ColetorMercado:
                     "mes_base_label":          ibov_indice.get("mes_base_label"),
                     "data_mes_anterior":       ibov_indice.get("data_mes_anterior"),
                     "data_atual":              ibov_indice.get("data_atual"),
+                    "historico":               ibov_indice.get("historico", []),
                     "fonte":                   ibov_indice.get("fonte"),
                 },
 
@@ -2778,9 +2896,12 @@ class ColetorMercado:
                     "mes_base_label":          dolar_indice.get("mes_base_label"),
                     "data_mes_anterior":       dolar_indice.get("data_mes_anterior"),
                     "data_atual":              dolar_indice.get("data_atual"),
+                    "historico":               dolar_indice.get("historico", []),
                     "fonte":                   dolar_indice.get("fonte"),
                 },
             },
+
+            "indicadores_mensais": indicadores_mensais,
 
             # Nova estrutura principal para a tabela de mercado da página.
             "indices_mercado": {
