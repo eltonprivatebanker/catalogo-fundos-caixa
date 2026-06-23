@@ -21569,3 +21569,30 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     sync: applyMobileFundCardRefinementV452
   };
 })();
+
+/* PATCH v455 — Mobile: indicadores mensais legíveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_READABLE_v455';
+
+  function applyMonthlyIndicatorsReadableV455(){
+    try{
+      document.documentElement.classList.add('mobile-v455','mobile-monthly-indicators-readable-v455');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMonthlyIndicatorsReadableV455, {once:true});
+  }else{
+    applyMonthlyIndicatorsReadableV455();
+  }
+
+  window.addEventListener('load', applyMonthlyIndicatorsReadableV455, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyMonthlyIndicatorsReadableV455, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_READABLE_V455__ = {
+    build: BUILD,
+    sync: applyMonthlyIndicatorsReadableV455
+  };
+})();
