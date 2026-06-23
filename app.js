@@ -2022,7 +2022,7 @@ function renderCdiYearHistory(d){
     return NaN;
   })();
 
-  if(title) title.textContent = isMobile ? `CDI — visão mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
+  if(title) title.textContent = isMobile ? `CDI mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
   if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
   if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? 'CDI 12M' : 'Últimos 12 meses';
   if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
@@ -2041,13 +2041,13 @@ function renderCdiYearHistory(d){
       const isFechado = item === ultimoFechado;
       const sinal = Number.isFinite(valor) && valor < 0 ? 'neg' : 'pos';
       const label = mesCurto(item).toUpperCase();
-      const status = isAtual ? 'parcial' : 'fechado';
+      const status = isAtual ? `${label} · parcial` : label;
       const acumTxt = Number.isFinite(acum) ? fmtPctLocal(acum) : '—';
       return `
         <article class="cdi-month-card-v322 ${sinal} ${isAtual ? 'is-current' : ''} ${isFechado ? 'is-lastclosed' : ''}" role="listitem">
-          <span class="cdi-month-kicker-v322">${label} · ${status}</span>
+          <span class="cdi-month-kicker-v322">${status}</span>
           <strong class="cdi-month-value-v322">${Number.isFinite(valor) ? fmtPctLocal(valor) : '—'}</strong>
-          <small class="cdi-month-accum-v322">Acum. ano ${acumTxt}</small>
+          <small class="cdi-month-accum-v322">Ano ${acumTxt}</small>
         </article>`;
     }).join('');
   }
@@ -6294,6 +6294,17 @@ function atualizarResumoIPCADashboardV378(rows){
   const last = data[data.length - 1];
   const max = data.reduce((acc, cur) => Number(cur.valor) > Number(acc.valor) ? cur : acc, data[0]);
   const min = data.reduce((acc, cur) => Number(cur.valor) < Number(acc.valor) ? cur : acc, data[0]);
+  const acumulado = (data.reduce((acc, cur) => acc * (1 + Number(cur.valor) / 100), 1) - 1) * 100;
+  const periodoLabel = data.length === 12 ? '12M' : data.length === 24 ? '24M' : data.length === 36 ? '36M' : `${data.length}M`;
+  const periodoDatas = `${econLabelFromItemV378(data[0])} → ${econLabelFromItemV378(last)}`;
+  econSetTextV378('ipcaResumoAcumLabelV420', `Acumulado ${periodoLabel}`);
+  econSetTextV378('ipcaResumoAcumV420', econPctV378(acumulado));
+  econSetTextV378('ipcaResumoAcumDataV420', periodoDatas);
+  const ipcaAcumElV420 = document.getElementById('ipcaResumoAcumV420');
+  if(ipcaAcumElV420){
+    ipcaAcumElV420.classList.toggle('valor-negativo-v402', Number.isFinite(acumulado) && acumulado < 0);
+    ipcaAcumElV420.classList.toggle('valor-positivo-v402', Number.isFinite(acumulado) && acumulado > 0);
+  }
   econSetTextV378('ipcaResumoUltimoV250', econPctV378(last.valor));
   econSetTextV378('ipcaResumoUltimoDataV250', econLabelFromItemV378(last));
   econSetTextV378('ipcaResumoMaxV250', econPctV378(max.valor));
@@ -12998,7 +13009,7 @@ async function sharePainelMercado(){
       hint = document.createElement('div');
       hint.className = 'ptax-scroll-hint-v99';
       hint.dataset.scrollHintV99 = id;
-      hint.innerHTML = `<span>${text}</span><strong>Arraste →</strong>`;
+      hint.innerHTML = `<span>${text}</span>`;
       row.parentElement.insertBefore(hint, row);
     }else{
       const span = hint.querySelector('span');
@@ -13089,6 +13100,41 @@ async function sharePainelMercado(){
   setTimeout(normalizePtaxScrollHintsV99,3000);
 
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__ = {sync:normalizePtaxScrollHintsV99};
+})();
+
+
+/* PATCH v424 — PTAX mobile: dica única e fechamentos mais compactos */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_DOLAR_MONTHS_CLEAN_v424';
+
+  function syncDolarMonthsCleanV424(){
+    try{
+      document.documentElement.classList.add('mobile-v424','dolar-months-clean-v424');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document
+        .querySelectorAll('#sec-dolar .ptax-scroll-hint-v99 strong')
+        .forEach((node) => node.remove());
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMonthsCleanV424, {once:true});
+  }else{
+    syncDolarMonthsCleanV424();
+  }
+
+  setTimeout(syncDolarMonthsCleanV424, 450);
+  setTimeout(syncDolarMonthsCleanV424, 1400);
+  setTimeout(syncDolarMonthsCleanV424, 2800);
+
+  window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__ = {
+    build: BUILD,
+    sync: syncDolarMonthsCleanV424
+  };
 })();
 
 
@@ -18226,15 +18272,25 @@ function openCdiAnalyticTableV274(){
 
     if(!items.length || summary.dataset.v321Built === '1') return;
 
+    // v413 — pista visual mobile para o carrossel da Agenda Copom
+    // Mantém o aviso fora da trilha para não atrapalhar o scroll dos cards.
+    const oldHint = document.getElementById('copomScrollHintV413');
+    if(!oldHint){
+      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true"></div>');
+    }else{
+      oldHint.textContent = '';
+    }
+
     const html = items.map(item => {
       const num = norm(item.querySelector('.copom-num')?.textContent);
+      const numShort = num.replace(/\s*reuni[aã]o\b/i, '').trim();
       const date = norm(item.querySelector('.copom-date')?.textContent);
       const result = norm(item.querySelector('.copom-result')?.textContent);
       const kind = classify(item, result);
       const label = statusLabel(result);
       return `
         <article class="copom-exec-card-v270 copom-carousel-card-v321 ${kind}" role="listitem">
-          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
+          <span class="copom-exec-kicker-v270">${numShort || num || 'Reunião'}</span>
           <strong class="copom-exec-date-v270">${date || '—'}</strong>
           <div class="copom-exec-meta-v270">
             <span class="copom-exec-status-v270 ${kind}">${label}</span>
@@ -19540,8 +19596,6 @@ function openCdiAnalyticTableV274(){
   }, {passive:true});
 })();
 
-
-
 /* PATCH v407 — Selic mobile-first: sparkline específico para celular
    Objetivo: parar de encolher o gráfico desktop no mobile. No celular, ocultamos eixos/grades,
    mostramos apenas a curva, os pontos-chave e um rodapé legível com período + taxa atual. */
@@ -19636,8 +19690,8 @@ function openCdiAnalyticTableV274(){
         ${dot(lastIdx, 'dot current', 7.2, `Atual · ${atual}`)}
       </svg>
       <div class="econ-selic-mobile-summary-v407" aria-hidden="true">
-        <span>${periodStart} → ${periodEnd}</span>
-        <strong>Atual · ${atual}</strong>
+        <span>${periodStart}</span>
+        <span>${periodEnd}</span>
       </div>
     `;
   }
@@ -19656,4 +19710,913 @@ function openCdiAnalyticTableV274(){
       }catch(e){}
     }, 180);
   }, {passive:true});
+})();
+
+/* PATCH v424 — marcador final para evitar overwrite por rotinas antigas */
+(function(){
+  function syncFinalBuildV424(){
+    try{
+      document.documentElement.classList.add('mobile-v424','dolar-months-clean-v424');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_DOLAR_MONTHS_CLEAN_v424';
+      if(window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__?.sync){
+        window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncFinalBuildV424, {once:true});
+  }else{
+    syncFinalBuildV424();
+  }
+
+  window.addEventListener('load', syncFinalBuildV424, {once:true});
+  setTimeout(syncFinalBuildV424, 3200);
+})();
+
+/* PATCH v425 — Juros e CDI: Copom/CDI mensal em carrosseis padronizados */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_CDI_CAROUSELS_v425';
+
+  function syncRatesCarouselsV425(){
+    try{
+      document.documentElement.classList.add('mobile-v425','rates-copom-cdi-carousels-v425');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const copomHint = document.getElementById('copomScrollHintV413');
+      if(copomHint) copomHint.textContent = '';
+
+      const cdiBox = document.getElementById('cdiYearHistory');
+      if(cdiBox){
+        cdiBox.removeAttribute('hidden');
+        cdiBox.removeAttribute('aria-hidden');
+      }
+
+      const setImportant = (el, prop, val) => {
+        if(el) el.style.setProperty(prop, val, 'important');
+      };
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'display', 'flex');
+          setImportant(track, 'gap', '9px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '28px');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'overflow-y', 'hidden');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+        });
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', '0 0 112px');
+          setImportant(card, 'width', '112px');
+          setImportant(card, 'min-width', '112px');
+          setImportant(card, 'max-width', '112px');
+          setImportant(card, 'box-sizing', 'border-box');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesCarouselsV425, {once:true});
+  }else{
+    syncRatesCarouselsV425();
+  }
+
+  window.addEventListener('load', syncRatesCarouselsV425, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesCarouselsV425), {passive:true});
+  setTimeout(syncRatesCarouselsV425, 450);
+  setTimeout(syncRatesCarouselsV425, 1500);
+  setTimeout(syncRatesCarouselsV425, 3400);
+
+  window.__ELTAUM_RATES_COPOM_CDI_CAROUSELS_V425__ = {
+    build: BUILD,
+    sync: syncRatesCarouselsV425
+  };
+})();
+
+/* PATCH v426 — Juros e CDI: tres cards visiveis por tela */
+(function(){
+  const BUILD = 'ELTAUM_RATES_THREE_VISIBLE_v426';
+
+  function syncRatesThreeVisibleV426(){
+    try{
+      document.documentElement.classList.add('mobile-v426','rates-three-visible-v426');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const setImportant = (el, prop, val) => {
+        if(el) el.style.setProperty(prop, val, 'important');
+      };
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'gap', '8px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '14px');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+        });
+
+      const width = 'calc((100% - 16px) / 3)';
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', `0 0 ${width}`);
+          setImportant(card, 'width', width);
+          setImportant(card, 'min-width', width);
+          setImportant(card, 'max-width', width);
+          setImportant(card, 'box-sizing', 'border-box');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesThreeVisibleV426, {once:true});
+  }else{
+    syncRatesThreeVisibleV426();
+  }
+
+  window.addEventListener('load', syncRatesThreeVisibleV426, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesThreeVisibleV426), {passive:true});
+  setTimeout(syncRatesThreeVisibleV426, 520);
+  setTimeout(syncRatesThreeVisibleV426, 1650);
+  setTimeout(syncRatesThreeVisibleV426, 3600);
+
+  window.__ELTAUM_RATES_THREE_VISIBLE_V426__ = {
+    build: BUILD,
+    sync: syncRatesThreeVisibleV426
+  };
+})();
+
+/* PATCH v427 — Juros e CDI: remove conflitos legados e fixa 3 cards */
+(function(){
+  const BUILD = 'ELTAUM_RATES_HARD_THREE_v427';
+  let observerStarted = false;
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function forceThreeCardsV427(){
+    try{
+      const root = document.documentElement;
+      root.classList.add('mobile-v427','rates-hard-three-v427');
+      root.classList.remove('mobile-rates-final-v352','mobile-v414','mobile-v413');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const sec = document.getElementById('sec-mercado');
+      if(sec) sec.classList.add('rates-hard-three-v427');
+
+      document.querySelectorAll('#sec-mercado .copom-scroll-hint-v413').forEach(el => el.remove());
+
+      const cdiBox = document.getElementById('cdiYearHistory');
+      if(cdiBox){
+        cdiBox.removeAttribute('hidden');
+        cdiBox.removeAttribute('aria-hidden');
+        setImportant(cdiBox, 'display', 'block');
+        setImportant(cdiBox, 'visibility', 'visible');
+        setImportant(cdiBox, 'height', 'auto');
+        setImportant(cdiBox, 'max-height', 'none');
+        setImportant(cdiBox, 'overflow', 'hidden');
+        setImportant(cdiBox, 'margin', '12px 0 0');
+        setImportant(cdiBox, 'padding', '11px 10px 13px');
+      }
+
+      const oldCdi = document.getElementById('cdiMobileReadableV352');
+      if(oldCdi){
+        oldCdi.setAttribute('aria-hidden','true');
+        try{ oldCdi.inert = true; }catch(_error){}
+        setImportant(oldCdi, 'display', 'none');
+        setImportant(oldCdi, 'height', '0');
+        setImportant(oldCdi, 'max-height', '0');
+        setImportant(oldCdi, 'overflow', 'hidden');
+      }
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'display', 'flex');
+          setImportant(track, 'flex-wrap', 'nowrap');
+          setImportant(track, 'gap', '8px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '0');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'overflow-y', 'hidden');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+          setImportant(track, 'scrollbar-width', 'none');
+        });
+
+      const width = 'calc((100% - 16px) / 3)';
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', `0 0 ${width}`);
+          setImportant(card, 'width', width);
+          setImportant(card, 'min-width', width);
+          setImportant(card, 'max-width', width);
+          setImportant(card, 'box-sizing', 'border-box');
+          setImportant(card, 'min-height', '66px');
+          setImportant(card, 'padding', '8px 6px 8px 9px');
+        });
+
+      if(!observerStarted){
+        observerStarted = true;
+        const targets = [
+          document.getElementById('copomExecutiveSummaryV270'),
+          document.getElementById('cdiMonthCarouselV322'),
+          document.getElementById('cdiYearHistory')
+        ].filter(Boolean);
+
+        const obs = new MutationObserver(() => {
+          requestAnimationFrame(forceThreeCardsV427);
+        });
+        targets.forEach(target => obs.observe(target, {
+          childList:true,
+          subtree:true,
+          attributes:true,
+          attributeFilter:['style','class','hidden','aria-hidden']
+        }));
+        window.__ELTAUM_RATES_HARD_THREE_OBSERVER_V427__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', forceThreeCardsV427, {once:true});
+  }else{
+    forceThreeCardsV427();
+  }
+
+  window.addEventListener('load', forceThreeCardsV427, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(forceThreeCardsV427), {passive:true});
+  [350, 800, 1400, 2400, 4200, 6500].forEach(ms => setTimeout(forceThreeCardsV427, ms));
+
+  window.__ELTAUM_RATES_HARD_THREE_V427__ = {
+    build: BUILD,
+    sync: forceThreeCardsV427
+  };
+})();
+
+/* PATCH v428 — Juros e CDI: limpeza semantica dos textos */
+(function(){
+  const BUILD = 'ELTAUM_RATES_SEMANTIC_CLEAN_v428';
+
+  function syncRatesSemanticCleanV428(){
+    try{
+      document.documentElement.classList.add('mobile-v428','rates-semantic-clean-v428');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const cdiTitle = document.getElementById('cdiYearHistoryTitle');
+      if(cdiTitle){
+        cdiTitle.textContent = cdiTitle.textContent
+          .replace(/CDI\s+—\s+vis[aã]o mensal/i, 'CDI mensal')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      document.querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 .copom-exec-kicker-v270').forEach(el => {
+        el.textContent = el.textContent.replace(/\s*reuni[aã]o\b/i, '').trim();
+      });
+
+      document.querySelectorAll('#sec-mercado #cdiMonthCarouselV322 .cdi-month-card-v322').forEach(card => {
+        const kicker = card.querySelector('.cdi-month-kicker-v322');
+        if(kicker){
+          const text = kicker.textContent.trim();
+          kicker.textContent = /parcial/i.test(text)
+            ? text.replace(/\s*·\s*fechado/i, '').replace(/\s+/g, ' ')
+            : text.replace(/\s*·\s*fechado/i, '').trim();
+        }
+
+        const accum = card.querySelector('.cdi-month-accum-v322');
+        if(accum){
+          accum.textContent = accum.textContent.replace(/^Acum\.\s*ano/i, 'Ano').replace(/\s+/g, ' ').trim();
+        }
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesSemanticCleanV428, {once:true});
+  }else{
+    syncRatesSemanticCleanV428();
+  }
+
+  window.addEventListener('load', syncRatesSemanticCleanV428, {once:true});
+  [500, 1200, 2600, 4600, 7000, 9200].forEach(ms => setTimeout(syncRatesSemanticCleanV428, ms));
+
+  window.__ELTAUM_RATES_SEMANTIC_CLEAN_V428__ = {
+    build: BUILD,
+    sync: syncRatesSemanticCleanV428
+  };
+})();
+
+/* PATCH v429 — Juros e CDI: Copom e CDI mensal com cards internos borderless */
+(function(){
+  const BUILD = 'ELTAUM_RATES_BORDERLESS_CAROUSELS_v429';
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function syncRatesBorderlessCarouselsV429(){
+    try{
+      document.documentElement.classList.add('mobile-v429','rates-borderless-carousel-v429');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'background', 'transparent');
+          setImportant(card, 'border', '0');
+          setImportant(card, 'outline', '0');
+          setImportant(card, 'box-shadow', 'none');
+        });
+
+      document
+        .querySelectorAll('#sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'padding-left', '6px');
+          setImportant(card, 'padding-right', '6px');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesBorderlessCarouselsV429, {once:true});
+  }else{
+    syncRatesBorderlessCarouselsV429();
+  }
+
+  window.addEventListener('load', syncRatesBorderlessCarouselsV429, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesBorderlessCarouselsV429), {passive:true});
+  [600, 1600, 3200, 5200, 7600, 9800].forEach(ms => setTimeout(syncRatesBorderlessCarouselsV429, ms));
+
+  window.__ELTAUM_RATES_BORDERLESS_CAROUSELS_V429__ = {
+    build: BUILD,
+    sync: syncRatesBorderlessCarouselsV429
+  };
+})();
+
+/* PATCH v430 — Agenda Copom: mostra apenas movimento em p.p. para corte/alta */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_MOVE_v430';
+
+  function extractMoveText(result){
+    const text = String(result || '').replace(/\u2212/g, '-').replace(/\s+/g, ' ').trim();
+    const match = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(!match) return '';
+    const value = match[2]
+      .replace(/\s*p\.?\s*p\.?/i, ' p.p.')
+      .replace(/^\+?/, match[1].toLowerCase() === 'alta' ? '+' : '');
+    return value;
+  }
+
+  function syncCopomMoveV430(){
+    try{
+      document.documentElement.classList.add('mobile-v430','rates-copom-move-v430');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article').forEach(card => {
+        const status = card.querySelector('.copom-exec-status-v270');
+        const result = card.querySelector('.copom-carousel-result-v321');
+        const raw = result?.textContent || '';
+        const move = extractMoveText(raw);
+
+        card.querySelectorAll('.copom-move-v430').forEach(el => el.remove());
+
+        if(result){
+          result.setAttribute('aria-hidden', move ? 'true' : 'false');
+          if(move){
+            result.style.setProperty('display', 'none', 'important');
+          }
+        }
+
+        if(!move || !status) return;
+
+        const el = document.createElement('small');
+        el.className = 'copom-move-v430';
+        el.textContent = move;
+        status.insertAdjacentElement('afterend', el);
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomMoveV430, {once:true});
+  }else{
+    syncCopomMoveV430();
+  }
+
+  window.addEventListener('load', syncCopomMoveV430, {once:true});
+  [700, 1700, 3300, 5400, 7800, 10200].forEach(ms => setTimeout(syncCopomMoveV430, ms));
+
+  window.__ELTAUM_RATES_COPOM_MOVE_V430__ = {
+    build: BUILD,
+    sync: syncCopomMoveV430
+  };
+})();
+
+/* PATCH v431 — Agenda Copom: movimento em p.p. persistente apos rebuild */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_MOVE_PERSISTENT_v431';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function extractMoveText(result){
+    const text = String(result || '').replace(/\u2212/g, '-').replace(/\s+/g, ' ').trim();
+    const match = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(!match) return '';
+    return match[2]
+      .replace(/\s*p\.?\s*p\.?/i, ' p.p.')
+      .replace(/^\+?/, match[1].toLowerCase() === 'alta' ? '+' : '');
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      syncCopomMovePersistentV431();
+    });
+  }
+
+  function syncCard(card){
+    const status = card.querySelector('.copom-exec-status-v270');
+    const result = card.querySelector('.copom-carousel-result-v321');
+    const move = extractMoveText(result?.textContent || '');
+    const existing = card.querySelector('.copom-move-v430, .copom-move-v431');
+
+    if(!move){
+      card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(el => el.remove());
+      return;
+    }
+
+    if(result){
+      result.setAttribute('aria-hidden', 'true');
+      result.style.setProperty('display', 'none', 'important');
+    }
+
+    if(existing){
+      existing.className = 'copom-move-v430 copom-move-v431';
+      if(existing.textContent !== move) existing.textContent = move;
+      if(status && existing.previousElementSibling !== status){
+        status.insertAdjacentElement('afterend', existing);
+      }
+      card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(el => {
+        if(el !== existing) el.remove();
+      });
+      return;
+    }
+
+    if(!status) return;
+    const el = document.createElement('small');
+    el.className = 'copom-move-v430 copom-move-v431';
+    el.textContent = move;
+    status.insertAdjacentElement('afterend', el);
+  }
+
+  function startObserver(summary){
+    if(observerStarted || !summary || !window.MutationObserver) return;
+    observerStarted = true;
+    const target = document.getElementById('sec-mercado') || summary;
+    const obs = new MutationObserver(schedule);
+    obs.observe(target, {
+      childList:true,
+      subtree:true
+    });
+    window.__ELTAUM_RATES_COPOM_MOVE_OBSERVER_V431__ = obs;
+  }
+
+  function syncCopomMovePersistentV431(){
+    try{
+      document.documentElement.classList.add('mobile-v430','rates-copom-move-v430','mobile-v431','rates-copom-move-persistent-v431');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+      summary.querySelectorAll(':scope > article').forEach(syncCard);
+      startObserver(summary);
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomMovePersistentV431, {once:true});
+  }else{
+    syncCopomMovePersistentV431();
+  }
+
+  window.addEventListener('load', syncCopomMovePersistentV431, {once:true});
+  window.addEventListener('pageshow', syncCopomMovePersistentV431, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomMovePersistentV431, ms));
+
+  window.__ELTAUM_RATES_COPOM_MOVE_PERSISTENT_V431__ = {
+    build: BUILD,
+    sync: syncCopomMovePersistentV431
+  };
+})();
+
+/* PATCH v432 — Poupanca mobile: hierarquia de KPI e regra mais clara */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_HERO_v432';
+
+  function applySavingsMobileHeroV432(){
+    try{
+      const root = document.documentElement;
+      root.classList.add('mobile-v432','savings-mobile-hero-v432');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const label = document.getElementById('poupCurrentLabelV214');
+      if(label) label.textContent = 'Rendimento do mês';
+
+      const ruleTitle = document.getElementById('poupCurrentScenarioTitleV214');
+      if(ruleTitle) ruleTitle.textContent = 'Regra vigente';
+
+      const yearLabel = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.year dt');
+      if(yearLabel) yearLabel.textContent = 'Acumulado 2026';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra será definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+        source.setAttribute('aria-label', 'Abrir simulador de rendimento da poupança do Banco Central em uma nova guia');
+      }
+
+      const btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileHeroV432, {once:true});
+  }else{
+    applySavingsMobileHeroV432();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobileHeroV432, 40);
+      setTimeout(applySavingsMobileHeroV432, 220);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobileHeroV432, {once:true});
+  [400, 1200, 2600, 5200, 9000, 14000, 24500].forEach(ms => setTimeout(applySavingsMobileHeroV432, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_HERO_V432__ = {
+    build: BUILD,
+    sync: applySavingsMobileHeroV432
+  };
+})();
+
+/* PATCH v433 — Poupanca mobile: microajustes de texto e leitura */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_POLISH_v433';
+
+  function applySavingsMobilePolishV433(){
+    try{
+      document.documentElement.classList.add('mobile-v433','savings-mobile-polish-v433');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const kicker = document.querySelector('#sec-mercado .savings-reference-v167 .savings-title-v207 .market-reference-kicker-v167');
+      if(kicker) kicker.textContent = 'Rendimento';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobilePolishV433, {once:true});
+  }else{
+    applySavingsMobilePolishV433();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobilePolishV433, 60);
+      setTimeout(applySavingsMobilePolishV433, 260);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobilePolishV433, {once:true});
+  [600, 1600, 3200, 6200, 10200, 15000, 25200].forEach(ms => setTimeout(applySavingsMobilePolishV433, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_POLISH_V433__ = {
+    build: BUILD,
+    sync: applySavingsMobilePolishV433
+  };
+})();
+
+/* PATCH v434 — Poupanca mobile: estabiliza textos finais sem piscar */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_v434';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function applySavingsMobileTextStableV434(){
+    try{
+      document.documentElement.classList.add('mobile-v434','savings-mobile-text-stable-v434');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt && dt.textContent !== 'Regra atual') dt.textContent = 'Regra atual';
+        if(data && data.textContent !== 'Selic acima de 8,50%') data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        let html = '';
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          html = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else if(raw.includes('aguardando') || raw.includes('definida')){
+          html = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          html = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+        if(html && quick.innerHTML !== html) quick.innerHTML = html;
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source && !source.textContent.includes('Simular rendimento')){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applySavingsMobileTextStableV434();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const target = document.querySelector('#sec-mercado .savings-reference-v167');
+    if(!target) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(target, {childList:true, subtree:true, characterData:true});
+    window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_OBSERVER_V434__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileTextStableV434, {once:true});
+  }else{
+    applySavingsMobileTextStableV434();
+  }
+
+  window.addEventListener('load', applySavingsMobileTextStableV434, {once:true});
+  [800, 1800, 3600, 7000, 11200, 16000, 26000].forEach(ms => setTimeout(applySavingsMobileTextStableV434, ms));
+
+window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
+    build: BUILD,
+    sync: applySavingsMobileTextStableV434
+  };
+})();
+
+/* PATCH v435 — Mobile: topo compacto e KPIs com icones */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_ICONS_v435';
+  let observerStarted = false;
+  let scheduled = false;
+
+  const ICONS = {
+    fundos: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4-8 4-8-4 8-4Z"/><path d="m4 12 8 4 8-4"/><path d="m4 17 8 4 8-4"/></svg>',
+    pl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9h9Z"/><path d="M12 3a9 9 0 0 1 9 9h-9V3Z"/></svg>',
+    best: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17 9 11l4 4 8-8"/><path d="M14 7h7v7"/></svg>',
+    worst: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 7 6 6 4-4 8 8"/><path d="M14 17h7v-7"/></svg>'
+  };
+
+  function setLabel(cell, text){
+    const label = cell?.querySelector(':scope > span:not(.mobile-kpi-icon-v435)');
+    if(label && label.textContent.trim() !== text) label.textContent = text;
+  }
+
+  function ensureIcon(cell, type){
+    if(!cell) return;
+    cell.classList.add(`is-${type}-v435`);
+    let icon = cell.querySelector(':scope > .mobile-kpi-icon-v435');
+    if(!icon){
+      icon = document.createElement('span');
+      icon.className = 'mobile-kpi-icon-v435';
+      icon.setAttribute('aria-hidden','true');
+      cell.prepend(icon);
+    }
+    const html = ICONS[type] || '';
+    if(icon.innerHTML !== html) icon.innerHTML = html;
+  }
+
+  function applyMobileTopKpiIconsV435(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v435','mobile-top-kpi-icons-v435');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const header = document.querySelector('.site-header-clean');
+      const status = header?.querySelector('.header-data-status-v343');
+      const last = document.getElementById('lastUpdate');
+      if(status && last && last.parentElement !== status){
+        status.appendChild(last);
+      }
+
+      const grid = document.querySelector('#sec-kpi-mobile .mobile-kpi-compact-grid');
+      if(grid){
+        grid.setAttribute('data-mobile-kpi-icons-v435','1');
+        const cells = Array.from(grid.querySelectorAll(':scope > .mobile-kpi-cell'));
+        const fundos = cells[0];
+        const pl = cells[1];
+        const categorias = cells[2];
+        const pipeline = cells[3];
+        const best = cells[4];
+        const worst = cells[5];
+
+        ensureIcon(fundos, 'fundos');
+        ensureIcon(pl, 'pl');
+        ensureIcon(best, 'best');
+        ensureIcon(worst, 'worst');
+
+        setLabel(fundos, 'Fundos');
+        setLabel(pl, 'PL');
+        setLabel(best, 'Melhor 12M');
+        setLabel(worst, 'Pior 12M');
+
+        categorias?.setAttribute('aria-hidden','true');
+        pipeline?.setAttribute('aria-hidden','true');
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileTopKpiIconsV435();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const targets = [
+      document.querySelector('.site-header-clean'),
+      document.getElementById('sec-kpi-mobile')
+    ].filter(Boolean);
+    if(!targets.length) return;
+
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    targets.forEach(target => obs.observe(target, {childList:true, subtree:true, characterData:true}));
+    window.__ELTAUM_MOBILE_TOP_KPI_ICONS_OBSERVER_V435__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileTopKpiIconsV435, {once:true});
+  }else{
+    applyMobileTopKpiIconsV435();
+  }
+
+  window.addEventListener('load', applyMobileTopKpiIconsV435, {once:true});
+  [300, 900, 1800, 3600, 7000, 12000, 18000, 27000].forEach(ms => setTimeout(applyMobileTopKpiIconsV435, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_ICONS_V435__ = {
+    build: BUILD,
+    sync: applyMobileTopKpiIconsV435
+  };
+})();
+
+/* PATCH v436 — Mobile: header minimalista sem chip na data */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_MINIMAL_v436';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function applyMobileHeaderMinimalV436(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v436','mobile-header-minimal-v436');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const header = document.querySelector('.site-header-clean');
+      const brandText = header?.querySelector('.brand-text');
+      const title = brandText?.querySelector('h1');
+      const last = document.getElementById('lastUpdate');
+      if(brandText && last && last.parentElement !== brandText){
+        if(title?.nextSibling){
+          brandText.insertBefore(last, title.nextSibling);
+        }else{
+          brandText.appendChild(last);
+        }
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderMinimalV436();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true});
+    window.__ELTAUM_MOBILE_HEADER_MINIMAL_OBSERVER_V436__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderMinimalV436, {once:true});
+  }else{
+    applyMobileHeaderMinimalV436();
+  }
+
+  window.addEventListener('load', applyMobileHeaderMinimalV436, {once:true});
+  [300, 900, 1800, 3600, 7000, 12000, 18000, 27000].forEach(ms => setTimeout(applyMobileHeaderMinimalV436, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_MINIMAL_V436__ = {
+    build: BUILD,
+    sync: applyMobileHeaderMinimalV436
+  };
 })();
