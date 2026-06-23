@@ -21134,7 +21134,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
 /* PATCH v445 — Mobile: Indicadores por mês */
 (function(){
-  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_CLEAN_v447';
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_STICKY_v448';
   let range = 'year';
   let view = 'all';
 
@@ -21253,6 +21253,20 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     return idx.historico || idx.mensal || idx.meses || idx.fechamentos || card.historico || card.mensal || card.meses || [];
   }
 
+  function getConsolidatedMonthlyV448(dados){
+    return Array.isArray(dados?.indicadores_mensais) ? dados.indicadores_mensais : [];
+  }
+
+  function mapConsolidatedV448(series, field){
+    const map = new Map();
+    (Array.isArray(series) ? series : []).forEach(item => {
+      const key = normalizeMonthKeyV445(item);
+      const value = toNumV445(item?.[field]);
+      if(key && value !== null) map.set(key, value);
+    });
+    return map;
+  }
+
   function getMonthKeysV445(maps){
     const currentYear = (new Date()).getFullYear();
     if(range === 'year'){
@@ -21337,7 +21351,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const table = root?.querySelector('.monthly-indicators-table-v445');
     if(!root || !tbody) return;
 
-    document.documentElement.classList.add('mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
+    document.documentElement.classList.add('mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
     const meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
 
@@ -21349,10 +21363,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const dolarCard = dados?.cards?.dolar || {};
     const dolarIdx = dados?.indices_mercado?.dolar || {};
 
-    const cdiMap = mapSeriesV445(cdiCard.historico || []);
-    const ipcaMap = mapSeriesV445(ipcaCard.historico || dados?.ipca_historico || dados?.historico_ipca || []);
-    const ibovMap = mapSeriesV445(getIbovSeriesV445(dados));
-    const dolarMap = mapSeriesV445(getPtaxSeriesV445(dados));
+    const consolidated = getConsolidatedMonthlyV448(dados);
+    const cdiMap = consolidated.length ? mapConsolidatedV448(consolidated, 'cdi') : mapSeriesV445(cdiCard.historico || []);
+    const ipcaMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ipca') : mapSeriesV445(ipcaCard.historico || dados?.ipca_historico || dados?.historico_ipca || []);
+    const ibovMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ibov') : mapSeriesV445(getIbovSeriesV445(dados));
+    const dolarMap = consolidated.length ? mapConsolidatedV448(consolidated, 'dolar') : mapSeriesV445(getPtaxSeriesV445(dados));
     const keys = getMonthKeysV445([cdiMap, ipcaMap, ibovMap, dolarMap]);
     const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap};
     let activeView = indicatorMetaV446[view] ? view : 'all';
@@ -21452,6 +21467,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   };
 
   window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_CLEAN_V447__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_STICKY_V448__ = {
     build: BUILD,
     render: renderMonthlyIndicatorsV445
   };
