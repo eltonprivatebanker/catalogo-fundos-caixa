@@ -20227,3 +20227,396 @@ function openCdiAnalyticTableV274(){
     sync: syncCopomMovePersistentV431
   };
 })();
+
+/* PATCH v432 — Poupanca mobile: hierarquia de KPI e regra mais clara */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_HERO_v432';
+
+  function applySavingsMobileHeroV432(){
+    try{
+      const root = document.documentElement;
+      root.classList.add('mobile-v432','savings-mobile-hero-v432');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const label = document.getElementById('poupCurrentLabelV214');
+      if(label) label.textContent = 'Rendimento do mês';
+
+      const ruleTitle = document.getElementById('poupCurrentScenarioTitleV214');
+      if(ruleTitle) ruleTitle.textContent = 'Regra vigente';
+
+      const yearLabel = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.year dt');
+      if(yearLabel) yearLabel.textContent = 'Acumulado 2026';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra será definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+        source.setAttribute('aria-label', 'Abrir simulador de rendimento da poupança do Banco Central em uma nova guia');
+      }
+
+      const btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileHeroV432, {once:true});
+  }else{
+    applySavingsMobileHeroV432();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobileHeroV432, 40);
+      setTimeout(applySavingsMobileHeroV432, 220);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobileHeroV432, {once:true});
+  [400, 1200, 2600, 5200, 9000, 14000, 24500].forEach(ms => setTimeout(applySavingsMobileHeroV432, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_HERO_V432__ = {
+    build: BUILD,
+    sync: applySavingsMobileHeroV432
+  };
+})();
+
+/* PATCH v433 — Poupanca mobile: microajustes de texto e leitura */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_POLISH_v433';
+
+  function applySavingsMobilePolishV433(){
+    try{
+      document.documentElement.classList.add('mobile-v433','savings-mobile-polish-v433');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const kicker = document.querySelector('#sec-mercado .savings-reference-v167 .savings-title-v207 .market-reference-kicker-v167');
+      if(kicker) kicker.textContent = 'Rendimento';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobilePolishV433, {once:true});
+  }else{
+    applySavingsMobilePolishV433();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobilePolishV433, 60);
+      setTimeout(applySavingsMobilePolishV433, 260);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobilePolishV433, {once:true});
+  [600, 1600, 3200, 6200, 10200, 15000, 25200].forEach(ms => setTimeout(applySavingsMobilePolishV433, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_POLISH_V433__ = {
+    build: BUILD,
+    sync: applySavingsMobilePolishV433
+  };
+})();
+
+/* PATCH v434 — Poupanca mobile: estabiliza textos finais sem piscar */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_v434';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function applySavingsMobileTextStableV434(){
+    try{
+      document.documentElement.classList.add('mobile-v434','savings-mobile-text-stable-v434');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt && dt.textContent !== 'Regra atual') dt.textContent = 'Regra atual';
+        if(data && data.textContent !== 'Selic acima de 8,50%') data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        let html = '';
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          html = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else if(raw.includes('aguardando') || raw.includes('definida')){
+          html = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          html = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+        if(html && quick.innerHTML !== html) quick.innerHTML = html;
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source && !source.textContent.includes('Simular rendimento')){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applySavingsMobileTextStableV434();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const target = document.querySelector('#sec-mercado .savings-reference-v167');
+    if(!target) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(target, {childList:true, subtree:true, characterData:true});
+    window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_OBSERVER_V434__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileTextStableV434, {once:true});
+  }else{
+    applySavingsMobileTextStableV434();
+  }
+
+  window.addEventListener('load', applySavingsMobileTextStableV434, {once:true});
+  [800, 1800, 3600, 7000, 11200, 16000, 26000].forEach(ms => setTimeout(applySavingsMobileTextStableV434, ms));
+
+window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
+    build: BUILD,
+    sync: applySavingsMobileTextStableV434
+  };
+})();
+
+/* PATCH v435 — Mobile: topo compacto e KPIs com icones */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_ICONS_v435';
+  let observerStarted = false;
+  let scheduled = false;
+
+  const ICONS = {
+    fundos: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4-8 4-8-4 8-4Z"/><path d="m4 12 8 4 8-4"/><path d="m4 17 8 4 8-4"/></svg>',
+    pl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9h9Z"/><path d="M12 3a9 9 0 0 1 9 9h-9V3Z"/></svg>',
+    best: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17 9 11l4 4 8-8"/><path d="M14 7h7v7"/></svg>',
+    worst: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 7 6 6 4-4 8 8"/><path d="M14 17h7v-7"/></svg>'
+  };
+
+  function setLabel(cell, text){
+    const label = cell?.querySelector(':scope > span:not(.mobile-kpi-icon-v435)');
+    if(label && label.textContent.trim() !== text) label.textContent = text;
+  }
+
+  function ensureIcon(cell, type){
+    if(!cell) return;
+    cell.classList.add(`is-${type}-v435`);
+    let icon = cell.querySelector(':scope > .mobile-kpi-icon-v435');
+    if(!icon){
+      icon = document.createElement('span');
+      icon.className = 'mobile-kpi-icon-v435';
+      icon.setAttribute('aria-hidden','true');
+      cell.prepend(icon);
+    }
+    const html = ICONS[type] || '';
+    if(icon.innerHTML !== html) icon.innerHTML = html;
+  }
+
+  function applyMobileTopKpiIconsV435(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v435','mobile-top-kpi-icons-v435');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const header = document.querySelector('.site-header-clean');
+      const status = header?.querySelector('.header-data-status-v343');
+      const last = document.getElementById('lastUpdate');
+      if(status && last && last.parentElement !== status){
+        status.appendChild(last);
+      }
+
+      const grid = document.querySelector('#sec-kpi-mobile .mobile-kpi-compact-grid');
+      if(grid){
+        grid.setAttribute('data-mobile-kpi-icons-v435','1');
+        const cells = Array.from(grid.querySelectorAll(':scope > .mobile-kpi-cell'));
+        const fundos = cells[0];
+        const pl = cells[1];
+        const categorias = cells[2];
+        const pipeline = cells[3];
+        const best = cells[4];
+        const worst = cells[5];
+
+        ensureIcon(fundos, 'fundos');
+        ensureIcon(pl, 'pl');
+        ensureIcon(best, 'best');
+        ensureIcon(worst, 'worst');
+
+        setLabel(fundos, 'Fundos');
+        setLabel(pl, 'PL');
+        setLabel(best, 'Melhor 12M');
+        setLabel(worst, 'Pior 12M');
+
+        categorias?.setAttribute('aria-hidden','true');
+        pipeline?.setAttribute('aria-hidden','true');
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileTopKpiIconsV435();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const targets = [
+      document.querySelector('.site-header-clean'),
+      document.getElementById('sec-kpi-mobile')
+    ].filter(Boolean);
+    if(!targets.length) return;
+
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    targets.forEach(target => obs.observe(target, {childList:true, subtree:true, characterData:true}));
+    window.__ELTAUM_MOBILE_TOP_KPI_ICONS_OBSERVER_V435__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileTopKpiIconsV435, {once:true});
+  }else{
+    applyMobileTopKpiIconsV435();
+  }
+
+  window.addEventListener('load', applyMobileTopKpiIconsV435, {once:true});
+  [300, 900, 1800, 3600, 7000, 12000, 18000, 27000].forEach(ms => setTimeout(applyMobileTopKpiIconsV435, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_ICONS_V435__ = {
+    build: BUILD,
+    sync: applyMobileTopKpiIconsV435
+  };
+})();
+
+/* PATCH v436 — Mobile: header minimalista sem chip na data */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_MINIMAL_v436';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function applyMobileHeaderMinimalV436(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v436','mobile-header-minimal-v436');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const header = document.querySelector('.site-header-clean');
+      const brandText = header?.querySelector('.brand-text');
+      const title = brandText?.querySelector('h1');
+      const last = document.getElementById('lastUpdate');
+      if(brandText && last && last.parentElement !== brandText){
+        if(title?.nextSibling){
+          brandText.insertBefore(last, title.nextSibling);
+        }else{
+          brandText.appendChild(last);
+        }
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderMinimalV436();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true});
+    window.__ELTAUM_MOBILE_HEADER_MINIMAL_OBSERVER_V436__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderMinimalV436, {once:true});
+  }else{
+    applyMobileHeaderMinimalV436();
+  }
+
+  window.addEventListener('load', applyMobileHeaderMinimalV436, {once:true});
+  [300, 900, 1800, 3600, 7000, 12000, 18000, 27000].forEach(ms => setTimeout(applyMobileHeaderMinimalV436, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_MINIMAL_V436__ = {
+    build: BUILD,
+    sync: applyMobileHeaderMinimalV436
+  };
+})();
