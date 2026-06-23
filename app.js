@@ -20792,3 +20792,110 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     sync: applyMobileHeaderDateInTitleV439
   };
 })();
+
+/* PATCH v440 — Mobile: filtros de fundos compactos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_v440';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function totalFundsText(){
+    const candidates = [
+      document.getElementById('filterResultSummary')?.textContent,
+      document.getElementById('mobileCategorySelectResultV74')?.textContent,
+      document.getElementById('desktopFilterResultSummary')?.textContent,
+      document.getElementById('resultInfo')?.textContent
+    ].filter(Boolean);
+
+    for(const raw of candidates){
+      const match = String(raw).match(/(\d[\d.]*)\s+fundos?/i);
+      if(match) return `${match[1]} fundos`;
+    }
+
+    return '';
+  }
+
+  function ensureFundsTitleCount(){
+    const section = document.getElementById('sec-fundos');
+    const title = section?.querySelector('.section-title h2');
+    if(!title) return;
+
+    let count = title.querySelector('.funds-title-count-v440');
+    if(!count){
+      count = document.createElement('span');
+      count.className = 'funds-title-count-v440';
+      count.setAttribute('aria-live','polite');
+      title.appendChild(count);
+    }
+
+    const text = totalFundsText();
+    if(text && count.textContent !== text) count.textContent = text;
+  }
+
+  function moveRealNoDataToggle(){
+    const shell = document.getElementById('mobileCategorySelectShellV74');
+    const toggle = document.querySelector('label[for="toggleSemDados"]');
+    if(!shell || !toggle) return;
+
+    shell.classList.add('has-real-toggle-v440');
+    toggle.classList.add('mobile-moved-toggle-v440');
+    if(toggle.parentElement !== shell){
+      const head = shell.querySelector('.mobile-category-select-head-v74');
+      shell.insertBefore(toggle, head || shell.firstChild);
+    }
+  }
+
+  function applyMobileFundsFiltersCompactV440(){
+    try{
+      document.documentElement.classList.add('mobile-v440','mobile-funds-filters-compact-v440');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const pfText = document.querySelector('#mobileExtraControlsV75 .mobile-pf-toggle-text-v75 strong');
+      if(pfText && pfText.textContent.trim() !== 'Pessoa Física') pfText.textContent = 'Pessoa Física';
+
+      moveRealNoDataToggle();
+      ensureFundsTitleCount();
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileFundsFiltersCompactV440();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const targets = [
+      document.getElementById('sec-fundos'),
+      document.getElementById('filterResultSummary'),
+      document.getElementById('mobileCategorySelectResultV74'),
+      document.getElementById('resultInfo')
+    ].filter(Boolean);
+    if(!targets.length) return;
+
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    targets.forEach(target => obs.observe(target, {childList:true, subtree:true, characterData:true}));
+    window.__ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_OBSERVER_V440__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundsFiltersCompactV440, {once:true});
+  }else{
+    applyMobileFundsFiltersCompactV440();
+  }
+
+  window.addEventListener('load', applyMobileFundsFiltersCompactV440, {once:true});
+  [250, 800, 1600, 3200, 6400, 12000].forEach(ms => setTimeout(applyMobileFundsFiltersCompactV440, ms));
+
+  window.__ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_V440__ = {
+    build: BUILD,
+    sync: applyMobileFundsFiltersCompactV440
+  };
+})();

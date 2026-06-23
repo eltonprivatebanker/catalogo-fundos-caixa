@@ -60015,3 +60015,411 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     font-size:.50rem!important;
   }
 }
+
+/* PATCH v440 — Mobile: Fundos disponiveis com filtros compactos */
+@media (max-width: 768px){
+  html.mobile-funds-filters-compact-v440 body #sec-fundos{
+    margin-top:18px!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos > .section-title{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos > .section-title .section-badge{
+    display:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos h2.section-title-v302{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr) auto!important;
+    align-items:center!important;
+    width:100%!important;
+    gap:9px!important;
+    margin:0!important;
+    min-width:0!important;
+    color:#f8fafc!important;
+    font-size:1.18rem!important;
+    line-height:1!important;
+    letter-spacing:-.035em!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos h2.section-title-v302 .section-title-icon-v302{
+    width:28px!important;
+    height:28px!important;
+    min-width:28px!important;
+    border-radius:9px!important;
+    font-size:.92rem!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos h2.section-title-v302 .section-title-text-v302{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .funds-title-count-v440{
+    justify-self:end!important;
+    color:#e8bb6a!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.68rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:-.03em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .fund-filter-shell,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .fund-filter-shell-v217{
+    margin:0!important;
+    padding:10px!important;
+    border-color:rgba(200,151,58,.18)!important;
+    border-radius:16px!important;
+    background:linear-gradient(145deg,rgba(15,19,34,.80),rgba(8,12,24,.82))!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .controls-bar,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .fund-controls-v2,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .fund-primary-toolbar-v217{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .fund-search-main{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr)!important;
+    align-items:center!important;
+    min-height:40px!important;
+    margin:0 0 8px!important;
+    padding:0 12px!important;
+    border:1px solid rgba(200,151,58,.20)!important;
+    border-radius:12px!important;
+    background:rgba(7,10,20,.68)!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .fund-search-main svg{
+    width:15px!important;
+    height:15px!important;
+    color:#b8c3df!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #searchInput{
+    min-height:38px!important;
+    height:38px!important;
+    padding:0 0 0 9px!important;
+    border:0!important;
+    background:transparent!important;
+    color:#f8fafc!important;
+    font-size:.78rem!important;
+    line-height:1!important;
+    font-weight:650!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #searchInput::placeholder{
+    color:#8f9ab6!important;
+    opacity:1!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .desktop-filter-result-summary-v221,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileFilterBar,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .catalog-shortcuts,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .fund-secondary-controls-v217{
+    display:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    grid-template-areas:
+      "toggle toggle"
+      "head head"
+      "cat risk"
+      "pf sort"!important;
+    gap:8px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74::before{
+    content:'Ocultar sem dados';
+    grid-area:toggle!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    min-height:38px!important;
+    padding:0 10px!important;
+    border:1px solid rgba(255,255,255,.075)!important;
+    border-radius:12px!important;
+    background:rgba(15,19,34,.72)!important;
+    color:#dbe4f6!important;
+    font-size:.74rem!important;
+    font-weight:850!important;
+    letter-spacing:-.015em!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74::after{
+    content:''!important;
+    grid-area:toggle!important;
+    justify-self:end!important;
+    align-self:center!important;
+    width:38px!important;
+    height:21px!important;
+    margin-right:10px!important;
+    border-radius:999px!important;
+    background:linear-gradient(135deg,#c8973a,#e8bb6a)!important;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74.has-real-toggle-v440::before,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74.has-real-toggle-v440::after{
+    display:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-moved-toggle-v440{
+    grid-area:toggle!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    min-height:38px!important;
+    margin:0!important;
+    padding:0 10px!important;
+    border:1px solid rgba(255,255,255,.075)!important;
+    border-radius:12px!important;
+    background:rgba(15,19,34,.72)!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-moved-toggle-v440 .toggle-label{
+    color:#dbe4f6!important;
+    font-size:.74rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:-.015em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-moved-toggle-v440 .toggle{
+    order:2!important;
+    width:38px!important;
+    height:21px!important;
+    min-width:38px!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-moved-toggle-v440 .toggle-slider{
+    width:38px!important;
+    height:21px!important;
+    border-radius:999px!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-category-select-head-v74{
+    grid-area:head!important;
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:space-between!important;
+    margin:4px 0 0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-category-select-head-v74 span{
+    color:#e8bb6a!important;
+    font-size:.74rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.02em!important;
+    text-transform:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-category-select-head-v74 span::before{
+    content:'Filtros';
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-category-select-head-v74 span{
+    font-size:0!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74 .mobile-category-select-head-v74 span::before{
+    font-size:.78rem!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectStatusV74{
+    display:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-wrap-v74{
+    grid-area:cat!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileExtraControlsV75{
+    display:contents!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-risk-select-v198{
+    grid-area:risk!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-v75{
+    grid-area:pf!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-sort-shell-v75{
+    grid-area:sort!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-sort-shell-v75,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-v75{
+    position:relative!important;
+    display:block!important;
+    min-width:0!important;
+    min-height:48px!important;
+    margin:0!important;
+    padding:8px 10px!important;
+    border:1px solid rgba(255,255,255,.075)!important;
+    border-radius:12px!important;
+    background:rgba(8,12,24,.62)!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-wrap-v74::before,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-risk-select-v198 > span:first-child,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-sort-shell-v75 > span:first-child{
+    display:block!important;
+    margin:0 0 5px!important;
+    color:#9ca7c2!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.10em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-wrap-v74::before{
+    content:'Categoria';
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-wrap-v74 select,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-risk-select-v198 select,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-sort-shell-v75 select{
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    padding:0 18px 0 0!important;
+    border:0!important;
+    background:transparent!important;
+    color:#f8fafc!important;
+    font-size:.75rem!important;
+    line-height:1.1!important;
+    font-weight:850!important;
+    letter-spacing:-.02em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-arrow-v74,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-risk-arrow-v198,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-sort-arrow-v75{
+    position:absolute!important;
+    right:10px!important;
+    bottom:10px!important;
+    color:#e8bb6a!important;
+    font-size:.72rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-v75{
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    min-height:48px!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-v75 input{
+    position:absolute!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-mark-v75{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:22px!important;
+    height:22px!important;
+    min-width:22px!important;
+    border:1px solid rgba(200,151,58,.38)!important;
+    border-radius:7px!important;
+    color:#e8bb6a!important;
+    background:rgba(200,151,58,.10)!important;
+    font-size:.70rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-text-v75{
+    min-width:0!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-text-v75 strong{
+    display:block!important;
+    color:#f8fafc!important;
+    font-size:.76rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:-.02em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-text-v75 small,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-foot-v74{
+    display:none!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .active-filter-strip:not(.active),
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .active-filter-strip:empty{
+    display:none!important;
+  }
+}
+
+@media (max-width: 380px){
+  html.mobile-funds-filters-compact-v440 body #sec-fundos h2.section-title-v302{
+    font-size:1.06rem!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .funds-title-count-v440{
+    font-size:.61rem!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos #mobileCategorySelectShellV74{
+    gap:7px!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-sort-shell-v75,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-v75{
+    padding:8px!important;
+  }
+
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-category-select-wrap-v74 select,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-risk-select-v198 select,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-sort-shell-v75 select,
+  html.mobile-funds-filters-compact-v440 body #sec-fundos .mobile-pf-toggle-text-v75 strong{
+    font-size:.68rem!important;
+  }
+}
