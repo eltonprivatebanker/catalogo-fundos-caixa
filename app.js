@@ -20960,3 +20960,117 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     sync: applyMobileFundsFiltersFixV441
   };
 })();
+
+/* PATCH v442 — Mobile: estabiliza o toggle "Ocultar fundos sem dados" */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_NO_DATA_TOGGLE_STABLE_v442';
+  let scheduled = false;
+
+  function ensureStableNoDataToggleV442(){
+    try{
+      document.documentElement.classList.add('mobile-v442','mobile-no-data-toggle-stable-v442');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const shell = document.getElementById('mobileCategorySelectShellV74');
+      const input = document.getElementById('toggleSemDados');
+      if(!shell || !input) return;
+
+      if(input.type !== 'checkbox') input.type = 'checkbox';
+
+      let row = document.getElementById('mobileNoDataRowV442');
+      if(!row){
+        row = document.createElement('label');
+        row.id = 'mobileNoDataRowV442';
+        row.className = 'toggle-wrap compact-toggle-wrap toggle-sem-dados-clean-v127 mobile-no-data-row-v442';
+        row.htmlFor = 'toggleSemDados';
+      }
+
+      row.dataset.v127Rebuilt = '1';
+      row.dataset.v442Stable = '1';
+      row.setAttribute('title','Ocultar fundos sem dados');
+
+      let text = row.querySelector('.mobile-no-data-text-v442');
+      if(!text){
+        text = document.createElement('span');
+        text.className = 'mobile-no-data-text-v442';
+        text.textContent = 'Ocultar fundos sem dados';
+      }
+
+      let switchWrap = row.querySelector('.mobile-no-data-switch-v442');
+      if(!switchWrap){
+        switchWrap = document.createElement('span');
+        switchWrap.className = 'mobile-no-data-switch-v442';
+      }
+
+      let slider = input.parentElement?.querySelector('.toggle-slider, .toggle-sem-dados-slider-v127') ||
+        row.querySelector('.toggle-slider, .toggle-sem-dados-slider-v127');
+      if(!slider){
+        slider = document.createElement('span');
+        slider.className = 'toggle-slider toggle-sem-dados-slider-v127';
+        slider.setAttribute('aria-hidden','true');
+      }else{
+        slider.classList.add('toggle-slider','toggle-sem-dados-slider-v127');
+        slider.setAttribute('aria-hidden','true');
+      }
+
+      input.classList.add('toggle-sem-dados-input-v127');
+      input.setAttribute('aria-label','Ocultar fundos sem dados');
+
+      if(text.parentElement !== row) row.appendChild(text);
+      if(switchWrap.parentElement !== row) row.appendChild(switchWrap);
+      if(input.parentElement !== switchWrap) switchWrap.appendChild(input);
+      if(slider.parentElement !== switchWrap) switchWrap.appendChild(slider);
+
+      row.classList.toggle('is-on', !!input.checked);
+
+      const head = shell.querySelector('.mobile-category-select-head-v74');
+      if(row.parentElement !== shell){
+        shell.insertBefore(row, head || shell.firstChild);
+      }else if(head && row.nextElementSibling !== head){
+        shell.insertBefore(row, head);
+      }
+
+      shell.classList.add('has-stable-no-data-toggle-v442');
+
+      document.querySelectorAll('.mobile-moved-toggle-v440, .toggle-sem-dados-clean-v127').forEach(el => {
+        if(el !== row && el.contains(input) === false && el.id !== 'mobileNoDataRowV442'){
+          el.remove();
+        }
+      });
+
+      if(input.dataset.v442Bound !== '1'){
+        input.dataset.v442Bound = '1';
+        input.addEventListener('change', () => {
+          row.classList.toggle('is-on', !!input.checked);
+        });
+      }
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      ensureStableNoDataToggleV442();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', ensureStableNoDataToggleV442, {once:true});
+  }else{
+    ensureStableNoDataToggleV442();
+  }
+
+  document.addEventListener('change', event => {
+    if(event.target?.id === 'toggleSemDados') schedule();
+  }, true);
+  window.addEventListener('load', ensureStableNoDataToggleV442, {once:true});
+  [100, 260, 600, 1200, 2400, 4200, 7000, 12000, 20000].forEach(ms => setTimeout(ensureStableNoDataToggleV442, ms));
+
+  window.__ELTAUM_MOBILE_NO_DATA_TOGGLE_STABLE_V442__ = {
+    build: BUILD,
+    sync: ensureStableNoDataToggleV442
+  };
+})();
