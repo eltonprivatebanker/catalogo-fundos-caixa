@@ -61109,3 +61109,218 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     font-size:.76rem!important;
   }
 }
+
+/* PATCH v445 — Mobile: Indicadores por mês */
+.monthly-indicators-mobile-v445{
+  display:none;
+}
+
+@media(max-width:768px){
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-mobile-v445{
+    display:block!important;
+    margin:12px 0 14px!important;
+    padding:12px!important;
+    border:1px solid rgba(232,187,106,.20)!important;
+    border-radius:16px!important;
+    background:linear-gradient(180deg,rgba(17,21,38,.92),rgba(7,10,19,.98))!important;
+    box-shadow:0 14px 32px rgba(0,0,0,.28)!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-head-v445{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:start!important;
+    gap:10px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-kicker-v445{
+    display:block!important;
+    margin:0 0 3px!important;
+    color:#e8bb6a!important;
+    font-size:.53rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.15em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-head-v445 h3{
+    margin:0!important;
+    color:#f8fafc!important;
+    font-size:1.02rem!important;
+    line-height:1.06!important;
+    font-weight:950!important;
+    letter-spacing:-.035em!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-head-v445 p{
+    margin:4px 0 0!important;
+    color:#aeb9d4!important;
+    font-size:.66rem!important;
+    line-height:1.22!important;
+    font-weight:650!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-tabs-v445{
+    display:inline-grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:0!important;
+    min-width:92px!important;
+    padding:2px!important;
+    border:1px solid rgba(255,255,255,.09)!important;
+    border-radius:999px!important;
+    background:rgba(8,12,24,.70)!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-tabs-v445 button{
+    min-height:28px!important;
+    padding:0 10px!important;
+    border:0!important;
+    border-radius:999px!important;
+    background:transparent!important;
+    color:#aeb9d4!important;
+    font-size:.62rem!important;
+    font-weight:900!important;
+    cursor:pointer!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-tabs-v445 button.active{
+    color:#10131f!important;
+    background:#e8bb6a!important;
+    box-shadow:0 8px 18px rgba(232,187,106,.20)!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-summary-v445{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-summary-v445 article{
+    min-height:48px!important;
+    padding:8px 9px!important;
+    border:1px solid rgba(255,255,255,.075)!important;
+    border-radius:12px!important;
+    background:rgba(8,12,24,.58)!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-summary-v445 span{
+    display:block!important;
+    margin:0 0 4px!important;
+    color:#9ca7c2!important;
+    font-size:.52rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.10em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-summary-v445 strong{
+    display:block!important;
+    color:#35e59b!important;
+    font-size:.92rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.03em!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-shell-v445{
+    max-height:268px!important;
+    overflow:hidden!important;
+    border:1px solid rgba(255,255,255,.08)!important;
+    border-radius:13px!important;
+    background:rgba(5,8,17,.56)!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-mobile-v445.is-expanded .monthly-indicators-table-shell-v445{
+    max-height:none!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445{
+    width:100%!important;
+    border-collapse:collapse!important;
+    table-layout:fixed!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 th,
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 td{
+    padding:9px 6px!important;
+    border-bottom:1px solid rgba(255,255,255,.065)!important;
+    color:#eaf0ff!important;
+    font-size:.66rem!important;
+    line-height:1.05!important;
+    font-weight:850!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 th{
+    position:sticky!important;
+    top:0!important;
+    z-index:1!important;
+    color:#9fb3d9!important;
+    background:#0a1020!important;
+    font-size:.56rem!important;
+    letter-spacing:.09em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 th:first-child,
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 td:first-child{
+    text-align:left!important;
+    width:17%!important;
+    color:#c8d7ff!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 .pos,
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-summary-v445 .pos{
+    color:#35e59b!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 .neg,
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-summary-v445 .neg{
+    color:#ff637d!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 .muted,
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-summary-v445 .muted{
+    color:#7f8aa6!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-more-v445{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-height:34px!important;
+    margin:9px 0 0!important;
+    border:1px solid rgba(232,187,106,.24)!important;
+    border-radius:11px!important;
+    background:rgba(232,187,106,.08)!important;
+    color:#f0c979!important;
+    font-size:.66rem!important;
+    font-weight:900!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-mobile-v445{
+    padding:10px!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-head-v445{
+    grid-template-columns:1fr!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-tabs-v445{
+    width:100%!important;
+  }
+
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 th,
+  html.mobile-monthly-indicators-v445 body #sec-mercado .monthly-indicators-table-v445 td{
+    padding:8px 4px!important;
+    font-size:.59rem!important;
+  }
+}

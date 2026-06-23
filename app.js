@@ -21126,8 +21126,252 @@ window.__ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_V443__ = {
   window.addEventListener('load', applyMobileFundCardHierarchyV444, {once:true});
   [250, 800, 1800, 3600, 7000].forEach(ms => setTimeout(applyMobileFundCardHierarchyV444, ms));
 
-  window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
+window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     build: BUILD,
     sync: applyMobileFundCardHierarchyV444
+  };
+})();
+
+/* PATCH v445 — Mobile: Indicadores por mês */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_v445';
+  let range = 'year';
+
+  function toNumV445(value){
+    if(value === null || value === undefined || value === '') return null;
+    if(typeof value === 'string'){
+      const cleaned = value.replace('%','').replace(/\./g,'').replace(',','.').trim();
+      const n = Number(cleaned);
+      return Number.isFinite(n) ? n : null;
+    }
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function pctV445(value){
+    const n = toNumV445(value);
+    if(n === null) return '—';
+    return `${n > 0 ? '+' : ''}${n.toFixed(2).replace('.', ',')}%`;
+  }
+
+  function clsV445(value){
+    const n = toNumV445(value);
+    if(n === null || Math.abs(n) < 0.005) return 'muted';
+    return n > 0 ? 'pos' : 'neg';
+  }
+
+  function monthNameV445(index){
+    const meses = Array.isArray(window.MESES_PT) ? window.MESES_PT : null;
+    const fallback = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return (meses || fallback)[index] || '';
+  }
+
+  function keyFromPartsV445(year, monthIndex){
+    return `${year}-${String(monthIndex + 1).padStart(2,'0')}`;
+  }
+
+  function normalizeMonthKeyV445(item){
+    if(!item || typeof item !== 'object') return '';
+    const raw = String(
+      item.key || item.mes_key || item.mesKey || item.periodo || item.mes || item.label ||
+      item.data_ref || item.data || item.date || item.dataHoraCotacao || ''
+    ).trim().toLowerCase();
+    if(!raw) return '';
+
+    let m = raw.match(/(\d{4})[-/](\d{1,2})/);
+    if(m) return `${m[1]}-${String(Number(m[2])).padStart(2,'0')}`;
+
+    m = raw.match(/(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+    if(m) return `${m[3]}-${String(Number(m[2])).padStart(2,'0')}`;
+
+    const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    m = raw.match(/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)[a-zç]*[\/\s.-]*(\d{2,4})/i);
+    if(m){
+      const year = Number(m[2]) < 100 ? 2000 + Number(m[2]) : Number(m[2]);
+      return `${year}-${String(nomes.indexOf(m[1].slice(0,3).toLowerCase()) + 1).padStart(2,'0')}`;
+    }
+    return '';
+  }
+
+  function valueFromItemV445(item){
+    if(!item || typeof item !== 'object') return null;
+    const keys = [
+      'valor','value','mensal','variacao','variacao_mensal','variacao_mes',
+      'var_pct','retorno','retorno_mes','pct','percentual'
+    ];
+    for(const key of keys){
+      const n = toNumV445(item[key]);
+      if(n !== null) return n;
+    }
+    return null;
+  }
+
+  function mapSeriesV445(series){
+    const map = new Map();
+    (Array.isArray(series) ? series : []).forEach(item => {
+      const key = normalizeMonthKeyV445(item);
+      const value = valueFromItemV445(item);
+      if(key && value !== null) map.set(key, value);
+    });
+    return map;
+  }
+
+  function getMercadoV445(){
+    try{
+      return (typeof _dadosMercado !== 'undefined' && _dadosMercado) || window.__mercadoAtualV230 || {};
+    }catch(_error){
+      return window.__mercadoAtualV230 || {};
+    }
+  }
+
+  function getPtaxSeriesV445(dados){
+    try{
+      if(typeof _ptaxHistorico !== 'undefined' && Array.isArray(_ptaxHistorico) && _ptaxHistorico.length){
+        return _ptaxHistorico.map(item => ({
+          key: normalizeMonthKeyV445(item),
+          valor: item._var_pct ?? item.var_pct ?? item.variacao ?? item.variacao_mensal
+        }));
+      }
+    }catch(_error){}
+    return Array.isArray(dados?.ptax_historico) ? dados.ptax_historico : [];
+  }
+
+  function getIbovSeriesV445(dados){
+    const idx = dados?.indices_mercado?.ibovespa || {};
+    const card = dados?.cards?.ibovespa || {};
+    return idx.historico || idx.mensal || idx.meses || idx.fechamentos || card.historico || card.mensal || card.meses || [];
+  }
+
+  function getMonthKeysV445(maps){
+    const currentYear = (new Date()).getFullYear();
+    if(range === 'year'){
+      return Array.from({length:12}, (_,index) => keyFromPartsV445(currentYear, index));
+    }
+
+    const union = new Set();
+    maps.forEach(map => map.forEach((_value, key) => union.add(key)));
+    const sorted = [...union].sort();
+    if(sorted.length >= 12) return sorted.slice(-12);
+
+    const base = new Date();
+    return Array.from({length:12}, (_,i) => {
+      const d = new Date(base.getFullYear(), base.getMonth() - (11 - i), 1);
+      return keyFromPartsV445(d.getFullYear(), d.getMonth());
+    });
+  }
+
+  function compoundV445(values){
+    const nums = values.map(toNumV445).filter(v => v !== null);
+    if(!nums.length) return null;
+    return (nums.reduce((acc, value) => acc * (1 + value / 100), 1) - 1) * 100;
+  }
+
+  function summaryValueV445(dados, key, map, directCandidates){
+    for(const candidate of directCandidates){
+      const n = toNumV445(candidate);
+      if(n !== null) return n;
+    }
+    const year = String((new Date()).getFullYear());
+    return compoundV445([...map.entries()].filter(([monthKey]) => monthKey.startsWith(year + '-')).map(([,value]) => value));
+  }
+
+  function setSummaryV445(id, value){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.textContent = pctV445(value);
+    el.className = clsV445(value);
+  }
+
+  function renderMonthlyIndicatorsV445(){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    const tbody = document.getElementById('monthlyIndicatorsRowsV445');
+    if(!root || !tbody) return;
+
+    document.documentElement.classList.add('mobile-v445','mobile-monthly-indicators-v445');
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    const dados = getMercadoV445();
+    const cdiCard = dados?.cards?.cdi || {};
+    const ipcaCard = dados?.cards?.ipca || {};
+    const ibovCard = dados?.cards?.ibovespa || {};
+    const ibovIdx = dados?.indices_mercado?.ibovespa || {};
+    const dolarCard = dados?.cards?.dolar || {};
+    const dolarIdx = dados?.indices_mercado?.dolar || {};
+
+    const cdiMap = mapSeriesV445(cdiCard.historico || []);
+    const ipcaMap = mapSeriesV445(ipcaCard.historico || dados?.ipca_historico || dados?.historico_ipca || []);
+    const ibovMap = mapSeriesV445(getIbovSeriesV445(dados));
+    const dolarMap = mapSeriesV445(getPtaxSeriesV445(dados));
+    const keys = getMonthKeysV445([cdiMap, ipcaMap, ibovMap, dolarMap]);
+
+    setSummaryV445('monthlySummaryCdiV445', summaryValueV445(dados, 'cdi', cdiMap, [cdiCard.acum_ano, cdiCard.ano]));
+    setSummaryV445('monthlySummaryIpcaV445', summaryValueV445(dados, 'ipca', ipcaMap, [ipcaCard.acum_ano, ipcaCard.ano]));
+    setSummaryV445('monthlySummaryIbovV445', summaryValueV445(dados, 'ibov', ibovMap, [ibovIdx.acum_ano, ibovCard.acum_ano]));
+    setSummaryV445('monthlySummaryDolarV445', summaryValueV445(dados, 'dolar', dolarMap, [dolarIdx.acum_ano, dolarCard.acum_ano]));
+
+    tbody.innerHTML = keys.map(key => {
+      const monthIndex = Math.max(0, Math.min(11, Number(key.slice(5,7)) - 1));
+      const label = monthNameV445(monthIndex);
+      const values = [
+        cdiMap.get(key),
+        ipcaMap.get(key),
+        ibovMap.get(key),
+        dolarMap.get(key)
+      ];
+      return `<tr>
+        <td>${label}</td>
+        ${values.map(value => `<td class="${clsV445(value)}">${pctV445(value)}</td>`).join('')}
+      </tr>`;
+    }).join('');
+
+    const active = root.querySelector(`[data-monthly-indicators-range-v445="${range}"]`);
+    root.querySelectorAll('[data-monthly-indicators-range-v445]').forEach(btn => {
+      const isActive = btn === active;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
+  function bindMonthlyIndicatorsV445(){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    if(!root || root.dataset.v445Bound) return;
+    root.dataset.v445Bound = '1';
+
+    root.addEventListener('click', event => {
+      const rangeBtn = event.target.closest('[data-monthly-indicators-range-v445]');
+      if(rangeBtn){
+        range = rangeBtn.dataset.monthlyIndicatorsRangeV445 || 'year';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const more = event.target.closest('#monthlyIndicatorsMoreV445');
+      if(more){
+        const expanded = root.classList.toggle('is-expanded');
+        more.textContent = expanded ? 'Mostrar menos' : 'Ver todos os meses';
+        more.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      }
+    });
+  }
+
+  function initMonthlyIndicatorsV445(){
+    bindMonthlyIndicatorsV445();
+    renderMonthlyIndicatorsV445();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initMonthlyIndicatorsV445, {once:true});
+  }else{
+    initMonthlyIndicatorsV445();
+  }
+
+  window.addEventListener('load', initMonthlyIndicatorsV445, {once:true});
+  document.addEventListener('elton:market-data-refresh', initMonthlyIndicatorsV445);
+  [400, 1200, 2500, 5000, 9000].forEach(ms => setTimeout(initMonthlyIndicatorsV445, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
   };
 })();
