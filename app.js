@@ -21528,3 +21528,34 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     render: renderMonthlyIndicatorsV445
   };
 })();
+
+/* PATCH v452 — Mobile: hierarquia refinada dos cards de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_REFINEMENT_v452';
+
+  function applyMobileFundCardRefinementV452(){
+    try{
+      document.documentElement.classList.add('mobile-v452','mobile-fund-card-refinement-v452');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-card-refinement-v452');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundCardRefinementV452, {once:true});
+  }else{
+    applyMobileFundCardRefinementV452();
+  }
+
+  window.addEventListener('load', applyMobileFundCardRefinementV452, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundCardRefinementV452);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundCardRefinementV452, ms));
+
+  window.__ELTAUM_MOBILE_FUND_CARD_REFINEMENT_V452__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+})();

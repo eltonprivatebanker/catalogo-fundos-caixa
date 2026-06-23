@@ -61840,3 +61840,152 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     max-width:38px!important;
   }
 }
+
+/* PATCH v452 — Mobile: card de fundo com hierarquia mais clara */
+@media(max-width:820px){
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-mobile-v26,
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-hierarchy-v444{
+    padding:11px!important;
+    border-color:rgba(255,255,255,.10)!important;
+    background:linear-gradient(180deg,rgba(15,19,34,.92),rgba(7,10,19,.98))!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-main{
+    padding:0 0 8px!important;
+    border-bottom:1px solid rgba(255,255,255,.055)!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-tags{
+    gap:4px!important;
+    margin-bottom:7px!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-tags .cat-badge,
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-tags .perfil-chip,
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-tags .fund-code-chip{
+    padding:2px 6px!important;
+    font-size:.43rem!important;
+    letter-spacing:.035em!important;
+    opacity:.92!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-name{
+    font-size:.80rem!important;
+    line-height:1.15!important;
+    letter-spacing:-.025em!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-performance-v68{
+    margin-top:8px!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-performance-title-v68{
+    margin:0 0 7px!important;
+    font-size:.50rem!important;
+    letter-spacing:.12em!important;
+    color:#e8bb6a!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-short-v68{
+    gap:6px!important;
+    margin-bottom:7px!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-chip-v68{
+    min-height:40px!important;
+    padding:7px 8px!important;
+    border-radius:11px!important;
+    background:rgba(8,12,24,.46)!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-chip-v68 small,
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68 small{
+    margin-bottom:3px!important;
+    font-size:.46rem!important;
+    letter-spacing:.09em!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-chip-v68 strong{
+    font-size:.72rem!important;
+    letter-spacing:-.015em!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-highlight-v68{
+    grid-template-columns:minmax(0,1.18fr) minmax(0,.82fr)!important;
+    gap:7px!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68{
+    min-height:52px!important;
+    padding:9px 10px!important;
+    border-radius:12px!important;
+    background:rgba(232,187,106,.075)!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68.cdi{
+    background:rgba(91,156,246,.075)!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68 strong{
+    font-size:.96rem!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68.cdi strong{
+    font-size:.72rem!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-actions-v26{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:7px!important;
+    margin-top:9px!important;
+    padding-top:9px!important;
+    border-top:1px solid rgba(255,255,255,.055)!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-actions-v26 .fund-card-boletim-quick-btn,
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-actions-v26 .fund-card-page-btn{
+    min-height:31px!important;
+    height:31px!important;
+    border-radius:10px!important;
+    font-size:.56rem!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-actions-v26 .fund-card-detail-btn{
+    grid-column:1/-1!important;
+    width:max-content!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:0!important;
+    justify-self:center!important;
+    margin-top:1px!important;
+    padding:4px 10px!important;
+    border:0!important;
+    border-radius:999px!important;
+    background:transparent!important;
+    color:#9fb7e8!important;
+    font-size:.54rem!important;
+    line-height:1.1!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-mobile.open .fund-card-detail-btn{
+    color:#e8bb6a!important;
+    background:rgba(232,187,106,.08)!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-list-name{
+    font-size:.75rem!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-chip-v68 strong{
+    font-size:.66rem!important;
+  }
+
+  html.mobile-fund-card-refinement-v452 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68 strong{
+    font-size:.86rem!important;
+  }
+}
