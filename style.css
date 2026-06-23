@@ -59883,3 +59883,77 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     font-size:.60rem!important;
   }
 }
+
+/* PATCH v438 — Mobile: respiro leve e data na mesma linha do titulo */
+@media (max-width: 768px){
+  html.mobile-header-inline-date-v438 body .page,
+  html.mobile-header-inline-date-v438 body #topo.page{
+    padding-top:8px!important;
+  }
+
+  html.mobile-header-inline-date-v438 body header.site-header-clean,
+  html.mobile-header-inline-date-v438 body .site-header-clean{
+    min-height:60px!important;
+    margin-top:0!important;
+    padding:10px 12px!important;
+  }
+
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text{
+    display:flex!important;
+    align-items:baseline!important;
+    gap:8px!important;
+    min-width:0!important;
+  }
+
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text h1{
+    flex:1 1 auto!important;
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text #lastUpdate,
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text #lastUpdate.live-badge,
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text #lastUpdate.header-update-v374{
+    flex:0 0 auto!important;
+    display:inline-flex!important;
+    align-items:baseline!important;
+    width:auto!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text #lastUpdate .live-update-time,
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text #lastUpdate time{
+    color:#aeb9d2!important;
+    font-size:.57rem!important;
+    line-height:1!important;
+    font-weight:800!important;
+    letter-spacing:.015em!important;
+  }
+}
+
+@media (max-width: 380px){
+  html.mobile-header-inline-date-v438 body .page,
+  html.mobile-header-inline-date-v438 body #topo.page{
+    padding-top:6px!important;
+  }
+
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text{
+    gap:6px!important;
+  }
+
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text h1{
+    font-size:.92rem!important;
+  }
+
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text #lastUpdate .live-update-time,
+  html.mobile-header-inline-date-v438 body .site-header-clean .brand-text #lastUpdate time{
+    font-size:.53rem!important;
+  }
+}
