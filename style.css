@@ -61794,3 +61794,49 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     max-width:44px!important;
   }
 }
+
+/* PATCH v451 — Mobile: redistribui espaço para o Dólar não ficar espremido */
+@media(max-width:768px){
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th,
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td{
+    width:calc((100% - 42px) / 4)!important;
+    padding-left:2px!important;
+    padding-right:2px!important;
+    font-size:.49rem!important;
+    letter-spacing:-.005em!important;
+  }
+
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th{
+    font-size:.435rem!important;
+    letter-spacing:.045em!important;
+  }
+
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th:first-child,
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td:first-child{
+    width:42px!important;
+    min-width:42px!important;
+    max-width:42px!important;
+    padding-left:6px!important;
+    padding-right:2px!important;
+  }
+
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th:last-child,
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td:last-child{
+    padding-right:6px!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th,
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td{
+    width:calc((100% - 38px) / 4)!important;
+    font-size:.455rem!important;
+  }
+
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] th:first-child,
+  html.mobile-monthly-indicators-balance-v451 body #sec-mercado .monthly-indicators-table-v445[data-view-v446="all"] td:first-child{
+    width:38px!important;
+    min-width:38px!important;
+    max-width:38px!important;
+  }
+}
