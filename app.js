@@ -20707,3 +20707,88 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     sync: applyMobileHeaderTightV437
   };
 })();
+
+/* PATCH v439 — Mobile: data visual dentro da mesma linha do titulo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_v439';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function currentDateText(){
+    const time = document.querySelector('#lastUpdate .live-update-time, #lastUpdate time');
+    const raw = (time?.textContent || document.getElementById('lastUpdate')?.textContent || '').replace(/\s+/g,' ').trim();
+    return raw.replace(/^Atualizado\s*·\s*/i,'') || '';
+  }
+
+  function applyMobileHeaderDateInTitleV439(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v439','mobile-header-date-in-title-v439');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const legacy = window.__ELTAUM_HEADER_UPDATE_FIX_V374__;
+      if(legacy?.observer && typeof legacy.observer.disconnect === 'function') legacy.observer.disconnect();
+      if(legacy) legacy.disabledByV439 = true;
+
+      const header = document.querySelector('.site-header-clean');
+      const h1 = header?.querySelector('.brand-text h1');
+      const last = document.getElementById('lastUpdate');
+      if(!h1 || !last) return;
+
+      last.classList.remove('header-update-v374');
+
+      let inline = h1.querySelector('.header-inline-date-v439');
+      if(!inline){
+        inline = document.createElement('span');
+        inline.className = 'header-inline-date-v439';
+        inline.setAttribute('aria-hidden','true');
+        h1.appendChild(document.createTextNode(' '));
+        h1.appendChild(inline);
+      }
+
+      const text = currentDateText();
+      if(text && inline.textContent !== text) inline.textContent = text;
+
+      document.querySelectorAll('.header-update-host-v374').forEach(host => {
+        if(!host.contains(last) && !host.textContent.trim()) host.remove();
+      });
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderDateInTitleV439();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true, characterData:true});
+    window.__ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_OBSERVER_V439__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderDateInTitleV439, {once:true});
+  }else{
+    applyMobileHeaderDateInTitleV439();
+  }
+
+  window.addEventListener('load', applyMobileHeaderDateInTitleV439, {once:true});
+  [50, 120, 260, 600, 1100, 2200, 4200, 6500, 10000, 16000, 26000].forEach(ms => setTimeout(applyMobileHeaderDateInTitleV439, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_V439__ = {
+    build: BUILD,
+    sync: applyMobileHeaderDateInTitleV439
+  };
+})();

@@ -59957,3 +59957,61 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     font-size:.53rem!important;
   }
 }
+
+/* PATCH v439 — Mobile: data realmente inline no titulo */
+@media (max-width: 768px){
+  html.mobile-header-date-in-title-v439 body .site-header-clean .brand-text{
+    display:block!important;
+    min-width:0!important;
+  }
+
+  html.mobile-header-date-in-title-v439 body .site-header-clean .brand-text h1{
+    display:block!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    color:#f8fafc!important;
+    font-size:1.00rem!important;
+    line-height:1.05!important;
+    font-weight:950!important;
+    letter-spacing:-.035em!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-header-date-in-title-v439 body .site-header-clean .brand-text h1 .header-inline-date-v439{
+    display:inline!important;
+    margin-left:7px!important;
+    color:#aeb9d2!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+    font-weight:800!important;
+    letter-spacing:.02em!important;
+    vertical-align:baseline!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-header-date-in-title-v439 body .site-header-clean .brand-text #lastUpdate{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    margin:-1px!important;
+    padding:0!important;
+    overflow:hidden!important;
+    clip:rect(0 0 0 0)!important;
+    clip-path:inset(50%)!important;
+    border:0!important;
+    white-space:nowrap!important;
+  }
+}
+
+@media (max-width: 380px){
+  html.mobile-header-date-in-title-v439 body .site-header-clean .brand-text h1{
+    font-size:.92rem!important;
+  }
+
+  html.mobile-header-date-in-title-v439 body .site-header-clean .brand-text h1 .header-inline-date-v439{
+    margin-left:5px!important;
+    font-size:.50rem!important;
+  }
+}
