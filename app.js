@@ -21531,11 +21531,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
 /* PATCH v452 — Mobile: hierarquia refinada dos cards de fundos */
 (function(){
-  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_DETAILS_CTA_v453';
+  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_BALANCED_METRICS_v454';
 
   function applyMobileFundCardRefinementV452(){
     try{
-      document.documentElement.classList.add('mobile-v453','mobile-fund-card-details-cta-v453','mobile-v452','mobile-fund-card-refinement-v452');
+      document.documentElement.classList.add('mobile-v454','mobile-fund-card-balanced-metrics-v454','mobile-v453','mobile-fund-card-details-cta-v453','mobile-v452','mobile-fund-card-refinement-v452');
       const meta = document.querySelector('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
       document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
@@ -21560,6 +21560,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   };
 
   window.__ELTAUM_MOBILE_FUND_CARD_DETAILS_CTA_V453__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+
+  window.__ELTAUM_MOBILE_FUND_CARD_BALANCED_METRICS_V454__ = {
     build: BUILD,
     sync: applyMobileFundCardRefinementV452
   };

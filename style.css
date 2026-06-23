@@ -62028,3 +62028,37 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     color:#f2d38b!important;
   }
 }
+
+/* PATCH v454 — Mobile: 12M e %CDI com pesos visuais equilibrados */
+@media(max-width:820px){
+  html.mobile-fund-card-balanced-metrics-v454 body.fund-card-mode #mobileFundCards .fund-card-perf-highlight-v68{
+    grid-template-columns:1fr 1fr!important;
+    gap:7px!important;
+  }
+
+  html.mobile-fund-card-balanced-metrics-v454 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68,
+  html.mobile-fund-card-balanced-metrics-v454 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68.cdi{
+    min-height:50px!important;
+    padding:8px 9px!important;
+  }
+
+  html.mobile-fund-card-balanced-metrics-v454 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68 strong{
+    font-size:.88rem!important;
+    letter-spacing:-.025em!important;
+  }
+
+  html.mobile-fund-card-balanced-metrics-v454 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68.cdi strong{
+    font-size:.68rem!important;
+    letter-spacing:-.015em!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-fund-card-balanced-metrics-v454 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68 strong{
+    font-size:.80rem!important;
+  }
+
+  html.mobile-fund-card-balanced-metrics-v454 body.fund-card-mode #mobileFundCards .fund-card-perf-main-v68.cdi strong{
+    font-size:.62rem!important;
+  }
+}
