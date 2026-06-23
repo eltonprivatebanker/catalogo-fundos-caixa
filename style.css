@@ -62114,3 +62114,60 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     max-width:34px!important;
   }
 }
+
+/* PATCH v456 — Mobile: harmoniza tipografia dos 4 KPIs do topo */
+@media(max-width:768px){
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell{
+    min-height:86px!important;
+    padding:11px 10px!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell > span:not(.mobile-kpi-icon-v435){
+    font-size:.58rem!important;
+    letter-spacing:.095em!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell strong{
+    font-size:1.22rem!important;
+    letter-spacing:-.035em!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell small{
+    margin-top:8px!important;
+    font-size:.64rem!important;
+    line-height:1.12!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell.is-best-v435 strong,
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell.is-worst-v435 strong,
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell-perf strong{
+    font-size:1.18rem!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-icon-v435{
+    width:30px!important;
+    height:30px!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-icon-v435 svg{
+    width:17px!important;
+    height:17px!important;
+  }
+}
+
+@media(max-width:380px){
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell{
+    min-height:82px!important;
+    padding:10px 9px!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell strong{
+    font-size:1.12rem!important;
+  }
+
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell.is-best-v435 strong,
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell.is-worst-v435 strong,
+  html.mobile-top-kpi-harmony-v456 body #sec-kpi-mobile .mobile-kpi-cell-perf strong{
+    font-size:1.08rem!important;
+  }
+}

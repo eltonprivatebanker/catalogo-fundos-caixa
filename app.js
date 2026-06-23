@@ -21596,3 +21596,30 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     sync: applyMonthlyIndicatorsReadableV455
   };
 })();
+
+/* PATCH v456 — Mobile: harmonia tipografica dos KPIs do topo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_HARMONY_v456';
+
+  function applyTopKpiHarmonyV456(){
+    try{
+      document.documentElement.classList.add('mobile-v456','mobile-top-kpi-harmony-v456');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyTopKpiHarmonyV456, {once:true});
+  }else{
+    applyTopKpiHarmonyV456();
+  }
+
+  window.addEventListener('load', applyTopKpiHarmonyV456, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyTopKpiHarmonyV456, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
+    build: BUILD,
+    sync: applyTopKpiHarmonyV456
+  };
+})();
