@@ -67846,3 +67846,50 @@ html.mobile-ranking-no-insight-v487 #rankingGrid .ranking-exec-insight{
     font-size:.56rem!important;
   }
 }
+
+/* PATCH v491 — Mobile: resumo de mercado com fonte mais legivel */
+@media(max-width:820px){
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch.closed-month-launch,
+  html.mobile-market-summary-readable-v491 body #sec-mercado .closed-month-launch-premium{
+    padding:14px 14px 11px!important;
+  }
+
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch .closed-month-mini{
+    margin-top:10px!important;
+    padding-top:8px!important;
+  }
+
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch .closed-mini-item{
+    padding:7px 10px!important;
+    gap:7px!important;
+  }
+
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch .closed-mini-item b{
+    font-size:.56rem!important;
+    line-height:1.05!important;
+    letter-spacing:.055em!important;
+  }
+
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch .closed-mini-item em{
+    max-width:104px!important;
+    font-size:.70rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.03em!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch .closed-mini-item{
+    padding:6px 7px!important;
+    gap:5px!important;
+  }
+
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch .closed-mini-item b{
+    font-size:.51rem!important;
+  }
+
+  html.mobile-market-summary-readable-v491 body #sec-mercado #closedMonthLaunch .closed-mini-item em{
+    max-width:88px!important;
+    font-size:.62rem!important;
+  }
+}

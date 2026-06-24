@@ -23007,3 +23007,44 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
     sync: syncMobileMarketSummaryUsdBrlV490
   };
 })();
+
+/* PATCH v491 — Mobile: resumo de mercado mais legivel */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_SUMMARY_READABLE_V491';
+
+  function syncMobileMarketSummaryReadableV491(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v491','mobile-market-summary-readable-v491');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(typeof atualizarResumoFechamentoMes === 'function'){
+        atualizarResumoFechamentoMes();
+      }
+
+      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
+      if(action) action.textContent = 'Ver fechamento ›';
+
+      const sub = document.getElementById('closedMonthLaunchSub');
+      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
+        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketSummaryReadableV491, {once:true});
+  }else{
+    syncMobileMarketSummaryReadableV491();
+  }
+
+  window.addEventListener('load', syncMobileMarketSummaryReadableV491, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketSummaryReadableV491, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketSummaryReadableV491, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_SUMMARY_READABLE_V491__ = {
+    build: BUILD,
+    sync: syncMobileMarketSummaryReadableV491
+  };
+})();
