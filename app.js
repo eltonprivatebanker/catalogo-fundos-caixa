@@ -22760,3 +22760,32 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     sync: syncMobileFilterListCompactV483
   };
 })();
+
+/* PATCH v484 — Mobile: primeira tela com filtros visiveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FIRST_SCREEN_FILTERS_V484';
+
+  function syncMobileFirstScreenFiltersV484(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v484','mobile-first-screen-filters-v484');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFirstScreenFiltersV484, {once:true});
+  }else{
+    syncMobileFirstScreenFiltersV484();
+  }
+
+  window.addEventListener('load', syncMobileFirstScreenFiltersV484, {once:true});
+  window.addEventListener('pageshow', syncMobileFirstScreenFiltersV484, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFirstScreenFiltersV484, ms));
+
+  window.__ELTAUM_MOBILE_FIRST_SCREEN_FILTERS_V484__ = {
+    build: BUILD,
+    sync: syncMobileFirstScreenFiltersV484
+  };
+})();
