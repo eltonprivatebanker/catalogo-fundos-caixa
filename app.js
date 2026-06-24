@@ -9240,29 +9240,51 @@ function atualizarResumoFechamentoMes(){
     const isQuote=mode==='quote' || /^R\$\s*/i.test(txt);
     el.textContent=txt;
     el.className='finance-number-v231';
-    if(isQuote){
+    if(mode === 'neutral'){
+      el.classList.add('neu');
+    }else if(isQuote){
       el.classList.add('market-quote-v231','zero');
     }else{
       el.classList.add(signClassFromText(txt));
     }
   };
-  const firstMarketLine=(val)=>{
+  const marketLine=(val, mode='usd')=>{
     const lines=quebrarUsdBrl(cleanTxt(val)).filter(Boolean);
-    const first=lines[0] || cleanTxt(val);
-    return first.trim();
+    const wanted = String(mode || 'usd').toUpperCase();
+    return (lines.find(line => line.toUpperCase().startsWith(wanted)) || lines[0] || cleanTxt(val)).trim();
   };
+  const pctFromNumber=(value)=>{
+    const n=Number(value);
+    return Number.isFinite(n) ? `${n > 0 ? '+' : ''}${n.toFixed(2).replace('.', ',')}%` : '—';
+  };
+  const dolarVariacaoFechada=()=>{
+    const fromDom = painelText('dolar-ant-var');
+    if(fromDom && fromDom !== '—') return fromDom;
+    const dolar = _dadosMercado?.indices_mercado?.dolar || _dadosMercado?.cards?.dolar || {};
+    const cards = _dadosMercado?.cards?.dolar || {};
+    const value =
+      dolar.variacao_mes_fechado ??
+      dolar.variacao_mes_anterior ??
+      dolar.variacao_mensal ??
+      cards.variacao_mes_fechado ??
+      cards.variacao_mes_anterior ??
+      cards.variacao_mensal ??
+      indicState?.dolarPct?.mes;
+    return pctFromNumber(value);
+  };
+  const usMode = (document.documentElement.getAttribute('data-us-currency-v492') || 'usd').toLowerCase() === 'brl' ? 'brl' : 'usd';
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
-  const dolarVariacaoMini=painelText('dolar-ant-var');
+  const dolarVariacaoMini=dolarVariacaoFechada();
   const dolarCotacaoMini=painelText('dolar-ant-cot');
   setMini('closedMiniDolar', dolarCotacaoMini, 'quote');
   setMini('closedMiniDolarVar', dolarVariacaoMini);
   setMini('closedMiniIbov', painelText('ibov-ant-var'));
   setMini('closedMiniPoup', primeiroValorNaoVazio(painelText('mc-poup'), painelText('poupOldMonthly')));
-  setMini('closedMiniIbovPts', painelText('ibov-ant-pts'));
-  setMini('closedMiniSp', firstMarketLine(painelText('sp-ant-var')));
-  setMini('closedMiniNasdaq', firstMarketLine(painelText('nasdaq-ant-var')));
-  setMini('closedMiniDow', firstMarketLine(painelText('dow-ant-var')));
+  setMini('closedMiniIbovPts', painelText('ibov-ant-pts'), 'neutral');
+  setMini('closedMiniSp', marketLine(painelText('sp-ant-var'), usMode));
+  setMini('closedMiniNasdaq', marketLine(painelText('nasdaq-ant-var'), usMode));
+  setMini('closedMiniDow', marketLine(painelText('dow-ant-var'), usMode));
 }
 function renderClosedMarketSheet(){
   const periodo=periodoUltimoFechado();
@@ -23046,5 +23068,84 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
   window.__ELTAUM_MOBILE_MARKET_SUMMARY_READABLE_V491__ = {
     build: BUILD,
     sync: syncMobileMarketSummaryReadableV491
+  };
+})();
+
+/* PATCH v492 — Mobile: seletor USD/BRL e correcoes do resumo de mercado */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_V492';
+
+  function currentMode(){
+    return document.documentElement.getAttribute('data-us-currency-v492') === 'brl' ? 'brl' : 'usd';
+  }
+
+  function applyClosedUsCurrencyV492(mode){
+    try{
+      const next = mode === 'brl' ? 'brl' : 'usd';
+      const html = document.documentElement;
+      html.setAttribute('data-us-currency-v492', next);
+      html.classList.add('mobile-v492','mobile-market-us-toggle-v492');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const toggle = document.querySelector('.closed-us-currency-toggle-v492');
+      if(toggle){
+        toggle.setAttribute('data-us-currency-v492', next);
+        toggle.querySelectorAll('[data-us-mode-label-v492]').forEach(el => {
+          el.classList.toggle('is-active', el.getAttribute('data-us-mode-label-v492') === next);
+        });
+      }
+
+      if(typeof atualizarResumoFechamentoMes === 'function'){
+        atualizarResumoFechamentoMes();
+      }
+
+      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
+      if(action) action.textContent = 'Ver fechamento ›';
+
+      const sub = document.getElementById('closedMonthLaunchSub');
+      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
+        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
+      }
+    }catch(_error){}
+  }
+
+  window.toggleClosedUsCurrencyV492 = function(){
+    const next = currentMode() === 'usd' ? 'brl' : 'usd';
+    applyClosedUsCurrencyV492(next);
+    return false;
+  };
+
+  function bindClosedUsCurrencyV492(){
+    try{
+      const toggle = document.querySelector('.closed-us-currency-toggle-v492');
+      if(toggle && !toggle.dataset.v492Bound){
+        toggle.dataset.v492Bound = '1';
+        toggle.addEventListener('keydown', event => {
+          if(event.key === 'Enter' || event.key === ' '){
+            event.preventDefault();
+            event.stopPropagation();
+            window.toggleClosedUsCurrencyV492();
+          }
+        });
+      }
+      applyClosedUsCurrencyV492(currentMode());
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bindClosedUsCurrencyV492, {once:true});
+  }else{
+    bindClosedUsCurrencyV492();
+  }
+
+  window.addEventListener('load', bindClosedUsCurrencyV492, {once:true});
+  window.addEventListener('pageshow', bindClosedUsCurrencyV492, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(bindClosedUsCurrencyV492, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__ = {
+    build: BUILD,
+    sync: bindClosedUsCurrencyV492,
+    set: applyClosedUsCurrencyV492
   };
 })();
