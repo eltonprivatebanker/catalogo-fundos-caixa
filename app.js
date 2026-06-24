@@ -23149,3 +23149,36 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
     set: applyClosedUsCurrencyV492
   };
 })();
+
+/* PATCH v493 — Mobile: seletor USD/BRL no cabecalho */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_HEADER_V493';
+
+  function syncMobileMarketUsToggleHeaderV493(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v493','mobile-market-us-toggle-header-v493');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
+        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleHeaderV493, {once:true});
+  }else{
+    syncMobileMarketUsToggleHeaderV493();
+  }
+
+  window.addEventListener('load', syncMobileMarketUsToggleHeaderV493, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketUsToggleHeaderV493, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleHeaderV493, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_HEADER_V493__ = {
+    build: BUILD,
+    sync: syncMobileMarketUsToggleHeaderV493
+  };
+})();
