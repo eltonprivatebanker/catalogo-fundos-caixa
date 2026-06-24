@@ -22624,3 +22624,32 @@ window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
     sync: syncMobileRankingSafeV480
   };
 })();
+
+/* PATCH v481 — Mobile: filtros com selects seguros */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481';
+
+  function syncMobileFilterSelectSafeV481(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v481','mobile-filter-select-safe-v481');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterSelectSafeV481, {once:true});
+  }else{
+    syncMobileFilterSelectSafeV481();
+  }
+
+  window.addEventListener('load', syncMobileFilterSelectSafeV481, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterSelectSafeV481, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterSelectSafeV481, ms));
+
+  window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
+    build: BUILD,
+    sync: syncMobileFilterSelectSafeV481
+  };
+})();
