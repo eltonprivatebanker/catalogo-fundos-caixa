@@ -22595,3 +22595,32 @@ window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
     sync: syncMobileRankingCompactV479
   };
 })();
+
+/* PATCH v480 — Mobile: ranking compacto sem cortes */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SAFE_V480';
+
+  function syncMobileRankingSafeV480(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v480','mobile-ranking-safe-v480');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileRankingSafeV480, {once:true});
+  }else{
+    syncMobileRankingSafeV480();
+  }
+
+  window.addEventListener('load', syncMobileRankingSafeV480, {once:true});
+  window.addEventListener('pageshow', syncMobileRankingSafeV480, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingSafeV480, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_SAFE_V480__ = {
+    build: BUILD,
+    sync: syncMobileRankingSafeV480
+  };
+})();

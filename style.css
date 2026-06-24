@@ -66258,3 +66258,76 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     gap:5px!important;
   }
 }
+
+/* PATCH v480 — Mobile: ranking compacto sem corte visual */
+@media(max-width:768px){
+  html.mobile-ranking-safe-v480 body #rankingsSection{
+    scroll-margin-top:18px!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-summary{
+    gap:8px!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-card{
+    min-height:92px!important;
+    padding:11px 10px 10px!important;
+    row-gap:4px!important;
+    overflow:visible!important;
+    contain:none!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-card > span{
+    line-height:1.18!important;
+    padding-top:1px!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-card > strong{
+    line-height:1.08!important;
+    padding-top:1px!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-card > small{
+    line-height:1.14!important;
+    margin-top:2px!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-card > em{
+    line-height:1.12!important;
+    margin-top:2px!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-insight{
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #sec-fundos{
+    padding-bottom:150px!important;
+  }
+
+  html.mobile-ranking-safe-v480 body.fund-card-mode #mobileFundCards,
+  html.mobile-ranking-safe-v480 body #mobileFundCards{
+    padding-bottom:170px!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #mobileFundCards .fund-card-mobile,
+  html.mobile-ranking-safe-v480 body #mobileFundCards .fund-card-mobile-v26{
+    scroll-margin-bottom:140px!important;
+  }
+
+  html.mobile-ranking-safe-v480 body #sec-fundos .fund-card-mobile-body,
+  html.mobile-ranking-safe-v480 body #sec-fundos .fund-detail-list-v468{
+    padding-bottom:6px!important;
+  }
+}
+
+@media(max-width:380px){
+  html.mobile-ranking-safe-v480 body #rankingsSection .ranking-exec-card{
+    min-height:88px!important;
+    padding:10px 9px!important;
+  }
+}
