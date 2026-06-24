@@ -7484,12 +7484,12 @@ document.addEventListener('DOMContentLoaded', function(){
         <div class="fund-card-expanded-head">
           <strong>Detalhes do fundo</strong>
         </div>
-        <div class="fund-card-mobile-body">
-          <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Patrimônio (mi)</span><span class="fund-metric-value">${pl}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Início do fundo</span><span class="fund-metric-value">${data}</span></div>
+        <div class="fund-card-mobile-body fund-detail-list-v468">
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Patrimônio mi</span><span class="fund-metric-value">${pl}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
         </div>
         ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
@@ -22048,8 +22048,42 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_IA_V466__ = {
   document.addEventListener('click', () => setTimeout(applyMobileFundDetailNoCutV467, 80), true);
   [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailNoCutV467, ms));
 
-  window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
+window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
     build: BUILD,
     sync: applyMobileFundDetailNoCutV467
+  };
+})();
+
+/* PATCH v468 — Mobile: lista de detalhes sem reticências */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_LIST_v468';
+
+  function applyMobileFundDetailListV468(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v468','mobile-fund-detail-list-v468');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-list-card-v468');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailListV468, {once:true});
+  }else{
+    applyMobileFundDetailListV468();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailListV468, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailListV468);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailListV468, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailListV468, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_LIST_V468__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailListV468
   };
 })();
