@@ -7356,9 +7356,21 @@ document.addEventListener('DOMContentLoaded', function(){
       ? `<a class="fund-card-docs-page-v235" href="${htmlAttr(pageUrl)}" target="_blank" rel="noopener">Página oficial ↗</a>`
       : '';
 
+    const docLabelMobileV466 = d => {
+      const label = String(d.label || '').trim();
+      const curto = String(d.curto || '').trim().toUpperCase();
+      if(/l[âa]mina/i.test(label) || curto === 'L') return 'Lâmina';
+      if(/regulamento/i.test(label) || curto === 'R') return 'Regulamento';
+      if(/informa/i.test(label) || curto === 'IC') return 'Informe';
+      if(/carteira/i.test(label) || curto === 'C') return 'Carteira';
+      if(/comercial|boletim/i.test(label) || curto === 'CM') return 'Comercial';
+      if(/termo|ades/i.test(label) || curto === 'TA') return 'Termo';
+      return label || curto || 'Documento';
+    };
+
     const links = secundarios.map(d => {
-      const label = d.curto || d.label || 'Doc';
-      return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
+      const label = docLabelMobileV466(d);
+      return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${htmlAttr(label)}</a>`;
     }).join('');
 
     return `<div class="fund-card-mobile-docs fund-card-mobile-docs-v236">
@@ -7470,14 +7482,12 @@ document.addEventListener('DOMContentLoaded', function(){
 
       <div class="fund-card-list-expanded" aria-hidden="true">
         <div class="fund-card-expanded-head">
-          <strong>Mais detalhes</strong>
-          <button type="button" class="fund-card-close-details" data-card-idx="${idx}" aria-label="Fechar detalhes">× Fechar</button>
+          <strong>Detalhes do fundo</strong>
         </div>
         <div class="fund-card-mobile-body">
           <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Referência</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Patrimônio (mi)</span><span class="fund-metric-value">${pl}</span></div>
           <div class="fund-metric"><span class="fund-metric-label">Início do fundo</span><span class="fund-metric-value">${data}</span></div>
         </div>
@@ -21953,8 +21963,59 @@ window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
   document.addEventListener('elton:rankings-rendered', applyAdaptiveRankingV465);
   [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyAdaptiveRankingV465, ms));
 
-  window.__ELTAUM_MOBILE_ADAPTIVE_RANKING_V465__ = {
+window.__ELTAUM_MOBILE_ADAPTIVE_RANKING_V465__ = {
     build: BUILD,
     sync: applyAdaptiveRankingV465
+  };
+})();
+
+/* PATCH v466 — Mobile: detalhes dos fundos com hierarquia mais limpa */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_IA_v466';
+
+  function applyMobileFundDetailIaV466(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v466','mobile-fund-detail-ia-v466');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-ia-v466');
+      });
+
+      document.querySelectorAll('#mobileFundCards .fund-card-doc-pill').forEach(link => {
+        const txt = String(link.textContent || '').trim();
+        const normalized = txt.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z]/g,'').toUpperCase();
+        const labels = {
+          L:'Lâmina',
+          R:'Regulamento',
+          IC:'Informe',
+          C:'Carteira',
+          CM:'Comercial',
+          TA:'Termo'
+        };
+        if(labels[normalized]){
+          link.textContent = labels[normalized];
+          link.setAttribute('aria-label', labels[normalized]);
+        }
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailIaV466, {once:true});
+  }else{
+    applyMobileFundDetailIaV466();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailIaV466, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailIaV466);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailIaV466, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailIaV466, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_IA_V466__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailIaV466
   };
 })();
