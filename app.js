@@ -22014,8 +22014,42 @@ window.__ELTAUM_MOBILE_ADAPTIVE_RANKING_V465__ = {
   document.addEventListener('click', () => setTimeout(applyMobileFundDetailIaV466, 80), true);
   [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailIaV466, ms));
 
-  window.__ELTAUM_MOBILE_FUND_DETAIL_IA_V466__ = {
+window.__ELTAUM_MOBILE_FUND_DETAIL_IA_V466__ = {
     build: BUILD,
     sync: applyMobileFundDetailIaV466
+  };
+})();
+
+/* PATCH v467 — Mobile: remove truncamento dos detalhes do fundo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_v467';
+
+  function applyMobileFundDetailNoCutV467(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v467','mobile-fund-detail-no-cut-v467');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-no-cut-v467');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailNoCutV467, {once:true});
+  }else{
+    applyMobileFundDetailNoCutV467();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailNoCutV467, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailNoCutV467);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailNoCutV467, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailNoCutV467, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailNoCutV467
   };
 })();

@@ -63553,3 +63553,109 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     padding:9px!important;
   }
 }
+
+/* PATCH v467 — Mobile: evita textos cortados nos detalhes dos fundos */
+@media(max-width:820px){
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile.open .fund-card-mobile-body,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-v26.open .fund-card-mobile-body,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-list-expanded[aria-hidden="false"] .fund-card-mobile-body{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:6px!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile.open .fund-metric,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-v26.open .fund-metric{
+    display:grid!important;
+    grid-template-columns:minmax(72px,.58fr) minmax(0,1.42fr)!important;
+    align-items:start!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    padding:7px 9px!important;
+    row-gap:3px!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile.open .fund-metric-label,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-v26.open .fund-metric-label{
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    line-height:1.12!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile.open .fund-metric-value,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-v26.open .fund-metric-value,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile.open .fund-metric-value.prazo-mobile,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-v26.open .fund-metric-value.prazo-mobile{
+    min-width:0!important;
+    max-width:100%!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere!important;
+    word-break:normal!important;
+    text-align:right!important;
+    line-height:1.18!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-facts-mobile-v235,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-docs-v236,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-quick-note,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-quick-note-v224{
+    max-width:100%!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-cnpj-row-mobile-v238,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-operation-strip-v236 > div,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-facts-grid-mobile-v235 .fund-fact-mobile-v235{
+    min-width:0!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-cnpj-value-mobile-v238,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-operation-strip-v236 strong,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-facts-grid-mobile-v235 .fund-fact-mobile-v235 > strong{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    overflow-wrap:anywhere!important;
+    line-height:1.2!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-doc-pill{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    line-height:1.12!important;
+  }
+}
+
+@media(max-width:430px){
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-facts-grid-mobile-v235{
+    grid-template-columns:minmax(0,1fr)!important;
+    gap:6px!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-facts-grid-mobile-v235 .fund-fact-mobile-v235.strategy,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-facts-grid-mobile-v235 .fund-fact-mobile-v235.availability{
+    grid-column:auto!important;
+  }
+}
+
+@media(max-width:370px), (max-height:760px){
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile.open .fund-metric,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-v26.open .fund-metric{
+    grid-template-columns:1fr!important;
+  }
+
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile.open .fund-metric-value,
+  html.mobile-fund-detail-no-cut-v467 #mobileFundCards .fund-card-mobile-v26.open .fund-metric-value{
+    text-align:left!important;
+  }
+}
