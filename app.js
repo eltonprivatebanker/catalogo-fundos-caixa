@@ -22648,8 +22648,86 @@ window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
   window.addEventListener('pageshow', syncMobileFilterSelectSafeV481, {passive:true});
   [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterSelectSafeV481, ms));
 
-  window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
+window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     build: BUILD,
     sync: syncMobileFilterSelectSafeV481
+  };
+})();
+
+/* PATCH v482 — Mobile: filtros em lista com valor visual sem corte */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_LIST_V482';
+  const FIELD_LABELS = {
+    mobileCategorySelectV74: 'Categoria',
+    mobileRiskSelectV198: 'Perfil de risco',
+    mobileSortSelectV75: 'Ordenar por'
+  };
+
+  function getOptionText(select){
+    const option = select?.options?.[select.selectedIndex];
+    return option ? option.textContent.trim() : 'Todos';
+  }
+
+  function upsertVisualFilterValueV482(select){
+    if(!select) return;
+    const host = select.closest('label') || select.parentElement;
+    if(!host) return;
+
+    host.classList.add('filter-list-row-v482');
+
+    let label = host.querySelector(':scope > .filter-label-v482');
+    if(!label){
+      label = document.createElement('span');
+      label.className = 'filter-label-v482';
+      label.textContent = FIELD_LABELS[select.id] || select.getAttribute('aria-label') || 'Filtro';
+      host.insertBefore(label, host.firstChild);
+    }
+
+    let value = host.querySelector(':scope > .filter-value-v482');
+    if(!value){
+      value = document.createElement('strong');
+      value.className = 'filter-value-v482';
+      const arrow = host.querySelector(':scope > .mobile-category-select-arrow-v74, :scope > .mobile-risk-arrow-v198, :scope > .mobile-sort-arrow-v75');
+      if(arrow) host.insertBefore(value, arrow);
+      else host.appendChild(value);
+    }
+
+    value.textContent = getOptionText(select);
+  }
+
+  function syncMobileFilterListV482(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v482','mobile-filter-list-v482');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      ['mobileCategorySelectV74','mobileRiskSelectV198','mobileSortSelectV75'].forEach(id => {
+        const select = document.getElementById(id);
+        if(!select) return;
+        upsertVisualFilterValueV482(select);
+        if(select.dataset.v482Bound === '1') return;
+        select.addEventListener('change', () => {
+          requestAnimationFrame(() => upsertVisualFilterValueV482(select));
+          setTimeout(() => upsertVisualFilterValueV482(select), 80);
+        }, {passive:true});
+        select.dataset.v482Bound = '1';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterListV482, {once:true});
+  }else{
+    syncMobileFilterListV482();
+  }
+
+  window.addEventListener('load', syncMobileFilterListV482, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterListV482, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterListV482, ms));
+
+  window.__ELTAUM_MOBILE_FILTER_LIST_V482__ = {
+    build: BUILD,
+    sync: syncMobileFilterListV482
   };
 })();
