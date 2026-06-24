@@ -22416,8 +22416,66 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
   window.addEventListener('load', syncDolarMobileCompactV474, {once:true});
   [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileCompactV474, ms));
 
-  window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
+window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
     build: BUILD,
     sync: syncDolarMobileCompactV474
+  };
+})();
+
+/* PATCH v475 — Mobile: Poupanca mais leve e plana */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_FLAT_V475';
+
+  function syncSavingsMobileFlatV475(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v475','savings-mobile-flat-v475');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const label = document.getElementById('poupCurrentLabelV214');
+      if(label) label.textContent = 'Rendimento do mês';
+
+      const yearLabel = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.year dt');
+      if(yearLabel) yearLabel.textContent = 'Acumulado 2026';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const ruleTitle = document.getElementById('poupCurrentScenarioTitleV214');
+      if(ruleTitle) ruleTitle.textContent = 'Regra vigente';
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+        source.setAttribute('aria-label', 'Abrir simulador de rendimento da poupança do Banco Central em uma nova guia');
+      }
+
+      const btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncSavingsMobileFlatV475, {once:true});
+  }else{
+    syncSavingsMobileFlatV475();
+  }
+
+  window.addEventListener('load', syncSavingsMobileFlatV475, {once:true});
+  window.addEventListener('pageshow', syncSavingsMobileFlatV475, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncSavingsMobileFlatV475, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_FLAT_V475__ = {
+    build: BUILD,
+    sync: syncSavingsMobileFlatV475
   };
 })();
