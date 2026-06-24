@@ -22393,3 +22393,31 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
     sync: syncCopomSingleDecisionV473
   };
 })();
+
+/* PATCH v474 — Mobile: Dolar PTAX mais compacto */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_COMPACT_V474';
+
+  function syncDolarMobileCompactV474(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v474','dolar-mobile-compact-v474');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileCompactV474, {once:true});
+  }else{
+    syncDolarMobileCompactV474();
+  }
+
+  window.addEventListener('load', syncDolarMobileCompactV474, {once:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileCompactV474, ms));
+
+  window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
+    build: BUILD,
+    sync: syncDolarMobileCompactV474
+  };
+})();

@@ -64653,3 +64653,402 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     line-height:1.16!important;
   }
 }
+
+/* PATCH v474 — Mobile: Dolar PTAX mais compacto e com menos peso visual */
+@media(max-width:768px){
+  html.dolar-mobile-compact-v474 body #sec-dolar{
+    margin-top:18px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar > .section-title{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:10px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .section-title h2{
+    margin:0!important;
+    min-width:0!important;
+    font-size:1.08rem!important;
+    line-height:1.08!important;
+    letter-spacing:-.028em!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .section-title-icon-v302{
+    width:24px!important;
+    height:24px!important;
+    min-width:24px!important;
+    max-width:24px!important;
+    border-radius:7px!important;
+    font-size:.76rem!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-source-badge-v336{
+    height:24px!important;
+    padding:0 9px!important;
+    font-size:.52rem!important;
+    letter-spacing:.08em!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card{
+    padding:10px!important;
+    border-radius:16px!important;
+    background:rgba(10,14,28,.76)!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card::before{
+    height:1px!important;
+    opacity:.72!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-top,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-summary-v162{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-main-kpi{
+    min-height:0!important;
+    padding:12px 14px 11px!important;
+    border-radius:13px!important;
+    background:rgba(255,255,255,.045)!important;
+    border:1px solid rgba(255,255,255,.08)!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-kpi-label{
+    margin:0 0 6px!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+    letter-spacing:.075em!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolar-day-rate{
+    display:block!important;
+    margin:0!important;
+    font-size:1.82rem!important;
+    line-height:.96!important;
+    letter-spacing:-.052em!important;
+    font-variant-numeric:tabular-nums slashed-zero!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolar-day-ref{
+    display:block!important;
+    margin-top:7px!important;
+    font-size:.58rem!important;
+    line-height:1.12!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-kpi-stack-v162{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-current-kpis-v162,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-history-kpis-v162{
+    display:grid!important;
+    gap:7px!important;
+    overflow:visible!important;
+    padding:0!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-current-kpis-v162{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-history-kpis-v162{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-mini-kpi,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-variation-chip-v98{
+    min-width:0!important;
+    max-width:none!important;
+    min-height:0!important;
+    padding:8px 9px!important;
+    border-radius:11px!important;
+    background:rgba(255,255,255,.032)!important;
+    border:1px solid rgba(255,255,255,.075)!important;
+    box-shadow:none!important;
+    scroll-snap-align:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi{
+    flex:initial!important;
+    padding:7px 8px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-mini-kpi span{
+    margin:0!important;
+    font-size:.52rem!important;
+    line-height:1!important;
+    letter-spacing:.07em!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-mini-kpi strong,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-metric-val{
+    display:block!important;
+    margin-top:5px!important;
+    font-size:.88rem!important;
+    line-height:1.02!important;
+    letter-spacing:-.022em!important;
+    font-variant-numeric:tabular-nums slashed-zero!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi strong,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-current-kpis-v162 .dolar-metric-val{
+    font-size:1rem!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-mini-kpi small{
+    margin-top:4px!important;
+    font-size:.52rem!important;
+    line-height:1.08!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi small{
+    display:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-chart{
+    margin-top:9px!important;
+    padding:0!important;
+    border-radius:13px!important;
+    background:rgba(255,255,255,.024)!important;
+    border:1px solid rgba(255,255,255,.075)!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-chart-header{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:10px!important;
+    padding:10px 11px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-chart-title{
+    font-size:.78rem!important;
+    line-height:1.05!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-chart-sub{
+    margin-top:2px!important;
+    font-size:.56rem!important;
+    line-height:1.1!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-chart-toggle-mobile{
+    min-height:28px!important;
+    padding:0 10px!important;
+    border-radius:999px!important;
+    font-size:.56rem!important;
+    white-space:nowrap!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarChartPanel.is-mobile-collapsed .chart-tabs,
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarChartPanel.is-mobile-collapsed .dolar-chart-body{
+    display:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarChartPanel:not(.is-mobile-collapsed) .chart-tabs{
+    grid-column:1/-1!important;
+    display:grid!important;
+    grid-template-columns:repeat(4,1fr)!important;
+    gap:6px!important;
+    margin-top:8px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarChartPanel:not(.is-mobile-collapsed) .dolar-chart-body{
+    display:block!important;
+    height:190px!important;
+    min-height:190px!important;
+    margin-top:8px!important;
+    padding:0 8px 8px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarChartPanel.is-mobile-collapsed + #ptaxStatsCard,
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarCurrentMonthV162{
+    display:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #ptaxStatsCard{
+    margin:8px 0 0!important;
+    padding:10px!important;
+    border-radius:13px!important;
+    background:rgba(255,255,255,.024)!important;
+    border:1px solid rgba(255,255,255,.075)!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .ptax-stats-title{
+    margin:0 0 8px!important;
+    font-size:.56rem!important;
+    line-height:1.08!important;
+    letter-spacing:.08em!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .ptax-stats-grid{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .ptax-stat-item{
+    min-height:0!important;
+    padding:8px!important;
+    border-radius:10px!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .ptax-stat-label,
+  html.dolar-mobile-compact-v474 body #sec-dolar .ptax-stat-ref{
+    font-size:.50rem!important;
+    line-height:1.06!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .ptax-stat-val{
+    font-size:.82rem!important;
+    line-height:1.04!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-footer,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-month-strip{
+    margin-top:9px!important;
+    padding:10px!important;
+    border-radius:13px!important;
+    background:rgba(255,255,255,.018)!important;
+    border:1px solid rgba(255,255,255,.065)!important;
+    box-shadow:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-month-strip-head{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:9px!important;
+    margin:0 0 8px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-month-strip-title{
+    font-size:.64rem!important;
+    line-height:1.05!important;
+    letter-spacing:.105em!important;
+    white-space:nowrap!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-month-strip-head small,
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarTimelineToggle,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-months-table-head-v162,
+  html.dolar-mobile-compact-v474 body #sec-dolar .ptax-scroll-hint-v99{
+    display:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-month-strip-head::after{
+    content:'Deslize →'!important;
+    color:#e8bb6a!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:.01em!important;
+    white-space:nowrap!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarTimelineBody,
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarTimelineBody.open{
+    display:block!important;
+    max-height:none!important;
+    margin-top:0!important;
+    overflow:visible!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card .dolar-months,
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarMonths{
+    display:flex!important;
+    gap:7px!important;
+    padding:0 0 4px!important;
+    overflow-x:auto!important;
+    scroll-snap-type:x proximity!important;
+    scrollbar-width:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card .dolar-months::-webkit-scrollbar,
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolarMonths::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card .dolar-month-item,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-month-row-v162{
+    flex:0 0 84px!important;
+    min-width:84px!important;
+    max-width:84px!important;
+    min-height:0!important;
+    padding:6px 6px 5px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    scroll-snap-align:start!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card .dolar-month-label{
+    font-size:.50rem!important;
+    line-height:1!important;
+    letter-spacing:.07em!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card .dolar-month-val{
+    display:block!important;
+    margin-top:7px!important;
+    font-size:.92rem!important;
+    line-height:.98!important;
+    letter-spacing:-.025em!important;
+    font-variant-numeric:tabular-nums slashed-zero!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card .dolar-month-var{
+    display:block!important;
+    margin-top:5px!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+  }
+}
+
+@media(max-width:380px){
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card{
+    padding:9px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar #dolar-day-rate{
+    font-size:1.68rem!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-mini-kpi,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-variation-chip-v98{
+    padding:7px 8px!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi strong,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-current-kpis-v162 .dolar-metric-val{
+    font-size:.92rem!important;
+  }
+
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-compact-card .dolar-month-item,
+  html.dolar-mobile-compact-v474 body #sec-dolar .dolar-month-row-v162{
+    flex-basis:78px!important;
+    min-width:78px!important;
+    max-width:78px!important;
+  }
+}
