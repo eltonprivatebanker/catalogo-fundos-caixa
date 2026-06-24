@@ -10891,7 +10891,12 @@ async function sharePainelMercado(){
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
+    return `<article class="ranking-cat-mini ranking-cat-row-v457">
+      <span>${esc(shortCat(cat))}</span>
+      <strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong>
+      <small title="${esc(nome)}">${esc(nome)}</small>
+      <em>Melhor em 12 meses</em>
+    </article>`;
   }
   function worstMini(r,i,campo){
     const nome=cleanFund(r['Fundo']);
@@ -10969,7 +10974,7 @@ async function sharePainelMercado(){
         </div>
       </section>
       <section class="ranking-exec-secondary ranking-exec-secondary-single-v195">
-        <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Melhor fundo de cada categoria em 12 meses.</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
+        <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Top fundo de cada classe · 12 meses</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
       </section>
     `;
   }
@@ -21618,8 +21623,35 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   window.addEventListener('load', applyTopKpiHarmonyV456, {once:true});
   [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyTopKpiHarmonyV456, ms));
 
-  window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
+window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
     build: BUILD,
     sync: applyTopKpiHarmonyV456
+  };
+})();
+
+/* PATCH v457 — Mobile: ranking por categoria em lista compacta */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_CATEGORY_LIST_v457';
+
+  function applyRankingCategoryListV457(){
+    try{
+      document.documentElement.classList.add('mobile-v457','mobile-ranking-category-list-v457');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingCategoryListV457, {once:true});
+  }else{
+    applyRankingCategoryListV457();
+  }
+
+  window.addEventListener('load', applyRankingCategoryListV457, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingCategoryListV457, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_CATEGORY_LIST_V457__ = {
+    build: BUILD,
+    sync: applyRankingCategoryListV457
   };
 })();
