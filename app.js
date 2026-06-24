@@ -22566,3 +22566,32 @@ window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
     sync: syncMobileNoTextCutV478
   };
 })();
+
+/* PATCH v479 — Mobile: ranking compacto */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_COMPACT_V479';
+
+  function syncMobileRankingCompactV479(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v479','mobile-ranking-compact-v479');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileRankingCompactV479, {once:true});
+  }else{
+    syncMobileRankingCompactV479();
+  }
+
+  window.addEventListener('load', syncMobileRankingCompactV479, {once:true});
+  window.addEventListener('pageshow', syncMobileRankingCompactV479, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingCompactV479, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_COMPACT_V479__ = {
+    build: BUILD,
+    sync: syncMobileRankingCompactV479
+  };
+})();
