@@ -22212,3 +22212,41 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
     sync: syncCopomConsultativeV470
   };
 })();
+
+/* PATCH v471 — Mobile: botoes "Ver mais" padronizados e rodape mais leve */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOGGLE_HARMONY_v471';
+
+  function syncToggleHarmonyV471(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v471','mobile-toggle-harmony-v471');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#sec-focus .section-toggle-btn, #sec-graficos .section-toggle-btn, #sec-mercado-painel .section-toggle-btn').forEach(btn => {
+        btn.dataset.labelClosed = 'Ver mais';
+        btn.dataset.labelOpen = 'Ver menos';
+        const label = btn.querySelector('.toggle-label');
+        const section = btn.closest('.collapsible-section');
+        const isOpen = section?.classList.contains('section-expanded') || btn.getAttribute('aria-expanded') === 'true';
+        if(label) label.textContent = isOpen ? 'Ver menos' : 'Ver mais';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncToggleHarmonyV471, {once:true});
+  }else{
+    syncToggleHarmonyV471();
+  }
+
+  window.addEventListener('load', syncToggleHarmonyV471, {once:true});
+  document.addEventListener('click', () => setTimeout(syncToggleHarmonyV471, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(syncToggleHarmonyV471, ms));
+
+  window.__ELTAUM_MOBILE_TOGGLE_HARMONY_V471__ = {
+    build: BUILD,
+    sync: syncToggleHarmonyV471
+  };
+})();
