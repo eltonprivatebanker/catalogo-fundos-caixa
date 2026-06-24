@@ -65693,3 +65693,144 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     padding-inline:8px!important;
   }
 }
+
+/* PATCH v477 — Mobile: PTAX ainda mais compacta */
+@media(max-width:768px){
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-compact-card{
+    padding:10px 12px!important;
+    border-radius:16px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-compact-card::before{
+    left:12px!important;
+    right:96px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-main-kpi{
+    grid-template-columns:minmax(86px,1fr) auto minmax(78px,.72fr)!important;
+    align-items:center!important;
+    column-gap:9px!important;
+    padding:7px 0 9px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-main-kpi .dolar-kpi-label,
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-kpi-label{
+    grid-column:auto!important;
+    margin:0!important;
+    font-size:.50rem!important;
+    line-height:1.05!important;
+    letter-spacing:.075em!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar #dolar-day-rate{
+    font-size:1.58rem!important;
+    line-height:.94!important;
+    letter-spacing:-.055em!important;
+    white-space:nowrap!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar #dolar-day-ref{
+    margin:0!important;
+    font-size:.48rem!important;
+    line-height:1.08!important;
+    text-align:right!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-kpi-stack-v162{
+    padding:7px 0 0!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-current-kpis-v162{
+    padding-bottom:6px!important;
+    margin-bottom:6px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-mini-kpi,
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-variation-chip-v98,
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-history-kpis-v162 .dolar-mini-kpi{
+    padding-top:1px!important;
+    padding-bottom:1px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-mini-kpi span{
+    font-size:.47rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-mini-kpi strong,
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-metric-val{
+    margin-top:4px!important;
+    font-size:.78rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-current-kpis-v162 .dolar-mini-kpi strong,
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-current-kpis-v162 .dolar-metric-val{
+    font-size:.90rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-mini-kpi small{
+    margin-top:2px!important;
+    font-size:.47rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-compact-chart{
+    margin-top:8px!important;
+    padding-top:8px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-chart-title{
+    font-size:.70rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-chart-sub{
+    font-size:.50rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-chart-toggle-mobile{
+    min-height:25px!important;
+    padding:0 9px!important;
+    font-size:.50rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-compact-footer,
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-month-strip{
+    margin-top:9px!important;
+    padding-top:9px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-month-strip-head{
+    margin-bottom:7px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-month-strip-title{
+    font-size:.56rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-month-strip-head::after{
+    font-size:.49rem!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-compact-card .dolar-month-item,
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-month-row-v162{
+    flex-basis:84px!important;
+    min-width:84px!important;
+    max-width:84px!important;
+    padding-top:0!important;
+    padding-bottom:0!important;
+  }
+}
+
+@media(max-width:380px){
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar .dolar-main-kpi{
+    grid-template-columns:minmax(76px,1fr) auto!important;
+    row-gap:4px!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar #dolar-day-ref{
+    grid-column:1/-1!important;
+    text-align:left!important;
+  }
+
+  html.dolar-mobile-ultra-compact-v477 body #sec-dolar #dolar-day-rate{
+    font-size:1.46rem!important;
+  }
+}

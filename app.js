@@ -22508,3 +22508,32 @@ window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
     sync: syncDolarMobileFlatV476
   };
 })();
+
+/* PATCH v477 — Mobile: PTAX ultra compacta */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_ULTRA_COMPACT_V477';
+
+  function syncDolarMobileUltraCompactV477(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v477','dolar-mobile-ultra-compact-v477');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileUltraCompactV477, {once:true});
+  }else{
+    syncDolarMobileUltraCompactV477();
+  }
+
+  window.addEventListener('load', syncDolarMobileUltraCompactV477, {once:true});
+  window.addEventListener('pageshow', syncDolarMobileUltraCompactV477, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileUltraCompactV477, ms));
+
+  window.__ELTAUM_DOLAR_MOBILE_ULTRA_COMPACT_V477__ = {
+    build: BUILD,
+    sync: syncDolarMobileUltraCompactV477
+  };
+})();
