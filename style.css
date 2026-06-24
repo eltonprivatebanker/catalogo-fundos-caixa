@@ -67123,3 +67123,173 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.62rem!important;
   }
 }
+
+/* PATCH v485 — Mobile: força filtros em grade real 2x2 */
+@media(max-width:768px){
+  html.mobile-filter-grid-force-v485 body #sec-fundos .fund-filter-shell,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .fund-filter-shell-v217{
+    padding:9px!important;
+    border-radius:15px!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .fund-search-main{
+    min-height:38px!important;
+    height:38px!important;
+    margin:0!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileNoDataRowV442,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-no-data-row-v442,
+  html.mobile-filter-grid-force-v485 body #sec-fundos label#mobileNoDataRowV442.toggle-sem-dados-clean-v127{
+    min-height:36px!important;
+    height:36px!important;
+    margin:6px 0 0!important;
+    padding:6px 10px!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileCategorySelectShellV74{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    margin:7px 0 0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-category-select-head-v74,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-category-select-foot-v74,
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileCategorySelectShellV74::before,
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileCategorySelectShellV74::after{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-extra-controls-v75,
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileExtraControlsV75{
+    display:contents!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-sort-shell-v75,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-pf-toggle-v75{
+    position:relative!important;
+    display:grid!important;
+    min-width:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:42px!important;
+    height:42px!important;
+    margin:0!important;
+    padding:6px 8px!important;
+    border:1px solid rgba(157,170,204,.15)!important;
+    border-radius:11px!important;
+    background:rgba(8,11,23,.54)!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-sort-shell-v75{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:"label arrow" "value arrow"!important;
+    align-content:center!important;
+    gap:2px 6px!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-pf-toggle-v75{
+    grid-template-columns:auto minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:7px!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .filter-label-v482{
+    grid-area:label!important;
+    font-size:.47rem!important;
+    line-height:1!important;
+    letter-spacing:.065em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .filter-value-v482,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-sort-shell-v75 .filter-value-v482{
+    grid-area:value!important;
+    display:block!important;
+    max-width:100%!important;
+    color:#f8fafc!important;
+    font-size:.63rem!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    overflow-wrap:normal!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-category-select-arrow-v74,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-risk-arrow-v198,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-sort-arrow-v75{
+    grid-area:arrow!important;
+    align-self:center!important;
+    justify-self:end!important;
+    position:static!important;
+    transform:none!important;
+    font-size:.68rem!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-pf-toggle-mark-v75{
+    width:20px!important;
+    height:20px!important;
+    min-width:20px!important;
+    border-radius:7px!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-pf-toggle-text-v75 strong{
+    font-size:.63rem!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-pf-toggle-text-v75 small{
+    display:none!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileCategorySelectV74,
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileRiskSelectV198,
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileSortSelectV75{
+    position:absolute!important;
+    inset:0!important;
+    width:100%!important;
+    height:100%!important;
+    opacity:0!important;
+    z-index:5!important;
+  }
+}
+
+@media(max-width:380px){
+  html.mobile-filter-grid-force-v485 body #sec-fundos #mobileCategorySelectShellV74{
+    gap:5px!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-sort-shell-v75,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-pf-toggle-v75{
+    height:40px!important;
+    min-height:40px!important;
+    padding:6px 7px!important;
+  }
+
+  html.mobile-filter-grid-force-v485 body #sec-fundos .filter-value-v482,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-sort-shell-v75 .filter-value-v482,
+  html.mobile-filter-grid-force-v485 body #sec-fundos .mobile-pf-toggle-text-v75 strong{
+    font-size:.60rem!important;
+  }
+}

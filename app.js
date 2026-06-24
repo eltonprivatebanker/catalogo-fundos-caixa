@@ -22789,3 +22789,32 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     sync: syncMobileFirstScreenFiltersV484
   };
 })();
+
+/* PATCH v485 — Mobile: filtros em grade real */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_GRID_FORCE_V485';
+
+  function syncMobileFilterGridForceV485(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v485','mobile-filter-grid-force-v485');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterGridForceV485, {once:true});
+  }else{
+    syncMobileFilterGridForceV485();
+  }
+
+  window.addEventListener('load', syncMobileFilterGridForceV485, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterGridForceV485, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterGridForceV485, ms));
+
+  window.__ELTAUM_MOBILE_FILTER_GRID_FORCE_V485__ = {
+    build: BUILD,
+    sync: syncMobileFilterGridForceV485
+  };
+})();
