@@ -22121,3 +22121,94 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
     sync: applyMobileFundDetailHarmonyV469
   };
 })();
+
+/* PATCH v470 — Juros e CDI: Agenda Copom consultiva e menos peso visual */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_CONSULTATIVE_v470';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function cleanText(value){
+    return String(value || '')
+      .replace(/\u2212/g, '-')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function extractDecision(card){
+    const status = cleanText(card.querySelector('.copom-exec-status-v270')?.textContent);
+    const result = cleanText(card.querySelector('.copom-carousel-result-v321')?.textContent);
+    const text = `${status} ${result}`.trim();
+    const lower = text.toLowerCase();
+
+    const move = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(move){
+      const type = move[1].toLowerCase() === 'alta' ? 'Alta' : 'Corte';
+      const value = move[2]
+        .replace(/[+-]/g, '')
+        .replace(/\s*p\.?\s*p\.?/i, ' p.p.');
+      return `${type} de ${value}`;
+    }
+
+    if(lower.includes('mantida')) return 'Mantida';
+    if(lower.includes('prevista')) return 'Prevista';
+    if(lower.includes('agenda') || lower.includes('próxima') || lower.includes('proxima')) return 'Próxima reunião';
+    return status || result || 'Agenda';
+  }
+
+  function syncCopomConsultativeV470(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v470','rates-copom-consultative-v470');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+
+      summary.querySelectorAll(':scope > article').forEach(card => {
+        const decision = extractDecision(card);
+        let el = card.querySelector('.copom-decision-v470');
+        if(!el){
+          el = document.createElement('small');
+          el.className = 'copom-decision-v470';
+          card.appendChild(el);
+        }
+        el.textContent = decision;
+
+        card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(old => {
+          old.setAttribute('aria-hidden','true');
+        });
+      });
+
+      if(!observerStarted && window.MutationObserver){
+        observerStarted = true;
+        const obs = new MutationObserver(() => {
+          if(scheduled) return;
+          scheduled = true;
+          requestAnimationFrame(() => {
+            scheduled = false;
+            syncCopomConsultativeV470();
+          });
+        });
+        obs.observe(summary, { childList:true, subtree:true });
+        window.__ELTAUM_RATES_COPOM_CONSULTATIVE_OBSERVER_V470__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomConsultativeV470, {once:true});
+  }else{
+    syncCopomConsultativeV470();
+  }
+
+  window.addEventListener('load', syncCopomConsultativeV470, {once:true});
+  window.addEventListener('pageshow', syncCopomConsultativeV470, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomConsultativeV470, ms));
+
+  window.__ELTAUM_RATES_COPOM_CONSULTATIVE_V470__ = {
+    build: BUILD,
+    sync: syncCopomConsultativeV470
+  };
+})();

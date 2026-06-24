@@ -64036,3 +64036,297 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.58rem!important;
   }
 }
+
+/* PATCH v470 — Juros e CDI: agenda consultiva e painel mais leve */
+@media(max-width:768px){
+  html.rates-copom-consultative-v470 body #sec-mercado .rates-reference-v167,
+  html.rates-copom-consultative-v470 body #sec-mercado .market-reference-block-v167.rates-reference-v167{
+    padding:16px 14px 18px!important;
+    border-color:rgba(148,163,184,.14)!important;
+    border-radius:18px!important;
+    background:linear-gradient(180deg,rgba(14,19,35,.88),rgba(7,10,20,.94))!important;
+    box-shadow:none!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rates-reference-v167 .market-reference-head-v167{
+    margin:0 0 12px!important;
+    padding:0 0 11px!important;
+    border-bottom:1px solid rgba(255,255,255,.07)!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rates-reference-v167 .card-title-v304,
+  html.rates-copom-consultative-v470 body #sec-mercado #ratesReferenceTitleV167{
+    font-size:1.05rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.02em!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rates-summary-v167{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:9px!important;
+    margin:0 0 15px!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rates-summary-v167 .rate-summary-card-v167{
+    min-height:76px!important;
+    padding:10px 11px!important;
+    border:1px solid rgba(148,163,184,.10)!important;
+    border-radius:13px!important;
+    background:rgba(2,6,23,.13)!important;
+    box-shadow:none!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rates-summary-v167 .rate-summary-card-v167:first-child{
+    border-color:rgba(200,151,58,.22)!important;
+    background:rgba(200,151,58,.050)!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rate-summary-card-v167 > span{
+    margin:0 0 5px!important;
+    color:#a1acc7!important;
+    font-size:.55rem!important;
+    line-height:1!important;
+    letter-spacing:.08em!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rate-summary-card-v167 > strong,
+  html.rates-copom-consultative-v470 body #sec-mercado .rate-summary-value-v167 strong{
+    font-size:.96rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.035em!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rate-summary-card-v167 small{
+    margin-top:7px!important;
+    color:#9aa8c6!important;
+    font-size:.58rem!important;
+    line-height:1.15!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .rates-detail-grid-v167{
+    display:block!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-compact-v167,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory{
+    margin:0!important;
+    padding:13px 0 14px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory{
+    margin-top:14px!important;
+    padding-top:15px!important;
+    border-top:1px solid rgba(255,255,255,.065)!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-compact-v167 .reference-subhead-v167,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory .reference-subhead-v167{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:8px!important;
+    margin:0 0 11px!important;
+    padding:0!important;
+    border:0!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomCompactTitleV167,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistoryTitle{
+    color:#f8fafc!important;
+    font-size:.88rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.02em!important;
+    font-weight:850!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-compact-v167 .reference-subhead-v167 small,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory .reference-subhead-v167 small,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiAnalyticLinkV274{
+    display:none!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-compact-v167 .reference-subhead-v167::after{
+    content:'Deslize ->'!important;
+    color:#e8bb6a!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory .reference-subhead-v167::after{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiMonthCarouselV322{
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:10px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0 2px 7px 0!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scroll-snap-type:x proximity!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+    scrollbar-width:none!important;
+    mask-image:linear-gradient(90deg,#000 0%,#000 92%,transparent 100%)!important;
+    -webkit-mask-image:linear-gradient(90deg,#000 0%,#000 92%,transparent 100%)!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270::-webkit-scrollbar,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiMonthCarouselV322::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    position:relative!important;
+    flex:0 0 calc((100% - 20px) / 3)!important;
+    width:calc((100% - 20px) / 3)!important;
+    min-width:calc((100% - 20px) / 3)!important;
+    max-width:calc((100% - 20px) / 3)!important;
+    min-height:82px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    justify-content:flex-start!important;
+    gap:5px!important;
+    margin:0!important;
+    padding:9px 6px 9px 11px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    outline:0!important;
+    scroll-snap-align:start!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article::before{
+    content:''!important;
+    position:absolute!important;
+    left:0!important;
+    top:12px!important;
+    bottom:12px!important;
+    width:2px!important;
+    border-radius:999px!important;
+    background:rgba(148,163,184,.44)!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article.is-cut::before{background:rgba(240,85,101,.92)!important;}
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hold::before{background:rgba(91,156,246,.82)!important;}
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hike::before{background:rgba(46,209,122,.82)!important;}
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article.is-next::before{background:rgba(232,187,106,.92)!important;}
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-exec-kicker-v270,
+  html.rates-copom-consultative-v470 body #sec-mercado .cdi-month-kicker-v322{
+    display:block!important;
+    margin:0!important;
+    color:#a6b0c9!important;
+    font-size:.50rem!important;
+    line-height:1.05!important;
+    font-weight:850!important;
+    letter-spacing:.06em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-exec-date-v270,
+  html.rates-copom-consultative-v470 body #sec-mercado .cdi-month-value-v322{
+    display:block!important;
+    margin:0!important;
+    color:#f8fafc!important;
+    font-size:.82rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.03em!important;
+    font-weight:850!important;
+    white-space:normal!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .cdi-month-value-v322{
+    color:#2ed17a!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-exec-meta-v270,
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-exec-status-v270,
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-move-v430,
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-move-v431,
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-carousel-result-v321{
+    display:none!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-decision-v470{
+    display:block!important;
+    margin:1px 0 0!important;
+    color:#aeb9d2!important;
+    font-size:.58rem!important;
+    line-height:1.18!important;
+    font-weight:800!important;
+    letter-spacing:-.01em!important;
+    white-space:normal!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article.is-cut .copom-decision-v470{
+    color:#ff7893!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hike .copom-decision-v470{
+    color:#66d79d!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hold .copom-decision-v470{
+    color:#9fb7ff!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .cdi-month-accum-v322{
+    display:block!important;
+    margin:0!important;
+    color:#98a7c5!important;
+    font-size:.54rem!important;
+    line-height:1.12!important;
+    font-weight:700!important;
+    white-space:normal!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory .cdi-kpis-v271,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory .cdi-chart-canvas-wrap-v271,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory .cdi-chart-scroll-wrap-v273,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory #cdiChartScrollInnerV273,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory #cdiYearChartV271,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory .cdi-chart-legend-v271,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiYearHistory > .reference-footnote-v167,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiMobileReadableV352{
+    display:none!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    visibility:hidden!important;
+  }
+}
+
+@media(max-width:380px){
+  html.rates-copom-consultative-v470 body #sec-mercado #copomExecutiveSummaryV270 > article,
+  html.rates-copom-consultative-v470 body #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322{
+    min-height:86px!important;
+    padding-left:9px!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-exec-date-v270,
+  html.rates-copom-consultative-v470 body #sec-mercado .cdi-month-value-v322{
+    font-size:.78rem!important;
+  }
+
+  html.rates-copom-consultative-v470 body #sec-mercado .copom-decision-v470{
+    font-size:.55rem!important;
+  }
+}
