@@ -10910,6 +10910,13 @@ async function sharePainelMercado(){
     const w=worst?` No mesmo recorte, o destaque negativo é ${cleanFund(worst['Fundo'])}, com ${pct(worst[campoPorPeriodo(periodo)])}.`:'';
     return `No período de ${periodoLabel(periodo)}, o maior destaque é ${nome}, da categoria ${cat}, com ${v}.${w}`;
   }
+  function compactInsight(top,worst,periodo){
+    if(!top) return 'Dados insuficientes para leitura rápida.';
+    const nome=cleanFund(top['Fundo']);
+    const v=pct(top[campoPorPeriodo(periodo)]);
+    if(!worst) return `${periodoLabel(periodo)}: destaque positivo ${nome} (${v}).`;
+    return `${periodoLabel(periodo)}: destaque positivo ${nome} (${v}); negativo ${cleanFund(worst['Fundo'])} (${pct(worst[campoPorPeriodo(periodo)])}).`;
+  }
 
   function renderRankingsV50(){
     const grid=qs('#rankingGrid');
@@ -10948,10 +10955,10 @@ async function sharePainelMercado(){
     const maiorPL=catPL[0];
 
     const cards=[
-      summaryCard('best','🏆 Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12)} do CDI · ${shortCat(best12['Categoria'])}`:''),
-      summaryCard('month','📈 Melhor no mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
-      summaryCard('pl','🏦 Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:''),
-      summaryCard('worst','⚠️ Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):'')
+      summaryCard('best','Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12)} do CDI · ${shortCat(best12['Categoria'])}`:''),
+      summaryCard('worst','Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):''),
+      summaryCard('month','Melhor mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
+      summaryCard('pl','Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:'')
     ].join('');
 
     const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
@@ -10962,7 +10969,7 @@ async function sharePainelMercado(){
     grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
-      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(insight(top[0],worst[0],periodo))}</p></section>
+      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(compactInsight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
@@ -21653,5 +21660,32 @@ window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
   window.__ELTAUM_MOBILE_RANKING_CATEGORY_LIST_V457__ = {
     build: BUILD,
     sync: applyRankingCategoryListV457
+  };
+})();
+
+/* PATCH v458 — Mobile: destaques do ranking compactos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_COMPACT_v458';
+
+  function applyRankingHighlightsCompactV458(){
+    try{
+      document.documentElement.classList.add('mobile-v458','mobile-ranking-highlights-compact-v458');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsCompactV458, {once:true});
+  }else{
+    applyRankingHighlightsCompactV458();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsCompactV458, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsCompactV458, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_COMPACT_V458__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsCompactV458
   };
 })();
