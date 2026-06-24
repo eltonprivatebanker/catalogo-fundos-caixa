@@ -21716,3 +21716,30 @@ window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
     sync: applyRankingHighlightsRefineV459
   };
 })();
+
+/* PATCH v460 — Mobile: indicadores mensais mais legiveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_v460';
+
+  function applyMonthlyIndicatorsNumericV460(){
+    try{
+      document.documentElement.classList.add('mobile-v460','mobile-monthly-indicators-numeric-v460');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMonthlyIndicatorsNumericV460, {once:true});
+  }else{
+    applyMonthlyIndicatorsNumericV460();
+  }
+
+  window.addEventListener('load', applyMonthlyIndicatorsNumericV460, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyMonthlyIndicatorsNumericV460, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
+    build: BUILD,
+    sync: applyMonthlyIndicatorsNumericV460
+  };
+})();
