@@ -22479,3 +22479,32 @@ window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
     sync: syncSavingsMobileFlatV475
   };
 })();
+
+/* PATCH v476 — Mobile: Dolar PTAX flat */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_FLAT_V476';
+
+  function syncDolarMobileFlatV476(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v476','dolar-mobile-flat-v476');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileFlatV476, {once:true});
+  }else{
+    syncDolarMobileFlatV476();
+  }
+
+  window.addEventListener('load', syncDolarMobileFlatV476, {once:true});
+  window.addEventListener('pageshow', syncDolarMobileFlatV476, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileFlatV476, ms));
+
+  window.__ELTAUM_DOLAR_MOBILE_FLAT_V476__ = {
+    build: BUILD,
+    sync: syncDolarMobileFlatV476
+  };
+})();
