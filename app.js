@@ -9246,12 +9246,21 @@ function atualizarResumoFechamentoMes(){
       el.classList.add(signClassFromText(txt));
     }
   };
+  const firstMarketLine=(val)=>{
+    const lines=quebrarUsdBrl(cleanTxt(val)).filter(Boolean);
+    const first=lines[0] || cleanTxt(val);
+    return first.replace(/^USD\s+/i,'').trim();
+  };
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
   const dolarVariacaoMini=painelText('dolar-ant-var');
   const dolarCotacaoMini=painelText('dolar-ant-cot');
   setMini('closedMiniDolar', dolarVariacaoMini !== '—' ? dolarVariacaoMini : dolarCotacaoMini, dolarVariacaoMini !== '—' ? 'variation' : 'quote');
   setMini('closedMiniIbov', painelText('ibov-ant-var'));
+  setMini('closedMiniPoup', primeiroValorNaoVazio(painelText('mc-poup'), painelText('poupOldMonthly')));
+  setMini('closedMiniIbovPts', painelText('ibov-ant-pts'));
+  setMini('closedMiniSp', firstMarketLine(painelText('sp-ant-var')));
+  setMini('closedMiniNasdaq', firstMarketLine(painelText('nasdaq-ant-var')));
 }
 function renderClosedMarketSheet(){
   const periodo=periodoUltimoFechado();
@@ -22912,5 +22921,46 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
   window.__ELTAUM_MOBILE_MARKET_SUMMARY_COMPACT_V488__ = {
     build: BUILD,
     sync: syncMobileMarketSummaryCompactV488
+  };
+})();
+
+/* PATCH v489 — Mobile: resumo de mercado com mais indicadores visiveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_SUMMARY_EXPANDED_V489';
+
+  function syncMobileMarketSummaryExpandedV489(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v489','mobile-market-summary-expanded-v489');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(typeof atualizarResumoFechamentoMes === 'function'){
+        atualizarResumoFechamentoMes();
+      }
+
+      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
+      if(action) action.textContent = 'Ver fechamento ›';
+
+      const sub = document.getElementById('closedMonthLaunchSub');
+      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
+        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketSummaryExpandedV489, {once:true});
+  }else{
+    syncMobileMarketSummaryExpandedV489();
+  }
+
+  window.addEventListener('load', syncMobileMarketSummaryExpandedV489, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketSummaryExpandedV489, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketSummaryExpandedV489, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_SUMMARY_EXPANDED_V489__ = {
+    build: BUILD,
+    sync: syncMobileMarketSummaryExpandedV489
   };
 })();
