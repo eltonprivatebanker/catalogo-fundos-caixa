@@ -10912,10 +10912,9 @@ async function sharePainelMercado(){
   }
   function compactInsight(top,worst,periodo){
     if(!top) return 'Dados insuficientes para leitura rápida.';
-    const nome=cleanFund(top['Fundo']);
-    const v=pct(top[campoPorPeriodo(periodo)]);
-    if(!worst) return `${periodoLabel(periodo)}: destaque positivo ${nome} (${v}).`;
-    return `${periodoLabel(periodo)}: destaque positivo ${nome} (${v}); negativo ${cleanFund(worst['Fundo'])} (${pct(worst[campoPorPeriodo(periodo)])}).`;
+    const positivo=`${pct(top[campoPorPeriodo(periodo)])} em ${shortCat(top['Categoria'])}`;
+    if(!worst) return `${periodoLabel(periodo)}: destaque positivo ${positivo}.`;
+    return `${periodoLabel(periodo)}: positivo ${positivo}; negativo ${pct(worst[campoPorPeriodo(periodo)])} em ${shortCat(worst['Categoria'])}.`;
   }
 
   function renderRankingsV50(){
@@ -16228,7 +16227,7 @@ if(document.readyState === 'loading'){
 
     const map={
       todos:'Todos os fundos',
-      'sem-fmp':'Todos, exceto FMP',
+      'sem-fmp':'Sem FMP',
       'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
       'renda-fixa-referenciado':'RF Referenciado',
@@ -21738,8 +21737,39 @@ window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
   window.addEventListener('load', applyMonthlyIndicatorsNumericV460, {once:true});
   [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyMonthlyIndicatorsNumericV460, ms));
 
-  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
+window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
     build: BUILD,
     sync: applyMonthlyIndicatorsNumericV460
+  };
+})();
+
+/* PATCH v461 — Mobile: destaques do ranking compactos e sem texto comido */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_TIGHT_v461';
+
+  function applyRankingHighlightsTightV461(){
+    try{
+      document.documentElement.classList.add('mobile-v461','mobile-ranking-highlights-tight-v461');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const semFmp = document.querySelector('#rankingClassSelectV136 option[value="sem-fmp"]');
+      if(semFmp && semFmp.textContent.trim() !== 'Sem FMP') semFmp.textContent = 'Sem FMP';
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsTightV461, {once:true});
+  }else{
+    applyRankingHighlightsTightV461();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsTightV461, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingHighlightsTightV461);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsTightV461, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_TIGHT_V461__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsTightV461
   };
 })();
