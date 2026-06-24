@@ -21773,3 +21773,31 @@ window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
     sync: applyRankingHighlightsTightV461
   };
 })();
+
+/* PATCH v462 — Mobile: tipografia harmonizada nos KPIs do topo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_TYPOGRAPHY_v462';
+
+  function applyTopKpiTypographyV462(){
+    try{
+      document.documentElement.classList.add('mobile-v462','mobile-top-kpi-typography-v462');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyTopKpiTypographyV462, {once:true});
+  }else{
+    applyTopKpiTypographyV462();
+  }
+
+  window.addEventListener('load', applyTopKpiTypographyV462, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyTopKpiTypographyV462);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyTopKpiTypographyV462, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_TYPOGRAPHY_V462__ = {
+    build: BUILD,
+    sync: applyTopKpiTypographyV462
+  };
+})();

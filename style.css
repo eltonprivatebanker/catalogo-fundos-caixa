@@ -62868,3 +62868,129 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     line-height:1.12!important;
   }
 }
+
+/* PATCH v462 — Mobile: tipografia harmonizada nos quatro KPIs do topo */
+@media(max-width:768px){
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-compact-grid{
+    gap:8px!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell{
+    min-height:82px!important;
+    padding:10px 10px 9px!important;
+    display:grid!important;
+    grid-template-columns:26px minmax(0,1fr)!important;
+    grid-template-areas:
+      "icon label"
+      "icon value"
+      "sub sub"!important;
+    column-gap:8px!important;
+    row-gap:0!important;
+    align-content:start!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-icon-v435{
+    grid-area:icon!important;
+    width:26px!important;
+    height:26px!important;
+    margin:1px 0 0!important;
+    border-radius:9px!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-icon-v435 svg{
+    width:15px!important;
+    height:15px!important;
+    stroke-width:2.25!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell > span:not(.mobile-kpi-icon-v435){
+    grid-area:label!important;
+    align-self:end!important;
+    min-width:0!important;
+    margin:0!important;
+    color:#b9c5e3!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+    letter-spacing:.08em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell > strong{
+    grid-area:value!important;
+    align-self:start!important;
+    min-width:0!important;
+    margin:4px 0 0!important;
+    font-size:1.08rem!important;
+    line-height:1.02!important;
+    letter-spacing:-.04em!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell > strong b{
+    font:inherit!important;
+    letter-spacing:inherit!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-pl-v435 > strong,
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-pl-v435 > strong b{
+    font-size:1.02rem!important;
+    letter-spacing:-.045em!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-best-v435 > strong,
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-worst-v435 > strong,
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell-perf > strong{
+    font-size:1.04rem!important;
+    letter-spacing:-.045em!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell > small{
+    grid-area:sub!important;
+    min-width:0!important;
+    margin:7px 0 0!important;
+    color:#c7d3ee!important;
+    font-size:.61rem!important;
+    line-height:1.12!important;
+    font-weight:750!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+
+@media(max-width:380px){
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell{
+    min-height:78px!important;
+    padding:9px 8px!important;
+    grid-template-columns:24px minmax(0,1fr)!important;
+    column-gap:7px!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-icon-v435{
+    width:24px!important;
+    height:24px!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell > strong{
+    font-size:1.01rem!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-pl-v435 > strong,
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-pl-v435 > strong b{
+    font-size:.96rem!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-best-v435 > strong,
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell.is-worst-v435 > strong,
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell-perf > strong{
+    font-size:.98rem!important;
+  }
+
+  html.mobile-top-kpi-typography-v462 body #sec-kpi-mobile .mobile-kpi-cell > small{
+    font-size:.58rem!important;
+  }
+}
