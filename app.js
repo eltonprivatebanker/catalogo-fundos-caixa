@@ -22818,3 +22818,32 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     sync: syncMobileFilterGridForceV485
   };
 })();
+
+/* PATCH v486 — Mobile: detalhes do fundo em grade densa */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486';
+
+  function syncMobileFundDetailDenseV486(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v486','mobile-fund-detail-dense-v486');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFundDetailDenseV486, {once:true});
+  }else{
+    syncMobileFundDetailDenseV486();
+  }
+
+  window.addEventListener('load', syncMobileFundDetailDenseV486, {once:true});
+  window.addEventListener('pageshow', syncMobileFundDetailDenseV486, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFundDetailDenseV486, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
+    build: BUILD,
+    sync: syncMobileFundDetailDenseV486
+  };
+})();
