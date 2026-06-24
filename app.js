@@ -21689,3 +21689,30 @@ window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
     sync: applyRankingHighlightsCompactV458
   };
 })();
+
+/* PATCH v459 — Mobile: refino visual dos destaques do ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_REFINE_v459';
+
+  function applyRankingHighlightsRefineV459(){
+    try{
+      document.documentElement.classList.add('mobile-v459','mobile-ranking-highlights-refine-v459');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsRefineV459, {once:true});
+  }else{
+    applyRankingHighlightsRefineV459();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsRefineV459, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsRefineV459, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_REFINE_V459__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsRefineV459
+  };
+})();
