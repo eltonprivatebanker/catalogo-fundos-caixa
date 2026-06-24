@@ -10823,6 +10823,48 @@ async function sharePainelMercado(){
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
+  function compactFundName(v){
+    const full=cleanFund(v);
+    if(full==='—') return full;
+    let s=full
+      .replace(/\s*\(\d+\)/g,' ')
+      .replace(/\bCAIXA\b/gi,' ')
+      .replace(/\b(FIC|FIF|FI|FIA|FIM|ETF)\b/gi,' ')
+      .replace(/\b(FUNDO|DE|INVESTIMENTO)\b/gi,' ')
+      .replace(/\b(RESP|LTDA|LTD|LP)\b/gi,' ')
+      .replace(/\s*-\s*/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    if(!s) return full;
+
+    const replacements=[
+      [/\bACOES\b/gi,'Ações'],
+      [/\bDOLAR\b/gi,'Dólar'],
+      [/\bINDICE\b/gi,'Índice'],
+      [/\bCRED PRIV\b/gi,'Cred. Priv.'],
+      [/\bREFERENCIADO\b/gi,'Ref.'],
+      [/\bCORPORATIVO\b/gi,'Corp.'],
+      [/\bBOLSA AMERICANA\b/gi,'Bolsa Americana'],
+      [/\bELETROBRAS MIGRACAO\b/gi,'Eletrobras Migração'],
+      [/\bELETROBRAS\b/gi,'Eletrobras']
+    ];
+    replacements.forEach(([pattern,value])=>{s=s.replace(pattern,value);});
+
+    const acronyms=new Set(['RF','DI','CP','CDI','FMP','FGTS','MM','IRF-M','IMA-B','IPCA']);
+    s=s.split(/\s+/).map(word=>{
+      const clean=word.replace(/[.,]/g,'').toUpperCase();
+      if(acronyms.has(clean)) return word.toUpperCase();
+      if(word.includes('-')) return word.split('-').map(part=>{
+        const p=part.toUpperCase();
+        return acronyms.has(p)?p:(part.charAt(0).toUpperCase()+part.slice(1).toLowerCase());
+      }).join('-');
+      return word.charAt(0).toUpperCase()+word.slice(1).toLowerCase();
+    }).join(' ');
+
+    const words=s.split(/\s+/).filter(Boolean);
+    if(words.length>4) s=words.slice(0,4).join(' ');
+    return s||full;
+  }
   function shortCat(v){
     const raw=String(v||'—').trim();
     const n=typeof normRankTxt==='function'?normRankTxt(raw):raw.toUpperCase();
@@ -10873,7 +10915,9 @@ async function sharePainelMercado(){
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
   function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
-    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
+    const fullName=cleanFund(name);
+    const displayName=kind==='pl' ? fullName : compactFundName(fullName);
+    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(fullName)}">${esc(displayName)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
   function topRow(r,i,campo,showCdi){
     const cat=shortCat(r['Categoria']);
@@ -21838,5 +21882,33 @@ window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
   window.__ELTAUM_MOBILE_RANKING_NO_CUT_V463__ = {
     build: BUILD,
     sync: applyRankingNoCutV463
+  };
+})();
+
+/* PATCH v464 — Mobile: nomes curtos nos cards de destaque do ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SHORT_NAMES_v464';
+
+  function applyRankingShortNamesV464(){
+    try{
+      document.documentElement.classList.add('mobile-v464','mobile-ranking-short-names-v464');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingShortNamesV464, {once:true});
+  }else{
+    applyRankingShortNamesV464();
+  }
+
+  window.addEventListener('load', applyRankingShortNamesV464, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingShortNamesV464);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingShortNamesV464, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_SHORT_NAMES_V464__ = {
+    build: BUILD,
+    sync: applyRankingShortNamesV464
   };
 })();

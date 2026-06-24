@@ -63164,3 +63164,33 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     font-size:.59rem!important;
   }
 }
+
+/* PATCH v464 — Mobile: nomes curtos nos destaques do ranking */
+@media(max-width:700px){
+  html.mobile-ranking-short-names-v464 body #rankingsSection .ranking-exec-card > small{
+    font-size:.66rem!important;
+    line-height:1.14!important;
+    letter-spacing:-.02em!important;
+    font-weight:850!important;
+    -webkit-line-clamp:2!important;
+  }
+
+  html.mobile-ranking-short-names-v464 body #rankingsSection .ranking-exec-card{
+    min-height:102px!important;
+  }
+
+  html.mobile-ranking-short-names-v464 body #rankingsSection .ranking-exec-card.pl{
+    min-height:92px!important;
+  }
+
+  html.mobile-ranking-short-names-v464 body #rankingsSection .ranking-exec-card > em{
+    font-size:.57rem!important;
+    color:#aab5cf!important;
+  }
+}
+
+@media(max-width:380px){
+  html.mobile-ranking-short-names-v464 body #rankingsSection .ranking-exec-card > small{
+    font-size:.62rem!important;
+  }
+}
