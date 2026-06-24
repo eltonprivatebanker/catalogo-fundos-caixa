@@ -10827,8 +10827,8 @@ async function sharePainelMercado(){
     const raw=String(v||'—').trim();
     const n=typeof normRankTxt==='function'?normRankTxt(raw):raw.toUpperCase();
     if(n.includes('FUNDOS MUTUOS')||n.includes('PRIVATIZACAO')) return 'FMP';
-    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Referenciado';
-    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto Prazo';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
     if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
     if(n.includes('RENDA FIXA')) return 'Renda Fixa';
     if(n.includes('MULTIMERCADO')) return 'Multimercado';
@@ -10853,7 +10853,7 @@ async function sharePainelMercado(){
   function periodoLabel(p){return typeof rankPeriodoLabel==='function'?rankPeriodoLabel(p):(p==='mes'?'mês':p==='ano'?'ano':'12 meses')}
   function periodoResumo(p){return typeof rankPeriodoResumo==='function'?rankPeriodoResumo(p):(p==='mes'?'do mês':p==='ano'?'no ano':'12M')}
   function filtroLabelAtual(){
-    if(typeof activeRankFilter==='undefined'||activeRankFilter==='todos') return 'Todos os fundos';
+    if(typeof activeRankFilter==='undefined'||activeRankFilter==='todos') return 'Todos';
     const btn=qs(`[data-rank-filter="${activeRankFilter}"]`);
     return btn?btn.textContent.trim():'Filtro aplicado';
   }
@@ -16226,19 +16226,19 @@ if(document.readyState === 'loading'){
     if(activeChip && activeChip.textContent.trim()) return activeChip.textContent.trim();
 
     const map={
-      todos:'Todos os fundos',
+      todos:'Todos',
       'sem-fmp':'Sem FMP',
       'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
-      'renda-fixa-referenciado':'RF Referenciado',
-      'renda-fixa-curto-prazo':'RF Curto Prazo',
+      'renda-fixa-referenciado':'RF Ref.',
+      'renda-fixa-curto-prazo':'RF Curto',
       multimercado:'Multimercado',
       cambial:'Cambial',
       acoes:'Ações',
       'fundo-de-indice':'Índice',
       fmp:'FMP'
     };
-    return map[value]||'Todos os fundos';
+    return map[value]||'Todos';
   }
 
   function syncUniversePill(){
@@ -21799,5 +21799,44 @@ window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
   window.__ELTAUM_MOBILE_TOP_KPI_TYPOGRAPHY_V462__ = {
     build: BUILD,
     sync: applyTopKpiTypographyV462
+  };
+})();
+
+/* PATCH v463 — Mobile: ranking sem truncamento agressivo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_NO_CUT_v463';
+
+  function applyRankingNoCutV463(){
+    try{
+      document.documentElement.classList.add('mobile-v463','mobile-ranking-no-cut-v463');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const labels = {
+        todos:'Todos',
+        'sem-fmp':'Sem FMP',
+        'renda-fixa-referenciado':'RF Ref.',
+        'renda-fixa-curto-prazo':'RF Curto'
+      };
+      Object.entries(labels).forEach(([value,label]) => {
+        const option = document.querySelector(`#rankingClassSelectV136 option[value="${value}"]`);
+        if(option && option.textContent.trim() !== label) option.textContent = label;
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingNoCutV463, {once:true});
+  }else{
+    applyRankingNoCutV463();
+  }
+
+  window.addEventListener('load', applyRankingNoCutV463, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingNoCutV463);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingNoCutV463, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_NO_CUT_V463__ = {
+    build: BUILD,
+    sync: applyRankingNoCutV463
   };
 })();
