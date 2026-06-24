@@ -64592,3 +64592,64 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.55rem!important;
   }
 }
+
+/* PATCH v473 — Agenda Copom: remove badge duplicado e mostra decisao unica */
+@media(max-width:768px){
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-exec-meta-v270,
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-exec-status-v270,
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-carousel-result-v321,
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-move-v430,
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-move-v431,
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-decision-v470{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 > article{
+    min-height:82px!important;
+    gap:5px!important;
+    justify-content:flex-start!important;
+  }
+
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-decision-v473{
+    display:block!important;
+    visibility:visible!important;
+    width:auto!important;
+    height:auto!important;
+    margin:1px 0 0!important;
+    padding:0!important;
+    color:#aeb9d2!important;
+    font-size:.58rem!important;
+    line-height:1.18!important;
+    font-weight:850!important;
+    letter-spacing:-.012em!important;
+    text-transform:none!important;
+    white-space:normal!important;
+  }
+
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 > article.is-cut .copom-decision-v473{
+    color:#ff7893!important;
+  }
+
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hike .copom-decision-v473{
+    color:#66d79d!important;
+  }
+
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 > article.is-hold .copom-decision-v473{
+    color:#9fb7ff!important;
+  }
+}
+
+@media(max-width:380px){
+  html.copom-single-decision-v473 body #sec-mercado #copomExecutiveSummaryV270 .copom-decision-v473{
+    font-size:.54rem!important;
+    line-height:1.16!important;
+  }
+}

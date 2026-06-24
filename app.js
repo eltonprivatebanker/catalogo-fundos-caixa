@@ -22278,3 +22278,118 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
     sync: syncFocusWrapV472
   };
 })();
+
+/* PATCH v473 — Agenda Copom: decisao unica com movimento em p.p. */
+(function(){
+  const BUILD = 'ELTAUM_COPOM_SINGLE_DECISION_v473';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function clean(value){
+    return String(value || '')
+      .replace(/\u2212/g, '-')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function normalizeMove(value){
+    const text = clean(value);
+    const match = text.match(/\b(corte|alta)\b(?:\s+de)?\s*([+-]?\d+(?:[,.]\d+)?)\s*p\.?\s*p\.?/i);
+    if(!match) return null;
+    return {
+      type: match[1].toLowerCase() === 'alta' ? 'Alta' : 'Corte',
+      value: match[2].replace(/[+-]/g, '') + ' p.p.'
+    };
+  }
+
+  function storeResults(){
+    const store = document.getElementById('copomMeetings');
+    if(!store) return [];
+    return [...store.querySelectorAll('.copom-item')]
+      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999))
+      .map(item => clean(item.querySelector('.copom-result')?.textContent));
+  }
+
+  function decisionFor(card, fallbackResult){
+    const pieces = [
+      card.querySelector('.copom-exec-status-v270')?.textContent,
+      card.querySelector('.copom-carousel-result-v321')?.textContent,
+      card.querySelector('.copom-move-v430')?.textContent,
+      card.querySelector('.copom-move-v431')?.textContent,
+      fallbackResult
+    ].map(clean).filter(Boolean);
+    const text = pieces.join(' ');
+    const lower = text.toLowerCase();
+    const move = normalizeMove(text);
+
+    if(move) return `${move.type} de ${move.value}`;
+    if(lower.includes('mantida')) return 'Mantida';
+    if(lower.includes('corte')) return 'Corte';
+    if(lower.includes('alta')) return 'Alta';
+    if(lower.includes('prevista')) return 'Prevista';
+    if(lower.includes('agenda') || lower.includes('próxima') || lower.includes('proxima')) return 'Próxima reunião';
+    return clean(card.querySelector('.copom-exec-status-v270')?.textContent) || 'Agenda';
+  }
+
+  function hideLegacy(card){
+    card.querySelectorAll('.copom-exec-meta-v270, .copom-exec-status-v270, .copom-carousel-result-v321, .copom-move-v430, .copom-move-v431').forEach(el => {
+      el.setAttribute('aria-hidden', 'true');
+      el.style.setProperty('display', 'none', 'important');
+    });
+  }
+
+  function syncCopomSingleDecisionV473(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v473','copom-single-decision-v473');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+
+      const results = storeResults();
+      const cards = [...summary.querySelectorAll(':scope > article')];
+      cards.forEach((card, index) => {
+        hideLegacy(card);
+        let decision = card.querySelector('.copom-decision-v473');
+        if(!decision){
+          decision = document.createElement('small');
+          decision.className = 'copom-decision-v473';
+          card.appendChild(decision);
+        }
+        decision.textContent = decisionFor(card, results[index]);
+      });
+
+      if(!observerStarted && window.MutationObserver){
+        observerStarted = true;
+        const target = document.getElementById('sec-mercado') || summary;
+        const obs = new MutationObserver(() => {
+          if(scheduled) return;
+          scheduled = true;
+          requestAnimationFrame(() => {
+            scheduled = false;
+            syncCopomSingleDecisionV473();
+          });
+        });
+        obs.observe(target, { childList:true, subtree:true });
+        window.__ELTAUM_COPOM_SINGLE_DECISION_OBSERVER_V473__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomSingleDecisionV473, {once:true});
+  }else{
+    syncCopomSingleDecisionV473();
+  }
+
+  window.addEventListener('load', syncCopomSingleDecisionV473, {once:true});
+  window.addEventListener('pageshow', syncCopomSingleDecisionV473, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomSingleDecisionV473, ms));
+
+  window.__ELTAUM_COPOM_SINGLE_DECISION_V473__ = {
+    build: BUILD,
+    sync: syncCopomSingleDecisionV473
+  };
+})();
