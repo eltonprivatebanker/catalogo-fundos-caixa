@@ -21912,3 +21912,49 @@ window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
     sync: applyRankingShortNamesV464
   };
 })();
+
+/* PATCH v465 — Mobile: ranking adaptativo por viewport real */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_ADAPTIVE_RANKING_v465';
+
+  function viewportSizeV465(){
+    const vv = window.visualViewport;
+    return {
+      width: Math.round(vv?.width || window.innerWidth || document.documentElement.clientWidth || 0),
+      height: Math.round(vv?.height || window.innerHeight || document.documentElement.clientHeight || 0)
+    };
+  }
+
+  function applyAdaptiveRankingV465(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v465','mobile-adaptive-ranking-v465');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const size = viewportSizeV465();
+      html.classList.toggle('mobile-tight-viewport-v465', size.width <= 390 || size.height <= 760);
+
+      document.querySelectorAll('#rankingRiskSelectV198,#rankingClassSelectV136,#rankingPeriodSelectV136').forEach(select => {
+        select.style.minHeight = html.classList.contains('mobile-tight-viewport-v465') ? '38px' : '';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyAdaptiveRankingV465, {once:true});
+  }else{
+    applyAdaptiveRankingV465();
+  }
+
+  window.addEventListener('load', applyAdaptiveRankingV465, {once:true});
+  window.addEventListener('resize', applyAdaptiveRankingV465, {passive:true});
+  window.visualViewport?.addEventListener('resize', applyAdaptiveRankingV465, {passive:true});
+  document.addEventListener('elton:rankings-rendered', applyAdaptiveRankingV465);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyAdaptiveRankingV465, ms));
+
+  window.__ELTAUM_MOBILE_ADAPTIVE_RANKING_V465__ = {
+    build: BUILD,
+    sync: applyAdaptiveRankingV465
+  };
+})();

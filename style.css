@@ -63194,3 +63194,167 @@ html.mobile-v408 body #mobileSelicV400 .econ-dash-card-head-v378 p{
     font-size:.62rem!important;
   }
 }
+
+/* PATCH v465 — Mobile: ranking adaptativo para telas estreitas e texto ampliado */
+@media(max-width:700px){
+  html.mobile-adaptive-ranking-v465 body #rankingsSection{
+    --rank-card-gap-v465:8px;
+    --rank-select-font-v465:.78rem;
+    --rank-value-font-v465:.94rem;
+    --rank-name-font-v465:.65rem;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-toolbar{
+    align-items:stretch!important;
+    gap:8px!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-control-card-v136{
+    min-height:76px!important;
+    padding:10px 12px!important;
+    justify-content:center!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-control-card-v136 label{
+    margin:0 0 7px!important;
+    line-height:1!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-select-v136{
+    min-height:34px!important;
+    height:auto!important;
+    padding:7px 30px 7px 0!important;
+    font-size:var(--rank-select-font-v465)!important;
+    line-height:1.22!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-risk-control-v198{
+    grid-column:1 / -1!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-risk-control-v198 .ranking-select-v136{
+    min-height:38px!important;
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-summary{
+    gap:var(--rank-card-gap-v465)!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card{
+    min-height:104px!important;
+    padding:10px 9px!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card > span{
+    min-width:0!important;
+    font-size:.54rem!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card > strong{
+    font-size:var(--rank-value-font-v465)!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card.pl > strong{
+    font-size:.82rem!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card > small{
+    font-size:var(--rank-name-font-v465)!important;
+    line-height:1.16!important;
+    overflow:hidden!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card > em{
+    font-size:.57rem!important;
+    line-height:1.18!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-insight{
+    margin-bottom:92px!important;
+    padding-right:64px!important;
+  }
+}
+
+@media(max-width:390px), (max-height:760px){
+  html.mobile-adaptive-ranking-v465 body #rankingsSection{
+    --rank-card-gap-v465:7px;
+    --rank-select-font-v465:.74rem;
+    --rank-value-font-v465:.88rem;
+    --rank-name-font-v465:.61rem;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-toolbar{
+    gap:7px!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-control-card-v136{
+    min-height:72px!important;
+    padding:9px 10px!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-select-v136{
+    min-height:36px!important;
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+    line-height:1.2!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card{
+    min-height:100px!important;
+    padding:9px 8px!important;
+    row-gap:4px!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card > span{
+    font-size:.51rem!important;
+    letter-spacing:.035em!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card.pl > strong{
+    font-size:.74rem!important;
+    letter-spacing:-.06em!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-card > em{
+    font-size:.54rem!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-insight{
+    padding:9px 58px 9px 10px!important;
+  }
+
+  html.mobile-adaptive-ranking-v465 body #rankingsSection .ranking-exec-insight > p{
+    font-size:.61rem!important;
+    line-height:1.3!important;
+  }
+}
+
+html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSection .ranking-select-v136{
+  min-height:38px!important;
+  font-size:.72rem!important;
+  line-height:1.24!important;
+}
+
+html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSection .ranking-exec-card{
+  min-height:102px!important;
+}
+
+html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSection .ranking-exec-card > strong{
+  font-size:.86rem!important;
+}
