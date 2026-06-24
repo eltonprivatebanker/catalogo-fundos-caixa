@@ -23182,3 +23182,48 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
     sync: syncMobileMarketUsToggleHeaderV493
   };
 })();
+
+/* PATCH v494 — Mobile: seletor USD/BRL inline e card sem botao aninhado */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_INLINE_V494';
+
+  function syncMobileMarketUsToggleInlineV494(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v494','mobile-market-us-toggle-inline-v494');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const card = document.getElementById('closedMonthLaunch');
+      if(card && !card.dataset.v494CardBound){
+        card.dataset.v494CardBound = '1';
+        card.addEventListener('keydown', event => {
+          if(event.target?.closest?.('.closed-us-currency-toggle-v492')) return;
+          if(event.key === 'Enter' || event.key === ' '){
+            event.preventDefault();
+            if(typeof openFechamentoMesSheet === 'function') openFechamentoMesSheet();
+          }
+        });
+      }
+
+      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
+        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleInlineV494, {once:true});
+  }else{
+    syncMobileMarketUsToggleInlineV494();
+  }
+
+  window.addEventListener('load', syncMobileMarketUsToggleInlineV494, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketUsToggleInlineV494, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleInlineV494, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_INLINE_V494__ = {
+    build: BUILD,
+    sync: syncMobileMarketUsToggleInlineV494
+  };
+})();
