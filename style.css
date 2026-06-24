@@ -66747,3 +66747,112 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.74rem!important;
   }
 }
+
+/* PATCH v483 — Mobile: filtros mais compactos e sem titulo duplicado */
+@media(max-width:768px){
+  html.mobile-filter-list-compact-v483 body #sec-fundos .fund-filter-shell,
+  html.mobile-filter-list-compact-v483 body #sec-fundos .fund-filter-shell-v217{
+    padding:12px!important;
+    border-radius:17px!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos #mobileCategorySelectShellV74{
+    margin-top:10px!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-category-select-head-v74{
+    margin:0!important;
+    padding:0 0 6px!important;
+    border-bottom:1px solid rgba(232,187,106,.16)!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-category-select-head-v74 span::before{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-category-select-head-v74 span::after{
+    content:"Filtros"!important;
+    font-size:.86rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-sort-shell-v75{
+    min-height:45px!important;
+    padding:7px 0!important;
+    gap:2px 8px!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-category-select-wrap-v74{
+    border-top:0!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .filter-label-v482{
+    font-size:.52rem!important;
+    line-height:1!important;
+    letter-spacing:.08em!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .filter-value-v482,
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-sort-shell-v75 .filter-value-v482{
+    font-size:.74rem!important;
+    line-height:1.1!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-pf-toggle-v75{
+    min-height:46px!important;
+    padding:7px 0!important;
+    column-gap:9px!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-pf-toggle-mark-v75{
+    width:23px!important;
+    height:23px!important;
+    min-width:23px!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-pf-toggle-text-v75 strong{
+    font-size:.74rem!important;
+    line-height:1.08!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-pf-toggle-text-v75 small{
+    display:none!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-category-select-foot-v74{
+    min-height:0!important;
+    margin:4px 0 0!important;
+    padding:6px 78px 0 0!important;
+    border-top:1px solid rgba(157,170,204,.10)!important;
+    justify-content:flex-start!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos #mobileCategorySelectResultV74{
+    display:none!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos #mobileCategoryClearV74{
+    margin:0!important;
+    min-height:28px!important;
+    max-width:100%!important;
+    padding:6px 10px!important;
+    border-radius:999px!important;
+    white-space:nowrap!important;
+  }
+}
+
+@media(max-width:380px){
+  html.mobile-filter-list-compact-v483 body #sec-fundos .fund-filter-shell,
+  html.mobile-filter-list-compact-v483 body #sec-fundos .fund-filter-shell-v217{
+    padding:11px!important;
+  }
+
+  html.mobile-filter-list-compact-v483 body #sec-fundos .filter-value-v482,
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-sort-shell-v75 .filter-value-v482,
+  html.mobile-filter-list-compact-v483 body #sec-fundos .mobile-pf-toggle-text-v75 strong{
+    font-size:.71rem!important;
+  }
+}

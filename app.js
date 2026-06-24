@@ -22731,3 +22731,32 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     sync: syncMobileFilterListV482
   };
 })();
+
+/* PATCH v483 — Mobile: ativa filtros compactos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_LIST_COMPACT_V483';
+
+  function syncMobileFilterListCompactV483(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v483','mobile-filter-list-compact-v483');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterListCompactV483, {once:true});
+  }else{
+    syncMobileFilterListCompactV483();
+  }
+
+  window.addEventListener('load', syncMobileFilterListCompactV483, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterListCompactV483, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterListCompactV483, ms));
+
+  window.__ELTAUM_MOBILE_FILTER_LIST_COMPACT_V483__ = {
+    build: BUILD,
+    sync: syncMobileFilterListCompactV483
+  };
+})();
