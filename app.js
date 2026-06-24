@@ -22250,3 +22250,31 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
     sync: syncToggleHarmonyV471
   };
 })();
+
+/* PATCH v472 — Mobile: Focus sem estouro horizontal */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FOCUS_WRAP_v472';
+
+  function syncFocusWrapV472(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v472','mobile-focus-wrap-v472');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncFocusWrapV472, {once:true});
+  }else{
+    syncFocusWrapV472();
+  }
+
+  window.addEventListener('load', syncFocusWrapV472, {once:true});
+  [300, 900, 1800, 3500].forEach(ms => setTimeout(syncFocusWrapV472, ms));
+
+  window.__ELTAUM_MOBILE_FOCUS_WRAP_V472__ = {
+    build: BUILD,
+    sync: syncFocusWrapV472
+  };
+})();
