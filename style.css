@@ -67766,3 +67766,83 @@ html.mobile-ranking-no-insight-v487 #rankingGrid .ranking-exec-insight{
     font-size:.63rem!important;
   }
 }
+
+/* PATCH v490 — Mobile: dolar separado e 3 bolsas EUA visiveis */
+@media(max-width:820px){
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch.closed-month-launch,
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado .closed-month-launch-premium{
+    padding:13px 14px 10px!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-month-mini{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    margin-top:9px!important;
+    padding-top:7px!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item{
+    min-height:0!important;
+    padding:6px 9px!important;
+    gap:6px!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item:nth-child(odd){
+    padding-left:0!important;
+    border-right:1px solid rgba(255,255,255,.065)!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item:nth-child(even){
+    padding-right:0!important;
+    border-right:0!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item:nth-child(-n+8){
+    border-bottom:1px solid rgba(255,255,255,.055)!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item:nth-child(n+9){
+    border-bottom:0!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item b{
+    font-size:.51rem!important;
+    letter-spacing:.055em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item em{
+    max-width:102px!important;
+    font-size:.62rem!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item em.neg{
+    color:#ff5c7a!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item em.pos{
+    color:#49d391!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item em.zero,
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item em.market-quote-v231{
+    color:#f8fafc!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item{
+    padding:5px 6px!important;
+    gap:4px!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item b{
+    font-size:.47rem!important;
+  }
+
+  html.mobile-market-summary-usd-brl-v490 body #sec-mercado #closedMonthLaunch .closed-mini-item em{
+    max-width:86px!important;
+    font-size:.56rem!important;
+  }
+}
