@@ -22087,3 +22087,37 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
     sync: applyMobileFundDetailListV468
   };
 })();
+
+/* PATCH v469 — Mobile: harmonia visual dos detalhes do fundo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_HARMONY_v469';
+
+  function applyMobileFundDetailHarmonyV469(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v469','mobile-fund-detail-harmony-v469');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-harmony-card-v469');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailHarmonyV469, {once:true});
+  }else{
+    applyMobileFundDetailHarmonyV469();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailHarmonyV469, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailHarmonyV469);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailHarmonyV469, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailHarmonyV469, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_HARMONY_V469__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailHarmonyV469
+  };
+})();
