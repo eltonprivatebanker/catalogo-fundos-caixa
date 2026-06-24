@@ -11022,7 +11022,6 @@ async function sharePainelMercado(){
     grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
-      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(compactInsight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
@@ -22842,8 +22841,39 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   window.addEventListener('pageshow', syncMobileFundDetailDenseV486, {passive:true});
   [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFundDetailDenseV486, ms));
 
-  window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
+window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
     build: BUILD,
     sync: syncMobileFundDetailDenseV486
+  };
+})();
+
+/* PATCH v487 — Rankings: remove Leitura rapida */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_NO_INSIGHT_V487';
+
+  function syncMobileRankingNoInsightV487(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v487','mobile-ranking-no-insight-v487');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.querySelectorAll('#rankingsSection .ranking-exec-insight, #rankingGrid .ranking-exec-insight')
+        .forEach(el => el.remove());
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileRankingNoInsightV487, {once:true});
+  }else{
+    syncMobileRankingNoInsightV487();
+  }
+
+  window.addEventListener('load', syncMobileRankingNoInsightV487, {once:true});
+  window.addEventListener('pageshow', syncMobileRankingNoInsightV487, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingNoInsightV487, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_NO_INSIGHT_V487__ = {
+    build: BUILD,
+    sync: syncMobileRankingNoInsightV487
   };
 })();

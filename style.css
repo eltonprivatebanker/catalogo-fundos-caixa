@@ -67479,3 +67479,10 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.64rem!important;
   }
 }
+
+/* PATCH v487 — Rankings: remove Leitura rapida */
+html.mobile-ranking-no-insight-v487 #rankingsSection .ranking-exec-insight,
+html.mobile-ranking-no-insight-v487 body #rankingsSection .ranking-exec-insight,
+html.mobile-ranking-no-insight-v487 #rankingGrid .ranking-exec-insight{
+  display:none!important;
+}
