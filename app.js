@@ -23302,8 +23302,81 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
   window.addEventListener('pageshow', syncMobileMarketUsToggleCleanV496, {passive:true});
   [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleCleanV496, ms));
 
-  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_CLEAN_V496__ = {
+window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_CLEAN_V496__ = {
     build: BUILD,
     sync: syncMobileMarketUsToggleCleanV496
+  };
+})();
+
+/* PATCH v497 — Mobile: resumo de mercado sem abertura e toggle EUA dedicado */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497';
+
+  function syncMobileMarketStaticUsToggleV497(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v497','mobile-market-static-us-toggle-v497');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const card = document.getElementById('closedMonthLaunch');
+      if(card){
+        card.removeAttribute('onclick');
+        card.removeAttribute('role');
+        card.removeAttribute('tabindex');
+        card.removeAttribute('data-open-closed-market');
+        card.setAttribute('aria-label','Resumo do último mês consolidado');
+        card.style.pointerEvents = 'auto';
+        const action = card.querySelector('.closed-month-launch-action');
+        if(action) action.remove();
+      }
+
+      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
+        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(!window.__ELTAUM_MARKET_STATIC_CARD_CAPTURE_V497__){
+    window.__ELTAUM_MARKET_STATIC_CARD_CAPTURE_V497__ = true;
+
+    document.addEventListener('click', event => {
+      const toggle = event.target?.closest?.('.closed-us-currency-toggle-v492');
+      if(toggle) return;
+
+      const card = event.target?.closest?.('#closedMonthLaunch');
+      if(!card) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      return false;
+    }, true);
+
+    document.addEventListener('keydown', event => {
+      const card = event.target?.closest?.('#closedMonthLaunch');
+      if(!card || event.target?.closest?.('.closed-us-currency-toggle-v492')) return;
+      if(event.key !== 'Enter' && event.key !== ' ') return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      return false;
+    }, true);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketStaticUsToggleV497, {once:true});
+  }else{
+    syncMobileMarketStaticUsToggleV497();
+  }
+
+  window.addEventListener('load', syncMobileMarketStaticUsToggleV497, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketStaticUsToggleV497, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketStaticUsToggleV497, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__ = {
+    build: BUILD,
+    sync: syncMobileMarketStaticUsToggleV497
   };
 })();
