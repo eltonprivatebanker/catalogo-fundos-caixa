@@ -23260,3 +23260,50 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
     sync: syncMobileMarketUsToggleScopedV495
   };
 })();
+
+/* PATCH v496 — Mobile: toggle Bolsa EUA limpo e com evento capturado */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_CLEAN_V496';
+
+  function syncMobileMarketUsToggleCleanV496(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v496','mobile-market-us-toggle-clean-v496');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
+        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(!window.__ELTAUM_MARKET_US_TOGGLE_CAPTURE_V496__){
+    window.__ELTAUM_MARKET_US_TOGGLE_CAPTURE_V496__ = true;
+    document.addEventListener('click', event => {
+      const toggle = event.target?.closest?.('.closed-us-currency-toggle-v492');
+      if(!toggle) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      if(typeof window.toggleClosedUsCurrencyV492 === 'function'){
+        window.toggleClosedUsCurrencyV492();
+      }
+    }, true);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleCleanV496, {once:true});
+  }else{
+    syncMobileMarketUsToggleCleanV496();
+  }
+
+  window.addEventListener('load', syncMobileMarketUsToggleCleanV496, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketUsToggleCleanV496, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleCleanV496, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_CLEAN_V496__ = {
+    build: BUILD,
+    sync: syncMobileMarketUsToggleCleanV496
+  };
+})();
