@@ -23227,3 +23227,36 @@ window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
     sync: syncMobileMarketUsToggleInlineV494
   };
 })();
+
+/* PATCH v495 — Mobile: seletor USD/Real escopado a Bolsa EUA */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_SCOPED_V495';
+
+  function syncMobileMarketUsToggleScopedV495(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v495','mobile-market-us-toggle-scoped-v495');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
+        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleScopedV495, {once:true});
+  }else{
+    syncMobileMarketUsToggleScopedV495();
+  }
+
+  window.addEventListener('load', syncMobileMarketUsToggleScopedV495, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketUsToggleScopedV495, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleScopedV495, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_SCOPED_V495__ = {
+    build: BUILD,
+    sync: syncMobileMarketUsToggleScopedV495
+  };
+})();

@@ -68093,3 +68093,100 @@ html.mobile-ranking-no-insight-v487 #rankingGrid .ranking-exec-insight{
     min-width:28px!important;
   }
 }
+
+/* PATCH v495 — Mobile: seletor USD/Real restrito ao bloco Bolsa EUA */
+@media(max-width:820px){
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado #closedMonthLaunchTitle,
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado #closedMonthLaunchSub{
+    width:calc(100% - 150px)!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado .closed-us-scope-row-v495{
+    grid-column:1 / -1!important;
+    min-height:28px!important;
+    margin:2px 0 0!important;
+    padding:7px 0 6px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    border-top:1px solid rgba(255,255,255,.075)!important;
+    border-bottom:1px solid rgba(255,255,255,.06)!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado .closed-us-scope-row-v495 > span{
+    color:#f4cf82!important;
+    font-family:var(--font-ui-v120,'Inter',system-ui,sans-serif)!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.095em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado .closed-us-currency-toggle-v492{
+    position:static!important;
+    top:auto!important;
+    right:auto!important;
+    transform:none!important;
+    z-index:auto!important;
+    width:max-content!important;
+    height:24px!important;
+    margin:0!important;
+    padding:2px!important;
+    display:inline-grid!important;
+    grid-template-columns:1fr 1fr!important;
+    align-items:center!important;
+    border-radius:999px!important;
+    border:1px solid rgba(232,187,106,.24)!important;
+    background:rgba(3,6,15,.56)!important;
+    color:#aeb8cf!important;
+    font-family:var(--font-ui-v120,'Inter',system-ui,sans-serif)!important;
+    font-size:.50rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.035em!important;
+    text-transform:uppercase!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.045)!important;
+    pointer-events:auto!important;
+    touch-action:manipulation!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado .closed-us-currency-toggle-v492 span{
+    min-width:34px!important;
+    height:18px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    border-radius:999px!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado .closed-us-currency-toggle-v492 span.is-active{
+    color:#07101a!important;
+    background:#f4cf82!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado #closedMonthLaunch .closed-month-mini{
+    margin-top:10px!important;
+    padding-top:9px!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado #closedMonthLaunch .closed-mini-item{
+    border-bottom:1px solid rgba(255,255,255,.055)!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado #closedMonthLaunch .closed-mini-item:nth-last-child(-n+2){
+    border-bottom:0!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado .closed-us-currency-toggle-v492 span{
+    min-width:30px!important;
+  }
+
+  html.mobile-market-us-toggle-scoped-v495 body #sec-mercado .closed-us-scope-row-v495 > span{
+    font-size:.52rem!important;
+  }
+}
