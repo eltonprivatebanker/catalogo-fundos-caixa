@@ -23408,8 +23408,37 @@ window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__ = {
   window.addEventListener('pageshow', syncMobileMarketUsTogglePolishV498, {passive:true});
   [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsTogglePolishV498, ms));
 
-  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_POLISH_V498__ = {
+window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_POLISH_V498__ = {
     build: BUILD,
     sync: syncMobileMarketUsTogglePolishV498
+  };
+})();
+
+/* PATCH v499 — Mobile: classe de estabilidade para botão Detalhes */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_DETAIL_BUTTON_STABLE_V499';
+
+  function syncMobileDetailButtonStableV499(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v499','mobile-detail-button-stable-v499');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileDetailButtonStableV499, {once:true});
+  }else{
+    syncMobileDetailButtonStableV499();
+  }
+
+  window.addEventListener('load', syncMobileDetailButtonStableV499, {once:true});
+  window.addEventListener('pageshow', syncMobileDetailButtonStableV499, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileDetailButtonStableV499, ms));
+
+  window.__ELTAUM_MOBILE_DETAIL_BUTTON_STABLE_V499__ = {
+    build: BUILD,
+    sync: syncMobileDetailButtonStableV499
   };
 })();
