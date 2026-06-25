@@ -23375,8 +23375,41 @@ window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_CLEAN_V496__ = {
   window.addEventListener('pageshow', syncMobileMarketStaticUsToggleV497, {passive:true});
   [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketStaticUsToggleV497, ms));
 
-  window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__ = {
+window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__ = {
     build: BUILD,
     sync: syncMobileMarketStaticUsToggleV497
+  };
+})();
+
+/* PATCH v498 — Mobile: acabamento visual do seletor USD/Real */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_POLISH_V498';
+
+  function syncMobileMarketUsTogglePolishV498(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v498','mobile-market-us-toggle-polish-v498');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      if(window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__?.sync){
+        window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileMarketUsTogglePolishV498, {once:true});
+  }else{
+    syncMobileMarketUsTogglePolishV498();
+  }
+
+  window.addEventListener('load', syncMobileMarketUsTogglePolishV498, {once:true});
+  window.addEventListener('pageshow', syncMobileMarketUsTogglePolishV498, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsTogglePolishV498, ms));
+
+  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_POLISH_V498__ = {
+    build: BUILD,
+    sync: syncMobileMarketUsTogglePolishV498
   };
 })();
