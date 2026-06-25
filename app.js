@@ -23506,9 +23506,142 @@ window.__ELTAUM_MOBILE_DETAIL_BUTTON_STABLE_V499__ = {
   window.addEventListener('pageshow', syncUsCurrencyToggleFinalV500, {passive:true});
   [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncUsCurrencyToggleFinalV500, ms));
 
-  window.__ELTAUM_MOBILE_US_CURRENCY_TOGGLE_FINAL_V500__ = {
+window.__ELTAUM_MOBILE_US_CURRENCY_TOGGLE_FINAL_V500__ = {
     build: BUILD,
     sync: syncUsCurrencyToggleFinalV500,
     set: applyUsCurrencyV500
+  };
+})();
+
+/* PATCH v501 — Mobile: clique em indicador mensal navega para a seção analítica */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATOR_JUMP_V501';
+
+  const indicatorTargetV501 = {
+    cdi: {
+      selector: '#ratesReferenceTitleV167, #cdiYearHistory, #sec-mercado',
+      open: null
+    },
+    ipca: {
+      selector: '#sec-graficos',
+      open: {body:'#sec-graficos-body', section:'#sec-graficos'}
+    },
+    ibov: {
+      selector: '#row-ibov, #sec-mercado-painel',
+      open: {body:'#sec-painel-body', section:'#sec-mercado-painel'}
+    },
+    dolar: {
+      selector: '#sec-dolar',
+      open: null
+    }
+  };
+
+  function normalizeIndicatorV501(text){
+    const raw = String(text || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .toLowerCase();
+    if(raw.includes('dolar')) return 'dolar';
+    if(raw.includes('ibov')) return 'ibov';
+    if(raw.includes('ipca')) return 'ipca';
+    if(raw.includes('cdi')) return 'cdi';
+    return '';
+  }
+
+  function openSectionV501(config){
+    if(!config?.open) return;
+    const body = document.querySelector(config.open.body);
+    const section = document.querySelector(config.open.section);
+    if(body){
+      body.hidden = false;
+      body.style.display = '';
+    }
+    if(section){
+      section.classList.add('section-expanded');
+      section.setAttribute('aria-expanded','true');
+    }
+    const toggle = section?.querySelector('[aria-expanded]');
+    if(toggle) toggle.setAttribute('aria-expanded','true');
+  }
+
+  function selectMonthlyChipV501(indicator){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    const chip = root?.querySelector(`[data-monthly-indicators-view-v446="${indicator}"]`);
+    if(chip && !chip.disabled && chip.getAttribute('aria-disabled') !== 'true'){
+      chip.click();
+    }
+  }
+
+  function scrollToIndicatorV501(indicator){
+    const config = indicatorTargetV501[indicator];
+    if(!config) return;
+    openSectionV501(config);
+    selectMonthlyChipV501(indicator);
+
+    window.setTimeout(() => {
+      const target = document.querySelector(config.selector);
+      if(!target) return;
+      const offset = window.matchMedia?.('(max-width: 820px)')?.matches ? 92 : 76;
+      const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
+      window.scrollTo({top, behavior:'smooth'});
+      target.classList.add('indicator-jump-focus-v501');
+      window.setTimeout(() => target.classList.remove('indicator-jump-focus-v501'), 1200);
+    }, 80);
+  }
+
+  function indicatorFromMonthlyClickV501(target){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    if(!root || !target || !root.contains(target)) return '';
+    if(target.closest('[data-monthly-indicators-range-v445], [data-monthly-indicators-view-v446], #monthlyIndicatorsMoreV445')) return '';
+
+    const summary = target.closest('.monthly-indicators-summary-v445 article');
+    if(summary){
+      return normalizeIndicatorV501(summary.querySelector('span')?.textContent);
+    }
+
+    const cell = target.closest('.monthly-indicators-table-v445 th, .monthly-indicators-table-v445 td');
+    if(!cell) return '';
+    const table = cell.closest('.monthly-indicators-table-v445');
+    const index = cell.cellIndex;
+    if(index <= 0) return '';
+
+    const currentView = table?.dataset.viewV446 || 'all';
+    if(currentView !== 'all') return normalizeIndicatorV501(table?.querySelector('thead th:nth-child(2)')?.textContent);
+
+    return ['','cdi','ipca','ibov','dolar'][index] || '';
+  }
+
+  function bindMonthlyIndicatorJumpV501(){
+    const html = document.documentElement;
+    html.classList.add('mobile-v501','mobile-monthly-indicator-jump-v501');
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    const root = document.getElementById('monthlyIndicatorsV445');
+    if(!root || root.dataset.v501JumpBound) return;
+    root.dataset.v501JumpBound = '1';
+    root.addEventListener('click', event => {
+      const indicator = indicatorFromMonthlyClickV501(event.target);
+      if(!indicator) return;
+      event.preventDefault();
+      event.stopPropagation();
+      scrollToIndicatorV501(indicator);
+    }, true);
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', bindMonthlyIndicatorJumpV501, {once:true});
+  }else{
+    bindMonthlyIndicatorJumpV501();
+  }
+
+  window.addEventListener('load', bindMonthlyIndicatorJumpV501, {once:true});
+  window.addEventListener('pageshow', bindMonthlyIndicatorJumpV501, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(bindMonthlyIndicatorJumpV501, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATOR_JUMP_V501__ = {
+    build: BUILD,
+    bind: bindMonthlyIndicatorJumpV501,
+    go: scrollToIndicatorV501
   };
 })();
