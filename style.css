@@ -68526,3 +68526,97 @@ html.mobile-ranking-no-insight-v487 #rankingGrid .ranking-exec-insight{
     backface-visibility:hidden!important;
   }
 }
+
+/* PATCH v500 — Mobile: seletor USD/Real final, isolado das versoes antigas */
+@media(max-width:820px){
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado .closed-us-scope-row-v500{
+    grid-column:1 / -1!important;
+    width:100%!important;
+    min-height:0!important;
+    margin:6px 0 2px!important;
+    padding:8px 0 7px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:12px!important;
+    border:0!important;
+    border-top:1px solid rgba(255,255,255,.08)!important;
+    border-bottom:1px solid rgba(255,255,255,.08)!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado .closed-us-scope-row-v500 > span{
+    min-width:0!important;
+    color:#f4cf82!important;
+    font-size:.62rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.08em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado .closed-us-currency-toggle-v500{
+    all:unset!important;
+    box-sizing:border-box!important;
+    width:78px!important;
+    height:24px!important;
+    flex:0 0 78px!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    align-items:center!important;
+    gap:0!important;
+    padding:2px!important;
+    border:1px solid rgba(255,255,255,.14)!important;
+    border-radius:999px!important;
+    background:rgba(5,8,18,.55)!important;
+    cursor:pointer!important;
+    pointer-events:auto!important;
+    touch-action:manipulation!important;
+    -webkit-tap-highlight-color:transparent!important;
+  }
+
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado .closed-us-currency-toggle-v500 span{
+    all:unset!important;
+    box-sizing:border-box!important;
+    height:18px!important;
+    min-width:0!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    border-radius:999px!important;
+    color:#9faabd!important;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    font-size:.52rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.01em!important;
+    text-transform:uppercase!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado .closed-us-currency-toggle-v500 span.is-active{
+    color:#08111d!important;
+    background:#e3c46f!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado #closedMonthLaunch .closed-mini-item:nth-last-child(-n+3){
+    padding-top:7px!important;
+  }
+}
+
+@media(max-width:370px){
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado .closed-us-currency-toggle-v500{
+    width:72px!important;
+    flex-basis:72px!important;
+  }
+
+  html.mobile-us-currency-toggle-final-v500 body #sec-mercado .closed-us-currency-toggle-v500 span{
+    font-size:.48rem!important;
+  }
+}
