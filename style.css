@@ -67231,3 +67231,100 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   }
 }
 
+
+/* PATCH v492 — Desktop: Perfil de risco na mesma leitura do funil + trilha ativa estável
+   Não altera mobile, pois está protegido por media query desktop. */
+@media (min-width: 821px){
+  html.desktop-filter-active-trail-v492 body #sec-fundos .fund-secondary-controls-v217{
+    display:grid!important;
+    grid-template-columns:124px minmax(0,1fr)!important;
+    align-items:center!important;
+    justify-content:start!important;
+    column-gap:14px!important;
+    row-gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:12px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(255,255,255,.075)!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #sec-fundos .catalog-risk-filter-v198,
+  html.desktop-filter-active-trail-v492 body #sec-fundos .catalog-risk-inline-v203{
+    grid-column:1 / -1!important;
+    display:grid!important;
+    grid-template-columns:124px minmax(210px,260px) minmax(0,1fr)!important;
+    align-items:center!important;
+    justify-content:start!important;
+    gap:14px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #sec-fundos .catalog-risk-filter-v198 > label{
+    grid-column:1!important;
+    margin:0!important;
+    padding:0!important;
+    min-width:0!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #sec-fundos .catalog-risk-filter-v198 > label span{
+    display:block!important;
+    color:#9db0d7!important;
+    font-family:'JetBrains Mono', monospace!important;
+    font-size:.60rem!important;
+    font-weight:900!important;
+    letter-spacing:.13em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #sec-fundos .catalog-risk-select-wrap-v198{
+    grid-column:2!important;
+    width:260px!important;
+    min-width:210px!important;
+    max-width:260px!important;
+    height:36px!important;
+    border-radius:12px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:rgba(7,10,20,.62)!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #sec-fundos .compact-toggle-label-v217{
+    grid-column:2!important;
+    justify-self:start!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #activeFilterStrip.desktop-active-trail-v492{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    flex-wrap:wrap!important;
+    gap:10px!important;
+    width:100%!important;
+    min-height:48px!important;
+    margin:0!important;
+    padding:12px 0 0!important;
+    border-top:0!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #activeFilterStrip.desktop-active-trail-v492:empty{
+    display:none!important;
+    min-height:0!important;
+    padding:0!important;
+  }
+
+  html.desktop-filter-active-trail-v492 body #activeFilterStrip.desktop-active-trail-v492 .active-filter-pill-v492,
+  html.desktop-filter-active-trail-v492 body #activeFilterStrip.desktop-active-trail-v492 .active-filter-clear-v492{
+    pointer-events:auto!important;
+    cursor:pointer!important;
+  }
+}
