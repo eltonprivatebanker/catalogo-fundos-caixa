@@ -67796,3 +67796,127 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     color:#2ed17a !important;
   }
 }
+
+/* =========================================================
+   PATCH v510 — Desktop: tabela executiva mais limpa
+   Base: v508/v509. Não altera mobile.
+   - CNPJ sem rótulo redundante
+   - SIART mais discreto
+   - Documentos compactos: Boletim +N
+   ========================================================= */
+@media (min-width: 769px){
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable tbody td.col-fundo{
+    min-width:340px!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .fundo-cell-meta-v509{
+    display:flex!important;
+    align-items:center!important;
+    gap:5px!important;
+    flex-wrap:wrap!important;
+    margin-top:5px!important;
+    max-width:100%!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .fundo-cnpj-sub-v510{
+    height:19px!important;
+    padding:0 6px!important;
+    border-radius:5px!important;
+    border:1px solid rgba(148,163,184,.10)!important;
+    background:rgba(8,13,24,.36)!important;
+    color:#c4cee3!important;
+    font-family:'JetBrains Mono', monospace!important;
+    font-size:.56rem!important;
+    letter-spacing:.01em!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .fundo-cnpj-sub-v510 b{
+    display:none!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .fundo-copy-cnpj-v510{
+    width:19px!important;
+    min-width:19px!important;
+    height:19px!important;
+    padding:0!important;
+    border-radius:5px!important;
+    border:1px solid rgba(200,151,58,.24)!important;
+    background:rgba(200,151,58,.065)!important;
+    color:#dcb766!important;
+    box-shadow:none!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .fundo-copy-cnpj-v510 .detail-copy-icon-v225{
+    font-size:.66rem!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .fundo-siart-sub-v510{
+    height:19px!important;
+    padding:0 6px!important;
+    border-radius:5px!important;
+    border:1px solid rgba(148,163,184,.09)!important;
+    background:rgba(8,13,24,.28)!important;
+    color:#8f9bb8!important;
+    font-family:'JetBrains Mono', monospace!important;
+    font-size:.54rem!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .fundo-siart-sub-v510 b{
+    color:#c9a75b!important;
+    font-size:.49rem!important;
+    letter-spacing:.08em!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable td.col-docs{
+    min-width:112px!important;
+    width:112px!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .docs-mini-wrap-v510{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    flex-wrap:nowrap!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .doc-mini-primary-v510{
+    height:24px!important;
+    min-width:62px!important;
+    padding:0 10px!important;
+    border-radius:7px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    border:1px solid rgba(200,151,58,.40)!important;
+    background:rgba(200,151,58,.10)!important;
+    color:#e8bb6a!important;
+    font-size:.64rem!important;
+    font-weight:800!important;
+    text-decoration:none!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .doc-mini-more-v510{
+    height:24px!important;
+    min-width:32px!important;
+    padding:0 8px!important;
+    border-radius:7px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    border:1px solid rgba(148,163,184,.16)!important;
+    background:rgba(8,13,24,.62)!important;
+    color:#b9c4dd!important;
+    font-size:.64rem!important;
+    font-weight:900!important;
+    cursor:pointer!important;
+  }
+
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .doc-mini-more-v510:hover,
+  html.desktop-table-clean-v510 body:not(.fund-card-mode) #mainTable .doc-mini-primary-v510:hover{
+    border-color:rgba(232,187,106,.58)!important;
+    background:rgba(200,151,58,.16)!important;
+    color:#f5d48a!important;
+  }
+}

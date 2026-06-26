@@ -3734,22 +3734,20 @@ function buildDocsCompactos(row){
   if(!docs.length) return '<span class="doc-mini-empty">—</span>';
 
   const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
-  const secundarios = boletim ? docs.filter(d => d.url !== boletim.url) : docs;
+  const principal = boletim || docs[0];
+  const secundarios = docs.filter(d => d.url !== principal.url);
+  const principalLabel = boletim ? 'Boletim' : (principal.curto || 'Doc');
+  const principalTitle = boletim ? 'Boletim Comercial' : principal.label;
 
-  const primary = boletim ? `
-    <a class="doc-mini-primary" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="Boletim Comercial">Boletim</a>
+  const primary = principal ? `
+    <a class="doc-mini-primary doc-mini-primary-v510" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(principalTitle)}">${htmlAttr(principalLabel)}</a>
   ` : '';
 
-  const btnTodos = (!boletim && docs.length > 1)
-    ? `<button type="button" class="doc-mini-all" data-urls="${encodeURIComponent(JSON.stringify(docs.map(d=>d.url)))}" onclick="abrirDocsDaLinha(event,this)" title="Abrir todos os documentos">Todos</button>`
+  const more = secundarios.length
+    ? `<button type="button" class="doc-mini-more-v510" data-urls="${encodeURIComponent(JSON.stringify(secundarios.map(d=>d.url)))}" onclick="abrirDocsDaLinha(event,this)" title="Abrir mais ${secundarios.length} documento${secundarios.length === 1 ? '' : 's'}">+${secundarios.length}</button>`
     : '';
 
-  const links = secundarios.map(d=>`
-    <a class="doc-mini doc-mini-secondary" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(d.label)}">${d.curto}</a>
-  `).join('');
-
-
-  return `<div class="docs-mini-wrap">${primary}${btnTodos}${links}</div>`;
+  return `<div class="docs-mini-wrap docs-mini-wrap-v510">${primary}${more}</div>`;
 }
 
 function buildDetailQuickActions(row, urlFund){
@@ -4865,10 +4863,10 @@ function buildRowHTML(r,idx){
       const cnpjFormatadoV509 = cnpjLimpoV509 ? formatarCnpjMeta(cnpjLimpoV509) : cnpjRaw;
       const codigoSiartV509 = getCodigoFundoTableV509(r);
       const cnpjHtmlV509 = cnpjFormatadoV509
-        ? `<span class="fundo-cnpj-sub-v509" title="CNPJ ${htmlAttr(cnpjFormatadoV509)}"><b>CNPJ</b> ${htmlAttr(cnpjFormatadoV509)}</span><button type="button" class="fundo-copy-cnpj-v509 detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjLimpoV509 || cnpjFormatadoV509)}" aria-label="Copiar CNPJ ${htmlAttr(cnpjFormatadoV509)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225">Copiar</span></button>`
+        ? `<span class="fundo-cnpj-sub-v509 fundo-cnpj-sub-v510" title="CNPJ ${htmlAttr(cnpjFormatadoV509)}">${htmlAttr(cnpjFormatadoV509)}</span><button type="button" class="fundo-copy-cnpj-v509 fundo-copy-cnpj-v510 detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjLimpoV509 || cnpjFormatadoV509)}" aria-label="Copiar CNPJ ${htmlAttr(cnpjFormatadoV509)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225">Copiar</span></button>`
         : '';
       const codigoHtmlV509 = codigoSiartV509
-        ? `<span class="fundo-siart-sub-v509" title="Código SIICO/SIART ${htmlAttr(codigoSiartV509)}"><b>SIART</b> ${htmlAttr(codigoSiartV509)}</span>`
+        ? `<span class="fundo-siart-sub-v509 fundo-siart-sub-v510" title="Código SIICO/SIART ${htmlAttr(codigoSiartV509)}"><b>SIART</b> ${htmlAttr(codigoSiartV509)}</span>`
         : '';
       html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta fundo-cell-meta-v509"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjHtmlV509}${codigoHtmlV509}</div></td>`;return;
     }
