@@ -70031,3 +70031,54 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v538 — Desktop: % CDI dinâmico por período + paleta neutra nas categorias
+   Escopo: somente desktop. Mantém os refinamentos v531/v537 e evita voltar
+   com coluna lateral, cards no desktop ou excesso de dourado.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-top-header span:last-child{
+    color:#aeb8d2!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cdi{
+    color:#cfd7ea!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-weight:800!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-mini small,
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-row-v531 small{
+    color:#dbe4f6!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-name-short-v531{
+    display:inline!important;
+    color:#dbe4f6!important;
+    font-weight:760!important;
+    letter-spacing:-.004em!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-name-full-v531{
+    display:none!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-mini span:first-child{
+    color:#e8bb6a!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-mini strong.pos{
+    color:#19e6b0!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-mini strong.neg{
+    color:#ff6f91!important;
+  }
+
+  html.desktop-ranking-cdi-period-v538 body #rankingsSection .ranking-cat-mini strong.zero{
+    color:#aeb8d2!important;
+  }
+}

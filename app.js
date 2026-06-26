@@ -10927,10 +10927,45 @@ async function sharePainelMercado(){
     const btn=qs(`[data-rank-filter="${activeRankFilter}"]`);
     return btn?btn.textContent.trim():'Filtro aplicado';
   }
-  function cdiRatioTxt(r){
+  function cdiReferenciaRankingV538(periodo){
+    const p=periodo||'12m';
+    const card=typeof cdiCardAtualV230==='function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const firstFinite=(...values)=>{
+      for(const value of values){
+        const n=num(value);
+        if(n!==null && !Number.isNaN(n) && Number.isFinite(n)) return n;
+      }
+      return null;
+    };
+    if(p==='mes'){
+      let atual=null;
+      try{ atual=typeof obterCdiAtualV232==='function' ? obterCdiAtualV232().valor : null; }catch(e){ atual=null; }
+      return firstFinite(atual, card?.parcial_mes_atual, card?.mensal, indicState?.cdi?.mes);
+    }
+    if(p==='ano'){
+      const direto=firstFinite(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, indicState?.cdi?.ano);
+      if(direto!==null) return direto;
+      try{
+        const hist=Array.isArray(card?.historico)?card.historico:[];
+        const ano=String(new Date().getFullYear());
+        const valores=hist
+          .map(item=>({key:String(item?.key||item?.data_ref||'').slice(0,7),value:num(item?.valor ?? item?.value)}))
+          .filter(item=>item.key.startsWith(ano+'-') && item.value!==null && !Number.isNaN(item.value) && Number.isFinite(item.value))
+          .map(item=>item.value);
+        if(valores.length && typeof acumularPercentuaisMensaisV229==='function') return acumularPercentuaisMensaisV229(valores);
+      }catch(e){}
+      return null;
+    }
+    const m12=typeof resolverCdiPeriodoV229==='function' ? resolverCdiPeriodoV229(card,12) : null;
+    return firstFinite(m12, card?.acum_12m, card?.m12, indicState?.cdi?.m12);
+  }
+  function cdiRatioTxt(r,periodo='12m'){
     try{
-      if(typeof calcCdiRatio!=='function') return '—';
-      const ratio=calcCdiRatio(num(r['Acum. 12M (%)']), indicState?.cdi?.m12);
+      const campo=campoPorPeriodo(periodo);
+      const rent=num(r[campo]);
+      const cdiRef=cdiReferenciaRankingV538(periodo);
+      if(rent===null || Number.isNaN(rent) || !Number.isFinite(rent) || cdiRef===null || cdiRef===0) return '—';
+      const ratio=typeof calcCdiRatio==='function' ? calcCdiRatio(rent,cdiRef) : Math.round((rent/cdiRef)*100);
       return ratio===null?'—':ratio+'%';
     }catch(e){return '—'}
   }
@@ -10947,12 +10982,12 @@ async function sharePainelMercado(){
     const displayName=kind==='pl' ? fullName : compactFundName(fullName);
     return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(fullName)}">${esc(displayName)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
-  function topRow(r,i,campo,showCdi){
+  function topRow(r,i,campo,periodo){
     const cat=shortCat(r['Categoria']);
     const nome=cleanFund(r['Fundo']);
     const val=pct(r[campo]);
     const cls=retClass(r[campo]);
-    const cdi=showCdi?cdiRatioTxt(r):'—';
+    const cdi=cdiRatioTxt(r,periodo);
     return `<div class="ranking-top-row">
       <div class="ranking-pos">${medal(i)}</div>
       <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
@@ -11027,13 +11062,13 @@ async function sharePainelMercado(){
     const maiorPL=catPL[0];
 
     const cards=[
-      summaryCard('best','Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12)} do CDI · ${shortCat(best12['Categoria'])}`:''),
+      summaryCard('best','Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12,'12m')} do CDI · ${shortCat(best12['Categoria'])}`:''),
       summaryCard('worst','Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):''),
       summaryCard('month','Melhor mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
       summaryCard('pl','Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:'')
     ].join('');
 
-    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo)).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
     const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
     // v195: o painel lateral de atenção já reúne piores leituras,
     // negativos no ano e fundos sem dados. Evita duplicar a mesma informação
@@ -11047,7 +11082,7 @@ async function sharePainelMercado(){
           <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}${riskPill()}</div>
         </div>
         <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
-          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
+          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI no período</span></div>
           ${topRows}
         </div>
       </section>
