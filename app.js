@@ -8504,9 +8504,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
-    const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
+    const noteBody = tmpDiv.querySelector('.fund-quick-note-text');
+    const noteTxt = noteBody
+      ? Array.from(noteBody.querySelectorAll('p')).map(p=>String(p.textContent||'').trim()).filter(Boolean).join(' ')
+      : String(tmpDiv.textContent || '').trim();
+    const safeNoteTxt = (typeof htmlAttr === 'function') ? htmlAttr(noteTxt) : noteTxt.replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${safeNoteTxt}`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -10958,11 +10962,12 @@ async function sharePainelMercado(){
   }
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
+    const nomeCurto=compactFundName(nome);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini ranking-cat-row-v457">
+    return `<article class="ranking-cat-mini ranking-cat-row-v457 ranking-cat-row-v531">
       <span>${esc(shortCat(cat))}</span>
       <strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong>
-      <small title="${esc(nome)}">${esc(nome)}</small>
+      <small title="${esc(nome)}"><span class="ranking-cat-name-full-v531">${esc(nome)}</span><span class="ranking-cat-name-short-v531">${esc(nomeCurto)}</span></small>
       <em>Melhor em 12 meses</em>
     </article>`;
   }
@@ -23234,4 +23239,33 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   window.addEventListener('resize',syncDesktopFiltersV526,{passive:true});
   [250,900,1800,3200].forEach(ms=>setTimeout(syncDesktopFiltersV526,ms));
   window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__={build:BUILD,sync:syncDesktopFiltersV526};
+})();
+
+
+/* ELTAUM_DESKTOP_POLISH_V528
+   Desktop only: aplica a classe de acabamento visual, mantém tabela única e remove ruídos legados. */
+(function(){
+  'use strict';
+  const FLAG='__ELTAUM_DESKTOP_POLISH_V528__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const isDesktop=()=>!window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-polish-v528','desktop-catalog-clean-v527','desktop-catalog-base-v525');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content='ELTAUM_DESKTOP_POLISH_V528';
+    if(document.body){
+      document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
+    }
+    document.querySelectorAll('#sec-fundos .mobile-catalog-view-btn[data-mobile-catalog-view="cards"], #sec-fundos .mobile-catalog-view-panel, #sec-fundos .mobile-view-toggle').forEach(el=>{
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  window.addEventListener('load',apply,{once:true});
+  window.addEventListener('resize',apply,{passive:true});
+  setTimeout(apply,300);
+  setTimeout(apply,1200);
 })();

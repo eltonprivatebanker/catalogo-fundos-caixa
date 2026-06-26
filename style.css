@@ -68466,43 +68466,872 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
 }
 
 
-/* ELTAUM_DESKTOP_RANKING_CATEGORY_PALETTE_V532
-   Desktop only: reduz excesso de dourado nos cards "Melhores por categoria".
-   Categoria permanece dourada; nome do fundo fica neutro; retorno mantém verde/vermelho. */
+/* =========================================================
+   ELTAUM_DESKTOP_POLISH_V528
+   Escopo: somente desktop.
+   Objetivo: reduzir peso visual do Spotlight e dos Rankings,
+   preservando a base desktop em tabela única e usando o eixo
+   de largura do Dólar PTAX como referência visual.
+   ========================================================= */
 @media (min-width:769px){
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-mini,
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-row-v457{
-    background:linear-gradient(180deg,rgba(14,18,33,.78),rgba(8,11,21,.72))!important;
+  html.desktop-polish-v528 body #rankingsSection{
+    max-width:1280px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  html.desktop-polish-v528 body #rankingsSection .ranking-head{
+    margin-bottom:8px!important;
+    align-items:flex-end!important;
+    gap:10px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .section-badge{
+    display:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-title-group h2{
+    margin:0!important;
+    font-size:1.06rem!important;
+    line-height:1.15!important;
+    letter-spacing:.01em!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-section-subtitle-v136{
+    margin-top:4px!important;
+    max-width:760px!important;
+    color:#9ca8c6!important;
+    font-size:.66rem!important;
+    line-height:1.35!important;
+  }
+
+  html.desktop-polish-v528 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-polish-v528 body #rankingsSection .ranking-toolbar{
+    display:grid!important;
+    grid-template-columns:minmax(170px,210px) minmax(140px,170px) minmax(165px,190px)!important;
+    width:max-content!important;
+    max-width:100%!important;
+    gap:8px!important;
+    margin:8px 0 10px!important;
+    padding:8px 10px!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    border-radius:13px!important;
+    background:rgba(11,14,26,.58)!important;
+    box-shadow:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-filter-row-compat-v136,
+  html.desktop-polish-v528 body #rankingsSection #rankingFilterRow{
+    display:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-control-card-v136{
+    gap:4px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-control-card-v136 label{
+    font-size:.50rem!important;
+    letter-spacing:.10em!important;
+    color:#8492b0!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-select-v136{
+    min-height:31px!important;
+    height:31px!important;
+    padding:6px 28px 6px 9px!important;
+    border-radius:8px!important;
+    font-size:.60rem!important;
+    line-height:1.1!important;
+    background:#0b1020!important;
+    border-color:rgba(148,163,184,.14)!important;
+  }
+
+  html.desktop-polish-v528 body #rankingsSection .ranking-layout-v136{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 244px!important;
+    gap:10px!important;
+    align-items:start!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-grid.ranking-executive-v50{
+    gap:9px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-summary{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-card{
+    min-height:0!important;
+    padding:9px 10px!important;
+    border-radius:11px!important;
+    background:rgba(13,17,32,.70)!important;
+    border-color:rgba(148,163,184,.11)!important;
+    box-shadow:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-card::before{
+    height:1px!important;
+    opacity:.75!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-card span{
+    margin-bottom:4px!important;
+    font-size:.50rem!important;
+    letter-spacing:.09em!important;
+    color:#aeb8d2!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-card strong{
+    margin-bottom:3px!important;
+    font-size:.88rem!important;
+    line-height:1!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-card small{
+    font-size:.58rem!important;
+    line-height:1.18!important;
+    color:#d7def0!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-card em{
+    display:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-insight{
+    padding:8px 10px!important;
+    border-radius:10px!important;
+    gap:8px!important;
+    background:rgba(91,156,246,.045)!important;
+    border-color:rgba(91,156,246,.13)!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-insight span{
+    padding:3px 7px!important;
+    font-size:.49rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-insight p{
+    font-size:.62rem!important;
+    line-height:1.35!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-board,
+  html.desktop-polish-v528 body #rankingsSection .ranking-category-panel,
+  html.desktop-polish-v528 body #rankingsSection .ranking-attention-panel-v136{
+    border-color:rgba(148,163,184,.12)!important;
+    background:rgba(9,12,23,.72)!important;
+    box-shadow:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-board-head,
+  html.desktop-polish-v528 body #rankingsSection .ranking-panel-head{
+    padding:10px 12px 9px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-board-head h3,
+  html.desktop-polish-v528 body #rankingsSection .ranking-panel-head h3{
+    font-size:.72rem!important;
+    color:#f0c777!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-board-head p,
+  html.desktop-polish-v528 body #rankingsSection .ranking-panel-head p{
+    margin-top:2px!important;
+    font-size:.55rem!important;
+    color:#8491ad!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-controls{
+    gap:5px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-periods{
+    padding:2px!important;
+    border-radius:9px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-periods .rank-period-tab,
+  html.desktop-polish-v528 body #rankingsSection .ranking-universe-pill,
+  html.desktop-polish-v528 body #rankingsSection .ranking-risk-pill-v198{
+    min-height:24px!important;
+    padding:4px 7px!important;
+    border-radius:8px!important;
+    font-size:.50rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-top-header{
+    grid-template-columns:40px minmax(0,1fr) 90px 78px!important;
+    gap:9px!important;
+    padding:7px 12px!important;
+    font-size:.48rem!important;
+    color:#7886a4!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-top-row{
+    grid-template-columns:40px minmax(0,1fr) 90px 78px!important;
+    gap:9px!important;
+    padding:8px 12px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-fund strong{
+    font-size:.64rem!important;
+    line-height:1.22!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-fund span{
+    font-size:.51rem!important;
+    margin-top:1px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-pos,
+  html.desktop-polish-v528 body #rankingsSection .ranking-return{
+    font-size:.62rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-cdi{
+    font-size:.55rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-exec-secondary{
+    gap:9px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-cat-grid-v50{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:6px!important;
+    padding:9px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-cat-mini{
+    padding:8px 9px!important;
+    border-radius:9px!important;
+    background:rgba(17,21,38,.42)!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-cat-mini span{
+    font-size:.48rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-cat-mini strong{
+    margin-top:4px!important;
+    font-size:.68rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-cat-mini small{
+    margin-top:3px!important;
+    font-size:.52rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-cat-mini em{
+    display:none!important;
+  }
+
+  html.desktop-polish-v528 body #rankingsSection .ranking-attention-panel-v136{
+    top:78px!important;
+    border-radius:12px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-head-v136{
+    padding:9px 10px!important;
+    gap:8px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-head-v136>span{
+    flex-basis:24px!important;
+    width:24px!important;
+    height:24px!important;
+    border-radius:8px!important;
+    font-size:.74rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-head-v136 strong{
+    font-size:.64rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-head-v136 small{
+    display:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-body-v136{
+    gap:7px!important;
+    padding:8px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-metric-grid-v136{
+    gap:5px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-metric-v136{
+    padding:7px 4px!important;
+    border-radius:8px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-metric-v136 span{
+    font-size:.43rem!important;
+    letter-spacing:.05em!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-metric-v136 strong{
+    margin-top:4px!important;
+    font-size:.68rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-block-v136{
+    border-radius:9px!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-block-v136:not(:first-of-type),
+  html.desktop-polish-v528 body #rankingsSection .attention-foot-v136{
+    display:none!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-block-v136 h3{
+    padding:7px 8px!important;
+    font-size:.48rem!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .attention-insight-v136{
+    padding:8px!important;
+    font-size:.55rem!important;
+    line-height:1.38!important;
+  }
+
+  html.desktop-polish-v528 body .fspot-panel{
+    width:min(760px,82vw)!important;
+    max-height:82vh!important;
+    border-radius:18px!important;
+    padding-bottom:14px!important;
+    background:linear-gradient(180deg,rgba(13,17,30,.98),rgba(8,10,18,.99))!important;
     border-color:rgba(148,163,184,.16)!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+    box-shadow:0 26px 72px rgba(0,0,0,.54)!important;
   }
-
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-mini > span{
-    color:#d6a84d!important;
-    opacity:.96!important;
+  html.desktop-polish-v528 body .fspot-header{
+    align-items:center!important;
+    gap:10px!important;
+    padding:15px 18px 12px!important;
+    border-bottom-color:rgba(148,163,184,.10)!important;
+  }
+  html.desktop-polish-v528 body .fspot-header-left{
+    align-items:center!important;
+    gap:10px!important;
+  }
+  html.desktop-polish-v528 body .fspot-badge{
+    margin:0!important;
+    padding:4px 8px!important;
+    border-radius:8px!important;
+    font-size:.54rem!important;
+    letter-spacing:.07em!important;
+  }
+  html.desktop-polish-v528 body .fspot-title{
+    font-family:'Inter',sans-serif!important;
+    font-size:.96rem!important;
+    line-height:1.18!important;
     font-weight:850!important;
-    letter-spacing:.065em!important;
+    letter-spacing:-.01em!important;
+  }
+  html.desktop-polish-v528 body .fspot-meta{
+    margin-top:3px!important;
+    font-size:.58rem!important;
+    color:#9aa6c2!important;
+  }
+  html.desktop-polish-v528 body .fspot-close{
+    width:31px!important;
+    height:31px!important;
+    padding:0!important;
+    border-radius:10px!important;
+  }
+  html.desktop-polish-v528 body .fspot-metrics{
+    gap:7px!important;
+    padding:11px 18px!important;
+    border-bottom-color:rgba(148,163,184,.10)!important;
+  }
+  html.desktop-polish-v528 body .fspot-metric-item{
+    gap:4px!important;
+    padding:8px 9px!important;
+    border-radius:10px!important;
+    background:rgba(17,22,39,.68)!important;
+    border-color:rgba(148,163,184,.12)!important;
+  }
+  html.desktop-polish-v528 body .fspot-metric-label{
+    font-size:.50rem!important;
+    letter-spacing:.09em!important;
+  }
+  html.desktop-polish-v528 body .fspot-metric-val{
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.92rem!important;
+    line-height:1.05!important;
+  }
+  html.desktop-polish-v528 body .fspot-liq{
+    padding:9px 18px!important;
+    gap:7px!important;
+    border-bottom-color:rgba(148,163,184,.10)!important;
+  }
+  html.desktop-polish-v528 body .fspot-liq-label{
+    min-width:0!important;
+    font-size:.50rem!important;
+  }
+  html.desktop-polish-v528 body .fspot-liq-badge{
+    padding:4px 8px!important;
+    border-radius:8px!important;
+    font-size:.58rem!important;
+    background:rgba(200,151,58,.10)!important;
+    border-color:rgba(200,151,58,.20)!important;
+    color:#e8bb6a!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154{
+    margin:10px 18px 0!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-facts-v154.spotlight{
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-facts-head-v154{
+    display:none!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-facts-grid-v154{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-fact-v154{
+    min-height:0!important;
+    padding:8px 9px!important;
+    border-radius:10px!important;
+    background:rgba(17,22,39,.50)!important;
+    border:1px solid rgba(148,163,184,.11)!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-fact-v154.strategy,
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-fact-v154.movement-hours-v155{
+    grid-column:span 2!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-fact-v154 span{
+    display:block!important;
+    margin:0 0 4px!important;
+    color:#8794b0!important;
+    font-size:.48rem!important;
+    line-height:1.1!important;
+    letter-spacing:.08em!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-fact-v154 strong{
+    display:block!important;
+    color:#edf2ff!important;
+    font-size:.61rem!important;
+    line-height:1.25!important;
+    font-weight:800!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-fact-v154 strong i{
+    margin-right:4px!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-hours-v155{
+    display:flex!important;
+    gap:6px!important;
+    flex-wrap:wrap!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-hours-v155 em{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:5px!important;
+    padding:4px 7px!important;
+    border-radius:8px!important;
+    background:rgba(15,20,36,.74)!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    font-style:normal!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .fund-hours-v155 em b{
+    color:#9ca8c4!important;
+    font-size:.48rem!important;
+    text-transform:uppercase!important;
+    letter-spacing:.06em!important;
+  }
+  html.desktop-polish-v528 body .fspot-facts-v154 .movement-hours-v155 small{
+    display:none!important;
+  }
+  html.desktop-polish-v528 body .fspot-note{
+    margin:10px 18px 0!important;
+    padding:10px 11px!important;
+    border-radius:11px!important;
+    background:rgba(91,156,246,.045)!important;
+    border-color:rgba(91,156,246,.13)!important;
+    color:#c5cee2!important;
+    font-size:.64rem!important;
+    line-height:1.43!important;
+  }
+  html.desktop-polish-v528 body .fspot-note-title{
+    margin-bottom:5px!important;
+    font-size:.50rem!important;
+  }
+  html.desktop-polish-v528 body .fspot-actions{
+    padding:10px 18px 0!important;
+    gap:7px!important;
+  }
+  html.desktop-polish-v528 body .fspot-btn-primary,
+  html.desktop-polish-v528 body .fspot-btn-secondary{
+    min-height:34px!important;
+    padding:8px 12px!important;
+    border-radius:10px!important;
+    font-size:.68rem!important;
+  }
+  html.desktop-polish-v528 body .fspot-docs{
+    display:none!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-polish-v528 body #rankingsSection .ranking-layout-v136{
+    grid-template-columns:1fr!important;
+  }
+  html.desktop-polish-v528 body #rankingsSection .ranking-attention-panel-v136{
+    position:relative!important;
+    top:auto!important;
+  }
+}
+
+
+/* =========================================================
+   ELTAUM_DESKTOP_RANKINGS_WIDTH_V529
+   Escopo: somente desktop.
+   Correção: a v528 centralizou o bloco Rankings em max-width:1280px
+   para reduzir peso visual, mas isso deixou a seção desalinhada das
+   demais áreas do desktop. Aqui o bloco volta a ocupar a largura útil
+   da página, mantendo o refinamento visual e a tela menos poluída.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-rankings-width-v529 body #rankingsSection{
+    width:100%!important;
+    max-width:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
   }
 
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-mini > strong,
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-mini > strong.pos{
-    color:#23e6b0!important;
-    text-shadow:none!important;
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-head,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-layout-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-grid,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-main-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-exec-board,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-exec-secondary,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-category-panel{
+    width:100%!important;
+    max-width:none!important;
   }
 
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-mini > strong.neg{
-    color:#ff6f91!important;
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-head{
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:space-between!important;
   }
 
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-mini > small{
-    color:#e8edf7!important;
-    font-weight:760!important;
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar{
+    width:100%!important;
+    max-width:100%!important;
+    grid-template-columns:minmax(210px,1fr) minmax(180px,.7fr) minmax(210px,.8fr)!important;
+    align-items:end!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-layout-v136{
+    grid-template-columns:minmax(0,1fr) 260px!important;
+    gap:12px!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-exec-summary{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-top-header,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-top-row{
+    grid-template-columns:44px minmax(0,1fr) 110px 90px!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-cat-grid-v50{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-attention-panel-v136{
+    width:260px!important;
+    max-width:260px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-layout-v136{
+    grid-template-columns:1fr!important;
+  }
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-attention-panel-v136{
+    width:100%!important;
+    max-width:none!important;
+    position:relative!important;
+    top:auto!important;
+  }
+}
+
+/* =========================================================
+   ELTAUM_DESKTOP_RANKINGS_READABLE_V530
+   Escopo: somente desktop.
+   Ajuste de equilíbrio: a v529 devolveu largura total aos rankings,
+   mas em telas grandes o conteúdo ficou espalhado e a tipografia
+   pareceu pequena. Aqui usamos largura intermediária e fonte maior.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-rankings-readable-v530 body #rankingsSection{
+    width:min(100%,1520px)!important;
+    max-width:1520px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-head,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-toolbar,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-layout-v136,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-grid,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-main-v136,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-board,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-secondary,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-category-panel{
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-head{
+    margin-bottom:10px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-title-group h2{
+    font-size:1.20rem!important;
+    line-height:1.12!important;
+    letter-spacing:-.015em!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-section-subtitle-v136{
+    max-width:860px!important;
+    margin-top:7px!important;
+    font-size:.74rem!important;
+    line-height:1.38!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-toolbar{
+    display:grid!important;
+    grid-template-columns:minmax(280px,1.15fr) minmax(210px,.65fr) minmax(240px,.75fr)!important;
+    width:100%!important;
+    max-width:100%!important;
+    gap:10px!important;
+    margin:10px 0 14px!important;
+    padding:10px 12px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-control-card-v136 label{
+    font-size:.56rem!important;
+    letter-spacing:.105em!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-select-v136{
+    min-height:36px!important;
+    height:36px!important;
+    padding:7px 32px 7px 11px!important;
+    border-radius:9px!important;
+    font-size:.72rem!important;
+    line-height:1.2!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-layout-v136{
+    grid-template-columns:minmax(0,1fr) 270px!important;
+    gap:14px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-grid.ranking-executive-v50{
+    gap:11px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-summary{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:9px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-card{
+    min-height:74px!important;
+    padding:12px 13px!important;
+    border-radius:13px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-card span{
+    margin-bottom:5px!important;
+    font-size:.56rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-card strong{
+    margin-bottom:4px!important;
+    font-size:1.06rem!important;
+    line-height:1.02!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-card small{
+    font-size:.68rem!important;
+    line-height:1.22!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-insight{
+    padding:9px 12px!important;
+    gap:9px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-insight span{
+    font-size:.54rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-insight p{
+    font-size:.70rem!important;
+    line-height:1.42!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-board-head,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-panel-head{
+    padding:12px 14px 10px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-board-head h3,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-panel-head h3{
+    font-size:.84rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-board-head p,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-panel-head p{
+    font-size:.62rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-exec-periods .rank-period-tab,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-universe-pill,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-risk-pill-v198{
+    min-height:28px!important;
+    padding:5px 9px!important;
+    border-radius:9px!important;
+    font-size:.56rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-top-header{
+    grid-template-columns:48px minmax(0,1fr) 120px 96px!important;
+    gap:12px!important;
+    padding:8px 14px!important;
+    font-size:.53rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-top-row{
+    grid-template-columns:48px minmax(0,1fr) 120px 96px!important;
+    gap:12px!important;
+    min-height:48px!important;
+    padding:9px 14px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-fund strong{
+    font-size:.75rem!important;
+    line-height:1.25!important;
     letter-spacing:-.005em!important;
-    text-transform:none!important;
   }
 
-  html.desktop-ranking-palette-v532 body #rankingsSection .ranking-category-panel .ranking-cat-mini:hover{
-    border-color:rgba(200,151,58,.30)!important;
-    background:linear-gradient(180deg,rgba(17,22,39,.84),rgba(9,12,22,.78))!important;
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-fund span{
+    margin-top:2px!important;
+    font-size:.61rem!important;
+    line-height:1.2!important;
   }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-pos,
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-return{
+    font-size:.72rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-cdi{
+    font-size:.66rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-cat-grid-v50{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+    padding:10px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-cat-mini{
+    min-height:82px!important;
+    padding:10px 11px!important;
+    border-radius:11px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:auto auto 1fr!important;
+    column-gap:10px!important;
+    align-content:start!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-cat-mini span{
+    grid-column:1!important;
+    font-size:.54rem!important;
+    line-height:1.1!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-cat-mini strong{
+    grid-column:2!important;
+    grid-row:1!important;
+    justify-self:end!important;
+    margin-top:0!important;
+    font-size:.74rem!important;
+    line-height:1.1!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-cat-mini small{
+    grid-column:1 / -1!important;
+    margin-top:10px!important;
+    font-size:.62rem!important;
+    line-height:1.25!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-attention-panel-v136{
+    width:270px!important;
+    max-width:270px!important;
+    border-radius:13px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .attention-head-v136{
+    padding:11px 12px!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .attention-head-v136 strong{
+    font-size:.70rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .attention-metric-v136 span{
+    font-size:.47rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .attention-metric-v136 strong{
+    font-size:.76rem!important;
+  }
+
+  html.desktop-rankings-readable-v530 body #rankingsSection .attention-insight-v136{
+    font-size:.61rem!important;
+    line-height:1.45!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1320px){
+  html.desktop-rankings-readable-v530 body #rankingsSection{
+    max-width:none!important;
+  }
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-layout-v136{
+    grid-template-columns:1fr!important;
+  }
+  html.desktop-rankings-readable-v530 body #rankingsSection .ranking-attention-panel-v136{
+    width:100%!important;
+    max-width:none!important;
+    position:relative!important;
+    top:auto!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v531 — Desktop: nomes curtos em "Melhores por categoria"
+   Escopo: somente desktop. Mantém o nome completo no title/tooltip.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini,
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-row-v531{
+    min-height:72px!important;
+    padding:10px 12px!important;
+    grid-template-rows:auto auto!important;
+    align-content:center!important;
+    row-gap:8px!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-name-full-v531{
+    display:none!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-name-short-v531{
+    display:inline!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini small{
+    margin-top:3px!important;
+    font-size:.72rem!important;
+    line-height:1.24!important;
+    color:#edf1fb!important;
+    font-weight:700!important;
+    letter-spacing:-.006em!important;
+    overflow:hidden!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini em{
+    display:none!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini span:first-child{
+    font-size:.56rem!important;
+    color:#e8bb6a!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini strong{
+    font-size:.82rem!important;
+  }
+}
+
+@media (max-width:768px){
+  .ranking-cat-name-short-v531{display:none!important;}
+  .ranking-cat-name-full-v531{display:inline!important;}
 }
