@@ -12000,10 +12000,8 @@ async function sharePainelMercado(){
     stabilizeFilterBox(()=>{
       try{
         activeCat = wanted ? findRawCategory(wanted) : '';
-        activeBenchmark = '';
-        activePerfil = '';
-        activeRisco = '';
-        hideSemDados = false;
+        /* v508 desktop: categoria não deve limpar público-alvo, risco ou benchmark.
+           O funil é acumulativo: Público-alvo → Categoria → Perfil de risco. */
         currentPage = 1;
         window.__favListMode = false;
         window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
@@ -22768,4 +22766,228 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     build: BUILD,
     sync: syncMobileFilterListV482
   };
+})();
+
+
+/* ════════════════════════════════════════════════════
+   PATCH v508 — Desktop: público-alvo clicável e funil acumulativo
+   - Restaura clique em PF/PJ/Private/Qualificado/Institucional.
+   - Categoria não limpa público-alvo.
+   - Trilha de filtros ativos mostra Público-alvo + Categoria + Risco/Busca.
+   - Escopo somente desktop.
+════════════════════════════════════════════════════ */
+(function(){
+  'use strict';
+  const BUILD='ELTAUM_DESKTOP_FILTER_AUDIENCE_ACTIONS_V508';
+  window.__ELTAUM_DESKTOP_FILTER_AUDIENCE_ACTIONS_V508__={build:BUILD};
+
+  const qs=(s,r=document)=>r.querySelector(s);
+  const qsa=(s,r=document)=>Array.from(r.querySelectorAll(s));
+  const isDesktop=()=>{try{return window.matchMedia&&window.matchMedia('(min-width:769px)').matches}catch(e){return false}};
+
+  function canon(v){
+    return String(v||'')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^A-Z0-9]+/gi,' ')
+      .replace(/\s+/g,' ')
+      .trim().toUpperCase();
+  }
+
+  const CAT_LABEL={
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Ref.',
+    'RENDA FIXA CURTO PRAZO':'Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
+  };
+
+  function catLabel(v){return CAT_LABEL[canon(v)]||String(v||'').trim()||'Todos'}
+  function compactSearchLabel(v){
+    let s=String(v||'').trim();
+    if(!s) return '';
+    let c=s
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\b(FIF|FIC|FI|RESP|LTDA|LTD)\b/gi,'')
+      .replace(/\bFUNDO DE INVESTIMENTO\b/gi,'')
+      .replace(/\s+/g,' ')
+      .trim();
+    c=c.replace(/FMP\s*-?\s*FGTS\s+ELETROBRAS/i,'FMP-FGTS Eletrobras')
+       .replace(/ACOES/ig,'Ações');
+    return c.length>30 ? c.slice(0,29).trim()+'…' : c;
+  }
+
+  function activePerfilValue(){try{return String(activePerfil||'')}catch(e){return ''}}
+  function activeCatValue(){try{return String(activeCat||'')}catch(e){return ''}}
+  function activeRiscoValue(){try{return String(activeRisco||'')}catch(e){return ''}}
+  function activeBenchmarkValue(){try{return String(activeBenchmark||'')}catch(e){return ''}}
+  function activeSearchValue(){try{return String(activeSearch||'').trim()}catch(e){return ''}}
+
+  function syncAudienceButtonsV508(){
+    const active=activePerfilValue();
+    qsa('.desktop-audience-chip-v488').forEach(btn=>{
+      const val=String(btn.getAttribute('data-audience-v488')||'');
+      const on=val===active;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+      btn.disabled=false;
+      btn.setAttribute('aria-disabled','false');
+    });
+  }
+
+  function syncCategoryButtonsV508(){
+    const active=canon(activeCatValue());
+    const map={
+      'all':'',
+      'renda-fixa-simples':'RENDA FIXA SIMPLES',
+      'renda-fixa':'RENDA FIXA',
+      'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+      'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+      'multimercado':'MULTIMERCADO',
+      'cambial':'CAMBIAL',
+      'acoes':'ACOES',
+      'fundo-de-indice':'FUNDO DE INDICE',
+      'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+    };
+    qsa('.filter-preset-chip[data-preset], .shortcut-preset[data-preset]').forEach(btn=>{
+      const wanted=canon(map[btn.dataset.preset]||'');
+      const on=btn.dataset.preset==='all' ? !active : active===wanted;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+    });
+  }
+
+  function applyAudienceV508(value, sourceBtn){
+    if(!isDesktop()) return;
+    try{
+      activePerfil=String(value||'');
+      currentPage=1;
+      window.__favListMode=false;
+      if(typeof expandedRows!=='undefined' && expandedRows && typeof expandedRows.clear==='function') expandedRows.clear();
+      if(typeof applyFilter==='function') applyFilter();
+    }catch(e){console.warn('[v508] Falha ao aplicar público-alvo',e)}
+    if(sourceBtn && typeof sourceBtn.blur==='function') sourceBtn.blur();
+    scheduleSyncV508();
+  }
+
+  function clearKindV508(kind){
+    try{
+      if(kind==='all'){
+        activePerfil=''; activeCat=''; activeBenchmark=''; activeRisco=''; hideSemDados=false; activeSearch='';
+        const inp=qs('#searchInput'); if(inp) inp.value='';
+      }else if(kind==='perfil' || kind==='audience') activePerfil='';
+      else if(kind==='cat') activeCat='';
+      else if(kind==='benchmark') activeBenchmark='';
+      else if(kind==='risco') activeRisco='';
+      else if(kind==='semDados') hideSemDados=false;
+      else if(kind==='search'){
+        activeSearch=''; const inp=qs('#searchInput'); if(inp) inp.value='';
+      }
+      currentPage=1;
+      if(typeof applyFilter==='function') applyFilter();
+    }catch(e){console.warn('[v508] Falha ao limpar filtro',e)}
+    scheduleSyncV508();
+  }
+
+  function renderActiveTrailV508(){
+    if(!isDesktop()) return;
+    const strip=qs('#activeFilterStrip'); if(!strip) return;
+    const parts=[];
+    const perfil=activePerfilValue();
+    const cat=activeCatValue();
+    const risco=activeRiscoValue();
+    const bench=activeBenchmarkValue();
+    const search=activeSearchValue();
+    let hide=false; try{hide=!!hideSemDados}catch(e){}
+
+    if(perfil) parts.push({kind:'perfil',label:'Público-alvo',value:perfil});
+    if(cat) parts.push({kind:'cat',label:'Categoria',value:catLabel(cat)});
+    if(risco) parts.push({kind:'risco',label:'Perfil de risco',value:risco});
+    if(bench) parts.push({kind:'benchmark',label:'Benchmark',value:bench});
+    if(search) parts.push({kind:'search',label:(search.length>24?'Fundo':'Busca'),value:compactSearchLabel(search),title:search});
+    if(hide) parts.push({kind:'semDados',label:'Base',value:'sem pipeline'});
+
+    if(!parts.length){
+      strip.classList.remove('active','desktop-active-filter-v87','desktop-active-trail-v491','desktop-active-trail-v492');
+      strip.innerHTML='';
+      return;
+    }
+
+    strip.classList.add('active','desktop-active-trail-v508');
+    strip.innerHTML='<span class="active-filter-label">Filtros ativos</span>'+parts.map(p=>{
+      const title=p.title ? ` title="Remover ${escapeHtmlV508(p.label)}: ${escapeHtmlV508(p.title)}"` : ` title="Remover ${escapeHtmlV508(p.label)}"`;
+      return `<button type="button" class="active-filter-pill active-filter-pill-v508" data-clear-filter-v508="${p.kind}"${title}><small>${escapeHtmlV508(p.label)}</small><strong>${escapeHtmlV508(p.value)}</strong><span aria-hidden="true">×</span></button>`;
+    }).join('')+'<button type="button" class="active-filter-clear active-filter-clear-v508" data-clear-filter-v508="all">Limpar tudo</button>';
+  }
+
+  function escapeHtmlV508(v){
+    return String(v??'').replace(/[&<>"]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  }
+
+  let syncTimer=0;
+  function syncV508(){
+    if(!isDesktop()) return;
+    syncAudienceButtonsV508();
+    syncCategoryButtonsV508();
+    renderActiveTrailV508();
+  }
+  function scheduleSyncV508(){
+    clearTimeout(syncTimer);
+    syncTimer=setTimeout(syncV508,0);
+    requestAnimationFrame(syncV508);
+    setTimeout(syncV508,80);
+  }
+
+  function bindV508(){
+    const meta=qs('meta[name="app-build"]'); if(meta) meta.content=BUILD;
+    document.documentElement.classList.add('desktop-filter-audience-actions-v508');
+
+    if(document.documentElement.dataset.v508AudienceBound!=='1'){
+      document.documentElement.dataset.v508AudienceBound='1';
+
+      // Captura apenas Público-alvo; não interfere no mobile.
+      window.addEventListener('click', function(ev){
+        const btn=ev.target && ev.target.closest ? ev.target.closest('.desktop-audience-chip-v488[data-audience-v488]') : null;
+        if(!btn || !isDesktop()) return;
+        ev.preventDefault(); ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+        applyAudienceV508(btn.getAttribute('data-audience-v488')||'', btn);
+      }, true);
+
+      // Trilha de filtros ativa: limpa sem depender das rotinas antigas.
+      const strip=qs('#activeFilterStrip');
+      if(strip){
+        strip.addEventListener('click', function(ev){
+          const btn=ev.target && ev.target.closest ? ev.target.closest('[data-clear-filter-v508]') : null;
+          if(!btn || !isDesktop()) return;
+          ev.preventDefault(); ev.stopPropagation();
+          if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+          clearKindV508(btn.getAttribute('data-clear-filter-v508')||'');
+        }, true);
+      }
+    }
+
+    // Envolve applyFilter uma única vez para corrigir a trilha depois das rotinas antigas.
+    try{
+      if(typeof applyFilter==='function' && !applyFilter.__desktopAudienceV508){
+        const old=applyFilter;
+        applyFilter=function(){
+          const out=old.apply(this,arguments);
+          scheduleSyncV508();
+          return out;
+        };
+        applyFilter.__desktopAudienceV508=true;
+      }
+    }catch(e){}
+
+    syncV508();
+    setTimeout(syncV508,300);
+    setTimeout(syncV508,1000);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV508,160),{once:true});
+  else setTimeout(bindV508,160);
 })();
