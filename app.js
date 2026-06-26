@@ -15276,21 +15276,18 @@ if(!isSearchInput(el)) return;
     let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
     if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
     const year=attentionRows(rows,'Acum. Ano (%)','Ano negativo — verificar a tese de manutenção',3);
-    const pipeline=missing.slice(0,3).map(r=>`<button type="button" class="attention-row-v136 pipeline" data-attention-fund="${esc(r.Fundo||'')}"><span><span class="fund">${esc(r.Fundo||'—')}</span><span class="reason">Sem cota/rentabilidade suficiente na base</span></span><span class="value">—</span></button>`).join('');
     const insight=neg12.length
       ? `<strong>${neg12.length}</strong> fundo(s) com retorno negativo em 12 meses no filtro atual. Use os alertas como ponto de partida para investigar classe, prazo, benchmark e aderência ao perfil.`
-      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês, no ano e fundos sem dados.`;
+      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês e no ano.`;
     host.innerHTML=`
       <div class="attention-metric-grid-v136">
         <div class="attention-metric-v136"><span>12M negativo</span><strong>${neg12.length}</strong></div>
         <div class="attention-metric-v136"><span>Ano negativo</span><strong>${negAno.length}</strong></div>
-        <div class="attention-metric-v136"><span>Sem dados</span><strong>${missing.length}</strong></div>
       </div>
       <div class="attention-block-v136"><h3>Insight SIPII</h3><div class="attention-insight-v136">${insight}</div></div>
-      ${worst?`<div class="attention-block-v136"><h3>Piores leituras</h3><div class="attention-list-v136">${worst}</div></div>`:''}
+      ${worst?`<div class="attention-block-v136"><h3>Piores em 12 meses</h3><div class="attention-list-v136">${worst}</div></div>`:''}
       ${year?`<div class="attention-block-v136"><h3>Negativos no ano</h3><div class="attention-list-v136">${year}</div></div>`:''}
-      ${pipeline?`<div class="attention-block-v136"><h3>Sem dados / pipeline</h3><div class="attention-list-v136">${pipeline}</div></div>`:''}
-      <div class="attention-foot-v136">Leitura automática e informativa. O alerta não substitui suitability, objetivos, liquidez e horizonte do cliente.</div>`;
+      <div class="attention-foot-v136">Alertas automáticos para apoio à análise. Não substituem suitability, objetivo e horizonte do cliente.</div>`;
   }
 
   function renderRankingsAndAttention(){
@@ -23488,6 +23485,120 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     wrapped.__desktopV536=true;
     try{window.renderRankings=wrapped;}catch(e){}
     try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function init(){
+    ensureBuild();
+    wrapRankingRender();
+    apply();
+    observe();
+    setTimeout(()=>{wrapRankingRender();apply();observe();},250);
+    setTimeout(()=>{wrapRankingRender();apply();observe();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v537 — Desktop: semântica dos alertas dos rankings
+   Escopo: somente desktop.
+   - Renomeia Piores leituras para Piores em 12 meses.
+   - Remove Sem dados / pipeline da área consultiva principal.
+   - Mantém Pontos de atenção em faixa horizontal, sem coluna lateral.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_ALERTS_SEMANTIC_V537';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let busy=false;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function txt(el){return (el && el.textContent || '').trim().toLowerCase()}
+
+  function ensureBuild(){
+    document.documentElement.classList.add('desktop-ranking-alerts-semantic-v537');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function removeQuickRead(){
+    if(!mq.matches) return;
+    qa('#rankingsSection .ranking-exec-insight').forEach(el=>el.remove());
+  }
+
+  function renameAndTrimAttention(){
+    if(!mq.matches || busy) return;
+    const aside=q('#rankingAttentionV136');
+    const host=q('.attention-body-v136', aside || document);
+    if(!aside || !host) return;
+
+    // Remove o indicador de qualidade da base da área consultiva principal.
+    qa('.attention-metric-v136', host).forEach(metric=>{
+      if(txt(metric).includes('sem dados')) metric.remove();
+    });
+
+    // Renomeia o bloco de 12M e remove blocos não consultivos.
+    qa('.attention-block-v136', host).forEach(block=>{
+      const h=q('h3', block);
+      const title=txt(h);
+      if(title.includes('piores leituras')) h.textContent='Piores em 12 meses';
+      if(title.includes('sem dados') || title.includes('pipeline') || title.includes('insight')) block.remove();
+    });
+
+    const foot=q('.attention-foot-v136', host);
+    if(foot) foot.textContent='Alertas automáticos para apoio à análise. Não substituem suitability, objetivo e horizonte do cliente.';
+
+    // Se a v536 já organizou em details + body, garante apenas os dois blocos úteis.
+    const details=q('.attention-details-v536', host);
+    const body=q('.attention-details-body-v536', host);
+    if(details && body){
+      qa('.attention-block-v136', body).forEach(block=>{
+        const h=q('h3', block);
+        const title=txt(h);
+        if(title.includes('piores leituras')) h.textContent='Piores em 12 meses';
+        if(title.includes('sem dados') || title.includes('pipeline') || title.includes('insight')) block.remove();
+      });
+      const useful=qa('.attention-block-v136', body);
+      if(!useful.length){
+        details.style.display='none';
+        body.style.display='none';
+      }else{
+        details.style.display='block';
+      }
+    }
+  }
+
+  function apply(){
+    ensureBuild();
+    removeQuickRead();
+    renameAndTrimAttention();
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__desktopV537) return;
+    const wrapped=function(){
+      const result=original.apply(this,arguments);
+      setTimeout(apply,0);
+      setTimeout(apply,80);
+      return result;
+    };
+    wrapped.__desktopV537=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function observe(){
+    const target=q('#rankingsSection');
+    if(!target || target.dataset.v537Observer==='1') return;
+    target.dataset.v537Observer='1';
+    const obs=new MutationObserver(()=>{
+      clearTimeout(target.__rankingV537Timer);
+      target.__rankingV537Timer=setTimeout(apply,40);
+    });
+    obs.observe(target,{childList:true,subtree:true});
   }
 
   function init(){
