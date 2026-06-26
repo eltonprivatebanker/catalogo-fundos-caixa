@@ -3937,75 +3937,67 @@ function buildDetailExecutiveV158(r){
   const asg = asgRaw.state === 'off' ? {...asgRaw,label:'Não identificada'} : asgRaw;
   const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : 'Não informado';
   const advanceSummary = detailAdvanceSummaryV206(adiCls,d.adiantamento.texto);
-  const audienceSummaryHtml = audienceSemantic.length
-    ? `<div class="detail-audience-compact-v225" aria-label="Público-alvo: ${htmlAttr(audienceSemantic.map(item=>item.label).join(', '))}">${audienceSemantic.slice(0,3).map(item=>detailAudienceChipV225(item,true)).join('')}${audienceSemantic.length>3?`<span class="detail-audience-more-v225" title="${htmlAttr(audienceSemantic.slice(3).map(item=>item.label).join(', '))}">+${audienceSemantic.length-3}</span>`:''}</div>`
-    : '<strong>Não informado</strong>';
   const observationHtml = detailObservationV206(r);
   const cnpjCopyValue = String(cnpj || '').replace(/\D/g,'') || String(cnpj || '').trim();
 
   const statusValue = (text, cls) => `<span class="detail-status-v158 ${cls}"><i>●</i>${htmlAttr(text)}</span>`;
-  const audienceHtml = audienceSemantic.length
-    ? audienceSemantic.map(item=>detailAudienceChipV225(item,false)).join('')
-    : '<span class="detail-empty-v158">Não informado</span>';
   const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
+  const audienceSummaryHtml = audienceSemantic.length
+    ? `<div class="detail-audience-compact-v225 detail-audience-compact-v501" aria-label="Público-alvo: ${htmlAttr(audienceSemantic.map(item=>item.label).join(', '))}">${audienceSemantic.slice(0,4).map(item=>detailAudienceChipV225(item,true)).join('')}${audienceSemantic.length>4?`<span class="detail-audience-more-v225" title="${htmlAttr(audienceSemantic.slice(4).map(item=>item.label).join(', '))}">+${audienceSemantic.length-4}</span>`:''}</div>`
+    : '<strong>Não informado</strong>';
 
-  return `<div class="detail-executive-v158 detail-executive-v206 detail-executive-v224">
-    <section class="detail-summary-v158 detail-summary-v224" aria-label="Características principais do fundo">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Características principais</strong></div>
-      <div class="detail-summary-grid-v158 detail-summary-grid-v206 detail-summary-grid-v224">
-        <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
-        <div class="detail-summary-item-v158"><span>Perfil de risco</span><strong>${htmlAttr(profile)}</strong></div>
-        <div class="detail-summary-item-v158"><span>Benchmark</span><strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}</div>
-        <div class="detail-summary-item-v158"><span>Tributação</span><strong>${htmlAttr(d.tributacao.texto)}</strong></div>
-        <div class="detail-summary-item-v158 audience-v225"><span>Público-alvo</span>${audienceSummaryHtml}</div>
-        <div class="detail-summary-item-v158 capture"><span>Captação</span>${statusValue(capLabel,capCls)}</div>
+  const summaryItem = (label, value, cls='') => `<div class="detail-summary-item-v158 detail-summary-item-v501 ${cls}"><span>${htmlAttr(label)}</span>${value}</div>`;
+  const opItem = (label, value, cls='') => `<div class="detail-op-item-v501 ${cls}"><span>${htmlAttr(label)}</span><strong>${htmlAttr(value)}</strong></div>`;
+
+  return `<div class="detail-executive-v158 detail-executive-v206 detail-executive-v224 detail-executive-v501">
+    <section class="detail-summary-v158 detail-summary-v224 detail-summary-v501" aria-label="Resumo executivo do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224 detail-section-head-v501"><strong>Resumo executivo</strong><small>Principais dados para enquadramento e conversa com o cliente.</small></div>
+      <div class="detail-summary-grid-v158 detail-summary-grid-v206 detail-summary-grid-v224 detail-summary-grid-v501">
+        ${summaryItem('Estratégia', `<strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}`, 'strategy')}
+        ${summaryItem('Risco', `<strong>${htmlAttr(profile)}</strong>`)}
+        ${summaryItem('Benchmark', `<strong>${htmlAttr(d.benchmark.texto)}</strong>${d.benchmark.estimado?'<em>indicativo</em>':''}`)}
+        ${summaryItem('Captação', statusValue(capLabel,capCls), 'capture')}
+        ${summaryItem('Público-alvo', audienceSummaryHtml, 'audience-v225')}
+        ${summaryItem('Tributação', `<strong>${htmlAttr(d.tributacao.texto)}</strong>`)}
       </div>
     </section>
 
-    <section class="detail-movement-v158 detail-movement-v224" aria-label="Movimentação do fundo">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Movimentação</strong><small>Prazos em dias úteis; solicitações após o horário limite podem seguir para o próximo dia útil.</small></div>
-      <div class="detail-movement-grid-v158 detail-movement-grid-v224">
-        <article class="detail-movement-card-v158 application">
-          <div class="detail-movement-title-v158"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
-          <div class="detail-flow-v158 detail-flow-v224">
-            <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.aplicacao)}</strong></div>
-            <i>→</i>
-            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionApp)}</strong></div>
+    <section class="detail-movement-v158 detail-movement-v224 detail-operation-v501" aria-label="Operação do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224 detail-section-head-v501"><strong>Operação</strong><small>Prazos em dias úteis; após o horário limite, a solicitação pode seguir para o próximo dia útil.</small></div>
+      <div class="detail-operation-grid-v501">
+        <article class="detail-operation-card-v501 application">
+          <div class="detail-operation-title-v501"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
+          <div class="detail-operation-items-v501">
+            ${opItem('Horário limite', d.horarios.aplicacao)}
+            ${opItem('Conversão', conversionApp)}
+            ${opItem('Aplicação inicial', appInitial)}
+            ${opItem('Aplicação adicional', appAdditional)}
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Aplicação inicial</b>${htmlAttr(appInitial)}</span><span><b>Aplicação adicional</b>${htmlAttr(appAdditional)}</span></div>
         </article>
-        <article class="detail-movement-card-v158 redemption">
-          <div class="detail-movement-title-v158"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
-          <div class="detail-flow-v158 three detail-flow-v224">
-            <div><span>Horário limite</span><strong>${htmlAttr(d.horarios.resgate)}</strong></div>
-            <i>→</i>
-            <div><span>Conversão da cota</span><strong>${htmlAttr(conversionRed)}</strong></div>
-            <i>→</i>
-            <div><span>Crédito em conta</span><strong>${htmlAttr(paymentRed)}</strong></div>
+        <article class="detail-operation-card-v501 redemption">
+          <div class="detail-operation-title-v501"><span>↑</span><div><b>Resgate</b><small>Saída de recursos</small></div></div>
+          <div class="detail-operation-items-v501">
+            ${opItem('Horário limite', d.horarios.resgate)}
+            ${opItem('Conversão', conversionRed)}
+            ${opItem('Crédito em conta', paymentRed)}
+            ${opItem('Resgate mínimo', redemptionMin)}
+            ${opItem('Adiantamento', advanceSummary, `advance ${adiCls}`)}
           </div>
-          <div class="detail-movement-meta-v158"><span><b>Resgate mínimo</b>${htmlAttr(redemptionMin)}</span><span class="advance ${adiCls}"><b>Adiantamento</b>${htmlAttr(advanceSummary)}</span></div>
         </article>
       </div>
       ${observationHtml}
     </section>
 
-    <section class="detail-complementary-v224" aria-label="Informações complementares">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Informações complementares</strong></div>
-      <div class="detail-complementary-grid-v224">
-        <div class="detail-complementary-group-v224">
-          <span class="detail-complementary-kicker-v224">Custos e identificação</span>
-          <dl class="detail-definition-list-v158 detail-definition-list-v224">
-            <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
-            <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
-            <div><dt>CNPJ</dt><dd class="copyable detail-copyable-v225"><span class="detail-copy-text-v225">${htmlAttr(cnpj)}</span><button type="button" class="detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjCopyValue)}" aria-label="Copiar CNPJ ${htmlAttr(cnpj)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button></dd></div>
-            <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
-          </dl>
-        </div>
-        <div class="detail-complementary-group-v224">
-          <span class="detail-complementary-kicker-v224">Público e enquadramento</span>
-          <div class="detail-audience-v158 detail-audience-v224"><b>Público-alvo</b><div>${audienceHtml}</div></div>
-          <div class="detail-flags-v158 detail-flags-v224">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
-        </div>
+    <section class="detail-complementary-v224 detail-technical-v501" aria-label="Dados técnicos do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224 detail-section-head-v501"><strong>Dados técnicos</strong><small>Cadastro, custos e controles operacionais.</small></div>
+      <div class="detail-technical-grid-v501">
+        <dl class="detail-definition-list-v158 detail-definition-list-v224 detail-definition-list-v501">
+          <div><dt>Taxa de administração</dt><dd>${htmlAttr(taxAdm)}</dd></div>
+          <div><dt>Saldo mínimo</dt><dd>${htmlAttr(balanceMin)}</dd></div>
+          <div><dt>CNPJ</dt><dd class="copyable detail-copyable-v225"><span class="detail-copy-text-v225">${htmlAttr(cnpj)}</span><button type="button" class="detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjCopyValue)}" aria-label="Copiar CNPJ ${htmlAttr(cnpj)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar</span></button></dd></div>
+          <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
+        </dl>
+        <div class="detail-flags-v158 detail-flags-v224 detail-flags-v501">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
       </div>
     </section>
   </div>`;
@@ -4325,7 +4317,7 @@ function buildDetailPanel(r,colspan){
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean detail-panel-v158">
-      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}${gerarLeituraRapidaFundo(r)}${buildDetailExecutiveV158(r)}</div>
     </div>
   </td></tr>`;
 }
