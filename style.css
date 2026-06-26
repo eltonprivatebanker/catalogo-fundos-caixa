@@ -8440,7 +8440,7 @@ th.th-num, td.col-pct, td.col-pct-12m, td.col-cdi-bar, td.cdi-ratio-cell{
   white-space:normal !important;
   overflow-wrap:normal !important;
   word-break:normal !important;
-  overflow-wrap:break-word;!important;
+  overflow-wrap:break-word!important;
 }
 @media(max-width:760px), (hover:none) and (pointer:coarse){
   .top-disclaimer.notice-strip-v3{
@@ -67246,5 +67246,20 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   .fspot-docs-menu-v485 .fspot-doc-btn{
     padding:6px 9px;
     font-size:.62rem;
+  }
+}
+
+
+/* ==========================================================
+   ELTAUM v486 — Desktop-only: estabilidade do modal do fundo
+   Corrige interação do overlay quando o modal está aberto.
+   Mobile preservado.
+========================================================== */
+@media (min-width: 769px){
+  html.desktop-fund-spotlight-v486 body .fspot-overlay.open{
+    pointer-events:auto!important;
+  }
+  html.desktop-fund-spotlight-v486 body .fspot-overlay.open .fspot-panel{
+    pointer-events:auto!important;
   }
 }

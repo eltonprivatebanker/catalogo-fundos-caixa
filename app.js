@@ -4549,6 +4549,11 @@ function factMobileV235(label, value, opts={}){
 
 function buildFundOperationalFacts(r, variant='detail'){
   const d = obterDadosOperacionaisFundo(r);
+  // v486 — correção desktop spotlight: estas variáveis eram usadas no bloco "Operação", mas só existiam dentro do detalhe antigo.
+  // Com isso, o clique nos cards Melhor/Pior 12M não quebra mais por ReferenceError.
+  const conversionApp = detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação'],'—');
+  const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate'],'—');
+  const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate'],'—');
   const capCls = classeStatusOperacional(d.captacao.status,'captacao');
   const adiCls = classeStatusOperacional(d.adiantamento.status,'adiantamento');
   const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
@@ -8585,6 +8590,14 @@ document.addEventListener('DOMContentLoaded', function(){
     ov.addEventListener('click', _spotlightBackdropClose);
     document.addEventListener('keydown', _spotlightEscClose);
   }
+
+  // v486 — utilitário de teste no console: __abrirModalFundoDesktop('best') ou ('worst')
+  window.__abrirModalFundoDesktop = function(kind='best'){
+    _spotlightKind = String(kind).toLowerCase().includes('worst') || String(kind).toLowerCase().includes('pior') ? 'worst' : 'best';
+    const row = bestWorstRow(_spotlightKind);
+    openFundRow(row);
+    return row;
+  };
 
   function closeFundSpotlight(){
     const ov = document.getElementById('fundSpotlightOverlay');
