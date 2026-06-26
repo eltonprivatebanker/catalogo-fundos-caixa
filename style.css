@@ -67995,3 +67995,310 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     gap:6px !important;
   }
 }
+
+
+/* ==========================================================
+   ELTAUM v513 — rankings desktop mais leves e hierarquia clara
+   Base: v508/v512. Escopo somente desktop. Não altera mobile.
+========================================================== */
+@media (min-width: 769px){
+  html.desktop-rankings-clean-v513 body #rankingsSection{
+    margin-top:34px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-head{
+    align-items:flex-start !important;
+    margin-bottom:12px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-title-group h2{
+    margin-bottom:6px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .section-badge,
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-actions,
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-view-tabs{
+    display:none !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-section-subtitle-v136{
+    max-width:720px !important;
+    margin-top:4px !important;
+    color:#a8b3ca !important;
+    font-size:.72rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-toolbar-v136{
+    display:grid !important;
+    grid-template-columns: minmax(170px,210px) minmax(145px,180px) minmax(165px,210px) minmax(0,1fr) !important;
+    align-items:end !important;
+    gap:10px !important;
+    padding:10px 12px !important;
+    margin:10px 0 12px !important;
+    border-radius:12px !important;
+    background:rgba(10,13,24,.58) !important;
+    border-color:rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-control-card-v136{
+    gap:5px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-control-card-v136 label{
+    font-size:.52rem !important;
+    color:#8794b1 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-select-v136{
+    min-height:34px !important;
+    border-radius:8px !important;
+    font-size:.64rem !important;
+    background:rgba(8,13,24,.78) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-filter-row-compat-v136{
+    min-height:34px !important;
+    gap:6px !important;
+    align-items:center !important;
+    padding:0 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-label{
+    font-size:.50rem !important;
+    opacity:.82 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-filter-row-compat-v136 .ranking-filter-chip{
+    min-height:28px !important;
+    padding:6px 9px !important;
+    border-radius:7px !important;
+    font-size:.57rem !important;
+    background:rgba(8,12,24,.72) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-layout-v136{
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) minmax(220px,248px) !important;
+    gap:12px !important;
+    align-items:start !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-summary{
+    display:grid !important;
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    gap:10px !important;
+    margin-bottom:10px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card{
+    min-height:86px !important;
+    padding:13px 14px !important;
+    border-radius:12px !important;
+    background:linear-gradient(180deg,rgba(13,17,31,.88),rgba(8,11,20,.76)) !important;
+    border-color:rgba(148,163,184,.14) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card.best{
+    border-color:rgba(29,209,161,.26) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card.worst{
+    border-color:rgba(255,96,119,.28) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card.universe{
+    border-color:rgba(232,187,106,.22) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card > span{
+    font-size:.57rem !important;
+    letter-spacing:.10em !important;
+    color:#9fb0d0 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card > strong{
+    margin-top:8px !important;
+    font-size:1.20rem !important;
+    line-height:1.05 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card.universe > strong{
+    color:#f2c978 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card > small,
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-card > em{
+    font-size:.58rem !important;
+    line-height:1.3 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-insight{
+    margin:0 0 10px !important;
+    padding:9px 12px !important;
+    border-radius:10px !important;
+    background:rgba(12,19,35,.70) !important;
+    border-color:rgba(96,165,250,.16) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-insight span{
+    font-size:.56rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-insight p{
+    font-size:.68rem !important;
+    margin:0 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-board,
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-category-panel{
+    border-radius:12px !important;
+    border-color:rgba(148,163,184,.15) !important;
+    background:rgba(8,11,20,.70) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-board-head{
+    padding:12px 14px !important;
+    gap:12px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-board-head h3,
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-panel-head h3{
+    font-size:.84rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-board-head p,
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-panel-head p{
+    font-size:.60rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-top-row{
+    min-height:42px !important;
+    padding:9px 12px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-fund strong{
+    font-size:.67rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-fund span{
+    font-size:.55rem !important;
+    opacity:.76 !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-exec-secondary{
+    margin-top:10px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-panel-head{
+    padding:11px 14px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-cat-grid-v50{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:8px !important;
+    padding:10px 12px 12px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-cat-mini{
+    min-height:74px !important;
+    padding:10px 11px !important;
+    border-radius:10px !important;
+    background:rgba(255,255,255,.018) !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-cat-mini small{
+    display:block !important;
+    max-width:100% !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .ranking-attention-panel-v136{
+    position:sticky !important;
+    top:74px !important;
+    border-radius:12px !important;
+    border-color:rgba(232,187,106,.20) !important;
+    background:rgba(9,11,20,.86) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-head-v136{
+    padding:11px 12px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-head-v136 > span{
+    width:28px !important;
+    height:28px !important;
+    border-radius:8px !important;
+    font-size:.78rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-head-v136 strong{
+    font-size:.70rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-head-v136 small{
+    font-size:.53rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-body-v136{
+    padding:9px !important;
+    gap:8px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-metric-grid-v136{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:7px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-metric-v136{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8px !important;
+    padding:9px 10px !important;
+    text-align:left !important;
+    border-radius:9px !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-metric-v136 span{
+    font-size:.52rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-metric-v136 strong{
+    margin:0 !important;
+    font-size:.82rem !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-block-v136,
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-foot-v136{
+    display:none !important;
+  }
+
+  html.desktop-rankings-clean-v513 body #rankingsSection .attention-body-v136::after{
+    content:'Detalhes disponíveis ao abrir o fundo ou aplicar filtros específicos.';
+    display:block;
+    padding:7px 2px 0;
+    color:#7f8aa8;
+    font-size:.52rem;
+    line-height:1.35;
+  }
+
+  @media (max-width: 1280px){
+    html.desktop-rankings-clean-v513 body #rankingsSection .ranking-layout-v136{
+      grid-template-columns:1fr !important;
+    }
+    html.desktop-rankings-clean-v513 body #rankingsSection .ranking-attention-panel-v136{
+      position:relative !important;
+      top:auto !important;
+      order:-1 !important;
+    }
+    html.desktop-rankings-clean-v513 body #rankingsSection .attention-metric-grid-v136{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}

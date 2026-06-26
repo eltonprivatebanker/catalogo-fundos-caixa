@@ -11026,8 +11026,7 @@ async function sharePainelMercado(){
     const cards=[
       summaryCard('best','Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12)} do CDI · ${shortCat(best12['Categoria'])}`:''),
       summaryCard('worst','Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):''),
-      summaryCard('month','Melhor mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
-      summaryCard('pl','Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:'')
+      summaryCard('universe','Universo analisado', `${base.length} fundos`, filtroLabelAtual(), `Risco: ${rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:'')}`)
     ].join('');
 
     const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
