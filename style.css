@@ -67404,3 +67404,224 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     margin-top: 14px !important;
   }
 }
+
+/* ELTAUM_DESKTOP_MARKET_FIX_V519
+   Corrige sobreposição/encavalamento na seção Juros e CDI no desktop.
+   Mantém mobile preservado e não altera a lógica dos indicadores. */
+@media (min-width: 769px){
+  html.desktop-market-fix-v519 body #sec-mercado .market-ref-grid.market-reference-v167{
+    display:block!important;
+    width:100%!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167,
+  html.desktop-market-fix-v519 body #sec-mercado .rates-executive-v255{
+    display:grid!important;
+    grid-template-columns:300px minmax(0,1fr)!important;
+    grid-template-areas:
+      "head head"
+      "summary detail"!important;
+    gap:14px 20px!important;
+    align-items:start!important;
+    overflow:visible!important;
+    min-height:0!important;
+    padding:18px 22px 22px!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 > .market-reference-head-v167{
+    grid-area:head!important;
+    min-width:0!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .rates-summary-v167{
+    grid-area:summary!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+    min-width:0!important;
+    width:100%!important;
+    align-self:start!important;
+    position:relative!important;
+    z-index:2!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .rates-detail-grid-v167{
+    grid-area:detail!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto!important;
+    gap:12px!important;
+    min-width:0!important;
+    width:100%!important;
+    align-items:start!important;
+    position:relative!important;
+    z-index:1!important;
+  }
+
+  /* Copom como faixa contextual compacta acima do gráfico */
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .copom-compact-v167{
+    grid-row:1!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    height:auto!important;
+    margin:0!important;
+    padding:12px 14px!important;
+    border-radius:14px!important;
+    background:rgba(15,23,42,.36)!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .copom-compact-v167 .reference-subhead-v167{
+    margin:0 0 8px!important;
+    padding:0!important;
+    border:0!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .copom-exec-summary-v270{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    scroll-snap-type:none!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .copom-exec-summary-v270 > article,
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .copom-exec-card-v270{
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    flex:initial!important;
+    min-height:72px!important;
+    padding:9px 11px!important;
+    box-sizing:border-box!important;
+    border-radius:12px!important;
+    background:rgba(2,6,23,.34)!important;
+    border:1px solid rgba(148,163,184,.10)!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .copom-exec-desc-v270{
+    max-width:100%!important;
+  }
+
+  /* CDI/gráfico sempre abaixo do Copom e sem invadir a coluna Selic/CDI */
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-year-history,
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 #cdiYearHistory{
+    grid-row:2!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:14px!important;
+    position:relative!important;
+    z-index:1!important;
+    border-radius:16px!important;
+    background:rgba(15,23,42,.28)!important;
+    border:1px solid rgba(96,165,250,.13)!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-year-head,
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-chart-head-v271{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin:0 0 10px!important;
+    padding:0!important;
+    border:0!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-kpis-v271{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:10px!important;
+    margin:0 0 10px!important;
+    width:100%!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-kpi-v271{
+    min-width:0!important;
+    min-height:54px!important;
+    padding:9px 11px!important;
+    border-radius:12px!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-month-carousel-v322{
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+    margin:0 0 10px!important;
+    padding:0!important;
+    overflow:hidden!important;
+    scroll-snap-type:none!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-month-carousel-v322 > article,
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-month-card-v322{
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    flex:initial!important;
+    min-height:54px!important;
+    padding:7px 8px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-chart-canvas-wrap-v271{
+    width:100%!important;
+    height:260px!important;
+    min-height:260px!important;
+    max-height:260px!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-chart-scroll-wrap-v273,
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-chart-scroll-inner-v273{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 #cdiYearChartV271{
+    width:100%!important;
+    max-width:100%!important;
+    height:260px!important;
+    max-height:260px!important;
+    display:block!important;
+  }
+
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .reference-footnote-v167{
+    margin-top:7px!important;
+  }
+}
+
+@media (min-width: 769px) and (max-width: 1180px){
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167,
+  html.desktop-market-fix-v519 body #sec-mercado .rates-executive-v255{
+    grid-template-columns:1fr!important;
+    grid-template-areas:
+      "head"
+      "summary"
+      "detail"!important;
+  }
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .rates-summary-v167{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+  html.desktop-market-fix-v519 body #sec-mercado .rates-reference-v167 .cdi-kpis-v271{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}

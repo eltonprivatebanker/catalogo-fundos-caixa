@@ -22770,3 +22770,188 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     sync: syncMobileFilterListV482
   };
 })();
+
+/* ELTAUM_DESKTOP_MARKET_FIX_V519
+   Corrige somente no desktop a seção Juros e CDI, removendo estilos inline antigos
+   que criavam sobreposição entre Selic/CDI, Copom e gráfico. */
+(function(){
+  const FLAG = '__ELTAUM_DESKTOP_MARKET_FIX_V519__';
+  if (window[FLAG]) return;
+  window[FLAG] = true;
+
+  const isDesktop = () => window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
+  const hasPatch = () => document.documentElement.classList.contains('desktop-market-fix-v519');
+  const set = (el, prop, value) => { if (el) el.style.setProperty(prop, value, 'important'); };
+  const clear = (el, prop) => { if (el) el.style.removeProperty(prop); };
+
+  function applyMarketFix(){
+    if (!isDesktop() || !hasPatch()) return;
+    const root = document.getElementById('sec-mercado');
+    if (!root) return;
+
+    const rates = root.querySelector('.rates-reference-v167, .rates-executive-v255');
+    if (rates){
+      set(rates, 'display', 'grid');
+      set(rates, 'grid-template-columns', '300px minmax(0,1fr)');
+      set(rates, 'grid-template-areas', '"head head" "summary detail"');
+      set(rates, 'gap', '14px 20px');
+      set(rates, 'align-items', 'start');
+      set(rates, 'overflow', 'visible');
+    }
+
+    const head = root.querySelector('.rates-reference-v167 > .market-reference-head-v167');
+    set(head, 'grid-area', 'head');
+
+    const summary = root.querySelector('.rates-summary-v167');
+    if (summary){
+      set(summary, 'grid-area', 'summary');
+      set(summary, 'display', 'grid');
+      set(summary, 'grid-template-columns', '1fr');
+      set(summary, 'gap', '10px');
+      set(summary, 'align-self', 'start');
+      set(summary, 'width', '100%');
+      set(summary, 'min-width', '0');
+    }
+
+    const detailGrid = root.querySelector('.rates-detail-grid-v167');
+    if (detailGrid){
+      set(detailGrid, 'grid-area', 'detail');
+      set(detailGrid, 'display', 'grid');
+      set(detailGrid, 'grid-template-columns', '1fr');
+      set(detailGrid, 'grid-template-rows', 'auto auto');
+      set(detailGrid, 'gap', '12px');
+      set(detailGrid, 'width', '100%');
+      set(detailGrid, 'min-width', '0');
+      set(detailGrid, 'align-items', 'start');
+    }
+
+    const copom = root.querySelector('.copom-compact-v167');
+    if (copom){
+      set(copom, 'grid-row', '1');
+      set(copom, 'width', '100%');
+      set(copom, 'min-width', '0');
+      set(copom, 'height', 'auto');
+      set(copom, 'margin', '0');
+      set(copom, 'overflow', 'hidden');
+    }
+
+    const copomSummary = root.querySelector('#copomExecutiveSummaryV270');
+    if (copomSummary){
+      set(copomSummary, 'display', 'grid');
+      set(copomSummary, 'grid-template-columns', 'repeat(2,minmax(0,1fr))');
+      set(copomSummary, 'gap', '10px');
+      set(copomSummary, 'width', '100%');
+      set(copomSummary, 'max-width', '100%');
+      set(copomSummary, 'overflow', 'hidden');
+      set(copomSummary, 'scroll-snap-type', 'none');
+    }
+    root.querySelectorAll('#copomExecutiveSummaryV270 > article').forEach(card => {
+      set(card, 'flex', 'initial');
+      set(card, 'width', 'auto');
+      set(card, 'min-width', '0');
+      set(card, 'max-width', 'none');
+      set(card, 'box-sizing', 'border-box');
+      set(card, 'min-height', '72px');
+    });
+
+    const cdi = root.querySelector('#cdiYearHistory');
+    if (cdi){
+      set(cdi, 'grid-row', '2');
+      set(cdi, 'display', 'block');
+      set(cdi, 'width', '100%');
+      set(cdi, 'min-width', '0');
+      set(cdi, 'max-width', '100%');
+      set(cdi, 'height', 'auto');
+      set(cdi, 'min-height', '0');
+      set(cdi, 'max-height', 'none');
+      set(cdi, 'margin', '0');
+      set(cdi, 'position', 'relative');
+      set(cdi, 'overflow', 'hidden');
+      set(cdi, 'box-sizing', 'border-box');
+    }
+
+    const cdiKpis = root.querySelector('#cdiYearHistory .cdi-kpis-v271');
+    if (cdiKpis){
+      set(cdiKpis, 'display', 'grid');
+      set(cdiKpis, 'grid-template-columns', 'repeat(4,minmax(0,1fr))');
+      set(cdiKpis, 'gap', '10px');
+      set(cdiKpis, 'width', '100%');
+    }
+
+    const monthCarousel = root.querySelector('#cdiMonthCarouselV322');
+    if (monthCarousel){
+      set(monthCarousel, 'display', 'grid');
+      set(monthCarousel, 'grid-template-columns', 'repeat(6,minmax(0,1fr))');
+      set(monthCarousel, 'gap', '8px');
+      set(monthCarousel, 'width', '100%');
+      set(monthCarousel, 'overflow', 'hidden');
+      set(monthCarousel, 'scroll-snap-type', 'none');
+      set(monthCarousel, 'flex-wrap', 'initial');
+    }
+    root.querySelectorAll('#cdiMonthCarouselV322 > article').forEach(card => {
+      set(card, 'flex', 'initial');
+      set(card, 'width', 'auto');
+      set(card, 'min-width', '0');
+      set(card, 'max-width', 'none');
+      set(card, 'box-sizing', 'border-box');
+      set(card, 'min-height', '54px');
+    });
+
+    const canvasWrap = root.querySelector('.cdi-chart-canvas-wrap-v271');
+    if (canvasWrap){
+      set(canvasWrap, 'width', '100%');
+      set(canvasWrap, 'height', '260px');
+      set(canvasWrap, 'min-height', '260px');
+      set(canvasWrap, 'max-height', '260px');
+      set(canvasWrap, 'overflow', 'hidden');
+    }
+    const scrollWrap = root.querySelector('.cdi-chart-scroll-wrap-v273');
+    const scrollInner = root.querySelector('#cdiChartScrollInnerV273');
+    [scrollWrap, scrollInner].forEach(el => {
+      if (!el) return;
+      set(el, 'width', '100%');
+      set(el, 'min-width', '0');
+      set(el, 'max-width', '100%');
+      set(el, 'overflow', 'hidden');
+    });
+
+    const canvas = root.querySelector('#cdiYearChartV271');
+    if (canvas){
+      set(canvas, 'width', '100%');
+      set(canvas, 'height', '260px');
+      set(canvas, 'max-height', '260px');
+      try{
+        if (window.Chart && typeof window.Chart.getChart === 'function'){
+          const chart = window.Chart.getChart(canvas);
+          if (chart && typeof chart.resize === 'function') chart.resize();
+        }
+      }catch(_){ }
+    }
+  }
+
+  let raf = 0;
+  function schedule(){
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      applyMarketFix();
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule, {once:true});
+  else schedule();
+  window.addEventListener('load', () => { schedule(); setTimeout(schedule, 250); setTimeout(schedule, 900); }, {once:true});
+  window.addEventListener('resize', schedule);
+
+  const obs = new MutationObserver((mutations) => {
+    if (!isDesktop() || !hasPatch()) return;
+    for (const m of mutations){
+      const t = m.target;
+      if (t && t.nodeType === 1 && (t.id === 'sec-mercado' || (t.closest && t.closest('#sec-mercado')))){
+        schedule();
+        break;
+      }
+    }
+  });
+  try{ obs.observe(document.documentElement, {subtree:true, childList:true, attributes:true, attributeFilter:['style','class']}); }catch(_){ }
+})();
