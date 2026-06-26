@@ -8424,6 +8424,29 @@ document.addEventListener('DOMContentLoaded', function(){
   /* ═══════════════════════════════════════════
      FUND SPOTLIGHT MODAL — lógica de abertura
   ═══════════════════════════════════════════ */
+
+  function cleanSpotlightDocLabelV499(d){
+    const curto = String(d?.curto || '').trim().toUpperCase();
+    const raw = String(d?.label || '').trim();
+    const map = {
+      BC: 'Boletim comercial',
+      L: 'Lâmina',
+      R: 'Regulamento',
+      IC: 'Informações complementares',
+      C: 'Comunicado aos cotistas',
+      CM: 'Carta mensal',
+      TA: 'Termo de adesão'
+    };
+    if(map[curto]) return map[curto];
+    return raw
+      .replace(/^(BC|L|R|IC|C|CM|TA)\s+/i, '')
+      .replace(/^Inf\.?\s*Compl\.?$/i, 'Informações complementares')
+      .replace(/^Comunicado$/i, 'Comunicado aos cotistas')
+      .replace(/^Carta Mensal$/i, 'Carta mensal')
+      .replace(/^Termo de Adesão$/i, 'Termo de adesão')
+      .replace(/^Boletim Comercial$/i, 'Boletim comercial');
+  }
+
   function openFundRow(row){
     if(!row) return showToast('Fundo não localizado na base atual.');
 
@@ -8518,7 +8541,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // Documentos
     const docs = obterDocsFundoCompactos ? obterDocsFundoCompactos(row) : [];
     el('fspotDocs').innerHTML = docs.length
-      ? docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')
+      ? docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${cleanSpotlightDocLabelV499(d)}</a>`).join('')
       : '';
 
     // Badge tipo (best/worst)
@@ -23674,14 +23697,31 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
    ========================================================= */
 (function desktopFundSpotlightRestoreV498(){
   'use strict';
-  const BUILD='ELTAUM_DESKTOP_MODAL_RESTORE_V498';
+  const BUILD='ELTAUM_DESKTOP_DOC_LABELS_V499';
   const html=document.documentElement;
-  html.classList.add('desktop-modal-restore-v498');
+  html.classList.add('desktop-modal-restore-v498','desktop-doc-labels-v499');
   const meta=document.querySelector('meta[name="app-build"]');
   if(meta) meta.content=BUILD;
   const isDesktop=()=>window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
   const safe=(fn, fallback='')=>{ try{return fn();}catch(_e){return fallback;} };
   const esc=(v)=> safe(()=>htmlAttr(v), String(v ?? '').replace(/[&<>"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])));
+
+  function cleanDocTextV499(text){
+    const t = String(text || '').replace(/\s+/g,' ').trim();
+    return t
+      .replace(/^BC\s+Boletim\s+Comercial$/i, 'Boletim comercial')
+      .replace(/^L\s+Lâmina$/i, 'Lâmina')
+      .replace(/^R\s+Regulamento$/i, 'Regulamento')
+      .replace(/^IC\s+Inf\.?\s*Compl\.?$/i, 'Informações complementares')
+      .replace(/^C\s+Comunicado$/i, 'Comunicado aos cotistas')
+      .replace(/^CM\s+Carta\s+Mensal$/i, 'Carta mensal')
+      .replace(/^TA\s+Termo\s+de\s+Adesão$/i, 'Termo de adesão')
+      .replace(/^Boletim\s+Comercial$/i, 'Boletim comercial')
+      .replace(/^Inf\.?\s*Compl\.?$/i, 'Informações complementares')
+      .replace(/^Comunicado$/i, 'Comunicado aos cotistas')
+      .replace(/^Carta\s+Mensal$/i, 'Carta mensal')
+      .replace(/^Termo\s+de\s+Adesão$/i, 'Termo de adesão');
+  }
 
   const previousBuildFacts = (typeof buildFundOperationalFacts === 'function') ? buildFundOperationalFacts : null;
 
@@ -23769,6 +23809,9 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     const docsEl = document.getElementById('fspotDocs');
     if(!docsEl || docsEl.querySelector('.fspot-docs-details-v485')){
       const details = docsEl && docsEl.querySelector('.fspot-docs-details-v485');
+      if(docsEl){
+        docsEl.querySelectorAll('a.fspot-doc-btn, a').forEach(a=>{ a.textContent = cleanDocTextV499(a.textContent); });
+      }
       setupDocsAutoScroll(details);
       return;
     }
@@ -23777,10 +23820,11 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     const unique = [];
     const seen = new Set();
     links.forEach(a=>{
-      const key = a.href + '|' + a.textContent.trim();
+      const label = cleanDocTextV499(a.textContent.trim());
+      const key = a.href + '|' + label;
       if(seen.has(key)) return;
       seen.add(key);
-      unique.push(`<a class="fspot-doc-btn" href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.textContent.trim())}</a>`);
+      unique.push(`<a class="fspot-doc-btn" href="${esc(a.href)}" target="_blank" rel="noopener">${esc(label)}</a>`);
     });
     docsEl.innerHTML = `<details class="fspot-docs-details-v485"><summary>Documentos <span>${unique.length}</span></summary><div class="fspot-docs-menu-v485">${unique.join('')}</div></details>`;
     setupDocsAutoScroll(docsEl.querySelector('.fspot-docs-details-v485'));
