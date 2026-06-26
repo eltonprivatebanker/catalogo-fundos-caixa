@@ -67704,3 +67704,95 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     display:none!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v509 — Desktop: CNPJ + SIART na linha do fundo
+   Base: v508. Não altera mobile.
+   ========================================================= */
+@media (min-width: 769px){
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable tbody td.col-fundo{
+    min-width: 320px !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-cell-meta-v509{
+    display:flex !important;
+    align-items:center !important;
+    gap:6px !important;
+    flex-wrap:wrap !important;
+    margin-top:5px !important;
+    max-width:100% !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-cell-meta-v509 .fundo-cat-badge{
+    flex:0 0 auto !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-cnpj-sub-v509,
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-siart-sub-v509{
+    display:inline-flex !important;
+    align-items:center !important;
+    gap:4px !important;
+    height:20px !important;
+    padding:0 7px !important;
+    border-radius:6px !important;
+    border:1px solid rgba(148,163,184,.14) !important;
+    background:rgba(8,13,24,.62) !important;
+    color:#aeb9d2 !important;
+    font-family:'JetBrains Mono', monospace !important;
+    font-size:.57rem !important;
+    line-height:1 !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-cnpj-sub-v509 b,
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-siart-sub-v509 b{
+    color:#e8bb6a !important;
+    font-size:.52rem !important;
+    text-transform:uppercase !important;
+    letter-spacing:.08em !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-copy-cnpj-v509{
+    flex:0 0 auto !important;
+    width:22px !important;
+    height:20px !important;
+    min-width:22px !important;
+    padding:0 !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border-radius:6px !important;
+    border:1px solid rgba(200,151,58,.28) !important;
+    background:rgba(200,151,58,.08) !important;
+    color:#e8bb6a !important;
+    cursor:pointer !important;
+    transition:background .12s ease,border-color .12s ease,color .12s ease !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-copy-cnpj-v509:hover{
+    border-color:rgba(232,187,106,.52) !important;
+    background:rgba(200,151,58,.15) !important;
+    color:#f5d48a !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-copy-cnpj-v509 .detail-copy-label-v225{
+    position:absolute !important;
+    width:1px !important;
+    height:1px !important;
+    overflow:hidden !important;
+    clip:rect(0 0 0 0) !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-copy-cnpj-v509 .detail-copy-icon-v225{
+    font-size:.72rem !important;
+    line-height:1 !important;
+  }
+
+  html.desktop-fund-table-ids-v509 body:not(.fund-card-mode) #mainTable .fundo-copy-cnpj-v509.is-copied{
+    border-color:rgba(46,209,122,.42) !important;
+    background:rgba(46,209,122,.10) !important;
+    color:#2ed17a !important;
+  }
+}

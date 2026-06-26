@@ -4798,6 +4798,18 @@ function mobileResumoRentCell(r){
   </td>`;
 }
 
+
+function getCodigoFundoTableV509(row){
+  const keys=['codfundo','Código SIART','Codigo SIART','SIART','Código SIICO','Codigo SIICO','SIICO','Código do Fundo','Codigo do Fundo','Cod Fundo','Cód. Fundo'];
+  for(const key of keys){
+    const value=String(row?.[key] || '').trim();
+    if(value) return value.replace(/^0+(?=\d)/,'');
+  }
+  const cnpjLimpo=String(row?.['CNPJ'] || '').replace(/\D/g,'').slice(0,14);
+  const docCode=cnpjLimpo ? String(_fundosDocMap?.[cnpjLimpo]?.codfundo || '').trim() : '';
+  return docCode.replace(/^0+(?=\d)/,'');
+}
+
 function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
@@ -4847,10 +4859,18 @@ function buildRowHTML(r,idx){
       const catCls=CAT_CLS[cat]||'RF';
       const catAbrev={'RENDA FIXA SIMPLES':'RF Simples','RENDA FIXA':'RF','RENDA FIXA REFERENCIADO':'RF Ref.','RENDA FIXA CURTO PRAZO':'RF CP','MULTIMERCADO':'MM','CAMBIAL':'CAM','ACOES':'Ações','FUNDO DE INDICE':'ETF','FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'};
       const catLabel=catAbrev[cat]||cat.slice(0,8);
-      // PL compacto
-      const plVal=toNum(r['PL (milhoes R$)']);
-      const plStr=plVal?'PL R$ '+( plVal>=1000?(plVal/1000).toFixed(1)+'bi' : plVal.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi' ):'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
+      // Identificação operacional no desktop: PL fica na coluna própria; aqui exibimos CNPJ + SIICO/SIART.
+      const cnpjRaw = String(r['CNPJ'] || '').trim();
+      const cnpjLimpoV509 = cnpjRaw.replace(/\D/g,'').slice(0,14);
+      const cnpjFormatadoV509 = cnpjLimpoV509 ? formatarCnpjMeta(cnpjLimpoV509) : cnpjRaw;
+      const codigoSiartV509 = getCodigoFundoTableV509(r);
+      const cnpjHtmlV509 = cnpjFormatadoV509
+        ? `<span class="fundo-cnpj-sub-v509" title="CNPJ ${htmlAttr(cnpjFormatadoV509)}"><b>CNPJ</b> ${htmlAttr(cnpjFormatadoV509)}</span><button type="button" class="fundo-copy-cnpj-v509 detail-copy-btn-v225" data-copy-value="${htmlAttr(cnpjLimpoV509 || cnpjFormatadoV509)}" aria-label="Copiar CNPJ ${htmlAttr(cnpjFormatadoV509)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225">Copiar</span></button>`
+        : '';
+      const codigoHtmlV509 = codigoSiartV509
+        ? `<span class="fundo-siart-sub-v509" title="Código SIICO/SIART ${htmlAttr(codigoSiartV509)}"><b>SIART</b> ${htmlAttr(codigoSiartV509)}</span>`
+        : '';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta fundo-cell-meta-v509"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjHtmlV509}${codigoHtmlV509}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
