@@ -8567,9 +8567,11 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Documentos
     const docs = obterDocsFundoCompactos ? obterDocsFundoCompactos(row) : [];
-    el('fspotDocs').innerHTML = docs.length
+    const docsSpotEl = el('fspotDocs');
+    docsSpotEl.innerHTML = docs.length
       ? `<details class="fspot-docs-details-v485"><summary>Documentos <span>${docs.length}</span></summary><div class="fspot-docs-menu-v485">${docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')}</div></details>`
       : '';
+    setupSpotlightDocsAutoScrollV487(docsSpotEl.querySelector('.fspot-docs-details-v485'));
 
     // Badge tipo (best/worst)
     const kind = _spotlightKind || 'best';
@@ -8589,6 +8591,37 @@ document.addEventListener('DOMContentLoaded', function(){
     document.body.style.overflow = 'hidden';
     ov.addEventListener('click', _spotlightBackdropClose);
     document.addEventListener('keydown', _spotlightEscClose);
+  }
+
+  // v487 — ao abrir "Documentos", desloca suavemente o conteúdo do modal
+  // para deixar claro que a lista de documentos apareceu abaixo dos botões.
+  function setupSpotlightDocsAutoScrollV487(details){
+    if(!details || details._docsAutoScrollV487) return;
+    details._docsAutoScrollV487 = true;
+
+    details.addEventListener('toggle', ()=>{
+      if(!details.open) return;
+
+      const run = ()=>{
+        const panel = details.closest('.fspot-panel') || document.querySelector('#fundSpotlightOverlay .fspot-panel');
+        const menu  = details.querySelector('.fspot-docs-menu-v485');
+        if(!panel || !menu) return;
+
+        details.classList.add('docs-open-attention-v487');
+        window.setTimeout(()=>details.classList.remove('docs-open-attention-v487'), 1100);
+
+        const panelRect = panel.getBoundingClientRect();
+        const menuRect  = menu.getBoundingClientRect();
+        const safeBottom = panelRect.bottom - 18;
+        const overflowBottom = Math.max(0, menuRect.bottom - safeBottom);
+
+        // Mesmo quando já couber, desce um pouco para sinalizar continuidade.
+        const scrollAmount = Math.max(58, overflowBottom + 22);
+        panel.scrollBy({ top: scrollAmount, behavior: 'smooth' });
+      };
+
+      requestAnimationFrame(()=>window.setTimeout(run, 80));
+    });
   }
 
   // v486 — utilitário de teste no console: __abrirModalFundoDesktop('best') ou ('worst')
