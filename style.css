@@ -68939,3 +68939,83 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     top:auto!important;
   }
 }
+
+
+/* =========================================================
+   ELTAUM_DESKTOP_RANKINGS_WIDTH_V529
+   Escopo: somente desktop.
+   Correção: a v528 centralizou o bloco Rankings em max-width:1280px
+   para reduzir peso visual, mas isso deixou a seção desalinhada das
+   demais áreas do desktop. Aqui o bloco volta a ocupar a largura útil
+   da página, mantendo o refinamento visual e a tela menos poluída.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-rankings-width-v529 body #rankingsSection{
+    width:100%!important;
+    max-width:none!important;
+    margin-left:0!important;
+    margin-right:0!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-head,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-layout-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-grid,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-main-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-exec-board,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-exec-secondary,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-category-panel{
+    width:100%!important;
+    max-width:none!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-head{
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:space-between!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-toolbar{
+    width:100%!important;
+    max-width:100%!important;
+    grid-template-columns:minmax(210px,1fr) minmax(180px,.7fr) minmax(210px,.8fr)!important;
+    align-items:end!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-layout-v136{
+    grid-template-columns:minmax(0,1fr) 260px!important;
+    gap:12px!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-exec-summary{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-top-header,
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-top-row{
+    grid-template-columns:44px minmax(0,1fr) 110px 90px!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-cat-grid-v50{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-attention-panel-v136{
+    width:260px!important;
+    max-width:260px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-layout-v136{
+    grid-template-columns:1fr!important;
+  }
+  html.desktop-rankings-width-v529 body #rankingsSection .ranking-attention-panel-v136{
+    width:100%!important;
+    max-width:none!important;
+    position:relative!important;
+    top:auto!important;
+  }
+}
