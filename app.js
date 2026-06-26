@@ -22774,7 +22774,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 /* PATCH v489 — Desktop: filtros em funil cumulativo com trilha ativa */
 (function(){
   'use strict';
-  const BUILD = 'ELTAUM_DESKTOP_FILTER_FUNNEL_V489';
+  const BUILD = 'ELTAUM_DESKTOP_FILTER_FUNNEL_LAYOUT_V490';
   let activeAudienceV489 = '';
   let syncingV489 = false;
 
@@ -23024,7 +23024,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     syncingV489 = true;
     try{
       const html = document.documentElement;
-      html.classList.add('desktop-filter-funnel-v489');
+      html.classList.add('desktop-filter-funnel-v489','desktop-filter-funnel-layout-v490');
       const meta = qs('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
       syncAudienceChipsV489();
