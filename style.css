@@ -70212,3 +70212,48 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     margin-top:4px!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v540 — Desktop: botões Ver mais com clique garantido
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-section-toggle-fix-v540 body .desktop-section-more-v539,
+  html.desktop-section-toggle-fix-v540 body .desktop-section-more-v540,
+  html.desktop-section-toggle-fix-v540 body [data-desktop-section-toggle]{
+    pointer-events:auto!important;
+    cursor:pointer!important;
+    position:relative!important;
+    z-index:30!important;
+    user-select:none!important;
+    touch-action:manipulation!important;
+  }
+
+  html.desktop-section-toggle-fix-v540 body #rankingsSection.section-expanded .ranking-view-tabs{
+    display:flex!important;
+  }
+
+  html.desktop-section-toggle-fix-v540 body #rankingsSection.section-expanded .ranking-exec-board,
+  html.desktop-section-toggle-fix-v540 body #rankingsSection.section-expanded .ranking-exec-secondary{
+    display:block!important;
+  }
+
+  html.desktop-section-toggle-fix-v540 body #rankingsSection:not(.section-expanded) .ranking-view-tabs,
+  html.desktop-section-toggle-fix-v540 body #rankingsSection:not(.section-expanded) .ranking-exec-board,
+  html.desktop-section-toggle-fix-v540 body #rankingsSection:not(.section-expanded) .ranking-exec-secondary{
+    display:none!important;
+  }
+
+  html.desktop-section-toggle-fix-v540 body #sec-dolar.section-expanded #dolarChartPanel,
+  html.desktop-section-toggle-fix-v540 body #sec-dolar.section-expanded #ptaxStatsCard,
+  html.desktop-section-toggle-fix-v540 body #sec-dolar.section-expanded .dolar-compact-footer{
+    display:block!important;
+  }
+
+  html.desktop-section-toggle-fix-v540 body #sec-dolar:not(.section-expanded) #dolarChartPanel,
+  html.desktop-section-toggle-fix-v540 body #sec-dolar:not(.section-expanded) #ptaxStatsCard,
+  html.desktop-section-toggle-fix-v540 body #sec-dolar:not(.section-expanded) #dolarCurrentMonthV162,
+  html.desktop-section-toggle-fix-v540 body #sec-dolar:not(.section-expanded) .dolar-compact-footer{
+    display:none!important;
+  }
+}

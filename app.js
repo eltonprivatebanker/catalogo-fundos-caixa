@@ -23704,3 +23704,88 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
   else init();
 })();
+
+
+/* =========================================================
+   PATCH v540 — Desktop: correção robusta dos botões Ver mais
+   ========================================================= */
+(function desktopSectionToggleFixV540(){
+  function getToggleButton(section){
+    if(!section) return null;
+    return section.querySelector('.desktop-section-more-v539, .desktop-section-more-v540, [data-desktop-section-toggle]');
+  }
+
+  function setButtonState(section, isOpen){
+    var btn = getToggleButton(section);
+    if(!btn) return;
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.toggle-label');
+    var icon = btn.querySelector('.toggle-icon');
+    var closed = btn.getAttribute('data-label-closed') || 'Ver mais';
+    var open = btn.getAttribute('data-label-open') || 'Ver menos';
+    if(label) label.textContent = isOpen ? open : closed;
+    if(icon) icon.textContent = isOpen ? '−' : '›';
+  }
+
+  function refreshDolarChartWhenOpened(sectionId, isOpen){
+    if(sectionId !== 'sec-dolar' || !isOpen) return;
+    setTimeout(function(){
+      try{
+        window.dispatchEvent(new Event('resize'));
+        var active = document.querySelector('[data-dolar-range].active, [data-dolar-range][aria-selected="true"]');
+        var range = (active && active.dataset && active.dataset.dolarRange) || '24m';
+        if(typeof window.buildChartDolar === 'function') window.buildChartDolar(range);
+        if(typeof window.renderDolarChart === 'function') window.renderDolarChart(range);
+      }catch(err){}
+    }, 120);
+  }
+
+  window.toggleDesktopCompactSection = function(event, sectionId){
+    if(event){
+      if(typeof event.preventDefault === 'function') event.preventDefault();
+      if(typeof event.stopPropagation === 'function') event.stopPropagation();
+    }
+    var section = document.getElementById(sectionId);
+    if(!section) return false;
+    var isOpen = !section.classList.contains('section-expanded');
+    section.classList.toggle('section-expanded', isOpen);
+    section.classList.toggle('section-collapsed', !isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(section, isOpen);
+    refreshDolarChartWhenOpened(sectionId, isOpen);
+    return false;
+  };
+
+  function initSection(id){
+    var section = document.getElementById(id);
+    if(!section || section.dataset.v540ToggleReady === '1') return;
+    section.dataset.v540ToggleReady = '1';
+    var btn = getToggleButton(section);
+    if(!btn) return;
+    btn.dataset.desktopSectionToggle = id;
+    btn.style.pointerEvents = 'auto';
+    btn.style.cursor = 'pointer';
+    btn.addEventListener('click', function(ev){
+      window.toggleDesktopCompactSection(ev, id);
+    }, true);
+    var isOpen = section.classList.contains('section-expanded');
+    section.classList.toggle('section-collapsed', !isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(section, isOpen);
+  }
+
+  function init(){
+    initSection('rankingsSection');
+    initSection('sec-dolar');
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
+  else init();
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest('.desktop-section-more-v539, .desktop-section-more-v540, [data-desktop-section-toggle]') : null;
+    if(!btn) return;
+    var id = btn.dataset.desktopSectionToggle || (btn.classList.contains('ranking-more-v539') ? 'rankingsSection' : (btn.classList.contains('dolar-more-v539') ? 'sec-dolar' : ''));
+    if(id) window.toggleDesktopCompactSection(ev, id);
+  }, true);
+})();
