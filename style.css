@@ -70082,3 +70082,133 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     color:#aeb8d2!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v539 — Desktop: Ver mais nos Rankings e no Dólar PTAX
+   Escopo: somente desktop. Mantém base v538 sem voltar com cards no desktop,
+   coluna lateral de alertas, leitura rápida ou excesso visual antigo.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-section-vermais-v539 body #rankingsSection,
+  html.desktop-section-vermais-v539 body #sec-dolar{
+    position:relative!important;
+  }
+
+  html.desktop-section-vermais-v539 body .desktop-section-more-v539{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    min-height:34px!important;
+    padding:8px 14px!important;
+    border-radius:10px!important;
+    border:1px solid rgba(200,151,58,.26)!important;
+    background:rgba(200,151,58,.09)!important;
+    color:#f0c777!important;
+    font-size:.66rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.02em!important;
+    text-transform:none!important;
+    white-space:nowrap!important;
+    cursor:pointer!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+
+  html.desktop-section-vermais-v539 body .desktop-section-more-v539:hover{
+    border-color:rgba(232,187,106,.48)!important;
+    background:rgba(200,151,58,.14)!important;
+    color:#f6d28a!important;
+  }
+
+  html.desktop-section-vermais-v539 body .desktop-section-more-v539 .toggle-icon{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:17px!important;
+    height:17px!important;
+    border-radius:999px!important;
+    background:rgba(255,255,255,.07)!important;
+    color:#f0c777!important;
+    font-size:.92rem!important;
+    line-height:1!important;
+    transform:rotate(0deg)!important;
+    transition:transform .18s ease!important;
+  }
+
+  html.desktop-section-vermais-v539 body .section-expanded > .ranking-head .desktop-section-more-v539 .toggle-icon,
+  html.desktop-section-vermais-v539 body #sec-dolar.section-expanded .desktop-section-more-v539 .toggle-icon{
+    transform:rotate(90deg)!important;
+  }
+
+  /* Ranking fechado: leitura executiva sem ocupar a tela toda */
+  html.desktop-section-vermais-v539 body #rankingsSection .ranking-head{
+    position:relative!important;
+    padding-right:124px!important;
+  }
+
+  html.desktop-section-vermais-v539 body #rankingsSection .ranking-more-v539{
+    position:absolute!important;
+    right:0!important;
+    top:0!important;
+  }
+
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded) .ranking-view-tabs,
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded) .ranking-exec-board,
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded) .ranking-exec-secondary{
+    display:none!important;
+  }
+
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded) .ranking-layout-v136{
+    margin-top:10px!important;
+  }
+
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded) .ranking-grid{
+    gap:10px!important;
+  }
+
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded) #rankingAttentionV136{
+    margin-bottom:0!important;
+  }
+
+  html.desktop-section-vermais-v539 body #rankingsSection:not(.section-expanded) #rankingAttentionV136 .attention-details-v536[open] + .attention-details-body-v536{
+    display:none!important;
+  }
+
+  /* Dólar fechado: mostra a cotação e KPIs; detalhes ficam sob demanda */
+  html.desktop-section-vermais-v539 body #sec-dolar > .section-title{
+    align-items:center!important;
+    gap:10px!important;
+  }
+
+  html.desktop-section-vermais-v539 body #sec-dolar .dolar-more-v539{
+    margin-left:auto!important;
+  }
+
+  html.desktop-section-vermais-v539 body #sec-dolar:not(.section-expanded) #dolarChartPanel,
+  html.desktop-section-vermais-v539 body #sec-dolar:not(.section-expanded) #ptaxStatsCard,
+  html.desktop-section-vermais-v539 body #sec-dolar:not(.section-expanded) #dolarCurrentMonthV162,
+  html.desktop-section-vermais-v539 body #sec-dolar:not(.section-expanded) .dolar-compact-footer{
+    display:none!important;
+  }
+
+  html.desktop-section-vermais-v539 body #sec-dolar:not(.section-expanded) .dolar-compact-card{
+    overflow:hidden!important;
+  }
+
+  html.desktop-section-vermais-v539 body #sec-dolar:not(.section-expanded) .dolar-compact-top{
+    border-bottom:0!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1120px){
+  html.desktop-section-vermais-v539 body #rankingsSection .ranking-head{
+    padding-right:0!important;
+  }
+
+  html.desktop-section-vermais-v539 body #rankingsSection .ranking-more-v539{
+    position:static!important;
+    margin-top:4px!important;
+  }
+}

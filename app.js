@@ -23648,3 +23648,59 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
   if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
 })();
+
+
+/* =========================================================
+   PATCH v539 — Desktop: controle Ver mais compacto para Ranking e Dólar
+   ========================================================= */
+(function desktopCompactSectionsV539(){
+  function updateButton(section, isOpen){
+    if(!section) return;
+    var btn = section.querySelector('.desktop-section-more-v539');
+    if(!btn) return;
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.toggle-label');
+    var closed = btn.getAttribute('data-label-closed') || 'Ver mais';
+    var open = btn.getAttribute('data-label-open') || 'Ver menos';
+    if(label) label.textContent = isOpen ? open : closed;
+  }
+
+  window.toggleDesktopCompactSection = function(event, sectionId){
+    if(event){
+      if(typeof event.preventDefault === 'function') event.preventDefault();
+      if(typeof event.stopPropagation === 'function') event.stopPropagation();
+    }
+    var section = document.getElementById(sectionId);
+    if(!section) return false;
+    var isOpen = !section.classList.contains('section-expanded');
+    section.classList.toggle('section-expanded', isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    updateButton(section, isOpen);
+
+    if(sectionId === 'sec-dolar' && isOpen){
+      setTimeout(function(){
+        try{
+          window.dispatchEvent(new Event('resize'));
+          var active = document.querySelector('[data-dolar-range].active');
+          if(typeof buildChartDolar === 'function'){
+            buildChartDolar((active && active.dataset && active.dataset.dolarRange) || '24m');
+          }
+        }catch(e){}
+      }, 90);
+    }
+    return false;
+  };
+
+  function init(){
+    ['rankingsSection','sec-dolar'].forEach(function(id){
+      var section = document.getElementById(id);
+      if(!section) return;
+      section.classList.remove('section-expanded');
+      section.setAttribute('aria-expanded','false');
+      updateButton(section, false);
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
+})();
