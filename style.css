@@ -70387,3 +70387,32 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     pointer-events:none!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v545 — Desktop: neutraliza UI mobile dos filtros
+   ========================================================= */
+@media (min-width:769px){
+  html body #sec-fundos #mobileFilterBar,
+  html body #sec-fundos #mobileFilterToggle,
+  html body #sec-fundos #mobileFilterSummary,
+  html body #sec-fundos #mobileCategorySelectShellV74,
+  html body #sec-fundos #mobileNoDataRowV442,
+  html body #sec-fundos .mobile-filter-summary,
+  html body #sec-fundos .mobile-filter-toggle,
+  html body #sec-fundos .mobile-category-select-shell-v74,
+  html body #sec-fundos .mobile-no-data-row-v442{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+    position:absolute!important;
+    inset:auto!important;
+  }
+}
