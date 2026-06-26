@@ -22771,11 +22771,11 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   };
 })();
 
-/* ELTAUM_DESKTOP_MARKET_HIERARCHY_V520
+/* ELTAUM_DESKTOP_MARKET_HIERARCHY_V520_LEGACY
    Desktop only: corrige a seção Juros e CDI resetando transform/grid-area legados
    que faziam o bloco CDI invadir o Copom. Mantém mobile preservado. */
 (function(){
-  const FLAG = '__ELTAUM_DESKTOP_MARKET_HIERARCHY_V520__';
+  const FLAG = '__ELTAUM_DESKTOP_MARKET_HIERARCHY_V520_LEGACY__';
   if (window[FLAG]) return;
   window[FLAG] = true;
 
@@ -22971,4 +22971,56 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     }
   });
   try{ obs.observe(document.documentElement, {subtree:true, childList:true, attributes:true, attributeFilter:['style','class']}); }catch(_){ }
+})();
+
+
+/* ELTAUM_DESKTOP_MARKET_FILTERS_V523
+   Desktop only: aplica largura integral à seção Mercado, remove o botão técnico do CDI
+   e reforça a hierarquia sem mexer no mobile. */
+(function(){
+  const FLAG='__ELTAUM_DESKTOP_MARKET_FILTERS_V523__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const isDesktop=()=>window.matchMedia&&window.matchMedia('(min-width: 769px)').matches;
+  const hasPatch=()=>document.documentElement.classList.contains('desktop-market-hierarchy-v523')||document.documentElement.classList.contains('desktop-filter-buttons-v523');
+  const set=(el,prop,val)=>{ if(el) el.style.setProperty(prop,val,'important'); };
+  const reset=(el)=>{
+    if(!el) return;
+    ['transform','translate','top','left','right','bottom'].forEach(p=>set(el,p,p==='transform'?'none':p==='translate'?'none':'auto'));
+    set(el,'grid-area','auto');set(el,'grid-column','auto');set(el,'grid-row','auto');set(el,'position','relative');
+    set(el,'justify-self','stretch');set(el,'align-self','start');set(el,'width','100%');set(el,'min-width','0');set(el,'max-width','100%');
+    set(el,'height','auto');set(el,'min-height','0');set(el,'max-height','none');set(el,'margin','0');set(el,'box-sizing','border-box');
+  };
+  function apply(){
+    if(!isDesktop()||!hasPatch()) return;
+    document.documentElement.classList.add('desktop-market-hierarchy-v523','desktop-filter-buttons-v523');
+    const root=document.getElementById('sec-mercado');
+    if(root){
+      set(root,'width','100%');set(root,'max-width','none');set(root,'margin-left','0');set(root,'margin-right','0');set(root,'padding-left','0');set(root,'padding-right','0');
+      root.querySelectorAll('#cdiAnalyticLinkV274,.cdi-analytic-link-v274').forEach(el=>{set(el,'display','none');set(el,'visibility','hidden');set(el,'pointer-events','none');});
+      root.querySelectorAll('.market-ref-grid,.market-reference-v167,.rates-reference-v167,.rates-executive-v255,.savings-reference-v167,#closedMonthLaunch').forEach(el=>{set(el,'width','100%');set(el,'max-width','none');set(el,'margin-left','0');set(el,'margin-right','0');});
+      const marketGrid=root.querySelector('.market-ref-grid.market-reference-v167');set(marketGrid,'display','block');
+      const rates=root.querySelector('.rates-reference-v167,.rates-executive-v255');
+      if(rates){set(rates,'display','grid');set(rates,'grid-template-columns','260px minmax(0,1fr)');set(rates,'grid-template-areas','"head head" "summary detail"');set(rates,'gap','16px 24px');set(rates,'align-items','start');set(rates,'overflow','visible');set(rates,'min-height','auto');set(rates,'height','auto');set(rates,'padding','18px 20px 22px');}
+      const head=root.querySelector('.rates-reference-v167 > .market-reference-head-v167');set(head,'grid-area','head');set(head,'margin','0');set(head,'padding','0 0 8px');
+      const summary=root.querySelector('.rates-summary-v167');if(summary){set(summary,'grid-area','summary');set(summary,'display','grid');set(summary,'grid-template-columns','1fr');set(summary,'gap','12px');set(summary,'width','100%');set(summary,'min-width','0');set(summary,'margin','0');set(summary,'padding','0');}
+      root.querySelectorAll('.rate-summary-card-v167').forEach(card=>{set(card,'min-height','104px');set(card,'height','auto');set(card,'max-height','none');set(card,'padding','14px 16px');});
+      const detail=root.querySelector('.rates-detail-grid-v167');if(detail){set(detail,'grid-area','detail');set(detail,'display','flex');set(detail,'flex-direction','column');set(detail,'gap','14px');set(detail,'width','100%');set(detail,'min-width','0');set(detail,'margin','0');set(detail,'padding','0');set(detail,'overflow','visible');set(detail,'isolation','isolate');}
+      const copom=root.querySelector('.copom-compact-v167');if(copom){reset(copom);set(copom,'z-index','2');set(copom,'padding','14px 16px');set(copom,'border-radius','14px');set(copom,'overflow','visible');}
+      const copomSummary=root.querySelector('#copomExecutiveSummaryV270');if(copomSummary){set(copomSummary,'display','grid');set(copomSummary,'grid-template-columns','repeat(2,minmax(0,1fr))');set(copomSummary,'gap','12px');set(copomSummary,'width','100%');set(copomSummary,'max-width','100%');set(copomSummary,'overflow','visible');set(copomSummary,'scroll-snap-type','none');}
+      root.querySelectorAll('#copomExecutiveSummaryV270 > article,.copom-exec-card-v270').forEach(card=>{set(card,'width','auto');set(card,'min-width','0');set(card,'max-width','none');set(card,'min-height','76px');set(card,'height','auto');set(card,'padding','10px 12px');set(card,'box-sizing','border-box');});
+      root.querySelectorAll('.copom-exec-desc-v270').forEach(el=>{set(el,'max-width','100%');set(el,'line-height','1.28');set(el,'overflow','visible');set(el,'display','block');});
+      const cdi=root.querySelector('#cdiYearHistory');if(cdi){reset(cdi);set(cdi,'z-index','1');set(cdi,'display','block');set(cdi,'padding','14px 16px');set(cdi,'border-radius','16px');set(cdi,'overflow','hidden');}
+      const cdiHead=root.querySelector('#cdiYearHistory .cdi-year-head,#cdiYearHistory .cdi-chart-head-v271');if(cdiHead){set(cdiHead,'display','flex');set(cdiHead,'align-items','flex-start');set(cdiHead,'justify-content','flex-start');set(cdiHead,'gap','14px');set(cdiHead,'margin','0 0 12px');set(cdiHead,'padding','0');set(cdiHead,'border','0');}
+      const kpis=root.querySelector('#cdiYearHistory .cdi-kpis-v271');if(kpis){set(kpis,'display','grid');set(kpis,'grid-template-columns','repeat(4,minmax(0,1fr))');set(kpis,'gap','10px');set(kpis,'width','100%');set(kpis,'margin','0 0 12px');}
+      const months=root.querySelector('#cdiMonthCarouselV322');if(months){set(months,'display','grid');set(months,'grid-template-columns','repeat(3,minmax(0,1fr))');set(months,'gap','10px');set(months,'width','100%');set(months,'max-width','100%');set(months,'margin','0 0 12px');set(months,'padding','0');set(months,'overflow','hidden');set(months,'scroll-snap-type','none');}
+      root.querySelectorAll('#cdiMonthCarouselV322 > article,.cdi-month-card-v322').forEach(card=>{set(card,'width','auto');set(card,'min-width','0');set(card,'max-width','none');set(card,'flex','initial');set(card,'min-height','54px');set(card,'padding','8px 10px');});
+      const canvasWrap=root.querySelector('.cdi-chart-canvas-wrap-v271');if(canvasWrap){set(canvasWrap,'width','100%');set(canvasWrap,'height','260px');set(canvasWrap,'min-height','260px');set(canvasWrap,'max-height','260px');set(canvasWrap,'margin','0');set(canvasWrap,'overflow','hidden');}
+      const canvas=root.querySelector('#cdiYearChartV271');if(canvas){set(canvas,'width','100%');set(canvas,'height','260px');set(canvas,'max-height','260px');try{const chart=window.Chart?.getChart?.(canvas);chart?.resize?.();}catch(_){}}
+    }
+  }
+  let raf=0;function schedule(){if(raf) cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{raf=0;apply();});}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',schedule,{once:true}); else schedule();
+  window.addEventListener('load',()=>{schedule();setTimeout(schedule,250);setTimeout(schedule,900);},{once:true});
+  window.addEventListener('resize',schedule,{passive:true});
 })();
