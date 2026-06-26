@@ -1,4 +1,3 @@
-// ELTAUM_DESKTOP_FILTER_AUDIENCE_v488
 // ELTAUM_REMOVE_12M_XAXIS_v342
 // ELTAUM_INFLATION_SUMMARY_COMPACT_v341
 // ELTAUM_CHARTS_LOOP_FIX_v340
@@ -2691,69 +2690,6 @@ function rankPeriodTabs(target, active, periods){
   return `<div class="rank-period-tabs" role="tablist" aria-label="Período do ranking">${periods.map(p=>`<button type="button" class="rank-period-tab ${active===p?'active':''}" data-rank-target="${target}" data-rank-period="${p}">${p==='dia'?'Dia':p==='mes'?'Mês':p==='ano'?'Ano':'12M'}</button>`).join('')}</div>`;
 }
 
-
-/* v488 — filtro desktop por público-alvo (PF/PJ/Private/Qualificado/Institucional) */
-function normAudienceFilterV488(v){
-  return String(v ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').trim();
-}
-function collectAudienceTextV488(row){
-  const parts=[];
-  ['Perfis','Perfil','Público Alvo','Publico Alvo','Segmentos','SEGMENTOS','lista_publico_alvo','no_classificacao_investidor'].forEach(k=>{
-    const v=row?.[k];
-    if(v!==null && v!==undefined && String(v).trim()) parts.push(String(v));
-  });
-  try{
-    const meta=row?.__fundosMeta;
-    if(meta){
-      if(Array.isArray(meta.lista_publico_alvo)) parts.push(meta.lista_publico_alvo.join(' '));
-      if(meta.no_classificacao_investidor) parts.push(String(meta.no_classificacao_investidor));
-    }
-  }catch(e){}
-  return normAudienceFilterV488(parts.join(' | '));
-}
-function rowMatchesAudienceV488(row, audience){
-  const target=normAudienceFilterV488(audience);
-  if(!target) return true;
-  const text=collectAudienceTextV488(row);
-  if(!text) return false;
-  if(target==='PF') return /(^|\s)PF(\s|$)/.test(text) || text.includes('PESSOA FISICA');
-  if(target==='PJ') return /(^|\s)PJ(\s|$)/.test(text) || text.includes('PESSOA JURIDICA');
-  if(target==='PRIVATE') return text.includes('PRIVATE');
-  if(target==='QUALIFICADO') return text.includes('QUALIFICAD');
-  if(target==='INSTITUCIONAL') return text.includes('INSTITUCIONAL');
-  return text.includes(target);
-}
-function labelAudienceV488(value){
-  const v=String(value||'').trim();
-  const map={PF:'PF',PJ:'PJ',Private:'Private',Qualificado:'Qualificado',Institucional:'Institucional'};
-  return map[v] || v;
-}
-function syncAudienceFilterV488(){
-  let active='';
-  try{ active=String(activePerfil||''); }catch(e){}
-  document.querySelectorAll('.desktop-audience-chip-v488').forEach(btn=>{
-    const on=String(btn.dataset.audienceV488||'')===active;
-    btn.classList.toggle('active', on);
-    btn.setAttribute('aria-pressed', on?'true':'false');
-  });
-}
-function bindAudienceFilterV488(){
-  document.querySelectorAll('.desktop-audience-chip-v488').forEach(btn=>{
-    if(btn.dataset.v488Bound==='1') return;
-    btn.dataset.v488Bound='1';
-    btn.addEventListener('click',()=>{
-      try{
-        activePerfil = String(btn.dataset.audienceV488 || '');
-        currentPage = 1;
-        syncAudienceFilterV488();
-        if(typeof syncFilterControls==='function') syncFilterControls();
-        if(typeof applyFilter==='function') applyFilter();
-      }catch(e){console.warn('[v488] falha ao aplicar público-alvo', e);}
-    });
-  });
-  syncAudienceFilterV488();
-}
-
 function renderRankings(){
   const grid = $('rankingGrid');
   if(!grid || !allRows.length) return;
@@ -2761,7 +2697,10 @@ function renderRankings(){
   atualizarRankingFilterUI();
 
   let base = allRows.filter(r => temDados(r)).filter(passaFiltroRanking);
-  if(activePerfil) base = base.filter(r => rowMatchesAudienceV488(r, activePerfil));
+  if(activePerfil) base = base.filter(r => {
+    const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
+    return tokens.includes(activePerfil);
+  });
   if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
 
   const ordenaCampo = (campo, asc=false) => base
@@ -3505,7 +3444,10 @@ function applyFilter(){
     if(hideSemDados&&!temDados(r)) return false;
     if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
     if(activeBenchmark && detectarBenchmarkFundo(r).label !== activeBenchmark) return false;
-    if(activePerfil && !rowMatchesAudienceV488(r, activePerfil)) return false;
+    if(activePerfil){
+      const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
+      if(!tokens.includes(activePerfil)) return false;
+    }
     if(activeRisco&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRisco)) return false;
     if(q&&!rowMatchesCatalogSearch(r,q)) return false;
     return true;
@@ -4607,11 +4549,6 @@ function factMobileV235(label, value, opts={}){
 
 function buildFundOperationalFacts(r, variant='detail'){
   const d = obterDadosOperacionaisFundo(r);
-  // v486 — correção desktop spotlight: estas variáveis eram usadas no bloco "Operação", mas só existiam dentro do detalhe antigo.
-  // Com isso, o clique nos cards Melhor/Pior 12M não quebra mais por ReferenceError.
-  const conversionApp = detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação'],'—');
-  const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate'],'—');
-  const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate'],'—');
   const capCls = classeStatusOperacional(d.captacao.status,'captacao');
   const adiCls = classeStatusOperacional(d.adiantamento.status,'adiantamento');
   const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
@@ -4652,44 +4589,6 @@ function buildFundOperationalFacts(r, variant='detail'){
         ${adiantamentoHtml}
       </div>
       <p class="fund-operation-note-v235">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
-    </section>`;
-  }
-
-  if(String(variant || '').includes('spotlight')){
-    const factLine = (label, value, opts={}) => {
-      const cls = opts.cls ? ` class="${opts.cls}"` : '';
-      return `<div${cls}><dt>${htmlAttr(label)}</dt><dd>${value}</dd></div>`;
-    };
-    const pill = (label, value, cls='') => `<span class="fspot-op-pill-v485 ${htmlAttr(cls)}"><b>${htmlAttr(label)}</b>${htmlAttr(value || '—')}</span>`;
-
-    return `<section class="fund-facts-v154 spotlight-v485" aria-label="Ficha executiva do fundo">
-      <div class="fund-facts-head-v154 fspot-facts-head-v485"><strong>Ficha executiva</strong><small>Resumo consultivo e operacional</small></div>
-      <div class="fspot-facts-layout-v485">
-        <article class="fspot-facts-card-v485 summary">
-          <div class="fspot-facts-card-title-v485">Resumo do fundo</div>
-          <dl class="fspot-definition-v485">
-            ${factLine('Benchmark', `${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}`)}
-            ${factLine('Estratégia', `${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}`)}
-            ${factLine('Tributação', htmlAttr(d.tributacao.texto))}
-            ${factLine('Adiantamento', `<span class="status-${htmlAttr(adiCls)}"><i>${htmlAttr(adiDot)}</i>${htmlAttr(d.adiantamento.texto)}</span>`)}
-            ${factLine('Captação', `<span class="status-${htmlAttr(capCls)}"><i>${htmlAttr(capDot)}</i>${htmlAttr(d.captacao.texto)}</span>`)}
-          </dl>
-        </article>
-
-        <article class="fspot-facts-card-v485 operation">
-          <div class="fspot-facts-card-title-v485">Operação</div>
-          <div class="fspot-operation-liq-v485" aria-label="Prazos de aplicação e resgate">
-            ${pill('Aplicação', conversionApp, 'application')}
-            ${pill('Resgate', conversionRed, 'redemption')}
-            ${pill('Crédito', paymentRed, 'payment')}
-          </div>
-          <dl class="fspot-definition-v485 operation-list">
-            ${factLine('Horário aplicação', htmlAttr(d.horarios.aplicacao))}
-            ${factLine('Horário resgate', htmlAttr(d.horarios.resgate))}
-          </dl>
-          <p class="fspot-operation-note-v485">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
-        </article>
-      </div>
     </section>`;
   }
 
@@ -7643,7 +7542,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const parts=[];
     if(typeof activeCat!=='undefined' && activeCat) parts.push({kind:'cat', label:'Categoria', value:activeCat});
     if(typeof activeBenchmark!=='undefined' && activeBenchmark) parts.push({kind:'benchmark', label:'Benchmark', value:activeBenchmark});
-    if(typeof activePerfil!=='undefined' && activePerfil) parts.push({kind:'perfil', label:'Público-alvo', value:labelAudienceV488(activePerfil)});
+    if(typeof activePerfil!=='undefined' && activePerfil) parts.push({kind:'perfil', label:'Perfil', value:activePerfil});
     if(typeof activeRisco!=='undefined' && activeRisco) parts.push({kind:'risco', label:'Risco', value:activeRisco});
     if(typeof hideSemDados!=='undefined' && hideSemDados) parts.push({kind:'semDados', label:'Base', value:'sem pipeline'});
     return parts;
@@ -7665,7 +7564,6 @@ document.addEventListener('DOMContentLoaded', function(){
     const chk=qs('#toggleSemDados');
     if(chk) chk.checked=!!hideSemDados;
     try{ syncRiskProfileControlsV198(); }catch(e){}
-    try{ syncAudienceFilterV488(); }catch(e){}
   }
 
   function setFilterPanelOpen(open){
@@ -7757,8 +7655,6 @@ document.addEventListener('DOMContentLoaded', function(){
       btn.classList.toggle('active', on);
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
-
-    try{ syncAudienceFilterV488(); }catch(e){}
 
     const status=qs('#categoryGridStatus');
     if(status){
@@ -7852,7 +7748,6 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     qsa('.filter-preset-chip').forEach(b=>b.addEventListener('click',()=>applyFilterPreset(b.dataset.preset)));
-    try{ bindAudienceFilterV488(); }catch(e){}
     setupAdvancedFilterAccordion();
 
     document.addEventListener('keydown',e=>{
@@ -8576,15 +8471,13 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>`).join('');
 
     // Liquidez
-    // Desktop v485: os prazos foram consolidados no bloco "Operação" para reduzir redundância.
-    const isDesktopSpotlightV485 = window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
     const liqParts = [];
     if(conv) liqParts.push(`<span class="fspot-liq-badge"><i class="ti ti-refresh" aria-hidden="true" style="font-size:12px"></i>${conv}</span>`);
     if(pag)  liqParts.push(`<span class="fspot-liq-badge"><i class="ti ti-cash" aria-hidden="true" style="font-size:12px"></i>${pag}</span>`);
-    el('fspotLiq').innerHTML = (!isDesktopSpotlightV485 && liqParts.length)
+    el('fspotLiq').innerHTML = liqParts.length
       ? `<span class="fspot-liq-label">Liquidez</span>${liqParts.join('')}`
       : '';
-    el('fspotLiq').style.display = (!isDesktopSpotlightV485 && liqParts.length) ? '' : 'none';
+    el('fspotLiq').style.display = liqParts.length ? '' : 'none';
 
     // Informações complementares
     const factsEl = el('fspotFacts');
@@ -8597,14 +8490,9 @@ document.addEventListener('DOMContentLoaded', function(){
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
-    const noteNode = tmpDiv.querySelector('.fund-quick-note-text');
-    const noteParagraphs = noteNode
-      ? [...noteNode.querySelectorAll('p')].map(p=>p.textContent.trim()).filter(Boolean)
-      : [];
-    let noteTxt = noteParagraphs.length ? noteParagraphs.join(' ') : (noteNode?.textContent || '').replace(/\s+/g,' ').trim();
-    if(noteTxt.length > 285) noteTxt = noteTxt.slice(0,282).trim().replace(/[,.!?;:]?$/,'') + '…';
+    const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div><p>${htmlAttr(noteTxt)}</p>`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -8629,11 +8517,9 @@ document.addEventListener('DOMContentLoaded', function(){
 
     // Documentos
     const docs = obterDocsFundoCompactos ? obterDocsFundoCompactos(row) : [];
-    const docsSpotEl = el('fspotDocs');
-    docsSpotEl.innerHTML = docs.length
-      ? `<details class="fspot-docs-details-v485"><summary>Documentos <span>${docs.length}</span></summary><div class="fspot-docs-menu-v485">${docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')}</div></details>`
+    el('fspotDocs').innerHTML = docs.length
+      ? docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')
       : '';
-    setupSpotlightDocsAutoScrollV487(docsSpotEl.querySelector('.fspot-docs-details-v485'));
 
     // Badge tipo (best/worst)
     const kind = _spotlightKind || 'best';
@@ -8654,45 +8540,6 @@ document.addEventListener('DOMContentLoaded', function(){
     ov.addEventListener('click', _spotlightBackdropClose);
     document.addEventListener('keydown', _spotlightEscClose);
   }
-
-  // v487 — ao abrir "Documentos", desloca suavemente o conteúdo do modal
-  // para deixar claro que a lista de documentos apareceu abaixo dos botões.
-  function setupSpotlightDocsAutoScrollV487(details){
-    if(!details || details._docsAutoScrollV487) return;
-    details._docsAutoScrollV487 = true;
-
-    details.addEventListener('toggle', ()=>{
-      if(!details.open) return;
-
-      const run = ()=>{
-        const panel = details.closest('.fspot-panel') || document.querySelector('#fundSpotlightOverlay .fspot-panel');
-        const menu  = details.querySelector('.fspot-docs-menu-v485');
-        if(!panel || !menu) return;
-
-        details.classList.add('docs-open-attention-v487');
-        window.setTimeout(()=>details.classList.remove('docs-open-attention-v487'), 1100);
-
-        const panelRect = panel.getBoundingClientRect();
-        const menuRect  = menu.getBoundingClientRect();
-        const safeBottom = panelRect.bottom - 18;
-        const overflowBottom = Math.max(0, menuRect.bottom - safeBottom);
-
-        // Mesmo quando já couber, desce um pouco para sinalizar continuidade.
-        const scrollAmount = Math.max(58, overflowBottom + 22);
-        panel.scrollBy({ top: scrollAmount, behavior: 'smooth' });
-      };
-
-      requestAnimationFrame(()=>window.setTimeout(run, 80));
-    });
-  }
-
-  // v486 — utilitário de teste no console: __abrirModalFundoDesktop('best') ou ('worst')
-  window.__abrirModalFundoDesktop = function(kind='best'){
-    _spotlightKind = String(kind).toLowerCase().includes('worst') || String(kind).toLowerCase().includes('pior') ? 'worst' : 'best';
-    const row = bestWorstRow(_spotlightKind);
-    openFundRow(row);
-    return row;
-  };
 
   function closeFundSpotlight(){
     const ov = document.getElementById('fundSpotlightOverlay');
@@ -11132,7 +10979,7 @@ async function sharePainelMercado(){
     const campo=campoPorPeriodo(periodo);
     let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
     try{
-      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>rowMatchesAudienceV488(r, activePerfil));
+      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
       if(typeof activeRankRisk!=='undefined' && activeRankRisk) base=base.filter(r=>perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
     }catch(e){}
     const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
@@ -22924,86 +22771,392 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   };
 })();
 
-
-/* PATCH v484 — Desktop only: metadados visuais dos KPIs */
+/* PATCH v489 — Desktop: filtros em funil cumulativo com trilha ativa */
 (function(){
-  const BUILD = 'ELTAUM_DESKTOP_KPI_STRIP_V484';
-  let scheduled = false;
+  'use strict';
+  const BUILD = 'ELTAUM_DESKTOP_FILTER_FUNNEL_V489';
+  let activeAudienceV489 = '';
+  let syncingV489 = false;
 
-  function syncDesktopKpiStripV484(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('desktop-kpi-strip-v484');
+  const AUDIENCE_LABELS = {
+    '': 'Todos',
+    'PF': 'PF',
+    'PJ': 'PJ',
+    'Private': 'Private',
+    'Qualificado': 'Qualificado',
+    'Institucional': 'Institucional'
+  };
 
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
+  const CAT_LABELS = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
+  };
 
-      const cats = document.getElementById('kpiCats');
-      const fundosSub = document.getElementById('kpiFundosSub');
-      const catsText = String(cats?.textContent || '').trim();
-      if(fundosSub){
-        if(catsText && catsText !== '—') fundosSub.dataset.cats = catsText;
-        else fundosSub.removeAttribute('data-cats');
-      }
+  const PRESET_TO_CAT = {
+    'renda-fixa-simples':'RENDA FIXA SIMPLES',
+    'renda-fixa':'RENDA FIXA',
+    'renda-fixa-referenciado':'RENDA FIXA REFERENCIADO',
+    'renda-fixa-curto-prazo':'RENDA FIXA CURTO PRAZO',
+    'multimercado':'MULTIMERCADO',
+    'cambial':'CAMBIAL',
+    'acoes':'ACOES',
+    'fundo-de-indice':'FUNDO DE INDICE',
+    'fmp':'FUNDOS MUTUOS DE PRIVATIZACAO'
+  };
 
-      const titleCount = document.querySelector('#sec-fundos .funds-title-count-v440');
-      if(titleCount){
-        titleCount.setAttribute('data-desktop-hidden-v484','1');
-      }
-    }catch(_error){}
+  function qs(sel, root){ return (root || document).querySelector(sel); }
+  function qsa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function normTxt(v){
+    return String(v || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toUpperCase().trim();
+  }
+  function escapeHtml(v){
+    return String(v ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
   }
 
-  function scheduleDesktopKpiStripV484(){
-    if(scheduled) return;
-    scheduled = true;
-    requestAnimationFrame(() => {
-      scheduled = false;
-      syncDesktopKpiStripV484();
+  function audienceRawText(row){
+    if(!row) return '';
+    const fields = [
+      'Público Alvo','Publico Alvo','Público-Alvo','Publico-Alvo',
+      'Público alvo','Publico alvo','Segmentos','SEGMENTOS','Perfil','Perfis',
+      'Classificação do Investidor','Classificacao do Investidor','no_classificacao_investidor','No Classificacao Investidor'
+    ];
+    return fields.map(k => row[k]).filter(v => v !== undefined && v !== null && String(v).trim()).join(' | ');
+  }
+
+  function rowAudienceTokensV489(row){
+    const text = normTxt(audienceRawText(row));
+    const tokens = new Set();
+    if(!text) return tokens;
+    if(/(^|[^A-Z])PF([^A-Z]|$)/.test(text) || text.includes('PESSOA FISICA')) tokens.add('PF');
+    if(/(^|[^A-Z])PJ([^A-Z]|$)/.test(text) || text.includes('PESSOA JURIDICA')) tokens.add('PJ');
+    if(text.includes('PRIVATE')) tokens.add('Private');
+    if(text.includes('QUALIFICADO') || text.includes('INVESTIDOR QUALIFICADO')) tokens.add('Qualificado');
+    if(text.includes('INSTITUCIONAL') || text.includes('RPPS')) tokens.add('Institucional');
+    return tokens;
+  }
+
+  function rowMatchesAudienceV489(row, audience){
+    if(!audience) return true;
+    const tokens = rowAudienceTokensV489(row);
+    return tokens.has(audience);
+  }
+
+  function stateV489(overrides){
+    return Object.assign({
+      search: (typeof activeSearch !== 'undefined' ? activeSearch : ''),
+      cat: (typeof activeCat !== 'undefined' ? activeCat : ''),
+      benchmark: (typeof activeBenchmark !== 'undefined' ? activeBenchmark : ''),
+      perfil: (typeof activePerfil !== 'undefined' ? activePerfil : ''),
+      risco: (typeof activeRisco !== 'undefined' ? activeRisco : ''),
+      hideSemDados: (typeof hideSemDados !== 'undefined' ? !!hideSemDados : false),
+      audience: activeAudienceV489
+    }, overrides || {});
+  }
+
+  function rowPassesFunnelV489(row, st){
+    const s = stateV489(st);
+    const q = String(s.search || '').trim();
+    try{
+      if(window.__favListMode && typeof rowIsFavoritedForFilter === 'function' && !rowIsFavoritedForFilter(row)) return false;
+    }catch(_e){}
+    try{ if(s.hideSemDados && typeof temDados === 'function' && !temDados(row)) return false; }catch(_e){}
+    if(s.audience && !rowMatchesAudienceV489(row, s.audience)) return false;
+    if(s.cat && String(row['Categoria'] || '') !== s.cat) return false;
+    if(s.benchmark){
+      try{ if(typeof detectarBenchmarkFundo === 'function' && detectarBenchmarkFundo(row).label !== s.benchmark) return false; }catch(_e){ return false; }
+    }
+    if(s.perfil){
+      const tokens = String(row['Perfis'] || row['Perfil'] || '').split(/\s*\|\s*/).map(x => x.trim()).filter(Boolean);
+      if(!tokens.includes(s.perfil)) return false;
+    }
+    if(s.risco){
+      try{
+        if(typeof perfilRiscoCorrespondeV198 === 'function'){
+          if(!perfilRiscoCorrespondeV198(row['Perfil de Risco'], s.risco)) return false;
+        }else if(String(row['Perfil de Risco'] || '') !== s.risco) return false;
+      }catch(_e){ return false; }
+    }
+    if(q){
+      try{
+        if(typeof rowMatchesCatalogSearch === 'function'){
+          if(!rowMatchesCatalogSearch(row, q)) return false;
+        }else if(!Object.values(row || {}).some(v => String(v || '').toLowerCase().includes(q.toLowerCase()))) return false;
+      }catch(_e){ return false; }
+    }
+    return true;
+  }
+
+  function countRowsV489(overrides){
+    try{
+      if(!Array.isArray(allRows)) return 0;
+      return allRows.filter(row => rowPassesFunnelV489(row, overrides)).length;
+    }catch(_e){ return 0; }
+  }
+
+  function setChipCountV489(btn, count){
+    if(!btn) return;
+    let badge = btn.querySelector(':scope > .filter-chip-count-v489');
+    if(!badge){
+      badge = document.createElement('span');
+      badge.className = 'filter-chip-count-v489';
+      btn.appendChild(badge);
+    }
+    badge.textContent = String(count);
+    btn.dataset.countV489 = String(count);
+  }
+
+  function syncAudienceChipsV489(){
+    const chips = qsa('[data-audience-v488]');
+    chips.forEach(btn => {
+      const val = btn.dataset.audienceV488 || '';
+      const count = countRowsV489({audience: val});
+      const on = (activeAudienceV489 || '') === val;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      setChipCountV489(btn, count);
+      const disabled = !!val && count === 0 && !on;
+      btn.classList.toggle('is-disabled-v489', disabled);
+      btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      btn.title = val ? `${AUDIENCE_LABELS[val] || val}: ${count} fundo${count===1?'':'s'} no funil atual` : `${count} fundo${count===1?'':'s'} no funil atual`;
     });
   }
 
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncDesktopKpiStripV484, {once:true});
-  }else{
-    syncDesktopKpiStripV484();
+  function syncCategoryChipsV489(){
+    const chips = qsa('.category-grid-v69 .filter-preset-chip');
+    chips.forEach(btn => {
+      const preset = btn.dataset.preset || '';
+      const cat = preset === 'all' ? '' : (PRESET_TO_CAT[preset] || '');
+      if(preset !== 'all' && !cat) return;
+      const count = countRowsV489({cat});
+      const on = String(typeof activeCat !== 'undefined' ? activeCat : '') === cat;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      setChipCountV489(btn, count);
+      const disabled = !!cat && count === 0 && !on;
+      btn.classList.toggle('is-disabled-v489', disabled);
+      btn.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+      const label = cat ? (CAT_LABELS[cat] || cat) : 'Todas as categorias';
+      btn.title = `${label}: ${count} fundo${count===1?'':'s'} no funil atual`;
+    });
+    const status = qs('#categoryGridStatus');
+    if(status){
+      const cat = String(typeof activeCat !== 'undefined' ? activeCat : '');
+      status.textContent = cat ? `Categoria: ${CAT_LABELS[cat] || cat}` : 'Todas as categorias';
+    }
   }
 
-  window.addEventListener('load', syncDesktopKpiStripV484, {once:true});
-  window.addEventListener('resize', scheduleDesktopKpiStripV484, {passive:true});
-  window.addEventListener('pageshow', syncDesktopKpiStripV484, {passive:true});
-  [80, 180, 420, 900, 1600, 3200, 6500, 11000].forEach(ms => setTimeout(syncDesktopKpiStripV484, ms));
-
-  const observer = new MutationObserver(scheduleDesktopKpiStripV484);
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', () => observer.observe(document.body, {childList:true, subtree:true, characterData:true}), {once:true});
-  }else if(document.body){
-    observer.observe(document.body, {childList:true, subtree:true, characterData:true});
+  function activePartsV489(){
+    const parts = [];
+    const q = String(typeof activeSearch !== 'undefined' ? activeSearch : '').trim();
+    const cat = String(typeof activeCat !== 'undefined' ? activeCat : '');
+    const bench = String(typeof activeBenchmark !== 'undefined' ? activeBenchmark : '');
+    const perfil = String(typeof activePerfil !== 'undefined' ? activePerfil : '');
+    const risco = String(typeof activeRisco !== 'undefined' ? activeRisco : '');
+    const semDados = !!(typeof hideSemDados !== 'undefined' ? hideSemDados : false);
+    if(activeAudienceV489) parts.push({kind:'audience', label:'Público-alvo', value:AUDIENCE_LABELS[activeAudienceV489] || activeAudienceV489});
+    if(cat) parts.push({kind:'cat', label:'Categoria', value:CAT_LABELS[cat] || cat});
+    if(risco) parts.push({kind:'risco', label:'Perfil de risco', value:risco});
+    if(bench) parts.push({kind:'benchmark', label:'Benchmark', value:bench});
+    if(perfil) parts.push({kind:'perfil', label:'Perfil', value:perfil});
+    if(q) parts.push({kind:'search', label:'Busca', value:q.length > 32 ? q.slice(0,32) + '…' : q});
+    if(semDados) parts.push({kind:'semDados', label:'Base', value:'sem pipeline'});
+    return parts;
   }
 
-  window.__ELTAUM_DESKTOP_KPI_STRIP_V484__ = {
+  function setSearchV489(value){
+    try{ activeSearch = String(value || ''); }catch(_e){}
+    ['#searchInput','#gfbSearch'].forEach(sel => {
+      const input = qs(sel);
+      if(input && input.value !== String(value || '')) input.value = String(value || '');
+    });
+  }
+
+  function clearFilterV489(kind){
+    if(kind === 'audience') activeAudienceV489 = '';
+    if(kind === 'cat') try{ activeCat = ''; }catch(_e){}
+    if(kind === 'benchmark') try{ activeBenchmark = ''; }catch(_e){}
+    if(kind === 'perfil') try{ activePerfil = ''; }catch(_e){}
+    if(kind === 'risco') try{ activeRisco = ''; }catch(_e){}
+    if(kind === 'semDados') try{ hideSemDados = false; }catch(_e){}
+    if(kind === 'search') setSearchV489('');
+    applyFilterV489();
+  }
+
+  function clearAllV489(){
+    activeAudienceV489 = '';
+    try{ activeCat = ''; activeBenchmark = ''; activePerfil = ''; activeRisco = ''; hideSemDados = false; }catch(_e){}
+    setSearchV489('');
+    const risk = qs('#catalogRiskSelectV198');
+    if(risk) risk.value = '';
+    const mobileRisk = qs('#mobileRiskSelectV198');
+    if(mobileRisk) mobileRisk.value = '';
+    const sem = qs('#toggleSemDados');
+    if(sem) sem.checked = false;
+    applyFilterV489();
+  }
+
+  function renderActiveStripV489(){
+    const strip = qs('#activeFilterStrip');
+    if(!strip) return;
+    const parts = activePartsV489();
+    if(!parts.length){
+      strip.innerHTML = '';
+      strip.classList.remove('active','desktop-funnel-active-v489');
+      return;
+    }
+    strip.classList.add('active','desktop-funnel-active-v489');
+    strip.innerHTML = `<span class="active-filter-label active-filter-label-v489">Filtros ativos</span>` +
+      parts.map(p => `<button type="button" class="active-filter-pill active-filter-pill-v489" data-clear-filter-v489="${escapeHtml(p.kind)}" title="Remover ${escapeHtml(p.label)}"><small>${escapeHtml(p.label)}</small><strong>${escapeHtml(p.value)}</strong><span aria-hidden="true">×</span></button>`).join('') +
+      `<button type="button" class="active-filter-clear active-filter-clear-v489" data-clear-filter-v489="all">Limpar tudo</button>`;
+  }
+
+  function syncCountsAndStateV489(){
+    if(syncingV489) return;
+    syncingV489 = true;
+    try{
+      const html = document.documentElement;
+      html.classList.add('desktop-filter-funnel-v489');
+      const meta = qs('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      syncAudienceChipsV489();
+      syncCategoryChipsV489();
+      renderActiveStripV489();
+      try{ if(typeof syncRiskProfileControlsV198 === 'function') syncRiskProfileControlsV198(); }catch(_e){}
+      try{ if(typeof updateFundResultSummary === 'function') updateFundResultSummary(); }catch(_e){}
+    }finally{
+      syncingV489 = false;
+    }
+  }
+
+  function applyFilterV489(){
+    try{
+      const q = String(typeof activeSearch !== 'undefined' ? activeSearch : '').trim();
+      filtered = allRows.filter(row => rowPassesFunnelV489(row, {search:q}));
+
+      if(typeof isMobileSortViewport === 'function' && isMobileSortViewport()){
+        if(typeof ordenarPorMobileSort === 'function') ordenarPorMobileSort(filtered);
+      }else if(typeof activeCdiSort !== 'undefined' && activeCdiSort){
+        if(typeof ordenarPorCdiRelativo === 'function') ordenarPorCdiRelativo(filtered, activeCdiSort);
+      }else if(typeof sortCol !== 'undefined' && sortCol >= 0 && sortCol < displayHeaders.length){
+        const key = displayHeaders[sortCol];
+        const isNum = NUM_SET.has(key);
+        const isDate = typeof isDateHeader === 'function' && isDateHeader(key);
+        filtered.sort((a,b)=>{
+          let av,bv;
+          if(isNum){ av = toNum(a[key]); bv = toNum(b[key]); }
+          else if(isDate){ av = parseDateBR(a[key]); bv = parseDateBR(b[key]); }
+          else{
+            av = String(a[key] || '').toLowerCase();
+            bv = String(b[key] || '').toLowerCase();
+            if(!av) av = null; if(!bv) bv = null;
+          }
+          return compararOrdenacao(av,bv);
+        });
+      }
+      currentPage = 1;
+      try{ expandedRows.clear(); }catch(_e){}
+      if(typeof render === 'function') render();
+      if(typeof renderRankings === 'function') renderRankings();
+      if(typeof updateCdiSortButtons === 'function') updateCdiSortButtons();
+      if(typeof syncRiskProfileControlsV198 === 'function') syncRiskProfileControlsV198();
+      syncCountsAndStateV489();
+    }catch(err){
+      console.warn('[v489] Falha no funil acumulativo; usando applyFilter original.', err);
+      try{ if(typeof originalApplyFilterV489 === 'function') originalApplyFilterV489(); }catch(_e){}
+      syncCountsAndStateV489();
+    }
+  }
+
+  const originalApplyFilterV489 = (typeof applyFilter === 'function') ? applyFilter : null;
+  try{ applyFilter = applyFilterV489; }catch(_e){}
+
+  function bindFunnelEventsV489(){
+    const audienceWrap = qs('.desktop-audience-filter-v488');
+    if(audienceWrap && audienceWrap.dataset.v489Bound !== '1'){
+      audienceWrap.addEventListener('click', ev => {
+        const btn = ev.target.closest('[data-audience-v488]');
+        if(!btn) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        const disabled = btn.getAttribute('aria-disabled') === 'true';
+        if(disabled) return;
+        activeAudienceV489 = btn.dataset.audienceV488 || '';
+        applyFilterV489();
+      }, true);
+      audienceWrap.dataset.v489Bound = '1';
+    }
+
+    const categoryWrap = qs('.category-grid-v69');
+    if(categoryWrap && categoryWrap.dataset.v489Bound !== '1'){
+      categoryWrap.addEventListener('click', ev => {
+        const btn = ev.target.closest('.filter-preset-chip');
+        if(!btn) return;
+        const preset = btn.dataset.preset || '';
+        const cat = preset === 'all' ? '' : PRESET_TO_CAT[preset];
+        if(preset !== 'all' && !cat) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+        if(btn.getAttribute('aria-disabled') === 'true') return;
+        try{ activeCat = cat || ''; }catch(_e){}
+        applyFilterV489();
+      }, true);
+      categoryWrap.dataset.v489Bound = '1';
+    }
+
+    const strip = qs('#activeFilterStrip');
+    if(strip && strip.dataset.v489Bound !== '1'){
+      strip.addEventListener('click', ev => {
+        const btn = ev.target.closest('[data-clear-filter-v489]');
+        if(!btn) return;
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation();
+        const kind = btn.dataset.clearFilterV489;
+        if(kind === 'all') clearAllV489(); else clearFilterV489(kind);
+      }, true);
+      strip.dataset.v489Bound = '1';
+    }
+
+    const risk = qs('#catalogRiskSelectV198');
+    if(risk && risk.dataset.v489Bound !== '1'){
+      risk.addEventListener('change', () => setTimeout(syncCountsAndStateV489, 0), {passive:true});
+      risk.dataset.v489Bound = '1';
+    }
+
+    const search = qs('#searchInput');
+    if(search && search.dataset.v489Bound !== '1'){
+      search.addEventListener('input', () => setTimeout(syncCountsAndStateV489, 0), {passive:true});
+      search.dataset.v489Bound = '1';
+    }
+  }
+
+  function bootV489(){
+    bindFunnelEventsV489();
+    syncCountsAndStateV489();
+    try{ if(typeof applyFilter === 'function' && Array.isArray(allRows) && allRows.length) applyFilter(); }catch(_e){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootV489, {once:true});
+  else bootV489();
+  window.addEventListener('load', () => setTimeout(bootV489, 80), {once:true});
+  [300,900,1800,3600].forEach(ms => setTimeout(syncCountsAndStateV489, ms));
+
+  window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__ = {
     build: BUILD,
-    sync: syncDesktopKpiStripV484
+    get audience(){ return activeAudienceV489; },
+    setAudience(value){ activeAudienceV489 = String(value || ''); applyFilterV489(); },
+    clearAll: clearAllV489,
+    sync: syncCountsAndStateV489,
+    rowAudienceTokens: rowAudienceTokensV489
   };
-})();
-
-
-/* ELTAUM_DESKTOP_FUND_SPOTLIGHT_V485 */
-
-
-/* ==========================================================
-   ELTAUM v488 — Desktop-only: filtros consultivos e cores de KPIs
-   - Público-alvo no desktop: Todos, PF, PJ, Private, Qualificado, Institucional.
-   - Mantém mobile preservado.
-========================================================== */
-(function(){
-  'use strict';
-  function ready(fn){
-    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn, {once:true});
-    else fn();
-  }
-  ready(function(){
-    try{ if(typeof bindAudienceFilterV488==='function') bindAudienceFilterV488(); }catch(e){}
-    setTimeout(()=>{ try{ if(typeof bindAudienceFilterV488==='function') bindAudienceFilterV488(); }catch(e){} }, 700);
-  });
-  window.__ELTAUM_DESKTOP_FILTER_AUDIENCE_V488__ = true;
 })();
