@@ -10962,11 +10962,12 @@ async function sharePainelMercado(){
   }
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
+    const nomeCurto=compactFundName(nome);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini ranking-cat-row-v457">
+    return `<article class="ranking-cat-mini ranking-cat-row-v457 ranking-cat-row-v531">
       <span>${esc(shortCat(cat))}</span>
       <strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong>
-      <small title="${esc(nome)}">${esc(nome)}</small>
+      <small title="${esc(nome)}"><span class="ranking-cat-name-full-v531">${esc(nome)}</span><span class="ranking-cat-name-short-v531">${esc(nomeCurto)}</span></small>
       <em>Melhor em 12 meses</em>
     </article>`;
   }

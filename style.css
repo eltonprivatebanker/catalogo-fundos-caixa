@@ -69280,3 +69280,58 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     top:auto!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v531 — Desktop: nomes curtos em "Melhores por categoria"
+   Escopo: somente desktop. Mantém o nome completo no title/tooltip.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini,
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-row-v531{
+    min-height:72px!important;
+    padding:10px 12px!important;
+    grid-template-rows:auto auto!important;
+    align-content:center!important;
+    row-gap:8px!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-name-full-v531{
+    display:none!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-name-short-v531{
+    display:inline!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini small{
+    margin-top:3px!important;
+    font-size:.72rem!important;
+    line-height:1.24!important;
+    color:#edf1fb!important;
+    font-weight:700!important;
+    letter-spacing:-.006em!important;
+    overflow:hidden!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini em{
+    display:none!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini span:first-child{
+    font-size:.56rem!important;
+    color:#e8bb6a!important;
+  }
+
+  html.desktop-ranking-shortnames-v531 body #rankingsSection .ranking-cat-mini strong{
+    font-size:.82rem!important;
+  }
+}
+
+@media (max-width:768px){
+  .ranking-cat-name-short-v531{display:none!important;}
+  .ranking-cat-name-full-v531{display:inline!important;}
+}
