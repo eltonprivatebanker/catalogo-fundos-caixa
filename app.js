@@ -23007,6 +23007,10 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   function renderActiveStripV489(){
     const strip = qs('#activeFilterStrip');
     if(!strip) return;
+    try{
+      const trail = window.__ELTAUM_DESKTOP_ACTIVE_TRAIL_V492__;
+      if(trail && typeof trail.paint === 'function'){ trail.paint(); return; }
+    }catch(_e){}
     const parts = activePartsV489();
     if(!parts.length){
       strip.innerHTML = '';
@@ -23431,15 +23435,24 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
       }
       strip.classList.add('active','desktop-funnel-active-v489','desktop-active-trail-v491','desktop-active-trail-v492');
       strip.dataset.trailV492 = '1';
-      strip.innerHTML = '<span class="active-filter-label active-filter-label-v491 active-filter-label-v492">Filtros ativos</span>' +
+      const desiredHtml = '<span class="active-filter-label active-filter-label-v491 active-filter-label-v492">Filtros ativos</span>' +
         ps.map(p => `<button type="button" class="active-filter-pill active-filter-pill-v491 active-filter-pill-v492" data-clear-filter-v492="${esc(p.kind)}" title="Remover ${esc(p.label)}"><small>${esc(p.label)}</small><strong>${esc(p.value)}</strong><span aria-hidden="true">×</span></button>`).join('') +
         '<button type="button" class="active-filter-clear active-filter-clear-v491 active-filter-clear-v492" data-clear-filter-v492="all">Limpar tudo</button>';
+      if(strip.innerHTML !== desiredHtml) strip.innerHTML = desiredHtml;
+      try{ window.__ELTAUM_DESKTOP_FILTER_BUTTONS_V497__?.styleNow?.(); }catch(_e){}
     }finally{
       painting = false;
     }
   }
 
-  function soon(){ [0,35,120,300,700].forEach(ms => setTimeout(paint, ms)); }
+  let soonTimerV497 = 0;
+  let soonRafV497 = 0;
+  function soon(){
+    if(soonRafV497) cancelAnimationFrame(soonRafV497);
+    soonRafV497 = requestAnimationFrame(() => { soonRafV497 = 0; paint(); });
+    if(soonTimerV497) clearTimeout(soonTimerV497);
+    soonTimerV497 = setTimeout(() => { soonTimerV497 = 0; paint(); }, 120);
+  }
 
   function clickSelector(sel){
     const el = q(sel);
@@ -23537,4 +23550,120 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   [900,1800,3200,5200,8200].forEach(ms => setTimeout(paint, ms));
 
   window.__ELTAUM_DESKTOP_ACTIVE_TRAIL_V492__ = {build: BUILD, paint, clear: clearKind, parts};
+})();
+
+
+/* =========================================================
+   PATCH v497 — Desktop filter buttons hardener
+   Desktop-only: injeta CSS crítico e aplica estilos inline com
+   prioridade !important para vencer heranças legadas e reduzir flicker.
+   ========================================================= */
+(function desktopFilterButtonsV497(){
+  'use strict';
+  const BUILD='ELTAUM_DESKTOP_FILTER_BUTTONS_V497';
+  const html=document.documentElement;
+  html.classList.add('desktop-filter-buttons-v497');
+  const meta=document.querySelector('meta[name="app-build"]');
+  if(meta) meta.content=BUILD;
+  const mq=()=>window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
+  const CSS_ID='desktopFilterButtonsV497Critical';
+  function injectCss(){
+    let st=document.getElementById(CSS_ID);
+    const css=`
+@media (min-width:769px){
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip,
+  html.desktop-filter-buttons-v497 body .shortcut-preset,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v492{
+    border-radius:6px!important;
+    animation:none!important;
+    transition:border-color .12s ease, background .12s ease, color .12s ease!important;
+  }
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip,
+  html.desktop-filter-buttons-v497 body .shortcut-preset,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button{
+    height:34px!important;min-height:34px!important;max-height:34px!important;
+    padding:0 12px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+    border:1px solid rgba(148,163,184,.18)!important;background:rgba(8,12,24,.72)!important;color:#e1e8f7!important;
+    font-size:.72rem!important;font-weight:800!important;line-height:1!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488.active,
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488[aria-pressed="true"],
+  html.desktop-filter-buttons-v497 body .filter-preset-chip.active,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip[aria-pressed="true"],
+  html.desktop-filter-buttons-v497 body .shortcut-preset.active,
+  html.desktop-filter-buttons-v497 body .shortcut-preset[aria-pressed="true"],
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button.active,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.52)!important;background:linear-gradient(180deg,rgba(200,151,58,.14),rgba(200,151,58,.055))!important;color:#f4d58a!important;
+  }
+  html.desktop-filter-buttons-v497 body .filter-chip-count-v489,
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488 > span,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip > span,
+  html.desktop-filter-buttons-v497 body .shortcut-preset > span,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button > span{
+    border-radius:4px!important;height:17px!important;min-width:21px!important;padding:0 6px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;
+    border:1px solid rgba(148,163,184,.14)!important;background:rgba(255,255,255,.05)!important;color:#dfe7f8!important;font-size:.60rem!important;font-weight:900!important;line-height:1!important;
+  }
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v492{
+    height:34px!important;min-height:34px!important;max-height:34px!important;padding:0 11px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+    border:1px solid rgba(232,187,106,.48)!important;background:linear-gradient(180deg,rgba(200,151,58,.13),rgba(200,151,58,.055))!important;color:#f4d58a!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+  }
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill span{border-radius:4px!important;}
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488.is-disabled-v489,
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488[aria-disabled="true"],
+  html.desktop-filter-buttons-v497 body .filter-preset-chip.is-disabled-v489,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip[aria-disabled="true"]{opacity:.34!important;filter:grayscale(.30)!important;}
+}`;
+    if(!st){ st=document.createElement('style'); st.id=CSS_ID; document.head.appendChild(st); }
+    if(st.textContent!==css) st.textContent=css;
+  }
+  function important(el, prop, value){ try{ el.style.setProperty(prop,value,'important'); }catch(_e){} }
+  function styleBtn(el){
+    if(!el || !mq()) return;
+    important(el,'border-radius','6px');
+    important(el,'animation','none');
+    important(el,'transition','border-color .12s ease, background .12s ease, color .12s ease');
+    if(el.matches('.desktop-audience-chip-v488,.filter-preset-chip,.shortcut-preset,.category-grid-v69 > button')){
+      important(el,'height','34px'); important(el,'min-height','34px'); important(el,'max-height','34px');
+      important(el,'display','inline-flex'); important(el,'align-items','center'); important(el,'justify-content','center');
+      important(el,'gap','8px'); important(el,'padding','0 12px');
+    }
+    if(el.matches('#activeFilterStrip .active-filter-pill,#activeFilterStrip .active-filter-pill-v87,#activeFilterStrip .active-filter-pill-v491,#activeFilterStrip .active-filter-pill-v492')){
+      important(el,'height','34px'); important(el,'min-height','34px'); important(el,'max-height','34px');
+      important(el,'padding','0 11px'); important(el,'display','inline-flex'); important(el,'align-items','center'); important(el,'justify-content','center');
+      important(el,'gap','8px');
+    }
+  }
+  function styleNow(){
+    if(!mq()) return;
+    injectCss();
+    document.querySelectorAll('.desktop-audience-chip-v488,.filter-preset-chip,.shortcut-preset,.category-grid-v69 > button,#activeFilterStrip .active-filter-pill,#activeFilterStrip .active-filter-pill-v87,#activeFilterStrip .active-filter-pill-v491,#activeFilterStrip .active-filter-pill-v492').forEach(styleBtn);
+    document.querySelectorAll('.filter-chip-count-v489,.desktop-audience-chip-v488 > span,.filter-preset-chip > span,.shortcut-preset > span,.category-grid-v69 > button > span,#activeFilterStrip .active-filter-pill span').forEach(el=>{
+      important(el,'border-radius','4px'); important(el,'animation','none');
+    });
+  }
+  let raf=0;
+  function schedule(){ if(raf) return; raf=requestAnimationFrame(()=>{ raf=0; styleNow(); }); }
+  function boot(){
+    injectCss(); styleNow();
+    const shell=document.querySelector('#fundsSection, .fund-filter-shell, #activeFilterStrip') || document.body;
+    if(window.MutationObserver && shell && !shell.dataset.v497Observer){
+      shell.dataset.v497Observer='1';
+      new MutationObserver(schedule).observe(shell,{childList:true,subtree:true,attributes:true,attributeFilter:['class','style','aria-pressed','aria-disabled']});
+    }
+    [60,180,420,900,1600].forEach(ms=>setTimeout(styleNow,ms));
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  window.__ELTAUM_DESKTOP_FILTER_BUTTONS_V497__={build:BUILD, styleNow, injectCss};
 })();

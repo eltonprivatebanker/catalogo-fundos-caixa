@@ -68072,3 +68072,62 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     color:#ff8a96!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v497 — Desktop filter buttons: runtime-safe CSS
+   Desktop-only. Complementa o hardener do app.js e vence chips legados.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip,
+  html.desktop-filter-buttons-v497 body .shortcut-preset,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v492{
+    border-radius:6px!important;
+    animation:none!important;
+    transition:border-color .12s ease,background .12s ease,color .12s ease!important;
+  }
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip,
+  html.desktop-filter-buttons-v497 body .shortcut-preset,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button{
+    height:34px!important;min-height:34px!important;max-height:34px!important;
+    padding:0 12px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+    border:1px solid rgba(148,163,184,.18)!important;background:rgba(8,12,24,.72)!important;color:#e1e8f7!important;
+    font-size:.72rem!important;font-weight:800!important;line-height:1!important;
+  }
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488.active,
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488[aria-pressed="true"],
+  html.desktop-filter-buttons-v497 body .filter-preset-chip.active,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip[aria-pressed="true"],
+  html.desktop-filter-buttons-v497 body .shortcut-preset.active,
+  html.desktop-filter-buttons-v497 body .shortcut-preset[aria-pressed="true"],
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button.active,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.52)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.14),rgba(200,151,58,.055))!important;
+    color:#f4d58a!important;
+  }
+  html.desktop-filter-buttons-v497 body .filter-chip-count-v489,
+  html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488 > span,
+  html.desktop-filter-buttons-v497 body .filter-preset-chip > span,
+  html.desktop-filter-buttons-v497 body .shortcut-preset > span,
+  html.desktop-filter-buttons-v497 body .category-grid-v69 > button > span,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill span{
+    border-radius:4px!important;
+  }
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v497 body #activeFilterStrip .active-filter-pill-v492{
+    height:34px!important;min-height:34px!important;max-height:34px!important;
+    padding:0 11px!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:8px!important;
+    border:1px solid rgba(232,187,106,.48)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.13),rgba(200,151,58,.055))!important;
+    color:#f4d58a!important;
+  }
+}
