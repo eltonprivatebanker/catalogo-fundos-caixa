@@ -10602,10 +10602,9 @@ async function sharePainelMercado(){
   }
   function normalizeMode(mode){return mode==='cards' ? 'cards' : 'list';}
   function getMode(){
-    // v67: no celular a experiência oficial é somente Cards.
-    // Desktop continua iniciando em Tabela, com opção de alternar para Cards.
+    // v527: mobile preservado em Cards; desktop fica somente em Tabela.
     if(isMobile()) return 'cards';
-    try{return normalizeMode(localStorage.getItem(MODE_KEY)||'list');}catch(e){return 'list';}
+    return 'list';
   }
   function saveMode(mode){
     try{localStorage.setItem(MODE_KEY,normalizeMode(mode)); localStorage.setItem(LEGACY_KEY,'cards');}catch(e){}
@@ -10677,17 +10676,24 @@ async function sharePainelMercado(){
   function applyMode(mode){
     mode=normalizeMode(mode);
     const mobile=isMobile();
-    // v67: mobile não tem alternância Tabela/Cards; força Cards sempre.
+    // v527: mobile preservado em Cards; desktop fica travado em Tabela.
     if(mobile) mode='cards';
+    else mode='list';
     saveMode(mode);
-    document.body.classList.toggle('fund-card-mode', mode==='cards' || mobile);
+    document.body.classList.toggle('fund-card-mode', mobile && mode==='cards');
     document.body.classList.toggle('fund-list-mode', false);
     syncButtons();
     renderByMode();
   }
   function ensureToggle(){
     const host=qs('#sec-fundos');
-    if(!host || qs('#mobileCatalogViewSwitch')) return;
+    if(!host) return;
+    if(!isMobile()){
+      const existing=qs('#mobileCatalogViewSwitch');
+      if(existing) existing.remove();
+      return;
+    }
+    if(qs('#mobileCatalogViewSwitch')) return;
     const table=qs('#sec-fundos .table-wrap');
     const div=document.createElement('div');
     div.className='mobile-catalog-view-switch';
@@ -23071,23 +23077,25 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 })();
 
 
-/* ELTAUM_DESKTOP_CATALOG_BASE_V525
-   Base desktop restaurada: tabela única, sem alternância de cards/executiva/detalhada.
+/* ELTAUM_DESKTOP_CATALOG_BASE_V527
+   Base desktop restaurada: tabela única, sem alternância de Cards e detalhe mais limpo.
    Mantém mobile preservado e impede scripts antigos de reativarem fund-card-mode no desktop. */
 (function(){
-  function isDesktopV525(){
+  function isDesktopV527(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
-  function enforceDesktopCatalogBaseV525(){
-    if(!isDesktopV525()) return;
-    document.documentElement.classList.add('desktop-catalog-base-v525');
+  function enforceDesktopCatalogBaseV527(){
+    if(!isDesktopV527()) return;
+    document.documentElement.classList.add('desktop-catalog-base-v525','desktop-catalog-clean-v527');
     var metaBuild=document.querySelector('meta[name="app-build"]');
-    if(metaBuild) metaBuild.content='ELTAUM_DESKTOP_CATALOG_BASE_V525';
+    if(metaBuild) metaBuild.content='ELTAUM_DESKTOP_CATALOG_BASE_V527';
     if(document.body){
       document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
     }
     var toggle=document.querySelector('#sec-fundos .desktop-table-mode-control, #sec-fundos .vista-toggle-wrap');
     if(toggle) toggle.remove();
+    var mobileSwitch=document.getElementById('mobileCatalogViewSwitch');
+    if(mobileSwitch) mobileSwitch.remove();
     var cards=document.getElementById('mobileFundCards');
     if(cards){
       cards.style.setProperty('display','none','important');
@@ -23103,20 +23111,20 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     }catch(e){}
   }
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', enforceDesktopCatalogBaseV525, {once:true});
+    document.addEventListener('DOMContentLoaded', enforceDesktopCatalogBaseV527, {once:true});
   }else{
-    enforceDesktopCatalogBaseV525();
+    enforceDesktopCatalogBaseV527();
   }
-  window.addEventListener('resize', enforceDesktopCatalogBaseV525, {passive:true});
-  window.addEventListener('load', enforceDesktopCatalogBaseV525, {once:true});
-  setTimeout(enforceDesktopCatalogBaseV525, 0);
-  setTimeout(enforceDesktopCatalogBaseV525, 400);
-  setTimeout(enforceDesktopCatalogBaseV525, 1200);
+  window.addEventListener('resize', enforceDesktopCatalogBaseV527, {passive:true});
+  window.addEventListener('load', enforceDesktopCatalogBaseV527, {once:true});
+  setTimeout(enforceDesktopCatalogBaseV527, 0);
+  setTimeout(enforceDesktopCatalogBaseV527, 400);
+  setTimeout(enforceDesktopCatalogBaseV527, 1200);
   try{
     var obs=new MutationObserver(function(muts){
-      if(!isDesktopV525() || !document.body) return;
+      if(!isDesktopV527() || !document.body) return;
       if(document.body.classList.contains('fund-card-mode') || document.body.classList.contains('mobile-catalog-cards-mode')){
-        enforceDesktopCatalogBaseV525();
+        enforceDesktopCatalogBaseV527();
       }
     });
     if(document.body) obs.observe(document.body,{attributes:true,attributeFilter:['class']});
