@@ -23160,3 +23160,176 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     rowAudienceTokens: rowAudienceTokensV489
   };
 })();
+
+/* PATCH v491 — Desktop: trilha de filtros ativos completa e removível
+   Corrige sobrescrita legada do activeFilterStrip e preserva mobile. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_DESKTOP_FILTER_ACTIVE_TRAIL_V491';
+  const CAT_LABELS_V491 = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP'
+  };
+  const AUD_LABELS_V491 = {
+    'PF':'PF',
+    'PJ':'PJ',
+    'Private':'Private',
+    'Qualificado':'Qualificado',
+    'Institucional':'Institucional'
+  };
+  const q = (sel, root=document) => root.querySelector(sel);
+  const esc = (v) => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const isDesktop = () => window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
+  let painting = false;
+
+  function audienceValue(){
+    try{
+      const api = window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__;
+      if(api && typeof api.audience !== 'undefined') return String(api.audience || '');
+    }catch(_e){}
+    const active = q('.desktop-audience-filter-v488 [data-audience-v488].active');
+    return active ? String(active.dataset.audienceV488 || '') : '';
+  }
+
+  function currentParts(){
+    const parts = [];
+    const aud = audienceValue();
+    const cat = String(typeof activeCat !== 'undefined' ? activeCat : '');
+    const risco = String(typeof activeRisco !== 'undefined' ? activeRisco : '');
+    const bench = String(typeof activeBenchmark !== 'undefined' ? activeBenchmark : '');
+    const perfil = String(typeof activePerfil !== 'undefined' ? activePerfil : '');
+    const search = String(typeof activeSearch !== 'undefined' ? activeSearch : '').trim();
+    const semDados = !!(typeof hideSemDados !== 'undefined' ? hideSemDados : false);
+
+    if(aud) parts.push({kind:'audience', label:'Público-alvo', value:AUD_LABELS_V491[aud] || aud});
+    if(cat) parts.push({kind:'cat', label:'Categoria', value:CAT_LABELS_V491[cat] || cat});
+    if(risco) parts.push({kind:'risco', label:'Perfil de risco', value:risco});
+    if(bench) parts.push({kind:'benchmark', label:'Benchmark', value:bench});
+    if(perfil) parts.push({kind:'perfil', label:'Perfil', value:perfil});
+    if(search) parts.push({kind:'search', label:'Busca', value:search.length > 34 ? search.slice(0,34) + '…' : search});
+    if(semDados) parts.push({kind:'semDados', label:'Base', value:'sem pipeline'});
+    return parts;
+  }
+
+  function paintTrail(){
+    if(!isDesktop()) return;
+    const strip = q('#activeFilterStrip');
+    if(!strip || painting) return;
+    painting = true;
+    try{
+      const html = document.documentElement;
+      html.classList.add('desktop-filter-active-trail-v491');
+      const meta = q('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const parts = currentParts();
+      if(!parts.length){
+        strip.innerHTML = '';
+        strip.classList.remove('active','desktop-active-filter-v87','desktop-funnel-active-v489','desktop-active-trail-v491');
+        strip.dataset.trailV491 = '0';
+        return;
+      }
+
+      strip.classList.add('active','desktop-funnel-active-v489','desktop-active-trail-v491');
+      strip.dataset.trailV491 = '1';
+      strip.innerHTML =
+        '<span class="active-filter-label active-filter-label-v491">Filtros ativos</span>' +
+        parts.map(p => (
+          `<button type="button" class="active-filter-pill active-filter-pill-v491" data-clear-filter-v491="${esc(p.kind)}" title="Remover ${esc(p.label)}">`+
+          `<small>${esc(p.label)}</small><strong>${esc(p.value)}</strong><span aria-hidden="true">×</span></button>`
+        )).join('') +
+        '<button type="button" class="active-filter-clear active-filter-clear-v491" data-clear-filter-v491="all">Limpar tudo</button>';
+    }finally{
+      painting = false;
+    }
+  }
+
+  function repaintSoon(){
+    [0, 40, 140, 360, 900].forEach(ms => setTimeout(paintTrail, ms));
+  }
+
+  function clearKind(kind){
+    try{
+      if(kind === 'all'){
+        if(window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__ && typeof window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__.clearAll === 'function'){
+          window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__.clearAll();
+        }else{
+          activeCat = ''; activeBenchmark = ''; activePerfil = ''; activeRisco = ''; hideSemDados = false; activeSearch = '';
+          const s = q('#searchInput'); if(s) s.value = '';
+        }
+        repaintSoon();
+        return;
+      }
+      if(kind === 'audience'){
+        if(window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__ && typeof window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__.setAudience === 'function'){
+          window.__ELTAUM_DESKTOP_FILTER_FUNNEL_V489__.setAudience('');
+        }
+      }
+      if(kind === 'cat') activeCat = '';
+      if(kind === 'benchmark') activeBenchmark = '';
+      if(kind === 'perfil') activePerfil = '';
+      if(kind === 'risco'){
+        activeRisco = '';
+        const risk = q('#catalogRiskSelectV198'); if(risk) risk.value = '';
+      }
+      if(kind === 'semDados'){
+        hideSemDados = false;
+        const sem = q('#toggleSemDados'); if(sem) sem.checked = false;
+      }
+      if(kind === 'search'){
+        activeSearch = '';
+        ['#searchInput','#gfbSearch'].forEach(sel => { const input = q(sel); if(input) input.value = ''; });
+      }
+      if(typeof applyFilter === 'function') applyFilter();
+      repaintSoon();
+    }catch(err){
+      console.warn('[v491] Falha ao limpar filtro', kind, err);
+      repaintSoon();
+    }
+  }
+
+  document.addEventListener('click', function(ev){
+    const clearBtn = ev.target && ev.target.closest ? ev.target.closest('#activeFilterStrip [data-clear-filter-v491], #activeFilterStrip [data-clear-filter-v489], #activeFilterStrip [data-clear-filter]') : null;
+    if(clearBtn){
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      const kind = clearBtn.dataset.clearFilterV491 || clearBtn.dataset.clearFilterV489 || clearBtn.dataset.clearFilter || '';
+      clearKind(kind);
+      return;
+    }
+
+    const filterBtn = ev.target && ev.target.closest ? ev.target.closest('[data-audience-v488], .category-grid-v69 .filter-preset-chip, #catalogRiskSelectV198, #toggleSemDados') : null;
+    if(filterBtn) repaintSoon();
+  }, true);
+
+  document.addEventListener('input', function(ev){
+    if(ev.target && (ev.target.matches('#searchInput') || ev.target.matches('#gfbSearch'))) repaintSoon();
+  }, true);
+  document.addEventListener('change', function(ev){
+    if(ev.target && (ev.target.matches('#catalogRiskSelectV198') || ev.target.matches('#toggleSemDados'))) repaintSoon();
+  }, true);
+
+  function boot(){
+    repaintSoon();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  [1200, 2400, 4200, 7000].forEach(ms => setTimeout(paintTrail, ms));
+
+  window.__ELTAUM_DESKTOP_FILTER_ACTIVE_TRAIL_V491__ = {
+    build: BUILD,
+    paint: paintTrail,
+    clear: clearKind,
+    parts: currentParts
+  };
+})();
+

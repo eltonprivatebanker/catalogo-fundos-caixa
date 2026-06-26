@@ -67148,3 +67148,86 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     border:0!important;
   }
 }
+
+/* PATCH v491 — Desktop: trilha de filtros ativa completa e clicável */
+@media (min-width: 769px){
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:wrap!important;
+    gap:10px!important;
+    min-height:48px!important;
+    padding:10px 0 0!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-label-v491{
+    color:#9fb3df!important;
+    font-size:.66rem!important;
+    font-weight:900!important;
+    letter-spacing:.12em!important;
+    text-transform:uppercase!important;
+    margin-right:4px!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-pill-v491{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    min-height:34px!important;
+    padding:7px 12px!important;
+    border-radius:999px!important;
+    border:1px solid rgba(200,151,58,.58)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.18),rgba(200,151,58,.08))!important;
+    color:#f5d48a!important;
+    cursor:pointer!important;
+    pointer-events:auto!important;
+    font-weight:850!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-pill-v491 small{
+    color:#aebbe0!important;
+    font-size:.56rem!important;
+    font-weight:900!important;
+    letter-spacing:.11em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-pill-v491 strong{
+    color:#ffd77b!important;
+    font-size:.72rem!important;
+    font-weight:900!important;
+    letter-spacing:.01em!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-pill-v491 span{
+    color:#ffd77b!important;
+    font-size:.86rem!important;
+    line-height:1!important;
+    opacity:.95!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-pill-v491:hover{
+    border-color:rgba(232,187,106,.84)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.24),rgba(200,151,58,.12))!important;
+    transform:translateY(-1px)!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-clear-v491{
+    min-height:34px!important;
+    padding:7px 12px!important;
+    border-radius:999px!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    background:rgba(15,23,42,.62)!important;
+    color:#cbd5e1!important;
+    cursor:pointer!important;
+    font-weight:850!important;
+  }
+
+  html.desktop-filter-active-trail-v491 body #activeFilterStrip.desktop-active-trail-v491 .active-filter-clear-v491:hover{
+    border-color:rgba(240,85,101,.42)!important;
+    color:#ff8b98!important;
+    background:rgba(240,85,101,.08)!important;
+  }
+}
+
