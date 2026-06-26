@@ -66862,3 +66862,191 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     line-height:1.15!important;
   }
 }
+
+/* PATCH v504 — Desktop: ficha do fundo com menos redundância e melhor hierarquia
+   Escopo: somente desktop. Não altera componentes mobile. */
+@media (min-width: 769px){
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-panel-v158 .detail-main{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:10px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-panel-v158 .detail-actions-card-v224{
+    margin-bottom:0!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-panel-v158 .fund-quick-note-v224,
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-panel-v158 .fund-quick-note-v503{
+    order:2!important;
+    margin:0!important;
+    padding:13px 16px!important;
+    border-radius:13px!important;
+    background:linear-gradient(180deg,rgba(15,23,42,.72),rgba(8,13,24,.64))!important;
+    border-color:rgba(91,156,246,.22)!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-panel-v158 .detail-executive-v504{
+    order:3!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:10px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-section-head-v224{
+    min-height:22px!important;
+    margin-bottom:8px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-section-head-v224 strong{
+    font-size:.75rem!important;
+    letter-spacing:-.01em!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-section-head-v224 small{
+    color:#8e9ab6!important;
+    font-size:.62rem!important;
+    line-height:1.25!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-summary-v504,
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-movement-v504,
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-technical-v504{
+    margin:0!important;
+    padding:13px 15px!important;
+    border-radius:14px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-summary-grid-v224{
+    grid-template-columns:1.35fr .82fr .82fr .82fr 1.25fr .82fr!important;
+    min-height:54px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-summary-item-v158{
+    padding:10px 12px!important;
+    min-height:52px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-summary-item-v158 span{
+    font-size:.56rem!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-summary-item-v158 strong,
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-status-v158{
+    font-size:.72rem!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-movement-grid-v224{
+    gap:10px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-movement-card-v158{
+    padding:12px 13px!important;
+    border-radius:13px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-movement-title-v158{
+    margin-bottom:10px!important;
+    padding-bottom:9px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-flow-v224{
+    gap:6px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-flow-v224 > div{
+    min-height:48px!important;
+    padding:9px 10px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-movement-meta-v158{
+    margin-top:8px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-observation-v224{
+    margin-top:8px!important;
+    min-height:34px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-complementary-grid-v224{
+    display:grid!important;
+    grid-template-columns:minmax(520px,.95fr) minmax(520px,1.05fr)!important;
+    gap:12px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-complementary-group-v224{
+    padding:12px 13px!important;
+    min-height:92px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-definition-list-v224{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    align-items:center!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-definition-list-v224 div{
+    min-height:48px!important;
+    padding:0 10px!important;
+    border-bottom:0!important;
+    border-right:1px solid rgba(148,163,184,.10)!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-definition-list-v224 div:last-child{
+    border-right:0!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-definition-list-v224 dt{
+    font-size:.57rem!important;
+    line-height:1.1!important;
+    margin-bottom:5px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-definition-list-v224 dd{
+    font-size:.72rem!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-copyable-v225{
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    min-width:0!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-copy-text-v225{
+    display:inline-block!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    max-width:none!important;
+    font-size:.70rem!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-copy-btn-v225{
+    flex:0 0 auto!important;
+    height:26px!important;
+    border-radius:6px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-controls-group-v504{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-flags-v504,
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-flags-v224{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-flag-v158{
+    min-height:48px!important;
+    padding:9px 10px!important;
+    border-radius:10px!important;
+  }
+
+  html.desktop-detail-dedupe-v504 body #sec-fundos .detail-audience-v224{
+    display:none!important;
+  }
+}

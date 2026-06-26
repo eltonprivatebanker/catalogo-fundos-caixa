@@ -3949,9 +3949,9 @@ function buildDetailExecutiveV158(r){
     : '<span class="detail-empty-v158">Não informado</span>';
   const flagHtml = (label, obj) => `<span class="detail-flag-v158 ${obj.state}"><i>${obj.dot}</i><b>${htmlAttr(label)}</b><em>${htmlAttr(obj.label)}</em></span>`;
 
-  return `<div class="detail-executive-v158 detail-executive-v206 detail-executive-v224">
-    <section class="detail-summary-v158 detail-summary-v224" aria-label="Características principais do fundo">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Características principais</strong></div>
+  return `<div class="detail-executive-v158 detail-executive-v206 detail-executive-v224 detail-executive-v504">
+    <section class="detail-summary-v158 detail-summary-v224 detail-summary-v504" aria-label="Resumo executivo do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Resumo executivo</strong><small>Principais dados para enquadramento e conversa com o cliente.</small></div>
       <div class="detail-summary-grid-v158 detail-summary-grid-v206 detail-summary-grid-v224">
         <div class="detail-summary-item-v158 strategy"><span>Estratégia</span><strong>${htmlAttr(d.estrategia.texto)}</strong>${d.estrategia.estimada?'<em>indicativo</em>':''}</div>
         <div class="detail-summary-item-v158"><span>Perfil de risco</span><strong>${htmlAttr(profile)}</strong></div>
@@ -3962,8 +3962,8 @@ function buildDetailExecutiveV158(r){
       </div>
     </section>
 
-    <section class="detail-movement-v158 detail-movement-v224" aria-label="Movimentação do fundo">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Movimentação</strong><small>Prazos em dias úteis; solicitações após o horário limite podem seguir para o próximo dia útil.</small></div>
+    <section class="detail-movement-v158 detail-movement-v224 detail-movement-v504" aria-label="Operação do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Operação</strong><small>Prazos em dias úteis; após o horário limite, a solicitação pode seguir para o próximo dia útil.</small></div>
       <div class="detail-movement-grid-v158 detail-movement-grid-v224">
         <article class="detail-movement-card-v158 application">
           <div class="detail-movement-title-v158"><span>↓</span><div><b>Aplicação</b><small>Entrada de recursos</small></div></div>
@@ -3989,8 +3989,8 @@ function buildDetailExecutiveV158(r){
       ${observationHtml}
     </section>
 
-    <section class="detail-complementary-v224" aria-label="Informações complementares">
-      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Informações complementares</strong></div>
+    <section class="detail-complementary-v224 detail-technical-v504" aria-label="Dados técnicos do fundo">
+      <div class="detail-section-head-v158 detail-section-head-v224"><strong>Dados técnicos</strong><small>Cadastro, custos e controles operacionais.</small></div>
       <div class="detail-complementary-grid-v224">
         <div class="detail-complementary-group-v224">
           <span class="detail-complementary-kicker-v224">Custos e identificação</span>
@@ -4001,10 +4001,9 @@ function buildDetailExecutiveV158(r){
             <div><dt>Código SIICO</dt><dd>${htmlAttr(code)}</dd></div>
           </dl>
         </div>
-        <div class="detail-complementary-group-v224">
-          <span class="detail-complementary-kicker-v224">Público e enquadramento</span>
-          <div class="detail-audience-v158 detail-audience-v224"><b>Público-alvo</b><div>${audienceHtml}</div></div>
-          <div class="detail-flags-v158 detail-flags-v224">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
+        <div class="detail-complementary-group-v224 detail-controls-group-v504">
+          <span class="detail-complementary-kicker-v224">Controles operacionais</span>
+          <div class="detail-flags-v158 detail-flags-v224 detail-flags-v504">${flagHtml('Movimentação automática',automatic)}${flagHtml('Carência para resgate',grace)}${flagHtml('Classificação ASG',asg)}</div>
         </div>
       </div>
     </section>
@@ -4140,7 +4139,7 @@ function gerarLeituraRapidaFundo(r){
   let objetivo = 'Este fundo pode ser analisado como alternativa de investimento conforme sua categoria, perfil de risco, liquidez e comportamento de rentabilidade.';
 
   if(base.includes('FUNDOS MUTUOS DE PRIVATIZACAO') || base.includes('FMP')){
-    objetivo = 'Fundo Mútuo de Privatização (FMP-FGTS): permite aplicar recursos do FGTS em ações de empresas privatizadas. Concentra risco em papéis específicos e está sujeito às oscilações do mercado de renda variável e ao ambiente regulatório.';
+    objetivo = 'FMP-FGTS com exposição a ações de empresas privatizadas, sujeito às oscilações da renda variável e ao ambiente regulatório.';
   } else if(base.includes('PETROBRAS') && base.includes('PRE-SAL')){
     objetivo = 'Fundo concentrado em ações da Petrobras com ênfase em ativos do pré-sal. Exposição elevada ao desempenho operacional da empresa, variações do preço do petróleo, câmbio e risco político/regulatório do setor de energia.';
   } else if(base.includes('PETROBRAS')){
@@ -4325,7 +4324,7 @@ function buildDetailPanel(r,colspan){
   const detailActions = buildDetailQuickActions(r, urlFund);
   return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
     <div class="detail-panel detail-panel-mobile-clean detail-panel-v158">
-      <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}</div>
+      <div class="detail-main">${detailActions}${gerarLeituraRapidaFundo(r)}${buildDetailExecutiveV158(r)}</div>
     </div>
   </td></tr>`;
 }
