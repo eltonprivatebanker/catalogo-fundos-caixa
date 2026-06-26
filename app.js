@@ -9240,51 +9240,18 @@ function atualizarResumoFechamentoMes(){
     const isQuote=mode==='quote' || /^R\$\s*/i.test(txt);
     el.textContent=txt;
     el.className='finance-number-v231';
-    if(mode === 'neutral'){
-      el.classList.add('neu');
-    }else if(isQuote){
+    if(isQuote){
       el.classList.add('market-quote-v231','zero');
     }else{
       el.classList.add(signClassFromText(txt));
     }
   };
-  const marketLine=(val, mode='usd')=>{
-    const lines=quebrarUsdBrl(cleanTxt(val)).filter(Boolean);
-    const wanted = String(mode || 'usd').toUpperCase();
-    return (lines.find(line => line.toUpperCase().startsWith(wanted)) || lines[0] || cleanTxt(val)).trim();
-  };
-  const pctFromNumber=(value)=>{
-    const n=Number(value);
-    return Number.isFinite(n) ? `${n > 0 ? '+' : ''}${n.toFixed(2).replace('.', ',')}%` : '—';
-  };
-  const dolarVariacaoFechada=()=>{
-    const fromDom = painelText('dolar-ant-var');
-    if(fromDom && fromDom !== '—') return fromDom;
-    const dolar = _dadosMercado?.indices_mercado?.dolar || _dadosMercado?.cards?.dolar || {};
-    const cards = _dadosMercado?.cards?.dolar || {};
-    const value =
-      dolar.variacao_mes_fechado ??
-      dolar.variacao_mes_anterior ??
-      dolar.variacao_mensal ??
-      cards.variacao_mes_fechado ??
-      cards.variacao_mes_anterior ??
-      cards.variacao_mensal ??
-      indicState?.dolarPct?.mes;
-    return pctFromNumber(value);
-  };
-  const usMode = (document.documentElement.getAttribute('data-us-currency-v492') || 'usd').toLowerCase() === 'brl' ? 'brl' : 'usd';
   setMini('closedMiniCdi', painelText('cdi-mes-ant'));
   setMini('closedMiniIpca', painelText('ipca-mes-ant'));
-  const dolarVariacaoMini=dolarVariacaoFechada();
+  const dolarVariacaoMini=painelText('dolar-ant-var');
   const dolarCotacaoMini=painelText('dolar-ant-cot');
-  setMini('closedMiniDolar', dolarCotacaoMini, 'quote');
-  setMini('closedMiniDolarVar', dolarVariacaoMini);
+  setMini('closedMiniDolar', dolarVariacaoMini !== '—' ? dolarVariacaoMini : dolarCotacaoMini, dolarVariacaoMini !== '—' ? 'variation' : 'quote');
   setMini('closedMiniIbov', painelText('ibov-ant-var'));
-  setMini('closedMiniPoup', primeiroValorNaoVazio(painelText('mc-poup'), painelText('poupOldMonthly')));
-  setMini('closedMiniIbovPts', painelText('ibov-ant-pts'), 'neutral');
-  setMini('closedMiniSp', marketLine(painelText('sp-ant-var'), usMode));
-  setMini('closedMiniNasdaq', marketLine(painelText('nasdaq-ant-var'), usMode));
-  setMini('closedMiniDow', marketLine(painelText('dow-ant-var'), usMode));
 }
 function renderClosedMarketSheet(){
   const periodo=periodoUltimoFechado();
@@ -11055,6 +11022,7 @@ async function sharePainelMercado(){
     grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
+      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(compactInsight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
@@ -20805,11 +20773,17 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
   };
 })();
 
-/* PATCH v439 — Mobile: data visual dentro da mesma linha do titulo */
+/* PATCH v439 — Mobile: data visual dentro da mesma linha do titulo
+   PATCH v483 — Desktop limpo: não injeta a data no H1 fora do mobile */
 (function(){
-  const BUILD = 'ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_v439';
+  const BUILD = 'ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_v439_DESKTOP_CLEAN_v483';
+  const MOBILE_QUERY = '(max-width: 768px)';
   let observerStarted = false;
   let scheduled = false;
+
+  function isMobileHeaderMode(){
+    return !!(window.matchMedia && window.matchMedia(MOBILE_QUERY).matches);
+  }
 
   function currentDateText(){
     const time = document.querySelector('#lastUpdate .live-update-time, #lastUpdate time');
@@ -20817,8 +20791,29 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
     return raw.replace(/^Atualizado\s*·\s*/i,'') || '';
   }
 
+  function removeDesktopInlineDateV483(){
+    const html = document.documentElement;
+    const header = document.querySelector('.site-header-clean');
+    const h1 = header?.querySelector('.brand-text h1');
+
+    html.classList.remove('mobile-header-date-in-title-v439');
+
+    h1?.querySelectorAll('.header-inline-date-v439').forEach(inline => {
+      const previous = inline.previousSibling;
+      if(previous && previous.nodeType === Node.TEXT_NODE && !previous.textContent.trim()){
+        previous.remove();
+      }
+      inline.remove();
+    });
+  }
+
   function applyMobileHeaderDateInTitleV439(){
     try{
+      if(!isMobileHeaderMode()){
+        removeDesktopInlineDateV483();
+        return;
+      }
+
       const html = document.documentElement;
       html.classList.add('mobile-v439','mobile-header-date-in-title-v439');
 
@@ -20882,11 +20877,23 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
   }
 
   window.addEventListener('load', applyMobileHeaderDateInTitleV439, {once:true});
+  window.addEventListener('resize', schedule, {passive:true});
+
+  if(window.matchMedia){
+    const mobileMedia = window.matchMedia(MOBILE_QUERY);
+    if(typeof mobileMedia.addEventListener === 'function'){
+      mobileMedia.addEventListener('change', schedule);
+    }else if(typeof mobileMedia.addListener === 'function'){
+      mobileMedia.addListener(schedule);
+    }
+  }
+
   [50, 120, 260, 600, 1100, 2200, 4200, 6500, 10000, 16000, 26000].forEach(ms => setTimeout(applyMobileHeaderDateInTitleV439, ms));
 
   window.__ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_V439__ = {
     build: BUILD,
-    sync: applyMobileHeaderDateInTitleV439
+    sync: applyMobileHeaderDateInTitleV439,
+    desktopClean: removeDesktopInlineDateV483
   };
 })();
 
@@ -22761,887 +22768,5 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   window.__ELTAUM_MOBILE_FILTER_LIST_V482__ = {
     build: BUILD,
     sync: syncMobileFilterListV482
-  };
-})();
-
-/* PATCH v483 — Mobile: ativa filtros compactos */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_FILTER_LIST_COMPACT_V483';
-
-  function syncMobileFilterListCompactV483(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v483','mobile-filter-list-compact-v483');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileFilterListCompactV483, {once:true});
-  }else{
-    syncMobileFilterListCompactV483();
-  }
-
-  window.addEventListener('load', syncMobileFilterListCompactV483, {once:true});
-  window.addEventListener('pageshow', syncMobileFilterListCompactV483, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterListCompactV483, ms));
-
-  window.__ELTAUM_MOBILE_FILTER_LIST_COMPACT_V483__ = {
-    build: BUILD,
-    sync: syncMobileFilterListCompactV483
-  };
-})();
-
-/* PATCH v484 — Mobile: primeira tela com filtros visiveis */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_FIRST_SCREEN_FILTERS_V484';
-
-  function syncMobileFirstScreenFiltersV484(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v484','mobile-first-screen-filters-v484');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileFirstScreenFiltersV484, {once:true});
-  }else{
-    syncMobileFirstScreenFiltersV484();
-  }
-
-  window.addEventListener('load', syncMobileFirstScreenFiltersV484, {once:true});
-  window.addEventListener('pageshow', syncMobileFirstScreenFiltersV484, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFirstScreenFiltersV484, ms));
-
-  window.__ELTAUM_MOBILE_FIRST_SCREEN_FILTERS_V484__ = {
-    build: BUILD,
-    sync: syncMobileFirstScreenFiltersV484
-  };
-})();
-
-/* PATCH v485 — Mobile: filtros em grade real */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_FILTER_GRID_FORCE_V485';
-
-  function syncMobileFilterGridForceV485(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v485','mobile-filter-grid-force-v485');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileFilterGridForceV485, {once:true});
-  }else{
-    syncMobileFilterGridForceV485();
-  }
-
-  window.addEventListener('load', syncMobileFilterGridForceV485, {once:true});
-  window.addEventListener('pageshow', syncMobileFilterGridForceV485, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterGridForceV485, ms));
-
-  window.__ELTAUM_MOBILE_FILTER_GRID_FORCE_V485__ = {
-    build: BUILD,
-    sync: syncMobileFilterGridForceV485
-  };
-})();
-
-/* PATCH v486 — Mobile: detalhes do fundo em grade densa */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486';
-
-  function syncMobileFundDetailDenseV486(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v486','mobile-fund-detail-dense-v486');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileFundDetailDenseV486, {once:true});
-  }else{
-    syncMobileFundDetailDenseV486();
-  }
-
-  window.addEventListener('load', syncMobileFundDetailDenseV486, {once:true});
-  window.addEventListener('pageshow', syncMobileFundDetailDenseV486, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFundDetailDenseV486, ms));
-
-window.__ELTAUM_MOBILE_FUND_DETAIL_DENSE_V486__ = {
-    build: BUILD,
-    sync: syncMobileFundDetailDenseV486
-  };
-})();
-
-/* PATCH v487 — Rankings: remove Leitura rapida */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_RANKING_NO_INSIGHT_V487';
-
-  function syncMobileRankingNoInsightV487(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v487','mobile-ranking-no-insight-v487');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-      document.querySelectorAll('#rankingsSection .ranking-exec-insight, #rankingGrid .ranking-exec-insight')
-        .forEach(el => el.remove());
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileRankingNoInsightV487, {once:true});
-  }else{
-    syncMobileRankingNoInsightV487();
-  }
-
-  window.addEventListener('load', syncMobileRankingNoInsightV487, {once:true});
-  window.addEventListener('pageshow', syncMobileRankingNoInsightV487, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingNoInsightV487, ms));
-
-  window.__ELTAUM_MOBILE_RANKING_NO_INSIGHT_V487__ = {
-    build: BUILD,
-    sync: syncMobileRankingNoInsightV487
-  };
-})();
-
-/* PATCH v488 — Mobile: resumo de mercado compacto */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_SUMMARY_COMPACT_V488';
-
-  function syncMobileMarketSummaryCompactV488(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v488','mobile-market-summary-compact-v488');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
-      if(action) action.textContent = 'Ver fechamento ›';
-
-      const sub = document.getElementById('closedMonthLaunchSub');
-      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
-        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketSummaryCompactV488, {once:true});
-  }else{
-    syncMobileMarketSummaryCompactV488();
-  }
-
-  window.addEventListener('load', syncMobileMarketSummaryCompactV488, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketSummaryCompactV488, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketSummaryCompactV488, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_SUMMARY_COMPACT_V488__ = {
-    build: BUILD,
-    sync: syncMobileMarketSummaryCompactV488
-  };
-})();
-
-/* PATCH v489 — Mobile: resumo de mercado com mais indicadores visiveis */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_SUMMARY_EXPANDED_V489';
-
-  function syncMobileMarketSummaryExpandedV489(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v489','mobile-market-summary-expanded-v489');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      if(typeof atualizarResumoFechamentoMes === 'function'){
-        atualizarResumoFechamentoMes();
-      }
-
-      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
-      if(action) action.textContent = 'Ver fechamento ›';
-
-      const sub = document.getElementById('closedMonthLaunchSub');
-      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
-        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketSummaryExpandedV489, {once:true});
-  }else{
-    syncMobileMarketSummaryExpandedV489();
-  }
-
-  window.addEventListener('load', syncMobileMarketSummaryExpandedV489, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketSummaryExpandedV489, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketSummaryExpandedV489, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_SUMMARY_EXPANDED_V489__ = {
-    build: BUILD,
-    sync: syncMobileMarketSummaryExpandedV489
-  };
-})();
-
-/* PATCH v490 — Mobile: resumo de mercado com dolar R$, dolar % e 3 bolsas EUA */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_SUMMARY_USD_BRL_V490';
-
-  function syncMobileMarketSummaryUsdBrlV490(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v490','mobile-market-summary-usd-brl-v490');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      if(typeof atualizarResumoFechamentoMes === 'function'){
-        atualizarResumoFechamentoMes();
-      }
-
-      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
-      if(action) action.textContent = 'Ver fechamento ›';
-
-      const sub = document.getElementById('closedMonthLaunchSub');
-      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
-        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketSummaryUsdBrlV490, {once:true});
-  }else{
-    syncMobileMarketSummaryUsdBrlV490();
-  }
-
-  window.addEventListener('load', syncMobileMarketSummaryUsdBrlV490, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketSummaryUsdBrlV490, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketSummaryUsdBrlV490, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_SUMMARY_USD_BRL_V490__ = {
-    build: BUILD,
-    sync: syncMobileMarketSummaryUsdBrlV490
-  };
-})();
-
-/* PATCH v491 — Mobile: resumo de mercado mais legivel */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_SUMMARY_READABLE_V491';
-
-  function syncMobileMarketSummaryReadableV491(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v491','mobile-market-summary-readable-v491');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      if(typeof atualizarResumoFechamentoMes === 'function'){
-        atualizarResumoFechamentoMes();
-      }
-
-      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
-      if(action) action.textContent = 'Ver fechamento ›';
-
-      const sub = document.getElementById('closedMonthLaunchSub');
-      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
-        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketSummaryReadableV491, {once:true});
-  }else{
-    syncMobileMarketSummaryReadableV491();
-  }
-
-  window.addEventListener('load', syncMobileMarketSummaryReadableV491, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketSummaryReadableV491, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketSummaryReadableV491, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_SUMMARY_READABLE_V491__ = {
-    build: BUILD,
-    sync: syncMobileMarketSummaryReadableV491
-  };
-})();
-
-/* PATCH v492 — Mobile: seletor USD/BRL e correcoes do resumo de mercado */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_V492';
-
-  function currentMode(){
-    return document.documentElement.getAttribute('data-us-currency-v492') === 'brl' ? 'brl' : 'usd';
-  }
-
-  function applyClosedUsCurrencyV492(mode){
-    try{
-      const next = mode === 'brl' ? 'brl' : 'usd';
-      const html = document.documentElement;
-      html.setAttribute('data-us-currency-v492', next);
-      html.classList.add('mobile-v492','mobile-market-us-toggle-v492');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const toggle = document.querySelector('.closed-us-currency-toggle-v492');
-      if(toggle){
-        toggle.setAttribute('data-us-currency-v492', next);
-        toggle.querySelectorAll('[data-us-mode-label-v492]').forEach(el => {
-          el.classList.toggle('is-active', el.getAttribute('data-us-mode-label-v492') === next);
-        });
-      }
-
-      if(typeof atualizarResumoFechamentoMes === 'function'){
-        atualizarResumoFechamentoMes();
-      }
-
-      const action = document.querySelector('#closedMonthLaunch .closed-month-launch-action');
-      if(action) action.textContent = 'Ver fechamento ›';
-
-      const sub = document.getElementById('closedMonthLaunchSub');
-      if(sub && /indicadores consolidados/i.test(sub.textContent || '')){
-        sub.textContent = sub.textContent.replace(/\s*·\s*indicadores consolidados/i, ' · fechamento mensal');
-      }
-    }catch(_error){}
-  }
-
-  window.toggleClosedUsCurrencyV492 = function(){
-    const next = currentMode() === 'usd' ? 'brl' : 'usd';
-    applyClosedUsCurrencyV492(next);
-    return false;
-  };
-
-  function bindClosedUsCurrencyV492(){
-    try{
-      const toggle = document.querySelector('.closed-us-currency-toggle-v492');
-      if(toggle && !toggle.dataset.v492Bound){
-        toggle.dataset.v492Bound = '1';
-        toggle.addEventListener('keydown', event => {
-          if(event.key === 'Enter' || event.key === ' '){
-            event.preventDefault();
-            event.stopPropagation();
-            window.toggleClosedUsCurrencyV492();
-          }
-        });
-      }
-      applyClosedUsCurrencyV492(currentMode());
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', bindClosedUsCurrencyV492, {once:true});
-  }else{
-    bindClosedUsCurrencyV492();
-  }
-
-  window.addEventListener('load', bindClosedUsCurrencyV492, {once:true});
-  window.addEventListener('pageshow', bindClosedUsCurrencyV492, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(bindClosedUsCurrencyV492, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__ = {
-    build: BUILD,
-    sync: bindClosedUsCurrencyV492,
-    set: applyClosedUsCurrencyV492
-  };
-})();
-
-/* PATCH v493 — Mobile: seletor USD/BRL no cabecalho */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_HEADER_V493';
-
-  function syncMobileMarketUsToggleHeaderV493(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v493','mobile-market-us-toggle-header-v493');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
-        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleHeaderV493, {once:true});
-  }else{
-    syncMobileMarketUsToggleHeaderV493();
-  }
-
-  window.addEventListener('load', syncMobileMarketUsToggleHeaderV493, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketUsToggleHeaderV493, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleHeaderV493, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_HEADER_V493__ = {
-    build: BUILD,
-    sync: syncMobileMarketUsToggleHeaderV493
-  };
-})();
-
-/* PATCH v494 — Mobile: seletor USD/BRL inline e card sem botao aninhado */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_INLINE_V494';
-
-  function syncMobileMarketUsToggleInlineV494(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v494','mobile-market-us-toggle-inline-v494');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const card = document.getElementById('closedMonthLaunch');
-      if(card && !card.dataset.v494CardBound){
-        card.dataset.v494CardBound = '1';
-        card.addEventListener('keydown', event => {
-          if(event.target?.closest?.('.closed-us-currency-toggle-v492,.closed-us-currency-toggle-v500')) return;
-          if(event.key === 'Enter' || event.key === ' '){
-            event.preventDefault();
-            if(typeof openFechamentoMesSheet === 'function') openFechamentoMesSheet();
-          }
-        });
-      }
-
-      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
-        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleInlineV494, {once:true});
-  }else{
-    syncMobileMarketUsToggleInlineV494();
-  }
-
-  window.addEventListener('load', syncMobileMarketUsToggleInlineV494, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketUsToggleInlineV494, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleInlineV494, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_INLINE_V494__ = {
-    build: BUILD,
-    sync: syncMobileMarketUsToggleInlineV494
-  };
-})();
-
-/* PATCH v495 — Mobile: seletor USD/Real escopado a Bolsa EUA */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_SCOPED_V495';
-
-  function syncMobileMarketUsToggleScopedV495(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v495','mobile-market-us-toggle-scoped-v495');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
-        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleScopedV495, {once:true});
-  }else{
-    syncMobileMarketUsToggleScopedV495();
-  }
-
-  window.addEventListener('load', syncMobileMarketUsToggleScopedV495, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketUsToggleScopedV495, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleScopedV495, ms));
-
-  window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_SCOPED_V495__ = {
-    build: BUILD,
-    sync: syncMobileMarketUsToggleScopedV495
-  };
-})();
-
-/* PATCH v496 — Mobile: toggle Bolsa EUA limpo e com evento capturado */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_CLEAN_V496';
-
-  function syncMobileMarketUsToggleCleanV496(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v496','mobile-market-us-toggle-clean-v496');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
-        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
-      }
-    }catch(_error){}
-  }
-
-  if(!window.__ELTAUM_MARKET_US_TOGGLE_CAPTURE_V496__){
-    window.__ELTAUM_MARKET_US_TOGGLE_CAPTURE_V496__ = true;
-    document.addEventListener('click', event => {
-      const toggle = event.target?.closest?.('.closed-us-currency-toggle-v492,.closed-us-currency-toggle-v500');
-      if(!toggle) return;
-      event.preventDefault();
-      event.stopPropagation();
-      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-      if(typeof window.toggleClosedUsCurrencyV492 === 'function'){
-        window.toggleClosedUsCurrencyV492();
-      }
-    }, true);
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketUsToggleCleanV496, {once:true});
-  }else{
-    syncMobileMarketUsToggleCleanV496();
-  }
-
-  window.addEventListener('load', syncMobileMarketUsToggleCleanV496, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketUsToggleCleanV496, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsToggleCleanV496, ms));
-
-window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_CLEAN_V496__ = {
-    build: BUILD,
-    sync: syncMobileMarketUsToggleCleanV496
-  };
-})();
-
-/* PATCH v497 — Mobile: resumo de mercado sem abertura e toggle EUA dedicado */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497';
-
-  function syncMobileMarketStaticUsToggleV497(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v497','mobile-market-static-us-toggle-v497');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const card = document.getElementById('closedMonthLaunch');
-      if(card){
-        card.removeAttribute('onclick');
-        card.removeAttribute('role');
-        card.removeAttribute('tabindex');
-        card.removeAttribute('data-open-closed-market');
-        card.setAttribute('aria-label','Resumo do último mês consolidado');
-        card.style.pointerEvents = 'auto';
-        const action = card.querySelector('.closed-month-launch-action');
-        if(action) action.remove();
-      }
-
-      if(window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__?.sync){
-        window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_V492__.sync();
-      }
-    }catch(_error){}
-  }
-
-  if(!window.__ELTAUM_MARKET_STATIC_CARD_CAPTURE_V497__){
-    window.__ELTAUM_MARKET_STATIC_CARD_CAPTURE_V497__ = true;
-
-    document.addEventListener('click', event => {
-      const toggle = event.target?.closest?.('.closed-us-currency-toggle-v492,.closed-us-currency-toggle-v500');
-      if(toggle) return;
-
-      const card = event.target?.closest?.('#closedMonthLaunch');
-      if(!card) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-      return false;
-    }, true);
-
-    document.addEventListener('keydown', event => {
-      const card = event.target?.closest?.('#closedMonthLaunch');
-      if(!card || event.target?.closest?.('.closed-us-currency-toggle-v492,.closed-us-currency-toggle-v500')) return;
-      if(event.key !== 'Enter' && event.key !== ' ') return;
-
-      event.preventDefault();
-      event.stopPropagation();
-      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-      return false;
-    }, true);
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketStaticUsToggleV497, {once:true});
-  }else{
-    syncMobileMarketStaticUsToggleV497();
-  }
-
-  window.addEventListener('load', syncMobileMarketStaticUsToggleV497, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketStaticUsToggleV497, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketStaticUsToggleV497, ms));
-
-window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__ = {
-    build: BUILD,
-    sync: syncMobileMarketStaticUsToggleV497
-  };
-})();
-
-/* PATCH v498 — Mobile: acabamento visual do seletor USD/Real */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MARKET_US_TOGGLE_POLISH_V498';
-
-  function syncMobileMarketUsTogglePolishV498(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v498','mobile-market-us-toggle-polish-v498');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      if(window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__?.sync){
-        window.__ELTAUM_MOBILE_MARKET_STATIC_US_TOGGLE_V497__.sync();
-      }
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileMarketUsTogglePolishV498, {once:true});
-  }else{
-    syncMobileMarketUsTogglePolishV498();
-  }
-
-  window.addEventListener('load', syncMobileMarketUsTogglePolishV498, {once:true});
-  window.addEventListener('pageshow', syncMobileMarketUsTogglePolishV498, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileMarketUsTogglePolishV498, ms));
-
-window.__ELTAUM_MOBILE_MARKET_US_TOGGLE_POLISH_V498__ = {
-    build: BUILD,
-    sync: syncMobileMarketUsTogglePolishV498
-  };
-})();
-
-/* PATCH v499 — Mobile: classe de estabilidade para botão Detalhes */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_DETAIL_BUTTON_STABLE_V499';
-
-  function syncMobileDetailButtonStableV499(){
-    try{
-      const html = document.documentElement;
-      html.classList.add('mobile-v499','mobile-detail-button-stable-v499');
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-    }catch(_error){}
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncMobileDetailButtonStableV499, {once:true});
-  }else{
-    syncMobileDetailButtonStableV499();
-  }
-
-  window.addEventListener('load', syncMobileDetailButtonStableV499, {once:true});
-  window.addEventListener('pageshow', syncMobileDetailButtonStableV499, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileDetailButtonStableV499, ms));
-
-window.__ELTAUM_MOBILE_DETAIL_BUTTON_STABLE_V499__ = {
-    build: BUILD,
-    sync: syncMobileDetailButtonStableV499
-  };
-})();
-
-/* PATCH v500 — Mobile: seletor USD/Real isolado das classes antigas */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_US_CURRENCY_TOGGLE_FINAL_V500';
-
-  function currentModeV500(){
-    return document.documentElement.getAttribute('data-us-currency-v492') === 'brl' ? 'brl' : 'usd';
-  }
-
-  function applyUsCurrencyV500(mode){
-    try{
-      const next = mode === 'brl' ? 'brl' : 'usd';
-      const html = document.documentElement;
-      html.classList.add('mobile-v500','mobile-us-currency-toggle-final-v500');
-      html.setAttribute('data-us-currency-v492', next);
-
-      const meta = document.querySelector('meta[name="app-build"]');
-      if(meta) meta.content = BUILD;
-
-      const toggle = document.querySelector('.closed-us-currency-toggle-v500');
-      if(toggle){
-        toggle.setAttribute('data-us-currency-v492', next);
-        toggle.querySelectorAll('[data-us-mode-label-v492]').forEach(el => {
-          el.classList.toggle('is-active', el.getAttribute('data-us-mode-label-v492') === next);
-        });
-      }
-
-      if(typeof atualizarResumoFechamentoMes === 'function'){
-        atualizarResumoFechamentoMes();
-      }
-    }catch(_error){}
-  }
-
-  function syncUsCurrencyToggleFinalV500(){
-    applyUsCurrencyV500(currentModeV500());
-  }
-
-  window.toggleClosedUsCurrencyV492 = function(){
-    applyUsCurrencyV500(currentModeV500() === 'usd' ? 'brl' : 'usd');
-    return false;
-  };
-
-  if(!window.__ELTAUM_US_CURRENCY_TOGGLE_FINAL_CLICK_V500__){
-    window.__ELTAUM_US_CURRENCY_TOGGLE_FINAL_CLICK_V500__ = true;
-    document.addEventListener('click', event => {
-      const toggle = event.target?.closest?.('.closed-us-currency-toggle-v500');
-      if(!toggle) return;
-      event.preventDefault();
-      event.stopPropagation();
-      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-      window.toggleClosedUsCurrencyV492();
-    }, true);
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', syncUsCurrencyToggleFinalV500, {once:true});
-  }else{
-    syncUsCurrencyToggleFinalV500();
-  }
-
-  window.addEventListener('load', syncUsCurrencyToggleFinalV500, {once:true});
-  window.addEventListener('pageshow', syncUsCurrencyToggleFinalV500, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncUsCurrencyToggleFinalV500, ms));
-
-window.__ELTAUM_MOBILE_US_CURRENCY_TOGGLE_FINAL_V500__ = {
-    build: BUILD,
-    sync: syncUsCurrencyToggleFinalV500,
-    set: applyUsCurrencyV500
-  };
-})();
-
-/* PATCH v501 — Mobile: clique em indicador mensal navega para a seção analítica */
-(function(){
-  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATOR_JUMP_V501';
-
-  const indicatorTargetV501 = {
-    cdi: {
-      selector: '#ratesReferenceTitleV167, #cdiYearHistory, #sec-mercado',
-      open: null
-    },
-    ipca: {
-      selector: '#sec-graficos',
-      open: {body:'#sec-graficos-body', section:'#sec-graficos'}
-    },
-    ibov: {
-      selector: '#row-ibov, #sec-mercado-painel',
-      open: {body:'#sec-painel-body', section:'#sec-mercado-painel'}
-    },
-    dolar: {
-      selector: '#sec-dolar',
-      open: null
-    }
-  };
-
-  function normalizeIndicatorV501(text){
-    const raw = String(text || '')
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g,'')
-      .toLowerCase();
-    if(raw.includes('dolar')) return 'dolar';
-    if(raw.includes('ibov')) return 'ibov';
-    if(raw.includes('ipca')) return 'ipca';
-    if(raw.includes('cdi')) return 'cdi';
-    return '';
-  }
-
-  function openSectionV501(config){
-    if(!config?.open) return;
-    const body = document.querySelector(config.open.body);
-    const section = document.querySelector(config.open.section);
-    if(body){
-      body.hidden = false;
-      body.style.display = '';
-    }
-    if(section){
-      section.classList.add('section-expanded');
-      section.setAttribute('aria-expanded','true');
-    }
-    const toggle = section?.querySelector('[aria-expanded]');
-    if(toggle) toggle.setAttribute('aria-expanded','true');
-  }
-
-  function selectMonthlyChipV501(indicator){
-    const root = document.getElementById('monthlyIndicatorsV445');
-    const chip = root?.querySelector(`[data-monthly-indicators-view-v446="${indicator}"]`);
-    if(chip && !chip.disabled && chip.getAttribute('aria-disabled') !== 'true'){
-      chip.click();
-    }
-  }
-
-  function scrollToIndicatorV501(indicator){
-    const config = indicatorTargetV501[indicator];
-    if(!config) return;
-    openSectionV501(config);
-    selectMonthlyChipV501(indicator);
-
-    window.setTimeout(() => {
-      const target = document.querySelector(config.selector);
-      if(!target) return;
-      const offset = window.matchMedia?.('(max-width: 820px)')?.matches ? 92 : 76;
-      const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset);
-      window.scrollTo({top, behavior:'smooth'});
-      target.classList.add('indicator-jump-focus-v501');
-      window.setTimeout(() => target.classList.remove('indicator-jump-focus-v501'), 1200);
-    }, 80);
-  }
-
-  function indicatorFromMonthlyClickV501(target){
-    const root = document.getElementById('monthlyIndicatorsV445');
-    if(!root || !target || !root.contains(target)) return '';
-    if(target.closest('[data-monthly-indicators-range-v445], [data-monthly-indicators-view-v446], #monthlyIndicatorsMoreV445')) return '';
-
-    const summary = target.closest('.monthly-indicators-summary-v445 article');
-    if(summary){
-      return normalizeIndicatorV501(summary.querySelector('span')?.textContent);
-    }
-
-    const cell = target.closest('.monthly-indicators-table-v445 th, .monthly-indicators-table-v445 td');
-    if(!cell) return '';
-    const table = cell.closest('.monthly-indicators-table-v445');
-    const index = cell.cellIndex;
-    if(index <= 0) return '';
-
-    const currentView = table?.dataset.viewV446 || 'all';
-    if(currentView !== 'all') return normalizeIndicatorV501(table?.querySelector('thead th:nth-child(2)')?.textContent);
-
-    return ['','cdi','ipca','ibov','dolar'][index] || '';
-  }
-
-  function bindMonthlyIndicatorJumpV501(){
-    const html = document.documentElement;
-    html.classList.add('mobile-v501','mobile-monthly-indicator-jump-v501');
-    const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
-
-    const root = document.getElementById('monthlyIndicatorsV445');
-    if(!root || root.dataset.v501JumpBound) return;
-    root.dataset.v501JumpBound = '1';
-    root.addEventListener('click', event => {
-      const indicator = indicatorFromMonthlyClickV501(event.target);
-      if(!indicator) return;
-      event.preventDefault();
-      event.stopPropagation();
-      scrollToIndicatorV501(indicator);
-    }, true);
-  }
-
-  if(document.readyState === 'loading'){
-    document.addEventListener('DOMContentLoaded', bindMonthlyIndicatorJumpV501, {once:true});
-  }else{
-    bindMonthlyIndicatorJumpV501();
-  }
-
-  window.addEventListener('load', bindMonthlyIndicatorJumpV501, {once:true});
-  window.addEventListener('pageshow', bindMonthlyIndicatorJumpV501, {passive:true});
-  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(bindMonthlyIndicatorJumpV501, ms));
-
-  window.__ELTAUM_MOBILE_MONTHLY_INDICATOR_JUMP_V501__ = {
-    build: BUILD,
-    bind: bindMonthlyIndicatorJumpV501,
-    go: scrollToIndicatorV501
   };
 })();
