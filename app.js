@@ -23269,3 +23269,115 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   setTimeout(apply,300);
   setTimeout(apply,1200);
 })();
+
+
+/* =========================================================
+   PATCH v534 — Desktop: reposiciona Pontos de atenção como faixa
+   Mantém a estrutura mobile original. No desktop, retira a coluna lateral
+   e insere o bloco entre a leitura rápida e o Top 10.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_ATTENTION_STRIP_V534';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let cachedAttention=null;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function ensureClass(){
+    document.documentElement.classList.add('desktop-ranking-attention-strip-v534');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function createAttention(){
+    const aside=document.createElement('aside');
+    aside.id='rankingAttentionV136';
+    aside.className='ranking-attention-panel-v136 ranking-attention-strip-v534';
+    aside.setAttribute('aria-label','Pontos de atenção dos fundos');
+    aside.innerHTML='<div class="attention-head-v136"><span>⚠️</span><div><strong>Pontos de atenção</strong><small>Alertas consultivos da base</small></div></div><div class="attention-body-v136"><div class="attention-empty-v136">Carregando insights...</div></div>';
+    return aside;
+  }
+
+  function detachAttention(){
+    const aside=q('#rankingAttentionV136');
+    if(aside){
+      cachedAttention=aside;
+      if(aside.parentNode) aside.parentNode.removeChild(aside);
+    }
+  }
+
+  function moveAttention(){
+    ensureClass();
+    const section=q('#rankingsSection');
+    if(!section) return;
+    const layout=q('.ranking-layout-v136',section);
+    const grid=q('#rankingGrid',section);
+    if(!layout || !grid) return;
+    let aside=cachedAttention || q('#rankingAttentionV136',section) || createAttention();
+    aside.classList.add('ranking-attention-strip-v534');
+
+    if(mq.matches){
+      const insight=q('.ranking-exec-insight',grid);
+      if(insight){
+        insight.insertAdjacentElement('afterend',aside);
+      }else if(aside.parentNode!==grid){
+        grid.appendChild(aside);
+      }
+    }else{
+      if(aside.parentNode!==layout) layout.appendChild(aside);
+    }
+    cachedAttention=aside;
+  }
+
+  function compactAttentionDetails(){
+    if(!mq.matches) return;
+    const aside=q('#rankingAttentionV136');
+    const body=q('.attention-body-v136',aside||document);
+    if(!aside || !body) return;
+    aside.classList.add('ranking-attention-strip-v534');
+    const blocks=qa(':scope > .attention-block-v136',body);
+    const foot=q(':scope > .attention-foot-v136',body);
+    if(blocks.length<=1) return;
+    if(q(':scope > .attention-details-v534',body)) return;
+
+    const details=document.createElement('details');
+    details.className='attention-details-v534';
+    details.innerHTML='<summary>Ver alertas</summary><div class="attention-details-body-v534"></div>';
+    const detailsBody=q('.attention-details-body-v534',details);
+    blocks.slice(1).forEach(block=>detailsBody.appendChild(block));
+    if(foot) detailsBody.appendChild(foot);
+    body.appendChild(details);
+  }
+
+  function apply(){
+    moveAttention();
+    setTimeout(()=>{moveAttention(); compactAttentionDetails();},0);
+    setTimeout(()=>{moveAttention(); compactAttentionDetails();},80);
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__attentionStripV534) return;
+    const wrapped=function(){
+      detachAttention();
+      const result=original.apply(this,arguments);
+      apply();
+      return result;
+    };
+    wrapped.__attentionStripV534=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function init(){
+    ensureClass();
+    wrapRankingRender();
+    apply();
+    setTimeout(()=>{wrapRankingRender();apply();},300);
+    setTimeout(()=>{wrapRankingRender();apply();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
