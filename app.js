@@ -22771,21 +22771,31 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   };
 })();
 
-/* ELTAUM_DESKTOP_MARKET_FIX_V519
-   Corrige somente no desktop a seção Juros e CDI, removendo estilos inline antigos
-   que criavam sobreposição entre Selic/CDI, Copom e gráfico. */
+/* ELTAUM_DESKTOP_MARKET_HIERARCHY_V520
+   Desktop only: corrige a seção Juros e CDI resetando transform/grid-area legados
+   que faziam o bloco CDI invadir o Copom. Mantém mobile preservado. */
 (function(){
-  const FLAG = '__ELTAUM_DESKTOP_MARKET_FIX_V519__';
+  const FLAG = '__ELTAUM_DESKTOP_MARKET_HIERARCHY_V520__';
   if (window[FLAG]) return;
   window[FLAG] = true;
 
   const isDesktop = () => window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
-  const hasPatch = () => document.documentElement.classList.contains('desktop-market-fix-v519');
+  const hasPatch = () => document.documentElement.classList.contains('desktop-market-hierarchy-v520') || document.documentElement.classList.contains('desktop-market-fix-v519');
   const set = (el, prop, value) => { if (el) el.style.setProperty(prop, value, 'important'); };
   const clear = (el, prop) => { if (el) el.style.removeProperty(prop); };
+  const resetLegacyPlacement = (el) => {
+    if (!el) return;
+    set(el, 'transform', 'none');
+    set(el, 'translate', 'none');
+    set(el, 'grid-area', 'auto');
+    set(el, 'grid-column', 'auto');
+    set(el, 'justify-self', 'stretch');
+    set(el, 'align-self', 'start');
+  };
 
   function applyMarketFix(){
     if (!isDesktop() || !hasPatch()) return;
+    document.documentElement.classList.add('desktop-market-hierarchy-v520');
     const root = document.getElementById('sec-mercado');
     if (!root) return;
 
@@ -22819,20 +22829,25 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
       set(detailGrid, 'display', 'grid');
       set(detailGrid, 'grid-template-columns', '1fr');
       set(detailGrid, 'grid-template-rows', 'auto auto');
+      set(detailGrid, 'grid-template-areas', 'none');
       set(detailGrid, 'gap', '12px');
       set(detailGrid, 'width', '100%');
       set(detailGrid, 'min-width', '0');
       set(detailGrid, 'align-items', 'start');
+      set(detailGrid, 'isolation', 'isolate');
+      set(detailGrid, 'overflow', 'visible');
     }
 
     const copom = root.querySelector('.copom-compact-v167');
     if (copom){
+      resetLegacyPlacement(copom);
       set(copom, 'grid-row', '1');
       set(copom, 'width', '100%');
       set(copom, 'min-width', '0');
       set(copom, 'height', 'auto');
       set(copom, 'margin', '0');
       set(copom, 'overflow', 'hidden');
+      set(copom, 'z-index', '2');
     }
 
     const copomSummary = root.querySelector('#copomExecutiveSummaryV270');
@@ -22856,6 +22871,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 
     const cdi = root.querySelector('#cdiYearHistory');
     if (cdi){
+      resetLegacyPlacement(cdi);
       set(cdi, 'grid-row', '2');
       set(cdi, 'display', 'block');
       set(cdi, 'width', '100%');
@@ -22868,6 +22884,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
       set(cdi, 'position', 'relative');
       set(cdi, 'overflow', 'hidden');
       set(cdi, 'box-sizing', 'border-box');
+      set(cdi, 'z-index', '1');
     }
 
     const cdiKpis = root.querySelector('#cdiYearHistory .cdi-kpis-v271');

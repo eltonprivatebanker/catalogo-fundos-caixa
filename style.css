@@ -67625,3 +67625,273 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
+
+
+/* ════════════════════════════════════════════════════
+   ELTAUM_DESKTOP_MARKET_HIERARCHY_V520 — Desktop only
+   Correção real do encavalamento em Juros e CDI.
+   Causa: patches antigos deixaram transform: translateY(-132px)
+   e grid-area: chart/copom no #cdiYearHistory dentro de um grid novo.
+   Esta camada zera a herança de posicionamento e reorganiza a hierarquia.
+════════════════════════════════════════════════════ */
+@media (min-width:769px){
+  html.desktop-market-hierarchy-v520 body #sec-mercado{
+    max-width:1500px!important;
+    margin-left:auto!important;
+    margin-right:auto!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .market-ref-grid.market-reference-v167{
+    display:block!important;
+    width:100%!important;
+    margin-top:16px!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-executive-v255{
+    display:grid!important;
+    grid-template-columns:300px minmax(0,1fr)!important;
+    grid-template-areas:
+      "head head"
+      "summary detail"!important;
+    gap:16px 22px!important;
+    align-items:start!important;
+    overflow:visible!important;
+    isolation:isolate!important;
+    min-height:0!important;
+    padding:18px 22px 22px!important;
+    border-radius:18px!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 > .market-reference-head-v167{
+    grid-area:head!important;
+    position:relative!important;
+    z-index:3!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0 0 12px!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .rates-summary-v167{
+    grid-area:summary!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    align-self:start!important;
+    position:relative!important;
+    z-index:2!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .rate-summary-card-v167{
+    min-height:82px!important;
+    height:auto!important;
+    max-height:none!important;
+    padding:13px 15px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .rates-detail-grid-v167{
+    grid-area:detail!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto!important;
+    grid-template-areas:none!important;
+    gap:12px!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    align-items:start!important;
+    overflow:visible!important;
+    isolation:isolate!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .copom-compact-v167,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 #cdiYearHistory,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-year-history{
+    transform:none!important;
+    translate:none!important;
+    grid-area:auto!important;
+    grid-column:auto!important;
+    justify-self:stretch!important;
+    align-self:start!important;
+    position:relative!important;
+    min-width:0!important;
+    max-width:100%!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .copom-compact-v167{
+    grid-row:1!important;
+    z-index:2!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:12px 14px!important;
+    border-radius:14px!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .copom-compact-v167 .reference-subhead-v167{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:12px!important;
+    margin:0 0 8px!important;
+    padding:0!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .copom-exec-summary-v270{
+    display:grid!important;
+    grid-template-columns:minmax(0,.55fr) minmax(0,.45fr)!important;
+    gap:10px!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    scroll-snap-type:none!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .copom-exec-card-v270{
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:76px!important;
+    height:auto!important;
+    padding:9px 11px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .copom-exec-desc-v270{
+    max-width:100%!important;
+    line-height:1.22!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 #cdiYearHistory,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-year-history{
+    grid-row:2!important;
+    z-index:1!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:14px!important;
+    border-radius:16px!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-year-head,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-chart-head-v271{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin:0 0 10px!important;
+    padding:0!important;
+    border:0!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-year-head > div{
+    min-width:0!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-kpis-v271{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+    margin:0 0 10px!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-kpi-v271{
+    min-width:0!important;
+    min-height:56px!important;
+    padding:9px 11px!important;
+    border-radius:12px!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-month-carousel-v322{
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0 0 10px!important;
+    padding:0!important;
+    overflow:hidden!important;
+    opacity:.92!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-month-carousel-v322 > article,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-month-card-v322{
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    flex:initial!important;
+    min-height:52px!important;
+    padding:7px 8px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-chart-canvas-wrap-v271{
+    width:100%!important;
+    height:260px!important;
+    min-height:260px!important;
+    max-height:260px!important;
+    margin:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-chart-scroll-wrap-v273,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-chart-scroll-inner-v273{
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 #cdiYearChartV271{
+    width:100%!important;
+    max-width:100%!important;
+    height:260px!important;
+    max-height:260px!important;
+    display:block!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-executive-v255{
+    grid-template-columns:1fr!important;
+    grid-template-areas:
+      "head"
+      "summary"
+      "detail"!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .rates-summary-v167,
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-kpis-v271{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .copom-exec-summary-v270{
+    grid-template-columns:1fr!important;
+  }
+
+  html.desktop-market-hierarchy-v520 body #sec-mercado .rates-reference-v167 .cdi-month-carousel-v322{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
