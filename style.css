@@ -67635,3 +67635,72 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     max-width:340px!important;
   }
 }
+
+/* PATCH v507 — Desktop: perfil de risco alinhado à esquerda no funil
+   Escopo: somente desktop. Não altera mobile.
+   Corrige herança antiga de catalog-desktop-compact-v219 que jogava filtros complementares para a coluna direita. */
+@media (min-width: 769px){
+  html.desktop-filter-risk-left-v507 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    grid-column:1 / -1!important;
+    justify-self:stretch!important;
+    align-self:stretch!important;
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:11px 0!important;
+    border-left:0!important;
+    border-top:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+    background:transparent!important;
+  }
+
+  html.desktop-filter-risk-left-v507 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+    display:grid!important;
+    grid-template-columns:128px 190px!important;
+    align-items:center!important;
+    justify-content:start!important;
+    justify-self:start!important;
+    gap:12px!important;
+    width:max-content!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+    margin-left:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    transform:none!important;
+  }
+
+  html.desktop-filter-risk-left-v507 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label{
+    margin:0!important;
+    min-width:0!important;
+  }
+
+  html.desktop-filter-risk-left-v507 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label span{
+    display:block!important;
+    color:#9fb8ea!important;
+    font-size:.62rem!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:.16em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-filter-risk-left-v507 body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198,
+  html.desktop-filter-risk-left-v507 body #sec-fundos #fundFilterShell #catalogRiskSelectV198{
+    width:190px!important;
+    min-width:190px!important;
+    max-width:190px!important;
+    height:36px!important;
+    border-radius:7px!important;
+  }
+
+  html.desktop-filter-risk-left-v507 body #sec-fundos #fundFilterShell .compact-toggle-wrap{
+    display:none!important;
+  }
+}
