@@ -23651,68 +23651,25 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 
 
 /* =========================================================
-   PATCH v539 — Desktop: controle Ver mais compacto para Ranking e Dólar
+   PATCH v541 — Desktop: Ver mais sem duplo clique e sem piscar
    ========================================================= */
-(function desktopCompactSectionsV539(){
-  function updateButton(section, isOpen){
-    if(!section) return;
-    var btn = section.querySelector('.desktop-section-more-v539');
-    if(!btn) return;
-    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    var label = btn.querySelector('.toggle-label');
-    var closed = btn.getAttribute('data-label-closed') || 'Ver mais';
-    var open = btn.getAttribute('data-label-open') || 'Ver menos';
-    if(label) label.textContent = isOpen ? open : closed;
+(function desktopSectionToggleFixV541(){
+  if(window.__desktopSectionToggleFixV541Installed) return;
+  window.__desktopSectionToggleFixV541Installed = true;
+
+  var SECTION_IDS = ['rankingsSection','sec-dolar'];
+  var BTN_SELECTOR = '.desktop-section-more-v539, .desktop-section-more-v540, .desktop-section-more-v541, [data-desktop-section-toggle]';
+
+  function getSectionIdFromButton(btn){
+    if(!btn) return '';
+    return btn.getAttribute('data-desktop-section-toggle') ||
+      (btn.classList.contains('ranking-more-v539') ? 'rankingsSection' :
+       btn.classList.contains('dolar-more-v539') ? 'sec-dolar' : '');
   }
 
-  window.toggleDesktopCompactSection = function(event, sectionId){
-    if(event){
-      if(typeof event.preventDefault === 'function') event.preventDefault();
-      if(typeof event.stopPropagation === 'function') event.stopPropagation();
-    }
-    var section = document.getElementById(sectionId);
-    if(!section) return false;
-    var isOpen = !section.classList.contains('section-expanded');
-    section.classList.toggle('section-expanded', isOpen);
-    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    updateButton(section, isOpen);
-
-    if(sectionId === 'sec-dolar' && isOpen){
-      setTimeout(function(){
-        try{
-          window.dispatchEvent(new Event('resize'));
-          var active = document.querySelector('[data-dolar-range].active');
-          if(typeof buildChartDolar === 'function'){
-            buildChartDolar((active && active.dataset && active.dataset.dolarRange) || '24m');
-          }
-        }catch(e){}
-      }, 90);
-    }
-    return false;
-  };
-
-  function init(){
-    ['rankingsSection','sec-dolar'].forEach(function(id){
-      var section = document.getElementById(id);
-      if(!section) return;
-      section.classList.remove('section-expanded');
-      section.setAttribute('aria-expanded','false');
-      updateButton(section, false);
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
-  else init();
-})();
-
-
-/* =========================================================
-   PATCH v540 — Desktop: correção robusta dos botões Ver mais
-   ========================================================= */
-(function desktopSectionToggleFixV540(){
   function getToggleButton(section){
     if(!section) return null;
-    return section.querySelector('.desktop-section-more-v539, .desktop-section-more-v540, [data-desktop-section-toggle]');
+    return section.querySelector(BTN_SELECTOR);
   }
 
   function setButtonState(section, isOpen){
@@ -23740,34 +23697,39 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     }, 120);
   }
 
+  function setSectionOpen(sectionId, isOpen){
+    var section = document.getElementById(sectionId);
+    if(!section) return false;
+    section.classList.toggle('section-expanded', !!isOpen);
+    section.classList.toggle('section-collapsed', !isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(section, !!isOpen);
+    refreshDolarChartWhenOpened(sectionId, !!isOpen);
+    return false;
+  }
+
   window.toggleDesktopCompactSection = function(event, sectionId){
     if(event){
+      if(event.__desktopCompactToggleV541Handled) return false;
+      event.__desktopCompactToggleV541Handled = true;
       if(typeof event.preventDefault === 'function') event.preventDefault();
       if(typeof event.stopPropagation === 'function') event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
     }
     var section = document.getElementById(sectionId);
     if(!section) return false;
-    var isOpen = !section.classList.contains('section-expanded');
-    section.classList.toggle('section-expanded', isOpen);
-    section.classList.toggle('section-collapsed', !isOpen);
-    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    setButtonState(section, isOpen);
-    refreshDolarChartWhenOpened(sectionId, isOpen);
-    return false;
+    return setSectionOpen(sectionId, !section.classList.contains('section-expanded'));
   };
 
   function initSection(id){
     var section = document.getElementById(id);
-    if(!section || section.dataset.v540ToggleReady === '1') return;
-    section.dataset.v540ToggleReady = '1';
+    if(!section) return;
     var btn = getToggleButton(section);
-    if(!btn) return;
-    btn.dataset.desktopSectionToggle = id;
-    btn.style.pointerEvents = 'auto';
-    btn.style.cursor = 'pointer';
-    btn.addEventListener('click', function(ev){
-      window.toggleDesktopCompactSection(ev, id);
-    }, true);
+    if(btn){
+      btn.setAttribute('data-desktop-section-toggle', id);
+      btn.style.pointerEvents = 'auto';
+      btn.style.cursor = 'pointer';
+    }
     var isOpen = section.classList.contains('section-expanded');
     section.classList.toggle('section-collapsed', !isOpen);
     section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -23775,17 +23737,18 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   }
 
   function init(){
-    initSection('rankingsSection');
-    initSection('sec-dolar');
+    SECTION_IDS.forEach(initSection);
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
   else init();
 
   document.addEventListener('click', function(ev){
-    var btn = ev.target && ev.target.closest ? ev.target.closest('.desktop-section-more-v539, .desktop-section-more-v540, [data-desktop-section-toggle]') : null;
+    var btn = ev.target && ev.target.closest ? ev.target.closest(BTN_SELECTOR) : null;
     if(!btn) return;
-    var id = btn.dataset.desktopSectionToggle || (btn.classList.contains('ranking-more-v539') ? 'rankingsSection' : (btn.classList.contains('dolar-more-v539') ? 'sec-dolar' : ''));
-    if(id) window.toggleDesktopCompactSection(ev, id);
+    var id = getSectionIdFromButton(btn);
+    if(!id) return;
+    window.toggleDesktopCompactSection(ev, id);
   }, true);
 })();
+
