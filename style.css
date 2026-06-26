@@ -67374,3 +67374,264 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* PATCH v506 — Desktop: correção definitiva do layout do funil de filtros
+   Escopo: somente desktop. Não altera mobile.
+   Corrige fieldset de categoria que estava empilhando chips e perfil de risco deslocado. */
+@media (min-width: 769px){
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell{
+    padding:16px 18px 14px!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-filter-result-summary-v221{
+    display:none!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217{
+    display:grid!important;
+    grid-template-columns:minmax(360px,1fr) auto!important;
+    align-items:center!important;
+    gap:12px!important;
+    margin:0 0 12px!important;
+    padding:0 0 12px!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .fund-search-main{
+    min-height:40px!important;
+    height:40px!important;
+    border-radius:11px!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:10px!important;
+    flex-wrap:nowrap!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488{
+    display:grid!important;
+    grid-template-columns:128px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:12px!important;
+    min-height:58px!important;
+    margin:0!important;
+    padding:11px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-filter-row-label-v488,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-filter-legend-v217,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label span{
+    color:#9fb8ea!important;
+    font-size:.62rem!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:.16em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-chips-v488{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    flex-wrap:wrap!important;
+    gap:8px!important;
+    min-width:0!important;
+  }
+
+  /* Fieldset não se comportava bem como grid por causa do legend. Em desktop ele vira linha flex estável. */
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:12px!important;
+    width:100%!important;
+    min-height:58px!important;
+    margin:0!important;
+    padding:11px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .catalog-filter-legend-v217{
+    display:flex!important;
+    align-items:center!important;
+    flex:0 0 128px!important;
+    width:128px!important;
+    max-width:128px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    float:none!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .category-grid-head-v69,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-shortcuts-label,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .category-grid-status-v69{
+    display:none!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .category-grid-v69{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    flex-wrap:wrap!important;
+    gap:8px!important;
+    flex:1 1 auto!important;
+    width:auto!important;
+    max-width:100%!important;
+    min-width:0!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .category-grid-v69 > button{
+    width:auto!important;
+    flex:0 0 auto!important;
+    margin:0!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:12px!important;
+    width:100%!important;
+    min-height:58px!important;
+    margin:0!important;
+    padding:11px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+    display:grid!important;
+    grid-template-columns:128px 190px!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:12px!important;
+    margin:0!important;
+    min-width:0!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label{
+    margin:0!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell #catalogRiskSelectV198{
+    width:190px!important;
+    min-width:190px!important;
+    max-width:190px!important;
+    height:36px!important;
+    border-radius:7px!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .filter-preset-chip,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .shortcut-preset{
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    padding:0 12px!important;
+    border-radius:7px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    width:auto!important;
+    flex:0 0 auto!important;
+    margin:0!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:rgba(8,12,24,.72)!important;
+    color:#dfe7ff!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    font-size:.72rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    white-space:nowrap!important;
+    transition:border-color .12s ease,background .12s ease,color .12s ease!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488.active,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488[aria-pressed="true"],
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .filter-preset-chip.active,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .filter-preset-chip[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.55)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.06))!important;
+    color:#f3d58a!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488 span,
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .filter-preset-chip span{
+    height:18px!important;
+    min-width:22px!important;
+    padding:0 7px!important;
+    border-radius:5px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:rgba(255,255,255,.055)!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    color:#dfe7ff!important;
+    font-size:.62rem!important;
+    line-height:1!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488[disabled],
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488[aria-disabled="true"],
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .filter-preset-chip[disabled],
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .filter-preset-chip[aria-disabled="true"],
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .filter-preset-chip.is-disabled-v489{
+    opacity:.36!important;
+    filter:grayscale(.35)!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #fundFilterShell .compact-toggle-wrap{
+    display:none!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #activeFilterStrip{
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    flex-wrap:wrap!important;
+    padding:10px 0 0!important;
+    margin:0!important;
+    border-top:1px solid rgba(148,163,184,.13)!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #activeFilterStrip .active-filter-label{
+    min-width:128px!important;
+    color:#9fb8ea!important;
+    font-size:.62rem!important;
+    font-weight:900!important;
+    letter-spacing:.16em!important;
+    line-height:1.15!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-filter-layout-v506 body #sec-fundos #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-layout-v506 body #sec-fundos #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-layout-v506 body #sec-fundos #activeFilterStrip .active-filter-pill-v492{
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    border-radius:7px!important;
+    padding:0 10px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    max-width:340px!important;
+  }
+}
