@@ -22770,3 +22770,65 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     sync: syncMobileFilterListV482
   };
 })();
+
+
+/* PATCH v484 — Desktop only: metadados visuais dos KPIs */
+(function(){
+  const BUILD = 'ELTAUM_DESKTOP_KPI_STRIP_V484';
+  let scheduled = false;
+
+  function syncDesktopKpiStripV484(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('desktop-kpi-strip-v484');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const cats = document.getElementById('kpiCats');
+      const fundosSub = document.getElementById('kpiFundosSub');
+      const catsText = String(cats?.textContent || '').trim();
+      if(fundosSub){
+        if(catsText && catsText !== '—') fundosSub.dataset.cats = catsText;
+        else fundosSub.removeAttribute('data-cats');
+      }
+
+      const titleCount = document.querySelector('#sec-fundos .funds-title-count-v440');
+      if(titleCount){
+        titleCount.setAttribute('data-desktop-hidden-v484','1');
+      }
+    }catch(_error){}
+  }
+
+  function scheduleDesktopKpiStripV484(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      syncDesktopKpiStripV484();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDesktopKpiStripV484, {once:true});
+  }else{
+    syncDesktopKpiStripV484();
+  }
+
+  window.addEventListener('load', syncDesktopKpiStripV484, {once:true});
+  window.addEventListener('resize', scheduleDesktopKpiStripV484, {passive:true});
+  window.addEventListener('pageshow', syncDesktopKpiStripV484, {passive:true});
+  [80, 180, 420, 900, 1600, 3200, 6500, 11000].forEach(ms => setTimeout(syncDesktopKpiStripV484, ms));
+
+  const observer = new MutationObserver(scheduleDesktopKpiStripV484);
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', () => observer.observe(document.body, {childList:true, subtree:true, characterData:true}), {once:true});
+  }else if(document.body){
+    observer.observe(document.body, {childList:true, subtree:true, characterData:true});
+  }
+
+  window.__ELTAUM_DESKTOP_KPI_STRIP_V484__ = {
+    build: BUILD,
+    sync: syncDesktopKpiStripV484
+  };
+})();
