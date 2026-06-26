@@ -67050,3 +67050,327 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     display:none!important;
   }
 }
+
+/* PATCH v505 — Desktop: recuperação do layout dos filtros e dados técnicos mais leves
+   Escopo: somente desktop. Não altera mobile. */
+@media (min-width: 769px){
+  /* Evita a repetição do contador dentro da barra de busca: o total já aparece no título. */
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-filter-result-summary-v221{
+    display:none!important;
+  }
+
+  /* Estrutura geral dos filtros: linhas estáveis, com label à esquerda e chips à direita. */
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell{
+    padding:16px 18px 14px!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217{
+    display:grid!important;
+    grid-template-columns:minmax(360px,1fr) auto!important;
+    align-items:center!important;
+    gap:12px!important;
+    margin:0 0 12px!important;
+    padding:0 0 12px!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .fund-search-main{
+    min-height:40px!important;
+    height:40px!important;
+    border-radius:11px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:10px!important;
+    flex-wrap:nowrap!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    display:grid!important;
+    grid-template-columns:128px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:12px!important;
+    margin:0!important;
+    padding:11px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+    min-height:58px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-filter-row-label-v488,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .catalog-filter-legend-v217,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198 > label span{
+    display:block!important;
+    color:#9fb8ea!important;
+    font-size:.62rem!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:.16em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  /* Remove cabeçalhos redundantes da grade antiga de categorias. */
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .category-grid-head-v69,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .catalog-shortcuts-label,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .category-grid-status-v69{
+    display:none!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-chips-v488,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .category-grid-v69{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    flex-wrap:wrap!important;
+    gap:8px!important;
+    min-width:0!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .filter-preset-chip,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .shortcut-preset{
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    padding:0 12px!important;
+    border-radius:7px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:rgba(8,12,24,.72)!important;
+    color:#dfe7ff!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    font-size:.72rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    white-space:nowrap!important;
+    transition:border-color .12s ease,background .12s ease,color .12s ease!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488.active,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488[aria-pressed="true"],
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .filter-preset-chip.active,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .filter-preset-chip[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.55)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.16),rgba(200,151,58,.06))!important;
+    color:#f3d58a!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488 span,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .filter-preset-chip span{
+    height:18px!important;
+    min-width:22px!important;
+    padding:0 7px!important;
+    border-radius:5px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    background:rgba(255,255,255,.055)!important;
+    border:1px solid rgba(255,255,255,.07)!important;
+    color:#dfe7ff!important;
+    font-size:.62rem!important;
+    line-height:1!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488[disabled],
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488[aria-disabled="true"],
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .filter-preset-chip[disabled],
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .filter-preset-chip[aria-disabled="true"],
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .filter-preset-chip.is-disabled-v489{
+    opacity:.36!important;
+    filter:grayscale(.35)!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+    display:flex!important;
+    align-items:center!important;
+    gap:12px!important;
+    justify-content:flex-start!important;
+    margin:0!important;
+    min-width:0!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .catalog-risk-select-wrap-v198,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell #catalogRiskSelectV198{
+    width:190px!important;
+    min-width:190px!important;
+    height:36px!important;
+    border-radius:7px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #fundFilterShell .compact-toggle-wrap{
+    display:none!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #activeFilterStrip{
+    display:flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    flex-wrap:wrap!important;
+    padding:10px 0 0!important;
+    margin:0!important;
+    border-top:1px solid rgba(148,163,184,.13)!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #activeFilterStrip .active-filter-label{
+    min-width:128px!important;
+    color:#9fb8ea!important;
+    font-size:.62rem!important;
+    font-weight:900!important;
+    letter-spacing:.16em!important;
+    line-height:1.15!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #activeFilterStrip .active-filter-pill,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-detail-cleanup-v505 body #sec-fundos #activeFilterStrip .active-filter-pill-v492{
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    border-radius:7px!important;
+    padding:0 10px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:8px!important;
+    max-width:340px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos #activeFilterStrip .active-filter-pill strong{
+    max-width:220px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    display:inline-block!important;
+  }
+
+  /* Dados técnicos: compacta a seção e remove o peso visual excessivo. */
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504{
+    padding:12px 14px!important;
+    border-radius:13px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-section-head-v224{
+    margin-bottom:8px!important;
+    min-height:20px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-complementary-grid-v224{
+    display:grid!important;
+    grid-template-columns:minmax(620px,1.1fr) minmax(420px,.9fr)!important;
+    gap:10px!important;
+    align-items:stretch!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-complementary-group-v224{
+    padding:10px 12px!important;
+    min-height:0!important;
+    border-radius:11px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-complementary-kicker-v224{
+    display:block!important;
+    margin:0 0 8px!important;
+    font-size:.55rem!important;
+    letter-spacing:.12em!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-definition-list-v224{
+    display:grid!important;
+    grid-template-columns:.95fr .85fr 1.55fr .70fr!important;
+    gap:0!important;
+    align-items:stretch!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-definition-list-v224 > div{
+    min-height:42px!important;
+    padding:0 10px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    border-bottom:0!important;
+    border-right:1px solid rgba(148,163,184,.10)!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-definition-list-v224 > div:last-child{
+    border-right:0!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-definition-list-v224 dt{
+    margin:0 0 4px!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-definition-list-v224 dd{
+    font-size:.72rem!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    min-width:0!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-copyable-v225{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-copy-text-v225{
+    max-width:none!important;
+    overflow:visible!important;
+    white-space:nowrap!important;
+    font-size:.70rem!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-copy-btn-v225{
+    height:24px!important;
+    padding:0 8px!important;
+    border-radius:6px!important;
+    flex:0 0 auto!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-controls-group-v504{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-flags-v504{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-flag-v158{
+    min-height:42px!important;
+    padding:8px 9px!important;
+    border-radius:8px!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-flag-v158 b{
+    font-size:.55rem!important;
+  }
+
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-flag-v158 em{
+    font-size:.66rem!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1280px){
+  html.desktop-detail-cleanup-v505 body #sec-fundos .detail-panel-v158 .detail-technical-v504 .detail-complementary-grid-v224{
+    grid-template-columns:1fr!important;
+  }
+}
