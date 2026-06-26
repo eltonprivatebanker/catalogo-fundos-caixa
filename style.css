@@ -68431,3 +68431,25 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     box-shadow:0 18px 44px rgba(0,0,0,.44), 0 0 0 3px rgba(200,151,58,.075)!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v500 — Desktop-only: chips ativos compactos
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-active-chip-compact-v500 body #activeFilterStrip .active-filter-pill{
+    max-width:310px!important;
+    overflow:hidden!important;
+  }
+  html.desktop-active-chip-compact-v500 body #activeFilterStrip .active-filter-pill small{
+    flex:0 0 auto!important;
+  }
+  html.desktop-active-chip-compact-v500 body #activeFilterStrip .active-filter-pill strong{
+    max-width:215px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    display:inline-block!important;
+    vertical-align:middle!important;
+  }
+}

@@ -23420,6 +23420,50 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     return '';
   }
 
+  function compactFundFilterNameV500(text){
+    let raw = String(text || '').replace(/\s+/g,' ').trim();
+    if(!raw) return '';
+    raw = raw.replace(/[\.\u2026]+$/g,'').trim();
+    let t = raw
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIF\b/gi,'')
+      .replace(/\bFIC\b/gi,'')
+      .replace(/\bFI\b/gi,'')
+      .replace(/\bFUNDO\s+DE\s+INVESTIMENTO\b/gi,'')
+      .replace(/\bINVESTIMENTO\b/gi,'')
+      .replace(/\bRESP(?:ONSABILIDADE)?\b/gi,'')
+      .replace(/\bLTD\.?A?\b/gi,'')
+      .replace(/\bLTDA\b/gi,'')
+      .replace(/\s+/g,' ')
+      .trim();
+
+    t = t
+      .replace(/FMP\s*-\s*FGTS\s+ELETROBRAS/i,'FMP-FGTS Eletrobras')
+      .replace(/FMP-FGTS\s+ELETROBRAS/i,'FMP-FGTS Eletrobras')
+      .replace(/ACOES/gi,'Ações')
+      .replace(/RENDA\s+FIXA/gi,'Renda Fixa')
+      .replace(/REFERENCIADO/gi,'Referenciado')
+      .replace(/MULTIMERCADO/gi,'Multimercado')
+      .replace(/CAMBIAL/gi,'Cambial')
+      .replace(/INDICE/gi,'Índice')
+      .replace(/\s+/g,' ')
+      .trim();
+
+    if(!t) t = raw;
+    return t.length > 30 ? t.slice(0,29).trim() + '…' : t;
+  }
+
+  function activeSearchPartV500(search){
+    const original = String(search || '').trim();
+    const compact = compactFundFilterNameV500(original);
+    const looksLikeFund = /^CAIXA\s+/i.test(original) || /\b(FMP|FIF|FIC|LTDA|RESP|ELETROBRAS|ACOES|RENDA FIXA)\b/i.test(original);
+    return {
+      kind:'search',
+      label: looksLikeFund ? 'Fundo' : 'Busca',
+      value: looksLikeFund ? compact : (original.length > 28 ? original.slice(0,27).trim() + '…' : original)
+    };
+  }
+
   function parts(){
     const out = [];
     const aud = audienceFromDom();
@@ -23435,7 +23479,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     if(risco) out.push({kind:'risco', label:'Perfil de risco', value:risco});
     if(bench) out.push({kind:'benchmark', label:'Benchmark', value:bench});
     if(perfil) out.push({kind:'perfil', label:'Perfil', value:perfil});
-    if(search) out.push({kind:'search', label:'Busca', value:search.length > 34 ? search.slice(0,34) + '…' : search});
+    if(search) out.push(activeSearchPartV500(search));
     if(semDados) out.push({kind:'semDados', label:'Base', value:'sem pipeline'});
     return out;
   }
@@ -23857,4 +23901,79 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   else boot();
   window.addEventListener('load', boot, {once:true});
   window.__ELTAUM_DESKTOP_MODAL_RESTORE_V498__={build:BUILD, restoreDocs, desktopSpotlightFactsV498};
+})();
+
+
+/* =========================================================
+   PATCH v500 — Desktop-only: chips ativos compactos
+   Encurta nomes longos apenas na trilha de filtros ativos.
+   ========================================================= */
+(function desktopActiveChipCompactV500(){
+  'use strict';
+  const BUILD='ELTAUM_DESKTOP_ACTIVE_CHIP_COMPACT_V500';
+  const html=document.documentElement;
+  html.classList.add('desktop-active-chip-compact-v500');
+  const meta=document.querySelector('meta[name="app-build"]');
+  if(meta) meta.content=BUILD;
+  const mq=()=>window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
+  function compactName(text){
+    let raw=String(text||'').replace(/\s+/g,' ').trim().replace(/[\.\u2026]+$/g,'').trim();
+    if(!raw) return '';
+    let t=raw
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIF\b|\bFIC\b|\bFI\b/gi,'')
+      .replace(/\bFUNDO\s+DE\s+INVESTIMENTO\b/gi,'')
+      .replace(/\bINVESTIMENTO\b/gi,'')
+      .replace(/\bRESP(?:ONSABILIDADE)?\b/gi,'')
+      .replace(/\bLTD\.?A?\b|\bLTDA\b/gi,'')
+      .replace(/FMP\s*-\s*FGTS\s+ELETROBRAS/gi,'FMP-FGTS Eletrobras')
+      .replace(/FMP-FGTS\s+ELETROBRAS/gi,'FMP-FGTS Eletrobras')
+      .replace(/ACOES/gi,'Ações')
+      .replace(/RENDA\s+FIXA/gi,'Renda Fixa')
+      .replace(/\s+/g,' ')
+      .trim();
+    if(!t) t=raw;
+    return t.length>30 ? t.slice(0,29).trim()+'…' : t;
+  }
+  function compactNow(){
+    if(!mq()) return;
+    const strip=document.querySelector('#activeFilterStrip');
+    if(!strip) return;
+    strip.querySelectorAll('.active-filter-pill').forEach(btn=>{
+      const kind=btn.dataset.clearFilterV492 || btn.dataset.clearFilterV491 || btn.dataset.clearFilterV489 || btn.dataset.clearFilter || '';
+      const small=btn.querySelector('small');
+      const strong=btn.querySelector('strong');
+      if(kind==='search' && strong){
+        const input=(document.querySelector('#searchInput')?.value || document.querySelector('#gfbSearch')?.value || strong.textContent || '').trim();
+        const looksLikeFund=/^CAIXA\s+/i.test(input) || /\b(FMP|FIF|FIC|LTDA|RESP|ELETROBRAS|ACOES|RENDA FIXA)\b/i.test(input);
+        if(small && looksLikeFund) small.textContent='Fundo';
+        const compact=looksLikeFund ? compactName(input) : (input.length>28 ? input.slice(0,27).trim()+'…' : input);
+        strong.textContent=compact;
+        btn.title = looksLikeFund ? ('Remover fundo: '+input) : ('Remover busca: '+input);
+      }
+      btn.style.setProperty('max-width','310px','important');
+      if(strong){
+        strong.style.setProperty('max-width','215px','important');
+        strong.style.setProperty('overflow','hidden','important');
+        strong.style.setProperty('text-overflow','ellipsis','important');
+        strong.style.setProperty('white-space','nowrap','important');
+        strong.style.setProperty('display','inline-block','important');
+      }
+    });
+  }
+  let raf=0;
+  function schedule(){ if(raf) return; raf=requestAnimationFrame(()=>{raf=0; compactNow();}); }
+  function boot(){
+    compactNow();
+    const strip=document.querySelector('#activeFilterStrip');
+    if(strip && window.MutationObserver && !strip.dataset.v500CompactObserver){
+      strip.dataset.v500CompactObserver='1';
+      new MutationObserver(schedule).observe(strip,{childList:true,subtree:true});
+    }
+    [80,220,500,1200].forEach(ms=>setTimeout(compactNow,ms));
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true});
+  else boot();
+  window.addEventListener('load',boot,{once:true});
+  window.__ELTAUM_DESKTOP_ACTIVE_CHIP_COMPACT_V500__={build:BUILD, compactNow};
 })();
