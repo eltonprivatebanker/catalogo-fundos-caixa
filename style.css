@@ -68435,3 +68435,32 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:nowrap!important;
   }
 }
+
+/* ELTAUM_DESKTOP_FILTER_ACTIONS_V526
+   Desktop only: garante clique real nos filtros e mantém a faixa de filtros ativos limpa. */
+@media (min-width:769px){
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell,
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217,
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell #activeFilterStrip{
+    pointer-events:auto!important;
+  }
+
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell .desktop-audience-chip-v488,
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 [data-preset],
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell #activeFilterStrip [data-clear-filter]{
+    pointer-events:auto!important;
+    cursor:pointer!important;
+    position:relative!important;
+    z-index:3!important;
+  }
+
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell #activeFilterStrip .active-filter-label{
+    display:none!important;
+  }
+
+  html.desktop-filter-actions-v526 body #sec-fundos #fundFilterShell #activeFilterStrip{
+    gap:8px!important;
+  }
+}

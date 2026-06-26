@@ -3442,7 +3442,17 @@ function applyFilter(){
   filtered=allRows.filter(r=>{
     if(favModeAtivo && !rowIsFavoritedForFilter(r)) return false;
     if(hideSemDados&&!temDados(r)) return false;
-    if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
+    if(activeCat){
+      const rowCat=String(r['Categoria']||'');
+      const canonCat=v=>String(v||'')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^A-Z0-9]+/gi,' ')
+        .replace(/\s+/g,' ')
+        .trim()
+        .toUpperCase();
+      if(rowCat!==activeCat && canonCat(rowCat)!==canonCat(activeCat)) return false;
+    }
     if(activeBenchmark && detectarBenchmarkFundo(r).label !== activeBenchmark) return false;
     if(activePerfil){
       const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
@@ -11962,6 +11972,10 @@ async function sharePainelMercado(){
     return LABELS[canonCat || ''] || canonCat || 'Todos';
   }
 
+  function escV87(v){
+    return String(v || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
   function findRawCategory(canonTarget){
     if(!canonTarget) return '';
     try{
@@ -12000,15 +12014,15 @@ async function sharePainelMercado(){
   }
 
   function applyPresetExact(preset, sourceBtn){
+    const clickedActive = !!(sourceBtn && sourceBtn.getAttribute && sourceBtn.getAttribute('aria-pressed') === 'true');
+    if(clickedActive && preset && preset !== 'all') preset = 'all';
     const wanted = PRESET_CAT.hasOwnProperty(preset) ? PRESET_CAT[preset] : '';
 
     stabilizeFilterBox(()=>{
       try{
         activeCat = wanted ? findRawCategory(wanted) : '';
-        activeBenchmark = '';
-        activePerfil = '';
-        activeRisco = '';
-        hideSemDados = false;
+        // Desktop v526: categoria não limpa público-alvo, risco, benchmark ou busca.
+        // Assim os filtros voltam a acumular na ordem: busca → público-alvo → categoria → risco.
         currentPage = 1;
         window.__favListMode = false;
         window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
@@ -12016,7 +12030,7 @@ async function sharePainelMercado(){
       }catch(e){}
 
       const semDados = qs('#toggleSemDados');
-      if(semDados) semDados.checked = false;
+      if(semDados) semDados.checked = !!hideSemDados;
 
       try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
       try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
@@ -12024,6 +12038,11 @@ async function sharePainelMercado(){
 
       if(sourceBtn && typeof sourceBtn.blur === 'function') sourceBtn.blur();
       syncV87();
+      try{
+        if(window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__ && typeof window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__.sync === 'function'){
+          setTimeout(window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__.sync,0);
+        }
+      }catch(e){}
     });
   }
 
@@ -12062,11 +12081,18 @@ async function sharePainelMercado(){
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        if(active){
+        const parts = [];
+        try{ if(activePerfil) parts.push({kind:'perfil', label:'Público-alvo', value:String(activePerfil)}); }catch(e){}
+        try{ if(activeBenchmark) parts.push({kind:'benchmark', label:'Benchmark', value:String(activeBenchmark)}); }catch(e){}
+        if(active) parts.push({kind:'cat', label:'Categoria', value:label});
+        try{ if(activeRisco) parts.push({kind:'risco', label:'Risco', value:(typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(activeRisco) : String(activeRisco))}); }catch(e){}
+        try{ if(hideSemDados) parts.push({kind:'semDados', label:'Base', value:'Ocultar sem dados'}); }catch(e){}
+
+        if(parts.length){
           strip.classList.add('active','desktop-active-filter-v87');
-          strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="cat"><small>Categoria</small>${label}<span aria-hidden="true">×</span></button>` +
-            '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
+          strip.innerHTML = parts.map(p =>
+            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="${escV87(p.kind)}"><small>${escV87(p.label)}</small>${escV87(p.value)}<span aria-hidden="true">×</span></button>`
+          ).join('') + '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
         }else{
           strip.classList.remove('active','desktop-active-filter-v87');
           strip.innerHTML = '';
@@ -23096,4 +23122,116 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     if(document.body) obs.observe(document.body,{attributes:true,attributeFilter:['class']});
     else document.addEventListener('DOMContentLoaded',function(){ obs.observe(document.body,{attributes:true,attributeFilter:['class']}); },{once:true});
   }catch(e){}
+})();
+
+
+/* ELTAUM_DESKTOP_FILTER_ACTIONS_V526
+   Desktop only: restaura o comportamento acumulativo dos filtros.
+   - Público-alvo volta a filtrar de fato e acumula com categoria/risco/busca.
+   - Categoria ativa pode ser clicada novamente para limpar apenas a categoria.
+   - Filtros ativos deixam de duplicar o rótulo e passam a refletir os filtros reais. */
+(function(){
+  'use strict';
+  const FLAG='__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const BUILD='ELTAUM_DESKTOP_FILTER_ACTIONS_V526';
+  const isDesktop=()=>!window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  const qs=(sel,root=document)=>root.querySelector(sel);
+  const qsa=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
+
+  function syncAudienceButtonsV526(){
+    if(!isDesktop()) return;
+    let atual='';
+    try{ atual=String(activePerfil||''); }catch(e){}
+    qsa('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]').forEach(btn=>{
+      const val=String(btn.dataset.audienceV488||'');
+      const on=val===atual;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+    });
+  }
+
+  function syncDesktopFiltersV526(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-filter-actions-v526','desktop-catalog-base-v525');
+    syncAudienceButtonsV526();
+    try{ if(window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__ && typeof window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__.sync==='function') window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__.sync(); }catch(e){}
+    try{ if(typeof syncRiskProfileControlsV198==='function') syncRiskProfileControlsV198(); }catch(e){}
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function applyAudienceV526(btn){
+    if(!btn || !isDesktop()) return;
+    const val=String(btn.dataset.audienceV488||'');
+    const wasActive=btn.getAttribute('aria-pressed')==='true';
+    try{
+      activePerfil=(wasActive && val) ? '' : val;
+      currentPage=1;
+      window.__favListMode=false;
+      if(expandedRows && typeof expandedRows.clear==='function') expandedRows.clear();
+    }catch(e){}
+    syncAudienceButtonsV526();
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.error('v526 audience filter',e); }
+    setTimeout(syncDesktopFiltersV526,0);
+    requestAnimationFrame(syncDesktopFiltersV526);
+  }
+
+  function clearByKindV526(kind){
+    if(!isDesktop()) return;
+    try{
+      if(kind==='all'){
+        if(typeof clearAllFilters==='function') clearAllFilters();
+        else { activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; if(typeof applyFilter==='function') applyFilter(); }
+      }else if(typeof clearFilter==='function'){
+        clearFilter(kind);
+      }else{
+        if(kind==='cat') activeCat='';
+        if(kind==='benchmark') activeBenchmark='';
+        if(kind==='perfil') activePerfil='';
+        if(kind==='risco') activeRisco='';
+        if(kind==='semDados') hideSemDados=false;
+        if(typeof applyFilter==='function') applyFilter();
+      }
+    }catch(e){}
+    setTimeout(syncDesktopFiltersV526,0);
+    requestAnimationFrame(syncDesktopFiltersV526);
+  }
+
+  function bindDesktopFiltersV526(){
+    syncDesktopFiltersV526();
+    if(document.documentElement.dataset.v526DesktopFiltersBound==='1') return;
+    document.documentElement.dataset.v526DesktopFiltersBound='1';
+
+    document.addEventListener('click',ev=>{
+      const audienceBtn=ev.target.closest && ev.target.closest('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]');
+      if(audienceBtn && isDesktop()){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+        applyAudienceV526(audienceBtn);
+        return;
+      }
+
+      const clearBtn=ev.target.closest && ev.target.closest('#activeFilterStrip [data-clear-filter]');
+      if(clearBtn && isDesktop()){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+        clearByKindV526(clearBtn.dataset.clearFilter||'all');
+      }
+    },true);
+
+    document.addEventListener('change',ev=>{
+      if(!isDesktop()) return;
+      if(ev.target && ev.target.id==='catalogRiskSelectV198') setTimeout(syncDesktopFiltersV526,0);
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindDesktopFiltersV526,{once:true}); else bindDesktopFiltersV526();
+  window.addEventListener('load',()=>{syncDesktopFiltersV526();setTimeout(syncDesktopFiltersV526,400);},{once:true});
+  window.addEventListener('resize',syncDesktopFiltersV526,{passive:true});
+  [250,900,1800,3200].forEach(ms=>setTimeout(syncDesktopFiltersV526,ms));
+  window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__={build:BUILD,sync:syncDesktopFiltersV526};
 })();
