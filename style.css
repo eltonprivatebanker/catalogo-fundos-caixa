@@ -68313,3 +68313,6 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:nowrap;
   }
 }
+
+
+/* desktop-rankings-cdi-fix-v515: cálculo do % CDI nos rankings corrigido no app.js; sem alterações visuais. */

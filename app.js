@@ -10845,7 +10845,7 @@ async function sharePainelMercado(){
 */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_RANKINGS_CDI_DINAMICO_DESKTOP_v514';
+  const BUILD='ELTAUM_RANKINGS_CDI_DINAMICO_DESKTOP_v515';
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
@@ -10926,29 +10926,78 @@ async function sharePainelMercado(){
     return btn?btn.textContent.trim():'Filtro aplicado';
   }
   function parsePctTextV514(txt){
-    const raw=String(txt||'').replace(/[^0-9,.-]/g,'').replace('.', '').replace(',', '.');
-    const n=Number(raw);
+    if(txt===null || txt===undefined || txt==='') return null;
+    if(typeof txt==='number') return Number.isFinite(txt) ? txt : null;
+    const raw=String(txt)
+      .replace(/ /g,' ')
+      .replace(/[^0-9,.-]/g,'')
+      .trim();
+    if(!raw || raw==='-' || raw==='—') return null;
+    const hasComma=raw.includes(',');
+    const normalized=hasComma
+      ? raw.replace(/\./g,'').replace(',', '.')
+      : raw.replace(/,/g,'');
+    const n=Number(normalized);
     return Number.isFinite(n)?n:null;
+  }
+  function cdiCardRankingsV515(){
+    try{return (_dadosMercado?.cards?.cdi) || (window.__mercadoAtualV230?.cards?.cdi) || {};}
+    catch(e){return (window.__mercadoAtualV230?.cards?.cdi) || {};}
+  }
+  function normalizarCdiRefV515(value,periodo){
+    let n=parsePctTextV514(value);
+    if(n===null || !Number.isFinite(n) || n<=0) return null;
+
+    // Alguns estados antigos guardavam o CDI multiplicado (ex.: 1474 em vez de 14,74).
+    // Normaliza antes de comparar com a rentabilidade do fundo.
+    if(n>1000) n=n/100;
+    if(n>100) n=n/100;
+
+    if(periodo==='mes'){
+      // CDI mensal deve ficar na ordem de 0% a 3%. Valores acima disso costumam ser taxa anual
+      // ou dado de estado antigo; neste caso, ignora para buscar a próxima fonte confiável.
+      return n>0 && n<5 ? n : null;
+    }
+    if(periodo==='ano') return n>0 && n<40 ? n : null;
+    return n>0 && n<50 ? n : null;
+  }
+  function primeiroCdiValidoV515(periodo,candidates){
+    for(const candidate of candidates){
+      const v=typeof candidate==='function' ? candidate() : candidate;
+      const n=normalizarCdiRefV515(v,periodo);
+      if(n!==null) return n;
+    }
+    return null;
   }
   function cdiPeriodoValorV514(periodo){
     try{
+      const cdiCard=cdiCardRankingsV515();
       if(periodo==='mes'){
-        const v=num(indicState?.cdi?.mes);
-        if(v!==null && Number.isFinite(v) && v>0) return v;
-        return parsePctTextV514(document.getElementById('cdi-mes-ant')?.textContent);
+        return primeiroCdiValidoV515('mes',[
+          cdiCard.mensal,
+          cdiCard.ultimo_mes,
+          cdiCard.mes,
+          ()=>document.getElementById('cdi-mes-ant')?.textContent,
+          ()=>indicState?.cdi?.mes
+        ]);
       }
       if(periodo==='ano'){
-        const dom=parsePctTextV514(document.getElementById('cdi-ano')?.textContent);
-        if(dom!==null && dom>0) return dom;
-        const cdiCard=window.__mercadoAtualV230?.cards?.cdi || {};
-        const direto=num(cdiCard.acum_ano_com_parcial ?? cdiCard.acum_ano ?? cdiCard.ano);
-        return direto!==null && Number.isFinite(direto) && direto>0 ? direto : null;
+        return primeiroCdiValidoV515('ano',[
+          cdiCard.acum_ano_com_parcial,
+          cdiCard.acum_ano,
+          cdiCard.ano,
+          ()=>document.getElementById('cdi-ano')?.textContent,
+          ()=>indicState?.cdi?.ano
+        ]);
       }
-      const v=num(indicState?.cdi?.m12);
-      if(v!==null && Number.isFinite(v) && v>0) return v;
-      const cdiCard=window.__mercadoAtualV230?.cards?.cdi || {};
-      const direto=num(cdiCard.acum_12m ?? cdiCard.m12 ?? cdiCard.acumulado_12m ?? cdiCard.acum12m);
-      return direto!==null && Number.isFinite(direto) && direto>0 ? direto : null;
+      return primeiroCdiValidoV515('12m',[
+        cdiCard.acum_12m,
+        cdiCard.m12,
+        cdiCard.acumulado_12m,
+        cdiCard.acum12m,
+        ()=>typeof resolverCdiPeriodoV229==='function' ? resolverCdiPeriodoV229(cdiCard,12) : null,
+        ()=>indicState?.cdi?.m12
+      ]);
     }catch(e){return null}
   }
   function cdiPeriodoTituloV514(periodo){
@@ -10961,7 +11010,7 @@ async function sharePainelMercado(){
       const cdiRef=cdiPeriodoValorV514(periodo);
       if(rent===null || !Number.isFinite(rent) || cdiRef===null || !Number.isFinite(cdiRef) || cdiRef===0) return '—';
       const ratio=Math.round((rent/cdiRef)*100);
-      return Number.isFinite(ratio)?ratio+'%':'—';
+      return Number.isFinite(ratio) && Math.abs(ratio)<10000 ? ratio+'%' : '—';
     }catch(e){return '—'}
   }
   function rowPL(r){return plMi(r['PL (milhoes R$)']||r['PL']||r['Patrimonio Liquido'])}
