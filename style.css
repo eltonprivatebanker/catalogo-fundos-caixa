@@ -67920,3 +67920,61 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     color:#f5d48a!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v511 — Desktop: tabela única, sem visualização Cards
+   Base: v508/v510. Não altera mobile.
+   - Desktop fica sempre em Tabela
+   - Esconde o bloco Visualização e os cards no desktop
+   - Preserva o comportamento mobile existente
+   ========================================================= */
+@media (min-width: 769px){
+  html.desktop-table-only-v511 body #sec-fundos #mobileCatalogViewSwitch,
+  html.desktop-table-only-v511 body #sec-fundos .mobile-catalog-view-switch,
+  html.desktop-table-only-v511 body .mobile-catalog-view-switch{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-table-only-v511 body #sec-fundos #mobileFundCards,
+  html.desktop-table-only-v511 body #sec-fundos .mobile-fund-cards,
+  html.desktop-table-only-v511 body.fund-card-mode #sec-fundos #mobileFundCards,
+  html.desktop-table-only-v511 body.fund-card-mode #sec-fundos .mobile-fund-cards{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-table-only-v511 body #sec-fundos .table-wrap,
+  html.desktop-table-only-v511 body.fund-card-mode #sec-fundos .table-wrap,
+  html.desktop-table-only-v511 body.fund-list-mode #sec-fundos .table-wrap{
+    display:block!important;
+    visibility:visible!important;
+    opacity:1!important;
+  }
+
+  html.desktop-table-only-v511 body #sec-fundos .table-wrap #mainTable{
+    display:table!important;
+  }
+
+  html.desktop-table-only-v511 body #sec-fundos .table-wrap #mainTable thead{
+    display:table-header-group!important;
+  }
+
+  html.desktop-table-only-v511 body #sec-fundos .table-wrap #mainTable tbody{
+    display:table-row-group!important;
+  }
+}

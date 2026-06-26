@@ -23009,3 +23009,54 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(bindV508,160),{once:true});
   else setTimeout(bindV508,160);
 })();
+
+
+/* =========================================================
+   PATCH v511 — Desktop: força Tabela e remove Cards do desktop
+   Base: v508/v510. Não altera mobile.
+   ========================================================= */
+(function(){
+  var FLAG='__ELTAUM_DESKTOP_TABLE_ONLY_V511__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  function isDesktop(){
+    try{return window.matchMedia('(min-width: 769px)').matches;}catch(e){return window.innerWidth>=769;}
+  }
+  function applyDesktopTableOnly(){
+    if(!isDesktop()) return;
+    try{
+      document.body.classList.remove('fund-card-mode');
+      document.body.classList.add('fund-list-mode','desktop-table-only-mode-v511');
+      var switcher=document.getElementById('mobileCatalogViewSwitch');
+      if(switcher){
+        switcher.setAttribute('aria-hidden','true');
+        switcher.style.display='none';
+      }
+      document.querySelectorAll('.mobile-catalog-view-btn').forEach(function(btn){
+        var isList=btn.getAttribute('data-mobile-catalog-view')==='list';
+        btn.classList.toggle('active',isList);
+        btn.setAttribute('aria-pressed',isList?'true':'false');
+      });
+      var cards=document.getElementById('mobileFundCards');
+      if(cards){
+        cards.style.display='none';
+        cards.setAttribute('aria-hidden','true');
+      }
+      var tableWrap=document.querySelector('#sec-fundos .table-wrap');
+      if(tableWrap){
+        tableWrap.style.display='block';
+        tableWrap.removeAttribute('aria-hidden');
+      }
+    }catch(e){}
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',function(){setTimeout(applyDesktopTableOnly,250);},{once:true});
+  }else{
+    setTimeout(applyDesktopTableOnly,80);
+  }
+  ['resize','orientationchange'].forEach(function(evt){
+    window.addEventListener(evt,function(){setTimeout(applyDesktopTableOnly,180);},{passive:true});
+  });
+  document.addEventListener('click',function(){setTimeout(applyDesktopTableOnly,120);},true);
+  setInterval(applyDesktopTableOnly,1800);
+})();
