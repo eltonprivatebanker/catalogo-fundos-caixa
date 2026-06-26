@@ -23972,3 +23972,329 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     setTimeout(apply, delay);
   });
 })();
+
+
+/* =========================================================
+   PATCH v546 — Desktop: abas do ranking funcionais
+   ========================================================= */
+(function desktopRankingTabsFuncionaisV546(){
+  if(window.__desktopRankingTabsFuncionaisV546Installed) return;
+  window.__desktopRankingTabsFuncionaisV546Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function q(sel, root){ return (root || document).querySelector(sel); }
+  function qa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function esc(v){
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function norm(v){
+    return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  }
+  function num(v){
+    if(typeof toNum === 'function') return toNum(v);
+    const n = Number(String(v ?? '').replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',','.'));
+    return Number.isFinite(n) ? n : null;
+  }
+  function pct(v){
+    const n = num(v);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return '—';
+    return (n > 0 ? '+' : '') + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+  }
+  function retClass(v){
+    const n = num(v);
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  }
+  function cleanFund(v){
+    return String(v || '—').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim() || '—';
+  }
+  function compactFundName(v){
+    let s = cleanFund(v)
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIC\b/ig,'')
+      .replace(/\bFIF\b/ig,'')
+      .replace(/\bRESP\.?\s*LTDA\b/ig,'')
+      .replace(/\bRESP\b/ig,'')
+      .replace(/\bFUNDO DE INDICE\b/ig,'')
+      .replace(/\bCORPORATIVO\b/ig,'Corp.')
+      .replace(/\bREFERENCIADO\b/ig,'Ref.')
+      .replace(/\s+-\s+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const words = s.split(/\s+/).filter(Boolean);
+    if(words.length > 4) s = words.slice(0,4).join(' ');
+    return s || cleanFund(v);
+  }
+  function shortCat(v){
+    const raw = String(v || '—').trim();
+    const n = norm(raw);
+    if(n.includes('FUNDOS MUTUOS') || n.includes('PRIVATIZACAO')) return 'FMP';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
+    if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
+    if(n.includes('RENDA FIXA')) return 'Renda Fixa';
+    if(n.includes('MULTIMERCADO')) return 'Multimercado';
+    if(n.includes('CAMBIAL')) return 'Cambial';
+    if(n.includes('ACOES')) return 'Ações';
+    if(n.includes('INDICE')) return 'Índice';
+    return raw;
+  }
+  function plValue(r){
+    return num(r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido']);
+  }
+  function plTxt(v){
+    const n = num(v);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return 'R$ —';
+    if(Math.abs(n) >= 1000) return 'R$ ' + (n / 1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
+    return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+  }
+  function campoPorPeriodo(periodo){
+    if(typeof rankCampoPorPeriodo === 'function') return rankCampoPorPeriodo(periodo);
+    if(periodo === 'dia') return 'Variacao Dia (%)';
+    if(periodo === 'mes') return 'Acum. Mes (%)';
+    if(periodo === 'ano') return 'Acum. Ano (%)';
+    return 'Acum. 12M (%)';
+  }
+  function periodoLabel(periodo){
+    if(typeof rankPeriodoLabel === 'function') return rankPeriodoLabel(periodo);
+    return ({dia:'dia',mes:'mês',ano:'ano','12m':'12 meses'})[periodo] || '12 meses';
+  }
+  function cdiReferencia(periodo){
+    const p = periodo || '12m';
+    const card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const firstFinite = function(){
+      for(const value of arguments){
+        const n = num(value);
+        if(n !== null && !Number.isNaN(n) && Number.isFinite(n)) return n;
+      }
+      return null;
+    };
+    if(p === 'mes'){
+      let atual = null;
+      try{ atual = typeof obterCdiAtualV232 === 'function' ? obterCdiAtualV232().valor : null; }catch(e){}
+      return firstFinite(atual, card?.parcial_mes_atual, card?.mensal, window.indicState?.cdi?.mes);
+    }
+    if(p === 'ano'){
+      const direto = firstFinite(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, window.indicState?.cdi?.ano);
+      if(direto !== null) return direto;
+    }
+    const m12 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(card,12) : null;
+    return firstFinite(m12, card?.acum_12m, card?.m12, window.indicState?.cdi?.m12);
+  }
+  function cdiRatioTxt(r, periodo){
+    const rent = num(r?.[campoPorPeriodo(periodo)]);
+    const cdi = cdiReferencia(periodo);
+    if(rent === null || cdi === null || !Number.isFinite(rent) || !Number.isFinite(cdi) || cdi === 0) return '—';
+    const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(rent, cdi) : Math.round((rent / cdi) * 100);
+    return ratio === null ? '—' : ratio + '%';
+  }
+  function medal(i){ return i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + 'º'; }
+  function currentFilterLabel(){
+    if(typeof activeRankFilter === 'undefined' || activeRankFilter === 'todos') return 'Todos';
+    const btn = q('[data-rank-filter="' + activeRankFilter + '"]');
+    return btn ? btn.textContent.trim() : 'Filtro aplicado';
+  }
+  function riskLabel(){
+    try{ return typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(activeRankRisk || '') : (activeRankRisk || 'Todos os perfis'); }
+    catch(e){ return 'Todos os perfis'; }
+  }
+  function baseRows(){
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows)) return [];
+    let base = allRows
+      .filter(function(r){ return typeof temDados === 'function' ? temDados(r) : true; })
+      .filter(function(r){ return typeof passaFiltroRanking === 'function' ? passaFiltroRanking(r) : true; });
+    try{
+      if(typeof activePerfil !== 'undefined' && activePerfil){
+        base = base.filter(function(r){
+          return String(r.Perfis || r.Perfil || '').split(/\s*\|\s*/).map(function(s){ return s.trim(); }).includes(activePerfil);
+        });
+      }
+      if(typeof activeRankRisk !== 'undefined' && activeRankRisk){
+        base = base.filter(function(r){ return perfilRiscoCorrespondeV198(r['Perfil de Risco'], activeRankRisk); });
+      }
+    }catch(e){}
+    return base;
+  }
+  function sortBy(base, field, asc){
+    return base
+      .filter(function(r){
+        const n = num(r[field]);
+        return n !== null && !Number.isNaN(n) && Number.isFinite(n);
+      })
+      .sort(function(a,b){
+        return asc ? num(a[field]) - num(b[field]) : num(b[field]) - num(a[field]);
+      });
+  }
+  function topRow(r, i, campo, periodo){
+    const nome = cleanFund(r.Fundo);
+    return '<div class="ranking-top-row">' +
+      '<div class="ranking-pos">' + medal(i) + '</div>' +
+      '<div class="ranking-fund"><strong title="' + esc(nome) + '">' + esc(nome) + '</strong><span>' + esc(shortCat(r.Categoria)) + ' · ' + esc(plTxt(plValue(r))) + '</span></div>' +
+      '<div class="ranking-value-standard ranking-return ' + retClass(r[campo]) + '">' + esc(pct(r[campo])) + '</div>' +
+      '<div class="ranking-cdi">' + esc(cdiRatioTxt(r, periodo)) + '</div>' +
+    '</div>';
+  }
+  function simpleRow(label, name, meta, value, cls){
+    return '<div class="ranking-top-row ranking-view-row-v546">' +
+      '<div class="ranking-pos">' + esc(label) + '</div>' +
+      '<div class="ranking-fund"><strong title="' + esc(name) + '">' + esc(name) + '</strong><span>' + esc(meta || '') + '</span></div>' +
+      '<div class="ranking-value-standard ranking-return ' + esc(cls || 'zero') + '">' + esc(value) + '</div>' +
+      '<div class="ranking-cdi"></div>' +
+    '</div>';
+  }
+  function summaryCard(kind, label, value, name, meta){
+    const full = cleanFund(name);
+    const display = kind === 'pl' ? full : compactFundName(full);
+    return '<article class="ranking-exec-card ' + esc(kind) + '"><span>' + esc(label) + '</span><strong class="ranking-value-standard ' + (kind === 'worst' ? 'neg' : 'pos') + '">' + esc(value) + '</strong><small title="' + esc(full) + '">' + esc(display) + '</small>' + (meta ? '<em>' + esc(meta) + '</em>' : '') + '</article>';
+  }
+  function groupCategories(base, field){
+    const map = {};
+    base.forEach(function(r){
+      const cat = r.Categoria || 'Sem categoria';
+      const ret = num(r[field]);
+      const pl = plValue(r);
+      if(!map[cat]) map[cat] = {cat:cat, qtd:0, pl:0, weighted:0, weight:0, sum:0, count:0};
+      map[cat].qtd += 1;
+      if(pl !== null && Number.isFinite(pl)) map[cat].pl += pl;
+      if(ret !== null && Number.isFinite(ret)){
+        map[cat].sum += ret;
+        map[cat].count += 1;
+        if(pl !== null && Number.isFinite(pl) && pl > 0){
+          map[cat].weighted += ret * pl;
+          map[cat].weight += pl;
+        }
+      }
+    });
+    return Object.values(map).map(function(d){
+      d.ret = d.weight > 0 ? d.weighted / d.weight : (d.count ? d.sum / d.count : null);
+      return d;
+    });
+  }
+  function periodTabs(target, active, periods){
+    return '<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">' + periods.map(function(p){
+      return '<button type="button" class="rank-period-tab ' + (active === p ? 'active' : '') + '" data-rank-target="' + esc(target) + '" data-rank-period="' + esc(p) + '">' + (p === 'dia' ? 'Dia' : p === 'mes' ? 'Mês' : p === 'ano' ? 'Ano' : '12M') + '</button>';
+    }).join('') + '</div>';
+  }
+  function board(title, subtitle, body, controls){
+    return '<section class="ranking-exec-board ranking-view-board-v546">' +
+      '<div class="ranking-exec-board-head"><div><h3>' + esc(title) + '</h3><p>' + esc(subtitle) + '</p></div><div class="ranking-exec-controls">' + (controls || '') + '<span class="ranking-universe-pill">Universo: <strong>' + esc(currentFilterLabel()) + '</strong></span><span class="ranking-risk-pill-v198">Risco: <strong>' + esc(riskLabel()) + '</strong></span></div></div>' +
+      '<div class="ranking-top-table" role="table" aria-label="' + esc(title) + '">' + body + '</div>' +
+    '</section>';
+  }
+  function renderTop(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campo = campoPorPeriodo(periodo);
+    const top = sortBy(base, campo).slice(0,10);
+    const rows = top.map(function(r,i){ return topRow(r,i,campo,periodo); }).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    return board('Top 10 fundos no período', 'Ranking por rentabilidade · ' + periodoLabel(periodo), '<div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI no período</span></div>' + rows, periodTabs('topFundos', periodo, ['mes','ano','12m']));
+  }
+  function renderCategoria(base){
+    const top12 = sortBy(base, 'Acum. 12M (%)');
+    const catMap = {};
+    top12.forEach(function(r){ const cat = r.Categoria || '—'; if(!catMap[cat]) catMap[cat] = r; });
+    const rows = Object.entries(catMap).slice(0,12).map(function(entry){
+      const cat = entry[0], r = entry[1], nome = cleanFund(r.Fundo);
+      return '<article class="ranking-cat-mini ranking-cat-row-v457 ranking-cat-row-v531">' +
+        '<span>' + esc(shortCat(cat)) + '</span>' +
+        '<strong class="ranking-value-standard ' + retClass(r['Acum. 12M (%)']) + '">' + esc(pct(r['Acum. 12M (%)'])) + '</strong>' +
+        '<small title="' + esc(nome) + '"><span class="ranking-cat-name-full-v531">' + esc(nome) + '</span><span class="ranking-cat-name-short-v531">' + esc(compactFundName(nome)) + '</span></small>' +
+      '</article>';
+    }).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
+    return '<section class="ranking-exec-secondary ranking-exec-secondary-single-v195 ranking-view-board-v546"><div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Top fundo de cada classe · 12 meses</p></div><div class="ranking-cat-grid-v50">' + rows + '</div></div></section>';
+  }
+  function renderDestaques(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.destaques) ? activeRankPeriods.destaques : 'mes';
+    const campo = campoPorPeriodo(periodo);
+    const altas = sortBy(base, campo).slice(0,5);
+    const quedas = sortBy(base, campo, true).filter(function(r){ return num(r[campo]) < 0; }).slice(0,5);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span></span></div>' +
+      altas.map(function(r,i){ return simpleRow(medal(i), cleanFund(r.Fundo), shortCat(r.Categoria) + ' · alta no período', pct(r[campo]), retClass(r[campo])); }).join('') +
+      '<div class="ranking-view-subhead-v546">Maiores quedas</div>' +
+      (quedas.map(function(r,i){ return simpleRow((i+1) + 'º', cleanFund(r.Fundo), shortCat(r.Categoria) + ' · queda no período', pct(r[campo]), retClass(r[campo])); }).join('') || '<div class="ranking-empty-v50">Sem retornos negativos neste recorte.</div>');
+    return board('Destaques do período', 'Maiores altas e quedas · ' + periodoLabel(periodo), body, periodTabs('destaques', periodo, ['dia','mes','ano','12m']));
+  }
+  function renderRentabilidade(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campo = campoPorPeriodo(periodo);
+    const cats = groupCategories(base, campo).filter(function(d){ return d.ret !== null; }).sort(function(a,b){ return b.ret - a.ret; }).slice(0,12);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>Retorno</span><span></span></div>' +
+      cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · ' + plTxt(d.pl), pct(d.ret), retClass(d.ret)); }).join('');
+    return board('Categorias por rentabilidade', 'Retorno médio ponderado por PL · ' + periodoLabel(periodo), body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>', periodTabs('topFundos', periodo, ['mes','ano','12m']));
+  }
+  function renderPL(base){
+    const cats = groupCategories(base, 'Acum. 12M (%)').sort(function(a,b){ return b.pl - a.pl; }).slice(0,12);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>PL</span><span></span></div>' +
+      cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · rent. 12M ' + pct(d.ret), plTxt(d.pl), 'zero'); }).join('');
+    return board('Categorias por patrimônio', 'Concentração de patrimônio líquido por classe', body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>');
+  }
+  function syncTabs(){
+    qa('[data-rank-view]').forEach(function(btn){
+      const active = btn.dataset.rankView === activeRankView;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+  function preserveAttention(grid){
+    const aside = q('#rankingAttentionV136');
+    if(aside && aside.parentNode) aside.parentNode.removeChild(aside);
+    return aside;
+  }
+  function restoreAttention(grid, aside){
+    if(!grid || !aside || !isDesktop()) return;
+    aside.classList.add('ranking-attention-strip-v534');
+    const boardEl = q('.ranking-view-board-v546', grid);
+    if(boardEl) grid.insertBefore(aside, boardEl);
+    else grid.appendChild(aside);
+  }
+  function renderRankingsV546(){
+    const grid = q('#rankingGrid');
+    if(!grid || typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
+    document.documentElement.classList.add('desktop-ranking-tabs-funcionais-v546');
+    const meta = q('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_TABS_FUNCIONAIS_V546';
+    syncTabs();
+
+    const base = baseRows();
+    const periodoTop = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campoTop = campoPorPeriodo(periodoTop);
+    const top = sortBy(base, campoTop);
+    const top12 = sortBy(base, 'Acum. 12M (%)');
+    const worst12 = sortBy(base, 'Acum. 12M (%)', true).find(function(r){ return num(r['Acum. 12M (%)']) < 0; });
+    const bestMonth = sortBy(base, 'Acum. Mes (%)')[0];
+    const cats = groupCategories(base, 'Acum. 12M (%)').sort(function(a,b){ return b.pl - a.pl; });
+    const maiorPL = cats[0];
+
+    const summary = '<section class="ranking-exec-summary" aria-label="Destaques dos rankings">' +
+      summaryCard('best','Melhor 12M', top12[0] ? pct(top12[0]['Acum. 12M (%)']) : '—', top12[0] ? cleanFund(top12[0].Fundo) : '—', top12[0] ? cdiRatioTxt(top12[0],'12m') + ' do CDI · ' + shortCat(top12[0].Categoria) : '') +
+      summaryCard('worst','Pior 12M', worst12 ? pct(worst12['Acum. 12M (%)']) : '—', worst12 ? cleanFund(worst12.Fundo) : 'Sem retorno negativo', worst12 ? shortCat(worst12.Categoria) : '') +
+      summaryCard('month','Melhor mês', bestMonth ? pct(bestMonth['Acum. Mes (%)']) : '—', bestMonth ? cleanFund(bestMonth.Fundo) : '—', bestMonth ? shortCat(bestMonth.Categoria) : '') +
+      summaryCard('pl','Maior PL', maiorPL ? plTxt(maiorPL.pl) : '—', maiorPL ? shortCat(maiorPL.cat) : '—', maiorPL ? maiorPL.qtd + ' fundos' : '') +
+    '</section>';
+
+    const views = {
+      top: renderTop,
+      categoria: renderCategoria,
+      destaques: renderDestaques,
+      rentabilidade: renderRentabilidade,
+      pl: renderPL
+    };
+    const aside = preserveAttention(grid);
+    grid.className = 'ranking-grid ranking-executive-v50 ranking-main-v136 ranking-tabs-active-v546';
+    grid.innerHTML = summary + (views[activeRankView] || views.top)(base);
+    restoreAttention(grid, aside);
+  }
+
+  function install(){
+    if(!isDesktop()) return;
+    window.renderRankings = renderRankingsV546;
+    try{ renderRankings = renderRankingsV546; }catch(e){}
+    if(typeof allRows !== 'undefined' && Array.isArray(allRows) && allRows.length) renderRankingsV546();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  setTimeout(install, 250);
+  setTimeout(install, 1200);
+})();

@@ -70416,3 +70416,29 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     inset:auto!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v546 — Desktop: abas funcionais dos rankings
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-tabs-funcionais-v546 body #rankingsSection .ranking-view-tabs{
+    display:flex!important;
+  }
+
+  html.desktop-ranking-tabs-funcionais-v546 body #rankingsSection:not(.section-expanded) .ranking-view-tabs{
+    display:none!important;
+  }
+
+  html.desktop-ranking-tabs-funcionais-v546 body #rankingsSection .ranking-view-subhead-v546{
+    grid-column:1 / -1;
+    margin-top:6px;
+    padding:12px 14px 8px;
+    color:#f6c861;
+    font-size:.76rem;
+    font-weight:800;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    border-top:1px solid rgba(148,163,184,.16);
+  }
+}
