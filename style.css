@@ -69636,3 +69636,95 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:1fr!important;
   }
 }
+
+/* =========================================================
+   PATCH v535 — Desktop: alertas do ranking inline, sem sobrepor tabela
+   Escopo: somente desktop. Mantém a faixa de Pontos de atenção da v534,
+   mas faz o painel detalhado abrir no fluxo da página, empurrando o Top 10
+   para baixo em vez de flutuar sobre a tabela.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136.ranking-attention-strip-v534{
+    margin:0 0 2px!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-body-v136{
+    grid-template-columns:minmax(250px,330px) minmax(0,1fr) auto!important;
+    row-gap:10px!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534{
+    display:contents!important;
+    min-width:0!important;
+    position:static!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534 > summary{
+    grid-column:3!important;
+    justify-self:end!important;
+    align-self:center!important;
+    position:static!important;
+    min-width:118px!important;
+    min-height:30px!important;
+    padding:7px 11px!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534:not([open]) > .attention-details-body-v534{
+    display:none!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534[open] > .attention-details-body-v534{
+    grid-column:1 / -1!important;
+    grid-row:auto!important;
+    position:static!important;
+    right:auto!important;
+    top:auto!important;
+    z-index:auto!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin-top:2px!important;
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+    padding:9px!important;
+    border:1px solid rgba(200,151,58,.16)!important;
+    border-radius:11px!important;
+    background:rgba(8,11,22,.58)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534[open] > summary{
+    background:rgba(200,151,58,.14)!important;
+    border-color:rgba(200,151,58,.34)!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534 .attention-block-v136{
+    min-height:0!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534 .attention-row-v136{
+    min-height:46px!important;
+  }
+
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534 .attention-row-v136 .fund{
+    max-width:100%!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1120px){
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-body-v136{
+    grid-template-columns:1fr!important;
+  }
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534{
+    display:block!important;
+  }
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534 > summary{
+    grid-column:auto!important;
+    justify-self:start!important;
+    width:max-content!important;
+  }
+  html.desktop-ranking-alerts-inline-v535 body #rankingsSection #rankingAttentionV136 .attention-details-v534[open] > .attention-details-body-v534{
+    grid-template-columns:1fr!important;
+  }
+}
