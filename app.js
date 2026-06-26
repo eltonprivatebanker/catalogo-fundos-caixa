@@ -11041,7 +11041,6 @@ async function sharePainelMercado(){
     grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
-      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(compactInsight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
@@ -23376,6 +23375,128 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     apply();
     setTimeout(()=>{wrapRankingRender();apply();},300);
     setTimeout(()=>{wrapRankingRender();apply();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v536 — Desktop ranking hierarchy cleanup
+   - Remove Leitura rápida da visão desktop.
+   - Mantém Pontos de atenção como faixa e abre alertas em linha, largura cheia.
+   - Centraliza o cabeçalho da seção de rankings.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_HIERARCHY_V536';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let busy=false;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function ensureBuild(){
+    document.documentElement.classList.add('desktop-ranking-hierarchy-v536');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function removeQuickRead(){
+    if(!mq.matches) return;
+    qa('#rankingsSection .ranking-exec-insight').forEach(el=>el.remove());
+  }
+
+  function normalizeAttention(){
+    if(!mq.matches || busy) return;
+    const aside=q('#rankingAttentionV136');
+    const host=q('.attention-body-v136',aside||document);
+    if(!aside || !host) return;
+    const metric=q('.attention-metric-grid-v136',host);
+    if(!metric) return;
+
+    const existingDetails=q('.attention-details-v536',host);
+    const wasOpen=!!(existingDetails && existingDetails.open) || !!q('.attention-details-v534[open]',host);
+    const blocks=qa('.attention-block-v136',host);
+    const foot=q('.attention-foot-v136',host);
+    const detailsBlocks=[];
+
+    blocks.forEach(block=>{
+      const title=(q('h3',block)?.textContent||'').trim().toLowerCase();
+      if(title.includes('insight')){
+        block.remove();
+        return;
+      }
+      detailsBlocks.push(block);
+    });
+    if(foot) detailsBlocks.push(foot);
+
+    // Se a v534/v535 já tiver criado um details antigo, reaproveita os blocos de dentro.
+    qa('.attention-details-v534 .attention-block-v136',host).forEach(block=>{
+      const title=(q('h3',block)?.textContent||'').trim().toLowerCase();
+      if(!title.includes('insight') && !detailsBlocks.includes(block)) detailsBlocks.push(block);
+    });
+    const oldFoot=q('.attention-details-v534 .attention-foot-v136',host);
+    if(oldFoot && !detailsBlocks.includes(oldFoot)) detailsBlocks.push(oldFoot);
+
+    busy=true;
+    const details=document.createElement('details');
+    details.className='attention-details-v536';
+    if(wasOpen) details.open=true;
+    details.innerHTML='<summary>Ver alertas</summary>';
+
+    const body=document.createElement('div');
+    body.className='attention-details-body-v536';
+    detailsBlocks.forEach(node=>body.appendChild(node));
+
+    host.innerHTML='';
+    host.appendChild(metric);
+    host.appendChild(details);
+    if(detailsBlocks.length){
+      host.appendChild(body);
+    }else{
+      details.style.display='none';
+    }
+    busy=false;
+  }
+
+  function apply(){
+    ensureBuild();
+    removeQuickRead();
+    normalizeAttention();
+  }
+
+  function observe(){
+    const target=q('#rankingsSection');
+    if(!target || target.dataset.v536Observer==='1') return;
+    target.dataset.v536Observer='1';
+    const obs=new MutationObserver(()=>{
+      clearTimeout(target.__rankingV536Timer);
+      target.__rankingV536Timer=setTimeout(apply,30);
+    });
+    obs.observe(target,{childList:true,subtree:true});
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__desktopV536) return;
+    const wrapped=function(){
+      const result=original.apply(this,arguments);
+      setTimeout(apply,0);
+      return result;
+    };
+    wrapped.__desktopV536=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function init(){
+    ensureBuild();
+    wrapRankingRender();
+    apply();
+    observe();
+    setTimeout(()=>{wrapRankingRender();apply();observe();},250);
+    setTimeout(()=>{wrapRankingRender();apply();observe();},1200);
   }
 
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
