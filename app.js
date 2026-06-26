@@ -8504,9 +8504,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
-    const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
+    const noteBody = tmpDiv.querySelector('.fund-quick-note-text');
+    const noteTxt = noteBody
+      ? Array.from(noteBody.querySelectorAll('p')).map(p=>String(p.textContent||'').trim()).filter(Boolean).join(' ')
+      : String(tmpDiv.textContent || '').trim();
+    const safeNoteTxt = (typeof htmlAttr === 'function') ? htmlAttr(noteTxt) : noteTxt.replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${safeNoteTxt}`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -10602,9 +10606,10 @@ async function sharePainelMercado(){
   }
   function normalizeMode(mode){return mode==='cards' ? 'cards' : 'list';}
   function getMode(){
-    // v527: mobile preservado em Cards; desktop fica somente em Tabela.
+    // v67: no celular a experiência oficial é somente Cards.
+    // Desktop continua iniciando em Tabela, com opção de alternar para Cards.
     if(isMobile()) return 'cards';
-    return 'list';
+    try{return normalizeMode(localStorage.getItem(MODE_KEY)||'list');}catch(e){return 'list';}
   }
   function saveMode(mode){
     try{localStorage.setItem(MODE_KEY,normalizeMode(mode)); localStorage.setItem(LEGACY_KEY,'cards');}catch(e){}
@@ -10676,24 +10681,17 @@ async function sharePainelMercado(){
   function applyMode(mode){
     mode=normalizeMode(mode);
     const mobile=isMobile();
-    // v527: mobile preservado em Cards; desktop fica travado em Tabela.
+    // v67: mobile não tem alternância Tabela/Cards; força Cards sempre.
     if(mobile) mode='cards';
-    else mode='list';
     saveMode(mode);
-    document.body.classList.toggle('fund-card-mode', mobile && mode==='cards');
+    document.body.classList.toggle('fund-card-mode', mode==='cards' || mobile);
     document.body.classList.toggle('fund-list-mode', false);
     syncButtons();
     renderByMode();
   }
   function ensureToggle(){
     const host=qs('#sec-fundos');
-    if(!host) return;
-    if(!isMobile()){
-      const existing=qs('#mobileCatalogViewSwitch');
-      if(existing) existing.remove();
-      return;
-    }
-    if(qs('#mobileCatalogViewSwitch')) return;
+    if(!host || qs('#mobileCatalogViewSwitch')) return;
     const table=qs('#sec-fundos .table-wrap');
     const div=document.createElement('div');
     div.className='mobile-catalog-view-switch';
@@ -23077,25 +23075,23 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 })();
 
 
-/* ELTAUM_DESKTOP_CATALOG_BASE_V527
-   Base desktop restaurada: tabela única, sem alternância de Cards e detalhe mais limpo.
+/* ELTAUM_DESKTOP_CATALOG_BASE_V525
+   Base desktop restaurada: tabela única, sem alternância de cards/executiva/detalhada.
    Mantém mobile preservado e impede scripts antigos de reativarem fund-card-mode no desktop. */
 (function(){
-  function isDesktopV527(){
+  function isDesktopV525(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
-  function enforceDesktopCatalogBaseV527(){
-    if(!isDesktopV527()) return;
-    document.documentElement.classList.add('desktop-catalog-base-v525','desktop-catalog-clean-v527');
+  function enforceDesktopCatalogBaseV525(){
+    if(!isDesktopV525()) return;
+    document.documentElement.classList.add('desktop-catalog-base-v525');
     var metaBuild=document.querySelector('meta[name="app-build"]');
-    if(metaBuild) metaBuild.content='ELTAUM_DESKTOP_CATALOG_BASE_V527';
+    if(metaBuild) metaBuild.content='ELTAUM_DESKTOP_CATALOG_BASE_V525';
     if(document.body){
       document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
     }
     var toggle=document.querySelector('#sec-fundos .desktop-table-mode-control, #sec-fundos .vista-toggle-wrap');
     if(toggle) toggle.remove();
-    var mobileSwitch=document.getElementById('mobileCatalogViewSwitch');
-    if(mobileSwitch) mobileSwitch.remove();
     var cards=document.getElementById('mobileFundCards');
     if(cards){
       cards.style.setProperty('display','none','important');
@@ -23111,20 +23107,20 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     }catch(e){}
   }
   if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded', enforceDesktopCatalogBaseV527, {once:true});
+    document.addEventListener('DOMContentLoaded', enforceDesktopCatalogBaseV525, {once:true});
   }else{
-    enforceDesktopCatalogBaseV527();
+    enforceDesktopCatalogBaseV525();
   }
-  window.addEventListener('resize', enforceDesktopCatalogBaseV527, {passive:true});
-  window.addEventListener('load', enforceDesktopCatalogBaseV527, {once:true});
-  setTimeout(enforceDesktopCatalogBaseV527, 0);
-  setTimeout(enforceDesktopCatalogBaseV527, 400);
-  setTimeout(enforceDesktopCatalogBaseV527, 1200);
+  window.addEventListener('resize', enforceDesktopCatalogBaseV525, {passive:true});
+  window.addEventListener('load', enforceDesktopCatalogBaseV525, {once:true});
+  setTimeout(enforceDesktopCatalogBaseV525, 0);
+  setTimeout(enforceDesktopCatalogBaseV525, 400);
+  setTimeout(enforceDesktopCatalogBaseV525, 1200);
   try{
     var obs=new MutationObserver(function(muts){
-      if(!isDesktopV527() || !document.body) return;
+      if(!isDesktopV525() || !document.body) return;
       if(document.body.classList.contains('fund-card-mode') || document.body.classList.contains('mobile-catalog-cards-mode')){
-        enforceDesktopCatalogBaseV527();
+        enforceDesktopCatalogBaseV525();
       }
     });
     if(document.body) obs.observe(document.body,{attributes:true,attributeFilter:['class']});
@@ -23242,4 +23238,33 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   window.addEventListener('resize',syncDesktopFiltersV526,{passive:true});
   [250,900,1800,3200].forEach(ms=>setTimeout(syncDesktopFiltersV526,ms));
   window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__={build:BUILD,sync:syncDesktopFiltersV526};
+})();
+
+
+/* ELTAUM_DESKTOP_POLISH_V528
+   Desktop only: aplica a classe de acabamento visual, mantém tabela única e remove ruídos legados. */
+(function(){
+  'use strict';
+  const FLAG='__ELTAUM_DESKTOP_POLISH_V528__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const isDesktop=()=>!window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-polish-v528','desktop-catalog-clean-v527','desktop-catalog-base-v525');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content='ELTAUM_DESKTOP_POLISH_V528';
+    if(document.body){
+      document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
+    }
+    document.querySelectorAll('#sec-fundos .mobile-catalog-view-btn[data-mobile-catalog-view="cards"], #sec-fundos .mobile-catalog-view-panel, #sec-fundos .mobile-view-toggle').forEach(el=>{
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  window.addEventListener('load',apply,{once:true});
+  window.addEventListener('resize',apply,{passive:true});
+  setTimeout(apply,300);
+  setTimeout(apply,1200);
 })();
