@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_DESKTOP_SECTION_TOGGLE_FIX_V540" name="app-build"/>
+<meta content="ELTAUM_DESKTOP_SECTION_TOGGLE_FIX_V542" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -61,7 +61,7 @@ html:not(.app-booting) .page{
 </style>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-<link href="style.css?v=desktop-section-toggle-fix-v541" rel="stylesheet"/>
+<link href="style.css?v=desktop-section-toggle-fix-v542" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -112,7 +112,7 @@ html:not(.app-booting) .page{
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=desktop-section-toggle-fix-v541"></script>
+<script defer="" src="app.js?v=desktop-section-toggle-fix-v542"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -1751,107 +1751,7 @@ html:not(.app-booting) .page{
 </div><!-- /w3c-balance-v128 -->
 </div><!-- /w3c-balance-v128 -->
 
-<script id="desktop-section-toggle-fix-v541">
-(function desktopSectionToggleFixV541(){
-  if(window.__desktopSectionToggleFixV541Installed) return;
-  window.__desktopSectionToggleFixV541Installed = true;
-
-  var SECTION_IDS = ['rankingsSection','sec-dolar'];
-  var BTN_SELECTOR = '.desktop-section-more-v539, .desktop-section-more-v540, .desktop-section-more-v541, [data-desktop-section-toggle]';
-
-  function getSectionIdFromButton(btn){
-    if(!btn) return '';
-    return btn.getAttribute('data-desktop-section-toggle') ||
-      (btn.classList.contains('ranking-more-v539') ? 'rankingsSection' :
-       btn.classList.contains('dolar-more-v539') ? 'sec-dolar' : '');
-  }
-
-  function getToggleButton(section){
-    if(!section) return null;
-    return section.querySelector(BTN_SELECTOR);
-  }
-
-  function setButtonState(section, isOpen){
-    var btn = getToggleButton(section);
-    if(!btn) return;
-    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    var label = btn.querySelector('.toggle-label');
-    var icon = btn.querySelector('.toggle-icon');
-    var closed = btn.getAttribute('data-label-closed') || 'Ver mais';
-    var open = btn.getAttribute('data-label-open') || 'Ver menos';
-    if(label) label.textContent = isOpen ? open : closed;
-    if(icon) icon.textContent = isOpen ? '−' : '›';
-  }
-
-  function refreshDolarChartWhenOpened(sectionId, isOpen){
-    if(sectionId !== 'sec-dolar' || !isOpen) return;
-    setTimeout(function(){
-      try{
-        window.dispatchEvent(new Event('resize'));
-        var active = document.querySelector('[data-dolar-range].active, [data-dolar-range][aria-selected="true"]');
-        var range = (active && active.dataset && active.dataset.dolarRange) || '24m';
-        if(typeof window.buildChartDolar === 'function') window.buildChartDolar(range);
-        if(typeof window.renderDolarChart === 'function') window.renderDolarChart(range);
-      }catch(err){}
-    }, 120);
-  }
-
-  function setSectionOpen(sectionId, isOpen){
-    var section = document.getElementById(sectionId);
-    if(!section) return false;
-    section.classList.toggle('section-expanded', !!isOpen);
-    section.classList.toggle('section-collapsed', !isOpen);
-    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    setButtonState(section, !!isOpen);
-    refreshDolarChartWhenOpened(sectionId, !!isOpen);
-    return false;
-  }
-
-  window.toggleDesktopCompactSection = function(event, sectionId){
-    if(event){
-      if(event.__desktopCompactToggleV541Handled) return false;
-      event.__desktopCompactToggleV541Handled = true;
-      if(typeof event.preventDefault === 'function') event.preventDefault();
-      if(typeof event.stopPropagation === 'function') event.stopPropagation();
-      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
-    }
-    var section = document.getElementById(sectionId);
-    if(!section) return false;
-    return setSectionOpen(sectionId, !section.classList.contains('section-expanded'));
-  };
-
-  function initSection(id){
-    var section = document.getElementById(id);
-    if(!section) return;
-    var btn = getToggleButton(section);
-    if(btn){
-      btn.setAttribute('data-desktop-section-toggle', id);
-      btn.style.pointerEvents = 'auto';
-      btn.style.cursor = 'pointer';
-    }
-    var isOpen = section.classList.contains('section-expanded');
-    section.classList.toggle('section-collapsed', !isOpen);
-    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-    setButtonState(section, isOpen);
-  }
-
-  function init(){
-    SECTION_IDS.forEach(initSection);
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
-  else init();
-
-  document.addEventListener('click', function(ev){
-    var btn = ev.target && ev.target.closest ? ev.target.closest(BTN_SELECTOR) : null;
-    if(!btn) return;
-    var id = getSectionIdFromButton(btn);
-    if(!id) return;
-    window.toggleDesktopCompactSection(ev, id);
-  }, true);
-})();
-
-</script>
+<!-- Desktop section toggle agora fica somente no app.js v542. -->
 
 </body>
 </html>

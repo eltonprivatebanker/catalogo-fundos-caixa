@@ -23651,14 +23651,19 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 
 
 /* =========================================================
-   PATCH v541 — Desktop: Ver mais sem duplo clique e sem piscar
+   PATCH v542 — Desktop: Ver mais estavel, sem recriar o grafico
    ========================================================= */
-(function desktopSectionToggleFixV541(){
-  if(window.__desktopSectionToggleFixV541Installed) return;
-  window.__desktopSectionToggleFixV541Installed = true;
+(function desktopSectionToggleFixV542(){
+  if(window.__desktopSectionToggleFixV542Installed) return;
+  window.__desktopSectionToggleFixV542Installed = true;
 
   var SECTION_IDS = ['rankingsSection','sec-dolar'];
   var BTN_SELECTOR = '.desktop-section-more-v539, .desktop-section-more-v540, .desktop-section-more-v541, [data-desktop-section-toggle]';
+  var root = document.documentElement;
+
+  root.classList.add('desktop-section-toggle-fix-v542');
+  var meta = document.querySelector('meta[name="app-build"]');
+  if(meta) meta.content = 'ELTAUM_DESKTOP_SECTION_TOGGLE_FIX_V542';
 
   function getSectionIdFromButton(btn){
     if(!btn) return '';
@@ -23675,26 +23680,48 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   function setButtonState(section, isOpen){
     var btn = getToggleButton(section);
     if(!btn) return;
+    btn.removeAttribute('onclick');
     btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     var label = btn.querySelector('.toggle-label');
     var icon = btn.querySelector('.toggle-icon');
     var closed = btn.getAttribute('data-label-closed') || 'Ver mais';
     var open = btn.getAttribute('data-label-open') || 'Ver menos';
     if(label) label.textContent = isOpen ? open : closed;
-    if(icon) icon.textContent = isOpen ? '−' : '›';
+    if(icon) icon.textContent = isOpen ? '-' : '›';
+  }
+
+  function syncDolarDetails(section, isOpen){
+    if(!section || section.id !== 'sec-dolar') return;
+    section.classList.toggle('dolar-details-collapsed-v542', !isOpen);
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+    var footer = section.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
   }
 
   function refreshDolarChartWhenOpened(sectionId, isOpen){
     if(sectionId !== 'sec-dolar' || !isOpen) return;
-    setTimeout(function(){
-      try{
-        window.dispatchEvent(new Event('resize'));
-        var active = document.querySelector('[data-dolar-range].active, [data-dolar-range][aria-selected="true"]');
-        var range = (active && active.dataset && active.dataset.dolarRange) || '24m';
-        if(typeof window.buildChartDolar === 'function') window.buildChartDolar(range);
-        if(typeof window.renderDolarChart === 'function') window.renderDolarChart(range);
-      }catch(err){}
-    }, 120);
+    var raf = window.requestAnimationFrame || function(cb){ return setTimeout(cb, 16); };
+    raf(function(){
+      raf(function(){
+        try{
+          var canvas = document.getElementById('chartDolar');
+          var chart = window.Chart && canvas ? Chart.getChart(canvas) : null;
+          if(chart && typeof chart.resize === 'function') chart.resize();
+          if(chart && typeof chart.update === 'function') chart.update('none');
+          window.dispatchEvent(new Event('resize'));
+        }catch(err){
+          console.warn('[Dolar PTAX] grafico aguardando layout:', err);
+        }
+      });
+    });
   }
 
   function setSectionOpen(sectionId, isOpen){
@@ -23704,14 +23731,15 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     section.classList.toggle('section-collapsed', !isOpen);
     section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     setButtonState(section, !!isOpen);
+    syncDolarDetails(section, !!isOpen);
     refreshDolarChartWhenOpened(sectionId, !!isOpen);
     return false;
   }
 
   window.toggleDesktopCompactSection = function(event, sectionId){
     if(event){
-      if(event.__desktopCompactToggleV541Handled) return false;
-      event.__desktopCompactToggleV541Handled = true;
+      if(event.__desktopCompactToggleV542Handled) return false;
+      event.__desktopCompactToggleV542Handled = true;
       if(typeof event.preventDefault === 'function') event.preventDefault();
       if(typeof event.stopPropagation === 'function') event.stopPropagation();
       if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
@@ -23727,6 +23755,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     var btn = getToggleButton(section);
     if(btn){
       btn.setAttribute('data-desktop-section-toggle', id);
+      btn.removeAttribute('onclick');
       btn.style.pointerEvents = 'auto';
       btn.style.cursor = 'pointer';
     }
@@ -23734,6 +23763,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     section.classList.toggle('section-collapsed', !isOpen);
     section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     setButtonState(section, isOpen);
+    syncDolarDetails(section, isOpen);
   }
 
   function init(){
@@ -23751,4 +23781,3 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     window.toggleDesktopCompactSection(ev, id);
   }, true);
 })();
-

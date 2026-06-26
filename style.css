@@ -70292,3 +70292,77 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   html.desktop-section-toggle-fix-v541 body #sec-dolar:not(.section-expanded) #dolarCurrentMonthV162,
   html.desktop-section-toggle-fix-v541 body #sec-dolar:not(.section-expanded) .dolar-compact-footer{display:none!important;}
 }
+
+
+/* =========================================================
+   PATCH v542 — Desktop: Dolar PTAX recolhido sem desmontar canvas
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-section-toggle-fix-v542 body .desktop-section-more-v539,
+  html.desktop-section-toggle-fix-v542 body .desktop-section-more-v540,
+  html.desktop-section-toggle-fix-v542 body .desktop-section-more-v541,
+  html.desktop-section-toggle-fix-v542 body [data-desktop-section-toggle]{
+    pointer-events:auto!important;
+    cursor:pointer!important;
+    position:relative!important;
+    z-index:45!important;
+    user-select:none!important;
+    touch-action:manipulation!important;
+  }
+
+  html.desktop-section-toggle-fix-v542 body #rankingsSection.section-expanded .ranking-view-tabs{display:flex!important;}
+  html.desktop-section-toggle-fix-v542 body #rankingsSection.section-expanded .ranking-exec-board,
+  html.desktop-section-toggle-fix-v542 body #rankingsSection.section-expanded .ranking-exec-secondary{display:block!important;}
+
+  html.desktop-section-toggle-fix-v542 body #rankingsSection:not(.section-expanded) .ranking-view-tabs,
+  html.desktop-section-toggle-fix-v542 body #rankingsSection:not(.section-expanded) .ranking-exec-board,
+  html.desktop-section-toggle-fix-v542 body #rankingsSection:not(.section-expanded) .ranking-exec-secondary{display:none!important;}
+
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.section-expanded #dolarChartPanel,
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.section-expanded #ptaxStatsCard,
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.section-expanded .dolar-compact-footer{
+    display:block!important;
+    max-height:none!important;
+    opacity:1!important;
+    visibility:visible!important;
+    overflow:visible!important;
+    pointer-events:auto!important;
+  }
+
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 #dolarChartPanel,
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 #ptaxStatsCard,
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 .dolar-compact-footer{
+    display:block!important;
+    max-height:0!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    overflow:hidden!important;
+    margin-top:0!important;
+    margin-bottom:0!important;
+    padding-top:0!important;
+    padding-bottom:0!important;
+    border-width:0!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 #dolarChartPanel .dolar-range-tabs,
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 #dolarChartPanel .dolar-chart-body,
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 #ptaxStatsCard .ptax-stats-grid,
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 .dolar-timeline-body{
+    max-height:0!important;
+    opacity:0!important;
+    overflow:hidden!important;
+    padding-top:0!important;
+    padding-bottom:0!important;
+  }
+
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 #chartDolar{
+    min-height:1px!important;
+    max-height:1px!important;
+    opacity:0!important;
+  }
+
+  html.desktop-section-toggle-fix-v542 body #sec-dolar.dolar-details-collapsed-v542 #dolarCurrentMonthV162{
+    display:none!important;
+  }
+}
