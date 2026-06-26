@@ -23667,3 +23667,150 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   window.addEventListener('load', boot, {once:true});
   window.__ELTAUM_DESKTOP_FILTER_BUTTONS_V497__={build:BUILD, styleNow, injectCss};
 })();
+
+/* =========================================================
+   PATCH v498 — Desktop-only: restaura modal executivo v485/v487
+   Reaplica a ficha executiva e documentos recolhidos sem afetar mobile.
+   ========================================================= */
+(function desktopFundSpotlightRestoreV498(){
+  'use strict';
+  const BUILD='ELTAUM_DESKTOP_MODAL_RESTORE_V498';
+  const html=document.documentElement;
+  html.classList.add('desktop-modal-restore-v498');
+  const meta=document.querySelector('meta[name="app-build"]');
+  if(meta) meta.content=BUILD;
+  const isDesktop=()=>window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
+  const safe=(fn, fallback='')=>{ try{return fn();}catch(_e){return fallback;} };
+  const esc=(v)=> safe(()=>htmlAttr(v), String(v ?? '').replace(/[&<>"]/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch])));
+
+  const previousBuildFacts = (typeof buildFundOperationalFacts === 'function') ? buildFundOperationalFacts : null;
+
+  function desktopSpotlightFactsV498(r){
+    const d = safe(()=>obterDadosOperacionaisFundo(r), null);
+    if(!d || !r) return previousBuildFacts ? previousBuildFacts(r,'spotlight') : '';
+
+    const conversionApp = safe(()=>detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação'],'—'), '—');
+    const conversionRed = safe(()=>detailValueV158(r,['Conversao Resgate','Conversão Resgate'],'—'), '—');
+    const paymentRed = safe(()=>detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate'],'—'), '—');
+    const capCls = safe(()=>classeStatusOperacional(d.captacao.status,'captacao'), 'unknown');
+    const adiCls = safe(()=>classeStatusOperacional(d.adiantamento.status,'adiantamento'), 'unknown');
+    const capDot = capCls==='positive'?'●':capCls==='negative'?'●':'○';
+    const adiDot = adiCls==='positive'?'●':adiCls==='negative'?'●':'○';
+    const estimateBadge = '<em class="fund-fact-estimated-v154">indicativo</em>';
+
+    const factLine = (label, value, opts={}) => {
+      const cls = opts.cls ? ` class="${esc(opts.cls)}"` : '';
+      return `<div${cls}><dt>${esc(label)}</dt><dd>${value}</dd></div>`;
+    };
+    const pill = (label, value, cls='') => `<span class="fspot-op-pill-v485 ${esc(cls)}"><b>${esc(label)}</b>${esc(value || '—')}</span>`;
+
+    return `<section class="fund-facts-v154 spotlight-v485" aria-label="Ficha executiva do fundo">
+      <div class="fund-facts-head-v154 fspot-facts-head-v485"><strong>Ficha executiva</strong><small>Resumo consultivo e operacional</small></div>
+      <div class="fspot-facts-layout-v485">
+        <article class="fspot-facts-card-v485 summary">
+          <div class="fspot-facts-card-title-v485">Resumo do fundo</div>
+          <dl class="fspot-definition-v485">
+            ${factLine('Benchmark', `${esc(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}`)}
+            ${factLine('Estratégia', `${esc(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}`)}
+            ${factLine('Tributação', esc(d.tributacao.texto))}
+            ${factLine('Adiantamento', `<span class="status-${esc(adiCls)}"><i>${esc(adiDot)}</i>${esc(d.adiantamento.texto)}</span>`)}
+            ${factLine('Captação', `<span class="status-${esc(capCls)}"><i>${esc(capDot)}</i>${esc(d.captacao.texto)}</span>`)}
+          </dl>
+        </article>
+        <article class="fspot-facts-card-v485 operation">
+          <div class="fspot-facts-card-title-v485">Operação</div>
+          <div class="fspot-operation-liq-v485" aria-label="Prazos de aplicação e resgate">
+            ${pill('Aplicação', conversionApp, 'application')}
+            ${pill('Resgate', conversionRed, 'redemption')}
+            ${pill('Crédito', paymentRed, 'payment')}
+          </div>
+          <dl class="fspot-definition-v485 operation-list">
+            ${factLine('Horário aplicação', esc(d.horarios.aplicacao))}
+            ${factLine('Horário resgate', esc(d.horarios.resgate))}
+          </dl>
+          <p class="fspot-operation-note-v485">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
+        </article>
+      </div>
+    </section>`;
+  }
+
+  if(previousBuildFacts){
+    try{
+      buildFundOperationalFacts = function buildFundOperationalFactsV498(r, variant='detail'){
+        if(isDesktop() && String(variant || '').includes('spotlight')) return desktopSpotlightFactsV498(r);
+        return previousBuildFacts(r, variant);
+      };
+    }catch(_e){}
+  }
+
+  function setupDocsAutoScroll(details){
+    if(!details || details._docsAutoScrollV498) return;
+    details._docsAutoScrollV498 = true;
+    details.addEventListener('toggle', ()=>{
+      if(!details.open) return;
+      const run=()=>{
+        const panel = details.closest('.fspot-panel') || document.querySelector('#fundSpotlightOverlay .fspot-panel');
+        const menu = details.querySelector('.fspot-docs-menu-v485');
+        if(!panel || !menu) return;
+        details.classList.add('docs-open-attention-v487');
+        window.setTimeout(()=>details.classList.remove('docs-open-attention-v487'), 1100);
+        const panelRect = panel.getBoundingClientRect();
+        const menuRect = menu.getBoundingClientRect();
+        const safeBottom = panelRect.bottom - 18;
+        const overflowBottom = Math.max(0, menuRect.bottom - safeBottom);
+        panel.scrollBy({top:Math.max(58, overflowBottom + 22), behavior:'smooth'});
+      };
+      requestAnimationFrame(()=>window.setTimeout(run,80));
+    });
+  }
+
+  function restoreDocs(){
+    if(!isDesktop()) return;
+    const docsEl = document.getElementById('fspotDocs');
+    if(!docsEl || docsEl.querySelector('.fspot-docs-details-v485')){
+      const details = docsEl && docsEl.querySelector('.fspot-docs-details-v485');
+      setupDocsAutoScroll(details);
+      return;
+    }
+    const links = [...docsEl.querySelectorAll('a.fspot-doc-btn, a')].filter(a=>a.href && a.textContent.trim());
+    if(!links.length) return;
+    const unique = [];
+    const seen = new Set();
+    links.forEach(a=>{
+      const key = a.href + '|' + a.textContent.trim();
+      if(seen.has(key)) return;
+      seen.add(key);
+      unique.push(`<a class="fspot-doc-btn" href="${esc(a.href)}" target="_blank" rel="noopener">${esc(a.textContent.trim())}</a>`);
+    });
+    docsEl.innerHTML = `<details class="fspot-docs-details-v485"><summary>Documentos <span>${unique.length}</span></summary><div class="fspot-docs-menu-v485">${unique.join('')}</div></details>`;
+    setupDocsAutoScroll(docsEl.querySelector('.fspot-docs-details-v485'));
+  }
+
+  function normalizeNote(){
+    if(!isDesktop()) return;
+    const note = document.getElementById('fspotNote');
+    if(!note || !note.textContent.trim() || note.querySelector('p')) return;
+    const title = note.querySelector('.fspot-note-title');
+    if(!title) return;
+    const text = [...note.childNodes].filter(n=>n!==title).map(n=>n.textContent || '').join('').trim();
+    if(text) note.innerHTML = `${title.outerHTML}<p>${esc(text)}</p>`;
+  }
+
+  let raf=0;
+  function schedule(){
+    if(raf) return;
+    raf=requestAnimationFrame(()=>{raf=0; restoreDocs(); normalizeNote();});
+  }
+  function boot(){
+    const ov=document.getElementById('fundSpotlightOverlay');
+    if(ov && window.MutationObserver && !ov.dataset.modalRestoreV498){
+      ov.dataset.modalRestoreV498='1';
+      new MutationObserver(schedule).observe(ov,{childList:true,subtree:true,attributes:true,attributeFilter:['class','open']});
+    }
+    schedule();
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  window.__ELTAUM_DESKTOP_MODAL_RESTORE_V498__={build:BUILD, restoreDocs, desktopSpotlightFactsV498};
+})();
