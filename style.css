@@ -68072,3 +68072,366 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   html.desktop-market-hierarchy-v523 body #sec-mercado .rates-reference-v167 .cdi-kpis-v271{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
   html.desktop-market-hierarchy-v523 body #sec-mercado .rates-reference-v167 .copom-exec-summary-v270{grid-template-columns:1fr!important;}
 }
+
+
+/* ELTAUM_DESKTOP_FILTER_CATEGORY_V524
+   Correção final desktop: a linha de categorias não usa mais fieldset/legend.
+   O fieldset fazia o grid jogar os botões em uma coluna estreita, empilhando os filtros. */
+@media (min-width:769px){
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell{
+    overflow:visible!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69.catalog-category-fieldset-v217{
+    display:grid!important;
+    grid-template-columns:140px minmax(0,1fr)!important;
+    grid-template-rows:auto!important;
+    align-items:center!important;
+    column-gap:14px!important;
+    row-gap:0!important;
+    min-height:56px!important;
+    height:auto!important;
+    max-height:none!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+    background:transparent!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .catalog-filter-legend-v217{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    grid-column:1!important;
+    width:140px!important;
+    min-width:140px!important;
+    max-width:140px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    float:none!important;
+    position:static!important;
+    color:#9fb8ea!important;
+    font-size:.60rem!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:.15em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .category-grid-head-v69{
+    display:none!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .category-grid-v69{
+    grid-column:2!important;
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    align-content:center!important;
+    gap:8px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:30px!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .category-grid-v69 > button,
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .filter-preset-chip,
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .shortcut-preset{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:38px!important;
+    max-width:none!important;
+    height:30px!important;
+    min-height:30px!important;
+    max-height:30px!important;
+    margin:0!important;
+    padding:0 12px!important;
+    border-radius:8px!important;
+    white-space:nowrap!important;
+    line-height:1!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488{
+    grid-template-columns:140px minmax(0,1fr)!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    display:grid!important;
+    grid-template-columns:140px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:14px!important;
+    min-height:54px!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+
+  html.desktop-filter-buttons-v524 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+    display:grid!important;
+    grid-template-columns:140px 210px!important;
+    align-items:center!important;
+    gap:14px!important;
+    margin:0!important;
+    padding:0!important;
+    grid-column:1 / -1!important;
+  }
+}
+
+
+/* ELTAUM_DESKTOP_CATALOG_BASE_V525
+   Correção de regressão: desktop volta para a base combinada.
+   - Sem controle Visualização/Card no desktop
+   - Tabela sempre visível no desktop
+   - CNPJ volta a aparecer na linha do fundo
+   - Categorias em linha, sem empilhamento lateral
+*/
+@media (min-width:769px){
+  html.desktop-catalog-base-v525 body #sec-fundos .desktop-table-mode-control,
+  html.desktop-catalog-base-v525 body #sec-fundos .vista-toggle-wrap,
+  html.desktop-catalog-base-v525 body #sec-fundos .mobile-catalog-view-panel,
+  html.desktop-catalog-base-v525 body #sec-fundos .mobile-view-toggle{
+    display:none!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-catalog-base-v525 body.fund-card-mode #sec-fundos .table-wrap,
+  html.desktop-catalog-base-v525 body #sec-fundos .table-wrap{
+    display:block!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow-x:auto!important;
+  }
+  html.desktop-catalog-base-v525 body.fund-card-mode #sec-fundos #mainTable,
+  html.desktop-catalog-base-v525 body #sec-fundos #mainTable{
+    display:table!important;
+    width:100%!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos #mobileFundCards,
+  html.desktop-catalog-base-v525 body.fund-card-mode #sec-fundos #mobileFundCards,
+  html.desktop-catalog-base-v525 body #sec-fundos .mobile-fund-cards{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-catalog-base-v525 body #sec-fundos .fund-filter-shell-v217{
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .controls-bar.fund-primary-toolbar-v217{
+    display:grid!important;
+    grid-template-columns:minmax(420px,1fr) auto!important;
+    align-items:center!important;
+    gap:12px!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .fund-view-controls-v217{
+    display:grid!important;
+    grid-template-columns:minmax(220px,280px) 150px!important;
+    align-items:center!important;
+    justify-content:end!important;
+    gap:8px!important;
+    width:auto!important;
+    max-width:none!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .fund-view-controls-v217 .desktop-cdi-sort-control{
+    min-width:220px!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .fund-view-controls-v217 .exhibition-control{
+    min-width:150px!important;
+  }
+
+  html.desktop-catalog-base-v525 body #sec-fundos .desktop-audience-filter-v488{
+    display:flex!important;
+    align-items:center!important;
+    gap:14px!important;
+    width:100%!important;
+    min-height:54px!important;
+    padding:10px 0!important;
+    margin:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .desktop-filter-row-label-v488,
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-filter-legend-v217,
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-risk-filter-v198 > label span{
+    flex:0 0 140px!important;
+    width:140px!important;
+    min-width:140px!important;
+    max-width:140px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    margin:0!important;
+    padding:0!important;
+    float:none!important;
+    position:static!important;
+    color:#9fb8ea!important;
+    font-size:.60rem!important;
+    line-height:1.1!important;
+    font-weight:900!important;
+    letter-spacing:.15em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .desktop-audience-chips-v488{
+    flex:1 1 auto!important;
+    display:flex!important;
+    flex-flow:row wrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts-category-grid-v69,
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts-category-grid-v69.catalog-category-fieldset-v217,
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts{
+    display:flex!important;
+    flex-direction:row!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:14px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:54px!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+    background:transparent!important;
+    overflow:visible!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts-category-grid-v69 .category-grid-head-v69,
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts-category-grid-v69 .catalog-shortcuts-label,
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts-category-grid-v69 .category-grid-status-v69{
+    display:none!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts-category-grid-v69 .category-grid-v69{
+    flex:1 1 auto!important;
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    align-content:center!important;
+    gap:8px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:30px!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .desktop-audience-chip-v488,
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-shortcuts-category-grid-v69 .category-grid-v69 > button,
+  html.desktop-catalog-base-v525 body #sec-fundos .filter-preset-chip,
+  html.desktop-catalog-base-v525 body #sec-fundos .shortcut-preset{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 auto!important;
+    width:auto!important;
+    min-width:38px!important;
+    max-width:none!important;
+    height:30px!important;
+    min-height:30px!important;
+    max-height:30px!important;
+    margin:0!important;
+    padding:0 12px!important;
+    border-radius:8px!important;
+    white-space:nowrap!important;
+    line-height:1!important;
+    transform:none!important;
+  }
+
+  html.desktop-catalog-base-v525 body #sec-fundos .fund-secondary-controls-v217{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:14px!important;
+    width:100%!important;
+    min-height:54px!important;
+    margin:0!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-bottom:1px solid rgba(148,163,184,.12)!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-risk-filter-v198{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:14px!important;
+    margin:0!important;
+    padding:0!important;
+    width:auto!important;
+    min-width:0!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .catalog-risk-select-wrap-v198,
+  html.desktop-catalog-base-v525 body #sec-fundos #catalogRiskSelectV198{
+    width:210px!important;
+    min-width:210px!important;
+    max-width:210px!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .compact-toggle-wrap{
+    display:none!important;
+  }
+
+  html.desktop-catalog-base-v525 body #sec-fundos td.col-fundo .fundo-cell-meta{
+    display:flex!important;
+    align-items:center!important;
+    flex-wrap:wrap!important;
+    gap:5px!important;
+    margin-top:4px!important;
+  }
+  html.desktop-catalog-base-v525 body #sec-fundos .fundo-cnpj-sub{
+    display:inline-flex!important;
+    align-items:center!important;
+    height:18px!important;
+    padding:0 6px!important;
+    border-radius:6px!important;
+    border:1px solid rgba(148,163,184,.16)!important;
+    background:rgba(148,163,184,.06)!important;
+    color:#9da8c2!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.55rem!important;
+    font-weight:700!important;
+    letter-spacing:.01em!important;
+    white-space:nowrap!important;
+  }
+}

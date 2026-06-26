@@ -4851,7 +4851,11 @@ function buildRowHTML(r,idx){
       // PL compacto
       const plVal=toNum(r['PL (milhoes R$)']);
       const plStr=plVal?'PL R$ '+( plVal>=1000?(plVal/1000).toFixed(1)+'bi' : plVal.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi' ):'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
+      const cnpjBruto=String(r['CNPJ']||'').trim();
+      const cnpjLimpo=cnpjBruto.replace(/\D/g,'').slice(0,14);
+      const cnpjFormatado=cnpjLimpo ? formatarCnpjMeta(cnpjLimpo) : cnpjBruto;
+      const cnpjStr=cnpjFormatado ? `<span class="fundo-cnpj-sub">CNPJ ${htmlAttr(cnpjFormatado)}</span>` : '';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjStr}${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
@@ -23023,4 +23027,73 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',schedule,{once:true}); else schedule();
   window.addEventListener('load',()=>{schedule();setTimeout(schedule,250);setTimeout(schedule,900);},{once:true});
   window.addEventListener('resize',schedule,{passive:true});
+})();
+
+
+/* ELTAUM_DESKTOP_FILTER_CATEGORY_V524 — safety class only */
+(function(){
+  const FLAG='__ELTAUM_DESKTOP_FILTER_CATEGORY_V524__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  function apply(){
+    if(window.matchMedia && window.matchMedia('(min-width: 769px)').matches){
+      document.documentElement.classList.add('desktop-filter-buttons-v524');
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  window.addEventListener('resize',apply,{passive:true});
+})();
+
+
+/* ELTAUM_DESKTOP_CATALOG_BASE_V525
+   Base desktop restaurada: tabela única, sem alternância de cards/executiva/detalhada.
+   Mantém mobile preservado e impede scripts antigos de reativarem fund-card-mode no desktop. */
+(function(){
+  function isDesktopV525(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function enforceDesktopCatalogBaseV525(){
+    if(!isDesktopV525()) return;
+    document.documentElement.classList.add('desktop-catalog-base-v525');
+    var metaBuild=document.querySelector('meta[name="app-build"]');
+    if(metaBuild) metaBuild.content='ELTAUM_DESKTOP_CATALOG_BASE_V525';
+    if(document.body){
+      document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
+    }
+    var toggle=document.querySelector('#sec-fundos .desktop-table-mode-control, #sec-fundos .vista-toggle-wrap');
+    if(toggle) toggle.remove();
+    var cards=document.getElementById('mobileFundCards');
+    if(cards){
+      cards.style.setProperty('display','none','important');
+      cards.setAttribute('aria-hidden','true');
+    }
+    var table=document.querySelector('#sec-fundos .table-wrap');
+    if(table){
+      table.style.removeProperty('display');
+      table.removeAttribute('aria-hidden');
+    }
+    try{
+      if(typeof vistaAtual !== 'undefined') vistaAtual='reuniao';
+    }catch(e){}
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', enforceDesktopCatalogBaseV525, {once:true});
+  }else{
+    enforceDesktopCatalogBaseV525();
+  }
+  window.addEventListener('resize', enforceDesktopCatalogBaseV525, {passive:true});
+  window.addEventListener('load', enforceDesktopCatalogBaseV525, {once:true});
+  setTimeout(enforceDesktopCatalogBaseV525, 0);
+  setTimeout(enforceDesktopCatalogBaseV525, 400);
+  setTimeout(enforceDesktopCatalogBaseV525, 1200);
+  try{
+    var obs=new MutationObserver(function(muts){
+      if(!isDesktopV525() || !document.body) return;
+      if(document.body.classList.contains('fund-card-mode') || document.body.classList.contains('mobile-catalog-cards-mode')){
+        enforceDesktopCatalogBaseV525();
+      }
+    });
+    if(document.body) obs.observe(document.body,{attributes:true,attributeFilter:['class']});
+    else document.addEventListener('DOMContentLoaded',function(){ obs.observe(document.body,{attributes:true,attributeFilter:['class']}); },{once:true});
+  }catch(e){}
 })();
