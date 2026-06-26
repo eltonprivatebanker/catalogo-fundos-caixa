@@ -70366,3 +70366,24 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     display:none!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v543 — Desktop: remove seletor de visualizacao mobile
+   ========================================================= */
+@media (min-width:769px){
+  html body #sec-fundos #mobileCatalogViewSwitch,
+  html body #sec-fundos .mobile-catalog-view-switch,
+  html body #mobileCatalogViewSwitch.mobile-catalog-view-switch{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+}

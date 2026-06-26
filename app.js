@@ -23289,7 +23289,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     if(document.body){
       document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
     }
-    document.querySelectorAll('#sec-fundos .mobile-catalog-view-btn[data-mobile-catalog-view="cards"], #sec-fundos .mobile-catalog-view-panel, #sec-fundos .mobile-view-toggle').forEach(el=>{
+    document.querySelectorAll('#mobileCatalogViewSwitch, #sec-fundos .mobile-catalog-view-switch, #sec-fundos .mobile-catalog-view-btn[data-mobile-catalog-view="cards"], #sec-fundos .mobile-catalog-view-panel, #sec-fundos .mobile-view-toggle').forEach(el=>{
       el.setAttribute('aria-hidden','true');
       el.style.setProperty('display','none','important');
     });
@@ -23780,4 +23780,43 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     if(!id) return;
     window.toggleDesktopCompactSection(ev, id);
   }, true);
+})();
+
+
+/* =========================================================
+   PATCH v543 — Desktop: oculta seletor de visualizacao mobile
+   ========================================================= */
+(function desktopHideMobileViewSwitchV543(){
+  if(window.__desktopHideMobileViewSwitchV543Installed) return;
+  window.__desktopHideMobileViewSwitchV543Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-hide-mobile-view-switch-v543');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_HIDE_MOBILE_VIEW_SWITCH_V543';
+    document.querySelectorAll('#mobileCatalogViewSwitch, #sec-fundos .mobile-catalog-view-switch').forEach(function(el){
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('visibility','hidden','important');
+      el.style.setProperty('height','0','important');
+      el.style.setProperty('min-height','0','important');
+      el.style.setProperty('max-height','0','important');
+      el.style.setProperty('margin','0','important');
+      el.style.setProperty('padding','0','important');
+      el.style.setProperty('border','0','important');
+      el.style.setProperty('overflow','hidden','important');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('resize', apply, {passive:true});
+  setTimeout(apply, 300);
+  setTimeout(apply, 1200);
 })();
