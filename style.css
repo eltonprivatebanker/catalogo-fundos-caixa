@@ -67978,3 +67978,20 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     display:table-row-group!important;
   }
 }
+
+
+/* =========================================================
+   v512 desktop-only: tabela com documento principal apenas
+   - remove o botão +N da coluna Documentos no desktop
+   - demais documentos seguem no painel/detalhe do fundo
+   ========================================================= */
+@media (min-width: 769px){
+  html.desktop-table-docs-primary-v512 body:not(.fund-card-mode) #mainTable .doc-mini-more-v510{
+    display:none !important;
+  }
+
+  html.desktop-table-docs-primary-v512 body:not(.fund-card-mode) #mainTable .docs-mini-wrap-v512{
+    justify-content:flex-start !important;
+    gap:6px !important;
+  }
+}

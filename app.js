@@ -3743,11 +3743,10 @@ function buildDocsCompactos(row){
     <a class="doc-mini-primary doc-mini-primary-v510" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(principalTitle)}">${htmlAttr(principalLabel)}</a>
   ` : '';
 
-  const more = secundarios.length
-    ? `<button type="button" class="doc-mini-more-v510" data-urls="${encodeURIComponent(JSON.stringify(secundarios.map(d=>d.url)))}" onclick="abrirDocsDaLinha(event,this)" title="Abrir mais ${secundarios.length} documento${secundarios.length === 1 ? '' : 's'}">+${secundarios.length}</button>`
-    : '';
-
-  return `<div class="docs-mini-wrap docs-mini-wrap-v510">${primary}${more}</div>`;
+  // v512 desktop-only: a tabela executiva mostra apenas o documento principal
+  // para reduzir ruído visual. Os demais documentos continuam disponíveis no
+  // detalhe do fundo / painel oficial de documentos.
+  return `<div class="docs-mini-wrap docs-mini-wrap-v510 docs-mini-wrap-v512">${primary}</div>`;
 }
 
 function buildDetailQuickActions(row, urlFund){
