@@ -67328,3 +67328,182 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     cursor:pointer!important;
   }
 }
+
+
+/* PATCH v493 — Desktop: botões do funil mais retangulares/premium
+   Escopo apenas desktop. Não altera a versão mobile. */
+@media (min-width: 821px){
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v493 body #sec-fundos .filter-preset-chip{
+    height:34px!important;
+    min-height:34px!important;
+    padding:0 12px!important;
+    border-radius:11px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:linear-gradient(180deg,rgba(15,23,42,.66),rgba(7,10,20,.72))!important;
+    color:#e7edf9!important;
+    font-size:.70rem!important;
+    font-weight:850!important;
+    letter-spacing:-.01em!important;
+    line-height:1!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    transition:border-color .16s ease,background .16s ease,color .16s ease,transform .16s ease,box-shadow .16s ease!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-audience-chip-v488:hover:not(.is-disabled-v489),
+  html.desktop-filter-buttons-v493 body #sec-fundos .filter-preset-chip:hover:not(.is-disabled-v489){
+    transform:translateY(-1px)!important;
+    border-color:rgba(200,151,58,.38)!important;
+    background:linear-gradient(180deg,rgba(22,30,50,.84),rgba(10,15,27,.86))!important;
+    box-shadow:0 7px 18px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-audience-chip-v488.active,
+  html.desktop-filter-buttons-v493 body #sec-fundos .filter-preset-chip.active{
+    border-color:rgba(232,187,106,.72)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.24),rgba(200,151,58,.105))!important;
+    color:#ffd978!important;
+    box-shadow:0 0 0 1px rgba(200,151,58,.08), 0 8px 22px rgba(200,151,58,.10), inset 0 1px 0 rgba(255,255,255,.055)!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-audience-chip-v488.active::before,
+  html.desktop-filter-buttons-v493 body #sec-fundos .filter-preset-chip.active::before{
+    content:""!important;
+    width:3px!important;
+    height:16px!important;
+    border-radius:999px!important;
+    background:#e8bb6a!important;
+    box-shadow:0 0 10px rgba(232,187,106,.35)!important;
+    margin-right:2px!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-audience-chip-v488.is-disabled-v489,
+  html.desktop-filter-buttons-v493 body #sec-fundos .filter-preset-chip.is-disabled-v489{
+    opacity:.36!important;
+    filter:none!important;
+    color:#8792aa!important;
+    border-color:rgba(148,163,184,.10)!important;
+    background:rgba(7,10,20,.38)!important;
+    box-shadow:none!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .filter-chip-count-v489{
+    height:18px!important;
+    min-width:24px!important;
+    margin-left:6px!important;
+    padding:0 7px!important;
+    border-radius:7px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:rgba(37,99,235,.12)!important;
+    color:#bcd2ff!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.56rem!important;
+    font-weight:900!important;
+    line-height:18px!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-audience-chip-v488.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v493 body #sec-fundos .filter-preset-chip.active .filter-chip-count-v489{
+    border-color:rgba(232,187,106,.30)!important;
+    background:rgba(232,187,106,.16)!important;
+    color:#ffe0a2!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-audience-chips-v488,
+  html.desktop-filter-buttons-v493 body #sec-fundos .category-grid-v69{
+    gap:9px!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .desktop-filter-row-label-v488,
+  html.desktop-filter-buttons-v493 body #sec-fundos .catalog-shortcuts-label,
+  html.desktop-filter-buttons-v493 body #sec-fundos .catalog-risk-filter-v198 > label span,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-label,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-label-v491,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-label-v492{
+    color:#9fb3df!important;
+    font-size:.61rem!important;
+    font-weight:900!important;
+    letter-spacing:.13em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #sec-fundos .catalog-risk-select-wrap-v198{
+    height:36px!important;
+    border-radius:11px!important;
+    border-color:rgba(148,163,184,.20)!important;
+    background:linear-gradient(180deg,rgba(15,23,42,.66),rgba(7,10,20,.72))!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v492{
+    min-height:34px!important;
+    padding:7px 12px!important;
+    border-radius:11px!important;
+    border:1px solid rgba(232,187,106,.62)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.20),rgba(200,151,58,.09))!important;
+    color:#ffd978!important;
+    gap:8px!important;
+    font-weight:900!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.05)!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill small,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v87 small,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v491 small,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v492 small{
+    color:#aebbe0!important;
+    font-size:.55rem!important;
+    font-weight:900!important;
+    letter-spacing:.12em!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill span,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v87 span,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v491 span,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v492 span{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:18px!important;
+    height:18px!important;
+    margin-left:2px!important;
+    border-radius:6px!important;
+    color:#ffe0a2!important;
+    background:rgba(7,10,20,.32)!important;
+    font-size:.75rem!important;
+    line-height:1!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill:hover,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v87:hover,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v491:hover,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-pill-v492:hover{
+    transform:translateY(-1px)!important;
+    border-color:rgba(232,187,106,.86)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.26),rgba(200,151,58,.12))!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear-v489,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear-v491,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear-v492{
+    min-height:34px!important;
+    padding:7px 12px!important;
+    border-radius:11px!important;
+    border:1px solid rgba(148,163,184,.20)!important;
+    background:linear-gradient(180deg,rgba(15,23,42,.66),rgba(7,10,20,.72))!important;
+    color:#cbd5e1!important;
+    font-weight:850!important;
+  }
+
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear:hover,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear-v489:hover,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear-v491:hover,
+  html.desktop-filter-buttons-v493 body #activeFilterStrip .active-filter-clear-v492:hover{
+    border-color:rgba(240,85,101,.46)!important;
+    background:rgba(240,85,101,.08)!important;
+    color:#ff9aa5!important;
+  }
+}
