@@ -67896,3 +67896,179 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     color:#ff8a96!important;
   }
 }
+
+/* =========================================================
+   PATCH v496 — Desktop funnel buttons: retangular final
+   Escopo desktop-only. Corrige classes reais do funil e
+   chips ativos que ainda herdavam radius 999px.
+   ========================================================= */
+@media (min-width: 769px){
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip,
+  html.desktop-filter-buttons-v496 body .shortcut-preset,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button{
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    padding:0 12px!important;
+    border-radius:6px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:rgba(8,12,24,.72)!important;
+    color:#e1e8f7!important;
+    font-size:.72rem!important;
+    font-weight:800!important;
+    line-height:1!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    transition:border-color .16s ease,background .16s ease,box-shadow .16s ease,transform .16s ease,color .16s ease!important;
+  }
+
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v496 body .filter-preset-chip:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v496 body .shortcut-preset:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button:hover:not(.is-disabled-v489):not(:disabled){
+    transform:translateY(-1px)!important;
+    border-color:rgba(232,187,106,.34)!important;
+    background:linear-gradient(180deg,rgba(18,26,45,.92),rgba(9,13,25,.90))!important;
+    color:#f6f8ff!important;
+    box-shadow:0 8px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488.active,
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488[aria-pressed="true"],
+  html.desktop-filter-buttons-v496 body .filter-preset-chip.active,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip[aria-pressed="true"],
+  html.desktop-filter-buttons-v496 body .shortcut-preset.active,
+  html.desktop-filter-buttons-v496 body .shortcut-preset[aria-pressed="true"],
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button.active,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.52)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.14),rgba(200,151,58,.055))!important;
+    color:#f4d58a!important;
+    box-shadow:0 0 0 1px rgba(200,151,58,.035),0 8px 18px rgba(200,151,58,.06),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488.active::before,
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488[aria-pressed="true"]::before,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip.active::before,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip[aria-pressed="true"]::before,
+  html.desktop-filter-buttons-v496 body .shortcut-preset.active::before,
+  html.desktop-filter-buttons-v496 body .shortcut-preset[aria-pressed="true"]::before,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button.active::before,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button[aria-pressed="true"]::before{
+    content:""!important;
+    display:inline-block!important;
+    flex:0 0 auto!important;
+    width:3px!important;
+    height:15px!important;
+    margin-right:3px!important;
+    border-radius:2px!important;
+    background:#e8bb6a!important;
+    box-shadow:0 0 8px rgba(232,187,106,.25)!important;
+  }
+
+  html.desktop-filter-buttons-v496 body .filter-chip-count-v489,
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488 > span,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip > span,
+  html.desktop-filter-buttons-v496 body .shortcut-preset > span,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button > span{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:21px!important;
+    height:17px!important;
+    padding:0 6px!important;
+    border-radius:4px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    background:rgba(255,255,255,.05)!important;
+    color:#dfe7f8!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.60rem!important;
+    font-weight:900!important;
+    line-height:1!important;
+  }
+
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488[aria-pressed="true"] .filter-chip-count-v489,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip[aria-pressed="true"] .filter-chip-count-v489,
+  html.desktop-filter-buttons-v496 body .shortcut-preset.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v496 body .shortcut-preset[aria-pressed="true"] .filter-chip-count-v489,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button.active span,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button[aria-pressed="true"] span{
+    border-color:rgba(232,187,106,.20)!important;
+    background:rgba(232,187,106,.12)!important;
+    color:#f4d58a!important;
+  }
+
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488.is-disabled-v489,
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488[aria-disabled="true"],
+  html.desktop-filter-buttons-v496 body .desktop-audience-chip-v488:disabled,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip.is-disabled-v489,
+  html.desktop-filter-buttons-v496 body .filter-preset-chip[aria-disabled="true"],
+  html.desktop-filter-buttons-v496 body .filter-preset-chip:disabled,
+  html.desktop-filter-buttons-v496 body .shortcut-preset.is-disabled-v489,
+  html.desktop-filter-buttons-v496 body .shortcut-preset[aria-disabled="true"],
+  html.desktop-filter-buttons-v496 body .shortcut-preset:disabled,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button.is-disabled-v489,
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button[aria-disabled="true"],
+  html.desktop-filter-buttons-v496 body .category-grid-v69 > button:disabled{
+    opacity:.34!important;
+    filter:grayscale(.30)!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v492{
+    min-height:34px!important;
+    height:34px!important;
+    max-height:34px!important;
+    padding:0 11px!important;
+    border-radius:6px!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    border:1px solid rgba(232,187,106,.48)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.13),rgba(200,151,58,.055))!important;
+    color:#f4d58a!important;
+    gap:8px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+  }
+
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill small,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v87 small,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v491 small,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v492 small{
+    color:#b7c4e2!important;
+    font-size:.58rem!important;
+    letter-spacing:.11em!important;
+  }
+
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill span,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v87 span,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v491 span,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v492 span{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:18px!important;
+    height:18px!important;
+    border-radius:4px!important;
+    margin-left:2px!important;
+    color:#f2c86c!important;
+    background:rgba(0,0,0,.20)!important;
+  }
+
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill:hover span,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v87:hover span,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v491:hover span,
+  html.desktop-filter-buttons-v496 body #activeFilterStrip .active-filter-pill-v492:hover span{
+    background:rgba(240,85,101,.16)!important;
+    color:#ff8a96!important;
+  }
+}
