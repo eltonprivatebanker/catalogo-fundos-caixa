@@ -68797,3 +68797,72 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     }
   }
 }
+
+/* ============================================================
+   ELTAUM_DESKTOP_FUND_DETAIL_TECHNICAL_v502
+   Ajustes desktop-only:
+   1) remove contador redundante dentro da barra de busca;
+   2) evita quebra do CNPJ em Dados técnicos.
+   Mobile preservado por escopo min-width.
+============================================================ */
+@media (min-width: 769px){
+  /* O total já aparece no título da seção e é atualizado pelo funil. */
+  html.desktop-fund-detail-technical-v502 #sec-fundos .fund-search-main #desktopFilterResultSummary,
+  html.desktop-fund-detail-technical-v502 #sec-fundos .desktop-filter-result-summary-v221{
+    display:none!important;
+    visibility:hidden!important;
+    opacity:0!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-fund-detail-technical-v502 #sec-fundos .fund-search-main #searchInput{
+    padding-right:18px!important;
+  }
+
+  /* Dados técnicos: dá mais largura ao CNPJ e impede quebra do número. */
+  html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-technical-grid-v501{
+    grid-template-columns:minmax(0,1.18fr) minmax(0,.92fr)!important;
+  }
+
+  html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-definition-list-v501{
+    grid-template-columns:minmax(116px,.72fr) minmax(130px,.82fr) minmax(285px,1.62fr) minmax(92px,.54fr)!important;
+  }
+
+  html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-definition-list-v501 > div:nth-child(3){
+    min-width:285px!important;
+  }
+
+  html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-copyable-v225{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:8px!important;
+    min-width:0!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-copy-text-v225{
+    flex:0 0 auto!important;
+    min-width:max-content!important;
+    white-space:nowrap!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    font-variant-numeric:tabular-nums!important;
+  }
+
+  html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-copy-btn-v225{
+    flex:0 0 auto!important;
+    white-space:nowrap!important;
+  }
+
+  @media (max-width: 1320px){
+    html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-technical-grid-v501{
+      grid-template-columns:1fr!important;
+    }
+    html.desktop-fund-detail-technical-v502 #sec-fundos .detail-technical-v501 .detail-definition-list-v501{
+      grid-template-columns:minmax(120px,.72fr) minmax(130px,.82fr) minmax(285px,1.62fr) minmax(92px,.54fr)!important;
+    }
+  }
+}
