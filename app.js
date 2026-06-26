@@ -1,3 +1,4 @@
+// ELTAUM_DESKTOP_FILTER_AUDIENCE_v488
 // ELTAUM_REMOVE_12M_XAXIS_v342
 // ELTAUM_INFLATION_SUMMARY_COMPACT_v341
 // ELTAUM_CHARTS_LOOP_FIX_v340
@@ -2690,6 +2691,69 @@ function rankPeriodTabs(target, active, periods){
   return `<div class="rank-period-tabs" role="tablist" aria-label="Período do ranking">${periods.map(p=>`<button type="button" class="rank-period-tab ${active===p?'active':''}" data-rank-target="${target}" data-rank-period="${p}">${p==='dia'?'Dia':p==='mes'?'Mês':p==='ano'?'Ano':'12M'}</button>`).join('')}</div>`;
 }
 
+
+/* v488 — filtro desktop por público-alvo (PF/PJ/Private/Qualificado/Institucional) */
+function normAudienceFilterV488(v){
+  return String(v ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().replace(/[^A-Z0-9]+/g,' ').trim();
+}
+function collectAudienceTextV488(row){
+  const parts=[];
+  ['Perfis','Perfil','Público Alvo','Publico Alvo','Segmentos','SEGMENTOS','lista_publico_alvo','no_classificacao_investidor'].forEach(k=>{
+    const v=row?.[k];
+    if(v!==null && v!==undefined && String(v).trim()) parts.push(String(v));
+  });
+  try{
+    const meta=row?.__fundosMeta;
+    if(meta){
+      if(Array.isArray(meta.lista_publico_alvo)) parts.push(meta.lista_publico_alvo.join(' '));
+      if(meta.no_classificacao_investidor) parts.push(String(meta.no_classificacao_investidor));
+    }
+  }catch(e){}
+  return normAudienceFilterV488(parts.join(' | '));
+}
+function rowMatchesAudienceV488(row, audience){
+  const target=normAudienceFilterV488(audience);
+  if(!target) return true;
+  const text=collectAudienceTextV488(row);
+  if(!text) return false;
+  if(target==='PF') return /(^|\s)PF(\s|$)/.test(text) || text.includes('PESSOA FISICA');
+  if(target==='PJ') return /(^|\s)PJ(\s|$)/.test(text) || text.includes('PESSOA JURIDICA');
+  if(target==='PRIVATE') return text.includes('PRIVATE');
+  if(target==='QUALIFICADO') return text.includes('QUALIFICAD');
+  if(target==='INSTITUCIONAL') return text.includes('INSTITUCIONAL');
+  return text.includes(target);
+}
+function labelAudienceV488(value){
+  const v=String(value||'').trim();
+  const map={PF:'PF',PJ:'PJ',Private:'Private',Qualificado:'Qualificado',Institucional:'Institucional'};
+  return map[v] || v;
+}
+function syncAudienceFilterV488(){
+  let active='';
+  try{ active=String(activePerfil||''); }catch(e){}
+  document.querySelectorAll('.desktop-audience-chip-v488').forEach(btn=>{
+    const on=String(btn.dataset.audienceV488||'')===active;
+    btn.classList.toggle('active', on);
+    btn.setAttribute('aria-pressed', on?'true':'false');
+  });
+}
+function bindAudienceFilterV488(){
+  document.querySelectorAll('.desktop-audience-chip-v488').forEach(btn=>{
+    if(btn.dataset.v488Bound==='1') return;
+    btn.dataset.v488Bound='1';
+    btn.addEventListener('click',()=>{
+      try{
+        activePerfil = String(btn.dataset.audienceV488 || '');
+        currentPage = 1;
+        syncAudienceFilterV488();
+        if(typeof syncFilterControls==='function') syncFilterControls();
+        if(typeof applyFilter==='function') applyFilter();
+      }catch(e){console.warn('[v488] falha ao aplicar público-alvo', e);}
+    });
+  });
+  syncAudienceFilterV488();
+}
+
 function renderRankings(){
   const grid = $('rankingGrid');
   if(!grid || !allRows.length) return;
@@ -2697,10 +2761,7 @@ function renderRankings(){
   atualizarRankingFilterUI();
 
   let base = allRows.filter(r => temDados(r)).filter(passaFiltroRanking);
-  if(activePerfil) base = base.filter(r => {
-    const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
-    return tokens.includes(activePerfil);
-  });
+  if(activePerfil) base = base.filter(r => rowMatchesAudienceV488(r, activePerfil));
   if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
 
   const ordenaCampo = (campo, asc=false) => base
@@ -3444,10 +3505,7 @@ function applyFilter(){
     if(hideSemDados&&!temDados(r)) return false;
     if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
     if(activeBenchmark && detectarBenchmarkFundo(r).label !== activeBenchmark) return false;
-    if(activePerfil){
-      const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
-      if(!tokens.includes(activePerfil)) return false;
-    }
+    if(activePerfil && !rowMatchesAudienceV488(r, activePerfil)) return false;
     if(activeRisco&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRisco)) return false;
     if(q&&!rowMatchesCatalogSearch(r,q)) return false;
     return true;
@@ -7585,7 +7643,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const parts=[];
     if(typeof activeCat!=='undefined' && activeCat) parts.push({kind:'cat', label:'Categoria', value:activeCat});
     if(typeof activeBenchmark!=='undefined' && activeBenchmark) parts.push({kind:'benchmark', label:'Benchmark', value:activeBenchmark});
-    if(typeof activePerfil!=='undefined' && activePerfil) parts.push({kind:'perfil', label:'Perfil', value:activePerfil});
+    if(typeof activePerfil!=='undefined' && activePerfil) parts.push({kind:'perfil', label:'Público-alvo', value:labelAudienceV488(activePerfil)});
     if(typeof activeRisco!=='undefined' && activeRisco) parts.push({kind:'risco', label:'Risco', value:activeRisco});
     if(typeof hideSemDados!=='undefined' && hideSemDados) parts.push({kind:'semDados', label:'Base', value:'sem pipeline'});
     return parts;
@@ -7607,6 +7665,7 @@ document.addEventListener('DOMContentLoaded', function(){
     const chk=qs('#toggleSemDados');
     if(chk) chk.checked=!!hideSemDados;
     try{ syncRiskProfileControlsV198(); }catch(e){}
+    try{ syncAudienceFilterV488(); }catch(e){}
   }
 
   function setFilterPanelOpen(open){
@@ -7698,6 +7757,8 @@ document.addEventListener('DOMContentLoaded', function(){
       btn.classList.toggle('active', on);
       btn.setAttribute('aria-pressed', on ? 'true' : 'false');
     });
+
+    try{ syncAudienceFilterV488(); }catch(e){}
 
     const status=qs('#categoryGridStatus');
     if(status){
@@ -7791,6 +7852,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 
     qsa('.filter-preset-chip').forEach(b=>b.addEventListener('click',()=>applyFilterPreset(b.dataset.preset)));
+    try{ bindAudienceFilterV488(); }catch(e){}
     setupAdvancedFilterAccordion();
 
     document.addEventListener('keydown',e=>{
@@ -11070,7 +11132,7 @@ async function sharePainelMercado(){
     const campo=campoPorPeriodo(periodo);
     let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
     try{
-      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
+      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>rowMatchesAudienceV488(r, activePerfil));
       if(typeof activeRankRisk!=='undefined' && activeRankRisk) base=base.filter(r=>perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
     }catch(e){}
     const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
@@ -22926,3 +22988,22 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 
 
 /* ELTAUM_DESKTOP_FUND_SPOTLIGHT_V485 */
+
+
+/* ==========================================================
+   ELTAUM v488 — Desktop-only: filtros consultivos e cores de KPIs
+   - Público-alvo no desktop: Todos, PF, PJ, Private, Qualificado, Institucional.
+   - Mantém mobile preservado.
+========================================================== */
+(function(){
+  'use strict';
+  function ready(fn){
+    if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', fn, {once:true});
+    else fn();
+  }
+  ready(function(){
+    try{ if(typeof bindAudienceFilterV488==='function') bindAudienceFilterV488(); }catch(e){}
+    setTimeout(()=>{ try{ if(typeof bindAudienceFilterV488==='function') bindAudienceFilterV488(); }catch(e){} }, 700);
+  });
+  window.__ELTAUM_DESKTOP_FILTER_AUDIENCE_V488__ = true;
+})();
