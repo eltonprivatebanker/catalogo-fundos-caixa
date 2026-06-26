@@ -68302,3 +68302,14 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     }
   }
 }
+
+/* ════════════════════════════════════════════════════════
+   ELTAUM v514 — Rankings desktop: % CDI dinâmico por período
+   - Header da coluna passa a acompanhar Mês/Ano/12M.
+   - Mantém mobile intocado.
+════════════════════════════════════════════════════════ */
+@media (min-width: 769px){
+  html.desktop-rankings-cdi-dynamic-v514 body #rankingsSection .ranking-cdi{
+    white-space:nowrap;
+  }
+}

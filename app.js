@@ -10845,7 +10845,7 @@ async function sharePainelMercado(){
 */
 (function(){
   'use strict';
-  const BUILD='ELTAUM_DESKTOP_CARDS_FORMAT_FIX_20260606_v57';
+  const BUILD='ELTAUM_RANKINGS_CDI_DINAMICO_DESKTOP_v514';
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
@@ -10925,11 +10925,43 @@ async function sharePainelMercado(){
     const btn=qs(`[data-rank-filter="${activeRankFilter}"]`);
     return btn?btn.textContent.trim():'Filtro aplicado';
   }
-  function cdiRatioTxt(r){
+  function parsePctTextV514(txt){
+    const raw=String(txt||'').replace(/[^0-9,.-]/g,'').replace('.', '').replace(',', '.');
+    const n=Number(raw);
+    return Number.isFinite(n)?n:null;
+  }
+  function cdiPeriodoValorV514(periodo){
     try{
-      if(typeof calcCdiRatio!=='function') return '—';
-      const ratio=calcCdiRatio(num(r['Acum. 12M (%)']), indicState?.cdi?.m12);
-      return ratio===null?'—':ratio+'%';
+      if(periodo==='mes'){
+        const v=num(indicState?.cdi?.mes);
+        if(v!==null && Number.isFinite(v) && v>0) return v;
+        return parsePctTextV514(document.getElementById('cdi-mes-ant')?.textContent);
+      }
+      if(periodo==='ano'){
+        const dom=parsePctTextV514(document.getElementById('cdi-ano')?.textContent);
+        if(dom!==null && dom>0) return dom;
+        const cdiCard=window.__mercadoAtualV230?.cards?.cdi || {};
+        const direto=num(cdiCard.acum_ano_com_parcial ?? cdiCard.acum_ano ?? cdiCard.ano);
+        return direto!==null && Number.isFinite(direto) && direto>0 ? direto : null;
+      }
+      const v=num(indicState?.cdi?.m12);
+      if(v!==null && Number.isFinite(v) && v>0) return v;
+      const cdiCard=window.__mercadoAtualV230?.cards?.cdi || {};
+      const direto=num(cdiCard.acum_12m ?? cdiCard.m12 ?? cdiCard.acumulado_12m ?? cdiCard.acum12m);
+      return direto!==null && Number.isFinite(direto) && direto>0 ? direto : null;
+    }catch(e){return null}
+  }
+  function cdiPeriodoTituloV514(periodo){
+    return periodo==='mes'?'% CDI mês':periodo==='ano'?'% CDI ano':'% CDI 12M';
+  }
+  function cdiRatioTxt(r,periodo='12m',campoOverride=null){
+    try{
+      const campoBase=campoOverride || campoPorPeriodo(periodo);
+      const rent=num(r[campoBase]);
+      const cdiRef=cdiPeriodoValorV514(periodo);
+      if(rent===null || !Number.isFinite(rent) || cdiRef===null || !Number.isFinite(cdiRef) || cdiRef===0) return '—';
+      const ratio=Math.round((rent/cdiRef)*100);
+      return Number.isFinite(ratio)?ratio+'%':'—';
     }catch(e){return '—'}
   }
   function rowPL(r){return plMi(r['PL (milhoes R$)']||r['PL']||r['Patrimonio Liquido'])}
@@ -10945,12 +10977,12 @@ async function sharePainelMercado(){
     const displayName=kind==='pl' ? fullName : compactFundName(fullName);
     return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(fullName)}">${esc(displayName)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
-  function topRow(r,i,campo,showCdi){
+  function topRow(r,i,campo,periodo){
     const cat=shortCat(r['Categoria']);
     const nome=cleanFund(r['Fundo']);
     const val=pct(r[campo]);
     const cls=retClass(r[campo]);
-    const cdi=showCdi?cdiRatioTxt(r):'—';
+    const cdi=cdiRatioTxt(r,periodo,campo);
     return `<div class="ranking-top-row">
       <div class="ranking-pos">${medal(i)}</div>
       <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
@@ -11029,7 +11061,8 @@ async function sharePainelMercado(){
       summaryCard('universe','Universo analisado', `${base.length} fundos`, filtroLabelAtual(), `Risco: ${rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:'')}`)
     ].join('');
 
-    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo)).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    const cdiHeader=cdiPeriodoTituloV514(periodo);
     const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
     // v195: o painel lateral de atenção já reúne piores leituras,
     // negativos no ano e fundos sem dados. Evita duplicar a mesma informação
@@ -11044,7 +11077,7 @@ async function sharePainelMercado(){
           <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}${riskPill()}</div>
         </div>
         <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
-          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
+          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>${esc(cdiHeader)}</span></div>
           ${topRows}
         </div>
       </section>
