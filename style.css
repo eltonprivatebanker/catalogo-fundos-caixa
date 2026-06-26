@@ -67507,3 +67507,392 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     color:#ff9aa5!important;
   }
 }
+
+
+/* PATCH v494 — Desktop: padronização premium dos botões do funil
+   Escopo apenas desktop. Não altera a versão mobile. */
+@media (min-width: 821px){
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    gap:8px!important;
+    min-width:0!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-preset-chip,
+  html.desktop-filter-buttons-v494 body #sec-fundos button[data-audience-filter],
+  html.desktop-filter-buttons-v494 body #sec-fundos button[data-filter],
+  html.desktop-filter-buttons-v494 body #sec-fundos button[data-cat],
+  html.desktop-filter-buttons-v494 body #sec-fundos button[data-category],
+  html.desktop-filter-buttons-v494 body #sec-fundos [data-filter-category]{
+    appearance:none!important;
+    -webkit-appearance:none!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:7px!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    min-width:78px!important;
+    width:auto!important;
+    padding:0 13px!important;
+    border-radius:9px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:linear-gradient(180deg,rgba(13,18,32,.86),rgba(7,10,20,.82))!important;
+    color:#e7edf9!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.70rem!important;
+    font-weight:850!important;
+    letter-spacing:-.01em!important;
+    line-height:1!important;
+    text-decoration:none!important;
+    white-space:nowrap!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    transform:none!important;
+    transition:border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease,opacity .16s ease!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chip-v488:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-preset-chip:hover:not(.is-disabled-v489):not(:disabled){
+    transform:translateY(-1px)!important;
+    border-color:rgba(232,187,106,.34)!important;
+    background:linear-gradient(180deg,rgba(18,26,45,.92),rgba(9,13,25,.90))!important;
+    color:#f4f7ff!important;
+    box-shadow:0 8px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button.active,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button.active,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chip-v488.active,
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-preset-chip.active,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button[aria-pressed="true"],
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.58)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.155),rgba(200,151,58,.070))!important;
+    color:#f5d48a!important;
+    box-shadow:0 0 0 1px rgba(200,151,58,.035),0 8px 20px rgba(200,151,58,.075),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button.active::before,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button.active::before,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chip-v488.active::before,
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-preset-chip.active::before,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button[aria-pressed="true"]::before,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button[aria-pressed="true"]::before{
+    content:""!important;
+    display:inline-block!important;
+    flex:0 0 auto!important;
+    width:3px!important;
+    height:15px!important;
+    margin-right:3px!important;
+    border-radius:3px!important;
+    background:#e8bb6a!important;
+    box-shadow:0 0 8px rgba(232,187,106,.28)!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button.is-disabled-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button.is-disabled-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chip-v488.is-disabled-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-preset-chip.is-disabled-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button:disabled,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button:disabled{
+    opacity:.42!important;
+    color:#7f8aa8!important;
+    border-color:rgba(148,163,184,.10)!important;
+    background:rgba(7,10,20,.38)!important;
+    box-shadow:none!important;
+    cursor:not-allowed!important;
+    transform:none!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-chip-count-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button span,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button span{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    height:18px!important;
+    min-width:24px!important;
+    margin-left:3px!important;
+    padding:0 7px!important;
+    border-radius:6px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:rgba(148,163,184,.095)!important;
+    color:#b9c8e8!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.55rem!important;
+    font-weight:900!important;
+    line-height:18px!important;
+    letter-spacing:-.015em!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chip-v488.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-preset-chip.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button.active span,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button.active span{
+    border-color:rgba(232,187,106,.28)!important;
+    background:rgba(232,187,106,.125)!important;
+    color:#f1d28c!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chip-v488.is-disabled-v489 .filter-chip-count-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .filter-preset-chip.is-disabled-v489 .filter-chip-count-v489,
+  html.desktop-filter-buttons-v494 body #sec-fundos .desktop-audience-chips-v488 > button.is-disabled-v489 span,
+  html.desktop-filter-buttons-v494 body #sec-fundos .category-grid-v69 > button.is-disabled-v489 span{
+    background:rgba(148,163,184,.055)!important;
+    border-color:rgba(148,163,184,.08)!important;
+    color:#717d95!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .catalog-risk-select-wrap-v198{
+    height:34px!important;
+    min-height:34px!important;
+    border-radius:9px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:linear-gradient(180deg,rgba(13,18,32,.86),rgba(7,10,20,.82))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #sec-fundos .catalog-risk-select-wrap-v198 select{
+    font-size:.70rem!important;
+    font-weight:850!important;
+    color:#f4f7ff!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v492{
+    min-height:34px!important;
+    height:34px!important;
+    padding:0 9px 0 12px!important;
+    border-radius:9px!important;
+    border:1px solid rgba(232,187,106,.50)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.145),rgba(200,151,58,.065))!important;
+    color:#f5d48a!important;
+    gap:8px!important;
+    font-family:'Inter',sans-serif!important;
+    font-size:.69rem!important;
+    font-weight:900!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill small,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v87 small,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v491 small,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v492 small{
+    color:#9fb3df!important;
+    font-size:.54rem!important;
+    font-weight:900!important;
+    letter-spacing:.12em!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill span,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v87 span,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v491 span,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-pill-v492 span{
+    width:18px!important;
+    height:18px!important;
+    border-radius:6px!important;
+    background:rgba(7,10,20,.38)!important;
+    color:#ffe0a2!important;
+    font-size:.78rem!important;
+  }
+
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-clear,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-clear-v489,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-clear-v491,
+  html.desktop-filter-buttons-v494 body #activeFilterStrip .active-filter-clear-v492{
+    min-height:34px!important;
+    height:34px!important;
+    padding:0 12px!important;
+    border-radius:9px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    background:linear-gradient(180deg,rgba(13,18,32,.86),rgba(7,10,20,.82))!important;
+    color:#cbd5e1!important;
+    font-size:.68rem!important;
+    font-weight:850!important;
+  }
+}
+
+
+/* PATCH v495 — Desktop: correção definitiva dos botões reais do funil
+   Causa identificada: os botões gerados usam classes reais .desktop-audience-chip-v488
+   e .filter-preset-chip. Este patch mira diretamente esses seletores e fica no final
+   do CSS para ganhar das versões antigas. Escopo somente desktop. */
+@media (min-width: 821px){
+  html.desktop-filter-buttons-v495 body .desktop-audience-chips-v488,
+  html.desktop-filter-buttons-v495 body .category-grid-v69{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    align-items:center!important;
+    gap:8px!important;
+    min-width:0!important;
+  }
+
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button,
+  html.desktop-filter-buttons-v495 body button[data-audience-v488],
+  html.desktop-filter-buttons-v495 body button[data-category],
+  html.desktop-filter-buttons-v495 body button[data-cat],
+  html.desktop-filter-buttons-v495 body button[data-filter]{
+    appearance:none!important;
+    -webkit-appearance:none!important;
+    position:relative!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:8px!important;
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+    width:auto!important;
+    min-width:82px!important;
+    padding:0 14px!important;
+    border-radius:9px!important;
+    border:1px solid rgba(148,163,184,.20)!important;
+    background:linear-gradient(180deg,rgba(13,18,32,.88),rgba(7,10,20,.86))!important;
+    color:#e7edf9!important;
+    font-family:'Inter',system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;
+    font-size:.70rem!important;
+    font-weight:850!important;
+    letter-spacing:-.01em!important;
+    line-height:1!important;
+    text-decoration:none!important;
+    white-space:nowrap!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    transform:none!important;
+    transition:border-color .16s ease,background .16s ease,color .16s ease,box-shadow .16s ease,transform .16s ease,opacity .16s ease!important;
+  }
+
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v495 body .filter-preset-chip:hover:not(.is-disabled-v489):not(:disabled),
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button:hover:not(.is-disabled-v489):not(:disabled){
+    transform:translateY(-1px)!important;
+    border-color:rgba(232,187,106,.34)!important;
+    background:linear-gradient(180deg,rgba(18,26,45,.92),rgba(9,13,25,.90))!important;
+    color:#f4f7ff!important;
+    box-shadow:0 8px 18px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488.active,
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488[aria-pressed="true"],
+  html.desktop-filter-buttons-v495 body .filter-preset-chip.active,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip[aria-pressed="true"],
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button.active,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.58)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.155),rgba(200,151,58,.070))!important;
+    color:#f5d48a!important;
+    box-shadow:0 0 0 1px rgba(200,151,58,.035),0 8px 20px rgba(200,151,58,.075),inset 0 1px 0 rgba(255,255,255,.045)!important;
+  }
+
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488.active::before,
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488[aria-pressed="true"]::before,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip.active::before,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip[aria-pressed="true"]::before,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button.active::before,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button[aria-pressed="true"]::before{
+    content:""!important;
+    display:inline-block!important;
+    flex:0 0 auto!important;
+    width:3px!important;
+    height:15px!important;
+    margin-right:3px!important;
+    border-radius:3px!important;
+    background:#e8bb6a!important;
+    box-shadow:0 0 8px rgba(232,187,106,.28)!important;
+  }
+
+  html.desktop-filter-buttons-v495 body .filter-chip-count-v489,
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488 > span,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip > span,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button > span{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:22px!important;
+    height:18px!important;
+    padding:0 6px!important;
+    border-radius:7px!important;
+    border:1px solid rgba(148,163,184,.16)!important;
+    background:rgba(255,255,255,.052)!important;
+    color:#dce6f8!important;
+    font-family:'JetBrains Mono',monospace!important;
+    font-size:.61rem!important;
+    font-weight:900!important;
+    line-height:1!important;
+  }
+
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488[aria-pressed="true"] .filter-chip-count-v489,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip.active .filter-chip-count-v489,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip[aria-pressed="true"] .filter-chip-count-v489,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button.active span,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button[aria-pressed="true"] span{
+    border-color:rgba(232,187,106,.22)!important;
+    background:rgba(232,187,106,.13)!important;
+    color:#f3d58a!important;
+  }
+
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488.is-disabled-v489,
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488[aria-disabled="true"],
+  html.desktop-filter-buttons-v495 body .desktop-audience-chip-v488:disabled,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip.is-disabled-v489,
+  html.desktop-filter-buttons-v495 body .filter-preset-chip[aria-disabled="true"],
+  html.desktop-filter-buttons-v495 body .filter-preset-chip:disabled,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button.is-disabled-v489,
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button[aria-disabled="true"],
+  html.desktop-filter-buttons-v495 body .category-grid-v69 > button:disabled{
+    opacity:.38!important;
+    filter:grayscale(.25)!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v87,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v491,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v492{
+    min-height:36px!important;
+    height:36px!important;
+    padding:0 12px!important;
+    border-radius:9px!important;
+    border:1px solid rgba(232,187,106,.50)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.145),rgba(200,151,58,.070))!important;
+    color:#f4d58a!important;
+    gap:8px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+  }
+
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill span,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v87 span,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v491 span,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v492 span{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:18px!important;
+    height:18px!important;
+    border-radius:6px!important;
+    margin-left:2px!important;
+    color:#f2c86c!important;
+    background:rgba(0,0,0,.20)!important;
+  }
+
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill:hover span,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v87:hover span,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v491:hover span,
+  html.desktop-filter-buttons-v495 body #activeFilterStrip .active-filter-pill-v492:hover span{
+    background:rgba(240,85,101,.16)!important;
+    color:#ff8a96!important;
+  }
+}
