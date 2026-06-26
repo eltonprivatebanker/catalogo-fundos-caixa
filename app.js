@@ -23727,6 +23727,10 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   function setSectionOpen(sectionId, isOpen){
     var section = document.getElementById(sectionId);
     if(!section) return false;
+    if(sectionId === 'sec-dolar'){
+      section.dataset.desktopDesiredOpenV544 = isOpen ? 'true' : 'false';
+      section.dataset.desktopUserToggledV544 = '1';
+    }
     section.classList.toggle('section-expanded', !!isOpen);
     section.classList.toggle('section-collapsed', !isOpen);
     section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -23760,6 +23764,9 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
       btn.style.cursor = 'pointer';
     }
     var isOpen = section.classList.contains('section-expanded');
+    if(id === 'sec-dolar' && !section.dataset.desktopDesiredOpenV544){
+      section.dataset.desktopDesiredOpenV544 = isOpen ? 'true' : 'false';
+    }
     section.classList.toggle('section-collapsed', !isOpen);
     section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
     setButtonState(section, isOpen);
@@ -23819,4 +23826,95 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   window.addEventListener('resize', apply, {passive:true});
   setTimeout(apply, 300);
   setTimeout(apply, 1200);
+})();
+
+
+/* =========================================================
+   PATCH v544 — Desktop: trava estado manual do Dolar PTAX
+   ========================================================= */
+(function desktopDolarToggleStateGuardV544(){
+  if(window.__desktopDolarToggleStateGuardV544Installed) return;
+  window.__desktopDolarToggleStateGuardV544Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function getButton(){
+    return document.querySelector('[data-desktop-section-toggle="sec-dolar"], .dolar-more-v539');
+  }
+
+  function setButtonState(btn, isOpen){
+    if(!btn) return;
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.toggle-label');
+    var icon = btn.querySelector('.toggle-icon');
+    if(label) label.textContent = isOpen ? (btn.dataset.labelOpen || 'Ver menos') : (btn.dataset.labelClosed || 'Ver mais');
+    if(icon) icon.textContent = isOpen ? '-' : '›';
+  }
+
+  function syncDetails(sec, isOpen){
+    if(!sec) return;
+    sec.classList.toggle('dolar-details-collapsed-v542', !isOpen);
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+    var footer = sec.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
+  }
+
+  function applyDesiredState(){
+    if(!isDesktop()) return;
+    var sec = document.getElementById('sec-dolar');
+    if(!sec || sec.dataset.desktopUserToggledV544 !== '1') return;
+
+    var isOpen = sec.dataset.desktopDesiredOpenV544 === 'true';
+    var btn = getButton();
+
+    sec.classList.toggle('section-expanded', isOpen);
+    sec.classList.toggle('section-collapsed', !isOpen);
+    sec.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(btn, isOpen);
+    syncDetails(sec, isOpen);
+  }
+
+  function install(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-dolar-toggle-state-guard-v544');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_TOGGLE_STATE_GUARD_V544';
+
+    var sec = document.getElementById('sec-dolar');
+    if(!sec || sec.dataset.desktopGuardV544Bound) return;
+    sec.dataset.desktopGuardV544Bound = '1';
+
+    var scheduled = false;
+    var obs = new MutationObserver(function(){
+      if(scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(function(){
+        scheduled = false;
+        applyDesiredState();
+      });
+    });
+    obs.observe(sec, {attributes:true, attributeFilter:['class','aria-expanded','aria-hidden']});
+
+    var btn = getButton();
+    if(btn){
+      obs.observe(btn, {attributes:true, attributeFilter:['aria-expanded','class']});
+    }
+
+    window.__ELTAUM_DESKTOP_DOLAR_TOGGLE_STATE_GUARD_OBSERVER_V544__ = obs;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  window.addEventListener('pageshow', install, {passive:true});
 })();
