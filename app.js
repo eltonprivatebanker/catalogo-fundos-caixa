@@ -23992,10 +23992,33 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   function norm(v){
     return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
   }
-  function num(v){
-    if(typeof toNum === 'function') return toNum(v);
-    const n = Number(String(v ?? '').replace(/[^\d,.-]/g,'').replace(/\./g,'').replace(',','.'));
+  function smartNum(v){
+    if(v === null || v === undefined || v === '') return null;
+    if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+    let s = String(v).trim();
+    if(!s || s === '-' || s === '—' || /^null$/i.test(s)) return null;
+    s = s.replace(/[^\d,.-]/g,'');
+    const hasComma = s.includes(',');
+    const hasDot = s.includes('.');
+    if(hasComma && hasDot){
+      s = s.replace(/\./g,'').replace(',','.');
+    }else if(hasComma){
+      s = s.replace(',','.');
+    }else if(hasDot){
+      const parts = s.split('.');
+      const last = parts[parts.length - 1] || '';
+      if(parts.length > 2 || last.length === 3){
+        s = s.replace(/\./g,'');
+      }
+    }
+    const n = Number(s);
     return Number.isFinite(n) ? n : null;
+  }
+  function num(v){
+    const n = smartNum(v);
+    if(n !== null) return n;
+    if(typeof toNum === 'function') return toNum(v);
+    return null;
   }
   function pct(v){
     const n = num(v);
@@ -24040,8 +24063,13 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     if(n.includes('INDICE')) return 'Índice';
     return raw;
   }
+  function plMillionsFromValue(value){
+    const n = num(value);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return null;
+    return Math.abs(n) >= 1000000 ? n / 1000000 : n;
+  }
   function plValue(r){
-    return num(r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido']);
+    return plMillionsFromValue(r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido']);
   }
   function plTxt(v){
     const n = num(v);
@@ -24171,6 +24199,38 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
       return d;
     });
   }
+  function categoryPassesFilter(cat){
+    const filtro = typeof activeRankFilter !== 'undefined' ? String(activeRankFilter || 'todos') : 'todos';
+    const c = norm(cat);
+    if(filtro === 'todos') return true;
+    if(filtro === 'sem-fmp') return !(c.includes('FMP') || c.includes('PRIVATIZACAO'));
+    if(filtro === 'renda-fixa-simples') return c.includes('RENDA FIXA SIMPLES');
+    if(filtro === 'renda-fixa-referenciado') return c.includes('RENDA FIXA REFERENCIADO');
+    if(filtro === 'renda-fixa-curto-prazo') return c.includes('RENDA FIXA CURTO');
+    if(filtro === 'renda-fixa') return c.includes('RENDA FIXA');
+    if(filtro === 'multimercado') return c.includes('MULTIMERCADO');
+    if(filtro === 'cambial') return c.includes('CAMBIAL');
+    if(filtro === 'acoes') return c.includes('ACOES');
+    if(filtro === 'fundo-de-indice') return c.includes('INDICE');
+    if(filtro === 'fmp') return c.includes('FMP') || c.includes('PRIVATIZACAO');
+    return true;
+  }
+  function dashboardCategories(){
+    const src = (typeof kpisDashboard !== 'undefined' && kpisDashboard?.categorias) ? kpisDashboard.categorias : null;
+    if(!src || typeof src !== 'object') return [];
+    return Object.entries(src)
+      .filter(function(entry){ return categoryPassesFilter(entry[0]); })
+      .map(function(entry){
+        const cat = entry[0];
+        const d = entry[1] || {};
+        return {
+          cat: cat,
+          qtd: d.qtd_ativos ?? d.quantidade ?? d.qtd ?? '—',
+          pl: plMillionsFromValue(d.pl_total),
+          ret: num(d.rent_12m_ponderada)
+        };
+      });
+  }
   function periodTabs(target, active, periods){
     return '<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">' + periods.map(function(p){
       return '<button type="button" class="rank-period-tab ' + (active === p ? 'active' : '') + '" data-rank-target="' + esc(target) + '" data-rank-period="' + esc(p) + '">' + (p === 'dia' ? 'Dia' : p === 'mes' ? 'Mês' : p === 'ano' ? 'Ano' : '12M') + '</button>';
@@ -24217,13 +24277,19 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   function renderRentabilidade(base){
     const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
     const campo = campoPorPeriodo(periodo);
-    const cats = groupCategories(base, campo).filter(function(d){ return d.ret !== null; }).sort(function(a,b){ return b.ret - a.ret; }).slice(0,12);
+    const dashboard = periodo === '12m' ? dashboardCategories().filter(function(d){ return d.ret !== null; }) : [];
+    const cats = (dashboard.length ? dashboard : groupCategories(base, campo).filter(function(d){ return d.ret !== null; }))
+      .sort(function(a,b){ return b.ret - a.ret; })
+      .slice(0,8);
     const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>Retorno</span><span></span></div>' +
       cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · ' + plTxt(d.pl), pct(d.ret), retClass(d.ret)); }).join('');
     return board('Categorias por rentabilidade', 'Retorno médio ponderado por PL · ' + periodoLabel(periodo), body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>', periodTabs('topFundos', periodo, ['mes','ano','12m']));
   }
   function renderPL(base){
-    const cats = groupCategories(base, 'Acum. 12M (%)').sort(function(a,b){ return b.pl - a.pl; }).slice(0,12);
+    const dashboard = dashboardCategories().filter(function(d){ return d.pl !== null; });
+    const cats = (dashboard.length ? dashboard : groupCategories(base, 'Acum. 12M (%)'))
+      .sort(function(a,b){ return b.pl - a.pl; })
+      .slice(0,8);
     const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>PL</span><span></span></div>' +
       cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · rent. 12M ' + pct(d.ret), plTxt(d.pl), 'zero'); }).join('');
     return board('Categorias por patrimônio', 'Concentração de patrimônio líquido por classe', body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>');
@@ -24250,9 +24316,9 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   function renderRankingsV546(){
     const grid = q('#rankingGrid');
     if(!grid || typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
-    document.documentElement.classList.add('desktop-ranking-tabs-funcionais-v546');
+    document.documentElement.classList.add('desktop-ranking-tabs-funcionais-v546','desktop-ranking-numeros-leves-v547');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_TABS_FUNCIONAIS_V546';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_NUMEROS_LEVES_V547';
     syncTabs();
 
     const base = baseRows();
@@ -24262,15 +24328,16 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     const top12 = sortBy(base, 'Acum. 12M (%)');
     const worst12 = sortBy(base, 'Acum. 12M (%)', true).find(function(r){ return num(r['Acum. 12M (%)']) < 0; });
     const bestMonth = sortBy(base, 'Acum. Mes (%)')[0];
-    const cats = groupCategories(base, 'Acum. 12M (%)').sort(function(a,b){ return b.pl - a.pl; });
+    const dashboardCats = dashboardCategories().filter(function(d){ return d.pl !== null; });
+    const cats = (dashboardCats.length ? dashboardCats : groupCategories(base, 'Acum. 12M (%)')).sort(function(a,b){ return b.pl - a.pl; });
     const maiorPL = cats[0];
 
-    const summary = '<section class="ranking-exec-summary" aria-label="Destaques dos rankings">' +
+    const summary = activeRankView === 'top' ? '<section class="ranking-exec-summary" aria-label="Destaques dos rankings">' +
       summaryCard('best','Melhor 12M', top12[0] ? pct(top12[0]['Acum. 12M (%)']) : '—', top12[0] ? cleanFund(top12[0].Fundo) : '—', top12[0] ? cdiRatioTxt(top12[0],'12m') + ' do CDI · ' + shortCat(top12[0].Categoria) : '') +
       summaryCard('worst','Pior 12M', worst12 ? pct(worst12['Acum. 12M (%)']) : '—', worst12 ? cleanFund(worst12.Fundo) : 'Sem retorno negativo', worst12 ? shortCat(worst12.Categoria) : '') +
       summaryCard('month','Melhor mês', bestMonth ? pct(bestMonth['Acum. Mes (%)']) : '—', bestMonth ? cleanFund(bestMonth.Fundo) : '—', bestMonth ? shortCat(bestMonth.Categoria) : '') +
       summaryCard('pl','Maior PL', maiorPL ? plTxt(maiorPL.pl) : '—', maiorPL ? shortCat(maiorPL.cat) : '—', maiorPL ? maiorPL.qtd + ' fundos' : '') +
-    '</section>';
+    '</section>' : '';
 
     const views = {
       top: renderTop,
@@ -24281,6 +24348,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     };
     const aside = preserveAttention(grid);
     grid.className = 'ranking-grid ranking-executive-v50 ranking-main-v136 ranking-tabs-active-v546';
+    grid.setAttribute('data-active-rank-view', activeRankView || 'top');
     grid.innerHTML = summary + (views[activeRankView] || views.top)(base);
     restoreAttention(grid, aside);
   }

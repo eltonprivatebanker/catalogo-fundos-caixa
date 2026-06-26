@@ -70442,3 +70442,37 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     border-top:1px solid rgba(148,163,184,.16);
   }
 }
+
+
+/* =========================================================
+   PATCH v547 — Desktop: numeros corretos e ranking mais leve
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-numeros-leves-v547 body #rankingsSection #rankingGrid[data-active-rank-view]:not([data-active-rank-view="top"]) .ranking-view-board-v546{
+    margin-top:0!important;
+  }
+
+  html.desktop-ranking-numeros-leves-v547 body #rankingsSection .ranking-view-board-v546 .ranking-top-row{
+    min-height:50px!important;
+    padding-top:10px!important;
+    padding-bottom:10px!important;
+  }
+
+  html.desktop-ranking-numeros-leves-v547 body #rankingsSection .ranking-view-board-v546 .ranking-fund strong{
+    font-size:.88rem!important;
+  }
+
+  html.desktop-ranking-numeros-leves-v547 body #rankingsSection .ranking-view-board-v546 .ranking-fund span{
+    font-size:.73rem!important;
+    color:rgba(203,213,225,.72)!important;
+  }
+
+  html.desktop-ranking-numeros-leves-v547 body #rankingsSection .ranking-view-board-v546 .ranking-return{
+    font-size:.88rem!important;
+    letter-spacing:0!important;
+  }
+
+  html.desktop-ranking-numeros-leves-v547 body #rankingsSection .ranking-exec-board-head{
+    padding-bottom:12px!important;
+  }
+}
