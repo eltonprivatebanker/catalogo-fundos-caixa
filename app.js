@@ -4592,6 +4592,44 @@ function buildFundOperationalFacts(r, variant='detail'){
     </section>`;
   }
 
+  if(String(variant || '').includes('spotlight')){
+    const factLine = (label, value, opts={}) => {
+      const cls = opts.cls ? ` class="${opts.cls}"` : '';
+      return `<div${cls}><dt>${htmlAttr(label)}</dt><dd>${value}</dd></div>`;
+    };
+    const pill = (label, value, cls='') => `<span class="fspot-op-pill-v485 ${htmlAttr(cls)}"><b>${htmlAttr(label)}</b>${htmlAttr(value || '—')}</span>`;
+
+    return `<section class="fund-facts-v154 spotlight-v485" aria-label="Ficha executiva do fundo">
+      <div class="fund-facts-head-v154 fspot-facts-head-v485"><strong>Ficha executiva</strong><small>Resumo consultivo e operacional</small></div>
+      <div class="fspot-facts-layout-v485">
+        <article class="fspot-facts-card-v485 summary">
+          <div class="fspot-facts-card-title-v485">Resumo do fundo</div>
+          <dl class="fspot-definition-v485">
+            ${factLine('Benchmark', `${htmlAttr(d.benchmark.texto)} ${d.benchmark.estimado?estimateBadge:''}`)}
+            ${factLine('Estratégia', `${htmlAttr(d.estrategia.texto)} ${d.estrategia.estimada?estimateBadge:''}`)}
+            ${factLine('Tributação', htmlAttr(d.tributacao.texto))}
+            ${factLine('Adiantamento', `<span class="status-${htmlAttr(adiCls)}"><i>${htmlAttr(adiDot)}</i>${htmlAttr(d.adiantamento.texto)}</span>`)}
+            ${factLine('Captação', `<span class="status-${htmlAttr(capCls)}"><i>${htmlAttr(capDot)}</i>${htmlAttr(d.captacao.texto)}</span>`)}
+          </dl>
+        </article>
+
+        <article class="fspot-facts-card-v485 operation">
+          <div class="fspot-facts-card-title-v485">Operação</div>
+          <div class="fspot-operation-liq-v485" aria-label="Prazos de aplicação e resgate">
+            ${pill('Aplicação', conversionApp, 'application')}
+            ${pill('Resgate', conversionRed, 'redemption')}
+            ${pill('Crédito', paymentRed, 'payment')}
+          </div>
+          <dl class="fspot-definition-v485 operation-list">
+            ${factLine('Horário aplicação', htmlAttr(d.horarios.aplicacao))}
+            ${factLine('Horário resgate', htmlAttr(d.horarios.resgate))}
+          </dl>
+          <p class="fspot-operation-note-v485">Solicitações após o horário limite podem ser processadas no próximo dia útil.</p>
+        </article>
+      </div>
+    </section>`;
+  }
+
   return `<section class="fund-facts-v154 ${htmlAttr(variant)}" aria-label="Informações complementares do fundo">
     <div class="fund-facts-head-v154"><strong>Informações complementares</strong><small>${r?.__fundosMeta?'Dados oficiais do cadastro do fundo':'Dados da base; indicação apenas quando sinalizada'}</small></div>
     <div class="fund-facts-grid-v154">
@@ -8471,13 +8509,15 @@ document.addEventListener('DOMContentLoaded', function(){
       </div>`).join('');
 
     // Liquidez
+    // Desktop v485: os prazos foram consolidados no bloco "Operação" para reduzir redundância.
+    const isDesktopSpotlightV485 = window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
     const liqParts = [];
     if(conv) liqParts.push(`<span class="fspot-liq-badge"><i class="ti ti-refresh" aria-hidden="true" style="font-size:12px"></i>${conv}</span>`);
     if(pag)  liqParts.push(`<span class="fspot-liq-badge"><i class="ti ti-cash" aria-hidden="true" style="font-size:12px"></i>${pag}</span>`);
-    el('fspotLiq').innerHTML = liqParts.length
+    el('fspotLiq').innerHTML = (!isDesktopSpotlightV485 && liqParts.length)
       ? `<span class="fspot-liq-label">Liquidez</span>${liqParts.join('')}`
       : '';
-    el('fspotLiq').style.display = liqParts.length ? '' : 'none';
+    el('fspotLiq').style.display = (!isDesktopSpotlightV485 && liqParts.length) ? '' : 'none';
 
     // Informações complementares
     const factsEl = el('fspotFacts');
@@ -8490,9 +8530,14 @@ document.addEventListener('DOMContentLoaded', function(){
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
-    const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
+    const noteNode = tmpDiv.querySelector('.fund-quick-note-text');
+    const noteParagraphs = noteNode
+      ? [...noteNode.querySelectorAll('p')].map(p=>p.textContent.trim()).filter(Boolean)
+      : [];
+    let noteTxt = noteParagraphs.length ? noteParagraphs.join(' ') : (noteNode?.textContent || '').replace(/\s+/g,' ').trim();
+    if(noteTxt.length > 285) noteTxt = noteTxt.slice(0,282).trim().replace(/[,.!?;:]?$/,'') + '…';
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div><p>${htmlAttr(noteTxt)}</p>`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -8518,7 +8563,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // Documentos
     const docs = obterDocsFundoCompactos ? obterDocsFundoCompactos(row) : [];
     el('fspotDocs').innerHTML = docs.length
-      ? docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')
+      ? `<details class="fspot-docs-details-v485"><summary>Documentos <span>${docs.length}</span></summary><div class="fspot-docs-menu-v485">${docs.map(d=>`<a class="fspot-doc-btn" href="${d.url}" target="_blank" rel="noopener">${d.curto} ${d.label}</a>`).join('')}</div></details>`
       : '';
 
     // Badge tipo (best/worst)
@@ -22832,3 +22877,6 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     sync: syncDesktopKpiStripV484
   };
 })();
+
+
+/* ELTAUM_DESKTOP_FUND_SPOTLIGHT_V485 */
