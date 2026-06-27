@@ -24885,3 +24885,139 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   window.addEventListener('load', installFinal, {once:true});
   [120, 500, 1300, 2600].forEach(function(delay){ setTimeout(installFinal, delay); });
 })();
+
+
+/* =========================================================
+   PATCH v558 — Desktop: busca limpa, docs compactos e CNPJ copiavel
+   ========================================================= */
+function buildDocsCompactos(row){
+  const docs = obterDocsFundoCompactos(row);
+  if(!docs.length) return '<span class="doc-mini-empty">—</span>';
+
+  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
+  const principal = boletim || docs[0];
+  const secundarios = docs.filter(d => d.url !== principal.url);
+
+  const primaryLabel = boletim ? 'Boletim' : principal.curto;
+  const primaryTitle = boletim ? 'Boletim Comercial' : principal.label;
+  const primary = `
+    <a class="doc-mini-primary doc-mini-primary-v558" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(primaryTitle)}">${primaryLabel}</a>
+  `;
+
+  const more = secundarios.length ? `
+    <details class="doc-more-v558" onclick="event.stopPropagation()">
+      <summary title="Abrir demais documentos">Mais</summary>
+      <div class="doc-more-menu-v558">
+        ${secundarios.map(d=>`
+          <a class="doc-mini doc-mini-secondary doc-mini-secondary-v558" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(d.label)}">
+            <strong>${htmlAttr(d.curto)}</strong><span>${htmlAttr(d.label)}</span>
+          </a>
+        `).join('')}
+      </div>
+    </details>
+  ` : '';
+
+  return `<div class="docs-mini-wrap docs-mini-wrap-v558">${primary}${more}</div>`;
+}
+
+(function desktopCatalogDocsCnpjV558(){
+  if(window.__desktopCatalogDocsCnpjV558Installed) return;
+  window.__desktopCatalogDocsCnpjV558Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function copyText(text){
+    if(navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function(resolve, reject){
+      try{
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly','');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        var ok = document.execCommand('copy');
+        textarea.remove();
+        ok ? resolve() : reject(new Error('copy failed'));
+      }catch(err){ reject(err); }
+    });
+  }
+
+  function enhanceCnpjCells(){
+    if(!isDesktop()) return;
+    document.querySelectorAll('#tableBody .fundo-cell-meta').forEach(function(meta){
+      if(meta.dataset.v558Cnpj === '1') return;
+      var cnpj = meta.querySelector('.fundo-cnpj-sub');
+      if(!cnpj) return;
+      var formatted = cnpj.textContent.replace(/^CNPJ\s*/i,'').trim();
+      if(!formatted) return;
+      meta.dataset.v558Cnpj = '1';
+      cnpj.classList.add('fundo-cnpj-sub-v558');
+      var pl = meta.querySelector('.fundo-pl-sub');
+      if(pl) pl.classList.add('fundo-pl-sub-hidden-v558');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cnpj-copy-btn-v558';
+      btn.dataset.copyCnpjV558 = formatted;
+      btn.setAttribute('aria-label','Copiar CNPJ ' + formatted);
+      btn.title = 'Copiar CNPJ';
+      btn.textContent = 'Copiar';
+      cnpj.insertAdjacentElement('afterend', btn);
+    });
+  }
+
+  function sync(){
+    document.documentElement.classList.add('desktop-catalog-docs-cnpj-v558');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_CATALOG_DOCS_CNPJ_V558';
+    enhanceCnpjCells();
+  }
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest('[data-copy-cnpj-v558]') : null;
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    var value = btn.dataset.copyCnpjV558 || '';
+    if(!value) return;
+    var old = btn.textContent;
+    copyText(value).then(function(){
+      btn.textContent = 'Copiado';
+      btn.classList.add('is-copied');
+      setTimeout(function(){
+        btn.textContent = old || 'Copiar';
+        btn.classList.remove('is-copied');
+      }, 1200);
+    }).catch(function(){
+      btn.textContent = 'Erro';
+      setTimeout(function(){ btn.textContent = old || 'Copiar'; }, 1200);
+    });
+  }, true);
+
+  var previousRender = typeof render === 'function' ? render : null;
+  if(previousRender && !previousRender.__v558Wrapped){
+    var wrappedRender = function(){
+      var result = previousRender.apply(this, arguments);
+      setTimeout(sync, 0);
+      return result;
+    };
+    wrappedRender.__v558Wrapped = true;
+    try{ render = wrappedRender; }catch(_){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', sync);
+  [100, 350, 900, 1800].forEach(function(delay){ setTimeout(sync, delay); });
+
+  var tbody = document.getElementById('tableBody');
+  if(tbody && window.MutationObserver){
+    new MutationObserver(function(){ sync(); }).observe(tbody, {childList:true, subtree:false});
+  }
+})();
