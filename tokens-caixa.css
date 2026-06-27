@@ -1,0 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   CAMADA DE IDENTIDADE VISUAL — CATÁLOGO DE FUNDOS CAIXA
+   tokens-caixa.css · v1 (Bronze · premium sóbrio)
+   ------------------------------------------------------------
+   Camada visual aplicada POR CIMA do style.css.
+   Carregar SEMPRE depois de style.css no index.html.
+   NÃO altera layout, NÃO altera JS, NÃO altera mobile.
+   Reversível: basta remover a linha <link> do index.html.
+   ============================================================ */
+
+/* ── 01 · PALETA — redefine as variáveis do app para bronze ──
+   O app é todo baseado nestas variáveis, então trocá-las aqui
+   propaga o bronze automaticamente para a maioria dos componentes. */
+:root{
+  /* tom de marca (antes dourado #c8973a) */
+  --gold:#b08454;
+  --gold2:#c79b6d;
+  --gold3:#d8b489;
+  --gold-dim:rgba(176,132,84,.12);
+  --gold-glow:rgba(176,132,84,.14);   /* brilho reduzido — visual mais sóbrio */
+  --border:rgba(176,132,84,.22);
+
+  /* design-system interno (prefixo --ds-) */
+  --ds-brand:#b08454;
+  --ds-brand-light:#c79b6d;
+  --ds-brand-dim:rgba(176,132,84,.12);
+  --ds-border-brand:rgba(176,132,84,.35);
+
+  /* semânticos — alta/baixa um pouco menos saturados, mais corporativos */
+  --green:#3f9d6e;
+  --green-dim:rgba(63,157,110,.12);
+  --red:#d06370;
+  --red-dim:rgba(208,99,112,.12);
+}
+
+/* ── 02 · Pontos com dourado fixo (não usavam variável) ──
+   Sobrescritos pontualmente para não sobrar nenhum dourado solto. */
+.top-disclaimer{ border-color:rgba(176,132,84,.18) !important; }
+.kpi:hover{ border-color:rgba(176,132,84,.30) !important; }
+.dolar-day-card:hover,
+.dolar-chart-card:hover,
+.dolar-timeline-card:hover{ border-color:rgba(176,132,84,.25) !important; }
+.dolar-timeline-header:hover{ background:rgba(176,132,84,.03) !important; }
+.dolar-source-note{
+  border-color:rgba(176,132,84,.24) !important;
+  background:rgba(176,132,84,.11) !important;
+}
+.copom-link:hover,
+.dolar-month-item:hover,
+.dolar-month-item.current{ background:rgba(176,132,84,.12) !important; }
+
+/* ── 03 · TIPOGRAFIA CORPORATIVA (apenas desktop) ──
+   Aposenta a serifada elegante (Cormorant) e padroniza:
+   IBM Plex Sans p/ títulos/interface, IBM Plex Mono p/ números.
+   Escopo desktop para não afetar o mobile nesta fase. */
+@media (min-width:769px){
+
+  /* base de interface */
+  body{ font-family:'IBM Plex Sans','Inter',Arial,sans-serif !important; }
+
+  /* títulos (eram Cormorant serif) → Plex Sans, mais sóbrio */
+  .brand-text h1,
+  .section-title h2,
+  .dolar-day-title,
+  .dolar-timeline-title,
+  .dolar-chart-title,
+  .poup-explain-title{
+    font-family:'IBM Plex Sans',sans-serif !important;
+    font-weight:600 !important;
+    letter-spacing:0 !important;
+  }
+
+  /* números e valores (eram Cormorant serif) → Plex Mono, tabular */
+  .kpi-value,
+  .indic-ref-val,
+  .dolar-day-rate,
+  .dolar-month-val{
+    font-family:'IBM Plex Mono',monospace !important;
+    font-weight:600 !important;
+    font-variant-numeric:tabular-nums !important;
+  }
+
+  /* rótulos, tabelas e mono (eram JetBrains Mono) → IBM Plex Mono */
+  .section-badge,
+  .indic-table,
+  .dolar-day-sub,
+  .dolar-timeline-sub,
+  .dolar-chart-sub,
+  .dolar-month-label,
+  .dolar-month-var,
+  .selic-change-badge,
+  .copom-link,
+  .cdi-rel{
+    font-family:'IBM Plex Mono',monospace !important;
+  }
+}
