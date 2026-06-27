@@ -2022,7 +2022,7 @@ function renderCdiYearHistory(d){
     return NaN;
   })();
 
-  if(title) title.textContent = isMobile ? `CDI — visão mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
+  if(title) title.textContent = isMobile ? `CDI mensal ${ano}` : `CDI mensal + acumulado ${ano}`;
   if(accumLabelElV298) accumLabelElV298.textContent = isMobile ? `Ano ${ano}` : 'Acumulado no ano';
   if(last12mLabelElV298) last12mLabelElV298.textContent = isMobile ? 'CDI 12M' : 'Últimos 12 meses';
   if(totalEl) totalEl.textContent = Number.isFinite(acumAno) ? `Ano ${fmtPctLocal(acumAno)}` : 'Ano —';
@@ -2041,13 +2041,13 @@ function renderCdiYearHistory(d){
       const isFechado = item === ultimoFechado;
       const sinal = Number.isFinite(valor) && valor < 0 ? 'neg' : 'pos';
       const label = mesCurto(item).toUpperCase();
-      const status = isAtual ? 'parcial' : 'fechado';
+      const status = isAtual ? `${label} · parcial` : label;
       const acumTxt = Number.isFinite(acum) ? fmtPctLocal(acum) : '—';
       return `
         <article class="cdi-month-card-v322 ${sinal} ${isAtual ? 'is-current' : ''} ${isFechado ? 'is-lastclosed' : ''}" role="listitem">
-          <span class="cdi-month-kicker-v322">${label} · ${status}</span>
+          <span class="cdi-month-kicker-v322">${status}</span>
           <strong class="cdi-month-value-v322">${Number.isFinite(valor) ? fmtPctLocal(valor) : '—'}</strong>
-          <small class="cdi-month-accum-v322">Acum. ano ${acumTxt}</small>
+          <small class="cdi-month-accum-v322">Ano ${acumTxt}</small>
         </article>`;
     }).join('');
   }
@@ -3409,6 +3409,7 @@ function setCdiSort(dir){
   else setup();
 })();
 
+
 function normalizeCatalogSearch(v){
   return String(v??'')
     .normalize('NFD')
@@ -3442,7 +3443,17 @@ function applyFilter(){
   filtered=allRows.filter(r=>{
     if(favModeAtivo && !rowIsFavoritedForFilter(r)) return false;
     if(hideSemDados&&!temDados(r)) return false;
-    if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
+    if(activeCat){
+      const rowCat=String(r['Categoria']||'');
+      const canonCat=v=>String(v||'')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^A-Z0-9]+/gi,' ')
+        .replace(/\s+/g,' ')
+        .trim()
+        .toUpperCase();
+      if(rowCat!==activeCat && canonCat(rowCat)!==canonCat(activeCat)) return false;
+    }
     if(activeBenchmark && detectarBenchmarkFundo(r).label !== activeBenchmark) return false;
     if(activePerfil){
       const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
@@ -4851,7 +4862,11 @@ function buildRowHTML(r,idx){
       // PL compacto
       const plVal=toNum(r['PL (milhoes R$)']);
       const plStr=plVal?'PL R$ '+( plVal>=1000?(plVal/1000).toFixed(1)+'bi' : plVal.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi' ):'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
+      const cnpjBruto=String(r['CNPJ']||'').trim();
+      const cnpjLimpo=cnpjBruto.replace(/\D/g,'').slice(0,14);
+      const cnpjFormatado=cnpjLimpo ? formatarCnpjMeta(cnpjLimpo) : cnpjBruto;
+      const cnpjStr=cnpjFormatado ? `<span class="fundo-cnpj-sub">CNPJ ${htmlAttr(cnpjFormatado)}</span>` : '';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjStr}${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
@@ -6294,6 +6309,17 @@ function atualizarResumoIPCADashboardV378(rows){
   const last = data[data.length - 1];
   const max = data.reduce((acc, cur) => Number(cur.valor) > Number(acc.valor) ? cur : acc, data[0]);
   const min = data.reduce((acc, cur) => Number(cur.valor) < Number(acc.valor) ? cur : acc, data[0]);
+  const acumulado = (data.reduce((acc, cur) => acc * (1 + Number(cur.valor) / 100), 1) - 1) * 100;
+  const periodoLabel = data.length === 12 ? '12M' : data.length === 24 ? '24M' : data.length === 36 ? '36M' : `${data.length}M`;
+  const periodoDatas = `${econLabelFromItemV378(data[0])} → ${econLabelFromItemV378(last)}`;
+  econSetTextV378('ipcaResumoAcumLabelV420', `Acumulado ${periodoLabel}`);
+  econSetTextV378('ipcaResumoAcumV420', econPctV378(acumulado));
+  econSetTextV378('ipcaResumoAcumDataV420', periodoDatas);
+  const ipcaAcumElV420 = document.getElementById('ipcaResumoAcumV420');
+  if(ipcaAcumElV420){
+    ipcaAcumElV420.classList.toggle('valor-negativo-v402', Number.isFinite(acumulado) && acumulado < 0);
+    ipcaAcumElV420.classList.toggle('valor-positivo-v402', Number.isFinite(acumulado) && acumulado > 0);
+  }
   econSetTextV378('ipcaResumoUltimoV250', econPctV378(last.valor));
   econSetTextV378('ipcaResumoUltimoDataV250', econLabelFromItemV378(last));
   econSetTextV378('ipcaResumoMaxV250', econPctV378(max.valor));
@@ -6781,7 +6807,7 @@ function atualizarTituloPeriodoGrafico(chart, range){
       },
       999: {
         titulo: '🏦 Trajetória da Selic meta',
-        subtitulo: 'Histórico completo desde 1999'
+        subtitulo: 'Série histórica da Selic meta.'
       }
     }
   };
@@ -7345,9 +7371,21 @@ document.addEventListener('DOMContentLoaded', function(){
       ? `<a class="fund-card-docs-page-v235" href="${htmlAttr(pageUrl)}" target="_blank" rel="noopener">Página oficial ↗</a>`
       : '';
 
+    const docLabelMobileV466 = d => {
+      const label = String(d.label || '').trim();
+      const curto = String(d.curto || '').trim().toUpperCase();
+      if(/l[âa]mina/i.test(label) || curto === 'L') return 'Lâmina';
+      if(/regulamento/i.test(label) || curto === 'R') return 'Regulamento';
+      if(/informa/i.test(label) || curto === 'IC') return 'Informe';
+      if(/carteira/i.test(label) || curto === 'C') return 'Carteira';
+      if(/comercial|boletim/i.test(label) || curto === 'CM') return 'Comercial';
+      if(/termo|ades/i.test(label) || curto === 'TA') return 'Termo';
+      return label || curto || 'Documento';
+    };
+
     const links = secundarios.map(d => {
-      const label = d.curto || d.label || 'Doc';
-      return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
+      const label = docLabelMobileV466(d);
+      return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${htmlAttr(label)}</a>`;
     }).join('');
 
     return `<div class="fund-card-mobile-docs fund-card-mobile-docs-v236">
@@ -7423,10 +7461,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const docs = getMobileDocs(r);
     const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
     const boletimBtn = boletim
-      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim comercial ↗</a>`
+      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim ↗</a>`
       : '';
     const docsHtml = buildMobileDocsHtml(r);
-    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
+    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26 fund-card-hierarchy-v444" data-card-idx="${idx}" data-idx="${idx}">
       <div class="fund-card-list-main fund-card-list-main-premium-v68">
         <div class="fund-card-list-left">
           <div class="fund-card-mobile-tags fund-card-list-tags">
@@ -7453,22 +7491,20 @@ document.addEventListener('DOMContentLoaded', function(){
 
       <div class="fund-card-mobile-actions fund-card-list-actions fund-card-list-actions-v26">
         ${boletimBtn}
-        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página do fundo ↗</a>
-        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Mais detalhes</button>
+        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página ↗</a>
+        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Detalhes</button>
       </div>
 
       <div class="fund-card-list-expanded" aria-hidden="true">
         <div class="fund-card-expanded-head">
-          <strong>Mais detalhes</strong>
-          <button type="button" class="fund-card-close-details" data-card-idx="${idx}" aria-label="Fechar detalhes">× Fechar</button>
+          <strong>Detalhes do fundo</strong>
         </div>
-        <div class="fund-card-mobile-body">
-          <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Referência</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Patrimônio (mi)</span><span class="fund-metric-value">${pl}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Início do fundo</span><span class="fund-metric-value">${data}</span></div>
+        <div class="fund-card-mobile-body fund-detail-list-v468">
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Patrimônio mi</span><span class="fund-metric-value">${pl}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
         </div>
         ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
@@ -7495,7 +7531,7 @@ document.addEventListener('DOMContentLoaded', function(){
         const open=card.classList.toggle('open');
         const expanded=card.querySelector('.fund-card-list-expanded');
         if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
-        btn.textContent=open?'Ocultar':'Mais detalhes';
+        btn.textContent=open?'Ocultar':'Detalhes';
         btn.setAttribute('aria-expanded', open?'true':'false');
         try{
           const key=fundKeyFromIdx(btn.dataset.cardIdx || card.dataset.idx);
@@ -8176,7 +8212,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if(expanded) expanded.setAttribute('aria-hidden', should?'false':'true');
       const btn=card.querySelector('.fund-card-detail-btn');
       if(btn){
-        btn.textContent=should?'Ocultar':'Mais detalhes';
+        btn.textContent=should?'Ocultar':'Detalhes';
         btn.setAttribute('aria-expanded', should?'true':'false');
       }
     });
@@ -8205,7 +8241,7 @@ document.addEventListener('DOMContentLoaded', function(){
       const expanded=card.querySelector('.fund-card-list-expanded');
       if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
       if(mainBtn){
-        mainBtn.textContent=open?'Ocultar':'Mais detalhes';
+        mainBtn.textContent=open?'Ocultar':'Detalhes';
         mainBtn.setAttribute('aria-expanded', open?'true':'false');
       }
       if(open) openCards.add(key); else openCards.delete(key);
@@ -8469,9 +8505,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
-    const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
+    const noteBody = tmpDiv.querySelector('.fund-quick-note-text');
+    const noteTxt = noteBody
+      ? Array.from(noteBody.querySelectorAll('p')).map(p=>String(p.textContent||'').trim()).filter(Boolean).join(' ')
+      : String(tmpDiv.textContent || '').trim();
+    const safeNoteTxt = (typeof htmlAttr === 'function') ? htmlAttr(noteTxt) : noteTxt.replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${safeNoteTxt}`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -10812,12 +10852,54 @@ async function sharePainelMercado(){
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
+  function compactFundName(v){
+    const full=cleanFund(v);
+    if(full==='—') return full;
+    let s=full
+      .replace(/\s*\(\d+\)/g,' ')
+      .replace(/\bCAIXA\b/gi,' ')
+      .replace(/\b(FIC|FIF|FI|FIA|FIM|ETF)\b/gi,' ')
+      .replace(/\b(FUNDO|DE|INVESTIMENTO)\b/gi,' ')
+      .replace(/\b(RESP|LTDA|LTD|LP)\b/gi,' ')
+      .replace(/\s*-\s*/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    if(!s) return full;
+
+    const replacements=[
+      [/\bACOES\b/gi,'Ações'],
+      [/\bDOLAR\b/gi,'Dólar'],
+      [/\bINDICE\b/gi,'Índice'],
+      [/\bCRED PRIV\b/gi,'Cred. Priv.'],
+      [/\bREFERENCIADO\b/gi,'Ref.'],
+      [/\bCORPORATIVO\b/gi,'Corp.'],
+      [/\bBOLSA AMERICANA\b/gi,'Bolsa Americana'],
+      [/\bELETROBRAS MIGRACAO\b/gi,'Eletrobras Migração'],
+      [/\bELETROBRAS\b/gi,'Eletrobras']
+    ];
+    replacements.forEach(([pattern,value])=>{s=s.replace(pattern,value);});
+
+    const acronyms=new Set(['RF','DI','CP','CDI','FMP','FGTS','MM','IRF-M','IMA-B','IPCA']);
+    s=s.split(/\s+/).map(word=>{
+      const clean=word.replace(/[.,]/g,'').toUpperCase();
+      if(acronyms.has(clean)) return word.toUpperCase();
+      if(word.includes('-')) return word.split('-').map(part=>{
+        const p=part.toUpperCase();
+        return acronyms.has(p)?p:(part.charAt(0).toUpperCase()+part.slice(1).toLowerCase());
+      }).join('-');
+      return word.charAt(0).toUpperCase()+word.slice(1).toLowerCase();
+    }).join(' ');
+
+    const words=s.split(/\s+/).filter(Boolean);
+    if(words.length>4) s=words.slice(0,4).join(' ');
+    return s||full;
+  }
   function shortCat(v){
     const raw=String(v||'—').trim();
     const n=typeof normRankTxt==='function'?normRankTxt(raw):raw.toUpperCase();
     if(n.includes('FUNDOS MUTUOS')||n.includes('PRIVATIZACAO')) return 'FMP';
-    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Referenciado';
-    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto Prazo';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
     if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
     if(n.includes('RENDA FIXA')) return 'Renda Fixa';
     if(n.includes('MULTIMERCADO')) return 'Multimercado';
@@ -10842,14 +10924,49 @@ async function sharePainelMercado(){
   function periodoLabel(p){return typeof rankPeriodoLabel==='function'?rankPeriodoLabel(p):(p==='mes'?'mês':p==='ano'?'ano':'12 meses')}
   function periodoResumo(p){return typeof rankPeriodoResumo==='function'?rankPeriodoResumo(p):(p==='mes'?'do mês':p==='ano'?'no ano':'12M')}
   function filtroLabelAtual(){
-    if(typeof activeRankFilter==='undefined'||activeRankFilter==='todos') return 'Todos os fundos';
+    if(typeof activeRankFilter==='undefined'||activeRankFilter==='todos') return 'Todos';
     const btn=qs(`[data-rank-filter="${activeRankFilter}"]`);
     return btn?btn.textContent.trim():'Filtro aplicado';
   }
-  function cdiRatioTxt(r){
+  function cdiReferenciaRankingV538(periodo){
+    const p=periodo||'12m';
+    const card=typeof cdiCardAtualV230==='function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const firstFinite=(...values)=>{
+      for(const value of values){
+        const n=num(value);
+        if(n!==null && !Number.isNaN(n) && Number.isFinite(n)) return n;
+      }
+      return null;
+    };
+    if(p==='mes'){
+      let atual=null;
+      try{ atual=typeof obterCdiAtualV232==='function' ? obterCdiAtualV232().valor : null; }catch(e){ atual=null; }
+      return firstFinite(atual, card?.parcial_mes_atual, card?.mensal, indicState?.cdi?.mes);
+    }
+    if(p==='ano'){
+      const direto=firstFinite(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, indicState?.cdi?.ano);
+      if(direto!==null) return direto;
+      try{
+        const hist=Array.isArray(card?.historico)?card.historico:[];
+        const ano=String(new Date().getFullYear());
+        const valores=hist
+          .map(item=>({key:String(item?.key||item?.data_ref||'').slice(0,7),value:num(item?.valor ?? item?.value)}))
+          .filter(item=>item.key.startsWith(ano+'-') && item.value!==null && !Number.isNaN(item.value) && Number.isFinite(item.value))
+          .map(item=>item.value);
+        if(valores.length && typeof acumularPercentuaisMensaisV229==='function') return acumularPercentuaisMensaisV229(valores);
+      }catch(e){}
+      return null;
+    }
+    const m12=typeof resolverCdiPeriodoV229==='function' ? resolverCdiPeriodoV229(card,12) : null;
+    return firstFinite(m12, card?.acum_12m, card?.m12, indicState?.cdi?.m12);
+  }
+  function cdiRatioTxt(r,periodo='12m'){
     try{
-      if(typeof calcCdiRatio!=='function') return '—';
-      const ratio=calcCdiRatio(num(r['Acum. 12M (%)']), indicState?.cdi?.m12);
+      const campo=campoPorPeriodo(periodo);
+      const rent=num(r[campo]);
+      const cdiRef=cdiReferenciaRankingV538(periodo);
+      if(rent===null || Number.isNaN(rent) || !Number.isFinite(rent) || cdiRef===null || cdiRef===0) return '—';
+      const ratio=typeof calcCdiRatio==='function' ? calcCdiRatio(rent,cdiRef) : Math.round((rent/cdiRef)*100);
       return ratio===null?'—':ratio+'%';
     }catch(e){return '—'}
   }
@@ -10862,14 +10979,16 @@ async function sharePainelMercado(){
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
   function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
-    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
+    const fullName=cleanFund(name);
+    const displayName=kind==='pl' ? fullName : compactFundName(fullName);
+    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(fullName)}">${esc(displayName)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
-  function topRow(r,i,campo,showCdi){
+  function topRow(r,i,campo,periodo){
     const cat=shortCat(r['Categoria']);
     const nome=cleanFund(r['Fundo']);
     const val=pct(r[campo]);
     const cls=retClass(r[campo]);
-    const cdi=showCdi?cdiRatioTxt(r):'—';
+    const cdi=cdiRatioTxt(r,periodo);
     return `<div class="ranking-top-row">
       <div class="ranking-pos">${medal(i)}</div>
       <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
@@ -10879,8 +10998,14 @@ async function sharePainelMercado(){
   }
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
+    const nomeCurto=compactFundName(nome);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
+    return `<article class="ranking-cat-mini ranking-cat-row-v457 ranking-cat-row-v531">
+      <span>${esc(shortCat(cat))}</span>
+      <strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong>
+      <small title="${esc(nome)}"><span class="ranking-cat-name-full-v531">${esc(nome)}</span><span class="ranking-cat-name-short-v531">${esc(nomeCurto)}</span></small>
+      <em>Melhor em 12 meses</em>
+    </article>`;
   }
   function worstMini(r,i,campo){
     const nome=cleanFund(r['Fundo']);
@@ -10893,6 +11018,12 @@ async function sharePainelMercado(){
     const v=pct(top[campoPorPeriodo(periodo)]);
     const w=worst?` No mesmo recorte, o destaque negativo é ${cleanFund(worst['Fundo'])}, com ${pct(worst[campoPorPeriodo(periodo)])}.`:'';
     return `No período de ${periodoLabel(periodo)}, o maior destaque é ${nome}, da categoria ${cat}, com ${v}.${w}`;
+  }
+  function compactInsight(top,worst,periodo){
+    if(!top) return 'Dados insuficientes para leitura rápida.';
+    const positivo=`${pct(top[campoPorPeriodo(periodo)])} em ${shortCat(top['Categoria'])}`;
+    if(!worst) return `${periodoLabel(periodo)}: destaque positivo ${positivo}.`;
+    return `${periodoLabel(periodo)}: positivo ${positivo}; negativo ${pct(worst[campoPorPeriodo(periodo)])} em ${shortCat(worst['Categoria'])}.`;
   }
 
   function renderRankingsV50(){
@@ -10932,13 +11063,13 @@ async function sharePainelMercado(){
     const maiorPL=catPL[0];
 
     const cards=[
-      summaryCard('best','🏆 Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12)} do CDI · ${shortCat(best12['Categoria'])}`:''),
-      summaryCard('month','📈 Melhor no mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
-      summaryCard('pl','🏦 Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:''),
-      summaryCard('worst','⚠️ Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):'')
+      summaryCard('best','Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12,'12m')} do CDI · ${shortCat(best12['Categoria'])}`:''),
+      summaryCard('worst','Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):''),
+      summaryCard('month','Melhor mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
+      summaryCard('pl','Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:'')
     ].join('');
 
-    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo)).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
     const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
     // v195: o painel lateral de atenção já reúne piores leituras,
     // negativos no ano e fundos sem dados. Evita duplicar a mesma informação
@@ -10946,19 +11077,18 @@ async function sharePainelMercado(){
     grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
-      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(insight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
           <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}${riskPill()}</div>
         </div>
         <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
-          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
+          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI no período</span></div>
           ${topRows}
         </div>
       </section>
       <section class="ranking-exec-secondary ranking-exec-secondary-single-v195">
-        <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Melhor fundo de cada categoria em 12 meses.</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
+        <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Top fundo de cada classe · 12 meses</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
       </section>
     `;
   }
@@ -11882,6 +12012,10 @@ async function sharePainelMercado(){
     return LABELS[canonCat || ''] || canonCat || 'Todos';
   }
 
+  function escV87(v){
+    return String(v || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
   function findRawCategory(canonTarget){
     if(!canonTarget) return '';
     try{
@@ -11920,15 +12054,15 @@ async function sharePainelMercado(){
   }
 
   function applyPresetExact(preset, sourceBtn){
+    const clickedActive = !!(sourceBtn && sourceBtn.getAttribute && sourceBtn.getAttribute('aria-pressed') === 'true');
+    if(clickedActive && preset && preset !== 'all') preset = 'all';
     const wanted = PRESET_CAT.hasOwnProperty(preset) ? PRESET_CAT[preset] : '';
 
     stabilizeFilterBox(()=>{
       try{
         activeCat = wanted ? findRawCategory(wanted) : '';
-        activeBenchmark = '';
-        activePerfil = '';
-        activeRisco = '';
-        hideSemDados = false;
+        // Desktop v526: categoria não limpa público-alvo, risco, benchmark ou busca.
+        // Assim os filtros voltam a acumular na ordem: busca → público-alvo → categoria → risco.
         currentPage = 1;
         window.__favListMode = false;
         window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
@@ -11936,7 +12070,7 @@ async function sharePainelMercado(){
       }catch(e){}
 
       const semDados = qs('#toggleSemDados');
-      if(semDados) semDados.checked = false;
+      if(semDados) semDados.checked = !!hideSemDados;
 
       try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
       try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
@@ -11944,6 +12078,11 @@ async function sharePainelMercado(){
 
       if(sourceBtn && typeof sourceBtn.blur === 'function') sourceBtn.blur();
       syncV87();
+      try{
+        if(window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__ && typeof window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__.sync === 'function'){
+          setTimeout(window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__.sync,0);
+        }
+      }catch(e){}
     });
   }
 
@@ -11982,11 +12121,18 @@ async function sharePainelMercado(){
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        if(active){
+        const parts = [];
+        try{ if(activePerfil) parts.push({kind:'perfil', label:'Público-alvo', value:String(activePerfil)}); }catch(e){}
+        try{ if(activeBenchmark) parts.push({kind:'benchmark', label:'Benchmark', value:String(activeBenchmark)}); }catch(e){}
+        if(active) parts.push({kind:'cat', label:'Categoria', value:label});
+        try{ if(activeRisco) parts.push({kind:'risco', label:'Risco', value:(typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(activeRisco) : String(activeRisco))}); }catch(e){}
+        try{ if(hideSemDados) parts.push({kind:'semDados', label:'Base', value:'Ocultar sem dados'}); }catch(e){}
+
+        if(parts.length){
           strip.classList.add('active','desktop-active-filter-v87');
-          strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="cat"><small>Categoria</small>${label}<span aria-hidden="true">×</span></button>` +
-            '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
+          strip.innerHTML = parts.map(p =>
+            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="${escV87(p.kind)}"><small>${escV87(p.label)}</small>${escV87(p.value)}<span aria-hidden="true">×</span></button>`
+          ).join('') + '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
         }else{
           strip.classList.remove('active','desktop-active-filter-v87');
           strip.innerHTML = '';
@@ -12998,7 +13144,7 @@ async function sharePainelMercado(){
       hint = document.createElement('div');
       hint.className = 'ptax-scroll-hint-v99';
       hint.dataset.scrollHintV99 = id;
-      hint.innerHTML = `<span>${text}</span><strong>Arraste →</strong>`;
+      hint.innerHTML = `<span>${text}</span>`;
       row.parentElement.insertBefore(hint, row);
     }else{
       const span = hint.querySelector('span');
@@ -13089,6 +13235,41 @@ async function sharePainelMercado(){
   setTimeout(normalizePtaxScrollHintsV99,3000);
 
   window.__ELTAUM_MOBILE_PTAX_SCROLL_HINT_V99__ = {sync:normalizePtaxScrollHintsV99};
+})();
+
+
+/* PATCH v424 — PTAX mobile: dica única e fechamentos mais compactos */
+(function(){
+  'use strict';
+
+  const BUILD = 'ELTAUM_DOLAR_MONTHS_CLEAN_v424';
+
+  function syncDolarMonthsCleanV424(){
+    try{
+      document.documentElement.classList.add('mobile-v424','dolar-months-clean-v424');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document
+        .querySelectorAll('#sec-dolar .ptax-scroll-hint-v99 strong')
+        .forEach((node) => node.remove());
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMonthsCleanV424, {once:true});
+  }else{
+    syncDolarMonthsCleanV424();
+  }
+
+  setTimeout(syncDolarMonthsCleanV424, 450);
+  setTimeout(syncDolarMonthsCleanV424, 1400);
+  setTimeout(syncDolarMonthsCleanV424, 2800);
+
+  window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__ = {
+    build: BUILD,
+    sync: syncDolarMonthsCleanV424
+  };
 })();
 
 
@@ -15131,21 +15312,18 @@ if(!isSearchInput(el)) return;
     let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
     if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
     const year=attentionRows(rows,'Acum. Ano (%)','Ano negativo — verificar a tese de manutenção',3);
-    const pipeline=missing.slice(0,3).map(r=>`<button type="button" class="attention-row-v136 pipeline" data-attention-fund="${esc(r.Fundo||'')}"><span><span class="fund">${esc(r.Fundo||'—')}</span><span class="reason">Sem cota/rentabilidade suficiente na base</span></span><span class="value">—</span></button>`).join('');
     const insight=neg12.length
       ? `<strong>${neg12.length}</strong> fundo(s) com retorno negativo em 12 meses no filtro atual. Use os alertas como ponto de partida para investigar classe, prazo, benchmark e aderência ao perfil.`
-      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês, no ano e fundos sem dados.`;
+      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês e no ano.`;
     host.innerHTML=`
       <div class="attention-metric-grid-v136">
         <div class="attention-metric-v136"><span>12M negativo</span><strong>${neg12.length}</strong></div>
         <div class="attention-metric-v136"><span>Ano negativo</span><strong>${negAno.length}</strong></div>
-        <div class="attention-metric-v136"><span>Sem dados</span><strong>${missing.length}</strong></div>
       </div>
       <div class="attention-block-v136"><h3>Insight SIPII</h3><div class="attention-insight-v136">${insight}</div></div>
-      ${worst?`<div class="attention-block-v136"><h3>Piores leituras</h3><div class="attention-list-v136">${worst}</div></div>`:''}
+      ${worst?`<div class="attention-block-v136"><h3>Piores em 12 meses</h3><div class="attention-list-v136">${worst}</div></div>`:''}
       ${year?`<div class="attention-block-v136"><h3>Negativos no ano</h3><div class="attention-list-v136">${year}</div></div>`:''}
-      ${pipeline?`<div class="attention-block-v136"><h3>Sem dados / pipeline</h3><div class="attention-list-v136">${pipeline}</div></div>`:''}
-      <div class="attention-foot-v136">Leitura automática e informativa. O alerta não substitui suitability, objetivos, liquidez e horizonte do cliente.</div>`;
+      <div class="attention-foot-v136">Alertas automáticos para apoio à análise. Não substituem suitability, objetivo e horizonte do cliente.</div>`;
   }
 
   function renderRankingsAndAttention(){
@@ -16169,19 +16347,19 @@ if(document.readyState === 'loading'){
     if(activeChip && activeChip.textContent.trim()) return activeChip.textContent.trim();
 
     const map={
-      todos:'Todos os fundos',
-      'sem-fmp':'Todos, exceto FMP',
+      todos:'Todos',
+      'sem-fmp':'Sem FMP',
       'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
-      'renda-fixa-referenciado':'RF Referenciado',
-      'renda-fixa-curto-prazo':'RF Curto Prazo',
+      'renda-fixa-referenciado':'RF Ref.',
+      'renda-fixa-curto-prazo':'RF Curto',
       multimercado:'Multimercado',
       cambial:'Cambial',
       acoes:'Ações',
       'fundo-de-indice':'Índice',
       fmp:'FMP'
     };
-    return map[value]||'Todos os fundos';
+    return map[value]||'Todos';
   }
 
   function syncUniversePill(){
@@ -18226,15 +18404,25 @@ function openCdiAnalyticTableV274(){
 
     if(!items.length || summary.dataset.v321Built === '1') return;
 
+    // v413 — pista visual mobile para o carrossel da Agenda Copom
+    // Mantém o aviso fora da trilha para não atrapalhar o scroll dos cards.
+    const oldHint = document.getElementById('copomScrollHintV413');
+    if(!oldHint){
+      summary.insertAdjacentHTML('beforebegin', '<div class="copom-scroll-hint-v413" id="copomScrollHintV413" aria-hidden="true"></div>');
+    }else{
+      oldHint.textContent = '';
+    }
+
     const html = items.map(item => {
       const num = norm(item.querySelector('.copom-num')?.textContent);
+      const numShort = num.replace(/\s*reuni[aã]o\b/i, '').trim();
       const date = norm(item.querySelector('.copom-date')?.textContent);
       const result = norm(item.querySelector('.copom-result')?.textContent);
       const kind = classify(item, result);
       const label = statusLabel(result);
       return `
         <article class="copom-exec-card-v270 copom-carousel-card-v321 ${kind}" role="listitem">
-          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
+          <span class="copom-exec-kicker-v270">${numShort || num || 'Reunião'}</span>
           <strong class="copom-exec-date-v270">${date || '—'}</strong>
           <div class="copom-exec-meta-v270">
             <span class="copom-exec-status-v270 ${kind}">${label}</span>
@@ -19540,8 +19728,6 @@ function openCdiAnalyticTableV274(){
   }, {passive:true});
 })();
 
-
-
 /* PATCH v407 — Selic mobile-first: sparkline específico para celular
    Objetivo: parar de encolher o gráfico desktop no mobile. No celular, ocultamos eixos/grades,
    mostramos apenas a curva, os pontos-chave e um rodapé legível com período + taxa atual. */
@@ -19636,8 +19822,8 @@ function openCdiAnalyticTableV274(){
         ${dot(lastIdx, 'dot current', 7.2, `Atual · ${atual}`)}
       </svg>
       <div class="econ-selic-mobile-summary-v407" aria-hidden="true">
-        <span>${periodStart} → ${periodEnd}</span>
-        <strong>Atual · ${atual}</strong>
+        <span>${periodStart}</span>
+        <span>${periodEnd}</span>
       </div>
     `;
   }
@@ -19656,4 +19842,4606 @@ function openCdiAnalyticTableV274(){
       }catch(e){}
     }, 180);
   }, {passive:true});
+})();
+
+/* PATCH v424 — marcador final para evitar overwrite por rotinas antigas */
+(function(){
+  function syncFinalBuildV424(){
+    try{
+      document.documentElement.classList.add('mobile-v424','dolar-months-clean-v424');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_DOLAR_MONTHS_CLEAN_v424';
+      if(window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__?.sync){
+        window.__ELTAUM_DOLAR_MONTHS_CLEAN_V424__.sync();
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncFinalBuildV424, {once:true});
+  }else{
+    syncFinalBuildV424();
+  }
+
+  window.addEventListener('load', syncFinalBuildV424, {once:true});
+  setTimeout(syncFinalBuildV424, 3200);
+})();
+
+/* PATCH v425 — Juros e CDI: Copom/CDI mensal em carrosseis padronizados */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_CDI_CAROUSELS_v425';
+
+  function syncRatesCarouselsV425(){
+    try{
+      document.documentElement.classList.add('mobile-v425','rates-copom-cdi-carousels-v425');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const copomHint = document.getElementById('copomScrollHintV413');
+      if(copomHint) copomHint.textContent = '';
+
+      const cdiBox = document.getElementById('cdiYearHistory');
+      if(cdiBox){
+        cdiBox.removeAttribute('hidden');
+        cdiBox.removeAttribute('aria-hidden');
+      }
+
+      const setImportant = (el, prop, val) => {
+        if(el) el.style.setProperty(prop, val, 'important');
+      };
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'display', 'flex');
+          setImportant(track, 'gap', '9px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '28px');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'overflow-y', 'hidden');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+        });
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', '0 0 112px');
+          setImportant(card, 'width', '112px');
+          setImportant(card, 'min-width', '112px');
+          setImportant(card, 'max-width', '112px');
+          setImportant(card, 'box-sizing', 'border-box');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesCarouselsV425, {once:true});
+  }else{
+    syncRatesCarouselsV425();
+  }
+
+  window.addEventListener('load', syncRatesCarouselsV425, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesCarouselsV425), {passive:true});
+  setTimeout(syncRatesCarouselsV425, 450);
+  setTimeout(syncRatesCarouselsV425, 1500);
+  setTimeout(syncRatesCarouselsV425, 3400);
+
+  window.__ELTAUM_RATES_COPOM_CDI_CAROUSELS_V425__ = {
+    build: BUILD,
+    sync: syncRatesCarouselsV425
+  };
+})();
+
+/* PATCH v426 — Juros e CDI: tres cards visiveis por tela */
+(function(){
+  const BUILD = 'ELTAUM_RATES_THREE_VISIBLE_v426';
+
+  function syncRatesThreeVisibleV426(){
+    try{
+      document.documentElement.classList.add('mobile-v426','rates-three-visible-v426');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const setImportant = (el, prop, val) => {
+        if(el) el.style.setProperty(prop, val, 'important');
+      };
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'gap', '8px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '14px');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+        });
+
+      const width = 'calc((100% - 16px) / 3)';
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', `0 0 ${width}`);
+          setImportant(card, 'width', width);
+          setImportant(card, 'min-width', width);
+          setImportant(card, 'max-width', width);
+          setImportant(card, 'box-sizing', 'border-box');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesThreeVisibleV426, {once:true});
+  }else{
+    syncRatesThreeVisibleV426();
+  }
+
+  window.addEventListener('load', syncRatesThreeVisibleV426, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesThreeVisibleV426), {passive:true});
+  setTimeout(syncRatesThreeVisibleV426, 520);
+  setTimeout(syncRatesThreeVisibleV426, 1650);
+  setTimeout(syncRatesThreeVisibleV426, 3600);
+
+  window.__ELTAUM_RATES_THREE_VISIBLE_V426__ = {
+    build: BUILD,
+    sync: syncRatesThreeVisibleV426
+  };
+})();
+
+/* PATCH v427 — Juros e CDI: remove conflitos legados e fixa 3 cards */
+(function(){
+  const BUILD = 'ELTAUM_RATES_HARD_THREE_v427';
+  let observerStarted = false;
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function forceThreeCardsV427(){
+    try{
+      const root = document.documentElement;
+      root.classList.add('mobile-v427','rates-hard-three-v427');
+      root.classList.remove('mobile-rates-final-v352','mobile-v414','mobile-v413');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const sec = document.getElementById('sec-mercado');
+      if(sec) sec.classList.add('rates-hard-three-v427');
+
+      document.querySelectorAll('#sec-mercado .copom-scroll-hint-v413').forEach(el => el.remove());
+
+      const cdiBox = document.getElementById('cdiYearHistory');
+      if(cdiBox){
+        cdiBox.removeAttribute('hidden');
+        cdiBox.removeAttribute('aria-hidden');
+        setImportant(cdiBox, 'display', 'block');
+        setImportant(cdiBox, 'visibility', 'visible');
+        setImportant(cdiBox, 'height', 'auto');
+        setImportant(cdiBox, 'max-height', 'none');
+        setImportant(cdiBox, 'overflow', 'hidden');
+        setImportant(cdiBox, 'margin', '12px 0 0');
+        setImportant(cdiBox, 'padding', '11px 10px 13px');
+      }
+
+      const oldCdi = document.getElementById('cdiMobileReadableV352');
+      if(oldCdi){
+        oldCdi.setAttribute('aria-hidden','true');
+        try{ oldCdi.inert = true; }catch(_error){}
+        setImportant(oldCdi, 'display', 'none');
+        setImportant(oldCdi, 'height', '0');
+        setImportant(oldCdi, 'max-height', '0');
+        setImportant(oldCdi, 'overflow', 'hidden');
+      }
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270, #sec-mercado #cdiMonthCarouselV322')
+        .forEach(track => {
+          setImportant(track, 'display', 'flex');
+          setImportant(track, 'flex-wrap', 'nowrap');
+          setImportant(track, 'gap', '8px');
+          setImportant(track, 'padding-left', '0');
+          setImportant(track, 'padding-right', '0');
+          setImportant(track, 'overflow-x', 'auto');
+          setImportant(track, 'overflow-y', 'hidden');
+          setImportant(track, 'scroll-snap-type', 'x proximity');
+          setImportant(track, 'scrollbar-width', 'none');
+        });
+
+      const width = 'calc((100% - 16px) / 3)';
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'flex', `0 0 ${width}`);
+          setImportant(card, 'width', width);
+          setImportant(card, 'min-width', width);
+          setImportant(card, 'max-width', width);
+          setImportant(card, 'box-sizing', 'border-box');
+          setImportant(card, 'min-height', '66px');
+          setImportant(card, 'padding', '8px 6px 8px 9px');
+        });
+
+      if(!observerStarted){
+        observerStarted = true;
+        const targets = [
+          document.getElementById('copomExecutiveSummaryV270'),
+          document.getElementById('cdiMonthCarouselV322'),
+          document.getElementById('cdiYearHistory')
+        ].filter(Boolean);
+
+        const obs = new MutationObserver(() => {
+          requestAnimationFrame(forceThreeCardsV427);
+        });
+        targets.forEach(target => obs.observe(target, {
+          childList:true,
+          subtree:true,
+          attributes:true,
+          attributeFilter:['style','class','hidden','aria-hidden']
+        }));
+        window.__ELTAUM_RATES_HARD_THREE_OBSERVER_V427__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', forceThreeCardsV427, {once:true});
+  }else{
+    forceThreeCardsV427();
+  }
+
+  window.addEventListener('load', forceThreeCardsV427, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(forceThreeCardsV427), {passive:true});
+  [350, 800, 1400, 2400, 4200, 6500].forEach(ms => setTimeout(forceThreeCardsV427, ms));
+
+  window.__ELTAUM_RATES_HARD_THREE_V427__ = {
+    build: BUILD,
+    sync: forceThreeCardsV427
+  };
+})();
+
+/* PATCH v428 — Juros e CDI: limpeza semantica dos textos */
+(function(){
+  const BUILD = 'ELTAUM_RATES_SEMANTIC_CLEAN_v428';
+
+  function syncRatesSemanticCleanV428(){
+    try{
+      document.documentElement.classList.add('mobile-v428','rates-semantic-clean-v428');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const cdiTitle = document.getElementById('cdiYearHistoryTitle');
+      if(cdiTitle){
+        cdiTitle.textContent = cdiTitle.textContent
+          .replace(/CDI\s+—\s+vis[aã]o mensal/i, 'CDI mensal')
+          .replace(/\s+/g, ' ')
+          .trim();
+      }
+
+      document.querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 .copom-exec-kicker-v270').forEach(el => {
+        el.textContent = el.textContent.replace(/\s*reuni[aã]o\b/i, '').trim();
+      });
+
+      document.querySelectorAll('#sec-mercado #cdiMonthCarouselV322 .cdi-month-card-v322').forEach(card => {
+        const kicker = card.querySelector('.cdi-month-kicker-v322');
+        if(kicker){
+          const text = kicker.textContent.trim();
+          kicker.textContent = /parcial/i.test(text)
+            ? text.replace(/\s*·\s*fechado/i, '').replace(/\s+/g, ' ')
+            : text.replace(/\s*·\s*fechado/i, '').trim();
+        }
+
+        const accum = card.querySelector('.cdi-month-accum-v322');
+        if(accum){
+          accum.textContent = accum.textContent.replace(/^Acum\.\s*ano/i, 'Ano').replace(/\s+/g, ' ').trim();
+        }
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesSemanticCleanV428, {once:true});
+  }else{
+    syncRatesSemanticCleanV428();
+  }
+
+  window.addEventListener('load', syncRatesSemanticCleanV428, {once:true});
+  [500, 1200, 2600, 4600, 7000, 9200].forEach(ms => setTimeout(syncRatesSemanticCleanV428, ms));
+
+  window.__ELTAUM_RATES_SEMANTIC_CLEAN_V428__ = {
+    build: BUILD,
+    sync: syncRatesSemanticCleanV428
+  };
+})();
+
+/* PATCH v429 — Juros e CDI: Copom e CDI mensal com cards internos borderless */
+(function(){
+  const BUILD = 'ELTAUM_RATES_BORDERLESS_CAROUSELS_v429';
+
+  function setImportant(el, prop, val){
+    if(el) el.style.setProperty(prop, val, 'important');
+  }
+
+  function syncRatesBorderlessCarouselsV429(){
+    try{
+      document.documentElement.classList.add('mobile-v429','rates-borderless-carousel-v429');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document
+        .querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article, #sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'background', 'transparent');
+          setImportant(card, 'border', '0');
+          setImportant(card, 'outline', '0');
+          setImportant(card, 'box-shadow', 'none');
+        });
+
+      document
+        .querySelectorAll('#sec-mercado #cdiMonthCarouselV322 > .cdi-month-card-v322')
+        .forEach(card => {
+          setImportant(card, 'padding-left', '6px');
+          setImportant(card, 'padding-right', '6px');
+        });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncRatesBorderlessCarouselsV429, {once:true});
+  }else{
+    syncRatesBorderlessCarouselsV429();
+  }
+
+  window.addEventListener('load', syncRatesBorderlessCarouselsV429, {once:true});
+  window.addEventListener('resize', () => requestAnimationFrame(syncRatesBorderlessCarouselsV429), {passive:true});
+  [600, 1600, 3200, 5200, 7600, 9800].forEach(ms => setTimeout(syncRatesBorderlessCarouselsV429, ms));
+
+  window.__ELTAUM_RATES_BORDERLESS_CAROUSELS_V429__ = {
+    build: BUILD,
+    sync: syncRatesBorderlessCarouselsV429
+  };
+})();
+
+/* PATCH v430 — Agenda Copom: mostra apenas movimento em p.p. para corte/alta */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_MOVE_v430';
+
+  function extractMoveText(result){
+    const text = String(result || '').replace(/\u2212/g, '-').replace(/\s+/g, ' ').trim();
+    const match = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(!match) return '';
+    const value = match[2]
+      .replace(/\s*p\.?\s*p\.?/i, ' p.p.')
+      .replace(/^\+?/, match[1].toLowerCase() === 'alta' ? '+' : '');
+    return value;
+  }
+
+  function syncCopomMoveV430(){
+    try{
+      document.documentElement.classList.add('mobile-v430','rates-copom-move-v430');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#sec-mercado #copomExecutiveSummaryV270 > article').forEach(card => {
+        const status = card.querySelector('.copom-exec-status-v270');
+        const result = card.querySelector('.copom-carousel-result-v321');
+        const raw = result?.textContent || '';
+        const move = extractMoveText(raw);
+
+        card.querySelectorAll('.copom-move-v430').forEach(el => el.remove());
+
+        if(result){
+          result.setAttribute('aria-hidden', move ? 'true' : 'false');
+          if(move){
+            result.style.setProperty('display', 'none', 'important');
+          }
+        }
+
+        if(!move || !status) return;
+
+        const el = document.createElement('small');
+        el.className = 'copom-move-v430';
+        el.textContent = move;
+        status.insertAdjacentElement('afterend', el);
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomMoveV430, {once:true});
+  }else{
+    syncCopomMoveV430();
+  }
+
+  window.addEventListener('load', syncCopomMoveV430, {once:true});
+  [700, 1700, 3300, 5400, 7800, 10200].forEach(ms => setTimeout(syncCopomMoveV430, ms));
+
+  window.__ELTAUM_RATES_COPOM_MOVE_V430__ = {
+    build: BUILD,
+    sync: syncCopomMoveV430
+  };
+})();
+
+/* PATCH v431 — Agenda Copom: movimento em p.p. persistente apos rebuild */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_MOVE_PERSISTENT_v431';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function extractMoveText(result){
+    const text = String(result || '').replace(/\u2212/g, '-').replace(/\s+/g, ' ').trim();
+    const match = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(!match) return '';
+    return match[2]
+      .replace(/\s*p\.?\s*p\.?/i, ' p.p.')
+      .replace(/^\+?/, match[1].toLowerCase() === 'alta' ? '+' : '');
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      syncCopomMovePersistentV431();
+    });
+  }
+
+  function syncCard(card){
+    const status = card.querySelector('.copom-exec-status-v270');
+    const result = card.querySelector('.copom-carousel-result-v321');
+    const move = extractMoveText(result?.textContent || '');
+    const existing = card.querySelector('.copom-move-v430, .copom-move-v431');
+
+    if(!move){
+      card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(el => el.remove());
+      return;
+    }
+
+    if(result){
+      result.setAttribute('aria-hidden', 'true');
+      result.style.setProperty('display', 'none', 'important');
+    }
+
+    if(existing){
+      existing.className = 'copom-move-v430 copom-move-v431';
+      if(existing.textContent !== move) existing.textContent = move;
+      if(status && existing.previousElementSibling !== status){
+        status.insertAdjacentElement('afterend', existing);
+      }
+      card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(el => {
+        if(el !== existing) el.remove();
+      });
+      return;
+    }
+
+    if(!status) return;
+    const el = document.createElement('small');
+    el.className = 'copom-move-v430 copom-move-v431';
+    el.textContent = move;
+    status.insertAdjacentElement('afterend', el);
+  }
+
+  function startObserver(summary){
+    if(observerStarted || !summary || !window.MutationObserver) return;
+    observerStarted = true;
+    const target = document.getElementById('sec-mercado') || summary;
+    const obs = new MutationObserver(schedule);
+    obs.observe(target, {
+      childList:true,
+      subtree:true
+    });
+    window.__ELTAUM_RATES_COPOM_MOVE_OBSERVER_V431__ = obs;
+  }
+
+  function syncCopomMovePersistentV431(){
+    try{
+      document.documentElement.classList.add('mobile-v430','rates-copom-move-v430','mobile-v431','rates-copom-move-persistent-v431');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+      summary.querySelectorAll(':scope > article').forEach(syncCard);
+      startObserver(summary);
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomMovePersistentV431, {once:true});
+  }else{
+    syncCopomMovePersistentV431();
+  }
+
+  window.addEventListener('load', syncCopomMovePersistentV431, {once:true});
+  window.addEventListener('pageshow', syncCopomMovePersistentV431, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomMovePersistentV431, ms));
+
+  window.__ELTAUM_RATES_COPOM_MOVE_PERSISTENT_V431__ = {
+    build: BUILD,
+    sync: syncCopomMovePersistentV431
+  };
+})();
+
+/* PATCH v432 — Poupanca mobile: hierarquia de KPI e regra mais clara */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_HERO_v432';
+
+  function applySavingsMobileHeroV432(){
+    try{
+      const root = document.documentElement;
+      root.classList.add('mobile-v432','savings-mobile-hero-v432');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const label = document.getElementById('poupCurrentLabelV214');
+      if(label) label.textContent = 'Rendimento do mês';
+
+      const ruleTitle = document.getElementById('poupCurrentScenarioTitleV214');
+      if(ruleTitle) ruleTitle.textContent = 'Regra vigente';
+
+      const yearLabel = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.year dt');
+      if(yearLabel) yearLabel.textContent = 'Acumulado 2026';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra será definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+        source.setAttribute('aria-label', 'Abrir simulador de rendimento da poupança do Banco Central em uma nova guia');
+      }
+
+      const btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileHeroV432, {once:true});
+  }else{
+    applySavingsMobileHeroV432();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobileHeroV432, 40);
+      setTimeout(applySavingsMobileHeroV432, 220);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobileHeroV432, {once:true});
+  [400, 1200, 2600, 5200, 9000, 14000, 24500].forEach(ms => setTimeout(applySavingsMobileHeroV432, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_HERO_V432__ = {
+    build: BUILD,
+    sync: applySavingsMobileHeroV432
+  };
+})();
+
+/* PATCH v433 — Poupanca mobile: microajustes de texto e leitura */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_POLISH_v433';
+
+  function applySavingsMobilePolishV433(){
+    try{
+      document.documentElement.classList.add('mobile-v433','savings-mobile-polish-v433');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const kicker = document.querySelector('#sec-mercado .savings-reference-v167 .savings-title-v207 .market-reference-kicker-v167');
+      if(kicker) kicker.textContent = 'Rendimento';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          quick.innerHTML = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else if(raw.includes('aguardando')){
+          quick.innerHTML = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          quick.innerHTML = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobilePolishV433, {once:true});
+  }else{
+    applySavingsMobilePolishV433();
+  }
+
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#poupExpandBtn')){
+      setTimeout(applySavingsMobilePolishV433, 60);
+      setTimeout(applySavingsMobilePolishV433, 260);
+    }
+  }, true);
+
+  window.addEventListener('load', applySavingsMobilePolishV433, {once:true});
+  [600, 1600, 3200, 6200, 10200, 15000, 25200].forEach(ms => setTimeout(applySavingsMobilePolishV433, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_POLISH_V433__ = {
+    build: BUILD,
+    sync: applySavingsMobilePolishV433
+  };
+})();
+
+/* PATCH v434 — Poupanca mobile: estabiliza textos finais sem piscar */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_v434';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function applySavingsMobileTextStableV434(){
+    try{
+      document.documentElement.classList.add('mobile-v434','savings-mobile-text-stable-v434');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt && dt.textContent !== 'Regra atual') dt.textContent = 'Regra atual';
+        if(data && data.textContent !== 'Selic acima de 8,50%') data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const quick = document.getElementById('poupQuickNote');
+      if(quick){
+        const raw = quick.textContent.toLowerCase();
+        let html = '';
+        if(raw.includes('70%') || raw.includes('até 8,50') || raw.includes('ate 8,50')){
+          html = '<strong>70% da Selic + TR</strong><span>Enquanto a Selic estiver em até <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }else if(raw.includes('aguardando') || raw.includes('definida')){
+          html = '<strong>Regra definida pela Selic vigente</strong><span>O cálculo muda quando a Selic fica em até 8,50% a.a.</span>';
+        }else{
+          html = '<strong>TR + 0,50% a.m.</strong><span>Enquanto a Selic estiver acima de <b class="poup-nowrap-v434">8,50% a.a.</b></span>';
+        }
+        if(html && quick.innerHTML !== html) quick.innerHTML = html;
+      }
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source && !source.textContent.includes('Simular rendimento')){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applySavingsMobileTextStableV434();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const target = document.querySelector('#sec-mercado .savings-reference-v167');
+    if(!target) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(target, {childList:true, subtree:true, characterData:true});
+    window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_OBSERVER_V434__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applySavingsMobileTextStableV434, {once:true});
+  }else{
+    applySavingsMobileTextStableV434();
+  }
+
+  window.addEventListener('load', applySavingsMobileTextStableV434, {once:true});
+  [800, 1800, 3600, 7000, 11200, 16000, 26000].forEach(ms => setTimeout(applySavingsMobileTextStableV434, ms));
+
+window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
+    build: BUILD,
+    sync: applySavingsMobileTextStableV434
+  };
+})();
+
+/* PATCH v435 — Mobile: topo compacto e KPIs com icones */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_ICONS_v435';
+  let observerStarted = false;
+  let scheduled = false;
+
+  const ICONS = {
+    fundos: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4-8 4-8-4 8-4Z"/><path d="m4 12 8 4 8-4"/><path d="m4 17 8 4 8-4"/></svg>',
+    pl: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9h9Z"/><path d="M12 3a9 9 0 0 1 9 9h-9V3Z"/></svg>',
+    best: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17 9 11l4 4 8-8"/><path d="M14 7h7v7"/></svg>',
+    worst: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m3 7 6 6 4-4 8 8"/><path d="M14 17h7v-7"/></svg>'
+  };
+
+  function setLabel(cell, text){
+    const label = cell?.querySelector(':scope > span:not(.mobile-kpi-icon-v435)');
+    if(label && label.textContent.trim() !== text) label.textContent = text;
+  }
+
+  function ensureIcon(cell, type){
+    if(!cell) return;
+    cell.classList.add(`is-${type}-v435`);
+    let icon = cell.querySelector(':scope > .mobile-kpi-icon-v435');
+    if(!icon){
+      icon = document.createElement('span');
+      icon.className = 'mobile-kpi-icon-v435';
+      icon.setAttribute('aria-hidden','true');
+      cell.prepend(icon);
+    }
+    const html = ICONS[type] || '';
+    if(icon.innerHTML !== html) icon.innerHTML = html;
+  }
+
+  function applyMobileTopKpiIconsV435(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v435','mobile-top-kpi-icons-v435');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const header = document.querySelector('.site-header-clean');
+      const status = header?.querySelector('.header-data-status-v343');
+      const last = document.getElementById('lastUpdate');
+      if(status && last && last.parentElement !== status){
+        status.appendChild(last);
+      }
+
+      const grid = document.querySelector('#sec-kpi-mobile .mobile-kpi-compact-grid');
+      if(grid){
+        grid.setAttribute('data-mobile-kpi-icons-v435','1');
+        const cells = Array.from(grid.querySelectorAll(':scope > .mobile-kpi-cell'));
+        const fundos = cells[0];
+        const pl = cells[1];
+        const categorias = cells[2];
+        const pipeline = cells[3];
+        const best = cells[4];
+        const worst = cells[5];
+
+        ensureIcon(fundos, 'fundos');
+        ensureIcon(pl, 'pl');
+        ensureIcon(best, 'best');
+        ensureIcon(worst, 'worst');
+
+        setLabel(fundos, 'Fundos');
+        setLabel(pl, 'PL');
+        setLabel(best, 'Melhor 12M');
+        setLabel(worst, 'Pior 12M');
+
+        categorias?.setAttribute('aria-hidden','true');
+        pipeline?.setAttribute('aria-hidden','true');
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileTopKpiIconsV435();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const targets = [
+      document.querySelector('.site-header-clean'),
+      document.getElementById('sec-kpi-mobile')
+    ].filter(Boolean);
+    if(!targets.length) return;
+
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    targets.forEach(target => obs.observe(target, {childList:true, subtree:true, characterData:true}));
+    window.__ELTAUM_MOBILE_TOP_KPI_ICONS_OBSERVER_V435__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileTopKpiIconsV435, {once:true});
+  }else{
+    applyMobileTopKpiIconsV435();
+  }
+
+  window.addEventListener('load', applyMobileTopKpiIconsV435, {once:true});
+  [300, 900, 1800, 3600, 7000, 12000, 18000, 27000].forEach(ms => setTimeout(applyMobileTopKpiIconsV435, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_ICONS_V435__ = {
+    build: BUILD,
+    sync: applyMobileTopKpiIconsV435
+  };
+})();
+
+/* PATCH v436 — Mobile: header minimalista sem chip na data */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_MINIMAL_v436';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function applyMobileHeaderMinimalV436(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v436','mobile-header-minimal-v436');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const header = document.querySelector('.site-header-clean');
+      const brandText = header?.querySelector('.brand-text');
+      const title = brandText?.querySelector('h1');
+      const last = document.getElementById('lastUpdate');
+      if(brandText && last && last.parentElement !== brandText){
+        if(title?.nextSibling){
+          brandText.insertBefore(last, title.nextSibling);
+        }else{
+          brandText.appendChild(last);
+        }
+      }
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderMinimalV436();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true});
+    window.__ELTAUM_MOBILE_HEADER_MINIMAL_OBSERVER_V436__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderMinimalV436, {once:true});
+  }else{
+    applyMobileHeaderMinimalV436();
+  }
+
+  window.addEventListener('load', applyMobileHeaderMinimalV436, {once:true});
+  [300, 900, 1800, 3600, 7000, 12000, 18000, 27000].forEach(ms => setTimeout(applyMobileHeaderMinimalV436, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_MINIMAL_V436__ = {
+    build: BUILD,
+    sync: applyMobileHeaderMinimalV436
+  };
+})();
+
+/* PATCH v437 — Mobile: remove wrapper antigo da data e zera topo excedente */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_TIGHT_v437';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function disableLegacyHeaderObserver(){
+    try{
+      const legacy = window.__ELTAUM_HEADER_UPDATE_FIX_V374__;
+      if(legacy?.observer && typeof legacy.observer.disconnect === 'function'){
+        legacy.observer.disconnect();
+      }
+      if(legacy){
+        legacy.sync = function(){};
+        legacy.disabledByV437 = true;
+      }
+    }catch(_error){}
+  }
+
+  function unwrapLegacyHost(){
+    const header = document.querySelector('.site-header-clean');
+    const brandText = header?.querySelector('.brand-text');
+    const title = brandText?.querySelector('h1');
+    const last = document.getElementById('lastUpdate');
+    if(!brandText || !last) return;
+
+    last.classList.remove('header-update-v374');
+    last.removeAttribute('style');
+
+    if(last.parentElement !== brandText){
+      if(title?.nextSibling){
+        brandText.insertBefore(last, title.nextSibling);
+      }else{
+        brandText.appendChild(last);
+      }
+    }
+
+    document.querySelectorAll('.header-update-host-v374').forEach(host => {
+      if(!host.contains(last) && !host.textContent.trim()) host.remove();
+    });
+  }
+
+  function applyMobileHeaderTightV437(){
+    try{
+      document.documentElement.classList.add('mobile-v437','mobile-header-tight-v437');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      disableLegacyHeaderObserver();
+      unwrapLegacyHost();
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderTightV437();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true, attributes:true, attributeFilter:['class','style']});
+    window.__ELTAUM_MOBILE_HEADER_TIGHT_OBSERVER_V437__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderTightV437, {once:true});
+  }else{
+    applyMobileHeaderTightV437();
+  }
+
+  window.addEventListener('load', applyMobileHeaderTightV437, {once:true});
+  [50, 120, 260, 600, 1100, 2200, 4200, 6500, 10000, 16000, 26000].forEach(ms => setTimeout(applyMobileHeaderTightV437, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_TIGHT_V437__ = {
+    build: BUILD,
+    sync: applyMobileHeaderTightV437
+  };
+})();
+
+/* PATCH v439 — Mobile: data visual dentro da mesma linha do titulo
+   PATCH v483 — Desktop limpo: não injeta a data no H1 fora do mobile */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_v439_DESKTOP_CLEAN_v483';
+  const MOBILE_QUERY = '(max-width: 768px)';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function isMobileHeaderMode(){
+    return !!(window.matchMedia && window.matchMedia(MOBILE_QUERY).matches);
+  }
+
+  function currentDateText(){
+    const time = document.querySelector('#lastUpdate .live-update-time, #lastUpdate time');
+    const raw = (time?.textContent || document.getElementById('lastUpdate')?.textContent || '').replace(/\s+/g,' ').trim();
+    return raw.replace(/^Atualizado\s*·\s*/i,'') || '';
+  }
+
+  function removeDesktopInlineDateV483(){
+    const html = document.documentElement;
+    const header = document.querySelector('.site-header-clean');
+    const h1 = header?.querySelector('.brand-text h1');
+
+    html.classList.remove('mobile-header-date-in-title-v439');
+
+    h1?.querySelectorAll('.header-inline-date-v439').forEach(inline => {
+      const previous = inline.previousSibling;
+      if(previous && previous.nodeType === Node.TEXT_NODE && !previous.textContent.trim()){
+        previous.remove();
+      }
+      inline.remove();
+    });
+  }
+
+  function applyMobileHeaderDateInTitleV439(){
+    try{
+      if(!isMobileHeaderMode()){
+        removeDesktopInlineDateV483();
+        return;
+      }
+
+      const html = document.documentElement;
+      html.classList.add('mobile-v439','mobile-header-date-in-title-v439');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const legacy = window.__ELTAUM_HEADER_UPDATE_FIX_V374__;
+      if(legacy?.observer && typeof legacy.observer.disconnect === 'function') legacy.observer.disconnect();
+      if(legacy) legacy.disabledByV439 = true;
+
+      const header = document.querySelector('.site-header-clean');
+      const h1 = header?.querySelector('.brand-text h1');
+      const last = document.getElementById('lastUpdate');
+      if(!h1 || !last) return;
+
+      last.classList.remove('header-update-v374');
+
+      let inline = h1.querySelector('.header-inline-date-v439');
+      if(!inline){
+        inline = document.createElement('span');
+        inline.className = 'header-inline-date-v439';
+        inline.setAttribute('aria-hidden','true');
+        h1.appendChild(document.createTextNode(' '));
+        h1.appendChild(inline);
+      }
+
+      const text = currentDateText();
+      if(text && inline.textContent !== text) inline.textContent = text;
+
+      document.querySelectorAll('.header-update-host-v374').forEach(host => {
+        if(!host.contains(last) && !host.textContent.trim()) host.remove();
+      });
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderDateInTitleV439();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true, characterData:true});
+    window.__ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_OBSERVER_V439__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderDateInTitleV439, {once:true});
+  }else{
+    applyMobileHeaderDateInTitleV439();
+  }
+
+  window.addEventListener('load', applyMobileHeaderDateInTitleV439, {once:true});
+  window.addEventListener('resize', schedule, {passive:true});
+
+  if(window.matchMedia){
+    const mobileMedia = window.matchMedia(MOBILE_QUERY);
+    if(typeof mobileMedia.addEventListener === 'function'){
+      mobileMedia.addEventListener('change', schedule);
+    }else if(typeof mobileMedia.addListener === 'function'){
+      mobileMedia.addListener(schedule);
+    }
+  }
+
+  [50, 120, 260, 600, 1100, 2200, 4200, 6500, 10000, 16000, 26000].forEach(ms => setTimeout(applyMobileHeaderDateInTitleV439, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_V439__ = {
+    build: BUILD,
+    sync: applyMobileHeaderDateInTitleV439,
+    desktopClean: removeDesktopInlineDateV483
+  };
+})();
+
+/* PATCH v440 — Mobile: filtros de fundos compactos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_v440';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function totalFundsText(){
+    const candidates = [
+      document.getElementById('filterResultSummary')?.textContent,
+      document.getElementById('mobileCategorySelectResultV74')?.textContent,
+      document.getElementById('desktopFilterResultSummary')?.textContent,
+      document.getElementById('resultInfo')?.textContent
+    ].filter(Boolean);
+
+    for(const raw of candidates){
+      const match = String(raw).match(/(\d[\d.]*)\s+fundos?/i);
+      if(match) return `${match[1]} fundos`;
+    }
+
+    return '';
+  }
+
+  function ensureFundsTitleCount(){
+    const section = document.getElementById('sec-fundos');
+    const title = section?.querySelector('.section-title h2');
+    if(!title) return;
+
+    let count = title.querySelector('.funds-title-count-v440');
+    if(!count){
+      count = document.createElement('span');
+      count.className = 'funds-title-count-v440';
+      count.setAttribute('aria-live','polite');
+      title.appendChild(count);
+    }
+
+    const text = totalFundsText();
+    if(text && count.textContent !== text) count.textContent = text;
+  }
+
+  function moveRealNoDataToggle(){
+    const shell = document.getElementById('mobileCategorySelectShellV74');
+    const toggle = document.querySelector('label[for="toggleSemDados"]');
+    if(!shell || !toggle) return;
+
+    shell.classList.add('has-real-toggle-v440');
+    toggle.classList.add('mobile-moved-toggle-v440');
+    if(toggle.parentElement !== shell){
+      const head = shell.querySelector('.mobile-category-select-head-v74');
+      shell.insertBefore(toggle, head || shell.firstChild);
+    }
+  }
+
+  function applyMobileFundsFiltersCompactV440(){
+    try{
+      document.documentElement.classList.add('mobile-v440','mobile-funds-filters-compact-v440');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const pfText = document.querySelector('#mobileExtraControlsV75 .mobile-pf-toggle-text-v75 strong');
+      if(pfText && pfText.textContent.trim() !== 'Pessoa Física') pfText.textContent = 'Pessoa Física';
+
+      moveRealNoDataToggle();
+      ensureFundsTitleCount();
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileFundsFiltersCompactV440();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const targets = [
+      document.getElementById('sec-fundos'),
+      document.getElementById('filterResultSummary'),
+      document.getElementById('mobileCategorySelectResultV74'),
+      document.getElementById('resultInfo')
+    ].filter(Boolean);
+    if(!targets.length) return;
+
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    targets.forEach(target => obs.observe(target, {childList:true, subtree:true, characterData:true}));
+    window.__ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_OBSERVER_V440__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundsFiltersCompactV440, {once:true});
+  }else{
+    applyMobileFundsFiltersCompactV440();
+  }
+
+  window.addEventListener('load', applyMobileFundsFiltersCompactV440, {once:true});
+  [250, 800, 1600, 3200, 6400, 12000].forEach(ms => setTimeout(applyMobileFundsFiltersCompactV440, ms));
+
+  window.__ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_V440__ = {
+    build: BUILD,
+    sync: applyMobileFundsFiltersCompactV440
+  };
+})();
+
+/* PATCH v441 — Mobile: ajustes finos dos filtros de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUNDS_FILTERS_FIX_v441';
+  let scheduled = false;
+
+  function applyMobileFundsFiltersFixV441(){
+    try{
+      document.documentElement.classList.add('mobile-v441','mobile-funds-filters-fix-v441');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const search = document.getElementById('searchInput');
+      if(search && !search.dataset.mobilePlaceholderV441){
+        search.dataset.desktopPlaceholderV441 = search.getAttribute('placeholder') || '';
+        search.dataset.mobilePlaceholderV441 = '1';
+      }
+      if(search && window.matchMedia?.('(max-width: 768px)').matches){
+        search.setAttribute('placeholder','Buscar fundo ou CNPJ...');
+      }
+
+      const pf = document.getElementById('mobileOnlyPfV75');
+      const pfLabel = document.querySelector('label[for="mobileOnlyPfV75"]');
+      if(pf && pfLabel){
+        pfLabel.classList.toggle('is-checked-v441', !!pf.checked);
+      }
+
+      const noDataToggle = document.querySelector('#mobileCategorySelectShellV74 .mobile-moved-toggle-v440');
+      if(noDataToggle){
+        noDataToggle.setAttribute('data-mobile-fixed-v441','1');
+      }
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileFundsFiltersFixV441();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundsFiltersFixV441, {once:true});
+  }else{
+    applyMobileFundsFiltersFixV441();
+  }
+
+  document.addEventListener('change', event => {
+    if(event.target?.id === 'mobileOnlyPfV75' || event.target?.id === 'toggleSemDados') schedule();
+  }, true);
+  window.addEventListener('resize', schedule, {passive:true});
+  window.addEventListener('load', applyMobileFundsFiltersFixV441, {once:true});
+  [250, 800, 1600, 3200, 6400, 12000].forEach(ms => setTimeout(applyMobileFundsFiltersFixV441, ms));
+
+  window.__ELTAUM_MOBILE_FUNDS_FILTERS_FIX_V441__ = {
+    build: BUILD,
+    sync: applyMobileFundsFiltersFixV441
+  };
+})();
+
+/* PATCH v442 — Mobile: estabiliza o toggle "Ocultar fundos sem dados" */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_NO_DATA_TOGGLE_STABLE_v442';
+  let scheduled = false;
+
+  function ensureStableNoDataToggleV442(){
+    try{
+      document.documentElement.classList.add('mobile-v442','mobile-no-data-toggle-stable-v442');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const shell = document.getElementById('mobileCategorySelectShellV74');
+      const input = document.getElementById('toggleSemDados');
+      if(!shell || !input) return;
+
+      if(input.type !== 'checkbox') input.type = 'checkbox';
+
+      let row = document.getElementById('mobileNoDataRowV442');
+      if(!row){
+        row = document.createElement('label');
+        row.id = 'mobileNoDataRowV442';
+        row.className = 'toggle-wrap compact-toggle-wrap toggle-sem-dados-clean-v127 mobile-no-data-row-v442';
+        row.htmlFor = 'toggleSemDados';
+      }
+
+      row.dataset.v127Rebuilt = '1';
+      row.dataset.v442Stable = '1';
+      row.setAttribute('title','Ocultar fundos sem dados');
+
+      let text = row.querySelector('.mobile-no-data-text-v442');
+      if(!text){
+        text = document.createElement('span');
+        text.className = 'mobile-no-data-text-v442';
+        text.textContent = 'Ocultar fundos sem dados';
+      }
+
+      let switchWrap = row.querySelector('.mobile-no-data-switch-v442');
+      if(!switchWrap){
+        switchWrap = document.createElement('span');
+        switchWrap.className = 'mobile-no-data-switch-v442';
+      }
+
+      let slider = input.parentElement?.querySelector('.toggle-slider, .toggle-sem-dados-slider-v127') ||
+        row.querySelector('.toggle-slider, .toggle-sem-dados-slider-v127');
+      if(!slider){
+        slider = document.createElement('span');
+        slider.className = 'toggle-slider toggle-sem-dados-slider-v127';
+        slider.setAttribute('aria-hidden','true');
+      }else{
+        slider.classList.add('toggle-slider','toggle-sem-dados-slider-v127');
+        slider.setAttribute('aria-hidden','true');
+      }
+
+      input.classList.add('toggle-sem-dados-input-v127');
+      input.setAttribute('aria-label','Ocultar fundos sem dados');
+
+      if(text.parentElement !== row) row.appendChild(text);
+      if(switchWrap.parentElement !== row) row.appendChild(switchWrap);
+      if(input.parentElement !== switchWrap) switchWrap.appendChild(input);
+      if(slider.parentElement !== switchWrap) switchWrap.appendChild(slider);
+
+      row.classList.toggle('is-on', !!input.checked);
+
+      const head = shell.querySelector('.mobile-category-select-head-v74');
+      if(row.parentElement !== shell){
+        shell.insertBefore(row, head || shell.firstChild);
+      }else if(head && row.nextElementSibling !== head){
+        shell.insertBefore(row, head);
+      }
+
+      shell.classList.add('has-stable-no-data-toggle-v442');
+
+      document.querySelectorAll('.mobile-moved-toggle-v440, .toggle-sem-dados-clean-v127').forEach(el => {
+        if(el !== row && el.contains(input) === false && el.id !== 'mobileNoDataRowV442'){
+          el.remove();
+        }
+      });
+
+      if(input.dataset.v442Bound !== '1'){
+        input.dataset.v442Bound = '1';
+        input.addEventListener('change', () => {
+          row.classList.toggle('is-on', !!input.checked);
+        });
+      }
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      ensureStableNoDataToggleV442();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', ensureStableNoDataToggleV442, {once:true});
+  }else{
+    ensureStableNoDataToggleV442();
+  }
+
+  document.addEventListener('change', event => {
+    if(event.target?.id === 'toggleSemDados') schedule();
+  }, true);
+  window.addEventListener('load', ensureStableNoDataToggleV442, {once:true});
+  [100, 260, 600, 1200, 2400, 4200, 7000, 12000, 20000].forEach(ms => setTimeout(ensureStableNoDataToggleV442, ms));
+
+  window.__ELTAUM_MOBILE_NO_DATA_TOGGLE_STABLE_V442__ = {
+    build: BUILD,
+    sync: ensureStableNoDataToggleV442
+  };
+})();
+
+/* PATCH v443 — Mobile: ranking toolbar compacto */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_v443';
+
+  function applyMobileRankingToolbarCompactV443(){
+    try{
+      document.documentElement.classList.add('mobile-v443','mobile-ranking-toolbar-compact-v443');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileRankingToolbarCompactV443, {once:true});
+  }else{
+    applyMobileRankingToolbarCompactV443();
+  }
+
+  window.addEventListener('load', applyMobileRankingToolbarCompactV443, {once:true});
+  [300, 1000, 2500, 6000].forEach(ms => setTimeout(applyMobileRankingToolbarCompactV443, ms));
+
+window.__ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_V443__ = {
+    build: BUILD,
+    sync: applyMobileRankingToolbarCompactV443
+  };
+})();
+
+/* PATCH v444 — Mobile: hierarquia visual dos cards de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_HIERARCHY_v444';
+
+  function applyMobileFundCardHierarchyV444(){
+    try{
+      document.documentElement.classList.add('mobile-v444','mobile-fund-card-hierarchy-v444');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-card-hierarchy-v444');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundCardHierarchyV444, {once:true});
+  }else{
+    applyMobileFundCardHierarchyV444();
+  }
+
+  window.addEventListener('load', applyMobileFundCardHierarchyV444, {once:true});
+  [250, 800, 1800, 3600, 7000].forEach(ms => setTimeout(applyMobileFundCardHierarchyV444, ms));
+
+window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
+    build: BUILD,
+    sync: applyMobileFundCardHierarchyV444
+  };
+})();
+
+/* PATCH v445 — Mobile: Indicadores por mês */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_BALANCE_v451';
+  let range = 'year';
+  let view = 'all';
+
+  function toNumV445(value){
+    if(value === null || value === undefined || value === '') return null;
+    if(typeof value === 'string'){
+      const cleaned = value.replace('%','').replace(/\./g,'').replace(',','.').trim();
+      const n = Number(cleaned);
+      return Number.isFinite(n) ? n : null;
+    }
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function pctV445(value){
+    const n = toNumV445(value);
+    if(n === null) return '—';
+    return `${n > 0 ? '+' : ''}${n.toFixed(2).replace('.', ',')}%`;
+  }
+
+  function clsV445(value){
+    const n = toNumV445(value);
+    if(n === null || Math.abs(n) < 0.005) return 'muted';
+    return n > 0 ? 'pos' : 'neg';
+  }
+
+  function monthNameV445(index){
+    const meses = Array.isArray(window.MESES_PT) ? window.MESES_PT : null;
+    const fallback = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return (meses || fallback)[index] || '';
+  }
+
+  function keyFromPartsV445(year, monthIndex){
+    return `${year}-${String(monthIndex + 1).padStart(2,'0')}`;
+  }
+
+  function labelFromKeyV447(key){
+    const monthIndex = Math.max(0, Math.min(11, Number(String(key).slice(5,7)) - 1));
+    const base = monthNameV445(monthIndex);
+    if(range === '12m'){
+      const year = String(key).slice(2,4);
+      return year ? `${base}/${year}` : base;
+    }
+    return base;
+  }
+
+  function normalizeMonthKeyV445(item){
+    if(!item || typeof item !== 'object') return '';
+    const raw = String(
+      item.key || item.mes_key || item.mesKey || item.periodo || item.mes || item.label ||
+      item.data_ref || item.data || item.date || item.dataHoraCotacao || ''
+    ).trim().toLowerCase();
+    if(!raw) return '';
+
+    let m = raw.match(/(\d{4})[-/](\d{1,2})/);
+    if(m) return `${m[1]}-${String(Number(m[2])).padStart(2,'0')}`;
+
+    m = raw.match(/(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+    if(m) return `${m[3]}-${String(Number(m[2])).padStart(2,'0')}`;
+
+    const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    m = raw.match(/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)[a-zç]*[\/\s.-]*(\d{2,4})/i);
+    if(m){
+      const year = Number(m[2]) < 100 ? 2000 + Number(m[2]) : Number(m[2]);
+      return `${year}-${String(nomes.indexOf(m[1].slice(0,3).toLowerCase()) + 1).padStart(2,'0')}`;
+    }
+    return '';
+  }
+
+  function valueFromItemV445(item){
+    if(!item || typeof item !== 'object') return null;
+    const keys = [
+      'valor','value','mensal','variacao','variacao_mensal','variacao_mes',
+      'var_pct','retorno','retorno_mes','pct','percentual'
+    ];
+    for(const key of keys){
+      const n = toNumV445(item[key]);
+      if(n !== null) return n;
+    }
+    return null;
+  }
+
+  function mapSeriesV445(series){
+    const map = new Map();
+    (Array.isArray(series) ? series : []).forEach(item => {
+      const key = normalizeMonthKeyV445(item);
+      const value = valueFromItemV445(item);
+      if(key && value !== null) map.set(key, value);
+    });
+    return map;
+  }
+
+  function getMercadoV445(){
+    try{
+      return (typeof _dadosMercado !== 'undefined' && _dadosMercado) || window.__mercadoAtualV230 || {};
+    }catch(_error){
+      return window.__mercadoAtualV230 || {};
+    }
+  }
+
+  function getPtaxSeriesV445(dados){
+    try{
+      if(typeof _ptaxHistorico !== 'undefined' && Array.isArray(_ptaxHistorico) && _ptaxHistorico.length){
+        return _ptaxHistorico.map(item => ({
+          key: normalizeMonthKeyV445(item),
+          valor: item._var_pct ?? item.var_pct ?? item.variacao ?? item.variacao_mensal
+        }));
+      }
+    }catch(_error){}
+    return Array.isArray(dados?.ptax_historico) ? dados.ptax_historico : [];
+  }
+
+  function getIbovSeriesV445(dados){
+    const idx = dados?.indices_mercado?.ibovespa || {};
+    const card = dados?.cards?.ibovespa || {};
+    return idx.historico || idx.mensal || idx.meses || idx.fechamentos || card.historico || card.mensal || card.meses || [];
+  }
+
+  function getConsolidatedMonthlyV448(dados){
+    return Array.isArray(dados?.indicadores_mensais) ? dados.indicadores_mensais : [];
+  }
+
+  function mapConsolidatedV448(series, field){
+    const map = new Map();
+    (Array.isArray(series) ? series : []).forEach(item => {
+      const key = normalizeMonthKeyV445(item);
+      const value = toNumV445(item?.[field]);
+      if(key && value !== null) map.set(key, value);
+    });
+    return map;
+  }
+
+  function getMonthKeysV445(maps){
+    const currentYear = (new Date()).getFullYear();
+    if(range === 'year'){
+      const yearKeys = Array.from({length:12}, (_,index) => keyFromPartsV445(currentYear, index));
+      const keysWithData = yearKeys.filter(key => maps.some(map => toNumV445(map?.get(key)) !== null));
+      if(keysWithData.length) return keysWithData;
+      const currentMonth = (new Date()).getMonth();
+      return yearKeys.slice(0, currentMonth + 1);
+    }
+
+    const union = new Set();
+    maps.forEach(map => map.forEach((_value, key) => union.add(key)));
+    const sorted = [...union].sort();
+    if(sorted.length >= 12) return sorted.slice(-12);
+
+    const base = new Date();
+    return Array.from({length:12}, (_,i) => {
+      const d = new Date(base.getFullYear(), base.getMonth() - (11 - i), 1);
+      return keyFromPartsV445(d.getFullYear(), d.getMonth());
+    });
+  }
+
+  function compoundV445(values){
+    const nums = values.map(toNumV445).filter(v => v !== null);
+    if(!nums.length) return null;
+    return (nums.reduce((acc, value) => acc * (1 + value / 100), 1) - 1) * 100;
+  }
+
+  function summaryValueV445(dados, key, map, directCandidates){
+    for(const candidate of directCandidates){
+      const n = toNumV445(candidate);
+      if(n !== null) return n;
+    }
+    const year = String((new Date()).getFullYear());
+    return compoundV445([...map.entries()].filter(([monthKey]) => monthKey.startsWith(year + '-')).map(([,value]) => value));
+  }
+
+  function summaryValueForKeysV449(map, keys, directCandidates){
+    for(const candidate of directCandidates){
+      const n = toNumV445(candidate);
+      if(n !== null) return n;
+    }
+    return compoundV445(keys.map(key => map.get(key)));
+  }
+
+  function setSummaryV445(id, value, label){
+    const el = document.getElementById(id);
+    if(!el) return;
+    const labelEl = el.closest('article')?.querySelector('span');
+    if(labelEl && label) labelEl.textContent = label;
+    el.textContent = pctV445(value);
+    el.className = clsV445(value);
+  }
+
+  const indicatorMetaV446 = {
+    all:{label:'Todos'},
+    cdi:{label:'CDI'},
+    ipca:{label:'IPCA'},
+    ibov:{label:'Ibov'},
+    dolar:{label:'Dólar'}
+  };
+
+  function renderMonthlyHeaderV446(table, activeView){
+    if(!table) return;
+    table.dataset.viewV446 = activeView;
+    const headRow = table.querySelector('thead tr');
+    if(!headRow) return;
+    if(activeView === 'all'){
+      headRow.innerHTML = '<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibov</th><th scope="col">Dólar</th>';
+    }else{
+      const label = indicatorMetaV446[activeView]?.label || 'Indicador';
+      headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">${label}</th>`;
+    }
+  }
+
+  function mapHasDataForKeysV447(map, keys){
+    return keys.some(key => toNumV445(map?.get(key)) !== null);
+  }
+
+  function syncIndicatorButtonsV447(root, maps, keys, activeView){
+    root.querySelectorAll('[data-monthly-indicators-view-v446]').forEach(btn => {
+      const key = btn.dataset.monthlyIndicatorsViewV446 || 'all';
+      const hasData = key === 'all' || mapHasDataForKeysV447(maps[key], keys);
+      const isActive = key === activeView;
+      btn.classList.toggle('active', isActive);
+      btn.classList.toggle('is-unavailable-v447', !hasData);
+      btn.disabled = !hasData;
+      btn.setAttribute('aria-disabled', hasData ? 'false' : 'true');
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
+  function renderMonthlyIndicatorsV445(){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    const tbody = document.getElementById('monthlyIndicatorsRowsV445');
+    const table = root?.querySelector('.monthly-indicators-table-v445');
+    if(!root || !tbody) return;
+
+    document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    const dados = getMercadoV445();
+    const cdiCard = dados?.cards?.cdi || {};
+    const ipcaCard = dados?.cards?.ipca || {};
+    const ibovCard = dados?.cards?.ibovespa || {};
+    const ibovIdx = dados?.indices_mercado?.ibovespa || {};
+    const dolarCard = dados?.cards?.dolar || {};
+    const dolarIdx = dados?.indices_mercado?.dolar || {};
+
+    const consolidated = getConsolidatedMonthlyV448(dados);
+    const cdiMap = consolidated.length ? mapConsolidatedV448(consolidated, 'cdi') : mapSeriesV445(cdiCard.historico || []);
+    const ipcaMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ipca') : mapSeriesV445(ipcaCard.historico || dados?.ipca_historico || dados?.historico_ipca || []);
+    const ibovMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ibov') : mapSeriesV445(getIbovSeriesV445(dados));
+    const dolarMap = consolidated.length ? mapConsolidatedV448(consolidated, 'dolar') : mapSeriesV445(getPtaxSeriesV445(dados));
+    const keys = getMonthKeysV445([cdiMap, ipcaMap, ibovMap, dolarMap]);
+    const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap};
+    let activeView = indicatorMetaV446[view] ? view : 'all';
+    if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
+      activeView = 'all';
+      view = 'all';
+    }
+
+    renderMonthlyHeaderV446(table, activeView);
+
+    const summarySuffix = range === '12m' ? '12M' : 'ano';
+    setSummaryV445(
+      'monthlySummaryCdiV445',
+      summaryValueForKeysV449(cdiMap, keys, range === '12m' ? [cdiCard.acum_12m] : [cdiCard.acum_ano_com_parcial, cdiCard.acum_ano, cdiCard.ano]),
+      `CDI ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryIpcaV445',
+      summaryValueForKeysV449(ipcaMap, keys, range === '12m' ? [ipcaCard.acum_12m] : [ipcaCard.acum_ano, ipcaCard.ano]),
+      `IPCA ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryIbovV445',
+      summaryValueForKeysV449(ibovMap, keys, range === '12m' ? [ibovIdx.acum_12m, ibovCard.acum_12m] : [ibovIdx.acum_ano, ibovCard.acum_ano]),
+      `Ibov ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryDolarV445',
+      summaryValueForKeysV449(dolarMap, keys, range === '12m' ? [dolarIdx.acum_12m, dolarCard.acum_12m] : [dolarIdx.acum_ano, dolarCard.acum_ano]),
+      `Dólar ${summarySuffix}`
+    );
+
+    tbody.innerHTML = keys.map(key => {
+      const label = labelFromKeyV447(key);
+      if(activeView !== 'all'){
+        const value = maps[activeView]?.get(key);
+        return `<tr><td>${label}</td><td class="${clsV445(value)}">${pctV445(value)}</td></tr>`;
+      }
+      const values = [cdiMap.get(key), ipcaMap.get(key), ibovMap.get(key), dolarMap.get(key)];
+      return `<tr>
+        <td>${label}</td>
+        ${values.map(value => `<td class="${clsV445(value)}">${pctV445(value)}</td>`).join('')}
+      </tr>`;
+    }).join('');
+
+    if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
+      const label = indicatorMetaV446[activeView]?.label || 'indicador';
+      tbody.innerHTML = `<tr class="monthly-empty-row-v447"><td colspan="2">Série mensal de ${label} indisponível no JSON atual.</td></tr>`;
+    }
+
+    const active = root.querySelector(`[data-monthly-indicators-range-v445="${range}"]`);
+    root.querySelectorAll('[data-monthly-indicators-range-v445]').forEach(btn => {
+      const isActive = btn === active;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+
+    syncIndicatorButtonsV447(root, maps, keys, activeView);
+    const shell = root.querySelector('.monthly-indicators-table-shell-v445');
+    if(shell && activeView === 'all'){
+      requestAnimationFrame(() => {
+        shell.scrollLeft = 0;
+      });
+    }
+  }
+
+  function bindMonthlyIndicatorsV445(){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    if(!root || root.dataset.v445Bound) return;
+    root.dataset.v445Bound = '1';
+
+    root.addEventListener('click', event => {
+      const rangeBtn = event.target.closest('[data-monthly-indicators-range-v445]');
+      if(rangeBtn){
+        range = rangeBtn.dataset.monthlyIndicatorsRangeV445 || 'year';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const viewBtn = event.target.closest('[data-monthly-indicators-view-v446]');
+      if(viewBtn){
+        if(viewBtn.disabled || viewBtn.getAttribute('aria-disabled') === 'true') return;
+        view = viewBtn.dataset.monthlyIndicatorsViewV446 || 'all';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const more = event.target.closest('#monthlyIndicatorsMoreV445');
+      if(more){
+        const expanded = root.classList.toggle('is-expanded');
+        more.textContent = expanded ? 'Mostrar menos' : 'Ver todos os meses';
+        more.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      }
+    });
+  }
+
+  function initMonthlyIndicatorsV445(){
+    bindMonthlyIndicatorsV445();
+    renderMonthlyIndicatorsV445();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initMonthlyIndicatorsV445, {once:true});
+  }else{
+    initMonthlyIndicatorsV445();
+  }
+
+  window.addEventListener('load', initMonthlyIndicatorsV445, {once:true});
+  document.addEventListener('elton:market-data-refresh', initMonthlyIndicatorsV445);
+  [400, 1200, 2500, 5000, 9000].forEach(ms => setTimeout(initMonthlyIndicatorsV445, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_SELECT_V446__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_CLEAN_V447__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_STICKY_V448__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_COMPACT_V449__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_FIT_V450__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_BALANCE_V451__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+})();
+
+/* PATCH v452 — Mobile: hierarquia refinada dos cards de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_BALANCED_METRICS_v454';
+
+  function applyMobileFundCardRefinementV452(){
+    try{
+      document.documentElement.classList.add('mobile-v454','mobile-fund-card-balanced-metrics-v454','mobile-v453','mobile-fund-card-details-cta-v453','mobile-v452','mobile-fund-card-refinement-v452');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-card-refinement-v452');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundCardRefinementV452, {once:true});
+  }else{
+    applyMobileFundCardRefinementV452();
+  }
+
+  window.addEventListener('load', applyMobileFundCardRefinementV452, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundCardRefinementV452);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundCardRefinementV452, ms));
+
+  window.__ELTAUM_MOBILE_FUND_CARD_REFINEMENT_V452__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+
+  window.__ELTAUM_MOBILE_FUND_CARD_DETAILS_CTA_V453__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+
+  window.__ELTAUM_MOBILE_FUND_CARD_BALANCED_METRICS_V454__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+})();
+
+/* PATCH v455 — Mobile: indicadores mensais legíveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_READABLE_v455';
+
+  function applyMonthlyIndicatorsReadableV455(){
+    try{
+      document.documentElement.classList.add('mobile-v455','mobile-monthly-indicators-readable-v455');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMonthlyIndicatorsReadableV455, {once:true});
+  }else{
+    applyMonthlyIndicatorsReadableV455();
+  }
+
+  window.addEventListener('load', applyMonthlyIndicatorsReadableV455, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyMonthlyIndicatorsReadableV455, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_READABLE_V455__ = {
+    build: BUILD,
+    sync: applyMonthlyIndicatorsReadableV455
+  };
+})();
+
+/* PATCH v456 — Mobile: harmonia tipografica dos KPIs do topo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_HARMONY_v456';
+
+  function applyTopKpiHarmonyV456(){
+    try{
+      document.documentElement.classList.add('mobile-v456','mobile-top-kpi-harmony-v456');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyTopKpiHarmonyV456, {once:true});
+  }else{
+    applyTopKpiHarmonyV456();
+  }
+
+  window.addEventListener('load', applyTopKpiHarmonyV456, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyTopKpiHarmonyV456, ms));
+
+window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
+    build: BUILD,
+    sync: applyTopKpiHarmonyV456
+  };
+})();
+
+/* PATCH v457 — Mobile: ranking por categoria em lista compacta */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_CATEGORY_LIST_v457';
+
+  function applyRankingCategoryListV457(){
+    try{
+      document.documentElement.classList.add('mobile-v457','mobile-ranking-category-list-v457');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingCategoryListV457, {once:true});
+  }else{
+    applyRankingCategoryListV457();
+  }
+
+  window.addEventListener('load', applyRankingCategoryListV457, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingCategoryListV457, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_CATEGORY_LIST_V457__ = {
+    build: BUILD,
+    sync: applyRankingCategoryListV457
+  };
+})();
+
+/* PATCH v458 — Mobile: destaques do ranking compactos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_COMPACT_v458';
+
+  function applyRankingHighlightsCompactV458(){
+    try{
+      document.documentElement.classList.add('mobile-v458','mobile-ranking-highlights-compact-v458');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsCompactV458, {once:true});
+  }else{
+    applyRankingHighlightsCompactV458();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsCompactV458, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsCompactV458, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_COMPACT_V458__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsCompactV458
+  };
+})();
+
+/* PATCH v459 — Mobile: refino visual dos destaques do ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_REFINE_v459';
+
+  function applyRankingHighlightsRefineV459(){
+    try{
+      document.documentElement.classList.add('mobile-v459','mobile-ranking-highlights-refine-v459');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsRefineV459, {once:true});
+  }else{
+    applyRankingHighlightsRefineV459();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsRefineV459, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsRefineV459, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_REFINE_V459__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsRefineV459
+  };
+})();
+
+/* PATCH v460 — Mobile: indicadores mensais mais legiveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_v460';
+
+  function applyMonthlyIndicatorsNumericV460(){
+    try{
+      document.documentElement.classList.add('mobile-v460','mobile-monthly-indicators-numeric-v460');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMonthlyIndicatorsNumericV460, {once:true});
+  }else{
+    applyMonthlyIndicatorsNumericV460();
+  }
+
+  window.addEventListener('load', applyMonthlyIndicatorsNumericV460, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyMonthlyIndicatorsNumericV460, ms));
+
+window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
+    build: BUILD,
+    sync: applyMonthlyIndicatorsNumericV460
+  };
+})();
+
+/* PATCH v461 — Mobile: destaques do ranking compactos e sem texto comido */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_TIGHT_v461';
+
+  function applyRankingHighlightsTightV461(){
+    try{
+      document.documentElement.classList.add('mobile-v461','mobile-ranking-highlights-tight-v461');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const semFmp = document.querySelector('#rankingClassSelectV136 option[value="sem-fmp"]');
+      if(semFmp && semFmp.textContent.trim() !== 'Sem FMP') semFmp.textContent = 'Sem FMP';
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsTightV461, {once:true});
+  }else{
+    applyRankingHighlightsTightV461();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsTightV461, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingHighlightsTightV461);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsTightV461, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_TIGHT_V461__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsTightV461
+  };
+})();
+
+/* PATCH v462 — Mobile: tipografia harmonizada nos KPIs do topo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_TYPOGRAPHY_v462';
+
+  function applyTopKpiTypographyV462(){
+    try{
+      document.documentElement.classList.add('mobile-v462','mobile-top-kpi-typography-v462');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyTopKpiTypographyV462, {once:true});
+  }else{
+    applyTopKpiTypographyV462();
+  }
+
+  window.addEventListener('load', applyTopKpiTypographyV462, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyTopKpiTypographyV462);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyTopKpiTypographyV462, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_TYPOGRAPHY_V462__ = {
+    build: BUILD,
+    sync: applyTopKpiTypographyV462
+  };
+})();
+
+/* PATCH v463 — Mobile: ranking sem truncamento agressivo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_NO_CUT_v463';
+
+  function applyRankingNoCutV463(){
+    try{
+      document.documentElement.classList.add('mobile-v463','mobile-ranking-no-cut-v463');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const labels = {
+        todos:'Todos',
+        'sem-fmp':'Sem FMP',
+        'renda-fixa-referenciado':'RF Ref.',
+        'renda-fixa-curto-prazo':'RF Curto'
+      };
+      Object.entries(labels).forEach(([value,label]) => {
+        const option = document.querySelector(`#rankingClassSelectV136 option[value="${value}"]`);
+        if(option && option.textContent.trim() !== label) option.textContent = label;
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingNoCutV463, {once:true});
+  }else{
+    applyRankingNoCutV463();
+  }
+
+  window.addEventListener('load', applyRankingNoCutV463, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingNoCutV463);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingNoCutV463, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_NO_CUT_V463__ = {
+    build: BUILD,
+    sync: applyRankingNoCutV463
+  };
+})();
+
+/* PATCH v464 — Mobile: nomes curtos nos cards de destaque do ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SHORT_NAMES_v464';
+
+  function applyRankingShortNamesV464(){
+    try{
+      document.documentElement.classList.add('mobile-v464','mobile-ranking-short-names-v464');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingShortNamesV464, {once:true});
+  }else{
+    applyRankingShortNamesV464();
+  }
+
+  window.addEventListener('load', applyRankingShortNamesV464, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingShortNamesV464);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingShortNamesV464, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_SHORT_NAMES_V464__ = {
+    build: BUILD,
+    sync: applyRankingShortNamesV464
+  };
+})();
+
+/* PATCH v465 — Mobile: ranking adaptativo por viewport real */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_ADAPTIVE_RANKING_v465';
+
+  function viewportSizeV465(){
+    const vv = window.visualViewport;
+    return {
+      width: Math.round(vv?.width || window.innerWidth || document.documentElement.clientWidth || 0),
+      height: Math.round(vv?.height || window.innerHeight || document.documentElement.clientHeight || 0)
+    };
+  }
+
+  function applyAdaptiveRankingV465(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v465','mobile-adaptive-ranking-v465');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const size = viewportSizeV465();
+      html.classList.toggle('mobile-tight-viewport-v465', size.width <= 390 || size.height <= 760);
+
+      document.querySelectorAll('#rankingRiskSelectV198,#rankingClassSelectV136,#rankingPeriodSelectV136').forEach(select => {
+        select.style.minHeight = html.classList.contains('mobile-tight-viewport-v465') ? '38px' : '';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyAdaptiveRankingV465, {once:true});
+  }else{
+    applyAdaptiveRankingV465();
+  }
+
+  window.addEventListener('load', applyAdaptiveRankingV465, {once:true});
+  window.addEventListener('resize', applyAdaptiveRankingV465, {passive:true});
+  window.visualViewport?.addEventListener('resize', applyAdaptiveRankingV465, {passive:true});
+  document.addEventListener('elton:rankings-rendered', applyAdaptiveRankingV465);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyAdaptiveRankingV465, ms));
+
+window.__ELTAUM_MOBILE_ADAPTIVE_RANKING_V465__ = {
+    build: BUILD,
+    sync: applyAdaptiveRankingV465
+  };
+})();
+
+/* PATCH v466 — Mobile: detalhes dos fundos com hierarquia mais limpa */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_IA_v466';
+
+  function applyMobileFundDetailIaV466(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v466','mobile-fund-detail-ia-v466');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-ia-v466');
+      });
+
+      document.querySelectorAll('#mobileFundCards .fund-card-doc-pill').forEach(link => {
+        const txt = String(link.textContent || '').trim();
+        const normalized = txt.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z]/g,'').toUpperCase();
+        const labels = {
+          L:'Lâmina',
+          R:'Regulamento',
+          IC:'Informe',
+          C:'Carteira',
+          CM:'Comercial',
+          TA:'Termo'
+        };
+        if(labels[normalized]){
+          link.textContent = labels[normalized];
+          link.setAttribute('aria-label', labels[normalized]);
+        }
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailIaV466, {once:true});
+  }else{
+    applyMobileFundDetailIaV466();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailIaV466, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailIaV466);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailIaV466, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailIaV466, ms));
+
+window.__ELTAUM_MOBILE_FUND_DETAIL_IA_V466__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailIaV466
+  };
+})();
+
+/* PATCH v467 — Mobile: remove truncamento dos detalhes do fundo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_v467';
+
+  function applyMobileFundDetailNoCutV467(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v467','mobile-fund-detail-no-cut-v467');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-no-cut-v467');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailNoCutV467, {once:true});
+  }else{
+    applyMobileFundDetailNoCutV467();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailNoCutV467, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailNoCutV467);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailNoCutV467, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailNoCutV467, ms));
+
+window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailNoCutV467
+  };
+})();
+
+/* PATCH v468 — Mobile: lista de detalhes sem reticências */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_LIST_v468';
+
+  function applyMobileFundDetailListV468(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v468','mobile-fund-detail-list-v468');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-list-card-v468');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailListV468, {once:true});
+  }else{
+    applyMobileFundDetailListV468();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailListV468, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailListV468);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailListV468, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailListV468, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_LIST_V468__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailListV468
+  };
+})();
+
+/* PATCH v469 — Mobile: harmonia visual dos detalhes do fundo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_HARMONY_v469';
+
+  function applyMobileFundDetailHarmonyV469(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v469','mobile-fund-detail-harmony-v469');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-harmony-card-v469');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailHarmonyV469, {once:true});
+  }else{
+    applyMobileFundDetailHarmonyV469();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailHarmonyV469, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailHarmonyV469);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailHarmonyV469, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailHarmonyV469, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_HARMONY_V469__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailHarmonyV469
+  };
+})();
+
+/* PATCH v470 — Juros e CDI: Agenda Copom consultiva e menos peso visual */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_CONSULTATIVE_v470';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function cleanText(value){
+    return String(value || '')
+      .replace(/\u2212/g, '-')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function extractDecision(card){
+    const status = cleanText(card.querySelector('.copom-exec-status-v270')?.textContent);
+    const result = cleanText(card.querySelector('.copom-carousel-result-v321')?.textContent);
+    const text = `${status} ${result}`.trim();
+    const lower = text.toLowerCase();
+
+    const move = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(move){
+      const type = move[1].toLowerCase() === 'alta' ? 'Alta' : 'Corte';
+      const value = move[2]
+        .replace(/[+-]/g, '')
+        .replace(/\s*p\.?\s*p\.?/i, ' p.p.');
+      return `${type} de ${value}`;
+    }
+
+    if(lower.includes('mantida')) return 'Mantida';
+    if(lower.includes('prevista')) return 'Prevista';
+    if(lower.includes('agenda') || lower.includes('próxima') || lower.includes('proxima')) return 'Próxima reunião';
+    return status || result || 'Agenda';
+  }
+
+  function syncCopomConsultativeV470(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v470','rates-copom-consultative-v470');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+
+      summary.querySelectorAll(':scope > article').forEach(card => {
+        const decision = extractDecision(card);
+        let el = card.querySelector('.copom-decision-v470');
+        if(!el){
+          el = document.createElement('small');
+          el.className = 'copom-decision-v470';
+          card.appendChild(el);
+        }
+        el.textContent = decision;
+
+        card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(old => {
+          old.setAttribute('aria-hidden','true');
+        });
+      });
+
+      if(!observerStarted && window.MutationObserver){
+        observerStarted = true;
+        const obs = new MutationObserver(() => {
+          if(scheduled) return;
+          scheduled = true;
+          requestAnimationFrame(() => {
+            scheduled = false;
+            syncCopomConsultativeV470();
+          });
+        });
+        obs.observe(summary, { childList:true, subtree:true });
+        window.__ELTAUM_RATES_COPOM_CONSULTATIVE_OBSERVER_V470__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomConsultativeV470, {once:true});
+  }else{
+    syncCopomConsultativeV470();
+  }
+
+  window.addEventListener('load', syncCopomConsultativeV470, {once:true});
+  window.addEventListener('pageshow', syncCopomConsultativeV470, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomConsultativeV470, ms));
+
+  window.__ELTAUM_RATES_COPOM_CONSULTATIVE_V470__ = {
+    build: BUILD,
+    sync: syncCopomConsultativeV470
+  };
+})();
+
+/* PATCH v471 — Mobile: botoes "Ver mais" padronizados e rodape mais leve */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOGGLE_HARMONY_v471';
+
+  function syncToggleHarmonyV471(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v471','mobile-toggle-harmony-v471');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#sec-focus .section-toggle-btn, #sec-graficos .section-toggle-btn, #sec-mercado-painel .section-toggle-btn').forEach(btn => {
+        btn.dataset.labelClosed = 'Ver mais';
+        btn.dataset.labelOpen = 'Ver menos';
+        const label = btn.querySelector('.toggle-label');
+        const section = btn.closest('.collapsible-section');
+        const isOpen = section?.classList.contains('section-expanded') || btn.getAttribute('aria-expanded') === 'true';
+        if(label) label.textContent = isOpen ? 'Ver menos' : 'Ver mais';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncToggleHarmonyV471, {once:true});
+  }else{
+    syncToggleHarmonyV471();
+  }
+
+  window.addEventListener('load', syncToggleHarmonyV471, {once:true});
+  document.addEventListener('click', () => setTimeout(syncToggleHarmonyV471, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(syncToggleHarmonyV471, ms));
+
+  window.__ELTAUM_MOBILE_TOGGLE_HARMONY_V471__ = {
+    build: BUILD,
+    sync: syncToggleHarmonyV471
+  };
+})();
+
+/* PATCH v472 — Mobile: Focus sem estouro horizontal */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FOCUS_WRAP_v472';
+
+  function syncFocusWrapV472(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v472','mobile-focus-wrap-v472');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncFocusWrapV472, {once:true});
+  }else{
+    syncFocusWrapV472();
+  }
+
+  window.addEventListener('load', syncFocusWrapV472, {once:true});
+  [300, 900, 1800, 3500].forEach(ms => setTimeout(syncFocusWrapV472, ms));
+
+  window.__ELTAUM_MOBILE_FOCUS_WRAP_V472__ = {
+    build: BUILD,
+    sync: syncFocusWrapV472
+  };
+})();
+
+/* PATCH v473 — Agenda Copom: decisao unica com movimento em p.p. */
+(function(){
+  const BUILD = 'ELTAUM_COPOM_SINGLE_DECISION_v473';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function clean(value){
+    return String(value || '')
+      .replace(/\u2212/g, '-')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function normalizeMove(value){
+    const text = clean(value);
+    const match = text.match(/\b(corte|alta)\b(?:\s+de)?\s*([+-]?\d+(?:[,.]\d+)?)\s*p\.?\s*p\.?/i);
+    if(!match) return null;
+    return {
+      type: match[1].toLowerCase() === 'alta' ? 'Alta' : 'Corte',
+      value: match[2].replace(/[+-]/g, '') + ' p.p.'
+    };
+  }
+
+  function storeResults(){
+    const store = document.getElementById('copomMeetings');
+    if(!store) return [];
+    return [...store.querySelectorAll('.copom-item')]
+      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999))
+      .map(item => clean(item.querySelector('.copom-result')?.textContent));
+  }
+
+  function decisionFor(card, fallbackResult){
+    const pieces = [
+      card.querySelector('.copom-exec-status-v270')?.textContent,
+      card.querySelector('.copom-carousel-result-v321')?.textContent,
+      card.querySelector('.copom-move-v430')?.textContent,
+      card.querySelector('.copom-move-v431')?.textContent,
+      fallbackResult
+    ].map(clean).filter(Boolean);
+    const text = pieces.join(' ');
+    const lower = text.toLowerCase();
+    const move = normalizeMove(text);
+
+    if(move) return `${move.type} de ${move.value}`;
+    if(lower.includes('mantida')) return 'Mantida';
+    if(lower.includes('corte')) return 'Corte';
+    if(lower.includes('alta')) return 'Alta';
+    if(lower.includes('prevista')) return 'Prevista';
+    if(lower.includes('agenda') || lower.includes('próxima') || lower.includes('proxima')) return 'Próxima reunião';
+    return clean(card.querySelector('.copom-exec-status-v270')?.textContent) || 'Agenda';
+  }
+
+  function hideLegacy(card){
+    card.querySelectorAll('.copom-exec-meta-v270, .copom-exec-status-v270, .copom-carousel-result-v321, .copom-move-v430, .copom-move-v431').forEach(el => {
+      el.setAttribute('aria-hidden', 'true');
+      el.style.setProperty('display', 'none', 'important');
+    });
+  }
+
+  function syncCopomSingleDecisionV473(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v473','copom-single-decision-v473');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+
+      const results = storeResults();
+      const cards = [...summary.querySelectorAll(':scope > article')];
+      cards.forEach((card, index) => {
+        hideLegacy(card);
+        let decision = card.querySelector('.copom-decision-v473');
+        if(!decision){
+          decision = document.createElement('small');
+          decision.className = 'copom-decision-v473';
+          card.appendChild(decision);
+        }
+        decision.textContent = decisionFor(card, results[index]);
+      });
+
+      if(!observerStarted && window.MutationObserver){
+        observerStarted = true;
+        const target = document.getElementById('sec-mercado') || summary;
+        const obs = new MutationObserver(() => {
+          if(scheduled) return;
+          scheduled = true;
+          requestAnimationFrame(() => {
+            scheduled = false;
+            syncCopomSingleDecisionV473();
+          });
+        });
+        obs.observe(target, { childList:true, subtree:true });
+        window.__ELTAUM_COPOM_SINGLE_DECISION_OBSERVER_V473__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomSingleDecisionV473, {once:true});
+  }else{
+    syncCopomSingleDecisionV473();
+  }
+
+  window.addEventListener('load', syncCopomSingleDecisionV473, {once:true});
+  window.addEventListener('pageshow', syncCopomSingleDecisionV473, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomSingleDecisionV473, ms));
+
+  window.__ELTAUM_COPOM_SINGLE_DECISION_V473__ = {
+    build: BUILD,
+    sync: syncCopomSingleDecisionV473
+  };
+})();
+
+/* PATCH v474 — Mobile: Dolar PTAX mais compacto */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_COMPACT_V474';
+
+  function syncDolarMobileCompactV474(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v474','dolar-mobile-compact-v474');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileCompactV474, {once:true});
+  }else{
+    syncDolarMobileCompactV474();
+  }
+
+  window.addEventListener('load', syncDolarMobileCompactV474, {once:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileCompactV474, ms));
+
+window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
+    build: BUILD,
+    sync: syncDolarMobileCompactV474
+  };
+})();
+
+/* PATCH v475 — Mobile: Poupanca mais leve e plana */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_FLAT_V475';
+
+  function syncSavingsMobileFlatV475(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v475','savings-mobile-flat-v475');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const label = document.getElementById('poupCurrentLabelV214');
+      if(label) label.textContent = 'Rendimento do mês';
+
+      const yearLabel = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.year dt');
+      if(yearLabel) yearLabel.textContent = 'Acumulado 2026';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const ruleTitle = document.getElementById('poupCurrentScenarioTitleV214');
+      if(ruleTitle) ruleTitle.textContent = 'Regra vigente';
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+        source.setAttribute('aria-label', 'Abrir simulador de rendimento da poupança do Banco Central em uma nova guia');
+      }
+
+      const btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncSavingsMobileFlatV475, {once:true});
+  }else{
+    syncSavingsMobileFlatV475();
+  }
+
+  window.addEventListener('load', syncSavingsMobileFlatV475, {once:true});
+  window.addEventListener('pageshow', syncSavingsMobileFlatV475, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncSavingsMobileFlatV475, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_FLAT_V475__ = {
+    build: BUILD,
+    sync: syncSavingsMobileFlatV475
+  };
+})();
+
+/* PATCH v476 — Mobile: Dolar PTAX flat */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_FLAT_V476';
+
+  function syncDolarMobileFlatV476(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v476','dolar-mobile-flat-v476');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileFlatV476, {once:true});
+  }else{
+    syncDolarMobileFlatV476();
+  }
+
+  window.addEventListener('load', syncDolarMobileFlatV476, {once:true});
+  window.addEventListener('pageshow', syncDolarMobileFlatV476, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileFlatV476, ms));
+
+  window.__ELTAUM_DOLAR_MOBILE_FLAT_V476__ = {
+    build: BUILD,
+    sync: syncDolarMobileFlatV476
+  };
+})();
+
+/* PATCH v477 — Mobile: PTAX ultra compacta */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_ULTRA_COMPACT_V477';
+
+  function syncDolarMobileUltraCompactV477(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v477','dolar-mobile-ultra-compact-v477');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileUltraCompactV477, {once:true});
+  }else{
+    syncDolarMobileUltraCompactV477();
+  }
+
+  window.addEventListener('load', syncDolarMobileUltraCompactV477, {once:true});
+  window.addEventListener('pageshow', syncDolarMobileUltraCompactV477, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileUltraCompactV477, ms));
+
+  window.__ELTAUM_DOLAR_MOBILE_ULTRA_COMPACT_V477__ = {
+    build: BUILD,
+    sync: syncDolarMobileUltraCompactV477
+  };
+})();
+
+/* PATCH v478 — Mobile: evita corte de textos em fundos, filtros e ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_NO_TEXT_CUT_V478';
+
+  function syncMobileNoTextCutV478(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v478','mobile-no-text-cut-v478');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileNoTextCutV478, {once:true});
+  }else{
+    syncMobileNoTextCutV478();
+  }
+
+  window.addEventListener('load', syncMobileNoTextCutV478, {once:true});
+  window.addEventListener('pageshow', syncMobileNoTextCutV478, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileNoTextCutV478, ms));
+
+  window.__ELTAUM_MOBILE_NO_TEXT_CUT_V478__ = {
+    build: BUILD,
+    sync: syncMobileNoTextCutV478
+  };
+})();
+
+/* PATCH v479 — Mobile: ranking compacto */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_COMPACT_V479';
+
+  function syncMobileRankingCompactV479(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v479','mobile-ranking-compact-v479');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileRankingCompactV479, {once:true});
+  }else{
+    syncMobileRankingCompactV479();
+  }
+
+  window.addEventListener('load', syncMobileRankingCompactV479, {once:true});
+  window.addEventListener('pageshow', syncMobileRankingCompactV479, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingCompactV479, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_COMPACT_V479__ = {
+    build: BUILD,
+    sync: syncMobileRankingCompactV479
+  };
+})();
+
+/* PATCH v480 — Mobile: ranking compacto sem cortes */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SAFE_V480';
+
+  function syncMobileRankingSafeV480(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v480','mobile-ranking-safe-v480');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileRankingSafeV480, {once:true});
+  }else{
+    syncMobileRankingSafeV480();
+  }
+
+  window.addEventListener('load', syncMobileRankingSafeV480, {once:true});
+  window.addEventListener('pageshow', syncMobileRankingSafeV480, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingSafeV480, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_SAFE_V480__ = {
+    build: BUILD,
+    sync: syncMobileRankingSafeV480
+  };
+})();
+
+/* PATCH v481 — Mobile: filtros com selects seguros */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481';
+
+  function syncMobileFilterSelectSafeV481(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v481','mobile-filter-select-safe-v481');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterSelectSafeV481, {once:true});
+  }else{
+    syncMobileFilterSelectSafeV481();
+  }
+
+  window.addEventListener('load', syncMobileFilterSelectSafeV481, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterSelectSafeV481, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterSelectSafeV481, ms));
+
+window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
+    build: BUILD,
+    sync: syncMobileFilterSelectSafeV481
+  };
+})();
+
+/* PATCH v482 — Mobile: filtros em lista com valor visual sem corte */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_LIST_V482';
+  const FIELD_LABELS = {
+    mobileCategorySelectV74: 'Categoria',
+    mobileRiskSelectV198: 'Perfil de risco',
+    mobileSortSelectV75: 'Ordenar por'
+  };
+
+  function getOptionText(select){
+    const option = select?.options?.[select.selectedIndex];
+    return option ? option.textContent.trim() : 'Todos';
+  }
+
+  function upsertVisualFilterValueV482(select){
+    if(!select) return;
+    const host = select.closest('label') || select.parentElement;
+    if(!host) return;
+
+    host.classList.add('filter-list-row-v482');
+
+    let label = host.querySelector(':scope > .filter-label-v482');
+    if(!label){
+      label = document.createElement('span');
+      label.className = 'filter-label-v482';
+      label.textContent = FIELD_LABELS[select.id] || select.getAttribute('aria-label') || 'Filtro';
+      host.insertBefore(label, host.firstChild);
+    }
+
+    let value = host.querySelector(':scope > .filter-value-v482');
+    if(!value){
+      value = document.createElement('strong');
+      value.className = 'filter-value-v482';
+      const arrow = host.querySelector(':scope > .mobile-category-select-arrow-v74, :scope > .mobile-risk-arrow-v198, :scope > .mobile-sort-arrow-v75');
+      if(arrow) host.insertBefore(value, arrow);
+      else host.appendChild(value);
+    }
+
+    value.textContent = getOptionText(select);
+  }
+
+  function syncMobileFilterListV482(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v482','mobile-filter-list-v482');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      ['mobileCategorySelectV74','mobileRiskSelectV198','mobileSortSelectV75'].forEach(id => {
+        const select = document.getElementById(id);
+        if(!select) return;
+        upsertVisualFilterValueV482(select);
+        if(select.dataset.v482Bound === '1') return;
+        select.addEventListener('change', () => {
+          requestAnimationFrame(() => upsertVisualFilterValueV482(select));
+          setTimeout(() => upsertVisualFilterValueV482(select), 80);
+        }, {passive:true});
+        select.dataset.v482Bound = '1';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterListV482, {once:true});
+  }else{
+    syncMobileFilterListV482();
+  }
+
+  window.addEventListener('load', syncMobileFilterListV482, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterListV482, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterListV482, ms));
+
+  window.__ELTAUM_MOBILE_FILTER_LIST_V482__ = {
+    build: BUILD,
+    sync: syncMobileFilterListV482
+  };
+})();
+
+/* ELTAUM_DESKTOP_MARKET_HIERARCHY_V520_LEGACY
+   Desktop only: corrige a seção Juros e CDI resetando transform/grid-area legados
+   que faziam o bloco CDI invadir o Copom. Mantém mobile preservado. */
+(function(){
+  const FLAG = '__ELTAUM_DESKTOP_MARKET_HIERARCHY_V520_LEGACY__';
+  if (window[FLAG]) return;
+  window[FLAG] = true;
+
+  const isDesktop = () => window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
+  const hasPatch = () => document.documentElement.classList.contains('desktop-market-hierarchy-v520') || document.documentElement.classList.contains('desktop-market-fix-v519');
+  const set = (el, prop, value) => { if (el) el.style.setProperty(prop, value, 'important'); };
+  const clear = (el, prop) => { if (el) el.style.removeProperty(prop); };
+  const resetLegacyPlacement = (el) => {
+    if (!el) return;
+    set(el, 'transform', 'none');
+    set(el, 'translate', 'none');
+    set(el, 'grid-area', 'auto');
+    set(el, 'grid-column', 'auto');
+    set(el, 'justify-self', 'stretch');
+    set(el, 'align-self', 'start');
+  };
+
+  function applyMarketFix(){
+    if (!isDesktop() || !hasPatch()) return;
+    document.documentElement.classList.add('desktop-market-hierarchy-v520');
+    const root = document.getElementById('sec-mercado');
+    if (!root) return;
+
+    const rates = root.querySelector('.rates-reference-v167, .rates-executive-v255');
+    if (rates){
+      set(rates, 'display', 'grid');
+      set(rates, 'grid-template-columns', '300px minmax(0,1fr)');
+      set(rates, 'grid-template-areas', '"head head" "summary detail"');
+      set(rates, 'gap', '14px 20px');
+      set(rates, 'align-items', 'start');
+      set(rates, 'overflow', 'visible');
+    }
+
+    const head = root.querySelector('.rates-reference-v167 > .market-reference-head-v167');
+    set(head, 'grid-area', 'head');
+
+    const summary = root.querySelector('.rates-summary-v167');
+    if (summary){
+      set(summary, 'grid-area', 'summary');
+      set(summary, 'display', 'grid');
+      set(summary, 'grid-template-columns', '1fr');
+      set(summary, 'gap', '10px');
+      set(summary, 'align-self', 'start');
+      set(summary, 'width', '100%');
+      set(summary, 'min-width', '0');
+    }
+
+    const detailGrid = root.querySelector('.rates-detail-grid-v167');
+    if (detailGrid){
+      set(detailGrid, 'grid-area', 'detail');
+      set(detailGrid, 'display', 'grid');
+      set(detailGrid, 'grid-template-columns', '1fr');
+      set(detailGrid, 'grid-template-rows', 'auto auto');
+      set(detailGrid, 'grid-template-areas', 'none');
+      set(detailGrid, 'gap', '12px');
+      set(detailGrid, 'width', '100%');
+      set(detailGrid, 'min-width', '0');
+      set(detailGrid, 'align-items', 'start');
+      set(detailGrid, 'isolation', 'isolate');
+      set(detailGrid, 'overflow', 'visible');
+    }
+
+    const copom = root.querySelector('.copom-compact-v167');
+    if (copom){
+      resetLegacyPlacement(copom);
+      set(copom, 'grid-row', '1');
+      set(copom, 'width', '100%');
+      set(copom, 'min-width', '0');
+      set(copom, 'height', 'auto');
+      set(copom, 'margin', '0');
+      set(copom, 'overflow', 'hidden');
+      set(copom, 'z-index', '2');
+    }
+
+    const copomSummary = root.querySelector('#copomExecutiveSummaryV270');
+    if (copomSummary){
+      set(copomSummary, 'display', 'grid');
+      set(copomSummary, 'grid-template-columns', 'repeat(2,minmax(0,1fr))');
+      set(copomSummary, 'gap', '10px');
+      set(copomSummary, 'width', '100%');
+      set(copomSummary, 'max-width', '100%');
+      set(copomSummary, 'overflow', 'hidden');
+      set(copomSummary, 'scroll-snap-type', 'none');
+    }
+    root.querySelectorAll('#copomExecutiveSummaryV270 > article').forEach(card => {
+      set(card, 'flex', 'initial');
+      set(card, 'width', 'auto');
+      set(card, 'min-width', '0');
+      set(card, 'max-width', 'none');
+      set(card, 'box-sizing', 'border-box');
+      set(card, 'min-height', '72px');
+    });
+
+    const cdi = root.querySelector('#cdiYearHistory');
+    if (cdi){
+      resetLegacyPlacement(cdi);
+      set(cdi, 'grid-row', '2');
+      set(cdi, 'display', 'block');
+      set(cdi, 'width', '100%');
+      set(cdi, 'min-width', '0');
+      set(cdi, 'max-width', '100%');
+      set(cdi, 'height', 'auto');
+      set(cdi, 'min-height', '0');
+      set(cdi, 'max-height', 'none');
+      set(cdi, 'margin', '0');
+      set(cdi, 'position', 'relative');
+      set(cdi, 'overflow', 'hidden');
+      set(cdi, 'box-sizing', 'border-box');
+      set(cdi, 'z-index', '1');
+    }
+
+    const cdiKpis = root.querySelector('#cdiYearHistory .cdi-kpis-v271');
+    if (cdiKpis){
+      set(cdiKpis, 'display', 'grid');
+      set(cdiKpis, 'grid-template-columns', 'repeat(4,minmax(0,1fr))');
+      set(cdiKpis, 'gap', '10px');
+      set(cdiKpis, 'width', '100%');
+    }
+
+    const monthCarousel = root.querySelector('#cdiMonthCarouselV322');
+    if (monthCarousel){
+      set(monthCarousel, 'display', 'grid');
+      set(monthCarousel, 'grid-template-columns', 'repeat(6,minmax(0,1fr))');
+      set(monthCarousel, 'gap', '8px');
+      set(monthCarousel, 'width', '100%');
+      set(monthCarousel, 'overflow', 'hidden');
+      set(monthCarousel, 'scroll-snap-type', 'none');
+      set(monthCarousel, 'flex-wrap', 'initial');
+    }
+    root.querySelectorAll('#cdiMonthCarouselV322 > article').forEach(card => {
+      set(card, 'flex', 'initial');
+      set(card, 'width', 'auto');
+      set(card, 'min-width', '0');
+      set(card, 'max-width', 'none');
+      set(card, 'box-sizing', 'border-box');
+      set(card, 'min-height', '54px');
+    });
+
+    const canvasWrap = root.querySelector('.cdi-chart-canvas-wrap-v271');
+    if (canvasWrap){
+      set(canvasWrap, 'width', '100%');
+      set(canvasWrap, 'height', '260px');
+      set(canvasWrap, 'min-height', '260px');
+      set(canvasWrap, 'max-height', '260px');
+      set(canvasWrap, 'overflow', 'hidden');
+    }
+    const scrollWrap = root.querySelector('.cdi-chart-scroll-wrap-v273');
+    const scrollInner = root.querySelector('#cdiChartScrollInnerV273');
+    [scrollWrap, scrollInner].forEach(el => {
+      if (!el) return;
+      set(el, 'width', '100%');
+      set(el, 'min-width', '0');
+      set(el, 'max-width', '100%');
+      set(el, 'overflow', 'hidden');
+    });
+
+    const canvas = root.querySelector('#cdiYearChartV271');
+    if (canvas){
+      set(canvas, 'width', '100%');
+      set(canvas, 'height', '260px');
+      set(canvas, 'max-height', '260px');
+      try{
+        if (window.Chart && typeof window.Chart.getChart === 'function'){
+          const chart = window.Chart.getChart(canvas);
+          if (chart && typeof chart.resize === 'function') chart.resize();
+        }
+      }catch(_){ }
+    }
+  }
+
+  let raf = 0;
+  function schedule(){
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      applyMarketFix();
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule, {once:true});
+  else schedule();
+  window.addEventListener('load', () => { schedule(); setTimeout(schedule, 250); setTimeout(schedule, 900); }, {once:true});
+  window.addEventListener('resize', schedule);
+
+  const obs = new MutationObserver((mutations) => {
+    if (!isDesktop() || !hasPatch()) return;
+    for (const m of mutations){
+      const t = m.target;
+      if (t && t.nodeType === 1 && (t.id === 'sec-mercado' || (t.closest && t.closest('#sec-mercado')))){
+        schedule();
+        break;
+      }
+    }
+  });
+  try{ obs.observe(document.documentElement, {subtree:true, childList:true, attributes:true, attributeFilter:['style','class']}); }catch(_){ }
+})();
+
+
+/* ELTAUM_DESKTOP_MARKET_FILTERS_V523
+   Desktop only: aplica largura integral à seção Mercado, remove o botão técnico do CDI
+   e reforça a hierarquia sem mexer no mobile. */
+(function(){
+  const FLAG='__ELTAUM_DESKTOP_MARKET_FILTERS_V523__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const isDesktop=()=>window.matchMedia&&window.matchMedia('(min-width: 769px)').matches;
+  const hasPatch=()=>document.documentElement.classList.contains('desktop-market-hierarchy-v523')||document.documentElement.classList.contains('desktop-filter-buttons-v523');
+  const set=(el,prop,val)=>{ if(el) el.style.setProperty(prop,val,'important'); };
+  const reset=(el)=>{
+    if(!el) return;
+    ['transform','translate','top','left','right','bottom'].forEach(p=>set(el,p,p==='transform'?'none':p==='translate'?'none':'auto'));
+    set(el,'grid-area','auto');set(el,'grid-column','auto');set(el,'grid-row','auto');set(el,'position','relative');
+    set(el,'justify-self','stretch');set(el,'align-self','start');set(el,'width','100%');set(el,'min-width','0');set(el,'max-width','100%');
+    set(el,'height','auto');set(el,'min-height','0');set(el,'max-height','none');set(el,'margin','0');set(el,'box-sizing','border-box');
+  };
+  function apply(){
+    if(!isDesktop()||!hasPatch()) return;
+    document.documentElement.classList.add('desktop-market-hierarchy-v523','desktop-filter-buttons-v523');
+    const root=document.getElementById('sec-mercado');
+    if(root){
+      set(root,'width','100%');set(root,'max-width','none');set(root,'margin-left','0');set(root,'margin-right','0');set(root,'padding-left','0');set(root,'padding-right','0');
+      root.querySelectorAll('#cdiAnalyticLinkV274,.cdi-analytic-link-v274').forEach(el=>{set(el,'display','none');set(el,'visibility','hidden');set(el,'pointer-events','none');});
+      root.querySelectorAll('.market-ref-grid,.market-reference-v167,.rates-reference-v167,.rates-executive-v255,.savings-reference-v167,#closedMonthLaunch').forEach(el=>{set(el,'width','100%');set(el,'max-width','none');set(el,'margin-left','0');set(el,'margin-right','0');});
+      const marketGrid=root.querySelector('.market-ref-grid.market-reference-v167');set(marketGrid,'display','block');
+      const rates=root.querySelector('.rates-reference-v167,.rates-executive-v255');
+      if(rates){set(rates,'display','grid');set(rates,'grid-template-columns','260px minmax(0,1fr)');set(rates,'grid-template-areas','"head head" "summary detail"');set(rates,'gap','16px 24px');set(rates,'align-items','start');set(rates,'overflow','visible');set(rates,'min-height','auto');set(rates,'height','auto');set(rates,'padding','18px 20px 22px');}
+      const head=root.querySelector('.rates-reference-v167 > .market-reference-head-v167');set(head,'grid-area','head');set(head,'margin','0');set(head,'padding','0 0 8px');
+      const summary=root.querySelector('.rates-summary-v167');if(summary){set(summary,'grid-area','summary');set(summary,'display','grid');set(summary,'grid-template-columns','1fr');set(summary,'gap','12px');set(summary,'width','100%');set(summary,'min-width','0');set(summary,'margin','0');set(summary,'padding','0');}
+      root.querySelectorAll('.rate-summary-card-v167').forEach(card=>{set(card,'min-height','104px');set(card,'height','auto');set(card,'max-height','none');set(card,'padding','14px 16px');});
+      const detail=root.querySelector('.rates-detail-grid-v167');if(detail){set(detail,'grid-area','detail');set(detail,'display','flex');set(detail,'flex-direction','column');set(detail,'gap','14px');set(detail,'width','100%');set(detail,'min-width','0');set(detail,'margin','0');set(detail,'padding','0');set(detail,'overflow','visible');set(detail,'isolation','isolate');}
+      const copom=root.querySelector('.copom-compact-v167');if(copom){reset(copom);set(copom,'z-index','2');set(copom,'padding','14px 16px');set(copom,'border-radius','14px');set(copom,'overflow','visible');}
+      const copomSummary=root.querySelector('#copomExecutiveSummaryV270');if(copomSummary){set(copomSummary,'display','grid');set(copomSummary,'grid-template-columns','repeat(2,minmax(0,1fr))');set(copomSummary,'gap','12px');set(copomSummary,'width','100%');set(copomSummary,'max-width','100%');set(copomSummary,'overflow','visible');set(copomSummary,'scroll-snap-type','none');}
+      root.querySelectorAll('#copomExecutiveSummaryV270 > article,.copom-exec-card-v270').forEach(card=>{set(card,'width','auto');set(card,'min-width','0');set(card,'max-width','none');set(card,'min-height','76px');set(card,'height','auto');set(card,'padding','10px 12px');set(card,'box-sizing','border-box');});
+      root.querySelectorAll('.copom-exec-desc-v270').forEach(el=>{set(el,'max-width','100%');set(el,'line-height','1.28');set(el,'overflow','visible');set(el,'display','block');});
+      const cdi=root.querySelector('#cdiYearHistory');if(cdi){reset(cdi);set(cdi,'z-index','1');set(cdi,'display','block');set(cdi,'padding','14px 16px');set(cdi,'border-radius','16px');set(cdi,'overflow','hidden');}
+      const cdiHead=root.querySelector('#cdiYearHistory .cdi-year-head,#cdiYearHistory .cdi-chart-head-v271');if(cdiHead){set(cdiHead,'display','flex');set(cdiHead,'align-items','flex-start');set(cdiHead,'justify-content','flex-start');set(cdiHead,'gap','14px');set(cdiHead,'margin','0 0 12px');set(cdiHead,'padding','0');set(cdiHead,'border','0');}
+      const kpis=root.querySelector('#cdiYearHistory .cdi-kpis-v271');if(kpis){set(kpis,'display','grid');set(kpis,'grid-template-columns','repeat(4,minmax(0,1fr))');set(kpis,'gap','10px');set(kpis,'width','100%');set(kpis,'margin','0 0 12px');}
+      const months=root.querySelector('#cdiMonthCarouselV322');if(months){set(months,'display','grid');set(months,'grid-template-columns','repeat(3,minmax(0,1fr))');set(months,'gap','10px');set(months,'width','100%');set(months,'max-width','100%');set(months,'margin','0 0 12px');set(months,'padding','0');set(months,'overflow','hidden');set(months,'scroll-snap-type','none');}
+      root.querySelectorAll('#cdiMonthCarouselV322 > article,.cdi-month-card-v322').forEach(card=>{set(card,'width','auto');set(card,'min-width','0');set(card,'max-width','none');set(card,'flex','initial');set(card,'min-height','54px');set(card,'padding','8px 10px');});
+      const canvasWrap=root.querySelector('.cdi-chart-canvas-wrap-v271');if(canvasWrap){set(canvasWrap,'width','100%');set(canvasWrap,'height','260px');set(canvasWrap,'min-height','260px');set(canvasWrap,'max-height','260px');set(canvasWrap,'margin','0');set(canvasWrap,'overflow','hidden');}
+      const canvas=root.querySelector('#cdiYearChartV271');if(canvas){set(canvas,'width','100%');set(canvas,'height','260px');set(canvas,'max-height','260px');try{const chart=window.Chart?.getChart?.(canvas);chart?.resize?.();}catch(_){}}
+    }
+  }
+  let raf=0;function schedule(){if(raf) cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{raf=0;apply();});}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',schedule,{once:true}); else schedule();
+  window.addEventListener('load',()=>{schedule();setTimeout(schedule,250);setTimeout(schedule,900);},{once:true});
+  window.addEventListener('resize',schedule,{passive:true});
+})();
+
+
+/* ELTAUM_DESKTOP_FILTER_CATEGORY_V524 — safety class only */
+(function(){
+  const FLAG='__ELTAUM_DESKTOP_FILTER_CATEGORY_V524__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  function apply(){
+    if(window.matchMedia && window.matchMedia('(min-width: 769px)').matches){
+      document.documentElement.classList.add('desktop-filter-buttons-v524');
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  window.addEventListener('resize',apply,{passive:true});
+})();
+
+
+/* ELTAUM_DESKTOP_CATALOG_BASE_V525
+   Base desktop restaurada: tabela única, sem alternância de cards/executiva/detalhada.
+   Mantém mobile preservado e impede scripts antigos de reativarem fund-card-mode no desktop. */
+(function(){
+  function isDesktopV525(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function enforceDesktopCatalogBaseV525(){
+    if(!isDesktopV525()) return;
+    document.documentElement.classList.add('desktop-catalog-base-v525');
+    var metaBuild=document.querySelector('meta[name="app-build"]');
+    if(metaBuild) metaBuild.content='ELTAUM_DESKTOP_CATALOG_BASE_V525';
+    if(document.body){
+      document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
+    }
+    var toggle=document.querySelector('#sec-fundos .desktop-table-mode-control, #sec-fundos .vista-toggle-wrap');
+    if(toggle) toggle.remove();
+    var cards=document.getElementById('mobileFundCards');
+    if(cards){
+      cards.style.setProperty('display','none','important');
+      cards.setAttribute('aria-hidden','true');
+    }
+    var table=document.querySelector('#sec-fundos .table-wrap');
+    if(table){
+      table.style.removeProperty('display');
+      table.removeAttribute('aria-hidden');
+    }
+    try{
+      if(typeof vistaAtual !== 'undefined') vistaAtual='reuniao';
+    }catch(e){}
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', enforceDesktopCatalogBaseV525, {once:true});
+  }else{
+    enforceDesktopCatalogBaseV525();
+  }
+  window.addEventListener('resize', enforceDesktopCatalogBaseV525, {passive:true});
+  window.addEventListener('load', enforceDesktopCatalogBaseV525, {once:true});
+  setTimeout(enforceDesktopCatalogBaseV525, 0);
+  setTimeout(enforceDesktopCatalogBaseV525, 400);
+  setTimeout(enforceDesktopCatalogBaseV525, 1200);
+  try{
+    var obs=new MutationObserver(function(muts){
+      if(!isDesktopV525() || !document.body) return;
+      if(document.body.classList.contains('fund-card-mode') || document.body.classList.contains('mobile-catalog-cards-mode')){
+        enforceDesktopCatalogBaseV525();
+      }
+    });
+    if(document.body) obs.observe(document.body,{attributes:true,attributeFilter:['class']});
+    else document.addEventListener('DOMContentLoaded',function(){ obs.observe(document.body,{attributes:true,attributeFilter:['class']}); },{once:true});
+  }catch(e){}
+})();
+
+
+/* ELTAUM_DESKTOP_FILTER_ACTIONS_V526
+   Desktop only: restaura o comportamento acumulativo dos filtros.
+   - Público-alvo volta a filtrar de fato e acumula com categoria/risco/busca.
+   - Categoria ativa pode ser clicada novamente para limpar apenas a categoria.
+   - Filtros ativos deixam de duplicar o rótulo e passam a refletir os filtros reais. */
+(function(){
+  'use strict';
+  const FLAG='__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const BUILD='ELTAUM_DESKTOP_FILTER_ACTIONS_V526';
+  const isDesktop=()=>!window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  const qs=(sel,root=document)=>root.querySelector(sel);
+  const qsa=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
+
+  function syncAudienceButtonsV526(){
+    if(!isDesktop()) return;
+    let atual='';
+    try{ atual=String(activePerfil||''); }catch(e){}
+    qsa('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]').forEach(btn=>{
+      const val=String(btn.dataset.audienceV488||'');
+      const on=val===atual;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+    });
+  }
+
+  function syncDesktopFiltersV526(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-filter-actions-v526','desktop-catalog-base-v525');
+    syncAudienceButtonsV526();
+    try{ if(window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__ && typeof window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__.sync==='function') window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__.sync(); }catch(e){}
+    try{ if(typeof syncRiskProfileControlsV198==='function') syncRiskProfileControlsV198(); }catch(e){}
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function applyAudienceV526(btn){
+    if(!btn || !isDesktop()) return;
+    const val=String(btn.dataset.audienceV488||'');
+    const wasActive=btn.getAttribute('aria-pressed')==='true';
+    try{
+      activePerfil=(wasActive && val) ? '' : val;
+      currentPage=1;
+      window.__favListMode=false;
+      if(expandedRows && typeof expandedRows.clear==='function') expandedRows.clear();
+    }catch(e){}
+    syncAudienceButtonsV526();
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.error('v526 audience filter',e); }
+    setTimeout(syncDesktopFiltersV526,0);
+    requestAnimationFrame(syncDesktopFiltersV526);
+  }
+
+  function clearByKindV526(kind){
+    if(!isDesktop()) return;
+    try{
+      if(kind==='all'){
+        if(typeof clearAllFilters==='function') clearAllFilters();
+        else { activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; if(typeof applyFilter==='function') applyFilter(); }
+      }else if(typeof clearFilter==='function'){
+        clearFilter(kind);
+      }else{
+        if(kind==='cat') activeCat='';
+        if(kind==='benchmark') activeBenchmark='';
+        if(kind==='perfil') activePerfil='';
+        if(kind==='risco') activeRisco='';
+        if(kind==='semDados') hideSemDados=false;
+        if(typeof applyFilter==='function') applyFilter();
+      }
+    }catch(e){}
+    setTimeout(syncDesktopFiltersV526,0);
+    requestAnimationFrame(syncDesktopFiltersV526);
+  }
+
+  function bindDesktopFiltersV526(){
+    syncDesktopFiltersV526();
+    if(document.documentElement.dataset.v526DesktopFiltersBound==='1') return;
+    document.documentElement.dataset.v526DesktopFiltersBound='1';
+
+    document.addEventListener('click',ev=>{
+      const audienceBtn=ev.target.closest && ev.target.closest('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]');
+      if(audienceBtn && isDesktop()){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+        applyAudienceV526(audienceBtn);
+        return;
+      }
+
+      const clearBtn=ev.target.closest && ev.target.closest('#activeFilterStrip [data-clear-filter]');
+      if(clearBtn && isDesktop()){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+        clearByKindV526(clearBtn.dataset.clearFilter||'all');
+      }
+    },true);
+
+    document.addEventListener('change',ev=>{
+      if(!isDesktop()) return;
+      if(ev.target && ev.target.id==='catalogRiskSelectV198') setTimeout(syncDesktopFiltersV526,0);
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindDesktopFiltersV526,{once:true}); else bindDesktopFiltersV526();
+  window.addEventListener('load',()=>{syncDesktopFiltersV526();setTimeout(syncDesktopFiltersV526,400);},{once:true});
+  window.addEventListener('resize',syncDesktopFiltersV526,{passive:true});
+  [250,900,1800,3200].forEach(ms=>setTimeout(syncDesktopFiltersV526,ms));
+  window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__={build:BUILD,sync:syncDesktopFiltersV526};
+})();
+
+
+/* ELTAUM_DESKTOP_POLISH_V528
+   Desktop only: aplica a classe de acabamento visual, mantém tabela única e remove ruídos legados. */
+(function(){
+  'use strict';
+  const FLAG='__ELTAUM_DESKTOP_POLISH_V528__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const isDesktop=()=>!window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-polish-v528','desktop-catalog-clean-v527','desktop-catalog-base-v525');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content='ELTAUM_DESKTOP_POLISH_V528';
+    if(document.body){
+      document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
+    }
+    document.querySelectorAll('#mobileCatalogViewSwitch, #sec-fundos .mobile-catalog-view-switch, #sec-fundos .mobile-catalog-view-btn[data-mobile-catalog-view="cards"], #sec-fundos .mobile-catalog-view-panel, #sec-fundos .mobile-view-toggle').forEach(el=>{
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  window.addEventListener('load',apply,{once:true});
+  window.addEventListener('resize',apply,{passive:true});
+  setTimeout(apply,300);
+  setTimeout(apply,1200);
+})();
+
+
+/* =========================================================
+   PATCH v534 — Desktop: reposiciona Pontos de atenção como faixa
+   Mantém a estrutura mobile original. No desktop, retira a coluna lateral
+   e insere o bloco entre a leitura rápida e o Top 10.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_ATTENTION_STRIP_V534';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let cachedAttention=null;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function ensureClass(){
+    document.documentElement.classList.add('desktop-ranking-attention-strip-v534');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function createAttention(){
+    const aside=document.createElement('aside');
+    aside.id='rankingAttentionV136';
+    aside.className='ranking-attention-panel-v136 ranking-attention-strip-v534';
+    aside.setAttribute('aria-label','Pontos de atenção dos fundos');
+    aside.innerHTML='<div class="attention-head-v136"><span>⚠️</span><div><strong>Pontos de atenção</strong><small>Alertas consultivos da base</small></div></div><div class="attention-body-v136"><div class="attention-empty-v136">Carregando insights...</div></div>';
+    return aside;
+  }
+
+  function detachAttention(){
+    const aside=q('#rankingAttentionV136');
+    if(aside){
+      cachedAttention=aside;
+      if(aside.parentNode) aside.parentNode.removeChild(aside);
+    }
+  }
+
+  function moveAttention(){
+    ensureClass();
+    const section=q('#rankingsSection');
+    if(!section) return;
+    const layout=q('.ranking-layout-v136',section);
+    const grid=q('#rankingGrid',section);
+    if(!layout || !grid) return;
+    let aside=cachedAttention || q('#rankingAttentionV136',section) || createAttention();
+    aside.classList.add('ranking-attention-strip-v534');
+
+    if(mq.matches){
+      const insight=q('.ranking-exec-insight',grid);
+      if(insight){
+        insight.insertAdjacentElement('afterend',aside);
+      }else if(aside.parentNode!==grid){
+        grid.appendChild(aside);
+      }
+    }else{
+      if(aside.parentNode!==layout) layout.appendChild(aside);
+    }
+    cachedAttention=aside;
+  }
+
+  function compactAttentionDetails(){
+    if(!mq.matches) return;
+    const aside=q('#rankingAttentionV136');
+    const body=q('.attention-body-v136',aside||document);
+    if(!aside || !body) return;
+    aside.classList.add('ranking-attention-strip-v534');
+    const blocks=qa(':scope > .attention-block-v136',body);
+    const foot=q(':scope > .attention-foot-v136',body);
+    if(blocks.length<=1) return;
+    if(q(':scope > .attention-details-v534',body)) return;
+
+    const details=document.createElement('details');
+    details.className='attention-details-v534';
+    details.innerHTML='<summary>Ver alertas</summary><div class="attention-details-body-v534"></div>';
+    const detailsBody=q('.attention-details-body-v534',details);
+    blocks.slice(1).forEach(block=>detailsBody.appendChild(block));
+    if(foot) detailsBody.appendChild(foot);
+    body.appendChild(details);
+  }
+
+  function apply(){
+    moveAttention();
+    setTimeout(()=>{moveAttention(); compactAttentionDetails();},0);
+    setTimeout(()=>{moveAttention(); compactAttentionDetails();},80);
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__attentionStripV534) return;
+    const wrapped=function(){
+      detachAttention();
+      const result=original.apply(this,arguments);
+      apply();
+      return result;
+    };
+    wrapped.__attentionStripV534=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function init(){
+    ensureClass();
+    wrapRankingRender();
+    apply();
+    setTimeout(()=>{wrapRankingRender();apply();},300);
+    setTimeout(()=>{wrapRankingRender();apply();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v536 — Desktop ranking hierarchy cleanup
+   - Remove Leitura rápida da visão desktop.
+   - Mantém Pontos de atenção como faixa e abre alertas em linha, largura cheia.
+   - Centraliza o cabeçalho da seção de rankings.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_HIERARCHY_V536';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let busy=false;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function ensureBuild(){
+    document.documentElement.classList.add('desktop-ranking-hierarchy-v536');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function removeQuickRead(){
+    if(!mq.matches) return;
+    qa('#rankingsSection .ranking-exec-insight').forEach(el=>el.remove());
+  }
+
+  function normalizeAttention(){
+    if(!mq.matches || busy) return;
+    const aside=q('#rankingAttentionV136');
+    const host=q('.attention-body-v136',aside||document);
+    if(!aside || !host) return;
+    const metric=q('.attention-metric-grid-v136',host);
+    if(!metric) return;
+
+    const existingDetails=q('.attention-details-v536',host);
+    const wasOpen=!!(existingDetails && existingDetails.open) || !!q('.attention-details-v534[open]',host);
+    const blocks=qa('.attention-block-v136',host);
+    const foot=q('.attention-foot-v136',host);
+    const detailsBlocks=[];
+
+    blocks.forEach(block=>{
+      const title=(q('h3',block)?.textContent||'').trim().toLowerCase();
+      if(title.includes('insight')){
+        block.remove();
+        return;
+      }
+      detailsBlocks.push(block);
+    });
+    if(foot) detailsBlocks.push(foot);
+
+    // Se a v534/v535 já tiver criado um details antigo, reaproveita os blocos de dentro.
+    qa('.attention-details-v534 .attention-block-v136',host).forEach(block=>{
+      const title=(q('h3',block)?.textContent||'').trim().toLowerCase();
+      if(!title.includes('insight') && !detailsBlocks.includes(block)) detailsBlocks.push(block);
+    });
+    const oldFoot=q('.attention-details-v534 .attention-foot-v136',host);
+    if(oldFoot && !detailsBlocks.includes(oldFoot)) detailsBlocks.push(oldFoot);
+
+    busy=true;
+    const details=document.createElement('details');
+    details.className='attention-details-v536';
+    if(wasOpen) details.open=true;
+    details.innerHTML='<summary>Ver alertas</summary>';
+
+    const body=document.createElement('div');
+    body.className='attention-details-body-v536';
+    detailsBlocks.forEach(node=>body.appendChild(node));
+
+    host.innerHTML='';
+    host.appendChild(metric);
+    host.appendChild(details);
+    if(detailsBlocks.length){
+      host.appendChild(body);
+    }else{
+      details.style.display='none';
+    }
+    busy=false;
+  }
+
+  function apply(){
+    ensureBuild();
+    removeQuickRead();
+    normalizeAttention();
+  }
+
+  function observe(){
+    const target=q('#rankingsSection');
+    if(!target || target.dataset.v536Observer==='1') return;
+    target.dataset.v536Observer='1';
+    const obs=new MutationObserver(()=>{
+      clearTimeout(target.__rankingV536Timer);
+      target.__rankingV536Timer=setTimeout(apply,30);
+    });
+    obs.observe(target,{childList:true,subtree:true});
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__desktopV536) return;
+    const wrapped=function(){
+      const result=original.apply(this,arguments);
+      setTimeout(apply,0);
+      return result;
+    };
+    wrapped.__desktopV536=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function init(){
+    ensureBuild();
+    wrapRankingRender();
+    apply();
+    observe();
+    setTimeout(()=>{wrapRankingRender();apply();observe();},250);
+    setTimeout(()=>{wrapRankingRender();apply();observe();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v537 — Desktop: semântica dos alertas dos rankings
+   Escopo: somente desktop.
+   - Renomeia Piores leituras para Piores em 12 meses.
+   - Remove Sem dados / pipeline da área consultiva principal.
+   - Mantém Pontos de atenção em faixa horizontal, sem coluna lateral.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_ALERTS_SEMANTIC_V537';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let busy=false;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function txt(el){return (el && el.textContent || '').trim().toLowerCase()}
+
+  function ensureBuild(){
+    document.documentElement.classList.add('desktop-ranking-alerts-semantic-v537');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function removeQuickRead(){
+    if(!mq.matches) return;
+    qa('#rankingsSection .ranking-exec-insight').forEach(el=>el.remove());
+  }
+
+  function renameAndTrimAttention(){
+    if(!mq.matches || busy) return;
+    const aside=q('#rankingAttentionV136');
+    const host=q('.attention-body-v136', aside || document);
+    if(!aside || !host) return;
+
+    // Remove o indicador de qualidade da base da área consultiva principal.
+    qa('.attention-metric-v136', host).forEach(metric=>{
+      if(txt(metric).includes('sem dados')) metric.remove();
+    });
+
+    // Renomeia o bloco de 12M e remove blocos não consultivos.
+    qa('.attention-block-v136', host).forEach(block=>{
+      const h=q('h3', block);
+      const title=txt(h);
+      if(title.includes('piores leituras')) h.textContent='Piores em 12 meses';
+      if(title.includes('sem dados') || title.includes('pipeline') || title.includes('insight')) block.remove();
+    });
+
+    const foot=q('.attention-foot-v136', host);
+    if(foot) foot.textContent='Alertas automáticos para apoio à análise. Não substituem suitability, objetivo e horizonte do cliente.';
+
+    // Se a v536 já organizou em details + body, garante apenas os dois blocos úteis.
+    const details=q('.attention-details-v536', host);
+    const body=q('.attention-details-body-v536', host);
+    if(details && body){
+      qa('.attention-block-v136', body).forEach(block=>{
+        const h=q('h3', block);
+        const title=txt(h);
+        if(title.includes('piores leituras')) h.textContent='Piores em 12 meses';
+        if(title.includes('sem dados') || title.includes('pipeline') || title.includes('insight')) block.remove();
+      });
+      const useful=qa('.attention-block-v136', body);
+      if(!useful.length){
+        details.style.display='none';
+        body.style.display='none';
+      }else{
+        details.style.display='block';
+      }
+    }
+  }
+
+  function apply(){
+    ensureBuild();
+    removeQuickRead();
+    renameAndTrimAttention();
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__desktopV537) return;
+    const wrapped=function(){
+      const result=original.apply(this,arguments);
+      setTimeout(apply,0);
+      setTimeout(apply,80);
+      return result;
+    };
+    wrapped.__desktopV537=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function observe(){
+    const target=q('#rankingsSection');
+    if(!target || target.dataset.v537Observer==='1') return;
+    target.dataset.v537Observer='1';
+    const obs=new MutationObserver(()=>{
+      clearTimeout(target.__rankingV537Timer);
+      target.__rankingV537Timer=setTimeout(apply,40);
+    });
+    obs.observe(target,{childList:true,subtree:true});
+  }
+
+  function init(){
+    ensureBuild();
+    wrapRankingRender();
+    apply();
+    observe();
+    setTimeout(()=>{wrapRankingRender();apply();observe();},250);
+    setTimeout(()=>{wrapRankingRender();apply();observe();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v542 — Desktop: Ver mais estavel, sem recriar o grafico
+   ========================================================= */
+(function desktopSectionToggleFixV542(){
+  if(window.__desktopSectionToggleFixV542Installed) return;
+  window.__desktopSectionToggleFixV542Installed = true;
+
+  var SECTION_IDS = ['rankingsSection','sec-dolar'];
+  var BTN_SELECTOR = '.desktop-section-more-v539, .desktop-section-more-v540, .desktop-section-more-v541, [data-desktop-section-toggle]';
+  var root = document.documentElement;
+
+  root.classList.add('desktop-section-toggle-fix-v542');
+  var meta = document.querySelector('meta[name="app-build"]');
+  if(meta) meta.content = 'ELTAUM_DESKTOP_SECTION_TOGGLE_FIX_V542';
+
+  function getSectionIdFromButton(btn){
+    if(!btn) return '';
+    return btn.getAttribute('data-desktop-section-toggle') ||
+      (btn.classList.contains('ranking-more-v539') ? 'rankingsSection' :
+       btn.classList.contains('dolar-more-v539') ? 'sec-dolar' : '');
+  }
+
+  function getToggleButton(section){
+    if(!section) return null;
+    return section.querySelector(BTN_SELECTOR);
+  }
+
+  function setButtonState(section, isOpen){
+    var btn = getToggleButton(section);
+    if(!btn) return;
+    btn.removeAttribute('onclick');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.toggle-label');
+    var icon = btn.querySelector('.toggle-icon');
+    var closed = btn.getAttribute('data-label-closed') || 'Ver mais';
+    var open = btn.getAttribute('data-label-open') || 'Ver menos';
+    if(label) label.textContent = isOpen ? open : closed;
+    if(icon) icon.textContent = isOpen ? '-' : '›';
+  }
+
+  function syncDolarDetails(section, isOpen){
+    if(!section || section.id !== 'sec-dolar') return;
+    section.classList.toggle('dolar-details-collapsed-v542', !isOpen);
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+    var footer = section.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
+  }
+
+  function refreshDolarChartWhenOpened(sectionId, isOpen){
+    if(sectionId !== 'sec-dolar' || !isOpen) return;
+    var raf = window.requestAnimationFrame || function(cb){ return setTimeout(cb, 16); };
+    raf(function(){
+      raf(function(){
+        try{
+          var canvas = document.getElementById('chartDolar');
+          var chart = window.Chart && canvas ? Chart.getChart(canvas) : null;
+          if(chart && typeof chart.resize === 'function') chart.resize();
+          if(chart && typeof chart.update === 'function') chart.update('none');
+          window.dispatchEvent(new Event('resize'));
+        }catch(err){
+          console.warn('[Dolar PTAX] grafico aguardando layout:', err);
+        }
+      });
+    });
+  }
+
+  function setSectionOpen(sectionId, isOpen){
+    var section = document.getElementById(sectionId);
+    if(!section) return false;
+    if(sectionId === 'sec-dolar'){
+      section.dataset.desktopDesiredOpenV544 = isOpen ? 'true' : 'false';
+      section.dataset.desktopUserToggledV544 = '1';
+    }
+    section.classList.toggle('section-expanded', !!isOpen);
+    section.classList.toggle('section-collapsed', !isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(section, !!isOpen);
+    syncDolarDetails(section, !!isOpen);
+    refreshDolarChartWhenOpened(sectionId, !!isOpen);
+    return false;
+  }
+
+  window.toggleDesktopCompactSection = function(event, sectionId){
+    if(event){
+      if(event.__desktopCompactToggleV542Handled) return false;
+      event.__desktopCompactToggleV542Handled = true;
+      if(typeof event.preventDefault === 'function') event.preventDefault();
+      if(typeof event.stopPropagation === 'function') event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+    }
+    var section = document.getElementById(sectionId);
+    if(!section) return false;
+    return setSectionOpen(sectionId, !section.classList.contains('section-expanded'));
+  };
+
+  function initSection(id){
+    var section = document.getElementById(id);
+    if(!section) return;
+    var btn = getToggleButton(section);
+    if(btn){
+      btn.setAttribute('data-desktop-section-toggle', id);
+      btn.removeAttribute('onclick');
+      btn.style.pointerEvents = 'auto';
+      btn.style.cursor = 'pointer';
+    }
+    var isOpen = section.classList.contains('section-expanded');
+    if(id === 'sec-dolar' && !section.dataset.desktopDesiredOpenV544){
+      section.dataset.desktopDesiredOpenV544 = isOpen ? 'true' : 'false';
+    }
+    section.classList.toggle('section-collapsed', !isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(section, isOpen);
+    syncDolarDetails(section, isOpen);
+  }
+
+  function init(){
+    SECTION_IDS.forEach(initSection);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
+  else init();
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest(BTN_SELECTOR) : null;
+    if(!btn) return;
+    var id = getSectionIdFromButton(btn);
+    if(!id) return;
+    window.toggleDesktopCompactSection(ev, id);
+  }, true);
+})();
+
+
+/* =========================================================
+   PATCH v543 — Desktop: oculta seletor de visualizacao mobile
+   ========================================================= */
+(function desktopHideMobileViewSwitchV543(){
+  if(window.__desktopHideMobileViewSwitchV543Installed) return;
+  window.__desktopHideMobileViewSwitchV543Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-hide-mobile-view-switch-v543');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_HIDE_MOBILE_VIEW_SWITCH_V543';
+    document.querySelectorAll('#mobileCatalogViewSwitch, #sec-fundos .mobile-catalog-view-switch').forEach(function(el){
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('visibility','hidden','important');
+      el.style.setProperty('height','0','important');
+      el.style.setProperty('min-height','0','important');
+      el.style.setProperty('max-height','0','important');
+      el.style.setProperty('margin','0','important');
+      el.style.setProperty('padding','0','important');
+      el.style.setProperty('border','0','important');
+      el.style.setProperty('overflow','hidden','important');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('resize', apply, {passive:true});
+  setTimeout(apply, 300);
+  setTimeout(apply, 1200);
+})();
+
+
+/* =========================================================
+   PATCH v544 — Desktop: trava estado manual do Dolar PTAX
+   ========================================================= */
+(function desktopDolarToggleStateGuardV544(){
+  if(window.__desktopDolarToggleStateGuardV544Installed) return;
+  window.__desktopDolarToggleStateGuardV544Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function getButton(){
+    return document.querySelector('[data-desktop-section-toggle="sec-dolar"], .dolar-more-v539');
+  }
+
+  function setButtonState(btn, isOpen){
+    if(!btn) return;
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.toggle-label');
+    var icon = btn.querySelector('.toggle-icon');
+    if(label) label.textContent = isOpen ? (btn.dataset.labelOpen || 'Ver menos') : (btn.dataset.labelClosed || 'Ver mais');
+    if(icon) icon.textContent = isOpen ? '-' : '›';
+  }
+
+  function syncDetails(sec, isOpen){
+    if(!sec) return;
+    sec.classList.toggle('dolar-details-collapsed-v542', !isOpen);
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+    var footer = sec.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
+  }
+
+  function applyDesiredState(){
+    if(!isDesktop()) return;
+    var sec = document.getElementById('sec-dolar');
+    if(!sec || sec.dataset.desktopUserToggledV544 !== '1') return;
+
+    var isOpen = sec.dataset.desktopDesiredOpenV544 === 'true';
+    var btn = getButton();
+
+    sec.classList.toggle('section-expanded', isOpen);
+    sec.classList.toggle('section-collapsed', !isOpen);
+    sec.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(btn, isOpen);
+    syncDetails(sec, isOpen);
+  }
+
+  function install(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-dolar-toggle-state-guard-v544');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_TOGGLE_STATE_GUARD_V544';
+
+    var sec = document.getElementById('sec-dolar');
+    if(!sec || sec.dataset.desktopGuardV544Bound) return;
+    sec.dataset.desktopGuardV544Bound = '1';
+
+    var scheduled = false;
+    var obs = new MutationObserver(function(){
+      if(scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(function(){
+        scheduled = false;
+        applyDesiredState();
+      });
+    });
+    obs.observe(sec, {attributes:true, attributeFilter:['class','aria-expanded','aria-hidden']});
+
+    var btn = getButton();
+    if(btn){
+      obs.observe(btn, {attributes:true, attributeFilter:['aria-expanded','class']});
+    }
+
+    window.__ELTAUM_DESKTOP_DOLAR_TOGGLE_STATE_GUARD_OBSERVER_V544__ = obs;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  window.addEventListener('pageshow', install, {passive:true});
+})();
+
+
+/* =========================================================
+   PATCH v545 — Desktop: neutraliza mutacoes mobile dos filtros
+   ========================================================= */
+(function desktopNeutralizeMobileFilterUiV545(){
+  if(window.__desktopNeutralizeMobileFilterUiV545Installed) return;
+  window.__desktopNeutralizeMobileFilterUiV545Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-neutralize-mobile-filter-ui-v545');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_NEUTRALIZE_MOBILE_FILTER_UI_V545';
+
+    document.querySelectorAll([
+      '#sec-fundos #mobileFilterBar',
+      '#sec-fundos #mobileFilterToggle',
+      '#sec-fundos #mobileFilterSummary',
+      '#sec-fundos #mobileCategorySelectShellV74',
+      '#sec-fundos #mobileNoDataRowV442',
+      '#sec-fundos .mobile-filter-summary',
+      '#sec-fundos .mobile-filter-toggle',
+      '#sec-fundos .mobile-category-select-shell-v74',
+      '#sec-fundos .mobile-no-data-row-v442'
+    ].join(',')).forEach(function(el){
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('visibility','hidden','important');
+      el.style.setProperty('height','0','important');
+      el.style.setProperty('min-height','0','important');
+      el.style.setProperty('max-height','0','important');
+      el.style.setProperty('margin','0','important');
+      el.style.setProperty('padding','0','important');
+      el.style.setProperty('border','0','important');
+      el.style.setProperty('overflow','hidden','important');
+      el.style.setProperty('pointer-events','none','important');
+      el.style.setProperty('position','absolute','important');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('pageshow', apply, {passive:true});
+  [120, 400, 900, 1800, 3200].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* =========================================================
+   PATCH v546 — Desktop: abas do ranking funcionais
+   ========================================================= */
+(function desktopRankingTabsFuncionaisV546(){
+  if(window.__desktopRankingTabsFuncionaisV546Installed) return;
+  window.__desktopRankingTabsFuncionaisV546Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function q(sel, root){ return (root || document).querySelector(sel); }
+  function qa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function esc(v){
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function norm(v){
+    return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  }
+  function smartNum(v){
+    if(v === null || v === undefined || v === '') return null;
+    if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+    let s = String(v).trim();
+    if(!s || s === '-' || s === '—' || /^null$/i.test(s)) return null;
+    s = s.replace(/[^\d,.-]/g,'');
+    const hasComma = s.includes(',');
+    const hasDot = s.includes('.');
+    if(hasComma && hasDot){
+      s = s.replace(/\./g,'').replace(',','.');
+    }else if(hasComma){
+      s = s.replace(',','.');
+    }else if(hasDot){
+      const parts = s.split('.');
+      const last = parts[parts.length - 1] || '';
+      if(parts.length > 2 || last.length === 3){
+        s = s.replace(/\./g,'');
+      }
+    }
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+  function num(v){
+    const n = smartNum(v);
+    if(n !== null) return n;
+    if(typeof toNum === 'function') return toNum(v);
+    return null;
+  }
+  function pct(v){
+    const n = num(v);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return '—';
+    return (n > 0 ? '+' : '') + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+  }
+  function retClass(v){
+    const n = num(v);
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  }
+  function cleanFund(v){
+    return String(v || '—').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim() || '—';
+  }
+  function compactFundName(v){
+    let s = cleanFund(v)
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIC\b/ig,'')
+      .replace(/\bFIF\b/ig,'')
+      .replace(/\bRESP\.?\s*LTDA\b/ig,'')
+      .replace(/\bRESP\b/ig,'')
+      .replace(/\bFUNDO DE INDICE\b/ig,'')
+      .replace(/\bCORPORATIVO\b/ig,'Corp.')
+      .replace(/\bREFERENCIADO\b/ig,'Ref.')
+      .replace(/\s+-\s+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const words = s.split(/\s+/).filter(Boolean);
+    if(words.length > 4) s = words.slice(0,4).join(' ');
+    return s || cleanFund(v);
+  }
+  function shortCat(v){
+    const raw = String(v || '—').trim();
+    const n = norm(raw);
+    if(n.includes('FUNDOS MUTUOS') || n.includes('PRIVATIZACAO')) return 'FMP';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
+    if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
+    if(n.includes('RENDA FIXA')) return 'Renda Fixa';
+    if(n.includes('MULTIMERCADO')) return 'Multimercado';
+    if(n.includes('CAMBIAL')) return 'Cambial';
+    if(n.includes('ACOES')) return 'Ações';
+    if(n.includes('INDICE')) return 'Índice';
+    return raw;
+  }
+  function plMillionsFromValue(value){
+    const n = num(value);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return null;
+    return Math.abs(n) >= 1000000 ? n / 1000000 : n;
+  }
+  function plValue(r){
+    return plMillionsFromValue(r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido']);
+  }
+  function plTxt(v){
+    const n = num(v);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return 'R$ —';
+    if(Math.abs(n) >= 1000) return 'R$ ' + (n / 1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
+    return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+  }
+  function campoPorPeriodo(periodo){
+    if(typeof rankCampoPorPeriodo === 'function') return rankCampoPorPeriodo(periodo);
+    if(periodo === 'dia') return 'Variacao Dia (%)';
+    if(periodo === 'mes') return 'Acum. Mes (%)';
+    if(periodo === 'ano') return 'Acum. Ano (%)';
+    return 'Acum. 12M (%)';
+  }
+  function periodoLabel(periodo){
+    if(typeof rankPeriodoLabel === 'function') return rankPeriodoLabel(periodo);
+    return ({dia:'dia',mes:'mês',ano:'ano','12m':'12 meses'})[periodo] || '12 meses';
+  }
+  function cdiReferencia(periodo){
+    const p = periodo || '12m';
+    const card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const firstFinite = function(){
+      for(const value of arguments){
+        const n = num(value);
+        if(n !== null && !Number.isNaN(n) && Number.isFinite(n)) return n;
+      }
+      return null;
+    };
+    if(p === 'mes'){
+      let atual = null;
+      try{ atual = typeof obterCdiAtualV232 === 'function' ? obterCdiAtualV232().valor : null; }catch(e){}
+      return firstFinite(atual, card?.parcial_mes_atual, card?.mensal, window.indicState?.cdi?.mes);
+    }
+    if(p === 'ano'){
+      const direto = firstFinite(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, window.indicState?.cdi?.ano);
+      if(direto !== null) return direto;
+    }
+    const m12 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(card,12) : null;
+    return firstFinite(m12, card?.acum_12m, card?.m12, window.indicState?.cdi?.m12);
+  }
+  function cdiRatioTxt(r, periodo){
+    const rent = num(r?.[campoPorPeriodo(periodo)]);
+    const cdi = cdiReferencia(periodo);
+    if(rent === null || cdi === null || !Number.isFinite(rent) || !Number.isFinite(cdi) || cdi === 0) return '—';
+    const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(rent, cdi) : Math.round((rent / cdi) * 100);
+    return ratio === null ? '—' : ratio + '%';
+  }
+  function medal(i){ return i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + 'º'; }
+  function currentFilterLabel(){
+    if(typeof activeRankFilter === 'undefined' || activeRankFilter === 'todos') return 'Todos';
+    const btn = q('[data-rank-filter="' + activeRankFilter + '"]');
+    return btn ? btn.textContent.trim() : 'Filtro aplicado';
+  }
+  function riskLabel(){
+    try{ return typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(activeRankRisk || '') : (activeRankRisk || 'Todos os perfis'); }
+    catch(e){ return 'Todos os perfis'; }
+  }
+  function baseRows(){
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows)) return [];
+    let base = allRows
+      .filter(function(r){ return typeof temDados === 'function' ? temDados(r) : true; })
+      .filter(function(r){ return typeof passaFiltroRanking === 'function' ? passaFiltroRanking(r) : true; });
+    try{
+      if(typeof activePerfil !== 'undefined' && activePerfil){
+        base = base.filter(function(r){
+          return String(r.Perfis || r.Perfil || '').split(/\s*\|\s*/).map(function(s){ return s.trim(); }).includes(activePerfil);
+        });
+      }
+      if(typeof activeRankRisk !== 'undefined' && activeRankRisk){
+        base = base.filter(function(r){ return perfilRiscoCorrespondeV198(r['Perfil de Risco'], activeRankRisk); });
+      }
+    }catch(e){}
+    return base;
+  }
+  function sortBy(base, field, asc){
+    return base
+      .filter(function(r){
+        const n = num(r[field]);
+        return n !== null && !Number.isNaN(n) && Number.isFinite(n);
+      })
+      .sort(function(a,b){
+        return asc ? num(a[field]) - num(b[field]) : num(b[field]) - num(a[field]);
+      });
+  }
+  function topRow(r, i, campo, periodo){
+    const nome = cleanFund(r.Fundo);
+    return '<div class="ranking-top-row">' +
+      '<div class="ranking-pos">' + medal(i) + '</div>' +
+      '<div class="ranking-fund"><strong title="' + esc(nome) + '">' + esc(nome) + '</strong><span>' + esc(shortCat(r.Categoria)) + ' · ' + esc(plTxt(plValue(r))) + '</span></div>' +
+      '<div class="ranking-value-standard ranking-return ' + retClass(r[campo]) + '">' + esc(pct(r[campo])) + '</div>' +
+      '<div class="ranking-cdi">' + esc(cdiRatioTxt(r, periodo)) + '</div>' +
+    '</div>';
+  }
+  function simpleRow(label, name, meta, value, cls){
+    return '<div class="ranking-top-row ranking-view-row-v546">' +
+      '<div class="ranking-pos">' + esc(label) + '</div>' +
+      '<div class="ranking-fund"><strong title="' + esc(name) + '">' + esc(name) + '</strong><span>' + esc(meta || '') + '</span></div>' +
+      '<div class="ranking-value-standard ranking-return ' + esc(cls || 'zero') + '">' + esc(value) + '</div>' +
+      '<div class="ranking-cdi"></div>' +
+    '</div>';
+  }
+  function summaryCard(kind, label, value, name, meta){
+    const full = cleanFund(name);
+    const display = kind === 'pl' ? full : compactFundName(full);
+    return '<article class="ranking-exec-card ' + esc(kind) + '"><span>' + esc(label) + '</span><strong class="ranking-value-standard ' + (kind === 'worst' ? 'neg' : 'pos') + '">' + esc(value) + '</strong><small title="' + esc(full) + '">' + esc(display) + '</small>' + (meta ? '<em>' + esc(meta) + '</em>' : '') + '</article>';
+  }
+  function groupCategories(base, field){
+    const map = {};
+    base.forEach(function(r){
+      const cat = r.Categoria || 'Sem categoria';
+      const ret = num(r[field]);
+      const pl = plValue(r);
+      if(!map[cat]) map[cat] = {cat:cat, qtd:0, pl:0, weighted:0, weight:0, sum:0, count:0};
+      map[cat].qtd += 1;
+      if(pl !== null && Number.isFinite(pl)) map[cat].pl += pl;
+      if(ret !== null && Number.isFinite(ret)){
+        map[cat].sum += ret;
+        map[cat].count += 1;
+        if(pl !== null && Number.isFinite(pl) && pl > 0){
+          map[cat].weighted += ret * pl;
+          map[cat].weight += pl;
+        }
+      }
+    });
+    return Object.values(map).map(function(d){
+      d.ret = d.weight > 0 ? d.weighted / d.weight : (d.count ? d.sum / d.count : null);
+      return d;
+    });
+  }
+  function categoryPassesFilter(cat){
+    const filtro = typeof activeRankFilter !== 'undefined' ? String(activeRankFilter || 'todos') : 'todos';
+    const c = norm(cat);
+    if(filtro === 'todos') return true;
+    if(filtro === 'sem-fmp') return !(c.includes('FMP') || c.includes('PRIVATIZACAO'));
+    if(filtro === 'renda-fixa-simples') return c.includes('RENDA FIXA SIMPLES');
+    if(filtro === 'renda-fixa-referenciado') return c.includes('RENDA FIXA REFERENCIADO');
+    if(filtro === 'renda-fixa-curto-prazo') return c.includes('RENDA FIXA CURTO');
+    if(filtro === 'renda-fixa') return c.includes('RENDA FIXA');
+    if(filtro === 'multimercado') return c.includes('MULTIMERCADO');
+    if(filtro === 'cambial') return c.includes('CAMBIAL');
+    if(filtro === 'acoes') return c.includes('ACOES');
+    if(filtro === 'fundo-de-indice') return c.includes('INDICE');
+    if(filtro === 'fmp') return c.includes('FMP') || c.includes('PRIVATIZACAO');
+    return true;
+  }
+  function dashboardCategories(){
+    const src = (typeof kpisDashboard !== 'undefined' && kpisDashboard?.categorias) ? kpisDashboard.categorias : null;
+    if(!src || typeof src !== 'object') return [];
+    return Object.entries(src)
+      .filter(function(entry){ return categoryPassesFilter(entry[0]); })
+      .map(function(entry){
+        const cat = entry[0];
+        const d = entry[1] || {};
+        return {
+          cat: cat,
+          qtd: d.qtd_ativos ?? d.quantidade ?? d.qtd ?? '—',
+          pl: plMillionsFromValue(d.pl_total),
+          ret: num(d.rent_12m_ponderada)
+        };
+      });
+  }
+  function periodTabs(target, active, periods){
+    return '<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">' + periods.map(function(p){
+      return '<button type="button" class="rank-period-tab ' + (active === p ? 'active' : '') + '" data-rank-target="' + esc(target) + '" data-rank-period="' + esc(p) + '">' + (p === 'dia' ? 'Dia' : p === 'mes' ? 'Mês' : p === 'ano' ? 'Ano' : '12M') + '</button>';
+    }).join('') + '</div>';
+  }
+  function board(title, subtitle, body, controls){
+    return '<section class="ranking-exec-board ranking-view-board-v546">' +
+      '<div class="ranking-exec-board-head"><div><h3>' + esc(title) + '</h3><p>' + esc(subtitle) + '</p></div><div class="ranking-exec-controls">' + (controls || '') + '<span class="ranking-universe-pill">Universo: <strong>' + esc(currentFilterLabel()) + '</strong></span><span class="ranking-risk-pill-v198">Risco: <strong>' + esc(riskLabel()) + '</strong></span></div></div>' +
+      '<div class="ranking-top-table" role="table" aria-label="' + esc(title) + '">' + body + '</div>' +
+    '</section>';
+  }
+  function renderTop(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campo = campoPorPeriodo(periodo);
+    const top = sortBy(base, campo).slice(0,10);
+    const rows = top.map(function(r,i){ return topRow(r,i,campo,periodo); }).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    return board('Top 10 fundos no período', 'Ranking por rentabilidade · ' + periodoLabel(periodo), '<div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI no período</span></div>' + rows, periodTabs('topFundos', periodo, ['mes','ano','12m']));
+  }
+  function renderCategoria(base){
+    const top12 = sortBy(base, 'Acum. 12M (%)');
+    const catMap = {};
+    top12.forEach(function(r){ const cat = r.Categoria || '—'; if(!catMap[cat]) catMap[cat] = r; });
+    const rows = Object.entries(catMap).slice(0,12).map(function(entry){
+      const cat = entry[0], r = entry[1], nome = cleanFund(r.Fundo);
+      return '<article class="ranking-cat-mini ranking-cat-row-v457 ranking-cat-row-v531">' +
+        '<span>' + esc(shortCat(cat)) + '</span>' +
+        '<strong class="ranking-value-standard ' + retClass(r['Acum. 12M (%)']) + '">' + esc(pct(r['Acum. 12M (%)'])) + '</strong>' +
+        '<small title="' + esc(nome) + '"><span class="ranking-cat-name-full-v531">' + esc(nome) + '</span><span class="ranking-cat-name-short-v531">' + esc(compactFundName(nome)) + '</span></small>' +
+      '</article>';
+    }).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
+    return '<section class="ranking-exec-secondary ranking-exec-secondary-single-v195 ranking-view-board-v546"><div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Top fundo de cada classe · 12 meses</p></div><div class="ranking-cat-grid-v50">' + rows + '</div></div></section>';
+  }
+  function renderDestaques(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.destaques) ? activeRankPeriods.destaques : 'mes';
+    const campo = campoPorPeriodo(periodo);
+    const altas = sortBy(base, campo).slice(0,5);
+    const quedas = sortBy(base, campo, true).filter(function(r){ return num(r[campo]) < 0; }).slice(0,5);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span></span></div>' +
+      altas.map(function(r,i){ return simpleRow(medal(i), cleanFund(r.Fundo), shortCat(r.Categoria) + ' · alta no período', pct(r[campo]), retClass(r[campo])); }).join('') +
+      '<div class="ranking-view-subhead-v546">Maiores quedas</div>' +
+      (quedas.map(function(r,i){ return simpleRow((i+1) + 'º', cleanFund(r.Fundo), shortCat(r.Categoria) + ' · queda no período', pct(r[campo]), retClass(r[campo])); }).join('') || '<div class="ranking-empty-v50">Sem retornos negativos neste recorte.</div>');
+    return board('Destaques do período', 'Maiores altas e quedas · ' + periodoLabel(periodo), body, periodTabs('destaques', periodo, ['dia','mes','ano','12m']));
+  }
+  function renderRentabilidade(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campo = campoPorPeriodo(periodo);
+    const dashboard = periodo === '12m' ? dashboardCategories().filter(function(d){ return d.ret !== null; }) : [];
+    const cats = (dashboard.length ? dashboard : groupCategories(base, campo).filter(function(d){ return d.ret !== null; }))
+      .sort(function(a,b){ return b.ret - a.ret; })
+      .slice(0,8);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>Retorno</span><span></span></div>' +
+      cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · ' + plTxt(d.pl), pct(d.ret), retClass(d.ret)); }).join('');
+    return board('Categorias por rentabilidade', 'Retorno médio ponderado por PL · ' + periodoLabel(periodo), body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>', periodTabs('topFundos', periodo, ['mes','ano','12m']));
+  }
+  function renderPL(base){
+    const dashboard = dashboardCategories().filter(function(d){ return d.pl !== null; });
+    const cats = (dashboard.length ? dashboard : groupCategories(base, 'Acum. 12M (%)'))
+      .sort(function(a,b){ return b.pl - a.pl; })
+      .slice(0,8);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>PL</span><span></span></div>' +
+      cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · rent. 12M ' + pct(d.ret), plTxt(d.pl), 'zero'); }).join('');
+    return board('Categorias por patrimônio', 'Concentração de patrimônio líquido por classe', body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>');
+  }
+  function syncTabs(){
+    qa('[data-rank-view]').forEach(function(btn){
+      const active = btn.dataset.rankView === activeRankView;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+  function preserveAttention(grid){
+    const aside = q('#rankingAttentionV136');
+    if(aside && aside.parentNode) aside.parentNode.removeChild(aside);
+    return aside;
+  }
+  function restoreAttention(grid, aside){
+    if(!grid || !aside || !isDesktop()) return;
+    aside.classList.add('ranking-attention-strip-v534');
+    const boardEl = q('.ranking-view-board-v546', grid);
+    if(boardEl) grid.insertBefore(aside, boardEl);
+    else grid.appendChild(aside);
+  }
+  function renderRankingsV546(){
+    const grid = q('#rankingGrid');
+    if(!grid || typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
+    document.documentElement.classList.add('desktop-ranking-tabs-funcionais-v546','desktop-ranking-numeros-leves-v547');
+    const meta = q('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_NUMEROS_LEVES_V547';
+    syncTabs();
+
+    const base = baseRows();
+    const periodoTop = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campoTop = campoPorPeriodo(periodoTop);
+    const top = sortBy(base, campoTop);
+    const top12 = sortBy(base, 'Acum. 12M (%)');
+    const worst12 = sortBy(base, 'Acum. 12M (%)', true).find(function(r){ return num(r['Acum. 12M (%)']) < 0; });
+    const bestMonth = sortBy(base, 'Acum. Mes (%)')[0];
+    const dashboardCats = dashboardCategories().filter(function(d){ return d.pl !== null; });
+    const cats = (dashboardCats.length ? dashboardCats : groupCategories(base, 'Acum. 12M (%)')).sort(function(a,b){ return b.pl - a.pl; });
+    const maiorPL = cats[0];
+
+    const summary = activeRankView === 'top' ? '<section class="ranking-exec-summary" aria-label="Destaques dos rankings">' +
+      summaryCard('best','Melhor 12M', top12[0] ? pct(top12[0]['Acum. 12M (%)']) : '—', top12[0] ? cleanFund(top12[0].Fundo) : '—', top12[0] ? cdiRatioTxt(top12[0],'12m') + ' do CDI · ' + shortCat(top12[0].Categoria) : '') +
+      summaryCard('worst','Pior 12M', worst12 ? pct(worst12['Acum. 12M (%)']) : '—', worst12 ? cleanFund(worst12.Fundo) : 'Sem retorno negativo', worst12 ? shortCat(worst12.Categoria) : '') +
+      summaryCard('month','Melhor mês', bestMonth ? pct(bestMonth['Acum. Mes (%)']) : '—', bestMonth ? cleanFund(bestMonth.Fundo) : '—', bestMonth ? shortCat(bestMonth.Categoria) : '') +
+      summaryCard('pl','Maior PL', maiorPL ? plTxt(maiorPL.pl) : '—', maiorPL ? shortCat(maiorPL.cat) : '—', maiorPL ? maiorPL.qtd + ' fundos' : '') +
+    '</section>' : '';
+
+    const views = {
+      top: renderTop,
+      categoria: renderCategoria,
+      destaques: renderDestaques,
+      rentabilidade: renderRentabilidade,
+      pl: renderPL
+    };
+    const aside = preserveAttention(grid);
+    grid.className = 'ranking-grid ranking-executive-v50 ranking-main-v136 ranking-tabs-active-v546';
+    grid.setAttribute('data-active-rank-view', activeRankView || 'top');
+    grid.innerHTML = summary + (views[activeRankView] || views.top)(base);
+    restoreAttention(grid, aside);
+  }
+
+  function install(){
+    if(!isDesktop()) return;
+    window.renderRankings = renderRankingsV546;
+    try{ renderRankings = renderRankingsV546; }catch(e){}
+    if(typeof allRows !== 'undefined' && Array.isArray(allRows) && allRows.length) renderRankingsV546();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  setTimeout(install, 250);
+  setTimeout(install, 1200);
+})();
+
+
+/* =========================================================
+   PATCH v549 — Desktop: Dolar PTAX sempre aberto, sem toggle
+   ========================================================= */
+(function desktopDolarSempreAbertoV549(){
+  if(window.__desktopDolarSempreAbertoV549Installed) return;
+  window.__desktopDolarSempreAbertoV549Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function forceOpen(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-dolar-sempre-aberto-v549');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SEMPRE_ABERTO_V549';
+
+    var sec = document.getElementById('sec-dolar');
+    if(!sec) return;
+    sec.classList.add('section-expanded');
+    sec.classList.remove('section-collapsed','dolar-details-collapsed-v542');
+    sec.setAttribute('aria-expanded','true');
+    sec.dataset.desktopDesiredOpenV544 = 'true';
+    sec.dataset.desktopDolarAlwaysOpenV549 = '1';
+
+    sec.querySelectorAll('.dolar-more-v539, [data-desktop-section-toggle="sec-dolar"]').forEach(function(btn){
+      btn.setAttribute('aria-hidden','true');
+      btn.removeAttribute('data-desktop-section-toggle');
+      btn.style.setProperty('display','none','important');
+      btn.style.setProperty('visibility','hidden','important');
+      btn.style.setProperty('pointer-events','none','important');
+    });
+
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden','false');
+      el.style.removeProperty('display');
+      el.style.removeProperty('max-height');
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('visibility');
+    });
+
+    var footer = sec.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden','false');
+      footer.style.removeProperty('display');
+      footer.style.removeProperty('max-height');
+      footer.style.removeProperty('opacity');
+      footer.style.removeProperty('visibility');
+    }
+  }
+
+  var previousToggle = window.toggleDesktopCompactSection;
+  window.toggleDesktopCompactSection = function(event, sectionId){
+    if(sectionId === 'sec-dolar'){
+      if(event){
+        if(typeof event.preventDefault === 'function') event.preventDefault();
+        if(typeof event.stopPropagation === 'function') event.stopPropagation();
+        if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      }
+      forceOpen();
+      return false;
+    }
+    return typeof previousToggle === 'function' ? previousToggle.apply(this, arguments) : false;
+  };
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', forceOpen, {once:true});
+  else forceOpen();
+  window.addEventListener('load', forceOpen, {once:true});
+  window.addEventListener('pageshow', forceOpen, {passive:true});
+  [80, 250, 700, 1500, 3000].forEach(function(delay){
+    setTimeout(forceOpen, delay);
+  });
 })();
