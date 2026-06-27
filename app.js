@@ -2698,8 +2698,9 @@ function renderRankings(){
 
   let base = allRows.filter(r => temDados(r)).filter(passaFiltroRanking);
   if(activePerfil) base = base.filter(r => {
-    const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
-    return tokens.includes(activePerfil);
+    return typeof catalogAudienceMatchesV553 === 'function'
+      ? catalogAudienceMatchesV553(r, activePerfil)
+      : String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil);
   });
   if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
 
@@ -3437,6 +3438,59 @@ function rowMatchesCatalogSearch(row, query){
   });
 }
 
+function catalogAudienceMatchesV553(row, audience){
+  const wantedRaw = String(audience || '').trim();
+  if(!wantedRaw) return true;
+
+  const norm = value => String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^A-Z0-9]+/gi,' ')
+    .replace(/\s+/g,' ')
+    .trim()
+    .toUpperCase();
+
+  const wanted = norm(wantedRaw);
+  const legacyTokens = String(row?.['Perfis'] || row?.['Perfil'] || '')
+    .split(/\s*\|\s*/)
+    .map(s => String(s).trim())
+    .filter(Boolean);
+
+  if(legacyTokens.some(token => norm(token) === wanted)) return true;
+
+  const rawParts = [];
+  ['Público Alvo','Publico Alvo','Segmentos','SEGMENTOS','lista_publico_alvo','no_classificacao_investidor'].forEach(key=>{
+    const value = row?.[key];
+    if(value === null || value === undefined || value === '') return;
+    if(Array.isArray(value)) rawParts.push(...value);
+    else {
+      const text = String(value).trim();
+      try{
+        const parsed = JSON.parse(text);
+        if(Array.isArray(parsed)) rawParts.push(...parsed);
+        else rawParts.push(text);
+      }catch(_){
+        rawParts.push(text);
+      }
+    }
+  });
+
+  const normalizedParts = rawParts
+    .flatMap(part => String(part ?? '').split(/\s*[·;,|/]\s*/g))
+    .map(part => norm(part))
+    .filter(Boolean);
+
+  const joined = normalizedParts.join(' ');
+
+  if(wanted === 'PF') return normalizedParts.some(part => part === 'PF' || part.includes('PESSOA FISICA'));
+  if(wanted === 'PJ') return normalizedParts.some(part => part === 'PJ' || part.includes('PESSOA JURIDICA'));
+  if(wanted.includes('PRIVATE')) return joined.includes('PRIVATE');
+  if(wanted.includes('QUALIFICADO')) return joined.includes('QUALIFICAD');
+  if(wanted.includes('INSTITUCIONAL')) return joined.includes('INSTITUCIONAL');
+
+  return normalizedParts.some(part => part === wanted || part.includes(wanted));
+}
+
 function applyFilter(){
   const q=String(activeSearch||'').trim();
   const favModeAtivo = !!window.__favListMode;
@@ -3456,8 +3510,7 @@ function applyFilter(){
     }
     if(activeBenchmark && detectarBenchmarkFundo(r).label !== activeBenchmark) return false;
     if(activePerfil){
-      const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
-      if(!tokens.includes(activePerfil)) return false;
+      if(!catalogAudienceMatchesV553(r,activePerfil)) return false;
     }
     if(activeRisco&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRisco)) return false;
     if(q&&!rowMatchesCatalogSearch(r,q)) return false;
@@ -11034,7 +11087,7 @@ async function sharePainelMercado(){
     const campo=campoPorPeriodo(periodo);
     let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
     try{
-      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
+      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>typeof catalogAudienceMatchesV553 === 'function' ? catalogAudienceMatchesV553(r, activePerfil) : String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
       if(typeof activeRankRisk!=='undefined' && activeRankRisk) base=base.filter(r=>perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
     }catch(e){}
     const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
@@ -24135,7 +24188,9 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     try{
       if(typeof activePerfil !== 'undefined' && activePerfil){
         base = base.filter(function(r){
-          return String(r.Perfis || r.Perfil || '').split(/\s*\|\s*/).map(function(s){ return s.trim(); }).includes(activePerfil);
+          return typeof catalogAudienceMatchesV553 === 'function'
+            ? catalogAudienceMatchesV553(r, activePerfil)
+            : String(r.Perfis || r.Perfil || '').split(/\s*\|\s*/).map(function(s){ return s.trim(); }).includes(activePerfil);
         });
       }
       if(typeof activeRankRisk !== 'undefined' && activeRankRisk){
