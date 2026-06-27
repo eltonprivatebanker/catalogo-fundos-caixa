@@ -788,3 +788,417 @@
     animation-iteration-count:1 !important;
   }
 }
+
+/* 07 · RANKINGS RECONSTRUIDOS — DESKTOP v555
+   Nova hierarquia: filtros simples, melhores por categoria, Top 10 e alertas recolhidos. */
+@media (min-width:769px){
+  html.desktop-ranking-redesign-v555 body #rankingsSection{
+    max-width:1540px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-head{
+    display:flex !important;
+    justify-content:center !important;
+    text-align:center !important;
+    margin-bottom:14px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-title-group{
+    align-items:center !important;
+    max-width:720px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-actions,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-view-tabs,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-more-v539,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-attention-panel-v136{
+    display:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-toolbar-v136{
+    display:grid !important;
+    grid-template-columns:170px 240px 240px minmax(0,1fr) !important;
+    align-items:end !important;
+    gap:12px !important;
+    padding:14px !important;
+    margin:0 0 14px !important;
+    background:#0b0f1b !important;
+    border:1px solid rgba(148,163,184,.18) !important;
+    border-radius:12px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-control-card-v136{
+    gap:6px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-control-card-v136 label,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-label{
+    color:#9fb1d9 !important;
+    font-size:.62rem !important;
+    letter-spacing:.12em !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-select-v136{
+    min-height:38px !important;
+    border-color:rgba(148,163,184,.22) !important;
+    background:#0a0e19 !important;
+    color:#f8fafc !important;
+    border-radius:9px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-row-compat-v136{
+    display:flex !important;
+    gap:7px !important;
+    align-items:center !important;
+    min-height:38px !important;
+    overflow-x:auto !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-chip{
+    min-height:31px !important;
+    padding:7px 11px !important;
+    border-radius:9px !important;
+    background:#0a0e19 !important;
+    border:1px solid rgba(148,163,184,.20) !important;
+    color:#d7def0 !important;
+    font-size:.68rem !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-chip.active{
+    border-color:rgba(200,151,58,.65) !important;
+    background:rgba(200,151,58,.14) !important;
+    color:#f1c976 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-layout-v136{
+    display:block !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:14px !important;
+    width:100% !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-context,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts{
+    background:#0b0f1b !important;
+    border:1px solid rgba(148,163,184,.16) !important;
+    border-radius:12px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:16px !important;
+    padding:14px 16px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero h3,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel h3{
+    margin:0 !important;
+    color:#f8fafc !important;
+    font-size:1rem !important;
+    line-height:1.2 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero p,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel p{
+    margin:4px 0 0 !important;
+    color:#93a4c3 !important;
+    font-size:.72rem !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-period-tabs{
+    display:inline-flex !important;
+    gap:4px !important;
+    padding:4px !important;
+    background:#111728 !important;
+    border:1px solid rgba(148,163,184,.16) !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-period-tabs button{
+    min-width:62px !important;
+    min-height:30px !important;
+    border:0 !important;
+    border-radius:7px !important;
+    background:transparent !important;
+    color:#cbd5e1 !important;
+    font-weight:800 !important;
+    font-size:.68rem !important;
+    cursor:pointer !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-period-tabs button.active{
+    background:rgba(200,151,58,.18) !important;
+    color:#f4cc7a !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-context{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+    padding:10px 12px !important;
+    color:#aebbd2 !important;
+    font-size:.68rem !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-context span{
+    padding:6px 9px !important;
+    border:1px solid rgba(148,163,184,.14) !important;
+    border-radius:999px !important;
+    background:#090d17 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card{
+    background:#0c1220 !important;
+    border:1px solid rgba(148,163,184,.16) !important;
+    border-radius:12px !important;
+    padding:13px 14px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card.best,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card:first-child{
+    border-top-color:rgba(200,151,58,.70) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card.worst{
+    border-top-color:rgba(236,93,110,.62) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card span,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card .ranking-v555-cat{
+    display:block !important;
+    color:#9fb1d9 !important;
+    font-size:.62rem !important;
+    font-weight:900 !important;
+    text-transform:uppercase !important;
+    letter-spacing:.10em !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card strong,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card strong{
+    display:block !important;
+    margin-top:6px !important;
+    font-size:1.12rem !important;
+    line-height:1.1 !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card small,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card small{
+    display:block !important;
+    margin-top:6px !important;
+    color:#f1f5f9 !important;
+    font-weight:800 !important;
+    font-size:.78rem !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card em,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card em{
+    display:block !important;
+    margin-top:4px !important;
+    color:#9aa9c2 !important;
+    font-size:.66rem !important;
+    font-style:normal !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .pos{color:#20e2ad !important}
+  html.desktop-ranking-redesign-v555 body #rankingsSection .neg{color:#ff5f7b !important}
+  html.desktop-ranking-redesign-v555 body #rankingsSection .zero{color:#dbe4f0 !important}
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel{
+    padding:14px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel-head{
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:flex-start !important;
+    padding-bottom:12px !important;
+    border-bottom:1px solid rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-primary{
+    border-color:rgba(200,151,58,.25) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-grid{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:10px !important;
+    padding-top:12px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table{
+    display:grid !important;
+    gap:0 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-head,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row{
+    display:grid !important;
+    grid-template-columns:56px minmax(0,1fr) 140px 110px !important;
+    align-items:center !important;
+    gap:14px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-head{
+    padding:10px 8px !important;
+    color:#8fa0be !important;
+    font-size:.62rem !important;
+    font-weight:900 !important;
+    text-transform:uppercase !important;
+    letter-spacing:.10em !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row{
+    min-height:54px !important;
+    padding:9px 8px !important;
+    border-top:1px solid rgba(148,163,184,.10) !important;
+    color:#e8eef8 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-pos{
+    width:28px !important;
+    height:28px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border-radius:8px !important;
+    background:rgba(200,151,58,.13) !important;
+    color:#f1c976 !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-fund{
+    min-width:0 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-fund strong{
+    display:block !important;
+    color:#f8fafc !important;
+    font-size:.78rem !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-fund small{
+    display:block !important;
+    margin-top:3px !important;
+    color:#91a0bb !important;
+    font-size:.66rem !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row > span:nth-child(3),
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row > span:nth-child(4){
+    text-align:right !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts{
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts summary{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    padding:13px 14px !important;
+    color:#f4cc7a !important;
+    font-weight:900 !important;
+    cursor:pointer !important;
+    list-style:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts summary::-webkit-details-marker{display:none !important}
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts summary strong{
+    min-width:28px !important;
+    height:24px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border-radius:999px !important;
+    background:rgba(236,93,110,.14) !important;
+    color:#ff7890 !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-list{
+    padding:0 14px 12px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row{
+    display:grid !important;
+    grid-template-columns:34px minmax(0,1fr) 140px 110px !important;
+    gap:12px !important;
+    align-items:center !important;
+    padding:9px 0 !important;
+    border-top:1px solid rgba(148,163,184,.10) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row strong{
+    min-width:0 !important;
+    color:#f8fafc !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row small{
+    color:#91a0bb !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row em{
+    text-align:right !important;
+    font-style:normal !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts p{
+    margin:0 !important;
+    padding:10px 14px 13px !important;
+    border-top:1px dashed rgba(148,163,184,.14) !important;
+    color:#8fa0be !important;
+    font-size:.68rem !important;
+  }
+
+  @media (max-width:1180px){
+    html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-toolbar-v136{
+      grid-template-columns:160px 210px 220px !important;
+    }
+    html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-row-compat-v136{
+      grid-column:1/-1 !important;
+    }
+    html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-grid{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}

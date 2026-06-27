@@ -3411,6 +3411,342 @@ function setCdiSort(dir){
 })();
 
 
+/* =========================================================
+   PATCH v555 — Desktop: Rankings reconstruidos e simplificados
+   ========================================================= */
+(function desktopRankingRedesignV555(){
+  if(window.__desktopRankingRedesignV555Installed) return;
+  window.__desktopRankingRedesignV555Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function q(sel, root){ return (root || document).querySelector(sel); }
+  function qa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function esc(v){
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function num(v){
+    try{ return typeof toNum === 'function' ? toNum(v) : Number(String(v ?? '').replace('%','').replace(',','.')); }
+    catch(e){ return null; }
+  }
+  function finite(v){
+    const n = num(v);
+    return n !== null && !Number.isNaN(n) && Number.isFinite(n) ? n : null;
+  }
+  function pct(v){
+    const n = finite(v);
+    if(n === null) return '—';
+    return (n > 0 ? '+' : '') + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+  }
+  function cls(v){
+    const n = finite(v);
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  }
+  function norm(v){
+    return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  }
+  function cleanFund(v){
+    return String(v || '—').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim() || '—';
+  }
+  function compactFund(v){
+    let s = cleanFund(v)
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIC\b/ig,'')
+      .replace(/\bFIF\b/ig,'')
+      .replace(/\bRESP\.?\s*LTDA\b/ig,'')
+      .replace(/\bRESP\b/ig,'')
+      .replace(/\bFUNDO DE INDICE\b/ig,'')
+      .replace(/\bCORPORATIVO\b/ig,'Corp.')
+      .replace(/\bREFERENCIADO\b/ig,'Ref.')
+      .replace(/\s+-\s+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const words = s.split(/\s+/).filter(Boolean);
+    if(words.length > 4) s = words.slice(0,4).join(' ');
+    return s || cleanFund(v);
+  }
+  function shortCat(v){
+    const raw = String(v || '—').trim();
+    const n = norm(raw);
+    if(n.includes('FUNDOS MUTUOS') || n.includes('PRIVATIZACAO')) return 'FMP';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
+    if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
+    if(n.includes('RENDA FIXA')) return 'Renda Fixa';
+    if(n.includes('MULTIMERCADO')) return 'Multimercado';
+    if(n.includes('CAMBIAL')) return 'Cambial';
+    if(n.includes('ACOES')) return 'Ações';
+    if(n.includes('INDICE')) return 'Índice';
+    return raw;
+  }
+  function plValue(r){
+    const raw = r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido'];
+    const n = finite(raw);
+    if(n === null) return null;
+    return Math.abs(n) >= 1000000 ? n / 1000000 : n;
+  }
+  function plTxt(v){
+    const n = finite(v);
+    if(n === null) return 'R$ —';
+    if(Math.abs(n) >= 1000) return 'R$ ' + (n / 1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
+    return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+  }
+  function periodoAtual(){
+    const select = q('#rankingPeriodSelectV136');
+    const p = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) || select?.value || '12m';
+    return ['mes','ano','12m'].includes(p) ? p : '12m';
+  }
+  function campoPorPeriodo(periodo){
+    if(typeof rankCampoPorPeriodo === 'function') return rankCampoPorPeriodo(periodo);
+    if(periodo === 'mes') return 'Acum. Mes (%)';
+    if(periodo === 'ano') return 'Acum. Ano (%)';
+    return 'Acum. 12M (%)';
+  }
+  function labelPeriodo(periodo){
+    return periodo === 'mes' ? 'mês' : periodo === 'ano' ? 'ano' : '12 meses';
+  }
+  function cdiReferencia(periodo){
+    const card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const first = function(){
+      for(const value of arguments){
+        const n = finite(value);
+        if(n !== null) return n;
+      }
+      return null;
+    };
+    if(periodo === 'mes'){
+      let atual = null;
+      try{ atual = typeof obterCdiAtualV232 === 'function' ? obterCdiAtualV232().valor : null; }catch(e){}
+      return first(atual, card?.parcial_mes_atual, card?.mensal, window.indicState?.cdi?.mes);
+    }
+    if(periodo === 'ano'){
+      return first(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, window.indicState?.cdi?.ano);
+    }
+    const m12 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(card,12) : null;
+    return first(m12, card?.acum_12m, card?.m12, window.indicState?.cdi?.m12);
+  }
+  function cdiRatio(r, periodo){
+    const rent = finite(r?.[campoPorPeriodo(periodo)]);
+    const cdi = cdiReferencia(periodo);
+    if(rent === null || cdi === null || cdi === 0) return '—';
+    const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(rent, cdi) : Math.round((rent / cdi) * 100);
+    return ratio === null ? '—' : ratio + '%';
+  }
+  function riskOk(r){
+    if(typeof activeRankRisk === 'undefined' || !activeRankRisk) return true;
+    return typeof perfilRiscoCorrespondeV198 === 'function' ? perfilRiscoCorrespondeV198(r['Perfil de Risco'], activeRankRisk) : true;
+  }
+  function filterOk(r){
+    return typeof passaFiltroRanking === 'function' ? passaFiltroRanking(r) : true;
+  }
+  function baseRows(){
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows)) return [];
+    return allRows
+      .filter(function(r){ return typeof temDados === 'function' ? temDados(r) : true; })
+      .filter(filterOk)
+      .filter(riskOk);
+  }
+  function sortedRows(rows, campo, asc){
+    return rows
+      .filter(function(r){ return finite(r[campo]) !== null; })
+      .sort(function(a,b){ return asc ? finite(a[campo]) - finite(b[campo]) : finite(b[campo]) - finite(a[campo]); });
+  }
+  function medal(i){ return i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : String(i + 1); }
+  function syncControls(periodo){
+    document.documentElement.classList.add('desktop-ranking-redesign-v555');
+    const meta = q('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_REDESIGN_V555';
+    const period = q('#rankingPeriodSelectV136');
+    const clsSelect = q('#rankingClassSelectV136');
+    const risk = q('#rankingRiskSelectV198');
+    if(period && period.value !== periodo) period.value = periodo;
+    if(clsSelect && typeof activeRankFilter !== 'undefined' && clsSelect.value !== activeRankFilter) clsSelect.value = activeRankFilter || 'todos';
+    if(risk && typeof activeRankRisk !== 'undefined' && risk.value !== (activeRankRisk || '')) risk.value = activeRankRisk || '';
+    qa('[data-rank-filter]').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.rankFilter === (typeof activeRankFilter !== 'undefined' ? activeRankFilter : 'todos'));
+    });
+  }
+  function periodTabs(periodo){
+    return '<div class="ranking-v555-period-tabs" role="tablist" aria-label="Período do ranking">' +
+      ['mes','ano','12m'].map(function(p){
+        const label = p === 'mes' ? 'Mês' : p === 'ano' ? 'Ano' : '12M';
+        return '<button type="button" class="' + (p === periodo ? 'active' : '') + '" data-rank-target="topFundos" data-rank-period="' + p + '">' + label + '</button>';
+      }).join('') +
+    '</div>';
+  }
+  function contextLine(rows, periodo){
+    const cdi = cdiReferencia(periodo);
+    const universo = q('[data-rank-filter="' + (typeof activeRankFilter !== 'undefined' ? activeRankFilter : 'todos') + '"]')?.textContent?.trim()
+      || q('#rankingClassSelectV136 option:checked')?.textContent?.trim()
+      || 'Todos';
+    const risco = typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(typeof activeRankRisk !== 'undefined' ? activeRankRisk : '') : 'Todos os perfis';
+    return '<div class="ranking-v555-context">' +
+      '<span>' + rows.length + ' fundos no recorte</span>' +
+      '<span>Universo: <strong>' + esc(universo) + '</strong></span>' +
+      '<span>Risco: <strong>' + esc(risco) + '</strong></span>' +
+      '<span>CDI do período: <strong>' + esc(cdi === null ? '—' : pct(cdi)) + '</strong></span>' +
+    '</div>';
+  }
+  function summaryCard(label, r, campo, periodo, mode){
+    if(!r) return '<article class="ranking-v555-summary-card"><span>' + esc(label) + '</span><strong>—</strong><small>Sem dados</small></article>';
+    const nome = cleanFund(r.Fundo);
+    return '<article class="ranking-v555-summary-card ' + esc(mode || '') + '">' +
+      '<span>' + esc(label) + '</span>' +
+      '<strong class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</strong>' +
+      '<small title="' + esc(nome) + '">' + esc(compactFund(nome)) + '</small>' +
+      '<em>' + esc(shortCat(r.Categoria)) + (cdiRatio(r, periodo) !== '—' ? ' · ' + esc(cdiRatio(r, periodo)) + ' do CDI' : '') + '</em>' +
+    '</article>';
+  }
+  function categoryWinners(rows, campo){
+    const map = new Map();
+    sortedRows(rows, campo).forEach(function(r){
+      const cat = r.Categoria || 'Sem categoria';
+      if(!map.has(cat)) map.set(cat, r);
+    });
+    const order = ['RF Simples','Renda Fixa','RF Ref.','RF Curto','Multimercado','Cambial','Ações','Índice','FMP'];
+    return Array.from(map.entries()).sort(function(a,b){
+      const ia = order.indexOf(shortCat(a[0]));
+      const ib = order.indexOf(shortCat(b[0]));
+      if(ia !== -1 || ib !== -1) return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      return shortCat(a[0]).localeCompare(shortCat(b[0]), 'pt-BR');
+    });
+  }
+  function categoryCard(entry, campo, periodo){
+    const cat = entry[0], r = entry[1], nome = cleanFund(r.Fundo), ratio = cdiRatio(r, periodo);
+    return '<article class="ranking-v555-category-card">' +
+      '<span class="ranking-v555-cat">' + esc(shortCat(cat)) + '</span>' +
+      '<strong class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</strong>' +
+      '<small title="' + esc(nome) + '">' + esc(compactFund(nome)) + '</small>' +
+      '<em>' + (ratio === '—' ? 'CDI indisponível' : esc(ratio) + ' do CDI') + '</em>' +
+    '</article>';
+  }
+  function topRow(r, i, campo, periodo){
+    const nome = cleanFund(r.Fundo);
+    const ratio = cdiRatio(r, periodo);
+    return '<div class="ranking-v555-table-row">' +
+      '<span class="ranking-v555-pos">' + medal(i) + '</span>' +
+      '<span class="ranking-v555-fund"><strong title="' + esc(nome) + '">' + esc(nome) + '</strong><small>' + esc(shortCat(r.Categoria)) + ' · ' + esc(plTxt(plValue(r))) + '</small></span>' +
+      '<span class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</span>' +
+      '<span>' + esc(ratio) + '</span>' +
+    '</div>';
+  }
+  function alertRow(r, i, campo){
+    const nome = cleanFund(r.Fundo);
+    return '<div class="ranking-v555-alert-row">' +
+      '<span>' + (i + 1) + '</span>' +
+      '<strong title="' + esc(nome) + '">' + esc(compactFund(nome)) + '</strong>' +
+      '<small>' + esc(shortCat(r.Categoria)) + '</small>' +
+      '<em class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</em>' +
+    '</div>';
+  }
+  function renderRankingsV555(){
+    const grid = q('#rankingGrid');
+    if(!grid || !isDesktop()) return;
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
+
+    const periodo = periodoAtual();
+    const campo = campoPorPeriodo(periodo);
+    syncControls(periodo);
+
+    const rows = baseRows();
+    const sorted = sortedRows(rows, campo);
+    const worst = sortedRows(rows, campo, true).filter(function(r){ return finite(r[campo]) < 0; });
+    const best = sorted[0];
+    const worstOne = worst[0];
+    const winners = categoryWinners(rows, campo);
+    const topRows = sorted.slice(0,10).map(function(r,i){ return topRow(r,i,campo,periodo); }).join('');
+    const alertRows = worst.slice(0,6).map(function(r,i){ return alertRow(r,i,campo); }).join('');
+
+    grid.className = 'ranking-grid ranking-v555-grid ranking-main-v136';
+    grid.innerHTML =
+      '<section class="ranking-v555-hero">' +
+        '<div><h3>Ranking por ' + esc(labelPeriodo(periodo)) + '</h3><p>Primeiro os melhores de cada categoria; depois o Top 10 geral.</p></div>' +
+        periodTabs(periodo) +
+      '</section>' +
+      contextLine(rows, periodo) +
+      '<section class="ranking-v555-summary" aria-label="Resumo do ranking">' +
+        summaryCard('Melhor do período', best, campo, periodo, 'best') +
+        summaryCard('Pior do período', worstOne, campo, periodo, 'worst') +
+        '<article class="ranking-v555-summary-card neutral"><span>Categorias com dados</span><strong>' + winners.length + '</strong><small>Melhor fundo por classe</small><em>Recorte atual</em></article>' +
+      '</section>' +
+      '<section class="ranking-v555-panel ranking-v555-primary">' +
+        '<div class="ranking-v555-panel-head"><div><h3>Melhores por categoria</h3><p>Vencedor de cada classe no período selecionado.</p></div></div>' +
+        '<div class="ranking-v555-category-grid">' + (winners.length ? winners.map(function(entry){ return categoryCard(entry,campo,periodo); }).join('') : '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
+      '</section>' +
+      '<section class="ranking-v555-panel">' +
+        '<div class="ranking-v555-panel-head"><div><h3>Top 10 geral</h3><p>Ranking por retorno e comparação com CDI do mesmo período.</p></div></div>' +
+        '<div class="ranking-v555-table">' +
+          '<div class="ranking-v555-table-head"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI</span></div>' +
+          (topRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') +
+        '</div>' +
+      '</section>' +
+      '<details class="ranking-v555-alerts">' +
+        '<summary><span>Piores do período</span><strong>' + worst.length + '</strong></summary>' +
+        '<div class="ranking-v555-alert-list">' + (alertRows || '<div class="ranking-empty-v50">Nenhum retorno negativo no recorte atual.</div>') + '</div>' +
+        '<p>Alertas automáticos para triagem. A decisão depende de suitability, objetivo, prazo e benchmark adequado.</p>' +
+      '</details>';
+  }
+  function bindV555(){
+    const clsSelect = q('#rankingClassSelectV136');
+    const period = q('#rankingPeriodSelectV136');
+    const risk = q('#rankingRiskSelectV198');
+
+    if(clsSelect && clsSelect.dataset.v555Bound !== '1'){
+      clsSelect.dataset.v555Bound = '1';
+      clsSelect.addEventListener('change', function(){
+        try{ activeRankFilter = clsSelect.value || 'todos'; }catch(e){}
+        renderRankingsV555();
+      });
+    }
+    if(period && period.dataset.v555Bound !== '1'){
+      period.dataset.v555Bound = '1';
+      period.addEventListener('change', function(){
+        try{
+          activeRankPeriods.topFundos = period.value || '12m';
+          activeRankPeriods.destaques = period.value || '12m';
+        }catch(e){}
+        renderRankingsV555();
+      });
+    }
+    if(risk && risk.dataset.v555Bound !== '1'){
+      risk.dataset.v555Bound = '1';
+      risk.addEventListener('change', function(){
+        try{ activeRankRisk = risk.value || ''; }catch(e){}
+        renderRankingsV555();
+      });
+    }
+    const row = q('#rankingFilterRow');
+    if(row && row.dataset.v555Bound !== '1'){
+      row.dataset.v555Bound = '1';
+      row.addEventListener('click', function(ev){
+        const btn = ev.target.closest('[data-rank-filter]');
+        if(!btn) return;
+        try{ activeRankFilter = btn.dataset.rankFilter || 'todos'; }catch(e){}
+        if(clsSelect) clsSelect.value = activeRankFilter;
+        renderRankingsV555();
+      });
+    }
+  }
+  function install(){
+    if(!isDesktop()) return;
+    window.renderRankings = renderRankingsV555;
+    try{ renderRankings = renderRankingsV555; }catch(e){}
+    bindV555();
+    renderRankingsV555();
+  }
+
+  window.__renderRankingsV555 = renderRankingsV555;
+  window.__bindRankingV555 = bindV555;
+  window.__installRankingV555 = install;
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  [150, 600, 1400].forEach(function(delay){ setTimeout(install, delay); });
+})();
+
+
 function normalizeCatalogSearch(v){
   return String(v??'')
     .normalize('NFD')
@@ -24499,4 +24835,23 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   [80, 250, 700, 1500, 3000].forEach(function(delay){
     setTimeout(forceOpen, delay);
   });
+})();
+
+
+/* =========================================================
+   PATCH v555-final — Reinstala ranking novo apos patches legados
+   ========================================================= */
+(function desktopRankingRedesignV555Final(){
+  function installFinal(){
+    if(!window.__renderRankingsV555) return;
+    document.documentElement.classList.add('desktop-ranking-redesign-v555');
+    window.renderRankings = window.__renderRankingsV555;
+    try{ renderRankings = window.__renderRankingsV555; }catch(e){}
+    try{ if(typeof window.__bindRankingV555 === 'function') window.__bindRankingV555(); }catch(e){}
+    try{ window.__renderRankingsV555(); }catch(e){ console.error('ranking v555 final', e); }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installFinal, {once:true});
+  else installFinal();
+  window.addEventListener('load', installFinal, {once:true});
+  [120, 500, 1300, 2600].forEach(function(delay){ setTimeout(installFinal, delay); });
 })();
