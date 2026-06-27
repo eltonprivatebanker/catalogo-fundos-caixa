@@ -25052,8 +25052,6 @@ function buildDetailPanel(r,colspan){
   const code = detailValueV158(r,['codfundo','Código SIART','Codigo SIART','SIART','Código SIICO','Codigo SIICO','SIICO','Código do Fundo','Codigo do Fundo','Cod Fundo','Cód. Fundo']);
   const taxAdm = detailPercentV158(detailValueV158(r,['Taxa Adm (%)']));
   const profile = detailValueV158(r,['Perfil de Risco']);
-  const cnpj = detailValueV158(r,['CNPJ']);
-  const cnpjCopyValue = String(cnpj || '').replace(/\D/g,'') || String(cnpj || '').trim();
   const conversionApp = detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação']);
   const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
   const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
@@ -25093,6 +25091,9 @@ function buildDetailPanel(r,colspan){
         ${field('Taxa adm.', taxAdm)}
         ${field('Perfil de risco', profile)}
         ${field('Código SIART', code)}
+        ${field('Saldo mínimo', balanceMin)}
+        ${field('Tributação', trib)}
+        ${field('Público-alvo', audienceText, 'wide')}
       </div>
 
       <div class="detail-oper-grid-v559">
@@ -25116,13 +25117,6 @@ function buildDetailPanel(r,colspan){
         </section>
       </div>
 
-      <div class="detail-bottom-grid-v559">
-        ${field('CNPJ', cnpj)}
-        <button type="button" class="detail-copy-btn-v225 detail-copy-btn-v559" data-copy-value="${htmlAttr(cnpjCopyValue)}" aria-label="Copiar CNPJ ${htmlAttr(cnpj)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar CNPJ</span></button>
-        ${field('Saldo mínimo', balanceMin)}
-        ${field('Tributação', trib)}
-        ${field('Público-alvo', audienceText, 'wide')}
-      </div>
     </div>
   </td></tr>`;
 }
@@ -25158,9 +25152,9 @@ function buildDetailPanel(r,colspan){
   }
 
   function sync(){
-    document.documentElement.classList.add('desktop-detail-compact-v559');
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560');
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COMPACT_V559';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_SEM_CNPJ_V560';
   }
 
   document.addEventListener('click', function(ev){

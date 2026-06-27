@@ -33,6 +33,75 @@
   --red-dim:rgba(208,99,112,.12);
 }
 
+/* 09C · Catálogo desktop — override terminal v560 */
+@media (min-width:769px){
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-panel-v559{
+    padding:12px 14px 13px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-compact-head-v559{
+    padding-bottom:9px !important;
+    margin-bottom:9px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+    grid-template-columns:116px minmax(170px,1.15fr) minmax(120px,.9fr) 96px 116px 106px 112px 104px minmax(140px,.9fr) !important;
+    gap:7px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559{
+    min-height:42px !important;
+    padding:7px 9px !important;
+    border-radius:9px !important;
+    gap:3px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 span{
+    font-size:.51rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 strong{
+    font-size:.72rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-grid-v559{
+    gap:8px !important;
+    margin-bottom:0 !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559{
+    padding:9px !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559 h4{
+    margin-bottom:7px !important;
+    font-size:.74rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-fields-v559{
+    gap:7px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-bottom-grid-v559,
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-copy-btn-v559{
+    display:none !important;
+  }
+
+  @media (max-width:1500px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media (max-width:1180px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}
+
 /* 08B · RANKINGS COMPACTOS — override final v556 */
 @media (min-width:769px){
   html.desktop-ranking-compact-cdi-v556 body #rankingsSection{
@@ -126,6 +195,75 @@
 
   html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-panel-head{
     padding-bottom:10px !important;
+  }
+}
+
+/* 09C · Catálogo desktop — detalhe sem CNPJ duplicado v560 */
+@media (min-width:769px){
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-panel-v559{
+    padding:12px 14px 13px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-compact-head-v559{
+    padding-bottom:9px !important;
+    margin-bottom:9px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+    grid-template-columns:116px minmax(170px,1.15fr) minmax(120px,.9fr) 96px 116px 106px 112px 104px minmax(140px,.9fr) !important;
+    gap:7px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559{
+    min-height:42px !important;
+    padding:7px 9px !important;
+    border-radius:9px !important;
+    gap:3px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 span{
+    font-size:.51rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 strong{
+    font-size:.72rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-grid-v559{
+    gap:8px !important;
+    margin-bottom:0 !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559{
+    padding:9px !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559 h4{
+    margin-bottom:7px !important;
+    font-size:.74rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-fields-v559{
+    gap:7px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-bottom-grid-v559,
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-copy-btn-v559{
+    display:none !important;
+  }
+
+  @media (max-width:1500px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media (max-width:1180px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
   }
 }
 
@@ -1870,6 +2008,75 @@
       grid-template-columns:repeat(2,minmax(0,1fr)) !important;
     }
     html.desktop-detail-compact-v559 body #sec-fundos .detail-bottom-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}
+
+/* 09C · Catálogo desktop — override terminal v560 */
+@media (min-width:769px){
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-panel-v559{
+    padding:12px 14px 13px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-compact-head-v559{
+    padding-bottom:9px !important;
+    margin-bottom:9px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+    grid-template-columns:116px minmax(170px,1.15fr) minmax(120px,.9fr) 96px 116px 106px 112px 104px minmax(140px,.9fr) !important;
+    gap:7px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559{
+    min-height:42px !important;
+    padding:7px 9px !important;
+    border-radius:9px !important;
+    gap:3px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 span{
+    font-size:.51rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 strong{
+    font-size:.72rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-grid-v559{
+    gap:8px !important;
+    margin-bottom:0 !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559{
+    padding:9px !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559 h4{
+    margin-bottom:7px !important;
+    font-size:.74rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-fields-v559{
+    gap:7px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-bottom-grid-v559,
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-copy-btn-v559{
+    display:none !important;
+  }
+
+  @media (max-width:1500px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media (max-width:1180px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
       grid-template-columns:repeat(3,minmax(0,1fr)) !important;
     }
   }
