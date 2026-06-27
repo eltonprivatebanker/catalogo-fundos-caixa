@@ -411,3 +411,334 @@
     filter:saturate(.86) contrast(.98) !important;
   }
 }
+
+
+/* ============================================================
+   05 · LAYOUT REFERENCIA — DESKTOP v552
+   Aproxima o catalogo de uma tela operacional sobria:
+   cabecalho menor, filtros densos e tabela mais limpa.
+   ============================================================ */
+@media (min-width:769px){
+  html.desktop-reference-layout-v552 body .page{
+    max-width:1660px !important;
+    padding-top:28px !important;
+  }
+
+  html.desktop-reference-layout-v552 body header{
+    padding-bottom:22px !important;
+    border-bottom-color:rgba(148,163,184,.14) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .brand-logo{
+    width:44px !important;
+    height:44px !important;
+    border-radius:11px !important;
+    font-size:1.26rem !important;
+    background:linear-gradient(135deg,#b9864f,#d4a76a) !important;
+    color:#070a12 !important;
+  }
+
+  html.desktop-reference-layout-v552 body .brand-text h1{
+    font-size:1.34rem !important;
+    line-height:1.12 !important;
+    font-weight:700 !important;
+    letter-spacing:.01em !important;
+  }
+
+  html.desktop-reference-layout-v552 body .brand-text p{
+    margin-top:5px !important;
+    color:rgba(199,208,227,.72) !important;
+    font-size:.60rem !important;
+    letter-spacing:.26em !important;
+  }
+
+  html.desktop-reference-layout-v552 body .desktop-anchor-nav-ui-v132{
+    position:relative !important;
+    top:auto !important;
+    margin:14px 0 16px !important;
+    padding:8px !important;
+    border-radius:12px !important;
+    background:rgba(8,12,22,.74) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .desktop-anchor-nav-ui-v132 a{
+    min-height:30px !important;
+    padding:0 12px !important;
+    border-radius:8px !important;
+    font-size:.66rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-grid{
+    gap:10px !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi{
+    min-height:88px !important;
+    padding:16px 15px !important;
+    border-radius:11px !important;
+    background:rgba(15,21,34,.78) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-icon{
+    display:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-label{
+    font-size:.57rem !important;
+    letter-spacing:.18em !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-value{
+    margin-top:8px !important;
+    font-size:1.28rem !important;
+    line-height:1.05 !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-sub{
+    margin-top:7px !important;
+    font-size:.62rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos{
+    margin-top:26px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title{
+    position:relative !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    align-items:end !important;
+    gap:12px !important;
+    margin:0 0 10px !important;
+    padding:0 2px 12px !important;
+    border-bottom:1px solid rgba(148,163,184,.16) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title::before{
+    content:'CATALOGO' !important;
+    position:absolute !important;
+    left:2px !important;
+    top:-14px !important;
+    color:#caa06c !important;
+    font-family:'IBM Plex Mono',monospace !important;
+    font-size:.54rem !important;
+    font-weight:800 !important;
+    letter-spacing:.18em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title h2{
+    margin:0 !important;
+    padding:0 !important;
+    color:var(--text-main) !important;
+    font-size:1.08rem !important;
+    line-height:1.15 !important;
+    font-weight:700 !important;
+    letter-spacing:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title .section-title-icon-v302{
+    display:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title .section-badge{
+    display:inline-flex !important;
+    height:28px !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:0 11px !important;
+    border-radius:8px !important;
+    color:rgba(199,208,227,.78) !important;
+    background:rgba(10,15,28,.72) !important;
+    border-color:rgba(148,163,184,.16) !important;
+    font-size:.58rem !important;
+    letter-spacing:.12em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #fundFilterShell{
+    padding:0 0 12px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-filter-v488{
+    order:1 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-shortcuts-category-grid-v69{
+    order:2 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-secondary-controls-v217{
+    order:3 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-primary-toolbar-v217{
+    order:4 !important;
+    display:grid !important;
+    grid-template-columns:minmax(360px,1fr) minmax(390px,auto) !important;
+    align-items:center !important;
+    gap:10px !important;
+    min-height:42px !important;
+    margin-top:0 !important;
+    padding:9px 0 0 !important;
+    border-bottom:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-filter-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-shortcuts-category-grid-v69,
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-secondary-controls-v217{
+    grid-template-columns:110px minmax(0,1fr) !important;
+    min-height:38px !important;
+    padding:6px 0 !important;
+    border-bottom:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-filter-row-label-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-filter-legend-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-risk-filter-v198 > label span{
+    width:110px !important;
+    min-width:110px !important;
+    max-width:110px !important;
+    flex-basis:110px !important;
+    color:rgba(159,184,234,.82) !important;
+    font-size:.56rem !important;
+    letter-spacing:.18em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-chips-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .category-grid-v69{
+    gap:7px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-chip-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .filter-preset-chip,
+  html.desktop-reference-layout-v552 body #sec-fundos .shortcut-preset{
+    height:28px !important;
+    min-height:28px !important;
+    max-height:28px !important;
+    padding:0 12px !important;
+    border-radius:8px !important;
+    font-size:.62rem !important;
+    font-weight:700 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-risk-filter-v198{
+    grid-template-columns:110px 210px !important;
+    gap:10px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-risk-select-wrap-v198,
+  html.desktop-reference-layout-v552 body #sec-fundos #catalogRiskSelectV198{
+    width:210px !important;
+    min-width:210px !important;
+    max-width:210px !important;
+    height:32px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-search-main{
+    height:36px !important;
+    min-height:36px !important;
+    border-radius:8px !important;
+    padding:0 11px !important;
+    background:rgba(10,15,28,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #searchInput{
+    font-size:.70rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #desktopFilterResultSummary{
+    display:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-view-controls-v217{
+    grid-template-columns:minmax(240px,1fr) 142px !important;
+    max-width:430px !important;
+    gap:8px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control,
+  html.desktop-reference-layout-v552 body #sec-fundos .exhibition-control{
+    height:36px !important;
+    border-radius:8px !important;
+    padding:5px 9px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control .control-caption-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .exhibition-control > span{
+    font-size:.50rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control .sort-metric-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .exhibition-control #perPage{
+    font-size:.62rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control .cdi-sort-btn{
+    height:22px !important;
+    min-height:22px !important;
+    padding:0 7px !important;
+    font-size:.58rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .table-wrap{
+    margin-top:16px !important;
+    border-radius:10px !important;
+    border-color:rgba(148,163,184,.16) !important;
+    background:rgba(9,13,23,.78) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable thead th{
+    height:38px !important;
+    padding-top:10px !important;
+    padding-bottom:10px !important;
+    background:rgba(18,26,42,.72) !important;
+    color:rgba(199,208,227,.72) !important;
+    font-size:.56rem !important;
+    letter-spacing:.16em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable tbody td{
+    padding-top:12px !important;
+    padding-bottom:12px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable td.col-fundo strong,
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable td.col-fundo a{
+    color:#e7edf7 !important;
+    font-size:.82rem !important;
+    letter-spacing:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable .fundo-cnpj-sub{
+    height:16px !important;
+    padding:0 5px !important;
+    font-size:.50rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body .pagination-row{
+    margin-top:10px !important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1220px){
+  html.desktop-reference-layout-v552 body .kpi-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:1fr !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-view-controls-v217{
+    max-width:none !important;
+    justify-self:stretch !important;
+  }
+}
