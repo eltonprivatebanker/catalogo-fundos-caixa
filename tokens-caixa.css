@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
-
 /* ============================================================
    CAMADA DE IDENTIDADE VISUAL — CATÁLOGO DE FUNDOS CAIXA
    tokens-caixa.css · v1 (Bronze · premium sóbrio)
@@ -52,37 +50,36 @@
 .dolar-month-item.current{ background:rgba(176,132,84,.12) !important; }
 
 /* ── 03 · TIPOGRAFIA CORPORATIVA (apenas desktop) ──
-   Aposenta a serifada elegante (Cormorant) e padroniza:
-   IBM Plex Sans p/ títulos/interface, IBM Plex Mono p/ números.
+   Usa fontes de sistema para evitar bloqueio de renderização.
    Escopo desktop para não afetar o mobile nesta fase. */
 @media (min-width:769px){
 
   /* base de interface */
-  body{ font-family:'IBM Plex Sans','Inter',Arial,sans-serif !important; }
+  body{ font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important; }
 
-  /* títulos (eram Cormorant serif) → Plex Sans, mais sóbrio */
+  /* títulos: sans de sistema, sem carregamento externo */
   .brand-text h1,
   .section-title h2,
   .dolar-day-title,
   .dolar-timeline-title,
   .dolar-chart-title,
   .poup-explain-title{
-    font-family:'IBM Plex Sans',sans-serif !important;
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
     font-weight:600 !important;
     letter-spacing:0 !important;
   }
 
-  /* números e valores (eram Cormorant serif) → Plex Mono, tabular */
+  /* números e valores: mono de sistema, tabular */
   .kpi-value,
   .indic-ref-val,
   .dolar-day-rate,
   .dolar-month-val{
-    font-family:'IBM Plex Mono',monospace !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,"Liberation Mono",monospace !important;
     font-weight:600 !important;
     font-variant-numeric:tabular-nums !important;
   }
 
-  /* rótulos, tabelas e mono (eram JetBrains Mono) → IBM Plex Mono */
+  /* rótulos, tabelas e mono: sem requisição externa */
   .section-badge,
   .indic-table,
   .dolar-day-sub,
@@ -93,7 +90,7 @@
   .selic-change-badge,
   .copom-link,
   .cdi-rel{
-    font-family:'IBM Plex Mono',monospace !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,"Liberation Mono",monospace !important;
   }
 }
 
@@ -740,5 +737,54 @@
   html.desktop-reference-layout-v552 body #sec-fundos .fund-view-controls-v217{
     max-width:none !important;
     justify-self:stretch !important;
+  }
+}
+
+
+/* ============================================================
+   06 · PERFORMANCE SEGURA — DESKTOP v554
+   Reduz custo de renderizacao sem alterar dados ou interacoes.
+   ============================================================ */
+@media (min-width:769px){
+  html.desktop-safe-performance-v554 body,
+  html.desktop-safe-performance-v554 body *{
+    text-rendering:optimizeLegibility;
+  }
+
+  html.desktop-safe-performance-v554 body .desktop-anchor-nav-ui-v132,
+  html.desktop-safe-performance-v554 body .header-source-pill-v343,
+  html.desktop-safe-performance-v554 body .live-badge,
+  html.desktop-safe-performance-v554 body .section-badge,
+  html.desktop-safe-performance-v554 body .fund-filter-shell,
+  html.desktop-safe-performance-v554 body .ranking-toolbar,
+  html.desktop-safe-performance-v554 body .dolar-compact-card{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body canvas{
+    filter:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body .page,
+  html.desktop-safe-performance-v554 body .kpi,
+  html.desktop-safe-performance-v554 body .rank-card,
+  html.desktop-safe-performance-v554 body .ranking-exec-card,
+  html.desktop-safe-performance-v554 body .table-wrap,
+  html.desktop-safe-performance-v554 body .dolar-compact-card,
+  html.desktop-safe-performance-v554 body .dolar-compact-chart,
+  html.desktop-safe-performance-v554 body .ptax-stats-card{
+    box-shadow:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body .page{
+    transition:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body .desktop-anchor-nav-ui-v132 *,
+  html.desktop-safe-performance-v554 body #sec-fundos *,
+  html.desktop-safe-performance-v554 body #rankingsSection *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
   }
 }
