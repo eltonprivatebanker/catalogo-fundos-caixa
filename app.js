@@ -24366,3 +24366,82 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
   setTimeout(install, 250);
   setTimeout(install, 1200);
 })();
+
+
+/* =========================================================
+   PATCH v549 — Desktop: Dolar PTAX sempre aberto, sem toggle
+   ========================================================= */
+(function desktopDolarSempreAbertoV549(){
+  if(window.__desktopDolarSempreAbertoV549Installed) return;
+  window.__desktopDolarSempreAbertoV549Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function forceOpen(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-dolar-sempre-aberto-v549');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SEMPRE_ABERTO_V549';
+
+    var sec = document.getElementById('sec-dolar');
+    if(!sec) return;
+    sec.classList.add('section-expanded');
+    sec.classList.remove('section-collapsed','dolar-details-collapsed-v542');
+    sec.setAttribute('aria-expanded','true');
+    sec.dataset.desktopDesiredOpenV544 = 'true';
+    sec.dataset.desktopDolarAlwaysOpenV549 = '1';
+
+    sec.querySelectorAll('.dolar-more-v539, [data-desktop-section-toggle="sec-dolar"]').forEach(function(btn){
+      btn.setAttribute('aria-hidden','true');
+      btn.removeAttribute('data-desktop-section-toggle');
+      btn.style.setProperty('display','none','important');
+      btn.style.setProperty('visibility','hidden','important');
+      btn.style.setProperty('pointer-events','none','important');
+    });
+
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden','false');
+      el.style.removeProperty('display');
+      el.style.removeProperty('max-height');
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('visibility');
+    });
+
+    var footer = sec.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden','false');
+      footer.style.removeProperty('display');
+      footer.style.removeProperty('max-height');
+      footer.style.removeProperty('opacity');
+      footer.style.removeProperty('visibility');
+    }
+  }
+
+  var previousToggle = window.toggleDesktopCompactSection;
+  window.toggleDesktopCompactSection = function(event, sectionId){
+    if(sectionId === 'sec-dolar'){
+      if(event){
+        if(typeof event.preventDefault === 'function') event.preventDefault();
+        if(typeof event.stopPropagation === 'function') event.stopPropagation();
+        if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      }
+      forceOpen();
+      return false;
+    }
+    return typeof previousToggle === 'function' ? previousToggle.apply(this, arguments) : false;
+  };
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', forceOpen, {once:true});
+  else forceOpen();
+  window.addEventListener('load', forceOpen, {once:true});
+  window.addEventListener('pageshow', forceOpen, {passive:true});
+  [80, 250, 700, 1500, 3000].forEach(function(delay){
+    setTimeout(forceOpen, delay);
+  });
+})();

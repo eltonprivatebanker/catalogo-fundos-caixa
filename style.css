@@ -70476,3 +70476,52 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     padding-bottom:12px!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v549 — Desktop: Dolar PTAX sempre aberto
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar{
+    display:block!important;
+  }
+
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar .dolar-more-v539,
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar [data-desktop-section-toggle="sec-dolar"]{
+    display:none!important;
+    visibility:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar #dolarChartPanel,
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar #ptaxStatsCard,
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar .dolar-compact-footer{
+    display:block!important;
+    max-height:none!important;
+    opacity:1!important;
+    visibility:visible!important;
+    overflow:visible!important;
+    margin-top:revert!important;
+    margin-bottom:revert!important;
+    padding-top:revert!important;
+    padding-bottom:revert!important;
+    border-width:revert!important;
+    pointer-events:auto!important;
+  }
+
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar #dolarChartPanel .dolar-range-tabs,
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar #dolarChartPanel .dolar-chart-body,
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar #ptaxStatsCard .ptax-stats-grid,
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar .dolar-timeline-body{
+    max-height:none!important;
+    opacity:1!important;
+    visibility:visible!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-dolar-sempre-aberto-v549 body #sec-dolar #chartDolar{
+    min-height:0!important;
+    max-height:none!important;
+    opacity:1!important;
+  }
+}
