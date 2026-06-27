@@ -3480,14 +3480,33 @@ function setCdiSort(dir){
     if(n.includes('INDICE')) return 'Índice';
     return raw;
   }
+  function parsePtNumberLocal(v){
+    if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+    let s = String(v ?? '').trim();
+    if(!s) return null;
+    s = s.replace(/[^\d,.\-]/g,'');
+    if(!s || s === '-' || s === ',' || s === '.') return null;
+    if(s.includes(',') && s.includes('.')){
+      s = s.replace(/\./g,'').replace(',', '.');
+    }else if(s.includes(',')){
+      s = s.replace(',', '.');
+    }else{
+      const parts = s.split('.');
+      if(parts.length > 2 || (parts.length === 2 && parts[1].length === 3 && parts[0].length <= 3)){
+        s = s.replace(/\./g,'');
+      }
+    }
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
   function plValue(r){
     const raw = r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido'];
-    const n = finite(raw);
+    const n = parsePtNumberLocal(raw);
     if(n === null) return null;
     return Math.abs(n) >= 1000000 ? n / 1000000 : n;
   }
   function plTxt(v){
-    const n = finite(v);
+    const n = parsePtNumberLocal(v);
     if(n === null) return 'R$ —';
     if(Math.abs(n) >= 1000) return 'R$ ' + (n / 1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
     return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
@@ -3515,8 +3534,9 @@ function setCdiSort(dir){
       else if(abs > 20) n = n / 100;
       return Number.isFinite(n) ? n : null;
     }
-    if(abs > 1000) n = n / 100;
-    else if(abs > 100) n = n / 100;
+    if(abs > 10000) n = n / 1000;
+    else if(abs > 1000) n = n / 100;
+    else if(abs > 80) n = n / 10;
     return Number.isFinite(n) ? n : null;
   }
   function cdiReferencia(periodo){
@@ -3568,9 +3588,9 @@ function setCdiSort(dir){
   }
   function medal(i){ return i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : String(i + 1); }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556');
+    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556','desktop-ranking-cdi-pl-fix-v557');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_COMPACT_CDI_V556';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_CDI_PL_FIX_V557';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -24854,7 +24874,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 (function desktopRankingRedesignV555Final(){
   function installFinal(){
     if(!window.__renderRankingsV555) return;
-    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556');
+    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556','desktop-ranking-cdi-pl-fix-v557');
     window.renderRankings = window.__renderRankingsV555;
     try{ renderRankings = window.__renderRankingsV555; }catch(e){}
     try{ if(typeof window.__bindRankingV555 === 'function') window.__bindRankingV555(); }catch(e){}
