@@ -96,3 +96,318 @@
     font-family:'IBM Plex Mono',monospace !important;
   }
 }
+
+
+/* ============================================================
+   04 · GOVERNANCA DE COR — DESKTOP v551
+   Regra: neutro para estrutura, bronze para marca/ativo,
+   verde/vermelho somente para dados positivos/negativos.
+   ============================================================ */
+@media (min-width:769px){
+  :root{
+    --surface-0:#070a12;
+    --surface-1:#0b101c;
+    --surface-2:#101725;
+    --surface-3:#141c2b;
+    --text-main:#f3f6fb;
+    --text-soft:#c7d0e3;
+    --text-muted:#8e9ab3;
+    --line-soft:rgba(148,163,184,.16);
+    --line-softer:rgba(148,163,184,.10);
+    --brand-bronze:#b58a55;
+    --brand-bronze-2:#d0a66c;
+    --brand-bronze-dim:rgba(181,138,85,.12);
+    --brand-bronze-line:rgba(181,138,85,.28);
+  }
+
+  body::before{
+    background:
+      radial-gradient(ellipse 72% 48% at 8% -6%,rgba(181,138,85,.035),transparent 58%),
+      radial-gradient(ellipse 68% 62% at 92% 105%,rgba(63,78,110,.028),transparent 60%) !important;
+  }
+
+  body,
+  .page{
+    color:var(--text-main) !important;
+  }
+
+  header,
+  .desktop-anchor-nav-ui-v132,
+  .fund-filter-shell,
+  .fund-filter-shell-v217,
+  .table-wrap,
+  .kpi,
+  .rank-card,
+  .ranking-exec-card,
+  .ranking-toolbar,
+  .ranking-view-tabs,
+  #rankingsSection .ranking-control-card-v136,
+  #rankingsSection .ranking-exec-board,
+  #rankingsSection .ranking-exec-secondary,
+  #rankingsSection .ranking-top-board,
+  #rankingsSection #rankingAttentionV136,
+  .dolar-compact-card,
+  .dolar-compact-chart,
+  .ptax-stats-card,
+  .dolar-compact-footer,
+  .market-ref-section,
+  .market-reference-card,
+  .indic-card-v2,
+  .rates-card,
+  .inflation-card,
+  .savings-card{
+    background:linear-gradient(180deg,rgba(15,21,34,.86),rgba(8,12,22,.86)) !important;
+    border-color:var(--line-soft) !important;
+    box-shadow:none !important;
+  }
+
+  .kpi:hover,
+  .rank-card:hover,
+  .ranking-exec-card:hover,
+  .dolar-compact-card:hover{
+    border-color:rgba(181,138,85,.24) !important;
+  }
+
+  .brand-logo,
+  .section-title-icon-v302,
+  .kpi-icon{
+    background:linear-gradient(135deg,rgba(181,138,85,.20),rgba(148,163,184,.08)) !important;
+    border:1px solid rgba(181,138,85,.26) !important;
+    color:#f4dfbf !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06) !important;
+  }
+
+  .brand-text h1,
+  .section-title h2,
+  .section-title-v302,
+  .page-section-title-v302,
+  .section-title-text-v302,
+  .ranking-title-group h2,
+  .ranking-title-group .section-title-text-v302{
+    color:var(--text-main) !important;
+  }
+
+  .section-badge,
+  .header-source-pill-v343,
+  .live-badge,
+  .kpi-label,
+  .ranking-section-subtitle-v136,
+  .ranking-control-card-v136 label,
+  .control-caption-v217,
+  .desktop-filter-row-label-v488,
+  .catalog-filter-legend-v217,
+  .catalog-risk-filter-v198 > label span,
+  .dolar-kpi-label,
+  .ptax-stat-label,
+  th,
+  .ranking-table th{
+    color:var(--text-muted) !important;
+  }
+
+  .section-badge,
+  .header-source-pill-v343,
+  .live-badge{
+    background:rgba(15,21,34,.82) !important;
+    border-color:var(--line-soft) !important;
+  }
+
+  .desktop-anchor-nav-ui-v132 a,
+  .desktop-anchor-nav-ui-v132 button,
+  .nav-link,
+  .anchor-link,
+  .section-anchor-link{
+    color:var(--text-soft) !important;
+    background:transparent !important;
+    border-color:transparent !important;
+  }
+
+  .desktop-anchor-nav-ui-v132 a.active,
+  .desktop-anchor-nav-ui-v132 button.active,
+  .desktop-anchor-nav-ui-v132 [aria-current="true"],
+  .nav-link.active,
+  .anchor-link.active,
+  .section-anchor-link.active,
+  .chart-tab.active,
+  .chart-tab[aria-selected="true"],
+  .ranking-view-tab.active,
+  .ranking-view-tab[aria-pressed="true"],
+  .desktop-audience-chip-v488.active,
+  .desktop-audience-chip-v488[aria-pressed="true"],
+  .filter-preset-chip.active,
+  .filter-preset-chip[aria-pressed="true"],
+  .shortcut-preset.active,
+  .shortcut-preset[aria-pressed="true"]{
+    color:#f7dfb7 !important;
+    background:rgba(181,138,85,.15) !important;
+    border-color:rgba(181,138,85,.42) !important;
+    box-shadow:none !important;
+  }
+
+  .chart-tab,
+  .ranking-view-tab,
+  .desktop-audience-chip-v488,
+  .filter-preset-chip,
+  .shortcut-preset,
+  .section-toggle-btn,
+  .ranking-action-btn,
+  .cdi-sort-btn,
+  .exhibition-control,
+  .ctrl-select,
+  select,
+  input{
+    color:var(--text-soft) !important;
+    background:rgba(10,15,28,.72) !important;
+    border-color:var(--line-soft) !important;
+    box-shadow:none !important;
+  }
+
+  .section-toggle-btn,
+  .ranking-action-btn,
+  .attention-details-v536 > summary,
+  .attention-details-v534 > summary,
+  .copom-link{
+    color:#f3d9ad !important;
+    background:rgba(181,138,85,.12) !important;
+    border-color:rgba(181,138,85,.28) !important;
+  }
+
+  #sec-fundos #mainTable tbody tr,
+  #sec-fundos #mainTable tbody td{
+    background:transparent !important;
+    border-color:var(--line-softer) !important;
+  }
+
+  #sec-fundos #mainTable tbody tr:hover{
+    background:rgba(148,163,184,.045) !important;
+  }
+
+  #sec-fundos #mainTable td.col-fundo strong,
+  #sec-fundos #mainTable td.col-fundo a,
+  #sec-fundos #mainTable .fund-name,
+  #sec-fundos #mainTable .fundo-name,
+  #sec-fundos #mainTable .fundo-nome,
+  #sec-fundos #mainTable .fund-title,
+  #sec-fundos #mainTable .fundo-title,
+  #rankingsSection .ranking-fund strong,
+  #rankingsSection .attention-row-v136 .fund,
+  #rankingsSection .ranking-cat-mini small,
+  .kpi-fund-name{
+    color:var(--text-main) !important;
+    text-shadow:none !important;
+  }
+
+  #sec-fundos #mainTable td.col-fundo .fundo-cell-meta,
+  #sec-fundos #mainTable td.col-fundo small,
+  #sec-fundos #mainTable .fundo-cnpj-sub,
+  #rankingsSection .ranking-fund span,
+  #rankingsSection .attention-row-v136 .reason,
+  .kpi-sub,
+  small{
+    color:var(--text-muted) !important;
+  }
+
+  #sec-fundos #mainTable .fundo-cnpj-sub{
+    background:rgba(148,163,184,.055) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  .category-badge,
+  .fundo-category-badge,
+  .fund-category-badge,
+  .categoria-badge,
+  .tag-categoria,
+  .fundo-tag,
+  .risk-badge,
+  .badge-cat,
+  #sec-fundos #mainTable td.col-fundo .fundo-cell-meta span:not(.fundo-cnpj-sub){
+    color:#d6deee !important;
+    background:rgba(148,163,184,.09) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  .doc-btn,
+  .doc-chip,
+  .fund-doc-btn,
+  .document-chip,
+  #sec-fundos #mainTable [data-doc],
+  #sec-fundos #mainTable a[href*=".pdf"]{
+    color:#d8e0ef !important;
+    background:rgba(148,163,184,.08) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  #sec-fundos #mainTable [data-doc="boletim"],
+  #sec-fundos #mainTable a[href*="boletim"],
+  #sec-fundos #mainTable a[href*="Boletim"]{
+    color:#f3d9ad !important;
+    background:rgba(181,138,85,.11) !important;
+    border-color:rgba(181,138,85,.28) !important;
+  }
+
+  .pos,
+  .positive,
+  .valor-pos,
+  .ranking-return.pos,
+  .ranking-value-standard.pos,
+  .dolar-metric-val.pos,
+  .dolar-month-var.pos{
+    color:#22d3a6 !important;
+  }
+
+  .neg,
+  .negative,
+  .valor-neg,
+  .ranking-return.neg,
+  .ranking-value-standard.neg,
+  .dolar-metric-val.neg,
+  .dolar-month-var.neg{
+    color:#fb6f8f !important;
+  }
+
+  #rankingsSection #rankingAttentionV136{
+    background:linear-gradient(180deg,rgba(15,21,34,.90),rgba(10,14,24,.90)) !important;
+    border-color:rgba(181,138,85,.22) !important;
+  }
+
+  #rankingsSection .attention-head-v136 > span{
+    color:#f3d9ad !important;
+    background:rgba(181,138,85,.12) !important;
+    border-color:rgba(181,138,85,.24) !important;
+  }
+
+  #rankingsSection .attention-head-v136 strong,
+  #rankingsSection .attention-block-v136 h3,
+  #rankingsSection .ranking-view-subhead-v546,
+  .dolar-chart-title,
+  .dolar-month-strip-title,
+  .ptax-stats-title,
+  .ind-v2-kicker,
+  .market-section-kicker{
+    color:#f3d9ad !important;
+  }
+
+  .kpi.kpi-best,
+  .kpi.kpi-worst,
+  .ranking-summary-card,
+  .ranking-exec-card,
+  .dolar-mini-kpi,
+  .ptax-stat-item,
+  .attention-metric-v136{
+    border-color:var(--line-soft) !important;
+    background:rgba(10,15,28,.70) !important;
+  }
+
+  .kpi.kpi-best,
+  .ranking-exec-card.is-positive{
+    border-top-color:rgba(34,211,166,.32) !important;
+  }
+
+  .kpi.kpi-worst,
+  .ranking-exec-card.is-negative{
+    border-top-color:rgba(251,111,143,.32) !important;
+  }
+
+  canvas{
+    filter:saturate(.86) contrast(.98) !important;
+  }
+}
