@@ -3506,11 +3506,24 @@ function setCdiSort(dir){
   function labelPeriodo(periodo){
     return periodo === 'mes' ? 'mês' : periodo === 'ano' ? 'ano' : '12 meses';
   }
+  function normalizarCdiPeriodo(raw, periodo){
+    let n = finite(raw);
+    if(n === null) return null;
+    const abs = Math.abs(n);
+    if(periodo === 'mes'){
+      if(abs > 1000) n = n / 10000;
+      else if(abs > 20) n = n / 100;
+      return Number.isFinite(n) ? n : null;
+    }
+    if(abs > 1000) n = n / 100;
+    else if(abs > 100) n = n / 100;
+    return Number.isFinite(n) ? n : null;
+  }
   function cdiReferencia(periodo){
     const card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
     const first = function(){
       for(const value of arguments){
-        const n = finite(value);
+        const n = normalizarCdiPeriodo(value, periodo);
         if(n !== null) return n;
       }
       return null;
@@ -3530,8 +3543,9 @@ function setCdiSort(dir){
     const rent = finite(r?.[campoPorPeriodo(periodo)]);
     const cdi = cdiReferencia(periodo);
     if(rent === null || cdi === null || cdi === 0) return '—';
-    const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(rent, cdi) : Math.round((rent / cdi) * 100);
-    return ratio === null ? '—' : ratio + '%';
+    const ratio = Math.round((rent / cdi) * 100);
+    if(!Number.isFinite(ratio)) return '—';
+    return ratio.toLocaleString('pt-BR',{maximumFractionDigits:0}) + '%';
   }
   function riskOk(r){
     if(typeof activeRankRisk === 'undefined' || !activeRankRisk) return true;
@@ -3554,9 +3568,9 @@ function setCdiSort(dir){
   }
   function medal(i){ return i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : String(i + 1); }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-redesign-v555');
+    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_REDESIGN_V555';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_COMPACT_CDI_V556';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -3581,7 +3595,7 @@ function setCdiSort(dir){
       || q('#rankingClassSelectV136 option:checked')?.textContent?.trim()
       || 'Todos';
     const risco = typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(typeof activeRankRisk !== 'undefined' ? activeRankRisk : '') : 'Todos os perfis';
-    return '<div class="ranking-v555-context">' +
+    return '<div class="ranking-v555-context ranking-v556-context">' +
       '<span>' + rows.length + ' fundos no recorte</span>' +
       '<span>Universo: <strong>' + esc(universo) + '</strong></span>' +
       '<span>Risco: <strong>' + esc(risco) + '</strong></span>' +
@@ -3660,10 +3674,6 @@ function setCdiSort(dir){
 
     grid.className = 'ranking-grid ranking-v555-grid ranking-main-v136';
     grid.innerHTML =
-      '<section class="ranking-v555-hero">' +
-        '<div><h3>Ranking por ' + esc(labelPeriodo(periodo)) + '</h3><p>Primeiro os melhores de cada categoria; depois o Top 10 geral.</p></div>' +
-        periodTabs(periodo) +
-      '</section>' +
       contextLine(rows, periodo) +
       '<section class="ranking-v555-summary" aria-label="Resumo do ranking">' +
         summaryCard('Melhor do período', best, campo, periodo, 'best') +
@@ -24844,7 +24854,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
 (function desktopRankingRedesignV555Final(){
   function installFinal(){
     if(!window.__renderRankingsV555) return;
-    document.documentElement.classList.add('desktop-ranking-redesign-v555');
+    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556');
     window.renderRankings = window.__renderRankingsV555;
     try{ renderRankings = window.__renderRankingsV555; }catch(e){}
     try{ if(typeof window.__bindRankingV555 === 'function') window.__bindRankingV555(); }catch(e){}
