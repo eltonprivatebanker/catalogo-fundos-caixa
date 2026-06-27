@@ -25021,3 +25021,181 @@ function buildDocsCompactos(row){
     new MutationObserver(function(){ sync(); }).observe(tbody, {childList:true, subtree:false});
   }
 })();
+
+
+/* =========================================================
+   PATCH v559 — Desktop: documentos em menu e detalhe operacional enxuto
+   ========================================================= */
+function buildDocsCompactos(row){
+  const docs = obterDocsFundoCompactos(row);
+  if(!docs.length) return '<span class="doc-mini-empty">—</span>';
+
+  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
+  const principal = boletim || docs[0];
+  const secundarios = docs.filter(d => d.url !== principal.url);
+  const primaryLabel = boletim ? 'Boletim' : principal.curto;
+  const primaryTitle = boletim ? 'Boletim Comercial' : principal.label;
+
+  const primary = `<a class="doc-mini-primary doc-mini-primary-v558 doc-mini-primary-v559" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(primaryTitle)}">${primaryLabel}</a>`;
+
+  const more = secundarios.length
+    ? `<button type="button" class="doc-more-button-v559" data-docs-other-v559="${htmlAttr(encodeURIComponent(JSON.stringify(secundarios.map(d=>({label:d.label,curto:d.curto,url:d.url})))))}" aria-haspopup="menu" title="Ver documentos complementares">Outros docs</button>`
+    : '';
+
+  return `<div class="docs-mini-wrap docs-mini-wrap-v558 docs-mini-wrap-v559">${primary}${more}</div>`;
+}
+
+function buildDetailPanel(r,colspan){
+  const d = obterDadosOperacionaisFundo(r);
+  const capCls = classeStatusOperacional(d.captacao.status,'captacao');
+  const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : (d.captacao.texto || 'Não informada');
+  const code = detailValueV158(r,['codfundo','Código SIART','Codigo SIART','SIART','Código SIICO','Codigo SIICO','SIICO','Código do Fundo','Codigo do Fundo','Cod Fundo','Cód. Fundo']);
+  const taxAdm = detailPercentV158(detailValueV158(r,['Taxa Adm (%)']));
+  const profile = detailValueV158(r,['Perfil de Risco']);
+  const cnpj = detailValueV158(r,['CNPJ']);
+  const cnpjCopyValue = String(cnpj || '').replace(/\D/g,'') || String(cnpj || '').trim();
+  const conversionApp = detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação']);
+  const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
+  const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
+  const appInitial = detailMoneyV158(detailValueV158(r,['Aplicacao Minima (R$)','Aplicação Mínima','Aplicacao Minima']));
+  const appAdditional = detailMoneyV158(detailValueV158(r,['Aplicacao Adicional Minima (R$)','Aplicação Adicional Mínima']));
+  const redemptionMin = detailMoneyV158(detailValueV158(r,['Resgate Minimo (R$)','Resgate Mínimo']));
+  const balanceMin = detailMoneyV158(detailValueV158(r,['Saldo Minimo (R$)','Saldo Mínimo']));
+  const trib = d.tributacao && d.tributacao.texto ? d.tributacao.texto : detailValueV158(r,['Classificação Tributária','Classificacao Tributaria','Tributação','Tributacao']);
+  const audience = detailAudienceSemanticV225(detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo'])));
+  const audienceText = audience.length ? audience.map(item=>item.short || item.label).join(' · ') : 'Não informado';
+  const urlFund = isFallbackUrl(r) ? '' : getFundUrl(r);
+  const docs = obterDocsFundoCompactos(r);
+  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || /boletim/i.test(String(d.label||'')));
+  const regulamento = docs.find(d => d.csvKey === 'doc_regulamento' || /regulamento/i.test(String(d.label||'')));
+
+  const field = (label, value, cls='') => `<div class="detail-field-v559 ${cls}"><span>${htmlAttr(label)}</span><strong>${htmlAttr(value || '—')}</strong></div>`;
+  const link = (href, label, cls='') => href ? `<a class="detail-doc-link-v559 ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${label}</a>` : '';
+
+  return `<tr class="detail-row detail-row-v559"><td colspan="${colspan}" style="padding:0">
+    <div class="detail-panel detail-panel-v559">
+      <div class="detail-compact-head-v559">
+        <div>
+          <strong>Dados operacionais do fundo</strong>
+          <small>Campos essenciais para consulta rápida no atendimento.</small>
+        </div>
+        <div class="detail-doc-actions-v559">
+          ${link(boletim?.url,'Boletim Comercial','primary')}
+          ${link(regulamento?.url,'Regulamento')}
+          ${urlFund ? link(urlFund,'Página do fundo') : ''}
+        </div>
+      </div>
+
+      <div class="detail-key-grid-v559">
+        ${field('Captação', capLabel, capCls)}
+        ${field('Estratégia', d.estrategia.texto)}
+        ${field('Benchmark', d.benchmark.texto)}
+        ${field('Taxa adm.', taxAdm)}
+        ${field('Perfil de risco', profile)}
+        ${field('Código SIART', code)}
+      </div>
+
+      <div class="detail-oper-grid-v559">
+        <section class="detail-oper-card-v559 application">
+          <h4>Aplicação</h4>
+          <div class="detail-oper-fields-v559">
+            ${field('Horário máximo', d.horarios.aplicacao)}
+            ${field('Conversão da cota', conversionApp)}
+            ${field('Aplicação inicial', appInitial)}
+            ${field('Aplicação adicional', appAdditional)}
+          </div>
+        </section>
+        <section class="detail-oper-card-v559 redemption">
+          <h4>Resgate</h4>
+          <div class="detail-oper-fields-v559">
+            ${field('Horário máximo', d.horarios.resgate)}
+            ${field('Conversão da cota', conversionRed)}
+            ${field('Crédito em conta', paymentRed)}
+            ${field('Resgate mínimo', redemptionMin)}
+          </div>
+        </section>
+      </div>
+
+      <div class="detail-bottom-grid-v559">
+        ${field('CNPJ', cnpj)}
+        <button type="button" class="detail-copy-btn-v225 detail-copy-btn-v559" data-copy-value="${htmlAttr(cnpjCopyValue)}" aria-label="Copiar CNPJ ${htmlAttr(cnpj)}" title="Copiar CNPJ"><span class="detail-copy-icon-v225" aria-hidden="true">⧉</span><span class="detail-copy-label-v225" aria-live="polite">Copiar CNPJ</span></button>
+        ${field('Saldo mínimo', balanceMin)}
+        ${field('Tributação', trib)}
+        ${field('Público-alvo', audienceText, 'wide')}
+      </div>
+    </div>
+  </td></tr>`;
+}
+
+(function desktopDocsMenuAndDetailV559(){
+  if(window.__desktopDocsMenuAndDetailV559Installed) return;
+  window.__desktopDocsMenuAndDetailV559Installed = true;
+
+  function closeMenu(){
+    var old = document.getElementById('docMenuPortalV559');
+    if(old) old.remove();
+  }
+
+  function openDocsMenu(btn){
+    closeMenu();
+    var docs = [];
+    try{ docs = JSON.parse(decodeURIComponent(btn.dataset.docsOtherV559 || '[]')); }catch(_){}
+    if(!docs.length) return;
+    var rect = btn.getBoundingClientRect();
+    var menu = document.createElement('div');
+    menu.id = 'docMenuPortalV559';
+    menu.className = 'doc-menu-portal-v559';
+    menu.setAttribute('role','menu');
+    menu.innerHTML = `<div class="doc-menu-head-v559">Documentos complementares</div>` + docs.map(function(d){
+      return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener"><strong>${htmlAttr(d.curto)}</strong><span>${htmlAttr(d.label)}</span></a>`;
+    }).join('');
+    document.body.appendChild(menu);
+    var width = Math.min(280, Math.max(220, menu.offsetWidth || 240));
+    var left = Math.min(window.innerWidth - width - 12, Math.max(12, rect.right - width));
+    var top = Math.min(window.innerHeight - menu.offsetHeight - 12, rect.bottom + 8);
+    menu.style.left = left + 'px';
+    menu.style.top = Math.max(12, top) + 'px';
+  }
+
+  function sync(){
+    document.documentElement.classList.add('desktop-detail-compact-v559');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COMPACT_V559';
+  }
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest('.doc-more-button-v559') : null;
+    if(btn){
+      ev.preventDefault();
+      ev.stopPropagation();
+      openDocsMenu(btn);
+      return;
+    }
+    if(!(ev.target && ev.target.closest && ev.target.closest('#docMenuPortalV559'))) closeMenu();
+  }, true);
+
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape') closeMenu();
+  });
+
+  var previousRender = typeof render === 'function' ? render : null;
+  if(previousRender && !previousRender.__v559Wrapped){
+    var wrappedRender = function(){
+      var result = previousRender.apply(this, arguments);
+      setTimeout(sync, 0);
+      return result;
+    };
+    wrappedRender.__v559Wrapped = true;
+    try{ render = wrappedRender; }catch(_){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  [120, 500, 1300].forEach(function(delay){
+    setTimeout(function(){
+      sync();
+      try{ if(typeof render === 'function' && document.getElementById('tableBody')) render(); }catch(_){}
+    }, delay);
+  });
+})();
