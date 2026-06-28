@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_COMPACT_HEIGHT_V568';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_ULTRA_COMPACT_V569';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -25611,10 +25611,11 @@ function buildDetailPanel(r,colspan){
       'desktop-ranking-filters-centered-v565',
       'desktop-ranking-stable-v566',
       'desktop-ranking-toolbar-locked-v567',
-      'desktop-ranking-compact-height-v568'
+      'desktop-ranking-compact-height-v568',
+      'desktop-ranking-ultra-compact-v569'
     );
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_COMPACT_HEIGHT_V568';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_ULTRA_COMPACT_V569';
     var toolbar = document.querySelector('#rankingsSection .ranking-toolbar-v136');
     if(toolbar){
       toolbar.style.setProperty('width','min(100%, 940px)','important');
@@ -25627,9 +25628,9 @@ function buildDetailPanel(r,colspan){
       toolbar.style.setProperty('align-items','end','important');
       toolbar.style.setProperty('column-gap','14px','important');
       toolbar.style.setProperty('row-gap','10px','important');
-      toolbar.style.setProperty('margin','8px auto 10px','important');
-      toolbar.style.setProperty('padding','10px 14px','important');
-      toolbar.style.setProperty('border-radius','12px','important');
+      toolbar.style.setProperty('margin','5px auto 8px','important');
+      toolbar.style.setProperty('padding','8px 12px','important');
+      toolbar.style.setProperty('border-radius','11px','important');
       if(window.matchMedia && window.matchMedia('(max-width: 1050px)').matches){
         toolbar.style.setProperty('width','min(100%, 560px)','important');
         toolbar.style.setProperty('max-width','560px','important');
@@ -25637,9 +25638,9 @@ function buildDetailPanel(r,colspan){
       }
     }
     document.querySelectorAll('#rankingsSection .ranking-select-v136').forEach(function(select){
-      select.style.setProperty('min-height','36px','important');
-      select.style.setProperty('padding-top','7px','important');
-      select.style.setProperty('padding-bottom','7px','important');
+      select.style.setProperty('min-height','32px','important');
+      select.style.setProperty('padding-top','5px','important');
+      select.style.setProperty('padding-bottom','5px','important');
     });
     var row = document.querySelector('#rankingsSection .ranking-filter-row-compat-v136');
     if(row){
@@ -25663,5 +25664,5 @@ function buildDetailPanel(r,colspan){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reinstall, {once:true});
   else reinstall();
   window.addEventListener('load', reinstall, {once:true});
-  [80, 300, 900, 1800, 3200].forEach(function(delay){ setTimeout(reinstall, delay); });
+  [80, 300, 900, 1800, 3200, 7000, 12000, 23000, 36000].forEach(function(delay){ setTimeout(reinstall, delay); });
 })();
