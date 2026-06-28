@@ -73694,3 +73694,111 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
   }
 }
+
+/* =========================================================
+   PATCH v596 — Selic: YTD, periodo customizado e tooltip
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .econ-dash-card-head-v378{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:"title tabs" "custom custom"!important;
+    gap:10px 14px!important;
+    align-items:start!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .econ-dash-card-head-v378 > div:first-child{
+    grid-area:title!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .econ-dash-range-v378{
+    grid-area:tabs!important;
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:8px!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .selic-custom-range-v596{
+    grid-area:custom!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+    padding-top:2px!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .selic-custom-range-v596 label{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    color:#aeb7cf!important;
+    font-size:.62rem!important;
+    font-weight:800!important;
+    letter-spacing:.05em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .selic-custom-range-v596 input{
+    height:30px!important;
+    min-width:128px!important;
+    padding:0 8px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    border-radius:10px!important;
+    background:rgba(8,12,24,.72)!important;
+    color:#edf1fb!important;
+    font:700 .68rem var(--font-ui-v120, Inter, sans-serif)!important;
+    color-scheme:dark!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .selic-custom-range-v596 button{
+    height:30px!important;
+    padding:0 12px!important;
+    border:1px solid rgba(200,151,58,.34)!important;
+    border-radius:10px!important;
+    background:rgba(200,151,58,.12)!important;
+    color:#f0c36b!important;
+    font-size:.64rem!important;
+    font-weight:900!important;
+    cursor:pointer!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 #econSparkSelicV367{
+    position:relative!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .selic-hit-dot-v596{
+    fill:transparent!important;
+    stroke:transparent!important;
+    pointer-events:all!important;
+    cursor:crosshair!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .selic-tooltip-v596{
+    position:absolute!important;
+    z-index:8!important;
+    min-width:154px!important;
+    max-width:220px!important;
+    padding:8px 10px!important;
+    border:1px solid rgba(200,151,58,.42)!important;
+    border-radius:10px!important;
+    background:rgba(8,12,24,.96)!important;
+    box-shadow:0 16px 34px rgba(0,0,0,.34)!important;
+    color:#edf1fb!important;
+    font:800 .68rem/1.25 var(--font-ui-v120, Inter, sans-serif)!important;
+    letter-spacing:.01em!important;
+    pointer-events:none!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .econ-dash-card-head-v378{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"title" "tabs" "custom"!important;
+  }
+
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .selic-custom-range-v596,
+  html.desktop-selic-ytd-custom-tooltip-v596 body #mobileSelicV400 .econ-dash-range-v378{
+    justify-content:flex-start!important;
+    flex-wrap:wrap!important;
+  }
+}

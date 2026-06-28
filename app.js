@@ -7026,7 +7026,8 @@ const econDashStateV378 = window.__ECON_DASH_STATE_V378__ || {
   ipcaNorm:[],
   metaNorm:[],
   selicNorm:[],
-  mercado:null
+  mercado:null,
+  selicCustomV596:{start:'', end:''}
 };
 window.__ECON_DASH_STATE_V378__ = econDashStateV378;
 
@@ -7112,12 +7113,26 @@ function bindIndicadoresDashboardV378(){
     btn.addEventListener('click', () => {
       const target = btn.dataset.dashRangeTarget;
       const raw = btn.dataset.dashRange;
-      const range = raw === 'all' ? 'all' : Number(raw || 12);
+      const range = raw === 'all' || raw === 'ytd' ? raw : Number(raw || 12);
       econDashStateV378.range[target] = range;
       econUpdateRangeButtonsV378(target, raw);
       econRenderTargetV378(target);
     });
   });
+
+  const applyCustom = document.getElementById('selicCustomApplyV596');
+  if(applyCustom && applyCustom.dataset.selicCustomBoundV596 !== '1'){
+    applyCustom.dataset.selicCustomBoundV596 = '1';
+    applyCustom.addEventListener('click', () => {
+      const start = document.getElementById('selicCustomStartV596')?.value || '';
+      const end = document.getElementById('selicCustomEndV596')?.value || '';
+      if(!start || !end) return;
+      econDashStateV378.selicCustomV596 = {start, end};
+      econDashStateV378.range.selic = 'custom';
+      econUpdateRangeButtonsV378('selic', 'custom');
+      econRenderTargetV378('selic');
+    });
+  }
 }
 
 function econRenderIpcaBarsV378(containerId, rows, range){
@@ -7465,25 +7480,41 @@ function econSelicVisibleRowsV381(rows, range){
 
   if(range === 'all') return sorted;
 
-  const months = Number(range || 12);
   const lastWithDate = [...sorted].reverse().find(x => x._dt && !isNaN(x._dt.getTime()));
   const endDate = lastWithDate?._dt || new Date();
+
+  function withPreviousContext(startDate, end){
+    let filtered = sorted.filter(x => x._dt && x._dt >= startDate && x._dt <= end);
+    const previous = [...sorted].reverse().find(x => x._dt && x._dt < startDate);
+    if(previous && filtered.length){
+      filtered = [{...previous, _periodContextOnly:true}, ...filtered];
+    }
+    return filtered.length >= 2 ? filtered : sorted.slice(-Math.max(2, Math.min(12, sorted.length)));
+  }
+
+  if(range === 'ytd'){
+    const startDate = new Date(endDate.getFullYear(), 0, 1);
+    return withPreviousContext(startDate, endDate);
+  }
+
+  if(range === 'custom'){
+    const custom = econDashStateV378.selicCustomV596 || {};
+    const start = custom.start ? new Date(`${custom.start}-01T00:00:00`) : null;
+    const end = custom.end ? new Date(`${custom.end}-01T00:00:00`) : null;
+    if(start && end && !isNaN(start.getTime()) && !isNaN(end.getTime())){
+      const endInclusive = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59);
+      const startDate = start <= endInclusive ? start : endInclusive;
+      const endDateCustom = start <= endInclusive ? endInclusive : start;
+      return withPreviousContext(startDate, endDateCustom);
+    }
+  }
+
+  const months = Number(range || 12);
 
   const startDate = new Date(endDate);
   startDate.setMonth(startDate.getMonth() - months);
 
-  let filtered = sorted.filter(x => x._dt && x._dt >= startDate && x._dt <= endDate);
-
-  // Inclui um ponto imediatamente anterior ao início apenas para continuidade visual da linha,
-  // mas esse ponto não entra no cálculo de máxima/mínima do período.
-  const previous = [...sorted].reverse().find(x => x._dt && x._dt < startDate);
-  if(previous && filtered.length){
-    filtered = [{...previous, _periodContextOnly:true}, ...filtered];
-  }
-
-  if(filtered.length >= 2) return filtered;
-
-  return sorted.slice(-Math.max(2, Math.min(12, months)));
+  return withPreviousContext(startDate, endDate);
 }
 
 function econAtualizarSelicKpiLabelsV381(range){
@@ -7514,9 +7545,13 @@ function econAtualizarSelicPeriodoTextoV381(range){
     data = ref?.data || data;
   }catch(e){}
 
+  const custom = econDashStateV378.selicCustomV596 || {};
   const periodo =
     range === 'all' ? 'histórico completo' :
+    range === 'ytd' ? 'no ano (YTD)' :
+    range === 'custom' && custom.start && custom.end ? `personalizado · ${custom.start} → ${custom.end}` :
     Number(range) === 12 ? 'último 1 ano' :
+    Number(range) === 36 ? 'últimos 3 anos' :
     Number(range) === 60 ? 'últimos 5 anos' :
     Number(range) === 120 ? 'últimos 10 anos' :
     `últimos ${range} meses`;
@@ -7601,6 +7636,11 @@ function econRenderSelicLegacyV380(containerId, rows, range){
     return `<circle class="${cls}" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="${r}"><title>${d.label} · ${econPctV378(d.value, false)} a.a.</title></circle>`;
   }).join('');
 
+  const hitDots = data.map((d, i) => {
+    const tip = `${d.label} · Selic ${econPctV378(d.value, false)} a.a.`;
+    return `<circle class="selic-hit-dot-v596" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="10" data-selic-tooltip-v596="${htmlAttr(tip)}"><title>${htmlAttr(tip)}</title></circle>`;
+  }).join('');
+
   const labelTargetCount = range === 'all' ? 7 : range === 36 ? 4 : range === 60 ? 5 : 6;
   const labelStep = Math.max(1, Math.round(data.length / labelTargetCount));
   const labels = data.map((d, i) => {
@@ -7621,8 +7661,10 @@ function econRenderSelicLegacyV380(containerId, rows, range){
       <polygon class="area" points="${area}"></polygon>
       <polyline class="main-line" points="${points}" fill="none"></polyline>
       ${dots}
+      ${hitDots}
       ${labels}
     </svg>
+    <div class="selic-tooltip-v596" role="tooltip" hidden></div>
     <div class="econ-selic-legend-v380" aria-hidden="true">
       <span><i class="max"></i> máxima do período</span>
       <span><i class="min"></i> mínima do período</span>
@@ -7631,6 +7673,63 @@ function econRenderSelicLegacyV380(containerId, rows, range){
       <strong>Atual · ${econPctV378(last.value, false)} a.a.</strong>
     </div>
   `;
+  bindSelicTooltipV596(el);
+}
+
+function bindSelicTooltipV596(root){
+  const tooltip = root?.querySelector?.('.selic-tooltip-v596');
+  if(!root || !tooltip) return;
+  const hide = () => {
+    tooltip.hidden = true;
+    tooltip.textContent = '';
+  };
+  root.querySelectorAll('[data-selic-tooltip-v596]').forEach(target => {
+    target.addEventListener('mousemove', event => {
+      const rect = root.getBoundingClientRect();
+      const text = target.getAttribute('data-selic-tooltip-v596') || '';
+      tooltip.textContent = text;
+      tooltip.hidden = false;
+      const left = Math.min(Math.max(event.clientX - rect.left + 12, 8), rect.width - 180);
+      const top = Math.max(event.clientY - rect.top - 34, 8);
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    });
+    target.addEventListener('mouseleave', hide);
+    target.addEventListener('focus', event => {
+      const text = target.getAttribute('data-selic-tooltip-v596') || '';
+      tooltip.textContent = text;
+      tooltip.hidden = false;
+      tooltip.style.left = '16px';
+      tooltip.style.top = '16px';
+    });
+    target.addEventListener('blur', hide);
+  });
+  root.addEventListener('mouseleave', hide, {once:true});
+}
+
+function selicMonthValueV596(dt){
+  if(!(dt instanceof Date) || isNaN(dt.getTime())) return '';
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2,'0')}`;
+}
+
+function syncSelicCustomInputsV596(rows){
+  const startInput = document.getElementById('selicCustomStartV596');
+  const endInput = document.getElementById('selicCustomEndV596');
+  if(!startInput || !endInput) return;
+  const dates = (rows || []).map(item => item._dt).filter(dt => dt instanceof Date && !isNaN(dt.getTime()));
+  if(!dates.length) return;
+  const first = selicMonthValueV596(dates[0]);
+  const last = selicMonthValueV596(dates[dates.length - 1]);
+  if(first){
+    startInput.min = first;
+    endInput.min = first;
+  }
+  if(last){
+    startInput.max = last;
+    endInput.max = last;
+    if(!endInput.value) endInput.value = last;
+  }
+  if(first && !startInput.value) startInput.value = first;
 }
 
 
@@ -7716,6 +7815,7 @@ async function renderIndicadoresDashboardV378(d){
   }catch(e){}
 
   econDashStateV378.selicNorm = selicNorm;
+  syncSelicCustomInputsV596(selicNorm);
   // v381: KPIs da Selic agora são atualizados dentro de econRenderTargetV378,
   // respeitando o período selecionado.
 
@@ -26690,6 +26790,28 @@ function buildDetailPanel(r,colspan){
 (function desktopFocusTrendsV595(){
   var BUILD = 'ELTAUM_DESKTOP_FOCUS_TRENDS_V595';
   var PATCH_CLASS = 'desktop-focus-trends-v595';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v596 — Selic com YTD, periodo customizado e tooltip */
+(function desktopSelicYtdCustomTooltipV596(){
+  var BUILD = 'ELTAUM_DESKTOP_SELIC_YTD_CUSTOM_TOOLTIP_V596';
+  var PATCH_CLASS = 'desktop-selic-ytd-custom-tooltip-v596';
   function isDesktop(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
