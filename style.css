@@ -73433,7 +73433,7 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   }
 
   html.desktop-initial-load-stable-v591:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #sec-fundos .table-wrap{
-    min-height:820px!important;
+    min-height:760px!important;
     overflow-anchor:none!important;
   }
 
@@ -73447,5 +73447,20 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
 
   html.desktop-initial-load-stable-v591.catalog-table-ready-v591 body:not(.fund-card-mode) #sec-fundos .table-wrap{
     min-height:0!important;
+  }
+
+  html.desktop-funds-load-lock-v592:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #sec-fundos{
+    min-height:1084px!important;
+    opacity:0!important;
+    visibility:hidden!important;
+    transform:none!important;
+    overflow-anchor:none!important;
+  }
+
+  html.desktop-funds-load-lock-v592.catalog-table-ready-v591 body:not(.fund-card-mode) #sec-fundos{
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    transition:opacity .12s ease!important;
   }
 }

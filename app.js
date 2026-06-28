@@ -26457,3 +26457,30 @@ function buildDetailPanel(r,colspan){
     setTimeout(apply, delay);
   });
 })();
+
+
+/* PATCH v592 — bloqueia visualmente Fundos ate a tabela estabilizar */
+(function desktopFundsLoadLockV592(){
+  var BUILD = 'ELTAUM_DESKTOP_FUNDS_LOAD_LOCK_V592';
+  var PATCH_CLASS = 'desktop-funds-load-lock-v592';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var table = document.getElementById('mainTable');
+    var body = document.getElementById('tableBody');
+    if(table && body && body.children.length && table.style.display !== 'none'){
+      document.documentElement.classList.add('catalog-table-ready-v591');
+    }
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [40, 100, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
