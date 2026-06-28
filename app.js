@@ -3615,9 +3615,9 @@ function setCdiSort(dir){
   }
   function categoryWinners(rows, campo, geral){
     const map = new Map();
-    geral.forEach(function(r, idx){
+    geral.forEach(function(r){
       const cat = r.Categoria || 'Sem categoria';
-      if(!map.has(cat)) map.set(cat, {cat:cat, row:r, globalRank:idx + 1});
+      if(!map.has(cat)) map.set(cat, {cat:cat, row:r});
     });
     return Array.from(map.values()).sort(function(a,b){
       return finite(b.row[campo]) - finite(a.row[campo]);
@@ -3640,17 +3640,7 @@ function setCdiSort(dir){
     if(attention) attention.remove();
   }
   function contextLine(rows, periodo){
-    const cdi = cdiReferencia(periodo);
-    const universo = q('[data-rank-filter="' + (typeof activeRankFilter !== 'undefined' ? activeRankFilter : 'todos') + '"]')?.textContent?.trim()
-      || q('#rankingClassSelectV136 option:checked')?.textContent?.trim()
-      || 'Todos';
-    const risco = typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(typeof activeRankRisk !== 'undefined' ? activeRankRisk : '') : 'Todos os perfis';
-    return '<div class="ranking-v562-context" aria-label="Contexto do recorte">' +
-      '<span>' + rows.length + ' fundos no recorte</span>' +
-      '<span>Universo: <strong>' + esc(universo) + '</strong></span>' +
-      '<span>Risco: <strong>' + esc(risco) + '</strong></span>' +
-      '<span>CDI de período: <strong>' + esc(cdi === null ? '—' : pct(cdi)) + '</strong></span>' +
-    '</div>';
+    return '';
   }
   function summaryCard(kind, label, value, name, meta){
     return '<article class="ranking-v562-summary-card ' + esc(kind || '') + '">' +
@@ -3671,16 +3661,15 @@ function setCdiSort(dir){
     const r = item.row;
     const ratio = cdiRatioNumber(r, periodo);
     const width = ratio === null ? 0 : Math.max(8, Math.min(100, Math.abs(ratio)));
-    const medalClass = item.globalRank === 1 ? 'gold' : item.globalRank === 2 ? 'silver' : item.globalRank === 3 ? 'bronze' : '';
+    const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
     const name = cleanFund(r.Fundo);
     return '<article class="ranking-v562-podium-row ' + (i === 0 ? 'is-leader ' : '') + medalClass + '">' +
-      '<div class="ranking-v562-medal"><span>' + esc(item.globalRank) + '</span></div>' +
+      '<div class="ranking-v562-medal"><span>' + esc(i + 1) + '</span></div>' +
       '<div class="ranking-v562-icon" aria-hidden="true">' + catIcon(item.cat) + '</div>' +
       '<div class="ranking-v562-fund">' +
         '<strong title="' + esc(name) + '">' + esc(i === 0 ? name : compactFund(name)) + '</strong>' +
         '<small>' + esc(shortCat(item.cat)) + '</small>' +
       '</div>' +
-      '<div class="ranking-v562-pl">' + esc(plTxt(plValue(r))) + '</div>' +
       '<div class="ranking-v562-return ' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</div>' +
       '<div class="ranking-v562-cdi">' +
         '<strong>' + esc(cdiRatioTxt(r, periodo)) + '</strong>' +
@@ -3728,7 +3717,7 @@ function setCdiSort(dir){
       '</section>' +
       '<section class="ranking-v562-board" aria-label="Melhores por categoria">' +
         '<div class="ranking-v562-board-head">' +
-          '<div><h3>Melhores por categoria</h3><p>Fundo vencedor em cada classe, ordenado pela posição real no ranking geral.</p></div>' +
+          '<div><h3>Melhores por categoria</h3><p>Fundo vencedor em cada classe, ordenado pelo retorno do período selecionado.</p></div>' +
           periodTabs(periodo) +
         '</div>' +
         '<div class="ranking-v562-podium">' + (boardRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
