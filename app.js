@@ -25063,9 +25063,6 @@ function buildDetailPanel(r,colspan){
   const audience = detailAudienceSemanticV225(detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo'])));
   const audienceText = audience.length ? audience.map(item=>item.short || item.label).join(' · ') : 'Não informado';
   const urlFund = isFallbackUrl(r) ? '' : getFundUrl(r);
-  const docs = obterDocsFundoCompactos(r);
-  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || /boletim/i.test(String(d.label||'')));
-  const regulamento = docs.find(d => d.csvKey === 'doc_regulamento' || /regulamento/i.test(String(d.label||'')));
 
   const field = (label, value, cls='') => `<div class="detail-field-v559 ${cls}"><span>${htmlAttr(label)}</span><strong>${htmlAttr(value || '—')}</strong></div>`;
   const link = (href, label, cls='') => href ? `<a class="detail-doc-link-v559 ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${label}</a>` : '';
@@ -25078,8 +25075,6 @@ function buildDetailPanel(r,colspan){
           <small>Campos essenciais para consulta rápida no atendimento.</small>
         </div>
         <div class="detail-doc-actions-v559">
-          ${link(boletim?.url,'Boletim Comercial','primary')}
-          ${link(regulamento?.url,'Regulamento')}
           ${urlFund ? link(urlFund,'Página do fundo') : ''}
         </div>
       </div>
@@ -25152,9 +25147,9 @@ function buildDetailPanel(r,colspan){
   }
 
   function sync(){
-    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560');
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561');
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_SEM_CNPJ_V560';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COLOR_HIERARCHY_V561';
   }
 
   document.addEventListener('click', function(ev){
@@ -25189,7 +25184,6 @@ function buildDetailPanel(r,colspan){
   [120, 500, 1300].forEach(function(delay){
     setTimeout(function(){
       sync();
-      try{ if(typeof render === 'function' && document.getElementById('tableBody')) render(); }catch(_){}
     }, delay);
   });
 })();

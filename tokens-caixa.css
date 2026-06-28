@@ -33,6 +33,111 @@
   --red-dim:rgba(208,99,112,.12);
 }
 
+/* 09D · Catálogo desktop — hierarquia de cor e estabilidade v561 */
+@media (min-width:769px){
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-panel-v559{
+    background:linear-gradient(180deg,rgba(9,13,24,.97),rgba(7,11,20,.97)) !important;
+    border-top:1px solid rgba(148,163,184,.15) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559{
+    border-bottom-color:rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 strong{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 small{
+    color:#8fa0bc !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559{
+    min-width:0 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559:empty{
+    display:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559{
+    color:#cfd8e8 !important;
+    background:rgba(13,19,34,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559:hover{
+    color:#f0c36b !important;
+    border-color:rgba(202,161,87,.34) !important;
+    background:rgba(202,161,87,.08) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559{
+    background:rgba(9,14,26,.66) !important;
+    border-color:rgba(148,163,184,.11) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 span{
+    color:#8fa0bc !important;
+    opacity:.92 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 strong{
+    color:#dfe7f3 !important;
+    font-weight:780 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive{
+    border-color:rgba(34,211,160,.18) !important;
+    background:rgba(34,211,160,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive strong{
+    color:#28e6af !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative{
+    border-color:rgba(255,102,133,.20) !important;
+    background:rgba(255,102,133,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative strong{
+    color:#ff6f8b !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559{
+    background:rgba(8,13,24,.58) !important;
+    border-color:rgba(148,163,184,.11) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application{
+    border-left-color:rgba(34,211,160,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption{
+    border-left-color:rgba(96,165,250,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 h4{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application h4{
+    color:#bff8e8 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption h4{
+    color:#cfe2ff !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 .detail-field-v559{
+    background:rgba(12,18,32,.60) !important;
+  }
+}
+
 /* 09C · Catálogo desktop — override terminal v560 */
 @media (min-width:769px){
   html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-panel-v559{
@@ -99,6 +204,107 @@
     html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
       grid-template-columns:repeat(3,minmax(0,1fr)) !important;
     }
+  }
+}
+
+/* 09D · Catálogo desktop — override terminal v561 */
+@media (min-width:769px){
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-panel-v559{
+    background:linear-gradient(180deg,rgba(9,13,24,.97),rgba(7,11,20,.97)) !important;
+    border-top:1px solid rgba(148,163,184,.15) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559{
+    border-bottom-color:rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 strong{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 small{
+    color:#8fa0bc !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559:empty{
+    display:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559{
+    color:#cfd8e8 !important;
+    background:rgba(13,19,34,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559:hover{
+    color:#f0c36b !important;
+    border-color:rgba(202,161,87,.34) !important;
+    background:rgba(202,161,87,.08) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559{
+    background:rgba(9,14,26,.66) !important;
+    border-color:rgba(148,163,184,.11) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 span{
+    color:#8fa0bc !important;
+    opacity:.92 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 strong{
+    color:#dfe7f3 !important;
+    font-weight:780 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive{
+    border-color:rgba(34,211,160,.18) !important;
+    background:rgba(34,211,160,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive strong{
+    color:#28e6af !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative{
+    border-color:rgba(255,102,133,.20) !important;
+    background:rgba(255,102,133,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative strong{
+    color:#ff6f8b !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559{
+    background:rgba(8,13,24,.58) !important;
+    border-color:rgba(148,163,184,.11) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application{
+    border-left-color:rgba(34,211,160,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption{
+    border-left-color:rgba(96,165,250,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 h4{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application h4{
+    color:#bff8e8 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption h4{
+    color:#cfe2ff !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 .detail-field-v559{
+    background:rgba(12,18,32,.60) !important;
   }
 }
 
@@ -2079,5 +2285,106 @@
     html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
       grid-template-columns:repeat(3,minmax(0,1fr)) !important;
     }
+  }
+}
+
+/* 09D · Catálogo desktop — override final absoluto v561 */
+@media (min-width:769px){
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-panel-v559{
+    background:linear-gradient(180deg,rgba(9,13,24,.97),rgba(7,11,20,.97)) !important;
+    border-top:1px solid rgba(148,163,184,.15) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559{
+    border-bottom-color:rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 strong{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 small{
+    color:#8fa0bc !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559:empty{
+    display:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559{
+    color:#cfd8e8 !important;
+    background:rgba(13,19,34,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559:hover{
+    color:#f0c36b !important;
+    border-color:rgba(202,161,87,.34) !important;
+    background:rgba(202,161,87,.08) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559{
+    background:rgba(9,14,26,.66) !important;
+    border-color:rgba(148,163,184,.11) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 span{
+    color:#8fa0bc !important;
+    opacity:.92 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 strong{
+    color:#dfe7f3 !important;
+    font-weight:780 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive{
+    border-color:rgba(34,211,160,.18) !important;
+    background:rgba(34,211,160,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive strong{
+    color:#28e6af !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative{
+    border-color:rgba(255,102,133,.20) !important;
+    background:rgba(255,102,133,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative strong{
+    color:#ff6f8b !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559{
+    background:rgba(8,13,24,.58) !important;
+    border-color:rgba(148,163,184,.11) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application{
+    border-left-color:rgba(34,211,160,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption{
+    border-left-color:rgba(96,165,250,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 h4{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application h4{
+    color:#bff8e8 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption h4{
+    color:#cfe2ff !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 .detail-field-v559{
+    background:rgba(12,18,32,.60) !important;
   }
 }
