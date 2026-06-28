@@ -73266,3 +73266,69 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     margin-top:0!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v588 — Desktop: menu lateral sem invadir Mercado/Poupanca/Dolar
+   ========================================================= */
+@media (min-width:1180px){
+  html.desktop-side-nav-market-fix-v588 body #topo.page{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    padding:18px 22px 88px 18px!important;
+    overflow-x:hidden!important;
+  }
+
+  html.desktop-side-nav-market-fix-v588 body #topo.page > :not(#desktopAnchorNavV131){
+    margin-left:208px!important;
+    width:calc(100% - 208px)!important;
+    max-width:calc(100% - 208px)!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado > .section-title,
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado #monthlyIndicatorsV445,
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado .indic-ref-bar,
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado .market-reference-v167,
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado .rates-reference-v167,
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado .rates-executive-v255,
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado .savings-reference-v167,
+  html.desktop-side-nav-market-fix-v588 body #sec-dolar > .section-title,
+  html.desktop-side-nav-market-fix-v588 body #sec-dolar .dolar-compact-card,
+  html.desktop-side-nav-market-fix-v588 body #sec-dolar #dolarChartPanel,
+  html.desktop-side-nav-market-fix-v588 body #sec-dolar #ptaxStatsCard,
+  html.desktop-side-nav-market-fix-v588 body #sec-dolar .dolar-compact-footer,
+  html.desktop-side-nav-market-fix-v588 body #sec-focus > .section-title,
+  html.desktop-side-nav-market-fix-v588 body #sec-graficos > .section-title,
+  html.desktop-side-nav-market-fix-v588 body #siteSources > .section-title{
+    width:100%!important;
+    max-width:100%!important;
+    min-width:0!important;
+    margin-left:0!important;
+    margin-right:0!important;
+    left:auto!important;
+    right:auto!important;
+    transform:none!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-side-nav-market-fix-v588 body #sec-mercado,
+  html.desktop-side-nav-market-fix-v588 body #sec-dolar,
+  html.desktop-side-nav-market-fix-v588 body #sec-focus,
+  html.desktop-side-nav-market-fix-v588 body #sec-graficos,
+  html.desktop-side-nav-market-fix-v588 body #siteSources{
+    scroll-margin-top:18px!important;
+    position:relative!important;
+    z-index:1!important;
+  }
+}
+
+@media (min-width:1180px) and (max-width:1360px){
+  html.desktop-side-nav-market-fix-v588 body #topo.page > :not(#desktopAnchorNavV131){
+    margin-left:184px!important;
+    width:calc(100% - 184px)!important;
+    max-width:calc(100% - 184px)!important;
+  }
+}
