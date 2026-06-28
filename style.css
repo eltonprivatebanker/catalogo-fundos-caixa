@@ -73491,3 +73491,19 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     transition:opacity .12s ease!important;
   }
 }
+
+/* =========================================================
+   PATCH v594 — Catalogo desktop: nomes curtos na tabela
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-short-fund-names-v594 body:not(.fund-card-mode) #sec-fundos #mainTable .fundo-cell-name-short-v594{
+    -webkit-line-clamp:2!important;
+    line-clamp:2;
+    line-height:1.28!important;
+    max-width:100%!important;
+  }
+
+  html.desktop-short-fund-names-v594 body:not(.fund-card-mode) #sec-fundos #mainTable td.col-fundo{
+    vertical-align:middle!important;
+  }
+}

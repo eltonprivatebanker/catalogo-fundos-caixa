@@ -3145,6 +3145,71 @@ function temDados(r){
   return c&&c!=='-'&&c!=='—';
 }
 
+function catalogShortFundNameV594(nome){
+  const original = String(nome || '').replace(/\s+/g,' ').trim();
+  if(!original) return '—';
+
+  const upper = original.toUpperCase();
+  if(/FMP[-\s]*FGTS/.test(upper) && /PETROBR/.test(upper)){
+    const serie = upper.match(/\b(I|II|III|IV|V|VI|VII|VIII|IX|X)\b/);
+    return `FMP-FGTS Petrobras${serie ? ' ' + serie[1] : ''}`;
+  }
+
+  let clean = original
+    .replace(/^CAIXA\s+/i,'')
+    .replace(/\s+RESP\s+LTDA.*$/i,'')
+    .replace(/\s+LTDA.*$/i,'')
+    .replace(/\s+-\s*RL\s*$/i,'')
+    .replace(/\b(FIC|FIF|FI|FUNDO\s+DE\s+INVESTIMENTO|COTAS\s+DE|COTAS)\b\s*/gi,'')
+    .replace(/\bMULTIMERCADO\b/gi,'MM')
+    .replace(/\bACOES\b/gi,'Ações')
+    .replace(/\bDOLAR\b/gi,'Dólar')
+    .replace(/\bRENDA\s+FIXA\b/gi,'RF')
+    .replace(/\bREFERENCIADO\b/gi,'Ref.')
+    .replace(/\bCURTO\s+PRAZO\b/gi,'CP')
+    .replace(/\bCREDITO\b/gi,'Crédito')
+    .replace(/\bCRED\b/gi,'Créd.')
+    .replace(/\bMIGRACAO\b/gi,'Migração')
+    .replace(/\bPRIVADO\b/gi,'Privado')
+    .replace(/\bPRIV\b/gi,'Priv.')
+    .replace(/\bMOVIMENTACOES\b/gi,'Mov.')
+    .replace(/\bMOVIMENTAÇÕES\b/gi,'Mov.')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  const keepUpper = new Set(['RF','DI','CDI','IPCA','IMA-B','IRF-M','FMP-FGTS','ETF','BDR','MM','LP','CP','PJ','PF','RPPS','FOF']);
+  clean = clean.split(' ').filter(Boolean).map(part => {
+    const up = part.toUpperCase();
+    if(keepUpper.has(up)) return up;
+    if(/^I{1,3}$|^IV$|^V$|^VI{0,3}$|^IX$|^X$/.test(up)) return up;
+    if(part.includes('-')) return part.split('-').map(p => {
+      const pUp = p.toUpperCase();
+      return keepUpper.has(pUp) ? pUp : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase();
+    }).join('-');
+    return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+  }).join(' ');
+
+  clean = clean
+    .replace(/\bRf\b/g,'RF')
+    .replace(/\bMm\b/g,'MM')
+    .replace(/\bLp\b/g,'LP')
+    .replace(/\bCp\b/g,'CP')
+    .replace(/\bFoF\b/g,'FOF')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  const maxLen = 42;
+  if(clean.length <= maxLen) return clean;
+  const words = clean.split(' ');
+  let out = '';
+  for(const word of words){
+    const next = out ? `${out} ${word}` : word;
+    if(next.length > maxLen) break;
+    out = next;
+  }
+  return out || clean.slice(0, maxLen).trim();
+}
+
 function kpiShortFundName(nome){
   const original = String(nome || '').replace(/\s+/g,' ').trim();
   if(!original) return '—';
@@ -5691,6 +5756,8 @@ function buildRowHTML(r,idx){
     if(h==='Fundo'){
       const url=getFundUrl(r); const isFb=isFallbackUrl(r);
       const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';
+      const fullFundName=val || '—';
+      const displayFundName=catalogShortFundNameV594(fullFundName);
       // Categoria como badge colorido
       const cat=String(r['Categoria']||'');
       const catCls=CAT_CLS[cat]||'RF';
@@ -5703,7 +5770,7 @@ function buildRowHTML(r,idx){
       const cnpjLimpo=cnpjBruto.replace(/\D/g,'').slice(0,14);
       const cnpjFormatado=cnpjLimpo ? formatarCnpjMeta(cnpjLimpo) : cnpjBruto;
       const cnpjStr=cnpjFormatado ? `<span class="fundo-cnpj-sub">CNPJ ${htmlAttr(cnpjFormatado)}</span>` : '';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjStr}${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name fundo-cell-name-short-v594" title="${htmlAttr(fullFundName)}" aria-label="${htmlAttr(fullFundName)}">${htmlAttr(displayFundName)}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjStr}${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
@@ -26501,6 +26568,28 @@ function buildDetailPanel(r,colspan){
 (function desktopMonthlyUsHeaderCurrencyV593(){
   var BUILD = 'ELTAUM_DESKTOP_MONTHLY_US_HEADER_CURRENCY_V593';
   var PATCH_CLASS = 'desktop-monthly-us-header-currency-v593';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v594 — nomes curtos no catalogo desktop */
+(function desktopShortFundNamesV594(){
+  var BUILD = 'ELTAUM_DESKTOP_SHORT_FUND_NAMES_V594';
+  var PATCH_CLASS = 'desktop-short-fund-names-v594';
   function isDesktop(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
