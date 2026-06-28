@@ -21,13 +21,14 @@ document.documentElement.classList.add(
   'desktop-rates-reference-slim-v575',
   'desktop-monthly-us-markets-v576',
   'desktop-monthly-comparison-chart-v580',
-  'desktop-monthly-chart-start-zero-v581'
+  'desktop-monthly-chart-start-zero-v581',
+  'desktop-header-kpis-focus-clean-v582'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_DESKTOP_MONTHLY_CHART_START_ZERO_V581" name="app-build"/>
+<meta content="ELTAUM_DESKTOP_HEADER_KPIS_FOCUS_CLEAN_V582" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -80,7 +81,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=desktop-monthly-chart-start-zero-v581" rel="stylesheet"/>
+<link href="style.css?v=desktop-header-kpis-focus-clean-v582" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -185,7 +186,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=desktop-monthly-chart-start-zero-v581"></script>
+<script defer="" src="app.js?v=desktop-header-kpis-focus-clean-v582"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -566,7 +567,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=desktop-monthly-chart-start-zero-v581" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=desktop-header-kpis-focus-clean-v582" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -577,6 +578,14 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <div class="brand-text">
 <h1>Catálogo de Fundos CAIXA</h1>
 </div>
+</div>
+<div aria-label="Resumo executivo do catálogo" class="kpi-grid executive-kpi-grid header-kpi-strip-v582" id="sec-kpi" role="group">
+<div class="kpi kpi-fundos"><div class="kpi-icon">📊</div><div class="kpi-label">Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
+<div class="kpi kpi-categorias"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub" id="kpiCatsSub">Tipos de estratégia</div></div>
+<div class="kpi kpi-pl"><div class="kpi-icon">💰</div><div class="kpi-label">PL consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">Patrimônio consolidado</div></div>
+<div class="kpi kpi-pipeline"><div class="kpi-icon">🔬</div><div class="kpi-label">Pipeline</div><div class="kpi-value" id="kpiPipe">—</div><div class="kpi-sub" id="kpiPipeSub">Fundos sem cota</div></div>
+<div class="kpi kpi-best"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub kpi-fund-name" id="kpiBestFundo">—</div></div>
+<div class="kpi kpi-worst"><div class="kpi-icon">📉</div><div class="kpi-label">Pior 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub kpi-fund-name" id="kpiWorstFundo">—</div></div>
 </div>
 <div aria-label="Origem e atualização dos dados" class="header-data-status-v343">
 <span class="header-source-pill-v343" title="Base pública de fundos usada no catálogo"><span class="badge-dot green" aria-hidden="true"></span><span>SIPII — Caixa</span></span>
@@ -603,14 +612,6 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 </nav>
 <!-- ════════════════ BLOCO 1: QUEBRA-GELO — visão geral ════════════════ -->
 <!-- ═══════════════════════════════════════════════ KPI GRID ══ -->
-<div aria-label="Resumo executivo do catálogo" class="kpi-grid section-gap executive-kpi-grid" id="sec-kpi" role="group">
-<div class="kpi kpi-fundos"><div class="kpi-icon">📊</div><div class="kpi-label">Fundos</div><div class="kpi-value" id="kpiFundos">—</div><div class="kpi-sub" id="kpiFundosSub">carregando...</div></div>
-<div class="kpi kpi-categorias"><div class="kpi-icon">🏷️</div><div class="kpi-label">Categorias</div><div class="kpi-value" id="kpiCats">—</div><div class="kpi-sub" id="kpiCatsSub">Tipos de estratégia</div></div>
-<div class="kpi kpi-pl"><div class="kpi-icon">💰</div><div class="kpi-label">PL consolidado</div><div class="kpi-value" id="kpiPL">—</div><div class="kpi-sub" id="kpiPLSub">Patrimônio consolidado</div></div>
-<div class="kpi kpi-pipeline"><div class="kpi-icon">🔬</div><div class="kpi-label">Pipeline</div><div class="kpi-value" id="kpiPipe">—</div><div class="kpi-sub" id="kpiPipeSub">Fundos sem cota</div></div>
-<div class="kpi kpi-best"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub kpi-fund-name" id="kpiBestFundo">—</div></div>
-<div class="kpi kpi-worst"><div class="kpi-icon">📉</div><div class="kpi-label">Pior 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub kpi-fund-name" id="kpiWorstFundo">—</div></div>
-</div>
 <!-- Resumo executivo para celular: substitui a grade de 6 cards por 3 blocos mais claros -->
 <div aria-label="Resumo executivo compacto do catálogo" class="mobile-kpi-overview section-gap" id="sec-kpi-mobile" role="group">
 <article class="mobile-kpi-card mobile-kpi-card-compact">
@@ -1045,7 +1046,6 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <strong id="copomCompactTitleV167">Cenário e expectativas</strong>
 <small>Copom e Focus como contexto de juros.</small>
 </div>
-<a class="rates-focus-link-v575" href="#sec-focus" data-target="sec-focus" aria-label="Ir para o Boletim Focus">Ver Focus</a>
 </div>
 <div aria-label="Resumo executivo do Copom" class="copom-exec-summary-v270" id="copomExecutiveSummaryV270" role="group">
 <article class="copom-exec-card-v270 is-last" id="copomLastExecutiveV270">

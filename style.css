@@ -72840,3 +72840,151 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     max-width:none!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v582 — Desktop: KPIs no header + sem link Focus solto
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-header-kpis-focus-clean-v582 body .rates-focus-link-v575{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body header.site-header-clean,
+  html.desktop-header-kpis-focus-clean-v582 body .site-header-clean.site-header-v217{
+    display:grid!important;
+    grid-template-columns:minmax(300px,390px) minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:16px!important;
+    min-height:96px!important;
+    padding:20px 24px!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body .site-header-clean .brand{
+    min-width:0!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body .site-header-clean .brand-logo{
+    width:44px!important;
+    height:44px!important;
+    border-radius:10px!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body .site-header-clean .brand-text h1{
+    font-size:1.42rem!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582{
+    display:grid!important;
+    grid-template-columns:1.02fr 1.18fr 1fr 1fr!important;
+    align-items:stretch!important;
+    gap:8px!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-categorias,
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-pipeline,
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-icon{
+    display:none!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-width:0!important;
+    min-height:58px!important;
+    padding:9px 12px!important;
+    border-radius:10px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    background:rgba(10,15,29,.66)!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi::before{
+    height:2px!important;
+    opacity:.72!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-label{
+    margin:0 0 5px!important;
+    color:rgba(178,191,222,.70)!important;
+    font-size:.48rem!important;
+    line-height:1!important;
+    letter-spacing:.13em!important;
+    font-weight:950!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-value{
+    margin:0!important;
+    color:#f4f7fb!important;
+    font-size:1.02rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-pl .kpi-value{
+    color:#f0c36b!important;
+    font-size:1rem!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-value.pos{
+    color:#30d796!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-value.neg{
+    color:#ff6f8b!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582 .kpi-sub{
+    margin:5px 0 0!important;
+    color:rgba(203,213,225,.68)!important;
+    font-size:.56rem!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body .site-header-clean .header-data-status-v343{
+    align-self:center!important;
+    margin-left:0!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-fundos.section-gap{
+    margin-top:16px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1240px){
+  html.desktop-header-kpis-focus-clean-v582 body header.site-header-clean,
+  html.desktop-header-kpis-focus-clean-v582 body .site-header-clean.site-header-v217{
+    grid-template-columns:1fr auto!important;
+  }
+
+  html.desktop-header-kpis-focus-clean-v582 body #sec-kpi.header-kpi-strip-v582{
+    grid-column:1 / -1!important;
+    grid-row:2!important;
+  }
+}
+
+@media (max-width:768px){
+  #sec-kpi.header-kpi-strip-v582{
+    display:none!important;
+  }
+}
