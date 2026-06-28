@@ -73372,3 +73372,51 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     max-width:calc(100% - 184px)!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v590 — Desktop: ranking por categoria em leitura vertical
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-columns-v590 body #rankingsSection .ranking-v562-podium{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    padding:8px!important;
+  }
+
+  html.desktop-ranking-columns-v590 body #rankingsSection .ranking-v590-columns{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+    align-items:start!important;
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  html.desktop-ranking-columns-v590 body #rankingsSection .ranking-v590-columns.single-column{
+    grid-template-columns:1fr!important;
+  }
+
+  html.desktop-ranking-columns-v590 body #rankingsSection .ranking-v590-column{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:8px!important;
+    min-width:0!important;
+  }
+
+  html.desktop-ranking-columns-v590 body #rankingsSection .ranking-v562-podium-row{
+    width:100%!important;
+  }
+
+  html.desktop-ranking-columns-v590 body #rankingsSection .ranking-v562-podium-row.is-leader{
+    width:100%!important;
+    grid-column:auto!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1120px){
+  html.desktop-ranking-columns-v590 body #rankingsSection .ranking-v590-columns{
+    grid-template-columns:1fr!important;
+  }
+}

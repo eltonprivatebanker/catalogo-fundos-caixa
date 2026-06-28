@@ -3688,6 +3688,26 @@ function setCdiSort(dir){
       '</div>' +
     '</article>';
   }
+  function categoryBoardRowsV590(winners, campo, periodo){
+    const top = winners.slice(0,10);
+    if(!top.length) return '';
+
+    const leader = categoryRow(top[0], 0, campo, periodo);
+    const left = top.slice(1,5).map(function(item, idx){
+      return categoryRow(item, idx + 1, campo, periodo);
+    }).join('');
+    const right = top.slice(5,10).map(function(item, idx){
+      return categoryRow(item, idx + 5, campo, periodo);
+    }).join('');
+
+    if(!left && !right) return leader;
+
+    return leader +
+      '<div class="ranking-v590-columns ' + (right ? 'has-continuation' : 'single-column') + '">' +
+        '<div class="ranking-v590-column ranking-v590-column-primary">' + left + '</div>' +
+        (right ? '<div class="ranking-v590-column ranking-v590-column-continuation">' + right + '</div>' : '') +
+      '</div>';
+  }
   function alertRows(rows, campo){
     return rows.map(function(r, i){
       const name = cleanFund(r.Fundo);
@@ -3714,7 +3734,7 @@ function setCdiSort(dir){
     const winners = categoryWinners(rows, campo, sorted);
     const best = sorted[0];
     const worstOne = worst[0];
-    const boardRows = winners.slice(0,10).map(function(item,i){ return categoryRow(item,i,campo,periodo); }).join('');
+    const boardRows = categoryBoardRowsV590(winners, campo, periodo);
     const alertBody = alertRows(worst.slice(0,8), campo);
 
     grid.className = 'ranking-grid ranking-main-v136 ranking-v562-grid';
@@ -26386,4 +26406,26 @@ function buildDetailPanel(r,colspan){
   setTimeout(function(){
     if(intervalId) clearInterval(intervalId);
   }, 180000);
+})();
+
+
+/* PATCH v590 — ativa layout vertical do ranking por categoria no desktop */
+(function desktopRankingColumnsV590(){
+  var BUILD = 'ELTAUM_DESKTOP_RANKING_COLUMNS_V590';
+  var PATCH_CLASS = 'desktop-ranking-columns-v590';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [80, 250, 700, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
 })();
