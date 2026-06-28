@@ -3636,7 +3636,7 @@ function setCdiSort(dir){
   function syncControls(periodo){
     document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_HISTORY_V577';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -22128,6 +22128,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_BALANCE_v451';
   let range = 'year';
   let view = 'all';
+  let usCurrency = 'usd';
 
   function toNumV445(value){
     if(value === null || value === undefined || value === '') return null;
@@ -22278,12 +22279,65 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     return null;
   }
 
-  function mapIndexSeriesV576(dados, key){
+  function getPtaxCloseMapV578(dados){
+    function toFx(value){
+      if(value === null || value === undefined || value === '') return null;
+      if(typeof value === 'number') return Number.isFinite(value) ? value : null;
+      const raw = String(value).trim();
+      const normalized = raw.includes(',')
+        ? raw.replace(/\./g,'').replace(',','.')
+        : raw;
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+    const series = [];
+    try{
+      if(typeof _ptaxHistorico !== 'undefined' && Array.isArray(_ptaxHistorico) && _ptaxHistorico.length){
+        series.push(..._ptaxHistorico);
+      }
+    }catch(_error){}
+    if(Array.isArray(dados?.ptax_historico)) series.push(...dados.ptax_historico);
+
+    const map = new Map();
+    series.forEach(item => {
+      const monthKey = normalizeMonthKeyV445(item);
+      const value = toFx(item?.cotacaoVenda ?? item?.cotacao ?? item?.valor ?? item?.fechamento);
+      if(monthKey && value !== null) map.set(monthKey, value);
+    });
+    return map;
+  }
+
+  function mapIndexSeriesV576(dados, key, currency = 'usd'){
     const item = getIndexObjectV576(dados, key);
     const series = item.historico || item.mensal || item.meses || item.fechamentos || item.serie || item.series || [];
     const map = new Map();
-    (Array.isArray(series) ? series : []).forEach(entry => {
-      const monthKey = normalizeMonthKeyV445(entry);
+    const entries = (Array.isArray(series) ? series : [])
+      .map(entry => ({ entry, monthKey: normalizeMonthKeyV445(entry) }))
+      .filter(item => item.monthKey)
+      .sort((a,b) => a.monthKey.localeCompare(b.monthKey));
+
+    if(currency === 'brl'){
+      const fxMap = getPtaxCloseMapV578(dados);
+      let prevClose = null;
+      let prevFx = null;
+      entries.forEach(({entry, monthKey}) => {
+        const close = toNumV445(entry?.fechamento ?? entry?.close ?? entry?.valor_fechamento ?? entry?.cotacao);
+        const fx = fxMap.get(monthKey);
+        const directBrl = toNumV445(entry?.valor_brl ?? entry?.variacao_brl ?? entry?.variacao_mensal_brl ?? entry?.retorno_brl);
+        let value = directBrl;
+        if(value === null && close !== null && fx !== null && prevClose !== null && prevFx !== null && prevClose > 0 && prevFx > 0){
+          value = ((close * fx) / (prevClose * prevFx) - 1) * 100;
+        }
+        if(value !== null) map.set(monthKey, value);
+        if(close !== null && fx !== null){
+          prevClose = close;
+          prevFx = fx;
+        }
+      });
+      if(map.size) return map;
+    }
+
+    entries.forEach(({entry, monthKey}) => {
       const value = percentFromItemV576(entry);
       if(monthKey && value !== null) map.set(monthKey, value);
     });
@@ -22294,7 +22348,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     return maps.find(map => map && map.size) || new Map();
   }
 
-  function directIndexCandidatesV576(dados, key, rangeKey){
+  function directIndexCandidatesV576(dados, key, rangeKey, currency = 'usd'){
     const item = getIndexObjectV576(dados, key);
     const aliases = key === 'dow'
       ? [dados?.indices_mercado?.dow_jones, dados?.indices_mercado?.dow, dados?.indices_internacionais?.dow_jones_detalhado, dados?.indices_internacionais?.dow_jones, dados?.indices_internacionais?.dow]
@@ -22304,9 +22358,9 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const pool = [item, ...aliases].filter(Boolean);
     const field = rangeKey === '12m' ? 'acum_12m' : 'acum_ano';
     const altFields = rangeKey === '12m'
-      ? ['acum_12m','retorno_12m','variacao_12m','m12']
-      : ['acum_ano','retorno_ano','variacao_ano','ano','ytd'];
-    return pool.flatMap(obj => altFields.map(name => obj?.[name] ?? obj?.[field]));
+      ? (currency === 'brl' ? ['acum_12m_brl','retorno_12m_brl','variacao_12m_brl','m12_brl'] : ['acum_12m','retorno_12m','variacao_12m','m12'])
+      : (currency === 'brl' ? ['acum_ano_brl','retorno_ano_brl','variacao_ano_brl','ano_brl','ytd_brl'] : ['acum_ano','retorno_ano','variacao_ano','ano','ytd']);
+    return pool.flatMap(obj => altFields.map(name => obj?.[name] ?? (currency === 'brl' ? undefined : obj?.[field])));
   }
 
   function getConsolidatedMonthlyV448(dados){
@@ -22393,9 +22447,10 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     table.dataset.viewV446 = activeView;
     const headRow = table.querySelector('thead tr');
     if(!headRow) return;
+    const usLabel = usCurrency === 'brl' ? 'BRL' : 'USD';
     if(activeView === 'all'){
       const usCols = isDesktopMonthlyV576()
-        ? '<th class="monthly-us-only-v576" scope="col">S&P 500</th><th class="monthly-us-only-v576" scope="col">Nasdaq</th><th class="monthly-us-only-v576" scope="col">Dow</th>'
+        ? `<th class="monthly-us-only-v576" scope="col">S&P 500 <small>${usLabel}</small></th><th class="monthly-us-only-v576" scope="col">Nasdaq <small>${usLabel}</small></th><th class="monthly-us-only-v576" scope="col">Dow <small>${usLabel}</small></th>`
         : '';
       headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibov</th><th scope="col">Dólar</th>${usCols}`;
     }else{
@@ -22421,6 +22476,15 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     });
   }
 
+  function syncUsCurrencyButtonsV578(root){
+    root.querySelectorAll('[data-monthly-us-currency-v578]').forEach(btn => {
+      const key = btn.dataset.monthlyUsCurrencyV578 || 'usd';
+      const active = key === usCurrency;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
   function renderMonthlyIndicatorsV445(){
     const root = document.getElementById('monthlyIndicatorsV445');
     const tbody = document.getElementById('monthlyIndicatorsRowsV445');
@@ -22431,7 +22495,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
     if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576');
     const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_US_HISTORY_V577' : BUILD;
+    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578' : BUILD;
 
     const dados = getMercadoV445();
     const cdiCard = dados?.cards?.cdi || {};
@@ -22446,20 +22510,36 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const ipcaMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ipca') : mapSeriesV445(ipcaCard.historico || dados?.ipca_historico || dados?.historico_ipca || []);
     const ibovMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ibov') : mapSeriesV445(getIbovSeriesV445(dados));
     const dolarMap = consolidated.length ? mapConsolidatedV448(consolidated, 'dolar') : mapSeriesV445(getPtaxSeriesV445(dados));
-    const sp500Map = firstMapWithDataV577(
-      consolidated.length ? mapConsolidatedV448(consolidated, 'sp500') : new Map(),
-      consolidated.length ? mapConsolidatedV448(consolidated, 'sp500_usd') : new Map(),
-      mapIndexSeriesV576(dados, 'sp500')
-    );
-    const nasdaqMap = firstMapWithDataV577(
-      consolidated.length ? mapConsolidatedV448(consolidated, 'nasdaq') : new Map(),
-      mapIndexSeriesV576(dados, 'nasdaq')
-    );
-    const dowMap = firstMapWithDataV577(
-      consolidated.length ? mapConsolidatedV448(consolidated, 'dow_jones') : new Map(),
-      consolidated.length ? mapConsolidatedV448(consolidated, 'dow') : new Map(),
-      mapIndexSeriesV576(dados, 'dow')
-    );
+    const sp500Map = usCurrency === 'brl'
+      ? firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'sp500_brl') : new Map(),
+          mapIndexSeriesV576(dados, 'sp500', usCurrency)
+        )
+      : firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'sp500') : new Map(),
+          consolidated.length ? mapConsolidatedV448(consolidated, 'sp500_usd') : new Map(),
+          mapIndexSeriesV576(dados, 'sp500', usCurrency)
+        );
+    const nasdaqMap = usCurrency === 'brl'
+      ? firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'nasdaq_brl') : new Map(),
+          mapIndexSeriesV576(dados, 'nasdaq', usCurrency)
+        )
+      : firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'nasdaq') : new Map(),
+          mapIndexSeriesV576(dados, 'nasdaq', usCurrency)
+        );
+    const dowMap = usCurrency === 'brl'
+      ? firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow_jones_brl') : new Map(),
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow_brl') : new Map(),
+          mapIndexSeriesV576(dados, 'dow', usCurrency)
+        )
+      : firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow_jones') : new Map(),
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow') : new Map(),
+          mapIndexSeriesV576(dados, 'dow', usCurrency)
+        );
     const tableMaps = desktopV576 ? [cdiMap, ipcaMap, ibovMap, dolarMap, sp500Map, nasdaqMap, dowMap] : [cdiMap, ipcaMap, ibovMap, dolarMap];
     const keys = getMonthKeysV445(tableMaps);
     const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap, sp500:sp500Map, nasdaq:nasdaqMap, dow:dowMap};
@@ -22494,18 +22574,18 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     );
     setSummaryV445(
       'monthlySummarySp500V576',
-      summaryValueForKeysV449(sp500Map, keys, directIndexCandidatesV576(dados, 'sp500', range === '12m' ? '12m' : 'year')),
-      `S&P 500 ${summarySuffix}`
+      summaryValueForKeysV449(sp500Map, keys, directIndexCandidatesV576(dados, 'sp500', range === '12m' ? '12m' : 'year', usCurrency)),
+      `S&P 500 ${summarySuffix} ${usCurrency.toUpperCase()}`
     );
     setSummaryV445(
       'monthlySummaryNasdaqV576',
-      summaryValueForKeysV449(nasdaqMap, keys, directIndexCandidatesV576(dados, 'nasdaq', range === '12m' ? '12m' : 'year')),
-      `Nasdaq ${summarySuffix}`
+      summaryValueForKeysV449(nasdaqMap, keys, directIndexCandidatesV576(dados, 'nasdaq', range === '12m' ? '12m' : 'year', usCurrency)),
+      `Nasdaq ${summarySuffix} ${usCurrency.toUpperCase()}`
     );
     setSummaryV445(
       'monthlySummaryDowV576',
-      summaryValueForKeysV449(dowMap, keys, directIndexCandidatesV576(dados, 'dow', range === '12m' ? '12m' : 'year')),
-      `Dow ${summarySuffix}`
+      summaryValueForKeysV449(dowMap, keys, directIndexCandidatesV576(dados, 'dow', range === '12m' ? '12m' : 'year', usCurrency)),
+      `Dow ${summarySuffix} ${usCurrency.toUpperCase()}`
     );
 
     tbody.innerHTML = keys.map(key => {
@@ -22536,6 +22616,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     });
 
     syncIndicatorButtonsV447(root, maps, keys, activeView);
+    syncUsCurrencyButtonsV578(root);
     const shell = root.querySelector('.monthly-indicators-table-shell-v445');
     if(shell && activeView === 'all'){
       requestAnimationFrame(() => {
@@ -22561,6 +22642,13 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       if(viewBtn){
         if(viewBtn.disabled || viewBtn.getAttribute('aria-disabled') === 'true') return;
         view = viewBtn.dataset.monthlyIndicatorsViewV446 || 'all';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const currencyBtn = event.target.closest('[data-monthly-us-currency-v578]');
+      if(currencyBtn){
+        usCurrency = currencyBtn.dataset.monthlyUsCurrencyV578 === 'brl' ? 'brl' : 'usd';
         renderMonthlyIndicatorsV445();
         return;
       }
@@ -25727,7 +25815,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-us-markets-v576'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_HISTORY_V577';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -25805,7 +25893,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-us-markets-v576'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_HISTORY_V577';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
@@ -25866,7 +25954,7 @@ function buildDetailPanel(r,colspan){
     }catch(_){}
 
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_HISTORY_V577';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
@@ -25886,7 +25974,7 @@ function buildDetailPanel(r,colspan){
     if(!isDesktop()) return;
 	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_HISTORY_V577';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
 
     var body = document.getElementById('dolarTimelineBody');
     if(body){

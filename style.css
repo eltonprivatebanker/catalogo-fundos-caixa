@@ -72592,3 +72592,112 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:repeat(4,minmax(0,1fr))!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v578 — Desktop: painel mensal mais largo + seletor USD/BRL
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445{
+    padding:10px 10px 10px 10px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445{
+    align-items:flex-start!important;
+    margin-bottom:9px!important;
+    padding:0 0 8px!important;
+    border-bottom:1px solid rgba(148,163,184,.10)!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    gap:8px!important;
+    flex-wrap:wrap!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:4px!important;
+    min-height:34px!important;
+    padding:3px!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    border-radius:12px!important;
+    background:rgba(8,12,24,.56)!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 span{
+    padding:0 6px!important;
+    color:rgba(178,191,222,.68)!important;
+    font-size:.52rem!important;
+    font-weight:900!important;
+    letter-spacing:.10em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    min-height:28px!important;
+    padding:0 10px!important;
+    border:0!important;
+    border-radius:9px!important;
+    background:transparent!important;
+    color:rgba(203,213,225,.70)!important;
+    font-size:.61rem!important;
+    font-weight:950!important;
+    cursor:pointer!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button.active{
+    background:rgba(200,151,58,.16)!important;
+    color:#f0c36b!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:6px!important;
+    margin-bottom:8px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article{
+    padding:7px 8px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    border-radius:10px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445{
+    min-width:0!important;
+    width:100%!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th,
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td{
+    padding-left:6px!important;
+    padding-right:6px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:first-child,
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:first-child{
+    width:10%!important;
+    padding-left:8px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th small{
+    color:rgba(240,195,107,.78)!important;
+    font-size:.45rem!important;
+    letter-spacing:.08em!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445{
+    min-width:1080px!important;
+  }
+}

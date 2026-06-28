@@ -25,7 +25,7 @@ document.documentElement.classList.add(
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_DESKTOP_MONTHLY_US_HISTORY_V577" name="app-build"/>
+<meta content="ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -78,7 +78,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=desktop-monthly-us-history-v577" rel="stylesheet"/>
+<link href="style.css?v=desktop-monthly-us-brl-toggle-v578" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -183,7 +183,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=desktop-monthly-us-history-v577"></script>
+<script defer="" src="app.js?v=desktop-monthly-us-brl-toggle-v578"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -564,7 +564,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=desktop-monthly-us-history-v577" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=desktop-monthly-us-brl-toggle-v578" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -938,9 +938,16 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <h3 id="monthlyIndicatorsTitleV445">Indicadores por mês</h3>
 <p>CDI, IPCA, Ibov, Dólar e bolsas dos EUA no mesmo painel.</p>
 </div>
+<div class="monthly-indicators-controls-v578">
 <div aria-label="Período dos indicadores mensais" class="monthly-indicators-tabs-v445" role="group">
 <button aria-pressed="true" class="active" data-monthly-indicators-range-v445="year" type="button">2026</button>
 <button aria-pressed="false" data-monthly-indicators-range-v445="12m" type="button">12M</button>
+</div>
+<div aria-label="Moeda das bolsas dos EUA" class="monthly-us-currency-toggle-v578" role="group">
+<span>EUA</span>
+<button aria-pressed="true" class="active" data-monthly-us-currency-v578="usd" type="button">USD</button>
+<button aria-pressed="false" data-monthly-us-currency-v578="brl" type="button">BRL</button>
+</div>
 </div>
 </header>
 <div aria-label="Selecionar indicador mensal" class="monthly-indicators-picker-v446" role="group">
