@@ -74325,3 +74325,79 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     transform:none!important;
   }
 }
+
+/* =========================================================
+   PATCH v603 — KPIs do header em linha unica real
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-header-kpi-single-row-v603 body header.site-header-clean,
+  html.desktop-header-kpi-single-row-v603 body .site-header-clean.site-header-v217{
+    height:100px!important;
+    min-height:100px!important;
+    max-height:100px!important;
+    padding-top:14px!important;
+    padding-bottom:14px!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582{
+    grid-template-columns:176px 176px 206px!important;
+    grid-template-rows:72px!important;
+    grid-auto-rows:0!important;
+    align-items:stretch!important;
+    height:72px!important;
+    min-height:72px!important;
+    max-height:72px!important;
+    overflow:visible!important;
+    transform:none!important;
+  }
+
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582 .kpi-pipeline,
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582 .kpi-best,
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582 .kpi-worst{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-width:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582 .kpi-fundos,
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582 .kpi-categorias,
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582 .kpi-pl{
+    display:flex!important;
+    height:72px!important;
+    min-height:72px!important;
+    max-height:72px!important;
+    padding:9px 13px 10px!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-header-kpi-single-row-v603 body #sec-fundos.section-gap{
+    margin-top:4px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-header-kpi-single-row-v603 body header.site-header-clean,
+  html.desktop-header-kpi-single-row-v603 body .site-header-clean.site-header-v217{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+
+  html.desktop-header-kpi-single-row-v603 body #sec-kpi.header-kpi-strip-v582{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+}
