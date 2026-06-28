@@ -53,13 +53,14 @@ document.documentElement.classList.add(
   'mobile-audience-chips-v612',
   'mobile-ranking-filters-balanced-v613',
   'mobile-ranking-filter-strip-v615',
+  'mobile-ranking-filter-force-row-v616',
   'mobile-ranking-filter-list-v614'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_MOBILE_RANKING_FILTER_STRIP_V615" name="app-build"/>
+<meta content="ELTAUM_MOBILE_RANKING_FILTER_FORCE_ROW_V616" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -119,7 +120,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=mobile-ranking-filter-strip-v615" rel="stylesheet"/>
+<link href="style.css?v=mobile-ranking-filter-force-row-v616" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -224,7 +225,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=mobile-ranking-filter-strip-v615"></script>
+<script defer="" src="app.js?v=mobile-ranking-filter-force-row-v616"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -605,7 +606,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=mobile-ranking-filter-strip-v615" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=mobile-ranking-filter-force-row-v616" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -911,7 +912,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <select aria-label="Selecionar o período de análise dos rankings" class="ranking-select-v136" id="rankingPeriodSelectV136">
 <option value="mes">Mês</option>
 <option value="ano">Ano</option>
-<option selected="" value="12m">12 meses</option>
+<option selected="" value="12m">12M</option>
 </select>
 </div>
 <div class="ranking-control-card-v136">

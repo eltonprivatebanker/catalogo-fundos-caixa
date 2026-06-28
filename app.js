@@ -27056,7 +27056,7 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v607 — Mobile: ranking renderiza sem herdar o renderizador desktop */
 (function mobileRankingRenderRestoreV607(){
-  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_STRIP_V615';
+  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_FORCE_ROW_V616';
   var PATCH_CLASS = 'mobile-ranking-render-restore-v607';
   var PATCH_CLASS_V608 = 'mobile-filter-header-clean-v608';
   var PATCH_CLASS_V609 = 'mobile-filters-functional-v609';
@@ -27065,6 +27065,7 @@ function buildDetailPanel(r,colspan){
   var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
   var PATCH_CLASS_V614 = 'mobile-ranking-filter-list-v614';
   var PATCH_CLASS_V615 = 'mobile-ranking-filter-strip-v615';
+  var PATCH_CLASS_V616 = 'mobile-ranking-filter-force-row-v616';
   function isMobile(){
     return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
   }
@@ -27073,7 +27074,7 @@ function buildDetailPanel(r,colspan){
   }
   function restore(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615, PATCH_CLASS_V616);
     document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
     document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
       node.remove();
@@ -27100,13 +27101,14 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v609 — Mobile: filtros reais, sem botoes visuais inertes */
 (function mobileFunctionalFiltersV609(){
-  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_STRIP_V615';
+  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_FORCE_ROW_V616';
   var PATCH_CLASS = 'mobile-filters-functional-v609';
   var PATCH_CLASS_V610 = 'mobile-filters-reset-v610';
   var PATCH_CLASS_V611 = 'mobile-filters-origin-clean-v611';
   var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
   var PATCH_CLASS_V614 = 'mobile-ranking-filter-list-v614';
   var PATCH_CLASS_V615 = 'mobile-ranking-filter-strip-v615';
+  var PATCH_CLASS_V616 = 'mobile-ranking-filter-force-row-v616';
   var AUDIENCE_OPTIONS = [
     ['', 'Todos'],
     ['PF', 'Pessoa Física'],
@@ -27251,7 +27253,7 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615, PATCH_CLASS_V616);
     document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
     document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
       node.remove();
@@ -27367,4 +27369,150 @@ function buildDetailPanel(r,colspan){
     sync: sync,
     apply: applyFromMobile
   };
+})();
+
+/* PATCH v617 — Mobile ranking: toolbar independente sincronizada com selects originais */
+(function rankingMobileToolbarV617(){
+  var IDS = {
+    periodOriginal: 'rankingPeriodSelectV136',
+    classOriginal: 'rankingClassSelectV136',
+    riskOriginal: 'rankingRiskSelectV198',
+    periodMobile: 'rankingMobilePeriodV617',
+    classMobile: 'rankingMobileClassV617',
+    riskMobile: 'rankingMobileRiskV617'
+  };
+
+  function qs(id){ return document.getElementById(id); }
+  function isMobile(){ return !window.matchMedia || window.matchMedia('(max-width: 768px)').matches; }
+
+  function labelForSelect(sourceId, option){
+    var value = String(option && option.value || '');
+    var text = String(option && option.textContent || '').replace(/\s+/g,' ').trim();
+
+    if(sourceId === IDS.periodOriginal){
+      if(value === '12m') return '12M';
+      if(value === 'ano') return 'Ano';
+      if(value === 'mes') return 'Mês';
+    }
+
+    if(sourceId === IDS.classOriginal){
+      if(value === 'todos') return 'Todos';
+      if(value === 'sem-fmp') return 'Sem FMP';
+      if(value === 'renda-fixa-simples') return 'RF Simples';
+      if(value === 'renda-fixa-referenciado') return 'RF Ref.';
+      if(value === 'renda-fixa-curto-prazo') return 'RF Curto';
+      if(value === 'fundo-de-indice') return 'Índice';
+    }
+
+    if(sourceId === IDS.riskOriginal){
+      if(value === '') return 'Todos os perfis';
+      if(text.toLowerCase() === 'todos perfis') return 'Todos os perfis';
+    }
+
+    return text || value || '—';
+  }
+
+  function copyOptions(source, target){
+    if(!source || !target) return;
+    var selected = target.value || source.value;
+    target.innerHTML = '';
+    Array.prototype.forEach.call(source.options || [], function(option){
+      var clone = document.createElement('option');
+      clone.value = option.value;
+      clone.textContent = labelForSelect(source.id, option);
+      if(option.disabled) clone.disabled = true;
+      if(option.title) clone.title = option.title;
+      target.appendChild(clone);
+    });
+    target.value = source.value || selected;
+  }
+
+  function createControl(labelText, id, extraClass){
+    var wrap = document.createElement('div');
+    wrap.className = 'ranking-mobile-control-v617' + (extraClass ? ' ' + extraClass : '');
+
+    var label = document.createElement('label');
+    label.className = 'ranking-mobile-label-v617';
+    label.setAttribute('for', id);
+    label.textContent = labelText;
+
+    var select = document.createElement('select');
+    select.className = 'ranking-mobile-select-v617';
+    select.id = id;
+    select.setAttribute('aria-label', labelText);
+
+    wrap.appendChild(label);
+    wrap.appendChild(select);
+    return wrap;
+  }
+
+  function ensureToolbar(){
+    var section = qs('rankingsSection');
+    var oldToolbar = section ? section.querySelector('.ranking-toolbar-v136') : null;
+    if(!section || !oldToolbar) return null;
+
+    var toolbar = section.querySelector('.ranking-mobile-toolbar-v617');
+    if(!toolbar){
+      toolbar = document.createElement('div');
+      toolbar.className = 'ranking-mobile-toolbar-v617';
+      toolbar.setAttribute('role','group');
+      toolbar.setAttribute('aria-label','Filtros dos rankings no mobile');
+      toolbar.appendChild(createControl('Período', IDS.periodMobile, 'ranking-mobile-control-period-v617'));
+      toolbar.appendChild(createControl('Universo', IDS.classMobile, 'ranking-mobile-control-class-v617'));
+      toolbar.appendChild(createControl('Risco', IDS.riskMobile, 'ranking-mobile-control-risk-v617'));
+      oldToolbar.parentNode.insertBefore(toolbar, oldToolbar);
+    }
+    return toolbar;
+  }
+
+  function syncOriginalToMobile(){
+    var toolbar = ensureToolbar();
+    if(!toolbar) return;
+
+    copyOptions(qs(IDS.periodOriginal), qs(IDS.periodMobile));
+    copyOptions(qs(IDS.classOriginal), qs(IDS.classMobile));
+    copyOptions(qs(IDS.riskOriginal), qs(IDS.riskMobile));
+  }
+
+  function setOriginalValue(originalId, value){
+    var original = qs(originalId);
+    if(!original || original.value === value) return;
+    original.value = value;
+    try{ original.dispatchEvent(new Event('input', {bubbles:true})); }catch(_){ }
+    try{ original.dispatchEvent(new Event('change', {bubbles:true})); }catch(_){ }
+  }
+
+  function bind(){
+    var map = [
+      [IDS.periodMobile, IDS.periodOriginal],
+      [IDS.classMobile, IDS.classOriginal],
+      [IDS.riskMobile, IDS.riskOriginal]
+    ];
+
+    map.forEach(function(pair){
+      var mobile = qs(pair[0]);
+      var original = qs(pair[1]);
+      if(mobile && !mobile.__rankingMobileV617Bound){
+        mobile.__rankingMobileV617Bound = true;
+        mobile.addEventListener('change', function(){ setOriginalValue(pair[1], mobile.value); });
+      }
+      if(original && !original.__rankingMobileV617Bound){
+        original.__rankingMobileV617Bound = true;
+        original.addEventListener('change', syncOriginalToMobile);
+      }
+    });
+  }
+
+  function apply(){
+    document.documentElement.classList.add('mobile-ranking-independent-v617');
+    syncOriginalToMobile();
+    bind();
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_INDEPENDENT_V617';
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [80, 300, 900, 1800, 3200, 7000, 12000].forEach(function(delay){ setTimeout(apply, delay); });
 })();
