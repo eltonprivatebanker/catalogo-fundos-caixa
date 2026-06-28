@@ -76507,3 +76507,20 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     padding-right:14px!important;
   }
 }
+
+
+/* PATCH v621 — Mobile: ocultar título redundante "Fundos disponíveis"
+   Ganha área útil no catálogo mobile sem tocar no desktop. */
+@media (max-width:768px){
+  body #sec-fundos > .section-title{
+    display:none!important;
+  }
+
+  body #sec-fundos{
+    margin-top:14px!important;
+  }
+
+  body #sec-fundos #fundFilterShell{
+    margin-top:0!important;
+  }
+}
