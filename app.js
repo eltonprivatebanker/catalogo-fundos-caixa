@@ -27056,7 +27056,7 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v607 — Mobile: ranking renderiza sem herdar o renderizador desktop */
 (function mobileRankingRenderRestoreV607(){
-  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_LIST_V614';
+  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_STRIP_V615';
   var PATCH_CLASS = 'mobile-ranking-render-restore-v607';
   var PATCH_CLASS_V608 = 'mobile-filter-header-clean-v608';
   var PATCH_CLASS_V609 = 'mobile-filters-functional-v609';
@@ -27064,6 +27064,7 @@ function buildDetailPanel(r,colspan){
   var PATCH_CLASS_V611 = 'mobile-filters-origin-clean-v611';
   var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
   var PATCH_CLASS_V614 = 'mobile-ranking-filter-list-v614';
+  var PATCH_CLASS_V615 = 'mobile-ranking-filter-strip-v615';
   function isMobile(){
     return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
   }
@@ -27072,7 +27073,7 @@ function buildDetailPanel(r,colspan){
   }
   function restore(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615);
     document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
     document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
       node.remove();
@@ -27099,12 +27100,13 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v609 — Mobile: filtros reais, sem botoes visuais inertes */
 (function mobileFunctionalFiltersV609(){
-  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_LIST_V614';
+  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_STRIP_V615';
   var PATCH_CLASS = 'mobile-filters-functional-v609';
   var PATCH_CLASS_V610 = 'mobile-filters-reset-v610';
   var PATCH_CLASS_V611 = 'mobile-filters-origin-clean-v611';
   var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
   var PATCH_CLASS_V614 = 'mobile-ranking-filter-list-v614';
+  var PATCH_CLASS_V615 = 'mobile-ranking-filter-strip-v615';
   var AUDIENCE_OPTIONS = [
     ['', 'Todos'],
     ['PF', 'Pessoa Física'],
@@ -27249,7 +27251,7 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615);
     document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
     document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
       node.remove();

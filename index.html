@@ -52,13 +52,14 @@ document.documentElement.classList.add(
   'mobile-filters-origin-clean-v611',
   'mobile-audience-chips-v612',
   'mobile-ranking-filters-balanced-v613',
+  'mobile-ranking-filter-strip-v615',
   'mobile-ranking-filter-list-v614'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_MOBILE_RANKING_FILTER_LIST_V614" name="app-build"/>
+<meta content="ELTAUM_MOBILE_RANKING_FILTER_STRIP_V615" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -118,7 +119,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=mobile-ranking-filter-list-v614" rel="stylesheet"/>
+<link href="style.css?v=mobile-ranking-filter-strip-v615" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -223,7 +224,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=mobile-ranking-filter-list-v614"></script>
+<script defer="" src="app.js?v=mobile-ranking-filter-strip-v615"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -604,7 +605,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=mobile-ranking-filter-list-v614" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=mobile-ranking-filter-strip-v615" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -936,7 +937,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <div class="ranking-control-card-v136 ranking-risk-control-v198">
 <label for="rankingRiskSelectV198">Perfil de risco</label>
 <select aria-label="Filtrar rankings pelo perfil de risco do fundo" class="ranking-select-v136" id="rankingRiskSelectV198">
-<option value="">Todos os perfis</option>
+<option value="">Todos perfis</option>
 <option value="Conservador">Conservador</option>
 <option value="Moderado">Moderado</option>
 <option value="Arrojado">Arrojado</option>
