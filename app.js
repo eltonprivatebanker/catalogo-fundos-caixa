@@ -27045,9 +27045,10 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v607 — Mobile: ranking renderiza sem herdar o renderizador desktop */
 (function mobileRankingRenderRestoreV607(){
-  var BUILD = 'ELTAUM_MOBILE_FILTER_HEADER_CLEAN_V608';
+  var BUILD = 'ELTAUM_MOBILE_FILTERS_FUNCTIONAL_V609';
   var PATCH_CLASS = 'mobile-ranking-render-restore-v607';
   var PATCH_CLASS_V608 = 'mobile-filter-header-clean-v608';
+  var PATCH_CLASS_V609 = 'mobile-filters-functional-v609';
   function isMobile(){
     return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
   }
@@ -27056,7 +27057,7 @@ function buildDetailPanel(r,colspan){
   }
   function restore(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609);
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
     if(typeof window.__renderRankingsMobileBaseV607 === 'function'){
@@ -27074,4 +27075,224 @@ function buildDetailPanel(r,colspan){
   [60, 160, 360, 800, 1400, 2400, 4200, 7000, 12000, 22000].forEach(function(delay){
     setTimeout(restore, delay);
   });
+})();
+
+
+/* PATCH v609 — Mobile: filtros reais, sem botoes visuais inertes */
+(function mobileFunctionalFiltersV609(){
+  var BUILD = 'ELTAUM_MOBILE_FILTERS_FUNCTIONAL_V609';
+  var PATCH_CLASS = 'mobile-filters-functional-v609';
+  var AUDIENCE_OPTIONS = [
+    ['', 'Todos'],
+    ['PF', 'Pessoa Física'],
+    ['PJ', 'Pessoa Jurídica'],
+    ['Private', 'Private'],
+    ['Qualificado', 'Qualificado'],
+    ['Institucional', 'Institucional']
+  ];
+  var CATEGORY_LABELS = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  }
+  function q(sel, root){
+    return (root || document).querySelector(sel);
+  }
+  function qa(sel, root){
+    return Array.from((root || document).querySelectorAll(sel));
+  }
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^A-Z0-9]+/gi,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+  function activeCategoryCanon(){
+    try{ return canon(activeCat || ''); }catch(e){ return ''; }
+  }
+  function findRawCategory(canonTarget){
+    if(!canonTarget) return '';
+    try{
+      if(Array.isArray(allRows)){
+        var found = allRows.find(function(row){
+          return canon(row && row.Categoria) === canonTarget || canon(row && row['Categoria']) === canonTarget;
+        });
+        if(found) return String(found.Categoria || found['Categoria'] || '').trim();
+      }
+    }catch(e){}
+    return canonTarget;
+  }
+  function sortMode(){
+    try{
+      return localStorage.getItem('mobileSortModeV81') || localStorage.getItem('mobileSortModeV75') || 'base';
+    }catch(e){
+      return 'base';
+    }
+  }
+  function setSortMode(mode){
+    var value = mode || 'base';
+    try{
+      localStorage.setItem('mobileSortModeV81', value);
+      localStorage.setItem('mobileSortModeV75', value);
+    }catch(e){}
+    try{ window.__mobileSortModeV81 = value; }catch(e){}
+  }
+  function optionHtml(pair){
+    return '<option value="' + String(pair[0]).replace(/"/g,'&quot;') + '">' + pair[1] + '</option>';
+  }
+  function ensureAudienceSelect(){
+    var shell = q('#mobileCategorySelectShellV74');
+    if(!shell) return null;
+    var existing = q('#mobileAudienceSelectV609', shell);
+    if(existing) return existing;
+
+    var row = document.createElement('label');
+    row.className = 'mobile-audience-select-v609 filter-list-row-v482';
+    row.setAttribute('for','mobileAudienceSelectV609');
+    row.innerHTML =
+      '<span class="filter-label-v482">Público-alvo</span>' +
+      '<select aria-label="Selecionar público-alvo no celular" id="mobileAudienceSelectV609">' +
+        AUDIENCE_OPTIONS.map(optionHtml).join('') +
+      '</select>' +
+      '<span aria-hidden="true" class="mobile-audience-arrow-v609">⌄</span>';
+
+    var noData = q('#mobileNoDataRowV442', shell);
+    var category = q('.mobile-category-select-wrap-v74', shell);
+    if(noData && noData.nextSibling) shell.insertBefore(row, noData.nextSibling);
+    else if(category) shell.insertBefore(row, category);
+    else shell.insertBefore(row, shell.firstChild);
+    return q('#mobileAudienceSelectV609', shell);
+  }
+  function setSelectValue(id, value){
+    var select = q('#' + id);
+    if(select && select.value !== String(value || '')) select.value = String(value || '');
+  }
+  function selectLabel(select){
+    var option = select && select.options ? select.options[select.selectedIndex] : null;
+    return option ? option.textContent.trim() : '';
+  }
+  function syncVisualRows(){
+    ['mobileAudienceSelectV609','mobileCategorySelectV74','mobileRiskSelectV198','mobileSortSelectV75'].forEach(function(id){
+      var select = q('#' + id);
+      if(!select) return;
+      var host = select.closest('label') || select.parentElement;
+      if(!host) return;
+      var value = q(':scope > .filter-value-v482', host);
+      if(value) value.textContent = selectLabel(select);
+    });
+  }
+  function sync(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = q('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+    ensureAudienceSelect();
+    var audience = '';
+    var risk = '';
+    var hidden = false;
+    try{ audience = String(activePerfil || ''); }catch(e){}
+    try{ risk = String(activeRisco || ''); }catch(e){}
+    try{ hidden = !!hideSemDados; }catch(e){}
+    setSelectValue('mobileAudienceSelectV609', audience);
+    setSelectValue('mobileCategorySelectV74', activeCategoryCanon());
+    setSelectValue('mobileRiskSelectV198', risk);
+    setSelectValue('mobileSortSelectV75', sortMode());
+    var noData = q('#toggleSemDados');
+    if(noData) noData.checked = hidden;
+    var status = q('#mobileCategorySelectStatusV74');
+    if(status){
+      var cat = activeCategoryCanon();
+      status.textContent = cat ? (CATEGORY_LABELS[cat] || cat) : 'Todos';
+    }
+    syncVisualRows();
+    qa('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]').forEach(function(btn){
+      var val = String(btn.dataset.audienceV488 || '');
+      var on = val === audience;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function applyFromMobile(){
+    if(!isMobile()) return;
+    var cat = q('#mobileCategorySelectV74')?.value || '';
+    var audience = q('#mobileAudienceSelectV609')?.value || '';
+    var risk = q('#mobileRiskSelectV198')?.value || '';
+    var mode = q('#mobileSortSelectV75')?.value || 'base';
+    var noData = !!q('#toggleSemDados')?.checked;
+    try{
+      activeCat = cat ? findRawCategory(cat) : '';
+      activePerfil = audience;
+      activeRisco = risk;
+      activeBenchmark = '';
+      hideSemDados = noData;
+      currentPage = 1;
+      activeCdiSort = null;
+      sortCol = -1;
+      sortDir = -1;
+      window.__favListMode = false;
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'mobile-functional-v609';
+      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+    }catch(e){}
+    setSortMode(mode);
+    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+    try{ if(typeof updateCdiSortButtons === 'function') updateCdiSortButtons(); }catch(e){}
+    try{ if(typeof updateMobileSortButtons === 'function') updateMobileSortButtons(); }catch(e){}
+    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){ console.error('mobile filters v609', e); }
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+    sync();
+  }
+  function isManagedTarget(target){
+    return !!(target && target.closest && target.closest(
+      '#mobileAudienceSelectV609,#mobileCategorySelectV74,#mobileRiskSelectV198,#mobileSortSelectV75,#toggleSemDados'
+    ));
+  }
+  function bind(){
+    sync();
+    if(document.documentElement.dataset.mobileFiltersV609Bound === '1') return;
+    document.documentElement.dataset.mobileFiltersV609Bound = '1';
+    document.addEventListener('change', function(ev){
+      if(!isMobile() || !isManagedTarget(ev.target)) return;
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      setTimeout(applyFromMobile, 0);
+    }, true);
+    document.addEventListener('click', function(ev){
+      if(!isMobile()) return;
+      var oldAudience = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]') : null;
+      if(!oldAudience) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      var select = ensureAudienceSelect();
+      if(select){
+        select.value = String(oldAudience.dataset.audienceV488 || '');
+        applyFromMobile();
+      }
+    }, true);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, {once:true});
+  else bind();
+  window.addEventListener('load', bind, {once:true});
+  window.addEventListener('pageshow', sync, {passive:true});
+  window.addEventListener('resize', sync, {passive:true});
+  [80, 220, 520, 1100, 2200, 4200, 8000, 14000].forEach(function(delay){
+    setTimeout(bind, delay);
+  });
+  window.__ELTAUM_MOBILE_FILTERS_FUNCTIONAL_V609__ = {
+    sync: sync,
+    apply: applyFromMobile
+  };
 })();
