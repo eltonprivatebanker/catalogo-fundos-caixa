@@ -71068,7 +71068,7 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     min-width:0!important;
     min-height:74px!important;
     display:grid!important;
-    grid-template-columns:54px 42px minmax(0,1fr) 104px 82px!important;
+    grid-template-columns:54px 42px minmax(0,1fr) 128px 116px!important;
     align-items:center!important;
     gap:10px!important;
     padding:10px 12px!important;
@@ -71080,7 +71080,7 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
 
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-podium-row.is-leader{
     grid-column:1 / -1!important;
-    grid-template-columns:76px 48px minmax(0,1fr) 122px 92px!important;
+    grid-template-columns:76px 48px minmax(0,1fr) 138px 124px!important;
     min-height:86px!important;
     padding:13px 16px!important;
     background:
@@ -71170,6 +71170,7 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-cdi{
     text-align:right!important;
     white-space:nowrap!important;
+    min-width:0!important;
   }
 
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-pl{
@@ -71177,14 +71178,33 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   }
 
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return{
+    display:grid!important;
+    gap:4px!important;
+    justify-items:end!important;
+  }
+
+  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return span,
+  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-cdi-label{
+    display:block!important;
+    color:rgba(178,191,222,.62)!important;
+    font-size:.52rem!important;
+    font-weight:850!important;
+    letter-spacing:.08em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return strong{
+    display:block!important;
     font-size:.88rem!important;
     font-weight:950!important;
     letter-spacing:-.01em!important;
+    line-height:1!important;
   }
 
-  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return.pos{color:#30d796!important;}
-  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return.neg{color:#ff6f8b!important;}
-  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return.zero{color:#dfe7f3!important;}
+  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return.pos strong{color:#30d796!important;}
+  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return.neg strong{color:#ff6f8b!important;}
+  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-return.zero strong{color:#dfe7f3!important;}
 
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-cdi strong{
     display:block!important;
@@ -71192,9 +71212,10 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.84rem!important;
     font-weight:950!important;
     line-height:1!important;
+    margin-top:4px!important;
   }
 
-  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-cdi span{
+  html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-cdi .ranking-v562-cdi-bar{
     display:block!important;
     width:58px!important;
     height:5px!important;
@@ -71304,7 +71325,7 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-podium-row,
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-podium-row.is-leader{
     grid-column:1!important;
-    grid-template-columns:58px 40px minmax(0,1fr) 96px 74px!important;
+    grid-template-columns:58px 40px minmax(0,1fr) 122px 110px!important;
   }
 
   html.desktop-ranking-podium-v562 body #rankingsSection .ranking-v562-alert-list{

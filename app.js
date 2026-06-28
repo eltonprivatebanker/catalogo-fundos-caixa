@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3560,6 +3560,12 @@ function setCdiSort(dir){
       else if(abs > 20) n = n / 100;
       return Number.isFinite(n) ? n : null;
     }
+    if(periodo === 'ano'){
+      if(abs > 10000) n = n / 1000;
+      else if(abs > 1000) n = n / 100;
+      else if(abs > 25) n = n / 10;
+      return Number.isFinite(n) ? n : null;
+    }
     if(abs > 10000) n = n / 1000;
     else if(abs > 1000) n = n / 100;
     else if(abs > 80) n = n / 10;
@@ -3594,6 +3600,12 @@ function setCdiSort(dir){
     const ratio = cdiRatioNumber(r, periodo);
     return ratio === null ? '—' : ratio.toLocaleString('pt-BR',{maximumFractionDigits:0}) + '%';
   }
+  function retornoLabel(periodo){
+    return periodo === 'mes' ? 'Retorno no mês' : periodo === 'ano' ? 'Retorno no ano' : 'Retorno em 12M';
+  }
+  function cdiLabel(periodo){
+    return periodo === 'mes' ? '% do CDI no mês' : periodo === 'ano' ? '% do CDI no ano' : '% do CDI em 12M';
+  }
   function riskOk(r){
     if(typeof activeRankRisk === 'undefined' || !activeRankRisk) return true;
     return typeof perfilRiscoCorrespondeV198 === 'function' ? perfilRiscoCorrespondeV198(r['Perfil de Risco'], activeRankRisk) : true;
@@ -3624,9 +3636,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_PODIUM_V562';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_SEMANTICO_CDI_V563';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -3670,10 +3682,11 @@ function setCdiSort(dir){
         '<strong title="' + esc(name) + '">' + esc(i === 0 ? name : compactFund(name)) + '</strong>' +
         '<small>' + esc(shortCat(item.cat)) + '</small>' +
       '</div>' +
-      '<div class="ranking-v562-return ' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</div>' +
+      '<div class="ranking-v562-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></div>' +
       '<div class="ranking-v562-cdi">' +
+        '<span class="ranking-v562-cdi-label">' + esc(cdiLabel(periodo)) + '</span>' +
         '<strong>' + esc(cdiRatioTxt(r, periodo)) + '</strong>' +
-        '<span><i style="width:' + width + '%"></i></span>' +
+        '<span class="ranking-v562-cdi-bar"><i style="width:' + width + '%"></i></span>' +
       '</div>' +
     '</article>';
   }
@@ -3717,7 +3730,7 @@ function setCdiSort(dir){
       '</section>' +
       '<section class="ranking-v562-board" aria-label="Melhores por categoria">' +
         '<div class="ranking-v562-board-head">' +
-          '<div><h3>Melhores por categoria</h3><p>Fundo vencedor em cada classe, ordenado pelo retorno do período selecionado.</p></div>' +
+          '<div><h3>Melhores por categoria</h3><p>Para cada categoria, mostra o fundo com maior retorno e quanto esse retorno representa do CDI no período selecionado.</p></div>' +
           periodTabs(periodo) +
         '</div>' +
         '<div class="ranking-v562-podium">' + (boardRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
@@ -3914,6 +3927,12 @@ function setCdiSort(dir){
     if(periodo === 'mes'){
       if(abs > 1000) n = n / 10000;
       else if(abs > 20) n = n / 100;
+      return Number.isFinite(n) ? n : null;
+    }
+    if(periodo === 'ano'){
+      if(abs > 10000) n = n / 1000;
+      else if(abs > 1000) n = n / 100;
+      else if(abs > 25) n = n / 10;
       return Number.isFinite(n) ? n : null;
     }
     if(abs > 10000) n = n / 1000;
@@ -25578,7 +25597,7 @@ function buildDetailPanel(r,colspan){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 final', e); }
