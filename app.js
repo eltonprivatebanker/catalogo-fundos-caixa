@@ -27056,12 +27056,13 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v607 — Mobile: ranking renderiza sem herdar o renderizador desktop */
 (function mobileRankingRenderRestoreV607(){
-  var BUILD = 'ELTAUM_MOBILE_FILTERS_ORIGIN_CLEAN_V611';
+  var BUILD = 'ELTAUM_MOBILE_AUDIENCE_CHIPS_V612';
   var PATCH_CLASS = 'mobile-ranking-render-restore-v607';
   var PATCH_CLASS_V608 = 'mobile-filter-header-clean-v608';
   var PATCH_CLASS_V609 = 'mobile-filters-functional-v609';
   var PATCH_CLASS_V610 = 'mobile-filters-reset-v610';
   var PATCH_CLASS_V611 = 'mobile-filters-origin-clean-v611';
+  var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
   function isMobile(){
     return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
   }
@@ -27070,7 +27071,7 @@ function buildDetailPanel(r,colspan){
   }
   function restore(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609, PATCH_CLASS_V610, PATCH_CLASS_V611);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612);
     document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
     document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
       node.remove();
@@ -27097,10 +27098,11 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v609 — Mobile: filtros reais, sem botoes visuais inertes */
 (function mobileFunctionalFiltersV609(){
-  var BUILD = 'ELTAUM_MOBILE_FILTERS_ORIGIN_CLEAN_V611';
+  var BUILD = 'ELTAUM_MOBILE_AUDIENCE_CHIPS_V612';
   var PATCH_CLASS = 'mobile-filters-functional-v609';
   var PATCH_CLASS_V610 = 'mobile-filters-reset-v610';
   var PATCH_CLASS_V611 = 'mobile-filters-origin-clean-v611';
+  var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
   var AUDIENCE_OPTIONS = [
     ['', 'Todos'],
     ['PF', 'Pessoa Física'],
@@ -27176,17 +27178,24 @@ function buildDetailPanel(r,colspan){
     var shell = q('#mobileCategorySelectShellV74');
     if(!shell) return null;
     var existing = q('#mobileAudienceSelectV609', shell);
-    if(existing) return existing;
+    if(existing){
+      ensureAudienceChips(existing);
+      return existing;
+    }
 
-    var row = document.createElement('label');
-    row.className = 'mobile-audience-select-v609 filter-list-row-v482';
-    row.setAttribute('for','mobileAudienceSelectV609');
+    var row = document.createElement('div');
+    row.className = 'mobile-audience-select-v609 mobile-audience-chips-v612 filter-list-row-v482';
     row.innerHTML =
       '<span class="filter-label-v482">Público-alvo</span>' +
       '<select aria-label="Selecionar público-alvo no celular" id="mobileAudienceSelectV609">' +
         AUDIENCE_OPTIONS.map(optionHtml).join('') +
       '</select>' +
-      '<span aria-hidden="true" class="mobile-audience-arrow-v609">⌄</span>';
+      '<span aria-label="Selecionar público-alvo" class="mobile-audience-chip-row-v612" role="group">' +
+        AUDIENCE_OPTIONS.map(function(pair, index){
+          var label = pair[0] === '' ? 'Todos' : pair[0];
+          return '<button aria-pressed="' + (index === 0 ? 'true' : 'false') + '" class="mobile-audience-chip-v612' + (index === 0 ? ' active' : '') + '" data-audience-v612="' + String(pair[0]).replace(/"/g,'&quot;') + '" type="button">' + label + '</button>';
+        }).join('') +
+      '</span>';
 
     var noData = q('#mobileNoDataRowV442', shell);
     var category = q('.mobile-category-select-wrap-v74', shell);
@@ -27194,6 +27203,29 @@ function buildDetailPanel(r,colspan){
     else if(category) shell.insertBefore(row, category);
     else shell.insertBefore(row, shell.firstChild);
     return q('#mobileAudienceSelectV609', shell);
+  }
+  function ensureAudienceChips(select){
+    if(!select) return;
+    var host = select.closest('label') || select.parentElement;
+    if(!host) return;
+    host.classList.add('mobile-audience-chips-v612');
+    if(q(':scope > .mobile-audience-chip-row-v612', host)) return;
+    var row = document.createElement('span');
+    row.className = 'mobile-audience-chip-row-v612';
+    row.setAttribute('role','group');
+    row.setAttribute('aria-label','Selecionar público-alvo');
+    row.innerHTML = AUDIENCE_OPTIONS.map(function(pair, index){
+      var label = pair[0] === '' ? 'Todos' : pair[0];
+      return '<button aria-pressed="' + (index === 0 ? 'true' : 'false') + '" class="mobile-audience-chip-v612' + (index === 0 ? ' active' : '') + '" data-audience-v612="' + String(pair[0]).replace(/"/g,'&quot;') + '" type="button">' + label + '</button>';
+    }).join('');
+    host.appendChild(row);
+  }
+  function syncAudienceChips(value){
+    qa('#sec-fundos .mobile-audience-chip-v612[data-audience-v612]').forEach(function(btn){
+      var on = String(btn.dataset.audienceV612 || '') === String(value || '');
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
   }
   function setSelectValue(id, value){
     var select = q('#' + id);
@@ -27215,7 +27247,7 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V610, PATCH_CLASS_V611);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612);
     document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
     document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
       node.remove();
@@ -27230,6 +27262,7 @@ function buildDetailPanel(r,colspan){
     try{ risk = String(activeRisco || ''); }catch(e){}
     try{ hidden = !!hideSemDados; }catch(e){}
     setSelectValue('mobileAudienceSelectV609', audience);
+    syncAudienceChips(audience);
     setSelectValue('mobileCategorySelectV74', activeCategoryCanon());
     setSelectValue('mobileRiskSelectV198', risk);
     setSelectValue('mobileSortSelectV75', sortMode());
@@ -27294,6 +27327,18 @@ function buildDetailPanel(r,colspan){
     }, true);
     document.addEventListener('click', function(ev){
       if(!isMobile()) return;
+      var audienceChip = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .mobile-audience-chip-v612[data-audience-v612]') : null;
+      if(audienceChip){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+        var managedSelect = ensureAudienceSelect();
+        if(managedSelect){
+          managedSelect.value = String(audienceChip.dataset.audienceV612 || '');
+          applyFromMobile();
+        }
+        return;
+      }
       var oldAudience = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]') : null;
       if(!oldAudience) return;
       ev.preventDefault();

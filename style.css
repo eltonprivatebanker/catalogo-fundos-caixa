@@ -112,6 +112,146 @@
   }
 }
 
+/* PATCH v612 — Mobile: trava final para publico-alvo em chips */
+@media (max-width:768px){
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-select-v609{
+    gap:8px!important;
+    padding:10px 0 9px!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-select-v609 > #mobileAudienceSelectV609{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    min-width:1px!important;
+    min-height:1px!important;
+    max-width:1px!important;
+    max-height:1px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    opacity:0!important;
+    pointer-events:none!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-row-v612{
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:32px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 1px 2px!important;
+    scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-row-v612::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-v612{
+    appearance:none!important;
+    -webkit-appearance:none!important;
+    flex:0 0 auto!important;
+    min-height:30px!important;
+    height:30px!important;
+    padding:0 10px!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:9px!important;
+    background:rgba(255,255,255,.075)!important;
+    color:#eef2fb!important;
+    box-shadow:none!important;
+    font:850 .70rem/1 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    letter-spacing:-.02em!important;
+    white-space:nowrap!important;
+    cursor:pointer!important;
+    pointer-events:auto!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-v612.active,
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-v612[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.72)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.24),rgba(200,151,58,.12))!important;
+    color:#ffe1a1!important;
+    box-shadow:inset 0 0 0 1px rgba(200,151,58,.18)!important;
+  }
+}
+
+/* PATCH v612 — Mobile: publico-alvo em chips na propria tela */
+@media (max-width:768px){
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-select-v609{
+    gap:8px!important;
+    padding:10px 0 9px!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-select-v609 > #mobileAudienceSelectV609{
+    position:absolute!important;
+    width:1px!important;
+    height:1px!important;
+    min-width:1px!important;
+    min-height:1px!important;
+    max-width:1px!important;
+    max-height:1px!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    opacity:0!important;
+    pointer-events:none!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-row-v612{
+    display:flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    width:100%!important;
+    max-width:100%!important;
+    min-height:32px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    padding:0 1px 2px!important;
+    scrollbar-width:none!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-row-v612::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-v612{
+    appearance:none!important;
+    -webkit-appearance:none!important;
+    flex:0 0 auto!important;
+    min-height:30px!important;
+    height:30px!important;
+    padding:0 10px!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:9px!important;
+    background:rgba(255,255,255,.075)!important;
+    color:#eef2fb!important;
+    box-shadow:none!important;
+    font:850 .70rem/1 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    letter-spacing:-.02em!important;
+    white-space:nowrap!important;
+    cursor:pointer!important;
+    pointer-events:auto!important;
+  }
+
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-v612.active,
+  html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-chip-v612[aria-pressed="true"]{
+    border-color:rgba(232,187,106,.72)!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.24),rgba(200,151,58,.12))!important;
+    color:#ffe1a1!important;
+    box-shadow:inset 0 0 0 1px rgba(200,151,58,.18)!important;
+  }
+}
+
 /* =========================================================
    PATCH v415 — Selic KPIs com hierarquia visual mobile
    Máxima e mínima ficam comparáveis em duas colunas.

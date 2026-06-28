@@ -49,13 +49,14 @@ document.documentElement.classList.add(
   'mobile-filter-header-clean-v608',
   'mobile-filters-functional-v609',
   'mobile-filters-reset-v610',
-  'mobile-filters-origin-clean-v611'
+  'mobile-filters-origin-clean-v611',
+  'mobile-audience-chips-v612'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_MOBILE_FILTERS_ORIGIN_CLEAN_V611" name="app-build"/>
+<meta content="ELTAUM_MOBILE_AUDIENCE_CHIPS_V612" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -115,7 +116,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=mobile-filters-origin-clean-v611" rel="stylesheet"/>
+<link href="style.css?v=mobile-audience-chips-v612" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -220,7 +221,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=mobile-filters-origin-clean-v611"></script>
+<script defer="" src="app.js?v=mobile-audience-chips-v612"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -601,7 +602,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=mobile-filters-origin-clean-v611" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=mobile-audience-chips-v612" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -783,7 +784,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <span>Categoria</span>
 <strong id="mobileCategorySelectStatusV74">Todos</strong>
 </div>
-<label class="mobile-audience-select-v609 filter-list-row-v482" for="mobileAudienceSelectV609">
+<div class="mobile-audience-select-v609 mobile-audience-chips-v612 filter-list-row-v482">
 <span class="filter-label-v482">Público-alvo</span>
 <select aria-label="Selecionar público-alvo no celular" id="mobileAudienceSelectV609">
 <option value="">Todos</option>
@@ -793,8 +794,15 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <option value="Qualificado">Qualificado</option>
 <option value="Institucional">Institucional</option>
 </select>
-<span aria-hidden="true" class="mobile-audience-arrow-v609">⌄</span>
-</label>
+<span aria-label="Selecionar público-alvo" class="mobile-audience-chip-row-v612" role="group">
+<button aria-pressed="true" class="mobile-audience-chip-v612 active" data-audience-v612="" type="button">Todos</button>
+<button aria-pressed="false" class="mobile-audience-chip-v612" data-audience-v612="PF" type="button">PF</button>
+<button aria-pressed="false" class="mobile-audience-chip-v612" data-audience-v612="PJ" type="button">PJ</button>
+<button aria-pressed="false" class="mobile-audience-chip-v612" data-audience-v612="Private" type="button">Private</button>
+<button aria-pressed="false" class="mobile-audience-chip-v612" data-audience-v612="Qualificado" type="button">Qualificado</button>
+<button aria-pressed="false" class="mobile-audience-chip-v612" data-audience-v612="Institucional" type="button">Institucional</button>
+</span>
+</div>
 <label class="mobile-category-select-wrap-v74">
 <select aria-label="Selecionar categoria do fundo" id="mobileCategorySelectV74">
 <option value="">Todos</option>
