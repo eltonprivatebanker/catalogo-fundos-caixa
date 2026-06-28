@@ -73238,3 +73238,31 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.62rem!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v587 — Desktop: remove cabecalho redundante dos fundos
+   ========================================================= */
+@media (min-width:1180px){
+  html.desktop-hide-funds-heading-v587 body #sec-fundos.section-gap{
+    margin-top:4px!important;
+  }
+
+  html.desktop-hide-funds-heading-v587 body #sec-fundos > .section-title,
+  html.desktop-hide-funds-heading-v587 body #sec-fundos > .section-title::before,
+  html.desktop-hide-funds-heading-v587 body #sec-fundos > .section-title::after,
+  html.desktop-hide-funds-heading-v587 body #sec-fundos > .section-title h2.section-title-v302{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-hide-funds-heading-v587 body #sec-fundos #fundFilterShell{
+    margin-top:0!important;
+  }
+}
