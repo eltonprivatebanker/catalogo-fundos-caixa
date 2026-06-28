@@ -2927,6 +2927,8 @@ function renderRankings(){
   grid.innerHTML = resumoCards + (cardsPorVisao[activeRankView] || cardsPorVisao.top);
 }
 
+window.__renderRankingsMobileBaseV607 = renderRankings;
+
 
 /* ════════════════════════════════════════════════════
    COMPARTILHAMENTO DOS RANKINGS
@@ -25886,7 +25888,11 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
    PATCH v555-final — Reinstala ranking novo apos patches legados
    ========================================================= */
 (function desktopRankingRedesignV555Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
   function installFinal(){
+    if(!isDesktop()) return;
     if(window.__desktopRankingPodiumV562Installed && typeof window.__renderRankingsV562 === 'function'){
       window.renderRankings = window.__renderRankingsV562;
       try{ renderRankings = window.__renderRankingsV562; }catch(e){}
@@ -27033,5 +27039,38 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', apply, {once:true});
   [40, 100, 220, 520, 1000, 1800, 3200, 7000, 14000, 30000].forEach(function(delay){
     setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v607 — Mobile: ranking renderiza sem herdar o renderizador desktop */
+(function mobileRankingRenderRestoreV607(){
+  var BUILD = 'ELTAUM_MOBILE_RANKING_RENDER_RESTORE_V607';
+  var PATCH_CLASS = 'mobile-ranking-render-restore-v607';
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  }
+  function hasRows(){
+    return typeof allRows !== 'undefined' && Array.isArray(allRows) && allRows.length > 0;
+  }
+  function restore(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+    if(typeof window.__renderRankingsMobileBaseV607 === 'function'){
+      window.renderRankings = window.__renderRankingsMobileBaseV607;
+      try{ renderRankings = window.__renderRankingsMobileBaseV607; }catch(e){}
+    }
+    if(hasRows() && typeof window.renderRankings === 'function'){
+      try{ window.renderRankings(); }catch(e){ console.error('ranking mobile v607', e); }
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restore, {once:true});
+  else restore();
+  window.addEventListener('load', restore, {once:true});
+  window.addEventListener('pageshow', restore, {passive:true});
+  [60, 160, 360, 800, 1400, 2400, 4200, 7000, 12000, 22000].forEach(function(delay){
+    setTimeout(restore, delay);
   });
 })();
