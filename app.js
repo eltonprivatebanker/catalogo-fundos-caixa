@@ -27013,3 +27013,25 @@ function buildDetailPanel(r,colspan){
     setTimeout(apply, delay);
   });
 })();
+
+
+/* PATCH v606 — Estabiliza a barra inferior dos filtros desktop */
+(function desktopFilterToolbarStableV606(){
+  var BUILD = 'ELTAUM_DESKTOP_FILTER_TOOLBAR_STABLE_V606';
+  var PATCH_CLASS = 'desktop-filter-toolbar-stable-v606';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [40, 100, 220, 520, 1000, 1800, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
