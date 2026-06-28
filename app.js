@@ -2425,21 +2425,99 @@ async function carregarMercado(){
 /* ════════════════════════════════════════════════════
    FOCUS
 ════════════════════════════════════════════════════ */
+function focusSeriesV595(dados){
+  const anos = [2026,2027,2028,2029];
+  return anos.map(ano => {
+    const med = dados?.[ano]?.mediana;
+    const value = focusNumberV595(med);
+    return {ano, med, value};
+  });
+}
+
+function focusNumberV595(value){
+  if(value === null || value === undefined || value === '') return null;
+  if(typeof value === 'number') return Number.isFinite(value) ? value : null;
+  const raw = String(value).trim().replace('%','').replace(/\s/g,'');
+  if(!raw || raw === '-' || raw === '—') return null;
+  const normalized = raw.includes(',')
+    ? raw.replace(/\./g,'').replace(',','.')
+    : raw;
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function focusTrendMetaV595(label, series){
+  const values = series.filter(item => item.value !== null && Number.isFinite(item.value));
+  if(values.length < 2) return {kind:'flat', label:'tendência', arrow:'↔', delta:'—'};
+  const first = values[0].value;
+  const last = values[values.length - 1].value;
+  const diff = last - first;
+  const abs = Math.abs(diff);
+  const flatLimit = label === 'Câmbio' ? 0.03 : label === 'PIB' ? 0.12 : 0.08;
+  const kind = abs <= flatLimit ? 'flat' : diff > 0 ? 'up' : 'down';
+  const trendLabel = kind === 'flat' ? 'estável' : kind === 'down' ? 'queda' : (label === 'Câmbio' ? 'alta leve' : 'alta');
+  const signal = diff > 0 ? '+' : diff < 0 ? '-' : '';
+  const deltaValue = Math.abs(diff).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const delta = label === 'Câmbio' ? `${signal}R$ ${deltaValue} até 2029` : `${signal}${deltaValue} p.p. até 2029`;
+  return {kind, label:trendLabel, arrow:kind === 'up' ? '↑' : kind === 'down' ? '↓' : '↔', delta};
+}
+
+function focusSparklineV595(series){
+  const values = series.map(item => item.value).filter(value => value !== null && Number.isFinite(value));
+  if(values.length < 2) return '';
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const points = series.map((item, index) => {
+    const x = 10 + index * (280 / Math.max(1, series.length - 1));
+    const y = item.value === null || !Number.isFinite(item.value)
+      ? 42
+      : 42 - ((item.value - min) / span) * 28;
+    return {x, y};
+  });
+  const line = points.map(point => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(' ');
+  const dots = points.map(point => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="2.6"></circle>`).join('');
+  return `<svg class="focus-sparkline-v595" viewBox="0 0 300 52" aria-hidden="true" focusable="false">
+    <line class="focus-sparkline-base-v595" x1="10" y1="44" x2="290" y2="44"></line>
+    <polyline points="${line}"></polyline>
+    ${dots}
+  </svg>`;
+}
+
+function focusSummaryHTMLV595(focus){
+  const selic = focusTrendMetaV595('Selic', focusSeriesV595(focus?.Selic));
+  const ipca = focusTrendMetaV595('IPCA', focusSeriesV595(focus?.IPCA));
+  const cambio = focusTrendMetaV595('Câmbio', focusSeriesV595(focus?.Cambio));
+  const pib = focusTrendMetaV595('PIB', focusSeriesV595(focus?.PIB));
+  const jurosInflacao = selic.kind === 'down' && ipca.kind === 'down' ? 'juros e inflação em queda gradual' : 'juros e inflação em ajuste';
+  const cambioTxt = cambio.kind === 'up' ? 'dólar em leve alta' : cambio.kind === 'down' ? 'dólar em queda' : 'dólar estável';
+  const pibTxt = pib.kind === 'flat' ? 'PIB estável no médio prazo' : pib.kind === 'up' ? 'PIB em melhora gradual' : 'PIB em desaceleração';
+  return `<div class="focus-trend-summary-v595" aria-label="Leitura de tendência do Boletim Focus">
+    <span class="focus-trend-icon-v595" aria-hidden="true">↗</span>
+    <p><strong>Leitura Focus:</strong> ${jurosInflacao}; ${cambioTxt}; ${pibTxt}.</p>
+    <span class="focus-trend-pill-v595">Tendência 2026 → 2029</span>
+  </div>`;
+}
+
 function focusCardHTML(icon, label, sub, dados){
   const anos = [2026,2027,2028,2029];
+  const series = focusSeriesV595(dados);
+  const trend = focusTrendMetaV595(label, series);
   const rows = anos.map((ano,i) => {
-    const v = dados?.[ano];
-    const med = v?.mediana;
+    const item = series[i] || {};
+    const med = item.med;
     const fmtd = med!==null && med!==undefined
       ? (label==='Câmbio' ? brl(med) : fmt(med))
       : '—';
     return `<div class="fcad-row">
       <span class="fcad-year">${ano}</span>
-      <span class="fcad-val${i===0?' hl':''}">${fmtd}</span>
+      <span class="fcad-val${i===0?' hl':''}">${fmtd}<em class="focus-row-arrow-v595 trend-${trend.kind}">${trend.arrow}</em></span>
     </div>${i<anos.length-1?'<hr class="fcad-hr">':''}`;
   }).join('');
-  return `<div class="fcad"><div class="fcad-label">${icon} ${label}</div>
-    <div class="fcad-sub">${sub}</div><div class="fcad-rows">${rows}</div></div>`;
+  return `<div class="fcad focus-trend-card-v595 trend-${trend.kind}"><div class="fcad-label">${icon} ${label}</div>
+    <div class="fcad-sub">${sub}</div>
+    <div class="focus-trend-line-v595"><strong>${trend.label}</strong><span>${trend.arrow}</span><em>${trend.delta}</em></div>
+    <div class="fcad-rows">${rows}</div>${focusSparklineV595(series)}</div>`;
 }
 
 function normalizarDataFocus(dataRef){
@@ -2546,7 +2624,7 @@ function carregarFocus(focus, atualizadoEm){
     refEl.innerHTML = `<span class="focus-ref-label">Último boletim Focus disponível: <strong>${dataFormatada}</strong></span><a class="focus-pdf-link" href="${pdfUrl}" target="_blank" rel="noopener">Baixe aqui o último boletim Focus (PDF) ↗</a>`;
   }
 
-  grid.innerHTML = [
+  grid.innerHTML = focusSummaryHTMLV595(focus) + [
     focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
     focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
     focusCardHTML('💵','Câmbio','R$ / US$ (dólar americano)',focus.Cambio),
@@ -26590,6 +26668,28 @@ function buildDetailPanel(r,colspan){
 (function desktopShortFundNamesV594(){
   var BUILD = 'ELTAUM_DESKTOP_SHORT_FUND_NAMES_V594';
   var PATCH_CLASS = 'desktop-short-fund-names-v594';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v595 — Boletim Focus com leitura de tendencia */
+(function desktopFocusTrendsV595(){
+  var BUILD = 'ELTAUM_DESKTOP_FOCUS_TRENDS_V595';
+  var PATCH_CLASS = 'desktop-focus-trends-v595';
   function isDesktop(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }

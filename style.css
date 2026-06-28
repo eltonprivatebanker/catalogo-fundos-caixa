@@ -73507,3 +73507,190 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     vertical-align:middle!important;
   }
 }
+
+/* =========================================================
+   PATCH v595 — Boletim Focus com tendencia consultiva
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-focus-trends-v595 body #sec-focus .focus-grid{
+    grid-template-columns:repeat(5,minmax(0,1fr))!important;
+    gap:12px!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-summary-v595{
+    grid-column:1 / -1!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:14px!important;
+    min-height:58px!important;
+    padding:11px 18px!important;
+    border:1px solid rgba(200,151,58,.26)!important;
+    border-radius:14px!important;
+    background:linear-gradient(90deg,rgba(200,151,58,.10),rgba(11,17,31,.84) 44%,rgba(91,156,246,.07))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-icon-v595{
+    display:grid!important;
+    place-items:center!important;
+    width:38px!important;
+    height:38px!important;
+    flex:0 0 38px!important;
+    border-radius:10px!important;
+    border:1px solid rgba(200,151,58,.18)!important;
+    background:rgba(200,151,58,.10)!important;
+    color:#f0c36b!important;
+    font-size:1.35rem!important;
+    font-weight:900!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-summary-v595 p{
+    margin:0!important;
+    flex:1 1 auto!important;
+    color:#d8deeb!important;
+    font-size:.82rem!important;
+    line-height:1.35!important;
+    font-weight:650!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-summary-v595 strong{
+    color:#ffffff!important;
+    text-decoration:underline!important;
+    text-decoration-color:rgba(240,195,107,.50)!important;
+    text-underline-offset:3px!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-pill-v595{
+    flex:0 0 auto!important;
+    padding:8px 13px!important;
+    border-radius:999px!important;
+    border:1px solid rgba(200,151,58,.35)!important;
+    background:rgba(200,151,58,.10)!important;
+    color:#f0c36b!important;
+    font-size:.64rem!important;
+    font-weight:900!important;
+    letter-spacing:.02em!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-card-v595{
+    min-height:300px!important;
+    padding:16px 18px 14px!important;
+    display:flex!important;
+    flex-direction:column!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-line-v595{
+    display:grid!important;
+    grid-template-columns:auto auto minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:9px!important;
+    margin:4px 0 11px!important;
+    padding-bottom:10px!important;
+    border-bottom:1px solid rgba(148,163,184,.11)!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-line-v595 strong{
+    color:#7ee787!important;
+    font-size:.74rem!important;
+    font-weight:850!important;
+    letter-spacing:.01em!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-line-v595 span{
+    display:inline-grid!important;
+    place-items:center!important;
+    width:21px!important;
+    height:21px!important;
+    border-radius:8px!important;
+    background:rgba(46,209,122,.10)!important;
+    color:#7ee787!important;
+    font-size:1rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-trend-line-v595 em{
+    min-width:0!important;
+    color:#b8c2d8!important;
+    font-style:normal!important;
+    font-size:.67rem!important;
+    line-height:1.25!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .trend-up .focus-trend-line-v595 strong,
+  html.desktop-focus-trends-v595 body #sec-focus .trend-up .focus-trend-line-v595 span,
+  html.desktop-focus-trends-v595 body #sec-focus .focus-row-arrow-v595.trend-up{
+    color:#f0c36b!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .trend-up .focus-trend-line-v595 span{
+    background:rgba(240,195,107,.12)!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .trend-flat .focus-trend-line-v595 strong,
+  html.desktop-focus-trends-v595 body #sec-focus .trend-flat .focus-trend-line-v595 span,
+  html.desktop-focus-trends-v595 body #sec-focus .focus-row-arrow-v595.trend-flat{
+    color:#7fb6ff!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .trend-flat .focus-trend-line-v595 span{
+    background:rgba(127,182,255,.12)!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .fcad-rows{
+    gap:5px!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .fcad-row{
+    align-items:center!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-row-arrow-v595{
+    display:inline-block!important;
+    margin-left:8px!important;
+    color:#7ee787!important;
+    font-family:var(--font-ui-v120, Inter, sans-serif)!important;
+    font-size:.88rem!important;
+    font-style:normal!important;
+    font-weight:900!important;
+    line-height:1!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-sparkline-v595{
+    width:100%!important;
+    height:54px!important;
+    margin-top:auto!important;
+    padding-top:11px!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-sparkline-v595 polyline{
+    fill:none!important;
+    stroke:#f0c36b!important;
+    stroke-width:2.2!important;
+    stroke-linecap:round!important;
+    stroke-linejoin:round!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-sparkline-v595 circle{
+    fill:#f0c36b!important;
+    stroke:rgba(7,10,19,.95)!important;
+    stroke-width:1.5!important;
+  }
+
+  html.desktop-focus-trends-v595 body #sec-focus .focus-sparkline-base-v595{
+    stroke:rgba(148,163,184,.24)!important;
+    stroke-width:1!important;
+    stroke-dasharray:4 4!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1280px){
+  html.desktop-focus-trends-v595 body #sec-focus .focus-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
