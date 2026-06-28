@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_COMPARISON_CHART_V580';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -22126,6 +22126,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
   let range = 'year';
   let view = 'all';
   let usCurrency = 'usd';
+  const selectedChartIndicatorsV580 = new Set(['cdi','ipca','ibov','sp500']);
 
   function toNumV445(value){
     if(value === null || value === undefined || value === '') return null;
@@ -22439,6 +22440,133 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     dow:{label:'Dow'}
   };
 
+  const chartMetaV580 = {
+    cdi:{label:'CDI', color:'#1d8cff'},
+    ipca:{label:'IPCA', color:'#22d3ee'},
+    ibov:{label:'Ibov', color:'#31d158'},
+    dolar:{label:'Dólar', color:'#ff6f8b'},
+    sp500:{label:'S&P 500', color:'#8b5cf6'},
+    nasdaq:{label:'Nasdaq', color:'#c084fc'},
+    dow:{label:'Dow', color:'#f0c36b'}
+  };
+
+  function cumulativeChartSeriesV580(map, keys){
+    let acc = 1;
+    return keys.map(key => {
+      const value = toNumV445(map?.get(key));
+      if(value === null) return null;
+      acc *= (1 + value / 100);
+      return Number(((acc - 1) * 100).toFixed(4));
+    });
+  }
+
+  function syncChartButtonsV580(root, maps, keys){
+    root.querySelectorAll('[data-monthly-chart-indicator-v580]').forEach(btn => {
+      const key = btn.dataset.monthlyChartIndicatorV580 || '';
+      const hasData = mapHasDataForKeysV447(maps[key], keys);
+      const active = selectedChartIndicatorsV580.has(key) && hasData;
+      btn.classList.toggle('active', active);
+      btn.classList.toggle('is-unavailable-v580', !hasData);
+      btn.disabled = !hasData;
+      btn.setAttribute('aria-disabled', hasData ? 'false' : 'true');
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function renderMonthlyComparisonChartV580(root, maps, keys){
+    const canvas = document.getElementById('monthlyComparisonCanvasV580');
+    const empty = document.getElementById('monthlyComparisonEmptyV580');
+    if(!root || !canvas) return;
+
+    syncChartButtonsV580(root, maps, keys);
+
+    if(!window.Chart){
+      if(empty){
+        empty.hidden = false;
+        empty.textContent = 'Gráfico indisponível: Chart.js não carregou.';
+      }
+      return;
+    }
+
+    const labels = keys.map(labelFromKeyV447);
+    const datasets = Object.keys(chartMetaV580)
+      .filter(key => selectedChartIndicatorsV580.has(key))
+      .filter(key => mapHasDataForKeysV447(maps[key], keys))
+      .map(key => {
+        const meta = chartMetaV580[key];
+        const currencySuffix = ['sp500','nasdaq','dow'].includes(key) ? ` ${usCurrency.toUpperCase()}` : '';
+        return {
+          label: `${meta.label}${currencySuffix}`,
+          data: cumulativeChartSeriesV580(maps[key], keys),
+          borderColor: meta.color,
+          backgroundColor: meta.color,
+          borderWidth: 2,
+          pointRadius: 2,
+          pointHoverRadius: 4,
+          tension: 0.28,
+          spanGaps: true
+        };
+      });
+
+    if(empty) empty.hidden = datasets.length > 0;
+
+    const existing = window.Chart.getChart ? window.Chart.getChart(canvas) : null;
+    if(existing) existing.destroy();
+
+    if(!datasets.length) return;
+
+    new window.Chart(canvas, {
+      type:'line',
+      data:{labels, datasets},
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{mode:'index', intersect:false},
+        plugins:{
+          legend:{
+            display:true,
+            position:'bottom',
+            labels:{
+              color:'rgba(223,231,243,.78)',
+              boxWidth:10,
+              boxHeight:10,
+              usePointStyle:true,
+              padding:12,
+              font:{size:11, weight:'700'}
+            }
+          },
+          tooltip:{
+            callbacks:{
+              label:function(context){
+                const value = context.parsed?.y;
+                const formatted = value === null || value === undefined
+                  ? '—'
+                  : `${value > 0 ? '+' : ''}${Number(value).toFixed(2).replace('.', ',')}%`;
+                return `${context.dataset.label}: ${formatted}`;
+              }
+            }
+          }
+        },
+        scales:{
+          x:{
+            grid:{color:'rgba(148,163,184,.08)'},
+            ticks:{color:'rgba(178,191,222,.72)', font:{size:11, weight:'700'}}
+          },
+          y:{
+            grid:{color:'rgba(148,163,184,.10)'},
+            ticks:{
+              color:'rgba(178,191,222,.72)',
+              font:{size:11, weight:'700'},
+              callback:function(value){
+                return `${Number(value).toFixed(0).replace('.', ',')}%`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
   function renderMonthlyHeaderV446(table, activeView){
     if(!table) return;
     table.dataset.viewV446 = activeView;
@@ -22492,7 +22620,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
     if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576');
     const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579' : BUILD;
+    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_COMPARISON_CHART_V580' : BUILD;
 
     const dados = getMercadoV445();
     const cdiCard = dados?.cards?.cdi || {};
@@ -22614,6 +22742,9 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
     syncIndicatorButtonsV447(root, maps, keys, activeView);
     syncUsCurrencyButtonsV578(root);
+    if(desktopV576){
+      renderMonthlyComparisonChartV580(root, maps, keys);
+    }
     const shell = root.querySelector('.monthly-indicators-table-shell-v445');
     if(shell && activeView === 'all'){
       requestAnimationFrame(() => {
@@ -22646,6 +22777,19 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       const currencyBtn = event.target.closest('[data-monthly-us-currency-v578]');
       if(currencyBtn){
         usCurrency = currencyBtn.dataset.monthlyUsCurrencyV578 === 'brl' ? 'brl' : 'usd';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const chartBtn = event.target.closest('[data-monthly-chart-indicator-v580]');
+      if(chartBtn){
+        if(chartBtn.disabled || chartBtn.getAttribute('aria-disabled') === 'true') return;
+        const key = chartBtn.dataset.monthlyChartIndicatorV580 || '';
+        if(selectedChartIndicatorsV580.has(key)){
+          selectedChartIndicatorsV580.delete(key);
+        }else{
+          selectedChartIndicatorsV580.add(key);
+        }
         renderMonthlyIndicatorsV445();
         return;
       }
@@ -25809,10 +25953,11 @@ function buildDetailPanel(r,colspan){
 	      'desktop-dolar-no-collapse-v573',
 	      'desktop-monthly-indicators-v574',
 	      'desktop-rates-reference-slim-v575',
-	      'desktop-monthly-us-markets-v576'
+	      'desktop-monthly-us-markets-v576',
+	      'desktop-monthly-comparison-chart-v580'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_COMPARISON_CHART_V580';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -25887,10 +26032,11 @@ function buildDetailPanel(r,colspan){
 	      'desktop-hide-closed-month-launch-v571',
 	      'desktop-rates-compact-v572',
 	      'desktop-rates-reference-slim-v575',
-	      'desktop-monthly-us-markets-v576'
+	      'desktop-monthly-us-markets-v576',
+	      'desktop-monthly-comparison-chart-v580'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_COMPARISON_CHART_V580';
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
@@ -25912,7 +26058,8 @@ function buildDetailPanel(r,colspan){
 	      'desktop-dolar-no-collapse-v573',
 	      'desktop-monthly-indicators-v574',
 	      'desktop-rates-reference-slim-v575',
-	      'desktop-monthly-us-markets-v576'
+	      'desktop-monthly-us-markets-v576',
+	      'desktop-monthly-comparison-chart-v580'
 	    );
 
     var monthly = document.getElementById('monthlyIndicatorsV445');
@@ -25951,7 +26098,7 @@ function buildDetailPanel(r,colspan){
     }catch(_){}
 
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_COMPARISON_CHART_V580';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
@@ -25969,9 +26116,9 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isDesktop()) return;
-	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
+	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580');
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_COMPARISON_CHART_V580';
 
     var body = document.getElementById('dolarTimelineBody');
     if(body){

@@ -19,13 +19,14 @@ document.documentElement.classList.add(
   'desktop-dolar-no-collapse-v573',
   'desktop-monthly-indicators-v574',
   'desktop-rates-reference-slim-v575',
-  'desktop-monthly-us-markets-v576'
+  'desktop-monthly-us-markets-v576',
+  'desktop-monthly-comparison-chart-v580'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579" name="app-build"/>
+<meta content="ELTAUM_DESKTOP_MONTHLY_COMPARISON_CHART_V580" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -78,7 +79,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=desktop-dolar-source-badge-removed-v579" rel="stylesheet"/>
+<link href="style.css?v=desktop-monthly-comparison-chart-v580" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -183,7 +184,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=desktop-dolar-source-badge-removed-v579"></script>
+<script defer="" src="app.js?v=desktop-monthly-comparison-chart-v580"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -564,7 +565,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=desktop-dolar-source-badge-removed-v579" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=desktop-monthly-comparison-chart-v580" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -966,6 +967,28 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <article class="monthly-us-only-v576"><span>Nasdaq ano</span><strong id="monthlySummaryNasdaqV576">—</strong></article>
 <article class="monthly-us-only-v576"><span>Dow ano</span><strong id="monthlySummaryDowV576">—</strong></article>
 </div>
+<section aria-labelledby="monthlyComparisonTitleV580" class="monthly-comparison-chart-v580" id="monthlyComparisonChartV580">
+<header class="monthly-comparison-head-v580">
+<div>
+<span class="monthly-comparison-kicker-v580">Comparativo</span>
+<h4 id="monthlyComparisonTitleV580">Gráfico comparativo</h4>
+<p>Retorno acumulado no período selecionado.</p>
+</div>
+<div aria-label="Selecionar indicadores do gráfico" class="monthly-comparison-chips-v580" id="monthlyComparisonChipsV580" role="group">
+<button aria-pressed="true" class="active" data-monthly-chart-indicator-v580="cdi" type="button">CDI</button>
+<button aria-pressed="true" class="active" data-monthly-chart-indicator-v580="ipca" type="button">IPCA</button>
+<button aria-pressed="true" class="active" data-monthly-chart-indicator-v580="ibov" type="button">Ibov</button>
+<button aria-pressed="false" data-monthly-chart-indicator-v580="dolar" type="button">Dólar</button>
+<button aria-pressed="true" class="active monthly-us-only-v576" data-monthly-chart-indicator-v580="sp500" type="button">S&amp;P 500</button>
+<button aria-pressed="false" class="monthly-us-only-v576" data-monthly-chart-indicator-v580="nasdaq" type="button">Nasdaq</button>
+<button aria-pressed="false" class="monthly-us-only-v576" data-monthly-chart-indicator-v580="dow" type="button">Dow</button>
+</div>
+</header>
+<div class="monthly-comparison-canvas-wrap-v580">
+<canvas aria-label="Gráfico de retorno acumulado dos indicadores selecionados" id="monthlyComparisonCanvasV580" role="img"></canvas>
+</div>
+<p class="monthly-comparison-empty-v580" id="monthlyComparisonEmptyV580" hidden="">Selecione ao menos um indicador com dados para exibir o gráfico.</p>
+</section>
 <div class="monthly-indicators-table-shell-v445">
 <table class="monthly-indicators-table-v445">
 <thead>

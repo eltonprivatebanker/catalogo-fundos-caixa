@@ -72717,3 +72717,126 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   overflow:hidden!important;
   pointer-events:none!important;
 }
+
+
+/* =========================================================
+   PATCH v580 — Desktop: grafico comparativo mensal
+   ========================================================= */
+@media (max-width:768px){
+  #monthlyComparisonChartV580{
+    display:none!important;
+  }
+}
+
+@media (min-width:769px){
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chart-v580{
+    display:block!important;
+    margin:0 0 8px!important;
+    padding:10px 10px 8px!important;
+    border:1px solid rgba(148,163,184,.11)!important;
+    border-radius:10px!important;
+    background:linear-gradient(180deg,rgba(8,12,24,.58),rgba(5,8,17,.42))!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-head-v580{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin:0 0 7px!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-kicker-v580{
+    display:block!important;
+    margin:0 0 2px!important;
+    color:rgba(240,195,107,.86)!important;
+    font-size:.48rem!important;
+    font-weight:950!important;
+    letter-spacing:.12em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chart-v580 h4{
+    margin:0!important;
+    color:#f4f7fb!important;
+    font-size:.82rem!important;
+    line-height:1.1!important;
+    font-weight:950!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chart-v580 p{
+    margin:2px 0 0!important;
+    color:rgba(203,213,225,.62)!important;
+    font-size:.56rem!important;
+    line-height:1.2!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chips-v580{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    flex-wrap:wrap!important;
+    gap:5px!important;
+    max-width:760px!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chips-v580 button{
+    min-height:24px!important;
+    padding:0 8px!important;
+    border:1px solid rgba(148,163,184,.16)!important;
+    border-radius:7px!important;
+    background:rgba(8,12,24,.62)!important;
+    color:rgba(203,213,225,.72)!important;
+    font-size:.55rem!important;
+    font-weight:900!important;
+    cursor:pointer!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chips-v580 button.active{
+    border-color:rgba(200,151,58,.40)!important;
+    background:rgba(200,151,58,.14)!important;
+    color:#f0c36b!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chips-v580 button.is-unavailable-v580{
+    opacity:.42!important;
+    cursor:not-allowed!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-canvas-wrap-v580{
+    position:relative!important;
+    width:100%!important;
+    height:218px!important;
+    min-height:218px!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 #monthlyComparisonCanvasV580{
+    display:block!important;
+    width:100%!important;
+    height:100%!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-empty-v580{
+    margin:6px 0 0!important;
+    color:rgba(203,213,225,.68)!important;
+    font-size:.60rem!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    max-height:214px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-head-v580{
+    display:block!important;
+  }
+
+  html.desktop-monthly-comparison-chart-v580 body #sec-mercado #monthlyIndicatorsV445 .monthly-comparison-chips-v580{
+    justify-content:flex-start!important;
+    margin-top:8px!important;
+    max-width:none!important;
+  }
+}
