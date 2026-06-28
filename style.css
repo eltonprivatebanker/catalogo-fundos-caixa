@@ -112,6 +112,153 @@
   }
 }
 
+/* PATCH v613 — Mobile: trava final dos filtros de ranking */
+@media (max-width:768px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection{
+    margin-top:20px!important;
+    padding-bottom:22px!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-head{
+    margin:0 0 8px!important;
+    padding:0!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    gap:5px!important;
+    text-align:center!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-hero-v305,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection h2.section-title-v302{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:1.18rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.04em!important;
+    text-align:center!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .section-title-icon-v302{
+    display:grid!important;
+    place-items:center!important;
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    min-height:42px!important;
+    margin:0 auto 2px!important;
+    border:1px solid rgba(232,187,106,.44)!important;
+    border-radius:999px!important;
+    background:radial-gradient(circle,rgba(232,187,106,.18),rgba(11,14,25,.82) 70%)!important;
+    box-shadow:0 0 18px rgba(200,151,58,.18)!important;
+    font-size:1.15rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group .section-badge,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-section-subtitle-v136{
+    display:none!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    align-items:stretch!important;
+    width:100%!important;
+    margin:0 0 12px!important;
+    padding:10px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    border-radius:16px!important;
+    background:linear-gradient(180deg,rgba(13,17,31,.78),rgba(8,10,19,.92))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:7px!important;
+    min-width:0!important;
+    width:100%!important;
+    min-height:74px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:10px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:13px!important;
+    background:rgba(10,13,24,.74)!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{
+    grid-column:1 / -1!important;
+    min-height:74px!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136 label{
+    display:block!important;
+    margin:0!important;
+    color:#aeb8d3!important;
+    font-size:.61rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.11em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-select-v136{
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    padding:0 28px 0 0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:#f8fafc!important;
+    box-shadow:none!important;
+    font-size:.92rem!important;
+    line-height:34px!important;
+    font-weight:850!important;
+    letter-spacing:-.035em!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198 .ranking-select-v136{
+    font-size:.88rem!important;
+    letter-spacing:-.03em!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    grid-template-columns:1fr!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{
+    grid-column:auto!important;
+  }
+}
+
 /* PATCH v612 — Mobile: trava final para publico-alvo em chips */
 @media (max-width:768px){
   html.mobile-audience-chips-v612 body #sec-fundos .mobile-audience-select-v609{
@@ -179,6 +326,306 @@
     background:linear-gradient(180deg,rgba(200,151,58,.24),rgba(200,151,58,.12))!important;
     color:#ffe1a1!important;
     box-shadow:inset 0 0 0 1px rgba(200,151,58,.18)!important;
+  }
+}
+
+/* PATCH v613 — Mobile: trava final dos filtros de ranking */
+@media (max-width:768px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection{
+    margin-top:20px!important;
+    padding-bottom:22px!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-head{
+    margin:0 0 8px!important;
+    padding:0!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    gap:5px!important;
+    text-align:center!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-hero-v305,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection h2.section-title-v302{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:1.18rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.04em!important;
+    text-align:center!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .section-title-icon-v302{
+    display:grid!important;
+    place-items:center!important;
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    min-height:42px!important;
+    margin:0 auto 2px!important;
+    border:1px solid rgba(232,187,106,.44)!important;
+    border-radius:999px!important;
+    background:radial-gradient(circle,rgba(232,187,106,.18),rgba(11,14,25,.82) 70%)!important;
+    box-shadow:0 0 18px rgba(200,151,58,.18)!important;
+    font-size:1.15rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group .section-badge,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-section-subtitle-v136{
+    display:none!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    align-items:stretch!important;
+    width:100%!important;
+    margin:0 0 12px!important;
+    padding:10px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    border-radius:16px!important;
+    background:linear-gradient(180deg,rgba(13,17,31,.78),rgba(8,10,19,.92))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:7px!important;
+    min-width:0!important;
+    width:100%!important;
+    min-height:74px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:10px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:13px!important;
+    background:rgba(10,13,24,.74)!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{
+    grid-column:1 / -1!important;
+    min-height:74px!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136 label{
+    display:block!important;
+    margin:0!important;
+    color:#aeb8d3!important;
+    font-size:.61rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.11em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-select-v136{
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    padding:0 28px 0 0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:#f8fafc!important;
+    box-shadow:none!important;
+    font-size:.92rem!important;
+    line-height:34px!important;
+    font-weight:850!important;
+    letter-spacing:-.035em!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198 .ranking-select-v136{
+    font-size:.88rem!important;
+    letter-spacing:-.03em!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    grid-template-columns:1fr!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{
+    grid-column:auto!important;
+  }
+}
+
+/* PATCH v613 — Mobile: ranking filtros proporcionais */
+@media (max-width:768px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection{
+    margin-top:20px!important;
+    padding-bottom:22px!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-head{
+    margin:0 0 8px!important;
+    padding:0!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    gap:5px!important;
+    text-align:center!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-hero-v305,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection h2.section-title-v302{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:6px!important;
+    margin:0!important;
+    padding:0!important;
+    font-size:1.18rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.04em!important;
+    text-align:center!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .section-title-icon-v302{
+    display:grid!important;
+    place-items:center!important;
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    min-height:42px!important;
+    margin:0 auto 2px!important;
+    border:1px solid rgba(232,187,106,.44)!important;
+    border-radius:999px!important;
+    background:radial-gradient(circle,rgba(232,187,106,.18),rgba(11,14,25,.82) 70%)!important;
+    box-shadow:0 0 18px rgba(200,151,58,.18)!important;
+    font-size:1.15rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .section-title-text-v302{
+    display:block!important;
+    max-width:100%!important;
+    white-space:normal!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group .section-badge,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-section-subtitle-v136{
+    display:none!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    align-items:stretch!important;
+    width:100%!important;
+    margin:0 0 12px!important;
+    padding:10px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    border-radius:16px!important;
+    background:linear-gradient(180deg,rgba(13,17,31,.78),rgba(8,10,19,.92))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:7px!important;
+    min-width:0!important;
+    width:100%!important;
+    min-height:74px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:10px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:13px!important;
+    background:rgba(10,13,24,.74)!important;
+    box-shadow:none!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{
+    grid-column:1 / -1!important;
+    min-height:74px!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136 label{
+    display:block!important;
+    margin:0!important;
+    color:#aeb8d3!important;
+    font-size:.61rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.11em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-select-v136{
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    padding:0 28px 0 0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:#f8fafc!important;
+    box-shadow:none!important;
+    font-size:.92rem!important;
+    line-height:34px!important;
+    font-weight:850!important;
+    letter-spacing:-.035em!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198 .ranking-select-v136{
+    font-size:.88rem!important;
+    letter-spacing:-.03em!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    grid-template-columns:1fr!important;
+  }
+
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{
+    grid-column:auto!important;
   }
 }
 
@@ -75665,4 +76112,29 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-arrow-v75{
     display:none!important;
   }
+}
+
+
+/* PATCH v613 — Mobile: trava final absoluta dos filtros de ranking */
+@media (max-width:768px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection{margin-top:20px!important;padding-bottom:22px!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-head{margin:0 0 8px!important;padding:0!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group{display:flex!important;flex-direction:column!important;align-items:center!important;gap:5px!important;text-align:center!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-hero-v305,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection h2.section-title-v302{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:6px!important;margin:0!important;padding:0!important;font-size:1.18rem!important;line-height:1.05!important;letter-spacing:-.04em!important;text-align:center!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .section-title-icon-v302{display:grid!important;place-items:center!important;width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;margin:0 auto 2px!important;border:1px solid rgba(232,187,106,.44)!important;border-radius:999px!important;background:radial-gradient(circle,rgba(232,187,106,.18),rgba(11,14,25,.82) 70%)!important;box-shadow:0 0 18px rgba(200,151,58,.18)!important;font-size:1.15rem!important;line-height:1!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-title-group .section-badge,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-section-subtitle-v136{display:none!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:8px!important;align-items:stretch!important;width:100%!important;margin:0 0 12px!important;padding:10px!important;border:1px solid rgba(148,163,184,.13)!important;border-radius:16px!important;background:linear-gradient(180deg,rgba(13,17,31,.78),rgba(8,10,19,.92))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.03)!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136{display:flex!important;flex-direction:column!important;justify-content:center!important;gap:7px!important;min-width:0!important;width:100%!important;min-height:74px!important;height:auto!important;margin:0!important;padding:10px!important;border:1px solid rgba(148,163,184,.14)!important;border-radius:13px!important;background:rgba(10,13,24,.74)!important;box-shadow:none!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{grid-column:1/-1!important;min-height:74px!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-control-card-v136 label{display:block!important;margin:0!important;color:#aeb8d3!important;font-size:.61rem!important;line-height:1!important;font-weight:900!important;letter-spacing:.11em!important;text-transform:uppercase!important;white-space:normal!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-select-v136{appearance:auto!important;-webkit-appearance:menulist!important;display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;height:34px!important;min-height:34px!important;margin:0!important;padding:0 28px 0 0!important;border:0!important;border-radius:0!important;background:transparent!important;color:#f8fafc!important;box-shadow:none!important;font-size:.92rem!important;line-height:34px!important;font-weight:850!important;letter-spacing:-.035em!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198 .ranking-select-v136{font-size:.88rem!important;letter-spacing:-.03em!important;}
+}
+@media (max-width:360px){
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{grid-template-columns:1fr!important;}
+  html.mobile-ranking-filters-balanced-v613 body #rankingsSection .ranking-risk-control-v198{grid-column:auto!important;}
 }
