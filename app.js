@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_STABLE_FILTERS_V566';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_TOOLBAR_LOCKED_V567';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -25597,20 +25597,65 @@ function buildDetailPanel(r,colspan){
 })();
 
 
-/* PATCH v562-final — reinstala ranking podio no fim do arquivo */
+/* PATCH v567-final — reinstala ranking podio e trava toolbar no fim do arquivo */
 (function desktopRankingPodiumV562Final(){
   function isDesktop(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
+  function lockToolbar(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(
+      'desktop-ranking-podium-v562',
+      'desktop-ranking-semantico-cdi-v563',
+      'desktop-ranking-cdi-ano-scale-v564',
+      'desktop-ranking-filters-centered-v565',
+      'desktop-ranking-stable-v566',
+      'desktop-ranking-toolbar-locked-v567'
+    );
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_TOOLBAR_LOCKED_V567';
+    var toolbar = document.querySelector('#rankingsSection .ranking-toolbar-v136');
+    if(toolbar){
+      toolbar.style.setProperty('width','min(100%, 940px)','important');
+      toolbar.style.setProperty('max-width','940px','important');
+      toolbar.style.setProperty('display','grid','important');
+      toolbar.style.setProperty('grid-template-columns','190px 310px 310px','important');
+      toolbar.style.setProperty('grid-auto-flow','row','important');
+      toolbar.style.setProperty('grid-auto-columns','initial','important');
+      toolbar.style.setProperty('justify-content','center','important');
+      toolbar.style.setProperty('align-items','end','important');
+      toolbar.style.setProperty('column-gap','14px','important');
+      toolbar.style.setProperty('row-gap','10px','important');
+      toolbar.style.setProperty('margin','14px auto 12px','important');
+      toolbar.style.setProperty('padding','14px 16px','important');
+      toolbar.style.setProperty('border-radius','14px','important');
+      if(window.matchMedia && window.matchMedia('(max-width: 1050px)').matches){
+        toolbar.style.setProperty('width','min(100%, 560px)','important');
+        toolbar.style.setProperty('max-width','560px','important');
+        toolbar.style.setProperty('grid-template-columns','1fr','important');
+      }
+    }
+    var row = document.querySelector('#rankingsSection .ranking-filter-row-compat-v136');
+    if(row){
+      row.style.setProperty('display','none','important');
+      row.style.setProperty('visibility','hidden','important');
+      row.style.setProperty('height','0','important');
+      row.style.setProperty('min-height','0','important');
+      row.style.setProperty('margin','0','important');
+      row.style.setProperty('padding','0','important');
+      row.style.setProperty('overflow','hidden','important');
+    }
+  }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566');
+    lockToolbar();
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 final', e); }
+    lockToolbar();
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reinstall, {once:true});
   else reinstall();
   window.addEventListener('load', reinstall, {once:true});
-  [300, 900, 1800, 3200].forEach(function(delay){ setTimeout(reinstall, delay); });
+  [80, 300, 900, 1800, 3200].forEach(function(delay){ setTimeout(reinstall, delay); });
 })();

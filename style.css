@@ -71367,9 +71367,13 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   }
 
   html.desktop-ranking-filters-centered-v565 body #rankingsSection .ranking-filter-row-compat-v136{
-    grid-column:1 / -1!important;
-    justify-content:center!important;
-    width:100%!important;
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
   }
 
   html.desktop-ranking-filters-centered-v565 body #rankingsSection .ranking-filter-row-compat-v136:empty{
@@ -71379,6 +71383,48 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
 
 @media (min-width:769px) and (max-width:1050px){
   html.desktop-ranking-filters-centered-v565 body #rankingsSection .ranking-toolbar-v136{
+    width:min(100%, 560px)!important;
+    max-width:560px!important;
+    grid-template-columns:1fr!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v567 — Desktop: trava final da toolbar dos rankings
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-toolbar-locked-v567 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-ranking-toolbar-locked-v567 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    width:min(100%, 940px)!important;
+    max-width:940px!important;
+    display:grid!important;
+    grid-template-columns:190px 310px 310px!important;
+    grid-auto-flow:row!important;
+    grid-auto-columns:initial!important;
+    justify-content:center!important;
+    align-items:end!important;
+    column-gap:14px!important;
+    row-gap:10px!important;
+    margin:14px auto 12px!important;
+    padding:14px 16px!important;
+    border-radius:14px!important;
+  }
+
+  html.desktop-ranking-toolbar-locked-v567 body #rankingsSection .ranking-filter-row-compat-v136{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1050px){
+  html.desktop-ranking-toolbar-locked-v567 body #rankingsSection .ranking-toolbar-v136,
+  html.desktop-ranking-toolbar-locked-v567 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
     width:min(100%, 560px)!important;
     max-width:560px!important;
     grid-template-columns:1fr!important;
