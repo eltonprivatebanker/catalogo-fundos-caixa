@@ -73076,3 +73076,104 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     max-width:none!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v585 — Desktop largo: navegacao lateral
+   ========================================================= */
+@media (min-width:1180px){
+  html.desktop-side-nav-v585 body .page{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    padding:22px 24px 88px 218px!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131.desktop-anchor-nav-ui-v132{
+    position:fixed!important;
+    left:18px!important;
+    top:18px!important;
+    bottom:18px!important;
+    z-index:700!important;
+    width:176px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:12px 10px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:16px!important;
+    background:linear-gradient(180deg,rgba(11,16,30,.94),rgba(6,9,18,.96))!important;
+    box-shadow:0 18px 44px rgba(0,0,0,.28)!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131 .desktop-anchor-nav-inner-v131{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:7px!important;
+    min-height:100%!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131 .desktop-anchor-kicker-v131{
+    display:block!important;
+    padding:4px 8px 7px!important;
+    color:rgba(178,191,222,.62)!important;
+    font-size:.50rem!important;
+    letter-spacing:.13em!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131 .desktop-anchor-link-v131{
+    width:100%!important;
+    justify-content:flex-start!important;
+    gap:9px!important;
+    min-height:38px!important;
+    padding:0 10px!important;
+    border-radius:10px!important;
+    font-size:.66rem!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131 .desktop-anchor-link-v131 span{
+    width:18px!important;
+    min-width:18px!important;
+    text-align:center!important;
+    font-size:.78rem!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131 .desktop-anchor-link-v131 strong{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131 .desktop-anchor-link-v131.active{
+    box-shadow:inset 3px 0 0 #c8973a!important;
+  }
+
+  html.desktop-side-nav-v585 body #desktopAnchorNavV131 .desktop-anchor-search-v135{
+    margin:10px 0 0!important;
+    border-color:rgba(200,151,58,.24)!important;
+  }
+
+  html.desktop-side-nav-v585 body header.site-header-clean,
+  html.desktop-side-nav-v585 body .site-header-clean.site-header-v217{
+    margin:0 0 12px!important;
+  }
+
+  html.desktop-side-nav-v585 body #sec-fundos.section-gap{
+    margin-top:8px!important;
+  }
+
+  html.desktop-side-nav-v585 body #sec-kpi,
+  html.desktop-side-nav-v585 body #sec-fundos,
+  html.desktop-side-nav-v585 body #rankingsSection,
+  html.desktop-side-nav-v585 body #sec-mercado,
+  html.desktop-side-nav-v585 body #sec-dolar,
+  html.desktop-side-nav-v585 body #sec-focus,
+  html.desktop-side-nav-v585 body #sec-graficos,
+  html.desktop-side-nav-v585 body #siteSources{
+    scroll-margin-top:18px!important;
+  }
+}
