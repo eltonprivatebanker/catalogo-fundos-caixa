@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3561,9 +3561,7 @@ function setCdiSort(dir){
       return Number.isFinite(n) ? n : null;
     }
     if(periodo === 'ano'){
-      if(abs > 10000) n = n / 1000;
-      else if(abs > 1000) n = n / 100;
-      else if(abs > 25) n = n / 10;
+      while(Math.abs(n) > 20) n = n / 10;
       return Number.isFinite(n) ? n : null;
     }
     if(abs > 10000) n = n / 1000;
@@ -3636,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_SEMANTICO_CDI_V563';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_CDI_ANO_SCALE_V564';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -3930,9 +3928,7 @@ function setCdiSort(dir){
       return Number.isFinite(n) ? n : null;
     }
     if(periodo === 'ano'){
-      if(abs > 10000) n = n / 1000;
-      else if(abs > 1000) n = n / 100;
-      else if(abs > 25) n = n / 10;
+      while(Math.abs(n) > 20) n = n / 10;
       return Number.isFinite(n) ? n : null;
     }
     if(abs > 10000) n = n / 1000;
@@ -25597,7 +25593,7 @@ function buildDetailPanel(r,colspan){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 final', e); }
