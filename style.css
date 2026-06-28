@@ -7,6 +7,111 @@
   --ds-ease:cubic-bezier(.4,0,.2,1);--ds-duration-normal:200ms;
 }
 
+/* PATCH v611 — Mobile: remove conflito dos filtros v481/v482 e fixa coluna real */
+@media (max-width:768px){
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileCategorySelectShellV74{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-audience-select-v609,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-shell-v75{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-top:1px solid rgba(148,163,184,.13)!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    transform:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-audience-select-v609{order:2!important;}
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-wrap-v74{order:3!important;}
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-select-v198{order:4!important;}
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-shell-v75{order:5!important;}
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .filter-value-v482{
+    display:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .filter-label-v482,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-wrap-v74::before,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-select-v198 > span:first-child,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-shell-v75 > span:first-child{
+    position:static!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    margin:0 0 7px!important;
+    padding:0!important;
+    color:#aeb8d3!important;
+    font-size:.60rem!important;
+    line-height:1.05!important;
+    font-weight:900!important;
+    letter-spacing:.12em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    transform:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileAudienceSelectV609,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileCategorySelectV74,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileRiskSelectV198,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileSortSelectV75{
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+    position:static!important;
+    inset:auto!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:44px!important;
+    min-height:44px!important;
+    max-height:44px!important;
+    margin:0!important;
+    padding:0 12px!important;
+    opacity:1!important;
+    color:#f8fafc!important;
+    background:#101423!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:12px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    font-size:.84rem!important;
+    line-height:44px!important;
+    font-weight:800!important;
+    letter-spacing:-.02em!important;
+    pointer-events:auto!important;
+    cursor:pointer!important;
+    transform:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-audience-arrow-v609,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-arrow-v74,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-arrow-v198,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-arrow-v75{
+    display:none!important;
+  }
+}
+
 /* =========================================================
    PATCH v415 — Selic KPIs com hierarquia visual mobile
    Máxima e mínima ficam comparáveis em duas colunas.
@@ -75313,5 +75418,111 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.66rem!important;
     line-height:1.15!important;
     font-weight:800!important;
+  }
+}
+
+/* PATCH v611 — Mobile: trava final contra conflito dos filtros antigos */
+@media (max-width:768px){
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileCategorySelectShellV74{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-audience-select-v609,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-shell-v75{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:10px 0!important;
+    border:0!important;
+    border-top:1px solid rgba(148,163,184,.13)!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    transform:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-audience-select-v609{order:2!important;}
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-wrap-v74{order:3!important;}
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-select-v198{order:4!important;}
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-shell-v75{order:5!important;}
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .filter-value-v482{
+    display:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .filter-label-v482,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-wrap-v74::before,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-select-v198 > span:first-child,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-shell-v75 > span:first-child{
+    position:static!important;
+    display:block!important;
+    width:100%!important;
+    height:auto!important;
+    margin:0 0 7px!important;
+    padding:0!important;
+    color:#aeb8d3!important;
+    font-size:.60rem!important;
+    line-height:1.05!important;
+    font-weight:900!important;
+    letter-spacing:.12em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    transform:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileAudienceSelectV609,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileCategorySelectV74,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileRiskSelectV198,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos #mobileSortSelectV75{
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+    position:static!important;
+    inset:auto!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:44px!important;
+    min-height:44px!important;
+    max-height:44px!important;
+    margin:0!important;
+    padding:0 12px!important;
+    opacity:1!important;
+    color:#f8fafc!important;
+    background:#101423!important;
+    border:1px solid rgba(148,163,184,.22)!important;
+    border-radius:12px!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    font-size:.84rem!important;
+    line-height:44px!important;
+    font-weight:800!important;
+    letter-spacing:-.02em!important;
+    pointer-events:auto!important;
+    cursor:pointer!important;
+    transform:none!important;
+  }
+
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-audience-arrow-v609,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-category-select-arrow-v74,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-risk-arrow-v198,
+  html.mobile-filters-origin-clean-v611 body #sec-fundos .mobile-sort-arrow-v75{
+    display:none!important;
   }
 }
