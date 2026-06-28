@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_ULTRA_COMPACT_V569';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOCS_COMPACT_V570';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -25441,16 +25441,16 @@ function buildDocsCompactos(row){
   const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
   const principal = boletim || docs[0];
   const secundarios = docs.filter(d => d.url !== principal.url);
-  const primaryLabel = boletim ? 'Boletim' : principal.curto;
+  const primaryLabel = boletim ? 'Bol.' : principal.curto;
   const primaryTitle = boletim ? 'Boletim Comercial' : principal.label;
 
   const primary = `<a class="doc-mini-primary doc-mini-primary-v558 doc-mini-primary-v559" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(primaryTitle)}">${primaryLabel}</a>`;
 
   const more = secundarios.length
-    ? `<button type="button" class="doc-more-button-v559" data-docs-other-v559="${htmlAttr(encodeURIComponent(JSON.stringify(secundarios.map(d=>({label:d.label,curto:d.curto,url:d.url})))))}" aria-haspopup="menu" title="Ver documentos complementares">Outros docs</button>`
+    ? `<button type="button" class="doc-more-button-v559 doc-more-button-v570" data-docs-other-v559="${htmlAttr(encodeURIComponent(JSON.stringify(secundarios.map(d=>({label:d.label,curto:d.curto,url:d.url})))))}" aria-haspopup="menu" aria-label="Ver ${secundarios.length} documentos complementares" title="Ver ${secundarios.length} documentos complementares">+${secundarios.length}</button>`
     : '';
 
-  return `<div class="docs-mini-wrap docs-mini-wrap-v558 docs-mini-wrap-v559">${primary}${more}</div>`;
+  return `<div class="docs-mini-wrap docs-mini-wrap-v558 docs-mini-wrap-v559 docs-mini-wrap-v570">${primary}${more}</div>`;
 }
 
 function buildDetailPanel(r,colspan){
@@ -25612,10 +25612,11 @@ function buildDetailPanel(r,colspan){
       'desktop-ranking-stable-v566',
       'desktop-ranking-toolbar-locked-v567',
       'desktop-ranking-compact-height-v568',
-      'desktop-ranking-ultra-compact-v569'
+      'desktop-ranking-ultra-compact-v569',
+      'desktop-docs-compact-v570'
     );
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_ULTRA_COMPACT_V569';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOCS_COMPACT_V570';
     var toolbar = document.querySelector('#rankingsSection .ranking-toolbar-v136');
     if(toolbar){
       toolbar.style.setProperty('width','min(100%, 940px)','important');
