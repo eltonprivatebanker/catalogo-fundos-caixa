@@ -76352,3 +76352,13 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-column:auto!important;
   }
 }
+
+/* PATCH v618 — Mobile ranking: foco acessível sem moldura branca pesada */
+@media (max-width:768px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617:focus,
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617:focus-visible{
+    outline:1px solid rgba(232,187,106,.55)!important;
+    outline-offset:2px!important;
+    box-shadow:none!important;
+  }
+}
