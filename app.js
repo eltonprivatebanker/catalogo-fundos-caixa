@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_HIDE_CLOSED_MONTH_LAUNCH_V571';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_COMPACT_V572';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -25614,10 +25614,11 @@ function buildDetailPanel(r,colspan){
       'desktop-ranking-compact-height-v568',
       'desktop-ranking-ultra-compact-v569',
       'desktop-docs-compact-v570',
-      'desktop-hide-closed-month-launch-v571'
+      'desktop-hide-closed-month-launch-v571',
+      'desktop-rates-compact-v572'
     );
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_HIDE_CLOSED_MONTH_LAUNCH_V571';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_COMPACT_V572';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -25678,4 +25679,25 @@ function buildDetailPanel(r,colspan){
   else reinstall();
   window.addEventListener('load', reinstall, {once:true});
   [80, 300, 900, 1800, 3200, 7000, 12000, 23000, 36000].forEach(function(delay){ setTimeout(reinstall, delay); });
+})();
+
+
+/* PATCH v572-final — compacta Juros e CDI no desktop sem alterar dados */
+(function desktopRatesCompactV572Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function sync(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(
+      'desktop-hide-closed-month-launch-v571',
+      'desktop-rates-compact-v572'
+    );
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_COMPACT_V572';
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  [120, 500, 1300, 3200, 7000, 14000, 23000, 36000].forEach(function(delay){ setTimeout(sync, delay); });
 })();
