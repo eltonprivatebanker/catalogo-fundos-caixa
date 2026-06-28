@@ -1,0 +1,2390 @@
+/* ============================================================
+   CAMADA DE IDENTIDADE VISUAL — CATÁLOGO DE FUNDOS CAIXA
+   tokens-caixa.css · v1 (Bronze · premium sóbrio)
+   ------------------------------------------------------------
+   Camada visual aplicada POR CIMA do style.css.
+   Carregar SEMPRE depois de style.css no index.html.
+   NÃO altera layout, NÃO altera JS, NÃO altera mobile.
+   Reversível: basta remover a linha <link> do index.html.
+   ============================================================ */
+
+/* ── 01 · PALETA — redefine as variáveis do app para bronze ──
+   O app é todo baseado nestas variáveis, então trocá-las aqui
+   propaga o bronze automaticamente para a maioria dos componentes. */
+:root{
+  /* tom de marca (antes dourado #c8973a) */
+  --gold:#b08454;
+  --gold2:#c79b6d;
+  --gold3:#d8b489;
+  --gold-dim:rgba(176,132,84,.12);
+  --gold-glow:rgba(176,132,84,.14);   /* brilho reduzido — visual mais sóbrio */
+  --border:rgba(176,132,84,.22);
+
+  /* design-system interno (prefixo --ds-) */
+  --ds-brand:#b08454;
+  --ds-brand-light:#c79b6d;
+  --ds-brand-dim:rgba(176,132,84,.12);
+  --ds-border-brand:rgba(176,132,84,.35);
+
+  /* semânticos — alta/baixa um pouco menos saturados, mais corporativos */
+  --green:#3f9d6e;
+  --green-dim:rgba(63,157,110,.12);
+  --red:#d06370;
+  --red-dim:rgba(208,99,112,.12);
+}
+
+/* 09D · Catálogo desktop — hierarquia de cor e estabilidade v561 */
+@media (min-width:769px){
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-panel-v559{
+    background:linear-gradient(180deg,rgba(9,13,24,.97),rgba(7,11,20,.97)) !important;
+    border-top:1px solid rgba(148,163,184,.15) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559{
+    border-bottom-color:rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 strong{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 small{
+    color:#8fa0bc !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559{
+    min-width:0 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559:empty{
+    display:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559{
+    color:#cfd8e8 !important;
+    background:rgba(13,19,34,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559:hover{
+    color:#f0c36b !important;
+    border-color:rgba(202,161,87,.34) !important;
+    background:rgba(202,161,87,.08) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559{
+    background:rgba(9,14,26,.66) !important;
+    border-color:rgba(148,163,184,.11) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 span{
+    color:#8fa0bc !important;
+    opacity:.92 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 strong{
+    color:#dfe7f3 !important;
+    font-weight:780 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive{
+    border-color:rgba(34,211,160,.18) !important;
+    background:rgba(34,211,160,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive strong{
+    color:#28e6af !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative{
+    border-color:rgba(255,102,133,.20) !important;
+    background:rgba(255,102,133,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative strong{
+    color:#ff6f8b !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559{
+    background:rgba(8,13,24,.58) !important;
+    border-color:rgba(148,163,184,.11) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application{
+    border-left-color:rgba(34,211,160,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption{
+    border-left-color:rgba(96,165,250,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 h4{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application h4{
+    color:#bff8e8 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption h4{
+    color:#cfe2ff !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 .detail-field-v559{
+    background:rgba(12,18,32,.60) !important;
+  }
+}
+
+/* 09C · Catálogo desktop — override terminal v560 */
+@media (min-width:769px){
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-panel-v559{
+    padding:12px 14px 13px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-compact-head-v559{
+    padding-bottom:9px !important;
+    margin-bottom:9px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+    grid-template-columns:116px minmax(170px,1.15fr) minmax(120px,.9fr) 96px 116px 106px 112px 104px minmax(140px,.9fr) !important;
+    gap:7px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559{
+    min-height:42px !important;
+    padding:7px 9px !important;
+    border-radius:9px !important;
+    gap:3px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 span{
+    font-size:.51rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 strong{
+    font-size:.72rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-grid-v559{
+    gap:8px !important;
+    margin-bottom:0 !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559{
+    padding:9px !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559 h4{
+    margin-bottom:7px !important;
+    font-size:.74rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-fields-v559{
+    gap:7px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-bottom-grid-v559,
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-copy-btn-v559{
+    display:none !important;
+  }
+
+  @media (max-width:1500px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media (max-width:1180px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}
+
+/* 09D · Catálogo desktop — override terminal v561 */
+@media (min-width:769px){
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-panel-v559{
+    background:linear-gradient(180deg,rgba(9,13,24,.97),rgba(7,11,20,.97)) !important;
+    border-top:1px solid rgba(148,163,184,.15) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559{
+    border-bottom-color:rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 strong{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 small{
+    color:#8fa0bc !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559:empty{
+    display:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559{
+    color:#cfd8e8 !important;
+    background:rgba(13,19,34,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559:hover{
+    color:#f0c36b !important;
+    border-color:rgba(202,161,87,.34) !important;
+    background:rgba(202,161,87,.08) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559{
+    background:rgba(9,14,26,.66) !important;
+    border-color:rgba(148,163,184,.11) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 span{
+    color:#8fa0bc !important;
+    opacity:.92 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 strong{
+    color:#dfe7f3 !important;
+    font-weight:780 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive{
+    border-color:rgba(34,211,160,.18) !important;
+    background:rgba(34,211,160,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive strong{
+    color:#28e6af !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative{
+    border-color:rgba(255,102,133,.20) !important;
+    background:rgba(255,102,133,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative strong{
+    color:#ff6f8b !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559{
+    background:rgba(8,13,24,.58) !important;
+    border-color:rgba(148,163,184,.11) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application{
+    border-left-color:rgba(34,211,160,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption{
+    border-left-color:rgba(96,165,250,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 h4{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application h4{
+    color:#bff8e8 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption h4{
+    color:#cfe2ff !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 .detail-field-v559{
+    background:rgba(12,18,32,.60) !important;
+  }
+}
+
+/* 08B · RANKINGS COMPACTOS — override final v556 */
+@media (min-width:769px){
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection{
+    margin-top:24px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-head{
+    margin-bottom:10px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-title-group h2{
+    margin-bottom:6px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-section-subtitle-v136{
+    margin-top:0 !important;
+    font-size:.76rem !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-toolbar-v136{
+    grid-template-columns:150px 230px 230px minmax(0,1fr) !important;
+    min-height:0 !important;
+    padding:10px 12px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-control-card-v136{
+    background:transparent !important;
+    border:0 !important;
+    padding:0 !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-control-card-v136 label{
+    margin-bottom:4px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-select-v136{
+    min-height:34px !important;
+    height:34px !important;
+    padding-top:6px !important;
+    padding-bottom:6px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-filter-row-compat-v136{
+    min-height:34px !important;
+    padding-top:18px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-filter-chip{
+    min-height:28px !important;
+    padding:6px 9px !important;
+    font-size:.64rem !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-grid{
+    gap:10px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-hero{
+    display:none !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v556-context,
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-context{
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    padding:0 2px !important;
+    margin:0 0 2px !important;
+    gap:6px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-context span{
+    padding:5px 8px !important;
+    background:#0b0f1b !important;
+    border-color:rgba(148,163,184,.14) !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-summary{
+    gap:8px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-summary-card,
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-category-card{
+    padding:11px 12px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-panel{
+    padding:12px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-panel-head{
+    padding-bottom:10px !important;
+  }
+}
+
+/* 09C · Catálogo desktop — detalhe sem CNPJ duplicado v560 */
+@media (min-width:769px){
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-panel-v559{
+    padding:12px 14px 13px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-compact-head-v559{
+    padding-bottom:9px !important;
+    margin-bottom:9px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+    grid-template-columns:116px minmax(170px,1.15fr) minmax(120px,.9fr) 96px 116px 106px 112px 104px minmax(140px,.9fr) !important;
+    gap:7px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559{
+    min-height:42px !important;
+    padding:7px 9px !important;
+    border-radius:9px !important;
+    gap:3px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 span{
+    font-size:.51rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 strong{
+    font-size:.72rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-grid-v559{
+    gap:8px !important;
+    margin-bottom:0 !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559{
+    padding:9px !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559 h4{
+    margin-bottom:7px !important;
+    font-size:.74rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-fields-v559{
+    gap:7px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-bottom-grid-v559,
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-copy-btn-v559{
+    display:none !important;
+  }
+
+  @media (max-width:1500px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media (max-width:1180px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}
+
+/* 08 · RANKINGS COMPACTOS + CDI NORMALIZADO — DESKTOP v556 */
+@media (min-width:769px){
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection{
+    margin-top:24px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-head{
+    margin-bottom:10px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-title-group h2{
+    margin-bottom:6px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-section-subtitle-v136{
+    margin-top:0 !important;
+    font-size:.76rem !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-toolbar-v136{
+    grid-template-columns:150px 230px 230px minmax(0,1fr) !important;
+    min-height:0 !important;
+    padding:10px 12px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-control-card-v136{
+    background:transparent !important;
+    border:0 !important;
+    padding:0 !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-control-card-v136 label{
+    margin-bottom:4px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-select-v136{
+    min-height:34px !important;
+    height:34px !important;
+    padding-top:6px !important;
+    padding-bottom:6px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-filter-row-compat-v136{
+    min-height:34px !important;
+    padding-top:18px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-filter-chip{
+    min-height:28px !important;
+    padding:6px 9px !important;
+    font-size:.64rem !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-grid{
+    gap:10px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-hero{
+    display:none !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v556-context,
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-context{
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    padding:0 2px !important;
+    margin:0 0 2px !important;
+    gap:6px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-context span{
+    padding:5px 8px !important;
+    background:#0b0f1b !important;
+    border-color:rgba(148,163,184,.14) !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-summary{
+    gap:8px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-summary-card,
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-category-card{
+    padding:11px 12px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-panel{
+    padding:12px !important;
+  }
+
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-panel-head{
+    padding-bottom:10px !important;
+  }
+}
+
+/* ── 02 · Pontos com dourado fixo (não usavam variável) ──
+   Sobrescritos pontualmente para não sobrar nenhum dourado solto. */
+.top-disclaimer{ border-color:rgba(176,132,84,.18) !important; }
+.kpi:hover{ border-color:rgba(176,132,84,.30) !important; }
+.dolar-day-card:hover,
+.dolar-chart-card:hover,
+.dolar-timeline-card:hover{ border-color:rgba(176,132,84,.25) !important; }
+.dolar-timeline-header:hover{ background:rgba(176,132,84,.03) !important; }
+.dolar-source-note{
+  border-color:rgba(176,132,84,.24) !important;
+  background:rgba(176,132,84,.11) !important;
+}
+.copom-link:hover,
+.dolar-month-item:hover,
+.dolar-month-item.current{ background:rgba(176,132,84,.12) !important; }
+
+/* ── 03 · TIPOGRAFIA CORPORATIVA (apenas desktop) ──
+   Usa fontes de sistema para evitar bloqueio de renderização.
+   Escopo desktop para não afetar o mobile nesta fase. */
+@media (min-width:769px){
+
+  /* base de interface */
+  body{ font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important; }
+
+  /* títulos: sans de sistema, sem carregamento externo */
+  .brand-text h1,
+  .section-title h2,
+  .dolar-day-title,
+  .dolar-timeline-title,
+  .dolar-chart-title,
+  .poup-explain-title{
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif !important;
+    font-weight:600 !important;
+    letter-spacing:0 !important;
+  }
+
+  /* números e valores: mono de sistema, tabular */
+  .kpi-value,
+  .indic-ref-val,
+  .dolar-day-rate,
+  .dolar-month-val{
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,"Liberation Mono",monospace !important;
+    font-weight:600 !important;
+    font-variant-numeric:tabular-nums !important;
+  }
+
+  /* rótulos, tabelas e mono: sem requisição externa */
+  .section-badge,
+  .indic-table,
+  .dolar-day-sub,
+  .dolar-timeline-sub,
+  .dolar-chart-sub,
+  .dolar-month-label,
+  .dolar-month-var,
+  .selic-change-badge,
+  .copom-link,
+  .cdi-rel{
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,"Liberation Mono",monospace !important;
+  }
+}
+
+
+/* ============================================================
+   04 · GOVERNANCA DE COR — DESKTOP v551
+   Regra: neutro para estrutura, bronze para marca/ativo,
+   verde/vermelho somente para dados positivos/negativos.
+   ============================================================ */
+@media (min-width:769px){
+  :root{
+    --surface-0:#070a12;
+    --surface-1:#0b101c;
+    --surface-2:#101725;
+    --surface-3:#141c2b;
+    --text-main:#f3f6fb;
+    --text-soft:#c7d0e3;
+    --text-muted:#8e9ab3;
+    --line-soft:rgba(148,163,184,.16);
+    --line-softer:rgba(148,163,184,.10);
+    --brand-bronze:#b58a55;
+    --brand-bronze-2:#d0a66c;
+    --brand-bronze-dim:rgba(181,138,85,.12);
+    --brand-bronze-line:rgba(181,138,85,.28);
+  }
+
+  body::before{
+    background:
+      radial-gradient(ellipse 72% 48% at 8% -6%,rgba(181,138,85,.035),transparent 58%),
+      radial-gradient(ellipse 68% 62% at 92% 105%,rgba(63,78,110,.028),transparent 60%) !important;
+  }
+
+  body,
+  .page{
+    color:var(--text-main) !important;
+  }
+
+  header,
+  .desktop-anchor-nav-ui-v132,
+  .fund-filter-shell,
+  .fund-filter-shell-v217,
+  .table-wrap,
+  .kpi,
+  .rank-card,
+  .ranking-exec-card,
+  .ranking-toolbar,
+  .ranking-view-tabs,
+  #rankingsSection .ranking-control-card-v136,
+  #rankingsSection .ranking-exec-board,
+  #rankingsSection .ranking-exec-secondary,
+  #rankingsSection .ranking-top-board,
+  #rankingsSection #rankingAttentionV136,
+  .dolar-compact-card,
+  .dolar-compact-chart,
+  .ptax-stats-card,
+  .dolar-compact-footer,
+  .market-ref-section,
+  .market-reference-card,
+  .indic-card-v2,
+  .rates-card,
+  .inflation-card,
+  .savings-card{
+    background:linear-gradient(180deg,rgba(15,21,34,.86),rgba(8,12,22,.86)) !important;
+    border-color:var(--line-soft) !important;
+    box-shadow:none !important;
+  }
+
+  .kpi:hover,
+  .rank-card:hover,
+  .ranking-exec-card:hover,
+  .dolar-compact-card:hover{
+    border-color:rgba(181,138,85,.24) !important;
+  }
+
+  .brand-logo,
+  .section-title-icon-v302,
+  .kpi-icon{
+    background:linear-gradient(135deg,rgba(181,138,85,.20),rgba(148,163,184,.08)) !important;
+    border:1px solid rgba(181,138,85,.26) !important;
+    color:#f4dfbf !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.06) !important;
+  }
+
+  .brand-text h1,
+  .section-title h2,
+  .section-title-v302,
+  .page-section-title-v302,
+  .section-title-text-v302,
+  .ranking-title-group h2,
+  .ranking-title-group .section-title-text-v302{
+    color:var(--text-main) !important;
+  }
+
+  .section-badge,
+  .header-source-pill-v343,
+  .live-badge,
+  .kpi-label,
+  .ranking-section-subtitle-v136,
+  .ranking-control-card-v136 label,
+  .control-caption-v217,
+  .desktop-filter-row-label-v488,
+  .catalog-filter-legend-v217,
+  .catalog-risk-filter-v198 > label span,
+  .dolar-kpi-label,
+  .ptax-stat-label,
+  th,
+  .ranking-table th{
+    color:var(--text-muted) !important;
+  }
+
+  .section-badge,
+  .header-source-pill-v343,
+  .live-badge{
+    background:rgba(15,21,34,.82) !important;
+    border-color:var(--line-soft) !important;
+  }
+
+  .desktop-anchor-nav-ui-v132 a,
+  .desktop-anchor-nav-ui-v132 button,
+  .nav-link,
+  .anchor-link,
+  .section-anchor-link{
+    color:var(--text-soft) !important;
+    background:transparent !important;
+    border-color:transparent !important;
+  }
+
+  .desktop-anchor-nav-ui-v132 a.active,
+  .desktop-anchor-nav-ui-v132 button.active,
+  .desktop-anchor-nav-ui-v132 [aria-current="true"],
+  .nav-link.active,
+  .anchor-link.active,
+  .section-anchor-link.active,
+  .chart-tab.active,
+  .chart-tab[aria-selected="true"],
+  .ranking-view-tab.active,
+  .ranking-view-tab[aria-pressed="true"],
+  .desktop-audience-chip-v488.active,
+  .desktop-audience-chip-v488[aria-pressed="true"],
+  .filter-preset-chip.active,
+  .filter-preset-chip[aria-pressed="true"],
+  .shortcut-preset.active,
+  .shortcut-preset[aria-pressed="true"]{
+    color:#f7dfb7 !important;
+    background:rgba(181,138,85,.15) !important;
+    border-color:rgba(181,138,85,.42) !important;
+    box-shadow:none !important;
+  }
+
+  .chart-tab,
+  .ranking-view-tab,
+  .desktop-audience-chip-v488,
+  .filter-preset-chip,
+  .shortcut-preset,
+  .section-toggle-btn,
+  .ranking-action-btn,
+  .cdi-sort-btn,
+  .exhibition-control,
+  .ctrl-select,
+  select,
+  input{
+    color:var(--text-soft) !important;
+    background:rgba(10,15,28,.72) !important;
+    border-color:var(--line-soft) !important;
+    box-shadow:none !important;
+  }
+
+  .section-toggle-btn,
+  .ranking-action-btn,
+  .attention-details-v536 > summary,
+  .attention-details-v534 > summary,
+  .copom-link{
+    color:#f3d9ad !important;
+    background:rgba(181,138,85,.12) !important;
+    border-color:rgba(181,138,85,.28) !important;
+  }
+
+  #sec-fundos #mainTable tbody tr,
+  #sec-fundos #mainTable tbody td{
+    background:transparent !important;
+    border-color:var(--line-softer) !important;
+  }
+
+  #sec-fundos #mainTable tbody tr:hover{
+    background:rgba(148,163,184,.045) !important;
+  }
+
+  #sec-fundos #mainTable td.col-fundo strong,
+  #sec-fundos #mainTable td.col-fundo a,
+  #sec-fundos #mainTable .fund-name,
+  #sec-fundos #mainTable .fundo-name,
+  #sec-fundos #mainTable .fundo-nome,
+  #sec-fundos #mainTable .fund-title,
+  #sec-fundos #mainTable .fundo-title,
+  #rankingsSection .ranking-fund strong,
+  #rankingsSection .attention-row-v136 .fund,
+  #rankingsSection .ranking-cat-mini small,
+  .kpi-fund-name{
+    color:var(--text-main) !important;
+    text-shadow:none !important;
+  }
+
+  #sec-fundos #mainTable td.col-fundo .fundo-cell-meta,
+  #sec-fundos #mainTable td.col-fundo small,
+  #sec-fundos #mainTable .fundo-cnpj-sub,
+  #rankingsSection .ranking-fund span,
+  #rankingsSection .attention-row-v136 .reason,
+  .kpi-sub,
+  small{
+    color:var(--text-muted) !important;
+  }
+
+  #sec-fundos #mainTable .fundo-cnpj-sub{
+    background:rgba(148,163,184,.055) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  .category-badge,
+  .fundo-category-badge,
+  .fund-category-badge,
+  .categoria-badge,
+  .tag-categoria,
+  .fundo-tag,
+  .risk-badge,
+  .badge-cat,
+  #sec-fundos #mainTable td.col-fundo .fundo-cell-meta span:not(.fundo-cnpj-sub){
+    color:#d6deee !important;
+    background:rgba(148,163,184,.09) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  .doc-btn,
+  .doc-chip,
+  .fund-doc-btn,
+  .document-chip,
+  #sec-fundos #mainTable [data-doc],
+  #sec-fundos #mainTable a[href*=".pdf"]{
+    color:#d8e0ef !important;
+    background:rgba(148,163,184,.08) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  #sec-fundos #mainTable [data-doc="boletim"],
+  #sec-fundos #mainTable a[href*="boletim"],
+  #sec-fundos #mainTable a[href*="Boletim"]{
+    color:#f3d9ad !important;
+    background:rgba(181,138,85,.11) !important;
+    border-color:rgba(181,138,85,.28) !important;
+  }
+
+  .pos,
+  .positive,
+  .valor-pos,
+  .ranking-return.pos,
+  .ranking-value-standard.pos,
+  .dolar-metric-val.pos,
+  .dolar-month-var.pos{
+    color:#22d3a6 !important;
+  }
+
+  .neg,
+  .negative,
+  .valor-neg,
+  .ranking-return.neg,
+  .ranking-value-standard.neg,
+  .dolar-metric-val.neg,
+  .dolar-month-var.neg{
+    color:#fb6f8f !important;
+  }
+
+  #rankingsSection #rankingAttentionV136{
+    background:linear-gradient(180deg,rgba(15,21,34,.90),rgba(10,14,24,.90)) !important;
+    border-color:rgba(181,138,85,.22) !important;
+  }
+
+  #rankingsSection .attention-head-v136 > span{
+    color:#f3d9ad !important;
+    background:rgba(181,138,85,.12) !important;
+    border-color:rgba(181,138,85,.24) !important;
+  }
+
+  #rankingsSection .attention-head-v136 strong,
+  #rankingsSection .attention-block-v136 h3,
+  #rankingsSection .ranking-view-subhead-v546,
+  .dolar-chart-title,
+  .dolar-month-strip-title,
+  .ptax-stats-title,
+  .ind-v2-kicker,
+  .market-section-kicker{
+    color:#f3d9ad !important;
+  }
+
+  .kpi.kpi-best,
+  .kpi.kpi-worst,
+  .ranking-summary-card,
+  .ranking-exec-card,
+  .dolar-mini-kpi,
+  .ptax-stat-item,
+  .attention-metric-v136{
+    border-color:var(--line-soft) !important;
+    background:rgba(10,15,28,.70) !important;
+  }
+
+  .kpi.kpi-best,
+  .ranking-exec-card.is-positive{
+    border-top-color:rgba(34,211,166,.32) !important;
+  }
+
+  .kpi.kpi-worst,
+  .ranking-exec-card.is-negative{
+    border-top-color:rgba(251,111,143,.32) !important;
+  }
+
+  canvas{
+    filter:saturate(.86) contrast(.98) !important;
+  }
+}
+
+
+/* ============================================================
+   05 · LAYOUT REFERENCIA — DESKTOP v552
+   Aproxima o catalogo de uma tela operacional sobria:
+   cabecalho menor, filtros densos e tabela mais limpa.
+   ============================================================ */
+@media (min-width:769px){
+  html.desktop-reference-layout-v552 body .page{
+    max-width:1660px !important;
+    padding-top:28px !important;
+  }
+
+  html.desktop-reference-layout-v552 body header{
+    padding-bottom:22px !important;
+    border-bottom-color:rgba(148,163,184,.14) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .brand-logo{
+    width:44px !important;
+    height:44px !important;
+    border-radius:11px !important;
+    font-size:1.26rem !important;
+    background:linear-gradient(135deg,#b9864f,#d4a76a) !important;
+    color:#070a12 !important;
+  }
+
+  html.desktop-reference-layout-v552 body .brand-text h1{
+    font-size:1.34rem !important;
+    line-height:1.12 !important;
+    font-weight:700 !important;
+    letter-spacing:.01em !important;
+  }
+
+  html.desktop-reference-layout-v552 body .brand-text p{
+    margin-top:5px !important;
+    color:rgba(199,208,227,.72) !important;
+    font-size:.60rem !important;
+    letter-spacing:.26em !important;
+  }
+
+  html.desktop-reference-layout-v552 body .desktop-anchor-nav-ui-v132{
+    position:relative !important;
+    top:auto !important;
+    margin:14px 0 16px !important;
+    padding:8px !important;
+    border-radius:12px !important;
+    background:rgba(8,12,22,.74) !important;
+    border-color:rgba(148,163,184,.16) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .desktop-anchor-nav-ui-v132 a{
+    min-height:30px !important;
+    padding:0 12px !important;
+    border-radius:8px !important;
+    font-size:.66rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-grid{
+    gap:10px !important;
+    grid-template-columns:repeat(6,minmax(0,1fr)) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi{
+    min-height:88px !important;
+    padding:16px 15px !important;
+    border-radius:11px !important;
+    background:rgba(15,21,34,.78) !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-icon{
+    display:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-label{
+    font-size:.57rem !important;
+    letter-spacing:.18em !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-value{
+    margin-top:8px !important;
+    font-size:1.28rem !important;
+    line-height:1.05 !important;
+  }
+
+  html.desktop-reference-layout-v552 body .kpi-sub{
+    margin-top:7px !important;
+    font-size:.62rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos{
+    margin-top:26px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title{
+    position:relative !important;
+    display:grid !important;
+    grid-template-columns:minmax(0,1fr) auto !important;
+    align-items:end !important;
+    gap:12px !important;
+    margin:0 0 10px !important;
+    padding:0 2px 12px !important;
+    border-bottom:1px solid rgba(148,163,184,.16) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title::before{
+    content:'CATALOGO' !important;
+    position:absolute !important;
+    left:2px !important;
+    top:-14px !important;
+    color:#caa06c !important;
+    font-family:'IBM Plex Mono',monospace !important;
+    font-size:.54rem !important;
+    font-weight:800 !important;
+    letter-spacing:.18em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title h2{
+    margin:0 !important;
+    padding:0 !important;
+    color:var(--text-main) !important;
+    font-size:1.08rem !important;
+    line-height:1.15 !important;
+    font-weight:700 !important;
+    letter-spacing:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title .section-title-icon-v302{
+    display:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos > .section-title .section-badge{
+    display:inline-flex !important;
+    height:28px !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:0 11px !important;
+    border-radius:8px !important;
+    color:rgba(199,208,227,.78) !important;
+    background:rgba(10,15,28,.72) !important;
+    border-color:rgba(148,163,184,.16) !important;
+    font-size:.58rem !important;
+    letter-spacing:.12em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #fundFilterShell{
+    padding:0 0 12px !important;
+    border:0 !important;
+    border-radius:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-filter-v488{
+    order:1 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-shortcuts-category-grid-v69{
+    order:2 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-secondary-controls-v217{
+    order:3 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-primary-toolbar-v217{
+    order:4 !important;
+    display:grid !important;
+    grid-template-columns:minmax(360px,1fr) minmax(390px,auto) !important;
+    align-items:center !important;
+    gap:10px !important;
+    min-height:42px !important;
+    margin-top:0 !important;
+    padding:9px 0 0 !important;
+    border-bottom:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-filter-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-shortcuts-category-grid-v69,
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-secondary-controls-v217{
+    grid-template-columns:110px minmax(0,1fr) !important;
+    min-height:38px !important;
+    padding:6px 0 !important;
+    border-bottom:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-filter-row-label-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-filter-legend-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-risk-filter-v198 > label span{
+    width:110px !important;
+    min-width:110px !important;
+    max-width:110px !important;
+    flex-basis:110px !important;
+    color:rgba(159,184,234,.82) !important;
+    font-size:.56rem !important;
+    letter-spacing:.18em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-chips-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .category-grid-v69{
+    gap:7px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-audience-chip-v488,
+  html.desktop-reference-layout-v552 body #sec-fundos .filter-preset-chip,
+  html.desktop-reference-layout-v552 body #sec-fundos .shortcut-preset{
+    height:28px !important;
+    min-height:28px !important;
+    max-height:28px !important;
+    padding:0 12px !important;
+    border-radius:8px !important;
+    font-size:.62rem !important;
+    font-weight:700 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-risk-filter-v198{
+    grid-template-columns:110px 210px !important;
+    gap:10px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .catalog-risk-select-wrap-v198,
+  html.desktop-reference-layout-v552 body #sec-fundos #catalogRiskSelectV198{
+    width:210px !important;
+    min-width:210px !important;
+    max-width:210px !important;
+    height:32px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-search-main{
+    height:36px !important;
+    min-height:36px !important;
+    border-radius:8px !important;
+    padding:0 11px !important;
+    background:rgba(10,15,28,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #searchInput{
+    font-size:.70rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #desktopFilterResultSummary{
+    display:none !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-view-controls-v217{
+    grid-template-columns:minmax(240px,1fr) 142px !important;
+    max-width:430px !important;
+    gap:8px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control,
+  html.desktop-reference-layout-v552 body #sec-fundos .exhibition-control{
+    height:36px !important;
+    border-radius:8px !important;
+    padding:5px 9px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control .control-caption-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .exhibition-control > span{
+    font-size:.50rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control .sort-metric-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .exhibition-control #perPage{
+    font-size:.62rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .desktop-cdi-sort-control .cdi-sort-btn{
+    height:22px !important;
+    min-height:22px !important;
+    padding:0 7px !important;
+    font-size:.58rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .table-wrap{
+    margin-top:16px !important;
+    border-radius:10px !important;
+    border-color:rgba(148,163,184,.16) !important;
+    background:rgba(9,13,23,.78) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable thead th{
+    height:38px !important;
+    padding-top:10px !important;
+    padding-bottom:10px !important;
+    background:rgba(18,26,42,.72) !important;
+    color:rgba(199,208,227,.72) !important;
+    font-size:.56rem !important;
+    letter-spacing:.16em !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable tbody td{
+    padding-top:12px !important;
+    padding-bottom:12px !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable td.col-fundo strong,
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable td.col-fundo a{
+    color:#e7edf7 !important;
+    font-size:.82rem !important;
+    letter-spacing:0 !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos #mainTable .fundo-cnpj-sub{
+    height:16px !important;
+    padding:0 5px !important;
+    font-size:.50rem !important;
+  }
+
+  html.desktop-reference-layout-v552 body .pagination-row{
+    margin-top:10px !important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1220px){
+  html.desktop-reference-layout-v552 body .kpi-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-primary-toolbar-v217{
+    grid-template-columns:1fr !important;
+  }
+
+  html.desktop-reference-layout-v552 body #sec-fundos .fund-view-controls-v217{
+    max-width:none !important;
+    justify-self:stretch !important;
+  }
+}
+
+
+/* ============================================================
+   06 · PERFORMANCE SEGURA — DESKTOP v554
+   Reduz custo de renderizacao sem alterar dados ou interacoes.
+   ============================================================ */
+@media (min-width:769px){
+  html.desktop-safe-performance-v554 body,
+  html.desktop-safe-performance-v554 body *{
+    text-rendering:optimizeLegibility;
+  }
+
+  html.desktop-safe-performance-v554 body .desktop-anchor-nav-ui-v132,
+  html.desktop-safe-performance-v554 body .header-source-pill-v343,
+  html.desktop-safe-performance-v554 body .live-badge,
+  html.desktop-safe-performance-v554 body .section-badge,
+  html.desktop-safe-performance-v554 body .fund-filter-shell,
+  html.desktop-safe-performance-v554 body .ranking-toolbar,
+  html.desktop-safe-performance-v554 body .dolar-compact-card{
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body canvas{
+    filter:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body .page,
+  html.desktop-safe-performance-v554 body .kpi,
+  html.desktop-safe-performance-v554 body .rank-card,
+  html.desktop-safe-performance-v554 body .ranking-exec-card,
+  html.desktop-safe-performance-v554 body .table-wrap,
+  html.desktop-safe-performance-v554 body .dolar-compact-card,
+  html.desktop-safe-performance-v554 body .dolar-compact-chart,
+  html.desktop-safe-performance-v554 body .ptax-stats-card{
+    box-shadow:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body .page{
+    transition:none !important;
+  }
+
+  html.desktop-safe-performance-v554 body .desktop-anchor-nav-ui-v132 *,
+  html.desktop-safe-performance-v554 body #sec-fundos *,
+  html.desktop-safe-performance-v554 body #rankingsSection *{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+  }
+}
+
+/* 07 · RANKINGS RECONSTRUIDOS — DESKTOP v555
+   Nova hierarquia: filtros simples, melhores por categoria, Top 10 e alertas recolhidos. */
+@media (min-width:769px){
+  html.desktop-ranking-redesign-v555 body #rankingsSection{
+    max-width:1540px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-head{
+    display:flex !important;
+    justify-content:center !important;
+    text-align:center !important;
+    margin-bottom:14px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-title-group{
+    align-items:center !important;
+    max-width:720px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-actions,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-view-tabs,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-more-v539,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-attention-panel-v136{
+    display:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-toolbar-v136{
+    display:grid !important;
+    grid-template-columns:170px 240px 240px minmax(0,1fr) !important;
+    align-items:end !important;
+    gap:12px !important;
+    padding:14px !important;
+    margin:0 0 14px !important;
+    background:#0b0f1b !important;
+    border:1px solid rgba(148,163,184,.18) !important;
+    border-radius:12px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-control-card-v136{
+    gap:6px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-control-card-v136 label,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-label{
+    color:#9fb1d9 !important;
+    font-size:.62rem !important;
+    letter-spacing:.12em !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-select-v136{
+    min-height:38px !important;
+    border-color:rgba(148,163,184,.22) !important;
+    background:#0a0e19 !important;
+    color:#f8fafc !important;
+    border-radius:9px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-row-compat-v136{
+    display:flex !important;
+    gap:7px !important;
+    align-items:center !important;
+    min-height:38px !important;
+    overflow-x:auto !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-chip{
+    min-height:31px !important;
+    padding:7px 11px !important;
+    border-radius:9px !important;
+    background:#0a0e19 !important;
+    border:1px solid rgba(148,163,184,.20) !important;
+    color:#d7def0 !important;
+    font-size:.68rem !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-chip.active{
+    border-color:rgba(200,151,58,.65) !important;
+    background:rgba(200,151,58,.14) !important;
+    color:#f1c976 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-layout-v136{
+    display:block !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-grid{
+    display:grid !important;
+    grid-template-columns:1fr !important;
+    gap:14px !important;
+    width:100% !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-context,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts{
+    background:#0b0f1b !important;
+    border:1px solid rgba(148,163,184,.16) !important;
+    border-radius:12px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:16px !important;
+    padding:14px 16px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero h3,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel h3{
+    margin:0 !important;
+    color:#f8fafc !important;
+    font-size:1rem !important;
+    line-height:1.2 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-hero p,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel p{
+    margin:4px 0 0 !important;
+    color:#93a4c3 !important;
+    font-size:.72rem !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-period-tabs{
+    display:inline-flex !important;
+    gap:4px !important;
+    padding:4px !important;
+    background:#111728 !important;
+    border:1px solid rgba(148,163,184,.16) !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-period-tabs button{
+    min-width:62px !important;
+    min-height:30px !important;
+    border:0 !important;
+    border-radius:7px !important;
+    background:transparent !important;
+    color:#cbd5e1 !important;
+    font-weight:800 !important;
+    font-size:.68rem !important;
+    cursor:pointer !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-period-tabs button.active{
+    background:rgba(200,151,58,.18) !important;
+    color:#f4cc7a !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-context{
+    display:flex !important;
+    flex-wrap:wrap !important;
+    gap:8px !important;
+    padding:10px 12px !important;
+    color:#aebbd2 !important;
+    font-size:.68rem !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-context span{
+    padding:6px 9px !important;
+    border:1px solid rgba(148,163,184,.14) !important;
+    border-radius:999px !important;
+    background:#090d17 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary{
+    display:grid !important;
+    grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card{
+    background:#0c1220 !important;
+    border:1px solid rgba(148,163,184,.16) !important;
+    border-radius:12px !important;
+    padding:13px 14px !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card.best,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card:first-child{
+    border-top-color:rgba(200,151,58,.70) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card.worst{
+    border-top-color:rgba(236,93,110,.62) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card span,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card .ranking-v555-cat{
+    display:block !important;
+    color:#9fb1d9 !important;
+    font-size:.62rem !important;
+    font-weight:900 !important;
+    text-transform:uppercase !important;
+    letter-spacing:.10em !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card strong,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card strong{
+    display:block !important;
+    margin-top:6px !important;
+    font-size:1.12rem !important;
+    line-height:1.1 !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card small,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card small{
+    display:block !important;
+    margin-top:6px !important;
+    color:#f1f5f9 !important;
+    font-weight:800 !important;
+    font-size:.78rem !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-summary-card em,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-card em{
+    display:block !important;
+    margin-top:4px !important;
+    color:#9aa9c2 !important;
+    font-size:.66rem !important;
+    font-style:normal !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .pos{color:#20e2ad !important}
+  html.desktop-ranking-redesign-v555 body #rankingsSection .neg{color:#ff5f7b !important}
+  html.desktop-ranking-redesign-v555 body #rankingsSection .zero{color:#dbe4f0 !important}
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel{
+    padding:14px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-panel-head{
+    display:flex !important;
+    justify-content:space-between !important;
+    align-items:flex-start !important;
+    padding-bottom:12px !important;
+    border-bottom:1px solid rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-primary{
+    border-color:rgba(200,151,58,.25) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-grid{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:10px !important;
+    padding-top:12px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table{
+    display:grid !important;
+    gap:0 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-head,
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row{
+    display:grid !important;
+    grid-template-columns:56px minmax(0,1fr) 140px 110px !important;
+    align-items:center !important;
+    gap:14px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-head{
+    padding:10px 8px !important;
+    color:#8fa0be !important;
+    font-size:.62rem !important;
+    font-weight:900 !important;
+    text-transform:uppercase !important;
+    letter-spacing:.10em !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row{
+    min-height:54px !important;
+    padding:9px 8px !important;
+    border-top:1px solid rgba(148,163,184,.10) !important;
+    color:#e8eef8 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-pos{
+    width:28px !important;
+    height:28px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border-radius:8px !important;
+    background:rgba(200,151,58,.13) !important;
+    color:#f1c976 !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-fund{
+    min-width:0 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-fund strong{
+    display:block !important;
+    color:#f8fafc !important;
+    font-size:.78rem !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-fund small{
+    display:block !important;
+    margin-top:3px !important;
+    color:#91a0bb !important;
+    font-size:.66rem !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row > span:nth-child(3),
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-table-row > span:nth-child(4){
+    text-align:right !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts{
+    padding:0 !important;
+    overflow:hidden !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts summary{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    padding:13px 14px !important;
+    color:#f4cc7a !important;
+    font-weight:900 !important;
+    cursor:pointer !important;
+    list-style:none !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts summary::-webkit-details-marker{display:none !important}
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts summary strong{
+    min-width:28px !important;
+    height:24px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    border-radius:999px !important;
+    background:rgba(236,93,110,.14) !important;
+    color:#ff7890 !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-list{
+    padding:0 14px 12px !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row{
+    display:grid !important;
+    grid-template-columns:34px minmax(0,1fr) 140px 110px !important;
+    gap:12px !important;
+    align-items:center !important;
+    padding:9px 0 !important;
+    border-top:1px solid rgba(148,163,184,.10) !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row strong{
+    min-width:0 !important;
+    color:#f8fafc !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row small{
+    color:#91a0bb !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alert-row em{
+    text-align:right !important;
+    font-style:normal !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-alerts p{
+    margin:0 !important;
+    padding:10px 14px 13px !important;
+    border-top:1px dashed rgba(148,163,184,.14) !important;
+    color:#8fa0be !important;
+    font-size:.68rem !important;
+  }
+
+  @media (max-width:1180px){
+    html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-toolbar-v136{
+      grid-template-columns:160px 210px 220px !important;
+    }
+    html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-filter-row-compat-v136{
+      grid-column:1/-1 !important;
+    }
+    html.desktop-ranking-redesign-v555 body #rankingsSection .ranking-v555-category-grid{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}
+
+/* 08C · RANKINGS COMPACTOS — override terminal v556 */
+@media (min-width:769px){
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection{margin-top:24px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-head{margin-bottom:10px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-title-group h2{margin-bottom:6px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-section-subtitle-v136{margin-top:0 !important;font-size:.76rem !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-toolbar-v136{
+    grid-template-columns:150px 230px 230px minmax(0,1fr) !important;
+    min-height:0 !important;
+    padding:10px 12px !important;
+    margin-bottom:8px !important;
+  }
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-control-card-v136{background:transparent !important;border:0 !important;padding:0 !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-control-card-v136 label{margin-bottom:4px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-select-v136{min-height:34px !important;height:34px !important;padding-top:6px !important;padding-bottom:6px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-filter-row-compat-v136{min-height:34px !important;padding-top:18px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-filter-chip{min-height:28px !important;padding:6px 9px !important;font-size:.64rem !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-grid{gap:10px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-hero{display:none !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v556-context,
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-context{
+    background:transparent !important;
+    border:0 !important;
+    border-radius:0 !important;
+    padding:0 2px !important;
+    margin:0 0 2px !important;
+    gap:6px !important;
+  }
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-context span{padding:5px 8px !important;background:#0b0f1b !important;border-color:rgba(148,163,184,.14) !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-summary{gap:8px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-summary-card,
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-category-card{padding:11px 12px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-panel{padding:12px !important}
+  html.desktop-ranking-compact-cdi-v556 body #rankingsSection .ranking-v555-panel-head{padding-bottom:10px !important}
+}
+
+/* 09A · Catálogo desktop — busca, documentos e CNPJ v558 */
+@media (min-width:769px){
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fund-search-main{
+    position:relative !important;
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    height:48px !important;
+    min-height:48px !important;
+    padding:0 13px !important;
+    border:1px solid rgba(148,163,184,.20) !important;
+    border-radius:12px !important;
+    background:rgba(8,12,22,.78) !important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025) !important;
+    overflow:hidden !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fund-search-main svg{
+    position:static !important;
+    inset:auto !important;
+    transform:none !important;
+    flex:0 0 16px !important;
+    width:16px !important;
+    height:16px !important;
+    color:rgba(203,213,225,.62) !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fund-search-main #searchInput{
+    flex:1 1 auto !important;
+    min-width:0 !important;
+    width:auto !important;
+    height:100% !important;
+    padding:0 !important;
+    border:0 !important;
+    outline:0 !important;
+    box-shadow:none !important;
+    background:transparent !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fund-search-main #searchInput:focus{
+    border:0 !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fund-search-main:focus-within{
+    border-color:rgba(202,161,87,.45) !important;
+    box-shadow:0 0 0 3px rgba(202,161,87,.10), inset 0 1px 0 rgba(255,255,255,.03) !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .docs-mini-wrap-v558{
+    display:flex !important;
+    align-items:flex-start !important;
+    gap:7px !important;
+    justify-content:flex-start !important;
+    overflow:visible !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-mini-primary-v558{
+    min-height:28px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 12px !important;
+    border-radius:9px !important;
+    color:#f5f7fb !important;
+    background:rgba(148,163,184,.12) !important;
+    border:1px solid rgba(148,163,184,.22) !important;
+    font-size:.70rem !important;
+    font-weight:850 !important;
+    text-decoration:none !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-more-v558{
+    position:relative !important;
+    display:inline-block !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-more-v558 summary{
+    min-height:28px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 10px !important;
+    border-radius:9px !important;
+    color:#cbd5e1 !important;
+    background:rgba(15,23,42,.72) !important;
+    border:1px solid rgba(148,163,184,.18) !important;
+    font-size:.68rem !important;
+    font-weight:800 !important;
+    list-style:none !important;
+    cursor:pointer !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-more-v558 summary::-webkit-details-marker{
+    display:none !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-more-menu-v558{
+    position:static !important;
+    z-index:1 !important;
+    min-width:190px !important;
+    margin-top:6px !important;
+    padding:6px !important;
+    border-radius:10px !important;
+    background:#0b1020 !important;
+    border:1px solid rgba(148,163,184,.22) !important;
+    box-shadow:0 16px 40px rgba(0,0,0,.34) !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-mini-secondary-v558{
+    display:grid !important;
+    grid-template-columns:32px minmax(0,1fr) !important;
+    gap:8px !important;
+    align-items:center !important;
+    padding:7px 8px !important;
+    border-radius:8px !important;
+    color:#dbe4f0 !important;
+    text-decoration:none !important;
+    font-size:.68rem !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-mini-secondary-v558:hover{
+    background:rgba(148,163,184,.10) !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-mini-secondary-v558 strong{
+    color:#f0c36b !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+    font-size:.66rem !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .doc-mini-secondary-v558 span{
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fundo-cell-meta{
+    gap:7px !important;
+    align-items:center !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fundo-cnpj-sub-v558{
+    display:inline-flex !important;
+    align-items:center !important;
+    min-height:22px !important;
+    padding:0 9px !important;
+    border-radius:7px !important;
+    color:#cbd5e1 !important;
+    background:rgba(148,163,184,.09) !important;
+    border:1px solid rgba(148,163,184,.16) !important;
+    font-size:.68rem !important;
+    letter-spacing:.02em !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .fundo-pl-sub-hidden-v558{
+    display:none !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .cnpj-copy-btn-v558{
+    min-height:22px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 8px !important;
+    border-radius:7px !important;
+    border:1px solid rgba(202,161,87,.28) !important;
+    background:rgba(202,161,87,.10) !important;
+    color:#f0c36b !important;
+    font-size:.62rem !important;
+    font-weight:850 !important;
+    cursor:pointer !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .cnpj-copy-btn-v558.is-copied{
+    border-color:rgba(34,211,160,.34) !important;
+    background:rgba(34,211,160,.12) !important;
+    color:#34d399 !important;
+  }
+
+  html.desktop-catalog-docs-cnpj-v558 body #sec-fundos .col-docs{
+    overflow:visible !important;
+  }
+}
+
+/* 09B · Catálogo desktop — documentos e detalhe compacto v559 */
+@media (min-width:769px){
+  html.desktop-detail-compact-v559 body #sec-fundos .docs-mini-wrap-v559{
+    align-items:center !important;
+    gap:8px !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .doc-more-button-v559{
+    min-height:28px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 10px !important;
+    border-radius:9px !important;
+    border:1px solid rgba(148,163,184,.18) !important;
+    background:rgba(15,23,42,.74) !important;
+    color:#d7deec !important;
+    font-size:.67rem !important;
+    font-weight:850 !important;
+    cursor:pointer !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .doc-more-button-v559:hover{
+    border-color:rgba(202,161,87,.34) !important;
+    color:#f0c36b !important;
+    background:rgba(202,161,87,.08) !important;
+  }
+
+  .doc-menu-portal-v559{
+    position:fixed !important;
+    z-index:99999 !important;
+    width:260px !important;
+    max-width:calc(100vw - 24px) !important;
+    padding:8px !important;
+    border-radius:12px !important;
+    border:1px solid rgba(148,163,184,.22) !important;
+    background:#0b1020 !important;
+    box-shadow:0 18px 46px rgba(0,0,0,.46) !important;
+    color:#e5e7eb !important;
+  }
+
+  .doc-menu-head-v559{
+    padding:6px 8px 8px !important;
+    color:#f0c36b !important;
+    font-size:.62rem !important;
+    font-weight:900 !important;
+    letter-spacing:.12em !important;
+    text-transform:uppercase !important;
+  }
+
+  .doc-menu-portal-v559 a{
+    display:grid !important;
+    grid-template-columns:34px minmax(0,1fr) !important;
+    gap:8px !important;
+    align-items:center !important;
+    padding:8px 9px !important;
+    border-radius:9px !important;
+    color:#dbe4f0 !important;
+    text-decoration:none !important;
+    font-size:.72rem !important;
+  }
+
+  .doc-menu-portal-v559 a:hover{
+    background:rgba(148,163,184,.10) !important;
+  }
+
+  .doc-menu-portal-v559 a strong{
+    color:#f0c36b !important;
+    font-family:"SFMono-Regular","Segoe UI Mono",Consolas,monospace !important;
+    font-size:.66rem !important;
+  }
+
+  .doc-menu-portal-v559 a span{
+    min-width:0 !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-row-v559 > td{
+    background:rgba(7,11,21,.92) !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-panel-v559{
+    margin:0 !important;
+    padding:14px 16px 16px !important;
+    border-top:1px solid rgba(202,161,87,.20) !important;
+    background:linear-gradient(180deg,rgba(11,16,30,.96),rgba(8,12,22,.96)) !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-compact-head-v559{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:14px !important;
+    padding:0 0 11px !important;
+    margin-bottom:11px !important;
+    border-bottom:1px solid rgba(148,163,184,.13) !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-compact-head-v559 strong{
+    display:block !important;
+    color:#f8fafc !important;
+    font-size:.86rem !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-compact-head-v559 small{
+    display:block !important;
+    margin-top:3px !important;
+    color:#93a2bd !important;
+    font-size:.66rem !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-doc-actions-v559{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:8px !important;
+    flex-wrap:wrap !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-doc-link-v559{
+    min-height:28px !important;
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    padding:0 11px !important;
+    border-radius:9px !important;
+    border:1px solid rgba(148,163,184,.18) !important;
+    background:rgba(15,23,42,.68) !important;
+    color:#dbe4f0 !important;
+    font-size:.67rem !important;
+    font-weight:850 !important;
+    text-decoration:none !important;
+    white-space:nowrap !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-doc-link-v559.primary{
+    border-color:rgba(202,161,87,.30) !important;
+    background:rgba(202,161,87,.10) !important;
+    color:#f0c36b !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-key-grid-v559{
+    display:grid !important;
+    grid-template-columns:130px minmax(180px,1.2fr) minmax(120px,.8fr) 110px 130px 120px !important;
+    gap:8px !important;
+    margin-bottom:10px !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-field-v559{
+    min-width:0 !important;
+    min-height:48px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    gap:4px !important;
+    padding:9px 10px !important;
+    border-radius:10px !important;
+    border:1px solid rgba(148,163,184,.13) !important;
+    background:rgba(10,15,29,.68) !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-field-v559 span{
+    color:#95a4c0 !important;
+    font-size:.56rem !important;
+    font-weight:900 !important;
+    letter-spacing:.12em !important;
+    text-transform:uppercase !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-field-v559 strong{
+    min-width:0 !important;
+    color:#f8fafc !important;
+    font-size:.78rem !important;
+    line-height:1.18 !important;
+    font-weight:850 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-field-v559.positive strong{color:#28e6af !important}
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-field-v559.negative strong{color:#ff6685 !important}
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-oper-grid-v559{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:10px !important;
+    margin-bottom:10px !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-oper-card-v559{
+    padding:10px !important;
+    border-radius:12px !important;
+    border:1px solid rgba(148,163,184,.14) !important;
+    background:rgba(8,13,25,.74) !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-oper-card-v559.application{
+    border-left:3px solid rgba(34,211,160,.62) !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-oper-card-v559.redemption{
+    border-left:3px solid rgba(96,165,250,.62) !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-oper-card-v559 h4{
+    margin:0 0 8px !important;
+    color:#f8fafc !important;
+    font-size:.78rem !important;
+    font-weight:900 !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-oper-fields-v559,
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-bottom-grid-v559{
+    display:grid !important;
+    grid-template-columns:repeat(4,minmax(0,1fr)) !important;
+    gap:8px !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-bottom-grid-v559{
+    grid-template-columns:minmax(170px,1.1fr) 110px repeat(3,minmax(120px,1fr)) !important;
+    align-items:stretch !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-bottom-grid-v559 .wide{
+    min-width:0 !important;
+  }
+
+  html.desktop-detail-compact-v559 body #sec-fundos .detail-copy-btn-v559{
+    min-height:48px !important;
+    align-self:stretch !important;
+    border-radius:10px !important;
+    border:1px solid rgba(202,161,87,.26) !important;
+    background:rgba(202,161,87,.10) !important;
+    color:#f0c36b !important;
+    font-size:.68rem !important;
+    font-weight:900 !important;
+    cursor:pointer !important;
+  }
+
+  @media (max-width:1320px){
+    html.desktop-detail-compact-v559 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+    html.desktop-detail-compact-v559 body #sec-fundos .detail-oper-fields-v559{
+      grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    }
+    html.desktop-detail-compact-v559 body #sec-fundos .detail-bottom-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}
+
+/* 09C · Catálogo desktop — override terminal v560 */
+@media (min-width:769px){
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-panel-v559{
+    padding:12px 14px 13px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-compact-head-v559{
+    padding-bottom:9px !important;
+    margin-bottom:9px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+    grid-template-columns:116px minmax(170px,1.15fr) minmax(120px,.9fr) 96px 116px 106px 112px 104px minmax(140px,.9fr) !important;
+    gap:7px !important;
+    margin-bottom:8px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559{
+    min-height:42px !important;
+    padding:7px 9px !important;
+    border-radius:9px !important;
+    gap:3px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 span{
+    font-size:.51rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-field-v559 strong{
+    font-size:.72rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-grid-v559{
+    gap:8px !important;
+    margin-bottom:0 !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559{
+    padding:9px !important;
+    border-radius:10px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-card-v559 h4{
+    margin-bottom:7px !important;
+    font-size:.74rem !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-oper-fields-v559{
+    gap:7px !important;
+  }
+
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-bottom-grid-v559,
+  html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-copy-btn-v559{
+    display:none !important;
+  }
+
+  @media (max-width:1500px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(5,minmax(0,1fr)) !important;
+    }
+  }
+
+  @media (max-width:1180px){
+    html.desktop-detail-sem-cnpj-v560 body #sec-fundos .detail-key-grid-v559{
+      grid-template-columns:repeat(3,minmax(0,1fr)) !important;
+    }
+  }
+}
+
+/* 09D · Catálogo desktop — override final absoluto v561 */
+@media (min-width:769px){
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-panel-v559{
+    background:linear-gradient(180deg,rgba(9,13,24,.97),rgba(7,11,20,.97)) !important;
+    border-top:1px solid rgba(148,163,184,.15) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559{
+    border-bottom-color:rgba(148,163,184,.12) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 strong{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-compact-head-v559 small{
+    color:#8fa0bc !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-actions-v559:empty{
+    display:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559{
+    color:#cfd8e8 !important;
+    background:rgba(13,19,34,.72) !important;
+    border-color:rgba(148,163,184,.18) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-doc-link-v559:hover{
+    color:#f0c36b !important;
+    border-color:rgba(202,161,87,.34) !important;
+    background:rgba(202,161,87,.08) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559{
+    background:rgba(9,14,26,.66) !important;
+    border-color:rgba(148,163,184,.11) !important;
+    box-shadow:none !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 span{
+    color:#8fa0bc !important;
+    opacity:.92 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559 strong{
+    color:#dfe7f3 !important;
+    font-weight:780 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive{
+    border-color:rgba(34,211,160,.18) !important;
+    background:rgba(34,211,160,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.positive strong{
+    color:#28e6af !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative{
+    border-color:rgba(255,102,133,.20) !important;
+    background:rgba(255,102,133,.045) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-field-v559.negative strong{
+    color:#ff6f8b !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559{
+    background:rgba(8,13,24,.58) !important;
+    border-color:rgba(148,163,184,.11) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application{
+    border-left-color:rgba(34,211,160,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption{
+    border-left-color:rgba(96,165,250,.70) !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 h4{
+    color:#e7edf7 !important;
+    font-weight:850 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.application h4{
+    color:#bff8e8 !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559.redemption h4{
+    color:#cfe2ff !important;
+  }
+
+  html.desktop-detail-color-hierarchy-v561 body #sec-fundos .detail-oper-card-v559 .detail-field-v559{
+    background:rgba(12,18,32,.60) !important;
+  }
+}

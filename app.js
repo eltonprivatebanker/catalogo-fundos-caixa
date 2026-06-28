@@ -2425,21 +2425,99 @@ async function carregarMercado(){
 /* ════════════════════════════════════════════════════
    FOCUS
 ════════════════════════════════════════════════════ */
+function focusSeriesV595(dados){
+  const anos = [2026,2027,2028,2029];
+  return anos.map(ano => {
+    const med = dados?.[ano]?.mediana;
+    const value = focusNumberV595(med);
+    return {ano, med, value};
+  });
+}
+
+function focusNumberV595(value){
+  if(value === null || value === undefined || value === '') return null;
+  if(typeof value === 'number') return Number.isFinite(value) ? value : null;
+  const raw = String(value).trim().replace('%','').replace(/\s/g,'');
+  if(!raw || raw === '-' || raw === '—') return null;
+  const normalized = raw.includes(',')
+    ? raw.replace(/\./g,'').replace(',','.')
+    : raw;
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function focusTrendMetaV595(label, series){
+  const values = series.filter(item => item.value !== null && Number.isFinite(item.value));
+  if(values.length < 2) return {kind:'flat', label:'tendência', arrow:'↔', delta:'—'};
+  const first = values[0].value;
+  const last = values[values.length - 1].value;
+  const diff = last - first;
+  const abs = Math.abs(diff);
+  const flatLimit = label === 'Câmbio' ? 0.03 : label === 'PIB' ? 0.12 : 0.08;
+  const kind = abs <= flatLimit ? 'flat' : diff > 0 ? 'up' : 'down';
+  const trendLabel = kind === 'flat' ? 'estável' : kind === 'down' ? 'queda' : (label === 'Câmbio' ? 'alta leve' : 'alta');
+  const signal = diff > 0 ? '+' : diff < 0 ? '-' : '';
+  const deltaValue = Math.abs(diff).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const delta = label === 'Câmbio' ? `${signal}R$ ${deltaValue} até 2029` : `${signal}${deltaValue} p.p. até 2029`;
+  return {kind, label:trendLabel, arrow:kind === 'up' ? '↑' : kind === 'down' ? '↓' : '↔', delta};
+}
+
+function focusSparklineV595(series){
+  const values = series.map(item => item.value).filter(value => value !== null && Number.isFinite(value));
+  if(values.length < 2) return '';
+  const min = Math.min(...values);
+  const max = Math.max(...values);
+  const span = max - min || 1;
+  const points = series.map((item, index) => {
+    const x = 10 + index * (280 / Math.max(1, series.length - 1));
+    const y = item.value === null || !Number.isFinite(item.value)
+      ? 42
+      : 42 - ((item.value - min) / span) * 28;
+    return {x, y};
+  });
+  const line = points.map(point => `${point.x.toFixed(1)},${point.y.toFixed(1)}`).join(' ');
+  const dots = points.map(point => `<circle cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="2.6"></circle>`).join('');
+  return `<svg class="focus-sparkline-v595" viewBox="0 0 300 52" aria-hidden="true" focusable="false">
+    <line class="focus-sparkline-base-v595" x1="10" y1="44" x2="290" y2="44"></line>
+    <polyline points="${line}"></polyline>
+    ${dots}
+  </svg>`;
+}
+
+function focusSummaryHTMLV595(focus){
+  const selic = focusTrendMetaV595('Selic', focusSeriesV595(focus?.Selic));
+  const ipca = focusTrendMetaV595('IPCA', focusSeriesV595(focus?.IPCA));
+  const cambio = focusTrendMetaV595('Câmbio', focusSeriesV595(focus?.Cambio));
+  const pib = focusTrendMetaV595('PIB', focusSeriesV595(focus?.PIB));
+  const jurosInflacao = selic.kind === 'down' && ipca.kind === 'down' ? 'juros e inflação em queda gradual' : 'juros e inflação em ajuste';
+  const cambioTxt = cambio.kind === 'up' ? 'dólar em leve alta' : cambio.kind === 'down' ? 'dólar em queda' : 'dólar estável';
+  const pibTxt = pib.kind === 'flat' ? 'PIB estável no médio prazo' : pib.kind === 'up' ? 'PIB em melhora gradual' : 'PIB em desaceleração';
+  return `<div class="focus-trend-summary-v595" aria-label="Leitura de tendência do Boletim Focus">
+    <span class="focus-trend-icon-v595" aria-hidden="true">↗</span>
+    <p><strong>Leitura Focus:</strong> ${jurosInflacao}; ${cambioTxt}; ${pibTxt}.</p>
+    <span class="focus-trend-pill-v595">Tendência 2026 → 2029</span>
+  </div>`;
+}
+
 function focusCardHTML(icon, label, sub, dados){
   const anos = [2026,2027,2028,2029];
+  const series = focusSeriesV595(dados);
+  const trend = focusTrendMetaV595(label, series);
   const rows = anos.map((ano,i) => {
-    const v = dados?.[ano];
-    const med = v?.mediana;
+    const item = series[i] || {};
+    const med = item.med;
     const fmtd = med!==null && med!==undefined
       ? (label==='Câmbio' ? brl(med) : fmt(med))
       : '—';
     return `<div class="fcad-row">
       <span class="fcad-year">${ano}</span>
-      <span class="fcad-val${i===0?' hl':''}">${fmtd}</span>
+      <span class="fcad-val${i===0?' hl':''}">${fmtd}<em class="focus-row-arrow-v595 trend-${trend.kind}">${trend.arrow}</em></span>
     </div>${i<anos.length-1?'<hr class="fcad-hr">':''}`;
   }).join('');
-  return `<div class="fcad"><div class="fcad-label">${icon} ${label}</div>
-    <div class="fcad-sub">${sub}</div><div class="fcad-rows">${rows}</div></div>`;
+  return `<div class="fcad focus-trend-card-v595 trend-${trend.kind}"><div class="fcad-label">${icon} ${label}</div>
+    <div class="fcad-sub">${sub}</div>
+    <div class="focus-trend-line-v595"><strong>${trend.label}</strong><span>${trend.arrow}</span><em>${trend.delta}</em></div>
+    <div class="fcad-rows">${rows}</div>${focusSparklineV595(series)}</div>`;
 }
 
 function normalizarDataFocus(dataRef){
@@ -2546,7 +2624,7 @@ function carregarFocus(focus, atualizadoEm){
     refEl.innerHTML = `<span class="focus-ref-label">Último boletim Focus disponível: <strong>${dataFormatada}</strong></span><a class="focus-pdf-link" href="${pdfUrl}" target="_blank" rel="noopener">Baixe aqui o último boletim Focus (PDF) ↗</a>`;
   }
 
-  grid.innerHTML = [
+  grid.innerHTML = focusSummaryHTMLV595(focus) + [
     focusCardHTML('🏦','Selic','Meta da Taxa Básica de Juros',focus.Selic),
     focusCardHTML('🎯','IPCA','Inflação ao Consumidor',focus.IPCA),
     focusCardHTML('💵','Câmbio','R$ / US$ (dólar americano)',focus.Cambio),
@@ -2698,8 +2776,9 @@ function renderRankings(){
 
   let base = allRows.filter(r => temDados(r)).filter(passaFiltroRanking);
   if(activePerfil) base = base.filter(r => {
-    const tokens = String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
-    return tokens.includes(activePerfil);
+    return typeof catalogAudienceMatchesV553 === 'function'
+      ? catalogAudienceMatchesV553(r, activePerfil)
+      : String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil);
   });
   if(activeRankRisk) base = base.filter(r => perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
 
@@ -2847,6 +2926,8 @@ function renderRankings(){
 
   grid.innerHTML = resumoCards + (cardsPorVisao[activeRankView] || cardsPorVisao.top);
 }
+
+window.__renderRankingsMobileBaseV607 = renderRankings;
 
 
 /* ════════════════════════════════════════════════════
@@ -3144,6 +3225,71 @@ function temDados(r){
   return c&&c!=='-'&&c!=='—';
 }
 
+function catalogShortFundNameV594(nome){
+  const original = String(nome || '').replace(/\s+/g,' ').trim();
+  if(!original) return '—';
+
+  const upper = original.toUpperCase();
+  if(/FMP[-\s]*FGTS/.test(upper) && /PETROBR/.test(upper)){
+    const serie = upper.match(/\b(I|II|III|IV|V|VI|VII|VIII|IX|X)\b/);
+    return `FMP-FGTS Petrobras${serie ? ' ' + serie[1] : ''}`;
+  }
+
+  let clean = original
+    .replace(/^CAIXA\s+/i,'')
+    .replace(/\s+RESP\s+LTDA.*$/i,'')
+    .replace(/\s+LTDA.*$/i,'')
+    .replace(/\s+-\s*RL\s*$/i,'')
+    .replace(/\b(FIC|FIF|FI|FUNDO\s+DE\s+INVESTIMENTO|COTAS\s+DE|COTAS)\b\s*/gi,'')
+    .replace(/\bMULTIMERCADO\b/gi,'MM')
+    .replace(/\bACOES\b/gi,'Ações')
+    .replace(/\bDOLAR\b/gi,'Dólar')
+    .replace(/\bRENDA\s+FIXA\b/gi,'RF')
+    .replace(/\bREFERENCIADO\b/gi,'Ref.')
+    .replace(/\bCURTO\s+PRAZO\b/gi,'CP')
+    .replace(/\bCREDITO\b/gi,'Crédito')
+    .replace(/\bCRED\b/gi,'Créd.')
+    .replace(/\bMIGRACAO\b/gi,'Migração')
+    .replace(/\bPRIVADO\b/gi,'Privado')
+    .replace(/\bPRIV\b/gi,'Priv.')
+    .replace(/\bMOVIMENTACOES\b/gi,'Mov.')
+    .replace(/\bMOVIMENTAÇÕES\b/gi,'Mov.')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  const keepUpper = new Set(['RF','DI','CDI','IPCA','IMA-B','IRF-M','FMP-FGTS','ETF','BDR','MM','LP','CP','PJ','PF','RPPS','FOF']);
+  clean = clean.split(' ').filter(Boolean).map(part => {
+    const up = part.toUpperCase();
+    if(keepUpper.has(up)) return up;
+    if(/^I{1,3}$|^IV$|^V$|^VI{0,3}$|^IX$|^X$/.test(up)) return up;
+    if(part.includes('-')) return part.split('-').map(p => {
+      const pUp = p.toUpperCase();
+      return keepUpper.has(pUp) ? pUp : p.charAt(0).toUpperCase() + p.slice(1).toLowerCase();
+    }).join('-');
+    return part.charAt(0).toUpperCase() + part.slice(1).toLowerCase();
+  }).join(' ');
+
+  clean = clean
+    .replace(/\bRf\b/g,'RF')
+    .replace(/\bMm\b/g,'MM')
+    .replace(/\bLp\b/g,'LP')
+    .replace(/\bCp\b/g,'CP')
+    .replace(/\bFoF\b/g,'FOF')
+    .replace(/\s+/g,' ')
+    .trim();
+
+  const maxLen = 42;
+  if(clean.length <= maxLen) return clean;
+  const words = clean.split(' ');
+  let out = '';
+  for(const word of words){
+    const next = out ? `${out} ${word}` : word;
+    if(next.length > maxLen) break;
+    out = next;
+  }
+  return out || clean.slice(0, maxLen).trim();
+}
+
 function kpiShortFundName(nome){
   const original = String(nome || '').replace(/\s+/g,' ').trim();
   if(!original) return '—';
@@ -3409,6 +3555,791 @@ function setCdiSort(dir){
   else setup();
 })();
 
+
+/* PATCH v562-terminal — garante que o ranking podio permaneça ativo apos patches legados */
+(function desktopRankingPodiumV562Terminal(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function reinstall(){
+    if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-monthly-us-markets-v576');
+    window.renderRankings = window.__renderRankingsV562;
+    try{ renderRankings = window.__renderRankingsV562; }catch(_){}
+    try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reinstall, {once:true});
+  else reinstall();
+  window.addEventListener('load', reinstall, {once:true});
+  [250, 700, 1500, 2600].forEach(function(delay){ setTimeout(reinstall, delay); });
+})();
+
+
+/* =========================================================
+   PATCH v562 — Desktop: ranking em podio visual por categoria
+   Escopo: somente desktop. Mantem a base v561 sem cards no catalogo,
+   sem toggle de visualizacao e sem coluna lateral de pontos de atencao.
+   ========================================================= */
+(function desktopRankingPodiumV562(){
+  if(window.__desktopRankingPodiumV562Installed) return;
+  window.__desktopRankingPodiumV562Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function q(sel, root){ return (root || document).querySelector(sel); }
+  function qa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function esc(v){
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function num(v){
+    try{ return typeof toNum === 'function' ? toNum(v) : Number(String(v ?? '').replace('%','').replace(',','.')); }
+    catch(e){ return null; }
+  }
+  function finite(v){
+    const n = num(v);
+    return n !== null && !Number.isNaN(n) && Number.isFinite(n) ? n : null;
+  }
+  function pct(v){
+    const n = finite(v);
+    if(n === null) return '—';
+    return (n > 0 ? '+' : '') + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+  }
+  function cls(v){
+    const n = finite(v);
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  }
+  function norm(v){
+    return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  }
+  function cleanFund(v){
+    return String(v || '—').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim() || '—';
+  }
+  function compactFund(v){
+    let s = cleanFund(v)
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIC\b/ig,'')
+      .replace(/\bFIF\b/ig,'')
+      .replace(/\bRESP\.?\s*LTDA\b/ig,'')
+      .replace(/\bRESP\b/ig,'')
+      .replace(/\bFUNDO DE INDICE\b/ig,'')
+      .replace(/\bREFERENCIADO\b/ig,'Ref.')
+      .replace(/\bCORPORATIVO\b/ig,'Corp.')
+      .replace(/\s+-\s+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const words = s.split(/\s+/).filter(Boolean);
+    if(words.length > 5) s = words.slice(0,5).join(' ');
+    return s || cleanFund(v);
+  }
+  function shortCat(v){
+    const raw = String(v || '—').trim();
+    const n = norm(raw);
+    if(n.includes('FUNDOS MUTUOS') || n.includes('PRIVATIZACAO')) return 'FMP';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
+    if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
+    if(n.includes('RENDA FIXA')) return 'Renda Fixa';
+    if(n.includes('MULTIMERCADO')) return 'Multimercado';
+    if(n.includes('CAMBIAL')) return 'Cambial';
+    if(n.includes('ACOES')) return 'Ações';
+    if(n.includes('INDICE')) return 'Índice';
+    return raw;
+  }
+  function catIcon(cat){
+    const s = norm(cat);
+    if(s.includes('FUNDOS MUTUOS') || s.includes('PRIVATIZACAO')) return '🏛';
+    if(s.includes('ACOES')) return '📈';
+    if(s.includes('MULTIMERCADO')) return '🧭';
+    if(s.includes('CAMBIAL')) return '💱';
+    if(s.includes('INDICE')) return '◈';
+    return '▦';
+  }
+  function parsePtNumberLocal(v){
+    if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+    let s = String(v ?? '').trim();
+    if(!s) return null;
+    s = s.replace(/[^\d,.\-]/g,'');
+    if(!s || s === '-' || s === ',' || s === '.') return null;
+    if(s.includes(',') && s.includes('.')) s = s.replace(/\./g,'').replace(',', '.');
+    else if(s.includes(',')) s = s.replace(',', '.');
+    else{
+      const parts = s.split('.');
+      if(parts.length > 2 || (parts.length === 2 && parts[1].length === 3 && parts[0].length <= 3)) s = s.replace(/\./g,'');
+    }
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+  function plValue(r){
+    const raw = r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido'];
+    const n = parsePtNumberLocal(raw);
+    if(n === null) return null;
+    return Math.abs(n) >= 1000000 ? n / 1000000 : n;
+  }
+  function plTxt(v){
+    const n = parsePtNumberLocal(v);
+    if(n === null) return 'R$ —';
+    if(Math.abs(n) >= 1000) return 'R$ ' + (n / 1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
+    return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+  }
+  function periodoAtual(){
+    const select = q('#rankingPeriodSelectV136');
+    const p = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) || select?.value || '12m';
+    return ['mes','ano','12m'].includes(p) ? p : '12m';
+  }
+  function campoPorPeriodo(periodo){
+    if(typeof rankCampoPorPeriodo === 'function') return rankCampoPorPeriodo(periodo);
+    if(periodo === 'mes') return 'Acum. Mes (%)';
+    if(periodo === 'ano') return 'Acum. Ano (%)';
+    return 'Acum. 12M (%)';
+  }
+  function labelPeriodo(periodo){
+    return periodo === 'mes' ? 'Mês' : periodo === 'ano' ? 'Ano' : '12M';
+  }
+  function normalizarCdiPeriodo(raw, periodo){
+    let n = finite(raw);
+    if(n === null) return null;
+    const abs = Math.abs(n);
+    if(periodo === 'mes'){
+      if(abs > 1000) n = n / 10000;
+      else if(abs > 20) n = n / 100;
+      return Number.isFinite(n) ? n : null;
+    }
+    if(periodo === 'ano'){
+      while(Math.abs(n) > 20) n = n / 10;
+      return Number.isFinite(n) ? n : null;
+    }
+    if(abs > 10000) n = n / 1000;
+    else if(abs > 1000) n = n / 100;
+    else if(abs > 80) n = n / 10;
+    return Number.isFinite(n) ? n : null;
+  }
+  function cdiReferencia(periodo){
+    const card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const first = function(){
+      for(const value of arguments){
+        const n = normalizarCdiPeriodo(value, periodo);
+        if(n !== null) return n;
+      }
+      return null;
+    };
+    if(periodo === 'mes'){
+      let atual = null;
+      try{ atual = typeof obterCdiAtualV232 === 'function' ? obterCdiAtualV232().valor : null; }catch(e){}
+      return first(atual, card?.parcial_mes_atual, card?.mensal, window.indicState?.cdi?.mes);
+    }
+    if(periodo === 'ano') return first(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, window.indicState?.cdi?.ano);
+    const m12 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(card,12) : null;
+    return first(m12, card?.acum_12m, card?.m12, window.indicState?.cdi?.m12);
+  }
+  function cdiRatioNumber(r, periodo){
+    const rent = finite(r?.[campoPorPeriodo(periodo)]);
+    const cdi = cdiReferencia(periodo);
+    if(rent === null || cdi === null || cdi === 0) return null;
+    const ratio = Math.round((rent / cdi) * 100);
+    return Number.isFinite(ratio) ? ratio : null;
+  }
+  function cdiRatioTxt(r, periodo){
+    const ratio = cdiRatioNumber(r, periodo);
+    return ratio === null ? '—' : ratio.toLocaleString('pt-BR',{maximumFractionDigits:0}) + '%';
+  }
+  function retornoLabel(periodo){
+    return periodo === 'mes' ? 'Retorno no mês' : periodo === 'ano' ? 'Retorno no ano' : 'Retorno em 12M';
+  }
+  function cdiLabel(periodo){
+    return periodo === 'mes' ? '% do CDI no mês' : periodo === 'ano' ? '% do CDI no ano' : '% do CDI em 12M';
+  }
+  function riskOk(r){
+    if(typeof activeRankRisk === 'undefined' || !activeRankRisk) return true;
+    return typeof perfilRiscoCorrespondeV198 === 'function' ? perfilRiscoCorrespondeV198(r['Perfil de Risco'], activeRankRisk) : true;
+  }
+  function filterOk(r){
+    return typeof passaFiltroRanking === 'function' ? passaFiltroRanking(r) : true;
+  }
+  function baseRows(){
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows)) return [];
+    return allRows
+      .filter(function(r){ return typeof temDados === 'function' ? temDados(r) : true; })
+      .filter(filterOk)
+      .filter(riskOk);
+  }
+  function sortedRows(rows, campo, asc){
+    return rows
+      .filter(function(r){ return finite(r[campo]) !== null; })
+      .sort(function(a,b){ return asc ? finite(a[campo]) - finite(b[campo]) : finite(b[campo]) - finite(a[campo]); });
+  }
+  function categoryWinners(rows, campo, geral){
+    const map = new Map();
+    geral.forEach(function(r){
+      const cat = r.Categoria || 'Sem categoria';
+      if(!map.has(cat)) map.set(cat, {cat:cat, row:r});
+    });
+    return Array.from(map.values()).sort(function(a,b){
+      return finite(b.row[campo]) - finite(a.row[campo]);
+    });
+  }
+  function syncControls(periodo){
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588');
+    const meta = q('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+    const period = q('#rankingPeriodSelectV136');
+    const clsSelect = q('#rankingClassSelectV136');
+    const risk = q('#rankingRiskSelectV198');
+    if(period && period.value !== periodo) period.value = periodo;
+    if(clsSelect && typeof activeRankFilter !== 'undefined' && clsSelect.value !== activeRankFilter) clsSelect.value = activeRankFilter || 'todos';
+    if(risk && typeof activeRankRisk !== 'undefined' && risk.value !== (activeRankRisk || '')) risk.value = activeRankRisk || '';
+    qa('[data-rank-filter]').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.rankFilter === (typeof activeRankFilter !== 'undefined' ? activeRankFilter : 'todos'));
+    });
+    const attention = q('#rankingAttentionV136');
+    if(attention) attention.remove();
+  }
+  function contextLine(rows, periodo){
+    return '';
+  }
+  function summaryCard(kind, label, value, name, meta){
+    return '<article class="ranking-v562-summary-card ' + esc(kind || '') + '">' +
+      '<span>' + esc(label) + '</span>' +
+      '<strong class="' + esc(kind === 'worst' ? 'neg' : kind === 'neutral' ? 'zero' : 'pos') + '">' + esc(value || '—') + '</strong>' +
+      '<small title="' + esc(name || '') + '">' + esc(name || '—') + '</small>' +
+      '<em>' + esc(meta || 'Recorte atual') + '</em>' +
+    '</article>';
+  }
+  function periodTabs(periodo){
+    return '<div class="ranking-v562-tabs" role="tablist" aria-label="Período do ranking">' +
+      ['mes','ano','12m'].map(function(p){
+        return '<button type="button" class="' + (p === periodo ? 'active' : '') + '" data-rank-target="topFundos" data-rank-period="' + p + '">' + labelPeriodo(p) + '</button>';
+      }).join('') +
+    '</div>';
+  }
+  function categoryRow(item, i, campo, periodo){
+    const r = item.row;
+    const ratio = cdiRatioNumber(r, periodo);
+    const width = ratio === null ? 0 : Math.max(8, Math.min(100, Math.abs(ratio)));
+    const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    const name = cleanFund(r.Fundo);
+    return '<article class="ranking-v562-podium-row ' + (i === 0 ? 'is-leader ' : '') + medalClass + '">' +
+      '<div class="ranking-v562-medal"><span>' + esc(i + 1) + '</span></div>' +
+      '<div class="ranking-v562-icon" aria-hidden="true">' + catIcon(item.cat) + '</div>' +
+      '<div class="ranking-v562-fund">' +
+        '<strong title="' + esc(name) + '">' + esc(i === 0 ? name : compactFund(name)) + '</strong>' +
+        '<small>' + esc(shortCat(item.cat)) + '</small>' +
+      '</div>' +
+      '<div class="ranking-v562-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></div>' +
+      '<div class="ranking-v562-cdi">' +
+        '<span class="ranking-v562-cdi-label">' + esc(cdiLabel(periodo)) + '</span>' +
+        '<strong>' + esc(cdiRatioTxt(r, periodo)) + '</strong>' +
+        '<span class="ranking-v562-cdi-bar"><i style="width:' + width + '%"></i></span>' +
+      '</div>' +
+    '</article>';
+  }
+  function categoryBoardRowsV590(winners, campo, periodo){
+    const top = winners.slice(0,10);
+    if(!top.length) return '';
+
+    const leader = categoryRow(top[0], 0, campo, periodo);
+    const left = top.slice(1,5).map(function(item, idx){
+      return categoryRow(item, idx + 1, campo, periodo);
+    }).join('');
+    const right = top.slice(5,10).map(function(item, idx){
+      return categoryRow(item, idx + 5, campo, periodo);
+    }).join('');
+
+    if(!left && !right) return leader;
+
+    return leader +
+      '<div class="ranking-v590-columns ' + (right ? 'has-continuation' : 'single-column') + '">' +
+        '<div class="ranking-v590-column ranking-v590-column-primary">' + left + '</div>' +
+        (right ? '<div class="ranking-v590-column ranking-v590-column-continuation">' + right + '</div>' : '') +
+      '</div>';
+  }
+  function alertRows(rows, campo){
+    return rows.map(function(r, i){
+      const name = cleanFund(r.Fundo);
+      return '<div class="ranking-v562-alert-row">' +
+        '<span>' + (i + 1) + '</span>' +
+        '<strong title="' + esc(name) + '">' + esc(compactFund(name)) + '</strong>' +
+        '<small>' + esc(shortCat(r.Categoria)) + '</small>' +
+        '<em class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</em>' +
+      '</div>';
+    }).join('');
+  }
+  function renderRankingsV562(){
+    const grid = q('#rankingGrid');
+    if(!grid || !isDesktop()) return;
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
+
+    const periodo = periodoAtual();
+    const campo = campoPorPeriodo(periodo);
+    syncControls(periodo);
+
+    const rows = baseRows();
+    const sorted = sortedRows(rows, campo);
+    const worst = sortedRows(rows, campo, true).filter(function(r){ return finite(r[campo]) < 0; });
+    const winners = categoryWinners(rows, campo, sorted);
+    const best = sorted[0];
+    const worstOne = worst[0];
+    const boardRows = categoryBoardRowsV590(winners, campo, periodo);
+    const alertBody = alertRows(worst.slice(0,8), campo);
+
+    grid.className = 'ranking-grid ranking-main-v136 ranking-v562-grid';
+    grid.removeAttribute('data-active-rank-view');
+    grid.innerHTML =
+      contextLine(rows, periodo) +
+      '<section class="ranking-v562-summary" aria-label="Resumo dos rankings">' +
+        summaryCard('best','Melhor do período', best ? pct(best[campo]) : '—', best ? compactFund(best.Fundo) : 'Sem dados', best ? shortCat(best.Categoria) + ' · ' + cdiRatioTxt(best, periodo) + ' do CDI' : '') +
+        summaryCard('worst','Pior do período', worstOne ? pct(worstOne[campo]) : '—', worstOne ? compactFund(worstOne.Fundo) : 'Sem queda', worstOne ? shortCat(worstOne.Categoria) + ' · ' + cdiRatioTxt(worstOne, periodo) + ' do CDI' : 'Nenhum retorno negativo') +
+        summaryCard('neutral','Categorias com dados', String(winners.length), 'Melhores Categorias', 'Recorte atual') +
+      '</section>' +
+      '<section class="ranking-v562-board" aria-label="Melhores por categoria">' +
+        '<div class="ranking-v562-board-head">' +
+          '<div><h3>Melhores por categoria</h3><p>Para cada categoria, mostra o fundo com maior retorno e quanto esse retorno representa do CDI no período selecionado.</p></div>' +
+          periodTabs(periodo) +
+        '</div>' +
+        '<div class="ranking-v562-podium">' + (boardRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
+      '</section>' +
+      '<details class="ranking-v562-alerts">' +
+        '<summary><span>Piores do período</span><strong>' + worst.length + '</strong></summary>' +
+        '<div class="ranking-v562-alert-list">' + (alertBody || '<div class="ranking-empty-v50">Nenhum retorno negativo no recorte atual.</div>') + '</div>' +
+      '</details>';
+  }
+  function bind(){
+    const clsSelect = q('#rankingClassSelectV136');
+    const period = q('#rankingPeriodSelectV136');
+    const risk = q('#rankingRiskSelectV198');
+
+    if(clsSelect && clsSelect.dataset.v562Bound !== '1'){
+      clsSelect.dataset.v562Bound = '1';
+      clsSelect.addEventListener('change', function(){
+        try{ activeRankFilter = clsSelect.value || 'todos'; }catch(e){}
+        setTimeout(renderRankingsV562, 0);
+      });
+    }
+    if(period && period.dataset.v562Bound !== '1'){
+      period.dataset.v562Bound = '1';
+      period.addEventListener('change', function(){
+        try{
+          activeRankPeriods.topFundos = period.value || '12m';
+          activeRankPeriods.destaques = period.value || '12m';
+        }catch(e){}
+        setTimeout(renderRankingsV562, 0);
+      });
+    }
+    if(risk && risk.dataset.v562Bound !== '1'){
+      risk.dataset.v562Bound = '1';
+      risk.addEventListener('change', function(){
+        try{ activeRankRisk = risk.value || ''; }catch(e){}
+        setTimeout(renderRankingsV562, 0);
+      });
+    }
+    const row = q('#rankingFilterRow');
+    if(row && row.dataset.v562Bound !== '1'){
+      row.dataset.v562Bound = '1';
+      row.addEventListener('click', function(ev){
+        const btn = ev.target.closest('[data-rank-filter]');
+        if(!btn) return;
+        try{ activeRankFilter = btn.dataset.rankFilter || 'todos'; }catch(e){}
+        if(clsSelect) clsSelect.value = activeRankFilter;
+        setTimeout(renderRankingsV562, 0);
+      });
+    }
+    document.addEventListener('click', function(ev){
+      const btn = ev.target && ev.target.closest ? ev.target.closest('[data-rank-period][data-rank-target]') : null;
+      if(!btn || !q('#rankingsSection')?.contains(btn)) return;
+      try{
+        activeRankPeriods.topFundos = btn.dataset.rankPeriod || '12m';
+        activeRankPeriods.destaques = btn.dataset.rankPeriod || '12m';
+      }catch(e){}
+      setTimeout(renderRankingsV562, 0);
+    }, true);
+  }
+  function install(){
+    if(!isDesktop()) return;
+    window.renderRankings = renderRankingsV562;
+    try{ renderRankings = renderRankingsV562; }catch(e){}
+    bind();
+    renderRankingsV562();
+  }
+
+  window.__renderRankingsV562 = renderRankingsV562;
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  [150, 500, 1200, 2200].forEach(function(delay){ setTimeout(install, delay); });
+})();
+
+
+/* =========================================================
+   PATCH v555 — Desktop: Rankings reconstruidos e simplificados
+   ========================================================= */
+(function desktopRankingRedesignV555(){
+  if(window.__desktopRankingRedesignV555Installed) return;
+  if(window.__desktopRankingPodiumV562Installed) return;
+  window.__desktopRankingRedesignV555Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function q(sel, root){ return (root || document).querySelector(sel); }
+  function qa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function esc(v){
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function num(v){
+    try{ return typeof toNum === 'function' ? toNum(v) : Number(String(v ?? '').replace('%','').replace(',','.')); }
+    catch(e){ return null; }
+  }
+  function finite(v){
+    const n = num(v);
+    return n !== null && !Number.isNaN(n) && Number.isFinite(n) ? n : null;
+  }
+  function pct(v){
+    const n = finite(v);
+    if(n === null) return '—';
+    return (n > 0 ? '+' : '') + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+  }
+  function cls(v){
+    const n = finite(v);
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  }
+  function norm(v){
+    return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  }
+  function cleanFund(v){
+    return String(v || '—').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim() || '—';
+  }
+  function compactFund(v){
+    let s = cleanFund(v)
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIC\b/ig,'')
+      .replace(/\bFIF\b/ig,'')
+      .replace(/\bRESP\.?\s*LTDA\b/ig,'')
+      .replace(/\bRESP\b/ig,'')
+      .replace(/\bFUNDO DE INDICE\b/ig,'')
+      .replace(/\bCORPORATIVO\b/ig,'Corp.')
+      .replace(/\bREFERENCIADO\b/ig,'Ref.')
+      .replace(/\s+-\s+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const words = s.split(/\s+/).filter(Boolean);
+    if(words.length > 4) s = words.slice(0,4).join(' ');
+    return s || cleanFund(v);
+  }
+  function shortCat(v){
+    const raw = String(v || '—').trim();
+    const n = norm(raw);
+    if(n.includes('FUNDOS MUTUOS') || n.includes('PRIVATIZACAO')) return 'FMP';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
+    if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
+    if(n.includes('RENDA FIXA')) return 'Renda Fixa';
+    if(n.includes('MULTIMERCADO')) return 'Multimercado';
+    if(n.includes('CAMBIAL')) return 'Cambial';
+    if(n.includes('ACOES')) return 'Ações';
+    if(n.includes('INDICE')) return 'Índice';
+    return raw;
+  }
+  function parsePtNumberLocal(v){
+    if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+    let s = String(v ?? '').trim();
+    if(!s) return null;
+    s = s.replace(/[^\d,.\-]/g,'');
+    if(!s || s === '-' || s === ',' || s === '.') return null;
+    if(s.includes(',') && s.includes('.')){
+      s = s.replace(/\./g,'').replace(',', '.');
+    }else if(s.includes(',')){
+      s = s.replace(',', '.');
+    }else{
+      const parts = s.split('.');
+      if(parts.length > 2 || (parts.length === 2 && parts[1].length === 3 && parts[0].length <= 3)){
+        s = s.replace(/\./g,'');
+      }
+    }
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+  function plValue(r){
+    const raw = r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido'];
+    const n = parsePtNumberLocal(raw);
+    if(n === null) return null;
+    return Math.abs(n) >= 1000000 ? n / 1000000 : n;
+  }
+  function plTxt(v){
+    const n = parsePtNumberLocal(v);
+    if(n === null) return 'R$ —';
+    if(Math.abs(n) >= 1000) return 'R$ ' + (n / 1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
+    return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+  }
+  function periodoAtual(){
+    const select = q('#rankingPeriodSelectV136');
+    const p = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) || select?.value || '12m';
+    return ['mes','ano','12m'].includes(p) ? p : '12m';
+  }
+  function campoPorPeriodo(periodo){
+    if(typeof rankCampoPorPeriodo === 'function') return rankCampoPorPeriodo(periodo);
+    if(periodo === 'mes') return 'Acum. Mes (%)';
+    if(periodo === 'ano') return 'Acum. Ano (%)';
+    return 'Acum. 12M (%)';
+  }
+  function labelPeriodo(periodo){
+    return periodo === 'mes' ? 'mês' : periodo === 'ano' ? 'ano' : '12 meses';
+  }
+  function normalizarCdiPeriodo(raw, periodo){
+    let n = finite(raw);
+    if(n === null) return null;
+    const abs = Math.abs(n);
+    if(periodo === 'mes'){
+      if(abs > 1000) n = n / 10000;
+      else if(abs > 20) n = n / 100;
+      return Number.isFinite(n) ? n : null;
+    }
+    if(periodo === 'ano'){
+      while(Math.abs(n) > 20) n = n / 10;
+      return Number.isFinite(n) ? n : null;
+    }
+    if(abs > 10000) n = n / 1000;
+    else if(abs > 1000) n = n / 100;
+    else if(abs > 80) n = n / 10;
+    return Number.isFinite(n) ? n : null;
+  }
+  function cdiReferencia(periodo){
+    const card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const first = function(){
+      for(const value of arguments){
+        const n = normalizarCdiPeriodo(value, periodo);
+        if(n !== null) return n;
+      }
+      return null;
+    };
+    if(periodo === 'mes'){
+      let atual = null;
+      try{ atual = typeof obterCdiAtualV232 === 'function' ? obterCdiAtualV232().valor : null; }catch(e){}
+      return first(atual, card?.parcial_mes_atual, card?.mensal, window.indicState?.cdi?.mes);
+    }
+    if(periodo === 'ano'){
+      return first(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, window.indicState?.cdi?.ano);
+    }
+    const m12 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(card,12) : null;
+    return first(m12, card?.acum_12m, card?.m12, window.indicState?.cdi?.m12);
+  }
+  function cdiRatio(r, periodo){
+    const rent = finite(r?.[campoPorPeriodo(periodo)]);
+    const cdi = cdiReferencia(periodo);
+    if(rent === null || cdi === null || cdi === 0) return '—';
+    const ratio = Math.round((rent / cdi) * 100);
+    if(!Number.isFinite(ratio)) return '—';
+    return ratio.toLocaleString('pt-BR',{maximumFractionDigits:0}) + '%';
+  }
+  function riskOk(r){
+    if(typeof activeRankRisk === 'undefined' || !activeRankRisk) return true;
+    return typeof perfilRiscoCorrespondeV198 === 'function' ? perfilRiscoCorrespondeV198(r['Perfil de Risco'], activeRankRisk) : true;
+  }
+  function filterOk(r){
+    return typeof passaFiltroRanking === 'function' ? passaFiltroRanking(r) : true;
+  }
+  function baseRows(){
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows)) return [];
+    return allRows
+      .filter(function(r){ return typeof temDados === 'function' ? temDados(r) : true; })
+      .filter(filterOk)
+      .filter(riskOk);
+  }
+  function sortedRows(rows, campo, asc){
+    return rows
+      .filter(function(r){ return finite(r[campo]) !== null; })
+      .sort(function(a,b){ return asc ? finite(a[campo]) - finite(b[campo]) : finite(b[campo]) - finite(a[campo]); });
+  }
+  function medal(i){ return i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : String(i + 1); }
+  function syncControls(periodo){
+    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556','desktop-ranking-cdi-pl-fix-v557');
+    const meta = q('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_CDI_PL_FIX_V557';
+    const period = q('#rankingPeriodSelectV136');
+    const clsSelect = q('#rankingClassSelectV136');
+    const risk = q('#rankingRiskSelectV198');
+    if(period && period.value !== periodo) period.value = periodo;
+    if(clsSelect && typeof activeRankFilter !== 'undefined' && clsSelect.value !== activeRankFilter) clsSelect.value = activeRankFilter || 'todos';
+    if(risk && typeof activeRankRisk !== 'undefined' && risk.value !== (activeRankRisk || '')) risk.value = activeRankRisk || '';
+    qa('[data-rank-filter]').forEach(function(btn){
+      btn.classList.toggle('active', btn.dataset.rankFilter === (typeof activeRankFilter !== 'undefined' ? activeRankFilter : 'todos'));
+    });
+  }
+  function periodTabs(periodo){
+    return '<div class="ranking-v555-period-tabs" role="tablist" aria-label="Período do ranking">' +
+      ['mes','ano','12m'].map(function(p){
+        const label = p === 'mes' ? 'Mês' : p === 'ano' ? 'Ano' : '12M';
+        return '<button type="button" class="' + (p === periodo ? 'active' : '') + '" data-rank-target="topFundos" data-rank-period="' + p + '">' + label + '</button>';
+      }).join('') +
+    '</div>';
+  }
+  function contextLine(rows, periodo){
+    const cdi = cdiReferencia(periodo);
+    const universo = q('[data-rank-filter="' + (typeof activeRankFilter !== 'undefined' ? activeRankFilter : 'todos') + '"]')?.textContent?.trim()
+      || q('#rankingClassSelectV136 option:checked')?.textContent?.trim()
+      || 'Todos';
+    const risco = typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(typeof activeRankRisk !== 'undefined' ? activeRankRisk : '') : 'Todos os perfis';
+    return '<div class="ranking-v555-context ranking-v556-context">' +
+      '<span>' + rows.length + ' fundos no recorte</span>' +
+      '<span>Universo: <strong>' + esc(universo) + '</strong></span>' +
+      '<span>Risco: <strong>' + esc(risco) + '</strong></span>' +
+      '<span>CDI do período: <strong>' + esc(cdi === null ? '—' : pct(cdi)) + '</strong></span>' +
+    '</div>';
+  }
+  function summaryCard(label, r, campo, periodo, mode){
+    if(!r) return '<article class="ranking-v555-summary-card"><span>' + esc(label) + '</span><strong>—</strong><small>Sem dados</small></article>';
+    const nome = cleanFund(r.Fundo);
+    return '<article class="ranking-v555-summary-card ' + esc(mode || '') + '">' +
+      '<span>' + esc(label) + '</span>' +
+      '<strong class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</strong>' +
+      '<small title="' + esc(nome) + '">' + esc(compactFund(nome)) + '</small>' +
+      '<em>' + esc(shortCat(r.Categoria)) + (cdiRatio(r, periodo) !== '—' ? ' · ' + esc(cdiRatio(r, periodo)) + ' do CDI' : '') + '</em>' +
+    '</article>';
+  }
+  function categoryWinners(rows, campo){
+    const map = new Map();
+    sortedRows(rows, campo).forEach(function(r){
+      const cat = r.Categoria || 'Sem categoria';
+      if(!map.has(cat)) map.set(cat, r);
+    });
+    const order = ['RF Simples','Renda Fixa','RF Ref.','RF Curto','Multimercado','Cambial','Ações','Índice','FMP'];
+    return Array.from(map.entries()).sort(function(a,b){
+      const ia = order.indexOf(shortCat(a[0]));
+      const ib = order.indexOf(shortCat(b[0]));
+      if(ia !== -1 || ib !== -1) return (ia === -1 ? 99 : ia) - (ib === -1 ? 99 : ib);
+      return shortCat(a[0]).localeCompare(shortCat(b[0]), 'pt-BR');
+    });
+  }
+  function categoryCard(entry, campo, periodo){
+    const cat = entry[0], r = entry[1], nome = cleanFund(r.Fundo), ratio = cdiRatio(r, periodo);
+    return '<article class="ranking-v555-category-card">' +
+      '<span class="ranking-v555-cat">' + esc(shortCat(cat)) + '</span>' +
+      '<strong class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</strong>' +
+      '<small title="' + esc(nome) + '">' + esc(compactFund(nome)) + '</small>' +
+      '<em>' + (ratio === '—' ? 'CDI indisponível' : esc(ratio) + ' do CDI') + '</em>' +
+    '</article>';
+  }
+  function topRow(r, i, campo, periodo){
+    const nome = cleanFund(r.Fundo);
+    const ratio = cdiRatio(r, periodo);
+    return '<div class="ranking-v555-table-row">' +
+      '<span class="ranking-v555-pos">' + medal(i) + '</span>' +
+      '<span class="ranking-v555-fund"><strong title="' + esc(nome) + '">' + esc(nome) + '</strong><small>' + esc(shortCat(r.Categoria)) + ' · ' + esc(plTxt(plValue(r))) + '</small></span>' +
+      '<span class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</span>' +
+      '<span>' + esc(ratio) + '</span>' +
+    '</div>';
+  }
+  function alertRow(r, i, campo){
+    const nome = cleanFund(r.Fundo);
+    return '<div class="ranking-v555-alert-row">' +
+      '<span>' + (i + 1) + '</span>' +
+      '<strong title="' + esc(nome) + '">' + esc(compactFund(nome)) + '</strong>' +
+      '<small>' + esc(shortCat(r.Categoria)) + '</small>' +
+      '<em class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</em>' +
+    '</div>';
+  }
+  function renderRankingsV555(){
+    const grid = q('#rankingGrid');
+    if(!grid || !isDesktop()) return;
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
+
+    const periodo = periodoAtual();
+    const campo = campoPorPeriodo(periodo);
+    syncControls(periodo);
+
+    const rows = baseRows();
+    const sorted = sortedRows(rows, campo);
+    const worst = sortedRows(rows, campo, true).filter(function(r){ return finite(r[campo]) < 0; });
+    const best = sorted[0];
+    const worstOne = worst[0];
+    const winners = categoryWinners(rows, campo);
+    const topRows = sorted.slice(0,10).map(function(r,i){ return topRow(r,i,campo,periodo); }).join('');
+    const alertRows = worst.slice(0,6).map(function(r,i){ return alertRow(r,i,campo); }).join('');
+
+    grid.className = 'ranking-grid ranking-v555-grid ranking-main-v136';
+    grid.innerHTML =
+      contextLine(rows, periodo) +
+      '<section class="ranking-v555-summary" aria-label="Resumo do ranking">' +
+        summaryCard('Melhor do período', best, campo, periodo, 'best') +
+        summaryCard('Pior do período', worstOne, campo, periodo, 'worst') +
+        '<article class="ranking-v555-summary-card neutral"><span>Categorias com dados</span><strong>' + winners.length + '</strong><small>Melhor fundo por classe</small><em>Recorte atual</em></article>' +
+      '</section>' +
+      '<section class="ranking-v555-panel ranking-v555-primary">' +
+        '<div class="ranking-v555-panel-head"><div><h3>Melhores por categoria</h3><p>Vencedor de cada classe no período selecionado.</p></div></div>' +
+        '<div class="ranking-v555-category-grid">' + (winners.length ? winners.map(function(entry){ return categoryCard(entry,campo,periodo); }).join('') : '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
+      '</section>' +
+      '<section class="ranking-v555-panel">' +
+        '<div class="ranking-v555-panel-head"><div><h3>Top 10 geral</h3><p>Ranking por retorno e comparação com CDI do mesmo período.</p></div></div>' +
+        '<div class="ranking-v555-table">' +
+          '<div class="ranking-v555-table-head"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI</span></div>' +
+          (topRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') +
+        '</div>' +
+      '</section>' +
+      '<details class="ranking-v555-alerts">' +
+        '<summary><span>Piores do período</span><strong>' + worst.length + '</strong></summary>' +
+        '<div class="ranking-v555-alert-list">' + (alertRows || '<div class="ranking-empty-v50">Nenhum retorno negativo no recorte atual.</div>') + '</div>' +
+        '<p>Alertas automáticos para triagem. A decisão depende de suitability, objetivo, prazo e benchmark adequado.</p>' +
+      '</details>';
+  }
+  function bindV555(){
+    const clsSelect = q('#rankingClassSelectV136');
+    const period = q('#rankingPeriodSelectV136');
+    const risk = q('#rankingRiskSelectV198');
+
+    if(clsSelect && clsSelect.dataset.v555Bound !== '1'){
+      clsSelect.dataset.v555Bound = '1';
+      clsSelect.addEventListener('change', function(){
+        try{ activeRankFilter = clsSelect.value || 'todos'; }catch(e){}
+        renderRankingsV555();
+      });
+    }
+    if(period && period.dataset.v555Bound !== '1'){
+      period.dataset.v555Bound = '1';
+      period.addEventListener('change', function(){
+        try{
+          activeRankPeriods.topFundos = period.value || '12m';
+          activeRankPeriods.destaques = period.value || '12m';
+        }catch(e){}
+        renderRankingsV555();
+      });
+    }
+    if(risk && risk.dataset.v555Bound !== '1'){
+      risk.dataset.v555Bound = '1';
+      risk.addEventListener('change', function(){
+        try{ activeRankRisk = risk.value || ''; }catch(e){}
+        renderRankingsV555();
+      });
+    }
+    const row = q('#rankingFilterRow');
+    if(row && row.dataset.v555Bound !== '1'){
+      row.dataset.v555Bound = '1';
+      row.addEventListener('click', function(ev){
+        const btn = ev.target.closest('[data-rank-filter]');
+        if(!btn) return;
+        try{ activeRankFilter = btn.dataset.rankFilter || 'todos'; }catch(e){}
+        if(clsSelect) clsSelect.value = activeRankFilter;
+        renderRankingsV555();
+      });
+    }
+  }
+  function install(){
+    if(!isDesktop()) return;
+    window.renderRankings = renderRankingsV555;
+    try{ renderRankings = renderRankingsV555; }catch(e){}
+    bindV555();
+    renderRankingsV555();
+  }
+
+  window.__renderRankingsV555 = renderRankingsV555;
+  window.__bindRankingV555 = bindV555;
+  window.__installRankingV555 = install;
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  [150, 600, 1400].forEach(function(delay){ setTimeout(install, delay); });
+})();
+
+
 function normalizeCatalogSearch(v){
   return String(v??'')
     .normalize('NFD')
@@ -3436,17 +4367,79 @@ function rowMatchesCatalogSearch(row, query){
   });
 }
 
+function catalogAudienceMatchesV553(row, audience){
+  const wantedRaw = String(audience || '').trim();
+  if(!wantedRaw) return true;
+
+  const norm = value => String(value ?? '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^A-Z0-9]+/gi,' ')
+    .replace(/\s+/g,' ')
+    .trim()
+    .toUpperCase();
+
+  const wanted = norm(wantedRaw);
+  const legacyTokens = String(row?.['Perfis'] || row?.['Perfil'] || '')
+    .split(/\s*\|\s*/)
+    .map(s => String(s).trim())
+    .filter(Boolean);
+
+  if(legacyTokens.some(token => norm(token) === wanted)) return true;
+
+  const rawParts = [];
+  ['Público Alvo','Publico Alvo','Segmentos','SEGMENTOS','lista_publico_alvo','no_classificacao_investidor'].forEach(key=>{
+    const value = row?.[key];
+    if(value === null || value === undefined || value === '') return;
+    if(Array.isArray(value)) rawParts.push(...value);
+    else {
+      const text = String(value).trim();
+      try{
+        const parsed = JSON.parse(text);
+        if(Array.isArray(parsed)) rawParts.push(...parsed);
+        else rawParts.push(text);
+      }catch(_){
+        rawParts.push(text);
+      }
+    }
+  });
+
+  const normalizedParts = rawParts
+    .flatMap(part => String(part ?? '').split(/\s*[·;,|/]\s*/g))
+    .map(part => norm(part))
+    .filter(Boolean);
+
+  const joined = normalizedParts.join(' ');
+
+  if(wanted === 'PF') return normalizedParts.some(part => part === 'PF' || part.includes('PESSOA FISICA'));
+  if(wanted === 'PJ') return normalizedParts.some(part => part === 'PJ' || part.includes('PESSOA JURIDICA'));
+  if(wanted.includes('PRIVATE')) return joined.includes('PRIVATE');
+  if(wanted.includes('QUALIFICADO')) return joined.includes('QUALIFICAD');
+  if(wanted.includes('INSTITUCIONAL')) return joined.includes('INSTITUCIONAL');
+
+  return normalizedParts.some(part => part === wanted || part.includes(wanted));
+}
+
 function applyFilter(){
   const q=String(activeSearch||'').trim();
   const favModeAtivo = !!window.__favListMode;
   filtered=allRows.filter(r=>{
     if(favModeAtivo && !rowIsFavoritedForFilter(r)) return false;
     if(hideSemDados&&!temDados(r)) return false;
-    if(activeCat&&(r['Categoria']||'')!==activeCat) return false;
+    if(activeCat){
+      const rowCat=String(r['Categoria']||'');
+      const canonCat=v=>String(v||'')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .replace(/[^A-Z0-9]+/gi,' ')
+        .replace(/\s+/g,' ')
+        .trim()
+        .toUpperCase();
+      if(rowCat!==activeCat && canonCat(rowCat)!==canonCat(activeCat)) return false;
+    }
     if(activeBenchmark && detectarBenchmarkFundo(r).label !== activeBenchmark) return false;
     if(activePerfil){
-      const tokens=String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim());
-      if(!tokens.includes(activePerfil)) return false;
+      if(!catalogAudienceMatchesV553(r,activePerfil)) return false;
     }
     if(activeRisco&&!perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRisco)) return false;
     if(q&&!rowMatchesCatalogSearch(r,q)) return false;
@@ -4843,6 +5836,8 @@ function buildRowHTML(r,idx){
     if(h==='Fundo'){
       const url=getFundUrl(r); const isFb=isFallbackUrl(r);
       const fbLabel=isFb?'<span class="link-fallback">🔍</span>':'';
+      const fullFundName=val || '—';
+      const displayFundName=catalogShortFundNameV594(fullFundName);
       // Categoria como badge colorido
       const cat=String(r['Categoria']||'');
       const catCls=CAT_CLS[cat]||'RF';
@@ -4851,7 +5846,11 @@ function buildRowHTML(r,idx){
       // PL compacto
       const plVal=toNum(r['PL (milhoes R$)']);
       const plStr=plVal?'PL R$ '+( plVal>=1000?(plVal/1000).toFixed(1)+'bi' : plVal.toLocaleString('pt-BR',{maximumFractionDigits:0})+'mi' ):'';
-      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name">${val}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
+      const cnpjBruto=String(r['CNPJ']||'').trim();
+      const cnpjLimpo=cnpjBruto.replace(/\D/g,'').slice(0,14);
+      const cnpjFormatado=cnpjLimpo ? formatarCnpjMeta(cnpjLimpo) : cnpjBruto;
+      const cnpjStr=cnpjFormatado ? `<span class="fundo-cnpj-sub">CNPJ ${htmlAttr(cnpjFormatado)}</span>` : '';
+      html+=`<td class="col-fundo"><a href="${url}" target="_blank" rel="noopener" class="fundo-cell-name fundo-cell-name-short-v594" title="${htmlAttr(fullFundName)}" aria-label="${htmlAttr(fullFundName)}">${htmlAttr(displayFundName)}${fbLabel}<svg class="link-icon" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a><div class="fundo-cell-meta"><span class="fundo-cat-badge cat-${catCls}">${catLabel}</span>${cnpjStr}${plStr?`<span class="fundo-pl-sub">${plStr}</span>`:''}</div></td>`;return;
     }
     if(['Variacao Dia (%)','Acum. Mes (%)','Acum. Ano (%)'].includes(h)){html+=pctCell(val);return;}
     if(h==='Acum. 12M (%)'){html+=pct12mCell(val);return;}
@@ -5167,6 +6166,7 @@ async function carregarDados(){
     buildHeader(); buildCatFilters(cats); buildBenchmarkFilters(allRows); updateKPIs(); applyFilter();
     $('loadMsg').style.display='none';
     $('mainTable').style.display='table';
+    document.documentElement.classList.add('catalog-table-ready-v591');
     renderRankings();
   }catch(err){
     $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
@@ -6028,7 +7028,8 @@ const econDashStateV378 = window.__ECON_DASH_STATE_V378__ || {
   ipcaNorm:[],
   metaNorm:[],
   selicNorm:[],
-  mercado:null
+  mercado:null,
+  selicCustomV596:{start:'', end:''}
 };
 window.__ECON_DASH_STATE_V378__ = econDashStateV378;
 
@@ -6114,12 +7115,26 @@ function bindIndicadoresDashboardV378(){
     btn.addEventListener('click', () => {
       const target = btn.dataset.dashRangeTarget;
       const raw = btn.dataset.dashRange;
-      const range = raw === 'all' ? 'all' : Number(raw || 12);
+      const range = raw === 'all' || raw === 'ytd' ? raw : Number(raw || 12);
       econDashStateV378.range[target] = range;
       econUpdateRangeButtonsV378(target, raw);
       econRenderTargetV378(target);
     });
   });
+
+  const applyCustom = document.getElementById('selicCustomApplyV596');
+  if(applyCustom && applyCustom.dataset.selicCustomBoundV596 !== '1'){
+    applyCustom.dataset.selicCustomBoundV596 = '1';
+    applyCustom.addEventListener('click', () => {
+      const start = document.getElementById('selicCustomStartV596')?.value || '';
+      const end = document.getElementById('selicCustomEndV596')?.value || '';
+      if(!start || !end) return;
+      econDashStateV378.selicCustomV596 = {start, end};
+      econDashStateV378.range.selic = 'custom';
+      econUpdateRangeButtonsV378('selic', 'custom');
+      econRenderTargetV378('selic');
+    });
+  }
 }
 
 function econRenderIpcaBarsV378(containerId, rows, range){
@@ -6467,25 +7482,41 @@ function econSelicVisibleRowsV381(rows, range){
 
   if(range === 'all') return sorted;
 
-  const months = Number(range || 12);
   const lastWithDate = [...sorted].reverse().find(x => x._dt && !isNaN(x._dt.getTime()));
   const endDate = lastWithDate?._dt || new Date();
+
+  function withPreviousContext(startDate, end){
+    let filtered = sorted.filter(x => x._dt && x._dt >= startDate && x._dt <= end);
+    const previous = [...sorted].reverse().find(x => x._dt && x._dt < startDate);
+    if(previous && filtered.length){
+      filtered = [{...previous, _periodContextOnly:true}, ...filtered];
+    }
+    return filtered.length >= 2 ? filtered : sorted.slice(-Math.max(2, Math.min(12, sorted.length)));
+  }
+
+  if(range === 'ytd'){
+    const startDate = new Date(endDate.getFullYear(), 0, 1);
+    return withPreviousContext(startDate, endDate);
+  }
+
+  if(range === 'custom'){
+    const custom = econDashStateV378.selicCustomV596 || {};
+    const start = custom.start ? new Date(`${custom.start}-01T00:00:00`) : null;
+    const end = custom.end ? new Date(`${custom.end}-01T00:00:00`) : null;
+    if(start && end && !isNaN(start.getTime()) && !isNaN(end.getTime())){
+      const endInclusive = new Date(end.getFullYear(), end.getMonth() + 1, 0, 23, 59, 59);
+      const startDate = start <= endInclusive ? start : endInclusive;
+      const endDateCustom = start <= endInclusive ? endInclusive : start;
+      return withPreviousContext(startDate, endDateCustom);
+    }
+  }
+
+  const months = Number(range || 12);
 
   const startDate = new Date(endDate);
   startDate.setMonth(startDate.getMonth() - months);
 
-  let filtered = sorted.filter(x => x._dt && x._dt >= startDate && x._dt <= endDate);
-
-  // Inclui um ponto imediatamente anterior ao início apenas para continuidade visual da linha,
-  // mas esse ponto não entra no cálculo de máxima/mínima do período.
-  const previous = [...sorted].reverse().find(x => x._dt && x._dt < startDate);
-  if(previous && filtered.length){
-    filtered = [{...previous, _periodContextOnly:true}, ...filtered];
-  }
-
-  if(filtered.length >= 2) return filtered;
-
-  return sorted.slice(-Math.max(2, Math.min(12, months)));
+  return withPreviousContext(startDate, endDate);
 }
 
 function econAtualizarSelicKpiLabelsV381(range){
@@ -6516,9 +7547,13 @@ function econAtualizarSelicPeriodoTextoV381(range){
     data = ref?.data || data;
   }catch(e){}
 
+  const custom = econDashStateV378.selicCustomV596 || {};
   const periodo =
     range === 'all' ? 'histórico completo' :
+    range === 'ytd' ? 'no ano (YTD)' :
+    range === 'custom' && custom.start && custom.end ? `personalizado · ${custom.start} → ${custom.end}` :
     Number(range) === 12 ? 'último 1 ano' :
+    Number(range) === 36 ? 'últimos 3 anos' :
     Number(range) === 60 ? 'últimos 5 anos' :
     Number(range) === 120 ? 'últimos 10 anos' :
     `últimos ${range} meses`;
@@ -6603,6 +7638,11 @@ function econRenderSelicLegacyV380(containerId, rows, range){
     return `<circle class="${cls}" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="${r}"><title>${d.label} · ${econPctV378(d.value, false)} a.a.</title></circle>`;
   }).join('');
 
+  const hitDots = data.map((d, i) => {
+    const tip = `${d.label} · Selic ${econPctV378(d.value, false)} a.a.`;
+    return `<circle class="selic-hit-dot-v596" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="10" data-selic-tooltip-v596="${htmlAttr(tip)}"><title>${htmlAttr(tip)}</title></circle>`;
+  }).join('');
+
   const labelTargetCount = range === 'all' ? 7 : range === 36 ? 4 : range === 60 ? 5 : 6;
   const labelStep = Math.max(1, Math.round(data.length / labelTargetCount));
   const labels = data.map((d, i) => {
@@ -6623,8 +7663,10 @@ function econRenderSelicLegacyV380(containerId, rows, range){
       <polygon class="area" points="${area}"></polygon>
       <polyline class="main-line" points="${points}" fill="none"></polyline>
       ${dots}
+      ${hitDots}
       ${labels}
     </svg>
+    <div class="selic-tooltip-v596" role="tooltip" hidden></div>
     <div class="econ-selic-legend-v380" aria-hidden="true">
       <span><i class="max"></i> máxima do período</span>
       <span><i class="min"></i> mínima do período</span>
@@ -6633,6 +7675,63 @@ function econRenderSelicLegacyV380(containerId, rows, range){
       <strong>Atual · ${econPctV378(last.value, false)} a.a.</strong>
     </div>
   `;
+  bindSelicTooltipV596(el);
+}
+
+function bindSelicTooltipV596(root){
+  const tooltip = root?.querySelector?.('.selic-tooltip-v596');
+  if(!root || !tooltip) return;
+  const hide = () => {
+    tooltip.hidden = true;
+    tooltip.textContent = '';
+  };
+  root.querySelectorAll('[data-selic-tooltip-v596]').forEach(target => {
+    target.addEventListener('mousemove', event => {
+      const rect = root.getBoundingClientRect();
+      const text = target.getAttribute('data-selic-tooltip-v596') || '';
+      tooltip.textContent = text;
+      tooltip.hidden = false;
+      const left = Math.min(Math.max(event.clientX - rect.left + 12, 8), rect.width - 180);
+      const top = Math.max(event.clientY - rect.top - 34, 8);
+      tooltip.style.left = `${left}px`;
+      tooltip.style.top = `${top}px`;
+    });
+    target.addEventListener('mouseleave', hide);
+    target.addEventListener('focus', event => {
+      const text = target.getAttribute('data-selic-tooltip-v596') || '';
+      tooltip.textContent = text;
+      tooltip.hidden = false;
+      tooltip.style.left = '16px';
+      tooltip.style.top = '16px';
+    });
+    target.addEventListener('blur', hide);
+  });
+  root.addEventListener('mouseleave', hide, {once:true});
+}
+
+function selicMonthValueV596(dt){
+  if(!(dt instanceof Date) || isNaN(dt.getTime())) return '';
+  return `${dt.getFullYear()}-${String(dt.getMonth() + 1).padStart(2,'0')}`;
+}
+
+function syncSelicCustomInputsV596(rows){
+  const startInput = document.getElementById('selicCustomStartV596');
+  const endInput = document.getElementById('selicCustomEndV596');
+  if(!startInput || !endInput) return;
+  const dates = (rows || []).map(item => item._dt).filter(dt => dt instanceof Date && !isNaN(dt.getTime()));
+  if(!dates.length) return;
+  const first = selicMonthValueV596(dates[0]);
+  const last = selicMonthValueV596(dates[dates.length - 1]);
+  if(first){
+    startInput.min = first;
+    endInput.min = first;
+  }
+  if(last){
+    startInput.max = last;
+    endInput.max = last;
+    if(!endInput.value) endInput.value = last;
+  }
+  if(first && !startInput.value) startInput.value = first;
 }
 
 
@@ -6718,6 +7817,7 @@ async function renderIndicadoresDashboardV378(d){
   }catch(e){}
 
   econDashStateV378.selicNorm = selicNorm;
+  syncSelicCustomInputsV596(selicNorm);
   // v381: KPIs da Selic agora são atualizados dentro de econRenderTargetV378,
   // respeitando o período selecionado.
 
@@ -7356,9 +8456,21 @@ document.addEventListener('DOMContentLoaded', function(){
       ? `<a class="fund-card-docs-page-v235" href="${htmlAttr(pageUrl)}" target="_blank" rel="noopener">Página oficial ↗</a>`
       : '';
 
+    const docLabelMobileV466 = d => {
+      const label = String(d.label || '').trim();
+      const curto = String(d.curto || '').trim().toUpperCase();
+      if(/l[âa]mina/i.test(label) || curto === 'L') return 'Lâmina';
+      if(/regulamento/i.test(label) || curto === 'R') return 'Regulamento';
+      if(/informa/i.test(label) || curto === 'IC') return 'Informe';
+      if(/carteira/i.test(label) || curto === 'C') return 'Carteira';
+      if(/comercial|boletim/i.test(label) || curto === 'CM') return 'Comercial';
+      if(/termo|ades/i.test(label) || curto === 'TA') return 'Termo';
+      return label || curto || 'Documento';
+    };
+
     const links = secundarios.map(d => {
-      const label = d.curto || d.label || 'Doc';
-      return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${d.icon || '📄'} ${htmlAttr(label)}</a>`;
+      const label = docLabelMobileV466(d);
+      return `<a class="fund-card-doc-pill" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" title="${htmlAttr(d.label || label)}">${htmlAttr(label)}</a>`;
     }).join('');
 
     return `<div class="fund-card-mobile-docs fund-card-mobile-docs-v236">
@@ -7434,10 +8546,10 @@ document.addEventListener('DOMContentLoaded', function(){
     const docs = getMobileDocs(r);
     const boletim = docs.find(d => /boletim/i.test(String(d.label || '')) || String(d.csvKey || '') === 'doc_boletim');
     const boletimBtn = boletim
-      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim comercial ↗</a>`
+      ? `<a class="fund-card-boletim-quick-btn" href="${htmlAttr(boletim.url)}" target="_blank" rel="noopener">Boletim ↗</a>`
       : '';
     const docsHtml = buildMobileDocsHtml(r);
-    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26" data-card-idx="${idx}" data-idx="${idx}">
+    return `<article class="fund-card-mobile fund-card-mobile-list fund-card-mobile-v26 fund-card-hierarchy-v444" data-card-idx="${idx}" data-idx="${idx}">
       <div class="fund-card-list-main fund-card-list-main-premium-v68">
         <div class="fund-card-list-left">
           <div class="fund-card-mobile-tags fund-card-list-tags">
@@ -7464,22 +8576,20 @@ document.addEventListener('DOMContentLoaded', function(){
 
       <div class="fund-card-mobile-actions fund-card-list-actions fund-card-list-actions-v26">
         ${boletimBtn}
-        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página do fundo ↗</a>
-        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Mais detalhes</button>
+        <a class="fund-card-primary-btn fund-card-page-btn" href="${htmlAttr(url)}" target="_blank" rel="noopener">Página ↗</a>
+        <button type="button" class="fund-card-detail-btn" data-card-idx="${idx}" aria-expanded="false">Detalhes</button>
       </div>
 
       <div class="fund-card-list-expanded" aria-hidden="true">
         <div class="fund-card-expanded-head">
-          <strong>Mais detalhes</strong>
-          <button type="button" class="fund-card-close-details" data-card-idx="${idx}" aria-label="Fechar detalhes">× Fechar</button>
+          <strong>Detalhes do fundo</strong>
         </div>
-        <div class="fund-card-mobile-body">
-          <div class="fund-metric"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Referência</span><span class="fund-metric-value">${htmlAttr(bench)}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Patrimônio (mi)</span><span class="fund-metric-value">${pl}</span></div>
-          <div class="fund-metric"><span class="fund-metric-label">Início do fundo</span><span class="fund-metric-value">${data}</span></div>
+        <div class="fund-card-mobile-body fund-detail-list-v468">
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Cota</span><span class="fund-metric-value">${cota}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Conversão</span><span class="fund-metric-value prazo-mobile">${htmlAttr(conversao)}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Pagamento</span><span class="fund-metric-value prazo-mobile">${htmlAttr(pagamento)}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Patrimônio mi</span><span class="fund-metric-value">${pl}</span></div>
+          <div class="fund-metric fund-detail-row-v468"><span class="fund-metric-label">Início</span><span class="fund-metric-value">${data}</span></div>
         </div>
         ${typeof buildFundOperationalFacts==='function'?buildFundOperationalFacts(r,'mobile'):''}
         ${docsHtml}
@@ -7506,7 +8616,7 @@ document.addEventListener('DOMContentLoaded', function(){
         const open=card.classList.toggle('open');
         const expanded=card.querySelector('.fund-card-list-expanded');
         if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
-        btn.textContent=open?'Ocultar':'Mais detalhes';
+        btn.textContent=open?'Ocultar':'Detalhes';
         btn.setAttribute('aria-expanded', open?'true':'false');
         try{
           const key=fundKeyFromIdx(btn.dataset.cardIdx || card.dataset.idx);
@@ -8187,7 +9297,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if(expanded) expanded.setAttribute('aria-hidden', should?'false':'true');
       const btn=card.querySelector('.fund-card-detail-btn');
       if(btn){
-        btn.textContent=should?'Ocultar':'Mais detalhes';
+        btn.textContent=should?'Ocultar':'Detalhes';
         btn.setAttribute('aria-expanded', should?'true':'false');
       }
     });
@@ -8216,7 +9326,7 @@ document.addEventListener('DOMContentLoaded', function(){
       const expanded=card.querySelector('.fund-card-list-expanded');
       if(expanded) expanded.setAttribute('aria-hidden', open?'false':'true');
       if(mainBtn){
-        mainBtn.textContent=open?'Ocultar':'Mais detalhes';
+        mainBtn.textContent=open?'Ocultar':'Detalhes';
         mainBtn.setAttribute('aria-expanded', open?'true':'false');
       }
       if(open) openCards.add(key); else openCards.delete(key);
@@ -8480,9 +9590,13 @@ document.addEventListener('DOMContentLoaded', function(){
     const nota = gerarLeituraRapidaFundo(row);
     const tmpDiv = document.createElement('div');
     tmpDiv.innerHTML = nota;
-    const noteTxt = tmpDiv.querySelector('.fund-quick-note-text')?.textContent || '';
+    const noteBody = tmpDiv.querySelector('.fund-quick-note-text');
+    const noteTxt = noteBody
+      ? Array.from(noteBody.querySelectorAll('p')).map(p=>String(p.textContent||'').trim()).filter(Boolean).join(' ')
+      : String(tmpDiv.textContent || '').trim();
+    const safeNoteTxt = (typeof htmlAttr === 'function') ? htmlAttr(noteTxt) : noteTxt.replace(/[&<>"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
     el('fspotNote').innerHTML = noteTxt
-      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${noteTxt}`
+      ? `<div class="fspot-note-title">🧭 Leitura consultiva</div>${safeNoteTxt}`
       : '';
     el('fspotNote').style.display = noteTxt ? '' : 'none';
 
@@ -10823,12 +11937,54 @@ async function sharePainelMercado(){
   function qs(sel,root=document){return root.querySelector(sel)}
   function esc(v){return String(v??'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
   function cleanFund(v){return String(v||'—').replace(/\s*\(\d+\)/g,'').trim()||'—'}
+  function compactFundName(v){
+    const full=cleanFund(v);
+    if(full==='—') return full;
+    let s=full
+      .replace(/\s*\(\d+\)/g,' ')
+      .replace(/\bCAIXA\b/gi,' ')
+      .replace(/\b(FIC|FIF|FI|FIA|FIM|ETF)\b/gi,' ')
+      .replace(/\b(FUNDO|DE|INVESTIMENTO)\b/gi,' ')
+      .replace(/\b(RESP|LTDA|LTD|LP)\b/gi,' ')
+      .replace(/\s*-\s*/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    if(!s) return full;
+
+    const replacements=[
+      [/\bACOES\b/gi,'Ações'],
+      [/\bDOLAR\b/gi,'Dólar'],
+      [/\bINDICE\b/gi,'Índice'],
+      [/\bCRED PRIV\b/gi,'Cred. Priv.'],
+      [/\bREFERENCIADO\b/gi,'Ref.'],
+      [/\bCORPORATIVO\b/gi,'Corp.'],
+      [/\bBOLSA AMERICANA\b/gi,'Bolsa Americana'],
+      [/\bELETROBRAS MIGRACAO\b/gi,'Eletrobras Migração'],
+      [/\bELETROBRAS\b/gi,'Eletrobras']
+    ];
+    replacements.forEach(([pattern,value])=>{s=s.replace(pattern,value);});
+
+    const acronyms=new Set(['RF','DI','CP','CDI','FMP','FGTS','MM','IRF-M','IMA-B','IPCA']);
+    s=s.split(/\s+/).map(word=>{
+      const clean=word.replace(/[.,]/g,'').toUpperCase();
+      if(acronyms.has(clean)) return word.toUpperCase();
+      if(word.includes('-')) return word.split('-').map(part=>{
+        const p=part.toUpperCase();
+        return acronyms.has(p)?p:(part.charAt(0).toUpperCase()+part.slice(1).toLowerCase());
+      }).join('-');
+      return word.charAt(0).toUpperCase()+word.slice(1).toLowerCase();
+    }).join(' ');
+
+    const words=s.split(/\s+/).filter(Boolean);
+    if(words.length>4) s=words.slice(0,4).join(' ');
+    return s||full;
+  }
   function shortCat(v){
     const raw=String(v||'—').trim();
     const n=typeof normRankTxt==='function'?normRankTxt(raw):raw.toUpperCase();
     if(n.includes('FUNDOS MUTUOS')||n.includes('PRIVATIZACAO')) return 'FMP';
-    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Referenciado';
-    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto Prazo';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
     if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
     if(n.includes('RENDA FIXA')) return 'Renda Fixa';
     if(n.includes('MULTIMERCADO')) return 'Multimercado';
@@ -10853,14 +12009,49 @@ async function sharePainelMercado(){
   function periodoLabel(p){return typeof rankPeriodoLabel==='function'?rankPeriodoLabel(p):(p==='mes'?'mês':p==='ano'?'ano':'12 meses')}
   function periodoResumo(p){return typeof rankPeriodoResumo==='function'?rankPeriodoResumo(p):(p==='mes'?'do mês':p==='ano'?'no ano':'12M')}
   function filtroLabelAtual(){
-    if(typeof activeRankFilter==='undefined'||activeRankFilter==='todos') return 'Todos os fundos';
+    if(typeof activeRankFilter==='undefined'||activeRankFilter==='todos') return 'Todos';
     const btn=qs(`[data-rank-filter="${activeRankFilter}"]`);
     return btn?btn.textContent.trim():'Filtro aplicado';
   }
-  function cdiRatioTxt(r){
+  function cdiReferenciaRankingV538(periodo){
+    const p=periodo||'12m';
+    const card=typeof cdiCardAtualV230==='function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const firstFinite=(...values)=>{
+      for(const value of values){
+        const n=num(value);
+        if(n!==null && !Number.isNaN(n) && Number.isFinite(n)) return n;
+      }
+      return null;
+    };
+    if(p==='mes'){
+      let atual=null;
+      try{ atual=typeof obterCdiAtualV232==='function' ? obterCdiAtualV232().valor : null; }catch(e){ atual=null; }
+      return firstFinite(atual, card?.parcial_mes_atual, card?.mensal, indicState?.cdi?.mes);
+    }
+    if(p==='ano'){
+      const direto=firstFinite(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, indicState?.cdi?.ano);
+      if(direto!==null) return direto;
+      try{
+        const hist=Array.isArray(card?.historico)?card.historico:[];
+        const ano=String(new Date().getFullYear());
+        const valores=hist
+          .map(item=>({key:String(item?.key||item?.data_ref||'').slice(0,7),value:num(item?.valor ?? item?.value)}))
+          .filter(item=>item.key.startsWith(ano+'-') && item.value!==null && !Number.isNaN(item.value) && Number.isFinite(item.value))
+          .map(item=>item.value);
+        if(valores.length && typeof acumularPercentuaisMensaisV229==='function') return acumularPercentuaisMensaisV229(valores);
+      }catch(e){}
+      return null;
+    }
+    const m12=typeof resolverCdiPeriodoV229==='function' ? resolverCdiPeriodoV229(card,12) : null;
+    return firstFinite(m12, card?.acum_12m, card?.m12, indicState?.cdi?.m12);
+  }
+  function cdiRatioTxt(r,periodo='12m'){
     try{
-      if(typeof calcCdiRatio!=='function') return '—';
-      const ratio=calcCdiRatio(num(r['Acum. 12M (%)']), indicState?.cdi?.m12);
+      const campo=campoPorPeriodo(periodo);
+      const rent=num(r[campo]);
+      const cdiRef=cdiReferenciaRankingV538(periodo);
+      if(rent===null || Number.isNaN(rent) || !Number.isFinite(rent) || cdiRef===null || cdiRef===0) return '—';
+      const ratio=typeof calcCdiRatio==='function' ? calcCdiRatio(rent,cdiRef) : Math.round((rent/cdiRef)*100);
       return ratio===null?'—':ratio+'%';
     }catch(e){return '—'}
   }
@@ -10873,14 +12064,16 @@ async function sharePainelMercado(){
   function universePill(){return `<span class="ranking-universe-pill">Universo: <strong>${esc(filtroLabelAtual())}</strong></span>`}
   function riskPill(){return `<span class="ranking-risk-pill-v198">Risco: <strong>${esc(rotuloPerfilRiscoV198(typeof activeRankRisk!=='undefined'?activeRankRisk:''))}</strong></span>`}
   function summaryCard(kind,label,value,name,meta){
-    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(name)}">${esc(name)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
+    const fullName=cleanFund(name);
+    const displayName=kind==='pl' ? fullName : compactFundName(fullName);
+    return `<article class="ranking-exec-card ${kind}"><span>${esc(label)}</span><strong class="ranking-value-standard ${kind==='worst'?'neg':'pos'}">${esc(value)}</strong><small title="${esc(fullName)}">${esc(displayName)}</small>${meta?`<em>${esc(meta)}</em>`:''}</article>`;
   }
-  function topRow(r,i,campo,showCdi){
+  function topRow(r,i,campo,periodo){
     const cat=shortCat(r['Categoria']);
     const nome=cleanFund(r['Fundo']);
     const val=pct(r[campo]);
     const cls=retClass(r[campo]);
-    const cdi=showCdi?cdiRatioTxt(r):'—';
+    const cdi=cdiRatioTxt(r,periodo);
     return `<div class="ranking-top-row">
       <div class="ranking-pos">${medal(i)}</div>
       <div class="ranking-fund"><strong title="${esc(nome)}">${esc(nome)}</strong><span>${esc(cat)} · ${esc(rowPL(r))}</span></div>
@@ -10890,8 +12083,14 @@ async function sharePainelMercado(){
   }
   function categoryMini([cat,r]){
     const nome=cleanFund(r['Fundo']);
+    const nomeCurto=compactFundName(nome);
     const val=pct(r['Acum. 12M (%)']);
-    return `<article class="ranking-cat-mini"><span>${esc(shortCat(cat))}</span><strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong><small title="${esc(nome)}">${esc(nome)}</small></article>`;
+    return `<article class="ranking-cat-mini ranking-cat-row-v457 ranking-cat-row-v531">
+      <span>${esc(shortCat(cat))}</span>
+      <strong class="ranking-value-standard ${retClass(r['Acum. 12M (%)'])}">${esc(val)}</strong>
+      <small title="${esc(nome)}"><span class="ranking-cat-name-full-v531">${esc(nome)}</span><span class="ranking-cat-name-short-v531">${esc(nomeCurto)}</span></small>
+      <em>Melhor em 12 meses</em>
+    </article>`;
   }
   function worstMini(r,i,campo){
     const nome=cleanFund(r['Fundo']);
@@ -10905,8 +12104,17 @@ async function sharePainelMercado(){
     const w=worst?` No mesmo recorte, o destaque negativo é ${cleanFund(worst['Fundo'])}, com ${pct(worst[campoPorPeriodo(periodo)])}.`:'';
     return `No período de ${periodoLabel(periodo)}, o maior destaque é ${nome}, da categoria ${cat}, com ${v}.${w}`;
   }
+  function compactInsight(top,worst,periodo){
+    if(!top) return 'Dados insuficientes para leitura rápida.';
+    const positivo=`${pct(top[campoPorPeriodo(periodo)])} em ${shortCat(top['Categoria'])}`;
+    if(!worst) return `${periodoLabel(periodo)}: destaque positivo ${positivo}.`;
+    return `${periodoLabel(periodo)}: positivo ${positivo}; negativo ${pct(worst[campoPorPeriodo(periodo)])} em ${shortCat(worst['Categoria'])}.`;
+  }
 
   function renderRankingsV50(){
+    if(window.__desktopRankingPodiumV562Installed && typeof window.__renderRankingsV562 === 'function'){
+      return window.__renderRankingsV562();
+    }
     const grid=qs('#rankingGrid');
     if(!grid || typeof allRows==='undefined' || !Array.isArray(allRows) || !allRows.length) return;
     try{ if(typeof atualizarRankingFilterUI==='function') atualizarRankingFilterUI(); }catch(e){}
@@ -10914,7 +12122,7 @@ async function sharePainelMercado(){
     const campo=campoPorPeriodo(periodo);
     let base=allRows.filter(r=>typeof temDados==='function'?temDados(r):true).filter(r=>typeof passaFiltroRanking==='function'?passaFiltroRanking(r):true);
     try{
-      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
+      if(typeof activePerfil!=='undefined' && activePerfil) base=base.filter(r=>typeof catalogAudienceMatchesV553 === 'function' ? catalogAudienceMatchesV553(r, activePerfil) : String(r['Perfis']||r['Perfil']||'').split(/\s*\|\s*/).map(s=>s.trim()).includes(activePerfil));
       if(typeof activeRankRisk!=='undefined' && activeRankRisk) base=base.filter(r=>perfilRiscoCorrespondeV198(r['Perfil de Risco'],activeRankRisk));
     }catch(e){}
     const sortBy=(field,asc=false)=>base.filter(r=>num(r[field])!==null && !Number.isNaN(num(r[field]))).sort((a,b)=>asc?num(a[field])-num(b[field]):num(b[field])-num(a[field]));
@@ -10943,13 +12151,13 @@ async function sharePainelMercado(){
     const maiorPL=catPL[0];
 
     const cards=[
-      summaryCard('best','🏆 Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12)} do CDI · ${shortCat(best12['Categoria'])}`:''),
-      summaryCard('month','📈 Melhor no mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
-      summaryCard('pl','🏦 Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:''),
-      summaryCard('worst','⚠️ Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):'')
+      summaryCard('best','Melhor 12M', best12?pct(best12['Acum. 12M (%)']):'—', best12?cleanFund(best12['Fundo']):'—', best12?`${cdiRatioTxt(best12,'12m')} do CDI · ${shortCat(best12['Categoria'])}`:''),
+      summaryCard('worst','Pior 12M', worst12?pct(worst12['Acum. 12M (%)']):'—', worst12?cleanFund(worst12['Fundo']):'Sem retorno negativo', worst12?shortCat(worst12['Categoria']):''),
+      summaryCard('month','Melhor mês', bestMonth?pct(bestMonth['Acum. Mes (%)']):'—', bestMonth?cleanFund(bestMonth['Fundo']):'—', bestMonth?shortCat(bestMonth['Categoria']):''),
+      summaryCard('pl','Maior PL', maiorPL?plMi(maiorPL[1].pl_total).replace('PL ',''):'—', maiorPL?shortCat(maiorPL[0]):'—', maiorPL?`${maiorPL[1].qtd_ativos??'—'} fundos`:'')
     ].join('');
 
-    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo==='12m')).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    const topRows=top.map((r,i)=>topRow(r,i,campo,periodo)).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
     const catRows=catTop.map(categoryMini).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
     // v195: o painel lateral de atenção já reúne piores leituras,
     // negativos no ano e fundos sem dados. Evita duplicar a mesma informação
@@ -10957,19 +12165,18 @@ async function sharePainelMercado(){
     grid.className='ranking-grid ranking-executive-v50 ranking-main-v136';
     grid.innerHTML=`
       <section class="ranking-exec-summary" aria-label="Destaques dos rankings">${cards}</section>
-      <section class="ranking-exec-insight"><span>Leitura rápida</span><p>${esc(insight(top[0],worst[0],periodo))}</p></section>
       <section class="ranking-exec-board">
         <div class="ranking-exec-board-head">
           <div><h3>Top 10 fundos no período</h3><p>Ranking por rentabilidade · ${esc(periodoLabel(periodo))}</p></div>
           <div class="ranking-exec-controls">${periodTabs(periodo)}${universePill()}${riskPill()}</div>
         </div>
         <div class="ranking-top-table" role="table" aria-label="Top 10 fundos">
-          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI 12M</span></div>
+          <div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI no período</span></div>
           ${topRows}
         </div>
       </section>
       <section class="ranking-exec-secondary ranking-exec-secondary-single-v195">
-        <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Melhor fundo de cada categoria em 12 meses.</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
+        <div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Top fundo de cada classe · 12 meses</p></div><div class="ranking-cat-grid-v50">${catRows}</div></div>
       </section>
     `;
   }
@@ -11893,6 +13100,10 @@ async function sharePainelMercado(){
     return LABELS[canonCat || ''] || canonCat || 'Todos';
   }
 
+  function escV87(v){
+    return String(v || '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  }
+
   function findRawCategory(canonTarget){
     if(!canonTarget) return '';
     try{
@@ -11931,15 +13142,15 @@ async function sharePainelMercado(){
   }
 
   function applyPresetExact(preset, sourceBtn){
+    const clickedActive = !!(sourceBtn && sourceBtn.getAttribute && sourceBtn.getAttribute('aria-pressed') === 'true');
+    if(clickedActive && preset && preset !== 'all') preset = 'all';
     const wanted = PRESET_CAT.hasOwnProperty(preset) ? PRESET_CAT[preset] : '';
 
     stabilizeFilterBox(()=>{
       try{
         activeCat = wanted ? findRawCategory(wanted) : '';
-        activeBenchmark = '';
-        activePerfil = '';
-        activeRisco = '';
-        hideSemDados = false;
+        // Desktop v526: categoria não limpa público-alvo, risco, benchmark ou busca.
+        // Assim os filtros voltam a acumular na ordem: busca → público-alvo → categoria → risco.
         currentPage = 1;
         window.__favListMode = false;
         window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = preset || 'all';
@@ -11947,7 +13158,7 @@ async function sharePainelMercado(){
       }catch(e){}
 
       const semDados = qs('#toggleSemDados');
-      if(semDados) semDados.checked = false;
+      if(semDados) semDados.checked = !!hideSemDados;
 
       try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
       try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){}
@@ -11955,6 +13166,11 @@ async function sharePainelMercado(){
 
       if(sourceBtn && typeof sourceBtn.blur === 'function') sourceBtn.blur();
       syncV87();
+      try{
+        if(window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__ && typeof window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__.sync === 'function'){
+          setTimeout(window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__.sync,0);
+        }
+      }catch(e){}
     });
   }
 
@@ -11993,11 +13209,18 @@ async function sharePainelMercado(){
 
       const strip = qs('#activeFilterStrip');
       if(strip && isDesktop()){
-        if(active){
+        const parts = [];
+        try{ if(activePerfil) parts.push({kind:'perfil', label:'Público-alvo', value:String(activePerfil)}); }catch(e){}
+        try{ if(activeBenchmark) parts.push({kind:'benchmark', label:'Benchmark', value:String(activeBenchmark)}); }catch(e){}
+        if(active) parts.push({kind:'cat', label:'Categoria', value:label});
+        try{ if(activeRisco) parts.push({kind:'risco', label:'Risco', value:(typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(activeRisco) : String(activeRisco))}); }catch(e){}
+        try{ if(hideSemDados) parts.push({kind:'semDados', label:'Base', value:'Ocultar sem dados'}); }catch(e){}
+
+        if(parts.length){
           strip.classList.add('active','desktop-active-filter-v87');
-          strip.innerHTML = '<span class="active-filter-label">Filtros ativos</span>' +
-            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="cat"><small>Categoria</small>${label}<span aria-hidden="true">×</span></button>` +
-            '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
+          strip.innerHTML = parts.map(p =>
+            `<button type="button" class="active-filter-pill active-filter-pill-v87" data-clear-filter="${escV87(p.kind)}"><small>${escV87(p.label)}</small>${escV87(p.value)}<span aria-hidden="true">×</span></button>`
+          ).join('') + '<button type="button" class="active-filter-clear" data-clear-filter="all">Limpar tudo</button>';
         }else{
           strip.classList.remove('active','desktop-active-filter-v87');
           strip.innerHTML = '';
@@ -15177,21 +16400,18 @@ if(!isSearchInput(el)) return;
     let worst=attentionRows(rows,'Acum. 12M (%)','12M negativo — avaliar contexto e benchmark',4);
     if(!worst) worst=attentionRows(rows,'Acum. Mes (%)','Mês negativo — monitorar comportamento',4);
     const year=attentionRows(rows,'Acum. Ano (%)','Ano negativo — verificar a tese de manutenção',3);
-    const pipeline=missing.slice(0,3).map(r=>`<button type="button" class="attention-row-v136 pipeline" data-attention-fund="${esc(r.Fundo||'')}"><span><span class="fund">${esc(r.Fundo||'—')}</span><span class="reason">Sem cota/rentabilidade suficiente na base</span></span><span class="value">—</span></button>`).join('');
     const insight=neg12.length
       ? `<strong>${neg12.length}</strong> fundo(s) com retorno negativo em 12 meses no filtro atual. Use os alertas como ponto de partida para investigar classe, prazo, benchmark e aderência ao perfil.`
-      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês, no ano e fundos sem dados.`;
+      : `Nenhum retorno negativo em 12 meses no filtro atual. Ainda assim, confira eventuais resultados negativos no mês e no ano.`;
     host.innerHTML=`
       <div class="attention-metric-grid-v136">
         <div class="attention-metric-v136"><span>12M negativo</span><strong>${neg12.length}</strong></div>
         <div class="attention-metric-v136"><span>Ano negativo</span><strong>${negAno.length}</strong></div>
-        <div class="attention-metric-v136"><span>Sem dados</span><strong>${missing.length}</strong></div>
       </div>
       <div class="attention-block-v136"><h3>Insight SIPII</h3><div class="attention-insight-v136">${insight}</div></div>
-      ${worst?`<div class="attention-block-v136"><h3>Piores leituras</h3><div class="attention-list-v136">${worst}</div></div>`:''}
+      ${worst?`<div class="attention-block-v136"><h3>Piores em 12 meses</h3><div class="attention-list-v136">${worst}</div></div>`:''}
       ${year?`<div class="attention-block-v136"><h3>Negativos no ano</h3><div class="attention-list-v136">${year}</div></div>`:''}
-      ${pipeline?`<div class="attention-block-v136"><h3>Sem dados / pipeline</h3><div class="attention-list-v136">${pipeline}</div></div>`:''}
-      <div class="attention-foot-v136">Leitura automática e informativa. O alerta não substitui suitability, objetivos, liquidez e horizonte do cliente.</div>`;
+      <div class="attention-foot-v136">Alertas automáticos para apoio à análise. Não substituem suitability, objetivo e horizonte do cliente.</div>`;
   }
 
   function renderRankingsAndAttention(){
@@ -16215,19 +17435,19 @@ if(document.readyState === 'loading'){
     if(activeChip && activeChip.textContent.trim()) return activeChip.textContent.trim();
 
     const map={
-      todos:'Todos os fundos',
-      'sem-fmp':'Todos, exceto FMP',
+      todos:'Todos',
+      'sem-fmp':'Sem FMP',
       'renda-fixa-simples':'RF Simples',
       'renda-fixa':'Renda Fixa',
-      'renda-fixa-referenciado':'RF Referenciado',
-      'renda-fixa-curto-prazo':'RF Curto Prazo',
+      'renda-fixa-referenciado':'RF Ref.',
+      'renda-fixa-curto-prazo':'RF Curto',
       multimercado:'Multimercado',
       cambial:'Cambial',
       acoes:'Ações',
       'fundo-de-indice':'Índice',
       fmp:'FMP'
     };
-    return map[value]||'Todos os fundos';
+    return map[value]||'Todos';
   }
 
   function syncUniversePill(){
@@ -19056,12 +20276,9 @@ function openCdiAnalyticTableV274(){
     const sec = document.getElementById('sec-dolar');
     if(!sec || !isMobile) return;
 
-    const badge = sec.querySelector('.section-badge');
+    const badge = sec.querySelector('.section-badge:not(.dolar-source-badge-v336)');
     if(badge){
-      badge.classList.add('dolar-source-badge-v336');
-      badge.innerHTML = '<span class="badge-dot green"></span>BCB · PTAX';
-      badge.removeAttribute('aria-hidden');
-      setImportant(badge, 'display', 'inline-flex');
+      badge.classList.remove('dolar-source-badge-v336');
     }
 
     const body = document.getElementById('dolarTimelineBody');
@@ -20618,5 +21835,5538 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
   window.__ELTAUM_MOBILE_HEADER_MINIMAL_V436__ = {
     build: BUILD,
     sync: applyMobileHeaderMinimalV436
+  };
+})();
+
+/* PATCH v437 — Mobile: remove wrapper antigo da data e zera topo excedente */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_TIGHT_v437';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function disableLegacyHeaderObserver(){
+    try{
+      const legacy = window.__ELTAUM_HEADER_UPDATE_FIX_V374__;
+      if(legacy?.observer && typeof legacy.observer.disconnect === 'function'){
+        legacy.observer.disconnect();
+      }
+      if(legacy){
+        legacy.sync = function(){};
+        legacy.disabledByV437 = true;
+      }
+    }catch(_error){}
+  }
+
+  function unwrapLegacyHost(){
+    const header = document.querySelector('.site-header-clean');
+    const brandText = header?.querySelector('.brand-text');
+    const title = brandText?.querySelector('h1');
+    const last = document.getElementById('lastUpdate');
+    if(!brandText || !last) return;
+
+    last.classList.remove('header-update-v374');
+    last.removeAttribute('style');
+
+    if(last.parentElement !== brandText){
+      if(title?.nextSibling){
+        brandText.insertBefore(last, title.nextSibling);
+      }else{
+        brandText.appendChild(last);
+      }
+    }
+
+    document.querySelectorAll('.header-update-host-v374').forEach(host => {
+      if(!host.contains(last) && !host.textContent.trim()) host.remove();
+    });
+  }
+
+  function applyMobileHeaderTightV437(){
+    try{
+      document.documentElement.classList.add('mobile-v437','mobile-header-tight-v437');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      disableLegacyHeaderObserver();
+      unwrapLegacyHost();
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderTightV437();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true, attributes:true, attributeFilter:['class','style']});
+    window.__ELTAUM_MOBILE_HEADER_TIGHT_OBSERVER_V437__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderTightV437, {once:true});
+  }else{
+    applyMobileHeaderTightV437();
+  }
+
+  window.addEventListener('load', applyMobileHeaderTightV437, {once:true});
+  [50, 120, 260, 600, 1100, 2200, 4200, 6500, 10000, 16000, 26000].forEach(ms => setTimeout(applyMobileHeaderTightV437, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_TIGHT_V437__ = {
+    build: BUILD,
+    sync: applyMobileHeaderTightV437
+  };
+})();
+
+/* PATCH v439 — Mobile: data visual dentro da mesma linha do titulo
+   PATCH v483 — Desktop limpo: não injeta a data no H1 fora do mobile */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_v439_DESKTOP_CLEAN_v483';
+  const MOBILE_QUERY = '(max-width: 768px)';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function isMobileHeaderMode(){
+    return !!(window.matchMedia && window.matchMedia(MOBILE_QUERY).matches);
+  }
+
+  function currentDateText(){
+    const time = document.querySelector('#lastUpdate .live-update-time, #lastUpdate time');
+    const raw = (time?.textContent || document.getElementById('lastUpdate')?.textContent || '').replace(/\s+/g,' ').trim();
+    return raw.replace(/^Atualizado\s*·\s*/i,'') || '';
+  }
+
+  function removeDesktopInlineDateV483(){
+    const html = document.documentElement;
+    const header = document.querySelector('.site-header-clean');
+    const h1 = header?.querySelector('.brand-text h1');
+
+    html.classList.remove('mobile-header-date-in-title-v439');
+
+    h1?.querySelectorAll('.header-inline-date-v439').forEach(inline => {
+      const previous = inline.previousSibling;
+      if(previous && previous.nodeType === Node.TEXT_NODE && !previous.textContent.trim()){
+        previous.remove();
+      }
+      inline.remove();
+    });
+  }
+
+  function applyMobileHeaderDateInTitleV439(){
+    try{
+      if(!isMobileHeaderMode()){
+        removeDesktopInlineDateV483();
+        return;
+      }
+
+      const html = document.documentElement;
+      html.classList.add('mobile-v439','mobile-header-date-in-title-v439');
+
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const legacy = window.__ELTAUM_HEADER_UPDATE_FIX_V374__;
+      if(legacy?.observer && typeof legacy.observer.disconnect === 'function') legacy.observer.disconnect();
+      if(legacy) legacy.disabledByV439 = true;
+
+      const header = document.querySelector('.site-header-clean');
+      const h1 = header?.querySelector('.brand-text h1');
+      const last = document.getElementById('lastUpdate');
+      if(!h1 || !last) return;
+
+      last.classList.remove('header-update-v374');
+
+      let inline = h1.querySelector('.header-inline-date-v439');
+      if(!inline){
+        inline = document.createElement('span');
+        inline.className = 'header-inline-date-v439';
+        inline.setAttribute('aria-hidden','true');
+        h1.appendChild(document.createTextNode(' '));
+        h1.appendChild(inline);
+      }
+
+      const text = currentDateText();
+      if(text && inline.textContent !== text) inline.textContent = text;
+
+      document.querySelectorAll('.header-update-host-v374').forEach(host => {
+        if(!host.contains(last) && !host.textContent.trim()) host.remove();
+      });
+
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileHeaderDateInTitleV439();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const header = document.querySelector('.site-header-clean');
+    if(!header) return;
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    obs.observe(header, {childList:true, subtree:true, characterData:true});
+    window.__ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_OBSERVER_V439__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileHeaderDateInTitleV439, {once:true});
+  }else{
+    applyMobileHeaderDateInTitleV439();
+  }
+
+  window.addEventListener('load', applyMobileHeaderDateInTitleV439, {once:true});
+  window.addEventListener('resize', schedule, {passive:true});
+
+  if(window.matchMedia){
+    const mobileMedia = window.matchMedia(MOBILE_QUERY);
+    if(typeof mobileMedia.addEventListener === 'function'){
+      mobileMedia.addEventListener('change', schedule);
+    }else if(typeof mobileMedia.addListener === 'function'){
+      mobileMedia.addListener(schedule);
+    }
+  }
+
+  [50, 120, 260, 600, 1100, 2200, 4200, 6500, 10000, 16000, 26000].forEach(ms => setTimeout(applyMobileHeaderDateInTitleV439, ms));
+
+  window.__ELTAUM_MOBILE_HEADER_DATE_IN_TITLE_V439__ = {
+    build: BUILD,
+    sync: applyMobileHeaderDateInTitleV439,
+    desktopClean: removeDesktopInlineDateV483
+  };
+})();
+
+/* PATCH v440 — Mobile: filtros de fundos compactos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_v440';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function totalFundsText(){
+    const candidates = [
+      document.getElementById('filterResultSummary')?.textContent,
+      document.getElementById('mobileCategorySelectResultV74')?.textContent,
+      document.getElementById('desktopFilterResultSummary')?.textContent,
+      document.getElementById('resultInfo')?.textContent
+    ].filter(Boolean);
+
+    for(const raw of candidates){
+      const match = String(raw).match(/(\d[\d.]*)\s+fundos?/i);
+      if(match) return `${match[1]} fundos`;
+    }
+
+    return '';
+  }
+
+  function ensureFundsTitleCount(){
+    const section = document.getElementById('sec-fundos');
+    const title = section?.querySelector('.section-title h2');
+    if(!title) return;
+
+    let count = title.querySelector('.funds-title-count-v440');
+    if(!count){
+      count = document.createElement('span');
+      count.className = 'funds-title-count-v440';
+      count.setAttribute('aria-live','polite');
+      title.appendChild(count);
+    }
+
+    const text = totalFundsText();
+    if(text && count.textContent !== text) count.textContent = text;
+  }
+
+  function moveRealNoDataToggle(){
+    const shell = document.getElementById('mobileCategorySelectShellV74');
+    const toggle = document.querySelector('label[for="toggleSemDados"]');
+    if(!shell || !toggle) return;
+
+    shell.classList.add('has-real-toggle-v440');
+    toggle.classList.add('mobile-moved-toggle-v440');
+    if(toggle.parentElement !== shell){
+      const head = shell.querySelector('.mobile-category-select-head-v74');
+      shell.insertBefore(toggle, head || shell.firstChild);
+    }
+  }
+
+  function applyMobileFundsFiltersCompactV440(){
+    try{
+      document.documentElement.classList.add('mobile-v440','mobile-funds-filters-compact-v440');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const pfText = document.querySelector('#mobileExtraControlsV75 .mobile-pf-toggle-text-v75 strong');
+      if(pfText && pfText.textContent.trim() !== 'Pessoa Física') pfText.textContent = 'Pessoa Física';
+
+      moveRealNoDataToggle();
+      ensureFundsTitleCount();
+      startObserver();
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileFundsFiltersCompactV440();
+    });
+  }
+
+  function startObserver(){
+    if(observerStarted || !window.MutationObserver) return;
+    const targets = [
+      document.getElementById('sec-fundos'),
+      document.getElementById('filterResultSummary'),
+      document.getElementById('mobileCategorySelectResultV74'),
+      document.getElementById('resultInfo')
+    ].filter(Boolean);
+    if(!targets.length) return;
+
+    observerStarted = true;
+    const obs = new MutationObserver(schedule);
+    targets.forEach(target => obs.observe(target, {childList:true, subtree:true, characterData:true}));
+    window.__ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_OBSERVER_V440__ = obs;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundsFiltersCompactV440, {once:true});
+  }else{
+    applyMobileFundsFiltersCompactV440();
+  }
+
+  window.addEventListener('load', applyMobileFundsFiltersCompactV440, {once:true});
+  [250, 800, 1600, 3200, 6400, 12000].forEach(ms => setTimeout(applyMobileFundsFiltersCompactV440, ms));
+
+  window.__ELTAUM_MOBILE_FUNDS_FILTERS_COMPACT_V440__ = {
+    build: BUILD,
+    sync: applyMobileFundsFiltersCompactV440
+  };
+})();
+
+/* PATCH v441 — Mobile: ajustes finos dos filtros de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUNDS_FILTERS_FIX_v441';
+  let scheduled = false;
+
+  function applyMobileFundsFiltersFixV441(){
+    try{
+      document.documentElement.classList.add('mobile-v441','mobile-funds-filters-fix-v441');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const search = document.getElementById('searchInput');
+      if(search && !search.dataset.mobilePlaceholderV441){
+        search.dataset.desktopPlaceholderV441 = search.getAttribute('placeholder') || '';
+        search.dataset.mobilePlaceholderV441 = '1';
+      }
+      if(search && window.matchMedia?.('(max-width: 768px)').matches){
+        search.setAttribute('placeholder','Buscar fundo ou CNPJ...');
+      }
+
+      const pf = document.getElementById('mobileOnlyPfV75');
+      const pfLabel = document.querySelector('label[for="mobileOnlyPfV75"]');
+      if(pf && pfLabel){
+        pfLabel.classList.toggle('is-checked-v441', !!pf.checked);
+      }
+
+      const noDataToggle = document.querySelector('#mobileCategorySelectShellV74 .mobile-moved-toggle-v440');
+      if(noDataToggle){
+        noDataToggle.setAttribute('data-mobile-fixed-v441','1');
+      }
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      applyMobileFundsFiltersFixV441();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundsFiltersFixV441, {once:true});
+  }else{
+    applyMobileFundsFiltersFixV441();
+  }
+
+  document.addEventListener('change', event => {
+    if(event.target?.id === 'mobileOnlyPfV75' || event.target?.id === 'toggleSemDados') schedule();
+  }, true);
+  window.addEventListener('resize', schedule, {passive:true});
+  window.addEventListener('load', applyMobileFundsFiltersFixV441, {once:true});
+  [250, 800, 1600, 3200, 6400, 12000].forEach(ms => setTimeout(applyMobileFundsFiltersFixV441, ms));
+
+  window.__ELTAUM_MOBILE_FUNDS_FILTERS_FIX_V441__ = {
+    build: BUILD,
+    sync: applyMobileFundsFiltersFixV441
+  };
+})();
+
+/* PATCH v442 — Mobile: estabiliza o toggle "Ocultar fundos sem dados" */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_NO_DATA_TOGGLE_STABLE_v442';
+  let scheduled = false;
+
+  function ensureStableNoDataToggleV442(){
+    try{
+      document.documentElement.classList.add('mobile-v442','mobile-no-data-toggle-stable-v442');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const shell = document.getElementById('mobileCategorySelectShellV74');
+      const input = document.getElementById('toggleSemDados');
+      if(!shell || !input) return;
+
+      if(input.type !== 'checkbox') input.type = 'checkbox';
+
+      let row = document.getElementById('mobileNoDataRowV442');
+      if(!row){
+        row = document.createElement('label');
+        row.id = 'mobileNoDataRowV442';
+        row.className = 'toggle-wrap compact-toggle-wrap toggle-sem-dados-clean-v127 mobile-no-data-row-v442';
+        row.htmlFor = 'toggleSemDados';
+      }
+
+      row.dataset.v127Rebuilt = '1';
+      row.dataset.v442Stable = '1';
+      row.setAttribute('title','Ocultar fundos sem dados');
+
+      let text = row.querySelector('.mobile-no-data-text-v442');
+      if(!text){
+        text = document.createElement('span');
+        text.className = 'mobile-no-data-text-v442';
+        text.textContent = 'Ocultar fundos sem dados';
+      }
+
+      let switchWrap = row.querySelector('.mobile-no-data-switch-v442');
+      if(!switchWrap){
+        switchWrap = document.createElement('span');
+        switchWrap.className = 'mobile-no-data-switch-v442';
+      }
+
+      let slider = input.parentElement?.querySelector('.toggle-slider, .toggle-sem-dados-slider-v127') ||
+        row.querySelector('.toggle-slider, .toggle-sem-dados-slider-v127');
+      if(!slider){
+        slider = document.createElement('span');
+        slider.className = 'toggle-slider toggle-sem-dados-slider-v127';
+        slider.setAttribute('aria-hidden','true');
+      }else{
+        slider.classList.add('toggle-slider','toggle-sem-dados-slider-v127');
+        slider.setAttribute('aria-hidden','true');
+      }
+
+      input.classList.add('toggle-sem-dados-input-v127');
+      input.setAttribute('aria-label','Ocultar fundos sem dados');
+
+      if(text.parentElement !== row) row.appendChild(text);
+      if(switchWrap.parentElement !== row) row.appendChild(switchWrap);
+      if(input.parentElement !== switchWrap) switchWrap.appendChild(input);
+      if(slider.parentElement !== switchWrap) switchWrap.appendChild(slider);
+
+      row.classList.toggle('is-on', !!input.checked);
+
+      const head = shell.querySelector('.mobile-category-select-head-v74');
+      if(row.parentElement !== shell){
+        shell.insertBefore(row, head || shell.firstChild);
+      }else if(head && row.nextElementSibling !== head){
+        shell.insertBefore(row, head);
+      }
+
+      shell.classList.add('has-stable-no-data-toggle-v442');
+
+      document.querySelectorAll('.mobile-moved-toggle-v440, .toggle-sem-dados-clean-v127').forEach(el => {
+        if(el !== row && el.contains(input) === false && el.id !== 'mobileNoDataRowV442'){
+          el.remove();
+        }
+      });
+
+      if(input.dataset.v442Bound !== '1'){
+        input.dataset.v442Bound = '1';
+        input.addEventListener('change', () => {
+          row.classList.toggle('is-on', !!input.checked);
+        });
+      }
+    }catch(_error){}
+  }
+
+  function schedule(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      ensureStableNoDataToggleV442();
+    });
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', ensureStableNoDataToggleV442, {once:true});
+  }else{
+    ensureStableNoDataToggleV442();
+  }
+
+  document.addEventListener('change', event => {
+    if(event.target?.id === 'toggleSemDados') schedule();
+  }, true);
+  window.addEventListener('load', ensureStableNoDataToggleV442, {once:true});
+  [100, 260, 600, 1200, 2400, 4200, 7000, 12000, 20000].forEach(ms => setTimeout(ensureStableNoDataToggleV442, ms));
+
+  window.__ELTAUM_MOBILE_NO_DATA_TOGGLE_STABLE_V442__ = {
+    build: BUILD,
+    sync: ensureStableNoDataToggleV442
+  };
+})();
+
+/* PATCH v443 — Mobile: ranking toolbar compacto */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_v443';
+
+  function applyMobileRankingToolbarCompactV443(){
+    try{
+      document.documentElement.classList.add('mobile-v443','mobile-ranking-toolbar-compact-v443');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileRankingToolbarCompactV443, {once:true});
+  }else{
+    applyMobileRankingToolbarCompactV443();
+  }
+
+  window.addEventListener('load', applyMobileRankingToolbarCompactV443, {once:true});
+  [300, 1000, 2500, 6000].forEach(ms => setTimeout(applyMobileRankingToolbarCompactV443, ms));
+
+window.__ELTAUM_MOBILE_RANKING_TOOLBAR_COMPACT_V443__ = {
+    build: BUILD,
+    sync: applyMobileRankingToolbarCompactV443
+  };
+})();
+
+/* PATCH v444 — Mobile: hierarquia visual dos cards de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_HIERARCHY_v444';
+
+  function applyMobileFundCardHierarchyV444(){
+    try{
+      document.documentElement.classList.add('mobile-v444','mobile-fund-card-hierarchy-v444');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-card-hierarchy-v444');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundCardHierarchyV444, {once:true});
+  }else{
+    applyMobileFundCardHierarchyV444();
+  }
+
+  window.addEventListener('load', applyMobileFundCardHierarchyV444, {once:true});
+  [250, 800, 1800, 3600, 7000].forEach(ms => setTimeout(applyMobileFundCardHierarchyV444, ms));
+
+window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
+    build: BUILD,
+    sync: applyMobileFundCardHierarchyV444
+  };
+})();
+
+/* PATCH v445 — Mobile: Indicadores por mês */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_BALANCE_v451';
+  let range = 'year';
+  let view = 'all';
+  let usCurrency = 'usd';
+  const selectedChartIndicatorsV580 = new Set(['cdi','ipca','ibov','sp500']);
+
+  function toNumV445(value){
+    if(value === null || value === undefined || value === '') return null;
+    if(typeof value === 'string'){
+      const cleaned = value.replace('%','').replace(/\./g,'').replace(',','.').trim();
+      const n = Number(cleaned);
+      return Number.isFinite(n) ? n : null;
+    }
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function pctV445(value){
+    const n = toNumV445(value);
+    if(n === null) return '—';
+    return `${n > 0 ? '+' : ''}${n.toFixed(2).replace('.', ',')}%`;
+  }
+
+  function clsV445(value){
+    const n = toNumV445(value);
+    if(n === null || Math.abs(n) < 0.005) return 'muted';
+    return n > 0 ? 'pos' : 'neg';
+  }
+
+  function monthNameV445(index){
+    const meses = Array.isArray(window.MESES_PT) ? window.MESES_PT : null;
+    const fallback = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    return (meses || fallback)[index] || '';
+  }
+
+  function keyFromPartsV445(year, monthIndex){
+    return `${year}-${String(monthIndex + 1).padStart(2,'0')}`;
+  }
+
+  function labelFromKeyV447(key){
+    const monthIndex = Math.max(0, Math.min(11, Number(String(key).slice(5,7)) - 1));
+    const base = monthNameV445(monthIndex);
+    if(range === '12m'){
+      const year = String(key).slice(2,4);
+      return year ? `${base}/${year}` : base;
+    }
+    return base;
+  }
+
+  function normalizeMonthKeyV445(item){
+    if(!item || typeof item !== 'object') return '';
+    const raw = String(
+      item.key || item.mes_key || item.mesKey || item.periodo || item.mes || item.label ||
+      item.data_ref || item.data || item.date || item.dataHoraCotacao || ''
+    ).trim().toLowerCase();
+    if(!raw) return '';
+
+    let m = raw.match(/(\d{4})[-/](\d{1,2})/);
+    if(m) return `${m[1]}-${String(Number(m[2])).padStart(2,'0')}`;
+
+    m = raw.match(/(\d{1,2})[-/](\d{1,2})[-/](\d{4})/);
+    if(m) return `${m[3]}-${String(Number(m[2])).padStart(2,'0')}`;
+
+    const nomes = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    m = raw.match(/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)[a-zç]*[\/\s.-]*(\d{2,4})/i);
+    if(m){
+      const year = Number(m[2]) < 100 ? 2000 + Number(m[2]) : Number(m[2]);
+      return `${year}-${String(nomes.indexOf(m[1].slice(0,3).toLowerCase()) + 1).padStart(2,'0')}`;
+    }
+    return '';
+  }
+
+  function valueFromItemV445(item){
+    if(!item || typeof item !== 'object') return null;
+    const keys = [
+      'valor','value','mensal','variacao','variacao_mensal','variacao_mes',
+      'var_pct','retorno','retorno_mes','pct','percentual'
+    ];
+    for(const key of keys){
+      const n = toNumV445(item[key]);
+      if(n !== null) return n;
+    }
+    return null;
+  }
+
+  function mapSeriesV445(series){
+    const map = new Map();
+    (Array.isArray(series) ? series : []).forEach(item => {
+      const key = normalizeMonthKeyV445(item);
+      const value = valueFromItemV445(item);
+      if(key && value !== null) map.set(key, value);
+    });
+    return map;
+  }
+
+  function getMercadoV445(){
+    try{
+      return (typeof _dadosMercado !== 'undefined' && _dadosMercado) || window.__mercadoAtualV230 || {};
+    }catch(_error){
+      return window.__mercadoAtualV230 || {};
+    }
+  }
+
+  function getPtaxSeriesV445(dados){
+    try{
+      if(typeof _ptaxHistorico !== 'undefined' && Array.isArray(_ptaxHistorico) && _ptaxHistorico.length){
+        return _ptaxHistorico.map(item => ({
+          key: normalizeMonthKeyV445(item),
+          valor: item._var_pct ?? item.var_pct ?? item.variacao ?? item.variacao_mensal
+        }));
+      }
+    }catch(_error){}
+    return Array.isArray(dados?.ptax_historico) ? dados.ptax_historico : [];
+  }
+
+  function getIbovSeriesV445(dados){
+    const idx = dados?.indices_mercado?.ibovespa || {};
+    const card = dados?.cards?.ibovespa || {};
+    return idx.historico || idx.mensal || idx.meses || idx.fechamentos || card.historico || card.mensal || card.meses || [];
+  }
+
+  function isDesktopMonthlyV576(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function getIndexObjectV576(dados, key){
+    const idx = dados?.indices_mercado || {};
+    const intl = dados?.indices_internacionais || {};
+    const cards = dados?.cards || {};
+    if(key === 'sp500'){
+      return idx.sp500 || intl.sp500 || intl.sp500_detalhado || cards.sp500 || {};
+    }
+    if(key === 'nasdaq'){
+      return idx.nasdaq || intl.nasdaq || intl.nasdaq_detalhado || cards.nasdaq || {};
+    }
+    if(key === 'dow'){
+      return idx.dow_jones || idx.dow || intl.dow_jones || intl.dow || intl.dow_jones_detalhado || cards.dow_jones || cards.dow || {};
+    }
+    return {};
+  }
+
+  function percentFromItemV576(item){
+    if(!item || typeof item !== 'object') return null;
+    const keys = [
+      'variacao','variacao_mensal','variacao_mes','variacao_pct','var_pct',
+      'retorno','retorno_mes','retorno_mensal','pct','percentual',
+      'valor'
+    ];
+    for(const key of keys){
+      const n = toNumV445(item[key]);
+      if(n !== null) return n;
+    }
+    return null;
+  }
+
+  function getPtaxCloseMapV578(dados){
+    function toFx(value){
+      if(value === null || value === undefined || value === '') return null;
+      if(typeof value === 'number') return Number.isFinite(value) ? value : null;
+      const raw = String(value).trim();
+      const normalized = raw.includes(',')
+        ? raw.replace(/\./g,'').replace(',','.')
+        : raw;
+      const n = Number(normalized);
+      return Number.isFinite(n) ? n : null;
+    }
+    const series = [];
+    try{
+      if(typeof _ptaxHistorico !== 'undefined' && Array.isArray(_ptaxHistorico) && _ptaxHistorico.length){
+        series.push(..._ptaxHistorico);
+      }
+    }catch(_error){}
+    if(Array.isArray(dados?.ptax_historico)) series.push(...dados.ptax_historico);
+
+    const map = new Map();
+    series.forEach(item => {
+      const monthKey = normalizeMonthKeyV445(item);
+      const value = toFx(item?.cotacaoVenda ?? item?.cotacao ?? item?.valor ?? item?.fechamento);
+      if(monthKey && value !== null) map.set(monthKey, value);
+    });
+    return map;
+  }
+
+  function mapIndexSeriesV576(dados, key, currency = 'usd'){
+    const item = getIndexObjectV576(dados, key);
+    const series = item.historico || item.mensal || item.meses || item.fechamentos || item.serie || item.series || [];
+    const map = new Map();
+    const entries = (Array.isArray(series) ? series : [])
+      .map(entry => ({ entry, monthKey: normalizeMonthKeyV445(entry) }))
+      .filter(item => item.monthKey)
+      .sort((a,b) => a.monthKey.localeCompare(b.monthKey));
+
+    if(currency === 'brl'){
+      const fxMap = getPtaxCloseMapV578(dados);
+      let prevClose = null;
+      let prevFx = null;
+      entries.forEach(({entry, monthKey}) => {
+        const close = toNumV445(entry?.fechamento ?? entry?.close ?? entry?.valor_fechamento ?? entry?.cotacao);
+        const fx = fxMap.get(monthKey);
+        const directBrl = toNumV445(entry?.valor_brl ?? entry?.variacao_brl ?? entry?.variacao_mensal_brl ?? entry?.retorno_brl);
+        let value = directBrl;
+        if(value === null && close !== null && fx !== null && prevClose !== null && prevFx !== null && prevClose > 0 && prevFx > 0){
+          value = ((close * fx) / (prevClose * prevFx) - 1) * 100;
+        }
+        if(value !== null) map.set(monthKey, value);
+        if(close !== null && fx !== null){
+          prevClose = close;
+          prevFx = fx;
+        }
+      });
+      if(map.size) return map;
+    }
+
+    entries.forEach(({entry, monthKey}) => {
+      const value = percentFromItemV576(entry);
+      if(monthKey && value !== null) map.set(monthKey, value);
+    });
+    return map;
+  }
+
+  function firstMapWithDataV577(...maps){
+    return maps.find(map => map && map.size) || new Map();
+  }
+
+  function directIndexCandidatesV576(dados, key, rangeKey, currency = 'usd'){
+    const item = getIndexObjectV576(dados, key);
+    const aliases = key === 'dow'
+      ? [dados?.indices_mercado?.dow_jones, dados?.indices_mercado?.dow, dados?.indices_internacionais?.dow_jones_detalhado, dados?.indices_internacionais?.dow_jones, dados?.indices_internacionais?.dow]
+      : key === 'sp500'
+        ? [dados?.indices_mercado?.sp500, dados?.indices_internacionais?.sp500, dados?.indices_internacionais?.sp500_detalhado]
+        : [dados?.indices_mercado?.nasdaq, dados?.indices_internacionais?.nasdaq, dados?.indices_internacionais?.nasdaq_detalhado];
+    const pool = [item, ...aliases].filter(Boolean);
+    const field = rangeKey === '12m' ? 'acum_12m' : 'acum_ano';
+    const altFields = rangeKey === '12m'
+      ? (currency === 'brl' ? ['acum_12m_brl','retorno_12m_brl','variacao_12m_brl','m12_brl'] : ['acum_12m','retorno_12m','variacao_12m','m12'])
+      : (currency === 'brl' ? ['acum_ano_brl','retorno_ano_brl','variacao_ano_brl','ano_brl','ytd_brl'] : ['acum_ano','retorno_ano','variacao_ano','ano','ytd']);
+    return pool.flatMap(obj => altFields.map(name => obj?.[name] ?? (currency === 'brl' ? undefined : obj?.[field])));
+  }
+
+  function getConsolidatedMonthlyV448(dados){
+    return Array.isArray(dados?.indicadores_mensais) ? dados.indicadores_mensais : [];
+  }
+
+  function mapConsolidatedV448(series, field){
+    const map = new Map();
+    (Array.isArray(series) ? series : []).forEach(item => {
+      const key = normalizeMonthKeyV445(item);
+      const value = toNumV445(item?.[field]);
+      if(key && value !== null) map.set(key, value);
+    });
+    return map;
+  }
+
+  function getMonthKeysV445(maps){
+    const currentYear = (new Date()).getFullYear();
+    if(range === 'year'){
+      const yearKeys = Array.from({length:12}, (_,index) => keyFromPartsV445(currentYear, index));
+      const keysWithData = yearKeys.filter(key => maps.some(map => toNumV445(map?.get(key)) !== null));
+      if(keysWithData.length) return keysWithData;
+      const currentMonth = (new Date()).getMonth();
+      return yearKeys.slice(0, currentMonth + 1);
+    }
+
+    const union = new Set();
+    maps.forEach(map => map.forEach((_value, key) => union.add(key)));
+    const sorted = [...union].sort();
+    if(sorted.length >= 12) return sorted.slice(-12);
+
+    const base = new Date();
+    return Array.from({length:12}, (_,i) => {
+      const d = new Date(base.getFullYear(), base.getMonth() - (11 - i), 1);
+      return keyFromPartsV445(d.getFullYear(), d.getMonth());
+    });
+  }
+
+  function compoundV445(values){
+    const nums = values.map(toNumV445).filter(v => v !== null);
+    if(!nums.length) return null;
+    return (nums.reduce((acc, value) => acc * (1 + value / 100), 1) - 1) * 100;
+  }
+
+  function summaryValueV445(dados, key, map, directCandidates){
+    for(const candidate of directCandidates){
+      const n = toNumV445(candidate);
+      if(n !== null) return n;
+    }
+    const year = String((new Date()).getFullYear());
+    return compoundV445([...map.entries()].filter(([monthKey]) => monthKey.startsWith(year + '-')).map(([,value]) => value));
+  }
+
+  function summaryValueForKeysV449(map, keys, directCandidates){
+    for(const candidate of directCandidates){
+      const n = toNumV445(candidate);
+      if(n !== null) return n;
+    }
+    return compoundV445(keys.map(key => map.get(key)));
+  }
+
+  function setSummaryV445(id, value, label){
+    const el = document.getElementById(id);
+    if(!el) return;
+    const labelEl = el.closest('article')?.querySelector('span');
+    if(labelEl && label) labelEl.textContent = label;
+    el.textContent = pctV445(value);
+    el.className = clsV445(value);
+  }
+
+  const indicatorMetaV446 = {
+    all:{label:'Todos'},
+    cdi:{label:'CDI'},
+    ipca:{label:'IPCA'},
+    ibov:{label:'Ibov'},
+    dolar:{label:'Dólar'},
+    sp500:{label:'S&P 500'},
+    nasdaq:{label:'Nasdaq'},
+    dow:{label:'Dow'}
+  };
+
+  const chartMetaV580 = {
+    cdi:{label:'CDI', color:'#1d8cff'},
+    ipca:{label:'IPCA', color:'#22d3ee'},
+    ibov:{label:'Ibov', color:'#31d158'},
+    dolar:{label:'Dólar', color:'#ff6f8b'},
+    sp500:{label:'S&P 500', color:'#8b5cf6'},
+    nasdaq:{label:'Nasdaq', color:'#c084fc'},
+    dow:{label:'Dow', color:'#f0c36b'}
+  };
+
+  function cumulativeChartSeriesV580(map, keys){
+    let acc = 1;
+    const series = keys.map(key => {
+      const value = toNumV445(map?.get(key));
+      if(value === null) return null;
+      acc *= (1 + value / 100);
+      return Number(((acc - 1) * 100).toFixed(4));
+    });
+    return [0, ...series];
+  }
+
+  function syncChartButtonsV580(root, maps, keys){
+    root.querySelectorAll('[data-monthly-chart-indicator-v580]').forEach(btn => {
+      const key = btn.dataset.monthlyChartIndicatorV580 || '';
+      const hasData = mapHasDataForKeysV447(maps[key], keys);
+      const active = selectedChartIndicatorsV580.has(key) && hasData;
+      btn.classList.toggle('active', active);
+      btn.classList.toggle('is-unavailable-v580', !hasData);
+      btn.disabled = !hasData;
+      btn.setAttribute('aria-disabled', hasData ? 'false' : 'true');
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function renderMonthlyComparisonChartV580(root, maps, keys){
+    const canvas = document.getElementById('monthlyComparisonCanvasV580');
+    const empty = document.getElementById('monthlyComparisonEmptyV580');
+    if(!root || !canvas) return;
+
+    syncChartButtonsV580(root, maps, keys);
+
+    if(!window.Chart){
+      if(empty){
+        empty.hidden = false;
+        empty.textContent = 'Gráfico indisponível: Chart.js não carregou.';
+      }
+      return;
+    }
+
+    const labels = ['Início', ...keys.map(labelFromKeyV447)];
+    const datasets = Object.keys(chartMetaV580)
+      .filter(key => selectedChartIndicatorsV580.has(key))
+      .filter(key => mapHasDataForKeysV447(maps[key], keys))
+      .map(key => {
+        const meta = chartMetaV580[key];
+        const currencySuffix = ['sp500','nasdaq','dow'].includes(key) ? ` ${usCurrency.toUpperCase()}` : '';
+        return {
+          label: `${meta.label}${currencySuffix}`,
+          data: cumulativeChartSeriesV580(maps[key], keys),
+          borderColor: meta.color,
+          backgroundColor: meta.color,
+          borderWidth: 2,
+          pointRadius: 2,
+          pointHoverRadius: 4,
+          tension: 0.28,
+          spanGaps: true
+        };
+      });
+
+    if(empty) empty.hidden = datasets.length > 0;
+
+    const existing = window.Chart.getChart ? window.Chart.getChart(canvas) : null;
+    if(existing) existing.destroy();
+
+    if(!datasets.length) return;
+
+    new window.Chart(canvas, {
+      type:'line',
+      data:{labels, datasets},
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{mode:'index', intersect:false},
+        plugins:{
+          legend:{
+            display:true,
+            position:'bottom',
+            labels:{
+              color:'rgba(223,231,243,.78)',
+              boxWidth:10,
+              boxHeight:10,
+              usePointStyle:true,
+              padding:12,
+              font:{size:11, weight:'700'}
+            }
+          },
+          tooltip:{
+            callbacks:{
+              label:function(context){
+                const value = context.parsed?.y;
+                const formatted = value === null || value === undefined
+                  ? '—'
+                  : `${value > 0 ? '+' : ''}${Number(value).toFixed(2).replace('.', ',')}%`;
+                return `${context.dataset.label}: ${formatted}`;
+              }
+            }
+          }
+        },
+        scales:{
+          x:{
+            grid:{color:'rgba(148,163,184,.08)'},
+            ticks:{color:'rgba(178,191,222,.72)', font:{size:11, weight:'700'}}
+          },
+          y:{
+            grid:{color:'rgba(148,163,184,.10)'},
+            ticks:{
+              color:'rgba(178,191,222,.72)',
+              font:{size:11, weight:'700'},
+              callback:function(value){
+                return `${Number(value).toFixed(0).replace('.', ',')}%`;
+              }
+            }
+          }
+        }
+      }
+    });
+  }
+
+  function monthlyUsHeaderCellV593(labelHtml, ariaLabel, usLabel){
+    return `<th class="monthly-us-only-v576" scope="col"><button aria-label="Alternar moeda do ${ariaLabel} entre USD e BRL" class="monthly-us-header-toggle-v593" data-monthly-us-header-toggle-v593 type="button">${labelHtml} <small>${usLabel}</small></button></th>`;
+  }
+
+  function renderMonthlyHeaderV446(table, activeView){
+    if(!table) return;
+    table.dataset.viewV446 = activeView;
+    const headRow = table.querySelector('thead tr');
+    if(!headRow) return;
+    const usLabel = usCurrency === 'brl' ? 'BRL' : 'USD';
+    if(activeView === 'all'){
+      const usCols = isDesktopMonthlyV576()
+        ? `${monthlyUsHeaderCellV593('S&amp;P 500', 'S&P 500', usLabel)}${monthlyUsHeaderCellV593('Nasdaq', 'Nasdaq', usLabel)}${monthlyUsHeaderCellV593('Dow', 'Dow', usLabel)}`
+        : '';
+      headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibov</th><th scope="col">Dólar</th>${usCols}`;
+    }else{
+      const label = indicatorMetaV446[activeView]?.label || 'Indicador';
+      headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">${label}</th>`;
+    }
+  }
+
+  function mapHasDataForKeysV447(map, keys){
+    return keys.some(key => toNumV445(map?.get(key)) !== null);
+  }
+
+  function syncIndicatorButtonsV447(root, maps, keys, activeView){
+    root.querySelectorAll('[data-monthly-indicators-view-v446]').forEach(btn => {
+      const key = btn.dataset.monthlyIndicatorsViewV446 || 'all';
+      const hasData = key === 'all' || mapHasDataForKeysV447(maps[key], keys);
+      const isActive = key === activeView;
+      btn.classList.toggle('active', isActive);
+      btn.classList.toggle('is-unavailable-v447', !hasData);
+      btn.disabled = !hasData;
+      btn.setAttribute('aria-disabled', hasData ? 'false' : 'true');
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+  }
+
+  function syncUsCurrencyButtonsV578(root){
+    root.querySelectorAll('[data-monthly-us-currency-v578]').forEach(btn => {
+      const key = btn.dataset.monthlyUsCurrencyV578 || 'usd';
+      const active = key === usCurrency;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+
+  function renderMonthlyIndicatorsV445(){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    const tbody = document.getElementById('monthlyIndicatorsRowsV445');
+    const table = root?.querySelector('.monthly-indicators-table-v445');
+    if(!root || !tbody) return;
+
+    const desktopV576 = isDesktopMonthlyV576();
+    document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
+    if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576','desktop-monthly-us-header-currency-v593');
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_US_HEADER_CURRENCY_V593' : BUILD;
+
+    const dados = getMercadoV445();
+    const cdiCard = dados?.cards?.cdi || {};
+    const ipcaCard = dados?.cards?.ipca || {};
+    const ibovCard = dados?.cards?.ibovespa || {};
+    const ibovIdx = dados?.indices_mercado?.ibovespa || {};
+    const dolarCard = dados?.cards?.dolar || {};
+    const dolarIdx = dados?.indices_mercado?.dolar || {};
+
+    const consolidated = getConsolidatedMonthlyV448(dados);
+    const cdiMap = consolidated.length ? mapConsolidatedV448(consolidated, 'cdi') : mapSeriesV445(cdiCard.historico || []);
+    const ipcaMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ipca') : mapSeriesV445(ipcaCard.historico || dados?.ipca_historico || dados?.historico_ipca || []);
+    const ibovMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ibov') : mapSeriesV445(getIbovSeriesV445(dados));
+    const dolarMap = consolidated.length ? mapConsolidatedV448(consolidated, 'dolar') : mapSeriesV445(getPtaxSeriesV445(dados));
+    const sp500Map = usCurrency === 'brl'
+      ? firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'sp500_brl') : new Map(),
+          mapIndexSeriesV576(dados, 'sp500', usCurrency)
+        )
+      : firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'sp500') : new Map(),
+          consolidated.length ? mapConsolidatedV448(consolidated, 'sp500_usd') : new Map(),
+          mapIndexSeriesV576(dados, 'sp500', usCurrency)
+        );
+    const nasdaqMap = usCurrency === 'brl'
+      ? firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'nasdaq_brl') : new Map(),
+          mapIndexSeriesV576(dados, 'nasdaq', usCurrency)
+        )
+      : firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'nasdaq') : new Map(),
+          mapIndexSeriesV576(dados, 'nasdaq', usCurrency)
+        );
+    const dowMap = usCurrency === 'brl'
+      ? firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow_jones_brl') : new Map(),
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow_brl') : new Map(),
+          mapIndexSeriesV576(dados, 'dow', usCurrency)
+        )
+      : firstMapWithDataV577(
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow_jones') : new Map(),
+          consolidated.length ? mapConsolidatedV448(consolidated, 'dow') : new Map(),
+          mapIndexSeriesV576(dados, 'dow', usCurrency)
+        );
+    const tableMaps = desktopV576 ? [cdiMap, ipcaMap, ibovMap, dolarMap, sp500Map, nasdaqMap, dowMap] : [cdiMap, ipcaMap, ibovMap, dolarMap];
+    const keys = getMonthKeysV445(tableMaps);
+    const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap, sp500:sp500Map, nasdaq:nasdaqMap, dow:dowMap};
+    let activeView = indicatorMetaV446[view] ? view : 'all';
+    if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
+      activeView = 'all';
+      view = 'all';
+    }
+
+    renderMonthlyHeaderV446(table, activeView);
+
+    const summarySuffix = range === '12m' ? '12M' : 'ano';
+    setSummaryV445(
+      'monthlySummaryCdiV445',
+      summaryValueForKeysV449(cdiMap, keys, range === '12m' ? [cdiCard.acum_12m] : [cdiCard.acum_ano_com_parcial, cdiCard.acum_ano, cdiCard.ano]),
+      `CDI ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryIpcaV445',
+      summaryValueForKeysV449(ipcaMap, keys, range === '12m' ? [ipcaCard.acum_12m] : [ipcaCard.acum_ano, ipcaCard.ano]),
+      `IPCA ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryIbovV445',
+      summaryValueForKeysV449(ibovMap, keys, range === '12m' ? [ibovIdx.acum_12m, ibovCard.acum_12m] : [ibovIdx.acum_ano, ibovCard.acum_ano]),
+      `Ibov ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryDolarV445',
+      summaryValueForKeysV449(dolarMap, keys, range === '12m' ? [dolarIdx.acum_12m, dolarCard.acum_12m] : [dolarIdx.acum_ano, dolarCard.acum_ano]),
+      `Dólar ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummarySp500V576',
+      summaryValueForKeysV449(sp500Map, keys, directIndexCandidatesV576(dados, 'sp500', range === '12m' ? '12m' : 'year', usCurrency)),
+      `S&P 500 ${summarySuffix} ${usCurrency.toUpperCase()}`
+    );
+    setSummaryV445(
+      'monthlySummaryNasdaqV576',
+      summaryValueForKeysV449(nasdaqMap, keys, directIndexCandidatesV576(dados, 'nasdaq', range === '12m' ? '12m' : 'year', usCurrency)),
+      `Nasdaq ${summarySuffix} ${usCurrency.toUpperCase()}`
+    );
+    setSummaryV445(
+      'monthlySummaryDowV576',
+      summaryValueForKeysV449(dowMap, keys, directIndexCandidatesV576(dados, 'dow', range === '12m' ? '12m' : 'year', usCurrency)),
+      `Dow ${summarySuffix} ${usCurrency.toUpperCase()}`
+    );
+
+    tbody.innerHTML = keys.map(key => {
+      const label = labelFromKeyV447(key);
+      if(activeView !== 'all'){
+        const value = maps[activeView]?.get(key);
+        return `<tr><td>${label}</td><td class="${clsV445(value)}">${pctV445(value)}</td></tr>`;
+      }
+      const values = desktopV576
+        ? [cdiMap.get(key), ipcaMap.get(key), ibovMap.get(key), dolarMap.get(key), sp500Map.get(key), nasdaqMap.get(key), dowMap.get(key)]
+        : [cdiMap.get(key), ipcaMap.get(key), ibovMap.get(key), dolarMap.get(key)];
+      return `<tr>
+        <td>${label}</td>
+        ${values.map(value => `<td class="${clsV445(value)}">${pctV445(value)}</td>`).join('')}
+      </tr>`;
+    }).join('');
+
+    if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
+      const label = indicatorMetaV446[activeView]?.label || 'indicador';
+      tbody.innerHTML = `<tr class="monthly-empty-row-v447"><td colspan="2">Série mensal de ${label} indisponível no JSON atual.</td></tr>`;
+    }
+
+    const active = root.querySelector(`[data-monthly-indicators-range-v445="${range}"]`);
+    root.querySelectorAll('[data-monthly-indicators-range-v445]').forEach(btn => {
+      const isActive = btn === active;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+    });
+
+    syncIndicatorButtonsV447(root, maps, keys, activeView);
+    syncUsCurrencyButtonsV578(root);
+    if(desktopV576){
+      renderMonthlyComparisonChartV580(root, maps, keys);
+    }
+    const shell = root.querySelector('.monthly-indicators-table-shell-v445');
+    if(shell && activeView === 'all'){
+      requestAnimationFrame(() => {
+        shell.scrollLeft = 0;
+      });
+    }
+  }
+
+  function bindMonthlyIndicatorsV445(){
+    const root = document.getElementById('monthlyIndicatorsV445');
+    if(!root || root.dataset.v445Bound) return;
+    root.dataset.v445Bound = '1';
+
+    root.addEventListener('click', event => {
+      const rangeBtn = event.target.closest('[data-monthly-indicators-range-v445]');
+      if(rangeBtn){
+        range = rangeBtn.dataset.monthlyIndicatorsRangeV445 || 'year';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const viewBtn = event.target.closest('[data-monthly-indicators-view-v446]');
+      if(viewBtn){
+        if(viewBtn.disabled || viewBtn.getAttribute('aria-disabled') === 'true') return;
+        view = viewBtn.dataset.monthlyIndicatorsViewV446 || 'all';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const currencyBtn = event.target.closest('[data-monthly-us-currency-v578]');
+      if(currencyBtn){
+        usCurrency = currencyBtn.dataset.monthlyUsCurrencyV578 === 'brl' ? 'brl' : 'usd';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const headerCurrencyBtn = event.target.closest('[data-monthly-us-header-toggle-v593]');
+      if(headerCurrencyBtn){
+        usCurrency = usCurrency === 'brl' ? 'usd' : 'brl';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const chartBtn = event.target.closest('[data-monthly-chart-indicator-v580]');
+      if(chartBtn){
+        if(chartBtn.disabled || chartBtn.getAttribute('aria-disabled') === 'true') return;
+        const key = chartBtn.dataset.monthlyChartIndicatorV580 || '';
+        if(selectedChartIndicatorsV580.has(key)){
+          selectedChartIndicatorsV580.delete(key);
+        }else{
+          selectedChartIndicatorsV580.add(key);
+        }
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const more = event.target.closest('#monthlyIndicatorsMoreV445');
+      if(more){
+        const expanded = root.classList.toggle('is-expanded');
+        more.textContent = expanded ? 'Mostrar menos' : 'Ver todos os meses';
+        more.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      }
+    });
+  }
+
+  function initMonthlyIndicatorsV445(){
+    bindMonthlyIndicatorsV445();
+    renderMonthlyIndicatorsV445();
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', initMonthlyIndicatorsV445, {once:true});
+  }else{
+    initMonthlyIndicatorsV445();
+  }
+
+  window.addEventListener('load', initMonthlyIndicatorsV445, {once:true});
+  document.addEventListener('elton:market-data-refresh', initMonthlyIndicatorsV445);
+  [400, 1200, 2500, 5000, 9000].forEach(ms => setTimeout(initMonthlyIndicatorsV445, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_SELECT_V446__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_CLEAN_V447__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_STICKY_V448__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_COMPACT_V449__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_FIT_V450__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_BALANCE_V451__ = {
+    build: BUILD,
+    render: renderMonthlyIndicatorsV445
+  };
+})();
+
+/* PATCH v452 — Mobile: hierarquia refinada dos cards de fundos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_CARD_BALANCED_METRICS_v454';
+
+  function applyMobileFundCardRefinementV452(){
+    try{
+      document.documentElement.classList.add('mobile-v454','mobile-fund-card-balanced-metrics-v454','mobile-v453','mobile-fund-card-details-cta-v453','mobile-v452','mobile-fund-card-refinement-v452');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-card-refinement-v452');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundCardRefinementV452, {once:true});
+  }else{
+    applyMobileFundCardRefinementV452();
+  }
+
+  window.addEventListener('load', applyMobileFundCardRefinementV452, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundCardRefinementV452);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundCardRefinementV452, ms));
+
+  window.__ELTAUM_MOBILE_FUND_CARD_REFINEMENT_V452__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+
+  window.__ELTAUM_MOBILE_FUND_CARD_DETAILS_CTA_V453__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+
+  window.__ELTAUM_MOBILE_FUND_CARD_BALANCED_METRICS_V454__ = {
+    build: BUILD,
+    sync: applyMobileFundCardRefinementV452
+  };
+})();
+
+/* PATCH v455 — Mobile: indicadores mensais legíveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_READABLE_v455';
+
+  function applyMonthlyIndicatorsReadableV455(){
+    try{
+      document.documentElement.classList.add('mobile-v455','mobile-monthly-indicators-readable-v455');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMonthlyIndicatorsReadableV455, {once:true});
+  }else{
+    applyMonthlyIndicatorsReadableV455();
+  }
+
+  window.addEventListener('load', applyMonthlyIndicatorsReadableV455, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyMonthlyIndicatorsReadableV455, ms));
+
+  window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_READABLE_V455__ = {
+    build: BUILD,
+    sync: applyMonthlyIndicatorsReadableV455
+  };
+})();
+
+/* PATCH v456 — Mobile: harmonia tipografica dos KPIs do topo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_HARMONY_v456';
+
+  function applyTopKpiHarmonyV456(){
+    try{
+      document.documentElement.classList.add('mobile-v456','mobile-top-kpi-harmony-v456');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyTopKpiHarmonyV456, {once:true});
+  }else{
+    applyTopKpiHarmonyV456();
+  }
+
+  window.addEventListener('load', applyTopKpiHarmonyV456, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyTopKpiHarmonyV456, ms));
+
+window.__ELTAUM_MOBILE_TOP_KPI_HARMONY_V456__ = {
+    build: BUILD,
+    sync: applyTopKpiHarmonyV456
+  };
+})();
+
+/* PATCH v457 — Mobile: ranking por categoria em lista compacta */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_CATEGORY_LIST_v457';
+
+  function applyRankingCategoryListV457(){
+    try{
+      document.documentElement.classList.add('mobile-v457','mobile-ranking-category-list-v457');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingCategoryListV457, {once:true});
+  }else{
+    applyRankingCategoryListV457();
+  }
+
+  window.addEventListener('load', applyRankingCategoryListV457, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingCategoryListV457, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_CATEGORY_LIST_V457__ = {
+    build: BUILD,
+    sync: applyRankingCategoryListV457
+  };
+})();
+
+/* PATCH v458 — Mobile: destaques do ranking compactos */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_COMPACT_v458';
+
+  function applyRankingHighlightsCompactV458(){
+    try{
+      document.documentElement.classList.add('mobile-v458','mobile-ranking-highlights-compact-v458');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsCompactV458, {once:true});
+  }else{
+    applyRankingHighlightsCompactV458();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsCompactV458, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsCompactV458, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_COMPACT_V458__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsCompactV458
+  };
+})();
+
+/* PATCH v459 — Mobile: refino visual dos destaques do ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_REFINE_v459';
+
+  function applyRankingHighlightsRefineV459(){
+    try{
+      document.documentElement.classList.add('mobile-v459','mobile-ranking-highlights-refine-v459');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsRefineV459, {once:true});
+  }else{
+    applyRankingHighlightsRefineV459();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsRefineV459, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsRefineV459, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_REFINE_V459__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsRefineV459
+  };
+})();
+
+/* PATCH v460 — Mobile: indicadores mensais mais legiveis */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_v460';
+
+  function applyMonthlyIndicatorsNumericV460(){
+    try{
+      document.documentElement.classList.add('mobile-v460','mobile-monthly-indicators-numeric-v460');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMonthlyIndicatorsNumericV460, {once:true});
+  }else{
+    applyMonthlyIndicatorsNumericV460();
+  }
+
+  window.addEventListener('load', applyMonthlyIndicatorsNumericV460, {once:true});
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyMonthlyIndicatorsNumericV460, ms));
+
+window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_NUMERIC_V460__ = {
+    build: BUILD,
+    sync: applyMonthlyIndicatorsNumericV460
+  };
+})();
+
+/* PATCH v461 — Mobile: destaques do ranking compactos e sem texto comido */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_HIGHLIGHTS_TIGHT_v461';
+
+  function applyRankingHighlightsTightV461(){
+    try{
+      document.documentElement.classList.add('mobile-v461','mobile-ranking-highlights-tight-v461');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const semFmp = document.querySelector('#rankingClassSelectV136 option[value="sem-fmp"]');
+      if(semFmp && semFmp.textContent.trim() !== 'Sem FMP') semFmp.textContent = 'Sem FMP';
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingHighlightsTightV461, {once:true});
+  }else{
+    applyRankingHighlightsTightV461();
+  }
+
+  window.addEventListener('load', applyRankingHighlightsTightV461, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingHighlightsTightV461);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingHighlightsTightV461, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_HIGHLIGHTS_TIGHT_V461__ = {
+    build: BUILD,
+    sync: applyRankingHighlightsTightV461
+  };
+})();
+
+/* PATCH v462 — Mobile: tipografia harmonizada nos KPIs do topo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOP_KPI_TYPOGRAPHY_v462';
+
+  function applyTopKpiTypographyV462(){
+    try{
+      document.documentElement.classList.add('mobile-v462','mobile-top-kpi-typography-v462');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyTopKpiTypographyV462, {once:true});
+  }else{
+    applyTopKpiTypographyV462();
+  }
+
+  window.addEventListener('load', applyTopKpiTypographyV462, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyTopKpiTypographyV462);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyTopKpiTypographyV462, ms));
+
+  window.__ELTAUM_MOBILE_TOP_KPI_TYPOGRAPHY_V462__ = {
+    build: BUILD,
+    sync: applyTopKpiTypographyV462
+  };
+})();
+
+/* PATCH v463 — Mobile: ranking sem truncamento agressivo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_NO_CUT_v463';
+
+  function applyRankingNoCutV463(){
+    try{
+      document.documentElement.classList.add('mobile-v463','mobile-ranking-no-cut-v463');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const labels = {
+        todos:'Todos',
+        'sem-fmp':'Sem FMP',
+        'renda-fixa-referenciado':'RF Ref.',
+        'renda-fixa-curto-prazo':'RF Curto'
+      };
+      Object.entries(labels).forEach(([value,label]) => {
+        const option = document.querySelector(`#rankingClassSelectV136 option[value="${value}"]`);
+        if(option && option.textContent.trim() !== label) option.textContent = label;
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingNoCutV463, {once:true});
+  }else{
+    applyRankingNoCutV463();
+  }
+
+  window.addEventListener('load', applyRankingNoCutV463, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingNoCutV463);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingNoCutV463, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_NO_CUT_V463__ = {
+    build: BUILD,
+    sync: applyRankingNoCutV463
+  };
+})();
+
+/* PATCH v464 — Mobile: nomes curtos nos cards de destaque do ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SHORT_NAMES_v464';
+
+  function applyRankingShortNamesV464(){
+    try{
+      document.documentElement.classList.add('mobile-v464','mobile-ranking-short-names-v464');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyRankingShortNamesV464, {once:true});
+  }else{
+    applyRankingShortNamesV464();
+  }
+
+  window.addEventListener('load', applyRankingShortNamesV464, {once:true});
+  document.addEventListener('elton:rankings-rendered', applyRankingShortNamesV464);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyRankingShortNamesV464, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_SHORT_NAMES_V464__ = {
+    build: BUILD,
+    sync: applyRankingShortNamesV464
+  };
+})();
+
+/* PATCH v465 — Mobile: ranking adaptativo por viewport real */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_ADAPTIVE_RANKING_v465';
+
+  function viewportSizeV465(){
+    const vv = window.visualViewport;
+    return {
+      width: Math.round(vv?.width || window.innerWidth || document.documentElement.clientWidth || 0),
+      height: Math.round(vv?.height || window.innerHeight || document.documentElement.clientHeight || 0)
+    };
+  }
+
+  function applyAdaptiveRankingV465(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v465','mobile-adaptive-ranking-v465');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const size = viewportSizeV465();
+      html.classList.toggle('mobile-tight-viewport-v465', size.width <= 390 || size.height <= 760);
+
+      document.querySelectorAll('#rankingRiskSelectV198,#rankingClassSelectV136,#rankingPeriodSelectV136').forEach(select => {
+        select.style.minHeight = html.classList.contains('mobile-tight-viewport-v465') ? '38px' : '';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyAdaptiveRankingV465, {once:true});
+  }else{
+    applyAdaptiveRankingV465();
+  }
+
+  window.addEventListener('load', applyAdaptiveRankingV465, {once:true});
+  window.addEventListener('resize', applyAdaptiveRankingV465, {passive:true});
+  window.visualViewport?.addEventListener('resize', applyAdaptiveRankingV465, {passive:true});
+  document.addEventListener('elton:rankings-rendered', applyAdaptiveRankingV465);
+  [400, 1200, 3000, 7000].forEach(ms => setTimeout(applyAdaptiveRankingV465, ms));
+
+window.__ELTAUM_MOBILE_ADAPTIVE_RANKING_V465__ = {
+    build: BUILD,
+    sync: applyAdaptiveRankingV465
+  };
+})();
+
+/* PATCH v466 — Mobile: detalhes dos fundos com hierarquia mais limpa */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_IA_v466';
+
+  function applyMobileFundDetailIaV466(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v466','mobile-fund-detail-ia-v466');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-ia-v466');
+      });
+
+      document.querySelectorAll('#mobileFundCards .fund-card-doc-pill').forEach(link => {
+        const txt = String(link.textContent || '').trim();
+        const normalized = txt.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z]/g,'').toUpperCase();
+        const labels = {
+          L:'Lâmina',
+          R:'Regulamento',
+          IC:'Informe',
+          C:'Carteira',
+          CM:'Comercial',
+          TA:'Termo'
+        };
+        if(labels[normalized]){
+          link.textContent = labels[normalized];
+          link.setAttribute('aria-label', labels[normalized]);
+        }
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailIaV466, {once:true});
+  }else{
+    applyMobileFundDetailIaV466();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailIaV466, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailIaV466);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailIaV466, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailIaV466, ms));
+
+window.__ELTAUM_MOBILE_FUND_DETAIL_IA_V466__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailIaV466
+  };
+})();
+
+/* PATCH v467 — Mobile: remove truncamento dos detalhes do fundo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_v467';
+
+  function applyMobileFundDetailNoCutV467(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v467','mobile-fund-detail-no-cut-v467');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-no-cut-v467');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailNoCutV467, {once:true});
+  }else{
+    applyMobileFundDetailNoCutV467();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailNoCutV467, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailNoCutV467);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailNoCutV467, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailNoCutV467, ms));
+
+window.__ELTAUM_MOBILE_FUND_DETAIL_NO_CUT_V467__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailNoCutV467
+  };
+})();
+
+/* PATCH v468 — Mobile: lista de detalhes sem reticências */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_LIST_v468';
+
+  function applyMobileFundDetailListV468(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v468','mobile-fund-detail-list-v468');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-list-card-v468');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailListV468, {once:true});
+  }else{
+    applyMobileFundDetailListV468();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailListV468, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailListV468);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailListV468, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailListV468, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_LIST_V468__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailListV468
+  };
+})();
+
+/* PATCH v469 — Mobile: harmonia visual dos detalhes do fundo */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FUND_DETAIL_HARMONY_v469';
+
+  function applyMobileFundDetailHarmonyV469(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v469','mobile-fund-detail-harmony-v469');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#mobileFundCards .fund-card-mobile-v26').forEach(card => {
+        card.classList.add('fund-detail-harmony-card-v469');
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', applyMobileFundDetailHarmonyV469, {once:true});
+  }else{
+    applyMobileFundDetailHarmonyV469();
+  }
+
+  window.addEventListener('load', applyMobileFundDetailHarmonyV469, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', applyMobileFundDetailHarmonyV469);
+  document.addEventListener('click', () => setTimeout(applyMobileFundDetailHarmonyV469, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(applyMobileFundDetailHarmonyV469, ms));
+
+  window.__ELTAUM_MOBILE_FUND_DETAIL_HARMONY_V469__ = {
+    build: BUILD,
+    sync: applyMobileFundDetailHarmonyV469
+  };
+})();
+
+/* PATCH v470 — Juros e CDI: Agenda Copom consultiva e menos peso visual */
+(function(){
+  const BUILD = 'ELTAUM_RATES_COPOM_CONSULTATIVE_v470';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function cleanText(value){
+    return String(value || '')
+      .replace(/\u2212/g, '-')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function extractDecision(card){
+    const status = cleanText(card.querySelector('.copom-exec-status-v270')?.textContent);
+    const result = cleanText(card.querySelector('.copom-carousel-result-v321')?.textContent);
+    const text = `${status} ${result}`.trim();
+    const lower = text.toLowerCase();
+
+    const move = text.match(/\b(corte|alta)\s*([+-]?\d+(?:[,.]\d+)?\s*p\.?\s*p\.?)/i);
+    if(move){
+      const type = move[1].toLowerCase() === 'alta' ? 'Alta' : 'Corte';
+      const value = move[2]
+        .replace(/[+-]/g, '')
+        .replace(/\s*p\.?\s*p\.?/i, ' p.p.');
+      return `${type} de ${value}`;
+    }
+
+    if(lower.includes('mantida')) return 'Mantida';
+    if(lower.includes('prevista')) return 'Prevista';
+    if(lower.includes('agenda') || lower.includes('próxima') || lower.includes('proxima')) return 'Próxima reunião';
+    return status || result || 'Agenda';
+  }
+
+  function syncCopomConsultativeV470(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v470','rates-copom-consultative-v470');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+
+      summary.querySelectorAll(':scope > article').forEach(card => {
+        const decision = extractDecision(card);
+        let el = card.querySelector('.copom-decision-v470');
+        if(!el){
+          el = document.createElement('small');
+          el.className = 'copom-decision-v470';
+          card.appendChild(el);
+        }
+        el.textContent = decision;
+
+        card.querySelectorAll('.copom-move-v430, .copom-move-v431').forEach(old => {
+          old.setAttribute('aria-hidden','true');
+        });
+      });
+
+      if(!observerStarted && window.MutationObserver){
+        observerStarted = true;
+        const obs = new MutationObserver(() => {
+          if(scheduled) return;
+          scheduled = true;
+          requestAnimationFrame(() => {
+            scheduled = false;
+            syncCopomConsultativeV470();
+          });
+        });
+        obs.observe(summary, { childList:true, subtree:true });
+        window.__ELTAUM_RATES_COPOM_CONSULTATIVE_OBSERVER_V470__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomConsultativeV470, {once:true});
+  }else{
+    syncCopomConsultativeV470();
+  }
+
+  window.addEventListener('load', syncCopomConsultativeV470, {once:true});
+  window.addEventListener('pageshow', syncCopomConsultativeV470, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomConsultativeV470, ms));
+
+  window.__ELTAUM_RATES_COPOM_CONSULTATIVE_V470__ = {
+    build: BUILD,
+    sync: syncCopomConsultativeV470
+  };
+})();
+
+/* PATCH v471 — Mobile: botoes "Ver mais" padronizados e rodape mais leve */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_TOGGLE_HARMONY_v471';
+
+  function syncToggleHarmonyV471(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v471','mobile-toggle-harmony-v471');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      document.querySelectorAll('#sec-focus .section-toggle-btn, #sec-graficos .section-toggle-btn, #sec-mercado-painel .section-toggle-btn').forEach(btn => {
+        btn.dataset.labelClosed = 'Ver mais';
+        btn.dataset.labelOpen = 'Ver menos';
+        const label = btn.querySelector('.toggle-label');
+        const section = btn.closest('.collapsible-section');
+        const isOpen = section?.classList.contains('section-expanded') || btn.getAttribute('aria-expanded') === 'true';
+        if(label) label.textContent = isOpen ? 'Ver menos' : 'Ver mais';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncToggleHarmonyV471, {once:true});
+  }else{
+    syncToggleHarmonyV471();
+  }
+
+  window.addEventListener('load', syncToggleHarmonyV471, {once:true});
+  document.addEventListener('click', () => setTimeout(syncToggleHarmonyV471, 80), true);
+  [300, 900, 1800, 3500, 7000].forEach(ms => setTimeout(syncToggleHarmonyV471, ms));
+
+  window.__ELTAUM_MOBILE_TOGGLE_HARMONY_V471__ = {
+    build: BUILD,
+    sync: syncToggleHarmonyV471
+  };
+})();
+
+/* PATCH v472 — Mobile: Focus sem estouro horizontal */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FOCUS_WRAP_v472';
+
+  function syncFocusWrapV472(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v472','mobile-focus-wrap-v472');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncFocusWrapV472, {once:true});
+  }else{
+    syncFocusWrapV472();
+  }
+
+  window.addEventListener('load', syncFocusWrapV472, {once:true});
+  [300, 900, 1800, 3500].forEach(ms => setTimeout(syncFocusWrapV472, ms));
+
+  window.__ELTAUM_MOBILE_FOCUS_WRAP_V472__ = {
+    build: BUILD,
+    sync: syncFocusWrapV472
+  };
+})();
+
+/* PATCH v473 — Agenda Copom: decisao unica com movimento em p.p. */
+(function(){
+  const BUILD = 'ELTAUM_COPOM_SINGLE_DECISION_v473';
+  let observerStarted = false;
+  let scheduled = false;
+
+  function clean(value){
+    return String(value || '')
+      .replace(/\u2212/g, '-')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  function normalizeMove(value){
+    const text = clean(value);
+    const match = text.match(/\b(corte|alta)\b(?:\s+de)?\s*([+-]?\d+(?:[,.]\d+)?)\s*p\.?\s*p\.?/i);
+    if(!match) return null;
+    return {
+      type: match[1].toLowerCase() === 'alta' ? 'Alta' : 'Corte',
+      value: match[2].replace(/[+-]/g, '') + ' p.p.'
+    };
+  }
+
+  function storeResults(){
+    const store = document.getElementById('copomMeetings');
+    if(!store) return [];
+    return [...store.querySelectorAll('.copom-item')]
+      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999))
+      .map(item => clean(item.querySelector('.copom-result')?.textContent));
+  }
+
+  function decisionFor(card, fallbackResult){
+    const pieces = [
+      card.querySelector('.copom-exec-status-v270')?.textContent,
+      card.querySelector('.copom-carousel-result-v321')?.textContent,
+      card.querySelector('.copom-move-v430')?.textContent,
+      card.querySelector('.copom-move-v431')?.textContent,
+      fallbackResult
+    ].map(clean).filter(Boolean);
+    const text = pieces.join(' ');
+    const lower = text.toLowerCase();
+    const move = normalizeMove(text);
+
+    if(move) return `${move.type} de ${move.value}`;
+    if(lower.includes('mantida')) return 'Mantida';
+    if(lower.includes('corte')) return 'Corte';
+    if(lower.includes('alta')) return 'Alta';
+    if(lower.includes('prevista')) return 'Prevista';
+    if(lower.includes('agenda') || lower.includes('próxima') || lower.includes('proxima')) return 'Próxima reunião';
+    return clean(card.querySelector('.copom-exec-status-v270')?.textContent) || 'Agenda';
+  }
+
+  function hideLegacy(card){
+    card.querySelectorAll('.copom-exec-meta-v270, .copom-exec-status-v270, .copom-carousel-result-v321, .copom-move-v430, .copom-move-v431').forEach(el => {
+      el.setAttribute('aria-hidden', 'true');
+      el.style.setProperty('display', 'none', 'important');
+    });
+  }
+
+  function syncCopomSingleDecisionV473(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v473','copom-single-decision-v473');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const summary = document.getElementById('copomExecutiveSummaryV270');
+      if(!summary) return;
+
+      const results = storeResults();
+      const cards = [...summary.querySelectorAll(':scope > article')];
+      cards.forEach((card, index) => {
+        hideLegacy(card);
+        let decision = card.querySelector('.copom-decision-v473');
+        if(!decision){
+          decision = document.createElement('small');
+          decision.className = 'copom-decision-v473';
+          card.appendChild(decision);
+        }
+        decision.textContent = decisionFor(card, results[index]);
+      });
+
+      if(!observerStarted && window.MutationObserver){
+        observerStarted = true;
+        const target = document.getElementById('sec-mercado') || summary;
+        const obs = new MutationObserver(() => {
+          if(scheduled) return;
+          scheduled = true;
+          requestAnimationFrame(() => {
+            scheduled = false;
+            syncCopomSingleDecisionV473();
+          });
+        });
+        obs.observe(target, { childList:true, subtree:true });
+        window.__ELTAUM_COPOM_SINGLE_DECISION_OBSERVER_V473__ = obs;
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncCopomSingleDecisionV473, {once:true});
+  }else{
+    syncCopomSingleDecisionV473();
+  }
+
+  window.addEventListener('load', syncCopomSingleDecisionV473, {once:true});
+  window.addEventListener('pageshow', syncCopomSingleDecisionV473, {passive:true});
+  [300, 900, 1800, 3600, 6200, 9800, 14000, 22000].forEach(ms => setTimeout(syncCopomSingleDecisionV473, ms));
+
+  window.__ELTAUM_COPOM_SINGLE_DECISION_V473__ = {
+    build: BUILD,
+    sync: syncCopomSingleDecisionV473
+  };
+})();
+
+/* PATCH v474 — Mobile: Dolar PTAX mais compacto */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_COMPACT_V474';
+
+  function syncDolarMobileCompactV474(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v474','dolar-mobile-compact-v474');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileCompactV474, {once:true});
+  }else{
+    syncDolarMobileCompactV474();
+  }
+
+  window.addEventListener('load', syncDolarMobileCompactV474, {once:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileCompactV474, ms));
+
+window.__ELTAUM_DOLAR_MOBILE_COMPACT_V474__ = {
+    build: BUILD,
+    sync: syncDolarMobileCompactV474
+  };
+})();
+
+/* PATCH v475 — Mobile: Poupanca mais leve e plana */
+(function(){
+  const BUILD = 'ELTAUM_SAVINGS_MOBILE_FLAT_V475';
+
+  function syncSavingsMobileFlatV475(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v475','savings-mobile-flat-v475');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      const label = document.getElementById('poupCurrentLabelV214');
+      if(label) label.textContent = 'Rendimento do mês';
+
+      const yearLabel = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.year dt');
+      if(yearLabel) yearLabel.textContent = 'Acumulado 2026';
+
+      const threshold = document.querySelector('#sec-mercado .savings-summary-v207 .savings-kpi-v199.threshold');
+      if(threshold){
+        const dt = threshold.querySelector('dt');
+        const data = threshold.querySelector('data');
+        if(dt) dt.textContent = 'Regra atual';
+        if(data) data.textContent = 'Selic acima de 8,50%';
+      }
+
+      const ruleTitle = document.getElementById('poupCurrentScenarioTitleV214');
+      if(ruleTitle) ruleTitle.textContent = 'Regra vigente';
+
+      const source = document.querySelector('#sec-mercado .savings-actions-v207 .market-reference-source-v167');
+      if(source){
+        source.innerHTML = 'Simular rendimento <span aria-hidden="true">↗</span>';
+        source.setAttribute('aria-label', 'Abrir simulador de rendimento da poupança do Banco Central em uma nova guia');
+      }
+
+      const btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        const expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar regras <span aria-hidden="true">▴</span>' : 'Ver regras <span aria-hidden="true">▾</span>';
+      }
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncSavingsMobileFlatV475, {once:true});
+  }else{
+    syncSavingsMobileFlatV475();
+  }
+
+  window.addEventListener('load', syncSavingsMobileFlatV475, {once:true});
+  window.addEventListener('pageshow', syncSavingsMobileFlatV475, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncSavingsMobileFlatV475, ms));
+
+  window.__ELTAUM_SAVINGS_MOBILE_FLAT_V475__ = {
+    build: BUILD,
+    sync: syncSavingsMobileFlatV475
+  };
+})();
+
+/* PATCH v476 — Mobile: Dolar PTAX flat */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_FLAT_V476';
+
+  function syncDolarMobileFlatV476(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v476','dolar-mobile-flat-v476');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileFlatV476, {once:true});
+  }else{
+    syncDolarMobileFlatV476();
+  }
+
+  window.addEventListener('load', syncDolarMobileFlatV476, {once:true});
+  window.addEventListener('pageshow', syncDolarMobileFlatV476, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileFlatV476, ms));
+
+  window.__ELTAUM_DOLAR_MOBILE_FLAT_V476__ = {
+    build: BUILD,
+    sync: syncDolarMobileFlatV476
+  };
+})();
+
+/* PATCH v477 — Mobile: PTAX ultra compacta */
+(function(){
+  const BUILD = 'ELTAUM_DOLAR_MOBILE_ULTRA_COMPACT_V477';
+
+  function syncDolarMobileUltraCompactV477(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v477','dolar-mobile-ultra-compact-v477');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncDolarMobileUltraCompactV477, {once:true});
+  }else{
+    syncDolarMobileUltraCompactV477();
+  }
+
+  window.addEventListener('load', syncDolarMobileUltraCompactV477, {once:true});
+  window.addEventListener('pageshow', syncDolarMobileUltraCompactV477, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncDolarMobileUltraCompactV477, ms));
+
+  window.__ELTAUM_DOLAR_MOBILE_ULTRA_COMPACT_V477__ = {
+    build: BUILD,
+    sync: syncDolarMobileUltraCompactV477
+  };
+})();
+
+/* PATCH v478 — Mobile: evita corte de textos em fundos, filtros e ranking */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_NO_TEXT_CUT_V478';
+
+  function syncMobileNoTextCutV478(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v478','mobile-no-text-cut-v478');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileNoTextCutV478, {once:true});
+  }else{
+    syncMobileNoTextCutV478();
+  }
+
+  window.addEventListener('load', syncMobileNoTextCutV478, {once:true});
+  window.addEventListener('pageshow', syncMobileNoTextCutV478, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileNoTextCutV478, ms));
+
+  window.__ELTAUM_MOBILE_NO_TEXT_CUT_V478__ = {
+    build: BUILD,
+    sync: syncMobileNoTextCutV478
+  };
+})();
+
+/* PATCH v479 — Mobile: ranking compacto */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_COMPACT_V479';
+
+  function syncMobileRankingCompactV479(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v479','mobile-ranking-compact-v479');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileRankingCompactV479, {once:true});
+  }else{
+    syncMobileRankingCompactV479();
+  }
+
+  window.addEventListener('load', syncMobileRankingCompactV479, {once:true});
+  window.addEventListener('pageshow', syncMobileRankingCompactV479, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingCompactV479, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_COMPACT_V479__ = {
+    build: BUILD,
+    sync: syncMobileRankingCompactV479
+  };
+})();
+
+/* PATCH v480 — Mobile: ranking compacto sem cortes */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SAFE_V480';
+
+  function syncMobileRankingSafeV480(){
+    try{
+      const html = document.documentElement;
+      html.classList.add('mobile-v480','mobile-ranking-safe-v480');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileRankingSafeV480, {once:true});
+  }else{
+    syncMobileRankingSafeV480();
+  }
+
+  window.addEventListener('load', syncMobileRankingSafeV480, {once:true});
+  window.addEventListener('pageshow', syncMobileRankingSafeV480, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileRankingSafeV480, ms));
+
+  window.__ELTAUM_MOBILE_RANKING_SAFE_V480__ = {
+    build: BUILD,
+    sync: syncMobileRankingSafeV480
+  };
+})();
+
+/* PATCH v481 — Mobile: filtros com selects seguros */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481';
+
+  function syncMobileFilterSelectSafeV481(){
+    try{
+      const html = document.documentElement;
+      if(html.classList.contains('mobile-filters-reset-v610') || html.classList.contains('mobile-filters-origin-clean-v611')){
+        html.classList.remove('mobile-v481','mobile-filter-select-safe-v481');
+        return;
+      }
+      html.classList.add('mobile-v481','mobile-filter-select-safe-v481');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterSelectSafeV481, {once:true});
+  }else{
+    syncMobileFilterSelectSafeV481();
+  }
+
+  window.addEventListener('load', syncMobileFilterSelectSafeV481, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterSelectSafeV481, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterSelectSafeV481, ms));
+
+window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
+    build: BUILD,
+    sync: syncMobileFilterSelectSafeV481
+  };
+})();
+
+/* PATCH v482 — Mobile: filtros em lista com valor visual sem corte */
+(function(){
+  const BUILD = 'ELTAUM_MOBILE_FILTER_LIST_V482';
+  const FIELD_LABELS = {
+    mobileCategorySelectV74: 'Categoria',
+    mobileRiskSelectV198: 'Perfil de risco',
+    mobileSortSelectV75: 'Ordenar por'
+  };
+
+  function getOptionText(select){
+    const option = select?.options?.[select.selectedIndex];
+    return option ? option.textContent.trim() : 'Todos';
+  }
+
+  function upsertVisualFilterValueV482(select){
+    if(!select) return;
+    const host = select.closest('label') || select.parentElement;
+    if(!host) return;
+
+    host.classList.add('filter-list-row-v482');
+
+    let label = host.querySelector(':scope > .filter-label-v482');
+    if(!label){
+      label = document.createElement('span');
+      label.className = 'filter-label-v482';
+      label.textContent = FIELD_LABELS[select.id] || select.getAttribute('aria-label') || 'Filtro';
+      host.insertBefore(label, host.firstChild);
+    }
+
+    let value = host.querySelector(':scope > .filter-value-v482');
+    if(!value){
+      value = document.createElement('strong');
+      value.className = 'filter-value-v482';
+      const arrow = host.querySelector(':scope > .mobile-category-select-arrow-v74, :scope > .mobile-risk-arrow-v198, :scope > .mobile-sort-arrow-v75');
+      if(arrow) host.insertBefore(value, arrow);
+      else host.appendChild(value);
+    }
+
+    value.textContent = getOptionText(select);
+  }
+
+  function syncMobileFilterListV482(){
+    try{
+      const html = document.documentElement;
+      if(html.classList.contains('mobile-filters-reset-v610') || html.classList.contains('mobile-filters-origin-clean-v611')){
+        html.classList.remove('mobile-v482','mobile-filter-list-v482');
+        document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
+          node.remove();
+        });
+        return;
+      }
+      html.classList.add('mobile-v482','mobile-filter-list-v482');
+      const meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      ['mobileCategorySelectV74','mobileRiskSelectV198','mobileSortSelectV75'].forEach(id => {
+        const select = document.getElementById(id);
+        if(!select) return;
+        upsertVisualFilterValueV482(select);
+        if(select.dataset.v482Bound === '1') return;
+        select.addEventListener('change', () => {
+          requestAnimationFrame(() => upsertVisualFilterValueV482(select));
+          setTimeout(() => upsertVisualFilterValueV482(select), 80);
+        }, {passive:true});
+        select.dataset.v482Bound = '1';
+      });
+    }catch(_error){}
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', syncMobileFilterListV482, {once:true});
+  }else{
+    syncMobileFilterListV482();
+  }
+
+  window.addEventListener('load', syncMobileFilterListV482, {once:true});
+  window.addEventListener('pageshow', syncMobileFilterListV482, {passive:true});
+  [300, 900, 1800, 3600, 7000].forEach(ms => setTimeout(syncMobileFilterListV482, ms));
+
+  window.__ELTAUM_MOBILE_FILTER_LIST_V482__ = {
+    build: BUILD,
+    sync: syncMobileFilterListV482
+  };
+})();
+
+/* ELTAUM_DESKTOP_MARKET_HIERARCHY_V520_LEGACY
+   Desktop only: corrige a seção Juros e CDI resetando transform/grid-area legados
+   que faziam o bloco CDI invadir o Copom. Mantém mobile preservado. */
+(function(){
+  const FLAG = '__ELTAUM_DESKTOP_MARKET_HIERARCHY_V520_LEGACY__';
+  if (window[FLAG]) return;
+  window[FLAG] = true;
+
+  const isDesktop = () => window.matchMedia && window.matchMedia('(min-width: 769px)').matches;
+  const hasPatch = () => document.documentElement.classList.contains('desktop-market-hierarchy-v520') || document.documentElement.classList.contains('desktop-market-fix-v519');
+  const set = (el, prop, value) => { if (el) el.style.setProperty(prop, value, 'important'); };
+  const clear = (el, prop) => { if (el) el.style.removeProperty(prop); };
+  const resetLegacyPlacement = (el) => {
+    if (!el) return;
+    set(el, 'transform', 'none');
+    set(el, 'translate', 'none');
+    set(el, 'grid-area', 'auto');
+    set(el, 'grid-column', 'auto');
+    set(el, 'justify-self', 'stretch');
+    set(el, 'align-self', 'start');
+  };
+
+  function applyMarketFix(){
+    if (!isDesktop() || !hasPatch()) return;
+    document.documentElement.classList.add('desktop-market-hierarchy-v520');
+    const root = document.getElementById('sec-mercado');
+    if (!root) return;
+
+    const rates = root.querySelector('.rates-reference-v167, .rates-executive-v255');
+    if (rates){
+      set(rates, 'display', 'grid');
+      set(rates, 'grid-template-columns', '300px minmax(0,1fr)');
+      set(rates, 'grid-template-areas', '"head head" "summary detail"');
+      set(rates, 'gap', '14px 20px');
+      set(rates, 'align-items', 'start');
+      set(rates, 'overflow', 'visible');
+    }
+
+    const head = root.querySelector('.rates-reference-v167 > .market-reference-head-v167');
+    set(head, 'grid-area', 'head');
+
+    const summary = root.querySelector('.rates-summary-v167');
+    if (summary){
+      set(summary, 'grid-area', 'summary');
+      set(summary, 'display', 'grid');
+      set(summary, 'grid-template-columns', '1fr');
+      set(summary, 'gap', '10px');
+      set(summary, 'align-self', 'start');
+      set(summary, 'width', '100%');
+      set(summary, 'min-width', '0');
+    }
+
+    const detailGrid = root.querySelector('.rates-detail-grid-v167');
+    if (detailGrid){
+      set(detailGrid, 'grid-area', 'detail');
+      set(detailGrid, 'display', 'grid');
+      set(detailGrid, 'grid-template-columns', '1fr');
+      set(detailGrid, 'grid-template-rows', 'auto auto');
+      set(detailGrid, 'grid-template-areas', 'none');
+      set(detailGrid, 'gap', '12px');
+      set(detailGrid, 'width', '100%');
+      set(detailGrid, 'min-width', '0');
+      set(detailGrid, 'align-items', 'start');
+      set(detailGrid, 'isolation', 'isolate');
+      set(detailGrid, 'overflow', 'visible');
+    }
+
+    const copom = root.querySelector('.copom-compact-v167');
+    if (copom){
+      resetLegacyPlacement(copom);
+      set(copom, 'grid-row', '1');
+      set(copom, 'width', '100%');
+      set(copom, 'min-width', '0');
+      set(copom, 'height', 'auto');
+      set(copom, 'margin', '0');
+      set(copom, 'overflow', 'hidden');
+      set(copom, 'z-index', '2');
+    }
+
+    const copomSummary = root.querySelector('#copomExecutiveSummaryV270');
+    if (copomSummary){
+      set(copomSummary, 'display', 'grid');
+      set(copomSummary, 'grid-template-columns', 'repeat(2,minmax(0,1fr))');
+      set(copomSummary, 'gap', '10px');
+      set(copomSummary, 'width', '100%');
+      set(copomSummary, 'max-width', '100%');
+      set(copomSummary, 'overflow', 'hidden');
+      set(copomSummary, 'scroll-snap-type', 'none');
+    }
+    root.querySelectorAll('#copomExecutiveSummaryV270 > article').forEach(card => {
+      set(card, 'flex', 'initial');
+      set(card, 'width', 'auto');
+      set(card, 'min-width', '0');
+      set(card, 'max-width', 'none');
+      set(card, 'box-sizing', 'border-box');
+      set(card, 'min-height', '72px');
+    });
+
+    const cdi = root.querySelector('#cdiYearHistory');
+    if (cdi){
+      resetLegacyPlacement(cdi);
+      set(cdi, 'grid-row', '2');
+      set(cdi, 'display', 'block');
+      set(cdi, 'width', '100%');
+      set(cdi, 'min-width', '0');
+      set(cdi, 'max-width', '100%');
+      set(cdi, 'height', 'auto');
+      set(cdi, 'min-height', '0');
+      set(cdi, 'max-height', 'none');
+      set(cdi, 'margin', '0');
+      set(cdi, 'position', 'relative');
+      set(cdi, 'overflow', 'hidden');
+      set(cdi, 'box-sizing', 'border-box');
+      set(cdi, 'z-index', '1');
+    }
+
+    const cdiKpis = root.querySelector('#cdiYearHistory .cdi-kpis-v271');
+    if (cdiKpis){
+      set(cdiKpis, 'display', 'grid');
+      set(cdiKpis, 'grid-template-columns', 'repeat(4,minmax(0,1fr))');
+      set(cdiKpis, 'gap', '10px');
+      set(cdiKpis, 'width', '100%');
+    }
+
+    const monthCarousel = root.querySelector('#cdiMonthCarouselV322');
+    if (monthCarousel){
+      set(monthCarousel, 'display', 'grid');
+      set(monthCarousel, 'grid-template-columns', 'repeat(6,minmax(0,1fr))');
+      set(monthCarousel, 'gap', '8px');
+      set(monthCarousel, 'width', '100%');
+      set(monthCarousel, 'overflow', 'hidden');
+      set(monthCarousel, 'scroll-snap-type', 'none');
+      set(monthCarousel, 'flex-wrap', 'initial');
+    }
+    root.querySelectorAll('#cdiMonthCarouselV322 > article').forEach(card => {
+      set(card, 'flex', 'initial');
+      set(card, 'width', 'auto');
+      set(card, 'min-width', '0');
+      set(card, 'max-width', 'none');
+      set(card, 'box-sizing', 'border-box');
+      set(card, 'min-height', '54px');
+    });
+
+    const canvasWrap = root.querySelector('.cdi-chart-canvas-wrap-v271');
+    if (canvasWrap){
+      set(canvasWrap, 'width', '100%');
+      set(canvasWrap, 'height', '260px');
+      set(canvasWrap, 'min-height', '260px');
+      set(canvasWrap, 'max-height', '260px');
+      set(canvasWrap, 'overflow', 'hidden');
+    }
+    const scrollWrap = root.querySelector('.cdi-chart-scroll-wrap-v273');
+    const scrollInner = root.querySelector('#cdiChartScrollInnerV273');
+    [scrollWrap, scrollInner].forEach(el => {
+      if (!el) return;
+      set(el, 'width', '100%');
+      set(el, 'min-width', '0');
+      set(el, 'max-width', '100%');
+      set(el, 'overflow', 'hidden');
+    });
+
+    const canvas = root.querySelector('#cdiYearChartV271');
+    if (canvas){
+      set(canvas, 'width', '100%');
+      set(canvas, 'height', '260px');
+      set(canvas, 'max-height', '260px');
+      try{
+        if (window.Chart && typeof window.Chart.getChart === 'function'){
+          const chart = window.Chart.getChart(canvas);
+          if (chart && typeof chart.resize === 'function') chart.resize();
+        }
+      }catch(_){ }
+    }
+  }
+
+  let raf = 0;
+  function schedule(){
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      applyMarketFix();
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule, {once:true});
+  else schedule();
+  window.addEventListener('load', () => { schedule(); setTimeout(schedule, 250); setTimeout(schedule, 900); }, {once:true});
+  window.addEventListener('resize', schedule);
+
+  const obs = new MutationObserver((mutations) => {
+    if (!isDesktop() || !hasPatch()) return;
+    for (const m of mutations){
+      const t = m.target;
+      if (t && t.nodeType === 1 && (t.id === 'sec-mercado' || (t.closest && t.closest('#sec-mercado')))){
+        schedule();
+        break;
+      }
+    }
+  });
+  try{ obs.observe(document.documentElement, {subtree:true, childList:true, attributes:true, attributeFilter:['style','class']}); }catch(_){ }
+})();
+
+
+/* ELTAUM_DESKTOP_MARKET_FILTERS_V523
+   Desktop only: aplica largura integral à seção Mercado, remove o botão técnico do CDI
+   e reforça a hierarquia sem mexer no mobile. */
+(function(){
+  const FLAG='__ELTAUM_DESKTOP_MARKET_FILTERS_V523__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const isDesktop=()=>window.matchMedia&&window.matchMedia('(min-width: 769px)').matches;
+  const hasPatch=()=>document.documentElement.classList.contains('desktop-market-hierarchy-v523')||document.documentElement.classList.contains('desktop-filter-buttons-v523');
+  const set=(el,prop,val)=>{ if(el) el.style.setProperty(prop,val,'important'); };
+  const reset=(el)=>{
+    if(!el) return;
+    ['transform','translate','top','left','right','bottom'].forEach(p=>set(el,p,p==='transform'?'none':p==='translate'?'none':'auto'));
+    set(el,'grid-area','auto');set(el,'grid-column','auto');set(el,'grid-row','auto');set(el,'position','relative');
+    set(el,'justify-self','stretch');set(el,'align-self','start');set(el,'width','100%');set(el,'min-width','0');set(el,'max-width','100%');
+    set(el,'height','auto');set(el,'min-height','0');set(el,'max-height','none');set(el,'margin','0');set(el,'box-sizing','border-box');
+  };
+  function apply(){
+    if(!isDesktop()||!hasPatch()) return;
+    document.documentElement.classList.add('desktop-market-hierarchy-v523','desktop-filter-buttons-v523');
+    const root=document.getElementById('sec-mercado');
+    if(root){
+      set(root,'width','100%');set(root,'max-width','none');set(root,'margin-left','0');set(root,'margin-right','0');set(root,'padding-left','0');set(root,'padding-right','0');
+      root.querySelectorAll('#cdiAnalyticLinkV274,.cdi-analytic-link-v274').forEach(el=>{set(el,'display','none');set(el,'visibility','hidden');set(el,'pointer-events','none');});
+      root.querySelectorAll('.market-ref-grid,.market-reference-v167,.rates-reference-v167,.rates-executive-v255,.savings-reference-v167,#closedMonthLaunch').forEach(el=>{set(el,'width','100%');set(el,'max-width','none');set(el,'margin-left','0');set(el,'margin-right','0');});
+      const marketGrid=root.querySelector('.market-ref-grid.market-reference-v167');set(marketGrid,'display','block');
+      const rates=root.querySelector('.rates-reference-v167,.rates-executive-v255');
+      if(rates){set(rates,'display','grid');set(rates,'grid-template-columns','260px minmax(0,1fr)');set(rates,'grid-template-areas','"head head" "summary detail"');set(rates,'gap','16px 24px');set(rates,'align-items','start');set(rates,'overflow','visible');set(rates,'min-height','auto');set(rates,'height','auto');set(rates,'padding','18px 20px 22px');}
+      const head=root.querySelector('.rates-reference-v167 > .market-reference-head-v167');set(head,'grid-area','head');set(head,'margin','0');set(head,'padding','0 0 8px');
+      const summary=root.querySelector('.rates-summary-v167');if(summary){set(summary,'grid-area','summary');set(summary,'display','grid');set(summary,'grid-template-columns','1fr');set(summary,'gap','12px');set(summary,'width','100%');set(summary,'min-width','0');set(summary,'margin','0');set(summary,'padding','0');}
+      root.querySelectorAll('.rate-summary-card-v167').forEach(card=>{set(card,'min-height','104px');set(card,'height','auto');set(card,'max-height','none');set(card,'padding','14px 16px');});
+      const detail=root.querySelector('.rates-detail-grid-v167');if(detail){set(detail,'grid-area','detail');set(detail,'display','flex');set(detail,'flex-direction','column');set(detail,'gap','14px');set(detail,'width','100%');set(detail,'min-width','0');set(detail,'margin','0');set(detail,'padding','0');set(detail,'overflow','visible');set(detail,'isolation','isolate');}
+      const copom=root.querySelector('.copom-compact-v167');if(copom){reset(copom);set(copom,'z-index','2');set(copom,'padding','14px 16px');set(copom,'border-radius','14px');set(copom,'overflow','visible');}
+      const copomSummary=root.querySelector('#copomExecutiveSummaryV270');if(copomSummary){set(copomSummary,'display','grid');set(copomSummary,'grid-template-columns','repeat(2,minmax(0,1fr))');set(copomSummary,'gap','12px');set(copomSummary,'width','100%');set(copomSummary,'max-width','100%');set(copomSummary,'overflow','visible');set(copomSummary,'scroll-snap-type','none');}
+      root.querySelectorAll('#copomExecutiveSummaryV270 > article,.copom-exec-card-v270').forEach(card=>{set(card,'width','auto');set(card,'min-width','0');set(card,'max-width','none');set(card,'min-height','76px');set(card,'height','auto');set(card,'padding','10px 12px');set(card,'box-sizing','border-box');});
+      root.querySelectorAll('.copom-exec-desc-v270').forEach(el=>{set(el,'max-width','100%');set(el,'line-height','1.28');set(el,'overflow','visible');set(el,'display','block');});
+      const cdi=root.querySelector('#cdiYearHistory');if(cdi){reset(cdi);set(cdi,'z-index','1');set(cdi,'display','block');set(cdi,'padding','14px 16px');set(cdi,'border-radius','16px');set(cdi,'overflow','hidden');}
+      const cdiHead=root.querySelector('#cdiYearHistory .cdi-year-head,#cdiYearHistory .cdi-chart-head-v271');if(cdiHead){set(cdiHead,'display','flex');set(cdiHead,'align-items','flex-start');set(cdiHead,'justify-content','flex-start');set(cdiHead,'gap','14px');set(cdiHead,'margin','0 0 12px');set(cdiHead,'padding','0');set(cdiHead,'border','0');}
+      const kpis=root.querySelector('#cdiYearHistory .cdi-kpis-v271');if(kpis){set(kpis,'display','grid');set(kpis,'grid-template-columns','repeat(4,minmax(0,1fr))');set(kpis,'gap','10px');set(kpis,'width','100%');set(kpis,'margin','0 0 12px');}
+      const months=root.querySelector('#cdiMonthCarouselV322');if(months){set(months,'display','grid');set(months,'grid-template-columns','repeat(3,minmax(0,1fr))');set(months,'gap','10px');set(months,'width','100%');set(months,'max-width','100%');set(months,'margin','0 0 12px');set(months,'padding','0');set(months,'overflow','hidden');set(months,'scroll-snap-type','none');}
+      root.querySelectorAll('#cdiMonthCarouselV322 > article,.cdi-month-card-v322').forEach(card=>{set(card,'width','auto');set(card,'min-width','0');set(card,'max-width','none');set(card,'flex','initial');set(card,'min-height','54px');set(card,'padding','8px 10px');});
+      const canvasWrap=root.querySelector('.cdi-chart-canvas-wrap-v271');if(canvasWrap){set(canvasWrap,'width','100%');set(canvasWrap,'height','260px');set(canvasWrap,'min-height','260px');set(canvasWrap,'max-height','260px');set(canvasWrap,'margin','0');set(canvasWrap,'overflow','hidden');}
+      const canvas=root.querySelector('#cdiYearChartV271');if(canvas){set(canvas,'width','100%');set(canvas,'height','260px');set(canvas,'max-height','260px');try{const chart=window.Chart?.getChart?.(canvas);chart?.resize?.();}catch(_){}}
+    }
+  }
+  let raf=0;function schedule(){if(raf) cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>{raf=0;apply();});}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',schedule,{once:true}); else schedule();
+  window.addEventListener('load',()=>{schedule();setTimeout(schedule,250);setTimeout(schedule,900);},{once:true});
+  window.addEventListener('resize',schedule,{passive:true});
+})();
+
+
+/* ELTAUM_DESKTOP_FILTER_CATEGORY_V524 — safety class only */
+(function(){
+  const FLAG='__ELTAUM_DESKTOP_FILTER_CATEGORY_V524__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  function apply(){
+    if(window.matchMedia && window.matchMedia('(min-width: 769px)').matches){
+      document.documentElement.classList.add('desktop-filter-buttons-v524');
+    }
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  window.addEventListener('resize',apply,{passive:true});
+})();
+
+
+/* ELTAUM_DESKTOP_CATALOG_BASE_V525
+   Base desktop restaurada: tabela única, sem alternância de cards/executiva/detalhada.
+   Mantém mobile preservado e impede scripts antigos de reativarem fund-card-mode no desktop. */
+(function(){
+  function isDesktopV525(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function enforceDesktopCatalogBaseV525(){
+    if(!isDesktopV525()) return;
+    document.documentElement.classList.add('desktop-catalog-base-v525');
+    var metaBuild=document.querySelector('meta[name="app-build"]');
+    if(metaBuild) metaBuild.content='ELTAUM_DESKTOP_CATALOG_BASE_V525';
+    if(document.body){
+      document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
+    }
+    var toggle=document.querySelector('#sec-fundos .desktop-table-mode-control, #sec-fundos .vista-toggle-wrap');
+    if(toggle) toggle.remove();
+    var cards=document.getElementById('mobileFundCards');
+    if(cards){
+      cards.style.setProperty('display','none','important');
+      cards.setAttribute('aria-hidden','true');
+    }
+    var table=document.querySelector('#sec-fundos .table-wrap');
+    if(table){
+      table.style.removeProperty('display');
+      table.removeAttribute('aria-hidden');
+    }
+    try{
+      if(typeof vistaAtual !== 'undefined') vistaAtual='reuniao';
+    }catch(e){}
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded', enforceDesktopCatalogBaseV525, {once:true});
+  }else{
+    enforceDesktopCatalogBaseV525();
+  }
+  window.addEventListener('resize', enforceDesktopCatalogBaseV525, {passive:true});
+  window.addEventListener('load', enforceDesktopCatalogBaseV525, {once:true});
+  setTimeout(enforceDesktopCatalogBaseV525, 0);
+  setTimeout(enforceDesktopCatalogBaseV525, 400);
+  setTimeout(enforceDesktopCatalogBaseV525, 1200);
+  try{
+    var obs=new MutationObserver(function(muts){
+      if(!isDesktopV525() || !document.body) return;
+      if(document.body.classList.contains('fund-card-mode') || document.body.classList.contains('mobile-catalog-cards-mode')){
+        enforceDesktopCatalogBaseV525();
+      }
+    });
+    if(document.body) obs.observe(document.body,{attributes:true,attributeFilter:['class']});
+    else document.addEventListener('DOMContentLoaded',function(){ obs.observe(document.body,{attributes:true,attributeFilter:['class']}); },{once:true});
+  }catch(e){}
+})();
+
+
+/* ELTAUM_DESKTOP_FILTER_ACTIONS_V526
+   Desktop only: restaura o comportamento acumulativo dos filtros.
+   - Público-alvo volta a filtrar de fato e acumula com categoria/risco/busca.
+   - Categoria ativa pode ser clicada novamente para limpar apenas a categoria.
+   - Filtros ativos deixam de duplicar o rótulo e passam a refletir os filtros reais. */
+(function(){
+  'use strict';
+  const FLAG='__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const BUILD='ELTAUM_DESKTOP_FILTER_ACTIONS_V526';
+  const isDesktop=()=>!window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  const qs=(sel,root=document)=>root.querySelector(sel);
+  const qsa=(sel,root=document)=>Array.from(root.querySelectorAll(sel));
+
+  function syncAudienceButtonsV526(){
+    if(!isDesktop()) return;
+    let atual='';
+    try{ atual=String(activePerfil||''); }catch(e){}
+    qsa('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]').forEach(btn=>{
+      const val=String(btn.dataset.audienceV488||'');
+      const on=val===atual;
+      btn.classList.toggle('active',on);
+      btn.setAttribute('aria-pressed',on?'true':'false');
+    });
+  }
+
+  function syncDesktopFiltersV526(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-filter-actions-v526','desktop-catalog-base-v525');
+    syncAudienceButtonsV526();
+    try{ if(window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__ && typeof window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__.sync==='function') window.__ELTAUM_CATEGORY_EXACT_STABLE_V87__.sync(); }catch(e){}
+    try{ if(typeof syncRiskProfileControlsV198==='function') syncRiskProfileControlsV198(); }catch(e){}
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function applyAudienceV526(btn){
+    if(!btn || !isDesktop()) return;
+    const val=String(btn.dataset.audienceV488||'');
+    const wasActive=btn.getAttribute('aria-pressed')==='true';
+    try{
+      activePerfil=(wasActive && val) ? '' : val;
+      currentPage=1;
+      window.__favListMode=false;
+      if(expandedRows && typeof expandedRows.clear==='function') expandedRows.clear();
+    }catch(e){}
+    syncAudienceButtonsV526();
+    try{ if(typeof applyFilter==='function') applyFilter(); }catch(e){ console.error('v526 audience filter',e); }
+    setTimeout(syncDesktopFiltersV526,0);
+    requestAnimationFrame(syncDesktopFiltersV526);
+  }
+
+  function clearByKindV526(kind){
+    if(!isDesktop()) return;
+    try{
+      if(kind==='all'){
+        if(typeof clearAllFilters==='function') clearAllFilters();
+        else { activeCat=''; activeBenchmark=''; activePerfil=''; activeRisco=''; hideSemDados=false; if(typeof applyFilter==='function') applyFilter(); }
+      }else if(typeof clearFilter==='function'){
+        clearFilter(kind);
+      }else{
+        if(kind==='cat') activeCat='';
+        if(kind==='benchmark') activeBenchmark='';
+        if(kind==='perfil') activePerfil='';
+        if(kind==='risco') activeRisco='';
+        if(kind==='semDados') hideSemDados=false;
+        if(typeof applyFilter==='function') applyFilter();
+      }
+    }catch(e){}
+    setTimeout(syncDesktopFiltersV526,0);
+    requestAnimationFrame(syncDesktopFiltersV526);
+  }
+
+  function bindDesktopFiltersV526(){
+    syncDesktopFiltersV526();
+    if(document.documentElement.dataset.v526DesktopFiltersBound==='1') return;
+    document.documentElement.dataset.v526DesktopFiltersBound='1';
+
+    document.addEventListener('click',ev=>{
+      const audienceBtn=ev.target.closest && ev.target.closest('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]');
+      if(audienceBtn && isDesktop()){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+        applyAudienceV526(audienceBtn);
+        return;
+      }
+
+      const clearBtn=ev.target.closest && ev.target.closest('#activeFilterStrip [data-clear-filter]');
+      if(clearBtn && isDesktop()){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation==='function') ev.stopImmediatePropagation();
+        clearByKindV526(clearBtn.dataset.clearFilter||'all');
+      }
+    },true);
+
+    document.addEventListener('change',ev=>{
+      if(!isDesktop()) return;
+      if(ev.target && ev.target.id==='catalogRiskSelectV198') setTimeout(syncDesktopFiltersV526,0);
+    },true);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',bindDesktopFiltersV526,{once:true}); else bindDesktopFiltersV526();
+  window.addEventListener('load',()=>{syncDesktopFiltersV526();setTimeout(syncDesktopFiltersV526,400);},{once:true});
+  window.addEventListener('resize',syncDesktopFiltersV526,{passive:true});
+  [250,900,1800,3200].forEach(ms=>setTimeout(syncDesktopFiltersV526,ms));
+  window.__ELTAUM_DESKTOP_FILTER_ACTIONS_V526__={build:BUILD,sync:syncDesktopFiltersV526};
+})();
+
+
+/* ELTAUM_DESKTOP_POLISH_V528
+   Desktop only: aplica a classe de acabamento visual, mantém tabela única e remove ruídos legados. */
+(function(){
+  'use strict';
+  const FLAG='__ELTAUM_DESKTOP_POLISH_V528__';
+  if(window[FLAG]) return;
+  window[FLAG]=true;
+  const isDesktop=()=>!window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-polish-v528','desktop-catalog-clean-v527','desktop-catalog-base-v525');
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content='ELTAUM_DESKTOP_POLISH_V528';
+    if(document.body){
+      document.body.classList.remove('fund-card-mode','mobile-catalog-cards-mode','mobile-catalog-table-mode');
+    }
+    document.querySelectorAll('#mobileCatalogViewSwitch, #sec-fundos .mobile-catalog-view-switch, #sec-fundos .mobile-catalog-view-btn[data-mobile-catalog-view="cards"], #sec-fundos .mobile-catalog-view-panel, #sec-fundos .mobile-view-toggle').forEach(el=>{
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
+  window.addEventListener('load',apply,{once:true});
+  window.addEventListener('resize',apply,{passive:true});
+  setTimeout(apply,300);
+  setTimeout(apply,1200);
+})();
+
+
+/* =========================================================
+   PATCH v534 — Desktop: reposiciona Pontos de atenção como faixa
+   Mantém a estrutura mobile original. No desktop, retira a coluna lateral
+   e insere o bloco entre a leitura rápida e o Top 10.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_ATTENTION_STRIP_V534';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let cachedAttention=null;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function ensureClass(){
+    document.documentElement.classList.add('desktop-ranking-attention-strip-v534');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function createAttention(){
+    const aside=document.createElement('aside');
+    aside.id='rankingAttentionV136';
+    aside.className='ranking-attention-panel-v136 ranking-attention-strip-v534';
+    aside.setAttribute('aria-label','Pontos de atenção dos fundos');
+    aside.innerHTML='<div class="attention-head-v136"><span>⚠️</span><div><strong>Pontos de atenção</strong><small>Alertas consultivos da base</small></div></div><div class="attention-body-v136"><div class="attention-empty-v136">Carregando insights...</div></div>';
+    return aside;
+  }
+
+  function detachAttention(){
+    const aside=q('#rankingAttentionV136');
+    if(aside){
+      cachedAttention=aside;
+      if(aside.parentNode) aside.parentNode.removeChild(aside);
+    }
+  }
+
+  function moveAttention(){
+    ensureClass();
+    const section=q('#rankingsSection');
+    if(!section) return;
+    const layout=q('.ranking-layout-v136',section);
+    const grid=q('#rankingGrid',section);
+    if(!layout || !grid) return;
+    let aside=cachedAttention || q('#rankingAttentionV136',section) || createAttention();
+    aside.classList.add('ranking-attention-strip-v534');
+
+    if(mq.matches){
+      const insight=q('.ranking-exec-insight',grid);
+      if(insight){
+        insight.insertAdjacentElement('afterend',aside);
+      }else if(aside.parentNode!==grid){
+        grid.appendChild(aside);
+      }
+    }else{
+      if(aside.parentNode!==layout) layout.appendChild(aside);
+    }
+    cachedAttention=aside;
+  }
+
+  function compactAttentionDetails(){
+    if(!mq.matches) return;
+    const aside=q('#rankingAttentionV136');
+    const body=q('.attention-body-v136',aside||document);
+    if(!aside || !body) return;
+    aside.classList.add('ranking-attention-strip-v534');
+    const blocks=qa(':scope > .attention-block-v136',body);
+    const foot=q(':scope > .attention-foot-v136',body);
+    if(blocks.length<=1) return;
+    if(q(':scope > .attention-details-v534',body)) return;
+
+    const details=document.createElement('details');
+    details.className='attention-details-v534';
+    details.innerHTML='<summary>Ver alertas</summary><div class="attention-details-body-v534"></div>';
+    const detailsBody=q('.attention-details-body-v534',details);
+    blocks.slice(1).forEach(block=>detailsBody.appendChild(block));
+    if(foot) detailsBody.appendChild(foot);
+    body.appendChild(details);
+  }
+
+  function apply(){
+    moveAttention();
+    setTimeout(()=>{moveAttention(); compactAttentionDetails();},0);
+    setTimeout(()=>{moveAttention(); compactAttentionDetails();},80);
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__attentionStripV534) return;
+    const wrapped=function(){
+      detachAttention();
+      const result=original.apply(this,arguments);
+      apply();
+      return result;
+    };
+    wrapped.__attentionStripV534=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function init(){
+    ensureClass();
+    wrapRankingRender();
+    apply();
+    setTimeout(()=>{wrapRankingRender();apply();},300);
+    setTimeout(()=>{wrapRankingRender();apply();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v536 — Desktop ranking hierarchy cleanup
+   - Remove Leitura rápida da visão desktop.
+   - Mantém Pontos de atenção como faixa e abre alertas em linha, largura cheia.
+   - Centraliza o cabeçalho da seção de rankings.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_HIERARCHY_V536';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let busy=false;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+
+  function ensureBuild(){
+    document.documentElement.classList.add('desktop-ranking-hierarchy-v536');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function removeQuickRead(){
+    if(!mq.matches) return;
+    qa('#rankingsSection .ranking-exec-insight').forEach(el=>el.remove());
+  }
+
+  function normalizeAttention(){
+    if(!mq.matches || busy) return;
+    const aside=q('#rankingAttentionV136');
+    const host=q('.attention-body-v136',aside||document);
+    if(!aside || !host) return;
+    const metric=q('.attention-metric-grid-v136',host);
+    if(!metric) return;
+
+    const existingDetails=q('.attention-details-v536',host);
+    const wasOpen=!!(existingDetails && existingDetails.open) || !!q('.attention-details-v534[open]',host);
+    const blocks=qa('.attention-block-v136',host);
+    const foot=q('.attention-foot-v136',host);
+    const detailsBlocks=[];
+
+    blocks.forEach(block=>{
+      const title=(q('h3',block)?.textContent||'').trim().toLowerCase();
+      if(title.includes('insight')){
+        block.remove();
+        return;
+      }
+      detailsBlocks.push(block);
+    });
+    if(foot) detailsBlocks.push(foot);
+
+    // Se a v534/v535 já tiver criado um details antigo, reaproveita os blocos de dentro.
+    qa('.attention-details-v534 .attention-block-v136',host).forEach(block=>{
+      const title=(q('h3',block)?.textContent||'').trim().toLowerCase();
+      if(!title.includes('insight') && !detailsBlocks.includes(block)) detailsBlocks.push(block);
+    });
+    const oldFoot=q('.attention-details-v534 .attention-foot-v136',host);
+    if(oldFoot && !detailsBlocks.includes(oldFoot)) detailsBlocks.push(oldFoot);
+
+    busy=true;
+    const details=document.createElement('details');
+    details.className='attention-details-v536';
+    if(wasOpen) details.open=true;
+    details.innerHTML='<summary>Ver alertas</summary>';
+
+    const body=document.createElement('div');
+    body.className='attention-details-body-v536';
+    detailsBlocks.forEach(node=>body.appendChild(node));
+
+    host.innerHTML='';
+    host.appendChild(metric);
+    host.appendChild(details);
+    if(detailsBlocks.length){
+      host.appendChild(body);
+    }else{
+      details.style.display='none';
+    }
+    busy=false;
+  }
+
+  function apply(){
+    ensureBuild();
+    removeQuickRead();
+    normalizeAttention();
+  }
+
+  function observe(){
+    const target=q('#rankingsSection');
+    if(!target || target.dataset.v536Observer==='1') return;
+    target.dataset.v536Observer='1';
+    const obs=new MutationObserver(()=>{
+      clearTimeout(target.__rankingV536Timer);
+      target.__rankingV536Timer=setTimeout(apply,30);
+    });
+    obs.observe(target,{childList:true,subtree:true});
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__desktopV536) return;
+    const wrapped=function(){
+      const result=original.apply(this,arguments);
+      setTimeout(apply,0);
+      return result;
+    };
+    wrapped.__desktopV536=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function init(){
+    ensureBuild();
+    wrapRankingRender();
+    apply();
+    observe();
+    setTimeout(()=>{wrapRankingRender();apply();observe();},250);
+    setTimeout(()=>{wrapRankingRender();apply();observe();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v537 — Desktop: semântica dos alertas dos rankings
+   Escopo: somente desktop.
+   - Renomeia Piores leituras para Piores em 12 meses.
+   - Remove Sem dados / pipeline da área consultiva principal.
+   - Mantém Pontos de atenção em faixa horizontal, sem coluna lateral.
+   ========================================================= */
+(function(){
+  const BUILD='ELTAUM_DESKTOP_RANKING_ALERTS_SEMANTIC_V537';
+  const mq=window.matchMedia ? window.matchMedia('(min-width:769px)') : {matches:true,addEventListener:null,addListener:null};
+  let busy=false;
+
+  function q(sel,root=document){return root.querySelector(sel)}
+  function qa(sel,root=document){return Array.from(root.querySelectorAll(sel))}
+  function txt(el){return (el && el.textContent || '').trim().toLowerCase()}
+
+  function ensureBuild(){
+    document.documentElement.classList.add('desktop-ranking-alerts-semantic-v537');
+    const meta=q('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  function removeQuickRead(){
+    if(!mq.matches) return;
+    qa('#rankingsSection .ranking-exec-insight').forEach(el=>el.remove());
+  }
+
+  function renameAndTrimAttention(){
+    if(!mq.matches || busy) return;
+    const aside=q('#rankingAttentionV136');
+    const host=q('.attention-body-v136', aside || document);
+    if(!aside || !host) return;
+
+    // Remove o indicador de qualidade da base da área consultiva principal.
+    qa('.attention-metric-v136', host).forEach(metric=>{
+      if(txt(metric).includes('sem dados')) metric.remove();
+    });
+
+    // Renomeia o bloco de 12M e remove blocos não consultivos.
+    qa('.attention-block-v136', host).forEach(block=>{
+      const h=q('h3', block);
+      const title=txt(h);
+      if(title.includes('piores leituras')) h.textContent='Piores em 12 meses';
+      if(title.includes('sem dados') || title.includes('pipeline') || title.includes('insight')) block.remove();
+    });
+
+    const foot=q('.attention-foot-v136', host);
+    if(foot) foot.textContent='Alertas automáticos para apoio à análise. Não substituem suitability, objetivo e horizonte do cliente.';
+
+    // Se a v536 já organizou em details + body, garante apenas os dois blocos úteis.
+    const details=q('.attention-details-v536', host);
+    const body=q('.attention-details-body-v536', host);
+    if(details && body){
+      qa('.attention-block-v136', body).forEach(block=>{
+        const h=q('h3', block);
+        const title=txt(h);
+        if(title.includes('piores leituras')) h.textContent='Piores em 12 meses';
+        if(title.includes('sem dados') || title.includes('pipeline') || title.includes('insight')) block.remove();
+      });
+      const useful=qa('.attention-block-v136', body);
+      if(!useful.length){
+        details.style.display='none';
+        body.style.display='none';
+      }else{
+        details.style.display='block';
+      }
+    }
+  }
+
+  function apply(){
+    ensureBuild();
+    removeQuickRead();
+    renameAndTrimAttention();
+  }
+
+  function wrapRankingRender(){
+    const original=window.renderRankings || (typeof renderRankings==='function' ? renderRankings : null);
+    if(!original || original.__desktopV537) return;
+    const wrapped=function(){
+      const result=original.apply(this,arguments);
+      setTimeout(apply,0);
+      setTimeout(apply,80);
+      return result;
+    };
+    wrapped.__desktopV537=true;
+    try{window.renderRankings=wrapped;}catch(e){}
+    try{renderRankings=wrapped;}catch(e){}
+  }
+
+  function observe(){
+    const target=q('#rankingsSection');
+    if(!target || target.dataset.v537Observer==='1') return;
+    target.dataset.v537Observer='1';
+    const obs=new MutationObserver(()=>{
+      clearTimeout(target.__rankingV537Timer);
+      target.__rankingV537Timer=setTimeout(apply,40);
+    });
+    obs.observe(target,{childList:true,subtree:true});
+  }
+
+  function init(){
+    ensureBuild();
+    wrapRankingRender();
+    apply();
+    observe();
+    setTimeout(()=>{wrapRankingRender();apply();observe();},250);
+    setTimeout(()=>{wrapRankingRender();apply();observe();},1200);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  if(mq.addEventListener) mq.addEventListener('change',apply); else if(mq.addListener) mq.addListener(apply);
+})();
+
+
+/* =========================================================
+   PATCH v542 — Desktop: Ver mais estavel, sem recriar o grafico
+   ========================================================= */
+(function desktopSectionToggleFixV542(){
+  if(window.__desktopSectionToggleFixV542Installed) return;
+  window.__desktopSectionToggleFixV542Installed = true;
+
+  var SECTION_IDS = ['rankingsSection','sec-dolar'];
+  var BTN_SELECTOR = '.desktop-section-more-v539, .desktop-section-more-v540, .desktop-section-more-v541, [data-desktop-section-toggle]';
+  var root = document.documentElement;
+
+  root.classList.add('desktop-section-toggle-fix-v542');
+  var meta = document.querySelector('meta[name="app-build"]');
+  if(meta) meta.content = 'ELTAUM_DESKTOP_SECTION_TOGGLE_FIX_V542';
+
+  function getSectionIdFromButton(btn){
+    if(!btn) return '';
+    return btn.getAttribute('data-desktop-section-toggle') ||
+      (btn.classList.contains('ranking-more-v539') ? 'rankingsSection' :
+       btn.classList.contains('dolar-more-v539') ? 'sec-dolar' : '');
+  }
+
+  function getToggleButton(section){
+    if(!section) return null;
+    return section.querySelector(BTN_SELECTOR);
+  }
+
+  function setButtonState(section, isOpen){
+    var btn = getToggleButton(section);
+    if(!btn) return;
+    btn.removeAttribute('onclick');
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.toggle-label');
+    var icon = btn.querySelector('.toggle-icon');
+    var closed = btn.getAttribute('data-label-closed') || 'Ver mais';
+    var open = btn.getAttribute('data-label-open') || 'Ver menos';
+    if(label) label.textContent = isOpen ? open : closed;
+    if(icon) icon.textContent = isOpen ? '-' : '›';
+  }
+
+  function syncDolarDetails(section, isOpen){
+    if(!section || section.id !== 'sec-dolar') return;
+    section.classList.toggle('dolar-details-collapsed-v542', !isOpen);
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+    var footer = section.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
+  }
+
+  function refreshDolarChartWhenOpened(sectionId, isOpen){
+    if(sectionId !== 'sec-dolar' || !isOpen) return;
+    var raf = window.requestAnimationFrame || function(cb){ return setTimeout(cb, 16); };
+    raf(function(){
+      raf(function(){
+        try{
+          var canvas = document.getElementById('chartDolar');
+          var chart = window.Chart && canvas ? Chart.getChart(canvas) : null;
+          if(chart && typeof chart.resize === 'function') chart.resize();
+          if(chart && typeof chart.update === 'function') chart.update('none');
+          window.dispatchEvent(new Event('resize'));
+        }catch(err){
+          console.warn('[Dolar PTAX] grafico aguardando layout:', err);
+        }
+      });
+    });
+  }
+
+  function setSectionOpen(sectionId, isOpen){
+    var section = document.getElementById(sectionId);
+    if(!section) return false;
+    if(sectionId === 'sec-dolar'){
+      section.dataset.desktopDesiredOpenV544 = isOpen ? 'true' : 'false';
+      section.dataset.desktopUserToggledV544 = '1';
+    }
+    section.classList.toggle('section-expanded', !!isOpen);
+    section.classList.toggle('section-collapsed', !isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(section, !!isOpen);
+    syncDolarDetails(section, !!isOpen);
+    refreshDolarChartWhenOpened(sectionId, !!isOpen);
+    return false;
+  }
+
+  window.toggleDesktopCompactSection = function(event, sectionId){
+    if(event){
+      if(event.__desktopCompactToggleV542Handled) return false;
+      event.__desktopCompactToggleV542Handled = true;
+      if(typeof event.preventDefault === 'function') event.preventDefault();
+      if(typeof event.stopPropagation === 'function') event.stopPropagation();
+      if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+    }
+    var section = document.getElementById(sectionId);
+    if(!section) return false;
+    return setSectionOpen(sectionId, !section.classList.contains('section-expanded'));
+  };
+
+  function initSection(id){
+    var section = document.getElementById(id);
+    if(!section) return;
+    var btn = getToggleButton(section);
+    if(btn){
+      btn.setAttribute('data-desktop-section-toggle', id);
+      btn.removeAttribute('onclick');
+      btn.style.pointerEvents = 'auto';
+      btn.style.cursor = 'pointer';
+    }
+    var isOpen = section.classList.contains('section-expanded');
+    if(id === 'sec-dolar' && !section.dataset.desktopDesiredOpenV544){
+      section.dataset.desktopDesiredOpenV544 = isOpen ? 'true' : 'false';
+    }
+    section.classList.toggle('section-collapsed', !isOpen);
+    section.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(section, isOpen);
+    syncDolarDetails(section, isOpen);
+  }
+
+  function init(){
+    SECTION_IDS.forEach(initSection);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});
+  else init();
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest(BTN_SELECTOR) : null;
+    if(!btn) return;
+    var id = getSectionIdFromButton(btn);
+    if(!id) return;
+    window.toggleDesktopCompactSection(ev, id);
+  }, true);
+})();
+
+
+/* =========================================================
+   PATCH v543 — Desktop: oculta seletor de visualizacao mobile
+   ========================================================= */
+(function desktopHideMobileViewSwitchV543(){
+  if(window.__desktopHideMobileViewSwitchV543Installed) return;
+  window.__desktopHideMobileViewSwitchV543Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-hide-mobile-view-switch-v543');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_HIDE_MOBILE_VIEW_SWITCH_V543';
+    document.querySelectorAll('#mobileCatalogViewSwitch, #sec-fundos .mobile-catalog-view-switch').forEach(function(el){
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('visibility','hidden','important');
+      el.style.setProperty('height','0','important');
+      el.style.setProperty('min-height','0','important');
+      el.style.setProperty('max-height','0','important');
+      el.style.setProperty('margin','0','important');
+      el.style.setProperty('padding','0','important');
+      el.style.setProperty('border','0','important');
+      el.style.setProperty('overflow','hidden','important');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('resize', apply, {passive:true});
+  setTimeout(apply, 300);
+  setTimeout(apply, 1200);
+})();
+
+
+/* =========================================================
+   PATCH v544 — Desktop: trava estado manual do Dolar PTAX
+   ========================================================= */
+(function desktopDolarToggleStateGuardV544(){
+  if(window.__desktopDolarToggleStateGuardV544Installed) return;
+  window.__desktopDolarToggleStateGuardV544Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function getButton(){
+    return document.querySelector('[data-desktop-section-toggle="sec-dolar"], .dolar-more-v539');
+  }
+
+  function setButtonState(btn, isOpen){
+    if(!btn) return;
+    btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    var label = btn.querySelector('.toggle-label');
+    var icon = btn.querySelector('.toggle-icon');
+    if(label) label.textContent = isOpen ? (btn.dataset.labelOpen || 'Ver menos') : (btn.dataset.labelClosed || 'Ver mais');
+    if(icon) icon.textContent = isOpen ? '-' : '›';
+  }
+
+  function syncDetails(sec, isOpen){
+    if(!sec) return;
+    sec.classList.toggle('dolar-details-collapsed-v542', !isOpen);
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    });
+    var footer = sec.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+    }
+  }
+
+  function applyDesiredState(){
+    if(!isDesktop()) return;
+    var sec = document.getElementById('sec-dolar');
+    if(!sec || sec.dataset.desktopUserToggledV544 !== '1') return;
+
+    var isOpen = sec.dataset.desktopDesiredOpenV544 === 'true';
+    var btn = getButton();
+
+    sec.classList.toggle('section-expanded', isOpen);
+    sec.classList.toggle('section-collapsed', !isOpen);
+    sec.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    setButtonState(btn, isOpen);
+    syncDetails(sec, isOpen);
+  }
+
+  function install(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-dolar-toggle-state-guard-v544');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_TOGGLE_STATE_GUARD_V544';
+
+    var sec = document.getElementById('sec-dolar');
+    if(!sec || sec.dataset.desktopGuardV544Bound) return;
+    sec.dataset.desktopGuardV544Bound = '1';
+
+    var scheduled = false;
+    var obs = new MutationObserver(function(){
+      if(scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(function(){
+        scheduled = false;
+        applyDesiredState();
+      });
+    });
+    obs.observe(sec, {attributes:true, attributeFilter:['class','aria-expanded','aria-hidden']});
+
+    var btn = getButton();
+    if(btn){
+      obs.observe(btn, {attributes:true, attributeFilter:['aria-expanded','class']});
+    }
+
+    window.__ELTAUM_DESKTOP_DOLAR_TOGGLE_STATE_GUARD_OBSERVER_V544__ = obs;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  window.addEventListener('pageshow', install, {passive:true});
+})();
+
+
+/* =========================================================
+   PATCH v545 — Desktop: neutraliza mutacoes mobile dos filtros
+   ========================================================= */
+(function desktopNeutralizeMobileFilterUiV545(){
+  if(window.__desktopNeutralizeMobileFilterUiV545Installed) return;
+  window.__desktopNeutralizeMobileFilterUiV545Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-neutralize-mobile-filter-ui-v545');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_NEUTRALIZE_MOBILE_FILTER_UI_V545';
+
+    document.querySelectorAll([
+      '#sec-fundos #mobileFilterBar',
+      '#sec-fundos #mobileFilterToggle',
+      '#sec-fundos #mobileFilterSummary',
+      '#sec-fundos #mobileCategorySelectShellV74',
+      '#sec-fundos #mobileNoDataRowV442',
+      '#sec-fundos .mobile-filter-summary',
+      '#sec-fundos .mobile-filter-toggle',
+      '#sec-fundos .mobile-category-select-shell-v74',
+      '#sec-fundos .mobile-no-data-row-v442'
+    ].join(',')).forEach(function(el){
+      el.setAttribute('aria-hidden','true');
+      el.style.setProperty('display','none','important');
+      el.style.setProperty('visibility','hidden','important');
+      el.style.setProperty('height','0','important');
+      el.style.setProperty('min-height','0','important');
+      el.style.setProperty('max-height','0','important');
+      el.style.setProperty('margin','0','important');
+      el.style.setProperty('padding','0','important');
+      el.style.setProperty('border','0','important');
+      el.style.setProperty('overflow','hidden','important');
+      el.style.setProperty('pointer-events','none','important');
+      el.style.setProperty('position','absolute','important');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('pageshow', apply, {passive:true});
+  [120, 400, 900, 1800, 3200].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* =========================================================
+   PATCH v546 — Desktop: abas do ranking funcionais
+   ========================================================= */
+(function desktopRankingTabsFuncionaisV546(){
+  if(window.__desktopRankingTabsFuncionaisV546Installed) return;
+  if(window.__desktopRankingPodiumV562Installed) return;
+  window.__desktopRankingTabsFuncionaisV546Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function q(sel, root){ return (root || document).querySelector(sel); }
+  function qa(sel, root){ return Array.from((root || document).querySelectorAll(sel)); }
+  function esc(v){
+    return String(v ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+  function norm(v){
+    return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+  }
+  function smartNum(v){
+    if(v === null || v === undefined || v === '') return null;
+    if(typeof v === 'number') return Number.isFinite(v) ? v : null;
+    let s = String(v).trim();
+    if(!s || s === '-' || s === '—' || /^null$/i.test(s)) return null;
+    s = s.replace(/[^\d,.-]/g,'');
+    const hasComma = s.includes(',');
+    const hasDot = s.includes('.');
+    if(hasComma && hasDot){
+      s = s.replace(/\./g,'').replace(',','.');
+    }else if(hasComma){
+      s = s.replace(',','.');
+    }else if(hasDot){
+      const parts = s.split('.');
+      const last = parts[parts.length - 1] || '';
+      if(parts.length > 2 || last.length === 3){
+        s = s.replace(/\./g,'');
+      }
+    }
+    const n = Number(s);
+    return Number.isFinite(n) ? n : null;
+  }
+  function num(v){
+    const n = smartNum(v);
+    if(n !== null) return n;
+    if(typeof toNum === 'function') return toNum(v);
+    return null;
+  }
+  function pct(v){
+    const n = num(v);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return '—';
+    return (n > 0 ? '+' : '') + n.toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2}) + '%';
+  }
+  function retClass(v){
+    const n = num(v);
+    return n > 0 ? 'pos' : n < 0 ? 'neg' : 'zero';
+  }
+  function cleanFund(v){
+    return String(v || '—').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim() || '—';
+  }
+  function compactFundName(v){
+    let s = cleanFund(v)
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/\bFIC\b/ig,'')
+      .replace(/\bFIF\b/ig,'')
+      .replace(/\bRESP\.?\s*LTDA\b/ig,'')
+      .replace(/\bRESP\b/ig,'')
+      .replace(/\bFUNDO DE INDICE\b/ig,'')
+      .replace(/\bCORPORATIVO\b/ig,'Corp.')
+      .replace(/\bREFERENCIADO\b/ig,'Ref.')
+      .replace(/\s+-\s+/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const words = s.split(/\s+/).filter(Boolean);
+    if(words.length > 4) s = words.slice(0,4).join(' ');
+    return s || cleanFund(v);
+  }
+  function shortCat(v){
+    const raw = String(v || '—').trim();
+    const n = norm(raw);
+    if(n.includes('FUNDOS MUTUOS') || n.includes('PRIVATIZACAO')) return 'FMP';
+    if(n.includes('RENDA FIXA REFERENCIADO')) return 'RF Ref.';
+    if(n.includes('RENDA FIXA CURTO')) return 'RF Curto';
+    if(n.includes('RENDA FIXA SIMPLES')) return 'RF Simples';
+    if(n.includes('RENDA FIXA')) return 'Renda Fixa';
+    if(n.includes('MULTIMERCADO')) return 'Multimercado';
+    if(n.includes('CAMBIAL')) return 'Cambial';
+    if(n.includes('ACOES')) return 'Ações';
+    if(n.includes('INDICE')) return 'Índice';
+    return raw;
+  }
+  function plMillionsFromValue(value){
+    const n = num(value);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return null;
+    return Math.abs(n) >= 1000000 ? n / 1000000 : n;
+  }
+  function plValue(r){
+    return plMillionsFromValue(r?.['PL (milhoes R$)'] ?? r?.PL ?? r?.['Patrimonio Liquido']);
+  }
+  function plTxt(v){
+    const n = num(v);
+    if(n === null || Number.isNaN(n) || !Number.isFinite(n)) return 'R$ —';
+    if(Math.abs(n) >= 1000) return 'R$ ' + (n / 1000).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1}) + ' bi';
+    return 'R$ ' + n.toLocaleString('pt-BR',{maximumFractionDigits:0}) + ' mi';
+  }
+  function campoPorPeriodo(periodo){
+    if(typeof rankCampoPorPeriodo === 'function') return rankCampoPorPeriodo(periodo);
+    if(periodo === 'dia') return 'Variacao Dia (%)';
+    if(periodo === 'mes') return 'Acum. Mes (%)';
+    if(periodo === 'ano') return 'Acum. Ano (%)';
+    return 'Acum. 12M (%)';
+  }
+  function periodoLabel(periodo){
+    if(typeof rankPeriodoLabel === 'function') return rankPeriodoLabel(periodo);
+    return ({dia:'dia',mes:'mês',ano:'ano','12m':'12 meses'})[periodo] || '12 meses';
+  }
+  function cdiReferencia(periodo){
+    const p = periodo || '12m';
+    const card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230?.cards?.cdi || {});
+    const firstFinite = function(){
+      for(const value of arguments){
+        const n = num(value);
+        if(n !== null && !Number.isNaN(n) && Number.isFinite(n)) return n;
+      }
+      return null;
+    };
+    if(p === 'mes'){
+      let atual = null;
+      try{ atual = typeof obterCdiAtualV232 === 'function' ? obterCdiAtualV232().valor : null; }catch(e){}
+      return firstFinite(atual, card?.parcial_mes_atual, card?.mensal, window.indicState?.cdi?.mes);
+    }
+    if(p === 'ano'){
+      const direto = firstFinite(card?.acum_ano_com_parcial, card?.acum_ano, card?.ano, window.indicState?.cdi?.ano);
+      if(direto !== null) return direto;
+    }
+    const m12 = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(card,12) : null;
+    return firstFinite(m12, card?.acum_12m, card?.m12, window.indicState?.cdi?.m12);
+  }
+  function cdiRatioTxt(r, periodo){
+    const rent = num(r?.[campoPorPeriodo(periodo)]);
+    const cdi = cdiReferencia(periodo);
+    if(rent === null || cdi === null || !Number.isFinite(rent) || !Number.isFinite(cdi) || cdi === 0) return '—';
+    const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(rent, cdi) : Math.round((rent / cdi) * 100);
+    return ratio === null ? '—' : ratio + '%';
+  }
+  function medal(i){ return i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + 'º'; }
+  function currentFilterLabel(){
+    if(typeof activeRankFilter === 'undefined' || activeRankFilter === 'todos') return 'Todos';
+    const btn = q('[data-rank-filter="' + activeRankFilter + '"]');
+    return btn ? btn.textContent.trim() : 'Filtro aplicado';
+  }
+  function riskLabel(){
+    try{ return typeof rotuloPerfilRiscoV198 === 'function' ? rotuloPerfilRiscoV198(activeRankRisk || '') : (activeRankRisk || 'Todos os perfis'); }
+    catch(e){ return 'Todos os perfis'; }
+  }
+  function baseRows(){
+    if(typeof allRows === 'undefined' || !Array.isArray(allRows)) return [];
+    let base = allRows
+      .filter(function(r){ return typeof temDados === 'function' ? temDados(r) : true; })
+      .filter(function(r){ return typeof passaFiltroRanking === 'function' ? passaFiltroRanking(r) : true; });
+    try{
+      if(typeof activePerfil !== 'undefined' && activePerfil){
+        base = base.filter(function(r){
+          return typeof catalogAudienceMatchesV553 === 'function'
+            ? catalogAudienceMatchesV553(r, activePerfil)
+            : String(r.Perfis || r.Perfil || '').split(/\s*\|\s*/).map(function(s){ return s.trim(); }).includes(activePerfil);
+        });
+      }
+      if(typeof activeRankRisk !== 'undefined' && activeRankRisk){
+        base = base.filter(function(r){ return perfilRiscoCorrespondeV198(r['Perfil de Risco'], activeRankRisk); });
+      }
+    }catch(e){}
+    return base;
+  }
+  function sortBy(base, field, asc){
+    return base
+      .filter(function(r){
+        const n = num(r[field]);
+        return n !== null && !Number.isNaN(n) && Number.isFinite(n);
+      })
+      .sort(function(a,b){
+        return asc ? num(a[field]) - num(b[field]) : num(b[field]) - num(a[field]);
+      });
+  }
+  function topRow(r, i, campo, periodo){
+    const nome = cleanFund(r.Fundo);
+    return '<div class="ranking-top-row">' +
+      '<div class="ranking-pos">' + medal(i) + '</div>' +
+      '<div class="ranking-fund"><strong title="' + esc(nome) + '">' + esc(nome) + '</strong><span>' + esc(shortCat(r.Categoria)) + ' · ' + esc(plTxt(plValue(r))) + '</span></div>' +
+      '<div class="ranking-value-standard ranking-return ' + retClass(r[campo]) + '">' + esc(pct(r[campo])) + '</div>' +
+      '<div class="ranking-cdi">' + esc(cdiRatioTxt(r, periodo)) + '</div>' +
+    '</div>';
+  }
+  function simpleRow(label, name, meta, value, cls){
+    return '<div class="ranking-top-row ranking-view-row-v546">' +
+      '<div class="ranking-pos">' + esc(label) + '</div>' +
+      '<div class="ranking-fund"><strong title="' + esc(name) + '">' + esc(name) + '</strong><span>' + esc(meta || '') + '</span></div>' +
+      '<div class="ranking-value-standard ranking-return ' + esc(cls || 'zero') + '">' + esc(value) + '</div>' +
+      '<div class="ranking-cdi"></div>' +
+    '</div>';
+  }
+  function summaryCard(kind, label, value, name, meta){
+    const full = cleanFund(name);
+    const display = kind === 'pl' ? full : compactFundName(full);
+    return '<article class="ranking-exec-card ' + esc(kind) + '"><span>' + esc(label) + '</span><strong class="ranking-value-standard ' + (kind === 'worst' ? 'neg' : 'pos') + '">' + esc(value) + '</strong><small title="' + esc(full) + '">' + esc(display) + '</small>' + (meta ? '<em>' + esc(meta) + '</em>' : '') + '</article>';
+  }
+  function groupCategories(base, field){
+    const map = {};
+    base.forEach(function(r){
+      const cat = r.Categoria || 'Sem categoria';
+      const ret = num(r[field]);
+      const pl = plValue(r);
+      if(!map[cat]) map[cat] = {cat:cat, qtd:0, pl:0, weighted:0, weight:0, sum:0, count:0};
+      map[cat].qtd += 1;
+      if(pl !== null && Number.isFinite(pl)) map[cat].pl += pl;
+      if(ret !== null && Number.isFinite(ret)){
+        map[cat].sum += ret;
+        map[cat].count += 1;
+        if(pl !== null && Number.isFinite(pl) && pl > 0){
+          map[cat].weighted += ret * pl;
+          map[cat].weight += pl;
+        }
+      }
+    });
+    return Object.values(map).map(function(d){
+      d.ret = d.weight > 0 ? d.weighted / d.weight : (d.count ? d.sum / d.count : null);
+      return d;
+    });
+  }
+  function categoryPassesFilter(cat){
+    const filtro = typeof activeRankFilter !== 'undefined' ? String(activeRankFilter || 'todos') : 'todos';
+    const c = norm(cat);
+    if(filtro === 'todos') return true;
+    if(filtro === 'sem-fmp') return !(c.includes('FMP') || c.includes('PRIVATIZACAO'));
+    if(filtro === 'renda-fixa-simples') return c.includes('RENDA FIXA SIMPLES');
+    if(filtro === 'renda-fixa-referenciado') return c.includes('RENDA FIXA REFERENCIADO');
+    if(filtro === 'renda-fixa-curto-prazo') return c.includes('RENDA FIXA CURTO');
+    if(filtro === 'renda-fixa') return c.includes('RENDA FIXA');
+    if(filtro === 'multimercado') return c.includes('MULTIMERCADO');
+    if(filtro === 'cambial') return c.includes('CAMBIAL');
+    if(filtro === 'acoes') return c.includes('ACOES');
+    if(filtro === 'fundo-de-indice') return c.includes('INDICE');
+    if(filtro === 'fmp') return c.includes('FMP') || c.includes('PRIVATIZACAO');
+    return true;
+  }
+  function dashboardCategories(){
+    const src = (typeof kpisDashboard !== 'undefined' && kpisDashboard?.categorias) ? kpisDashboard.categorias : null;
+    if(!src || typeof src !== 'object') return [];
+    return Object.entries(src)
+      .filter(function(entry){ return categoryPassesFilter(entry[0]); })
+      .map(function(entry){
+        const cat = entry[0];
+        const d = entry[1] || {};
+        return {
+          cat: cat,
+          qtd: d.qtd_ativos ?? d.quantidade ?? d.qtd ?? '—',
+          pl: plMillionsFromValue(d.pl_total),
+          ret: num(d.rent_12m_ponderada)
+        };
+      });
+  }
+  function periodTabs(target, active, periods){
+    return '<div class="ranking-exec-periods" role="tablist" aria-label="Período do ranking">' + periods.map(function(p){
+      return '<button type="button" class="rank-period-tab ' + (active === p ? 'active' : '') + '" data-rank-target="' + esc(target) + '" data-rank-period="' + esc(p) + '">' + (p === 'dia' ? 'Dia' : p === 'mes' ? 'Mês' : p === 'ano' ? 'Ano' : '12M') + '</button>';
+    }).join('') + '</div>';
+  }
+  function board(title, subtitle, body, controls){
+    return '<section class="ranking-exec-board ranking-view-board-v546">' +
+      '<div class="ranking-exec-board-head"><div><h3>' + esc(title) + '</h3><p>' + esc(subtitle) + '</p></div><div class="ranking-exec-controls">' + (controls || '') + '<span class="ranking-universe-pill">Universo: <strong>' + esc(currentFilterLabel()) + '</strong></span><span class="ranking-risk-pill-v198">Risco: <strong>' + esc(riskLabel()) + '</strong></span></div></div>' +
+      '<div class="ranking-top-table" role="table" aria-label="' + esc(title) + '">' + body + '</div>' +
+    '</section>';
+  }
+  function renderTop(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campo = campoPorPeriodo(periodo);
+    const top = sortBy(base, campo).slice(0,10);
+    const rows = top.map(function(r,i){ return topRow(r,i,campo,periodo); }).join('') || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>';
+    return board('Top 10 fundos no período', 'Ranking por rentabilidade · ' + periodoLabel(periodo), '<div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span>% CDI no período</span></div>' + rows, periodTabs('topFundos', periodo, ['mes','ano','12m']));
+  }
+  function renderCategoria(base){
+    const top12 = sortBy(base, 'Acum. 12M (%)');
+    const catMap = {};
+    top12.forEach(function(r){ const cat = r.Categoria || '—'; if(!catMap[cat]) catMap[cat] = r; });
+    const rows = Object.entries(catMap).slice(0,12).map(function(entry){
+      const cat = entry[0], r = entry[1], nome = cleanFund(r.Fundo);
+      return '<article class="ranking-cat-mini ranking-cat-row-v457 ranking-cat-row-v531">' +
+        '<span>' + esc(shortCat(cat)) + '</span>' +
+        '<strong class="ranking-value-standard ' + retClass(r['Acum. 12M (%)']) + '">' + esc(pct(r['Acum. 12M (%)'])) + '</strong>' +
+        '<small title="' + esc(nome) + '"><span class="ranking-cat-name-full-v531">' + esc(nome) + '</span><span class="ranking-cat-name-short-v531">' + esc(compactFundName(nome)) + '</span></small>' +
+      '</article>';
+    }).join('') || '<div class="ranking-empty-v50">Sem categorias suficientes.</div>';
+    return '<section class="ranking-exec-secondary ranking-exec-secondary-single-v195 ranking-view-board-v546"><div class="ranking-category-panel"><div class="ranking-panel-head"><h3>Melhores por categoria</h3><p>Top fundo de cada classe · 12 meses</p></div><div class="ranking-cat-grid-v50">' + rows + '</div></div></section>';
+  }
+  function renderDestaques(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.destaques) ? activeRankPeriods.destaques : 'mes';
+    const campo = campoPorPeriodo(periodo);
+    const altas = sortBy(base, campo).slice(0,5);
+    const quedas = sortBy(base, campo, true).filter(function(r){ return num(r[campo]) < 0; }).slice(0,5);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Fundo</span><span>Retorno</span><span></span></div>' +
+      altas.map(function(r,i){ return simpleRow(medal(i), cleanFund(r.Fundo), shortCat(r.Categoria) + ' · alta no período', pct(r[campo]), retClass(r[campo])); }).join('') +
+      '<div class="ranking-view-subhead-v546">Maiores quedas</div>' +
+      (quedas.map(function(r,i){ return simpleRow((i+1) + 'º', cleanFund(r.Fundo), shortCat(r.Categoria) + ' · queda no período', pct(r[campo]), retClass(r[campo])); }).join('') || '<div class="ranking-empty-v50">Sem retornos negativos neste recorte.</div>');
+    return board('Destaques do período', 'Maiores altas e quedas · ' + periodoLabel(periodo), body, periodTabs('destaques', periodo, ['dia','mes','ano','12m']));
+  }
+  function renderRentabilidade(base){
+    const periodo = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campo = campoPorPeriodo(periodo);
+    const dashboard = periodo === '12m' ? dashboardCategories().filter(function(d){ return d.ret !== null; }) : [];
+    const cats = (dashboard.length ? dashboard : groupCategories(base, campo).filter(function(d){ return d.ret !== null; }))
+      .sort(function(a,b){ return b.ret - a.ret; })
+      .slice(0,8);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>Retorno</span><span></span></div>' +
+      cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · ' + plTxt(d.pl), pct(d.ret), retClass(d.ret)); }).join('');
+    return board('Categorias por rentabilidade', 'Retorno médio ponderado por PL · ' + periodoLabel(periodo), body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>', periodTabs('topFundos', periodo, ['mes','ano','12m']));
+  }
+  function renderPL(base){
+    const dashboard = dashboardCategories().filter(function(d){ return d.pl !== null; });
+    const cats = (dashboard.length ? dashboard : groupCategories(base, 'Acum. 12M (%)'))
+      .sort(function(a,b){ return b.pl - a.pl; })
+      .slice(0,8);
+    const body = '<div class="ranking-top-header"><span>Pos.</span><span>Categoria</span><span>PL</span><span></span></div>' +
+      cats.map(function(d,i){ return simpleRow(medal(i), shortCat(d.cat), d.qtd + ' fundos · rent. 12M ' + pct(d.ret), plTxt(d.pl), 'zero'); }).join('');
+    return board('Categorias por patrimônio', 'Concentração de patrimônio líquido por classe', body || '<div class="ranking-empty-v50">Sem dados suficientes.</div>');
+  }
+  function syncTabs(){
+    qa('[data-rank-view]').forEach(function(btn){
+      const active = btn.dataset.rankView === activeRankView;
+      btn.classList.toggle('active', active);
+      btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+  }
+  function preserveAttention(grid){
+    const aside = q('#rankingAttentionV136');
+    if(aside && aside.parentNode) aside.parentNode.removeChild(aside);
+    return aside;
+  }
+  function restoreAttention(grid, aside){
+    if(!grid || !aside || !isDesktop()) return;
+    aside.classList.add('ranking-attention-strip-v534');
+    const boardEl = q('.ranking-view-board-v546', grid);
+    if(boardEl) grid.insertBefore(aside, boardEl);
+    else grid.appendChild(aside);
+  }
+  function renderRankingsV546(){
+    const grid = q('#rankingGrid');
+    if(!grid || typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
+    document.documentElement.classList.add('desktop-ranking-tabs-funcionais-v546','desktop-ranking-numeros-leves-v547');
+    const meta = q('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_NUMEROS_LEVES_V547';
+    syncTabs();
+
+    const base = baseRows();
+    const periodoTop = (typeof activeRankPeriods !== 'undefined' && activeRankPeriods.topFundos) ? activeRankPeriods.topFundos : '12m';
+    const campoTop = campoPorPeriodo(periodoTop);
+    const top = sortBy(base, campoTop);
+    const top12 = sortBy(base, 'Acum. 12M (%)');
+    const worst12 = sortBy(base, 'Acum. 12M (%)', true).find(function(r){ return num(r['Acum. 12M (%)']) < 0; });
+    const bestMonth = sortBy(base, 'Acum. Mes (%)')[0];
+    const dashboardCats = dashboardCategories().filter(function(d){ return d.pl !== null; });
+    const cats = (dashboardCats.length ? dashboardCats : groupCategories(base, 'Acum. 12M (%)')).sort(function(a,b){ return b.pl - a.pl; });
+    const maiorPL = cats[0];
+
+    const summary = activeRankView === 'top' ? '<section class="ranking-exec-summary" aria-label="Destaques dos rankings">' +
+      summaryCard('best','Melhor 12M', top12[0] ? pct(top12[0]['Acum. 12M (%)']) : '—', top12[0] ? cleanFund(top12[0].Fundo) : '—', top12[0] ? cdiRatioTxt(top12[0],'12m') + ' do CDI · ' + shortCat(top12[0].Categoria) : '') +
+      summaryCard('worst','Pior 12M', worst12 ? pct(worst12['Acum. 12M (%)']) : '—', worst12 ? cleanFund(worst12.Fundo) : 'Sem retorno negativo', worst12 ? shortCat(worst12.Categoria) : '') +
+      summaryCard('month','Melhor mês', bestMonth ? pct(bestMonth['Acum. Mes (%)']) : '—', bestMonth ? cleanFund(bestMonth.Fundo) : '—', bestMonth ? shortCat(bestMonth.Categoria) : '') +
+      summaryCard('pl','Maior PL', maiorPL ? plTxt(maiorPL.pl) : '—', maiorPL ? shortCat(maiorPL.cat) : '—', maiorPL ? maiorPL.qtd + ' fundos' : '') +
+    '</section>' : '';
+
+    const views = {
+      top: renderTop,
+      categoria: renderCategoria,
+      destaques: renderDestaques,
+      rentabilidade: renderRentabilidade,
+      pl: renderPL
+    };
+    const aside = preserveAttention(grid);
+    grid.className = 'ranking-grid ranking-executive-v50 ranking-main-v136 ranking-tabs-active-v546';
+    grid.setAttribute('data-active-rank-view', activeRankView || 'top');
+    grid.innerHTML = summary + (views[activeRankView] || views.top)(base);
+    restoreAttention(grid, aside);
+  }
+
+  function install(){
+    if(!isDesktop()) return;
+    window.renderRankings = renderRankingsV546;
+    try{ renderRankings = renderRankingsV546; }catch(e){}
+    if(typeof allRows !== 'undefined' && Array.isArray(allRows) && allRows.length) renderRankingsV546();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, {once:true});
+  else install();
+  window.addEventListener('load', install, {once:true});
+  setTimeout(install, 250);
+  setTimeout(install, 1200);
+})();
+
+
+/* =========================================================
+   PATCH v549 — Desktop: Dolar PTAX sempre aberto, sem toggle
+   ========================================================= */
+(function desktopDolarSempreAbertoV549(){
+  if(window.__desktopDolarSempreAbertoV549Installed) return;
+  window.__desktopDolarSempreAbertoV549Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function forceOpen(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-dolar-sempre-aberto-v549');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SEMPRE_ABERTO_V549';
+
+    var sec = document.getElementById('sec-dolar');
+    if(!sec) return;
+    sec.classList.add('section-expanded');
+    sec.classList.remove('section-collapsed','dolar-details-collapsed-v542');
+    sec.setAttribute('aria-expanded','true');
+    sec.dataset.desktopDesiredOpenV544 = 'true';
+    sec.dataset.desktopDolarAlwaysOpenV549 = '1';
+
+    sec.querySelectorAll('.dolar-more-v539, [data-desktop-section-toggle="sec-dolar"]').forEach(function(btn){
+      btn.setAttribute('aria-hidden','true');
+      btn.removeAttribute('data-desktop-section-toggle');
+      btn.style.setProperty('display','none','important');
+      btn.style.setProperty('visibility','hidden','important');
+      btn.style.setProperty('pointer-events','none','important');
+    });
+
+    ['dolarChartPanel','ptaxStatsCard'].forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      el.hidden = false;
+      el.setAttribute('aria-hidden','false');
+      el.style.removeProperty('display');
+      el.style.removeProperty('max-height');
+      el.style.removeProperty('opacity');
+      el.style.removeProperty('visibility');
+    });
+
+    var footer = sec.querySelector('.dolar-compact-footer');
+    if(footer){
+      footer.hidden = false;
+      footer.setAttribute('aria-hidden','false');
+      footer.style.removeProperty('display');
+      footer.style.removeProperty('max-height');
+      footer.style.removeProperty('opacity');
+      footer.style.removeProperty('visibility');
+    }
+  }
+
+  var previousToggle = window.toggleDesktopCompactSection;
+  window.toggleDesktopCompactSection = function(event, sectionId){
+    if(sectionId === 'sec-dolar'){
+      if(event){
+        if(typeof event.preventDefault === 'function') event.preventDefault();
+        if(typeof event.stopPropagation === 'function') event.stopPropagation();
+        if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      }
+      forceOpen();
+      return false;
+    }
+    return typeof previousToggle === 'function' ? previousToggle.apply(this, arguments) : false;
+  };
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', forceOpen, {once:true});
+  else forceOpen();
+  window.addEventListener('load', forceOpen, {once:true});
+  window.addEventListener('pageshow', forceOpen, {passive:true});
+  [80, 250, 700, 1500, 3000].forEach(function(delay){
+    setTimeout(forceOpen, delay);
+  });
+})();
+
+
+/* =========================================================
+   PATCH v555-final — Reinstala ranking novo apos patches legados
+   ========================================================= */
+(function desktopRankingRedesignV555Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function installFinal(){
+    if(!isDesktop()) return;
+    if(window.__desktopRankingPodiumV562Installed && typeof window.__renderRankingsV562 === 'function'){
+      window.renderRankings = window.__renderRankingsV562;
+      try{ renderRankings = window.__renderRankingsV562; }catch(e){}
+      try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 stable', e); }
+      return;
+    }
+    if(!window.__renderRankingsV555) return;
+    document.documentElement.classList.add('desktop-ranking-redesign-v555','desktop-ranking-compact-cdi-v556','desktop-ranking-cdi-pl-fix-v557');
+    window.renderRankings = window.__renderRankingsV555;
+    try{ renderRankings = window.__renderRankingsV555; }catch(e){}
+    try{ if(typeof window.__bindRankingV555 === 'function') window.__bindRankingV555(); }catch(e){}
+    try{ window.__renderRankingsV555(); }catch(e){ console.error('ranking v555 final', e); }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installFinal, {once:true});
+  else installFinal();
+  window.addEventListener('load', installFinal, {once:true});
+  [120, 500, 1300, 2600].forEach(function(delay){ setTimeout(installFinal, delay); });
+})();
+
+
+/* =========================================================
+   PATCH v558 — Desktop: busca limpa, docs compactos e CNPJ copiavel
+   ========================================================= */
+function buildDocsCompactos(row){
+  const docs = obterDocsFundoCompactos(row);
+  if(!docs.length) return '<span class="doc-mini-empty">—</span>';
+
+  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
+  const principal = boletim || docs[0];
+  const secundarios = docs.filter(d => d.url !== principal.url);
+
+  const primaryLabel = boletim ? 'Boletim' : principal.curto;
+  const primaryTitle = boletim ? 'Boletim Comercial' : principal.label;
+  const primary = `
+    <a class="doc-mini-primary doc-mini-primary-v558" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(primaryTitle)}">${primaryLabel}</a>
+  `;
+
+  const more = secundarios.length ? `
+    <details class="doc-more-v558" onclick="event.stopPropagation()">
+      <summary title="Abrir demais documentos">Mais</summary>
+      <div class="doc-more-menu-v558">
+        ${secundarios.map(d=>`
+          <a class="doc-mini doc-mini-secondary doc-mini-secondary-v558" href="${htmlAttr(d.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(d.label)}">
+            <strong>${htmlAttr(d.curto)}</strong><span>${htmlAttr(d.label)}</span>
+          </a>
+        `).join('')}
+      </div>
+    </details>
+  ` : '';
+
+  return `<div class="docs-mini-wrap docs-mini-wrap-v558">${primary}${more}</div>`;
+}
+
+(function desktopCatalogDocsCnpjV558(){
+  if(window.__desktopCatalogDocsCnpjV558Installed) return;
+  window.__desktopCatalogDocsCnpjV558Installed = true;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function copyText(text){
+    if(navigator.clipboard && window.isSecureContext){
+      return navigator.clipboard.writeText(text);
+    }
+    return new Promise(function(resolve, reject){
+      try{
+        var textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly','');
+        textarea.style.position = 'fixed';
+        textarea.style.left = '-9999px';
+        document.body.appendChild(textarea);
+        textarea.select();
+        var ok = document.execCommand('copy');
+        textarea.remove();
+        ok ? resolve() : reject(new Error('copy failed'));
+      }catch(err){ reject(err); }
+    });
+  }
+
+  function enhanceCnpjCells(){
+    if(!isDesktop()) return;
+    document.querySelectorAll('#tableBody .fundo-cell-meta').forEach(function(meta){
+      if(meta.dataset.v558Cnpj === '1') return;
+      var cnpj = meta.querySelector('.fundo-cnpj-sub');
+      if(!cnpj) return;
+      var formatted = cnpj.textContent.replace(/^CNPJ\s*/i,'').trim();
+      if(!formatted) return;
+      meta.dataset.v558Cnpj = '1';
+      cnpj.classList.add('fundo-cnpj-sub-v558');
+      var pl = meta.querySelector('.fundo-pl-sub');
+      if(pl) pl.classList.add('fundo-pl-sub-hidden-v558');
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cnpj-copy-btn-v558';
+      btn.dataset.copyCnpjV558 = formatted;
+      btn.setAttribute('aria-label','Copiar CNPJ ' + formatted);
+      btn.title = 'Copiar CNPJ';
+      btn.textContent = 'Copiar';
+      cnpj.insertAdjacentElement('afterend', btn);
+    });
+  }
+
+  function sync(){
+    document.documentElement.classList.add('desktop-catalog-docs-cnpj-v558');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_CATALOG_DOCS_CNPJ_V558';
+    enhanceCnpjCells();
+  }
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest('[data-copy-cnpj-v558]') : null;
+    if(!btn) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    var value = btn.dataset.copyCnpjV558 || '';
+    if(!value) return;
+    var old = btn.textContent;
+    copyText(value).then(function(){
+      btn.textContent = 'Copiado';
+      btn.classList.add('is-copied');
+      setTimeout(function(){
+        btn.textContent = old || 'Copiar';
+        btn.classList.remove('is-copied');
+      }, 1200);
+    }).catch(function(){
+      btn.textContent = 'Erro';
+      setTimeout(function(){ btn.textContent = old || 'Copiar'; }, 1200);
+    });
+  }, true);
+
+  var previousRender = typeof render === 'function' ? render : null;
+  if(previousRender && !previousRender.__v558Wrapped){
+    var wrappedRender = function(){
+      var result = previousRender.apply(this, arguments);
+      setTimeout(sync, 0);
+      return result;
+    };
+    wrappedRender.__v558Wrapped = true;
+    try{ render = wrappedRender; }catch(_){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  document.addEventListener('elton:fund-cards-rendered', sync);
+  [100, 350, 900, 1800].forEach(function(delay){ setTimeout(sync, delay); });
+
+  var tbody = document.getElementById('tableBody');
+  if(tbody && window.MutationObserver){
+    new MutationObserver(function(){ sync(); }).observe(tbody, {childList:true, subtree:false});
+  }
+})();
+
+
+/* =========================================================
+   PATCH v559 — Desktop: documentos em menu e detalhe operacional enxuto
+   ========================================================= */
+function buildDocsCompactos(row){
+  const docs = obterDocsFundoCompactos(row);
+  if(!docs.length) return '<span class="doc-mini-empty">—</span>';
+
+  const boletim = docs.find(d => d.csvKey === 'doc_boletim' || d.label === 'Boletim Comercial');
+  const principal = boletim || docs[0];
+  const secundarios = docs.filter(d => d.url !== principal.url);
+  const primaryLabel = boletim ? 'Bol.' : principal.curto;
+  const primaryTitle = boletim ? 'Boletim Comercial' : principal.label;
+
+  const primary = `<a class="doc-mini-primary doc-mini-primary-v558 doc-mini-primary-v559" href="${htmlAttr(principal.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" title="${htmlAttr(primaryTitle)}">${primaryLabel}</a>`;
+
+  const more = secundarios.length
+    ? `<button type="button" class="doc-more-button-v559 doc-more-button-v570" data-docs-other-v559="${htmlAttr(encodeURIComponent(JSON.stringify(secundarios.map(d=>({label:d.label,curto:d.curto,url:d.url})))))}" aria-haspopup="menu" aria-label="Ver ${secundarios.length} documentos complementares" title="Ver ${secundarios.length} documentos complementares">+${secundarios.length}</button>`
+    : '';
+
+  return `<div class="docs-mini-wrap docs-mini-wrap-v558 docs-mini-wrap-v559 docs-mini-wrap-v570">${primary}${more}</div>`;
+}
+
+function buildDetailPanel(r,colspan){
+  const d = obterDadosOperacionaisFundo(r);
+  const capCls = classeStatusOperacional(d.captacao.status,'captacao');
+  const capLabel = capCls === 'positive' ? 'Aberta' : capCls === 'negative' ? 'Fechada' : (d.captacao.texto || 'Não informada');
+  const code = detailValueV158(r,['codfundo','Código SIART','Codigo SIART','SIART','Código SIICO','Codigo SIICO','SIICO','Código do Fundo','Codigo do Fundo','Cod Fundo','Cód. Fundo']);
+  const taxAdm = detailPercentV158(detailValueV158(r,['Taxa Adm (%)']));
+  const profile = detailValueV158(r,['Perfil de Risco']);
+  const conversionApp = detailValueV158(r,['Conversao Aplicacao','Conversão Aplicação']);
+  const conversionRed = detailValueV158(r,['Conversao Resgate','Conversão Resgate']);
+  const paymentRed = detailValueV158(r,['Pagamento Resgate','Pagamento do Resgate']);
+  const appInitial = detailMoneyV158(detailValueV158(r,['Aplicacao Minima (R$)','Aplicação Mínima','Aplicacao Minima']));
+  const appAdditional = detailMoneyV158(detailValueV158(r,['Aplicacao Adicional Minima (R$)','Aplicação Adicional Mínima']));
+  const redemptionMin = detailMoneyV158(detailValueV158(r,['Resgate Minimo (R$)','Resgate Mínimo']));
+  const balanceMin = detailMoneyV158(detailValueV158(r,['Saldo Minimo (R$)','Saldo Mínimo']));
+  const trib = d.tributacao && d.tributacao.texto ? d.tributacao.texto : detailValueV158(r,['Classificação Tributária','Classificacao Tributaria','Tributação','Tributacao']);
+  const audience = detailAudienceSemanticV225(detailAudienceV158(detailValueV158(r,['Público Alvo','Publico Alvo'])));
+  const audienceText = audience.length ? audience.map(item=>item.short || item.label).join(' · ') : 'Não informado';
+  const urlFund = isFallbackUrl(r) ? '' : getFundUrl(r);
+
+  const field = (label, value, cls='') => `<div class="detail-field-v559 ${cls}"><span>${htmlAttr(label)}</span><strong>${htmlAttr(value || '—')}</strong></div>`;
+  const link = (href, label, cls='') => href ? `<a class="detail-doc-link-v559 ${cls}" href="${htmlAttr(href)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">${label}</a>` : '';
+
+  return `<tr class="detail-row detail-row-v559"><td colspan="${colspan}" style="padding:0">
+    <div class="detail-panel detail-panel-v559">
+      <div class="detail-compact-head-v559">
+        <div>
+          <strong>Dados operacionais do fundo</strong>
+          <small>Campos essenciais para consulta rápida no atendimento.</small>
+        </div>
+        <div class="detail-doc-actions-v559">
+          ${urlFund ? link(urlFund,'Página do fundo') : ''}
+        </div>
+      </div>
+
+      <div class="detail-key-grid-v559">
+        ${field('Captação', capLabel, capCls)}
+        ${field('Estratégia', d.estrategia.texto)}
+        ${field('Benchmark', d.benchmark.texto)}
+        ${field('Taxa adm.', taxAdm)}
+        ${field('Perfil de risco', profile)}
+        ${field('Código SIART', code)}
+        ${field('Saldo mínimo', balanceMin)}
+        ${field('Tributação', trib)}
+        ${field('Público-alvo', audienceText, 'wide')}
+      </div>
+
+      <div class="detail-oper-grid-v559">
+        <section class="detail-oper-card-v559 application">
+          <h4>Aplicação</h4>
+          <div class="detail-oper-fields-v559">
+            ${field('Horário máximo', d.horarios.aplicacao)}
+            ${field('Conversão da cota', conversionApp)}
+            ${field('Aplicação inicial', appInitial)}
+            ${field('Aplicação adicional', appAdditional)}
+          </div>
+        </section>
+        <section class="detail-oper-card-v559 redemption">
+          <h4>Resgate</h4>
+          <div class="detail-oper-fields-v559">
+            ${field('Horário máximo', d.horarios.resgate)}
+            ${field('Conversão da cota', conversionRed)}
+            ${field('Crédito em conta', paymentRed)}
+            ${field('Resgate mínimo', redemptionMin)}
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </td></tr>`;
+}
+
+(function desktopDocsMenuAndDetailV559(){
+  if(window.__desktopDocsMenuAndDetailV559Installed) return;
+  window.__desktopDocsMenuAndDetailV559Installed = true;
+
+  function closeMenu(){
+    var old = document.getElementById('docMenuPortalV559');
+    if(old) old.remove();
+  }
+
+  function openDocsMenu(btn){
+    closeMenu();
+    var docs = [];
+    try{ docs = JSON.parse(decodeURIComponent(btn.dataset.docsOtherV559 || '[]')); }catch(_){}
+    if(!docs.length) return;
+    var rect = btn.getBoundingClientRect();
+    var menu = document.createElement('div');
+    menu.id = 'docMenuPortalV559';
+    menu.className = 'doc-menu-portal-v559';
+    menu.setAttribute('role','menu');
+    menu.innerHTML = `<div class="doc-menu-head-v559">Documentos complementares</div>` + docs.map(function(d){
+      return `<a role="menuitem" href="${htmlAttr(d.url)}" target="_blank" rel="noopener"><strong>${htmlAttr(d.curto)}</strong><span>${htmlAttr(d.label)}</span></a>`;
+    }).join('');
+    document.body.appendChild(menu);
+    var width = Math.min(280, Math.max(220, menu.offsetWidth || 240));
+    var left = Math.min(window.innerWidth - width - 12, Math.max(12, rect.right - width));
+    var top = Math.min(window.innerHeight - menu.offsetHeight - 12, rect.bottom + 8);
+    menu.style.left = left + 'px';
+    menu.style.top = Math.max(12, top) + 'px';
+  }
+
+  function sync(){
+    document.documentElement.classList.add('desktop-detail-compact-v559','desktop-detail-sem-cnpj-v560','desktop-detail-color-hierarchy-v561');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DETAIL_COLOR_HIERARCHY_V561';
+  }
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest('.doc-more-button-v559') : null;
+    if(btn){
+      ev.preventDefault();
+      ev.stopPropagation();
+      openDocsMenu(btn);
+      return;
+    }
+    if(!(ev.target && ev.target.closest && ev.target.closest('#docMenuPortalV559'))) closeMenu();
+  }, true);
+
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape') closeMenu();
+  });
+
+  var previousRender = typeof render === 'function' ? render : null;
+  if(previousRender && !previousRender.__v559Wrapped){
+    var wrappedRender = function(){
+      var result = previousRender.apply(this, arguments);
+      setTimeout(sync, 0);
+      return result;
+    };
+    wrappedRender.__v559Wrapped = true;
+    try{ render = wrappedRender; }catch(_){}
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  [120, 500, 1300].forEach(function(delay){
+    setTimeout(function(){
+      sync();
+    }, delay);
+  });
+})();
+
+
+/* PATCH v567-final — reinstala ranking podio e trava toolbar no fim do arquivo */
+(function desktopRankingPodiumV562Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function lockToolbar(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(
+      'desktop-ranking-podium-v562',
+      'desktop-ranking-semantico-cdi-v563',
+      'desktop-ranking-cdi-ano-scale-v564',
+      'desktop-ranking-filters-centered-v565',
+      'desktop-ranking-stable-v566',
+      'desktop-ranking-toolbar-locked-v567',
+	      'desktop-ranking-compact-height-v568',
+	      'desktop-ranking-ultra-compact-v569',
+	      'desktop-docs-compact-v570',
+	      'desktop-hide-closed-month-launch-v571',
+	      'desktop-rates-compact-v572',
+	      'desktop-dolar-no-collapse-v573',
+	      'desktop-monthly-indicators-v574',
+	      'desktop-rates-reference-slim-v575',
+	      'desktop-monthly-us-markets-v576',
+	      'desktop-monthly-comparison-chart-v580',
+	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
+	    );
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+    var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
+    if(closedMonthLaunch){
+      closedMonthLaunch.style.setProperty('display','none','important');
+      closedMonthLaunch.style.setProperty('visibility','hidden','important');
+      closedMonthLaunch.style.setProperty('height','0','important');
+      closedMonthLaunch.style.setProperty('min-height','0','important');
+      closedMonthLaunch.style.setProperty('margin','0','important');
+      closedMonthLaunch.style.setProperty('padding','0','important');
+      closedMonthLaunch.style.setProperty('border','0','important');
+      closedMonthLaunch.style.setProperty('overflow','hidden','important');
+    }
+    var toolbar = document.querySelector('#rankingsSection .ranking-toolbar-v136');
+    if(toolbar){
+      toolbar.style.setProperty('width','min(100%, 940px)','important');
+      toolbar.style.setProperty('max-width','940px','important');
+      toolbar.style.setProperty('display','grid','important');
+      toolbar.style.setProperty('grid-template-columns','190px 310px 310px','important');
+      toolbar.style.setProperty('grid-auto-flow','row','important');
+      toolbar.style.setProperty('grid-auto-columns','initial','important');
+      toolbar.style.setProperty('justify-content','center','important');
+      toolbar.style.setProperty('align-items','end','important');
+      toolbar.style.setProperty('column-gap','14px','important');
+      toolbar.style.setProperty('row-gap','10px','important');
+      toolbar.style.setProperty('margin','5px auto 8px','important');
+      toolbar.style.setProperty('padding','8px 12px','important');
+      toolbar.style.setProperty('border-radius','11px','important');
+      if(window.matchMedia && window.matchMedia('(max-width: 1050px)').matches){
+        toolbar.style.setProperty('width','min(100%, 560px)','important');
+        toolbar.style.setProperty('max-width','560px','important');
+        toolbar.style.setProperty('grid-template-columns','1fr','important');
+      }
+    }
+    document.querySelectorAll('#rankingsSection .ranking-select-v136').forEach(function(select){
+      select.style.setProperty('min-height','32px','important');
+      select.style.setProperty('padding-top','5px','important');
+      select.style.setProperty('padding-bottom','5px','important');
+    });
+    var row = document.querySelector('#rankingsSection .ranking-filter-row-compat-v136');
+    if(row){
+      row.style.setProperty('display','none','important');
+      row.style.setProperty('visibility','hidden','important');
+      row.style.setProperty('height','0','important');
+      row.style.setProperty('min-height','0','important');
+      row.style.setProperty('margin','0','important');
+      row.style.setProperty('padding','0','important');
+      row.style.setProperty('overflow','hidden','important');
+    }
+  }
+  function reinstall(){
+    if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
+    lockToolbar();
+    window.renderRankings = window.__renderRankingsV562;
+    try{ renderRankings = window.__renderRankingsV562; }catch(_){}
+    try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 final', e); }
+    lockToolbar();
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', reinstall, {once:true});
+  else reinstall();
+  window.addEventListener('load', reinstall, {once:true});
+  [80, 300, 900, 1800, 3200, 7000, 12000, 23000, 36000].forEach(function(delay){ setTimeout(reinstall, delay); });
+})();
+
+
+/* PATCH v572-final — compacta Juros e CDI no desktop sem alterar dados */
+(function desktopRatesCompactV572Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function sync(){
+    if(!isDesktop()) return;
+	    document.documentElement.classList.add(
+	      'desktop-hide-closed-month-launch-v571',
+	      'desktop-rates-compact-v572',
+	      'desktop-rates-reference-slim-v575',
+	      'desktop-monthly-us-markets-v576',
+	      'desktop-monthly-comparison-chart-v580',
+	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
+	    );
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  [120, 500, 1300, 3200, 7000, 14000, 23000, 36000].forEach(function(delay){ setTimeout(sync, delay); });
+})();
+
+
+/* PATCH v574-final — indicadores mensais visiveis no desktop */
+(function desktopMonthlyIndicatorsV574Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function sync(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(
+      'desktop-hide-closed-month-launch-v571',
+	      'desktop-rates-compact-v572',
+	      'desktop-dolar-no-collapse-v573',
+	      'desktop-monthly-indicators-v574',
+	      'desktop-rates-reference-slim-v575',
+	      'desktop-monthly-us-markets-v576',
+	      'desktop-monthly-comparison-chart-v580',
+	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
+	    );
+
+    var monthly = document.getElementById('monthlyIndicatorsV445');
+    if(monthly){
+      monthly.dataset.desktopV574 = '1';
+      monthly.style.setProperty('display','block','important');
+    }
+
+	    var cdiMonths = document.getElementById('cdiMonthCarouselV322');
+	    if(cdiMonths){
+	      cdiMonths.style.setProperty('display','none','important');
+      cdiMonths.style.setProperty('visibility','hidden','important');
+      cdiMonths.style.setProperty('height','0','important');
+      cdiMonths.style.setProperty('min-height','0','important');
+      cdiMonths.style.setProperty('margin','0','important');
+      cdiMonths.style.setProperty('padding','0','important');
+	      cdiMonths.style.setProperty('overflow','hidden','important');
+	    }
+	    var cdiHistory = document.getElementById('cdiYearHistory');
+	    if(cdiHistory){
+	      cdiHistory.style.setProperty('display','none','important');
+	      cdiHistory.style.setProperty('visibility','hidden','important');
+	      cdiHistory.style.setProperty('height','0','important');
+	      cdiHistory.style.setProperty('min-height','0','important');
+	      cdiHistory.style.setProperty('max-height','0','important');
+	      cdiHistory.style.setProperty('margin','0','important');
+	      cdiHistory.style.setProperty('padding','0','important');
+	      cdiHistory.style.setProperty('border','0','important');
+	      cdiHistory.style.setProperty('overflow','hidden','important');
+	    }
+
+    try{
+      if(window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__?.render){
+        window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__.render();
+      }
+    }catch(_){}
+
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  document.addEventListener('elton:market-data-refresh', sync);
+  [120, 500, 1300, 3200, 7000, 14000, 23000, 36000].forEach(function(delay){ setTimeout(sync, delay); });
+})();
+
+
+/* PATCH v573-final — dolar sempre aberto e sem botao Recolher no desktop */
+(function desktopDolarNoCollapseV573Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function sync(){
+    if(!isDesktop()) return;
+	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588');
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+
+    var body = document.getElementById('dolarTimelineBody');
+    if(body){
+      body.classList.add('open');
+      body.removeAttribute('hidden');
+      body.style.setProperty('display','block','important');
+      body.style.setProperty('max-height','none','important');
+      body.style.setProperty('height','auto','important');
+      body.style.setProperty('overflow','visible','important');
+    }
+
+    var toggle = document.getElementById('dolarTimelineToggle');
+    if(toggle){
+      toggle.setAttribute('aria-hidden','true');
+      toggle.setAttribute('tabindex','-1');
+      toggle.setAttribute('aria-expanded','true');
+      toggle.style.setProperty('display','none','important');
+      toggle.style.setProperty('visibility','hidden','important');
+      toggle.style.setProperty('width','0','important');
+      toggle.style.setProperty('height','0','important');
+      toggle.style.setProperty('min-width','0','important');
+      toggle.style.setProperty('min-height','0','important');
+      toggle.style.setProperty('margin','0','important');
+      toggle.style.setProperty('padding','0','important');
+      toggle.style.setProperty('border','0','important');
+      toggle.style.setProperty('overflow','hidden','important');
+      toggle.style.setProperty('pointer-events','none','important');
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  [120, 500, 1300, 3200, 7000, 14000, 23000, 36000].forEach(function(delay){ setTimeout(sync, delay); });
+})();
+
+
+/* PATCH v588 — menu lateral: impede Mercado/Poupanca/Dolar de invadir a navegacao */
+(function desktopSideNavMarketFixV588(){
+  var BUILD = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+  var PATCH_CLASS = 'desktop-side-nav-market-fix-v588';
+  var WIDE_QUERY = '(min-width: 1180px)';
+  var AFFECTED_INNER = [
+    '#sec-mercado > .section-title',
+    '#sec-mercado #monthlyIndicatorsV445',
+    '#sec-mercado .indic-ref-bar',
+    '#sec-mercado .market-reference-v167',
+    '#sec-mercado .rates-reference-v167',
+    '#sec-mercado .rates-executive-v255',
+    '#sec-mercado .savings-reference-v167',
+    '#sec-dolar > .section-title',
+    '#sec-dolar .dolar-compact-card',
+    '#sec-dolar #dolarChartPanel',
+    '#sec-dolar #ptaxStatsCard',
+    '#sec-dolar .dolar-compact-footer',
+    '#sec-focus > .section-title',
+    '#sec-graficos > .section-title',
+    '#siteSources > .section-title'
+  ].join(',');
+
+  function isWide(){
+    return !window.matchMedia || window.matchMedia(WIDE_QUERY).matches;
+  }
+
+  function set(el, prop, value){
+    if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function clear(el, prop){
+    if(el) el.style.removeProperty(prop);
+  }
+
+  function getOffset(page, nav){
+    if(!page || !nav) return 0;
+    var pageLeft = page.getBoundingClientRect().left || 0;
+    var navRight = nav.getBoundingClientRect().right || 0;
+    var gap = window.innerWidth <= 1360 ? 12 : 14;
+    return Math.max(0, Math.ceil(navRight - pageLeft + gap));
+  }
+
+  function apply(){
+    var page = document.getElementById('topo');
+    var nav = document.getElementById('desktopAnchorNavV131');
+    if(!page || !nav) return;
+
+    if(!isWide()){
+      Array.prototype.forEach.call(page.children, function(child){
+        if(child && child.dataset && child.dataset.sideNavFixV588 === '1'){
+          ['margin-left','width','max-width','min-width','box-sizing'].forEach(function(prop){ clear(child, prop); });
+          delete child.dataset.sideNavFixV588;
+        }
+      });
+      return;
+    }
+
+    document.documentElement.classList.add(
+      'desktop-side-nav-v585',
+      'desktop-side-nav-no-overlap-v586',
+      'desktop-hide-funds-heading-v587',
+      PATCH_CLASS
+    );
+
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    var offset = getOffset(page, nav);
+    var contentWidth = 'calc(100% - ' + offset + 'px)';
+
+    set(page, 'max-width', 'none');
+    set(page, 'width', '100%');
+    set(page, 'margin', '0');
+    set(page, 'padding', '18px 22px 88px 18px');
+    set(page, 'overflow-x', 'hidden');
+
+    Array.prototype.forEach.call(page.children, function(child){
+      if(!child || child === nav) return;
+      child.dataset.sideNavFixV588 = '1';
+      set(child, 'margin-left', offset + 'px');
+      set(child, 'width', contentWidth);
+      set(child, 'max-width', contentWidth);
+      set(child, 'min-width', '0');
+      set(child, 'box-sizing', 'border-box');
+    });
+
+    document.querySelectorAll(AFFECTED_INNER).forEach(function(el){
+      set(el, 'width', '100%');
+      set(el, 'max-width', '100%');
+      set(el, 'min-width', '0');
+      set(el, 'margin-left', '0');
+      set(el, 'margin-right', '0');
+      set(el, 'left', 'auto');
+      set(el, 'right', 'auto');
+      set(el, 'transform', 'none');
+      set(el, 'box-sizing', 'border-box');
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('resize', apply);
+  document.addEventListener('elton:market-data-refresh', apply);
+  document.addEventListener('elton:market-period-change', apply);
+  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 23000, 37000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v589 — trava final do #sec-mercado contra resets tardios */
+(function desktopSideNavMarketLockV589(){
+  var BUILD = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_LOCK_V589';
+  var PATCH_CLASS = 'desktop-side-nav-market-lock-v589';
+  var WIDE_QUERY = '(min-width: 1180px)';
+  var applying = false;
+  var raf = 0;
+  var intervalId = 0;
+
+  function isWide(){
+    return !window.matchMedia || window.matchMedia(WIDE_QUERY).matches;
+  }
+
+  function set(el, prop, value){
+    if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function getOffset(page, nav){
+    if(!page || !nav) return window.innerWidth <= 1360 ? 184 : 208;
+    var pageLeft = page.getBoundingClientRect().left || 0;
+    var navRight = nav.getBoundingClientRect().right || 0;
+    var gap = window.innerWidth <= 1360 ? 12 : 14;
+    return Math.max(window.innerWidth <= 1360 ? 184 : 208, Math.ceil(navRight - pageLeft + gap));
+  }
+
+  function apply(){
+    if(applying) return;
+    var page = document.getElementById('topo');
+    var nav = document.getElementById('desktopAnchorNavV131');
+    var mercado = document.getElementById('sec-mercado');
+    if(!page || !nav || !mercado || !isWide()) return;
+
+    applying = true;
+    try{
+      document.documentElement.classList.add(
+        'desktop-side-nav-v585',
+        'desktop-side-nav-no-overlap-v586',
+        'desktop-hide-funds-heading-v587',
+        'desktop-side-nav-market-fix-v588',
+        PATCH_CLASS
+      );
+
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      var offset = getOffset(page, nav);
+      var width = 'calc(100% - ' + offset + 'px)';
+
+      set(mercado, 'margin-left', offset + 'px');
+      set(mercado, 'margin-right', '0');
+      set(mercado, 'width', width);
+      set(mercado, 'max-width', width);
+      set(mercado, 'min-width', '0');
+      set(mercado, 'padding-left', '0');
+      set(mercado, 'padding-right', '0');
+      set(mercado, 'left', 'auto');
+      set(mercado, 'right', 'auto');
+      set(mercado, 'transform', 'none');
+      set(mercado, 'translate', 'none');
+      set(mercado, 'position', 'relative');
+      set(mercado, 'box-sizing', 'border-box');
+      set(mercado, 'z-index', '1');
+
+      mercado.querySelectorAll(':scope > *').forEach(function(child){
+        set(child, 'max-width', '100%');
+        set(child, 'min-width', '0');
+        set(child, 'box-sizing', 'border-box');
+      });
+    }finally{
+      applying = false;
+    }
+  }
+
+  function schedule(){
+    if(raf) return;
+    raf = requestAnimationFrame(function(){
+      raf = 0;
+      apply();
+    });
+  }
+
+  function installObserver(){
+    var mercado = document.getElementById('sec-mercado');
+    if(!mercado || mercado.dataset.sideNavLockV589 === '1') return;
+    mercado.dataset.sideNavLockV589 = '1';
+    var observer = new MutationObserver(function(records){
+      if(applying) return;
+      if(records.some(function(record){ return record.attributeName === 'style' || record.attributeName === 'class'; })){
+        schedule();
+      }
+    });
+    observer.observe(mercado, {attributes:true, attributeFilter:['style','class']});
+  }
+
+  function boot(){
+    apply();
+    installObserver();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+
+  window.addEventListener('load', boot, {once:true});
+  window.addEventListener('resize', schedule);
+  document.addEventListener('elton:market-data-refresh', schedule);
+  document.addEventListener('elton:market-period-change', schedule);
+  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 23000, 37000, 60000, 90000, 130000].forEach(function(delay){
+    setTimeout(boot, delay);
+  });
+
+  intervalId = setInterval(apply, 1500);
+  setTimeout(function(){
+    if(intervalId) clearInterval(intervalId);
+  }, 180000);
+})();
+
+
+/* PATCH v590 — ativa layout vertical do ranking por categoria no desktop */
+(function desktopRankingColumnsV590(){
+  var BUILD = 'ELTAUM_DESKTOP_RANKING_COLUMNS_V590';
+  var PATCH_CLASS = 'desktop-ranking-columns-v590';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [80, 250, 700, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v591 — estabiliza o primeiro carregamento do catalogo desktop */
+(function desktopInitialLoadStableV591(){
+  var BUILD = 'ELTAUM_DESKTOP_INITIAL_LOAD_STABLE_V591';
+  var PATCH_CLASS = 'desktop-initial-load-stable-v591';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var table = document.getElementById('mainTable');
+    var body = document.getElementById('tableBody');
+    if(table && body && body.children.length && table.style.display !== 'none'){
+      document.documentElement.classList.add('catalog-table-ready-v591');
+    }
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v592 — bloqueia visualmente Fundos ate a tabela estabilizar */
+(function desktopFundsLoadLockV592(){
+  var BUILD = 'ELTAUM_DESKTOP_FUNDS_LOAD_LOCK_V592';
+  var PATCH_CLASS = 'desktop-funds-load-lock-v592';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var table = document.getElementById('mainTable');
+    var body = document.getElementById('tableBody');
+    if(table && body && body.children.length && table.style.display !== 'none'){
+      document.documentElement.classList.add('catalog-table-ready-v591');
+    }
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [40, 100, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v593 — permite alternar USD/BRL pelo cabecalho das colunas EUA */
+(function desktopMonthlyUsHeaderCurrencyV593(){
+  var BUILD = 'ELTAUM_DESKTOP_MONTHLY_US_HEADER_CURRENCY_V593';
+  var PATCH_CLASS = 'desktop-monthly-us-header-currency-v593';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v594 — nomes curtos no catalogo desktop */
+(function desktopShortFundNamesV594(){
+  var BUILD = 'ELTAUM_DESKTOP_SHORT_FUND_NAMES_V594';
+  var PATCH_CLASS = 'desktop-short-fund-names-v594';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v595 — Boletim Focus com leitura de tendencia */
+(function desktopFocusTrendsV595(){
+  var BUILD = 'ELTAUM_DESKTOP_FOCUS_TRENDS_V595';
+  var PATCH_CLASS = 'desktop-focus-trends-v595';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v596 — Selic com YTD, periodo customizado e tooltip */
+(function desktopSelicYtdCustomTooltipV596(){
+  var BUILD = 'ELTAUM_DESKTOP_SELIC_YTD_CUSTOM_TOOLTIP_V596';
+  var PATCH_CLASS = 'desktop-selic-ytd-custom-tooltip-v596';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v597 — Header desktop com KPIs alinhados a direita */
+(function desktopHeaderKpisRightV597(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_KPIS_RIGHT_V597';
+  var PATCH_CLASS = 'desktop-header-kpis-right-v597';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v598 — Header desktop compacto */
+(function desktopHeaderKpisCompactV598(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_KPIS_COMPACT_V598';
+  var PATCH_CLASS = 'desktop-header-kpis-compact-v598';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v599 — Menu lateral com rotulos semanticos */
+(function desktopSideNavLabelsV599(){
+  var BUILD = 'ELTAUM_DESKTOP_SIDE_NAV_LABELS_V599';
+  var PATCH_CLASS = 'desktop-side-nav-labels-v599';
+  var LABELS = {
+    'sec-mercado':'Indicadores',
+    'sec-dolar':'Dólar PTAX',
+    'sec-focus':'Boletim Focus'
+  };
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function syncLabels(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    Object.keys(LABELS).forEach(function(target){
+      var strong = document.querySelector('#desktopAnchorNavV131 [data-anchor-target="' + target + '"] strong');
+      if(strong) strong.textContent = LABELS[target];
+    });
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', syncLabels, {once:true});
+  else syncLabels();
+  window.addEventListener('load', syncLabels, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(syncLabels, delay);
+  });
+})();
+
+
+/* PATCH v600 — Header KPIs sem corte */
+(function desktopHeaderKpisNoCutV600(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_KPIS_NO_CUT_V600';
+  var PATCH_CLASS = 'desktop-header-kpis-no-cut-v600';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v601 — Header executivo compacto */
+(function desktopHeaderTightExecutiveV601(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_TIGHT_EXECUTIVE_V601';
+  var PATCH_CLASS = 'desktop-header-tight-executive-v601';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v602 — Ajuste fino vertical dos KPIs do header */
+(function desktopHeaderKpiVerticalFineV602(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_KPI_VERTICAL_FINE_V602';
+  var PATCH_CLASS = 'desktop-header-kpi-vertical-fine-v602';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v603 — KPIs do header em linha unica */
+(function desktopHeaderKpiSingleRowV603(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_KPI_SINGLE_ROW_V603';
+  var PATCH_CLASS = 'desktop-header-kpi-single-row-v603';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v605 — Estabiliza altura dos filtros no desktop */
+(function desktopFilterHeightStableV605(){
+  var BUILD = 'ELTAUM_DESKTOP_FILTER_HEIGHT_STABLE_V605';
+  var PATCH_CLASS = 'desktop-filter-height-stable-v605';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v606 — Estabiliza a barra inferior dos filtros desktop */
+(function desktopFilterToolbarStableV606(){
+  var BUILD = 'ELTAUM_DESKTOP_FILTER_TOOLBAR_STABLE_V606';
+  var PATCH_CLASS = 'desktop-filter-toolbar-stable-v606';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [40, 100, 220, 520, 1000, 1800, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v607 — Mobile: ranking renderiza sem herdar o renderizador desktop */
+(function mobileRankingRenderRestoreV607(){
+  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_FORCE_ROW_V616';
+  var PATCH_CLASS = 'mobile-ranking-render-restore-v607';
+  var PATCH_CLASS_V608 = 'mobile-filter-header-clean-v608';
+  var PATCH_CLASS_V609 = 'mobile-filters-functional-v609';
+  var PATCH_CLASS_V610 = 'mobile-filters-reset-v610';
+  var PATCH_CLASS_V611 = 'mobile-filters-origin-clean-v611';
+  var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
+  var PATCH_CLASS_V614 = 'mobile-ranking-filter-list-v614';
+  var PATCH_CLASS_V615 = 'mobile-ranking-filter-strip-v615';
+  var PATCH_CLASS_V616 = 'mobile-ranking-filter-force-row-v616';
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  }
+  function hasRows(){
+    return typeof allRows !== 'undefined' && Array.isArray(allRows) && allRows.length > 0;
+  }
+  function restore(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608, PATCH_CLASS_V609, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615, PATCH_CLASS_V616);
+    document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
+    document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
+      node.remove();
+    });
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+    if(typeof window.__renderRankingsMobileBaseV607 === 'function'){
+      window.renderRankings = window.__renderRankingsMobileBaseV607;
+      try{ renderRankings = window.__renderRankingsMobileBaseV607; }catch(e){}
+    }
+    if(hasRows() && typeof window.renderRankings === 'function'){
+      try{ window.renderRankings(); }catch(e){ console.error('ranking mobile v607', e); }
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', restore, {once:true});
+  else restore();
+  window.addEventListener('load', restore, {once:true});
+  window.addEventListener('pageshow', restore, {passive:true});
+  [60, 160, 360, 800, 1400, 2400, 4200, 7000, 12000, 22000].forEach(function(delay){
+    setTimeout(restore, delay);
+  });
+})();
+
+
+/* PATCH v609 — Mobile: filtros reais, sem botoes visuais inertes */
+(function mobileFunctionalFiltersV609(){
+  var BUILD = 'ELTAUM_MOBILE_RANKING_FILTER_FORCE_ROW_V616';
+  var PATCH_CLASS = 'mobile-filters-functional-v609';
+  var PATCH_CLASS_V610 = 'mobile-filters-reset-v610';
+  var PATCH_CLASS_V611 = 'mobile-filters-origin-clean-v611';
+  var PATCH_CLASS_V612 = 'mobile-audience-chips-v612';
+  var PATCH_CLASS_V614 = 'mobile-ranking-filter-list-v614';
+  var PATCH_CLASS_V615 = 'mobile-ranking-filter-strip-v615';
+  var PATCH_CLASS_V616 = 'mobile-ranking-filter-force-row-v616';
+  var AUDIENCE_OPTIONS = [
+    ['', 'Todos'],
+    ['PF', 'Pessoa Física'],
+    ['PJ', 'Pessoa Jurídica'],
+    ['Private', 'Private'],
+    ['Qualificado', 'Qualificado'],
+    ['Institucional', 'Institucional']
+  ];
+  var CATEGORY_LABELS = {
+    'RENDA FIXA SIMPLES':'RF Simples',
+    'RENDA FIXA':'Renda Fixa',
+    'RENDA FIXA REFERENCIADO':'RF Referenciado',
+    'RENDA FIXA CURTO PRAZO':'RF Curto Prazo',
+    'MULTIMERCADO':'Multimercado',
+    'CAMBIAL':'Cambial',
+    'ACOES':'Ações',
+    'FUNDO DE INDICE':'Fundo de Índice',
+    'FUNDOS MUTUOS DE PRIVATIZACAO':'FMP / Privatização'
+  };
+
+  function isMobile(){
+    return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+  }
+  function q(sel, root){
+    return (root || document).querySelector(sel);
+  }
+  function qa(sel, root){
+    return Array.from((root || document).querySelectorAll(sel));
+  }
+  function canon(v){
+    return String(v || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g,'')
+      .replace(/[^A-Z0-9]+/gi,' ')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toUpperCase();
+  }
+  function activeCategoryCanon(){
+    try{ return canon(activeCat || ''); }catch(e){ return ''; }
+  }
+  function findRawCategory(canonTarget){
+    if(!canonTarget) return '';
+    try{
+      if(Array.isArray(allRows)){
+        var found = allRows.find(function(row){
+          return canon(row && row.Categoria) === canonTarget || canon(row && row['Categoria']) === canonTarget;
+        });
+        if(found) return String(found.Categoria || found['Categoria'] || '').trim();
+      }
+    }catch(e){}
+    return canonTarget;
+  }
+  function sortMode(){
+    try{
+      return localStorage.getItem('mobileSortModeV81') || localStorage.getItem('mobileSortModeV75') || 'base';
+    }catch(e){
+      return 'base';
+    }
+  }
+  function setSortMode(mode){
+    var value = mode || 'base';
+    try{
+      localStorage.setItem('mobileSortModeV81', value);
+      localStorage.setItem('mobileSortModeV75', value);
+    }catch(e){}
+    try{ window.__mobileSortModeV81 = value; }catch(e){}
+  }
+  function optionHtml(pair){
+    return '<option value="' + String(pair[0]).replace(/"/g,'&quot;') + '">' + pair[1] + '</option>';
+  }
+  function ensureAudienceSelect(){
+    var shell = q('#mobileCategorySelectShellV74');
+    if(!shell) return null;
+    var existing = q('#mobileAudienceSelectV609', shell);
+    if(existing){
+      ensureAudienceChips(existing);
+      return existing;
+    }
+
+    var row = document.createElement('div');
+    row.className = 'mobile-audience-select-v609 mobile-audience-chips-v612 filter-list-row-v482';
+    row.innerHTML =
+      '<span class="filter-label-v482">Público-alvo</span>' +
+      '<select aria-label="Selecionar público-alvo no celular" id="mobileAudienceSelectV609">' +
+        AUDIENCE_OPTIONS.map(optionHtml).join('') +
+      '</select>' +
+      '<span aria-label="Selecionar público-alvo" class="mobile-audience-chip-row-v612" role="group">' +
+        AUDIENCE_OPTIONS.map(function(pair, index){
+          var label = pair[0] === '' ? 'Todos' : pair[0];
+          return '<button aria-pressed="' + (index === 0 ? 'true' : 'false') + '" class="mobile-audience-chip-v612' + (index === 0 ? ' active' : '') + '" data-audience-v612="' + String(pair[0]).replace(/"/g,'&quot;') + '" type="button">' + label + '</button>';
+        }).join('') +
+      '</span>';
+
+    var noData = q('#mobileNoDataRowV442', shell);
+    var category = q('.mobile-category-select-wrap-v74', shell);
+    if(noData && noData.nextSibling) shell.insertBefore(row, noData.nextSibling);
+    else if(category) shell.insertBefore(row, category);
+    else shell.insertBefore(row, shell.firstChild);
+    return q('#mobileAudienceSelectV609', shell);
+  }
+  function ensureAudienceChips(select){
+    if(!select) return;
+    var host = select.closest('label') || select.parentElement;
+    if(!host) return;
+    host.classList.add('mobile-audience-chips-v612');
+    if(q(':scope > .mobile-audience-chip-row-v612', host)) return;
+    var row = document.createElement('span');
+    row.className = 'mobile-audience-chip-row-v612';
+    row.setAttribute('role','group');
+    row.setAttribute('aria-label','Selecionar público-alvo');
+    row.innerHTML = AUDIENCE_OPTIONS.map(function(pair, index){
+      var label = pair[0] === '' ? 'Todos' : pair[0];
+      return '<button aria-pressed="' + (index === 0 ? 'true' : 'false') + '" class="mobile-audience-chip-v612' + (index === 0 ? ' active' : '') + '" data-audience-v612="' + String(pair[0]).replace(/"/g,'&quot;') + '" type="button">' + label + '</button>';
+    }).join('');
+    host.appendChild(row);
+  }
+  function syncAudienceChips(value){
+    qa('#sec-fundos .mobile-audience-chip-v612[data-audience-v612]').forEach(function(btn){
+      var on = String(btn.dataset.audienceV612 || '') === String(value || '');
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function setSelectValue(id, value){
+    var select = q('#' + id);
+    if(select && select.value !== String(value || '')) select.value = String(value || '');
+  }
+  function selectLabel(select){
+    var option = select && select.options ? select.options[select.selectedIndex] : null;
+    return option ? option.textContent.trim() : '';
+  }
+  function syncVisualRows(){
+    ['mobileAudienceSelectV609','mobileCategorySelectV74','mobileRiskSelectV198','mobileSortSelectV75'].forEach(function(id){
+      var select = q('#' + id);
+      if(!select) return;
+      var host = select.closest('label') || select.parentElement;
+      if(!host) return;
+      var value = q(':scope > .filter-value-v482', host);
+      if(value) value.textContent = selectLabel(select);
+    });
+  }
+  function sync(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V610, PATCH_CLASS_V611, PATCH_CLASS_V612, PATCH_CLASS_V614, PATCH_CLASS_V615, PATCH_CLASS_V616);
+    document.documentElement.classList.remove('mobile-v481','mobile-filter-select-safe-v481','mobile-v482','mobile-filter-list-v482');
+    document.querySelectorAll('#sec-fundos .filter-value-v482').forEach(function(node){
+      node.remove();
+    });
+    var meta = q('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+    ensureAudienceSelect();
+    var audience = '';
+    var risk = '';
+    var hidden = false;
+    try{ audience = String(activePerfil || ''); }catch(e){}
+    try{ risk = String(activeRisco || ''); }catch(e){}
+    try{ hidden = !!hideSemDados; }catch(e){}
+    setSelectValue('mobileAudienceSelectV609', audience);
+    syncAudienceChips(audience);
+    setSelectValue('mobileCategorySelectV74', activeCategoryCanon());
+    setSelectValue('mobileRiskSelectV198', risk);
+    setSelectValue('mobileSortSelectV75', sortMode());
+    var noData = q('#toggleSemDados');
+    if(noData) noData.checked = hidden;
+    var status = q('#mobileCategorySelectStatusV74');
+    if(status){
+      var cat = activeCategoryCanon();
+      status.textContent = cat ? (CATEGORY_LABELS[cat] || cat) : 'Todos';
+    }
+    syncVisualRows();
+    qa('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]').forEach(function(btn){
+      var val = String(btn.dataset.audienceV488 || '');
+      var on = val === audience;
+      btn.classList.toggle('active', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function applyFromMobile(){
+    if(!isMobile()) return;
+    var cat = q('#mobileCategorySelectV74')?.value || '';
+    var audience = q('#mobileAudienceSelectV609')?.value || '';
+    var risk = q('#mobileRiskSelectV198')?.value || '';
+    var mode = q('#mobileSortSelectV75')?.value || 'base';
+    var noData = !!q('#toggleSemDados')?.checked;
+    try{
+      activeCat = cat ? findRawCategory(cat) : '';
+      activePerfil = audience;
+      activeRisco = risk;
+      activeBenchmark = '';
+      hideSemDados = noData;
+      currentPage = 1;
+      activeCdiSort = null;
+      sortCol = -1;
+      sortDir = -1;
+      window.__favListMode = false;
+      window.__ELTAUM_ACTIVE_SHORTCUT_PRESET__ = 'mobile-functional-v609';
+      if(expandedRows && typeof expandedRows.clear === 'function') expandedRows.clear();
+    }catch(e){}
+    setSortMode(mode);
+    try{ if(typeof syncFilterControls === 'function') syncFilterControls(); }catch(e){}
+    try{ if(typeof updateCdiSortButtons === 'function') updateCdiSortButtons(); }catch(e){}
+    try{ if(typeof updateMobileSortButtons === 'function') updateMobileSortButtons(); }catch(e){}
+    try{ if(typeof applyFilter === 'function') applyFilter(); }catch(e){ console.error('mobile filters v609', e); }
+    try{ if(typeof renderMobileFundCards === 'function') renderMobileFundCards(); }catch(e){}
+    sync();
+  }
+  function isManagedTarget(target){
+    return !!(target && target.closest && target.closest(
+      '#mobileAudienceSelectV609,#mobileCategorySelectV74,#mobileRiskSelectV198,#mobileSortSelectV75,#toggleSemDados'
+    ));
+  }
+  function bind(){
+    sync();
+    if(document.documentElement.dataset.mobileFiltersV609Bound === '1') return;
+    document.documentElement.dataset.mobileFiltersV609Bound = '1';
+    document.addEventListener('change', function(ev){
+      if(!isMobile() || !isManagedTarget(ev.target)) return;
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      setTimeout(applyFromMobile, 0);
+    }, true);
+    document.addEventListener('click', function(ev){
+      if(!isMobile()) return;
+      var audienceChip = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .mobile-audience-chip-v612[data-audience-v612]') : null;
+      if(audienceChip){
+        ev.preventDefault();
+        ev.stopPropagation();
+        if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+        var managedSelect = ensureAudienceSelect();
+        if(managedSelect){
+          managedSelect.value = String(audienceChip.dataset.audienceV612 || '');
+          applyFromMobile();
+        }
+        return;
+      }
+      var oldAudience = ev.target && ev.target.closest ? ev.target.closest('#sec-fundos .desktop-audience-chip-v488[data-audience-v488]') : null;
+      if(!oldAudience) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      if(typeof ev.stopImmediatePropagation === 'function') ev.stopImmediatePropagation();
+      var select = ensureAudienceSelect();
+      if(select){
+        select.value = String(oldAudience.dataset.audienceV488 || '');
+        applyFromMobile();
+      }
+    }, true);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, {once:true});
+  else bind();
+  window.addEventListener('load', bind, {once:true});
+  window.addEventListener('pageshow', sync, {passive:true});
+  window.addEventListener('resize', sync, {passive:true});
+  [80, 220, 520, 1100, 2200, 4200, 8000, 14000].forEach(function(delay){
+    setTimeout(bind, delay);
+  });
+  window.__ELTAUM_MOBILE_FILTERS_FUNCTIONAL_V609__ = {
+    sync: sync,
+    apply: applyFromMobile
   };
 })();
