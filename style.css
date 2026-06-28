@@ -72535,3 +72535,60 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
       "context"!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v576 — Desktop: bolsas dos EUA no resumo mensal
+   ========================================================= */
+@media (max-width:768px){
+  .monthly-us-only-v576{
+    display:none!important;
+  }
+}
+
+@media (min-width:769px){
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(7,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article{
+    min-height:50px!important;
+    padding:8px 9px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 span{
+    font-size:.47rem!important;
+    letter-spacing:.08em!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 strong{
+    font-size:.90rem!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    overflow:auto!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445{
+    min-width:1180px!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th,
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td{
+    padding-left:8px!important;
+    padding-right:8px!important;
+    font-size:.63rem!important;
+  }
+
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:first-child,
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:first-child{
+    width:12%!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1380px){
+  html.desktop-monthly-us-markets-v576 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}

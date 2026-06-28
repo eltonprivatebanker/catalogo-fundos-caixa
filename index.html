@@ -17,13 +17,15 @@ document.documentElement.classList.add(
   'desktop-hide-closed-month-launch-v571',
   'desktop-rates-compact-v572',
   'desktop-dolar-no-collapse-v573',
-  'desktop-monthly-indicators-v574'
+  'desktop-monthly-indicators-v574',
+  'desktop-rates-reference-slim-v575',
+  'desktop-monthly-us-markets-v576'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575" name="app-build"/>
+<meta content="ELTAUM_DESKTOP_MONTHLY_US_MARKETS_V576" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -76,7 +78,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=desktop-rates-reference-slim-v575" rel="stylesheet"/>
+<link href="style.css?v=desktop-monthly-us-markets-v576" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -181,7 +183,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=desktop-rates-reference-slim-v575"></script>
+<script defer="" src="app.js?v=desktop-monthly-us-markets-v576"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -562,7 +564,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=desktop-rates-reference-slim-v575" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=desktop-monthly-us-markets-v576" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -934,7 +936,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <div>
 <span class="monthly-indicators-kicker-v445">Resumo mensal</span>
 <h3 id="monthlyIndicatorsTitleV445">Indicadores por mês</h3>
-<p>CDI, IPCA, Ibov e Dólar no mesmo painel.</p>
+<p>CDI, IPCA, Ibov, Dólar e bolsas dos EUA no mesmo painel.</p>
 </div>
 <div aria-label="Período dos indicadores mensais" class="monthly-indicators-tabs-v445" role="group">
 <button aria-pressed="true" class="active" data-monthly-indicators-range-v445="year" type="button">2026</button>
@@ -953,6 +955,9 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <article><span>IPCA ano</span><strong id="monthlySummaryIpcaV445">—</strong></article>
 <article><span>Ibov ano</span><strong id="monthlySummaryIbovV445">—</strong></article>
 <article><span>Dólar ano</span><strong id="monthlySummaryDolarV445">—</strong></article>
+<article class="monthly-us-only-v576"><span>S&amp;P 500 ano</span><strong id="monthlySummarySp500V576">—</strong></article>
+<article class="monthly-us-only-v576"><span>Nasdaq ano</span><strong id="monthlySummaryNasdaqV576">—</strong></article>
+<article class="monthly-us-only-v576"><span>Dow ano</span><strong id="monthlySummaryDowV576">—</strong></article>
 </div>
 <div class="monthly-indicators-table-shell-v445">
 <table class="monthly-indicators-table-v445">
@@ -963,6 +968,9 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <th scope="col">IPCA</th>
 <th scope="col">Ibov</th>
 <th scope="col">Dólar</th>
+<th class="monthly-us-only-v576" scope="col">S&amp;P 500</th>
+<th class="monthly-us-only-v576" scope="col">Nasdaq</th>
+<th class="monthly-us-only-v576" scope="col">Dow</th>
 </tr>
 </thead>
 <tbody id="monthlyIndicatorsRowsV445">

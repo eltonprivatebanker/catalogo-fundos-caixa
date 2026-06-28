@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-monthly-us-markets-v576');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_MARKETS_V576';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -22244,6 +22244,66 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     return idx.historico || idx.mensal || idx.meses || idx.fechamentos || card.historico || card.mensal || card.meses || [];
   }
 
+  function isDesktopMonthlyV576(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function getIndexObjectV576(dados, key){
+    const idx = dados?.indices_mercado || {};
+    const intl = dados?.indices_internacionais || {};
+    const cards = dados?.cards || {};
+    if(key === 'sp500'){
+      return idx.sp500 || intl.sp500 || intl.sp500_detalhado || cards.sp500 || {};
+    }
+    if(key === 'nasdaq'){
+      return idx.nasdaq || intl.nasdaq || intl.nasdaq_detalhado || cards.nasdaq || {};
+    }
+    if(key === 'dow'){
+      return idx.dow_jones || idx.dow || intl.dow_jones || intl.dow || intl.dow_jones_detalhado || cards.dow_jones || cards.dow || {};
+    }
+    return {};
+  }
+
+  function percentFromItemV576(item){
+    if(!item || typeof item !== 'object') return null;
+    const keys = [
+      'variacao','variacao_mensal','variacao_mes','variacao_pct','var_pct',
+      'retorno','retorno_mes','retorno_mensal','pct','percentual'
+    ];
+    for(const key of keys){
+      const n = toNumV445(item[key]);
+      if(n !== null) return n;
+    }
+    return null;
+  }
+
+  function mapIndexSeriesV576(dados, key){
+    const item = getIndexObjectV576(dados, key);
+    const series = item.historico || item.mensal || item.meses || item.fechamentos || item.serie || item.series || [];
+    const map = new Map();
+    (Array.isArray(series) ? series : []).forEach(entry => {
+      const monthKey = normalizeMonthKeyV445(entry);
+      const value = percentFromItemV576(entry);
+      if(monthKey && value !== null) map.set(monthKey, value);
+    });
+    return map;
+  }
+
+  function directIndexCandidatesV576(dados, key, rangeKey){
+    const item = getIndexObjectV576(dados, key);
+    const aliases = key === 'dow'
+      ? [dados?.indices_mercado?.dow_jones, dados?.indices_mercado?.dow, dados?.indices_internacionais?.dow_jones_detalhado, dados?.indices_internacionais?.dow_jones, dados?.indices_internacionais?.dow]
+      : key === 'sp500'
+        ? [dados?.indices_mercado?.sp500, dados?.indices_internacionais?.sp500, dados?.indices_internacionais?.sp500_detalhado]
+        : [dados?.indices_mercado?.nasdaq, dados?.indices_internacionais?.nasdaq, dados?.indices_internacionais?.nasdaq_detalhado];
+    const pool = [item, ...aliases].filter(Boolean);
+    const field = rangeKey === '12m' ? 'acum_12m' : 'acum_ano';
+    const altFields = rangeKey === '12m'
+      ? ['acum_12m','retorno_12m','variacao_12m','m12']
+      : ['acum_ano','retorno_ano','variacao_ano','ano','ytd'];
+    return pool.flatMap(obj => altFields.map(name => obj?.[name] ?? obj?.[field]));
+  }
+
   function getConsolidatedMonthlyV448(dados){
     return Array.isArray(dados?.indicadores_mensais) ? dados.indicadores_mensais : [];
   }
@@ -22317,7 +22377,10 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     cdi:{label:'CDI'},
     ipca:{label:'IPCA'},
     ibov:{label:'Ibov'},
-    dolar:{label:'Dólar'}
+    dolar:{label:'Dólar'},
+    sp500:{label:'S&P 500'},
+    nasdaq:{label:'Nasdaq'},
+    dow:{label:'Dow'}
   };
 
   function renderMonthlyHeaderV446(table, activeView){
@@ -22326,7 +22389,10 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const headRow = table.querySelector('thead tr');
     if(!headRow) return;
     if(activeView === 'all'){
-      headRow.innerHTML = '<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibov</th><th scope="col">Dólar</th>';
+      const usCols = isDesktopMonthlyV576()
+        ? '<th class="monthly-us-only-v576" scope="col">S&P 500</th><th class="monthly-us-only-v576" scope="col">Nasdaq</th><th class="monthly-us-only-v576" scope="col">Dow</th>'
+        : '';
+      headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibov</th><th scope="col">Dólar</th>${usCols}`;
     }else{
       const label = indicatorMetaV446[activeView]?.label || 'Indicador';
       headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">${label}</th>`;
@@ -22356,9 +22422,11 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const table = root?.querySelector('.monthly-indicators-table-v445');
     if(!root || !tbody) return;
 
+    const desktopV576 = isDesktopMonthlyV576();
     document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
+    if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576');
     const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
+    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_US_MARKETS_V576' : BUILD;
 
     const dados = getMercadoV445();
     const cdiCard = dados?.cards?.cdi || {};
@@ -22373,8 +22441,12 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const ipcaMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ipca') : mapSeriesV445(ipcaCard.historico || dados?.ipca_historico || dados?.historico_ipca || []);
     const ibovMap = consolidated.length ? mapConsolidatedV448(consolidated, 'ibov') : mapSeriesV445(getIbovSeriesV445(dados));
     const dolarMap = consolidated.length ? mapConsolidatedV448(consolidated, 'dolar') : mapSeriesV445(getPtaxSeriesV445(dados));
-    const keys = getMonthKeysV445([cdiMap, ipcaMap, ibovMap, dolarMap]);
-    const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap};
+    const sp500Map = consolidated.length ? mapConsolidatedV448(consolidated, 'sp500') : mapIndexSeriesV576(dados, 'sp500');
+    const nasdaqMap = consolidated.length ? mapConsolidatedV448(consolidated, 'nasdaq') : mapIndexSeriesV576(dados, 'nasdaq');
+    const dowMap = consolidated.length ? (mapConsolidatedV448(consolidated, 'dow_jones').size ? mapConsolidatedV448(consolidated, 'dow_jones') : mapConsolidatedV448(consolidated, 'dow')) : mapIndexSeriesV576(dados, 'dow');
+    const tableMaps = desktopV576 ? [cdiMap, ipcaMap, ibovMap, dolarMap, sp500Map, nasdaqMap, dowMap] : [cdiMap, ipcaMap, ibovMap, dolarMap];
+    const keys = getMonthKeysV445(tableMaps);
+    const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap, sp500:sp500Map, nasdaq:nasdaqMap, dow:dowMap};
     let activeView = indicatorMetaV446[view] ? view : 'all';
     if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
       activeView = 'all';
@@ -22404,6 +22476,21 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       summaryValueForKeysV449(dolarMap, keys, range === '12m' ? [dolarIdx.acum_12m, dolarCard.acum_12m] : [dolarIdx.acum_ano, dolarCard.acum_ano]),
       `Dólar ${summarySuffix}`
     );
+    setSummaryV445(
+      'monthlySummarySp500V576',
+      summaryValueForKeysV449(sp500Map, keys, directIndexCandidatesV576(dados, 'sp500', range === '12m' ? '12m' : 'year')),
+      `S&P 500 ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryNasdaqV576',
+      summaryValueForKeysV449(nasdaqMap, keys, directIndexCandidatesV576(dados, 'nasdaq', range === '12m' ? '12m' : 'year')),
+      `Nasdaq ${summarySuffix}`
+    );
+    setSummaryV445(
+      'monthlySummaryDowV576',
+      summaryValueForKeysV449(dowMap, keys, directIndexCandidatesV576(dados, 'dow', range === '12m' ? '12m' : 'year')),
+      `Dow ${summarySuffix}`
+    );
 
     tbody.innerHTML = keys.map(key => {
       const label = labelFromKeyV447(key);
@@ -22411,7 +22498,9 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
         const value = maps[activeView]?.get(key);
         return `<tr><td>${label}</td><td class="${clsV445(value)}">${pctV445(value)}</td></tr>`;
       }
-      const values = [cdiMap.get(key), ipcaMap.get(key), ibovMap.get(key), dolarMap.get(key)];
+      const values = desktopV576
+        ? [cdiMap.get(key), ipcaMap.get(key), ibovMap.get(key), dolarMap.get(key), sp500Map.get(key), nasdaqMap.get(key), dowMap.get(key)]
+        : [cdiMap.get(key), ipcaMap.get(key), ibovMap.get(key), dolarMap.get(key)];
       return `<tr>
         <td>${label}</td>
         ${values.map(value => `<td class="${clsV445(value)}">${pctV445(value)}</td>`).join('')}
@@ -25618,10 +25707,11 @@ function buildDetailPanel(r,colspan){
 	      'desktop-rates-compact-v572',
 	      'desktop-dolar-no-collapse-v573',
 	      'desktop-monthly-indicators-v574',
-	      'desktop-rates-reference-slim-v575'
+	      'desktop-rates-reference-slim-v575',
+	      'desktop-monthly-us-markets-v576'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_MARKETS_V576';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -25695,10 +25785,11 @@ function buildDetailPanel(r,colspan){
 	    document.documentElement.classList.add(
 	      'desktop-hide-closed-month-launch-v571',
 	      'desktop-rates-compact-v572',
-	      'desktop-rates-reference-slim-v575'
+	      'desktop-rates-reference-slim-v575',
+	      'desktop-monthly-us-markets-v576'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_MARKETS_V576';
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
@@ -25719,7 +25810,8 @@ function buildDetailPanel(r,colspan){
 	      'desktop-rates-compact-v572',
 	      'desktop-dolar-no-collapse-v573',
 	      'desktop-monthly-indicators-v574',
-	      'desktop-rates-reference-slim-v575'
+	      'desktop-rates-reference-slim-v575',
+	      'desktop-monthly-us-markets-v576'
 	    );
 
     var monthly = document.getElementById('monthlyIndicatorsV445');
@@ -25758,7 +25850,7 @@ function buildDetailPanel(r,colspan){
     }catch(_){}
 
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_MARKETS_V576';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
@@ -25776,9 +25868,9 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isDesktop()) return;
-	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575');
+	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_MARKETS_V576';
 
     var body = document.getElementById('dolarTimelineBody');
     if(body){
