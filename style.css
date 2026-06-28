@@ -76524,3 +76524,64 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     margin-top:0!important;
   }
 }
+
+
+/* PATCH v622 — Mobile ranking: nomes sem corte + respiro do menu inferior
+   Corrige retorno de nomes truncados no bloco Top Fundos e evita que
+   a navegação fixa cubra as últimas linhas no mobile. */
+@media (max-width:768px){
+  html.mobile-ranking-names-safe-v622 body #rankingsSection{
+    padding-bottom:128px!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .ranking-grid,
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .ranking-main-v136{
+    padding-bottom:118px!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-card{
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-list{
+    padding-bottom:18px!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-item{
+    align-items:flex-start!important;
+    min-height:auto!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-info{
+    min-width:0!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-name{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    line-height:1.22!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-cat{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .ranking-summary-name{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+  }
+}
