@@ -27405,8 +27405,8 @@ function buildDetailPanel(r,colspan){
     }
 
     if(sourceId === IDS.riskOriginal){
-      if(value === '') return 'Todos os perfis';
-      if(text.toLowerCase() === 'todos perfis') return 'Todos os perfis';
+      if(value === '') return 'Todos';
+      if(text.toLowerCase() === 'todos perfis' || text.toLowerCase() === 'todos os perfis') return 'Todos';
     }
 
     return text || value || '—';
@@ -27508,7 +27508,7 @@ function buildDetailPanel(r,colspan){
     syncOriginalToMobile();
     bind();
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_INDEPENDENT_V617';
+    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_EQUAL_COMPACT_V620';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
