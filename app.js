@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_INDICATORS_V574';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -25611,16 +25611,17 @@ function buildDetailPanel(r,colspan){
       'desktop-ranking-filters-centered-v565',
       'desktop-ranking-stable-v566',
       'desktop-ranking-toolbar-locked-v567',
-      'desktop-ranking-compact-height-v568',
-      'desktop-ranking-ultra-compact-v569',
-      'desktop-docs-compact-v570',
-      'desktop-hide-closed-month-launch-v571',
-      'desktop-rates-compact-v572',
-      'desktop-dolar-no-collapse-v573',
-      'desktop-monthly-indicators-v574'
-    );
-    var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_INDICATORS_V574';
+	      'desktop-ranking-compact-height-v568',
+	      'desktop-ranking-ultra-compact-v569',
+	      'desktop-docs-compact-v570',
+	      'desktop-hide-closed-month-launch-v571',
+	      'desktop-rates-compact-v572',
+	      'desktop-dolar-no-collapse-v573',
+	      'desktop-monthly-indicators-v574',
+	      'desktop-rates-reference-slim-v575'
+	    );
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -25691,12 +25692,13 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isDesktop()) return;
-    document.documentElement.classList.add(
-      'desktop-hide-closed-month-launch-v571',
-      'desktop-rates-compact-v572'
-    );
-    var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_COMPACT_V572';
+	    document.documentElement.classList.add(
+	      'desktop-hide-closed-month-launch-v571',
+	      'desktop-rates-compact-v572',
+	      'desktop-rates-reference-slim-v575'
+	    );
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
@@ -25714,10 +25716,11 @@ function buildDetailPanel(r,colspan){
     if(!isDesktop()) return;
     document.documentElement.classList.add(
       'desktop-hide-closed-month-launch-v571',
-      'desktop-rates-compact-v572',
-      'desktop-dolar-no-collapse-v573',
-      'desktop-monthly-indicators-v574'
-    );
+	      'desktop-rates-compact-v572',
+	      'desktop-dolar-no-collapse-v573',
+	      'desktop-monthly-indicators-v574',
+	      'desktop-rates-reference-slim-v575'
+	    );
 
     var monthly = document.getElementById('monthlyIndicatorsV445');
     if(monthly){
@@ -25725,16 +25728,28 @@ function buildDetailPanel(r,colspan){
       monthly.style.setProperty('display','block','important');
     }
 
-    var cdiMonths = document.getElementById('cdiMonthCarouselV322');
-    if(cdiMonths){
-      cdiMonths.style.setProperty('display','none','important');
+	    var cdiMonths = document.getElementById('cdiMonthCarouselV322');
+	    if(cdiMonths){
+	      cdiMonths.style.setProperty('display','none','important');
       cdiMonths.style.setProperty('visibility','hidden','important');
       cdiMonths.style.setProperty('height','0','important');
       cdiMonths.style.setProperty('min-height','0','important');
       cdiMonths.style.setProperty('margin','0','important');
       cdiMonths.style.setProperty('padding','0','important');
-      cdiMonths.style.setProperty('overflow','hidden','important');
-    }
+	      cdiMonths.style.setProperty('overflow','hidden','important');
+	    }
+	    var cdiHistory = document.getElementById('cdiYearHistory');
+	    if(cdiHistory){
+	      cdiHistory.style.setProperty('display','none','important');
+	      cdiHistory.style.setProperty('visibility','hidden','important');
+	      cdiHistory.style.setProperty('height','0','important');
+	      cdiHistory.style.setProperty('min-height','0','important');
+	      cdiHistory.style.setProperty('max-height','0','important');
+	      cdiHistory.style.setProperty('margin','0','important');
+	      cdiHistory.style.setProperty('padding','0','important');
+	      cdiHistory.style.setProperty('border','0','important');
+	      cdiHistory.style.setProperty('overflow','hidden','important');
+	    }
 
     try{
       if(window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__?.render){
@@ -25742,8 +25757,8 @@ function buildDetailPanel(r,colspan){
       }
     }catch(_){}
 
-    var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_INDICATORS_V574';
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
@@ -25761,9 +25776,9 @@ function buildDetailPanel(r,colspan){
   }
   function sync(){
     if(!isDesktop()) return;
-    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574');
-    var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_INDICATORS_V574';
+	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575');
+	    var meta = document.querySelector('meta[name="app-build"]');
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_REFERENCE_SLIM_V575';
 
     var body = document.getElementById('dolarTimelineBody');
     if(body){
