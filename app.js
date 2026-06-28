@@ -26850,3 +26850,25 @@ function buildDetailPanel(r,colspan){
     setTimeout(apply, delay);
   });
 })();
+
+
+/* PATCH v598 — Header desktop compacto */
+(function desktopHeaderKpisCompactV598(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_KPIS_COMPACT_V598';
+  var PATCH_CLASS = 'desktop-header-kpis-compact-v598';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
