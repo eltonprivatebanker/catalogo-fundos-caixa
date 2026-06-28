@@ -74120,3 +74120,159 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
   }
 }
+
+/* =========================================================
+   PATCH v601 — Header executivo sem espaco vertical sobrando
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-header-tight-executive-v601 body header.site-header-clean,
+  html.desktop-header-tight-executive-v601 body .site-header-clean.site-header-v217{
+    display:grid!important;
+    grid-template-columns:minmax(430px,auto) minmax(0,1fr)!important;
+    grid-template-areas:"brand kpis"!important;
+    align-items:center!important;
+    align-content:center!important;
+    justify-content:stretch!important;
+    gap:22px!important;
+    height:112px!important;
+    min-height:112px!important;
+    max-height:112px!important;
+    padding:14px 28px!important;
+    margin-top:0!important;
+    margin-bottom:10px!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body .site-header-clean .brand{
+    grid-area:brand!important;
+    align-self:center!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:14px!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body .site-header-clean .brand-logo{
+    width:46px!important;
+    height:46px!important;
+    min-width:46px!important;
+    border-radius:11px!important;
+    font-size:1.36rem!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body .site-header-clean .brand-text{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:7px!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body .site-header-clean .brand-text h1{
+    margin:0!important;
+    font-size:1.58rem!important;
+    line-height:1.04!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body .site-header-clean .brand-text #lastUpdate,
+  html.desktop-header-tight-executive-v601 body .site-header-clean .brand-text .live-badge{
+    margin:0!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body .site-header-clean > .header-data-status-v343{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-kpi.header-kpi-strip-v582{
+    grid-area:kpis!important;
+    justify-self:end!important;
+    align-self:center!important;
+    display:grid!important;
+    grid-template-columns:176px 176px 206px!important;
+    gap:10px!important;
+    width:auto!important;
+    max-width:none!important;
+    min-width:0!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-kpi.header-kpi-strip-v582 .kpi{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-height:72px!important;
+    height:72px!important;
+    padding:9px 13px 10px!important;
+    border-radius:10px!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-kpi.header-kpi-strip-v582 .kpi-label{
+    margin:0 0 6px!important;
+    font-size:.47rem!important;
+    line-height:1!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-kpi.header-kpi-strip-v582 .kpi-value{
+    margin:0!important;
+    font-size:1rem!important;
+    line-height:1.05!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-kpi.header-kpi-strip-v582 .kpi-pl .kpi-value{
+    font-size:.96rem!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-kpi.header-kpi-strip-v582 .kpi-sub{
+    display:block!important;
+    margin:6px 0 0!important;
+    font-size:.52rem!important;
+    line-height:1.12!important;
+    max-height:none!important;
+    overflow:visible!important;
+    white-space:nowrap!important;
+    text-overflow:clip!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-fundos.section-gap{
+    margin-top:4px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-header-tight-executive-v601 body header.site-header-clean,
+  html.desktop-header-tight-executive-v601 body .site-header-clean.site-header-v217{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"brand" "kpis"!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    padding:14px 20px!important;
+    gap:12px!important;
+  }
+
+  html.desktop-header-tight-executive-v601 body #sec-kpi.header-kpi-strip-v582{
+    justify-self:stretch!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+  }
+}
