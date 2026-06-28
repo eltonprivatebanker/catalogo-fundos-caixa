@@ -72095,3 +72095,35 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
       "months"!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v573 — Desktop: dolar sem botao Recolher
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-dolar-no-collapse-v573 body #sec-dolar #dolarTimelineToggle,
+  html.desktop-dolar-no-collapse-v573 body #sec-dolar .dolar-timeline-toggle{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-dolar-no-collapse-v573 body #sec-dolar #dolarTimelineBody,
+  html.desktop-dolar-no-collapse-v573 body #sec-dolar .dolar-timeline-body{
+    display:block!important;
+    visibility:visible!important;
+    max-height:none!important;
+    height:auto!important;
+    min-height:0!important;
+    overflow:visible!important;
+    transition:none!important;
+  }
+}

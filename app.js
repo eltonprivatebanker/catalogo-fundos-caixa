@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_COMPACT_V572';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_NO_COLLAPSE_V573';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -25615,10 +25615,11 @@ function buildDetailPanel(r,colspan){
       'desktop-ranking-ultra-compact-v569',
       'desktop-docs-compact-v570',
       'desktop-hide-closed-month-launch-v571',
-      'desktop-rates-compact-v572'
+      'desktop-rates-compact-v572',
+      'desktop-dolar-no-collapse-v573'
     );
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_COMPACT_V572';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_NO_COLLAPSE_V573';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -25695,6 +25696,52 @@ function buildDetailPanel(r,colspan){
     );
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_DESKTOP_RATES_COMPACT_V572';
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
+  else sync();
+  window.addEventListener('load', sync, {once:true});
+  [120, 500, 1300, 3200, 7000, 14000, 23000, 36000].forEach(function(delay){ setTimeout(sync, delay); });
+})();
+
+
+/* PATCH v573-final — dolar sempre aberto e sem botao Recolher no desktop */
+(function desktopDolarNoCollapseV573Final(){
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function sync(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add('desktop-dolar-no-collapse-v573');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_NO_COLLAPSE_V573';
+
+    var body = document.getElementById('dolarTimelineBody');
+    if(body){
+      body.classList.add('open');
+      body.removeAttribute('hidden');
+      body.style.setProperty('display','block','important');
+      body.style.setProperty('max-height','none','important');
+      body.style.setProperty('height','auto','important');
+      body.style.setProperty('overflow','visible','important');
+    }
+
+    var toggle = document.getElementById('dolarTimelineToggle');
+    if(toggle){
+      toggle.setAttribute('aria-hidden','true');
+      toggle.setAttribute('tabindex','-1');
+      toggle.setAttribute('aria-expanded','true');
+      toggle.style.setProperty('display','none','important');
+      toggle.style.setProperty('visibility','hidden','important');
+      toggle.style.setProperty('width','0','important');
+      toggle.style.setProperty('height','0','important');
+      toggle.style.setProperty('min-width','0','important');
+      toggle.style.setProperty('min-height','0','important');
+      toggle.style.setProperty('margin','0','important');
+      toggle.style.setProperty('padding','0','important');
+      toggle.style.setProperty('border','0','important');
+      toggle.style.setProperty('overflow','hidden','important');
+      toggle.style.setProperty('pointer-events','none','important');
+    }
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
