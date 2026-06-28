@@ -3636,7 +3636,7 @@ function setCdiSort(dir){
   function syncControls(periodo){
     document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -20008,12 +20008,9 @@ function openCdiAnalyticTableV274(){
     const sec = document.getElementById('sec-dolar');
     if(!sec || !isMobile) return;
 
-    const badge = sec.querySelector('.section-badge');
+    const badge = sec.querySelector('.section-badge:not(.dolar-source-badge-v336)');
     if(badge){
-      badge.classList.add('dolar-source-badge-v336');
-      badge.innerHTML = '<span class="badge-dot green"></span>BCB · PTAX';
-      badge.removeAttribute('aria-hidden');
-      setImportant(badge, 'display', 'inline-flex');
+      badge.classList.remove('dolar-source-badge-v336');
     }
 
     const body = document.getElementById('dolarTimelineBody');
@@ -22495,7 +22492,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
     if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576');
     const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578' : BUILD;
+    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579' : BUILD;
 
     const dados = getMercadoV445();
     const cdiCard = dados?.cards?.cdi || {};
@@ -25815,7 +25812,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-us-markets-v576'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -25893,7 +25890,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-us-markets-v576'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
@@ -25954,7 +25951,7 @@ function buildDetailPanel(r,colspan){
     }catch(_){}
 
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
@@ -25974,7 +25971,7 @@ function buildDetailPanel(r,colspan){
     if(!isDesktop()) return;
 	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576');
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_MONTHLY_US_BRL_TOGGLE_V578';
+	    if(meta) meta.content = 'ELTAUM_DESKTOP_DOLAR_SOURCE_BADGE_REMOVED_V579';
 
     var body = document.getElementById('dolarTimelineBody');
     if(body){

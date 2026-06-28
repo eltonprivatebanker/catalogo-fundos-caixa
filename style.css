@@ -72701,3 +72701,19 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     min-width:1080px!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v579 — Dolar: remove badge solto "BCB · PTAX"
+   ========================================================= */
+#sec-dolar .dolar-source-badge-v336{
+  display:none!important;
+  visibility:hidden!important;
+  width:0!important;
+  height:0!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
