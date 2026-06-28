@@ -73332,3 +73332,43 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     max-width:calc(100% - 184px)!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v589 — Desktop: trava #sec-mercado contra resets legados
+   ========================================================= */
+@media (min-width:1180px){
+  html.desktop-side-nav-market-lock-v589 body #topo.page > #sec-mercado,
+  html.desktop-side-nav-market-lock-v589 body #sec-mercado.section-gap{
+    margin-left:208px!important;
+    margin-right:0!important;
+    width:calc(100% - 208px)!important;
+    max-width:calc(100% - 208px)!important;
+    min-width:0!important;
+    padding-left:0!important;
+    padding-right:0!important;
+    left:auto!important;
+    right:auto!important;
+    transform:none!important;
+    translate:none!important;
+    position:relative!important;
+    box-sizing:border-box!important;
+    z-index:1!important;
+  }
+
+  html.desktop-side-nav-market-lock-v589 body #topo.page > #sec-mercado > *,
+  html.desktop-side-nav-market-lock-v589 body #sec-mercado > *{
+    max-width:100%!important;
+    min-width:0!important;
+    box-sizing:border-box!important;
+  }
+}
+
+@media (min-width:1180px) and (max-width:1360px){
+  html.desktop-side-nav-market-lock-v589 body #topo.page > #sec-mercado,
+  html.desktop-side-nav-market-lock-v589 body #sec-mercado.section-gap{
+    margin-left:184px!important;
+    width:calc(100% - 184px)!important;
+    max-width:calc(100% - 184px)!important;
+  }
+}

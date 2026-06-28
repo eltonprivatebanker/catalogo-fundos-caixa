@@ -26270,3 +26270,120 @@ function buildDetailPanel(r,colspan){
     setTimeout(apply, delay);
   });
 })();
+
+
+/* PATCH v589 — trava final do #sec-mercado contra resets tardios */
+(function desktopSideNavMarketLockV589(){
+  var BUILD = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_LOCK_V589';
+  var PATCH_CLASS = 'desktop-side-nav-market-lock-v589';
+  var WIDE_QUERY = '(min-width: 1180px)';
+  var applying = false;
+  var raf = 0;
+  var intervalId = 0;
+
+  function isWide(){
+    return !window.matchMedia || window.matchMedia(WIDE_QUERY).matches;
+  }
+
+  function set(el, prop, value){
+    if(el) el.style.setProperty(prop, value, 'important');
+  }
+
+  function getOffset(page, nav){
+    if(!page || !nav) return window.innerWidth <= 1360 ? 184 : 208;
+    var pageLeft = page.getBoundingClientRect().left || 0;
+    var navRight = nav.getBoundingClientRect().right || 0;
+    var gap = window.innerWidth <= 1360 ? 12 : 14;
+    return Math.max(window.innerWidth <= 1360 ? 184 : 208, Math.ceil(navRight - pageLeft + gap));
+  }
+
+  function apply(){
+    if(applying) return;
+    var page = document.getElementById('topo');
+    var nav = document.getElementById('desktopAnchorNavV131');
+    var mercado = document.getElementById('sec-mercado');
+    if(!page || !nav || !mercado || !isWide()) return;
+
+    applying = true;
+    try{
+      document.documentElement.classList.add(
+        'desktop-side-nav-v585',
+        'desktop-side-nav-no-overlap-v586',
+        'desktop-hide-funds-heading-v587',
+        'desktop-side-nav-market-fix-v588',
+        PATCH_CLASS
+      );
+
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      var offset = getOffset(page, nav);
+      var width = 'calc(100% - ' + offset + 'px)';
+
+      set(mercado, 'margin-left', offset + 'px');
+      set(mercado, 'margin-right', '0');
+      set(mercado, 'width', width);
+      set(mercado, 'max-width', width);
+      set(mercado, 'min-width', '0');
+      set(mercado, 'padding-left', '0');
+      set(mercado, 'padding-right', '0');
+      set(mercado, 'left', 'auto');
+      set(mercado, 'right', 'auto');
+      set(mercado, 'transform', 'none');
+      set(mercado, 'translate', 'none');
+      set(mercado, 'position', 'relative');
+      set(mercado, 'box-sizing', 'border-box');
+      set(mercado, 'z-index', '1');
+
+      mercado.querySelectorAll(':scope > *').forEach(function(child){
+        set(child, 'max-width', '100%');
+        set(child, 'min-width', '0');
+        set(child, 'box-sizing', 'border-box');
+      });
+    }finally{
+      applying = false;
+    }
+  }
+
+  function schedule(){
+    if(raf) return;
+    raf = requestAnimationFrame(function(){
+      raf = 0;
+      apply();
+    });
+  }
+
+  function installObserver(){
+    var mercado = document.getElementById('sec-mercado');
+    if(!mercado || mercado.dataset.sideNavLockV589 === '1') return;
+    mercado.dataset.sideNavLockV589 = '1';
+    var observer = new MutationObserver(function(records){
+      if(applying) return;
+      if(records.some(function(record){ return record.attributeName === 'style' || record.attributeName === 'class'; })){
+        schedule();
+      }
+    });
+    observer.observe(mercado, {attributes:true, attributeFilter:['style','class']});
+  }
+
+  function boot(){
+    apply();
+    installObserver();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+
+  window.addEventListener('load', boot, {once:true});
+  window.addEventListener('resize', schedule);
+  document.addEventListener('elton:market-data-refresh', schedule);
+  document.addEventListener('elton:market-period-change', schedule);
+  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 23000, 37000, 60000, 90000, 130000].forEach(function(delay){
+    setTimeout(boot, delay);
+  });
+
+  intervalId = setInterval(apply, 1500);
+  setTimeout(function(){
+    if(intervalId) clearInterval(intervalId);
+  }, 180000);
+})();
