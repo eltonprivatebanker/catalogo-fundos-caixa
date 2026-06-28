@@ -73177,3 +73177,64 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     scroll-margin-top:18px!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v586 — Desktop: menu lateral sem sobrepor conteudo
+   ========================================================= */
+@media (min-width:1180px){
+  html.desktop-side-nav-no-overlap-v586 body #topo.page{
+    max-width:none!important;
+    width:100%!important;
+    margin:0!important;
+    padding:18px 22px 88px 18px!important;
+    overflow-x:hidden!important;
+  }
+
+  html.desktop-side-nav-no-overlap-v586 body #desktopAnchorNavV131.desktop-anchor-nav-ui-v132{
+    left:16px!important;
+    top:18px!important;
+    bottom:18px!important;
+    width:178px!important;
+    max-width:178px!important;
+  }
+
+  html.desktop-side-nav-no-overlap-v586 body #topo.page > :not(#desktopAnchorNavV131){
+    margin-left:208px!important;
+    width:calc(100% - 208px)!important;
+    max-width:calc(100% - 208px)!important;
+  }
+
+  html.desktop-side-nav-no-overlap-v586 body header.site-header-clean,
+  html.desktop-side-nav-no-overlap-v586 body .site-header-clean.site-header-v217{
+    margin-top:0!important;
+    margin-bottom:12px!important;
+  }
+
+  html.desktop-side-nav-no-overlap-v586 body #sec-fundos.section-gap{
+    margin-top:8px!important;
+  }
+
+  html.desktop-side-nav-no-overlap-v586 body #desktopAnchorNavV131 .desktop-anchor-link-v131{
+    min-height:40px!important;
+  }
+}
+
+@media (min-width:1180px) and (max-width:1360px){
+  html.desktop-side-nav-no-overlap-v586 body #desktopAnchorNavV131.desktop-anchor-nav-ui-v132{
+    width:156px!important;
+    max-width:156px!important;
+  }
+
+  html.desktop-side-nav-no-overlap-v586 body #topo.page > :not(#desktopAnchorNavV131){
+    margin-left:184px!important;
+    width:calc(100% - 184px)!important;
+    max-width:calc(100% - 184px)!important;
+  }
+
+  html.desktop-side-nav-no-overlap-v586 body #desktopAnchorNavV131 .desktop-anchor-link-v131{
+    padding-left:8px!important;
+    padding-right:8px!important;
+    font-size:.62rem!important;
+  }
+}
