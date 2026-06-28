@@ -74402,9 +74402,72 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   }
 }
 
-/* PATCH v604 — Diagnostico temporario do boot da tabela desktop */
+/* =========================================================
+   PATCH v605 — Estabiliza altura dos filtros no desktop
+   ========================================================= */
 @media (min-width:769px){
-  html.desktop-table-boot-diagnostic-v604 body{
-    --boot-table-diagnostic-v604:1;
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell{
+    height:240px!important;
+    min-height:240px!important;
+    max-height:240px!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-filter-height-stable-v605 body #sec-fundos #mobileFilterBar,
+  html.desktop-filter-height-stable-v605 body #sec-fundos #mobileCategorySelectShellV74,
+  html.desktop-filter-height-stable-v605 body #sec-fundos #mobileCatalogViewSwitch,
+  html.desktop-filter-height-stable-v605 body #mobileCatalogViewSwitch.mobile-catalog-view-switch,
+  html.desktop-filter-height-stable-v605 body #sec-fundos .mobile-catalog-view-switch{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-filter-height-stable-v605 body #sec-fundos #activeFilterStrip,
+  html.desktop-filter-height-stable-v605 body #sec-fundos .active-filter-strip{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .compact-toggle-wrap,
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .compact-toggle-label-v217{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    height:48px!important;
+    min-height:48px!important;
+    max-height:48px!important;
+  }
+
+  html.desktop-filter-height-stable-v605 body #sec-fundos .table-wrap{
+    margin-top:16px!important;
   }
 }
