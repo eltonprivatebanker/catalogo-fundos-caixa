@@ -72988,3 +72988,47 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     display:none!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v583 — Desktop: remove selos SIPII redundantes + menu semantico
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-header-clean-inflacao-juros-v583 body .site-header-clean .header-source-pill-v343,
+  html.desktop-header-clean-inflacao-juros-v583 body #sec-fundos > .section-title > .section-badge{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-header-clean-inflacao-juros-v583 body header.site-header-clean,
+  html.desktop-header-clean-inflacao-juros-v583 body .site-header-clean.site-header-v217{
+    grid-template-columns:minmax(300px,390px) minmax(0,1fr) max-content!important;
+  }
+
+  html.desktop-header-clean-inflacao-juros-v583 body .site-header-clean .header-data-status-v343{
+    justify-content:center!important;
+    min-width:0!important;
+  }
+
+  html.desktop-header-clean-inflacao-juros-v583 body .site-header-clean .header-update-v217{
+    white-space:nowrap!important;
+  }
+
+  html.desktop-header-clean-inflacao-juros-v583 body #sec-fundos > .section-title{
+    align-items:flex-end!important;
+    padding-right:0!important;
+  }
+
+  html.desktop-header-clean-inflacao-juros-v583 body .desktop-anchor-nav-ui-v132 .desktop-anchor-link-v131[data-anchor-target="sec-graficos"]{
+    min-width:auto!important;
+  }
+}

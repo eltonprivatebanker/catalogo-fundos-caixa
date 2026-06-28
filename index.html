@@ -22,13 +22,14 @@ document.documentElement.classList.add(
   'desktop-monthly-us-markets-v576',
   'desktop-monthly-comparison-chart-v580',
   'desktop-monthly-chart-start-zero-v581',
-  'desktop-header-kpis-focus-clean-v582'
+  'desktop-header-kpis-focus-clean-v582',
+  'desktop-header-clean-inflacao-juros-v583'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_DESKTOP_HEADER_KPIS_FOCUS_CLEAN_V582" name="app-build"/>
+<meta content="ELTAUM_DESKTOP_HEADER_CLEAN_INFLACAO_JUROS_V583" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -81,7 +82,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=desktop-header-kpis-focus-clean-v582" rel="stylesheet"/>
+<link href="style.css?v=desktop-header-clean-inflacao-juros-v583" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -186,7 +187,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=desktop-header-kpis-focus-clean-v582"></script>
+<script defer="" src="app.js?v=desktop-header-clean-inflacao-juros-v583"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -567,7 +568,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=desktop-header-kpis-focus-clean-v582" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=desktop-header-clean-inflacao-juros-v583" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -587,8 +588,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <div class="kpi kpi-best"><div class="kpi-icon">📈</div><div class="kpi-label">Melhor 12M</div><div class="kpi-value pos" id="kpiBest">—</div><div class="kpi-sub kpi-fund-name" id="kpiBestFundo">—</div></div>
 <div class="kpi kpi-worst"><div class="kpi-icon">📉</div><div class="kpi-label">Pior 12M</div><div class="kpi-value neg" id="kpiWorst">—</div><div class="kpi-sub kpi-fund-name" id="kpiWorstFundo">—</div></div>
 </div>
-<div aria-label="Origem e atualização dos dados" class="header-data-status-v343">
-<span class="header-source-pill-v343" title="Base pública de fundos usada no catálogo"><span class="badge-dot green" aria-hidden="true"></span><span>SIPII — Caixa</span></span>
+<div aria-label="Atualização dos dados" class="header-data-status-v343">
 <div aria-label="Última atualização dos dados" aria-live="polite" class="live-badge header-update-v217" id="lastUpdate" role="status">
 <span aria-hidden="true" class="live-dot"></span>
 <span class="live-update-label">Atualizando dados…</span>
@@ -605,7 +605,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <a class="desktop-anchor-link-v131" data-anchor-target="sec-mercado" href="#sec-mercado"><span>📈</span><strong>Mercado</strong></a>
 <a class="desktop-anchor-link-v131" data-anchor-target="sec-dolar" href="#sec-dolar"><span>💵</span><strong>Dólar</strong></a>
 <a class="desktop-anchor-link-v131" data-anchor-target="sec-focus" data-open-section="sec-focus-body" href="#sec-focus"><span>📋</span><strong>Focus</strong></a>
-<a class="desktop-anchor-link-v131" data-anchor-target="sec-graficos" data-open-section="sec-graficos-body" href="#sec-graficos"><span>📉</span><strong>Gráficos</strong></a>
+<a class="desktop-anchor-link-v131" data-anchor-target="sec-graficos" data-open-section="sec-graficos-body" href="#sec-graficos"><span>📈</span><strong>Inflação e juros</strong></a>
 <a class="desktop-anchor-link-v131" data-anchor-target="siteSources" data-open-details="footerDisclaimer" href="#siteSources"><span>ℹ️</span><strong>Fontes</strong></a>
 <a class="desktop-anchor-link-v131 desktop-anchor-search-v135" data-anchor-target="sec-fundos" data-search-focus="1" href="#sec-fundos"><span>🔎</span><strong>Buscar fundo</strong></a>
 </div>
@@ -653,7 +653,6 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <div class="section-gap" id="sec-fundos">
 <div class="section-title">
 <h2 class="section-title-v302 page-section-title-v302"><span aria-hidden="true" class="section-title-icon-v302">📁</span><span class="section-title-text-v302">Fundos disponíveis</span></h2>
-<span class="section-badge"><span class="badge-dot green"></span>SIPII — Caixa</span>
 </div>
 <div class="fund-filter-shell fund-filter-shell-v217" id="fundFilterShell">
 <div class="controls-bar fund-controls-v2 fund-primary-toolbar-v217">
