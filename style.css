@@ -73032,3 +73032,47 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     min-width:auto!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v584 — Desktop: header com KPIs essenciais
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-header-kpis-minimal-v584 body #sec-kpi.header-kpi-strip-v582{
+    grid-template-columns:1fr 1fr 1.12fr!important;
+    max-width:900px!important;
+    justify-self:center!important;
+  }
+
+  html.desktop-header-kpis-minimal-v584 body #sec-kpi.header-kpi-strip-v582 .kpi-pipeline,
+  html.desktop-header-kpis-minimal-v584 body #sec-kpi.header-kpi-strip-v582 .kpi-best,
+  html.desktop-header-kpis-minimal-v584 body #sec-kpi.header-kpi-strip-v582 .kpi-worst{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-header-kpis-minimal-v584 body #sec-kpi.header-kpi-strip-v582 .kpi{
+    min-height:64px!important;
+  }
+
+  html.desktop-header-kpis-minimal-v584 body header.site-header-clean,
+  html.desktop-header-kpis-minimal-v584 body .site-header-clean.site-header-v217{
+    grid-template-columns:minmax(300px,410px) minmax(520px,900px) max-content!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1240px){
+  html.desktop-header-kpis-minimal-v584 body #sec-kpi.header-kpi-strip-v582{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    max-width:none!important;
+  }
+}
