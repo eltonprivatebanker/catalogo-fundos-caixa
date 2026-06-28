@@ -72690,6 +72690,33 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.45rem!important;
     letter-spacing:.08em!important;
   }
+
+  html.desktop-monthly-us-header-currency-v593 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-header-toggle-v593{
+    display:inline-flex!important;
+    align-items:baseline!important;
+    justify-content:center!important;
+    gap:3px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+    color:inherit!important;
+    font:inherit!important;
+    letter-spacing:inherit!important;
+    text-transform:inherit!important;
+    cursor:pointer!important;
+  }
+
+  html.desktop-monthly-us-header-currency-v593 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-header-toggle-v593:hover small{
+    color:#ffd27a!important;
+  }
+
+  html.desktop-monthly-us-header-currency-v593 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-header-toggle-v593:focus-visible{
+    outline:1px solid rgba(240,195,107,.72)!important;
+    outline-offset:3px!important;
+    border-radius:6px!important;
+  }
 }
 
 @media (min-width:769px) and (max-width:1180px){

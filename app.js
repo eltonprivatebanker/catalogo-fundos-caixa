@@ -22589,6 +22589,10 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     });
   }
 
+  function monthlyUsHeaderCellV593(labelHtml, ariaLabel, usLabel){
+    return `<th class="monthly-us-only-v576" scope="col"><button aria-label="Alternar moeda do ${ariaLabel} entre USD e BRL" class="monthly-us-header-toggle-v593" data-monthly-us-header-toggle-v593 type="button">${labelHtml} <small>${usLabel}</small></button></th>`;
+  }
+
   function renderMonthlyHeaderV446(table, activeView){
     if(!table) return;
     table.dataset.viewV446 = activeView;
@@ -22597,7 +22601,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     const usLabel = usCurrency === 'brl' ? 'BRL' : 'USD';
     if(activeView === 'all'){
       const usCols = isDesktopMonthlyV576()
-        ? `<th class="monthly-us-only-v576" scope="col">S&P 500 <small>${usLabel}</small></th><th class="monthly-us-only-v576" scope="col">Nasdaq <small>${usLabel}</small></th><th class="monthly-us-only-v576" scope="col">Dow <small>${usLabel}</small></th>`
+        ? `${monthlyUsHeaderCellV593('S&amp;P 500', 'S&P 500', usLabel)}${monthlyUsHeaderCellV593('Nasdaq', 'Nasdaq', usLabel)}${monthlyUsHeaderCellV593('Dow', 'Dow', usLabel)}`
         : '';
       headRow.innerHTML = `<th scope="col">Mês</th><th scope="col">CDI</th><th scope="col">IPCA</th><th scope="col">Ibov</th><th scope="col">Dólar</th>${usCols}`;
     }else{
@@ -22640,9 +22644,9 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
 
     const desktopV576 = isDesktopMonthlyV576();
     document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
-    if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576');
+    if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576','desktop-monthly-us-header-currency-v593');
     const meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588' : BUILD;
+    if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_US_HEADER_CURRENCY_V593' : BUILD;
 
     const dados = getMercadoV445();
     const cdiCard = dados?.cards?.cdi || {};
@@ -22799,6 +22803,13 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       const currencyBtn = event.target.closest('[data-monthly-us-currency-v578]');
       if(currencyBtn){
         usCurrency = currencyBtn.dataset.monthlyUsCurrencyV578 === 'brl' ? 'brl' : 'usd';
+        renderMonthlyIndicatorsV445();
+        return;
+      }
+
+      const headerCurrencyBtn = event.target.closest('[data-monthly-us-header-toggle-v593]');
+      if(headerCurrencyBtn){
+        usCurrency = usCurrency === 'brl' ? 'usd' : 'brl';
         renderMonthlyIndicatorsV445();
         return;
       }
@@ -26481,6 +26492,28 @@ function buildDetailPanel(r,colspan){
   else apply();
   window.addEventListener('load', apply, {once:true});
   [40, 100, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v593 — permite alternar USD/BRL pelo cabecalho das colunas EUA */
+(function desktopMonthlyUsHeaderCurrencyV593(){
+  var BUILD = 'ELTAUM_DESKTOP_MONTHLY_US_HEADER_CURRENCY_V593';
+  var PATCH_CLASS = 'desktop-monthly-us-header-currency-v593';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
     setTimeout(apply, delay);
   });
 })();
