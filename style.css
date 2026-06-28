@@ -72127,3 +72127,207 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     transition:none!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v574 — Desktop: indicadores mensais em tela
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445{
+    display:block!important;
+    margin:0 0 12px!important;
+    padding:12px 14px!important;
+    border:1px solid rgba(200,151,58,.20)!important;
+    border-radius:14px!important;
+    background:linear-gradient(180deg,rgba(14,19,34,.82),rgba(7,10,19,.96))!important;
+    box-shadow:0 14px 30px rgba(0,0,0,.16)!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445{
+    display:flex!important;
+    align-items:flex-start!important;
+    justify-content:space-between!important;
+    gap:14px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-kicker-v445{
+    display:block!important;
+    margin:0 0 3px!important;
+    color:#f0c36b!important;
+    font-size:.54rem!important;
+    font-weight:900!important;
+    letter-spacing:.12em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 h3{
+    margin:0!important;
+    color:#f4f7fb!important;
+    font-size:.98rem!important;
+    line-height:1.15!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 p{
+    margin:2px 0 0!important;
+    color:rgba(203,213,225,.70)!important;
+    font-size:.62rem!important;
+    line-height:1.25!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445{
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:4px!important;
+    padding:3px!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    border-radius:12px!important;
+    background:rgba(8,12,24,.56)!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button{
+    min-height:28px!important;
+    padding:0 12px!important;
+    border:0!important;
+    border-radius:9px!important;
+    background:transparent!important;
+    color:rgba(203,213,225,.70)!important;
+    font-size:.62rem!important;
+    font-weight:900!important;
+    cursor:pointer!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button.active{
+    background:rgba(200,151,58,.16)!important;
+    color:#f0c36b!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    display:none!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:8px!important;
+    margin:0 0 10px!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article{
+    min-height:52px!important;
+    padding:8px 10px!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    border-radius:10px!important;
+    background:rgba(8,12,24,.52)!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 span{
+    display:block!important;
+    color:rgba(178,191,222,.70)!important;
+    font-size:.50rem!important;
+    font-weight:900!important;
+    letter-spacing:.10em!important;
+    line-height:1!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 strong{
+    display:block!important;
+    margin-top:5px!important;
+    font-size:.98rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    max-height:246px!important;
+    overflow:auto!important;
+    border:1px solid rgba(148,163,184,.10)!important;
+    border-radius:11px!important;
+    background:rgba(5,8,17,.38)!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445{
+    width:100%!important;
+    border-collapse:collapse!important;
+    table-layout:fixed!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th,
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td{
+    padding:8px 10px!important;
+    border-bottom:1px solid rgba(148,163,184,.08)!important;
+    color:#dfe7f3!important;
+    font-size:.66rem!important;
+    line-height:1.1!important;
+    font-weight:850!important;
+    text-align:right!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th{
+    position:sticky!important;
+    top:0!important;
+    z-index:2!important;
+    background:#0b1020!important;
+    color:rgba(178,191,222,.68)!important;
+    font-size:.52rem!important;
+    letter-spacing:.10em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:first-child,
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:first-child{
+    text-align:left!important;
+    width:18%!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .pos,
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 .pos{
+    color:#30d796!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .neg,
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 .neg{
+    color:#ff6f8b!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 .muted,
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 .muted{
+    color:#7f8aa6!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-more-v445{
+    display:none!important;
+  }
+
+  /* A tabela mensal assume o papel analítico; este resumo fica curto. */
+  html.desktop-monthly-indicators-v574 body #sec-mercado .rates-reference-v167 #cdiMonthCarouselV322,
+  html.desktop-monthly-indicators-v574 body #sec-mercado .rates-reference-v167 .cdi-month-carousel-v322{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado .rates-reference-v167 #cdiYearHistory,
+  html.desktop-monthly-indicators-v574 body #sec-mercado .rates-reference-v167 .cdi-year-history{
+    grid-template-columns:240px minmax(0,1fr)!important;
+    grid-template-areas:"head kpis"!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1280px){
+  html.desktop-monthly-indicators-v574 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  html.desktop-monthly-indicators-v574 body #sec-mercado .rates-reference-v167 #cdiYearHistory,
+  html.desktop-monthly-indicators-v574 body #sec-mercado .rates-reference-v167 .cdi-year-history{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"head" "kpis"!important;
+  }
+}
