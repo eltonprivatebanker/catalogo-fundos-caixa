@@ -27045,8 +27045,9 @@ function buildDetailPanel(r,colspan){
 
 /* PATCH v607 — Mobile: ranking renderiza sem herdar o renderizador desktop */
 (function mobileRankingRenderRestoreV607(){
-  var BUILD = 'ELTAUM_MOBILE_RANKING_RENDER_RESTORE_V607';
+  var BUILD = 'ELTAUM_MOBILE_FILTER_HEADER_CLEAN_V608';
   var PATCH_CLASS = 'mobile-ranking-render-restore-v607';
+  var PATCH_CLASS_V608 = 'mobile-filter-header-clean-v608';
   function isMobile(){
     return window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
   }
@@ -27055,7 +27056,7 @@ function buildDetailPanel(r,colspan){
   }
   function restore(){
     if(!isMobile()) return;
-    document.documentElement.classList.add(PATCH_CLASS);
+    document.documentElement.classList.add(PATCH_CLASS, PATCH_CLASS_V608);
     var meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = BUILD;
     if(typeof window.__renderRankingsMobileBaseV607 === 'function'){

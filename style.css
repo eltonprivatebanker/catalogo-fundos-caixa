@@ -74907,3 +74907,36 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     padding:9px!important;
   }
 }
+
+/* PATCH v608 — Mobile: remove titulo interno duplicado "Filtros" */
+@media (max-width:768px){
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-head-v74,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-head-v74 span,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-head-v74 strong,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-head-v74::before,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-head-v74::after,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-head-v74 span::before,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-head-v74 span::after{
+    display:none!important;
+    content:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-filter-header-clean-v608 body #sec-fundos #mobileCategorySelectShellV74{
+    margin-top:7px!important;
+    gap:0!important;
+  }
+
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-category-select-wrap-v74,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-risk-select-v198,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-pf-toggle-v75,
+  html.mobile-filter-header-clean-v608 body #sec-fundos .mobile-sort-shell-v75{
+    min-height:54px!important;
+  }
+}
