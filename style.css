@@ -76585,3 +76585,109 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     text-overflow:clip!important;
   }
 }
+
+
+/* PATCH v623 — Mobile ranking: resumo em carrossel compacto
+   O problema não era só o nome: o menu inferior fixo cobria a lista porque
+   os 3 cards-resumo empurravam o bloco Top Fundos para baixo. No mobile,
+   o resumo vira uma faixa horizontal compacta e o conteúdo principal sobe. */
+@media (max-width:768px){
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-strip{
+    display:flex!important;
+    grid-template-columns:none!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:10px 0 10px!important;
+    padding:0 2px 4px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+    scroll-snap-type:x mandatory!important;
+    scrollbar-width:none!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-strip::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card{
+    flex:0 0 78%!important;
+    min-width:78%!important;
+    max-width:78%!important;
+    min-height:68px!important;
+    height:68px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "label value"
+      "name value"!important;
+    align-items:center!important;
+    column-gap:10px!important;
+    row-gap:3px!important;
+    margin:0!important;
+    padding:9px 12px!important;
+    border-radius:14px!important;
+    scroll-snap-align:start!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card span{
+    grid-area:label!important;
+    margin:0!important;
+    font-size:.58rem!important;
+    line-height:1.05!important;
+    letter-spacing:.06em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card strong{
+    grid-area:value!important;
+    margin:0!important;
+    font-size:1.02rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card small{
+    grid-area:name!important;
+    display:block!important;
+    margin:0!important;
+    font-size:.62rem!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    -webkit-line-clamp:1!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-card{
+    margin-top:8px!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-card-header{
+    padding:10px 12px 8px!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-card-sub,
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-advisory-note{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-list{
+    padding-bottom:calc(118px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card{
+    flex-basis:84%!important;
+    min-width:84%!important;
+    max-width:84%!important;
+  }
+}
