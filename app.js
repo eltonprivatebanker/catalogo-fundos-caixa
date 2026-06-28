@@ -26947,3 +26947,25 @@ function buildDetailPanel(r,colspan){
     setTimeout(apply, delay);
   });
 })();
+
+
+/* PATCH v602 — Ajuste fino vertical dos KPIs do header */
+(function desktopHeaderKpiVerticalFineV602(){
+  var BUILD = 'ELTAUM_DESKTOP_HEADER_KPI_VERTICAL_FINE_V602';
+  var PATCH_CLASS = 'desktop-header-kpi-vertical-fine-v602';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [60, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
