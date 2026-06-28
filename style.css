@@ -73802,3 +73802,137 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     flex-wrap:wrap!important;
   }
 }
+
+/* =========================================================
+   PATCH v597 — Header desktop: KPIs essenciais alinhados a direita
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-header-kpis-right-v597 body header.site-header-clean,
+  html.desktop-header-kpis-right-v597 body .site-header-clean.site-header-v217{
+    display:grid!important;
+    grid-template-columns:minmax(360px,auto) minmax(0,1fr)!important;
+    grid-template-areas:"brand kpis"!important;
+    align-items:center!important;
+    gap:24px!important;
+    min-height:112px!important;
+    padding:22px 34px!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body .site-header-clean .brand{
+    grid-area:brand!important;
+    justify-self:start!important;
+    min-width:0!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body .site-header-clean .brand-logo{
+    width:50px!important;
+    height:50px!important;
+    border-radius:12px!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body .site-header-clean .brand-text h1{
+    font-size:1.72rem!important;
+    line-height:1.08!important;
+    white-space:nowrap!important;
+    letter-spacing:.005em!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582{
+    grid-area:kpis!important;
+    justify-self:end!important;
+    align-self:center!important;
+    display:grid!important;
+    grid-template-columns:176px 176px 200px!important;
+    width:auto!important;
+    max-width:none!important;
+    min-width:0!important;
+    gap:10px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-pipeline,
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-best,
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-worst,
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-icon{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    min-width:0!important;
+    min-height:68px!important;
+    padding:11px 14px!important;
+    border-radius:11px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    background:rgba(10,15,29,.70)!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi::before{
+    height:2px!important;
+    opacity:.78!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-label{
+    margin:0 0 7px!important;
+    color:rgba(178,191,222,.72)!important;
+    font-size:.50rem!important;
+    line-height:1!important;
+    letter-spacing:.14em!important;
+    font-weight:950!important;
+    text-transform:uppercase!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-value{
+    margin:0!important;
+    color:#f4f7fb!important;
+    font-size:1.08rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-pl .kpi-value{
+    color:#f0c36b!important;
+    font-size:1.04rem!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582 .kpi-sub{
+    margin:7px 0 0!important;
+    color:rgba(203,213,225,.68)!important;
+    font-size:.56rem!important;
+    line-height:1.15!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-header-kpis-right-v597 body header.site-header-clean,
+  html.desktop-header-kpis-right-v597 body .site-header-clean.site-header-v217{
+    grid-template-columns:1fr!important;
+    grid-template-areas:"brand" "kpis"!important;
+    gap:14px!important;
+  }
+
+  html.desktop-header-kpis-right-v597 body #sec-kpi.header-kpi-strip-v582{
+    justify-self:stretch!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    width:100%!important;
+  }
+}
