@@ -71819,3 +71819,22 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     color:#f0c36b!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v571 — Desktop: remove faixa redundante de fechamento
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-hide-closed-month-launch-v571 body #sec-mercado #closedMonthLaunch.closed-month-launch,
+  html.desktop-hide-closed-month-launch-v571 body #sec-mercado .closed-month-launch-premium{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+  }
+}

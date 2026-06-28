@@ -3418,7 +3418,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -3634,9 +3634,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_DOCS_COMPACT_V570';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_HIDE_CLOSED_MONTH_LAUNCH_V571';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -25613,10 +25613,22 @@ function buildDetailPanel(r,colspan){
       'desktop-ranking-toolbar-locked-v567',
       'desktop-ranking-compact-height-v568',
       'desktop-ranking-ultra-compact-v569',
-      'desktop-docs-compact-v570'
+      'desktop-docs-compact-v570',
+      'desktop-hide-closed-month-launch-v571'
     );
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_DOCS_COMPACT_V570';
+    if(meta) meta.content = 'ELTAUM_DESKTOP_HIDE_CLOSED_MONTH_LAUNCH_V571';
+    var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
+    if(closedMonthLaunch){
+      closedMonthLaunch.style.setProperty('display','none','important');
+      closedMonthLaunch.style.setProperty('visibility','hidden','important');
+      closedMonthLaunch.style.setProperty('height','0','important');
+      closedMonthLaunch.style.setProperty('min-height','0','important');
+      closedMonthLaunch.style.setProperty('margin','0','important');
+      closedMonthLaunch.style.setProperty('padding','0','important');
+      closedMonthLaunch.style.setProperty('border','0','important');
+      closedMonthLaunch.style.setProperty('overflow','hidden','important');
+    }
     var toolbar = document.querySelector('#rankingsSection .ranking-toolbar-v136');
     if(toolbar){
       toolbar.style.setProperty('width','min(100%, 940px)','important');
