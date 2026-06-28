@@ -73420,3 +73420,32 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v591 — Desktop: estabiliza carregamento inicial
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-initial-load-stable-v591.app-booting body .page{
+    opacity:1!important;
+    transform:none!important;
+    transition:none!important;
+  }
+
+  html.desktop-initial-load-stable-v591:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #sec-fundos .table-wrap{
+    min-height:820px!important;
+    overflow-anchor:none!important;
+  }
+
+  html.desktop-initial-load-stable-v591:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #loadMsg{
+    min-height:758px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex-direction:column!important;
+  }
+
+  html.desktop-initial-load-stable-v591.catalog-table-ready-v591 body:not(.fund-card-mode) #sec-fundos .table-wrap{
+    min-height:0!important;
+  }
+}

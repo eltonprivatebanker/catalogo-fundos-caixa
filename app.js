@@ -6019,6 +6019,7 @@ async function carregarDados(){
     buildHeader(); buildCatFilters(cats); buildBenchmarkFilters(allRows); updateKPIs(); applyFilter();
     $('loadMsg').style.display='none';
     $('mainTable').style.display='table';
+    document.documentElement.classList.add('catalog-table-ready-v591');
     renderRankings();
   }catch(err){
     $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
@@ -26426,6 +26427,33 @@ function buildDetailPanel(r,colspan){
   else apply();
   window.addEventListener('load', apply, {once:true});
   [80, 250, 700, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
+    setTimeout(apply, delay);
+  });
+})();
+
+
+/* PATCH v591 — estabiliza o primeiro carregamento do catalogo desktop */
+(function desktopInitialLoadStableV591(){
+  var BUILD = 'ELTAUM_DESKTOP_INITIAL_LOAD_STABLE_V591';
+  var PATCH_CLASS = 'desktop-initial-load-stable-v591';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var table = document.getElementById('mainTable');
+    var body = document.getElementById('tableBody');
+    if(table && body && body.children.length && table.style.display !== 'none'){
+      document.documentElement.classList.add('catalog-table-ready-v591');
+    }
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
     setTimeout(apply, delay);
   });
 })();

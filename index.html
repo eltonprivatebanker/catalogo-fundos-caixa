@@ -30,13 +30,14 @@ document.documentElement.classList.add(
   'desktop-hide-funds-heading-v587',
   'desktop-side-nav-market-fix-v588',
   'desktop-side-nav-market-lock-v589',
-  'desktop-ranking-columns-v590'
+  'desktop-ranking-columns-v590',
+  'desktop-initial-load-stable-v591'
 );
 </script>
 <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
 <meta content="#07080f" name="theme-color"/>
 <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
-<meta content="ELTAUM_DESKTOP_RANKING_COLUMNS_V590" name="app-build"/>
+<meta content="ELTAUM_DESKTOP_INITIAL_LOAD_STABLE_V591" name="app-build"/>
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
@@ -48,6 +49,11 @@ document.documentElement.classList.add(
   html.app-booting{background:#07080f;color-scheme:dark;}
   html.app-booting body{background:#07080f;}
   html.app-booting .page{opacity:0;transform:translateY(6px);}
+  html.desktop-initial-load-stable-v591.app-booting .page{opacity:1!important;transform:none!important;}
+  @media (min-width:769px){
+    html.desktop-initial-load-stable-v591:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #sec-fundos .table-wrap{min-height:820px!important;}
+    html.desktop-initial-load-stable-v591:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #loadMsg{min-height:758px!important;display:flex!important;align-items:center!important;justify-content:center!important;flex-direction:column!important;}
+  }
   html.app-ready .page{opacity:1;transform:none;transition:opacity .22s ease,transform .22s ease;}
   #appBootScreen{position:fixed;inset:0;z-index:999999;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 55% at 50% -10%,rgba(200,151,58,.12),transparent 60%),#07080f;color:#edf1fb;transition:opacity .22s ease,visibility .22s ease;}
   html.app-ready #appBootScreen,html:not(.app-booting) #appBootScreen{opacity:0;visibility:hidden;pointer-events:none;}
@@ -89,7 +95,7 @@ html:not(.app-booting) .page{
 }
 
 </style>
-<link href="style.css?v=desktop-ranking-columns-v590" rel="stylesheet"/>
+<link href="style.css?v=desktop-initial-load-stable-v591" rel="stylesheet"/>
 <style id="desktop-filter-buttons-v497-critical-inline">
 @media (min-width:769px){
   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
@@ -194,7 +200,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
   else cleanupLegacyUi();
 })();
 </script>
-<script defer="" src="app.js?v=desktop-ranking-columns-v590"></script>
+<script defer="" src="app.js?v=desktop-initial-load-stable-v591"></script>
 
 <style id="desktop-detail-cleanup-v505-critical-inline">
 @media (min-width:769px){
@@ -575,7 +581,7 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 }
 </style>
 
-<link href="tokens-caixa.css?v=desktop-ranking-columns-v590" rel="stylesheet"/>
+<link href="tokens-caixa.css?v=desktop-initial-load-stable-v591" rel="stylesheet"/>
 </head>
 <body>
 <div class="page" id="topo">
