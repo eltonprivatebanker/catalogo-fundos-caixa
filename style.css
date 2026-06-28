@@ -74401,3 +74401,10 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     max-height:none!important;
   }
 }
+
+/* PATCH v604 — Diagnostico temporario do boot da tabela desktop */
+@media (min-width:769px){
+  html.desktop-table-boot-diagnostic-v604 body{
+    --boot-table-diagnostic-v604:1;
+  }
+}

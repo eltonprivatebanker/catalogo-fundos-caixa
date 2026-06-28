@@ -1,4 +1,213 @@
 // ELTAUM_REMOVE_12M_XAXIS_v342
+/* PATCH v604 — Diagnostico do carregamento inicial da tabela desktop */
+(function desktopTableBootDiagnosticV604(){
+  var BUILD = 'ELTAUM_DESKTOP_TABLE_BOOT_DIAGNOSTIC_V604';
+  var PATCH_CLASS = 'desktop-table-boot-diagnostic-v604';
+  var START = performance.now();
+  var MAX_MS = 10000;
+  var lastKey = '';
+  var frame = 0;
+  var stopped = false;
+  var snapshots = [];
+  var resizeObserver = null;
+  var observed = new WeakSet();
+  var scrollToOriginal = window.scrollTo;
+  var scrollByOriginal = window.scrollBy;
+  var intoViewOriginal = Element.prototype.scrollIntoView;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function shortClasses(){
+    return Array.from(document.documentElement.classList || [])
+      .filter(function(cls){
+        return /desktop-|catalog-table-ready|fund-card-mode|app-booting|v59|v60/.test(cls);
+      })
+      .join(' ');
+  }
+
+  function box(name, selector){
+    var el = document.querySelector(selector);
+    if(!el) return {name:name, found:false};
+    var r = el.getBoundingClientRect();
+    var cs = getComputedStyle(el);
+    return {
+      name:name,
+      found:true,
+      top:Math.round(r.top),
+      height:Math.round(r.height),
+      display:cs.display,
+      visibility:cs.visibility,
+      opacity:cs.opacity,
+      minHeight:cs.minHeight,
+      heightCss:cs.height,
+      marginTop:cs.marginTop,
+      marginBottom:cs.marginBottom,
+      transform:cs.transform === 'none' ? 'none' : cs.transform
+    };
+  }
+
+  function targetRows(){
+    return [
+      box('header','header.site-header-clean'),
+      box('kpis','#sec-kpi'),
+      box('fundos','#sec-fundos'),
+      box('filtros','#fundFilterShell'),
+      box('loadMsg','#loadMsg'),
+      box('tableWrap','#sec-fundos .table-wrap'),
+      box('mainTable','#mainTable'),
+      box('thead','#mainTable thead'),
+      box('tbody','#mainTable tbody'),
+      box('pagination','.pagination-row')
+    ];
+  }
+
+  function state(){
+    var tableBody = document.getElementById('tableBody');
+    var loadMsg = document.getElementById('loadMsg');
+    var mainTable = document.getElementById('mainTable');
+    return {
+      t:Math.round(performance.now() - START),
+      scrollY:Math.round(window.scrollY || 0),
+      docH:Math.round(document.documentElement.scrollHeight || 0),
+      ready:document.documentElement.classList.contains('catalog-table-ready-v591'),
+      loadMsgInline:loadMsg ? loadMsg.style.display || '(empty)' : '(missing)',
+      mainTableInline:mainTable ? mainTable.style.display || '(empty)' : '(missing)',
+      bodyRows:tableBody ? tableBody.children.length : -1,
+      htmlClasses:shortClasses()
+    };
+  }
+
+  function makeKey(rows, st){
+    return JSON.stringify({
+      scrollY:st.scrollY,
+      docH:st.docH,
+      ready:st.ready,
+      loadMsgInline:st.loadMsgInline,
+      mainTableInline:st.mainTableInline,
+      bodyRows:st.bodyRows,
+      rows:rows.map(function(row){
+        return [row.name,row.found,row.top,row.height,row.display,row.visibility,row.opacity,row.minHeight,row.heightCss,row.transform];
+      })
+    });
+  }
+
+  function log(reason, detail){
+    if(stopped || !isDesktop()) return;
+    var rows = targetRows();
+    var st = state();
+    var key = makeKey(rows, st);
+    if(key === lastKey && !/^(inicio|fim|scrollTo|scrollBy|scrollIntoView)$/.test(reason)) return;
+    lastKey = key;
+    var item = {reason:reason, state:st, rows:rows, detail:detail || null};
+    snapshots.push(item);
+    if(snapshots.length > 80) snapshots.shift();
+    console.groupCollapsed('[BOOT_TABLE_V604] ' + reason + ' +' + st.t + 'ms');
+    console.log(st);
+    if(detail) console.log('detail', detail);
+    console.table(rows);
+    console.groupEnd();
+  }
+
+  function observeCurrentTargets(){
+    if(!resizeObserver || stopped) return;
+    [
+      'header.site-header-clean',
+      '#sec-kpi',
+      '#sec-fundos',
+      '#fundFilterShell',
+      '#loadMsg',
+      '#sec-fundos .table-wrap',
+      '#mainTable',
+      '#mainTable thead',
+      '#mainTable tbody',
+      '.pagination-row'
+    ].forEach(function(selector){
+      var el = document.querySelector(selector);
+      if(el && !observed.has(el)){
+        observed.add(el);
+        resizeObserver.observe(el);
+      }
+    });
+  }
+
+  function loop(){
+    if(stopped) return;
+    frame += 1;
+    observeCurrentTargets();
+    log('frame');
+    if(performance.now() - START < MAX_MS) requestAnimationFrame(loop);
+    else log('fim');
+  }
+
+  function install(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+
+    window.scrollTo = function(){
+      log('scrollTo', {args:Array.from(arguments)});
+      return scrollToOriginal.apply(window, arguments);
+    };
+    window.scrollBy = function(){
+      log('scrollBy', {args:Array.from(arguments)});
+      return scrollByOriginal.apply(window, arguments);
+    };
+    Element.prototype.scrollIntoView = function(){
+      log('scrollIntoView', {target:this.id || this.className || this.tagName, args:Array.from(arguments)});
+      return intoViewOriginal.apply(this, arguments);
+    };
+
+    resizeObserver = new ResizeObserver(function(entries){
+      entries.forEach(function(entry){
+        var el = entry.target;
+        log('resize', {target:el.id || el.className || el.tagName});
+      });
+    });
+
+    var mutationObserver = new MutationObserver(function(mutations){
+      var interesting = mutations.slice(0, 6).map(function(m){
+        return {
+          type:m.type,
+          target:m.target.id || m.target.className || m.target.nodeName,
+          attr:m.attributeName || '',
+          added:m.addedNodes ? m.addedNodes.length : 0,
+          removed:m.removedNodes ? m.removedNodes.length : 0
+        };
+      });
+      log('mutation', interesting);
+    });
+    mutationObserver.observe(document.documentElement, {
+      childList:true,
+      subtree:true,
+      attributes:true,
+      attributeFilter:['class','style','hidden']
+    });
+
+    window.__BOOT_TABLE_V604 = {
+      build:BUILD,
+      snapshots:snapshots,
+      stop:function(){
+        stopped = true;
+        if(resizeObserver) resizeObserver.disconnect();
+        mutationObserver.disconnect();
+        window.scrollTo = scrollToOriginal;
+        window.scrollBy = scrollByOriginal;
+        Element.prototype.scrollIntoView = intoViewOriginal;
+        console.warn('[BOOT_TABLE_V604] parado');
+      }
+    };
+
+    console.warn('[BOOT_TABLE_V604] ativo por 10s desde o boot. Exporte o console apos o carregamento.');
+    log('inicio');
+    requestAnimationFrame(loop);
+  }
+
+  install();
+})();
+
 // ELTAUM_INFLATION_SUMMARY_COMPACT_v341
 // ELTAUM_CHARTS_LOOP_FIX_v340
 // ELTAUM_CHARTS_TABS_FIX_v339
