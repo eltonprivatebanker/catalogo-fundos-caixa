@@ -77566,3 +77566,50 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     text-align:left!important;
   }
 }
+
+
+/* PATCH v629 — Mobile: elimina espaços vazios excessivos entre Rankings e Mercado */
+@media (max-width:768px){
+  html.mobile-ranking-gap-fix-v629 body #rankingsSection{
+    margin-top:18px!important;
+    margin-bottom:0!important;
+    padding-bottom:22px!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-card{
+    margin-top:10px!important;
+    margin-bottom:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-list{
+    padding-bottom:0!important;
+    margin-bottom:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-more-wrap{
+    padding:6px 12px 12px!important;
+    margin:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-more-btn{
+    margin:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingsSection + section,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado{
+    margin-top:0!important;
+    padding-top:10px!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .section-title,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .section-title-v302,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .page-section-title-v302,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .market-reference-head-v167{
+    margin-top:0!important;
+  }
+}
