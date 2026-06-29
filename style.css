@@ -76987,3 +76987,32 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.72rem!important;
   }
 }
+
+
+/* PATCH v625 — Mobile: remove título redundante dos fundos e compacta nomes dos cards
+   - Esconde "Fundos disponíveis" somente no mobile para ganhar área útil.
+   - Mantém o nome completo no title do card, mas exibe versão mais curta no corpo. */
+@media (max-width:768px){
+  body #sec-fundos > h2.section-title-v302,
+  body #sec-fundos > h2.page-section-title-v302,
+  body #sec-fundos > .section-title-v302.page-section-title-v302,
+  body #sec-fundos > .section-title,
+  body #sec-fundos .page-section-title-v302:has(.section-title-text-v302){
+    display:none!important;
+  }
+
+  body #sec-fundos{
+    margin-top:8px!important;
+  }
+
+  body #sec-fundos .fund-card-mobile-name,
+  body #sec-fundos .fund-card-list-name{
+    max-width:100%!important;
+    font-size:.98rem!important;
+    line-height:1.16!important;
+    letter-spacing:-.025em!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+}

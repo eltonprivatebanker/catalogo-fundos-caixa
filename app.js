@@ -8522,8 +8522,46 @@ document.addEventListener('DOMContentLoaded', function(){
     return vJson || '';
   }
 
+  function compactMobileFundNameV625(value){
+    const full = String(value || '').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim();
+    if(!full || full === '—') return full || '—';
+
+    let s = full
+      .replace(/CAIXA/gi,'')
+      .replace(/(FIC|FIF|FI|FIA|FIM|FIP|ETF)/gi,'')
+      .replace(/(FUNDO|DE|DO|DA|DOS|DAS|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)/gi,'')
+      .replace(/(RESP|LTDA|LTD|LP)/gi,'')
+      .replace(/\s*-\s*/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+
+    const replacements = [
+      [/ACOES/gi,'Ações'],
+      [/RENDA FIXA/gi,'Renda Fixa'],
+      [/REFERENCIADO/gi,'Ref.'],
+      [/SIMPLES/gi,'Simples'],
+      [/CREDITO PRIVADO/gi,'Crédito Privado'],
+      [/CRED PRIV/gi,'Cred. Priv.'],
+      [/MULTIMERCADO/gi,'Multimercado'],
+      [/ELETROBRAS MIGRACAO/gi,'Eletrobras Migração'],
+      [/ELETROBRAS/gi,'Eletrobras'],
+      [/SEGURIDADE/gi,'Seguridade'],
+      [/INDEXA IBOVESPA/gi,'Indexa Ibovespa'],
+      [/FACIL/gi,'Fácil'],
+      [/LONGO PRAZO/gi,'Longo Prazo'],
+      [/CURTO PRAZO/gi,'Curto Prazo']
+    ];
+    replacements.forEach(([pattern,replacement])=>{ s = s.replace(pattern,replacement); });
+    s = s.replace(/\s+/g,' ').trim();
+
+    if(!s) return full;
+    if(s.length > 42) s = s.slice(0, 39).trimEnd() + '…';
+    return s;
+  }
+
   function buildMobileFundCard(r,idx){
     const nome=fmtDash(r['Fundo']);
+    const nomeMobile=compactMobileFundNameV625(nome);
     const cat=fmtDash(r['Categoria']);
     const risco=fmtDash(r['Perfil de Risco']);
     const cota=fmtDash(r['Cota (R$)']);
@@ -8557,7 +8595,7 @@ document.addEventListener('DOMContentLoaded', function(){
             ${risco!=='—'?`<span class="perfil-chip pchip-TODOS">${risco}</span>`:''}
             ${codigo?`<span class="fund-code-chip">Cód. ${htmlAttr(codigo)}</span>`:''}
           </div>
-          <div class="fund-card-mobile-name fund-card-list-name">${htmlAttr(nome)}</div>
+          <div class="fund-card-mobile-name fund-card-list-name" title="${htmlAttr(nome)}">${htmlAttr(nomeMobile)}</div>
         </div>
       </div>
 
