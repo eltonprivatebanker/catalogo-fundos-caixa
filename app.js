@@ -27508,7 +27508,7 @@ function buildDetailPanel(r,colspan){
     syncOriginalToMobile();
     bind();
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_EQUAL_COMPACT_V620';
+    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_INDEPENDENT_V617_FINAL_V625';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
