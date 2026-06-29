@@ -22954,6 +22954,9 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       view = 'all';
     }
 
+    root.dataset.monthlyViewV630 = activeView;
+    if(table) table.dataset.monthlyViewV630 = activeView;
+
     renderMonthlyHeaderV446(table, activeView);
 
     const summarySuffix = range === '12m' ? '12M' : 'ano';
