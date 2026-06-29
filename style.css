@@ -77241,3 +77241,142 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.92rem!important;
   }
 }
+
+/* =========================================================
+   PATCH v627 — Mobile Ranking: resumo empilhado em 2 linhas
+   - substitui os 2 cards em colunas por 2 cards horizontais empilhados
+   - aumenta a largura útil dos nomes dos fundos
+   - mantém desktop preservado
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:9px!important;
+    width:100%!important;
+    margin:6px 0 16px!important;
+    padding:10px!important;
+    border-radius:18px!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-pl{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "label value"
+      "name  value"!important;
+    align-items:center!important;
+    column-gap:12px!important;
+    row-gap:5px!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:72px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:12px 13px!important;
+    border:1px solid rgba(148,163,184,.16)!important;
+    border-radius:15px!important;
+    background:linear-gradient(180deg,rgba(11,15,28,.88),rgba(7,10,19,.96))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    text-align:left!important;
+    justify-content:stretch!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card + .ranking-summary-card{
+    border-left:1px solid rgba(148,163,184,.16)!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card span{
+    grid-area:label!important;
+    display:block!important;
+    min-height:0!important;
+    margin:0!important;
+    color:#f0c36b!important;
+    font-size:.60rem!important;
+    line-height:1.05!important;
+    font-weight:900!important;
+    letter-spacing:.075em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    text-align:left!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card small{
+    grid-area:name!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    max-height:34px!important;
+    margin:0!important;
+    color:#f4f7ff!important;
+    font-size:.74rem!important;
+    line-height:1.16!important;
+    font-weight:850!important;
+    letter-spacing:-.015em!important;
+    text-align:left!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:normal!important;
+    overflow-wrap:break-word!important;
+    hyphens:none!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card strong{
+    grid-area:value!important;
+    align-self:center!important;
+    justify-self:end!important;
+    margin:0!important;
+    color:#1ff0a0!important;
+    font-size:1.02rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.035em!important;
+    white-space:nowrap!important;
+    text-align:right!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    gap:8px!important;
+    padding:9px!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "label"
+      "name"
+      "value"!important;
+    row-gap:6px!important;
+    min-height:90px!important;
+    padding:11px 12px!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card strong{
+    justify-self:start!important;
+    font-size:.98rem!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card span{
+    white-space:normal!important;
+  }
+}
