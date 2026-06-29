@@ -27868,3 +27868,80 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', bind, {once:true});
   [80,240,600,1200,2400,5000].forEach(delay=>setTimeout(applyRankingSummaryMinimalV628,delay));
 })();
+
+
+/* PATCH v629 — Mobile: ranking sem loop de MutationObserver
+   Evita travamento em navegadores mobile causado por observadores que reescrevem
+   os textos do resumo continuamente. Mantém o visual v628, mas só aplica após render. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_NO_LOOP_v629';
+  function isMobile(){
+    try{return window.matchMedia('(max-width:768px)').matches;}catch(e){return false;}
+  }
+  function setTextIfChanged(el, value){
+    if(!el || value == null) return;
+    const next = String(value);
+    if(el.textContent !== next) el.textContent = next;
+  }
+  function applySummaryMinimalSafeV629(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add('mobile-ranking-summary-minimal-v628','mobile-ranking-no-loop-v629');
+    const cards = document.querySelectorAll('#rankingGrid .ranking-summary-card');
+    cards.forEach((card,index)=>{
+      const label = card.querySelector('.ranking-summary-label, span');
+      const name = card.querySelector('.ranking-summary-name, small');
+      if(name){
+        const full = name.getAttribute('data-full-name-v629') || name.getAttribute('title') || name.textContent || '';
+        if(full && !name.getAttribute('data-full-name-v629')) name.setAttribute('data-full-name-v629', full.trim());
+        if(full && !name.getAttribute('title')) name.setAttribute('title', full.trim());
+      }
+      if(!label) return;
+      const cls = card.className || '';
+      let text = '';
+      if(/ranking-summary-pl|\bpl\b/i.test(cls)) text = '🏦 Maior PL';
+      else if(/highlight|month|alta/i.test(cls)) text = '📈 Alta mês';
+      else if(index === 0) text = '🏆 Melhor 12M';
+      else if(index === 1) text = '📈 Alta mês';
+      else if(index === 2) text = '🏦 Maior PL';
+      if(text) setTextIfChanged(label, text);
+    });
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  window.applySummaryMinimalSafeV629 = applySummaryMinimalSafeV629;
+
+  function forceRankingRetryV629(){
+    if(!isMobile()) return;
+    const grid = document.getElementById('rankingGrid');
+    const loading = grid && /Carregando rankings/i.test(grid.textContent || '');
+    if(loading && typeof window.__renderRankingsMobileBaseV607 === 'function'){
+      try{ window.__renderRankingsMobileBaseV607(); }catch(e){ console.error('ranking mobile retry v629', e); }
+    }else if(loading && typeof window.renderRankings === 'function'){
+      try{ window.renderRankings(); }catch(e){ console.error('ranking retry v629', e); }
+    }
+    setTimeout(applySummaryMinimalSafeV629,0);
+  }
+
+  function bindV629(){
+    applySummaryMinimalSafeV629();
+    if(window.__rankingNoLoopV629Bound) return;
+    window.__rankingNoLoopV629Bound = true;
+    const oldRender = window.renderRankings;
+    if(typeof oldRender === 'function' && !oldRender.__v629Wrapped){
+      const wrapped = function(){
+        const ret = oldRender.apply(this, arguments);
+        setTimeout(applySummaryMinimalSafeV629,0);
+        return ret;
+      };
+      wrapped.__v629Wrapped = true;
+      window.renderRankings = wrapped;
+      try{ renderRankings = wrapped; }catch(e){}
+    }
+    [80,240,600,1200,2400,5000].forEach(delay=>setTimeout(forceRankingRetryV629,delay));
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindV629, {once:true});
+  else bindV629();
+  window.addEventListener('load', bindV629, {once:true});
+})();
