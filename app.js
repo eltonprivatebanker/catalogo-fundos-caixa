@@ -27511,11 +27511,11 @@ function buildDetailPanel(r,colspan){
   }
 
   function apply(){
-    document.documentElement.classList.add('mobile-ranking-independent-v617','mobile-ranking-summary-two-cards-v626');
+    document.documentElement.classList.add('mobile-ranking-independent-v617','mobile-ranking-summary-two-cards-v626','mobile-ranking-summary-stacked-v627','mobile-ranking-summary-clean-v628');
     syncOriginalToMobile();
     bind();
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_SUMMARY_TWO_CARDS_V626';
+    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_SUMMARY_CLEAN_V628';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});

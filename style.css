@@ -77380,3 +77380,189 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:normal!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v628 — Mobile Ranking: resumo limpo em lista vertical
+   - corrige herança do carrossel v623 que deixava flex-basis/max-width presos
+   - remove o card externo pesado do resumo
+   - mantém 2 destaques empilhados com altura real, sem sobreposição
+   - desktop permanece preservado
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    grid-column:1 / -1!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    align-items:stretch!important;
+    justify-items:stretch!important;
+    gap:9px!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:8px 0 14px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    overflow-x:visible!important;
+    overflow-y:visible!important;
+    scroll-snap-type:none!important;
+    touch-action:auto!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip::-webkit-scrollbar,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-pl{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-best,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-highlight{
+    position:relative!important;
+    inset:auto!important;
+    transform:none!important;
+    translate:none!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "label value"
+      "name  value"!important;
+    align-items:center!important;
+    justify-items:stretch!important;
+    column-gap:14px!important;
+    row-gap:7px!important;
+    flex:none!important;
+    flex-basis:auto!important;
+    flex-grow:0!important;
+    flex-shrink:0!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:82px!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:14px 14px!important;
+    border:1px solid rgba(148,163,184,.17)!important;
+    border-left:1px solid rgba(148,163,184,.17)!important;
+    border-radius:16px!important;
+    background:
+      radial-gradient(circle at 12% 0%,rgba(200,151,58,.09),transparent 38%),
+      linear-gradient(180deg,rgba(12,17,31,.92),rgba(7,10,19,.97))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    text-align:left!important;
+    overflow:hidden!important;
+    scroll-snap-align:none!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card + .ranking-summary-card{
+    border-left:1px solid rgba(148,163,184,.17)!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card span{
+    grid-area:label!important;
+    order:0!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    color:#f0c36b!important;
+    font-size:.62rem!important;
+    line-height:1.08!important;
+    font-weight:950!important;
+    letter-spacing:.075em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    text-align:left!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card small{
+    grid-area:name!important;
+    order:0!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    max-height:40px!important;
+    margin:0!important;
+    padding:0!important;
+    color:#f5f7ff!important;
+    font-size:.78rem!important;
+    line-height:1.18!important;
+    font-weight:900!important;
+    letter-spacing:-.018em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:normal!important;
+    overflow-wrap:break-word!important;
+    hyphens:none!important;
+    text-align:left!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card strong{
+    grid-area:value!important;
+    order:0!important;
+    align-self:center!important;
+    justify-self:end!important;
+    display:block!important;
+    min-width:max-content!important;
+    margin:0!important;
+    padding:0!important;
+    color:#1ff0a0!important;
+    font-size:1.08rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.04em!important;
+    white-space:nowrap!important;
+    text-align:right!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .rank-card{
+    margin-top:10px!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-best,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-highlight{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "label"
+      "name"
+      "value"!important;
+    row-gap:7px!important;
+    min-height:94px!important;
+    padding:13px 14px!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card strong{
+    justify-self:start!important;
+    font-size:1.02rem!important;
+    text-align:left!important;
+  }
+}
