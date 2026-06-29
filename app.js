@@ -2895,24 +2895,31 @@ function renderRankings(){
     const maiorPL = catPL[0];
     const maiorPLNome = maiorPL ? maiorPL[0] : '—';
     const maiorPLVal = maiorPL ? fmtSummaryPl(maiorPL[1].pl_total) : '—';
-    const melhorLabel = activeRankPeriods.topFundos === '12m' ? '🏆 Melhor fundo 12M' : `🏆 Melhor fundo ${rankPeriodoResumo(activeRankPeriods.topFundos)}`;
-    const destaqueLabel = `📈 Maior alta ${rankPeriodoResumo(activeRankPeriods.destaques)}`;
-    return `<div class="ranking-summary-strip" aria-label="Resumo rápido dos rankings">
-      <div class="ranking-summary-card ranking-summary-best">
-        <span class="ranking-summary-label">${attr(melhorLabel)}</span>
-        <strong>${attr(melhorVal)}</strong>
-        <small class="ranking-summary-name" title="${attr(melhorNome)}">${attr(melhorNome)}</small>
-      </div>
-      <div class="ranking-summary-card ranking-summary-highlight">
-        <span class="ranking-summary-label">${attr(destaqueLabel)}</span>
-        <strong>${attr(destaqueVal)}</strong>
-        <small class="ranking-summary-name" title="${attr(destaqueNome)}">${attr(destaqueNome)}</small>
-      </div>
+    const mobileResumoV626 = typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(max-width: 768px)').matches;
+    const resumoNomeV626 = (nome) => String(nome||'')
+      .replace(/\bRESP\.?\s*LTDA\b/gi,'')
+      .replace(/\bRESPONSABILIDADE\s+LIMITADA\b/gi,'')
+      .replace(/\s+/g,' ')
+      .trim();
+    const melhorLabel = activeRankPeriods.topFundos === '12m' ? '🏆 Melhor 12M' : `🏆 Melhor ${rankPeriodoResumo(activeRankPeriods.topFundos)}`;
+    const destaqueLabel = activeRankPeriods.destaques === 'mes' ? '📈 Destaque do mês' : `📈 Maior alta ${rankPeriodoResumo(activeRankPeriods.destaques)}`;
+    const maiorPLHtml = mobileResumoV626 ? '' : `
       <div class="ranking-summary-card ranking-summary-pl">
         <span class="ranking-summary-label">🏦 Categoria com maior PL</span>
         <strong>${attr(maiorPLVal)}</strong>
         <small class="ranking-summary-name" title="${attr(maiorPLNome)}">${attr(maiorPLNome)}</small>
+      </div>`;
+    return `<div class="ranking-summary-strip ranking-summary-two-v626" aria-label="Resumo rápido dos rankings">
+      <div class="ranking-summary-card ranking-summary-best">
+        <span class="ranking-summary-label">${attr(melhorLabel)}</span>
+        <strong>${attr(melhorVal)}</strong>
+        <small class="ranking-summary-name" title="${attr(melhorNome)}">${attr(resumoNomeV626(melhorNome))}</small>
       </div>
+      <div class="ranking-summary-card ranking-summary-highlight">
+        <span class="ranking-summary-label">${attr(destaqueLabel)}</span>
+        <strong>${attr(destaqueVal)}</strong>
+        <small class="ranking-summary-name" title="${attr(destaqueNome)}">${attr(resumoNomeV626(destaqueNome))}</small>
+      </div>${maiorPLHtml}
     </div>`;
   })();
 
@@ -27504,11 +27511,11 @@ function buildDetailPanel(r,colspan){
   }
 
   function apply(){
-    document.documentElement.classList.add('mobile-ranking-independent-v617');
+    document.documentElement.classList.add('mobile-ranking-independent-v617','mobile-ranking-summary-two-cards-v626');
     syncOriginalToMobile();
     bind();
     var meta = document.querySelector('meta[name="app-build"]');
-    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_INDEPENDENT_V617_FINAL_V625';
+    if(meta && isMobile()) meta.content = 'ELTAUM_MOBILE_RANKING_SUMMARY_TWO_CARDS_V626';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
