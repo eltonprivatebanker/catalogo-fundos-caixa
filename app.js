@@ -8527,35 +8527,38 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!full || full === '—') return full || '—';
 
     let s = full
-      .replace(/CAIXA/gi,'')
-      .replace(/(FIC|FIF|FI|FIA|FIM|FIP|ETF)/gi,'')
-      .replace(/(FUNDO|DE|DO|DA|DOS|DAS|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)/gi,'')
-      .replace(/(RESP|LTDA|LTD|LP)/gi,'')
-      .replace(/\s*-\s*/g,' ')
+      .replace(/\bCAIXA\b/gi,'')
+      .replace(/\b(FIC|FIF|FI|FIA|FIM|FIP|ETF)\b/gi,'')
+      .replace(/\b(FUNDO|FUNDOS|DE|DO|DA|DOS|DAS|EM|E|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)\b/gi,'')
+      .replace(/\b(RESP|LTDA|LTD|LP)\b/gi,'')
+      .replace(/\s*[-–—]\s*/g,' ')
       .replace(/\s+/g,' ')
       .trim();
 
     const replacements = [
-      [/ACOES/gi,'Ações'],
-      [/RENDA FIXA/gi,'Renda Fixa'],
-      [/REFERENCIADO/gi,'Ref.'],
-      [/SIMPLES/gi,'Simples'],
-      [/CREDITO PRIVADO/gi,'Crédito Privado'],
-      [/CRED PRIV/gi,'Cred. Priv.'],
-      [/MULTIMERCADO/gi,'Multimercado'],
-      [/ELETROBRAS MIGRACAO/gi,'Eletrobras Migração'],
-      [/ELETROBRAS/gi,'Eletrobras'],
-      [/SEGURIDADE/gi,'Seguridade'],
-      [/INDEXA IBOVESPA/gi,'Indexa Ibovespa'],
-      [/FACIL/gi,'Fácil'],
-      [/LONGO PRAZO/gi,'Longo Prazo'],
-      [/CURTO PRAZO/gi,'Curto Prazo']
+      [/\bA(?:Ç|C)OES\b/gi,'Ações'],
+      [/\bRENDA FIXA\b/gi,'Renda Fixa'],
+      [/\bREFERENCIADO\b/gi,'Ref.'],
+      [/\bSIMPLES\b/gi,'Simples'],
+      [/\bCREDITO PRIVADO\b/gi,'Crédito Privado'],
+      [/\bCRED PRIV\b/gi,'Cred. Priv.'],
+      [/\bMULTIMERCADO\b/gi,'Multimercado'],
+      [/\bELETROBRAS MIGRA(?:Ç|C)AO\b/gi,'Eletrobras Migração'],
+      [/\bELETROBRAS\b/gi,'Eletrobras'],
+      [/\bSEGURIDADE\b/gi,'Seguridade'],
+      [/\bINDEXA IBOVESPA\b/gi,'Indexa Ibovespa'],
+      [/\bFACIL\b/gi,'Fácil'],
+      [/\bFÁCIL\b/gi,'Fácil'],
+      [/\bLONGO PRAZO\b/gi,'Longo Prazo'],
+      [/\bCURTO PRAZO\b/gi,'Curto Prazo'],
+      [/\bRF\b/gi,'RF'],
+      [/\bFMP FGTS\b/gi,'FMP FGTS']
     ];
     replacements.forEach(([pattern,replacement])=>{ s = s.replace(pattern,replacement); });
     s = s.replace(/\s+/g,' ').trim();
 
     if(!s) return full;
-    if(s.length > 42) s = s.slice(0, 39).trimEnd() + '…';
+    if(s.length > 38) s = s.slice(0, 35).trimEnd() + '…';
     return s;
   }
 
@@ -27553,4 +27556,315 @@ function buildDetailPanel(r,colspan){
   else apply();
   window.addEventListener('load', apply, {once:true});
   [80, 300, 900, 1800, 3200, 7000, 12000].forEach(function(delay){ setTimeout(apply, delay); });
+})();
+
+
+/* PATCH v626 — Mobile: título do catálogo oculto e nomes de fundos compactados de verdade
+   Segurança extra: aplica depois de cada renderização, mesmo se alguma rotina legada recriar os cards. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_MOBILE_FUNDS_TITLE_NAMES_v626';
+  function isMobile(){
+    try{return window.matchMedia('(max-width:768px)').matches;}catch(e){return false;}
+  }
+  function compactFundNameV626(value){
+    const full = String(value || '').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim();
+    if(!full || full === '—') return full || '—';
+    let s = full
+      .replace(/\bCAIXA\b/gi,'')
+      .replace(/\b(FIC|FIF|FI|FIA|FIM|FIP|ETF)\b/gi,'')
+      .replace(/\b(FUNDO|FUNDOS|DE|DO|DA|DOS|DAS|EM|E|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)\b/gi,'')
+      .replace(/\b(RESP|LTDA|LTD|LP)\b/gi,'')
+      .replace(/\s*[-–—]\s*/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+    const rules = [
+      [/\bA(?:Ç|C)OES\b/gi,'Ações'],
+      [/\bRENDA FIXA\b/gi,'Renda Fixa'],
+      [/\bREFERENCIADO\b/gi,'Ref.'],
+      [/\bSIMPLES\b/gi,'Simples'],
+      [/\bCREDITO PRIVADO\b/gi,'Crédito Privado'],
+      [/\bCRED PRIV\b/gi,'Cred. Priv.'],
+      [/\bMULTIMERCADO\b/gi,'Multimercado'],
+      [/\bELETROBRAS MIGRA(?:Ç|C)AO\b/gi,'Eletrobras Migração'],
+      [/\bELETROBRAS\b/gi,'Eletrobras'],
+      [/\bSEGURIDADE\b/gi,'Seguridade'],
+      [/\bINDEXA IBOVESPA\b/gi,'Indexa Ibovespa'],
+      [/\bFACIL\b/gi,'Fácil'],
+      [/\bFÁCIL\b/gi,'Fácil'],
+      [/\bLONGO PRAZO\b/gi,'Longo Prazo'],
+      [/\bCURTO PRAZO\b/gi,'Curto Prazo']
+    ];
+    rules.forEach(([pattern,replacement])=>{ s = s.replace(pattern,replacement); });
+    s = s.replace(/\s+/g,' ').trim();
+    if(!s) return full;
+    return s.length > 38 ? s.slice(0,35).trimEnd() + '…' : s;
+  }
+  function hideMobileFundsTitleV626(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add('mobile-v626','mobile-funds-title-names-v626');
+    const sec = document.getElementById('sec-fundos');
+    if(!sec) return;
+    const title = sec.querySelector(':scope > .section-title');
+    if(title){
+      title.setAttribute('aria-hidden','true');
+      title.style.setProperty('display','none','important');
+      title.style.setProperty('height','0','important');
+      title.style.setProperty('margin','0','important');
+      title.style.setProperty('padding','0','important');
+    }
+  }
+  function applyCompactFundNamesV626(){
+    if(!isMobile()) return;
+    hideMobileFundsTitleV626();
+    document.querySelectorAll('#mobileFundCards .fund-card-mobile-name, #mobileFundCards .fund-card-list-name').forEach(el=>{
+      const full = (el.getAttribute('data-full-name-v626') || el.getAttribute('title') || el.textContent || '').trim();
+      const compact = compactFundNameV626(full);
+      if(compact && compact !== el.textContent.trim()){
+        el.setAttribute('data-full-name-v626', full);
+        if(!el.getAttribute('title')) el.setAttribute('title', full);
+        el.textContent = compact;
+      }
+    });
+  }
+  window.compactFundNameV626 = compactFundNameV626;
+  window.applyCompactFundNamesV626 = applyCompactFundNamesV626;
+  function bind(){
+    hideMobileFundsTitleV626();
+    applyCompactFundNamesV626();
+    if(window.__fundNamesV626Bound) return;
+    window.__fundNamesV626Bound = true;
+    const oldRender = window.renderMobileFundCards;
+    if(typeof oldRender === 'function'){
+      window.renderMobileFundCards = function(){
+        const ret = oldRender.apply(this, arguments);
+        setTimeout(applyCompactFundNamesV626, 0);
+        return ret;
+      };
+    }
+    const box = document.getElementById('mobileFundCards');
+    if(box && window.MutationObserver){
+      const mo = new MutationObserver(()=>applyCompactFundNamesV626());
+      mo.observe(box,{childList:true,subtree:true,characterData:true});
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+  window.addEventListener('resize', ()=>setTimeout(bind,80), {passive:true});
+  setTimeout(bind,250);
+  setTimeout(applyCompactFundNamesV626,1000);
+})();
+
+
+/* PATCH v627 — Mobile: rótulos curtos e nomes compactos no resumo dos rankings
+   Corrige cortes nos 3 cards-resumo sem mexer no desktop. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SUMMARY_LEAN_v627';
+
+  function isMobile(){
+    try{return window.matchMedia('(max-width:768px)').matches;}catch(e){return false;}
+  }
+
+  function normalizeText(value){
+    return String(value || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/\s+/g,' ')
+      .trim()
+      .toLowerCase();
+  }
+
+  function titleCaseShort(value){
+    return String(value || '')
+      .toLowerCase()
+      .replace(/\b\w/g, c => c.toUpperCase())
+      .replace(/\bRf\b/g,'RF')
+      .replace(/\bCdi\b/g,'CDI')
+      .replace(/\bIpca\b/g,'IPCA')
+      .replace(/\bIbovespa\b/g,'Ibovespa')
+      .replace(/\bPl\b/g,'PL');
+  }
+
+  function compactSummaryNameV627(value){
+    const full = String(value || '').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim();
+    if(!full || full === '—') return full || '—';
+
+    const normalized = normalizeText(full);
+    const namedRules = [
+      [/inflacao.*private.*2027/, 'Inflação Private 2027'],
+      [/inflacao.*private/, 'Inflação Private'],
+      [/seguridade/, 'Seguridade Ações'],
+      [/eletrobras.*migracao/, 'Eletrobras Migração'],
+      [/eletrobras/, 'Eletrobras'],
+      [/indexa.*ibovespa/, 'Indexa Ibovespa'],
+      [/facil.*rf.*simples|rf.*simples/, 'Fácil RF Simples'],
+      [/expert.*cdi/, 'Expert RF CDI'],
+      [/multi.*gestor/, 'Multigestor Ações'],
+      [/credito.*privado/, 'Crédito Privado']
+    ];
+    for(const [pattern,label] of namedRules){
+      if(pattern.test(normalized)) return label;
+    }
+
+    let s = full
+      .replace(/\bCAIXA\b/gi,'')
+      .replace(/\b(FIC|FIF|FI|FIA|FIM|ETF|FIP)\b/gi,'')
+      .replace(/\b(FUNDO|FUNDOS|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)\b/gi,'')
+      .replace(/\b(RESP|LTDA|LTD|LONGO PRAZO|CURTO PRAZO)\b/gi,'')
+      .replace(/\b(DE|DO|DA|DOS|DAS|EM|E)\b/gi,'')
+      .replace(/\s*[-–—]\s*/g,' ')
+      .replace(/\s+/g,' ')
+      .trim();
+
+    s = s
+      .replace(/INFLACAO/gi,'Inflação')
+      .replace(/RENDA FIXA/gi,'RF')
+      .replace(/A(?:C|Ç)OES/gi,'Ações')
+      .replace(/REFERENCIADO/gi,'Ref.')
+      .replace(/SIMPLES/gi,'Simples')
+      .replace(/CDI/gi,'CDI')
+      .replace(/IPCA/gi,'IPCA')
+      .replace(/PRIVADO/gi,'Privado')
+      .replace(/PRIVATE/gi,'Private')
+      .replace(/\s+/g,' ')
+      .trim();
+
+    s = titleCaseShort(s);
+    if(!s) return full;
+    return s.length > 24 ? s.slice(0,21).trimEnd() + '…' : s;
+  }
+
+  function shortLabelV627(el){
+    const txt = normalizeText(el ? el.textContent : '');
+    if(!txt) return '';
+    if(txt.includes('categoria') && txt.includes('pl')) return '🏦 Maior PL';
+    if(txt.includes('maior alta')){
+      if(txt.includes('mes')) return '📈 Alta mês';
+      if(txt.includes('ano')) return '📈 Alta ano';
+      if(txt.includes('12m') || txt.includes('12 m')) return '📈 Alta 12M';
+      if(txt.includes('dia')) return '📈 Alta dia';
+      return '📈 Maior alta';
+    }
+    if(txt.includes('melhor fundo')){
+      if(txt.includes('12m') || txt.includes('12 m')) return '🏆 Melhor 12M';
+      if(txt.includes('ano')) return '🏆 Melhor ano';
+      if(txt.includes('mes')) return '🏆 Melhor mês';
+      return '🏆 Melhor fundo';
+    }
+    return el.textContent.trim();
+  }
+
+  function applyRankingSummaryLeanV627(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add('mobile-ranking-summary-lean-v627');
+    const strip = document.querySelector('#rankingGrid .ranking-summary-strip');
+    if(!strip) return;
+
+    strip.querySelectorAll('.ranking-summary-card').forEach(card=>{
+      const label = card.querySelector('.ranking-summary-label, span');
+      if(label){
+        const shortened = shortLabelV627(label);
+        if(shortened) label.textContent = shortened;
+      }
+      const name = card.querySelector('.ranking-summary-name, small');
+      if(name){
+        const full = name.getAttribute('data-full-name-v627') || name.getAttribute('title') || name.textContent || '';
+        const compact = compactSummaryNameV627(full);
+        name.setAttribute('data-full-name-v627', full.trim());
+        if(!name.getAttribute('title')) name.setAttribute('title', full.trim());
+        name.textContent = compact;
+      }
+    });
+  }
+
+  window.compactSummaryNameV627 = compactSummaryNameV627;
+  window.applyRankingSummaryLeanV627 = applyRankingSummaryLeanV627;
+
+  function bind(){
+    applyRankingSummaryLeanV627();
+    if(window.__rankingSummaryLeanV627Bound) return;
+    window.__rankingSummaryLeanV627Bound = true;
+    const grid = document.getElementById('rankingGrid');
+    if(grid && window.MutationObserver){
+      const mo = new MutationObserver(()=>applyRankingSummaryLeanV627());
+      mo.observe(grid,{childList:true,subtree:true,characterData:true});
+    }
+    const oldRender = window.renderRankings;
+    if(typeof oldRender === 'function' && !oldRender.__v627Wrapped){
+      const wrapped = function(){
+        const ret = oldRender.apply(this, arguments);
+        setTimeout(applyRankingSummaryLeanV627,0);
+        return ret;
+      };
+      wrapped.__v627Wrapped = true;
+      window.renderRankings = wrapped;
+    }
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta && isMobile()) meta.content = BUILD;
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, {once:true});
+  else bind();
+  window.addEventListener('load', bind, {once:true});
+  [120,400,900,1800,3200,6000].forEach(delay=>setTimeout(applyRankingSummaryLeanV627,delay));
+})();
+
+/* PATCH v628 — Mobile: resumo do ranking minimalista
+   Remove visualmente o nome dos fundos da faixa superior e força labels curtos.
+   Os nomes permanecem no title/DOM e a lista Top Fundos continua detalhada. */
+(function(){
+  'use strict';
+  const BUILD = 'ELTAUM_MOBILE_RANKING_SUMMARY_MINIMAL_v628';
+  function isMobile(){
+    try{return window.matchMedia('(max-width:768px)').matches;}catch(e){return false;}
+  }
+  function applyRankingSummaryMinimalV628(){
+    if(!isMobile()) return;
+    document.documentElement.classList.add('mobile-ranking-summary-minimal-v628');
+    const cards = document.querySelectorAll('#rankingGrid .ranking-summary-card');
+    if(!cards.length) return;
+    cards.forEach((card,index)=>{
+      const label = card.querySelector('.ranking-summary-label, span');
+      const name = card.querySelector('.ranking-summary-name, small');
+      if(name){
+        const full = name.getAttribute('data-full-name-v628') || name.getAttribute('title') || name.textContent || '';
+        name.setAttribute('data-full-name-v628', full.trim());
+        if(full && !name.getAttribute('title')) name.setAttribute('title', full.trim());
+      }
+      if(!label) return;
+      const cls = card.className || '';
+      if(/ranking-summary-pl|\bpl\b/i.test(cls)) label.textContent = '🏦 Maior PL';
+      else if(/highlight|month|alta/i.test(cls)) label.textContent = '📈 Alta mês';
+      else if(index === 0) label.textContent = '🏆 Melhor 12M';
+      else if(index === 1) label.textContent = '📈 Alta mês';
+      else if(index === 2) label.textContent = '🏦 Maior PL';
+    });
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  window.applyRankingSummaryMinimalV628 = applyRankingSummaryMinimalV628;
+  function bind(){
+    applyRankingSummaryMinimalV628();
+    if(window.__rankingSummaryMinimalV628Bound) return;
+    window.__rankingSummaryMinimalV628Bound = true;
+    const grid = document.getElementById('rankingGrid');
+    if(grid && window.MutationObserver){
+      const mo = new MutationObserver(()=>applyRankingSummaryMinimalV628());
+      mo.observe(grid,{childList:true,subtree:true,characterData:true});
+    }
+    const oldRender = window.renderRankings;
+    if(typeof oldRender === 'function' && !oldRender.__v628Wrapped){
+      const wrapped = function(){
+        const ret = oldRender.apply(this, arguments);
+        setTimeout(applyRankingSummaryMinimalV628,0);
+        return ret;
+      };
+      wrapped.__v628Wrapped = true;
+      window.renderRankings = wrapped;
+    }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, {once:true});
+  else bind();
+  window.addEventListener('load', bind, {once:true});
+  [80,240,600,1200,2400,5000].forEach(delay=>setTimeout(applyRankingSummaryMinimalV628,delay));
 })();
