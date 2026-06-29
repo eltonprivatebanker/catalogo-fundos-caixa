@@ -8527,38 +8527,35 @@ document.addEventListener('DOMContentLoaded', function(){
     if(!full || full === '—') return full || '—';
 
     let s = full
-      .replace(/\bCAIXA\b/gi,'')
-      .replace(/\b(FIC|FIF|FI|FIA|FIM|FIP|ETF)\b/gi,'')
-      .replace(/\b(FUNDO|FUNDOS|DE|DO|DA|DOS|DAS|EM|E|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)\b/gi,'')
-      .replace(/\b(RESP|LTDA|LTD|LP)\b/gi,'')
-      .replace(/\s*[-–—]\s*/g,' ')
+      .replace(/CAIXA/gi,'')
+      .replace(/(FIC|FIF|FI|FIA|FIM|FIP|ETF)/gi,'')
+      .replace(/(FUNDO|DE|DO|DA|DOS|DAS|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)/gi,'')
+      .replace(/(RESP|LTDA|LTD|LP)/gi,'')
+      .replace(/\s*-\s*/g,' ')
       .replace(/\s+/g,' ')
       .trim();
 
     const replacements = [
-      [/\bA(?:Ç|C)OES\b/gi,'Ações'],
-      [/\bRENDA FIXA\b/gi,'Renda Fixa'],
-      [/\bREFERENCIADO\b/gi,'Ref.'],
-      [/\bSIMPLES\b/gi,'Simples'],
-      [/\bCREDITO PRIVADO\b/gi,'Crédito Privado'],
-      [/\bCRED PRIV\b/gi,'Cred. Priv.'],
-      [/\bMULTIMERCADO\b/gi,'Multimercado'],
-      [/\bELETROBRAS MIGRA(?:Ç|C)AO\b/gi,'Eletrobras Migração'],
-      [/\bELETROBRAS\b/gi,'Eletrobras'],
-      [/\bSEGURIDADE\b/gi,'Seguridade'],
-      [/\bINDEXA IBOVESPA\b/gi,'Indexa Ibovespa'],
-      [/\bFACIL\b/gi,'Fácil'],
-      [/\bFÁCIL\b/gi,'Fácil'],
-      [/\bLONGO PRAZO\b/gi,'Longo Prazo'],
-      [/\bCURTO PRAZO\b/gi,'Curto Prazo'],
-      [/\bRF\b/gi,'RF'],
-      [/\bFMP FGTS\b/gi,'FMP FGTS']
+      [/ACOES/gi,'Ações'],
+      [/RENDA FIXA/gi,'Renda Fixa'],
+      [/REFERENCIADO/gi,'Ref.'],
+      [/SIMPLES/gi,'Simples'],
+      [/CREDITO PRIVADO/gi,'Crédito Privado'],
+      [/CRED PRIV/gi,'Cred. Priv.'],
+      [/MULTIMERCADO/gi,'Multimercado'],
+      [/ELETROBRAS MIGRACAO/gi,'Eletrobras Migração'],
+      [/ELETROBRAS/gi,'Eletrobras'],
+      [/SEGURIDADE/gi,'Seguridade'],
+      [/INDEXA IBOVESPA/gi,'Indexa Ibovespa'],
+      [/FACIL/gi,'Fácil'],
+      [/LONGO PRAZO/gi,'Longo Prazo'],
+      [/CURTO PRAZO/gi,'Curto Prazo']
     ];
     replacements.forEach(([pattern,replacement])=>{ s = s.replace(pattern,replacement); });
     s = s.replace(/\s+/g,' ').trim();
 
     if(!s) return full;
-    if(s.length > 38) s = s.slice(0, 35).trimEnd() + '…';
+    if(s.length > 42) s = s.slice(0, 39).trimEnd() + '…';
     return s;
   }
 
@@ -27556,101 +27553,4 @@ function buildDetailPanel(r,colspan){
   else apply();
   window.addEventListener('load', apply, {once:true});
   [80, 300, 900, 1800, 3200, 7000, 12000].forEach(function(delay){ setTimeout(apply, delay); });
-})();
-
-
-/* PATCH v626 — Mobile: título do catálogo oculto e nomes de fundos compactados de verdade
-   Segurança extra: aplica depois de cada renderização, mesmo se alguma rotina legada recriar os cards. */
-(function(){
-  'use strict';
-  const BUILD = 'ELTAUM_MOBILE_FUNDS_TITLE_NAMES_v626';
-  function isMobile(){
-    try{return window.matchMedia('(max-width:768px)').matches;}catch(e){return false;}
-  }
-  function compactFundNameV626(value){
-    const full = String(value || '').replace(/\s*\(\d+\)/g,'').replace(/\s+/g,' ').trim();
-    if(!full || full === '—') return full || '—';
-    let s = full
-      .replace(/\bCAIXA\b/gi,'')
-      .replace(/\b(FIC|FIF|FI|FIA|FIM|FIP|ETF)\b/gi,'')
-      .replace(/\b(FUNDO|FUNDOS|DE|DO|DA|DOS|DAS|EM|E|INVESTIMENTO|INVESTIMENTOS|COTAS|COTA)\b/gi,'')
-      .replace(/\b(RESP|LTDA|LTD|LP)\b/gi,'')
-      .replace(/\s*[-–—]\s*/g,' ')
-      .replace(/\s+/g,' ')
-      .trim();
-    const rules = [
-      [/\bA(?:Ç|C)OES\b/gi,'Ações'],
-      [/\bRENDA FIXA\b/gi,'Renda Fixa'],
-      [/\bREFERENCIADO\b/gi,'Ref.'],
-      [/\bSIMPLES\b/gi,'Simples'],
-      [/\bCREDITO PRIVADO\b/gi,'Crédito Privado'],
-      [/\bCRED PRIV\b/gi,'Cred. Priv.'],
-      [/\bMULTIMERCADO\b/gi,'Multimercado'],
-      [/\bELETROBRAS MIGRA(?:Ç|C)AO\b/gi,'Eletrobras Migração'],
-      [/\bELETROBRAS\b/gi,'Eletrobras'],
-      [/\bSEGURIDADE\b/gi,'Seguridade'],
-      [/\bINDEXA IBOVESPA\b/gi,'Indexa Ibovespa'],
-      [/\bFACIL\b/gi,'Fácil'],
-      [/\bFÁCIL\b/gi,'Fácil'],
-      [/\bLONGO PRAZO\b/gi,'Longo Prazo'],
-      [/\bCURTO PRAZO\b/gi,'Curto Prazo']
-    ];
-    rules.forEach(([pattern,replacement])=>{ s = s.replace(pattern,replacement); });
-    s = s.replace(/\s+/g,' ').trim();
-    if(!s) return full;
-    return s.length > 38 ? s.slice(0,35).trimEnd() + '…' : s;
-  }
-  function hideMobileFundsTitleV626(){
-    if(!isMobile()) return;
-    document.documentElement.classList.add('mobile-v626','mobile-funds-title-names-v626');
-    const sec = document.getElementById('sec-fundos');
-    if(!sec) return;
-    const title = sec.querySelector(':scope > .section-title');
-    if(title){
-      title.setAttribute('aria-hidden','true');
-      title.style.setProperty('display','none','important');
-      title.style.setProperty('height','0','important');
-      title.style.setProperty('margin','0','important');
-      title.style.setProperty('padding','0','important');
-    }
-  }
-  function applyCompactFundNamesV626(){
-    if(!isMobile()) return;
-    hideMobileFundsTitleV626();
-    document.querySelectorAll('#mobileFundCards .fund-card-mobile-name, #mobileFundCards .fund-card-list-name').forEach(el=>{
-      const full = (el.getAttribute('data-full-name-v626') || el.getAttribute('title') || el.textContent || '').trim();
-      const compact = compactFundNameV626(full);
-      if(compact && compact !== el.textContent.trim()){
-        el.setAttribute('data-full-name-v626', full);
-        if(!el.getAttribute('title')) el.setAttribute('title', full);
-        el.textContent = compact;
-      }
-    });
-  }
-  window.compactFundNameV626 = compactFundNameV626;
-  window.applyCompactFundNamesV626 = applyCompactFundNamesV626;
-  function bind(){
-    hideMobileFundsTitleV626();
-    applyCompactFundNamesV626();
-    if(window.__fundNamesV626Bound) return;
-    window.__fundNamesV626Bound = true;
-    const oldRender = window.renderMobileFundCards;
-    if(typeof oldRender === 'function'){
-      window.renderMobileFundCards = function(){
-        const ret = oldRender.apply(this, arguments);
-        setTimeout(applyCompactFundNamesV626, 0);
-        return ret;
-      };
-    }
-    const box = document.getElementById('mobileFundCards');
-    if(box && window.MutationObserver){
-      const mo = new MutationObserver(()=>applyCompactFundNamesV626());
-      mo.observe(box,{childList:true,subtree:true,characterData:true});
-    }
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind);
-  else bind();
-  window.addEventListener('resize', ()=>setTimeout(bind,80), {passive:true});
-  setTimeout(bind,250);
-  setTimeout(applyCompactFundNamesV626,1000);
 })();
