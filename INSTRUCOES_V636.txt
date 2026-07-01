@@ -1,0 +1,11 @@
+V636 — Mobile: botões “Ver mais” padronizados
+
+Escopo: somente versão mobile. Desktop preservado.
+
+Arquivos alterados:
+- index.html: adiciona classe mobile-vermais-standard-v636 e atualiza cache para mobile-vermais-standard-v636.
+- style.css: patch final @media(max-width:768px) para padronizar os botões Ver mais em Painel consolidado, Boletim Focus e Inflação e juros. Também reposiciona o botão do Painel consolidado para o topo direito do card, deixando de ficar perdido abaixo dos filtros de período.
+- app.js: garante reaplicação da classe mobile-vermais-standard-v636 após carregamento.
+- tokens-caixa.css: sem alteração.
+
+Subir todos os arquivos, especialmente index.html para quebrar cache do GitHub Pages.
