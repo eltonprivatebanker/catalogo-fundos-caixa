@@ -76230,3 +76230,2870 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   html.mobile-ranking-filter-force-row-v616 body #rankingsSection .ranking-toolbar-v136 > .ranking-control-card-v136{padding-left:5px!important;padding-right:5px!important;}
   html.mobile-ranking-filter-force-row-v616 body #rankingsSection .ranking-select-v136{font-size:.60rem!important;padding-right:13px!important;}
 }
+
+/* PATCH v617 — Mobile ranking: toolbar independente, sem herdar conflitos da v136 */
+@media (min-width:769px){
+  html body #rankingsSection .ranking-mobile-toolbar-v617{display:none!important;}
+}
+
+@media (max-width:768px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-toolbar-v617{
+    display:grid!important;
+    grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:10px 0 14px!important;
+    padding:10px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:18px!important;
+    background:linear-gradient(180deg,rgba(11,15,28,.86),rgba(7,10,19,.96))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-v617{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+    gap:6px!important;
+    min-width:0!important;
+    width:100%!important;
+    min-height:62px!important;
+    margin:0!important;
+    padding:10px 12px!important;
+    border:1px solid rgba(148,163,184,.16)!important;
+    border-radius:15px!important;
+    background:rgba(8,12,24,.66)!important;
+    box-shadow:none!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-risk-v617{
+    grid-column:1 / -1!important;
+    min-height:60px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-label-v617{
+    display:block!important;
+    width:100%!important;
+    margin:0!important;
+    color:#8fa0bc!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.12em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617{
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    padding:0 26px 0 0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    color:#f8fafc!important;
+    box-shadow:none!important;
+    font:850 .96rem/34px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    letter-spacing:-.035em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    cursor:pointer!important;
+    pointer-events:auto!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection #rankingMobilePeriodV617{
+    font-size:.98rem!important;
+    letter-spacing:-.025em!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection #rankingMobileRiskV617{
+    font-size:.92rem!important;
+    letter-spacing:-.025em!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-toolbar-v617{
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+    padding:9px!important;
+  }
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-risk-v617{
+    grid-column:auto!important;
+  }
+}
+
+/* PATCH v618 — Mobile ranking: foco acessível sem moldura branca pesada */
+@media (max-width:768px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617:focus,
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617:focus-visible{
+    outline:1px solid rgba(232,187,106,.55)!important;
+    outline-offset:2px!important;
+    box-shadow:none!important;
+  }
+}
+
+/* PATCH v619 — Mobile ranking: toolbar compacta sem perder legibilidade */
+@media (max-width:768px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-toolbar-v617{
+    grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)!important;
+    gap:7px!important;
+    margin:8px 0 12px!important;
+    padding:8px!important;
+    border-radius:16px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-v617{
+    min-height:50px!important;
+    padding:7px 9px!important;
+    gap:4px!important;
+    border-radius:13px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-risk-v617{
+    grid-column:1 / -1!important;
+    min-height:50px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-label-v617{
+    font-size:.51rem!important;
+    line-height:1!important;
+    letter-spacing:.115em!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617{
+    height:27px!important;
+    min-height:27px!important;
+    padding:0 20px 0 0!important;
+    font:850 .84rem/27px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    letter-spacing:-.03em!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection #rankingMobilePeriodV617{
+    font-size:.86rem!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection #rankingMobileRiskV617{
+    font-size:.82rem!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-toolbar-v617{
+    grid-template-columns:minmax(0,.78fr) minmax(0,1.22fr)!important;
+    gap:6px!important;
+    padding:7px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-risk-v617{
+    grid-column:1 / -1!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-v617{
+    min-height:48px!important;
+    padding:7px 8px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617{
+    font-size:.80rem!important;
+  }
+}
+
+
+/* PATCH v620 — Mobile ranking: 3 cards proporcionais em uma linha */
+@media (max-width:768px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-toolbar-v617{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:6px!important;
+    margin:8px 0 12px!important;
+    padding:7px!important;
+    border-radius:15px!important;
+    align-items:stretch!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-v617,
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-risk-v617{
+    grid-column:auto!important;
+    min-width:0!important;
+    width:100%!important;
+    min-height:50px!important;
+    height:50px!important;
+    padding:7px 8px 6px!important;
+    gap:4px!important;
+    border-radius:12px!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-label-v617{
+    font-size:.48rem!important;
+    line-height:1!important;
+    letter-spacing:.095em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617{
+    height:27px!important;
+    min-height:27px!important;
+    padding:0 17px 0 0!important;
+    font:850 .75rem/27px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    letter-spacing:-.035em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection #rankingMobilePeriodV617{
+    font-size:.80rem!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection #rankingMobileRiskV617{
+    font-size:.73rem!important;
+  }
+}
+
+@media (max-width:340px){
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-toolbar-v617{
+    gap:5px!important;
+    padding:6px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-v617,
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-control-risk-v617{
+    min-height:48px!important;
+    height:48px!important;
+    padding:6px 6px 5px!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-label-v617{
+    font-size:.44rem!important;
+    letter-spacing:.075em!important;
+  }
+
+  html.mobile-ranking-independent-v617 body #rankingsSection .ranking-mobile-select-v617{
+    font-size:.68rem!important;
+    padding-right:14px!important;
+  }
+}
+
+
+/* PATCH v621 — Mobile: ocultar título redundante "Fundos disponíveis"
+   Ganha área útil no catálogo mobile sem tocar no desktop. */
+@media (max-width:768px){
+  body #sec-fundos > .section-title{
+    display:none!important;
+  }
+
+  body #sec-fundos{
+    margin-top:14px!important;
+  }
+
+  body #sec-fundos #fundFilterShell{
+    margin-top:0!important;
+  }
+}
+
+
+/* PATCH v622 — Mobile ranking: nomes sem corte + respiro do menu inferior
+   Corrige retorno de nomes truncados no bloco Top Fundos e evita que
+   a navegação fixa cubra as últimas linhas no mobile. */
+@media (max-width:768px){
+  html.mobile-ranking-names-safe-v622 body #rankingsSection{
+    padding-bottom:128px!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .ranking-grid,
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .ranking-main-v136{
+    padding-bottom:118px!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-card{
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-list{
+    padding-bottom:18px!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-item{
+    align-items:flex-start!important;
+    min-height:auto!important;
+    height:auto!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-info{
+    min-width:0!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-name{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+    line-height:1.22!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .rank-cat{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-names-safe-v622 body #rankingsSection .ranking-summary-name{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:clip!important;
+  }
+}
+
+
+/* PATCH v623 — Mobile ranking: resumo em carrossel compacto
+   O problema não era só o nome: o menu inferior fixo cobria a lista porque
+   os 3 cards-resumo empurravam o bloco Top Fundos para baixo. No mobile,
+   o resumo vira uma faixa horizontal compacta e o conteúdo principal sobe. */
+@media (max-width:768px){
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-strip{
+    display:flex!important;
+    grid-template-columns:none!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:10px 0 10px!important;
+    padding:0 2px 4px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    -webkit-overflow-scrolling:touch!important;
+    touch-action:pan-x!important;
+    scroll-snap-type:x mandatory!important;
+    scrollbar-width:none!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-strip::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card{
+    flex:0 0 78%!important;
+    min-width:78%!important;
+    max-width:78%!important;
+    min-height:68px!important;
+    height:68px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "label value"
+      "name value"!important;
+    align-items:center!important;
+    column-gap:10px!important;
+    row-gap:3px!important;
+    margin:0!important;
+    padding:9px 12px!important;
+    border-radius:14px!important;
+    scroll-snap-align:start!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card span{
+    grid-area:label!important;
+    margin:0!important;
+    font-size:.58rem!important;
+    line-height:1.05!important;
+    letter-spacing:.06em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card strong{
+    grid-area:value!important;
+    margin:0!important;
+    font-size:1.02rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card small{
+    grid-area:name!important;
+    display:block!important;
+    margin:0!important;
+    font-size:.62rem!important;
+    line-height:1.1!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    -webkit-line-clamp:1!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-card{
+    margin-top:8px!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-card-header{
+    padding:10px 12px 8px!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-card-sub,
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-advisory-note{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .rank-list{
+    padding-bottom:calc(118px + env(safe-area-inset-bottom,0px))!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-summary-carousel-v623 body #rankingGrid .ranking-summary-card{
+    flex-basis:84%!important;
+    min-width:84%!important;
+    max-width:84%!important;
+  }
+}
+
+/* =========================================================
+   PATCH v624 — Mobile Ranking: visual integrado, sem card dentro de card
+   - mantém desktop intacto
+   - transforma o resumo em um único painel com 3 colunas
+   - remove efeito carrossel v623 no mobile
+   - deixa filtros mais próximos do mockup, com labels fora do campo
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection{
+    margin-top:18px!important;
+    padding-bottom:96px!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-head{
+    margin:0 0 12px!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .section-title-icon-v302{
+    margin-bottom:10px!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .section-title-text-v302{
+    font-size:1.32rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.055em!important;
+  }
+
+  /* Filtros: sem “card pai” pesado; cada filtro vira campo limpo. */
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-toolbar-v617{
+    display:grid!important;
+    grid-template-columns:.88fr .88fr 1.05fr!important;
+    gap:10px!important;
+    width:100%!important;
+    margin:0 0 16px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-control-v617,
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-control-risk-v617{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:flex-start!important;
+    min-width:0!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-label-v617{
+    display:block!important;
+    margin:0 0 6px!important;
+    padding-left:2px!important;
+    color:#93a1bd!important;
+    font-size:.60rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.14em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    opacity:.95!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-select-v617{
+    display:block!important;
+    width:100%!important;
+    height:52px!important;
+    min-height:52px!important;
+    padding:0 30px 0 12px!important;
+    border:1px solid rgba(148,163,184,.20)!important;
+    border-radius:12px!important;
+    background:linear-gradient(180deg,rgba(10,15,27,.94),rgba(7,11,21,.96))!important;
+    color:#f8fafc!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    font-size:.82rem!important;
+    line-height:52px!important;
+    font-weight:900!important;
+    letter-spacing:-.05em!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-select-v617:focus-visible{
+    outline:1px solid rgba(232,187,106,.55)!important;
+    outline-offset:2px!important;
+    border-color:rgba(232,187,106,.38)!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection #rankingMobileRiskV617{
+    font-size:.72rem!important;
+    letter-spacing:-.055em!important;
+  }
+
+  /* Resumo: um único painel, 3 colunas internas. */
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-strip{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:6px 0 16px!important;
+    padding:14px 8px!important;
+    border:1px solid rgba(148,163,184,.18)!important;
+    border-radius:18px!important;
+    background:
+      radial-gradient(circle at 50% 0%,rgba(200,151,58,.08),transparent 46%),
+      linear-gradient(180deg,rgba(10,16,29,.92),rgba(6,10,19,.96))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    overflow:visible!important;
+    scroll-snap-type:none!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-strip::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card{
+    position:relative!important;
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:7px!important;
+    min-width:0!important;
+    width:100%!important;
+    min-height:132px!important;
+    padding:0 9px!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    text-align:center!important;
+    overflow:visible!important;
+    scroll-snap-align:none!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card + .ranking-summary-card{
+    border-left:1px solid rgba(148,163,184,.18)!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card span{
+    order:1!important;
+    display:block!important;
+    min-height:30px!important;
+    margin:0!important;
+    color:#f0c36b!important;
+    font-size:.58rem!important;
+    line-height:1.24!important;
+    font-weight:950!important;
+    letter-spacing:.055em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card small{
+    order:2!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    min-height:34px!important;
+    max-width:100%!important;
+    margin:0!important;
+    color:#c5cee3!important;
+    font-size:.62rem!important;
+    line-height:1.28!important;
+    font-weight:800!important;
+    letter-spacing:.005em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card strong{
+    order:3!important;
+    display:block!important;
+    margin-top:auto!important;
+    color:#34e49a!important;
+    font-size:.94rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.01em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card.pl strong,
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-pl strong{
+    font-size:.80rem!important;
+    letter-spacing:-.03em!important;
+  }
+
+  /* Top Fundos: painel mais limpo, sem ficar escondido pelo menu inferior. */
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-card{
+    margin-top:0!important;
+    border-radius:18px!important;
+    background:linear-gradient(180deg,rgba(9,15,27,.95),rgba(6,10,19,.97))!important;
+    border-color:rgba(148,163,184,.18)!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-card-header{
+    padding:14px 16px 10px!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-card-title{
+    font-size:1rem!important;
+    line-height:1.1!important;
+    letter-spacing:-.04em!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-period-tabs{
+    padding:0 16px 12px!important;
+    gap:10px!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-period-tab{
+    min-height:42px!important;
+    min-width:82px!important;
+    padding:0 14px!important;
+    border-radius:999px!important;
+    font-size:.80rem!important;
+    font-weight:900!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-list{
+    padding-bottom:118px!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-item{
+    min-height:72px!important;
+    padding:12px 16px!important;
+    border-top:1px solid rgba(148,163,184,.10)!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-name{
+    font-size:.82rem!important;
+    line-height:1.18!important;
+    letter-spacing:-.03em!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-cat{
+    font-size:.68rem!important;
+    margin-top:4px!important;
+  }
+
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .rank-val{
+    font-size:.86rem!important;
+    white-space:nowrap!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-toolbar-v617{
+    gap:7px!important;
+  }
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection .ranking-mobile-select-v617{
+    height:48px!important;
+    min-height:48px!important;
+    padding-left:10px!important;
+    padding-right:24px!important;
+    font-size:.76rem!important;
+    line-height:48px!important;
+  }
+  html.mobile-ranking-summary-integrated-v624 body #rankingsSection #rankingMobileRiskV617{
+    font-size:.66rem!important;
+  }
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-strip{
+    padding:12px 6px!important;
+  }
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card{
+    min-height:126px!important;
+    padding:0 6px!important;
+  }
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-card strong{
+    font-size:.84rem!important;
+  }
+  html.mobile-ranking-summary-integrated-v624 body #rankingGrid .ranking-summary-pl strong{
+    font-size:.72rem!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v625 — Mobile Ranking definitivo
+   - Toolbar v617 independente e estática/dinâmica.
+   - Toolbar antiga v136 fica preservada para desktop/lógica, mas invisível no mobile.
+   - 3 filtros em uma linha no mobile, com largura protegida contra truncamento agressivo.
+   ========================================================= */
+@media (min-width:769px){
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-toolbar-v617{
+    display:none!important;
+  }
+}
+
+@media (max-width:768px){
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-toolbar-v136,
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-toolbar.ranking-toolbar-v136{
+    display:none!important;
+    visibility:hidden!important;
+    height:0!important;
+    min-height:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    opacity:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-toolbar-v617{
+    display:grid!important;
+    grid-template-columns:minmax(72px,.74fr) minmax(102px,1.06fr) minmax(98px,1fr)!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0 0 14px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-control-v617,
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-control-risk-v617{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:flex-start!important;
+    align-items:stretch!important;
+    min-width:0!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    box-sizing:border-box!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-control-risk-v617{
+    grid-column:auto!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-label-v617{
+    display:block!important;
+    width:100%!important;
+    margin:0 0 6px!important;
+    padding:0 0 0 2px!important;
+    color:#93a1bd!important;
+    font-size:.56rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.10em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-select-v617{
+    appearance:auto!important;
+    -webkit-appearance:menulist!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:46px!important;
+    min-height:46px!important;
+    margin:0!important;
+    padding:0 24px 0 10px!important;
+    border:1px solid rgba(148,163,184,.20)!important;
+    border-radius:12px!important;
+    background:linear-gradient(180deg,rgba(10,15,27,.94),rgba(7,11,21,.96))!important;
+    color:#f8fafc!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    font:900 .78rem/46px Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    letter-spacing:-.045em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    cursor:pointer!important;
+    pointer-events:auto!important;
+    box-sizing:border-box!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection #rankingMobilePeriodV617{
+    font-size:.82rem!important;
+    letter-spacing:-.03em!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection #rankingMobileRiskV617{
+    font-size:.70rem!important;
+    letter-spacing:-.045em!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-select-v617:focus,
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-select-v617:focus-visible{
+    outline:1px solid rgba(232,187,106,.55)!important;
+    outline-offset:2px!important;
+    border-color:rgba(232,187,106,.42)!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-toolbar-v617{
+    grid-template-columns:minmax(60px,.70fr) minmax(86px,1fr) minmax(86px,1fr)!important;
+    gap:6px!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-label-v617{
+    font-size:.50rem!important;
+    letter-spacing:.075em!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection .ranking-mobile-select-v617{
+    height:42px!important;
+    min-height:42px!important;
+    padding-left:8px!important;
+    padding-right:20px!important;
+    font-size:.68rem!important;
+    line-height:42px!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection #rankingMobilePeriodV617{
+    font-size:.74rem!important;
+  }
+
+  html.mobile-ranking-toolbar-final-v625 body #rankingsSection #rankingMobileRiskV617{
+    font-size:.60rem!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v626 — Mobile Ranking: resumo com 2 cards úteis
+   - remove Categoria com maior PL do resumo mobile
+   - mantém somente Melhor 12M e Destaque do mês
+   - reduz quebras agressivas dos nomes dos fundos
+   - desktop permanece preservado
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:0!important;
+    margin:6px 0 16px!important;
+    padding:14px 8px!important;
+    border-radius:18px!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-pl{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card{
+    min-height:112px!important;
+    padding:0 12px!important;
+    gap:7px!important;
+    justify-content:flex-start!important;
+    text-align:center!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card + .ranking-summary-card{
+    border-left:1px solid rgba(148,163,184,.18)!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card span{
+    min-height:22px!important;
+    font-size:.62rem!important;
+    line-height:1.14!important;
+    letter-spacing:.06em!important;
+    white-space:normal!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card small{
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    min-height:34px!important;
+    max-height:36px!important;
+    font-size:.70rem!important;
+    line-height:1.20!important;
+    letter-spacing:-.01em!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:normal!important;
+    overflow-wrap:normal!important;
+    hyphens:none!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card strong{
+    margin-top:auto!important;
+    font-size:1rem!important;
+    line-height:1!important;
+    white-space:nowrap!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    padding:12px 6px!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card{
+    min-height:108px!important;
+    padding:0 8px!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card span{
+    font-size:.56rem!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card small{
+    font-size:.64rem!important;
+  }
+
+  html.mobile-ranking-summary-two-cards-v626 body #rankingGrid .ranking-summary-card strong{
+    font-size:.92rem!important;
+  }
+}
+
+/* =========================================================
+   PATCH v627 — Mobile Ranking: resumo empilhado em 2 linhas
+   - substitui os 2 cards em colunas por 2 cards horizontais empilhados
+   - aumenta a largura útil dos nomes dos fundos
+   - mantém desktop preservado
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:stretch!important;
+    gap:9px!important;
+    width:100%!important;
+    margin:6px 0 16px!important;
+    padding:10px!important;
+    border-radius:18px!important;
+    overflow:visible!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-pl{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "label value"
+      "name  value"!important;
+    align-items:center!important;
+    column-gap:12px!important;
+    row-gap:5px!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:72px!important;
+    height:auto!important;
+    margin:0!important;
+    padding:12px 13px!important;
+    border:1px solid rgba(148,163,184,.16)!important;
+    border-radius:15px!important;
+    background:linear-gradient(180deg,rgba(11,15,28,.88),rgba(7,10,19,.96))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    text-align:left!important;
+    justify-content:stretch!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card + .ranking-summary-card{
+    border-left:1px solid rgba(148,163,184,.16)!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card span{
+    grid-area:label!important;
+    display:block!important;
+    min-height:0!important;
+    margin:0!important;
+    color:#f0c36b!important;
+    font-size:.60rem!important;
+    line-height:1.05!important;
+    font-weight:900!important;
+    letter-spacing:.075em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    text-align:left!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card small{
+    grid-area:name!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    max-height:34px!important;
+    margin:0!important;
+    color:#f4f7ff!important;
+    font-size:.74rem!important;
+    line-height:1.16!important;
+    font-weight:850!important;
+    letter-spacing:-.015em!important;
+    text-align:left!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:normal!important;
+    overflow-wrap:break-word!important;
+    hyphens:none!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card strong{
+    grid-area:value!important;
+    align-self:center!important;
+    justify-self:end!important;
+    margin:0!important;
+    color:#1ff0a0!important;
+    font-size:1.02rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.035em!important;
+    white-space:nowrap!important;
+    text-align:right!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    gap:8px!important;
+    padding:9px!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "label"
+      "name"
+      "value"!important;
+    row-gap:6px!important;
+    min-height:90px!important;
+    padding:11px 12px!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card strong{
+    justify-self:start!important;
+    font-size:.98rem!important;
+  }
+
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-stacked-v627 body #rankingGrid .ranking-summary-card span{
+    white-space:normal!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v628 — Mobile Ranking: resumo limpo em lista vertical
+   - corrige herança do carrossel v623 que deixava flex-basis/max-width presos
+   - remove o card externo pesado do resumo
+   - mantém 2 destaques empilhados com altura real, sem sobreposição
+   - desktop permanece preservado
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626{
+    grid-column:1 / -1!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    align-items:stretch!important;
+    justify-items:stretch!important;
+    gap:9px!important;
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:8px 0 14px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    overflow-x:visible!important;
+    overflow-y:visible!important;
+    scroll-snap-type:none!important;
+    touch-action:auto!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip::-webkit-scrollbar,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-strip.ranking-summary-two-v626::-webkit-scrollbar{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-pl{
+    display:none!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-best,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-highlight{
+    position:relative!important;
+    inset:auto!important;
+    transform:none!important;
+    translate:none!important;
+    grid-column:auto!important;
+    grid-row:auto!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "label value"
+      "name  value"!important;
+    align-items:center!important;
+    justify-items:stretch!important;
+    column-gap:14px!important;
+    row-gap:7px!important;
+    flex:none!important;
+    flex-basis:auto!important;
+    flex-grow:0!important;
+    flex-shrink:0!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:auto!important;
+    min-height:82px!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:14px 14px!important;
+    border:1px solid rgba(148,163,184,.17)!important;
+    border-left:1px solid rgba(148,163,184,.17)!important;
+    border-radius:16px!important;
+    background:
+      radial-gradient(circle at 12% 0%,rgba(200,151,58,.09),transparent 38%),
+      linear-gradient(180deg,rgba(12,17,31,.92),rgba(7,10,19,.97))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    text-align:left!important;
+    overflow:hidden!important;
+    scroll-snap-align:none!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card + .ranking-summary-card{
+    border-left:1px solid rgba(148,163,184,.17)!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-label,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card span{
+    grid-area:label!important;
+    order:0!important;
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-height:none!important;
+    margin:0!important;
+    padding:0!important;
+    color:#f0c36b!important;
+    font-size:.62rem!important;
+    line-height:1.08!important;
+    font-weight:950!important;
+    letter-spacing:.075em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    text-align:left!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-name,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card small{
+    grid-area:name!important;
+    order:0!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    min-height:0!important;
+    max-height:40px!important;
+    margin:0!important;
+    padding:0!important;
+    color:#f5f7ff!important;
+    font-size:.78rem!important;
+    line-height:1.18!important;
+    font-weight:900!important;
+    letter-spacing:-.018em!important;
+    text-transform:uppercase!important;
+    white-space:normal!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    word-break:normal!important;
+    overflow-wrap:break-word!important;
+    hyphens:none!important;
+    text-align:left!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card strong{
+    grid-area:value!important;
+    order:0!important;
+    align-self:center!important;
+    justify-self:end!important;
+    display:block!important;
+    min-width:max-content!important;
+    margin:0!important;
+    padding:0!important;
+    color:#1ff0a0!important;
+    font-size:1.08rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.04em!important;
+    white-space:nowrap!important;
+    text-align:right!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .rank-card{
+    margin-top:10px!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-best,
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card.ranking-summary-highlight{
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:
+      "label"
+      "name"
+      "value"!important;
+    row-gap:7px!important;
+    min-height:94px!important;
+    padding:13px 14px!important;
+  }
+
+  html.mobile-ranking-summary-clean-v628 body #rankingGrid .ranking-summary-card strong{
+    justify-self:start!important;
+    font-size:1.02rem!important;
+    text-align:left!important;
+  }
+}
+
+
+/* PATCH v629 — Mobile: elimina espaços vazios excessivos entre Rankings e Mercado */
+@media (max-width:768px){
+  html.mobile-ranking-gap-fix-v629 body #rankingsSection{
+    margin-top:18px!important;
+    margin-bottom:0!important;
+    padding-bottom:22px!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-card{
+    margin-top:10px!important;
+    margin-bottom:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-list{
+    padding-bottom:0!important;
+    margin-bottom:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-more-wrap{
+    padding:6px 12px 12px!important;
+    margin:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingGrid .rank-more-btn{
+    margin:0!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #rankingsSection + section,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado{
+    margin-top:0!important;
+    padding-top:10px!important;
+  }
+
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .section-title,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .section-title-v302,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .page-section-title-v302,
+  html.mobile-ranking-gap-fix-v629 body #sec-mercado > .market-reference-head-v167{
+    margin-top:0!important;
+  }
+}
+
+
+/* PATCH v630 — Mobile: Mercado compacto + seletor USD/BRL menor + tabela mensal legível */
+@media (max-width:768px){
+  html.mobile-market-compact-v630 body #rankingsSection{
+    margin-bottom:0!important;
+    padding-bottom:4px!important;
+  }
+
+  html.mobile-market-compact-v630 body #rankingGrid{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+  }
+
+  html.mobile-market-compact-v630 body #rankingGrid .rank-card{
+    margin-bottom:0!important;
+  }
+
+  html.mobile-market-compact-v630 body #rankingGrid .rank-list{
+    padding-bottom:0!important;
+  }
+
+  html.mobile-market-compact-v630 body #rankingGrid .rank-more-wrap{
+    padding:6px 12px 10px!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado.section-gap,
+  html.mobile-market-compact-v630 body #sec-mercado{
+    margin-top:8px!important;
+    padding-top:0!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado .market-section-head{
+    margin-top:0!important;
+    margin-bottom:8px!important;
+    padding-top:0!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado .market-title-left{
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado .market-hero-v306,
+  html.mobile-market-compact-v630 body #sec-mercado h2.section-title-v302{
+    margin:0!important;
+    gap:8px!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado .section-title-icon-v302{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    min-height:42px!important;
+    margin:0 auto 8px!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado .section-title-text-v302{
+    font-size:1.18rem!important;
+    line-height:1.05!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445{
+    margin-top:8px!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    width:100%!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    display:grid!important;
+    grid-template-columns:38px repeat(2,minmax(74px,1fr))!important;
+    width:min(100%,260px)!important;
+    max-width:260px!important;
+    min-height:30px!important;
+    margin:0!important;
+    padding:2px!important;
+    border-radius:12px!important;
+    justify-self:start!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 span{
+    height:26px!important;
+    font-size:.64rem!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    height:26px!important;
+    min-height:26px!important;
+    padding:0 8px!important;
+    border-radius:9px!important;
+    font-size:.68rem!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445{
+    table-layout:fixed!important;
+    width:100%!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 th:first-child,
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 td:first-child{
+    width:52%!important;
+    padding-left:12px!important;
+    text-align:left!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 th:nth-child(2),
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 td:nth-child(2){
+    width:48%!important;
+    padding-left:0!important;
+    padding-right:18px!important;
+    text-align:right!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 td:nth-child(2){
+    font-size:.82rem!important;
+    letter-spacing:-.025em!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    width:min(100%,236px)!important;
+    max-width:236px!important;
+    grid-template-columns:34px repeat(2,minmax(66px,1fr))!important;
+  }
+
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 th:nth-child(2),
+  html.mobile-market-compact-v630 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 td:nth-child(2){
+    padding-right:14px!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v631 — Mobile: aproxima Rankings de Indicadores
+   - elimina safe-space herdado dentro do bloco Ranking
+   - mantém desktop intacto (apenas max-width:768px)
+   - mantém o espaço de proteção somente no fim da página/nav mobile
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-market-gap-v631 body #rankingsSection,
+  html.mobile-ranking-market-gap-v631 body #rankingsSection.section-gap{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+    min-height:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid,
+  html.mobile-ranking-market-gap-v631 body #rankingGrid.ranking-grid,
+  html.mobile-ranking-market-gap-v631 body #rankingsSection .ranking-grid,
+  html.mobile-ranking-market-gap-v631 body #rankingsSection .ranking-main-v136{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+    min-height:0!important;
+    row-gap:10px!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-card,
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-card:last-child{
+    margin-bottom:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-list{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-more-wrap{
+    margin:0!important;
+    padding:6px 12px 8px!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-more-btn{
+    margin:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingsSection + #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado.section-gap{
+    margin-top:10px!important;
+    padding-top:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #sec-mercado .market-section-head,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado > .section-title,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado h2.section-title-v302{
+    margin-top:0!important;
+    padding-top:0!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-ranking-market-gap-v631 body #rankingsSection + #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado.section-gap{
+    margin-top:8px!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v632 — Mobile: indicadores mensais EUA + tabela selecionada
+   - mantém desktop intacto
+   - deixa USD/BRL com visual de controle único
+   - exibe S&P 500, Nasdaq e Dow no mobile
+   - ao escolher 1 indicador, remove rolagem lateral e centraliza valores
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:9px!important;
+    width:100%!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445,
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    width:100%!important;
+    max-width:none!important;
+    min-height:38px!important;
+    margin:0!important;
+    padding:3px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:14px!important;
+    background:rgba(8,12,23,.72)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    display:grid!important;
+    grid-template-columns:minmax(54px,.64fr) repeat(2,minmax(0,1fr))!important;
+    gap:3px!important;
+    justify-self:stretch!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 span{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    height:32px!important;
+    border-right:1px solid rgba(148,163,184,.12)!important;
+    color:#e8bb6a!important;
+    font-size:.65rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.02em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button,
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    min-width:0!important;
+    width:100%!important;
+    min-height:32px!important;
+    height:32px!important;
+    margin:0!important;
+    padding:0 8px!important;
+    border:0!important;
+    border-radius:11px!important;
+    background:transparent!important;
+    color:#c7d2e7!important;
+    box-shadow:none!important;
+    font-size:.72rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.02em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button.active,
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button.active{
+    background:linear-gradient(180deg,rgba(176,132,84,.24),rgba(176,132,84,.14))!important;
+    color:#ffe1a1!important;
+    box-shadow:inset 0 0 0 1px rgba(176,132,84,.35)!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    display:flex!important;
+    flex-wrap:wrap!important;
+    gap:6px!important;
+    overflow:visible!important;
+    padding:10px 0 2px!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button{
+    flex:0 0 auto!important;
+    min-height:32px!important;
+    padding:0 11px!important;
+    border-radius:11px!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-picker-v632{
+    display:inline-flex!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 .monthly-us-only-v576{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:center!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-shell-v445{
+    overflow-x:hidden!important;
+    max-width:100%!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445{
+    min-width:0!important;
+    width:100%!important;
+    table-layout:fixed!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 th:first-child,
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 td:first-child{
+    width:38%!important;
+    padding-left:14px!important;
+    padding-right:6px!important;
+    text-align:left!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 th:nth-child(2),
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 td:nth-child(2){
+    width:62%!important;
+    padding-left:6px!important;
+    padding-right:14px!important;
+    text-align:center!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630]:not([data-monthly-view-v630="all"]) .monthly-indicators-table-v445 td:nth-child(2){
+    font-size:.86rem!important;
+    font-weight:950!important;
+    letter-spacing:-.025em!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    grid-template-columns:minmax(48px,.58fr) repeat(2,minmax(0,1fr))!important;
+  }
+
+  html.mobile-monthly-us-indicators-v632 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button{
+    padding:0 9px!important;
+    font-size:.66rem!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v633 — Mobile: Indicadores por mês com semântica e tabela completa
+   - mantém desktop intacto
+   - troca 2026/12M por Ano atual/12 meses via JS
+   - melhora o visual dos controles
+   - no modo Todos mostra Brasil + EUA dentro da largura da tela
+   - ao selecionar 1 indicador mantém mês + valor centralizados
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445{
+    --monthly-v633-border:rgba(148,163,184,.14);
+    --monthly-v633-card:rgba(8,12,23,.74);
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:10px!important;
+    margin-top:8px!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445,
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    position:relative!important;
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:4px!important;
+    min-height:0!important;
+    padding:20px 4px 4px!important;
+    border:1px solid var(--monthly-v633-border)!important;
+    border-radius:15px!important;
+    background:linear-gradient(180deg,rgba(12,16,30,.88),rgba(7,10,19,.92))!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445::before,
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578::before{
+    position:absolute!important;
+    top:6px!important;
+    left:10px!important;
+    color:#91a0bd!important;
+    font-size:.52rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.12em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445::before{content:"Período"!important;}
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578::before{content:"Moeda EUA"!important;}
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 > span{
+    display:none!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button,
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:0!important;
+    width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    padding:0 8px!important;
+    border:1px solid transparent!important;
+    border-radius:11px!important;
+    background:transparent!important;
+    color:#cbd6ea!important;
+    font-size:.72rem!important;
+    font-weight:950!important;
+    letter-spacing:-.02em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button.active,
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button.active{
+    border-color:rgba(176,132,84,.48)!important;
+    background:linear-gradient(180deg,rgba(176,132,84,.25),rgba(176,132,84,.13))!important;
+    color:#ffe3aa!important;
+    box-shadow:inset 0 0 0 1px rgba(176,132,84,.16),0 8px 18px rgba(0,0,0,.16)!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:7px!important;
+    overflow:visible!important;
+    padding:11px 0 4px!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:34px!important;
+    height:34px!important;
+    margin:0!important;
+    padding:0 4px!important;
+    border:1px solid rgba(148,163,184,.15)!important;
+    border-radius:12px!important;
+    background:rgba(8,12,23,.62)!important;
+    color:#cbd6ea!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+    font-size:.66rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:-.025em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button.active{
+    border-color:rgba(176,132,84,.55)!important;
+    background:linear-gradient(180deg,rgba(176,132,84,.24),rgba(176,132,84,.12))!important;
+    color:#ffe3aa!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article{
+    min-height:54px!important;
+    padding:9px 10px!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    overflow-x:hidden!important;
+    max-width:100%!important;
+    border-radius:15px!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445{
+    width:100%!important;
+    min-width:0!important;
+    table-layout:fixed!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:first-child,
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:first-child{
+    position:static!important;
+    left:auto!important;
+    width:26%!important;
+    padding-left:12px!important;
+    padding-right:6px!important;
+    text-align:left!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:nth-child(2),
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:nth-child(2){
+    width:74%!important;
+    padding-left:6px!important;
+    padding-right:12px!important;
+    text-align:center!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-single-indicator-row-v633 td:nth-child(2){
+    font-size:.92rem!important;
+    font-weight:950!important;
+    letter-spacing:-.025em!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445[data-monthly-view-v630="all"] .monthly-indicators-table-v445 th:nth-child(2){
+    text-align:left!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-cell-v633{
+    padding-top:8px!important;
+    padding-bottom:8px!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v633{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    width:100%!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:6px!important;
+    min-width:0!important;
+    min-height:29px!important;
+    padding:6px 7px!important;
+    border:1px solid rgba(148,163,184,.10)!important;
+    border-radius:10px!important;
+    background:rgba(7,11,21,.60)!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633 em{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    color:#aeb9d2!important;
+    font-style:normal!important;
+    font-size:.54rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.04em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633 strong{
+    flex:0 0 auto!important;
+    font-size:.68rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.03em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633.pos strong{color:#2fffc3!important;}
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633.neg strong{color:#ff6f8b!important;}
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633.muted strong{color:#93a2bd!important;}
+}
+
+@media (max-width:380px){
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+
+  html.mobile-monthly-semantic-v633 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v633{
+    grid-template-columns:1fr!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v634 — Mobile: Indicadores por mês mais leve e legível
+   - preserva desktop
+   - remove subtítulo redundante
+   - deixa chips proporcionais em grid
+   - reforça tabela compacta em modo Todos / indicador único
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445{
+    --monthly-v634-border:rgba(148,163,184,.13);
+    --monthly-v634-active:rgba(176,132,84,.52);
+    --monthly-v634-soft:rgba(8,12,23,.76);
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445{
+    margin-bottom:10px!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445 p{
+    display:none!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    gap:9px!important;
+    margin-top:4px!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    display:grid!important;
+    align-items:center!important;
+    gap:5px!important;
+    min-height:42px!important;
+    padding:4px!important;
+    border:1px solid var(--monthly-v634-border)!important;
+    border-radius:15px!important;
+    background:rgba(6,10,20,.70)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+    overflow:hidden!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    grid-template-columns:.72fr 1fr 1fr!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445::before,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578::before{
+    display:none!important;
+    content:none!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 > span{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:0!important;
+    height:34px!important;
+    margin:0!important;
+    padding:0 4px!important;
+    color:#ffe3aa!important;
+    font-size:.66rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.02em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    min-width:0!important;
+    width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    padding:0 6px!important;
+    border:1px solid transparent!important;
+    border-radius:11px!important;
+    background:transparent!important;
+    color:#d8e1f3!important;
+    font-size:.72rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.025em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button.active,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button.active{
+    border-color:var(--monthly-v634-active)!important;
+    background:linear-gradient(180deg,rgba(176,132,84,.24),rgba(176,132,84,.12))!important;
+    color:#ffe6b2!important;
+    box-shadow:inset 0 0 0 1px rgba(176,132,84,.12)!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:6px!important;
+    width:100%!important;
+    overflow:visible!important;
+    padding:10px 0 2px!important;
+    border-top:1px solid rgba(148,163,184,.09)!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    margin:0!important;
+    padding:0 5px!important;
+    border:1px solid rgba(148,163,184,.14)!important;
+    border-radius:12px!important;
+    background:rgba(7,11,21,.68)!important;
+    color:#d4def1!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.022)!important;
+    font-size:.64rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:-.035em!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button[data-monthly-indicators-view-v446="sp500"]{
+    font-size:.60rem!important;
+    letter-spacing:-.045em!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button.active{
+    border-color:var(--monthly-v634-active)!important;
+    background:linear-gradient(180deg,rgba(176,132,84,.23),rgba(176,132,84,.11))!important;
+    color:#ffe6b2!important;
+    box-shadow:inset 0 0 0 1px rgba(176,132,84,.14)!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    margin-top:9px!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    overflow-x:hidden!important;
+    max-width:100%!important;
+    margin-top:9px!important;
+    border-radius:16px!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445{
+    width:100%!important;
+    min-width:0!important;
+    table-layout:fixed!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:first-child,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:first-child{
+    width:25%!important;
+    min-width:0!important;
+    padding-left:12px!important;
+    padding-right:6px!important;
+    text-align:left!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 th:nth-child(2),
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-v445 td:nth-child(2){
+    width:75%!important;
+    min-width:0!important;
+    padding-left:6px!important;
+    padding-right:10px!important;
+    text-align:center!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v634,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v633{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:6px!important;
+    width:100%!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:6px!important;
+    min-width:0!important;
+    min-height:29px!important;
+    padding:6px 7px!important;
+    border:1px solid rgba(148,163,184,.10)!important;
+    border-radius:10px!important;
+    background:rgba(7,11,21,.60)!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634 em,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633 em{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    color:#aeb9d2!important;
+    font-style:normal!important;
+    font-size:.52rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:.035em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634 strong,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633 strong{
+    flex:0 0 auto!important;
+    font-size:.68rem!important;
+    line-height:1!important;
+    font-weight:950!important;
+    letter-spacing:-.03em!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634.pos strong,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633.pos strong{color:#2fffc3!important;}
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634.neg strong,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633.neg strong{color:#ff6f8b!important;}
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634.muted strong,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633.muted strong{color:#93a2bd!important;}
+}
+
+@media (max-width:380px){
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v634,
+  html.mobile-monthly-polish-v634 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v633{
+    grid-template-columns:1fr!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v635 — Mobile: Indicadores mensais mais compactos
+   - preserva desktop
+   - remove kicker redundante "Resumo mensal"
+   - reduz altura dos seletores e chips
+   - força chips em 4 colunas também em telas pequenas
+   - diminui margens internas para reduzir rolagem
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445{
+    padding:10px 12px 11px!important;
+    border-radius:16px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445{
+    margin:0 0 7px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-kicker-v445,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445 p{
+    display:none!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 #monthlyIndicatorsTitleV445{
+    margin:0!important;
+    font-size:1.06rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.04em!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    gap:7px!important;
+    margin-top:10px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    min-height:36px!important;
+    padding:3px!important;
+    gap:4px!important;
+    border-radius:13px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 > span,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    height:30px!important;
+    min-height:30px!important;
+    border-radius:9px!important;
+    font-size:.67rem!important;
+    letter-spacing:-.02em!important;
+    padding:0 5px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 > span{
+    font-size:.62rem!important;
+    letter-spacing:.02em!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:5px!important;
+    padding:7px 0 1px!important;
+    border-top:1px solid rgba(148,163,184,.075)!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button{
+    height:32px!important;
+    min-height:32px!important;
+    padding:0 4px!important;
+    border-radius:10px!important;
+    font-size:.58rem!important;
+    font-weight:900!important;
+    letter-spacing:-.045em!important;
+    line-height:1!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button[data-monthly-indicators-view-v446="sp500"],
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button[data-monthly-indicators-view-v446="ibov"]{
+    font-size:.55rem!important;
+    letter-spacing:-.055em!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    margin-top:7px!important;
+    gap:6px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article{
+    min-height:52px!important;
+    padding:9px 10px!important;
+    border-radius:12px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article span{
+    font-size:.55rem!important;
+    line-height:1.05!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article strong{
+    font-size:.88rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    margin-top:7px!important;
+    border-radius:14px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v634,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v633{
+    gap:5px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633{
+    min-height:26px!important;
+    padding:5px 6px!important;
+    border-radius:9px!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}
+
+@media (max-width:340px){
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v636 — Mobile: padronização profissional dos botões "Ver mais"
+   Escopo: somente mobile. Mantém desktop intocado.
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-table-toolbar.section-title-collapsible{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:
+      "title action"
+      "tabs  tabs"!important;
+    align-items:start!important;
+    gap:12px 12px!important;
+    width:100%!important;
+    padding:16px 18px!important;
+    border-radius:22px!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-table-title{
+    grid-area:title!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-table-title span{
+    display:block!important;
+    margin:0!important;
+    font-size:1.18rem!important;
+    line-height:1.08!important;
+    letter-spacing:-.055em!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-table-title small{
+    display:block!important;
+    margin:4px 0 0!important;
+    max-width:27ch!important;
+    font-size:.70rem!important;
+    line-height:1.22!important;
+    color:#aeb8d3!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-toolbar-actions.indic-actions,
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-toolbar-actions{
+    grid-area:action!important;
+    align-self:start!important;
+    justify-self:end!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:flex-end!important;
+    width:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .indic-tabs-bar.market-period-tabs{
+    grid-area:tabs!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:8px!important;
+    width:100%!important;
+    margin:1px 0 0!important;
+    padding:0!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .indic-tabs-label{
+    margin:0!important;
+    color:#aeb8d3!important;
+    font-size:.64rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.13em!important;
+    text-transform:uppercase!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .indic-tabs{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:8px!important;
+    width:100%!important;
+    margin:0!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .indic-tab{
+    min-width:0!important;
+    min-height:38px!important;
+    height:38px!important;
+    padding:0 8px!important;
+    border-radius:13px!important;
+    font-size:.74rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:-.02em!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .section-toggle-btn,
+  html.mobile-vermais-standard-v636 body #sec-focus .section-toggle-btn,
+  html.mobile-vermais-standard-v636 body #sec-graficos .section-toggle-btn{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:7px!important;
+    width:auto!important;
+    min-width:104px!important;
+    height:40px!important;
+    min-height:40px!important;
+    max-height:40px!important;
+    padding:0 13px 0 10px!important;
+    border:1px solid rgba(200,151,58,.28)!important;
+    border-radius:999px!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.13),rgba(200,151,58,.055))!important;
+    color:#f2cf89!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.04)!important;
+    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+    font-size:.62rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.085em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    pointer-events:none!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-standard-v636 body #sec-focus .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-standard-v636 body #sec-graficos .section-toggle-btn .toggle-icon{
+    order:-1!important;
+    display:inline-grid!important;
+    place-items:center!important;
+    width:20px!important;
+    height:20px!important;
+    min-width:20px!important;
+    margin:0!important;
+    border:1px solid rgba(232,187,106,.22)!important;
+    border-radius:999px!important;
+    background:rgba(232,187,106,.075)!important;
+    color:#f3c978!important;
+    font-size:.88rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    transform:none!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel.section-expanded .section-toggle-btn,
+  html.mobile-vermais-standard-v636 body #sec-focus.section-expanded .section-toggle-btn,
+  html.mobile-vermais-standard-v636 body #sec-graficos.section-expanded .section-toggle-btn{
+    background:linear-gradient(180deg,rgba(200,151,58,.18),rgba(200,151,58,.075))!important;
+    border-color:rgba(200,151,58,.42)!important;
+    color:#ffe1a1!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel.section-expanded .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-standard-v636 body #sec-focus.section-expanded .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-standard-v636 body #sec-graficos.section-expanded .section-toggle-btn .toggle-icon{
+    transform:rotate(90deg)!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-focus > .section-title,
+  html.mobile-vermais-standard-v636 body #sec-graficos > .section-title,
+  html.mobile-vermais-standard-v636 body #sec-graficos > .evolution-title{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:start!important;
+    gap:10px!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-focus .section-toggle-btn,
+  html.mobile-vermais-standard-v636 body #sec-graficos .section-toggle-btn{
+    justify-self:end!important;
+    align-self:start!important;
+    margin:0!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-table-toolbar.section-title-collapsible{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    padding:15px 14px!important;
+    gap:10px 9px!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .market-table-title span{
+    font-size:1.08rem!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .section-toggle-btn,
+  html.mobile-vermais-standard-v636 body #sec-focus .section-toggle-btn,
+  html.mobile-vermais-standard-v636 body #sec-graficos .section-toggle-btn{
+    min-width:94px!important;
+    height:38px!important;
+    min-height:38px!important;
+    max-height:38px!important;
+    padding:0 10px 0 8px!important;
+    font-size:.57rem!important;
+    letter-spacing:.07em!important;
+  }
+
+  html.mobile-vermais-standard-v636 body #sec-mercado-painel .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-standard-v636 body #sec-focus .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-standard-v636 body #sec-graficos .section-toggle-btn .toggle-icon{
+    width:18px!important;
+    height:18px!important;
+    min-width:18px!important;
+    font-size:.78rem!important;
+  }
+}
+
+
+/* =========================================================
+   PATCH v637 — Mobile: botões "Ver mais" limpos e discretos
+   Corrige v636: remove bolha interna e reduz proporção visual.
+   Escopo: somente mobile. Desktop intocado.
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .market-table-toolbar.section-title-collapsible{
+    gap:10px 10px!important;
+    padding:15px 16px!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .market-table-title span{
+    font-size:1.08rem!important;
+    line-height:1.08!important;
+    letter-spacing:-.045em!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .market-table-title small{
+    margin-top:3px!important;
+    max-width:25ch!important;
+    font-size:.66rem!important;
+    line-height:1.18!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-focus .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-toggle-btn{
+    gap:6px!important;
+    min-width:auto!important;
+    width:auto!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    padding:0 11px!important;
+    border-radius:12px!important;
+    border:1px solid rgba(200,151,58,.26)!important;
+    background:rgba(200,151,58,.075)!important;
+    box-shadow:none!important;
+    color:#e9c37d!important;
+    font-size:.58rem!important;
+    font-weight:900!important;
+    letter-spacing:.075em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-focus .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-toggle-btn .toggle-icon{
+    order:-1!important;
+    display:inline!important;
+    width:auto!important;
+    height:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    color:#e9c37d!important;
+    font-size:.82rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    transform:none!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel.section-expanded .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-focus.section-expanded .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-graficos.section-expanded .section-toggle-btn{
+    background:rgba(200,151,58,.105)!important;
+    border-color:rgba(200,151,58,.38)!important;
+    color:#ffe0a0!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel.section-expanded .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-focus.section-expanded .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-graficos.section-expanded .section-toggle-btn .toggle-icon{
+    color:#ffe0a0!important;
+    transform:rotate(90deg)!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-focus > .section-title,
+  html.mobile-vermais-clean-v637 body #sec-graficos > .section-title,
+  html.mobile-vermais-clean-v637 body #sec-graficos > .evolution-title{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:8px!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-focus .section-title-v302,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-title-v302{
+    margin:0!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-title-subtitle-v518{
+    max-width:24ch!important;
+    margin-top:4px!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-focus .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-toggle-btn{
+    height:32px!important;
+    min-height:32px!important;
+    max-height:32px!important;
+    padding:0 9px!important;
+    font-size:.54rem!important;
+    letter-spacing:.06em!important;
+  }
+}
+
+/* =========================================================
+   PATCH v638 — Mobile: ranking period tabs + botão inferior
+   - lapida Mês/Ano/12 meses como seletor segmentado compacto
+   - deixa Ver mais fundos como ação secundária premium
+   - escopo somente mobile; desktop preservado
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card{
+    border-radius:20px!important;
+    background:linear-gradient(180deg,rgba(9,15,28,.96),rgba(6,10,19,.98))!important;
+    border-color:rgba(148,163,184,.16)!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card-header{
+    display:block!important;
+    padding:14px 14px 10px!important;
+    border-bottom:1px solid rgba(148,163,184,.08)!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card-main-title{
+    display:flex!important;
+    align-items:center!important;
+    gap:9px!important;
+    margin:0 0 12px!important;
+    padding:0!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card-main-title > span:first-child{
+    display:grid!important;
+    place-items:center!important;
+    width:28px!important;
+    height:28px!important;
+    min-width:28px!important;
+    border-radius:10px!important;
+    border:1px solid rgba(232,187,106,.22)!important;
+    background:rgba(232,187,106,.075)!important;
+    font-size:1rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card-title{
+    font-size:1.08rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.045em!important;
+    font-weight:900!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-period-tabs{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    align-items:center!important;
+    gap:7px!important;
+    width:100%!important;
+    margin:0!important;
+    padding:3px!important;
+    border:1px solid rgba(148,163,184,.13)!important;
+    border-radius:16px!important;
+    background:rgba(6,10,20,.74)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-period-tab{
+    appearance:none!important;
+    -webkit-appearance:none!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    margin:0!important;
+    padding:0 6px!important;
+    border:1px solid transparent!important;
+    border-radius:12px!important;
+    background:transparent!important;
+    color:#b8c1d7!important;
+    box-shadow:none!important;
+    font-size:.73rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:-.025em!important;
+    text-transform:none!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-period-tab.active,
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-period-tab[aria-selected="true"]{
+    border-color:rgba(232,187,106,.44)!important;
+    background:linear-gradient(180deg,rgba(176,132,84,.20),rgba(176,132,84,.10))!important;
+    color:#ffe1a1!important;
+    box-shadow:inset 0 0 0 1px rgba(176,132,84,.10)!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card-sub{
+    display:none!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-list{
+    border-top:0!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-more-wrap{
+    margin:0!important;
+    padding:9px 14px 12px!important;
+    border-top:1px solid rgba(148,163,184,.09)!important;
+    background:linear-gradient(180deg,rgba(8,12,22,.0),rgba(9,13,24,.32))!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-more-btn{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    margin:0!important;
+    padding:0 12px!important;
+    border:1px solid rgba(176,132,84,.36)!important;
+    border-radius:13px!important;
+    background:linear-gradient(180deg,rgba(176,132,84,.105),rgba(176,132,84,.045))!important;
+    color:#f0d19b!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.035)!important;
+    font-size:.72rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    letter-spacing:.01em!important;
+    text-transform:none!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-more-btn::before{
+    content:"›"!important;
+    display:inline-grid!important;
+    place-items:center!important;
+    margin-right:7px!important;
+    color:#e8bb6a!important;
+    font-size:1rem!important;
+    line-height:1!important;
+    transform:translateY(-1px)!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card:not(.rank-collapsed) .rank-more-btn::before{
+    content:"⌃"!important;
+    font-size:.9rem!important;
+    transform:none!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-card-header{
+    padding:12px 12px 9px!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-period-tabs{
+    gap:5px!important;
+    border-radius:14px!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-period-tab{
+    height:32px!important;
+    min-height:32px!important;
+    font-size:.69rem!important;
+    border-radius:10px!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-more-wrap{
+    padding:8px 12px 10px!important;
+  }
+
+  html.mobile-ranking-buttons-polish-v638 body #rankingGrid .rank-more-btn{
+    height:36px!important;
+    min-height:36px!important;
+    font-size:.70rem!important;
+  }
+}
