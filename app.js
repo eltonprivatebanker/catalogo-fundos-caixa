@@ -27739,7 +27739,7 @@ function buildDetailPanel(r,colspan){
     if(!isMobile() || running) return;
     running = true;
     try{
-      document.documentElement.classList.add('mobile-monthly-us-indicators-v632','mobile-monthly-semantic-v633',PATCH_CLASS);
+      document.documentElement.classList.add('mobile-monthly-us-indicators-v632','mobile-monthly-semantic-v633','mobile-monthly-compact-v635',PATCH_CLASS);
       var root = document.getElementById('monthlyIndicatorsV445');
       if(root){
         root.dataset.mobilePolishV634 = '1';
@@ -27784,4 +27784,64 @@ function buildDetailPanel(r,colspan){
     }
   }, true);
   [120, 420, 1000, 2200, 5200, 9000].forEach(function(delay){ setTimeout(renderThenPolish, delay); });
+})();
+
+
+/* PATCH v635 — Mobile: indicadores mensais compactos e hierarquia limpa */
+(function(){
+  'use strict';
+  var PATCH_CLASS = 'mobile-monthly-compact-v635';
+
+  function isMobile(){
+    return !window.matchMedia || window.matchMedia('(max-width: 768px)').matches;
+  }
+
+  function setButtonText(selector, text){
+    var el = document.querySelector(selector);
+    if(el && el.textContent.trim() !== text) el.textContent = text;
+  }
+
+  function compact(){
+    if(!isMobile()) return;
+    try{
+      document.documentElement.classList.add('mobile-monthly-us-indicators-v632','mobile-monthly-semantic-v633','mobile-monthly-polish-v634',PATCH_CLASS);
+      var root = document.getElementById('monthlyIndicatorsV445');
+      if(root){
+        root.dataset.mobileCompactV635 = '1';
+        var kicker = root.querySelector('.monthly-indicators-kicker-v445');
+        if(kicker) kicker.remove();
+        var lead = root.querySelector('.monthly-indicators-head-v445 p');
+        if(lead) lead.remove();
+        setButtonText('#monthlyIndicatorsV445 [data-monthly-indicators-range-v445="year"]', 'Ano');
+        setButtonText('#monthlyIndicatorsV445 [data-monthly-indicators-range-v445="12m"]', '12 meses');
+        setButtonText('#monthlyIndicatorsV445 [data-monthly-indicators-view-v446="ibov"]', 'Ibovespa');
+        setButtonText('#monthlyIndicatorsV445 [data-monthly-indicators-view-v446="sp500"]', 'S&P 500');
+      }
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_MOBILE_MONTHLY_COMPACT_V635';
+    }catch(_error){}
+  }
+
+  function renderThenCompact(){
+    if(!isMobile()) return;
+    try{
+      if(window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__ && typeof window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__.render === 'function'){
+        window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__.render();
+      }
+    }catch(_error){}
+    setTimeout(compact, 0);
+    setTimeout(compact, 120);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', renderThenCompact, {once:true});
+  else renderThenCompact();
+  window.addEventListener('load', renderThenCompact, {once:true});
+  document.addEventListener('elton:market-data-refresh', renderThenCompact);
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#monthlyIndicatorsV445')){
+      setTimeout(compact, 80);
+      setTimeout(compact, 260);
+    }
+  }, true);
+  [120, 420, 1000, 2200, 5200, 9000].forEach(function(delay){ setTimeout(renderThenCompact, delay); });
 })();

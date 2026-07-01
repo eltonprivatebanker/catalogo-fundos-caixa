@@ -78462,3 +78462,138 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:1fr!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v635 — Mobile: Indicadores mensais mais compactos
+   - preserva desktop
+   - remove kicker redundante "Resumo mensal"
+   - reduz altura dos seletores e chips
+   - força chips em 4 colunas também em telas pequenas
+   - diminui margens internas para reduzir rolagem
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445{
+    padding:10px 12px 11px!important;
+    border-radius:16px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445{
+    margin:0 0 7px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-kicker-v445,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-head-v445 p{
+    display:none!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 #monthlyIndicatorsTitleV445{
+    margin:0!important;
+    font-size:1.06rem!important;
+    line-height:1.05!important;
+    letter-spacing:-.04em!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-controls-v578{
+    gap:7px!important;
+    margin-top:10px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578{
+    min-height:36px!important;
+    padding:3px!important;
+    gap:4px!important;
+    border-radius:13px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 > span,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-tabs-v445 button,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 button{
+    height:30px!important;
+    min-height:30px!important;
+    border-radius:9px!important;
+    font-size:.67rem!important;
+    letter-spacing:-.02em!important;
+    padding:0 5px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-us-currency-toggle-v578 > span{
+    font-size:.62rem!important;
+    letter-spacing:.02em!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:5px!important;
+    padding:7px 0 1px!important;
+    border-top:1px solid rgba(148,163,184,.075)!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button{
+    height:32px!important;
+    min-height:32px!important;
+    padding:0 4px!important;
+    border-radius:10px!important;
+    font-size:.58rem!important;
+    font-weight:900!important;
+    letter-spacing:-.045em!important;
+    line-height:1!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button[data-monthly-indicators-view-v446="sp500"],
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446 button[data-monthly-indicators-view-v446="ibov"]{
+    font-size:.55rem!important;
+    letter-spacing:-.055em!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445{
+    margin-top:7px!important;
+    gap:6px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article{
+    min-height:52px!important;
+    padding:9px 10px!important;
+    border-radius:12px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article span{
+    font-size:.55rem!important;
+    line-height:1.05!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-summary-v445 article strong{
+    font-size:.88rem!important;
+    line-height:1!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-table-shell-v445{
+    margin-top:7px!important;
+    border-radius:14px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v634,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-grid-v633{
+    gap:5px!important;
+  }
+
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v634,
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-mobile-all-item-v633{
+    min-height:26px!important;
+    padding:5px 6px!important;
+    border-radius:9px!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  }
+}
+
+@media (max-width:340px){
+  html.mobile-monthly-compact-v635 body #sec-mercado #monthlyIndicatorsV445 .monthly-indicators-picker-v446{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}

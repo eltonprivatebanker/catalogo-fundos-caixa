@@ -1,0 +1,19 @@
+CATÁLOGO DE FUNDOS CAIXA — v635 MOBILE MONTHLY COMPACT
+
+Objetivo:
+- Reduzir a altura do bloco Indicadores por mês no mobile.
+- Compactar botões de período, moeda e indicadores.
+- Remover redundância visual do kicker "Resumo mensal" dentro do card.
+- Preservar a v631/v632/v633/v634 e manter desktop intocado.
+
+Arquivos alterados:
+- index.html: adicionada classe mobile-monthly-compact-v635 e cache busting para style/app.
+- style.css: novo patch CSS apenas em @media (max-width:768px).
+- app.js: patch v635 para reaplicar classe e remover textos redundantes após renderização dinâmica.
+- tokens-caixa.css: sem alteração.
+
+Teste recomendado:
+- Mobile: Indicadores de mercado > Indicadores por mês.
+- Conferir se "Resumo mensal" desapareceu dentro do card.
+- Conferir se os chips ficaram mais compactos e com menos rolagem.
+- Testar Todos, CDI, S&P 500 e alternância USD/BRL.
