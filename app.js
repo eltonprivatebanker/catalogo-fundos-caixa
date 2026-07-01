@@ -27514,7 +27514,7 @@ function buildDetailPanel(r,colspan){
   }
 
   function apply(){
-    document.documentElement.classList.add('mobile-ranking-independent-v617','mobile-ranking-summary-two-cards-v626','mobile-ranking-summary-stacked-v627','mobile-ranking-summary-clean-v628');
+    document.documentElement.classList.add('mobile-ranking-independent-v617','mobile-ranking-summary-two-cards-v626','mobile-ranking-summary-stacked-v627','mobile-ranking-summary-clean-v628','mobile-ranking-gap-fix-v629','mobile-ranking-market-gap-v631');
     syncOriginalToMobile();
     bind();
     var meta = document.querySelector('meta[name="app-build"]');
@@ -27525,4 +27525,24 @@ function buildDetailPanel(r,colspan){
   else apply();
   window.addEventListener('load', apply, {once:true});
   [80, 300, 900, 1800, 3200, 7000, 12000].forEach(function(delay){ setTimeout(apply, delay); });
+})();
+
+
+/* PATCH v631 — Mobile: garante ativação do ajuste de espaçamento Ranking → Mercado */
+(function(){
+  'use strict';
+  var PATCH_CLASS = 'mobile-ranking-market-gap-v631';
+  function apply(){
+    try{
+      document.documentElement.classList.add('mobile-ranking-gap-fix-v629', PATCH_CLASS);
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta && window.matchMedia && window.matchMedia('(max-width: 768px)').matches){
+        meta.content = 'ELTAUM_MOBILE_RANKING_MARKET_GAP_V631';
+      }
+    }catch(_){ }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [120, 400, 1000, 2200, 5000].forEach(function(delay){ setTimeout(apply, delay); });
 })();

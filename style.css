@@ -77749,3 +77749,70 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     padding-right:14px!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v631 — Mobile: aproxima Rankings de Indicadores
+   - elimina safe-space herdado dentro do bloco Ranking
+   - mantém desktop intacto (apenas max-width:768px)
+   - mantém o espaço de proteção somente no fim da página/nav mobile
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-ranking-market-gap-v631 body #rankingsSection,
+  html.mobile-ranking-market-gap-v631 body #rankingsSection.section-gap{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+    min-height:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid,
+  html.mobile-ranking-market-gap-v631 body #rankingGrid.ranking-grid,
+  html.mobile-ranking-market-gap-v631 body #rankingsSection .ranking-grid,
+  html.mobile-ranking-market-gap-v631 body #rankingsSection .ranking-main-v136{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+    min-height:0!important;
+    row-gap:10px!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-card,
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-card:last-child{
+    margin-bottom:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-list{
+    margin-bottom:0!important;
+    padding-bottom:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-more-wrap{
+    margin:0!important;
+    padding:6px 12px 8px!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingGrid .rank-more-btn{
+    margin:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #rankingsSection + #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado.section-gap{
+    margin-top:10px!important;
+    padding-top:0!important;
+  }
+
+  html.mobile-ranking-market-gap-v631 body #sec-mercado .market-section-head,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado > .section-title,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado h2.section-title-v302{
+    margin-top:0!important;
+    padding-top:0!important;
+  }
+}
+
+@media (max-width:380px){
+  html.mobile-ranking-market-gap-v631 body #rankingsSection + #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado,
+  html.mobile-ranking-market-gap-v631 body #sec-mercado.section-gap{
+    margin-top:8px!important;
+  }
+}
