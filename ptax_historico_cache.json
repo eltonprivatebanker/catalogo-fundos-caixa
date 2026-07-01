@@ -1,20 +1,12 @@
 {
-  "gerado_em": "30/06/2026 15:47:27",
-  "total": 37,
+  "gerado_em": "01/07/2026 16:02:10",
+  "total": 36,
   "ptax_historico": [
-    {
-      "key": "2023-06",
-      "mes": "jun/2023",
-      "cotacao": 4.8192,
-      "var_pct": null,
-      "data_ref": "2023-06-30",
-      "dataHoraCotacao": "2023-06-30 13:10:24.365"
-    },
     {
       "key": "2023-07",
       "mes": "jul/2023",
       "cotacao": 4.7415,
-      "var_pct": -1.61,
+      "var_pct": null,
       "data_ref": "2023-07-31",
       "dataHoraCotacao": "2023-07-31 13:02:52.412"
     },
@@ -293,10 +285,10 @@
     {
       "key": "2026-06",
       "mes": "jun/2026",
-      "cotacao": 5.1717,
-      "var_pct": 2.27,
-      "data_ref": "2026-06-29",
-      "dataHoraCotacao": "2026-06-29 13:06:58.963012"
+      "cotacao": 5.1766,
+      "var_pct": 2.37,
+      "data_ref": "2026-06-30",
+      "dataHoraCotacao": "2026-06-30 13:09:20.564468"
     }
   ]
 }
