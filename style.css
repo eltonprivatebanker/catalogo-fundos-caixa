@@ -78804,3 +78804,118 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.78rem!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v637 — Mobile: botões "Ver mais" limpos e discretos
+   Corrige v636: remove bolha interna e reduz proporção visual.
+   Escopo: somente mobile. Desktop intocado.
+   ========================================================= */
+@media (max-width:768px){
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .market-table-toolbar.section-title-collapsible{
+    gap:10px 10px!important;
+    padding:15px 16px!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .market-table-title span{
+    font-size:1.08rem!important;
+    line-height:1.08!important;
+    letter-spacing:-.045em!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .market-table-title small{
+    margin-top:3px!important;
+    max-width:25ch!important;
+    font-size:.66rem!important;
+    line-height:1.18!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-focus .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-toggle-btn{
+    gap:6px!important;
+    min-width:auto!important;
+    width:auto!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    padding:0 11px!important;
+    border-radius:12px!important;
+    border:1px solid rgba(200,151,58,.26)!important;
+    background:rgba(200,151,58,.075)!important;
+    box-shadow:none!important;
+    color:#e9c37d!important;
+    font-size:.58rem!important;
+    font-weight:900!important;
+    letter-spacing:.075em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-focus .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-toggle-btn .toggle-icon{
+    order:-1!important;
+    display:inline!important;
+    width:auto!important;
+    height:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    color:#e9c37d!important;
+    font-size:.82rem!important;
+    line-height:1!important;
+    font-weight:900!important;
+    transform:none!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel.section-expanded .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-focus.section-expanded .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-graficos.section-expanded .section-toggle-btn{
+    background:rgba(200,151,58,.105)!important;
+    border-color:rgba(200,151,58,.38)!important;
+    color:#ffe0a0!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel.section-expanded .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-focus.section-expanded .section-toggle-btn .toggle-icon,
+  html.mobile-vermais-clean-v637 body #sec-graficos.section-expanded .section-toggle-btn .toggle-icon{
+    color:#ffe0a0!important;
+    transform:rotate(90deg)!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-focus > .section-title,
+  html.mobile-vermais-clean-v637 body #sec-graficos > .section-title,
+  html.mobile-vermais-clean-v637 body #sec-graficos > .evolution-title{
+    grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;
+    gap:8px!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-focus .section-title-v302,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-title-v302{
+    margin:0!important;
+  }
+
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-title-subtitle-v518{
+    max-width:24ch!important;
+    margin-top:4px!important;
+  }
+}
+
+@media (max-width:360px){
+  html.mobile-vermais-clean-v637 body #sec-mercado-painel .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-focus .section-toggle-btn,
+  html.mobile-vermais-clean-v637 body #sec-graficos .section-toggle-btn{
+    height:32px!important;
+    min-height:32px!important;
+    max-height:32px!important;
+    padding:0 9px!important;
+    font-size:.54rem!important;
+    letter-spacing:.06em!important;
+  }
+}

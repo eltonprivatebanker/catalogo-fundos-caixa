@@ -27867,3 +27867,25 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', apply, {once:true});
   [120, 420, 1000, 2200, 5200, 9000].forEach(function(delay){ setTimeout(apply, delay); });
 })();
+
+
+/* PATCH v637 — Mobile: ativa o refinamento limpo dos botões Ver mais */
+(function(){
+  'use strict';
+  var PATCH_CLASS = 'mobile-vermais-clean-v637';
+  function isMobile(){
+    return !window.matchMedia || window.matchMedia('(max-width: 768px)').matches;
+  }
+  function apply(){
+    try{
+      if(!isMobile()) return;
+      document.documentElement.classList.add(PATCH_CLASS);
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_MOBILE_VERMAIS_CLEAN_V637';
+    }catch(_error){}
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  [120, 420, 1000, 2200, 5200, 9000].forEach(function(delay){ setTimeout(apply, delay); });
+})();
