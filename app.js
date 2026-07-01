@@ -27889,3 +27889,49 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', apply, {once:true});
   [120, 420, 1000, 2200, 5200, 9000].forEach(function(delay){ setTimeout(apply, delay); });
 })();
+
+/* PATCH v638 — Mobile: ativa lapidação dos botões de período do ranking */
+(function(){
+  'use strict';
+  var PATCH_CLASS = 'mobile-ranking-buttons-polish-v638';
+  function isMobile(){
+    return !window.matchMedia || window.matchMedia('(max-width: 768px)').matches;
+  }
+  function normalizeRankingButtons(){
+    try{
+      if(!isMobile()) return;
+      document.documentElement.classList.add(PATCH_CLASS);
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_MOBILE_RANKING_BUTTONS_POLISH_V638';
+
+      document.querySelectorAll('#rankingGrid .rank-period-tab').forEach(function(btn){
+        var raw = (btn.getAttribute('data-rank-period') || btn.textContent || '').trim().toLowerCase();
+        if(raw === 'mes' || raw === 'mês') btn.textContent = 'Mês';
+        else if(raw === 'ano') btn.textContent = 'Ano';
+        else if(raw === '12m' || raw === '12 meses') btn.textContent = '12 meses';
+      });
+
+      document.querySelectorAll('#rankingGrid .rank-more-btn').forEach(function(btn){
+        var expanded = false;
+        var card = btn.closest('.rank-card');
+        if(card) expanded = !card.classList.contains('rank-collapsed');
+        var current = (btn.textContent || '').trim().toLowerCase();
+        if(expanded || current.indexOf('menos') >= 0){
+          btn.textContent = 'Ver menos';
+        }else{
+          btn.textContent = 'Ver mais fundos';
+        }
+      });
+    }catch(_error){}
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', normalizeRankingButtons, {once:true});
+  else normalizeRankingButtons();
+  window.addEventListener('load', normalizeRankingButtons, {once:true});
+  document.addEventListener('click', function(event){
+    if(event.target && event.target.closest && event.target.closest('#rankingGrid')){
+      setTimeout(normalizeRankingButtons, 60);
+      setTimeout(normalizeRankingButtons, 240);
+    }
+  }, true);
+  [120, 420, 1000, 2200, 5200, 9000].forEach(function(delay){ setTimeout(normalizeRankingButtons, delay); });
+})();
