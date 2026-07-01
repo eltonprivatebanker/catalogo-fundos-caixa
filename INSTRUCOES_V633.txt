@@ -1,0 +1,20 @@
+Catálogo de Fundos CAIXA — v633 mobile mensal semântico
+
+Base: v632, preservando v631.
+Escopo: somente mobile. Desktop não foi alterado.
+
+Arquivos para subir no GitHub:
+- index.html
+- style.css
+- app.js
+- tokens-caixa.css
+
+O que mudou:
+1. Indicadores EUA também aparecem na tabela mensal mobile no modo Todos.
+2. No modo Todos, a tabela mobile vira Mês + bloco de indicadores, sem rolagem lateral.
+3. Ao selecionar um indicador, a tabela fica em duas colunas: Mês + Indicador, com valor centralizado.
+4. Melhor semântica: Ano atual / 12 meses / Moeda EUA / Ibovespa.
+5. Botões mais proporcionais e organizados em grid.
+6. Mantida a solução v631 do espaço Ranking → Mercado.
+
+Após subir, limpar cache no celular ou abrir em guia anônima.

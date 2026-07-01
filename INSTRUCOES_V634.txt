@@ -1,0 +1,16 @@
+CATÁLOGO DE FUNDOS CAIXA — v634 MOBILE MONTHLY POLISH
+
+Escopo: somente mobile. Desktop preservado.
+
+Arquivos para subir: index.html, style.css, app.js e tokens-caixa.css.
+
+Atenção: esta versão atualiza os query strings do index para ?v=mobile-monthly-polish-v634.
+Isso é importante para quebrar cache no celular/GitHub Pages.
+
+Principais ajustes:
+- remove subtítulo redundante do bloco Indicadores por mês;
+- refinamento visual dos seletores Período/Moeda EUA;
+- chips dos indicadores em grid proporcional;
+- modo Todos compactado para caber na tela sem rolagem lateral;
+- indicador único fica em tabela simples Mês + Valor;
+- mantém v631/v632/v633 como base e adiciona camada terminal v634.

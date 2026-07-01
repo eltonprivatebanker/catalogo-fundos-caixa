@@ -1,0 +1,15 @@
+Catálogo de Fundos CAIXA — PATCH MOBILE v631
+
+Escopo: somente mobile. Desktop preservado.
+
+Arquivos atualizados:
+- index.html: ativa as classes mobile-ranking-gap-fix-v629 e mobile-ranking-market-gap-v631.
+- style.css: adiciona o PATCH v631 para remover o espaço vazio entre Rankings e Indicadores de mercado.
+- app.js: garante a ativação das classes v629/v631 também após carregamento/renderização dinâmica.
+- tokens-caixa.css: mantido sem alterações.
+
+Para testar no GitHub Pages:
+1. Substitua index.html, style.css, app.js e tokens-caixa.css pelos arquivos desta pasta.
+2. Publique/commit.
+3. No celular, force atualização sem cache.
+4. Verifique a transição entre Ranking e Indicadores de mercado.

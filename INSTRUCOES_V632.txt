@@ -1,0 +1,18 @@
+CATÁLOGO DE FUNDOS CAIXA — MOBILE v632
+
+Base: v631 aprovada.
+Escopo: somente mobile. Desktop preservado.
+
+Alterações:
+1. Ativa classe mobile-monthly-us-indicators-v632.
+2. Refina visual dos seletores 2026/12M e EUA USD/BRL.
+3. Exibe botões S&P 500, Nasdaq e Dow no seletor de indicadores mensais mobile.
+4. Inclui mapas dos EUA no cálculo de disponibilidade/valores do mobile.
+5. Quando um indicador único é selecionado, a tabela deixa de usar largura mínima herdada e passa a caber na tela, com valor centralizado.
+6. Preserva a solução v631 de aproximação Ranking → Mercado.
+
+Arquivos para subir:
+- index.html
+- style.css
+- app.js
+- tokens-caixa.css
