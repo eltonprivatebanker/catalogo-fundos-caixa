@@ -22897,7 +22897,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     if(!root || !tbody) return;
 
     const desktopV576 = isDesktopMonthlyV576();
-    document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445');
+    document.documentElement.classList.add('mobile-v451','mobile-monthly-indicators-balance-v451','mobile-v450','mobile-monthly-indicators-fit-v450','mobile-v449','mobile-monthly-indicators-compact-v449','mobile-v448','mobile-monthly-indicators-sticky-v448','mobile-v447','mobile-monthly-indicators-clean-v447','mobile-v446','mobile-monthly-indicators-select-v446','mobile-v445','mobile-monthly-indicators-v445','mobile-monthly-us-indicators-v632');
     if(desktopV576) document.documentElement.classList.add('desktop-monthly-us-markets-v576','desktop-monthly-us-header-currency-v593');
     const meta = document.querySelector('meta[name="app-build"]');
     if(meta) meta.content = desktopV576 ? 'ELTAUM_DESKTOP_MONTHLY_US_HEADER_CURRENCY_V593' : BUILD;
@@ -22945,8 +22945,9 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
           consolidated.length ? mapConsolidatedV448(consolidated, 'dow') : new Map(),
           mapIndexSeriesV576(dados, 'dow', usCurrency)
         );
-    const tableMaps = desktopV576 ? [cdiMap, ipcaMap, ibovMap, dolarMap, sp500Map, nasdaqMap, dowMap] : [cdiMap, ipcaMap, ibovMap, dolarMap];
-    const keys = getMonthKeysV445(tableMaps);
+    const tableMaps = [cdiMap, ipcaMap, ibovMap, dolarMap];
+    const usMapsV632 = [sp500Map, nasdaqMap, dowMap];
+    const keys = getMonthKeysV445(tableMaps.concat(usMapsV632));
     const maps = {cdi:cdiMap, ipca:ipcaMap, ibov:ibovMap, dolar:dolarMap, sp500:sp500Map, nasdaq:nasdaqMap, dow:dowMap};
     let activeView = indicatorMetaV446[view] ? view : 'all';
     if(activeView !== 'all' && !mapHasDataForKeysV447(maps[activeView], keys)){
@@ -22955,6 +22956,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
     }
 
     root.dataset.monthlyViewV630 = activeView;
+    root.dataset.monthlyUsCurrencyV632 = usCurrency;
     if(table) table.dataset.monthlyViewV630 = activeView;
 
     renderMonthlyHeaderV446(table, activeView);
@@ -23029,7 +23031,7 @@ window.__ELTAUM_MOBILE_FUND_CARD_HIERARCHY_V444__ = {
       renderMonthlyComparisonChartV580(root, maps, keys);
     }
     const shell = root.querySelector('.monthly-indicators-table-shell-v445');
-    if(shell && activeView === 'all'){
+    if(shell){
       requestAnimationFrame(() => {
         shell.scrollLeft = 0;
       });
@@ -27514,7 +27516,7 @@ function buildDetailPanel(r,colspan){
   }
 
   function apply(){
-    document.documentElement.classList.add('mobile-ranking-independent-v617','mobile-ranking-summary-two-cards-v626','mobile-ranking-summary-stacked-v627','mobile-ranking-summary-clean-v628','mobile-ranking-gap-fix-v629','mobile-ranking-market-gap-v631');
+    document.documentElement.classList.add('mobile-ranking-independent-v617','mobile-ranking-summary-two-cards-v626','mobile-ranking-summary-stacked-v627','mobile-ranking-summary-clean-v628','mobile-ranking-gap-fix-v629','mobile-ranking-market-gap-v631','mobile-monthly-us-indicators-v632');
     syncOriginalToMobile();
     bind();
     var meta = document.querySelector('meta[name="app-build"]');
@@ -27534,7 +27536,7 @@ function buildDetailPanel(r,colspan){
   var PATCH_CLASS = 'mobile-ranking-market-gap-v631';
   function apply(){
     try{
-      document.documentElement.classList.add('mobile-ranking-gap-fix-v629', PATCH_CLASS);
+      document.documentElement.classList.add('mobile-ranking-gap-fix-v629', PATCH_CLASS, 'mobile-monthly-us-indicators-v632');
       var meta = document.querySelector('meta[name="app-build"]');
       if(meta && window.matchMedia && window.matchMedia('(max-width: 768px)').matches){
         meta.content = 'ELTAUM_MOBILE_RANKING_MARKET_GAP_V631';
@@ -27545,4 +27547,32 @@ function buildDetailPanel(r,colspan){
   else apply();
   window.addEventListener('load', apply, {once:true});
   [120, 400, 1000, 2200, 5000].forEach(function(delay){ setTimeout(apply, delay); });
+})();
+
+
+/* PATCH v632 — Mobile: indicadores mensais EUA + tabela selecionada sem rolagem lateral */
+(function(){
+  'use strict';
+  var PATCH_CLASS = 'mobile-monthly-us-indicators-v632';
+  function isMobile(){
+    return !window.matchMedia || window.matchMedia('(max-width: 768px)').matches;
+  }
+  function apply(){
+    try{
+      if(!isMobile()) return;
+      document.documentElement.classList.add(PATCH_CLASS);
+      var root = document.getElementById('monthlyIndicatorsV445');
+      if(root) root.dataset.mobileUsV632 = '1';
+      if(window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__ && typeof window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__.render === 'function'){
+        window.__ELTAUM_MOBILE_MONTHLY_INDICATORS_V445__.render();
+      }
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_MOBILE_MONTHLY_US_INDICATORS_V632';
+    }catch(_){ }
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+  window.addEventListener('load', apply, {once:true});
+  document.addEventListener('elton:market-data-refresh', apply);
+  [150, 450, 1100, 2400, 5200].forEach(function(delay){ setTimeout(apply, delay); });
 })();
