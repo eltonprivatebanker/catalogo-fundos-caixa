@@ -3947,6 +3947,25 @@ function setCdiSort(dir){
       '</div>';
     }).join('');
   }
+  function rankingFilteredSingleCategoryV644(){
+    const filtro = String(typeof activeRankFilter !== 'undefined' ? (activeRankFilter || 'todos') : 'todos');
+    return filtro !== 'todos' && filtro !== 'sem-fmp';
+  }
+  function rankingCurrentCategoryLabelV644(rows){
+    const clsSelect = q('#rankingClassSelectV136');
+    const optionLabel = clsSelect && clsSelect.options && clsSelect.selectedIndex >= 0
+      ? String(clsSelect.options[clsSelect.selectedIndex].textContent || '').trim()
+      : '';
+    if(optionLabel && optionLabel.toLowerCase() !== 'todos') return optionLabel;
+    const firstCat = rows && rows[0] && rows[0].Categoria ? shortCat(rows[0].Categoria) : '';
+    return firstCat || 'Categoria selecionada';
+  }
+  function topFundsBoardRowsV644(rows, campo, periodo){
+    const top = (rows || []).slice(0,10).map(function(r){
+      return { cat: r.Categoria || 'Sem categoria', row: r };
+    });
+    return categoryBoardRowsV590(top, campo, periodo);
+  }
   function renderRankingsV562(){
     const grid = q('#rankingGrid');
     if(!grid || !isDesktop()) return;
@@ -3960,10 +3979,22 @@ function setCdiSort(dir){
     const sorted = sortedRows(rows, campo);
     const worst = sortedRows(rows, campo, true).filter(function(r){ return finite(r[campo]) < 0; });
     const winners = categoryWinners(rows, campo, sorted);
+    const isSingleCategory = rankingFilteredSingleCategoryV644();
+    const currentCategoryLabel = rankingCurrentCategoryLabelV644(rows);
+    const boardSource = isSingleCategory ? sorted : winners;
+    const boardRows = isSingleCategory ? topFundsBoardRowsV644(sorted, campo, periodo) : categoryBoardRowsV590(winners, campo, periodo);
     const best = sorted[0];
     const worstOne = worst[0];
-    const boardRows = categoryBoardRowsV590(winners, campo, periodo);
     const alertBody = alertRows(worst.slice(0,8), campo);
+    const summaryLabel = isSingleCategory ? 'Fundos com dados' : 'Categorias com dados';
+    const summaryValue = String(boardSource.length || 0);
+    const summaryName = isSingleCategory ? currentCategoryLabel : 'Melhores Categorias';
+    const summaryMeta = isSingleCategory ? 'Ranking da categoria' : 'Recorte atual';
+    const boardTitle = isSingleCategory ? ('Melhores fundos em ' + currentCategoryLabel) : 'Melhores por categoria';
+    const boardDescription = isSingleCategory
+      ? ('Mostra os fundos com maior retorno dentro de ' + currentCategoryLabel + ' e quanto esse retorno representa do CDI no período selecionado.')
+      : 'Para cada categoria, mostra o fundo com maior retorno e quanto esse retorno representa do CDI no período selecionado.';
+    const boardAria = isSingleCategory ? ('Melhores fundos em ' + currentCategoryLabel) : 'Melhores por categoria';
 
     grid.className = 'ranking-grid ranking-main-v136 ranking-v562-grid';
     grid.removeAttribute('data-active-rank-view');
@@ -3972,11 +4003,11 @@ function setCdiSort(dir){
       '<section class="ranking-v562-summary" aria-label="Resumo dos rankings">' +
         summaryCard('best','Melhor do período', best ? pct(best[campo]) : '—', best ? compactFund(best.Fundo) : 'Sem dados', best ? shortCat(best.Categoria) + ' · ' + cdiRatioTxt(best, periodo) + ' do CDI' : '') +
         summaryCard('worst','Pior do período', worstOne ? pct(worstOne[campo]) : '—', worstOne ? compactFund(worstOne.Fundo) : 'Sem queda', worstOne ? shortCat(worstOne.Categoria) + ' · ' + cdiRatioTxt(worstOne, periodo) + ' do CDI' : 'Nenhum retorno negativo') +
-        summaryCard('neutral','Categorias com dados', String(winners.length), 'Melhores Categorias', 'Recorte atual') +
+        summaryCard('neutral', summaryLabel, summaryValue, summaryName, summaryMeta) +
       '</section>' +
-      '<section class="ranking-v562-board" aria-label="Melhores por categoria">' +
+      '<section class="ranking-v562-board" aria-label="' + esc(boardAria) + '">' +
         '<div class="ranking-v562-board-head">' +
-          '<div><h3>Melhores por categoria</h3><p>Para cada categoria, mostra o fundo com maior retorno e quanto esse retorno representa do CDI no período selecionado.</p></div>' +
+          '<div><h3>' + esc(boardTitle) + '</h3><p>' + esc(boardDescription) + '</p></div>' +
           periodTabs(periodo) +
         '</div>' +
         '<div class="ranking-v562-podium">' + (boardRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
