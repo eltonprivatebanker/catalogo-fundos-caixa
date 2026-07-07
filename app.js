@@ -27984,3 +27984,182 @@ function buildDetailPanel(r,colspan){
     return out;
   };
 })();
+
+
+/* PATCH v641-terminal — Ranking: corrige % do CDI em 12M com trava de escala + cache-busting
+   Motivo: algumas fontes do mercado_atual.json podem trazer o CDI 12M em escala 10x
+   (ex.: 146,8 em vez de 14,68). Este patch normaliza a referência usada nos rankings
+   e corrige também o DOM renderizado por versões anteriores que ainda estejam ativas. */
+(function rankingCdi12mScaleFixV641(){
+  'use strict';
+  if(window.__rankingCdi12mScaleFixV641Installed) return;
+  window.__rankingCdi12mScaleFixV641Installed = true;
+  document.documentElement.classList.add('ranking-cdi-12m-scale-fix-v641');
+
+  function parseNumber(value){
+    if(value === null || value === undefined || value === '') return null;
+    if(typeof value === 'number') return Number.isFinite(value) ? value : null;
+    var raw = String(value).trim();
+    if(!raw || raw === '-' || raw === '—' || raw.toLowerCase() === 'null') return null;
+    raw = raw.replace('%','').replace(/\s/g,'');
+    if(raw.indexOf(',') >= 0){
+      raw = raw.replace(/\./g,'').replace(',', '.');
+    }
+    var n = Number(raw);
+    return Number.isFinite(n) ? n : null;
+  }
+
+  function normalizeCdi(value, period){
+    var n = parseNumber(value);
+    if(n === null) return null;
+    var p = String(period || '12m').toLowerCase();
+    var v = n;
+
+    if(p === 'mes' || p === 'mês' || p === 'month'){
+      var absMes = Math.abs(v);
+      if(absMes > 1000) v = v / 10000;
+      else if(absMes > 20) v = v / 100;
+      return Number.isFinite(v) ? Number(v.toFixed(4)) : null;
+    }
+
+    if(p === 'ano' || p === 'year'){
+      while(Math.abs(v) > 25) v = v / 10;
+      return Number.isFinite(v) ? Number(v.toFixed(4)) : null;
+    }
+
+    // 12M: CDI acumulado plausível em % a.a. deve ficar geralmente abaixo de 30.
+    // A regra abaixo aceita eventuais períodos extremos, mas corrige 146 / 1460 / 14600 etc.
+    while(Math.abs(v) > 35) v = v / 10;
+    return Number.isFinite(v) ? Number(v.toFixed(4)) : null;
+  }
+
+  window.__normalizarCdiRankingV641 = normalizeCdi;
+
+  var originalResolver = null;
+  try{ originalResolver = window.resolverCdiPeriodoV229 || resolverCdiPeriodoV229; }catch(_e){}
+  if(typeof originalResolver === 'function'){
+    var wrappedResolver = function(cdiCard, months){
+      var value = originalResolver.apply(this, arguments);
+      var period = Number(months) === 24 ? '24m' : Number(months) === 36 ? '36m' : '12m';
+      if(period === '12m') return normalizeCdi(value, '12m');
+      return value;
+    };
+    window.resolverCdiPeriodoV229 = wrappedResolver;
+    try{ resolverCdiPeriodoV229 = wrappedResolver; }catch(_e){}
+  }
+
+  function cdiCard(){
+    try{
+      if(typeof cdiCardAtualV230 === 'function') return cdiCardAtualV230() || {};
+    }catch(_e){}
+    try{ return window.__mercadoAtualV230?.cards?.cdi || window._dadosMercado?.cards?.cdi || {}; }catch(_e){ return {}; }
+  }
+
+  function cdiReference12m(){
+    var card = cdiCard();
+    var candidates = [];
+    try{ if(typeof window.resolverCdiPeriodoV229 === 'function') candidates.push(window.resolverCdiPeriodoV229(card, 12)); }catch(_e){}
+    candidates.push(card && card.acum_12m, card && card.m12);
+    try{ candidates.push(window.indicState && window.indicState.cdi && window.indicState.cdi.m12); }catch(_e){}
+    for(var i=0;i<candidates.length;i++){
+      var n = normalizeCdi(candidates[i], '12m');
+      if(n !== null && n !== 0) return n;
+    }
+    return null;
+  }
+
+  var originalCalc = null;
+  try{ originalCalc = window.calcCdiRatio || calcCdiRatio; }catch(_e){}
+  var fixedCalc = function(rentabilidade, cdiReferencia){
+    var r = parseNumber(rentabilidade);
+    var c = normalizeCdi(cdiReferencia, '12m');
+    if(c === null || c === 0) c = cdiReference12m();
+    if(r === null || c === null || c === 0) return null;
+    var ratio = Math.round((r / c) * 100);
+    return Number.isFinite(ratio) ? ratio : null;
+  };
+  window.calcCdiRatio = fixedCalc;
+  try{ calcCdiRatio = fixedCalc; }catch(_e){}
+
+  function activeRankingPeriod(){
+    var select = document.querySelector('#rankingPeriodSelectV136');
+    if(select && select.value) return String(select.value).toLowerCase();
+    var active = document.querySelector('#rankingGrid [data-rank-period].active, #rankingsSection [data-rank-period].active');
+    if(active) return String(active.getAttribute('data-rank-period') || '').toLowerCase();
+    return '';
+  }
+
+  function fixRankingDom(){
+    try{
+      var period = activeRankingPeriod();
+      if(period !== '12m') return;
+      var cdi = cdiReference12m();
+      if(cdi === null || cdi === 0) return;
+
+      document.querySelectorAll('#rankingGrid .ranking-v562-podium-row').forEach(function(row){
+        var retEl = row.querySelector('.ranking-v562-return strong');
+        var cdiEl = row.querySelector('.ranking-v562-cdi strong');
+        if(!retEl || !cdiEl) return;
+        var rent = parseNumber(retEl.textContent);
+        if(rent === null) return;
+        var ratio = Math.round((rent / cdi) * 100);
+        if(!Number.isFinite(ratio)) return;
+        cdiEl.textContent = ratio.toLocaleString('pt-BR', {maximumFractionDigits:0}) + '%';
+        var bar = row.querySelector('.ranking-v562-cdi-bar i');
+        if(bar) bar.style.width = Math.max(8, Math.min(100, Math.abs(ratio))) + '%';
+      });
+
+      document.querySelectorAll('#rankingGrid .ranking-top-row').forEach(function(row){
+        var retEl = row.querySelector('.ranking-return');
+        var cdiEl = row.querySelector('.ranking-cdi');
+        if(!retEl || !cdiEl) return;
+        var rent = parseNumber(retEl.textContent);
+        if(rent === null) return;
+        var ratio = Math.round((rent / cdi) * 100);
+        if(Number.isFinite(ratio)) cdiEl.textContent = ratio.toLocaleString('pt-BR', {maximumFractionDigits:0}) + '%';
+      });
+
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_RANKING_CDI_12M_SCALE_FIX_V641';
+    }catch(error){
+      console.warn('[v641] falha ao corrigir ranking CDI 12M', error);
+    }
+  }
+
+  function scheduleFix(){
+    fixRankingDom();
+    setTimeout(fixRankingDom, 80);
+    setTimeout(fixRankingDom, 260);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleFix, {once:true});
+  else scheduleFix();
+  window.addEventListener('load', scheduleFix, {once:true});
+  document.addEventListener('click', function(ev){
+    if(ev.target && ev.target.closest && ev.target.closest('#rankingsSection')) scheduleFix();
+  }, true);
+  document.addEventListener('change', function(ev){
+    if(ev.target && ev.target.closest && ev.target.closest('#rankingsSection')) scheduleFix();
+  }, true);
+  [200, 600, 1200, 2500, 5000, 9000].forEach(function(delay){ setTimeout(scheduleFix, delay); });
+  try{
+    var target = document.getElementById('rankingGrid');
+    if(target && window.MutationObserver){
+      new MutationObserver(function(){ scheduleFix(); }).observe(target, {childList:true, subtree:true});
+    }
+  }catch(_e){}
+
+  window.__diagnosticarCdiRankingV641 = function(){
+    var card = cdiCard();
+    var out = {
+      build:'v641',
+      cdi12m_ref_normalizado:cdiReference12m(),
+      card_acum_12m:card && card.acum_12m,
+      card_m12:card && card.m12,
+      indicState_m12:window.indicState && window.indicState.cdi && window.indicState.cdi.m12,
+      periodo_ativo:activeRankingPeriod()
+    };
+    console.table(out);
+    return out;
+  };
+})();
