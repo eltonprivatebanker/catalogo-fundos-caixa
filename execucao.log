@@ -12945,3 +12945,217 @@ Stacktrace:
 [16:45:15] =================================================================
 [16:45:15] [FIM] 96 fundos consolidados. Pipeline v18.0 automático completo.
 [16:45:15] =================================================================
+[02:59:51] =================================================================
+[02:59:51] ⚡ ROBÔ SIPII v18.0 — atualização integral e automática do catálogo
+[02:59:51] =================================================================
+[02:59:53]   [CAIXA] renda-fixa → +34 links (34 total)
+[02:59:55]   [CAIXA] referenciados → +4 links (38 total)
+[02:59:56]   [CAIXA] fundo-simples → +2 links (40 total)
+[02:59:58]   [CAIXA] curto-prazo → +1 links (41 total)
+[02:59:59]   [CAIXA] multimercado → +19 links (60 total)
+[03:00:02]   [CAIXA] cambiais → +1 links (61 total)
+[03:00:03]   [CAIXA] fundos-de-acoes → +10 links (71 total)
+[03:00:05]   [CAIXA] fundos-de-indices → +2 links (73 total)
+[03:00:06]   [CAIXA] renda-fixa → +8 links (81 total)
+[03:00:07]   [CAIXA] empresa → +5 links (86 total)
+[03:00:09]   [CAIXA] fmp-fgts → HTTP 404
+[03:00:09]   [CAIXA] rpps → +8 links (94 total)
+[03:00:10] [CAIXA] Total URLs dinâmicas: 94
+[03:00:10] [Fundos.json] Baixando catálogo integral da CAIXA Asset...
+[03:00:12] [Fundos.json] Download OK e arquivo local atualizado — 195 registros.
+[03:00:12] [Fundos.json DEBUG] Campos do 1º registro (84 campos):
+[03:00:12]   'ItemInternalId'                    = '32b2a3ab-a801-4505-94ad-6105a35230dd'
+[03:00:12]   'co_siico'                          = '55'
+[03:00:12]   'nu_cnpj'                           = '00834074000123'
+[03:00:12]   'no_fundo'                          = 'CAIXA PRATICO FIC FIF RF CURTO PRAZO - RESP LTDA'
+[03:00:12]   'ic_flag_exibir_portfolio'          = '1'
+[03:00:12]   'dt_inicial'                        = '1995-10-02T00:00:00Z'
+[03:00:12]   'id_perfil_risco'                   = '1'
+[03:00:12]   'no_perfil_risco'                   = 'Conservador'
+[03:00:12]   'id_classificacao_cvm'              = '8'
+[03:00:12]   'no_classificacao_cvm'              = 'Renda Fixa'
+[03:00:12]   'de_horario_resgate'                = '18h00'
+[03:00:12]   'vr_aplicacao_inicial'              = '0.01'
+[03:00:12]   'co_oferta_siart'                   = 'GOV'
+[03:00:12]   'id_estrategia'                     = '36'
+[03:00:12]   'no_estrategia'                     = 'RF 100% TPF - Curto Prazo                                   '
+[03:00:12]   'pc_taxa_adm_cliente'               = '1.7'
+[03:00:12]   'de_link_detalhes'                  = '/Sistemas/#/PortfolioQS/55'
+[03:00:12]   'dt_cota_atual'                     = '2026-06-30T00:00:00Z'
+[03:00:12]   'vr_cota_atual'                     = '9.481374'
+[03:00:12]   'dt_cota_dia_anterior'              = '2026-06-29T00:00:00Z'
+[03:00:12]   'vr_cota_dia_anterior'              = '9.477039'
+[03:00:12]   'pc_rentabilidade_dia_anterior'     = '0.04574213528086146'
+[03:00:12]   'dt_cota_mes_anterior'              = '2026-05-29T00:00:00Z'
+[03:00:12]   'vr_cota_mes_anterior'              = '9.390246'
+[03:00:12]   'pc_rentabilidade_mes_anterior'     = '0.9704538091973309'
+[03:00:12]   'dt_cota_ano_anterior'              = '2025-12-31T00:00:00Z'
+[03:00:12]   'vr_cota_ano_anterior'              = '8.95089'
+[03:00:12]   'pc_rentabilidade_ano_anterior'     = '5.926606181061325'
+[03:00:12]   'dt_cota_12m_anterior'              = '2025-07-01T00:00:00Z'
+[03:00:12]   'vr_cota_12m_anterior'              = '8.427782'
+[03:00:12]   'pc_rentabilidade_12m_anterior'     = '12.501414963035351'
+[03:00:12]   'in_cdi_atual'                      = '19.14804696'
+[03:00:12]   'in_cdi_ano'                        = '17.92159302'
+[03:00:12]   'pc_cdi_ano'                        = '6.843442672'
+[03:00:12]   'pc_rentabilidade_cdi_ano'          = '101.42'
+[03:00:12]   'in_cdi_12m'                        = '16.69162183'
+[03:00:12]   'pc_cdi_12m'                        = '14.716515600024'
+[03:00:12]   'pc_rentabilidade_cdi_12m'          = '84.94'
+[03:00:12]   'co_siico00'                        = '0055'
+[03:00:12]   'de_pesquisa_index'                 = 'CAIXA PRATICO FIC FIF RF CURTO PRAZO - RESP LTDA 0055 008340'
+[03:00:12]   'de_link_aplicacao'                 = 'http://plataforma.caixa'
+[03:00:12]   'vr_pl'                             = '2928363045.58'
+[03:00:12]   'no_benchmark'                      = 'CDI'
+[03:00:12]   'de_tipo_api'                       = 'SIM – API SIMPLIFICADO'
+[03:00:12]   'de_tipo_automatico'                = 'RESGATE'
+[03:00:12]   'vr_resgate_minimo'                 = '0.01'
+[03:00:12]   'vr_aplicacao_adicional_minima'     = '0.01'
+[03:00:12]   'vr_saldo_minimo'                   = '0.01'
+[03:00:12]   'de_conversao_aplicacao'            = 'D+0 (du)'
+[03:00:12]   'de_conversao_resgate'              = 'D+0 (du)'
+[03:00:12]   'de_pagamento_resgate'              = 'D+00 (du)'
+[03:00:12]   'de_adiant_manual_automatico'       = 'NÃO SE APLICA'
+[03:00:12]   'pc_taxa_adm_maxima'                = '1.7'
+[03:00:12]   'co_mn'                             = 'FI657'
+[03:00:12]   'no_classificacao_tributaria'       = 'CURTO PRAZO'
+[03:00:12]   'no_razao_social'                   = 'CAIXA PRÁTICO FUNDO DE INVESTIMENTO EM COTAS DE CLASSE DE FU'
+[03:00:12]   'no_classificacao_investidor'       = 'GERAL'
+[03:00:12]   'de_observacao_qs'                  = 'Movimentações: O FUNDO oferece mecanismo resgate automático.'
+[03:00:12]   'de_tipo_estorno_aplicacao'         = 'NÃO'
+[03:00:12]   'co_oferta_ibc'                     = 'GOV'
+[03:00:12]   'de_due_diligence'                  = 'INDISPONIVEL'
+[03:00:12]   'de_horario_limite'                 = '18:00'
+[03:00:12]   'de_destino'                        = 'PJ PUB'
+[03:00:12]   'ic_mov_automatica'                 = 'True'
+[03:00:12]   'de_link_regulamento'               = 'https://www.caixa.gov.br/downloads/aplicacao-financeira-regu'
+[03:00:12]   'de_link_lamina'                    = 'INDISPONIVEL'
+[03:00:12]   'de_link_termo_adesao'              = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-term'
+[03:00:12]   'de_link_boletim_comercial'         = 'INDISPONIVEL'
+[03:00:12]   'de_link_fato_relevante'            = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-comu'
+[03:00:12]   'de_link_raio_x'                    = 'INDISPONIVEL'
+[03:00:12]   'de_link_info_compl'                = 'https://www.caixa.gov.br/Downloads/aplicacao-financeira-inf-'
+[03:00:12]   'de_link_pagina_fundo'              = 'http://www.caixa.gov.br/fundos-investimento/curto-prazo/fic-'
+[03:00:12]   'de_link_sumario'                   = 'INDISPONIVEL'
+[03:00:12]   'lista_publico_alvo'                = '["GOV"]'
+[03:00:12]   'lista_segmento'                    = '["GOV"]'
+[03:00:12] [Fundos.json] 194 produtos indexados.
+[03:00:12] [Fundos.json] fundos_caixa.json salvo — 195 CNPJs indexados.
+[03:00:12] Raspando segmento: PESSOA FÍSICA...
+[03:00:12] [PF] Abrindo SIPII...
+[03:00:30]   [PF] RENDA FIXA SIMPLES: 3 fundos.
+[03:00:45]   [PF] RENDA FIXA: 39 fundos.
+[03:00:51]   [PF] RENDA FIXA REFERENCIADO: 10 fundos.
+[03:00:54]   [PF] RENDA FIXA CURTO PRAZO: 1 fundos.
+[03:01:06]   [PF] MULTIMERCADO: 30 fundos.
+[03:01:09]   [PF] CAMBIAL: 1 fundos.
+[03:01:21]   [PF] ACOES: 29 fundos.
+[03:01:24]   [PF] FUNDO DE INDICE: 1 fundos.
+[03:01:30]   [PF] FUNDOS MUTUOS DE PRIVATIZACAO: 9 fundos.
+[03:01:32] Raspando segmento: PESSOA JURÍDICA...
+[03:01:32] [PJ] Abrindo SIPII...
+[03:01:51]   [PJ] RENDA FIXA SIMPLES: 5 fundos.
+[03:02:06]   [PJ] RENDA FIXA: 38 fundos.
+[03:02:11]   [PJ] RENDA FIXA REFERENCIADO: 7 fundos.
+[03:02:15]   [PJ] RENDA FIXA CURTO PRAZO: 2 fundos.
+[03:02:26]   [PJ] MULTIMERCADO: 27 fundos.
+[03:02:29]   [PJ] CAMBIAL: 1 fundos.
+[03:02:41]   [PJ] ACOES: 28 fundos.
+[03:02:43] Raspando segmento: GOVERNO...
+[03:02:43] [GOV] Abrindo SIPII...
+[03:03:00]   [GOV] RENDA FIXA: 2 fundos.
+[03:03:04]   [GOV] RENDA FIXA REFERENCIADO: 3 fundos.
+[03:03:07]   [GOV] RENDA FIXA CURTO PRAZO: 3 fundos.
+[03:03:12]   [GOV] MULTIMERCADO: 6 fundos.
+[03:03:15]   [GOV] ACOES: 4 fundos.
+[03:03:17] Raspando segmento: RPPS...
+[03:03:18] [RPPS] Abrindo SIPII...
+[03:03:46]   [RPPS] RENDA FIXA: 19 fundos.
+[03:03:50]   [RPPS] RENDA FIXA REFERENCIADO: 4 fundos.
+[03:03:57]   [RPPS] MULTIMERCADO: 14 fundos.
+[03:04:04]   [RPPS] ACOES: 14 fundos.
+[03:04:06] Raspando segmento: TODOS...
+[03:04:06] [TODOS] Abrindo SIPII...
+[03:04:23]   [TODOS] RENDA FIXA SIMPLES: 2 fundos.
+[03:04:39]   [TODOS] RENDA FIXA: 42 fundos.
+[03:04:44]   [TODOS] RENDA FIXA REFERENCIADO: 8 fundos.
+[03:04:48]   [TODOS] RENDA FIXA CURTO PRAZO: 3 fundos.
+[03:04:55]   [TODOS] MULTIMERCADO: 14 fundos.
+[03:04:58]   [TODOS] CAMBIAL: 1 fundos.
+[03:05:08]   [TODOS] ACOES: 25 fundos.
+[03:05:12]   [TODOS] FUNDO DE INDICE: 1 fundos.
+[03:05:14]   [Meta] Fallback nome→codfundo 5980 para 'CAIXA FIF E-SIMPLES RENDA FIXA LP RESP LTDA' (fallback_estatico:e simples renda fixa)
+[03:05:14]   [Meta] Fallback nome→codfundo 5570 para 'CAIXA FIC FIF GERAÇÃO JOVEM CRED PRIV RF LP RESP LTDA' (fallback_estatico:geracao jovem)
+[03:05:14]   [Meta] Fallback nome→codfundo 5972 para 'CAIXA FIC FIF EXCLUSIVO FUNC RF CREDITO PRIVADO LP RESP' (fallback_estatico:exclusivo func)
+[03:05:14]   [Meta] Fallback nome→codfundo 89 para 'CAIXA FIC FIFINVESTIDOR RF LP RESP LTDA' (fallback_estatico:fifinvestidor)
+[03:05:14]   [Meta] Fallback nome→codfundo 6533 para 'CAIXA FIC FIF PLUS QUALI RF CREDI PRIV LP RESP LTDA' (fallback_estatico:plus quali)
+[03:05:14]   [Meta] Fallback nome→codfundo 5411 para 'CAIXA FIC FIF MEGA RF REFERENC DI LONGO PRAZO - RESP LT' (fallback_estatico:mega rf ref)
+[03:05:14]   [Meta] Fallback nome→codfundo 82 para 'CAIXA FIF MULTIMERCADO RV 30 LP RESP LTDA' (fallback_estatico:multimercado rv 30)
+[03:05:14]   [Meta] Fallback nome→codfundo 7991 para 'CAIXA CARTEIRA QUANT QUALI FIC FIF MM LP RESP LTDA (1) ' (fallback_estatico:carteira quant quali)
+[03:05:14]   [Meta] Fallback nome→codfundo 7980 para 'CAIXA HASHDEX NASDAQ CRYPTO INDEX FIC FIF MM RESP LTDA ' (fallback_estatico:hashdex nasdaq crypto)
+[03:05:14]   [Meta] Fallback nome→codfundo 5842 para 'CAIXA ETF IBOVESPA FUNDO DE ÍNDICE RESP LTDA' (fallback_estatico:etf ibovespa)
+[03:05:14]   [Meta] Fallback nome→codfundo 7861 para 'CAIXA FIC FIF AMETISTA CORP RF SIMPLES RESP LTDA' (fallback_estatico:ametista corp)
+[03:05:14]   [Meta] Fallback nome→codfundo 5413 para 'CAIXA FIC FIF TRANSFERÊNCIA VOLUNTÁRIA RF CP RESP LTDA' (fallback_estatico:transferencia voluntaria)
+[03:05:14]   [Meta] Fallback nome→codfundo 5825 para 'CAIXA FIF BRASIL IDKA IPCA 2A TIT PUB RF LP RESP LTDA' (fallback_estatico:brasil idka ipca 2a)
+[03:05:14]   [Meta] Fallback nome→codfundo 5842 para 'CAIXA FIF AÇÕES BRASIL ETF IBOVESPA RESP LTDA' (fallback_estatico:etf ibovespa)
+[03:05:14] [Fundos.json] Vinculados: 169/171 | URLs válidas: 161/171 | codfundo: 169/171
+[03:05:14] [Auditoria] auditoria_fundos.json salvo — 169/171 vinculados.
+[03:05:14] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/dados_atuais.xlsx
+[03:05:15] Excel salvo: /home/runner/work/catalogo-fundos-caixa/catalogo-fundos-caixa/sipii_caixa_20260707.xlsx
+[03:05:15] [KPIs] JSON exportado: kpis_dashboard.json
+[03:05:15] [MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...
+[03:05:15] [Poupança] Buscando série 196 (nova) para acum. ano...
+[03:05:16]   [Poupança] nova: mensal=0.6738% | acum. ano=4.746% (7 meses)
+[03:05:16]   [Poupança] antiga = nova (Selic 14.25% > 8,5% → TR+0,50% para ambas)
+[03:05:16] [CDI] Calculando CDI mensal/ano/12M/24M/36M...
+[03:05:17]   [CDI] Série 4391 BCB carregada: 44 competências
+[03:05:17]   [CDI] Série diária SGS 12: 0.1577% no mês até 03/07/2026 (3 observações)
+[03:05:17]   [CDI] mês fechado=1.12% (jun/2026) | parcial=0.1577% (jul/2026 até 03/07/2026; origem=bcb_sgs_12_diario) | ano fechado=6.8369% | ano c/ parcial=7.0053% | 12M=14.7747% | 24M=28.7297% | 36M=43.7676%
+[03:05:17] [IPCA] Base local: 557 meses.
+[03:05:18] [IPCA] Base salva: 557 meses.
+[03:05:18]   [IPCA] 12M=4.7249% | 24M=10.2959% | 36M=14.6261%
+[03:05:18]   [META INFLAÇÃO] gráfico sincronizado: mai/2026 = 4.7249% em 12 meses.
+[03:05:18] [PTAX] Buscando histórico 37M via CotacaoDolarPeriodo mês a mês...
+[03:05:45]   [PTAX] CotacaoDolarPeriodo OK — 37 meses
+[03:05:45]   [PTAX] Cache salvo: ptax_historico_cache.json (37 meses)
+[03:05:45] [PTAX] Dólar PTAX: último=5.167 (2026-07-06) | mês fechado=2.37% | mês atual=-0.19% | ano=-6.1% | 12M=-7.77% | 24M=-8.74% | 36M=8.97%
+[03:05:45] [Índices] Calculando Ibovespa (^BVSP)...
+[03:05:45] [Yahoo Histórico] Buscando ^BVSP...
+[03:05:45] [Yahoo Histórico] ^BVSP OK — 850 registros
+[03:05:45] [Índices] Ibovespa: mês fechado=-1.02% | mês atual=0.25% | ano=7.03% | 12M=23.63% | 24M=36.57% | 36M=45.04%
+[03:05:45] [Índices] Calculando IFIX (^IFIX)...
+[03:05:45] [Yahoo Histórico] Buscando ^IFIX...
+[03:05:45] [Yahoo Histórico] ^IFIX HTTP 404
+[03:05:45]   [IFIX] Indisponível no Yahoo — campo virá vazio no JSON
+[03:05:45] [Índices] Calculando S&P 500 (^GSPC)...
+[03:05:45] [Yahoo Histórico] Buscando ^GSPC...
+[03:05:45] [Yahoo Histórico] ^GSPC OK — 855 registros
+[03:05:45] [Índices] S&P 500: mês fechado=-1.06% | mês atual=0.51% | ano=10.11% | 12M=20.99% | 24M=35.39% | 36M=71.35%
+[03:05:45] [Índices] Calculando Dow Jones (^DJI)...
+[03:05:45] [Yahoo Histórico] Buscando ^DJI...
+[03:05:45] [Yahoo Histórico] ^DJI OK — 855 registros
+[03:05:45] [Índices] Dow Jones: mês fechado=2.52% | mês atual=1.41% | ano=10.39% | 12M=19.48% | 24M=34.74% | 36M=57.27%
+[03:05:45] [Índices] Calculando Nasdaq (^IXIC)...
+[03:05:45] [Yahoo Histórico] Buscando ^IXIC...
+[03:05:46] [Yahoo Histórico] ^IXIC OK — 855 registros
+[03:05:46] [Índices] Nasdaq: mês fechado=-2.81% | mês atual=-0.35% | ano=12.39% | 12M=27.97% | 24M=42.33% | 36M=91.21%
+[03:05:46] [Indicadores mensais] Série consolidada: 37 competências
+[03:05:46] [Focus] Coletando expectativas do Banco Central...
+[03:05:46] [Focus PDF] Procurando PDF oficial mais recente disponível...
+[03:05:46] [Focus PDF] PDF disponível encontrado: R20260703.pdf (03/07/2026)
+[03:05:46]   [Focus] -> IPCA
+[03:05:47]   [Focus] -> Selic
+[03:05:49]   [Focus] -> PIB Total
+[03:05:51]   [Focus] -> Câmbio
+[03:05:53]   [Focus] -> IGP-M
+[03:05:54] [SUCESSO] mercado_atual.json exportado
+[03:05:54]   CDI: mensal=1.12% | 12M=14.7747% | 24M=28.7297% | 36M=43.7676%
+[03:05:54]   IPCA: 12M=4.7249% | 24M=10.2959% | 36M=14.6261%
+[03:05:54]   PTAX: 37 fechamentos mensais pré-salvos
+[03:05:54]   Poupança nova:  mensal=0.6738% | acum. ano=4.746%
+[03:05:54]   Poupança antiga: mensal=0.6738% | acum. ano=4.746%
+[03:05:54] [LIMPEZA] Removido: sipii_caixa_20260630.csv
+[03:05:54] [LIMPEZA] Removido: sipii_caixa_20260630.xlsx
+[03:05:54] =================================================================
+[03:05:54] [FIM] 171 fundos consolidados. Pipeline v18.0 automático completo.
+[03:05:54] =================================================================
