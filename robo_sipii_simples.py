@@ -1,6 +1,15 @@
 """
-ROBÔ SIPII CAIXA — v18.5 (Automação integral GitHub)
+ROBÔ SIPII CAIXA — v18.6 / v640 (Automação integral GitHub)
 ==========================================================
+Novidades v18.6 / v640:
+  + Fallback seletivo de rentabilidade: se a data atual vier com cota/rentabilidade vazia,
+    tenta até 5 dias úteis anteriores somente nas categorias/perfis afetados.
+  + Preserva rentabilidade válida: dado vazio/traço nunca substitui dado válido.
+  + Grava Data Base Consulta, Data Rentabilidade Ref, Fallback Rentabilidade,
+    Dias Úteis Fallback e Alerta Rentabilidade Defasada.
+  + Consolidação passa a priorizar a linha com rentabilidade válida.
+  + Trava de segurança evita publicar base muito incompleta quando houver fallback local válido.
+
 Novidades v18.5:
   + Calcula o CDI acumulado do mês pela série diária SGS 12
   + Usa a última data diária disponível como referência real do parcial
@@ -119,6 +128,26 @@ CAIXA_LISTING_PAGES = [
 MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"]
 
 DEBUG_COLUNAS = False
+
+# ---------------------------------------------------------------------------
+# v640 — Fallback seletivo de rentabilidade SIPII
+# ---------------------------------------------------------------------------
+PERF_COLS_RENTABILIDADE = [
+    "Variacao Dia (%)",
+    "Acum. Mes (%)",
+    "Acum. Ano (%)",
+    "Acum. 12M (%)",
+]
+PERF_COLS_VALOR = PERF_COLS_RENTABILIDADE + ["Cota (R$)", "PL (milhoes R$)"]
+
+# Padrão escolhido: tenta até 5 dias úteis anteriores.
+# Até 3 dias úteis = normal. De 4 a 5 = mantém, mas marca alerta.
+FALLBACK_RENT_MAX_DIAS_UTEIS = 5
+FALLBACK_RENT_ALERTA_APOS_DIAS_UTEIS = 3
+
+# Trava contra publicação de base parcial. O número atual esperado gira em torno de 170.
+MIN_FUNDOS_PUBLICACAO_SEGURA = 150
+
 
 # ---------------------------------------------------------------------------
 # Fechamentos confirmados / validação manual de virada de mês
@@ -1096,6 +1125,8 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
         "Percentual Adiantamento (%)", "Público Alvo", "Segmentos",
         "Movimentação Automática", "Carência", "Fim Carência", "ASG",
         "Razão Social", "Observação Operacional",
+        "Data Base Consulta", "Data Rentabilidade Ref", "Fallback Rentabilidade",
+        "Dias Úteis Fallback", "Alerta Rentabilidade Defasada",
         "doc_lamina", "doc_regulamento", "doc_inf_comp", "doc_comunicado",
         "doc_carta", "doc_boletim", "doc_termo", "doc_sumario", "doc_raio_x",
     ]
@@ -2936,6 +2967,356 @@ class ColetorMercado:
 # ---------------------------------------------------------------------------
 # SIPII scraping — inalterado v15
 # ---------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------
+# v640 — Utilidades de data/rentabilidade para fallback seletivo
+# ---------------------------------------------------------------------------
+def _hoje_brasilia():
+    return datetime.now(ZoneInfo("America/Sao_Paulo")).date()
+
+def _formatar_data_br(data_ref):
+    if not data_ref:
+        return ""
+    if isinstance(data_ref, str):
+        return data_ref
+    return data_ref.strftime("%d/%m/%Y")
+
+def _parse_data_br(data_ref):
+    if isinstance(data_ref, date):
+        return data_ref
+    texto = str(data_ref or "").strip()
+    m = re.search(r"(\d{2})/(\d{2})/(\d{4})", texto)
+    if not m:
+        return None
+    try:
+        return date(int(m.group(3)), int(m.group(2)), int(m.group(1)))
+    except Exception:
+        return None
+
+def _datas_uteis_anteriores(data_base, max_dias=5):
+    datas = []
+    atual = data_base
+    while len(datas) < max_dias:
+        atual = atual - timedelta(days=1)
+        if atual.weekday() < 5:
+            datas.append(atual)
+    return datas
+
+def _valor_rentabilidade_valido(valor):
+    if valor is None:
+        return False
+    texto = str(valor).strip()
+    if texto in {"", "-", "—", "–", "None", "nan", "NaN"}:
+        return False
+    if normalizar(texto) in {"INDISPONIVEL", "NAO DISPONIVEL", "N/D", "ND"}:
+        return False
+    # "0,00" é dado válido. O que não é válido é vazio/traço.
+    return bool(re.search(r"\d", texto))
+
+def _linha_tem_rentabilidade_valida(row):
+    for col in PERF_COLS_RENTABILIDADE:
+        try:
+            valor = row.get(col, "")
+        except AttributeError:
+            valor = row[col] if col in row.index else ""
+        if _valor_rentabilidade_valido(valor):
+            return True
+    return False
+
+def _linha_tem_dados_valor_validos(row):
+    for col in PERF_COLS_VALOR:
+        try:
+            valor = row.get(col, "")
+        except AttributeError:
+            valor = row[col] if col in row.index else ""
+        if _valor_rentabilidade_valido(valor):
+            return True
+    return False
+
+def _chave_linha_rentabilidade(row):
+    return (
+        str(row.get("Fundo_norm", "")).strip(),
+        str(row.get("Categoria", "")).strip(),
+        str(row.get("Perfil", "")).strip(),
+    )
+
+def _localizar_input_data_sipii(driver):
+    """
+    Localiza o campo de data do SIPII sem depender de um ID fixo.
+    O portal JSF/PrimeFaces pode mudar IDs; por isso usamos heurística
+    por id/name/placeholder/value e input visível.
+    """
+    candidatos = []
+    xpath = (
+        "//input["
+        "not(@type) or @type='text' or @type='search' or @type='tel'"
+        "]"
+    )
+    try:
+        for inp in driver.find_elements(By.XPATH, xpath):
+            try:
+                if not inp.is_displayed() or not inp.is_enabled():
+                    continue
+                attrs = " ".join([
+                    inp.get_attribute("id") or "",
+                    inp.get_attribute("name") or "",
+                    inp.get_attribute("class") or "",
+                    inp.get_attribute("placeholder") or "",
+                    inp.get_attribute("aria-label") or "",
+                    inp.get_attribute("value") or "",
+                ])
+                attrs_norm = normalizar(attrs)
+                value = (inp.get_attribute("value") or "").strip()
+
+                score = 0
+                if "DATA" in attrs_norm:
+                    score += 4
+                if "REFERENCIA" in attrs_norm or "REFERÊNCIA" in attrs_norm:
+                    score += 2
+                if re.search(r"\d{2}/\d{2}/\d{4}", value):
+                    score += 5
+                if "hasDatepicker" in attrs or "ui-inputfield" in attrs:
+                    score += 1
+                if score > 0:
+                    candidatos.append((score, inp))
+            except Exception:
+                continue
+    except Exception:
+        return None
+
+    if not candidatos:
+        return None
+    candidatos.sort(key=lambda x: x[0], reverse=True)
+    return candidatos[0][1]
+
+def _setar_data_consulta_sipii(driver, data_ref):
+    data_br = _formatar_data_br(data_ref)
+    if not data_br:
+        return False
+
+    inp = _localizar_input_data_sipii(driver)
+    if not inp:
+        log(f"[SIPII] Campo de data não localizado. Consulta seguirá na data padrão do portal.")
+        return False
+
+    try:
+        driver.execute_script("""
+            const el = arguments[0];
+            const val = arguments[1];
+            el.focus();
+            el.value = val;
+            el.setAttribute('value', val);
+            el.dispatchEvent(new Event('input', {bubbles:true}));
+            el.dispatchEvent(new Event('change', {bubbles:true}));
+            el.blur();
+        """, inp, data_br)
+        time.sleep(0.5)
+        log(f"[SIPII] Data de consulta ajustada para {data_br}.")
+        return True
+    except Exception as e:
+        log(f"[SIPII] Não foi possível ajustar data para {data_br}: {e}")
+        return False
+
+def _obter_data_consulta_sipii(driver):
+    try:
+        inp = _localizar_input_data_sipii(driver)
+        if not inp:
+            return ""
+        valor = (inp.get_attribute("value") or "").strip()
+        m = re.search(r"\d{2}/\d{2}/\d{4}", valor)
+        return m.group(0) if m else ""
+    except Exception:
+        return ""
+
+def _inferir_data_base_dos_registros(registros):
+    for row in registros or []:
+        data_obj = _parse_data_br(row.get("Data Base Consulta") or row.get("Data Rentabilidade Ref"))
+        if data_obj:
+            return data_obj
+    return None
+
+def _preparar_colunas_rentabilidade_ref(df, data_base=None):
+    if df is None or df.empty:
+        return df
+    data_br = _formatar_data_br(data_base or _hoje_brasilia())
+    defaults = {
+        "Data Base Consulta": data_br,
+        "Data Rentabilidade Ref": data_br,
+        "Fallback Rentabilidade": "Não",
+        "Dias Úteis Fallback": "0",
+        "Alerta Rentabilidade Defasada": "Não",
+    }
+    for col, val in defaults.items():
+        if col not in df.columns:
+            df[col] = val
+        else:
+            df[col] = df[col].fillna("").astype(str).replace("", val)
+    return df
+
+def _carregar_ultima_base_publicada():
+    candidatos = [BASE_DIR / "dados_atuais.csv"]
+    candidatos += sorted(BASE_DIR.glob("sipii_caixa_*.csv"), reverse=True)
+    for caminho in candidatos:
+        if not caminho.exists():
+            continue
+        try:
+            df = pd.read_csv(caminho, encoding="utf-8-sig")
+            if df.empty or "Fundo" not in df.columns:
+                continue
+            if "Fundo_norm" not in df.columns:
+                df["Fundo_norm"] = df["Fundo"].apply(normalizar)
+            return df, caminho
+        except Exception as e:
+            log(f"[BASE ANTERIOR] Erro ao ler {caminho.name}: {e}")
+    return pd.DataFrame(), None
+
+def _validar_publicacao_segura(df):
+    if df is None or df.empty:
+        return False, "base vazia"
+    qtd = len(df)
+    qtd_rent = int(df.apply(_linha_tem_rentabilidade_valida, axis=1).sum()) if not df.empty else 0
+    if qtd < MIN_FUNDOS_PUBLICACAO_SEGURA:
+        return False, f"apenas {qtd} fundos (< {MIN_FUNDOS_PUBLICACAO_SEGURA})"
+    if qtd_rent < max(1, int(qtd * 0.50)):
+        return False, f"apenas {qtd_rent}/{qtd} fundos com rentabilidade válida"
+    return True, f"{qtd} fundos; {qtd_rent} com rentabilidade válida"
+
+def _substituir_por_ultima_base_se_necessario(df):
+    ok, motivo = _validar_publicacao_segura(df)
+    if ok:
+        log(f"[VALIDAÇÃO] Publicação segura: {motivo}.")
+        return df
+
+    log(f"[VALIDAÇÃO] Base atual insegura: {motivo}. Tentando preservar última base publicada...")
+    anterior, caminho = _carregar_ultima_base_publicada()
+    ok_ant, motivo_ant = _validar_publicacao_segura(anterior)
+    if ok_ant:
+        log(f"[VALIDAÇÃO] Usando base anterior '{caminho.name}' para não publicar dado parcial ({motivo_ant}).")
+        return anterior
+
+    log(f"[VALIDAÇÃO] Nenhuma base anterior segura encontrada. Mantendo base atual para não interromper pipeline.")
+    return df
+
+def aplicar_fallback_rentabilidade(todos_dados, data_base=None):
+    """
+    Reconsulta somente perfis/categorias que trouxeram fundos sem rentabilidade.
+    Não consulta fundo a fundo; faz por grupo Perfil + Categoria para reduzir carga.
+    """
+    if not todos_dados:
+        return todos_dados
+
+    data_base = data_base or _inferir_data_base_dos_registros(todos_dados) or _hoje_brasilia()
+    data_base_br = _formatar_data_br(data_base)
+    df = pd.DataFrame(todos_dados)
+    df = _preparar_colunas_rentabilidade_ref(df, data_base)
+
+    if df.empty:
+        return todos_dados
+
+    mascara_pendente = ~df.apply(_linha_tem_rentabilidade_valida, axis=1)
+    pendentes = df[mascara_pendente].copy()
+    if pendentes.empty:
+        log("[Fallback Rentabilidade] Nenhum fundo sem rentabilidade na data atual.")
+        return df.to_dict("records")
+
+    log(f"[Fallback Rentabilidade] {len(pendentes)} linhas sem rentabilidade em {data_base_br}.")
+    datas_fallback = _datas_uteis_anteriores(data_base, FALLBACK_RENT_MAX_DIAS_UTEIS)
+
+    total_corrigidos = 0
+
+    for dias_uteis, data_fb in enumerate(datas_fallback, start=1):
+        ainda_pendente = df[~df.apply(_linha_tem_rentabilidade_valida, axis=1)]
+        if ainda_pendente.empty:
+            break
+
+        grupos = (
+            ainda_pendente[["Perfil", "Categoria"]]
+            .dropna()
+            .drop_duplicates()
+            .to_dict("records")
+        )
+        if not grupos:
+            break
+
+        data_fb_br = _formatar_data_br(data_fb)
+        log(f"[Fallback Rentabilidade] Tentando {data_fb_br} para {len(grupos)} grupos pendentes...")
+
+        grupos_por_perfil = {}
+        for g in grupos:
+            sigla = str(g.get("Perfil", "")).strip()
+            cat = str(g.get("Categoria", "")).strip()
+            if sigla and cat:
+                grupos_por_perfil.setdefault(sigla, set()).add(cat)
+
+        dados_fb = []
+        for sigla, cats in grupos_por_perfil.items():
+            perfil = next((p for p in PERFIS if p["sigla"] == sigla), None)
+            if not perfil:
+                continue
+            try:
+                dados_fb.extend(
+                    processar_perfil(
+                        perfil,
+                        headless=True,
+                        data_consulta=data_fb,
+                        categorias_alvo=cats,
+                    )
+                )
+            except TypeError:
+                # Segurança caso alguma execução antiga chame função sem assinatura nova.
+                log("[Fallback Rentabilidade] Assinatura antiga de processar_perfil detectada; fallback por data não executado.")
+                return df.to_dict("records")
+            except Exception as e:
+                log(f"[Fallback Rentabilidade] Erro no perfil {sigla} em {data_fb_br}: {e}")
+
+        if not dados_fb:
+            log(f"[Fallback Rentabilidade] Nenhum dado retornado em {data_fb_br}.")
+            continue
+
+        df_fb = pd.DataFrame(dados_fb)
+        df_fb = _preparar_colunas_rentabilidade_ref(df_fb, data_fb)
+        df_fb = df_fb[df_fb.apply(_linha_tem_rentabilidade_valida, axis=1)].copy()
+        if df_fb.empty:
+            log(f"[Fallback Rentabilidade] {data_fb_br} também retornou somente dados vazios.")
+            continue
+
+        mapa_fb = {}
+        for _, row in df_fb.iterrows():
+            chave = _chave_linha_rentabilidade(row)
+            if chave not in mapa_fb or _linha_tem_rentabilidade_valida(row):
+                mapa_fb[chave] = row.to_dict()
+
+        corrigidos_data = 0
+        for idx, row in df.iterrows():
+            if _linha_tem_rentabilidade_valida(row):
+                continue
+            chave = _chave_linha_rentabilidade(row)
+            fb = mapa_fb.get(chave)
+            if not fb:
+                continue
+
+            for col in PERF_COLS_VALOR + ["Data Inicio"]:
+                if col in df.columns and col in fb and _valor_rentabilidade_valido(fb.get(col, "")):
+                    df.at[idx, col] = fb.get(col, "")
+
+            if _linha_tem_rentabilidade_valida(df.loc[idx]):
+                df.at[idx, "Data Base Consulta"] = data_base_br
+                df.at[idx, "Data Rentabilidade Ref"] = data_fb_br
+                df.at[idx, "Fallback Rentabilidade"] = "Sim"
+                df.at[idx, "Dias Úteis Fallback"] = str(dias_uteis)
+                df.at[idx, "Alerta Rentabilidade Defasada"] = (
+                    "Sim" if dias_uteis > FALLBACK_RENT_ALERTA_APOS_DIAS_UTEIS else "Não"
+                )
+                corrigidos_data += 1
+
+        total_corrigidos += corrigidos_data
+        log(f"[Fallback Rentabilidade] {corrigidos_data} linhas corrigidas usando {data_fb_br}.")
+
+    pendentes_finais = int((~df.apply(_linha_tem_rentabilidade_valida, axis=1)).sum())
+    log(f"[Fallback Rentabilidade] Total corrigido: {total_corrigidos}. Pendentes finais: {pendentes_finais}.")
+    return df.to_dict("records")
+
+
 def configurar_driver(headless=True):
     opt = webdriver.ChromeOptions()
     if headless: opt.add_argument("--headless=new")
@@ -2968,10 +3349,12 @@ def clicar_por_texto(driver, texto_alvo):
             clicar_elemento(driver, a); return
     raise NoSuchElementException(f"Link não encontrado: {texto_alvo}")
 
-def abrir_site_e_preparar(driver, sigla, segmento):
+def abrir_site_e_preparar(driver, sigla, segmento, data_consulta=None):
     log(f"[{sigla}] Abrindo SIPII...")
     driver.get(URL_SIPII); time.sleep(3)
     clicar_por_texto(driver, segmento); esperar_ajax(driver)
+    if data_consulta:
+        _setar_data_consulta_sipii(driver, data_consulta)
     consultar = WebDriverWait(driver, 20).until(
         EC.presence_of_element_located((By.ID, "btn-consultar")))
     clicar_elemento(driver, consultar); esperar_ajax(driver); time.sleep(3)
@@ -2991,10 +3374,11 @@ def localizar_tabela_ativa(driver):
         if p.is_displayed(): return p.find_element(By.CSS_SELECTOR, "table")
     raise Exception("Tabela ativa não encontrada")
 
-def extrair_dados_tabela(driver, nome_csv, sigla):
+def extrair_dados_tabela(driver, nome_csv, sigla, data_consulta=None):
     tabela = localizar_tabela_ativa(driver)
     linhas = tabela.find_elements(By.CSS_SELECTOR, "tbody tr")
     dados = []
+    data_ref_br = _formatar_data_br(data_consulta) or _obter_data_consulta_sipii(driver) or _formatar_data_br(_hoje_brasilia())
     for i, tr in enumerate(linhas):
         tds = tr.find_elements(By.XPATH, "./td")
         if DEBUG_COLUNAS and i == 0:
@@ -3016,39 +3400,52 @@ def extrair_dados_tabela(driver, nome_csv, sigla):
                     "Acum. 12M (%)":    tds[7].text.strip(),
                     "PL (milhoes R$)":  tds[8].text.strip(),
                     "Perfil":           sigla,
+                    "Data Base Consulta": data_ref_br,
+                    "Data Rentabilidade Ref": data_ref_br,
+                    "Fallback Rentabilidade": "Não",
+                    "Dias Úteis Fallback": "0",
+                    "Alerta Rentabilidade Defasada": "Não",
                 })
     return dados
 
-def coletar_aba(driver, sigla, segmento, cat, dados):
+def coletar_aba(driver, sigla, segmento, cat, dados, data_consulta=None):
     try:
         clicar_por_texto(driver, cat["texto_tela"]); esperar_ajax(driver); time.sleep(1.5)
-        res = extrair_dados_tabela(driver, cat["csv"], sigla)
+        res = extrair_dados_tabela(driver, cat["csv"], sigla, data_consulta=data_consulta)
         dados.extend(res)
-        log(f"  [{sigla}] {cat['csv']}: {len(res)} fundos.")
+        data_log = f" | data {_formatar_data_br(data_consulta)}" if data_consulta else ""
+        log(f"  [{sigla}] {cat['csv']}{data_log}: {len(res)} fundos.")
     except (InvalidSessionIdException, WebDriverException):
         log(f"  [{sigla}] Sessão perdida em '{cat['csv']}'. Reiniciando...")
         finalizar_driver(driver)
         driver = configurar_driver(headless=True)
         try:
-            abrir_site_e_preparar(driver, sigla, segmento)
+            abrir_site_e_preparar(driver, sigla, segmento, data_consulta=data_consulta)
             clicar_por_texto(driver, cat["texto_tela"]); esperar_ajax(driver); time.sleep(1.5)
-            res = extrair_dados_tabela(driver, cat["csv"], sigla)
+            res = extrair_dados_tabela(driver, cat["csv"], sigla, data_consulta=data_consulta)
             dados.extend(res)
-            log(f"  [{sigla}] {cat['csv']} (recuperado): {len(res)} fundos.")
+            data_log = f" | data {_formatar_data_br(data_consulta)}" if data_consulta else ""
+            log(f"  [{sigla}] {cat['csv']} (recuperado){data_log}: {len(res)} fundos.")
         except Exception as e2:
             log(f"  [{sigla}] Falha ao recuperar '{cat['csv']}': {e2}")
     except Exception as e:
         log(f"  [{sigla}] Erro em '{cat['csv']}': {e}")
     return driver
 
-def processar_perfil(perfil, headless=True):
+def processar_perfil(perfil, headless=True, data_consulta=None, categorias_alvo=None):
     sigla, segmento = perfil["sigla"], perfil["segmento"]
     driver, dados = None, []
+    categorias_norm = None
+    if categorias_alvo:
+        categorias_norm = {normalizar(c) for c in categorias_alvo}
+
     try:
         driver = configurar_driver(headless=headless)
-        abrir_site_e_preparar(driver, sigla, segmento)
+        abrir_site_e_preparar(driver, sigla, segmento, data_consulta=data_consulta)
         for cat in descobrir_categorias(driver):
-            driver = coletar_aba(driver, sigla, segmento, cat, dados)
+            if categorias_norm and normalizar(cat.get("csv", "")) not in categorias_norm and normalizar(cat.get("texto_tela", "")) not in categorias_norm:
+                continue
+            driver = coletar_aba(driver, sigla, segmento, cat, dados, data_consulta=data_consulta)
     except Exception as e:
         log(f"[{sigla}] Erro geral: {e}"); traceback.print_exc()
     finally:
@@ -3056,13 +3453,26 @@ def processar_perfil(perfil, headless=True):
     return dados
 
 def consolidar(todos):
-    if not todos: return pd.DataFrame()
+    if not todos:
+        return pd.DataFrame()
     df = pd.DataFrame(todos)
+    df = _preparar_colunas_rentabilidade_ref(df)
+
     consolidado = []
-    for (fn, cat), group in df.groupby(["Fundo_norm","Categoria"], sort=False):
-        reg = group.iloc[0].to_dict()
-        reg["Perfis"] = " | ".join(sorted(group["Perfil"].unique()))
+    for (fn, cat), group in df.groupby(["Fundo_norm", "Categoria"], sort=False):
+        # A versão antiga usava sempre a primeira linha do grupo. Em dias de cota
+        # indisponível, isso podia fazer uma linha com "-" vencer uma linha válida.
+        # Agora prioriza: rentabilidade válida > algum valor/cota válido > primeira linha.
+        grupo_validos = group[group.apply(_linha_tem_rentabilidade_valida, axis=1)]
+        if not grupo_validos.empty:
+            reg = grupo_validos.iloc[0].to_dict()
+        else:
+            grupo_valor = group[group.apply(_linha_tem_dados_valor_validos, axis=1)]
+            reg = (grupo_valor.iloc[0] if not grupo_valor.empty else group.iloc[0]).to_dict()
+
+        reg["Perfis"] = " | ".join(sorted(group["Perfil"].astype(str).unique()))
         consolidado.append(reg)
+
     return pd.DataFrame(consolidado)
 
 def salvar_excel(df, caminho):
@@ -3117,7 +3527,7 @@ def salvar_excel(df, caminho):
 # ---------------------------------------------------------------------------
 def executar():
     log("=" * 65)
-    log("⚡ ROBÔ SIPII v18.0 — atualização integral e automática do catálogo")
+    log("⚡ ROBÔ SIPII v18.6 / v640 — fallback seletivo de rentabilidade")
     log("=" * 65)
 
     # 1. URLs dinâmicas do portal CAIXA
@@ -3135,7 +3545,9 @@ def executar():
         todos_dados.extend(processar_perfil(perf, headless=True))
         time.sleep(2)
 
-    # 4. Consolidação (com fallback se SIPII falhar)
+    # 4. Fallback seletivo de rentabilidade e consolidação
+    todos_dados = aplicar_fallback_rentabilidade(todos_dados)
+
     df_consolidado = consolidar(todos_dados)
     if df_consolidado.empty:
         log("[AVISO] SIPII sem dados. Ativando fallback...")
@@ -3144,6 +3556,9 @@ def executar():
             log("[ERRO CRÍTICO] Fallback também vazio. Pipeline interrompido.")
             return
         log(f"[FALLBACK] Continuando com {len(df_consolidado)} fundos.")
+
+    # Trava v640: evita publicar execução parcial por timeout/403.
+    df_consolidado = _substituir_por_ultima_base_se_necessario(df_consolidado)
 
     # 5. Enriquecimento (URL + CNPJ + codfundo + taxa adm + prazos)
     df_consolidado["URL"] = df_consolidado["Fundo"].apply(
@@ -3214,7 +3629,7 @@ def executar():
     limpar_backups_antigos(manter=5)
 
     log("=" * 65)
-    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v18.0 automático completo.")
+    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v18.6/v640 completo.")
     log("=" * 65)
 
 
