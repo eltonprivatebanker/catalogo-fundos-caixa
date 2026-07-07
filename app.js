@@ -285,6 +285,63 @@ function normalizarCdiPeriodoV642(value, months){
 }
 window.normalizarCdiPeriodoV642 = normalizarCdiPeriodoV642;
 
+
+/* v643 — trava final para % do CDI nos rankings
+   Motivo: algumas renderizações desktop/mobile calculam o ratio usando a referência
+   do CDI antes da normalização. Esta função é chamada no momento do cálculo do
+   percentual e impede CDI 12M em escala 10x/100x (ex.: 146,8) de distorcer o ranking. */
+function parseNumeroRankingCdiV643(value){
+  if(value === null || value === undefined || value === '') return null;
+  if(typeof value === 'number') return Number.isFinite(value) ? value : null;
+  let s = String(value).trim();
+  if(!s || s === '-' || s === '—' || s.toLowerCase() === 'null') return null;
+  s = s.replace(/%/g,'').replace(/\s/g,'').replace(/[^0-9,\.\-]/g,'');
+  if(!s || s === '-' || s === ',' || s === '.') return null;
+  if(s.includes(',') && s.includes('.')){
+    s = s.replace(/\./g,'').replace(',', '.');
+  }else if(s.includes(',')){
+    s = s.replace(',', '.');
+  }else{
+    const parts = s.split('.');
+    if(parts.length > 2 || (parts.length === 2 && parts[1].length === 3 && parts[0].length <= 3)){
+      s = s.replace(/\./g,'');
+    }
+  }
+  const n = Number(s);
+  return Number.isFinite(n) ? n : null;
+}
+function normalizarCdiRankingPeriodoV643(value, periodo){
+  let n = parseNumeroRankingCdiV643(value);
+  if(n === null) return null;
+  const p = String(periodo || '12m').toLowerCase();
+
+  if(p === 'mes' || p === 'mês'){
+    // CDI mensal normalmente fica perto de 0,5% a 1,5%.
+    while(Math.abs(n) > 5) n = n / 10;
+    return Number.isFinite(n) ? Number(n.toFixed(6)) : null;
+  }
+
+  if(p === 'ano'){
+    // CDI no ano dificilmente passa de 25% em um ano corrente.
+    while(Math.abs(n) > 25) n = n / 10;
+    return Number.isFinite(n) ? Number(n.toFixed(6)) : null;
+  }
+
+  // 12M: CDI acumulado deve ficar em escala percentual normal, não 10x.
+  while(Math.abs(n) > 35) n = n / 10;
+  return Number.isFinite(n) ? Number(n.toFixed(6)) : null;
+}
+function calcularPercentualCdiRankingV643(rentabilidade, cdiReferencia, periodo){
+  const rent = parseNumeroRankingCdiV643(rentabilidade);
+  const cdi = normalizarCdiRankingPeriodoV643(cdiReferencia, periodo || '12m');
+  if(rent === null || cdi === null || cdi === 0) return null;
+  const ratio = Math.round((rent / cdi) * 100);
+  return Number.isFinite(ratio) ? ratio : null;
+}
+window.parseNumeroRankingCdiV643 = parseNumeroRankingCdiV643;
+window.normalizarCdiRankingPeriodoV643 = normalizarCdiRankingPeriodoV643;
+window.calcularPercentualCdiRankingV643 = calcularPercentualCdiRankingV643;
+
 function chaveMesDeRotuloV229(label){
   const match = String(label || '').trim().toLowerCase().match(/(jan|fev|mar|abr|mai|jun|jul|ago|set|out|nov|dez)\/(\d{4})/);
   if(!match) return null;
@@ -3762,7 +3819,7 @@ function setCdiSort(dir){
     const rent = finite(r?.[campoPorPeriodo(periodo)]);
     const cdi = cdiReferencia(periodo);
     if(rent === null || cdi === null || cdi === 0) return null;
-    const ratio = Math.round((rent / cdi) * 100);
+    const ratio = typeof calcularPercentualCdiRankingV643 === 'function' ? calcularPercentualCdiRankingV643(rent, cdi, periodo) : Math.round((rent / cdi) * 100);
     return Number.isFinite(ratio) ? ratio : null;
   }
   function cdiRatioTxt(r, periodo){
@@ -4152,7 +4209,7 @@ function setCdiSort(dir){
     const rent = finite(r?.[campoPorPeriodo(periodo)]);
     const cdi = cdiReferencia(periodo);
     if(rent === null || cdi === null || cdi === 0) return '—';
-    const ratio = Math.round((rent / cdi) * 100);
+    const ratio = typeof calcularPercentualCdiRankingV643 === 'function' ? calcularPercentualCdiRankingV643(rent, cdi, periodo) : Math.round((rent / cdi) * 100);
     if(!Number.isFinite(ratio)) return '—';
     return ratio.toLocaleString('pt-BR',{maximumFractionDigits:0}) + '%';
   }
@@ -5693,6 +5750,8 @@ function buildSinaisConsultivos(r){
 function calcCdiRatio(rent12, cdi12){
   const r = typeof rent12 === 'string' ? toNum(rent12) : rent12;
   const cBase = cdi12 || indicState.cdi.m12 || null;
+  const ratio = typeof calcularPercentualCdiRankingV643 === 'function' ? calcularPercentualCdiRankingV643(r, cBase, '12m') : null;
+  if(ratio !== null) return ratio;
   const c = typeof normalizarCdiPeriodoV642 === 'function' ? normalizarCdiPeriodoV642(cBase, 12) : cBase;
   if(r === null || c === null || c === 0) return null;
   return Math.round((r / c) * 100);
@@ -12078,7 +12137,7 @@ async function sharePainelMercado(){
       const rent=num(r[campo]);
       const cdiRef=cdiReferenciaRankingV538(periodo);
       if(rent===null || Number.isNaN(rent) || !Number.isFinite(rent) || cdiRef===null || cdiRef===0) return '—';
-      const ratio=typeof calcCdiRatio==='function' ? calcCdiRatio(rent,cdiRef) : Math.round((rent/cdiRef)*100);
+      const ratio=typeof calcularPercentualCdiRankingV643==='function' ? calcularPercentualCdiRankingV643(rent,cdiRef,periodo) : (typeof calcCdiRatio==='function' ? calcCdiRatio(rent,cdiRef) : Math.round((rent/cdiRef)*100));
       return ratio===null?'—':ratio+'%';
     }catch(e){return '—'}
   }
@@ -25625,7 +25684,7 @@ window.__ELTAUM_MOBILE_FILTER_SELECT_SAFE_V481__ = {
     const rent = num(r?.[campoPorPeriodo(periodo)]);
     const cdi = cdiReferencia(periodo);
     if(rent === null || cdi === null || !Number.isFinite(rent) || !Number.isFinite(cdi) || cdi === 0) return '—';
-    const ratio = typeof calcCdiRatio === 'function' ? calcCdiRatio(rent, cdi) : Math.round((rent / cdi) * 100);
+    const ratio = typeof calcularPercentualCdiRankingV643 === 'function' ? calcularPercentualCdiRankingV643(rent, cdi, periodo) : (typeof calcCdiRatio === 'function' ? calcCdiRatio(rent, cdi) : Math.round((rent / cdi) * 100));
     return ratio === null ? '—' : ratio + '%';
   }
   function medal(i){ return i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1) + 'º'; }
@@ -27971,6 +28030,36 @@ function buildDetailPanel(r,colspan){
       cdi12m_normalizado: normalizado,
       indicState_m12: window.indicState && window.indicState.cdi && window.indicState.cdi.m12,
       card_acum_12m: card && card.acum_12m
+    };
+    console.table(out);
+    return out;
+  };
+})();
+
+
+/* DIAGNÓSTICO v643 — valida a referência de CDI usada no cálculo final do ranking */
+(function diagnosticoRankingCdiV643(){
+  window.__diagnosticarCdiRankingV643 = function(){
+    var card = {};
+    try{ card = typeof cdiCardAtualV230 === 'function' ? cdiCardAtualV230() : (window.__mercadoAtualV230 && window.__mercadoAtualV230.cards && window.__mercadoAtualV230.cards.cdi) || {}; }catch(e){}
+    var bruto = null;
+    try{ bruto = typeof resolverCdiPeriodoV229 === 'function' ? resolverCdiPeriodoV229(card, 12) : (card && card.acum_12m); }catch(e){ bruto = card && card.acum_12m; }
+    var normalizado = typeof normalizarCdiRankingPeriodoV643 === 'function' ? normalizarCdiRankingPeriodoV643(bruto || (card && card.acum_12m), '12m') : bruto;
+    var exemplos = [];
+    try{
+      var rows = Array.isArray(window.allRows) ? window.allRows : (typeof allRows !== 'undefined' && Array.isArray(allRows) ? allRows : []);
+      exemplos = rows.filter(function(r){ return parseNumeroRankingCdiV643(r && r['Acum. 12M (%)']) !== null; }).slice(0,5).map(function(r){
+        var rent = parseNumeroRankingCdiV643(r['Acum. 12M (%)']);
+        return { fundo: r.Fundo, rent12m: rent, pct_cdi_12m: calcularPercentualCdiRankingV643(rent, normalizado, '12m') };
+      });
+    }catch(e){}
+    var out = {
+      build: 'v643-safe-ratio',
+      cdi12m_resolvido: bruto,
+      cdi12m_normalizado_final: normalizado,
+      indicState_m12: window.indicState && window.indicState.cdi && window.indicState.cdi.m12,
+      card_acum_12m: card && card.acum_12m,
+      exemplos: exemplos
     };
     console.table(out);
     return out;
