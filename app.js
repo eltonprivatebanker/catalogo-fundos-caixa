@@ -10787,7 +10787,7 @@ async function sharePainelMercado(){
    Motivo: alguns browsers/ambientes estavam deixando a classe active mudar, mas o canvas não era redesenhado.
    Este patch captura o clique antes dos listeners antigos, recarrega a base necessária e redesenha diretamente o Chart.js. */
 (function(){
-  const BUILD = 'ELTAUM_RATES_CLEAN_DASHBOARD_20260620_v399';
+  const BUILD = 'ELTAUM_MARKET_CURRENT_VARIATION_V652';
   window.__ELTAUM_TABS_FORCE_BUILD__ = BUILD;
   console.info('[Catálogo CAIXA] Patch filtros gráficos ativo:', BUILD);
 
@@ -16040,6 +16040,60 @@ if(!isSearchInput(el)) return;
     return `${months}M`;
   }
   function valueOrDash(v){ const s=clean(v); return s && !/^(m[eê]s|ano|fechado|atual)$/i.test(s) ? s : '—'; }
+  function isDashV652(v){ const s=clean(v); return !s || s === '—' || s === '-' || /^null$/i.test(s) || /^undefined$/i.test(s); }
+  function finiteV652(value){
+    if(value === null || value === undefined || value === '') return null;
+    let normalized = value;
+    if(typeof value === 'string'){
+      normalized = value.trim().replace(/%/g,'').replace(/\s+/g,'');
+      if(normalized.includes(',')) normalized = normalized.replace(/\./g,'').replace(',','.');
+    }
+    const number = Number(normalized);
+    return Number.isFinite(number) ? number : null;
+  }
+  function firstFiniteV652(){
+    for(const value of arguments){
+      const number = finiteV652(value);
+      if(number !== null) return number;
+    }
+    return null;
+  }
+  function pctTxtV652(value, fallback='—'){
+    const number = finiteV652(value);
+    if(number === null) return fallback;
+    return `${number > 0 ? '+' : ''}${number.toFixed(2).replace('.',',')}%`;
+  }
+  function rawMarketV652(key, cardKey){
+    const data = (typeof _dadosMercado !== 'undefined' && _dadosMercado) || window.__mercadoAtualV230 || {};
+    return {
+      item: data?.indices_mercado?.[key] || {},
+      card: data?.cards?.[cardKey || key] || {}
+    };
+  }
+  function currentVariationFromMarketV652(key, cardKey){
+    const data = rawMarketV652(key, cardKey || key);
+    const item = data.item || {};
+    const card = data.card || {};
+    const explicit = firstFiniteV652(
+      item.variacao_mes_atual,
+      item.variacao_mensal,
+      item.variacao_mes,
+      card.variacao_mes_atual,
+      card.variacao_mensal,
+      card.variacao_mes
+    );
+    if(explicit !== null) return pctTxtV652(explicit);
+    const current = firstFiniteV652(item.fechamento_atual, card.atual);
+    const previous = firstFiniteV652(item.fechamento_mes_anterior, card.anterior);
+    if(current !== null && previous !== null && previous !== 0){
+      return pctTxtV652(((current / previous) - 1) * 100);
+    }
+    return '—';
+  }
+  function withFallbackV652(primary, fallback){
+    const value = valueOrDash(primary);
+    return isDashV652(value) ? valueOrDash(fallback) : value;
+  }
 
   function normalizeClosedPeriodLabels(closed, current){
     const closedHeader=qs('#th-mes-ant-sub');
@@ -16123,8 +16177,8 @@ if(!isSearchInput(el)) return;
         accum:valueOrDash(text('cdi-acum-v2'))
       },
       ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2')),closedStatus:ipcaClosedStatus,lastAvailable:ipcaLastAvailable,awaitingMonth:ipcaAwaitingMonth},
-      dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
-      ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
+      dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:withFallbackV652(text('dolar-cur-var'), currentVariationFromMarketV652('dolar','dolar')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
+      ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:withFallbackV652(text('ibov-cur-var'), currentVariationFromMarketV652('ibovespa','ibovespa')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
       us:[
         {icon:'🌎',name:'S&P 500',sub:'índice amplo dos EUA',closed:parseUs('sp-ant-var'),current:parseUs('sp-cur-var'),year:parseUs('sp-ano-var'),accum:parseUs('sp-acum-var'),points:valueOrDash(text('sp-cur-pts'))},
         {icon:'🏛️',name:'Dow Jones',sub:'empresas blue chips',closed:parseUs('dow-ant-var'),current:parseUs('dow-cur-var'),year:parseUs('dow-ano-var'),accum:parseUs('dow-acum-var'),points:valueOrDash(text('dow-cur-pts'))},

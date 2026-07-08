@@ -1,0 +1,16 @@
+V652 — Indicadores de mercado: variação do mês atual para Dólar e Ibovespa
+
+Escopo: somente desktop / Indicadores de mercado.
+
+Arquivos alterados:
+- index.html: cache atualizado para app.js?v=market-current-var-v652 e classe desktop-market-current-var-v652.
+- app.js: o painel executivo passa a usar fallback direto do JSON mercado_atual para calcular/exibir a variação percentual do mês atual em Dólar PTAX e Ibovespa quando a leitura via DOM vier como traço.
+- style.css: sem alteração funcional nesta versão; mantém a regra v651 que acrescenta o sufixo “no mês” aos percentuais da prévia.
+- tokens-caixa.css: sem alteração.
+
+Validação sugerida:
+1) Abrir Indicadores de mercado > Visão executiva no desktop.
+2) Conferir Prévia do mês atual.
+3) Dólar PTAX deve mostrar cotação + variação percentual no mês.
+4) Ibovespa deve mostrar pontuação + variação percentual no mês.
+5) IPCA permanece fora da prévia, aparecendo apenas no consolidado quando aguardando divulgação.
