@@ -7715,15 +7715,17 @@ function econSelicVisibleRowsV381(rows, range){
 function econAtualizarSelicKpiLabelsV381(range){
   const maxLabel = document.getElementById('selicMaxLabelV381');
   const minLabel = document.getElementById('selicMinLabelV381');
+  const currentLabel = document.querySelector('#mobileSelicV400 .selic-kpi-focus-card-v415.is-current span');
 
   if(range === 'all'){
-    if(maxLabel) maxLabel.textContent = 'Máxima histórica';
-    if(minLabel) minLabel.textContent = 'Mínima histórica';
-    return;
+    if(maxLabel) maxLabel.textContent = 'Maior Selic da série';
+    if(minLabel) minLabel.textContent = 'Menor Selic da série';
+  }else{
+    if(maxLabel) maxLabel.textContent = 'Maior Selic do período';
+    if(minLabel) minLabel.textContent = 'Menor Selic do período';
   }
 
-  if(maxLabel) maxLabel.textContent = 'Máxima do período';
-  if(minLabel) minLabel.textContent = 'Mínima do período';
+  if(currentLabel) currentLabel.textContent = 'Selic vigente';
 }
 
 function econAtualizarSelicPeriodoTextoV381(range){
@@ -7743,7 +7745,7 @@ function econAtualizarSelicPeriodoTextoV381(range){
   const custom = econDashStateV378.selicCustomV596 || {};
   const periodo =
     range === 'all' ? 'histórico completo' :
-    range === 'ytd' ? 'no ano (YTD)' :
+    range === 'ytd' ? 'ano atual' :
     range === 'custom' && custom.start && custom.end ? `personalizado · ${custom.start} → ${custom.end}` :
     Number(range) === 12 ? 'último 1 ano' :
     Number(range) === 36 ? 'últimos 3 anos' :
@@ -7751,7 +7753,7 @@ function econAtualizarSelicPeriodoTextoV381(range){
     Number(range) === 120 ? 'últimos 10 anos' :
     `últimos ${range} meses`;
 
-  note.textContent = `Taxa vigente · ${Number.isFinite(valor) ? valor.toFixed(2).replace('.', ',') : '—'}% a.a. · desde ${data} · período: ${periodo}`;
+  note.textContent = `Leitura do gráfico · ${periodo} · Selic vigente ${Number.isFinite(valor) ? valor.toFixed(2).replace('.', ',') : '—'}% a.a.${data && data !== 'último dado' ? ` desde ${data}` : ''}`;
 }
 
 
@@ -7824,7 +7826,7 @@ function econRenderSelicLegacyV380(containerId, rows, range){
 
   const dots = data.map((d, i) => {
     let cls = d.contextOnly ? 'dot context' : 'dot small';
-    let r = d.contextOnly ? 1.8 : 2.4;
+    let r = d.contextOnly ? 1.3 : (range === 'all' ? 1.25 : 2.0);
     if(i === maxIdx){ cls = 'dot max'; r = 6; }
     if(i === minIdx){ cls = 'dot min'; r = 5.4; }
     if(i === lastIdx){ cls = 'dot current'; r = 6.4; }
@@ -7860,12 +7862,11 @@ function econRenderSelicLegacyV380(containerId, rows, range){
       ${labels}
     </svg>
     <div class="selic-tooltip-v596" role="tooltip" hidden></div>
-    <div class="econ-selic-legend-v380" aria-hidden="true">
-      <span><i class="max"></i> máxima do período</span>
-      <span><i class="min"></i> mínima do período</span>
-      <span><i class="current"></i> vigente</span>
-      <strong>${periodStart} → ${periodEnd}</strong>
-      <strong>Atual · ${econPctV378(last.value, false)} a.a.</strong>
+    <div class="econ-selic-legend-v380 selic-legend-executive-v653" aria-hidden="true">
+      <span><i class="max"></i> Máxima</span>
+      <span><i class="min"></i> Mínima</span>
+      <span><i class="current"></i> Selic vigente</span>
+      <strong>Período exibido: ${periodStart} → ${periodEnd} · Selic atual: ${econPctV378(last.value, false)} a.a.</strong>
     </div>
   `;
   bindSelicTooltipV596(el);
@@ -8020,7 +8021,7 @@ async function renderIndicadoresDashboardV378(d){
     selicData = ref?.data || selicData;
   }catch(e){}
   const selicValor = Number(selic.valor);
-  econSetTextV378('evoCardSelicNote', `Taxa vigente · ${Number.isFinite(selicValor) ? selicValor.toFixed(2).replace('.', ',') : '—'}% a.a. · desde ${selicData}`);
+  econSetTextV378('evoCardSelicNote', `Leitura do gráfico · Selic vigente ${Number.isFinite(selicValor) ? selicValor.toFixed(2).replace('.', ',') : '—'}% a.a.${selicData && selicData !== 'último dado' ? ` desde ${selicData}` : ''}`);
 
   let meta = d?.meta_vs_inflacao_efetiva || [];
   if(!meta.length){
@@ -28891,4 +28892,49 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', applyLayout, {once:true});
   window.addEventListener('pageshow', applyLayout, {passive:true});
   window.addEventListener('resize', scheduleApply, {passive:true});
+})();
+
+
+/* PATCH v653 — Desktop: Selic com leitura executiva e semântica simplificada */
+(function desktopSelicExecutiveV653(){
+  var BUILD = 'ELTAUM_DESKTOP_SELIC_EXECUTIVE_V653';
+  var PATCH_CLASS = 'desktop-selic-executive-v653';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function setText(selector, text){
+    var el = document.querySelector(selector);
+    if(el) el.textContent = text;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    setText('#mobileSelicV400 .econ-dash-card-head-v378 h3', '🏦 Trajetória da Selic meta');
+    setText('#mobileSelicV400 .econ-dash-card-head-v378 p', 'Histórico da taxa básica de juros para contextualizar o nível atual.');
+    var buttons = document.querySelectorAll('#mobileSelicV400 [data-dash-range-target="selic"]');
+    buttons.forEach(function(btn){
+      var r = btn.getAttribute('data-dash-range');
+      if(r === 'ytd') btn.textContent = 'Ano atual';
+      if(r === '36') btn.textContent = '3 anos';
+      if(r === '60') btn.textContent = '5 anos';
+      if(r === '120') btn.textContent = '10 anos';
+      if(r === 'all') btn.textContent = 'Histórico';
+    });
+    var current = document.querySelector('#mobileSelicV400 .selic-kpi-focus-card-v415.is-current span');
+    if(current) current.textContent = 'Selic vigente';
+    var active = document.querySelector('#mobileSelicV400 [data-dash-range-target="selic"].active');
+    if(active && typeof econAtualizarSelicKpiLabelsV381 === 'function') econAtualizarSelicKpiLabelsV381(active.dataset.dashRange || 'all');
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  function schedule(){
+    apply();
+    [80, 220, 520, 1000, 1800, 3200, 7000].forEach(function(delay){ setTimeout(apply, delay); });
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', schedule, {once:true});
+  else schedule();
+  window.addEventListener('load', schedule, {once:true});
+  document.addEventListener('click', function(ev){
+    if(ev.target && ev.target.closest && ev.target.closest('#mobileSelicV400')) setTimeout(apply, 30);
+  });
 })();

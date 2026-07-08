@@ -1,0 +1,25 @@
+VERSÃO v653 — SELIC DESKTOP COM LEITURA EXECUTIVA
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+
+tokens-caixa.css mantido sem alteração.
+
+Escopo:
+- Somente desktop.
+- Mobile preservado.
+
+Ajustes principais:
+1. Subtítulo da seção Selic ficou mais consultivo.
+2. Botão YTD virou Ano atual.
+3. Botões 3A/5A/10A viraram 3 anos/5 anos/10 anos.
+4. Faixa verde de taxa vigente foi removida no desktop por ser redundante.
+5. Cards foram renomeados para Maior/Menor Selic da série ou do período e Selic vigente.
+6. Legenda inferior simplificada para Máxima, Mínima, Selic vigente e período exibido.
+7. Pontos intermediários do gráfico histórico ficaram menos chamativos.
+8. Cache atualizado para app.js?v=desktop-selic-executive-v653.
+
+Validação:
+- app.js validado com node --check.
