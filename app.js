@@ -28349,3 +28349,215 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('resize', () => requestAnimationFrame(apply), {passive:true});
 })();
 
+
+
+/* ============================================================
+   PATCH v648 — Desktop: Agenda Copom 2026 definitiva em 8 cards
+   Escopo: SOMENTE DESKTOP (min-width: 769px).
+   - Preserva mobile.
+   - Evita conflito com carrossel/summary legado usando um container dedicado.
+   - Mostra as 8 reuniões em grade compacta 4x2, sem rolagem.
+   - Remove redundância visual: não repete "Corte/Mantida" dentro do mesmo card.
+   ============================================================ */
+(function desktopCopomAgendaEightCardsV648(){
+  const BUILD = 'ELTAUM_DESKTOP_COPOM_AGENDA_8_V648';
+  const MQ_DESKTOP = '(min-width: 769px)';
+  const AGENDA_ID = 'desktopCopomAgendaV648';
+
+  function isDesktop(){
+    return window.matchMedia && window.matchMedia(MQ_DESKTOP).matches;
+  }
+
+  function clean(value){
+    return String(value || '')
+      .replace(/\s+/g, ' ')
+      .replace(/★/g, '')
+      .trim();
+  }
+
+  function escapeHtml(value){
+    return String(value || '').replace(/[&<>"']/g, ch => ({
+      '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'
+    }[ch]));
+  }
+
+  function setImportant(el, prop, value){
+    if(el && el.style) el.style.setProperty(prop, value, 'important');
+  }
+
+  function getKind(item, result){
+    const cls = String(item?.className || '').toLowerCase();
+    const r = String(result || '').toLowerCase();
+    if(cls.includes('next') || r.includes('próxima') || r.includes('proxima')) return 'is-next';
+    if(cls.includes('future') || r.includes('prevista')) return 'is-future';
+    if(cls.includes('cut') || r.includes('corte')) return 'is-cut';
+    if(cls.includes('hike') || r.includes('alta')) return 'is-hike';
+    if(cls.includes('hold') || r.includes('mantida') || r.includes('mantido') || r.includes('manutenção') || r.includes('manutencao')) return 'is-hold';
+    return 'is-neutral';
+  }
+
+  function extractRate(result){
+    const r = clean(result);
+    const arrow = r.match(/(?:→|->)\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
+    if(arrow) return arrow[1];
+    const em = r.match(/\bem\s*([0-9]{1,2}(?:[,.][0-9]{1,2})?%)/i);
+    if(em) return em[1];
+    return '';
+  }
+
+  function extractMove(result, kind){
+    const r = clean(result).replace(/−/g, '-');
+    const move = r.match(/(?:corte|alta)\s*([-+]?\d+(?:[,.]\d+)?)\s*p\.?p\.?/i);
+    if(move){
+      const prefix = kind === 'is-hike' ? 'Alta' : 'Corte';
+      return `${prefix} ${move[1].replace('.', ',')} p.p.`;
+    }
+    if(kind === 'is-cut') return 'Corte';
+    if(kind === 'is-hike') return 'Alta';
+    return '';
+  }
+
+  function buildTexts(item){
+    const numRaw = clean(item.querySelector('.copom-num')?.textContent);
+    const num = numRaw.replace(/\s*reuni[aã]o\b/i, '').trim() || 'Reunião';
+    const date = clean(item.querySelector('.copom-date')?.textContent) || '—';
+    const result = clean(item.querySelector('.copom-result')?.textContent);
+    const kind = getKind(item, result);
+    const rate = extractRate(result);
+    const move = extractMove(result, kind);
+
+    let status = 'Status a confirmar';
+    let detail = '—';
+
+    if(kind === 'is-next'){
+      status = 'Próxima reunião';
+      detail = 'Decisão a definir';
+    }else if(kind === 'is-future'){
+      status = 'Prevista';
+      detail = 'Sem decisão';
+    }else if(kind === 'is-hold'){
+      status = 'Mantida';
+      detail = rate ? `Selic ${rate}` : 'Sem alteração';
+    }else if(kind === 'is-cut'){
+      status = move || 'Corte';
+      detail = rate ? `Selic ${rate}` : 'Decisão realizada';
+    }else if(kind === 'is-hike'){
+      status = move || 'Alta';
+      detail = rate ? `Selic ${rate}` : 'Decisão realizada';
+    }else if(result){
+      status = result;
+      detail = rate ? `Selic ${rate}` : 'Decisão realizada';
+    }
+
+    return {num, date, result, kind, status, detail};
+  }
+
+  function getStoreItems(){
+    const store = document.getElementById('copomMeetings');
+    if(!store) return [];
+    return [...store.querySelectorAll('.copom-item')]
+      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
+  }
+
+  function renderAgenda(){
+    if(!isDesktop()) return;
+
+    const copomBlock = document.querySelector('#sec-mercado .copom-compact-v167');
+    const legacySummary = document.getElementById('copomExecutiveSummaryV270');
+    const subhead = copomBlock?.querySelector('.reference-subhead-v167');
+    const items = getStoreItems();
+    if(!copomBlock || !items.length) return;
+
+    document.documentElement.classList.add('desktop-rates-copom-agenda-v648');
+
+    const title = document.getElementById('copomCompactTitleV167');
+    if(title) title.textContent = 'Calendário Copom 2026';
+    const subtitle = title?.closest('.reference-subhead-v167')?.querySelector('small');
+    if(subtitle) subtitle.textContent = 'Agenda anual com decisões realizadas e próximas reuniões.';
+
+    if(legacySummary){
+      legacySummary.setAttribute('aria-hidden', 'true');
+      setImportant(legacySummary, 'display', 'none');
+      setImportant(legacySummary, 'visibility', 'hidden');
+      setImportant(legacySummary, 'height', '0');
+      setImportant(legacySummary, 'min-height', '0');
+      setImportant(legacySummary, 'margin', '0');
+      setImportant(legacySummary, 'padding', '0');
+      setImportant(legacySummary, 'overflow', 'hidden');
+    }
+
+    let agenda = document.getElementById(AGENDA_ID);
+    if(!agenda){
+      agenda = document.createElement('div');
+      agenda.id = AGENDA_ID;
+      agenda.className = 'desktop-copom-agenda-v648';
+      agenda.setAttribute('role', 'list');
+      agenda.setAttribute('aria-label', 'Calendário das 8 reuniões do Copom em 2026');
+      if(subhead && subhead.parentNode){
+        subhead.insertAdjacentElement('afterend', agenda);
+      }else{
+        copomBlock.insertBefore(agenda, copomBlock.firstChild);
+      }
+    }
+
+    const html = items.map(item => {
+      const data = buildTexts(item);
+      return `<article class="desktop-copom-card-v648 ${escapeHtml(data.kind)}" role="listitem" title="${escapeHtml(data.num)} reunião · ${escapeHtml(data.date)} · ${escapeHtml(data.status)}">
+        <span class="desktop-copom-num-v648">${escapeHtml(data.num)}</span>
+        <strong class="desktop-copom-date-v648">${escapeHtml(data.date)}</strong>
+        <span class="desktop-copom-status-v648">${escapeHtml(data.status)}</span>
+        <small class="desktop-copom-detail-v648">${escapeHtml(data.detail)}</small>
+      </article>`;
+    }).join('');
+
+    if(agenda.dataset.htmlV648 !== html){
+      agenda.dataset.htmlV648 = html;
+      agenda.innerHTML = html;
+    }
+
+    setImportant(copomBlock, 'padding', '14px 16px 16px');
+    setImportant(copomBlock, 'overflow', 'visible');
+    setImportant(agenda, 'display', 'grid');
+    setImportant(agenda, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
+    setImportant(agenda, 'gap', '8px');
+    setImportant(agenda, 'width', '100%');
+    setImportant(agenda, 'max-width', '100%');
+    setImportant(agenda, 'overflow', 'visible');
+  }
+
+  let scheduled = false;
+  function scheduleRender(){
+    if(scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(() => {
+      scheduled = false;
+      renderAgenda();
+    });
+  }
+
+  function boot(){
+    renderAgenda();
+    [100, 350, 700, 1200, 2200, 4200, 8000, 14000, 23000].forEach(ms => setTimeout(renderAgenda, ms));
+
+    const store = document.getElementById('copomMeetings');
+    if(store && !store.dataset.v648Observed){
+      store.dataset.v648Observed = '1';
+      new MutationObserver(scheduleRender).observe(store, {childList:true, subtree:true, characterData:true});
+    }
+
+    const legacySummary = document.getElementById('copomExecutiveSummaryV270');
+    if(legacySummary && !legacySummary.dataset.v648Observed){
+      legacySummary.dataset.v648Observed = '1';
+      new MutationObserver(scheduleRender).observe(legacySummary, {childList:true, subtree:true, characterData:true});
+    }
+
+    console.log('[Catálogo CAIXA] Agenda Copom desktop 8 cards ativa:', BUILD);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+
+  window.addEventListener('load', renderAgenda, {once:true});
+  window.addEventListener('pageshow', renderAgenda, {passive:true});
+  window.addEventListener('resize', scheduleRender, {passive:true});
+})();

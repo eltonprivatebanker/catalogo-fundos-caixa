@@ -1,0 +1,26 @@
+INSTRUÇÕES V648 — DESKTOP COPOM AGENDA 8 CARDS
+
+Objetivo:
+- Corrigir a v647 para exibir as 8 reuniões do Copom em grade compacta no desktop.
+- Manter o mobile preservado.
+
+Arquivos para subir:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css
+
+Principais ajustes:
+- Novo patch: desktop-rates-copom-agenda-v648.
+- Cria container dedicado #desktopCopomAgendaV648 para não sofrer sobrescrita dos patches legados do carrossel Copom.
+- Oculta no desktop o #copomExecutiveSummaryV270 legado.
+- Mostra as 8 reuniões em grid 4x2, com cards compactos.
+- Remove repetição visual de status como Mantida/Mantida ou Corte/Corte.
+- Atualiza cache do app.js para app.js?v=desktop-copom-agenda-8-v648.
+
+Teste recomendado:
+1. Subir os quatro arquivos.
+2. Limpar cache/forçar atualização.
+3. Abrir desktop em Referências de juros.
+4. Verificar que o Calendário Copom 2026 mostra 8 cards: jan, mar, abr, jun, ago, set, nov e dez.
+5. Conferir que o mobile não mudou.
