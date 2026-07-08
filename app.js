@@ -3862,9 +3862,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588','desktop-ranking-balanced-v645');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -3895,17 +3895,21 @@ function setCdiSort(dir){
       }).join('') +
     '</div>';
   }
-  function categoryRow(item, i, campo, periodo){
+  function categoryRow(item, i, campo, periodo, options){
     const r = item.row;
+    const opts = options || {};
+    const balanced = !!opts.balanced;
     const ratio = cdiRatioNumber(r, periodo);
     const width = ratio === null ? 0 : Math.max(8, Math.min(100, Math.abs(ratio)));
     const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
     const name = cleanFund(r.Fundo);
-    return '<article class="ranking-v562-podium-row ' + (i === 0 ? 'is-leader ' : '') + medalClass + '">' +
+    const leaderClass = (!balanced && i === 0) ? 'is-leader ' : '';
+    const displayName = (!balanced && i === 0) ? name : compactFund(name);
+    return '<article class="ranking-v562-podium-row ' + leaderClass + medalClass + '">' +
       '<div class="ranking-v562-medal"><span>' + esc(i + 1) + '</span></div>' +
       '<div class="ranking-v562-icon" aria-hidden="true">' + catIcon(item.cat) + '</div>' +
       '<div class="ranking-v562-fund">' +
-        '<strong title="' + esc(name) + '">' + esc(i === 0 ? name : compactFund(name)) + '</strong>' +
+        '<strong title="' + esc(name) + '">' + esc(displayName) + '</strong>' +
         '<small>' + esc(shortCat(item.cat)) + '</small>' +
       '</div>' +
       '<div class="ranking-v562-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></div>' +
@@ -3920,21 +3924,27 @@ function setCdiSort(dir){
     const top = winners.slice(0,10);
     if(!top.length) return '';
 
-    const leader = categoryRow(top[0], 0, campo, periodo);
-    const left = top.slice(1,5).map(function(item, idx){
-      return categoryRow(item, idx + 1, campo, periodo);
-    }).join('');
-    const right = top.slice(5,10).map(function(item, idx){
-      return categoryRow(item, idx + 5, campo, periodo);
-    }).join('');
+    /* v645 — Desktop: quando há 6 ou mais itens, o ranking deixa de ter
+       o primeiro card ocupando a linha inteira e passa a usar duas colunas
+       equilibradas. Isso evita a sensação de sobra/desalinhamento na posição 10. */
+    if(top.length >= 6){
+      const split = Math.ceil(top.length / 2);
+      const left = top.slice(0, split).map(function(item, idx){
+        return categoryRow(item, idx, campo, periodo, { balanced:true });
+      }).join('');
+      const right = top.slice(split).map(function(item, idx){
+        return categoryRow(item, idx + split, campo, periodo, { balanced:true });
+      }).join('');
 
-    if(!left && !right) return leader;
-
-    return leader +
-      '<div class="ranking-v590-columns ' + (right ? 'has-continuation' : 'single-column') + '">' +
+      return '<div class="ranking-v590-columns ranking-v645-balanced-columns has-continuation">' +
         '<div class="ranking-v590-column ranking-v590-column-primary">' + left + '</div>' +
-        (right ? '<div class="ranking-v590-column ranking-v590-column-continuation">' + right + '</div>' : '') +
+        '<div class="ranking-v590-column ranking-v590-column-continuation">' + right + '</div>' +
       '</div>';
+    }
+
+    return top.map(function(item, idx){
+      return categoryRow(item, idx, campo, periodo);
+    }).join('');
   }
   function alertRows(rows, campo){
     return rows.map(function(r, i){
@@ -26408,7 +26418,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -26488,7 +26498,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
@@ -26551,7 +26561,7 @@ function buildDetailPanel(r,colspan){
     }catch(_){}
 
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
@@ -26571,7 +26581,7 @@ function buildDetailPanel(r,colspan){
     if(!isDesktop()) return;
 	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588');
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_DESKTOP_SIDE_NAV_MARKET_FIX_V588';
+	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
 
     var body = document.getElementById('dolarTimelineBody');
     if(body){

@@ -1,0 +1,20 @@
+CATÁLOGO DE FUNDOS CAIXA — v645
+
+Ajuste aplicado:
+- Ranking desktop com 6 ou mais itens agora usa duas colunas equilibradas.
+- O card da posição 1 deixa de ocupar a linha inteira nesse modo.
+- Para 10 itens, a leitura fica 1–5 na coluna esquerda e 6–10 na direita.
+- Para até 5 itens, mantém lista única com destaque visual do primeiro colocado.
+- Mobile preservado.
+- Desktop v606 preservado; alteração concentrada no ranking desktop v562/v590.
+
+Arquivos para subir no GitHub:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css
+
+Depois de subir, testar com Ctrl+F5 e validar principalmente:
+- Ranking > Universo/Categoria = Multimercado > 12M
+- Ranking geral com todas categorias
+- Tela mobile para confirmar que não houve alteração visual indesejada.

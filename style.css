@@ -79097,3 +79097,28 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     font-size:.70rem!important;
   }
 }
+
+/* =========================================================
+   PATCH v645 — Desktop: ranking em duas colunas equilibradas
+   ---------------------------------------------------------
+   Ativo apenas no desktop. Quando o JS monta .ranking-v645-balanced-columns,
+   o card #1 deixa de ocupar a largura inteira para manter 1–5 / 6–10 alinhado.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-balanced-v645 body #rankingsSection .ranking-v645-balanced-columns{
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    gap:8px!important;
+    align-items:start!important;
+  }
+
+  html.desktop-ranking-balanced-v645 body #rankingsSection .ranking-v645-balanced-columns .ranking-v562-podium-row.is-leader{
+    grid-column:auto!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1120px){
+  html.desktop-ranking-balanced-v645 body #rankingsSection .ranking-v645-balanced-columns{
+    grid-template-columns:1fr!important;
+  }
+}
+
