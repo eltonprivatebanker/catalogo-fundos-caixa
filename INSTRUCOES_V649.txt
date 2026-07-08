@@ -1,0 +1,25 @@
+INSTRUÇÕES V649 — DESKTOP JUROS POLIMENTO FINAL
+
+Arquivos para subir:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css
+
+Escopo:
+- Somente desktop. Mobile preservado.
+
+O que mudou:
+1. Topo de Juros de referência agora tem 4 KPIs:
+   - Selic meta
+   - CDI
+   - CDI no ano
+   - CDI 12 meses
+2. Bloco CDI inferior deixa de repetir acumulado no ano e 12 meses.
+   - Mantém apenas mês atual e último mês fechado.
+3. Calendário Copom 2026 preserva os 8 cards em grade 4x2, com refinamento de altura e tipografia.
+4. Próxima reunião passa a usar texto mais institucional: Aguardando decisão.
+5. Cache atualizado para app.js?v=desktop-rates-polish-v649.
+
+Validação:
+- app.js validado com node --check.

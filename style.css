@@ -79511,3 +79511,125 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
+
+
+/* ============================================================
+   PATCH v649 — Desktop: polimento final de Juros de referência
+   Escopo desktop somente. Mobile preservado.
+   ============================================================ */
+@media (min-width:769px){
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-reference-v167{
+    gap:14px!important;
+    padding:18px 20px 20px!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:10px!important;
+    width:100%!important;
+    max-width:100%!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167 > .rate-summary-card-v167{
+    min-height:92px!important;
+    padding:13px 14px!important;
+    border-radius:13px!important;
+    background:linear-gradient(180deg,rgba(12,16,29,.78),rgba(7,10,19,.90))!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167 > .cdi-year-summary-v649{
+    border-color:rgba(232,187,106,.18)!important;
+    background:linear-gradient(180deg,rgba(33,25,12,.44),rgba(7,10,19,.90))!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167 > .cdi-12m-summary-v649{
+    border-color:rgba(148,163,184,.16)!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167 > .rate-summary-card-v167 span{
+    font-size:.58rem!important;
+    letter-spacing:.13em!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167 > .rate-summary-card-v167 .rate-summary-value-v167 strong{
+    font-size:1.12rem!important;
+    line-height:1!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167 > .rate-summary-card-v167 small{
+    font-size:.62rem!important;
+    line-height:1.15!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .copom-compact-v167{
+    padding:14px 16px 14px!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .desktop-copom-agenda-v648{
+    gap:8px!important;
+    margin-top:10px!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .desktop-copom-card-v648{
+    min-height:66px!important;
+    padding:9px 10px 9px 12px!important;
+    border-radius:12px!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .desktop-copom-num-v648{
+    width:25px!important;
+    min-width:25px!important;
+    height:23px!important;
+    border-radius:7px!important;
+    font-size:.58rem!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .desktop-copom-date-v648{
+    font-size:.84rem!important;
+    line-height:1.02!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .desktop-copom-status-v648{
+    font-size:.64rem!important;
+    line-height:1.08!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado .desktop-copom-detail-v648{
+    font-size:.56rem!important;
+    line-height:1.10!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado #cdiYearHistory{
+    padding:12px 12px 14px!important;
+    border-radius:18px!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado #cdiYearHistory .reference-subhead-v167{
+    margin-bottom:10px!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado #cdiYearHistory .cdi-kpis-v271{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+    margin:0!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado #cdiYearHistory .cdi-kpi-v271.is-total,
+  html.desktop-rates-polish-v649 body #sec-mercado #cdiYearHistory .cdi-kpi-v271.is-12m{
+    display:none!important;
+  }
+
+  html.desktop-rates-polish-v649 body #sec-mercado #cdiYearHistory .cdi-kpi-v271.is-current,
+  html.desktop-rates-polish-v649 body #sec-mercado #cdiYearHistory .cdi-kpi-v271.is-lastclosed{
+    min-height:70px!important;
+    padding:13px 14px!important;
+  }
+}
+
+@media (min-width:769px) and (max-width:1180px){
+  html.desktop-rates-polish-v649 body #sec-mercado .rates-summary-v167{
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  }
+}
