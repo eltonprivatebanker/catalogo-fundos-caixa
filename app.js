@@ -28938,3 +28938,34 @@ function buildDetailPanel(r,colspan){
     if(ev.target && ev.target.closest && ev.target.closest('#mobileSelicV400')) setTimeout(apply, 30);
   });
 })();
+
+
+/* PATCH v654 — Desktop: cores semânticas no calendário Copom
+   Escopo: SOMENTE DESKTOP. Visual sem alterar dados, layout ou mobile. */
+(function desktopCopomSemanticColorsV654(){
+  var BUILD = 'ELTAUM_DESKTOP_COPOM_SEMANTIC_COLORS_V654';
+  var PATCH_CLASS = 'desktop-copom-semantic-colors-v654';
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+  function apply(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+  function boot(){
+    apply();
+    [100, 350, 900, 1800, 3600, 7000].forEach(function(ms){ setTimeout(apply, ms); });
+    var agenda = document.getElementById('desktopCopomAgendaV648');
+    if(agenda && !agenda.dataset.v654Observed){
+      agenda.dataset.v654Observed = '1';
+      new MutationObserver(apply).observe(agenda, {childList:true, subtree:true, characterData:true});
+    }
+    console.log('[Catálogo CAIXA] Cores semânticas Copom desktop ativas:', BUILD);
+  }
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', apply, {once:true});
+  window.addEventListener('pageshow', apply, {passive:true});
+})();

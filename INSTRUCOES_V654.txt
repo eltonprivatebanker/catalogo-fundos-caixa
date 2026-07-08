@@ -1,0 +1,20 @@
+V654 — Desktop Copom com cores semânticas
+
+Escopo: somente desktop.
+
+Arquivos para subir no GitHub:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css
+
+O que mudou:
+- Cores semânticas no Calendário Copom 2026.
+- "Corte -0,25 p.p." passa a aparecer em vermelho/rosa suave.
+- "Mantida" fica neutro.
+- "Próxima reunião" fica em dourado.
+- "Prevista" fica em cinza/azul discreto.
+- Não altera layout, dados, ranking ou mobile.
+
+Cache atualizado:
+app.js?v=desktop-copom-semantic-colors-v654

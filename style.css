@@ -79816,3 +79816,48 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     letter-spacing:-.01em!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v654 — Desktop: cores semânticas no Calendário Copom
+   Escopo: somente desktop. Não altera mobile nem layout.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-cut{
+    border-color:rgba(255,115,144,.22)!important;
+  }
+
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-cut .desktop-copom-status-v648{
+    color:#ff7d99!important;
+    font-weight:900!important;
+  }
+
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-cut .desktop-copom-detail-v648{
+    color:#aeb8d3!important;
+  }
+
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-hold .desktop-copom-status-v648{
+    color:#e2e8f0!important;
+    font-weight:850!important;
+  }
+
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-next .desktop-copom-status-v648{
+    color:#f4c76f!important;
+    font-weight:900!important;
+  }
+
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-future .desktop-copom-status-v648{
+    color:#aab6ca!important;
+    font-weight:850!important;
+  }
+
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-hike .desktop-copom-status-v648{
+    color:#7dd3fc!important;
+    font-weight:900!important;
+  }
+
+  html.desktop-copom-semantic-colors-v654 body #sec-mercado .desktop-copom-card-v648.is-cut .desktop-copom-num-v648{
+    border-color:rgba(255,115,144,.34)!important;
+    color:#ffd0da!important;
+  }
+}
