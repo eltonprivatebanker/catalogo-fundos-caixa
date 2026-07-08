@@ -79633,3 +79633,38 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v650 — Desktop: IPCA aguardando divulgação + Dólar %
+   Escopo: somente desktop / Indicadores de mercado.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-market-ipca-dolar-v650 body #sec-mercado .market-awaiting-value-v650,
+  html.desktop-market-ipca-dolar-v650 body #sec-mercado .market-v159-kpi.is-awaiting-v650 strong{
+    color:#cbd5e1!important;
+    font-size:clamp(.88rem, .85vw, 1rem)!important;
+    line-height:1.05!important;
+    letter-spacing:-.03em!important;
+    white-space:normal!important;
+  }
+
+  html.desktop-market-ipca-dolar-v650 body #sec-mercado .ipca-pending-v650 .period-status{
+    color:#e8bb6a!important;
+    font-weight:800!important;
+    letter-spacing:0!important;
+    text-transform:none!important;
+  }
+
+  html.desktop-market-ipca-dolar-v650 body #sec-mercado .market-v159-kpi.is-awaiting-v650{
+    background:linear-gradient(180deg,rgba(30,35,48,.72),rgba(13,17,30,.92))!important;
+  }
+
+  html.desktop-market-ipca-dolar-v650 body #sec-mercado .market-v159-kpi.is-awaiting-v650 small em{
+    color:#e8bb6a!important;
+  }
+
+  html.desktop-market-ipca-dolar-v650 body #sec-mercado #row-dolar #dolar-ant-var{
+    white-space:nowrap!important;
+  }
+}

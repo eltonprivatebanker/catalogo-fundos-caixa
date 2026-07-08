@@ -1,0 +1,16 @@
+V650 — Desktop: IPCA aguardando divulgação + variação % do dólar
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+
+Escopo:
+- Apenas desktop / Indicadores de mercado.
+- Mobile preservado.
+
+Ajustes:
+1. Se o fechamento exibido for jun/2026, mas o último IPCA disponível ainda for mai/2026, o card deixa de mostrar +0,58% como se fosse junho.
+2. O IPCA passa a exibir “Aguardando divulgação” e, como referência secundária, “Último disponível: mai/2026 +0,58%”.
+3. O Dólar PTAX do mês fechado passa a mostrar cotação e variação percentual do mês.
+4. Cache atualizado para app.js?v=market-ipca-dolar-v650.

@@ -1506,6 +1506,24 @@ function atualizarTabelaIndicadores(){
     if(el) el.className = val === null ? 'v2-val dash' : 'v2-val neu';
   };
 
+  const setAwaitingValueV650 = (id, text='Aguardando divulgação') => {
+    const el=$(id);
+    if(el){
+      el.textContent = text;
+      el.className = 'v2-val dash market-awaiting-value-v650';
+    }
+  };
+
+  const setSubIpcaPendingV650 = (id, lastLabel, lastValue, awaitingLabel) => {
+    const el=$(id);
+    if(!el) return;
+    const label = limparStatus(lastLabel || 'último dado');
+    const val = num(lastValue);
+    const valTxt = val === null ? '—' : pctTxt(val);
+    const aguardando = limparStatus(awaitingLabel || 'mês fechado');
+    el.innerHTML = `<span class="period-line status-aguardando ipca-pending-v650"><span class="period-label">Aguardando ${aguardando}</span><span class="period-dot">·</span><span class="period-status">último: ${label} ${valTxt}</span></span>`;
+  };
+
   const monthKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
   const labelFromDate = dataStr => {
     if(!dataStr) return null;
@@ -1635,8 +1653,29 @@ function atualizarTabelaIndicadores(){
   const ipcaAno = num(cards.ipca?.acum_ano) ?? num(indicState.ipca.ano);
   const ipcaAcum = num(cards.ipca?.[`acum_${m}m`]) ?? num(indicState.ipca[`m${m}`]);
 
-  setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2, false);
-  setSubStatus('ipca-mes-ant-sub', ipcaRef, 'fechado');
+  const ipcaClosedKeyV650 = parseLabelKey(fallbackMesFechado);
+  const ipcaRefKeyV650 = parseLabelKey(ipcaRef);
+  const ipcaMesFechadoDisponivelV650 = ipcaMes !== null && (!ipcaClosedKeyV650 || !ipcaRefKeyV650 || ipcaRefKeyV650 === ipcaClosedKeyV650);
+  const rowIpcaV650 = $('row-ipca');
+  if(ipcaMesFechadoDisponivelV650){
+    setPct('ipca-mes-ant', ipcaMes, 'bar-ipca-ant', 2, false);
+    setSubStatus('ipca-mes-ant-sub', ipcaRef, 'fechado');
+    if(rowIpcaV650){
+      rowIpcaV650.dataset.ipcaClosedStatus = 'available';
+      rowIpcaV650.dataset.ipcaLastAvailable = '';
+      rowIpcaV650.dataset.ipcaAwaitingMonth = '';
+    }
+  }else{
+    setAwaitingValueV650('ipca-mes-ant', 'Aguardando divulgação');
+    const barIpcaAntV650 = $('bar-ipca-ant');
+    if(barIpcaAntV650){ barIpcaAntV650.style.width = '0%'; barIpcaAntV650.className = ''; }
+    setSubIpcaPendingV650('ipca-mes-ant-sub', ipcaRef, ipcaMes, fallbackMesFechado);
+    if(rowIpcaV650){
+      rowIpcaV650.dataset.ipcaClosedStatus = 'pending';
+      rowIpcaV650.dataset.ipcaLastAvailable = `${limparStatus(ipcaRef)} ${ipcaMes === null ? '—' : pctTxt(ipcaMes)}`;
+      rowIpcaV650.dataset.ipcaAwaitingMonth = limparStatus(fallbackMesFechado);
+    }
+  }
   const ipcaCurCell = document.querySelector('#row-ipca .td-cur');
   if(ipcaCurCell){
     ipcaCurCell.innerHTML = `<div class="v2-val dash">—</div><div class="v2-sub status-line">${subStatus(mesAtualLabel, 'aguardando')}</div>`;
@@ -1662,6 +1701,7 @@ function atualizarTabelaIndicadores(){
   const dolarAcum = num(idxDolar[`acum_${m}m`]) ?? num(cards.dolar?.[`acum_${m}m`]) ?? num(indicState.dolarPct[`m${m}`]);
 
   setMoney('dolar-ant-cot', dolarFechado.valor ?? indicState.dolarBRL.mes);
+  setPct('dolar-ant-var', dolarFechado.variacao, 'bar-dolar-ant', 10, false, '—');
   setSubStatus('dolar-ant-sub', dolarFechado.label, 'fechado');
 
   setMoney('dolar-cur-cot', dolarAtualInfo.valor, '—');
@@ -16066,6 +16106,10 @@ if(!isSearchInput(el)) return;
     const ipcaCurrentEl=qs('#row-ipca .td-cur');
     const ipcaCurrentTxt=clean(ipcaCurrentEl?.textContent||'');
     const ipcaCurrent = /aguard/i.test(ipcaCurrentTxt) ? '—' : valueOrDash(ipcaCurrentTxt.match(/[+-]?\d+(?:[.,]\d+)?%/)?.[0]||'—');
+    const ipcaRow=qs('#row-ipca');
+    const ipcaClosedStatus=ipcaRow?.dataset?.ipcaClosedStatus || '';
+    const ipcaLastAvailable=valueOrDash(ipcaRow?.dataset?.ipcaLastAvailable || '—');
+    const ipcaAwaitingMonth=valueOrDash(ipcaRow?.dataset?.ipcaAwaitingMonth || closed);
     return {
       closed,current,accum,
       cdi:{
@@ -16078,7 +16122,7 @@ if(!isSearchInput(el)) return;
         year:valueOrDash(text('cdi-ano')),
         accum:valueOrDash(text('cdi-acum-v2'))
       },
-      ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2'))},
+      ipca:{closed:valueOrDash(text('ipca-mes-ant')),current:ipcaCurrent,year:valueOrDash(text('ipca-ano-v2')),accum:valueOrDash(text('ipca-acum-v2')),closedStatus:ipcaClosedStatus,lastAvailable:ipcaLastAvailable,awaitingMonth:ipcaAwaitingMonth},
       dolar:{closedQuote:valueOrDash(text('dolar-ant-cot')),closedVar:valueOrDash(text('dolar-ant-var')),currentQuote:valueOrDash(text('dolar-cur-cot')),currentVar:valueOrDash(text('dolar-cur-var')),year:valueOrDash(text('dolar-ano-v2')),accum:valueOrDash(text('dolar-acum-v2'))},
       ibov:{closedPoints:valueOrDash(text('ibov-ant-pts')),closedVar:valueOrDash(text('ibov-ant-var')),currentPoints:valueOrDash(text('ibov-cur-pts')),currentVar:valueOrDash(text('ibov-cur-var')),year:valueOrDash(text('ibov-ano-v2')),accum:valueOrDash(text('ibov-acum-v2'))},
       us:[
@@ -16099,7 +16143,8 @@ if(!isSearchInput(el)) return;
   }
   function closedMetric(label, main, subLabel, subValue, mainClass=''){
     const cls=mainClass || pctClass(main);
-    return `<article class="market-v159-kpi"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong><small><b>${esc(subLabel)}</b><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))}</em></small></article>`;
+    const awaiting=/aguard/i.test(clean(main));
+    return `<article class="market-v159-kpi${awaiting?' is-awaiting-v650':''}"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong><small><b>${esc(subLabel)}</b><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))}</em></small></article>`;
   }
   function currentMetric(label, main, variation, mainClass='neu'){
     return `<div class="market-v159-current-metric"><span>${esc(label)}</span><strong class="${mainClass}">${esc(valueOrDash(main))}</strong><em class="${pctClass(variation)}">${esc(valueOrDash(variation))}</em></div>`;
@@ -16234,7 +16279,7 @@ if(!isSearchInput(el)) return;
           <div class="market-v159-section-head"><div><span>Fechamento</span><strong>${esc(data.closed)}</strong></div><small>Último mês consolidado</small></div>
           <div class="market-v159-kpi-grid">
             ${closedMetric('CDI',data.cdi.closed,data.accum,data.cdi.accum)}
-            ${closedMetric('IPCA',data.ipca.closed,data.accum,data.ipca.accum)}
+            ${closedMetric('IPCA',data.ipca.closed,/pending/i.test(data.ipca.closedStatus||'')?'Último disponível':data.accum,/pending/i.test(data.ipca.closedStatus||'')?data.ipca.lastAvailable:data.ipca.accum)}
             ${closedMetric('Dólar PTAX',data.dolar.closedQuote,'Variação no mês',data.dolar.closedVar,'neu')}
             ${closedMetric('Ibovespa',data.ibov.closedPoints,'Variação no mês',data.ibov.closedVar,'neu')}
           </div>
