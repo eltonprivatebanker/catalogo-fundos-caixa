@@ -1,0 +1,28 @@
+Catálogo de Fundos CAIXA — v646
+
+Objetivo: sinalizar no ranking os fundos fechados para captação.
+
+Arquivos para subir no GitHub:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css
+
+Alterações realizadas:
+1. app.js
+   - Adicionado detector rankingFundClosedForCaptationV646().
+   - O ranking identifica fundos com ic_aberto_captacao === false ou status textual fechado/encerrado/suspenso.
+   - O fundo continua no ranking, apenas recebe classe is-closed-captacao-v646 e badge 🔒 Captação fechada.
+
+2. style.css
+   - Adicionado patch desktop-ranking-closed-badge-v646.
+   - Badge discreto no metadado do fundo, sem alterar ordenação.
+
+3. index.html
+   - Adicionada classe desktop-ranking-closed-badge-v646.
+   - Cache atualizado para app.js?v=ranking-captacao-fechada-v646.
+   - Meta app-build atualizada para ELTAUM_RANKING_CAPTACAO_FECHADA_V646.
+
+Observação:
+- tokens-caixa.css foi preservado sem alteração.
+- O ajuste é visual/comercial: não remove fundos fechados, apenas sinaliza.

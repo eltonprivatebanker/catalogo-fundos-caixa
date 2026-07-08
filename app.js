@@ -3862,9 +3862,9 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588','desktop-ranking-balanced-v645');
+    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588','desktop-ranking-balanced-v645','desktop-ranking-closed-badge-v646');
     const meta = q('meta[name="app-build"]');
-    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
+    if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
     const period = q('#rankingPeriodSelectV136');
     const clsSelect = q('#rankingClassSelectV136');
     const risk = q('#rankingRiskSelectV198');
@@ -3895,6 +3895,30 @@ function setCdiSort(dir){
       }).join('') +
     '</div>';
   }
+  function rankingFundClosedForCaptationV646(row){
+    try{
+      const meta = row && (row.__fundosMeta || (typeof obterMetaFundo === 'function' ? obterMetaFundo(row) : null));
+      if(meta && meta.ic_aberto_captacao === false) return true;
+      if(meta && meta.ic_aberto_captacao === true) return false;
+
+      const raw = typeof primeiroCampoFundo === 'function' ? primeiroCampoFundo(row,[
+        'Status de Captação','Status Captação','Status Captacao','Captação','Captacao',
+        'Aberto para Captação','Aberto para Captacao','Situação de Captação','Situacao de Captacao'
+      ]) : '';
+      const norm = typeof normalizarStatusOperacional === 'function'
+        ? normalizarStatusOperacional(raw)
+        : String(raw || '').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase();
+
+      return /FECHAD|ENCERRAD|SUSPENS/.test(norm);
+    }catch(e){
+      return false;
+    }
+  }
+  function rankingClosedBadgeV646(row){
+    return rankingFundClosedForCaptationV646(row)
+      ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span aria-hidden="true">🔒</span><b>Captação fechada</b></span>'
+      : '';
+  }
   function categoryRow(item, i, campo, periodo, options){
     const r = item.row;
     const opts = options || {};
@@ -3905,12 +3929,14 @@ function setCdiSort(dir){
     const name = cleanFund(r.Fundo);
     const leaderClass = (!balanced && i === 0) ? 'is-leader ' : '';
     const displayName = (!balanced && i === 0) ? name : compactFund(name);
-    return '<article class="ranking-v562-podium-row ' + leaderClass + medalClass + '">' +
+    const closedBadge = rankingClosedBadgeV646(r);
+    const closedClass = closedBadge ? ' is-closed-captacao-v646' : '';
+    return '<article class="ranking-v562-podium-row ' + leaderClass + medalClass + closedClass + '">' +
       '<div class="ranking-v562-medal"><span>' + esc(i + 1) + '</span></div>' +
       '<div class="ranking-v562-icon" aria-hidden="true">' + catIcon(item.cat) + '</div>' +
       '<div class="ranking-v562-fund">' +
         '<strong title="' + esc(name) + '">' + esc(displayName) + '</strong>' +
-        '<small>' + esc(shortCat(item.cat)) + '</small>' +
+        '<small class="ranking-v646-meta-line"><span>' + esc(shortCat(item.cat)) + '</span>' + closedBadge + '</small>' +
       '</div>' +
       '<div class="ranking-v562-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></div>' +
       '<div class="ranking-v562-cdi">' +
@@ -26418,7 +26444,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
+	    if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
     var closedMonthLaunch = document.querySelector('#sec-mercado #closedMonthLaunch.closed-month-launch');
     if(closedMonthLaunch){
       closedMonthLaunch.style.setProperty('display','none','important');
@@ -26498,7 +26524,7 @@ function buildDetailPanel(r,colspan){
 	      'desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588'
 	    );
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
+	    if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
   }
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
   else sync();
@@ -26561,7 +26587,7 @@ function buildDetailPanel(r,colspan){
     }catch(_){}
 
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
+	    if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', sync, {once:true});
@@ -26581,7 +26607,7 @@ function buildDetailPanel(r,colspan){
     if(!isDesktop()) return;
 	    document.documentElement.classList.add('desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588');
 	    var meta = document.querySelector('meta[name="app-build"]');
-	    if(meta) meta.content = 'ELTAUM_RANKING_BALANCED_COLUMNS_V645';
+	    if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
 
     var body = document.getElementById('dolarTimelineBody');
     if(body){
