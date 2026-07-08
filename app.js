@@ -1205,14 +1205,14 @@ function renderDolarMensais(){
 
   const container = $('dolarMonths');
   if(!container) return;
-  container.innerHTML = closedEntries.map(([key,item]) => {
+  container.innerHTML = closedEntries.map(([key,item], index) => {
     const [ano,mes] = key.split('-');
     const label = item._mes_label || `${MESES_PT[parseInt(mes)-1]}/${ano}`;
     const val = parseFloat(item.cotacaoVenda || item.cotacao || 0);
     const varPct = calcVar(key,item);
     const cls = varPct === null ? 'zero' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
     const varTxt = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
-    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98">
+    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98${index === 0 ? ' is-latest-v655' : ''}" aria-label="${label}: fechamento R$ ${fmtBRL(val)}; variação ${varTxt}">
       <span class="dolar-month-label">${label}</span>
       <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
       <span class="dolar-month-var ${cls}">${varTxt}</span>

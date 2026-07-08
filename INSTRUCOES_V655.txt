@@ -1,0 +1,17 @@
+V655 — Desktop: Dólar PTAX · fechamentos mensais em cards compactos
+
+Escopo:
+- Somente versão desktop da seção Dólar PTAX.
+- Mobile preservado.
+
+Arquivos:
+- index.html: adiciona classe desktop-dolar-month-cards-v655 e atualiza cache do app.js.
+- app.js: marca o mês mais recente como is-latest-v655 e melhora acessibilidade do card.
+- style.css: converte a lista/tabela de fechamentos mensais em grid de cards compactos 3x2 no desktop.
+- tokens-caixa.css: sem alteração.
+
+Teste recomendado:
+- Abrir seção Dólar PTAX no desktop.
+- Confirmar que os fechamentos mensais aparecem como 6 cards em 3 colunas x 2 linhas.
+- Confirmar que o mês mais recente está levemente destacado.
+- Confirmar que no mobile o comportamento continua como carrossel/compacto anterior.
