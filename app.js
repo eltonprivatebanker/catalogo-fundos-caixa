@@ -28132,3 +28132,220 @@ function buildDetailPanel(r,colspan){
     return out;
   };
 })();
+
+/* ============================================================
+   PATCH v647 — Desktop: Referências de juros + Agenda Copom 2026
+   Escopo: SOMENTE DESKTOP (min-width: 769px).
+   - Mantém o mobile preservado.
+   - Mostra as 8 reuniões do Copom em grade 4x2, sem rolagem.
+   - Corrige a semântica do bloco de juros e reduz textos redundantes.
+   ============================================================ */
+(function desktopRatesCopomAgendaV647(){
+  const MQ_DESKTOP = '(min-width: 769px)';
+
+  function isDesktop(){
+    return window.matchMedia(MQ_DESKTOP).matches;
+  }
+
+  function norm(txt){
+    return String(txt || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function setImportant(el, prop, value){
+    if(el && el.style) el.style.setProperty(prop, value, 'important');
+  }
+
+  function statusKind(item, result){
+    const cls = String(item?.className || '').toLowerCase();
+    const r = String(result || '').toLowerCase();
+    if(cls.includes('next') || r.includes('próxima') || r.includes('proxima')) return 'is-next';
+    if(cls.includes('future') || r.includes('prevista')) return 'is-future';
+    if(cls.includes('cut') || r.includes('corte')) return 'is-cut';
+    if(cls.includes('hike') || r.includes('alta')) return 'is-hike';
+    if(cls.includes('hold') || r.includes('mantida') || r.includes('manutenção') || r.includes('manutencao')) return 'is-hold';
+    return 'is-neutral';
+  }
+
+  function statusLabel(result, kind){
+    const r = norm(result);
+    if(kind === 'is-next') return 'Próxima';
+    if(kind === 'is-future') return 'Prevista';
+    if(kind === 'is-cut') return 'Corte';
+    if(kind === 'is-hike') return 'Alta';
+    if(kind === 'is-hold') return 'Mantida';
+    if(!r) return 'Status';
+    return r.replace(/→/g, '').slice(0, 18);
+  }
+
+  function resultDetail(result, kind){
+    const r = norm(result).replace(/\s*★\s*/g, '');
+    if(kind === 'is-next') return 'Decisão a definir';
+    if(kind === 'is-future') return 'Sem decisão';
+    if(!r) return '—';
+    return r.replace(/\s*→\s*/g, ' → ');
+  }
+
+  function applyDesktopLayout(){
+    if(!isDesktop()) return;
+
+    const root = document.querySelector('#sec-mercado .rates-reference-v167');
+    const head = root?.querySelector('.market-reference-head-v167');
+    const summaryCards = root?.querySelector('.rates-summary-v167');
+    const detailGrid = root?.querySelector('.rates-detail-grid-v167');
+    const copomBlock = root?.querySelector('.copom-compact-v167');
+    const cdiBlock = document.getElementById('cdiYearHistory');
+    const cdiKpis = document.querySelector('#cdiYearHistory .cdi-kpis-v271');
+
+    if(root){
+      setImportant(root, 'display', 'grid');
+      setImportant(root, 'grid-template-columns', '1fr');
+      setImportant(root, 'grid-template-areas', '"head" "summary" "detail"');
+      setImportant(root, 'gap', '14px');
+      setImportant(root, 'padding', '18px 20px 20px');
+      setImportant(root, 'overflow', 'visible');
+    }
+
+    if(head){
+      setImportant(head, 'grid-area', 'head');
+      setImportant(head, 'padding', '0 0 8px');
+      setImportant(head, 'margin', '0');
+    }
+
+    if(summaryCards){
+      setImportant(summaryCards, 'grid-area', 'summary');
+      setImportant(summaryCards, 'display', 'grid');
+      setImportant(summaryCards, 'grid-template-columns', 'repeat(2, minmax(0, 1fr))');
+      setImportant(summaryCards, 'gap', '12px');
+      setImportant(summaryCards, 'width', '100%');
+    }
+
+    if(detailGrid){
+      setImportant(detailGrid, 'grid-area', 'detail');
+      setImportant(detailGrid, 'display', 'grid');
+      setImportant(detailGrid, 'grid-template-columns', '1fr');
+      setImportant(detailGrid, 'gap', '12px');
+      setImportant(detailGrid, 'width', '100%');
+    }
+
+    if(copomBlock){
+      setImportant(copomBlock, 'padding', '14px 16px 12px');
+      setImportant(copomBlock, 'border-radius', '16px');
+      setImportant(copomBlock, 'overflow', 'visible');
+    }
+
+    if(cdiBlock){
+      setImportant(cdiBlock, 'margin', '0');
+      setImportant(cdiBlock, 'padding', '12px 12px 14px');
+    }
+
+    if(cdiKpis){
+      setImportant(cdiKpis, 'display', 'grid');
+      setImportant(cdiKpis, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
+      setImportant(cdiKpis, 'gap', '10px');
+    }
+  }
+
+  function applySemanticTexts(){
+    if(!isDesktop()) return;
+
+    const ratesTitle = document.getElementById('ratesReferenceTitleV167');
+    if(ratesTitle) ratesTitle.textContent = 'Juros de referência';
+
+    const ratesSubtitle = ratesTitle?.closest('.market-reference-head-v167')?.querySelector('p');
+    if(ratesSubtitle) ratesSubtitle.textContent = 'Selic meta, CDI e calendário Copom usados como referência no painel.';
+
+    const copomTitle = document.getElementById('copomCompactTitleV167');
+    if(copomTitle) copomTitle.textContent = 'Calendário Copom 2026';
+
+    const copomSubtitle = copomTitle?.closest('.reference-subhead-v167')?.querySelector('small');
+    if(copomSubtitle) copomSubtitle.textContent = 'Decisões realizadas e próximas reuniões de política monetária.';
+
+    const cdiTitle = document.getElementById('cdiYearHistoryTitle');
+    if(cdiTitle) cdiTitle.textContent = 'CDI em 2026';
+
+    const cdiSubtitle = cdiTitle?.closest('.reference-subhead-v167')?.querySelector('small');
+    if(cdiSubtitle) cdiSubtitle.textContent = 'Mês atual, último mês fechado e acumulados.';
+  }
+
+  function buildDesktopCopomAgenda(){
+    if(!isDesktop()) return;
+
+    const summary = document.getElementById('copomExecutiveSummaryV270');
+    const store = document.getElementById('copomMeetings');
+    if(!summary || !store) return;
+
+    const items = [...store.querySelectorAll('.copom-item')]
+      .sort((a,b) => Number(a.dataset.originalOrder ?? 999) - Number(b.dataset.originalOrder ?? 999));
+
+    if(items.length < 2) return;
+
+    const html = items.map(item => {
+      const num = norm(item.querySelector('.copom-num')?.textContent).replace(/\s*reuni[aã]o\b/i, '').trim();
+      const date = norm(item.querySelector('.copom-date')?.textContent);
+      const result = norm(item.querySelector('.copom-result')?.textContent);
+      const kind = statusKind(item, result);
+      const label = statusLabel(result, kind);
+      const detail = resultDetail(result, kind);
+      return `
+        <article class="copom-exec-card-v270 copom-agenda-card-v647 ${kind}" role="listitem">
+          <span class="copom-exec-kicker-v270">${num || 'Reunião'}</span>
+          <strong class="copom-exec-date-v270">${date || '—'}</strong>
+          <div class="copom-exec-meta-v270">
+            <span class="copom-exec-status-v270 ${kind}">${label}</span>
+          </div>
+          <small class="copom-agenda-result-v647">${detail}</small>
+        </article>`;
+    }).join('');
+
+    if(summary.dataset.v647Html !== html){
+      summary.dataset.v647Html = html;
+      summary.dataset.v321Built = '0';
+      summary.dataset.v647Built = '1';
+      summary.classList.add('copom-agenda-grid-v647');
+      summary.setAttribute('role', 'list');
+      summary.setAttribute('aria-label', 'Calendário das 8 reuniões do Copom em 2026');
+      summary.innerHTML = html;
+    }
+
+    setImportant(summary, 'display', 'grid');
+    setImportant(summary, 'grid-template-columns', 'repeat(4, minmax(0, 1fr))');
+    setImportant(summary, 'gap', '8px');
+    setImportant(summary, 'overflow', 'visible');
+    setImportant(summary, 'scroll-snap-type', 'none');
+    setImportant(summary, 'width', '100%');
+    setImportant(summary, 'max-width', '100%');
+
+    summary.querySelectorAll('.copom-agenda-card-v647').forEach(card => {
+      setImportant(card, 'min-width', '0');
+      setImportant(card, 'max-width', 'none');
+      setImportant(card, 'width', 'auto');
+      setImportant(card, 'min-height', '84px');
+      setImportant(card, 'padding', '10px 10px 9px');
+      setImportant(card, 'box-sizing', 'border-box');
+    });
+  }
+
+  function apply(){
+    if(!isDesktop()) return;
+    applyDesktopLayout();
+    applySemanticTexts();
+    buildDesktopCopomAgenda();
+  }
+
+  function boot(){
+    apply();
+    [120, 450, 900, 1600, 2600].forEach(ms => setTimeout(apply, ms));
+
+    const store = document.getElementById('copomMeetings');
+    if(store && !store.dataset.v647Observed){
+      store.dataset.v647Observed = '1';
+      new MutationObserver(() => requestAnimationFrame(apply)).observe(store, {childList:true, subtree:true, characterData:true});
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+
+  window.addEventListener('resize', () => requestAnimationFrame(apply), {passive:true});
+})();
+

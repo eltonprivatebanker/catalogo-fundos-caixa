@@ -1,0 +1,25 @@
+Catálogo de Fundos CAIXA — v647
+
+Escopo aplicado: somente versão desktop.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+
+Arquivo preservado sem alteração:
+- tokens-caixa.css
+
+Ajustes:
+1. Bloco Referências de juros reorganizado no desktop.
+2. Título alterado para “Juros de referência”.
+3. Bloco “Cenário e expectativas” passa a ser “Calendário Copom 2026”.
+4. As 8 reuniões do Copom aparecem em grade compacta no desktop, sem rolagem horizontal.
+5. O mobile foi preservado.
+6. Cache do app atualizado para app.js?v=desktop-rates-copom-agenda-v647.
+
+Validação recomendada:
+- Abrir desktop em tela ampla.
+- Conferir bloco “Referências de juros”.
+- Validar se o calendário Copom exibe 8 cards.
+- Conferir se o mobile continua com o comportamento anterior.
