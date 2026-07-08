@@ -1,0 +1,20 @@
+V651 — Indicadores de mercado com semântica consolidado/prévia
+
+Escopo: somente desktop / Indicadores de mercado.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+
+O que foi ajustado:
+- "Fechamento" passa a ser "Fechamento consolidado".
+- "Mês atual" passa a ser "Prévia do mês atual".
+- Cabeçalho do painel passa a usar "Consolidado" e "Prévia".
+- Removida a redundância "Último mês consolidado" no canto direito.
+- IPCA segue no bloco consolidado, com "Aguardando divulgação" quando o mês fechado ainda não estiver disponível.
+- A prévia do mês atual fica focada em CDI, Dólar PTAX e Ibovespa.
+- Variações de Dólar e Ibovespa passam a aparecer de forma mais curta: "+x,xx% no mês".
+
+Validação:
+- app.js validado com node --check.

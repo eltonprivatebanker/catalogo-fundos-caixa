@@ -79668,3 +79668,47 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:nowrap!important;
   }
 }
+
+/* =========================================================
+   PATCH v651 — Desktop: semântica consolidado/prévia no painel
+   Escopo: somente desktop / Indicadores de mercado.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-market-semantic-v651 body #sec-mercado .market-v159-section-head.market-v651-section-head{
+    align-items:flex-end!important;
+  }
+
+  html.desktop-market-semantic-v651 body #sec-mercado .market-v159-section-head.market-v651-section-head > div{
+    min-width:0!important;
+  }
+
+  html.desktop-market-semantic-v651 body #sec-mercado .market-v651-inline-var{
+    display:block!important;
+    margin-top:6px!important;
+  }
+
+  html.desktop-market-semantic-v651 body #sec-mercado .market-v651-inline-var em{
+    display:inline!important;
+    font-weight:850!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-market-semantic-v651 body #sec-mercado .market-v651-current .market-v159-current-copy span{
+    color:#8fb4ff!important;
+  }
+
+  html.desktop-market-semantic-v651 body #sec-mercado .market-v651-current .market-v159-current-copy small{
+    max-width:320px!important;
+    color:#aeb8d3!important;
+  }
+
+  html.desktop-market-semantic-v651 body #sec-mercado .market-v159-current-metric > em::after{
+    content:' no mês';
+    color:inherit!important;
+    font-style:normal!important;
+  }
+
+  html.desktop-market-semantic-v651 body #sec-mercado .market-current-cdi-v233 .market-current-cdi-meta-v233 em::after{
+    content:''!important;
+  }
+}

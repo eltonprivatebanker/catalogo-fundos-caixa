@@ -16144,7 +16144,12 @@ if(!isSearchInput(el)) return;
   function closedMetric(label, main, subLabel, subValue, mainClass=''){
     const cls=mainClass || pctClass(main);
     const awaiting=/aguard/i.test(clean(main));
-    return `<article class="market-v159-kpi${awaiting?' is-awaiting-v650':''}"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong><small><b>${esc(subLabel)}</b><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))}</em></small></article>`;
+    const sub=valueOrDash(subValue);
+    const compactMonth=/^no mês$/i.test(clean(subLabel));
+    const subHtml=compactMonth
+      ? `<small class="market-v651-inline-var"><em class="${pctClass(sub)}">${esc(sub)} no mês</em></small>`
+      : `<small><b>${esc(subLabel)}</b><em class="${pctClass(sub)}">${esc(sub)}</em></small>`;
+    return `<article class="market-v159-kpi${awaiting?' is-awaiting-v650':''}"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong>${subHtml}</article>`;
   }
   function currentMetric(label, main, variation, mainClass='neu'){
     return `<div class="market-v159-current-metric"><span>${esc(label)}</span><strong class="${mainClass}">${esc(valueOrDash(main))}</strong><em class="${pctClass(variation)}">${esc(valueOrDash(variation))}</em></div>`;
@@ -16250,24 +16255,20 @@ if(!isSearchInput(el)) return;
     }
     shell.classList.add('market-v159-shell');
     const usMode=state.usMode==='usd'?'usd':'brl';
-    const awaiting=[];
-    const currentNotes=[];
-    const cdiAvailable=data.cdi.current!=='—';
-    const ipcaAvailable=data.ipca.current!=='—';
-    if(!cdiAvailable) awaiting.push('CDI');
-    else currentNotes.push('CDI acumulado no mês');
-    if(!ipcaAvailable) awaiting.push('IPCA');
-    else currentNotes.push('IPCA disponível');
-    const awaitingText=[
-      ...currentNotes,
-      awaiting.length ? `${awaiting.join(' e ')} aguardando fechamento` : ''
-    ].filter(Boolean).join(' · ') || 'Indicadores correntes disponíveis';
+    const cdiInfo={
+      data:data?.cdi?.currentRef || '',
+      dataIso:data?.cdi?.currentDateIso || '',
+      referencia:data?.cdi?.currentPeriodRef || data?.current || '',
+      origem:data?.cdi?.currentSource || ''
+    };
+    const currentContext=contextoCdiAtualV233(cdiInfo);
+    const currentSubtitle=currentContext?.detail || 'Dados parciais disponíveis';
 
     shell.innerHTML=`
       <div class="market-v150-head market-v159-head">
         <div class="market-v150-title market-v159-title">
           <strong>Indicadores de mercado</strong>
-          <div class="market-v150-periods market-v159-periods"><span><b>Fechado</b> ${esc(data.closed)}</span><i></i><span><b>Atual</b> ${esc(data.current)} parcial</span></div>
+          <div class="market-v150-periods market-v159-periods"><span><b>Consolidado</b> ${esc(data.closed)}</span><i></i><span><b>Prévia</b> ${esc(data.current)}</span></div>
         </div>
         <div class="market-v150-view-switch" role="group" aria-label="Modo de visualização do painel">
           <button type="button" data-v150-mode="exec" class="${state.mode==='exec'?'active':''}" aria-pressed="${state.mode==='exec'}">Visão executiva</button>
@@ -16275,20 +16276,20 @@ if(!isSearchInput(el)) return;
         </div>
       </div>
       <div class="market-v150-executive market-v159-executive">
-        <section class="market-v159-section market-v159-closed">
-          <div class="market-v159-section-head"><div><span>Fechamento</span><strong>${esc(data.closed)}</strong></div><small>Último mês consolidado</small></div>
+        <section class="market-v159-section market-v159-closed" aria-label="Fechamento consolidado">
+          <div class="market-v159-section-head market-v651-section-head"><div><span>Fechamento consolidado</span><strong>${esc(data.closed)}</strong></div></div>
           <div class="market-v159-kpi-grid">
             ${closedMetric('CDI',data.cdi.closed,data.accum,data.cdi.accum)}
             ${closedMetric('IPCA',data.ipca.closed,/pending/i.test(data.ipca.closedStatus||'')?'Último disponível':data.accum,/pending/i.test(data.ipca.closedStatus||'')?data.ipca.lastAvailable:data.ipca.accum)}
-            ${closedMetric('Dólar PTAX',data.dolar.closedQuote,'Variação no mês',data.dolar.closedVar,'neu')}
-            ${closedMetric('Ibovespa',data.ibov.closedPoints,'Variação no mês',data.ibov.closedVar,'neu')}
+            ${closedMetric('Dólar PTAX',data.dolar.closedQuote,'no mês',data.dolar.closedVar,'neu')}
+            ${closedMetric('Ibovespa',data.ibov.closedPoints,'no mês',data.ibov.closedVar,'neu')}
           </div>
         </section>
 
-        <section class="market-v159-current market-v227-current" aria-label="Mês atual">
-          <div class="market-v159-current-copy"><span>Mês atual</span><strong>${esc(data.current)} · parcial</strong><small>${esc(awaitingText)}</small></div>
+        <section class="market-v159-current market-v227-current market-v651-current" aria-label="Prévia do mês atual">
+          <div class="market-v159-current-copy"><span>Prévia do mês atual</span><strong>${esc(data.current)}</strong><small>${esc(currentSubtitle)}</small></div>
           ${currentCdiMetricV233(data)}
-          ${currentMetric('Dólar',data.dolar.currentQuote,data.dolar.currentVar)}
+          ${currentMetric('Dólar PTAX',data.dolar.currentQuote,data.dolar.currentVar)}
           ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
         </section>
 
