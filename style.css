@@ -80283,3 +80283,18 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     }
   }
 }
+
+
+/* =========================================================
+   PATCH v659 — Desktop: microcopy limpa nos cards da prévia
+   Escopo: somente desktop / Indicadores de mercado.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-market-microcopy-v659 body #sec-mercado .market-v658-current-grid .market-v657-note{
+    gap:0!important;
+  }
+
+  html.desktop-market-microcopy-v659 body #sec-mercado .market-v658-current-grid .market-v657-note b + .market-v657-note-text{
+    margin-left:6px!important;
+  }
+}

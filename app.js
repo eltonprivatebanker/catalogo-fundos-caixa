@@ -16239,7 +16239,8 @@ if(!isSearchInput(el)) return;
       if(compactMonth){
         subHtml = `<small class="market-v651-inline-var"><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))} no mês</em></small>`;
       }else if(noteMode){
-        subHtml = `<small class="market-v657-note"><b>${esc(subLabel || 'Detalhe')}</b><em class="market-v657-note-text">${esc(noteOrDash(subValue))}</em></small>`;
+        const labelHtml = subLabel ? `<b>${esc(subLabel)}</b>` : '';
+        subHtml = `<small class="market-v657-note">${labelHtml}<em class="market-v657-note-text">${esc(noteOrDash(subValue))}</em></small>`;
       }else{
         subHtml = `<small><b>${esc(subLabel)}</b><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))}</em></small>`;
       }
@@ -16247,11 +16248,10 @@ if(!isSearchInput(el)) return;
     return `<article class="market-v159-kpi market-v657-kpi${awaiting?' is-awaiting-v650':''}"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong>${subHtml}</article>`;
   }
   function currentIpcaMetricV657(){
-    return currentMetricUniform('IPCA', 'Sem leitura parcial', 'Status', 'Divulgação após fechamento', 'neu');
+    return currentMetricUniform('IPCA', 'Sem leitura parcial', '', 'Divulgação após fechamento', 'neu');
   }
   function currentCdiMetricUniformV657(data, subtitle=''){
-    const text = clean(subtitle || 'Dados parciais disponíveis');
-    return currentMetricUniform('CDI', data?.cdi?.current, 'Parcial', text, pctClass(data?.cdi?.current));
+    return currentMetricUniform('CDI', data?.cdi?.current, '', 'Parcial do mês', pctClass(data?.cdi?.current));
   }
   function usCompactCard(item, mode, accum){
     const current=compactUsValue(item.current,mode);

@@ -1,0 +1,23 @@
+V659 — Microcopy limpa nos indicadores de mercado
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css mantido sem alteração
+
+Ajustes:
+- CDI na prévia agora mostra:
+  +0,26%
+  Parcial do mês
+
+- IPCA na prévia agora mostra:
+  Sem leitura parcial
+  Divulgação após fechamento
+
+- Removidos rótulos redundantes como:
+  "Parcial Dados disponíveis até..."
+  "Status Divulgação após fechamento"
+
+- Layout da v658 preservado.
+- Mobile preservado.
