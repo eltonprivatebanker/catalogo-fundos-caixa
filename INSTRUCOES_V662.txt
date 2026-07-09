@@ -1,0 +1,15 @@
+V662 — Badge de captação fechada em linha separada (desktop)
+
+Arquivos alterados:
+- index.html
+- style.css
+- app.js mantido sem alteração funcional
+- tokens-caixa.css mantido sem alteração
+
+Ajustes:
+- categoria fica em uma linha
+- badge "🔒 Fechado" fica em linha própria abaixo
+- altura extra aplicada apenas aos cards fechados
+- badge ficou mais discreto, com tom âmbar suave
+- reduz poluição visual e elimina encavalamento
+- mobile preservado
