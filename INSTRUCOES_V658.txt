@@ -1,0 +1,19 @@
+V658 — Correção de conflito na Prévia dos indicadores (desktop)
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css mantido sem alteração
+
+Correção:
+- remove classes antigas da seção de prévia que estavam herdando grid antigo:
+  .market-v159-current
+  .market-v227-current
+  .market-v651-current
+- cria seção isolada:
+  .market-v657-current-section
+  .market-v658-current-grid
+- mantém 4 cards uniformes na ordem:
+  CDI, IPCA, Dólar PTAX, Ibovespa
+- preserva mobile.

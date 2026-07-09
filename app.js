@@ -16375,9 +16375,9 @@ if(!isSearchInput(el)) return;
           </div>
         </section>
 
-        <section class="market-v159-section market-v159-current market-v227-current market-v651-current market-v657-current" aria-label="Prévia do mês atual">
+        <section class="market-v159-section market-v657-current-section" aria-label="Prévia do mês atual">
           <div class="market-v159-section-head market-v651-section-head market-v657-section-head"><div><span>Prévia do mês atual</span><strong>${esc(data.current)}</strong></div><small>${esc(currentSubtitle)}</small></div>
-          <div class="market-v159-kpi-grid market-v657-current-grid">
+          <div class="market-v159-kpi-grid market-v658-current-grid">
             ${currentCdiMetricUniformV657(data,currentSubtitle)}
             ${currentIpcaMetricV657()}
             ${currentMetricUniform('Dólar PTAX',data.dolar.currentQuote,'no mês',data.dolar.currentVar,'neu')}
