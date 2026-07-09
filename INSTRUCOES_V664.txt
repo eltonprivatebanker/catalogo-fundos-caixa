@@ -1,0 +1,14 @@
+V664 — Microtag mínima e suavizada para captação fechada (desktop)
+
+Arquivos alterados:
+- index.html
+- style.css
+- app.js mantido sem alteração funcional
+- tokens-caixa.css mantido sem alteração
+
+Ajustes:
+- microtag "🔒 Fechado" ficou ainda menor
+- borda/fundo do card fechado ficaram muito mais suaves
+- reduzida a altura extra dos cards fechados
+- diminuídos contraste, padding, fonte e ícone da microtag
+- mobile preservado
