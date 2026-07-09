@@ -1,0 +1,14 @@
+V663 — Microtag discreta para captação fechada (desktop)
+
+Arquivos alterados:
+- index.html
+- style.css
+- app.js mantido sem alteração funcional
+- tokens-caixa.css mantido sem alteração
+
+Ajustes:
+- badge "🔒 Fechado" ficou menor e mais discreto
+- reduzida a altura extra dos cards fechados
+- categoria e microtag ficaram mais próximas
+- suavizadas borda, fundo e contraste do badge
+- mobile preservado

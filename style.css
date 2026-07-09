@@ -80577,3 +80577,75 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:nowrap!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v663 — Desktop: microtag mais discreta para captação fechada
+   ---------------------------------------------------------
+   Objetivo: deixar o badge mais leve, reduzir a altura extra dos cards
+   fechados e aproximar mais da aparência dos demais cards.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v562-podium-row.is-closed-captacao-v646{
+    min-height:66px!important;
+    align-items:center!important;
+  }
+
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v562-podium-row.is-closed-captacao-v646.is-leader,
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v645-balanced-columns .ranking-v562-podium-row.is-closed-captacao-v646{
+    min-height:70px!important;
+  }
+
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v646-meta-line{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    gap:3px!important;
+    margin-top:3px!important;
+    align-items:start!important;
+    justify-items:start!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v646-meta-line > span:first-child{
+    display:block!important;
+    max-width:100%!important;
+    line-height:1.05!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v646-closed-badge{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:3px!important;
+    align-self:flex-start!important;
+    width:auto!important;
+    max-width:none!important;
+    min-height:15px!important;
+    padding:1px 6px!important;
+    border:1px solid rgba(245,158,11,.14)!important;
+    background:rgba(245,158,11,.05)!important;
+    color:#e6c68f!important;
+    font-size:.43rem!important;
+    line-height:1!important;
+    font-weight:780!important;
+    letter-spacing:.035em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    box-shadow:none!important;
+  }
+
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v646-closed-badge > span[aria-hidden="true"]{
+    font-size:.50rem!important;
+    opacity:.82!important;
+  }
+
+  html.desktop-ranking-closed-microtag-v663 body #rankingsSection .ranking-v646-closed-badge b{
+    font:inherit!important;
+    color:inherit!important;
+    white-space:nowrap!important;
+  }
+}
