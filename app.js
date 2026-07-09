@@ -1167,7 +1167,13 @@ function renderDolarMensais(){
 
   const currentKey = `${HOJE.getFullYear()}-${String(HOJE.getMonth()+1).padStart(2,'0')}`;
   const currentEntry = sorted.find(([key]) => key === currentKey);
-  const closedEntries = sorted.filter(([key]) => key !== currentKey).slice(-6).reverse();
+  // v656: a visão executiva deve exibir sempre somente os últimos 6 meses fechados.
+  // Quando um novo mês consolidado entra, o mais antigo sai automaticamente.
+  const EXECUTIVE_MONTH_LIMIT_V656 = 6;
+  const closedEntries = sorted
+    .filter(([key]) => key !== currentKey)
+    .slice(-EXECUTIVE_MONTH_LIMIT_V656)
+    .reverse();
 
   const calcVar = (key,item) => {
     let varPct = item._var_pct;
@@ -1212,7 +1218,7 @@ function renderDolarMensais(){
     const varPct = calcVar(key,item);
     const cls = varPct === null ? 'zero' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
     const varTxt = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
-    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98${index === 0 ? ' is-latest-v655' : ''}" aria-label="${label}: fechamento R$ ${fmtBRL(val)}; variação ${varTxt}">
+    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98${index === 0 ? ' is-latest-v656' : ''}" aria-label="${label}: fechamento R$ ${fmtBRL(val)}; variação ${varTxt}">
       <span class="dolar-month-label">${label}</span>
       <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
       <span class="dolar-month-var ${cls}">${varTxt}</span>

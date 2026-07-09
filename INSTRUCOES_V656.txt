@@ -1,0 +1,19 @@
+CATÁLOGO DE FUNDOS CAIXA — v656
+Desktop · Dólar PTAX · últimos 6 meses consolidados
+
+Arquivos para subir:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css
+
+O que mudou:
+- A visão executiva dos fechamentos mensais do Dólar PTAX fica limitada a 6 meses consolidados.
+- Quando um novo mês fechado entra, o mês mais antigo sai automaticamente da grade.
+- O subtítulo passa a indicar “Últimos 6 meses consolidados.”
+- Mantido o layout desktop em cards compactos 3x2.
+- Mobile preservado.
+- tokens-caixa.css mantido sem alteração funcional.
+
+Cache atualizado:
+- app.js?v=desktop-dolar-months-six-v656

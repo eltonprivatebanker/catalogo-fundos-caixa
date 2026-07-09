@@ -79863,11 +79863,11 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
 }
 
 /* ═══════════════════════════════════════════════════════
-   v655 — Desktop: Dólar PTAX · fechamentos mensais em cards compactos
+   v656 — Desktop: Dólar PTAX · últimos 6 meses em cards compactos
    Escopo: somente desktop. Mobile preservado.
    ═══════════════════════════════════════════════════════ */
 @media (min-width:769px){
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-compact-footer{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-compact-footer{
     display:block!important;
     grid-template-columns:1fr!important;
     padding:14px 18px 18px!important;
@@ -79876,12 +79876,12 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     background:linear-gradient(180deg,rgba(8,11,20,.34),rgba(8,11,20,.10))!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-month-strip{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-month-strip{
     width:100%!important;
     max-width:100%!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-month-strip-head{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-month-strip-head{
     display:flex!important;
     align-items:flex-end!important;
     justify-content:space-between!important;
@@ -79891,7 +79891,7 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     border:0!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-month-strip-title{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-month-strip-title{
     color:#e8bb6a!important;
     font-family:Inter,system-ui,sans-serif!important;
     font-size:.76rem!important;
@@ -79901,7 +79901,7 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     text-transform:uppercase!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-month-strip-head small{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-month-strip-head small{
     display:block!important;
     margin-top:4px!important;
     color:#9aa6c3!important;
@@ -79910,23 +79910,23 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     line-height:1.25!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarTimelineToggle{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarTimelineToggle{
     display:none!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarTimelineBody,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarTimelineBody.open{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarTimelineBody,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarTimelineBody.open{
     display:block!important;
     max-height:none!important;
     overflow:visible!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-months-table-head-v162{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-months-table-head-v162{
     display:none!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-compact-card .dolar-months{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-compact-card .dolar-months{
     display:grid!important;
     grid-template-columns:repeat(3,minmax(0,1fr))!important;
     gap:10px!important;
@@ -79936,9 +79936,9 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     overflow:visible!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-item,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-row-v162,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-compact-card .dolar-months .dolar-month-item{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-item,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-row-v162,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-compact-card .dolar-months .dolar-month-item{
     position:relative!important;
     display:grid!important;
     grid-template-columns:minmax(0,1fr) auto!important;
@@ -79958,21 +79958,21 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     overflow:hidden!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-item:hover,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-row-v162:hover{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-item:hover,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-row-v162:hover{
     border-color:rgba(232,187,106,.32)!important;
     background:linear-gradient(180deg,rgba(18,22,38,.82),rgba(10,13,24,.92))!important;
     transform:none!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-item.is-latest-v655,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-item:first-child{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-item.is-latest-v656,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-item:first-child{
     border-color:rgba(232,187,106,.34)!important;
     background:linear-gradient(180deg,rgba(200,151,58,.105),rgba(13,17,31,.82))!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-item.is-latest-v655::before,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-item:first-child::before{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-item.is-latest-v656::before,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-item:first-child::before{
     content:"";
     position:absolute;
     left:0;
@@ -79984,8 +79984,8 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     opacity:.9;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-label,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-compact-card .dolar-month-label{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-label,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-compact-card .dolar-month-label{
     grid-area:month!important;
     width:auto!important;
     margin:0!important;
@@ -80000,8 +80000,8 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:nowrap!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-val,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-compact-card .dolar-month-val{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-val,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-compact-card .dolar-month-val{
     grid-area:value!important;
     width:auto!important;
     margin:0!important;
@@ -80014,8 +80014,8 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:nowrap!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-var,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-compact-card .dolar-month-var{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-var,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-compact-card .dolar-month-var{
     grid-area:var!important;
     width:auto!important;
     margin:0!important;
@@ -80029,19 +80029,19 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     white-space:nowrap!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-var.pos{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-var.pos{
     color:#2dd4a0!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-var.neg{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-var.neg{
     color:#ff6b85!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths .dolar-month-var.zero{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths .dolar-month-var.zero{
     color:#8fa0bc!important;
   }
 
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-month-empty-v162{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-month-empty-v162{
     grid-column:1 / -1!important;
     padding:14px!important;
     border:1px solid rgba(148,163,184,.12)!important;
@@ -80052,8 +80052,8 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
 }
 
 @media (min-width:769px) and (max-width:1180px){
-  html.desktop-dolar-month-cards-v655 body #sec-dolar #dolarMonths,
-  html.desktop-dolar-month-cards-v655 body #sec-dolar .dolar-compact-card .dolar-months{
+  html.desktop-dolar-month-cards-v656 body #sec-dolar #dolarMonths,
+  html.desktop-dolar-month-cards-v656 body #sec-dolar .dolar-compact-card .dolar-months{
     grid-template-columns:repeat(2,minmax(0,1fr))!important;
   }
 }
