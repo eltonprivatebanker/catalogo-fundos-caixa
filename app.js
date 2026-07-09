@@ -29006,3 +29006,48 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', apply, {once:true});
   window.addEventListener('pageshow', apply, {passive:true});
 })();
+
+
+/* =========================================================
+   PATCH v660 — Estabilidade inicial do header/KPIs
+   Objetivo: reduzir CLS/tremida inicial apontada pelo PageSpeed.
+   Escopo: desktop e fallback seguro para classes "mobile-kpi" usadas no topo.
+   ========================================================= */
+(function headerKpiInitialStabilityV660(){
+  const ROOT_CLASS = 'desktop-header-kpi-stable-v660-runtime';
+
+  function apply(){
+    try{
+      document.documentElement.classList.add(ROOT_CLASS);
+
+      const kpiCells = document.querySelectorAll(
+        '.mobile-kpi-cell, .header-kpi-card, .header-kpi, .top-kpi-card, .kpi-card, .brand-kpi, .hero-kpi'
+      );
+
+      kpiCells.forEach((cell) => {
+        if(!cell || cell.dataset.stableV660 === '1') return;
+        cell.dataset.stableV660 = '1';
+
+        const name = cell.querySelector(
+          '.mobile-kpi-name, .mobile-kpi-fund, .mobile-kpi-label-small, small, .kpi-name, .kpi-subtitle'
+        );
+        if(name && !name.getAttribute('title')){
+          const text = String(name.textContent || '').replace(/\s+/g,' ').trim();
+          if(text) name.setAttribute('title', text);
+        }
+      });
+    }catch(err){
+      console.warn('[v660 header stability]', err);
+    }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+
+  requestAnimationFrame(apply);
+  setTimeout(apply, 120);
+  setTimeout(apply, 450);
+})();

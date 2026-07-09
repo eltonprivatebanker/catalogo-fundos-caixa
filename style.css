@@ -80298,3 +80298,114 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     margin-left:6px!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v660 — Estabilidade visual inicial do header/KPIs
+   Reduz layout shift no topo apontado pelo PageSpeed:
+   .mobile-kpi-cell.mobile-kpi-cell-perf / Melhor 12M.
+   ========================================================= */
+
+/* Mantém a calha da barra de rolagem estável quando o conteúdo ganha altura. */
+@supports (scrollbar-gutter: stable){
+  html.desktop-header-kpi-stable-v660{
+    scrollbar-gutter:stable both-edges;
+  }
+}
+
+@media (min-width:769px){
+  html.desktop-header-kpi-stable-v660 body{
+    overflow-y:scroll;
+  }
+
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell-perf,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell.is-best-v435,
+  html.desktop-header-kpi-stable-v660 body .header-kpi-card,
+  html.desktop-header-kpi-stable-v660 body .top-kpi-card,
+  html.desktop-header-kpi-stable-v660 body .kpi-card,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell-perf{
+    min-height:88px!important;
+    height:88px!important;
+    max-height:88px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    contain:layout paint!important;
+  }
+
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell strong,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell b,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell .mobile-kpi-value,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell strong,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell b,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell .mobile-kpi-value{
+    display:block!important;
+    min-height:25px!important;
+    line-height:1.05!important;
+    white-space:nowrap!important;
+    font-variant-numeric:tabular-nums!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell small,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell .mobile-kpi-name,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell .mobile-kpi-fund,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell .mobile-kpi-label-small,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell small,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell .mobile-kpi-name,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell .mobile-kpi-fund,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell .mobile-kpi-label-small{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    min-height:28px!important;
+    max-height:28px!important;
+    line-height:14px!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell > span:first-child,
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell .mobile-kpi-label,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell > span:first-child,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell .mobile-kpi-label{
+    display:block!important;
+    min-height:13px!important;
+    line-height:13px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+  }
+
+  /* Reserva espaço para grids/faixas que contenham os KPIs do topo. */
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-grid,
+  html.desktop-header-kpi-stable-v660 body .header-kpi-grid,
+  html.desktop-header-kpi-stable-v660 body .top-kpi-grid,
+  html.desktop-header-kpi-stable-v660 body .hero-kpi-grid,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-grid,
+  html.desktop-header-kpi-stable-v660-runtime body .header-kpi-grid,
+  html.desktop-header-kpi-stable-v660-runtime body .top-kpi-grid,
+  html.desktop-header-kpi-stable-v660-runtime body .hero-kpi-grid{
+    min-height:88px!important;
+    align-items:stretch!important;
+  }
+}
+
+/* No mobile, apenas reserva mínima sem travar altura absoluta. */
+@media (max-width:768px){
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell{
+    min-height:82px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-header-kpi-stable-v660 body .mobile-kpi-cell small,
+  html.desktop-header-kpi-stable-v660-runtime body .mobile-kpi-cell small{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:2!important;
+    overflow:hidden!important;
+  }
+}

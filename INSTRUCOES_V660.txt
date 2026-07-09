@@ -1,0 +1,25 @@
+V660 — Estabilidade inicial do header/KPIs
+
+Base: v659.
+
+Objetivo:
+- reduzir a tremida inicial/CLS apontada pelo PageSpeed no card:
+  .mobile-kpi-cell.mobile-kpi-cell-perf
+  "Melhor 12M"
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css mantido sem alteração
+
+Principais ajustes:
+- adicionada classe desktop-header-kpi-stable-v660 no index.html
+- cache atualizado para app.js?v=desktop-header-kpi-stable-v660
+- reserva altura dos KPIs do topo no desktop
+- limita nome do fundo em até 2 linhas para evitar mudança de altura
+- usa scrollbar-gutter/overflow-y:scroll para reduzir sobe/desce da barra lateral
+- adiciona pequeno JS de estabilização para marcar KPIs e preservar title em nomes longos
+
+Validação:
+- app.js validado com node --check.
