@@ -80409,3 +80409,89 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     overflow:hidden!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v661 — Desktop: polimento do badge de captação fechada
+   ---------------------------------------------------------
+   Objetivo: reduzir poluição visual e evitar texto encavalado.
+   Badge passa a ocupar linha própria sob a categoria.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v562-podium-row.is-closed-captacao-v646{
+    border-color:rgba(248,113,113,.16)!important;
+    background:
+      linear-gradient(90deg,rgba(248,113,113,.03),rgba(255,255,255,.018) 46%,rgba(255,255,255,.025))!important;
+  }
+
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v646-meta-line{
+    display:flex!important;
+    flex-direction:column!important;
+    align-items:flex-start!important;
+    gap:4px!important;
+    min-width:0!important;
+    max-width:100%!important;
+    margin-top:4px!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v646-meta-line > span:first-child{
+    min-width:0!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    line-height:1.1!important;
+  }
+
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v646-closed-badge{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:5px!important;
+    align-self:flex-start!important;
+    width:auto!important;
+    max-width:none!important;
+    height:auto!important;
+    min-height:20px!important;
+    padding:2px 8px!important;
+    border:1px solid rgba(248,113,113,.26)!important;
+    border-radius:999px!important;
+    background:rgba(127,29,29,.16)!important;
+    color:#f8c7c7!important;
+    font-size:.49rem!important;
+    line-height:1.05!important;
+    font-weight:850!important;
+    letter-spacing:.04em!important;
+    text-transform:uppercase!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    box-shadow:none!important;
+  }
+
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v646-closed-badge > span[aria-hidden="true"]{
+    font-size:.62rem!important;
+    line-height:1!important;
+    opacity:.92!important;
+  }
+
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v646-closed-badge b{
+    display:inline!important;
+    max-width:none!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:nowrap!important;
+    font:inherit!important;
+    color:inherit!important;
+  }
+
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v562-fund{
+    min-width:0!important;
+  }
+
+  html.desktop-ranking-closed-badge-polish-v661 body #rankingsSection .ranking-v562-fund strong{
+    display:block!important;
+    min-width:0!important;
+  }
+}

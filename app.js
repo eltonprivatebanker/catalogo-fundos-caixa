@@ -3962,7 +3962,7 @@ function setCdiSort(dir){
   }
   function rankingClosedBadgeV646(row){
     return rankingFundClosedForCaptationV646(row)
-      ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span aria-hidden="true">🔒</span><b>Captação fechada</b></span>'
+      ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span aria-hidden="true">🔒</span><b>Fechado</b></span>'
       : '';
   }
   function categoryRow(item, i, campo, periodo, options){

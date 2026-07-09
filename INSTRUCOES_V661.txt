@@ -1,0 +1,15 @@
+V661 — Polimento do badge de captação fechada no ranking (desktop)
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css mantido sem alteração
+
+Ajustes:
+- badge de captação fechada passa a ocupar linha própria sob a categoria
+- rótulo visível encurtado para "Fechado"
+- mantém title/aria-label completos: "Fechado para captação" / "Captação fechada"
+- reduz poluição visual e evita texto encavalado
+- suaviza levemente a borda/fundo dos cards fechados
+- mobile preservado
