@@ -1,0 +1,14 @@
+V657 — Indicadores de mercado em 4 cards uniformes (desktop)
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css (sem alteração)
+
+Objetivo:
+- padronizar os blocos "Fechamento consolidado" e "Prévia do mês atual"
+- manter 4 cards com a mesma largura e altura
+- preservar a ordem: CDI, IPCA, Dólar PTAX, Ibovespa
+- incluir o IPCA também na prévia, com mensagem semântica: "Sem leitura parcial / Divulgação após fechamento"
+- remover o bloco desalinhado "Acumulado no mês" da prévia

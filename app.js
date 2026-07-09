@@ -16225,6 +16225,34 @@ if(!isSearchInput(el)) return;
     const contexto=contextoCdiAtualV233(info);
     return `<div class="market-v159-current-metric market-current-cdi-v233"><span>CDI</span><strong class="${pctClass(data?.cdi?.current)}">${esc(valueOrDash(data?.cdi?.current))}</strong><div class="market-current-cdi-meta-v233"><b>${esc(contexto.title)}</b><em>${esc(contexto.detail)}</em></div></div>`;
   }
+  function noteOrDash(value){
+    const v = clean(valueOrDash(value));
+    return v && v !== '—' ? v : '—';
+  }
+  function currentMetricUniform(label, main, subLabel='', subValue='', mainClass=''){
+    const cls = mainClass || pctClass(main);
+    const awaiting = /sem leitura|aguard/i.test(clean(main));
+    const compactMonth = /^no mês$/i.test(clean(subLabel));
+    const noteMode = /dados|divulgação|sem leitura|após fechamento|parcial/i.test(clean(subValue)) || awaiting;
+    let subHtml = '';
+    if(subLabel || subValue){
+      if(compactMonth){
+        subHtml = `<small class="market-v651-inline-var"><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))} no mês</em></small>`;
+      }else if(noteMode){
+        subHtml = `<small class="market-v657-note"><b>${esc(subLabel || 'Detalhe')}</b><em class="market-v657-note-text">${esc(noteOrDash(subValue))}</em></small>`;
+      }else{
+        subHtml = `<small><b>${esc(subLabel)}</b><em class="${pctClass(subValue)}">${esc(valueOrDash(subValue))}</em></small>`;
+      }
+    }
+    return `<article class="market-v159-kpi market-v657-kpi${awaiting?' is-awaiting-v650':''}"><span>${esc(label)}</span><strong class="${cls}">${esc(valueOrDash(main))}</strong>${subHtml}</article>`;
+  }
+  function currentIpcaMetricV657(){
+    return currentMetricUniform('IPCA', 'Sem leitura parcial', 'Status', 'Divulgação após fechamento', 'neu');
+  }
+  function currentCdiMetricUniformV657(data, subtitle=''){
+    const text = clean(subtitle || 'Dados parciais disponíveis');
+    return currentMetricUniform('CDI', data?.cdi?.current, 'Parcial', text, pctClass(data?.cdi?.current));
+  }
   function usCompactCard(item, mode, accum){
     const current=compactUsValue(item.current,mode);
     const year=compactUsValue(item.year,mode);
@@ -16347,11 +16375,14 @@ if(!isSearchInput(el)) return;
           </div>
         </section>
 
-        <section class="market-v159-current market-v227-current market-v651-current" aria-label="Prévia do mês atual">
-          <div class="market-v159-current-copy"><span>Prévia do mês atual</span><strong>${esc(data.current)}</strong><small>${esc(currentSubtitle)}</small></div>
-          ${currentCdiMetricV233(data)}
-          ${currentMetric('Dólar PTAX',data.dolar.currentQuote,data.dolar.currentVar)}
-          ${currentMetric('Ibovespa',data.ibov.currentPoints,data.ibov.currentVar)}
+        <section class="market-v159-section market-v159-current market-v227-current market-v651-current market-v657-current" aria-label="Prévia do mês atual">
+          <div class="market-v159-section-head market-v651-section-head market-v657-section-head"><div><span>Prévia do mês atual</span><strong>${esc(data.current)}</strong></div><small>${esc(currentSubtitle)}</small></div>
+          <div class="market-v159-kpi-grid market-v657-current-grid">
+            ${currentCdiMetricUniformV657(data,currentSubtitle)}
+            ${currentIpcaMetricV657()}
+            ${currentMetricUniform('Dólar PTAX',data.dolar.currentQuote,'no mês',data.dolar.currentVar,'neu')}
+            ${currentMetricUniform('Ibovespa',data.ibov.currentPoints,'no mês',data.ibov.currentVar,'neu')}
+          </div>
         </section>
 
         ${ibovPerspectiveV172(data)}
