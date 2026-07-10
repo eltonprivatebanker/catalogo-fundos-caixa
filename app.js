@@ -29531,15 +29531,9 @@ function buildDetailPanel(r,colspan){
         }
       });
 
-      // Poupança: com Selic acima de 8,50% a regra vigente é TR + 0,50% a.m.
-      if(valor > 8.5){
-        setText('#poupQuickNote', 'Rendimento de TR + 0,50% a.m. (Selic acima de 8,50% a.a.)');
-        setText('#poupNewRuleText', 'Rendimento: TR + 0,50% a.m.');
-        setText('#poupScenarioCurrentNew', 'TR + 0,50% a.m.');
-        setText('#poupScenarioCurrentOld', 'TR + 0,50% a.m.');
-        const poup = document.getElementById('mc-poup');
-        if(poup && (/0,67|0\.67|—/.test(poup.textContent || ''))) poup.textContent = 'TR + 0,50%';
-      }
+      // v673: este reparo de Selic/Copom não altera mais o bloco de Poupança.
+      // A Poupança fica sob responsabilidade do patch dedicado v673, evitando
+      // disputa entre "rendimento efetivo" e "fórmula" no card principal.
 
       // Se algum texto de Copom ainda foi renderizado com 0,00%, força nova montagem.
       const badCopom = document.querySelector('#desktopCopomAgendaV648, #copomMeetings, .desktop-copom-agenda-v648');
@@ -29565,16 +29559,16 @@ function buildDetailPanel(r,colspan){
 })();
 
 
+
 /* =========================================================
-   PATCH v672 — Poupança: rendimento efetivo do mês + bloco compacto
+   PATCH v673 — Poupança: rendimento efetivo estável, sem disputa de render
    ---------------------------------------------------------
-   Objetivo: priorizar o rendimento efetivo mensal vindo do robô
-   e deixar a fórmula apenas como leitura auxiliar.
+   Objetivo: manter o rendimento efetivo no card principal,
+   deixar a fórmula como leitura auxiliar e evitar flicker/re-render.
    ========================================================= */
-(function poupancaEffectiveMonthlyV672(){
-  var BUILD = 'ELTAUM_POUPANCA_EFFECTIVE_MONTHLY_V672';
+(function poupancaEffectiveMonthlyV673(){
+  var BUILD = 'ELTAUM_POUPANCA_EFFECTIVE_MONTHLY_V673';
   var lastKey = '';
-  var timer = null;
 
   function parseNum(value){
     if(value === null || value === undefined || value === '') return NaN;
@@ -29654,21 +29648,23 @@ function buildDetailPanel(r,colspan){
   function ensureFormulaCard(formula){
     var strip = document.querySelector('.savings-reference-v167 .savings-summary-v207, .savings-reference-v167 .savings-kpi-strip-v199');
     if(!strip) return;
-    var card = document.getElementById('poupFormulaCompactV672');
+    var card = document.getElementById('poupFormulaCompactV672') || document.getElementById('poupFormulaCompactV673');
     if(!card){
       card = document.createElement('div');
-      card.className = 'savings-kpi-v199 formula poup-formula-card-v672';
-      card.id = 'poupFormulaCompactV672';
+      card.className = 'savings-kpi-v199 formula poup-formula-card-v673';
+      card.id = 'poupFormulaCompactV673';
       card.innerHTML = '<dt>Fórmula vigente</dt><dd></dd>';
       strip.appendChild(card);
     }
+    card.id = 'poupFormulaCompactV673';
+    card.classList.add('poup-formula-card-v673');
     var dd = card.querySelector('dd');
-    if(dd) dd.textContent = formula;
+    if(dd && dd.textContent !== formula) dd.textContent = formula;
   }
 
-  function apply(){
+  function apply(force){
     try{
-      document.documentElement.classList.add('desktop-poupanca-effective-v672');
+      document.documentElement.classList.add('desktop-poupanca-effective-v673');
       var meta = document.querySelector('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
 
@@ -29678,8 +29674,15 @@ function buildDetailPanel(r,colspan){
       var formula = formulaText(selic);
       var regra = regraText(selic);
       var efetivoTxt = Number.isFinite(p.efetivo) && p.efetivo > 0 ? fmtPct(p.efetivo) : '';
+      var key = (efetivoTxt || formula) + '|' + regra + '|' + (Number.isFinite(p.acumAno) ? p.acumAno : '');
 
-      // Evita trocar número por fórmula quando o robô já trouxe rendimento efetivo.
+      if(!force && key === lastKey){
+        // Mesmo sem reescrever tudo, protege o card principal caso algum patch antigo tente trocar por fórmula.
+        var outCheck = document.getElementById('mc-poup');
+        if(efetivoTxt && outCheck && outCheck.textContent !== efetivoTxt) outCheck.textContent = efetivoTxt;
+        return;
+      }
+
       if(efetivoTxt){
         setText('#poupCurrentLabelV214', 'Rendimento efetivo do mês');
         var out = document.getElementById('mc-poup');
@@ -29699,8 +29702,7 @@ function buildDetailPanel(r,colspan){
 
       var note = document.getElementById('poupQuickNote');
       if(note){
-        var selicTxt = Number.isFinite(selic) ? ' · ' + regra : '';
-        note.innerHTML = '<strong>Fórmula vigente:</strong> <span>' + formula + selicTxt + '</span>';
+        note.innerHTML = '<strong>Fórmula vigente:</strong><span>' + formula + '</span><em>' + regra + '</em>';
       }
 
       var thresholdDt = document.querySelector('.savings-reference-v167 .savings-kpi-v199.threshold dt');
@@ -29712,31 +29714,29 @@ function buildDetailPanel(r,colspan){
 
       var currentNew = document.getElementById('poupScenarioCurrentNew');
       if(currentNew && efetivoTxt) currentNew.textContent = efetivoTxt + ' a.m.';
+
+      // Dentro de "Regras da poupança" não repetimos o rendimento efetivo do topo.
+      // Essa área explica a regra; o número fica no card principal.
       var newRule = document.getElementById('poupNewRuleText');
-      if(newRule) newRule.innerHTML = 'Rendimento efetivo do mês: <strong>' + (efetivoTxt || '—') + '</strong>. Fórmula: <strong>' + formula + '</strong>.';
+      if(newRule) newRule.innerHTML = 'Fórmula aplicada: <strong>' + formula + '</strong>.';
 
-      lastKey = (efetivoTxt || formula) + '|' + regra;
+      var oldRule = document.getElementById('poupOldRuleText');
+      if(oldRule) oldRule.innerHTML = 'Fórmula: <strong>TR + 0,50% a.m.</strong>';
+
+      lastKey = key;
     }catch(err){
-      console.warn('[Poupança v672]', err);
+      console.warn('[Poupança v673]', err);
     }
-  }
-
-  function schedule(){
-    clearTimeout(timer);
-    timer = setTimeout(apply, 80);
   }
 
   function bind(){
-    apply();
-    var root = document.querySelector('.savings-reference-v167');
-    if(root && window.MutationObserver && !root.dataset.poupancaV672Bound){
-      root.dataset.poupancaV672Bound = '1';
-      new MutationObserver(function(){ schedule(); }).observe(root, {childList:true, subtree:true, characterData:true});
-    }
+    apply(true);
+    // Sem MutationObserver no bloco: ele causava disputa/flicker com patches legados.
   }
 
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, {once:true});
   else bind();
-  window.addEventListener('load', bind, {once:true});
-  [120, 360, 900, 1800, 3200, 5200, 7600].forEach(function(delay){ setTimeout(apply, delay); });
+  window.addEventListener('load', function(){ apply(true); }, {once:true});
+  [120, 360, 900, 1800, 3200, 5200, 7600].forEach(function(delay){ setTimeout(function(){ apply(false); }, delay); });
 })();
+

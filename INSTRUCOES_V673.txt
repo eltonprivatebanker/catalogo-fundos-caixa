@@ -1,0 +1,14 @@
+V673 — Poupança: rendimento efetivo estável e sem texto duplicado
+
+Base: v672.
+
+Correções:
+- removeu a disputa entre o reparo v667 de Selic/Copom e o patch da Poupança;
+- o card principal não troca mais 0,67% por TR + 0,50%;
+- removido MutationObserver do bloco da Poupança para evitar flicker/re-render;
+- em Regras da Poupança, o texto agora explica só a fórmula aplicada, sem repetir o rendimento efetivo do topo;
+- faixa da regra ficou mais organizada: Fórmula vigente + regra Selic;
+- mobile preservado.
+
+Validação:
+- app.js validado com node --check.
