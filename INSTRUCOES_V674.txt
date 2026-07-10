@@ -1,0 +1,21 @@
+V674 — Poupança aberta mais compacta
+
+Base: v673.
+
+Ajustes:
+- compactado o bloco da poupança quando "Ver detalhes/regras" está aberto;
+- removido o card duplicado "Fórmula vigente" do resumo superior;
+- mantido o rendimento efetivo do mês como destaque principal;
+- regras ficam em dois cards mais baixos;
+- comparação de cenários fica mais compacta em três colunas;
+- botões e espaçamentos reduzidos;
+- mobile preservado.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css mantido sem alteração
+
+Validação:
+- app.js validado com node --check.

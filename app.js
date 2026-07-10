@@ -29740,3 +29740,57 @@ function buildDetailPanel(r,colspan){
   [120, 360, 900, 1800, 3200, 5200, 7600].forEach(function(delay){ setTimeout(function(){ apply(false); }, delay); });
 })();
 
+
+
+/* =========================================================
+   PATCH v674 — Poupança compacta aberta
+   ---------------------------------------------------------
+   Remove duplicidade visual do card de fórmula no resumo e
+   mantém o painel aberto mais enxuto.
+   ========================================================= */
+(function poupancaCompactOpenV674(){
+  function apply(){
+    try{
+      document.documentElement.classList.add('desktop-poupanca-compact-open-v674');
+
+      var formulaCard =
+        document.getElementById('poupFormulaCompactV673') ||
+        document.getElementById('poupFormulaCompactV672');
+      if(formulaCard){
+        formulaCard.setAttribute('hidden','');
+        formulaCard.style.display = 'none';
+      }
+
+      var btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar detalhes <span aria-hidden="true">▲</span>' : 'Ver detalhes <span aria-hidden="true">▼</span>';
+      }
+
+      var newRule = document.getElementById('poupNewRuleText');
+      if(newRule && /Rendimento efetivo do mês/i.test(newRule.textContent || '')){
+        newRule.innerHTML = 'Com Selic acima de 8,50% a.a.: <strong>TR + 0,50% a.m.</strong>';
+      }
+
+      var oldRule = document.getElementById('poupOldRuleText');
+      if(oldRule && /^Fórmula:/i.test(oldRule.textContent || '')){
+        oldRule.innerHTML = 'Rendimento: <strong>TR + 0,50% a.m.</strong>';
+      }
+    }catch(err){
+      console.warn('[Poupança v674]', err);
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+
+  window.addEventListener('load', apply, {once:true});
+  document.addEventListener('click', function(ev){
+    if(ev.target && ev.target.closest && ev.target.closest('#poupExpandBtn, .savings-reference-v167')){
+      setTimeout(apply, 40);
+      setTimeout(apply, 180);
+    }
+  }, true);
+
+  [120, 420, 1000, 2200, 4200].forEach(function(delay){ setTimeout(apply, delay); });
+})();

@@ -81347,3 +81347,273 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     line-height:1.3!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v674 — Desktop: Poupança aberta mais compacta
+   ---------------------------------------------------------
+   Objetivo:
+   - reduzir a altura do bloco quando "Ver regras" estiver aberto;
+   - remover duplicidade visual do card "Fórmula vigente" no resumo;
+   - manter o rendimento efetivo do mês como destaque principal;
+   - compactar regras e comparação de cenários.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167{
+    overflow:hidden!important;
+  }
+
+  /* Topo mais enxuto */
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-head-v167,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-head-v207{
+    min-height:72px!important;
+    padding:12px 20px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-title-v207 h3{
+    font-size:1.42rem!important;
+    line-height:1.02!important;
+    margin:1px 0 3px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-title-v207 p{
+    font-size:.78rem!important;
+    margin:0!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-current-v167,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-current-v207{
+    width:340px!important;
+    min-width:340px!important;
+    height:52px!important;
+    padding:7px 16px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-current-v167 > span{
+    font-size:.62rem!important;
+    letter-spacing:.075em!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #mc-poup{
+    font-size:1.85rem!important;
+  }
+
+  /* Faixa de fórmula mais baixa */
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-reading-v167,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-reading-v205,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-reading-v207{
+    padding:9px 20px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupQuickNote{
+    min-height:32px!important;
+    padding:0 14px!important;
+    font-size:.82rem!important;
+    border-radius:12px!important;
+  }
+
+  /* Resumo sem card duplicado de fórmula */
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupFormulaCompactV672,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupFormulaCompactV673,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .poup-formula-card-v673{
+    display:none!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-kpi-strip-v199,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-summary-v205,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-summary-v207{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,280px))!important;
+    justify-content:start!important;
+    align-items:stretch!important;
+    gap:10px!important;
+    width:100%!important;
+    max-width:none!important;
+    padding:10px 20px!important;
+    margin:0!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-kpi-v199{
+    min-height:50px!important;
+    padding:9px 13px!important;
+    border-radius:12px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-kpi-v199 dt{
+    font-size:.63rem!important;
+    margin-bottom:4px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-kpi-v199 dd{
+    font-size:.96rem!important;
+    line-height:1.05!important;
+  }
+
+  /* Ações mais compactas */
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-actions-v167,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-actions-v205,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-actions-v207{
+    padding:10px 20px!important;
+    gap:8px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-actions-v167 button,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-actions-v167 a{
+    min-height:30px!important;
+    padding:7px 14px!important;
+    font-size:.73rem!important;
+    border-radius:12px!important;
+  }
+
+  /* Painel aberto */
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupDetailsPanelV167[hidden]{
+    display:none!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupDetailsPanelV167:not([hidden]){
+    display:grid!important;
+    gap:10px!important;
+    padding:0 20px 16px!important;
+    margin:0!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupRulesV214{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    gap:10px!important;
+    margin:0!important;
+    padding:12px 14px!important;
+    border-radius:16px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupRulesV214 .savings-detail-head-v259{
+    grid-column:1/-1!important;
+    display:flex!important;
+    align-items:flex-end!important;
+    justify-content:space-between!important;
+    gap:16px!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupRulesV214 .savings-detail-head-v259 h4{
+    font-size:1.05rem!important;
+    line-height:1.05!important;
+    margin:0!important;
+    letter-spacing:.05em!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupRulesV214 .savings-detail-head-v259 p{
+    display:none!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .poup-rule-card,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-rule-v167,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-rule-v207{
+    min-height:112px!important;
+    padding:12px 14px!important;
+    border-radius:14px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-rule-head-v205{
+    min-height:auto!important;
+    padding-bottom:8px!important;
+    margin-bottom:8px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .poup-rule-label{
+    font-size:.82rem!important;
+    line-height:1.15!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .poup-rule-period{
+    font-size:.77rem!important;
+    margin:0 0 8px!important;
+    line-height:1.25!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupNewRuleText,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupOldRuleText{
+    font-size:.82rem!important;
+    line-height:1.25!important;
+    margin:0!important;
+  }
+
+  /* Comparação de cenários mais baixa */
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .poup-scenarios-card,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenarios-v167,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenarios-v207,
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenarios-v208{
+    padding:12px 14px!important;
+    margin:0!important;
+    border-radius:16px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .poup-scenarios-head{
+    margin:0 0 10px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupScenariosTitleV167{
+    font-size:1.02rem!important;
+    line-height:1.05!important;
+    margin:0!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .poup-scenarios-subtitle{
+    display:none!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-grid-v208{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:10px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-v208{
+    min-height:94px!important;
+    padding:12px!important;
+    border-radius:14px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-head-v208{
+    margin-bottom:8px!important;
+    padding-bottom:8px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-head-v208 span{
+    font-size:.80rem!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-head-v208 small{
+    font-size:.58rem!important;
+    padding:3px 8px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-v208 dl{
+    gap:6px!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-v208 dl div{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    padding:5px 0!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-v208 dt{
+    font-size:.62rem!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 .savings-scenario-card-v208 dd{
+    font-size:.78rem!important;
+    text-align:right!important;
+  }
+
+  html.desktop-poupanca-compact-open-v674 body .savings-reference-v167 #poupScenarioNote{
+    margin-top:10px!important;
+    padding:8px 12px!important;
+    font-size:.74rem!important;
+    line-height:1.2!important;
+  }
+}
