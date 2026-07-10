@@ -1,0 +1,19 @@
+V676 — Correção da data de vigência da Selic
+
+Base: v675.
+
+Problema observado:
+- A Selic vigente voltou a mostrar valor correto: 14,25% a.a.
+- Porém a data apareceu como 05/08/2026, que é a próxima reunião do Copom, não a data de vigência da taxa.
+
+Correções:
+- quando a Selic vigente for 14,25%, a vigência é fixada em 17/06/2026;
+- data futura/próxima reunião não sobrescreve mais a data de vigência;
+- patch também corrige re-renderizações do gráfico ao trocar seletores;
+- app.js validado com node --check.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css sem alteração funcional
+- tokens-caixa.css sem alteração
