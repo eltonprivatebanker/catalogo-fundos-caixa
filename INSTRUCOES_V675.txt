@@ -1,0 +1,22 @@
+V675 — Poupança ultracompacta aberta
+
+Base: v674.
+
+Ajustes:
+- remove definitivamente o card duplicado "Fórmula vigente" do resumo;
+- reduz altura do cabeçalho, faixa de fórmula, KPIs e botões;
+- força o painel aberto a usar uma única coluna em largura total;
+- corrige o problema das regras ficarem presas na coluna esquerda;
+- reduz altura dos cards de regras;
+- compacta a comparação de cenários;
+- mantém o rendimento do mês como destaque principal;
+- mobile preservado.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css mantido sem alteração
+
+Validação:
+- app.js validado com node --check.

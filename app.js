@@ -29794,3 +29794,71 @@ function buildDetailPanel(r,colspan){
 
   [120, 420, 1000, 2200, 4200].forEach(function(delay){ setTimeout(apply, delay); });
 })();
+
+
+/* =========================================================
+   PATCH v675 — Poupança ultracompacta aberta
+   Remove card duplicado de fórmula e evita reinsert tardio.
+   ========================================================= */
+(function poupancaUltraCompactV675(){
+  let obs = null;
+
+  function removeFormulaCard(){
+    document.querySelectorAll('#poupFormulaCompactV672,#poupFormulaCompactV673,.poup-formula-card-v673').forEach(function(el){
+      try{ el.remove(); }catch(e){ el.style.display='none'; }
+    });
+  }
+
+  function apply(){
+    try{
+      document.documentElement.classList.add('desktop-poupanca-ultracompact-v675');
+
+      removeFormulaCard();
+
+      var btn = document.getElementById('poupExpandBtn');
+      if(btn){
+        var expanded = btn.getAttribute('aria-expanded') === 'true';
+        btn.innerHTML = expanded ? 'Ocultar detalhes <span aria-hidden="true">▲</span>' : 'Ver detalhes <span aria-hidden="true">▼</span>';
+      }
+
+      var newRule = document.getElementById('poupNewRuleText');
+      if(newRule){
+        newRule.innerHTML = 'Com Selic acima de 8,50% a.a.: <strong>TR + 0,50% a.m.</strong>';
+      }
+
+      var oldRule = document.getElementById('poupOldRuleText');
+      if(oldRule){
+        oldRule.innerHTML = 'Rendimento: <strong>TR + 0,50% a.m.</strong>';
+      }
+
+      var details = document.getElementById('poupDetailsPanelV167');
+      if(details && !details.dataset.v675Ready){
+        details.dataset.v675Ready = '1';
+      }
+
+      if(!obs && window.MutationObserver){
+        var strip = document.querySelector('#sec-mercado .savings-reference-v167 .savings-summary-v207, #sec-mercado .savings-reference-v167 .savings-kpi-strip-v199');
+        if(strip){
+          obs = new MutationObserver(removeFormulaCard);
+          obs.observe(strip, {childList:true, subtree:true});
+        }
+      }
+    }catch(err){
+      console.warn('[Poupança v675]', err);
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+
+  window.addEventListener('load', apply, {once:true});
+  document.addEventListener('click', function(ev){
+    if(ev.target && ev.target.closest && ev.target.closest('#poupExpandBtn, .savings-reference-v167')){
+      setTimeout(apply, 30);
+      setTimeout(apply, 120);
+      setTimeout(apply, 300);
+    }
+  }, true);
+
+  [80, 180, 400, 800, 1600, 3000, 5000].forEach(function(delay){ setTimeout(apply, delay); });
+})();
