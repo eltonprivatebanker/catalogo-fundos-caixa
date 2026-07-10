@@ -1,0 +1,27 @@
+V667 — Correção Selic/Copom quando mercado_atual vem com Selic 0 ou vazia
+
+Base: v666.
+
+Problema observado:
+- Referências de juros mostravam Selic meta = —.
+- Calendário Copom mostrava 16–17 jun como corte -14,50 p.p. e Selic 0,00%.
+- Trajetória da Selic mostrava Selic vigente 0,00%.
+- Poupança entrou na regra de 70% da Selic + TR por causa da leitura zerada.
+
+Correções:
+- Adicionado fallback oficial temporário para Selic vigente: 14,25% desde 17/06/2026.
+- Reunião Copom de 16–17 jun passa a ter decisão estática: corte -0,25 p.p. → 14,25%.
+- normalizarMercadoAtual repara cards.selic_meta quando o robô entrega 0/vazio.
+- histórico_selic repara/remover pontos zerados e injeta 17/06/2026 com 14,25%.
+- carregarMercadoAtual também repara o JSON antes de cachear.
+- _decisaoCopomPorData usa fallback estático se não houver histórico válido.
+- DOM sync final corrige #mc-selic, Selic vigente, legenda, Copom e regra da poupança.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css sem alteração funcional
+- tokens-caixa.css sem alteração
+
+Validação:
+- app.js validado com node --check.

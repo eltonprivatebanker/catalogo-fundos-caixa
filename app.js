@@ -1,3 +1,106 @@
+
+/* =========================================================
+   PATCH v666 — Helper oficial da Selic vigente
+   ---------------------------------------------------------
+   Centraliza a leitura da Selic vigente e evita usar 0,00%.
+   Prioridade:
+   1) dados oficiais do mercado_atual, se > 0;
+   2) DOM do card de juros (#mc-selic), se já renderizado;
+   3) textos visíveis do bloco de juros, como fallback.
+   ========================================================= */
+(function selicOfficialHelperV666(){
+  function parse(v){
+    if(v === null || v === undefined || v === '') return NaN;
+    var s = String(v)
+      .replace(/%/g,'')
+      .replace(/\s+/g,'')
+      .replace(/[^0-9,.\-]/g,'');
+    if(!s || s === '-' || s === '—') return NaN;
+    if(s.includes(',') && s.includes('.')) s = s.replace(/\./g,'').replace(',','.');
+    else if(s.includes(',')) s = s.replace(',','.');
+    var n = Number(s);
+    return Number.isFinite(n) && n > 0 ? n : NaN;
+  }
+
+  function fromData(dados){
+    var card = dados?.cards?.selic_meta || window._dadosMercado?.cards?.selic_meta || window.__ECON_DASH_STATE_V378__?.mercado?.cards?.selic_meta || {};
+    var vals = [
+      card.valor,
+      card.taxa,
+      card.valor_atual,
+      card.selic,
+      card.selic_meta,
+      card.meta,
+      card.valor_anual
+    ];
+    for(var i=0;i<vals.length;i++){
+      var n = parse(vals[i]);
+      if(Number.isFinite(n) && n > 0) return n;
+    }
+    return NaN;
+  }
+
+  function fromDom(){
+    var selectors = [
+      '#mc-selic',
+      '#evoSelicAtualVal',
+      '#selicHojeResumo',
+      '.selic-summary-v167 strong',
+      '.rate-summary-card-v167.selic-summary-v167 strong',
+      '[data-selic-meta]',
+      '[data-current-selic]'
+    ];
+
+    for(var i=0;i<selectors.length;i++){
+      var el = document.querySelector(selectors[i]);
+      var n = parse(el?.textContent || el?.value || el?.dataset?.selicMeta || el?.dataset?.currentSelic);
+      if(Number.isFinite(n) && n > 0) return n;
+    }
+
+    var area = document.querySelector('#sec-mercado, #mobileSelicV400, body');
+    var txt = String(area?.innerText || '');
+    var m = txt.match(/Selic\s*(?:meta|vigente|atual)?[^0-9]{0,25}(\d{1,2}(?:[,.]\d{1,2})?)\s*%/i);
+    var n2 = parse(m && m[1]);
+    return Number.isFinite(n2) && n2 > 0 ? n2 : NaN;
+  }
+
+  function dateFromData(dados){
+    var card = dados?.cards?.selic_meta || window._dadosMercado?.cards?.selic_meta || window.__ECON_DASH_STATE_V378__?.mercado?.cards?.selic_meta || {};
+    var vals = [
+      card.ultima_alteracao,
+      card.data_ultima_alteracao,
+      card.data_mudanca,
+      card.vigente_desde,
+      card.data_ref,
+      card.data
+    ];
+    for(var i=0;i<vals.length;i++){
+      var v = vals[i];
+      if(v && String(v).trim() && !/^0/.test(String(v).trim())) return String(v).trim();
+    }
+    var el = document.querySelector('#selic-last-change, #selicHojeData');
+    var t = String(el?.textContent || '').replace(/^desde\s+/i,'').trim();
+    return t && !/0,00|último dado|ultimo dado|vigente$/i.test(t) ? t : '';
+  }
+
+  window.selicOfficialPositiveV666 = function(dados){
+    var n = fromData(dados);
+    if(Number.isFinite(n) && n > 0) return n;
+    n = fromDom();
+    if(Number.isFinite(n) && n > 0) return n;
+    return NaN;
+  };
+
+  window.selicOfficialDateV666 = function(dados){
+    return dateFromData(dados);
+  };
+
+  window.formatSelicOfficialV666 = function(v){
+    var n = Number(v);
+    return Number.isFinite(n) && n > 0 ? n.toFixed(2).replace('.', ',') + '% a.a.' : '—';
+  };
+})();
+
 // ELTAUM_REMOVE_12M_XAXIS_v342
 // ELTAUM_INFLATION_SUMMARY_COMPACT_v341
 // ELTAUM_CHARTS_LOOP_FIX_v340
@@ -1897,6 +2000,7 @@ window.addEventListener('pageshow', () => {
 ════════════════════════════════════════════════════ */
 function normalizarMercadoAtual(d){
   if(!d || typeof d !== 'object') return d;
+  d = typeof repararSelicMercadoV667 === 'function' ? repararSelicMercadoV667(d) : d;
 
   const c = d.cards || {};
   const intl = d.indices_internacionais || {};
@@ -6797,7 +6901,7 @@ function buildChartSelic(historico,qtd){
         _valor: valor
       };
     })
-    .filter(d=>d._ano>=1999 && !isNaN(d._valor) && d._valor>=0 && d._ts>0);
+    .filter(d=>d._ano>=1999 && !isNaN(d._valor) && d._valor>0 && d._ts>0);
 
   filtrado.sort((a,b)=>a._ts-b._ts);
 
@@ -6805,12 +6909,12 @@ function buildChartSelic(historico,qtd){
   // Assim o desenho inicial e os cliques antigos usam o mesmo valor do painel.
   try{
     const card = _dadosMercado?.cards?.selic_meta || {};
-    const valorVigente = Number(card.valor);
-    if(Number.isFinite(valorVigente)){
+    const valorVigente = (window.selicOfficialPositiveV666?.(_dadosMercado) ?? parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.')));
+    if(Number.isFinite(valorVigente) && valorVigente > 0){
       const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
         ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
         : null;
-      const dataRef = ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || '';
+      const dataRef = (window.selicOfficialDateV666?.(_dadosMercado) || ref?.data || card.ultima_alteracao || card.data_ultima_alteracao || card.vigente_desde || card.data_ref || '');
       let dtVigente = null;
       if(dataRef && typeof dataRef === 'string' && dataRef.includes('/')){
         const p = dataRef.split('/');
@@ -6893,8 +6997,8 @@ function buildChartSelic(historico,qtd){
   let vigenteResumoData = fmtDataSelic(currentRow?._dt) || 'último dado';
   try{
     const card = _dadosMercado?.cards?.selic_meta || {};
-    const valorCard = Number(card.valor);
-    if(Number.isFinite(valorCard)){
+    const valorCard = (window.selicOfficialPositiveV666?.(_dadosMercado) ?? parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.')));
+    if(Number.isFinite(valorCard) && valorCard > 0){
       vigenteResumoValor = valorCard;
       const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
         ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
@@ -8272,12 +8376,150 @@ const COPOM_2026 = [
   { num:1, short:'27–28 jan', datas:'27 e 28 de janeiro',  decision:'2026-01-28', resultado_static:'mantida em 15,00%',        tipo_static:'hold' },
   { num:2, short:'17–18 mar', datas:'17 e 18 de março',    decision:'2026-03-18', resultado_static:'corte −0,25 p.p. → 14,75%', tipo_static:'cut'  },
   { num:3, short:'28–29 abr', datas:'28 e 29 de abril',    decision:'2026-04-29', resultado_static:'corte −0,25 p.p. → 14,50%', tipo_static:'cut'  },
-  { num:4, short:'16–17 jun', datas:'16 e 17 de junho',    decision:'2026-06-17' },
+  { num:4, short:'16–17 jun', datas:'16 e 17 de junho',    decision:'2026-06-17', resultado_static:'corte −0,25 p.p. → 14,25%', tipo_static:'cut'  },
   { num:5, short:'4–5 ago',   datas:'4 e 5 de agosto',     decision:'2026-08-05' },
   { num:6, short:'15–16 set', datas:'15 e 16 de setembro', decision:'2026-09-16' },
   { num:7, short:'3–4 nov',   datas:'3 e 4 de novembro',   decision:'2026-11-04' },
   { num:8, short:'8–9 dez',   datas:'8 e 9 de dezembro',   decision:'2026-12-09' },
 ];
+
+/* PATCH v667 — fallback oficial da Selic/Copom quando o robô entrega 0 ou vazio */
+const SELIC_FALLBACK_V667 = {
+  valor: 14.25,
+  dataKey: '2026-06-17',
+  dataBR: '17/06/2026',
+  resultado: 'corte −0,25 p.p. → 14,25%',
+  tipo: 'cut'
+};
+
+function parseSelicNumberV667(value){
+  if(value === null || value === undefined || value === '') return NaN;
+  let s = String(value)
+    .replace(/%/g,'')
+    .replace(/\s+/g,'')
+    .replace(/[^0-9,.\-]/g,'');
+  if(!s || s === '-' || s === '—') return NaN;
+  if(s.includes(',') && s.includes('.')) s = s.replace(/\./g,'').replace(',','.');
+  else if(s.includes(',')) s = s.replace(',','.');
+  const n = Number(s);
+  return Number.isFinite(n) ? n : NaN;
+}
+
+function selicFallbackAtivaV667(){
+  try{
+    const hoje = _dataKeyHojeLocal ? _dataKeyHojeLocal() : new Date().toISOString().slice(0,10);
+    return hoje >= SELIC_FALLBACK_V667.dataKey && hoje < '2026-08-05';
+  }catch(e){
+    return true;
+  }
+}
+
+function normalizarRegistroSelicV667(item){
+  if(!item || typeof item !== 'object') return item;
+  const key = _dateKeyCopom(item.DataReuniaoCopom || item.data || item.DataInicioVigencia || item.data_ref || item.Data || '');
+  const n = parseSelicNumberV667(item.MetaSelic ?? item.valor ?? item.meta_selic ?? item.taxa ?? item.Valor ?? item.Selic ?? item.selic);
+  if(key === SELIC_FALLBACK_V667.dataKey && (!Number.isFinite(n) || n <= 0)){
+    return {
+      ...item,
+      data: SELIC_FALLBACK_V667.dataBR,
+      valor: SELIC_FALLBACK_V667.valor,
+      MetaSelic: SELIC_FALLBACK_V667.valor,
+      DataReuniaoCopom: `${SELIC_FALLBACK_V667.dataKey}T03:00:00Z`,
+      data_ref: SELIC_FALLBACK_V667.dataKey,
+      _selic_reparada_v667: true
+    };
+  }
+  return item;
+}
+
+function repararHistoricoSelicV667(arr){
+  const base = Array.isArray(arr) ? arr.map(normalizarRegistroSelicV667) : [];
+  const semZeros = base.filter(item => {
+    const key = _dateKeyCopom(item?.DataReuniaoCopom || item?.data || item?.DataInicioVigencia || item?.data_ref || item?.Data || '');
+    const n = parseSelicNumberV667(item?.MetaSelic ?? item?.valor ?? item?.meta_selic ?? item?.taxa ?? item?.Valor ?? item?.Selic ?? item?.selic);
+    if(key === SELIC_FALLBACK_V667.dataKey) return true;
+    return Number.isFinite(n) && n > 0;
+  });
+
+  const existeJunho = semZeros.some(item => {
+    const key = _dateKeyCopom(item?.DataReuniaoCopom || item?.data || item?.DataInicioVigencia || item?.data_ref || item?.Data || '');
+    const n = parseSelicNumberV667(item?.MetaSelic ?? item?.valor ?? item?.meta_selic ?? item?.taxa ?? item?.Valor ?? item?.Selic ?? item?.selic);
+    return key === SELIC_FALLBACK_V667.dataKey && Number.isFinite(n) && n > 0;
+  });
+
+  if(selicFallbackAtivaV667() && !existeJunho){
+    semZeros.push({
+      data: SELIC_FALLBACK_V667.dataBR,
+      valor: SELIC_FALLBACK_V667.valor,
+      MetaSelic: SELIC_FALLBACK_V667.valor,
+      DataReuniaoCopom: `${SELIC_FALLBACK_V667.dataKey}T03:00:00Z`,
+      data_ref: SELIC_FALLBACK_V667.dataKey,
+      _selic_reparada_v667: true
+    });
+  }
+
+  return semZeros;
+}
+
+function repararSelicMercadoV667(dados){
+  if(!dados || typeof dados !== 'object') return dados;
+
+  if(!dados.cards) dados.cards = {};
+  if(!dados.cards.selic_meta) dados.cards.selic_meta = {};
+
+  const card = dados.cards.selic_meta;
+  const atual = parseSelicNumberV667(card.valor ?? card.taxa ?? card.valor_atual ?? card.selic ?? card.selic_meta ?? card.meta);
+
+  if((!Number.isFinite(atual) || atual <= 0) && selicFallbackAtivaV667()){
+    card.valor = SELIC_FALLBACK_V667.valor;
+    card.taxa = SELIC_FALLBACK_V667.valor;
+    card.valor_atual = SELIC_FALLBACK_V667.valor;
+    card.vigente_desde = SELIC_FALLBACK_V667.dataBR;
+    card.ultima_alteracao = SELIC_FALLBACK_V667.dataBR;
+    card.data_ultima_alteracao = SELIC_FALLBACK_V667.dataBR;
+    card.data_ref = SELIC_FALLBACK_V667.dataKey;
+    card._reparado_v667 = true;
+  }
+
+  if(Array.isArray(dados.historico_selic)){
+    dados.historico_selic = repararHistoricoSelicV667(dados.historico_selic);
+  }else if(selicFallbackAtivaV667()){
+    dados.historico_selic = repararHistoricoSelicV667(dados.cards.selic_meta.historico || []);
+  }
+
+  if(Array.isArray(card.historico)){
+    card.historico = repararHistoricoSelicV667(card.historico);
+  }
+
+  return dados;
+}
+
+(function selicHelperFallbackV667(){
+  const oldValue = window.selicOfficialPositiveV666;
+  const oldDate = window.selicOfficialDateV666;
+
+  window.selicOfficialPositiveV666 = function(dados){
+    const reparado = repararSelicMercadoV667(dados || window._dadosMercado || window.__ECON_DASH_STATE_V378__?.mercado || {});
+    const card = reparado?.cards?.selic_meta || {};
+    const direto = parseSelicNumberV667(card.valor ?? card.taxa ?? card.valor_atual ?? card.selic ?? card.selic_meta ?? card.meta);
+    if(Number.isFinite(direto) && direto > 0) return direto;
+
+    if(selicFallbackAtivaV667()) return SELIC_FALLBACK_V667.valor;
+
+    const antigo = oldValue?.(dados);
+    return Number.isFinite(antigo) && antigo > 0 ? antigo : NaN;
+  };
+
+  window.selicOfficialDateV666 = function(dados){
+    const reparado = repararSelicMercadoV667(dados || window._dadosMercado || window.__ECON_DASH_STATE_V378__?.mercado || {});
+    const card = reparado?.cards?.selic_meta || {};
+    const direto = card.vigente_desde || card.ultima_alteracao || card.data_ultima_alteracao || card.data_ref || '';
+    if(direto) return String(direto);
+    if(selicFallbackAtivaV667()) return SELIC_FALLBACK_V667.dataBR;
+    return oldDate?.(dados) || '';
+  };
+})();
+
 
 function _dateKeyCopom(v){
   if(!v) return '';
@@ -8289,8 +8531,8 @@ function _dateKeyCopom(v){
 }
 function _selicValorRegistro(r){
   const v = r?.MetaSelic ?? r?.valor ?? r?.meta_selic ?? r?.taxa;
-  const n = Number(v);
-  return Number.isFinite(n) ? n : null;
+  const n = parseFloat(String(v ?? '').replace('%','').replace(',','.'));
+  return Number.isFinite(n) && n > 0 ? n : null;
 }
 function _fmtPpCopom(v){
   const n = Number(v);
@@ -8318,8 +8560,8 @@ function _historicoSelicOrdenadoParaDados(dados){
     .filter(r => r._key && r._valor !== null)
     .sort((a,b) => b._key.localeCompare(a._key));
 
-  const vigente = Number(card.valor);
-  if(!Number.isFinite(vigente)) return historico;
+  const vigente = (window.selicOfficialPositiveV666?.(dados) ?? parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.')));
+  if(!Number.isFinite(vigente) || vigente <= 0) return historico;
 
   const maisRecente = historico[0] || null;
   const historicoJaAtual = maisRecente && Math.abs(maisRecente._valor - vigente) < 0.005;
@@ -8359,10 +8601,10 @@ function _historicoSelicOrdenado(){
 }
 function resolverDataUltimaAlteracaoSelic(dados){
   const card = dados?.cards?.selic_meta || {};
-  const vigente = Number(card.valor);
+  const vigente = (window.selicOfficialPositiveV666?.(dados) ?? parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.')));
   const historico = _historicoSelicOrdenadoParaDados(dados);
 
-  if(!Number.isFinite(vigente) || !historico.length){
+  if(!Number.isFinite(vigente) || vigente <= 0 || !historico.length){
     const fallback = card.ultima_alteracao || card.data_ultima_alteracao || card.data_ref || '';
     const key = _dateKeyCopom(fallback);
     return { data:key ? _dataBrCopom(key) : String(fallback || ''), key, inferida:false };
@@ -8391,23 +8633,37 @@ function resolverDataUltimaAlteracaoSelic(dados){
   };
 }
 function _decisaoCopomPorData(decisionDate){
+  const evento = COPOM_2026.find(r => r.decision === decisionDate) || null;
+  const hojeKey = _dataKeyHojeLocal();
+
   const hist = _historicoSelicOrdenado();
   const idx = hist.findIndex(r => r._key === decisionDate);
-  if(idx < 0) return null;
-  const atual = hist[idx];
-  const anterior = hist[idx + 1];
-  const taxa = atual._valor;
-  if(!anterior || anterior._valor === null){
-    return { tipo:'done', texto:`Selic ${_fmtPctCopom(taxa)}` };
+
+  if(idx >= 0){
+    const atual = hist[idx];
+    const anterior = hist[idx + 1];
+    const taxa = atual._valor;
+
+    if(Number.isFinite(taxa) && taxa > 0){
+      if(!anterior || anterior._valor === null){
+        return { tipo:'done', texto:`Selic ${_fmtPctCopom(taxa)}` };
+      }
+      const diff = +(taxa - anterior._valor).toFixed(2);
+      if(Math.abs(diff) < 0.005){
+        return { tipo:'hold', texto:`mantida em ${_fmtPctCopom(taxa)}` };
+      }
+      if(diff > 0){
+        return { tipo:'hike', texto:`alta ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
+      }
+      return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
+    }
   }
-  const diff = +(taxa - anterior._valor).toFixed(2);
-  if(Math.abs(diff) < 0.005){
-    return { tipo:'hold', texto:`mantida em ${_fmtPctCopom(taxa)}` };
+
+  if(evento && evento.resultado_static && decisionDate <= hojeKey){
+    return { tipo:evento.tipo_static || 'done', texto:evento.resultado_static, static_v667:true };
   }
-  if(diff > 0){
-    return { tipo:'hike', texto:`alta ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
-  }
-  return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
+
+  return null;
 }
 function _resumoCopomTexto(resultado){
   const raw = String(resultado || '').trim();
@@ -10871,6 +11127,7 @@ async function sharePainelMercado(){
   async function carregarMercadoAtual(){
     if(cache.mercado) return cache.mercado;
     cache.mercado = await carregarJsonDoRepo('mercado_atual.json');
+    if(typeof repararSelicMercadoV667 === 'function') cache.mercado = repararSelicMercadoV667(cache.mercado);
     return cache.mercado;
   }
 
@@ -10939,7 +11196,7 @@ async function sharePainelMercado(){
       const dt = parseDateAny(dataRaw);
       const valor = parseNum(d.MetaSelic ?? d.valor ?? d.Valor ?? d.TaxaSelic ?? d.taxa ?? d.Selic ?? d.selic);
       return { label: dt ? mesAno(dt) : 'p' + (idx + 1), valor, _dt: dt, _ts: dt ? dt.getTime() : idx };
-    }).filter(d => Number.isFinite(d.valor) && d.valor >= 0).sort((a,b) => a._ts - b._ts);
+    }).filter(d => Number.isFinite(d.valor) && d.valor > 0).sort((a,b) => a._ts - b._ts);
 
     // Se vier uma série diária, mantém só pontos de mudança para o gráfico ficar leve e didático.
     const compacta = [];
@@ -10954,8 +11211,8 @@ async function sharePainelMercado(){
   function reconciliarSelicVigenteV248(base, mercado){
     const lista = Array.isArray(base) ? [...base] : [];
     const card = mercado?.cards?.selic_meta || {};
-    const valor = Number(card.valor);
-    if(!Number.isFinite(valor)) return lista;
+    const valor = (window.selicOfficialPositiveV666?.(mercado) ?? parseNum(card.valor ?? card.taxa ?? card.valor_atual));
+    if(!Number.isFinite(valor) || valor <= 0) return lista;
 
     let dataRef = '';
     try{
@@ -10970,6 +11227,7 @@ async function sharePainelMercado(){
       || card.data_mudanca
       || card.vigente_desde
       || card.data_ref
+      || window.selicOfficialDateV666?.(mercado)
       || '';
 
     let dt = parseDateAny(dataRef);
@@ -11171,8 +11429,8 @@ async function sharePainelMercado(){
     // não apenas o último ponto que veio no histórico antigo.
     try{
       const card = _dadosMercado?.cards?.selic_meta || {};
-      const valorCard = Number(card.valor);
-      if(Number.isFinite(valorCard)){
+      const valorCard = (window.selicOfficialPositiveV666?.(_dadosMercado) ?? parseNum(card.valor ?? card.taxa ?? card.valor_atual));
+      if(Number.isFinite(valorCard) && valorCard > 0){
         vigenteValor = valorCard;
         const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
           ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
@@ -29050,4 +29308,258 @@ function buildDetailPanel(r,colspan){
   requestAnimationFrame(apply);
   setTimeout(apply, 120);
   setTimeout(apply, 450);
+})();
+
+
+/* =========================================================
+   PATCH v665 — Selic zero-safe
+   ---------------------------------------------------------
+   Evita que um carregamento antecipado do mercado_atual injete 0,00%
+   como Selic vigente no gráfico/resumo.
+   ========================================================= */
+(function selicZeroSafeV665(){
+  function parseSelic(v){
+    if(v === null || v === undefined || v === '') return NaN;
+    return parseFloat(String(v).replace('%','').replace(',','.').replace(/[^0-9.\-]/g,''));
+  }
+
+  function fmt(v){
+    return Number.isFinite(v) && v > 0 ? v.toFixed(2).replace('.', ',') + '% a.a.' : '';
+  }
+
+  function cardValue(){
+    try{
+      var card = window._dadosMercado?.cards?.selic_meta || window.__ECON_DASH_STATE_V378__?.mercado?.cards?.selic_meta || {};
+      var n = parseSelic(card.valor ?? card.taxa ?? card.valor_atual);
+      return Number.isFinite(n) && n > 0 ? n : NaN;
+    }catch(e){
+      return NaN;
+    }
+  }
+
+  function lastPositiveFromChart(){
+    try{
+      var chart = window.Chart && window.Chart.getChart ? window.Chart.getChart('chartSelic') : null;
+      var arr = chart?.data?.datasets?.[0]?.data || [];
+      for(var i = arr.length - 1; i >= 0; i--){
+        var v = typeof arr[i] === 'number' ? arr[i] : (arr[i]?.y ?? arr[i]);
+        var n = Number(v);
+        if(Number.isFinite(n) && n > 0) return n;
+      }
+    }catch(e){}
+    return NaN;
+  }
+
+  function apply(){
+    var current = cardValue();
+    if(!Number.isFinite(current) || current <= 0) current = lastPositiveFromChart();
+    if(!Number.isFinite(current) || current <= 0) return;
+
+    var currentTxt = fmt(current);
+    var resumo = document.getElementById('selicHojeResumo');
+    if(resumo && /(^|\s)0,00%\s*a\.a\./i.test(resumo.textContent || '')){
+      resumo.textContent = currentTxt;
+    }
+
+    document.querySelectorAll('#mobileSelicV400 .selic-executive-legend-v596 strong, #mobileSelicV400 .selic-chart-legend-v596 strong').forEach(function(el){
+      if(/Selic atual:\s*0,00%\s*a\.a\./i.test(el.textContent || '')){
+        el.textContent = (el.textContent || '').replace(/Selic atual:\s*0,00%\s*a\.a\./i, 'Selic atual: ' + currentTxt);
+      }
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+
+  window.addEventListener('load', apply, {once:true});
+  [100, 350, 800, 1600, 3200].forEach(function(delay){ setTimeout(apply, delay); });
+})();
+
+
+/* =========================================================
+   PATCH v666 — Selic vigente DOM sync e anti-flicker
+   ---------------------------------------------------------
+   Corrige re-renderizações tardias do módulo legado da Selic.
+   Mantém card e legenda coerentes com a Selic vigente oficial.
+   ========================================================= */
+(function selicCurrentDomSyncV666(){
+  var timer = null;
+  var lastApplied = '';
+
+  function val(){
+    var n = window.selicOfficialPositiveV666?.(window._dadosMercado);
+    return Number.isFinite(n) && n > 0 ? n : NaN;
+  }
+
+  function date(){
+    return window.selicOfficialDateV666?.(window._dadosMercado) || '';
+  }
+
+  function fmt(v){
+    return window.formatSelicOfficialV666 ? window.formatSelicOfficialV666(v) : (v.toFixed(2).replace('.', ',') + '% a.a.');
+  }
+
+  function normalizeDateText(d){
+    if(!d) return '';
+    d = String(d).trim().replace(/^desde\s+/i,'');
+    var m = d.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    if(m) return m[3] + '/' + m[2] + '/' + m[1];
+    return d;
+  }
+
+  function sync(){
+    var n = val();
+    if(!Number.isFinite(n) || n <= 0) return;
+
+    var txt = fmt(n);
+    var d = normalizeDateText(date());
+    var key = txt + '|' + d;
+
+    var currentValue = document.getElementById('selicHojeResumo');
+    var currentDate = document.getElementById('selicHojeData');
+
+    if(currentValue && currentValue.textContent !== txt){
+      currentValue.textContent = txt;
+    }
+    if(currentDate && d && currentDate.textContent !== 'desde ' + d){
+      currentDate.textContent = 'desde ' + d;
+    }
+
+    document.querySelectorAll('#mobileSelicV400 .selic-executive-legend-v596 strong, #mobileSelicV400 .selic-chart-legend-v596 strong').forEach(function(el){
+      var t = el.textContent || '';
+      var next = t;
+      if(/Selic atual:\s*[\d,.]+%\s*a\.a\./i.test(t)){
+        next = t.replace(/Selic atual:\s*[\d,.]+%\s*a\.a\./i, 'Selic atual: ' + txt);
+      }else if(/Período exibido:/i.test(t) && !/Selic atual:/i.test(t)){
+        next = t + ' · Selic atual: ' + txt;
+      }
+      if(next !== t) el.textContent = next;
+    });
+
+    // Atualiza o último dataset de marcador "vigente", quando existir, sem destruir o gráfico.
+    try{
+      var chart = window.Chart && window.Chart.getChart ? window.Chart.getChart('chartSelic') : null;
+      if(chart && chart.data && Array.isArray(chart.data.datasets)){
+        chart.data.datasets.forEach(function(ds){
+          if(/vigente|atual/i.test(String(ds.label || '')) && Array.isArray(ds.data) && ds.data.length){
+            var lastIndex = ds.data.length - 1;
+            if(typeof ds.data[lastIndex] === 'number') ds.data[lastIndex] = n;
+            else if(ds.data[lastIndex] && typeof ds.data[lastIndex] === 'object') ds.data[lastIndex].y = n;
+          }
+        });
+        chart.update('none');
+      }
+    }catch(e){}
+
+    lastApplied = key;
+  }
+
+  function schedule(){
+    clearTimeout(timer);
+    timer = setTimeout(sync, 60);
+    setTimeout(sync, 220);
+  }
+
+  function bind(){
+    var root = document.getElementById('mobileSelicV400');
+    if(root && !root.dataset.v666Bound){
+      root.dataset.v666Bound = '1';
+      root.addEventListener('click', function(ev){
+        if(ev.target && ev.target.closest('[data-dash-range-target="selic"], #selicCustomApplyV596, button')){
+          root.classList.add('selic-switching-v666');
+          schedule();
+          setTimeout(function(){ root.classList.remove('selic-switching-v666'); sync(); }, 260);
+        }
+      }, true);
+
+      if(window.MutationObserver){
+        new MutationObserver(schedule).observe(root, {childList:true, subtree:true, characterData:true});
+      }
+    }
+    schedule();
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, {once:true});
+  else bind();
+
+  window.addEventListener('load', bind, {once:true});
+  [120, 400, 1000, 2200, 5000].forEach(function(delay){ setTimeout(sync, delay); });
+})();
+
+
+/* =========================================================
+   PATCH v667 — Selic/Copom DOM sync final
+   ---------------------------------------------------------
+   Corrige telas legadas quando mercado_atual.json veio com Selic vazia/0.
+   ========================================================= */
+(function selicCopomDomRepairV667(){
+  function fmtValor(v){
+    return Number(v).toFixed(2).replace('.', ',') + '%';
+  }
+
+  function apply(){
+    try{
+      if(window._dadosMercado && typeof repararSelicMercadoV667 === 'function'){
+        repararSelicMercadoV667(window._dadosMercado);
+      }
+      if(window.__ECON_DASH_STATE_V378__?.mercado && typeof repararSelicMercadoV667 === 'function'){
+        repararSelicMercadoV667(window.__ECON_DASH_STATE_V378__.mercado);
+      }
+
+      const valor = window.selicOfficialPositiveV666?.(window._dadosMercado);
+      if(!Number.isFinite(valor) || valor <= 0) return;
+
+      const valorPct = fmtValor(valor);
+      const valorAa = valorPct + ' a.a.';
+      const data = window.selicOfficialDateV666?.(window._dadosMercado) || SELIC_FALLBACK_V667.dataBR;
+
+      const setText = (sel, text) => {
+        document.querySelectorAll(sel).forEach(el => {
+          if(el && el.textContent !== text) el.textContent = text;
+        });
+      };
+
+      setText('#mc-selic', valorPct);
+      setText('#selic-last-change', String(data).replace(/^desde\s+/i,''));
+      setText('#selicHojeResumo', valorAa);
+      setText('#selicHojeData', 'desde ' + String(data).replace(/^desde\s+/i,''));
+
+      document.querySelectorAll('#mobileSelicV400 .selic-executive-legend-v596 strong, #mobileSelicV400 .selic-chart-legend-v596 strong').forEach(el => {
+        const txt = el.textContent || '';
+        if(/Selic atual:\s*[\d,.]+%\s*a\.a\./i.test(txt)){
+          el.textContent = txt.replace(/Selic atual:\s*[\d,.]+%\s*a\.a\./i, 'Selic atual: ' + valorAa);
+        }
+      });
+
+      // Poupança: com Selic acima de 8,50% a regra vigente é TR + 0,50% a.m.
+      if(valor > 8.5){
+        setText('#poupQuickNote', 'Rendimento de TR + 0,50% a.m. (Selic acima de 8,50% a.a.)');
+        setText('#poupNewRuleText', 'Rendimento: TR + 0,50% a.m.');
+        setText('#poupScenarioCurrentNew', 'TR + 0,50% a.m.');
+        setText('#poupScenarioCurrentOld', 'TR + 0,50% a.m.');
+        const poup = document.getElementById('mc-poup');
+        if(poup && (/0,67|0\.67|—/.test(poup.textContent || ''))) poup.textContent = 'TR + 0,50%';
+      }
+
+      // Se algum texto de Copom ainda foi renderizado com 0,00%, força nova montagem.
+      const badCopom = document.querySelector('#desktopCopomAgendaV648, #copomMeetings, .desktop-copom-agenda-v648');
+      if(badCopom && /0,00%|14,50\s*p\.p/i.test(badCopom.innerText || '') && typeof buildCopomCalendario === 'function'){
+        buildCopomCalendario();
+      }
+    }catch(err){
+      console.warn('[v667 Selic/Copom repair]', err);
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
+  else apply();
+
+  window.addEventListener('load', apply, {once:true});
+  [80, 220, 500, 1000, 1800, 3200, 6000].forEach(delay => setTimeout(apply, delay));
+  document.addEventListener('click', ev => {
+    if(ev.target?.closest?.('#mobileSelicV400, #sec-mercado, [data-dash-range-target="selic"]')){
+      setTimeout(apply, 80);
+      setTimeout(apply, 260);
+    }
+  }, true);
 })();

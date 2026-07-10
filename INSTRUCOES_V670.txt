@@ -1,0 +1,23 @@
+V670 — Dólar PTAX desktop mais compacto
+
+Base: v667.
+
+Ajustes aplicados somente no desktop:
+- topo do Dólar PTAX mais baixo;
+- card principal e mini KPIs com menos altura/padding;
+- gráfico reduzido para ocupar menos área vertical;
+- abas 2026/12M/24M/36M menores;
+- estatísticas do período mais compactas;
+- fechamentos mensais com linhas menores;
+- mobile preservado.
+
+Arquivos alterados:
+- index.html
+- style.css
+
+Arquivos mantidos:
+- app.js sem alteração funcional
+- tokens-caixa.css sem alteração
+
+Validação:
+- app.js validado com node --check.
