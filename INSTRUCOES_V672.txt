@@ -1,0 +1,19 @@
+V672 — Poupança com rendimento efetivo do mês e bloco desktop compacto
+
+Base: v671.
+
+Ajustes principais:
+- O card principal da poupança passa a priorizar o rendimento efetivo mensal vindo do robô.
+- A fórmula TR + 0,50% a.m. deixa de substituir o valor efetivo e vira leitura auxiliar.
+- O texto principal passa a ser "Rendimento efetivo do mês".
+- A linha de regra ficou mais objetiva: Fórmula vigente + regra da Selic.
+- Adicionado card compacto "Fórmula vigente" na área de KPIs.
+- Bloco desktop ficou mais baixo/compacto.
+- Mobile preservado.
+
+Observação:
+- Se o robô ainda não trouxer o rendimento efetivo mensal, o painel mantém a fórmula como fallback.
+- Quando o robô v669/v18.7 atualizar mercado_atual.json corretamente, o card deve exibir algo como 0,67% a.m. em vez de TR + 0,50%.
+
+Validação:
+- app.js validado com node --check.

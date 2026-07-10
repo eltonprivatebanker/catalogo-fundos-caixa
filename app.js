@@ -29563,3 +29563,180 @@ function buildDetailPanel(r,colspan){
     }
   }, true);
 })();
+
+
+/* =========================================================
+   PATCH v672 — Poupança: rendimento efetivo do mês + bloco compacto
+   ---------------------------------------------------------
+   Objetivo: priorizar o rendimento efetivo mensal vindo do robô
+   e deixar a fórmula apenas como leitura auxiliar.
+   ========================================================= */
+(function poupancaEffectiveMonthlyV672(){
+  var BUILD = 'ELTAUM_POUPANCA_EFFECTIVE_MONTHLY_V672';
+  var lastKey = '';
+  var timer = null;
+
+  function parseNum(value){
+    if(value === null || value === undefined || value === '') return NaN;
+    if(typeof value === 'number') return Number.isFinite(value) ? value : NaN;
+    var s = String(value).trim();
+    if(!s || s === '-' || s === '—') return NaN;
+    s = s.replace(/%/g,'').replace(/\s+/g,'').replace(/[^0-9,\.\-]/g,'');
+    if(!s || s === '-' || s === '—') return NaN;
+    if(s.indexOf(',') >= 0 && s.indexOf('.') >= 0) s = s.replace(/\./g,'').replace(',','.');
+    else if(s.indexOf(',') >= 0) s = s.replace(',','.');
+    var n = Number(s);
+    return Number.isFinite(n) ? n : NaN;
+  }
+
+  function firstNumber(){
+    for(var i=0;i<arguments.length;i++){
+      var n = parseNum(arguments[i]);
+      if(Number.isFinite(n)) return n;
+    }
+    return NaN;
+  }
+
+  function fmtPct(n){
+    return Number.isFinite(n) ? n.toFixed(2).replace('.', ',') + '%' : '—';
+  }
+
+  function mercado(){
+    return window._dadosMercado || window.__ECON_DASH_STATE_V378__?.mercado || window.__mercadoAtualV230 || {};
+  }
+
+  function selicAtual(d){
+    try{
+      var s = window.selicOfficialPositiveV666?.(d);
+      if(Number.isFinite(s) && s > 0) return s;
+    }catch(e){}
+    var c = d?.cards || {};
+    return firstNumber(c.selic_meta?.valor, c.selic_meta?.taxa, c.selic_meta?.valor_atual, d?.selic_meta?.valor);
+  }
+
+  function getPoupanca(d){
+    var c = d?.cards || {};
+    var nova = c.poupanca_nova || d?.poupanca_nova || d?.poupanca?.nova || {};
+    var antiga = c.poupanca_antiga || d?.poupanca_antiga || d?.poupanca?.antiga || {};
+    var efetivo = firstNumber(
+      nova.valor,
+      nova.mensal,
+      nova.rendimento_mensal,
+      nova.rendimento_mes,
+      nova.mes,
+      antiga.valor,
+      antiga.mensal,
+      antiga.rendimento_mensal,
+      antiga.rendimento_mes
+    );
+    var acumAno = firstNumber(nova.acum_ano, nova.acumulado_ano, nova.rendimento_ano, nova.ytd, antiga.acum_ano, antiga.acumulado_ano);
+    return { nova:nova, antiga:antiga, efetivo:efetivo, acumAno:acumAno };
+  }
+
+  function formulaText(selic){
+    if(Number.isFinite(selic) && selic > 8.5) return 'TR + 0,50% a.m.';
+    if(Number.isFinite(selic)) return '70% da Selic + TR';
+    return 'Regra definida pela Selic vigente';
+  }
+
+  function regraText(selic){
+    if(Number.isFinite(selic) && selic > 8.5) return 'Selic acima de 8,50%';
+    if(Number.isFinite(selic)) return 'Selic até 8,50%';
+    return 'Aguardando Selic';
+  }
+
+  function setText(selector, text){
+    document.querySelectorAll(selector).forEach(function(el){
+      if(el && el.textContent !== text) el.textContent = text;
+    });
+  }
+
+  function ensureFormulaCard(formula){
+    var strip = document.querySelector('.savings-reference-v167 .savings-summary-v207, .savings-reference-v167 .savings-kpi-strip-v199');
+    if(!strip) return;
+    var card = document.getElementById('poupFormulaCompactV672');
+    if(!card){
+      card = document.createElement('div');
+      card.className = 'savings-kpi-v199 formula poup-formula-card-v672';
+      card.id = 'poupFormulaCompactV672';
+      card.innerHTML = '<dt>Fórmula vigente</dt><dd></dd>';
+      strip.appendChild(card);
+    }
+    var dd = card.querySelector('dd');
+    if(dd) dd.textContent = formula;
+  }
+
+  function apply(){
+    try{
+      document.documentElement.classList.add('desktop-poupanca-effective-v672');
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = BUILD;
+
+      var d = mercado();
+      var p = getPoupanca(d);
+      var selic = selicAtual(d);
+      var formula = formulaText(selic);
+      var regra = regraText(selic);
+      var efetivoTxt = Number.isFinite(p.efetivo) && p.efetivo > 0 ? fmtPct(p.efetivo) : '';
+
+      // Evita trocar número por fórmula quando o robô já trouxe rendimento efetivo.
+      if(efetivoTxt){
+        setText('#poupCurrentLabelV214', 'Rendimento efetivo do mês');
+        var out = document.getElementById('mc-poup');
+        if(out){
+          out.textContent = efetivoTxt;
+          out.setAttribute('aria-label', 'Rendimento efetivo da poupança no mês: ' + efetivoTxt + ' ao mês');
+        }
+        setText('#poupTodayCompactV199', efetivoTxt);
+      }else{
+        setText('#poupCurrentLabelV214', 'Fórmula do mês');
+        setText('#mc-poup', formula.replace(' a.m.',''));
+      }
+
+      if(Number.isFinite(p.acumAno)) setText('#poupYearCompactV199', (p.acumAno > 0 ? '+' : '') + fmtPct(p.acumAno));
+
+      setText('#poupCurrentScenarioTitleV214', 'Leitura da regra');
+
+      var note = document.getElementById('poupQuickNote');
+      if(note){
+        var selicTxt = Number.isFinite(selic) ? ' · ' + regra : '';
+        note.innerHTML = '<strong>Fórmula vigente:</strong> <span>' + formula + selicTxt + '</span>';
+      }
+
+      var thresholdDt = document.querySelector('.savings-reference-v167 .savings-kpi-v199.threshold dt');
+      var thresholdDd = document.querySelector('.savings-reference-v167 .savings-kpi-v199.threshold dd');
+      if(thresholdDt) thresholdDt.textContent = 'Regra atual';
+      if(thresholdDd) thresholdDd.textContent = regra;
+
+      ensureFormulaCard(formula);
+
+      var currentNew = document.getElementById('poupScenarioCurrentNew');
+      if(currentNew && efetivoTxt) currentNew.textContent = efetivoTxt + ' a.m.';
+      var newRule = document.getElementById('poupNewRuleText');
+      if(newRule) newRule.innerHTML = 'Rendimento efetivo do mês: <strong>' + (efetivoTxt || '—') + '</strong>. Fórmula: <strong>' + formula + '</strong>.';
+
+      lastKey = (efetivoTxt || formula) + '|' + regra;
+    }catch(err){
+      console.warn('[Poupança v672]', err);
+    }
+  }
+
+  function schedule(){
+    clearTimeout(timer);
+    timer = setTimeout(apply, 80);
+  }
+
+  function bind(){
+    apply();
+    var root = document.querySelector('.savings-reference-v167');
+    if(root && window.MutationObserver && !root.dataset.poupancaV672Bound){
+      root.dataset.poupancaV672Bound = '1';
+      new MutationObserver(function(){ schedule(); }).observe(root, {childList:true, subtree:true, characterData:true});
+    }
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, {once:true});
+  else bind();
+  window.addEventListener('load', bind, {once:true});
+  [120, 360, 900, 1800, 3200, 5200, 7600].forEach(function(delay){ setTimeout(apply, delay); });
+})();
