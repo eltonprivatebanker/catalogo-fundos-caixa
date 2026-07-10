@@ -1,0 +1,25 @@
+V666 — Selic vigente sincronizada e anti-flicker
+
+Base: v665.
+
+Problema observado:
+- Selic vigente aparecia 0,00% a.a. no card.
+- O gráfico/legenda ficava com valor antigo quando a série ainda não continha a reunião mais recente.
+- Ao trocar seletores, alguns módulos legados re-renderizavam e a tela parecia piscar.
+
+Correções:
+- Criado helper central window.selicOfficialPositiveV666.
+- Selic vigente passa a buscar primeiro dado oficial positivo; se faltar, usa o card do DOM #mc-selic.
+- Reconciliação de série só injeta ponto vigente se valor for positivo.
+- Card "Selic vigente", data e legenda são ressincronizados após re-renderização.
+- Adicionado MutationObserver leve no bloco da Selic para corrigir re-renderizações tardias.
+- Adicionado min-height/anti-flicker visual no gráfico durante troca de seletores.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css
+- tokens-caixa.css mantido sem alteração
+
+Validação:
+- app.js validado com node --check.
