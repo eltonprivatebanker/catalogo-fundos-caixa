@@ -1,0 +1,24 @@
+ROBÔ v18.7 / v668 — Selic safe
+
+Arquivo principal:
+- robo_sipii_simples.py
+
+Correções aplicadas:
+- SGS 432 agora busca os últimos 10 registros e usa o último valor positivo.
+- Selic None/0/0,00/traço deixa de ser aceita como taxa vigente.
+- histórico local da Selic remove MetaSelic <= 0 antes de exportar mercado_atual.json.
+- se BCB/local falharem, fallback seguro: Selic 14,25% desde 17/06/2026.
+- cards.selic_meta agora exporta valor, vigente_desde, ultima_alteracao, data_ref, fonte e fallback.
+- CDI estimado só é calculado quando a Selic é positiva.
+- Poupança volta a usar a regra correta quando Selic > 8,50%.
+
+Validação:
+- Arquivo compilado com py_compile sem erro de sintaxe.
+
+Como subir:
+1. Substitua o robo_sipii_simples.py do repositório por este arquivo.
+2. Execute o workflow/robô.
+3. Verifique mercado_atual.json:
+   cards.selic_meta.valor = 14.25
+   cards.selic_meta.vigente_desde = 17/06/2026
+   historico_selic sem MetaSelic 0.
