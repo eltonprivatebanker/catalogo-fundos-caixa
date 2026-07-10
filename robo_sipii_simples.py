@@ -1,11 +1,11 @@
 """
-ROBÔ SIPII CAIXA — v18.7 / v668 (Automação integral GitHub)
+ROBÔ SIPII CAIXA — v18.8 / v677 (Modular + Selic Safe)
 ==========================================================
-Novidades v18.7 / v668:
-  + Selic safe: busca SGS 432 nos últimos registros e ignora valores nulos/zerados.
-  + Repara histórico local da Selic removendo MetaSelic <= 0 e injetando a taxa vigente válida.
-  + Fallback seguro: Selic 14,25% desde 17/06/2026 se BCB/local falharem.
-  + Impede Selic 0,00% de contaminar CDI, Copom, poupança e gráficos.
+Novidades v18.8 / v677:
+  + Execução modular por --modo: full, indicadores, debug-selic, fundos e metadados.
+  + Rotina automática diária segue em modo full; execução manual permite escolher módulo.
+  + Selic Safe: rejeita Selic zerada/vazia e protege a data de vigência correta.
+  + Corrige cards.selic_meta para não usar data de próxima reunião como vigente_desde.
 
 Novidades v18.6 / v640:
   + Fallback seletivo de rentabilidade: se a data atual vier com cota/rentabilidade vazia,
@@ -74,6 +74,8 @@ import json
 import csv
 import glob
 import calendar
+import argparse
+import os
 from pathlib import Path
 from datetime import datetime, timedelta, date
 from zoneinfo import ZoneInfo
@@ -136,6 +138,18 @@ MESES_PT = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","d
 DEBUG_COLUNAS = False
 
 # ---------------------------------------------------------------------------
+# v677 — Selic Safe / Vigência protegida
+# ---------------------------------------------------------------------------
+# Contexto:
+# A SGS 432 informa a taxa vigente, mas o painel precisa também da data em que
+# essa taxa passou a vigorar. Essa data não deve ser a próxima reunião do Copom.
+SELIC_FALLBACK_VALOR = 14.25
+SELIC_FALLBACK_DATA_KEY = "2026-06-17"
+SELIC_FALLBACK_DATA_BR = "17/06/2026"
+SELIC_PROXIMA_REUNIAO_KEY = "2026-08-05"
+
+
+# ---------------------------------------------------------------------------
 # v640 — Fallback seletivo de rentabilidade SIPII
 # ---------------------------------------------------------------------------
 PERF_COLS_RENTABILIDADE = [
@@ -182,21 +196,6 @@ FECHAMENTOS_CONFIRMADOS = {
         "^DJI":  {"2026-05": {"variacao_mes_fechado": 1.99}},
         "^IFIX": {"2026-05": {"variacao_mes_fechado": None}},  # ★ v17.3: IFIX pendente
     },
-}
-
-
-# ---------------------------------------------------------------------------
-# v18.7 / v668 — Selic safe
-# ---------------------------------------------------------------------------
-# Proteção contra retorno vazio/zerado da SGS 432 ou do histórico local.
-# O fallback só é usado quando BCB/local não entregam valor positivo.
-SELIC_VALOR_MINIMO_VALIDO = 0.01
-SELIC_FALLBACK_ATUAL = {
-    "valor": 14.25,
-    "data": "17/06/2026",
-    "data_iso": "2026-06-17",
-    "origem": "fallback_manual_v18_7",
-    "motivo": "proteção contra Selic vazia/zerada na coleta BCB/local",
 }
 
 
@@ -1342,183 +1341,159 @@ class ColetorMercado:
     def __init__(self):
         self.headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
 
-    def _parse_float_bcb(self, valor):
-        """Converte número BCB/JSON aceitando vírgula, ponto e símbolos."""
+    def _parse_num_bcb(self, valor):
+        """Converte número do BCB aceitando vírgula, ponto, percentual e vazio."""
         if valor is None:
             return None
-        if isinstance(valor, (int, float)):
-            try:
-                v = float(valor)
-                return v if v == v else None
-            except Exception:
-                return None
-
         texto = str(valor).strip()
-        if not texto or texto in {"-", "—"}:
+        if texto in {"", "-", "—", "None", "null"}:
             return None
-
         texto = texto.replace("%", "").replace(" ", "")
-        texto = re.sub(r"[^0-9,.-]", "", texto)
-        if not texto or texto in {"-", "—"}:
-            return None
-
-        # 1.234,56 → 1234.56 | 14,25 → 14.25
         if "," in texto and "." in texto:
             texto = texto.replace(".", "").replace(",", ".")
-        elif "," in texto:
+        else:
             texto = texto.replace(",", ".")
-
         try:
-            v = float(texto)
-            return v if v == v else None
+            n = float(texto)
+            return n if n == n else None
         except Exception:
             return None
 
-    def _parse_data_bcb(self, valor):
+    def _date_key(self, valor):
+        """Normaliza datas em AAAA-MM-DD."""
         if not valor:
-            return None
+            return ""
         texto = str(valor).strip()
+        if re.match(r"^\d{4}-\d{2}-\d{2}", texto):
+            return texto[:10]
+        m = re.match(r"^(\d{2})/(\d{2})/(\d{4})", texto)
+        if m:
+            return f"{m.group(3)}-{m.group(2)}-{m.group(1)}"
+        return ""
 
+    def _date_br(self, key):
+        key = self._date_key(key)
+        if not key:
+            return ""
         try:
-            if re.fullmatch(r"\d{2}/\d{2}/\d{4}", texto[:10]):
-                return datetime.strptime(texto[:10], "%d/%m/%Y")
+            dt = datetime.strptime(key, "%Y-%m-%d")
+            return dt.strftime("%d/%m/%Y")
         except Exception:
-            pass
+            return ""
 
+    def _hoje_key_brasilia(self):
         try:
-            if re.fullmatch(r"\d{4}-\d{2}-\d{2}", texto[:10]):
-                return datetime.strptime(texto[:10], "%Y-%m-%d")
+            return datetime.now(ZoneInfo("America/Sao_Paulo")).strftime("%Y-%m-%d")
         except Exception:
-            pass
-
-        try:
-            if "T" in texto:
-                return datetime.fromisoformat(texto.replace("Z", "+00:00")).replace(tzinfo=None)
-        except Exception:
-            pass
-
-        return None
-
-    def _buscar_bcb_registro(self, codigo_serie, ultimos=1, apenas_positivo=False):
-        """Busca últimos registros da SGS e retorna o último valor válido."""
-        try:
-            qtd = max(1, int(ultimos or 1))
-            url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/{qtd}?formato=json"
-            res = requests.get(url, headers=self.headers, timeout=15)
-            if res.status_code != 200:
-                log(f"  [BCB SGS {codigo_serie}] HTTP {res.status_code}")
-                return None
-
-            registros = res.json() or []
-            validos = []
-            for idx, item in enumerate(registros):
-                valor = self._parse_float_bcb(item.get("valor"))
-                if valor is None:
-                    continue
-                if apenas_positivo and valor <= SELIC_VALOR_MINIMO_VALIDO:
-                    continue
-                dt = self._parse_data_bcb(item.get("data"))
-                validos.append({
-                    "valor": valor,
-                    "data": item.get("data"),
-                    "data_dt": dt,
-                    "idx": idx,
-                    "origem": f"BCB SGS {codigo_serie}",
-                })
-
-            if not validos:
-                return None
-
-            validos.sort(key=lambda x: (x["data_dt"] or datetime.min, x["idx"]))
-            return validos[-1]
-
-        except Exception as e:
-            log(f"  [BCB SGS {codigo_serie}] Erro: {e}")
-            return None
+            return datetime.now().strftime("%Y-%m-%d")
 
     def _buscar_bcb(self, codigo_serie):
-        registro = self._buscar_bcb_registro(codigo_serie, ultimos=1, apenas_positivo=False)
-        return registro["valor"] if registro else None
-
-    def _selic_fallback_ativo(self):
-        """Fallback usado apenas enquanto não houver valor positivo vindo do BCB/local."""
+        """Busca último valor da série BCB. Para Selic 432, usa rotina segura."""
+        if int(codigo_serie) == 432:
+            info = self._buscar_selic_meta_segura()
+            return info.get("valor")
         try:
-            hoje = self._agora_brasilia().date()
-            inicio = datetime.strptime(SELIC_FALLBACK_ATUAL["data_iso"], "%Y-%m-%d").date()
-            return hoje >= inicio
+            url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/1?formato=json"
+            res = requests.get(url, headers=self.headers, timeout=10)
+            if res.status_code == 200:
+                dados = res.json() or []
+                if dados:
+                    return self._parse_num_bcb(dados[-1].get("valor"))
         except Exception:
-            return True
+            pass
+        return None
 
-    def _selic_info_fallback(self, motivo="fallback"):
-        return {
-            "valor": float(SELIC_FALLBACK_ATUAL["valor"]),
-            "data": SELIC_FALLBACK_ATUAL["data"],
-            "data_iso": SELIC_FALLBACK_ATUAL["data_iso"],
-            "origem": SELIC_FALLBACK_ATUAL["origem"],
-            "fallback": True,
-            "motivo": motivo,
-        }
-
-    def _ultima_selic_local_positiva(self):
-        """Lê o histórico local e retorna a decisão mais recente com MetaSelic > 0."""
-        if not SELIC_BASE_PATH.exists():
-            return None
+    def _buscar_bcb_ultimos(self, codigo_serie, ultimos=10):
+        """Busca últimos registros de uma série BCB, preservando data e valor."""
         try:
-            raw = json.loads(SELIC_BASE_PATH.read_text(encoding="utf-8"))
-            candidatos = []
-            for item in raw.get("conteudo", []):
-                valor = self._parse_float_bcb(item.get("MetaSelic") or item.get("valor"))
-                if valor is None or valor <= SELIC_VALOR_MINIMO_VALIDO:
-                    continue
-                data_iso = str(item.get("DataReuniaoCopom") or item.get("data_ref") or "").split("T")[0]
-                dt = datetime.strptime(data_iso, "%Y-%m-%d") if re.fullmatch(r"\d{4}-\d{2}-\d{2}", data_iso) else None
-                candidatos.append({
-                    "valor": valor,
-                    "data": dt.strftime("%d/%m/%Y") if dt else data_iso,
-                    "data_iso": data_iso,
-                    "origem": "histórico local Selic",
-                    "fallback": False,
-                    "data_dt": dt or datetime.min,
-                })
-            if not candidatos:
-                return None
-            candidatos.sort(key=lambda x: x["data_dt"])
-            out = candidatos[-1]
-            out.pop("data_dt", None)
-            return out
+            url = f"https://api.bcb.gov.br/dados/serie/bcdata.sgs.{codigo_serie}/dados/ultimos/{ultimos}?formato=json"
+            res = requests.get(url, headers=self.headers, timeout=15)
+            if res.status_code != 200:
+                return []
+            saida = []
+            for item in res.json() or []:
+                n = self._parse_num_bcb(item.get("valor"))
+                key = self._date_key(item.get("data"))
+                if n is not None and key:
+                    saida.append({"data": item.get("data"), "data_key": key, "valor": n})
+            return saida
         except Exception as e:
-            log(f"[SELIC] Erro ao buscar última Selic positiva no histórico local: {e}")
-            return None
+            log(f"[BCB] Erro ao buscar série {codigo_serie}: {e}")
+            return []
+
+    def _vigencia_selic_por_historico(self, valor_selic):
+        """Encontra a última data histórica válida em que a Selic vigente passou a valer."""
+        if valor_selic is None:
+            return ""
+
+        hoje_key = self._hoje_key_brasilia()
+        historico = self._carregar_base_selic()
+        candidatos = []
+
+        for item in historico or []:
+            key = self._date_key(item.get("DataReuniaoCopom") or item.get("data"))
+            val = self._parse_num_bcb(item.get("MetaSelic") if item.get("MetaSelic") is not None else item.get("valor"))
+            if not key or val is None:
+                continue
+            if key > hoje_key:
+                continue
+            if abs(float(val) - float(valor_selic)) < 0.011:
+                candidatos.append(key)
+
+        if candidatos:
+            key = max(candidatos)
+            # Proteção: não usar próxima reunião ou data futura como vigência.
+            if key and key < SELIC_PROXIMA_REUNIAO_KEY:
+                return key
+
+        # Fallback oficial temporário para o cenário atual tratado no painel.
+        if abs(float(valor_selic) - SELIC_FALLBACK_VALOR) < 0.011:
+            return SELIC_FALLBACK_DATA_KEY
+
+        return ""
 
     def _buscar_selic_meta_segura(self):
-        """Busca Selic meta vigente com proteção contra None/0."""
-        # 1) BCB SGS 432: busca janela maior e escolhe último valor positivo.
-        registro = self._buscar_bcb_registro(432, ultimos=10, apenas_positivo=True)
-        if registro and registro.get("valor") and registro["valor"] > SELIC_VALOR_MINIMO_VALIDO:
-            local = self._ultima_selic_local_positiva()
-            data_iso = local.get("data_iso") if local and abs(local.get("valor", 0) - registro["valor"]) < 0.005 else ""
-            data_br = local.get("data") if data_iso and local else ""
-            return {
-                "valor": round(float(registro["valor"]), 4),
-                "data": data_br or registro.get("data") or "",
-                "data_iso": data_iso or "",
-                "origem": registro.get("origem", "BCB SGS 432"),
-                "fallback": False,
-            }
+        """
+        Retorna dict com Selic vigente e data de vigência confiável.
+        Nunca aceita valor <= 0 e nunca usa próxima reunião como vigente_desde.
+        """
+        fonte = "BCB SGS 432"
+        fallback = False
 
-        # 2) Histórico local positivo.
-        local = self._ultima_selic_local_positiva()
-        if local and local.get("valor") and local["valor"] > SELIC_VALOR_MINIMO_VALIDO:
-            log(f"[SELIC] BCB indisponível/zerado — usando histórico local: {local['valor']}%")
-            return local
+        registros = self._buscar_bcb_ultimos(432, ultimos=10)
+        hoje_key = self._hoje_key_brasilia()
+        validos = [
+            r for r in registros
+            if r.get("valor") is not None and r["valor"] > 0 and r.get("data_key") <= hoje_key
+        ]
 
-        # 3) Fallback manual, somente como última defesa.
-        if self._selic_fallback_ativo():
-            log(f"[SELIC] BCB/local sem valor positivo — usando fallback seguro: {SELIC_FALLBACK_ATUAL['valor']}% desde {SELIC_FALLBACK_ATUAL['data']}")
-            return self._selic_info_fallback("BCB/local sem valor positivo")
+        if validos:
+            # Último registro válido da SGS 432 indica a taxa vigente.
+            validos.sort(key=lambda r: r["data_key"])
+            valor = validos[-1]["valor"]
+        else:
+            valor = SELIC_FALLBACK_VALOR
+            fallback = True
+            fonte = "fallback Selic Safe"
 
-        log("[SELIC] ERRO: não foi possível obter Selic meta positiva.")
-        return {"valor": None, "data": "", "data_iso": "", "origem": "indisponível", "fallback": False}
+        vig_key = self._vigencia_selic_por_historico(valor)
+
+        # Se a fonte da vigência vier vazia, futura ou igual à próxima reunião, corrige.
+        if (not vig_key or vig_key >= SELIC_PROXIMA_REUNIAO_KEY) and abs(valor - SELIC_FALLBACK_VALOR) < 0.011:
+            vig_key = SELIC_FALLBACK_DATA_KEY
+            fallback = fallback or not validos
+
+        vig_br = self._date_br(vig_key) or SELIC_FALLBACK_DATA_BR
+
+        return {
+            "valor": round(float(valor), 4),
+            "unidade": "% a.a.",
+            "vigente_desde": vig_br,
+            "ultima_alteracao": vig_br,
+            "data_ref": vig_key,
+            "fonte": fonte,
+            "fallback": bool(fallback),
+        }
 
     @staticmethod
     def _agora_brasilia():
@@ -2643,76 +2618,58 @@ class ColetorMercado:
 
         return indice_usd
 
-    def _carregar_base_selic(self, selic_meta_atual=None, data_ref_iso=None):
-        """Carrega histórico da Selic removendo registros zerados e injetando a taxa vigente válida."""
+    def _carregar_base_selic(self):
+        """Carrega histórico local da Selic, removendo zeros, vazios e reuniões futuras."""
         historico = []
-        invalidos = 0
-
         if SELIC_BASE_PATH.exists():
             try:
                 raw = json.loads(SELIC_BASE_PATH.read_text(encoding="utf-8"))
+                hoje_key = self._hoje_key_brasilia()
                 for item in raw.get("conteudo", []):
-                    data_iso = str(item.get("DataReuniaoCopom") or "").split("T")[0]
-                    dt = datetime.strptime(data_iso, "%Y-%m-%d") if data_iso else None
-                    valor = self._parse_float_bcb(item.get("MetaSelic") or item.get("valor"))
-
-                    # v18.7: nunca publica MetaSelic <= 0 no mercado_atual.json.
-                    if valor is None or valor <= SELIC_VALOR_MINIMO_VALIDO:
-                        invalidos += 1
+                    data_iso = str(item.get("DataReuniaoCopom", "")).split("T")[0]
+                    key = self._date_key(data_iso)
+                    if not key or key > hoje_key:
                         continue
 
+                    valor = self._parse_num_bcb(item.get("MetaSelic"))
+                    if valor is None or valor <= 0:
+                        continue
+
+                    dt = datetime.strptime(key, "%Y-%m-%d")
                     historico.append({
-                        "data": dt.strftime("%d/%m/%Y") if dt else "-",
-                        "valor": round(float(valor), 4),
+                        "data": dt.strftime("%d/%m/%Y"),
+                        "valor": round(valor, 4),
                         "numero_reuniao": item.get("NumeroReuniaoCopom"),
-                        "DataReuniaoCopom": item.get("DataReuniaoCopom"),
-                        "MetaSelic": round(float(valor), 4),
+                        "DataReuniaoCopom": item.get("DataReuniaoCopom") or f"{key}T03:00:00Z",
+                        "MetaSelic": round(valor, 4),
                     })
-
-                if invalidos:
-                    log(f"[SELIC] {invalidos} registro(s) com MetaSelic <= 0 removido(s) do histórico local.")
-
             except Exception as e:
                 log(f"[SELIC] Erro ao ler histórico local: {e}")
 
-        valor_atual = self._parse_float_bcb(selic_meta_atual)
-        if valor_atual is None or valor_atual <= SELIC_VALOR_MINIMO_VALIDO:
-            info = self._buscar_selic_meta_segura()
-            valor_atual = self._parse_float_bcb(info.get("valor"))
-            data_ref_iso = data_ref_iso or info.get("data_iso")
-
-        # Se houver Selic vigente válida e ela não estiver no histórico, injeta o ponto vigente.
-        if valor_atual is not None and valor_atual > SELIC_VALOR_MINIMO_VALIDO:
-            data_ref_iso = data_ref_iso or SELIC_FALLBACK_ATUAL["data_iso"]
-            data_ref_br = SELIC_FALLBACK_ATUAL["data"]
-            try:
-                dt_ref = datetime.strptime(str(data_ref_iso)[:10], "%Y-%m-%d")
-                data_ref_br = dt_ref.strftime("%d/%m/%Y")
-                data_reuniao = f"{dt_ref.strftime('%Y-%m-%d')}T03:00:00Z"
-            except Exception:
-                data_reuniao = f"{SELIC_FALLBACK_ATUAL['data_iso']}T03:00:00Z"
-
-            existe_mesmo_valor = any(abs(float(item.get("MetaSelic") or 0) - valor_atual) < 0.005 for item in historico)
-            existe_mesma_data = any(str(item.get("DataReuniaoCopom") or "").startswith(str(data_ref_iso)[:10]) for item in historico)
-
-            if not existe_mesmo_valor or not existe_mesma_data:
+        # Proteção atual: se a base local estiver sem a reunião de 17/06/2026,
+        # injeta a Selic vigente correta para impedir queda para zero ou data futura.
+        hoje_key = self._hoje_key_brasilia()
+        if hoje_key >= SELIC_FALLBACK_DATA_KEY:
+            existe = any(
+                self._date_key(item.get("DataReuniaoCopom") or item.get("data")) == SELIC_FALLBACK_DATA_KEY
+                or (
+                    abs(float(item.get("MetaSelic") or item.get("valor") or 0) - SELIC_FALLBACK_VALOR) < 0.011
+                    and self._date_key(item.get("DataReuniaoCopom") or item.get("data")) >= SELIC_FALLBACK_DATA_KEY
+                    and self._date_key(item.get("DataReuniaoCopom") or item.get("data")) < SELIC_PROXIMA_REUNIAO_KEY
+                )
+                for item in historico
+            )
+            if not existe:
                 historico.append({
-                    "data": data_ref_br,
-                    "valor": round(float(valor_atual), 4),
+                    "data": SELIC_FALLBACK_DATA_BR,
+                    "valor": SELIC_FALLBACK_VALOR,
                     "numero_reuniao": None,
-                    "DataReuniaoCopom": data_reuniao,
-                    "MetaSelic": round(float(valor_atual), 4),
-                    "reconciliado_robo": True,
+                    "DataReuniaoCopom": f"{SELIC_FALLBACK_DATA_KEY}T03:00:00Z",
+                    "MetaSelic": SELIC_FALLBACK_VALOR,
+                    "reparado_selic_safe_v677": True,
                 })
-                log(f"[SELIC] Histórico reconciliado com Selic vigente: {valor_atual}% em {data_ref_br}.")
 
-        def _ts(item):
-            try:
-                return datetime.strptime(str(item.get("DataReuniaoCopom") or "")[:10], "%Y-%m-%d")
-            except Exception:
-                return datetime.min
-
-        historico.sort(key=_ts)
+        historico.sort(key=lambda item: self._date_key(item.get("DataReuniaoCopom") or item.get("data")))
         return historico
 
     def _carregar_base_meta_inflacao(self):
@@ -2977,18 +2934,9 @@ class ColetorMercado:
     def coletar_todos(self):
         log("[MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...")
 
-        # Taxas de referência — v18.7: Selic safe, nunca aceita None/0 como taxa vigente.
+        # Taxas de referência — v677 Selic Safe
         selic_info = self._buscar_selic_meta_segura()
-        selic_meta = selic_info.get("valor") if selic_info else None
-        selic_historico = self._carregar_base_selic(
-            selic_meta,
-            selic_info.get("data_iso") if selic_info else None,
-        )
-        log(
-            f"[SELIC] Vigente considerada: {selic_meta}% "
-            f"desde {selic_info.get('data') if selic_info else '-'} "
-            f"({selic_info.get('origem') if selic_info else 'indisponível'})"
-        )
+        selic_meta = selic_info.get("valor")
 
         # ★ v17.1 — Poupança nova + antiga com acum. ano (série 196; 253 para Selic≤8,5%)
         poup_detalhado = self._buscar_poupanca_detalhada(selic_meta)
@@ -2999,6 +2947,7 @@ class ColetorMercado:
         cdi_mensal_atual = cdi_acum["mensal"] if cdi_acum else self._buscar_bcb(4391)
 
         # IPCA histórico
+        selic_historico       = self._carregar_base_selic()
         inflacao_meta_efetiva = self._carregar_base_meta_inflacao()
         base_ipca  = self._carregar_base_ipca()
         delta_ipca = self._buscar_ipca_delta(meses=3)
@@ -3077,17 +3026,17 @@ class ColetorMercado:
 
             "cards": {
                 "selic_meta": {
-                    "valor":    selic_meta if selic_meta and selic_meta > SELIC_VALOR_MINIMO_VALIDO else None,
+                    "valor":    selic_meta,
                     "unidade":  "% a.a.",
-                    "vigente_desde": selic_info.get("data") if selic_info else None,
-                    "ultima_alteracao": selic_info.get("data") if selic_info else None,
-                    "data_ref": selic_info.get("data_iso") if selic_info else None,
-                    "fonte": selic_info.get("origem") if selic_info else "indisponível",
-                    "fallback": bool(selic_info.get("fallback")) if selic_info else False,
+                    "vigente_desde": selic_info.get("vigente_desde"),
+                    "ultima_alteracao": selic_info.get("ultima_alteracao"),
+                    "data_ref": selic_info.get("data_ref"),
+                    "fonte": selic_info.get("fonte"),
+                    "fallback": selic_info.get("fallback"),
                     "historico": selic_historico,
                 },
                 "cdi": {
-                    "valor":   round(selic_meta - 0.10, 4) if selic_meta and selic_meta > SELIC_VALOR_MINIMO_VALIDO else None,
+                    "valor":   round(selic_meta - 0.10, 4) if selic_meta else None,
                     "valor_estimado": True,
                     "fonte_valor": "Referência estimada: Selic Meta - 0,10 p.p.; CDI mensal/acumulado: BCB SGS 4391",
                     "mensal":  cdi_mensal_atual,
@@ -3778,18 +3727,60 @@ def salvar_excel(df, caminho):
     except Exception as e: log(f"Erro Excel: {e}"); traceback.print_exc()
 
 # ---------------------------------------------------------------------------
-# Ponto de entrada
+# Ponto de entrada — v677 Modular
 # ---------------------------------------------------------------------------
-def executar():
+def salvar_mercado_atual():
+    """Executa apenas a rotina de indicadores e salva mercado_atual.json."""
+    log("[MODO indicadores] Atualizando mercado_atual.json...")
+    coletor = ColetorMercado()
+    indicadores = coletor.coletar_todos()
+    caminho_json = BASE_DIR / "mercado_atual.json"
+
+    with open(caminho_json, "w", encoding="utf-8") as f:
+        json.dump(indicadores, f, indent=4, ensure_ascii=False)
+
+    cdi     = indicadores.get("cards", {}).get("cdi", {})
+    ipca    = indicadores.get("cards", {}).get("ipca", {})
+    selic   = indicadores.get("cards", {}).get("selic_meta", {})
+    ptax    = indicadores.get("ptax_historico", [])
+    pnova   = indicadores.get("cards", {}).get("poupanca_nova", {})
+    pantiga = indicadores.get("cards", {}).get("poupanca_antiga", {})
+
+    log("[SUCESSO] mercado_atual.json exportado")
+    log(f"  Selic: valor={selic.get('valor')}% | vigente_desde={selic.get('vigente_desde')} | data_ref={selic.get('data_ref')}")
+    log(f"  CDI: mensal={cdi.get('mensal')}% | 12M={cdi.get('acum_12m')}% | 24M={cdi.get('acum_24m')}% | 36M={cdi.get('acum_36m')}%")
+    log(f"  IPCA: 12M={ipca.get('acum_12m')}% | 24M={ipca.get('acum_24m')}% | 36M={ipca.get('acum_36m')}%")
+    log(f"  PTAX: {len(ptax)} fechamentos mensais pré-salvos")
+    log(f"  Poupança nova:  mensal={pnova.get('valor')}% | acum. ano={pnova.get('acum_ano')}%")
+    log(f"  Poupança antiga: mensal={pantiga.get('valor')}% | acum. ano={pantiga.get('acum_ano')}%")
+    return indicadores
+
+
+def executar_metadados():
+    """Atualiza apenas metadados/documentos do catálogo CAIXA Asset."""
     log("=" * 65)
-    log("⚡ ROBÔ SIPII v18.6 / v640 — fallback seletivo de rentabilidade")
+    log("⚡ ROBÔ SIPII v18.8 / v677 — modo metadados")
+    log("=" * 65)
+
+    log("[MODO metadados] Raspando URLs CAIXA e atualizando fundos.json/fundos_caixa.json...")
+    raspar_urls_caixa()
+    headers_http = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
+    indice_fundos_json = buscar_fundos_json(headers_http)
+
+    log(f"[FIM] Metadados atualizados. Produtos indexados: {len(indice_fundos_json.get('exato', {})) if isinstance(indice_fundos_json, dict) else 0}")
+    log("=" * 65)
+
+
+def executar_pipeline_fundos(atualizar_indicadores=True):
+    """Executa a rotina pesada de fundos/SIPII. Opcionalmente atualiza indicadores."""
+    log("=" * 65)
+    log("⚡ ROBÔ SIPII v18.8 / v677 — modo fundos/full")
     log("=" * 65)
 
     # 1. URLs dinâmicas do portal CAIXA
     links_dinamicos = raspar_urls_caixa()
 
     # 2. Metadados do fundos.json (CNPJ, taxa adm, prazos, codfundo)
-    #    ★ v16: também salva fundos_caixa.json para o HTML
     headers_http = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"}
     indice_fundos_json = buscar_fundos_json(headers_http)
 
@@ -3815,7 +3806,7 @@ def executar():
     # Trava v640: evita publicar execução parcial por timeout/403.
     df_consolidado = _substituir_por_ultima_base_se_necessario(df_consolidado)
 
-    # 5. Enriquecimento (URL + CNPJ + codfundo + taxa adm + prazos)
+    # 5. Enriquecimento
     df_consolidado["URL"] = df_consolidado["Fundo"].apply(
         lambda x: encontrar_url(x, links_dinamicos))
     df_consolidado = enriquecer_dados_com_fundos_json(df_consolidado, indice_fundos_json)
@@ -3857,36 +3848,75 @@ def executar():
     # 8. KPIs do dashboard
     gerar_json_kpis_dashboard(df_consolidado, BASE_DIR / "kpis_dashboard.json")
 
-    # 9. Indicadores macro + Focus + CDI/IPCA 24M/36M + PTAX histórico
-    try:
-        coletor     = ColetorMercado()
-        indicadores = coletor.coletar_todos()
-        caminho_json = BASE_DIR / "mercado_atual.json"
-        with open(caminho_json, "w", encoding="utf-8") as f:
-            json.dump(indicadores, f, indent=4, ensure_ascii=False)
+    # 9. Indicadores macro
+    if atualizar_indicadores:
+        try:
+            salvar_mercado_atual()
+        except Exception as e:
+            log(f"[ERRO] Falha nos indicadores macro: {e}")
+            traceback.print_exc()
+    else:
+        log("[MODO fundos] Indicadores não atualizados neste modo.")
 
-        cdi    = indicadores.get("cards", {}).get("cdi", {})
-        ipca   = indicadores.get("cards", {}).get("ipca", {})
-        ptax   = indicadores.get("ptax_historico", [])
-        pnova  = indicadores.get("cards", {}).get("poupanca_nova", {})
-        pantiga= indicadores.get("cards", {}).get("poupanca_antiga", {})
-        log(f"[SUCESSO] mercado_atual.json exportado")
-        log(f"  CDI: mensal={cdi.get('mensal')}% | 12M={cdi.get('acum_12m')}% | 24M={cdi.get('acum_24m')}% | 36M={cdi.get('acum_36m')}%")
-        log(f"  IPCA: 12M={ipca.get('acum_12m')}% | 24M={ipca.get('acum_24m')}% | 36M={ipca.get('acum_36m')}%")
-        log(f"  PTAX: {len(ptax)} fechamentos mensais pré-salvos")
-        log(f"  Poupança nova:  mensal={pnova.get('valor')}% | acum. ano={pnova.get('acum_ano')}%")
-        log(f"  Poupança antiga: mensal={pantiga.get('valor')}% | acum. ano={pantiga.get('acum_ano')}%")
-    except Exception as e:
-        log(f"[ERRO] Falha nos indicadores macro: {e}")
-        traceback.print_exc()
-
-    # 10. Limpeza de backups (mantém 5)
+    # 10. Limpeza de backups
     limpar_backups_antigos(manter=5)
 
     log("=" * 65)
-    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v18.7/v668 completo.")
+    log(f"[FIM] {len(df_consolidado)} fundos consolidados. Pipeline v18.8/v677 completo.")
     log("=" * 65)
 
 
+def executar(modo="full"):
+    modo = (modo or "full").strip().lower()
+    aliases = {
+        "mercado": "indicadores",
+        "indicador": "indicadores",
+        "selic": "debug-selic",
+        "debug_selic": "debug-selic",
+        "debugselic": "debug-selic",
+        "completo": "full",
+        "tudo": "full",
+    }
+    modo = aliases.get(modo, modo)
+
+    if modo in {"indicadores", "debug-selic"}:
+        log("=" * 65)
+        log(f"⚡ ROBÔ SIPII v18.8 / v677 — modo {modo}")
+        log("=" * 65)
+        salvar_mercado_atual()
+        log("=" * 65)
+        log(f"[FIM] Modo {modo} concluído.")
+        log("=" * 65)
+        return
+
+    if modo == "metadados":
+        executar_metadados()
+        return
+
+    if modo == "fundos":
+        executar_pipeline_fundos(atualizar_indicadores=False)
+        return
+
+    if modo == "full":
+        executar_pipeline_fundos(atualizar_indicadores=True)
+        return
+
+    raise ValueError(
+        f"Modo inválido: {modo}. Use: full, indicadores, debug-selic, fundos ou metadados."
+    )
+
+
+def _parse_args():
+    parser = argparse.ArgumentParser(description="Robô SIPII CAIXA modular v18.8/v677")
+    parser.add_argument(
+        "--modo",
+        default=os.environ.get("MODO", "full"),
+        choices=["full", "indicadores", "debug-selic", "fundos", "metadados"],
+        help="Rotina a executar. schedule diário deve usar full; execução manual pode escolher o módulo.",
+    )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
-    executar()
+    args = _parse_args()
+    executar(args.modo)

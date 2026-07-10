@@ -1,0 +1,173 @@
+# INSTRUÇÕES — Robô SIPII CAIXA v18.8 / v677 Modular + Selic Safe
+
+## Arquivos deste pacote
+
+- `robo_sipii_simples.py`
+- `.github/workflows/main.yml`
+- `main.yml` — cópia visível do workflow, para conferência
+- `INSTRUCOES_ROBO_V677_MODULAR_SELIC_SAFE.txt`
+
+## Objetivo
+
+Esta versão permite rodar o robô por módulos no GitHub Actions.
+
+A rotina automática diária continua rodando o modo completo:
+
+```bash
+python robo_sipii_simples.py --modo full
+```
+
+Na execução manual, você escolhe no botão **Run workflow**:
+
+- `debug-selic`
+- `indicadores`
+- `fundos`
+- `metadados`
+- `full`
+
+## O que cada modo faz
+
+### `debug-selic`
+
+Roda a rotina rápida de mercado, sem abrir SIPII/Selenium.
+
+Atualiza principalmente:
+
+- `mercado_atual.json`
+- Selic
+- CDI
+- Poupança
+- Copom/Selic histórica
+- PTAX
+- Focus
+- IPCA e indicadores de mercado
+
+Use este modo para testar rapidamente a correção da Selic.
+
+### `indicadores`
+
+Mesmo fluxo do `debug-selic`, mas com nome mais geral.
+
+### `fundos`
+
+Roda a parte pesada de fundos/SIPII:
+
+- scraping SIPII
+- fallback de rentabilidade
+- `dados_atuais.csv`
+- `dados_atuais.xlsx`
+- `sipii_caixa_YYYYMMDD.csv/xlsx`
+- `kpis_dashboard.json`
+- metadados dos fundos
+
+Não atualiza `mercado_atual.json`.
+
+### `metadados`
+
+Atualiza apenas:
+
+- `fundos.json`
+- `fundos_caixa.json`
+- links e documentos dos fundos
+
+### `full`
+
+Roda tudo:
+
+- metadados
+- fundos/SIPII
+- indicadores/mercado
+
+É o modo usado automaticamente no agendamento diário.
+
+## Correção da Selic
+
+Esta versão protege a Selic contra dois problemas:
+
+1. Selic zerada ou vazia.
+2. Data de próxima reunião sendo usada como data de vigência.
+
+O resultado esperado no `mercado_atual.json` é:
+
+```json
+"selic_meta": {
+  "valor": 14.25,
+  "unidade": "% a.a.",
+  "vigente_desde": "17/06/2026",
+  "ultima_alteracao": "17/06/2026",
+  "data_ref": "2026-06-17"
+}
+```
+
+## Como testar no GitHub
+
+1. Suba/substitua o arquivo:
+
+```text
+robo_sipii_simples.py
+```
+
+2. Suba/substitua o workflow:
+
+```text
+.github/workflows/main.yml
+```
+
+3. Vá em:
+
+```text
+Actions → Atualizacao Diaria Caixa → Run workflow
+```
+
+4. Escolha primeiro:
+
+```text
+modo: debug-selic
+```
+
+5. Aguarde concluir.
+
+6. Confira no GitHub o arquivo:
+
+```text
+mercado_atual.json
+```
+
+Procure por:
+
+```text
+cards → selic_meta
+```
+
+O esperado é:
+
+```text
+valor = 14.25
+vigente_desde = 17/06/2026
+ultima_alteracao = 17/06/2026
+data_ref = 2026-06-17
+```
+
+7. Depois confira a página com Ctrl+F5.
+
+8. Se `debug-selic` funcionar, teste:
+
+```text
+modo: indicadores
+```
+
+9. Por fim, teste:
+
+```text
+modo: full
+```
+
+## Observação importante
+
+O workflow automático agendado não pergunta modo. Ele sempre define:
+
+```text
+MODO=full
+```
+
+Assim, a rotina diária continua completa. O seletor só aparece quando você roda manualmente.
