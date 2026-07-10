@@ -6797,7 +6797,7 @@ function buildChartSelic(historico,qtd){
         _valor: valor
       };
     })
-    .filter(d=>d._ano>=1999 && !isNaN(d._valor) && d._valor>0 && d._ts>0);
+    .filter(d=>d._ano>=1999 && !isNaN(d._valor) && d._valor>=0 && d._ts>0);
 
   filtrado.sort((a,b)=>a._ts-b._ts);
 
@@ -6805,8 +6805,8 @@ function buildChartSelic(historico,qtd){
   // Assim o desenho inicial e os cliques antigos usam o mesmo valor do painel.
   try{
     const card = _dadosMercado?.cards?.selic_meta || {};
-    const valorVigente = parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.'));
-    if(Number.isFinite(valorVigente) && valorVigente > 0){
+    const valorVigente = Number(card.valor);
+    if(Number.isFinite(valorVigente)){
       const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
         ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
         : null;
@@ -6893,8 +6893,8 @@ function buildChartSelic(historico,qtd){
   let vigenteResumoData = fmtDataSelic(currentRow?._dt) || 'último dado';
   try{
     const card = _dadosMercado?.cards?.selic_meta || {};
-    const valorCard = parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.'));
-    if(Number.isFinite(valorCard) && valorCard > 0){
+    const valorCard = Number(card.valor);
+    if(Number.isFinite(valorCard)){
       vigenteResumoValor = valorCard;
       const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
         ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
@@ -8289,8 +8289,8 @@ function _dateKeyCopom(v){
 }
 function _selicValorRegistro(r){
   const v = r?.MetaSelic ?? r?.valor ?? r?.meta_selic ?? r?.taxa;
-  const n = parseFloat(String(v ?? '').replace('%','').replace(',','.'));
-  return Number.isFinite(n) && n > 0 ? n : null;
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
 }
 function _fmtPpCopom(v){
   const n = Number(v);
@@ -8318,8 +8318,8 @@ function _historicoSelicOrdenadoParaDados(dados){
     .filter(r => r._key && r._valor !== null)
     .sort((a,b) => b._key.localeCompare(a._key));
 
-  const vigente = parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.'));
-  if(!Number.isFinite(vigente) || vigente <= 0) return historico;
+  const vigente = Number(card.valor);
+  if(!Number.isFinite(vigente)) return historico;
 
   const maisRecente = historico[0] || null;
   const historicoJaAtual = maisRecente && Math.abs(maisRecente._valor - vigente) < 0.005;
@@ -8359,10 +8359,10 @@ function _historicoSelicOrdenado(){
 }
 function resolverDataUltimaAlteracaoSelic(dados){
   const card = dados?.cards?.selic_meta || {};
-  const vigente = parseFloat(String(card.valor ?? card.taxa ?? card.valor_atual ?? '').replace('%','').replace(',','.'));
+  const vigente = Number(card.valor);
   const historico = _historicoSelicOrdenadoParaDados(dados);
 
-  if(!Number.isFinite(vigente) || vigente <= 0 || !historico.length){
+  if(!Number.isFinite(vigente) || !historico.length){
     const fallback = card.ultima_alteracao || card.data_ultima_alteracao || card.data_ref || '';
     const key = _dateKeyCopom(fallback);
     return { data:key ? _dataBrCopom(key) : String(fallback || ''), key, inferida:false };
@@ -10939,7 +10939,7 @@ async function sharePainelMercado(){
       const dt = parseDateAny(dataRaw);
       const valor = parseNum(d.MetaSelic ?? d.valor ?? d.Valor ?? d.TaxaSelic ?? d.taxa ?? d.Selic ?? d.selic);
       return { label: dt ? mesAno(dt) : 'p' + (idx + 1), valor, _dt: dt, _ts: dt ? dt.getTime() : idx };
-    }).filter(d => Number.isFinite(d.valor) && d.valor > 0).sort((a,b) => a._ts - b._ts);
+    }).filter(d => Number.isFinite(d.valor) && d.valor >= 0).sort((a,b) => a._ts - b._ts);
 
     // Se vier uma série diária, mantém só pontos de mudança para o gráfico ficar leve e didático.
     const compacta = [];
@@ -10954,8 +10954,8 @@ async function sharePainelMercado(){
   function reconciliarSelicVigenteV248(base, mercado){
     const lista = Array.isArray(base) ? [...base] : [];
     const card = mercado?.cards?.selic_meta || {};
-    const valor = parseNum(card.valor ?? card.taxa ?? card.valor_atual);
-    if(!Number.isFinite(valor) || valor <= 0) return lista;
+    const valor = Number(card.valor);
+    if(!Number.isFinite(valor)) return lista;
 
     let dataRef = '';
     try{
@@ -11171,8 +11171,8 @@ async function sharePainelMercado(){
     // não apenas o último ponto que veio no histórico antigo.
     try{
       const card = _dadosMercado?.cards?.selic_meta || {};
-      const valorCard = parseNum(card.valor ?? card.taxa ?? card.valor_atual);
-      if(Number.isFinite(valorCard) && valorCard > 0){
+      const valorCard = Number(card.valor);
+      if(Number.isFinite(valorCard)){
         vigenteValor = valorCard;
         const ref = typeof resolverDataUltimaAlteracaoSelic === 'function'
           ? resolverDataUltimaAlteracaoSelic(_dadosMercado)
@@ -29050,69 +29050,4 @@ function buildDetailPanel(r,colspan){
   requestAnimationFrame(apply);
   setTimeout(apply, 120);
   setTimeout(apply, 450);
-})();
-
-
-/* =========================================================
-   PATCH v665 — Selic zero-safe
-   ---------------------------------------------------------
-   Evita que um carregamento antecipado do mercado_atual injete 0,00%
-   como Selic vigente no gráfico/resumo.
-   ========================================================= */
-(function selicZeroSafeV665(){
-  function parseSelic(v){
-    if(v === null || v === undefined || v === '') return NaN;
-    return parseFloat(String(v).replace('%','').replace(',','.').replace(/[^0-9.\-]/g,''));
-  }
-
-  function fmt(v){
-    return Number.isFinite(v) && v > 0 ? v.toFixed(2).replace('.', ',') + '% a.a.' : '';
-  }
-
-  function cardValue(){
-    try{
-      var card = window._dadosMercado?.cards?.selic_meta || window.__ECON_DASH_STATE_V378__?.mercado?.cards?.selic_meta || {};
-      var n = parseSelic(card.valor ?? card.taxa ?? card.valor_atual);
-      return Number.isFinite(n) && n > 0 ? n : NaN;
-    }catch(e){
-      return NaN;
-    }
-  }
-
-  function lastPositiveFromChart(){
-    try{
-      var chart = window.Chart && window.Chart.getChart ? window.Chart.getChart('chartSelic') : null;
-      var arr = chart?.data?.datasets?.[0]?.data || [];
-      for(var i = arr.length - 1; i >= 0; i--){
-        var v = typeof arr[i] === 'number' ? arr[i] : (arr[i]?.y ?? arr[i]);
-        var n = Number(v);
-        if(Number.isFinite(n) && n > 0) return n;
-      }
-    }catch(e){}
-    return NaN;
-  }
-
-  function apply(){
-    var current = cardValue();
-    if(!Number.isFinite(current) || current <= 0) current = lastPositiveFromChart();
-    if(!Number.isFinite(current) || current <= 0) return;
-
-    var currentTxt = fmt(current);
-    var resumo = document.getElementById('selicHojeResumo');
-    if(resumo && /(^|\s)0,00%\s*a\.a\./i.test(resumo.textContent || '')){
-      resumo.textContent = currentTxt;
-    }
-
-    document.querySelectorAll('#mobileSelicV400 .selic-executive-legend-v596 strong, #mobileSelicV400 .selic-chart-legend-v596 strong').forEach(function(el){
-      if(/Selic atual:\s*0,00%\s*a\.a\./i.test(el.textContent || '')){
-        el.textContent = (el.textContent || '').replace(/Selic atual:\s*0,00%\s*a\.a\./i, 'Selic atual: ' + currentTxt);
-      }
-    });
-  }
-
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
-  else apply();
-
-  window.addEventListener('load', apply, {once:true});
-  [100, 350, 800, 1600, 3200].forEach(function(delay){ setTimeout(apply, delay); });
 })();
