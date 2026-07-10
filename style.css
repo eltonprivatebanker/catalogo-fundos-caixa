@@ -80975,3 +80975,107 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     padding-bottom:7px!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v671 — Desktop: Fechamentos mensais PTAX em faixa compacta
+   ---------------------------------------------------------
+   Objetivo: reduzir a altura da área "Fechamentos mensais do Dólar PTAX"
+   no desktop, mantendo a leitura dos 6 últimos meses e preservando mobile.
+   ========================================================= */
+@media (min-width:821px){
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-month-strip,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-timeline-v162,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarTimelineBody,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarTimelineBody.open{
+    margin:0!important;
+    padding:0!important;
+    border-top:1px solid rgba(148,163,184,.10)!important;
+    max-height:none!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-month-strip-head{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:10px!important;
+    padding:10px 14px 6px!important;
+    margin:0!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-month-strip-title{
+    font-size:.58rem!important;
+    line-height:1!important;
+    letter-spacing:.075em!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-month-strip-head small,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-months-table-head-v162,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarTimelineToggle{
+    display:none!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-compact-card .dolar-months{
+    display:grid!important;
+    grid-template-columns:repeat(6,minmax(0,1fr))!important;
+    gap:7px!important;
+    padding:0 14px 12px!important;
+    margin:0!important;
+    width:100%!important;
+    overflow:visible!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths .dolar-month-item,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths .dolar-month-row-v162,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-compact-card .dolar-months .dolar-month-item{
+    min-height:54px!important;
+    padding:9px 10px 8px!important;
+    border-radius:12px!important;
+    column-gap:6px!important;
+    row-gap:3px!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-areas:"month" "value" "var"!important;
+    align-content:center!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths .dolar-month-item.is-latest-v656::before,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths .dolar-month-item:first-child::before{
+    top:9px!important;
+    bottom:9px!important;
+    width:2px!important;
+    opacity:.72!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths .dolar-month-label,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-compact-card .dolar-month-label{
+    font-size:.52rem!important;
+    line-height:1!important;
+    letter-spacing:.035em!important;
+    text-align:left!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths .dolar-month-val,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-compact-card .dolar-month-val{
+    font-size:.72rem!important;
+    line-height:1.05!important;
+    text-align:left!important;
+  }
+
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths .dolar-month-var,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-compact-card .dolar-month-var{
+    justify-self:start!important;
+    align-self:start!important;
+    font-size:.62rem!important;
+    line-height:1!important;
+    text-align:left!important;
+  }
+}
+
+@media (min-width:821px) and (max-width:1180px){
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar #dolarMonths,
+  html.desktop-dolar-months-strip-compact-v671 body #sec-dolar .dolar-compact-card .dolar-months{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  }
+}

@@ -1,0 +1,20 @@
+V671 — Fechamentos mensais PTAX mais compactos no desktop
+
+Base: v670.
+
+Ajustes:
+- seção "Fechamentos mensais do Dólar PTAX" ficou mais baixa;
+- no desktop largo, os 6 meses aparecem em uma faixa de 6 colunas;
+- cards mensais menores, com menos padding e menos altura;
+- título mais compacto;
+- estatísticas e gráfico da v670 preservados;
+- mobile preservado.
+
+Arquivos alterados:
+- index.html
+- style.css
+- app.js mantido sem alteração funcional
+- tokens-caixa.css mantido sem alteração
+
+Validação:
+- app.js validado com node --check.
