@@ -1,0 +1,23 @@
+V665 — Selic zero-safe
+
+Base: v664.
+
+Problema:
+- A Selic passou a aparecer como 0,00% a.a. no gráfico/resumo.
+- Causa provável: em algum carregamento antecipado, o módulo de Selic reconciliava a taxa vigente usando valor 0 do mercado_atual ainda não consolidado, cacheando esse ponto como se fosse a taxa atual.
+
+Correções:
+- filtros da série Selic agora descartam valores <= 0;
+- reconciliação da Selic vigente só injeta ponto oficial se valor > 0;
+- parsing passa a aceitar string com vírgula/percentual;
+- resumo "Selic vigente" só é sobrescrito pelo card oficial quando o valor é positivo;
+- patch final corrige textos residuais de "Selic atual: 0,00% a.a." caso algum módulo legado renderize antes.
+
+Arquivos alterados:
+- index.html
+- app.js
+- style.css sem alteração funcional
+- tokens-caixa.css sem alteração
+
+Validação:
+- app.js validado com node --check.
