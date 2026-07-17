@@ -1,0 +1,29 @@
+CATÁLOGO DE FUNDOS CAIXA — V679
+Dólar PTAX · link para cotações oficiais do Banco Central
+
+Base:
+- V678, preservando a apresentação da PTAX com quatro casas decimais.
+
+Arquivos alterados:
+- index.html
+- style.css
+
+Arquivos preservados sem alteração:
+- app.js
+- tokens-caixa.css
+- robo_sipii_simples.py
+- arquivos JSON
+
+Alteração:
+- Incluído no card principal da PTAX o link “Consultar cotações oficiais ↗”.
+- O link abre, em nova aba, o histórico oficial de cotações do Banco Central:
+  https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes
+- Incluídos title, aria-label e rel="noopener noreferrer".
+- Estilo discreto no desktop e no mobile, sem competir com a cotação principal.
+- Cache do style.css atualizado para dolar-ptax-link-bcb-v679.
+
+Para testar:
+1. Substituir index.html e style.css.
+2. Manter o app.js da V678.
+3. Fazer atualização forçada com Ctrl+F5 ou abrir em guia anônima.
+4. Conferir o link abaixo da data de referência da PTAX.
