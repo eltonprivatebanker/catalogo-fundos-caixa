@@ -243,8 +243,6 @@ const fmt = (v,dec=2,suf='%') => {
 const fmtBRL = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:2,maximumFractionDigits:2});
 const fmtBRL4 = v => v===null||v===undefined ? '—' : Number(v).toLocaleString('pt-BR',{minimumFractionDigits:4,maximumFractionDigits:4});
 const brl = v => v===null||v===undefined || Number.isNaN(Number(v)) ? '—' : 'R$\u00a0' + fmtBRL(v);
-const brl4 = v => v===null||v===undefined || Number.isNaN(Number(v)) ? '—' : 'R$\u00a0' + fmtBRL4(v);
-// v678 — PTAX exibida com quatro casas decimais; percentuais permanecem com duas.
 const fmtPLBilhoes = v => {
   const n = Number(v);
   if(!Number.isFinite(n) || n <= 0) return '—';
@@ -1040,11 +1038,11 @@ function atualizarPTAXStats(range='24m'){
   setText('ptaxStatMinLabel', 'Mínima');
   setText('ptaxStatMediaLabel', 'Média');
   setText('ptaxStatAtual', varPeriodoTxt);
-  setText('ptaxStatMax', brl4(max.val));
+  setText('ptaxStatMax', brl(max.val));
   setText('ptaxStatMaxRef', max.label);
-  setText('ptaxStatMin', brl4(min.val));
+  setText('ptaxStatMin', brl(min.val));
   setText('ptaxStatMinRef', min.label);
-  setText('ptaxStatMedia', brl4(media));
+  setText('ptaxStatMedia', brl(media));
 
   setClass('ptaxStatAtual', `ptax-stat-val ${varPeriodoCls}`);
   setClass('ptaxStatMax', 'ptax-stat-val neu');
@@ -1123,8 +1121,8 @@ function calcularDolarPeriodos(){
   if($('ref-dolar')) $('ref-dolar').textContent = refLabel;
   if($('ref-dolar2')) $('ref-dolar2').textContent = refLabel;
 
-  if($('it-dolar-mes-val')) $('it-dolar-mes-val').textContent = indicState.dolarBRL.mes ? brl4(indicState.dolarBRL.mes) : '—';
-  if($('it-dolar-ano-val') && indicState.dolarBRL.ano) $('it-dolar-ano-val').textContent = brl4(indicState.dolarBRL.ano);
+  if($('it-dolar-mes-val')) $('it-dolar-mes-val').textContent = indicState.dolarBRL.mes ? brl(indicState.dolarBRL.mes) : '—';
+  if($('it-dolar-ano-val') && indicState.dolarBRL.ano) $('it-dolar-ano-val').textContent = brl(indicState.dolarBRL.ano);
 
   const mesVarEl = $('it-dolar-var-mes');
   if(mesVarEl && indicState.dolarPct.mes !== null){
@@ -1140,7 +1138,7 @@ function calcularDolarPeriodos(){
   }
 
   if($('dolar-day-rate')){
-    $('dolar-day-rate').textContent = brl4(lastVal);
+    $('dolar-day-rate').textContent = brl(lastVal);
   }
   if($('dolar-ptax-compact')){
     $('dolar-ptax-compact').textContent = `Cotação PTAX de venda / fechamento ${refLabel}`;
@@ -1186,10 +1184,10 @@ async function carregarDolarDia(){
       const cotCompra = parseFloat(ultima.cotacaoCompra);
       const dtCot = new Date(ultima.dataHoraCotacao);
 
-      if($('dolar-day-rate')) $('dolar-day-rate').textContent = brl4(cotVenda);
-      if($('dolar-compra')) $('dolar-compra').textContent = brl4(cotCompra);
-      if($('dolar-venda')) $('dolar-venda').textContent = brl4(cotVenda);
-      if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda / fechamento: ' + brl4(cotVenda);
+      if($('dolar-day-rate')) $('dolar-day-rate').textContent = brl(cotVenda);
+      if($('dolar-compra')) $('dolar-compra').textContent = brl(cotCompra);
+      if($('dolar-venda')) $('dolar-venda').textContent = brl(cotVenda);
+      if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda / fechamento: ' + brl(cotVenda);
 
       const diaRef = `${String(dtCot.getDate()).padStart(2,'0')}/${String(dtCot.getMonth()+1).padStart(2,'0')}/${dtCot.getFullYear()}`;
       const hora = `${String(dtCot.getHours()).padStart(2,'0')}:${String(dtCot.getMinutes()).padStart(2,'0')}`;
@@ -1207,7 +1205,7 @@ async function carregarDolarDia(){
           varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs cot. anterior do dia)`;
           varEl.className = `dolar-metric-val ${varPct < 0 ? 'neg' : varPct > 0 ? 'pos' : 'muted'}`;
         }
-        if($('dolar-dia-ant')) $('dolar-dia-ant').textContent = brl4(antVal);
+        if($('dolar-dia-ant')) $('dolar-dia-ant').textContent = brl(antVal);
       } else {
         // Compara com dia anterior via histórico
         const diaAnt = new Date(dia);
@@ -1243,7 +1241,7 @@ async function buscarCotacaoDiaAnterior(cotAtual, diaAnt){
       if(varEl){
         varEl.textContent = `${signPct(varPct)}${fmt(varPct)} (vs fechamento ${fmtDataBR(dia)})`;
         varEl.className = `dolar-metric-val ${varPct < 0 ? 'neg' : varPct > 0 ? 'pos' : 'muted'}`;
-        if($('dolar-dia-ant')) $('dolar-dia-ant').textContent = brl4(antVal);
+        if($('dolar-dia-ant')) $('dolar-dia-ant').textContent = brl(antVal);
       }
       return;
     }catch(e){ continue; }
@@ -1304,7 +1302,7 @@ function renderDolarMensais(){
       const varEl = $('dolar-current-month-var');
       currentCard.hidden = false;
       if($('dolar-current-month-ref')) $('dolar-current-month-ref').textContent = label;
-      if($('dolar-current-month-rate')) $('dolar-current-month-rate').textContent = `R$ ${fmtBRL4(val)}`;
+      if($('dolar-current-month-rate')) $('dolar-current-month-rate').textContent = `R$ ${fmtBRL(val)}`;
       if(varEl){
         varEl.textContent = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
         varEl.className = varPct === null ? 'muted' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'muted';
@@ -1323,9 +1321,9 @@ function renderDolarMensais(){
     const varPct = calcVar(key,item);
     const cls = varPct === null ? 'zero' : varPct > 0 ? 'pos' : varPct < 0 ? 'neg' : 'zero';
     const varTxt = varPct === null ? '—' : `${signPct(varPct)}${fmt(varPct)}`;
-    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98${index === 0 ? ' is-latest-v656' : ''}" aria-label="${label}: fechamento R$ ${fmtBRL4(val)}; variação ${varTxt}">
+    return `<div class="dolar-month-item dolar-month-row-v162 dolar-month-snap-v98${index === 0 ? ' is-latest-v656' : ''}" aria-label="${label}: fechamento R$ ${fmtBRL(val)}; variação ${varTxt}">
       <span class="dolar-month-label">${label}</span>
-      <span class="dolar-month-val">R$ ${fmtBRL4(val)}</span>
+      <span class="dolar-month-val">R$ ${fmtBRL(val)}</span>
       <span class="dolar-month-var ${cls}">${varTxt}</span>
     </div>`;
   }).join('') || '<div class="dolar-month-empty-v162">Nenhum mês fechado disponível.</div>';
@@ -7215,10 +7213,10 @@ function atualizarResumoEvolucao(d){
   const pp = v => `${Number(v).toFixed(2).replace('.',',')} p.p.`;
   const metaStatus = (v) => {
     const n = Number(v);
-    if(!Number.isFinite(n)) return 'Meta central: 3,00% · faixa: 1,50% a 4,50%';
-    if(n > 4.5) return `${pp(n - 4.5)} acima do teto de 4,50%`;
-    if(n < 1.5) return `${pp(1.5 - n)} abaixo do piso de 1,50%`;
-    return 'dentro da faixa de 1,50% a 4,50%';
+    if(!Number.isFinite(n)) return 'meta central de 3,00% e faixa de tolerância de 1,50% a 4,50%';
+    if(n > 4.5) return `${pp(n - 4.5)} acima do limite superior de 4,50%`;
+    if(n < 1.5) return `${pp(1.5 - n)} abaixo do limite inferior de 1,50%`;
+    return 'dentro da faixa de tolerância de 1,50% a 4,50%';
   };
 
   const selicRef = resolverDataUltimaAlteracaoSelic(d).data || '';
@@ -7238,8 +7236,8 @@ function atualizarResumoEvolucao(d){
     ? `Taxa vigente · ${selicValor}${selicRef ? ` · desde ${selicRef}` : ''}`
     : 'Taxa vigente: aguardando atualização.');
   setText('evoCardMetaNote', ipca.acum_12m != null
-    ? `IPCA em 12 meses · ${pct(ipca.acum_12m)} · ${metaStatus(ipca.acum_12m)}`
-    : 'Meta central: 3,00% · faixa: 1,50% a 4,50%.');
+    ? `IPCA em 12 meses: ${pct(ipca.acum_12m).replace(/^\+/, '')} — ${metaStatus(ipca.acum_12m)}.`
+    : 'IPCA em 12 meses: aguardando atualização.');
 
   const ativo = document.querySelector('.evo-view-tab.active')?.dataset.evoChart || 'ipca';
   atualizarResumoMovelEvolucao(ativo, d);
@@ -7386,11 +7384,11 @@ function econLabelFromItemV378(item){
 
 function econMetaStatusV378(v){
   const n = Number(v);
-  if(!Number.isFinite(n)) return 'Meta central: 3,00% · banda de 1,50% a 4,50%';
+  if(!Number.isFinite(n)) return 'Aguardando atualização';
   const fmt = x => Number(x).toFixed(2).replace('.', ',') + ' p.p.';
-  if(n > 4.5) return `Acima do teto da meta em ${fmt(n - 4.5)}`;
-  if(n < 1.5) return `Abaixo do piso da meta em ${fmt(1.5 - n)}`;
-  return 'Dentro da banda da meta';
+  if(n > 4.5) return `${fmt(n - 4.5)} acima do limite superior de 4,50%`;
+  if(n < 1.5) return `${fmt(1.5 - n)} abaixo do limite inferior de 1,50%`;
+  return 'Dentro da faixa de tolerância de 1,50% a 4,50%';
 }
 
 function econRangeLabelV378(range, suffix = 'M'){
@@ -7768,10 +7766,10 @@ function econRenderMetaVersusMetaV379(containerId, rows, range){
       ${labels}
     </svg>
     <div class="econ-meta-legend-v379" aria-hidden="true">
-      <span><i class="ipca"></i> IPCA 12M</span>
-      <span><i class="meta"></i> Meta 3%</span>
-      <span><i class="banda"></i> Banda 1,5%–4,5%</span>
-      <strong>Atual · ${econPctV378(last.value)}</strong>
+      <span><i class="ipca"></i><span class="ipca-meta-legend-default-v680">IPCA 12M</span><span class="ipca-meta-legend-desktop-v680">IPCA em 12 meses</span></span>
+      <span><i class="meta"></i><span class="ipca-meta-legend-default-v680">Meta 3%</span><span class="ipca-meta-legend-desktop-v680">Meta central: 3,00%</span></span>
+      <span><i class="banda"></i><span class="ipca-meta-legend-default-v680">Banda 1,5%–4,5%</span><span class="ipca-meta-legend-desktop-v680">Faixa de tolerância: 1,50%–4,50%</span></span>
+      <strong class="econ-meta-legend-current-v680">Atual · ${econPctV378(last.value)}</strong>
     </div>
   `;
 }
@@ -8058,7 +8056,8 @@ function econRenderTargetV378(target){
     }else{
       document.getElementById('econSparkMetaV367').innerHTML = '<div class="econ-empty-v367">Histórico indisponível no momento.</div>';
     }
-    econSetTextV378('evoCardMetaNote', `IPCA em 12 meses · ${econPctV378(ipca.acum_12m)} · ${econMetaStatusV378(ipca.acum_12m).toLowerCase()}`);
+    const ipcaAtualMetaV680 = econPctV378(ipca.acum_12m).replace(/^\+/, '');
+    econSetTextV378('evoCardMetaNote', `IPCA em 12 meses: ${ipcaAtualMetaV680} — ${econMetaStatusV378(ipca.acum_12m).toLowerCase()}.`);
   }
 
   if(target === 'selic'){
