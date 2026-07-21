@@ -82115,3 +82115,79 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     display:inline;
   }
 }
+
+
+/* =========================================================
+   PATCH v681 — IPCA × meta: refinamento exclusivo desktop
+   - título mais compacto e estável em uma linha;
+   - seletor com rótulo menos espaçado;
+   - legenda com leitura e contraste melhores;
+   - mobile preservado integralmente.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-dash-card-head-v378{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 126px;
+    align-items:start;
+    gap:14px;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-dash-card-head-v378 > div:first-child{
+    min-width:0;
+    max-width:none;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-dash-card-head-v378 h3{
+    font-size:.96rem;
+    line-height:1.16;
+    letter-spacing:-.021em;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-dash-card-head-v378 p{
+    max-width:100%;
+    margin-top:6px;
+    font-size:.71rem;
+    line-height:1.42;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .ipca-meta-range-v680{
+    width:126px;
+    gap:6px;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .ipca-meta-range-label-v680{
+    color:#9aa8bd;
+    font-size:.60rem;
+    font-weight:800;
+    line-height:1.1;
+    letter-spacing:.035em;
+    text-transform:none;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .ipca-meta-range-v680 button{
+    min-height:34px;
+    font-size:.68rem;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-meta-legend-v379{
+    justify-content:center;
+    gap:16px;
+    margin-top:9px;
+    padding:0 6px 1px;
+    color:#aeb9cc;
+    font-size:.66rem;
+    line-height:1.25;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-meta-legend-v379 span{
+    color:#aeb9cc;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-meta-legend-v379 i{
+    flex:0 0 auto;
+  }
+
+  html.desktop-ipca-meta-polish-v681 body #sec-graficos #mobileIpcaMetaV400 .econ-meta-legacy-svg-v379 .axis.x{
+    font-size:8.2px;
+  }
+}

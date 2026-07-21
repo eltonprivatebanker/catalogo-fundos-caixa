@@ -7746,9 +7746,30 @@ function econRenderMetaVersusMetaV379(containerId, rows, range){
     return `<circle class="${cls}" cx="${xFor(i).toFixed(1)}" cy="${yFor(d.value).toFixed(1)}" r="4.2"><title>${d.label} · ${econPctV378(d.value)}</title></circle>`;
   }).join('');
 
+  const isDesktopMetaV681 =
+    document.documentElement.classList.contains('desktop-ipca-meta-polish-v681') &&
+    window.matchMedia('(min-width: 769px)').matches;
+
+  let labelIndexesV681 = null;
+  if(isDesktopMetaV681){
+    // Distribui os rótulos de forma uniforme entre as extremidades.
+    // Evita que o penúltimo mês fique colado ao último (ex.: abr/26jun/26).
+    const lastIndex = data.length - 1;
+    const targetCount = data.length >= 18 ? 7 : data.length >= 11 ? 6 : Math.min(data.length, 5);
+    const intervals = Math.max(1, targetCount - 1);
+    labelIndexesV681 = new Set();
+    for(let slot = 0; slot <= intervals; slot++){
+      labelIndexesV681.add(Math.round((slot * lastIndex) / intervals));
+    }
+    labelIndexesV681.add(0);
+    labelIndexesV681.add(lastIndex);
+  }
+
   const labelStep = Math.max(1, Math.round(data.length / 5));
   const labels = data.map((d, i) => {
-    const show = i === 0 || i === data.length - 1 || i % labelStep === 0;
+    const show = isDesktopMetaV681
+      ? labelIndexesV681.has(i)
+      : (i === 0 || i === data.length - 1 || i % labelStep === 0);
     if(!show) return '';
     const x = xFor(i);
     return `<text class="axis x" x="${x.toFixed(1)}" y="${height - 24}" text-anchor="${i === 0 ? 'start' : i === data.length - 1 ? 'end' : 'middle'}">${d.label}</text>`;
