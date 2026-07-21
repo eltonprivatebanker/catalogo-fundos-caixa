@@ -16092,3 +16092,62 @@ Stacktrace:
 [15:23:22] =================================================================
 [15:23:22] [FIM] 171 fundos consolidados. Pipeline v18.8/v677 completo.
 [15:23:22] =================================================================
+[02:31:04] =================================================================
+[02:31:04] ⚡ ROBÔ SIPII v18.8 / v677 — modo indicadores
+[02:31:04] =================================================================
+[02:31:04] [MODO indicadores] Atualizando mercado_atual.json...
+[02:31:04] [MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...
+[02:31:04] [Poupança] Buscando série 196 (nova) para acum. ano...
+[02:31:05]   [Poupança] nova: mensal=0.6738% | acum. ano=4.746% (7 meses)
+[02:31:05]   [Poupança] antiga = nova (Selic 14.25% > 8,5% → TR+0,50% para ambas)
+[02:31:05] [CDI] Calculando CDI mensal/ano/12M/24M/36M...
+[02:31:06]   [CDI] Série 4391 BCB carregada: 44 competências
+[02:31:07]   [CDI] Série diária SGS 12: 0.6851% no mês até 17/07/2026 (13 observações)
+[02:31:07]   [CDI] mês fechado=1.12% (jun/2026) | parcial=0.6851% (jul/2026 até 17/07/2026; origem=bcb_sgs_12_diario) | ano fechado=6.8369% | ano c/ parcial=7.5688% | 12M=14.7747% | 24M=28.7297% | 36M=43.7676%
+[02:31:07] [IPCA] Base local: 558 meses.
+[02:31:08] [IPCA] Base salva: 558 meses.
+[02:31:08]   [IPCA] 12M=4.6413% | 24M=10.2409% | 36M=14.9014%
+[02:31:08]   [META INFLAÇÃO] gráfico sincronizado: jun/2026 = 4.6413% em 12 meses.
+[02:31:08] [PTAX] Buscando histórico 37M via CotacaoDolarPeriodo mês a mês...
+[02:31:41]   [PTAX] CotacaoDolarPeriodo OK — 37 meses
+[02:31:41]   [PTAX] Cache salvo: ptax_historico_cache.json (37 meses)
+[02:31:41] [PTAX] Dólar PTAX: último=5.0894 (2026-07-20) | mês fechado=2.37% | mês atual=-1.68% | ano=-7.51% | 12M=-9.15% | 24M=-10.11% | 36M=7.34%
+[02:31:41] [Índices] Calculando Ibovespa (^BVSP)...
+[02:31:41] [Yahoo Histórico] Buscando ^BVSP...
+[02:31:41] [Yahoo Histórico] ^BVSP OK — 850 registros
+[02:31:41] [Índices] Ibovespa: mês fechado=-1.02% | mês atual=0.78% | ano=7.6% | 12M=29.22% | 24M=35.85% | 36M=44.22%
+[02:31:41] [Índices] Calculando IFIX (^IFIX)...
+[02:31:41] [Yahoo Histórico] Buscando ^IFIX...
+[02:31:41] [Yahoo Histórico] ^IFIX HTTP 404
+[02:31:41]   [IFIX] Indisponível no Yahoo — campo virá vazio no JSON
+[02:31:41] [Índices] Calculando S&P 500 (^GSPC)...
+[02:31:41] [Yahoo Histórico] Buscando ^GSPC...
+[02:31:41] [Yahoo Histórico] ^GSPC OK — 855 registros
+[02:31:41] [Índices] S&P 500: mês fechado=-1.06% | mês atual=-0.75% | ano=8.73% | 12M=18.04% | 24M=35.21% | 36M=64.08%
+[02:31:41] [Índices] Calculando Dow Jones (^DJI)...
+[02:31:41] [Yahoo Histórico] Buscando ^DJI...
+[02:31:41] [Yahoo Histórico] ^DJI OK — 855 registros
+[02:31:41] [Índices] Dow Jones: mês fechado=2.52% | mês atual=-0.92% | ano=7.86% | 12M=16.96% | 24M=28.67% | 36M=47.15%
+[02:31:41] [Índices] Calculando Nasdaq (^IXIC)...
+[02:31:41] [Yahoo Histórico] Buscando ^IXIC...
+[02:31:42] [Yahoo Histórico] ^IXIC OK — 855 registros
+[02:31:42] [Índices] Nasdaq: mês fechado=-2.81% | mês atual=-2.69% | ano=9.75% | 12M=21.62% | 24M=43.89% | 36M=81.77%
+[02:31:42] [Indicadores mensais] Série consolidada: 37 competências
+[02:31:42] [Focus] Coletando expectativas do Banco Central...
+[02:31:42] [Focus PDF] Procurando PDF oficial mais recente disponível...
+[02:31:42] [Focus PDF] PDF disponível encontrado: R20260717.pdf (17/07/2026)
+[02:31:42]   [Focus] -> IPCA
+[02:31:44]   [Focus] -> Selic
+[02:31:45]   [Focus] -> PIB Total
+[02:31:47]   [Focus] -> Câmbio
+[02:31:49]   [Focus] -> IGP-M
+[02:31:51] [SUCESSO] mercado_atual.json exportado
+[02:31:51]   Selic: valor=14.25% | vigente_desde=17/06/2026 | data_ref=2026-06-17
+[02:31:51]   CDI: mensal=1.12% | 12M=14.7747% | 24M=28.7297% | 36M=43.7676%
+[02:31:51]   IPCA: 12M=4.6413% | 24M=10.2409% | 36M=14.9014%
+[02:31:51]   PTAX: 37 fechamentos mensais pré-salvos
+[02:31:51]   Poupança nova:  mensal=0.6738% | acum. ano=4.746%
+[02:31:51]   Poupança antiga: mensal=0.6738% | acum. ano=4.746%
+[02:31:51] =================================================================
+[02:31:51] [FIM] Modo indicadores concluído.
+[02:31:51] =================================================================
