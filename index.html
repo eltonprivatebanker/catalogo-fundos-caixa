@@ -627,6 +627,43 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 </style>
 
 <link href="tokens-caixa.css?v=mobile-market-compact-v630" rel="stylesheet"/>
+
+<style id="ptax-history-link-v682">
+/* v682 — link oficial para o histórico de cotações do Banco Central */
+.ptax-history-link-v682{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  width:max-content;
+  max-width:100%;
+  margin-top:9px;
+  padding:2px 0;
+  color:#9fa9c1;
+  border-bottom:1px solid rgba(200,151,58,.28);
+  font:700 .60rem/1.25 'Inter',sans-serif;
+  letter-spacing:.015em;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:color .15s ease,border-color .15s ease;
+}
+.ptax-history-link-v682:hover{
+  color:#e8bb6a;
+  border-bottom-color:rgba(232,187,106,.72);
+}
+.ptax-history-link-v682:focus-visible{
+  color:#e8bb6a;
+  outline:2px solid rgba(232,187,106,.80);
+  outline-offset:4px;
+  border-radius:2px;
+}
+@media(max-width:768px){
+  .ptax-history-link-v682{
+    margin-top:7px;
+    font-size:.57rem;
+  }
+}
+</style>
+
 </head>
 <body>
 <div class="page" id="topo">
@@ -1593,6 +1630,17 @@ html.desktop-ranking-stable-v566 body #rankingsSection .ranking-toolbar-v136{wid
 <span class="dolar-kpi-label">PTAX atual</span>
 <strong id="dolar-day-rate">—</strong>
 <small id="dolar-day-ref">—</small>
+<a
+  class="ptax-history-link-v682"
+  href="https://www.bcb.gov.br/estabilidadefinanceira/historicocotacoes"
+  target="_blank"
+  rel="noopener noreferrer"
+  title="Consultar o histórico oficial de cotações no Banco Central"
+  aria-label="Consultar histórico oficial de cotações do dólar PTAX no Banco Central; abre em nova aba"
+>
+  <span>Histórico no BCB</span>
+  <span aria-hidden="true">↗</span>
+</a>
 </div>
 <div class="dolar-kpi-stack-v162">
 <div aria-label="Variações do mês e do ano" class="dolar-current-kpis-v162">
