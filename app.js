@@ -1138,7 +1138,7 @@ function calcularDolarPeriodos(){
   }
 
   if($('dolar-day-rate')){
-    $('dolar-day-rate').textContent = brl(lastVal);
+    $('dolar-day-rate').textContent = 'R$\u00a0' + fmtBRL4(lastVal);
   }
   if($('dolar-ptax-compact')){
     $('dolar-ptax-compact').textContent = `Cotação PTAX de venda / fechamento ${refLabel}`;
@@ -1184,7 +1184,7 @@ async function carregarDolarDia(){
       const cotCompra = parseFloat(ultima.cotacaoCompra);
       const dtCot = new Date(ultima.dataHoraCotacao);
 
-      if($('dolar-day-rate')) $('dolar-day-rate').textContent = brl(cotVenda);
+      if($('dolar-day-rate')) $('dolar-day-rate').textContent = 'R$\u00a0' + fmtBRL4(cotVenda);
       if($('dolar-compra')) $('dolar-compra').textContent = brl(cotCompra);
       if($('dolar-venda')) $('dolar-venda').textContent = brl(cotVenda);
       if($('dolar-ptax-compact')) $('dolar-ptax-compact').textContent = 'Cotação PTAX de venda / fechamento: ' + brl(cotVenda);
