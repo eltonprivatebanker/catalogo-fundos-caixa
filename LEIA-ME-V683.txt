@@ -1,0 +1,19 @@
+RANKING DESKTOP v683 — ARQUIVOS PARA TESTE
+
+Substitua somente:
+- index.html
+- style.css
+- app.js
+
+Ajustes desta versão:
+- filtros compactos na mesma linha;
+- botão Limpar filtros exibido apenas quando necessário;
+- remoção das contagens repetidas no cabeçalho da tabela;
+- nomes regulatórios encurtados apenas na visualização do ranking;
+- perfil de risco e situação do fundo organizados na mesma linha;
+- lista de retornos negativos fechada por padrão;
+- navegação lateral sincronizada com a seção visível;
+- paginação dos fundos ocultada visualmente enquanto o ranking está ativo;
+- maior separação antes de Indicadores de mercado.
+
+Os arquivos de dados não precisam ser substituídos.

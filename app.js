@@ -4066,12 +4066,24 @@ function setCdiSort(dir){
       ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span aria-hidden="true">🔒</span><b>Fechado</b></span>'
       : '';
   }
+  function rankingDisplayNameV683(rawName){
+    let name = String(rawName || '').trim();
+    if(!name) return 'Fundo sem nome';
+    name = name
+      .replace(/^CAIXA\s+/i,'')
+      .replace(/^(?:(?:FIC|FIF)\s+){1,3}/i,'')
+      .replace(/\s+-?\s*RESP(?:ONSABILIDADE)?\s+LTDA\.?$/i,'')
+      .replace(/\s{2,}/g,' ')
+      .trim();
+    return name || String(rawName || '').trim();
+  }
   function categoryRow(item, i, campo, periodo){
     const r = item.row;
     const ratio = cdiRatioNumber(r, periodo);
     const ratioClass = ratio === null ? 'is-neutral' : ratio >= 100 ? 'is-above' : ratio >= 80 ? 'is-near' : 'is-below';
     const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : 'standard';
-    const name = cleanFund(r.Fundo);
+    const fullName = cleanFund(r.Fundo);
+    const name = rankingDisplayNameV683(fullName);
     const closedBadge = rankingClosedBadgeV646(r);
     const closedClass = closedBadge ? ' is-closed-captacao-v646' : '';
     const riskText = String(r['Perfil de Risco'] || 'Risco não informado').trim();
@@ -4081,8 +4093,8 @@ function setCdiSort(dir){
         '<div class="ranking-v682-fund-wrap">' +
           '<span class="ranking-v682-icon" aria-hidden="true">' + catIcon(item.cat) + '</span>' +
           '<span class="ranking-v682-fund-copy">' +
-            '<strong title="' + esc(name) + '">' + esc(name) + '</strong>' +
-            '<small><span class="ranking-v682-risk">' + esc(riskText) + '</span>' + closedBadge + '</small>' +
+            '<strong title="' + esc(fullName) + '">' + esc(name) + '</strong>' +
+            '<small class="ranking-v683-fund-meta"><span class="ranking-v682-risk">' + esc(riskText) + '</span>' + (closedBadge ? '<span class="ranking-v683-meta-separator" aria-hidden="true">·</span>' + closedBadge : '') + '</small>' +
           '</span>' +
         '</div>' +
       '</th>' +
@@ -4098,10 +4110,11 @@ function setCdiSort(dir){
   }
   function alertRows(rows, campo){
     return rows.map(function(r, i){
-      const name = cleanFund(r.Fundo);
+      const fullName = cleanFund(r.Fundo);
+      const name = rankingDisplayNameV683(fullName);
       return '<div class="ranking-v562-alert-row">' +
         '<span>' + (i + 1) + '</span>' +
-        '<strong title="' + esc(name) + '">' + esc(compactFund(name)) + '</strong>' +
+        '<strong title="' + esc(fullName) + '">' + esc(name) + '</strong>' +
         '<small>' + esc(shortCat(r.Categoria)) + '</small>' +
         '<em class="' + cls(r[campo]) + '">' + esc(pct(r[campo])) + '</em>' +
       '</div>';
@@ -4131,9 +4144,9 @@ function setCdiSort(dir){
     if(!grid || !isDesktop()) return;
     if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
 
-    document.documentElement.classList.add('desktop-ranking-table-v682');
+    document.documentElement.classList.add('desktop-ranking-table-v682','desktop-ranking-refine-v683');
     const metaBuild = q('meta[name="app-build"]');
-    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_TABLE_V682';
+    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_REFINE_V683';
 
     const periodo = periodoAtual();
     const campo = campoPorPeriodo(periodo);
@@ -4171,6 +4184,7 @@ function setCdiSort(dir){
       const isDefault = (typeof activeRankFilter === 'undefined' || !activeRankFilter || activeRankFilter === 'todos') &&
         (typeof activeRankRisk === 'undefined' || !activeRankRisk) && periodo === '12m';
       clearBtn.disabled = isDefault;
+      clearBtn.hidden = isDefault;
       clearBtn.setAttribute('aria-disabled', isDefault ? 'true' : 'false');
     }
 
@@ -4178,14 +4192,13 @@ function setCdiSort(dir){
     grid.removeAttribute('data-active-rank-view');
     grid.innerHTML =
       '<section class="ranking-v562-summary ranking-v682-summary" aria-label="Resumo do ranking">' +
-        summaryCard('best','Melhor retorno', best ? pct(best[campo]) : '—', best ? cleanFund(best.Fundo) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
-        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? cleanFund(lowest.Fundo) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
+        summaryCard('best','Melhor retorno', best ? pct(best[campo]) : '—', best ? rankingDisplayNameV683(cleanFund(best.Fundo)) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
+        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
         summaryCard('neutral', summaryLabel, summaryValue, summaryName, labelPeriodo(periodo)) +
       '</section>' +
       '<section class="ranking-v682-board" aria-label="' + esc(boardAria) + '">' +
         '<div class="ranking-v682-board-head">' +
           '<div><h3>' + esc(boardTitle) + '</h3><p>' + esc(boardDescription) + '</p></div>' +
-          '<span class="ranking-v682-count">' + esc(resultText) + '</span>' +
         '</div>' +
         '<div class="ranking-v682-table-shell">' +
           '<table class="ranking-v682-table">' +
@@ -4196,10 +4209,53 @@ function setCdiSort(dir){
           '</table>' +
         '</div>' +
       '</section>' +
-      '<details class="ranking-v562-alerts ranking-v682-alerts">' +
+      '<details class="ranking-v562-alerts ranking-v682-alerts ranking-v683-alerts">' +
         '<summary><span>Fundos com retorno negativo</span><strong>' + negatives.length + '</strong></summary>' +
         '<div class="ranking-v562-alert-list">' + (alertBody || '<div class="ranking-empty-v50">Nenhum retorno negativo no recorte atual.</div>') + '</div>' +
       '</details>';
+  }
+  function syncActiveSectionV683(){
+    if(!isDesktop()){
+      document.body.classList.remove('ranking-active-v683');
+      return;
+    }
+    const nav = q('#desktopAnchorNavV131');
+    if(!nav) return;
+    const links = qa('.desktop-anchor-link-v131[data-anchor-target]', nav).filter(function(link){
+      return link.dataset.searchFocus !== '1';
+    });
+    if(!links.length) return;
+    const threshold = Math.min(220, Math.max(120, window.innerHeight * 0.24));
+    let chosen = links[0];
+    links.forEach(function(link){
+      const target = q('#' + link.dataset.anchorTarget);
+      if(!target || target.offsetParent === null) return;
+      const rect = target.getBoundingClientRect();
+      if(rect.top <= threshold && rect.bottom > threshold) chosen = link;
+    });
+    links.forEach(function(link){
+      link.classList.toggle('active', link === chosen);
+      if(link === chosen) link.setAttribute('aria-current','page');
+      else link.removeAttribute('aria-current');
+    });
+    document.body.classList.toggle('ranking-active-v683', chosen.dataset.anchorTarget === 'rankingsSection');
+  }
+  function installActiveSectionSyncV683(){
+    if(window.__rankingActiveSectionV683Installed) return;
+    window.__rankingActiveSectionV683Installed = true;
+    let scheduled = false;
+    const requestSync = function(){
+      if(scheduled) return;
+      scheduled = true;
+      requestAnimationFrame(function(){
+        scheduled = false;
+        syncActiveSectionV683();
+      });
+    };
+    window.addEventListener('scroll', requestSync, {passive:true});
+    window.addEventListener('resize', requestSync, {passive:true});
+    window.addEventListener('load', requestSync, {once:true});
+    [0,180,600,1400].forEach(function(delay){ setTimeout(requestSync, delay); });
   }
   function bind(){
     const clsSelect = q('#rankingClassSelectV136');
@@ -4279,7 +4335,9 @@ function setCdiSort(dir){
     window.renderRankings = renderRankingsV562;
     try{ renderRankings = renderRankingsV562; }catch(e){}
     bind();
+    installActiveSectionSyncV683();
     renderRankingsV562();
+    syncActiveSectionV683();
   }
 
   window.__renderRankingsV562 = renderRankingsV562;
