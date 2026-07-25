@@ -4144,9 +4144,9 @@ function setCdiSort(dir){
     if(!grid || !isDesktop()) return;
     if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
 
-    document.documentElement.classList.add('desktop-ranking-table-v682','desktop-ranking-refine-v683');
+    document.documentElement.classList.add('desktop-ranking-table-v682','desktop-ranking-refine-v683','desktop-ranking-overhaul-v684');
     const metaBuild = q('meta[name="app-build"]');
-    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_REFINE_V683';
+    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_OVERHAUL_V684';
 
     const periodo = periodoAtual();
     const campo = campoPorPeriodo(periodo);
@@ -4158,6 +4158,7 @@ function setCdiSort(dir){
     const negatives = ascending.filter(function(r){ return finite(r[campo]) < 0; });
     const winners = categoryWinners(rows, campo, sorted);
     const isSingleCategory = rankingFilteredSingleCategoryV644();
+    document.body.classList.toggle('ranking-single-category-v684', isSingleCategory);
     const currentCategoryLabel = rankingCurrentCategoryLabelV644(rows);
     const boardSource = isSingleCategory ? sorted : winners;
     const boardRows = isSingleCategory ? topFundsBoardRowsV644(sorted, campo, periodo) : categoryBoardRowsV590(winners, campo, periodo);
@@ -4196,7 +4197,7 @@ function setCdiSort(dir){
         summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
         summaryCard('neutral', summaryLabel, summaryValue, summaryName, labelPeriodo(periodo)) +
       '</section>' +
-      '<section class="ranking-v682-board" aria-label="' + esc(boardAria) + '">' +
+      '<section class="ranking-v682-board ' + (isSingleCategory ? 'is-single-category-v684' : 'is-multi-category-v684') + '" aria-label="' + esc(boardAria) + '">' +
         '<div class="ranking-v682-board-head">' +
           '<div><h3>' + esc(boardTitle) + '</h3><p>' + esc(boardDescription) + '</p></div>' +
         '</div>' +
