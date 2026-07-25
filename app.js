@@ -4031,19 +4031,16 @@ function setCdiSort(dir){
     return '';
   }
   function summaryCard(kind, label, value, name, meta){
-    return '<article class="ranking-v562-summary-card ' + esc(kind || '') + '">' +
+    return '<article class="ranking-v562-summary-card ranking-v682-summary-card ' + esc(kind || '') + '">' +
       '<span>' + esc(label) + '</span>' +
       '<strong class="' + esc(kind === 'worst' ? 'neg' : kind === 'neutral' ? 'zero' : 'pos') + '">' + esc(value || '—') + '</strong>' +
       '<small title="' + esc(name || '') + '">' + esc(name || '—') + '</small>' +
-      '<em>' + esc(meta || 'Recorte atual') + '</em>' +
+      (meta ? '<em>' + esc(meta) + '</em>' : '') +
     '</article>';
   }
-  function periodTabs(periodo){
-    return '<div class="ranking-v562-tabs" role="tablist" aria-label="Período do ranking">' +
-      ['mes','ano','12m'].map(function(p){
-        return '<button type="button" class="' + (p === periodo ? 'active' : '') + '" data-rank-target="topFundos" data-rank-period="' + p + '">' + labelPeriodo(p) + '</button>';
-      }).join('') +
-    '</div>';
+  function periodTabs(){
+    /* v682: o período é controlado somente pelo filtro superior. */
+    return '';
   }
   function rankingFundClosedForCaptationV646(row){
     try{
@@ -4069,56 +4066,33 @@ function setCdiSort(dir){
       ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span aria-hidden="true">🔒</span><b>Fechado</b></span>'
       : '';
   }
-  function categoryRow(item, i, campo, periodo, options){
+  function categoryRow(item, i, campo, periodo){
     const r = item.row;
-    const opts = options || {};
-    const balanced = !!opts.balanced;
     const ratio = cdiRatioNumber(r, periodo);
-    const width = ratio === null ? 0 : Math.max(8, Math.min(100, Math.abs(ratio)));
-    const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+    const ratioClass = ratio === null ? 'is-neutral' : ratio >= 100 ? 'is-above' : ratio >= 80 ? 'is-near' : 'is-below';
+    const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : 'standard';
     const name = cleanFund(r.Fundo);
-    const leaderClass = (!balanced && i === 0) ? 'is-leader ' : '';
-    const displayName = (!balanced && i === 0) ? name : compactFund(name);
     const closedBadge = rankingClosedBadgeV646(r);
     const closedClass = closedBadge ? ' is-closed-captacao-v646' : '';
-    return '<article class="ranking-v562-podium-row ' + leaderClass + medalClass + closedClass + '">' +
-      '<div class="ranking-v562-medal"><span>' + esc(i + 1) + '</span></div>' +
-      '<div class="ranking-v562-icon" aria-hidden="true">' + catIcon(item.cat) + '</div>' +
-      '<div class="ranking-v562-fund">' +
-        '<strong title="' + esc(name) + '">' + esc(displayName) + '</strong>' +
-        '<small class="ranking-v646-meta-line"><span>' + esc(shortCat(item.cat)) + '</span>' + closedBadge + '</small>' +
-      '</div>' +
-      '<div class="ranking-v562-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></div>' +
-      '<div class="ranking-v562-cdi">' +
-        '<span class="ranking-v562-cdi-label">' + esc(cdiLabel(periodo)) + '</span>' +
-        '<strong>' + esc(cdiRatioTxt(r, periodo)) + '</strong>' +
-        '<span class="ranking-v562-cdi-bar"><i style="width:' + width + '%"></i></span>' +
-      '</div>' +
-    '</article>';
+    const riskText = String(r['Perfil de Risco'] || 'Risco não informado').trim();
+    return '<tr class="ranking-v682-row ' + medalClass + closedClass + '">' +
+      '<td class="ranking-v682-position"><span aria-label="Posição ' + esc(i + 1) + '">' + esc(i + 1) + '</span></td>' +
+      '<th scope="row" class="ranking-v682-fund-cell">' +
+        '<div class="ranking-v682-fund-wrap">' +
+          '<span class="ranking-v682-icon" aria-hidden="true">' + catIcon(item.cat) + '</span>' +
+          '<span class="ranking-v682-fund-copy">' +
+            '<strong title="' + esc(name) + '">' + esc(name) + '</strong>' +
+            '<small><span class="ranking-v682-risk">' + esc(riskText) + '</span>' + closedBadge + '</small>' +
+          '</span>' +
+        '</div>' +
+      '</th>' +
+      '<td class="ranking-v682-category"><span>' + esc(shortCat(item.cat)) + '</span></td>' +
+      '<td class="ranking-v682-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></td>' +
+      '<td class="ranking-v682-cdi ' + ratioClass + '"><span>' + esc(cdiLabel(periodo)) + '</span><strong>' + esc(cdiRatioTxt(r, periodo)) + '</strong></td>' +
+    '</tr>';
   }
   function categoryBoardRowsV590(winners, campo, periodo){
-    const top = winners.slice(0,10);
-    if(!top.length) return '';
-
-    /* v645 — Desktop: quando há 6 ou mais itens, o ranking deixa de ter
-       o primeiro card ocupando a linha inteira e passa a usar duas colunas
-       equilibradas. Isso evita a sensação de sobra/desalinhamento na posição 10. */
-    if(top.length >= 6){
-      const split = Math.ceil(top.length / 2);
-      const left = top.slice(0, split).map(function(item, idx){
-        return categoryRow(item, idx, campo, periodo, { balanced:true });
-      }).join('');
-      const right = top.slice(split).map(function(item, idx){
-        return categoryRow(item, idx + split, campo, periodo, { balanced:true });
-      }).join('');
-
-      return '<div class="ranking-v590-columns ranking-v645-balanced-columns has-continuation">' +
-        '<div class="ranking-v590-column ranking-v590-column-primary">' + left + '</div>' +
-        '<div class="ranking-v590-column ranking-v590-column-continuation">' + right + '</div>' +
-      '</div>';
-    }
-
-    return top.map(function(item, idx){
+    return (winners || []).slice(0,10).map(function(item, idx){
       return categoryRow(item, idx, campo, periodo);
     }).join('');
   }
@@ -4157,49 +4131,73 @@ function setCdiSort(dir){
     if(!grid || !isDesktop()) return;
     if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
 
+    document.documentElement.classList.add('desktop-ranking-table-v682');
+    const metaBuild = q('meta[name="app-build"]');
+    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_TABLE_V682';
+
     const periodo = periodoAtual();
     const campo = campoPorPeriodo(periodo);
     syncControls(periodo);
 
     const rows = baseRows();
     const sorted = sortedRows(rows, campo);
-    const worst = sortedRows(rows, campo, true).filter(function(r){ return finite(r[campo]) < 0; });
+    const ascending = sortedRows(rows, campo, true);
+    const negatives = ascending.filter(function(r){ return finite(r[campo]) < 0; });
     const winners = categoryWinners(rows, campo, sorted);
     const isSingleCategory = rankingFilteredSingleCategoryV644();
     const currentCategoryLabel = rankingCurrentCategoryLabelV644(rows);
     const boardSource = isSingleCategory ? sorted : winners;
     const boardRows = isSingleCategory ? topFundsBoardRowsV644(sorted, campo, periodo) : categoryBoardRowsV590(winners, campo, periodo);
     const best = sorted[0];
-    const worstOne = worst[0];
-    const alertBody = alertRows(worst.slice(0,8), campo);
-    const summaryLabel = isSingleCategory ? 'Fundos com dados' : 'Categorias com dados';
+    const lowest = ascending[0];
+    const alertBody = alertRows(negatives.slice(0,8), campo);
+    const summaryLabel = isSingleCategory ? 'Fundos analisados' : 'Categorias analisadas';
     const summaryValue = String(boardSource.length || 0);
-    const summaryName = isSingleCategory ? currentCategoryLabel : 'Melhores Categorias';
-    const summaryMeta = isSingleCategory ? 'Ranking da categoria' : 'Recorte atual';
-    const boardTitle = isSingleCategory ? ('Melhores fundos em ' + currentCategoryLabel) : 'Melhores por categoria';
+    const summaryName = isSingleCategory ? currentCategoryLabel : 'Com dados no período';
+    const boardTitle = isSingleCategory ? ('Ranking em ' + currentCategoryLabel) : 'Melhor fundo de cada categoria';
     const boardDescription = isSingleCategory
-      ? ('Mostra os fundos com maior retorno dentro de ' + currentCategoryLabel + ' e quanto esse retorno representa do CDI no período selecionado.')
-      : 'Para cada categoria, mostra o fundo com maior retorno e quanto esse retorno representa do CDI no período selecionado.';
-    const boardAria = isSingleCategory ? ('Melhores fundos em ' + currentCategoryLabel) : 'Melhores por categoria';
+      ? ('Fundos ordenados pelo maior retorno em ' + labelPeriodo(periodo) + '.')
+      : ('Uma comparação direta entre o fundo líder de cada categoria em ' + labelPeriodo(periodo) + '.');
+    const boardAria = isSingleCategory ? ('Ranking de fundos em ' + currentCategoryLabel) : 'Melhor fundo de cada categoria';
+    const displayedCount = Math.min(10, boardSource.length || 0);
+    const resultText = isSingleCategory
+      ? ((boardSource.length || 0) + ' fundos · exibindo ' + displayedCount)
+      : ((boardSource.length || 0) + ' categorias com dados');
 
-    grid.className = 'ranking-grid ranking-main-v136 ranking-v562-grid';
+    const resultsEl = q('#rankingResultsV682');
+    if(resultsEl) resultsEl.textContent = resultText;
+    const clearBtn = q('#rankingClearFiltersV682');
+    if(clearBtn){
+      const isDefault = (typeof activeRankFilter === 'undefined' || !activeRankFilter || activeRankFilter === 'todos') &&
+        (typeof activeRankRisk === 'undefined' || !activeRankRisk) && periodo === '12m';
+      clearBtn.disabled = isDefault;
+      clearBtn.setAttribute('aria-disabled', isDefault ? 'true' : 'false');
+    }
+
+    grid.className = 'ranking-grid ranking-main-v136 ranking-v682-grid';
     grid.removeAttribute('data-active-rank-view');
     grid.innerHTML =
-      contextLine(rows, periodo) +
-      '<section class="ranking-v562-summary" aria-label="Resumo dos rankings">' +
-        summaryCard('best','Melhor do período', best ? pct(best[campo]) : '—', best ? compactFund(best.Fundo) : 'Sem dados', best ? shortCat(best.Categoria) + ' · ' + cdiRatioTxt(best, periodo) + ' do CDI' : '') +
-        summaryCard('worst','Pior do período', worstOne ? pct(worstOne[campo]) : '—', worstOne ? compactFund(worstOne.Fundo) : 'Sem queda', worstOne ? shortCat(worstOne.Categoria) + ' · ' + cdiRatioTxt(worstOne, periodo) + ' do CDI' : 'Nenhum retorno negativo') +
-        summaryCard('neutral', summaryLabel, summaryValue, summaryName, summaryMeta) +
+      '<section class="ranking-v562-summary ranking-v682-summary" aria-label="Resumo do ranking">' +
+        summaryCard('best','Melhor retorno', best ? pct(best[campo]) : '—', best ? cleanFund(best.Fundo) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
+        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? cleanFund(lowest.Fundo) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
+        summaryCard('neutral', summaryLabel, summaryValue, summaryName, labelPeriodo(periodo)) +
       '</section>' +
-      '<section class="ranking-v562-board" aria-label="' + esc(boardAria) + '">' +
-        '<div class="ranking-v562-board-head">' +
+      '<section class="ranking-v682-board" aria-label="' + esc(boardAria) + '">' +
+        '<div class="ranking-v682-board-head">' +
           '<div><h3>' + esc(boardTitle) + '</h3><p>' + esc(boardDescription) + '</p></div>' +
-          periodTabs(periodo) +
+          '<span class="ranking-v682-count">' + esc(resultText) + '</span>' +
         '</div>' +
-        '<div class="ranking-v562-podium">' + (boardRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
+        '<div class="ranking-v682-table-shell">' +
+          '<table class="ranking-v682-table">' +
+            '<caption>Fundos ordenados pelo retorno no período selecionado</caption>' +
+            '<colgroup><col class="col-position"><col class="col-fund"><col class="col-category"><col class="col-return"><col class="col-cdi"></colgroup>' +
+            '<thead><tr><th scope="col">Pos.</th><th scope="col">Fundo</th><th scope="col">Categoria</th><th scope="col">Retorno</th><th scope="col">% do CDI</th></tr></thead>' +
+            '<tbody>' + (boardRows || '<tr><td colspan="5" class="ranking-empty-v50">Sem dados suficientes para este filtro.</td></tr>') + '</tbody>' +
+          '</table>' +
+        '</div>' +
       '</section>' +
-      '<details class="ranking-v562-alerts">' +
-        '<summary><span>Piores do período</span><strong>' + worst.length + '</strong></summary>' +
+      '<details class="ranking-v562-alerts ranking-v682-alerts">' +
+        '<summary><span>Fundos com retorno negativo</span><strong>' + negatives.length + '</strong></summary>' +
         '<div class="ranking-v562-alert-list">' + (alertBody || '<div class="ranking-empty-v50">Nenhum retorno negativo no recorte atual.</div>') + '</div>' +
       '</details>';
   }
@@ -4229,6 +4227,29 @@ function setCdiSort(dir){
       risk.dataset.v562Bound = '1';
       risk.addEventListener('change', function(){
         try{ activeRankRisk = risk.value || ''; }catch(e){}
+        setTimeout(renderRankingsV562, 0);
+      });
+    }
+    const clearBtn = q('#rankingClearFiltersV682');
+    if(clearBtn && clearBtn.dataset.v682Bound !== '1'){
+      clearBtn.dataset.v682Bound = '1';
+      clearBtn.addEventListener('click', function(){
+        if(clearBtn.disabled) return;
+        try{
+          activeRankFilter = 'todos';
+          activeRankRisk = '';
+          activeRankPeriods.topFundos = '12m';
+          activeRankPeriods.destaques = '12m';
+        }catch(e){}
+        if(clsSelect) clsSelect.value = 'todos';
+        if(period) period.value = '12m';
+        if(risk) risk.value = '';
+        const mobilePeriod = q('#rankingMobilePeriodV617');
+        const mobileClass = q('#rankingMobileClassV617');
+        const mobileRisk = q('#rankingMobileRiskV617');
+        if(mobilePeriod) mobilePeriod.value = '12m';
+        if(mobileClass) mobileClass.value = 'todos';
+        if(mobileRisk) mobileRisk.value = '';
         setTimeout(renderRankingsV562, 0);
       });
     }

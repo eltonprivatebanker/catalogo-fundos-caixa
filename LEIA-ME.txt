@@ -1,0 +1,30 @@
+CATÁLOGO DE FUNDOS CAIXA — RANKING DESKTOP V682
+
+Arquivos para substituir na branch de testes:
+- index.html
+- style.css
+- app.js
+
+O que foi alterado:
+1. Ranking desktop convertido de duas colunas de cards para uma tabela comparativa contínua.
+2. Leitura das posições em ordem natural, de 1 a 10.
+3. Apenas um controle de período, localizado no bloco superior de filtros.
+4. Filtros reorganizados e compactados.
+5. Inclusão do botão “Limpar filtros”, com estado desativado quando o recorte já está no padrão.
+6. Resumo superior compactado: melhor retorno, menor retorno e categorias/fundos analisados.
+7. Barras de % do CDI removidas; o valor numérico passa a ser a informação principal.
+8. Nomenclatura semântica corrigida:
+   - “Melhor fundo de cada categoria” no universo geral;
+   - “Ranking em [categoria]” quando uma categoria específica estiver selecionada.
+9. Perfil de risco exibido como informação secundária de cada fundo.
+10. Fundos fechados para captação continuam identificados por selo.
+11. Mobile preservado: as novas regras visuais são aplicadas apenas acima de 768 px.
+12. Cache-busting atualizado para desktop-ranking-table-v682.
+
+Validações realizadas:
+- app.js aprovado em `node --check`.
+- style.css analisado pelo tinycss2 sem erros de sintaxe.
+- index.html analisado e contém os novos controles e referências corretas.
+
+Recomendação:
+Teste primeiro na branch Testes-da-versão-01. Mantenha uma cópia dos três arquivos atuais antes de substituir.

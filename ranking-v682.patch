@@ -1,0 +1,915 @@
+--- a/index.html
++++ b/index.html
+@@ -1,6 +1,6 @@
+ <!DOCTYPE html>
+ 
+-<html class="desktop-ipca-meta-polish-v681 desktop-ipca-meta-semantic-v680 desktop-poupanca-ultracompact-v675 desktop-poupanca-compact-open-v674 desktop-poupanca-effective-v673 desktop-poupanca-effective-v672 desktop-dolar-months-strip-compact-v671 desktop-dolar-ptax-compact-v670 desktop-selic-copom-repair-v667 desktop-selic-current-sync-v666 desktop-selic-zero-safe-v665 desktop-ranking-closed-microtag-soft-v664 desktop-ranking-closed-microtag-v663 desktop-ranking-closed-badge-safe-v662 desktop-ranking-closed-badge-polish-v661 desktop-header-kpi-stable-v660 desktop-market-microcopy-v659 desktop-market-uniform-v658 desktop-market-uniform-v657 desktop-dolar-month-cards-v656 desktop-copom-semantic-colors-v654 desktop-selic-executive-v653 desktop-market-current-var-v652 desktop-market-semantic-v651 desktop-market-ipca-dolar-v650 desktop-rates-polish-v649 desktop-rates-copom-agenda-v648 desktop-rates-copom-agenda-v647 desktop-ranking-closed-badge-v646 desktop-ranking-balanced-v645 mobile-ranking-buttons-polish-v638 ranking-cdi-12m-safe-v643 mobile-vermais-clean-v637 mobile-vermais-standard-v636 mobile-monthly-compact-v635 mobile-monthly-polish-v634 mobile-monthly-semantic-v633 mobile-monthly-us-indicators-v632 mobile-market-compact-v630 mobile-ranking-summary-stacked-v627 mobile-ranking-toolbar-final-v625 mobile-ranking-independent-v617 mobile-ranking-summary-integrated-v624 mobile-ranking-summary-carousel-v623 mobile-ranking-names-safe-v622 mobile-hide-funds-heading-v621 desktop-ranking-cdi-pl-fix-v557 desktop-ranking-compact-cdi-v556 desktop-ranking-redesign-v555 desktop-safe-performance-v554 desktop-audience-filter-fix-v553 desktop-reference-layout-v552 desktop-color-governance-v551 desktop-catalog-filter-hierarchy-v550 desktop-section-toggle-fix-v541 desktop-section-toggle-fix-v540 desktop-section-vermais-v539 desktop-ranking-cdi-period-v538 desktop-ranking-alerts-semantic-v537 desktop-ranking-hierarchy-v536 desktop-ranking-alerts-inline-v535 desktop-ranking-attention-strip-v534 desktop-restore-v531-base-v533 desktop-ranking-shortnames-v531 desktop-rankings-readable-v530 desktop-rankings-width-v529 desktop-polish-v528 desktop-catalog-clean-v527 desktop-catalog-base-v525 desktop-filter-actions-v526 desktop-market-hierarchy-v523 desktop-filter-buttons-v524 desktop-filter-buttons-v523 desktop-collapsible-sections-v518 desktop-market-clean-v517 desktop-market-hierarchy-v516 desktop-rankings-cdi-dynamic-v515 desktop-rankings-cdi-dynamic-v514 desktop-rankings-clean-v513 desktop-table-docs-primary-v512 desktop-table-only-v511 desktop-table-clean-v510 desktop-fund-table-ids-v509 desktop-filter-audience-actions-v508 desktop-filter-risk-left-v507 desktop-filter-layout-v506 desktop-detail-cleanup-v505 desktop-detail-dedupe-v504 desktop-quick-note-compact-v503 desktop-fund-detail-technical-v502 desktop-fund-detail-hierarchy-v501 desktop-active-chip-compact-v500 desktop-doc-labels-v499 desktop-modal-restore-v498 desktop-filter-buttons-v497 desktop-filter-buttons-v495 desktop-filter-buttons-v496 desktop-filter-buttons-v494 desktop-filter-buttons-v493 desktop-filter-active-trail-v492 desktop-filter-active-trail-v491 desktop-filter-funnel-layout-v490 desktop-filter-funnel-v489 desktop-filter-audience-v488 desktop-kpi-signal-v488 desktop-docs-scroll-v487 desktop-fund-spotlight-v486 desktop-kpi-strip-v484 mobile-v480 mobile-ranking-safe-v480 mobile-v479 mobile-ranking-compact-v479 mobile-v478 mobile-no-text-cut-v478 mobile-v477 dolar-mobile-ultra-compact-v477 mobile-v476 dolar-mobile-flat-v476 mobile-v475 savings-mobile-flat-v475 mobile-v474 dolar-mobile-compact-v474 mobile-v473 copom-single-decision-v473 mobile-v472 mobile-focus-wrap-v472 mobile-v471 mobile-toggle-harmony-v471 mobile-v470 rates-copom-consultative-v470 mobile-v469 mobile-fund-detail-harmony-v469 mobile-v468 mobile-fund-detail-list-v468 mobile-v467 mobile-fund-detail-no-cut-v467 mobile-v466 mobile-fund-detail-ia-v466 mobile-v465 mobile-adaptive-ranking-v465 mobile-v464 mobile-ranking-short-names-v464 mobile-v463 mobile-ranking-no-cut-v463 mobile-v462 mobile-top-kpi-typography-v462 mobile-v461 mobile-ranking-highlights-tight-v461 mobile-v460 mobile-monthly-indicators-numeric-v460 mobile-v459 mobile-ranking-highlights-refine-v459 mobile-v458 mobile-ranking-highlights-compact-v458 mobile-v457 mobile-ranking-category-list-v457 mobile-v456 mobile-top-kpi-harmony-v456 mobile-v455 mobile-monthly-indicators-readable-v455 mobile-v454 mobile-fund-card-balanced-metrics-v454 mobile-v453 mobile-fund-card-details-cta-v453 mobile-v452 mobile-fund-card-refinement-v452 mobile-v451 mobile-monthly-indicators-balance-v451 mobile-v450 mobile-monthly-indicators-fit-v450 mobile-v449 mobile-monthly-indicators-compact-v449 mobile-v448 mobile-monthly-indicators-sticky-v448 mobile-v447 mobile-monthly-indicators-clean-v447 mobile-v446 mobile-monthly-indicators-select-v446 mobile-v445 mobile-monthly-indicators-v445 mobile-v444 mobile-fund-card-hierarchy-v444 mobile-v443 mobile-ranking-toolbar-compact-v443 mobile-v442 mobile-no-data-toggle-stable-v442 mobile-v441 mobile-funds-filters-fix-v441 mobile-v440 mobile-funds-filters-compact-v440 mobile-v439 mobile-header-date-in-title-v439 mobile-v438 mobile-header-inline-date-v438 mobile-v437 mobile-header-tight-v437 mobile-v436 mobile-header-minimal-v436 mobile-v435 mobile-top-kpi-icons-v435 mobile-v434 savings-mobile-text-stable-v434 mobile-v433 savings-mobile-polish-v433 mobile-v432 savings-mobile-hero-v432 mobile-v431 rates-copom-move-persistent-v431 mobile-v430 rates-copom-move-v430 mobile-v429 rates-borderless-carousel-v429 mobile-v428 rates-semantic-clean-v428 mobile-v427 rates-hard-three-v427 mobile-v426 rates-three-visible-v426 mobile-v425 rates-copom-cdi-carousels-v425 mobile-v424 dolar-months-clean-v424 mobile-v423 ipca-extremes-side-v423 mobile-v422 inflation-header-clean-v422 mobile-v421 ipca-extremes-grid-v421 mobile-v420 ipca-accum-v420 mobile-v419 selic-chart-dates-edge-v419 mobile-v418 selic-chart-dates-v418 mobile-v417 selic-chart-period-v417 mobile-v416 selic-kpi-compact-v416 mobile-v415 selic-kpi-focus-v415 mobile-v412 mobile-v411 mobile-v404 mobile-v403 mobile-v402 mobile-responsive-v400 rates-clean-dashboard-v399 rates-final-unscoped-v398 evo-clean-indicators-fix-v368 evo-clean-indicators-v367 evo-pointer-sane-v363 evo-hard-freeze-v362 evo-no-flicker-v360 evo-stability-v359 evo-stable-v358 dolar-carousel-affordance-v356 mobile-carousel-affordance-v355 mobile-semantic-clean-v354 copom-true-borderless-v353 mobile-body-fit-v346 page-center-v345 header-data-status-v343 charts-remove-12m-xaxis-v342 inflation-summary-compact-v341 charts-loop-fix-v340 charts-tabs-fix-v339 inflation-rates-clean-v338 dolar-chart-closed-v337 dolar-badge-months-v336 dolar-xaxis-mobile-v335 dolar-chart-stats-v334 dolar-executive-mobile-v333 market-microcopy-force-v332 market-card-156-v331 market-card-width-uniform-v330 market-microcopy-clean-v329 savings-header-topright-v328 savings-micro-polish-v327 savings-scenarios-polish-v326 savings-clean-mobile-v325 cdi-semantic-cards-v324 cdi-12m-fix-v323 cdi-month-carousel-v322 copom-carousel-v321 market-remove-next-summary-v320 market-rates-grid-force-v319 market-rates-compact-v318 ranking-market-clean-v317 market-mobile-card-system-v316 ranking-professional-breath-v315 pagination-ranking-tight-v314 ranking-gap-rays-v313 ranking-gap-cleanup-v312 summary-head-removed-v311 summary-icon-dedup-v310 ranking-hero-spacing-v309 remove-gfb-full-v308 remove-gfb-top-v307 title-hero-levels-v306 ranking-hero-icon-v305 card-title-system-v304 title-normalized-v303 title-unified-v302 section-title-force-v301 section-title-system-v300 cdi-mobile-canvas-fix-v299 cdi-mobile-semantic-v298 cdi-mobile-bars-v297 cdi-mobile-compact-v296 ranking-insight-premium-v295 mobile-hide-gfb-search-v294 ranking-insight-stable-v293 ranking-value-standard-v292 ranking-values-compact-v291 ranking-tight-uniform-v290 ranking-uniform-final-v289 ranking-pl-compact-v288 ranking-scale-final-v287 ranking-value-fix-v286 ranking-proportion-v285 ranking-premium-v284 ranking-mobile-refine-v283 ranking-mobile-standard-v282 ranking-mobile-value-right-v280 layout-executivo-v279 palette-applied-v278 rates-compact-v265 rates-cdi-real-v264 rates-scroll-fix-v263 savings-mobile-reorg-v242 ranking-mobile-density-v240 market-mobile-dedup-v234 market-live-values-v234 fund-mobile-polish-v236 fund-mobile-semantic-v235 cdi-current-context-v233 cdi-daily-auto-v232 numeric-legibility-v231 cdi-current-auto-v227 savings-table-v208 savings-balanced-v207 fund-detail-semantic-v206 toggle-sem-dados-stable-v204 app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164 mobile-ux-fixes-v165 fund-card-executive-v166 market-reference-executive-v167 pagination-stable-v168 pagination-no-desktop-scroll-v169 cumulative-ui-v170 catalog-table-sanitized-v171 market-ibov-perspective-v172 dolar-current-dedup-v172 market-us-legibility-v175 market-number-legibility-v176 rankings-mobile-stable-v177 mobile-copom-carousel-v178 ranking-universe-mobile-v178 rankings-mobile-readability-v179 desktop-ranking-insight-v181 mobile-market-layout-v180 evolution-desktop-v182 evolution-toggle-fix-v183 evolution-toggle-permanent-v186 mobile-ptax-month-carousel-v187 mobile-ptax-current-dedup-v188 mobile-reference-header-v191 mobile-brand-copy-v192 mobile-layout-uniform-v193 ranking-mobile-spacing-v194 ranking-attention-dedup-v195 ranking-category-exact-v197 savings-mobile-semantic-v201 savings-clean-v205 catalog-risk-inline-v203 catalog-desktop-professional-v217 catalog-desktop-balance-v218 catalog-desktop-compact-v219 catalog-desktop-overlap-fix-v220 catalog-desktop-result-chip-v221 rankings-semantic-v222 selic-date-reconciliation-v223 fund-detail-clean-v224 fund-detail-audience-v225 market-period-controller-v228 mobile-selic-reorg-v243 mobile-gfb-compact-v243 fund-cnpj-balance-v244 selic-chart-polish-v245 dolar-mobile-typography-v246 dolar-mobile-executive-v247 selic-vigente-sync-v248 selic-periods-v249 ipca-chart-summary-v250 ipca-chart-fix-v251 ipca-summary-label-fix-v252 selic-axis-labels-v253 footer-privacy-v254 rates-reference-exec-v255 rates-reference-clean-v256 rates-reference-stable-v257 selic-mobile-fit-v258 rates-mobile-compact-v260 rates-premium-v261 rates-decompressed-v267 rates-executive-lean-v268 copom-card-fit-v269 copom-premium-v270 cdi-chart-proportion-v272 cdi-chart-12m-ready-v273 cdi-executive-final-v274 cdi-analytic-fix-v275 cdi-axis-linear-v276 rates-desktop-refine-v266 rates-mobile-refine-v281 mobile-ranking-gap-fix-v629 mobile-ranking-market-gap-v631" lang="pt-br">
++<html class="desktop-ranking-table-v682 desktop-ipca-meta-polish-v681 desktop-ipca-meta-semantic-v680 desktop-poupanca-ultracompact-v675 desktop-poupanca-compact-open-v674 desktop-poupanca-effective-v673 desktop-poupanca-effective-v672 desktop-dolar-months-strip-compact-v671 desktop-dolar-ptax-compact-v670 desktop-selic-copom-repair-v667 desktop-selic-current-sync-v666 desktop-selic-zero-safe-v665 desktop-ranking-closed-microtag-soft-v664 desktop-ranking-closed-microtag-v663 desktop-ranking-closed-badge-safe-v662 desktop-ranking-closed-badge-polish-v661 desktop-header-kpi-stable-v660 desktop-market-microcopy-v659 desktop-market-uniform-v658 desktop-market-uniform-v657 desktop-dolar-month-cards-v656 desktop-copom-semantic-colors-v654 desktop-selic-executive-v653 desktop-market-current-var-v652 desktop-market-semantic-v651 desktop-market-ipca-dolar-v650 desktop-rates-polish-v649 desktop-rates-copom-agenda-v648 desktop-rates-copom-agenda-v647 desktop-ranking-closed-badge-v646 desktop-ranking-balanced-v645 mobile-ranking-buttons-polish-v638 ranking-cdi-12m-safe-v643 mobile-vermais-clean-v637 mobile-vermais-standard-v636 mobile-monthly-compact-v635 mobile-monthly-polish-v634 mobile-monthly-semantic-v633 mobile-monthly-us-indicators-v632 mobile-market-compact-v630 mobile-ranking-summary-stacked-v627 mobile-ranking-toolbar-final-v625 mobile-ranking-independent-v617 mobile-ranking-summary-integrated-v624 mobile-ranking-summary-carousel-v623 mobile-ranking-names-safe-v622 mobile-hide-funds-heading-v621 desktop-ranking-cdi-pl-fix-v557 desktop-ranking-compact-cdi-v556 desktop-ranking-redesign-v555 desktop-safe-performance-v554 desktop-audience-filter-fix-v553 desktop-reference-layout-v552 desktop-color-governance-v551 desktop-catalog-filter-hierarchy-v550 desktop-section-toggle-fix-v541 desktop-section-toggle-fix-v540 desktop-section-vermais-v539 desktop-ranking-cdi-period-v538 desktop-ranking-alerts-semantic-v537 desktop-ranking-hierarchy-v536 desktop-ranking-alerts-inline-v535 desktop-ranking-attention-strip-v534 desktop-restore-v531-base-v533 desktop-ranking-shortnames-v531 desktop-rankings-readable-v530 desktop-rankings-width-v529 desktop-polish-v528 desktop-catalog-clean-v527 desktop-catalog-base-v525 desktop-filter-actions-v526 desktop-market-hierarchy-v523 desktop-filter-buttons-v524 desktop-filter-buttons-v523 desktop-collapsible-sections-v518 desktop-market-clean-v517 desktop-market-hierarchy-v516 desktop-rankings-cdi-dynamic-v515 desktop-rankings-cdi-dynamic-v514 desktop-rankings-clean-v513 desktop-table-docs-primary-v512 desktop-table-only-v511 desktop-table-clean-v510 desktop-fund-table-ids-v509 desktop-filter-audience-actions-v508 desktop-filter-risk-left-v507 desktop-filter-layout-v506 desktop-detail-cleanup-v505 desktop-detail-dedupe-v504 desktop-quick-note-compact-v503 desktop-fund-detail-technical-v502 desktop-fund-detail-hierarchy-v501 desktop-active-chip-compact-v500 desktop-doc-labels-v499 desktop-modal-restore-v498 desktop-filter-buttons-v497 desktop-filter-buttons-v495 desktop-filter-buttons-v496 desktop-filter-buttons-v494 desktop-filter-buttons-v493 desktop-filter-active-trail-v492 desktop-filter-active-trail-v491 desktop-filter-funnel-layout-v490 desktop-filter-funnel-v489 desktop-filter-audience-v488 desktop-kpi-signal-v488 desktop-docs-scroll-v487 desktop-fund-spotlight-v486 desktop-kpi-strip-v484 mobile-v480 mobile-ranking-safe-v480 mobile-v479 mobile-ranking-compact-v479 mobile-v478 mobile-no-text-cut-v478 mobile-v477 dolar-mobile-ultra-compact-v477 mobile-v476 dolar-mobile-flat-v476 mobile-v475 savings-mobile-flat-v475 mobile-v474 dolar-mobile-compact-v474 mobile-v473 copom-single-decision-v473 mobile-v472 mobile-focus-wrap-v472 mobile-v471 mobile-toggle-harmony-v471 mobile-v470 rates-copom-consultative-v470 mobile-v469 mobile-fund-detail-harmony-v469 mobile-v468 mobile-fund-detail-list-v468 mobile-v467 mobile-fund-detail-no-cut-v467 mobile-v466 mobile-fund-detail-ia-v466 mobile-v465 mobile-adaptive-ranking-v465 mobile-v464 mobile-ranking-short-names-v464 mobile-v463 mobile-ranking-no-cut-v463 mobile-v462 mobile-top-kpi-typography-v462 mobile-v461 mobile-ranking-highlights-tight-v461 mobile-v460 mobile-monthly-indicators-numeric-v460 mobile-v459 mobile-ranking-highlights-refine-v459 mobile-v458 mobile-ranking-highlights-compact-v458 mobile-v457 mobile-ranking-category-list-v457 mobile-v456 mobile-top-kpi-harmony-v456 mobile-v455 mobile-monthly-indicators-readable-v455 mobile-v454 mobile-fund-card-balanced-metrics-v454 mobile-v453 mobile-fund-card-details-cta-v453 mobile-v452 mobile-fund-card-refinement-v452 mobile-v451 mobile-monthly-indicators-balance-v451 mobile-v450 mobile-monthly-indicators-fit-v450 mobile-v449 mobile-monthly-indicators-compact-v449 mobile-v448 mobile-monthly-indicators-sticky-v448 mobile-v447 mobile-monthly-indicators-clean-v447 mobile-v446 mobile-monthly-indicators-select-v446 mobile-v445 mobile-monthly-indicators-v445 mobile-v444 mobile-fund-card-hierarchy-v444 mobile-v443 mobile-ranking-toolbar-compact-v443 mobile-v442 mobile-no-data-toggle-stable-v442 mobile-v441 mobile-funds-filters-fix-v441 mobile-v440 mobile-funds-filters-compact-v440 mobile-v439 mobile-header-date-in-title-v439 mobile-v438 mobile-header-inline-date-v438 mobile-v437 mobile-header-tight-v437 mobile-v436 mobile-header-minimal-v436 mobile-v435 mobile-top-kpi-icons-v435 mobile-v434 savings-mobile-text-stable-v434 mobile-v433 savings-mobile-polish-v433 mobile-v432 savings-mobile-hero-v432 mobile-v431 rates-copom-move-persistent-v431 mobile-v430 rates-copom-move-v430 mobile-v429 rates-borderless-carousel-v429 mobile-v428 rates-semantic-clean-v428 mobile-v427 rates-hard-three-v427 mobile-v426 rates-three-visible-v426 mobile-v425 rates-copom-cdi-carousels-v425 mobile-v424 dolar-months-clean-v424 mobile-v423 ipca-extremes-side-v423 mobile-v422 inflation-header-clean-v422 mobile-v421 ipca-extremes-grid-v421 mobile-v420 ipca-accum-v420 mobile-v419 selic-chart-dates-edge-v419 mobile-v418 selic-chart-dates-v418 mobile-v417 selic-chart-period-v417 mobile-v416 selic-kpi-compact-v416 mobile-v415 selic-kpi-focus-v415 mobile-v412 mobile-v411 mobile-v404 mobile-v403 mobile-v402 mobile-responsive-v400 rates-clean-dashboard-v399 rates-final-unscoped-v398 evo-clean-indicators-fix-v368 evo-clean-indicators-v367 evo-pointer-sane-v363 evo-hard-freeze-v362 evo-no-flicker-v360 evo-stability-v359 evo-stable-v358 dolar-carousel-affordance-v356 mobile-carousel-affordance-v355 mobile-semantic-clean-v354 copom-true-borderless-v353 mobile-body-fit-v346 page-center-v345 header-data-status-v343 charts-remove-12m-xaxis-v342 inflation-summary-compact-v341 charts-loop-fix-v340 charts-tabs-fix-v339 inflation-rates-clean-v338 dolar-chart-closed-v337 dolar-badge-months-v336 dolar-xaxis-mobile-v335 dolar-chart-stats-v334 dolar-executive-mobile-v333 market-microcopy-force-v332 market-card-156-v331 market-card-width-uniform-v330 market-microcopy-clean-v329 savings-header-topright-v328 savings-micro-polish-v327 savings-scenarios-polish-v326 savings-clean-mobile-v325 cdi-semantic-cards-v324 cdi-12m-fix-v323 cdi-month-carousel-v322 copom-carousel-v321 market-remove-next-summary-v320 market-rates-grid-force-v319 market-rates-compact-v318 ranking-market-clean-v317 market-mobile-card-system-v316 ranking-professional-breath-v315 pagination-ranking-tight-v314 ranking-gap-rays-v313 ranking-gap-cleanup-v312 summary-head-removed-v311 summary-icon-dedup-v310 ranking-hero-spacing-v309 remove-gfb-full-v308 remove-gfb-top-v307 title-hero-levels-v306 ranking-hero-icon-v305 card-title-system-v304 title-normalized-v303 title-unified-v302 section-title-force-v301 section-title-system-v300 cdi-mobile-canvas-fix-v299 cdi-mobile-semantic-v298 cdi-mobile-bars-v297 cdi-mobile-compact-v296 ranking-insight-premium-v295 mobile-hide-gfb-search-v294 ranking-insight-stable-v293 ranking-value-standard-v292 ranking-values-compact-v291 ranking-tight-uniform-v290 ranking-uniform-final-v289 ranking-pl-compact-v288 ranking-scale-final-v287 ranking-value-fix-v286 ranking-proportion-v285 ranking-premium-v284 ranking-mobile-refine-v283 ranking-mobile-standard-v282 ranking-mobile-value-right-v280 layout-executivo-v279 palette-applied-v278 rates-compact-v265 rates-cdi-real-v264 rates-scroll-fix-v263 savings-mobile-reorg-v242 ranking-mobile-density-v240 market-mobile-dedup-v234 market-live-values-v234 fund-mobile-polish-v236 fund-mobile-semantic-v235 cdi-current-context-v233 cdi-daily-auto-v232 numeric-legibility-v231 cdi-current-auto-v227 savings-table-v208 savings-balanced-v207 fund-detail-semantic-v206 toggle-sem-dados-stable-v204 app-ready no-boot-v79 data-first-v81 micro-pagination-native-v108 remove-legacy-market-hints-v118 header-lastupdate-reorg-v119 typography-system-v120 closed-month-mini-panel-v121 closed-month-mobile-rebalance-v122 search-no-autofill-v123 design-tokens-legibility-v124 kpi-toggle-desktop-fix-v125 toggle-sem-dados-checkbox-fix-v126 toggle-sem-dados-native-fix-v127 w3c-html-validate-fix-v128 desktop-anchor-layout-v132 compact-dashboard-v131 mobile-blank-fix-v132 executive-header-v134 anchor-position-fix-v134 rankings-ux-v136 rankings-ux-v137 rankings-ux-v138 rankings-ux-v139 rankings-ux-v140 rankings-ux-v141 rankings-ux-v143 fundos-meta-integration-v156 fund-detail-executive-v158 market-executive-simple-v159 market-analytic-compact-v160 market-analytic-typography-v161 dolar-ptax-reorg-v162 market-analytic-dedup-v163 market-analytic-alignment-v164 mobile-ux-fixes-v165 fund-card-executive-v166 market-reference-executive-v167 pagination-stable-v168 pagination-no-desktop-scroll-v169 cumulative-ui-v170 catalog-table-sanitized-v171 market-ibov-perspective-v172 dolar-current-dedup-v172 market-us-legibility-v175 market-number-legibility-v176 rankings-mobile-stable-v177 mobile-copom-carousel-v178 ranking-universe-mobile-v178 rankings-mobile-readability-v179 desktop-ranking-insight-v181 mobile-market-layout-v180 evolution-desktop-v182 evolution-toggle-fix-v183 evolution-toggle-permanent-v186 mobile-ptax-month-carousel-v187 mobile-ptax-current-dedup-v188 mobile-reference-header-v191 mobile-brand-copy-v192 mobile-layout-uniform-v193 ranking-mobile-spacing-v194 ranking-attention-dedup-v195 ranking-category-exact-v197 savings-mobile-semantic-v201 savings-clean-v205 catalog-risk-inline-v203 catalog-desktop-professional-v217 catalog-desktop-balance-v218 catalog-desktop-compact-v219 catalog-desktop-overlap-fix-v220 catalog-desktop-result-chip-v221 rankings-semantic-v222 selic-date-reconciliation-v223 fund-detail-clean-v224 fund-detail-audience-v225 market-period-controller-v228 mobile-selic-reorg-v243 mobile-gfb-compact-v243 fund-cnpj-balance-v244 selic-chart-polish-v245 dolar-mobile-typography-v246 dolar-mobile-executive-v247 selic-vigente-sync-v248 selic-periods-v249 ipca-chart-summary-v250 ipca-chart-fix-v251 ipca-summary-label-fix-v252 selic-axis-labels-v253 footer-privacy-v254 rates-reference-exec-v255 rates-reference-clean-v256 rates-reference-stable-v257 selic-mobile-fit-v258 rates-mobile-compact-v260 rates-premium-v261 rates-decompressed-v267 rates-executive-lean-v268 copom-card-fit-v269 copom-premium-v270 cdi-chart-proportion-v272 cdi-chart-12m-ready-v273 cdi-executive-final-v274 cdi-analytic-fix-v275 cdi-axis-linear-v276 rates-desktop-refine-v266 rates-mobile-refine-v281 mobile-ranking-gap-fix-v629 mobile-ranking-market-gap-v631" lang="pt-br">
+ <head>
+ <meta charset="utf-8"/>
+ <script>
+@@ -80,7 +80,7 @@
+ <meta content="width=device-width,initial-scale=1.0" name="viewport"/>
+ <meta content="#07080f" name="theme-color"/>
+ <meta content="Catálogo de Fundos CAIXA para consulta, análise de rentabilidade, rankings, indicadores de mercado e informações públicas sobre fundos de investimento." name="description"/>
+-<meta content="ELTAUM_DESKTOP_RATES_COPOM_AGENDA_V647" name="app-build"/>
++<meta content="ELTAUM_RANKING_TABLE_V682" name="app-build"/>
+ <meta content="yes" name="mobile-web-app-capable"/>
+ <meta content="yes" name="apple-mobile-web-app-capable"/>
+ <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
+@@ -140,7 +140,7 @@
+ }
+ 
+ </style>
+-<link href="style.css?v=desktop-ipca-meta-polish-v681" rel="stylesheet"/>
++<link href="style.css?v=desktop-ranking-table-v682" rel="stylesheet"/>
+ <style id="desktop-filter-buttons-v497-critical-inline">
+ @media (min-width:769px){
+   html.desktop-filter-buttons-v497 body .desktop-audience-chip-v488,
+@@ -245,7 +245,7 @@
+   else cleanupLegacyUi();
+ })();
+ </script>
+-<script defer="" src="app.js?v=desktop-ipca-meta-polish-v681"></script>
++<script defer="" src="app.js?v=desktop-ranking-table-v682"></script>
+ 
+ <style id="desktop-detail-cleanup-v505-critical-inline">
+ @media (min-width:769px){
+@@ -960,7 +960,7 @@
+ <div class="ranking-title-group">
+ <h2 class="section-title-v302 page-section-title-v302 ranking-title-hero-v305 section-hero-premium-v306"><span aria-hidden="true" class="section-title-icon-v302">🏆</span><span class="section-title-text-v302">Rankings dos fundos</span></h2>
+ <span class="section-badge"><span class="badge-dot green"></span>Ranking dinâmico · SIPII</span>
+-<p class="ranking-section-subtitle-v136">Melhores por categoria, top geral e alertas simples por período.</p>
++<p class="ranking-section-subtitle-v136">Compare o desempenho dos fundos por período, categoria e perfil de risco.</p>
+ </div>
+ </div>
+ <div aria-label="Filtros dos rankings no mobile" class="ranking-mobile-toolbar-v617" role="group">
+@@ -969,7 +969,7 @@
+ <select aria-label="Período" class="ranking-mobile-select-v617" id="rankingMobilePeriodV617">
+ <option value="mes">Mês</option>
+ <option value="ano">Ano</option>
+-<option selected="" value="12m">12M</option>
++<option selected="" value="12m">12 meses</option>
+ </select>
+ </div>
+ <div class="ranking-mobile-control-v617 ranking-mobile-control-class-v617">
+@@ -1002,15 +1002,15 @@
+ </div>
+ <div aria-label="Filtros dos rankings" class="ranking-toolbar ranking-toolbar-v136" role="group">
+ <div class="ranking-control-card-v136">
+-<label for="rankingPeriodSelectV136">Período</label>
++<label for="rankingPeriodSelectV136">Período de análise</label>
+ <select aria-label="Selecionar o período de análise dos rankings" class="ranking-select-v136" id="rankingPeriodSelectV136">
+ <option value="mes">Mês</option>
+ <option value="ano">Ano</option>
+-<option selected="" value="12m">12M</option>
++<option selected="" value="12m">12 meses</option>
+ </select>
+ </div>
+ <div class="ranking-control-card-v136">
+-<label for="rankingClassSelectV136">Universo / categoria</label>
++<label for="rankingClassSelectV136">Categoria ou universo</label>
+ <select aria-label="Selecionar o universo do ranking" class="ranking-select-v136" id="rankingClassSelectV136">
+ <optgroup label="Universo">
+ <option value="todos">Todos</option>
+@@ -1040,6 +1040,10 @@
+ <option value="Sem classificação">Sem classificação</option>
+ </select>
+ </div>
++<div class="ranking-actions-v682">
++<span aria-live="polite" id="rankingResultsV682">Atualizando resultados…</span>
++<button class="ranking-clear-v682" id="rankingClearFiltersV682" type="button">Limpar filtros</button>
++</div>
+ <div aria-label="Categorias do ranking" class="ranking-filter-row ranking-filter-row-compat-v136" id="rankingFilterRow">
+ <span class="ranking-filter-label">Categoria</span>
+ <button class="ranking-filter-chip active" data-rank-filter="todos" type="button">Todos</button>
+--- a/style.css
++++ b/style.css
+@@ -82191,3 +82191,597 @@
+     font-size:8.2px;
+   }
+ }
++
++
++/* =========================================================
++   PATCH v682 — Ranking desktop em tabela comparativa compacta
++   - leitura contínua da posição 1 à 10;
++   - um único controle de período;
++   - filtros compactos, resumo enxuto e sem barras enganosas;
++   - sem alteração do layout mobile.
++   ========================================================= */
++@media (min-width:769px){
++  html.desktop-ranking-table-v682 body #rankingsSection{
++    margin-top:14px!important;
++    padding-bottom:8px!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-head{
++    display:flex!important;
++    align-items:flex-end!important;
++    justify-content:space-between!important;
++    gap:16px!important;
++    margin:0 0 8px!important;
++    padding:0!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-title-group{
++    display:grid!important;
++    grid-template-columns:auto minmax(0,1fr)!important;
++    grid-template-areas:"title badge" "subtitle subtitle"!important;
++    align-items:center!important;
++    justify-content:start!important;
++    gap:4px 10px!important;
++    width:100%!important;
++    text-align:left!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-title-hero-v305{
++    grid-area:title!important;
++    display:flex!important;
++    flex-direction:row!important;
++    align-items:center!important;
++    justify-content:flex-start!important;
++    gap:10px!important;
++    margin:0!important;
++    padding:0!important;
++    font-size:1.38rem!important;
++    line-height:1.1!important;
++    text-align:left!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .section-title-icon-v302{
++    display:grid!important;
++    place-items:center!important;
++    width:36px!important;
++    height:36px!important;
++    min-width:36px!important;
++    min-height:36px!important;
++    margin:0!important;
++    border:1px solid rgba(232,187,106,.34)!important;
++    border-radius:10px!important;
++    background:linear-gradient(180deg,rgba(200,151,58,.16),rgba(11,14,25,.92))!important;
++    box-shadow:none!important;
++    font-size:1rem!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .section-badge{
++    grid-area:badge!important;
++    justify-self:start!important;
++    margin:0!important;
++    font-size:.60rem!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-section-subtitle-v136{
++    grid-area:subtitle!important;
++    display:block!important;
++    max-width:720px!important;
++    margin:0 0 0 46px!important;
++    color:#98a4bd!important;
++    font-size:.70rem!important;
++    line-height:1.35!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-toolbar-v136{
++    display:grid!important;
++    grid-template-columns:168px minmax(250px,1fr) minmax(220px,.9fr) 154px!important;
++    align-items:end!important;
++    justify-content:stretch!important;
++    gap:10px!important;
++    width:100%!important;
++    max-width:none!important;
++    margin:8px 0 10px!important;
++    padding:10px 12px!important;
++    border:1px solid rgba(148,163,184,.16)!important;
++    border-radius:14px!important;
++    background:linear-gradient(180deg,rgba(13,17,31,.84),rgba(8,11,20,.92))!important;
++    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-control-card-v136{
++    display:flex!important;
++    flex-direction:column!important;
++    justify-content:flex-end!important;
++    gap:6px!important;
++    width:100%!important;
++    min-width:0!important;
++    min-height:0!important;
++    margin:0!important;
++    padding:0!important;
++    border:0!important;
++    background:transparent!important;
++    box-shadow:none!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-control-card-v136 label{
++    margin:0!important;
++    color:#9aa6bf!important;
++    font-size:.56rem!important;
++    line-height:1!important;
++    font-weight:850!important;
++    letter-spacing:.09em!important;
++    text-transform:uppercase!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-select-v136{
++    width:100%!important;
++    min-width:0!important;
++    height:40px!important;
++    min-height:40px!important;
++    max-height:40px!important;
++    padding:0 34px 0 12px!important;
++    border:1px solid rgba(148,163,184,.22)!important;
++    border-radius:10px!important;
++    background:#0d1120!important;
++    color:#f3f6fc!important;
++    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
++    font-size:.74rem!important;
++    line-height:40px!important;
++    font-weight:750!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-select-v136:focus-visible{
++    border-color:rgba(232,187,106,.66)!important;
++    outline:2px solid rgba(232,187,106,.16)!important;
++    outline-offset:2px!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-actions-v682{
++    display:grid!important;
++    grid-template-rows:auto 40px!important;
++    align-items:end!important;
++    gap:6px!important;
++    min-width:0!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection #rankingResultsV682{
++    display:block!important;
++    min-width:0!important;
++    overflow:hidden!important;
++    color:#8f9bb5!important;
++    font-size:.56rem!important;
++    line-height:1!important;
++    font-weight:800!important;
++    letter-spacing:.03em!important;
++    text-overflow:ellipsis!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-clear-v682{
++    display:inline-flex!important;
++    align-items:center!important;
++    justify-content:center!important;
++    width:100%!important;
++    height:40px!important;
++    min-height:40px!important;
++    margin:0!important;
++    padding:0 12px!important;
++    border:1px solid rgba(200,151,58,.30)!important;
++    border-radius:10px!important;
++    background:rgba(200,151,58,.07)!important;
++    color:#e5bd70!important;
++    font:800 .67rem/1 Inter,Arial,sans-serif!important;
++    cursor:pointer!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-clear-v682:hover:not(:disabled){
++    border-color:rgba(232,187,106,.58)!important;
++    background:rgba(200,151,58,.13)!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-clear-v682:disabled{
++    opacity:.38!important;
++    cursor:default!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-filter-row-compat-v136,
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v562-tabs{
++    display:none!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-layout-v136,
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-grid{
++    display:block!important;
++    width:100%!important;
++    margin:0!important;
++    padding:0!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary{
++    display:grid!important;
++    grid-template-columns:repeat(3,minmax(0,1fr))!important;
++    gap:8px!important;
++    width:100%!important;
++    margin:0 0 10px!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary-card{
++    display:grid!important;
++    grid-template-columns:minmax(0,1fr) auto!important;
++    grid-template-areas:"label value" "name value"!important;
++    align-items:center!important;
++    column-gap:12px!important;
++    row-gap:4px!important;
++    min-width:0!important;
++    min-height:62px!important;
++    margin:0!important;
++    padding:10px 13px!important;
++    border:1px solid rgba(148,163,184,.15)!important;
++    border-radius:12px!important;
++    background:linear-gradient(180deg,rgba(13,17,31,.82),rgba(8,11,20,.96))!important;
++    box-shadow:none!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary-card.best{
++    border-color:rgba(43,209,151,.25)!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary-card.worst{
++    border-color:rgba(244,98,126,.24)!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary-card > span{
++    grid-area:label!important;
++    color:#8794ad!important;
++    font-size:.54rem!important;
++    line-height:1!important;
++    font-weight:850!important;
++    letter-spacing:.08em!important;
++    text-transform:uppercase!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary-card > strong{
++    grid-area:value!important;
++    align-self:center!important;
++    justify-self:end!important;
++    margin:0!important;
++    font-family:"JetBrains Mono",monospace!important;
++    font-size:1.12rem!important;
++    line-height:1!important;
++    letter-spacing:-.045em!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary-card > small{
++    grid-area:name!important;
++    display:block!important;
++    min-width:0!important;
++    overflow:hidden!important;
++    color:#e8edf7!important;
++    font-size:.67rem!important;
++    line-height:1.2!important;
++    font-weight:750!important;
++    text-overflow:ellipsis!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-summary-card > em{
++    display:none!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-board{
++    width:100%!important;
++    overflow:hidden!important;
++    border:1px solid rgba(148,163,184,.17)!important;
++    border-radius:14px!important;
++    background:rgba(8,11,20,.92)!important;
++    box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-board-head{
++    display:flex!important;
++    align-items:center!important;
++    justify-content:space-between!important;
++    gap:18px!important;
++    min-height:58px!important;
++    margin:0!important;
++    padding:10px 14px!important;
++    border-bottom:1px solid rgba(148,163,184,.14)!important;
++    background:linear-gradient(180deg,rgba(17,21,38,.82),rgba(10,13,24,.72))!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-board-head h3{
++    margin:0!important;
++    color:#efc66f!important;
++    font-size:.92rem!important;
++    line-height:1.15!important;
++    font-weight:850!important;
++    letter-spacing:-.02em!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-board-head p{
++    margin:4px 0 0!important;
++    color:#8f9bb4!important;
++    font-size:.63rem!important;
++    line-height:1.3!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-count{
++    flex:0 0 auto!important;
++    display:inline-flex!important;
++    align-items:center!important;
++    min-height:28px!important;
++    padding:0 10px!important;
++    border:1px solid rgba(148,163,184,.16)!important;
++    border-radius:999px!important;
++    background:rgba(15,20,35,.82)!important;
++    color:#aeb8cd!important;
++    font-size:.58rem!important;
++    line-height:1!important;
++    font-weight:800!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table-shell{
++    width:100%!important;
++    overflow-x:auto!important;
++    scrollbar-width:thin!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table{
++    width:100%!important;
++    min-width:860px!important;
++    border-collapse:collapse!important;
++    table-layout:fixed!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table caption{
++    position:absolute!important;
++    width:1px!important;
++    height:1px!important;
++    margin:-1px!important;
++    padding:0!important;
++    overflow:hidden!important;
++    clip:rect(0 0 0 0)!important;
++    white-space:nowrap!important;
++    border:0!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table .col-position{width:66px!important;}
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table .col-fund{width:auto!important;}
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table .col-category{width:164px!important;}
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table .col-return{width:152px!important;}
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table .col-cdi{width:128px!important;}
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table thead th{
++    height:34px!important;
++    padding:0 12px!important;
++    border-bottom:1px solid rgba(148,163,184,.13)!important;
++    background:#0b0f1c!important;
++    color:#7f8ba4!important;
++    font-size:.52rem!important;
++    line-height:1!important;
++    font-weight:850!important;
++    letter-spacing:.09em!important;
++    text-align:left!important;
++    text-transform:uppercase!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-table thead th:nth-last-child(-n+2){
++    text-align:right!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-row{
++    height:58px!important;
++    border-bottom:1px solid rgba(148,163,184,.105)!important;
++    background:transparent!important;
++    transition:background-color 160ms ease!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-row:last-child{
++    border-bottom:0!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-row:hover{
++    background:rgba(255,255,255,.027)!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-row > *{
++    min-width:0!important;
++    padding:7px 12px!important;
++    vertical-align:middle!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-position{
++    text-align:center!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-position > span{
++    display:inline-grid!important;
++    place-items:center!important;
++    width:30px!important;
++    height:30px!important;
++    border:1px solid rgba(148,163,184,.20)!important;
++    border-radius:9px!important;
++    background:#121827!important;
++    color:#c8d0df!important;
++    font-family:"JetBrains Mono",monospace!important;
++    font-size:.72rem!important;
++    line-height:1!important;
++    font-weight:900!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-row.gold .ranking-v682-position > span{
++    border-color:rgba(232,187,106,.62)!important;
++    background:linear-gradient(145deg,#f1ca76,#a87827)!important;
++    color:#171005!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-row.silver .ranking-v682-position > span{
++    border-color:rgba(225,231,240,.55)!important;
++    background:linear-gradient(145deg,#e9eef5,#8b97a8)!important;
++    color:#111827!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-row.bronze .ranking-v682-position > span{
++    border-color:rgba(214,147,87,.58)!important;
++    background:linear-gradient(145deg,#e7ad72,#8c512b)!important;
++    color:#1b0e07!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-fund-cell{
++    text-align:left!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-fund-wrap{
++    display:flex!important;
++    align-items:center!important;
++    gap:10px!important;
++    min-width:0!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-icon{
++    flex:0 0 32px!important;
++    display:grid!important;
++    place-items:center!important;
++    width:32px!important;
++    height:32px!important;
++    border:1px solid rgba(200,151,58,.24)!important;
++    border-radius:9px!important;
++    background:rgba(200,151,58,.08)!important;
++    font-size:.86rem!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-fund-copy{
++    display:flex!important;
++    flex-direction:column!important;
++    justify-content:center!important;
++    gap:4px!important;
++    min-width:0!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-fund-copy > strong{
++    display:block!important;
++    min-width:0!important;
++    overflow:hidden!important;
++    color:#edf1f8!important;
++    font-size:.72rem!important;
++    line-height:1.15!important;
++    font-weight:850!important;
++    letter-spacing:-.015em!important;
++    text-overflow:ellipsis!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-fund-copy > small{
++    display:flex!important;
++    align-items:center!important;
++    min-height:14px!important;
++    color:#76839c!important;
++    font-size:.53rem!important;
++    line-height:1!important;
++    font-weight:700!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v646-closed-badge{
++    display:inline-flex!important;
++    align-items:center!important;
++    gap:3px!important;
++    min-height:16px!important;
++    padding:0 5px!important;
++    border:1px solid rgba(200,151,58,.25)!important;
++    border-radius:5px!important;
++    background:rgba(200,151,58,.07)!important;
++    color:#c7a45f!important;
++    font-size:.48rem!important;
++    line-height:1!important;
++    font-weight:850!important;
++    text-transform:uppercase!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-risk{
++    display:inline-block!important;
++    max-width:150px!important;
++    overflow:hidden!important;
++    opacity:.76!important;
++    text-overflow:ellipsis!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-fund-copy > small .ranking-v646-closed-badge{
++    margin-left:6px!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-category > span{
++    display:inline-flex!important;
++    align-items:center!important;
++    max-width:100%!important;
++    min-height:24px!important;
++    padding:0 8px!important;
++    overflow:hidden!important;
++    border:1px solid rgba(148,163,184,.14)!important;
++    border-radius:7px!important;
++    background:rgba(15,20,35,.72)!important;
++    color:#aab4c8!important;
++    font-size:.58rem!important;
++    line-height:1!important;
++    font-weight:750!important;
++    text-overflow:ellipsis!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-return,
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-cdi{
++    text-align:right!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-return > span,
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-cdi > span{
++    display:none!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-return > strong,
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-cdi > strong{
++    display:block!important;
++    margin:0!important;
++    font-family:"JetBrains Mono",monospace!important;
++    font-size:.78rem!important;
++    line-height:1!important;
++    font-weight:900!important;
++    letter-spacing:-.035em!important;
++    white-space:nowrap!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-cdi.is-above > strong{color:#58cce2!important;}
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-cdi.is-near > strong{color:#d7b870!important;}
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-cdi.is-below > strong{color:#ef8b9d!important;}
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-cdi.is-neutral > strong{color:#8390aa!important;}
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-alerts{
++    margin:8px 0 0!important;
++    border:1px solid rgba(148,163,184,.13)!important;
++    border-radius:11px!important;
++    background:rgba(9,12,22,.72)!important;
++  }
++
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-v682-alerts > summary{
++    min-height:38px!important;
++    padding:0 12px!important;
++    font-size:.64rem!important;
++  }
++}
++
++@media (min-width:769px) and (max-width:1120px){
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-toolbar-v136{
++    grid-template-columns:150px minmax(210px,1fr) minmax(190px,1fr)!important;
++  }
++  html.desktop-ranking-table-v682 body #rankingsSection .ranking-actions-v682{
++    grid-column:1 / -1!important;
++    grid-template-columns:minmax(0,1fr) 150px!important;
++    grid-template-rows:40px!important;
++    align-items:center!important;
++  }
++  html.desktop-ranking-table-v682 body #rankingsSection #rankingResultsV682{
++    font-size:.60rem!important;
++  }
++}
+--- a/app.js
++++ b/app.js
+@@ -4031,19 +4031,16 @@
+     return '';
+   }
+   function summaryCard(kind, label, value, name, meta){
+-    return '<article class="ranking-v562-summary-card ' + esc(kind || '') + '">' +
++    return '<article class="ranking-v562-summary-card ranking-v682-summary-card ' + esc(kind || '') + '">' +
+       '<span>' + esc(label) + '</span>' +
+       '<strong class="' + esc(kind === 'worst' ? 'neg' : kind === 'neutral' ? 'zero' : 'pos') + '">' + esc(value || '—') + '</strong>' +
+       '<small title="' + esc(name || '') + '">' + esc(name || '—') + '</small>' +
+-      '<em>' + esc(meta || 'Recorte atual') + '</em>' +
++      (meta ? '<em>' + esc(meta) + '</em>' : '') +
+     '</article>';
+   }
+-  function periodTabs(periodo){
+-    return '<div class="ranking-v562-tabs" role="tablist" aria-label="Período do ranking">' +
+-      ['mes','ano','12m'].map(function(p){
+-        return '<button type="button" class="' + (p === periodo ? 'active' : '') + '" data-rank-target="topFundos" data-rank-period="' + p + '">' + labelPeriodo(p) + '</button>';
+-      }).join('') +
+-    '</div>';
++  function periodTabs(){
++    /* v682: o período é controlado somente pelo filtro superior. */
++    return '';
+   }
+   function rankingFundClosedForCaptationV646(row){
+     try{
+@@ -4069,56 +4066,33 @@
+       ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span aria-hidden="true">🔒</span><b>Fechado</b></span>'
+       : '';
+   }
+-  function categoryRow(item, i, campo, periodo, options){
++  function categoryRow(item, i, campo, periodo){
+     const r = item.row;
+-    const opts = options || {};
+-    const balanced = !!opts.balanced;
+     const ratio = cdiRatioNumber(r, periodo);
+-    const width = ratio === null ? 0 : Math.max(8, Math.min(100, Math.abs(ratio)));
+-    const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
++    const ratioClass = ratio === null ? 'is-neutral' : ratio >= 100 ? 'is-above' : ratio >= 80 ? 'is-near' : 'is-below';
++    const medalClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : 'standard';
+     const name = cleanFund(r.Fundo);
+-    const leaderClass = (!balanced && i === 0) ? 'is-leader ' : '';
+-    const displayName = (!balanced && i === 0) ? name : compactFund(name);
+     const closedBadge = rankingClosedBadgeV646(r);
+     const closedClass = closedBadge ? ' is-closed-captacao-v646' : '';
+-    return '<article class="ranking-v562-podium-row ' + leaderClass + medalClass + closedClass + '">' +
+-      '<div class="ranking-v562-medal"><span>' + esc(i + 1) + '</span></div>' +
+-      '<div class="ranking-v562-icon" aria-hidden="true">' + catIcon(item.cat) + '</div>' +
+-      '<div class="ranking-v562-fund">' +
+-        '<strong title="' + esc(name) + '">' + esc(displayName) + '</strong>' +
+-        '<small class="ranking-v646-meta-line"><span>' + esc(shortCat(item.cat)) + '</span>' + closedBadge + '</small>' +
+-      '</div>' +
+-      '<div class="ranking-v562-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></div>' +
+-      '<div class="ranking-v562-cdi">' +
+-        '<span class="ranking-v562-cdi-label">' + esc(cdiLabel(periodo)) + '</span>' +
+-        '<strong>' + esc(cdiRatioTxt(r, periodo)) + '</strong>' +
+-        '<span class="ranking-v562-cdi-bar"><i style="width:' + width + '%"></i></span>' +
+-      '</div>' +
+-    '</article>';
++    const riskText = String(r['Perfil de Risco'] || 'Risco não informado').trim();
++    return '<tr class="ranking-v682-row ' + medalClass + closedClass + '">' +
++      '<td class="ranking-v682-position"><span aria-label="Posição ' + esc(i + 1) + '">' + esc(i + 1) + '</span></td>' +
++      '<th scope="row" class="ranking-v682-fund-cell">' +
++        '<div class="ranking-v682-fund-wrap">' +
++          '<span class="ranking-v682-icon" aria-hidden="true">' + catIcon(item.cat) + '</span>' +
++          '<span class="ranking-v682-fund-copy">' +
++            '<strong title="' + esc(name) + '">' + esc(name) + '</strong>' +
++            '<small><span class="ranking-v682-risk">' + esc(riskText) + '</span>' + closedBadge + '</small>' +
++          '</span>' +
++        '</div>' +
++      '</th>' +
++      '<td class="ranking-v682-category"><span>' + esc(shortCat(item.cat)) + '</span></td>' +
++      '<td class="ranking-v682-return ' + cls(r[campo]) + '"><span>' + esc(retornoLabel(periodo)) + '</span><strong>' + esc(pct(r[campo])) + '</strong></td>' +
++      '<td class="ranking-v682-cdi ' + ratioClass + '"><span>' + esc(cdiLabel(periodo)) + '</span><strong>' + esc(cdiRatioTxt(r, periodo)) + '</strong></td>' +
++    '</tr>';
+   }
+   function categoryBoardRowsV590(winners, campo, periodo){
+-    const top = winners.slice(0,10);
+-    if(!top.length) return '';
+-
+-    /* v645 — Desktop: quando há 6 ou mais itens, o ranking deixa de ter
+-       o primeiro card ocupando a linha inteira e passa a usar duas colunas
+-       equilibradas. Isso evita a sensação de sobra/desalinhamento na posição 10. */
+-    if(top.length >= 6){
+-      const split = Math.ceil(top.length / 2);
+-      const left = top.slice(0, split).map(function(item, idx){
+-        return categoryRow(item, idx, campo, periodo, { balanced:true });
+-      }).join('');
+-      const right = top.slice(split).map(function(item, idx){
+-        return categoryRow(item, idx + split, campo, periodo, { balanced:true });
+-      }).join('');
+-
+-      return '<div class="ranking-v590-columns ranking-v645-balanced-columns has-continuation">' +
+-        '<div class="ranking-v590-column ranking-v590-column-primary">' + left + '</div>' +
+-        '<div class="ranking-v590-column ranking-v590-column-continuation">' + right + '</div>' +
+-      '</div>';
+-    }
+-
+-    return top.map(function(item, idx){
++    return (winners || []).slice(0,10).map(function(item, idx){
+       return categoryRow(item, idx, campo, periodo);
+     }).join('');
+   }
+@@ -4157,49 +4131,73 @@
+     if(!grid || !isDesktop()) return;
+     if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
+ 
++    document.documentElement.classList.add('desktop-ranking-table-v682');
++    const metaBuild = q('meta[name="app-build"]');
++    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_TABLE_V682';
++
+     const periodo = periodoAtual();
+     const campo = campoPorPeriodo(periodo);
+     syncControls(periodo);
+ 
+     const rows = baseRows();
+     const sorted = sortedRows(rows, campo);
+-    const worst = sortedRows(rows, campo, true).filter(function(r){ return finite(r[campo]) < 0; });
++    const ascending = sortedRows(rows, campo, true);
++    const negatives = ascending.filter(function(r){ return finite(r[campo]) < 0; });
+     const winners = categoryWinners(rows, campo, sorted);
+     const isSingleCategory = rankingFilteredSingleCategoryV644();
+     const currentCategoryLabel = rankingCurrentCategoryLabelV644(rows);
+     const boardSource = isSingleCategory ? sorted : winners;
+     const boardRows = isSingleCategory ? topFundsBoardRowsV644(sorted, campo, periodo) : categoryBoardRowsV590(winners, campo, periodo);
+     const best = sorted[0];
+-    const worstOne = worst[0];
+-    const alertBody = alertRows(worst.slice(0,8), campo);
+-    const summaryLabel = isSingleCategory ? 'Fundos com dados' : 'Categorias com dados';
++    const lowest = ascending[0];
++    const alertBody = alertRows(negatives.slice(0,8), campo);
++    const summaryLabel = isSingleCategory ? 'Fundos analisados' : 'Categorias analisadas';
+     const summaryValue = String(boardSource.length || 0);
+-    const summaryName = isSingleCategory ? currentCategoryLabel : 'Melhores Categorias';
+-    const summaryMeta = isSingleCategory ? 'Ranking da categoria' : 'Recorte atual';
+-    const boardTitle = isSingleCategory ? ('Melhores fundos em ' + currentCategoryLabel) : 'Melhores por categoria';
++    const summaryName = isSingleCategory ? currentCategoryLabel : 'Com dados no período';
++    const boardTitle = isSingleCategory ? ('Ranking em ' + currentCategoryLabel) : 'Melhor fundo de cada categoria';
+     const boardDescription = isSingleCategory
+-      ? ('Mostra os fundos com maior retorno dentro de ' + currentCategoryLabel + ' e quanto esse retorno representa do CDI no período selecionado.')
+-      : 'Para cada categoria, mostra o fundo com maior retorno e quanto esse retorno representa do CDI no período selecionado.';
+-    const boardAria = isSingleCategory ? ('Melhores fundos em ' + currentCategoryLabel) : 'Melhores por categoria';
++      ? ('Fundos ordenados pelo maior retorno em ' + labelPeriodo(periodo) + '.')
++      : ('Uma comparação direta entre o fundo líder de cada categoria em ' + labelPeriodo(periodo) + '.');
++    const boardAria = isSingleCategory ? ('Ranking de fundos em ' + currentCategoryLabel) : 'Melhor fundo de cada categoria';
++    const displayedCount = Math.min(10, boardSource.length || 0);
++    const resultText = isSingleCategory
++      ? ((boardSource.length || 0) + ' fundos · exibindo ' + displayedCount)
++      : ((boardSource.length || 0) + ' categorias com dados');
++
++    const resultsEl = q('#rankingResultsV682');
++    if(resultsEl) resultsEl.textContent = resultText;
++    const clearBtn = q('#rankingClearFiltersV682');
++    if(clearBtn){
++      const isDefault = (typeof activeRankFilter === 'undefined' || !activeRankFilter || activeRankFilter === 'todos') &&
++        (typeof activeRankRisk === 'undefined' || !activeRankRisk) && periodo === '12m';
++      clearBtn.disabled = isDefault;
++      clearBtn.setAttribute('aria-disabled', isDefault ? 'true' : 'false');
++    }
+ 
+-    grid.className = 'ranking-grid ranking-main-v136 ranking-v562-grid';
++    grid.className = 'ranking-grid ranking-main-v136 ranking-v682-grid';
+     grid.removeAttribute('data-active-rank-view');
+     grid.innerHTML =
+-      contextLine(rows, periodo) +
+-      '<section class="ranking-v562-summary" aria-label="Resumo dos rankings">' +
+-        summaryCard('best','Melhor do período', best ? pct(best[campo]) : '—', best ? compactFund(best.Fundo) : 'Sem dados', best ? shortCat(best.Categoria) + ' · ' + cdiRatioTxt(best, periodo) + ' do CDI' : '') +
+-        summaryCard('worst','Pior do período', worstOne ? pct(worstOne[campo]) : '—', worstOne ? compactFund(worstOne.Fundo) : 'Sem queda', worstOne ? shortCat(worstOne.Categoria) + ' · ' + cdiRatioTxt(worstOne, periodo) + ' do CDI' : 'Nenhum retorno negativo') +
+-        summaryCard('neutral', summaryLabel, summaryValue, summaryName, summaryMeta) +
++      '<section class="ranking-v562-summary ranking-v682-summary" aria-label="Resumo do ranking">' +
++        summaryCard('best','Melhor retorno', best ? pct(best[campo]) : '—', best ? cleanFund(best.Fundo) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
++        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? cleanFund(lowest.Fundo) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
++        summaryCard('neutral', summaryLabel, summaryValue, summaryName, labelPeriodo(periodo)) +
+       '</section>' +
+-      '<section class="ranking-v562-board" aria-label="' + esc(boardAria) + '">' +
+-        '<div class="ranking-v562-board-head">' +
++      '<section class="ranking-v682-board" aria-label="' + esc(boardAria) + '">' +
++        '<div class="ranking-v682-board-head">' +
+           '<div><h3>' + esc(boardTitle) + '</h3><p>' + esc(boardDescription) + '</p></div>' +
+-          periodTabs(periodo) +
++          '<span class="ranking-v682-count">' + esc(resultText) + '</span>' +
++        '</div>' +
++        '<div class="ranking-v682-table-shell">' +
++          '<table class="ranking-v682-table">' +
++            '<caption>Fundos ordenados pelo retorno no período selecionado</caption>' +
++            '<colgroup><col class="col-position"><col class="col-fund"><col class="col-category"><col class="col-return"><col class="col-cdi"></colgroup>' +
++            '<thead><tr><th scope="col">Pos.</th><th scope="col">Fundo</th><th scope="col">Categoria</th><th scope="col">Retorno</th><th scope="col">% do CDI</th></tr></thead>' +
++            '<tbody>' + (boardRows || '<tr><td colspan="5" class="ranking-empty-v50">Sem dados suficientes para este filtro.</td></tr>') + '</tbody>' +
++          '</table>' +
+         '</div>' +
+-        '<div class="ranking-v562-podium">' + (boardRows || '<div class="ranking-empty-v50">Sem dados suficientes para este filtro.</div>') + '</div>' +
+       '</section>' +
+-      '<details class="ranking-v562-alerts">' +
+-        '<summary><span>Piores do período</span><strong>' + worst.length + '</strong></summary>' +
++      '<details class="ranking-v562-alerts ranking-v682-alerts">' +
++        '<summary><span>Fundos com retorno negativo</span><strong>' + negatives.length + '</strong></summary>' +
+         '<div class="ranking-v562-alert-list">' + (alertBody || '<div class="ranking-empty-v50">Nenhum retorno negativo no recorte atual.</div>') + '</div>' +
+       '</details>';
+   }
+@@ -4232,6 +4230,29 @@
+         setTimeout(renderRankingsV562, 0);
+       });
+     }
++    const clearBtn = q('#rankingClearFiltersV682');
++    if(clearBtn && clearBtn.dataset.v682Bound !== '1'){
++      clearBtn.dataset.v682Bound = '1';
++      clearBtn.addEventListener('click', function(){
++        if(clearBtn.disabled) return;
++        try{
++          activeRankFilter = 'todos';
++          activeRankRisk = '';
++          activeRankPeriods.topFundos = '12m';
++          activeRankPeriods.destaques = '12m';
++        }catch(e){}
++        if(clsSelect) clsSelect.value = 'todos';
++        if(period) period.value = '12m';
++        if(risk) risk.value = '';
++        const mobilePeriod = q('#rankingMobilePeriodV617');
++        const mobileClass = q('#rankingMobileClassV617');
++        const mobileRisk = q('#rankingMobileRiskV617');
++        if(mobilePeriod) mobilePeriod.value = '12m';
++        if(mobileClass) mobileClass.value = 'todos';
++        if(mobileRisk) mobileRisk.value = '';
++        setTimeout(renderRankingsV562, 0);
++      });
++    }
+     const row = q('#rankingFilterRow');
+     if(row && row.dataset.v562Bound !== '1'){
+       row.dataset.v562Bound = '1';
