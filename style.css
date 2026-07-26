@@ -83366,3 +83366,177 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     justify-content:flex-end!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v685 — Workspace semântico e compacto do ranking desktop
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-ranking-workspace-v685 body #rankingsSection{
+    display:grid!important;
+    grid-template-columns:minmax(250px,.62fr) minmax(690px,1.75fr)!important;
+    align-items:center!important;
+    column-gap:22px!important;
+    row-gap:9px!important;
+    width:min(100%,1480px)!important;
+    max-width:1480px!important;
+    margin:0 auto!important;
+    padding:10px 0 18px!important;
+    scroll-margin-top:10px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-head{
+    grid-column:1!important;
+    grid-row:1!important;
+    align-self:center!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-title-group{
+    display:grid!important;
+    grid-template-columns:38px minmax(0,1fr)!important;
+    grid-template-areas:"icon title" "icon subtitle"!important;
+    gap:2px 10px!important;
+    align-items:center!important;
+    text-align:left!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .section-title-icon-v302{
+    width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;
+    border-radius:11px!important;font-size:.92rem!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-title-hero-v305,
+  html.desktop-ranking-workspace-v685 body #rankingsSection h2.section-title-v302{
+    font-size:1.18rem!important;line-height:1.05!important;text-align:left!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-section-subtitle-v136{
+    display:block!important;font-size:.60rem!important;line-height:1.25!important;
+    white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-mobile-toolbar-v617{display:none!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-toolbar-v136,
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    grid-column:2!important;
+    grid-row:1!important;
+    display:grid!important;
+    grid-template-columns:120px 145px minmax(210px,1fr) minmax(190px,.9fr)!important;
+    align-items:end!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:none!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:8px 9px!important;
+    border-radius:12px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-control-card-v136,
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-risk-control-v198{
+    gap:4px!important;min-height:0!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-control-card-v136 label{
+    margin-left:1px!important;font-size:.47rem!important;letter-spacing:.09em!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-select-v136{
+    height:34px!important;min-height:34px!important;max-height:34px!important;
+    padding:0 28px 0 10px!important;border-radius:8px!important;
+    font-size:.64rem!important;line-height:34px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-actions-v682,
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-actions-v683,
+  html.desktop-ranking-workspace-v685 body #rankingsSection #rankingClearFiltersV682{display:none!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-layout-v136{
+    grid-column:1 / -1!important;
+    grid-row:2!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary{
+    min-height:0!important;margin:0 0 8px!important;border-radius:11px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary-card{
+    min-height:48px!important;padding:7px 12px!important;row-gap:2px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary-card.best::before,
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary-card.worst::before{
+    top:8px!important;bottom:8px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary-card > span{font-size:.45rem!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary-card > strong{font-size:.92rem!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary-card > small{font-size:.59rem!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-summary-card > em{display:none!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-board{border-radius:12px!important;overflow:hidden!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-board-head{
+    min-height:50px!important;padding:8px 13px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-board-head h3{font-size:.89rem!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-board-head p{font-size:.57rem!important;margin-top:3px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-history-note{
+    flex:0 0 auto!important;display:inline-flex!important;align-items:center!important;
+    min-height:24px!important;padding:0 9px!important;border:1px solid rgba(148,163,184,.18)!important;
+    border-radius:999px!important;background:rgba(15,23,42,.68)!important;color:#aab5c9!important;
+    font:750 .51rem/1 Inter,Arial,sans-serif!important;white-space:nowrap!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-table{
+    width:100%!important;min-width:760px!important;table-layout:fixed!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-table .col-position{width:66px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-table .col-category{width:190px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-table .col-return{width:170px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-table .col-cdi{width:150px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-table thead th{
+    display:table-cell!important;height:28px!important;padding:0 12px!important;
+    color:#8895ad!important;font-size:.48rem!important;line-height:1.15!important;
+    white-space:normal!important;vertical-align:middle!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v685-table thead th:nth-last-child(-n+2){text-align:right!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-row{height:44px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-row > *{padding-top:4px!important;padding-bottom:4px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-position > span{
+    width:26px!important;height:26px!important;border-radius:7px!important;font-size:.62rem!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-icon{
+    flex-basis:27px!important;width:27px!important;height:27px!important;border-radius:7px!important;font-size:.72rem!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-fund-copy > strong{font-size:.66rem!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v683-fund-meta{font-size:.47rem!important;margin-top:2px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-category span{font-size:.55rem!important;padding:4px 7px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-return,
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-cdi{text-align:right!important;padding-right:13px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-return > span,
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-cdi > span{display:none!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-return > strong,
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v682-cdi > strong{font-size:.66rem!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v683-alerts{margin-top:7px!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-v683-alerts > summary{min-height:34px!important;}
+
+  /* Navegação desktop passa a funcionar como uma tela dedicada de ranking. */
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #sec-kpi,
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #sec-fundos,
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #sec-mercado,
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #sec-dolar,
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #sec-focus,
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #sec-graficos,
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #siteSources{
+    display:none!important;
+  }
+  html.desktop-ranking-workspace-v685 body.ranking-page-v685 #rankingsSection{
+    margin-top:0!important;
+  }
+}
+@media (min-width:769px) and (max-width:1240px){
+  html.desktop-ranking-workspace-v685 body #rankingsSection{
+    grid-template-columns:1fr!important;row-gap:8px!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-head,
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-toolbar-v136{
+    grid-column:1!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-head{grid-row:1!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-toolbar-v136{grid-row:2!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-layout-v136{grid-row:3!important;}
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-toolbar-v136,
+  html.desktop-ranking-workspace-v685 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    grid-template-columns:120px 145px minmax(210px,1fr) minmax(180px,1fr)!important;
+  }
+  html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-section-subtitle-v136{white-space:normal!important;}
+}
