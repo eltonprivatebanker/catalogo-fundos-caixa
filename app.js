@@ -4260,7 +4260,7 @@ function setCdiSort(dir){
       '<section class="ranking-v682-board ranking-v685-board ' + (isSingleCategory ? 'is-single-category-v685' : 'is-multi-category-v685') + '" aria-label="' + esc(boardAria) + '">' +
         '<div class="ranking-v682-board-head">' +
           '<div><h3>' + esc(boardTitle) + '</h3><p>' + esc(boardDescription) + '</p></div>' +
-          (excludedIncomplete ? '<span class="ranking-v685-history-note" title="Fundos iniciados depois do começo do período selecionado não entram na comparação">' + excludedIncomplete + ' sem histórico completo</span>' : '') +
+          (excludedIncomplete ? '<span class="ranking-v685-history-note" title="Fundos sem histórico completo no período selecionado ficam fora desta comparação">' + excludedIncomplete + ' fora do ranking</span>' : '') +
         '</div>' +
         '<div class="ranking-v682-table-shell">' +
           '<table class="ranking-v682-table ranking-v685-table">' +
@@ -30060,4 +30060,269 @@ function buildDetailPanel(r,colspan){
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',apply,{once:true}); else apply();
   window.addEventListener('load',apply,{once:true});
   [250,900,1900,3200].forEach(function(ms){setTimeout(apply,ms);});
+})();
+
+
+/* =========================================================
+   PATCH v687 — Navegação por telas e workspace final do ranking
+   Corrige conflitos com a navegação legada e remove o catálogo
+   da área visível enquanto Rankings estiver ativo.
+   ========================================================= */
+(function rankingWorkspaceV687Terminal(){
+  'use strict';
+
+  const ROOT_CLASS = 'desktop-ranking-workspace-v687';
+  const PAGE_CLASS = 'ranking-page-v687';
+  const LEGACY_PAGE_CLASS = 'ranking-page-v685';
+  const RANKING_ID = 'rankingsSection';
+  const savedDisplay = new WeakMap();
+  let pageObserver = null;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width:769px)').matches;
+  }
+
+  function pageRoot(){
+    return document.getElementById('topo');
+  }
+
+  function navRoot(){
+    return document.getElementById('desktopAnchorNavV131');
+  }
+
+  function rankingSection(){
+    return document.getElementById(RANKING_ID);
+  }
+
+  function setBuildMarker(){
+    document.documentElement.classList.add(ROOT_CLASS);
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_RANKING_WORKSPACE_V687';
+  }
+
+  function restoreDisplay(el){
+    if(!el || !savedDisplay.has(el)) return;
+    const previous = savedDisplay.get(el);
+    if(previous.value){
+      el.style.setProperty('display', previous.value, previous.priority || '');
+    }else{
+      el.style.removeProperty('display');
+    }
+    savedDisplay.delete(el);
+    el.removeAttribute('aria-hidden');
+  }
+
+  function hideDisplay(el){
+    if(!el) return;
+    if(!savedDisplay.has(el)){
+      savedDisplay.set(el, {
+        value: el.style.getPropertyValue('display'),
+        priority: el.style.getPropertyPriority('display')
+      });
+    }
+    if(el.style.getPropertyValue('display') !== 'none' || el.style.getPropertyPriority('display') !== 'important'){
+      el.style.setProperty('display','none','important');
+    }
+    el.setAttribute('aria-hidden','true');
+  }
+
+  function applyScreenVisibility(active){
+    const page = pageRoot();
+    const nav = navRoot();
+    const ranking = rankingSection();
+    if(!page || !ranking) return;
+
+    Array.from(page.children).forEach(function(child){
+      if(child === nav || child === ranking) return;
+      if(active) hideDisplay(child);
+      else restoreDisplay(child);
+    });
+
+    if(active){
+      restoreDisplay(ranking);
+      ranking.removeAttribute('aria-hidden');
+      ranking.hidden = false;
+      ranking.style.setProperty('display','grid','important');
+    }else{
+      ranking.style.removeProperty('display');
+    }
+  }
+
+  function setActiveNav(linkOrTarget){
+    const nav = navRoot();
+    if(!nav) return;
+    const links = Array.from(nav.querySelectorAll('.desktop-anchor-link-v131[data-anchor-target]'));
+    let activeLink = null;
+
+    if(linkOrTarget && linkOrTarget.nodeType === 1){
+      activeLink = linkOrTarget;
+    }else{
+      activeLink = links.find(function(link){
+        return link.dataset.anchorTarget === String(linkOrTarget || '');
+      }) || null;
+    }
+
+    links.forEach(function(link){
+      const active = link === activeLink;
+      link.classList.toggle('active', active);
+      if(active) link.setAttribute('aria-current','page');
+      else link.removeAttribute('aria-current');
+    });
+  }
+
+  function navOffset(){
+    const nav = navRoot();
+    if(!nav || nav.offsetParent === null) return 16;
+    return Math.max(16, Math.ceil(nav.getBoundingClientRect().height + 18));
+  }
+
+  function scrollToSection(target, focusSearch){
+    if(!target) return;
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - navOffset());
+        window.scrollTo({top:top, behavior:'auto'});
+        if(focusSearch){
+          window.setTimeout(function(){
+            const input = document.getElementById('searchInput');
+            if(input){
+              try{ input.focus({preventScroll:true}); }
+              catch(e){ input.focus(); }
+            }
+          },80);
+        }
+      });
+    });
+  }
+
+  function updateHash(targetId){
+    try{
+      history.replaceState(null,'',location.pathname + location.search + '#' + targetId);
+    }catch(e){}
+  }
+
+  function enforceRankingScreen(){
+    if(!document.body.classList.contains(PAGE_CLASS) || !isDesktop()) return;
+    applyScreenVisibility(true);
+    setActiveNav(RANKING_ID);
+    const ranking = rankingSection();
+    if(ranking){
+      ranking.style.setProperty('margin-top','0','important');
+      ranking.style.setProperty('scroll-margin-top','0','important');
+    }
+  }
+
+  function enterRankingScreen(options){
+    if(!isDesktop()) return;
+    setBuildMarker();
+    document.body.classList.add(PAGE_CLASS);
+    document.body.classList.remove(LEGACY_PAGE_CLASS);
+    applyScreenVisibility(true);
+    setActiveNav(RANKING_ID);
+    if(!options || options.updateHash !== false) updateHash(RANKING_ID);
+
+    try{
+      if(typeof window.__renderRankingsV562 === 'function'){
+        window.renderRankings = window.__renderRankingsV562;
+        window.__renderRankingsV562();
+      }
+    }catch(e){
+      console.error('[Ranking v687] Falha ao renderizar',e);
+    }
+
+    window.scrollTo({top:0, behavior:'auto'});
+    [0,40,140,400,900,1800].forEach(function(delay){
+      window.setTimeout(enforceRankingScreen,delay);
+    });
+  }
+
+  function exitRankingScreen(targetId, clickedLink){
+    document.body.classList.remove(PAGE_CLASS, LEGACY_PAGE_CLASS);
+    applyScreenVisibility(false);
+
+    const target = document.getElementById(targetId);
+    setActiveNav(clickedLink || targetId);
+    updateHash(targetId);
+    scrollToSection(target, clickedLink && clickedLink.dataset.searchFocus === '1');
+  }
+
+  function openLinkedPanels(link){
+    if(!link) return;
+    const detailsId = link.dataset.openDetails;
+    const sectionId = link.dataset.openSection;
+    if(detailsId){
+      const details = document.getElementById(detailsId);
+      if(details && 'open' in details) details.open = true;
+    }
+    if(sectionId){
+      const section = document.getElementById(sectionId);
+      if(section) section.hidden = false;
+    }
+  }
+
+  function handleNavigationClick(event){
+    if(!isDesktop()) return;
+    const target = event.target;
+    if(!target || !target.closest) return;
+    const link = target.closest('#desktopAnchorNavV131 .desktop-anchor-link-v131[data-anchor-target]');
+    if(!link) return;
+
+    event.preventDefault();
+    event.stopPropagation();
+    if(typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+
+    const targetId = link.dataset.anchorTarget;
+    openLinkedPanels(link);
+
+    if(targetId === RANKING_ID){
+      enterRankingScreen({updateHash:true});
+    }else{
+      exitRankingScreen(targetId, link);
+    }
+  }
+
+  function installObserver(){
+    const page = pageRoot();
+    if(!page || pageObserver || !window.MutationObserver) return;
+    pageObserver = new MutationObserver(function(){
+      if(document.body.classList.contains(PAGE_CLASS)) enforceRankingScreen();
+    });
+    pageObserver.observe(page,{childList:true,attributes:true,subtree:false,attributeFilter:['style','hidden']});
+  }
+
+  function applyInitialState(){
+    setBuildMarker();
+    installObserver();
+
+    if(!isDesktop()){
+      document.body.classList.remove(PAGE_CLASS,LEGACY_PAGE_CLASS);
+      applyScreenVisibility(false);
+      return;
+    }
+
+    if(location.hash === '#'+RANKING_ID){
+      enterRankingScreen({updateHash:false});
+    }else{
+      document.body.classList.remove(PAGE_CLASS,LEGACY_PAGE_CLASS);
+      applyScreenVisibility(false);
+    }
+  }
+
+  document.addEventListener('click',handleNavigationClick,true);
+  window.addEventListener('hashchange',function(){
+    if(location.hash === '#'+RANKING_ID) enterRankingScreen({updateHash:false});
+  });
+  window.addEventListener('resize',function(){
+    window.setTimeout(applyInitialState,60);
+  },{passive:true});
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded',applyInitialState,{once:true});
+  }else{
+    applyInitialState();
+  }
+  window.addEventListener('load',applyInitialState,{once:true});
+  [120,500,1300,2600].forEach(function(delay){
+    window.setTimeout(applyInitialState,delay);
+  });
 })();

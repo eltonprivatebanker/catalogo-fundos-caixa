@@ -1,0 +1,29 @@
+{
+  "arquivos_zip_original": 80,
+  "arquivos_na_raiz_organizada": 20,
+  "raiz": [
+    ".gitignore",
+    "README.md",
+    "app.js",
+    "auditoria_fundos.json",
+    "dados_atuais.csv",
+    "dados_atuais.xlsx",
+    "focus_cache.json",
+    "fundos.json",
+    "fundos_caixa.json",
+    "historico da selic do BC.json",
+    "index.html",
+    "ipca_historico_base.json",
+    "kpis_dashboard.json",
+    "mercado_atual.json",
+    "meta-vs-inflacao-efetiva.json",
+    "ptax_historico_cache.json",
+    "requirements.txt",
+    "robo_sipii_simples.py",
+    "style.css",
+    "tokens-caixa.css"
+  ],
+  "docs_historico": 37,
+  "snapshots": 10,
+  "legacy": 5
+}

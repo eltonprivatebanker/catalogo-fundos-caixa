@@ -203,6 +203,8 @@ FECHAMENTOS_CONFIRMADOS = {
 # Caminhos de arquivo
 # ---------------------------------------------------------------------------
 BASE_DIR            = Path.cwd()
+HISTORY_DIR         = BASE_DIR / "data" / "historico" / "sipii"
+HISTORY_DIR.mkdir(parents=True, exist_ok=True)
 LOG_PATH            = BASE_DIR / "execucao.log"
 IPCA_BASE_PATH      = BASE_DIR / "ipca_historico_base.json"
 FOCUS_CACHE_PATH    = BASE_DIR / "focus_cache.json"
@@ -1246,6 +1248,8 @@ def enriquecer_dados_com_fundos_json(df, indice_json):
 # ---------------------------------------------------------------------------
 def carregar_fallback_sipii():
     candidatos = [BASE_DIR / "dados_atuais.csv"]
+    candidatos += sorted(HISTORY_DIR.glob("sipii_caixa_*.csv"), reverse=True)
+    # Compatibilidade com versões antigas que ainda tenham snapshots na raiz.
     candidatos += sorted(BASE_DIR.glob("sipii_caixa_*.csv"), reverse=True)
     for caminho in candidatos:
         if caminho.exists():
@@ -1265,7 +1269,7 @@ def carregar_fallback_sipii():
 # ---------------------------------------------------------------------------
 def limpar_backups_antigos(manter=5):
     for ext in ["csv", "xlsx"]:
-        arquivos = sorted(BASE_DIR.glob(f"sipii_caixa_*.{ext}"), reverse=True)
+        arquivos = sorted(HISTORY_DIR.glob(f"sipii_caixa_*.{ext}"), reverse=True)
         for arq in arquivos[manter:]:
             try:
                 arq.unlink()
@@ -3841,9 +3845,9 @@ def executar_pipeline_fundos(atualizar_indicadores=True):
     salvar_excel(df_consolidado, caminho_xlsx)
 
     data_str = datetime.now().strftime("%Y%m%d")
-    df_consolidado.to_csv(BASE_DIR / f"sipii_caixa_{data_str}.csv",
+    df_consolidado.to_csv(HISTORY_DIR / f"sipii_caixa_{data_str}.csv",
                           index=False, encoding="utf-8", quoting=csv.QUOTE_MINIMAL)
-    salvar_excel(df_consolidado, BASE_DIR / f"sipii_caixa_{data_str}.xlsx")
+    salvar_excel(df_consolidado, HISTORY_DIR / f"sipii_caixa_{data_str}.xlsx")
 
     # 8. KPIs do dashboard
     gerar_json_kpis_dashboard(df_consolidado, BASE_DIR / "kpis_dashboard.json")
