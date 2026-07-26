@@ -3796,7 +3796,7 @@ function setCdiSort(dir){
   }
   function reinstall(){
     if(!isDesktop() || typeof window.__renderRankingsV562 !== 'function') return;
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-monthly-us-markets-v576');
+    document.documentElement.classList.add('desktop-ranking-ux-v688','desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-monthly-us-markets-v576');
     window.renderRankings = window.__renderRankingsV562;
     try{ renderRankings = window.__renderRankingsV562; }catch(_){}
     try{ window.__renderRankingsV562(); }catch(e){ console.error('ranking v562 terminal', e); }
@@ -4069,7 +4069,7 @@ function setCdiSort(dir){
     });
   }
   function syncControls(periodo){
-    document.documentElement.classList.add('desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588','desktop-ranking-balanced-v645','desktop-ranking-closed-badge-v646');
+    document.documentElement.classList.add('desktop-ranking-ux-v688','desktop-ranking-podium-v562','desktop-ranking-semantico-cdi-v563','desktop-ranking-cdi-ano-scale-v564','desktop-ranking-filters-centered-v565','desktop-ranking-stable-v566','desktop-ranking-toolbar-locked-v567','desktop-ranking-compact-height-v568','desktop-ranking-ultra-compact-v569','desktop-docs-compact-v570','desktop-hide-closed-month-launch-v571','desktop-rates-compact-v572','desktop-dolar-no-collapse-v573','desktop-monthly-indicators-v574','desktop-rates-reference-slim-v575','desktop-monthly-us-markets-v576','desktop-monthly-comparison-chart-v580','desktop-monthly-chart-start-zero-v581','desktop-header-kpis-focus-clean-v582','desktop-header-clean-inflacao-juros-v583','desktop-header-kpis-minimal-v584','desktop-side-nav-v585','desktop-side-nav-no-overlap-v586','desktop-side-nav-market-fix-v588','desktop-ranking-balanced-v645','desktop-ranking-closed-badge-v646');
     const meta = q('meta[name="app-build"]');
     if(meta) meta.content = 'ELTAUM_RANKING_CAPTACAO_FECHADA_V646';
     const period = q('#rankingPeriodSelectV136');
@@ -4129,7 +4129,7 @@ function setCdiSort(dir){
   }
   function rankingClosedBadgeV646(row){
     return rankingFundClosedForCaptationV646(row)
-      ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span aria-hidden="true">🔒</span><b>Fechado</b></span>'
+      ? '<span class="ranking-v646-closed-badge" title="Fechado para captação" aria-label="Captação fechada"><span class="ranking-v688-closed-dot" aria-hidden="true"></span><b>Fechado</b></span>'
       : '';
   }
   function rankingDisplayNameV683(rawName){
@@ -4204,14 +4204,35 @@ function setCdiSort(dir){
     });
     return (top || []).map(function(item, idx){ return categoryRow(item, idx, campo, periodo, false); }).join('');
   }
+  function rankingLatestDateV688(rows){
+    const dates = (rows || []).map(function(r){
+      return parseRankingDateV685(r?.['Data Base Consulta']) || parseRankingDateV685(r?.['Data Rentabilidade Ref']);
+    }).filter(Boolean);
+    if(!dates.length) return null;
+    return dates.reduce(function(latest, current){ return current.getTime() > latest.getTime() ? current : latest; });
+  }
+  function rankingHasActiveFiltersV688(periodo){
+    return periodo !== '12m' || rankingUniverseValueV685() !== 'todos' || rankingCategoryValueV685() !== 'todos' || !!(q('#rankingRiskSelectV198')?.value || '');
+  }
+  function syncRankingMetaV688(rows, resultText, periodo){
+    const resultsEl = q('#rankingResultsV682');
+    if(resultsEl) resultsEl.textContent = resultText;
+    const updatedEl = q('#rankingUpdatedV688');
+    const latest = rankingLatestDateV688(rows);
+    if(updatedEl) updatedEl.textContent = latest
+      ? ('Atualizado em ' + latest.toLocaleDateString('pt-BR'))
+      : 'Data de atualização indisponível';
+    const clear = q('#rankingClearFiltersV688');
+    if(clear) clear.hidden = !rankingHasActiveFiltersV688(periodo);
+  }
   function renderRankingsV562(){
     const grid = q('#rankingGrid');
     if(!grid || !isDesktop()) return;
     if(typeof allRows === 'undefined' || !Array.isArray(allRows) || !allRows.length) return;
 
-    document.documentElement.classList.add('desktop-ranking-table-v682','desktop-ranking-refine-v683','desktop-ranking-overhaul-v684','desktop-ranking-workspace-v685');
+    document.documentElement.classList.add('desktop-ranking-ux-v688','desktop-ranking-table-v682','desktop-ranking-refine-v683','desktop-ranking-overhaul-v684','desktop-ranking-workspace-v685');
     const metaBuild = q('meta[name="app-build"]');
-    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_WORKSPACE_V685';
+    if(metaBuild) metaBuild.content = 'ELTAUM_RANKING_UX_V688';
 
     const periodo = periodoAtual();
     const campo = campoPorPeriodo(periodo);
@@ -4233,38 +4254,37 @@ function setCdiSort(dir){
     const best = sorted[0];
     const lowest = ascending[0];
     const alertBody = alertRows(negatives.slice(0,8), campo);
-    const summaryLabel = isSingleCategory ? 'Fundos elegíveis' : 'Categorias elegíveis';
+    const summaryLabel = isSingleCategory ? 'Fundos com histórico completo' : 'Categorias com histórico completo';
     const summaryValue = String(boardSource.length || 0);
-    const summaryName = isSingleCategory ? currentCategoryLabel : ('Histórico completo em ' + labelPeriodo(periodo));
-    const boardTitle = isSingleCategory ? ('Ranking em ' + currentCategoryLabel) : 'Melhor fundo de cada categoria';
+    const summaryName = isSingleCategory ? currentCategoryLabel : ('No período de ' + labelPeriodo(periodo));
+    const boardTitle = isSingleCategory ? ('Ranking em ' + currentCategoryLabel) : 'Líderes por categoria';
     const boardDescription = isSingleCategory
       ? ('Fundos com histórico completo, ordenados pelo retorno em ' + labelPeriodo(periodo) + '.')
-      : ('Líder de cada categoria com histórico completo em ' + labelPeriodo(periodo) + '.');
-    const boardAria = isSingleCategory ? ('Ranking de fundos em ' + currentCategoryLabel) : 'Melhor fundo de cada categoria';
+      : ('Fundo com maior retorno em cada categoria no período selecionado.');
+    const boardAria = isSingleCategory ? ('Ranking de fundos em ' + currentCategoryLabel) : 'Líderes de retorno por categoria';
     const displayedCount = Math.min(10, boardSource.length || 0);
     const resultText = isSingleCategory
-      ? ((boardSource.length || 0) + ' fundos · exibindo ' + displayedCount)
-      : ((boardSource.length || 0) + ' categorias com dados');
+      ? ((rows.length || 0) + ' fundos encontrados · exibindo ' + displayedCount)
+      : ((rows.length || 0) + ' fundos encontrados · ' + (boardSource.length || 0) + ' categorias');
 
-    const resultsEl = q('#rankingResultsV682');
-    if(resultsEl) resultsEl.textContent = resultText;
+    syncRankingMetaV688(filteredRows, resultText, periodo);
 
     grid.className = 'ranking-grid ranking-main-v136 ranking-v682-grid';
     grid.removeAttribute('data-active-rank-view');
     grid.innerHTML =
       '<section class="ranking-v562-summary ranking-v682-summary" aria-label="Resumo do ranking">' +
-        summaryCard('best','Melhor retorno', best ? pct(best[campo]) : '—', best ? rankingDisplayNameV683(cleanFund(best.Fundo)) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
-        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno', lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
+        summaryCard('best','Maior retorno no período', best ? pct(best[campo]) : '—', best ? rankingDisplayNameV683(cleanFund(best.Fundo)) : 'Sem dados', best ? shortCat(best.Categoria) : '') +
+        summaryCard(lowest && finite(lowest[campo]) < 0 ? 'worst' : 'neutral','Menor retorno no período', lowest ? pct(lowest[campo]) : '—', lowest ? rankingDisplayNameV683(cleanFund(lowest.Fundo)) : 'Sem dados', lowest ? shortCat(lowest.Categoria) : '') +
         summaryCard('neutral', summaryLabel, summaryValue, summaryName, labelPeriodo(periodo)) +
       '</section>' +
       '<section class="ranking-v682-board ranking-v685-board ' + (isSingleCategory ? 'is-single-category-v685' : 'is-multi-category-v685') + '" aria-label="' + esc(boardAria) + '">' +
         '<div class="ranking-v682-board-head">' +
           '<div><h3>' + esc(boardTitle) + '</h3><p>' + esc(boardDescription) + '</p></div>' +
-          (excludedIncomplete ? '<span class="ranking-v685-history-note" title="Fundos sem histórico completo no período selecionado ficam fora desta comparação">' + excludedIncomplete + ' fora do ranking</span>' : '') +
+          (excludedIncomplete ? '<span class="ranking-v685-history-note" title="Fundos sem histórico completo no período selecionado não participam desta classificação"><span aria-hidden="true">ⓘ</span>' + excludedIncomplete + ' ' + (excludedIncomplete === 1 ? 'fundo sem histórico completo' : 'fundos sem histórico completo') + '</span>' : '') +
         '</div>' +
         '<div class="ranking-v682-table-shell">' +
           '<table class="ranking-v682-table ranking-v685-table">' +
-            '<caption>Fundos elegíveis ordenados pelo retorno no período selecionado</caption>' +
+            '<caption>' + esc(isSingleCategory ? 'Fundos elegíveis ordenados pelo retorno no período selecionado' : 'Fundo com maior retorno de cada categoria no período selecionado') + '</caption>' +
             (isSingleCategory
               ? '<colgroup><col class="col-position"><col class="col-fund"><col class="col-return"><col class="col-cdi"></colgroup>'
               : '<colgroup><col class="col-position"><col class="col-fund"><col class="col-category"><col class="col-return"><col class="col-cdi"></colgroup>') +
@@ -4328,6 +4348,24 @@ function setCdiSort(dir){
     const universeSelect = q('#rankingUniverseSelectV685');
     const period = q('#rankingPeriodSelectV136');
     const risk = q('#rankingRiskSelectV198');
+    const clearFilters = q('#rankingClearFiltersV688');
+
+    if(clearFilters && clearFilters.dataset.v688Bound !== '1'){
+      clearFilters.dataset.v688Bound = '1';
+      clearFilters.addEventListener('click', function(){
+        if(period) period.value = '12m';
+        if(universeSelect) universeSelect.value = 'todos';
+        if(clsSelect) clsSelect.value = 'todos';
+        if(risk) risk.value = '';
+        try{
+          activeRankFilter = 'todos';
+          activeRankRisk = '';
+          activeRankPeriods.topFundos = '12m';
+          activeRankPeriods.destaques = '12m';
+        }catch(e){}
+        setTimeout(renderRankingsV562, 0);
+      });
+    }
 
     if(clsSelect && clsSelect.dataset.v562Bound !== '1'){
       clsSelect.dataset.v562Bound = '1';
