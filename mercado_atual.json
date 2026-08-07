@@ -1,5 +1,5 @@
 {
-    "atualizado_em": "07/08/2026 20:38:21",
+    "atualizado_em": "07/08/2026 20:41:51",
     "cards": {
         "selic_meta": {
             "valor": 14.25,
@@ -8390,7 +8390,7 @@
         }
     ],
     "focus": {
-        "data_coleta": "07/08/2026 20:38",
+        "data_coleta": "07/08/2026 20:41",
         "fonte": "odata",
         "IPCA": {
             "2026": {
