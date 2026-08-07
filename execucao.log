@@ -20344,3 +20344,63 @@ Stacktrace:
 [14:31:35] =================================================================
 [14:31:35] [FIM] 173 fundos consolidados. Pipeline v18.8/v677 completo.
 [14:31:35] =================================================================
+[20:37:39] =================================================================
+[20:37:39] ⚡ ROBÔ SIPII v18.8 / v677 — modo debug-selic
+[20:37:39] =================================================================
+[20:37:39] [MODO indicadores] Atualizando mercado_atual.json...
+[20:37:39] [MERCADO] Coletando indicadores macro (v17 — índices mercado ampliados)...
+[20:37:40] [Poupança] Buscando série 196 (nova) para acum. ano...
+[20:37:41]   [Poupança] nova: mensal=0.6701% | acum. ano=5.4479% (8 meses)
+[20:37:41]   [Poupança] antiga = nova (Selic 14.25% > 8,5% → TR+0,50% para ambas)
+[20:37:41] [CDI] Calculando CDI mensal/ano/12M/24M/36M...
+[20:37:41]   [CDI] Série 4391 BCB carregada: 44 competências
+[20:37:42]   [CDI] Série diária SGS 12: 0.2094% no mês até 06/08/2026 (4 observações)
+[20:37:42]   [CDI] mês fechado=1.22% (jul/2026) | parcial=0.2094% (ago/2026 até 06/08/2026; origem=bcb_sgs_12_diario) | ano fechado=8.1403% | ano c/ parcial=8.3667% | 12M=14.7067% | 24M=29.1252% | 36M=43.981%
+[20:37:42] [IPCA] Base local: 558 meses.
+[20:37:43] [IPCA] Base salva: 558 meses.
+[20:37:43]   [IPCA] 12M=4.6413% | 24M=10.2409% | 36M=14.9014%
+[20:37:43]   [META INFLAÇÃO] gráfico sincronizado: jun/2026 = 4.6413% em 12 meses.
+[20:37:43] [PTAX] Buscando histórico 37M via CotacaoDolarPeriodo mês a mês...
+[20:38:12]   [PTAX] CotacaoDolarPeriodo OK — 37 meses
+[20:38:12]   [PTAX] Cache salvo: ptax_historico_cache.json (37 meses)
+[20:38:12] [PTAX] Dólar PTAX: último=5.0908 (2026-08-07) | mês fechado=-1.92% | mês atual=0.27% | ano=-7.48% | 12M=-6.18% | 24M=-10.0% | 36M=3.43%
+[20:38:12] [Índices] Calculando Ibovespa (^BVSP)...
+[20:38:12] [Yahoo Histórico] Buscando ^BVSP...
+[20:38:12] [Yahoo Histórico] ^BVSP OK — 855 registros
+[20:38:12] [Índices] Ibovespa: mês fechado=3.47% | mês atual=-3.08% | ano=7.07% | 12M=26.36% | 24M=35.29% | 36M=44.51%
+[20:38:12] [Índices] Calculando IFIX (^IFIX)...
+[20:38:12] [Yahoo Histórico] Buscando ^IFIX...
+[20:38:12] [Yahoo Histórico] ^IFIX HTTP 404
+[20:38:12]   [IFIX] Indisponível no Yahoo — campo virá vazio no JSON
+[20:38:12] [Índices] Calculando S&P 500 (^GSPC)...
+[20:38:12] [Yahoo Histórico] Buscando ^GSPC...
+[20:38:12] [Yahoo Histórico] ^GSPC OK — 859 registros
+[20:38:12] [Índices] S&P 500: mês fechado=-0.13% | mês atual=3.58% | ano=13.32% | 12M=22.36% | 24M=49.2% | 36M=71.69%
+[20:38:12] [Índices] Calculando Dow Jones (^DJI)...
+[20:38:12] [Yahoo Histórico] Buscando ^DJI...
+[20:38:13] [Yahoo Histórico] ^DJI OK — 859 registros
+[20:38:13] [Índices] Dow Jones: mês fechado=0.32% | mês atual=2.96% | ano=12.43% | 12M=22.9% | 24M=39.4% | 36M=52.33%
+[20:38:13] [Índices] Calculando Nasdaq (^IXIC)...
+[20:38:13] [Yahoo Histórico] Buscando ^IXIC...
+[20:38:13] [Yahoo Histórico] ^IXIC OK — 859 registros
+[20:38:13] [Índices] Nasdaq: mês fechado=-3.2% | mês atual=5.19% | ano=14.84% | 12M=25.65% | 24M=64.8% | 36M=90.72%
+[20:38:13] [Indicadores mensais] Série consolidada: 37 competências
+[20:38:13] [Focus] Coletando expectativas do Banco Central...
+[20:38:13] [Focus PDF] Procurando PDF oficial mais recente disponível...
+[20:38:13] [Focus PDF] R20260807.pdf indisponível — HTTP 401 | 16 bytes
+[20:38:14] [Focus PDF] PDF disponível encontrado: R20260731.pdf (31/07/2026)
+[20:38:14]   [Focus] -> IPCA
+[20:38:15]   [Focus] -> Selic
+[20:38:17]   [Focus] -> PIB Total
+[20:38:18]   [Focus] -> Câmbio
+[20:38:20]   [Focus] -> IGP-M
+[20:38:21] [SUCESSO] mercado_atual.json exportado
+[20:38:21]   Selic: valor=14.25% | vigente_desde=17/06/2026 | data_ref=2026-06-17
+[20:38:21]   CDI: mensal=1.22% | 12M=14.7067% | 24M=29.1252% | 36M=43.981%
+[20:38:21]   IPCA: 12M=4.6413% | 24M=10.2409% | 36M=14.9014%
+[20:38:21]   PTAX: 37 fechamentos mensais pré-salvos
+[20:38:21]   Poupança nova:  mensal=0.6701% | acum. ano=5.4479%
+[20:38:21]   Poupança antiga: mensal=0.6701% | acum. ano=5.4479%
+[20:38:21] =================================================================
+[20:38:21] [FIM] Modo debug-selic concluído.
+[20:38:21] =================================================================
