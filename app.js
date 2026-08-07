@@ -8812,33 +8812,78 @@ function resolverDataUltimaAlteracaoSelic(dados){
     inferida: Boolean(referencia?._reconciliado_v223)
   };
 }
+/* PATCH v686 — reconcilia data da decisão do Copom com a data de vigência da Selic.
+   O Copom decide em D, mas a nova meta normalmente passa a aparecer como vigente
+   no primeiro dia útil seguinte. O histórico do painel pode, portanto, ter 06/08
+   para a decisão de 05/08. Esta rotina aceita a própria data da decisão ou o
+   primeiro registro válido até 4 dias corridos depois, sem hardcode de taxa. */
+function _diasEntreKeysCopomV686(inicioKey, fimKey){
+  try{
+    const a = new Date(`${inicioKey}T00:00:00Z`);
+    const b = new Date(`${fimKey}T00:00:00Z`);
+    if(Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) return NaN;
+    return Math.round((b.getTime() - a.getTime()) / 86400000);
+  }catch(e){
+    return NaN;
+  }
+}
+
+function _indiceHistoricoParaDecisaoCopomV686(hist, decisionDate){
+  if(!Array.isArray(hist) || !decisionDate) return -1;
+
+  // 1) Prioridade absoluta: registro exatamente na data da decisão.
+  const exato = hist.findIndex(r => r?._key === decisionDate);
+  if(exato >= 0) return exato;
+
+  // 2) Se a taxa só aparece na data de vigência, aceita o primeiro registro
+  //    posterior dentro de uma pequena janela (ex.: decisão 05/08, vigência 06/08).
+  const candidatos = hist
+    .map((r, idx) => ({ idx, key:r?._key || '', dias:_diasEntreKeysCopomV686(decisionDate, r?._key || '') }))
+    .filter(x => Number.isFinite(x.dias) && x.dias > 0 && x.dias <= 4)
+    .sort((a,b) => a.dias - b.dias || a.key.localeCompare(b.key));
+
+  return candidatos.length ? candidatos[0].idx : -1;
+}
+
 function _decisaoCopomPorData(decisionDate){
   const evento = COPOM_2026.find(r => r.decision === decisionDate) || null;
   const hojeKey = _dataKeyHojeLocal();
 
   const hist = _historicoSelicOrdenado();
-  const idx = hist.findIndex(r => r._key === decisionDate);
+  const idx = _indiceHistoricoParaDecisaoCopomV686(hist, decisionDate);
 
   if(idx >= 0){
     const atual = hist[idx];
-    const anterior = hist[idx + 1];
-    const taxa = atual._valor;
+
+    // O histórico está em ordem decrescente. Quando usamos a data de vigência
+    // (D+1), o registro imediatamente seguinte continua sendo a taxa anterior.
+    const anterior = hist.slice(idx + 1).find(r =>
+      Number.isFinite(r?._valor) &&
+      r._valor > 0 &&
+      r._key < decisionDate
+    ) || hist[idx + 1];
+
+    const taxa = atual?._valor;
 
     if(Number.isFinite(taxa) && taxa > 0){
-      if(!anterior || anterior._valor === null){
-        return { tipo:'done', texto:`Selic ${_fmtPctCopom(taxa)}` };
+      if(!anterior || !Number.isFinite(anterior._valor)){
+        return { tipo:'done', texto:`Selic ${_fmtPctCopom(taxa)}`, reconciliada_v686: atual._key !== decisionDate };
       }
+
       const diff = +(taxa - anterior._valor).toFixed(2);
+      const meta = { reconciliada_v686: atual._key !== decisionDate, data_vigencia: atual._key };
+
       if(Math.abs(diff) < 0.005){
-        return { tipo:'hold', texto:`mantida em ${_fmtPctCopom(taxa)}` };
+        return { tipo:'hold', texto:`mantida em ${_fmtPctCopom(taxa)}`, ...meta };
       }
       if(diff > 0){
-        return { tipo:'hike', texto:`alta ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
+        return { tipo:'hike', texto:`alta ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}`, ...meta };
       }
-      return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}` };
+      return { tipo:'cut', texto:`corte ${_fmtPpCopom(diff)} → ${_fmtPctCopom(taxa)}`, ...meta };
     }
   }
 
+  // Mantém apenas os resultados estáticos antigos como compatibilidade.
   if(evento && evento.resultado_static && decisionDate <= hojeKey){
     return { tipo:evento.tipo_static || 'done', texto:evento.resultado_static, static_v667:true };
   }
