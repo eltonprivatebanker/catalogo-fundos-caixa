@@ -30832,3 +30832,124 @@ function buildDetailPanel(r,colspan){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
   else boot();
 })();
+
+/* PATCH v690 — Sincroniza DE/ATÉ da Selic com os presets de período (desktop) */
+(function desktopSelicPresetPeriodSyncV690(){
+  'use strict';
+
+  var PATCH_CLASS = 'desktop-selic-preset-period-sync-v690';
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function monthKeyFromDate(dt){
+    if(!(dt instanceof Date) || isNaN(dt.getTime())) return '';
+    return String(dt.getFullYear()) + '-' + String(dt.getMonth() + 1).padStart(2, '0');
+  }
+
+  function validRows(){
+    var state = window.__ECON_DASH_STATE_V378__ || (typeof econDashStateV378 !== 'undefined' ? econDashStateV378 : null);
+    var rows = state && Array.isArray(state.selicNorm) ? state.selicNorm : [];
+    return rows
+      .filter(function(item){ return item && item._dt instanceof Date && !isNaN(item._dt.getTime()); })
+      .sort(function(a,b){ return a._dt.getTime() - b._dt.getTime(); });
+  }
+
+  function setInputValue(input, value){
+    if(!input || !value) return;
+    if(input.min && value < input.min) value = input.min;
+    if(input.max && value > input.max) value = input.max;
+    input.value = value;
+    if(typeof input._selicMonthPickerSyncV689 === 'function'){
+      input._selicMonthPickerSyncV689();
+    }
+  }
+
+  function syncFromRange(rangeOverride){
+    if(!isDesktop()) return;
+
+    var startInput = document.getElementById('selicCustomStartV596');
+    var endInput = document.getElementById('selicCustomEndV596');
+    if(!startInput || !endInput) return;
+
+    var rows = validRows();
+    if(!rows.length) return;
+
+    var firstDate = rows[0]._dt;
+    var lastDate = rows[rows.length - 1]._dt;
+    var firstKey = monthKeyFromDate(firstDate);
+    var lastKey = monthKeyFromDate(lastDate);
+    if(!firstKey || !lastKey) return;
+
+    // Mantém os limites reais da série nos inputs ocultos.
+    startInput.min = firstKey;
+    endInput.min = firstKey;
+    startInput.max = lastKey;
+    endInput.max = lastKey;
+
+    var state = window.__ECON_DASH_STATE_V378__ || (typeof econDashStateV378 !== 'undefined' ? econDashStateV378 : null);
+    var range = rangeOverride != null ? rangeOverride : (state && state.range ? state.range.selic : 'all');
+
+    // Período personalizado é controlado diretamente pelos campos + botão Aplicar.
+    if(String(range) === 'custom'){
+      if(typeof startInput._selicMonthPickerSyncV689 === 'function') startInput._selicMonthPickerSyncV689();
+      if(typeof endInput._selicMonthPickerSyncV689 === 'function') endInput._selicMonthPickerSyncV689();
+      return;
+    }
+
+    var startDate;
+    if(String(range) === 'all'){
+      startDate = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
+    }else if(String(range) === 'ytd'){
+      startDate = new Date(lastDate.getFullYear(), 0, 1);
+    }else{
+      var months = Number(range);
+      if(!Number.isFinite(months) || months <= 0) months = 12;
+      // Replica a mesma regra usada por econSelicVisibleRowsV381:
+      // 36 meses a partir de ago/2026 => ago/2023, por exemplo.
+      startDate = new Date(lastDate.getFullYear(), lastDate.getMonth() - months, 1);
+      var floorDate = new Date(firstDate.getFullYear(), firstDate.getMonth(), 1);
+      if(startDate < floorDate) startDate = floorDate;
+    }
+
+    setInputValue(startInput, monthKeyFromDate(startDate));
+    setInputValue(endInput, lastKey);
+
+    document.documentElement.classList.add(PATCH_CLASS);
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_SELIC_PRESET_PERIOD_SYNC_V690';
+  }
+
+  function rangeFromButton(btn){
+    if(!btn) return null;
+    var raw = btn.dataset ? btn.dataset.dashRange : null;
+    if(raw == null || raw === '') return null;
+    if(raw === 'all' || raw === 'ytd' || raw === 'custom') return raw;
+    var n = Number(raw);
+    return Number.isFinite(n) ? n : raw;
+  }
+
+  document.addEventListener('click', function(ev){
+    var btn = ev.target && ev.target.closest ? ev.target.closest('[data-dash-range-target="selic"]') : null;
+    if(!btn) return;
+    var range = rangeFromButton(btn);
+    // O listener original do dashboard atualiza o gráfico no próprio botão.
+    // Sincronizamos os campos logo depois, sem disparar change/input para não
+    // transformar o preset selecionado em período "custom".
+    requestAnimationFrame(function(){ syncFromRange(range); });
+    setTimeout(function(){ syncFromRange(range); }, 80);
+  }, false);
+
+  function boot(){
+    if(isDesktop()) syncFromRange();
+    window.addEventListener('pageshow', function(){ if(isDesktop()) syncFromRange(); }, {passive:true});
+    window.addEventListener('resize', function(){ if(isDesktop()) syncFromRange(); }, {passive:true});
+    [120,350,800,1500,3000,6000].forEach(function(ms){
+      setTimeout(function(){ if(isDesktop()) syncFromRange(); }, ms);
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+})();
