@@ -30953,3 +30953,166 @@ function buildDetailPanel(r,colspan){
   if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
   else boot();
 })();
+
+/* PATCH v691 — Selic KPI stability / anti-flicker desktop
+   Mantém os valores visíveis durante a troca de período, evita placeholders
+   transitórios e estabiliza largura tipográfica dos números/datas. */
+(function desktopSelicKpiStabilityV691(){
+  'use strict';
+
+  var ROOT_CLASS = 'desktop-selic-kpi-stable-v691';
+  var STYLE_ID = 'desktop-selic-kpi-stable-v691-style';
+  var IDS = [
+    'selicMaxResumo','selicMaxData',
+    'selicMinResumo','selicMinData',
+    'selicHojeResumo','selicHojeData'
+  ];
+  var lastGood = Object.create(null);
+  var switchingUntil = 0;
+  var settleTimer = null;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function isTransient(text){
+    var t = String(text == null ? '' : text).trim();
+    return !t || t === '—' || t === '-' || /^nan\b/i.test(t) || /^undefined\b/i.test(t) || /^null\b/i.test(t);
+  }
+
+  function ensureStyle(){
+    if(document.getElementById(STYLE_ID)) return;
+    var style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      @media (min-width:769px){
+        html.${ROOT_CLASS} #selicMaxResumo,
+        html.${ROOT_CLASS} #selicMinResumo,
+        html.${ROOT_CLASS} #selicHojeResumo,
+        html.${ROOT_CLASS} #selicMaxData,
+        html.${ROOT_CLASS} #selicMinData,
+        html.${ROOT_CLASS} #selicHojeData{
+          font-variant-numeric: tabular-nums!important;
+          font-feature-settings: "tnum" 1!important;
+          animation:none!important;
+          transition:none!important;
+          backface-visibility:hidden!important;
+          transform:translateZ(0)!important;
+        }
+        html.${ROOT_CLASS} #selicMaxResumo,
+        html.${ROOT_CLASS} #selicMinResumo,
+        html.${ROOT_CLASS} #selicHojeResumo{
+          display:inline-block!important;
+          min-width:10.5ch!important;
+          min-height:1.2em!important;
+          white-space:nowrap!important;
+        }
+        html.${ROOT_CLASS} #selicMaxData,
+        html.${ROOT_CLASS} #selicMinData,
+        html.${ROOT_CLASS} #selicHojeData{
+          display:block!important;
+          min-width:10ch!important;
+          min-height:1.15em!important;
+          white-space:nowrap!important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function remember(){
+    IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      var txt = String(el.textContent || '').trim();
+      if(!isTransient(txt)) lastGood[id] = txt;
+    });
+  }
+
+  function guardTransient(){
+    if(Date.now() > switchingUntil) return;
+    IDS.forEach(function(id){
+      var el = document.getElementById(id);
+      if(!el) return;
+      var txt = String(el.textContent || '').trim();
+      if(isTransient(txt) && lastGood[id]){
+        el.textContent = lastGood[id];
+      }else if(!isTransient(txt)){
+        lastGood[id] = txt;
+      }
+    });
+  }
+
+  function finalCommit(){
+    if(!isDesktop()) return;
+    try{
+      var state = window.__ECON_DASH_STATE_V378__ || (typeof econDashStateV378 !== 'undefined' ? econDashStateV378 : null);
+      if(state && Array.isArray(state.selicNorm) && typeof econSelicVisibleRowsV381 === 'function' && typeof atualizarResumoSelicDashboardV378 === 'function'){
+        var range = state.range ? state.range.selic : 'all';
+        var rows = econSelicVisibleRowsV381(state.selicNorm, range).filter(function(x){ return !x._periodContextOnly; });
+        atualizarResumoSelicDashboardV378(rows, state.mercado || window._dadosMercado || {});
+        if(typeof econAtualizarSelicKpiLabelsV381 === 'function') econAtualizarSelicKpiLabelsV381(range);
+      }
+    }catch(e){
+      console.warn('[v691 Selic KPI stability] final commit:', e);
+    }
+    remember();
+  }
+
+  function beginSwitch(){
+    if(!isDesktop()) return;
+    remember();
+    switchingUntil = Date.now() + 420;
+    clearTimeout(settleTimer);
+    // Não apaga nem reduz opacidade: o valor anterior permanece estável até o
+    // render final válido, evitando a sensação de erro/pisca.
+    requestAnimationFrame(function(){
+      guardTransient();
+      requestAnimationFrame(guardTransient);
+    });
+    setTimeout(guardTransient, 35);
+    setTimeout(guardTransient, 80);
+    settleTimer = setTimeout(function(){
+      finalCommit();
+      switchingUntil = 0;
+    }, 130);
+  }
+
+  function bindObserver(){
+    var root = document.getElementById('mobileSelicV400');
+    if(!root || root.dataset.selicKpiStableV691 === '1') return;
+    root.dataset.selicKpiStableV691 = '1';
+    if(window.MutationObserver){
+      new MutationObserver(function(){
+        if(Date.now() <= switchingUntil) guardTransient();
+        else remember();
+      }).observe(root, {subtree:true, childList:true, characterData:true});
+    }
+  }
+
+  function boot(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(ROOT_CLASS);
+    ensureStyle();
+    bindObserver();
+    remember();
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_SELIC_KPI_STABILITY_V691';
+  }
+
+  // Capture acontece antes do listener normal dos botões; guardamos o estado
+  // visual atual e deixamos o dashboard calcular o novo período normalmente.
+  document.addEventListener('click', function(ev){
+    if(!isDesktop()) return;
+    var target = ev.target && ev.target.closest ? ev.target.closest(
+      '#mobileSelicV400 [data-dash-range-target="selic"], #selicCustomApplyV596'
+    ) : null;
+    if(target) beginSwitch();
+  }, true);
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  window.addEventListener('load', boot, {once:true});
+  window.addEventListener('pageshow', boot, {passive:true});
+  window.addEventListener('resize', function(){ if(isDesktop()) boot(); }, {passive:true});
+})();
