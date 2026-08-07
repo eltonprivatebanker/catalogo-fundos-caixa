@@ -30416,3 +30416,419 @@ function buildDetailPanel(r,colspan){
   else boot();
 })();
 
+
+/* PATCH v689 — Seletor de mês Selic consistente entre Chrome e Firefox (desktop) */
+(function desktopSelicMonthPickerV689(){
+  'use strict';
+  var PATCH_CLASS = 'desktop-selic-month-picker-v689';
+  var STYLE_ID = 'desktop-selic-month-picker-v689-style';
+  var MONTHS = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  var MONTHS_LONG = ['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function monthKey(year, monthIndex){
+    return String(year) + '-' + String(monthIndex + 1).padStart(2,'0');
+  }
+
+  function parseKey(value){
+    var m = String(value || '').match(/^(\d{4})-(\d{2})$/);
+    if(!m) return null;
+    var year = Number(m[1]);
+    var month = Number(m[2]);
+    if(!Number.isFinite(year) || month < 1 || month > 12) return null;
+    return {year:year, month:month - 1};
+  }
+
+  function formatPt(value){
+    var parsed = parseKey(value);
+    if(!parsed) return 'Selecionar mês';
+    return MONTHS_LONG[parsed.month] + ' de ' + parsed.year;
+  }
+
+  function withinBounds(input, key){
+    var min = input.min || '';
+    var max = input.max || '';
+    if(min && key < min) return false;
+    if(max && key > max) return false;
+    return true;
+  }
+
+  function clampYear(input, year){
+    var min = parseKey(input.min);
+    var max = parseKey(input.max);
+    if(min && year < min.year) year = min.year;
+    if(max && year > max.year) year = max.year;
+    return year;
+  }
+
+  function ensureStyle(){
+    if(document.getElementById(STYLE_ID)) return;
+    var style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      @media (min-width:769px){
+        html.${PATCH_CLASS} #selicCustomStartV596,
+        html.${PATCH_CLASS} #selicCustomEndV596{
+          position:absolute!important;
+          width:1px!important;
+          height:1px!important;
+          min-width:1px!important;
+          max-width:1px!important;
+          padding:0!important;
+          margin:-1px!important;
+          border:0!important;
+          opacity:0!important;
+          pointer-events:none!important;
+          clip:rect(0 0 0 0)!important;
+          clip-path:inset(50%)!important;
+          overflow:hidden!important;
+          white-space:nowrap!important;
+        }
+        html.${PATCH_CLASS} .selic-month-field-v689{
+          position:relative!important;
+          display:inline-flex!important;
+          align-items:center!important;
+          min-width:0!important;
+        }
+        html.${PATCH_CLASS} .selic-month-display-v689{
+          appearance:none!important;
+          -webkit-appearance:none!important;
+          display:inline-flex!important;
+          align-items:center!important;
+          justify-content:space-between!important;
+          gap:12px!important;
+          width:166px!important;
+          min-width:166px!important;
+          height:38px!important;
+          padding:0 11px 0 12px!important;
+          border:1px solid rgba(148,163,184,.16)!important;
+          border-radius:11px!important;
+          background:rgba(8,12,24,.76)!important;
+          color:#dce4f4!important;
+          box-shadow:inset 0 1px 0 rgba(255,255,255,.018)!important;
+          font:700 .69rem/1 Inter,ui-sans-serif,system-ui,sans-serif!important;
+          letter-spacing:-.01em!important;
+          text-align:left!important;
+          white-space:nowrap!important;
+          cursor:pointer!important;
+          outline:none!important;
+          transition:border-color .15s ease,background .15s ease,box-shadow .15s ease!important;
+        }
+        html.${PATCH_CLASS} .selic-month-display-v689:hover{
+          border-color:rgba(200,151,58,.35)!important;
+          background:rgba(11,16,30,.92)!important;
+        }
+        html.${PATCH_CLASS} .selic-month-display-v689:focus-visible,
+        html.${PATCH_CLASS} .selic-month-display-v689[aria-expanded="true"]{
+          border-color:rgba(232,187,106,.60)!important;
+          box-shadow:0 0 0 2px rgba(200,151,58,.10),inset 0 1px 0 rgba(255,255,255,.03)!important;
+        }
+        html.${PATCH_CLASS} .selic-month-display-text-v689{
+          display:block!important;
+          overflow:hidden!important;
+          text-overflow:ellipsis!important;
+          white-space:nowrap!important;
+        }
+        html.${PATCH_CLASS} .selic-month-display-icon-v689{
+          flex:0 0 auto!important;
+          color:#9ba7bf!important;
+          font-size:.82rem!important;
+          line-height:1!important;
+        }
+        html.${PATCH_CLASS} .selic-month-popover-v689{
+          position:absolute!important;
+          z-index:100000!important;
+          top:calc(100% + 7px)!important;
+          right:0!important;
+          width:274px!important;
+          padding:12px!important;
+          border:1px solid rgba(200,151,58,.28)!important;
+          border-radius:14px!important;
+          background:#101522!important;
+          color:#eef2fb!important;
+          box-shadow:0 18px 50px rgba(0,0,0,.48),inset 0 1px 0 rgba(255,255,255,.035)!important;
+          font-family:Inter,ui-sans-serif,system-ui,sans-serif!important;
+        }
+        html.${PATCH_CLASS} .selic-month-popover-v689[hidden]{display:none!important;}
+        html.${PATCH_CLASS} .selic-month-yearbar-v689{
+          display:grid!important;
+          grid-template-columns:32px 1fr 32px!important;
+          align-items:center!important;
+          gap:8px!important;
+          padding:0 0 10px!important;
+          margin:0 0 10px!important;
+          border-bottom:1px solid rgba(148,163,184,.14)!important;
+        }
+        html.${PATCH_CLASS} .selic-month-year-v689{
+          color:#f0c777!important;
+          font-size:.78rem!important;
+          font-weight:850!important;
+          text-align:center!important;
+          letter-spacing:.02em!important;
+        }
+        html.${PATCH_CLASS} .selic-month-nav-v689{
+          appearance:none!important;
+          width:32px!important;
+          height:30px!important;
+          display:inline-flex!important;
+          align-items:center!important;
+          justify-content:center!important;
+          padding:0!important;
+          border:1px solid rgba(148,163,184,.14)!important;
+          border-radius:8px!important;
+          background:#0b1020!important;
+          color:#aeb8ce!important;
+          cursor:pointer!important;
+          font-size:.95rem!important;
+        }
+        html.${PATCH_CLASS} .selic-month-nav-v689:hover:not(:disabled){
+          border-color:rgba(200,151,58,.38)!important;
+          color:#f0c777!important;
+        }
+        html.${PATCH_CLASS} .selic-month-nav-v689:disabled{opacity:.30!important;cursor:default!important;}
+        html.${PATCH_CLASS} .selic-month-grid-v689{
+          display:grid!important;
+          grid-template-columns:repeat(4,1fr)!important;
+          gap:7px!important;
+        }
+        html.${PATCH_CLASS} .selic-month-option-v689{
+          appearance:none!important;
+          height:34px!important;
+          padding:0!important;
+          border:1px solid transparent!important;
+          border-radius:8px!important;
+          background:transparent!important;
+          color:#c2cadc!important;
+          font-size:.70rem!important;
+          font-weight:700!important;
+          text-transform:lowercase!important;
+          cursor:pointer!important;
+        }
+        html.${PATCH_CLASS} .selic-month-option-v689:hover:not(:disabled){
+          border-color:rgba(200,151,58,.30)!important;
+          background:rgba(200,151,58,.08)!important;
+          color:#f1d08b!important;
+        }
+        html.${PATCH_CLASS} .selic-month-option-v689.is-selected{
+          border-color:rgba(232,187,106,.62)!important;
+          background:linear-gradient(180deg,rgba(200,151,58,.22),rgba(200,151,58,.09))!important;
+          color:#f5d48a!important;
+          box-shadow:inset 0 1px 0 rgba(255,255,255,.05)!important;
+        }
+        html.${PATCH_CLASS} .selic-month-option-v689:disabled{
+          opacity:.28!important;
+          cursor:default!important;
+        }
+        html.${PATCH_CLASS} .selic-month-actions-v689{
+          display:flex!important;
+          align-items:center!important;
+          justify-content:space-between!important;
+          gap:10px!important;
+          margin-top:11px!important;
+          padding-top:10px!important;
+          border-top:1px solid rgba(148,163,184,.14)!important;
+        }
+        html.${PATCH_CLASS} .selic-month-action-v689{
+          appearance:none!important;
+          border:0!important;
+          background:transparent!important;
+          color:#91b7ff!important;
+          padding:4px 2px!important;
+          font-size:.68rem!important;
+          font-weight:700!important;
+          cursor:pointer!important;
+        }
+        html.${PATCH_CLASS} .selic-month-action-v689:hover{color:#c8d9ff!important;}
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function closeAll(except){
+    document.querySelectorAll('.selic-month-popover-v689').forEach(function(pop){
+      if(pop !== except) pop.hidden = true;
+    });
+    document.querySelectorAll('.selic-month-display-v689').forEach(function(btn){
+      var pop = btn.parentElement && btn.parentElement.querySelector('.selic-month-popover-v689');
+      btn.setAttribute('aria-expanded', String(Boolean(pop && !pop.hidden)));
+    });
+  }
+
+  function buildPicker(input){
+    if(!input || input.dataset.selicMonthPickerV689 === '1') return;
+    var label = input.closest('label');
+    if(!label) return;
+
+    input.dataset.selicMonthPickerV689 = '1';
+
+    var field = document.createElement('span');
+    field.className = 'selic-month-field-v689';
+
+    var display = document.createElement('button');
+    display.type = 'button';
+    display.className = 'selic-month-display-v689';
+    display.setAttribute('aria-haspopup','dialog');
+    display.setAttribute('aria-expanded','false');
+    display.setAttribute('aria-label', (input.id === 'selicCustomStartV596' ? 'Mês inicial' : 'Mês final'));
+    display.innerHTML = '<span class="selic-month-display-text-v689"></span><span class="selic-month-display-icon-v689" aria-hidden="true">▣</span>';
+
+    var pop = document.createElement('div');
+    pop.className = 'selic-month-popover-v689';
+    pop.hidden = true;
+    pop.setAttribute('role','dialog');
+    pop.setAttribute('aria-label','Selecionar mês e ano');
+    pop.innerHTML = `
+      <div class="selic-month-yearbar-v689">
+        <button type="button" class="selic-month-nav-v689" data-dir="-1" aria-label="Ano anterior">‹</button>
+        <strong class="selic-month-year-v689"></strong>
+        <button type="button" class="selic-month-nav-v689" data-dir="1" aria-label="Próximo ano">›</button>
+      </div>
+      <div class="selic-month-grid-v689"></div>
+      <div class="selic-month-actions-v689">
+        <button type="button" class="selic-month-action-v689" data-action="clear">Limpar</button>
+        <button type="button" class="selic-month-action-v689" data-action="today">Este mês</button>
+      </div>`;
+
+    input.parentNode.insertBefore(field, input.nextSibling);
+    field.appendChild(display);
+    field.appendChild(pop);
+
+    var view = parseKey(input.value) || parseKey(input.max) || parseKey(input.min) || {year:(new Date()).getFullYear(), month:(new Date()).getMonth()};
+    var viewYear = view.year;
+
+    function syncDisplay(){
+      var text = display.querySelector('.selic-month-display-text-v689');
+      if(text) text.textContent = formatPt(input.value);
+      display.title = input.value ? formatPt(input.value) : 'Selecionar mês';
+      if(!pop.hidden) renderGrid();
+    }
+
+    function renderGrid(){
+      viewYear = clampYear(input, viewYear);
+      var yearLabel = pop.querySelector('.selic-month-year-v689');
+      var grid = pop.querySelector('.selic-month-grid-v689');
+      var selected = parseKey(input.value);
+      if(yearLabel) yearLabel.textContent = String(viewYear);
+      if(grid){
+        grid.innerHTML = MONTHS.map(function(name, idx){
+          var key = monthKey(viewYear, idx);
+          var disabled = !withinBounds(input, key);
+          var isSelected = selected && selected.year === viewYear && selected.month === idx;
+          return '<button type="button" class="selic-month-option-v689' + (isSelected ? ' is-selected' : '') + '" data-month="' + idx + '"' + (disabled ? ' disabled' : '') + '>' + name + '</button>';
+        }).join('');
+      }
+      var min = parseKey(input.min), max = parseKey(input.max);
+      var prev = pop.querySelector('[data-dir="-1"]');
+      var next = pop.querySelector('[data-dir="1"]');
+      if(prev) prev.disabled = Boolean(min && viewYear <= min.year);
+      if(next) next.disabled = Boolean(max && viewYear >= max.year);
+    }
+
+    function setValue(key){
+      if(key && !withinBounds(input, key)) return;
+      input.value = key || '';
+      input.dispatchEvent(new Event('input', {bubbles:true}));
+      input.dispatchEvent(new Event('change', {bubbles:true}));
+      syncDisplay();
+    }
+
+    display.addEventListener('click', function(ev){
+      ev.preventDefault();
+      ev.stopPropagation();
+      var willOpen = pop.hidden;
+      closeAll(willOpen ? pop : null);
+      pop.hidden = !willOpen;
+      display.setAttribute('aria-expanded', String(willOpen));
+      if(willOpen){
+        var current = parseKey(input.value) || parseKey(input.max) || parseKey(input.min);
+        if(current) viewYear = current.year;
+        renderGrid();
+      }
+    });
+
+    pop.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      var nav = ev.target.closest('[data-dir]');
+      if(nav){
+        viewYear = clampYear(input, viewYear + Number(nav.dataset.dir || 0));
+        renderGrid();
+        return;
+      }
+      var monthBtn = ev.target.closest('[data-month]');
+      if(monthBtn && !monthBtn.disabled){
+        var idx = Number(monthBtn.dataset.month);
+        setValue(monthKey(viewYear, idx));
+        pop.hidden = true;
+        display.setAttribute('aria-expanded','false');
+        display.focus();
+        return;
+      }
+      var action = ev.target.closest('[data-action]');
+      if(action){
+        if(action.dataset.action === 'clear'){
+          setValue('');
+          pop.hidden = true;
+          display.setAttribute('aria-expanded','false');
+          display.focus();
+        }else if(action.dataset.action === 'today'){
+          var now = new Date();
+          var key = monthKey(now.getFullYear(), now.getMonth());
+          var min = input.min || '', max = input.max || '';
+          if(min && key < min) key = min;
+          if(max && key > max) key = max;
+          setValue(key);
+          pop.hidden = true;
+          display.setAttribute('aria-expanded','false');
+          display.focus();
+        }
+      }
+    });
+
+    input.addEventListener('input', syncDisplay);
+    input.addEventListener('change', syncDisplay);
+    input._selicMonthPickerSyncV689 = syncDisplay;
+    syncDisplay();
+  }
+
+  function syncAll(){
+    if(!isDesktop()) return;
+    document.documentElement.classList.add(PATCH_CLASS);
+    ensureStyle();
+    ['selicCustomStartV596','selicCustomEndV596'].forEach(function(id){
+      var input = document.getElementById(id);
+      if(!input) return;
+      buildPicker(input);
+      if(typeof input._selicMonthPickerSyncV689 === 'function') input._selicMonthPickerSyncV689();
+    });
+    var meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = 'ELTAUM_DESKTOP_SELIC_MONTH_PICKER_V689';
+  }
+
+  function removeDesktop(){
+    document.documentElement.classList.remove(PATCH_CLASS);
+    closeAll(null);
+  }
+
+  document.addEventListener('click', function(ev){
+    if(!ev.target.closest('.selic-month-field-v689')) closeAll(null);
+  });
+  document.addEventListener('keydown', function(ev){
+    if(ev.key === 'Escape') closeAll(null);
+  });
+
+  function boot(){
+    syncAll();
+    window.addEventListener('resize', function(){
+      if(isDesktop()) syncAll(); else removeDesktop();
+    }, {passive:true});
+    window.addEventListener('pageshow', syncAll, {passive:true});
+    [100,300,700,1400,2600,5000,9000].forEach(function(ms){ setTimeout(syncAll, ms); });
+    setInterval(function(){ if(isDesktop()) syncAll(); }, 4000);
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+})();
