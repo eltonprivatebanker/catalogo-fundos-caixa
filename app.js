@@ -30106,3 +30106,336 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load',apply,{once:true});
   [250,900,1900,3200].forEach(function(ms){setTimeout(apply,ms);});
 })();
+
+
+/* =========================================================
+   PATCH v687 — Desktop Ranking Header Hierarchy
+   ---------------------------------------------------------
+   Reorganiza SOMENTE a versão desktop do cabeçalho de Rankings:
+   - título + ícone ganham hierarquia editorial;
+   - filtros ficam alinhados ao topo e ocupam melhor a largura;
+   - reduz o vazio entre identificação da seção e controles;
+   - mobile permanece com a estrutura original.
+   ========================================================= */
+(function desktopRankingHeaderHierarchyV687(){
+  'use strict';
+
+  var PATCH_CLASS = 'desktop-ranking-header-hierarchy-v687';
+  var STYLE_ID = 'desktop-ranking-header-hierarchy-v687-style';
+  var SHELL_CLASS = 'ranking-heading-shell-v687';
+  var KICKER_CLASS = 'ranking-kicker-v687';
+  var applying = false;
+  var pending = false;
+  var previousInline = new WeakMap();
+  var observer = null;
+
+  function isDesktop(){
+    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+  }
+
+  function remember(el){
+    if(!el || previousInline.has(el)) return;
+    previousInline.set(el, el.getAttribute('style'));
+  }
+
+  function restore(el){
+    if(!el || !previousInline.has(el)) return;
+    var old = previousInline.get(el);
+    if(old === null) el.removeAttribute('style');
+    else el.setAttribute('style', old);
+    previousInline.delete(el);
+  }
+
+  function setImp(el, prop, value){
+    if(!el) return;
+    remember(el);
+    var current = el.style.getPropertyValue(prop);
+    var priority = el.style.getPropertyPriority(prop);
+    if(current === value && priority === 'important') return;
+    el.style.setProperty(prop, value, 'important');
+  }
+
+  function ensureStyle(){
+    if(document.getElementById(STYLE_ID)) return;
+    var style = document.createElement('style');
+    style.id = STYLE_ID;
+    style.textContent = `
+      @media (min-width: 769px){
+        html.${PATCH_CLASS} #rankingsSection .${SHELL_CLASS}{
+          display:grid;
+          grid-template-columns:minmax(300px,350px) minmax(0,1fr);
+          gap:30px;
+          align-items:start;
+          width:100%;
+          margin:0 0 18px;
+        }
+        html.${PATCH_CLASS} #rankingsSection .${KICKER_CLASS}{
+          display:block;
+          margin:0 0 7px 52px;
+          color:#d5aa54;
+          font:800 .60rem/1 Inter,ui-sans-serif,system-ui,sans-serif;
+          letter-spacing:.16em;
+          text-transform:uppercase;
+        }
+        html.${PATCH_CLASS} #rankingsSection .ranking-title-group > .section-badge{
+          display:none!important;
+        }
+        @media (max-width: 1180px){
+          html.${PATCH_CLASS} #rankingsSection .${SHELL_CLASS}{
+            grid-template-columns:1fr;
+            gap:14px;
+          }
+          html.${PATCH_CLASS} #rankingsSection .ranking-head{
+            max-width:620px!important;
+          }
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureKicker(titleGroup, h2){
+    if(!titleGroup || !h2) return null;
+    var kicker = titleGroup.querySelector('.' + KICKER_CLASS);
+    if(!kicker){
+      kicker = document.createElement('span');
+      kicker.className = KICKER_CLASS;
+      kicker.textContent = 'Rankings';
+      titleGroup.insertBefore(kicker, h2);
+    }
+    return kicker;
+  }
+
+  function ensureShell(section, head, toolbar){
+    if(!section || !head || !toolbar) return null;
+    var shell = section.querySelector(':scope > .' + SHELL_CLASS);
+    if(!shell){
+      shell = document.createElement('div');
+      shell.className = SHELL_CLASS;
+      shell.setAttribute('data-desktop-only-v687','1');
+      section.insertBefore(shell, head);
+    }
+    if(head.parentNode !== shell) shell.appendChild(head);
+    if(toolbar.parentNode !== shell) shell.appendChild(toolbar);
+    return shell;
+  }
+
+  function styleDesktop(section, head, titleGroup, h2, icon, text, subtitle, toolbar){
+    document.documentElement.classList.add(PATCH_CLASS);
+
+    setImp(section, 'margin-top', '14px');
+    setImp(section, 'padding-top', '0');
+
+    setImp(head, 'display', 'block');
+    setImp(head, 'width', '100%');
+    setImp(head, 'max-width', '350px');
+    setImp(head, 'margin', '0');
+    setImp(head, 'padding', '16px 0 0 4px');
+    setImp(head, 'min-height', '0');
+
+    setImp(titleGroup, 'display', 'block');
+    setImp(titleGroup, 'width', '100%');
+    setImp(titleGroup, 'margin', '0');
+    setImp(titleGroup, 'padding', '0');
+    setImp(titleGroup, 'text-align', 'left');
+
+    setImp(h2, 'display', 'grid');
+    setImp(h2, 'grid-template-columns', '40px minmax(0,1fr)');
+    setImp(h2, 'align-items', 'center');
+    setImp(h2, 'justify-content', 'start');
+    setImp(h2, 'column-gap', '12px');
+    setImp(h2, 'width', '100%');
+    setImp(h2, 'margin', '0');
+    setImp(h2, 'padding', '0');
+    setImp(h2, 'color', '#f5f7fb');
+    setImp(h2, 'font-size', '1.54rem');
+    setImp(h2, 'line-height', '1.08');
+    setImp(h2, 'font-weight', '820');
+    setImp(h2, 'letter-spacing', '-0.035em');
+    setImp(h2, 'text-align', 'left');
+    setImp(h2, 'background', 'transparent');
+    setImp(h2, 'border', '0');
+    setImp(h2, 'text-shadow', 'none');
+
+    setImp(icon, 'display', 'inline-flex');
+    setImp(icon, 'align-items', 'center');
+    setImp(icon, 'justify-content', 'center');
+    setImp(icon, 'width', '40px');
+    setImp(icon, 'height', '40px');
+    setImp(icon, 'min-width', '40px');
+    setImp(icon, 'max-width', '40px');
+    setImp(icon, 'flex', '0 0 40px');
+    setImp(icon, 'border-radius', '11px');
+    setImp(icon, 'background', 'linear-gradient(145deg, rgba(200,151,58,.16), rgba(14,18,32,.94))');
+    setImp(icon, 'border', '1px solid rgba(232,187,106,.38)');
+    setImp(icon, 'box-shadow', 'inset 0 1px 0 rgba(255,255,255,.06), 0 8px 18px rgba(0,0,0,.22)');
+    setImp(icon, 'color', '#e8bb6a');
+    setImp(icon, 'font-size', '1.04rem');
+    setImp(icon, 'line-height', '1');
+    setImp(icon, 'text-shadow', 'none');
+
+    setImp(text, 'display', 'block');
+    setImp(text, 'min-width', '0');
+    setImp(text, 'color', '#f5f7fb');
+    setImp(text, 'font-size', 'inherit');
+    setImp(text, 'font-weight', 'inherit');
+    setImp(text, 'line-height', 'inherit');
+    setImp(text, 'letter-spacing', 'inherit');
+    setImp(text, 'text-align', 'left');
+
+    setImp(subtitle, 'display', 'block');
+    setImp(subtitle, 'max-width', '278px');
+    setImp(subtitle, 'margin', '9px 0 0 52px');
+    setImp(subtitle, 'padding', '0');
+    setImp(subtitle, 'color', '#8f9ab4');
+    setImp(subtitle, 'font-size', '.72rem');
+    setImp(subtitle, 'line-height', '1.48');
+    setImp(subtitle, 'font-weight', '520');
+    setImp(subtitle, 'letter-spacing', '0');
+    setImp(subtitle, 'text-align', 'left');
+
+    // Toolbar: três controles principais na primeira linha; risco na segunda,
+    // sem limitar o painel aos 940px legados.
+    setImp(toolbar, 'width', '100%');
+    setImp(toolbar, 'max-width', 'none');
+    setImp(toolbar, 'display', 'grid');
+    setImp(toolbar, 'grid-template-columns', 'minmax(170px,.75fr) minmax(250px,1.25fr) minmax(250px,1.25fr)');
+    setImp(toolbar, 'grid-auto-flow', 'row');
+    setImp(toolbar, 'justify-content', 'stretch');
+    setImp(toolbar, 'align-items', 'end');
+    setImp(toolbar, 'column-gap', '14px');
+    setImp(toolbar, 'row-gap', '10px');
+    setImp(toolbar, 'margin', '0');
+    setImp(toolbar, 'padding', '14px 16px');
+    setImp(toolbar, 'min-height', '126px');
+    setImp(toolbar, 'border-radius', '14px');
+    setImp(toolbar, 'border', '1px solid rgba(148,163,184,.16)');
+    setImp(toolbar, 'background', 'linear-gradient(180deg,rgba(13,17,30,.94),rgba(9,12,23,.96))');
+    setImp(toolbar, 'box-shadow', 'inset 0 1px 0 rgba(255,255,255,.025)');
+
+    var risk = toolbar.querySelector('.ranking-risk-control-v198');
+    if(risk){
+      setImp(risk, 'grid-column', '1 / 2');
+      setImp(risk, 'width', '100%');
+      setImp(risk, 'max-width', '250px');
+    }
+
+    toolbar.querySelectorAll('.ranking-control-card-v136').forEach(function(control){
+      setImp(control, 'width', '100%');
+      setImp(control, 'min-width', '0');
+      setImp(control, 'margin', '0');
+    });
+
+    toolbar.querySelectorAll('.ranking-select-v136').forEach(function(select){
+      setImp(select, 'width', '100%');
+      setImp(select, 'min-height', '42px');
+      setImp(select, 'height', '42px');
+      setImp(select, 'padding-top', '8px');
+      setImp(select, 'padding-bottom', '8px');
+      setImp(select, 'border-radius', '10px');
+    });
+  }
+
+  function restoreMobile(){
+    document.documentElement.classList.remove(PATCH_CLASS);
+    var section = document.getElementById('rankingsSection');
+    if(!section) return;
+    var shell = section.querySelector(':scope > .' + SHELL_CLASS);
+    var head = shell ? shell.querySelector('.ranking-head') : section.querySelector('.ranking-head');
+    var toolbar = shell ? shell.querySelector('.ranking-toolbar-v136') : section.querySelector('.ranking-toolbar-v136');
+    var mobileToolbar = section.querySelector('.ranking-mobile-toolbar-v617');
+
+    if(shell){
+      section.insertBefore(head, shell);
+      if(mobileToolbar){
+        if(mobileToolbar.nextSibling) section.insertBefore(toolbar, mobileToolbar.nextSibling);
+        else section.appendChild(toolbar);
+      }else{
+        section.insertBefore(toolbar, shell.nextSibling);
+      }
+      shell.remove();
+    }
+
+    var titleGroup = head && head.querySelector('.ranking-title-group');
+    var h2 = titleGroup && titleGroup.querySelector('h2');
+    var icon = h2 && h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
+    var text = h2 && h2.querySelector('.section-title-text-v302, .section-title-text-v300');
+    var subtitle = titleGroup && titleGroup.querySelector('.ranking-section-subtitle-v136');
+    var kicker = titleGroup && titleGroup.querySelector('.' + KICKER_CLASS);
+    if(kicker) kicker.remove();
+
+    [section, head, titleGroup, h2, icon, text, subtitle, toolbar].forEach(restore);
+    if(toolbar){
+      toolbar.querySelectorAll('.ranking-control-card-v136,.ranking-select-v136').forEach(restore);
+      var risk = toolbar.querySelector('.ranking-risk-control-v198');
+      restore(risk);
+    }
+  }
+
+  function apply(){
+    if(applying) return;
+    applying = true;
+    pending = false;
+    try{
+      if(!isDesktop()){
+        restoreMobile();
+        return;
+      }
+
+      ensureStyle();
+      var section = document.getElementById('rankingsSection');
+      if(!section) return;
+      var head = section.querySelector('.ranking-head');
+      var titleGroup = head && head.querySelector('.ranking-title-group');
+      var h2 = titleGroup && titleGroup.querySelector('h2.ranking-title-hero-v305, h2.section-hero-premium-v306, h2');
+      var icon = h2 && h2.querySelector('.section-title-icon-v302, .section-title-icon-v300');
+      var text = h2 && h2.querySelector('.section-title-text-v302, .section-title-text-v300, span:last-child');
+      var subtitle = titleGroup && titleGroup.querySelector('.ranking-section-subtitle-v136');
+      var toolbar = section.querySelector('.ranking-toolbar-v136');
+      if(!head || !titleGroup || !h2 || !toolbar) return;
+
+      ensureKicker(titleGroup, h2);
+      ensureShell(section, head, toolbar);
+      styleDesktop(section, head, titleGroup, h2, icon, text, subtitle, toolbar);
+
+      var meta = document.querySelector('meta[name="app-build"]');
+      if(meta) meta.content = 'ELTAUM_DESKTOP_RANKING_HEADER_HIERARCHY_V687';
+
+      // Reage aos patches legados que ainda tentam reescrever o style da toolbar.
+      if(!observer && window.MutationObserver){
+        observer = new MutationObserver(function(mutations){
+          if(!isDesktop() || applying) return;
+          var relevant = mutations.some(function(m){
+            return m.type === 'attributes' || m.type === 'childList';
+          });
+          if(relevant && !pending){
+            pending = true;
+            requestAnimationFrame(apply);
+          }
+        });
+        observer.observe(section, {subtree:true, childList:true, attributes:true, attributeFilter:['style','class']});
+      }
+    }catch(err){
+      console.warn('[Ranking desktop v687]', err);
+    }finally{
+      applying = false;
+    }
+  }
+
+  function boot(){
+    apply();
+    window.addEventListener('resize', function(){ requestAnimationFrame(apply); }, {passive:true});
+    window.addEventListener('pageshow', apply, {passive:true});
+    document.addEventListener('click', function(ev){
+      if(ev.target && ev.target.closest && ev.target.closest('#rankingsSection')){
+        setTimeout(apply, 40);
+      }
+    }, true);
+    [80,240,600,1200,2200,4200,7600,12500,24000,36500].forEach(function(ms){
+      setTimeout(apply, ms);
+    });
+  }
+
+  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+})();
