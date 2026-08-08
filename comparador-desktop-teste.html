@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teste · Comparador Desktop · Catálogo de Fundos CAIXA</title>
+<style>
+  html,body{margin:0;width:100%;height:100%;background:#07080f;overflow:hidden;font-family:Inter,Arial,sans-serif}
+  #siteFrame{display:block;width:100%;height:100%;border:0;background:#07080f}
+  .test-badge{position:fixed;right:14px;bottom:14px;z-index:9999999;padding:7px 10px;border:1px solid rgba(232,187,106,.38);border-radius:999px;background:rgba(7,8,15,.88);backdrop-filter:blur(12px);color:#e8bb6a;font:700 10px/1 Inter,Arial,sans-serif;letter-spacing:.08em;text-transform:uppercase;box-shadow:0 8px 24px rgba(0,0,0,.28);pointer-events:none}
+  @media(max-width:1023px){.test-badge::after{content:' · desktop ≥ 1024px'}}
+</style>
+</head>
+<body>
+<iframe id="siteFrame" title="Catálogo de Fundos CAIXA — teste do comparador desktop" src="./index.html?comparadorDesktopTeste=v640"></iframe>
+<div class="test-badge">Teste · Comparador v640</div>
+<script>
+(function(){
+  'use strict';
+  const frame = document.getElementById('siteFrame');
+  let observer = null;
+  let enhancing = false;
+  let enhanceTimer = 0;
+
+  function norm(value){
+    return String(value || '')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .replace(/\s+/g,' ').trim().toLowerCase();
+  }
+
+  function cleanCellText(cell){
+    if(!cell) return '';
+    const clone = cell.cloneNode(true);
+    clone.querySelectorAll('.compar-v640-injected').forEach(el => el.remove());
+    return clone.textContent.replace(/\s+/g,' ').trim();
+  }
+
+  function parseNumber(text){
+    const raw = String(text || '').replace(/\s/g,'');
+    const match = raw.match(/-?\d+(?:[.,]\d+)?/);
+    if(!match) return NaN;
+    return Number(match[0].replace(',','.'));
+  }
+
+  function parseMoney(text){
+    const n = parseNumber(text);
+    if(!Number.isFinite(n)) return NaN;
+    const t = norm(text);
+    if(/\btri\b|trilhao|trilhões|trilhoes/.test(t)) return n * 1e12;
+    if(/\bbi\b|bilhao|bilhões|bilhoes/.test(t)) return n * 1e9;
+    if(/\bmi\b|milhao|milhões|milhoes/.test(t)) return n * 1e6;
+    if(/\bmil\b/.test(t)) return n * 1e3;
+    return n;
+  }
+
+  function parseDays(text){
+    const t = norm(text).replace(/\s/g,'');
+    const dplus = t.match(/d\+0*(\d+)/i);
+    if(dplus) return Number(dplus[1]);
+    if(/mesmo dia|imediat|d\+0/.test(t)) return 0;
+    const days = t.match(/(\d+)d/);
+    return days ? Number(days[1]) : NaN;
+  }
+
+  function shortName(name){
+    const s = String(name || '').replace(/\s+/g,' ').trim();
+    if(s.length <= 30) return s;
+    return s.slice(0,29).trim() + '…';
+  }
+
+  function scheduleEnhance(delay){
+    clearTimeout(enhanceTimer);
+    enhanceTimer = setTimeout(enhance, delay == null ? 70 : delay);
+  }
+
+  function injectStyles(doc){
+    if(doc.getElementById('compar-v640-styles')) return;
+    const style = doc.createElement('style');
+    style.id = 'compar-v640-styles';
+    style.textContent = `
+@media (min-width:1024px){
+  html.desktop-comparator-v640-test #comparOverlay.compar-overlay{
+    background:rgba(2,4,10,.78)!important;
+    backdrop-filter:blur(12px)!important;
+    padding:28px!important;
+    align-items:center!important;
+    justify-content:center!important;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-panel{
+    width:min(1480px,calc(100vw - 56px))!important;
+    max-width:none!important;
+    max-height:91vh!important;
+    border:1px solid rgba(232,187,106,.25)!important;
+    border-radius:20px!important;
+    background:linear-gradient(180deg,#0e1120 0%,#090b14 100%)!important;
+    box-shadow:0 34px 90px rgba(0,0,0,.55)!important;
+    overflow:hidden!important;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-header{
+    position:relative!important;
+    z-index:30!important;
+    padding:20px 24px 13px!important;
+    border-bottom:1px solid rgba(255,255,255,.07)!important;
+    background:rgba(14,17,32,.96)!important;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-title{
+    margin:0!important;
+    font-size:1.22rem!important;
+    letter-spacing:-.02em!important;
+  }
+  html.desktop-comparator-v640-test .compar-v640-subtitle{
+    margin:5px 48px 0 0;
+    color:#909ab3;
+    font-size:.78rem;
+    line-height:1.35;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-close{
+    position:absolute!important;right:20px!important;top:18px!important;
+    width:34px!important;height:34px!important;border-radius:10px!important;
+  }
+  html.desktop-comparator-v640-test .compar-v640-summary{
+    display:grid;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:10px;
+    padding:14px 24px 15px;
+    background:rgba(10,12,22,.96);
+    border-bottom:1px solid rgba(255,255,255,.065);
+  }
+  html.desktop-comparator-v640-test .compar-v640-card{
+    min-height:82px;
+    padding:12px 14px;
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:13px;
+    background:rgba(255,255,255,.025);
+  }
+  html.desktop-comparator-v640-test .compar-v640-card-label{
+    color:#aab3c8;font-size:.64rem;font-weight:800;letter-spacing:.075em;text-transform:uppercase;
+  }
+  html.desktop-comparator-v640-test .compar-v640-card-name{
+    margin-top:7px;color:#eef2fb;font-size:.76rem;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  html.desktop-comparator-v640-test .compar-v640-card-value{
+    margin-top:4px;color:#e8bb6a;font-size:1rem;font-weight:800;font-variant-numeric:tabular-nums;
+  }
+  html.desktop-comparator-v640-test .compar-v640-card.is-empty .compar-v640-card-value,
+  html.desktop-comparator-v640-test .compar-v640-card.is-empty .compar-v640-card-name{color:#737d94}
+  html.desktop-comparator-v640-test .compar-v640-summary-actions{
+    grid-column:1/-1;display:none;justify-content:flex-end;margin-top:-2px;
+  }
+  html.desktop-comparator-v640-test .compar-v640-summary.has-hidden .compar-v640-summary-actions{display:flex}
+  html.desktop-comparator-v640-test .compar-v640-restore{
+    appearance:none;border:1px solid rgba(232,187,106,.28);border-radius:8px;padding:6px 9px;
+    background:rgba(232,187,106,.06);color:#e8bb6a;font:700 .67rem/1 Inter,Arial,sans-serif;cursor:pointer;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-scroll{
+    max-height:calc(91vh - 228px)!important;
+    overflow:auto!important;
+    overscroll-behavior:contain;
+    scrollbar-gutter:stable;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-table{
+    width:100%!important;
+    min-width:900px!important;
+    border-collapse:separate!important;
+    border-spacing:0!important;
+    table-layout:fixed!important;
+    margin:0!important;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr>th,
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr>td{
+    padding:13px 16px!important;
+    border-right:1px solid rgba(255,255,255,.045)!important;
+    border-bottom:1px solid rgba(255,255,255,.052)!important;
+    vertical-align:middle!important;
+    font-variant-numeric:tabular-nums;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr>th:first-child,
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr>td:first-child{
+    position:sticky!important;
+    left:0!important;
+    z-index:12!important;
+    width:178px!important;
+    min-width:178px!important;
+    max-width:178px!important;
+    background:#0d101c!important;
+    color:#9da7bf!important;
+    font-size:.71rem!important;
+    font-weight:750!important;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr:first-child>th,
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr:first-child>td{
+    position:sticky!important;
+    top:0!important;
+    z-index:18!important;
+    min-height:72px!important;
+    background:#111526!important;
+    color:#f0f3fb!important;
+    font-weight:800!important;
+    box-shadow:0 1px 0 rgba(232,187,106,.16)!important;
+  }
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr:first-child>th:first-child,
+  html.desktop-comparator-v640-test #comparOverlay .compar-table tr:first-child>td:first-child{z-index:22!important}
+  html.desktop-comparator-v640-test .compar-v640-fund-cell{position:sticky!important;top:0!important;padding-right:38px!important}
+  html.desktop-comparator-v640-test .compar-v640-remove{
+    position:absolute;right:8px;top:8px;width:24px;height:24px;border:0;border-radius:7px;
+    background:rgba(255,255,255,.055);color:#8994ab;font:700 12px/24px Arial,sans-serif;cursor:pointer;
+  }
+  html.desktop-comparator-v640-test .compar-v640-remove:hover{background:rgba(232,187,106,.12);color:#e8bb6a}
+  html.desktop-comparator-v640-test .compar-v640-group>td{
+    position:static!important;
+    padding:9px 16px!important;
+    background:#090b14!important;
+    color:#c8973a!important;
+    border-top:1px solid rgba(200,151,58,.14)!important;
+    border-bottom:1px solid rgba(200,151,58,.10)!important;
+    font-size:.61rem!important;font-weight:850!important;letter-spacing:.12em!important;text-transform:uppercase!important;
+  }
+  html.desktop-comparator-v640-test .compar-v640-winner{
+    background:linear-gradient(90deg,rgba(200,151,58,.115),rgba(200,151,58,.045))!important;
+    color:#f5d58d!important;
+    font-weight:800!important;
+  }
+  html.desktop-comparator-v640-test .compar-v640-cell-badge{
+    display:block;margin-top:4px;color:#cda754;font-size:.56rem;font-weight:800;letter-spacing:.03em;white-space:nowrap;
+  }
+  html.desktop-comparator-v640-test .compar-v640-col-hidden{display:none!important}
+  html.desktop-comparator-v640-test .compar-v640-footnote{
+    padding:10px 24px 14px;color:#778198;font-size:.64rem;line-height:1.4;background:#090b14;border-top:1px solid rgba(255,255,255,.04)
+  }
+}
+`;
+    doc.head.appendChild(style);
+  }
+
+  function getSourceRows(table){
+    return Array.from(table.rows).filter(row => !row.classList.contains('compar-v640-group'));
+  }
+
+  function makeFingerprint(table){
+    return getSourceRows(table).map(row => Array.from(row.cells).map(cleanCellText).join('|')).join('||');
+  }
+
+  function rowLabel(row){ return norm(row && row.cells && row.cells[0] ? cleanCellText(row.cells[0]) : ''); }
+
+  function findRow(rows, predicates){
+    return rows.slice(1).find(row => {
+      const label = rowLabel(row);
+      return predicates.some(fn => fn(label));
+    }) || null;
+  }
+
+  function candidateIndexes(row){
+    if(!row) return [];
+    const out=[];
+    for(let i=1;i<row.cells.length;i++){
+      if(!row.cells[i].classList.contains('compar-v640-col-hidden')) out.push(i);
+    }
+    return out;
+  }
+
+  function winners(row, parser, mode){
+    const items = candidateIndexes(row).map(index => ({index,value:parser(cleanCellText(row.cells[index]))})).filter(x => Number.isFinite(x.value));
+    if(!items.length) return [];
+    const best = mode === 'min' ? Math.min(...items.map(x=>x.value)) : Math.max(...items.map(x=>x.value));
+    return items.filter(x => Math.abs(x.value-best) < 1e-8).map(x=>x.index);
+  }
+
+  function clearHighlights(table){
+    table.querySelectorAll('.compar-v640-winner').forEach(el => el.classList.remove('compar-v640-winner'));
+    table.querySelectorAll('.compar-v640-cell-badge').forEach(el => el.remove());
+  }
+
+  function addHighlight(row, idxs, badge){
+    if(!row) return;
+    idxs.forEach(idx => {
+      const cell=row.cells[idx]; if(!cell) return;
+      cell.classList.add('compar-v640-winner');
+      if(badge){
+        const tag=cell.ownerDocument.createElement('span');
+        tag.className='compar-v640-cell-badge compar-v640-injected';
+        tag.textContent=badge;
+        cell.appendChild(tag);
+      }
+    });
+  }
+
+  function addGroupBefore(doc, row, label, colCount){
+    if(!row || !row.parentNode) return;
+    const tr=doc.createElement('tr');
+    tr.className='compar-v640-group compar-v640-injected';
+    const td=doc.createElement('td');
+    td.colSpan=Math.max(1,colCount);
+    td.textContent=label;
+    tr.appendChild(td);
+    row.parentNode.insertBefore(tr,row);
+  }
+
+  function activeNames(headerRow){
+    if(!headerRow) return {};
+    const names={};
+    for(let i=1;i<headerRow.cells.length;i++){
+      if(!headerRow.cells[i].classList.contains('compar-v640-col-hidden')) names[i]=cleanCellText(headerRow.cells[i]);
+    }
+    return names;
+  }
+
+  function makeCard(doc, icon, label, name, value){
+    const card=doc.createElement('div');
+    card.className='compar-v640-card compar-v640-injected'+(!value?' is-empty':'');
+    card.innerHTML='<div class="compar-v640-card-label"></div><div class="compar-v640-card-name"></div><div class="compar-v640-card-value"></div>';
+    card.querySelector('.compar-v640-card-label').textContent=icon+' '+label;
+    card.querySelector('.compar-v640-card-name').textContent=name || 'Dado não disponível';
+    card.querySelector('.compar-v640-card-value').textContent=value || '—';
+    return card;
+  }
+
+  function summaryItem(row, idxs, names){
+    if(!row || !idxs.length) return {name:'Dado não disponível',value:''};
+    const visible=idxs.filter(i => names[i] != null);
+    if(!visible.length) return {name:'Dado não disponível',value:''};
+    return {
+      name: visible.length>1 ? (visible.length+' fundos empatados') : shortName(names[visible[0]]),
+      value: cleanCellText(row.cells[visible[0]])
+    };
+  }
+
+  function renderSummary(doc, panel, scroll, table, rows, headerRow, metricRows){
+    const old=panel.querySelector('.compar-v640-summary'); if(old) old.remove();
+    const oldNote=panel.querySelector('.compar-v640-footnote'); if(oldNote) oldNote.remove();
+    const names=activeNames(headerRow);
+
+    const retIdx=winners(metricRows.ret12,parseNumber,'max');
+    const liqIdx=winners(metricRows.liq,parseDays,'min');
+    const feeIdx=winners(metricRows.fee,parseNumber,'min');
+    const plIdx=winners(metricRows.pl,parseMoney,'max');
+
+    const ret=summaryItem(metricRows.ret12,retIdx,names);
+    const liq=summaryItem(metricRows.liq,liqIdx,names);
+    const fee=summaryItem(metricRows.fee,feeIdx,names);
+    const pl=summaryItem(metricRows.pl,plIdx,names);
+
+    const summary=doc.createElement('div');
+    summary.className='compar-v640-summary compar-v640-injected';
+    summary.append(
+      makeCard(doc,'🏆','Maior retorno 12M',ret.name,ret.value),
+      makeCard(doc,'💧','Maior liquidez',liq.name,liq.value),
+      makeCard(doc,'💰','Menor taxa',fee.name,fee.value),
+      makeCard(doc,'📊','Maior PL',pl.name,pl.value)
+    );
+
+    const anyHidden=rows.some(r => Array.from(r.cells).some(c => c.classList.contains('compar-v640-col-hidden')));
+    if(anyHidden){
+      summary.classList.add('has-hidden');
+      const actions=doc.createElement('div');
+      actions.className='compar-v640-summary-actions compar-v640-injected';
+      const btn=doc.createElement('button');
+      btn.className='compar-v640-restore compar-v640-injected';
+      btn.type='button'; btn.textContent='↺ Restaurar colunas';
+      btn.addEventListener('click',()=>{
+        rows.forEach(r=>Array.from(r.cells).forEach(c=>c.classList.remove('compar-v640-col-hidden')));
+        scheduleEnhance(0);
+      });
+      actions.appendChild(btn); summary.appendChild(actions);
+    }
+    panel.insertBefore(summary,scroll);
+
+    const note=doc.createElement('div');
+    note.className='compar-v640-footnote compar-v640-injected';
+    note.textContent='Destaques objetivos entre os fundos selecionados. Rentabilidade passada não representa garantia de resultado futuro.';
+    panel.appendChild(note);
+  }
+
+  function setupRemoveButtons(doc, rows, headerRow){
+    if(!headerRow) return;
+    Array.from(headerRow.cells).slice(1).forEach((cell,offset)=>{
+      const colIndex=offset+1;
+      cell.classList.add('compar-v640-fund-cell');
+      const btn=doc.createElement('button');
+      btn.type='button'; btn.className='compar-v640-remove compar-v640-injected'; btn.textContent='×';
+      btn.title='Ocultar este fundo desta visualização'; btn.setAttribute('aria-label','Ocultar fundo desta comparação');
+      btn.addEventListener('click',ev=>{
+        ev.preventDefault(); ev.stopPropagation();
+        const active=Array.from(headerRow.cells).slice(1).filter(c=>!c.classList.contains('compar-v640-col-hidden')).length;
+        if(active<=2){
+          try{ frame.contentWindow.alert('Mantenha ao menos 2 fundos na comparação.'); }catch(e){}
+          return;
+        }
+        rows.forEach(r=>{ if(r.cells[colIndex]) r.cells[colIndex].classList.add('compar-v640-col-hidden'); });
+        scheduleEnhance(0);
+      });
+      cell.appendChild(btn);
+    });
+  }
+
+  function enhance(){
+    if(enhancing) return;
+    let doc,win;
+    try{doc=frame.contentDocument;win=frame.contentWindow;}catch(e){return;}
+    if(!doc || !doc.documentElement || !win || !win.matchMedia('(min-width:1024px)').matches) return;
+    const overlay=doc.getElementById('comparOverlay');
+    const table=doc.getElementById('comparTable');
+    if(!overlay || !table || !table.rows || table.rows.length<2) return;
+
+    injectStyles(doc);
+    doc.documentElement.classList.add('desktop-comparator-v640-test');
+    const panel=overlay.querySelector('.compar-panel');
+    const scroll=overlay.querySelector('.compar-scroll');
+    const header=overlay.querySelector('.compar-header');
+    if(!panel || !scroll || !header) return;
+
+    const fp=makeFingerprint(table);
+    if(table.dataset.v640Fingerprint===fp && panel.querySelector('.compar-v640-summary')) return;
+
+    enhancing=true;
+    try{
+      table.dataset.v640Fingerprint=fp;
+      table.querySelectorAll('.compar-v640-group,.compar-v640-cell-badge,.compar-v640-remove').forEach(el=>el.remove());
+      panel.querySelectorAll('.compar-v640-summary,.compar-v640-footnote').forEach(el=>el.remove());
+      header.querySelectorAll('.compar-v640-subtitle').forEach(el=>el.remove());
+      clearHighlights(table);
+
+      const subtitle=doc.createElement('div');
+      subtitle.className='compar-v640-subtitle compar-v640-injected';
+      subtitle.textContent='Compare desempenho, liquidez e estrutura dos fundos selecionados.';
+      const title=header.querySelector('.compar-title');
+      if(title) title.insertAdjacentElement('afterend',subtitle); else header.appendChild(subtitle);
+
+      const rows=getSourceRows(table);
+      const headerRow=rows[0];
+      const colCount=headerRow ? headerRow.cells.length : 1;
+
+      const retMonth=findRow(rows,[l=>l==='mes'||l.startsWith('mes ')]);
+      const retYear=findRow(rows,[l=>l==='ano'||l.includes('ano atual')||l.includes('no ano')]);
+      const ret12=findRow(rows,[l=>(l.includes('12m')||l.includes('12 meses'))&&!l.includes('cdi')]);
+      const cdi12=findRow(rows,[l=>l.includes('cdi')&&(l.includes('12m')||l.includes('12 meses')||l.includes('% cdi'))]);
+      const conversion=findRow(rows,[l=>l.includes('convers')||l.includes('cotiza')]);
+      const payment=findRow(rows,[l=>l.includes('pagamento')||l.includes('liquidacao')||l.includes('resgate')]);
+      const risk=findRow(rows,[l=>l.includes('risco')]);
+      const pl=findRow(rows,[l=>l==='pl'||l.includes('patrimonio')||l.includes('patr. liquido')]);
+      const fee=findRow(rows,[l=>l.includes('taxa')&&(l.includes('adm')||l.includes('administr'))]);
+      const category=findRow(rows,[l=>l.includes('categoria')]);
+
+      const rentStart=retMonth||retYear||ret12||cdi12;
+      const liqStart=conversion||payment;
+      const structStart=pl||fee||risk;
+      const identStart=category;
+      if(identStart && rows.indexOf(identStart)<rows.indexOf(rentStart)) addGroupBefore(doc,identStart,'Identificação',colCount);
+      if(rentStart) addGroupBefore(doc,rentStart,'Rentabilidade',colCount);
+      if(liqStart) addGroupBefore(doc,liqStart,'Liquidez',colCount);
+      if(structStart) addGroupBefore(doc,structStart,'Estrutura',colCount);
+
+      addHighlight(retMonth,winners(retMonth,parseNumber,'max'),'');
+      addHighlight(retYear,winners(retYear,parseNumber,'max'),'');
+      addHighlight(ret12,winners(ret12,parseNumber,'max'),'🏆 maior retorno');
+      addHighlight(cdi12,winners(cdi12,parseNumber,'max'),'');
+      const liqRow=payment||conversion;
+      addHighlight(liqRow,winners(liqRow,parseDays,'min'),'💧 maior liquidez');
+      addHighlight(fee,winners(fee,parseNumber,'min'),'💰 menor taxa');
+      addHighlight(pl,winners(pl,parseMoney,'max'),'📊 maior PL');
+
+      setupRemoveButtons(doc,rows,headerRow);
+      renderSummary(doc,panel,scroll,table,rows,headerRow,{ret12,liq:liqRow,fee,pl});
+    }finally{
+      enhancing=false;
+    }
+  }
+
+  function boot(){
+    let doc,win;
+    try{doc=frame.contentDocument;win=frame.contentWindow;}catch(e){return;}
+    if(!doc||!win) return;
+    injectStyles(doc);
+    if(win.matchMedia('(min-width:1024px)').matches) doc.documentElement.classList.add('desktop-comparator-v640-test');
+
+    if(observer) observer.disconnect();
+    observer=new MutationObserver(()=>scheduleEnhance(80));
+    observer.observe(doc.documentElement,{subtree:true,childList:true,characterData:true});
+    doc.addEventListener('click',ev=>{
+      const t=ev.target && ev.target.closest ? ev.target.closest('#comparBtn,[onclick*="abrirComparador"]') : null;
+      if(t) scheduleEnhance(140);
+    },true);
+    win.addEventListener('resize',()=>scheduleEnhance(120));
+    scheduleEnhance(120);
+  }
+
+  frame.addEventListener('load',boot);
+})();
+</script>
+</body>
+</html>
