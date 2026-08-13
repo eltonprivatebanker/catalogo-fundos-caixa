@@ -83543,91 +83543,229 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
 
 
 /* =========================================================
-   PATCH v686 — Desktop: filtros responsivos sem sobreposicao
-   ---------------------------------------------------------
-   Complementa a v606 para telas corporativas / escala do
-   Windows, preservando o layout amplo acima de 1360px.
+   PATCH v686 — Laptop corporativo / escala de tela
+   Objetivo: impedir sobreposição em Fundos e Rankings em
+   desktops com viewport intermediária, sem alterar mobile
+   nem o layout amplo de monitores grandes.
    ========================================================= */
+@media (min-width:769px) and (max-width:1500px){
+  /* ---------- FUNDOS: fluxo vertical estável ---------- */
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:0!important;
+    padding:12px 14px!important;
+    box-sizing:border-box!important;
+  }
 
-/* Desktop intermediario: mantem busca e controles na mesma linha,
-   mas deixa as colunas realmente flexiveis. */
-@media (min-width:980px) and (max-width:1360px){
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217,
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-primary-toolbar-v217{
-    grid-template-columns:minmax(0,1fr) minmax(400px,470px)!important;
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-primary-toolbar-v217{
+    order:1!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(390px,44%)!important;
+    align-items:stretch!important;
     gap:10px!important;
-  }
-
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
-    grid-template-columns:minmax(0,1fr) 150px!important;
-    gap:8px!important;
     width:100%!important;
-    max-width:470px!important;
-    min-width:0!important;
-  }
-
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .desktop-cdi-sort-control{
-    min-width:0!important;
-    grid-template-columns:minmax(0,1fr) 56px 56px!important;
-  }
-
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .exhibition-control{
-    min-width:0!important;
-    width:150px!important;
-  }
-}
-
-/* Desktop estreito / notebook com escala alta: quebra somente a barra
-   superior em duas linhas e permite que os filtros crescam sem invadir
-   Publico-alvo, Categoria ou Perfil de risco. */
-@media (min-width:769px) and (max-width:979px){
-  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell{
     height:auto!important;
-    min-height:0!important;
+    min-height:50px!important;
     max-height:none!important;
+    margin:0!important;
+    padding:0 0 10px!important;
+    overflow:visible!important;
   }
 
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217,
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-primary-toolbar-v217{
-    grid-template-columns:1fr!important;
-    grid-template-rows:auto auto!important;
-    height:auto!important;
-    min-height:0!important;
-    max-height:none!important;
-    gap:8px!important;
-    padding-bottom:8px!important;
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-search-main{
+    width:100%!important;
+    min-width:0!important;
+    height:50px!important;
+    min-height:50px!important;
+    max-height:50px!important;
   }
 
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
-    grid-template-columns:minmax(0,1fr) 170px!important;
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 142px!important;
+    align-items:stretch!important;
     gap:8px!important;
     width:100%!important;
     max-width:none!important;
     min-width:0!important;
+    height:50px!important;
     justify-self:stretch!important;
   }
 
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .desktop-cdi-sort-control{
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .desktop-cdi-sort-control,
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .exhibition-control{
+    width:100%!important;
     min-width:0!important;
-    grid-template-columns:minmax(0,1fr) 60px 60px!important;
+    max-width:none!important;
+    height:50px!important;
+    min-height:50px!important;
+    max-height:50px!important;
+    position:relative!important;
+    inset:auto!important;
+    transform:none!important;
   }
 
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .exhibition-control{
-    min-width:0!important;
-    width:170px!important;
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .desktop-cdi-sort-control{
+    grid-template-columns:minmax(0,1fr) 54px 54px!important;
+    padding:6px 8px!important;
   }
 
-  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
-  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
-  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .desktop-cdi-sort-control .cdi-sort-btn{
+    min-width:0!important;
+    padding:0 5px!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488{
+    order:2!important;
+  }
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69{
+    order:3!important;
+  }
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    order:4!important;
+  }
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell #activeFilterStrip{
+    order:5!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    float:none!important;
+    clear:both!important;
+    width:100%!important;
+    max-width:100%!important;
     height:auto!important;
-    min-height:48px!important;
+    min-height:52px!important;
     max-height:none!important;
+    margin:0!important;
+    padding:9px 0!important;
+    box-sizing:border-box!important;
+    overflow:visible!important;
+    z-index:auto!important;
   }
 
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .desktop-audience-chips-v488,
-  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .category-grid-v69{
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69{
+    display:grid!important;
+    grid-template-columns:145px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:12px!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    display:grid!important;
+    grid-template-columns:145px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:12px!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .catalog-risk-filter-v198{
+    grid-column:1 / -1!important;
+    display:grid!important;
+    grid-template-columns:145px minmax(190px,230px)!important;
+    align-items:center!important;
+    gap:12px!important;
+    width:100%!important;
     min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    position:static!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .desktop-audience-chips-v488,
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .category-grid-v69{
+    display:flex!important;
     flex-wrap:wrap!important;
+    align-items:center!important;
+    gap:7px!important;
+    min-width:0!important;
+    width:100%!important;
+    margin:0!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #sec-fundos .table-wrap{
+    margin-top:14px!important;
+  }
+
+  /* ---------- RANKINGS: título e filtros nunca disputam a mesma linha ---------- */
+  html.desktop-laptop-fit-v686 body #rankingsSection{
+    display:grid!important;
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto auto!important;
+    align-items:stretch!important;
+    row-gap:9px!important;
+    column-gap:0!important;
+    width:100%!important;
+    max-width:100%!important;
+    margin:0!important;
+    padding:10px 0 18px!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #rankingsSection > .ranking-head{
+    grid-column:1!important;
+    grid-row:1!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #rankingsSection > .ranking-toolbar-v136,
+  html.desktop-laptop-fit-v686 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    grid-column:1!important;
+    grid-row:2!important;
+    display:grid!important;
+    grid-template-columns:150px minmax(180px,.8fr) minmax(220px,1fr) minmax(210px,.9fr)!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:9px 10px!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #rankingsSection > .ranking-layout-v136{
+    grid-column:1!important;
+    grid-row:3!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #rankingsSection .ranking-title-group{
+    width:100%!important;
+    min-width:0!important;
+  }
+
+  html.desktop-laptop-fit-v686 body #rankingsSection .ranking-section-subtitle-v136{
+    white-space:normal!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+}
+
+/* Faixa ainda mais estreita de notebook: controles do topo em duas linhas limpas. */
+@media (min-width:769px) and (max-width:1120px){
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-primary-toolbar-v217{
+    grid-template-columns:1fr!important;
+    row-gap:8px!important;
+  }
+  html.desktop-laptop-fit-v686 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
+    height:50px!important;
+  }
+  html.desktop-laptop-fit-v686 body #rankingsSection > .ranking-toolbar-v136,
+  html.desktop-laptop-fit-v686 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    grid-template-columns:1fr 1fr!important;
   }
 }
