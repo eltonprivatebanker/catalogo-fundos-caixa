@@ -83540,3 +83540,94 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
   }
   html.desktop-ranking-workspace-v685 body #rankingsSection .ranking-section-subtitle-v136{white-space:normal!important;}
 }
+
+
+/* =========================================================
+   PATCH v686 — Desktop: filtros responsivos sem sobreposicao
+   ---------------------------------------------------------
+   Complementa a v606 para telas corporativas / escala do
+   Windows, preservando o layout amplo acima de 1360px.
+   ========================================================= */
+
+/* Desktop intermediario: mantem busca e controles na mesma linha,
+   mas deixa as colunas realmente flexiveis. */
+@media (min-width:980px) and (max-width:1360px){
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-primary-toolbar-v217{
+    grid-template-columns:minmax(0,1fr) minmax(400px,470px)!important;
+    gap:10px!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
+    grid-template-columns:minmax(0,1fr) 150px!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:470px!important;
+    min-width:0!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .desktop-cdi-sort-control{
+    min-width:0!important;
+    grid-template-columns:minmax(0,1fr) 56px 56px!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .exhibition-control{
+    min-width:0!important;
+    width:150px!important;
+  }
+}
+
+/* Desktop estreito / notebook com escala alta: quebra somente a barra
+   superior em duas linhas e permite que os filtros crescam sem invadir
+   Publico-alvo, Categoria ou Perfil de risco. */
+@media (min-width:769px) and (max-width:979px){
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .controls-bar.fund-primary-toolbar-v217,
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-primary-toolbar-v217{
+    grid-template-columns:1fr!important;
+    grid-template-rows:auto auto!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    gap:8px!important;
+    padding-bottom:8px!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .fund-view-controls-v217{
+    grid-template-columns:minmax(0,1fr) 170px!important;
+    gap:8px!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    justify-self:stretch!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .desktop-cdi-sort-control{
+    min-width:0!important;
+    grid-template-columns:minmax(0,1fr) 60px 60px!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .exhibition-control{
+    min-width:0!important;
+    width:170px!important;
+  }
+
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
+  html.desktop-filter-height-stable-v605 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    height:auto!important;
+    min-height:48px!important;
+    max-height:none!important;
+  }
+
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .desktop-audience-chips-v488,
+  html.desktop-filter-toolbar-stable-v606 body #sec-fundos #fundFilterShell .category-grid-v69{
+    min-width:0!important;
+    flex-wrap:wrap!important;
+  }
+}
