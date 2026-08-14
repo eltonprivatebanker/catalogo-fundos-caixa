@@ -19081,6 +19081,15 @@ if(document.readyState === 'loading'){
   }
 
   function bindDesktopResultChipV221(){
+    /* v698 — o contador visual foi removido da barra de busca.
+       Mantém o resumo oficial junto da tabela e evita observers/timers redundantes. */
+    if(window.matchMedia && window.matchMedia('(min-width: 769px)').matches &&
+       !document.getElementById('desktopFilterResultSummary')){
+      const search=document.getElementById('searchInput');
+      if(search) search.setAttribute('aria-describedby','filterResultSummary');
+      return;
+    }
+
     const source=document.getElementById('filterResultSummary');
     if(source && source.dataset.v221Observed!=='1'){
       source.dataset.v221Observed='1';
@@ -31244,4 +31253,48 @@ function buildDetailPanel(r,colspan){
   };
 
   console.info('[Catálogo CAIXA] Busca desktop estável ativa:', BUILD);
+})();
+
+
+/* =========================================================
+   PATCH v698 — Desktop: busca limpa, sem contador redundante
+   - remove o chip "N fundos" da barra de busca;
+   - mantém a contagem no resumo oficial junto da tabela;
+   - preserva a geometria estável criada na v697.
+   ========================================================= */
+(function desktopSearchCleanV698(){
+  'use strict';
+  const BUILD = 'ELTAUM_DESKTOP_SEARCH_CLEAN_V698';
+
+  function apply(){
+    if(!(window.matchMedia && window.matchMedia('(min-width: 769px)').matches)) return;
+
+    document.documentElement.classList.add('desktop-search-clean-v698');
+
+    const chip = document.getElementById('desktopFilterResultSummary');
+    if(chip) chip.remove();
+
+    const search = document.getElementById('searchInput');
+    if(search){
+      search.setAttribute('aria-describedby','filterResultSummary');
+      search.dataset.desktopSearchCleanV698 = '1';
+    }
+
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+  window.addEventListener('load', apply, {once:true});
+
+  window.__ELTAUM_DESKTOP_SEARCH_CLEAN_V698__ = {
+    build: BUILD,
+    apply
+  };
+
+  console.info('[Catálogo CAIXA] Busca desktop limpa ativa:', BUILD);
 })();

@@ -1,0 +1,23 @@
+CATÁLOGO DE FUNDOS CAIXA — v698
+
+OBJETIVO
+Remover o contador "152 fundos" da barra de busca, mantendo a informação de
+quantidade somente no resumo da tabela.
+
+ALTERAÇÕES
+- Remove #desktopFilterResultSummary da barra de busca.
+- A busca passa a usar somente ícone + campo de texto.
+- Mantém a geometria estável da v697.
+- O resumo/quantidade junto da tabela continua funcionando.
+- aria-describedby volta a apontar para #filterResultSummary.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- app.js
+
+MANTER COMO ESTÁ
+- style.css
+- tokens-caixa.css
+- JSON/CSV/robôs
+
+Depois de publicar, faça Ctrl+F5.
