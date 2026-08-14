@@ -21501,6 +21501,22 @@ function openCdiAnalyticTableV274(){
 
   function normalizeLastUpdate(){
     try{
+      /* v696 — desktop: posição do status é estrutural e não pode ser reorganizada */
+      if(window.matchMedia && window.matchMedia('(min-width: 769px)').matches){
+        const header = document.querySelector('.site-header-clean');
+        const brandText = header?.querySelector('.brand-text');
+        const last = document.getElementById('lastUpdate');
+        if(brandText && last && last.parentElement !== brandText){
+          brandText.appendChild(last);
+        }
+        last?.classList.remove('header-update-v374');
+        document.querySelectorAll('.header-update-host-v374').forEach(host => {
+          if(!host.textContent.trim()) host.remove();
+        });
+        document.documentElement.classList.add('desktop-header-stable-v696');
+        return;
+      }
+
       document.documentElement.classList.add('header-update-fix-v374');
 
       const meta = qs('meta[name="app-build"]');
@@ -21532,6 +21548,13 @@ function openCdiAnalyticTableV274(){
 
   function boot(){
     normalizeLastUpdate();
+
+    /* v696 — no desktop, não instala timers nem MutationObserver que movem #lastUpdate */
+    if(window.matchMedia && window.matchMedia('(min-width: 769px)').matches){
+      window.__ELTAUM_HEADER_UPDATE_FIX_V374__.sync = normalizeLastUpdate;
+      window.__ELTAUM_HEADER_UPDATE_FIX_V374__.desktopDisabledByV696 = true;
+      return;
+    }
 
     [80, 200, 500, 1000, 1800, 3000, 5200].forEach(ms => {
       setTimeout(normalizeLastUpdate, ms);
@@ -22468,6 +22491,8 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
 
   function applyMobileTopKpiIconsV435(){
     try{
+      /* v696 — esta rotina é exclusivamente mobile */
+      if(!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches)) return;
       const html = document.documentElement;
       html.classList.add('mobile-v435','mobile-top-kpi-icons-v435');
 
@@ -22556,6 +22581,8 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
 
   function applyMobileHeaderMinimalV436(){
     try{
+      /* v696 — esta rotina é exclusivamente mobile */
+      if(!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches)) return;
       const html = document.documentElement;
       html.classList.add('mobile-v436','mobile-header-minimal-v436');
 
@@ -22656,6 +22683,8 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
 
   function applyMobileHeaderTightV437(){
     try{
+      /* v696 — esta rotina é exclusivamente mobile */
+      if(!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches)) return;
       document.documentElement.classList.add('mobile-v437','mobile-header-tight-v437');
       const meta = document.querySelector('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
@@ -31110,4 +31139,53 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', boot, {once:true});
   window.addEventListener('pageshow', boot, {passive:true});
   window.addEventListener('resize', function(){ if(isDesktop()) boot(); }, {passive:true});
+})();
+
+
+/* =========================================================
+   PATCH v696 — Desktop: header estruturalmente estável
+   - #lastUpdate nasce dentro de .brand-text no HTML;
+   - v374 não cria host/timers/observer no desktop;
+   - v435/v436/v437 deixam de executar no desktop;
+   - o texto/data pode atualizar, mas o nó não troca de pai.
+   ========================================================= */
+(function desktopHeaderStableV696(){
+  'use strict';
+  const BUILD = 'ELTAUM_DESKTOP_HEADER_STABLE_V696';
+
+  function enforce(){
+    if(!(window.matchMedia && window.matchMedia('(min-width: 769px)').matches)) return;
+    const html = document.documentElement;
+    const header = document.querySelector('.site-header-clean');
+    const brandText = header?.querySelector('.brand-text');
+    const last = document.getElementById('lastUpdate');
+
+    html.classList.add('desktop-header-stable-v696');
+
+    if(brandText && last && last.parentElement !== brandText){
+      brandText.appendChild(last);
+    }
+
+    last?.classList.remove('header-update-v374');
+    document.querySelectorAll('.header-update-host-v374').forEach(host => {
+      if(!host.textContent.trim()) host.remove();
+    });
+
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', enforce, {once:true});
+  }else{
+    enforce();
+  }
+  window.addEventListener('load', enforce, {once:true});
+
+  window.__ELTAUM_DESKTOP_HEADER_STABLE_V696__ = {
+    build: BUILD,
+    enforce
+  };
+
+  console.info('[Catálogo CAIXA] Header desktop estável ativo:', BUILD);
 })();

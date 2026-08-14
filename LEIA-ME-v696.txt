@@ -1,0 +1,23 @@
+CATÁLOGO DE FUNDOS CAIXA — v696
+
+OBJETIVO
+Eliminar o sobe-e-desce do título “Catálogo de Fundos CAIXA” e do selo “Atualizado”
+durante os primeiros segundos do carregamento no desktop.
+
+O QUE FOI ALTERADO
+1. #lastUpdate agora já nasce no HTML dentro de .brand-text, abaixo do H1.
+2. A rotina legada v374 não cria host, timers ou MutationObserver no desktop.
+3. As rotinas v435, v436 e v437 foram limitadas de fato ao mobile.
+4. Foi adicionada uma proteção final v696 para manter #lastUpdate no mesmo pai.
+5. Não foi alterado o layout da tabela/filtros que já vinha sendo estabilizado.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- app.js
+
+NÃO SUBSTITUIR
+- style.css
+- tokens-caixa.css
+- JSON/CSV/robôs
+
+Após publicar, aguarde o GitHub Pages concluir e faça Ctrl+F5.
