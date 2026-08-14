@@ -84999,3 +84999,186 @@ html.desktop-responsive-fit-v688 body{
   }
 }
 
+
+
+
+/* =========================================================
+   PATCH v705 — Rankings: acabamento visual limpo
+   - oculta subtítulo redundante;
+   - aumenta respiro entre ícone e título;
+   - remove "caixa dentro de caixa" dos filtros;
+   - 4 filtros em linha quando houver espaço real;
+   - 2x2 apenas quando o container ficar realmente estreito.
+   ========================================================= */
+
+@media (min-width:769px){
+
+  html.ranking-clean-v705 body #rankingsSection{
+    row-gap:7px!important;
+  }
+
+  /* Cabeçalho enxuto */
+  html.ranking-clean-v705 body #rankingsSection > .ranking-head{
+    margin:0 0 8px!important;
+    padding:0 2px!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection .ranking-title-group{
+    display:grid!important;
+    grid-template-columns:38px minmax(0,1fr)!important;
+    grid-template-areas:"icon title"!important;
+    grid-template-rows:auto!important;
+    align-items:center!important;
+    justify-items:start!important;
+    column-gap:14px!important;
+    row-gap:0!important;
+    width:100%!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection .section-title-icon-v302{
+    grid-area:icon!important;
+    width:38px!important;
+    height:38px!important;
+    min-width:38px!important;
+    min-height:38px!important;
+    max-width:38px!important;
+    max-height:38px!important;
+    margin:0!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-clean-v705 body #rankingsSection h2.section-title-v302{
+    grid-area:title!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection .section-title-text-v302{
+    font-size:1.18rem!important;
+    line-height:1!important;
+    font-weight:820!important;
+    letter-spacing:-.025em!important;
+    white-space:nowrap!important;
+  }
+
+  /* Subtítulo removido: os filtros já explicam a função da seção */
+  html.ranking-clean-v705 body #rankingsSection .ranking-section-subtitle-v136{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Remove o efeito "painel dentro de painel".
+     Ficam visíveis apenas labels + selects. */
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136,
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0 0 8px!important;
+    padding:2px 0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136 > .ranking-control-card-v136{
+    margin:0!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136 label{
+    margin:0 0 5px 1px!important;
+    color:#9daac6!important;
+    font-size:.49rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:.085em!important;
+    white-space:nowrap!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136 .ranking-select-v136{
+    height:36px!important;
+    min-height:36px!important;
+    max-height:36px!important;
+    border-radius:9px!important;
+  }
+
+  /* Cards-resumo sobem um pouco após remoção da caixa externa. */
+  html.ranking-clean-v705 body #rankingsSection .ranking-v682-summary{
+    margin-top:0!important;
+  }
+}
+
+/* Base segura: 2x2 apenas quando o próprio bloco estiver estreito. */
+@container ranking-v704 (max-width: 779px){
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136,
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    gap:9px 10px!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+}
+
+/* Quando a largura REAL do Rankings for suficiente, força 4x1.
+   O threshold foi reduzido em relação à v704 porque as larguras reais
+   mostradas nos testes comportam confortavelmente os quatro campos. */
+@container ranking-v704 (min-width: 780px){
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136,
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:
+      minmax(140px,.62fr)
+      minmax(220px,1.18fr)
+      minmax(205px,1.08fr)
+      minmax(175px,.78fr)!important;
+    grid-template-rows:54px!important;
+    grid-auto-rows:54px!important;
+    align-items:end!important;
+    gap:10px!important;
+    height:58px!important;
+    min-height:58px!important;
+    max-height:58px!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136 > .ranking-control-card-v136:nth-of-type(1){
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136 > .ranking-universe-control-v685{
+    grid-column:2!important;
+    grid-row:1!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136 > .ranking-category-control-v685{
+    grid-column:3!important;
+    grid-row:1!important;
+  }
+
+  html.ranking-clean-v705 body #rankingsSection > .ranking-toolbar-v136 > .ranking-risk-control-v198{
+    grid-column:4!important;
+    grid-row:1!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+}
+

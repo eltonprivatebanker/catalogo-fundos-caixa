@@ -1,0 +1,28 @@
+CATÁLOGO DE FUNDOS CAIXA — v705
+RANKINGS — ACABAMENTO VISUAL LIMPO
+
+OBJETIVO
+Simplificar a seção Rankings e remover a sensação de "tabela dentro de tabela".
+
+ALTERAÇÕES
+- Oculta "Compare por período, universo, categoria e risco."
+- Aumenta o espaço entre o ícone de troféu e "Rankings de fundos".
+- Remove borda/fundo do contêiner externo dos filtros.
+- Mantém somente labels + selects.
+- Com largura real do Rankings >= 780 px: 4 filtros em uma linha.
+- Abaixo de 780 px: layout 2x2.
+- Mantém cards, tabela, cálculos e app.js intactos.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- style.css
+
+MANTER COMO ESTÁ
+- app.js atual da v701
+- tokens-caixa.css
+- dados / JSON / robôs
+
+Depois de publicar:
+1. Ctrl+F5.
+2. Vá aos Rankings.
+3. Teste em 80%, 90%, 100% e 110%.
