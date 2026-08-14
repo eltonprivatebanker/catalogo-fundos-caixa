@@ -6615,6 +6615,16 @@ $('perPage')?.addEventListener('change',e=>{ perPage=parseInt(e.target.value); c
 $('toggleSemDados')?.addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
+  const root=document.documentElement;
+  const loadMsg=$('loadMsg');
+  const mainTable=$('mainTable');
+
+  /* v690 — prepara o primeiro catálogo fora do fluxo visível.
+     O CSS já reserva ~720px, então a tabela pode ser montada inteira
+     sem empurrar Rankings/Indicadores durante o primeiro segundo. */
+  root.classList.remove('catalog-table-ready-v690');
+  root.classList.add('catalog-table-settling-v690');
+
   try{
     const raw=await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
     const result=parseCsv(raw);
@@ -6624,13 +6634,37 @@ async function carregarDados(){
     const di=displayHeaders.indexOf(DEFAULT_SORT);
     if(di>=0){sortCol=di;sortDir=-1;}
     const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
-    buildHeader(); buildCatFilters(cats); buildBenchmarkFilters(allRows); updateKPIs(); applyFilter();
-    $('loadMsg').style.display='none';
-    $('mainTable').style.display='table';
-    document.documentElement.classList.add('catalog-table-ready-v591');
+
+    /* Monta tudo primeiro. mainTable continua display:none neste momento. */
+    buildHeader();
+    buildCatFilters(cats);
+    buildBenchmarkFilters(allRows);
+    updateKPIs();
+    applyFilter();
     renderRankings();
+
+    /* Troca Loading -> tabela em um único frame. */
+    requestAnimationFrame(()=>{
+      if(loadMsg) loadMsg.style.display='none';
+      if(mainTable) mainTable.style.display='table';
+      root.classList.add('catalog-table-ready-v591','catalog-table-ready-v690');
+
+      /* Dois frames + pequena janela para o Firefox concluir métricas de fonte/linha.
+         Só depois retiramos a reserva de 720px; no desktop medido a diferença é ~2–4px. */
+      requestAnimationFrame(()=>{
+        requestAnimationFrame(()=>{
+          setTimeout(()=>{
+            root.classList.remove('catalog-table-settling-v690');
+          },180);
+        });
+      });
+    });
   }catch(err){
-    $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
+    root.classList.remove('catalog-table-settling-v690','catalog-table-ready-v690');
+    if(loadMsg){
+      loadMsg.style.display='flex';
+      loadMsg.innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
+    }
   }
 }
 
@@ -31115,4 +31149,27 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', boot, {once:true});
   window.addEventListener('pageshow', boot, {passive:true});
   window.addEventListener('resize', function(){ if(isDesktop()) boot(); }, {passive:true});
+})();
+
+
+/* =========================================================
+   PATCH v690 — saneamento do estado visual do primeiro catálogo
+   ========================================================= */
+(function desktopFundLoadStableV690(){
+  'use strict';
+  const BUILD='ELTAUM_DESKTOP_FUND_LOAD_STABLE_V690';
+  const root=document.documentElement;
+  root.classList.add('desktop-fund-load-stable-v690');
+  const meta=document.querySelector('meta[name="app-build"]');
+  if(meta) meta.content=BUILD;
+
+  window.addEventListener('pageshow',function(ev){
+    /* Se a página voltou do bfcache com a tabela já montada, não reaplica loading. */
+    const table=document.getElementById('mainTable');
+    const body=document.getElementById('tableBody');
+    if(table && body && body.children.length && table.style.display!=='none'){
+      root.classList.add('catalog-table-ready-v690');
+      root.classList.remove('catalog-table-settling-v690');
+    }
+  },{passive:true});
 })();

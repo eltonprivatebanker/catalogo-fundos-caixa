@@ -1,0 +1,16 @@
+CATÁLOGO CAIXA — v690
+
+Substitua no GitHub somente:
+- index.html
+- style.css
+- app.js
+
+Não altere tokens-caixa.css, JSONs, CSVs ou robô.
+
+Objetivo desta versão:
+- eliminar o salto visual da tabela de Fundos no primeiro carregamento;
+- manter menu/laptop responsivo das versões anteriores;
+- montar a tabela escondida e fazer a troca para o conteúdo pronto em um único frame;
+- reservar ~720px apenas durante o boot e liberar depois para filtros com poucos resultados.
+
+Após publicar: Ctrl+F5 e teste com o navegador em 100%.
