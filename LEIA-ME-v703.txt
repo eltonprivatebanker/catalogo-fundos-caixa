@@ -1,0 +1,28 @@
+CATÁLOGO DE FUNDOS CAIXA — v703
+AJUSTE FINO DOS RANKINGS
+
+OBJETIVO
+Corrigir os cortes de texto e deixar a seção compacta sem sacrificar legibilidade.
+
+ALTERAÇÕES
+- Título e subtítulo voltam a ter hierarquia em duas linhas:
+  Rankings de fundos
+  Compare por período, universo, categoria e risco.
+- Em desktop, a barra dos filtros usa FLEX em vez de GRID para neutralizar
+  conflitos das versões antigas.
+- Perfil de risco ganha 190 px fixos, evitando "PERFIL DE RISC..." cortado.
+- Universo e Categoria dividem o espaço restante.
+- Remove overflow:hidden do contêiner de filtros.
+- Em telas realmente estreitas (<1050 px), volta automaticamente para 2x2.
+- Pequeno refinamento nos cards de resumo para evitar textos encostando.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- style.css
+
+MANTER COMO ESTÁ
+- app.js da v701/v700-v699 consolidado
+- tokens-caixa.css
+- dados / JSON / robôs
+
+Depois de publicar, faça Ctrl+F5.
