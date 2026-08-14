@@ -85182,3 +85182,295 @@ html.desktop-responsive-fit-v688 body{
   }
 }
 
+
+
+
+/* =========================================================
+   PATCH v706 — Rankings estáveis / sem cortes / sem salto
+   - título simples: H2 em flex real, com gap fixo;
+   - subtítulo oculto;
+   - toolbar com geometria fixa desde o primeiro frame;
+   - 4x1 quando há espaço, 2x2 antes de qualquer corte;
+   - Perfil de risco recebe largura mínima suficiente.
+   ========================================================= */
+
+@media (min-width:769px){
+
+  html.ranking-stable-final-v706 body #rankingsSection{
+    display:block!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:10px 0 0!important;
+    padding:0 0 14px!important;
+    text-align:left!important;
+    container-type:inline-size!important;
+    container-name:ranking-v706!important;
+    overflow:visible!important;
+  }
+
+  /* Cabeçalho com altura estável desde o primeiro frame */
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-head{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    min-height:42px!important;
+    height:42px!important;
+    max-height:42px!important;
+    margin:0 0 9px!important;
+    padding:0 2px!important;
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    overflow:visible!important;
+    text-align:left!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection .ranking-title-group{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:42px!important;
+    min-height:42px!important;
+    max-height:42px!important;
+    margin:0!important;
+    padding:0!important;
+    position:static!important;
+    transform:none!important;
+    overflow:visible!important;
+    text-align:left!important;
+  }
+
+  /* O ícone e o texto estão DENTRO do H2. O gap precisa ser no H2,
+     e não no ranking-title-group. */
+  html.ranking-stable-final-v706 body #rankingsSection h2.ranking-title-hero-v305,
+  html.ranking-stable-final-v706 body #rankingsSection h2.section-title-v302{
+    display:flex!important;
+    flex-direction:row!important;
+    flex-wrap:nowrap!important;
+    align-items:center!important;
+    justify-content:flex-start!important;
+    gap:14px!important;
+    width:max-content!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:42px!important;
+    min-height:42px!important;
+    max-height:42px!important;
+    margin:0!important;
+    padding:0!important;
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    overflow:visible!important;
+    white-space:nowrap!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection .section-title-icon-v302{
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 40px!important;
+    width:40px!important;
+    height:40px!important;
+    min-width:40px!important;
+    min-height:40px!important;
+    max-width:40px!important;
+    max-height:40px!important;
+    margin:0!important;
+    padding:0!important;
+    border-radius:10px!important;
+    font-size:.98rem!important;
+    line-height:1!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection .section-title-text-v302{
+    position:static!important;
+    transform:none!important;
+    display:block!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:0!important;
+    color:#f5f7fb!important;
+    font-size:1.18rem!important;
+    line-height:1!important;
+    font-weight:820!important;
+    letter-spacing:-.025em!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection .ranking-section-subtitle-v136,
+  html.ranking-stable-final-v706 body #rankingsSection .ranking-kicker-v688,
+  html.ranking-stable-final-v706 body #rankingsSection .section-badge,
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-mobile-toolbar-v617{
+    display:none!important;
+    visibility:hidden!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-width:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+  }
+
+  /* Base segura: 2x2.
+     Altura já fica reservada e não muda enquanto JS carrega rankings. */
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136,
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-rows:54px 54px!important;
+    grid-auto-rows:54px!important;
+    align-items:end!important;
+    gap:9px 12px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:117px!important;
+    min-height:117px!important;
+    max-height:117px!important;
+    margin:0 0 9px!important;
+    padding:0!important;
+    border:0!important;
+    border-radius:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    overflow:visible!important;
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    box-sizing:border-box!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136 > .ranking-control-card-v136{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:flex-end!important;
+    align-items:stretch!important;
+    gap:5px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:54px!important;
+    min-height:54px!important;
+    max-height:54px!important;
+    margin:0!important;
+    padding:0!important;
+    background:transparent!important;
+    border:0!important;
+    box-shadow:none!important;
+    position:static!important;
+    inset:auto!important;
+    transform:none!important;
+    box-sizing:border-box!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136 label{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    margin:0 0 5px 1px!important;
+    padding:0!important;
+    color:#9daac6!important;
+    font-size:.49rem!important;
+    line-height:1!important;
+    font-weight:850!important;
+    letter-spacing:.08em!important;
+    white-space:nowrap!important;
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136 .ranking-select-v136{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:38px!important;
+    min-height:38px!important;
+    max-height:38px!important;
+    margin:0!important;
+    padding:0 34px 0 11px!important;
+    border-radius:9px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection #rankingFilterRow,
+  html.ranking-stable-final-v706 body #rankingsSection .ranking-filter-row-compat-v136{
+    display:none!important;
+    visibility:hidden!important;
+    position:absolute!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-width:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+}
+
+/* 4 filtros somente quando o PRÓPRIO bloco realmente comporta.
+   Somatório mínimo ~950px, deixando margem para labels e setas. */
+@container ranking-v706 (min-width: 1000px){
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136,
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    grid-template-columns:
+      minmax(155px,.60fr)
+      minmax(245px,1.15fr)
+      minmax(225px,1.05fr)
+      minmax(220px,.90fr)!important;
+    grid-template-rows:54px!important;
+    grid-auto-rows:54px!important;
+    height:58px!important;
+    min-height:58px!important;
+    max-height:58px!important;
+    gap:12px!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136 > .ranking-control-card-v136:nth-of-type(1){
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136 > .ranking-universe-control-v685{
+    grid-column:2!important;
+    grid-row:1!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136 > .ranking-category-control-v685{
+    grid-column:3!important;
+    grid-row:1!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection > .ranking-toolbar-v136 > .ranking-risk-control-v198{
+    grid-column:4!important;
+    grid-row:1!important;
+    width:100%!important;
+    min-width:220px!important;
+    max-width:none!important;
+  }
+
+  html.ranking-stable-final-v706 body #rankingsSection #rankingRiskSelectV198{
+    min-width:220px!important;
+  }
+}
+

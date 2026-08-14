@@ -1,0 +1,33 @@
+CATÁLOGO DE FUNDOS CAIXA — v706
+RANKINGS ESTÁVEIS / AJUSTE FINO FINAL
+
+CORREÇÕES
+1. Ícone + título:
+   - o ícone e o texto estão dentro do mesmo H2;
+   - o gap agora é aplicado no H2 (14px), no lugar correto;
+   - isso corrige o efeito de ícone “grudado”.
+
+2. Textos cortados:
+   - Perfil de risco recebe mínimo de 220px no layout 4x1;
+   - 4 filtros só ficam em uma linha quando o próprio bloco tem >=1000px;
+   - abaixo disso, vira 2x2 antes de truncar os labels/valores.
+
+3. Sobe-e-desce no carregamento:
+   - a v688 antiga aplicava estilos INLINE com !important nos primeiros ciclos;
+   - depois outras versões tentavam substituir esses estilos;
+   - isso causava mudança de geometria durante o carregamento;
+   - a v706 bloqueia a v688 desde o primeiro frame e limpa resíduos inline;
+   - o cabeçalho e a toolbar já nascem com altura reservada.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- style.css
+- app.js
+
+Depois:
+- aguarde o deploy;
+- faça Ctrl+F5;
+- teste 80%, 90%, 100% e 110%.
+
+DIAGNÓSTICO NO CONSOLE
+window.__ELTAUM_RANKING_STABLE_FINAL_V706__.state()

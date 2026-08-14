@@ -30535,8 +30535,16 @@ function buildDetailPanel(r,colspan){
   }
 
   function applyDesktop(){
-    /* v701 — a hierarquia compacta passa a ser controlada pela camada final.
-       Evita kicker e inline !important da v688 disputando com o layout atual. */
+    /* v706 — o header de Rankings já nasce na geometria final pelo HTML/CSS.
+       Não aplicar estilos inline/timers legados no desktop. */
+    if(document.documentElement.classList.contains('ranking-stable-final-v706')){
+      var oldKickerV706 = document.querySelector('#rankingsSection .ranking-kicker-v688');
+      if(oldKickerV706) oldKickerV706.remove();
+      document.documentElement.classList.remove(PATCH_CLASS);
+      return;
+    }
+
+    /* v701 — compatibilidade para builds anteriores */
     if(document.documentElement.classList.contains('desktop-ranking-compact-v701')){
       var oldKicker = document.querySelector('#rankingsSection .ranking-kicker-v688');
       if(oldKicker) oldKicker.remove();
@@ -31591,6 +31599,9 @@ function buildDetailPanel(r,colspan){
   function apply(){
     if(!(window.matchMedia && window.matchMedia('(min-width:769px)').matches)) return;
 
+    /* v706 já define a estrutura final desde o primeiro frame. */
+    if(document.documentElement.classList.contains('ranking-stable-final-v706')) return;
+
     document.documentElement.classList.add('desktop-ranking-compact-v701');
 
     document.querySelectorAll('#rankingsSection .ranking-kicker-v688').forEach(el=>el.remove());
@@ -31620,4 +31631,72 @@ function buildDetailPanel(r,colspan){
   window.__ELTAUM_RANKING_COMPACT_V701__={build:BUILD,apply};
 
   console.info('[Catálogo CAIXA] Rankings compactos ativos:',BUILD);
+})();
+
+
+/* =========================================================
+   PATCH v706 — estabilizador final dos Rankings
+   ========================================================= */
+(function rankingStableFinalV706(){
+  'use strict';
+  const BUILD='ELTAUM_RANKING_STABLE_FINAL_V706';
+
+  function clearLegacyInline(){
+    const section=document.getElementById('rankingsSection');
+    if(!section) return;
+
+    const nodes=[
+      section.querySelector(':scope > .ranking-head'),
+      section.querySelector('.ranking-title-group'),
+      section.querySelector('h2.ranking-title-hero-v305'),
+      section.querySelector('.section-title-icon-v302'),
+      section.querySelector('.section-title-text-v302'),
+      section.querySelector('.ranking-section-subtitle-v136'),
+      section.querySelector(':scope > .ranking-toolbar-v136')
+    ].filter(Boolean);
+
+    const props=[
+      'align-self','justify-self','width','min-width','max-width',
+      'height','min-height','max-height','margin','padding','overflow',
+      'display','position','inset','top','right','bottom','left',
+      'transform','translate','flex-direction','flex-wrap','align-items',
+      'justify-content','gap','order','text-align','white-space'
+    ];
+
+    nodes.forEach(el=>props.forEach(prop=>el.style.removeProperty(prop)));
+
+    document.querySelectorAll('#rankingsSection .ranking-kicker-v688').forEach(el=>el.remove());
+  }
+
+  function apply(){
+    document.documentElement.classList.add('ranking-stable-final-v706');
+    clearLegacyInline();
+
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',apply,{once:true});
+  }else{
+    apply();
+  }
+  window.addEventListener('load',apply,{once:true});
+
+  window.__ELTAUM_RANKING_STABLE_FINAL_V706__={
+    build:BUILD,
+    apply,
+    state:function(){
+      const s=document.getElementById('rankingsSection');
+      const t=s?.querySelector(':scope > .ranking-toolbar-v136');
+      const r=s?.querySelector('.ranking-risk-control-v198');
+      return {
+        sectionWidth:s ? Math.round(s.getBoundingClientRect().width) : null,
+        toolbarHeight:t ? Math.round(t.getBoundingClientRect().height) : null,
+        riskWidth:r ? Math.round(r.getBoundingClientRect().width) : null
+      };
+    }
+  };
+
+  console.info('[Catálogo CAIXA] Rankings estáveis ativos:',BUILD);
 })();
