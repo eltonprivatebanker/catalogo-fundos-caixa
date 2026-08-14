@@ -83784,3 +83784,34 @@ html.desktop-responsive-fit-v688 body{
   min-width:0!important;
   max-width:none!important;
 }
+
+
+/* =========================================================
+   PATCH v689 — carregamento de Fundos sem salto visual
+   Neutraliza o lock legado v591/v592 durante o primeiro load.
+   ========================================================= */
+@media (min-width:769px){
+  html.desktop-load-stable-v689 body:not(.fund-card-mode) #sec-fundos{
+    min-height:0!important;
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    transition:none!important;
+    overflow-anchor:none!important;
+  }
+
+  html.desktop-load-stable-v689 body:not(.fund-card-mode) #sec-fundos .table-wrap{
+    min-height:0!important;
+    overflow-anchor:none!important;
+  }
+
+  html.desktop-load-stable-v689 body:not(.fund-card-mode) #sec-fundos #loadMsg{
+    min-height:120px!important;
+    height:auto!important;
+    padding:34px!important;
+  }
+
+  html.desktop-load-stable-v689.catalog-table-ready-v591 body:not(.fund-card-mode) #sec-fundos .table-wrap{
+    min-height:0!important;
+  }
+}
