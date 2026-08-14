@@ -1,0 +1,37 @@
+CATÁLOGO DE FUNDOS CAIXA — v700
+MODO FOCO DOS DETALHES DO FUNDO
+
+OBJETIVO
+Ao abrir os detalhes de um fundo no desktop, mostrar somente:
+- a linha do fundo selecionado;
+- o painel de dados operacionais.
+
+Os demais fundos ficam temporariamente fora da tela, reduzindo poluição visual.
+
+COMPORTAMENTO
+- Clicar na seta: entra no modo foco.
+- Apenas um fundo pode ficar aberto por vez.
+- "Voltar para a lista": restaura todos os fundos.
+- ESC também fecha o modo foco.
+- Pesquisa, filtros, ordenação e página são preservados.
+- Paginação e texto de resultado ficam ocultos somente enquanto o detalhe está aberto.
+- Mobile não foi reestruturado por esta versão.
+
+SUBSTITUIR NO GITHUB
+- app.js
+- style.css
+
+MANTER COMO ESTÁ
+- index.html
+- tokens-caixa.css
+- fundos.json
+- fundos_caixa.json
+- dados_atuais.csv
+- robôs
+
+TESTE
+1. Abra a página e pesquise/filtre normalmente.
+2. Clique na seta de um fundo.
+3. Confirme que os demais fundos desaparecem enquanto o detalhe estiver aberto.
+4. Clique em "Voltar para a lista" ou pressione ESC.
+5. Confirme que a listagem volta com o mesmo filtro/página.

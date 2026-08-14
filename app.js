@@ -3320,6 +3320,7 @@ let activeCdiSort=null; // 'desc' = maior % CDI 12M primeiro; 'asc' = menor prim
 let activeMobileSortCampo='dia'; // dia | mes | ano | m12 | cdi
 let activeMobileSortDir='desc';  // desc = maior primeiro; asc = menor primeiro
 let expandedRows=new Set();
+let fundDetailFocusIdxV700=null; // v700: índice absoluto em filtered do fundo aberto em modo foco
 
 const NUM_SET=new Set(["Cota (R$)","Variacao Dia (%)","Acum. Mes (%)","Acum. Ano (%)","Acum. 12M (%)","PL (milhoes R$)","% CDI 12M"]);
 const DATE_SET=new Set(["Data Inicio","Data Início","Data de Inicio","Data de Início","DATA INICIO","DATA INÍCIO"]);
@@ -5930,9 +5931,19 @@ function gerarLeituraRapidaFundo(r){
 function buildDetailPanel(r,colspan){
   const urlFund=isFallbackUrl(r)?'':getFundUrl(r);
   const detailActions = buildDetailQuickActions(r, urlFund);
-  return `<tr class="detail-row"><td colspan="${colspan}" style="padding:0">
-    <div class="detail-panel detail-panel-mobile-clean detail-panel-v158">
+  return `<tr class="detail-row detail-row-focus-v700"><td colspan="${colspan}" style="padding:0">
+    <div class="detail-panel detail-panel-mobile-clean detail-panel-v158 detail-panel-focus-v700">
+      <div class="fund-detail-focus-bar-v700">
+        <div class="fund-detail-focus-copy-v700">
+          <span>DETALHES DO FUNDO</span>
+          <small>Modo foco · os demais fundos ficam temporariamente ocultos</small>
+        </div>
+        <button type="button" class="fund-detail-focus-back-v700" aria-label="Voltar para a lista de fundos">← Voltar para a lista</button>
+      </div>
       <div class="detail-main">${detailActions}${buildDetailExecutiveV158(r)}${gerarLeituraRapidaFundo(r)}</div>
+      <div class="fund-detail-focus-footer-v700">
+        <button type="button" class="fund-detail-focus-back-v700">← Voltar para a lista de fundos</button>
+      </div>
     </div>
   </td></tr>`;
 }
@@ -6413,10 +6424,14 @@ function buildRowHTML(r,idx){
   const semDados=!temDados(r);
   const visibleHeaders=getVisibleHeaders();
   const colspan=visibleHeaders.length+2;
-  let html=`<tr${semDados?' class="row-sem-dados"':''} data-idx="${idx}">`;
   const isExpanded=expandedRows.has(idx);
+  const isFocus=fundDetailFocusIdxV700===idx && isExpanded;
+  const rowClasses=[];
+  if(semDados) rowClasses.push('row-sem-dados');
+  if(isFocus) rowClasses.push('fund-detail-focus-row-v700');
+  let html=`<tr${rowClasses.length?` class="${rowClasses.join(' ')}"`:''} data-idx="${idx}">`;
   html+=`<td style="width:28px;padding:11px 8px;text-align:center">
-    <button class="exp-btn" data-idx="${idx}">${isExpanded?'▲':'▼'}</button>
+    <button class="exp-btn" data-idx="${idx}" aria-expanded="${isExpanded?'true':'false'}" title="${isExpanded?'Fechar detalhes e voltar para a lista':'Ver detalhes do fundo'}" aria-label="${isExpanded?'Fechar detalhes e voltar para a lista':'Ver detalhes do fundo'}">${isExpanded?'▲':'▼'}</button>
   </td>`;
   // Checkbox comparador
   const isCompSelected = comparSet.has(idx);
@@ -6505,14 +6520,38 @@ function updateFundResultSummary(){
 function render(){
   const start=(currentPage-1)*perPage;
   const end=perPage===9999?filtered.length:Math.min(start+perPage,filtered.length);
-  const rows=filtered.slice(start,end);
   const tbody=$('tableBody');
-  if(!rows.length){
+
+  // v700 — se algum fluxo antigo recolheu o detalhe, sai também do modo foco.
+  if(fundDetailFocusIdxV700!==null && !expandedRows.has(fundDetailFocusIdxV700)){
+    fundDetailFocusIdxV700=null;
+  }
+
+  const focusActive =
+    fundDetailFocusIdxV700!==null &&
+    fundDetailFocusIdxV700>=0 &&
+    fundDetailFocusIdxV700<filtered.length &&
+    expandedRows.has(fundDetailFocusIdxV700);
+
+  document.body?.classList.toggle('fund-detail-focus-v700', focusActive);
+  document.documentElement.classList.toggle('fund-detail-focus-v700', focusActive);
+
+  const rowEntries = focusActive
+    ? [{r:filtered[fundDetailFocusIdxV700], idx:fundDetailFocusIdxV700}]
+    : filtered.slice(start,end).map((r,i)=>({r,idx:start+i}));
+
+  if(!rowEntries.length){
     tbody.innerHTML=`<tr><td colspan="20" style="text-align:center;padding:50px;color:var(--muted)">Nenhum fundo encontrado.</td></tr>`;
     $('resultInfo').textContent='Resultado: 0 fundos encontrados'; updateFundResultSummary(); renderPagination(); return;
   }
-  tbody.innerHTML=rows.map((r,i)=>buildRowHTML(r,start+i)).join('');
-  $('resultInfo').textContent= perPage===9999 ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}` : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
+
+  tbody.innerHTML=rowEntries.map(item=>buildRowHTML(item.r,item.idx)).join('');
+
+  if(focusActive){
+    $('resultInfo').textContent='Modo foco · 1 fundo';
+  }else{
+    $('resultInfo').textContent= perPage===9999 ? `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)}` : `Resultado: ${filtered.length.toLocaleString('pt-BR')} ${fundPlural(filtered.length)} · exibindo ${Math.min(start+1,filtered.length)}–${end}`;
+  }
   updateFundResultSummary();
   // Eventos checkboxes comparador
   tbody.querySelectorAll('.comp-check').forEach(cb=>{
@@ -6528,10 +6567,38 @@ function render(){
     btn.addEventListener('click',e=>{
       e.stopPropagation();
       const idx=parseInt(btn.dataset.idx);
-      if(expandedRows.has(idx)) expandedRows.delete(idx); else expandedRows.add(idx);
+
+      if(expandedRows.has(idx) && fundDetailFocusIdxV700===idx){
+        expandedRows.delete(idx);
+        fundDetailFocusIdxV700=null;
+      }else{
+        // v700: modo foco exclusivo — nunca deixa dois detalhes competindo na tela.
+        expandedRows.clear();
+        expandedRows.add(idx);
+        fundDetailFocusIdxV700=idx;
+      }
       render();
     });
   });
+
+  tbody.querySelectorAll('.fund-detail-focus-back-v700').forEach(btn=>{
+    btn.addEventListener('click',e=>{
+      e.preventDefault();
+      e.stopPropagation();
+      expandedRows.clear();
+      fundDetailFocusIdxV700=null;
+      render();
+
+      // Mantém o usuário no início da listagem após fechar o foco.
+      requestAnimationFrame(()=>{
+        const tableWrap=document.querySelector('#sec-fundos .table-wrap');
+        if(!tableWrap) return;
+        const y=tableWrap.getBoundingClientRect().top+window.pageYOffset-20;
+        window.scrollTo({top:Math.max(0,y),behavior:'auto'});
+      });
+    });
+  });
+
   renderPagination();
 }
 
@@ -14576,6 +14643,9 @@ async function sharePainelMercado(){
     try{
       if(expandedRows && typeof expandedRows.clear === 'function' && expandedRows.size > 0){
         expandedRows.clear();
+        try{ fundDetailFocusIdxV700=null; }catch(_){}
+        document.body?.classList.remove('fund-detail-focus-v700');
+        document.documentElement.classList.remove('fund-detail-focus-v700');
         closed = true;
       }
     }catch(e){}
@@ -31465,4 +31535,38 @@ function buildDetailPanel(r,colspan){
       return window.__ELTAUM_CATALOGO_UNIVERSO_V699__ || null;
     }
   };
+})();
+
+
+/* =========================================================
+   PATCH v700 — Fund Detail Focus Mode
+   - detalhe desktop é exclusivo;
+   - mantém somente o fundo selecionado + painel;
+   - filtros, busca, página e ordenação são preservados;
+   - voltar/ESC restaura a lista sem perder o estado.
+   ========================================================= */
+(function fundDetailFocusModeV700(){
+  'use strict';
+  const BUILD='ELTAUM_FUND_DETAIL_FOCUS_V700';
+
+  document.documentElement.classList.add('fund-detail-focus-ready-v700');
+
+  window.__ELTAUM_FUND_DETAIL_FOCUS_V700__={
+    build:BUILD,
+    close:function(){
+      try{ expandedRows.clear(); }catch(_){}
+      try{ fundDetailFocusIdxV700=null; }catch(_){}
+      document.body?.classList.remove('fund-detail-focus-v700');
+      document.documentElement.classList.remove('fund-detail-focus-v700');
+      try{ if(typeof render==='function') render(); }catch(_){}
+    },
+    state:function(){
+      return {
+        active:document.body?.classList.contains('fund-detail-focus-v700')||false,
+        index:(typeof fundDetailFocusIdxV700!=='undefined'?fundDetailFocusIdxV700:null)
+      };
+    }
+  };
+
+  console.info('[Catálogo CAIXA] Modo foco dos detalhes ativo:',BUILD);
 })();

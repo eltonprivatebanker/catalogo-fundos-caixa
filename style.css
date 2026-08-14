@@ -83961,3 +83961,139 @@ html.desktop-responsive-fit-v688 body{
     margin-top:14px !important;
   }
 }
+
+
+/* =========================================================
+   PATCH v700 — Fund Detail Focus Mode
+   Escopo: detalhe de fundo na tabela desktop.
+   ========================================================= */
+@media (min-width:769px){
+  html.fund-detail-focus-v700 body #sec-fundos .table-wrap,
+  body.fund-detail-focus-v700 #sec-fundos .table-wrap{
+    overflow-x:auto!important;
+    overflow-y:visible!important;
+    border-color:rgba(200,151,58,.30)!important;
+    box-shadow:0 18px 55px rgba(0,0,0,.20)!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos #mainTable tbody,
+  body.fund-detail-focus-v700 #sec-fundos #mainTable tbody{
+    background:rgba(5,8,17,.98)!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos #mainTable tr.fund-detail-focus-row-v700,
+  body.fund-detail-focus-v700 #sec-fundos #mainTable tr.fund-detail-focus-row-v700{
+    position:relative;
+    background:linear-gradient(90deg,rgba(200,151,58,.075),rgba(200,151,58,.018) 42%,rgba(255,255,255,.006))!important;
+    box-shadow:inset 3px 0 0 rgba(232,187,106,.72)!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos #mainTable tr.fund-detail-focus-row-v700 > td,
+  body.fund-detail-focus-v700 #sec-fundos #mainTable tr.fund-detail-focus-row-v700 > td{
+    border-bottom-color:rgba(200,151,58,.18)!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos #mainTable tr.detail-row-focus-v700 > td,
+  body.fund-detail-focus-v700 #sec-fundos #mainTable tr.detail-row-focus-v700 > td{
+    background:rgba(5,8,17,.99)!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .detail-panel-focus-v700,
+  body.fund-detail-focus-v700 #sec-fundos .detail-panel-focus-v700{
+    border-top:0!important;
+    background:
+      radial-gradient(circle at 8% 0%,rgba(200,151,58,.055),transparent 26%),
+      rgba(5,8,17,.985)!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-bar-v700,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-bar-v700{
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    gap:18px!important;
+    min-height:58px!important;
+    margin:0 0 14px!important;
+    padding:11px 14px!important;
+    border:1px solid rgba(200,151,58,.18)!important;
+    border-radius:11px!important;
+    background:linear-gradient(180deg,rgba(200,151,58,.055),rgba(255,255,255,.012))!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-copy-v700,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-copy-v700{
+    display:flex!important;
+    flex-direction:column!important;
+    gap:5px!important;
+    min-width:0!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-copy-v700 > span,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-copy-v700 > span{
+    color:#e8bb6a!important;
+    font:850 .57rem/1 Inter,system-ui,sans-serif!important;
+    letter-spacing:.14em!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-copy-v700 > small,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-copy-v700 > small{
+    color:#8f9bb4!important;
+    font:600 .61rem/1.25 Inter,system-ui,sans-serif!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-back-v700,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-back-v700{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    flex:0 0 auto!important;
+    min-height:34px!important;
+    padding:7px 12px!important;
+    border:1px solid rgba(200,151,58,.28)!important;
+    border-radius:8px!important;
+    background:rgba(200,151,58,.075)!important;
+    color:#e8c77f!important;
+    font:780 .61rem/1 Inter,system-ui,sans-serif!important;
+    cursor:pointer!important;
+    transition:border-color .15s ease,background .15s ease,color .15s ease!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-back-v700:hover,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-back-v700:hover{
+    border-color:rgba(232,187,106,.58)!important;
+    background:rgba(200,151,58,.13)!important;
+    color:#f2d494!important;
+  }
+
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-footer-v700,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-footer-v700{
+    display:flex!important;
+    justify-content:flex-start!important;
+    margin-top:14px!important;
+    padding-top:12px!important;
+    border-top:1px solid rgba(148,163,184,.10)!important;
+  }
+
+  /* No modo foco o total/paginação não ajudam na leitura e viram ruído. */
+  html.fund-detail-focus-v700 body #sec-fundos #resultInfo,
+  html.fund-detail-focus-v700 body #sec-fundos .pagination-row,
+  body.fund-detail-focus-v700 #sec-fundos #resultInfo,
+  body.fund-detail-focus-v700 #sec-fundos .pagination-row{
+    display:none!important;
+  }
+
+  /* O botão estreito continua visualmente discreto, mas ganha estado claro. */
+  html.fund-detail-focus-v700 body #sec-fundos .fund-detail-focus-row-v700 .exp-btn,
+  body.fund-detail-focus-v700 #sec-fundos .fund-detail-focus-row-v700 .exp-btn{
+    border-color:rgba(232,187,106,.38)!important;
+    background:rgba(200,151,58,.12)!important;
+    color:#e8bb6a!important;
+  }
+}
+
+@media (max-width:768px){
+  .fund-detail-focus-bar-v700,
+  .fund-detail-focus-footer-v700{
+    display:none!important;
+  }
+}
