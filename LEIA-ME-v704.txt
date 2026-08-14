@@ -1,0 +1,32 @@
+CATÁLOGO DE FUNDOS CAIXA — v704
+RANKINGS RESPONSIVOS POR CONTAINER
+
+OBJETIVO
+Eliminar as mudanças estranhas de alinhamento dos Rankings quando o zoom do
+navegador altera a largura CSS da janela.
+
+ALTERAÇÕES
+- A seção Rankings deixa de depender apenas de breakpoints do viewport.
+- #rankingsSection passa a ser um CSS Container.
+- Com largura real >= 920 px: 4 filtros em uma linha.
+- Abaixo disso: 2x2 ANTES de qualquer texto começar a cortar.
+- Título e subtítulo ficam presos ao mesmo bloco, alinhados à esquerda.
+- Neutraliza posicionamentos/transformações antigas no cabeçalho e filtros.
+- Mantém tabela, cards, cálculos e app.js inalterados.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- style.css
+
+MANTER COMO ESTÁ
+- app.js da v701
+- tokens-caixa.css
+- dados / JSON / robôs
+
+TESTE RECOMENDADO
+1. Ctrl+F5.
+2. Vá aos Rankings.
+3. Teste 80%, 90%, 100% e 110% de zoom.
+4. O título/subtítulo deve permanecer alinhado à esquerda.
+5. Os filtros devem ficar 4x1 quando couber e 2x2 quando não couber,
+   sem cortes de rótulos.
