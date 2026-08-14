@@ -1,0 +1,32 @@
+CATÁLOGO DE FUNDOS CAIXA — v692 CONSOLIDADA
+
+Objetivo
+- Corrigir o salto da tabela de Fundos nos primeiros segundos do carregamento.
+- Preservar os ajustes responsivos v686/v688 (notebook do trabalho e menu lateral).
+- Remover a disputa entre os mecanismos antigos v591/v592 e os testes v689/v690.
+
+Arquivos para substituir no GitHub
+1. index.html
+2. style.css
+3. app.js
+
+Não alterar
+- tokens-caixa.css
+- JSON/CSV/XLSX
+- robô Python
+
+O que mudou
+- A v692 é ativada desde o primeiro parse do HTML.
+- v591/v592 deixam de ser ativadas como locks visuais concorrentes.
+- A tabela reserva 720px durante o primeiro carregamento (medida real observada ~716–718px).
+- A reserva continua após a primeira renderização e só é liberada quando o usuário interage com filtros/paginação.
+- Foram removidos os timers tardios específicos de v591/v592 no app.js.
+- Foi corrigido o erro CSS `overflow-wrap:break-word;!important;` visto no console do Firefox.
+- v689/v690 não fazem parte desta base; a v692 parte da v688 estável e consolida apenas o carregamento.
+
+Teste
+- Suba os 3 arquivos.
+- Aguarde o GitHub Pages publicar.
+- Use Ctrl+F5.
+- Observe os 2–3 primeiros segundos sem clicar: a tabela não deve mais descer/subir antes de estabilizar.
+- Depois teste filtros, paginação e Rankings.

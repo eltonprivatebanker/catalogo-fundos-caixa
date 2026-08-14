@@ -9132,7 +9132,7 @@ th.th-num, td.col-pct, td.col-pct-12m, td.col-cdi-bar, td.cdi-ratio-cell{
   white-space:normal !important;
   overflow-wrap:normal !important;
   word-break:normal !important;
-  overflow-wrap:break-word;!important;
+  overflow-wrap:break-word!important;
 }
 @media(max-width:760px), (hover:none) and (pointer:coarse){
   .top-disclaimer.notice-strip-v3{
@@ -83785,53 +83785,21 @@ html.desktop-responsive-fit-v688 body{
   max-width:none!important;
 }
 
-
 /* =========================================================
-   PATCH v689 — carregamento de Fundos sem salto visual
-   Neutraliza o lock legado v591/v592 durante o primeiro load.
-   ========================================================= */
-@media (min-width:769px){
-  html.desktop-load-stable-v689 body:not(.fund-card-mode) #sec-fundos{
-    min-height:0!important;
-    opacity:1!important;
-    visibility:visible!important;
-    transform:none!important;
-    transition:none!important;
-    overflow-anchor:none!important;
-  }
-
-  html.desktop-load-stable-v689 body:not(.fund-card-mode) #sec-fundos .table-wrap{
-    min-height:0!important;
-    overflow-anchor:none!important;
-  }
-
-  html.desktop-load-stable-v689 body:not(.fund-card-mode) #sec-fundos #loadMsg{
-    min-height:120px!important;
-    height:auto!important;
-    padding:34px!important;
-  }
-
-  html.desktop-load-stable-v689.catalog-table-ready-v591 body:not(.fund-card-mode) #sec-fundos .table-wrap{
-    min-height:0!important;
-  }
-}
-
-
-/* =========================================================
-   PATCH v690 — Fundos: estabilidade visual no primeiro carregamento
+   PATCH v692 — Fundos: carregamento inicial consolidado
    ---------------------------------------------------------
-   Objetivo:
-   - manter o bloco Fundos visível desde o primeiro frame;
-   - reservar a altura real aproximada da tabela (10 linhas) enquanto
-     dados_atuais.csv é processado;
-   - fazer a troca Loading -> tabela de forma atômica;
-   - neutralizar os locks legados v591/v592 sem afetar filtros posteriores.
+   Base: v688 responsiva + princípio de estabilidade da v591.
+   Remove a disputa visual entre v591/v592/v689/v690:
+   - Fundos permanece visível desde o primeiro frame;
+   - a área da tabela reserva 720px no estado inicial;
+   - a reserva permanece após a chegada dos dados até a primeira
+     interação real do usuário com filtros/paginação;
+   - v591/v592 ficam neutralizadas mesmo se uma cópia antiga do JS
+     tentar recolocar as classes;
+   - nenhuma animação de geometria/opacity é usada nesse bloco.
    ========================================================= */
 @media (min-width:769px){
-  /* v592 não pode esconder a seção durante o boot. */
-  html.desktop-fund-load-stable-v690 body:not(.fund-card-mode) #sec-fundos,
-  html.desktop-fund-load-stable-v690.desktop-funds-load-lock-v592 body:not(.fund-card-mode) #sec-fundos,
-  html.desktop-fund-load-stable-v690.desktop-initial-load-stable-v591 body:not(.fund-card-mode) #sec-fundos{
+  html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos{
     min-height:0!important;
     opacity:1!important;
     visibility:visible!important;
@@ -83840,14 +83808,25 @@ html.desktop-responsive-fit-v688 body{
     overflow-anchor:none!important;
   }
 
-  /* Antes da primeira tabela ficar pronta, o espaço já nasce praticamente
-     no tamanho final observado no desktop (~716–718px). */
-  html.desktop-fund-load-stable-v690:not(.catalog-table-ready-v690) body:not(.fund-card-mode) #sec-fundos .table-wrap{
+  /* Neutraliza definitivamente o antigo lock v592. */
+  html.desktop-funds-load-stable-v692.desktop-funds-load-lock-v592 body:not(.fund-card-mode) #sec-fundos,
+  html.desktop-funds-load-stable-v692.desktop-initial-load-stable-v591.desktop-funds-load-lock-v592 body:not(.fund-card-mode) #sec-fundos{
+    min-height:0!important;
+    opacity:1!important;
+    visibility:visible!important;
+    transform:none!important;
+    transition:none!important;
+  }
+
+  /* Mantém a geometria inicial no tamanho medido da tabela de 10 fundos.
+     A reserva só é liberada quando o usuário realmente interage. */
+  html.desktop-funds-load-stable-v692:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap,
+  html.desktop-funds-load-stable-v692.desktop-initial-load-stable-v591:not(.catalog-user-interacted-v692) body:not(.fund-card-mode) #sec-fundos .table-wrap{
     min-height:720px!important;
     overflow-anchor:none!important;
   }
 
-  html.desktop-fund-load-stable-v690:not(.catalog-table-ready-v690) body:not(.fund-card-mode) #sec-fundos #loadMsg{
+  html.desktop-funds-load-stable-v692:not(.catalog-table-ready-v591) body:not(.fund-card-mode) #sec-fundos #loadMsg{
     box-sizing:border-box!important;
     min-height:718px!important;
     height:718px!important;
@@ -83859,42 +83838,17 @@ html.desktop-responsive-fit-v688 body{
     flex-direction:column!important;
   }
 
-  /* Enquanto o JS monta tbody/cabeçalho, a tabela continua fora do fluxo visual. */
-  html.desktop-fund-load-stable-v690:not(.catalog-table-ready-v690) body:not(.fund-card-mode) #sec-fundos #mainTable{
-    display:none!important;
-  }
-
-  /* Primeiro(s) frames após a troca: mantém a reserva para evitar o pequeno
-     recalculo de altura de fonte/linha do navegador. */
-  html.desktop-fund-load-stable-v690.catalog-table-ready-v690.catalog-table-settling-v690 body:not(.fund-card-mode) #sec-fundos .table-wrap{
-    min-height:720px!important;
-    overflow-anchor:none!important;
-  }
-
-  html.desktop-fund-load-stable-v690.catalog-table-ready-v690 body:not(.fund-card-mode) #sec-fundos #loadMsg{
-    display:none!important;
-    min-height:0!important;
-    height:0!important;
-    margin:0!important;
-    padding:0!important;
-    overflow:hidden!important;
-  }
-
-  html.desktop-fund-load-stable-v690.catalog-table-ready-v690 body:not(.fund-card-mode) #sec-fundos #mainTable{
-    display:table!important;
-  }
-
-  /* Após a estabilização inicial, volta ao comportamento natural. Assim,
-     buscas/filtros com poucos resultados não deixam um grande espaço vazio. */
-  html.desktop-fund-load-stable-v690.catalog-table-ready-v690:not(.catalog-table-settling-v690) body:not(.fund-card-mode) #sec-fundos .table-wrap{
+  /* Depois de interação, o catálogo volta a crescer/encolher naturalmente
+     para buscas e filtros com menos resultados. */
+  html.desktop-funds-load-stable-v692.catalog-user-interacted-v692 body:not(.fund-card-mode) #sec-fundos .table-wrap{
     min-height:0!important;
   }
 
-  /* Nenhuma transição/animation de geometria no primeiro catálogo. */
-  html.desktop-fund-load-stable-v690 body:not(.fund-card-mode) #sec-fundos .table-wrap,
-  html.desktop-fund-load-stable-v690 body:not(.fund-card-mode) #sec-fundos #mainTable,
-  html.desktop-fund-load-stable-v690 body:not(.fund-card-mode) #sec-fundos #loadMsg{
+  html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos .table-wrap,
+  html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #mainTable,
+  html.desktop-funds-load-stable-v692 body:not(.fund-card-mode) #sec-fundos #loadMsg{
     transition:none!important;
     animation:none!important;
   }
 }
+

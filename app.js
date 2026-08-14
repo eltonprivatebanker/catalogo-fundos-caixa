@@ -6615,16 +6615,6 @@ $('perPage')?.addEventListener('change',e=>{ perPage=parseInt(e.target.value); c
 $('toggleSemDados')?.addEventListener('change',e=>{ hideSemDados=e.target.checked; applyFilter(); });
 
 async function carregarDados(){
-  const root=document.documentElement;
-  const loadMsg=$('loadMsg');
-  const mainTable=$('mainTable');
-
-  /* v690 — prepara o primeiro catálogo fora do fluxo visível.
-     O CSS já reserva ~720px, então a tabela pode ser montada inteira
-     sem empurrar Rankings/Indicadores durante o primeiro segundo. */
-  root.classList.remove('catalog-table-ready-v690');
-  root.classList.add('catalog-table-settling-v690');
-
   try{
     const raw=await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
     const result=parseCsv(raw);
@@ -6634,37 +6624,13 @@ async function carregarDados(){
     const di=displayHeaders.indexOf(DEFAULT_SORT);
     if(di>=0){sortCol=di;sortDir=-1;}
     const cats=new Set(allRows.map(r=>r['Categoria']||'').filter(Boolean));
-
-    /* Monta tudo primeiro. mainTable continua display:none neste momento. */
-    buildHeader();
-    buildCatFilters(cats);
-    buildBenchmarkFilters(allRows);
-    updateKPIs();
-    applyFilter();
+    buildHeader(); buildCatFilters(cats); buildBenchmarkFilters(allRows); updateKPIs(); applyFilter();
+    $('loadMsg').style.display='none';
+    $('mainTable').style.display='table';
+    document.documentElement.classList.add('catalog-table-ready-v591','catalog-table-ready-v692');
     renderRankings();
-
-    /* Troca Loading -> tabela em um único frame. */
-    requestAnimationFrame(()=>{
-      if(loadMsg) loadMsg.style.display='none';
-      if(mainTable) mainTable.style.display='table';
-      root.classList.add('catalog-table-ready-v591','catalog-table-ready-v690');
-
-      /* Dois frames + pequena janela para o Firefox concluir métricas de fonte/linha.
-         Só depois retiramos a reserva de 720px; no desktop medido a diferença é ~2–4px. */
-      requestAnimationFrame(()=>{
-        requestAnimationFrame(()=>{
-          setTimeout(()=>{
-            root.classList.remove('catalog-table-settling-v690');
-          },180);
-        });
-      });
-    });
   }catch(err){
-    root.classList.remove('catalog-table-settling-v690','catalog-table-ready-v690');
-    if(loadMsg){
-      loadMsg.style.display='flex';
-      loadMsg.innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
-    }
+    $('loadMsg').innerHTML=`<div style="color:var(--red)">Erro ao carregar dados_atuais.csv<br><small>${err.message}</small></div>`;
   }
 }
 
@@ -27551,59 +27517,54 @@ function buildDetailPanel(r,colspan){
 })();
 
 
-/* PATCH v591 — estabiliza o primeiro carregamento do catalogo desktop */
-(function desktopInitialLoadStableV591(){
-  var BUILD = 'ELTAUM_DESKTOP_INITIAL_LOAD_STABLE_V591';
-  var PATCH_CLASS = 'desktop-initial-load-stable-v591';
+/* PATCH v692 — compatibilidade de carregamento inicial de Fundos
+   Consolida os antigos v591/v592 e remove reaplicações tardias por timers. */
+(function desktopFundsLoadStableV692(){
+  'use strict';
+  const BUILD='ELTAUM_DESKTOP_FUNDS_LOAD_STABLE_V692';
+  const root=document.documentElement;
+
   function isDesktop(){
     return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
   }
-  function apply(){
+
+  function sync(){
     if(!isDesktop()) return;
-    document.documentElement.classList.add(PATCH_CLASS);
-    var table = document.getElementById('mainTable');
-    var body = document.getElementById('tableBody');
-    if(table && body && body.children.length && table.style.display !== 'none'){
-      document.documentElement.classList.add('catalog-table-ready-v591');
+    root.classList.add('desktop-funds-load-stable-v692');
+    root.classList.remove('desktop-initial-load-stable-v591','desktop-funds-load-lock-v592');
+
+    const table=document.getElementById('mainTable');
+    const body=document.getElementById('tableBody');
+    if(table && body && body.children.length && table.style.display!=='none'){
+      root.classList.add('catalog-table-ready-v591');
     }
-    var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
-  }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
-  else apply();
-  window.addEventListener('load', apply, {once:true});
-  [80, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
-    setTimeout(apply, delay);
-  });
-})();
 
-
-/* PATCH v592 — bloqueia visualmente Fundos ate a tabela estabilizar */
-(function desktopFundsLoadLockV592(){
-  var BUILD = 'ELTAUM_DESKTOP_FUNDS_LOAD_LOCK_V592';
-  var PATCH_CLASS = 'desktop-funds-load-lock-v592';
-  function isDesktop(){
-    return !window.matchMedia || window.matchMedia('(min-width: 769px)').matches;
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
   }
-  function apply(){
+
+  function releaseInitialReserve(ev){
     if(!isDesktop()) return;
-    document.documentElement.classList.add(PATCH_CLASS);
-    var table = document.getElementById('mainTable');
-    var body = document.getElementById('tableBody');
-    if(table && body && body.children.length && table.style.display !== 'none'){
-      document.documentElement.classList.add('catalog-table-ready-v591');
+    const target=ev && ev.target && ev.target.closest ? ev.target : null;
+    if(!target) return;
+    if(target.closest('#fundFilterShell,#pageBtns')){
+      root.classList.add('catalog-user-interacted-v692');
     }
-    var meta = document.querySelector('meta[name="app-build"]');
-    if(meta) meta.content = BUILD;
   }
-  if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', apply, {once:true});
-  else apply();
-  window.addEventListener('load', apply, {once:true});
-  [40, 100, 180, 420, 900, 1600, 3200, 7000, 14000, 30000].forEach(function(delay){
-    setTimeout(apply, delay);
-  });
-})();
 
+  /* Captura antes dos handlers dos filtros/paginação, para liberar a reserva
+     no mesmo gesto que poderá alterar a quantidade/altura das linhas. */
+  document.addEventListener('pointerdown',releaseInitialReserve,true);
+  document.addEventListener('keydown',releaseInitialReserve,true);
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',sync,{once:true});
+  }else{
+    sync();
+  }
+  window.addEventListener('load',sync,{once:true});
+  window.addEventListener('pageshow',sync,{passive:true});
+})();
 
 /* PATCH v593 — permite alternar USD/BRL pelo cabecalho das colunas EUA */
 (function desktopMonthlyUsHeaderCurrencyV593(){
@@ -31149,27 +31110,4 @@ function buildDetailPanel(r,colspan){
   window.addEventListener('load', boot, {once:true});
   window.addEventListener('pageshow', boot, {passive:true});
   window.addEventListener('resize', function(){ if(isDesktop()) boot(); }, {passive:true});
-})();
-
-
-/* =========================================================
-   PATCH v690 — saneamento do estado visual do primeiro catálogo
-   ========================================================= */
-(function desktopFundLoadStableV690(){
-  'use strict';
-  const BUILD='ELTAUM_DESKTOP_FUND_LOAD_STABLE_V690';
-  const root=document.documentElement;
-  root.classList.add('desktop-fund-load-stable-v690');
-  const meta=document.querySelector('meta[name="app-build"]');
-  if(meta) meta.content=BUILD;
-
-  window.addEventListener('pageshow',function(ev){
-    /* Se a página voltou do bfcache com a tabela já montada, não reaplica loading. */
-    const table=document.getElementById('mainTable');
-    const body=document.getElementById('tableBody');
-    if(table && body && body.children.length && table.style.display!=='none'){
-      root.classList.add('catalog-table-ready-v690');
-      root.classList.remove('catalog-table-settling-v690');
-    }
-  },{passive:true});
 })();
