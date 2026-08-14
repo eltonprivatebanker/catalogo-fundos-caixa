@@ -83852,3 +83852,86 @@ html.desktop-responsive-fit-v688 body{
   }
 }
 
+
+/* =========================================================
+   PATCH v693 — Desktop intermediário: categorias em uma linha estável
+   ---------------------------------------------------------
+   Diagnóstico real do primeiro carregamento mostrou que a tabela
+   permanece estável em 720px; o salto restante vem do filtro:
+   a linha Categoria alterna entre 1 e 2 linhas (+34px), deslocando
+   a tabela de top 406px para 440px. Nesta faixa, os 10 atalhos usam
+   uma grade fixa de uma linha, impedindo reflow vertical tardio.
+   ========================================================= */
+@media (min-width:1180px) and (max-width:1600px){
+  html.desktop-filter-no-wrap-v693 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69{
+    display:grid!important;
+    grid-template-columns:132px minmax(0,1fr)!important;
+    align-items:center!important;
+    column-gap:10px!important;
+    width:100%!important;
+    height:56px!important;
+    min-height:56px!important;
+    max-height:56px!important;
+    margin:0!important;
+    padding:8px 0!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    transform:none!important;
+    transition:none!important;
+    animation:none!important;
+  }
+
+  html.desktop-filter-no-wrap-v693 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .catalog-filter-legend-v217{
+    width:132px!important;
+    min-width:132px!important;
+    max-width:132px!important;
+  }
+
+  html.desktop-filter-no-wrap-v693 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .category-grid-head-v69{
+    display:none!important;
+  }
+
+  html.desktop-filter-no-wrap-v693 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .category-grid-v69{
+    grid-column:2!important;
+    display:grid!important;
+    grid-template-columns:repeat(10,minmax(0,1fr))!important;
+    grid-template-rows:28px!important;
+    align-items:center!important;
+    gap:6px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:28px!important;
+    min-height:28px!important;
+    max-height:28px!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    transform:none!important;
+    transition:none!important;
+    animation:none!important;
+  }
+
+  html.desktop-filter-no-wrap-v693 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .category-grid-v69 > button,
+  html.desktop-filter-no-wrap-v693 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .filter-preset-chip,
+  html.desktop-filter-no-wrap-v693 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69 .shortcut-preset{
+    display:inline-flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:100%!important;
+    height:28px!important;
+    min-height:28px!important;
+    max-height:28px!important;
+    margin:0!important;
+    padding:0 5px!important;
+    box-sizing:border-box!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    font-size:.58rem!important;
+    line-height:1!important;
+  }
+}
+

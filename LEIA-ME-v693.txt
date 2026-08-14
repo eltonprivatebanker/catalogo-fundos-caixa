@@ -1,0 +1,22 @@
+CATÁLOGO CAIXA — v693 | estabilidade dos filtros no primeiro carregamento
+
+O diagnóstico por iframe confirmou:
+- table-wrap: 720 px o tempo todo;
+- mainTable pronta: 716 px;
+- o salto restante vem do fundFilterShell, que alterna 241 -> 275 px;
+- ao mesmo tempo tabelaTop alterna 406 -> 440 px;
+- diferença exata: +34 px.
+
+Correção v693:
+- mantém toda a v692;
+- na faixa 1180–1600 px, fixa apenas a linha Categoria em 56 px;
+- transforma os 10 atalhos de categoria em grade de uma única linha;
+- impede que a linha quebre temporariamente em duas linhas durante re-renderizações tardias;
+- não altera tabela, menu, rankings, dados, JSON ou app.js.
+
+SUBSTITUIR NO GITHUB SOMENTE:
+1. index.html
+2. style.css
+
+O app.js permanece o mesmo da v692.
+Depois: Ctrl+F5.
