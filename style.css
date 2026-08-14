@@ -83935,3 +83935,29 @@ html.desktop-responsive-fit-v688 body{
   }
 }
 
+
+
+/* =========================================================
+   PATCH v694 — trava a altura total do shell de filtros
+   para eliminar o sobe-e-desce da tabela em desktops
+   médios/grandes durante o primeiro carregamento.
+   ========================================================= */
+@media (min-width:1180px) and (max-width:1600px){
+  html.desktop-filters-shell-lock-v694 body #sec-fundos #fundFilterShell{
+    height:275px !important;
+    min-height:275px !important;
+    max-height:275px !important;
+    overflow:hidden !important;
+    box-sizing:border-box !important;
+  }
+
+  html.desktop-filters-shell-lock-v694 body #sec-fundos #fundFilterShell .desktop-audience-filter-v488,
+  html.desktop-filters-shell-lock-v694 body #sec-fundos #fundFilterShell .catalog-shortcuts-category-grid-v69,
+  html.desktop-filters-shell-lock-v694 body #sec-fundos #fundFilterShell .fund-secondary-controls-v217{
+    overflow:hidden !important;
+  }
+
+  html.desktop-filters-shell-lock-v694 body #sec-fundos .table-wrap{
+    margin-top:14px !important;
+  }
+}

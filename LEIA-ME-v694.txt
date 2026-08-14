@@ -1,0 +1,1 @@
+Substituir apenas index.html e style.css. Manter app.js da v692 ou usar o incluso se preferir consistência. Patch v694 trava a altura total do shell de filtros em 275px para evitar o sobe-e-desce da tabela durante o primeiro carregamento.
