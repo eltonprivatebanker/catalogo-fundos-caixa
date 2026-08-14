@@ -83769,3 +83769,18 @@ html.mobile-adaptive-ranking-v465.mobile-tight-viewport-v465 body #rankingsSecti
     grid-template-columns:1fr 1fr!important;
   }
 }
+
+
+/* =========================================================
+   PATCH v688 — Segurança contra escala global de página
+   A compactação responsiva fica por componente no index.html.
+   ========================================================= */
+html.desktop-responsive-fit-v688,
+html.desktop-responsive-fit-v688 body{
+  zoom:1!important;
+  transform:none!important;
+  transform-origin:initial!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+}
