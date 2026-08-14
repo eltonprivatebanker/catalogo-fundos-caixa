@@ -1,0 +1,30 @@
+CATÁLOGO DE FUNDOS CAIXA — v702
+RANKINGS — 4 FILTROS NA MESMA LINHA
+
+OBJETIVO
+Corrigir o Perfil de risco que ainda era empurrado para a segunda linha.
+
+CAUSA
+Havia regras antigas de grid/posicionamento para .ranking-risk-control-v198.
+A v702 passa a posicionar explicitamente cada um dos 4 controles:
+
+1. Período
+2. Universo
+3. Categoria
+4. Perfil de risco
+
+COMPORTAMENTO
+- Em desktop >= 1050px: 4 filtros em uma única linha.
+- Entre 769px e 1049px: grade segura 2x2.
+- Não altera cálculos, rankings, Fundos, busca ou modo foco.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- style.css
+
+MANTER COMO ESTÁ
+- app.js da v701
+- tokens-caixa.css
+- dados / JSON / robôs
+
+Depois de publicar, faça Ctrl+F5.

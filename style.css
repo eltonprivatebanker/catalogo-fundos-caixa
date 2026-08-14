@@ -84358,3 +84358,124 @@ html.desktop-responsive-fit-v688 body{
   }
 }
 
+
+
+
+/* =========================================================
+   PATCH v702 — Rankings: 4 filtros na mesma linha
+   Corrige conflito de posicionamento legado no Perfil de risco.
+   ========================================================= */
+@media (min-width:1050px){
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136,
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:
+      150px
+      minmax(220px,1.08fr)
+      minmax(210px,1fr)
+      minmax(185px,.82fr)!important;
+    grid-template-rows:54px!important;
+    grid-auto-flow:row!important;
+    grid-auto-rows:54px!important;
+    align-items:end!important;
+    gap:9px!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    min-height:70px!important;
+    height:70px!important;
+    max-height:70px!important;
+    margin:0!important;
+    padding:8px 10px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+
+  /* Posicionamento explícito: impede regras legadas de mandar Risco para a linha 2 */
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 > .ranking-control-card-v136:nth-of-type(1){
+    grid-column:1!important;
+    grid-row:1!important;
+  }
+
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 > .ranking-universe-control-v685{
+    grid-column:2!important;
+    grid-row:1!important;
+  }
+
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 > .ranking-category-control-v685{
+    grid-column:3!important;
+    grid-row:1!important;
+  }
+
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 > .ranking-risk-control-v198{
+    grid-column:4!important;
+    grid-row:1!important;
+  }
+
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 > .ranking-control-card-v136,
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 > .ranking-risk-control-v198{
+    display:flex!important;
+    flex-direction:column!important;
+    justify-content:flex-end!important;
+    align-items:stretch!important;
+    gap:4px!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:54px!important;
+    min-height:54px!important;
+    max-height:54px!important;
+    margin:0!important;
+    padding:0!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 .ranking-select-v136{
+    display:block!important;
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+    height:34px!important;
+    min-height:34px!important;
+    max-height:34px!important;
+    margin:0!important;
+    box-sizing:border-box!important;
+  }
+
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 #rankingFilterRow,
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 .ranking-filter-row-compat-v136{
+    display:none!important;
+    visibility:hidden!important;
+    position:absolute!important;
+    width:0!important;
+    height:0!important;
+    min-width:0!important;
+    min-height:0!important;
+    max-width:0!important;
+    max-height:0!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    overflow:hidden!important;
+    pointer-events:none!important;
+  }
+}
+
+/* Em larguras menores, preserva segurança e usa grade 2x2. */
+@media (min-width:769px) and (max-width:1049px){
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136,
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar.ranking-toolbar-v136{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+    grid-template-rows:auto auto!important;
+    height:auto!important;
+    max-height:none!important;
+    gap:8px!important;
+  }
+
+  html.desktop-ranking-four-filters-v702 body #rankingsSection > .ranking-toolbar-v136 > .ranking-control-card-v136{
+    grid-column:auto!important;
+    grid-row:auto!important;
+  }
+}
+
