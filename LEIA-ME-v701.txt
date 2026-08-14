@@ -1,0 +1,36 @@
+CATÁLOGO DE FUNDOS CAIXA — v701
+RANKINGS COMPACTOS
+
+OBJETIVO
+Simplificar a hierarquia da seção Rankings e reduzir a altura ocupada no desktop.
+
+ALTERAÇÕES
+- Remove o kicker redundante "Rankings".
+- Título passa de "Rankings dos fundos" para "Rankings de fundos".
+- Subtítulo reduzido para: "Compare por período, universo, categoria e risco."
+- Os 4 filtros ficam na mesma linha em desktops a partir de 1180 px.
+- Abaixo de 1180 px, filtros ficam em grade 2x2 para evitar sobreposição.
+- Reduz padding/altura da caixa de filtros e dos cards-resumo.
+- Oculta a linha redundante de chips de categoria.
+- Mantém o conteúdo, regras e cálculos dos rankings intactos.
+
+IMPORTANTE
+Ao preparar a v701 foi identificado que o app.js v688 aplicava estilos inline com !important
+e criava dinamicamente o pequeno kicker "Rankings". Por isso, para a compactação funcionar
+de forma consistente, esta versão precisa atualizar 3 arquivos, e não apenas index/style.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- style.css
+- app.js
+
+MANTER COMO ESTÁ
+- tokens-caixa.css
+- fundos.json / fundos_caixa.json
+- dados_atuais.csv
+- robôs
+
+Após publicar:
+1. Aguarde o GitHub Pages atualizar.
+2. Faça Ctrl+F5.
+3. Vá em Rankings e confira os 4 filtros na mesma linha.

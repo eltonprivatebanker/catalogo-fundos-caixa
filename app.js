@@ -19537,7 +19537,7 @@ function openCdiAnalyticTableV274(){
   const TARGETS = [
     'Resumo executivo',
     'Fundos disponíveis',
-    'Rankings dos fundos',
+    'Rankings de fundos',
     'Indicadores de mercado',
     'Dólar PTAX',
     'Boletim Focus',
@@ -30535,6 +30535,15 @@ function buildDetailPanel(r,colspan){
   }
 
   function applyDesktop(){
+    /* v701 — a hierarquia compacta passa a ser controlada pela camada final.
+       Evita kicker e inline !important da v688 disputando com o layout atual. */
+    if(document.documentElement.classList.contains('desktop-ranking-compact-v701')){
+      var oldKicker = document.querySelector('#rankingsSection .ranking-kicker-v688');
+      if(oldKicker) oldKicker.remove();
+      document.documentElement.classList.remove(PATCH_CLASS);
+      return;
+    }
+
     var section = document.getElementById('rankingsSection');
     if(!section) return;
 
@@ -31569,4 +31578,46 @@ function buildDetailPanel(r,colspan){
   };
 
   console.info('[Catálogo CAIXA] Modo foco dos detalhes ativo:',BUILD);
+})();
+
+
+/* =========================================================
+   PATCH v701 — Rankings compactos / hierarquia final
+   ========================================================= */
+(function rankingCompactV701(){
+  'use strict';
+  const BUILD='ELTAUM_RANKING_COMPACT_V701';
+
+  function apply(){
+    if(!(window.matchMedia && window.matchMedia('(min-width:769px)').matches)) return;
+
+    document.documentElement.classList.add('desktop-ranking-compact-v701');
+
+    document.querySelectorAll('#rankingsSection .ranking-kicker-v688').forEach(el=>el.remove());
+
+    const text=document.querySelector('#rankingsSection .section-title-text-v302');
+    if(text && text.textContent.trim()!=='Rankings de fundos'){
+      text.textContent='Rankings de fundos';
+    }
+
+    const subtitle=document.querySelector('#rankingsSection .ranking-section-subtitle-v136');
+    if(subtitle && subtitle.textContent.trim()!=='Compare por período, universo, categoria e risco.'){
+      subtitle.textContent='Compare por período, universo, categoria e risco.';
+    }
+
+    const meta=document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content=BUILD;
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',apply,{once:true});
+  }else{
+    apply();
+  }
+  window.addEventListener('load',apply,{once:true});
+  [250,900,1900,4200,8000,13000].forEach(ms=>setTimeout(apply,ms));
+
+  window.__ELTAUM_RANKING_COMPACT_V701__={build:BUILD,apply};
+
+  console.info('[Catálogo CAIXA] Rankings compactos ativos:',BUILD);
 })();
