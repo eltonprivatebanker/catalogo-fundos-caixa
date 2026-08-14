@@ -1,71 +1,81 @@
 {
     "resumo_geral": {
-        "pl_total_consolidado": 341954.81,
-        "concentracao_top5_percent": 33.34,
-        "pipeline_novos_fundos": 27
+        "pl_total_consolidado": 350423.86,
+        "concentracao_top5_percent": 32.61,
+        "pipeline_novos_fundos": 34
     },
     "categorias": {
         "ACOES": {
-            "qtd_ativos": 32,
-            "pl_total": 9426.96,
-            "rent_12m_ponderada": 21.86
+            "qtd_ativos": 33,
+            "pl_total": 9444.6,
+            "rent_12m_ponderada": 22.56
         },
         "CAMBIAL": {
             "qtd_ativos": 1,
-            "pl_total": 97.09,
-            "rent_12m_ponderada": 0.03
+            "pl_total": 97.61,
+            "rent_12m_ponderada": 0.31
         },
         "FUNDO DE INDICE": {
             "qtd_ativos": 1,
-            "pl_total": 16.38,
-            "rent_12m_ponderada": 21.22
+            "pl_total": 16.34,
+            "rent_12m_ponderada": 21.94
+        },
+        "FUNDOS MUTUOS DE PRIVATIZACAO": {
+            "qtd_ativos": 9,
+            "pl_total": 4629.76,
+            "rent_12m_ponderada": 46.21
         },
         "MULTIMERCADO": {
             "qtd_ativos": 10,
-            "pl_total": 5036.66,
-            "rent_12m_ponderada": 24.97
+            "pl_total": 5049.72,
+            "rent_12m_ponderada": 25.03
         },
         "RENDA FIXA": {
-            "qtd_ativos": 58,
-            "pl_total": 134964.71,
-            "rent_12m_ponderada": 14.15
+            "qtd_ativos": 62,
+            "pl_total": 138343.83,
+            "rent_12m_ponderada": 14.16
         },
         "RENDA FIXA CURTO PRAZO": {
             "qtd_ativos": 5,
-            "pl_total": 56422.62,
+            "pl_total": 56554.57,
             "rent_12m_ponderada": 12.08
         },
         "RENDA FIXA REFERENCIADO": {
-            "qtd_ativos": 13,
-            "pl_total": 127847.3,
-            "rent_12m_ponderada": 14.39
+            "qtd_ativos": 14,
+            "pl_total": 128132.74,
+            "rent_12m_ponderada": 14.38
         },
         "RENDA FIXA SIMPLES": {
             "qtd_ativos": 5,
-            "pl_total": 8143.1,
+            "pl_total": 8154.7,
             "rent_12m_ponderada": 12.51
         }
     },
     "perfis_comerciais": {
         "GOV": {
             "qtd_fundos": 3,
-            "pl_total": 54444.93,
-            "share_percent": 15.92
+            "pl_total": 54576.64,
+            "share_percent": 15.57
+        },
+        "PF": {
+            "qtd_fundos": 125,
+            "pl_total": 132551.08,
+            "share_percent": 37.83
         },
         "PJ": {
-            "qtd_fundos": 109,
-            "pl_total": 174524.36,
-            "share_percent": 51.04
+            "qtd_fundos": 18,
+            "pl_total": 72476.25,
+            "share_percent": 20.68
         },
         "RPPS": {
-            "qtd_fundos": 29,
-            "pl_total": 100426.05,
-            "share_percent": 29.37
+            "qtd_fundos": 27,
+            "pl_total": 85662.75,
+            "share_percent": 24.45
         },
         "TODOS": {
-            "qtd_fundos": 11,
-            "pl_total": 12559.47,
-            "share_percent": 3.67
+            "qtd_fundos": 1,
+            "pl_total": 5157.14,
+            "share_percent": 1.47
         }
     }
 }
