@@ -1,0 +1,34 @@
+CATÁLOGO DE FUNDOS CAIXA — v699
+
+OBJETIVO
+Fazer a busca consultar o universo completo de fundos de fundos.json,
+mesmo quando um fundo não aparece em dados_atuais.csv na data.
+
+COMO FUNCIONA
+- dados_atuais.csv continua sendo a fonte oficial da rentabilidade diária.
+- fundos.json passa a complementar o universo do Catálogo.
+- Fundos ausentes do CSV aparecem com rentabilidades "—".
+- Rankings continuam usando apenas fundos que possuem cota/rentabilidade válida.
+- Deduplicação usa CNPJ, depois código SIICO e nome normalizado.
+- Registros com ic_flag_exibir_portfolio = 0/false não são adicionados.
+
+EXEMPLO ESPERADO
+Ao buscar "arx", o catálogo passa a localizar o(s) fundo(s) ARX existente(s)
+em fundos.json, mesmo sem linha correspondente no dados_atuais.csv.
+
+SUBSTITUIR NO GITHUB
+- app.js
+
+MANTER COMO ESTÁ
+- index.html
+- style.css
+- tokens-caixa.css
+- fundos.json
+- fundos_caixa.json
+- dados_atuais.csv
+- robôs
+
+TESTE NO CONSOLE APÓS PUBLICAR
+window.__ELTAUM_CATALOGO_V699__.diagnostico()
+
+Depois digite "arx" na busca.

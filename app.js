@@ -4940,6 +4940,7 @@ let _fundosDocMap = {}; // CNPJ limpo → { codfundo, docs:{} }
 let _fundosMetaMap = {};      // CNPJ limpo → cadastro operacional completo de fundos.json
 let _fundosMetaByCode = {};   // código SIICO → cadastro
 let _fundosMetaByName = {};   // nome normalizado → cadastro
+let _fundosMetaLista = [];    // v699: universo completo carregado de fundos.json
 
 function limparCnpjMeta(v){ return String(v || '').replace(/\D/g,'').slice(0,14); }
 function normalizarNomeMeta(v){
@@ -5004,6 +5005,148 @@ function pontuarMeta(meta){
   return campos.reduce((n,k)=>n+(valorMetaValido(meta?.[k])?1:0),0);
 }
 
+
+/* =========================================================
+   PATCH v699 — universo completo do catálogo
+   fundos.json = cadastro/universo
+   dados_atuais.csv = rentabilidade disponível na data
+   ========================================================= */
+function formatarDataIsoBrV699(v){
+  const s=String(v || '').trim();
+  if(!s) return '';
+  const m=s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : s;
+}
+
+function categoriaCatalogoMetaV699(meta){
+  const cls=normalizarNomeMeta(meta?.no_classificacao_cvm || '');
+  const nome=normalizarNomeMeta(meta?.no_fundo || meta?.no_razao_social || '');
+  const est=normalizarNomeMeta(meta?.no_estrategia || '');
+  const blob=`${cls} ${nome} ${est}`;
+
+  if(blob.includes('FUNDO DE INDICE') || /\bETF\b/.test(blob)) return 'FUNDO DE INDICE';
+  if(blob.includes('FMP') || blob.includes('MUTUOS DE PRIVATIZACAO')) return 'FUNDOS MUTUOS DE PRIVATIZACAO';
+  if(cls.includes('ACOES')) return 'ACOES';
+  if(cls.includes('CAMBIAL')) return 'CAMBIAL';
+  if(cls.includes('MULTIMERCADO')) return 'MULTIMERCADO';
+
+  if(cls.includes('RENDA FIXA')){
+    if(blob.includes('SIMPLES')) return 'RENDA FIXA SIMPLES';
+    if(blob.includes('CURTO PRAZO')) return 'RENDA FIXA CURTO PRAZO';
+    if(blob.includes('REFERENCIADO') || /\bREF\b/.test(est)) return 'RENDA FIXA REFERENCIADO';
+    return 'RENDA FIXA';
+  }
+
+  return String(meta?.no_classificacao_cvm || '').trim().toUpperCase() || 'OUTROS';
+}
+
+function chaveCatalogoV699(row){
+  const cnpj=limparCnpjMeta(row?.['CNPJ'] || row?.nu_cnpj);
+  if(cnpj) return 'cnpj:'+cnpj;
+
+  const codigo=String(row?.['codfundo'] || row?.co_siico00 || row?.co_siico || '')
+    .replace(/\D/g,'')
+    .replace(/^0+(?=\d)/,'');
+  if(codigo) return 'cod:'+codigo;
+
+  const nome=normalizarNomeMeta(row?.['Fundo'] || row?.no_fundo || row?.no_razao_social);
+  return nome ? 'nome:'+nome : '';
+}
+
+function criarLinhaCatalogoMetaV699(meta, headers){
+  const row={};
+  (headers || []).forEach(h=>{ row[h]=''; });
+
+  row['Categoria']=categoriaCatalogoMetaV699(meta);
+  row['Fundo']=String(meta?.no_fundo || meta?.no_razao_social || '').trim();
+  row['Fundo_norm']=normalizarNomeMeta(row['Fundo']);
+  row['Data Inicio']=formatarDataIsoBrV699(meta?.dt_inicial);
+
+  /* Deliberadamente não usa a rentabilidade/cota de fundos.json:
+     se o fundo não está no CSV da data, aparece no catálogo com "—",
+     evitando misturar dado defasado com a fotografia diária. */
+  row['Cota (R$)']='';
+  row['Variacao Dia (%)']='';
+  row['Acum. Mes (%)']='';
+  row['Acum. Ano (%)']='';
+  row['Acum. 12M (%)']='';
+
+  if(Number.isFinite(Number(meta?.vr_pl))){
+    row['PL (milhoes R$)']=(Number(meta.vr_pl)/1000000)
+      .toLocaleString('pt-BR',{minimumFractionDigits:3,maximumFractionDigits:3});
+  }
+
+  row['Data Base Consulta']='';
+  row['Data Rentabilidade Ref']='';
+  row['Fallback Rentabilidade']='Não';
+  row['Dias Úteis Fallback']='';
+  row['Alerta Rentabilidade Defasada']='Sem rentabilidade na data de referência';
+
+  row['CNPJ']=formatarCnpjMeta(meta?.nu_cnpj || meta?.cnpj);
+  row['codfundo']=String(meta?.co_siico00 || meta?.co_siico || meta?.codfundo || '')
+    .replace(/\D/g,'')
+    .replace(/^0+(?=\d)/,'');
+
+  return mesclarMetadadosFundo(row);
+}
+
+function unificarUniversoCatalogoV699(csvRows, headers){
+  const rows=Array.isArray(csvRows) ? csvRows.slice() : [];
+  const metaLista=Array.isArray(_fundosMetaLista) ? _fundosMetaLista : [];
+
+  const chaves=new Set();
+  rows.forEach(row=>{
+    const k=chaveCatalogoV699(row);
+    if(k) chaves.add(k);
+
+    const meta=obterMetaFundo(row);
+    if(meta){
+      const mk=chaveCatalogoV699(meta);
+      if(mk) chaves.add(mk);
+    }
+  });
+
+  let adicionados=0;
+  metaLista.forEach(meta=>{
+    if(!meta || typeof meta!=='object') return;
+
+    /* respeita a sinalização explícita de não exibir no portfólio */
+    if(meta.ic_flag_exibir_portfolio === 0 || meta.ic_flag_exibir_portfolio === false) return;
+
+    const k=chaveCatalogoV699(meta);
+    if(!k || chaves.has(k)) return;
+
+    const row=criarLinhaCatalogoMetaV699(meta,headers);
+    if(!row['Fundo']) return;
+
+    rows.push(row);
+    chaves.add(k);
+    adicionados++;
+  });
+
+  const comDados=rows.filter(temDados).length;
+  const semDados=rows.length-comDados;
+
+  window.__ELTAUM_CATALOGO_UNIVERSO_V699__={
+    build:'ELTAUM_CATALOGO_UNIVERSO_V699',
+    csv:csvRows?.length || 0,
+    metadados:metaLista.length,
+    adicionados,
+    total:rows.length,
+    comDados,
+    semDados
+  };
+
+  console.info(
+    `[Catálogo CAIXA] Universo v699: ${rows.length} fundos · `+
+    `${comDados} com rentabilidade · ${semDados} sem dado na data · `+
+    `${adicionados} adicionados do fundos.json`
+  );
+
+  return rows;
+}
+
+
 async function carregarFundosMetaJson(){
   try{
     const r=await fetch(BASE_URL+'fundos.json?v='+Date.now());
@@ -5026,10 +5169,11 @@ async function carregarFundosMetaJson(){
     _fundosMetaMap=porCnpj;
     _fundosMetaByCode=porCodigo;
     _fundosMetaByName=porNome;
+    _fundosMetaLista=lista;
     console.log(`[fundos.json] ${lista.length} registros · ${Object.keys(porCnpj).length} CNPJs indexados`);
     return lista;
   }catch(e){
-    _fundosMetaMap={}; _fundosMetaByCode={}; _fundosMetaByName={};
+    _fundosMetaMap={}; _fundosMetaByCode={}; _fundosMetaByName={}; _fundosMetaLista=[];
     console.info('[fundos.json] metadados operacionais não disponíveis:',e.message);
     return [];
   }
@@ -5056,6 +5200,10 @@ function mesclarMetadadosFundo(row){
 
   preencherSeVazio(row,'CNPJ',formatarCnpjMeta(meta.nu_cnpj));
   preencherSeVazio(row,'codfundo',String(meta.co_siico00 || meta.co_siico || '').replace(/^0+(?=\d)/,''));
+  preencherSeVazio(row,'Fundo',String(meta.no_fundo || meta.no_razao_social || '').trim());
+  preencherSeVazio(row,'Fundo_norm',normalizarNomeMeta(meta.no_fundo || meta.no_razao_social || ''));
+  preencherSeVazio(row,'Categoria',categoriaCatalogoMetaV699(meta));
+  preencherSeVazio(row,'Data Inicio',formatarDataIsoBrV699(meta.dt_inicial));
   preencherSeVazio(row,'Perfil de Risco',meta.no_perfil_risco);
   preencherSeVazio(row,'Taxa Adm (%)',meta.pc_taxa_adm_cliente);
   preencherSeVazio(row,'Aplicacao Minima (R$)',meta.vr_aplicacao_inicial);
@@ -5074,6 +5222,12 @@ function mesclarMetadadosFundo(row){
   preencherSeVazio(row,'Resgate Minimo (R$)',meta.vr_resgate_minimo);
   preencherSeVazio(row,'Saldo Minimo (R$)',meta.vr_saldo_minimo);
   preencherSeVazio(row,'Público Alvo',formatarListaMeta(meta.lista_publico_alvo) || meta.no_classificacao_investidor);
+  preencherSeVazio(row,'Segmentos',formatarListaMeta(meta.lista_segmento));
+  preencherSeVazio(row,'Classificação Investidor',String(meta.no_classificacao_investidor || '').trim());
+  preencherSeVazio(row,'Razão Social',String(meta.no_razao_social || '').trim());
+  preencherSeVazio(row,'Modalidade Adiantamento',String(meta.de_adiant_manual_automatico || '').trim());
+  preencherSeVazio(row,'Percentual Adiantamento (%)',meta.pc_adiant_resgate);
+  preencherSeVazio(row,'Fim Carência',formatarDataIsoBrV699(meta.dt_fim_carencia));
   preencherSeVazio(row,'Movimentação Automática',meta.ic_mov_automatica===true?'Sim':meta.ic_mov_automatica===false?'Não':'');
   preencherSeVazio(row,'Carência',meta.ic_carencia===true?(meta.dt_fim_carencia?`Até ${meta.dt_fim_carencia}`:'Sim'):meta.ic_carencia===false?'Não':'');
   preencherSeVazio(row,'ASG',meta.ic_asg===true?'Sim':meta.ic_asg===false?'Não':'');
@@ -5086,6 +5240,8 @@ function mesclarMetadadosFundo(row){
   preencherSeVazio(row,'doc_comunicado',urlMetaValida(meta.de_link_fato_relevante)?meta.de_link_fato_relevante:'');
   preencherSeVazio(row,'doc_boletim',urlMetaValida(meta.de_link_boletim_comercial)?meta.de_link_boletim_comercial:'');
   preencherSeVazio(row,'doc_termo',urlMetaValida(meta.de_link_termo_adesao)?meta.de_link_termo_adesao:'');
+  preencherSeVazio(row,'doc_sumario',urlMetaValida(meta.de_link_sumario)?meta.de_link_sumario:'');
+  preencherSeVazio(row,'doc_raio_x',urlMetaValida(meta.de_link_raio_x)?meta.de_link_raio_x:'');
   return row;
 }
 
@@ -6618,8 +6774,9 @@ async function carregarDados(){
   try{
     const raw=await fetch(BASE_URL+'dados_atuais.csv?v='+Date.now()).then(r=>r.text());
     const result=parseCsv(raw);
-    allRows=result.data.map(mesclarMetadadosFundo);
-    const headers=Object.keys(allRows[0]||{});
+    const csvRows=result.data.map(mesclarMetadadosFundo);
+    const headers=Object.keys(csvRows[0]||{});
+    allRows=unificarUniversoCatalogoV699(csvRows,headers);
     displayHeaders=headers;
     const di=displayHeaders.indexOf(DEFAULT_SORT);
     if(di>=0){sortCol=di;sortDir=-1;}
@@ -31297,4 +31454,15 @@ function buildDetailPanel(r,colspan){
   };
 
   console.info('[Catálogo CAIXA] Busca desktop limpa ativa:', BUILD);
+})();
+
+
+/* PATCH v699 — marcador de build */
+(function(){
+  window.__ELTAUM_CATALOGO_V699__ = {
+    build: 'ELTAUM_CATALOGO_UNIVERSO_V699',
+    diagnostico: function(){
+      return window.__ELTAUM_CATALOGO_UNIVERSO_V699__ || null;
+    }
+  };
 })();
