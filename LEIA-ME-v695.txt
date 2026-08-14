@@ -1,0 +1,1 @@
+Substitua SOMENTE index.html. O patch v695 foi colocado como o último <style> do <head> para vencer o bloco inline v688 que usa !important e estava sobrepondo os ajustes externos v693/v694. O app.js e style.css permanecem os atuais.
