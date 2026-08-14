@@ -22906,6 +22906,8 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
 
   function applyMobileFundsFiltersCompactV440(){
     try{
+      /* v697 — rotina exclusivamente mobile; não toca Fundos no desktop */
+      if(!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches)) return;
       document.documentElement.classList.add('mobile-v440','mobile-funds-filters-compact-v440');
       const meta = document.querySelector('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
@@ -22966,6 +22968,8 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
 
   function applyMobileFundsFiltersFixV441(){
     try{
+      /* v697 — rotina exclusivamente mobile; não altera placeholder/DOM no desktop */
+      if(!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches)) return;
       document.documentElement.classList.add('mobile-v441','mobile-funds-filters-fix-v441');
       const meta = document.querySelector('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
@@ -23027,6 +23031,8 @@ window.__ELTAUM_SAVINGS_MOBILE_TEXT_STABLE_V434__ = {
 
   function ensureStableNoDataToggleV442(){
     try{
+      /* v697 — rotina exclusivamente mobile; evita mutações tardias em #sec-fundos no desktop */
+      if(!(window.matchMedia && window.matchMedia('(max-width: 768px)').matches)) return;
       document.documentElement.classList.add('mobile-v442','mobile-no-data-toggle-stable-v442');
       const meta = document.querySelector('meta[name="app-build"]');
       if(meta) meta.content = BUILD;
@@ -31188,4 +31194,54 @@ function buildDetailPanel(r,colspan){
   };
 
   console.info('[Catálogo CAIXA] Header desktop estável ativo:', BUILD);
+})();
+
+
+/* =========================================================
+   PATCH v697 — Desktop: busca visualmente estável
+   - trava geometria do campo via CSS crítico no index;
+   - v440/v441/v442 não executam no desktop;
+   - contador usa largura fixa, então sua atualização não comprime o input.
+   ========================================================= */
+(function desktopSearchStableV697(){
+  'use strict';
+  const BUILD = 'ELTAUM_DESKTOP_SEARCH_STABLE_V697';
+
+  function apply(){
+    if(!(window.matchMedia && window.matchMedia('(min-width: 769px)').matches)) return;
+
+    document.documentElement.classList.add('desktop-search-stable-v697');
+
+    const search = document.getElementById('searchInput');
+    const result = document.getElementById('desktopFilterResultSummary');
+
+    if(search){
+      const desktopPlaceholder = 'Buscar fundo, CNPJ, benchmark ou liquidez...';
+      if(search.getAttribute('placeholder') !== desktopPlaceholder){
+        search.setAttribute('placeholder', desktopPlaceholder);
+      }
+      search.dataset.desktopSearchStableV697 = '1';
+    }
+
+    if(result && !result.textContent.trim()){
+      result.textContent = '— fundos';
+    }
+
+    const meta = document.querySelector('meta[name="app-build"]');
+    if(meta) meta.content = BUILD;
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', apply, {once:true});
+  }else{
+    apply();
+  }
+  window.addEventListener('load', apply, {once:true});
+
+  window.__ELTAUM_DESKTOP_SEARCH_STABLE_V697__ = {
+    build: BUILD,
+    apply
+  };
+
+  console.info('[Catálogo CAIXA] Busca desktop estável ativa:', BUILD);
 })();

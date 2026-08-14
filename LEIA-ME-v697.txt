@@ -1,0 +1,22 @@
+CATÁLOGO DE FUNDOS CAIXA — v697
+
+OBJETIVO
+Eliminar o microflicker do campo de busca no desktop durante os primeiros segundos.
+
+ALTERAÇÕES
+- Campo de busca travado em grade: ícone + input + contador.
+- Contador de resultados recebe largura fixa de 96 px.
+- Placeholder mantém opacidade/tipografia/altura desde o primeiro frame.
+- Rotinas mobile v440, v441 e v442 deixam de executar no desktop.
+- Tabela, filtros e header v696 não foram reestruturados.
+
+SUBSTITUIR NO GITHUB
+- index.html
+- app.js
+
+MANTER COMO ESTÁ
+- style.css
+- tokens-caixa.css
+- JSON/CSV/robôs
+
+Após publicar, aguarde o GitHub Pages atualizar e faça Ctrl+F5.
