@@ -1,0 +1,13 @@
+{
+  "schema": "ipca15-v1",
+  "status": "aguardando_primeira_coleta",
+  "fonte": {
+    "instituicao": "IBGE",
+    "sistema": "SIDRA",
+    "tabela": 7062,
+    "descricao": "IPCA15 - variação mensal, acumulada no ano e acumulada em 12 meses"
+  },
+  "atual": null,
+  "anterior": null,
+  "historico": []
+}

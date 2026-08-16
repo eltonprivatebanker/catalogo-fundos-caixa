@@ -1,0 +1,124 @@
+/* IPCA-15 TESTE v707 — somente index-ipca15-teste.html */
+.ipca15-preview-v707{
+  display:grid;
+  gap:10px;
+  margin:10px 0 2px;
+  padding:11px 13px;
+  border:1px solid rgba(200,151,58,.25);
+  border-radius:12px;
+  background:
+    linear-gradient(135deg,rgba(200,151,58,.085),rgba(255,255,255,.018) 52%,rgba(91,156,246,.035));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+}
+.ipca15-head-v707{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+.ipca15-title-wrap-v707{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  min-width:0;
+}
+.ipca15-icon-v707{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;
+  height:28px;
+  flex:0 0 28px;
+  border:1px solid rgba(232,187,106,.30);
+  border-radius:8px;
+  color:#e8bb6a;
+  background:rgba(200,151,58,.10);
+  font-size:.82rem;
+}
+.ipca15-title-line-v707{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  min-width:0;
+}
+.ipca15-title-line-v707 strong{
+  color:#edf1fb;
+  font:800 .72rem/1.1 Inter,system-ui,sans-serif;
+  letter-spacing:.01em;
+}
+.ipca15-badge-v707{
+  display:inline-flex;
+  align-items:center;
+  min-height:18px;
+  padding:2px 6px;
+  border:1px solid rgba(232,187,106,.30);
+  border-radius:999px;
+  color:#e8bb6a;
+  background:rgba(200,151,58,.08);
+  font:800 .43rem/1 "JetBrains Mono",monospace;
+  letter-spacing:.10em;
+}
+.ipca15-title-wrap-v707 small,
+.ipca15-source-v707,
+.ipca15-foot-v707{
+  color:#8995af;
+  font:600 .52rem/1.35 "JetBrains Mono",monospace;
+}
+.ipca15-source-v707{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+.ipca15-metrics-v707{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;
+}
+.ipca15-metrics-v707 > div{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:8px;
+  min-width:0;
+  padding:8px 9px;
+  border:1px solid rgba(148,163,184,.12);
+  border-radius:9px;
+  background:rgba(7,8,15,.45);
+}
+.ipca15-metrics-v707 span{
+  color:#8995af;
+  font:700 .46rem/1 "JetBrains Mono",monospace;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+.ipca15-metrics-v707 strong{
+  color:#e8bb6a;
+  font:850 .76rem/1 "JetBrains Mono",monospace;
+  white-space:nowrap;
+}
+.ipca15-preview-v707.is-error{
+  border-color:rgba(240,85,101,.26);
+}
+.ipca15-preview-v707.is-error .ipca15-foot-v707{
+  color:#d99aa4;
+}
+.ipca15-preview-v707.is-loading{
+  opacity:.88;
+}
+@media (max-width:768px){
+  .ipca15-preview-v707{
+    padding:10px;
+  }
+  .ipca15-head-v707{
+    align-items:flex-start;
+  }
+  .ipca15-source-v707{
+    display:none;
+  }
+  .ipca15-metrics-v707{
+    grid-template-columns:1fr;
+  }
+  .ipca15-metrics-v707 > div{
+    min-height:38px;
+  }
+}

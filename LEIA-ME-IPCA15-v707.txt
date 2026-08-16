@@ -1,0 +1,42 @@
+IPCA-15 · TESTE ISOLADO v707
+================================
+
+ESTRATÉGIA
+Não substitua o index.html atual ainda.
+
+Esta versão cria uma página de teste separada:
+  index-ipca15-teste.html
+
+Ela usa o style.css, tokens-caixa.css e app.js atuais da página principal,
+mas acrescenta o IPCA-15 com arquivos próprios de teste.
+
+ARQUIVOS NOVOS
+- index-ipca15-teste.html
+- ipca15-teste.css
+- ipca15-teste.js
+- robo_ipca15.py
+- ipca15.json
+- .github/workflows/ipca15.yml
+
+COMO TESTAR
+1. Suba todos os arquivos acima mantendo a pasta .github/workflows.
+2. Vá em GitHub > Actions.
+3. Abra o workflow "IPCA-15 · IBGE".
+4. Clique em "Run workflow".
+5. Aguarde o commit automático de ipca15.json.
+6. Abra:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html
+7. Expanda "Inflação e juros".
+8. Confira o bloco "IPCA-15 · PRÉVIA" dentro do painel de IPCA mensal.
+
+IMPORTANTE
+- O index.html de produção não é alterado.
+- O app.js de produção não é alterado.
+- O style.css de produção não é alterado.
+- Se o JSON falhar, a página de teste mostra indisponibilidade e o restante segue normal.
+- O workflow é independente do robô dos fundos e não instala Chrome.
+- Ele roda diariamente em dias úteis, mas só cria commit se houver nova divulgação.
+
+DEPOIS DA APROVAÇÃO VISUAL
+Podemos fazer a integração definitiva no index.html/app.js/style.css atuais
+em uma versão posterior, removendo os arquivos "-teste".
