@@ -1,0 +1,60 @@
+name: IPCA-15 · IBGE
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 10:30 de Brasília (13:30 UTC), dias úteis.
+    # O robô só faz commit quando houver nova divulgação estatística.
+    - cron: '30 13 * * 1-5'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ipca15-ibge
+  cancel-in-progress: false
+
+jobs:
+  atualizar-ipca15:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Baixar branch do site
+        uses: actions/checkout@v4
+        with:
+          ref: Testes-da-versão-01
+          fetch-depth: 0
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependência
+        run: python -m pip install --quiet requests
+
+      - name: Consultar IPCA-15 no IBGE
+        run: python robo_ipca15.py
+
+      - name: Verificar alteração
+        id: diff
+        shell: bash
+        run: |
+          if git diff --quiet -- ipca15.json; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            echo "Nenhuma nova divulgação do IPCA-15."
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+            echo "Nova divulgação detectada."
+          fi
+
+      - name: Salvar novo IPCA-15
+        if: steps.diff.outputs.changed == 'true'
+        shell: bash
+        run: |
+          git config user.name "actions-user"
+          git config user.email "actions@github.com"
+          git add ipca15.json
+          git commit -m "Atualiza IPCA-15 via IBGE"
+          git push origin HEAD:Testes-da-versão-01
