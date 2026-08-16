@@ -1,0 +1,40 @@
+IPCA-15 · TESTE v708
+=======================
+
+OBJETIVO
+Deixar claro para o usuário:
+- IPCA = indicador OFICIAL de inflação;
+- IPCA-15 = PRÉVIA, com período de coleta diferente e divulgação antecipada;
+- os dois se complementam, não se substituem.
+
+O QUE MUDOU NO TESTE
+1. Título do card:
+   "IPCA oficial — últimos X meses"
+2. Subtítulo:
+   deixa explícito que é o resultado oficial divulgado pelo IBGE.
+3. IPCA-15:
+   mantém selo PRÉVIA e métricas de mês, ano e 12 meses.
+4. Leitura conjunta:
+   compara automaticamente IPCA-15 12M com o IPCA oficial 12M.
+5. Explicação:
+   dois blocos curtos explicam OFICIAL x PRÉVIA.
+6. Próximas divulgações:
+   mostra o próximo IPCA-15 e o próximo IPCA do calendário oficial de 2026.
+7. Remove o rodapé técnico com horário do JSON e prioriza interpretação.
+
+ARQUIVOS A SUBSTITUIR NA BRANCH Testes-da-versão-01
+- index-ipca15-teste.html
+- ipca15-teste.css
+- ipca15-teste.js
+
+NÃO PRECISA ALTERAR
+- index.html
+- app.js
+- style.css
+- robo_ipca15.py
+- ipca15.json
+- .github/workflows/ipca15.yml
+
+TESTE
+Depois do upload e do deploy, faça Ctrl+F5 em:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html

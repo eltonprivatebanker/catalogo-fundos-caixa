@@ -1,28 +1,33 @@
-/* IPCA-15 TESTE v707 — somente index-ipca15-teste.html */
-.ipca15-preview-v707{
+/* IPCA-15 TESTE v708
+   Objetivo: deixar inequívoco o papel do IPCA oficial e do IPCA-15 (prévia),
+   mantendo o bloco compacto e integrado ao card de inflação. */
+
+.ipca15-preview-v708{
   display:grid;
-  gap:10px;
+  gap:9px;
   margin:10px 0 2px;
-  padding:11px 13px;
-  border:1px solid rgba(200,151,58,.25);
+  padding:10px 12px;
+  border:1px solid rgba(200,151,58,.24);
   border-radius:12px;
-  background:
-    linear-gradient(135deg,rgba(200,151,58,.085),rgba(255,255,255,.018) 52%,rgba(91,156,246,.035));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.025);
+  background:linear-gradient(135deg,rgba(200,151,58,.07),rgba(255,255,255,.014) 58%,rgba(91,156,246,.025));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.02);
 }
-.ipca15-head-v707{
+
+.ipca15-head-v708{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:12px;
 }
-.ipca15-title-wrap-v707{
+
+.ipca15-title-wrap-v708{
   display:flex;
   align-items:center;
   gap:9px;
   min-width:0;
 }
-.ipca15-icon-v707{
+
+.ipca15-icon-v708{
   display:inline-flex;
   align-items:center;
   justify-content:center;
@@ -35,90 +40,200 @@
   background:rgba(200,151,58,.10);
   font-size:.82rem;
 }
-.ipca15-title-line-v707{
+
+.ipca15-title-line-v708{
   display:flex;
   align-items:center;
   gap:7px;
-  min-width:0;
 }
-.ipca15-title-line-v707 strong{
+
+.ipca15-title-line-v708 strong{
   color:#edf1fb;
-  font:800 .72rem/1.1 Inter,system-ui,sans-serif;
-  letter-spacing:.01em;
+  font:850 .72rem/1.1 Inter,system-ui,sans-serif;
 }
-.ipca15-badge-v707{
+
+.ipca15-badge-v708,
+.ipca15-tag-v708{
   display:inline-flex;
   align-items:center;
+  width:max-content;
   min-height:18px;
   padding:2px 6px;
-  border:1px solid rgba(232,187,106,.30);
   border-radius:999px;
+  font:850 .43rem/1 "JetBrains Mono",monospace;
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+
+.ipca15-badge-v708,
+.ipca15-tag-v708.preview{
+  border:1px solid rgba(232,187,106,.30);
   color:#e8bb6a;
   background:rgba(200,151,58,.08);
-  font:800 .43rem/1 "JetBrains Mono",monospace;
-  letter-spacing:.10em;
 }
-.ipca15-title-wrap-v707 small,
-.ipca15-source-v707,
-.ipca15-foot-v707{
+
+.ipca15-tag-v708.official{
+  border:1px solid rgba(91,156,246,.28);
+  color:#8ab8ff;
+  background:rgba(91,156,246,.08);
+}
+
+.ipca15-title-wrap-v708 small,
+.ipca15-source-v708{
   color:#8995af;
-  font:600 .52rem/1.35 "JetBrains Mono",monospace;
+  font:600 .50rem/1.35 "JetBrains Mono",monospace;
 }
-.ipca15-source-v707{
+
+.ipca15-source-v708{
   flex:0 0 auto;
   white-space:nowrap;
 }
-.ipca15-metrics-v707{
+
+.ipca15-metrics-v708{
   display:grid;
   grid-template-columns:repeat(3,minmax(0,1fr));
   gap:8px;
 }
-.ipca15-metrics-v707 > div{
+
+.ipca15-metrics-v708 > div{
   display:flex;
   align-items:baseline;
   justify-content:space-between;
   gap:8px;
   min-width:0;
-  padding:8px 9px;
-  border:1px solid rgba(148,163,184,.12);
+  padding:7px 9px;
+  border:1px solid rgba(148,163,184,.11);
   border-radius:9px;
-  background:rgba(7,8,15,.45);
+  background:rgba(7,8,15,.38);
 }
-.ipca15-metrics-v707 span{
+
+.ipca15-metrics-v708 span{
   color:#8995af;
-  font:700 .46rem/1 "JetBrains Mono",monospace;
+  font:750 .45rem/1 "JetBrains Mono",monospace;
   text-transform:uppercase;
   letter-spacing:.08em;
   white-space:nowrap;
 }
-.ipca15-metrics-v707 strong{
+
+.ipca15-metrics-v708 strong{
   color:#e8bb6a;
-  font:850 .76rem/1 "JetBrains Mono",monospace;
+  font:850 .75rem/1 "JetBrains Mono",monospace;
   white-space:nowrap;
 }
-.ipca15-preview-v707.is-error{
-  border-color:rgba(240,85,101,.26);
+
+.ipca15-compare-v708{
+  display:grid;
+  grid-template-columns:max-content minmax(0,1fr);
+  grid-template-areas:
+    "label strong"
+    "label small";
+  column-gap:10px;
+  row-gap:2px;
+  align-items:center;
+  padding:7px 9px;
+  border-left:2px solid rgba(232,187,106,.55);
+  border-radius:0 8px 8px 0;
+  background:rgba(200,151,58,.045);
 }
-.ipca15-preview-v707.is-error .ipca15-foot-v707{
-  color:#d99aa4;
+
+.ipca15-compare-label-v708{
+  grid-area:label;
+  align-self:stretch;
+  display:flex;
+  align-items:center;
+  color:#e8bb6a;
+  font:850 .43rem/1.15 "JetBrains Mono",monospace;
+  letter-spacing:.07em;
+  text-transform:uppercase;
+  white-space:nowrap;
 }
-.ipca15-preview-v707.is-loading{
+
+.ipca15-compare-v708 strong{
+  grid-area:strong;
+  color:#dfe6f5;
+  font:780 .55rem/1.25 Inter,system-ui,sans-serif;
+}
+
+.ipca15-compare-v708 small{
+  grid-area:small;
+  color:#8995af;
+  font:550 .47rem/1.25 Inter,system-ui,sans-serif;
+}
+
+.ipca15-explainer-v708{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) 18px minmax(0,1fr);
+  gap:8px;
+  align-items:stretch;
+}
+
+.ipca15-explainer-item-v708{
+  display:grid;
+  gap:4px;
+  min-width:0;
+  padding:8px 9px;
+  border:1px solid rgba(148,163,184,.10);
+  border-radius:9px;
+  background:rgba(7,8,15,.30);
+}
+
+.ipca15-explainer-item-v708 p{
+  margin:0;
+  color:#c5cede;
+  font:600 .50rem/1.35 Inter,system-ui,sans-serif;
+}
+
+.ipca15-explainer-item-v708 small{
+  color:#7f8ba5;
+  font:600 .45rem/1.25 "JetBrains Mono",monospace;
+}
+
+.ipca15-explainer-sep-v708{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:#6f7c98;
+  font:800 .78rem/1 Inter,system-ui,sans-serif;
+}
+
+.ipca15-why-v708{
+  display:flex;
+  align-items:baseline;
+  gap:7px;
+  min-width:0;
+  color:#8995af;
+  font:550 .48rem/1.35 Inter,system-ui,sans-serif;
+}
+
+.ipca15-why-v708 strong{
+  flex:0 0 auto;
+  color:#d6deed;
+  font-weight:750;
+}
+
+.ipca15-preview-v708.is-error{
+  border-color:rgba(240,85,101,.25);
+}
+
+.ipca15-preview-v708.is-loading{
   opacity:.88;
 }
+
 @media (max-width:768px){
-  .ipca15-preview-v707{
-    padding:10px;
+  .ipca15-preview-v708{padding:10px;}
+  .ipca15-source-v708{display:none;}
+  .ipca15-metrics-v708{grid-template-columns:1fr;}
+  .ipca15-explainer-v708{grid-template-columns:1fr;}
+  .ipca15-explainer-sep-v708{
+    height:10px;
+    transform:rotate(90deg);
   }
-  .ipca15-head-v707{
-    align-items:flex-start;
-  }
-  .ipca15-source-v707{
-    display:none;
-  }
-  .ipca15-metrics-v707{
+  .ipca15-compare-v708{
     grid-template-columns:1fr;
+    grid-template-areas:"label" "strong" "small";
   }
-  .ipca15-metrics-v707 > div{
-    min-height:38px;
+  .ipca15-why-v708{
+    display:grid;
+    gap:2px;
   }
 }

@@ -82,7 +82,7 @@ document.documentElement.classList.add(
 <meta content="yes" name="mobile-web-app-capable"/>
 <meta content="yes" name="apple-mobile-web-app-capable"/>
 <meta content="black-translucent" name="apple-mobile-web-app-status-bar-style"/>
-<title>TESTE IPCA-15 · Catálogo de Fundos CAIXA</title>
+<title>TESTE IPCA-15 v708 · Catálogo de Fundos CAIXA</title>
 <style id="critical-css-v50">
   :root{--bg:#07080f;--bg2:#0c0e1a;--bg3:#111526;--gold:#c8973a;--gold2:#e8bb6a;--text:#edf1fb;--muted:#a6b0c9;--border:rgba(200,151,58,.22);--border2:rgba(255,255,255,.085);}
   *{box-sizing:border-box} html{background:#07080f;color-scheme:dark} body{margin:0;min-height:100vh;background:#07080f;color:#edf1fb;font-family:Inter,Arial,sans-serif;overflow-x:hidden;-webkit-font-smoothing:antialiased} body::before{content:'';position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse 80% 50% at 10% -5%,rgba(200,151,58,.055),transparent 55%),radial-gradient(ellipse 60% 60% at 90% 105%,rgba(91,156,246,.04),transparent 55%)} .page{position:relative;z-index:1;max-width:1760px;margin:0 auto;padding:32px 28px 100px} header{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-bottom:28px;border-bottom:1px solid rgba(200,151,58,.22)} .brand{display:flex;align-items:center;gap:16px}.brand-logo{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#c8973a,#e8bb6a);color:#07080f;font-weight:800;font-size:1.55rem}.brand-text h1{margin:0;color:#e8bb6a;font-size:1.8rem;line-height:1.1}.brand-text p{margin:.35rem 0 0;color:#a6b0c9;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em}.section-gap{margin-top:28px}.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px}.kpi,.fund-filter-shell,.rank-card,.ranking-exec-card,.table-wrap{background:#0c0e1a;border:1px solid rgba(200,151,58,.22);border-radius:14px}.kpi{padding:20px 18px}.section-title h2,.ranking-title-group h2{color:#e8bb6a}.table-wrap{overflow-x:auto;overflow-y:hidden} #loadMsg{padding:34px;text-align:center;color:#a6b0c9}.spinner{width:18px;height:18px;border:2px solid rgba(200,151,58,.22);border-top-color:#e8bb6a;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 10px}@keyframes spin{to{transform:rotate(360deg)}}
@@ -2765,7 +2765,7 @@ html.desktop-responsive-fit-v688 body{
 }
 
 </style>
-<link rel="stylesheet" href="ipca15-teste.css?v=ipca15-v707"/>
+<link rel="stylesheet" href="ipca15-teste.css?v=ipca15-v708"/>
 </head>
 <body>
 <div class="page" id="topo">
@@ -3888,8 +3888,8 @@ html.desktop-responsive-fit-v688 body{
       <article class="econ-dash-card-v378 econ-dash-card-ipca-v378" id="mobileIpcaMensalV400">
         <header class="econ-dash-card-head-v378">
           <div>
-            <h3><span aria-hidden="true">🎯</span> IPCA mensal — últimos <span id="ipcaDashRangeLabelV378">24 meses</span></h3>
-            <p>Variação percentual oficial em cada mês.</p>
+            <h3><span aria-hidden="true">🎯</span> IPCA oficial — últimos <span id="ipcaDashRangeLabelV378">24 meses</span></h3>
+            <p>Inflação oficial do Brasil · resultado fechado divulgado mensalmente pelo IBGE.</p>
           </div>
           <div aria-label="Período do IPCA mensal" class="econ-dash-range-v378" role="group">
             <button class="active" data-dash-range-target="ipca" data-dash-range="12" type="button" aria-pressed="true">12M</button>
@@ -3898,36 +3898,50 @@ html.desktop-responsive-fit-v688 body{
           </div>
         </header>
         <div class="econ-dash-pill-v378" id="evoCardIpcaNote">Último resultado: aguardando atualização.</div>
-        <aside class="ipca15-preview-v707 is-loading" id="ipca15PreviewV707" aria-labelledby="ipca15TitleV707" role="status">
-          <div class="ipca15-head-v707">
-            <div class="ipca15-title-wrap-v707">
-              <span aria-hidden="true" class="ipca15-icon-v707">◔</span>
+        <aside class="ipca15-preview-v708 is-loading" id="ipca15PreviewV708" aria-labelledby="ipca15TitleV708" role="status">
+          <div class="ipca15-head-v708">
+            <div class="ipca15-title-wrap-v708">
+              <span aria-hidden="true" class="ipca15-icon-v708">◔</span>
               <div>
-                <div class="ipca15-title-line-v707">
-                  <strong id="ipca15TitleV707">IPCA-15</strong>
-                  <span class="ipca15-badge-v707">PRÉVIA</span>
+                <div class="ipca15-title-line-v708">
+                  <strong id="ipca15TitleV708">IPCA-15</strong>
+                  <span class="ipca15-badge-v708">PRÉVIA</span>
                 </div>
-                <small id="ipca15PeriodoV707">Aguardando primeira coleta do IBGE</small>
+                <small id="ipca15PeriodoV708">Aguardando leitura do IBGE</small>
               </div>
             </div>
-            <span class="ipca15-source-v707">IBGE · SIDRA</span>
+            <span class="ipca15-source-v708">IBGE · SIDRA</span>
           </div>
-          <div class="ipca15-metrics-v707" aria-label="Resumo do IPCA-15">
-            <div>
-              <span>No mês</span>
-              <strong id="ipca15MensalV707">—</strong>
+
+          <div class="ipca15-metrics-v708" aria-label="Resumo do IPCA-15">
+            <div><span>No mês</span><strong id="ipca15MensalV708">—</strong></div>
+            <div><span>No ano</span><strong id="ipca15AnoV708">—</strong></div>
+            <div><span>12 meses</span><strong id="ipca15DozeV708">—</strong></div>
+          </div>
+
+          <div class="ipca15-compare-v708" id="ipca15CompareV708">
+            <span class="ipca15-compare-label-v708">Leitura conjunta</span>
+            <strong id="ipca15CompareTextV708">Comparando com o IPCA oficial…</strong>
+            <small>Serve como sinal de tendência; não é uma previsão exata do próximo IPCA.</small>
+          </div>
+
+          <div class="ipca15-explainer-v708" aria-label="Diferença entre IPCA e IPCA-15">
+            <div class="ipca15-explainer-item-v708">
+              <span class="ipca15-tag-v708 official">IPCA · OFICIAL</span>
+              <p>Resultado fechado da inflação do mês. É a referência oficial.</p>
+              <small id="ipcaNextOfficialV708">Próxima divulgação: —</small>
             </div>
-            <div>
-              <span>No ano</span>
-              <strong id="ipca15AnoV707">—</strong>
-            </div>
-            <div>
-              <span>12 meses</span>
-              <strong id="ipca15DozeV707">—</strong>
+            <div class="ipca15-explainer-sep-v708" aria-hidden="true">→</div>
+            <div class="ipca15-explainer-item-v708">
+              <span class="ipca15-tag-v708 preview">IPCA-15 · PRÉVIA</span>
+              <p>Usa período de coleta diferente e é divulgado antes, sinalizando a direção da inflação.</p>
+              <small id="ipcaNextPreviewV708">Próxima divulgação: —</small>
             </div>
           </div>
-          <div class="ipca15-foot-v707" id="ipca15StatusV707">
-            Prévia mensal; o IPCA oficial continua sendo exibido acima.
+
+          <div class="ipca15-why-v708">
+            <strong>Por que acompanhar os dois?</strong>
+            <span>O IPCA-15 antecipa o sinal; o IPCA confirma o resultado oficial. Eles se complementam e não são substitutos.</span>
           </div>
         </aside>
         <div class="econ-dash-chart-v378 econ-dash-chart-ipca-v378" id="econSparkIpcaV367" aria-label="Gráfico do IPCA mensal"></div>
@@ -4147,6 +4161,6 @@ html.desktop-responsive-fit-v688 body{
 
 <!-- Desktop section toggle agora fica somente no app.js v542. -->
 
-<script src="ipca15-teste.js?v=ipca15-v707"></script>
+<script src="ipca15-teste.js?v=ipca15-v708"></script>
 </body>
 </html>
