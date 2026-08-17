@@ -1,0 +1,53 @@
+DI FUTURO / CURVA DE JUROS · TESTE v715
+===========================================
+
+OBJETIVO
+Testar o encaixe dos widgets do projeto curva-juros-brasil dentro da
+seção "Inflação e juros", logo depois da Trajetória da Selic.
+
+ORDEM DA LEITURA
+1. IPCA oficial + IPCA-15
+2. Trajetória da Selic
+3. Ponte: Selic -> DI/CDI -> DI Futuro
+4. Curva DI atual (aberta)
+5. Evolução da curva (recolhida)
+6. Link para o painel Juros Brasil completo
+
+ARQUITETURA
+Os widgets continuam hospedados no projeto:
+https://eltonprivatebanker.github.io/curva-juros-brasil/
+
+O catálogo apenas os incorpora por iframe.
+Assim, futuras atualizações dos widgets aparecem no catálogo sem duplicar
+o código e sem criar um segundo robô para a mesma informação.
+
+ARQUIVOS PARA SUBIR NA RAIZ DA BRANCH Testes-da-versão-01
+- index-ipca15-teste.html       -> SUBSTITUIR
+- juros-futuros-teste-v715.css -> NOVO
+- juros-futuros-teste-v715.js  -> NOVO
+
+MANTER
+- app-selic-teste-v714.js
+- selic-teste-v714.css
+- ipca15-teste.css
+- ipca15-teste.js
+- ipca15.json
+- robôs/workflows
+- app.js e style.css principais
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=715
+
+Faça Ctrl+F5 depois do deploy.
+
+SE FOR APROVADO
+Na promoção oficial vamos partir dos arquivos atuais da página principal
+e gerar um pacote consolidado, sem depender do nome "teste":
+- index.html atualizado
+- integração oficial do IPCA-15
+- integração final da Selic aprovada
+- juros-futuros.css
+- juros-futuros.js
+
+Os widgets e o robô de juros continuam no repositório curva-juros-brasil.
+O ipca15.json/robô/workflow permanecem como já estão.

@@ -1,0 +1,293 @@
+/* =========================================================
+   DI FUTURO / CURVA DE JUROS · TESTE v715
+   Mantém os widgets do projeto curva-juros-brasil independentes.
+   ========================================================= */
+
+.di-context-v715,
+.di-market-v715{
+  grid-column:1 / -1;
+}
+
+.di-context-v715{
+  margin-top:4px;
+  padding:14px 16px;
+  border:1px solid rgba(148,163,184,.11);
+  border-radius:14px;
+  background:linear-gradient(135deg,rgba(91,156,246,.035),rgba(255,255,255,.012) 58%,rgba(200,151,58,.025));
+}
+
+.di-context-head-v715 h3,
+.di-market-head-v715 h3{
+  margin:3px 0 4px;
+  color:#eef2fb;
+  font:800 .92rem/1.2 Inter,system-ui,sans-serif;
+}
+
+.di-context-head-v715 p,
+.di-market-head-v715 p{
+  margin:0;
+  color:#98a5bd;
+  font:550 .58rem/1.45 Inter,system-ui,sans-serif;
+}
+
+.di-context-eyebrow-v715,
+.di-market-eyebrow-v715{
+  display:block;
+  color:#d5a84e;
+  font:850 .43rem/1 "JetBrains Mono",monospace;
+  letter-spacing:.11em;
+}
+
+.di-rate-chain-v715{
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr) auto minmax(0,1fr);
+  gap:10px;
+  align-items:center;
+  margin-top:12px;
+}
+
+.di-rate-chain-v715 > i{
+  color:#68758e;
+  font:800 .72rem/1 Inter,system-ui,sans-serif;
+  font-style:normal;
+}
+
+.di-chain-item-v715{
+  display:grid;
+  gap:2px;
+  min-width:0;
+  padding:9px 11px;
+  border:1px solid rgba(148,163,184,.09);
+  border-radius:10px;
+  background:rgba(7,10,19,.32);
+}
+
+.di-chain-item-v715 span{
+  color:#7f8ba4;
+  font:750 .42rem/1.15 "JetBrains Mono",monospace;
+  text-transform:uppercase;
+  letter-spacing:.07em;
+}
+
+.di-chain-item-v715 strong{
+  color:#e1e7f3;
+  font:800 .68rem/1.2 Inter,system-ui,sans-serif;
+}
+
+.di-chain-item-v715 small{
+  color:#939fb7;
+  font:550 .49rem/1.3 Inter,system-ui,sans-serif;
+}
+
+.di-chain-item-v715.is-future-v715{
+  border-color:rgba(213,168,78,.17);
+  background:rgba(200,151,58,.04);
+}
+
+.di-chain-item-v715.is-future-v715 strong{
+  color:#e8bb6a;
+}
+
+.di-market-v715{
+  margin-top:12px;
+  padding:16px;
+  border:1px solid rgba(148,163,184,.12);
+  border-radius:16px;
+  background:rgba(8,11,21,.42);
+}
+
+.di-market-head-v715{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:12px;
+}
+
+.di-market-head-v715 > div{
+  min-width:0;
+}
+
+.di-full-link-v715{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  flex:0 0 auto;
+  min-height:31px;
+  padding:0 10px;
+  border:1px solid rgba(148,163,184,.14);
+  border-radius:9px;
+  color:#a8b3c8;
+  background:rgba(8,10,18,.38);
+  font:700 .50rem/1 Inter,system-ui,sans-serif;
+  text-decoration:none;
+  white-space:nowrap;
+}
+
+.di-full-link-v715:hover{
+  border-color:rgba(213,168,78,.28);
+  color:#e8bb6a;
+}
+
+.di-widget-shell-v715{
+  overflow:hidden;
+  border:1px solid rgba(148,163,184,.10);
+  border-radius:13px;
+  background:#080b14;
+}
+
+.di-widget-label-v715{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-height:34px;
+  padding:7px 10px;
+  border-bottom:1px solid rgba(148,163,184,.08);
+  background:rgba(255,255,255,.012);
+}
+
+.di-widget-label-v715 span{
+  padding:3px 6px;
+  border:1px solid rgba(213,168,78,.16);
+  border-radius:999px;
+  color:#d9ac58;
+  background:rgba(200,151,58,.04);
+  font:850 .39rem/1 "JetBrains Mono",monospace;
+  letter-spacing:.08em;
+}
+
+.di-widget-label-v715 strong{
+  color:#dbe3f0;
+  font:750 .54rem/1.2 Inter,system-ui,sans-serif;
+}
+
+.di-widget-label-v715 small{
+  color:#7f8ba3;
+  font:550 .46rem/1.2 Inter,system-ui,sans-serif;
+}
+
+.di-widget-frame-v715{
+  display:block;
+  width:100%;
+  height:560px;
+  min-height:480px;
+  border:0;
+  background:#080b14;
+}
+
+.di-history-details-v715{
+  margin-top:10px;
+  border:1px solid rgba(148,163,184,.10);
+  border-radius:12px;
+  background:rgba(7,10,18,.24);
+}
+
+.di-history-details-v715 > summary{
+  list-style:none;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  min-height:52px;
+  padding:8px 12px;
+  cursor:pointer;
+  user-select:none;
+}
+
+.di-history-details-v715 > summary::-webkit-details-marker{
+  display:none;
+}
+
+.di-history-details-v715 > summary span{
+  display:grid;
+  gap:2px;
+}
+
+.di-history-details-v715 > summary b{
+  color:#d8e0ed;
+  font:750 .57rem/1.25 Inter,system-ui,sans-serif;
+}
+
+.di-history-details-v715 > summary small{
+  color:#7f8ba3;
+  font:550 .47rem/1.3 Inter,system-ui,sans-serif;
+}
+
+.di-history-details-v715 > summary i{
+  color:#8d99b0;
+  font-style:normal;
+  transition:transform .18s ease;
+}
+
+.di-history-details-v715[open] > summary i{
+  transform:rotate(180deg);
+}
+
+.di-history-details-v715[open] > summary{
+  border-bottom:1px solid rgba(148,163,184,.08);
+}
+
+.di-history-details-v715 .di-widget-shell-v715{
+  border:0;
+  border-radius:0 0 12px 12px;
+}
+
+.di-history-details-v715 .di-widget-frame-v715{
+  height:570px;
+}
+
+.di-footnote-v715{
+  margin:10px 2px 0;
+  color:#8794ac;
+  font:550 .49rem/1.45 Inter,system-ui,sans-serif;
+}
+
+.di-footnote-v715 strong{
+  color:#cbd4e4;
+  font-weight:780;
+}
+
+@media (max-width:900px){
+  .di-market-head-v715{
+    display:grid;
+  }
+  .di-full-link-v715{
+    width:max-content;
+  }
+}
+
+@media (max-width:768px){
+  .di-context-v715,
+  .di-market-v715{
+    padding:12px;
+  }
+
+  .di-rate-chain-v715{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+
+  .di-rate-chain-v715 > i{
+    justify-self:center;
+    transform:rotate(90deg);
+  }
+
+  .di-widget-label-v715{
+    align-items:flex-start;
+    flex-wrap:wrap;
+  }
+
+  .di-widget-label-v715 small{
+    width:100%;
+  }
+
+  .di-widget-frame-v715,
+  .di-history-details-v715 .di-widget-frame-v715{
+    height:680px;
+    min-height:560px;
+  }
+
+  .di-history-details-v715 > summary{
+    align-items:flex-start;
+  }
+}
