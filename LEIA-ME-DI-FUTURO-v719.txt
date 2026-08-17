@@ -1,0 +1,32 @@
+DI FUTURO · TESTE v719 — BLOCO LIMPO
+======================================
+
+ALTERAÇÕES
+- removida totalmente a faixa:
+  Selic -> DI / CDI -> DI Futuro;
+- gráfico atual sobe e fica mais próximo do título;
+- "Ver evolução da curva" virou "Evolução histórica";
+- removido o título interno duplicado "Evolução da Curva DI";
+- "Impacto nos fundos" ganhou um pouco mais de legibilidade;
+- texto de impacto ficou tecnicamente mais preciso:
+  "Aberturas e fechamentos da curva podem afetar..."
+
+ARQUIVOS PARA SUBIR NA RAIZ DE Testes-da-versão-01
+- index-ipca15-teste.html        -> substituir
+- juros-futuros-teste-v719.css  -> novo
+- juros-futuros-teste-v719.js   -> novo
+
+MANTER COMO ESTÁ
+- app-selic-teste-v714.js
+- selic-teste-v714.css
+- ipca15-teste.css
+- ipca15-teste.js
+- ipca15.json
+- app.js / style.css principais
+- robôs e workflows
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=719
+
+Depois do deploy:
+Ctrl + F5
