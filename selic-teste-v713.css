@@ -1,0 +1,122 @@
+/* SELIC TESTE v713 — painel mais simples e orientado à leitura */
+
+@media (min-width:769px){
+
+  #mobileSelicV400 .econ-dash-card-head-v378{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-rows:auto auto!important;
+    align-items:start!important;
+    column-gap:18px!important;
+    row-gap:8px!important;
+  }
+
+  #mobileSelicV400 .econ-dash-card-head-v378 > div:first-child{
+    grid-column:1!important;
+    grid-row:1 / span 2!important;
+  }
+
+  #mobileSelicV400 .econ-dash-range-v378{
+    grid-column:2!important;
+    grid-row:1!important;
+    justify-self:end!important;
+    align-self:start!important;
+  }
+
+  #mobileSelicV400 .selic-custom-details-v713{
+    grid-column:2!important;
+    grid-row:2!important;
+    justify-self:end!important;
+    width:max-content!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    background:transparent!important;
+  }
+
+  #mobileSelicV400 .selic-custom-details-v713 > summary{
+    list-style:none!important;
+    display:inline-flex!important;
+    align-items:center!important;
+    gap:6px!important;
+    min-height:30px!important;
+    padding:0 8px!important;
+    border:0!important;
+    background:transparent!important;
+    color:#8f9ab2!important;
+    font:700 .58rem/1 Inter,system-ui,sans-serif!important;
+    cursor:pointer!important;
+    user-select:none!important;
+  }
+
+  #mobileSelicV400 .selic-custom-details-v713 > summary::-webkit-details-marker{
+    display:none!important;
+  }
+
+  #mobileSelicV400 .selic-custom-details-v713 > summary:hover{
+    color:#e6bd70!important;
+  }
+
+  #mobileSelicV400 .selic-custom-details-v713[open] > summary{
+    color:#e6bd70!important;
+  }
+
+  #mobileSelicV400 .selic-custom-details-v713[open] > summary span{
+    transform:rotate(180deg)!important;
+  }
+
+  #mobileSelicV400 .selic-custom-range-v596{
+    margin-top:6px!important;
+    padding:8px!important;
+    border:1px solid rgba(148,163,184,.12)!important;
+    border-radius:10px!important;
+    background:rgba(7,10,19,.62)!important;
+    box-shadow:none!important;
+  }
+
+  /* A informação de taxa vigente já está no KPI principal. */
+  #mobileSelicV400 #evoCardSelicNote{
+    display:none!important;
+  }
+
+  #mobileSelicV400 .selic-kpis-v378{
+    display:grid!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:10px!important;
+    margin-top:14px!important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415{
+    min-height:82px!important;
+    padding:13px 15px!important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415.is-current{
+    border-color:rgba(56,211,137,.22)!important;
+    background:linear-gradient(180deg,rgba(56,211,137,.045),rgba(11,15,28,.72))!important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > span{
+    font-size:.58rem!important;
+    letter-spacing:.10em!important;
+  }
+
+  #mobileSelicV400 .selic-kpi-focus-card-v415 > strong{
+    margin-top:6px!important;
+  }
+
+  #mobileSelicV400 .econ-selic-legend-v380 strong{
+    color:#cbd4e5!important;
+    font-size:.58rem!important;
+  }
+}
+
+@media (max-width:768px){
+  #mobileSelicV400 .selic-custom-details-v713{
+    width:100%;
+  }
+
+  #mobileSelicV400 .selic-custom-details-v713 > summary{
+    min-height:34px;
+  }
+}

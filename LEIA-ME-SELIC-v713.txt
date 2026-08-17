@@ -1,0 +1,31 @@
+SELIC · TESTE v713
+==================
+
+OBJETIVO
+Simplificar a área de trajetória da Selic sem perder funcionalidade.
+
+ALTERAÇÕES
+- 10 anos passa a ser a visualização padrão.
+- "Histórico" continua disponível.
+- De / Até / Aplicar ficam escondidos em "Período personalizado".
+- Selic vigente passa a ser o primeiro KPI.
+- KPIs usam "Máxima no período" e "Mínima no período".
+- Remove a pílula redundante de taxa vigente.
+- Rodapé do gráfico deixa de repetir "Selic atual".
+- O app.js principal NÃO é alterado: o teste usa app-selic-teste-v713.js.
+
+ARQUIVOS PARA SUBIR NA RAIZ DE Testes-da-versão-01
+1. index-ipca15-teste.html       (substituir)
+2. app-selic-teste-v713.js       (novo)
+3. selic-teste-v713.css          (novo)
+
+MANTER COMO ESTÁ
+- app.js
+- style.css
+- ipca15-teste.css
+- ipca15-teste.js
+- ipca15.json
+- robôs/workflows
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=713
