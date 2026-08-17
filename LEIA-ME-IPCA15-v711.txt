@@ -1,0 +1,18 @@
+IPCA-15 · TESTE v711 — VERSÃO ENXUTA
+
+Substitua na raiz de Testes-da-versão-01:
+- index-ipca15-teste.html
+- ipca15-teste.css
+- ipca15-teste.js
+
+Não altere index.html, app.js, style.css, ipca15.json, robo_ipca15.py ou o workflow.
+
+Teste:
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=711
+
+O que mudou:
+- removidos os dois quadros redundantes IPCA OFICIAL x IPCA-15;
+- removido o kicker repetitivo "LEITURA ANTECIPADA";
+- fonte consolidada em "Fonte: IBGE/SIDRA";
+- próximas divulgações em uma linha compacta;
+- mantida a comparação automática e uma única frase educativa.

@@ -1,8 +1,8 @@
-/* IPCA-15 TESTE v710 — acabamento semântico final */
+/* IPCA-15 TESTE v711 — acabamento semântico final */
 (function ipca15TesteV709(){
   'use strict';
 
-  const BUILD = 'ELTAUM_IPCA15_TESTE_V710';
+  const BUILD = 'ELTAUM_IPCA15_TESTE_V711';
 
   const CAL_IPCA15 = [
     {competencia:'202608', data:'2026-08-26'},
@@ -167,7 +167,7 @@
 
       card.dataset.ipca15Ready = '1';
       setStatus(false);
-      console.info('[Catálogo CAIXA] IPCA-15 v710 carregado:', atual);
+      console.info('[Catálogo CAIXA] IPCA-15 v711 carregado:', atual);
     }catch(err){
       console.warn('[Catálogo CAIXA] Falha ao carregar ipca15.json:', err);
       byId('ipca15PeriodoV709').textContent = 'IPCA-15 temporariamente indisponível';
@@ -183,7 +183,7 @@
     carregar();
   }
 
-  window.__ELTAUM_IPCA15_TESTE_V710__ = {
+  window.__ELTAUM_IPCA15_TESTE_V711__ = {
     build:BUILD,
     carregar,
     renderCalendar
