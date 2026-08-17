@@ -1,0 +1,43 @@
+IPCA-15 · TESTE v709 — HIERARQUIA E SEMÂNTICA
+================================================
+
+OBJETIVO
+Melhorar a leitura conceitual da área de inflação sem alterar robô ou dados.
+
+O QUE MUDOU
+- "Inflação e juros": subtítulo agora cita IPCA-15.
+- Card esquerdo:
+  "IPCA oficial — inflação realizada"
+- O período 12M/24M/36M fica apenas no controle, não no título conceitual.
+- Card direito:
+  "IPCA oficial — 12 meses e meta"
+- IPCA-15 passa a ter o kicker "SINAL ANTECIPADO".
+- IPCA-15 vira H4 dentro do contexto do H3 do IPCA oficial.
+- Métricas usam estrutura semântica DL/DT/DD.
+- O card inteiro deixa de usar role=status.
+- aria-live fica somente na área dinâmica de dados/comparação.
+- Os blocos explicativos foram compactados:
+  IPCA = Resultado fechado
+  IPCA-15 = Sinal antecipado
+- Fechamento:
+  "Entenda: o IPCA-15 antecipa a tendência; o IPCA confirma a inflação oficial."
+
+ARQUIVOS A SUBSTITUIR NA RAIZ DA BRANCH Testes-da-versão-01
+1. index-ipca15-teste.html
+2. ipca15-teste.css
+3. ipca15-teste.js
+
+NÃO ALTERAR
+- index.html
+- app.js
+- style.css
+- ipca15.json
+- robo_ipca15.py
+- .github/workflows/ipca15.yml
+
+DEPOIS DO UPLOAD
+1. Aguarde pages-build-deployment ficar verde.
+2. Abra:
+   https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=709
+3. Faça Ctrl+F5.
+4. Abra "Inflação e juros".
