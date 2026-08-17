@@ -1,0 +1,24 @@
+IPCA-15 · TESTE v712 — CORREÇÃO DE CARREGAMENTO
+
+CAUSA DA v711
+O HTML passou a usar IDs terminados em V711, mas o JavaScript ainda procurava
+IDs V709. Assim, o script não encontrava o card e encerrava antes de ler o
+ipca15.json.
+
+A coleta não parou: o ipca15.json continua preenchido normalmente.
+
+SUBSTITUIR NA RAIZ DA BRANCH Testes-da-versão-01
+- index-ipca15-teste.html
+- ipca15-teste.css
+- ipca15-teste.js
+
+NÃO ALTERAR
+- index.html
+- app.js
+- style.css
+- ipca15.json
+- robo_ipca15.py
+- .github/workflows/ipca15.yml
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=712

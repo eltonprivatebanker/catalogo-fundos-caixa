@@ -1,8 +1,8 @@
-/* IPCA-15 TESTE v711 — acabamento semântico final */
-(function ipca15TesteV709(){
+/* IPCA-15 TESTE v712 — correção de carregamento */
+(function ipca15TesteV712(){
   'use strict';
 
-  const BUILD = 'ELTAUM_IPCA15_TESTE_V711';
+  const BUILD = 'ELTAUM_IPCA15_TESTE_V712';
 
   const CAL_IPCA15 = [
     {competencia:'202608', data:'2026-08-26'},
@@ -63,13 +63,11 @@
     const p = nextRelease(CAL_IPCA15);
     const o = nextRelease(CAL_IPCA);
 
-    if(byId('ipcaNextPreviewV709')){
-      byId('ipcaNextPreviewV709').textContent =
-        `Próx.: ${labelCompetencia(p.competencia)} · ${fmtDate(p.data)}`;
+    if(byId('ipcaNextPreviewV712')){
+      byId('ipcaNextPreviewV712').textContent = fmtDate(p.data);
     }
-    if(byId('ipcaNextOfficialV709')){
-      byId('ipcaNextOfficialV709').textContent =
-        `Próx.: ${labelCompetencia(o.competencia)} · ${fmtDate(o.data)}`;
+    if(byId('ipcaNextOfficialV712')){
+      byId('ipcaNextOfficialV712').textContent = fmtDate(o.data);
     }
   }
 
@@ -79,7 +77,7 @@
   }
 
   function renderComparison(ipca15_12m){
-    const out = byId('ipca15CompareTextV709');
+    const out = byId('ipca15CompareTextV712');
     if(!out) return;
 
     const oficial = official12m();
@@ -129,7 +127,7 @@
   }
 
   function setStatus(error){
-    const card = byId('ipca15PreviewV709');
+    const card = byId('ipca15PreviewV712');
     if(card){
       card.classList.toggle('is-error', !!error);
       card.classList.remove('is-loading');
@@ -137,7 +135,7 @@
   }
 
   async function carregar(){
-    const card = byId('ipca15PreviewV709');
+    const card = byId('ipca15PreviewV712');
     if(!card) return;
 
     renderCalendar();
@@ -151,27 +149,27 @@
       const atual = dados && dados.atual;
 
       if(!atual || !atual.competencia){
-        byId('ipca15PeriodoV709').textContent = 'Aguardando primeira coleta automática';
+        byId('ipca15PeriodoV712').textContent = 'Aguardando primeira coleta automática';
         setStatus(false);
         return;
       }
 
-      byId('ipca15PeriodoV709').textContent =
-        `${labelCompetencia(atual.competencia)} · divulgado pelo IBGE`;
+      byId('ipca15PeriodoV712').textContent =
+        `Leitura antecipada da inflação · ${labelCompetencia(atual.competencia)}`;
 
-      byId('ipca15MensalV709').textContent = pct(atual.mensal);
-      byId('ipca15AnoV709').textContent = pct(atual.acumulado_ano);
-      byId('ipca15DozeV709').textContent = pct(atual.acumulado_12m);
+      byId('ipca15MensalV712').textContent = pct(atual.mensal);
+      byId('ipca15AnoV712').textContent = pct(atual.acumulado_ano);
+      byId('ipca15DozeV712').textContent = pct(atual.acumulado_12m);
 
       watchOfficial(atual.acumulado_12m);
 
       card.dataset.ipca15Ready = '1';
       setStatus(false);
-      console.info('[Catálogo CAIXA] IPCA-15 v711 carregado:', atual);
+      console.info('[Catálogo CAIXA] IPCA-15 v712 carregado:', atual);
     }catch(err){
       console.warn('[Catálogo CAIXA] Falha ao carregar ipca15.json:', err);
-      byId('ipca15PeriodoV709').textContent = 'IPCA-15 temporariamente indisponível';
-      const compare = byId('ipca15CompareTextV709');
+      byId('ipca15PeriodoV712').textContent = 'IPCA-15 temporariamente indisponível';
+      const compare = byId('ipca15CompareTextV712');
       if(compare) compare.textContent = 'Prévia indisponível; o IPCA oficial permanece disponível normalmente.';
       setStatus(true);
     }
@@ -183,7 +181,7 @@
     carregar();
   }
 
-  window.__ELTAUM_IPCA15_TESTE_V711__ = {
+  window.__ELTAUM_IPCA15_TESTE_V712__ = {
     build:BUILD,
     carregar,
     renderCalendar
