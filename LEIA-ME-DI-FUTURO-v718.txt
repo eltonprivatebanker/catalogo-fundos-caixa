@@ -1,0 +1,36 @@
+DI FUTURO · TESTE v718 — HIERARQUIA OTIMIZADA
+================================================
+
+AJUSTES SOBRE A v717
+- removido o link visível "Juros Brasil completo";
+- "Por que isso importa?" virou "Impacto nos fundos";
+- texto do impacto ficou mais direto e maior;
+- seletor histórico ficou mais compacto:
+  "1 semana · 1 mês · 3 meses · 6 meses · 1 ano";
+- removida a duplicidade:
+  "HISTÓRICO · CURVA DI" + "Como a curva mudou no tempo";
+- agora o histórico usa apenas:
+  "Evolução da Curva DI";
+- fontes do gatilho e do título histórico foram aumentadas.
+
+ARQUIVOS PARA SUBIR NA RAIZ DE Testes-da-versão-01
+- index-ipca15-teste.html        -> substituir
+- juros-futuros-teste-v718.css  -> novo
+- juros-futuros-teste-v718.js   -> novo
+
+MANTER COMO ESTÁ
+- app-selic-teste-v714.js
+- selic-teste-v714.css
+- ipca15-teste.css
+- ipca15-teste.js
+- ipca15.json
+- app.js / style.css principais
+- robôs e workflows
+
+Os arquivos v715/v716/v717 podem permanecer; a v718 não os carrega.
+
+TESTE
+https://eltonprivatebanker.github.io/catalogo-fundos-caixa/index-ipca15-teste.html?v=718
+
+Depois do deploy:
+Ctrl + F5
